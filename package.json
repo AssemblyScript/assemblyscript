@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "@types/chalk": "^0.4.31",
+    "@types/diff": "^3.2.2",
+    "@types/long": "^3.0.32",
+    "chalk": "^2.1.0",
+    "diff": "^3.3.1",
+    "long": "^3.2.0",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.2"
+  },
+  "dependencies": {
+    "@types/node": "^8.0.28",
+    "binaryen": "37.0.0-nightly.20170912"
+  }
+}

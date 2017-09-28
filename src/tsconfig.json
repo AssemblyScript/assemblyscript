@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "types": [
+      "node"
+    ],
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "outDir": "../out"
+  },
+  "files": [
+    "ast.ts",
+    "binaryen.d.ts",
+    "binaryen.ts",
+    "compiler.ts",
+    "diagnosticMessages.generated.ts",
+    "diagnostics.ts",
+    "glue/js.d.ts",
+    "glue/js.ts",
+    "index.ts",
+    "parser.ts",
+    "program.ts",
+    "reflection.ts",
+    "tokenizer.ts",
+    "util.ts",
+    "util/i64.ts"
+  ]
+}
