@@ -1,0 +1,13 @@
+Includes parts of TypeScript:
+
+  https://github.com/Microsoft/TypeScript
+
+  Apache License, Version 2.0
+  https://www.apache.org/licenses/LICENSE-2.0
+
+Includes parts of Binaryen:
+
+  https://github.com/WebAssembly/binaryen
+
+  Apache License, Version 2.0
+  https://www.apache.org/licenses/LICENSE-2.0
