@@ -226,3 +226,10 @@ export function dirname(normalizedPath: string, separator: CharCode = CharCode.S
 export function resolvePath(normalizedPath: string, normalizedOrigin: string, separator: CharCode = CharCode.SLASH): string {
   return normalizePath(dirname(normalizedOrigin, separator) + String.fromCharCode(separator) + normalizedPath);
 }
+
+export function trimExtension(path: string): string {
+  const len: i32 = path.length;
+  if (len > 3 && path.charCodeAt(len - 3) == CharCode.DOT && (path.charCodeAt(len - 2) == CharCode.t || path.charCodeAt(len - 2) == CharCode.a) && path.charCodeAt(len - 1) == CharCode.s)
+    return path.substring(0, len - 3);
+  return path;
+}

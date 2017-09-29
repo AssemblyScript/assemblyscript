@@ -11,7 +11,7 @@ import { Program } from "./program";
 import { Source } from "./reflection";
 import { Tokenizer, Token, Range } from "./tokenizer";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter, formatDiagnosticMessage } from "./diagnostics";
-import { I64 } from "./util";
+import { I64, normalizePath, resolvePath } from "./util";
 import {
 
   NodeKind,
@@ -67,6 +67,7 @@ export class Parser extends DiagnosticEmitter {
 
   program: Program;
   backlog: string[] = new Array();
+  seenlog: Set<string> = new Set();
 
   constructor() {
     super();
@@ -74,11 +75,13 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseFile(text: string, path: string, isEntry: bool): void {
-    if (path.startsWith("./"))
-      path = path.substring(2);
+    const normalizedPath: string = normalizePath(path);
     for (let i: i32 = 0, k: i32 = this.program.sources.length; i < k; ++i)
-      if (this.program.sources[i].path == path)
+      if (this.program.sources[i].normalizedPath == normalizedPath)
         throw Error("duplicate source");
+
+    if (isEntry)
+      this.seenlog.add(normalizedPath);
 
     const source: Source = new Source(path, text, isEntry);
     this.program.sources.push(source);
@@ -189,6 +192,8 @@ export class Parser extends DiagnosticEmitter {
   finish(): Program {
     if (this.backlog.length)
       throw new Error("backlog is not empty");
+    this.backlog = new Array(0);
+    this.seenlog.clear();
     return this.program;
   }
 
@@ -689,9 +694,14 @@ export class Parser extends DiagnosticEmitter {
       }
       let path: string | null = null;
       if (tn.skip(Token.FROM)) {
-        if (tn.skip(Token.STRINGLITERAL))
+        if (tn.skip(Token.STRINGLITERAL)) {
           path = tn.readString();
-        else {
+          const resolvedPath: string = resolvePath(normalizePath(path), tn.source.normalizedPath);
+          if (!this.seenlog.has(resolvedPath)) {
+            this.backlog.push(resolvedPath);
+            this.seenlog.add(resolvedPath);
+          }
+        } else {
           this.error(DiagnosticCode.String_literal_expected, tn.range());
           return null;
         }
@@ -743,6 +753,11 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.FROM)) {
         if (tn.skip(Token.STRINGLITERAL)) {
           const path: string = tn.readString();
+          const resolvedPath: string = resolvePath(normalizePath(path), tn.source.normalizedPath);
+          if (!this.seenlog.has(resolvedPath)) {
+            this.backlog.push(resolvedPath);
+            this.seenlog.add(resolvedPath);
+          }
           const ret: ImportStatement = Statement.createImport(members, path, Range.join(startRange, tn.range()));
           tn.skip(Token.SEMICOLON);
           return ret;

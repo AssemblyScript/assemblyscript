@@ -31,6 +31,10 @@ export class I64 {
     return this.lo == 0 && this.hi == 0;
   }
 
+  get isOne(): bool {
+    return this.lo == 1 && this.hi == 0;
+  }
+
   get isPositive(): bool {
     return this.hi >= 0;
   }
@@ -45,6 +49,10 @@ export class I64 {
 
   get isEven(): bool {
     return (this.lo & 1) == 0;
+  }
+
+  get fitsInI32(): bool {
+    return this.hi == 0 || (this.hi == -1 && this.lo < 0);
   }
 
   toI32(): i32 {

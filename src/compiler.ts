@@ -1,8 +1,9 @@
-import { Module, MemorySegment, UnaryOp, BinaryOp, HostOp } from "./binaryen";
+import { Module, MemorySegment, UnaryOp, BinaryOp, HostOp, Type as BinaryenType } from "./binaryen";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
 import { hasModifier } from "./parser";
 import { Program } from "./program";
-import { CharCode, U64 } from "./util";
+import { CharCode, I64, U64 } from "./util";
+import { Token } from "./tokenizer";
 import {
 
   NodeKind,
@@ -16,10 +17,12 @@ import {
   DoStatement,
   EmptyStatement,
   EnumDeclaration,
+  EnumValueDeclaration,
   ExpressionStatement,
   FunctionDeclaration,
   ForStatement,
   IfStatement,
+  ImportStatement,
   MethodDeclaration,
   ModifierKind,
   NamespaceDeclaration,
@@ -93,6 +96,8 @@ export class Compiler extends DiagnosticEmitter {
   memoryOffset: U64 = new U64(8, 0); // leave space for (any size of) NULL
   memorySegments: MemorySegment[] = new Array();
 
+  statements: BinaryenExpressionRef[] = new Array(); // TODO: make start function
+
   static compile(program: Program, options: Options | null = null): Module {
     const compiler: Compiler = new Compiler(program, options);
     return compiler.compile();
@@ -141,6 +146,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           break;
 
+        case NodeKind.IMPORT:
+          break;
+
         case NodeKind.NAMESPACE:
           if (hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>statement).modifiers)) {
             const ns: Namespace = Namespace.create(<NamespaceDeclaration>statement).exportAs((<NamespaceDeclaration>statement).identifier.name);
@@ -162,7 +170,11 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case NodeKind.EXPORT:
-          // obtain referenced declaration and export that
+          // TODO: obtain referenced declaration and export that
+          break;
+
+        default:
+          this.statements.push(this.compileStatement(statement));
           break;
       }
     }
@@ -186,7 +198,17 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileEnum(en: Enum): void {
-    throw new Error("not implemented");
+    for (let i: i32 = 0, k = en.declaration.members.length; i < k; ++i) {
+      const declaration: EnumValueDeclaration =  en.declaration.members[i];
+      const name: string = this.program.mangleName(declaration);
+      const value: BinaryenExpressionRef = declaration.value
+        ? this.compileExpression(<Expression>declaration.value, Type.i32)
+        : this.module.createI32(i); // TODO
+      this.module.addGlobal(name, BinaryenType.I32, false, value);
+      if (en.exportName != null) {
+        // TODO: WASM does not yet support non-function exports
+      }
+    }
   }
 
   compileFunction(fn: Function): void {
@@ -229,6 +251,17 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   // statements
+
+  enterBreakContext(): string {
+    if (this.breakMinor == 0)
+      ++this.breakMajor;
+    ++this.breakMinor;
+    return this.breakMajor.toString() + "." + this.breakMinor.toString();
+  }
+
+  leaveBreakContext(): void {
+    --this.breakMinor;
+  }
 
   compileStatement(statement: Statement): BinaryenExpressionRef {
     switch (statement.kind) {
@@ -283,7 +316,7 @@ export class Compiler extends DiagnosticEmitter {
     const children: BinaryenExpressionRef[] = new Array(substatements.length);
     for (let i: i32 = 0, k: i32 = substatements.length; i < k; ++i)
       children[i] = this.compileStatement(substatements[i]);
-    return this.module.createBlock(null, children);
+    return this.module.createBlock(null, children, BinaryenType.None);
   }
 
   compileBreakStatement(statement: BreakStatement): BinaryenExpressionRef {
@@ -303,21 +336,20 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileExpressionStatement(statement: ExpressionStatement): BinaryenExpressionRef {
-    const expression: BinaryenExpressionRef = this.compileExpression(statement.expression, Type.void);
-    return this.currentType == Type.void ? expression : this.module.createDrop(expression);
+    return this.compileExpression(statement.expression, Type.void);
   }
 
   compileForStatement(statement: ForStatement): BinaryenExpressionRef {
     const initializer: BinaryenExpressionRef = statement.initializer ? this.compileStatement(<Statement>statement.initializer) : 0;
-    const condition: BinaryenExportRef = statement.condition ? this.compileExpression(<Expression>statement.condition, Type.i32) : 0;
-    const incrementor: BinaryenExportRef = statement.incrementor ? this.compileExpression(<Expression>statement.incrementor, Type.void) : 0;
+    const condition: BinaryenExpressionRef = statement.condition ? this.compileExpression(<Expression>statement.condition, Type.i32) : 0;
+    const incrementor: BinaryenExpressionRef = statement.incrementor ? this.compileExpression(<Expression>statement.incrementor, Type.void) : 0;
     throw new Error("not implemented");
   }
 
   compileIfStatement(statement: IfStatement): BinaryenExpressionRef {
     const condition: BinaryenExpressionRef = this.compileExpression(statement.condition, Type.i32);
     const ifTrue: BinaryenExpressionRef = this.compileStatement(statement.statement);
-    const ifFalse: BinaryenExportRef = statement.elseStatement ? this.compileStatement(<Statement>statement.elseStatement) : 0;
+    const ifFalse: BinaryenExpressionRef = statement.elseStatement ? this.compileStatement(<Statement>statement.elseStatement) : 0;
     return this.module.createIf(condition, ifTrue, ifFalse);
   }
 
@@ -346,72 +378,85 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileWhileStatement(statement: WhileStatement): BinaryenExpressionRef {
-    throw new Error("not implemented");
+    const condition: BinaryenExpressionRef = this.compileExpression(statement.condition, Type.i32);
+    const label: string = this.enterBreakContext();
+    const breakLabel: string = "break$" + label;
+    const continueLabel: string = "continue$" + label;
+    const body: BinaryenExpressionRef = this.compileStatement(statement.statement);
+    this.leaveBreakContext();
+    return this.module.createBlock(breakLabel, [
+      this.module.createLoop(continueLabel,
+        this.module.createIf(condition, this.module.createBlock("", [
+          body,
+          this.module.createBreak(continueLabel)
+        ]))
+      )
+    ]);
   }
 
   // expressions
 
-  compileExpression(expression: Expression, resultType: Type): BinaryenExpressionRef {
-    this.currentType = resultType;
+  compileExpression(expression: Expression, contextualType: Type, convert: bool = true): BinaryenExpressionRef {
+    this.currentType = contextualType;
 
     let expr: BinaryenExpressionRef;
     switch (expression.kind) {
 
       case NodeKind.ASSERTION:
-        expr = this.compileAssertionExpression(<AssertionExpression>expression, resultType);
+        expr = this.compileAssertionExpression(<AssertionExpression>expression, contextualType);
         break;
 
       case NodeKind.BINARY:
-        expr = this.compileBinaryExpression(<BinaryExpression>expression, resultType);
+        expr = this.compileBinaryExpression(<BinaryExpression>expression, contextualType);
         break;
 
       case NodeKind.CALL:
-        expr = this.compileCallExpression(<CallExpression>expression, resultType);
+        expr = this.compileCallExpression(<CallExpression>expression, contextualType);
         break;
 
       case NodeKind.ELEMENTACCESS:
-        expr = this.compileElementAccessExpression(<ElementAccessExpression>expression, resultType);
+        expr = this.compileElementAccessExpression(<ElementAccessExpression>expression, contextualType);
         break;
 
       case NodeKind.IDENTIFIER:
-        expr = this.compileIdentifierExpression(<IdentifierExpression>expression, resultType);
+        expr = this.compileIdentifierExpression(<IdentifierExpression>expression, contextualType);
         break;
 
       case NodeKind.LITERAL:
-        expr = this.compileLiteralExpression(<LiteralExpression>expression, resultType);
+        expr = this.compileLiteralExpression(<LiteralExpression>expression, contextualType);
         break;
 
       case NodeKind.NEW:
-        expr = this.compileNewExpression(<NewExpression>expression, resultType);
+        expr = this.compileNewExpression(<NewExpression>expression, contextualType);
         break;
 
       case NodeKind.PARENTHESIZED:
-        expr = this.compileParenthesizedExpression(<ParenthesizedExpression>expression, resultType);
+        expr = this.compileParenthesizedExpression(<ParenthesizedExpression>expression, contextualType);
         break;
 
       case NodeKind.PROPERTYACCESS:
-        expr = this.compilePropertyAccessExpression(<PropertyAccessExpression>expression, resultType);
+        expr = this.compilePropertyAccessExpression(<PropertyAccessExpression>expression, contextualType);
         break;
 
       case NodeKind.SELECT:
-        expr = this.compileSelectExpression(<SelectExpression>expression, resultType);
+        expr = this.compileSelectExpression(<SelectExpression>expression, contextualType);
         break;
 
       case NodeKind.UNARYPOSTFIX:
-        expr = this.compileUnaryPostfixExpression(<UnaryPostfixExpression>expression, resultType);
+        expr = this.compileUnaryPostfixExpression(<UnaryPostfixExpression>expression, contextualType);
         break;
 
       case NodeKind.UNARYPREFIX:
-        expr = this.compileUnaryPrefixExpression(<UnaryPrefixExpression>expression, resultType);
+        expr = this.compileUnaryPrefixExpression(<UnaryPrefixExpression>expression, contextualType);
         break;
 
       default:
         throw new Error("unexpected expression kind");
     }
 
-    if (this.currentType != resultType) {
-      expr = this.convertExpression(expr, this.currentType, resultType);
-      this.currentType = resultType;
+    if (convert && this.currentType != contextualType) {
+      expr = this.convertExpression(expr, this.currentType, contextualType);
+      this.currentType = contextualType;
     }
 
     return expr;
@@ -580,6 +625,221 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileBinaryExpression(expression: BinaryExpression, contextualType: Type): BinaryenExpressionRef {
+    let op: BinaryOp;
+    let left: BinaryenExpressionRef;
+    let right: BinaryenExpressionRef;
+    let compound: Token = 0;
+
+    switch (expression.operator) {
+
+      case Token.LESSTHAN:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.LtF32
+           : this.currentType == Type.f64
+           ? BinaryOp.LtF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.LtI64
+           : BinaryOp.LtI32;
+        this.currentType = Type.bool;
+        break;
+
+      case Token.GREATERTHAN:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.GtF32
+           : this.currentType == Type.f64
+           ? BinaryOp.GtF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.GtI64
+           : BinaryOp.GtI32;
+        this.currentType = Type.bool;
+        break;
+
+      case Token.LESSTHAN_EQUALS:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.LeF32
+           : this.currentType == Type.f64
+           ? BinaryOp.LeF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.LeI64
+           : BinaryOp.LeI32;
+        this.currentType = Type.bool;
+        break;
+
+      case Token.GREATERTHAN_EQUALS:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.GeF32
+           : this.currentType == Type.f64
+           ? BinaryOp.GeF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.GeI64
+           : BinaryOp.GeI32;
+        this.currentType = Type.bool;
+        break;
+
+      case Token.EQUALS_EQUALS:
+      case Token.EQUALS_EQUALS_EQUALS:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.EqF32
+           : this.currentType == Type.f64
+           ? BinaryOp.EqF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.EqI64
+           : BinaryOp.EqI32;
+        this.currentType = Type.bool;
+        break;
+
+      case Token.PLUS_EQUALS:
+        compound = Token.EQUALS;
+      case Token.PLUS:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.AddF32
+           : this.currentType == Type.f64
+           ? BinaryOp.AddF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.AddI64
+           : BinaryOp.AddI32;
+        break;
+
+      case Token.MINUS_EQUALS:
+        compound = Token.EQUALS;
+      case Token.MINUS:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.SubF32
+           : this.currentType == Type.f64
+           ? BinaryOp.SubF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.SubI64
+           : BinaryOp.SubI32;
+        break;
+
+      case Token.ASTERISK_EQUALS:
+        compound = Token.EQUALS;
+      case Token.ASTERISK:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.MulF32
+           : this.currentType == Type.f64
+           ? BinaryOp.MulF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.MulI64
+           : BinaryOp.MulI32;
+        break;
+
+      case Token.SLASH_EQUALS:
+        compound = Token.EQUALS;
+      case Token.SLASH:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+           ? BinaryOp.DivF32
+           : this.currentType == Type.f64
+           ? BinaryOp.DivF64
+           : this.currentType.isLongInteger
+           ? BinaryOp.DivI64
+           : BinaryOp.DivI32;
+        break;
+
+      case Token.PERCENT_EQUALS:
+        compound = Token.EQUALS;
+      case Token.PERCENT:
+        left = this.compileExpression(expression.left, contextualType, false);
+        right = this.compileExpression(expression.right, this.currentType);
+        if (this.currentType.isAnyFloat)
+          throw new Error("not implemented"); // TODO: fmod
+        op = this.currentType.isLongInteger
+           ? BinaryOp.RemI64
+           : BinaryOp.RemI32;
+        break;
+
+      case Token.LESSTHAN_LESSTHAN_EQUALS:
+        compound = Token.EQUALS;
+      case Token.LESSTHAN_LESSTHAN:
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType.isLongInteger
+           ? BinaryOp.ShlI64
+           : BinaryOp.ShlI32;
+        break;
+
+      case Token.GREATERTHAN_GREATERTHAN_EQUALS:
+        compound = Token.EQUALS;
+      case Token.GREATERTHAN_GREATERTHAN:
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType.isSignedInteger
+           ? this.currentType.isLongInteger
+             ? BinaryOp.ShrI64
+             : BinaryOp.ShrI32
+           : this.currentType.isLongInteger
+             ? BinaryOp.ShrU64
+             : BinaryOp.ShrU32;
+        break;
+
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
+        compound = Token.EQUALS;
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.u64 : contextualType);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType.isLongInteger
+           ? BinaryOp.ShrU64
+           : BinaryOp.ShrU32;
+        break;
+
+      case Token.AMPERSAND_EQUALS:
+        compound = Token.EQUALS;
+      case Token.AMPERSAND:
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType.isLongInteger
+           ? BinaryOp.AndI64
+           : BinaryOp.AndI32;
+        break;
+
+      case Token.BAR_EQUALS:
+        compound = Token.EQUALS;
+      case Token.BAR:
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType.isLongInteger
+           ? BinaryOp.OrI64
+           : BinaryOp.OrI32;
+        break;
+
+      case Token.CARET_EQUALS:
+        compound = Token.EQUALS;
+      case Token.CARET:
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType.isLongInteger
+           ? BinaryOp.XorI64
+           : BinaryOp.XorI32;
+        break;
+
+      default:
+        throw new Error("not implemented");
+    }
+
+    return compound
+      ? this.compileAssignment(expression.left, this.module.createBinary(op, left, right))
+      : this.module.createBinary(op, left, right);
+  }
+
+  compileAssignment(expression: Expression, value: BinaryenExpressionRef): BinaryenExpressionRef {
     throw new Error("not implemented");
   }
 
@@ -599,23 +859,27 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.literalKind) {
       // case LiteralKind.ARRAY:
 
-      case LiteralKind.FLOAT:
-        if (contextualType == Type.f32)
-          return this.module.createF32((<FloatLiteralExpression>expression).value);
+      case LiteralKind.FLOAT: {
+        const floatValue: f64 = (<FloatLiteralExpression>expression).value;
+        if (contextualType == Type.f32 && (Math.fround(floatValue) as f64) == floatValue)
+          return this.module.createF32(floatValue);
         this.currentType = Type.f64;
-        return this.module.createF64((<FloatLiteralExpression>expression).value);
+        return this.module.createF64(floatValue);
+      }
 
-      case LiteralKind.INTEGER:
-        if (contextualType == Type.bool)
-          return this.module.createI32((<IntegerLiteralExpression>expression).value.isOdd ? 1 : 0)
+      case LiteralKind.INTEGER: {
+        const intValue: I64 = (<IntegerLiteralExpression>expression).value;
+        if (contextualType == Type.bool && (intValue.isZero || intValue.isOne))
+          return this.module.createI32(intValue.isZero ? 0 : 1);
         if (contextualType.isLongInteger)
-          return this.module.createI64((<IntegerLiteralExpression>expression).value.lo, (<IntegerLiteralExpression>expression).value.hi);
-        const value: i32 = (<IntegerLiteralExpression>expression).value.toI32();
-        if (contextualType.isSmallInteger)
-          return contextualType.isSignedInteger
-            ? this.module.createI32(value << contextualType.smallIntegerShift >> contextualType.smallIntegerShift)
-            : this.module.createI32(value & contextualType.smallIntegerMask);
-        return this.module.createI32(value);
+          return this.module.createI64(intValue.lo, intValue.hi);
+        if (!intValue.fitsInI32) {
+          this.currentType = Type.i64;
+          return this.module.createI64(intValue.lo, intValue.hi);
+        }
+        this.currentType = Type.i32;
+        return this.module.createI32(intValue.toI32());
+      }
 
       // case LiteralKind.OBJECT:
       // case LiteralKind.REGEXP:
@@ -644,10 +908,70 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type): BinaryenExpressionRef {
-    throw new Error("not implemented");
+    let operand: BinaryenExpressionRef;
+    let op: UnaryOp;
+
+    switch (expression.operator) {
+
+      case Token.PLUS_PLUS:
+      case Token.MINUS_MINUS:
+
+      default:
+        throw new Error("not implemented");
+    }
+    // return this.module.createBinary(op, operand);
   }
 
   compileUnaryPrefixExpression(expression: UnaryPrefixExpression, contextualType: Type): BinaryenExpressionRef {
-    throw new Error("not implemented");
+    let operand: BinaryenExpressionRef;
+    let op: UnaryOp;
+
+    switch (expression.operator) {
+
+      case Token.PLUS:
+        return this.compileExpression(expression.expression, contextualType);
+
+      case Token.MINUS:
+        operand = this.compileExpression(expression.expression, contextualType);
+        if (this.currentType == Type.f32)
+          op = UnaryOp.NegF32;
+        else if (this.currentType == Type.f64)
+          op = UnaryOp.NegF64;
+        else
+          return this.currentType.isLongInteger
+            ? this.module.createBinary(BinaryOp.SubI64, this.module.createI64(0, 0), operand)
+            : this.module.createBinary(BinaryOp.SubI32, this.module.createI32(0), operand);
+        break;
+
+      // case Token.PLUS_PLUS:
+      // case Token.MINUS_MINUS:
+
+      case Token.EXCLAMATION:
+        operand = this.compileExpression(expression.expression, Type.bool, false);
+        if (this.currentType == Type.f32) {
+          this.currentType = Type.bool;
+          return this.module.createBinary(BinaryOp.EqF32, operand, this.module.createF32(0));
+        }
+        if (this.currentType == Type.f64) {
+          this.currentType = Type.bool;
+          return this.module.createBinary(BinaryOp.EqF64, operand, this.module.createF64(0));
+        }
+        op = this.currentType.isLongInteger
+           ? UnaryOp.EqzI64 // TODO: does this yield i64 0/1?
+           : UnaryOp.EqzI32;
+        this.currentType = Type.bool;
+        break;
+
+      case Token.TILDE:
+        operand = this.compileExpression(expression.expression, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        return this.currentType.isLongInteger
+          ? this.module.createBinary(BinaryOp.XorI64, operand, this.module.createI64(-1, -1))
+          : this.module.createBinary(BinaryOp.XorI32, operand, this.module.createI32(-1));
+
+      default:
+        throw new Error("not implemented");
+    }
+
+    return this.module.createUnary(op, operand);
   }
 }

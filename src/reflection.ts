@@ -42,7 +42,7 @@ import {
 import { DiagnosticMessage } from "./diagnostics";
 import { Token, Tokenizer, Range } from "./tokenizer";
 import { hasModifier } from "./parser";
-import { normalizePath } from "./util";
+import { normalizePath, trimExtension } from "./util";
 
 export abstract class Base {
 
@@ -146,7 +146,7 @@ export class Type extends Base {
 export class Source extends SourceNode {
 
   text: string;
-  tokenizer: Tokenizer | null;
+  tokenizer: Tokenizer | null = null;
   statements: Statement[];
   isEntry: bool;
   normalizedPath: string;
@@ -158,7 +158,7 @@ export class Source extends SourceNode {
     this.text = text;
     this.statements = new Array();
     this.isEntry = isEntry;
-    this.normalizedPath = normalizePath(path);
+    this.normalizedPath = normalizePath(trimExtension(path));
   }
 
   get isDeclaration(): bool { return !this.isEntry && this.path.endsWith(".d.ts"); }

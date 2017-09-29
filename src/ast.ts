@@ -112,6 +112,7 @@ export enum NodeKind {
   ENUMVALUE,            // is also declaration
   EXPORT,
   EXPORTIMPORT,
+  EXPORTMEMBER,
   EXPRESSION,
   INTERFACE,
   FOR,
@@ -875,11 +876,11 @@ export abstract class Statement extends Node {
     return stmt;
   }
 
-  static createExportMember(identifier: IdentifierExpression, asIdentifier: IdentifierExpression | null, range: Range): ExportMember {
+  static createExportMember(identifier: IdentifierExpression, externalIdentifier: IdentifierExpression | null, range: Range): ExportMember {
     const elem: ExportMember = new ExportMember();
     elem.range = range;
     (elem.identifier = identifier).parent = elem;
-    if (elem.asIdentifier = asIdentifier) (<IdentifierExpression>asIdentifier).parent = elem;
+    (elem.externalIdentifier = externalIdentifier ? <IdentifierExpression>externalIdentifier : identifier).parent = elem;
     return elem;
   }
 
@@ -1272,14 +1273,15 @@ export class ExportImportStatement extends Node {
 
 export class ExportMember extends Node {
 
+  kind = NodeKind.EXPORTMEMBER;
   identifier: IdentifierExpression;
-  asIdentifier: IdentifierExpression | null;
+  externalIdentifier: IdentifierExpression;
 
   serialize(sb: string[]): void {
     this.identifier.serialize(sb);
-    if (this.asIdentifier) {
+    if (this.externalIdentifier.name != this.identifier.name) {
       sb.push(" as ");
-      (<IdentifierExpression>this.asIdentifier).serialize(sb);
+      (<IdentifierExpression>this.externalIdentifier).serialize(sb);
     }
   }
 }

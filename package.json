@@ -1,4 +1,5 @@
 {
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/chalk": "^0.4.31",
     "@types/diff": "^3.2.2",
