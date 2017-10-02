@@ -1,5 +1,5 @@
 import { Range } from "./ast";
-import { CharCode, isLineBreak, sb } from "./util";
+import { isLineBreak, sb } from "./util";
 import { DiagnosticCode, diagnosticCodeToString } from "./diagnosticMessages.generated";
 
 export { DiagnosticCode, diagnosticCodeToString } from "./diagnosticMessages.generated";

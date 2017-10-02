@@ -53,6 +53,7 @@
  │ ├ VariableStatement <> VariableDeclaration
  │ └ WhileStatement
  ├ Parameter
+ ├ Source
  ├ SwitchCase
  ├ TypeNode
  └ TypeParameter
@@ -65,8 +66,8 @@
 
 */
 
-import { Token, operatorTokenToString, Range } from "./tokenizer";
-import { CharCode, I64, sb } from "./util";
+import { Token, Tokenizer, operatorTokenToString, Range } from "./tokenizer";
+import { CharCode, I64, normalizePath, resolvePath } from "./util";
 
 export { Range } from "./tokenizer";
 
@@ -106,6 +107,7 @@ export enum NodeKind {
   BREAK,
   CLASS,                // is also declaration
   CONTINUE,
+  DECORATOR,
   DO,
   EMPTY,
   ENUM,                 // is also declaration
@@ -202,7 +204,7 @@ export class TypeNode extends Node {
     this.identifier.serialize(sb);
     if (this.parameters.length) {
       sb.push("<");
-      for (let i: i32 = 0; i < this.parameters.length; ++i) {
+      for (let i: i32 = 0, k: i32 = this.parameters.length; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.parameters[i].serialize(sb);
@@ -398,7 +400,7 @@ export class ArrayLiteralExpression extends LiteralExpression {
 
   serialize(sb: string[]): void {
     sb.push("[");
-    for (let i: i32 = 0; i < this.elementExpressions.length; ++i) {
+    for (let i: i32 = 0, k: i32 = this.elementExpressions.length; i < k; ++i) {
       if (i > 0)
         sb.push(", ");
       if (this.elementExpressions[i])
@@ -410,7 +412,7 @@ export class ArrayLiteralExpression extends LiteralExpression {
   serializeAsTree(sb: string[], indent: i32 = 0): void {
     pushIndent(sb, indent++);
     sb.push("[\n");
-    for (let i: i32 = 0; i < this.elementExpressions.length; ++i) {
+    for (let i: i32 = 0, k: i32 = this.elementExpressions.length; i < k; ++i) {
       pushIndent(sb, indent);
       if (i > 0)
         sb.push(",\n");
@@ -499,9 +501,10 @@ export class CallExpression extends Expression {
 
   serialize(sb: string[]): void {
     this.expression.serialize(sb);
+    let i: i32, k: i32;
     if (this.typeArguments.length) {
       sb.push("<");
-      for (let i: i32 = 0; i < this.typeArguments.length; ++i) {
+      for (i = 0, k = this.typeArguments.length; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.typeArguments[i].serialize(sb);
@@ -509,7 +512,7 @@ export class CallExpression extends Expression {
       sb.push(">(");
     } else
       sb.push("(");
-    for (let i: i32 = 0; i < this.arguments.length; ++i) {
+    for (i = 0, k = this.arguments.length; i < k; ++i) {
       if (i > 0)
         sb.push(", ");
       this.arguments[i].serialize(sb);
@@ -806,7 +809,7 @@ export abstract class Statement extends Node {
     return stmt;
   }
 
-  static createClass(modifiers: Modifier[], identifier: IdentifierExpression, typeParameters: TypeParameter[], extendsType: TypeNode | null, implementsTypes: TypeNode[], members: DeclarationStatement[], range: Range): ClassDeclaration {
+  static createClass(modifiers: Modifier[], identifier: IdentifierExpression, typeParameters: TypeParameter[], extendsType: TypeNode | null, implementsTypes: TypeNode[], members: DeclarationStatement[], decorators: DecoratorStatement[], range: Range): ClassDeclaration {
     const stmt: ClassDeclaration = new ClassDeclaration();
     stmt.range = range;
     let i: i32, k: i32;
@@ -816,6 +819,7 @@ export abstract class Statement extends Node {
     if (stmt.extendsType = extendsType) (<TypeNode>extendsType).parent = stmt;
     for (i = 0, k = (stmt.implementsTypes = implementsTypes).length; i < k; ++i) implementsTypes[i].parent = stmt;
     for (i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
+    for (i = 0, k = (stmt.decorators = decorators).length; i < k; ++i) decorators[i].parent = stmt;
     return stmt;
   }
 
@@ -823,6 +827,14 @@ export abstract class Statement extends Node {
     const stmt: ContinueStatement = new ContinueStatement();
     stmt.range = range;
     if (stmt.label = label) (<IdentifierExpression>label).parent = stmt;
+    return stmt;
+  }
+
+  static createDecorator(expression: Expression, args: Expression[], range: Range): DecoratorStatement {
+    const stmt: DecoratorStatement = new DecoratorStatement();
+    stmt.range = range;
+    (stmt.expression = expression).parent = stmt;
+    for (let i: i32 = 0, k: i32 = (stmt.arguments = args).length; i < k; ++i) args[i].parent = stmt;
     return stmt;
   }
 
@@ -865,6 +877,7 @@ export abstract class Statement extends Node {
     for (i = 0, k = (stmt.modifiers = modifiers).length; i < k; ++i) modifiers[i].parent = stmt;
     for (i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
     stmt.path = path;
+    stmt.normalizedPath = path == null ? null : resolvePath(normalizePath(<string>path), range.source.normalizedPath);
     return stmt;
   }
 
@@ -905,6 +918,7 @@ export abstract class Statement extends Node {
     stmt.range = range;
     for (let i: i32 = 0, k: i32 = (stmt.declarations = declarations).length; i < k; ++i) declarations[i].parent = stmt;
     stmt.path = path;
+    stmt.normalizedPath = resolvePath(normalizePath(path), range.source.normalizedPath);
     return stmt;
   }
 
@@ -926,7 +940,7 @@ export abstract class Statement extends Node {
     return stmt;
   }
 
-  static createField(modifiers: Modifier[], identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, range: Range): FieldDeclaration {
+  static createField(modifiers: Modifier[], identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, decorators: DecoratorStatement[], range: Range): FieldDeclaration {
     const stmt: FieldDeclaration = new FieldDeclaration();
     stmt.range = range;
     let i: i32, k: i32;
@@ -934,6 +948,7 @@ export abstract class Statement extends Node {
     (stmt.identifier = identifier).parent = stmt;
     if (stmt.type = type) (<TypeNode>type).parent = stmt;
     if (stmt.initializer = initializer) (<Expression>initializer).parent = stmt;
+    for (i = 0, k = (stmt.decorators = decorators).length; i < k; ++i) decorators[i].parent = stmt;
     return stmt;
   }
 
@@ -965,7 +980,7 @@ export abstract class Statement extends Node {
     return elem;
   }
 
-  static createFunction(modifiers: Modifier[], identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, range: Range): FunctionDeclaration {
+  static createFunction(modifiers: Modifier[], identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, decorators: DecoratorStatement[], range: Range): FunctionDeclaration {
     const stmt: FunctionDeclaration = new FunctionDeclaration();
     stmt.range = range;
     let i: i32, k: i32;
@@ -975,10 +990,11 @@ export abstract class Statement extends Node {
     for (i = 0, k = (stmt.parameters = parameters).length; i < k; ++i) parameters[i].parent = stmt;
     if (stmt.returnType = returnType) (<TypeNode>returnType).parent = stmt;
     if (stmt.statements = statements) for (i = 0, k = (<Statement[]>statements).length; i < k; ++i) (<Statement[]>statements)[i].parent = stmt;
+    for (i = 0, k = (stmt.decorators = decorators).length; i < k; ++i) decorators[i].parent = stmt;
     return stmt;
   }
 
-  static createMethod(modifiers: Modifier[], identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, range: Range): MethodDeclaration {
+  static createMethod(modifiers: Modifier[], identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, decorators: DecoratorStatement[], range: Range): MethodDeclaration {
     const stmt: MethodDeclaration = new MethodDeclaration();
     stmt.range = range;
     let i: i32, k: i32;
@@ -988,6 +1004,7 @@ export abstract class Statement extends Node {
     for (i = 0, k = (stmt.parameters = parameters).length; i < k; ++i) parameters[i].parent = stmt;
     if (stmt.returnType = returnType) (<TypeNode>returnType).parent = stmt;;
     if (stmt.statements = statements) for (i = 0, k = (<Statement[]>statements).length; i < k; ++i) (<Statement[]>statements)[i].parent = stmt;
+    for (i = 0, k = (stmt.decorators = decorators).length; i < k; ++i) decorators[i].parent = stmt;
     return stmt;
   }
 
@@ -1053,7 +1070,7 @@ export abstract class Statement extends Node {
     stmt.range = range;
     let i: i32, k: i32;
     for (i = 0, k = (stmt.modifiers = modifiers).length; i < k; ++i) modifiers[i].parent = stmt;
-    for (i = 0, k = (stmt.members = declarations).length; i < k; ++i) declarations[i].parent = stmt;
+    for (i = 0, k = (stmt.declarations = declarations).length; i < k; ++i) declarations[i].parent = stmt;
     return stmt;
   }
 
@@ -1075,12 +1092,29 @@ export abstract class Statement extends Node {
   }
 }
 
-export abstract class SourceNode extends Node { // extended by Source
+export class Source extends Node {
 
   kind = NodeKind.SOURCE;
   parent = null;
   path: string;
+  normalizedPath: string;
   statements: Statement[];
+
+  text: string;
+  tokenizer: Tokenizer | null = null;
+  isEntry: bool;
+
+  constructor(path: string, text: string, isEntry: bool) {
+    super();
+    this.path = path;
+    this.normalizedPath = normalizePath(path, true);
+    this.statements = new Array();
+    this.range = new Range(this, 0, text.length);
+    this.text = text;
+    this.isEntry = isEntry;
+  }
+
+  get isDeclaration(): bool { return !this.isEntry && this.path.endsWith(".d.ts"); }
 
   serialize(sb: string[]): void {
     for (let i: i32 = 0, k = this.statements.length; i < k; ++i) {
@@ -1097,7 +1131,6 @@ export abstract class SourceNode extends Node { // extended by Source
 
 export abstract class DeclarationStatement extends Statement {
   identifier: IdentifierExpression;
-  reflectionIndex: i32 = -1;
 }
 
 export class BlockStatement extends Statement {
@@ -1107,9 +1140,9 @@ export class BlockStatement extends Statement {
 
   serialize(sb: string[]): void {
     sb.push("{\n");
-    for (let i: i32 = 0; i < this.statements.length; ++i) {
+    for (let i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
       this.statements[i].serialize(sb);
-      if (endsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1140,9 +1173,15 @@ export class ClassDeclaration extends DeclarationStatement {
   extendsType: TypeNode | null;
   implementsTypes: TypeNode[];
   members: DeclarationStatement[];
+  decorators: DecoratorStatement[];
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.decorators.length; i < k; ++i) {
+      this.decorators[i].serialize(sb);
+      sb.push("\n");
+    }
+    for (i  = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
     }
@@ -1150,7 +1189,7 @@ export class ClassDeclaration extends DeclarationStatement {
     sb.push(this.identifier.name);
     if (this.typeParameters.length) {
       sb.push("<");
-      for (let i: i32 = 0; i < this.typeParameters.length; ++i) {
+      for (i = 0, k = this.typeParameters.length; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.typeParameters[i].serialize(sb);
@@ -1163,16 +1202,16 @@ export class ClassDeclaration extends DeclarationStatement {
     }
     if (this.implementsTypes.length) {
       sb.push(" implements ");
-      for (let i: i32 = 0; i < this.implementsTypes.length; ++i) {
+      for (i = 0, k = this.implementsTypes.length; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.implementsTypes[i].serialize(sb);
       }
     }
     sb.push(" {\n");
-    for (let i: i32 = 0; i < this.members.length; ++i) {
+    for (i = 0, k = this.members.length; i < k; ++i) {
       this.members[i].serialize(sb);
-      if (endsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1192,6 +1231,25 @@ export class ContinueStatement extends Statement {
       sb.push(this.label.name);
     } else
       sb.push("continue");
+  }
+}
+
+export class DecoratorStatement extends Statement {
+
+  kind = NodeKind.DECORATOR;
+  expression: Expression;
+  arguments: Expression[];
+
+  serialize(sb: string[]): void {
+    sb.push("@");
+    this.expression.serialize(sb);
+    sb.push("(");
+    for (let i: i32 = 0, k: i32 = this.arguments.length; i < k; ++i) {
+      if (i > 0)
+        sb.push(", ");
+      this.arguments[i].serialize(sb);
+    }
+    sb.push(")");
   }
 }
 
@@ -1227,14 +1285,15 @@ export class EnumDeclaration extends DeclarationStatement {
   members: EnumValueDeclaration[];
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
     }
     sb.push("enum ");
     this.identifier.serialize(sb);
     sb.push(" {\n");
-    for (let i: i32 = 0; i < this.members.length; ++i) {
+    for (i = 0, k = this.members.length; i < k; ++i) {
       if (i > 0)
         sb.push(",\n");
       this.members[i].serialize(sb);
@@ -1292,14 +1351,16 @@ export class ExportStatement extends Statement {
   modifiers: Modifier[];
   members: ExportMember[];
   path: string | null;
+  normalizedPath: string | null;
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
     }
     sb.push("export {\n");
-    for (let i: i32 = 0; i < this.members.length; ++i) {
+    for (i = 0, k = this.members.length; i < k; ++i) {
       if (i > 0)
         sb.push(",\n");
       this.members[i].serialize(sb);
@@ -1329,9 +1390,15 @@ export class FieldDeclaration extends DeclarationStatement {
   modifiers: Modifier[];
   type: TypeNode | null;
   initializer: Expression | null;
+  decorators: DecoratorStatement[];
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.decorators.length; i < k; ++i) {
+      this.decorators[i].serialize(sb);
+      sb.push("\n");
+    }
+    for (i = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
     }
@@ -1382,9 +1449,15 @@ export class FunctionDeclaration extends DeclarationStatement {
   parameters: Parameter[];
   returnType: TypeNode | null;
   statements: Statement[] | null;
+  decorators: DecoratorStatement[];
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.decorators.length; i < k; ++i) {
+      this.decorators[i].serialize(sb);
+      sb.push("\n");
+    }
+    for (i = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
     }
@@ -1394,9 +1467,10 @@ export class FunctionDeclaration extends DeclarationStatement {
 
   protected serializeCommon(sb: string[]): void {
     this.identifier.serialize(sb);
+    let i: i32, k: i32;
     if (this.typeParameters.length) {
       sb.push("<");
-      for (let i: i32 = 0; i < this.typeParameters.length; ++i) {
+      for (i = 0, k = this.typeParameters.length; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.typeParameters[i].serialize(sb);
@@ -1404,7 +1478,7 @@ export class FunctionDeclaration extends DeclarationStatement {
       sb.push(">");
     }
     sb.push("(");
-    for (let i: i32 = 0; i < this.parameters.length; ++i) {
+    for (i = 0, k = this.parameters.length; i < k; ++i) {
       if (i > 0)
         sb.push(", ");
       this.parameters[i].serialize(sb);
@@ -1416,10 +1490,10 @@ export class FunctionDeclaration extends DeclarationStatement {
       sb.push(")");
     if (this.statements) {
       sb.push(" {\n");
-      for (let i: i32 = 0; i < (<Statement[]>this.statements).length; ++i) {
+      for (i = 0, k = (<Statement[]>this.statements).length; i < k; ++i) {
         const statement: Statement = (<Statement[]>this.statements)[i];
         statement.serialize(sb);
-        if (endsWith(CharCode.CLOSEBRACE, sb))
+        if (builderEndsWith(CharCode.CLOSEBRACE, sb))
           sb.push("\n");
         else
           sb.push(";\n");
@@ -1472,10 +1546,11 @@ export class ImportStatement extends Statement {
   kind = NodeKind.IMPORT;
   declarations: ImportDeclaration[];
   path: string;
+  normalizedPath: string;
 
   serialize(sb: string[]): void {
     sb.push("import {\n");
-    for (let i: i32 = 0; i < this.declarations.length; ++i) {
+    for (let i: i32 = 0, k: i32 = this.declarations.length; i < k; ++i) {
       if (i > 0)
         sb.push(",\n");
       this.declarations[i].serialize(sb);
@@ -1494,7 +1569,8 @@ export class InterfaceDeclaration extends DeclarationStatement {
   members: Statement[];
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
     }
@@ -1502,7 +1578,7 @@ export class InterfaceDeclaration extends DeclarationStatement {
     this.identifier.serialize(sb);
     if (this.typeParameters.length) {
       sb.push("<");
-      for (let i: i32 = 0; i < this.typeParameters.length; ++i) {
+      for (i = 0, k =  this.typeParameters.length; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.typeParameters[i].serialize(sb);
@@ -1514,9 +1590,9 @@ export class InterfaceDeclaration extends DeclarationStatement {
       (<TypeNode>this.extendsType).serialize(sb);
     }
     sb.push(" {\n");
-    for (let i: i32 = 0; i < this.members.length; ++i) {
+    for (i = 0, k = this.members.length; i < k; ++i) {
       this.members[i].serialize(sb);
-      if (endsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1530,7 +1606,12 @@ export class MethodDeclaration extends FunctionDeclaration {
   kind = NodeKind.METHOD;
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.decorators.length; i < k; ++i) {
+      this.decorators[i].serialize(sb);
+      sb.push("\n");
+    }
+    for (i = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
     }
@@ -1545,16 +1626,17 @@ export class NamespaceDeclaration extends DeclarationStatement {
   members: DeclarationStatement[];
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
     }
     sb.push("namespace ");
     this.identifier.serialize(sb);
     sb.push(" {\n");
-    for (let i: i32 = 0; i < this.members.length; ++i) {
+    for (i = 0, k = this.members.length; i < k; ++i) {
       this.members[i].serialize(sb);
-      if (endsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1634,11 +1716,11 @@ export class SwitchCase extends Node {
       sb.push(":\n");
     } else
       sb.push("default:\n");
-    for (let i: i32 = 0; i < this.statements.length; ++i) {
+    for (let i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
       if (i > 0)
         sb.push("\n");
       this.statements[i].serialize(sb);
-      if (endsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1656,7 +1738,7 @@ export class SwitchStatement extends Statement {
     sb.push("switch (");
     this.expression.serialize(sb);
     sb.push(") {\n");
-    for (let i: i32 = 0; i < this.cases.length; ++i) {
+    for (let i: i32 = 0, k: i32 = this.cases.length; i < k; ++i) {
       this.cases[i].serialize(sb);
       sb.push("\n");
     }
@@ -1684,14 +1766,15 @@ export class TryStatement extends Statement {
 
   serialize(sb: string[]): void {
     sb.push("try {\n");
-    for (let i: i32 = 0; i < this.statements.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.statements.length; i < k; ++i) {
       this.statements[i].serialize(sb);
       sb.push(";\n");
     }
     sb.push("} catch (");
     this.catchVariable.serialize(sb);
     sb.push(") {\n");
-    for (let i: i32 = 0; i < this.catchStatements.length; ++i) {
+    for (i = 0, k = this.catchStatements.length; i < k; ++i) {
       this.catchStatements[i].serialize(sb);
       sb.push(";\n");
     }
@@ -1722,11 +1805,12 @@ export class VariableStatement extends Statement {
 
   kind = NodeKind.VARIABLE;
   modifiers: Modifier[];
-  members: VariableDeclaration[];
+  declarations: VariableDeclaration[];
 
   serialize(sb: string[]): void {
     let isConst: bool = false;
-    for (let i: i32 = 0; i < this.modifiers.length; ++i) {
+    let i: i32, k: i32;
+    for (i = 0, k = this.modifiers.length; i < k; ++i) {
       this.modifiers[i].serialize(sb);
       sb.push(" ");
       if (this.modifiers[i].modifierKind == ModifierKind.CONST)
@@ -1734,10 +1818,10 @@ export class VariableStatement extends Statement {
     }
     if (!isConst)
       sb.push("let ");
-    for (let i: i32 = 0; i < this.members.length; ++i) {
+    for (i = 0, k = this.declarations.length; i < k; ++i) {
       if (i > 0)
         sb.push(", ");
-      this.members[i].serialize(sb);
+      this.declarations[i].serialize(sb);
     }
   }
 }
@@ -1768,12 +1852,12 @@ export function isDeclarationStatement(kind: NodeKind): bool {
 }
 
 export function serialize(node: Node, indent: i32 = 0): string {
-  sb.length = 0;
+  const sb: string[] = new Array(); // shared builder could grow too much
   node.serialize(sb);
   return sb.join("");
 }
 
-function endsWith(code: CharCode, sb: string[]): bool {
+function builderEndsWith(code: CharCode, sb: string[]): bool {
   if (sb.length) {
     const last: string = sb[sb.length - 1];
     return last.length ? last.charCodeAt(last.length - 1) == code : false;

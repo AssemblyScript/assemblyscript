@@ -39,12 +39,14 @@ export enum DiagnosticCode {
   An_implementation_cannot_be_declared_in_ambient_contexts = 1183,
   An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive = 1198,
   Unterminated_Unicode_escape_sequence = 1199,
+  Decorators_are_not_valid_here = 1206,
   _abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration = 1242,
   Duplicate_identifier_0 = 2300,
   Cannot_find_name_0 = 2304,
   Generic_type_0_requires_1_type_argument_s = 2314,
   Type_0_is_not_generic = 2315,
   Type_0_is_not_assignable_to_type_1 = 2322,
+  The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391
 }
 
@@ -88,12 +90,14 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1183: return "An implementation cannot be declared in ambient contexts.";
     case 1198: return "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.";
     case 1199: return "Unterminated Unicode escape sequence.";
+    case 1206: return "Decorators are not valid here.";
     case 1242: return "'abstract' modifier can only appear on a class, method, or property declaration.";
     case 2300: return "Duplicate identifier '{0}'.";
     case 2304: return "Cannot find name '{0}'.";
     case 2314: return "Generic type '{0}' requires {1} type argument(s).";
     case 2315: return "Type '{0}' is not generic.";
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
+    case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     default: return "";
   }

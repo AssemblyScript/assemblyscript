@@ -10,6 +10,7 @@
       "node"
     ],
     "downlevelIteration": true,
+    "experimentalDecorators": true,
     "strictNullChecks": true,
     "alwaysStrict": true,
     "outDir": "../out"
@@ -28,7 +29,10 @@
     "program.ts",
     "reflection.ts",
     "tokenizer.ts",
+    "types.ts",
     "util.ts",
-    "util/i64.ts"
+    "util/charcode.ts",
+    "util/i64.ts",
+    "util/path.ts"
   ]
 }

@@ -394,7 +394,7 @@ export class Module {
     }
   }
 
-  addFunction(name: string, type: Type, varTypes: Type[], body: BinaryenExpressionRef): BinaryenFunctionRef {
+  addFunction(name: string, type: BinaryenFunctionTypeRef, varTypes: Type[], body: BinaryenExpressionRef): BinaryenFunctionRef {
     const cStr: CString = allocString(name);
     const cArr: CArray<i32> = allocI32Array(varTypes);
     try {

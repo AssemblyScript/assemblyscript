@@ -38,6 +38,7 @@
   "An implementation cannot be declared in ambient contexts.": 1183,
   "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": 1198,
   "Unterminated Unicode escape sequence.": 1199,
+  "Decorators are not valid here.": 1206,
   "'abstract' modifier can only appear on a class, method, or property declaration.": 1242,
 
   "Duplicate identifier '{0}'.": 2300,
@@ -45,5 +46,6 @@
   "Generic type '{0}' requires {1} type argument(s).": 2314,
   "Type '{0}' is not generic.": 2315,
   "Type '{0}' is not assignable to type '{1}'.": 2322,
+  "The operand of an increment or decrement operator must be a variable or a property access.": 2357,
   "Function implementation is missing or not immediately following the declaration.": 2391
 }

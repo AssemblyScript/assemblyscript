@@ -21,7 +21,7 @@
 
 import { Module } from "./binaryen";
 import { Compiler } from "./compiler";
-import { DiagnosticMessage, DiagnosticCategory, DiagnosticCode } from "./diagnostics";
+import { DiagnosticMessage, DiagnosticCategory } from "./diagnostics";
 import { Parser } from "./parser";
 import { Program } from "./program";
 

@@ -1,15 +1,13 @@
 import { Target } from "./compiler";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
-import { Source, Type, Class, Enum, Function, GlobalVariable, Namespace } from "./reflection";
 import { hasModifier } from "./parser";
-import { normalizePath, resolvePath, trimExtension } from "./util";
+import { Type } from "./types";
 import {
 
+  ModifierKind,
   Node,
   NodeKind,
-  SourceNode,
-  ModifierKind,
-  IdentifierExpression,
+  Source,
 
   ClassDeclaration,
   DeclarationStatement,
@@ -36,7 +34,7 @@ class QueuedExport {
 }
 
 class QueuedImport {
-  globalName: string;
+  internalName: string;
   importName: string;
   declaration: ImportDeclaration;
 }
@@ -47,19 +45,12 @@ export class Program extends DiagnosticEmitter {
   diagnosticsOffset: i32 = 0;
   target: Target = Target.WASM32;
 
-  // internal names to declarations
+  /** Internal map of names to declarations. */
   names: Map<string,DeclarationStatement> = new Map();
-  // type names to types
+  /** Separate map of internal type names to declarations. */
   types: Map<string,Type> = new Map();
-  // export names to declarations (separate from internal names)
+  /** Separate map of internal export names to declarations. */
   exports: Map<string,DeclarationStatement> = new Map();
-
-  // reflection instances
-  classes: Class[] = new Array();
-  enums: Enum[] = new Array();
-  functions: Function[] = new Array();
-  globals: GlobalVariable[] = new Array();
-  namespaces: Namespace[] = new Array();
 
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
@@ -68,12 +59,13 @@ export class Program extends DiagnosticEmitter {
 
   initialize(target: Target): void {
     this.target = target;
+
     initializeBasicTypes(this.types, target);
 
-    const exportsMap: Map<string,QueuedExport> = new Map();
-    const importsQueue: QueuedImport[] = new Array();
+    const queuedExports: Map<string,QueuedExport> = new Map();
+    const queuedImports: QueuedImport[] = new Array();
 
-    // build initial lookup maps of global and export names to declarations
+    // build initial lookup maps of internal and export names to declarations
     for (let i: i32 = 0, k: i32 = this.sources.length; i < k; ++i) {
       const source: Source = this.sources[i];
       const statements: Statement[] = source.statements;
@@ -90,7 +82,7 @@ export class Program extends DiagnosticEmitter {
             break;
 
           case NodeKind.EXPORT:
-            this.initializeExports(<ExportStatement>statement, exportsMap);
+            this.initializeExports(<ExportStatement>statement, queuedExports);
             break;
 
           case NodeKind.FUNCTION:
@@ -98,7 +90,7 @@ export class Program extends DiagnosticEmitter {
             break;
 
           case NodeKind.IMPORT:
-            this.initializeImports(<ImportStatement>statement, exportsMap, importsQueue);
+            this.initializeImports(<ImportStatement>statement, queuedExports, queuedImports);
             break;
 
           case NodeKind.INTERFACE:
@@ -116,52 +108,53 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // at this point exports map should be resolvable
-    for (let [key, val] of exportsMap.entries()) {
+    // at this point queued exports should be resolvable
+    for (let [exportName, queuedExport] of queuedExports.entries()) {
       const seen: Set<QueuedExport> = new Set();
-      while (exportsMap.has(val.importName)) {
-        val = <QueuedExport>exportsMap.get(val.importName);
-        if (seen.has(val))
+      while (queuedExports.has(queuedExport.importName)) {
+        queuedExport = <QueuedExport>queuedExports.get(queuedExport.importName);
+        if (seen.has(queuedExport))
           break;
-        seen.add(val);
+        seen.add(queuedExport);
       }
-      if (this.exports.has(val.importName))
-        this.addExport(key, <DeclarationStatement>this.exports.get(val.importName));
+      if (this.exports.has(queuedExport.importName))
+        this.addExport(exportName, <DeclarationStatement>this.exports.get(queuedExport.importName));
       else
-        this.error(DiagnosticCode.Cannot_find_name_0, val.member.externalIdentifier.range, val.importName);
+        this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.externalIdentifier.range, queuedExport.importName);
     }
 
-    // at this point imports queue should be resolvable
-    for (let i: i32 = 0, k: i32 = importsQueue.length; i < k; ++i) {
-      const queued: QueuedImport = importsQueue[i];
-      const globalName: string = queued.globalName;
-      let importName: string = queued.importName;
+    // at this point also queued imports should be resolvable
+    for (let i: i32 = 0, k: i32 = queuedImports.length; i < k; ++i) {
+      const queuedImport: QueuedImport = queuedImports[i];
+      const internalName: string = queuedImport.internalName;
+      let importName: string = queuedImport.importName;
       const seen: Set<QueuedExport> = new Set();
-      while (exportsMap.has(importName)) {
-        const val: QueuedExport = <QueuedExport>exportsMap.get(importName);
-        importName = val.importName;
-        if (seen.has(val))
+      while (queuedExports.has(importName)) {
+        const queuedExport: QueuedExport = <QueuedExport>queuedExports.get(importName);
+        importName = queuedExport.importName;
+        if (seen.has(queuedExport))
           break;
-        seen.add(val);
+        seen.add(queuedExport);
       }
       if (this.exports.has(importName)) {
-        if (this.names.has(globalName))
-          this.error(DiagnosticCode.Duplicate_identifier_0, queued.declaration.identifier.range, globalName);
+        if (this.names.has(internalName))
+          this.error(DiagnosticCode.Duplicate_identifier_0, queuedImport.declaration.identifier.range, internalName);
         else {
           const declaration: DeclarationStatement = <DeclarationStatement>this.exports.get(importName);
-          this.names.set(globalName, declaration);
+          this.names.set(internalName, declaration);
           // TODO: also mirror (non-private) member names?
+          // wouldn't it be better to look up members based on their parent?
         }
       } else
-        this.error(DiagnosticCode.Cannot_find_name_0, queued.declaration.externalIdentifier.range, importName);
+        this.error(DiagnosticCode.Cannot_find_name_0, queuedImport.declaration.externalIdentifier.range, importName);
     }
   }
 
   private initializeClass(declaration: ClassDeclaration): void {
-    const globalName: string = this.mangleName(declaration);
-    this.addName(globalName, declaration);
+    const internalName: string = this.mangleInternalName(declaration);
+    this.addName(internalName, declaration);
     if (hasModifier(ModifierKind.EXPORT, declaration.modifiers))
-      this.addExport(globalName, declaration);
+      this.addExport(/* same as */internalName, declaration);
     const members: DeclarationStatement[] = declaration.members;
     for (let j: i32 = 0, l: i32 = members.length; j < l; ++j) {
       const statement: Statement = members[j];
@@ -182,87 +175,91 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeField(declaration: FieldDeclaration): void {
-    const globalName: string = this.mangleName(declaration);
-    this.addName(globalName, declaration);
+    const internalName: string = this.mangleInternalName(declaration);
+    this.addName(internalName, declaration);
   }
 
   private initializeEnum(declaration: EnumDeclaration): void {
-    const globalName: string = this.mangleName(declaration);
-    this.addName(globalName, declaration);
+    const internalName: string = this.mangleInternalName(declaration);
+    this.addName(internalName, declaration);
     if (hasModifier(ModifierKind.EXPORT, declaration.modifiers))
-      this.addExport(globalName, declaration);
+      this.addExport(/* same as */internalName, declaration);
     const members: EnumValueDeclaration[] = declaration.members;
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i)
       this.initializeEnumValue(members[i]);
   }
 
   private initializeEnumValue(declaration: EnumValueDeclaration): void {
-    const globalName: string = this.mangleName(declaration);
-    this.addName(globalName, declaration);
+    const internalName: string = this.mangleInternalName(declaration);
+    this.addName(internalName, declaration);
   }
 
-  private initializeExports(statement: ExportStatement, exportsMap: Map<string,QueuedExport>): void {
+  private initializeExports(statement: ExportStatement, queuedExports: Map<string,QueuedExport>): void {
     const members: ExportMember[] = statement.members;
-    const normalizedPath: string | null = statement.path == null ? null : normalizePath(<string>statement.path);
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i)
-      this.initializeExport(members[i], normalizedPath, exportsMap);
+      this.initializeExport(members[i], statement.normalizedPath, queuedExports);
   }
 
-  private initializeExport(member: ExportMember, normalizedPath: string | null, exportsMap: Map<string,QueuedExport>): void {
+  private initializeExport(member: ExportMember, normalizedPath: string | null, queuedExports: Map<string,QueuedExport>): void {
     const exportName: string = member.range.source.normalizedPath + "/" + member.externalIdentifier.name;
-    if (exportsMap.has(exportName))
+    if (queuedExports.has(exportName))
       this.error(DiagnosticCode.Duplicate_identifier_0, member.externalIdentifier.range, exportName);
     else {
-      const queued: QueuedExport = new QueuedExport();
-      queued.importName = normalizedPath == null
+      const queuedExport: QueuedExport = new QueuedExport();
+      queuedExport.importName = normalizedPath == null
         ? member.range.source.normalizedPath + "/" + member.identifier.name // local
         : (<string>normalizedPath) + "/" + member.identifier.name;          // re-export
-      queued.member = member;
-      exportsMap.set(exportName, queued);
+      queuedExport.member = member;
+      queuedExports.set(exportName, queuedExport);
     }
   }
 
   private initializeFunction(declaration: FunctionDeclaration): void {
-    const globalName: string = this.mangleName(declaration);
-    this.addName(globalName, declaration);
+    const internalName: string = this.mangleInternalName(declaration);
+    this.addName(internalName, declaration);
     if (hasModifier(ModifierKind.EXPORT, declaration.modifiers))
-      this.addExport(globalName, declaration);
+      this.addExport(/* same as */internalName, declaration);
   }
 
-  private initializeImports(statement: ImportStatement, exportsMap: Map<string,QueuedExport>, importsQueue: QueuedImport[]): void {
+  private initializeImports(statement: ImportStatement, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
     const members: ImportDeclaration[] = statement.declarations;
-    const normalizedPath: string = normalizePath(statement.path);
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i) {
       const declaration: ImportDeclaration = members[i];
-      this.initializeImport(declaration, normalizedPath, exportsMap, importsQueue);
+      this.initializeImport(declaration, statement.normalizedPath, queuedExports, queuedImports);
     }
   }
 
-  private initializeImport(declaration: ImportDeclaration, normalizedPath: string, exportsMap: Map<string,QueuedExport>, importsQueue: QueuedImport[]): void {
+  private initializeImport(declaration: ImportDeclaration, normalizedPath: string, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
     const importName: string = normalizedPath + "/" + declaration.externalIdentifier.name;
     let resolvedImportName: string = importName;
-    while (exportsMap.has(resolvedImportName))
-      resolvedImportName = (<QueuedExport>exportsMap.get(resolvedImportName)).importName;
-    const globalName: string = this.mangleName(declaration);
+    const seen: Set<QueuedExport> = new Set();
+    while (queuedExports.has(resolvedImportName)) {
+      const queuedExport: QueuedExport = <QueuedExport>queuedExports.get(resolvedImportName);
+      resolvedImportName = queuedExport.importName;
+      if (seen.has(queuedExport))
+        break;
+      seen.add(queuedExport);
+    }
+    const internalName: string = this.mangleInternalName(declaration);
     if (this.exports.has(resolvedImportName)) { // resolvable right away
-      if (this.names.has(globalName))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, globalName);
+      if (this.names.has(internalName))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       else
-        this.names.set(globalName, <DeclarationStatement>this.exports.get(resolvedImportName));
+        this.names.set(internalName, <DeclarationStatement>this.exports.get(resolvedImportName));
     } else { // points to yet unresolved export
-      const queued: QueuedImport = new QueuedImport();
-      queued.globalName = globalName;
-      queued.importName = importName;
-      queued.declaration = declaration;
-      importsQueue.push(queued);
+      const queuedImport: QueuedImport = new QueuedImport();
+      queuedImport.internalName = internalName;
+      queuedImport.importName = importName;
+      queuedImport.declaration = declaration;
+      queuedImports.push(queuedImport);
     }
   }
 
   private initializeInterface(declaration: InterfaceDeclaration): void {
-    const globalName: string = this.mangleName(declaration);
-    this.addName(globalName, declaration);
+    const internalName: string = this.mangleInternalName(declaration);
+    this.addName(internalName, declaration);
     if (hasModifier(ModifierKind.EXPORT, declaration.modifiers))
-      this.addExport(globalName, declaration);
+      this.addExport(/* same as */internalName, declaration);
     const members: Statement[] = declaration.members;
     for (let j: i32 = 0, l: i32 = members.length; j < l; ++j) {
       const statement: Statement = members[j];
@@ -283,15 +280,15 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeMethod(declaration: MethodDeclaration): void {
-    const globalName: string = this.mangleName(declaration);
-    this.addName(globalName, declaration);
+    const internalName: string = this.mangleInternalName(declaration);
+    this.addName(internalName, declaration);
   }
 
   private initializeNamespace(declaration: NamespaceDeclaration): void {
-    const globalName: string = this.mangleName(declaration);
-    this.addName(globalName, declaration);
+    const internalName: string = this.mangleInternalName(declaration);
+    this.addName(internalName, declaration);
     if (hasModifier(ModifierKind.EXPORT, declaration.modifiers))
-      this.addExport(globalName, declaration);
+      this.addExport(/* same as */internalName, declaration);
     const members: Statement[] = declaration.members;
     for (let j: i32 = 0, l: i32 = members.length; j < l; ++j) {
       const statement: Statement = members[j];
@@ -327,33 +324,33 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeVariables(statement: VariableStatement, insideNamespace: bool = false): void {
-    const declarations: VariableDeclaration[] = statement.members;
-    const isExport: bool = !insideNamespace && hasModifier(ModifierKind.EXPORT, statement.modifiers);
+  private initializeVariables(statement: VariableStatement, isNamespaceMember: bool = false): void {
+    const declarations: VariableDeclaration[] = statement.declarations;
+    const isExport: bool = !isNamespaceMember && hasModifier(ModifierKind.EXPORT, statement.modifiers);
     for (let i: i32 = 0, k = declarations.length; i < k; ++i) {
       const declaration: VariableDeclaration = declarations[i];
-      const globalName: string = this.mangleName(declaration);
-      this.addName(globalName, declaration);
+      const internalName: string = this.mangleInternalName(declaration);
+      this.addName(internalName, declaration);
       if (isExport)
-        this.addExport(globalName, declaration);
+        this.addExport(/* same as */internalName, declaration);
     }
   }
 
-  private addName(globalName: string, declaration: DeclarationStatement): void {
-    if (this.names.has(globalName))
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, globalName); // recoverable
+  private addName(internalName: string, declaration: DeclarationStatement): void {
+    if (this.names.has(internalName))
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName); // recoverable
     else
-      this.names.set(globalName, declaration);
+      this.names.set(internalName, declaration);
   }
 
-  private addExport(globalName: string, declaration: DeclarationStatement): void {
-    if (this.exports.has(globalName))
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, globalName); // recoverable
+  private addExport(exportName: string, declaration: DeclarationStatement): void {
+    if (this.exports.has(exportName))
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, exportName); // recoverable
     else
-      this.exports.set(globalName, declaration);
+      this.exports.set(exportName, declaration);
   }
 
-  mangleName(declaration: DeclarationStatement): string {
+  mangleInternalName(declaration: DeclarationStatement): string {
     let name: string = declaration.identifier.name;
     let parent: Node | null = declaration.parent;
     if (parent) {
@@ -367,28 +364,28 @@ export class Program extends DiagnosticEmitter {
             (declaration.kind == NodeKind.FIELD && !hasModifier(ModifierKind.STATIC, (<FieldDeclaration>declaration).modifiers)) ||
             (declaration.kind == NodeKind.METHOD && !hasModifier(ModifierKind.STATIC, (<MethodDeclaration>declaration).modifiers))
           )
-            return this.mangleName(<DeclarationStatement>parent) + "#" + name;
+            return this.mangleInternalName(<DeclarationStatement>parent) + "#" + name;
           // otherwise fall through
         }
         case NodeKind.ENUM:
         case NodeKind.ENUMVALUE:
         case NodeKind.NAMESPACE:
-          return this.mangleName(<DeclarationStatement>parent) + "." + name;
+          return this.mangleInternalName(<DeclarationStatement>parent) + "." + name;
 
         case NodeKind.IMPORT: {
-          const impParent: Node | null = (<ImportStatement>parent).parent;
-          if (impParent && impParent.kind == NodeKind.SOURCE)
-            return (<SourceNode>impParent).path + "/" + name;
+          const importParent: Node | null = (<ImportStatement>parent).parent;
+          if (importParent && importParent.kind == NodeKind.SOURCE)
+            return (<Source>importParent).path + "/" + name;
           break;
         }
 
         case NodeKind.VARIABLE: {
-          const varParent: Node | null = (<VariableStatement>parent).parent;
-          if (varParent) {
-            if (varParent.kind == NodeKind.SOURCE)
-              return <SourceNode>varParent == this.sources[0] ? name : (<SourceNode>varParent).path + "/" + name;
-            if (varParent.kind == NodeKind.NAMESPACE)
-              return this.mangleName(<DeclarationStatement>varParent) + "." + name;
+          const variableParent: Node | null = (<VariableStatement>parent).parent;
+          if (variableParent) {
+            if (variableParent.kind == NodeKind.SOURCE)
+              return <Source>variableParent == this.sources[0] ? name : (<Source>variableParent).path + "/" + name;
+            if (variableParent.kind == NodeKind.NAMESPACE)
+              return this.mangleInternalName(<DeclarationStatement>variableParent) + "." + name;
           }
           break;
         }
@@ -396,34 +393,9 @@ export class Program extends DiagnosticEmitter {
     }
     throw new Error("unexpected parent");
   }
-
-  addClass(cl: Class): void {
-    cl.declaration.reflectionIndex = this.classes.length;
-    this.classes.push(cl);
-  }
-
-  addEnum(en: Enum): void {
-    en.declaration.reflectionIndex = this.enums.length;
-    this.enums.push(en);
-  }
-
-  addFunction(fn: Function): void {
-    fn.declaration.reflectionIndex = this.functions.length;
-    this.functions.push(fn);
-  }
-
-  addGlobal(gl: GlobalVariable): void {
-    gl.declaration.reflectionIndex = this.globals.length;
-    this.globals.push(gl);
-  }
-
-  addNamespace(ns: Namespace): void {
-    ns.declaration.reflectionIndex = this.namespaces.length;
-    this.namespaces.push(ns);
-  }
 }
 
-function initializeBasicTypes(types: Map<string,Type>, target: Target) {
+function initializeBasicTypes(types: Map<string,Type>, target: Target): void {
   types.set("i8", Type.i8);
   types.set("i16", Type.i16);
   types.set("i32", Type.i32);
@@ -435,5 +407,7 @@ function initializeBasicTypes(types: Map<string,Type>, target: Target) {
   types.set("u64", Type.u64);
   types.set("usize", target == Target.WASM64 ? Type.usize64 : Type.usize32);
   types.set("bool", Type.bool);
+  types.set("f32", Type.f32);
+  types.set("f64", Type.f64);
   types.set("void", Type.void);
 }

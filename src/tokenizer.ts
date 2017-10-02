@@ -20,7 +20,7 @@
 */
 
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter, formatDiagnosticMessage } from "./diagnostics";
-import { Source } from "./reflection";
+import { Source } from "./ast";
 import { I64, CharCode, isLineBreak } from "./util";
 
 export enum Token {

@@ -219,7 +219,7 @@ declare type BinaryenExportRef = usize;
 declare function _BinaryenAddExport(module: BinaryenModuleRef, internalName: CString, externalName: CString): BinaryenExportRef;
 declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: CString): void;
 
-declare function _BinaryenAddGlobal(module: BinaryenModuleRef, name: CString, type: BinaryenType, mutable: i8, init: BinaryenExpressionRef): BinaryenImportRef;
+declare function _BinaryenAddGlobal(module: BinaryenModuleRef, name: CString, type: BinaryenType, mutable: i8, init: BinaryenExpressionRef): BinaryenImportRef; // sic
 
 declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, funcs: CArray<BinaryenFunctionRef>, numFuncs: BinaryenIndex): void;
 
