@@ -19,6 +19,8 @@ export enum DiagnosticCode {
   An_accessor_cannot_have_type_parameters = 1094,
   A_set_accessor_cannot_have_a_return_type_annotation = 1095,
   Type_parameter_list_cannot_be_empty = 1098,
+  A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement = 1104,
+  A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement = 1105,
   A_return_statement_can_only_be_used_within_a_function_body = 1108,
   Expression_expected = 1109,
   Type_expected = 1110,
@@ -46,8 +48,11 @@ export enum DiagnosticCode {
   Generic_type_0_requires_1_type_argument_s = 2314,
   Type_0_is_not_generic = 2315,
   Type_0_is_not_assignable_to_type_1 = 2322,
+  _this_cannot_be_referenced_in_current_location = 2332,
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
-  Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391
+  Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
+  Duplicate_function_implementation = 2393,
+  Expected_0_type_arguments_but_got_1 = 2558
 }
 
 export function diagnosticCodeToString(code: DiagnosticCode): string {
@@ -70,6 +75,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1094: return "An accessor cannot have type parameters.";
     case 1095: return "A 'set' accessor cannot have a return type annotation.";
     case 1098: return "Type parameter list cannot be empty.";
+    case 1104: return "A 'continue' statement can only be used within an enclosing iteration statement.";
+    case 1105: return "A 'break' statement can only be used within an enclosing iteration or switch statement.";
     case 1108: return "A 'return' statement can only be used within a function body.";
     case 1109: return "Expression expected.";
     case 1110: return "Type expected.";
@@ -97,8 +104,11 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2314: return "Generic type '{0}' requires {1} type argument(s).";
     case 2315: return "Type '{0}' is not generic.";
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
+    case 2332: return "'this' cannot be referenced in current location.";
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
+    case 2393: return "Duplicate function implementation.";
+    case 2558: return "Expected {0} type arguments, but got {1}.";
     default: return "";
   }
 }

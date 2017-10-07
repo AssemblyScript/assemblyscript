@@ -39,6 +39,8 @@ class QueuedImport {
   declaration: ImportDeclaration;
 }
 
+const typesStub: Map<string,Type> = new Map();
+
 export class Program extends DiagnosticEmitter {
 
   sources: Source[];
@@ -48,7 +50,7 @@ export class Program extends DiagnosticEmitter {
   /** Internal map of names to declarations. */
   names: Map<string,DeclarationStatement> = new Map();
   /** Separate map of internal type names to declarations. */
-  types: Map<string,Type> = new Map();
+  types: Map<string,Type> = typesStub;
   /** Separate map of internal export names to declarations. */
   exports: Map<string,DeclarationStatement> = new Map();
 
@@ -59,8 +61,22 @@ export class Program extends DiagnosticEmitter {
 
   initialize(target: Target): void {
     this.target = target;
-
-    initializeBasicTypes(this.types, target);
+    this.types = new Map([
+      ["i8", Type.i8],
+      ["i16", Type.i16],
+      ["i32", Type.i32],
+      ["i64", Type.i64],
+      ["isize", target == Target.WASM64 ? Type.isize64 : Type.isize32],
+      ["u8", Type.u8],
+      ["u16", Type.u16],
+      ["u32", Type.u32],
+      ["u64", Type.u64],
+      ["usize", target == Target.WASM64 ? Type.usize64 : Type.usize32],
+      ["bool", Type.bool],
+      ["f32", Type.f32],
+      ["f64", Type.f64],
+      ["void", Type.void]
+    ]);
 
     const queuedExports: Map<string,QueuedExport> = new Map();
     const queuedImports: QueuedImport[] = new Array();
@@ -127,8 +143,8 @@ export class Program extends DiagnosticEmitter {
     for (let i: i32 = 0, k: i32 = queuedImports.length; i < k; ++i) {
       const queuedImport: QueuedImport = queuedImports[i];
       const internalName: string = queuedImport.internalName;
-      let importName: string = queuedImport.importName;
       const seen: Set<QueuedExport> = new Set();
+      let importName: string = queuedImport.importName;
       while (queuedExports.has(importName)) {
         const queuedExport: QueuedExport = <QueuedExport>queuedExports.get(importName);
         importName = queuedExport.importName;
@@ -327,7 +343,7 @@ export class Program extends DiagnosticEmitter {
   private initializeVariables(statement: VariableStatement, isNamespaceMember: bool = false): void {
     const declarations: VariableDeclaration[] = statement.declarations;
     const isExport: bool = !isNamespaceMember && hasModifier(ModifierKind.EXPORT, statement.modifiers);
-    for (let i: i32 = 0, k = declarations.length; i < k; ++i) {
+    for (let i: i32 = 0, k: i32 = declarations.length; i < k; ++i) {
       const declaration: VariableDeclaration = declarations[i];
       const internalName: string = this.mangleInternalName(declaration);
       this.addName(internalName, declaration);
@@ -393,21 +409,4 @@ export class Program extends DiagnosticEmitter {
     }
     throw new Error("unexpected parent");
   }
-}
-
-function initializeBasicTypes(types: Map<string,Type>, target: Target): void {
-  types.set("i8", Type.i8);
-  types.set("i16", Type.i16);
-  types.set("i32", Type.i32);
-  types.set("i64", Type.i64);
-  types.set("isize", target == Target.WASM64 ? Type.isize64 : Type.isize32);
-  types.set("u8", Type.u8);
-  types.set("u16", Type.u16);
-  types.set("u32", Type.u32);
-  types.set("u64", Type.u64);
-  types.set("usize", target == Target.WASM64 ? Type.usize64 : Type.usize32);
-  types.set("bool", Type.bool);
-  types.set("f32", Type.f32);
-  types.set("f64", Type.f64);
-  types.set("void", Type.void);
 }

@@ -475,6 +475,9 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.SLASH:
           if (++this.pos < this.end) {
             if (text.charCodeAt(this.pos) == CharCode.SLASH) { // single-line comment
+              if (this.pos + 1 < this.end && text.charCodeAt(this.pos + 1) == CharCode.SLASH) {
+                // TODO: triple-slash directives, i.e. '/// <reference path="some.d.ts" />'
+              }
               while (++this.pos < this.end) {
                 if (isLineBreak(text.charCodeAt(this.pos)))
                   break;
@@ -690,7 +693,7 @@ export class Tokenizer extends DiagnosticEmitter {
     const posBefore: i32 = this.pos;
     const tokenBefore: Token = this.token;
     const tokenPosBefore: i32 = this.tokenPos;
-    if ((this.nextToken = this.unsafeNext(token == Token.IDENTIFIER)) == token) {
+    if ((this.token = this.unsafeNext(token == Token.IDENTIFIER)) == token) {
       this.nextToken = -1;
       return true;
     } else {

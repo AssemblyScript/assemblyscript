@@ -172,11 +172,15 @@ export class Module {
 
   ref: BinaryenModuleRef;
   lit: BinaryenLiteral;
+  noEmit: bool;
+
+  static MAX_MEMORY_WASM32: BinaryenIndex = 0xffff;
 
   static create(): Module {
     const module: Module = new Module();
     module.ref = _BinaryenModuleCreate();
     module.lit = _malloc(16);
+    module.noEmit = false;
     return module;
   }
 
@@ -186,17 +190,27 @@ export class Module {
       const module: Module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
       module.lit = _malloc(16);
+      module.noEmit = false;
       return module;
     } finally {
       _free(cArr);
     }
   }
 
-  static MAX_MEMORY_WASM32: BinaryenIndex = 0xffff;
+  static createStub(): Module {
+    const module: Module = new Module();
+    module.ref = 0;
+    module.lit = 0;
+    module.noEmit = true;
+    return module;
+  }
+
+  private constructor() { }
 
   // types
 
   addFunctionType(name: string, result: Type, paramTypes: Type[]): BinaryenFunctionRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(name);
     const cArr: CArray<i32> = allocI32Array(paramTypes);
     try {
@@ -208,6 +222,7 @@ export class Module {
   }
 
   getFunctionTypeBySignature(result: Type, paramTypes: Type[]): BinaryenFunctionTypeRef {
+    if (this.noEmit) return 0;
     const cArr: CArray<i32> = allocI32Array(paramTypes);
     try {
       return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes.length);
@@ -219,34 +234,41 @@ export class Module {
   // expressions
 
   createI32(value: i32): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     _BinaryenLiteralInt32(this.lit, value);
     return _BinaryenConst(this.ref, this.lit);
   }
 
   createI64(lo: i32, hi: i32): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     _BinaryenLiteralInt64(this.lit, lo, hi);
     return _BinaryenConst(this.ref, this.lit);
   }
 
   createF32(value: f32): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     _BinaryenLiteralFloat32(this.lit, value);
     return _BinaryenConst(this.ref, this.lit);
   }
 
   createF64(value: f64): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     _BinaryenLiteralFloat64(this.lit, value);
     return _BinaryenConst(this.ref, this.lit);
   }
 
   createUnary(op: UnaryOp, expr: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenUnary(this.ref, op, expr);
   }
 
   createBinary(op: BinaryOp, left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenBinary(this.ref, op, left, right);
   }
 
   createHost(op: HostOp, name: string | null = null, operands: BinaryenExpressionRef[] | null = null): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(name);
     const cArr: CArray<i32> = allocI32Array(operands);
     try {
@@ -258,14 +280,17 @@ export class Module {
   }
 
   createGetLocal(index: i32, type: Type): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenGetLocal(this.ref, index, type);
   }
 
   createTeeLocal(index: i32, value: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenTeeLocal(this.ref, index, value);
   }
 
   createGetGlobal(name: string, type: Type): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(name);
     try {
       return _BinaryenGetGlobal(this.ref, cStr, type);
@@ -274,21 +299,15 @@ export class Module {
     }
   }
 
-  createTeeGlobal(name: string, value: BinaryenExpressionRef, type: Type): BinaryenExpressionRef {
-    // emulated, lives here for simplicity reasons
-    return this.createBlock(null, [
-      this.createSetGlobal(name, value),
-      this.createGetGlobal(name, type)
-    ], type);
-  }
-
   // statements
 
   createSetLocal(index: i32, value: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenSetLocal(this.ref, index, value);
   }
 
   createSetGlobal(name: string, value: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(name);
     try {
       return _BinaryenSetGlobal(this.ref, cStr, value);
@@ -298,6 +317,7 @@ export class Module {
   }
 
   createBlock(label: string | null, children: BinaryenExpressionRef[], type: Type = Type.Undefined): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(label);
     const cArr: CArray<i32> = allocI32Array(children);
     try {
@@ -309,6 +329,7 @@ export class Module {
   }
 
   createBreak(label: string | null, condition: BinaryenExpressionRef = 0, value: BinaryenExpressionRef = 0): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(label);
     try {
       return _BinaryenBreak(this.ref, cStr, condition, value);
@@ -318,10 +339,12 @@ export class Module {
   }
 
   createDrop(expression: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenDrop(this.ref, expression);
   }
 
   createLoop(label: string | null, body: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(label);
     try {
       return _BinaryenLoop(this.ref, cStr, body);
@@ -331,22 +354,27 @@ export class Module {
   }
 
   createIf(condition: BinaryenExpressionRef, ifTrue: BinaryenExpressionRef, ifFalse: BinaryenExpressionRef = 0): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenIf(this.ref, condition, ifTrue, ifFalse);
   }
 
   createNop(): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenNop(this.ref);
   }
 
   createReturn(expression: BinaryenExpressionRef = 0): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenReturn(this.ref, expression);
   }
 
   createSelect(condition: BinaryenExpressionRef, ifTrue: BinaryenExpressionRef, ifFalse: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenSelect(this.ref, condition, ifTrue, ifFalse);
   }
 
   createSwitch(names: string[], defaultName: string | null, condition: BinaryenExpressionRef, value: BinaryenExpressionRef = 0): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const strs: CString[] = new Array(names.length);
     let i: i32, k: i32 = names.length;
     for (i = 0; i < k; ++i) strs[i] = allocString(names[i]);
@@ -362,6 +390,7 @@ export class Module {
   }
 
   createCall(target: BinaryenFunctionRef, operands: BinaryenExpressionRef[], returnType: Type): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const cArr: CArray<i32> = allocI32Array(operands);
     try {
       return _BinaryenCall(this.ref, target, cArr, operands.length, returnType);
@@ -371,6 +400,7 @@ export class Module {
   }
 
   createCallImport(target: BinaryenImportRef, operands: BinaryenExpressionRef[], returnType: Type): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     const cArr: CArray<i32> = allocI32Array(operands);
     try {
       return _BinaryenCallImport(this.ref, target, cArr, operands.length, returnType);
@@ -380,12 +410,14 @@ export class Module {
   }
 
   createUnreachable(): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
     return _BinaryenUnreachable(this.ref);
   }
 
   // meta
 
   addGlobal(name: string, type: Type, mutable: bool, initializer: BinaryenExpressionRef): BinaryenImportRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(name);
     try {
       return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
@@ -395,6 +427,7 @@ export class Module {
   }
 
   addFunction(name: string, type: BinaryenFunctionTypeRef, varTypes: Type[], body: BinaryenExpressionRef): BinaryenFunctionRef {
+    if (this.noEmit) return 0;
     const cStr: CString = allocString(name);
     const cArr: CArray<i32> = allocI32Array(varTypes);
     try {
@@ -406,6 +439,7 @@ export class Module {
   }
 
   addExport(internalName: string, externalName: string): BinaryenExportRef {
+    if (this.noEmit) return 0;
     const cStr1: CString = allocString(internalName);
     const cStr2: CString = allocString(externalName);
     try {
@@ -417,6 +451,7 @@ export class Module {
   }
 
   removeExport(externalName: string): void {
+    if (this.noEmit) return;
     const cStr = allocString(externalName);
     try {
       _BinaryenRemoveExport(this.ref, cStr);
@@ -426,6 +461,7 @@ export class Module {
   }
 
   addImport(internalName: string, externalModuleName: string, externalBaseName: string, type: BinaryenFunctionTypeRef): BinaryenImportRef {
+    if (this.noEmit) return 0;
     const cStr1: CString = allocString(internalName);
     const cStr2: CString = allocString(externalModuleName);
     const cStr3: CString = allocString(externalBaseName);
@@ -439,6 +475,7 @@ export class Module {
   }
 
   removeImport(internalName: string): void {
+    if (this.noEmit) return;
     const cStr: CString = allocString(internalName);
     try {
       _BinaryenRemoveImport(this.ref, cStr);
@@ -448,6 +485,7 @@ export class Module {
   }
 
   setMemory(initial: BinaryenIndex, maximum: BinaryenIndex, segments: MemorySegment[], target: Target, exportName: string | null = null): void {
+    if (this.noEmit) return;
     const cStr: CString = allocString(exportName);
     let i: i32, k: i32 = segments.length;
     const segs: CArray<u8>[] = new Array(k);
@@ -477,18 +515,22 @@ export class Module {
   }
 
   setStart(func: BinaryenFunctionRef): void {
+    if (this.noEmit) return;
     _BinaryenSetStart(this.ref, func);
   }
 
   optimize(): void {
+    if (this.noEmit) return;
     _BinaryenModuleOptimize(this.ref);
   }
 
   validate(): bool {
+    if (this.noEmit) return false;
     return _BinaryenModuleValidate(this.ref) == 1;
   }
 
   dispose(): void {
+    if (!this.ref) return; // sic
     _BinaryenModuleDispose(this.ref);
     _free(this.lit);
   }
@@ -547,7 +589,7 @@ function allocString(str: string | null): CString {
   if (!str) return 0;
   const ptr: usize = _malloc(stringLengthUTF8((<string>str)) + 1);
   let idx: usize = ptr;
-  for (let i: i32 = 0, k = (<string>str).length; i < k; ++i) {
+  for (let i: i32 = 0, k: i32 = (<string>str).length; i < k; ++i) {
     let u: i32 = (<string>str).charCodeAt(i);
     if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k)
       u = 0x10000 + ((u & 0x3FF) << 10) | ((<string>str).charCodeAt(++i) & 0x3FF);

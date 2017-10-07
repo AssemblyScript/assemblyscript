@@ -94,11 +94,16 @@ export enum NodeKind {
   BINARY,
   CALL,
   ELEMENTACCESS,
+  FALSE,
   LITERAL,
   NEW,
+  NULL,
   PARENTHESIZED,
   PROPERTYACCESS,
   SELECT,
+  SUPER,
+  THIS,
+  TRUE,
   UNARYPOSTFIX,
   UNARYPREFIX,
 
@@ -163,6 +168,7 @@ export function nodeKindToString(kind: NodeKind): string {
     case NodeKind.EXPORTIMPORT: return "EXPORTIMPORT";
     case NodeKind.EXPRESSION: return "EXPRESSION";
     case NodeKind.INTERFACE: return "INTERFACE";
+    case NodeKind.FALSE: return "FALSE";
     case NodeKind.FOR: return "FOR";
     case NodeKind.FUNCTION: return "FUNCTION";
     case NodeKind.IF: return "IF";
@@ -170,10 +176,14 @@ export function nodeKindToString(kind: NodeKind): string {
     case NodeKind.IMPORTDECLARATION: return "IMPORTDECLARATION";
     case NodeKind.METHOD: return "METHOD";
     case NodeKind.NAMESPACE: return "NAMESPACE";
+    case NodeKind.NULL: return "NULL";
     case NodeKind.FIELD: return "PROPERTY";
     case NodeKind.RETURN: return "RETURN";
+    case NodeKind.SUPER: return "SUPER";
     case NodeKind.SWITCH: return "SWITCH";
+    case NodeKind.THIS: return "THIS";
     case NodeKind.THROW: return "THROW";
+    case NodeKind.TRUE: return "TRUE";
     case NodeKind.TRY: return "TRY";
     case NodeKind.VARIABLE: return "VARIABLE";
     case NodeKind.VARIABLEDECLARATION: return "VARIABLEDECLARATION";
@@ -286,6 +296,12 @@ export abstract class Expression extends Node {
     return expr;
   }
 
+  static createFalse(range: Range): FalseExpression {
+    const expr: FalseExpression = new FalseExpression();
+    expr.range = range;
+    return expr;
+  }
+
   static createFloatLiteral(value: f64, range: Range): FloatLiteralExpression {
     const expr: FloatLiteralExpression = new FloatLiteralExpression();
     expr.range = range;
@@ -307,6 +323,12 @@ export abstract class Expression extends Node {
     let i: i32, k: i32;
     for (i = 0, k = (expr.typeArguments = typeArguments).length; i < k; ++i) typeArguments[i].parent = expr;
     for (i = 0, k = (expr.arguments = args).length; i < k; ++i) args[i].parent = expr;
+    return expr;
+  }
+
+  static createNull(range: Range): NullExpression {
+    const expr: NullExpression = new NullExpression();
+    expr.range = range;
     return expr;
   }
 
@@ -345,6 +367,24 @@ export abstract class Expression extends Node {
     const expr: StringLiteralExpression = new StringLiteralExpression();
     expr.range = range;
     expr.value = value;
+    return expr;
+  }
+
+  static createSuper(range: Range): SuperExpression {
+    const expr: SuperExpression = new SuperExpression();
+    expr.range = range;
+    return expr;
+  }
+
+  static createThis(range: Range): ThisExpression {
+    const expr: ThisExpression = new ThisExpression();
+    expr.range = range;
+    return expr;
+  }
+
+  static createTrue(range: Range): TrueExpression {
+    const expr: TrueExpression = new TrueExpression();
+    expr.range = range;
     return expr;
   }
 
@@ -614,6 +654,11 @@ export class NewExpression extends CallExpression {
   }
 }
 
+export class NullExpression extends IdentifierExpression {
+  kind = NodeKind.NULL;
+  name = "null";
+}
+
 export class ParenthesizedExpression extends Expression {
 
   kind = NodeKind.PARENTHESIZED;
@@ -711,6 +756,26 @@ export class StringLiteralExpression extends LiteralExpression {
   }
 }
 
+export class SuperExpression extends IdentifierExpression {
+  kind = NodeKind.SUPER;
+  name = "super";
+}
+
+export class ThisExpression extends IdentifierExpression {
+  kind = NodeKind.THIS;
+  name = "this";
+}
+
+export class TrueExpression extends IdentifierExpression {
+  kind = NodeKind.TRUE;
+  name = "true";
+}
+
+export class FalseExpression extends IdentifierExpression {
+  kind = NodeKind.FALSE;
+  name = "false";
+}
+
 export abstract class UnaryExpression extends Expression {
   operator: Token;
   expression: Expression;
@@ -798,7 +863,7 @@ export abstract class Statement extends Node {
   static createBlock(statements: Statement[], range: Range): BlockStatement {
     const stmt: BlockStatement = new BlockStatement();
     stmt.range = range;
-    for (let i: i32 = 0, k = (stmt.statements = statements).length; i < k; ++i) statements[i].parent = stmt;
+    for (let i: i32 = 0, k: i32 = (stmt.statements = statements).length; i < k; ++i) statements[i].parent = stmt;
     return stmt;
   }
 
@@ -1055,13 +1120,14 @@ export abstract class Statement extends Node {
     return stmt;
   }
 
-  static createTry(statements: Statement[], catchVariable: VariableDeclaration, catchStatements: Statement[], range: Range): TryStatement {
+  static createTry(statements: Statement[], catchVariable: IdentifierExpression | null, catchStatements: Statement[] | null, finallyStatements: Statement[] | null, range: Range): TryStatement {
     const stmt: TryStatement = new TryStatement();
     stmt.range = range;
     let i: i32, k: i32;
     for (i = 0, k = (stmt.statements = statements).length; i < k; ++i) statements[i].parent = stmt;
-    (stmt.catchVariable = catchVariable).parent = stmt;
-    for (i = 0, k = (stmt.catchStatements = catchStatements).length; i < k; ++i) catchStatements[i].parent = stmt;
+    if (stmt.catchVariable = catchVariable) (<IdentifierExpression>catchVariable).parent = stmt;
+    if (stmt.catchStatements = catchStatements) for (i = 0, k = (<Statement[]>catchStatements).length; i < k; ++i) (<Statement[]>catchStatements)[i].parent = stmt;
+    if (stmt.finallyStatements = finallyStatements) for (i = 0, k = (<Statement[]>finallyStatements).length; i < k; ++i) (<Statement[]>finallyStatements)[i].parent = stmt;
     return stmt;
   }
 
@@ -1117,7 +1183,7 @@ export class Source extends Node {
   get isDeclaration(): bool { return !this.isEntry && this.path.endsWith(".d.ts"); }
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0, k = this.statements.length; i < k; ++i) {
+    for (let i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
       const statement: Statement = this.statements[i];
       statement.serialize(sb);
       const last: string = sb[sb.length - 1];
@@ -1142,7 +1208,7 @@ export class BlockStatement extends Statement {
     sb.push("{\n");
     for (let i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
       this.statements[i].serialize(sb);
-      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1211,7 +1277,7 @@ export class ClassDeclaration extends DeclarationStatement {
     sb.push(" {\n");
     for (i = 0, k = this.members.length; i < k; ++i) {
       this.members[i].serialize(sb);
-      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1493,7 +1559,7 @@ export class FunctionDeclaration extends DeclarationStatement {
       for (i = 0, k = (<Statement[]>this.statements).length; i < k; ++i) {
         const statement: Statement = (<Statement[]>this.statements)[i];
         statement.serialize(sb);
-        if (builderEndsWith(CharCode.CLOSEBRACE, sb))
+        if (builderEndsWith(sb, CharCode.CLOSEBRACE))
           sb.push("\n");
         else
           sb.push(";\n");
@@ -1592,7 +1658,7 @@ export class InterfaceDeclaration extends DeclarationStatement {
     sb.push(" {\n");
     for (i = 0, k = this.members.length; i < k; ++i) {
       this.members[i].serialize(sb);
-      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1623,7 +1689,7 @@ export class NamespaceDeclaration extends DeclarationStatement {
 
   kind = NodeKind.NAMESPACE;
   modifiers: Modifier[];
-  members: DeclarationStatement[];
+  members: Statement[];
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
@@ -1636,7 +1702,7 @@ export class NamespaceDeclaration extends DeclarationStatement {
     sb.push(" {\n");
     for (i = 0, k = this.members.length; i < k; ++i) {
       this.members[i].serialize(sb);
-      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1720,7 +1786,7 @@ export class SwitchCase extends Node {
       if (i > 0)
         sb.push("\n");
       this.statements[i].serialize(sb);
-      if (builderEndsWith(CharCode.CLOSEBRACE, sb))
+      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
         sb.push("\n");
       else
         sb.push(";\n");
@@ -1761,8 +1827,9 @@ export class TryStatement extends Statement {
 
   kind = NodeKind.TRY;
   statements: Statement[];
-  catchVariable: VariableDeclaration;
-  catchStatements: Statement[];
+  catchVariable: IdentifierExpression | null;
+  catchStatements: Statement[] | null;
+  finallyStatements: Statement[] | null;
 
   serialize(sb: string[]): void {
     sb.push("try {\n");
@@ -1771,12 +1838,22 @@ export class TryStatement extends Statement {
       this.statements[i].serialize(sb);
       sb.push(";\n");
     }
-    sb.push("} catch (");
-    this.catchVariable.serialize(sb);
-    sb.push(") {\n");
-    for (i = 0, k = this.catchStatements.length; i < k; ++i) {
-      this.catchStatements[i].serialize(sb);
-      sb.push(";\n");
+    if (this.catchVariable) {
+      sb.push("} catch (");
+      (<IdentifierExpression>this.catchVariable).serialize(sb);
+      sb.push(") {\n");
+      if (this.catchStatements)
+        for (i = 0, k = (<Statement[]>this.catchStatements).length; i < k; ++i) {
+          (<Statement[]>this.catchStatements)[i].serialize(sb);
+          sb.push(";\n");
+        }
+    }
+    if (this.finallyStatements) {
+      sb.push("} finally {\n");
+      for (i = 0, k = (<Statement[]>this.finallyStatements).length; i < k; ++i) {
+        (<Statement[]>this.finallyStatements)[i].serialize(sb);
+        sb.push(";\n");
+      }
     }
     sb.push("}");
   }
@@ -1857,7 +1934,7 @@ export function serialize(node: Node, indent: i32 = 0): string {
   return sb.join("");
 }
 
-function builderEndsWith(code: CharCode, sb: string[]): bool {
+function builderEndsWith(sb: string[], code: CharCode): bool {
   if (sb.length) {
     const last: string = sb[sb.length - 1];
     return last.length ? last.charCodeAt(last.length - 1) == code : false;

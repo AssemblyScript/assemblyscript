@@ -1,3 +1,5 @@
+import { sb } from "./util";
+
 export const enum TypeKind {
 
   // signed integers
@@ -54,12 +56,14 @@ export class Type {
   }
 
   asNullable(): Type {
+    if (this.kind != TypeKind.USIZE)
+      throw new Error("unexpected non-usize nullable");
     if (!this.nullableType)
       (this.nullableType = new Type(this.kind, this.size)).nullable = true;
     return <Type>this.nullableType;
   }
 
-  toString(): string {
+  toString(kindOnly: bool = false): string {
     switch (this.kind) {
       case TypeKind.I8: return "i8";
       case TypeKind.I16: return "i16";
@@ -69,7 +73,7 @@ export class Type {
       case TypeKind.U16: return "u16";
       case TypeKind.U32: return "u32";
       case TypeKind.U64: return "u64";
-      case TypeKind.USIZE: return "usize";
+      case TypeKind.USIZE: return this.classType && !kindOnly ? this.classType.toString() : "usize";
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
@@ -99,40 +103,99 @@ export class Type {
 
 export class FunctionType {
 
-  returnType: Type;
+  typeArguments: Type[];
   parameterTypes: Type[];
+  returnType: Type;
+
   additionalLocals: Type[];
   typeArgumentsMap: Map<string, Type> | null = null;
+  locals: Map<string, LocalType> = new Map();
+  breakContext: string | null = null;
 
   private breakMajor: i32 = 0;
   private breakMinor: i32 = 0;
 
-  constructor(returnType: Type, parameterTypes: Type[]) {
-    this.returnType = returnType;
+  constructor(typeArguments: Type[], parameterTypes: Type[], returnType: Type, parameterNames: string[] | null = null) {
+    this.typeArguments = typeArguments;
     this.parameterTypes = parameterTypes;
+    this.returnType = returnType;
     this.additionalLocals = new Array();
+    if (parameterNames) {
+      if (parameterTypes.length != (<string[]>parameterNames).length)
+        throw new Error("unexpected parameter count mismatch");;
+      for (let i: i32 = 0, k: i32 = parameterTypes.length; i < k; ++i) {
+        const name: string = (<string[]>parameterNames)[i];
+        if (this.locals.has(name))
+          throw new Error("duplicate parameter name");
+        this.locals.set(name, new LocalType(i, parameterTypes[i]));
+      }
+    }
   }
 
   enterBreakContext(): string {
     if (!this.breakMinor)
       this.breakMajor++;
-    return this.breakMajor.toString(10) + "." + (++this.breakMinor).toString(10);
+    return this.breakContext = this.breakMajor.toString(10) + "." + (++this.breakMinor).toString(10);
   }
 
   leaveBreakContext(): void {
     if (--this.breakMinor < 0)
       throw new Error("unexpected unbalanced break context");
+    if (this.breakMinor == 0 && !--this.breakMajor)
+      this.breakContext = null;
+  }
+
+  addLocal(type: Type, name: string | null = null): i32 {
+    // internal locals don't necessarily need names if referenced by index only
+    if (name && this.locals.has(<string>name))
+      throw new Error("duplicate local name");
+    const index: i32 = this.parameterTypes.length + this.additionalLocals.length;
+    this.additionalLocals.push(type);
+    if (name)
+      this.locals.set(<string>name, new LocalType(index, type));
+    return index;
+  }
+}
+
+export class LocalType {
+
+  index: i32;
+  type: Type;
+
+  constructor(index: i32, type: Type) {
+    this.index = index;
+    this.type = type;
   }
 }
 
 export class ClassType {
 
-  type: Type;
-  typeArgumentsMap: Map<string, Type> | null = null;
+  name: string;
+  typeArguments: Type[];
   base: ClassType | null;
 
-  constructor(usizeType: Type, base: ClassType | null = null) {
-    this.type = usizeType.asClass(this);
+  type: Type;
+  typeArgumentsMap: Map<string, Type> | null = null;
+
+  constructor(name: string, usizeType: Type, typeArguments: Type[], base: ClassType | null = null) {
+    this.name = name;
+    this.typeArguments = typeArguments;
     this.base = base;
+    this.type = usizeType.asClass(this);
   }
+
+  toString(): string {
+    let str: string = this.typeArguments.length ? this.name + typeArgumentsToString(this.typeArguments) : this.name;
+    return this.type.nullable ? str + " | null" : str;
+  }
+}
+
+export function typeArgumentsToString(typeArguments: Type[]): string {
+  const k: i32 = typeArguments.length;
+  if (!k)
+    return "";
+  sb.length = 0;
+  for (let i: i32 = 0; i < k; ++i)
+    sb[i] = typeArguments[i].toString();
+  return "<" + sb.join(",") + ">";
 }

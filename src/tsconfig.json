@@ -27,7 +27,6 @@
     "index.ts",
     "parser.ts",
     "program.ts",
-    "reflection.ts",
     "tokenizer.ts",
     "types.ts",
     "util.ts",

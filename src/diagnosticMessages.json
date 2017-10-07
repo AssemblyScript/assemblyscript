@@ -18,6 +18,8 @@
   "An accessor cannot have type parameters.": 1094,
   "A 'set' accessor cannot have a return type annotation.": 1095,
   "Type parameter list cannot be empty.": 1098,
+  "A 'continue' statement can only be used within an enclosing iteration statement.": 1104,
+  "A 'break' statement can only be used within an enclosing iteration or switch statement.": 1105,
   "A 'return' statement can only be used within a function body.": 1108,
   "Expression expected.": 1109,
   "Type expected.": 1110,
@@ -46,6 +48,9 @@
   "Generic type '{0}' requires {1} type argument(s).": 2314,
   "Type '{0}' is not generic.": 2315,
   "Type '{0}' is not assignable to type '{1}'.": 2322,
+  "'this' cannot be referenced in current location.": 2332,
   "The operand of an increment or decrement operator must be a variable or a property access.": 2357,
-  "Function implementation is missing or not immediately following the declaration.": 2391
+  "Function implementation is missing or not immediately following the declaration.": 2391,
+  "Duplicate function implementation.": 2393,
+  "Expected {0} type arguments, but got {1}.": 2558
 }
