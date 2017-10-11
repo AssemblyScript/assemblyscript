@@ -534,6 +534,65 @@ export class Module {
     _BinaryenModuleDispose(this.ref);
     _free(this.lit);
   }
+
+  createRelooper(): Relooper {
+    return this.noEmit ? Relooper.createStub(this) : Relooper.create(this);
+  }
+}
+
+export class Relooper {
+
+  module: Module;
+  ref: RelooperRef;
+  noEmit: bool;
+
+  static create(module: Module): Relooper {
+    const relooper: Relooper = new Relooper();
+    relooper.module = module;
+    relooper.ref = _RelooperCreate();
+    relooper.noEmit = false;
+    return relooper;
+  }
+
+  static createStub(module: Module): Relooper {
+    const relooper: Relooper = new Relooper();
+    relooper.module = module;
+    relooper.ref = 0;
+    relooper.noEmit = true;
+    return relooper;
+  }
+
+  private constructor() {}
+
+  addBlock(code: BinaryenExpressionRef): RelooperBlockRef {
+    if (this.noEmit) return 0;
+    return _RelooperAddBlock(this.ref, code);
+  }
+
+  addBranch(from: RelooperBlockRef, to: RelooperBlockRef, condition: BinaryenExpressionRef = 0, code: BinaryenExpressionRef = 0): void {
+    if (this.noEmit) return;
+    _RelooperAddBranch(from, to, condition, code);
+  }
+
+  addBlockWithSwitch(code: BinaryenExpressionRef, condition: BinaryenExpressionRef): RelooperBlockRef {
+    if (this.noEmit) return 0;
+    return _RelooperAddBlockWithSwitch(this.ref, code, condition);
+  }
+
+  addBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: i32[], code: BinaryenExpressionRef = 0): void {
+    if (this.noEmit) return;
+    const cArr: CArray<i32> = allocI32Array(indexes);
+    try {
+      _RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
+    } finally {
+      _free(cArr);
+    }
+  }
+
+  renderAndDispose(entry: RelooperBlockRef, labelHelper: BinaryenIndex): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
+    return _RelooperRenderAndDispose(this.ref, entry, labelHelper, this.module.ref);
+  }
 }
 
 // helpers

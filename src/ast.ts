@@ -404,7 +404,7 @@ export abstract class Expression extends Node {
     return expr;
   }
 
-  abstract serializeAsTree(sb: string[], indent: i32);
+  abstract serializeAsTree(sb: string[], indent: i32): void;
 }
 
 export const enum LiteralKind {
@@ -541,10 +541,10 @@ export class CallExpression extends Expression {
 
   serialize(sb: string[]): void {
     this.expression.serialize(sb);
-    let i: i32, k: i32;
-    if (this.typeArguments.length) {
+    let i: i32, k: i32 = this.typeArguments.length;
+    if (k) {
       sb.push("<");
-      for (i = 0, k = this.typeArguments.length; i < k; ++i) {
+      for (i = 0; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.typeArguments[i].serialize(sb);
@@ -935,14 +935,14 @@ export abstract class Statement extends Node {
     return stmt;
   }
 
-  static createExport(modifiers: Modifier[], members: ExportMember[], path: string | null, range: Range): ExportStatement {
+  static createExport(modifiers: Modifier[], members: ExportMember[], path: StringLiteralExpression | null, range: Range): ExportStatement {
     const stmt: ExportStatement = new ExportStatement();
     stmt.range = range;
     let i: i32, k: i32;
     for (i = 0, k = (stmt.modifiers = modifiers).length; i < k; ++i) modifiers[i].parent = stmt;
     for (i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
     stmt.path = path;
-    stmt.normalizedPath = path == null ? null : resolvePath(normalizePath(<string>path), range.source.normalizedPath);
+    stmt.normalizedPath = path ? resolvePath(normalizePath(path.value), range.source.normalizedPath) : null;
     return stmt;
   }
 
@@ -978,12 +978,12 @@ export abstract class Statement extends Node {
     return stmt;
   }
 
-  static createImport(declarations: ImportDeclaration[], path: string, range: Range): ImportStatement {
+  static createImport(declarations: ImportDeclaration[], path: StringLiteralExpression, range: Range): ImportStatement {
     const stmt: ImportStatement = new ImportStatement();
     stmt.range = range;
     for (let i: i32 = 0, k: i32 = (stmt.declarations = declarations).length; i < k; ++i) declarations[i].parent = stmt;
     stmt.path = path;
-    stmt.normalizedPath = resolvePath(normalizePath(path), range.source.normalizedPath);
+    stmt.normalizedPath = resolvePath(normalizePath(path.value), range.source.normalizedPath);
     return stmt;
   }
 
@@ -1196,7 +1196,17 @@ export class Source extends Node {
 }
 
 export abstract class DeclarationStatement extends Statement {
+
   identifier: IdentifierExpression;
+  modifiers: Modifier[] | null;
+  private _cachedInternalName: string | null = null;
+  globalExportName: string | null = null;
+
+  get internalName(): string {
+    if (this._cachedInternalName == null)
+      this._cachedInternalName = mangleInternalName(this);
+    return this._cachedInternalName;
+  }
 }
 
 export class BlockStatement extends Statement {
@@ -1225,7 +1235,7 @@ export class BreakStatement extends Statement {
   serialize(sb: string[]): void {
     if (this.label) {
       sb.push("break ");
-      sb.push((<IdentifierExpression>this.label).name);
+      (<IdentifierExpression>this.label).serialize(name);
     } else
       sb.push("break");
   }
@@ -1234,7 +1244,6 @@ export class BreakStatement extends Statement {
 export class ClassDeclaration extends DeclarationStatement {
 
   kind = NodeKind.CLASS;
-  modifiers: Modifier[];
   typeParameters: TypeParameter[];
   extendsType: TypeNode | null;
   implementsTypes: TypeNode[];
@@ -1247,10 +1256,11 @@ export class ClassDeclaration extends DeclarationStatement {
       this.decorators[i].serialize(sb);
       sb.push("\n");
     }
-    for (i  = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
     sb.push("class ");
     sb.push(this.identifier.name);
     if (this.typeParameters.length) {
@@ -1294,7 +1304,7 @@ export class ContinueStatement extends Statement {
   serialize(sb: string[]): void {
     if (this.label) {
       sb.push("continue ");
-      sb.push(this.label.name);
+      (<IdentifierExpression>this.label).serialize(sb);
     } else
       sb.push("continue");
   }
@@ -1347,15 +1357,15 @@ export class EmptyStatement extends Statement {
 export class EnumDeclaration extends DeclarationStatement {
 
   kind = NodeKind.ENUM;
-  modifiers: Modifier[];
   members: EnumValueDeclaration[];
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
-    for (i = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
     sb.push("enum ");
     this.identifier.serialize(sb);
     sb.push(" {\n");
@@ -1371,6 +1381,7 @@ export class EnumDeclaration extends DeclarationStatement {
 export class EnumValueDeclaration extends DeclarationStatement {
 
   kind = NodeKind.ENUMVALUE;
+  modifiers = null;
   value: Expression | null;
 
   serialize(sb: string[]): void {
@@ -1414,29 +1425,29 @@ export class ExportMember extends Node {
 export class ExportStatement extends Statement {
 
   kind = NodeKind.EXPORT;
-  modifiers: Modifier[];
+  modifiers: Modifier[] | null;
   members: ExportMember[];
-  path: string | null;
+  path: StringLiteralExpression | null;
   normalizedPath: string | null;
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
-    for (i = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
     sb.push("export {\n");
     for (i = 0, k = this.members.length; i < k; ++i) {
       if (i > 0)
         sb.push(",\n");
       this.members[i].serialize(sb);
     }
-    if (this.path == null)
-      sb.push("\n}");
-    else {
+    if (this.path) {
       sb.push("\n} from ");
-      sb.push(JSON.stringify(this.path));
-    }
+      this.path.serialize(sb);
+    } else
+      sb.push("\n}");
   }
 }
 
@@ -1453,7 +1464,6 @@ export class ExpressionStatement extends Statement {
 export class FieldDeclaration extends DeclarationStatement {
 
   kind = NodeKind.FIELD;
-  modifiers: Modifier[];
   type: TypeNode | null;
   initializer: Expression | null;
   decorators: DecoratorStatement[];
@@ -1464,10 +1474,11 @@ export class FieldDeclaration extends DeclarationStatement {
       this.decorators[i].serialize(sb);
       sb.push("\n");
     }
-    for (i = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
     this.identifier.serialize(sb);
     if (this.type) {
       sb.push(": ");
@@ -1510,7 +1521,6 @@ export class ForStatement extends Statement {
 export class FunctionDeclaration extends DeclarationStatement {
 
   kind = NodeKind.FUNCTION;
-  modifiers: Modifier[];
   typeParameters: TypeParameter[];
   parameters: Parameter[];
   returnType: TypeNode | null;
@@ -1523,10 +1533,11 @@ export class FunctionDeclaration extends DeclarationStatement {
       this.decorators[i].serialize(sb);
       sb.push("\n");
     }
-    for (i = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
     sb.push("function ");
     this.serializeCommon(sb);
   }
@@ -1596,6 +1607,7 @@ export class IfStatement extends Statement {
 export class ImportDeclaration extends DeclarationStatement {
 
   kind = NodeKind.IMPORTDECLARATION;
+  modifiers = null;
   externalIdentifier: IdentifierExpression;
 
   serialize(sb: string[]): void {
@@ -1611,7 +1623,7 @@ export class ImportStatement extends Statement {
 
   kind = NodeKind.IMPORT;
   declarations: ImportDeclaration[];
-  path: string;
+  path: StringLiteralExpression;
   normalizedPath: string;
 
   serialize(sb: string[]): void {
@@ -1622,24 +1634,24 @@ export class ImportStatement extends Statement {
       this.declarations[i].serialize(sb);
     }
     sb.push("\n} from ");
-    sb.push(JSON.stringify(this.path));
+    this.path.serialize(sb);
   }
 }
 
 export class InterfaceDeclaration extends DeclarationStatement {
 
   kind = NodeKind.INTERFACE;
-  modifiers: Modifier[];
   typeParameters: TypeParameter[];
   extendsType: TypeNode | null;
   members: Statement[];
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
-    for (i = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
     sb.push("interface ");
     this.identifier.serialize(sb);
     if (this.typeParameters.length) {
@@ -1677,10 +1689,11 @@ export class MethodDeclaration extends FunctionDeclaration {
       this.decorators[i].serialize(sb);
       sb.push("\n");
     }
-    for (i = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
     super.serializeCommon(sb);
   }
 }
@@ -1688,15 +1701,15 @@ export class MethodDeclaration extends FunctionDeclaration {
 export class NamespaceDeclaration extends DeclarationStatement {
 
   kind = NodeKind.NAMESPACE;
-  modifiers: Modifier[];
   members: Statement[];
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
-    for (i = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
     sb.push("namespace ");
     this.identifier.serialize(sb);
     sb.push(" {\n");
@@ -1862,6 +1875,7 @@ export class TryStatement extends Statement {
 export class VariableDeclaration extends DeclarationStatement {
 
   kind = NodeKind.VARIABLEDECLARATION;
+  modifiers = null;
   type: TypeNode | null;
   initializer: Expression | null;
 
@@ -1881,18 +1895,19 @@ export class VariableDeclaration extends DeclarationStatement {
 export class VariableStatement extends Statement {
 
   kind = NodeKind.VARIABLE;
-  modifiers: Modifier[];
+  modifiers: Modifier[] | null;
   declarations: VariableDeclaration[];
 
   serialize(sb: string[]): void {
     let isConst: bool = false;
     let i: i32, k: i32;
-    for (i = 0, k = this.modifiers.length; i < k; ++i) {
-      this.modifiers[i].serialize(sb);
-      sb.push(" ");
-      if (this.modifiers[i].modifierKind == ModifierKind.CONST)
-        isConst = true;
-    }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+        if ((<Modifier[]>this.modifiers)[i].modifierKind == ModifierKind.CONST)
+          isConst = true;
+      }
     if (!isConst)
       sb.push("let ");
     for (i = 0, k = this.declarations.length; i < k; ++i) {
@@ -1917,21 +1932,29 @@ export class WhileStatement extends Statement {
   }
 }
 
-export function isDeclarationStatement(kind: NodeKind): bool {
-  return kind == NodeKind.CLASS
-      || kind == NodeKind.ENUM
-      || kind == NodeKind.ENUMVALUE
-      || kind == NodeKind.FIELD
-      || kind == NodeKind.FUNCTION
-      || kind == NodeKind.METHOD
-      || kind == NodeKind.NAMESPACE
-      || kind == NodeKind.VARIABLEDECLARATION;
+export function hasModifier(kind: ModifierKind, modifiers: Modifier[] | null): bool {
+  if (modifiers)
+    for (let i: i32 = 0, k: i32 = (<Modifier[]>modifiers).length; i < k; ++i)
+      if ((<Modifier[]>modifiers)[i].modifierKind == kind)
+        return true;
+  return false;
 }
 
 export function serialize(node: Node, indent: i32 = 0): string {
   const sb: string[] = new Array(); // shared builder could grow too much
   node.serialize(sb);
   return sb.join("");
+}
+
+export function mangleInternalName(declaration: DeclarationStatement): string {
+  let name: string = declaration.identifier.name;
+  if (!declaration.parent)
+    return name;
+  if (declaration.parent.kind == NodeKind.CLASS)
+    return (<ClassDeclaration>declaration.parent).internalName + (hasModifier(ModifierKind.STATIC, declaration.modifiers) ? "." : "#") + name;
+  if (declaration.parent.kind == NodeKind.NAMESPACE || declaration.parent.kind == NodeKind.ENUM)
+    return (<DeclarationStatement>declaration.parent).internalName + "." + name;
+  return declaration.range.source.normalizedPath + "/" + name;
 }
 
 function builderEndsWith(sb: string[], code: CharCode): bool {

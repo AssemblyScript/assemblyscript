@@ -28,25 +28,18 @@ mod.addExport("lit", "lit");
 
 mod.addGlobal("42", Type.I32, false, mod.createI32(42));
 
-const aSwitch = mod.addFunctionType("i", Type.I32, []);
-mod.addFunction("aSwitch", aSwitch, [], mod.createBlock("", [
-  mod.createBlock("a", [
-    mod.createBlock("b", [
-      mod.createBlock("c", [
-        mod.createBlock("d", [
-          mod.createSwitch(
-            ["a", "b", "c"],
-            "d",
-            mod.createI32(4)
-          )
-        ]),
-        mod.createReturn(mod.createI32(3))
-      ]),
-      mod.createReturn(mod.createI32(2))
-    ]),
-    mod.createReturn(mod.createI32(1))
-  ]),
-  mod.createReturn(mod.createI32(0))
+const aSwitch = mod.addFunctionType("ii", Type.I32, [ Type.I32 ]);
+const rl = mod.createRelooper();
+const b0 = rl.addBlockWithSwitch(mod.createNop(), mod.createGetLocal(0, Type.I32));
+let b1, b2, b3;
+rl.addBranchForSwitch(b0, b2 = rl.addBlock(mod.createReturn(mod.createI32(1))), [1]); // indexed branch
+rl.addBranchForSwitch(b0, b3 = rl.addBlock(mod.createReturn(mod.createI32(2))), [2]); // indexed branch
+rl.addBranch(b0, b1 = rl.addBlock(mod.createDrop(mod.createI32(0)))); // default branch
+rl.addBranch(b1, b2);
+
+mod.addFunction("aSwitch", aSwitch, [ Type.I32 ], mod.createBlock(null, [
+  rl.renderAndDispose(b0, 1),
+  mod.createUnreachable()
 ]));
 mod.addExport("aSwitch", "aSwitch");
 

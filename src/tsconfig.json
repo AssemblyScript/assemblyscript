@@ -13,6 +13,9 @@
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
     "outDir": "../out"
   },
   "files": [

@@ -52,5 +52,7 @@
   "The operand of an increment or decrement operator must be a variable or a property access.": 2357,
   "Function implementation is missing or not immediately following the declaration.": 2391,
   "Duplicate function implementation.": 2393,
-  "Expected {0} type arguments, but got {1}.": 2558
+  "Expected {0} type arguments, but got {1}.": 2558,
+
+  "File '{0}' not found.": 6054
 }

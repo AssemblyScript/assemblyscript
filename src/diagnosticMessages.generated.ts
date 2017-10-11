@@ -52,7 +52,8 @@ export enum DiagnosticCode {
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Duplicate_function_implementation = 2393,
-  Expected_0_type_arguments_but_got_1 = 2558
+  Expected_0_type_arguments_but_got_1 = 2558,
+  File_0_not_found = 6054
 }
 
 export function diagnosticCodeToString(code: DiagnosticCode): string {
@@ -109,6 +110,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2393: return "Duplicate function implementation.";
     case 2558: return "Expected {0} type arguments, but got {1}.";
+    case 6054: return "File '{0}' not found.";
     default: return "";
   }
 }

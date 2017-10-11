@@ -11,12 +11,37 @@ import { Parser } from "../src/parser";
 ]); */
 
 const files: Map<string,string> = new Map([
-  ["main", `
-    export function add(a: i32, b: i32): i32 { let c: i32 = a + b; return c; }
-  `]
+  ["main",
+`
+  function add(a: i32, b: i32): i32 { return a + b; };
+  export { add };
+  export { sub as notadd } from "../other";
+  2+3;
+  export function switchMe(n: i32): i32 {
+    switch (n) {
+      case 0:
+        return 0;
+      default:
+        return 2;
+      case 1:
+        return 1;
+      case -1:
+        break;
+    }
+    return -1;
+  }
+`],
+
+  ["../other",
+`
+  export function sub(a: i32, b: i32): i32 { return a - b + c; };
+  let c: i32 = 42 >> 31;
+  1+2;
+`]
 ]);
 
 const parser = new Parser();
+
 parser.parseFile(<string>files.get("main"), "main", true);
 do {
   let nextFile = parser.nextFile();
@@ -30,15 +55,7 @@ const program = parser.finish();
 const compiler = new Compiler(program);
 const module = compiler.compile();
 
-console.log("names", program.names.keys());
-console.log("exports", program.exports.keys());
-
-module.optimize();
-// module.validate(); // global initializers can't use i32.add etc. yet
+// module.optimize();
+module.validate();
 if (!module.noEmit)
   _BinaryenModulePrint(module.ref);
-
-/* console.log("--- statements ---");
-compiler.statements.forEach(stmt => {
-  _BinaryenExpressionPrint(stmt);
-}); */

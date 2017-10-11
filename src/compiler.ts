@@ -1,6 +1,5 @@
-import { Module, MemorySegment, UnaryOp, BinaryOp, HostOp, Type as BinaryenType } from "./binaryen";
+import { Module, MemorySegment, UnaryOp, BinaryOp, HostOp, Type as BinaryenType, Relooper } from "./binaryen";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
-import { hasModifier } from "./parser";
 import { Program } from "./program";
 import { CharCode, I64, U64, normalizePath, sb } from "./util";
 import { Token } from "./tokenizer";
@@ -35,6 +34,7 @@ import {
   NamespaceDeclaration,
   ReturnStatement,
   Statement,
+  SwitchCase,
   SwitchStatement,
   ThrowStatement,
   TryStatement,
@@ -60,7 +60,9 @@ import {
   SelectExpression,
   StringLiteralExpression,
   UnaryPostfixExpression,
-  UnaryPrefixExpression
+  UnaryPrefixExpression,
+
+  hasModifier
 
 } from "./ast";
 import {
@@ -75,16 +77,20 @@ import {
 } from "./types";
 
 export enum Target {
+  /** WebAssembly with 32-bit pointers. */
   WASM32,
+  /** WebAssembly with 64-bit pointers. Experimental / not supported by any runtime yet. */
   WASM64
 }
 
 export class Options {
+  /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
+  /** If true, performs compilation as usual but doesn't produce any output (all calls to Binaryen are nops). */
   noEmit: bool = false;
+  /** If true, compiles everything instead of just reachable code. */
+  noTreeShaking: bool = false;
 }
-
-const VOID: BinaryenExpressionRef = 0;
 
 export class Compiler extends DiagnosticEmitter {
 
@@ -98,10 +104,12 @@ export class Compiler extends DiagnosticEmitter {
   currentType: Type = Type.void;
   currentClass: ClassType | null = null;
   currentFunction: FunctionType = this.startFunction;
+  disallowContinue: bool = true;
 
   memoryOffset: U64 = new U64(8, 0); // leave space for (any size of) NULL
   memorySegments: MemorySegment[] = new Array();
 
+  files: Set<string> = new Set();
   classes: Map<string,ClassType> = new Map();
   enums: Set<string> = new Set();
   functions: Map<string,FunctionType> = new Map();
@@ -117,7 +125,6 @@ export class Compiler extends DiagnosticEmitter {
     this.program = program;
     this.options = options ? options : new Options();
     this.module = this.options.noEmit ? Module.createStub() : Module.create();
-    // noEmit performs compilation as usual but all binaryen methods are nops instead
   }
 
   compile(): Module {
@@ -126,56 +133,11 @@ export class Compiler extends DiagnosticEmitter {
     // initialize lookup maps
     program.initialize(this.options.target);
 
-    // start by compiling entry file exports
-    const entrySource: Source = program.sources[0];
-    for (let i: i32 = 0, k: i32 = entrySource.statements.length; i < k; ++i) {
-      const statement: Statement = entrySource.statements[i];
-      switch (statement.kind) {
-
-        case NodeKind.CLASS:
-          if (hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>statement).modifiers) && !(<ClassDeclaration>statement).typeParameters.length)
-            this.compileClass(<ClassDeclaration>statement, []);
-          break;
-
-        case NodeKind.ENUM:
-          if (hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>statement).modifiers))
-            this.compileEnum(<EnumDeclaration>statement);
-          break;
-
-        case NodeKind.FUNCTION:
-          if (hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>statement).modifiers) && !(<FunctionDeclaration>statement).typeParameters.length)
-            this.compileFunction(<FunctionDeclaration>statement, []);
-          break;
-
-        case NodeKind.IMPORT:
-          break;
-
-        case NodeKind.NAMESPACE:
-          if (hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>statement).modifiers))
-            this.compileNamespace(<NamespaceDeclaration>statement);
-          break;
-
-        case NodeKind.VARIABLE:
-          if (hasModifier(ModifierKind.EXPORT, (<VariableStatement>statement).modifiers))
-            this.compileGlobals(<VariableStatement>statement);
-          break;
-
-        case NodeKind.EXPORT: {
-          this.compileExports(<ExportStatement>statement);
-          break;
-        }
-
-        default: {
-          const previousClass: ClassType | null = this.currentClass;
-          const previousFunction: FunctionType = this.currentFunction;
-          this.currentClass = null;
-          this.currentFunction = this.startFunction;
-          this.startFunctionBody.push(this.compileStatement(statement));
-          this.currentClass = previousClass;
-          this.currentFunction = previousFunction;
-          break;
-        }
-      }
+    // compile entry file (exactly one, usually)
+    for (let i: i32 = 0, k = program.sources.length; i < k; ++i) {
+      const source: Source = program.sources[i];
+      if (source.isEntry)
+        this.compileFile(source);
     }
 
     // make start function if not empty
@@ -184,7 +146,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!typeRef)
         typeRef = this.module.addFunctionType("v", BinaryenType.None, []);
       this.module.setStart(
-        this.module.addFunction("", typeRef, typesToBinaryenTypes(this.startFunction.additionalLocals), this.module.createBlock(null, this.startFunctionBody))
+        this.module.addFunction("start", typeRef, typesToBinaryenTypes(this.startFunction.additionalLocals), this.module.createBlock(null, this.startFunctionBody))
       );
     }
 
@@ -202,48 +164,126 @@ export class Compiler extends DiagnosticEmitter {
     return this.module;
   }
 
+  compileFile(source: Source): void {
+    if (this.files.has(source.normalizedPath))
+      return;
+    this.files.add(source.normalizedPath);
+
+    const isEntry: bool = source.isEntry;
+    const noTreeShaking: bool = this.options.noTreeShaking;
+    for (let i: i32 = 0, k: i32 = source.statements.length; i < k; ++i) {
+      const statement: Statement = source.statements[i];
+      switch (statement.kind) {
+
+        case NodeKind.CLASS:
+          if ((noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>statement).modifiers)) && !(<ClassDeclaration>statement).typeParameters.length)
+            this.compileClass(<ClassDeclaration>statement, []);
+          break;
+
+        case NodeKind.ENUM:
+          if (noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>statement).modifiers))
+            this.compileEnum(<EnumDeclaration>statement);
+          break;
+
+        case NodeKind.FUNCTION:
+          if ((noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>statement).modifiers)) && !(<FunctionDeclaration>statement).typeParameters.length)
+            this.compileFunction(<FunctionDeclaration>statement, []);
+          break;
+
+        case NodeKind.IMPORT:
+          this.compileFileByPath((<ImportStatement>statement).normalizedPath, (<ImportStatement>statement).path);
+          break;
+
+        case NodeKind.NAMESPACE:
+          if (noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>statement).modifiers))
+            this.compileNamespace(<NamespaceDeclaration>statement);
+          break;
+
+        case NodeKind.VARIABLE:
+          if (noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<VariableStatement>statement).modifiers))
+            this.compileGlobals(<VariableStatement>statement);
+          break;
+
+        case NodeKind.EXPORT:
+          if ((<ExportStatement>statement).path)
+            this.compileFileByPath((<StringLiteralExpression>(<ExportStatement>statement).path).value, <StringLiteralExpression>(<ExportStatement>statement).path);
+          if (noTreeShaking || isEntry)
+            this.compileExports(<ExportStatement>statement);
+          break;
+
+        // otherwise a top-level statement that is part of the start function's body
+        default: {
+          const previousClass: ClassType | null = this.currentClass;
+          const previousFunction: FunctionType = this.currentFunction;
+          this.currentClass = null;
+          this.currentFunction = this.startFunction;
+          this.startFunctionBody.push(this.compileStatement(statement));
+          this.currentClass = previousClass;
+          this.currentFunction = previousFunction;
+          break;
+        }
+      }
+    }
+  }
+
+  compileFileByPath(normalizedPath: string, reportNode: Node): void {
+    for (let j: i32 = 0, l: i32 = this.program.sources.length; j < l; ++j) {
+      const importedSource: Source = this.program.sources[j];
+      if (importedSource.normalizedPath == normalizedPath) {
+        this.compileFile(importedSource);
+        return;
+      }
+    }
+    this.error(DiagnosticCode.File_0_not_found, reportNode.range, normalizedPath);
+  }
+
   compileClass(declaration: ClassDeclaration, typeArguments: Type[]): void {
     throw new Error("not implemented");
   }
 
   compileEnum(declaration: EnumDeclaration): void {
-    const name: string = this.program.mangleInternalName(declaration);
-    if (this.enums.has(name)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, name);
+    const internalName: string = declaration.internalName;
+    if (this.enums.has(internalName)) {
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
     }
+    this.enums.add(internalName);
     const valueDeclarations: EnumValueDeclaration[] = declaration.members;
     let previousValueName: string | null = null;
-    const isExport: bool = declaration.range.source.isEntry && hasModifier(ModifierKind.EXPORT, declaration.modifiers);
     for (let i: i32 = 0, k: i32 = valueDeclarations.length; i < k; ++i)
-      previousValueName = this.compileEnumValue(valueDeclarations[i], previousValueName, isExport);
-    this.enums.add(name);
+      previousValueName = this.compileEnumValue(valueDeclarations[i], previousValueName);
   }
 
-  compileEnumValue(declaration: EnumValueDeclaration, previousName: string | null, isExport: bool): string {
-    const name: string = this.program.mangleInternalName(declaration);
-    let initializer: BinaryenExpressionRef = declaration.value ? this.compileExpression(<Expression>declaration.value, Type.i32) : 0;
-    let initializeInStart: bool = declaration.value ? (<Expression>declaration.value).kind != NodeKind.LITERAL : true;
-    // TODO: WASM does not support binary initializers for globals yet, hence me make them mutable and initialize in start
-    if (!initializer) {
-      if (previousName == null) {
-        initializer = this.module.createI32(0);
-        initializeInStart = false;
-      } else {
-        initializer = this.module.createBinary(BinaryOp.AddI32,
-          this.module.createGetGlobal(previousName, BinaryenType.I32),
-          this.module.createI32(1)
-        );
-      }
+  compileEnumValue(declaration: EnumValueDeclaration, previousName: string | null): string {
+    const internalName: string = declaration.internalName;
+    // TODO: WASM does not support complex initializers for globals yet, hence we make such globals mutable and initialize in start
+    let initializer: BinaryenExpressionRef;
+    let initializeInStart: bool;
+    if (declaration.value) {
+      initializer = this.compileExpression(<Expression>declaration.value, Type.i32);
+      initializeInStart = declaration.value.kind != NodeKind.LITERAL;
+    } else if (previousName == null) {
+      initializer = this.module.createI32(0);
+      initializeInStart = false;
+    } else {
+      initializer = this.module.createBinary(BinaryOp.AddI32,
+        this.module.createGetGlobal(previousName, BinaryenType.I32),
+        this.module.createI32(1)
+      );
+      initializeInStart = true;
     }
     if (initializeInStart) {
-      this.module.addGlobal(name, BinaryenType.I32, true, this.module.createI32(-1));
-      this.startFunctionBody.push(this.module.createSetGlobal(name, initializer));
+      this.module.addGlobal(internalName, BinaryenType.I32, true, this.module.createI32(-1));
+      this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
     } else
-      this.module.addGlobal(name, BinaryenType.I32, false, initializer);
-    // TODO: WASM does not support exporting globals yet (the following produces invalid code referencing a non-existent function)
-    // this.module.addExport(name, (<EnumDeclaration>declaration.parent).identifier.name + "." + declaration.identifier.name);
-    return name;
+      this.module.addGlobal(internalName, BinaryenType.I32, false, initializer);
+
+    // export if applicable
+    if (declaration.parent && (<Node>declaration.parent).kind == NodeKind.ENUM && (<EnumDeclaration>declaration.parent).globalExportName != null) {
+      // TODO: WASM does not support exporting globals yet
+      // this.module.addExport(internalName, <string>(<EnumDeclaration>declaration.parent).exportName);
+    }
+    return internalName;
   }
 
   checkTypeArguments(typeParameters: TypeParameter[], typeArguments: Type[], reportNode: Node | null = null): bool {
@@ -252,6 +292,7 @@ export class Compiler extends DiagnosticEmitter {
         this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, (<Node>reportNode).range, typeParameters.length.toString(10), typeArguments.length.toString(10));
       return false;
     }
+    // TODO: check class types, arrays
     // TODO: check TypeParameter#extendsType
     return true;
   }
@@ -266,7 +307,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!this.checkTypeArguments(declaration.typeParameters, typeArguments, reportNode)) // reports if requested
       return;
 
-    let globalName: string = this.program.mangleInternalName(declaration);
+    let internalName: string = declaration.internalName;
 
     // inherit type arguments, i.e. from class
     const typeArgumentsMap: Map<string,Type> = new Map();
@@ -279,10 +320,10 @@ export class Compiler extends DiagnosticEmitter {
     if (k) {
       for (i = 0; i < k; ++i)
         typeArgumentsMap.set(declaration.typeParameters[i].identifier.name, typeArguments[i]);
-      globalName += typeArgumentsToString(typeArguments);
+      internalName += typeArgumentsToString(typeArguments);
     }
 
-    if (this.functions.has(globalName)) {
+    if (this.functions.has(internalName)) {
       if (reportNode)
         this.error(DiagnosticCode.Duplicate_function_implementation, (<Node>reportNode).range);
       return;
@@ -319,20 +360,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile statements
     const functionType: FunctionType = new FunctionType(typeArguments, parameterTypes, returnType, parameterNames);
-    this.functions.set(globalName, functionType);
+    this.functions.set(internalName, functionType);
     const previousFunction: FunctionType = this.currentFunction;
     this.currentFunction = functionType;
-    const statements: Statement[] = <Statement[]>declaration.statements;
-    k = statements.length;
-    const body: BinaryenExpressionRef[] = new Array(k);
-    let hasErrors: bool = false;
-    for (i = 0; i < k; ++i)
-      if (!(body[i] = this.compileStatement(statements[i])))
-        hasErrors = true;
+    const stmts: BinaryenExpressionRef[] = this.compileStatements(<Statement[]>declaration.statements);
     this.currentFunction = previousFunction;
-
-    if (hasErrors)
-      return;
 
     // create function
     const binaryenResultType: BinaryenType = typeToBinaryenType(returnType);
@@ -340,75 +372,88 @@ export class Compiler extends DiagnosticEmitter {
     let binaryenTypeRef: BinaryenFunctionTypeRef = this.module.getFunctionTypeBySignature(binaryenResultType, binaryenParamTypes);
     if (!binaryenTypeRef)
       binaryenTypeRef = this.module.addFunctionType(typesToSignatureName(parameterTypes, returnType), binaryenResultType, binaryenParamTypes);
-    this.module.addFunction(globalName, binaryenTypeRef, typesToBinaryenTypes(functionType.additionalLocals), this.module.createBlock(null, body));
-    if (declaration.range.source.isEntry && hasModifier(ModifierKind.EXPORT, declaration.modifiers))
-      this.module.addExport(globalName, declaration.identifier.name);
+    this.module.addFunction(internalName, binaryenTypeRef, typesToBinaryenTypes(functionType.additionalLocals), this.module.createBlock(null, stmts, BinaryenType.None));
+
+    // export if applicable
+    if (declaration.globalExportName != null)
+      this.module.addExport(internalName, <string>declaration.globalExportName);
   }
 
   compileGlobals(statement: VariableStatement): void {
     const declarations: VariableDeclaration[] = statement.declarations;
     const isConst: bool = hasModifier(ModifierKind.CONST, statement.modifiers);
-    const isExport: bool = statement.range.source.isEntry && hasModifier(ModifierKind.EXPORT, statement.modifiers);
     for (let i: i32 = 0, k: i32 = declarations.length; i < k; ++i)
-      this.compileGlobal(declarations[i], isConst, isExport);
+      this.compileGlobal(declarations[i], isConst);
   }
 
-  compileGlobal(declaration: VariableDeclaration, isConst: bool, isExport: bool): void {
+  compileGlobal(declaration: VariableDeclaration, isConst: bool): void {
     const type: Type | null = declaration.type ? this.resolveType(<TypeNode>declaration.type) : null; // reports
     if (!type)
       return;
-    const name: string = this.program.mangleInternalName(declaration);
-    if (this.globals.has(name)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, name);
+    const internalName: string = declaration.internalName;
+    if (this.globals.has(internalName)) {
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
     }
     const binaryenType: BinaryenType = typeToBinaryenType(<Type>type);
-    const initializer: BinaryenExpressionRef = declaration.initializer ? this.compileExpression(<Expression>declaration.initializer, <Type>type) : typeToBinaryenZero(this.module, <Type>type);
-    let initializeInStart: bool = declaration.initializer ? (<Expression>declaration.initializer).kind != NodeKind.LITERAL : false;
-    // TODO: WASM does not support binary initializers for globals yet, hence me make them mutable and initialize in start
+    // TODO: WASM does not support complex initializers for globals yet, hence me such globals mutable and initialize in start
+    let initializer: BinaryenExportRef;
+    let initializeInStart: bool;
+    if (declaration.initializer) {
+      initializer = this.compileExpression(<Expression>declaration.initializer, <Type>type);
+      initializeInStart = (<Expression>declaration.initializer).kind != NodeKind.LITERAL;
+    } else {
+      initializer = typeToBinaryenZero(this.module, <Type>type);
+      initializeInStart = false;
+    }
     if (initializeInStart) {
-      this.module.addGlobal(name, binaryenType, false, typeToBinaryenZero(this.module, <Type>type));
-      this.startFunctionBody.push(initializer);
+      this.module.addGlobal(internalName, binaryenType, true, typeToBinaryenZero(this.module, <Type>type));
+      this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
     } else
-      this.module.addGlobal(name, binaryenType, !isConst, initializer);
-    // TODO: WASM does not support exporting globals yet (the following produces invalid code referencing a non-existent function)
-    // this.module.addExport(name, declaration.identifier.name);
-    this.globals.set(name, <Type>type);
+      this.module.addGlobal(internalName, binaryenType, !isConst, initializer);
+    this.globals.set(internalName, <Type>type);
+
+    // export if applicable
+    if (declaration.globalExportName != null) {
+      // TODO: WASM does not support exporting globals yet
+      // this.module.addExport(internalName, <string>declaration.exportName);
+    }
   }
 
   compileNamespace(declaration: NamespaceDeclaration): void {
     const members: Statement[] = declaration.members;
+    const noTreeShaking: bool = this.options.noTreeShaking;
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i) {
       const member: Statement = members[i];
       switch (member.kind) {
 
         case NodeKind.CLASS:
-          if (!(<ClassDeclaration>member).typeParameters.length)
+          if ((noTreeShaking || hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>member).modifiers)) && !(<ClassDeclaration>member).typeParameters.length)
             this.compileClass(<ClassDeclaration>member, []);
           break;
 
         case NodeKind.ENUM:
-          this.compileEnum(<EnumDeclaration>member);
+          if (noTreeShaking || hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>member).modifiers))
+            this.compileEnum(<EnumDeclaration>member);
           break;
 
         case NodeKind.FUNCTION:
-          if (!(<FunctionDeclaration>member).typeParameters.length)
+          if ((noTreeShaking || hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>member).modifiers)) && !(<FunctionDeclaration>member).typeParameters.length)
             this.compileFunction(<FunctionDeclaration>member, []);
           break;
 
         case NodeKind.NAMESPACE:
-          this.compileNamespace(<NamespaceDeclaration>member);
+          if (noTreeShaking || hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>member).modifiers))
+            this.compileNamespace(<NamespaceDeclaration>member);
           break;
 
         case NodeKind.VARIABLE:
-          this.compileGlobals(<VariableStatement>member);
+          if (noTreeShaking || hasModifier(ModifierKind.EXPORT, (<VariableStatement>member).modifiers))
+            this.compileGlobals(<VariableStatement>member);
           break;
 
-        // TODO: some form of internal visibility?
-        // case NodeKind.EXPORT:
-
         default:
-          throw new Error("unexpected namespace member kind");
+          throw new Error("unexpected namespace member");
       }
     }
     throw new Error("not implemented");
@@ -416,14 +461,14 @@ export class Compiler extends DiagnosticEmitter {
 
   compileExports(statement: ExportStatement): void {
     const members: ExportMember[] = statement.members;
-    const normalizedPath: string | null = statement.path == null ? null : normalizePath(<string>statement.path);
+    const normalizedPath: string | null = statement.path ? normalizePath(<string>(<StringLiteralExpression>statement.path).value) : statement.range.source.normalizedPath;
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i)
       this.compileExport(members[i], normalizedPath);
   }
 
-  compileExport(member: ExportMember, normalizedPath: string | null): void {
-    const exportName: string = normalizedPath + "/" + member.externalIdentifier.name;
-    const declaration: DeclarationStatement | null = <DeclarationStatement | null>this.program.exports.get(exportName);
+  compileExport(member: ExportMember, normalizedPath: string): void {
+    const internalExportName: string = normalizedPath + "/" + member.identifier.name;
+    const declaration: DeclarationStatement | null = <DeclarationStatement | null>this.program.exports.get(internalExportName);
     if (declaration) {
       switch ((<DeclarationStatement>declaration).kind) {
 
@@ -446,7 +491,7 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case NodeKind.VARIABLEDECLARATION:
-          this.compileGlobal(<VariableDeclaration>declaration, hasModifier(ModifierKind.CONST, (<VariableStatement>declaration.parent).modifiers), member.range.source.isEntry);
+          this.compileGlobal(<VariableDeclaration>declaration, hasModifier(ModifierKind.CONST, (<VariableStatement>declaration.parent).modifiers));
           break;
 
         default:
@@ -554,9 +599,7 @@ export class Compiler extends DiagnosticEmitter {
       if (this.functions.has(globalName))
         return <FunctionType>this.functions.get(globalName);
       this.error(DiagnosticCode.Cannot_find_name_0, expression.range, globalName);
-      return null;
-    }
-    if (expression.kind == NodeKind.PROPERTYACCESS) {
+    } else {
       throw new Error("not implemented");
     }
     return null;
@@ -609,28 +652,36 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.WHILE:
         return this.compileWhileStatement(<WhileStatement>statement);
     }
-    throw new Error("not implemented");
+    throw new Error("unexpected statement kind");
+  }
+
+  compileStatements(statements: Statement[]): BinaryenExpressionRef[] {
+    const k: i32 = statements.length;
+    const stmts: BinaryenExpressionRef[] = new Array(k);
+    for (let i: i32 = 0; i < k; ++i)
+      stmts[i] = this.compileStatement(statements[i]);
+    return stmts;
   }
 
   compileBlockStatement(statement: BlockStatement): BinaryenExpressionRef {
-    const substatements: Statement[] = statement.statements;
-    const children: BinaryenExpressionRef[] = new Array(substatements.length);
-    for (let i: i32 = 0, k: i32 = substatements.length; i < k; ++i)
-      children[i] = this.compileStatement(substatements[i]);
-    return this.module.createBlock(null, children, BinaryenType.None);
+    return this.module.createBlock(null, this.compileStatements(statement.statements), BinaryenType.None);
   }
 
   compileBreakStatement(statement: BreakStatement): BinaryenExpressionRef {
+    if (statement.label)
+      throw new Error("not implemented");
     const context: string | null = this.currentFunction.breakContext;
-    if (context)
+    if (context != null)
       return this.module.createBreak("break$" + (<string>context));
     this.error(DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement, statement.range);
     return this.module.createUnreachable();
   }
 
   compileContinueStatement(statement: ContinueStatement): BinaryenExpressionRef {
+    if (statement.label)
+      throw new Error("not implemented");
     const context: string | null = this.currentFunction.breakContext;
-    if (context)
+    if (context != null && !this.disallowContinue)
       return this.module.createBreak("continue$" + (<string>context));
     this.error(DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement, statement.range);
     return this.module.createUnreachable();
@@ -648,8 +699,8 @@ export class Compiler extends DiagnosticEmitter {
         this.module.createBlock(null, [
           body,
           this.module.createBreak(continueLabel, condition)
-        ]))
-    ]);
+        ], BinaryenType.None))
+    ], BinaryenType.None);
   }
 
   compileEmptyStatement(statement: EmptyStatement): BinaryenExpressionRef {
@@ -676,9 +727,9 @@ export class Compiler extends DiagnosticEmitter {
           body,
           incrementor,
           this.module.createBreak(continueLabel)
-        ]))
-      ]))
-    ]);
+        ], BinaryenType.None))
+      ], BinaryenType.None))
+    ], BinaryenType.None);
   }
 
   compileIfStatement(statement: IfStatement): BinaryenExpressionRef {
@@ -697,7 +748,57 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileSwitchStatement(statement: SwitchStatement): BinaryenExpressionRef {
-    throw new Error("not implemented");
+    const context: string = this.currentFunction.enterBreakContext();
+    const previousDisallowContinue: bool = this.disallowContinue;
+    this.disallowContinue = true;
+
+    // introduce a local for evaluating the condition (exactly once)
+    const localIndex: i32 = this.currentFunction.addLocal(Type.i32);
+    let i: i32, k: i32 = statement.cases.length;
+
+    // prepend initializer to inner block
+    const breaks: BinaryenExpressionRef[] = new Array(1 + k);
+    breaks[0] = this.module.createSetLocal(localIndex, this.compileExpression(statement.expression, Type.i32)); // initializer
+
+    // make one br_if per (possibly dynamic) labeled case
+    // TODO: take advantage of br_table where labels are known to be (sequential) constant (ideally Binaryen's optimizer would)
+    let breakIndex: i32 = 1;
+    let defaultIndex: i32 = -1;
+    for (i = 0; i < k; ++i) {
+      const case_: SwitchCase = statement.cases[i];
+      if (case_.label) {
+        breaks[breakIndex++] = this.module.createBreak("case" + i.toString(10) + "$" + context, this.module.createBinary(BinaryOp.EqI32,
+          this.module.createGetLocal(localIndex, BinaryenType.I32),
+          this.compileExpression(case_.label, Type.i32)
+        ));
+      } else
+        defaultIndex = i;
+    }
+
+    // otherwise br to default respectively out of the switch if there is no default case
+    breaks[breakIndex] = this.module.createBreak((defaultIndex >= 0
+        ? "case" + defaultIndex.toString(10)
+        : "break"
+      ) + "$" + context);
+
+    // nest blocks in order
+    let currentBlock: BinaryenExpressionRef = this.module.createBlock("case0$" + context, breaks, BinaryenType.None);
+    for (i = 0; i < k; ++i) {
+      const case_: SwitchCase = statement.cases[i];
+      const nextLabel: string = i == k - 1
+        ? "break$" + context
+        : "case" + (i + 1).toString(10) + "$" + context;
+      const l: i32 = case_.statements.length;
+      const body: BinaryenExpressionRef[] = new Array(1 + l);
+      body[0] = currentBlock;
+      for (let j: i32 = 0; j < l; ++j)
+        body[j + 1] = this.compileStatement(case_.statements[j]);
+      currentBlock = this.module.createBlock(nextLabel, body, BinaryenType.None);
+    }
+    this.currentFunction.leaveBreakContext();
+    this.disallowContinue = previousDisallowContinue;
+
+    return currentBlock;
   }
 
   compileThrowStatement(statement: ThrowStatement): BinaryenExpressionRef {
@@ -734,24 +835,24 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     }
-    return initializers.length ? this.module.createBlock(null, initializers) : this.module.createNop();
+    return initializers.length ? this.module.createBlock(null, initializers, BinaryenType.None) : this.module.createNop();
   }
 
   compileWhileStatement(statement: WhileStatement): BinaryenExpressionRef {
-    const condition: BinaryenExpressionRef = this.compileExpression(statement.condition, Type.i32);
     const label: string = this.currentFunction.enterBreakContext();
+    const condition: BinaryenExpressionRef = this.compileExpression(statement.condition, Type.i32);
     const breakLabel: string = "break$" + label;
     const continueLabel: string = "continue$" + label;
     const body: BinaryenExpressionRef = this.compileStatement(statement.statement);
     this.currentFunction.leaveBreakContext();
     return this.module.createBlock(breakLabel, [
       this.module.createLoop(continueLabel,
-        this.module.createIf(condition, this.module.createBlock("", [
+        this.module.createIf(condition, this.module.createBlock(null, [
           body,
           this.module.createBreak(continueLabel)
-        ]))
+        ], BinaryenType.None))
       )
-    ]);
+    ], BinaryenType.None);
   }
 
   // expressions
@@ -779,6 +880,10 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case NodeKind.IDENTIFIER:
+      case NodeKind.FALSE:
+      case NodeKind.NULL:
+      case NodeKind.THIS:
+      case NodeKind.TRUE:
         expr = this.compileIdentifierExpression(<IdentifierExpression>expression, contextualType);
         break;
 
@@ -1254,19 +1359,76 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type): BinaryenExpressionRef {
-    const name: string = expression.name;
+
+    // null
+    if (expression.kind == NodeKind.NULL) {
+      if (contextualType.classType) // keep contextualType
+        return this.options.target == Target.WASM64 ? this.module.createI64(0, 0) : this.module.createI32(0);
+      if (this.options.target == Target.WASM64) {
+        this.currentType = Type.u64;
+        return this.module.createI64(0, 0);
+      } else {
+        this.currentType = Type.u32;
+        return this.module.createI32(0);
+      }
+
+    // true
+    } else if (expression.kind == NodeKind.TRUE) {
+      this.currentType = Type.bool;
+      return this.module.createI32(1);
+
+    // false
+    } else if (expression.kind == NodeKind.FALSE) {
+      this.currentType = Type.bool;
+      return this.module.createI32(0);
+
+    // this
+    } else if (expression.kind == NodeKind.THIS) {
+      if (/* TODO: this.currentFunction.isInstance &&*/ this.currentClass) {
+        this.currentType = this.currentClass.type;
+        return this.module.createGetLocal(0, typeToBinaryenType(this.currentType));
+      }
+      this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
+      this.currentType = this.options.target == Target.WASM64 ? Type.u64 : Type.u32;
+      return this.module.createUnreachable();
+    }
+
+    const globalName: string = expression.name; // same as local variable name
+
+    // local variable
     const locals: Map<string,LocalType> = this.currentFunction.locals;
-    if (locals.has(name)) {
-      const local: LocalType = <LocalType>locals.get(name);
+    if (locals.has(globalName)) {
+      const local: LocalType = <LocalType>locals.get(globalName);
       this.currentType = local.type;
       return this.module.createGetLocal(local.index, typeToBinaryenType(this.currentType));
     }
-    const globals: Map<string,Type> = this.globals;
-    if (globals.has(name)) {
-      this.currentType = <Type>globals.get(name);
-      return this.module.createGetGlobal(name, typeToBinaryenType(this.currentType));
+
+    // global in local file
+    const localName: string = expression.range.source.normalizedPath + "/" + globalName;
+    let determinedName: string = localName;
+    if (this.program.names.has(localName)) {
+      const declaration: DeclarationStatement = <DeclarationStatement>this.program.names.get(localName);
+      if (declaration.kind == NodeKind.VARIABLEDECLARATION) {
+        if (!this.globals.has(declaration.internalName))
+          this.compileGlobal(<VariableDeclaration>declaration, hasModifier(ModifierKind.CONST, declaration.modifiers));
+      }
+
+    // global across files
+    } else if (this.program.names.has(globalName)) {
+      const declaration: DeclarationStatement = <DeclarationStatement>this.program.names.get(globalName);
+      if (declaration.kind == NodeKind.VARIABLEDECLARATION) {
+        if (!this.globals.has(declaration.internalName))
+          this.compileGlobal(<VariableDeclaration>declaration, hasModifier(ModifierKind.CONST, declaration.modifiers));
+        determinedName = globalName;
+      }
     }
-    this.error(DiagnosticCode.Cannot_find_name_0, expression.range, name);
+
+    const globals: Map<string,Type> = this.globals;
+    if (globals.has(determinedName)) {
+      this.currentType = <Type>globals.get(determinedName);
+      return this.module.createGetGlobal(determinedName, typeToBinaryenType(this.currentType));
+    }
+    this.error(DiagnosticCode.Cannot_find_name_0, expression.range, determinedName);
     return this.module.createUnreachable();
   }
 
