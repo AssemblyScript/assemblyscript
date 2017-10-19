@@ -462,13 +462,13 @@ export class Parser extends DiagnosticEmitter {
     // Identifier ('extends' Type)?
     if (tn.next() == Token.IDENTIFIER) {
       const identifier: IdentifierExpression = Expression.createIdentifier(tn.readIdentifier(), tn.range());
-      let extendsName: TypeNode | null = null;
+      let extendsType: TypeNode | null = null;
       if (tn.skip(Token.EXTENDS)) {
-        extendsName = this.parseType(tn);
-        if (!extendsName)
+        extendsType = this.parseType(tn);
+        if (!extendsType)
           return null;
       }
-      return Statement.createTypeParameter(identifier, extendsName, Range.join(identifier.range, tn.range()));
+      return Statement.createTypeParameter(identifier, extendsType, Range.join(identifier.range, tn.range()));
     } else
       this.error(DiagnosticCode.Identifier_expected, tn.range());
     return null;

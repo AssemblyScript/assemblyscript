@@ -66,6 +66,7 @@
 
 */
 
+import { GETTER_PREFIX, SETTER_PREFIX, PATH_DELIMITER, PARENT_SUBST, STATIC_DELIMITER, INSTANCE_DELIMITER } from "./constants";
 import { Token, Tokenizer, operatorTokenToString, Range } from "./tokenizer";
 import { CharCode, I64, normalizePath, resolvePath } from "./util";
 
@@ -137,59 +138,6 @@ export enum NodeKind {
   VARIABLE,             // wraps declarations
   VARIABLEDECLARATION,
   WHILE
-}
-
-export function nodeKindToString(kind: NodeKind): string {
-  switch (kind) {
-    case NodeKind.SOURCE: return "SOURCE";
-    case NodeKind.TYPE: return "TYPE";
-    case NodeKind.TYPEPARAMETER: return "TYPEPARAMETER";
-    case NodeKind.IDENTIFIER: return "IDENTIFIER";
-    case NodeKind.ASSERTION: return "ASSERTION";
-    case NodeKind.BINARY: return "BINARY";
-    case NodeKind.CALL: return "CALL";
-    case NodeKind.ELEMENTACCESS: return "ELEMENTACCESS";
-    case NodeKind.LITERAL: return "LITERAL";
-    case NodeKind.NEW: return "NEW";
-    case NodeKind.PARENTHESIZED: return "PARENTHESIZED";
-    case NodeKind.PROPERTYACCESS: return "PROPERTYACCESS";
-    case NodeKind.SELECT: return "SELECT";
-    case NodeKind.UNARYPOSTFIX: return "UNARYPOSTFIX";
-    case NodeKind.UNARYPREFIX: return "UNARYPREFIX";
-    case NodeKind.BLOCK: return "BLOCK";
-    case NodeKind.BREAK: return "BREAK";
-    case NodeKind.CLASS: return "CLASS";
-    case NodeKind.CONTINUE: return "CONTINUE";
-    case NodeKind.DO: return "DO";
-    case NodeKind.EMPTY: return "EMPTY";
-    case NodeKind.ENUM: return "ENUM";
-    case NodeKind.ENUMVALUE: return "ENUMVALUE";
-    case NodeKind.EXPORT: return "EXPORT";
-    case NodeKind.EXPORTIMPORT: return "EXPORTIMPORT";
-    case NodeKind.EXPRESSION: return "EXPRESSION";
-    case NodeKind.INTERFACE: return "INTERFACE";
-    case NodeKind.FALSE: return "FALSE";
-    case NodeKind.FOR: return "FOR";
-    case NodeKind.FUNCTION: return "FUNCTION";
-    case NodeKind.IF: return "IF";
-    case NodeKind.IMPORT: return "IMPORT";
-    case NodeKind.IMPORTDECLARATION: return "IMPORTDECLARATION";
-    case NodeKind.METHOD: return "METHOD";
-    case NodeKind.NAMESPACE: return "NAMESPACE";
-    case NodeKind.NULL: return "NULL";
-    case NodeKind.FIELD: return "PROPERTY";
-    case NodeKind.RETURN: return "RETURN";
-    case NodeKind.SUPER: return "SUPER";
-    case NodeKind.SWITCH: return "SWITCH";
-    case NodeKind.THIS: return "THIS";
-    case NodeKind.THROW: return "THROW";
-    case NodeKind.TRUE: return "TRUE";
-    case NodeKind.TRY: return "TRY";
-    case NodeKind.VARIABLE: return "VARIABLE";
-    case NodeKind.VARIABLEDECLARATION: return "VARIABLEDECLARATION";
-    case NodeKind.WHILE: return "WHILE";
-    default: return "";
-  }
 }
 
 // types
@@ -414,18 +362,6 @@ export const enum LiteralKind {
   REGEXP,
   ARRAY,
   OBJECT
-}
-
-export function literalKindToString(kind: LiteralKind): string {
-  switch (kind) {
-    case LiteralKind.FLOAT: return "FLOAT";
-    case LiteralKind.INTEGER: return "INTEGER";
-    case LiteralKind.STRING: return "STRING";
-    case LiteralKind.REGEXP: return "REGEXP";
-    case LiteralKind.ARRAY: return "ARRAY";
-    case LiteralKind.OBJECT: return "OBJECT";
-    default: return "";
-  }
 }
 
 export abstract class LiteralExpression extends Expression {
@@ -840,24 +776,6 @@ export enum ModifierKind {
   SET
 }
 
-export function modifierKindToString(kind: ModifierKind): string {
-  switch (kind) {
-    case ModifierKind.ASYNC: return "ASYNC";
-    case ModifierKind.CONST: return "CONST";
-    case ModifierKind.DECLARE: return "DECLARE";
-    case ModifierKind.EXPORT: return "EXPORT";
-    case ModifierKind.IMPORT: return "IMPORT";
-    case ModifierKind.STATIC: return "STATIC";
-    case ModifierKind.ABSTRACT: return "ABSTRACT";
-    case ModifierKind.PUBLIC: return "PUBLIC";
-    case ModifierKind.PRIVATE: return "PRIVATE";
-    case ModifierKind.PROTECTED: return "PROTECTED";
-    case ModifierKind.GET: return "GET";
-    case ModifierKind.SET: return "SET";
-    default: return "";
-  }
-}
-
 export abstract class Statement extends Node {
 
   static createBlock(statements: Statement[], range: Range): BlockStatement {
@@ -943,6 +861,7 @@ export abstract class Statement extends Node {
     for (i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
     stmt.path = path;
     stmt.normalizedPath = path ? resolvePath(normalizePath(path.value), range.source.normalizedPath) : null;
+    stmt.internalPath = stmt.normalizedPath ? mangleInternalPath(stmt.normalizedPath) : null;
     return stmt;
   }
 
@@ -984,6 +903,7 @@ export abstract class Statement extends Node {
     for (let i: i32 = 0, k: i32 = (stmt.declarations = declarations).length; i < k; ++i) declarations[i].parent = stmt;
     stmt.path = path;
     stmt.normalizedPath = resolvePath(normalizePath(path.value), range.source.normalizedPath);
+    stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
     return stmt;
   }
 
@@ -995,7 +915,7 @@ export abstract class Statement extends Node {
     return elem;
   }
 
-  static createInterface(modifiers: Modifier[], extendsType: TypeNode | null, members: Statement[], range: Range): InterfaceDeclaration {
+  static createInterface(modifiers: Modifier[], extendsType: TypeNode | null, members: DeclarationStatement[], range: Range): InterfaceDeclaration {
     const stmt: InterfaceDeclaration = new InterfaceDeclaration();
     stmt.range = range;
     let i: i32, k: i32;
@@ -1164,6 +1084,7 @@ export class Source extends Node {
   parent = null;
   path: string;
   normalizedPath: string;
+  internalPath: string;
   statements: Statement[];
 
   text: string;
@@ -1174,6 +1095,7 @@ export class Source extends Node {
     super();
     this.path = path;
     this.normalizedPath = normalizePath(path, true);
+    this.internalPath = mangleInternalPath(this.normalizedPath);
     this.statements = new Array();
     this.range = new Range(this, 0, text.length);
     this.text = text;
@@ -1199,14 +1121,15 @@ export abstract class DeclarationStatement extends Statement {
 
   identifier: IdentifierExpression;
   modifiers: Modifier[] | null;
-  private _cachedInternalName: string | null = null;
-  globalExportName: string | null = null;
 
-  get internalName(): string {
-    if (this._cachedInternalName == null)
-      this._cachedInternalName = mangleInternalName(this);
-    return this._cachedInternalName;
-  }
+  protected _cachedInternalName: string | null = null;
+
+  get internalName(): string { return this._cachedInternalName === null ? this._cachedInternalName = mangleInternalName(this) : this._cachedInternalName; }
+}
+
+export abstract class VariableLikeDeclarationStatement extends DeclarationStatement {
+  type: TypeNode | null;
+  initializer: Expression | null;
 }
 
 export class BlockStatement extends Statement {
@@ -1249,6 +1172,16 @@ export class ClassDeclaration extends DeclarationStatement {
   implementsTypes: TypeNode[];
   members: DeclarationStatement[];
   decorators: DecoratorStatement[];
+
+  get internalName(): string {
+    if (this._cachedInternalName !== null)
+      return this._cachedInternalName;
+    const globalDecorator: DecoratorStatement | null = getDecoratorByName("global", this.decorators);
+    if (globalDecorator && globalDecorator.expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>globalDecorator.expression).name == "global")
+      return this._cachedInternalName = this.identifier.name;
+    else
+      return this._cachedInternalName = mangleInternalName(this);
+  }
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
@@ -1429,6 +1362,7 @@ export class ExportStatement extends Statement {
   members: ExportMember[];
   path: StringLiteralExpression | null;
   normalizedPath: string | null;
+  internalPath: string | null;
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
@@ -1461,11 +1395,9 @@ export class ExpressionStatement extends Statement {
   }
 }
 
-export class FieldDeclaration extends DeclarationStatement {
+export class FieldDeclaration extends VariableLikeDeclarationStatement {
 
   kind = NodeKind.FIELD;
-  type: TypeNode | null;
-  initializer: Expression | null;
   decorators: DecoratorStatement[];
 
   serialize(sb: string[]): void {
@@ -1526,6 +1458,16 @@ export class FunctionDeclaration extends DeclarationStatement {
   returnType: TypeNode | null;
   statements: Statement[] | null;
   decorators: DecoratorStatement[];
+
+  get internalName(): string {
+    if (this._cachedInternalName !== null)
+      return this._cachedInternalName;
+    const globalDecorator: DecoratorStatement | null = getDecoratorByName("global", this.decorators);
+    if (globalDecorator && globalDecorator.expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>globalDecorator.expression).name == "global")
+      return this._cachedInternalName = this.identifier.name;
+    else
+      return this._cachedInternalName = mangleInternalName(this);
+  }
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
@@ -1625,6 +1567,7 @@ export class ImportStatement extends Statement {
   declarations: ImportDeclaration[];
   path: StringLiteralExpression;
   normalizedPath: string;
+  internalPath: string;
 
   serialize(sb: string[]): void {
     sb.push("import {\n");
@@ -1638,12 +1581,9 @@ export class ImportStatement extends Statement {
   }
 }
 
-export class InterfaceDeclaration extends DeclarationStatement {
+export class InterfaceDeclaration extends ClassDeclaration {
 
   kind = NodeKind.INTERFACE;
-  typeParameters: TypeParameter[];
-  extendsType: TypeNode | null;
-  members: Statement[];
 
   serialize(sb: string[]): void {
     let i: i32, k: i32;
@@ -1872,12 +1812,10 @@ export class TryStatement extends Statement {
   }
 }
 
-export class VariableDeclaration extends DeclarationStatement {
+export class VariableDeclaration extends VariableLikeDeclarationStatement {
 
   kind = NodeKind.VARIABLEDECLARATION;
   modifiers = null;
-  type: TypeNode | null;
-  initializer: Expression | null;
 
   serialize(sb: string[]): void {
     this.identifier.serialize(sb);
@@ -1940,21 +1878,53 @@ export function hasModifier(kind: ModifierKind, modifiers: Modifier[] | null): b
   return false;
 }
 
+export function getDecoratorByName(name: string, decorators: DecoratorStatement[]): DecoratorStatement | null {
+  for (let i: i32 = 0, k: i32 = decorators.length; i < k; ++i) {
+    const decorator: DecoratorStatement = decorators[i];
+    const expression: Expression = decorator.expression;
+    if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).name == name)
+      return decorator;
+  }
+  return null;
+}
+
 export function serialize(node: Node, indent: i32 = 0): string {
   const sb: string[] = new Array(); // shared builder could grow too much
   node.serialize(sb);
   return sb.join("");
 }
 
+export function mangleInternalPath(path: string): string {
+  if (PATH_DELIMITER.charCodeAt(0) != CharCode.SLASH)
+    path = path.replace("/", PATH_DELIMITER);
+  if (PARENT_SUBST != "..")
+    path = path.replace("..", PARENT_SUBST);
+  return path;
+}
+
 export function mangleInternalName(declaration: DeclarationStatement): string {
   let name: string = declaration.identifier.name;
+  let modifiers: Modifier[] | null;
+  if (declaration.kind == NodeKind.METHOD && (modifiers = declaration.modifiers)) {
+    for (let i: i32 = 0, k: i32 = modifiers.length; i < k; ++i) {
+      const modifier: Modifier = modifiers[i];
+      if (modifier.modifierKind == ModifierKind.GET) {
+        name = GETTER_PREFIX + name;
+        break;
+      }
+      else if (modifier.modifierKind == ModifierKind.SET) {
+        name = SETTER_PREFIX + name;
+        break;
+      }
+    }
+  }
   if (!declaration.parent)
     return name;
   if (declaration.parent.kind == NodeKind.CLASS)
-    return (<ClassDeclaration>declaration.parent).internalName + (hasModifier(ModifierKind.STATIC, declaration.modifiers) ? "." : "#") + name;
+    return (<ClassDeclaration>declaration.parent).internalName + (hasModifier(ModifierKind.STATIC, declaration.modifiers) ? STATIC_DELIMITER : INSTANCE_DELIMITER) + name;
   if (declaration.parent.kind == NodeKind.NAMESPACE || declaration.parent.kind == NodeKind.ENUM)
-    return (<DeclarationStatement>declaration.parent).internalName + "." + name;
-  return declaration.range.source.normalizedPath + "/" + name;
+    return (<DeclarationStatement>declaration.parent).internalName + STATIC_DELIMITER + name;
+  return declaration.range.source.internalPath + PATH_DELIMITER + name;
 }
 
 function builderEndsWith(sb: string[], code: CharCode): bool {

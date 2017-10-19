@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "noLib": true,
+    "experimentalDecorators": true
+  },
+  "files": [
+    "array.ts",
+    "error.ts",
+    "map.ts",
+    "math.ts",
+    "memory.ts",
+    "set.ts",
+    "string.ts"
+  ]
+}

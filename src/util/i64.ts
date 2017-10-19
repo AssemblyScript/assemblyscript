@@ -511,6 +511,10 @@ export class U64 extends I64 {
     return false;
   }
 
+  get fitsInU32(): bool {
+    return this.hi == 0;
+  }
+
   comp32(lo: i32, hi: i32): i32 {
     // uses both a cast and a js-like shift for portability
     return ((hi as u32 >>> 0) > (this.hi as u32 >>> 0)) || (hi == this.hi && (lo as u32 >>> 0) > (this.lo as u32 >>> 0)) ? -1 : 1;

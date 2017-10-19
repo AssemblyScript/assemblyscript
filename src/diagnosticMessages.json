@@ -1,6 +1,7 @@
 {
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 100,
   "Basic type '{0}' cannot be nullable.": 101,
+  "Operation not supported.": 102,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
@@ -31,6 +32,7 @@
   "Unexpected end of text.": 1126,
   "Invalid character.": 1127,
   "'case' or 'default' expected.": 1130,
+  "Type argument expected.": 1140,
   "String literal expected.": 1141,
   "Line break not permitted here.": 1142,
   "Declaration expected.": 1146,
@@ -50,8 +52,10 @@
   "Type '{0}' is not assignable to type '{1}'.": 2322,
   "'this' cannot be referenced in current location.": 2332,
   "The operand of an increment or decrement operator must be a variable or a property access.": 2357,
+  "The left-hand side of an assignment expression must be a variable or a property access.": 2364,
   "Function implementation is missing or not immediately following the declaration.": 2391,
   "Duplicate function implementation.": 2393,
+  "The target of an assignment must be a variable or a property access.": 2541,
   "Expected {0} type arguments, but got {1}.": 2558,
 
   "File '{0}' not found.": 6054

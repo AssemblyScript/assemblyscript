@@ -3,6 +3,7 @@
 export enum DiagnosticCode {
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 100,
   Basic_type_0_cannot_be_nullable = 101,
+  Operation_not_supported = 102,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -32,6 +33,7 @@ export enum DiagnosticCode {
   Unexpected_end_of_text = 1126,
   Invalid_character = 1127,
   _case_or_default_expected = 1130,
+  Type_argument_expected = 1140,
   String_literal_expected = 1141,
   Line_break_not_permitted_here = 1142,
   Declaration_expected = 1146,
@@ -50,8 +52,10 @@ export enum DiagnosticCode {
   Type_0_is_not_assignable_to_type_1 = 2322,
   _this_cannot_be_referenced_in_current_location = 2332,
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
+  The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Duplicate_function_implementation = 2393,
+  The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
   Expected_0_type_arguments_but_got_1 = 2558,
   File_0_not_found = 6054
 }
@@ -60,6 +64,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
     case 100: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 101: return "Basic type '{0}' cannot be nullable.";
+    case 102: return "Operation not supported.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -89,6 +94,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1126: return "Unexpected end of text.";
     case 1127: return "Invalid character.";
     case 1130: return "'case' or 'default' expected.";
+    case 1140: return "Type argument expected.";
     case 1141: return "String literal expected.";
     case 1142: return "Line break not permitted here.";
     case 1146: return "Declaration expected.";
@@ -107,8 +113,10 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
     case 2332: return "'this' cannot be referenced in current location.";
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
+    case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2393: return "Duplicate function implementation.";
+    case 2541: return "The target of an assignment must be a variable or a property access.";
     case 2558: return "Expected {0} type arguments, but got {1}.";
     case 6054: return "File '{0}' not found.";
     default: return "";

@@ -36,5 +36,14 @@
     "util/charcode.ts",
     "util/i64.ts",
     "util/path.ts"
-  ]
+  ],
+  "assembly": {
+    "exclude": [
+      "glue/js.t.ts",
+      "glue/js.ts"
+    ],
+    "include": [
+      "glue/wasm.ts"
+    ]
+  }
 }

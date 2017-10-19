@@ -27,7 +27,6 @@ export const enum CharCode {
   OGHAM = 0x1680,
 
   _ = 0x5F,
-  $ = 0x24,
 
   _0 = 0x30,
   _1 = 0x31,
@@ -106,6 +105,7 @@ export const enum CharCode {
   CLOSEPAREN = 0x29,
   COLON = 0x3A,
   COMMA = 0x2C,
+  DOLLAR = 0x24,
   DOT = 0x2E,
   DOUBLEQUOTE = 0x22,
   EQUALS = 0x3D,

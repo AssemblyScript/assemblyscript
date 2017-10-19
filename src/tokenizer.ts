@@ -280,6 +280,7 @@ export function operatorTokenToString(token: Token): string {
 
 const possibleIdentifiers: Set<string> = new Set([
   "from",
+  "global",
   "module",
   "namespace",
   "type"
@@ -302,6 +303,9 @@ export class Range {
       throw new Error("source mismatch");
     return new Range(a.source, a.start < b.start ? a.start : b.start, a.end > b.end ? a.end : b.end);
   }
+
+  get atStart(): Range { return new Range(this.source, this.start, this.start); }
+  get atEnd(): Range { return new Range(this.source, this.end, this.end); }
 }
 
 export class Tokenizer extends DiagnosticEmitter {
@@ -1107,7 +1111,7 @@ function isOctalDigit(c: i32): bool {
 function isIdentifierStart(c: i32): bool {
   return c >= CharCode.A && c <= CharCode.Z
       || c >= CharCode.a && c <= CharCode.z
-      || c == CharCode.$
+//    || c == CharCode.DOLLAR // reserved for internal in case we have to change the naming scheme
       || c == CharCode._
       || c > 0x7f && isUnicodeIdentifierStart(c);
 }
@@ -1120,7 +1124,7 @@ function isIdentifierPart(c: i32): bool {
   return c >= CharCode.A && c <= CharCode.Z
       || c >= CharCode.a && c <= CharCode.z
       || c >= CharCode._0 && c <= CharCode._9
-      || c == CharCode.$
+//    || c == CharCode.DOLLAR // reserved for internal use, see above
       || c == CharCode._
       || c > 0x7f && isUnicodeIdentifierPart(c);
 }
