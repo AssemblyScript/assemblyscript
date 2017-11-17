@@ -15,7 +15,7 @@ declare function _free(ptr: usize): void;
 
 declare type BinaryenIndex = u32;
 
-declare type BinaryenType = u32;
+declare type BinaryenType = i32;
 
 declare function _BinaryenNone(): BinaryenType;
 declare function _BinaryenInt32(): BinaryenType;
@@ -23,6 +23,37 @@ declare function _BinaryenInt64(): BinaryenType;
 declare function _BinaryenFloat32(): BinaryenType;
 declare function _BinaryenFloat64(): BinaryenType;
 declare function _BinaryenUndefined(): BinaryenType;
+
+declare type BinaryenExpressionId = i32;
+
+declare function _BinaryenInvalidId(): BinaryenExpressionId;
+declare function _BinaryenBlockId(): BinaryenExpressionId;
+declare function _BinaryenIfId(): BinaryenExpressionId;
+declare function _BinaryenLoopId(): BinaryenExpressionId;
+declare function _BinaryenBreakId(): BinaryenExpressionId;
+declare function _BinaryenSwitchId(): BinaryenExpressionId;
+declare function _BinaryenCallId(): BinaryenExpressionId;
+declare function _BinaryenCallImportId(): BinaryenExpressionId;
+declare function _BinaryenCallIndirectId(): BinaryenExpressionId;
+declare function _BinaryenGetLocalId(): BinaryenExpressionId;
+declare function _BinaryenSetLocalId(): BinaryenExpressionId;
+declare function _BinaryenGetGlobalId(): BinaryenExpressionId;
+declare function _BinaryenSetGlobalId(): BinaryenExpressionId;
+declare function _BinaryenLoadId(): BinaryenExpressionId;
+declare function _BinaryenStoreId(): BinaryenExpressionId;
+declare function _BinaryenConstId(): BinaryenExpressionId;
+declare function _BinaryenUnaryId(): BinaryenExpressionId;
+declare function _BinaryenBinaryId(): BinaryenExpressionId;
+declare function _BinaryenSelectId(): BinaryenExpressionId;
+declare function _BinaryenDropId(): BinaryenExpressionId;
+declare function _BinaryenReturnId(): BinaryenExpressionId;
+declare function _BinaryenHostId(): BinaryenExpressionId;
+declare function _BinaryenNopId(): BinaryenExpressionId;
+declare function _BinaryenUnreachableId(): BinaryenExpressionId;
+declare function _BinaryenAtomicCmpxchgId(): BinaryenExpressionId;
+declare function _BinaryenAtomicRMWId(): BinaryenExpressionId;
+declare function _BinaryenAtomicWaitId(): BinaryenExpressionId;
+declare function _BinaryenAtomicWakeId(): BinaryenExpressionId;
 
 declare type BinaryenModuleRef = usize;
 
@@ -34,10 +65,11 @@ declare type CString = usize;
 declare type CArray<T> = usize;
 
 declare function _BinaryenAddFunctionType(module: BinaryenModuleRef, name: CString, result: BinaryenType, paramTypes: CArray<BinaryenType>, numParams: BinaryenIndex): BinaryenFunctionTypeRef;
+declare function _BinaryenGetFunctionTypeBySignature(module: BinaryenModuleRef, result: BinaryenType, paramTypes: CArray<BinaryenType>, numParams: BinaryenIndex): BinaryenFunctionTypeRef;
 
 declare type BinaryenLiteral = CArray<u8>;
 
-// LLVM C ABI with `out` being a buffer of 16 bytes receiving the BinaryenLiteral struct
+// LLVM C ABI with `out` being a buffer of 16 bytes receiving the BinaryenLiteral struct.
 // union value starts at offset 8 due to alignment (?)
 declare function _BinaryenLiteralInt32(out: BinaryenLiteral, x: i32): void;
 declare function _BinaryenLiteralInt64(out: BinaryenLiteral, x: i32, y: i32): void;
@@ -171,10 +203,22 @@ declare function _BinaryenLtFloat64(): BinaryenOp;
 declare function _BinaryenLeFloat64(): BinaryenOp;
 declare function _BinaryenGtFloat64(): BinaryenOp;
 declare function _BinaryenGeFloat64(): BinaryenOp;
-declare function _BinaryenPageSize(): BinaryenOp;
-declare function _BinaryenCurrentMemory(): BinaryenOp;
-declare function _BinaryenGrowMemory(): BinaryenOp;
-declare function _BinaryenHasFeature(): BinaryenOp;
+
+declare type BinaryenHostOp = BinaryenOp;
+
+declare function _BinaryenPageSize(): BinaryenHostOp;
+declare function _BinaryenCurrentMemory(): BinaryenHostOp;
+declare function _BinaryenGrowMemory(): BinaryenHostOp;
+declare function _BinaryenHasFeature(): BinaryenHostOp;
+
+declare type BinaryenAtomicRMWOp = BinaryenOp;
+
+declare function _BinaryenAtomicRMWAdd(): BinaryenAtomicRMWOp;
+declare function _BinaryenAtomicRMWSub(): BinaryenAtomicRMWOp;
+declare function _BinaryenAtomicRMWAnd(): BinaryenAtomicRMWOp;
+declare function _BinaryenAtomicRMWOr(): BinaryenAtomicRMWOp;
+declare function _BinaryenAtomicRMWXor(): BinaryenAtomicRMWOp;
+declare function _BinaryenAtomicRMWXchg(): BinaryenAtomicRMWOp;
 
 declare type BinaryenExpressionRef = usize;
 
@@ -202,8 +246,19 @@ declare function _BinaryenReturn(module: BinaryenModuleRef, value: BinaryenExpre
 declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, name: CString | 0, operands: CArray<BinaryenExpressionRef>, numOperands: BinaryenIndex): BinaryenExpressionRef;
 declare function _BinaryenNop(module: BinaryenModuleRef): BinaryenExpressionRef;
 declare function _BinaryenUnreachable(module: BinaryenModuleRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicRMW(module: BinaryenModuleRef, op: BinaryenAtomicRMWOp, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
+declare function _BinaryenAtomicCmpxchg(module: BinaryenModuleRef, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, replacement: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
+declare function _BinaryenAtomicWait(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, timeout: BinaryenExpressionRef, expectedType: BinaryenType): BinaryenExpressionRef;
+declare function _BinaryenAtomicWake(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, wakeCount: BinaryenExpressionRef): BinaryenExpressionRef;
 
+declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
+declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
 declare function _BinaryenExpressionPrint(expr: BinaryenExpressionRef): void;
+declare function _BinaryenConstGetValueI32(expr: BinaryenExpressionRef): i32;
+declare function _BinaryenConstGetValueI64Low(expr: BinaryenExpressionRef): i32;
+declare function _BinaryenConstGetValueI64High(expr: BinaryenExpressionRef): i32;
+declare function _BinaryenConstGetValueF32(expr: BinaryenExpressionRef): f32;
+declare function _BinaryenConstGetValueF64(expr: BinaryenExpressionRef): f64;
 
 declare type BinaryenFunctionRef = usize;
 
@@ -219,7 +274,9 @@ declare type BinaryenExportRef = usize;
 declare function _BinaryenAddExport(module: BinaryenModuleRef, internalName: CString, externalName: CString): BinaryenExportRef;
 declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: CString): void;
 
-declare function _BinaryenAddGlobal(module: BinaryenModuleRef, name: CString, type: BinaryenType, mutable: i8, init: BinaryenExpressionRef): BinaryenImportRef; // sic
+declare type BinaryenGlobalRef = usize;
+
+declare function _BinaryenAddGlobal(module: BinaryenModuleRef, name: CString, type: BinaryenType, mutable: i8, init: BinaryenExpressionRef): BinaryenGlobalRef;
 
 declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, funcs: CArray<BinaryenFunctionRef>, numFuncs: BinaryenIndex): void;
 
@@ -232,6 +289,7 @@ declare function _BinaryenModulePrint(module: BinaryenModuleRef): void;
 declare function _BinaryenModulePrintAsmjs(module: BinaryenModuleRef): void;
 declare function _BinaryenModuleValidate(module: BinaryenModuleRef): i32;
 declare function _BinaryenModuleOptimize(module: BinaryenModuleRef): void;
+declare function _BinaryenModuleRunPasses(module: BinaryenModuleRef, passes: string[]): void;
 declare function _BinaryenModuleAutoDrop(module: BinaryenModuleRef): void;
 declare function _BinaryenModuleWrite(module: BinaryenModuleRef, output: CString, outputSize: usize): usize;
 declare function _BinaryenModuleRead(input: CString, inputSize: usize): BinaryenModuleRef;
@@ -248,5 +306,3 @@ declare function _RelooperAddBranchForSwitch(from: RelooperBlockRef, to: Reloope
 declare function _RelooperRenderAndDispose(relooper: RelooperRef, entry: RelooperBlockRef, labelHelper: BinaryenIndex, module: BinaryenModuleRef): BinaryenExpressionRef;
 
 declare function _BinaryenSetAPITracing(on: i32): void;
-
-declare function _BinaryenGetFunctionTypeBySignature(module: BinaryenModuleRef, result: BinaryenType, paramTypes: CArray<BinaryenType>, numParams: BinaryenIndex): BinaryenFunctionTypeRef;

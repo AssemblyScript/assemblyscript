@@ -51,10 +51,12 @@ export enum DiagnosticCode {
   Type_0_is_not_generic = 2315,
   Type_0_is_not_assignable_to_type_1 = 2322,
   _this_cannot_be_referenced_in_current_location = 2332,
+  Property_0_does_not_exist_on_type_1 = 2339,
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Duplicate_function_implementation = 2393,
+  Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
   The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
   Expected_0_type_arguments_but_got_1 = 2558,
   File_0_not_found = 6054
@@ -112,10 +114,12 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2315: return "Type '{0}' is not generic.";
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
     case 2332: return "'this' cannot be referenced in current location.";
+    case 2339: return "Property '{0}' does not exist on type '{1}'.";
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2393: return "Duplicate function implementation.";
+    case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
     case 2541: return "The target of an assignment must be a variable or a property access.";
     case 2558: return "Expected {0} type arguments, but got {1}.";
     case 6054: return "File '{0}' not found.";

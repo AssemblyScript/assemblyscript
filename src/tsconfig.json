@@ -25,6 +25,7 @@
     "compiler.ts",
     "diagnosticMessages.generated.ts",
     "diagnostics.ts",
+    "evaluator.ts",
     "glue/js.d.ts",
     "glue/js.ts",
     "index.ts",

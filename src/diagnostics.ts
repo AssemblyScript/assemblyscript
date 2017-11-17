@@ -11,10 +11,12 @@ export enum DiagnosticCategory {
 }
 
 export function diagnosticCategoryToString(category: DiagnosticCategory): string {
-  if (category == DiagnosticCategory.INFO) return "INFO";
-  if (category == DiagnosticCategory.WARNING) return "WARNING";
-  if (category == DiagnosticCategory.ERROR) return "ERROR";
-  return "";
+  switch (category) {
+    case DiagnosticCategory.INFO: return "INFO";
+    case DiagnosticCategory.WARNING: return "WARNING";
+    case DiagnosticCategory.ERROR: return "ERROR";
+    default: return "";
+  }
 }
 
 const colorBlue: string = "\u001b[93m";
@@ -23,10 +25,12 @@ const colorRed: string = "\u001b[91m";
 const colorReset: string = "\u001b[0m";
 
 export function diagnosticCategoryToColor(category: DiagnosticCategory): string {
-  if (category == DiagnosticCategory.INFO) return colorBlue;
-  if (category == DiagnosticCategory.WARNING) return colorYellow;
-  if (category == DiagnosticCategory.ERROR) return colorRed;
-  return "";
+  switch (category) {
+    case DiagnosticCategory.INFO: return colorBlue;
+    case DiagnosticCategory.WARNING: return colorYellow;
+    case DiagnosticCategory.ERROR: return colorRed;
+    default: return "";
+  }
 }
 
 export class DiagnosticMessage {

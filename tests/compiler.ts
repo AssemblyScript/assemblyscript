@@ -30,6 +30,10 @@ const files: Map<string,string> = new Map([
     }
     return -1;
   }
+  import { sub } from "../other";
+  export function what(): void {
+    sub(1,2);
+  }
 `],
 
   ["../other",
@@ -54,6 +58,7 @@ do {
 const program = parser.finish();
 const compiler = new Compiler(program);
 const module = compiler.compile();
+console.log(program.elements.keys());
 
 // module.optimize();
 module.validate();

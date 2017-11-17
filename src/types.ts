@@ -1,4 +1,4 @@
-import { ClassInstance } from "./program";
+import { Class } from "./program";
 import { sb } from "./util";
 
 export const enum TypeKind {
@@ -29,7 +29,7 @@ export class Type {
 
   kind: TypeKind;
   size: i32;
-  classType: ClassInstance | null;
+  classType: Class | null;
   nullable: bool = false;
   nullableType: Type | null = null; // cached, of this type
 
@@ -50,7 +50,7 @@ export class Type {
   get isAnySize(): bool { return this.kind == TypeKind.ISIZE || this.kind == TypeKind.USIZE; }
   get isAnyFloat(): bool { return this.kind == TypeKind.F32 || this.kind == TypeKind.F64; }
 
-  asClass(classType: ClassInstance): Type {
+  asClass(classType: Class): Type {
     const ret: Type = new Type(this.kind, this.size);
     ret.classType = classType;
     return ret;

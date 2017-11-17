@@ -1,7 +1,7 @@
 import { Module, MemorySegment, UnaryOp, BinaryOp, HostOp, Type as BinaryenType, Relooper } from "./binaryen";
 import { PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
-import { Program, ClassTemplate, Element, ElementKind, Enum, FunctionTemplate, FunctionInstance, Global, Local, Namespace, Parameter } from "./program";
+import { Program, ClassPrototype, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter } from "./program";
 import { CharCode, I64, U64, normalizePath, sb } from "./util";
 import { Token } from "./tokenizer";
 import {
@@ -96,11 +96,11 @@ export class Compiler extends DiagnosticEmitter {
   options: Options;
   module: Module;
 
-  startFunction: FunctionInstance;
+  startFunction: Function;
   startFunctionBody: BinaryenExpressionRef[] = new Array();
 
   currentType: Type = Type.void;
-  currentFunction: FunctionInstance;
+  currentFunction: Function;
   disallowContinue: bool = true;
 
   memoryOffset: U64 = new U64(8, 0); // leave space for (any size of) NULL
@@ -118,8 +118,8 @@ export class Compiler extends DiagnosticEmitter {
     this.program = program;
     this.options = options ? options : new Options();
     this.module = this.options.noEmit ? Module.createStub() : Module.create();
-    const startFunctionTemplate: FunctionTemplate = new FunctionTemplate(program, "start", null);
-    const startFunctionInstance: FunctionInstance = new FunctionInstance(startFunctionTemplate, startFunctionTemplate.internalName, [], [], Type.void, null);
+    const startFunctionTemplate: FunctionPrototype = new FunctionPrototype(program, "start", null);
+    const startFunctionInstance: Function = new Function(startFunctionTemplate, startFunctionTemplate.internalName, [], [], Type.void, null);
     this.currentFunction = this.startFunction = startFunctionInstance;
     this.memoryOffset = new U64(2 * (this.options.target == Target.WASM64 ? 8 : 4), 0); // leave space for `null` and heapStart (both of usize type)
   }
@@ -251,7 +251,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // otherwise a top-level statement that is part of the start function's body
         default: {
-          const previousFunction: FunctionInstance = this.currentFunction;
+          const previousFunction: Function = this.currentFunction;
           this.currentFunction = this.startFunction;
           this.startFunctionBody.push(this.compileStatement(statement));
           this.currentFunction = previousFunction;
@@ -290,7 +290,7 @@ export class Compiler extends DiagnosticEmitter {
     let initializeInStart: bool;
     if (element.hasConstantValue) {
       if (type.isLongInteger)
-        initializer = this.module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi);
+        initializer = element.constantIntegerValue ? this.module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi) : this.module.createI64(0, 0);
       else if (type.kind == TypeKind.F32)
         initializer = this.module.createF32(element.constantFloatValue);
       else if (type.kind == TypeKind.F64)
@@ -298,11 +298,11 @@ export class Compiler extends DiagnosticEmitter {
       else if (type.isSmallInteger) {
         if (type.isSignedInteger) {
           const shift: i32 = type.smallIntegerShift;
-          initializer = this.module.createI32(element.constantIntegerValue.toI32() << shift >> shift);
+          initializer = this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
         } else
-          initializer = this.module.createI32(element.constantIntegerValue.toI32() & type.smallIntegerMask);
+          initializer = this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & type.smallIntegerMask: 0);
       } else
-        initializer = this.module.createI32(element.constantIntegerValue.toI32());
+        initializer = this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() : 0);
       initializeInStart = false;
       this.module.addGlobal(element.internalName, binaryenType, element.isMutable, initializer);
     } else if (declaration) {
@@ -374,16 +374,16 @@ export class Compiler extends DiagnosticEmitter {
   compileFunctionDeclaration(declaration: FunctionDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
     const internalName: string = declaration.internalName;
     const element: Element | null = <Element | null>this.program.elements.get(internalName);
-    if (!element || element.kind != ElementKind.FUNCTION)
+    if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE)
       throw new Error("unexpected missing function");
     const resolvedTypeArguments: Type[] | null = this.program.resolveTypeArguments(declaration.typeParameters, typeArguments, contextualTypeArguments, alternativeReportNode); // reports
     if (!resolvedTypeArguments)
       return;
-    this.compileFunction(<FunctionTemplate>element, resolvedTypeArguments, contextualTypeArguments);
+    this.compileFunction(<FunctionPrototype>element, resolvedTypeArguments, contextualTypeArguments);
   }
 
-  compileFunction(template: FunctionTemplate, typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null = null): void {
-    const instance: FunctionInstance | null = template.instantiate(typeArguments, contextualTypeArguments);
+  compileFunction(template: FunctionPrototype, typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null = null): void {
+    const instance: Function | null = template.resolve(typeArguments, contextualTypeArguments);
     if (!instance || instance.compiled)
       return;
 
@@ -398,7 +398,7 @@ export class Compiler extends DiagnosticEmitter {
     instance.compiled = true;
 
     // compile statements
-    const previousFunction: FunctionInstance = this.currentFunction;
+    const previousFunction: Function = this.currentFunction;
     this.currentFunction = instance;
     const stmts: BinaryenExpressionRef[] = this.compileStatements(<Statement[]>declaration.statements);
     this.currentFunction = previousFunction;
@@ -468,18 +468,18 @@ export class Compiler extends DiagnosticEmitter {
     for (let [name, element] of ns.members) {
       switch (element.kind) {
 
-        case ElementKind.CLASS:
-          if ((noTreeShaking || (<ClassTemplate>element).isExport) && !(<ClassTemplate>element).isGeneric)
-            this.compileClass(<ClassTemplate>element, []);
+        case ElementKind.CLASS_PROTOTYPE:
+          if ((noTreeShaking || (<ClassPrototype>element).isExport) && !(<ClassPrototype>element).isGeneric)
+            this.compileClass(<ClassPrototype>element, []);
           break;
 
         case ElementKind.ENUM:
           this.compileEnum(<Enum>element);
           break;
 
-        case ElementKind.FUNCTION:
-          if ((noTreeShaking || (<FunctionTemplate>element).isExport) && !(<FunctionTemplate>element).isGeneric)
-            this.compileFunction(<FunctionTemplate>element, []);
+        case ElementKind.FUNCTION_PROTOTYPE:
+          if ((noTreeShaking || (<FunctionPrototype>element).isExport) && !(<FunctionPrototype>element).isGeneric)
+            this.compileFunction(<FunctionPrototype>element, []);
           break;
 
         case ElementKind.GLOBAL:
@@ -506,18 +506,18 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("unexpected missing element");
       switch (element.kind) {
 
-        case ElementKind.CLASS:
-          if (!(<ClassTemplate>element).isGeneric)
-            this.compileClass(<ClassTemplate>element, []);
+        case ElementKind.CLASS_PROTOTYPE:
+          if (!(<ClassPrototype>element).isGeneric)
+            this.compileClass(<ClassPrototype>element, []);
           break;
 
         case ElementKind.ENUM:
           this.compileEnum(<Enum>element);
           break;
 
-        case ElementKind.FUNCTION:
-          if (!(<FunctionTemplate>element).isGeneric)
-            this.compileFunction(<FunctionTemplate>element, []);
+        case ElementKind.FUNCTION_PROTOTYPE:
+          if (!(<FunctionPrototype>element).isGeneric)
+            this.compileFunction(<FunctionPrototype>element, []);
           break;
 
         case ElementKind.GLOBAL:
@@ -536,15 +536,15 @@ export class Compiler extends DiagnosticEmitter {
   compileClassDeclaration(declaration: ClassDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
     const internalName: string = declaration.internalName;
     const element: Element | null = <Element | null>this.program.elements.get(internalName);
-    if (!element || element.kind != ElementKind.CLASS)
+    if (!element || element.kind != ElementKind.CLASS_PROTOTYPE)
       throw new Error("unexpected missing class");
     const resolvedTypeArguments: Type[] | null = this.program.resolveTypeArguments(declaration.typeParameters, typeArguments, contextualTypeArguments, alternativeReportNode); // reports
     if (!resolvedTypeArguments)
       return;
-    this.compileClass(<ClassTemplate>element, resolvedTypeArguments, contextualTypeArguments);
+    this.compileClass(<ClassPrototype>element, resolvedTypeArguments, contextualTypeArguments);
   }
 
-  compileClass(cls: ClassTemplate, typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null = null) {
+  compileClass(cls: ClassPrototype, typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null = null) {
     throw new Error("not implemented");
   }
 
@@ -1053,9 +1053,9 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): BinaryenExpressionRef {
-    const toType: Type | null = this.program.resolveType(expression.toType, this.currentFunction.contextualTypeArguments, true); // reports
+    const toType: Type | null = this.program.resolveType(expression.toType, this.currentFunction.contextualTypeArguments); // reports
     if (toType && toType != contextualType) {
-      const expr: BinaryenExpressionRef = this.compileExpression(expression.expression, <Type>toType);
+      const expr: BinaryenExpressionRef = this.compileExpression(expression.expression, <Type>toType, false);
       return this.convertExpression(expr, this.currentType, <Type>toType);
     }
     return this.compileExpression(expression.expression, contextualType);
@@ -1316,9 +1316,13 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileCallExpression(expression: CallExpression, contextualType: Type): BinaryenExpressionRef {
-    const element: Element | null = this.program.resolveElement(expression, this.currentFunction);
-    if (!element || element.kind != ElementKind.FUNCTION)
+    const element: Element | null = this.program.resolveElement(expression.expression, this.currentFunction); // reports
+    if (!element)
       return this.module.createUnreachable();
+    if (element.kind != ElementKind.FUNCTION_PROTOTYPE) {
+      // TODO: report 'Cannot invoke an expression whose type lacks a call signature.'
+      return this.module.createUnreachable();
+    }
     throw new Error("not implemented");
   }
 
@@ -1401,7 +1405,7 @@ export class Compiler extends DiagnosticEmitter {
     //  throw new Error("not implemented");
 
     // getter
-    if (element.kind == ElementKind.FUNCTION && (<FunctionTemplate>element).isGetter)
+    if (element.kind == ElementKind.FUNCTION_PROTOTYPE && (<FunctionPrototype>element).isGetter)
       throw new Error("not implemented");
 
     this.error(DiagnosticCode.Operation_not_supported, expression.range);

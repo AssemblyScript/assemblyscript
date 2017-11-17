@@ -1,6 +1,6 @@
 import "../src/glue/js";
 import { Tokenizer, Token } from "../src/tokenizer";
-import { Source } from "../src/reflection";
+import { Source } from "../src/ast";
 import * as fs from "fs";
 
 const text = fs.readFileSync(__dirname + "/../src/tokenizer.ts").toString();

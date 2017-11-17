@@ -1091,7 +1091,7 @@ export class Source extends Node {
   tokenizer: Tokenizer | null = null;
   isEntry: bool;
 
-  constructor(path: string, text: string, isEntry: bool) {
+  constructor(path: string, text: string, isEntry: bool = false) {
     super();
     this.path = path;
     this.normalizedPath = normalizePath(path, true);
@@ -1392,6 +1392,7 @@ export class ExpressionStatement extends Statement {
 
   serialize(sb: string[]): void {
     this.expression.serialize(sb);
+    sb.push(";");
   }
 }
 
@@ -1773,6 +1774,7 @@ export class ThrowStatement extends Statement {
   serialize(sb: string[]): void {
     sb.push("throw ");
     this.expression.serialize(sb);
+    sb.push(";");
   }
 }
 
@@ -1895,10 +1897,11 @@ export function serialize(node: Node, indent: i32 = 0): string {
 }
 
 export function mangleInternalPath(path: string): string {
-  if (PATH_DELIMITER.charCodeAt(0) != CharCode.SLASH)
+  // TODO: not necessary with current config
+  /* if (PATH_DELIMITER.charCodeAt(0) != CharCode.SLASH)
     path = path.replace("/", PATH_DELIMITER);
   if (PARENT_SUBST != "..")
-    path = path.replace("..", PARENT_SUBST);
+    path = path.replace("..", PARENT_SUBST); */
   return path;
 }
 

@@ -1,4 +1,4 @@
-import { U64 } from "./util";
+import { I64, U64 } from "./util";
 import { Target } from "./compiler";
 
 export enum Type {
@@ -8,6 +8,37 @@ export enum Type {
   F32 = _BinaryenFloat32(),
   F64 =  _BinaryenFloat64(),
   Undefined = _BinaryenUndefined()
+}
+
+export enum ExpressionId {
+  Invalid = _BinaryenInvalidId(),
+  Block = _BinaryenBlockId(),
+  If = _BinaryenIfId(),
+  Loop = _BinaryenLoopId(),
+  Break = _BinaryenBreakId(),
+  Switch = _BinaryenSwitchId(),
+  Call = _BinaryenCallId(),
+  CallImport = _BinaryenCallImportId(),
+  CallIndirect = _BinaryenCallIndirectId(),
+  GetLocal = _BinaryenGetLocalId(),
+  SetLocal = _BinaryenSetLocalId(),
+  GetGlobal = _BinaryenGetGlobalId(),
+  SetGlobal = _BinaryenSetGlobalId(),
+  Load = _BinaryenLoadId(),
+  Store = _BinaryenStoreId(),
+  Const = _BinaryenConstId(),
+  Unary = _BinaryenUnaryId(),
+  Binary = _BinaryenBinaryId(),
+  Select = _BinaryenSelectId(),
+  Drop = _BinaryenDropId(),
+  Return = _BinaryenReturnId(),
+  Host = _BinaryenHostId(),
+  Nop = _BinaryenNopId(),
+  Unreachable = _BinaryenUnreachableId(),
+  AtomicCmpxchg = _BinaryenAtomicCmpxchgId(),
+  AtomicRMW = _BinaryenAtomicRMWId(),
+  AtomicWait = _BinaryenAtomicWaitId(),
+  AtomicWake = _BinaryenAtomicWakeId()
 }
 
 export enum UnaryOp {
@@ -146,13 +177,13 @@ export enum HostOp {
   HasFeature = _BinaryenHasFeature()
 }
 
-export enum AtomicRMWOp { // TODO: not yet part of the C-API
-  Add,
-  Sub,
-  And,
-  Or,
-  Xor,
-  Xchg
+export enum AtomicRMWOp {
+  Add = _BinaryenAtomicRMWAdd(),
+  Sub = _BinaryenAtomicRMWSub(),
+  And = _BinaryenAtomicRMWAnd(),
+  Or = _BinaryenAtomicRMWOr(),
+  Xor = _BinaryenAtomicRMWXor(),
+  Xchg = _BinaryenAtomicRMWXchg()
 }
 
 export class MemorySegment {
@@ -216,8 +247,8 @@ export class Module {
     try {
       return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes.length);
     } finally {
-      _free(cStr);
       _free(cArr);
+      _free(cStr);
     }
   }
 
@@ -274,8 +305,8 @@ export class Module {
     try {
       return _BinaryenHost(this.ref, op, cStr, cArr, operands ? (<BinaryenExpressionRef[]>operands).length : 0);
     } finally {
-      _free(cStr);
       _free(cArr);
+      _free(cStr);
     }
   }
 
@@ -297,6 +328,26 @@ export class Module {
     } finally {
       _free(cStr);
     }
+  }
+
+  createAtomicRMW(op: AtomicRMWOp, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: Type): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
+    return _BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type);
+  }
+
+  createAtomicCmpxchg(bytes: i32, offset: i32, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, replacement: BinaryenExpressionRef, type: Type): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
+    return _BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type);
+  }
+
+  createAtomicWait(ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, timeout: BinaryenExpressionRef, expectedType: BinaryenType): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
+    return _BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType);
+  }
+
+  createAtomicWake(ptr: BinaryenExpressionRef, wakeCount: BinaryenExpressionRef): BinaryenExpressionRef {
+    if (this.noEmit) return 0;
+    return _BinaryenAtomicWake(this.ref, ptr, wakeCount);
   }
 
   // statements
@@ -323,8 +374,8 @@ export class Module {
     try {
       return _BinaryenBlock(this.ref, cStr, cArr, children.length, type);
     } finally {
-      _free(cStr);
       _free(cArr);
+      _free(cStr);
     }
   }
 
@@ -383,9 +434,9 @@ export class Module {
     try {
       return _BinaryenSwitch(this.ref, cArr, k, cStr, condition, value);
     } finally {
-      for (i = 0; i < k; ++i) _free(strs[i]);
-      _free(cArr);
       _free(cStr);
+      _free(cArr);
+      for (i = k - 1; i >= 0; --i) _free(strs[i]);
     }
   }
 
@@ -416,7 +467,7 @@ export class Module {
 
   // meta
 
-  addGlobal(name: string, type: Type, mutable: bool, initializer: BinaryenExpressionRef): BinaryenImportRef {
+  addGlobal(name: string, type: Type, mutable: bool, initializer: BinaryenExpressionRef): BinaryenGlobalRef {
     if (this.noEmit) return 0;
     const cStr: CString = allocString(name);
     try {
@@ -433,8 +484,8 @@ export class Module {
     try {
       return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes.length, body);
     } finally {
-      _free(cStr);
       _free(cArr);
+      _free(cStr);
     }
   }
 
@@ -445,8 +496,8 @@ export class Module {
     try {
       return _BinaryenAddExport(this.ref, cStr1, cStr2);
     } finally {
-      _free(cStr1);
       _free(cStr2);
+      _free(cStr1);
     }
   }
 
@@ -468,9 +519,9 @@ export class Module {
     try {
       return _BinaryenAddImport(this.ref, cStr1, cStr2, cStr3, type);
     } finally {
-      _free(cStr1);
-      _free(cStr2);
       _free(cStr3);
+      _free(cStr2);
+      _free(cStr1);
     }
   }
 
@@ -506,11 +557,11 @@ export class Module {
     try {
       _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k);
     } finally {
-      _free(cStr);
-      for (i = 0; i < k; ++i) _free(segs[i]);
-      _free(cArr1);
-      _free(cArr2);
       _free(cArr3);
+      _free(cArr2);
+      _free(cArr1);
+      for (i = k - 1; i >= 0; --i) _free(segs[i]);
+      _free(cStr);
     }
   }
 
@@ -538,6 +589,45 @@ export class Module {
   createRelooper(): Relooper {
     return this.noEmit ? Relooper.createStub(this) : Relooper.create(this);
   }
+}
+
+export function getExpressionId(expr: BinaryenExpressionRef): ExpressionId {
+  return _BinaryenExpressionGetId(expr);
+}
+
+export function getExpressionType(expr: BinaryenExpressionRef): Type {
+  return _BinaryenExpressionGetType(expr);
+}
+
+export function printExpression(expr: BinaryenExpressionRef): void {
+  return _BinaryenExpressionPrint(expr);
+}
+
+export function getConstValueI32(expr: BinaryenExpressionRef): i32 {
+  return _BinaryenConstGetValueI32(expr);
+}
+
+export function getConstValueI64Low(expr: BinaryenExpressionRef): i32 {
+  return _BinaryenConstGetValueI64Low(expr);
+}
+
+export function getConstValueI64High(expr: BinaryenExpressionRef): i32 {
+  return _BinaryenConstGetValueI64High(expr);
+}
+
+export function getConstValueI64(expr: BinaryenExpressionRef): I64 {
+  return new I64(
+    _BinaryenConstGetValueI64Low(expr),
+    _BinaryenConstGetValueI64High(expr)
+  );
+}
+
+export function getConstValueF32(expr: BinaryenExpressionRef): f32 {
+  return _BinaryenConstGetValueF32(expr);
+}
+
+export function getConstValueF64(expr: BinaryenExpressionRef): f64 {
+  return _BinaryenConstGetValueF64(expr);
 }
 
 export class Relooper {
@@ -596,7 +686,7 @@ export class Relooper {
 }
 
 // helpers
-// TODO: investigate stack allocation?
+// can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js
 
 function allocU8Array(u8s: Uint8Array | null): CArray<u8> {
   if (!u8s) return 0;
