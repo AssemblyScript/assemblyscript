@@ -1,9 +1,9 @@
 import { Module, MemorySegment, UnaryOp, BinaryOp, HostOp, Type as BinaryenType, Relooper } from "./binaryen";
 import { PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
-import { Program, ClassPrototype, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter } from "./program";
+import { Program, ClassPrototype, Class, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter } from "./program";
 import { CharCode, I64, U64, normalizePath, sb } from "./util";
-import { Token } from "./tokenizer";
+import { Token, Range } from "./tokenizer";
 import {
 
   Node,
@@ -376,18 +376,21 @@ export class Compiler extends DiagnosticEmitter {
     const element: Element | null = <Element | null>this.program.elements.get(internalName);
     if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE)
       throw new Error("unexpected missing function");
-    const resolvedTypeArguments: Type[] | null = this.program.resolveTypeArguments(declaration.typeParameters, typeArguments, contextualTypeArguments, alternativeReportNode); // reports
-    if (!resolvedTypeArguments)
-      return;
-    this.compileFunction(<FunctionPrototype>element, resolvedTypeArguments, contextualTypeArguments);
+    this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode);
   }
 
-  compileFunction(template: FunctionPrototype, typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null = null): void {
-    const instance: Function | null = template.resolve(typeArguments, contextualTypeArguments);
-    if (!instance || instance.compiled)
+  compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null) {
+    const instance: Function | null = prototype.resolveInclTypeArguments(typeArguments, contextualTypeArguments, alternativeReportNode); // reports
+    if (!instance)
+      return;
+    this.compileFunction(instance);
+  }
+
+  compileFunction(instance: Function): void {
+    if (instance.compiled)
       return;
 
-    const declaration: FunctionDeclaration | null = template.declaration;
+    const declaration: FunctionDeclaration | null = instance.template.declaration;
     if (!declaration) // TODO: compile builtins
       throw new Error("not implemented");
 
@@ -470,7 +473,7 @@ export class Compiler extends DiagnosticEmitter {
 
         case ElementKind.CLASS_PROTOTYPE:
           if ((noTreeShaking || (<ClassPrototype>element).isExport) && !(<ClassPrototype>element).isGeneric)
-            this.compileClass(<ClassPrototype>element, []);
+            this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
           break;
 
         case ElementKind.ENUM:
@@ -479,7 +482,7 @@ export class Compiler extends DiagnosticEmitter {
 
         case ElementKind.FUNCTION_PROTOTYPE:
           if ((noTreeShaking || (<FunctionPrototype>element).isExport) && !(<FunctionPrototype>element).isGeneric)
-            this.compileFunction(<FunctionPrototype>element, []);
+            this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
           break;
 
         case ElementKind.GLOBAL:
@@ -508,7 +511,7 @@ export class Compiler extends DiagnosticEmitter {
 
         case ElementKind.CLASS_PROTOTYPE:
           if (!(<ClassPrototype>element).isGeneric)
-            this.compileClass(<ClassPrototype>element, []);
+            this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
           break;
 
         case ElementKind.ENUM:
@@ -517,7 +520,7 @@ export class Compiler extends DiagnosticEmitter {
 
         case ElementKind.FUNCTION_PROTOTYPE:
           if (!(<FunctionPrototype>element).isGeneric)
-            this.compileFunction(<FunctionPrototype>element, []);
+            this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
           break;
 
         case ElementKind.GLOBAL:
@@ -538,13 +541,17 @@ export class Compiler extends DiagnosticEmitter {
     const element: Element | null = <Element | null>this.program.elements.get(internalName);
     if (!element || element.kind != ElementKind.CLASS_PROTOTYPE)
       throw new Error("unexpected missing class");
-    const resolvedTypeArguments: Type[] | null = this.program.resolveTypeArguments(declaration.typeParameters, typeArguments, contextualTypeArguments, alternativeReportNode); // reports
-    if (!resolvedTypeArguments)
-      return;
-    this.compileClass(<ClassPrototype>element, resolvedTypeArguments, contextualTypeArguments);
+    this.compileClassUsingTypeArguments(<ClassPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode);
   }
 
-  compileClass(cls: ClassPrototype, typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null = null) {
+  compileClassUsingTypeArguments(prototype: ClassPrototype, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
+    const instance: Class | null = prototype.resolveInclTypeArguments(typeArguments, contextualTypeArguments, alternativeReportNode);
+    if (!instance)
+      return;
+    this.compileClass(instance);
+  }
+
+  compileClass(cls: Class) {
     throw new Error("not implemented");
   }
 
@@ -1319,14 +1326,46 @@ export class Compiler extends DiagnosticEmitter {
     const element: Element | null = this.program.resolveElement(expression.expression, this.currentFunction); // reports
     if (!element)
       return this.module.createUnreachable();
-    if (element.kind != ElementKind.FUNCTION_PROTOTYPE) {
-      // TODO: report 'Cannot invoke an expression whose type lacks a call signature.'
+    if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      const functionInstance: Function | null = (<FunctionPrototype>element).resolveInclTypeArguments(expression.typeArguments, this.currentFunction.contextualTypeArguments, expression); // reports
+      if (!functionInstance)
+        return this.module.createUnreachable();
+      return this.compileCall(functionInstance, expression.arguments, expression);
+    }
+    this.error(DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, expression.range, element.internalName);
+    return this.module.createUnreachable();
+  }
+
+  compileCall(functionInstance: Function, argumentExpressions: Expression[], reportNode: Node): BinaryenExpressionRef {
+    if (!functionInstance.compiled)
+      this.compileFunction(functionInstance);
+    const parameters: Parameter[] = functionInstance.parameters;
+    let k: i32 = parameters.length;
+    if (argumentExpressions.length > k) {
+      this.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range, k.toString(10), argumentExpressions.length.toString(10));
       return this.module.createUnreachable();
     }
-    throw new Error("not implemented");
+    const operands: BinaryenExpressionRef[] = new Array(k);
+    for (let i: i32 = 0; i < k; ++i) {
+      if (argumentExpressions.length > i) {
+        operands[i] = this.compileExpression(argumentExpressions[i], parameters[i].type);
+      } else {
+        const initializer: Expression | null = parameters[i].initializer;
+        if (initializer) {
+          operands[i] = this.compileExpression(initializer, parameters[i].type);
+        } else {
+          this.error(DiagnosticCode.Expected_at_least_0_arguments_but_got_1, reportNode.range, (i + 1).toString(10), argumentExpressions.length.toString(10));
+          return this.module.createUnreachable();
+        }
+      }
+    }
+    return this.module.createCall(functionInstance.internalName, operands, typeToBinaryenType(functionInstance.returnType));
   }
 
   compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type): BinaryenExpressionRef {
+    const element: Element | null = this.program.resolveElement(expression.expression, this.currentFunction); // reports
+    if (!element)
+      return this.module.createUnreachable();
     throw new Error("not implemented");
   }
 

@@ -508,19 +508,19 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  resolveTypeArguments(typeParameters: TypeParameter[], typeArgumentNodes: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Type[] | null {
+  resolveTypeArguments(typeParameters: TypeParameter[], typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Type[] | null {
     const parameterCount: i32 = typeParameters.length;
-    const argumentCount: i32 = typeArgumentNodes.length;
+    const argumentCount: i32 = typeArgumentNodes ? typeArgumentNodes.length : 0;
     if (parameterCount != argumentCount) {
       if (argumentCount)
-        this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, Range.join(typeArgumentNodes[0].range, typeArgumentNodes[argumentCount - 1].range), parameterCount.toString(10), argumentCount.toString(10));
+        this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, Range.join((<TypeNode[]>typeArgumentNodes)[0].range, (<TypeNode[]>typeArgumentNodes)[argumentCount - 1].range), parameterCount.toString(10), argumentCount.toString(10));
       else if (alternativeReportNode)
         this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, alternativeReportNode.range.atEnd, parameterCount.toString(10), "0");
       return null;
     }
     const typeArguments: Type[] = new Array(parameterCount);
     for (let i: i32 = 0; i < parameterCount; ++i) {
-      const type: Type | null = this.resolveType(typeArgumentNodes[i], contextualTypeArguments, true); // reports
+      const type: Type | null = this.resolveType((<TypeNode[]>typeArgumentNodes)[i], contextualTypeArguments, true); // reports
       if (!type)
         return null;
       // TODO: check extendsType
@@ -531,13 +531,15 @@ export class Program extends DiagnosticEmitter {
 
   resolveElement(expression: Expression, contextualFunction: Function): Element | null {
 
-    // this
+    // this -> Class
     if (expression.kind == NodeKind.THIS) {
       if (contextualFunction.instanceMethodOf)
         return contextualFunction.instanceMethodOf;
       this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
       return null;
     }
+
+    let ret: Element;
 
     // local or global name
     if (expression.kind == NodeKind.IDENTIFIER) {
@@ -557,10 +559,10 @@ export class Program extends DiagnosticEmitter {
     // static or instance property (incl. enum values) or method
     } else if (expression.kind == NodeKind.PROPERTYACCESS) {
       const target: Element | null = this.resolveElement((<PropertyAccessExpression>expression).expression, contextualFunction); // reports
-      let member: Element | null = null;
       if (!target)
         return null;
       const propertyName: string = (<PropertyAccessExpression>expression).property.name;
+      let member: Element | null = null;
       if (target.kind == ElementKind.ENUM)
         member = <EnumValue | null>(<Enum>target).members.get(propertyName);
       else if (target.kind == ElementKind.CLASS_PROTOTYPE)
@@ -702,10 +704,12 @@ export class Parameter {
 
   name: string;
   type: Type;
+  initializer: Expression | null;
 
-  constructor(name: string, type: Type) {
+  constructor(name: string, type: Type, initializer: Expression | null = null) {
     this.name = name;
     this.type = type;
+    this.initializer = initializer;
   }
 }
 
@@ -802,26 +806,51 @@ export class FunctionPrototype extends Element {
     this.instances.set(instanceKey, instance);
     return instance;
   }
+
+  resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Function | null {
+    let resolvedTypeArguments: Type[] | null;
+    if (this.isGeneric) {
+      if (!this.declaration)
+        throw new Error("not implemented"); // generic builtin
+      resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
+      if (!resolvedTypeArguments)
+        return null;
+    } else {
+      // TODO: check typeArgumentNodes being empty
+      resolvedTypeArguments = [];
+    }
+    return this.resolve(resolvedTypeArguments, contextualTypeArguments);
+  }
 }
 
 /** A resolved function. */
 export class Function extends Element {
 
   kind = ElementKind.FUNCTION;
-  template: FunctionPrototype;
-  typeArguments: Type[];
-  parameters: Parameter[];
-  returnType: Type;
-  instanceMethodOf: Class | null;
-  locals: Map<string,Local> = new Map();
-  additionalLocals: Type[] = []; // without parameters
-  breakContext: string | null = null;
 
+  /** Underlying function template. */
+  template: FunctionPrototype;
+  /** Concrete type arguments. */
+  typeArguments: Type[];
+  /** Concrete function parameters. */
+  parameters: Parameter[];
+  /** Concrete return type. */
+  returnType: Type;
+  /** If a method, the concrete class it is a member of. */
+  instanceMethodOf: Class | null;
+  /** Map of locals by name. */
+  locals: Map<string,Local> = new Map();
+  /** List of additional non-parameter locals. */
+  additionalLocals: Type[] = [];
+  /** Current break context label. */
+  breakContext: string | null = null;
+  /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> = new Map();
 
   private breakMajor: i32 = 0;
   private breakMinor: i32 = 0;
 
+  /** Constructs a new concrete function. */
   constructor(template: FunctionPrototype, internalName: string, typeArguments: Type[], parameters: Parameter[], returnType: Type, instanceMethodOf: Class | null) {
     super(template.program, internalName);
     this.template = template;
@@ -841,8 +870,10 @@ export class Function extends Element {
     }
   }
 
+  /** Tests if this function is an instance method. */
   get isInstance(): bool { return this.instanceMethodOf != null; }
 
+  /** Adds a local of the specified type, with an optional name. */
   addLocal(type: Type, name: string | null = null): Local {
     // if it has a name, check previously as this method will throw otherwise
     let localIndex = this.parameters.length + this.additionalLocals.length;
@@ -857,12 +888,14 @@ export class Function extends Element {
     return local;
   }
 
+  /** Enters a(nother) break context. */
   enterBreakContext(): string {
     if (!this.breakMinor)
       this.breakMajor++;
     return this.breakContext = this.breakMajor.toString(10) + "." + (++this.breakMinor).toString(10);
   }
 
+  /** Leaves the current break context. */
   leaveBreakContext(): void {
     if (--this.breakMinor < 0)
       throw new Error("unexpected unbalanced break context");
@@ -930,6 +963,21 @@ export class ClassPrototype extends Namespace {
     if (!this.declaration)
       throw new Error("unexpected instantiation of internal class");
     throw new Error("not implemented");
+  }
+
+  resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Class | null {
+    let resolvedTypeArguments: Type[] | null;
+    if (this.isGeneric) {
+      if (!this.declaration)
+        throw new Error("not implemented"); // generic builtin
+      resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
+      if (!resolvedTypeArguments)
+        return null;
+    } else {
+      // TODO: check typeArgumentNodes being empty
+      resolvedTypeArguments = [];
+    }
+    return this.resolve(resolvedTypeArguments, contextualTypeArguments);
   }
 }
 

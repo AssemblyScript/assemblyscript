@@ -440,23 +440,27 @@ export class Module {
     }
   }
 
-  createCall(target: BinaryenFunctionRef, operands: BinaryenExpressionRef[], returnType: Type): BinaryenExpressionRef {
+  createCall(target: string, operands: BinaryenExpressionRef[], returnType: Type): BinaryenExpressionRef {
     if (this.noEmit) return 0;
+    const cStr: CString = allocString(target);
     const cArr: CArray<i32> = allocI32Array(operands);
     try {
-      return _BinaryenCall(this.ref, target, cArr, operands.length, returnType);
+      return _BinaryenCall(this.ref, cStr, cArr, operands.length, returnType);
     } finally {
       _free(cArr);
+      _free(cStr);
     }
   }
 
-  createCallImport(target: BinaryenImportRef, operands: BinaryenExpressionRef[], returnType: Type): BinaryenExpressionRef {
+  createCallImport(target: string, operands: BinaryenExpressionRef[], returnType: Type): BinaryenExpressionRef {
     if (this.noEmit) return 0;
+    const cStr: CString = allocString(target);
     const cArr: CArray<i32> = allocI32Array(operands);
     try {
-      return _BinaryenCallImport(this.ref, target, cArr, operands.length, returnType);
+      return _BinaryenCallImport(this.ref, cStr, cArr, operands.length, returnType);
     } finally {
       _free(cArr);
+      _free(cStr);
     }
   }
 
