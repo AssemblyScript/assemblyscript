@@ -14,15 +14,7 @@ files.forEach(filename => {
   const text = fs.readFileSync(__dirname + "/fixtures/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n").replace(/^\/\/.*\r?\n/mg, "");
   parser.parseFile(text, filename, true);
   var sb: string[] = [];
-  if (isTree) {
-    const statements = parser.program.sources[0].statements;
-    statements.forEach(stmt => {
-      if (stmt.kind != NodeKind.EXPRESSION) return;
-      (<ExpressionStatement>stmt).expression.serializeAsTree(sb, 0);
-      sb.push(";\n");
-    });
-  } else
-    parser.program.sources[0].serialize(sb);
+  parser.program.sources[0].serialize(sb);
   const actual = sb.join("");
   const expected = isTree ? text : text.replace(/^\s+/mg, "");
   const diffs = diff.diffLines(expected, actual);

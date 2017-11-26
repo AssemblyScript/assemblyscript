@@ -246,6 +246,8 @@ declare function _BinaryenReturn(module: BinaryenModuleRef, value: BinaryenExpre
 declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, name: CString | 0, operands: CArray<BinaryenExpressionRef>, numOperands: BinaryenIndex): BinaryenExpressionRef;
 declare function _BinaryenNop(module: BinaryenModuleRef): BinaryenExpressionRef;
 declare function _BinaryenUnreachable(module: BinaryenModuleRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicLoad(module: BinaryenModuleRef, bytes: BinaryenIndex, offset: BinaryenIndex, type: BinaryenType, ptr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicStore(module: BinaryenModuleRef, bytes: BinaryenIndex, offset: BinaryenIndex, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicRMW(module: BinaryenModuleRef, op: BinaryenAtomicRMWOp, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicCmpxchg(module: BinaryenModuleRef, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, replacement: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicWait(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, timeout: BinaryenExpressionRef, expectedType: BinaryenType): BinaryenExpressionRef;
@@ -263,6 +265,12 @@ declare function _BinaryenConstGetValueF64(expr: BinaryenExpressionRef): f64;
 declare type BinaryenFunctionRef = usize;
 
 declare function _BinaryenAddFunction(module: BinaryenModuleRef, name: CString, type: BinaryenFunctionTypeRef, varTypes: CArray<BinaryenType>, numVarTypes: BinaryenIndex, body: BinaryenExpressionRef): BinaryenFunctionRef;
+declare function _BinaryenGetFunction(module: BinaryenModuleRef, name: CString): BinaryenFunctionRef;
+declare function _BinaryenRemoveFunction(module: BinaryenModuleRef, name: CString): void;
+
+declare function _BinaryenFunctionGetBody(func: BinaryenFunctionRef): BinaryenExpressionRef;
+declare function _BinaryenFunctionOptimize(func: BinaryenFunctionRef, module: BinaryenModuleRef): void;
+declare function _BinaryenFunctionRunPasses(func: BinaryenFunctionRef, module: BinaryenModuleRef, passes: CArray<CString>, numPasses: BinaryenIndex): void;
 
 declare type BinaryenImportRef = usize;
 
@@ -289,7 +297,7 @@ declare function _BinaryenModulePrint(module: BinaryenModuleRef): void;
 declare function _BinaryenModulePrintAsmjs(module: BinaryenModuleRef): void;
 declare function _BinaryenModuleValidate(module: BinaryenModuleRef): i32;
 declare function _BinaryenModuleOptimize(module: BinaryenModuleRef): void;
-declare function _BinaryenModuleRunPasses(module: BinaryenModuleRef, passes: string[]): void;
+declare function _BinaryenModuleRunPasses(module: BinaryenModuleRef, passes: CArray<CString>, numPasses: BinaryenIndex): void;
 declare function _BinaryenModuleAutoDrop(module: BinaryenModuleRef): void;
 declare function _BinaryenModuleWrite(module: BinaryenModuleRef, output: CString, outputSize: usize): usize;
 declare function _BinaryenModuleRead(input: CString, inputSize: usize): BinaryenModuleRef;

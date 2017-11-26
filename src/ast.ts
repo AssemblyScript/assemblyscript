@@ -351,8 +351,6 @@ export abstract class Expression extends Node {
     (expr.expression = expression).parent = expr;
     return expr;
   }
-
-  abstract serializeAsTree(sb: string[], indent: i32): void;
 }
 
 export const enum LiteralKind {
@@ -384,20 +382,6 @@ export class ArrayLiteralExpression extends LiteralExpression {
     }
     sb.push("]");
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent++);
-    sb.push("[\n");
-    for (let i: i32 = 0, k: i32 = this.elementExpressions.length; i < k; ++i) {
-      pushIndent(sb, indent);
-      if (i > 0)
-        sb.push(",\n");
-      if (this.elementExpressions[i])
-        (<Expression>this.elementExpressions[i]).serialize(sb);
-    }
-    pushIndent(sb, --indent);
-    sb.push("]");
-  }
 }
 
 export const enum AssertionKind {
@@ -424,24 +408,6 @@ export class AssertionExpression extends Expression {
       this.toType.serialize(sb);
     }
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    if (this.assertionKind == AssertionKind.PREFIX) {
-      pushIndent(sb, indent);
-      sb.push("<");
-      this.toType.serialize(sb);
-      sb.push(">\n");
-      this.expression.serializeAsTree(sb, indent + 1);
-    } else {
-      this.expression.serializeAsTree(sb, indent + 1);
-      sb.push("\n");
-      pushIndent(sb, indent);
-      sb.push("as\n");
-      pushIndent(sb, indent + 1);
-      this.toType.serialize(sb);
-    }
-    sb.push("\n");
-  }
 }
 
 export class BinaryExpression extends Expression {
@@ -457,14 +423,6 @@ export class BinaryExpression extends Expression {
     sb.push(operatorTokenToString(this.operator));
     sb.push(" ");
     this.right.serialize(sb);
-  }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    this.left.serializeAsTree(sb, indent + 1);
-    pushIndent(sb, indent);
-    sb.push(operatorTokenToString(this.operator));
-    sb.push("\n");
-    this.right.serializeAsTree(sb, indent + 1);
   }
 }
 
@@ -495,12 +453,6 @@ export class CallExpression extends Expression {
     }
     sb.push(")");
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    this.serialize(sb); // not interested in a tree here
-    sb.push("\n");
-  }
 }
 
 export class ElementAccessExpression extends Expression {
@@ -515,15 +467,6 @@ export class ElementAccessExpression extends Expression {
     this.elementExpression.serialize(sb);
     sb.push("]");
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    this.expression.serializeAsTree(sb, indent);
-    pushIndent(sb, indent);
-    sb.push("[\n");
-    this.elementExpression.serializeAsTree(sb, indent + 1);
-    pushIndent(sb, indent);
-    sb.push("]\n");
-  }
 }
 
 export class FloatLiteralExpression extends LiteralExpression {
@@ -533,12 +476,6 @@ export class FloatLiteralExpression extends LiteralExpression {
 
   serialize(sb: string[]): void {
     sb.push(this.value.toString());
-  }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    this.serialize(sb);
-    sb.push("\n");
   }
 }
 
@@ -550,12 +487,6 @@ export class IdentifierExpression extends Expression {
   serialize(sb: string[]): void {
     sb.push(this.name);
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    this.serialize(sb);
-    sb.push("\n");
-  }
 }
 
 export class IntegerLiteralExpression extends LiteralExpression {
@@ -566,12 +497,6 @@ export class IntegerLiteralExpression extends LiteralExpression {
   serialize(sb: string[]): void {
     sb.push(this.value.toString());
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    this.serialize(sb);
-    sb.push("\n");
-  }
 }
 
 export class NewExpression extends CallExpression {
@@ -581,12 +506,6 @@ export class NewExpression extends CallExpression {
   serialize(sb: string[]): void {
     sb.push("new ");
     super.serialize(sb);
-  }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    this.serialize(sb); // not interested in a tree here
-    sb.push("\n");
   }
 }
 
@@ -605,14 +524,6 @@ export class ParenthesizedExpression extends Expression {
     this.expression.serialize(sb);
     sb.push(")");
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    sb.push("(\n");
-    this.expression.serializeAsTree(sb, indent + 1);
-    pushIndent(sb, indent);
-    sb.push(")\n");
-  }
 }
 
 export class PropertyAccessExpression extends Expression {
@@ -626,12 +537,6 @@ export class PropertyAccessExpression extends Expression {
     sb.push(".");
     this.property.serialize(sb);
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    this.serialize(sb); // not interested in a tree here
-    sb.push("\n");
-  }
 }
 
 export class RegexpLiteralExpression extends LiteralExpression {
@@ -641,12 +546,6 @@ export class RegexpLiteralExpression extends LiteralExpression {
 
   serialize(sb: string[]): void {
     sb.push(this.value);
-  }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    this.serialize(sb);
-    sb.push("\n");
   }
 }
 
@@ -664,16 +563,6 @@ export class SelectExpression extends Expression {
     sb.push(" : ");
     this.ifElse.serialize(sb);
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    this.condition.serializeAsTree(sb, indent + 1);
-    pushIndent(sb, indent);
-    sb.push("?\n");
-    this.ifThen.serializeAsTree(sb, indent + 1);
-    pushIndent(sb, indent);
-    sb.push(":\n");
-    this.ifElse.serializeAsTree(sb, indent + 1);
-  }
 }
 
 export class StringLiteralExpression extends LiteralExpression {
@@ -683,12 +572,6 @@ export class StringLiteralExpression extends LiteralExpression {
 
   serialize(sb: string[]): void {
     sb.push(JSON.stringify(this.value));
-  }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    this.serialize(sb);
-    sb.push("\n");
   }
 }
 
@@ -729,17 +612,6 @@ export class UnaryPostfixExpression extends UnaryExpression {
       default: sb.push("INVALID"); break;
     }
   }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    this.expression.serializeAsTree(sb, indent + 1);
-    pushIndent(sb, indent);
-    switch (this.operator) {
-      case Token.PLUS_PLUS: sb.push("++"); break;
-      case Token.MINUS_MINUS: sb.push("--"); break;
-      default: sb.push("INVALID"); break;
-    }
-    sb.push("\n");
-  }
 }
 
 export class UnaryPrefixExpression extends UnaryExpression {
@@ -749,13 +621,6 @@ export class UnaryPrefixExpression extends UnaryExpression {
   serialize(sb: string[]): void {
     sb.push(operatorTokenToString(this.operator));
     this.expression.serialize(sb);
-  }
-
-  serializeAsTree(sb: string[], indent: i32 = 0): void {
-    pushIndent(sb, indent);
-    sb.push(operatorTokenToString(this.operator));
-    sb.push("\n");
-    this.expression.serializeAsTree(sb, indent + 1);
   }
 }
 
@@ -1936,9 +1801,4 @@ function builderEndsWith(sb: string[], code: CharCode): bool {
     return last.length ? last.charCodeAt(last.length - 1) == code : false;
   }
   return false;
-}
-
-function pushIndent(sb: string[], indent: i32): void {
-  for (let i: i32 = 0; i < indent; ++i)
-    sb.push("  ");
 }

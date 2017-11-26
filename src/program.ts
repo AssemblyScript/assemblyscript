@@ -832,7 +832,7 @@ export class Function extends Element {
   template: FunctionPrototype;
   /** Concrete type arguments. */
   typeArguments: Type[];
-  /** Concrete function parameters. */
+  /** Concrete function parameters. Excluding `this` if an instance method. */
   parameters: Parameter[];
   /** Concrete return type. */
   returnType: Type;
@@ -877,7 +877,7 @@ export class Function extends Element {
   addLocal(type: Type, name: string | null = null): Local {
     // if it has a name, check previously as this method will throw otherwise
     let localIndex = this.parameters.length + this.additionalLocals.length;
-    if (this.instanceMethodOf) localIndex++; // plus 'this'
+    if (this.isInstance) localIndex++; // plus 'this'
     const local: Local = new Local(this.template.program, name ? name : "anonymous$" + localIndex.toString(10), localIndex, type);
     if (name) {
       if (this.locals.has(<string>name))

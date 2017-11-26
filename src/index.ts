@@ -19,7 +19,7 @@
 
 */
 
-import { Module } from "./binaryen";
+import { Module } from "./module";
 import { Compiler } from "./compiler";
 import { DiagnosticMessage, DiagnosticCategory } from "./diagnostics";
 import { Parser } from "./parser";
