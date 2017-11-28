@@ -5,7 +5,7 @@
     "binaryen": "39.0.0-nightly.20171116"
   },
   "devDependencies": {
-    "@types/chalk": "^0.4.31",
+    "@types/chalk": "^2.2.0",
     "@types/diff": "^3.2.2",
     "@types/glob": "^5.0.33",
     "@types/long": "^3.0.32",
@@ -18,6 +18,8 @@
   },
   "scripts": {
     "build": "tsc -P src",
-    "test:compiler": "ts-node -P src tests/compiler"
+    "test:parser": "ts-node -P src tests/parser",
+    "test:compiler": "ts-node -P src tests/compiler",
+    "test": "npm run test:parser && npm run test:compiler"
   }
 }

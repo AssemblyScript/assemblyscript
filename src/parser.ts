@@ -259,7 +259,7 @@ export class Parser extends DiagnosticEmitter {
       // Name<T>
       if (tn.skip(Token.LESSTHAN)) {
         do {
-          const parameter: TypeNode | null = this.parseType(tn, true);
+          const parameter: TypeNode | null = this.parseType(tn, true, suppressErrors);
           if (!parameter)
             return null;
           parameters.push(<TypeNode>parameter);

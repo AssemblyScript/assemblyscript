@@ -31,7 +31,7 @@ files.forEach(filename => {
     diffs.forEach(part => {
       if (part.added || part.removed)
         changed = true;
-      process.stderr.write((part.added ? chalk.green : part.removed ? chalk.red : chalk.grey)(part.value));
+      process.stderr.write((part.added ? chalk.default.green : part.removed ? chalk.default.red : chalk.default.grey)(part.value));
     });
   } else {
     console.log("No differences in " + filename + ".");
