@@ -1,18 +1,20 @@
 {
   "license": "Apache-2.0",
+  "dependencies": {
+    "@types/node": "^8.0.53",
+    "binaryen": "39.0.0-nightly.20171116"
+  },
   "devDependencies": {
     "@types/chalk": "^0.4.31",
     "@types/diff": "^3.2.2",
+    "@types/glob": "^5.0.33",
     "@types/long": "^3.0.32",
-    "chalk": "^2.1.0",
-    "diff": "^3.3.1",
+    "chalk": "^2.3.0",
+    "diff": "^3.4.0",
+    "glob": "^7.1.2",
     "long": "^3.2.0",
     "ts-node": "^3.3.0",
-    "typescript": "^2.5.2"
-  },
-  "dependencies": {
-    "@types/node": "^8.0.28",
-    "binaryen": "39.0.0-nightly.20171116"
+    "typescript": "^2.6.2"
   },
   "scripts": {
     "build": "tsc -P src",

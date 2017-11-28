@@ -1257,7 +1257,6 @@ export class ExpressionStatement extends Statement {
 
   serialize(sb: string[]): void {
     this.expression.serialize(sb);
-    sb.push(";");
   }
 }
 

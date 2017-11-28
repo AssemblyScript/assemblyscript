@@ -212,7 +212,7 @@ export class Parser extends DiagnosticEmitter {
     return this.program;
   }
 
-  parseType(tn: Tokenizer, acceptParenthesized: bool = true): TypeNode | null {
+  parseType(tn: Tokenizer, acceptParenthesized: bool = true, suppressErrors: bool = false): TypeNode | null {
     // not TypeScript-compatible
     const token: Token = tn.next();
     const startPos: i32 = tn.tokenPos;
@@ -225,11 +225,12 @@ export class Parser extends DiagnosticEmitter {
 
     // ( ... )
     if (acceptParenthesized && token == Token.OPENPAREN) {
-      const innerType: TypeNode | null = this.parseType(tn, false);
+      const innerType: TypeNode | null = this.parseType(tn, false, suppressErrors);
       if (!innerType)
         return null;
       if (!tn.skip(Token.CLOSEPAREN)) {
-        this.error(DiagnosticCode._0_expected, tn.range(tn.pos), "}");
+        if (!suppressErrors)
+          this.error(DiagnosticCode._0_expected, tn.range(tn.pos), "}");
         return null;
       }
       type = innerType;
@@ -264,7 +265,8 @@ export class Parser extends DiagnosticEmitter {
           parameters.push(<TypeNode>parameter);
         } while (tn.skip(Token.COMMA));
         if (!tn.skip(Token.GREATERTHAN)) {
-          this.error(DiagnosticCode._0_expected, tn.range(tn.pos), ">");
+          if (!suppressErrors)
+            this.error(DiagnosticCode._0_expected, tn.range(tn.pos), ">");
           return null;
         }
       }
@@ -273,21 +275,24 @@ export class Parser extends DiagnosticEmitter {
         if (tn.skip(Token.NULL)) {
           nullable = true;
         } else {
-          this.error(DiagnosticCode._0_expected, tn.range(tn.pos), "null");
+          if (!suppressErrors)
+            this.error(DiagnosticCode._0_expected, tn.range(tn.pos), "null");
           return null;
         }
       }
       type = TypeNode.create(identifier, parameters, nullable, tn.range(startPos, tn.pos));
 
     } else {
-      this.error(DiagnosticCode.Identifier_expected, tn.range());
+      if (!suppressErrors)
+        this.error(DiagnosticCode.Identifier_expected, tn.range());
       return null;
     }
     // ... [][]
     while (tn.skip(Token.OPENBRACKET)) {
       let bracketStart: i32 = tn.tokenPos;
       if (!tn.skip(Token.CLOSEBRACKET)) {
-        this.error(DiagnosticCode._0_expected, tn.range(), "]");
+        if (!suppressErrors)
+          this.error(DiagnosticCode._0_expected, tn.range(), "]");
         return null;
       }
       const bracketRange = tn.range(bracketStart, tn.pos);
@@ -298,7 +303,8 @@ export class Parser extends DiagnosticEmitter {
         if (tn.skip(Token.NULL)) {
           nullable = true;
         } else {
-          this.error(DiagnosticCode._0_expected, tn.range(), "null");
+          if (!suppressErrors)
+            this.error(DiagnosticCode._0_expected, tn.range(), "null");
           return null;
         }
       }
@@ -999,26 +1005,36 @@ export class Parser extends DiagnosticEmitter {
     // at 'for': '(' Statement? Expression? ';' Expression? ')' Statement
     const startPos: i32 = tn.tokenPos;
     if (tn.skip(Token.OPENPAREN)) {
-      const initializer: Statement | null = this.parseStatement(tn); // skips the semicolon (actually an expression)
-      if (!initializer)
-        return null;
-      if (initializer.kind != NodeKind.EXPRESSION && initializer.kind != NodeKind.VARIABLE)
-        this.error(DiagnosticCode.Expression_expected, initializer.range); // recoverable
-      if (tn.token == Token.SEMICOLON) {
-        const condition: Expression | null = this.parseExpression(tn);
-        if (!condition)
+      let initializer: Statement | null = null;
+      if (tn.skip(Token.LET) || tn.skip(Token.CONST) || tn.skip(Token.VAR)) {
+        initializer = this.parseVariable(tn, /* TODO */ createModifiers());
+      } else if (!tn.skip(Token.SEMICOLON)) {
+        initializer = this.parseExpressionStatement(tn);
+        if (!initializer)
           return null;
-        if (tn.skip(Token.SEMICOLON)) {
-          const incrementor: Expression | null = this.parseExpression(tn);
-          if (!incrementor)
+      }
+      if (tn.token == Token.SEMICOLON) {
+        let condition: ExpressionStatement | null = null;
+        if (!tn.skip(Token.SEMICOLON)) {
+          condition = this.parseExpressionStatement(tn);
+          if (!condition)
             return null;
-          if (tn.skip(Token.CLOSEPAREN)) {
-            const statement: Statement | null = this.parseStatement(tn);
-            if (!statement)
+        }
+        if (tn.token == Token.SEMICOLON) {
+          let incrementor: Expression | null = null;
+          if (!tn.skip(Token.CLOSEPAREN)) {
+            incrementor = this.parseExpression(tn);
+            if (!incrementor)
               return null;
-            return Statement.createFor(initializer, condition, incrementor, statement, tn.range(startPos, tn.pos));
-          } else
-            this.error(DiagnosticCode._0_expected, tn.range(), ")");
+            if (!tn.skip(Token.CLOSEPAREN)) {
+              this.error(DiagnosticCode._0_expected, tn.range(), ")");
+              return null;
+            }
+          }
+          const statement: Statement | null = this.parseStatement(tn);
+          if (!statement)
+            return null;
+          return Statement.createFor(initializer, condition ? condition.expression : null, incrementor, statement, tn.range(startPos, tn.pos));
         } else
           this.error(DiagnosticCode._0_expected, tn.range(), ";");
       } else
@@ -1225,6 +1241,7 @@ export class Parser extends DiagnosticEmitter {
   parseExpressionPrefix(tn: Tokenizer): Expression | null {
     const token: Token = tn.next();
     const startPos: i32 = tn.tokenPos;
+    let expr: Expression | null = null;
 
     if (token == Token.NULL)
       return Expression.createNull(tn.range());
@@ -1248,10 +1265,10 @@ export class Parser extends DiagnosticEmitter {
           if (tn.skip(Token.OPENPAREN)) {
             if (tn.peek() != Token.CLOSEPAREN) {
               do {
-                const expr: Expression | null = this.parseExpression(tn, Precedence.COMMA + 1);
+                expr = this.parseExpression(tn, Precedence.COMMA + 1);
                 if (!expr)
                   return null;
-                args.push(<Expression>expr);
+                args.push(expr);
               } while (tn.skip(Token.COMMA));
             }
             if (!tn.skip(Token.CLOSEPAREN)) {
@@ -1277,7 +1294,7 @@ export class Parser extends DiagnosticEmitter {
 
       // ParenthesizedExpression
       case Token.OPENPAREN: {
-        const expr: Expression | null = this.parseExpression(tn);
+        expr = this.parseExpression(tn);
         if (!expr)
           return null;
         if (!tn.skip(Token.CLOSEPAREN)) {
@@ -1292,7 +1309,6 @@ export class Parser extends DiagnosticEmitter {
         const elementExpressions: (Expression | null)[] = new Array();
         if (!tn.skip(Token.CLOSEBRACKET)) {
           do {
-            let expr: Expression | null;
             if (tn.peek() == Token.COMMA || tn.peek() == Token.CLOSEBRACKET)
               expr = null; // omitted
             else {
@@ -1319,7 +1335,7 @@ export class Parser extends DiagnosticEmitter {
           this.error(DiagnosticCode._0_expected, tn.range(), ">");
           return null;
         }
-        const expr: Expression | null = this.parseExpressionPrefix(tn);
+        expr = this.parseExpressionPrefix(tn);
         if (!expr)
           return null;
         return Expression.createAssertion(AssertionKind.PREFIX, <Expression>expr, <TypeNode>toType, tn.range(startPos, tn.pos));
@@ -1359,7 +1375,7 @@ export class Parser extends DiagnosticEmitter {
 
     const typeArguments: TypeNode[] = [];
     do {
-      const type: TypeNode | null = this.parseType(tn);
+      const type: TypeNode | null = this.parseType(tn, true, true);
       if (!type) {
         tn.reset();
         return null;

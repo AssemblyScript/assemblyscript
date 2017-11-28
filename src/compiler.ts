@@ -1,6 +1,6 @@
 import { PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
-import { Module, ModuleRef, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType, FunctionTypeRef, FunctionRef, ImportRef, ExportRef, GlobalRef, Relooper } from "./module";
+import { Module, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, NativeType, FunctionTypeRef } from "./module";
 import { Program, ClassPrototype, Class, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter } from "./program";
 import { CharCode, I64, U64, normalizePath, sb } from "./util";
 import { Token, Range } from "./tokenizer";

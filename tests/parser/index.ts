@@ -1,12 +1,15 @@
 import * as fs from "fs";
 import * as diff from "diff";
 import * as chalk from "chalk";
+import * as glob from "glob";
 
 import "../../src/glue/js";
 import { NodeKind, ExpressionStatement } from "../../src/ast";
 import { Parser } from "../../src/parser";
 
-const files = fs.readdirSync(__dirname + "/fixtures");
+const filter = process.argv.length > 2 ? "*" + process.argv[2] + "*.ts" : "**.ts";
+
+const files = glob.sync(filter, { cwd: __dirname + "/fixtures" });
 files.forEach(filename => {
   if (filename.charAt(0) == "_")  return;
   const isTree = filename.indexOf(".tree.") >= 0;
