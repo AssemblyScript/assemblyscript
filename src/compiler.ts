@@ -1352,6 +1352,9 @@ export class Compiler extends DiagnosticEmitter {
           sb.push(type.toString());
         }
         functionInstance = <Function | null>functionPrototype.instances.get(sb.join(","));
+        if (!functionInstance) {
+          // TODO: sizeof, load, store, see program.ts/initializeBuiltins
+        }
       } else {
         functionInstance = (<FunctionPrototype>element).resolveInclTypeArguments(expression.typeArguments, this.currentFunction.contextualTypeArguments, expression); // reports
       }
