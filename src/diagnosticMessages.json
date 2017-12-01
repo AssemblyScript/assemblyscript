@@ -2,6 +2,7 @@
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 100,
   "Basic type '{0}' cannot be nullable.": 101,
   "Operation not supported.": 102,
+  "Operation is unsafe.": 103,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

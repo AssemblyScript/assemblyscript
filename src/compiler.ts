@@ -1,6 +1,6 @@
 import { PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
-import { Module, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, NativeType, FunctionTypeRef } from "./module";
+import { Module, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType, FunctionTypeRef } from "./module";
 import { Program, ClassPrototype, Class, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter } from "./program";
 import { CharCode, I64, U64, normalizePath, sb } from "./util";
 import { Token, Range } from "./tokenizer";
@@ -285,7 +285,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileGlobal(element: Global): bool {
-    if (element.compiled)
+    if (element.isCompiled)
       return true;
     const declaration: VariableLikeDeclarationStatement | null = element.declaration;
     let type: Type | null = element.type;
@@ -335,7 +335,7 @@ export class Compiler extends DiagnosticEmitter {
       this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
     } else
       this.module.addGlobal(internalName, NativeType.I32, element.isMutable, initializer);
-    return element.compiled = true;
+    return element.isCompiled = true;
   }
 
   // enums
@@ -348,9 +348,9 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileEnum(element: Enum): void {
-    if (element.compiled)
+    if (element.isCompiled)
       return;
-    element.compiled = true;
+    element.isCompiled = true;
     let previousInternalName: string | null = null;
     for (let [key, val] of element.members) {
       if (val.hasConstantValue) {
@@ -401,7 +401,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileFunction(instance: Function): void {
-    if (instance.compiled)
+    if (instance.isCompiled)
       return;
 
     const declaration: FunctionDeclaration | null = instance.template.declaration;
@@ -412,7 +412,7 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.identifier.range);
       return;
     }
-    instance.compiled = true;
+    instance.isCompiled = true;
 
     // compile statements
     const previousFunction: Function = this.currentFunction;
@@ -1221,7 +1221,7 @@ export class Compiler extends DiagnosticEmitter {
         left = this.compileExpression(expression.left, contextualType, false);
         right = this.compileExpression(expression.right, this.currentType);
         if (this.currentType.isAnyFloat)
-          throw new Error("not implemented"); // TODO: internal fmod
+          throw new Error("not implemented"); // TODO: internal fmod, possibly simply imported from JS
         op = this.currentType.isLongInteger
            ? BinaryOp.RemI64
            : BinaryOp.RemI32;
@@ -1337,21 +1337,24 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileCallExpression(expression: CallExpression, contextualType: Type): ExpressionRef {
-    // TODO
-    /* const callee: Expression = expression.expression;
-    switch (callee.kind) {
-      case NodeKind.THIS:
-        // use current class
-      case NodeKind.PROPERTYACCESS:
-        // compile, use class in currentType?
-      case NodeKind.IDENTIFIER:
-        // lookup identifier?
-    } */
     const element: Element | null = this.program.resolveElement(expression.expression, this.currentFunction); // reports
     if (!element)
       return this.module.createUnreachable();
     if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
-      const functionInstance: Function | null = (<FunctionPrototype>element).resolveInclTypeArguments(expression.typeArguments, this.currentFunction.contextualTypeArguments, expression); // reports
+      const functionPrototype: FunctionPrototype = <FunctionPrototype>element;
+      let functionInstance: Function | null = null;
+      if (functionPrototype.isBuiltin) {
+        sb.length = 0;
+        for (let i: i32 = 0, k: i32 = expression.typeArguments.length; i < k; ++i) {
+          let type: Type | null = this.program.resolveType(expression.typeArguments[i], this.currentFunction.contextualTypeArguments, true); // reports
+          if (!type)
+            return this.module.createUnreachable();
+          sb.push(type.toString());
+        }
+        functionInstance = <Function | null>functionPrototype.instances.get(sb.join(","));
+      } else {
+        functionInstance = (<FunctionPrototype>element).resolveInclTypeArguments(expression.typeArguments, this.currentFunction.contextualTypeArguments, expression); // reports
+      }
       if (!functionInstance)
         return this.module.createUnreachable();
       return this.compileCall(functionInstance, expression.arguments, expression);
@@ -1362,9 +1365,6 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles a call to a function. If an instance method, `this` is the first element in `argumentExpressions`. */
   compileCall(functionInstance: Function, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
-    // when called, the function is considered reachable -> compile
-    if (!functionInstance.compiled)
-      this.compileFunction(functionInstance);
 
     // validate and compile arguments
     const parameters: Parameter[] = functionInstance.parameters;
@@ -1385,7 +1385,7 @@ export class Compiler extends DiagnosticEmitter {
         const initializer: Expression | null = parameters[i].initializer;
         if (initializer) { // omitted, uses initializer
           // FIXME: here, the initializer is compiled in the caller's scope.
-          // a solution could be to use a stub for each possible overload, calling the 
+          // a solution could be to use a stub for each possible overload, calling the
           // full function with optional arguments being part of the stub's body.
           operands[i] = this.compileExpression(initializer, parameters[i].type);
         } else { // too few arguments
@@ -1398,8 +1398,187 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // finally compile the call
     this.currentType = functionInstance.returnType;
+
+    let tempLocal: Local;
+    if (functionInstance.isBuiltin) {
+      switch (functionInstance.template.internalName) {
+
+        case "clz": // i32/i64.clz
+          if (this.currentType.isLongInteger)
+            return this.module.createUnary(UnaryOp.ClzI64, operands[0]);
+          else if (this.currentType.isAnyInteger)
+            return this.module.createUnary(UnaryOp.ClzI32, operands[0]);
+          break;
+
+        case "ctz": // i32/i64.ctz
+          if (this.currentType.isLongInteger)
+            return this.module.createUnary(UnaryOp.CtzI64, operands[0]);
+          else if (this.currentType.isAnyInteger)
+            return this.module.createUnary(UnaryOp.CtzI32, operands[0]);
+          break;
+
+        case "popcnt": // i32/i64.popcnt
+          if (this.currentType.isLongInteger)
+            return this.module.createUnary(UnaryOp.PopcntI64, operands[0]);
+          else if (this.currentType.isAnyInteger)
+            return this.module.createUnary(UnaryOp.PopcntI32, operands[0]);
+          break;
+
+        case "rotl": // i32/i64.rotl
+          if (this.currentType.isLongInteger)
+            return this.module.createBinary(BinaryOp.RotlI64, operands[0], operands[1]);
+          else if (this.currentType.isAnyInteger)
+            return this.module.createBinary(BinaryOp.RotlI32, operands[0], operands[1]);
+          break;
+
+        case "rotr": // i32/i64.rotr
+          if (this.currentType.isLongInteger)
+            return this.module.createBinary(BinaryOp.RotrI64, operands[0], operands[1]);
+          else if (this.currentType.isAnyInteger)
+            return this.module.createBinary(BinaryOp.RotrI32, operands[0], operands[1]);
+          break;
+
+        case "abs": // f32/f64.abs
+          if (this.currentType == Type.f64)
+            return this.module.createUnary(UnaryOp.AbsF64, operands[0]);
+          else if (this.currentType == Type.f32)
+            return this.module.createUnary(UnaryOp.AbsF32, operands[0]);
+          break;
+
+        case "ceil": // f32/f64.ceil
+          if (this.currentType == Type.f64)
+            return this.module.createUnary(UnaryOp.CeilF64, operands[0]);
+          else if (this.currentType == Type.f32)
+            return this.module.createUnary(UnaryOp.CeilF32, operands[0]);
+          break;
+
+        case "copysign": // f32/f64.copysign
+          if (this.currentType == Type.f64)
+            return this.module.createBinary(BinaryOp.CopysignF64, operands[0], operands[1]);
+          else if (this.currentType == Type.f32)
+            return this.module.createBinary(BinaryOp.CopysignF32, operands[0], operands[1]);
+          break;
+
+        case "floor": // f32/f64.floor
+          if (this.currentType == Type.f64)
+            return this.module.createUnary(UnaryOp.FloorF64, operands[0]);
+          else if (this.currentType == Type.f32)
+            return this.module.createUnary(UnaryOp.FloorF32, operands[0]);
+          break;
+
+        case "max": // f32/f64.max
+          if (this.currentType == Type.f64)
+            return this.module.createBinary(BinaryOp.MaxF64, operands[0], operands[1]);
+          else if (this.currentType == Type.f32)
+            return this.module.createBinary(BinaryOp.MaxF32, operands[0], operands[1]);
+          break;
+
+        case "min": // f32/f64.min
+          if (this.currentType == Type.f64)
+            return this.module.createBinary(BinaryOp.MinF64, operands[0], operands[1]);
+          else if (this.currentType == Type.f32)
+            return this.module.createBinary(BinaryOp.MinF32, operands[0], operands[1]);
+          break;
+
+        case "nearest": // f32/f64.nearest
+          if (this.currentType == Type.f64)
+            return this.module.createUnary(UnaryOp.NearestF64, operands[0]);
+          else if (this.currentType == Type.f32)
+            return this.module.createUnary(UnaryOp.NearestF32, operands[0]);
+          break;
+
+        case "sqrt": // f32/f64.sqrt
+          if (this.currentType == Type.f64)
+            return this.module.createUnary(UnaryOp.SqrtF64, operands[0]);
+          else if (this.currentType == Type.f32)
+            return this.module.createUnary(UnaryOp.SqrtF32, operands[0]);
+          break;
+
+        case "trunc": // f32/f64.trunc
+          if (this.currentType == Type.f64)
+            return this.module.createUnary(UnaryOp.TruncF64, operands[0]);
+          else if (this.currentType == Type.f32)
+            return this.module.createUnary(UnaryOp.TruncF32, operands[0]);
+          break;
+
+        case "current_memory":
+          return this.module.createHost(HostOp.CurrentMemory);
+
+        case "grow_memory":
+          this.warning(DiagnosticCode.Operation_is_unsafe, reportNode.range); // unsure
+          return this.module.createHost(HostOp.GrowMemory, null, operands);
+
+        case "unreachable":
+          return this.module.createUnreachable();
+
+        case "sizeof": // T.size
+          if (this.options.target == Target.WASM64)
+            return this.module.createI64(Math.ceil(functionInstance.typeArguments[0].size / 8), 0);
+          return this.module.createI32(Math.ceil(functionInstance.typeArguments[0].size / 8));
+
+        case "isNaN": // value != value
+          if (functionInstance.typeArguments[0] == Type.f64) {
+            tempLocal = this.currentFunction.addLocal(Type.f64);
+            return this.module.createBinary(BinaryOp.NeF64,
+              this.module.createTeeLocal(tempLocal.index, operands[0]),
+              this.module.createGetLocal(tempLocal.index, NativeType.F64)
+            );
+          } else if (functionInstance.typeArguments[0] == Type.f32) {
+            tempLocal = this.currentFunction.addLocal(Type.f32);
+            return this.module.createBinary(BinaryOp.NeF32,
+              this.module.createTeeLocal(tempLocal.index, operands[0]),
+              this.module.createGetLocal(tempLocal.index, NativeType.F64)
+            );
+          }
+          break;
+
+        case "isFinite": // value != value ? false : abs(value) != Infinity
+          if (functionInstance.typeArguments[0] == Type.f64) {
+            tempLocal = this.currentFunction.addLocal(Type.f64);
+            return this.module.createSelect(
+              this.module.createBinary(BinaryOp.NeF64,
+                this.module.createTeeLocal(tempLocal.index, operands[0]),
+                this.module.createGetLocal(tempLocal.index, NativeType.F64)
+              ),
+              this.module.createI32(0),
+              this.module.createBinary(BinaryOp.NeF64,
+                this.module.createUnary(UnaryOp.AbsF64,
+                  this.module.createGetLocal(tempLocal.index, NativeType.F64)
+                ),
+                this.module.createF64(Infinity)
+              )
+            );
+          } else if (functionInstance.typeArguments[0] == Type.f32) {
+            tempLocal = this.currentFunction.addLocal(Type.f32);
+            return this.module.createSelect(
+              this.module.createBinary(BinaryOp.NeF32,
+                this.module.createTeeLocal(tempLocal.index, operands[0]),
+                this.module.createGetLocal(tempLocal.index, NativeType.F32)
+              ),
+              this.module.createI32(0),
+              this.module.createBinary(BinaryOp.NeF32,
+                this.module.createUnary(UnaryOp.AbsF32,
+                  this.module.createGetLocal(tempLocal.index, NativeType.F32)
+                ),
+                this.module.createF32(Infinity)
+              )
+            );
+          }
+          break;
+      }
+      this.error(DiagnosticCode.Operation_not_supported, reportNode.range);
+      return this.module.createUnreachable();
+    }
+
+    if (!functionInstance.isCompiled)
+      this.compileFunction(functionInstance);
+
+    // imported function
+    if (functionInstance.isImport)
+      return this.module.createCallImport(functionInstance.internalName, operands, typeToNativeType(functionInstance.returnType));
+
+    // internal function
     return this.module.createCall(functionInstance.internalName, operands, typeToNativeType(functionInstance.returnType));
   }
 
@@ -1498,8 +1677,8 @@ export class Compiler extends DiagnosticEmitter {
 
       case LiteralKind.FLOAT: {
         const floatValue: f64 = (<FloatLiteralExpression>expression).value;
-        if (contextualType == Type.f32 && (Math.fround(floatValue) as f64) == floatValue)
-          return this.module.createF32(floatValue);
+        if (contextualType == Type.f32)
+          return this.module.createF32(Math.fround(floatValue));
         this.currentType = Type.f64;
         return this.module.createF64(floatValue);
       }

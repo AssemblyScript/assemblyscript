@@ -31,8 +31,14 @@ const files: Map<string,string> = new Map([
     return -1;
   }
   import { sub } from "../other";
-  export function what(): void {
+  export function doCall(): void {
     sub(1,2);
+  }
+  export function doNaN(value: f32): bool {
+    return isNaN<f32>(0.3);
+  }
+  export function doRotl(value: u16): u8 {
+    return rotl<i32>(value, 2);
   }
 `],
 
@@ -58,7 +64,7 @@ do {
 const program = parser.finish();
 const compiler = new Compiler(program);
 const module = compiler.compile();
-console.log(program.elements.keys());
+// console.log(program.elements.keys());
 
 // module.optimize();
 module.validate();

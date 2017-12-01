@@ -81,22 +81,8 @@ export class Program extends DiagnosticEmitter {
   /** Initializes the program and its elements prior to compilation. */
   initialize(target: Target = Target.WASM32): void {
     this.target = target;
-    this.types = new Map([ // replaces typesStub
-      ["i8", Type.i8],
-      ["i16", Type.i16],
-      ["i32", Type.i32],
-      ["i64", Type.i64],
-      ["isize", target == Target.WASM64 ? Type.isize64 : Type.isize32],
-      ["u8", Type.u8],
-      ["u16", Type.u16],
-      ["u32", Type.u32],
-      ["u64", Type.u64],
-      ["usize", target == Target.WASM64 ? Type.usize64 : Type.usize32],
-      ["bool", Type.bool],
-      ["f32", Type.f32],
-      ["f64", Type.f64],
-      ["void", Type.void]
-    ]);
+
+    initializeBuiltins(this);
 
     const queuedExports: Map<string,QueuedExport> = new Map();
     const queuedImports: QueuedImport[] = new Array();
@@ -621,7 +607,9 @@ export abstract class Element {
   program: Program;
   internalName: string;
   globalExportName: string | null = null;
-  compiled: bool = false;
+  isCompiled: bool = false;
+  isImport: bool = false;
+  isBuiltin: bool = false;
 
   constructor(program: Program, internalName: string) {
     this.program = program;
@@ -811,7 +799,7 @@ export class FunctionPrototype extends Element {
     let resolvedTypeArguments: Type[] | null;
     if (this.isGeneric) {
       if (!this.declaration)
-        throw new Error("not implemented"); // generic builtin
+        throw new Error("missing declaration");
       resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
       if (!resolvedTypeArguments)
         return null;
@@ -851,22 +839,23 @@ export class Function extends Element {
   private breakMinor: i32 = 0;
 
   /** Constructs a new concrete function. */
-  constructor(template: FunctionPrototype, internalName: string, typeArguments: Type[], parameters: Parameter[], returnType: Type, instanceMethodOf: Class | null) {
-    super(template.program, internalName);
-    this.template = template;
+  constructor(prototype: FunctionPrototype, internalName: string, typeArguments: Type[], parameters: Parameter[], returnType: Type, instanceMethodOf: Class | null) {
+    super(prototype.program, internalName);
+    this.template = prototype;
     this.typeArguments = typeArguments;
     this.parameters = parameters;
     this.returnType = returnType;
     this.instanceMethodOf = instanceMethodOf;
+    this.isBuiltin = prototype.isBuiltin;
     let localIndex: i32 = 0;
     if (instanceMethodOf) {
-      this.locals.set("this", new Local(template.program, "this", localIndex++, instanceMethodOf.type));
+      this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));
       for (let [name, type] of instanceMethodOf.contextualTypeArguments)
         this.contextualTypeArguments.set(name, type);
     }
     for (let i: i32 = 0, k: i32 = parameters.length; i < k; ++i) {
       const parameter: Parameter = parameters[i];
-      this.locals.set(parameter.name, new Local(template.program, parameter.name, localIndex++, parameter.type));
+      this.locals.set(parameter.name, new Local(prototype.program, parameter.name, localIndex++, parameter.type));
     }
   }
 
@@ -1015,6 +1004,10 @@ export class Class extends Namespace {
         this.contextualTypeArguments.set(typeParameters[i].identifier.name, typeArguments[i]);
     }
   }
+
+  toString(): string {
+    throw new Error("not implemented");
+  }
 }
 
 /** A yet unresvoled interface. */
@@ -1038,4 +1031,101 @@ export class Interface extends Class {
   constructor(template: InterfacePrototype, internalName: string, typeArguments: Type[], base: Interface | null) {
     super(template, internalName, typeArguments, base);
   }
+}
+
+function initializeBuiltins(program: Program): void {
+
+  // types
+
+  program.types = new Map([
+    ["i8", Type.i8],
+    ["i16", Type.i16],
+    ["i32", Type.i32],
+    ["i64", Type.i64],
+    ["isize", program.target == Target.WASM64 ? Type.isize64 : Type.isize32],
+    ["u8", Type.u8],
+    ["u16", Type.u16],
+    ["u32", Type.u32],
+    ["u64", Type.u64],
+    ["usize", program.target == Target.WASM64 ? Type.usize64 : Type.usize32],
+    ["bool", Type.bool],
+    ["f32", Type.f32],
+    ["f64", Type.f64],
+    ["void", Type.void]
+  ]);
+
+  // functions
+
+  const genericInt: Type[] = [ Type.i32, Type.i64 ];
+  const genericFloat: Type[] = [ Type.f32, Type.f64 ];
+
+  addGenericUnaryBuiltin(program, "clz", genericInt);
+  addGenericUnaryBuiltin(program, "ctz", genericInt);
+  addGenericUnaryBuiltin(program, "popcnt", genericInt);
+  addGenericBinaryBuiltin(program, "rotl", genericInt);
+  addGenericBinaryBuiltin(program, "rotr", genericInt);
+
+  addGenericUnaryBuiltin(program, "abs", genericFloat);
+  addGenericUnaryBuiltin(program, "ceil", genericFloat);
+  addGenericUnaryBuiltin(program, "copysign", genericFloat);
+  addGenericUnaryBuiltin(program, "floor", genericFloat);
+  addGenericBinaryBuiltin(program, "max", genericFloat);
+  addGenericBinaryBuiltin(program, "min", genericFloat);
+  addGenericUnaryBuiltin(program, "nearest", genericFloat);
+  addGenericUnaryBuiltin(program, "sqrt", genericFloat);
+  addGenericUnaryBuiltin(program, "trunc", genericFloat);
+
+  addBuiltin(program, "current_memory", [], Type.i32);
+  addBuiltin(program, "grow_memory", [ Type.i32 ], Type.i32);
+  addBuiltin(program, "unreachable", [], Type.void);
+
+  addGenericUnaryTestBuiltin(program, "isNaN", genericFloat);
+  addGenericUnaryTestBuiltin(program, "isFinite", genericFloat);
+
+  // TODO: load, store, sizeof
+  // sizeof, for example, has varying Ts but really shouldn't provide an instance for each class
+}
+
+function addBuiltin(program: Program, name: string, parameterTypes: Type[], returnType: Type) {
+  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
+  prototype.isGeneric = false;
+  prototype.isBuiltin = true;
+  const k: i32 = parameterTypes.length;
+  const parameters: Parameter[] = new Array(k);
+  for (let i: i32 = 0; i < k; ++i)
+    parameters[i] = new Parameter("arg" + i, parameterTypes[i], null);
+  prototype.instances.set("", new Function(prototype, name, [], parameters, Type.bool, null));
+}
+
+function addGenericUnaryBuiltin(program: Program, name: string, types: Type[]): void {
+  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
+  prototype.isGeneric = true;
+  prototype.isBuiltin = true;
+  for (let i: i32 = 0, k = types.length; i < k; ++i) {
+    const typeName: string = types[i].toString();
+    prototype.instances.set(typeName, new Function(prototype, name + "<" + typeName + ">", [ types[i] ], [ new Parameter("value", types[i], null) ], types[i], null));
+  }
+  program.elements.set(name, prototype);
+}
+
+function addGenericBinaryBuiltin(program: Program, name: string, types: Type[]): void {
+  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
+  prototype.isGeneric = true;
+  prototype.isBuiltin = true;
+  for (let i: i32 = 0, k = types.length; i < k; ++i) {
+    const typeName: string = types[i].toString();
+    prototype.instances.set(typeName, new Function(prototype, name + "<" + typeName + ">", [ types[i], types[i] ], [ new Parameter("left", types[i], null), new Parameter("right", types[i], null) ], types[i], null));
+  }
+  program.elements.set(name, prototype);
+}
+
+function addGenericUnaryTestBuiltin(program: Program, name: string, types: Type[]): void {
+  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
+  prototype.isGeneric = true;
+  prototype.isBuiltin = true;
+  for (let i: i32 = 0, k = types.length; i < k; ++i) {
+    const typeName: string = types[i].toString();
+    prototype.instances.set(typeName, new Function(prototype, name + "<" + typeName + ">", [ types[i] ], [ new Parameter("value", types[i], null) ], Type.bool, null));
+  }
+  program.elements.set(name, prototype);
 }

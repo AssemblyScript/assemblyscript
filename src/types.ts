@@ -69,6 +69,7 @@ export class Type {
       case TypeKind.I8: return "i8";
       case TypeKind.I16: return "i16";
       case TypeKind.I32: return "i32";
+      case TypeKind.I64: return "i64";
       case TypeKind.ISIZE: return "isize";
       case TypeKind.U8: return "u8";
       case TypeKind.U16: return "u16";

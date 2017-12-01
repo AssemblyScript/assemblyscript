@@ -4,6 +4,7 @@ export enum DiagnosticCode {
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 100,
   Basic_type_0_cannot_be_nullable = 101,
   Operation_not_supported = 102,
+  Operation_is_unsafe = 103,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -70,6 +71,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 100: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 101: return "Basic type '{0}' cannot be nullable.";
     case 102: return "Operation not supported.";
+    case 103: return "Operation is unsafe.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
