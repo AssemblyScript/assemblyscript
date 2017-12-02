@@ -346,6 +346,8 @@ export class Compiler extends DiagnosticEmitter {
       this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
     } else
       this.module.addGlobal(internalName, nativeType, element.isMutable, initializer);
+    // if (element.globalExportName != null && element.hasConstantValue && !initializeInStart)
+    //   this.module.addGlobalExport(element.internalName, element.globalExportName);
     return element.isCompiled = true;
   }
 
@@ -401,19 +403,21 @@ export class Compiler extends DiagnosticEmitter {
     const element: Element | null = <Element | null>this.program.elements.get(internalName);
     if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE)
       throw new Error("unexpected missing function");
-    this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode);
+    const instance: Function | null = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode);
+    if (instance && declaration.range.source.isEntry && declaration.parent == declaration.range.source && hasModifier(ModifierKind.EXPORT, declaration.modifiers))
+      this.module.addExport(instance.internalName, declaration.identifier.name);
   }
 
-  compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null) {
+  compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Function | null {
     const instance: Function | null = prototype.resolveInclTypeArguments(typeArguments, contextualTypeArguments, alternativeReportNode); // reports
     if (!instance)
-      return;
-    this.compileFunction(instance);
+      return null;
+    return this.compileFunction(instance) ? instance : null;
   }
 
-  compileFunction(instance: Function): void {
+  compileFunction(instance: Function): bool {
     if (instance.isCompiled)
-      return;
+      return true;
 
     const declaration: FunctionDeclaration | null = instance.template.declaration;
     if (!declaration)
@@ -421,7 +425,7 @@ export class Compiler extends DiagnosticEmitter {
 
     if (!declaration.statements) {
       this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.identifier.range);
-      return;
+      return false;
     }
     instance.isCompiled = true;
 
@@ -446,8 +450,7 @@ export class Compiler extends DiagnosticEmitter {
       typeRef = this.module.addFunctionType(signatureNameParts.join(""), binaryenResultType, binaryenParamTypes);
     const internalName: string = instance.internalName;
     this.module.addFunction(internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, stmts, NativeType.None));
-    if (instance.globalExportName != null)
-      this.module.addExport(internalName, <string>instance.globalExportName);
+    return true;
   }
 
   // namespaces
@@ -544,8 +547,11 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case ElementKind.FUNCTION_PROTOTYPE:
-          if (!(<FunctionPrototype>element).isGeneric)
-            this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
+          if (!(<FunctionPrototype>element).isGeneric) {
+            const functionInstance: Function | null = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
+            if (functionInstance && statement.range.source.isEntry)
+              this.module.addExport(functionInstance.internalName, member.externalIdentifier.name);
+          }
           break;
 
         case ElementKind.GLOBAL:

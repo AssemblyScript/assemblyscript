@@ -2,6 +2,9 @@
  (type $ii (func (param i32) (result i32)))
  (memory $0 1)
  (data (i32.const 4) "\08\00\00\00")
+ (export "ifThenElse" (func $if/ifThenElse))
+ (export "ifThen" (func $if/ifThen))
+ (export "ifThenElseBlock" (func $if/ifThenElseBlock))
  (export "memory" (memory $0))
  (func $if/ifThenElse (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (if

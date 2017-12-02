@@ -686,7 +686,6 @@ export abstract class Element {
   kind: ElementKind;
   program: Program;
   internalName: string;
-  globalExportName: string | null = null;
   isCompiled: bool = false;
   isImport: bool = false;
   isBuiltin: bool = false;
@@ -710,7 +709,6 @@ export class Namespace extends Element {
   }
 
   get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : false; }
-  get isGlobalExport(): bool { return this.declaration ? this.globalExportName != null : /* internals aren't exports */ false; }
 }
 
 /** An enum. */
@@ -726,7 +724,6 @@ export class Enum extends Namespace {
   }
 
   get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't exports */ false; }
-  get isGlobalExport(): bool { return this.globalExportName != null; }
   get isConstant(): bool { return this.declaration ? hasModifier(ModifierKind.CONST, this.declaration.modifiers) : /* internals are const */ true; }
 }
 
@@ -763,7 +760,6 @@ export class Global extends Element {
   }
 
   get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't exports */ false; }
-  get isGlobalExport(): bool { return this.globalExportName != null; }
   get isMutable(): bool { return this.declaration ? !hasModifier(ModifierKind.CONST, this.declaration.modifiers) : /* internals are immutable */ false; }
 }
 
@@ -812,7 +808,6 @@ export class FunctionPrototype extends Element {
   }
 
   get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't file-level exports */ false; }
-  get isGlobalExport(): bool { return this.declaration ? this.globalExportName != null : /* internals aren't global exports */ false; }
   get isInstance(): bool { return this.classPrototype != null; }
   get isGetter(): bool { return this.declaration ? hasModifier(ModifierKind.GET, this.declaration.modifiers) : /* internals aren't getters */ false; }
   get isSetter(): bool { return this.declaration ? hasModifier(ModifierKind.SET, this.declaration.modifiers) : /* internals aren't setters */ false; }
@@ -986,7 +981,6 @@ export class FieldPrototype extends Element {
   }
 
   get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't file-level exports */ false; }
-  get isGlobalExport(): bool { return this.declaration ? this.globalExportName != null : /* internals aren't global exports */ false; }
 }
 
 /** A resolved instance field. */
@@ -1022,7 +1016,6 @@ export class ClassPrototype extends Namespace {
   }
 
   get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't file-level exports */ false; }
-  get isGlobalExport(): bool { return this.declaration ? this.globalExportName != null : /* internals aren't global exports */ false; }
 
   resolve(typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null): Class {
     const key: string = typesToString(typeArguments, "", "");

@@ -2,6 +2,8 @@
  (type $iv (func (param i32)))
  (memory $0 1)
  (data (i32.const 4) "\08\00\00\00")
+ (export "loopDo" (func $do/loopDo))
+ (export "loopDoInDo" (func $do/loopDoInDo))
  (export "memory" (memory $0))
  (func $do/loopDo (; 0 ;) (type $iv) (param $0 i32)
   (block $break$1.1

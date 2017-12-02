@@ -2,6 +2,8 @@
  (type $iv (func (param i32)))
  (memory $0 1)
  (data (i32.const 4) "\08\00\00\00")
+ (export "loopWhile" (func $while/loopWhile))
+ (export "loopWhileInWhile" (func $while/loopWhileInWhile))
  (export "memory" (memory $0))
  (func $while/loopWhile (; 0 ;) (type $iv) (param $0 i32)
   (block $break$1.1
