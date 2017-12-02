@@ -1,72 +1,74 @@
+/// <reference path="../src/glue/binaryen.d.ts" />
+
+import * as fs from "fs";
+import * as path from "path";
+import * as chalk from "chalk";
+import * as glob from "glob";
+
 import "../src/glue/js";
 import { Compiler } from "../src/compiler";
+import { Module } from "../src/module";
 import { Parser } from "../src/parser";
+import { diff } from "./util/diff";
 
-/* const files: Map<string,string> = new Map([
-  ["main", `import { Test as TestAlias } from "./a"; export { TestAlias } from "./d"; if (1) {} export const a: i32 = 123;`],
-  ["a", `export { Test } from "./b";`],
-  ["b", `export { Test } from "./c";`],
-  ["c", `export enum Test { ONE = 1, TWO = 1 + 1 }`],
-  ["d", `export { Test as TestAlias } from "./b";`]
-]); */
+// TODO: implement properly in module.ts
+import * as binaryen from "binaryen";
+Module.prototype.toText = function(): string {
+  let old: any = (<any>binaryen)["print"];
+  let ret: string = "";
+  (<any>binaryen)["print"] = function(x: string): void { ret += x + "\n" };
+  _BinaryenModulePrint(this.ref);
+  (<any>binaryen)["print"] = old;
+  return ret;
+}
 
-const files: Map<string,string> = new Map([
-  ["main",
-`
-  function add(a: i32, b: i32): i32 { return a + b; };
-  export { add };
-  export { sub as notadd } from "../other";
-  2+3;
-  export function switchMe(n: i32): i32 {
-    switch (n) {
-      case 0:
-        return 0;
-      default:
-        return 2;
-      case 1:
-        return 1;
-      case -1:
-        break;
+const isCreate = process.argv[2] === "--create";
+const filter = process.argv.length > 2 && !isCreate ? "*" + process.argv[2] + "*.ts" : "*.ts";
+
+glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
+  if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts"))
+    return;
+
+  console.log("Testing compiler/" + filename);
+
+  const parser = new Parser();
+  const sourceText = fs.readFileSync(__dirname + "/compiler/" + filename, { encoding: "utf8" });
+  parser.parseFile(sourceText, filename, true);
+  let nextFile;
+  while ((nextFile = parser.nextFile()) !== null) {
+    let nextSourceText: string;
+    try {
+      nextSourceText = fs.readFileSync(path.join(__dirname, "compiler", nextFile + ".ts"), { encoding: "utf8" });
+    } catch (e) {
+      nextSourceText = fs.readFileSync(path.join(__dirname, "compiler", nextFile, "index.ts"), { encoding: "utf8" });
     }
-    return -1;
+    parser.parseFile(nextSourceText, nextFile, false);
   }
-  import { sub } from "../other";
-  export function doCall(): void {
-    sub(1,2);
+  const program = parser.finish();
+  const module = Compiler.compile(program);
+  const actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
+  const fixture = path.basename(filename, ".ts") + ".wast";
+
+  if (isCreate) {
+    fs.writeFileSync(__dirname + "/compiler/" + fixture, actual, { encoding: "utf8" });
+    console.log("Created\n");
+  } else {
+    const expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
+    const diffs = diff("compiler/" + fixture, expected, actual);
+    if (diffs !== null) {
+      process.exitCode = 1;
+      console.log(diffs);
+    } else {
+      console.log("No changes\n");
+    }
   }
-  export function doNaN(value: f32): bool {
-    return isNaN<f32>(0.3);
+});
+
+function iterate<T>(it: IterableIterator<T>): T[] {
+  let current: IteratorResult<T>;
+  var arr: T[] = [];
+  while ((current = it.next()) && !current.done) {
+    arr.push(current.value);
   }
-  export function doRotl(value: u16): u8 {
-    return rotl<i32>(value, 2);
-  }
-`],
-
-  ["../other",
-`
-  export function sub(a: i32, b: i32): i32 { return a - b + c; };
-  let c: i32 = 42 >> 31;
-  1+2;
-`]
-]);
-
-const parser = new Parser();
-
-parser.parseFile(<string>files.get("main"), "main", true);
-do {
-  let nextFile = parser.nextFile();
-  if (!nextFile)
-    break;
-  if (!files.has(nextFile))
-    throw new Error("file not found: " + nextFile);
-  parser.parseFile(<string>files.get(nextFile), nextFile, false);
-} while(true);
-const program = parser.finish();
-const compiler = new Compiler(program);
-const module = compiler.compile();
-// console.log(program.elements.keys());
-
-// module.optimize();
-module.validate();
-if (!module.noEmit)
-  _BinaryenModulePrint(module.ref);
+  return arr;
+}

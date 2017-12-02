@@ -1,6 +1,6 @@
 import { Target } from "./compiler";
 import { GETTER_PREFIX, SETTER_PREFIX, PATH_DELIMITER } from "./constants";
-import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
+import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter, DiagnosticCategory } from "./diagnostics";
 import { Type, typesToString } from "./types";
 import { I64 } from "./util";
 import {
@@ -40,19 +40,20 @@ import {
   VariableDeclaration,
   VariableStatement,
 
-  hasModifier
+  hasModifier,
+  mangleInternalName
 
 } from "./ast";
 
 class QueuedExport {
-  isForeign: bool;
+  isReExport: bool;
   referencedName: string;
   member: ExportMember;
 }
 
 class QueuedImport {
   internalName: string;
-  importName: string;
+  referencedName: string;
   declaration: ImportDeclaration;
 }
 
@@ -130,59 +131,61 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // at this point queued exports should be resolvable
-    for (let [exportName, queuedExport] of queuedExports) { // all file-level exports
-      if (queuedExport.isForeign) {
-        const seen: Set<QueuedExport> = new Set();
-        while (queuedExports.has(queuedExport.referencedName)) {
-          queuedExport = <QueuedExport>queuedExports.get(queuedExport.referencedName);
-          if (seen.has(queuedExport))
-            break;
-          seen.add(queuedExport);
-        }
-        if (this.exports.has(queuedExport.referencedName)) {
-          const element: Element = <Element>this.exports.get(queuedExport.referencedName);
-          if (!this.exports.has(exportName))
-            this.exports.set(exportName, element);
-          if (queuedExport.member.range.source.isEntry)
-            element.globalExportName = queuedExport.member.externalIdentifier.name;
-        } else
-          this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.externalIdentifier.range, queuedExport.referencedName);
-      } else /* local */ {
-        if (this.elements.has(queuedExport.referencedName)) {
-          const element: Element = <Element>this.elements.get(queuedExport.referencedName);
-          if (!this.exports.has(exportName))
-            this.exports.set(exportName, element);
-          if (queuedExport.member.range.source.isEntry)
-            element.globalExportName = queuedExport.member.externalIdentifier.name;
-        } else
-          this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.externalIdentifier.range, queuedExport.referencedName);
+    let element: Element | null;
+
+    // queued imports should be resolvable now
+    for (let i: i32 = 0; i < queuedImports.length;) {
+      const queuedImport: QueuedImport = queuedImports[i];
+      element = this.tryResolveImport(queuedImport.referencedName, queuedExports);
+      if (element) {
+        this.elements.set(queuedImport.internalName, element);
+        queuedImports.splice(i, 1);
+      } else {
+        this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedImport.declaration.range, (<ImportStatement>queuedImport.declaration.parent).path.value, queuedImport.declaration.externalIdentifier.name);
+        ++i;
       }
     }
 
-    // at this point queued imports should be resolvable as well
-    for (let i: i32 = 0, k: i32 = queuedImports.length; i < k; ++i) {
-      const queuedImport: QueuedImport = queuedImports[i];
-      const internalName: string = queuedImport.internalName;
-      const seen: Set<QueuedExport> = new Set();
-      let importName: string = queuedImport.importName;
-      while (queuedExports.has(importName)) {
-        const queuedExport: QueuedExport = <QueuedExport>queuedExports.get(importName);
-        importName = queuedExport.referencedName;
-        if (seen.has(queuedExport))
+    // queued exports should be resolvable noww
+    for (let [exportName, queuedExport] of queuedExports) {
+      let currentExport: QueuedExport | null = queuedExport;
+      do {
+        if (currentExport.isReExport) {
+          element = <Element | null>this.exports.get(currentExport.referencedName);
+          if (element) {
+            this.exports.set(exportName, element);
+            break;
+          }
+          currentExport = <QueuedExport | null>queuedExports.get(currentExport.referencedName);
+          if (!currentExport)
+            this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedExport.member.externalIdentifier.range, (<StringLiteralExpression>(<ExportStatement>queuedExport.member.parent).path).value, queuedExport.member.externalIdentifier.name);
+        } else {
+          element = <Element | null>this.elements.get(currentExport.referencedName);
+          if (element)
+            this.exports.set(exportName, element);
+          else
+            this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.range, queuedExport.member.identifier.name);
           break;
-        seen.add(queuedExport);
-      }
-      if (this.exports.has(importName)) {
-        if (this.elements.has(internalName))
-          this.error(DiagnosticCode.Duplicate_identifier_0, queuedImport.declaration.identifier.range, internalName);
-        else {
-          const element: Element = <Element>this.exports.get(importName);
-          this.elements.set(internalName, element);
         }
-      } else
-        this.error(DiagnosticCode.Cannot_find_name_0, queuedImport.declaration.externalIdentifier.range, importName);
+      } while (currentExport);
     }
+  }
+
+  private tryResolveImport(referencedName: string, queuedExports: Map<string,QueuedExport>): Element | null {
+    let element: Element | null;
+    do {
+      element = <Element | null>this.exports.get(referencedName);
+      if (element)
+        return element;
+      const queuedExport: QueuedExport | null = <QueuedExport | null>queuedExports.get(referencedName);
+      if (!queuedExport)
+        return null;
+      if (queuedExport.isReExport) {
+        referencedName = queuedExport.referencedName;
+        continue;
+      }
+      return <Element | null>this.elements.get(queuedExport.referencedName);
+    } while (true);
   }
 
   private initializeClass(declaration: ClassDeclaration): void {
@@ -288,21 +291,79 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeExport(member: ExportMember, internalPath: string | null, queuedExports: Map<string,QueuedExport>): void {
-    const exportName: string = member.range.source.internalPath + PATH_DELIMITER + member.externalIdentifier.name;
-    if (queuedExports.has(exportName)) {
-      this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalIdentifier.range, exportName);
+    const externalName: string = member.range.source.internalPath + PATH_DELIMITER + member.externalIdentifier.name;
+
+    if (this.exports.has(externalName)) {
+      this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalIdentifier.range, externalName);
       return;
     }
-    const queuedExport: QueuedExport = new QueuedExport();
+
+    let referencedName: string;
+
+    // export local element
     if (internalPath == null) {
-      queuedExport.isForeign = false;
-      queuedExport.referencedName = member.range.source.internalPath + PATH_DELIMITER + member.identifier.name;
+      referencedName = member.range.source.internalPath + PATH_DELIMITER + member.identifier.name;
+
+      // resolve right away if the element exists
+      if (this.elements.has(referencedName)) {
+        this.exports.set(externalName, <Element>this.elements.get(referencedName));
+        return;
+      }
+
+      // otherwise queue it
+      if (queuedExports.has(externalName)) {
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalIdentifier.range, externalName);
+        return;
+      }
+      const queuedExport: QueuedExport = new QueuedExport();
+      queuedExport.isReExport = false;
+      queuedExport.referencedName = referencedName; // -> internal name
+      queuedExport.member = member;
+      queuedExports.set(externalName, queuedExport);
+
+    // export external element
     } else {
-      queuedExport.isForeign = true;
-      queuedExport.referencedName = (<string>internalPath) + PATH_DELIMITER + member.identifier.name;
+      referencedName = (<string>internalPath) + PATH_DELIMITER + member.externalIdentifier.name;
+
+      // resolve right away if the export exists
+      if (this.exports.has(referencedName)) {
+        this.exports.set(externalName, <Element>this.exports.get(referencedName));
+        return;
+      }
+
+      // walk already known queued exports
+      const seen: Set<QueuedExport> = new Set();
+      while (queuedExports.has(referencedName)) {
+        const queuedExport: QueuedExport = <QueuedExport>queuedExports.get(referencedName);
+        if (queuedExport.isReExport) {
+          if (this.exports.has(queuedExport.referencedName)) {
+            this.exports.set(externalName, <Element>this.exports.get(referencedName));
+            return;
+          }
+          referencedName = queuedExport.referencedName;
+          if (seen.has(queuedExport))
+            break;
+          seen.add(queuedExport);
+        } else {
+          if (this.elements.has(queuedExport.referencedName)) {
+            this.exports.set(externalName, <Element>this.elements.get(referencedName));
+            return;
+          }
+          break;
+        }
+      }
+
+      // otherwise queue it
+      if (queuedExports.has(externalName)) {
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalIdentifier.range, externalName);
+        return;
+      }
+      const queuedReExport: QueuedExport = new QueuedExport();
+      queuedReExport.isReExport = true;
+      queuedReExport.referencedName = referencedName; // -> export name
+      queuedReExport.member = member;
+      queuedExports.set(externalName, queuedReExport);
     }
-    queuedExport.member = member;
-    queuedExports.set(exportName, queuedExport);
   }
 
   private initializeFunction(declaration: FunctionDeclaration): void {
@@ -330,29 +391,48 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeImport(declaration: ImportDeclaration, internalPath: string, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
-    const importName: string = internalPath + PATH_DELIMITER + declaration.externalIdentifier.name;
-    let resolvedImportName: string = importName;
-    const seen: Set<QueuedExport> = new Set();
-    while (queuedExports.has(resolvedImportName)) {
-      const queuedExport: QueuedExport = <QueuedExport>queuedExports.get(resolvedImportName);
-      resolvedImportName = queuedExport.referencedName;
-      if (seen.has(queuedExport))
-        break;
-      seen.add(queuedExport);
-    }
     const internalName: string = declaration.internalName;
-    if (this.exports.has(resolvedImportName)) { // resolvable right away
-      if (this.elements.has(internalName))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-      else
-        this.elements.set(internalName, <Element>this.exports.get(resolvedImportName));
-    } else { // points to yet unresolved export
-      const queuedImport: QueuedImport = new QueuedImport();
-      queuedImport.internalName = internalName;
-      queuedImport.importName = importName;
-      queuedImport.declaration = declaration;
-      queuedImports.push(queuedImport);
+    if (this.elements.has(internalName)) {
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      return;
     }
+
+    let referencedName: string = internalPath + PATH_DELIMITER + declaration.externalIdentifier.name;
+
+    // resolve right away if the export exists
+    if (this.exports.has(referencedName)) {
+      this.elements.set(internalName, <Element>this.exports.get(referencedName));
+      return;
+    }
+
+    // walk already known queued exports
+    const seen: Set<QueuedExport> = new Set();
+    while (queuedExports.has(referencedName)) {
+      const queuedExport: QueuedExport = <QueuedExport>queuedExports.get(referencedName);
+      if (queuedExport.isReExport) {
+        if (this.exports.has(queuedExport.referencedName)) {
+          this.elements.set(internalName, <Element>this.exports.get(referencedName));
+          return;
+        }
+        referencedName = queuedExport.referencedName;
+        if (seen.has(queuedExport))
+          break;
+        seen.add(queuedExport);
+      } else {
+        if (this.elements.has(queuedExport.referencedName)) {
+          this.elements.set(internalName, <Element>this.elements.get(referencedName));
+          return;
+        }
+        break;
+      }
+    }
+
+    // otherwise queue it
+    const queuedImport: QueuedImport = new QueuedImport();
+    queuedImport.internalName = internalName;
+    queuedImport.referencedName = referencedName;
+    queuedImport.declaration = declaration;
+    queuedImports.push(queuedImport);
   }
 
   private initializeInterface(declaration: InterfaceDeclaration): void {

@@ -257,8 +257,8 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case NodeKind.EXPORT:
-          if ((<ExportStatement>statement).path)
-            this.compileSourceByPath((<StringLiteralExpression>(<ExportStatement>statement).path).value, <StringLiteralExpression>(<ExportStatement>statement).path);
+          if ((<ExportStatement>statement).normalizedPath != null)
+            this.compileSourceByPath(<string>(<ExportStatement>statement).normalizedPath, <StringLiteralExpression>(<ExportStatement>statement).path);
           if (noTreeShaking || isEntry)
             this.compileExportStatement(<ExportStatement>statement);
           break;
@@ -517,10 +517,10 @@ export class Compiler extends DiagnosticEmitter {
     const internalPath: string | null = statement.path ? statement.internalPath : statement.range.source.internalPath;
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i) {
       const member: ExportMember = members[i];
-      const internalExportName: string = internalPath + PATH_DELIMITER + member.identifier.name;
+      const internalExportName: string = internalPath + PATH_DELIMITER + member.externalIdentifier.name;
       const element: Element | null = <Element | null>this.program.exports.get(internalExportName);
-      if (!element)
-        throw new Error("unexpected missing element");
+      if (!element) // reported in Program#initialize
+        continue;
       switch (element.kind) {
 
         case ElementKind.CLASS_PROTOTYPE:
@@ -1356,6 +1356,7 @@ export class Compiler extends DiagnosticEmitter {
           // TODO: sizeof, load, store, see program.ts/initializeBuiltins
         }
       } else {
+        // TODO: infer type arguments from parameter types if omitted
         functionInstance = (<FunctionPrototype>element).resolveInclTypeArguments(expression.typeArguments, this.currentFunction.contextualTypeArguments, expression); // reports
       }
       if (!functionInstance)

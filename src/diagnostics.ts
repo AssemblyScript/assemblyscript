@@ -154,8 +154,8 @@ export abstract class DiagnosticEmitter {
   emitDiagnostic(code: DiagnosticCode, category: DiagnosticCategory, range: Range, arg0: string | null = null, arg1: string | null = null) {
     const message: DiagnosticMessage = DiagnosticMessage.create(code, category, arg0, arg1).withRange(range);
     this.diagnostics.push(message);
-    console.log(formatDiagnosticMessage(message, true, true)); // temporary
-    console.log(new Error().stack);
+    console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
+    // console.log(new Error().stack);
   }
 
   error(code: DiagnosticCode, range: Range, arg0: string | null = null, arg1: string | null = null): void {

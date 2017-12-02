@@ -613,6 +613,14 @@ export class Module {
     return _BinaryenModuleValidate(this.ref) == 1;
   }
 
+  toBinary(): Uint8Array {
+    throw new Error("not implemented");
+  }
+
+  toText(): string {
+    throw new Error("not implemented");
+  }
+
   dispose(): void {
     if (!this.ref) return; // sic
     _BinaryenModuleDispose(this.ref);

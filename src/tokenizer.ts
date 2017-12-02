@@ -724,10 +724,9 @@ export class Tokenizer extends DiagnosticEmitter {
   range(start: i32 = -1, end: i32 = -1): Range {
     if (start < 0) {
       start = this.tokenPos;
-      if (end < 0)
-        end = start;
-    } else if (end < 0)
       end = this.pos;
+    } else if (end < 0)
+      end = start;
     return new Range(this.source, start, end);
   }
 
