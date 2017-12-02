@@ -49,9 +49,12 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   const actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
   const fixture = path.basename(filename, ".ts") + ".wast";
 
+  if (module.validate())
+    console.log("Validates");
+
   if (isCreate) {
     fs.writeFileSync(__dirname + "/compiler/" + fixture, actual, { encoding: "utf8" });
-    console.log("Created\n");
+    console.log("Created");
   } else {
     const expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
     const diffs = diff("compiler/" + fixture, expected, actual);
@@ -59,9 +62,11 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
       process.exitCode = 1;
       console.log(diffs);
     } else {
-      console.log("No changes\n");
+      console.log("No changes");
     }
   }
+
+  console.log();
 });
 
 function iterate<T>(it: IterableIterator<T>): T[] {

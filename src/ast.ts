@@ -925,12 +925,13 @@ export abstract class Statement extends Node {
     return stmt;
   }
 
-  static createVariableDeclaration(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, range: Range): VariableDeclaration {
+  static createVariableDeclaration(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, modifiers: Modifier[] | null, range: Range): VariableDeclaration {
     const elem: VariableDeclaration = new VariableDeclaration();
     elem.range = range;
     (elem.identifier = identifier).parent = elem;
     if (elem.type = type) (<TypeNode>type).parent = elem;
     if (elem.initializer = initializer) (<Expression>initializer).parent = elem;
+    elem.modifiers = modifiers;
     return elem;
   }
 
@@ -1681,7 +1682,7 @@ export class TryStatement extends Statement {
 export class VariableDeclaration extends VariableLikeDeclarationStatement {
 
   kind = NodeKind.VARIABLEDECLARATION;
-  modifiers = null;
+  modifiers: Modifier[] | null;
 
   serialize(sb: string[]): void {
     this.identifier.serialize(sb);

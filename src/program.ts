@@ -764,7 +764,7 @@ export class Global extends Element {
 
   get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't exports */ false; }
   get isGlobalExport(): bool { return this.globalExportName != null; }
-  get isMutable(): bool { return this.declaration ? hasModifier(ModifierKind.CONST, this.declaration.modifiers) : /* internals are immutable */ false; }
+  get isMutable(): bool { return this.declaration ? !hasModifier(ModifierKind.CONST, this.declaration.modifiers) : /* internals are immutable */ false; }
 }
 
 /** A function parameter. */

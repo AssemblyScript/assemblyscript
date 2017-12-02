@@ -90,6 +90,15 @@ export class Options {
   noTreeShaking: bool = false;
 }
 
+const enum ConversionKind {
+  /** No conversion. */
+  NONE,
+  /** Implicit conversion. */
+  IMPLICIT,
+  /** Explicit conversion. */
+  EXPLICIT
+}
+
 export class Compiler extends DiagnosticEmitter {
 
   /** Program reference. */
@@ -141,7 +150,7 @@ export class Compiler extends DiagnosticEmitter {
   compile(): Module {
     const program: Program = this.program;
 
-    // initialize lookup maps
+    // initialize lookup maps, builtins, imports, exports, etc.
     program.initialize(this.options.target);
 
     // compile entry file (exactly one, usually)
@@ -181,7 +190,7 @@ export class Compiler extends DiagnosticEmitter {
       heapStartBuffer[7] = (initial.hi >>> 24) as u8;
     } else {
       if (!initial.fitsInU32)
-        throw new Error("memory size overflow");
+        throw new Error("static memory size overflows 32 bits");
       heapStartBuffer = new Uint8Array(4);
       heapStartOffset = 4;
       heapStartBuffer[0] = (initial.lo       ) as u8;
@@ -299,6 +308,8 @@ export class Compiler extends DiagnosticEmitter {
         return false;
       element.type = type;
     }
+    if (this.module.noEmit)
+      return true;
     const nativeType: NativeType = typeToNativeType(<Type>type);
     let initializer: ExpressionRef;
     let initializeInStart: bool;
@@ -331,10 +342,10 @@ export class Compiler extends DiagnosticEmitter {
       throw new Error("unexpected missing declaration or constant value");
     const internalName: string = element.internalName;
     if (initializeInStart) {
-      this.module.addGlobal(internalName, NativeType.I32, true, this.module.createI32(-1));
+      this.module.addGlobal(internalName, nativeType, true, this.module.createI32(-1));
       this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
     } else
-      this.module.addGlobal(internalName, NativeType.I32, element.isMutable, initializer);
+      this.module.addGlobal(internalName, nativeType, element.isMutable, initializer);
     return element.isCompiled = true;
   }
 
@@ -350,7 +361,6 @@ export class Compiler extends DiagnosticEmitter {
   compileEnum(element: Enum): void {
     if (element.isCompiled)
       return;
-    element.isCompiled = true;
     let previousInternalName: string | null = null;
     for (let [key, val] of element.members) {
       if (val.hasConstantValue) {
@@ -381,6 +391,7 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("unexpected missing declaration or constant value");
       previousInternalName = val.internalName;
     }
+    element.isCompiled = true;
   }
 
   // functions
@@ -405,8 +416,8 @@ export class Compiler extends DiagnosticEmitter {
       return;
 
     const declaration: FunctionDeclaration | null = instance.template.declaration;
-    if (!declaration) // TODO: compile builtins
-      throw new Error("not implemented");
+    if (!declaration)
+      throw new Error("unexpected missing declaration");
 
     if (!declaration.statements) {
       this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.identifier.range);
@@ -588,7 +599,7 @@ export class Compiler extends DiagnosticEmitter {
     const previousType: Type = this.currentType;
     const previousNoEmit: bool = this.module.noEmit;
     this.module.noEmit = true;
-    this.compileExpression(expression, contextualType, false); // now performs a dry run
+    this.compileExpression(expression, contextualType, ConversionKind.NONE); // now performs a dry run
     const type: Type = this.currentType;
     this.currentType = previousType;
     this.module.noEmit = previousNoEmit;
@@ -698,7 +709,12 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileExpressionStatement(statement: ExpressionStatement): ExpressionRef {
-    return this.compileExpression(statement.expression, Type.void);
+    let expr: ExpressionRef = this.compileExpression(statement.expression, Type.void, ConversionKind.NONE);
+    if (this.currentType != Type.void) {
+      expr = this.module.createDrop(expr);
+      this.currentType = Type.void;
+    }
+    return expr;
   }
 
   compileForStatement(statement: ForStatement): ExpressionRef {
@@ -850,7 +866,7 @@ export class Compiler extends DiagnosticEmitter {
 
   // expressions
 
-  compileExpression(expression: Expression, contextualType: Type, convert: bool = true): ExpressionRef {
+  compileExpression(expression: Expression, contextualType: Type, conversionKind: ConversionKind = ConversionKind.IMPLICIT): ExpressionRef {
     this.currentType = contextualType;
 
     let expr: ExpressionRef;
@@ -912,19 +928,22 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("unexpected expression kind");
     }
 
-    if (convert && this.currentType != contextualType) {
-      expr = this.convertExpression(expr, this.currentType, contextualType);
+    if (conversionKind != ConversionKind.NONE) {
+      expr = this.convertExpression(expr, this.currentType, contextualType, conversionKind, expression);
       this.currentType = contextualType;
     }
-
     return expr;
   }
 
-  convertExpression(expr: ExpressionRef, fromType: Type, toType: Type): ExpressionRef {
+  convertExpression(expr: ExpressionRef, fromType: Type, toType: Type, conversionKind: ConversionKind, reportNode: Node): ExpressionRef {
+    if (conversionKind == ConversionKind.NONE)
+      return expr;
 
     // void to any
-    if (fromType.kind == TypeKind.VOID)
+    if (fromType.kind == TypeKind.VOID) {
+      this.error(DiagnosticCode.Operation_not_supported, reportNode.range);
       throw new Error("unexpected conversion from void");
+    }
 
     // any to void
     if (toType.kind == TypeKind.VOID)
@@ -1070,16 +1089,17 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    if (losesInformation && conversionKind == ConversionKind.IMPLICIT)
+      this.error(DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast, reportNode.range, fromType.toString(), toType.toString());
+
     return expr;
   }
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
     const toType: Type | null = this.program.resolveType(expression.toType, this.currentFunction.contextualTypeArguments); // reports
-    if (toType && toType != contextualType) {
-      const expr: ExpressionRef = this.compileExpression(expression.expression, <Type>toType, false);
-      return this.convertExpression(expr, this.currentType, <Type>toType);
-    }
-    return this.compileExpression(expression.expression, contextualType);
+    return toType && toType != contextualType
+      ? this.compileExpression(expression.expression, <Type>toType, ConversionKind.EXPLICIT)
+      : this.compileExpression(expression.expression, contextualType);
   }
 
   compileBinaryExpression(expression: BinaryExpression, contextualType: Type): ExpressionRef {
@@ -1091,7 +1111,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.operator) {
 
       case Token.LESSTHAN:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.LtF32
@@ -1104,7 +1124,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.GREATERTHAN:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.GtF32
@@ -1117,7 +1137,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.LESSTHAN_EQUALS:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.LeF32
@@ -1130,7 +1150,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.GREATERTHAN_EQUALS:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.GeF32
@@ -1144,7 +1164,7 @@ export class Compiler extends DiagnosticEmitter {
 
       case Token.EQUALS_EQUALS:
       case Token.EQUALS_EQUALS_EQUALS:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.EqF32
@@ -1162,7 +1182,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PLUS_EQUALS:
         compound = Token.EQUALS;
       case Token.PLUS:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.AddF32
@@ -1176,7 +1196,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.MINUS_EQUALS:
         compound = Token.EQUALS;
       case Token.MINUS:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.SubF32
@@ -1190,7 +1210,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.ASTERISK_EQUALS:
         compound = Token.EQUALS;
       case Token.ASTERISK:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.MulF32
@@ -1204,7 +1224,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.SLASH_EQUALS:
         compound = Token.EQUALS;
       case Token.SLASH:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType == Type.f32
            ? BinaryOp.DivF32
@@ -1218,7 +1238,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PERCENT_EQUALS:
         compound = Token.EQUALS;
       case Token.PERCENT:
-        left = this.compileExpression(expression.left, contextualType, false);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         if (this.currentType.isAnyFloat)
           throw new Error("not implemented"); // TODO: internal fmod, possibly simply imported from JS
@@ -1230,7 +1250,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.LESSTHAN_LESSTHAN_EQUALS:
         compound = Token.EQUALS;
       case Token.LESSTHAN_LESSTHAN:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.ShlI64
@@ -1240,7 +1260,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_EQUALS:
         compound = Token.EQUALS;
       case Token.GREATERTHAN_GREATERTHAN:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isSignedInteger
            ? this.currentType.isLongInteger
@@ -1254,7 +1274,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
         compound = Token.EQUALS;
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.u64 : contextualType);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.u64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.ShrU64
@@ -1264,7 +1284,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.AMPERSAND_EQUALS:
         compound = Token.EQUALS;
       case Token.AMPERSAND:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.AndI64
@@ -1274,7 +1294,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.BAR_EQUALS:
         compound = Token.EQUALS;
       case Token.BAR:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.OrI64
@@ -1284,7 +1304,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.CARET_EQUALS:
         compound = Token.EQUALS;
       case Token.CARET:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.XorI64
@@ -1316,11 +1336,17 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = (<Local>element).type;
         return this.module.createTeeLocal((<Local>element).index, valueWithCorrectType);
       }
+      this.currentType = Type.void;
       return this.module.createSetLocal((<Local>element).index, valueWithCorrectType);
     }
 
-    if (element.kind == ElementKind.GLOBAL && (<Global>element).type) {
+    if (element.kind == ElementKind.GLOBAL) {
+      this.compileGlobal(<Global>element);
+      if (!(<Global>element).isMutable)
+        this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, element.internalName);
       if (tee) {
+        if (!(<Global>element).type)
+          return this.module.createUnreachable();
         const globalNativeType: NativeType = typeToNativeType(<Type>(<Global>element).type);
         this.currentType = <Type>(<Global>element).type;
         return this.module.createBlock(null, [ // teeGlobal
@@ -1328,6 +1354,7 @@ export class Compiler extends DiagnosticEmitter {
           this.module.createGetGlobal((<Global>element).internalName, globalNativeType)
         ], globalNativeType);
       }
+      this.currentType = Type.void;
       return this.module.createSetGlobal((<Global>element).internalName, valueWithCorrectType);
     }
 
@@ -1384,7 +1411,7 @@ export class Compiler extends DiagnosticEmitter {
     const operands: ExpressionRef[] = new Array(parameterCount);
     for (let i: i32 = 0; i < parameterCount; ++i) {
       if (argumentExpressions.length > i) {
-        operands[i] = this.compileExpression(argumentExpressions[i], parameters[i].type, true);
+        operands[i] = this.compileExpression(argumentExpressions[i], parameters[i].type);
       } else {
         const initializer: Expression | null = parameters[i].initializer;
         if (initializer) { // omitted, uses initializer
@@ -1621,47 +1648,52 @@ export class Compiler extends DiagnosticEmitter {
     } else if (expression.kind == NodeKind.THIS) {
       if (this.currentFunction.instanceMethodOf) {
         this.currentType = this.currentFunction.instanceMethodOf.type;
-        return this.module.createGetLocal(0, typeToNativeType(this.currentType));
+        return this.module.createGetLocal(0, this.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32);
       }
       this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
       this.currentType = this.options.target == Target.WASM64 ? Type.u64 : Type.u32;
       return this.module.createUnreachable();
     }
 
-    const element: Element | null = this.program.resolveElement(expression, this.currentFunction); // reports
-    if (!element) {
-      if (expression.kind == NodeKind.IDENTIFIER) {
+    if (expression.kind == NodeKind.IDENTIFIER) {
 
-        // NaN
-        if ((<IdentifierExpression>expression).name == "NaN")
-          if (this.currentType.kind == TypeKind.F32)
-            return this.module.createF32(NaN);
-          else {
-            this.currentType = Type.f64;
-            return this.module.createF64(NaN);
-          }
+      // NaN
+      if ((<IdentifierExpression>expression).name == "NaN")
+        if (this.currentType.kind == TypeKind.F32)
+          return this.module.createF32(NaN);
+        else {
+          this.currentType = Type.f64;
+          return this.module.createF64(NaN);
+        }
 
-        // Infinity
-        if ((<IdentifierExpression>expression).name == "Infinity")
-          if (this.currentType.kind == TypeKind.F32)
-            return this.module.createF32(Infinity);
-          else {
-            this.currentType = Type.f64;
-            return this.module.createF64(Infinity);
-          }
-      }
-      return this.module.createUnreachable();
+      // Infinity
+      if ((<IdentifierExpression>expression).name == "Infinity")
+        if (this.currentType.kind == TypeKind.F32)
+          return this.module.createF32(Infinity);
+        else {
+          this.currentType = Type.f64;
+          return this.module.createF64(Infinity);
+        }
     }
 
+    const element: Element | null = this.program.resolveElement(expression, this.currentFunction); // reports
+    if (!element)
+      return this.module.createUnreachable();
+
     // local
-    if (element.kind == ElementKind.LOCAL)
+    if (element.kind == ElementKind.LOCAL) {
+      this.currentType = (<Local>element).type;
       return this.module.createGetLocal((<Local>element).index, typeToNativeType(this.currentType = (<Local>element).type));
+    }
 
     // global
-    if (element.kind == ElementKind.GLOBAL)
+    if (element.kind == ElementKind.GLOBAL) {
+      if ((<Global>element).type)
+        this.currentType = <Type>(<Global>element).type;
       return this.compileGlobal(<Global>element) // reports
         ? this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType = <Type>(<Global>element).type))
         : this.module.createUnreachable();
+    }
 
     // field
     // if (element.kind == ElementKind.FIELD)
@@ -1691,6 +1723,10 @@ export class Compiler extends DiagnosticEmitter {
         const intValue: I64 = (<IntegerLiteralExpression>expression).value;
         if (contextualType == Type.bool && (intValue.isZero || intValue.isOne))
           return this.module.createI32(intValue.isZero ? 0 : 1);
+        if (contextualType == Type.f64)
+          return this.module.createF64((<f64>intValue.lo) + (<f64>intValue.hi) * 0xffffffff);
+        if (contextualType == Type.f32)
+          return this.module.createF32((<f32>intValue.lo) + (<f32>intValue.hi) * 0xffffffff);
         if (contextualType.isLongInteger)
           return this.module.createI64(intValue.lo, intValue.hi);
         if (!intValue.fitsInI32) {
@@ -1769,10 +1805,10 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.operator) {
 
       case Token.PLUS:
-        return this.compileExpression(operandExpression, contextualType);
+        return this.compileExpression(operandExpression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
 
       case Token.MINUS:
-        operand = this.compileExpression(operandExpression, contextualType);
+        operand = this.compileExpression(operandExpression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         if (this.currentType == Type.f32)
           op = UnaryOp.NegF32;
         else if (this.currentType == Type.f64)
@@ -1784,7 +1820,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.PLUS_PLUS:
-        operand = this.compileExpression(operandExpression, contextualType);
+        operand = this.compileExpression(operandExpression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         return this.currentType == Type.f32
              ? this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.AddF32, operand, this.module.createF32(1)), contextualType != Type.void)
              : this.currentType == Type.f64
@@ -1794,7 +1830,7 @@ export class Compiler extends DiagnosticEmitter {
              : this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.AddI32, operand, this.module.createI32(1)), contextualType != Type.void);
 
       case Token.MINUS_MINUS:
-        operand = this.compileExpression(operandExpression, contextualType);
+        operand = this.compileExpression(operandExpression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         return this.currentType == Type.f32
              ? this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.SubF32, operand, this.module.createF32(1)), contextualType != Type.void)
              : this.currentType == Type.f64
@@ -1804,7 +1840,7 @@ export class Compiler extends DiagnosticEmitter {
              : this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.SubI32, operand, this.module.createI32(1)), contextualType != Type.void);
 
       case Token.EXCLAMATION:
-        operand = this.compileExpression(operandExpression, Type.bool, false);
+        operand = this.compileExpression(operandExpression, Type.bool, ConversionKind.NONE);
         if (this.currentType == Type.f32) {
           this.currentType = Type.bool;
           return this.module.createBinary(BinaryOp.EqF32, operand, this.module.createF32(0));
@@ -1820,7 +1856,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.TILDE:
-        operand = this.compileExpression(operandExpression, contextualType.isAnyFloat ? Type.i64 : contextualType);
+        operand = this.compileExpression(operandExpression, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         return this.currentType.isLongInteger
              ? this.module.createBinary(BinaryOp.XorI64, operand, this.module.createI64(-1, -1))
              : this.module.createBinary(BinaryOp.XorI32, operand, this.module.createI32(-1));

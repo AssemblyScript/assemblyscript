@@ -60,6 +60,7 @@ export enum DiagnosticCode {
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Duplicate_function_implementation = 2393,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
+  Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
   The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
   Expected_0_arguments_but_got_1 = 2554,
   Expected_at_least_0_arguments_but_got_1 = 2555,
@@ -128,6 +129,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2393: return "Duplicate function implementation.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
+    case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";
     case 2541: return "The target of an assignment must be a variable or a property access.";
     case 2554: return "Expected {0} arguments, but got {1}.";
     case 2555: return "Expected at least {0} arguments, but got {1}.";

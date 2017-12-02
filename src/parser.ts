@@ -350,7 +350,7 @@ export class Parser extends DiagnosticEmitter {
     const members: VariableDeclaration[] = new Array();
     const isDeclare = hasModifier(ModifierKind.DECLARE, modifiers);
     do {
-      const member: VariableDeclaration | null = this.parseVariableDeclaration(tn, isDeclare);
+      const member: VariableDeclaration | null = this.parseVariableDeclaration(tn, isDeclare, modifiers);
       if (!member)
         return null;
       members.push(<VariableDeclaration>member);
@@ -361,7 +361,7 @@ export class Parser extends DiagnosticEmitter {
     return ret;
   }
 
-  parseVariableDeclaration(tn: Tokenizer, isDeclare: bool = false): VariableDeclaration | null {
+  parseVariableDeclaration(tn: Tokenizer, isDeclare: bool = false, parentModifiers: Modifier[]): VariableDeclaration | null {
     // Identifier (':' Type)? ('=' Expression)?
     if (!tn.skip(Token.IDENTIFIER)) {
       this.error(DiagnosticCode.Identifier_expected, tn.range());
@@ -383,7 +383,7 @@ export class Parser extends DiagnosticEmitter {
       if (!initializer)
         return null;
     }
-    return Statement.createVariableDeclaration(identifier, type, initializer, Range.join(identifier.range, tn.range()));
+    return Statement.createVariableDeclaration(identifier, type, initializer, parentModifiers, Range.join(identifier.range, tn.range()));
   }
 
   parseEnum(tn: Tokenizer, modifiers: Modifier[]): EnumDeclaration | null {

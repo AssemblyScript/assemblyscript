@@ -1,8 +1,8 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
- (global $export/a i32 (i32.const 1))
- (global $export/b i32 (i32.const 2))
+ (global $export/a (mut i32) (i32.const 1))
+ (global $export/b (mut i32) (i32.const 2))
  (memory $0 1)
  (data (i32.const 4) "\08\00\00\00")
  (export "memory" (memory $0))
