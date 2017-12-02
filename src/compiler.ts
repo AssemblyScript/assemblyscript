@@ -766,17 +766,18 @@ export class Compiler extends DiagnosticEmitter {
     const breaks: ExpressionRef[] = new Array(1 + k);
     breaks[0] = this.module.createSetLocal(local.index, this.compileExpression(statement.expression, Type.i32)); // initializer
 
-    // make one br_if per (possibly dynamic) labeled case
-    // TODO: take advantage of br_table where labels are known to be (sequential) constant (ideally the optimizer would)
+    // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
     let breakIndex: i32 = 1;
     let defaultIndex: i32 = -1;
     for (i = 0; i < k; ++i) {
       const case_: SwitchCase = statement.cases[i];
       if (case_.label) {
-        breaks[breakIndex++] = this.module.createBreak("case" + i.toString(10) + "$" + context, this.module.createBinary(BinaryOp.EqI32,
-          this.module.createGetLocal(local.index, NativeType.I32),
-          this.compileExpression(case_.label, Type.i32)
-        ));
+        breaks[breakIndex++] = this.module.createBreak("case" + i.toString(10) + "$" + context,
+          this.module.createBinary(BinaryOp.EqI32,
+            this.module.createGetLocal(local.index, NativeType.I32),
+            this.compileExpression(case_.label, Type.i32)
+          )
+        );
       } else
         defaultIndex = i;
     }

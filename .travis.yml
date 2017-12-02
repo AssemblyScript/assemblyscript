@@ -1,0 +1,10 @@
+dist: trusty
+language: node_js
+node_js:
+  - 8
+jobs:
+  include:
+    - stage: test
+      script: npm test
+    - stage: build
+      script: npm run build

@@ -1118,8 +1118,7 @@ export class Parser extends DiagnosticEmitter {
         this.error(DiagnosticCode._0_expected, tn.range(), ":");
 
     // 'default' ':' Statement*
-    } else if (tn.nextToken == Token.DEFAULT) {
-      tn.next();
+    } else if (tn.skip(Token.DEFAULT)) {
       if (tn.skip(Token.COLON)) {
         const statements: Statement[] = new Array();
         while (tn.peek() != Token.CASE && tn.nextToken != Token.DEFAULT && tn.nextToken != Token.CLOSEBRACE) {

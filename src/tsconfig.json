@@ -28,7 +28,7 @@
     "glue/js.d.ts",
     "glue/js.ts",
     "index.ts",
-    "moddule.ts",
+    "module.ts",
     "parser.ts",
     "program.ts",
     "tokenizer.ts",
