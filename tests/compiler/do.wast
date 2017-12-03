@@ -71,8 +71,12 @@
   nearest
   sqrt
   trunc
+  current_memory
+  grow_memory
+  unreachable
   isNaN
   isFinite
+  assert
   do/loopDo
   do/loopDoInDo
 [program.exports]

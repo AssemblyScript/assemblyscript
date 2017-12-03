@@ -1,5 +1,5 @@
 import { Range } from "./ast";
-import { isLineBreak, sb } from "./util";
+import { CharCode, isLineBreak, sb } from "./util";
 import { DiagnosticCode, diagnosticCodeToString } from "./diagnosticMessages.generated";
 
 export { DiagnosticCode, diagnosticCodeToString } from "./diagnosticMessages.generated";
@@ -100,9 +100,9 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
     sb.push("\n");
     let pos: i32 = range.start;
     let line: i32 = 1;
-    let column: i32 = 0;
+    let column: i32 = 1;
     while (pos-- > 0)
-      if (isLineBreak(text.charCodeAt(pos)))
+      if (text.charCodeAt(pos) == CharCode.LINEFEED)
         line++;
       else if (line == 1)
         column++;

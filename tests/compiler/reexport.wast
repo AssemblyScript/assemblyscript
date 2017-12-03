@@ -56,8 +56,12 @@
   nearest
   sqrt
   trunc
+  current_memory
+  grow_memory
+  unreachable
   isNaN
   isFinite
+  assert
   export/add
   export/sub
   export/a

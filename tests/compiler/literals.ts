@@ -42,7 +42,3 @@
 0b1;
 true;
 false;
-NaN;
-Infinity;
-<f32>NaN;
-<f32>Infinity;

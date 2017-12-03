@@ -1,6 +1,6 @@
 import { PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
-import { Module, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType, FunctionTypeRef } from "./module";
+import { Module, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType, FunctionTypeRef, getExpressionId, ExpressionId } from "./module";
 import { Program, ClassPrototype, Class, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter } from "./program";
 import { CharCode, I64, U64, normalizePath, sb } from "./util";
 import { Token, Range } from "./tokenizer";
@@ -286,11 +286,13 @@ export class Compiler extends DiagnosticEmitter {
 
   // globals
 
-  compileGlobalDeclaration(declaration: VariableDeclaration, isConst: bool): bool {
+  compileGlobalDeclaration(declaration: VariableDeclaration, isConst: bool): Global | null {
     const element: Element | null = <Element | null>this.program.elements.get(declaration.internalName);
     if (!element || element.kind != ElementKind.GLOBAL)
       throw new Error("unexpected missing global");
-    return this.compileGlobal(<Global>element);
+    return this.compileGlobal(<Global>element)
+      ? <Global>element
+      : null;
   }
 
   compileGlobal(element: Global): bool {
@@ -333,7 +335,7 @@ export class Compiler extends DiagnosticEmitter {
     } else if (declaration) {
       if (declaration.initializer) {
         initializer = this.compileExpression(declaration.initializer, type);
-        initializeInStart = declaration.initializer.kind != NodeKind.LITERAL; // MVP doesn't support complex initializers
+        initializeInStart = getExpressionId(initializer) != ExpressionId.Const; // MVP doesn't support complex initializers
       } else {
         initializer = typeToNativeZero(this.module, type);
         initializeInStart = false;
@@ -342,12 +344,14 @@ export class Compiler extends DiagnosticEmitter {
       throw new Error("unexpected missing declaration or constant value");
     const internalName: string = element.internalName;
     if (initializeInStart) {
-      this.module.addGlobal(internalName, nativeType, true, this.module.createI32(-1));
+      this.module.addGlobal(internalName, nativeType, true, typeToNativeZero(this.module, type));
       this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
-    } else
+    } else {
       this.module.addGlobal(internalName, nativeType, element.isMutable, initializer);
-    // if (element.globalExportName != null && element.hasConstantValue && !initializeInStart)
-    //   this.module.addGlobalExport(element.internalName, element.globalExportName);
+      if (!element.isMutable) {
+        // TODO: check export, requires updated binaryen.js with Module#addGlobalExport
+      }
+    }
     return element.isCompiled = true;
   }
 
@@ -373,7 +377,7 @@ export class Compiler extends DiagnosticEmitter {
         let initializeInStart: bool = false;
         if (declaration.value) {
           initializer = this.compileExpression(<Expression>declaration.value, Type.i32);
-          initializeInStart = declaration.value.kind != NodeKind.LITERAL; // MVP doesn't support complex initializers
+          initializeInStart = getExpressionId(initializer) != ExpressionId.Const; // MVP doesn't support complex initializers
         } else if (previousInternalName == null) {
           initializer = this.module.createI32(0);
           initializeInStart = false;
@@ -385,10 +389,12 @@ export class Compiler extends DiagnosticEmitter {
           initializeInStart = true;
         }
         if (initializeInStart) {
-          this.module.addGlobal(val.internalName, NativeType.I32, true, this.module.createI32(-1));
+          this.module.addGlobal(val.internalName, NativeType.I32, true, this.module.createI32(0));
           this.startFunctionBody.push(this.module.createSetGlobal(val.internalName, initializer));
-        } else
+        } else {
           this.module.addGlobal(val.internalName, NativeType.I32, false, initializer);
+          // TODO: check export, requires updated binaryen.js with Module#addGlobalExport
+        }
       } else
         throw new Error("unexpected missing declaration or constant value");
       previousInternalName = val.internalName;
@@ -1183,6 +1189,20 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
 
+      case Token.EXCLAMATION_EQUALS:
+      case Token.EXCLAMATION_EQUALS_EQUALS:
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
+        right = this.compileExpression(expression.right, this.currentType);
+        op = this.currentType == Type.f32
+          ? BinaryOp.NeF32
+          : this.currentType == Type.f64
+          ? BinaryOp.NeF64
+          : this.currentType.isLongInteger
+          ? BinaryOp.NeI64
+          : BinaryOp.NeI32;
+        this.currentType = Type.bool;
+        break;
+
       case Token.EQUALS:
         return this.compileAssignment(expression.left, expression.right, contextualType);
 
@@ -1544,7 +1564,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createHost(HostOp.CurrentMemory);
 
         case "grow_memory":
-          this.warning(DiagnosticCode.Operation_is_unsafe, reportNode.range); // unsure
+          // this.warning(DiagnosticCode.Operation_is_unsafe, reportNode.range); // unsure
           return this.module.createHost(HostOp.GrowMemory, null, operands);
 
         case "unreachable":
@@ -1566,7 +1586,7 @@ export class Compiler extends DiagnosticEmitter {
             tempLocal = this.currentFunction.addLocal(Type.f32);
             return this.module.createBinary(BinaryOp.NeF32,
               this.module.createTeeLocal(tempLocal.index, operands[0]),
-              this.module.createGetLocal(tempLocal.index, NativeType.F64)
+              this.module.createGetLocal(tempLocal.index, NativeType.F32)
             );
           }
           break;
@@ -1604,6 +1624,12 @@ export class Compiler extends DiagnosticEmitter {
             );
           }
           break;
+
+        case "assert":
+          return this.module.createIf(
+            this.module.createUnary(UnaryOp.EqzI32, operands[0]),
+            this.module.createUnreachable()
+          );
       }
       this.error(DiagnosticCode.Operation_not_supported, reportNode.range);
       return this.module.createUnreachable();

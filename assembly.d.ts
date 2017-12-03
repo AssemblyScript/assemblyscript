@@ -30,7 +30,7 @@ declare type f64 = number;
 // builtins
 
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
-declare function clz<T>(value: T): T;
+declare function clz<T extends number>(value: T): T;
 /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
 declare function ctz<T>(value: T): T;
 /** Performs the sign-agnostic count number of one bits operation on a 32-bit or 64-bit integer. */
@@ -84,6 +84,8 @@ declare const Infinity: number;
 declare function isNaN<T>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not NaN or +/-Infinity. */
 declare function isFinite<T>(value: T): bool;
+/** Traps if the specified value is `false`. */
+declare function assert(isTrue: bool): void;
 
 // internal decorators
 

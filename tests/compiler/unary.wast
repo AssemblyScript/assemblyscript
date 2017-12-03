@@ -649,8 +649,12 @@
   nearest
   sqrt
   trunc
+  current_memory
+  grow_memory
+  unreachable
   isNaN
   isFinite
+  assert
   unary/i
   unary/I
   unary/f

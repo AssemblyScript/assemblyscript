@@ -80,8 +80,12 @@
   nearest
   sqrt
   trunc
+  current_memory
+  grow_memory
+  unreachable
   isNaN
   isFinite
+  assert
   while/loopWhile
   while/loopWhileInWhile
 [program.exports]

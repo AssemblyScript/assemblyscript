@@ -3,7 +3,7 @@ AssemblyScript NEXT
 
 [![Build Status](https://travis-ci.org/AssemblyScript/next.svg?branch=master)](https://travis-ci.org/AssemblyScript/next)
 
-This repository contains compiler component prototypes for the next iteration of the AssemblyScript compiler written in AssemblyScript itself.
+This repository contains compiler components for the next iteration of the AssemblyScript compiler written in AssemblyScript itself.
 
 Note that the code uses some features and standard library components that are not yet supported by any version of asc. To account for this, the code has been written in "portable AssemblyScript", a TypeScript-compatible subset of a subset of a superset of JavaScript, that also compiles to JavaScript using TSC.
 

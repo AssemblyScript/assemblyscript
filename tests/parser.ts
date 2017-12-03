@@ -33,8 +33,11 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
     if (diffs !== null) {
       process.exitCode = 1;
       console.log(diffs);
+      console.log(chalk.default.red("diff ERROR"));
     } else {
-      console.log("No changes\n");
+      console.log(chalk.default.green("diff OK"));
     }
   }
+
+  console.log();
 });

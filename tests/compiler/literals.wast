@@ -137,18 +137,6 @@
   (drop
    (i32.const 0)
   )
-  (drop
-   (f64.const nan:0x8000000000000)
-  )
-  (drop
-   (f64.const inf)
-  )
-  (drop
-   (f32.const nan:0x400000)
-  )
-  (drop
-   (f32.const inf)
-  )
  )
 )
 (;
@@ -167,8 +155,12 @@
   nearest
   sqrt
   trunc
+  current_memory
+  grow_memory
+  unreachable
   isNaN
   isFinite
+  assert
 [program.exports]
   
 ;)

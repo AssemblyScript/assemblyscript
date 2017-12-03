@@ -613,6 +613,10 @@ export class Module {
     return _BinaryenModuleValidate(this.ref) == 1;
   }
 
+  interpret(): void {
+    return _BinaryenModuleInterpret(this.ref);
+  }
+
   toBinary(): Uint8Array {
     throw new Error("not implemented");
   }
@@ -725,6 +729,10 @@ export class Relooper {
     return _RelooperRenderAndDispose(this.ref, entry, labelHelper, this.module.ref);
   }
 }
+
+// export function setAPITracing(on: bool): void {
+//   _BinaryenSetAPITracing(on ? 1 : 0);
+// }
 
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js

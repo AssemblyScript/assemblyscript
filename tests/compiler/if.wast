@@ -62,8 +62,12 @@
   nearest
   sqrt
   trunc
+  current_memory
+  grow_memory
+  unreachable
   isNaN
   isFinite
+  assert
   if/ifThenElse
   if/ifThen
   if/ifThenElseBlock

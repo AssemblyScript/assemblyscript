@@ -49,8 +49,17 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   const actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
   const fixture = path.basename(filename, ".ts") + ".wast";
 
-  if (module.validate())
-    console.log("Validates");
+  if (module.validate()) {
+    console.log(chalk.default.green("validate OK"));
+    try {
+      module.interpret();
+      console.log(chalk.default.green("interpret OK"));
+    } catch (e) {
+      process.exitCode = 1;
+      console.log(chalk.default.red("interpret ERROR"));
+    }
+  } else
+  console.log(chalk.default.red("validate ERROR"));
 
   if (isCreate) {
     fs.writeFileSync(__dirname + "/compiler/" + fixture, actual, { encoding: "utf8" });
@@ -61,11 +70,13 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     if (diffs !== null) {
       process.exitCode = 1;
       console.log(diffs);
+      console.log(chalk.default.red("diff ERROR"));
     } else {
-      console.log("No changes");
+      console.log(chalk.default.green("diff OK"));
     }
   }
 
+  module.dispose();
   console.log();
 });
 

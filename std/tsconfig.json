@@ -4,12 +4,12 @@
     "experimentalDecorators": true
   },
   "files": [
-    "array.ts",
-    "error.ts",
-    "map.ts",
-    "math.ts",
-    "memory.ts",
-    "set.ts",
-    "string.ts"
+    "array.d.ts",
+    "error.d.ts",
+    "map.d.ts",
+    "math.d.ts",
+    "memory.d.ts",
+    "set.d.ts",
+    "string.d.ts"
   ]
 }

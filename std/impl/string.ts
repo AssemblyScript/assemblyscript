@@ -1,4 +1,4 @@
-/// <reference path="../assembly.d.ts" />
+/// <reference path="../../assembly.d.ts" />
 
 @global()
 @allocates()

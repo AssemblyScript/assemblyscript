@@ -1,7 +1,7 @@
 (module
  (type $v (func))
  (global $binary/i (mut i32) (i32.const 0))
- (global $binary/b (mut i32) (i32.const -1))
+ (global $binary/b (mut i32) (i32.const 0))
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
@@ -111,9 +111,6 @@
     (get_global $binary/i)
     (i32.const 1)
    )
-  )
-  (set_global $binary/b
-   (i32.const 0)
   )
   (set_global $binary/b
    (i32.lt_s
@@ -835,8 +832,12 @@
   nearest
   sqrt
   trunc
+  current_memory
+  grow_memory
+  unreachable
   isNaN
   isFinite
+  assert
   binary/b
   binary/i
   binary/I

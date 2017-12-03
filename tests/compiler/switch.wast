@@ -161,8 +161,12 @@
   nearest
   sqrt
   trunc
+  current_memory
+  grow_memory
+  unreachable
   isNaN
   isFinite
+  assert
   switch/doSwitch
   switch/doSwitchDefaultFirst
   switch/doSwitchDefaultOmitted

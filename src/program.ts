@@ -1131,6 +1131,7 @@ function initializeBuiltins(program: Program): void {
 
   const genericInt: Type[] = [ Type.i32, Type.i64 ];
   const genericFloat: Type[] = [ Type.f32, Type.f64 ];
+  const usize: Type = program.target == Target.WASM64 ? Type.usize64 : Type.usize32;
 
   addGenericUnaryBuiltin(program, "clz", genericInt);
   addGenericUnaryBuiltin(program, "ctz", genericInt);
@@ -1140,7 +1141,7 @@ function initializeBuiltins(program: Program): void {
 
   addGenericUnaryBuiltin(program, "abs", genericFloat);
   addGenericUnaryBuiltin(program, "ceil", genericFloat);
-  addGenericUnaryBuiltin(program, "copysign", genericFloat);
+  addGenericBinaryBuiltin(program, "copysign", genericFloat);
   addGenericUnaryBuiltin(program, "floor", genericFloat);
   addGenericBinaryBuiltin(program, "max", genericFloat);
   addGenericBinaryBuiltin(program, "min", genericFloat);
@@ -1148,12 +1149,13 @@ function initializeBuiltins(program: Program): void {
   addGenericUnaryBuiltin(program, "sqrt", genericFloat);
   addGenericUnaryBuiltin(program, "trunc", genericFloat);
 
-  addBuiltin(program, "current_memory", [], Type.i32);
-  addBuiltin(program, "grow_memory", [ Type.i32 ], Type.i32);
+  addBuiltin(program, "current_memory", [], usize);
+  addBuiltin(program, "grow_memory", [ usize ], usize);
   addBuiltin(program, "unreachable", [], Type.void);
 
   addGenericUnaryTestBuiltin(program, "isNaN", genericFloat);
   addGenericUnaryTestBuiltin(program, "isFinite", genericFloat);
+  addBuiltin(program, "assert", [ Type.bool ], Type.void);
 
   // TODO: load, store, sizeof
   // sizeof, for example, has varying Ts but really shouldn't provide an instance for each class
@@ -1167,7 +1169,8 @@ function addBuiltin(program: Program, name: string, parameterTypes: Type[], retu
   const parameters: Parameter[] = new Array(k);
   for (let i: i32 = 0; i < k; ++i)
     parameters[i] = new Parameter("arg" + i, parameterTypes[i], null);
-  prototype.instances.set("", new Function(prototype, name, [], parameters, Type.bool, null));
+  prototype.instances.set("", new Function(prototype, name, [], parameters, returnType, null));
+  program.elements.set(name, prototype);
 }
 
 function addGenericUnaryBuiltin(program: Program, name: string, types: Type[]): void {
