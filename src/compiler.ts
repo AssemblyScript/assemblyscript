@@ -1330,7 +1330,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef {
     this.currentType = this.determineExpressionType(expression, contextualType);
-    return this.compileAssignmentWithValue(expression, this.compileExpression(valueExpression, this.currentType), contextualType != Type.void);
+    return this.compileAssignmentWithValue(expression, this.compileExpression(valueExpression, this.currentType, ConversionKind.IMPLICIT), contextualType != Type.void);
   }
 
   compileAssignmentWithValue(expression: Expression, valueWithCorrectType: ExpressionRef, tee: bool = false): ExpressionRef {
@@ -1773,33 +1773,52 @@ export class Compiler extends DiagnosticEmitter {
   compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type): ExpressionRef {
     const operator: Token = expression.operator;
 
+    // make a getter for the expression (also obtains the type)
+    const getValue: ExpressionRef = this.compileExpression(expression.expression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+
+    // use a temp local for the intermediate value
+    const tempLocal: Local = this.currentFunction.addLocal(this.currentType);
+
     let op: BinaryOp;
     let nativeType: NativeType;
     let nativeOne: ExpressionRef;
 
-    if (contextualType == Type.f32) {
+    if (tempLocal.type == Type.f32) {
       op = operator == Token.PLUS_PLUS ? BinaryOp.AddF32 : BinaryOp.SubF32;
       nativeType = NativeType.F32;
       nativeOne = this.module.createF32(1);
-    } else if (contextualType == Type.f64) {
+
+    } else if (tempLocal.type == Type.f64) {
       op = operator == Token.PLUS_PLUS ? BinaryOp.AddF64 : BinaryOp.SubF64;
       nativeType = NativeType.F64;
       nativeOne = this.module.createF64(1);
-    } else if (contextualType.isLongInteger) {
+
+    } else if (tempLocal.type.isLongInteger) {
       op = operator == Token.PLUS_PLUS ? BinaryOp.AddI64 : BinaryOp.SubI64;
       nativeType = NativeType.I64;
       nativeOne = this.module.createI64(1, 0);
+
     } else {
       op = operator == Token.PLUS_PLUS ? BinaryOp.AddI32 : BinaryOp.SubI32;
       nativeType = NativeType.I32;
       nativeOne = this.module.createI32(1);
     }
-    const getValue: ExpressionRef = this.compileExpression(expression.expression, contextualType);
-    const setValue: ExpressionRef = this.compileAssignmentWithValue(expression.expression, this.module.createBinary(op, getValue, nativeOne), false); // reports
 
+    // make a setter that sets the new value (temp value +/- 1)
+    const setValue: ExpressionRef = this.compileAssignmentWithValue(expression.expression,
+      this.module.createBinary(op,
+        this.module.createGetLocal(tempLocal.index, nativeType),
+        nativeOne
+      ), false
+    );
+
+    // NOTE: can't preemptively tee_local the return value on the stack because binaryen expects
+    // this to be well-formed. becomes a tee_local when optimizing, though.
+    this.currentType = tempLocal.type;
     return this.module.createBlock(null, [
-      getValue,
-      setValue
+      this.module.createSetLocal(tempLocal.index, getValue),  // +++ this.module.createTeeLocal(tempLocal.index, getValue),
+      setValue,
+      this.module.createGetLocal(tempLocal.index, nativeType) // ---
     ], nativeType);
   }
 

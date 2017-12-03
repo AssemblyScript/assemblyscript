@@ -143,6 +143,12 @@
   (drop
    (f64.const inf)
   )
+  (drop
+   (f32.const nan:0x400000)
+  )
+  (drop
+   (f32.const inf)
+  )
  )
 )
 (;
