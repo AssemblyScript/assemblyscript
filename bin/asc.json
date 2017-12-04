@@ -17,5 +17,13 @@
   "validate": {
     "desc": "Validate the module.",
     "type": "boolean"
+  },
+  "outFile": {
+    "desc": "Specify the output file (binary format).",
+    "type": "string"
+  },
+  "textFile": {
+    "desc": "Specify the output file (text format).",
+    "type": "string"
   }
 }

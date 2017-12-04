@@ -380,6 +380,9 @@ export class Program extends DiagnosticEmitter {
       else
         this.exports.set(internalName, prototype);
     }
+    if (hasModifier(ModifierKind.DECLARE, declaration.modifiers)) {
+      prototype.isDeclare = true;
+    }
   }
 
   private initializeImports(statement: ImportStatement, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
@@ -689,6 +692,7 @@ export abstract class Element {
   isCompiled: bool = false;
   isImport: bool = false;
   isBuiltin: bool = false;
+  isDeclare: bool = false;
 
   constructor(program: Program, internalName: string) {
     this.program = program;
@@ -922,6 +926,7 @@ export class Function extends Element {
     this.returnType = returnType;
     this.instanceMethodOf = instanceMethodOf;
     this.isBuiltin = prototype.isBuiltin;
+    this.isDeclare = prototype.isDeclare;
     let localIndex: i32 = 0;
     if (instanceMethodOf) {
       this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));

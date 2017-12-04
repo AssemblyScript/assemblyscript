@@ -617,11 +617,21 @@ export class Module {
     return _BinaryenModuleInterpret(this.ref);
   }
 
-  toBinary(): Uint8Array {
+  write(output: usize, outputSize: usize = 1048576): usize {
+    return _BinaryenModuleWrite(this.ref, output, outputSize);
+  }
+
+  print(): void {
+    return _BinaryenModulePrint(this.ref);
+  }
+
+  toBinary(bufferSize: usize = 1048576): Uint8Array {
+    // FIXME: target specific / JS glue overrides this
     throw new Error("not implemented");
   }
 
   toText(): string {
+    // FIXME: target specific / JS glue overrides this
     throw new Error("not implemented");
   }
 

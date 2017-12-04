@@ -12,3 +12,23 @@ const binaryen = require("binaryen");
 for (const key in binaryen)
   if (/^_(?:Binaryen|Relooper|malloc$|free$)/.test(key))
     globalScope[key] = binaryen[key];
+
+import { Module } from "../module";
+
+Module.prototype.toBinary = function(bufferSize = 1048576): Uint8Array {
+  const ptr = _malloc(bufferSize);
+  const len = this.write(ptr, bufferSize);
+  const ret = new Uint8Array(len);
+  ret.set(binaryen.HEAPU8.subarray(ptr, ptr + len));
+  _free(ptr);
+  return ret;
+}
+
+Module.prototype.toText = function(): string {
+  let previousPrint: any = (<any>binaryen)["print"];
+  let ret: string = "";
+  binaryen["print"] = function(x: string): void { ret += x + "\n" };
+  this.print();
+  binaryen["print"] = previousPrint;
+  return ret;
+}

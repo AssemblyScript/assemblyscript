@@ -11,17 +11,6 @@ import { Module } from "../src/module";
 import { Parser } from "../src/parser";
 import { diff } from "./util/diff";
 
-// TODO: implement properly in module.ts
-import * as binaryen from "binaryen";
-Module.prototype.toText = function(): string {
-  let old: any = (<any>binaryen)["print"];
-  let ret: string = "";
-  (<any>binaryen)["print"] = function(x: string): void { ret += x + "\n" };
-  _BinaryenModulePrint(this.ref);
-  (<any>binaryen)["print"] = old;
-  return ret;
-}
-
 const isCreate = process.argv[2] === "--create";
 const filter = process.argv.length > 2 && !isCreate ? "*" + process.argv[2] + "*.ts" : "*.ts";
 

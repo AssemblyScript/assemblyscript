@@ -177,12 +177,39 @@
   )
   (set_global $builtins/i
    (i32.load
-    (i32.const 4)
+    (i32.const 8)
    )
   )
   (i32.store
-   (i32.const 4)
+   (i32.const 8)
    (get_global $builtins/i)
+  )
+  (set_global $builtins/I
+   (i64.load
+    (i32.const 8)
+   )
+  )
+  (i64.store
+   (i32.const 8)
+   (get_global $builtins/I)
+  )
+  (set_global $builtins/f
+   (f32.load
+    (i32.const 8)
+   )
+  )
+  (f32.store
+   (i32.const 8)
+   (get_global $builtins/f)
+  )
+  (set_global $builtins/F
+   (f64.load
+    (i32.const 8)
+   )
+  )
+  (f64.store
+   (i32.const 8)
+   (get_global $builtins/F)
   )
   (if
    (f32.eq

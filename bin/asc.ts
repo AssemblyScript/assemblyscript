@@ -1,5 +1,3 @@
-/// <reference path="../src/glue/binaryen.d.ts" />
-
 import * as fs from "fs";
 import * as path from "path";
 import * as minimist from "minimist";
@@ -112,5 +110,17 @@ if (args["validate"])
 if (args["optimize"])
   module.optimize();
 
-_BinaryenModulePrint(module.ref);
+let hasOutput = false;
+
+if (args["outFile"]) {
+  fs.writeFileSync(args["outFile"], module.toBinary());
+  hasOutput = true;
+}
+if (args["textFile"]) {
+  fs.writeFileSync(args["textFile"], module.toText(), { encoding: "utf8" });
+  hasOutput = true;
+}
+if (!hasOutput)
+  module.print();
+
 module.dispose();

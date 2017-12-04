@@ -119,8 +119,14 @@ sizeof<isize>();
 sizeof<f32>();
 sizeof<f64>();
 
-i = load<i32>(4);
-store<i32>(4, i);
+i = load<i32>(8);
+store<i32>(8, i);
+I = load<i64>(8);
+store<i64>(8, I);
+f = load<f32>(8);
+store<f32>(8, f);
+F = load<f64>(8);
+store<f64>(8, F);
 
 if (NaN == NaN)
   unreachable();

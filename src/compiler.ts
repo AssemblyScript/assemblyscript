@@ -412,7 +412,9 @@ export class Compiler extends DiagnosticEmitter {
     if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE)
       throw new Error("unexpected missing function");
     const instance: Function | null = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode);
-    if (instance && declaration.range.source.isEntry && declaration.parent == declaration.range.source && hasModifier(ModifierKind.EXPORT, declaration.modifiers))
+    if (!instance)
+      return;
+    if (declaration.range.source.isEntry && declaration.parent == declaration.range.source && hasModifier(ModifierKind.EXPORT, declaration.modifiers))
       this.module.addExport(instance.internalName, declaration.identifier.name);
   }
 
@@ -431,19 +433,29 @@ export class Compiler extends DiagnosticEmitter {
     if (!declaration)
       throw new Error("unexpected missing declaration");
 
-    if (!declaration.statements) {
-      this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.identifier.range);
-      return false;
+    if (instance.isDeclare) {
+      if (declaration.statements) {
+        this.error(DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts, declaration.identifier.range);
+        return false;
+      }
+    } else {
+      if (!declaration.statements) {
+        this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.identifier.range);
+        return false;
+      }
     }
     instance.isCompiled = true;
 
     // compile statements
-    const previousFunction: Function = this.currentFunction;
-    this.currentFunction = instance;
-    const stmts: ExpressionRef[] = this.compileStatements(<Statement[]>declaration.statements);
-    this.currentFunction = previousFunction;
+    let stmts: ExpressionRef[] | null = null;
+    if (!instance.isDeclare) {
+      const previousFunction: Function = this.currentFunction;
+      this.currentFunction = instance;
+      stmts = this.compileStatements(<Statement[]>declaration.statements);
+      this.currentFunction = previousFunction;
+    }
 
-    // create the function
+    // create the function type
     let k: i32 = instance.parameters.length;
     const binaryenResultType: NativeType = typeToNativeType(instance.returnType);
     const binaryenParamTypes: NativeType[] = new Array(k);
@@ -456,8 +468,14 @@ export class Compiler extends DiagnosticEmitter {
     let typeRef: FunctionTypeRef = this.module.getFunctionTypeBySignature(binaryenResultType, binaryenParamTypes);
     if (!typeRef)
       typeRef = this.module.addFunctionType(signatureNameParts.join(""), binaryenResultType, binaryenParamTypes);
+
+    // create the function
     const internalName: string = instance.internalName;
-    this.module.addFunction(internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, stmts, NativeType.None));
+    if (instance.isDeclare) {
+      this.module.addImport(internalName, "env", declaration.identifier.name, typeRef);
+    } else {
+      this.module.addFunction(internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
+    }
     return true;
   }
 
@@ -1732,7 +1750,7 @@ export class Compiler extends DiagnosticEmitter {
       this.compileFunction(functionInstance);
 
     // imported function
-    if (functionInstance.isImport)
+    if (functionInstance.isDeclare)
       return this.module.createCallImport(functionInstance.internalName, operands, typeToNativeType(functionInstance.returnType));
 
     // internal function
