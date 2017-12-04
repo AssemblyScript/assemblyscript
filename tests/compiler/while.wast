@@ -86,6 +86,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
   while/loopWhile
   while/loopWhileInWhile
 [program.exports]

@@ -838,6 +838,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
   binary/b
   binary/i
   binary/I

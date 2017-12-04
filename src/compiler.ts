@@ -88,6 +88,8 @@ export class Options {
   noEmit: bool = false;
   /** If true, compiles everything instead of just reachable code. */
   noTreeShaking: bool = false;
+  /** If true, replaces assertions with nops. */
+  noDebug: bool = false;
 }
 
 const enum ConversionKind {
@@ -1398,16 +1400,73 @@ export class Compiler extends DiagnosticEmitter {
       const functionPrototype: FunctionPrototype = <FunctionPrototype>element;
       let functionInstance: Function | null = null;
       if (functionPrototype.isBuiltin) {
+        const k: i32 = expression.typeArguments.length;
+        const resolvedTypeArguments: Type[] = new Array(k);
         sb.length = 0;
-        for (let i: i32 = 0, k: i32 = expression.typeArguments.length; i < k; ++i) {
-          let type: Type | null = this.program.resolveType(expression.typeArguments[i], this.currentFunction.contextualTypeArguments, true); // reports
-          if (!type)
+        for (let i: i32 = 0; i < k; ++i) {
+          let resolvedType: Type | null = this.program.resolveType(expression.typeArguments[i], this.currentFunction.contextualTypeArguments, true); // reports
+          if (!resolvedType)
             return this.module.createUnreachable();
-          sb.push(type.toString());
+          resolvedTypeArguments[i] = resolvedType;
+          sb.push(resolvedType.toString());
         }
+
         functionInstance = <Function | null>functionPrototype.instances.get(sb.join(","));
         if (!functionInstance) {
-          // TODO: sizeof, load, store, see program.ts/initializeBuiltins
+          let arg0: ExpressionRef, arg1: ExpressionRef;
+
+          if (functionPrototype.internalName == "sizeof") { // no parameters
+            this.currentType = this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32;
+            if (k != 1) {
+              this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, expression.range, "1", k.toString());
+              return this.module.createUnreachable();
+            }
+            if (expression.arguments.length != 0) {
+              this.error(DiagnosticCode.Expected_0_arguments_but_got_1, expression.range, "0", expression.arguments.length.toString());
+              return this.module.createUnreachable();
+            }
+            return this.options.target == Target.WASM64
+              ? this.module.createI64(resolvedTypeArguments[0].byteSize, 0)
+              : this.module.createI32(resolvedTypeArguments[0].byteSize);
+
+          } else if (functionPrototype.internalName == "load") {
+            this.currentType = resolvedTypeArguments[0];
+            if (k != 1) {
+              this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, expression.range, "1", k.toString());
+              return this.module.createUnreachable();
+            }
+            if (expression.arguments.length != 1) {
+              this.error(DiagnosticCode.Expected_0_arguments_but_got_1, expression.range, "1", expression.arguments.length.toString());
+              return this.module.createUnreachable();
+            }
+            arg0 = this.compileExpression(expression.arguments[0], Type.usize32, ConversionKind.IMPLICIT); // reports
+            this.currentType = resolvedTypeArguments[0];
+            if (!arg0)
+              return this.module.createUnreachable();
+            return this.module.createLoad(resolvedTypeArguments[0].byteSize, resolvedTypeArguments[0].isSignedInteger, arg0, typeToNativeType(resolvedTypeArguments[0]));
+
+          } else if (functionPrototype.internalName == "store") {
+            this.currentType = Type.void;
+            if (k != 1) {
+              this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, expression.range, "1", k.toString());
+              return this.module.createUnreachable();
+            }
+            if (expression.arguments.length != 2) {
+              this.error(DiagnosticCode.Expected_0_arguments_but_got_1, expression.range, "2", expression.arguments.length.toString());
+              return this.module.createUnreachable();
+            }
+            arg0 = this.compileExpression(expression.arguments[0], Type.usize32, ConversionKind.IMPLICIT); // reports
+            this.currentType = Type.void;
+            if (!arg0)
+              return this.module.createUnreachable();
+            arg1 = this.compileExpression(expression.arguments[1], resolvedTypeArguments[0], ConversionKind.IMPLICIT);
+            this.currentType = Type.void;
+            if (!arg1)
+              return this.module.createUnreachable();
+            return this.module.createStore(resolvedTypeArguments[0].byteSize, arg0, arg1, typeToNativeType(resolvedTypeArguments[0]));
+          }
+          this.error(DiagnosticCode.Operation_not_supported, expression.range);
+          return this.module.createUnreachable();
         }
       } else {
         // TODO: infer type arguments from parameter types if omitted
@@ -1458,8 +1517,8 @@ export class Compiler extends DiagnosticEmitter {
 
     this.currentType = functionInstance.returnType;
 
-    let tempLocal: Local;
     if (functionInstance.isBuiltin) {
+      let tempLocal: Local;
       switch (functionInstance.template.internalName) {
 
         case "clz": // i32/i64.clz
@@ -1570,11 +1629,6 @@ export class Compiler extends DiagnosticEmitter {
         case "unreachable":
           return this.module.createUnreachable();
 
-        case "sizeof": // T.size
-          if (this.options.target == Target.WASM64)
-            return this.module.createI64(Math.ceil(functionInstance.typeArguments[0].size / 8), 0);
-          return this.module.createI32(Math.ceil(functionInstance.typeArguments[0].size / 8));
-
         case "isNaN": // value != value
           if (functionInstance.typeArguments[0] == Type.f64) {
             tempLocal = this.currentFunction.addLocal(Type.f64);
@@ -1626,10 +1680,12 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case "assert":
-          return this.module.createIf(
-            this.module.createUnary(UnaryOp.EqzI32, operands[0]),
-            this.module.createUnreachable()
-          );
+          return this.options.noDebug
+            ? this.module.createNop()
+            : this.module.createIf(
+              this.module.createUnary(UnaryOp.EqzI32, operands[0]),
+              this.module.createUnreachable()
+            );
       }
       this.error(DiagnosticCode.Operation_not_supported, reportNode.range);
       return this.module.createUnreachable();

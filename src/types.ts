@@ -29,6 +29,7 @@ export class Type {
 
   kind: TypeKind;
   size: i32;
+  byteSize: i32;
   classType: Class | null;
   nullable: bool = false;
   nullableType: Type | null = null; // cached, of this type
@@ -36,6 +37,7 @@ export class Type {
   constructor(kind: TypeKind, size: i32) {
     this.kind = kind;
     this.size = size;
+    this.byteSize = Math.ceil(<f64>size / 8);
     this.classType = null;
   }
 

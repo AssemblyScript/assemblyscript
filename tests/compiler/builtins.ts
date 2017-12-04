@@ -104,3 +104,20 @@ s = grow_memory(1);
 if (0) unreachable();
 
 assert(true);
+
+sizeof<u8>();
+sizeof<u16>();
+sizeof<u32>();
+sizeof<u64>();
+sizeof<usize>();
+sizeof<bool>();
+sizeof<i8>();
+sizeof<i16>();
+sizeof<i32>();
+sizeof<i64>();
+sizeof<isize>();
+sizeof<f32>();
+sizeof<f64>();
+
+i = load<i32>(4);
+store<i32>(4, i);

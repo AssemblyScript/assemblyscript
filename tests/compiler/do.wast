@@ -77,6 +77,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
   do/loopDo
   do/loopDoInDo
 [program.exports]

@@ -655,6 +655,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
   unary/i
   unary/I
   unary/f

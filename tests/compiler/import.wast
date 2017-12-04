@@ -60,6 +60,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
   export/add
   export/sub
   export/a

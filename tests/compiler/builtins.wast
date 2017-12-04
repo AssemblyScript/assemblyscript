@@ -475,6 +475,54 @@
    )
    (unreachable)
   )
+  (drop
+   (i32.const 1)
+  )
+  (drop
+   (i32.const 2)
+  )
+  (drop
+   (i32.const 4)
+  )
+  (drop
+   (i32.const 8)
+  )
+  (drop
+   (i32.const 4)
+  )
+  (drop
+   (i32.const 1)
+  )
+  (drop
+   (i32.const 1)
+  )
+  (drop
+   (i32.const 2)
+  )
+  (drop
+   (i32.const 4)
+  )
+  (drop
+   (i32.const 8)
+  )
+  (drop
+   (i32.const 4)
+  )
+  (drop
+   (i32.const 4)
+  )
+  (drop
+   (i32.const 8)
+  )
+  (set_global $builtins/i
+   (i32.load
+    (i32.const 4)
+   )
+  )
+  (i32.store
+   (i32.const 4)
+   (get_global $builtins/i)
+  )
  )
 )
 (;
@@ -499,6 +547,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
   builtins/b
   builtins/i
   builtins/I

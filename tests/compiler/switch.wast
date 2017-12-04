@@ -167,6 +167,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
   switch/doSwitch
   switch/doSwitchDefaultFirst
   switch/doSwitchDefaultOmitted

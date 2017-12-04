@@ -1149,19 +1149,21 @@ function initializeBuiltins(program: Program): void {
   addGenericUnaryBuiltin(program, "sqrt", genericFloat);
   addGenericUnaryBuiltin(program, "trunc", genericFloat);
 
-  addBuiltin(program, "current_memory", [], usize);
-  addBuiltin(program, "grow_memory", [ usize ], usize);
-  addBuiltin(program, "unreachable", [], Type.void);
+  addSimpleBuiltin(program, "current_memory", [], usize);
+  addSimpleBuiltin(program, "grow_memory", [ usize ], usize);
+  addSimpleBuiltin(program, "unreachable", [], Type.void);
 
   addGenericUnaryTestBuiltin(program, "isNaN", genericFloat);
   addGenericUnaryTestBuiltin(program, "isFinite", genericFloat);
-  addBuiltin(program, "assert", [ Type.bool ], Type.void);
+  addSimpleBuiltin(program, "assert", [ Type.bool ], Type.void);
 
-  // TODO: load, store, sizeof
-  // sizeof, for example, has varying Ts but really shouldn't provide an instance for each class
+  addGenericAnyBuiltin(program, "sizeof");
+  addGenericAnyBuiltin(program, "load");
+  addGenericAnyBuiltin(program, "store");
 }
 
-function addBuiltin(program: Program, name: string, parameterTypes: Type[], returnType: Type) {
+/** Adds a simple (non-generic) builtin. */
+function addSimpleBuiltin(program: Program, name: string, parameterTypes: Type[], returnType: Type) {
   let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
   prototype.isGeneric = false;
   prototype.isBuiltin = true;
@@ -1173,6 +1175,7 @@ function addBuiltin(program: Program, name: string, parameterTypes: Type[], retu
   program.elements.set(name, prototype);
 }
 
+/** Adds a generic unary builtin that takes and returns a value of its generic type. */
 function addGenericUnaryBuiltin(program: Program, name: string, types: Type[]): void {
   let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
   prototype.isGeneric = true;
@@ -1184,6 +1187,7 @@ function addGenericUnaryBuiltin(program: Program, name: string, types: Type[]): 
   program.elements.set(name, prototype);
 }
 
+/** Adds a generic binary builtin that takes two and returns a value of its generic type. */
 function addGenericBinaryBuiltin(program: Program, name: string, types: Type[]): void {
   let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
   prototype.isGeneric = true;
@@ -1195,6 +1199,7 @@ function addGenericBinaryBuiltin(program: Program, name: string, types: Type[]):
   program.elements.set(name, prototype);
 }
 
+/** Adds a generic unary builtin that alwways returns `bool`. */
 function addGenericUnaryTestBuiltin(program: Program, name: string, types: Type[]): void {
   let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
   prototype.isGeneric = true;
@@ -1204,4 +1209,13 @@ function addGenericUnaryTestBuiltin(program: Program, name: string, types: Type[
     prototype.instances.set(typeName, new Function(prototype, name + "<" + typeName + ">", [ types[i] ], [ new Parameter("value", types[i], null) ], Type.bool, null));
   }
   program.elements.set(name, prototype);
+}
+
+/** Adds a special generic builtin that takes any type argument. */
+function addGenericAnyBuiltin(program: Program, name: string): void {
+  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
+  prototype.isGeneric = true;
+  prototype.isBuiltin = true;
+  program.elements.set(name, prototype);
+  // instances are hard coded in compiler.ts
 }

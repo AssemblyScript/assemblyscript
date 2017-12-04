@@ -161,6 +161,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
 [program.exports]
   
 ;)

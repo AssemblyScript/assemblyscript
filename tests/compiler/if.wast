@@ -68,6 +68,9 @@
   isNaN
   isFinite
   assert
+  sizeof
+  load
+  store
   if/ifThenElse
   if/ifThen
   if/ifThenElseBlock
