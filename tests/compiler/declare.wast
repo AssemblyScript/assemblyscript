@@ -25,12 +25,14 @@
   current_memory
   grow_memory
   unreachable
+  load
+  store
+  reinterpret
+  select
+  sizeof
   isNaN
   isFinite
   assert
-  sizeof
-  load
-  store
   declare/external
 [program.exports]
   declare/external

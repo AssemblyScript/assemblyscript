@@ -74,12 +74,14 @@
   current_memory
   grow_memory
   unreachable
+  load
+  store
+  reinterpret
+  select
+  sizeof
   isNaN
   isFinite
   assert
-  sizeof
-  load
-  store
   do/loopDo
   do/loopDoInDo
 [program.exports]

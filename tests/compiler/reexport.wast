@@ -59,12 +59,14 @@
   current_memory
   grow_memory
   unreachable
+  load
+  store
+  reinterpret
+  select
+  sizeof
   isNaN
   isFinite
   assert
-  sizeof
-  load
-  store
   export/add
   export/sub
   export/a

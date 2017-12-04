@@ -453,6 +453,82 @@
     )
    )
   )
+  (set_global $builtins/i
+   (i32.load
+    (i32.const 8)
+   )
+  )
+  (i32.store
+   (i32.const 8)
+   (get_global $builtins/i)
+  )
+  (set_global $builtins/I
+   (i64.load
+    (i32.const 8)
+   )
+  )
+  (i64.store
+   (i32.const 8)
+   (get_global $builtins/I)
+  )
+  (set_global $builtins/f
+   (f32.load
+    (i32.const 8)
+   )
+  )
+  (f32.store
+   (i32.const 8)
+   (get_global $builtins/f)
+  )
+  (set_global $builtins/F
+   (f64.load
+    (i32.const 8)
+   )
+  )
+  (f64.store
+   (i32.const 8)
+   (get_global $builtins/F)
+  )
+  (drop
+   (i32.reinterpret/f32
+    (f32.const 1.25)
+   )
+  )
+  (drop
+   (f32.reinterpret/i32
+    (i32.const 25)
+   )
+  )
+  (drop
+   (i64.reinterpret/f64
+    (f64.const 1.25)
+   )
+  )
+  (drop
+   (f64.reinterpret/i64
+    (i64.const 25)
+   )
+  )
+  (set_global $builtins/i
+   (i32.reinterpret/f32
+    (f32.const 1.25)
+   )
+  )
+  (set_global $builtins/f
+   (f32.reinterpret/i32
+    (i32.const 25)
+   )
+  )
+  (set_global $builtins/I
+   (i64.reinterpret/f64
+    (f64.const 1.25)
+   )
+  )
+  (set_global $builtins/F
+   (f64.reinterpret/i64
+    (i64.const 25)
+   )
+  )
   (drop
    (current_memory)
   )
@@ -467,6 +543,62 @@
   (set_global $builtins/s
    (grow_memory
     (i32.const 1)
+   )
+  )
+  (drop
+   (select
+    (i32.const 10)
+    (i32.const 20)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (select
+    (i64.const 100)
+    (i64.const 200)
+    (i32.const 0)
+   )
+  )
+  (drop
+   (select
+    (f32.const 1.25)
+    (f32.const 2.5)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (select
+    (f64.const 12.5)
+    (f64.const 25)
+    (i32.const 0)
+   )
+  )
+  (set_global $builtins/i
+   (select
+    (i32.const 10)
+    (i32.const 20)
+    (i32.const 1)
+   )
+  )
+  (set_global $builtins/I
+   (select
+    (i64.const 100)
+    (i64.const 200)
+    (i32.const 0)
+   )
+  )
+  (set_global $builtins/f
+   (select
+    (f32.const 1.25)
+    (f32.const 2.5)
+    (i32.const 1)
+   )
+  )
+  (set_global $builtins/F
+   (select
+    (f64.const 12.5)
+    (f64.const 25)
+    (i32.const 0)
    )
   )
   (if
@@ -517,42 +649,6 @@
   )
   (drop
    (i32.const 8)
-  )
-  (set_global $builtins/i
-   (i32.load
-    (i32.const 8)
-   )
-  )
-  (i32.store
-   (i32.const 8)
-   (get_global $builtins/i)
-  )
-  (set_global $builtins/I
-   (i64.load
-    (i32.const 8)
-   )
-  )
-  (i64.store
-   (i32.const 8)
-   (get_global $builtins/I)
-  )
-  (set_global $builtins/f
-   (f32.load
-    (i32.const 8)
-   )
-  )
-  (f32.store
-   (i32.const 8)
-   (get_global $builtins/f)
-  )
-  (set_global $builtins/F
-   (f64.load
-    (i32.const 8)
-   )
-  )
-  (f64.store
-   (i32.const 8)
-   (get_global $builtins/F)
   )
   (if
    (f64.eq
@@ -649,12 +745,14 @@
   current_memory
   grow_memory
   unreachable
+  load
+  store
+  reinterpret
+  select
+  sizeof
   isNaN
   isFinite
   assert
-  sizeof
-  load
-  store
   builtins/b
   builtins/i
   builtins/I

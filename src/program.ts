@@ -1111,6 +1111,9 @@ export class Interface extends Class {
   }
 }
 
+const builtinIntTypes: Type[] = [ Type.i32, Type.i64 ];
+const builtinFloatTypes: Type[] = [ Type.f32, Type.f64 ];
+
 function initializeBuiltins(program: Program): void {
 
   // types
@@ -1134,37 +1137,37 @@ function initializeBuiltins(program: Program): void {
 
   // functions
 
-  const genericInt: Type[] = [ Type.i32, Type.i64 ];
-  const genericFloat: Type[] = [ Type.f32, Type.f64 ];
   const usize: Type = program.target == Target.WASM64 ? Type.usize64 : Type.usize32;
 
-  addGenericUnaryBuiltin(program, "clz", genericInt);
-  addGenericUnaryBuiltin(program, "ctz", genericInt);
-  addGenericUnaryBuiltin(program, "popcnt", genericInt);
-  addGenericBinaryBuiltin(program, "rotl", genericInt);
-  addGenericBinaryBuiltin(program, "rotr", genericInt);
+  addGenericUnaryBuiltin(program, "clz", builtinIntTypes);
+  addGenericUnaryBuiltin(program, "ctz", builtinIntTypes);
+  addGenericUnaryBuiltin(program, "popcnt", builtinIntTypes);
+  addGenericBinaryBuiltin(program, "rotl", builtinIntTypes);
+  addGenericBinaryBuiltin(program, "rotr", builtinIntTypes);
 
-  addGenericUnaryBuiltin(program, "abs", genericFloat);
-  addGenericUnaryBuiltin(program, "ceil", genericFloat);
-  addGenericBinaryBuiltin(program, "copysign", genericFloat);
-  addGenericUnaryBuiltin(program, "floor", genericFloat);
-  addGenericBinaryBuiltin(program, "max", genericFloat);
-  addGenericBinaryBuiltin(program, "min", genericFloat);
-  addGenericUnaryBuiltin(program, "nearest", genericFloat);
-  addGenericUnaryBuiltin(program, "sqrt", genericFloat);
-  addGenericUnaryBuiltin(program, "trunc", genericFloat);
+  addGenericUnaryBuiltin(program, "abs", builtinFloatTypes);
+  addGenericUnaryBuiltin(program, "ceil", builtinFloatTypes);
+  addGenericBinaryBuiltin(program, "copysign", builtinFloatTypes);
+  addGenericUnaryBuiltin(program, "floor", builtinFloatTypes);
+  addGenericBinaryBuiltin(program, "max", builtinFloatTypes);
+  addGenericBinaryBuiltin(program, "min", builtinFloatTypes);
+  addGenericUnaryBuiltin(program, "nearest", builtinFloatTypes);
+  addGenericUnaryBuiltin(program, "sqrt", builtinFloatTypes);
+  addGenericUnaryBuiltin(program, "trunc", builtinFloatTypes);
 
   addSimpleBuiltin(program, "current_memory", [], usize);
   addSimpleBuiltin(program, "grow_memory", [ usize ], usize);
   addSimpleBuiltin(program, "unreachable", [], Type.void);
 
-  addGenericUnaryTestBuiltin(program, "isNaN", genericFloat);
-  addGenericUnaryTestBuiltin(program, "isFinite", genericFloat);
-  addSimpleBuiltin(program, "assert", [ Type.bool ], Type.void);
-
-  addGenericAnyBuiltin(program, "sizeof");
   addGenericAnyBuiltin(program, "load");
   addGenericAnyBuiltin(program, "store");
+  addGenericAnyBuiltin(program, "reinterpret");
+  addGenericAnyBuiltin(program, "select");
+
+  addGenericAnyBuiltin(program, "sizeof");
+  addGenericUnaryTestBuiltin(program, "isNaN", builtinFloatTypes);
+  addGenericUnaryTestBuiltin(program, "isFinite", builtinFloatTypes);
+  addSimpleBuiltin(program, "assert", [ Type.bool ], Type.void);
 }
 
 /** Adds a simple (non-generic) builtin. */

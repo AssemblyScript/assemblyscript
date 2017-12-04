@@ -1466,7 +1466,7 @@ export class Compiler extends DiagnosticEmitter {
 
         functionInstance = <Function | null>functionPrototype.instances.get(sb.join(","));
         if (!functionInstance) {
-          let arg0: ExpressionRef, arg1: ExpressionRef;
+          let arg0: ExpressionRef, arg1: ExpressionRef, arg2: ExpressionRef;
 
           if (functionPrototype.internalName == "sizeof") { // no parameters
             this.currentType = this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32;
@@ -1483,11 +1483,11 @@ export class Compiler extends DiagnosticEmitter {
               : this.module.createI32(resolvedTypeArguments[0].byteSize);
 
           } else if (functionPrototype.internalName == "load") {
-            this.currentType = resolvedTypeArguments[0];
             if (k != 1) {
               this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, expression.range, "1", k.toString());
               return this.module.createUnreachable();
             }
+            this.currentType = resolvedTypeArguments[0];
             if (expression.arguments.length != 1) {
               this.error(DiagnosticCode.Expected_0_arguments_but_got_1, expression.range, "1", expression.arguments.length.toString());
               return this.module.createUnreachable();
@@ -1517,6 +1517,60 @@ export class Compiler extends DiagnosticEmitter {
             if (!arg1)
               return this.module.createUnreachable();
             return this.module.createStore(resolvedTypeArguments[0].byteSize, arg0, arg1, typeToNativeType(resolvedTypeArguments[0]));
+
+          } else if (functionPrototype.internalName == "reinterpret") {
+            if (k != 2) {
+              this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, expression.range, "2", k.toString());
+              return this.module.createUnreachable();
+            }
+            this.currentType = resolvedTypeArguments[1];
+            if (expression.arguments.length != 1) {
+              this.error(DiagnosticCode.Expected_0_arguments_but_got_1, expression.range, "1", expression.arguments.length.toString());
+              return this.module.createUnreachable();
+            }
+
+            if (this.currentType == Type.f64) {
+              arg0 = this.compileExpression(expression.arguments[0], Type.i64); // reports
+              this.currentType = Type.f64;
+              return this.module.createUnary(UnaryOp.ReinterpretI64, arg0);
+            }
+            if (this.currentType == Type.f32) {
+              arg0 = this.compileExpression(expression.arguments[0], Type.i32); // reports
+              this.currentType = Type.f32;
+              return this.module.createUnary(UnaryOp.ReinterpretI32, arg0);
+            }
+            if (this.currentType.isLongInteger) {
+              arg0 = this.compileExpression(expression.arguments[0], Type.f64); // reports
+              this.currentType = Type.i64;
+              return this.module.createUnary(UnaryOp.ReinterpretF64, arg0);
+            }
+            if (this.currentType.isAnyInteger) {
+              arg0 = this.compileExpression(expression.arguments[0], Type.f32); // reports
+              this.currentType = Type.i32;
+              return this.module.createUnary(UnaryOp.ReinterpretF32, arg0);
+            }
+
+          } else if (functionPrototype.internalName == "select") {
+            if (k != 1) {
+              this.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, expression.range, "1", k.toString());
+              return this.module.createUnreachable();
+            }
+            this.currentType = resolvedTypeArguments[0];
+            if (expression.arguments.length != 3) {
+              this.error(DiagnosticCode.Expected_0_arguments_but_got_1, expression.range, "3", expression.arguments.length.toString());
+              return this.module.createUnreachable();
+            }
+            arg0 = this.compileExpression(expression.arguments[0], this.currentType); // reports
+            if (!arg0)
+              return this.module.createUnreachable();
+            arg1 = this.compileExpression(expression.arguments[1], this.currentType); // reports
+            if (!arg1)
+              return this.module.createUnreachable();
+            arg2 = this.compileExpression(expression.arguments[2], Type.i32); // reports
+            this.currentType = resolvedTypeArguments[0];
+            if (!arg2)
+              return this.module.createUnreachable();
+            return this.module.createSelect(arg0, arg1, arg2);
           }
           this.error(DiagnosticCode.Operation_not_supported, expression.range);
           return this.module.createUnreachable();

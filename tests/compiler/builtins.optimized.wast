@@ -159,22 +159,6 @@
     )
    )
   )
-  (drop
-   (current_memory)
-  )
-  (drop
-   (grow_memory
-    (i32.const 1)
-   )
-  )
-  (set_global $builtins/s
-   (current_memory)
-  )
-  (set_global $builtins/s
-   (grow_memory
-    (i32.const 1)
-   )
-  )
   (set_global $builtins/i
    (i32.load
     (i32.const 8)
@@ -210,6 +194,46 @@
   (f64.store
    (i32.const 8)
    (get_global $builtins/F)
+  )
+  (set_global $builtins/i
+   (i32.const 1067450368)
+  )
+  (set_global $builtins/f
+   (f32.const 3.5032461608120427e-44)
+  )
+  (set_global $builtins/I
+   (i64.const 4608308318706860032)
+  )
+  (set_global $builtins/F
+   (f64.const 1.24e-322)
+  )
+  (drop
+   (current_memory)
+  )
+  (drop
+   (grow_memory
+    (i32.const 1)
+   )
+  )
+  (set_global $builtins/s
+   (current_memory)
+  )
+  (set_global $builtins/s
+   (grow_memory
+    (i32.const 1)
+   )
+  )
+  (set_global $builtins/i
+   (i32.const 10)
+  )
+  (set_global $builtins/I
+   (i64.const 200)
+  )
+  (set_global $builtins/f
+   (f32.const 1.25)
+  )
+  (set_global $builtins/F
+   (f64.const 25)
   )
   (if
    (f32.eq
