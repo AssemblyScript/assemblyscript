@@ -47,6 +47,7 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   const program = parser.finish();
   const module = Compiler.compile(program);
   const actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
+  let actualOptimized: string | null = null;
   const fixture = path.basename(filename, ".ts") + ".wast";
 
   if (module.validate()) {
@@ -58,12 +59,18 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
       process.exitCode = 1;
       console.log(chalk.default.red("interpret ERROR"));
     }
+    module.optimize();
+    actualOptimized = module.toText();
   } else
-  console.log(chalk.default.red("validate ERROR"));
+    console.log(chalk.default.red("validate ERROR"));
 
   if (isCreate) {
     fs.writeFileSync(__dirname + "/compiler/" + fixture, actual, { encoding: "utf8" });
     console.log("Created");
+    if (actualOptimized != null) {
+      fs.writeFileSync(__dirname + "/compiler/" + path.basename(filename, ".ts") + ".optimized.wast", actualOptimized, { encoding: "utf8" });
+      console.log("Created optimized");
+    }
   } else {
     const expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
     const diffs = diff("compiler/" + fixture, expected, actual);

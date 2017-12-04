@@ -1123,6 +1123,9 @@ export class Compiler extends DiagnosticEmitter {
     let right: ExpressionRef;
     let compound: Token = 0;
 
+    let condition: ExpressionRef;
+    let tempLocal: Local;
+
     switch (expression.operator) {
 
       case Token.LESSTHAN:
@@ -1339,6 +1342,38 @@ export class Compiler extends DiagnosticEmitter {
            ? BinaryOp.XorI64
            : BinaryOp.XorI32;
         break;
+
+      case Token.AMPERSAND_AMPERSAND: // left && right
+        left = this.compileExpression(expression.left, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        right = this.compileExpression(expression.right, this.currentType);
+        tempLocal = this.currentFunction.addLocal(this.currentType);
+        return this.module.createIf(
+          this.currentType.isLongInteger
+            ? this.module.createBinary(BinaryOp.NeI64, this.module.createTeeLocal(tempLocal.index, left), this.module.createI64(0, 0))
+            : this.currentType == Type.f64
+            ? this.module.createBinary(BinaryOp.NeF64, this.module.createTeeLocal(tempLocal.index, left), this.module.createF64(0))
+            : this.currentType == Type.f32
+            ? this.module.createBinary(BinaryOp.NeF32, this.module.createTeeLocal(tempLocal.index, left), this.module.createF32(0))
+            : this.module.createTeeLocal(tempLocal.index, left),
+          right,
+          this.module.createGetLocal(tempLocal.index, typeToNativeType(tempLocal.type))
+        );
+
+      case Token.BAR_BAR: // left || right
+        left = this.compileExpression(expression.left, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        right = this.compileExpression(expression.right, this.currentType);
+        tempLocal = this.currentFunction.addLocal(this.currentType);
+        return this.module.createIf(
+          this.currentType.isLongInteger
+            ? this.module.createBinary(BinaryOp.NeI64, this.module.createTeeLocal(tempLocal.index, left), this.module.createI64(0, 0))
+            : this.currentType == Type.f64
+            ? this.module.createBinary(BinaryOp.NeF64, this.module.createTeeLocal(tempLocal.index, left), this.module.createF64(0))
+            : this.currentType == Type.f32
+            ? this.module.createBinary(BinaryOp.NeF32, this.module.createTeeLocal(tempLocal.index, left), this.module.createF32(0))
+            : this.module.createTeeLocal(tempLocal.index, left),
+          this.module.createGetLocal(tempLocal.index, typeToNativeType(tempLocal.type)),
+          right
+        );
 
       default:
         throw new Error("not implemented");
@@ -2010,7 +2045,7 @@ function typeToNativeZero(module: Module, type: Type): ExpressionRef {
        : module.createI32(0);
 }
 
-function typeToBinaryenOne(module: Module, type: Type): ExpressionRef {
+function typeToNativeOne(module: Module, type: Type): ExpressionRef {
   return type.kind == TypeKind.F32
        ? module.createF32(1)
        : type.kind == TypeKind.F64

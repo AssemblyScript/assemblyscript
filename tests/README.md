@@ -16,7 +16,7 @@ $>npm run test:parser -- --create
 Compiler
 --------
 
-Tests consist of a test case that is compiled to a module, converted to text format and then compared to its respective fixture.
+Tests consist of a test case that is compiled to a module, validated, interpreted, converted to text format and then compared to its respective fixture.
 
 ```
 $> npm run test:compiler [case name]
