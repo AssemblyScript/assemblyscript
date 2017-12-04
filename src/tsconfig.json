@@ -40,7 +40,7 @@
   ],
   "assembly": {
     "exclude": [
-      "glue/js.t.ts",
+      "glue/js.d.ts",
       "glue/js.ts"
     ],
     "include": [

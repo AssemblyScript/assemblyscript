@@ -55,4 +55,4 @@ export function compile(parser: Parser): Module {
   return Compiler.compile(program);
 }
 
-export { formatDiagnosticMessage as formatDiagnostic } from "./diagnostics";
+export { DiagnosticMessage, formatDiagnosticMessage as formatDiagnostic } from "./diagnostics";

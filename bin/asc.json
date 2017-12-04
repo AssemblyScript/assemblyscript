@@ -1,0 +1,12 @@
+{
+  "version": {
+    "desc": "Print the compiler's version.",
+    "type": "boolean",
+    "aliases": [ "v" ]
+  },
+  "help": {
+    "desc": "Print this message.",
+    "type": "boolean",
+    "aliases": [ "h" ]
+  }
+}
