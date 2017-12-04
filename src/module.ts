@@ -448,7 +448,7 @@ export class Module {
     return _BinaryenReturn(this.ref, expression);
   }
 
-  createSelect(condition: ExpressionRef, ifTrue: ExpressionRef, ifFalse: ExpressionRef): ExpressionRef {
+  createSelect(ifTrue: ExpressionRef, ifFalse: ExpressionRef, condition: ExpressionRef): ExpressionRef {
     if (this.noEmit) return 0;
     return _BinaryenSelect(this.ref, condition, ifTrue, ifFalse);
   }

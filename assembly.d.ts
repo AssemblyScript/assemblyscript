@@ -66,7 +66,7 @@ declare function current_memory(): i32;
 /** Grows linear memory by a given unsigned delta of pages. One page is 64kb. Returns the previous memory size in units of pages or `-1` on failure. */
 declare function grow_memory(value: i32): i32;
 /** Emits an unreachable operation that results in a runtime error when executed. */
-declare function unreachable(): void;
+declare function unreachable(): any; // sic
 
 /** Loads a value of the specified type from memory. */
 declare function load<T>(offset: usize): T;

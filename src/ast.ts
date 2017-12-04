@@ -19,7 +19,7 @@
  │ ├ ParenthesizedExpression
  │ ├ NewExpression
  │ ├ PropertyAccessExpression
- │ ├ SelectExpression
+ │ ├ TernaryExpression
  │ └ UnaryExpression
  │   ├ UnaryPostfixExpression
  │   └ UnaryPrefixExpression
@@ -101,7 +101,7 @@ export enum NodeKind {
   NULL,
   PARENTHESIZED,
   PROPERTYACCESS,
-  SELECT,
+  TERNARY,
   SUPER,
   THIS,
   TRUE,
@@ -302,8 +302,8 @@ export abstract class Expression extends Node {
     return expr;
   }
 
-  static createSelect(condition: Expression, ifThen: Expression, ifElse: Expression, range: Range): SelectExpression {
-    const expr: SelectExpression = new SelectExpression();
+  static createTernary(condition: Expression, ifThen: Expression, ifElse: Expression, range: Range): TernaryExpression {
+    const expr: TernaryExpression = new TernaryExpression();
     expr.range = range;
     (expr.condition = condition).parent = expr;
     (expr.ifThen = ifThen).parent = expr;
@@ -549,9 +549,9 @@ export class RegexpLiteralExpression extends LiteralExpression {
   }
 }
 
-export class SelectExpression extends Expression {
+export class TernaryExpression extends Expression {
 
-  kind = NodeKind.SELECT;
+  kind = NodeKind.TERNARY;
   condition: Expression;
   ifThen: Expression;
   ifElse: Expression;

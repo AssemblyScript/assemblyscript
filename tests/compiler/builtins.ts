@@ -121,3 +121,14 @@ sizeof<f64>();
 
 i = load<i32>(4);
 store<i32>(4, i);
+
+if (NaN == NaN)
+  unreachable();
+if (!isNaN<f32>(NaN))
+  unreachable();
+if (isFinite<f32>(NaN))
+  unreachable();
+if (isFinite<f32>(Infinity))
+  unreachable();
+if (!isFinite<f64>(0))
+  unreachable();

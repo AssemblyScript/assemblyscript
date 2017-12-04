@@ -59,7 +59,7 @@ import {
   NewExpression,
   ParenthesizedExpression,
   PropertyAccessExpression,
-  SelectExpression,
+  TernaryExpression,
   StringLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
@@ -927,8 +927,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.compilePropertyAccessExpression(<PropertyAccessExpression>expression, contextualType);
         break;
 
-      case NodeKind.SELECT:
-        expr = this.compileSelectExpression(<SelectExpression>expression, contextualType);
+      case NodeKind.TERNARY:
+        expr = this.compileTernaryExpression(<TernaryExpression>expression, contextualType);
         break;
 
       case NodeKind.UNARYPOSTFIX:
@@ -1482,6 +1482,7 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles a call to a function. If an instance method, `this` is the first element in `argumentExpressions`. */
   compileCall(functionInstance: Function, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
+    const previousType: Type = this.currentType;
 
     // validate and compile arguments
     const parameters: Parameter[] = functionInstance.parameters;
@@ -1627,6 +1628,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createHost(HostOp.GrowMemory, null, operands);
 
         case "unreachable":
+          this.currentType = previousType;
           return this.module.createUnreachable();
 
         case "isNaN": // value != value
@@ -1645,35 +1647,35 @@ export class Compiler extends DiagnosticEmitter {
           }
           break;
 
-        case "isFinite": // value != value ? false : abs(value) != Infinity
+        case "isFinite": // v=[abs(value) != Infinity, false]; return value == value ? v[0] : v[1]
           if (functionInstance.typeArguments[0] == Type.f64) {
             tempLocal = this.currentFunction.addLocal(Type.f64);
             return this.module.createSelect(
               this.module.createBinary(BinaryOp.NeF64,
-                this.module.createTeeLocal(tempLocal.index, operands[0]),
-                this.module.createGetLocal(tempLocal.index, NativeType.F64)
-              ),
-              this.module.createI32(0),
-              this.module.createBinary(BinaryOp.NeF64,
                 this.module.createUnary(UnaryOp.AbsF64,
-                  this.module.createGetLocal(tempLocal.index, NativeType.F64)
+                  this.module.createTeeLocal(tempLocal.index, operands[0])
                 ),
                 this.module.createF64(Infinity)
+              ),
+              this.module.createI32(0),
+              this.module.createBinary(BinaryOp.EqF64,
+                this.module.createGetLocal(tempLocal.index, NativeType.F64),
+                this.module.createGetLocal(tempLocal.index, NativeType.F64)
               )
             );
           } else if (functionInstance.typeArguments[0] == Type.f32) {
             tempLocal = this.currentFunction.addLocal(Type.f32);
             return this.module.createSelect(
               this.module.createBinary(BinaryOp.NeF32,
-                this.module.createTeeLocal(tempLocal.index, operands[0]),
-                this.module.createGetLocal(tempLocal.index, NativeType.F32)
-              ),
-              this.module.createI32(0),
-              this.module.createBinary(BinaryOp.NeF32,
                 this.module.createUnary(UnaryOp.AbsF32,
-                  this.module.createGetLocal(tempLocal.index, NativeType.F32)
+                  this.module.createTeeLocal(tempLocal.index, operands[0])
                 ),
                 this.module.createF32(Infinity)
+              ),
+              this.module.createI32(0),
+              this.module.createBinary(BinaryOp.EqF32,
+                this.module.createGetLocal(tempLocal.index, NativeType.F32),
+                this.module.createGetLocal(tempLocal.index, NativeType.F32)
               )
             );
           }
@@ -1845,11 +1847,11 @@ export class Compiler extends DiagnosticEmitter {
     throw new Error("not implemented");
   }
 
-  compileSelectExpression(expression: SelectExpression, contextualType: Type): ExpressionRef {
+  compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {
     const condition: ExpressionRef = this.compileExpression(expression.condition, Type.i32);
     const ifThen: ExpressionRef = this.compileExpression(expression.ifThen, contextualType);
     const ifElse: ExpressionRef = this.compileExpression(expression.ifElse, contextualType);
-    return this.module.createSelect(condition, ifThen, ifElse);
+    return this.module.createIf(condition, ifThen, ifElse);
   }
 
   compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type): ExpressionRef {

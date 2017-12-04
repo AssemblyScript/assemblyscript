@@ -1456,7 +1456,7 @@ export class Parser extends DiagnosticEmitter {
           this.error(DiagnosticCode.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access, expr.range);
         expr = Expression.createUnaryPostfix(token, expr, tn.range(startPos, tn.pos));
 
-      // SelectExpression
+      // TernaryExpression
       } else if (token == Token.QUESTION) {
         const ifThen: Expression | null = this.parseExpression(tn);
         if (!ifThen)
@@ -1465,7 +1465,7 @@ export class Parser extends DiagnosticEmitter {
           const ifElse: Expression | null = this.parseExpression(tn);
           if (!ifElse)
             return null;
-          expr = Expression.createSelect(<Expression>expr, <Expression>ifThen, <Expression>ifElse, tn.range(startPos, tn.pos));
+          expr = Expression.createTernary(<Expression>expr, <Expression>ifThen, <Expression>ifElse, tn.range(startPos, tn.pos));
         } else {
           this.error(DiagnosticCode._0_expected, tn.range(), ":");
           return null;

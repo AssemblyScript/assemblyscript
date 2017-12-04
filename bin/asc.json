@@ -8,5 +8,14 @@
     "desc": "Print this message.",
     "type": "boolean",
     "aliases": [ "h" ]
+  },
+  "optimize": {
+    "desc": "Optimize the module.",
+    "type": "boolean",
+    "aliases": [ "O" ]
+  },
+  "validate": {
+    "desc": "Validate the module.",
+    "type": "boolean"
   }
 }

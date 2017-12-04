@@ -8,6 +8,7 @@ import * as as from "../src";
 
 var conf: { [key: string]: { desc: string, type: string, aliases: string[], default: any } } = require("./asc.json");
 var opts: minimist.Opts = {};
+
 Object.keys(conf).forEach(key => {
   var opt = conf[key];
   if (opt.aliases)
@@ -80,7 +81,7 @@ let diagnostic: as.DiagnosticMessage | null;
 let hasErrors: boolean = false;
 
 while ((diagnostic = as.nextDiagnostic(parser)) != null) {
-  console.error(as.formatDiagnostic(diagnostic, process.stdout.isTTY, true));
+  console.error(as.formatDiagnostic(diagnostic, process.stderr.isTTY, true));
   if (as.isError(diagnostic))
     hasErrors = true;
 }
@@ -89,5 +90,27 @@ if (hasErrors)
   process.exit(1);
 
 const module = as.compile(parser);
+
+hasErrors = false;
+while ((diagnostic = as.nextDiagnostic(parser)) != null) {
+  console.error(as.formatDiagnostic(diagnostic, process.stderr.isTTY, true));
+  if (as.isError(diagnostic))
+    hasErrors = true;
+}
+
+if (hasErrors) {
+  module.dispose();
+  process.exit(1);
+}
+
+if (args["validate"])
+  if (!module.validate()) {
+    module.dispose();
+    process.exit(1);
+  }
+
+if (args["optimize"])
+  module.optimize();
+
 _BinaryenModulePrint(module.ref);
 module.dispose();
