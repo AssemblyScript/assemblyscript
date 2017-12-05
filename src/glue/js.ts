@@ -12,7 +12,12 @@ globalScope["select"] = function select<T>(ifTrue: T, ifFalse: T, condition: boo
   return condition ? ifTrue : ifFalse;
 };
 
-const binaryen = require("binaryen");
+let binaryen: any;
+try {
+  binaryen = require("binaryen");
+} catch (e) {
+  binaryen = globalScope["Binaryen"];
+}
 for (const key in binaryen)
   if (/^_(?:Binaryen|Relooper|malloc$|free$)/.test(key))
     globalScope[key] = binaryen[key];

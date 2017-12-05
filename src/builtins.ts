@@ -5,7 +5,7 @@ import { Type } from "./types";
 import { ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType } from "./module";
 import { Program, FunctionPrototype, Local } from "./program";
 
-/** Initializes the specified program with builtin functions. */
+/** Initializes the specified program with built-in functions. */
 export function initialize(program: Program): void {
   addFunction(program, "clz", true);
   addFunction(program, "ctz", true);
@@ -34,15 +34,15 @@ export function initialize(program: Program): void {
   addFunction(program, "assert");
 }
 
-/** Adds a builtin function to the specified program. */
+/** Adds a built-in function to the specified program. */
 function addFunction(program: Program, name: string, isGeneric: bool = false): void {
   let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
   prototype.isGeneric = isGeneric;
-  prototype.isBuiltin = true;
+  prototype.isBuiltIn = true;
   program.elements.set(name, prototype);
 }
 
-/** Compiles a call to a builtin function. */
+/** Compiles a call to a built-in function. */
 export function compileCall(compiler: Compiler, internalName: string, typeArguments: Type[], operands: Expression[], reportNode: Node): ExpressionRef {
   const usizeType: Type = select<Type>(Type.usize64, Type.usize32, compiler.options.target == Target.WASM64);
 
@@ -417,7 +417,7 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
   return 0;
 }
 
-/** Validates a call to a builtin function. */
+/** Validates a call to a built-in function. */
 function validateCall(compiler: Compiler, typeArguments: Type[], expectedTypeArguments: i32, operands: Expression[], expectedOperands: i32, reportNode: Node): bool {
   if (typeArguments.length != expectedTypeArguments) {
     compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, expectedTypeArguments.toString(10), typeArguments.length.toString(10));

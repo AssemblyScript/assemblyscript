@@ -17,14 +17,16 @@
     "diff": "^3.4.0",
     "glob": "^7.1.2",
     "long": "^3.2.0",
+    "ts-loader": "^3.2.0",
     "ts-node": "^3.3.0",
-    "typescript": "^2.6.2"
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
   },
   "bin": {
     "asc": "bin/asc.js"
   },
   "scripts": {
-    "build": "tsc -P src",
+    "build": "webpack",
     "test:parser": "ts-node -P src tests/parser",
     "test:compiler": "ts-node -P src tests/compiler",
     "test": "npm run test:parser && npm run test:compiler"

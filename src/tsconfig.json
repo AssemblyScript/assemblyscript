@@ -16,10 +16,13 @@
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "outDir": "../out"
+    "preserveConstEnums": true,
+    "outDir": "../out",
+    "sourceMap": true
   },
   "files": [
     "ast.ts",
+    "builtins.ts",
     "compiler.ts",
     "diagnosticMessages.generated.ts",
     "diagnostics.ts",

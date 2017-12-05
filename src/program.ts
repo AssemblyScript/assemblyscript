@@ -625,8 +625,6 @@ export class Program extends DiagnosticEmitter {
       return null;
     }
 
-    let ret: Element;
-
     // local or global name
     if (expression.kind == NodeKind.IDENTIFIER) {
       const name: string = (<IdentifierExpression>expression).name;
@@ -708,7 +706,7 @@ export abstract class Element {
   internalName: string;
   isCompiled: bool = false;
   isImport: bool = false;
-  isBuiltin: bool = false;
+  isBuiltIn: bool = false;
   isDeclare: bool = false;
 
   constructor(program: Program, internalName: string) {
@@ -825,7 +823,7 @@ export class FunctionPrototype extends Element {
     super(program, internalName);
     this.declaration = declaration;
     this.classPrototype = classPrototype;
-    this.isGeneric = declaration ? declaration.typeParameters.length > 0 : false; // builtins set this
+    this.isGeneric = declaration ? declaration.typeParameters.length > 0 : false; // built-ins set this
   }
 
   get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't file-level exports */ false; }
@@ -942,7 +940,7 @@ export class Function extends Element {
     this.parameters = parameters;
     this.returnType = returnType;
     this.instanceMethodOf = instanceMethodOf;
-    this.isBuiltin = prototype.isBuiltin;
+    this.isBuiltIn = prototype.isBuiltIn;
     this.isDeclare = prototype.isDeclare;
     let localIndex: i32 = 0;
     if (instanceMethodOf) {
@@ -1053,7 +1051,7 @@ export class ClassPrototype extends Namespace {
     let resolvedTypeArguments: Type[] | null;
     if (this.isGeneric) {
       if (!this.declaration)
-        throw new Error("not implemented"); // generic builtin
+        throw new Error("not implemented"); // generic built-in
       resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
       if (!resolvedTypeArguments)
         return null;
@@ -1091,7 +1089,7 @@ export class Class extends Namespace {
 
     // apply instance-specific contextual type arguments
     const declaration: ClassDeclaration | null = this.template.declaration;
-    if (declaration) { // irrelevant for builtins
+    if (declaration) { // irrelevant for built-ins
       const typeParameters: TypeParameter[] = declaration.typeParameters;
       if (typeParameters.length != typeArguments.length)
         throw new Error("unexpected type argument count mismatch");

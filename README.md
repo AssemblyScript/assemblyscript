@@ -25,3 +25,32 @@ Side effects:
 - Good fire test for the compiler
 - Good benchmark when comparing both versions
 - Benefits standard library design ideas
+
+Getting started
+---------------
+
+If you'd like to try out NEXT today or even plan to contribute, this is how you do it:
+
+```
+$> git clone https://github.com/AssemblyScript/next.git
+$> cd next
+$> npm install
+$> node bin\asc yourModule.ts
+```
+
+Building a browser bundle to `dist/assemblyscript.js` (requires [binaryen.js](https://github.com/AssemblyScript/binaryen.js)):
+
+```
+$> npm run build
+```
+
+Running the [tests](./tests):
+
+```
+$> npm test
+```
+
+Development status
+------------------
+
+For now, see the [compiler tests](https://github.com/AssemblyScript/next/tree/master/tests/compiler) for an overview of what's supposed to be working already.

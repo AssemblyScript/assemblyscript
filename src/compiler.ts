@@ -153,7 +153,7 @@ export class Compiler extends DiagnosticEmitter {
   compile(): Module {
     const program: Program = this.program;
 
-    // initialize lookup maps, builtins, imports, exports, etc.
+    // initialize lookup maps, built-ins, imports, exports, etc.
     program.initialize(this.options.target);
 
     // compile entry file (exactly one, usually)
@@ -1459,7 +1459,7 @@ export class Compiler extends DiagnosticEmitter {
     if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
       const functionPrototype: FunctionPrototype = <FunctionPrototype>element;
       let functionInstance: Function | null = null;
-      if (functionPrototype.isBuiltin) {
+      if (functionPrototype.isBuiltIn) {
         const k: i32 = expression.typeArguments.length;
         const resolvedTypeArguments: Type[] = new Array(k);
         sb.length = 0;
