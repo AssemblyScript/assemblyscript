@@ -522,12 +522,48 @@ export class Module {
     }
   }
 
-  addExport(internalName: string, externalName: string): ExportRef {
+  addFunctionExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
     const cStr1: CString = allocString(internalName);
     const cStr2: CString = allocString(externalName);
     try {
-      return _BinaryenAddExport(this.ref, cStr1, cStr2);
+      return _BinaryenAddFunctionExport(this.ref, cStr1, cStr2);
+    } finally {
+      _free(cStr2);
+      _free(cStr1);
+    }
+  }
+
+  addTableExport(internalName: string, externalName: string): ExportRef {
+    if (this.noEmit) return 0;
+    const cStr1: CString = allocString(internalName);
+    const cStr2: CString = allocString(externalName);
+    try {
+      return _BinaryenAddTableExport(this.ref, cStr1, cStr2);
+    } finally {
+      _free(cStr2);
+      _free(cStr1);
+    }
+  }
+
+  addMemoryExport(internalName: string, externalName: string): ExportRef {
+    if (this.noEmit) return 0;
+    const cStr1: CString = allocString(internalName);
+    const cStr2: CString = allocString(externalName);
+    try {
+      return _BinaryenAddMemoryExport(this.ref, cStr1, cStr2);
+    } finally {
+      _free(cStr2);
+      _free(cStr1);
+    }
+  }
+
+  addGlobalExport(internalName: string, externalName: string): ExportRef {
+    if (this.noEmit) return 0;
+    const cStr1: CString = allocString(internalName);
+    const cStr2: CString = allocString(externalName);
+    try {
+      return _BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
     } finally {
       _free(cStr2);
       _free(cStr1);
@@ -544,13 +580,55 @@ export class Module {
     }
   }
 
-  addImport(internalName: string, externalModuleName: string, externalBaseName: string, type: FunctionTypeRef): ImportRef {
+  addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, functionType: FunctionTypeRef): ImportRef {
     if (this.noEmit) return 0;
     const cStr1: CString = allocString(internalName);
     const cStr2: CString = allocString(externalModuleName);
     const cStr3: CString = allocString(externalBaseName);
     try {
-      return _BinaryenAddImport(this.ref, cStr1, cStr2, cStr3, type);
+      return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
+    } finally {
+      _free(cStr3);
+      _free(cStr2);
+      _free(cStr1);
+    }
+  }
+
+  addTableImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
+    if (this.noEmit) return 0;
+    const cStr1: CString = allocString(internalName);
+    const cStr2: CString = allocString(externalModuleName);
+    const cStr3: CString = allocString(externalBaseName);
+    try {
+      return _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
+    } finally {
+      _free(cStr3);
+      _free(cStr2);
+      _free(cStr1);
+    }
+  }
+
+  addMemoryImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
+    if (this.noEmit) return 0;
+    const cStr1: CString = allocString(internalName);
+    const cStr2: CString = allocString(externalModuleName);
+    const cStr3: CString = allocString(externalBaseName);
+    try {
+      return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3);
+    } finally {
+      _free(cStr3);
+      _free(cStr2);
+      _free(cStr1);
+    }
+  }
+
+  addGlobalImport(internalName: string, externalModuleName: string, externalBaseName: string, globalType: NativeType): ImportRef {
+    if (this.noEmit) return 0;
+    const cStr1: CString = allocString(internalName);
+    const cStr2: CString = allocString(externalModuleName);
+    const cStr3: CString = allocString(externalBaseName);
+    try {
+      return _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
     } finally {
       _free(cStr3);
       _free(cStr2);
@@ -595,6 +673,16 @@ export class Module {
       _free(cArr1);
       for (i = k - 1; i >= 0; --i) _free(segs[i]);
       _free(cStr);
+    }
+  }
+
+  setFunctionTable(funcs: BinaryenFunctionRef[]): void {
+    if (this.noEmit) return;
+    const cArr: CArray<i32> = allocI32Array(funcs);
+    try {
+      _BinaryenSetFunctionTable(this.ref, cArr, funcs.length);
+    } finally {
+      _free(cArr);
     }
   }
 

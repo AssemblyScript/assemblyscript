@@ -274,12 +274,18 @@ declare function _BinaryenFunctionRunPasses(func: BinaryenFunctionRef, module: B
 
 declare type BinaryenImportRef = usize;
 
-declare function _BinaryenAddImport(module: BinaryenModuleRef, internalName: CString, externalModuleName: CString, externalBaseName: CString, type: BinaryenFunctionTypeRef): BinaryenImportRef;
+declare function _BinaryenAddFunctionImport(module: BinaryenModuleRef, internalName: CString, externalModuleName: CString, externalBaseName: CString, functionType: BinaryenFunctionTypeRef): BinaryenImportRef;
+declare function _BinaryenAddTableImport(module: BinaryenModuleRef, internalName: CString, externalModuleName: CString, externalBaseName: CString): BinaryenImportRef;
+declare function _BinaryenAddMemoryImport(module: BinaryenModuleRef, internalName: CString, externalModuleName: CString, externalBaseName: CString): BinaryenImportRef;
+declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, internalName: CString, externalModuleName: CString, externalBaseName: CString, globalType: BinaryenType): BinaryenImportRef;
 declare function _BinaryenRemoveImport(module: BinaryenModuleRef, internalName: CString): void;
 
 declare type BinaryenExportRef = usize;
 
-declare function _BinaryenAddExport(module: BinaryenModuleRef, internalName: CString, externalName: CString): BinaryenExportRef;
+declare function _BinaryenAddFunctionExport(module: BinaryenModuleRef, internalName: CString, externalName: CString): BinaryenExportRef;
+declare function _BinaryenAddTableExport(module: BinaryenModuleRef, internalName: CString, externalName: CString): BinaryenExportRef;
+declare function _BinaryenAddMemoryExport(module: BinaryenModuleRef, internalName: CString, externalName: CString): BinaryenExportRef;
+declare function _BinaryenAddGlobalExport(module: BinaryenModuleRef, internalName: CString, externalName: CString): BinaryenExportRef;
 declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: CString): void;
 
 declare type BinaryenGlobalRef = usize;

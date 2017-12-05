@@ -352,7 +352,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       this.module.addGlobal(internalName, nativeType, element.isMutable, initializer);
       if (!element.isMutable) {
-        // TODO: check export, requires updated binaryen.js with Module#addGlobalExport
+        // TODO: check export
       }
     }
     return element.isCompiled = true;
@@ -416,7 +416,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!instance)
       return;
     if (declaration.range.source.isEntry && declaration.parent == declaration.range.source && hasModifier(ModifierKind.EXPORT, declaration.modifiers))
-      this.module.addExport(instance.internalName, declaration.identifier.name);
+      this.module.addFunctionExport(instance.internalName, declaration.identifier.name);
   }
 
   compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Function | null {
@@ -473,7 +473,7 @@ export class Compiler extends DiagnosticEmitter {
     // create the function
     const internalName: string = instance.internalName;
     if (instance.isDeclare) {
-      this.module.addImport(internalName, "env", declaration.identifier.name, typeRef);
+      this.module.addFunctionImport(internalName, "env", declaration.identifier.name, typeRef);
     } else {
       this.module.addFunction(internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
     }
@@ -577,7 +577,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!(<FunctionPrototype>element).isGeneric) {
             const functionInstance: Function | null = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
             if (functionInstance && statement.range.source.isEntry)
-              this.module.addExport(functionInstance.internalName, member.externalIdentifier.name);
+              this.module.addFunctionExport(functionInstance.internalName, member.externalIdentifier.name);
           }
           break;
 

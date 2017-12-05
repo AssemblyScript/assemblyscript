@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@types/node": "^8.0.54",
-    "binaryen": "39.0.0-nightly.20171116",
+    "binaryen": "39.0.0-nightly.20171205",
     "minimist": "^1.2.0",
     "source-map-support": "^0.5.0"
   },
