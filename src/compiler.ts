@@ -122,6 +122,8 @@ export class Compiler extends DiagnosticEmitter {
   currentFunction: Function;
   /** Marker indicating whether continue statements are allowed in the current break context. */
   disallowContinue: bool = true;
+  /** Marker indicating that a new variable, if present, is always a local. Used to distinguish locals from globals in the start function. */
+  variableIsLocal: bool = false;
 
   /** Counting memory offset. */
   memoryOffset: U64 = new U64(8, 0); // leave space for (any size of) NULL
@@ -757,7 +759,11 @@ export class Compiler extends DiagnosticEmitter {
 
   compileForStatement(statement: ForStatement): ExpressionRef {
     const context: string = this.currentFunction.enterBreakContext();
+    const variableWasLocal: bool = this.variableIsLocal;
+    if (this.currentFunction == this.startFunction)
+      this.variableIsLocal = true;
     const initializer: ExpressionRef = statement.initializer ? this.compileStatement(<Statement>statement.initializer) : this.module.createNop();
+    this.variableIsLocal = variableWasLocal;
     const condition: ExpressionRef = statement.condition ? this.compileExpression(<Expression>statement.condition, Type.i32) : this.module.createI32(1);
     const incrementor: ExpressionRef = statement.incrementor ? this.compileExpression(<Expression>statement.incrementor, Type.void) : this.module.createNop();
     const body: ExpressionRef = this.compileStatement(statement.statement);
@@ -860,7 +866,7 @@ export class Compiler extends DiagnosticEmitter {
     const declarations: VariableDeclaration[] = statement.declarations;
 
     // top-level variables become globals
-    if (this.currentFunction == this.startFunction) {
+    if (this.currentFunction == this.startFunction && !this.variableIsLocal) {
       const isConst: bool = hasModifier(ModifierKind.CONST, statement.modifiers);
       for (let i: i32 = 0, k: i32 = declarations.length; i < k; ++i)
         this.compileGlobalDeclaration(declarations[i], isConst);

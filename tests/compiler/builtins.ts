@@ -9,12 +9,18 @@ ctz<i32>(1);
 popcnt<i32>(1);
 rotl<i32>(1, 1);
 rotr<i32>(1, 1);
+abs<i32>(-42);
+max<i32>(1, 2);
+min<i32>(1, 2);
 
 i = clz<i32>(1);
 i = ctz<i32>(1);
 i = popcnt<i32>(1);
 i = rotl<i32>(1, 1);
 i = rotr<i32>(1, 1);
+i = abs<i32>(-42); assert(i == 42);
+i = max<i32>(1, 2); assert(i == 2);
+i = min<i32>(1, 2); assert(i == 1);
 
 let I: i64;
 
@@ -23,12 +29,16 @@ ctz<i64>(1);
 popcnt<i64>(1);
 rotl<i64>(1, 1);
 rotr<i64>(1, 1);
+abs<i64>(-42);
 
 I = clz<i64>(1);
 I = ctz<i64>(1);
 I = popcnt<i64>(1);
 I = rotl<i64>(1, 1);
 I = rotr<i64>(1, 1);
+I = abs<i64>(-42); assert(I == 42);
+I = max<i64>(1, 2); assert(I == 2);
+I = min<i64>(1, 2); assert(i == 1);
 
 // floating point builtins
 
@@ -96,14 +106,14 @@ b = isFinite<f64>(1.25);
 
 // load and store builtins
 
-i = load<i32>(8);
-store<i32>(8, i);
-I = load<i64>(8);
-store<i64>(8, I);
-f = load<f32>(8);
-store<f32>(8, f);
-F = load<f64>(8);
-store<f64>(8, F);
+i = load<i32>(8); store<i32>(8, i);
+store<i32>(8, load<i32>(8));
+I = load<i64>(8); store<i64>(8, I);
+store<i64>(8, load<i64>(8));
+f = load<f32>(8); store<f32>(8, f);
+store<f32>(8, load<f32>(8));
+F = load<f64>(8); store<f64>(8, F);
+store<f64>(8, load<f64>(8));
 
 // reinterpretation builtins
 
@@ -143,8 +153,6 @@ if (0) unreachable();
 
 // AS specific builtins
 
-assert(true);
-
 sizeof<u8>();
 sizeof<u16>();
 sizeof<u32>();
@@ -159,13 +167,12 @@ sizeof<isize>();
 sizeof<f32>();
 sizeof<f64>();
 
-if (NaN == NaN)
-  unreachable();
-if (!isNaN<f32>(NaN))
-  unreachable();
-if (isFinite<f32>(NaN))
-  unreachable();
-if (isFinite<f32>(Infinity))
-  unreachable();
-if (!isFinite<f64>(0))
-  unreachable();
+assert(NaN != NaN);
+assert(isNaN<f32>(NaN));
+assert(isNaN<f64>(NaN));
+assert(!isFinite<f32>(NaN));
+assert(!isFinite<f32>(Infinity));
+assert(!isFinite<f64>(NaN));
+assert(!isFinite<f64>(Infinity));
+assert(isFinite<f32>(0));
+assert(isFinite<f64>(0));

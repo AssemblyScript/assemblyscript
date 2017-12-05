@@ -53,7 +53,9 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
       arg1: ExpressionRef,
       arg2: ExpressionRef;
 
-  let tempLocal: Local;
+  let tempLocal0: Local;
+  let tempLocal1: Local;
+  let nativeType: NativeType;
 
   switch (internalName) {
 
@@ -149,7 +151,34 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
             ? compiler.module.createUnary(UnaryOp.AbsF32, arg0)
             : compiler.module.createUnary(UnaryOp.AbsF64, arg0);
         if (typeArguments[0].isAnyInteger) {
-          // TODO: ternaries for integers
+          if (typeArguments[0].isSignedInteger) {
+            tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
+            if (typeArguments[0].isLongInteger)
+              return compiler.module.createSelect(
+                compiler.module.createBinary(BinaryOp.SubI64,
+                  compiler.module.createI64(0, 0),
+                  compiler.module.createTeeLocal(tempLocal0.index, arg0)
+                ),
+                compiler.module.createGetLocal(tempLocal0.index, NativeType.I64),
+                compiler.module.createBinary(BinaryOp.LtI64,
+                  compiler.module.createGetLocal(tempLocal0.index, NativeType.I64),
+                  compiler.module.createI64(0, 0)
+                )
+              );
+            else
+              return compiler.module.createSelect(
+                compiler.module.createBinary(BinaryOp.SubI32,
+                  compiler.module.createI32(0),
+                  compiler.module.createTeeLocal(tempLocal0.index, arg0)
+                ),
+                compiler.module.createGetLocal(tempLocal0.index, NativeType.I32),
+                compiler.module.createBinary(BinaryOp.LtI32,
+                  compiler.module.createGetLocal(tempLocal0.index, NativeType.I32),
+                  compiler.module.createI32(0)
+                )
+              );
+          } else
+            return arg0;
         }
       }
       break;
@@ -165,7 +194,26 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
             ? compiler.module.createBinary(BinaryOp.MaxF32, arg0, arg1)
             : compiler.module.createBinary(BinaryOp.MaxF64, arg0, arg1);
         if (typeArguments[0].isAnyInteger) {
-          // TODO: ternaries for integers
+          tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
+          tempLocal1 = compiler.currentFunction.addLocal(typeArguments[0]);
+          if (typeArguments[0].isLongInteger)
+            return compiler.module.createSelect(
+              compiler.module.createTeeLocal(tempLocal0.index, arg0),
+              compiler.module.createTeeLocal(tempLocal1.index, arg1),
+              compiler.module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.GtI64 : BinaryOp.GtU64,
+                compiler.module.createGetLocal(tempLocal0.index, NativeType.I64),
+                compiler.module.createGetLocal(tempLocal1.index, NativeType.I64)
+              )
+            );
+          else
+            return compiler.module.createSelect(
+              compiler.module.createTeeLocal(tempLocal0.index, arg0),
+              compiler.module.createTeeLocal(tempLocal1.index, arg1),
+              compiler.module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.GtI32 : BinaryOp.GtU32,
+                compiler.module.createGetLocal(tempLocal0.index, NativeType.I32),
+                compiler.module.createGetLocal(tempLocal1.index, NativeType.I32)
+              )
+            );
         }
       }
       break;
@@ -181,7 +229,26 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
             ? compiler.module.createBinary(BinaryOp.MinF32, arg0, arg1)
             : compiler.module.createBinary(BinaryOp.MinF64, arg0, arg1);
         if (typeArguments[0].isAnyInteger) {
-          // TODO: ternaries for integers
+          tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
+          tempLocal1 = compiler.currentFunction.addLocal(typeArguments[0]);
+          if (typeArguments[0].isLongInteger)
+            return compiler.module.createSelect(
+              compiler.module.createTeeLocal(tempLocal0.index, arg0),
+              compiler.module.createTeeLocal(tempLocal1.index, arg1),
+              compiler.module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.LtI64 : BinaryOp.LtU64,
+                compiler.module.createGetLocal(tempLocal0.index, NativeType.I64),
+                compiler.module.createGetLocal(tempLocal1.index, NativeType.I64)
+              )
+            );
+          else
+            return compiler.module.createSelect(
+              compiler.module.createTeeLocal(tempLocal0.index, arg0),
+              compiler.module.createTeeLocal(tempLocal1.index, arg1),
+              compiler.module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.LtI32 : BinaryOp.LtU32,
+                compiler.module.createGetLocal(tempLocal0.index, NativeType.I32),
+                compiler.module.createGetLocal(tempLocal1.index, NativeType.I32)
+              )
+            );
         }
       }
       break;
@@ -220,7 +287,7 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
       }
       break;
 
-    case "nearest":
+    case "nearest": // nearest<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return compiler.module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
@@ -231,7 +298,7 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
       }
       break;
 
-    case "sqrt":
+    case "sqrt": // sqrt<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return compiler.module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
@@ -242,7 +309,7 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
       }
       break;
 
-    case "trunc":
+    case "trunc": // trunc<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return compiler.module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
@@ -336,7 +403,7 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
       validateCall(compiler, typeArguments, 0, operands, 0, reportNode);
       return compiler.module.createUnreachable();
 
-    case "isNaN":
+    case "isNaN": // isNaN<T>(value: T) -> bool
       compiler.currentType = Type.bool;
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return compiler.module.createUnreachable();
@@ -346,22 +413,22 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]); // reports
         compiler.currentType = Type.bool;
         if (typeArguments[0] == Type.f32) {
-          tempLocal = compiler.currentFunction.addLocal(Type.f32);
+          tempLocal0 = compiler.currentFunction.addLocal(Type.f32);
           return compiler.module.createBinary(BinaryOp.NeF32,
-            compiler.module.createTeeLocal(tempLocal.index, arg0),
-            compiler.module.createGetLocal(tempLocal.index, NativeType.F32)
+            compiler.module.createTeeLocal(tempLocal0.index, arg0),
+            compiler.module.createGetLocal(tempLocal0.index, NativeType.F32)
           );
         } else {
-          tempLocal = compiler.currentFunction.addLocal(Type.f64);
+          tempLocal0 = compiler.currentFunction.addLocal(Type.f64);
           return compiler.module.createBinary(BinaryOp.NeF64,
-            compiler.module.createTeeLocal(tempLocal.index, arg0),
-            compiler.module.createGetLocal(tempLocal.index, NativeType.F64)
+            compiler.module.createTeeLocal(tempLocal0.index, arg0),
+            compiler.module.createGetLocal(tempLocal0.index, NativeType.F64)
           );
         }
       }
       break;
 
-    case "isFinite":
+    case "isFinite": // isFinite<T>(value: T) -> bool
       compiler.currentType = Type.bool;
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return compiler.module.createUnreachable();
@@ -371,40 +438,40 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]); // reports
         compiler.currentType = Type.bool;
         if (typeArguments[0] == Type.f32) {
-          tempLocal = compiler.currentFunction.addLocal(Type.f32);
+          tempLocal0 = compiler.currentFunction.addLocal(Type.f32);
           return compiler.module.createSelect(
             compiler.module.createBinary(BinaryOp.NeF32,
               compiler.module.createUnary(UnaryOp.AbsF32,
-                compiler.module.createTeeLocal(tempLocal.index, arg0)
+                compiler.module.createTeeLocal(tempLocal0.index, arg0)
               ),
               compiler.module.createF32(Infinity)
             ),
             compiler.module.createI32(0),
             compiler.module.createBinary(BinaryOp.EqF32,
-              compiler.module.createGetLocal(tempLocal.index, NativeType.F32),
-              compiler.module.createGetLocal(tempLocal.index, NativeType.F32)
+              compiler.module.createGetLocal(tempLocal0.index, NativeType.F32),
+              compiler.module.createGetLocal(tempLocal0.index, NativeType.F32)
             )
           );
         } else {
-          tempLocal = compiler.currentFunction.addLocal(Type.f64);
+          tempLocal0 = compiler.currentFunction.addLocal(Type.f64);
           return compiler.module.createSelect(
             compiler.module.createBinary(BinaryOp.NeF64,
               compiler.module.createUnary(UnaryOp.AbsF64,
-                compiler.module.createTeeLocal(tempLocal.index, arg0)
+                compiler.module.createTeeLocal(tempLocal0.index, arg0)
               ),
               compiler.module.createF64(Infinity)
             ),
             compiler.module.createI32(0),
             compiler.module.createBinary(BinaryOp.EqF64,
-              compiler.module.createGetLocal(tempLocal.index, NativeType.F64),
-              compiler.module.createGetLocal(tempLocal.index, NativeType.F64)
+              compiler.module.createGetLocal(tempLocal0.index, NativeType.F64),
+              compiler.module.createGetLocal(tempLocal0.index, NativeType.F64)
             )
           );
         }
       }
       break;
 
-    case "assert":
+    case "assert": // assert(isTrue: bool) -> void
       compiler.currentType = Type.void;
       if (!validateCall(compiler, typeArguments, 0, operands, 1, reportNode))
         return compiler.module.createUnreachable();

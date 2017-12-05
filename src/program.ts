@@ -981,9 +981,9 @@ export class Function extends Element {
 
   /** Leaves the current break context. */
   leaveBreakContext(): void {
-    if (--this.breakMinor < 0)
+    if (this.breakMinor < 1)
       throw new Error("unexpected unbalanced break context");
-    if (this.breakMinor == 0 && !--this.breakMajor)
+    if (--this.breakMinor == 0)
       this.breakContext = null;
   }
 }

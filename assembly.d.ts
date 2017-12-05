@@ -87,11 +87,9 @@ declare function assert(isTrue: bool): void;
 
 // internal decorators
 
-/** A decorator marking a function or class as global. */
 declare function global(name?: string): any;
-/** A decorator marking a function as ideally being inlined. */
+declare function struct(): any
 declare function inline(): any;
-/** A decorator marking a class that manually manages its memory. */
 declare function allocates(): any;
 declare function operator(token: string, fn: any): any;
 

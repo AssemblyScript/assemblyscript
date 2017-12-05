@@ -113,9 +113,11 @@
    )
   )
   (if
-   (i32.ne
-    (get_global $logical/i)
-    (i32.const 2)
+   (i32.eqz
+    (i32.eq
+     (get_global $logical/i)
+     (i32.const 2)
+    )
    )
    (unreachable)
   )
@@ -129,9 +131,11 @@
    )
   )
   (if
-   (i32.ne
-    (get_global $logical/i)
-    (i32.const 1)
+   (i32.eqz
+    (i32.eq
+     (get_global $logical/i)
+     (i32.const 1)
+    )
    )
    (unreachable)
   )
@@ -148,9 +152,11 @@
    )
   )
   (if
-   (i64.ne
-    (get_global $logical/I)
-    (i64.const 2)
+   (i32.eqz
+    (i64.eq
+     (get_global $logical/I)
+     (i64.const 2)
+    )
    )
    (unreachable)
   )
@@ -167,9 +173,11 @@
    )
   )
   (if
-   (i64.ne
-    (get_global $logical/I)
-    (i64.const 1)
+   (i32.eqz
+    (i64.eq
+     (get_global $logical/I)
+     (i64.const 1)
+    )
    )
    (unreachable)
   )
@@ -186,9 +194,11 @@
    )
   )
   (if
-   (f32.ne
-    (get_global $logical/f)
-    (f32.const 2)
+   (i32.eqz
+    (f32.eq
+     (get_global $logical/f)
+     (f32.const 2)
+    )
    )
    (unreachable)
   )
@@ -205,9 +215,11 @@
    )
   )
   (if
-   (f32.ne
-    (get_global $logical/f)
-    (f32.const 1)
+   (i32.eqz
+    (f32.eq
+     (get_global $logical/f)
+     (f32.const 1)
+    )
    )
    (unreachable)
   )
@@ -224,9 +236,11 @@
    )
   )
   (if
-   (f64.ne
-    (get_global $logical/F)
-    (f64.const 2)
+   (i32.eqz
+    (f64.eq
+     (get_global $logical/F)
+     (f64.const 2)
+    )
    )
    (unreachable)
   )
@@ -243,9 +257,11 @@
    )
   )
   (if
-   (f64.ne
-    (get_global $logical/F)
-    (f64.const 1)
+   (i32.eqz
+    (f64.eq
+     (get_global $logical/F)
+     (f64.const 1)
+    )
    )
    (unreachable)
   )
