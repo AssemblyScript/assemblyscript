@@ -8,12 +8,10 @@
  (func $do/loopDo (; 0 ;) (type $iv) (param $0 i32)
   (block $break$1.1
    (loop $continue$1.1
-    (block
-     (set_local $0
-      (i32.sub
-       (get_local $0)
-       (i32.const 1)
-      )
+    (set_local $0
+     (i32.sub
+      (get_local $0)
+      (i32.const 1)
      )
     )
     (br_if $continue$1.1
@@ -34,12 +32,10 @@
      )
      (block $break$1.2
       (loop $continue$1.2
-       (block
-        (set_local $0
-         (i32.sub
-          (get_local $0)
-          (i32.const 1)
-         )
+       (set_local $0
+        (i32.sub
+         (get_local $0)
+         (i32.const 1)
         )
        )
        (br_if $continue$1.2

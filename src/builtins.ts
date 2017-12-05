@@ -32,13 +32,16 @@ export function initialize(program: Program): void {
   addFunction(program, "isNaN", true);
   addFunction(program, "isFinite", true);
   addFunction(program, "assert");
+  // addFunction(program, "fmod", false, true);
+  // addFunction(program, "pow", true, true);
 }
 
 /** Adds a built-in function to the specified program. */
-function addFunction(program: Program, name: string, isGeneric: bool = false): void {
+function addFunction(program: Program, name: string, isGeneric: bool = false, isImport: bool = false): void {
   let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
-  prototype.isGeneric = isGeneric;
   prototype.isBuiltIn = true;
+  prototype.isGeneric = isGeneric;
+  prototype.isImport = isImport;
   program.elements.set(name, prototype);
 }
 
@@ -413,6 +416,9 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
             compiler.module.createUnary(UnaryOp.EqzI32, arg0),
             compiler.module.createUnreachable()
           );
+
+    // case "fmod":
+    // case "pow":
   }
   return 0;
 }

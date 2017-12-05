@@ -11,12 +11,10 @@
     (if
      (get_local $0)
      (block
-      (block
-       (set_local $0
-        (i32.sub
-         (get_local $0)
-         (i32.const 1)
-        )
+      (set_local $0
+       (i32.sub
+        (get_local $0)
+        (i32.const 1)
        )
       )
       (br $continue$1.1)
@@ -43,12 +41,10 @@
          (if
           (get_local $0)
           (block
-           (block
-            (set_local $0
-             (i32.sub
-              (get_local $0)
-              (i32.const 1)
-             )
+           (set_local $0
+            (i32.sub
+             (get_local $0)
+             (i32.const 1)
             )
            )
            (br $continue$1.2)

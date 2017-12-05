@@ -698,7 +698,12 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileBlockStatement(statement: BlockStatement): ExpressionRef {
-    return this.module.createBlock(null, this.compileStatements(statement.statements), NativeType.None);
+    const statements: Statement[] = statement.statements;
+    if (statements.length == 0)
+      return this.module.createNop();
+    if (statements.length == 1)
+      return this.compileStatement(statements[0]);
+    return this.module.createBlock(null, this.compileStatements(statements), NativeType.None);
   }
 
   compileBreakStatement(statement: BreakStatement): ExpressionRef {
@@ -962,7 +967,7 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("unexpected expression kind");
     }
 
-    if (conversionKind != ConversionKind.NONE) {
+    if (conversionKind != ConversionKind.NONE && this.currentType != contextualType) {
       expr = this.convertExpression(expr, this.currentType, contextualType, conversionKind, expression);
       this.currentType = contextualType;
     }

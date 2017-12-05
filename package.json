@@ -1,18 +1,27 @@
 {
-  "name": "@assemblyscript/next",
+  "name": "assemblyscript",
   "version": "0.5.0",
+  "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AssemblyScript/next.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AssemblyScript/next/issues"
+  },
   "dependencies": {
-    "@types/minimist": "^1.2.0",
-    "@types/node": "^8.0.53",
+    "@types/node": "^8.0.54",
     "binaryen": "39.0.0-nightly.20171116",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "source-map-support": "^0.5.0"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/diff": "^3.2.2",
     "@types/glob": "^5.0.33",
     "@types/long": "^3.0.32",
+    "@types/minimist": "^1.2.0",
     "chalk": "^2.3.0",
     "diff": "^3.4.0",
     "glob": "^7.1.2",
@@ -22,13 +31,27 @@
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   },
+  "main": "dist/assemblyscript.js",
   "bin": {
     "asc": "bin/asc.js"
   },
   "scripts": {
     "build": "webpack",
+    "clean": "rm dist/assemblyscript.*",
     "test:parser": "ts-node -P src tests/parser",
     "test:compiler": "ts-node -P src tests/compiler",
     "test": "npm run test:parser && npm run test:compiler"
-  }
+  },
+  "files": [
+    "assembly.d.ts",
+    "bin/asc.js",
+    "bin/asc.json",
+    "dist/assemblyscript.js",
+    "dist/assemblyscript.js.map",
+    "LICENSE",
+    "NOTICE",
+    "package.json",
+    "package-lock.json",
+    "README.md"
+  ]
 }
