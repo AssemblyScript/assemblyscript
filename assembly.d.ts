@@ -39,18 +39,18 @@ declare function popcnt<T = i32 | i64>(value: T): T;
 declare function rotl<T = i32 | i64>(value: T, shift: T): T;
 /** Performs the sign-agnostic rotate right operation on a 32-bit or 64-bit integer. */
 declare function rotr<T = i32 | i64>(value: T, shift: T): T;
-/** Computes the absolute value of a 32-bit or 64-bit float. */
-declare function abs<T = f32 | f64>(value: T): T;
+/** Computes the absolute value of an integer or float. */
+declare function abs<T = i32 | i64 | f32 | f64>(value: T): T;
+/** Determines the maximum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
+declare function max<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Determines the minimum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
+declare function min<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
 /** Performs the ceiling operation on a 32-bit or 64-bit float. */
 declare function ceil<T = f32 | f64>(value: T): T;
 /** Composes a 32-bit or 64-bit float from the magnitude of `x` and the sign of `y`. */
 declare function copysign<T = f32 | f64>(x: T, y: T): T;
 /** Performs the floor operation on a 32-bit or 64-bit float. */
 declare function floor<T = f32 | f64>(value: T): T;
-/** Determines the maximum of two 32-bit or 64-bit floats. If either operand is `NaN`, returns `NaN`. */
-declare function max<T = f32 | f64>(left: T, right: T): T;
-/** Determines the minimum of two 32-bit or 64-bit floats. If either operand is `NaN`, returns `NaN`. */
-declare function min<T = f32 | f64>(left: T, right: T): T;
 /** Rounds to the nearest integer tied to even of a 32-bit or 64-bit float. */
 declare function nearest<T = f32 | f64>(value: T): T;
 /** Reinterprets the bits of a value of type `T1` as type `T2`. Valid reinterpretations are i32 to/from f32 and i64 to/from f64. */

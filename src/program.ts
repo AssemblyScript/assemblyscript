@@ -1,6 +1,7 @@
+import { initialize as initializeBuiltins } from "./builtins";
 import { Target } from "./compiler";
 import { GETTER_PREFIX, SETTER_PREFIX, PATH_DELIMITER } from "./constants";
-import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter, DiagnosticCategory } from "./diagnostics";
+import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
 import { Type, typesToString } from "./types";
 import { I64 } from "./util";
 import {
@@ -57,7 +58,7 @@ class QueuedImport {
   declaration: ImportDeclaration;
 }
 
-const reusableTypesStub: Map<string,Type> = new Map();
+const noTypesYet: Map<string,Type> = new Map();
 
 export class Program extends DiagnosticEmitter {
 
@@ -70,7 +71,7 @@ export class Program extends DiagnosticEmitter {
   /** Elements by internal name. */
   elements: Map<string,Element> = new Map();
   /** Types by internal name. */
-  types: Map<string,Type> = reusableTypesStub;
+  types: Map<string,Type> = noTypesYet;
   /** Exports of individual files by internal name. Not global exports. */
   exports: Map<string,Element> = new Map();
 
@@ -82,6 +83,22 @@ export class Program extends DiagnosticEmitter {
   /** Initializes the program and its elements prior to compilation. */
   initialize(target: Target = Target.WASM32): void {
     this.target = target;
+    this.types = new Map([
+      ["i8", Type.i8],
+      ["i16", Type.i16],
+      ["i32", Type.i32],
+      ["i64", Type.i64],
+      ["isize", target == Target.WASM64 ? Type.isize64 : Type.isize32],
+      ["u8", Type.u8],
+      ["u16", Type.u16],
+      ["u32", Type.u32],
+      ["u64", Type.u64],
+      ["usize", target == Target.WASM64 ? Type.usize64 : Type.usize32],
+      ["bool", Type.bool],
+      ["f32", Type.f32],
+      ["f64", Type.f64],
+      ["void", Type.void]
+    ]);
 
     initializeBuiltins(this);
 
@@ -1109,121 +1126,4 @@ export class Interface extends Class {
   constructor(template: InterfacePrototype, internalName: string, typeArguments: Type[], base: Interface | null) {
     super(template, internalName, typeArguments, base);
   }
-}
-
-const builtinIntTypes: Type[] = [ Type.i32, Type.i64 ];
-const builtinFloatTypes: Type[] = [ Type.f32, Type.f64 ];
-
-function initializeBuiltins(program: Program): void {
-
-  // types
-
-  program.types = new Map([
-    ["i8", Type.i8],
-    ["i16", Type.i16],
-    ["i32", Type.i32],
-    ["i64", Type.i64],
-    ["isize", program.target == Target.WASM64 ? Type.isize64 : Type.isize32],
-    ["u8", Type.u8],
-    ["u16", Type.u16],
-    ["u32", Type.u32],
-    ["u64", Type.u64],
-    ["usize", program.target == Target.WASM64 ? Type.usize64 : Type.usize32],
-    ["bool", Type.bool],
-    ["f32", Type.f32],
-    ["f64", Type.f64],
-    ["void", Type.void]
-  ]);
-
-  // functions
-
-  const usize: Type = program.target == Target.WASM64 ? Type.usize64 : Type.usize32;
-
-  addGenericUnaryBuiltin(program, "clz", builtinIntTypes);
-  addGenericUnaryBuiltin(program, "ctz", builtinIntTypes);
-  addGenericUnaryBuiltin(program, "popcnt", builtinIntTypes);
-  addGenericBinaryBuiltin(program, "rotl", builtinIntTypes);
-  addGenericBinaryBuiltin(program, "rotr", builtinIntTypes);
-
-  addGenericUnaryBuiltin(program, "abs", builtinFloatTypes);
-  addGenericUnaryBuiltin(program, "ceil", builtinFloatTypes);
-  addGenericBinaryBuiltin(program, "copysign", builtinFloatTypes);
-  addGenericUnaryBuiltin(program, "floor", builtinFloatTypes);
-  addGenericBinaryBuiltin(program, "max", builtinFloatTypes);
-  addGenericBinaryBuiltin(program, "min", builtinFloatTypes);
-  addGenericUnaryBuiltin(program, "nearest", builtinFloatTypes);
-  addGenericUnaryBuiltin(program, "sqrt", builtinFloatTypes);
-  addGenericUnaryBuiltin(program, "trunc", builtinFloatTypes);
-
-  addSimpleBuiltin(program, "current_memory", [], usize);
-  addSimpleBuiltin(program, "grow_memory", [ usize ], usize);
-  addSimpleBuiltin(program, "unreachable", [], Type.void);
-
-  addGenericAnyBuiltin(program, "load");
-  addGenericAnyBuiltin(program, "store");
-  addGenericAnyBuiltin(program, "reinterpret");
-  addGenericAnyBuiltin(program, "select");
-
-  addGenericAnyBuiltin(program, "sizeof");
-  addGenericUnaryTestBuiltin(program, "isNaN", builtinFloatTypes);
-  addGenericUnaryTestBuiltin(program, "isFinite", builtinFloatTypes);
-  addSimpleBuiltin(program, "assert", [ Type.bool ], Type.void);
-}
-
-/** Adds a simple (non-generic) builtin. */
-function addSimpleBuiltin(program: Program, name: string, parameterTypes: Type[], returnType: Type) {
-  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
-  prototype.isGeneric = false;
-  prototype.isBuiltin = true;
-  const k: i32 = parameterTypes.length;
-  const parameters: Parameter[] = new Array(k);
-  for (let i: i32 = 0; i < k; ++i)
-    parameters[i] = new Parameter("arg" + i, parameterTypes[i], null);
-  prototype.instances.set("", new Function(prototype, name, [], parameters, returnType, null));
-  program.elements.set(name, prototype);
-}
-
-/** Adds a generic unary builtin that takes and returns a value of its generic type. */
-function addGenericUnaryBuiltin(program: Program, name: string, types: Type[]): void {
-  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
-  prototype.isGeneric = true;
-  prototype.isBuiltin = true;
-  for (let i: i32 = 0, k = types.length; i < k; ++i) {
-    const typeName: string = types[i].toString();
-    prototype.instances.set(typeName, new Function(prototype, name + "<" + typeName + ">", [ types[i] ], [ new Parameter("value", types[i], null) ], types[i], null));
-  }
-  program.elements.set(name, prototype);
-}
-
-/** Adds a generic binary builtin that takes two and returns a value of its generic type. */
-function addGenericBinaryBuiltin(program: Program, name: string, types: Type[]): void {
-  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
-  prototype.isGeneric = true;
-  prototype.isBuiltin = true;
-  for (let i: i32 = 0, k = types.length; i < k; ++i) {
-    const typeName: string = types[i].toString();
-    prototype.instances.set(typeName, new Function(prototype, name + "<" + typeName + ">", [ types[i], types[i] ], [ new Parameter("left", types[i], null), new Parameter("right", types[i], null) ], types[i], null));
-  }
-  program.elements.set(name, prototype);
-}
-
-/** Adds a generic unary builtin that alwways returns `bool`. */
-function addGenericUnaryTestBuiltin(program: Program, name: string, types: Type[]): void {
-  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
-  prototype.isGeneric = true;
-  prototype.isBuiltin = true;
-  for (let i: i32 = 0, k = types.length; i < k; ++i) {
-    const typeName: string = types[i].toString();
-    prototype.instances.set(typeName, new Function(prototype, name + "<" + typeName + ">", [ types[i] ], [ new Parameter("value", types[i], null) ], Type.bool, null));
-  }
-  program.elements.set(name, prototype);
-}
-
-/** Adds a special generic builtin that takes any type argument. */
-function addGenericAnyBuiltin(program: Program, name: string): void {
-  let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
-  prototype.isGeneric = true;
-  prototype.isBuiltin = true;
-  program.elements.set(name, prototype);
-  // instances are hard coded in compiler.ts
 }

@@ -8,6 +8,10 @@ globalScope["load"] = function load_u8(ptr: number) {
   return binaryen.HEAPU8[ptr];
 };
 
+globalScope["select"] = function select<T>(ifTrue: T, ifFalse: T, condition: bool): T {
+  return condition ? ifTrue : ifFalse;
+};
+
 const binaryen = require("binaryen");
 for (const key in binaryen)
   if (/^_(?:Binaryen|Relooper|malloc$|free$)/.test(key))

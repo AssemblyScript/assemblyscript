@@ -50,8 +50,10 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     }
     module.optimize();
     actualOptimized = module.toText();
-  } else
+  } else {
+    process.exitCode = 1;
     console.log(chalk.default.red("validate ERROR"));
+  }
 
   if (isCreate) {
     fs.writeFileSync(__dirname + "/compiler/" + fixture, actual, { encoding: "utf8" });
