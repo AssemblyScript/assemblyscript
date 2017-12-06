@@ -5,6 +5,7 @@ export enum DiagnosticCode {
   Basic_type_0_cannot_be_nullable = 101,
   Operation_not_supported = 102,
   Operation_is_unsafe = 103,
+  Cannot_export_a_mutable_global = 104,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -74,6 +75,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 101: return "Basic type '{0}' cannot be nullable.";
     case 102: return "Operation not supported.";
     case 103: return "Operation is unsafe.";
+    case 104: return "Cannot export a mutable global.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

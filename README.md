@@ -38,7 +38,7 @@ $> npm install
 $> node bin\asc yourModule.ts
 ```
 
-Building a browser bundle to `dist/assemblyscript.js` (still requires [binaryen.js](https://github.com/AssemblyScript/binaryen.js)):
+Building an UMD bundle to `dist/assemblyscript.js` (does not bundle [binaryen.js](https://github.com/AssemblyScript/binaryen.js):
 
 ```
 $> npm run build

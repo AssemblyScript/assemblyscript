@@ -203,7 +203,7 @@ export class Compiler extends DiagnosticEmitter {
       heapStartBuffer[2] = (initial.lo >>> 16) as u8;
       heapStartBuffer[3] = (initial.lo >>> 24) as u8;
     }
-    this.memorySegments.push(MemorySegment.create(heapStartBuffer, new U64(heapStartOffset, 0)));
+    this.memorySegments.push(MemorySegment.create(heapStartBuffer, new U64(heapStartOffset, 0))); // TODO: use a global instead?
     // determine initial page size
     const initialOverlaps: U64 = initial.clone();
     initialOverlaps.and32(0xffff);
@@ -295,9 +295,15 @@ export class Compiler extends DiagnosticEmitter {
     const element: Element | null = <Element | null>this.program.elements.get(declaration.internalName);
     if (!element || element.kind != ElementKind.GLOBAL)
       throw new Error("unexpected missing global");
-    return this.compileGlobal(<Global>element)
-      ? <Global>element
-      : null;
+    if (!this.compileGlobal(<Global>element))
+      return null;
+    if (declaration.range.source.isEntry && (<VariableStatement>declaration.parent).parent == declaration.range.source && hasModifier(ModifierKind.EXPORT, declaration.modifiers)) {
+      if (!(<Global>element).isCompiledMutable)
+        this.module.addGlobalExport(element.internalName, declaration.identifier.name);
+      else
+        this.warning(DiagnosticCode.Cannot_export_a_mutable_global, declaration.range);
+    }
+    return <Global>element;
   }
 
   compileGlobal(element: Global): bool {
@@ -336,7 +342,6 @@ export class Compiler extends DiagnosticEmitter {
       } else
         initializer = this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() : 0);
       initializeInStart = false;
-      this.module.addGlobal(element.internalName, nativeType, element.isMutable, initializer);
     } else if (declaration) {
       if (declaration.initializer) {
         initializer = this.compileExpression(declaration.initializer, type);
@@ -351,11 +356,10 @@ export class Compiler extends DiagnosticEmitter {
     if (initializeInStart) {
       this.module.addGlobal(internalName, nativeType, true, typeToNativeZero(this.module, type));
       this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
+      element.isCompiledMutable = true;
     } else {
       this.module.addGlobal(internalName, nativeType, element.isMutable, initializer);
-      if (!element.isMutable) {
-        // TODO: check export
-      }
+      element.isCompiledMutable = element.isMutable;
     }
     return element.isCompiled = true;
   }
@@ -557,10 +561,9 @@ export class Compiler extends DiagnosticEmitter {
 
   compileExportStatement(statement: ExportStatement): void {
     const members: ExportMember[] = statement.members;
-    const internalPath: string | null = statement.path ? statement.internalPath : statement.range.source.internalPath;
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i) {
       const member: ExportMember = members[i];
-      const internalExportName: string = internalPath + PATH_DELIMITER + member.externalIdentifier.name;
+      const internalExportName: string = statement.range.source.internalPath + PATH_DELIMITER + member.externalIdentifier.name;
       const element: Element | null = <Element | null>this.program.exports.get(internalExportName);
       if (!element) // reported in Program#initialize
         continue;
@@ -584,7 +587,12 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case ElementKind.GLOBAL:
-          this.compileGlobal(<Global>element);
+          if (this.compileGlobal(<Global>element) && statement.range.source.isEntry) {
+            if (!(<Global>element).isCompiledMutable)
+              this.module.addGlobalExport(element.internalName, member.externalIdentifier.name);
+            else
+              this.warning(DiagnosticCode.Cannot_export_a_mutable_global, member.range);
+          }
           break;
 
         case ElementKind.NAMESPACE:
@@ -713,7 +721,7 @@ export class Compiler extends DiagnosticEmitter {
       throw new Error("not implemented");
     const context: string | null = this.currentFunction.breakContext;
     if (context != null)
-      return this.module.createBreak("break$" + (<string>context));
+      return this.module.createBreak("break|" + (<string>context));
     this.error(DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement, statement.range);
     return this.module.createUnreachable();
   }
@@ -723,7 +731,7 @@ export class Compiler extends DiagnosticEmitter {
       throw new Error("not implemented");
     const context: string | null = this.currentFunction.breakContext;
     if (context != null && !this.disallowContinue)
-      return this.module.createBreak("continue$" + (<string>context));
+      return this.module.createBreak("continue|" + (<string>context));
     this.error(DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement, statement.range);
     return this.module.createUnreachable();
   }
@@ -733,8 +741,8 @@ export class Compiler extends DiagnosticEmitter {
     const condition: ExpressionRef = this.compileExpression(statement.condition, Type.i32);
     const body: ExpressionRef = this.compileStatement(statement.statement);
     this.currentFunction.leaveBreakContext();
-    const breakLabel: string = "break$" + label;
-    const continueLabel: string = "continue$" + label;
+    const breakLabel: string = "break|" + label;
+    const continueLabel: string = "continue|" + label;
     return this.module.createBlock(breakLabel, [
       this.module.createLoop(continueLabel,
         this.module.createBlock(null, [
@@ -768,8 +776,8 @@ export class Compiler extends DiagnosticEmitter {
     const incrementor: ExpressionRef = statement.incrementor ? this.compileExpression(<Expression>statement.incrementor, Type.void) : this.module.createNop();
     const body: ExpressionRef = this.compileStatement(statement.statement);
     this.currentFunction.leaveBreakContext();
-    const continueLabel: string = "continue$" + context;
-    const breakLabel: string = "break$" + context;
+    const continueLabel: string = "continue|" + context;
+    const breakLabel: string = "break|" + context;
     return this.module.createBlock(breakLabel, [
       initializer,
       this.module.createLoop(continueLabel, this.module.createBlock(null, [
@@ -816,7 +824,7 @@ export class Compiler extends DiagnosticEmitter {
     for (i = 0; i < k; ++i) {
       const case_: SwitchCase = statement.cases[i];
       if (case_.label) {
-        breaks[breakIndex++] = this.module.createBreak("case" + i.toString(10) + "$" + context,
+        breaks[breakIndex++] = this.module.createBreak("case" + i.toString(10) + "|" + context,
           this.module.createBinary(BinaryOp.EqI32,
             this.module.createGetLocal(local.index, NativeType.I32),
             this.compileExpression(case_.label, Type.i32)
@@ -830,15 +838,15 @@ export class Compiler extends DiagnosticEmitter {
     breaks[breakIndex] = this.module.createBreak((defaultIndex >= 0
         ? "case" + defaultIndex.toString(10)
         : "break"
-      ) + "$" + context);
+      ) + "|" + context);
 
     // nest blocks in order
-    let currentBlock: ExpressionRef = this.module.createBlock("case0$" + context, breaks, NativeType.None);
+    let currentBlock: ExpressionRef = this.module.createBlock("case0|" + context, breaks, NativeType.None);
     for (i = 0; i < k; ++i) {
       const case_: SwitchCase = statement.cases[i];
       const nextLabel: string = i == k - 1
-        ? "break$" + context
-        : "case" + (i + 1).toString(10) + "$" + context;
+        ? "break|" + context
+        : "case" + (i + 1).toString(10) + "|" + context;
       const l: i32 = case_.statements.length;
       const body: ExpressionRef[] = new Array(1 + l);
       body[0] = currentBlock;
@@ -895,8 +903,8 @@ export class Compiler extends DiagnosticEmitter {
   compileWhileStatement(statement: WhileStatement): ExpressionRef {
     const label: string = this.currentFunction.enterBreakContext();
     const condition: ExpressionRef = this.compileExpression(statement.condition, Type.i32);
-    const breakLabel: string = "break$" + label;
-    const continueLabel: string = "continue$" + label;
+    const breakLabel: string = "break|" + label;
+    const continueLabel: string = "continue|" + label;
     const body: ExpressionRef = this.compileStatement(statement.statement);
     this.currentFunction.leaveBreakContext();
     return this.module.createBlock(breakLabel, [

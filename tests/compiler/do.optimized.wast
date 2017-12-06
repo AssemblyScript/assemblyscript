@@ -6,8 +6,8 @@
  (export "loopDoInDo" (func $do/loopDoInDo))
  (export "memory" (memory $0))
  (func $do/loopDo (; 0 ;) (type $iv) (param $0 i32)
-  (loop $continue$1.1
-   (br_if $continue$1.1
+  (loop $continue|1.1
+   (br_if $continue|1.1
     (tee_local $0
      (i32.sub
       (get_local $0)
@@ -18,15 +18,15 @@
   )
  )
  (func $do/loopDoInDo (; 1 ;) (type $iv) (param $0 i32)
-  (loop $continue$1.1
+  (loop $continue|1.1
    (set_local $0
     (i32.sub
      (get_local $0)
      (i32.const 1)
     )
    )
-   (loop $continue$1.2
-    (br_if $continue$1.2
+   (loop $continue|1.2
+    (br_if $continue|1.2
      (tee_local $0
       (i32.sub
        (get_local $0)
@@ -35,7 +35,7 @@
      )
     )
    )
-   (br_if $continue$1.1
+   (br_if $continue|1.1
     (get_local $0)
    )
   )

@@ -44,15 +44,9 @@ if (args.help || args._.length < 1) {
   var options = [];
   Object.keys(conf).forEach(name => {
     var option = conf[name];
-    var text = "";
-    if (option.aliases) {
-      option.aliases.forEach((alias, i) => {
-        if (i > 0)
-          text += ", ";
-        text += "-" + alias;
-      });
-      text += ", ";
-    }
+    var text = " ";
+    if (option.aliases)
+      text += "-" + option.aliases[0] + ", ";
     text += "--" + name;
     while (text.length < 20)
       text += " ";
@@ -69,8 +63,20 @@ if (args.help || args._.length < 1) {
   process.exit(args.help ? 0 : 1);
 }
 
-var entryPath = args._[0];
-var entryText = fs.readFileSync(entryPath, { encoding: "utf8" });
+var entryPath = args._[0].replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
+var entryDir  = path.dirname(entryPath);
+var entryText;
+try {
+  entryText = fs.readFileSync(entryPath + ".ts", { encoding: "utf8" });
+} catch (e) {
+  try {
+    entryText = fs.readFileSync(entryPath + "/index.ts", { encoding: "utf8" });
+    entryPath = entryPath + "/index";
+  } catch (e) {
+    console.error("File '" + entryPath + ".ts' not found.");
+    process.exit(1);
+  }
+}
 
 var parser = assemblyscript.parseFile(entryText, entryPath);
 
@@ -79,9 +85,15 @@ var nextText;
 
 while ((nextPath = parser.nextFile()) != null) {
   try {
-    nextText = fs.readFileSync(path.join(path.dirname(entryPath), nextPath + ".ts"), { encoding: "utf8" });
+    nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
   } catch (e) {
-    nextText = fs.readFileSync(path.join(path.dirname(entryPath), nextPath, "index.ts"), { encoding: "utf8" });
+    try {
+      nextText = fs.readFileSync(nextPath + "/index.ts", { encoding: "utf8" });
+      nextPath = nextPath + "/index";
+    } catch (e) {
+      console.error("Imported file '" + nextPath + ".ts' not found.");
+      process.exit(1);
+    }
   }
   assemblyscript.parseFile(nextText, nextPath, parser);
 }

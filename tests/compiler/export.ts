@@ -8,8 +8,8 @@ function sub(a: i32, b: i32): i32 {
 
 export { sub as renamed_sub };
 
-export let a: i32 = 1;
+export const a: i32 = 1;
 
-let b: i32 = 2;
+const b: i32 = 2;
 
 export { b as renamed_b };

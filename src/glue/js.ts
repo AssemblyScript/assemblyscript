@@ -12,6 +12,10 @@ globalScope["select"] = function select<T>(ifTrue: T, ifFalse: T, condition: boo
   return condition ? ifTrue : ifFalse;
 };
 
+globalScope["assert"] = function(isTrue: bool): void {
+  if (!isTrue) throw new Error("assertion failed");
+};
+
 let binaryen: any;
 try {
   binaryen = require("binaryen");

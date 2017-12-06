@@ -1,4 +1,4 @@
-export { add, renamed_sub } from "./export";
+export { add, renamed_sub, a as renamed_a, renamed_b as rerenamed_b } from "./export";
 
 import { add as imported_add, renamed_sub as imported_sub } from "./export";
 

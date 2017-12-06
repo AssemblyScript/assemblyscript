@@ -340,7 +340,7 @@ export class Program extends DiagnosticEmitter {
 
     // export external element
     } else {
-      referencedName = (<string>internalPath) + PATH_DELIMITER + member.externalIdentifier.name;
+      referencedName = (<string>internalPath) + PATH_DELIMITER + member.identifier.name;
 
       // resolve right away if the export exists
       if (this.exports.has(referencedName)) {
@@ -771,6 +771,7 @@ export class Global extends Element {
   hasConstantValue: bool = false;
   constantIntegerValue: I64 | null = null;
   constantFloatValue: f64 = 0;
+  isCompiledMutable: bool = false;
 
   constructor(program: Program, internalName: string, declaration: VariableLikeDeclarationStatement | null, type: Type | null) {
     super(program, internalName);

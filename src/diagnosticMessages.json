@@ -3,6 +3,7 @@
   "Basic type '{0}' cannot be nullable.": 101,
   "Operation not supported.": 102,
   "Operation is unsafe.": 103,
+  "Cannot export a mutable global.": 104,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
