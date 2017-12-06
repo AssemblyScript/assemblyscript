@@ -13,7 +13,7 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts"))
     return;
 
-  console.log("Testing parser/" + filename);
+  console.log(chalk.default.whiteBright("Testing parser/" + filename));
 
   const parser = new Parser();
   const sourceText = fs.readFileSync(__dirname + "/parser/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n").replace(/^\/\/.*\r?\n/mg, "");

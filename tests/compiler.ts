@@ -18,7 +18,7 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts"))
     return;
 
-  console.log("Testing compiler/" + filename);
+  console.log(chalk.default.whiteBright("Testing compiler/" + filename));
 
   const parser = new Parser();
   const sourceText = fs.readFileSync(__dirname + "/compiler/" + filename, { encoding: "utf8" });
@@ -37,6 +37,7 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   const module = Compiler.compile(program);
   const actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
   let actualOptimized: string | null = null;
+  let actualInlined: string | null = null;
   const fixture = path.basename(filename, ".ts") + ".wast";
 
   if (module.validate()) {
@@ -50,6 +51,8 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     }
     module.optimize();
     actualOptimized = module.toText();
+    module.runPasses([ "inlining" ]);
+    actualInlined = module.toText();
   } else {
     process.exitCode = 1;
     console.log(chalk.default.red("validate ERROR"));
@@ -61,6 +64,17 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     if (actualOptimized != null) {
       fs.writeFileSync(__dirname + "/compiler/" + path.basename(filename, ".ts") + ".optimized.wast", actualOptimized, { encoding: "utf8" });
       console.log("Created optimized");
+    }
+    if (actualInlined != null) {
+      if (actualInlined != actualOptimized) {
+        fs.writeFileSync(__dirname + "/compiler/" + path.basename(filename, ".ts") + ".optimized-inlined.wast", actualInlined, { encoding: "utf8" });
+        console.log("Created optimized & inlined");
+      } else {
+        try {
+          fs.unlinkSync(__dirname + "/compiler/" + path.basename(filename, ".ts") + ".optimized-inlined.wast");
+          console.log("Deleted optimized & inlined");
+        } catch (e) {}
+      }
     }
   } else {
     const expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
