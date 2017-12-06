@@ -27,12 +27,12 @@
   (drop
    (i32.add
     (call $export/add
-     (get_global $export/a)
-     (get_global $export/b)
+     (i32.const 1)
+     (i32.const 2)
     )
     (call $export/sub
-     (get_global $export/b)
-     (get_global $export/a)
+     (i32.const 2)
+     (i32.const 1)
     )
    )
   )

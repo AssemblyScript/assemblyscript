@@ -522,6 +522,15 @@ export class Module {
     }
   }
 
+  removeFunction(name: string): void {
+    const cStr: CString = allocString(name);
+    try {
+      _BinaryenRemoveFunction(this.ref, cStr);
+    } finally {
+      _free(cStr);
+    }
+  }
+
   addFunctionExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
     const cStr1: CString = allocString(internalName);
@@ -691,9 +700,27 @@ export class Module {
     _BinaryenSetStart(this.ref, func);
   }
 
-  optimize(): void {
-    if (this.noEmit) return;
-    _BinaryenModuleOptimize(this.ref);
+  optimize(func: FunctionRef = 0): void {
+    if (func)
+      _BinaryenFunctionOptimize(func, this.ref);
+    else
+      _BinaryenModuleOptimize(this.ref);
+  }
+
+  runPasses(passes: string[], func: FunctionRef = 0): void {
+    let i: i32, k: i32 = passes.length;
+    const names: CString[] = new Array(k);
+    for (i = 0; i < k; ++i) names[i] = allocString(passes[i]);
+    const cArr: CArray<i32> = allocI32Array(names);
+    try {
+      if (func)
+        _BinaryenFunctionRunPasses(func, this.ref, cArr, k);
+      else
+        _BinaryenModuleRunPasses(this.ref, cArr, k);
+    } finally {
+      _free(cArr);
+      for (; i >= 0; --i) _free(names[i]);
+    }
   }
 
   validate(): bool {
@@ -771,6 +798,10 @@ export function getConstValueF32(expr: ExpressionRef): f32 {
 
 export function getConstValueF64(expr: ExpressionRef): f64 {
   return _BinaryenConstGetValueF64(expr);
+}
+
+export function getFunctionBody(func: FunctionRef): ExpressionRef {
+  return _BinaryenFunctionGetBody(func);
 }
 
 export class Relooper {

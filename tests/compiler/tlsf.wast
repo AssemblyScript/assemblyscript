@@ -1,22 +1,25 @@
 (module
  (type $ii (func (param i32) (result i32)))
+ (type $i (func (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iv (func (param i32)))
  (type $v (func))
  (global $tlsf/ALIGN_SIZE_LOG2 i32 (i32.const 3))
- (global $tlsf/ALIGN_SIZE (mut i32) (i32.const 0))
+ (global $tlsf/ALIGN_SIZE i32 (i32.const 8))
  (global $tlsf/BLOCK_PREV_PHYS_OFFSET i32 (i32.const 0))
- (global $tlsf/BLOCK_SIZE_OFFSET (mut i32) (i32.const 0))
- (global $tlsf/BLOCK_NEXT_FREE_OFFSET (mut i32) (i32.const 0))
- (global $tlsf/BLOCK_PREV_FREE_OFFSET (mut i32) (i32.const 0))
- (global $tlsf/CONTROL_FL_BITMAP_OFFSET (mut i32) (i32.const 0))
+ (global $tlsf/BLOCK_SIZE_OFFSET i32 (i32.const 4))
+ (global $tlsf/BLOCK_NEXT_FREE_OFFSET i32 (i32.const 8))
+ (global $tlsf/BLOCK_PREV_FREE_OFFSET i32 (i32.const 12))
+ (global $tlsf/CONTROL_FL_BITMAP_OFFSET i32 (i32.const 16))
  (global $tlsf/FL_INDEX_MAX i32 (i32.const 30))
  (global $tlsf/SL_INDEX_COUNT_LOG2 i32 (i32.const 5))
- (global $tlsf/FL_INDEX_SHIFT (mut i32) (i32.const 0))
- (global $tlsf/FL_INDEX_COUNT (mut i32) (i32.const 0))
- (global $tlsf/SL_INDEX_COUNT (mut i32) (i32.const 0))
+ (global $tlsf/FL_INDEX_SHIFT i32 (i32.const 8))
+ (global $tlsf/FL_INDEX_COUNT i32 (i32.const 23))
+ (global $tlsf/CONTROL_SL_BITMAP_OFFSET i32 (i32.const 20))
+ (global $tlsf/SL_INDEX_COUNT i32 (i32.const 32))
+ (global $tlsf/CONTROL_BLOCKS_OFFSET i32 (i32.const 112))
  (memory $0 1)
  (data (i32.const 4) "\08\00\00\00")
  (export "control_construct" (func $tlsf/control_construct))
@@ -61,7 +64,7 @@
   (i32.store
    (i32.add
     (get_local $0)
-    (get_global $tlsf/BLOCK_NEXT_FREE_OFFSET)
+    (i32.const 8)
    )
    (get_local $1)
   )
@@ -70,7 +73,7 @@
   (i32.store
    (i32.add
     (get_local $0)
-    (get_global $tlsf/BLOCK_PREV_FREE_OFFSET)
+    (i32.const 12)
    )
    (get_local $1)
   )
@@ -79,7 +82,7 @@
   (i32.store
    (i32.add
     (get_local $0)
-    (get_global $tlsf/CONTROL_FL_BITMAP_OFFSET)
+    (i32.const 16)
    )
    (get_local $1)
   )
@@ -89,14 +92,17 @@
    (i32.eqz
     (i32.lt_s
      (get_local $1)
-     (get_global $tlsf/FL_INDEX_COUNT)
+     (i32.const 23)
     )
    )
    (unreachable)
   )
   (i32.store
    (i32.add
-    (get_local $0)
+    (i32.add
+     (get_local $0)
+     (i32.const 20)
+    )
     (i32.mul
      (get_local $1)
      (i32.const 4)
@@ -110,7 +116,7 @@
    (i32.eqz
     (i32.lt_s
      (get_local $1)
-     (get_global $tlsf/FL_INDEX_COUNT)
+     (i32.const 23)
     )
    )
    (unreachable)
@@ -119,19 +125,22 @@
    (i32.eqz
     (i32.lt_s
      (get_local $2)
-     (get_global $tlsf/SL_INDEX_COUNT)
+     (i32.const 32)
     )
    )
    (unreachable)
   )
   (i32.store
    (i32.add
-    (get_local $0)
+    (i32.add
+     (get_local $0)
+     (i32.const 112)
+    )
     (i32.mul
      (i32.add
       (i32.mul
        (get_local $1)
-       (get_global $tlsf/SL_INDEX_COUNT)
+       (i32.const 32)
       )
       (get_local $2)
      )
@@ -166,7 +175,7 @@
     (if
      (i32.lt_s
       (get_local $1)
-      (get_global $tlsf/FL_INDEX_COUNT)
+      (i32.const 23)
      )
      (block
       (block
@@ -185,7 +194,7 @@
          (if
           (i32.lt_s
            (get_local $2)
-           (get_global $tlsf/SL_INDEX_COUNT)
+           (i32.const 32)
           )
           (block
            (call $tlsf/control_set_block
@@ -302,69 +311,18 @@
    )
    (unreachable)
   )
-  (set_global $tlsf/ALIGN_SIZE
-   (i32.shl
-    (i32.const 1)
-    (get_global $tlsf/ALIGN_SIZE_LOG2)
-   )
-  )
   (if
    (i32.eqz
     (i32.eq
-     (get_global $tlsf/ALIGN_SIZE)
+     (i32.const 8)
      (i32.const 8)
     )
    )
    (unreachable)
   )
-  (set_global $tlsf/BLOCK_SIZE_OFFSET
-   (i32.add
-    (get_global $tlsf/BLOCK_PREV_PHYS_OFFSET)
-    (i32.const 4)
-   )
-  )
-  (set_global $tlsf/BLOCK_NEXT_FREE_OFFSET
-   (i32.add
-    (get_global $tlsf/BLOCK_SIZE_OFFSET)
-    (i32.const 4)
-   )
-  )
-  (set_global $tlsf/BLOCK_PREV_FREE_OFFSET
-   (i32.add
-    (get_global $tlsf/BLOCK_NEXT_FREE_OFFSET)
-    (i32.const 4)
-   )
-  )
-  (set_global $tlsf/CONTROL_FL_BITMAP_OFFSET
-   (i32.add
-    (get_global $tlsf/BLOCK_PREV_FREE_OFFSET)
-    (i32.const 4)
-   )
-  )
-  (set_global $tlsf/FL_INDEX_SHIFT
-   (i32.add
-    (get_global $tlsf/SL_INDEX_COUNT_LOG2)
-    (get_global $tlsf/ALIGN_SIZE_LOG2)
-   )
-  )
-  (set_global $tlsf/FL_INDEX_COUNT
-   (i32.add
-    (i32.sub
-     (get_global $tlsf/FL_INDEX_MAX)
-     (get_global $tlsf/FL_INDEX_SHIFT)
-    )
-    (i32.const 1)
-   )
-  )
-  (set_global $tlsf/SL_INDEX_COUNT
-   (i32.shl
-    (i32.const 1)
-    (get_global $tlsf/SL_INDEX_COUNT_LOG2)
-   )
-  )
   (call $tlsf/control_construct
    (i32.load
-    (i32.const 8)
+    (i32.const 4)
    )
   )
  )

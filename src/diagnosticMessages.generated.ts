@@ -6,6 +6,7 @@ export enum DiagnosticCode {
   Operation_not_supported = 102,
   Operation_is_unsafe = 103,
   Cannot_export_a_mutable_global = 104,
+  Compiling_constant_global_with_non_constant_initializer_as_mutable = 105,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -14,6 +15,7 @@ export enum DiagnosticCode {
   Unexpected_token = 1012,
   A_rest_parameter_must_be_last_in_a_parameter_list = 1014,
   A_required_parameter_cannot_follow_an_optional_parameter = 1016,
+  Enum_member_must_have_initializer = 1061,
   Statements_are_not_allowed_in_ambient_contexts = 1036,
   Initializers_are_not_allowed_in_ambient_contexts = 1039,
   _0_modifier_cannot_be_used_here = 1042,
@@ -76,6 +78,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 102: return "Operation not supported.";
     case 103: return "Operation is unsafe.";
     case 104: return "Cannot export a mutable global.";
+    case 105: return "Compiling constant global with non-constant initializer as mutable.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -84,6 +87,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1012: return "Unexpected token.";
     case 1014: return "A rest parameter must be last in a parameter list.";
     case 1016: return "A required parameter cannot follow an optional parameter.";
+    case 1061: return "Enum member must have initializer.";
     case 1036: return "Statements are not allowed in ambient contexts.";
     case 1039: return "Initializers are not allowed in ambient contexts.";
     case 1042: return "'{0}' modifier cannot be used here.";

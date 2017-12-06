@@ -4,6 +4,7 @@
   "Operation not supported.": 102,
   "Operation is unsafe.": 103,
   "Cannot export a mutable global.": 104,
+  "Compiling constant global with non-constant initializer as mutable.": 105,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
@@ -13,6 +14,7 @@
   "Unexpected token.": 1012,
   "A rest parameter must be last in a parameter list.": 1014,
   "A required parameter cannot follow an optional parameter.": 1016,
+  "Enum member must have initializer.": 1061,
   "Statements are not allowed in ambient contexts.": 1036,
   "Initializers are not allowed in ambient contexts.": 1039,
   "'{0}' modifier cannot be used here.": 1042,

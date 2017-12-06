@@ -1,8 +1,8 @@
-import { compileCall as compileBuiltinCall } from "./builtins";
+import { compileCall as compileBuiltinCall, initialize } from "./builtins";
 import { PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticEmitter } from "./diagnostics";
-import { Module, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, NativeType, FunctionTypeRef, getExpressionId, ExpressionId } from "./module";
-import { Program, ClassPrototype, Class, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter } from "./program";
+import { Module, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, NativeType, FunctionRef, FunctionTypeRef, getExpressionId, ExpressionId, getExpressionType, getFunctionBody, getConstValueI32, getConstValueI64Low, getConstValueI64High, getConstValueF32, getConstValueF64 } from "./module";
+import { Program, ClassPrototype, Class, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter, EnumValue } from "./program";
 import { I64, U64, sb } from "./util";
 import { Token } from "./tokenizer";
 import {
@@ -298,7 +298,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!this.compileGlobal(<Global>element))
       return null;
     if (declaration.range.source.isEntry && (<VariableStatement>declaration.parent).parent == declaration.range.source && hasModifier(ModifierKind.EXPORT, declaration.modifiers)) {
-      if (!(<Global>element).isCompiledMutable)
+      if ((<Global>element).hasConstantValue)
         this.module.addGlobalExport(element.internalName, declaration.identifier.name);
       else
         this.warning(DiagnosticCode.Cannot_export_a_mutable_global, declaration.range);
@@ -325,7 +325,7 @@ export class Compiler extends DiagnosticEmitter {
       return true;
     const nativeType: NativeType = typeToNativeType(<Type>type);
     let initializer: ExpressionRef;
-    let initializeInStart: bool;
+    let initializeInStart: bool = false;
     if (element.hasConstantValue) {
       if (type.isLongInteger)
         initializer = element.constantIntegerValue ? this.module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi) : this.module.createI64(0, 0);
@@ -341,25 +341,49 @@ export class Compiler extends DiagnosticEmitter {
           initializer = this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & type.smallIntegerMask: 0);
       } else
         initializer = this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() : 0);
-      initializeInStart = false;
     } else if (declaration) {
       if (declaration.initializer) {
         initializer = this.compileExpression(declaration.initializer, type);
-        initializeInStart = getExpressionId(initializer) != ExpressionId.Const; // MVP doesn't support complex initializers
-      } else {
+        if (getExpressionId(initializer) != ExpressionId.Const) {
+          if (!element.isMutable) {
+            initializer = this.precomputeExpressionRef(initializer);
+            if (getExpressionId(initializer) != ExpressionId.Const) {
+              this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
+              initializeInStart = true;
+            }
+          } else
+            initializeInStart = true;
+        }
+      } else
         initializer = typeToNativeZero(this.module, type);
-        initializeInStart = false;
-      }
     } else
       throw new Error("unexpected missing declaration or constant value");
     const internalName: string = element.internalName;
     if (initializeInStart) {
       this.module.addGlobal(internalName, nativeType, true, typeToNativeZero(this.module, type));
       this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
-      element.isCompiledMutable = true;
     } else {
       this.module.addGlobal(internalName, nativeType, element.isMutable, initializer);
-      element.isCompiledMutable = element.isMutable;
+      if (!element.isMutable) {
+        element.hasConstantValue = true;
+        const exprType: NativeType = getExpressionType(initializer);
+        switch (exprType) {
+          case NativeType.I32:
+            element.constantIntegerValue = new I64(getConstValueI32(initializer), 0);
+            break;
+          case NativeType.I64:
+            element.constantIntegerValue = new I64(getConstValueI64Low(initializer), getConstValueI64High(initializer));
+            break;
+          case NativeType.F32:
+            element.constantFloatValue = getConstValueF32(initializer);
+            break;
+          case NativeType.F64:
+            element.constantFloatValue = getConstValueF64(initializer);
+            break;
+          default:
+            throw new Error("unexpected initializer type");
+        }
+      }
     }
     return element.isCompiled = true;
   }
@@ -376,7 +400,7 @@ export class Compiler extends DiagnosticEmitter {
   compileEnum(element: Enum): void {
     if (element.isCompiled)
       return;
-    let previousInternalName: string | null = null;
+    let previousValue: EnumValue | null = null;
     for (let [key, val] of element.members) {
       if (val.hasConstantValue) {
         this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
@@ -386,15 +410,24 @@ export class Compiler extends DiagnosticEmitter {
         let initializeInStart: bool = false;
         if (declaration.value) {
           initializer = this.compileExpression(<Expression>declaration.value, Type.i32);
-          initializeInStart = getExpressionId(initializer) != ExpressionId.Const; // MVP doesn't support complex initializers
-        } else if (previousInternalName == null) {
+          if (getExpressionId(initializer) != ExpressionId.Const) {
+            initializer = this.precomputeExpressionRef(initializer);
+            if (getExpressionId(initializer) != ExpressionId.Const) {
+              this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
+              initializeInStart = true;
+            }
+          }
+        } else if (previousValue == null) {
           initializer = this.module.createI32(0);
-          initializeInStart = false;
+        } else if (previousValue.hasConstantValue) {
+          initializer = this.module.createI32(previousValue.constantValue + 1);
         } else {
+          // in TypeScript this errors with TS1061, but actually we can do:
           initializer = this.module.createBinary(BinaryOp.AddI32,
-            this.module.createGetGlobal(previousInternalName, NativeType.I32),
+            this.module.createGetGlobal(previousValue.internalName, NativeType.I32),
             this.module.createI32(1)
           );
+          this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, val.declaration.range);
           initializeInStart = true;
         }
         if (initializeInStart) {
@@ -402,11 +435,15 @@ export class Compiler extends DiagnosticEmitter {
           this.startFunctionBody.push(this.module.createSetGlobal(val.internalName, initializer));
         } else {
           this.module.addGlobal(val.internalName, NativeType.I32, false, initializer);
-          // TODO: check export, requires updated binaryen.js with Module#addGlobalExport
+          if (getExpressionType(initializer) == NativeType.I32) {
+            val.hasConstantValue = true;
+            val.constantValue = getConstValueI32(initializer);
+          } else
+            throw new Error("unexpected initializer type");
         }
       } else
         throw new Error("unexpected missing declaration or constant value");
-      previousInternalName = val.internalName;
+      previousValue = val;
     }
     element.isCompiled = true;
   }
@@ -588,7 +625,7 @@ export class Compiler extends DiagnosticEmitter {
 
         case ElementKind.GLOBAL:
           if (this.compileGlobal(<Global>element) && statement.range.source.isEntry) {
-            if (!(<Global>element).isCompiledMutable)
+            if ((<Global>element).hasConstantValue)
               this.module.addGlobalExport(element.internalName, member.externalIdentifier.name);
             else
               this.warning(DiagnosticCode.Cannot_export_a_mutable_global, member.range);
@@ -986,6 +1023,24 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = contextualType;
     }
     return expr;
+  }
+
+  precomputeExpression(expression: Expression, contextualType: Type, conversionKind: ConversionKind = ConversionKind.IMPLICIT): ExpressionRef {
+    const expr: ExpressionRef = this.compileExpression(expression, contextualType, conversionKind);
+    return this.precomputeExpressionRef(expr);
+  }
+
+  precomputeExpressionRef(expr: ExpressionRef): ExpressionRef {
+    const nativeType: NativeType = typeToNativeType(this.currentType);
+    let typeRef: FunctionTypeRef = this.module.getFunctionTypeBySignature(nativeType, []);
+    if (!typeRef)
+      typeRef = this.module.addFunctionType(typeToSignatureNamePart(this.currentType), nativeType, []);
+    const funcRef: FunctionRef = this.module.addFunction("__precompute", typeRef, [], expr);
+    this.module.runPasses([ "precompute" ], funcRef);
+    const ret: ExpressionRef = getFunctionBody(funcRef);
+    this.module.removeFunction("__precompute");
+    // TODO: also remove the function type somehow if no longer used
+    return ret;
   }
 
   convertExpression(expr: ExpressionRef, fromType: Type, toType: Type, conversionKind: ConversionKind, reportNode: Node): ExpressionRef {
@@ -1636,11 +1691,24 @@ export class Compiler extends DiagnosticEmitter {
 
     // global
     if (element.kind == ElementKind.GLOBAL) {
-      if ((<Global>element).type)
-        this.currentType = <Type>(<Global>element).type;
-      return this.compileGlobal(<Global>element) // reports
-        ? this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType = <Type>(<Global>element).type))
-        : this.module.createUnreachable();
+      const global: Global = <Global>element;
+      if (global.type)
+        this.currentType = <Type>global.type;
+      if (!this.compileGlobal(global)) // reports
+        return this.module.createUnreachable();
+      if (global.hasConstantValue) {
+        if (global.type == Type.f32)
+          return this.module.createF32((<Global>element).constantFloatValue);
+        else if (global.type == Type.f64)
+          return this.module.createF64((<Global>element).constantFloatValue);
+        else if ((<Type>global.type).isLongInteger)
+          return this.module.createI64((<I64>global.constantIntegerValue).lo, (<I64>global.constantIntegerValue).hi);
+        else if ((<Type>global.type).isAnyInteger)
+          return this.module.createI32((<I64>global.constantIntegerValue).lo);
+        else
+          throw new Error("unexpected global type");
+      } else
+        return this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType = <Type>(<Global>element).type));
     }
 
     // field

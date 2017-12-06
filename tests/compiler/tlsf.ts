@@ -104,24 +104,24 @@ function control_set_fl(ptr: usize, value: u32): void {
 
 function control_get_sl(ptr: usize, flIndex: usize): u32 {
   assert(flIndex < FL_INDEX_COUNT);
-  return load<u32>(ptr + flIndex * sizeof<u32>());
+  return load<u32>(ptr + CONTROL_SL_BITMAP_OFFSET + flIndex * sizeof<u32>());
 }
 
 function control_set_sl(ptr: usize, flIndex: usize, value: u32): void {
   assert(flIndex < FL_INDEX_COUNT);
-  store<u32>(ptr + flIndex * sizeof<u32>(), value);
+  store<u32>(ptr + CONTROL_SL_BITMAP_OFFSET + flIndex * sizeof<u32>(), value);
 }
 
 function control_get_block(ptr: usize, flIndex: usize, slIndex: usize): usize {
   assert(flIndex < FL_INDEX_COUNT);
   assert(slIndex < SL_INDEX_COUNT);
-  return load<usize>(ptr + (flIndex * SL_INDEX_COUNT + slIndex) * sizeof<usize>());
+  return load<usize>(ptr + CONTROL_BLOCKS_OFFSET + (flIndex * SL_INDEX_COUNT + slIndex) * sizeof<usize>());
 }
 
 function control_set_block(ptr: usize, flIndex: usize, slIndex: usize, value: usize): void {
   assert(flIndex < FL_INDEX_COUNT);
   assert(slIndex < SL_INDEX_COUNT);
-  store<usize>(ptr + (flIndex * SL_INDEX_COUNT + slIndex) * sizeof<usize>(), value);
+  store<usize>(ptr + CONTROL_BLOCKS_OFFSET + (flIndex * SL_INDEX_COUNT + slIndex) * sizeof<usize>(), value);
 }
 
 /* Clear structure and point all empty lists at the null block. */
@@ -136,4 +136,4 @@ export function control_construct(ptr: usize): void {
   }
 }
 
-control_construct(load<usize>(8));
+control_construct(load<usize>(sizeof<usize>())); // get HEAP_OFFSET and initialize there

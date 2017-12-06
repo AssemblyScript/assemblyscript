@@ -771,7 +771,6 @@ export class Global extends Element {
   hasConstantValue: bool = false;
   constantIntegerValue: I64 | null = null;
   constantFloatValue: f64 = 0;
-  isCompiledMutable: bool = false;
 
   constructor(program: Program, internalName: string, declaration: VariableLikeDeclarationStatement | null, type: Type | null) {
     super(program, internalName);
