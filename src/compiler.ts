@@ -1745,10 +1745,8 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createF32((<f32>intValue.lo) + (<f32>intValue.hi) * 0xffffffff);
         if (contextualType.isLongInteger)
           return this.module.createI64(intValue.lo, intValue.hi);
-        if (!intValue.fitsInI32) {
-          this.currentType = Type.i64;
-          return this.module.createI64(intValue.lo, intValue.hi);
-        }
+        if (contextualType.isSmallInteger)
+          return this.module.createI32(intValue.toI32());
         this.currentType = Type.i32;
         return this.module.createI32(intValue.toI32());
       }

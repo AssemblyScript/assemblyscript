@@ -1110,7 +1110,7 @@ function isOctalDigit(c: i32): bool {
 function isIdentifierStart(c: i32): bool {
   return c >= CharCode.A && c <= CharCode.Z
       || c >= CharCode.a && c <= CharCode.z
-//    || c == CharCode.DOLLAR // reserved for internal in case we have to change the naming scheme
+      || c == CharCode.DOLLAR
       || c == CharCode._
       || c > 0x7f && isUnicodeIdentifierStart(c);
 }
@@ -1123,7 +1123,7 @@ function isIdentifierPart(c: i32): bool {
   return c >= CharCode.A && c <= CharCode.Z
       || c >= CharCode.a && c <= CharCode.z
       || c >= CharCode._0 && c <= CharCode._9
-//    || c == CharCode.DOLLAR // reserved for internal use, see above
+      || c == CharCode.DOLLAR
       || c == CharCode._
       || c > 0x7f && isUnicodeIdentifierPart(c);
 }

@@ -7,7 +7,7 @@
  (type $v (func))
  (memory $0 1)
  (data (i32.const 4) "\08")
- (export "control_construct" (func $tlsf/control_construct))
+ (export "control$construct" (func $tlsf/control$construct))
  (export "memory" (memory $0))
  (start $start)
  (func $tlsf/fls (; 0 ;) (type $ii) (param $0 i32) (result i32)
@@ -31,7 +31,7 @@
    (i32.const -1)
   )
  )
- (func $tlsf/control_set_block (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $tlsf/control$set_block (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (if
    (i32.ge_s
     (get_local $1)
@@ -66,7 +66,7 @@
    (get_local $3)
   )
  )
- (func $tlsf/control_construct (; 3 ;) (type $iv) (param $0 i32)
+ (func $tlsf/control$construct (; 3 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -79,7 +79,7 @@
   (local $10 i32)
   (local $11 i32)
   (block
-   (block $__inlined_func$tlsf/block_set_next_free
+   (block $__inlined_func$tlsf/block$set_next_free
     (set_local $3
      (get_local $0)
     )
@@ -96,7 +96,7 @@
    )
   )
   (block
-   (block $__inlined_func$tlsf/block_set_prev_free
+   (block $__inlined_func$tlsf/block$set_prev_free
     (set_local $5
      (get_local $0)
     )
@@ -113,7 +113,7 @@
    )
   )
   (block
-   (block $__inlined_func$tlsf/control_set_fl
+   (block $__inlined_func$tlsf/control$set_fl_bitmap
     (set_local $7
      (get_local $0)
     )
@@ -140,7 +140,7 @@
     )
     (block
      (block
-      (block $__inlined_func$tlsf/control_set_sl
+      (block $__inlined_func$tlsf/control$set_sl_bitmap
        (set_local $9
         (get_local $0)
        )
@@ -184,7 +184,7 @@
         (i32.const 32)
        )
        (block
-        (call $tlsf/control_set_block
+        (call $tlsf/control$set_block
          (get_local $0)
          (get_local $1)
          (get_local $2)
@@ -269,7 +269,7 @@
    )
    (unreachable)
   )
-  (call $tlsf/control_construct
+  (call $tlsf/control$construct
    (i32.load
     (i32.const 4)
    )

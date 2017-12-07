@@ -379,7 +379,7 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.EQUALS)) {
       if (isDeclare)
         this.error(DiagnosticCode.Initializers_are_not_allowed_in_ambient_contexts, tn.range()); // recoverable
-      initializer = this.parseExpression(tn);
+      initializer = this.parseExpression(tn, Precedence.COMMA + 1);
       if (!initializer)
         return null;
     }

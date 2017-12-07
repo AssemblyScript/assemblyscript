@@ -41,46 +41,98 @@ const SMALL_BLOCK_SIZE: i32 = 1 << FL_INDEX_SHIFT;
 
 // struct block_header_t {
 //   struct block_header_t* prev_phys_block;
-//   size_t size;
+//   size_t tagged_size;
 //   struct block_header_t* next_free;
 //   struct block_header_t* prev_free;
 // }
 
-const BLOCK_PREV_PHYS_OFFSET: usize = 0;
-const BLOCK_SIZE_OFFSET: usize = BLOCK_PREV_PHYS_OFFSET + sizeof<usize>();
-const BLOCK_NEXT_FREE_OFFSET: usize = BLOCK_SIZE_OFFSET + sizeof<usize>();
-const BLOCK_PREV_FREE_OFFSET: usize = BLOCK_NEXT_FREE_OFFSET + sizeof<usize>();
+const BLOCK$PREV_PHYS_BLOCK_OFFSET: usize = 0;
+const BLOCK$TAGGED_SIZE_OFFSET: usize = BLOCK$PREV_PHYS_BLOCK_OFFSET + sizeof<usize>();
+const BLOCK$NEXT_FREE_OFFSET: usize = BLOCK$TAGGED_SIZE_OFFSET + sizeof<usize>();
+const BLOCK$PREV_FREE_OFFSET: usize = BLOCK$NEXT_FREE_OFFSET + sizeof<usize>();
+const BLOCK$SIZE: usize = BLOCK$PREV_FREE_OFFSET + sizeof<usize>();
 
-function block_get_prev_phys_block(ptr: usize): usize {
-  return load<usize>(ptr + BLOCK_PREV_PHYS_OFFSET);
+const BLOCK_HEADER_FREE_BIT: u32 = 1 << 0;
+const BLOCK_HEADER_PREV_FREE_BIT: u32 = 1 << 1;
+const BLOCK_OVERHEAD: usize = sizeof<usize>();
+const BLOCK_START_OFFSET: usize = BLOCK$TAGGED_SIZE_OFFSET + sizeof<usize>();
+const BLOCK_SIZE_MIN: usize = BLOCK$SIZE - BLOCK_OVERHEAD;
+const BLOCK_SIZE_MAX: usize = 1 << (<usize>FL_INDEX_MAX);
+
+function block$get_prev_phys_block(block: usize): usize {
+  return load<usize>(block + BLOCK$PREV_PHYS_BLOCK_OFFSET);
 }
 
-function block_set_prev_phys_block(ptr: usize, value: usize): void {
-  store<usize>(ptr + BLOCK_PREV_PHYS_OFFSET, value);
+function block$set_prev_phys_block(block: usize, value: usize): void {
+  store<usize>(block + BLOCK$PREV_PHYS_BLOCK_OFFSET, value);
 }
 
-function block_get_size(ptr: usize): usize {
-  return load<usize>(ptr + BLOCK_SIZE_OFFSET);
+function block$get_tagged_size(block: usize): usize {
+  return load<usize>(block + BLOCK$TAGGED_SIZE_OFFSET);
 }
 
-function block_set_size(ptr: usize, value: usize): void {
-  store<usize>(ptr + BLOCK_SIZE_OFFSET, value);
+function block$set_tagged_size(block: usize, value: usize): void {
+  store<usize>(block + BLOCK$TAGGED_SIZE_OFFSET, value);
 }
 
-function block_get_next_free(ptr: usize): usize {
-  return load<usize>(ptr + BLOCK_NEXT_FREE_OFFSET);
+function block_size(block: usize): usize {
+  return block$get_tagged_size(block) & ~(BLOCK_HEADER_FREE_BIT | BLOCK_HEADER_PREV_FREE_BIT);
 }
 
-function block_set_next_free(ptr: usize, value: usize): void {
-  store<usize>(ptr + BLOCK_NEXT_FREE_OFFSET, value);
+function block_set_size(block: usize, value: usize): void {
+  store<usize>(block + BLOCK$TAGGED_SIZE_OFFSET, value | (block$get_tagged_size(block) & (BLOCK_HEADER_FREE_BIT | BLOCK_HEADER_PREV_FREE_BIT)));
 }
 
-function block_get_prev_free(ptr: usize): usize {
-  return load<usize>(ptr + BLOCK_PREV_FREE_OFFSET);
+function block$get_next_free(block: usize): usize {
+  return load<usize>(block + BLOCK$NEXT_FREE_OFFSET);
 }
 
-function block_set_prev_free(ptr: usize, value: usize): void {
-  store<usize>(ptr + BLOCK_PREV_FREE_OFFSET, value);
+function block$set_next_free(block: usize, value: usize): void {
+  store<usize>(block + BLOCK$NEXT_FREE_OFFSET, value);
+}
+
+function block$get_prev_free(block: usize): usize {
+  return load<usize>(block + BLOCK$PREV_FREE_OFFSET);
+}
+
+function block$set_prev_free(block: usize, value: usize): void {
+  store<usize>(block + BLOCK$PREV_FREE_OFFSET, value);
+}
+
+function block_is_last(block: usize): bool {
+  return block_size(block) == 0;
+}
+
+function block_is_free(block: usize): bool {
+  return (block$get_tagged_size(block) & BLOCK_HEADER_FREE_BIT) != 0;
+}
+
+function block_set_free(block: usize): void {
+  store<usize>(block + BLOCK$TAGGED_SIZE_OFFSET, block$get_tagged_size(block) | BLOCK_HEADER_FREE_BIT);
+}
+
+function block_set_used(block: usize): void {
+  store<usize>(block + BLOCK$TAGGED_SIZE_OFFSET, block$get_tagged_size(block) & ~BLOCK_HEADER_FREE_BIT);
+}
+
+function block_is_prev_free(block: usize): bool {
+  return (block$get_tagged_size(block) & BLOCK_HEADER_PREV_FREE_BIT) != 0;
+}
+
+function block_set_prev_free(block: usize): void {
+  store<usize>(block + BLOCK$TAGGED_SIZE_OFFSET, block$get_tagged_size(block) | BLOCK_HEADER_PREV_FREE_BIT);
+}
+
+function block_set_prev_used(block: usize): void {
+  store<usize>(block + BLOCK$TAGGED_SIZE_OFFSET, block$get_tagged_size(block) & ~BLOCK_HEADER_PREV_FREE_BIT);
+}
+
+function block_from_ptr(ptr: usize): usize {
+  return ptr - BLOCK_START_OFFSET;
+}
+
+function block_to_ptr(block: usize): usize {
+  return block + BLOCK_START_OFFSET;
 }
 
 // struct control_t {
@@ -90,50 +142,51 @@ function block_set_prev_free(ptr: usize, value: usize): void {
 //   block_header_t* blocks[FL_INDEX_COUNT][SL_INDEX_COUNT];
 // }
 
-const CONTROL_FL_BITMAP_OFFSET: usize = BLOCK_PREV_FREE_OFFSET + sizeof<usize>();
-const CONTROL_SL_BITMAP_OFFSET: usize = CONTROL_FL_BITMAP_OFFSET + sizeof<u32>();
-const CONTROL_BLOCKS_OFFSET: usize = CONTROL_SL_BITMAP_OFFSET + FL_INDEX_COUNT * sizeof<u32>();
+const CONTROL$FL_BITMAP_OFFSET: usize = BLOCK$SIZE;
+const CONTROL$SL_BITMAP_OFFSET: usize = CONTROL$FL_BITMAP_OFFSET + sizeof<u32>();
+const CONTROL$BLOCKS_OFFSET: usize = CONTROL$SL_BITMAP_OFFSET + FL_INDEX_COUNT * sizeof<u32>();
+const CONTROL$SIZE: usize = CONTROL$BLOCKS_OFFSET + FL_INDEX_COUNT * SL_INDEX_COUNT * sizeof<u32>();
 
-function control_get_fl(ptr: usize): u32 {
-  return load<u32>(ptr + CONTROL_FL_BITMAP_OFFSET);
+function control$get_fl_bitmap(ptr: usize): u32 {
+  return load<u32>(ptr + CONTROL$FL_BITMAP_OFFSET);
 }
 
-function control_set_fl(ptr: usize, value: u32): void {
-  store<u32>(ptr + CONTROL_FL_BITMAP_OFFSET, value);
+function control$set_fl_bitmap(ptr: usize, value: u32): void {
+  store<u32>(ptr + CONTROL$FL_BITMAP_OFFSET, value);
 }
 
-function control_get_sl(ptr: usize, flIndex: usize): u32 {
+function control$get_sl_bitmap(ptr: usize, flIndex: usize): u32 {
   assert(flIndex < FL_INDEX_COUNT);
-  return load<u32>(ptr + CONTROL_SL_BITMAP_OFFSET + flIndex * sizeof<u32>());
+  return load<u32>(ptr + CONTROL$SL_BITMAP_OFFSET + flIndex * sizeof<u32>());
 }
 
-function control_set_sl(ptr: usize, flIndex: usize, value: u32): void {
+function control$set_sl_bitmap(ptr: usize, flIndex: usize, value: u32): void {
   assert(flIndex < FL_INDEX_COUNT);
-  store<u32>(ptr + CONTROL_SL_BITMAP_OFFSET + flIndex * sizeof<u32>(), value);
+  store<u32>(ptr + CONTROL$SL_BITMAP_OFFSET + flIndex * sizeof<u32>(), value);
 }
 
-function control_get_block(ptr: usize, flIndex: usize, slIndex: usize): usize {
-  assert(flIndex < FL_INDEX_COUNT);
-  assert(slIndex < SL_INDEX_COUNT);
-  return load<usize>(ptr + CONTROL_BLOCKS_OFFSET + (flIndex * SL_INDEX_COUNT + slIndex) * sizeof<usize>());
-}
-
-function control_set_block(ptr: usize, flIndex: usize, slIndex: usize, value: usize): void {
+function control$get_block(ptr: usize, flIndex: usize, slIndex: usize): usize {
   assert(flIndex < FL_INDEX_COUNT);
   assert(slIndex < SL_INDEX_COUNT);
-  store<usize>(ptr + CONTROL_BLOCKS_OFFSET + (flIndex * SL_INDEX_COUNT + slIndex) * sizeof<usize>(), value);
+  return load<usize>(ptr + CONTROL$BLOCKS_OFFSET + (flIndex * SL_INDEX_COUNT + slIndex) * sizeof<usize>());
+}
+
+function control$set_block(ptr: usize, flIndex: usize, slIndex: usize, value: usize): void {
+  assert(flIndex < FL_INDEX_COUNT);
+  assert(slIndex < SL_INDEX_COUNT);
+  store<usize>(ptr + CONTROL$BLOCKS_OFFSET + (flIndex * SL_INDEX_COUNT + slIndex) * sizeof<usize>(), value);
 }
 
 /* Clear structure and point all empty lists at the null block. */
-export function control_construct(ptr: usize): void {
-  block_set_next_free(ptr, ptr);
-  block_set_prev_free(ptr, ptr);
-  control_set_fl(ptr, 0);
+export function control$construct(ptr: usize): void {
+  block$set_next_free(ptr, ptr);
+  block$set_prev_free(ptr, ptr);
+  control$set_fl_bitmap(ptr, 0);
   for (let flIndex: usize = 0; flIndex < FL_INDEX_COUNT; ++flIndex) {
-    control_set_sl(ptr, flIndex, 0);
+    control$set_sl_bitmap(ptr, flIndex, 0);
     for (let slIndex: usize = 0; slIndex < SL_INDEX_COUNT; ++slIndex)
-      control_set_block(ptr, flIndex, slIndex, ptr);
+      control$set_block(ptr, flIndex, slIndex, ptr);
   }
 }
 
-control_construct(load<usize>(sizeof<usize>())); // get HEAP_OFFSET and initialize there
+control$construct(load<usize>(sizeof<usize>())); // get HEAP_OFFSET and initialize there

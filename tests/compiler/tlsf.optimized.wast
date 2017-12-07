@@ -7,7 +7,7 @@
  (type $v (func))
  (memory $0 1)
  (data (i32.const 4) "\08")
- (export "control_construct" (func $tlsf/control_construct))
+ (export "control$construct" (func $tlsf/control$construct))
  (export "memory" (memory $0))
  (start $start)
  (func $tlsf/fls (; 0 ;) (type $ii) (param $0 i32) (result i32)
@@ -31,7 +31,7 @@
    (i32.const -1)
   )
  )
- (func $tlsf/block_set_next_free (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $tlsf/block$set_next_free (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (i32.add
     (get_local $0)
@@ -40,7 +40,7 @@
    (get_local $1)
   )
  )
- (func $tlsf/block_set_prev_free (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $tlsf/block$set_prev_free (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (i32.add
     (get_local $0)
@@ -49,7 +49,7 @@
    (get_local $1)
   )
  )
- (func $tlsf/control_set_fl (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $tlsf/control$set_fl_bitmap (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (i32.add
     (get_local $0)
@@ -58,7 +58,7 @@
    (get_local $1)
   )
  )
- (func $tlsf/control_set_sl (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $tlsf/control$set_sl_bitmap (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (if
    (i32.ge_s
     (get_local $1)
@@ -80,7 +80,7 @@
    (get_local $2)
   )
  )
- (func $tlsf/control_set_block (; 6 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $tlsf/control$set_block (; 6 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (if
    (i32.ge_s
     (get_local $1)
@@ -115,18 +115,18 @@
    (get_local $3)
   )
  )
- (func $tlsf/control_construct (; 7 ;) (type $iv) (param $0 i32)
+ (func $tlsf/control$construct (; 7 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (call $tlsf/block_set_next_free
+  (call $tlsf/block$set_next_free
    (get_local $0)
    (get_local $0)
   )
-  (call $tlsf/block_set_prev_free
+  (call $tlsf/block$set_prev_free
    (get_local $0)
    (get_local $0)
   )
-  (call $tlsf/control_set_fl
+  (call $tlsf/control$set_fl_bitmap
    (get_local $0)
    (i32.const 0)
   )
@@ -140,7 +140,7 @@
      (i32.const 23)
     )
     (block
-     (call $tlsf/control_set_sl
+     (call $tlsf/control$set_sl_bitmap
       (get_local $0)
       (get_local $1)
       (i32.const 0)
@@ -155,7 +155,7 @@
         (i32.const 32)
        )
        (block
-        (call $tlsf/control_set_block
+        (call $tlsf/control$set_block
          (get_local $0)
          (get_local $1)
          (get_local $2)
@@ -240,7 +240,7 @@
    )
    (unreachable)
   )
-  (call $tlsf/control_construct
+  (call $tlsf/control$construct
    (i32.load
     (i32.const 4)
    )
