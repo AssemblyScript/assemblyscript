@@ -1,27 +1,21 @@
 /// <reference path="../../assembly.d.ts" />
 
+const MEMORY_ALIGN_LOG2: usize = 3;
+const MEMORY_ALIGN_SIZE: usize = 1 << MEMORY_ALIGN_LOG2;
+const MEMORY_ALIGN_MASK: usize = MEMORY_ALIGN_SIZE - 1;
+
 @global()
 class Memory {
 
   static allocate(size: usize): usize {
-    const ptr: usize = load<usize>(sizeof<usize>());
-    store<usize>(sizeof<usize>(), ptr + size);
+    const ptr: usize = HEAP_OFFSET;
+    HEAP_OFFSET += size;
+    if ((HEAP_OFFSET & MEMORY_ALIGN_MASK) != 0)
+      HEAP_OFFSET = (HEAP_OFFSET | MEMORY_ALIGN_MASK) + 1;
     return ptr;
   }
 
-  static free(ptr: usize): void {
-  }
-
-  static copy(src: usize, dst: usize, count: usize): void {
-    for (let i: usize = 0; i < count; ++i)
-      store<u8>(dst + i, load<u8>(src + i));
-  }
-
-  static compare(src: usize, dst: usize, count: usize): i32 {
-    for (let i: usize = 0; i < count; ++i) {
-      const d: i32 = (load<u8>(src + i) as i32) - (load<u8>(dst + i) as i32);
-      if (d) return d;
-    }
-    return 0;
+  static dispose(ptr: usize): void {
+    // just a big chunk of non-disposable memory for now
   }
 }

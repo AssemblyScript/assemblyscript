@@ -1,36 +1,61 @@
 <canvas id="canvas" width="640" height="480"></canvas>
-<script src="../../node_modules/binaryen/index.js"></script>
-<script>
-fetch("game-of-life.optimized.wast").then(response =>
-  response.text()
-).then(text => {
-  let buffer = Binaryen.parseText(text).emitBinary();
+<script src="../../node_modules/binaryen/index.js"></script><script>
+
+// Fetch the .wast (just because we dont's store the .wasm in git)
+fetch("game-of-life.optimized.wast").then(response => response.text()).then(text => {
+
+  // Convert it to binary format
+  var buffer = Binaryen.parseText(text).emitBinary();
+
+  // Instantiate the module
   return WebAssembly.instantiate(buffer, {});
+
 }).then(result => {
-  let cnv = document.getElementById("canvas");
-  let ctx = cnv.getContext("2d");
-  let w = cnv.width, h = cnv.height, s = w * h, S = s + s;
-  if (result.instance.exports.memory.buffer.byteLength < S)
-    result.instance.exports.memory.grow(Math.ceil(S / 65536) - 1);
-  let mem = new Uint8Array(result.instance.exports.memory.buffer);
-  for (let y = 0; y < h; ++y)
-    for (let x = 0; x < w; ++x)
+  var module = result.instance;
+
+  // Set up the canvas with a 2D rendering context
+  var cnv = document.getElementById("canvas");
+  var ctx = cnv.getContext("2d");
+  var w = cnv.width,
+      h = cnv.height,
+      s = w * h, // memory required to store either input or output
+      S = s + s; // total memory required to store input and output
+
+  // Grow the (exported) memory if it's size isn't sufficient
+  var memory = module.exports.memory;
+  if (memory.buffer.byteLength < S)
+    memory.grow(Math.ceil((S - memory.buffer.byteLength) / 65536));
+
+  // Fill input at [0, s-1] with random cells
+  var mem = new Uint8Array(memory.buffer);
+  for (var y = 0; y < h; ++y)
+    for (var x = 0; x < w; ++x)
       mem[y * w + x] = Math.random() > 0.1 ? 0 : 1;
-  result.instance.exports.init(w, h);
-  setInterval(function() {
-    result.instance.exports.step();
-    mem.set(mem.subarray(s, S), 0);
-  }, 33);
+
+  // Initialize with width and height
+  module.exports.init(w, h);
+
+  // Update about 30 times a second
+  function update() {
+    setTimeout(update, 33);
+    module.exports.step();
+    mem.set(mem.subarray(s, S), 0); // copy output -> input
+  }
+
+  // Keep rendering the output at [s, 2*s-1]
   function render() {
     requestAnimationFrame(render);
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = "#333";
-    for (let y = 0; y < h; ++y)
-      for (let x = 0; x < w; ++x)
+    for (var y = 0; y < h; ++y)
+      for (var x = 0; x < w; ++x)
         if (mem[s + y * w + x])
           ctx.fillRect(x, y, 1, 1);
   }
+
+  update();
   render();
+
 }).catch(err => {
   throw err;
 });

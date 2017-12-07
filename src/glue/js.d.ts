@@ -14,6 +14,7 @@ declare type bool = boolean;
 // Raw memory access (here: Binaryen memory)
 declare function store<T = u8>(ptr: usize, val: T): void;
 declare function load<T = u8>(ptr: usize): T;
+declare function assert(isTrue: bool): void;
 
 // Other things that might or might not be useful
 declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;

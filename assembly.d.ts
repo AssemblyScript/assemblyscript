@@ -87,17 +87,10 @@ declare function assert(isTrue: bool): void;
 
 // internal decorators
 
-declare function global(name?: string): any;
-declare function struct(): any
+declare function global(): any;
 declare function inline(): any;
-declare function allocates(): any;
-declare function operator(token: string, fn: any): any;
 
 // standard library
 
-/// <reference path="./std/array.d.ts" />
-/// <reference path="./std/map.d.ts" />
-/// <reference path="./std/math.d.ts" />
-/// <reference path="./std/memory.d.ts" />
-/// <reference path="./std/set.d.ts" />
-/// <reference path="./std/string.d.ts" />
+/// <reference path="./std/carray.d.ts" />
+/// <reference path="./std/cstring.d.ts" />

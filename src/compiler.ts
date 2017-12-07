@@ -1624,59 +1624,54 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type): ExpressionRef {
+    switch (expression.kind) {
 
-    // null
-    if (expression.kind == NodeKind.NULL) {
-      if (contextualType.classType) // keep contextualType
-        return this.options.target == Target.WASM64 ? this.module.createI64(0, 0) : this.module.createI32(0);
-      if (this.options.target == Target.WASM64) {
-        this.currentType = Type.u64;
-        return this.module.createI64(0, 0);
-      } else {
-        this.currentType = Type.u32;
+      case NodeKind.NULL:
+        if (this.options.target == Target.WASM64) {
+          if (!contextualType.classType) {
+            assert(contextualType.kind == TypeKind.USIZE);
+            this.currentType = Type.usize64;
+          }
+          return this.module.createI64(0, 0);
+        }
+        if (!contextualType.classType) {
+          assert(contextualType.kind == TypeKind.USIZE);
+          this.currentType = Type.usize32;
+        }
         return this.module.createI32(0);
-      }
 
-    // true
-    } else if (expression.kind == NodeKind.TRUE) {
-      this.currentType = Type.bool;
-      return this.module.createI32(1);
+      case NodeKind.TRUE:
+        this.currentType = Type.bool;
+        return this.module.createI32(1);
 
-    // false
-    } else if (expression.kind == NodeKind.FALSE) {
-      this.currentType = Type.bool;
-      return this.module.createI32(0);
+      case NodeKind.FALSE:
+        this.currentType = Type.bool;
+        return this.module.createI32(0);
 
-    // this
-    } else if (expression.kind == NodeKind.THIS) {
-      if (this.currentFunction.instanceMethodOf) {
-        this.currentType = this.currentFunction.instanceMethodOf.type;
-        return this.module.createGetLocal(0, this.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32);
-      }
-      this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
-      this.currentType = this.options.target == Target.WASM64 ? Type.u64 : Type.u32;
-      return this.module.createUnreachable();
-    }
+      case NodeKind.THIS:
+        if (this.currentFunction.instanceMethodOf) {
+          this.currentType = this.currentFunction.instanceMethodOf.type;
+          return this.module.createGetLocal(0, this.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32);
+        }
+        this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
+        this.currentType = this.options.target == Target.WASM64 ? Type.u64 : Type.u32;
+        return this.module.createUnreachable();
 
-    if (expression.kind == NodeKind.IDENTIFIER) {
-
-      // NaN
-      if ((<IdentifierExpression>expression).name == "NaN")
-        if (this.currentType.kind == TypeKind.F32)
-          return this.module.createF32(NaN);
-        else {
+      case NodeKind.IDENTIFIER:
+        // TODO: some sort of resolveIdentifier maybe
+        if ((<IdentifierExpression>expression).name == "NaN") {
+          if (this.currentType == Type.f32)
+            return this.module.createF32(NaN);
           this.currentType = Type.f64;
           return this.module.createF64(NaN);
         }
-
-      // Infinity
-      if ((<IdentifierExpression>expression).name == "Infinity")
-        if (this.currentType.kind == TypeKind.F32)
-          return this.module.createF32(Infinity);
-        else {
+        if ((<IdentifierExpression>expression).name == "Infinity") {
+          if (this.currentType == Type.f32)
+            return this.module.createF32(Infinity);
           this.currentType = Type.f64;
           return this.module.createF64(Infinity);
         }
+        break;
     }
 
     const element: Element | null = this.program.resolveElement(expression, this.currentFunction); // reports

@@ -26,6 +26,11 @@ Side effects:
 - Good benchmark when comparing both versions
 - Benefits standard library design ideas
 
+How does it work?
+-----------------
+
+AssemblyScript NEXT compiles a subset (or variant) of TypeScript to Binaryen IR. The resulting module can then be optimized, emitted in text or binary format, or even be converted to asm.js as a polyfill.
+
 Getting started
 ---------------
 
@@ -38,7 +43,7 @@ $> npm install
 $> node bin\asc yourModule.ts
 ```
 
-Building an UMD bundle to `dist/assemblyscript.js` (does not bundle [binaryen.js](https://github.com/AssemblyScript/binaryen.js):
+Building an UMD bundle to `dist/assemblyscript.js` (does not bundle [binaryen.js](https://github.com/AssemblyScript/binaryen.js)):
 
 ```
 $> npm run build
