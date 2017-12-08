@@ -27,9 +27,7 @@
     "diagnosticMessages.generated.ts",
     "diagnostics.ts",
     "evaluator.ts",
-    "glue/binaryen.d.ts",
     "glue/js.d.ts",
-    "glue/js.ts",
     "index.ts",
     "module.ts",
     "parser.ts",
@@ -43,11 +41,7 @@
   ],
   "assembly": {
     "exclude": [
-      "glue/js.d.ts",
-      "glue/js.ts"
-    ],
-    "include": [
-      "glue/wasm.ts"
+      "glue/js.d.ts"
     ]
   }
 }

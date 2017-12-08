@@ -66,52 +66,38 @@
    )
   )
   (set_global $unary/i
-   (block (result i32)
-    (set_global $unary/i
-     (i32.add
-      (get_global $unary/i)
-      (i32.const 1)
-     )
-    )
+   (i32.add
     (get_global $unary/i)
+    (i32.const 1)
    )
   )
   (set_global $unary/i
-   (block (result i32)
-    (set_global $unary/i
-     (i32.sub
-      (get_global $unary/i)
-      (i32.const 1)
-     )
-    )
+   (i32.sub
     (get_global $unary/i)
+    (i32.const 1)
    )
   )
   (set_global $unary/i
-   (block (result i32)
-    (set_global $unary/i
-     (i32.add
-      (tee_local $0
-       (get_global $unary/i)
-      )
-      (i32.const 1)
-     )
+   (i32.add
+    (tee_local $0
+     (get_global $unary/i)
     )
-    (get_local $0)
+    (i32.const 1)
    )
   )
   (set_global $unary/i
-   (block (result i32)
-    (set_global $unary/i
-     (i32.sub
-      (tee_local $0
-       (get_global $unary/i)
-      )
-      (i32.const 1)
-     )
+   (get_local $0)
+  )
+  (set_global $unary/i
+   (i32.sub
+    (tee_local $0
+     (get_global $unary/i)
     )
-    (get_local $0)
+    (i32.const 1)
    )
+  )
+  (set_global $unary/i
+   (get_local $0)
   )
   (set_global $unary/I
    (i64.add
@@ -169,52 +155,38 @@
    )
   )
   (set_global $unary/I
-   (block (result i64)
-    (set_global $unary/I
-     (i64.add
-      (get_global $unary/I)
-      (i64.const 1)
-     )
-    )
+   (i64.add
     (get_global $unary/I)
+    (i64.const 1)
    )
   )
   (set_global $unary/I
-   (block (result i64)
-    (set_global $unary/I
-     (i64.sub
-      (get_global $unary/I)
-      (i64.const 1)
-     )
-    )
+   (i64.sub
     (get_global $unary/I)
+    (i64.const 1)
    )
   )
   (set_global $unary/I
-   (block (result i64)
-    (set_global $unary/I
-     (i64.add
-      (tee_local $1
-       (get_global $unary/I)
-      )
-      (i64.const 1)
-     )
+   (i64.add
+    (tee_local $1
+     (get_global $unary/I)
     )
-    (get_local $1)
+    (i64.const 1)
    )
   )
   (set_global $unary/I
-   (block (result i64)
-    (set_global $unary/I
-     (i64.sub
-      (tee_local $1
-       (get_global $unary/I)
-      )
-      (i64.const 1)
-     )
+   (get_local $1)
+  )
+  (set_global $unary/I
+   (i64.sub
+    (tee_local $1
+     (get_global $unary/I)
     )
-    (get_local $1)
+    (i64.const 1)
    )
+  )
+  (set_global $unary/I
+   (get_local $1)
   )
   (set_global $unary/f
    (f32.add
@@ -261,52 +233,38 @@
    )
   )
   (set_global $unary/f
-   (block (result f32)
-    (set_global $unary/f
-     (f32.add
-      (get_global $unary/f)
-      (f32.const 1)
-     )
-    )
+   (f32.add
     (get_global $unary/f)
+    (f32.const 1)
    )
   )
   (set_global $unary/f
-   (block (result f32)
-    (set_global $unary/f
-     (f32.sub
-      (get_global $unary/f)
-      (f32.const 1)
-     )
-    )
+   (f32.sub
     (get_global $unary/f)
+    (f32.const 1)
    )
   )
   (set_global $unary/f
-   (block (result f32)
-    (set_global $unary/f
-     (f32.add
-      (tee_local $2
-       (get_global $unary/f)
-      )
-      (f32.const 1)
-     )
+   (f32.add
+    (tee_local $2
+     (get_global $unary/f)
     )
-    (get_local $2)
+    (f32.const 1)
    )
   )
   (set_global $unary/f
-   (block (result f32)
-    (set_global $unary/f
-     (f32.sub
-      (tee_local $2
-       (get_global $unary/f)
-      )
-      (f32.const 1)
-     )
+   (get_local $2)
+  )
+  (set_global $unary/f
+   (f32.sub
+    (tee_local $2
+     (get_global $unary/f)
     )
-    (get_local $2)
+    (f32.const 1)
    )
+  )
+  (set_global $unary/f
+   (get_local $2)
   )
   (set_global $unary/F
    (f64.add
@@ -355,52 +313,38 @@
    )
   )
   (set_global $unary/F
-   (block (result f64)
-    (set_global $unary/F
-     (f64.add
-      (get_global $unary/F)
-      (f64.const 1)
-     )
-    )
+   (f64.add
     (get_global $unary/F)
+    (f64.const 1)
    )
   )
   (set_global $unary/F
-   (block (result f64)
-    (set_global $unary/F
-     (f64.sub
-      (get_global $unary/F)
-      (f64.const 1)
-     )
-    )
+   (f64.sub
     (get_global $unary/F)
+    (f64.const 1)
    )
   )
   (set_global $unary/F
-   (block (result f64)
-    (set_global $unary/F
-     (f64.add
-      (tee_local $3
-       (get_global $unary/F)
-      )
-      (f64.const 1)
-     )
+   (f64.add
+    (tee_local $3
+     (get_global $unary/F)
     )
-    (get_local $3)
+    (f64.const 1)
    )
   )
   (set_global $unary/F
-   (block (result f64)
-    (set_global $unary/F
-     (f64.sub
-      (tee_local $3
-       (get_global $unary/F)
-      )
-      (f64.const 1)
-     )
+   (get_local $3)
+  )
+  (set_global $unary/F
+   (f64.sub
+    (tee_local $3
+     (get_global $unary/F)
     )
-    (get_local $3)
+    (f64.const 1)
    )
+  )
+  (set_global $unary/F
+   (get_local $3)
   )
  )
 )

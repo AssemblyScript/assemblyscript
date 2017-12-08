@@ -1424,6 +1424,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.AMPERSAND_AMPERSAND: // left && right
         left = this.compileExpression(expression.left, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
+        // TODO: once it's possible to clone 'left', we could check if it is a Const, GetLocal, GetGlobal or Load and avoid the tempLocal
         tempLocal = this.currentFunction.addLocal(this.currentType);
         return this.module.createIf(
           this.currentType.isLongInteger
@@ -1440,6 +1441,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.BAR_BAR: // left || right
         left = this.compileExpression(expression.left, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
+        // TODO: same as above
         tempLocal = this.currentFunction.addLocal(this.currentType);
         return this.module.createIf(
           this.currentType.isLongInteger

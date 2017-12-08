@@ -1,4 +1,6 @@
-// types
+// Definitions for the "AssemblyScript" subset.
+
+// Types
 
 /** An 8-bit signed integer. */
 declare type i8 = number;
@@ -27,7 +29,7 @@ declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
 
-// built-ins
+// Built-ins
 
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T = i32 | i64>(value: T): T;
@@ -84,10 +86,10 @@ declare function changetype<T1,T2>(value: T1): T2;
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not NaN or +/-Infinity. */
 declare function isFinite<T = f32 | f64>(value: T): bool;
-/** Traps if the specified value is `false`. */
+/** Traps if the specified value evaluates to `false`. */
 declare function assert(isTrue: bool): void;
 
-// internal decorators
+// Internal decorators
 
 /** Annotates an element being part of the global namespace. */
 declare function global(): any;
@@ -96,7 +98,7 @@ declare function inline(): any;
 /** Annotates a class using a C-style memory layout. */
 declare function struct(): any;
 
-// standard library
+// Standard library
 
 /// <reference path="./std/carray.d.ts" />
 /// <reference path="./std/cstring.d.ts" />

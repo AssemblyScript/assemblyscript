@@ -42,7 +42,7 @@ class Heap {
     let w: u32, x: u32;
 
     // copy 1 byte each until src is aligned to 4 bytes
-    while (n != 0 && src % 4 != 0) {
+    while (n && src % 4) {
       store<u8>(dst++, load<u8>(src++));
       n--;
     }

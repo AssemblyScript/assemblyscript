@@ -1,4 +1,4 @@
-/// <reference path="../src/glue/binaryen.d.ts" />
+/// <reference path="../lib/binaryen.d.ts" />
 
 import "../src/glue/js";
 import { NativeType, Module, MemorySegment, BinaryOp } from "../src/module";
@@ -19,13 +19,13 @@ mod.addFunction("add", add, [], mod.createReturn(
     mod.createGetLocal(1, NativeType.I32)
   )
 ));
-mod.addExport("add", "add");
+mod.addFunctionExport("add", "add");
 
 const lit = mod.addFunctionType("I", NativeType.I64, []);
 mod.addFunction("lit", lit, [], mod.createReturn(
   mod.createI64(0, 0x80000000) // I64_MIN
 ));
-mod.addExport("lit", "lit");
+mod.addFunctionExport("lit", "lit");
 
 mod.addGlobal("42", NativeType.I32, false, mod.createI32(42));
 
@@ -42,7 +42,7 @@ mod.addFunction("aSwitch", aSwitch, [ NativeType.I32 ], mod.createBlock(null, [
   rl.renderAndDispose(b0, 1),
   mod.createUnreachable()
 ]));
-mod.addExport("aSwitch", "aSwitch");
+mod.addFunctionExport("aSwitch", "aSwitch");
 
 // mod.optimize();
 if (mod.validate())

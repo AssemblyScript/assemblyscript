@@ -2,7 +2,7 @@ var path = require("path");
 var webpack = require("webpack");
 
 module.exports = {
-  entry: [ "./src/glue/js.ts", "./src/index.ts" ],
+  entry: [ "./src/glue/js.js", "./src/index.ts" ],
   module: {
     rules: [
       {
