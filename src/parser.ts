@@ -13,6 +13,7 @@ import { DiagnosticCode, DiagnosticEmitter } from "./diagnostics";
 import { normalizePath, I64 } from "./util";
 import {
 
+  Node,
   NodeKind,
   Source,
 
@@ -30,7 +31,7 @@ import {
   BreakStatement,
   ClassDeclaration,
   ContinueStatement,
-  DecoratorStatement,
+  Decorator,
   DoStatement,
   EnumDeclaration,
   EnumValueDeclaration,
@@ -60,7 +61,8 @@ import {
   VariableDeclaration,
   WhileStatement,
 
-  hasModifier
+  hasModifier,
+  NamespaceDeclaration
 
 } from "./ast";
 
@@ -89,108 +91,121 @@ export class Parser extends DiagnosticEmitter {
     source.tokenizer = tn;
 
     while (!tn.skip(Token.ENDOFFILE)) {
-
-      let decorators: DecoratorStatement[] | null = null;
-
-      while (tn.skip(Token.AT)) {
-        const decorator: DecoratorStatement | null = this.parseDecorator(tn);
-        if (!decorator)
-          break;
-        if (!decorators)
-          decorators = new Array();
-        (<DecoratorStatement[]>decorators).push(<DecoratorStatement>decorator);
-      }
-
-      let modifiers: Modifier[] | null = null;
-
-      if (tn.skip(Token.EXPORT))
-        modifiers = addModifier(Statement.createModifier(ModifierKind.EXPORT, tn.range()), modifiers);
-
-      if (tn.skip(Token.DECLARE)) {
-        modifiers = addModifier(Statement.createModifier(ModifierKind.DECLARE, tn.range()), modifiers);
-        tn.peek(true);
-        if (tn.nextTokenOnNewLine)
-          this.error(DiagnosticCode.Line_break_not_permitted_here, tn.range(tn.pos)); // recoverable, compatibility
-      }
-
-      tn.mark();
-
-      let statement: Statement | null = null;
-      switch (tn.next()) {
-
-        case Token.CONST:
-          modifiers = addModifier(Statement.createModifier(ModifierKind.CONST, tn.range()), modifiers);
-
-          if (tn.skip(Token.ENUM)) {
-            statement = this.parseEnum(tn, modifiers ? <Modifier[]>modifiers : createModifiers());
-            break;
-          }
-          // fall through
-
-        case Token.VAR:
-        case Token.LET:
-          statement = this.parseVariable(tn, modifiers ? <Modifier[]>modifiers : createModifiers());
-          break;
-
-        case Token.ENUM:
-          statement = this.parseEnum(tn, modifiers ? <Modifier[]>modifiers : createModifiers());
-          break;
-
-        case Token.FUNCTION:
-          statement = this.parseFunction(tn, modifiers ? <Modifier[]>modifiers : createModifiers(), decorators);
-          decorators = null;
-          break;
-
-        case Token.ABSTRACT:
-          if (!tn.skip(Token.CLASS)) {
-            this.error(DiagnosticCode._0_expected, tn.range(tn.pos), "class");
-            break;
-          }
-          modifiers = addModifier(Statement.createModifier(ModifierKind.ABSTRACT, tn.range()), modifiers);
-          // fall through
-
-        case Token.CLASS:
-          statement = this.parseClass(tn, modifiers ? <Modifier[]>modifiers : createModifiers(), decorators);
-          decorators = null;
-          break;
-
-        case Token.IMPORT:
-          if (hasModifier(ModifierKind.EXPORT, modifiers)) {
-            statement = this.parseExportImport(tn, getModifier(ModifierKind.EXPORT, <Modifier[]>modifiers).range);
-          } else
-            statement = this.parseImport(tn);
-          if (modifiers)
-            reusableModifiers = modifiers;
-          break;
-
-        case Token.TYPE:
-          // TODO
-
-        default:
-          if (hasModifier(ModifierKind.EXPORT, modifiers)) {
-            tn.reset();
-            statement = this.parseExport(tn, modifiers ? <Modifier[]>modifiers : createModifiers());
-          } else {
-            if (modifiers) {
-              if (hasModifier(ModifierKind.DECLARE, modifiers))
-                this.error(DiagnosticCode._0_modifier_cannot_be_used_here, getModifier(ModifierKind.DECLARE, <Modifier[]>modifiers).range, "declare"); // recoverable
-              reusableModifiers = modifiers;
-            }
-            tn.reset();
-            statement = this.parseStatement(tn, true);
-          }
-          break;
-      }
-
-      if (decorators)
-        for (let i: i32 = 0, k: i32 = (<DecoratorStatement[]>decorators).length; i < k; ++i)
-          this.error(DiagnosticCode.Decorators_are_not_valid_here, (<DecoratorStatement[]>decorators)[i].range);
+      const statement: Statement | null = this.parseTopLevelStatement(tn);
       if (!statement)
         return;
       statement.parent = source;
       source.statements.push(statement);
     }
     reusableModifiers = null;
+  }
+
+  parseTopLevelStatement(tn: Tokenizer, isNamespaceMember: bool = false): Statement | null {
+    let decorators: Decorator[] | null = null;
+
+    while (tn.skip(Token.AT)) {
+      const decorator: Decorator | null = this.parseDecorator(tn);
+      if (!decorator)
+        break;
+      if (!decorators)
+        decorators = new Array();
+      (<Decorator[]>decorators).push(<Decorator>decorator);
+    }
+
+    let modifiers: Modifier[] | null = null;
+
+    if (tn.skip(Token.EXPORT))
+      modifiers = addModifier(Statement.createModifier(ModifierKind.EXPORT, tn.range()), modifiers);
+
+    if (tn.skip(Token.DECLARE)) {
+      modifiers = addModifier(Statement.createModifier(ModifierKind.DECLARE, tn.range()), modifiers);
+      tn.peek(true);
+      if (tn.nextTokenOnNewLine)
+        this.error(DiagnosticCode.Line_break_not_permitted_here, tn.range(tn.pos)); // recoverable, compatibility
+    }
+
+    tn.mark();
+
+    let statement: Statement | null = null;
+    switch (tn.next()) {
+
+      case Token.CONST:
+        modifiers = addModifier(Statement.createModifier(ModifierKind.CONST, tn.range()), modifiers);
+
+        if (tn.skip(Token.ENUM)) {
+          statement = this.parseEnum(tn, modifiers, decorators);
+          break;
+        }
+        // fall through
+
+      case Token.VAR:
+      case Token.LET:
+        statement = this.parseVariable(tn, modifiers, decorators);
+        decorators = null;
+        break;
+
+      case Token.ENUM:
+        statement = this.parseEnum(tn, modifiers, decorators);
+        decorators = null;
+        break;
+
+      case Token.FUNCTION:
+        statement = this.parseFunction(tn, modifiers, decorators);
+        decorators = null;
+        break;
+
+      case Token.ABSTRACT:
+        if (!tn.skip(Token.CLASS)) {
+          this.error(DiagnosticCode._0_expected, tn.range(tn.pos), "class");
+          break;
+        }
+        modifiers = addModifier(Statement.createModifier(ModifierKind.ABSTRACT, tn.range()), modifiers);
+        // fall through
+
+      case Token.CLASS:
+        statement = this.parseClass(tn, modifiers, decorators);
+        decorators = null;
+        break;
+
+      case Token.NAMESPACE:
+        statement = this.parseNamespace(tn, modifiers, decorators);
+        decorators = null;
+        break;
+
+      case Token.IMPORT:
+        if (hasModifier(ModifierKind.EXPORT, modifiers)) {
+          statement = this.parseExportImport(tn, getModifier(ModifierKind.EXPORT, <Modifier[]>modifiers).range);
+        } else
+          statement = this.parseImport(tn);
+        if (modifiers)
+          reusableModifiers = modifiers;
+        break;
+
+      case Token.TYPE:
+        // TODO
+
+      default:
+        if (hasModifier(ModifierKind.EXPORT, modifiers)) {
+          tn.reset();
+          statement = this.parseExport(tn, modifiers); // TODO: why exactly does this have modifiers again?
+        } else {
+          if (modifiers) {
+            if (hasModifier(ModifierKind.DECLARE, modifiers))
+              this.error(DiagnosticCode._0_modifier_cannot_be_used_here, getModifier(ModifierKind.DECLARE, modifiers).range, "declare"); // recoverable
+            reusableModifiers = modifiers;
+          }
+          tn.reset();
+          if (!isNamespaceMember)
+            statement = this.parseStatement(tn, true);
+        }
+        break;
+    }
+
+    if (decorators /* not consumed */)
+      for (let i: i32 = 0, k: i32 = (<Decorator[]>decorators).length; i < k; ++i)
+        this.error(DiagnosticCode.Decorators_are_not_valid_here, (<Decorator[]>decorators)[i].range);
+
+    return statement;
   }
 
   nextFile(): string | null {
@@ -318,7 +333,7 @@ export class Parser extends DiagnosticEmitter {
 
   // statements
 
-  parseDecorator(tn: Tokenizer): DecoratorStatement | null {
+  parseDecorator(tn: Tokenizer): Decorator | null {
     // at '@': Identifier ('.' Identifier)* '(' Arguments
     const startPos: i32 = tn.tokenPos;
     if (tn.skip(Token.IDENTIFIER)) {
@@ -344,24 +359,24 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseVariable(tn: Tokenizer, modifiers: Modifier[]): VariableStatement | null {
+  parseVariable(tn: Tokenizer, modifiers: Modifier[] | null, decorators: Decorator[] | null): VariableStatement | null {
     // at ('const' | 'let' | 'var'): VariableDeclaration (',' VariableDeclaration)* ';'?
-    const startPos: i32 = modifiers.length ? modifiers[0].range.start : tn.tokenPos;
+    const startPos: i32 = modifiers && modifiers.length ? modifiers[0].range.start : tn.tokenPos;
     const members: VariableDeclaration[] = new Array();
     const isDeclare = hasModifier(ModifierKind.DECLARE, modifiers);
     do {
-      const member: VariableDeclaration | null = this.parseVariableDeclaration(tn, isDeclare, modifiers);
+      const member: VariableDeclaration | null = this.parseVariableDeclaration(tn, isDeclare, modifiers, decorators);
       if (!member)
         return null;
       members.push(<VariableDeclaration>member);
     } while (tn.skip(Token.COMMA));
 
-    const ret: VariableStatement = Statement.createVariable(modifiers, members, tn.range(startPos, tn.pos));
+    const ret: VariableStatement = Statement.createVariable(members, modifiers, decorators, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
     return ret;
   }
 
-  parseVariableDeclaration(tn: Tokenizer, isDeclare: bool = false, parentModifiers: Modifier[]): VariableDeclaration | null {
+  parseVariableDeclaration(tn: Tokenizer, isDeclare: bool = false, parentModifiers: Modifier[] | null, parentDecorators: Decorator[] | null): VariableDeclaration | null {
     // Identifier (':' Type)? ('=' Expression)?
     if (!tn.skip(Token.IDENTIFIER)) {
       this.error(DiagnosticCode.Identifier_expected, tn.range());
@@ -383,12 +398,12 @@ export class Parser extends DiagnosticEmitter {
       if (!initializer)
         return null;
     }
-    return Statement.createVariableDeclaration(identifier, type, initializer, parentModifiers, Range.join(identifier.range, tn.range()));
+    return Statement.createVariableDeclaration(identifier, type, initializer, parentModifiers, parentDecorators, Range.join(identifier.range, tn.range()));
   }
 
-  parseEnum(tn: Tokenizer, modifiers: Modifier[]): EnumDeclaration | null {
+  parseEnum(tn: Tokenizer, modifiers: Modifier[] | null, decorators: Decorator[] | null): EnumDeclaration | null {
     // at 'enum': Identifier '{' (EnumValueDeclaration (',' EnumValueDeclaration )*)? '}' ';'?
-    const startPos: i32 = modifiers.length ? modifiers[0].range.start : tn.tokenPos;
+    const startPos: i32 = modifiers && modifiers.length ? modifiers[0].range.start : tn.tokenPos;
     if (tn.next() != Token.IDENTIFIER) {
       this.error(DiagnosticCode.Identifier_expected, tn.range());
       return null;
@@ -411,7 +426,7 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
     }
-    const ret: EnumDeclaration = Statement.createEnum(modifiers, identifier, members, tn.range(startPos, tn.pos));
+    const ret: EnumDeclaration = Statement.createEnum(identifier, members, modifiers, decorators, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
     return ret;
   }
@@ -528,13 +543,9 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseFunction(tn: Tokenizer, modifiers: Modifier[], decorators: DecoratorStatement[] | null): FunctionDeclaration | null {
+  parseFunction(tn: Tokenizer, modifiers: Modifier[] | null, decorators: Decorator[] | null): FunctionDeclaration | null {
     // at 'function': Identifier ('<' TypeParameters)? '(' Parameters (':' Type)? '{' Statement* '}' ';'?
-    const startPos: i32 = decorators && (<DecoratorStatement[]>decorators).length
-      ? (<DecoratorStatement[]>decorators)[0].range.start
-      : modifiers.length
-      ? modifiers[0].range.start
-      : tn.tokenPos;
+    const startPos: i32 = modifiers && modifiers.length ? modifiers[0].range.start : tn.tokenPos;
 
     if (!tn.skip(Token.IDENTIFIER)) {
       this.error(DiagnosticCode.Identifier_expected, tn.range(tn.pos));
@@ -576,16 +587,16 @@ export class Parser extends DiagnosticEmitter {
       }
     } else if (!isDeclare)
       this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, tn.range(tn.pos));
-    const ret: FunctionDeclaration = Statement.createFunction(modifiers, identifier, typeParameters, <Parameter[]>parameters, returnType, statements, decorators ? <DecoratorStatement[]>decorators : [], tn.range(startPos, tn.pos));
+    const ret: FunctionDeclaration = Statement.createFunction(identifier, typeParameters, <Parameter[]>parameters, returnType, statements, modifiers, decorators, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
     return ret;
   }
 
-  parseClass(tn: Tokenizer, modifiers: Modifier[], decorators: DecoratorStatement[] | null): ClassDeclaration | null {
+  parseClass(tn: Tokenizer, modifiers: Modifier[] | null, decorators: Decorator[] | null): ClassDeclaration | null {
     // at 'class': Identifier ('<' TypeParameters)? ('extends' Type)? ('implements' Type (',' Type)*)? '{' ClassMember* '}'
-    const startPos: i32 = decorators && (<DecoratorStatement[]>decorators).length
-      ? (<DecoratorStatement[]>decorators)[0].range.start
-      : modifiers.length
+    const startPos: i32 = decorators && decorators.length
+      ? decorators[0].range.start
+      : modifiers && modifiers.length
       ? modifiers[0].range.start
       : tn.tokenPos;
 
@@ -628,7 +639,7 @@ export class Parser extends DiagnosticEmitter {
             members.push(<DeclarationStatement>member);
           } while (!tn.skip(Token.CLOSEBRACE));
         }
-        return Statement.createClass(modifiers, identifier, <TypeParameter[]>typeParameters, extendsType, implementsTypes, members, decorators ? <DecoratorStatement[]>decorators : [], tn.range(startPos, tn.pos));
+        return Statement.createClass(identifier, <TypeParameter[]>typeParameters, extendsType, implementsTypes, members, modifiers, decorators, tn.range(startPos, tn.pos));
       } else
         this.error(DiagnosticCode._0_expected, tn.range(), "{");
     } else
@@ -640,13 +651,13 @@ export class Parser extends DiagnosticEmitter {
     // ('public' | 'private' | 'protected')? ('static' | 'abstract')? ('get' | 'set')? Identifier ...
     const startRange: Range = tn.range();
 
-    let decorators: DecoratorStatement[] = new Array();
+    let decorators: Decorator[] = new Array();
 
     while (tn.skip(Token.AT)) {
-      const decorator: DecoratorStatement | null = this.parseDecorator(tn);
+      const decorator: Decorator | null = this.parseDecorator(tn);
       if (!decorator)
         break;
-      decorators.push(<DecoratorStatement>decorator);
+      decorators.push(<Decorator>decorator);
     }
 
     let modifiers: Modifier[] | null = null;
@@ -706,7 +717,7 @@ export class Parser extends DiagnosticEmitter {
             this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, tn.range()); // recoverable
         }
 
-        const ret: MethodDeclaration = Statement.createMethod(modifiers ? modifiers : createModifiers(), identifier, <TypeParameter[]>typeParameters, <Parameter[]>parameters, returnType, statements, decorators, Range.join(startRange, tn.range()));
+        const ret: MethodDeclaration = Statement.createMethod(identifier, <TypeParameter[]>typeParameters, <Parameter[]>parameters, returnType, statements, modifiers, decorators, Range.join(startRange, tn.range()));
         tn.skip(Token.SEMICOLON);
         return ret;
 
@@ -731,7 +742,7 @@ export class Parser extends DiagnosticEmitter {
           if (!initializer)
             return null;
         }
-        const ret: FieldDeclaration = Statement.createField(modifiers ? modifiers : createModifiers(), identifier, type, initializer, decorators, Range.join(startRange, tn.range()));
+        const ret: FieldDeclaration = Statement.createField(identifier, type, initializer, modifiers, decorators, Range.join(startRange, tn.range()));
         tn.skip(Token.SEMICOLON);
         return ret;
       }
@@ -740,9 +751,32 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseExport(tn: Tokenizer, modifiers: Modifier[]): ExportStatement | null {
+  parseNamespace(tn: Tokenizer, modifiers: Modifier[] | null, decorators: Decorator[] | null): NamespaceDeclaration | null {
+    // at 'namespace': Identifier '{' (Variable | Function)* '}'
+    const startRange: Range = modifiers && modifiers.length ? modifiers[0].range : tn.range();
+    if (tn.skip(Token.IDENTIFIER)) {
+      const identifier: IdentifierExpression = Expression.createIdentifier(tn.readIdentifier(), tn.range());
+      if (tn.skip(Token.OPENBRACE)) {
+        const members: Statement[] = new Array();
+        while (!tn.skip(Token.CLOSEBRACE)) {
+          const member: Statement | null = this.parseTopLevelStatement(tn, true);
+          if (!member)
+            return null;
+          members.push(member);
+        }
+        const ret: NamespaceDeclaration = Statement.createNamespace(identifier, members, modifiers, decorators, Range.join(startRange, tn.range()));
+        tn.skip(Token.SEMICOLON);
+        return ret;
+      } else
+        this.error(DiagnosticCode._0_expected, tn.range(), "{");
+    } else
+      this.error(DiagnosticCode.Identifier_expected, tn.range());
+    return null;
+  }
+
+  parseExport(tn: Tokenizer, modifiers: Modifier[] | null): ExportStatement | null {
     // at 'export': '{' ExportMember (',' ExportMember)* }' ('from' StringLiteral)? ';'?
-    const startRange: Range = modifiers.length ? modifiers[0].range : tn.range();
+    const startRange: Range = modifiers && modifiers.length ? modifiers[0].range : tn.range();
     if (tn.skip(Token.OPENBRACE)) {
       const members: ExportMember[] = new Array();
       if (!tn.skip(Token.CLOSEBRACE)) {
@@ -766,7 +800,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      const ret: ExportStatement = Statement.createExport(modifiers, members, path, Range.join(startRange, tn.range()));
+      const ret: ExportStatement = Statement.createExport(members, path, modifiers, Range.join(startRange, tn.range()));
       if (ret.normalizedPath && !this.seenlog.has(<string>ret.normalizedPath)) {
         this.backlog.push(<string>ret.normalizedPath);
         this.seenlog.add(<string>ret.normalizedPath);
@@ -881,7 +915,7 @@ export class Parser extends DiagnosticEmitter {
         return this.parseBreak(tn);
 
       case Token.CONST:
-        return this.parseVariable(tn, [ Statement.createModifier(ModifierKind.CONST, tn.range()) ]);
+        return this.parseVariable(tn, [ Statement.createModifier(ModifierKind.CONST, tn.range()) ], null);
 
       case Token.CONTINUE:
         return this.parseContinue(tn);
@@ -897,7 +931,7 @@ export class Parser extends DiagnosticEmitter {
 
       case Token.LET:
       case Token.VAR:
-        return this.parseVariable(tn, []);
+        return this.parseVariable(tn, null, null);
 
       case Token.OPENBRACE:
         return this.parseBlockStatement(tn, topLevel);
@@ -1007,7 +1041,7 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.OPENPAREN)) {
       let initializer: Statement | null = null;
       if (tn.skip(Token.LET) || tn.skip(Token.CONST) || tn.skip(Token.VAR)) {
-        initializer = this.parseVariable(tn, /* TODO */ createModifiers());
+        initializer = this.parseVariable(tn, null, null);
       } else if (!tn.skip(Token.SEMICOLON)) {
         initializer = this.parseExpressionStatement(tn);
         if (!initializer)

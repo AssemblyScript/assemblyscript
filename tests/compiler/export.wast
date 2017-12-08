@@ -2,8 +2,8 @@
  (type $iii (func (param i32 i32) (result i32)))
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "add" (func $export/add))
  (export "renamed_sub" (func $export/sub))
  (export "a" (global $export/a))
@@ -50,6 +50,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

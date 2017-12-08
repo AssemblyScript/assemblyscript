@@ -1,29 +1,37 @@
 {
   "version": {
-    "desc": "Print the compiler's version.",
+    "desc": "Prints the compiler's version.",
     "type": "boolean",
     "aliases": [ "v" ]
   },
   "help": {
-    "desc": "Print this message.",
+    "desc": "Prints this message.",
     "type": "boolean",
     "aliases": [ "h" ]
   },
   "optimize": {
-    "desc": "Optimize the module.",
+    "desc": "Optimizes the module.",
     "type": "boolean",
     "aliases": [ "O" ]
   },
   "validate": {
-    "desc": "Validate the module.",
+    "desc": "Validates the module.",
     "type": "boolean"
   },
   "outFile": {
-    "desc": "Specify the output file (binary format).",
+    "desc": "Specifies the output file (binary format).",
     "type": "string"
   },
   "textFile": {
-    "desc": "Specify the output file (text format).",
+    "desc": "Specifies the output file (text format).",
     "type": "string"
+  },
+  "noTreeShaking": {
+    "desc": "Disables built-in tree-shaking.",
+    "type": "boolean"
+  },
+  "noDebug": {
+    "desc": "Replaces assertions with nops.",
+    "type": "boolean"
   }
 }

@@ -2,7 +2,6 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
  (memory $0 1)
- (data (i32.const 4) "\08")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (type $v)

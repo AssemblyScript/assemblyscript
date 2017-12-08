@@ -3,7 +3,6 @@
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (memory $0 1)
- (data (i32.const 4) "\08")
  (export "add" (func $export/add))
  (export "renamed_sub" (func $export/sub))
  (export "a" (global $export/a))

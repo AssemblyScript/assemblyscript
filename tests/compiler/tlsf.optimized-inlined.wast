@@ -6,7 +6,6 @@
  (type $iv (func (param i32)))
  (type $v (func))
  (memory $0 1)
- (data (i32.const 4) "\08")
  (export "control$construct" (func $tlsf/control$construct))
  (export "memory" (memory $0))
  (start $start)

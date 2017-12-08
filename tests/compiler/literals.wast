@@ -1,7 +1,7 @@
 (module
  (type $v (func))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
@@ -163,6 +163,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

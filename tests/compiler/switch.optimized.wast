@@ -1,7 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (memory $0 1)
- (data (i32.const 4) "\08")
  (export "doSwitch" (func $switch/doSwitch))
  (export "doSwitchDefaultFirst" (func $switch/doSwitchDefaultFirst))
  (export "doSwitchDefaultOmitted" (func $switch/doSwitchDefaultOmitted))

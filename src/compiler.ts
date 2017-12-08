@@ -148,7 +148,7 @@ export class Compiler extends DiagnosticEmitter {
     const startFunctionTemplate: FunctionPrototype = new FunctionPrototype(program, "start", null);
     const startFunctionInstance: Function = new Function(startFunctionTemplate, startFunctionTemplate.internalName, [], [], Type.void, null);
     this.currentFunction = this.startFunction = startFunctionInstance;
-    this.memoryOffset = new U64(2 * (this.options.target == Target.WASM64 ? 8 : 4), 0); // leave space for `null` and heapStart (both of usize type)
+    this.memoryOffset = new U64(this.options.target == Target.WASM64 ? 8 : 4, 0); // leave space for `null`
   }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
@@ -178,32 +178,12 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up memory
-    // store heapStart at `sizeof<usize>()` (that is right after `null`) as an usize
     const initial: U64 = this.memoryOffset.clone();
-    let heapStartBuffer: Uint8Array;
-    let heapStartOffset: i32;
-    if (this.options.target == Target.WASM64) {
-      heapStartBuffer = new Uint8Array(8);
-      heapStartOffset = 8;
-      heapStartBuffer[0] = (initial.lo       ) as u8;
-      heapStartBuffer[1] = (initial.lo >>>  8) as u8;
-      heapStartBuffer[2] = (initial.lo >>> 16) as u8;
-      heapStartBuffer[3] = (initial.lo >>> 24) as u8;
-      heapStartBuffer[4] = (initial.hi       ) as u8;
-      heapStartBuffer[5] = (initial.hi >>>  8) as u8;
-      heapStartBuffer[6] = (initial.hi >>> 16) as u8;
-      heapStartBuffer[7] = (initial.hi >>> 24) as u8;
-    } else {
-      if (!initial.fitsInU32)
-        throw new Error("static memory size overflows 32 bits");
-      heapStartBuffer = new Uint8Array(4);
-      heapStartOffset = 4;
-      heapStartBuffer[0] = (initial.lo       ) as u8;
-      heapStartBuffer[1] = (initial.lo >>>  8) as u8;
-      heapStartBuffer[2] = (initial.lo >>> 16) as u8;
-      heapStartBuffer[3] = (initial.lo >>> 24) as u8;
-    }
-    this.memorySegments.push(MemorySegment.create(heapStartBuffer, new U64(heapStartOffset, 0))); // TODO: use a global instead?
+    if (this.options.target == Target.WASM64)
+      this.module.addGlobal("HEAP_START", NativeType.I64, false, this.module.createI64(initial.lo, initial.hi));
+    else
+      this.module.addGlobal("HEAP_START", NativeType.I32, false, this.module.createI32(initial.lo));
+
     // determine initial page size
     const initialOverlaps: U64 = initial.clone();
     initialOverlaps.and32(0xffff);
@@ -663,7 +643,7 @@ export class Compiler extends DiagnosticEmitter {
   // memory
 
   addMemorySegment(buffer: Uint8Array): MemorySegment {
-    if (this.memoryOffset.lo & 7) { // align to 8 bytes so any possible data type is aligned here
+    if (this.memoryOffset.lo & 7) { // align to 8 bytes so any native data type is aligned here
       this.memoryOffset.or32(7);
       this.memoryOffset.add32(1);
     }

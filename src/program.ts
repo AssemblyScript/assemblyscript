@@ -22,7 +22,7 @@ import {
 
   ClassDeclaration,
   DeclarationStatement,
-  DecoratorStatement,
+  Decorator,
   EnumDeclaration,
   EnumValueDeclaration,
   ExportMember,
@@ -665,9 +665,9 @@ export class Program extends DiagnosticEmitter {
   }
 }
 
-function checkGlobalDecorator(decorators: DecoratorStatement[]): string | null {
+function checkGlobalDecorator(decorators: Decorator[]): string | null {
   for (let i: i32 = 0, k: i32 = decorators.length; i < k; ++i) {
-    const decorator: DecoratorStatement = decorators[i];
+    const decorator: Decorator = decorators[i];
     const expression: Expression = decorator.expression;
     const args: Expression[] = decorator.arguments;
     if (expression.kind == NodeKind.IDENTIFIER && args.length <= 1 && (<IdentifierExpression>expression).name == "global") {

@@ -1,17 +1,16 @@
 /// <reference path="../../assembly.d.ts" />
 
-/** A C-compatible string class. */
 @global()
-class CString extends CArray<u8> {
+@struct()
+class CString {
 
-  /** Constructs a new C-String from a String. */
-  constructor(text: string) {
-    super(text.length * 2 + 1);
-    let idx: usize = unsafe_cast<this,usize>(this);
-    for (let i: usize = 0, k: usize = (<string>str).length; i < k; ++i) {
-      let u: i32 = text.charCodeAt(i);
+  constructor(string: string) {
+    const ptr: usize = Heap.allocate(<usize>string.length * 2 + 1);
+    let idx: usize = ptr;
+    for (let i: usize = 0, k: usize = <usize>(<string>str).length; i < k; ++i) {
+      let u: i32 = string.charCodeAt(i);
       if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k)
-        u = 0x10000 + ((u & 0x3FF) << 10) | (text.charCodeAt(++i) & 0x3FF);
+        u = 0x10000 + ((u & 0x3FF) << 10) | (string.charCodeAt(++i) & 0x3FF);
       if (u <= 0x7F)
         store<u8>(idx++, u as u8);
       else if (u <= 0x7FF) {
@@ -43,5 +42,17 @@ class CString extends CArray<u8> {
       }
     }
     store<u8>(idx, 0);
+    return changetype<usize, this>(ptr);
+  }
+
+  @inline()
+  "[]"(index: usize): u8 {
+    return load<u8>(changetype<this, usize>(this) + index /* * sizeof<u8>() */);
+  }
+
+  // read-only
+
+  dispose(): void {
+    Heap.dispose(changetype<this, usize>(this));
   }
 }

@@ -5,8 +5,8 @@
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
@@ -840,6 +840,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

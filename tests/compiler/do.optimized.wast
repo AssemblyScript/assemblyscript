@@ -1,7 +1,6 @@
 (module
  (type $iv (func (param i32)))
  (memory $0 1)
- (data (i32.const 4) "\08")
  (export "loopDo" (func $do/loopDo))
  (export "loopDoInDo" (func $do/loopDoInDo))
  (export "memory" (memory $0))

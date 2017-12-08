@@ -5,7 +5,6 @@
  (global $game-of-life/h (mut i32) (i32.const 0))
  (global $game-of-life/s (mut i32) (i32.const 0))
  (memory $0 1)
- (data (i32.const 4) "\08")
  (export "init" (func $game-of-life/init))
  (export "step" (func $game-of-life/step))
  (export "memory" (memory $0))

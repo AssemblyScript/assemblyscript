@@ -15,8 +15,8 @@
  (global $enum/Mixed.FOUR i32 (i32.const 4))
  (global $enum/NonConstant.ZERO (mut i32) (i32.const 0))
  (global $enum/NonConstant.ONE (mut i32) (i32.const 0))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "memory" (memory $0))
  (start $start)
  (func $enum/getZero (; 0 ;) (type $i) (result i32)
@@ -60,6 +60,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

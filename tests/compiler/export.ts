@@ -13,3 +13,8 @@ export const a: i32 = 1;
 const b: i32 = 2;
 
 export { b as renamed_b };
+
+/* export namespace ns {
+  function one(): void {}
+  export function two(): void {}
+} */

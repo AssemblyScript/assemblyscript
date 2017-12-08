@@ -110,7 +110,12 @@ while ((diagnostic = assemblyscript.nextDiagnostic(parser)) != null) {
 if (hasErrors)
   process.exit(1);
 
-var module = assemblyscript.compile(parser);
+var options = assemblyscript.createOptions();
+assemblyscript.setTarget(options, 0);
+assemblyscript.setNoTreeShaking(options, args.noTreeShaking);
+assemblyscript.setNoDebug(options, args.noDebug);
+
+var module = assemblyscript.compile(parser, options);
 
 hasErrors = false;
 while ((diagnostic = assemblyscript.nextDiagnostic(parser)) != null) {

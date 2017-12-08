@@ -4,8 +4,8 @@
  (global $game-of-life/w (mut i32) (i32.const 0))
  (global $game-of-life/h (mut i32) (i32.const 0))
  (global $game-of-life/s (mut i32) (i32.const 0))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "init" (func $game-of-life/init))
  (export "step" (func $game-of-life/step))
  (export "memory" (memory $0))
@@ -332,6 +332,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

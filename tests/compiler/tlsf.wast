@@ -21,8 +21,8 @@
  (global $tlsf/CONTROL$SL_BITMAP_OFFSET i32 (i32.const 20))
  (global $tlsf/SL_INDEX_COUNT i32 (i32.const 32))
  (global $tlsf/CONTROL$BLOCKS_OFFSET i32 (i32.const 112))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "control$construct" (func $tlsf/control$construct))
  (export "memory" (memory $0))
  (start $start)
@@ -352,6 +352,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

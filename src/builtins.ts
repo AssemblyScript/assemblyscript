@@ -2,7 +2,7 @@ import { Compiler, Target, typeToNativeType, typeToNativeOne } from "./compiler"
 import { DiagnosticCode } from "./diagnostics";
 import { Node, Expression } from "./ast";
 import { Type } from "./types";
-import { ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType } from "./module";
+import { Module, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType } from "./module";
 import { Program, FunctionPrototype, Local } from "./program";
 
 /** Initializes the specified program with built-in functions. */
@@ -29,6 +29,7 @@ export function initialize(program: Program): void {
   addFunction(program, "reinterpret", true);
   addFunction(program, "select", true);
   addFunction(program, "sizeof", true);
+  addFunction(program, "changetype", true);
   addFunction(program, "isNaN", true);
   addFunction(program, "isFinite", true);
   addFunction(program, "assert");
@@ -47,6 +48,7 @@ function addFunction(program: Program, name: string, isGeneric: bool = false, is
 
 /** Compiles a call to a built-in function. */
 export function compileCall(compiler: Compiler, internalName: string, typeArguments: Type[], operands: Expression[], reportNode: Node): ExpressionRef {
+  const module: Module = compiler.module;
   const usizeType: Type = select<Type>(Type.usize64, Type.usize32, compiler.options.target == Target.WASM64);
 
   let arg0: ExpressionRef,
@@ -55,126 +57,127 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
 
   let tempLocal0: Local;
   let tempLocal1: Local;
-  let nativeType: NativeType;
+
+  let type: Type;
 
   switch (internalName) {
 
     case "clz": // clz<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyInteger) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]).isLongInteger // sic
-          ? compiler.module.createUnary(UnaryOp.ClzI64, arg0)
+          ? module.createUnary(UnaryOp.ClzI64, arg0)
           : typeArguments[0].isSmallInteger
-          ? compiler.module.createBinary(BinaryOp.AndI32,
-              compiler.module.createUnary(UnaryOp.ClzI32, arg0),
-              compiler.module.createI32(typeArguments[0].smallIntegerMask)
+          ? module.createBinary(BinaryOp.AndI32,
+              module.createUnary(UnaryOp.ClzI32, arg0),
+              module.createI32(typeArguments[0].smallIntegerMask)
             )
-          : compiler.module.createUnary(UnaryOp.ClzI32, arg0);
+          : module.createUnary(UnaryOp.ClzI32, arg0);
       }
       break;
 
     case "ctz": // ctz<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyInteger) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]).isLongInteger // sic
-          ? compiler.module.createUnary(UnaryOp.CtzI64, arg0)
+          ? module.createUnary(UnaryOp.CtzI64, arg0)
           : typeArguments[0].isSmallInteger
-          ? compiler.module.createBinary(BinaryOp.AndI32,
-              compiler.module.createUnary(UnaryOp.CtzI32, arg0),
-              compiler.module.createI32(typeArguments[0].smallIntegerMask)
+          ? module.createBinary(BinaryOp.AndI32,
+              module.createUnary(UnaryOp.CtzI32, arg0),
+              module.createI32(typeArguments[0].smallIntegerMask)
             )
-          : compiler.module.createUnary(UnaryOp.CtzI32, arg0);
+          : module.createUnary(UnaryOp.CtzI32, arg0);
       }
       break;
 
     case "popcnt": // popcnt<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyInteger) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]).isLongInteger // sic
-          ? compiler.module.createUnary(UnaryOp.PopcntI64, arg0)
+          ? module.createUnary(UnaryOp.PopcntI64, arg0)
           : typeArguments[0].isSmallInteger
-          ? compiler.module.createBinary(BinaryOp.AndI32,
-              compiler.module.createUnary(UnaryOp.PopcntI32, arg0),
-              compiler.module.createI32(typeArguments[0].smallIntegerMask)
+          ? module.createBinary(BinaryOp.AndI32,
+              module.createUnary(UnaryOp.PopcntI32, arg0),
+              module.createI32(typeArguments[0].smallIntegerMask)
             )
-          : compiler.module.createUnary(UnaryOp.PopcntI32, arg0);
+          : module.createUnary(UnaryOp.PopcntI32, arg0);
       }
       break;
 
     case "rotl": // rotl<T>(value: T, shift: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 2, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyInteger) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         arg1 = compiler.compileExpression(operands[1], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]).isLongInteger // sic
-          ? compiler.module.createBinary(BinaryOp.RotlI64, arg0, arg1)
+          ? module.createBinary(BinaryOp.RotlI64, arg0, arg1)
           : typeArguments[0].isSmallInteger
-          ? compiler.module.createBinary(BinaryOp.AndI32,
-              compiler.module.createBinary(BinaryOp.RotlI32, arg0, arg1),
-              compiler.module.createI32(typeArguments[0].smallIntegerMask)
+          ? module.createBinary(BinaryOp.AndI32,
+              module.createBinary(BinaryOp.RotlI32, arg0, arg1),
+              module.createI32(typeArguments[0].smallIntegerMask)
             )
-          : compiler.module.createBinary(BinaryOp.RotlI32, arg0, arg1);
+          : module.createBinary(BinaryOp.RotlI32, arg0, arg1);
       }
       break;
 
     case "rotr": // rotr<T>(value: T, shift: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 2, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyInteger) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         arg1 = compiler.compileExpression(operands[1], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]).isLongInteger // sic
-          ? compiler.module.createBinary(BinaryOp.RotrI64, arg0, arg1)
+          ? module.createBinary(BinaryOp.RotrI64, arg0, arg1)
           : typeArguments[0].isSmallInteger
-          ? compiler.module.createBinary(BinaryOp.AndI32,
-              compiler.module.createBinary(BinaryOp.RotrI32, arg0, arg1),
-              compiler.module.createI32(typeArguments[0].smallIntegerMask)
+          ? module.createBinary(BinaryOp.AndI32,
+              module.createBinary(BinaryOp.RotrI32, arg0, arg1),
+              module.createI32(typeArguments[0].smallIntegerMask)
             )
-          : compiler.module.createBinary(BinaryOp.RotrI32, arg0, arg1);
+          : module.createBinary(BinaryOp.RotrI32, arg0, arg1);
       }
       break;
 
     case "abs": // abs<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]) != Type.void) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         if ((compiler.currentType = typeArguments[0]).isAnyFloat) // sic
           return typeArguments[0] == Type.f32
-            ? compiler.module.createUnary(UnaryOp.AbsF32, arg0)
-            : compiler.module.createUnary(UnaryOp.AbsF64, arg0);
+            ? module.createUnary(UnaryOp.AbsF32, arg0)
+            : module.createUnary(UnaryOp.AbsF64, arg0);
         if (typeArguments[0].isAnyInteger) {
           if (typeArguments[0].isSignedInteger) {
             tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
             if (typeArguments[0].isLongInteger)
-              return compiler.module.createSelect(
-                compiler.module.createBinary(BinaryOp.SubI64,
-                  compiler.module.createI64(0, 0),
-                  compiler.module.createTeeLocal(tempLocal0.index, arg0)
+              return module.createSelect(
+                module.createBinary(BinaryOp.SubI64,
+                  module.createI64(0, 0),
+                  module.createTeeLocal(tempLocal0.index, arg0)
                 ),
-                compiler.module.createGetLocal(tempLocal0.index, NativeType.I64),
-                compiler.module.createBinary(BinaryOp.LtI64,
-                  compiler.module.createGetLocal(tempLocal0.index, NativeType.I64),
-                  compiler.module.createI64(0, 0)
+                module.createGetLocal(tempLocal0.index, NativeType.I64),
+                module.createBinary(BinaryOp.LtI64,
+                  module.createGetLocal(tempLocal0.index, NativeType.I64),
+                  module.createI64(0, 0)
                 )
               );
             else
-              return compiler.module.createSelect(
-                compiler.module.createBinary(BinaryOp.SubI32,
-                  compiler.module.createI32(0),
-                  compiler.module.createTeeLocal(tempLocal0.index, arg0)
+              return module.createSelect(
+                module.createBinary(BinaryOp.SubI32,
+                  module.createI32(0),
+                  module.createTeeLocal(tempLocal0.index, arg0)
                 ),
-                compiler.module.createGetLocal(tempLocal0.index, NativeType.I32),
-                compiler.module.createBinary(BinaryOp.LtI32,
-                  compiler.module.createGetLocal(tempLocal0.index, NativeType.I32),
-                  compiler.module.createI32(0)
+                module.createGetLocal(tempLocal0.index, NativeType.I32),
+                module.createBinary(BinaryOp.LtI32,
+                  module.createGetLocal(tempLocal0.index, NativeType.I32),
+                  module.createI32(0)
                 )
               );
           } else
@@ -185,33 +188,33 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
 
     case "max": // max<T>(left: T, right: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 2, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]) != Type.void) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         arg1 = compiler.compileExpression(operands[1], typeArguments[0]);
         if ((compiler.currentType = typeArguments[0]).isAnyFloat) // sic
           return typeArguments[0] == Type.f32
-            ? compiler.module.createBinary(BinaryOp.MaxF32, arg0, arg1)
-            : compiler.module.createBinary(BinaryOp.MaxF64, arg0, arg1);
+            ? module.createBinary(BinaryOp.MaxF32, arg0, arg1)
+            : module.createBinary(BinaryOp.MaxF64, arg0, arg1);
         if (typeArguments[0].isAnyInteger) {
           tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
           tempLocal1 = compiler.currentFunction.addLocal(typeArguments[0]);
           if (typeArguments[0].isLongInteger)
-            return compiler.module.createSelect(
-              compiler.module.createTeeLocal(tempLocal0.index, arg0),
-              compiler.module.createTeeLocal(tempLocal1.index, arg1),
-              compiler.module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.GtI64 : BinaryOp.GtU64,
-                compiler.module.createGetLocal(tempLocal0.index, NativeType.I64),
-                compiler.module.createGetLocal(tempLocal1.index, NativeType.I64)
+            return module.createSelect(
+              module.createTeeLocal(tempLocal0.index, arg0),
+              module.createTeeLocal(tempLocal1.index, arg1),
+              module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.GtI64 : BinaryOp.GtU64,
+                module.createGetLocal(tempLocal0.index, NativeType.I64),
+                module.createGetLocal(tempLocal1.index, NativeType.I64)
               )
             );
           else
-            return compiler.module.createSelect(
-              compiler.module.createTeeLocal(tempLocal0.index, arg0),
-              compiler.module.createTeeLocal(tempLocal1.index, arg1),
-              compiler.module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.GtI32 : BinaryOp.GtU32,
-                compiler.module.createGetLocal(tempLocal0.index, NativeType.I32),
-                compiler.module.createGetLocal(tempLocal1.index, NativeType.I32)
+            return module.createSelect(
+              module.createTeeLocal(tempLocal0.index, arg0),
+              module.createTeeLocal(tempLocal1.index, arg1),
+              module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.GtI32 : BinaryOp.GtU32,
+                module.createGetLocal(tempLocal0.index, NativeType.I32),
+                module.createGetLocal(tempLocal1.index, NativeType.I32)
               )
             );
         }
@@ -220,33 +223,33 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
 
     case "min": // min<T>(left: T, right: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 2, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]) != Type.void) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         arg1 = compiler.compileExpression(operands[1], typeArguments[0]);
         if ((compiler.currentType = typeArguments[0]).isAnyFloat) // sic
           return typeArguments[0] == Type.f32
-            ? compiler.module.createBinary(BinaryOp.MinF32, arg0, arg1)
-            : compiler.module.createBinary(BinaryOp.MinF64, arg0, arg1);
+            ? module.createBinary(BinaryOp.MinF32, arg0, arg1)
+            : module.createBinary(BinaryOp.MinF64, arg0, arg1);
         if (typeArguments[0].isAnyInteger) {
           tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
           tempLocal1 = compiler.currentFunction.addLocal(typeArguments[0]);
           if (typeArguments[0].isLongInteger)
-            return compiler.module.createSelect(
-              compiler.module.createTeeLocal(tempLocal0.index, arg0),
-              compiler.module.createTeeLocal(tempLocal1.index, arg1),
-              compiler.module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.LtI64 : BinaryOp.LtU64,
-                compiler.module.createGetLocal(tempLocal0.index, NativeType.I64),
-                compiler.module.createGetLocal(tempLocal1.index, NativeType.I64)
+            return module.createSelect(
+              module.createTeeLocal(tempLocal0.index, arg0),
+              module.createTeeLocal(tempLocal1.index, arg1),
+              module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.LtI64 : BinaryOp.LtU64,
+                module.createGetLocal(tempLocal0.index, NativeType.I64),
+                module.createGetLocal(tempLocal1.index, NativeType.I64)
               )
             );
           else
-            return compiler.module.createSelect(
-              compiler.module.createTeeLocal(tempLocal0.index, arg0),
-              compiler.module.createTeeLocal(tempLocal1.index, arg1),
-              compiler.module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.LtI32 : BinaryOp.LtU32,
-                compiler.module.createGetLocal(tempLocal0.index, NativeType.I32),
-                compiler.module.createGetLocal(tempLocal1.index, NativeType.I32)
+            return module.createSelect(
+              module.createTeeLocal(tempLocal0.index, arg0),
+              module.createTeeLocal(tempLocal1.index, arg1),
+              module.createBinary(typeArguments[0].isSignedInteger ? BinaryOp.LtI32 : BinaryOp.LtU32,
+                module.createGetLocal(tempLocal0.index, NativeType.I32),
+                module.createGetLocal(tempLocal1.index, NativeType.I32)
               )
             );
         }
@@ -255,174 +258,185 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
 
     case "ceil": // ceil<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]) == Type.f32 // sic
-          ? compiler.module.createUnary(UnaryOp.CeilF32, arg0)
-          : compiler.module.createUnary(UnaryOp.CeilF64, arg0);
+          ? module.createUnary(UnaryOp.CeilF32, arg0)
+          : module.createUnary(UnaryOp.CeilF64, arg0);
       }
       break;
 
     case "floor": // floor<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]) == Type.f32 // sic
-          ? compiler.module.createUnary(UnaryOp.FloorF32, arg0)
-          : compiler.module.createUnary(UnaryOp.FloorF64, arg0);
+          ? module.createUnary(UnaryOp.FloorF32, arg0)
+          : module.createUnary(UnaryOp.FloorF64, arg0);
       }
       break;
 
     case "copysign": // copysign<T>(left: T, right: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 2, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         arg1 = compiler.compileExpression(operands[1], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]) == Type.f32 // sic
-          ? compiler.module.createBinary(BinaryOp.CopysignF32, arg0, arg1)
-          : compiler.module.createBinary(BinaryOp.CopysignF64, arg0, arg1);
+          ? module.createBinary(BinaryOp.CopysignF32, arg0, arg1)
+          : module.createBinary(BinaryOp.CopysignF64, arg0, arg1);
       }
       break;
 
     case "nearest": // nearest<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]) == Type.f32 // sic
-          ? compiler.module.createUnary(UnaryOp.NearestF32, arg0)
-          : compiler.module.createUnary(UnaryOp.NearestF64, arg0);
+          ? module.createUnary(UnaryOp.NearestF32, arg0)
+          : module.createUnary(UnaryOp.NearestF64, arg0);
       }
       break;
 
     case "sqrt": // sqrt<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]) == Type.f32 // sic
-          ? compiler.module.createUnary(UnaryOp.SqrtF32, arg0)
-          : compiler.module.createUnary(UnaryOp.SqrtF64, arg0);
+          ? module.createUnary(UnaryOp.SqrtF32, arg0)
+          : module.createUnary(UnaryOp.SqrtF64, arg0);
       }
       break;
 
     case "trunc": // trunc<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if ((compiler.currentType = typeArguments[0]).isAnyFloat) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
         return (compiler.currentType = typeArguments[0]) == Type.f32 // sic
-          ? compiler.module.createUnary(UnaryOp.TruncF32, arg0)
-          : compiler.module.createUnary(UnaryOp.TruncF64, arg0);
+          ? module.createUnary(UnaryOp.TruncF32, arg0)
+          : module.createUnary(UnaryOp.TruncF64, arg0);
       }
       break;
 
-    case "sizeof": // sizeof<T>() -> usize
-      compiler.currentType = usizeType;
-      if (!validateCall(compiler, typeArguments, 1, operands, 0, reportNode))
-        return compiler.module.createUnreachable();
-      return usizeType.isLongInteger
-        ? compiler.module.createI64(typeArguments[0].byteSize, 0)
-        : compiler.module.createI32(typeArguments[0].byteSize);
-
     case "load": // load<T>(offset: usize) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], usizeType); // reports
       if ((compiler.currentType = typeArguments[0]) != Type.void)
-        return compiler.module.createLoad(typeArguments[0].byteSize, typeArguments[0].isSignedInteger, arg0, typeToNativeType(typeArguments[0]));
+        return module.createLoad(typeArguments[0].byteSize, typeArguments[0].isSignedInteger, arg0, typeToNativeType(typeArguments[0]));
       break;
 
     case "store": // store<T>(offset: usize, value: T) -> void
       compiler.currentType = Type.void;
       if (!validateCall(compiler, typeArguments, 1, operands, 2, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], usizeType); // reports
       arg1 = compiler.compileExpression(operands[1], typeArguments[0]); // reports
       compiler.currentType = Type.void;
       if (typeArguments[0] != Type.void)
-        return compiler.module.createStore(typeArguments[0].byteSize, arg0, arg1, typeToNativeType(typeArguments[0]));
+        return module.createStore(typeArguments[0].byteSize, arg0, arg1, typeToNativeType(typeArguments[0]));
       break;
 
     case "reinterpret": // reinterpret<T1,T2>(value: T1) -> T2
       if (!validateCall(compiler, typeArguments, 2, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       compiler.currentType = typeArguments[1];
       if (typeArguments[0].isLongInteger && typeArguments[1] == Type.f64) {
         arg0 = compiler.compileExpression(operands[0], Type.i64); // reports
         compiler.currentType = Type.f64;
-        return compiler.module.createUnary(UnaryOp.ReinterpretI64, arg0);
+        return module.createUnary(UnaryOp.ReinterpretI64, arg0);
       }
       if (typeArguments[0].isAnyInteger && typeArguments[0].byteSize == 4 && typeArguments[1] == Type.f32) {
         arg0 = compiler.compileExpression(operands[0], Type.i32); // reports
         compiler.currentType = Type.f32;
-        return compiler.module.createUnary(UnaryOp.ReinterpretI32, arg0);
+        return module.createUnary(UnaryOp.ReinterpretI32, arg0);
       }
       if (typeArguments[0] == Type.f64 && typeArguments[1].isLongInteger) {
         arg0 = compiler.compileExpression(operands[0], Type.f64); // reports
         compiler.currentType = typeArguments[1];
-        return compiler.module.createUnary(UnaryOp.ReinterpretF64, arg0);
+        return module.createUnary(UnaryOp.ReinterpretF64, arg0);
       }
       if (typeArguments[0] == Type.f32 && typeArguments[1].isAnyInteger && typeArguments[1].byteSize == 4) {
         arg0 = compiler.compileExpression(operands[0], Type.f32); // reports
         compiler.currentType = typeArguments[1];
-        return compiler.module.createUnary(UnaryOp.ReinterpretF32, arg0);
+        return module.createUnary(UnaryOp.ReinterpretF32, arg0);
       }
       break;
 
     case "select": // select<T>(ifTrue: T, ifFalse: T, condition: bool) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 3, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if (typeArguments[0] != Type.void) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]); // reports
         arg1 = compiler.compileExpression(operands[1], typeArguments[0]); // reports
         arg2 = compiler.compileExpression(operands[2], Type.i32); // reports
         compiler.currentType = typeArguments[0];
-        return compiler.module.createSelect(arg0, arg1, arg2);
+        return module.createSelect(arg0, arg1, arg2);
       }
       break;
 
     case "current_memory": // current_memory() -> i32
       compiler.currentType = Type.i32;
       if (!validateCall(compiler, typeArguments, 0, operands, 0, reportNode))
-        return compiler.module.createUnreachable();
-      return compiler.module.createHost(HostOp.CurrentMemory);
+        return module.createUnreachable();
+      return module.createHost(HostOp.CurrentMemory);
 
     case "grow_memory": // grow_memory(pages: i32) -> i32
       compiler.currentType = Type.i32;
       if (!validateCall(compiler, typeArguments, 0, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], Type.i32);
-      return compiler.module.createHost(HostOp.GrowMemory, null, [ arg0 ]);
+      return module.createHost(HostOp.GrowMemory, null, [ arg0 ]);
 
     case "unreachable": // unreachable() -> *
       // does not modify currentType
       validateCall(compiler, typeArguments, 0, operands, 0, reportNode);
-      return compiler.module.createUnreachable();
+      return module.createUnreachable();
+
+    case "sizeof": // sizeof<T>() -> usize
+      compiler.currentType = usizeType;
+      if (!validateCall(compiler, typeArguments, 1, operands, 0, reportNode))
+        return module.createUnreachable();
+      return usizeType.isLongInteger
+        ? module.createI64(typeArguments[0].byteSize, 0)
+        : module.createI32(typeArguments[0].byteSize);
+
+    case "changetype": // changetype<T1,T2>(value: T1) -> T2
+      if (!validateCall(compiler, typeArguments, 2, operands, 1, reportNode))
+        return module.createUnreachable();
+      if ((typeArguments[0] == usizeType && typeArguments[1].classType) || (typeArguments[0].classType && typeArguments[1] == usizeType)) {
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        compiler.currentType = typeArguments[1];
+        return arg0;
+      }
+      compiler.error(DiagnosticCode.Type_0_cannot_be_changed_to_type_1, reportNode.range, typeArguments[0].toString(), typeArguments[1].toString());
+      return module.createUnreachable();
 
     case "isNaN": // isNaN<T>(value: T) -> bool
       compiler.currentType = Type.bool;
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if (typeArguments[0].isAnyInteger)
-        return compiler.module.createI32(0);
+        return module.createI32(0);
       if (typeArguments[0].isAnyFloat) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]); // reports
         compiler.currentType = Type.bool;
         if (typeArguments[0] == Type.f32) {
           tempLocal0 = compiler.currentFunction.addLocal(Type.f32);
-          return compiler.module.createBinary(BinaryOp.NeF32,
-            compiler.module.createTeeLocal(tempLocal0.index, arg0),
-            compiler.module.createGetLocal(tempLocal0.index, NativeType.F32)
+          return module.createBinary(BinaryOp.NeF32,
+            module.createTeeLocal(tempLocal0.index, arg0),
+            module.createGetLocal(tempLocal0.index, NativeType.F32)
           );
         } else {
           tempLocal0 = compiler.currentFunction.addLocal(Type.f64);
-          return compiler.module.createBinary(BinaryOp.NeF64,
-            compiler.module.createTeeLocal(tempLocal0.index, arg0),
-            compiler.module.createGetLocal(tempLocal0.index, NativeType.F64)
+          return module.createBinary(BinaryOp.NeF64,
+            module.createTeeLocal(tempLocal0.index, arg0),
+            module.createGetLocal(tempLocal0.index, NativeType.F64)
           );
         }
       }
@@ -431,40 +445,40 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
     case "isFinite": // isFinite<T>(value: T) -> bool
       compiler.currentType = Type.bool;
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       if (typeArguments[0].isAnyInteger)
-        return compiler.module.createI32(1);
+        return module.createI32(1);
       if (typeArguments[0].isAnyFloat) {
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]); // reports
         compiler.currentType = Type.bool;
         if (typeArguments[0] == Type.f32) {
           tempLocal0 = compiler.currentFunction.addLocal(Type.f32);
-          return compiler.module.createSelect(
-            compiler.module.createBinary(BinaryOp.NeF32,
-              compiler.module.createUnary(UnaryOp.AbsF32,
-                compiler.module.createTeeLocal(tempLocal0.index, arg0)
+          return module.createSelect(
+            module.createBinary(BinaryOp.NeF32,
+              module.createUnary(UnaryOp.AbsF32,
+                module.createTeeLocal(tempLocal0.index, arg0)
               ),
-              compiler.module.createF32(Infinity)
+              module.createF32(Infinity)
             ),
-            compiler.module.createI32(0),
-            compiler.module.createBinary(BinaryOp.EqF32,
-              compiler.module.createGetLocal(tempLocal0.index, NativeType.F32),
-              compiler.module.createGetLocal(tempLocal0.index, NativeType.F32)
+            module.createI32(0),
+            module.createBinary(BinaryOp.EqF32,
+              module.createGetLocal(tempLocal0.index, NativeType.F32),
+              module.createGetLocal(tempLocal0.index, NativeType.F32)
             )
           );
         } else {
           tempLocal0 = compiler.currentFunction.addLocal(Type.f64);
-          return compiler.module.createSelect(
-            compiler.module.createBinary(BinaryOp.NeF64,
-              compiler.module.createUnary(UnaryOp.AbsF64,
-                compiler.module.createTeeLocal(tempLocal0.index, arg0)
+          return module.createSelect(
+            module.createBinary(BinaryOp.NeF64,
+              module.createUnary(UnaryOp.AbsF64,
+                module.createTeeLocal(tempLocal0.index, arg0)
               ),
-              compiler.module.createF64(Infinity)
+              module.createF64(Infinity)
             ),
-            compiler.module.createI32(0),
-            compiler.module.createBinary(BinaryOp.EqF64,
-              compiler.module.createGetLocal(tempLocal0.index, NativeType.F64),
-              compiler.module.createGetLocal(tempLocal0.index, NativeType.F64)
+            module.createI32(0),
+            module.createBinary(BinaryOp.EqF64,
+              module.createGetLocal(tempLocal0.index, NativeType.F64),
+              module.createGetLocal(tempLocal0.index, NativeType.F64)
             )
           );
         }
@@ -474,14 +488,14 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
     case "assert": // assert(isTrue: bool) -> void
       compiler.currentType = Type.void;
       if (!validateCall(compiler, typeArguments, 0, operands, 1, reportNode))
-        return compiler.module.createUnreachable();
+        return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], Type.i32); // reports
       compiler.currentType = Type.void;
       return compiler.options.noDebug
-        ? compiler.module.createNop()
-        : compiler.module.createIf(
-            compiler.module.createUnary(UnaryOp.EqzI32, arg0),
-            compiler.module.createUnreachable()
+        ? module.createNop()
+        : module.createIf(
+            module.createUnary(UnaryOp.EqzI32, arg0),
+            module.createUnreachable()
           );
 
     // case "fmod":

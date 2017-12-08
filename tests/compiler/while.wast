@@ -1,7 +1,7 @@
 (module
  (type $iv (func (param i32)))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "loopWhile" (func $while/loopWhile))
  (export "loopWhileInWhile" (func $while/loopWhileInWhile))
  (export "memory" (memory $0))
@@ -84,6 +84,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

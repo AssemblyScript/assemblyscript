@@ -1,7 +1,7 @@
 (module
  (type $iv (func (param i32)))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "loopDo" (func $do/loopDo))
  (export "loopDoInDo" (func $do/loopDoInDo))
  (export "memory" (memory $0))
@@ -75,6 +75,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

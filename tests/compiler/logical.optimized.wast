@@ -5,7 +5,6 @@
  (global $logical/f (mut f32) (f32.const 0))
  (global $logical/F (mut f64) (f64.const 0))
  (memory $0 1)
- (data (i32.const 4) "\08")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (type $v)

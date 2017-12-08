@@ -1,7 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
+ (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00")
  (export "ifThenElse" (func $if/ifThenElse))
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElseBlock))
@@ -70,6 +70,7 @@
   reinterpret
   select
   sizeof
+  changetype
   isNaN
   isFinite
   assert

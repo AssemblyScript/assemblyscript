@@ -6,6 +6,6 @@
   "files": [
     "carray.ts",
     "cstring.ts",
-    "memory.ts"
+    "heap.ts"
   ]
 }
