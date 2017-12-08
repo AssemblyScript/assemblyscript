@@ -45,10 +45,10 @@ if (args.help || args._.length < 1) {
   Object.keys(conf).forEach(name => {
     var option = conf[name];
     var text = " ";
-    if (option.aliases)
+    if (option.aliases && option.aliases[0].length === 1)
       text += "-" + option.aliases[0] + ", ";
     text += "--" + name;
-    while (text.length < 20)
+    while (text.length < 24)
       text += " ";
     options.push(text + option.desc);
   });
@@ -141,14 +141,32 @@ if (args.optimize)
 var hasOutput = false;
 
 if (args.outFile != null) {
-  fs.writeFileSync(args.outFile, module.toBinary());
+  if (/\.wast$/.test(args.outFile) && args.textFile == null)
+    args.textFile = args.outFile;
+  else if (/\.js$/.test(args.outFile) && args.asmjsFile == null)
+    args.asmjsFile = args.outFile;
+  else if (args.binaryFile == null)
+    args.binaryFile = args.outFile;
+}
+if (args.binaryFile != null && args.binaryFile.length) {
+  fs.writeFileSync(args.binaryFile, module.toBinary());
   hasOutput = true;
 }
-if (args.textFile != null) {
+if (args.textFile != null && args.textFile.length) {
   fs.writeFileSync(args.textFile, module.toText(), { encoding: "utf8" });
   hasOutput = true;
 }
-if (!hasOutput)
-  module.print();
+if (args.asmjsFile != null && args.asmjsFile.length) {
+  fs.writeFileSync(args.asmjsFile, module.toAsmjs(), { encoding: "utf8" });
+  hasOutput = true;
+}
+if (!hasOutput) {
+  if (args.binaryFile === "")
+    process.stdout.write(Buffer.from(module.toBinary()));
+  else if (args.asmjsFile === "")
+    module.printAsmjs();
+  else
+    module.print();
+}
 
 module.dispose();

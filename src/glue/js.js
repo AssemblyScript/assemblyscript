@@ -40,3 +40,12 @@ Module.prototype.toText = function toText() {
   binaryen.print = previousPrint;
   return ret;
 }
+
+Module.prototype.toAsmjs = function toAsmjs() {
+  var previousPrint = binaryen.print;
+  var ret = "";
+  binaryen.print = function print(x) { ret += x + "\n" };
+  this.printAsmjs();
+  binaryen.print = previousPrint;
+  return ret;
+}

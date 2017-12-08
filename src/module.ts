@@ -743,6 +743,10 @@ export class Module {
     return _BinaryenModulePrint(this.ref);
   }
 
+  printAsmjs(): void {
+    return _BinaryenModulePrintAsmjs(this.ref);
+  }
+
   toBinary(bufferSize: usize = 1048576): Uint8Array {
     // FIXME: target specific / JS glue overrides this
     throw new Error("not implemented");

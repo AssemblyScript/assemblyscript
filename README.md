@@ -29,7 +29,7 @@ Side effects:
 How does it work?
 -----------------
 
-AssemblyScript NEXT compiles a subset (or variant) of TypeScript to Binaryen IR. The resulting module can then be optimized, emitted in text or binary format, or even be converted to asm.js as a polyfill.
+AssemblyScript NEXT compiles a subset (or variant) of TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR. The resulting module can then be optimized, emitted in text or binary format or converted to [asm.js](http://asmjs.org) as a polyfill.
 
 Getting started
 ---------------
@@ -59,3 +59,24 @@ Development status
 ------------------
 
 For now, see the [compiler tests](https://github.com/AssemblyScript/next/tree/master/tests/compiler) for an overview of what's supposed to be working already.
+
+Using the CLI
+-------------
+
+```
+Syntax:   asc [options] [file ...]
+
+Examples: asc hello.ts
+
+Options:
+ -v, --version          Prints the compiler's version.
+ -h, --help             Prints this message.
+ -O, --optimize         Optimizes the module.
+ -c, --validate         Validates the module.
+ -o, --outFile          Specifies the output file.
+ -b, --binaryFile       Specifies the binary format output file.
+ -t, --textFile         Specifies the text format output file.
+ -a, --asmjsFile        Specifies the asm.js format output file.
+ --noTreeShaking        Disables tree-shaking.
+ --noDebug              Disables assertions.
+```

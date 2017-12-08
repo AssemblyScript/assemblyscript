@@ -16,22 +16,35 @@
   },
   "validate": {
     "desc": "Validates the module.",
-    "type": "boolean"
+    "type": "boolean",
+    "aliases": [ "c", "check" ]
   },
   "outFile": {
-    "desc": "Specifies the output file (binary format).",
-    "type": "string"
+    "desc": "Specifies the output file.",
+    "type": "string",
+    "aliases": [ "o" ]
+  },
+  "binaryFile": {
+    "desc": "Specifies the binary format output file.",
+    "type": "string",
+    "aliases": [ "b" ]
   },
   "textFile": {
-    "desc": "Specifies the output file (text format).",
-    "type": "string"
+    "desc": "Specifies the text format output file.",
+    "type": "string",
+    "aliases": [ "t" ]
+  },
+  "asmjsFile": {
+    "desc": "Specifies the asm.js format output file.",
+    "type": "string",
+    "aliases": [ "a" ]
   },
   "noTreeShaking": {
-    "desc": "Disables built-in tree-shaking.",
+    "desc": "Disables tree-shaking.",
     "type": "boolean"
   },
   "noDebug": {
-    "desc": "Replaces assertions with nops.",
+    "desc": "Disables assertions.",
     "type": "boolean"
   }
 }
