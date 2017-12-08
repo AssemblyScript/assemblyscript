@@ -108,17 +108,11 @@
     (if
      (if (result i32)
       (tee_local $7
-       (i32.ne
-        (get_local $2)
-        (i32.const 0)
-       )
+       (get_local $2)
       )
-      (i32.ne
-       (i32.rem_s
-        (get_local $4)
-        (i32.const 4)
-       )
-       (i32.const 0)
+      (i32.rem_s
+       (get_local $4)
+       (i32.const 4)
       )
       (get_local $7)
      )

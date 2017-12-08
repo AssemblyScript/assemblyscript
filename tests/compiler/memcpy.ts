@@ -4,7 +4,7 @@ export function memcpy(dest: usize, src: usize, n: usize): usize {
   let w: u32, x: u32;
 
   // copy 1 byte each until src is aligned to 4 bytes
-  while (n != 0 && s % 4 != 0) {
+  while (n && s % 4) {
     store<u8>(d++, load<u8>(s++));
     n--;
   }

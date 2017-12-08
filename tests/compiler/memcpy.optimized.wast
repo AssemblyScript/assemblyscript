@@ -17,10 +17,7 @@
    (if
     (if (result i32)
      (tee_local $3
-      (i32.ne
-       (get_local $2)
-       (i32.const 0)
-      )
+      (get_local $2)
      )
      (i32.rem_s
       (get_local $1)
