@@ -5,7 +5,7 @@
  (export "loopWhileInWhile" (func $while/loopWhileInWhile))
  (export "memory" (memory $0))
  (func $while/loopWhile (; 0 ;) (type $iv) (param $0 i32)
-  (loop $continue|1.1
+  (loop $continue|0
    (if
     (get_local $0)
     (block
@@ -15,13 +15,13 @@
        (i32.const 1)
       )
      )
-     (br $continue|1.1)
+     (br $continue|0)
     )
    )
   )
  )
  (func $while/loopWhileInWhile (; 1 ;) (type $iv) (param $0 i32)
-  (loop $continue|1.1
+  (loop $continue|0
    (if
     (get_local $0)
     (block
@@ -31,7 +31,7 @@
        (i32.const 1)
       )
      )
-     (loop $continue|1.2
+     (loop $continue|1
       (if
        (get_local $0)
        (block
@@ -41,11 +41,11 @@
           (i32.const 1)
          )
         )
-        (br $continue|1.2)
+        (br $continue|1)
        )
       )
      )
-     (br $continue|1.1)
+     (br $continue|0)
     )
    )
   )

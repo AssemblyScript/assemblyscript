@@ -2,6 +2,7 @@ Includes parts of TypeScript:
 
   https://github.com/Microsoft/TypeScript
 
+  Copyright (c) Microsoft Corporation. All rights reserved.
   Apache License, Version 2.0
   https://www.apache.org/licenses/LICENSE-2.0
 
@@ -9,5 +10,14 @@ Includes parts of Binaryen:
 
   https://github.com/WebAssembly/binaryen
 
+  Copyright 2015 WebAssembly Community Group participants
   Apache License, Version 2.0
   https://www.apache.org/licenses/LICENSE-2.0
+
+Includes parts of musl:
+
+  http://www.musl-libc.org
+
+  Copyright © 2005-2014 Rich Felker, et al.
+  MIT License
+  https://opensource.org/licenses/MIT

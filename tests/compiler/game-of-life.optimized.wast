@@ -46,7 +46,7 @@
   (set_local $0
    (i32.const 0)
   )
-  (loop $continue|1.1
+  (loop $continue|0
    (if
     (i32.lt_s
      (get_local $0)
@@ -79,7 +79,7 @@
      (set_local $1
       (i32.const 0)
      )
-     (loop $continue|1.2
+     (loop $continue|1
       (if
        (i32.lt_s
         (get_local $1)
@@ -259,7 +259,7 @@
           (i32.const 1)
          )
         )
-        (br $continue|1.2)
+        (br $continue|1)
        )
       )
      )
@@ -269,7 +269,7 @@
        (i32.const 1)
       )
      )
-     (br $continue|1.1)
+     (br $continue|0)
     )
    )
   )

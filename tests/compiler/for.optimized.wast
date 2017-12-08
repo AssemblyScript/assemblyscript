@@ -9,7 +9,7 @@
   (set_global $for/i
    (i32.const 0)
   )
-  (loop $continue|1.1
+  (loop $continue|0
    (if
     (i32.lt_s
      (get_global $for/i)
@@ -22,7 +22,7 @@
        (i32.const 1)
       )
      )
-     (br $continue|1.1)
+     (br $continue|0)
     )
    )
   )
@@ -36,7 +36,7 @@
   (set_local $0
    (i32.const 0)
   )
-  (loop $continue|2.1
+  (loop $continue|1
    (if
     (i32.lt_s
      (get_local $0)
@@ -49,11 +49,11 @@
        (i32.const 1)
       )
      )
-     (br $continue|2.1)
+     (br $continue|1)
     )
    )
   )
-  (loop $continue|3.1
+  (loop $continue|2
    (if
     (i32.gt_s
      (get_global $for/i)
@@ -66,7 +66,7 @@
        (i32.const 1)
       )
      )
-     (br $continue|3.1)
+     (br $continue|2)
     )
    )
   )
@@ -74,9 +74,9 @@
    (get_global $for/i)
    (unreachable)
   )
-  (block $break|4.1
-   (loop $continue|4.1
-    (br_if $break|4.1
+  (block $break|3
+   (loop $continue|3
+    (br_if $break|3
      (i32.eq
       (get_global $for/i)
       (i32.const 10)
@@ -88,17 +88,17 @@
       (i32.const 1)
      )
     )
-    (br $continue|4.1)
+    (br $continue|3)
    )
   )
-  (loop $continue|5.1
+  (loop $continue|4
    (set_global $for/i
     (i32.sub
      (get_global $for/i)
      (i32.const 1)
     )
    )
-   (br_if $continue|5.1
+   (br_if $continue|4
     (get_global $for/i)
    )
   )

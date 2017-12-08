@@ -929,8 +929,8 @@ export class Function extends Element {
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> = new Map();
 
-  private breakMajor: i32 = 0;
-  private breakMinor: i32 = 0;
+  private nextBreakId: i32 = 0;
+  private breakStack: i32[] | null = null;
 
   /** Constructs a new concrete function. */
   constructor(prototype: FunctionPrototype, internalName: string, typeArguments: Type[], parameters: Parameter[], returnType: Type, instanceMethodOf: Class | null) {
@@ -974,17 +974,26 @@ export class Function extends Element {
 
   /** Enters a(nother) break context. */
   enterBreakContext(): string {
-    if (!this.breakMinor)
-      this.breakMajor++;
-    return this.breakContext = this.breakMajor.toString(10) + "." + (++this.breakMinor).toString(10);
+    const id: i32 = this.nextBreakId++;
+    if (!this.breakStack)
+      this.breakStack = [ id ];
+    else
+      this.breakStack.push(id);
+    return this.breakContext = id.toString(10);
   }
 
   /** Leaves the current break context. */
   leaveBreakContext(): void {
-    if (this.breakMinor < 1)
-      throw new Error("unexpected unbalanced break context");
-    if (--this.breakMinor == 0)
+    assert(this.breakStack != null);
+    const length: i32 = (<i32[]>this.breakStack).length;
+    assert(length > 0);
+    (<i32[]>this.breakStack).pop();
+    if (length > 1) {
+      this.breakContext = (<i32[]>this.breakStack)[length - 2].toString(10)
+    } else {
       this.breakContext = null;
+      this.breakStack = null;
+    }
   }
 }
 
