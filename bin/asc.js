@@ -62,61 +62,70 @@ if (args.help || args._.length < 1) {
   });
   console.log([
     "Version " + version,
-    "Syntax:   asc [options] [file ...]",
+    "Syntax:   asc [options] [entryFile ...]",
     "",
     "Examples: asc hello.ts",
+    "          asc hello.ts -b hello.wasm -t hello.wast -a hello.js",
+    "          asc hello.ts -b > hello.wasm",
     "",
     "Options:"
   ].concat(options).join("\n"));
   process.exit(args.help ? 0 : 1);
 }
 
-var entryPath = args._[0].replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
-var entryDir  = path.dirname(entryPath);
-var entryText;
-try {
-  entryText = fs.readFileSync(entryPath + ".ts", { encoding: "utf8" });
-} catch (e) {
-  try {
-    entryText = fs.readFileSync(entryPath + "/index.ts", { encoding: "utf8" });
-    entryPath = entryPath + "/index";
-  } catch (e) {
-    console.error("File '" + entryPath + ".ts' not found.");
-    process.exit(1);
+var parser = null;
+
+function checkDiagnostics(parser) {
+  var diagnostic;
+  var hasErrors = false;
+
+  while ((diagnostic = assemblyscript.nextDiagnostic(parser)) != null) {
+    console.error(assemblyscript.formatDiagnostic(diagnostic, process.stderr.isTTY, true));
+    if (assemblyscript.isError(diagnostic))
+      hasErrors = true;
   }
+  if (hasErrors)
+    process.exit(1);
 }
 
-var parser = assemblyscript.parseFile(entryText, entryPath);
+args._.forEach(filename => {
+  var entryPath = filename.replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
+  var entryDir  = path.dirname(entryPath);
+  var entryText;
 
-var nextPath;
-var nextText;
-
-while ((nextPath = parser.nextFile()) != null) {
   try {
-    nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
+    entryText = fs.readFileSync(entryPath + ".ts", { encoding: "utf8" });
   } catch (e) {
     try {
-      nextText = fs.readFileSync(nextPath + "/index.ts", { encoding: "utf8" });
-      nextPath = nextPath + "/index";
+      entryText = fs.readFileSync(entryPath + "/index.ts", { encoding: "utf8" });
+      entryPath = entryPath + "/index";
     } catch (e) {
-      console.error("Imported file '" + nextPath + ".ts' not found.");
+      console.error("File '" + entryPath + ".ts' not found.");
       process.exit(1);
     }
   }
-  assemblyscript.parseFile(nextText, nextPath, parser);
-}
 
-var diagnostic;
-var hasErrors = false;
+  parser = assemblyscript.parseFile(entryText, entryPath, parser, true);
 
-while ((diagnostic = assemblyscript.nextDiagnostic(parser)) != null) {
-  console.error(assemblyscript.formatDiagnostic(diagnostic, process.stderr.isTTY, true));
-  if (assemblyscript.isError(diagnostic))
-    hasErrors = true;
-}
+  var nextPath;
+  var nextText;
 
-if (hasErrors)
-  process.exit(1);
+  while ((nextPath = parser.nextFile()) != null) {
+    try {
+      nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
+    } catch (e) {
+      try {
+        nextText = fs.readFileSync(nextPath + "/index.ts", { encoding: "utf8" });
+        nextPath = nextPath + "/index";
+      } catch (e) {
+        console.error("Imported file '" + nextPath + ".ts' not found.");
+        process.exit(1);
+      }
+    }
+    assemblyscript.parseFile(nextText, nextPath, parser);
+  }
+  checkDiagnostics(parser);
+});
 
 var options = assemblyscript.createOptions();
 assemblyscript.setTarget(options, 0);
@@ -124,18 +133,7 @@ assemblyscript.setNoTreeShaking(options, args.noTreeShaking);
 assemblyscript.setNoDebug(options, args.noDebug);
 
 var module = assemblyscript.compile(parser, options);
-
-hasErrors = false;
-while ((diagnostic = assemblyscript.nextDiagnostic(parser)) != null) {
-  console.error(assemblyscript.formatDiagnostic(diagnostic, process.stderr.isTTY, true));
-  if (assemblyscript.isError(diagnostic))
-    hasErrors = true;
-}
-
-if (hasErrors) {
-  module.dispose();
-  process.exit(1);
-}
+checkDiagnostics(parser);
 
 if (args.validate)
   if (!module.validate()) {

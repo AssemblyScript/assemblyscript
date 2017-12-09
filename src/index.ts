@@ -26,8 +26,7 @@ import { Parser } from "./parser";
 import { Program } from "./program";
 
 /** Parses a single source file. If `parser` has been omitted a new one is created. */
-export function parseFile(text: string, path: string, parser: Parser | null = null): Parser {
-  let isEntry: bool = false;
+export function parseFile(text: string, path: string, parser: Parser | null = null, isEntry: bool = false): Parser {
   if (!parser) {
     parser = new Parser();
     isEntry = true;

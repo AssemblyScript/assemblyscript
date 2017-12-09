@@ -64,9 +64,11 @@ Using the CLI
 -------------
 
 ```
-Syntax:   asc [options] [file ...]
+Syntax:   asc [options] [entryFile ...]
 
 Examples: asc hello.ts
+          asc hello.ts -b hello.wasm -t hello.wast -a hello.js
+          asc hello.ts -b > hello.wasm
 
 Options:
  -v, --version      Prints the compiler's version.
