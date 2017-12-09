@@ -31,6 +31,7 @@ Object.keys(conf).forEach(key => {
 
 var args = minimist(process.argv.slice(2), opts);
 var version = require("../package.json").version;
+var indent = 20;
 if (isDev) version += "-dev";
 
 if (args.version) {
@@ -48,9 +49,16 @@ if (args.help || args._.length < 1) {
     if (option.aliases && option.aliases[0].length === 1)
       text += "-" + option.aliases[0] + ", ";
     text += "--" + name;
-    while (text.length < 24)
+    while (text.length < indent)
       text += " ";
-    options.push(text + option.desc);
+    if (Array.isArray(option.desc)) {
+      options.push(text + option.desc[0] + option.desc.slice(1).map(line => {
+        for (var i = 0; i < indent; ++i)
+          line = " " + line;
+        return "\n" + line;
+      }).join(""));
+    } else
+      options.push(text + option.desc);
   });
   console.log([
     "Version " + version,
@@ -134,6 +142,11 @@ if (args.validate)
     module.dispose();
     process.exit(1);
   }
+
+if (args.trapMode === "clamp")
+  module.runPasses([ "trap-mode-clamp" ]);
+else if (args.trapMode === "js")
+  module.runPasses([ "trap-mode-js" ]);
 
 if (args.optimize)
   module.optimize();

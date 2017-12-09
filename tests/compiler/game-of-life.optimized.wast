@@ -100,7 +100,7 @@
                    (get_local $4)
                    (get_global $game-of-life/w)
                   )
-                  (tee_local $3
+                  (tee_local $2
                    (select
                     (i32.sub
                      (get_local $1)
@@ -128,7 +128,7 @@
                   (get_local $4)
                   (get_global $game-of-life/w)
                  )
-                 (tee_local $2
+                 (tee_local $3
                   (select
                    (i32.const 0)
                    (i32.add
@@ -150,7 +150,7 @@
                  (get_local $0)
                  (get_global $game-of-life/w)
                 )
-                (get_local $3)
+                (get_local $2)
                )
               )
              )
@@ -160,7 +160,7 @@
                 (get_local $0)
                 (get_global $game-of-life/w)
                )
-               (get_local $2)
+               (get_local $3)
               )
              )
             )
@@ -170,7 +170,7 @@
                (get_local $5)
                (get_global $game-of-life/w)
               )
-              (get_local $3)
+              (get_local $2)
              )
             )
            )
@@ -190,7 +190,7 @@
              (get_local $5)
              (get_global $game-of-life/w)
             )
-            (get_local $2)
+            (get_local $3)
            )
           )
          )
@@ -205,38 +205,32 @@
            (get_local $1)
           )
          )
-         (block
-          (if
-           (i32.eqz
-            (tee_local $3
-             (i32.lt_s
-              (get_local $2)
-              (i32.const 2)
-             )
+         (if
+          (if (result i32)
+           (tee_local $3
+            (i32.lt_s
+             (get_local $2)
+             (i32.const 2)
             )
            )
-           (set_local $3
-            (i32.gt_s
-             (get_local $2)
-             (i32.const 3)
-            )
+           (get_local $3)
+           (i32.gt_s
+            (get_local $2)
+            (i32.const 3)
            )
           )
-          (if
-           (get_local $3)
-           (i32.store8
+          (i32.store8
+           (i32.add
             (i32.add
-             (i32.add
-              (get_global $game-of-life/s)
-              (i32.mul
-               (get_local $0)
-               (get_global $game-of-life/w)
-              )
+             (get_global $game-of-life/s)
+             (i32.mul
+              (get_local $0)
+              (get_global $game-of-life/w)
              )
-             (get_local $1)
             )
-            (i32.const 0)
+            (get_local $1)
            )
+           (i32.const 0)
           )
          )
          (if

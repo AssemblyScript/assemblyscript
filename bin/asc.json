@@ -20,22 +20,22 @@
     "aliases": [ "c", "check" ]
   },
   "outFile": {
-    "desc": "Specifies the output file.",
+    "desc": "Specifies the output file. Format is determined by file extension.",
     "type": "string",
     "aliases": [ "o" ]
   },
   "binaryFile": {
-    "desc": "Specifies the binary format output file.",
+    "desc": "Specifies the binary format output file (.wasm).",
     "type": "string",
     "aliases": [ "b" ]
   },
   "textFile": {
-    "desc": "Specifies the text format output file.",
+    "desc": "Specifies the text format output file (.wast).",
     "type": "string",
     "aliases": [ "t" ]
   },
   "asmjsFile": {
-    "desc": "Specifies the asm.js format output file.",
+    "desc": "Specifies the asm.js format output file (.js).",
     "type": "string",
     "aliases": [ "a" ]
   },
@@ -46,5 +46,15 @@
   "noDebug": {
     "desc": "Disables assertions.",
     "type": "boolean"
+  },
+  "trapMode": {
+    "desc": [
+      "Sets the trap mode to use.",
+      "none   Do not modify trapping operations. This is the default.",
+      "clamp  Replace trapping operations with clamping semantics.",
+      "js     Replace trapping operations with JS semantics."
+    ],
+    "type": "string",
+    "default": "none"
   }
 }

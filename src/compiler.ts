@@ -393,7 +393,8 @@ export class Compiler extends DiagnosticEmitter {
           if (getExpressionId(initializer) != ExpressionId.Const) {
             initializer = this.precomputeExpressionRef(initializer);
             if (getExpressionId(initializer) != ExpressionId.Const) {
-              this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
+              if (element.isConstant)
+                this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
               initializeInStart = true;
             }
           }
@@ -407,7 +408,8 @@ export class Compiler extends DiagnosticEmitter {
             this.module.createGetGlobal(previousValue.internalName, NativeType.I32),
             this.module.createI32(1)
           );
-          this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, val.declaration.range);
+          if (element.isConstant)
+            this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, val.declaration.range);
           initializeInStart = true;
         }
         if (initializeInStart) {

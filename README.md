@@ -69,16 +69,20 @@ Syntax:   asc [options] [file ...]
 Examples: asc hello.ts
 
 Options:
- -v, --version          Prints the compiler's version.
- -h, --help             Prints this message.
- -O, --optimize         Optimizes the module.
- -c, --validate         Validates the module.
- -o, --outFile          Specifies the output file.
- -b, --binaryFile       Specifies the binary format output file.
- -t, --textFile         Specifies the text format output file.
- -a, --asmjsFile        Specifies the asm.js format output file.
- --noTreeShaking        Disables tree-shaking.
- --noDebug              Disables assertions.
+ -v, --version      Prints the compiler's version.
+ -h, --help         Prints this message.
+ -O, --optimize     Optimizes the module.
+ -c, --validate     Validates the module.
+ -o, --outFile      Specifies the output file. Format is determined by file extension.
+ -b, --binaryFile   Specifies the binary format output file (.wasm).
+ -t, --textFile     Specifies the text format output file (.wast).
+ -a, --asmjsFile    Specifies the asm.js format output file (.js).
+ --noTreeShaking    Disables tree-shaking.
+ --noDebug          Disables assertions.
+ --trapMode         Sets the trap mode to use.
+                    none   Do not modify trapping operations. This is the default.
+                    clamp  Replace trapping operations with clamping semantics.
+                    js     Replace trapping operations with JS semantics.
 ```
 
 Unless a bundle has been built to `dist/`, `asc` runs the TypeScript sources directly via [ts-node](https://www.npmjs.com/package/ts-node). Useful for development.

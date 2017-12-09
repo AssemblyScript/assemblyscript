@@ -702,7 +702,7 @@ export class Module {
 
   optimize(func: FunctionRef = 0): void {
     // see: https://github.com/WebAssembly/binaryen/issues/1331#issuecomment-350328175
-    this.runPasses([ "flatten", "ssa" ], func);
+    // this.runPasses([ "flatten", "ssa" ], func);
     if (func) {
       _BinaryenFunctionOptimize(func, this.ref);
     } else {
