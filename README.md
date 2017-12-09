@@ -80,3 +80,5 @@ Options:
  --noTreeShaking        Disables tree-shaking.
  --noDebug              Disables assertions.
 ```
+
+Unless a bundle has been built to `dist/`, `asc` runs the TypeScript sources directly via [ts-node](https://www.npmjs.com/package/ts-node). Useful for development.

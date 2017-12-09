@@ -23,7 +23,7 @@ declare type bool = boolean;
 
 // Portable built-ins
 
-/** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
+/** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T = i32>(value: T): T;
 /** Computes the absolute value of an integer or float. */
 declare function abs<T = i32 | f32 | f64>(value: T): T;

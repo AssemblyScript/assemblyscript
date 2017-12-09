@@ -1707,7 +1707,7 @@ export class Compiler extends DiagnosticEmitter {
       case LiteralKind.FLOAT: {
         const floatValue: f64 = (<FloatLiteralExpression>expression).value;
         if (contextualType == Type.f32)
-          return this.module.createF32(Math.fround(floatValue));
+          return this.module.createF32(<f32>floatValue);
         this.currentType = Type.f64;
         return this.module.createF64(floatValue);
       }

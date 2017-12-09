@@ -5,13 +5,11 @@
 fetch("game-of-life.optimized.wast").then(response => response.text()).then(text => {
 
   // Convert it to binary format
-  var buffer = Binaryen.parseText(text).emitBinary();
+  var binary = Binaryen.parseText(text).emitBinary();
 
   // Instantiate the module
-  return WebAssembly.instantiate(buffer, {});
-
-}).then(result => {
-  var module = result.instance;
+  var module = new WebAssembly.Module(binary);
+  var instance = new WebAssembly.Instance(module, { /* no imports */ });
 
   // Set up the canvas with a 2D rendering context
   var cnv = document.getElementById("canvas");
@@ -22,9 +20,12 @@ fetch("game-of-life.optimized.wast").then(response => response.text()).then(text
       S = s + s; // total memory required to store input and output
 
   // Grow the (exported) memory if it's size isn't sufficient
-  var memory = module.exports.memory;
+  var memory = instance.exports.memory;
   if (memory.buffer.byteLength < S)
     memory.grow(Math.ceil((S - memory.buffer.byteLength) / 65536));
+
+  // Initialize with width and height
+  instance.exports.init(w, h);
 
   // Fill input at [0, s-1] with random cells
   var mem = new Uint8Array(memory.buffer);
@@ -32,18 +33,15 @@ fetch("game-of-life.optimized.wast").then(response => response.text()).then(text
     for (var x = 0; x < w; ++x)
       mem[y * w + x] = Math.random() > 0.1 ? 0 : 1;
 
-  // Initialize with width and height
-  module.exports.init(w, h);
-
   // Update about 30 times a second
-  function update() {
+  (function update() {
     setTimeout(update, 33);
-    module.exports.step();
+    instance.exports.step();
     mem.set(mem.subarray(s, S), 0); // copy output -> input
-  }
+  })();
 
   // Keep rendering the output at [s, 2*s-1]
-  function render() {
+  (function render() {
     requestAnimationFrame(render);
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = "#333";
@@ -51,10 +49,7 @@ fetch("game-of-life.optimized.wast").then(response => response.text()).then(text
       for (var x = 0; x < w; ++x)
         if (mem[s + y * w + x])
           ctx.fillRect(x, y, 1, 1);
-  }
-
-  update();
-  render();
+  })();
 
 }).catch(err => {
   throw err;
