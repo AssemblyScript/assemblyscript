@@ -1,8 +1,56 @@
 import { compileCall as compileBuiltinCall, initialize } from "./builtins";
 import { PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticEmitter } from "./diagnostics";
-import { Module, MemorySegment, ExpressionRef, UnaryOp, BinaryOp, NativeType, FunctionRef, FunctionTypeRef, getExpressionId, ExpressionId, getExpressionType, getFunctionBody, getConstValueI32, getConstValueI64Low, getConstValueI64High, getConstValueF32, getConstValueF64 } from "./module";
-import { Program, ClassPrototype, Class, Element, ElementKind, Enum, FunctionPrototype, Function, Global, Local, Namespace, Parameter, EnumValue } from "./program";
+import {
+
+  Module,
+  MemorySegment,
+  ExpressionRef,
+  UnaryOp,
+  BinaryOp,
+  NativeType,
+  FunctionTypeRef,
+  FunctionRef,
+  ExpressionId,
+
+  getExpressionId,
+  getExpressionType,
+  getFunctionBody,
+  getConstValueI32,
+  getConstValueI64Low,
+  getConstValueI64High,
+  getConstValueF32,
+  getConstValueF64,
+  getGetLocalIndex,
+  getGetGlobalName,
+  isLoadAtomic,
+  isLoadSigned,
+  getLoadBytes,
+  getLoadOffset,
+  getLoadPtr,
+  getUnaryOp,
+  getUnaryValue,
+  getBinaryOp,
+  getBinaryLeft,
+  getBinaryRight
+
+} from "./module";
+import {
+
+  Program,
+  ClassPrototype,
+  Class, Element,
+  ElementKind,
+  Enum,
+  FunctionPrototype,
+  Function,
+  Global,
+  Local,
+  Namespace,
+  Parameter,
+  EnumValue
+
+} from "./program";
 import { I64, U64, sb } from "./util";
 import { Token } from "./tokenizer";
 import {
@@ -65,6 +113,7 @@ import {
   UnaryPostfixExpression,
   UnaryPrefixExpression,
 
+  // utility
   hasModifier
 
 } from "./ast";
@@ -1021,7 +1070,8 @@ export class Compiler extends DiagnosticEmitter {
     this.module.runPasses([ "precompute" ], funcRef);
     const ret: ExpressionRef = getFunctionBody(funcRef);
     this.module.removeFunction("__precompute");
-    // TODO: also remove the function type somehow if no longer used
+    // TODO: also remove the function type somehow if no longer used or make the C-API accept
+    // a `null` typeRef, using an implicit type.
     return ret;
   }
 
@@ -1188,6 +1238,41 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast, reportNode.range, fromType.toString(), toType.toString());
 
     return expr;
+  }
+
+  cloneExpressionRef(expr: ExpressionRef, noSideEffects: bool = false, maxDepth: i32 = 0x7fffffff): ExpressionRef {
+    // currently supports side effect free expressions only
+    if (maxDepth < 0)
+      return 0;
+    let nested1: ExpressionRef,
+        nested2: ExpressionRef;
+    switch (getExpressionId(expr)) {
+      case ExpressionId.Const:
+        switch (getExpressionType(expr)) {
+          case NativeType.I32: return this.module.createI32(getConstValueI32(expr));
+          case NativeType.I64: return this.module.createI64(getConstValueI64Low(expr), getConstValueI64High(expr));
+          case NativeType.F32: return this.module.createF32(getConstValueF32(expr));
+          case NativeType.F64: return this.module.createF64(getConstValueF64(expr));
+          default: throw new Error("unexpected expression type");
+        }
+      case ExpressionId.GetLocal:
+        return this.module.createGetLocal(getGetLocalIndex(expr), getExpressionType(expr));
+      case ExpressionId.GetGlobal:
+        return this.module.createGetGlobal(getGetGlobalName(expr), getExpressionType(expr));
+      case ExpressionId.Load:
+        if (!(nested1 = this.cloneExpressionRef(getLoadPtr(expr), noSideEffects, maxDepth - 1))) break;
+        return isLoadAtomic(expr)
+          ? this.module.createAtomicLoad(getLoadBytes(expr), nested1, getExpressionType(expr), getLoadOffset(expr))
+          : this.module.createLoad(getLoadBytes(expr), isLoadSigned(expr), nested1, getExpressionType(expr), getLoadOffset(expr));
+      case ExpressionId.Unary:
+        if (!(nested1 = this.cloneExpressionRef(getUnaryValue(expr), noSideEffects, maxDepth - 1))) break;
+        return this.module.createUnary(getUnaryOp(expr), nested1);
+      case ExpressionId.Binary:
+        if (!(nested1 = this.cloneExpressionRef(getBinaryLeft(expr), noSideEffects, maxDepth - 1))) break;
+        if (!(nested2 = this.cloneExpressionRef(getBinaryLeft(expr), noSideEffects, maxDepth - 1))) break;
+        return this.module.createBinary(getBinaryOp(expr), nested1, nested2);
+    }
+    return 0;
   }
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
@@ -1426,15 +1511,31 @@ export class Compiler extends DiagnosticEmitter {
       case Token.AMPERSAND_AMPERSAND: // left && right
         left = this.compileExpression(expression.left, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
-        // TODO: once it's possible to clone 'left', we could check if it is a Const, GetLocal, GetGlobal or Load and avoid the tempLocal
+
+        // simplify if left is free of side effects while tolerating two levels of nesting, e.g., i32.load(i32.load(i32.const))
+        // if (condition = this.cloneExpressionRef(left, true, 2))
+        //   return this.module.createIf(
+        //     this.currentType.isLongInteger
+        //       ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
+        //       : this.currentType == Type.f64
+        //       ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
+        //       : this.currentType == Type.f32
+        //       ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
+        //       : condition, // usual case: saves one EQZ when not using EQZ above
+        //      right,
+        //      left
+        //   );
+
+        // otherwise use a temporary local for the intermediate value
         tempLocal = this.currentFunction.addLocal(this.currentType);
+        condition = this.module.createTeeLocal(tempLocal.index, left);
         return this.module.createIf(
           this.currentType.isLongInteger
-            ? this.module.createBinary(BinaryOp.NeI64, this.module.createTeeLocal(tempLocal.index, left), this.module.createI64(0, 0))
+            ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
             : this.currentType == Type.f64
-            ? this.module.createBinary(BinaryOp.NeF64, this.module.createTeeLocal(tempLocal.index, left), this.module.createF64(0))
+            ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
             : this.currentType == Type.f32
-            ? this.module.createBinary(BinaryOp.NeF32, this.module.createTeeLocal(tempLocal.index, left), this.module.createF32(0))
+            ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
             : this.module.createTeeLocal(tempLocal.index, left),
           right,
           this.module.createGetLocal(tempLocal.index, typeToNativeType(tempLocal.type))
@@ -1443,15 +1544,31 @@ export class Compiler extends DiagnosticEmitter {
       case Token.BAR_BAR: // left || right
         left = this.compileExpression(expression.left, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
         right = this.compileExpression(expression.right, this.currentType);
-        // TODO: same as above
+
+        // simplify if left is free of side effects while tolerating two levels of nesting
+        // if (condition = this.cloneExpressionRef(left, true, 2))
+        //   return this.module.createIf(
+        //     this.currentType.isLongInteger
+        //       ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
+        //       : this.currentType == Type.f64
+        //       ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
+        //       : this.currentType == Type.f32
+        //       ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
+        //       : condition, // usual case: saves one EQZ when not using EQZ above
+        //     left,
+        //     right
+        //   );
+
+        // otherwise use a temporary local for the intermediate value
         tempLocal = this.currentFunction.addLocal(this.currentType);
+        condition = this.module.createTeeLocal(tempLocal.index, left);
         return this.module.createIf(
           this.currentType.isLongInteger
-            ? this.module.createBinary(BinaryOp.NeI64, this.module.createTeeLocal(tempLocal.index, left), this.module.createI64(0, 0))
+            ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
             : this.currentType == Type.f64
-            ? this.module.createBinary(BinaryOp.NeF64, this.module.createTeeLocal(tempLocal.index, left), this.module.createF64(0))
+            ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
             : this.currentType == Type.f32
-            ? this.module.createBinary(BinaryOp.NeF32, this.module.createTeeLocal(tempLocal.index, left), this.module.createF32(0))
+            ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
             : this.module.createTeeLocal(tempLocal.index, left),
           this.module.createGetLocal(tempLocal.index, typeToNativeType(tempLocal.type)),
           right

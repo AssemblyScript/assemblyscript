@@ -66,7 +66,7 @@ if (args.help || args._.length < 1) {
     "",
     "Examples: asc hello.ts",
     "          asc hello.ts -b hello.wasm -t hello.wast -a hello.js",
-    "          asc hello.ts -b > hello.wasm",
+    "          asc hello1.ts hello2.ts -b -O > hello.wasm",
     "",
     "Options:"
   ].concat(options).join("\n"));
@@ -145,6 +145,10 @@ if (args.trapMode === "clamp")
   module.runPasses([ "trap-mode-clamp" ]);
 else if (args.trapMode === "js")
   module.runPasses([ "trap-mode-js" ]);
+else if (args.trapMode !== "allow") {
+  console.log("Unsupported trap mode: " + args.trapMode);
+  process.exit(1);
+}
 
 if (args.optimize)
   module.optimize();

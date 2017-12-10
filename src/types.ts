@@ -37,7 +37,7 @@ export class Type {
   constructor(kind: TypeKind, size: i32) {
     this.kind = kind;
     this.size = size;
-    this.byteSize = ceil<f64>(<f64>size / 8);
+    this.byteSize = <i32>ceil<f64>(<f64>size / 8);
     this.classType = null;
   }
 

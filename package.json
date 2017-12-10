@@ -31,7 +31,8 @@
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   },
-  "main": "dist/assemblyscript.js",
+  "main": "index.js",
+  "types": "index.d.ts",
   "bin": {
     "asc": "bin/asc.js"
   },
@@ -48,10 +49,15 @@
     "bin/asc.json",
     "dist/assemblyscript.js",
     "dist/assemblyscript.js.map",
+    "index.d.ts",
+    "index.js",
     "LICENSE",
     "NOTICE",
     "package.json",
     "package-lock.json",
-    "README.md"
+    "portable-assembly.d.ts",
+    "portable-assembly.js",
+    "README.md",
+    "src"
   ]
 }

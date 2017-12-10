@@ -3,62 +3,33 @@ AssemblyScript NEXT
 
 [![Build Status](https://travis-ci.org/AssemblyScript/next.svg?branch=master)](https://travis-ci.org/AssemblyScript/next)
 
-This repository contains compiler components for the next iteration of the AssemblyScript compiler written in AssemblyScript itself.
+**AssemblyScript** is a new compiler targeting WebAssembly while utilizing [TypeScript](http://www.typescriptlang.org)'s syntax and [node](https://nodejs.org)'s vibrant ecosystem. Instead of requiring complex toolchains to set up, you can simply `npm install` it - or run it in a browser.
 
-Note that the code uses some features and standard library components that are not yet supported by any version of asc. To account for this, the code has been written in "portable AssemblyScript", a TypeScript-compatible subset of a subset of a superset of JavaScript, that also compiles to JavaScript using TSC.
+By compiling a variant of TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR, the resulting module can be validated, optimized, emitted in WebAssembly text or binary format and converted to [asm.js](http://asmjs.org) as a polyfill.
 
-Why is this necessary?
-----------------------
+The compiler itself is written in "portable AssemblyScript" so it can be compiled to both JavaScript using `tsc` and, eventually, to WebAssembly using `asc`.
 
-Well, it isn't, but: In order to be able to compile the AssemblyScript compiler itself to WebAssembly eventually, we cannot depend on TypeScript because it is written in vanilla TypeScript and makes use of quite a few non-AOT-compatible dynamic features of JavaScript.
+Development status
+------------------
 
-Cons:
-- A lot of work
-- Dealing with TypeScript compatibility issues
-
-Pros:
-- One day compiling to WebAssembly for performance
-- Necessary features only, reducing binary size
-- Linking against Binaryen compiled to WebAssembly, reducing overhead
-
-Side effects:
-- Good fire test for the compiler
-- Good benchmark when comparing both versions
-- Benefits standard library design ideas
-
-How does it work?
------------------
-
-AssemblyScript NEXT compiles a subset (or variant) of TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR. The resulting module can then be optimized, emitted in text or binary format or converted to [asm.js](http://asmjs.org) as a polyfill.
+This version of the compiler (0.5.0, NEXT) is relatively new and does not yet support some features a TypeScript programmer might expect, e.g., strings, arrays and classes. For now, you can see the [compiler tests](https://github.com/AssemblyScript/next/tree/master/tests/compiler) for an overview of what's supposed to be working already.
 
 Getting started
 ---------------
 
-If you'd like to try out NEXT today or even plan to contribute, this is how you do it:
+If you'd like to try it today or even plan to contribute, this is how you do it:
 
 ```
 $> git clone https://github.com/AssemblyScript/next.git
 $> cd next
 $> npm install
+```
+
+Author your module in AssemblyScript ([definitions](./assembly.d.ts)) or portable AssemblyScript ([definitions](./portable-assembly.d.ts)) and run:
+
+```
 $> node bin\asc yourModule.ts
 ```
-
-Building an UMD bundle to `dist/assemblyscript.js` (does not bundle [binaryen.js](https://github.com/AssemblyScript/binaryen.js)):
-
-```
-$> npm run build
-```
-
-Running the [tests](./tests):
-
-```
-$> npm test
-```
-
-Development status
-------------------
-
-For now, see the [compiler tests](https://github.com/AssemblyScript/next/tree/master/tests/compiler) for an overview of what's supposed to be working already.
 
 Using the CLI
 -------------
@@ -82,9 +53,24 @@ Options:
  --noTreeShaking    Disables tree-shaking.
  --noDebug          Disables assertions.
  --trapMode         Sets the trap mode to use.
-                    none   Do not modify trapping operations. This is the default.
+                    allow  Allow trapping operations. This is the default.
                     clamp  Replace trapping operations with clamping semantics.
                     js     Replace trapping operations with JS semantics.
 ```
 
-Unless a bundle has been built to `dist/`, `asc` runs the TypeScript sources directly via [ts-node](https://www.npmjs.com/package/ts-node). Useful for development.
+Unless a bundle has been built to `dist/`, `asc` runs the TypeScript sources on the fly via [ts-node](https://www.npmjs.com/package/ts-node). Useful for development.
+
+Building
+--------
+
+Building an UMD bundle to `dist/assemblyscript.js` (does not bundle [binaryen.js](https://github.com/AssemblyScript/binaryen.js)):
+
+```
+$> npm run build
+```
+
+Running the [tests](./tests):
+
+```
+$> npm test
+```

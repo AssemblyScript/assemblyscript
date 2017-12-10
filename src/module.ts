@@ -807,8 +807,56 @@ export function getConstValueF64(expr: ExpressionRef): f64 {
   return _BinaryenConstGetValueF64(expr);
 }
 
+export function getGetLocalIndex(expr: ExpressionRef): Index {
+  return _BinaryenGetLocalGetIndex(expr);
+}
+
+export function getGetGlobalName(expr: ExpressionRef): string {
+  return readString(_BinaryenGetGlobalGetName(expr));
+}
+
+export function isLoadAtomic(expr: ExpressionRef): bool {
+  return _BinaryenLoadIsAtomic(expr);
+}
+
+export function isLoadSigned(expr: ExpressionRef): bool {
+  return _BinaryenLoadIsSigned(expr);
+}
+
+export function getLoadBytes(expr: ExpressionRef): u32 {
+  return _BinaryenLoadGetBytes(expr);
+}
+
+export function getLoadOffset(expr: ExpressionRef): u32 {
+  return _BinaryenLoadGetOffset(expr);
+}
+
+export function getLoadPtr(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenLoadGetPtr(expr);
+}
+
 export function getFunctionBody(func: FunctionRef): ExpressionRef {
   return _BinaryenFunctionGetBody(func);
+}
+
+export function getUnaryOp(expr: ExpressionRef): UnaryOp {
+  return _BinaryenUnaryGetOp(expr);
+}
+
+export function getUnaryValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenUnaryGetValue(expr);
+}
+
+export function getBinaryOp(expr: ExpressionRef): BinaryOp {
+  return _BinaryenBinaryGetOp(expr);
+}
+
+export function getBinaryLeft(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenBinaryGetLeft(expr);
+}
+
+export function getBinaryRight(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenBinaryGetRight(expr);
 }
 
 export class Relooper {
@@ -866,9 +914,9 @@ export class Relooper {
   }
 }
 
-// export function setAPITracing(on: bool): void {
-//   _BinaryenSetAPITracing(on ? 1 : 0);
-// }
+export function setAPITracing(on: bool): void {
+  _BinaryenSetAPITracing(on ? 1 : 0);
+}
 
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js
@@ -958,4 +1006,48 @@ function allocString(str: string | null): CString {
   }
   store<u8>(idx, 0);
   return ptr;
+}
+
+function readString(ptr: usize): string {
+  const utf16le: u32[] = [];
+  // the following is based on Emscripten's UTF8ArrayToString
+  let cp: u32;
+  let u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
+  while (cp = load<u8>(ptr++)) {
+    if (!(cp & 0x80)) {
+      utf16le.push(cp);
+      continue;
+    }
+    u1 = load<u8>(ptr++) & 63;
+    if ((cp & 0xE0) == 0xC0) {
+      utf16le.push(((cp & 31) << 6) | u1);
+      continue;
+    }
+    u2 = load<u8>(ptr++) & 63;
+    if ((cp & 0xF0) == 0xE0) {
+      cp = ((cp & 15) << 12) | (u1 << 6) | u2;
+    } else {
+      u3 = load<u8>(ptr++) & 63;
+      if ((cp & 0xF8) == 0xF0) {
+        cp = ((cp & 7) << 18) | (u1 << 12) | (u2 << 6) | u3;
+      } else {
+        u4 = load<u8>(ptr++) & 63;
+        if ((cp & 0xFC) == 0xF8) {
+          cp = ((cp & 3) << 24) | (u1 << 18) | (u2 << 12) | (u3 << 6) | u4;
+        } else {
+          u5 = load<u8>(ptr++) & 63;
+          cp = ((cp & 1) << 30) | (u1 << 24) | (u2 << 18) | (u3 << 12) | (u4 << 6) | u5;
+        }
+      }
+    }
+    if (cp < 0x10000) {
+      utf16le.push(cp);
+    } else {
+      var ch = cp - 0x10000;
+      utf16le.push(0xD800 | (ch >> 10));
+      utf16le.push(0xDC00 | (ch & 0x3FF));
+    }
+  }
+  // FIXME: not portable and prone to stack overflows. Maybe use CString from stdlib?
+  return String.fromCharCode.apply(utf16le);
 }

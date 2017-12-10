@@ -89,7 +89,7 @@ declare function isFinite<T = f32 | f64>(value: T): bool;
 /** Traps if the specified value evaluates to `false`. */
 declare function assert(isTrue: bool): void;
 
-// Internal decorators
+// Internal decorators (not yet implemented)
 
 /** Annotates an element being part of the global namespace. */
 declare function global(): any;
@@ -98,7 +98,7 @@ declare function inline(): any;
 /** Annotates a class using a C-style memory layout. */
 declare function struct(): any;
 
-// Standard library
+// Standard library (not yet implemented)
 
 /// <reference path="./std/carray.d.ts" />
 /// <reference path="./std/cstring.d.ts" />

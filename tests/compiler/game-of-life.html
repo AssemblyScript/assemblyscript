@@ -19,7 +19,7 @@ fetch("game-of-life.optimized.wast").then(response => response.text()).then(text
       s = w * h, // memory required to store either input or output
       S = s + s; // total memory required to store input and output
 
-  // Grow the (exported) memory if it's size isn't sufficient
+  // Grow the (exported) memory if its size isn't sufficient
   var memory = instance.exports.memory;
   if (memory.buffer.byteLength < S)
     memory.grow(Math.ceil((S - memory.buffer.byteLength) / 65536));
@@ -27,7 +27,7 @@ fetch("game-of-life.optimized.wast").then(response => response.text()).then(text
   // Initialize with width and height
   instance.exports.init(w, h);
 
-  // Fill input at [0, s-1] with random cells
+  // Fill input at [0, s-1] with random live cells
   var mem = new Uint8Array(memory.buffer);
   for (var y = 0; y < h; ++y)
     for (var x = 0; x < w; ++x)

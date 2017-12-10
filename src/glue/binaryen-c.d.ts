@@ -60,12 +60,8 @@ declare type BinaryenModuleRef = usize;
 declare function _BinaryenModuleCreate(): BinaryenModuleRef;
 declare function _BinaryenModuleDispose(module: BinaryenModuleRef): void;
 
-declare type BinaryenFunctionTypeRef = usize;
 declare type CString = usize;
 declare type CArray<T> = usize;
-
-declare function _BinaryenAddFunctionType(module: BinaryenModuleRef, name: CString, result: BinaryenType, paramTypes: CArray<BinaryenType>, numParams: BinaryenIndex): BinaryenFunctionTypeRef;
-declare function _BinaryenGetFunctionTypeBySignature(module: BinaryenModuleRef, result: BinaryenType, paramTypes: CArray<BinaryenType>, numParams: BinaryenIndex): BinaryenFunctionTypeRef;
 
 declare type BinaryenLiteral = CArray<u8>;
 
@@ -256,11 +252,120 @@ declare function _BinaryenAtomicWake(module: BinaryenModuleRef, ptr: BinaryenExp
 declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
 declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
 declare function _BinaryenExpressionPrint(expr: BinaryenExpressionRef): void;
+
+declare function _BinaryenBlockGetName(expr: BinaryenExpressionRef): CString;
+declare function _BinaryenBlockGetNumChildren(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenBlockGetChild(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+
+declare function _BinaryenIfGetCondition(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenIfGetIfTrue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenIfGetIfFalse(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenLoopGetName(expr: BinaryenExpressionRef): CString;
+declare function _BinaryenLoopGetBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenBreakGetName(expr: BinaryenExpressionRef): CString;
+declare function _BinaryenBreakGetCondition(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenBreakGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenSwitchGetNumNames(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenSwitchGetName(expr: BinaryenExpressionRef, index: BinaryenIndex): CString;
+declare function _BinaryenSwitchGetDefaultName(expr: BinaryenExpressionRef): CString;
+declare function _BinaryenSwitchGetCondition(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSwitchGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenCallGetTarget(expr: BinaryenExpressionRef): CString;
+declare function _BinaryenCallGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenCallGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+
+declare function _BinaryenCallImportGetTarget(expr: BinaryenExpressionRef): CString;
+declare function _BinaryenCallImportGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenCallImportGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+
+declare function _BinaryenCallIndirectGetTarget(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenCallIndirectGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenCallIndirectGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+
+declare function _BinaryenGetLocalGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
+
+declare function _BinaryenSetLocalIsTee(expr: BinaryenExpressionRef): bool;
+declare function _BinaryenSetLocalGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenSetLocalGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenGetGlobalGetName(expr: BinaryenExpressionRef): CString;
+
+declare function _BinaryenSetGlobalGetName(expr: BinaryenExpressionRef): CString;
+declare function _BinaryenSetGlobalGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenHostGetOp(expr: BinaryenExpressionRef): BinaryenOp;
+declare function _BinaryenHostGetNameOperand(expr: BinaryenExpressionRef): CString;
+declare function _BinaryenHostGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenHostGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+
+declare function _BinaryenLoadIsAtomic(expr: BinaryenExpressionRef): bool;
+declare function _BinaryenLoadIsSigned(expr: BinaryenExpressionRef): bool;
+declare function _BinaryenLoadGetBytes(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenLoadGetOffset(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenLoadGetAlign(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenLoadGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenStoreIsAtomic(expr: BinaryenExpressionRef): bool;
+declare function _BinaryenStoreGetBytes(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenStoreGetOffset(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenStoreGetAlign(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenStoreGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenStoreGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
 declare function _BinaryenConstGetValueI32(expr: BinaryenExpressionRef): i32;
 declare function _BinaryenConstGetValueI64Low(expr: BinaryenExpressionRef): i32;
 declare function _BinaryenConstGetValueI64High(expr: BinaryenExpressionRef): i32;
 declare function _BinaryenConstGetValueF32(expr: BinaryenExpressionRef): f32;
 declare function _BinaryenConstGetValueF64(expr: BinaryenExpressionRef): f64;
+
+declare function _BinaryenUnaryGetOp(expr: BinaryenExpressionRef): BinaryenOp;
+declare function _BinaryenUnaryGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenBinaryGetOp(expr: BinaryenExpressionRef): BinaryenOp;
+declare function _BinaryenBinaryGetLeft(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenBinaryGetRight(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenSelectGetIfTrue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSelectGetIfFalse(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSelectGetCondition(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenDropGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenReturnGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenAtomicRMWGetOp(expr: BinaryenExpressionRef): BinaryenOp;
+declare function _BinaryenAtomicRMWGetBytes(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenAtomicRMWGetOffset(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenAtomicRMWGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicRMWGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenAtomicCmpxchgGetBytes(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenAtomicCmpxchgGetOffset(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenAtomicCmpxchgGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicCmpxchgGetExpected(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicCmpxchgGetReplacement(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenAtomicWaitGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicWaitGetExpected(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicWaitGetTimeout(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicWaitGetExpectedType(expr: BinaryenExpressionRef): BinaryenType;
+
+declare function _BinaryenAtomicWakeGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicWakeGetWakeCount(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare type BinaryenFunctionTypeRef = usize;
+
+declare function _BinaryenAddFunctionType(module: BinaryenModuleRef, name: CString, result: BinaryenType, paramTypes: CArray<BinaryenType>, numParams: BinaryenIndex): BinaryenFunctionTypeRef;
+declare function _BinaryenGetFunctionTypeBySignature(module: BinaryenModuleRef, result: BinaryenType, paramTypes: CArray<BinaryenType>, numParams: BinaryenIndex): BinaryenFunctionTypeRef;
+
+declare function _BinaryenFunctionTypeGetName(ftype: BinaryenFunctionTypeRef): CString;
+declare function _BinaryenFunctionTypeGetNumParams(ftype: BinaryenFunctionTypeRef): BinaryenIndex;
+declare function _BinaryenFunctionTypeGetParam(ftype: BinaryenFunctionTypeRef, index: BinaryenIndex): BinaryenType;
+declare function _BinaryenFunctionTypeGetResult(ftype: BinaryenFunctionTypeRef): BinaryenType;
 
 declare type BinaryenFunctionRef = usize;
 
@@ -268,6 +373,13 @@ declare function _BinaryenAddFunction(module: BinaryenModuleRef, name: CString, 
 declare function _BinaryenGetFunction(module: BinaryenModuleRef, name: CString): BinaryenFunctionRef;
 declare function _BinaryenRemoveFunction(module: BinaryenModuleRef, name: CString): void;
 
+declare function _BinaryenFunctionGetName(func: BinaryenFunctionRef): CString;
+declare function _BinaryenFunctionGetType(func: BinaryenFunctionRef): BinaryenFunctionTypeRef;
+declare function _BinaryenFunctionGetNumParams(func: BinaryenFunctionRef): BinaryenIndex;
+declare function _BinaryenFunctionGetParam(func: BinaryenFunctionRef, index: BinaryenIndex): BinaryenType;
+declare function _BinaryenFunctionGetResult(func: BinaryenFunctionRef): BinaryenType;
+declare function _BinaryenFunctionGetNumVars(func: BinaryenFunctionRef): BinaryenIndex;
+declare function _BinaryenFunctionGetVar(func: BinaryenFunctionRef, index: BinaryenIndex): BinaryenType;
 declare function _BinaryenFunctionGetBody(func: BinaryenFunctionRef): BinaryenExpressionRef;
 declare function _BinaryenFunctionOptimize(func: BinaryenFunctionRef, module: BinaryenModuleRef): void;
 declare function _BinaryenFunctionRunPasses(func: BinaryenFunctionRef, module: BinaryenModuleRef, passes: CArray<CString>, numPasses: BinaryenIndex): void;

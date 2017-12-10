@@ -50,11 +50,11 @@
   "trapMode": {
     "desc": [
       "Sets the trap mode to use.",
-      "none   Do not modify trapping operations. This is the default.",
+      "allow  Allow trapping operations. This is the default.",
       "clamp  Replace trapping operations with clamping semantics.",
       "js     Replace trapping operations with JS semantics."
     ],
     "type": "string",
-    "default": "none"
+    "default": "allow"
   }
 }
