@@ -48,7 +48,7 @@
   )
   (loop $continue|0
    (if
-    (i32.lt_s
+    (i32.lt_u
      (get_local $0)
      (get_global $game-of-life/h)
     )
@@ -81,7 +81,7 @@
      )
      (loop $continue|1
       (if
-       (i32.lt_s
+       (i32.lt_u
         (get_local $1)
         (get_global $game-of-life/w)
        )
@@ -208,13 +208,13 @@
          (if
           (if (result i32)
            (tee_local $3
-            (i32.lt_s
+            (i32.lt_u
              (get_local $2)
              (i32.const 2)
             )
            )
            (get_local $3)
-           (i32.gt_s
+           (i32.gt_u
             (get_local $2)
             (i32.const 3)
            )

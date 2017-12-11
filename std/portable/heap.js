@@ -1,6 +1,6 @@
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
-var HEAP = new Uint8Array(65536);
+var HEAP = new Uint8Array(0);
 var HEAP_OFFSET = 0;
 
 Object.defineProperties(globalScope["Heap"] = {
@@ -8,7 +8,7 @@ Object.defineProperties(globalScope["Heap"] = {
     if (!size) return 0;
     if (HEAP_OFFSET + size > HEAP.length) {
       var oldHeap = HEAP;
-      HEAP = new Uint8Array(Math.max(HEAP.length + size, HEAP.length * 2));
+      HEAP = new Uint8Array(Math.max(65536, HEAP.length + size, HEAP.length * 2));
       HEAP.set(oldHeap);
     }
     var ptr = HEAP_OFFSET;

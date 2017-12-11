@@ -108,6 +108,7 @@ declare interface IArguments {}
 declare class Error {
   constructor(message: string);
   message: string;
+  stack: string | null;
 }
 
 declare class Symbol {

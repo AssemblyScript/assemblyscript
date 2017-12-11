@@ -32,14 +32,14 @@
  )
  (func $tlsf/control$set_block (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (if
-   (i32.ge_s
+   (i32.ge_u
     (get_local $1)
     (i32.const 23)
    )
    (unreachable)
   )
   (if
-   (i32.ge_s
+   (i32.ge_u
     (get_local $2)
     (i32.const 32)
    )
@@ -133,7 +133,7 @@
   )
   (loop $continue|0
    (if
-    (i32.lt_s
+    (i32.lt_u
      (get_local $1)
      (i32.const 23)
     )
@@ -151,7 +151,7 @@
        )
        (block
         (if
-         (i32.ge_s
+         (i32.ge_u
           (get_local $10)
           (i32.const 23)
          )
@@ -178,7 +178,7 @@
      )
      (loop $continue|1
       (if
-       (i32.lt_s
+       (i32.lt_u
         (get_local $2)
         (i32.const 32)
        )

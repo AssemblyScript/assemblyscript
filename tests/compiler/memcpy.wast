@@ -110,7 +110,7 @@
       (tee_local $7
        (get_local $2)
       )
-      (i32.rem_s
+      (i32.rem_u
        (get_local $4)
        (i32.const 4)
       )
@@ -168,7 +168,7 @@
   )
   (if
    (i32.eq
-    (i32.rem_s
+    (i32.rem_u
      (get_local $3)
      (i32.const 4)
     )
@@ -178,7 +178,7 @@
     (block $break|1
      (loop $continue|1
       (if
-       (i32.ge_s
+       (i32.ge_u
         (get_local $2)
         (i32.const 16)
        )
@@ -380,7 +380,7 @@
    )
   )
   (if
-   (i32.ge_s
+   (i32.ge_u
     (get_local $2)
     (i32.const 32)
    )
@@ -389,7 +389,7 @@
      (block $case1|2
       (block $case0|2
        (set_local $13
-        (i32.rem_s
+        (i32.rem_u
          (get_local $3)
          (i32.const 4)
         )
@@ -512,7 +512,7 @@
       (block $break|3
        (loop $continue|3
         (if
-         (i32.ge_s
+         (i32.ge_u
           (get_local $2)
           (i32.const 17)
          )
@@ -707,7 +707,7 @@
      (block $break|4
       (loop $continue|4
        (if
-        (i32.ge_s
+        (i32.ge_u
          (get_local $2)
          (i32.const 18)
         )
@@ -874,7 +874,7 @@
     (block $break|5
      (loop $continue|5
       (if
-       (i32.ge_s
+       (i32.ge_u
         (get_local $2)
         (i32.const 19)
        )

@@ -1,5 +1,5 @@
 {
-  "extends": "../portable-assembly.json",
+  "extends": "../portable.json",
   "compilerOptions": {
     "outDir": "../out",
     "sourceMap": true

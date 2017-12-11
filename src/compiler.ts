@@ -1277,9 +1277,9 @@ export class Compiler extends DiagnosticEmitter {
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
     const toType: Type | null = this.program.resolveType(expression.toType, this.currentFunction.contextualTypeArguments); // reports
-    return toType && toType != contextualType
-      ? this.compileExpression(expression.expression, <Type>toType, ConversionKind.EXPLICIT)
-      : this.compileExpression(expression.expression, contextualType);
+    if (!toType)
+      return this.module.createUnreachable();
+    return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT);
   }
 
   compileBinaryExpression(expression: BinaryExpression, contextualType: Type): ExpressionRef {
@@ -1300,9 +1300,13 @@ export class Compiler extends DiagnosticEmitter {
            ? BinaryOp.LtF32
            : this.currentType == Type.f64
            ? BinaryOp.LtF64
+           : this.currentType.isSignedInteger
+           ? this.currentType.isLongInteger
+             ? BinaryOp.LtI64
+             : BinaryOp.LtI32
            : this.currentType.isLongInteger
-           ? BinaryOp.LtI64
-           : BinaryOp.LtI32;
+             ? BinaryOp.LtU64
+             : BinaryOp.LtU32;
         this.currentType = Type.bool;
         break;
 
@@ -1313,9 +1317,13 @@ export class Compiler extends DiagnosticEmitter {
            ? BinaryOp.GtF32
            : this.currentType == Type.f64
            ? BinaryOp.GtF64
+           : this.currentType.isSignedInteger
+           ? this.currentType.isLongInteger
+             ? BinaryOp.GtI64
+             : BinaryOp.GtI32
            : this.currentType.isLongInteger
-           ? BinaryOp.GtI64
-           : BinaryOp.GtI32;
+             ? BinaryOp.GtU64
+             : BinaryOp.GtU32;
         this.currentType = Type.bool;
         break;
 
@@ -1326,9 +1334,13 @@ export class Compiler extends DiagnosticEmitter {
            ? BinaryOp.LeF32
            : this.currentType == Type.f64
            ? BinaryOp.LeF64
+           : this.currentType.isSignedInteger
+           ? this.currentType.isLongInteger
+             ? BinaryOp.LeI64
+             : BinaryOp.LeI32
            : this.currentType.isLongInteger
-           ? BinaryOp.LeI64
-           : BinaryOp.LeI32;
+             ? BinaryOp.LeU64
+             : BinaryOp.LeU32;
         this.currentType = Type.bool;
         break;
 
@@ -1339,9 +1351,13 @@ export class Compiler extends DiagnosticEmitter {
            ? BinaryOp.GeF32
            : this.currentType == Type.f64
            ? BinaryOp.GeF64
+           : this.currentType.isSignedInteger
+           ? this.currentType.isLongInteger
+             ? BinaryOp.GeI64
+             : BinaryOp.GeI32
            : this.currentType.isLongInteger
-           ? BinaryOp.GeI64
-           : BinaryOp.GeI32;
+             ? BinaryOp.GeU64
+             : BinaryOp.GeU32;
         this.currentType = Type.bool;
         break;
 
@@ -1427,9 +1443,13 @@ export class Compiler extends DiagnosticEmitter {
            ? BinaryOp.DivF32
            : this.currentType == Type.f64
            ? BinaryOp.DivF64
+           : this.currentType.isSignedInteger
+           ? this.currentType.isLongInteger
+             ? BinaryOp.DivI64
+             : BinaryOp.DivI32
            : this.currentType.isLongInteger
-           ? BinaryOp.DivI64
-           : BinaryOp.DivI32;
+             ? BinaryOp.DivU64
+             : BinaryOp.DivU32;
         break;
 
       case Token.PERCENT_EQUALS:
@@ -1439,15 +1459,19 @@ export class Compiler extends DiagnosticEmitter {
         right = this.compileExpression(expression.right, this.currentType);
         if (this.currentType.isAnyFloat)
           throw new Error("not implemented"); // TODO: internal fmod, possibly simply imported from JS
-        op = this.currentType.isLongInteger
-           ? BinaryOp.RemI64
-           : BinaryOp.RemI32;
+        op = this.currentType.isSignedInteger
+           ? this.currentType.isLongInteger
+             ? BinaryOp.RemI64
+             : BinaryOp.RemI32
+           : this.currentType.isLongInteger
+             ? BinaryOp.RemU64
+             : BinaryOp.RemU32;
         break;
 
       case Token.LESSTHAN_LESSTHAN_EQUALS:
         compound = Token.EQUALS;
       case Token.LESSTHAN_LESSTHAN:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.ShlI64
@@ -1457,7 +1481,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_EQUALS:
         compound = Token.EQUALS;
       case Token.GREATERTHAN_GREATERTHAN:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isSignedInteger
            ? this.currentType.isLongInteger
@@ -1471,7 +1495,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
         compound = Token.EQUALS;
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.u64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.u64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.ShrU64
@@ -1481,7 +1505,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.AMPERSAND_EQUALS:
         compound = Token.EQUALS;
       case Token.AMPERSAND:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.AndI64
@@ -1491,7 +1515,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.BAR_EQUALS:
         compound = Token.EQUALS;
       case Token.BAR:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.OrI64
@@ -1501,7 +1525,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.CARET_EQUALS:
         compound = Token.EQUALS;
       case Token.CARET:
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
         op = this.currentType.isLongInteger
            ? BinaryOp.XorI64
@@ -1509,7 +1533,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.AMPERSAND_AMPERSAND: // left && right
-        left = this.compileExpression(expression.left, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
         // simplify if left is free of side effects while tolerating two levels of nesting, e.g., i32.load(i32.load(i32.const))
@@ -1542,7 +1566,7 @@ export class Compiler extends DiagnosticEmitter {
         );
 
       case Token.BAR_BAR: // left || right
-        left = this.compileExpression(expression.left, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+        left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
         // simplify if left is free of side effects while tolerating two levels of nesting
@@ -1782,16 +1806,15 @@ export class Compiler extends DiagnosticEmitter {
     // local
     if (element.kind == ElementKind.LOCAL) {
       this.currentType = (<Local>element).type;
-      return this.module.createGetLocal((<Local>element).index, typeToNativeType(this.currentType = (<Local>element).type));
+      return this.module.createGetLocal((<Local>element).index, typeToNativeType(this.currentType));
     }
 
     // global
     if (element.kind == ElementKind.GLOBAL) {
       const global: Global = <Global>element;
-      if (global.type)
-        this.currentType = <Type>global.type;
       if (!this.compileGlobal(global)) // reports
         return this.module.createUnreachable();
+      this.currentType = <Type>global.type;
       if (global.hasConstantValue) {
         if (global.type == Type.f32)
           return this.module.createF32((<Global>element).constantFloatValue);
@@ -1804,7 +1827,7 @@ export class Compiler extends DiagnosticEmitter {
         else
           throw new Error("unexpected global type");
       } else
-        return this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType = <Type>(<Global>element).type));
+        return this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType));
     }
 
     // field
@@ -1859,7 +1882,8 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileParenthesizedExpression(expression: ParenthesizedExpression, contextualType: Type): ExpressionRef {
-    return this.compileExpression(expression.expression, contextualType);
+    // does not change types, just order
+    return this.compileExpression(expression.expression, contextualType, ConversionKind.NONE);
   }
 
   compilePropertyAccessExpression(expression: PropertyAccessExpression, contextualType: Type): ExpressionRef {

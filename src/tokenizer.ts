@@ -306,6 +306,10 @@ export class Range {
 
   get atStart(): Range { return new Range(this.source, this.start, this.start); }
   get atEnd(): Range { return new Range(this.source, this.end, this.end); }
+
+  toString(): string {
+    return this.source.text.substring(this.start, this.end);
+  }
 }
 
 export class Tokenizer extends DiagnosticEmitter {

@@ -859,6 +859,41 @@ export function getBinaryRight(expr: ExpressionRef): ExpressionRef {
   return _BinaryenBinaryGetRight(expr);
 }
 
+export function getSelectIfTrue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenSelectGetIfTrue(expr);
+}
+
+export function getSelectIfFalse(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenSelectGetIfFalse(expr);
+}
+
+export function getSelectCondition(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenSelectGetCondition(expr);
+}
+
+export function getReturnValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenReturnGetValue(expr);
+}
+
+export function getDropValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenDropGetValue(expr);
+}
+
+export function getHostOp(expr: ExpressionRef): HostOp {
+  return _BinaryenHostGetOp(expr);
+}
+
+export function getHostNameOperand(expr: ExpressionRef): string {
+  return readString(_BinaryenHostGetNameOperand(expr));
+}
+
+export function getHostOperands(expr: ExpressionRef): BinaryenExpressionRef[] {
+  const num: Index = _BinaryenHostGetNumOperands(expr);
+  const arr: BinaryenExpressionRef[] = new Array(num);
+  for (let i: Index = 0; i < num; ++i) arr[i] = _BinaryenHostGetOperand(expr, i);
+  return arr;
+}
+
 export class Relooper {
 
   module: Module;

@@ -1,4 +1,4 @@
-require("../../portable-assembly");
+require("../../portable");
 
 // Copy Binaryen exports to global scope
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;

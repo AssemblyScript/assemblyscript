@@ -14,6 +14,11 @@ Development status
 
 This version of the compiler (0.5.0, NEXT) is relatively new and does not yet support some features a TypeScript programmer might expect, e.g., strings, arrays and classes. For now, you can see the [compiler tests](https://github.com/AssemblyScript/next/tree/master/tests/compiler) for an overview of what's supposed to be working already.
 
+A few early examples to get an idea:
+
+* [memcpy](./tests/compiler/memcpy.ts) using load/store derived from [musl](http://www.musl-libc.org)
+* Conway's [Game of Life](./tests/compiler/game-of-life.ts) ([html](./tests/compiler/game-of-life.html)) as seen on [dcode.io](http://dcode.io)
+
 Getting started
 ---------------
 
@@ -25,7 +30,7 @@ $> cd next
 $> npm install
 ```
 
-Author your module in AssemblyScript ([definitions](./assembly.d.ts)) or portable AssemblyScript ([definitions](./portable-assembly.d.ts)) and run:
+Author your module in AssemblyScript ([definitions](./assembly.d.ts), [base config](./assembly.json)) or portable AssemblyScript ([definitions](./portable.d.ts), [base config](./portable.json) and run:
 
 ```
 $> node bin\asc yourModule.ts

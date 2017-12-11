@@ -14,8 +14,8 @@
     "allowJs": true
   },
   "files": [
-    "./portable-assembly.d.ts",
-    "./portable-assembly.js",
+    "./portable.d.ts",
+    "./portable.js",
     "./std/portable/heap.d.ts",
     "./std/portable/heap.js"
   ]
