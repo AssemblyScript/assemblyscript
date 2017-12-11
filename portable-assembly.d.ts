@@ -44,5 +44,100 @@ declare function trunc<T = f32 | f64>(value: T): T;
 /** Emits an unreachable operation that results in a runtime error when executed. */
 declare function unreachable(): any; // sic
 
+/** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
+declare function changetype<T1,T2>(value: T1): T2;
 /** Traps if the specified value evaluates to `false`. */
 declare function assert(isTrue: bool): void;
+
+// Portable standard library
+// Everything marked @deprecated is a temporary filler. Do not use.
+
+declare const NaN: f32 | f64;
+declare const Infinity: f32 | f64;
+
+declare class Array<T> {
+  [key: number]: T;
+  length: i32;
+  constructor(capacity?: i32);
+  push(value: T): void;
+  pop(): T;
+  join(delim: string): string;
+  slice(from: i32, to?: i32): T[];
+  splice(index: i32, count: i32): T[];
+}
+
+declare class Uint8Array extends Array<u8> {}
+declare class Uint16Array extends Array<u16> {}
+declare class Uint32Array extends Array<u32> {}
+declare class Int8Array extends Array<i8> {}
+declare class Int16Array extends Array<i16> {}
+declare class Int32Array extends Array<i32> {}
+
+declare class String {
+  static fromCharCode(ls: i32, hs?: i32): string;
+  readonly length: i32;
+  indexOf(subject: string): i32;
+  charCodeAt(index: i32): i32;
+  substring(from: i32, to?: i32): string;
+  startsWith(subject: string): bool;
+  endsWith(subject: string): bool;
+  replace(search: string, replacement: string): string;
+}
+
+declare class Boolean {}
+
+declare class Number {
+  toString(radix: i32): string;
+}
+
+declare class Object {}
+
+declare class Function {
+  /** @deprecated */
+  apply(subject: any): any;
+}
+
+declare class RegExp {}
+
+declare interface IArguments {}
+
+declare class Error {
+  constructor(message: string);
+  message: string;
+}
+
+declare class Symbol {
+  static iterator: symbol;
+}
+
+declare class Set<T> {
+  constructor(entries?: T[]);
+  add(value: T): void;
+  has(value: T): bool;
+  clear(): void;
+  [Symbol.iterator](): Iterator<T>;
+}
+
+declare class Map<K,V> {
+  constructor(entries?: [K, V][]);
+  set(key: K, value: V): void;
+  has(key: K): bool;
+  get(key: K): V | null;
+  clear(): void;
+  [Symbol.iterator](): Iterator<[K, V]>;
+}
+
+declare interface Iterator<T> {}
+
+declare namespace JSON {
+  /** @deprecated */
+  function stringify(subject: any): string;
+}
+
+declare namespace console {
+  /** @deprecated */
+  function log(message: string): void;
+}
+
+/** @deprecated */
+declare function parseFloat(str: string): f64;

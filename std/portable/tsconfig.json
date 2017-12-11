@@ -1,0 +1,9 @@
+{
+  "extends": "../../portable-assembly.json",
+  "compilerOptions": {
+    "diagnostics": true
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}

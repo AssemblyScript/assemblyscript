@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "noLib": true,
+    "types": [],
+    "rootDirs": [
+      "./std/assembly",
+      "./node_modules"
+    ]
+  },
+  "files": [
+    "./assembly.d.ts"
+  ]
+}

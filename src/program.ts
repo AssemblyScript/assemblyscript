@@ -83,6 +83,7 @@ export class Program extends DiagnosticEmitter {
   /** Initializes the program and its elements prior to compilation. */
   initialize(target: Target = Target.WASM32): void {
     this.target = target;
+
     this.types = new Map([
       ["i8", Type.i8],
       ["i16", Type.i16],

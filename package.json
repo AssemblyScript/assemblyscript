@@ -39,9 +39,13 @@
   "scripts": {
     "build": "webpack",
     "clean": "rm dist/assemblyscript.*",
-    "test:parser": "ts-node -P src tests/parser",
-    "test:compiler": "ts-node -P src tests/compiler",
-    "test": "npm run test:parser && npm run test:compiler"
+    "test:config": "npm run test:config:assembly --scripts-prepend-node-path && npm run test:config:portable --scripts-prepend-node-path && npm run test:config:src --scripts-prepend-node-path",
+    "test:config:assembly": "tsc --noEmit -p std/assembly --diagnostics --listFiles",
+    "test:config:portable": "tsc --noEmit -p std/portable --diagnostics --listFiles",
+    "test:config:src": "tsc --noEmit -p src --diagnostics --listFiles",
+    "test:parser": "node tests/parser",
+    "test:compiler": "node tests/compiler",
+    "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path"
   },
   "files": [
     "assembly.d.ts",

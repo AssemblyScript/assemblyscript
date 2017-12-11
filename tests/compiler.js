@@ -1,16 +1,18 @@
-import * as fs from "fs";
-import * as path from "path";
-import * as chalk from "chalk";
-import * as glob from "glob";
+var fs = require("fs");
+var path = require("path");
+var chalk = require("chalk");
+var glob = require("glob");
+var diff = require("./util/diff");
 
-import "../src/glue/js";
-import { Compiler } from "../src/compiler";
-import { Module } from "../src/module";
-import { Parser } from "../src/parser";
-import { diff } from "./util/diff";
+require("ts-node").register({ project: require("path").join(__dirname, "..", "src") });
+require("../src/glue/js");
 
-const isCreate = process.argv[2] === "--create";
-const filter = process.argv.length > 2 && !isCreate ? "*" + process.argv[2] + "*.ts" : "*.ts";
+var Compiler = require("../src/compiler").Compiler;
+var Module = require("../src/module").Module;
+var Parser = require("../src/parser").Parser;
+
+var isCreate = process.argv[2] === "--create";
+var filter = process.argv.length > 2 && !isCreate ? "*" + process.argv[2] + "*.ts" : "*.ts";
 
 glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts"))
@@ -18,12 +20,12 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
 
   console.log(chalk.default.whiteBright("Testing compiler/" + filename));
 
-  const parser = new Parser();
-  const sourceText = fs.readFileSync(__dirname + "/compiler/" + filename, { encoding: "utf8" });
+  var parser = new Parser();
+  var sourceText = fs.readFileSync(__dirname + "/compiler/" + filename, { encoding: "utf8" });
   parser.parseFile(sourceText, filename, true);
-  let nextFile;
+  var nextFile;
   while ((nextFile = parser.nextFile()) !== null) {
-    let nextSourceText: string;
+    var nextSourceText;
     try {
       nextSourceText = fs.readFileSync(path.join(__dirname, "compiler", nextFile + ".ts"), { encoding: "utf8" });
     } catch (e) {
@@ -31,12 +33,12 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     }
     parser.parseFile(nextSourceText, nextFile, false);
   }
-  const program = parser.finish();
-  const module = Compiler.compile(program);
-  const actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
-  let actualOptimized: string | null = null;
-  let actualInlined: string | null = null;
-  const fixture = path.basename(filename, ".ts") + ".wast";
+  var program = parser.finish();
+  var module = Compiler.compile(program);
+  var actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
+  var actualOptimized = null;
+  var actualInlined = null;
+  var fixture = path.basename(filename, ".ts") + ".wast";
 
   if (module.validate()) {
     console.log(chalk.default.green("validate OK"));
@@ -75,8 +77,8 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
       }
     }
   } else {
-    const expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
-    const diffs = diff("compiler/" + fixture, expected, actual);
+    var expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
+    var diffs = diff("compiler/" + fixture, expected, actual);
     if (diffs !== null) {
       process.exitCode = 1;
       console.log(diffs);
@@ -90,11 +92,10 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   console.log();
 });
 
-function iterate<T>(it: IterableIterator<T>): T[] {
-  let current: IteratorResult<T>;
-  var arr: T[] = [];
-  while ((current = it.next()) && !current.done) {
+function iterate(it) {
+  var current;
+  var arr = [];
+  while ((current = it.next()) && !current.done)
     arr.push(current.value);
-  }
   return arr;
 }

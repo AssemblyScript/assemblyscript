@@ -85,7 +85,7 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
   sb.push(diagnosticCategoryToString(message.category));
   if (useColors) sb.push(colorReset);
   sb.push(" AS");
-  sb.push(message.code.toString());
+  sb.push(message.code.toString(10));
   sb.push(": ");
   sb.push(message.message);
 
@@ -109,9 +109,9 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
     sb.push(" in ");
     sb.push(range.source.path);
     sb.push("(");
-    sb.push(line.toString());
+    sb.push(line.toString(10));
     sb.push(",");
-    sb.push(column.toString());
+    sb.push(column.toString(10));
     sb.push(")");
   }
   return sb.join("");

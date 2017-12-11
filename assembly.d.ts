@@ -78,6 +78,8 @@ declare function unreachable(): any; // sic
 declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
+/** Heap start offset. */
+declare const HEAP_START: usize;
 /** Determines the byte size of the specified core or class type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
 /** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
@@ -100,6 +102,13 @@ declare function struct(): any;
 
 // Standard library (not yet implemented)
 
-/// <reference path="./std/carray.d.ts" />
-/// <reference path="./std/cstring.d.ts" />
 /// <reference path="./std/heap.d.ts" />
+
+interface Array<T> {}
+interface Boolean {}
+interface Function {}
+interface IArguments {}
+interface Number {}
+interface Object {}
+interface RegExp {}
+interface String {}

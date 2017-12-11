@@ -27,3 +27,4 @@ AssertionError.prototype.name = "AssertionError";
 AssertionError.prototype.message = "assertion failed";
 
 globalScope["assert"] = function assert(isTrue) { if (!isTrue) throw new AssertionError(); };
+globalScope["changetype"] = function changetype(value) { return value; }

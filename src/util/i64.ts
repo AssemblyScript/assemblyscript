@@ -421,7 +421,7 @@ export class I64 {
         lo = "0" + lo;
       return (negative ? "-0x" : "0x") + (i64_hi as u32 >>> 0).toString(16) + lo;
     }
-    return negative ? "-" + i64_lo.toString() : i64_lo.toString();
+    return negative ? "-" + i64_lo.toString(10) : i64_lo.toString(10);
   }
 }
 

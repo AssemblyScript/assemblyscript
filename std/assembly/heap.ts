@@ -1,5 +1,3 @@
-/// <reference path="../../assembly.d.ts" />
-
 const ALIGN_LOG2: usize = 3;
 const ALIGN_SIZE: usize = 1 << ALIGN_LOG2;
 const ALIGN_MASK: usize = ALIGN_SIZE - 1;

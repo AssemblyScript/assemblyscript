@@ -475,7 +475,7 @@ export class FloatLiteralExpression extends LiteralExpression {
   value: f64;
 
   serialize(sb: string[]): void {
-    sb.push(this.value.toString());
+    sb.push(this.value.toString(10));
   }
 }
 
@@ -1030,7 +1030,7 @@ export class BreakStatement extends Statement {
   serialize(sb: string[]): void {
     if (this.label) {
       sb.push("break ");
-      (<IdentifierExpression>this.label).serialize(name);
+      (<IdentifierExpression>this.label).serialize(sb);
     } else
       sb.push("break");
   }

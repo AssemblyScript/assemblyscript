@@ -1,17 +1,17 @@
-import * as JsDiff from "diff";
-import * as chalk from "chalk";
+var JsDiff = require("diff");
+var chalk = require("chalk");
 
-export function diff(filename: string, expected: string, actual: string): string | null {
-  const diff = JsDiff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 2 });
+module.exports = function diff(filename, expected, actual) {
+  var diff = JsDiff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 2 });
   if (!diff.hunks.length)
     return null;
 
-  const ret = [];
+  var ret = [];
   ret.push('--- ' + diff.oldHeader);
   ret.push('+++ ' + diff.newHeader);
 
-  for (let i = 0; i < diff.hunks.length; i++) {
-    const hunk = diff.hunks[i];
+  for (var i = 0; i < diff.hunks.length; i++) {
+    var hunk = diff.hunks[i];
     ret.push(
       '@@ -' + hunk.oldStart + ',' + hunk.oldLines
       + ' +' + hunk.newStart + ',' + hunk.newLines
@@ -27,4 +27,4 @@ export function diff(filename: string, expected: string, actual: string): string
   }
 
   return ret.join('\n') + '\n';
-}
+};

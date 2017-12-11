@@ -81,7 +81,7 @@ export class Parser extends DiagnosticEmitter {
     const normalizedPath: string = normalizePath(path);
     for (let i: i32 = 0, k: i32 = this.program.sources.length; i < k; ++i)
       if (this.program.sources[i].normalizedPath == normalizedPath)
-        throw Error("duplicate source");
+        throw new Error("duplicate source");
     this.seenlog.add(normalizedPath);
 
     const source: Source = new Source(path, text, isEntry);

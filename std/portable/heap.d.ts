@@ -1,5 +1,3 @@
-/// <reference path="../assembly.d.ts" />
-
 /** A static class representing the heap. */
 declare class Heap {
 
@@ -10,11 +8,11 @@ declare class Heap {
   static dispose(ptr: usize): void;
 
   /** Gets the amount of used heap space, in bytes. */
-  static get used(): usize;
+  static readonly used: usize;
 
   /** Gets the amount of free heap space, in bytes. */
-  static get free(): usize;
+  static readonly free: usize;
 
   /** Gets the size of the heap, in bytes. */
-  static get size(): usize;
+  static readonly size: usize;
 }

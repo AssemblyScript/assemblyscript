@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "downlevelIteration": true,
+    "preserveConstEnums": true,
+    "noLib": true,
+    "types": [],
+    "rootDirs": [
+      "./std/portable",
+      "./node_modules"
+    ],
+    "allowJs": true
+  },
+  "files": [
+    "./portable-assembly.d.ts",
+    "./portable-assembly.js",
+    "./std/portable/heap.d.ts",
+    "./std/portable/heap.js"
+  ]
+}

@@ -1,47 +1,10 @@
 {
+  "extends": "../portable-assembly.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": [
-      "dom",
-      "es6"
-    ],
-    "types": [
-      "node"
-    ],
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "strictNullChecks": true,
-    "alwaysStrict": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "preserveConstEnums": true,
     "outDir": "../out",
     "sourceMap": true
   },
-  "files": [
-    "ast.ts",
-    "builtins.ts",
-    "compiler.ts",
-    "diagnosticMessages.generated.ts",
-    "diagnostics.ts",
-    "evaluator.ts",
-    "glue/js.d.ts",
-    "index.ts",
-    "module.ts",
-    "parser.ts",
-    "program.ts",
-    "tokenizer.ts",
-    "types.ts",
-    "util.ts",
-    "util/charcode.ts",
-    "util/i64.ts",
-    "util/path.ts"
-  ],
-  "assembly": {
-    "exclude": [
-      "glue/js.d.ts"
-    ]
-  }
+  "include": [
+    "./**/*.ts"
+  ]
 }

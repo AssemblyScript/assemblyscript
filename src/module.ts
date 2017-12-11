@@ -1,14 +1,14 @@
 import { I64, U64 } from "./util";
 import { Target } from "./compiler";
 
-export type ModuleRef = BinaryenModuleRef;
-export type FunctionTypeRef = BinaryenFunctionTypeRef;
-export type FunctionRef = BinaryenFunctionRef;
-export type ExpressionRef = BinaryenExpressionRef;
-export type GlobalRef = BinaryenGlobalRef;
-export type ImportRef = BinaryenImportRef;
-export type ExportRef = BinaryenExportRef;
-export type Index = BinaryenIndex;
+export type ModuleRef = usize;
+export type FunctionTypeRef = usize;
+export type FunctionRef = usize;
+export type ExpressionRef = usize;
+export type GlobalRef = usize;
+export type ImportRef = usize;
+export type ExportRef = usize;
+export type Index = u32;
 
 export enum NativeType {
   None = _BinaryenNone(),
@@ -219,28 +219,28 @@ export class Module {
   static create(): Module {
     const module: Module = new Module();
     module.ref = _BinaryenModuleCreate();
-    module.lit = _malloc(16);
+    module.lit = changetype<usize,BinaryenLiteral>(Heap.allocate(16));
     module.noEmit = false;
     return module;
   }
 
   static createFrom(buffer: Uint8Array): Module {
-    const cArr: CArray<u8> = allocU8Array(buffer);
+    const cArr: usize = allocU8Array(buffer);
     try {
       const module: Module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
-      module.lit = _malloc(16);
+      module.lit = changetype<usize,BinaryenLiteral>(Heap.allocate(16));
       module.noEmit = false;
       return module;
     } finally {
-      _free(cArr);
+      Heap.dispose(changetype<usize,usize>(cArr));
     }
   }
 
   static createStub(): Module {
     const module: Module = new Module();
     module.ref = 0;
-    module.lit = 0;
+    module.lit = changetype<usize,BinaryenLiteral>(0);
     module.noEmit = true;
     return module;
   }
@@ -251,23 +251,23 @@ export class Module {
 
   addFunctionType(name: string, result: NativeType, paramTypes: NativeType[]): FunctionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(name);
-    const cArr: CArray<i32> = allocI32Array(paramTypes);
+    const cStr: usize = allocString(name);
+    const cArr: usize = allocI32Array(paramTypes);
     try {
       return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes.length);
     } finally {
-      _free(cArr);
-      _free(cStr);
+      Heap.dispose(cArr);
+      Heap.dispose(cStr);
     }
   }
 
   getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[]): FunctionTypeRef {
     if (this.noEmit) return 0;
-    const cArr: CArray<i32> = allocI32Array(paramTypes);
+    const cArr: usize = allocI32Array(paramTypes);
     try {
       return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes.length);
     } finally {
-      _free(cArr);
+      Heap.dispose(cArr);
     }
   }
 
@@ -309,13 +309,13 @@ export class Module {
 
   createHost(op: HostOp, name: string | null = null, operands: ExpressionRef[] | null = null): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(name);
-    const cArr: CArray<i32> = allocI32Array(operands);
+    const cStr: usize = allocString(name);
+    const cArr: usize = allocI32Array(operands);
     try {
       return _BinaryenHost(this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0);
     } finally {
-      _free(cArr);
-      _free(cStr);
+      Heap.dispose(cArr);
+      Heap.dispose(cStr);
     }
   }
 
@@ -331,11 +331,11 @@ export class Module {
 
   createGetGlobal(name: string, type: NativeType): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(name);
+    const cStr: usize = allocString(name);
     try {
       return _BinaryenGetGlobal(this.ref, cStr, type);
     } finally {
-      _free(cStr);
+      Heap.dispose(cStr);
     }
   }
 
@@ -388,33 +388,33 @@ export class Module {
 
   createSetGlobal(name: string, value: ExpressionRef): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(name);
+    const cStr: usize = allocString(name);
     try {
       return _BinaryenSetGlobal(this.ref, cStr, value);
     } finally {
-      _free(cStr);
+      Heap.dispose(cStr);
     }
   }
 
   createBlock(label: string | null, children: ExpressionRef[], type: NativeType = NativeType.Undefined): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(label);
-    const cArr: CArray<i32> = allocI32Array(children);
+    const cStr: usize = allocString(label);
+    const cArr: usize = allocI32Array(children);
     try {
       return _BinaryenBlock(this.ref, cStr, cArr, children.length, type);
     } finally {
-      _free(cArr);
-      _free(cStr);
+      Heap.dispose(cArr);
+      Heap.dispose(cStr);
     }
   }
 
   createBreak(label: string | null, condition: ExpressionRef = 0, value: ExpressionRef = 0): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(label);
+    const cStr: usize = allocString(label);
     try {
       return _BinaryenBreak(this.ref, cStr, condition, value);
     } finally {
-      _free(cStr);
+      Heap.dispose(cStr);
     }
   }
 
@@ -425,11 +425,11 @@ export class Module {
 
   createLoop(label: string | null, body: ExpressionRef): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(label);
+    const cStr: usize = allocString(label);
     try {
       return _BinaryenLoop(this.ref, cStr, body);
     } finally {
-      _free(cStr);
+      Heap.dispose(cStr);
     }
   }
 
@@ -455,41 +455,41 @@ export class Module {
 
   createSwitch(names: string[], defaultName: string | null, condition: ExpressionRef, value: ExpressionRef = 0): ExpressionRef {
     if (this.noEmit) return 0;
-    const strs: CString[] = new Array(names.length);
+    const strs: usize[] = new Array(names.length);
     let i: i32, k: i32 = names.length;
     for (i = 0; i < k; ++i) strs[i] = allocString(names[i]);
-    const cArr: CArray<i32> = allocI32Array(strs);
-    const cStr: CString = allocString(defaultName);
+    const cArr: usize = allocI32Array(strs);
+    const cStr: usize = allocString(defaultName);
     try {
       return _BinaryenSwitch(this.ref, cArr, k, cStr, condition, value);
     } finally {
-      _free(cStr);
-      _free(cArr);
-      for (i = k - 1; i >= 0; --i) _free(strs[i]);
+      Heap.dispose(cStr);
+      Heap.dispose(cArr);
+      for (i = k - 1; i >= 0; --i) Heap.dispose(strs[i]);
     }
   }
 
   createCall(target: string, operands: ExpressionRef[], returnType: NativeType): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(target);
-    const cArr: CArray<i32> = allocI32Array(operands);
+    const cStr: usize = allocString(target);
+    const cArr: usize = allocI32Array(operands);
     try {
       return _BinaryenCall(this.ref, cStr, cArr, operands.length, returnType);
     } finally {
-      _free(cArr);
-      _free(cStr);
+      Heap.dispose(cArr);
+      Heap.dispose(cStr);
     }
   }
 
   createCallImport(target: string, operands: ExpressionRef[], returnType: NativeType): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(target);
-    const cArr: CArray<i32> = allocI32Array(operands);
+    const cStr: usize = allocString(target);
+    const cArr: usize = allocI32Array(operands);
     try {
       return _BinaryenCallImport(this.ref, cStr, cArr, operands.length, returnType);
     } finally {
-      _free(cArr);
-      _free(cStr);
+      Heap.dispose(cArr);
+      Heap.dispose(cStr);
     }
   }
 
@@ -502,80 +502,80 @@ export class Module {
 
   addGlobal(name: string, type: NativeType, mutable: bool, initializer: ExpressionRef): GlobalRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(name);
+    const cStr: usize = allocString(name);
     try {
       return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
     } finally {
-      _free(cStr);
+      Heap.dispose(cStr);
     }
   }
 
   addFunction(name: string, type: FunctionTypeRef, varTypes: NativeType[], body: ExpressionRef): FunctionRef {
     if (this.noEmit) return 0;
-    const cStr: CString = allocString(name);
-    const cArr: CArray<i32> = allocI32Array(varTypes);
+    const cStr: usize = allocString(name);
+    const cArr: usize = allocI32Array(varTypes);
     try {
       return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes.length, body);
     } finally {
-      _free(cArr);
-      _free(cStr);
+      Heap.dispose(cArr);
+      Heap.dispose(cStr);
     }
   }
 
   removeFunction(name: string): void {
-    const cStr: CString = allocString(name);
+    const cStr: usize = allocString(name);
     try {
       _BinaryenRemoveFunction(this.ref, cStr);
     } finally {
-      _free(cStr);
+      Heap.dispose(cStr);
     }
   }
 
   addFunctionExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
-    const cStr1: CString = allocString(internalName);
-    const cStr2: CString = allocString(externalName);
+    const cStr1: usize = allocString(internalName);
+    const cStr2: usize = allocString(externalName);
     try {
       return _BinaryenAddFunctionExport(this.ref, cStr1, cStr2);
     } finally {
-      _free(cStr2);
-      _free(cStr1);
+      Heap.dispose(cStr2);
+      Heap.dispose(cStr1);
     }
   }
 
   addTableExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
-    const cStr1: CString = allocString(internalName);
-    const cStr2: CString = allocString(externalName);
+    const cStr1: usize = allocString(internalName);
+    const cStr2: usize = allocString(externalName);
     try {
       return _BinaryenAddTableExport(this.ref, cStr1, cStr2);
     } finally {
-      _free(cStr2);
-      _free(cStr1);
+      Heap.dispose(cStr2);
+      Heap.dispose(cStr1);
     }
   }
 
   addMemoryExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
-    const cStr1: CString = allocString(internalName);
-    const cStr2: CString = allocString(externalName);
+    const cStr1: usize = allocString(internalName);
+    const cStr2: usize = allocString(externalName);
     try {
       return _BinaryenAddMemoryExport(this.ref, cStr1, cStr2);
     } finally {
-      _free(cStr2);
-      _free(cStr1);
+      Heap.dispose(cStr2);
+      Heap.dispose(cStr1);
     }
   }
 
   addGlobalExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
-    const cStr1: CString = allocString(internalName);
-    const cStr2: CString = allocString(externalName);
+    const cStr1: usize = allocString(internalName);
+    const cStr2: usize = allocString(externalName);
     try {
       return _BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
     } finally {
-      _free(cStr2);
-      _free(cStr1);
+      Heap.dispose(cStr2);
+      Heap.dispose(cStr1);
     }
   }
 
@@ -585,81 +585,81 @@ export class Module {
     try {
       _BinaryenRemoveExport(this.ref, cStr);
     } finally {
-      _free(cStr);
+      Heap.dispose(cStr);
     }
   }
 
   addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, functionType: FunctionTypeRef): ImportRef {
     if (this.noEmit) return 0;
-    const cStr1: CString = allocString(internalName);
-    const cStr2: CString = allocString(externalModuleName);
-    const cStr3: CString = allocString(externalBaseName);
+    const cStr1: usize = allocString(internalName);
+    const cStr2: usize = allocString(externalModuleName);
+    const cStr3: usize = allocString(externalBaseName);
     try {
       return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
     } finally {
-      _free(cStr3);
-      _free(cStr2);
-      _free(cStr1);
+      Heap.dispose(cStr3);
+      Heap.dispose(cStr2);
+      Heap.dispose(cStr1);
     }
   }
 
   addTableImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
     if (this.noEmit) return 0;
-    const cStr1: CString = allocString(internalName);
-    const cStr2: CString = allocString(externalModuleName);
-    const cStr3: CString = allocString(externalBaseName);
+    const cStr1: usize = allocString(internalName);
+    const cStr2: usize = allocString(externalModuleName);
+    const cStr3: usize = allocString(externalBaseName);
     try {
       return _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
     } finally {
-      _free(cStr3);
-      _free(cStr2);
-      _free(cStr1);
+      Heap.dispose(cStr3);
+      Heap.dispose(cStr2);
+      Heap.dispose(cStr1);
     }
   }
 
   addMemoryImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
     if (this.noEmit) return 0;
-    const cStr1: CString = allocString(internalName);
-    const cStr2: CString = allocString(externalModuleName);
-    const cStr3: CString = allocString(externalBaseName);
+    const cStr1: usize = allocString(internalName);
+    const cStr2: usize = allocString(externalModuleName);
+    const cStr3: usize = allocString(externalBaseName);
     try {
       return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3);
     } finally {
-      _free(cStr3);
-      _free(cStr2);
-      _free(cStr1);
+      Heap.dispose(cStr3);
+      Heap.dispose(cStr2);
+      Heap.dispose(cStr1);
     }
   }
 
   addGlobalImport(internalName: string, externalModuleName: string, externalBaseName: string, globalType: NativeType): ImportRef {
     if (this.noEmit) return 0;
-    const cStr1: CString = allocString(internalName);
-    const cStr2: CString = allocString(externalModuleName);
-    const cStr3: CString = allocString(externalBaseName);
+    const cStr1: usize = allocString(internalName);
+    const cStr2: usize = allocString(externalModuleName);
+    const cStr3: usize = allocString(externalBaseName);
     try {
       return _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
     } finally {
-      _free(cStr3);
-      _free(cStr2);
-      _free(cStr1);
+      Heap.dispose(cStr3);
+      Heap.dispose(cStr2);
+      Heap.dispose(cStr1);
     }
   }
 
   removeImport(internalName: string): void {
     if (this.noEmit) return;
-    const cStr: CString = allocString(internalName);
+    const cStr: usize = allocString(internalName);
     try {
       _BinaryenRemoveImport(this.ref, cStr);
     } finally {
-      _free(cStr);
+      Heap.dispose(cStr);
     }
   }
 
   setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName: string | null = null): void {
     if (this.noEmit) return;
-    const cStr: CString = allocString(exportName);
+    const cStr: usize = allocString(exportName);
     let i: i32, k: i32 = segments.length;
-    const segs: CArray<u8>[] = new Array(k);
+    const segs: usize[] = new Array(k);
     const offs: ExpressionRef[] = new Array(k);
     const sizs: Index[] = new Array(k);
     for (i = 0; i < k; ++i) {
@@ -671,27 +671,27 @@ export class Module {
         : this.createI32(offset.toI32());
       sizs[i] = buffer.length;
     }
-    const cArr1: CArray<i32> = allocI32Array(segs);
-    const cArr2: CArray<i32> = allocI32Array(offs);
-    const cArr3: CArray<i32> = allocI32Array(sizs);
+    const cArr1: usize = allocI32Array(segs);
+    const cArr2: usize = allocI32Array(offs);
+    const cArr3: usize = allocI32Array(sizs);
     try {
       _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k);
     } finally {
-      _free(cArr3);
-      _free(cArr2);
-      _free(cArr1);
-      for (i = k - 1; i >= 0; --i) _free(segs[i]);
-      _free(cStr);
+      Heap.dispose(cArr3);
+      Heap.dispose(cArr2);
+      Heap.dispose(cArr1);
+      for (i = k - 1; i >= 0; --i) Heap.dispose(segs[i]);
+      Heap.dispose(cStr);
     }
   }
 
-  setFunctionTable(funcs: BinaryenFunctionRef[]): void {
+  setFunctionTable(funcs: FunctionRef[]): void {
     if (this.noEmit) return;
-    const cArr: CArray<i32> = allocI32Array(funcs);
+    const cArr: usize = allocI32Array(funcs);
     try {
       _BinaryenSetFunctionTable(this.ref, cArr, funcs.length);
     } finally {
-      _free(cArr);
+      Heap.dispose(cArr);
     }
   }
 
@@ -712,17 +712,17 @@ export class Module {
 
   runPasses(passes: string[], func: FunctionRef = 0): void {
     let i: i32, k: i32 = passes.length;
-    const names: CString[] = new Array(k);
+    const names: usize[] = new Array(k);
     for (i = 0; i < k; ++i) names[i] = allocString(passes[i]);
-    const cArr: CArray<i32> = allocI32Array(names);
+    const cArr: usize = allocI32Array(names);
     try {
       if (func)
         _BinaryenFunctionRunPasses(func, this.ref, cArr, k);
       else
         _BinaryenModuleRunPasses(this.ref, cArr, k);
     } finally {
-      _free(cArr);
-      for (; i >= 0; --i) _free(names[i]);
+      Heap.dispose(cArr);
+      for (; i >= 0; --i) Heap.dispose(names[i]);
     }
   }
 
@@ -760,7 +760,7 @@ export class Module {
   dispose(): void {
     if (!this.ref) return; // sic
     _BinaryenModuleDispose(this.ref);
-    _free(this.lit);
+    Heap.dispose(changetype<BinaryenLiteral, usize>(this.lit));
   }
 
   createRelooper(): Relooper {
@@ -900,11 +900,11 @@ export class Relooper {
 
   addBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: i32[], code: ExpressionRef = 0): void {
     if (this.noEmit) return;
-    const cArr: CArray<i32> = allocI32Array(indexes);
+    const cArr: usize = allocI32Array(indexes);
     try {
       _RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
     } finally {
-      _free(cArr);
+      Heap.dispose(cArr);
     }
   }
 
@@ -921,18 +921,18 @@ export function setAPITracing(on: bool): void {
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js
 
-function allocU8Array(u8s: Uint8Array | null): CArray<u8> {
+function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
-  const ptr: usize = _malloc((<Uint8Array>u8s).length);
+  const ptr: usize = Heap.allocate((<Uint8Array>u8s).length);
   let idx: usize = ptr;
   for (let i: i32 = 0, k: i32 = (<Uint8Array>u8s).length; i < k; ++i)
     store<u8>(idx++, (<Uint8Array>u8s)[i])
   return ptr;
 }
 
-function allocI32Array(i32s: i32[] | null): CArray<i32> {
+function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
-  const ptr: usize = _malloc((<i32[]>i32s).length << 2);
+  const ptr: usize = Heap.allocate((<i32[]>i32s).length << 2);
   let idx: usize = ptr;
   for (let i: i32 = 0, k: i32 = (<i32[]>i32s).length; i < k; ++i) {
     let val: i32 = (<i32[]>i32s)[i];
@@ -967,9 +967,9 @@ function stringLengthUTF8(str: string): usize {
   return len;
 }
 
-function allocString(str: string | null): CString {
+function allocString(str: string | null): usize {
   if (!str) return 0;
-  const ptr: usize = _malloc(stringLengthUTF8((<string>str)) + 1);
+  const ptr: usize = Heap.allocate(stringLengthUTF8((<string>str)) + 1);
   let idx: usize = ptr;
   for (let i: i32 = 0, k: i32 = (<string>str).length; i < k; ++i) {
     let u: i32 = (<string>str).charCodeAt(i);
