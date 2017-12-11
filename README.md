@@ -20,6 +20,8 @@ A few early examples to get an idea:
   [source](./tests/compiler/memcpy.ts) - [wast](./tests/compiler/memcpy.optimized.wast)
 * **Conway's Game of Life** as seen on [dcode.io](http://dcode.io)<br />
   [source](./tests/compiler/game-of-life.ts) - [wast](./tests/compiler/game-of-life.optimized.wast) - [html](./tests/compiler/game-of-life.html)
+* **i64 polyfill** using 32-bit integers<br />
+  [source](./tests/compiler/i64.ts) - [wast](./tests/compiler/i64.optimized.wast)
 
 Getting started
 ---------------
@@ -32,7 +34,7 @@ $> cd next
 $> npm install
 ```
 
-Author your module in AssemblyScript ([definitions](./assembly.d.ts), [base config](./assembly.json)) or portable AssemblyScript ([definitions](./portable.d.ts), [base config](./portable.json) and run:
+Author your module in AssemblyScript ([definitions](./assembly.d.ts), [base config](./assembly.json)) or portable AssemblyScript ([definitions](./portable.d.ts), [base config](./portable.json)) and run:
 
 ```
 $> node bin\asc yourModule.ts

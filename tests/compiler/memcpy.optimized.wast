@@ -1,7 +1,7 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
- (global $memcpy/dst (mut i32) (i32.const 0))
+ (global $memcpy/dest (mut i32) (i32.const 0))
  (memory $0 1)
  (export "memcpy" (func $memcpy/memcpy))
  (export "memory" (memory $0))
@@ -1588,7 +1588,7 @@
    (i32.const 32)
    (i64.const 4919131752989213764)
   )
-  (set_global $memcpy/dst
+  (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.const 9)
     (i32.const 24)
@@ -1597,7 +1597,7 @@
   )
   (if
    (i32.ne
-    (get_global $memcpy/dst)
+    (get_global $memcpy/dest)
     (i32.const 9)
    )
    (unreachable)
@@ -1611,7 +1611,7 @@
    )
    (unreachable)
   )
-  (set_global $memcpy/dst
+  (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.const 8)
     (i32.const 8)
@@ -1620,7 +1620,7 @@
   )
   (if
    (i32.ne
-    (get_global $memcpy/dst)
+    (get_global $memcpy/dest)
     (i32.const 8)
    )
    (unreachable)
@@ -1661,7 +1661,7 @@
    )
    (unreachable)
   )
-  (set_global $memcpy/dst
+  (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.const 13)
     (i32.const 36)
@@ -1677,7 +1677,7 @@
    )
    (unreachable)
   )
-  (set_global $memcpy/dst
+  (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.const 16)
     (i32.const 24)

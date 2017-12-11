@@ -9,7 +9,7 @@ export function memcpy(dest: usize, src: usize, n: usize): usize {
     n--;
   }
 
-  // if dst is aligned to 4 bytes as well, copy 4 bytes each
+  // if dest is aligned to 4 bytes as well, copy 4 bytes each
   if (d % 4 == 0) {
     while (n >= 16) {
       store<u32>(d     , load<u32>(s     ));
@@ -27,7 +27,7 @@ export function memcpy(dest: usize, src: usize, n: usize): usize {
       store<u32>(d, load<u32>(s));
       d += 4; s += 4;
     }
-    if (n & 2) { // drop to 2 bytes each
+    if (n & 2) { // drop to 2 bytes
       store<u16>(d, load<u16>(s));
       d += 2; s += 2;
     }
@@ -37,7 +37,7 @@ export function memcpy(dest: usize, src: usize, n: usize): usize {
     return dest;
   }
 
-  // if dst is not aligned to 4 bytes, use alternating shifts to copy 4 bytes each
+  // if dest is not aligned to 4 bytes, use alternating shifts to copy 4 bytes each
   // doing shifts if faster when copying enough bytes (here: 32 or more)
   if (n >= 32) {
     switch (d % 4) {
@@ -147,22 +147,22 @@ store<u64>(base + 8 , 0x2222222222222222);
 store<u64>(base + 16, 0x3333333333333333);
 store<u64>(base + 24, 0x4444444444444444);
 
-let dst: usize;
-dst = memcpy(base + 1, base + 16, 4);
-assert(dst == base + 1);
+let dest: usize;
+dest = memcpy(base + 1, base + 16, 4);
+assert(dest == base + 1);
 assert(load<u64>(base) == 0x1111113333333311);
 
-dst = memcpy(base, base, 32);
-assert(dst == base);
+dest = memcpy(base, base, 32);
+assert(dest == base);
 assert(load<u64>(base) == 0x1111113333333311);
 assert(load<u64>(base + 8) == 0x2222222222222222);
 assert(load<u64>(base + 16) == 0x3333333333333333);
 assert(load<u64>(base + 24) == 0x4444444444444444);
 
-dst = memcpy(base + 5, base + 28, 3);
+dest = memcpy(base + 5, base + 28, 3);
 assert(load<u64>(base) == 0x4444443333333311);
 
-dst = memcpy(base + 8, base + 16, 15);
+dest = memcpy(base + 8, base + 16, 15);
 assert(load<u64>(base) == 0x4444443333333311);
 assert(load<u64>(base + 8) == 0x3333333333333333);
 assert(load<u64>(base + 16) == 0x3344444444444444);

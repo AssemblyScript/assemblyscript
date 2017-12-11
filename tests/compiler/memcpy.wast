@@ -2,7 +2,7 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
  (global $memcpy/base i32 (i32.const 8))
- (global $memcpy/dst (mut i32) (i32.const 0))
+ (global $memcpy/dest (mut i32) (i32.const 0))
  (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
  (export "memcpy" (func $memcpy/memcpy))
@@ -1936,7 +1936,7 @@
    )
    (i64.const 4919131752989213764)
   )
-  (set_global $memcpy/dst
+  (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.add
      (i32.const 8)
@@ -1952,7 +1952,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (get_global $memcpy/dst)
+     (get_global $memcpy/dest)
      (i32.add
       (i32.const 8)
       (i32.const 1)
@@ -1972,7 +1972,7 @@
    )
    (unreachable)
   )
-  (set_global $memcpy/dst
+  (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.const 8)
     (i32.const 8)
@@ -1982,7 +1982,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (get_global $memcpy/dst)
+     (get_global $memcpy/dest)
      (i32.const 8)
     )
    )
@@ -2041,7 +2041,7 @@
    )
    (unreachable)
   )
-  (set_global $memcpy/dst
+  (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.add
      (i32.const 8)
@@ -2065,7 +2065,7 @@
    )
    (unreachable)
   )
-  (set_global $memcpy/dst
+  (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.add
      (i32.const 8)
@@ -2163,7 +2163,7 @@
   assert
   memcpy/memcpy
   memcpy/base
-  memcpy/dst
+  memcpy/dest
 [program.exports]
   memcpy/memcpy
 ;)

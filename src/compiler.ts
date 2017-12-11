@@ -1206,7 +1206,7 @@ export class Compiler extends DiagnosticEmitter {
         // i64 to i32
         if (!toType.isLongInteger) {
           losesInformation = true;
-          expr = mod.createUnary(UnaryOp.WrapI64, expr);
+          expr = mod.createUnary(UnaryOp.WrapI64, expr); // discards upper bits
           if (toType.isSmallInteger) {
             if (toType.isSignedInteger) {
               expr = mod.createBinary(BinaryOp.ShlI32, expr, mod.createI32(toType.smallIntegerShift));
