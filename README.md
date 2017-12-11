@@ -16,8 +16,10 @@ This version of the compiler (0.5.0, NEXT) is relatively new and does not yet su
 
 A few early examples to get an idea:
 
-* [memcpy](./tests/compiler/memcpy.ts) using load/store derived from [musl](http://www.musl-libc.org)
-* Conway's [Game of Life](./tests/compiler/game-of-life.ts) ([html](./tests/compiler/game-of-life.html)) as seen on [dcode.io](http://dcode.io)
+* **memcpy** using load/store derived from [musl](http://www.musl-libc.org)<br />
+  [source](./tests/compiler/memcpy.ts) - [wast](./tests/compiler/memcpy.optimized.wast)
+* **Conway's Game of Life** as seen on [dcode.io](http://dcode.io)<br />
+  [source](./tests/compiler/game-of-life.ts) - [wast](./tests/compiler/game-of-life.optimized.wast) - [html](./tests/compiler/game-of-life.html)
 
 Getting started
 ---------------
