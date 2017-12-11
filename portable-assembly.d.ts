@@ -41,6 +41,10 @@ declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
+/** Loads a value of the specified type from memory. Type must be `u8`. */
+declare function load<T = u8>(offset: usize): T;
+/** Stores a value of the specified type to memory. Type must be `u8`. */
+declare function store<T = u8>(offset: usize, value: T): void;
 /** Emits an unreachable operation that results in a runtime error when executed. */
 declare function unreachable(): any; // sic
 

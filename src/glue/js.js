@@ -1,4 +1,4 @@
-require("../../portable-assembly"); // not inherited from tsconfig by ts-node otherwise :(
+require("../../portable-assembly");
 
 // Copy Binaryen exports to global scope
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
@@ -13,9 +13,17 @@ for (var key in binaryen)
     globalScope[key] = binaryen[key];
 
 // Use Binaryen's heap
-Object.defineProperties(globalScope['Heap'] = {
-  allocate: binaryen._malloc,
-  dispose: binaryen._free
+Object.defineProperties(globalScope["Heap"] = {
+  allocate: function allocate(size) {
+    if (!size) return 0; // should be safe in our case
+    return binaryen._malloc(size);
+  },
+  dispose: function dispose(ptr) {
+    if (ptr) binaryen._free(ptr);
+  },
+  copy: function copy(dest, src, n) {
+    return binaryen._memcpy(dest, src, n);
+  }
 }, {
   free: { get: function() { return binaryen.HEAPU8.length; } },
   used: { get: function() { return 0; } },
@@ -24,7 +32,7 @@ Object.defineProperties(globalScope['Heap'] = {
 globalScope["store"] = function store(ptr, val) {
   binaryen.HEAPU8[ptr] = val;
 };
-globalScope["load"] = function load_u8(ptr) {
+globalScope["load"] = function load(ptr) {
   return binaryen.HEAPU8[ptr];
 };
 
