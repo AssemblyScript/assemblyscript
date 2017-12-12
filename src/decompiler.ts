@@ -8,45 +8,27 @@ import {
   FunctionTypeRef,
   FunctionRef,
   ExpressionRef,
-
-  getFunctionBody,
-  getExpressionId,
-  getExpressionType,
-  getUnaryOp,
-  getUnaryValue,
-  getBinaryOp,
-  getBinaryLeft,
-  getBinaryRight,
-  getSelectIfTrue,
-  getSelectIfFalse,
-  getSelectCondition,
-  getHostOp,
-  getHostNameOperand,
-  getHostOperands,
-  getConstValueI32,
-  getConstValueI64Low,
-  getConstValueI64High,
-  getConstValueF32,
-  getConstValueF64,
-  getReturnValue,
-  getDropValue
+  Index,
+  readString
 } from "./module";
 import { I64 } from "./util";
 
 // TODO :-)
 
-class Decompiler {
+export class Decompiler {
 
-  name: string;
+  static decompile(module: Module): string {
+    const decompiler: Decompiler = new Decompiler();
+    decompiler.decompile(module);
+    return decompiler.finish();
+  }
+
   text: string[] = [];
+  functionId: i32 = 0;
 
   private tempI64: I64 = new I64();
 
-  // Decide whether to decompile to an AST or to text directly.
-  // AST is a bit more useful, text a lot more efficient.
-
-  constructor(name: string = "module.ts") {
-    this.name = name;
+  constructor() {
   }
 
   /** Decompiles a module to an AST that can then be serialized. */
@@ -55,103 +37,800 @@ class Decompiler {
   }
 
   decompileFunction(func: FunctionRef): void {
-    const body: ExpressionRef = getFunctionBody(func);
-    throw new Error("not implemented");
+    const name: string = readString(_BinaryenFunctionGetName(func)) || "$" + this.functionId.toString(10)
+    const body: ExpressionRef = _BinaryenFunctionGetBody(func);
+    this.push("function ");
+    this.push(name);
+    this.push("(");
+    let k: Index = _BinaryenFunctionGetNumParams(func);
+    for (let i: Index = 0; i < k; ++i) {
+      console.log("rat");
+      if (i > 0)
+        this.push(", ");
+      this.push("$");
+      this.push(i.toString(10));
+      this.push(": ");
+      this.push(nativeTypeToType(_BinaryenFunctionGetParam(func, i)));
+    }
+    this.push("): ");
+    this.push(nativeTypeToType(_BinaryenFunctionGetResult(func)));
+    this.push(" ");
+    if (_BinaryenExpressionGetId(body) != ExpressionId.Block) {
+      this.push("{\n");
+    }
+    this.decompileExpression(body);
+    if (_BinaryenExpressionGetId(body) != ExpressionId.Block) {
+      this.push("\n}\n");
+    }
+    ++this.functionId;
   }
 
   decompileExpression(expr: ExpressionRef): void {
-    const id: ExpressionId = getExpressionId(expr);
-    const type: NativeType = getExpressionType(expr);
+    const id: ExpressionId = _BinaryenExpressionGetId(expr);
+    const type: NativeType = _BinaryenExpressionGetType(expr);
+
+    let nested: ExpressionRef;
+    let string: string | null;
+    let i: Index, k: Index;
 
     switch (id) {
-      case ExpressionId.Block:
+
+      case ExpressionId.Block: // TODO: magic
+        if ((string = readString(_BinaryenBlockGetName(expr))) != null) {
+          this.push(string);
+          this.push(": ");
+        }
+        this.push("{\n");
+        k = _BinaryenBlockGetNumChildren(expr);
+        for (i = 0; i < k; ++i) {
+          this.decompileExpression(_BinaryenBlockGetChild(expr, i));
+        }
+        this.push("}\n");
+        return;
+
       case ExpressionId.If:
+        if (type == NativeType.None) {
+          this.push("if (");
+          this.decompileExpression(_BinaryenIfGetCondition(expr));
+          this.push(") ");
+          this.decompileExpression(_BinaryenIfGetIfTrue(expr));
+          if (nested = _BinaryenIfGetIfFalse(expr)) {
+            this.push(" else ");
+            this.decompileExpression(nested);
+          }
+        } else {
+          this.decompileExpression(_BinaryenIfGetCondition(expr));
+          this.push(" ? ");
+          this.decompileExpression(_BinaryenIfGetIfTrue(expr));
+          this.push(" : ");
+          this.decompileExpression(_BinaryenIfGetIfFalse(expr));
+        }
+        return;
+
       case ExpressionId.Loop:
+        if ((string = readString(_BinaryenLoopGetName(expr))) != null) {
+          this.push(string);
+          this.push(": ");
+        }
+        this.push("do ");
+        this.decompileExpression(_BinaryenLoopGetBody(expr));
+        this.push("while (0);\n");
+
       case ExpressionId.Break:
+        if (nested = _BinaryenBreakGetCondition(expr)) {
+          this.push("if (");
+          this.decompileExpression(nested);
+          this.push(") ");
+        }
+        if ((string = readString(_BinaryenBreakGetName(expr))) != null) {
+          this.push("break ");
+          this.push(string);
+          this.push(";\n");
+        } else
+          this.push("break;\n");
+        return;
+
       case ExpressionId.Switch:
+
       case ExpressionId.Call:
+
       case ExpressionId.CallImport:
+
       case ExpressionId.CallIndirect:
+
       case ExpressionId.GetLocal:
+        this.push("$");
+        this.push(_BinaryenGetLocalGetIndex(expr).toString(10));
+        return;
+
       case ExpressionId.SetLocal:
+        this.push("$");
+        this.push(_BinaryenSetLocalGetIndex(expr).toString(10));
+        this.push(" = ");
+        this.decompileExpression(_BinaryenSetLocalGetValue(expr));
+        return;
+
       case ExpressionId.GetGlobal:
+
       case ExpressionId.SetGlobal:
+
       case ExpressionId.Load:
+        this.push("load<");
+        this.push(nativeTypeToType(type));
+        this.push(">(");
+        this.push(_BinaryenLoadGetOffset(expr).toString(10));
+        this.push(" + ");
+        this.decompileExpression(_BinaryenLoadGetPtr(expr));
+        this.push(")");
+        return;
+
       case ExpressionId.Store:
+        this.push("store<");
+        this.push(nativeTypeToType(type));
+        this.push(">(");
+        this.push(_BinaryenStoreGetOffset(expr).toString(10));
+        this.push(" + ");
+        this.decompileExpression(_BinaryenStoreGetPtr(expr));
+        this.push(", ");
+        this.decompileExpression(_BinaryenStoreGetValue(expr));
+        this.push(")");
+        return;
+
       case ExpressionId.Const:
         switch (type) {
+
           case NativeType.I32:
-            this.text.push(getConstValueI32(expr).toString(10));
+            this.push(_BinaryenConstGetValueI32(expr).toString(10));
             return;
+
           case NativeType.I64:
-            this.tempI64.lo = getConstValueI64Low(expr);
-            this.tempI64.hi = getConstValueI64High(expr);
-            this.text.push(this.tempI64.toString());
+            this.tempI64.lo = _BinaryenConstGetValueI64Low(expr);
+            this.tempI64.hi = _BinaryenConstGetValueI64High(expr);
+            this.push(this.tempI64.toString());
             return;
+
           case NativeType.F32:
-            this.text.push(getConstValueF32(expr).toString(10));
+            this.push(_BinaryenConstGetValueF32(expr).toString(10));
             return;
+
           case NativeType.F64:
-            this.text.push(getConstValueF64(expr).toString(10));
+            this.push(_BinaryenConstGetValueF64(expr).toString(10));
             return;
-          default:
-            throw new Error("unexpected const type");
-        }
-      case ExpressionId.Unary:
-        switch (getUnaryOp(expr)) {
-          // TODO
-        }
-        this.decompileExpression(getUnaryValue(expr));
-        return;
-      case ExpressionId.Binary:
-        this.decompileExpression(getBinaryLeft(expr));
-        switch (getBinaryOp(expr)) {
-          // TODO
-        }
-        this.decompileExpression(getBinaryRight(expr));
-        return;
-      case ExpressionId.Select:
-        this.text.push("select<");
-        this.text.push(nativeTypeToType(type));
-        this.text.push(">(");
-        this.decompileExpression(getSelectIfTrue(expr));
-        this.text.push(", ");
-        this.decompileExpression(getSelectIfFalse(expr));
-        this.text.push(", ");
-        this.decompileExpression(getSelectCondition(expr));
-        this.text.push(");");
-        return;
-      case ExpressionId.Drop:
-        this.decompileExpression(getDropValue(expr));
-        this.text.push(";");
-        return;
-      case ExpressionId.Return:
-        if (type == NativeType.None) {
-          this.text.push("return;");
-        } else {
-          this.text.push("return ");
-          this.decompileExpression(getReturnValue(expr));
-          this.text.push(";");
-        }
-        return;
-      case ExpressionId.Host:
-        switch (getHostOp(expr)) {
-          case HostOp.CurrentMemory:
-          case HostOp.GrowMemory:
         }
         break;
+
+      case ExpressionId.Unary:
+        switch (_BinaryenUnaryGetOp(expr)) {
+
+          case UnaryOp.ClzI32:
+            this.push("clz<i32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.CtzI32:
+            this.push("ctz<i32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.PopcntI32:
+            this.push("popcnt<i32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.NegF32:
+          case UnaryOp.NegF64:
+            this.push("-");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.AbsF32:
+            this.push("abs<f32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.CeilF32:
+            this.push("ceil<f32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.FloorF32:
+            this.push("floor<f32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.TruncF32:
+            this.push("trunc<f32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.NearestF32:
+            this.push("nearest<i32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.SqrtF32:
+            this.push("sqrt<f32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.EqzI32:
+          case UnaryOp.EqzI64:
+            this.push("!");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ClzI64:
+            this.push("clz<i64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.CtzI64:
+            this.push("ctz<i64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.PopcntI64:
+            this.push("popcnt<i64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.AbsF64:
+            this.push("abs<f64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.CeilF64:
+            this.push("ceil<f64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.FloorF64:
+            this.push("floor<f64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.TruncF64:
+            this.push("trunc<f64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.NearestF64:
+            this.push("nearest<f64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.SqrtF64:
+            this.push("sqrt<f64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.ExtendI32:
+            this.push("<i64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ExtendU32:
+            this.push("<i64><u64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.WrapI64:
+            this.push("<i32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.TruncF32_I32:
+            this.push("<i32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.TruncF32_I64:
+            this.push("<i64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.TruncF32_U32:
+            this.push("<i32><u32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.TruncF32_U64:
+            this.push("<i64><u64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.TruncF64_I32:
+            this.push("<i32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.TruncF64_I64:
+            this.push("<i64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.TruncF64_U32:
+            this.push("<i32><u32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.TruncF64_U64:
+            this.push("<i64><u64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ReinterpretF32:
+            this.push("reinterpret<f32,i32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.ReinterpretF64:
+            this.push("reinterpret<f64,i64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.ConvertI32_F32:
+            this.push("<f32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ConvertI32_F64:
+            this.push("<f64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ConvertU32_F32:
+            this.push("<f32><u32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ConvertU32_F64:
+            this.push("<f64><u32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ConvertI64_F32:
+            this.push("<f32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ConvertI64_F64:
+            this.push("<f64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ConvertU64_F32:
+            this.push("<f32><u64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ConvertU64_F64:
+            this.push("<f64><u64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.PromoteF32:
+            this.push("<f64>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.DemoteF64:
+            this.push("<f32>");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            return;
+
+          case UnaryOp.ReinterpretI32:
+            this.push("reinterpret<i32,f32>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+
+          case UnaryOp.ReinterpretI64:
+            this.push("reinterpret<i64,f64>(");
+            this.decompileExpression(_BinaryenUnaryGetValue(expr));
+            this.push(")");
+            return;
+        }
+        break;
+
+      case ExpressionId.Binary: // TODO: precedence
+        switch (_BinaryenBinaryGetOp(expr)) {
+
+          case BinaryOp.AddI32:
+          case BinaryOp.AddI64:
+          case BinaryOp.AddF32:
+          case BinaryOp.AddF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" + ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.SubI32:
+          case BinaryOp.SubI64:
+          case BinaryOp.SubF32:
+          case BinaryOp.SubF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" - ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.MulI32:
+          case BinaryOp.MulI64:
+          case BinaryOp.MulF32:
+          case BinaryOp.MulF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" * ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.DivI32:
+          case BinaryOp.DivI64:
+          case BinaryOp.DivF32:
+          case BinaryOp.DivF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" / ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.DivU32:
+            this.push("<i32>(<u32>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" / <u32>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.RemI32:
+          case BinaryOp.RemI64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" % ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.RemU32:
+            this.push("<i32>(<u32>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" / <u32>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.AndI32:
+          case BinaryOp.AndI64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" & ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.OrI32:
+          case BinaryOp.OrI64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" | ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.XorI32:
+          case BinaryOp.XorI64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" ^ ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.ShlI32:
+          case BinaryOp.ShlI64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" << ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.ShrU32:
+          case BinaryOp.ShrU64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" >>> ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.ShrI32:
+          case BinaryOp.ShrI64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" >> ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.RotlI32:
+            this.push("rotl<i32>(")
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.RotrI32:
+            this.push("rotr<i32>(")
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.EqI32:
+          case BinaryOp.EqI64:
+          case BinaryOp.EqF32:
+          case BinaryOp.EqF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" == ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.NeI32:
+          case BinaryOp.NeI64:
+          case BinaryOp.NeF32:
+          case BinaryOp.NeF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" != ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.LtI32:
+          case BinaryOp.LtI64:
+          case BinaryOp.LtF32:
+          case BinaryOp.LtF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" < ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.LtU32:
+            this.push("<u32>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" < <u32>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.LeI32:
+          case BinaryOp.LeI64:
+          case BinaryOp.LeF32:
+          case BinaryOp.LeF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" <= ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.LeU32:
+            this.push("<u32>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" <= <u32>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.GtI32:
+          case BinaryOp.GtI64:
+          case BinaryOp.GtF32:
+          case BinaryOp.GtF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" > ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.GtU32:
+            this.push("<u32>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" > <u32>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.GeI32:
+          case BinaryOp.GeI64:
+          case BinaryOp.GeF32:
+          case BinaryOp.GeF64:
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" >= ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.GeU32:
+            this.push("<u32>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" >= <u32>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.DivU64:
+            this.push("<u64>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" / <u64>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.RemU64:
+            this.push("<u64>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" % <u64>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+           case BinaryOp.RotlI64:
+            this.push("rotl<i64>(");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.RotrI64:
+            this.push("rotr<i64>(");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.LtU64:
+            this.push("<u64>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" < <u64>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.LeU64:
+            this.push("<u64>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" <= <u64>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.GtU64:
+            this.push("<u64>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" > <u64>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.GeU64:
+            this.push("<u64>");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(" >= <u64>");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            return;
+
+          case BinaryOp.CopysignF32:
+            this.push("copysign<f32>(");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.MinF32:
+            this.push("min<f32>(");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.MaxF32:
+            this.push("max<f32>(");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+            case BinaryOp.CopysignF64:
+            this.push("copysign<f64>(");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.MinF64:
+            this.push("min<f64>(");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+
+          case BinaryOp.MaxF64:
+            this.push("max<f64>(");
+            this.decompileExpression(_BinaryenBinaryGetLeft(expr));
+            this.push(", ");
+            this.decompileExpression(_BinaryenBinaryGetRight(expr));
+            this.push(")");
+            return;
+        }
+        return;
+
+      case ExpressionId.Select:
+        this.push("select<");
+        this.push(nativeTypeToType(type));
+        this.push(">(");
+        this.decompileExpression(_BinaryenSelectGetIfTrue(expr));
+        this.push(", ");
+        this.decompileExpression(_BinaryenSelectGetIfFalse(expr));
+        this.push(", ");
+        this.decompileExpression(_BinaryenSelectGetCondition(expr));
+        this.push(")");
+        return;
+
+      case ExpressionId.Drop:
+        this.decompileExpression(_BinaryenDropGetValue(expr));
+        this.push(";\n");
+        return;
+
+      case ExpressionId.Return:
+        if (nested = _BinaryenReturnGetValue(expr)) {
+          this.push("return ");
+          this.decompileExpression(nested);
+          this.push(";\n");
+        } else {
+          this.push("return;\n");
+        }
+        return;
+
+      case ExpressionId.Host:
+        switch (_BinaryenHostGetOp(expr)) {
+          case HostOp.CurrentMemory:
+            this.push("current_memory()");
+            return;
+          case HostOp.GrowMemory:
+            this.push("grow_memory(");
+            this.decompileExpression(_BinaryenHostGetOperand(expr, 0));
+            this.push(")");
+            return;
+        }
+        break;
+
       case ExpressionId.Nop:
-        this.text.push(";");
+        this.push(";\n");
         return;
+
       case ExpressionId.Unreachable:
-        this.text.push("unreachable()");
+        this.push("unreachable()");
         return;
+
       case ExpressionId.AtomicCmpxchg:
+
       case ExpressionId.AtomicRMW:
+
       case ExpressionId.AtomicWait:
+
       case ExpressionId.AtomicWake:
     }
-    throw new Error("not implemented")
+    throw new Error("not implemented: " + id);
+  }
+
+  private push(text: string): void {
+    // mostly here so we can add debugging if necessary
+    this.text.push(text);
+  }
+
+  finish(): string {
+    const ret: string = this.text.join("");
+    this.text = [];
+    return ret;
   }
 }
 
@@ -162,6 +841,8 @@ function nativeTypeToType(type: NativeType): string {
     case NativeType.I64: return "i64";
     case NativeType.F32: return "f32";
     case NativeType.F64: return "f64";
+    case NativeType.Unreachable: throw new Error("unreachable type");
+    case NativeType.Auto: throw new Error("auto type");
     default: throw new Error("unexpected type");
   }
 }

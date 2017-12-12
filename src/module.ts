@@ -10,14 +10,33 @@ export type ImportRef = usize;
 export type ExportRef = usize;
 export type Index = u32;
 
+// snip...
+declare function _BinaryenNone(): NativeType;
+declare function _BinaryenInt32(): NativeType;
+declare function _BinaryenInt64(): NativeType;
+declare function _BinaryenFloat32(): NativeType;
+declare function _BinaryenFloat64(): NativeType;
+declare function _BinaryenUndefined(): NativeType;
 export enum NativeType {
   None = _BinaryenNone(),
   I32 = _BinaryenInt32(),
   I64 = _BinaryenInt64(),
   F32 = _BinaryenFloat32(),
   F64 =  _BinaryenFloat64(),
-  Undefined = _BinaryenUndefined()
+  Unreachable = 5,
+  Auto = _BinaryenUndefined()
 }
+// ...snap, once binaryen is updated
+
+// export enum NativeType {
+//   None = _BinaryenTypeNone(),
+//   I32 = _BinaryenTypeInt32(),
+//   I64 = _BinaryenTypeInt64(),
+//   F32 = _BinaryenTypeFloat32(),
+//   F64 =  _BinaryenTypeFloat64(),
+//   Unreachable = _BinaryenTypeUnreachable(),
+//   Auto = _BinaryenTypeAuto()
+// }
 
 export enum ExpressionId {
   Invalid = _BinaryenInvalidId(),
@@ -396,7 +415,7 @@ export class Module {
     }
   }
 
-  createBlock(label: string | null, children: ExpressionRef[], type: NativeType = NativeType.Undefined): ExpressionRef {
+  createBlock(label: string | null, children: ExpressionRef[], type: NativeType = NativeType.Auto): ExpressionRef {
     if (this.noEmit) return 0;
     const cStr: usize = allocString(label);
     const cArr: usize = allocI32Array(children);
@@ -811,7 +830,7 @@ export function getGetLocalIndex(expr: ExpressionRef): Index {
   return _BinaryenGetLocalGetIndex(expr);
 }
 
-export function getGetGlobalName(expr: ExpressionRef): string {
+export function getGetGlobalName(expr: ExpressionRef): string | null {
   return readString(_BinaryenGetGlobalGetName(expr));
 }
 
@@ -883,7 +902,7 @@ export function getHostOp(expr: ExpressionRef): HostOp {
   return _BinaryenHostGetOp(expr);
 }
 
-export function getHostNameOperand(expr: ExpressionRef): string {
+export function getHostNameOperand(expr: ExpressionRef): string | null {
   return readString(_BinaryenHostGetNameOperand(expr));
 }
 
@@ -1043,7 +1062,8 @@ function allocString(str: string | null): usize {
   return ptr;
 }
 
-function readString(ptr: usize): string {
+export function readString(ptr: usize): string | null {
+  if (!ptr) return null;
   const utf16le: u32[] = [];
   // the following is based on Emscripten's UTF8ArrayToString
   let cp: u32;

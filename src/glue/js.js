@@ -2,11 +2,13 @@ require("../../portable");
 
 // Copy Binaryen exports to global scope
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
-var binaryen;
-try {
-  binaryen = require("binaryen");
-} catch (e) {
-  binaryen = globalScope["Binaryen"];
+var binaryen = globalScope["Binaryen"]; // allow overriding for testing purposes
+if (!binaryen) {
+  try {
+    binaryen = require("binaryen");
+  } catch (e) {
+    binaryen = globalScope["Binaryen"];
+  }
 }
 for (var key in binaryen)
   if (/^_(?:Binaryen|Relooper)/.test(key))

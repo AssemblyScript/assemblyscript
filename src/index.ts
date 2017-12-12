@@ -24,6 +24,7 @@ import { Compiler, Options, Target } from "./compiler";
 import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
 import { Parser } from "./parser";
 import { Program } from "./program";
+import { Decompiler } from "./decompiler";
 
 /** Parses a single source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, parser: Parser | null = null, isEntry: bool = false): Parser {
@@ -93,4 +94,11 @@ export function compile(parser: Parser, options: Options | null = null): Module 
   const program: Program = parser.finish();
   const compiler: Compiler = new Compiler(program, options);
   return compiler.compile();
+}
+
+/** Decompiles a module to its (low level) source. */
+export function decompile(module: Module): string {
+  const decompiler: Decompiler = new Decompiler();
+  decompiler.decompile(module);
+  return decompiler.finish();
 }

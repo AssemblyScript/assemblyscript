@@ -1257,8 +1257,8 @@ export class Compiler extends DiagnosticEmitter {
         }
       case ExpressionId.GetLocal:
         return this.module.createGetLocal(getGetLocalIndex(expr), getExpressionType(expr));
-      case ExpressionId.GetGlobal:
-        return this.module.createGetGlobal(getGetGlobalName(expr), getExpressionType(expr));
+      // case ExpressionId.GetGlobal: explodes if it doesn't have a name
+      //   return this.module.createGetGlobal(getGetGlobalName(expr), getExpressionType(expr));
       case ExpressionId.Load:
         if (!(nested1 = this.cloneExpressionRef(getLoadPtr(expr), noSideEffects, maxDepth - 1))) break;
         return isLoadAtomic(expr)

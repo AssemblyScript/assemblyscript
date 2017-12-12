@@ -17,12 +17,13 @@ declare type BinaryenIndex = u32;
 
 declare type BinaryenType = i32;
 
-declare function _BinaryenNone(): BinaryenType;
-declare function _BinaryenInt32(): BinaryenType;
-declare function _BinaryenInt64(): BinaryenType;
-declare function _BinaryenFloat32(): BinaryenType;
-declare function _BinaryenFloat64(): BinaryenType;
-declare function _BinaryenUndefined(): BinaryenType;
+declare function _BinaryenTypeNone(): BinaryenType;
+declare function _BinaryenTypeInt32(): BinaryenType;
+declare function _BinaryenTypeInt64(): BinaryenType;
+declare function _BinaryenTypeFloat32(): BinaryenType;
+declare function _BinaryenTypeFloat64(): BinaryenType;
+declare function _BinaryenTypeUnreachable(): BinaryenType;
+declare function _BinaryenTypeAuto(): BinaryenType;
 
 declare type BinaryenExpressionId = i32;
 
