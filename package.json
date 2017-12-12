@@ -48,20 +48,17 @@
     "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path"
   },
   "files": [
-    "assembly.d.ts",
-    "bin/asc.js",
-    "bin/asc.json",
-    "dist/assemblyscript.js",
-    "dist/assemblyscript.js.map",
+    "bin/",
+    "dist/",
     "index.d.ts",
     "index.js",
     "LICENSE",
     "NOTICE",
     "package.json",
     "package-lock.json",
-    "portable-assembly.d.ts",
-    "portable-assembly.js",
     "README.md",
-    "src"
+    "src/",
+    "std/",
+    "tsconfig-base.json"
   ]
 }

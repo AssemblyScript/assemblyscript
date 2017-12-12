@@ -34,10 +34,10 @@ $> cd next
 $> npm install
 ```
 
-Author your module in AssemblyScript ([definitions](./assembly.d.ts), [base config](./assembly.json)) or portable AssemblyScript ([definitions](./portable.d.ts), [base config](./portable.json)) and run:
+Author your module in AssemblyScript ([definitions](./std/assembly.d.ts), [base config](./std/assembly.json)) or portable AssemblyScript ([definitions](./std/portable.d.ts), [base config](./std/portable.json)) and run:
 
 ```
-$> node bin\asc yourModule.ts
+$> node bin/asc yourModule.ts
 ```
 
 Using the CLI

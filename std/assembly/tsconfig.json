@@ -1,5 +1,5 @@
 {
-  "extends": "../../assembly.json",
+  "extends": "../assembly.json",
   "compilerOptions": {
     "diagnostics": true
   },

@@ -106,8 +106,6 @@ declare function struct(): any;
 
 // Standard library (not yet implemented)
 
-/// <reference path="./std/heap.d.ts" />
-
 interface Array<T> {}
 interface Boolean {}
 interface Function {}

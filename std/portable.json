@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig-base.json",
+  "extends": "../tsconfig-base.json",
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
@@ -8,15 +8,14 @@
     "noLib": true,
     "types": [],
     "rootDirs": [
-      "./std/portable",
-      "./node_modules"
+      "./portable"
     ],
     "allowJs": true
   },
   "files": [
     "./portable.d.ts",
     "./portable.js",
-    "./std/portable/heap.d.ts",
-    "./std/portable/heap.js"
+    "./portable/heap.d.ts",
+    "./portable/heap.js"
   ]
 }

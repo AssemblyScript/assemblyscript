@@ -1,13 +1,13 @@
 {
-  "extends": "./tsconfig-base.json",
+  "extends": "../tsconfig-base.json",
   "compilerOptions": {
     "target": "esnext",
     "noLib": true,
     "types": [],
     "rootDirs": [
-      "./std/assembly",
-      "./node_modules"
-    ]
+      "./assembly"
+    ],
+    "allowJs": false
   },
   "files": [
     "./assembly.d.ts"

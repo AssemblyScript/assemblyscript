@@ -1,5 +1,5 @@
 {
-  "extends": "../portable.json",
+  "extends": "../std/portable.json",
   "compilerOptions": {
     "outDir": "../out",
     "sourceMap": true
