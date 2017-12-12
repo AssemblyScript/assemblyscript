@@ -858,12 +858,12 @@ export class Compiler extends DiagnosticEmitter {
     this.disallowContinue = true;
 
     // introduce a local for evaluating the condition (exactly once)
-    const local: Local = this.currentFunction.addLocal(Type.i32);
+    const tempLocal: Local = this.currentFunction.getTempLocal(Type.i32);
     let i: i32, k: i32 = statement.cases.length;
 
     // prepend initializer to inner block
     const breaks: ExpressionRef[] = new Array(1 + k);
-    breaks[0] = this.module.createSetLocal(local.index, this.compileExpression(statement.expression, Type.i32)); // initializer
+    breaks[0] = this.module.createSetLocal(tempLocal.index, this.compileExpression(statement.expression, Type.i32)); // initializer
 
     // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
     let breakIndex: i32 = 1;
@@ -873,13 +873,15 @@ export class Compiler extends DiagnosticEmitter {
       if (case_.label) {
         breaks[breakIndex++] = this.module.createBreak("case" + i.toString(10) + "|" + context,
           this.module.createBinary(BinaryOp.EqI32,
-            this.module.createGetLocal(local.index, NativeType.I32),
+            this.module.createGetLocal(tempLocal.index, NativeType.I32),
             this.compileExpression(case_.label, Type.i32)
           )
         );
       } else
         defaultIndex = i;
     }
+
+    this.currentFunction.freeTempLocal(tempLocal);
 
     // otherwise br to default respectively out of the switch if there is no default case
     breaks[breakIndex] = this.module.createBreak((defaultIndex >= 0
@@ -1495,7 +1497,7 @@ export class Compiler extends DiagnosticEmitter {
         //   );
 
         // otherwise use a temporary local for the intermediate value
-        tempLocal = this.currentFunction.addLocal(this.currentType);
+        tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
         condition = this.module.createTeeLocal(tempLocal.index, left);
         return this.module.createIf(
           this.currentType.isLongInteger
@@ -1528,7 +1530,7 @@ export class Compiler extends DiagnosticEmitter {
         //   );
 
         // otherwise use a temporary local for the intermediate value
-        tempLocal = this.currentFunction.addLocal(this.currentType);
+        tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
         condition = this.module.createTeeLocal(tempLocal.index, left);
         return this.module.createIf(
           this.currentType.isLongInteger
@@ -1848,7 +1850,7 @@ export class Compiler extends DiagnosticEmitter {
     const getValue: ExpressionRef = this.compileExpression(expression.expression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
 
     // use a temp local for the intermediate value
-    const tempLocal: Local = this.currentFunction.addLocal(this.currentType);
+    const tempLocal: Local = this.currentFunction.getTempLocal(this.currentType);
 
     let op: BinaryOp;
     let nativeType: NativeType;
@@ -1886,6 +1888,7 @@ export class Compiler extends DiagnosticEmitter {
     // NOTE: can't preemptively tee_local the return value on the stack because binaryen expects
     // this to be well-formed. becomes a tee_local when optimizing, though.
     this.currentType = tempLocal.type;
+    this.currentFunction.freeTempLocal(tempLocal);
     return this.module.createBlock(null, [
       this.module.createSetLocal(tempLocal.index, getValue),  // +++ this.module.createTeeLocal(tempLocal.index, getValue),
       setValue,
