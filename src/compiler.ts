@@ -11,28 +11,7 @@ import {
   NativeType,
   FunctionTypeRef,
   FunctionRef,
-  ExpressionId,
-
-  getExpressionId,
-  getExpressionType,
-  getFunctionBody,
-  getConstValueI32,
-  getConstValueI64Low,
-  getConstValueI64High,
-  getConstValueF32,
-  getConstValueF64,
-  getGetLocalIndex,
-  getGetGlobalName,
-  isLoadAtomic,
-  isLoadSigned,
-  getLoadBytes,
-  getLoadOffset,
-  getLoadPtr,
-  getUnaryOp,
-  getUnaryValue,
-  getBinaryOp,
-  getBinaryLeft,
-  getBinaryRight
+  ExpressionId
 
 } from "./module";
 import {
@@ -373,10 +352,10 @@ export class Compiler extends DiagnosticEmitter {
     } else if (declaration) {
       if (declaration.initializer) {
         initializer = this.compileExpression(declaration.initializer, type);
-        if (getExpressionId(initializer) != ExpressionId.Const) {
+        if (_BinaryenExpressionGetId(initializer) != ExpressionId.Const) {
           if (!element.isMutable) {
             initializer = this.precomputeExpressionRef(initializer);
-            if (getExpressionId(initializer) != ExpressionId.Const) {
+            if (_BinaryenExpressionGetId(initializer) != ExpressionId.Const) {
               this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
               initializeInStart = true;
             }
@@ -395,19 +374,19 @@ export class Compiler extends DiagnosticEmitter {
       this.module.addGlobal(internalName, nativeType, element.isMutable, initializer);
       if (!element.isMutable) {
         element.hasConstantValue = true;
-        const exprType: NativeType = getExpressionType(initializer);
+        const exprType: NativeType = _BinaryenExpressionGetType(initializer);
         switch (exprType) {
           case NativeType.I32:
-            element.constantIntegerValue = new I64(getConstValueI32(initializer), 0);
+            element.constantIntegerValue = new I64(_BinaryenConstGetValueI32(initializer), 0);
             break;
           case NativeType.I64:
-            element.constantIntegerValue = new I64(getConstValueI64Low(initializer), getConstValueI64High(initializer));
+            element.constantIntegerValue = new I64(_BinaryenConstGetValueI64Low(initializer), _BinaryenConstGetValueI64High(initializer));
             break;
           case NativeType.F32:
-            element.constantFloatValue = getConstValueF32(initializer);
+            element.constantFloatValue = _BinaryenConstGetValueF32(initializer);
             break;
           case NativeType.F64:
-            element.constantFloatValue = getConstValueF64(initializer);
+            element.constantFloatValue = _BinaryenConstGetValueF64(initializer);
             break;
           default:
             throw new Error("unexpected initializer type");
@@ -439,9 +418,9 @@ export class Compiler extends DiagnosticEmitter {
         let initializeInStart: bool = false;
         if (declaration.value) {
           initializer = this.compileExpression(<Expression>declaration.value, Type.i32);
-          if (getExpressionId(initializer) != ExpressionId.Const) {
+          if (_BinaryenExpressionGetId(initializer) != ExpressionId.Const) {
             initializer = this.precomputeExpressionRef(initializer);
-            if (getExpressionId(initializer) != ExpressionId.Const) {
+            if (_BinaryenExpressionGetId(initializer) != ExpressionId.Const) {
               if (element.isConstant)
                 this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
               initializeInStart = true;
@@ -466,9 +445,9 @@ export class Compiler extends DiagnosticEmitter {
           this.startFunctionBody.push(this.module.createSetGlobal(val.internalName, initializer));
         } else {
           this.module.addGlobal(val.internalName, NativeType.I32, false, initializer);
-          if (getExpressionType(initializer) == NativeType.I32) {
+          if (_BinaryenExpressionGetType(initializer) == NativeType.I32) {
             val.hasConstantValue = true;
-            val.constantValue = getConstValueI32(initializer);
+            val.constantValue = _BinaryenConstGetValueI32(initializer);
           } else
             throw new Error("unexpected initializer type");
         }
@@ -1068,7 +1047,7 @@ export class Compiler extends DiagnosticEmitter {
       typeRef = this.module.addFunctionType(typeToSignatureNamePart(this.currentType), nativeType, []);
     const funcRef: FunctionRef = this.module.addFunction("__precompute", typeRef, [], expr);
     this.module.runPasses([ "precompute" ], funcRef);
-    const ret: ExpressionRef = getFunctionBody(funcRef);
+    const ret: ExpressionRef = _BinaryenFunctionGetBody(funcRef);
     this.module.removeFunction("__precompute");
     // TODO: also remove the function type somehow if no longer used or make the C-API accept
     // a `null` typeRef, using an implicit type.
@@ -1238,41 +1217,6 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast, reportNode.range, fromType.toString(), toType.toString());
 
     return expr;
-  }
-
-  cloneExpressionRef(expr: ExpressionRef, noSideEffects: bool = false, maxDepth: i32 = 0x7fffffff): ExpressionRef {
-    // currently supports side effect free expressions only
-    if (maxDepth < 0)
-      return 0;
-    let nested1: ExpressionRef,
-        nested2: ExpressionRef;
-    switch (getExpressionId(expr)) {
-      case ExpressionId.Const:
-        switch (getExpressionType(expr)) {
-          case NativeType.I32: return this.module.createI32(getConstValueI32(expr));
-          case NativeType.I64: return this.module.createI64(getConstValueI64Low(expr), getConstValueI64High(expr));
-          case NativeType.F32: return this.module.createF32(getConstValueF32(expr));
-          case NativeType.F64: return this.module.createF64(getConstValueF64(expr));
-          default: throw new Error("unexpected expression type");
-        }
-      case ExpressionId.GetLocal:
-        return this.module.createGetLocal(getGetLocalIndex(expr), getExpressionType(expr));
-      // case ExpressionId.GetGlobal: explodes if it doesn't have a name
-      //   return this.module.createGetGlobal(getGetGlobalName(expr), getExpressionType(expr));
-      case ExpressionId.Load:
-        if (!(nested1 = this.cloneExpressionRef(getLoadPtr(expr), noSideEffects, maxDepth - 1))) break;
-        return isLoadAtomic(expr)
-          ? this.module.createAtomicLoad(getLoadBytes(expr), nested1, getExpressionType(expr), getLoadOffset(expr))
-          : this.module.createLoad(getLoadBytes(expr), isLoadSigned(expr), nested1, getExpressionType(expr), getLoadOffset(expr));
-      case ExpressionId.Unary:
-        if (!(nested1 = this.cloneExpressionRef(getUnaryValue(expr), noSideEffects, maxDepth - 1))) break;
-        return this.module.createUnary(getUnaryOp(expr), nested1);
-      case ExpressionId.Binary:
-        if (!(nested1 = this.cloneExpressionRef(getBinaryLeft(expr), noSideEffects, maxDepth - 1))) break;
-        if (!(nested2 = this.cloneExpressionRef(getBinaryLeft(expr), noSideEffects, maxDepth - 1))) break;
-        return this.module.createBinary(getBinaryOp(expr), nested1, nested2);
-    }
-    return 0;
   }
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
@@ -1537,7 +1481,7 @@ export class Compiler extends DiagnosticEmitter {
         right = this.compileExpression(expression.right, this.currentType);
 
         // simplify if left is free of side effects while tolerating two levels of nesting, e.g., i32.load(i32.load(i32.const))
-        // if (condition = this.cloneExpressionRef(left, true, 2))
+        // if (condition = this.module.cloneExpression(left, true, 2))
         //   return this.module.createIf(
         //     this.currentType.isLongInteger
         //       ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
@@ -1570,7 +1514,7 @@ export class Compiler extends DiagnosticEmitter {
         right = this.compileExpression(expression.right, this.currentType);
 
         // simplify if left is free of side effects while tolerating two levels of nesting
-        // if (condition = this.cloneExpressionRef(left, true, 2))
+        // if (condition = this.module.cloneExpression(left, true, 2))
         //   return this.module.createIf(
         //     this.currentType.isLongInteger
         //       ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))

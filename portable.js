@@ -28,3 +28,6 @@ AssertionError.prototype.message = "assertion failed";
 
 globalScope["assert"] = function assert(isTrue) { if (!isTrue) throw new AssertionError(); };
 globalScope["changetype"] = function changetype(value) { return value; }
+
+String["fromCharCodes"] = function fromCharCodes(arr) { return String.fromCharCode.apply(String, arr); }
+String["fromCodePoints"] = function fromCodePoints(arr) { return String.fromCodePoint.apply(String, arr); }

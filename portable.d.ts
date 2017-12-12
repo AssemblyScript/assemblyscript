@@ -83,6 +83,9 @@ declare class Int32Array extends Array<i32> {}
 
 declare class String {
   static fromCharCode(ls: i32, hs?: i32): string;
+  static fromCharCodes(arr: u16[]): string;
+  static fromCodePoint(cp: i32): string;
+  static fromCodePoints(arr: i32[]): string;
   readonly length: i32;
   indexOf(subject: string): i32;
   charCodeAt(index: i32): i32;

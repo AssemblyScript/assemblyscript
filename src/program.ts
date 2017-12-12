@@ -1,5 +1,5 @@
 import { initialize as initializeBuiltins } from "./builtins";
-import { Target } from "./compiler";
+import { Target, typeToNativeType } from "./compiler";
 import { GETTER_PREFIX, SETTER_PREFIX, PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
 import { Type, typesToString } from "./types";
@@ -45,6 +45,7 @@ import {
   mangleInternalName
 
 } from "./ast";
+import { NativeType } from "./module";
 
 class QueuedExport {
   isReExport: bool;
@@ -970,6 +971,53 @@ export class Function extends Element {
       this.locals.set(<string>name, local);
     }
     this.additionalLocals.push(type);
+    return local;
+  }
+
+  private tempI32s: Local[] = [];
+  private tempI64s: Local[] = [];
+  private tempF32s: Local[] = [];
+  private tempF64s: Local[] = [];
+
+  getTempLocal(type: Type): Local {
+    let temps: Local[];
+    switch (typeToNativeType(type)) {
+      case NativeType.I32: temps = this.tempI32s; break;
+      case NativeType.I64: temps = this.tempI64s; break;
+      case NativeType.F32: temps = this.tempF32s; break;
+      case NativeType.F64: temps = this.tempF64s; break;
+      default: throw new Error("unexpected type");
+    }
+    if (temps.length > 0)
+      return temps.pop();
+    return this.addLocal(type);
+  }
+
+  freeTempLocal(local: Local): void {
+    let temps: Local[];
+    switch (typeToNativeType(local.type)) {
+      case NativeType.I32: temps = this.tempI32s; break;
+      case NativeType.I64: temps = this.tempI64s; break;
+      case NativeType.F32: temps = this.tempF32s; break;
+      case NativeType.F64: temps = this.tempF64s; break;
+      default: throw new Error("unexpected type");
+    }
+    temps.push(local);
+  }
+
+  getAndFreeTempLocal(type: Type): Local {
+    let temps: Local[];
+    switch (typeToNativeType(type)) {
+      case NativeType.I32: temps = this.tempI32s; break;
+      case NativeType.I64: temps = this.tempI64s; break;
+      case NativeType.F32: temps = this.tempF32s; break;
+      case NativeType.F64: temps = this.tempF64s; break;
+      default: throw new Error("unexpected type");
+    }
+    if (temps.length > 0)
+      return temps[temps.length - 1];
+    let local: Local = this.addLocal(type);
+    temps.push(local);
     return local;
   }
 

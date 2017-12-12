@@ -115,4 +115,10 @@ interface IArguments {}
 interface Number {}
 interface Object {}
 interface RegExp {}
-interface String {}
+
+declare class String {
+  static fromCharCode(ls: i32, hs?: i32): string;
+  static fromCharCodes(arr: u16[]): string;
+  static fromCodePoint(cp: i32): string;
+  static fromCodePoints(arr: i32[]): string;
+}

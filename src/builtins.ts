@@ -156,7 +156,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
             : module.createUnary(UnaryOp.AbsF64, arg0);
         if (typeArguments[0].isAnyInteger) {
           if (typeArguments[0].isSignedInteger) {
-            tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
+            tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(typeArguments[0]);
             if (typeArguments[0].isLongInteger)
               return module.createSelect(
                 module.createBinary(BinaryOp.SubI64,
@@ -198,8 +198,9 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
             ? module.createBinary(BinaryOp.MaxF32, arg0, arg1)
             : module.createBinary(BinaryOp.MaxF64, arg0, arg1);
         if (typeArguments[0].isAnyInteger) {
-          tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
-          tempLocal1 = compiler.currentFunction.addLocal(typeArguments[0]);
+          tempLocal0 = compiler.currentFunction.getTempLocal(typeArguments[0]);
+          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(typeArguments[0]);
+          compiler.currentFunction.freeTempLocal(tempLocal0);
           if (typeArguments[0].isLongInteger)
             return module.createSelect(
               module.createTeeLocal(tempLocal0.index, arg0),
@@ -233,8 +234,9 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
             ? module.createBinary(BinaryOp.MinF32, arg0, arg1)
             : module.createBinary(BinaryOp.MinF64, arg0, arg1);
         if (typeArguments[0].isAnyInteger) {
-          tempLocal0 = compiler.currentFunction.addLocal(typeArguments[0]);
-          tempLocal1 = compiler.currentFunction.addLocal(typeArguments[0]);
+          tempLocal0 = compiler.currentFunction.getTempLocal(typeArguments[0]);
+          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(typeArguments[0]);
+          compiler.currentFunction.freeTempLocal(tempLocal0);
           if (typeArguments[0].isLongInteger)
             return module.createSelect(
               module.createTeeLocal(tempLocal0.index, arg0),
@@ -428,13 +430,13 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]); // reports
         compiler.currentType = Type.bool;
         if (typeArguments[0] == Type.f32) {
-          tempLocal0 = compiler.currentFunction.addLocal(Type.f32);
+          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
           return module.createBinary(BinaryOp.NeF32,
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createGetLocal(tempLocal0.index, NativeType.F32)
           );
         } else {
-          tempLocal0 = compiler.currentFunction.addLocal(Type.f64);
+          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
           return module.createBinary(BinaryOp.NeF64,
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createGetLocal(tempLocal0.index, NativeType.F64)
@@ -453,7 +455,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]); // reports
         compiler.currentType = Type.bool;
         if (typeArguments[0] == Type.f32) {
-          tempLocal0 = compiler.currentFunction.addLocal(Type.f32);
+          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
           return module.createSelect(
             module.createBinary(BinaryOp.NeF32,
               module.createUnary(UnaryOp.AbsF32,
@@ -468,7 +470,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
             )
           );
         } else {
-          tempLocal0 = compiler.currentFunction.addLocal(Type.f64);
+          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
           return module.createSelect(
             module.createBinary(BinaryOp.NeF64,
               module.createUnary(UnaryOp.AbsF64,

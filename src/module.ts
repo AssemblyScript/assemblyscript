@@ -751,7 +751,7 @@ export class Module {
   }
 
   interpret(): void {
-    return _BinaryenModuleInterpret(this.ref);
+    _BinaryenModuleInterpret(this.ref);
   }
 
   write(output: usize, outputSize: usize = 1048576): usize {
@@ -759,11 +759,11 @@ export class Module {
   }
 
   print(): void {
-    return _BinaryenModulePrint(this.ref);
+    _BinaryenModulePrint(this.ref);
   }
 
   printAsmjs(): void {
-    return _BinaryenModulePrintAsmjs(this.ref);
+    _BinaryenModulePrintAsmjs(this.ref);
   }
 
   toBinary(bufferSize: usize = 1048576): Uint8Array {
@@ -785,132 +785,48 @@ export class Module {
   createRelooper(): Relooper {
     return this.noEmit ? Relooper.createStub(this) : Relooper.create(this);
   }
-}
 
-export function getExpressionId(expr: ExpressionRef): ExpressionId {
-  return _BinaryenExpressionGetId(expr);
-}
+  // currently supports side effect free expressions only
+  cloneExpression(expr: ExpressionRef, noSideEffects: bool = false, maxDepth: i32 = 0x7fffffff): ExpressionRef {
+    if (this.noEmit || maxDepth < 0) return 0;
 
-export function getExpressionType(expr: ExpressionRef): NativeType {
-  return _BinaryenExpressionGetType(expr);
-}
+    let nested1: ExpressionRef,
+        nested2: ExpressionRef;
 
-export function printExpression(expr: ExpressionRef): void {
-  return _BinaryenExpressionPrint(expr);
-}
+    switch (_BinaryenExpressionGetId(expr)) {
 
-export function getConstValueI32(expr: ExpressionRef): i32 {
-  return _BinaryenConstGetValueI32(expr);
-}
+      case ExpressionId.Const:
+        switch (_BinaryenExpressionGetType(expr)) {
+          case NativeType.I32: return this.createI32(_BinaryenConstGetValueI32(expr));
+          case NativeType.I64: return this.createI64(_BinaryenConstGetValueI64Low(expr), _BinaryenConstGetValueI64High(expr));
+          case NativeType.F32: return this.createF32(_BinaryenConstGetValueF32(expr));
+          case NativeType.F64: return this.createF64(_BinaryenConstGetValueF64(expr));
+          default: throw new Error("unexpected constant type");
+        }
 
-export function getConstValueI64Low(expr: ExpressionRef): i32 {
-  return _BinaryenConstGetValueI64Low(expr);
-}
+      case ExpressionId.GetLocal:
+        return _BinaryenGetLocal(this.ref, _BinaryenGetLocalGetIndex(expr), _BinaryenExpressionGetType(expr));
 
-export function getConstValueI64High(expr: ExpressionRef): i32 {
-  return _BinaryenConstGetValueI64High(expr);
-}
+      // case ExpressionId.GetGlobal: explodes if it doesn't have a name
+      //   return _BinaryenGetGlobal(this.ref, _BinaryenGetGlobalGetName(expr), _BinaryenExpressionGetType(expr));
 
-export function getConstValueI64(expr: ExpressionRef): I64 {
-  return new I64(
-    _BinaryenConstGetValueI64Low(expr),
-    _BinaryenConstGetValueI64High(expr)
-  );
-}
+      case ExpressionId.Load:
+        if (!(nested1 = this.cloneExpression(_BinaryenLoadGetPtr(expr), noSideEffects, maxDepth - 1))) break;
+        return _BinaryenLoadIsAtomic(expr)
+          ? _BinaryenAtomicLoad(this.ref, _BinaryenLoadGetBytes(expr), _BinaryenLoadGetOffset(expr), _BinaryenExpressionGetType(expr), nested1)
+          : _BinaryenLoad(this.ref, _BinaryenLoadGetBytes(expr), _BinaryenLoadIsSigned(expr) ? 1 : 0, _BinaryenLoadGetOffset(expr),  _BinaryenLoadGetAlign(expr), _BinaryenExpressionGetType(expr), nested1);
 
-export function getConstValueF32(expr: ExpressionRef): f32 {
-  return _BinaryenConstGetValueF32(expr);
-}
+      case ExpressionId.Unary:
+        if (!(nested1 = this.cloneExpression(_BinaryenUnaryGetValue(expr), noSideEffects, maxDepth - 1))) break;
+        return _BinaryenUnary(this.ref, _BinaryenUnaryGetOp(expr), nested1);
 
-export function getConstValueF64(expr: ExpressionRef): f64 {
-  return _BinaryenConstGetValueF64(expr);
-}
-
-export function getGetLocalIndex(expr: ExpressionRef): Index {
-  return _BinaryenGetLocalGetIndex(expr);
-}
-
-export function getGetGlobalName(expr: ExpressionRef): string | null {
-  return readString(_BinaryenGetGlobalGetName(expr));
-}
-
-export function isLoadAtomic(expr: ExpressionRef): bool {
-  return _BinaryenLoadIsAtomic(expr);
-}
-
-export function isLoadSigned(expr: ExpressionRef): bool {
-  return _BinaryenLoadIsSigned(expr);
-}
-
-export function getLoadBytes(expr: ExpressionRef): u32 {
-  return _BinaryenLoadGetBytes(expr);
-}
-
-export function getLoadOffset(expr: ExpressionRef): u32 {
-  return _BinaryenLoadGetOffset(expr);
-}
-
-export function getLoadPtr(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenLoadGetPtr(expr);
-}
-
-export function getFunctionBody(func: FunctionRef): ExpressionRef {
-  return _BinaryenFunctionGetBody(func);
-}
-
-export function getUnaryOp(expr: ExpressionRef): UnaryOp {
-  return _BinaryenUnaryGetOp(expr);
-}
-
-export function getUnaryValue(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenUnaryGetValue(expr);
-}
-
-export function getBinaryOp(expr: ExpressionRef): BinaryOp {
-  return _BinaryenBinaryGetOp(expr);
-}
-
-export function getBinaryLeft(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenBinaryGetLeft(expr);
-}
-
-export function getBinaryRight(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenBinaryGetRight(expr);
-}
-
-export function getSelectIfTrue(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenSelectGetIfTrue(expr);
-}
-
-export function getSelectIfFalse(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenSelectGetIfFalse(expr);
-}
-
-export function getSelectCondition(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenSelectGetCondition(expr);
-}
-
-export function getReturnValue(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenReturnGetValue(expr);
-}
-
-export function getDropValue(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenDropGetValue(expr);
-}
-
-export function getHostOp(expr: ExpressionRef): HostOp {
-  return _BinaryenHostGetOp(expr);
-}
-
-export function getHostNameOperand(expr: ExpressionRef): string | null {
-  return readString(_BinaryenHostGetNameOperand(expr));
-}
-
-export function getHostOperands(expr: ExpressionRef): BinaryenExpressionRef[] {
-  const num: Index = _BinaryenHostGetNumOperands(expr);
-  const arr: BinaryenExpressionRef[] = new Array(num);
-  for (let i: Index = 0; i < num; ++i) arr[i] = _BinaryenHostGetOperand(expr, i);
-  return arr;
+      case ExpressionId.Binary:
+        if (!(nested1 = this.cloneExpression(_BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth - 1))) break;
+        if (!(nested2 = this.cloneExpression(_BinaryenBinaryGetRight(expr), noSideEffects, maxDepth - 1))) break;
+        return _BinaryenBinary(this.ref, _BinaryenBinaryGetOp(expr), nested1, nested2);
+    }
+    return 0;
+  }
 }
 
 export class Relooper {
@@ -990,6 +906,7 @@ function allocI32Array(i32s: i32[] | null): usize {
   let idx: usize = ptr;
   for (let i: i32 = 0, k: i32 = (<i32[]>i32s).length; i < k; ++i) {
     let val: i32 = (<i32[]>i32s)[i];
+    // store<i32>(idx, val) is not portable
     store<u8>(idx    , ( val         & 0xff) as u8);
     store<u8>(idx + 1, ((val >>   8) & 0xff) as u8);
     store<u8>(idx + 2, ((val >>  16) & 0xff) as u8);
@@ -1022,7 +939,7 @@ function stringLengthUTF8(str: string): usize {
 }
 
 function allocString(str: string | null): usize {
-  if (!str) return 0;
+  if (str == null) return 0;
   const ptr: usize = Heap.allocate(stringLengthUTF8((<string>str)) + 1);
   let idx: usize = ptr;
   for (let i: i32 = 0, k: i32 = (<string>str).length; i < k; ++i) {
@@ -1064,18 +981,18 @@ function allocString(str: string | null): usize {
 
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
-  const utf16le: u32[] = [];
+  const arr: i32[] = [];
   // the following is based on Emscripten's UTF8ArrayToString
   let cp: u32;
   let u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
   while (cp = load<u8>(ptr++)) {
     if (!(cp & 0x80)) {
-      utf16le.push(cp);
+      arr.push(cp);
       continue;
     }
     u1 = load<u8>(ptr++) & 63;
     if ((cp & 0xE0) == 0xC0) {
-      utf16le.push(((cp & 31) << 6) | u1);
+      arr.push(((cp & 31) << 6) | u1);
       continue;
     }
     u2 = load<u8>(ptr++) & 63;
@@ -1095,14 +1012,14 @@ export function readString(ptr: usize): string | null {
         }
       }
     }
-    if (cp < 0x10000) {
-      utf16le.push(cp);
-    } else {
-      var ch = cp - 0x10000;
-      utf16le.push(0xD800 | (ch >> 10));
-      utf16le.push(0xDC00 | (ch & 0x3FF));
-    }
+    // if (cp < 0x10000) {
+    //   arr.push(cp);
+    // } else {
+    //   var ch = cp - 0x10000;
+    //   arr.push(0xD800 | (ch >> 10));
+    //   arr.push(0xDC00 | (ch & 0x3FF));
+    // }
   }
-  // FIXME: not portable and prone to stack overflows. Maybe use CString from stdlib?
-  return String.fromCharCode.apply(utf16le);
+  // return String.fromCharCodes(arr);
+  return String.fromCodePoints(arr);
 }
