@@ -1,0 +1,8 @@
+{
+  "name": "@assemblyscript/i64-polyfill-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "asc assembly/i64.ts -t assembly/i64.wast -c && asc assembly/i64.ts -b i64.wasm -t assembly/i64.optimized.wast -O -c"
+  }
+}

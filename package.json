@@ -11,7 +11,7 @@
     "url": "https://github.com/AssemblyScript/next/issues"
   },
   "dependencies": {
-    "@types/node": "^8.0.54",
+    "@types/node": "^8.0.58",
     "binaryen": "40.0.0-nightly.20171209",
     "minimist": "^1.2.0",
     "source-map-support": "^0.5.0"
@@ -34,7 +34,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {
-    "asc": "bin/asc.js"
+    "asc": "bin/asc"
   },
   "scripts": {
     "build": "webpack",

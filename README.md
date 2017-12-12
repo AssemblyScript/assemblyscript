@@ -5,9 +5,9 @@ AssemblyScript NEXT
 
 **AssemblyScript** is a new compiler targeting [WebAssembly](http://webassembly.org) while utilizing [TypeScript](http://www.typescriptlang.org)'s syntax and [node](https://nodejs.org)'s vibrant ecosystem. Instead of requiring complex toolchains to set up, you can simply `npm install` it - or run it in a browser.
 
-By compiling a variant of TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR, the resulting module can be validated, optimized, emitted in WebAssembly text or binary format and converted to [asm.js](http://asmjs.org) as a polyfill.
+By compiling syntactially but not necessarily semantically valid TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR, the resulting module can be validated, optimized, emitted in WebAssembly text or binary format and converted to [asm.js](http://asmjs.org) as a polyfill.
 
-The compiler itself is written in "portable AssemblyScript" so it can be compiled to both JavaScript using `tsc` and, eventually, to WebAssembly using `asc`.
+The compiler itself utilizies "portable definitions" so it can be compiled to both JavaScript using `tsc` and, eventually, to WebAssembly using `asc`.
 
 Development status
 ------------------
@@ -16,12 +16,10 @@ This version of the compiler (0.5.0, NEXT) is relatively new and does not yet su
 
 A few early examples to get an idea:
 
-* **memcpy** using load/store derived from [musl](http://www.musl-libc.org)<br />
-  [source](./tests/compiler/memcpy.ts) - [wast](./tests/compiler/memcpy.optimized.wast)
 * **Conway's Game of Life** as seen on [dcode.io](http://dcode.io)<br />
-  [source](./tests/compiler/game-of-life.ts) - [wast](./tests/compiler/game-of-life.optimized.wast) - [html](./tests/compiler/game-of-life.html)
+  [source](./examples/game-of-life/assembly/game-of-life.ts) - [wast](./examples/game-of-life/assembly/game-of-life.optimized.wast) - [html](./examples/game-of-life/game-of-life.html)
 * **i64 polyfill** using 32-bit integers<br />
-  [source](./tests/compiler/i64.ts) - [wast](./tests/compiler/i64.optimized.wast)
+  [source](./examples/i64-polyfill/assembly/i64.ts) - [wast](./examples/i64-polyfill/assembly/i64.optimized.wast) - [js](./examples/i64-polyfill/index.js)
 
 Getting started
 ---------------
@@ -34,7 +32,12 @@ $> cd next
 $> npm install
 ```
 
-Author your module in AssemblyScript ([definitions](./std/assembly.d.ts), [base config](./std/assembly.json)) or portable AssemblyScript ([definitions](./std/portable.d.ts), [base config](./std/portable.json)) and run:
+Author your module either using
+
+* the [assembly definitions](./std/assembly.d.ts) ([base config](./std/assembly.json)) if all you care about is targeting WebAssembly/asm.js or
+* the [portable definitions](./std/portable.d.ts) ([base config](./std/portable.json)) if you also want to compile to JavaScript using `tsc`
+
+and run:
 
 ```
 $> node bin/asc yourModule.ts
@@ -67,7 +70,7 @@ Options:
                     js     Replace trapping operations with JS semantics.
 ```
 
-Unless a bundle has been built to `dist/`, `asc` runs the TypeScript sources on the fly via [ts-node](https://www.npmjs.com/package/ts-node). Useful for development.
+Unless a bundle has been built to `dist/`, `asc` runs the (portable) TypeScript sources on the fly via [ts-node](https://www.npmjs.com/package/ts-node). Useful for development.
 
 Building
 --------

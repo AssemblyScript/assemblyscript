@@ -1,28 +1,28 @@
 (module
  (type $iiv (func (param i32 i32)))
  (type $v (func))
- (global $game-of-life/w (mut i32) (i32.const 0))
- (global $game-of-life/h (mut i32) (i32.const 0))
- (global $game-of-life/s (mut i32) (i32.const 0))
+ (global $assembly/game-of-life/w (mut i32) (i32.const 0))
+ (global $assembly/game-of-life/h (mut i32) (i32.const 0))
+ (global $assembly/game-of-life/s (mut i32) (i32.const 0))
  (memory $0 1)
- (export "init" (func $game-of-life/init))
- (export "step" (func $game-of-life/step))
+ (export "init" (func $assembly/game-of-life/init))
+ (export "step" (func $assembly/game-of-life/step))
  (export "memory" (memory $0))
- (func $game-of-life/init (; 0 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (set_global $game-of-life/w
+ (func $assembly/game-of-life/init (; 0 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (set_global $assembly/game-of-life/w
    (get_local $0)
   )
-  (set_global $game-of-life/h
+  (set_global $assembly/game-of-life/h
    (get_local $1)
   )
-  (set_global $game-of-life/s
+  (set_global $assembly/game-of-life/s
    (i32.mul
-    (get_global $game-of-life/w)
-    (get_global $game-of-life/h)
+    (get_global $assembly/game-of-life/w)
+    (get_global $assembly/game-of-life/h)
    )
   )
  )
- (func $game-of-life/step (; 1 ;) (type $v)
+ (func $assembly/game-of-life/step (; 1 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -33,13 +33,13 @@
   (local $7 i32)
   (set_local $6
    (i32.sub
-    (get_global $game-of-life/h)
+    (get_global $assembly/game-of-life/h)
     (i32.const 1)
    )
   )
   (set_local $7
    (i32.sub
-    (get_global $game-of-life/w)
+    (get_global $assembly/game-of-life/w)
     (i32.const 1)
    )
   )
@@ -50,7 +50,7 @@
    (if
     (i32.lt_u
      (get_local $0)
-     (get_global $game-of-life/h)
+     (get_global $assembly/game-of-life/h)
     )
     (block
      (set_local $4
@@ -83,7 +83,7 @@
       (if
        (i32.lt_u
         (get_local $1)
-        (get_global $game-of-life/w)
+        (get_global $assembly/game-of-life/w)
        )
        (block
         (set_local $2
@@ -98,7 +98,7 @@
                  (i32.add
                   (i32.mul
                    (get_local $4)
-                   (get_global $game-of-life/w)
+                   (get_global $assembly/game-of-life/w)
                   )
                   (tee_local $2
                    (select
@@ -116,7 +116,7 @@
                  (i32.add
                   (i32.mul
                    (get_local $4)
-                   (get_global $game-of-life/w)
+                   (get_global $assembly/game-of-life/w)
                   )
                   (get_local $1)
                  )
@@ -126,7 +126,7 @@
                 (i32.add
                  (i32.mul
                   (get_local $4)
-                  (get_global $game-of-life/w)
+                  (get_global $assembly/game-of-life/w)
                  )
                  (tee_local $3
                   (select
@@ -148,7 +148,7 @@
                (i32.add
                 (i32.mul
                  (get_local $0)
-                 (get_global $game-of-life/w)
+                 (get_global $assembly/game-of-life/w)
                 )
                 (get_local $2)
                )
@@ -158,7 +158,7 @@
               (i32.add
                (i32.mul
                 (get_local $0)
-                (get_global $game-of-life/w)
+                (get_global $assembly/game-of-life/w)
                )
                (get_local $3)
               )
@@ -168,7 +168,7 @@
              (i32.add
               (i32.mul
                (get_local $5)
-               (get_global $game-of-life/w)
+               (get_global $assembly/game-of-life/w)
               )
               (get_local $2)
              )
@@ -178,7 +178,7 @@
             (i32.add
              (i32.mul
               (get_local $5)
-              (get_global $game-of-life/w)
+              (get_global $assembly/game-of-life/w)
              )
              (get_local $1)
             )
@@ -188,7 +188,7 @@
            (i32.add
             (i32.mul
              (get_local $5)
-             (get_global $game-of-life/w)
+             (get_global $assembly/game-of-life/w)
             )
             (get_local $3)
            )
@@ -200,7 +200,7 @@
           (i32.add
            (i32.mul
             (get_local $0)
-            (get_global $game-of-life/w)
+            (get_global $assembly/game-of-life/w)
            )
            (get_local $1)
           )
@@ -222,10 +222,10 @@
           (i32.store8
            (i32.add
             (i32.add
-             (get_global $game-of-life/s)
+             (get_global $assembly/game-of-life/s)
              (i32.mul
               (get_local $0)
-              (get_global $game-of-life/w)
+              (get_global $assembly/game-of-life/w)
              )
             )
             (get_local $1)
@@ -241,10 +241,10 @@
           (i32.store8
            (i32.add
             (i32.add
-             (get_global $game-of-life/s)
+             (get_global $assembly/game-of-life/s)
              (i32.mul
               (get_local $0)
-              (get_global $game-of-life/w)
+              (get_global $assembly/game-of-life/w)
              )
             )
             (get_local $1)

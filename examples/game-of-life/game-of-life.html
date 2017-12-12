@@ -1,11 +1,7 @@
-<canvas id="canvas" width="640" height="480"></canvas>
-<script src="../../node_modules/binaryen/index.js"></script><script>
+<canvas id="canvas" width="640" height="480"></canvas><script>
 
-// Fetch the .wast (just because we dont's store the .wasm in git)
-fetch("game-of-life.optimized.wast").then(response => response.text()).then(text => {
-
-  // Convert it to binary format
-  var binary = Binaryen.parseText(text).emitBinary();
+// Fetch the .wasm
+fetch("game-of-life.wasm").then(response => response.arrayBuffer()).then(binary => {
 
   // Instantiate the module
   var module = new WebAssembly.Module(binary);

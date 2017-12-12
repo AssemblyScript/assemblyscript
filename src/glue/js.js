@@ -42,11 +42,11 @@ globalScope["load"] = function load(ptr) {
 var Module = require("../module").Module;
 Module.prototype.toBinary = function toBinary(bufferSize) {
   if (!bufferSize) bufferSize = 1024 * 1024; // FIXME: see binaryen.js-post.js in Binaryen
-  var ptr = _malloc(bufferSize);
+  var ptr = Heap.allocate(bufferSize);
   var len = this.write(ptr, bufferSize);
   var ret = new Uint8Array(len);
   ret.set(binaryen.HEAPU8.subarray(ptr, ptr + len));
-  _free(ptr);
+  Heap.dispose(ptr);
   return ret;
 };
 Module.prototype.toText = function toText() {

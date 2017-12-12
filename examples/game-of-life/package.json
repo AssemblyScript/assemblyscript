@@ -1,0 +1,9 @@
+{
+  "name": "@assemblyscript/game-of-life-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "asc assembly/game-of-life.ts -t assembly/game-of-life.wast -c && asc assembly/game-of-life.ts -b game-of-life.wasm -t assembly/game-of-life.optimized.wast -O -c",
+    "browser": "game-of-life.html"
+  }
+}
