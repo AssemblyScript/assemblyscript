@@ -2,7 +2,7 @@ import { Compiler, Target, typeToNativeType, typeToNativeOne } from "./compiler"
 import { DiagnosticCode } from "./diagnostics";
 import { Node, Expression } from "./ast";
 import { Type } from "./types";
-import { Module, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType } from "./module";
+import { Module, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType, FunctionTypeRef } from "./module";
 import { Program, FunctionPrototype, Local } from "./program";
 
 /** Initializes the specified program with built-in functions. */
@@ -33,23 +33,23 @@ export function initialize(program: Program): void {
   addFunction(program, "isNaN", true);
   addFunction(program, "isFinite", true);
   addFunction(program, "assert");
-  // addFunction(program, "fmod", false, true);
-  // addFunction(program, "pow", true, true);
+  addFunction(program, "parseInt");
+  addFunction(program, "parseFloat");
 }
 
 /** Adds a built-in function to the specified program. */
-function addFunction(program: Program, name: string, isGeneric: bool = false, isImport: bool = false): void {
+function addFunction(program: Program, name: string, isGeneric: bool = false): void {
   let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
   prototype.isBuiltIn = true;
   prototype.isGeneric = isGeneric;
-  prototype.isImport = isImport;
   program.elements.set(name, prototype);
 }
 
 /** Compiles a call to a built-in function. */
-export function compileCall(compiler: Compiler, internalName: string, typeArguments: Type[], operands: Expression[], reportNode: Node): ExpressionRef {
+export function compileCall(compiler: Compiler, prototype: FunctionPrototype, typeArguments: Type[], operands: Expression[], reportNode: Node): ExpressionRef {
   const module: Module = compiler.module;
   const usizeType: Type = select<Type>(Type.usize64, Type.usize32, compiler.options.target == Target.WASM64);
+  const nativeUsizeType: NativeType = select<NativeType>(NativeType.I64, NativeType.I32, compiler.options.target == Target.WASM64);
 
   let arg0: ExpressionRef,
       arg1: ExpressionRef,
@@ -59,8 +59,9 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
   let tempLocal1: Local;
 
   let type: Type;
+  var ftype: FunctionTypeRef;
 
-  switch (internalName) {
+  switch (prototype.internalName) {
 
     case "clz": // clz<T>(value: T) -> T
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
@@ -498,8 +499,42 @@ export function compileCall(compiler: Compiler, internalName: string, typeArgume
             module.createUnreachable()
           );
 
-    // case "fmod":
-    // case "pow":
+    case "parseInt": // takes a pointer to the string
+      compiler.currentType = Type.f64;
+      if (typeArguments.length != 0) {
+        compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "0", typeArguments.length.toString(10));
+        return module.createUnreachable();
+      }
+      if (operands.length < 1) {
+        compiler.error(DiagnosticCode.Expected_at_least_0_arguments_but_got_1, reportNode.range, "1", operands.length.toString(10));
+        return module.createUnreachable();
+      }
+      if (operands.length > 2) {
+        compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range, "2", operands.length.toString(10));
+        return module.createUnreachable();
+      }
+      if (!prototype.isCompiled) {
+        if (!(ftype = module.getFunctionTypeBySignature(NativeType.F64, [ nativeUsizeType, NativeType.I32 ])))
+              ftype = module.addFunctionType(nativeUsizeType == NativeType.I64 ? "FIi" : "Fii", NativeType.F64, [ nativeUsizeType, NativeType.I32 ]);
+        module.addFunctionImport("parseInt", "env", "parseInt", ftype); // FIXME: can't call with i64 pointers (WASM64)
+        prototype.isCompiled = true;
+      }
+      arg0 = compiler.compileExpression(operands[0], usizeType); // reports
+      arg1 = operands.length == 2 ? compiler.compileExpression(operands[1], Type.i32) : module.createI32(-1); // -1 marks omitted
+      return module.createCallImport("parseInt", [ arg0, arg1 ], NativeType.F64);
+
+    case "parseFloat": // takes a pointer to the string
+      compiler.currentType = Type.f64;
+      if (!validateCall(compiler, typeArguments, 0, operands, 1, reportNode))
+        return module.createUnreachable();
+      if (!prototype.isCompiled) {
+        if (!(ftype = module.getFunctionTypeBySignature(NativeType.F64, [ nativeUsizeType ])))
+              ftype = module.addFunctionType(nativeUsizeType == NativeType.I64 ? "FI" : "Fi", NativeType.F64, [ nativeUsizeType ]);
+        module.addFunctionImport("parseFloat", "env", "parseFloat", ftype); // FIXME: can't call with i64 pointers (WASM64)
+        prototype.isCompiled = true;
+      }
+      arg0 = compiler.compileExpression(operands[0], usizeType); // reports
+      return module.createCallImport("parseFloat", [ arg0 ], NativeType.F64);
   }
   return 0;
 }

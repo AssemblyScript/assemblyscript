@@ -52,6 +52,10 @@ declare function unreachable(): any; // sic
 declare function changetype<T1,T2>(value: T1): T2;
 /** Traps if the specified value evaluates to `false`. */
 declare function assert(isTrue: bool): void;
+/** Parses an integer string to a 64-bit float. */
+declare function parseInt(str: string, radix?: i32): f64;
+/** Parses a floating point string to a 64-bit float. */
+declare function parseFloat(str: string): f64;
 
 // Portable standard library
 // Everything marked @deprecated is a temporary filler. Do not use.
@@ -143,6 +147,3 @@ declare namespace console {
   /** @deprecated */
   function log(message: string): void;
 }
-
-/** @deprecated */
-declare function parseFloat(str: string): f64;

@@ -72,6 +72,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   export/add
   export/sub
   export/a

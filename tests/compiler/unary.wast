@@ -661,6 +661,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   unary/i
   unary/I
   unary/f

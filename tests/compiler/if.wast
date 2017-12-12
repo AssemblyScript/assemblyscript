@@ -74,6 +74,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   if/ifThenElse
   if/ifThen
   if/ifThenElseBlock

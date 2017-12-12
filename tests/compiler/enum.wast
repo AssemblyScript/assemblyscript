@@ -64,6 +64,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   enum/Implicit
   enum/Explicit
   enum/Mixed

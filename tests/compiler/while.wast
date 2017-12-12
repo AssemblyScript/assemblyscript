@@ -88,6 +88,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   while/loopWhile
   while/loopWhileInWhile
 [program.exports]

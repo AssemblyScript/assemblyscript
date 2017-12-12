@@ -844,6 +844,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   binary/b
   binary/i
   binary/I

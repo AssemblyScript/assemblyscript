@@ -356,6 +356,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   tlsf/fls
   tlsf/ffs
   tlsf/ALIGN_SIZE_LOG2

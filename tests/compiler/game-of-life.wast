@@ -336,6 +336,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   game-of-life/w
   game-of-life/h
   game-of-life/s

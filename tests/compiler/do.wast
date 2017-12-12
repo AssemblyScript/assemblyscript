@@ -79,6 +79,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   do/loopDo
   do/loopDoInDo
 [program.exports]

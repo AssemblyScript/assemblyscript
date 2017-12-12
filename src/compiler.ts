@@ -1673,7 +1673,7 @@ export class Compiler extends DiagnosticEmitter {
         functionInstance = <Function | null>functionPrototype.instances.get(sb.join(","));
         if (!functionInstance) {
           this.currentType = contextualType;
-          let expr: ExpressionRef = compileBuiltinCall(this, functionPrototype.internalName, resolvedTypeArguments, expression.arguments, expression);
+          let expr: ExpressionRef = compileBuiltinCall(this, functionPrototype, resolvedTypeArguments, expression.arguments, expression);
           if (!expr) {
             this.error(DiagnosticCode.Operation_not_supported, expression.range);
             return this.module.createUnreachable();

@@ -41,6 +41,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
 [program.exports]
   
 ;)

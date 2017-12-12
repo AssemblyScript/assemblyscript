@@ -1,6 +1,6 @@
 let b: bool;
 
-// integer builtins
+// integers
 
 let i: i32;
 
@@ -40,7 +40,7 @@ I = abs<i64>(-42); assert(I == 42);
 I = max<i64>(1, 2); assert(I == 2);
 I = min<i64>(1, 2); assert(i == 1);
 
-// floating point builtins
+// floats
 
 let f: f32;
 
@@ -104,7 +104,7 @@ F = trunc<f64>(1.25);
 b = isNaN<f64>(1.25);
 b = isFinite<f64>(1.25);
 
-// load and store builtins
+// load and store
 
 i = load<i32>(8); store<i32>(8, i);
 store<i32>(8, load<i32>(8));
@@ -115,7 +115,7 @@ store<f32>(8, load<f32>(8));
 F = load<f64>(8); store<f64>(8, F);
 store<f64>(8, load<f64>(8));
 
-// reinterpretation builtins
+// reinterpretation
 
 reinterpret<f32,i32>(1.25);
 reinterpret<i32,f32>(25);
@@ -127,7 +127,7 @@ f = reinterpret<i32,f32>(25);
 I = reinterpret<f64,i64>(1.25);
 F = reinterpret<i64,f64>(25);
 
-// host builtins
+// host
 
 let s: usize;
 
@@ -137,7 +137,7 @@ grow_memory(1);
 s = current_memory();
 s = grow_memory(1);
 
-// other builtins
+// other
 
 select<i32>(10, 20, true);
 select<i64>(100, 200, false);
@@ -151,7 +151,7 @@ F = select<f64>(12.5, 25.0, false);
 
 if (0) unreachable();
 
-// AS specific builtins
+// AS specific
 
 sizeof<u8>();
 sizeof<u16>();
@@ -176,3 +176,11 @@ assert(!isFinite<f64>(NaN));
 assert(!isFinite<f64>(Infinity));
 assert(isFinite<f32>(0));
 assert(isFinite<f64>(0));
+
+// imported
+
+// TODO: Can't be interpreted due to 'Fatal: callImport: unknown import: env.parseInt'
+
+// parseInt(0);
+// parseInt(0, 10);
+// parseFloat(0);

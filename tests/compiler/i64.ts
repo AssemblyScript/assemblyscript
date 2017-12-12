@@ -102,14 +102,14 @@ export function shl(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void 
   hi = <u32>(ret >>> 32);
 }
 
-export function shr_u(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
-  const ret: u64 = (<u64>loLeft | <u64>hiLeft << 32) >> (<u64>loRight | <u64>hiRight << 32);
+export function shr_s(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
+  const ret: u64 = <u64>(<i64>(<u64>loLeft | <u64>hiLeft << 32) >> <i64>(<u64>loRight | <u64>hiRight << 32));
   lo = <u32>ret;
   hi = <u32>(ret >>> 32);
 }
 
-export function shr_s(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
-  const ret: u64 = <u64>(<i64>(<u64>loLeft | <u64>hiLeft << 32) >> <i64>(<u64>loRight | <u64>hiRight << 32));
+export function shr_u(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
+  const ret: u64 = (<u64>loLeft | <u64>hiLeft << 32) >> (<u64>loRight | <u64>hiRight << 32);
   lo = <u32>ret;
   hi = <u32>(ret >>> 32);
 }

@@ -61,6 +61,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   ternary/a
 [program.exports]
   

@@ -1087,6 +1087,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   builtins/b
   builtins/i
   builtins/I

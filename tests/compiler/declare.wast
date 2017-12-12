@@ -34,6 +34,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   declare/external
 [program.exports]
   declare/external

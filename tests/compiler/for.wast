@@ -175,6 +175,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   for/i
 [program.exports]
   

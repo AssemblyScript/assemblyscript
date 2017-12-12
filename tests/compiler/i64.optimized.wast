@@ -22,8 +22,8 @@
  (export "or" (func $i64/or))
  (export "xor" (func $i64/xor))
  (export "shl" (func $i64/shl))
- (export "shr_u" (func $i64/shr_u))
  (export "shr_s" (func $i64/shr_s))
+ (export "shr_u" (func $i64/shr_u))
  (export "rotl" (func $i64/rotl_))
  (export "rotr" (func $i64/rotr_))
  (export "eq" (func $i64/eq))
@@ -580,12 +580,12 @@
    )
   )
  )
- (func $i64/shr_u (; 17 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $i64/shr_s (; 17 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   (set_global $i64/lo
    (i32.wrap/i64
     (tee_local $4
-     (i64.shr_u
+     (i64.shr_s
       (i64.or
        (i64.extend_u/i32
         (get_local $0)
@@ -621,12 +621,12 @@
    )
   )
  )
- (func $i64/shr_s (; 18 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $i64/shr_u (; 18 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   (set_global $i64/lo
    (i32.wrap/i64
     (tee_local $4
-     (i64.shr_s
+     (i64.shr_u
       (i64.or
        (i64.extend_u/i32
         (get_local $0)

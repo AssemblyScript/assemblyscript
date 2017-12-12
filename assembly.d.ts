@@ -90,6 +90,10 @@ declare function isNaN<T = f32 | f64>(value: T): bool;
 declare function isFinite<T = f32 | f64>(value: T): bool;
 /** Traps if the specified value evaluates to `false`. */
 declare function assert(isTrue: bool): void;
+/** Parses an integer string to a 64-bit float. */
+declare function parseInt(str: string, radix?: i32): f64;
+/** Parses a string to a 64-bit float. */
+declare function parseFloat(str: string): f64;
 
 // Internal decorators (not yet implemented)
 

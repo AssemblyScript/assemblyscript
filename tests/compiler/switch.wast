@@ -173,6 +173,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   switch/doSwitch
   switch/doSwitchDefaultFirst
   switch/doSwitchDefaultOmitted

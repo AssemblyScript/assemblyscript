@@ -2161,6 +2161,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   memcpy/memcpy
   memcpy/base
   memcpy/dest

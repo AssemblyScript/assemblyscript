@@ -295,6 +295,8 @@
   isNaN
   isFinite
   assert
+  parseInt
+  parseFloat
   logical/i
   logical/I
   logical/f
