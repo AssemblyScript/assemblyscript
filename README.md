@@ -7,7 +7,7 @@ AssemblyScript NEXT
 
 By compiling syntactially but not necessarily semantically valid TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR, the resulting module can be validated, optimized, emitted in WebAssembly text or binary format and converted to [asm.js](http://asmjs.org) as a polyfill.
 
-The compiler itself utilizies "portable definitions" so it can be compiled to both JavaScript using `tsc` and, eventually, to WebAssembly using `asc`.
+The compiler itself utilizes "portable definitions" so it can be compiled to both JavaScript using `tsc` and, eventually, to WebAssembly using `asc`.
 
 Development status
 ------------------
@@ -32,7 +32,7 @@ $> cd next
 $> npm install
 ```
 
-Author your module either using
+Author your module using either
 
 * the [assembly definitions](./std/assembly.d.ts) ([base config](./std/assembly.json)) if all you care about is targeting WebAssembly/asm.js or
 * the [portable definitions](./std/portable.d.ts) ([base config](./std/portable.json)) if you also want to compile to JavaScript using `tsc`

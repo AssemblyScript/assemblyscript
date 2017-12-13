@@ -61,6 +61,7 @@ class QueuedImport {
 
 const noTypesYet: Map<string,Type> = new Map();
 
+/** Represents an AssemblyScript program. */
 export class Program extends DiagnosticEmitter {
 
   /** Array of source files. */
@@ -76,6 +77,7 @@ export class Program extends DiagnosticEmitter {
   /** Exports of individual files by internal name. Not global exports. */
   exports: Map<string,Element> = new Map();
 
+  /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
     this.sources = new Array();
@@ -152,7 +154,7 @@ export class Program extends DiagnosticEmitter {
 
     let element: Element | null;
 
-    // queued imports should be resolvable now
+    // queued imports should be resolvable now through traversing exports and queued exports
     for (let i: i32 = 0; i < queuedImports.length;) {
       const queuedImport: QueuedImport = queuedImports[i];
       element = this.tryResolveImport(queuedImport.referencedName, queuedExports);
@@ -165,7 +167,7 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // queued exports should be resolvable noww
+    // queued exports should be resolvable now that imports are finalized
     for (let [exportName, queuedExport] of queuedExports) {
       let currentExport: QueuedExport | null = queuedExport;
       do {
@@ -190,6 +192,7 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Tries to resolve an import by traversing exports and queued exports. */
   private tryResolveImport(referencedName: string, queuedExports: Map<string,QueuedExport>): Element | null {
     let element: Element | null;
     do {
@@ -215,7 +218,7 @@ export class Program extends DiagnosticEmitter {
     }
     const prototype: ClassPrototype = new ClassPrototype(this, internalName, declaration);
     this.elements.set(internalName, prototype);
-    if (hasModifier(ModifierKind.EXPORT, declaration.modifiers)) {
+    if (prototype.isExported) {
       if (this.exports.has(internalName))
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
       else
@@ -281,7 +284,7 @@ export class Program extends DiagnosticEmitter {
     }
     const enm: Enum = new Enum(this, internalName, declaration);
     this.elements.set(internalName, enm);
-    if (hasModifier(ModifierKind.EXPORT, declaration.modifiers)) {
+    if (enm.isExported) {
       if (this.exports.has(internalName))
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
       else
@@ -311,12 +314,10 @@ export class Program extends DiagnosticEmitter {
 
   private initializeExport(member: ExportMember, internalPath: string | null, queuedExports: Map<string,QueuedExport>): void {
     const externalName: string = member.range.source.internalPath + PATH_DELIMITER + member.externalIdentifier.name;
-
     if (this.exports.has(externalName)) {
       this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalIdentifier.range, externalName);
       return;
     }
-
     let referencedName: string;
 
     // export local element
@@ -393,14 +394,11 @@ export class Program extends DiagnosticEmitter {
       return;
     }
     this.elements.set(internalName, prototype);
-    if (hasModifier(ModifierKind.EXPORT, declaration.modifiers)) {
+    if (prototype.isExported) {
       if (this.exports.has(internalName))
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
       else
         this.exports.set(internalName, prototype);
-    }
-    if (hasModifier(ModifierKind.DECLARE, declaration.modifiers)) {
-      prototype.isDeclare = true;
     }
   }
 
@@ -459,16 +457,17 @@ export class Program extends DiagnosticEmitter {
 
   private initializeInterface(declaration: InterfaceDeclaration): void {
     const internalName: string = declaration.internalName;
-    const interfacePrototype: InterfacePrototype = new InterfacePrototype(this, internalName, declaration);
+    const prototype: InterfacePrototype = new InterfacePrototype(this, internalName, declaration);
     if (this.elements.has(internalName))
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
     else
-      this.elements.set(internalName, interfacePrototype);
-    if (hasModifier(ModifierKind.EXPORT, declaration.modifiers)) {
+      this.elements.set(internalName, prototype);
+
+    if (prototype.isExported) {
       if (this.exports.has(internalName))
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
       else
-        this.exports.set(internalName, interfacePrototype);
+        this.exports.set(internalName, prototype);
     }
     const memberDeclarations: DeclarationStatement[] = declaration.members;
     for (let j: i32 = 0, l: i32 = memberDeclarations.length; j < l; ++j) {
@@ -476,11 +475,11 @@ export class Program extends DiagnosticEmitter {
       switch (memberDeclaration.kind) {
 
         case NodeKind.FIELD:
-          this.initializeField(<FieldDeclaration>memberDeclaration, interfacePrototype);
+          this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
 
         case NodeKind.METHOD:
-          this.initializeMethod(<MethodDeclaration>memberDeclaration, interfacePrototype);
+          this.initializeMethod(<MethodDeclaration>memberDeclaration, prototype);
           break;
 
         default:
@@ -492,11 +491,12 @@ export class Program extends DiagnosticEmitter {
   private initializeNamespace(declaration: NamespaceDeclaration): void {
     const internalName: string = declaration.internalName;
     const namespace: Namespace = new Namespace(this, internalName, declaration);
+
     if (this.elements.has(internalName))
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
     else {
       this.elements.set(internalName, namespace);
-      if (hasModifier(ModifierKind.EXPORT, declaration.modifiers)) {
+      if (namespace.isExported) {
         if (this.exports.has(internalName))
           this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
         else
@@ -504,8 +504,8 @@ export class Program extends DiagnosticEmitter {
       }
     }
     const members: Statement[] = declaration.members;
-    for (let j: i32 = 0, l: i32 = members.length; j < l; ++j) {
-      const statement: Statement = members[j];
+    for (let i: i32 = 0, k: i32 = members.length; i < k; ++i) {
+      const statement: Statement = members[i];
       switch (statement.kind) {
 
         case NodeKind.CLASS:
@@ -540,7 +540,6 @@ export class Program extends DiagnosticEmitter {
 
   private initializeVariables(statement: VariableStatement, isNamespaceMember: bool = false): void {
     const declarations: VariableDeclaration[] = statement.declarations;
-    const isExport: bool = !isNamespaceMember && hasModifier(ModifierKind.EXPORT, statement.modifiers);
     for (let i: i32 = 0, k: i32 = declarations.length; i < k; ++i) {
       const declaration: VariableDeclaration = declarations[i];
       const internalName: string = declaration.internalName;
@@ -549,7 +548,7 @@ export class Program extends DiagnosticEmitter {
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       else {
         this.elements.set(internalName, global);
-        if (isExport) {
+        if (global.isExported) {
           if (this.exports.has(internalName))
             this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
           else
@@ -559,6 +558,7 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Resolves a {@link TypeNode} to a concrete {@link Type}. */
   resolveType(node: TypeNode, contextualTypeArguments: Map<string,Type> | null = null, reportNotFound: bool = true): Type | null {
 
     // resolve parameters
@@ -596,6 +596,7 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
+  /** Resolves {@link TypeParameter}s to concrete {@link Type}s. */
   resolveTypeArguments(typeParameters: TypeParameter[], typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Type[] | null {
     const parameterCount: i32 = typeParameters.length;
     const argumentCount: i32 = typeArgumentNodes ? typeArgumentNodes.length : 0;
@@ -684,83 +685,193 @@ function checkGlobalDecorator(decorators: Decorator[]): string | null {
   return null;
 }
 
+/** Indicates the specific kind of an {@link Element}. */
 export enum ElementKind {
+  /** A {@link ClassPrototype}. */
   CLASS_PROTOTYPE,
+  /** A {@link Class}. */
   CLASS,
+  /** An {@link Enum}. */
   ENUM,
+  /** An {@link EnumValue}. */
   ENUMVALUE,
+  /** A {@link FieldPrototype}. */
   FIELD_PROTOTYPE,
+  /** A {@link Field}. */
   FIELD,
+  /** A {@link FunctionPrototype}. */
   FUNCTION_PROTOTYPE,
+  /** A {@link Function}. */
   FUNCTION,
+  /** A {@link Global}. */
   GLOBAL,
+  /** An {@link InterfacePrototype}. */
   INTERFACE_PROTOTYPE,
+  /** An {@link Interface}. */
   INTERFACE,
+  /** A {@link Local}. */
   LOCAL,
+  /** A {@link Namespace}. */
   NAMESPACE
+}
+
+/** Indicates traits of an {@link Element}. */
+export enum ElementFlags {
+  /** No flags set. */
+  NONE = 0,
+  /** Is compiled. */
+  COMPILED = 1 << 0,
+  /** Is an import. */
+  IMPORTED = 1 << 1,
+  /** Is an export. */
+  EXPORTED = 1 << 2,
+  /** Is built-in. */
+  BUILTIN = 1 << 3,
+  /** Is declared. */
+  DECLARED = 1 << 4,
+  /** Is generic. */
+  GENERIC = 1 << 5,
+  /** Is constant. */
+  CONSTANT = 1 << 6,
+  /** Has constant value. */
+  CONSTANT_VALUE = 1 << 7,
+  /** Is instance member. */
+  INSTANCE = 1 << 8,
+  /** Is getter. */
+  GETTER = 1 << 9,
+  /** Is setter. */
+  SETTER = 1 << 10
 }
 
 /** Base class of all program elements. */
 export abstract class Element {
 
+  /** Specific element kind. */
   kind: ElementKind;
+  /** Containing {@link Program}. */
   program: Program;
+  /** Internal name referring to this element. */
   internalName: string;
-  isCompiled: bool = false;
-  isImport: bool = false;
-  isBuiltIn: bool = false;
-  isDeclare: bool = false;
+  /** Element flags. */
+  flags: ElementFlags = ElementFlags.NONE;
 
-  constructor(program: Program, internalName: string) {
+  /** Constructs a new element, linking it to its containing {@link Program}. */
+  protected constructor(program: Program, internalName: string) {
     this.program = program;
     this.internalName = internalName;
   }
+
+  /** Whether compiled or not. */
+  get isCompiled(): bool { return (this.flags & ElementFlags.COMPILED) != 0; }
+  set isCompiled(is: bool) { if (is) this.flags |= ElementFlags.COMPILED; else this.flags &= ~ElementFlags.COMPILED; }
+
+  /** Whether imported or not. */
+  get isImported(): bool { return (this.flags & ElementFlags.IMPORTED) != 0; }
+  set isImported(is: bool) { if (is) this.flags |= ElementFlags.IMPORTED; else this.flags &= ~ElementFlags.IMPORTED; }
+
+  /** Whether exported or not. */
+  get isExported(): bool { return (this.flags & ElementFlags.EXPORTED) != 0; }
+  set isExported(is: bool) { if (is) this.flags |= ElementFlags.EXPORTED; else this.flags &= ~ElementFlags.EXPORTED; }
+
+  /** Whether built-in or not. */
+  get isBuiltIn(): bool { return (this.flags & ElementFlags.BUILTIN) != 0; }
+  set isBuiltIn(is: bool) { if (is) this.flags |= ElementFlags.BUILTIN; else this.flags &= ~ElementFlags.BUILTIN; }
+
+  /** Whether declared or not. */
+  get isDeclared(): bool { return (this.flags & ElementFlags.DECLARED) != 0; }
+  set isDeclared(is: bool) { if (is) this.flags |= ElementFlags.DECLARED; else this.flags &= ~ElementFlags.DECLARED; }
+
+  /** Whether generic or not. */
+  get isGeneric(): bool { return (this.flags & ElementFlags.GENERIC) != 0; }
+  set isGeneric(is: bool) { if (is) this.flags |= ElementFlags.GENERIC; else this.flags &= ~ElementFlags.GENERIC; }
+
+  /** Whether constant or not. */
+  get isConstant(): bool { return (this.flags & ElementFlags.CONSTANT) != 0; }
+  set isConstant(is: bool) { if (is) this.flags |= ElementFlags.CONSTANT; else this.flags &= ~ElementFlags.CONSTANT; }
+
+  /** Whether mutable or not. */
+  get isMutable(): bool { return !(this.flags & ElementFlags.CONSTANT); } // reuses constant flag
+  set isMutable(is: bool) { if (is) this.flags &= ~ElementFlags.CONSTANT; else this.flags |= ElementFlags.CONSTANT; }
+
+  /** Whether this element has a constant value or not. */
+  get hasConstantValue(): bool { return (this.flags & ElementFlags.CONSTANT_VALUE) != 0; }
+  set hasConstantValue(is: bool) { if (is) this.flags |= ElementFlags.CONSTANT_VALUE; else this.flags &= ~ElementFlags.CONSTANT_VALUE; }
+
+  /** Whether an instance member or not. */
+  get isInstance(): bool { return (this.flags & ElementFlags.INSTANCE) != 0; }
+  set isInstance(is: bool) { if (is) this.flags |= ElementFlags.INSTANCE; else this.flags &= ~ElementFlags.INSTANCE; }
 }
 
 /** A namespace. Also the base class of other namespace-like program elements. */
 export class Namespace extends Element {
 
   kind = ElementKind.NAMESPACE;
+
+  /** Declaration reference. */
   declaration: NamespaceDeclaration | null;
+  /** Member elements. */
   members: Map<string,Element> = new Map();
 
-  constructor(program: Program, internalName: string, declaration: NamespaceDeclaration | null) {
+  /** Constructs a new namespace. */
+  constructor(program: Program, internalName: string, declaration: NamespaceDeclaration | null = null) {
     super(program, internalName);
-    this.declaration = declaration;
+    if ((this.declaration = declaration) && this.declaration.modifiers) {
+      for (let i: i32 = 0, k: i32 = this.declaration.modifiers.length; i < k; ++i) {
+        switch (this.declaration.modifiers[i].modifierKind) {
+          case ModifierKind.IMPORT: this.isImported = true; break;
+          case ModifierKind.EXPORT: this.isExported = true; break;
+          case ModifierKind.DECLARE: this.isDeclared = true; break;
+          default: throw new Error("unexpected modifier");
+        }
+      }
+    }
   }
-
-  get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : false; }
 }
 
 /** An enum. */
 export class Enum extends Namespace {
 
   kind = ElementKind.ENUM;
+
+  /** Declaration reference. */
   declaration: EnumDeclaration | null;
+  /** Enum members. */
   members: Map<string,EnumValue> = new Map(); // more specific
 
+  /** Constructs a new enum. */
   constructor(program: Program, internalName: string, declaration: EnumDeclaration | null = null) {
     super(program, internalName, null);
-    this.declaration = declaration;
+    if ((this.declaration = declaration) && this.declaration.modifiers) {
+      for (let i: i32 = 0, k = this.declaration.modifiers.length; i < k; ++i) {
+        switch (this.declaration.modifiers[i].modifierKind) {
+          case ModifierKind.EXPORT: this.isExported = true; break;
+          case ModifierKind.IMPORT: this.isImported = true; break;
+          case ModifierKind.DECLARE: this.isDeclared = true; break;
+          case ModifierKind.CONST: this.isConstant = true; break;
+          default: throw new Error("unexpected modifier");
+        }
+      }
+    }
   }
-
-  get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't exports */ false; }
-  get isConstant(): bool { return this.declaration ? hasModifier(ModifierKind.CONST, this.declaration.modifiers) : /* internals are const */ true; }
 }
 
 /** An enum value. */
 export class EnumValue extends Element {
 
   kind = ElementKind.ENUMVALUE;
+
+  /** Declaration reference. */
   declaration: EnumValueDeclaration | null;
+  /** Parent enum. */
   enum: Enum;
-  hasConstantValue: bool;
+  /** Constant value, if applicable. */
   constantValue: i32 = 0;
 
   constructor(enm: Enum, program: Program, internalName: string, declaration: EnumValueDeclaration | null = null) {
     super(program, internalName);
     this.enum = enm;
-    if (!(this.declaration = declaration)) this.hasConstantValue = true;
+    if (!(this.declaration = declaration))
+      this.hasConstantValue = true; // built-ins have constant values
   }
 }
 
@@ -768,29 +879,50 @@ export class EnumValue extends Element {
 export class Global extends Element {
 
   kind = ElementKind.GLOBAL;
+
+  /** Declaration reference. */
   declaration: VariableLikeDeclarationStatement | null;
+  /** Resolved type, if resolved. */
   type: Type | null;
-  hasConstantValue: bool = false;
+  /** Constant integer value, if applicable. */
   constantIntegerValue: I64 | null = null;
+  /** Constant float value, if applicable. */
   constantFloatValue: f64 = 0;
 
-  constructor(program: Program, internalName: string, declaration: VariableLikeDeclarationStatement | null, type: Type | null) {
+  constructor(program: Program, internalName: string, declaration: VariableLikeDeclarationStatement | null = null, type: Type | null = null) {
     super(program, internalName);
-    if (!(this.declaration = declaration)) this.hasConstantValue = true;
-    this.type = type; // resolved later if `null`, also updates constantKind
+    if (this.declaration = declaration) {
+      if (this.declaration.modifiers) {
+        for (let i: i32 = 0, k = this.declaration.modifiers.length; i < k; ++i) {
+          switch (this.declaration.modifiers[i].modifierKind) {
+            case ModifierKind.IMPORT: this.isImported = true; break;
+            case ModifierKind.EXPORT: this.isExported = true; break;
+            case ModifierKind.CONST: this.isConstant = true; break;
+            case ModifierKind.DECLARE: this.isDeclared = true; break;
+            default: throw new Error("unexpected modifier");
+          }
+        }
+      }
+    } else {
+      this.hasConstantValue = true; // built-ins have constant values
+    }
+    this.type = type; // resolved later if `null`
   }
-
-  get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't exports */ false; }
-  get isMutable(): bool { return this.declaration ? !hasModifier(ModifierKind.CONST, this.declaration.modifiers) : /* internals are immutable */ false; }
 }
 
 /** A function parameter. */
 export class Parameter {
 
+  // not an Element on its own
+
+  /** Parameter name. */
   name: string;
+  /** Parameter type. */
   type: Type;
+  /** Parameter initializer. */
   initializer: Expression | null;
 
+  /** Constructs a new function parameter. */
   constructor(name: string, type: Type, initializer: Expression | null = null) {
     this.name = name;
     this.type = type;
@@ -802,7 +934,10 @@ export class Parameter {
 export class Local extends Element {
 
   kind = ElementKind.LOCAL;
+
+  /** Local index. */
   index: i32;
+  /** Local type. */
   type: Type;
 
   constructor(program: Program, internalName: string, index: i32, type: Type) {
@@ -816,22 +951,44 @@ export class Local extends Element {
 export class FunctionPrototype extends Element {
 
   kind = ElementKind.FUNCTION_PROTOTYPE;
-  declaration: FunctionDeclaration | null;
-  classPrototype: ClassPrototype | null;
-  instances: Map<string,Function> = new Map();
-  isGeneric: bool;
 
+  /** Declaration reference. */
+  declaration: FunctionDeclaration | null;
+  /** Class prototype reference. */
+  classPrototype: ClassPrototype | null;
+  /** Resolved instances. */
+  instances: Map<string,Function> = new Map();
+
+  /** Constructs a new function prototype. */
   constructor(program: Program, internalName: string, declaration: FunctionDeclaration | null, classPrototype: ClassPrototype | null = null) {
     super(program, internalName);
-    this.declaration = declaration;
-    this.classPrototype = classPrototype;
-    this.isGeneric = declaration ? declaration.typeParameters.length > 0 : false; // built-ins set this
+    if (this.declaration = declaration) {
+      if (this.declaration.modifiers)
+        for (let i: i32 = 0, k: i32 = this.declaration.modifiers.length; i < k; ++i) {
+          switch (this.declaration.modifiers[i].modifierKind) {
+            case ModifierKind.IMPORT: this.isImported = true; break;
+            case ModifierKind.EXPORT: this.isExported = true; break;
+            case ModifierKind.DECLARE: this.isDeclared = true; break;
+            case ModifierKind.GET: this.isGetter = true; break;
+            case ModifierKind.SET: this.isSetter = true; break;
+            default: throw new Error("unexpected modifier");
+          }
+        }
+      if (this.declaration.typeParameters.length)
+        this.isGeneric = true;
+    }
+    if (this.classPrototype = classPrototype) {
+      this.isInstance = true;
+    }
   }
 
-  get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't file-level exports */ false; }
-  get isInstance(): bool { return this.classPrototype != null; }
-  get isGetter(): bool { return this.declaration ? hasModifier(ModifierKind.GET, this.declaration.modifiers) : /* internals aren't getters */ false; }
-  get isSetter(): bool { return this.declaration ? hasModifier(ModifierKind.SET, this.declaration.modifiers) : /* internals aren't setters */ false; }
+  /** Whether a getter function or not. */
+  get isGetter(): bool { return (this.flags & ElementFlags.GETTER) != 0; }
+  set isGetter(is: bool) { if (is) this.flags |= ElementFlags.GETTER; else this.flags &= ~ElementFlags.GETTER; }
+
+  /** Whether a setter function or not. */
+  get isSetter(): bool { return (this.flags & ElementFlags.SETTER) != 0; }
+  set isSetter(is: bool) { if (is) this.flags |= ElementFlags.SETTER; else this.flags &= ~ElementFlags.SETTER; }
 
   resolve(typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null): Function | null {
     const instanceKey: string = typesToString(typeArguments, "", "");
@@ -912,8 +1069,8 @@ export class Function extends Element {
 
   kind = ElementKind.FUNCTION;
 
-  /** Underlying function template. */
-  template: FunctionPrototype;
+  /** Prototype reference. */
+  prototype: FunctionPrototype;
   /** Concrete type arguments. */
   typeArguments: Type[];
   /** Concrete function parameters. Excluding `this` if an instance method. */
@@ -937,13 +1094,12 @@ export class Function extends Element {
   /** Constructs a new concrete function. */
   constructor(prototype: FunctionPrototype, internalName: string, typeArguments: Type[], parameters: Parameter[], returnType: Type, instanceMethodOf: Class | null) {
     super(prototype.program, internalName);
-    this.template = prototype;
+    this.prototype = prototype;
     this.typeArguments = typeArguments;
     this.parameters = parameters;
     this.returnType = returnType;
     this.instanceMethodOf = instanceMethodOf;
-    this.isBuiltIn = prototype.isBuiltIn;
-    this.isDeclare = prototype.isDeclare;
+    this.flags = prototype.flags;
     let localIndex: i32 = 0;
     if (instanceMethodOf) {
       this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));
@@ -964,7 +1120,7 @@ export class Function extends Element {
     // if it has a name, check previously as this method will throw otherwise
     let localIndex = this.parameters.length + this.additionalLocals.length;
     if (this.isInstance) localIndex++; // plus 'this'
-    const local: Local = new Local(this.template.program, name ? name : "anonymous$" + localIndex.toString(10), localIndex, type);
+    const local: Local = new Local(this.prototype.program, name ? name : "anonymous$" + localIndex.toString(10), localIndex, type);
     if (name) {
       if (this.locals.has(<string>name))
         throw new Error("unexpected duplicate local name");
@@ -1050,30 +1206,45 @@ export class Function extends Element {
 export class FieldPrototype extends Element {
 
   kind = ElementKind.FIELD_PROTOTYPE;
+
+  /** Declaration reference. */
   declaration: FieldDeclaration | null;
+  /** Parent class prototype. */
   classPrototype: ClassPrototype;
 
-  constructor(classPrototype: ClassPrototype, internalName: string, declaration: FieldDeclaration | null) {
+  /** Constructs a new field prototype. */
+  constructor(classPrototype: ClassPrototype, internalName: string, declaration: FieldDeclaration | null = null) {
     super(classPrototype.program, internalName);
     this.classPrototype = classPrototype;
+    if ((this.declaration = declaration) && this.declaration.modifiers) {
+      for (let i: i32 = 0, k = this.declaration.modifiers.length; i < k; ++i) {
+        switch (this.declaration.modifiers[i].modifierKind) {
+          case ModifierKind.EXPORT: this.isExported = true; break;
+          default: throw new Error("unexpected modifier");
+        }
+      }
+    }
   }
-
-  get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't file-level exports */ false; }
 }
 
 /** A resolved instance field. */
 export class Field extends Element {
 
   kind = ElementKind.FIELD;
-  template: FieldPrototype;
+
+  /** Field prototype reference. */
+  prototype: FieldPrototype;
+  /** Resolved type. */
   type: Type;
-  hasConstantValue: bool = false;
+  /** Constant integer value, if applicable. */
   constantIntegerValue: I64 | null = null;
+  /** Constant float value, if applicable. */
   constantFloatValue: f64 = 0;
 
-  constructor(template: FieldPrototype, internalName: string, type: Type) {
-    super(template.program, internalName);
-    if (!this.template.declaration) this.hasConstantValue = true;
+  /** Constructs a new field. */
+  constructor(prototype: FieldPrototype, internalName: string, type: Type) {
+    super(prototype.program, internalName);
+    this.flags = prototype.flags;
     this.type = type;
   }
 }
@@ -1082,18 +1253,30 @@ export class Field extends Element {
 export class ClassPrototype extends Namespace {
 
   kind = ElementKind.CLASS_PROTOTYPE;
+
+  /** Declaration reference. */
   declaration: ClassDeclaration | null;
+  /** Resolved instances. */
   instances: Map<string,Class>;
-  isGeneric: bool;
 
   constructor(program: Program, internalName: string, declaration: ClassDeclaration | null = null) {
     super(program, internalName, null);
-    this.declaration = declaration;
+    if (this.declaration = declaration) {
+      if (this.declaration.modifiers) {
+        for (let i: i32 = 0, k: i32 = this.declaration.modifiers.length; i < k; ++i) {
+          switch (this.declaration.modifiers[i].modifierKind) {
+            case ModifierKind.IMPORT: this.isImported = true; break;
+            case ModifierKind.EXPORT: this.isExported = true; break;
+            case ModifierKind.DECLARE: this.isDeclared = true; break;
+            default: throw new Error("unexpected modifier");
+          }
+        }
+      }
+      if (this.declaration.typeParameters.length)
+        this.isGeneric = true;
+    }
     this.instances = new Map();
-    this.isGeneric = declaration ? declaration.typeParameters.length > 0 : false; // builtins can set this
   }
-
-  get isExport(): bool { return this.declaration ? hasModifier(ModifierKind.EXPORT, this.declaration.modifiers) : /* internals aren't file-level exports */ false; }
 
   resolve(typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null): Class {
     const key: string = typesToString(typeArguments, "", "");
@@ -1125,20 +1308,26 @@ export class ClassPrototype extends Namespace {
 export class Class extends Namespace {
 
   kind = ElementKind.CLASS;
-  declaration: ClassDeclaration | null;
-  template: ClassPrototype;
+
+  /** Prototype reference. */
+  prototype: ClassPrototype;
+  /** Resolved type arguments. */
   typeArguments: Type[];
-  base: Class | null;
+  /** Resolved class type. */
   type: Type;
+  /** Base class, if applicable. */
+  base: Class | null;
 
   contextualTypeArguments: Map<string,Type> = new Map();
 
-  constructor(template: ClassPrototype, internalName: string, typeArguments: Type[], base: Class | null) {
-    super(template.program, internalName, template.declaration);
-    this.template = template;
+  /** Constructs a new class. */
+  constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] = [], base: Class | null = null) {
+    super(prototype.program, internalName, prototype.declaration);
+    this.prototype = prototype;
+    this.flags = prototype.flags;
     this.typeArguments = typeArguments;
     this.base = base;
-    this.type = (template.program.target == Target.WASM64 ? Type.usize64 : Type.usize32).asClass(this);
+    this.type = (prototype.program.target == Target.WASM64 ? Type.usize64 : Type.usize32).asClass(this);
 
     // inherit base class contextual type arguments
     if (base)
@@ -1146,7 +1335,7 @@ export class Class extends Namespace {
         this.contextualTypeArguments.set(name, type);
 
     // apply instance-specific contextual type arguments
-    const declaration: ClassDeclaration | null = this.template.declaration;
+    const declaration: ClassDeclaration | null = this.prototype.declaration;
     if (declaration) { // irrelevant for built-ins
       const typeParameters: TypeParameter[] = declaration.typeParameters;
       if (typeParameters.length != typeArguments.length)
@@ -1165,9 +1354,12 @@ export class Class extends Namespace {
 export class InterfacePrototype extends ClassPrototype {
 
   kind = ElementKind.INTERFACE_PROTOTYPE;
+
+  /** Declaration reference. */
   declaration: InterfaceDeclaration | null;
 
-  constructor(program: Program, internalName: string, declaration: InterfaceDeclaration | null) {
+  /** Constructs a new interface prototype. */
+  constructor(program: Program, internalName: string, declaration: InterfaceDeclaration | null = null) {
     super(program, internalName, declaration);
   }
 }
@@ -1176,10 +1368,14 @@ export class InterfacePrototype extends ClassPrototype {
 export class Interface extends Class {
 
   kind = ElementKind.INTERFACE;
-  template: InterfacePrototype;
+
+  /** Prototype reference. */
+  prototype: InterfacePrototype;
+  /** Base interface, if applcable. */
   base: Interface | null;
 
-  constructor(template: InterfacePrototype, internalName: string, typeArguments: Type[], base: Interface | null) {
-    super(template, internalName, typeArguments, base);
+  /** Constructs a new interface. */
+  constructor(prototype: InterfacePrototype, internalName: string, typeArguments: Type[] = [], base: Interface | null = null) {
+    super(prototype, internalName, typeArguments, base);
   }
 }

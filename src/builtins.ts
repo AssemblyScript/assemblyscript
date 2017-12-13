@@ -3,7 +3,7 @@ import { DiagnosticCode } from "./diagnostics";
 import { Node, Expression } from "./ast";
 import { Type } from "./types";
 import { Module, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType, FunctionTypeRef } from "./module";
-import { Program, FunctionPrototype, Local } from "./program";
+import { Program, ElementFlags, FunctionPrototype, Local } from "./program";
 
 /** Initializes the specified program with built-in functions. */
 export function initialize(program: Program): void {
@@ -41,7 +41,7 @@ export function initialize(program: Program): void {
 function addFunction(program: Program, name: string, isGeneric: bool = false): void {
   let prototype: FunctionPrototype = new FunctionPrototype(program, name, null, null);
   prototype.isBuiltIn = true;
-  prototype.isGeneric = isGeneric;
+  if (isGeneric) prototype.isGeneric = true;
   program.elements.set(name, prototype);
 }
 
