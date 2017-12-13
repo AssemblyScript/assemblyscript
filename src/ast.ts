@@ -1809,12 +1809,16 @@ export function mangleInternalName(declaration: DeclarationStatement): string {
       }
     }
   }
-  if (!declaration.parent)
+  let parent: Node | null = declaration.parent;
+  if (!parent)
     return name;
-  if (declaration.parent.kind == NodeKind.CLASS)
-    return (<ClassDeclaration>declaration.parent).internalName + (hasModifier(ModifierKind.STATIC, declaration.modifiers) ? STATIC_DELIMITER : INSTANCE_DELIMITER) + name;
-  if (declaration.parent.kind == NodeKind.NAMESPACE || declaration.parent.kind == NodeKind.ENUM)
-    return (<DeclarationStatement>declaration.parent).internalName + STATIC_DELIMITER + name;
+  if (declaration.kind == NodeKind.VARIABLEDECLARATION && parent.kind == NodeKind.VARIABLE) // skip over
+    if (!(parent = parent.parent))
+      return name;
+  if (parent.kind == NodeKind.CLASS)
+    return (<ClassDeclaration>parent).internalName + (hasModifier(ModifierKind.STATIC, declaration.modifiers) ? STATIC_DELIMITER : INSTANCE_DELIMITER) + name;
+  if (parent.kind == NodeKind.NAMESPACE || parent.kind == NodeKind.ENUM)
+    return (<DeclarationStatement>parent).internalName + STATIC_DELIMITER + name;
   return declaration.range.source.internalPath + PATH_DELIMITER + name;
 }
 

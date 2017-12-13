@@ -1,0 +1,12 @@
+(module
+ (type $v (func))
+ (memory $0 1)
+ (export "test" (func $namespace/test))
+ (export "memory" (memory $0))
+ (func $namespace/Outer.Inner.aFunc (; 0 ;) (type $v)
+  (nop)
+ )
+ (func $namespace/test (; 1 ;) (type $v)
+  (call $namespace/Outer.Inner.aFunc)
+ )
+)

@@ -119,7 +119,7 @@ export class Options {
   /** If true, compiles everything instead of just reachable code. */
   noTreeShaking: bool = false;
   /** If true, replaces assertions with nops. */
-  noDebug: bool = false;
+  noAssert: bool = false;
 }
 
 const enum ConversionKind {
@@ -306,7 +306,7 @@ export class Compiler extends DiagnosticEmitter {
       throw new Error("unexpected missing global");
     if (!this.compileGlobal(<Global>element))
       return null;
-    if (declaration.range.source.isEntry && (<VariableStatement>declaration.parent).parent == declaration.range.source && hasModifier(ModifierKind.EXPORT, declaration.modifiers)) {
+    if (isModuleExport(element, declaration)) {
       if ((<Global>element).hasConstantValue)
         this.module.addGlobalExport(element.internalName, declaration.identifier.name);
       else
@@ -470,7 +470,7 @@ export class Compiler extends DiagnosticEmitter {
     const instance: Function | null = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode);
     if (!instance)
       return;
-    if (declaration.range.source.isEntry && declaration.parent == declaration.range.source && hasModifier(ModifierKind.EXPORT, declaration.modifiers))
+    if (isModuleExport(instance, declaration))
       this.module.addFunctionExport(instance.internalName, declaration.identifier.name);
   }
 
@@ -527,7 +527,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // create the function
     const internalName: string = instance.internalName;
-    if (instance.isDeclared) {
+    if (instance.isDeclared) { // TODO: use parent namespace as externalModuleName, if applicable
       this.module.addFunctionImport(internalName, "env", declaration.identifier.name, typeRef);
     } else {
       this.module.addFunction(internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
@@ -573,7 +573,6 @@ export class Compiler extends DiagnosticEmitter {
           throw new Error("unexpected namespace member");
       }
     }
-    throw new Error("not implemented");
   }
 
   compileNamespace(ns: Namespace): void {
@@ -1834,7 +1833,115 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileExpression(expression.expression, contextualType, ConversionKind.NONE);
   }
 
-  compilePropertyAccessExpression(expression: PropertyAccessExpression, contextualType: Type): ExpressionRef {
+  compilePropertyAccessExpression(propertyAccess: PropertyAccessExpression, contextualType: Type): ExpressionRef {
+    const expression: Expression = propertyAccess.expression;
+    const propertyName: string = propertyAccess.property.name;
+
+    // the lhs expression is either 'this', 'super', an identifier or another property access
+    let target: Element | null;
+    switch (expression.kind) {
+
+      default:
+        throw new Error("unexpected expression kind");
+
+      case NodeKind.THIS:
+        if (!this.currentFunction.instanceMethodOf) {
+          this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
+          return this.module.createUnreachable();
+        }
+        target = this.currentFunction.instanceMethodOf;
+        break;
+
+      case NodeKind.SUPER:
+        if (!(this.currentFunction.instanceMethodOf && this.currentFunction.instanceMethodOf.base)) {
+          this.error(DiagnosticCode._super_can_only_be_referenced_in_a_derived_class, expression.range);
+          return this.module.createUnreachable();
+        }
+        target = this.currentFunction.instanceMethodOf.base;
+        break;
+
+      case NodeKind.IDENTIFIER:
+        target = this.program.resolveIdentifier(<IdentifierExpression>expression, this.currentFunction); // reports
+        break;
+
+      case NodeKind.PROPERTYACCESS:
+        target = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression, this.currentFunction); // reports
+        break;
+    }
+    if (!target)
+      return this.module.createUnreachable();
+
+    // look up the property within the target to obtain the actual element
+    let element: Element | null;
+    let expr: ExpressionRef;
+    switch (target.kind) {
+
+      // handle enum value right away
+
+      case ElementKind.ENUM:
+        element = (<Enum>target).members.get(propertyName);
+        if (!element) {
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
+          return this.module.createUnreachable();
+        }
+        this.currentType = Type.i32;
+        return (<EnumValue>element).hasConstantValue
+          ? this.module.createI32((<EnumValue>element).constantValue)
+          : this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
+
+      // postpone everything else
+
+      case ElementKind.LOCAL:
+        element = (<Local>target).type.classType;
+        if (!element) {
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Local>target).type.toString());
+          return this.module.createUnreachable();
+        }
+        target = element;
+        break;
+
+      case ElementKind.GLOBAL:
+        if (!this.compileGlobal(<Global>target))
+          return this.module.createUnreachable();
+        element = (<Type>(<Global>target).type).classType;
+        if (!element) {
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Local>target).type.toString());
+          return this.module.createUnreachable();
+        }
+        target = element;
+        break;
+
+      case ElementKind.NAMESPACE:
+        element =  (<Namespace>target).members.get(propertyName);
+        if (!(element && element.isExported)) {
+          this.error(DiagnosticCode.Namespace_0_has_no_exported_member_1, propertyAccess.property.range, (<Namespace>target).internalName, propertyName);
+          return this.module.createUnreachable();
+        }
+        target = element;
+        break;
+
+      default:
+        throw new Error("unexpected target kind");
+    }
+
+    // handle the element
+    switch (element.kind) {
+
+      case ElementKind.LOCAL:
+        return this.module.createGetLocal((<Local>element).index, typeToNativeType(this.currentType = (<Local>element).type));
+
+      case ElementKind.GLOBAL:
+        this.compileGlobal(<Global>element);
+        return this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType = <Type>(<Global>element).type));
+
+      case ElementKind.FUNCTION: // getter
+        if (!(<Function>element).prototype.isGetter) {
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, element.internalName);
+          return this.module.createUnreachable();
+        }
+        return this.compileCall(<Function>element, [], propertyAccess);
+    }
+    this.error(DiagnosticCode.Operation_not_supported, propertyAccess.range);
     throw new Error("not implemented");
   }
 
@@ -2030,4 +2137,23 @@ function typesToSignatureName(paramTypes: Type[], returnType: Type): string {
     sb.push(typeToSignatureNamePart(paramTypes[i]));
   sb.push(typeToSignatureNamePart(returnType));
   return sb.join("");
+}
+
+function isModuleExport(element: Element, declaration: DeclarationStatement): bool {
+  if (!element.isExported)
+    return false;
+  if (declaration.range.source.isEntry)
+    return true;
+  let parentNode: Node | null = declaration.parent;
+  if (!parentNode)
+    return false;
+  if (parentNode.kind == NodeKind.VARIABLE)
+    if (!(parentNode = parentNode.parent))
+      return false;
+  if (parentNode.kind != NodeKind.NAMESPACE && parentNode.kind != NodeKind.CLASS)
+    return false;
+  let parent: Element | null = element.program.elements.get((<DeclarationStatement>parentNode).internalName);
+  if (!parent)
+    return false;
+  return isModuleExport(parent, <DeclarationStatement>parentNode);
 }

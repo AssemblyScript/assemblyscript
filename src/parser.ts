@@ -22,6 +22,7 @@ import {
 
   // expressions
   AssertionKind,
+  CallExpression,
   Expression,
   IdentifierExpression,
   StringLiteralExpression,
@@ -31,6 +32,7 @@ import {
   BreakStatement,
   ClassDeclaration,
   ContinueStatement,
+  DeclarationStatement,
   Decorator,
   DoStatement,
   EnumDeclaration,
@@ -39,6 +41,7 @@ import {
   ExportMember,
   ExportStatement,
   ExpressionStatement,
+  FieldDeclaration,
   ForStatement,
   FunctionDeclaration,
   IfStatement,
@@ -47,9 +50,8 @@ import {
   MethodDeclaration,
   Modifier,
   ModifierKind,
-  DeclarationStatement,
+  NamespaceDeclaration,
   Parameter,
-  FieldDeclaration,
   ReturnStatement,
   Statement,
   SwitchCase,
@@ -61,8 +63,7 @@ import {
   VariableDeclaration,
   WhileStatement,
 
-  hasModifier,
-  NamespaceDeclaration
+  hasModifier
 
 } from "./ast";
 
@@ -1514,6 +1515,13 @@ export class Parser extends DiagnosticEmitter {
         if (token == Token.DOT) {
           if (next.kind == NodeKind.IDENTIFIER) {
             expr = Expression.createPropertyAccess(<Expression>expr, <IdentifierExpression>next, tn.range(startPos, tn.pos));
+          } else if (next.kind == NodeKind.CALL) { // amend
+            let propertyCall: CallExpression = <CallExpression>next;
+            if (propertyCall.expression.kind == NodeKind.IDENTIFIER) {
+              propertyCall.expression = Expression.createPropertyAccess(<Expression>expr, <IdentifierExpression>propertyCall.expression, tn.range(startPos, tn.pos));
+            } else
+              throw new Error("unexpected expression kind");
+            expr = propertyCall;
           } else {
             this.error(DiagnosticCode.Identifier_expected, next.range);
             return null;

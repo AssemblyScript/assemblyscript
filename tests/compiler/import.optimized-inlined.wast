@@ -41,5 +41,10 @@
     )
    )
   )
+  (block
+   (block $__inlined_func$export/ns.two
+    (nop)
+   )
+  )
  )
 )

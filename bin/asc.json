@@ -43,7 +43,7 @@
     "desc": "Disables tree-shaking.",
     "type": "boolean"
   },
-  "noDebug": {
+  "noAssert": {
     "desc": "Disables assertions.",
     "type": "boolean"
   },

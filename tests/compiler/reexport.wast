@@ -29,7 +29,9 @@
    )
   )
  )
- (func $start (; 2 ;) (type $v)
+ (func $export/ns.two (; 2 ;) (type $v)
+ )
+ (func $start (; 3 ;) (type $v)
   (drop
    (i32.add
     (call $export/add
@@ -78,17 +80,23 @@
   export/sub
   export/a
   export/b
+  export/ns
+  export/ns.one
+  export/ns.two
   reexport/imported_add
   reexport/imported_sub
+  reexport/imported_ns
 [program.exports]
   export/add
   export/renamed_sub
   export/a
   export/renamed_b
+  export/ns
   reexport/add
   reexport/renamed_sub
   reexport/renamed_a
   reexport/rerenamed_b
   reexport/renamed_add
   reexport/rerenamed_sub
+  reexport/renamed_ns
 ;)

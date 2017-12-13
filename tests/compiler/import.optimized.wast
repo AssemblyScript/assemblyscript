@@ -16,7 +16,10 @@
    (get_local $1)
   )
  )
- (func $start (; 2 ;) (type $v)
+ (func $export/ns.two (; 2 ;) (type $v)
+  (nop)
+ )
+ (func $start (; 3 ;) (type $v)
   (drop
    (i32.add
     (call $export/add
@@ -29,5 +32,6 @@
     )
    )
   )
+  (call $export/ns.two)
  )
 )

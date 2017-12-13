@@ -494,7 +494,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], Type.i32); // reports
       compiler.currentType = Type.void;
-      return compiler.options.noDebug
+      return compiler.options.noAssert
         ? module.createNop()
         : module.createIf(
             module.createUnary(UnaryOp.EqzI32, arg0),

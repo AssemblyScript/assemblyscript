@@ -87,30 +87,31 @@ declare class String {
   static fromCodePoint(cp: i32): string;
   static fromCodePoints(arr: i32[]): string;
   readonly length: i32;
+  private constructor();
   indexOf(subject: string): i32;
+  lastIndexOf(subject: string): i32;
   charCodeAt(index: i32): i32;
   substring(from: i32, to?: i32): string;
   startsWith(subject: string): bool;
   endsWith(subject: string): bool;
   replace(search: string, replacement: string): string;
+  toString(): string;
 }
 
-declare class Boolean {}
+interface Boolean {}
 
 declare class Number {
-  toString(radix: i32): string;
+  private constructor();
+  toString(radix?: i32): string;
 }
 
-declare class Object {}
+interface Object {}
 
-declare class Function {
-  /** @deprecated */
-  apply(subject: any): any;
-}
+interface Function {}
 
-declare class RegExp {}
+interface RegExp {}
 
-declare interface IArguments {}
+interface IArguments {}
 
 declare class Error {
   constructor(message: string);
@@ -119,7 +120,8 @@ declare class Error {
 }
 
 declare class Symbol {
-  static iterator: symbol;
+  private constructor();
+  static readonly iterator: symbol;
 }
 
 declare class Set<T> {
@@ -139,7 +141,7 @@ declare class Map<K,V> {
   [Symbol.iterator](): Iterator<[K, V]>;
 }
 
-declare interface Iterator<T> {}
+interface Iterator<T> {}
 
 declare namespace JSON {
   /** @deprecated */

@@ -210,8 +210,9 @@ export class Program extends DiagnosticEmitter {
     } while (true);
   }
 
-  private initializeClass(declaration: ClassDeclaration): void {
-    const internalName: string = declaration.internalName;
+  private initializeClass(declaration: ClassDeclaration, namespace: Namespace | null = null): void {
+    throw new Error("not implemented");
+    /* const internalName: string = declaration.internalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
@@ -233,11 +234,12 @@ export class Program extends DiagnosticEmitter {
         this.initializeMethod(<MethodDeclaration>memberDeclaration, prototype);
       else
         throw new Error("unexpected class member");
-    }
+    } */
   }
 
   private initializeField(declaration: FieldDeclaration, classPrototype: ClassPrototype): void {
-    const name: string = declaration.identifier.name;
+    throw new Error("not implemented");
+    /* const name: string = declaration.identifier.name;
     if (classPrototype.members.has(name)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
       return;
@@ -249,11 +251,12 @@ export class Program extends DiagnosticEmitter {
     } else {
       const field: FieldPrototype = new FieldPrototype(classPrototype, internalName, declaration);
       classPrototype.members.set(name, field);
-    }
+    } */
   }
 
   private initializeMethod(declaration: MethodDeclaration, classPrototype: ClassPrototype): void {
-    let name: string = declaration.identifier.name;
+    throw new Error("not implemented");
+    /* let name: string = declaration.identifier.name;
     const internalName: string = declaration.internalName;
     if (classPrototype.members.has(name)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
@@ -273,23 +276,30 @@ export class Program extends DiagnosticEmitter {
         }
       }
     }
-    classPrototype.members.set(name, func);
+    classPrototype.members.set(name, func); */
   }
 
-  private initializeEnum(declaration: EnumDeclaration): void {
+  private initializeEnum(declaration: EnumDeclaration, namespace: Namespace | null = null): void {
     const internalName: string = declaration.internalName;
-    if (this.elements.has(internalName)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-      return;
-    }
     const enm: Enum = new Enum(this, internalName, declaration);
-    this.elements.set(internalName, enm);
-    if (enm.isExported) {
+
+    if (this.elements.has(internalName))
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+    else
+      this.elements.set(internalName, enm);
+
+    if (namespace) {
+      if (namespace.members.has(declaration.identifier.name)) {
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      } else
+        namespace.members.set(declaration.identifier.name, enm);
+    } else if (enm.isExported) {
       if (this.exports.has(internalName))
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
       else
         this.exports.set(internalName, enm);
     }
+
     const values: EnumValueDeclaration[] = declaration.members;
     for (let i: i32 = 0, k: i32 = values.length; i < k; ++i)
       this.initializeEnumValue(values[i], enm);
@@ -386,15 +396,22 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeFunction(declaration: FunctionDeclaration): void {
+  private initializeFunction(declaration: FunctionDeclaration, namespace: Namespace | null = null): void {
     const internalName: string = declaration.internalName;
     const prototype: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, null);
+
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
     }
     this.elements.set(internalName, prototype);
-    if (prototype.isExported) {
+
+    if (namespace) {
+      if (namespace.members.has(declaration.identifier.name))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      else
+        namespace.members.set(declaration.identifier.name, prototype);
+    } else if (prototype.isExported) {
       if (this.exports.has(internalName))
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
       else
@@ -455,20 +472,27 @@ export class Program extends DiagnosticEmitter {
     queuedImports.push(queuedImport);
   }
 
-  private initializeInterface(declaration: InterfaceDeclaration): void {
+  private initializeInterface(declaration: InterfaceDeclaration, namespace: Namespace | null = null): void {
     const internalName: string = declaration.internalName;
     const prototype: InterfacePrototype = new InterfacePrototype(this, internalName, declaration);
+
     if (this.elements.has(internalName))
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
     else
       this.elements.set(internalName, prototype);
 
-    if (prototype.isExported) {
+    if (namespace) {
+      if (namespace.members.has(prototype.internalName))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      else
+        namespace.members.set(prototype.internalName, prototype);
+    } else if (prototype.isExported) {
       if (this.exports.has(internalName))
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
       else
         this.exports.set(internalName, prototype);
     }
+
     const memberDeclarations: DeclarationStatement[] = declaration.members;
     for (let j: i32 = 0, l: i32 = memberDeclarations.length; j < l; ++j) {
       const memberDeclaration: DeclarationStatement = memberDeclarations[j];
@@ -488,48 +512,54 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeNamespace(declaration: NamespaceDeclaration): void {
+  private initializeNamespace(declaration: NamespaceDeclaration, parentNamespace: Namespace | null = null): void {
     const internalName: string = declaration.internalName;
     const namespace: Namespace = new Namespace(this, internalName, declaration);
 
     if (this.elements.has(internalName))
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-    else {
+    else
       this.elements.set(internalName, namespace);
-      if (namespace.isExported) {
+
+    if (parentNamespace) {
+      if (parentNamespace.members.has(declaration.identifier.name))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      else
+        parentNamespace.members.set(declaration.identifier.name, namespace);
+    } else if (namespace.isExported) {
         if (this.exports.has(internalName))
           this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
         else
           this.exports.set(internalName, namespace);
-      }
     }
+
     const members: Statement[] = declaration.members;
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i) {
       const statement: Statement = members[i];
       switch (statement.kind) {
 
         case NodeKind.CLASS:
-          this.initializeClass(<ClassDeclaration>statement);
+          this.initializeClass(<ClassDeclaration>statement, namespace);
           break;
 
         case NodeKind.ENUM:
-          this.initializeEnum(<EnumDeclaration>statement);
+          this.initializeEnum(<EnumDeclaration>statement, namespace);
           break;
 
         case NodeKind.FUNCTION:
-          this.initializeFunction(<FunctionDeclaration>statement);
+          this.initializeFunction(<FunctionDeclaration>statement, namespace);
           break;
 
         case NodeKind.INTERFACE:
-          this.initializeInterface(<InterfaceDeclaration>statement);
+          this.initializeInterface(<InterfaceDeclaration>statement, namespace);
           break;
 
         case NodeKind.NAMESPACE:
-          this.initializeNamespace(<NamespaceDeclaration>statement);
+          this.initializeNamespace(<NamespaceDeclaration>statement, namespace);
           break;
 
         case NodeKind.VARIABLE:
-          this.initializeVariables(<VariableStatement>statement, true);
+          this.initializeVariables(<VariableStatement>statement, namespace);
           break;
 
         default:
@@ -538,17 +568,24 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeVariables(statement: VariableStatement, isNamespaceMember: bool = false): void {
+  private initializeVariables(statement: VariableStatement, namespace: Namespace | null = null): void {
     const declarations: VariableDeclaration[] = statement.declarations;
     for (let i: i32 = 0, k: i32 = declarations.length; i < k; ++i) {
       const declaration: VariableDeclaration = declarations[i];
       const internalName: string = declaration.internalName;
       const global: Global = new Global(this, internalName, declaration, null);
+
       if (this.elements.has(internalName))
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       else {
         this.elements.set(internalName, global);
-        if (global.isExported) {
+
+      if (namespace) {
+        if (namespace.members.has(declaration.identifier.name))
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        else
+          namespace.members.set(declaration.identifier.name, global);
+      } else if (global.isExported) {
           if (this.exports.has(internalName))
             this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
           else
@@ -596,7 +633,7 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  /** Resolves {@link TypeParameter}s to concrete {@link Type}s. */
+  /** Resolves an array of type parameters to concrete types. */
   resolveTypeArguments(typeParameters: TypeParameter[], typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Type[] | null {
     const parameterCount: i32 = typeParameters.length;
     const argumentCount: i32 = typeArgumentNodes ? typeArgumentNodes.length : 0;
@@ -618,6 +655,49 @@ export class Program extends DiagnosticEmitter {
     return typeArguments;
   }
 
+  /** Resolves an identifier to the element is refers to. */
+  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function): Element | null {
+    const name: string = identifier.name;
+    const local: Local | null = <Local | null>contextualFunction.locals.get(name);
+    if (local)
+      return local;
+    let element: Element | null;
+    if (element = this.elements.get(identifier.range.source.internalPath + PATH_DELIMITER + name))
+      return element;
+    if (element = this.elements.get(name))
+      return element;
+    this.error(DiagnosticCode.Cannot_find_name_0, identifier.range, name);
+    return null;
+  }
+
+  /** Resolves a property access the element it refers to. */
+  resolvePropertyAccess(propertyAccess: PropertyAccessExpression, contextualFunction: Function): Element | null {
+    const expression: Expression = propertyAccess.expression;
+    let target: Element | null = null;
+    if (expression.kind == NodeKind.IDENTIFIER) {
+      target = this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
+    } else if (expression.kind == NodeKind.PROPERTYACCESS) {
+      target = this.resolvePropertyAccess(<PropertyAccessExpression>expression, contextualFunction);
+    } else
+      throw new Error("unexpected target kind");
+    if (!target)
+      return null;
+    const propertyName: string = propertyAccess.property.name;
+    let member: Element | null = null;
+    if (target.kind == ElementKind.ENUM)
+      member = (<Enum>target).members.get(propertyName);
+    else if (target.kind == ElementKind.NAMESPACE)
+      member = (<Namespace>target).members.get(propertyName);
+    // else if (target.kind == ElementKind.CLASS_PROTOTYPE)
+    //   member = <Element | null>(<ClassPrototype>target).members.get(propertyName);
+    // else if (target.kind == ElementKind.CLASS)
+    //   member = <Element | null>(<Class>target).members.get(propertyName);
+    if (member)
+      return member;
+    this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, expression.range, (<PropertyAccessExpression>expression).property.name, target.internalName);
+    return null;
+  }
+
   resolveElement(expression: Expression, contextualFunction: Function): Element | null {
 
     // this -> Class
@@ -630,38 +710,11 @@ export class Program extends DiagnosticEmitter {
 
     // local or global name
     if (expression.kind == NodeKind.IDENTIFIER) {
-      const name: string = (<IdentifierExpression>expression).name;
-      const local: Local | null = <Local | null>contextualFunction.locals.get(name);
-      if (local)
-        return local;
-      const fileGlobalElement: Element | null = <Element | null>this.elements.get(expression.range.source.internalPath + PATH_DELIMITER + name);
-      if (fileGlobalElement)
-        return fileGlobalElement;
-      const programGlobalElement: Element | null = <Element | null>this.elements.get(name);
-      if (programGlobalElement)
-        return programGlobalElement;
-      this.error(DiagnosticCode.Cannot_find_name_0, expression.range, name);
-      return null;
+      return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
 
     // static or instance property (incl. enum values) or method
     } else if (expression.kind == NodeKind.PROPERTYACCESS) {
-      const target: Element | null = this.resolveElement((<PropertyAccessExpression>expression).expression, contextualFunction); // reports
-      if (!target)
-        return null;
-      const propertyName: string = (<PropertyAccessExpression>expression).property.name;
-      let member: Element | null = null;
-      if (target.kind == ElementKind.ENUM)
-        member = <EnumValue | null>(<Enum>target).members.get(propertyName);
-      else if (target.kind == ElementKind.CLASS_PROTOTYPE)
-        member = <Element | null>(<ClassPrototype>target).members.get(propertyName);
-      else if (target.kind == ElementKind.CLASS)
-        member = <Element | null>(<Class>target).members.get(propertyName);
-      else if (target.kind == ElementKind.NAMESPACE)
-        member = <Element | null>(<Namespace>target).members.get(propertyName);
-      if (member)
-        return member;
-      this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, expression.range, (<PropertyAccessExpression>expression).property.name, target.internalName);
-      return null;
+      return this.resolvePropertyAccess(<PropertyAccessExpression>expression, contextualFunction);
     }
 
     throw new Error("not implemented: " + expression.kind);
@@ -1130,13 +1183,14 @@ export class Function extends Element {
     return local;
   }
 
-  private tempI32s: Local[] = [];
-  private tempI64s: Local[] = [];
-  private tempF32s: Local[] = [];
-  private tempF64s: Local[] = [];
+  private tempI32s: Local[] | null = null;
+  private tempI64s: Local[] | null = null;
+  private tempF32s: Local[] | null = null;
+  private tempF64s: Local[] | null = null;
 
+  /** Gets a free temporary local of the specified type. */
   getTempLocal(type: Type): Local {
-    let temps: Local[];
+    let temps: Local[] | null;
     switch (typeToNativeType(type)) {
       case NativeType.I32: temps = this.tempI32s; break;
       case NativeType.I64: temps = this.tempI64s; break;
@@ -1144,30 +1198,32 @@ export class Function extends Element {
       case NativeType.F64: temps = this.tempF64s; break;
       default: throw new Error("unexpected type");
     }
-    if (temps.length > 0)
+    if (temps && temps.length > 0)
       return temps.pop();
     return this.addLocal(type);
   }
 
+  /** Frees the temporary local for reuse. */
   freeTempLocal(local: Local): void {
     let temps: Local[];
     switch (typeToNativeType(local.type)) {
-      case NativeType.I32: temps = this.tempI32s; break;
-      case NativeType.I64: temps = this.tempI64s; break;
-      case NativeType.F32: temps = this.tempF32s; break;
-      case NativeType.F64: temps = this.tempF64s; break;
+      case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
+      case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
+      case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
+      case NativeType.F64: temps = this.tempF64s || (this.tempF64s = []); break;
       default: throw new Error("unexpected type");
     }
     temps.push(local);
   }
 
+  /** Gets and immediately frees a temporary local of the specified type. */
   getAndFreeTempLocal(type: Type): Local {
     let temps: Local[];
     switch (typeToNativeType(type)) {
-      case NativeType.I32: temps = this.tempI32s; break;
-      case NativeType.I64: temps = this.tempI64s; break;
-      case NativeType.F32: temps = this.tempF32s; break;
-      case NativeType.F64: temps = this.tempF64s; break;
+      case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
+      case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
+      case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
+      case NativeType.F64: temps = this.tempF64s || (this.tempF64s = []); break;
       default: throw new Error("unexpected type");
     }
     if (temps.length > 0)
@@ -1250,17 +1306,25 @@ export class Field extends Element {
 }
 
 /** A yet unresolved class prototype. */
-export class ClassPrototype extends Namespace {
+export class ClassPrototype extends Element {
 
   kind = ElementKind.CLASS_PROTOTYPE;
 
   /** Declaration reference. */
   declaration: ClassDeclaration | null;
   /** Resolved instances. */
-  instances: Map<string,Class>;
+  instances: Map<string,Class> = new Map();
+  /** Static fields. */
+  staticFields: Map<string,Global> | null = null;
+  /** Static methods. */
+  staticMethods: Map<string,Function> | null = null;
+  /** Static getters. */
+  staticGetters: Map<string,Function> | null = null;
+  /** Static setters. */
+  staticSetters: Map<string,Function> | null = null;
 
   constructor(program: Program, internalName: string, declaration: ClassDeclaration | null = null) {
-    super(program, internalName, null);
+    super(program, internalName);
     if (this.declaration = declaration) {
       if (this.declaration.modifiers) {
         for (let i: i32 = 0, k: i32 = this.declaration.modifiers.length; i < k; ++i) {
@@ -1275,7 +1339,6 @@ export class ClassPrototype extends Namespace {
       if (this.declaration.typeParameters.length)
         this.isGeneric = true;
     }
-    this.instances = new Map();
   }
 
   resolve(typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null): Class {
@@ -1305,7 +1368,7 @@ export class ClassPrototype extends Namespace {
 }
 
 /** A resolved class. */
-export class Class extends Namespace {
+export class Class extends Element {
 
   kind = ElementKind.CLASS;
 
@@ -1317,19 +1380,27 @@ export class Class extends Namespace {
   type: Type;
   /** Base class, if applicable. */
   base: Class | null;
-
+  /** Contextual type argumentsfor fields and methods. */
   contextualTypeArguments: Map<string,Type> = new Map();
+  /** Instance fields. */
+  instanceFields: Map<string,Field> | null = null;
+  /** Instance methods. */
+  instanceMethods: Map<string,Function> | null = null;
+  /** Instance getters. */
+  instanceGetters: Map<string,Function> | null = null;
+  /** Instance setters. */
+  instanceSetters: Map<string,Function> | null = null;
 
   /** Constructs a new class. */
   constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] = [], base: Class | null = null) {
-    super(prototype.program, internalName, prototype.declaration);
+    super(prototype.program, internalName);
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.typeArguments = typeArguments;
-    this.base = base;
     this.type = (prototype.program.target == Target.WASM64 ? Type.usize64 : Type.usize32).asClass(this);
+    this.base = base;
 
-    // inherit base class contextual type arguments
+    // inherit contextual type arguments from base class
     if (base)
       for (let [name, type] of base.contextualTypeArguments)
         this.contextualTypeArguments.set(name, type);
@@ -1350,13 +1421,13 @@ export class Class extends Namespace {
   }
 }
 
-/** A yet unresvoled interface. */
+/** A yet unresolved interface. */
 export class InterfacePrototype extends ClassPrototype {
 
   kind = ElementKind.INTERFACE_PROTOTYPE;
 
   /** Declaration reference. */
-  declaration: InterfaceDeclaration | null;
+  declaration: InterfaceDeclaration | null; // more specific
 
   /** Constructs a new interface prototype. */
   constructor(program: Program, internalName: string, declaration: InterfaceDeclaration | null = null) {
@@ -1370,9 +1441,9 @@ export class Interface extends Class {
   kind = ElementKind.INTERFACE;
 
   /** Prototype reference. */
-  prototype: InterfacePrototype;
+  prototype: InterfacePrototype; // more specific
   /** Base interface, if applcable. */
-  base: Interface | null;
+  base: Interface | null; // more specific
 
   /** Constructs a new interface. */
   constructor(prototype: InterfacePrototype, internalName: string, typeArguments: Type[] = [], base: Interface | null = null) {

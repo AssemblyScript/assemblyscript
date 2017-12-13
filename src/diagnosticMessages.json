@@ -57,6 +57,7 @@
   "Type '{0}' is not generic.": 2315,
   "Type '{0}' is not assignable to type '{1}'.": 2322,
   "'this' cannot be referenced in current location.": 2332,
+  "'super' can only be referenced in a derived class.": 2335,
   "Property '{0}' does not exist on type '{1}'.": 2339,
   "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": 2349,
   "The operand of an increment or decrement operator must be a variable or a property access.": 2357,
@@ -69,6 +70,7 @@
   "Expected {0} arguments, but got {1}.": 2554,
   "Expected at least {0} arguments, but got {1}.": 2555,
   "Expected {0} type arguments, but got {1}.": 2558,
+  "Namespace '{0}' has no exported member '{1}'.": 2694,
 
   "File '{0}' not found.": 6054
 }

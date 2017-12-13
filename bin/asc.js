@@ -130,7 +130,8 @@ args._.forEach(filename => {
 var options = assemblyscript.createOptions();
 assemblyscript.setTarget(options, 0);
 assemblyscript.setNoTreeShaking(options, args.noTreeShaking);
-assemblyscript.setNoDebug(options, args.noDebug);
+assemblyscript.setNoAssert(options, args.noAssert);
+// TODO: noDebug binaryen feature, removing names the debug section
 
 var module = assemblyscript.compile(parser, options);
 checkDiagnostics(parser);

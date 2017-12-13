@@ -5,7 +5,7 @@ AssemblyScript NEXT
 
 **AssemblyScript** is a new compiler targeting [WebAssembly](http://webassembly.org) while utilizing [TypeScript](http://www.typescriptlang.org)'s syntax and [node](https://nodejs.org)'s vibrant ecosystem. Instead of requiring complex toolchains to set up, you can simply `npm install` it - or run it in a browser.
 
-By compiling syntactially but not necessarily semantically valid TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR, the resulting module can be validated, optimized, emitted in WebAssembly text or binary format and converted to [asm.js](http://asmjs.org) as a polyfill.
+By compiling syntactially (not necessarily semantically) valid TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR, the resulting module can be validated, optimized, emitted in WebAssembly text or binary format and converted to [asm.js](http://asmjs.org) as a polyfill.
 
 The compiler itself utilizes "portable definitions" so it can be compiled to both JavaScript using `tsc` and, eventually, to WebAssembly using `asc`.
 

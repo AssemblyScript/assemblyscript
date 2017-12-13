@@ -84,9 +84,9 @@ export function setNoTreeShaking(options: Options, noTreeShaking: bool): void {
   options.noTreeShaking = noTreeShaking;
 }
 
-/** Sets the `noDebug` option. */
-export function setNoDebug(options: Options, noDebug: bool): void {
-  options.noDebug = noDebug;
+/** Sets the `noAssert` option. */
+export function setNoAssert(options: Options, noAssert: bool): void {
+  options.noAssert = noAssert;
 }
 
 /** Compiles the sources computed by the parser to a module. */

@@ -57,6 +57,7 @@ export enum DiagnosticCode {
   Type_0_is_not_generic = 2315,
   Type_0_is_not_assignable_to_type_1 = 2322,
   _this_cannot_be_referenced_in_current_location = 2332,
+  _super_can_only_be_referenced_in_a_derived_class = 2335,
   Property_0_does_not_exist_on_type_1 = 2339,
   Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
@@ -69,6 +70,7 @@ export enum DiagnosticCode {
   Expected_0_arguments_but_got_1 = 2554,
   Expected_at_least_0_arguments_but_got_1 = 2555,
   Expected_0_type_arguments_but_got_1 = 2558,
+  Namespace_0_has_no_exported_member_1 = 2694,
   File_0_not_found = 6054
 }
 
@@ -130,6 +132,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2315: return "Type '{0}' is not generic.";
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
     case 2332: return "'this' cannot be referenced in current location.";
+    case 2335: return "'super' can only be referenced in a derived class.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";
     case 2349: return "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.";
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
@@ -142,6 +145,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2554: return "Expected {0} arguments, but got {1}.";
     case 2555: return "Expected at least {0} arguments, but got {1}.";
     case 2558: return "Expected {0} type arguments, but got {1}.";
+    case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 6054: return "File '{0}' not found.";
     default: return "";
   }
