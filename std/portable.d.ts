@@ -51,7 +51,7 @@ declare function unreachable(): any; // sic
 /** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
 declare function changetype<T1,T2>(value: T1): T2;
 /** Traps if the specified value evaluates to `false`. */
-declare function assert(isTrue: bool): void;
+declare function assert(isTrue: bool, message?: string): void;
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
 /** Parses a floating point string to a 64-bit float. */

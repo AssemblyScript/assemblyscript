@@ -19,14 +19,14 @@ UnreachableError.prototype.message = "unreachable";
 
 globalScope["unreachable"] = function unreachable() { throw new UnreachableError(); };
 
-function AssertionError() {
+function AssertionError(message) {
+  this.message = message || "assertion failed";
   this.stack = new Error().stack;
 }
 AssertionError.prototype = new Error;
 AssertionError.prototype.name = "AssertionError";
-AssertionError.prototype.message = "assertion failed";
 
-globalScope["assert"] = function assert(isTrue) { if (!isTrue) throw new AssertionError(); };
+globalScope["assert"] = function assert(isTrue, message) { if (!isTrue) throw new AssertionError(message); };
 globalScope["changetype"] = function changetype(value) { return value; }
 
 String["fromCharCodes"] = function fromCharCodes(arr) { return String.fromCharCode.apply(String, arr); }

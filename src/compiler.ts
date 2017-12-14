@@ -31,7 +31,6 @@ import {
   EnumValue
 
 } from "./program";
-import { I64, U64, sb } from "./util";
 import { Token } from "./tokenizer";
 import {
 
@@ -103,7 +102,10 @@ import {
   TypeKind,
 
 } from "./types";
+import { I64, U64 } from "./util/i64";
+import { sb } from "./util/sb";
 
+/** Compilation target. */
 export enum Target {
   /** WebAssembly with 32-bit pointers. */
   WASM32,
@@ -111,6 +113,7 @@ export enum Target {
   WASM64
 }
 
+/** Compiler options. */
 export class Options {
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
@@ -122,6 +125,7 @@ export class Options {
   noAssert: bool = false;
 }
 
+/** Indicates the desired kind of a conversion. */
 const enum ConversionKind {
   /** No conversion. */
   NONE,
@@ -131,6 +135,7 @@ const enum ConversionKind {
   EXPLICIT
 }
 
+/** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
 
   /** Program reference. */
@@ -323,8 +328,10 @@ export class Compiler extends DiagnosticEmitter {
     if (!type) {
       if (!declaration)
         throw new Error("unexpected missing declaration");
-      if (!declaration.type)
-        return false; // TODO: infer type? currently reported by parser
+      if (!declaration.type) { // TODO: infer type
+        this.error(DiagnosticCode.Type_expected, declaration.identifier.range);
+        return false;
+      }
       type = this.program.resolveType(declaration.type); // reports
       if (!type)
         return false;
@@ -336,6 +343,7 @@ export class Compiler extends DiagnosticEmitter {
     let initializer: ExpressionRef;
     let initializeInStart: bool = false;
     if (global.hasConstantValue) {
+      assert(type != null);
       if (type.isLongInteger)
         initializer = global.constantIntegerValue ? this.module.createI64(global.constantIntegerValue.lo, global.constantIntegerValue.hi) : this.module.createI64(0, 0);
       else if (type.kind == TypeKind.F32)
@@ -513,17 +521,17 @@ export class Compiler extends DiagnosticEmitter {
 
     // create the function type
     let k: i32 = instance.parameters.length;
-    const binaryenResultType: NativeType = typeToNativeType(instance.returnType);
-    const binaryenParamTypes: NativeType[] = new Array(k);
+    const nativeResultType: NativeType = typeToNativeType(instance.returnType);
+    const nativeParamTypes: NativeType[] = new Array(k);
     const signatureNameParts: string[] = new Array(k + 1);
     for (let i: i32 = 0; i < k; ++i) {
-      binaryenParamTypes[i] = typeToNativeType(instance.parameters[i].type);
+      nativeParamTypes[i] = typeToNativeType(instance.parameters[i].type);
       signatureNameParts[i] = typeToSignatureNamePart(instance.parameters[i].type);
     }
     signatureNameParts[k] = typeToSignatureNamePart(instance.returnType);
-    let typeRef: FunctionTypeRef = this.module.getFunctionTypeBySignature(binaryenResultType, binaryenParamTypes);
+    let typeRef: FunctionTypeRef = this.module.getFunctionTypeBySignature(nativeResultType, nativeParamTypes);
     if (!typeRef)
-      typeRef = this.module.addFunctionType(signatureNameParts.join(""), binaryenResultType, binaryenParamTypes);
+      typeRef = this.module.addFunctionType(signatureNameParts.join(""), nativeResultType, nativeParamTypes);
 
     // create the function
     const internalName: string = instance.internalName;
@@ -673,6 +681,7 @@ export class Compiler extends DiagnosticEmitter {
 
   // memory
 
+  /** Adds a static memory segment with the specified data.  */
   addMemorySegment(buffer: Uint8Array): MemorySegment {
     if (this.memoryOffset.lo & 7) { // align to 8 bytes so any native data type is aligned here
       this.memoryOffset.or32(7);
@@ -686,6 +695,7 @@ export class Compiler extends DiagnosticEmitter {
 
   // types
 
+  // TODO: try to get rid of this
   determineExpressionType(expression: Expression, contextualType: Type): Type {
     const previousType: Type = this.currentType;
     const previousNoEmit: bool = this.module.noEmit;
@@ -945,6 +955,8 @@ export class Compiler extends DiagnosticEmitter {
           if (declaration.initializer)
             initializers.push(this.compileAssignment(declaration.identifier, <Expression>declaration.initializer, Type.void));
         }
+      } else {
+        this.error(DiagnosticCode.Type_expected, declaration.identifier.range);
       }
     }
     return initializers.length ? this.module.createBlock(null, initializers, NativeType.None) : this.module.createNop();
@@ -1160,11 +1172,14 @@ export class Compiler extends DiagnosticEmitter {
             expr = mod.createUnary(UnaryOp.ConvertI64_F32, expr);
           else
             expr = mod.createUnary(UnaryOp.ConvertU64_F32, expr);
-        } else
+        } else {
+          if (!fromType.isSmallInteger)
+            losesInformation = true;
           if (fromType.isSignedInteger)
             expr = mod.createUnary(UnaryOp.ConvertI32_F32, expr);
           else
             expr = mod.createUnary(UnaryOp.ConvertU32_F32, expr);
+        }
 
       // int to f64
       } else {
@@ -1205,8 +1220,8 @@ export class Compiler extends DiagnosticEmitter {
         else
           expr = mod.createUnary(UnaryOp.ExtendU32, expr);
 
-      // i32 to smaller/change of signage i32
-      } else if (toType.isSmallInteger && (fromType.size > toType.size || (fromType.size == toType.size && fromType.kind != toType.kind))) {
+      // i32 or smaller to even smaller int
+      } else if (toType.isSmallInteger && fromType.size > toType.size) {
         losesInformation = true;
         if (toType.isSignedInteger) {
           expr = mod.createBinary(BinaryOp.ShlI32, expr, mod.createI32(toType.smallIntegerShift));
@@ -1813,7 +1828,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createI64(intValue.lo, intValue.hi);
         if (contextualType.isSmallInteger)
           return this.module.createI32(intValue.toI32());
-        this.currentType = Type.i32;
+        this.currentType = contextualType.isSignedInteger ? Type.i32 : Type.u32;
         return this.module.createI32(intValue.toI32());
       }
 

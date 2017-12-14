@@ -10,7 +10,8 @@
 import { Program } from "./program";
 import { Tokenizer, Token, Range } from "./tokenizer";
 import { DiagnosticCode, DiagnosticEmitter } from "./diagnostics";
-import { normalizePath, I64 } from "./util";
+import { I64 } from "./util/i64";
+import { normalize as normalizePath } from "./util/path";
 import {
 
   Node,
@@ -386,10 +387,8 @@ export class Parser extends DiagnosticEmitter {
     const identifier: IdentifierExpression = Expression.createIdentifier(tn.readIdentifier(), tn.range());
 
     let type: TypeNode | null = null;
-    if (tn.skip(Token.COLON)) {
+    if (tn.skip(Token.COLON))
       type = this.parseType(tn);
-    } else
-      this.error(DiagnosticCode.Type_expected, tn.range(tn.pos)); // recoverable
 
     let initializer: Expression | null = null;
     if (tn.skip(Token.EQUALS)) {
@@ -398,6 +397,11 @@ export class Parser extends DiagnosticEmitter {
       initializer = this.parseExpression(tn, Precedence.COMMA + 1);
       if (!initializer)
         return null;
+    } else {
+      if (hasModifier(ModifierKind.CONST, parentModifiers))
+        this.error(DiagnosticCode._const_declarations_must_be_initialized, identifier.range);
+      else if (!type) // neither type nor initializer
+        this.error(DiagnosticCode.Type_expected, tn.range(tn.pos)); // recoverable
     }
     return Statement.createVariableDeclaration(identifier, type, initializer, parentModifiers, parentDecorators, Range.join(identifier.range, tn.range()));
   }
@@ -567,13 +571,28 @@ export class Parser extends DiagnosticEmitter {
     const parameters: Parameter[] | null = this.parseParameters(tn);
     if (!parameters)
       return null;
+    let isSetter: bool = hasModifier(ModifierKind.SET, modifiers);
+    if (isSetter) {
+      if (parameters.length != 1)
+        this.error(DiagnosticCode.A_set_accessor_must_have_exactly_one_parameter, identifier.range); // recoverable
+      if (parameters.length && parameters[0].initializer)
+        this.error(DiagnosticCode.A_set_accessor_parameter_cannot_have_an_initializer, identifier.range); // recoverable
+    }
+    let isGetter: bool = hasModifier(ModifierKind.GET, modifiers);
+    if (isGetter && parameters.length)
+      this.error(DiagnosticCode.A_get_accessor_cannot_have_parameters, identifier.range); // recoverable
     let returnType: TypeNode | null = null;
     if (tn.skip(Token.COLON)) {
-      returnType = this.parseType(tn);
+      returnType = this.parseType(tn, isSetter);
       if (!returnType)
         return null;
-    } else
-      this.error(DiagnosticCode.Type_expected, tn.range(tn.pos)); // recoverable
+    } else {
+      if (isSetter) {
+        if (parameters.length)
+          returnType = parameters[0].type;
+      } else
+        this.error(DiagnosticCode.Type_expected, tn.range(tn.pos)); // recoverable
+    }
     const isDeclare: bool = hasModifier(ModifierKind.DECLARE, modifiers);
     let statements: Statement[] | null = null;
     if (tn.skip(Token.OPENBRACE)) {
@@ -675,10 +694,15 @@ export class Parser extends DiagnosticEmitter {
     else if (tn.skip(Token.ABSTRACT))
       modifiers = addModifier(Statement.createModifier(ModifierKind.ABSTRACT, tn.range()), modifiers);
 
-    if (tn.skip(Token.GET))
+    let isGetter: bool = false;
+    let isSetter: bool = false;
+    if (tn.skip(Token.GET)) {
       modifiers = addModifier(Statement.createModifier(ModifierKind.GET, tn.range()), modifiers);
-    else if (tn.skip(Token.SET))
+      isGetter = true;
+    } else if (tn.skip(Token.SET)) { // can't be both
       modifiers = addModifier(Statement.createModifier(ModifierKind.SET, tn.range()), modifiers);
+      isSetter = true;
+    }
 
     if (tn.skip(Token.IDENTIFIER)) {
       const identifier: IdentifierExpression = Expression.createIdentifier(tn.readIdentifier(), tn.range());
@@ -695,13 +719,26 @@ export class Parser extends DiagnosticEmitter {
         let parameters = this.parseParameters(tn);
         if (!parameters)
           return null;
+        if (isGetter && parameters.length)
+          this.error(DiagnosticCode.A_get_accessor_cannot_have_parameters, identifier.range);
+        if (isSetter) {
+          if (parameters.length != 1)
+            this.error(DiagnosticCode.A_set_accessor_must_have_exactly_one_parameter, identifier.range);
+          if (parameters.length && parameters[0].initializer)
+            this.error(DiagnosticCode.A_set_accessor_parameter_cannot_have_an_initializer, identifier.range);
+        }
         let returnType: TypeNode | null = null;
         if (tn.skip(Token.COLON)) {
-          returnType = this.parseType(tn);
+          returnType = this.parseType(tn, isSetter);
           if (!returnType)
             return null;
-        } else
-          this.error(DiagnosticCode.Type_expected, tn.range()); // recoverable
+        } else {
+          if (isSetter) {
+            if (parameters.length)
+              returnType = parameters[0].type;
+          } else
+            this.error(DiagnosticCode.Type_expected, tn.range()); // recoverable
+        }
         let statements: Statement[] | null = null;
         if (tn.skip(Token.OPENBRACE)) {
           if (parentIsDeclare)

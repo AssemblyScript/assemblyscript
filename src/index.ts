@@ -17,6 +17,9 @@
 
  compile(parser) -> module
 
+ [check diagnostics again]
+ [output module]
+
 */
 
 import { Module } from "./module";

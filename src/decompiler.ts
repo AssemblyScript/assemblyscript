@@ -14,7 +14,7 @@ import {
   readString
 
 } from "./module";
-import { I64 } from "./util";
+import { I64 } from "./util/i64";
 
 // TODO :-)
 

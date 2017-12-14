@@ -1,4 +1,4 @@
-import { Compiler, Target, typeToNativeType, typeToNativeOne } from "./compiler";
+import { Compiler, Target, typeToNativeType, typeToNativeOne, typeToNativeZero } from "./compiler";
 import { DiagnosticCode } from "./diagnostics";
 import { Node, Expression } from "./ast";
 import { Type } from "./types";
@@ -490,15 +490,26 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
     case "assert": // assert(isTrue: bool) -> void
       compiler.currentType = Type.void;
-      if (!validateCall(compiler, typeArguments, 0, operands, 1, reportNode))
+      if (typeArguments.length != 0) {
+        compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "0", typeArguments.length.toString(10));
         return module.createUnreachable();
+      }
+      if (operands.length < 1) {
+        compiler.error(DiagnosticCode.Expected_at_least_0_arguments_but_got_1, reportNode.range, "1", operands.length.toString(10));
+        return module.createUnreachable();
+      }
+      if (operands.length > 2) {
+        compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range, "2", operands.length.toString(10));
+        return module.createUnreachable();
+      }
       arg0 = compiler.compileExpression(operands[0], Type.i32); // reports
+      arg1 = operands.length > 1 ? compiler.compileExpression(operands[1], usizeType) : typeToNativeZero(module, usizeType); // TODO: string type
       compiler.currentType = Type.void;
       return compiler.options.noAssert
         ? module.createNop()
         : module.createIf(
             module.createUnary(UnaryOp.EqzI32, arg0),
-            module.createUnreachable()
+            module.createUnreachable() // TODO: report message to embedder
           );
 
     case "parseInt": // takes a pointer to the string
@@ -541,7 +552,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
   return 0;
 }
 
-/** Validates a call to a built-in function. */
+/** Pre-validates a call to a built-in function. */
 function validateCall(compiler: Compiler, typeArguments: Type[], expectedTypeArguments: i32, operands: Expression[], expectedOperands: i32, reportNode: Node): bool {
   if (typeArguments.length != expectedTypeArguments) {
     compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, expectedTypeArguments.toString(10), typeArguments.length.toString(10));

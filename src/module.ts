@@ -1,5 +1,5 @@
-import { I64, U64 } from "./util";
 import { Target } from "./compiler";
+import { I64, U64 } from "./util/i64";
 
 export type ModuleRef = usize;
 export type FunctionTypeRef = usize;

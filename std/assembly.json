@@ -2,6 +2,7 @@
   "extends": "../tsconfig-base.json",
   "compilerOptions": {
     "target": "esnext",
+    "module": "commonjs",
     "noLib": true,
     "types": [],
     "rootDirs": [

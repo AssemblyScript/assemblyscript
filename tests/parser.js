@@ -18,12 +18,13 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
   console.log(chalk.default.whiteBright("Testing parser/" + filename));
 
   var parser = new Parser();
+  parser.silentDiagnostics = true;
   var sourceText = fs.readFileSync(__dirname + "/parser/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n").replace(/^\/\/.*\r?\n/mg, "");
   parser.parseFile(sourceText, filename, true);
 
   var sb = [];
   parser.program.sources[0].serialize(sb);
-  var actual = sb.join("");
+  var actual = sb.join("") + parser.diagnostics.map(diagnostic => "// " + diagnostic + "\n").join("");;
   var fixture = filename + ".fixture.ts";
 
   if (isCreate) {

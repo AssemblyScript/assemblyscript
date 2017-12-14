@@ -21,7 +21,8 @@
 
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter, formatDiagnosticMessage } from "./diagnostics";
 import { Source } from "./ast";
-import { I64, CharCode, isLineBreak } from "./util";
+import { CharCode, isLineBreak } from "./util/charcode";
+import { I64 } from "./util/i64";
 
 export enum Token {
 

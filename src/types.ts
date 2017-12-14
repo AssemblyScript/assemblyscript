@@ -1,5 +1,5 @@
 import { Class } from "./program";
-import { sb } from "./util";
+import { sb } from "./util/sb";
 
 export const enum TypeKind {
 
@@ -103,6 +103,7 @@ export class Type {
   static readonly f32: Type = new Type(TypeKind.F32, 32);
   static readonly f64: Type = new Type(TypeKind.F64, 64);
   static readonly void: Type = new Type(TypeKind.VOID, 0);
+  static readonly infer: Type = Type.void;
 }
 
 export function typesToString(types: Type[], prefix: string = "<", postfix: string = ">"): string {

@@ -20,6 +20,9 @@ export enum DiagnosticCode {
   Statements_are_not_allowed_in_ambient_contexts = 1036,
   Initializers_are_not_allowed_in_ambient_contexts = 1039,
   _0_modifier_cannot_be_used_here = 1042,
+  A_set_accessor_must_have_exactly_one_parameter = 1049,
+  A_set_accessor_parameter_cannot_have_an_initializer = 1052,
+  A_get_accessor_cannot_have_parameters = 1054,
   Type_parameters_cannot_appear_on_a_constructor_declaration = 1092,
   Type_annotation_cannot_appear_on_a_constructor_declaration = 1093,
   An_accessor_cannot_have_type_parameters = 1094,
@@ -42,6 +45,7 @@ export enum DiagnosticCode {
   String_literal_expected = 1141,
   Line_break_not_permitted_here = 1142,
   Declaration_expected = 1146,
+  _const_declarations_must_be_initialized = 1155,
   Unterminated_regular_expression_literal = 1161,
   Binary_digit_expected = 1177,
   Octal_digit_expected = 1178,
@@ -95,6 +99,9 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1036: return "Statements are not allowed in ambient contexts.";
     case 1039: return "Initializers are not allowed in ambient contexts.";
     case 1042: return "'{0}' modifier cannot be used here.";
+    case 1049: return "A 'set' accessor must have exactly one parameter.";
+    case 1052: return "A 'set' accessor parameter cannot have an initializer.";
+    case 1054: return "A 'get' accessor cannot have parameters.";
     case 1092: return "Type parameters cannot appear on a constructor declaration.";
     case 1093: return "Type annotation cannot appear on a constructor declaration.";
     case 1094: return "An accessor cannot have type parameters.";
@@ -117,6 +124,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1141: return "String literal expected.";
     case 1142: return "Line break not permitted here.";
     case 1146: return "Declaration expected.";
+    case 1155: return "'const' declarations must be initialized.";
     case 1161: return "Unterminated regular expression literal.";
     case 1177: return "Binary digit expected.";
     case 1178: return "Octal digit expected.";

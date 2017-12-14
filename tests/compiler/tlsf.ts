@@ -2,8 +2,6 @@
 // Useful as a compiler test in this state, but nothing more.
 // based upon: https://github.com/mattconte/tlsf/blob/master/tlsf.c (BSD)
 
-/// <reference path="../../assembly.d.ts" />
-
 /** Finds the index of the least bit set. */
 function fls(word: u32): i32 {
   return !word ? -1: 31 - clz<i32>(word);

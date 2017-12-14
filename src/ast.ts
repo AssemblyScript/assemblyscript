@@ -68,16 +68,20 @@
 
 import { GETTER_PREFIX, SETTER_PREFIX, PATH_DELIMITER, PARENT_SUBST, STATIC_DELIMITER, INSTANCE_DELIMITER } from "./constants";
 import { Token, Tokenizer, operatorTokenToString, Range } from "./tokenizer";
-import { CharCode, I64, normalizePath, resolvePath } from "./util";
+import { CharCode } from "./util/charcode";
+import { I64 } from "./util/i64";
+import { normalize as normalizePath, resolve as resolvePath } from "./util/path";
 
 export { Range } from "./tokenizer";
 
+/** Base class of all AST nodes. */
 export abstract class Node {
 
   kind: NodeKind;
   range: Range;
   parent: Node | null = null;
 
+  /** Serializes this node to its TypeScript representation. */
   abstract serialize(sb: string[]): void;
 }
 
@@ -1374,7 +1378,7 @@ export class FunctionDeclaration extends DeclarationStatement {
         sb.push(", ");
       this.parameters[i].serialize(sb);
     }
-    if (this.returnType) {
+    if (this.returnType && !hasModifier(ModifierKind.SET, this.modifiers)) {
       sb.push("): ");
       (<TypeNode>this.returnType).serialize(sb);
     } else

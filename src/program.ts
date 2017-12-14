@@ -3,7 +3,7 @@ import { Target, typeToNativeType } from "./compiler";
 import { GETTER_PREFIX, SETTER_PREFIX, PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
 import { Type, typesToString } from "./types";
-import { I64 } from "./util";
+import { I64 } from "./util/i64";
 import {
 
   ModifierKind,

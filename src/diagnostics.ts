@@ -1,6 +1,7 @@
 import { Range } from "./ast";
-import { CharCode, isLineBreak, sb } from "./util";
 import { DiagnosticCode, diagnosticCodeToString } from "./diagnosticMessages.generated";
+import { CharCode, isLineBreak } from "./util/charcode";
+import { sb } from "./util/sb";
 
 export { DiagnosticCode, diagnosticCodeToString } from "./diagnosticMessages.generated";
 
@@ -70,6 +71,12 @@ export class DiagnosticMessage {
   withRange(range: Range): this {
     this.range = range;
     return this;
+  }
+
+  toString(): string {
+    if (this.range)
+      return diagnosticCategoryToString(this.category) + " " + this.code + ": \"" + this.message + "\" in " + this.range.source.path + " @ " + this.range.start + "," + this.range.end;
+    return diagnosticCategoryToString(this.category) + " " + this.code + ": " + this.message;
   }
 }
 
@@ -146,6 +153,7 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
 export abstract class DiagnosticEmitter {
 
   diagnostics: DiagnosticMessage[];
+  silentDiagnostics: bool = false;
 
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
     this.diagnostics = diagnostics ? <DiagnosticMessage[]>diagnostics : new Array();
@@ -154,8 +162,10 @@ export abstract class DiagnosticEmitter {
   emitDiagnostic(code: DiagnosticCode, category: DiagnosticCategory, range: Range, arg0: string | null = null, arg1: string | null = null) {
     const message: DiagnosticMessage = DiagnosticMessage.create(code, category, arg0, arg1).withRange(range);
     this.diagnostics.push(message);
-    console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
-    console.log(<string>new Error("stack").stack);
+    if (!this.silentDiagnostics) {
+      console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
+      console.log(<string>new Error("stack").stack);
+    }
   }
 
   error(code: DiagnosticCode, range: Range, arg0: string | null = null, arg1: string | null = null): void {
