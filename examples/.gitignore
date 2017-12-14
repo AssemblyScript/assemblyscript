@@ -1,2 +1,3 @@
+*.wast
 *.wasm
 node_modules/

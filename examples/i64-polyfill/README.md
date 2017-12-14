@@ -6,10 +6,10 @@ An AssemblyScript example.
 Instructions
 ------------
 
-To build `assembly/i64.ts` to `i64.wasm`, run:
+To build [assembly/i64.ts](./assembly/i64.ts) to an untouched and an optimized `.wasm` including their respective `.wast` representations, run:
 
 ```
 $> npm run build
 ```
 
-Afterwards, `require` the node module as usual (entry point is `index.js`).
+Afterwards, `require` the node module as usual (CommonJS entry point is [index.js](./index.js)).

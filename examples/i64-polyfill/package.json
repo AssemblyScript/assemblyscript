@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "asc assembly/i64.ts -t assembly/i64.wast -c && asc assembly/i64.ts -b i64.wasm -t assembly/i64.optimized.wast -O -c"
+    "build": "npm run build:untouched && npm run build:optimized",
+    "build:untouched": "asc assembly/i64.ts -t i64.untouched.wast -b i64.untouched.wasm --validate",
+    "build:optimized": "asc -O assembly/i64.ts -b i64.optimized.wasm -t i64.optimized.wast --validdate"
   }
 }
