@@ -9,17 +9,17 @@ By compiling syntactially (not necessarily semantically) valid TypeScript to [Bi
 
 The compiler itself utilizes "portable definitions" so it can be compiled to both JavaScript using `tsc` and, eventually, to WebAssembly using `asc`.
 
-Development status
-------------------
+Note, though, that this version of the compiler (0.5.0, NEXT) is relatively new and does not yet support some features a TypeScript programmer might expect, e.g., strings, arrays and classes.
 
-This version of the compiler (0.5.0, NEXT) is relatively new and does not yet support some features a TypeScript programmer might expect, e.g., strings, arrays and classes. For now, you can see the [compiler tests](https://github.com/AssemblyScript/next/tree/master/tests/compiler) for an overview of what's supposed to be working already.
+See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for additional information and documentation.
+
+Examples
+--------
 
 A few early examples to get an idea:
 
-* **Conway's Game of Life** as seen on [dcode.io](http://dcode.io)<br />
-  [source](./examples/game-of-life/assembly/game-of-life.ts) - [wast](./examples/game-of-life/assembly/game-of-life.optimized.wast) - [html](./examples/game-of-life/game-of-life.html)
-* **i64 polyfill** using 32-bit integers<br />
-  [source](./examples/i64-polyfill/assembly/i64.ts) - [wast](./examples/i64-polyfill/assembly/i64.optimized.wast) - [js](./examples/i64-polyfill/index.js)
+* **[Conway's Game of Life](./examples/game-of-life)** as seen on dcode.io<br />
+* **[i64 polyfill](./examples/i64-polyfill)** using 32-bit integers<br />
 
 Getting started
 ---------------
@@ -42,35 +42,6 @@ and run:
 ```
 $> node bin/asc yourModule.ts
 ```
-
-Using the CLI
--------------
-
-```
-Syntax:   asc [options] [entryFile ...]
-
-Examples: asc hello.ts
-          asc hello.ts -b hello.wasm -t hello.wast -a hello.js
-          asc hello.ts -b > hello.wasm
-
-Options:
- -v, --version      Prints the compiler's version.
- -h, --help         Prints this message.
- -O, --optimize     Optimizes the module.
- -c, --validate     Validates the module.
- -o, --outFile      Specifies the output file. Format is determined by file extension.
- -b, --binaryFile   Specifies the binary format output file (.wasm).
- -t, --textFile     Specifies the text format output file (.wast).
- -a, --asmjsFile    Specifies the asm.js format output file (.js).
- --noTreeShaking    Disables tree-shaking.
- --noDebug          Disables assertions.
- --trapMode         Sets the trap mode to use.
-                    allow  Allow trapping operations. This is the default.
-                    clamp  Replace trapping operations with clamping semantics.
-                    js     Replace trapping operations with JS semantics.
-```
-
-Unless a bundle has been built to `dist/`, `asc` runs the (portable) TypeScript sources on the fly via [ts-node](https://www.npmjs.com/package/ts-node). Useful for development.
 
 Building
 --------

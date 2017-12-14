@@ -1,7 +1,7 @@
 i64 polyfill
 ============
 
-An AssemblyScript example.
+An [AssemblyScript](http://assemblyscript.org) example. Exposes i64 operations to JS using 32-bit integers (low and high bits).
 
 Instructions
 ------------

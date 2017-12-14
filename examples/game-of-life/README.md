@@ -1,7 +1,7 @@
 Conway's Game of Life
 =====================
 
-An AssemblyScript example.
+An [AssemblyScript](http://assemblyscript.org) example. Continuously updates the cellular automaton and visualizes its state on a canvas.
 
 Instructions
 ------------

@@ -5,6 +5,6 @@
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
     "build:untouched": "asc assembly/i64.ts -t i64.untouched.wast -b i64.untouched.wasm --validate",
-    "build:optimized": "asc -O assembly/i64.ts -b i64.optimized.wasm -t i64.optimized.wast --validdate"
+    "build:optimized": "asc -O assembly/i64.ts -b i64.optimized.wasm -t i64.optimized.wast --validate"
   }
 }

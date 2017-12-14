@@ -63,15 +63,15 @@ declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
-/** Loads a value of the specified type from memory. */
+/** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(offset: usize): T;
-/** Stores a value of the specified type to memory. */
+/** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
 declare function store<T>(offset: usize, value: T): void;
 /** Returns the current memory size in units of pages. One page is 64kb. */
 declare function current_memory(): i32;
 /** Grows linear memory by a given unsigned delta of pages. One page is 64kb. Returns the previous memory size in units of pages or `-1` on failure. */
 declare function grow_memory(value: i32): i32;
-/** Emits an unreachable operation that results in a runtime error when executed. */
+/** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
 declare function unreachable(): any; // sic
 
 /** NaN (not a number) as a 32-bit or 64-bit float depending on context. */
@@ -84,9 +84,9 @@ declare const HEAP_START: usize;
 declare function sizeof<T>(): usize;
 /** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
 declare function changetype<T1,T2>(value: T1): T2;
-/** Tests if a 32-bit or 64-bit float is NaN. */
+/** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
-/** Tests if a 32-bit or 64-bit float is finite, that is not NaN or +/-Infinity. */
+/** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T = f32 | f64>(value: T): bool;
 /** Traps if the specified value evaluates to `false`. */
 declare function assert(isTrue: bool, message?: string): void;
