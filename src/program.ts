@@ -210,94 +210,144 @@ export class Program extends DiagnosticEmitter {
     } while (true);
   }
 
-  private initializeClass(declaration: ClassDeclaration, namespace: Namespace | null = null): void {
-    throw new Error("not implemented");
-    /* const internalName: string = declaration.internalName;
+  private initializeClass(declaration: ClassDeclaration, namespace: Element | null = null): void {
+    const internalName: string = declaration.internalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
     }
     const prototype: ClassPrototype = new ClassPrototype(this, internalName, declaration);
     this.elements.set(internalName, prototype);
-    if (prototype.isExported) {
-      if (this.exports.has(internalName))
+
+    if (namespace) {
+      if (namespace.members) {
+        if (namespace.members.has(declaration.identifier.name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+          return;
+        }
+      } else
+        namespace.members = new Map();
+      namespace.members.set(declaration.identifier.name, prototype);
+    } else if (prototype.isExported) {
+      if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
-      else
-        this.exports.set(internalName, prototype);
+        return;
+      }
+      this.exports.set(internalName, prototype);
     }
+
     const memberDeclarations: DeclarationStatement[] = declaration.members;
     for (let j: i32 = 0, l: i32 = memberDeclarations.length; j < l; ++j) {
-      const memberDeclaration: DeclarationStatement = memberDeclarations[j];
-      if (memberDeclaration.kind == NodeKind.FIELD)
-        this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
-      else if (memberDeclaration.kind == NodeKind.METHOD)
-        this.initializeMethod(<MethodDeclaration>memberDeclaration, prototype);
-      else
-        throw new Error("unexpected class member");
-    } */
+      switch (memberDeclarations[j].kind) {
+
+        case NodeKind.FIELD:
+          this.initializeField(<FieldDeclaration>memberDeclarations[j], prototype);
+          break;
+
+        case NodeKind.METHOD:
+          this.initializeMethod(<MethodDeclaration>memberDeclarations[j], prototype);
+          break;
+
+        default:
+          throw new Error("unexpected class member");
+      }
+    }
   }
 
   private initializeField(declaration: FieldDeclaration, classPrototype: ClassPrototype): void {
-    throw new Error("not implemented");
-    /* const name: string = declaration.identifier.name;
-    if (classPrototype.members.has(name)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
-      return;
-    }
+    const name: string = declaration.identifier.name;
     const internalName: string = declaration.internalName;
-    if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) { // static fields become globals
-      const global: Global = new Global(this, internalName, declaration, null);
-      classPrototype.members.set(name, global);
+
+    // static fields become global variables
+    if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
+      if (this.elements.has(internalName)) {
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+        return;
+      }
+      if (classPrototype.members) {
+        if (classPrototype.members.has(name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+          return;
+        }
+      } else
+        classPrototype.members = new Map();
+      const staticField: Global = new Global(this, internalName, declaration, null);
+      classPrototype.members.set(name, staticField);
+      this.elements.set(internalName, staticField);
+
+    // instance fields are remembered until resolved
     } else {
-      const field: FieldPrototype = new FieldPrototype(classPrototype, internalName, declaration);
-      classPrototype.members.set(name, field);
-    } */
+      if (classPrototype.instanceMembers) {
+        if (classPrototype.instanceMembers.has(name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+          return;
+        }
+      } else
+        classPrototype.instanceMembers = new Map();
+      const instanceField = new FieldPrototype(classPrototype, internalName, declaration);
+      classPrototype.instanceMembers.set(name, instanceField);
+    }
   }
 
   private initializeMethod(declaration: MethodDeclaration, classPrototype: ClassPrototype): void {
-    throw new Error("not implemented");
-    /* let name: string = declaration.identifier.name;
+    let name: string = declaration.identifier.name;
     const internalName: string = declaration.internalName;
-    if (classPrototype.members.has(name)) {
+
+    // static methods become global functions
+    if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
+      if (this.elements.has(internalName)) {
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+        return;
+      }
+      if (classPrototype.members) {
+        if (classPrototype.members.has(name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+          return;
+        }
+      } else
+        classPrototype.members = new Map();
+      const staticPrototype: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, null);
+      classPrototype.members.set(name, staticPrototype);
+      this.elements.set(internalName, staticPrototype);
+
+    // instance methods are remembered until resolved
+    } else {
+      if (classPrototype.instanceMembers) {
+        if (classPrototype.instanceMembers.has(name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+          return;
+        }
+      } else
+        classPrototype.instanceMembers = new Map();
+      const instancePrototype: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, classPrototype);
+      classPrototype.instanceMembers.set(name, instancePrototype);
+    }
+  }
+
+  private initializeEnum(declaration: EnumDeclaration, namespace: Element | null = null): void {
+    const internalName: string = declaration.internalName;
+    if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
     }
-    const func: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, hasModifier(ModifierKind.STATIC, declaration.modifiers) ? null : classPrototype);
-    let modifiers: Modifier[] | null;
-    if (modifiers = declaration.modifiers) {
-      for (let i: i32 = 0, k: i32 = modifiers.length; i < k; ++i) {
-        const modifier: Modifier = modifiers[i];
-        if (modifier.modifierKind == ModifierKind.GET) {
-          name = GETTER_PREFIX + name;
-          break;
-        } else if (modifier.modifierKind == ModifierKind.SET) {
-          name = SETTER_PREFIX + name;
-          break;
-        }
-      }
-    }
-    classPrototype.members.set(name, func); */
-  }
-
-  private initializeEnum(declaration: EnumDeclaration, namespace: Namespace | null = null): void {
-    const internalName: string = declaration.internalName;
     const enm: Enum = new Enum(this, internalName, declaration);
-
-    if (this.elements.has(internalName))
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-    else
-      this.elements.set(internalName, enm);
+    this.elements.set(internalName, enm);
 
     if (namespace) {
-      if (namespace.members.has(declaration.identifier.name)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      if (namespace.members) {
+        if (namespace.members.has(declaration.identifier.name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+          return;
+        }
       } else
-        namespace.members.set(declaration.identifier.name, enm);
+        namespace.members = new Map();
+      namespace.members.set(declaration.identifier.name, enm);
     } else if (enm.isExported) {
-      if (this.exports.has(internalName))
+      if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
-      else
-        this.exports.set(internalName, enm);
+        return;
+      }
+      this.exports.set(internalName, enm);
     }
 
     const values: EnumValueDeclaration[] = declaration.members;
@@ -308,10 +358,13 @@ export class Program extends DiagnosticEmitter {
   private initializeEnumValue(declaration: EnumValueDeclaration, enm: Enum): void {
     const name: string = declaration.identifier.name;
     const internalName: string = declaration.internalName;
-    if (enm.members.has(name)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-      return;
-    }
+    if (enm.members) {
+      if (enm.members.has(name)) {
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        return;
+      }
+    } else
+      enm.members = new Map();
     const value: EnumValue = new EnumValue(enm, this, internalName, declaration);
     enm.members.set(name, value);
   }
@@ -396,26 +449,30 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeFunction(declaration: FunctionDeclaration, namespace: Namespace | null = null): void {
+  private initializeFunction(declaration: FunctionDeclaration, namespace: Element | null = null): void {
     const internalName: string = declaration.internalName;
-    const prototype: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, null);
-
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
     }
+    const prototype: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, null);
     this.elements.set(internalName, prototype);
 
     if (namespace) {
-      if (namespace.members.has(declaration.identifier.name))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-      else
-        namespace.members.set(declaration.identifier.name, prototype);
+      if (namespace.members) {
+        if (namespace.members.has(declaration.identifier.name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+          return;
+        }
+      } else
+        namespace.members = new Map();
+      namespace.members.set(declaration.identifier.name, prototype);
     } else if (prototype.isExported) {
-      if (this.exports.has(internalName))
+      if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
-      else
-        this.exports.set(internalName, prototype);
+        return;
+      }
+      this.exports.set(internalName, prototype);
     }
   }
 
@@ -472,38 +529,43 @@ export class Program extends DiagnosticEmitter {
     queuedImports.push(queuedImport);
   }
 
-  private initializeInterface(declaration: InterfaceDeclaration, namespace: Namespace | null = null): void {
+  private initializeInterface(declaration: InterfaceDeclaration, namespace: Element | null = null): void {
     const internalName: string = declaration.internalName;
     const prototype: InterfacePrototype = new InterfacePrototype(this, internalName, declaration);
 
-    if (this.elements.has(internalName))
+    if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-    else
-      this.elements.set(internalName, prototype);
+      return;
+    }
+    this.elements.set(internalName, prototype);
 
     if (namespace) {
-      if (namespace.members.has(prototype.internalName))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-      else
-        namespace.members.set(prototype.internalName, prototype);
+      if (namespace.members) {
+        if (namespace.members.has(prototype.internalName)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+          return;
+        }
+      } else
+        namespace.members = new Map();
+      namespace.members.set(prototype.internalName, prototype);
     } else if (prototype.isExported) {
-      if (this.exports.has(internalName))
+      if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
-      else
-        this.exports.set(internalName, prototype);
+        return;
+      }
+      this.exports.set(internalName, prototype);
     }
 
     const memberDeclarations: DeclarationStatement[] = declaration.members;
-    for (let j: i32 = 0, l: i32 = memberDeclarations.length; j < l; ++j) {
-      const memberDeclaration: DeclarationStatement = memberDeclarations[j];
-      switch (memberDeclaration.kind) {
+    for (let i: i32 = 0, k: i32 = memberDeclarations.length; i < k; ++i) {
+      switch (memberDeclarations[i].kind) {
 
         case NodeKind.FIELD:
-          this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
+          this.initializeField(<FieldDeclaration>memberDeclarations[i], prototype);
           break;
 
         case NodeKind.METHOD:
-          this.initializeMethod(<MethodDeclaration>memberDeclaration, prototype);
+          this.initializeMethod(<MethodDeclaration>memberDeclarations[i], prototype);
           break;
 
         default:
@@ -512,54 +574,58 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeNamespace(declaration: NamespaceDeclaration, parentNamespace: Namespace | null = null): void {
+  private initializeNamespace(declaration: NamespaceDeclaration, parentNamespace: Element | null = null): void {
     const internalName: string = declaration.internalName;
-    const namespace: Namespace = new Namespace(this, internalName, declaration);
 
-    if (this.elements.has(internalName))
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-    else
+    let namespace: Element | null = this.elements.get(internalName);
+    if (!namespace) {
+      namespace = new Namespace(this, internalName, declaration);
       this.elements.set(internalName, namespace);
+    }
 
     if (parentNamespace) {
-      if (parentNamespace.members.has(declaration.identifier.name))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-      else
-        parentNamespace.members.set(declaration.identifier.name, namespace);
+      if (parentNamespace.members) {
+        if (parentNamespace.members.has(declaration.identifier.name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+          return;
+        }
+      } else
+        parentNamespace.members = new Map();
+      parentNamespace.members.set(declaration.identifier.name, namespace);
     } else if (namespace.isExported) {
-        if (this.exports.has(internalName))
-          this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
-        else
-          this.exports.set(internalName, namespace);
+      if (this.exports.has(internalName)) {
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
+        return;
+      }
+      this.exports.set(internalName, namespace);
     }
 
     const members: Statement[] = declaration.members;
     for (let i: i32 = 0, k: i32 = members.length; i < k; ++i) {
-      const statement: Statement = members[i];
-      switch (statement.kind) {
+      switch (members[i].kind) {
 
         case NodeKind.CLASS:
-          this.initializeClass(<ClassDeclaration>statement, namespace);
+          this.initializeClass(<ClassDeclaration>members[i], namespace);
           break;
 
         case NodeKind.ENUM:
-          this.initializeEnum(<EnumDeclaration>statement, namespace);
+          this.initializeEnum(<EnumDeclaration>members[i], namespace);
           break;
 
         case NodeKind.FUNCTION:
-          this.initializeFunction(<FunctionDeclaration>statement, namespace);
+          this.initializeFunction(<FunctionDeclaration>members[i], namespace);
           break;
 
         case NodeKind.INTERFACE:
-          this.initializeInterface(<InterfaceDeclaration>statement, namespace);
+          this.initializeInterface(<InterfaceDeclaration>members[i], namespace);
           break;
 
         case NodeKind.NAMESPACE:
-          this.initializeNamespace(<NamespaceDeclaration>statement, namespace);
+          this.initializeNamespace(<NamespaceDeclaration>members[i], namespace);
           break;
 
         case NodeKind.VARIABLE:
-          this.initializeVariables(<VariableStatement>statement, namespace);
+          this.initializeVariables(<VariableStatement>members[i], namespace);
           break;
 
         default:
@@ -568,29 +634,33 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeVariables(statement: VariableStatement, namespace: Namespace | null = null): void {
+  private initializeVariables(statement: VariableStatement, namespace: Element | null = null): void {
     const declarations: VariableDeclaration[] = statement.declarations;
     for (let i: i32 = 0, k: i32 = declarations.length; i < k; ++i) {
       const declaration: VariableDeclaration = declarations[i];
       const internalName: string = declaration.internalName;
-      const global: Global = new Global(this, internalName, declaration, null);
-
-      if (this.elements.has(internalName))
+      if (this.elements.has(internalName)) {
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-      else {
-        this.elements.set(internalName, global);
+        continue;
+      }
+
+      const global: Global = new Global(this, internalName, declaration, null);
+      this.elements.set(internalName, global);
 
       if (namespace) {
-        if (namespace.members.has(declaration.identifier.name))
+        if (namespace.members) {
+          if (namespace.members.has(declaration.identifier.name)) {
+            this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+            continue;
+          }
+        } else
+          namespace.members = new Map();
+        namespace.members.set(declaration.identifier.name, global);
+      } else if (global.isExported) {
+        if (this.exports.has(internalName))
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
         else
-          namespace.members.set(declaration.identifier.name, global);
-      } else if (global.isExported) {
-          if (this.exports.has(internalName))
-            this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
-          else
-            this.exports.set(internalName, global);
-        }
+          this.exports.set(internalName, global);
       }
     }
   }
@@ -683,17 +753,11 @@ export class Program extends DiagnosticEmitter {
     if (!target)
       return null;
     const propertyName: string = propertyAccess.property.name;
-    let member: Element | null = null;
-    if (target.kind == ElementKind.ENUM)
-      member = (<Enum>target).members.get(propertyName);
-    else if (target.kind == ElementKind.NAMESPACE)
-      member = (<Namespace>target).members.get(propertyName);
-    // else if (target.kind == ElementKind.CLASS_PROTOTYPE)
-    //   member = <Element | null>(<ClassPrototype>target).members.get(propertyName);
-    // else if (target.kind == ElementKind.CLASS)
-    //   member = <Element | null>(<Class>target).members.get(propertyName);
-    if (member)
-      return member;
+    if (target.members) {
+      const member: Element | null = target.members.get(propertyName);
+      if (member)
+        return member;
+    }
     this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, expression.range, (<PropertyAccessExpression>expression).property.name, target.internalName);
     return null;
   }
@@ -807,6 +871,8 @@ export abstract class Element {
   internalName: string;
   /** Element flags. */
   flags: ElementFlags = ElementFlags.NONE;
+  /** Namespaced member elements. */
+  members: Map<string,Element> | null = null;
 
   /** Constructs a new element, linking it to its containing {@link Program}. */
   protected constructor(program: Program, internalName: string) {
@@ -861,9 +927,7 @@ export class Namespace extends Element {
   kind = ElementKind.NAMESPACE;
 
   /** Declaration reference. */
-  declaration: NamespaceDeclaration | null;
-  /** Member elements. */
-  members: Map<string,Element> = new Map();
+  declaration: NamespaceDeclaration | null; // more specific
 
   /** Constructs a new namespace. */
   constructor(program: Program, internalName: string, declaration: NamespaceDeclaration | null = null) {
@@ -882,18 +946,16 @@ export class Namespace extends Element {
 }
 
 /** An enum. */
-export class Enum extends Namespace {
+export class Enum extends Element {
 
   kind = ElementKind.ENUM;
 
   /** Declaration reference. */
   declaration: EnumDeclaration | null;
-  /** Enum members. */
-  members: Map<string,EnumValue> = new Map(); // more specific
 
   /** Constructs a new enum. */
   constructor(program: Program, internalName: string, declaration: EnumDeclaration | null = null) {
-    super(program, internalName, null);
+    super(program, internalName);
     if ((this.declaration = declaration) && this.declaration.modifiers) {
       for (let i: i32 = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
@@ -952,6 +1014,7 @@ export class Global extends Element {
             case ModifierKind.EXPORT: this.isExported = true; break;
             case ModifierKind.CONST: this.isConstant = true; break;
             case ModifierKind.DECLARE: this.isDeclared = true; break;
+            case ModifierKind.STATIC: break; // static fields become globals
             default: throw new Error("unexpected modifier");
           }
         }
@@ -1024,6 +1087,7 @@ export class FunctionPrototype extends Element {
             case ModifierKind.DECLARE: this.isDeclared = true; break;
             case ModifierKind.GET: this.isGetter = true; break;
             case ModifierKind.SET: this.isSetter = true; break;
+            case ModifierKind.STATIC: break; // already handled
             default: throw new Error("unexpected modifier");
           }
         }
@@ -1314,14 +1378,8 @@ export class ClassPrototype extends Element {
   declaration: ClassDeclaration | null;
   /** Resolved instances. */
   instances: Map<string,Class> = new Map();
-  /** Static fields. */
-  staticFields: Map<string,Global> | null = null;
-  /** Static methods. */
-  staticMethods: Map<string,Function> | null = null;
-  /** Static getters. */
-  staticGetters: Map<string,Function> | null = null;
-  /** Static setters. */
-  staticSetters: Map<string,Function> | null = null;
+  /** Instance member prototypes. */
+  instanceMembers: Map<string,Element> | null = null;
 
   constructor(program: Program, internalName: string, declaration: ClassDeclaration | null = null) {
     super(program, internalName);

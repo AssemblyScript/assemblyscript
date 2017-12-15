@@ -419,52 +419,56 @@ export class Compiler extends DiagnosticEmitter {
     if (element.isCompiled)
       return;
     let previousValue: EnumValue | null = null;
-    for (let [key, val] of element.members) {
-      if (val.hasConstantValue) {
-        this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
-      } else if (val.declaration) {
-        const declaration: EnumValueDeclaration = val.declaration;
-        let initializer: ExpressionRef;
-        let initializeInStart: bool = false;
-        if (declaration.value) {
-          initializer = this.compileExpression(<Expression>declaration.value, Type.i32);
-          if (_BinaryenExpressionGetId(initializer) != ExpressionId.Const) {
-            initializer = this.precomputeExpressionRef(initializer);
+    if (element.members)
+      for (let [key, member] of element.members) {
+        if (member.kind != ElementKind.ENUMVALUE)
+          continue;
+        const val: EnumValue = <EnumValue>member;
+        if (val.hasConstantValue) {
+          this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
+        } else if (val.declaration) {
+          const declaration: EnumValueDeclaration = val.declaration;
+          let initializer: ExpressionRef;
+          let initializeInStart: bool = false;
+          if (declaration.value) {
+            initializer = this.compileExpression(<Expression>declaration.value, Type.i32);
             if (_BinaryenExpressionGetId(initializer) != ExpressionId.Const) {
-              if (element.isConstant)
-                this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
-              initializeInStart = true;
+              initializer = this.precomputeExpressionRef(initializer);
+              if (_BinaryenExpressionGetId(initializer) != ExpressionId.Const) {
+                if (element.isConstant)
+                  this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
+                initializeInStart = true;
+              }
             }
+          } else if (previousValue == null) {
+            initializer = this.module.createI32(0);
+          } else if (previousValue.hasConstantValue) {
+            initializer = this.module.createI32(previousValue.constantValue + 1);
+          } else {
+            // in TypeScript this errors with TS1061, but actually we can do:
+            initializer = this.module.createBinary(BinaryOp.AddI32,
+              this.module.createGetGlobal(previousValue.internalName, NativeType.I32),
+              this.module.createI32(1)
+            );
+            if (element.isConstant)
+              this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
+            initializeInStart = true;
           }
-        } else if (previousValue == null) {
-          initializer = this.module.createI32(0);
-        } else if (previousValue.hasConstantValue) {
-          initializer = this.module.createI32(previousValue.constantValue + 1);
-        } else {
-          // in TypeScript this errors with TS1061, but actually we can do:
-          initializer = this.module.createBinary(BinaryOp.AddI32,
-            this.module.createGetGlobal(previousValue.internalName, NativeType.I32),
-            this.module.createI32(1)
-          );
-          if (element.isConstant)
-            this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, val.declaration.range);
-          initializeInStart = true;
-        }
-        if (initializeInStart) {
-          this.module.addGlobal(val.internalName, NativeType.I32, true, this.module.createI32(0));
-          this.startFunctionBody.push(this.module.createSetGlobal(val.internalName, initializer));
-        } else {
-          this.module.addGlobal(val.internalName, NativeType.I32, false, initializer);
-          if (_BinaryenExpressionGetType(initializer) == NativeType.I32) {
-            val.constantValue = _BinaryenConstGetValueI32(initializer);
-            val.hasConstantValue = true;
-          } else
-            throw new Error("unexpected initializer type");
-        }
-      } else
-        throw new Error("unexpected missing declaration or constant value");
-      previousValue = val;
-    }
+          if (initializeInStart) {
+            this.module.addGlobal(val.internalName, NativeType.I32, true, this.module.createI32(0));
+            this.startFunctionBody.push(this.module.createSetGlobal(val.internalName, initializer));
+          } else {
+            this.module.addGlobal(val.internalName, NativeType.I32, false, initializer);
+            if (_BinaryenExpressionGetType(initializer) == NativeType.I32) {
+              val.constantValue = _BinaryenConstGetValueI32(initializer);
+              val.hasConstantValue = true;
+            } else
+              throw new Error("unexpected initializer type");
+          }
+        } else
+          throw new Error("unexpected missing declaration or constant value");
+        previousValue = <EnumValue>val;
+      }
     element.isCompiled = true;
   }
 
@@ -584,6 +588,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileNamespace(ns: Namespace): void {
+    if (!ns.members) return;
     const noTreeShaking: bool = this.options.noTreeShaking;
     for (let [name, element] of ns.members) {
       switch (element.kind) {
@@ -1856,9 +1861,6 @@ export class Compiler extends DiagnosticEmitter {
     let target: Element | null;
     switch (expression.kind) {
 
-      default:
-        throw new Error("unexpected expression kind");
-
       case NodeKind.THIS:
         if (!this.currentFunction.instanceMethodOf) {
           this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
@@ -1882,6 +1884,9 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.PROPERTYACCESS:
         target = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression, this.currentFunction); // reports
         break;
+
+      default:
+        throw new Error("unexpected expression kind");
     }
     if (!target)
       return this.module.createUnreachable();
@@ -1891,20 +1896,29 @@ export class Compiler extends DiagnosticEmitter {
     let expr: ExpressionRef;
     switch (target.kind) {
 
-      // handle enum value right away
-
       case ElementKind.ENUM:
-        element = (<Enum>target).members.get(propertyName);
-        if (!element) {
+      case ElementKind.CLASS_PROTOTYPE:
+      case ElementKind.CLASS:
+      case ElementKind.NAMESPACE:
+        if (target.members) {
+          element = target.members.get(propertyName);
+          if (!element) {
+            this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
+            return this.module.createUnreachable();
+          }
+
+          // handle enum values right away
+          if (element.kind == ElementKind.ENUMVALUE) {
+            this.currentType = Type.i32;
+            return (<EnumValue>element).hasConstantValue
+              ? this.module.createI32((<EnumValue>element).constantValue)
+              : this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
+          }
+        } else {
           this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
           return this.module.createUnreachable();
         }
-        this.currentType = Type.i32;
-        return (<EnumValue>element).hasConstantValue
-          ? this.module.createI32((<EnumValue>element).constantValue)
-          : this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
-
-      // postpone everything else
+        break;
 
       case ElementKind.LOCAL:
         element = (<Local>target).type.classType;
@@ -1921,15 +1935,6 @@ export class Compiler extends DiagnosticEmitter {
         element = (<Type>(<Global>target).type).classType;
         if (!element) {
           this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Local>target).type.toString());
-          return this.module.createUnreachable();
-        }
-        target = element;
-        break;
-
-      case ElementKind.NAMESPACE:
-        element =  (<Namespace>target).members.get(propertyName);
-        if (!(element && element.isExported)) {
-          this.error(DiagnosticCode.Namespace_0_has_no_exported_member_1, propertyAccess.property.range, (<Namespace>target).internalName, propertyName);
           return this.module.createUnreachable();
         }
         target = element;

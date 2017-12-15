@@ -7,8 +7,6 @@ AssemblyScript NEXT
 
 By compiling syntactially (not necessarily semantically) valid TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR, the resulting module can be validated, optimized, emitted in WebAssembly text or binary format and converted to [asm.js](http://asmjs.org) as a polyfill.
 
-The compiler itself utilizes "portable definitions" so it can be compiled to both JavaScript using `tsc` and, eventually, to WebAssembly using `asc`.
-
 Note, though, that this version of the compiler (0.5.0, NEXT) is relatively new and does not yet support some features a TypeScript programmer might expect, e.g., strings, arrays and classes.
 
 See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for additional information and documentation.

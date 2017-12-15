@@ -77,14 +77,20 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
       }
     }
   } else {
-    var expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
-    var diffs = diff("compiler/" + fixture, expected, actual);
-    if (diffs !== null) {
+    try {
+      var expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
+      var diffs = diff("compiler/" + fixture, expected, actual);
+      if (diffs !== null) {
+        process.exitCode = 1;
+        console.log(diffs);
+        console.log(chalk.default.red("diff ERROR"));
+      } else {
+        console.log(chalk.default.green("diff OK"));
+      }
+    } catch (e) {
       process.exitCode = 1;
-      console.log(diffs);
+      console.log(e.message);
       console.log(chalk.default.red("diff ERROR"));
-    } else {
-      console.log(chalk.default.green("diff OK"));
     }
   }
 
