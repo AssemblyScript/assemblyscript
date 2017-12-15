@@ -330,34 +330,34 @@
 )
 (;
 [program.elements]
+  isNaN
+  isFinite
   clz
   ctz
   popcnt
   rotl
   rotr
   abs
-  ceil
-  copysign
-  floor
   max
   min
+  ceil
+  floor
+  copysign
   nearest
+  reinterpret
   sqrt
   trunc
-  current_memory
-  grow_memory
-  unreachable
   load
   store
-  reinterpret
-  select
   sizeof
-  changetype
-  isNaN
-  isFinite
-  assert
+  select
+  unreachable
+  current_memory
+  grow_memory
   parseInt
   parseFloat
+  changetype
+  assert
   i8
   i16
   i32

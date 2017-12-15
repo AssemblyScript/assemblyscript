@@ -1028,12 +1028,14 @@ export class Global extends Element {
   withConstantIntegerValue(lo: i32, hi: i32): this {
     this.constantIntegerValue = new I64(lo, hi);
     this.hasConstantValue = true;
+    this.isMutable = false;
     return this;
   }
 
   withConstantFloatValue(value: f64): this {
     this.constantFloatValue = value;
     this.hasConstantValue = true;
+    this.isMutable = false;
     return this;
   }
 }

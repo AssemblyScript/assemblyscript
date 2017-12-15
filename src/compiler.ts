@@ -127,7 +127,7 @@ export class Options {
 }
 
 /** Indicates the desired kind of a conversion. */
-const enum ConversionKind {
+export const enum ConversionKind {
   /** No conversion. */
   NONE,
   /** Implicit conversion. */

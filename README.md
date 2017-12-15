@@ -28,8 +28,8 @@ Getting started
 This version of the compiler is not on [npm](https://www.npmjs.com/package/assemblyscript), yet, but if you'd like to try it today or even plan to contribute, this is how you do it:
 
 ```
-$> git clone https://github.com/AssemblyScript/next.git
-$> cd next
+$> git clone https://github.com/AssemblyScript/assemblyscript.git
+$> cd assemblyscript
 $> npm install
 ```
 
@@ -47,7 +47,7 @@ $> node bin/asc yourModule.ts
 Building
 --------
 
-Building an UMD bundle to `dist/assemblyscript.js` (does not bundle [binaryen.js](https://github.com/AssemblyScript/binaryen.js)):
+Building an UMD bundle to `dist/assemblyscript.js` (does not bundle [binaryen.js](https://github.com/AssemblyScript/binaryen.js) which remains an external dependency):
 
 ```
 $> npm run build
