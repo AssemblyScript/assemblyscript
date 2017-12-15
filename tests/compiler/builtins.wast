@@ -1063,6 +1063,19 @@
   assert
   parseInt
   parseFloat
+  i8
+  i16
+  i32
+  i64
+  u8
+  u16
+  u32
+  u64
+  bool
+  f32
+  f64
+  isize
+  usize
   builtins/b
   builtins/i
   builtins/I

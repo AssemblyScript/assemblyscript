@@ -10,16 +10,83 @@
 // of 2^53-1) and instead require a compatibility layer to work in JS as well. See: src/util/i64.ts
 
 declare type i8 = number;
-declare type u8 = number;
 declare type i16 = number;
-declare type u16 = number;
 declare type i32 = number;
-declare type u32 = number;
 declare type isize = number;
+declare type u8 = number;
+declare type u16 = number;
+declare type u32 = number;
+declare type bool = boolean;
 declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
-declare type bool = boolean;
+
+/** Converts any other numeric value to an 8-bit signed integer. */
+declare function i8(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
+declare namespace i8 {
+  export const MIN_VALUE: i8;
+  export const MAX_VALUE: i8;
+}
+/** Converts any other numeric value to a 16-bit signed integer. */
+declare function i16(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
+declare namespace i16 {
+  export const MIN_VALUE: i16;
+  export const MAX_VALUE: i16;
+}
+/** Converts any other numeric value to a 32-bit signed integer. */
+declare function i32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i32;
+declare namespace i32 {
+  export const MIN_VALUE: i32;
+  export const MAX_VALUE: i32;
+}
+/** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
+declare function isize(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): isize;
+declare namespace isize {
+  export const MIN_VALUE: isize;
+  export const MAX_VALUE: isize;
+}
+/** Converts any other numeric value to an 8-bit unsigned integer. */
+declare function u8(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
+declare namespace u8 {
+  export const MIN_VALUE: u8;
+  export const MAX_VALUE: u8;
+}
+/** Converts any other numeric value to a 16-bit unsigned integer. */
+declare function u16(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
+declare namespace u16 {
+  export const MIN_VALUE: u16;
+  export const MAX_VALUE: u16;
+}
+/** Converts any other numeric value to a 32-bit unsigned integer. */
+declare function u32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i32;
+declare namespace u32 {
+  export const MIN_VALUE: u32;
+  export const MAX_VALUE: u32;
+}
+/** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
+declare function usize(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): isize;
+declare namespace usize {
+  export const MIN_VALUE: usize;
+  export const MAX_VALUE: usize;
+}
+/** Converts any other numeric value to a 1-bit unsigned integer. */
+declare function bool(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): bool;
+declare namespace bool {
+  export const MIN_VALUE: bool;
+  export const MAX_VALUE: bool;
+}
+/** Converts any other numeric value to a 32-bit float. */
+declare function f32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): f32;
+declare namespace f32 {
+  export const MIN_SAFE_INTEGER: f32;
+  export const MAX_SAFE_INTEGER: f32;
+}
+/** Converts any other numeric value to a 64-bit float. */
+declare function f64(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): f64;
+declare namespace f64 {
+  export const MIN_SAFE_INTEGER: f64;
+  export const MAX_SAFE_INTEGER: f64;
+}
 
 // Portable built-ins
 

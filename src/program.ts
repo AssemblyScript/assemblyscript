@@ -216,7 +216,7 @@ export class Program extends DiagnosticEmitter {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
     }
-    const prototype: ClassPrototype = new ClassPrototype(this, internalName, declaration);
+    const prototype: ClassPrototype = new ClassPrototype(this, declaration.identifier.name, internalName, declaration);
     this.elements.set(internalName, prototype);
 
     if (namespace) {
@@ -306,7 +306,7 @@ export class Program extends DiagnosticEmitter {
         }
       } else
         classPrototype.members = new Map();
-      const staticPrototype: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, null);
+      const staticPrototype: FunctionPrototype = new FunctionPrototype(this, name, internalName, declaration, null);
       classPrototype.members.set(name, staticPrototype);
       this.elements.set(internalName, staticPrototype);
 
@@ -319,7 +319,7 @@ export class Program extends DiagnosticEmitter {
         }
       } else
         classPrototype.instanceMembers = new Map();
-      const instancePrototype: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, classPrototype);
+      const instancePrototype: FunctionPrototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
       classPrototype.instanceMembers.set(name, instancePrototype);
     }
   }
@@ -455,7 +455,7 @@ export class Program extends DiagnosticEmitter {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
       return;
     }
-    const prototype: FunctionPrototype = new FunctionPrototype(this, internalName, declaration, null);
+    const prototype: FunctionPrototype = new FunctionPrototype(this, declaration.identifier.name, internalName, declaration, null);
     this.elements.set(internalName, prototype);
 
     if (namespace) {
@@ -531,7 +531,7 @@ export class Program extends DiagnosticEmitter {
 
   private initializeInterface(declaration: InterfaceDeclaration, namespace: Element | null = null): void {
     const internalName: string = declaration.internalName;
-    const prototype: InterfacePrototype = new InterfacePrototype(this, internalName, declaration);
+    const prototype: InterfacePrototype = new InterfacePrototype(this, declaration.identifier.name, internalName, declaration);
 
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
@@ -1024,6 +1024,18 @@ export class Global extends Element {
     }
     this.type = type; // resolved later if `null`
   }
+
+  withConstantIntegerValue(lo: i32, hi: i32): this {
+    this.constantIntegerValue = new I64(lo, hi);
+    this.hasConstantValue = true;
+    return this;
+  }
+
+  withConstantFloatValue(value: f64): this {
+    this.constantFloatValue = value;
+    this.hasConstantValue = true;
+    return this;
+  }
 }
 
 /** A function parameter. */
@@ -1070,14 +1082,17 @@ export class FunctionPrototype extends Element {
 
   /** Declaration reference. */
   declaration: FunctionDeclaration | null;
-  /** Class prototype reference. */
+  /** If an instance method, the class prototype reference. */
   classPrototype: ClassPrototype | null;
   /** Resolved instances. */
   instances: Map<string,Function> = new Map();
+  /** Simple name. */
+  simpleName: string;
 
   /** Constructs a new function prototype. */
-  constructor(program: Program, internalName: string, declaration: FunctionDeclaration | null, classPrototype: ClassPrototype | null = null) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: FunctionDeclaration | null, classPrototype: ClassPrototype | null = null) {
     super(program, internalName);
+    this.simpleName = simpleName;
     if (this.declaration = declaration) {
       if (this.declaration.modifiers)
         for (let i: i32 = 0, k: i32 = this.declaration.modifiers.length; i < k; ++i) {
@@ -1142,7 +1157,7 @@ export class FunctionPrototype extends Element {
         } else
           return null;
       } else
-        return null; // TODO: infer type? (currently reported by parser)
+        return null;
     }
 
     // resolve return type
@@ -1155,7 +1170,7 @@ export class FunctionPrototype extends Element {
       else
         return null;
     } else
-      return null; // TODO: infer type? (currently reported by parser)
+      return null;
 
     let internalName: string = this.internalName;
     if (instanceKey.length)
@@ -1168,17 +1183,20 @@ export class FunctionPrototype extends Element {
   resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Function | null {
     let resolvedTypeArguments: Type[] | null;
     if (this.isGeneric) {
+      assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
       if (!this.declaration)
         throw new Error("missing declaration");
       resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
       if (!resolvedTypeArguments)
         return null;
     } else {
-      // TODO: check typeArgumentNodes being empty
+      assert(typeArgumentNodes == null || typeArgumentNodes.length == 0);
       resolvedTypeArguments = [];
     }
     return this.resolve(resolvedTypeArguments, contextualTypeArguments);
   }
+
+  toString(): string { return this.simpleName; }
 }
 
 /** A resolved function. */
@@ -1194,7 +1212,7 @@ export class Function extends Element {
   parameters: Parameter[];
   /** Concrete return type. */
   returnType: Type;
-  /** If a method, the concrete class it is a member of. */
+  /** If an instance method, the concrete class it is a member of. */
   instanceMethodOf: Class | null;
   /** Map of locals by name. */
   locals: Map<string,Local> = new Map();
@@ -1203,7 +1221,7 @@ export class Function extends Element {
   /** Current break context label. */
   breakContext: string | null = null;
   /** Contextual type arguments. */
-  contextualTypeArguments: Map<string,Type> = new Map();
+  contextualTypeArguments: Map<string,Type> | null;
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
@@ -1219,18 +1237,20 @@ export class Function extends Element {
     this.flags = prototype.flags;
     let localIndex: i32 = 0;
     if (instanceMethodOf) {
+      assert(this.isInstance);
       this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));
-      for (let [name, type] of instanceMethodOf.contextualTypeArguments)
-        this.contextualTypeArguments.set(name, type);
-    }
+      if (instanceMethodOf.contextualTypeArguments) {
+        if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
+        for (let [name, type] of instanceMethodOf.contextualTypeArguments)
+          this.contextualTypeArguments.set(name, type);
+      }
+    } else
+      assert(!this.isInstance);
     for (let i: i32 = 0, k: i32 = parameters.length; i < k; ++i) {
       const parameter: Parameter = parameters[i];
       this.locals.set(parameter.name, new Local(prototype.program, parameter.name, localIndex++, parameter.type));
     }
   }
-
-  /** Tests if this function is an instance method. */
-  get isInstance(): bool { return this.instanceMethodOf != null; }
 
   /** Adds a local of the specified type, with an optional name. */
   addLocal(type: Type, name: string | null = null): Local {
@@ -1320,6 +1340,16 @@ export class Function extends Element {
       this.breakStack = null;
     }
   }
+
+  /** Finalizes the function once compiled, releasing no longer needed resources. */
+  finalize(): void {
+    assert(!this.breakStack || !this.breakStack.length, "break stack is not empty");
+    this.breakStack = null;
+    this.breakContext = null;
+    this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
+  }
+
+  toString(): string { return this.prototype.simpleName; }
 }
 
 /** A yet unresolved instance field prototype. */
@@ -1380,9 +1410,12 @@ export class ClassPrototype extends Element {
   instances: Map<string,Class> = new Map();
   /** Instance member prototypes. */
   instanceMembers: Map<string,Element> | null = null;
+  /** Simple name. */
+  simpleName: string;
 
-  constructor(program: Program, internalName: string, declaration: ClassDeclaration | null = null) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: ClassDeclaration | null = null) {
     super(program, internalName);
+    this.simpleName = simpleName;
     if (this.declaration = declaration) {
       if (this.declaration.modifiers) {
         for (let i: i32 = 0, k: i32 = this.declaration.modifiers.length; i < k; ++i) {
@@ -1400,29 +1433,62 @@ export class ClassPrototype extends Element {
   }
 
   resolve(typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null): Class {
-    const key: string = typesToString(typeArguments, "", "");
-    let instance: Class | null = <Class | null>this.instances.get(key);
+    const instanceKey: string = typesToString(typeArguments, "", "");
+    let instance: Class | null = <Class | null>this.instances.get(instanceKey);
     if (instance)
       return instance;
-    if (!this.declaration)
+    const declaration: ClassDeclaration | null = this.declaration;
+    if (!declaration)
       throw new Error("unexpected instantiation of internal class");
-    throw new Error("not implemented");
+
+    // override call specific contextual type arguments
+    let i: i32, k: i32 = typeArguments.length;
+    if (k) {
+      const inheritedTypeArguments: Map<string,Type> | null = contextualTypeArguments;
+      contextualTypeArguments = new Map();
+      if (inheritedTypeArguments)
+        for (let [name, type] of inheritedTypeArguments)
+          contextualTypeArguments.set(name, type);
+      for (i = 0; i < k; ++i)
+        contextualTypeArguments.set(declaration.typeParameters[i].identifier.name, typeArguments[i]);
+    }
+
+    // TODO: set up instance fields and methods
+    if (this.instanceMembers)
+      for (let [key, member] of this.instanceMembers) {
+        switch (member.kind) {
+          case ElementKind.FIELD_PROTOTYPE: break;
+          case ElementKind.FUNCTION_PROTOTYPE: break;
+          default: throw new Error("unexpected instance member");
+        }
+      }
+
+    let internalName: string = this.internalName;
+    if (instanceKey.length)
+      internalName += "<" + instanceKey + ">";
+    instance = new Class(this, internalName, typeArguments, null); // TODO: base class
+    instance.contextualTypeArguments = contextualTypeArguments;
+    this.instances.set(instanceKey, instance);
+    return instance;
   }
 
   resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Class | null {
     let resolvedTypeArguments: Type[] | null;
     if (this.isGeneric) {
+      assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
       if (!this.declaration)
-        throw new Error("not implemented"); // generic built-in
+        throw new Error("missing declaration"); // generic built-in
       resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
       if (!resolvedTypeArguments)
         return null;
     } else {
-      // TODO: check typeArgumentNodes being empty
+      assert(typeArgumentNodes == null || !typeArgumentNodes.length);
       resolvedTypeArguments = [];
     }
     return this.resolve(resolvedTypeArguments, contextualTypeArguments);
   }
+
+  toString(): string { return this.simpleName; }
 }
 
 /** A resolved class. */
@@ -1438,16 +1504,8 @@ export class Class extends Element {
   type: Type;
   /** Base class, if applicable. */
   base: Class | null;
-  /** Contextual type argumentsfor fields and methods. */
-  contextualTypeArguments: Map<string,Type> = new Map();
-  /** Instance fields. */
-  instanceFields: Map<string,Field> | null = null;
-  /** Instance methods. */
-  instanceMethods: Map<string,Function> | null = null;
-  /** Instance getters. */
-  instanceGetters: Map<string,Function> | null = null;
-  /** Instance setters. */
-  instanceSetters: Map<string,Function> | null = null;
+  /** Contextual type arguments for fields and methods. */
+  contextualTypeArguments: Map<string,Type> | null = null;
 
   /** Constructs a new class. */
   constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] = [], base: Class | null = null) {
@@ -1459,9 +1517,11 @@ export class Class extends Element {
     this.base = base;
 
     // inherit contextual type arguments from base class
-    if (base)
+    if (base && base.contextualTypeArguments) {
+      if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
       for (let [name, type] of base.contextualTypeArguments)
         this.contextualTypeArguments.set(name, type);
+    }
 
     // apply instance-specific contextual type arguments
     const declaration: ClassDeclaration | null = this.prototype.declaration;
@@ -1469,14 +1529,16 @@ export class Class extends Element {
       const typeParameters: TypeParameter[] = declaration.typeParameters;
       if (typeParameters.length != typeArguments.length)
         throw new Error("unexpected type argument count mismatch");
-      for (let i: i32 = 0, k: i32 = typeArguments.length; i < k; ++i)
-        this.contextualTypeArguments.set(typeParameters[i].identifier.name, typeArguments[i]);
+      const k: i32 = typeArguments.length;
+      if (k) {
+        if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
+        for (let i: i32 = 0; i < k; ++i)
+          this.contextualTypeArguments.set(typeParameters[i].identifier.name, typeArguments[i]);
+      }
     }
   }
 
-  toString(): string {
-    throw new Error("not implemented");
-  }
+  toString(): string { return this.prototype.simpleName; }
 }
 
 /** A yet unresolved interface. */
@@ -1488,8 +1550,8 @@ export class InterfacePrototype extends ClassPrototype {
   declaration: InterfaceDeclaration | null; // more specific
 
   /** Constructs a new interface prototype. */
-  constructor(program: Program, internalName: string, declaration: InterfaceDeclaration | null = null) {
-    super(program, internalName, declaration);
+  constructor(program: Program, simpleName: string, internalName: string, declaration: InterfaceDeclaration | null = null) {
+    super(program, simpleName, internalName, declaration);
   }
 }
 

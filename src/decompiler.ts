@@ -47,7 +47,6 @@ export class Decompiler {
     this.push("(");
     let k: Index = _BinaryenFunctionGetNumParams(func);
     for (let i: Index = 0; i < k; ++i) {
-      console.log("rat");
       if (i > 0)
         this.push(", ");
       this.push("$");

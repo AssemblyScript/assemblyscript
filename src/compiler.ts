@@ -93,7 +93,8 @@ import {
   UnaryPrefixExpression,
 
   // utility
-  hasModifier
+  hasModifier,
+  InterfaceDeclaration
 
 } from "./ast";
 import {
@@ -179,7 +180,7 @@ export class Compiler extends DiagnosticEmitter {
     this.program = program;
     this.options = options ? options : new Options();
     this.module = this.options.noEmit ? Module.createStub() : Module.create();
-    const startFunctionTemplate: FunctionPrototype = new FunctionPrototype(program, "start", null);
+    const startFunctionTemplate: FunctionPrototype = new FunctionPrototype(program, "start", "start", null);
     const startFunctionInstance: Function = new Function(startFunctionTemplate, startFunctionTemplate.internalName, [], [], Type.void, null);
     this.currentFunction = this.startFunction = startFunctionInstance;
     this.memoryOffset = new U64(this.options.target == Target.WASM64 ? 8 : 4, 0); // leave space for `null`
@@ -544,6 +545,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       this.module.addFunction(internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
     }
+    instance.finalize();
     return true;
   }
 
@@ -559,6 +561,11 @@ export class Compiler extends DiagnosticEmitter {
         case NodeKind.CLASS:
           if ((noTreeShaking || hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>member).modifiers)) && !(<ClassDeclaration>member).typeParameters.length)
             this.compileClassDeclaration(<ClassDeclaration>member, []);
+          break;
+
+        case NodeKind.INTERFACE:
+          if ((noTreeShaking || hasModifier(ModifierKind.EXPORT, (<InterfaceDeclaration>member).modifiers)) && !(<InterfaceDeclaration>member).typeParameters.length)
+            this.compileInterfaceDeclaration(<InterfaceDeclaration>member, []);
           break;
 
         case NodeKind.ENUM:
@@ -681,6 +688,10 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileClass(cls: Class) {
+    throw new Error("not implemented");
+  }
+
+  compileInterfaceDeclaration(declaration: InterfaceDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
     throw new Error("not implemented");
   }
 
@@ -1896,30 +1907,6 @@ export class Compiler extends DiagnosticEmitter {
     let expr: ExpressionRef;
     switch (target.kind) {
 
-      case ElementKind.ENUM:
-      case ElementKind.CLASS_PROTOTYPE:
-      case ElementKind.CLASS:
-      case ElementKind.NAMESPACE:
-        if (target.members) {
-          element = target.members.get(propertyName);
-          if (!element) {
-            this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
-            return this.module.createUnreachable();
-          }
-
-          // handle enum values right away
-          if (element.kind == ElementKind.ENUMVALUE) {
-            this.currentType = Type.i32;
-            return (<EnumValue>element).hasConstantValue
-              ? this.module.createI32((<EnumValue>element).constantValue)
-              : this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
-          }
-        } else {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
-          return this.module.createUnreachable();
-        }
-        break;
-
       case ElementKind.LOCAL:
         element = (<Local>target).type.classType;
         if (!element) {
@@ -1941,7 +1928,25 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       default:
-        throw new Error("unexpected target kind");
+        if (target.members) {
+          element = target.members.get(propertyName);
+          if (!element) {
+            this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
+            return this.module.createUnreachable();
+          }
+
+          // handle enum values right away
+          if (element.kind == ElementKind.ENUMVALUE) {
+            this.currentType = Type.i32;
+            return (<EnumValue>element).hasConstantValue
+              ? this.module.createI32((<EnumValue>element).constantValue)
+              : this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
+          }
+        } else {
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
+          return this.module.createUnreachable();
+        }
+        break;
     }
 
     // handle the element
@@ -1951,8 +1956,18 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createGetLocal((<Local>element).index, typeToNativeType(this.currentType = (<Local>element).type));
 
       case ElementKind.GLOBAL:
-        this.compileGlobal(<Global>element);
-        return this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType = <Type>(<Global>element).type));
+        if (!this.compileGlobal(<Global>element))
+          return this.module.createUnreachable();
+        this.currentType = <Type>(<Global>element).type;
+        if ((<Global>element).hasConstantValue)
+          return this.currentType== Type.f32
+            ? this.module.createF32((<Global>element).constantFloatValue)
+            : this.currentType == Type.f64
+            ? this.module.createF64((<Global>element).constantFloatValue)
+            : this.currentType.isLongInteger
+            ? this.module.createI64((<I64>(<Global>element).constantIntegerValue).lo, (<I64>(<Global>element).constantIntegerValue).hi)
+            : this.module.createI32((<I64>(<Global>element).constantIntegerValue).lo);
+        return this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType));
 
       case ElementKind.FUNCTION: // getter
         if (!(<Function>element).prototype.isGetter) {
