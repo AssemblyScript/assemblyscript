@@ -3,7 +3,7 @@
  (type $v (func))
  (global $memcpy/base i32 (i32.const 8))
  (global $memcpy/dest (mut i32) (i32.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memcpy" (func $memcpy/memcpy))
  (export "memory" (memory $0))
@@ -2098,7 +2098,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   memcpy/memcpy
   memcpy/base
   memcpy/dest

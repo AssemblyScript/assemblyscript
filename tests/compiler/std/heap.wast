@@ -8,7 +8,7 @@
  (global $heap/ALIGN_SIZE i32 (i32.const 8))
  (global $heap/ALIGN_MASK i32 (i32.const 7))
  (global $std/heap/ptr (mut i32) (i32.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -113,7 +113,7 @@
  )
  (func $start (; 2 ;) (type $v)
   (set_global $heap/HEAP_OFFSET
-   (get_global $HEAP_START)
+   (get_global $HEAP_BASE)
   )
   (set_global $std/heap/ptr
    (call $Heap.allocate
@@ -170,22 +170,31 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   Array
-  Array.fromPtr
-  Array.test
+  Error
+  RangeError
   heap/ALIGN_LOG2
   heap/ALIGN_SIZE
   heap/ALIGN_MASK
   heap/HEAP_OFFSET
   Heap
-  Heap.allocate
-  Heap.dispose
   Heap.get_used
   Heap.get_free
   Heap.get_size
+  Heap.allocate
+  Heap.dispose
   Heap.copy
+  Map
+  Set
+  String
   std/heap/ptr
 [program.exports]
-  
+  Array
+  Error
+  RangeError
+  Heap
+  Map
+  Set
+  String
 ;)

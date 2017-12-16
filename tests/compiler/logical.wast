@@ -4,7 +4,7 @@
  (global $logical/I (mut i64) (i64.const 0))
  (global $logical/f (mut f32) (f32.const 0))
  (global $logical/F (mut f64) (f64.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -300,7 +300,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   logical/i
   logical/I
   logical/f

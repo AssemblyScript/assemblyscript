@@ -1,14 +1,7 @@
 (module
- (type $v (func))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
- (start $start)
- (func $Array.test (; 0 ;) (type $v)
- )
- (func $start (; 1 ;) (type $v)
-  (call $Array.test)
- )
 )
 (;
 [program.elements]
@@ -55,21 +48,30 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   Array
-  Array.fromPtr
-  Array.test
+  Error
+  RangeError
   heap/ALIGN_LOG2
   heap/ALIGN_SIZE
   heap/ALIGN_MASK
   heap/HEAP_OFFSET
   Heap
-  Heap.allocate
-  Heap.dispose
   Heap.get_used
   Heap.get_free
   Heap.get_size
+  Heap.allocate
+  Heap.dispose
   Heap.copy
+  Map
+  Set
+  String
 [program.exports]
-  
+  Array
+  Error
+  RangeError
+  Heap
+  Map
+  Set
+  String
 ;)

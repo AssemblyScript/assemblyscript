@@ -1,12 +1,4 @@
 (module
- (type $v (func))
  (memory $0 1)
  (export "memory" (memory $0))
- (start $start)
- (func $Array.test (; 0 ;) (type $v)
-  (nop)
- )
- (func $start (; 1 ;) (type $v)
-  (call $Array.test)
- )
 )

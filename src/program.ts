@@ -672,10 +672,10 @@ export class Program extends DiagnosticEmitter {
   resolveType(node: TypeNode, contextualTypeArguments: Map<string,Type> | null = null, reportNotFound: bool = true): Type | null {
 
     // resolve parameters
-    const k: i32 = node.parameters.length;
+    const k: i32 = node.typeArguments.length;
     const paramTypes: Type[] = new Array(k);
     for (let i: i32 = 0; i < k; ++i) {
-      const paramType: Type | null = this.resolveType(node.parameters[i], contextualTypeArguments, reportNotFound);
+      const paramType: Type | null = this.resolveType(node.typeArguments[i], contextualTypeArguments, reportNotFound);
       if (!paramType)
         return null;
       paramTypes[i] = <Type>paramType;
@@ -806,30 +806,34 @@ function hasDecorator(name: string, decorators: Decorator[] | null): bool {
 
 /** Indicates the specific kind of an {@link Element}. */
 export enum ElementKind {
-  /** A {@link ClassPrototype}. */
-  CLASS_PROTOTYPE,
-  /** A {@link Class}. */
-  CLASS,
+  /** A {@link Global}. */
+  GLOBAL,
+  /** A {@link Local}. */
+  LOCAL,
   /** An {@link Enum}. */
   ENUM,
   /** An {@link EnumValue}. */
   ENUMVALUE,
-  /** A {@link FieldPrototype}. */
-  FIELD_PROTOTYPE,
-  /** A {@link Field}. */
-  FIELD,
   /** A {@link FunctionPrototype}. */
   FUNCTION_PROTOTYPE,
   /** A {@link Function}. */
   FUNCTION,
-  /** A {@link Global}. */
-  GLOBAL,
+  /** A {@link ClassPrototype}. */
+  CLASS_PROTOTYPE,
+  /** A {@link Class}. */
+  CLASS,
   /** An {@link InterfacePrototype}. */
   INTERFACE_PROTOTYPE,
   /** An {@link Interface}. */
   INTERFACE,
-  /** A {@link Local}. */
-  LOCAL,
+  /** A {@link FieldPrototype}. */
+  FIELD_PROTOTYPE,
+  /** A {@link Field}. */
+  FIELD,
+  /** A {@link PropertyPrototype}. */
+  PROPERTY_PROTOTYPE,
+  /** A {@link Property}. */
+  PROPERTY,
   /** A {@link Namespace}. */
   NAMESPACE
 }
@@ -1113,7 +1117,11 @@ export class FunctionPrototype extends Element {
             case ModifierKind.DECLARE: this.isDeclared = true; break;
             case ModifierKind.GET: this.isGetter = true; break;
             case ModifierKind.SET: this.isSetter = true; break;
-            case ModifierKind.STATIC: break; // already handled
+            case ModifierKind.STATIC:
+            case ModifierKind.ABSTRACT:
+            case ModifierKind.PRIVATE:
+            case ModifierKind.PROTECTED:
+            case ModifierKind.PUBLIC: break; // already handled
             default: throw new Error("unexpected modifier");
           }
         }
@@ -1360,7 +1368,11 @@ export class Function extends Element {
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
   }
 
+  /** Returns the TypeScript representation of this function. */
   toString(): string { return this.prototype.simpleName; }
+
+  /** Returns the function type TypeScript representation of this function.*/
+  toTypeString(): string { throw new Error("not implemented"); }
 }
 
 /** A yet unresolved instance field prototype. */
@@ -1410,6 +1422,76 @@ export class Field extends Element {
 
   /** Constructs a new field. */
   constructor(prototype: FieldPrototype, internalName: string, type: Type) {
+    super(prototype.program, internalName);
+    this.flags = prototype.flags;
+    this.type = type;
+  }
+}
+
+/** A yet unresolved property. */
+export class PropertyPrototype extends Element {
+
+  kind = ElementKind.PROPERTY_PROTOTYPE;
+
+  /** Simple name. */
+  simpleName: string;
+  /** Parent class prototype. */
+  classPrototype: ClassPrototype;
+  /** Getter declaration reference. */
+  getterDeclaration: FunctionDeclaration | null;
+  /** Setter declaration reference. */
+  setterDeclaration: FunctionDeclaration | null;
+
+  /** Constructs a new propery prototype. */
+  constructor(classPrototype: ClassPrototype, simpleName: string, internalName: string, getterDeclaration: FunctionDeclaration | null = null, setterDeclaration: FunctionDeclaration | null = null) {
+    super(classPrototype.program, internalName);
+    this.simpleName = simpleName;
+    this.classPrototype = classPrototype;
+
+    let i: i32, k: i32;
+    if ((this.getterDeclaration = getterDeclaration) && this.getterDeclaration.modifiers) {
+      assert(this.getterDeclaration.typeParameters.length == 0);
+      assert(this.getterDeclaration.parameters.length == 0);
+      for (i = 0, k = this.getterDeclaration.modifiers.length; i < k; ++i) {
+        switch (this.getterDeclaration.modifiers[i].modifierKind) {
+          case ModifierKind.EXPORT: this.isExported = true; break;
+          case ModifierKind.GET:
+          case ModifierKind.STATIC: break; // already handled
+          default: assert(false);
+        }
+      }
+    }
+    if ((this.setterDeclaration = setterDeclaration) && this.setterDeclaration.modifiers) {
+      assert(this.setterDeclaration.typeParameters.length == 0);
+      assert(this.setterDeclaration.parameters.length == 1);
+      for (i = 0, k = this.setterDeclaration.modifiers.length; i < k; ++i) {
+        switch (this.setterDeclaration.modifiers[i].modifierKind) {
+          case ModifierKind.EXPORT: this.isExported = true; break;
+          case ModifierKind.SET:
+          case ModifierKind.STATIC: break; // already handled
+          default: assert(false);
+        }
+      }
+    }
+  }
+}
+
+/** A resolved property. */
+export class Property extends Element {
+
+  kind = ElementKind.PROPERTY;
+
+  /** Prototype reference. */
+  prototype: PropertyPrototype;
+  /** Property type. */
+  type: Type;
+  /** Getter function. */
+  getter: Function | null = null;
+  /** Setter function. */
+  setter: Function | null = null;
+
+  /** Constructs a new property. */
+  constructor(prototype: PropertyPrototype, internalName: string, type: Type) {
     super(prototype.program, internalName);
     this.flags = prototype.flags;
     this.type = type;

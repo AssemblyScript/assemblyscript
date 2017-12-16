@@ -4,7 +4,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (global $../../examples/i64-polyfill/assembly/i64/hi (mut i32) (i32.const 0))
  (global $../../examples/i64-polyfill/assembly/i64/lo (mut i32) (i32.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "getHi" (func $../../examples/i64-polyfill/assembly/i64/getHi))
  (export "getLo" (func $../../examples/i64-polyfill/assembly/i64/getLo))
@@ -1234,7 +1234,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   ../../examples/i64-polyfill/assembly/i64/lo
   ../../examples/i64-polyfill/assembly/i64/hi
   ../../examples/i64-polyfill/assembly/i64/getLo

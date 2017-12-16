@@ -15,4 +15,7 @@ declare class Heap {
 
   /** Gets the size of the heap, in bytes. */
   static readonly size: usize;
+
+  /** Copies a chunk of memory from one location to another. */
+  static copy(dest: usize, src: usize, n: usize): usize;
 }

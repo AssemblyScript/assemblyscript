@@ -99,11 +99,11 @@ export function initialize(program: Program): void {
   if (program.target == Target.WASM64) {
     program.elements.set("isize", <Element>program.elements.get("i64"));
     program.elements.set("usize", <Element>program.elements.get("u64"));
-    addConstant(program, "HEAP_START", Type.usize64);
+    addConstant(program, "HEAP_BASE", Type.usize64);
   } else {
     program.elements.set("isize", <Element>program.elements.get("i32"));
     program.elements.set("usize", <Element>program.elements.get("u32"));
-    addConstant(program, "HEAP_START", Type.usize32);
+    addConstant(program, "HEAP_BASE", Type.usize32);
   }
 }
 
@@ -126,6 +126,7 @@ function addFunction(program: Program, name: string, isGeneric: bool = false): F
   return prototype;
 }
 
+/** Compiles a get of a built-in global. */
 export function compileGetGlobal(compiler: Compiler, global: Global): ExpressionRef {
   switch (global.internalName) {
 
@@ -141,8 +142,8 @@ export function compileGetGlobal(compiler: Compiler, global: Global): Expression
       compiler.currentType = Type.f64;
       return compiler.module.createF64(Infinity);
 
-    case "HEAP_START": // never inlined
-      return compiler.module.createGetGlobal("HEAP_START", typeToNativeType(<Type>global.type));
+    case "HEAP_BASE": // constant, but never inlined
+      return compiler.module.createGetGlobal("HEAP_BASE", typeToNativeType(compiler.currentType = <Type>global.type));
 
     default:
       throw new Error("not implemented: " + global.internalName);
@@ -162,8 +163,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
   let tempLocal0: Local;
   let tempLocal1: Local;
 
-  let type: Type;
-  var ftype: FunctionTypeRef;
+  let ftype: FunctionTypeRef;
 
   switch (prototype.internalName) {
 

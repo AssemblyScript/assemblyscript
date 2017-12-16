@@ -37,7 +37,7 @@ Object.defineProperties(
   "MAX_VALUE": { value: 4294967295, writable: false }
 });
 Object.defineProperties(
-  globalScope["bool"] = function bool(value) { return Boolean(value); }
+  globalScope["bool"] = function bool(value) { return !!value; }
 , {
   "MIN_VALUE": { value: 0, writable: false },
   "MAX_VALUE": { value: 1, writable: false }

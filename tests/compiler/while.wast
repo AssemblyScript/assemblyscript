@@ -1,6 +1,6 @@
 (module
  (type $iv (func (param i32)))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "loopWhile" (func $while/loopWhile))
  (export "loopWhileInWhile" (func $while/loopWhileInWhile))
@@ -105,7 +105,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   while/loopWhile
   while/loopWhileInWhile
 [program.exports]

@@ -1,6 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "doSwitch" (func $switch/doSwitch))
  (export "doSwitchDefaultFirst" (func $switch/doSwitchDefaultFirst))
@@ -190,7 +190,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   switch/doSwitch
   switch/doSwitchDefaultFirst
   switch/doSwitchDefaultOmitted

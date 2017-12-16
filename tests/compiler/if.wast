@@ -1,6 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "ifThenElse" (func $if/ifThenElse))
  (export "ifThen" (func $if/ifThen))
@@ -91,7 +91,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   if/ifThenElse
   if/ifThen
   if/ifThenElseBlock

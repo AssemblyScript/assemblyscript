@@ -22,7 +22,7 @@
  (global $f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
  (global $f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -152,7 +152,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
 [program.exports]
   
 ;)

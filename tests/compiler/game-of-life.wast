@@ -4,7 +4,7 @@
  (global $../../examples/game-of-life/assembly/game-of-life/w (mut i32) (i32.const 0))
  (global $../../examples/game-of-life/assembly/game-of-life/h (mut i32) (i32.const 0))
  (global $../../examples/game-of-life/assembly/game-of-life/s (mut i32) (i32.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "init" (func $../../examples/game-of-life/assembly/game-of-life/init))
  (export "step" (func $../../examples/game-of-life/assembly/game-of-life/step))
@@ -353,7 +353,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   ../../examples/game-of-life/assembly/game-of-life/w
   ../../examples/game-of-life/assembly/game-of-life/h
   ../../examples/game-of-life/assembly/game-of-life/s

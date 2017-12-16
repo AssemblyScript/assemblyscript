@@ -4,7 +4,7 @@
  (type $v (func))
  (global $heap/HEAP_OFFSET (mut i32) (i32.const 0))
  (global $std/heap/ptr (mut i32) (i32.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -100,7 +100,7 @@
  (func $start (; 1 ;) (type $v)
   (local $0 i32)
   (set_global $heap/HEAP_OFFSET
-   (get_global $HEAP_START)
+   (get_global $HEAP_BASE)
   )
   (set_global $std/heap/ptr
    (call $Heap.allocate

@@ -21,7 +21,7 @@
  (global $tlsf/CONTROL$SL_BITMAP_OFFSET i32 (i32.const 20))
  (global $tlsf/SL_INDEX_COUNT i32 (i32.const 32))
  (global $tlsf/CONTROL$BLOCKS_OFFSET i32 (i32.const 112))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "control$construct" (func $tlsf/control$construct))
  (export "memory" (memory $0))
@@ -373,7 +373,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   tlsf/fls
   tlsf/ffs
   tlsf/ALIGN_SIZE_LOG2

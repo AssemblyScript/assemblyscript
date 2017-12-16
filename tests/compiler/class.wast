@@ -3,7 +3,7 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $v (func))
  (global $class/Animal.MAX (mut i32) (i32.const 1))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -86,7 +86,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   class/Animal
   class/Animal.MAX
   class/Animal.add

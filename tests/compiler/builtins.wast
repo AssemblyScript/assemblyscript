@@ -6,7 +6,7 @@
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -1078,7 +1078,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   builtins/b
   builtins/i
   builtins/I

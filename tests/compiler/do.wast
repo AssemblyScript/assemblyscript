@@ -1,6 +1,6 @@
 (module
  (type $iv (func (param i32)))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "loopDo" (func $do/loopDo))
  (export "loopDoInDo" (func $do/loopDoInDo))
@@ -96,7 +96,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   do/loopDo
   do/loopDoInDo
 [program.exports]

@@ -1,7 +1,7 @@
 (module
  (type $v (func))
  (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "test" (func $namespace/test))
  (export "memory" (memory $0))
@@ -62,7 +62,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   namespace/Outer
   namespace/Outer.Inner
   namespace/Outer.Inner.aVar

@@ -215,9 +215,9 @@ export class Compiler extends DiagnosticEmitter {
     // set up memory
     const initial: U64 = this.memoryOffset.clone();
     if (this.options.target == Target.WASM64)
-      this.module.addGlobal("HEAP_START", NativeType.I64, false, this.module.createI64(initial.lo, initial.hi));
+      this.module.addGlobal("HEAP_BASE", NativeType.I64, false, this.module.createI64(initial.lo, initial.hi));
     else
-      this.module.addGlobal("HEAP_START", NativeType.I32, false, this.module.createI32(initial.lo));
+      this.module.addGlobal("HEAP_BASE", NativeType.I32, false, this.module.createI32(initial.lo));
 
     // determine initial page size
     const initialOverlaps: U64 = initial.clone();

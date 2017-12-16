@@ -15,7 +15,7 @@
  (global $enum/Mixed.FOUR i32 (i32.const 4))
  (global $enum/NonConstant.ZERO (mut i32) (i32.const 0))
  (global $enum/NonConstant.ONE (mut i32) (i32.const 0))
- (global $HEAP_START i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -81,7 +81,7 @@
   f64
   isize
   usize
-  HEAP_START
+  HEAP_BASE
   enum/Implicit
   enum/Explicit
   enum/Mixed

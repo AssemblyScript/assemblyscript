@@ -157,8 +157,8 @@ declare function unreachable(): any; // sic
 declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
-/** Heap start offset. */
-declare const HEAP_START: usize;
+/** Heap base offset. */
+declare const HEAP_BASE: usize;
 /** Determines the byte size of the specified core or class type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
 /** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
@@ -174,18 +174,72 @@ declare function parseInt(str: string, radix?: i32): f64;
 /** Parses a string to a 64-bit float. */
 declare function parseFloat(str: string): f64;
 
-// Internal decorators (not yet implemented)
-
-/** Annotates an element being part of the global namespace. */
-declare function global(): any;
-/** Annotates a function being always inlined. */
-declare function inline(): any;
-/** Annotates a class using a C-style memory layout. */
-declare function struct(): any;
-
 // Standard library (not yet implemented)
 
-interface Array<T> {}
+/** Class representing a sequence of values of type `T`. */
+declare class Array<T> {
+
+  /** Current maximum capacity of the array. */
+  readonly capacity: i32;
+
+  /** Current length of the array. */
+  length: i32;
+
+  /** Constructs a new array. */
+  constructor(capacity?: i32);
+}
+
+/** Class representing a sequence of characters. */
+declare class String {
+  static fromCharCode(ls: i32, hs?: i32): string;
+  static fromCharCodes(arr: u16[]): string;
+  static fromCodePoint(cp: i32): string;
+  static fromCodePoints(arr: i32[]): string;
+}
+
+/** Class for representing a runtime error. Base class of all errors. */
+declare class Error {
+
+  /** Error name. */
+  name: string;
+
+  /** Message provided on construction. */
+  message: string;
+
+  /** Stack trace. */
+  stack: string;
+
+  /** Constructs a new error, optionally with a message. */
+  constructor(message?: string);
+}
+
+/** Class for indicating an error when a value is not in the set or range of allowed values. */
+declare class RangeError extends Error { }
+
+/** A static class representing the heap. */
+declare class Heap {
+
+  /** Gets the amount of used heap space, in bytes. */
+  static readonly used: usize;
+
+  /** Gets the amount of free heap space, in bytes. */
+  static readonly free: usize;
+
+  /** Gets the size of the heap, in bytes. */
+  static readonly size: usize;
+
+  /** Allocates a chunk of memory and returns a pointer to it. */
+  static allocate(size: usize): usize;
+
+  /** Disposes a chunk of memory by its pointer. */
+  static dispose(ptr: usize): void;
+
+  /** Copies a chunk of memory from one location to another. */
+  static copy(dest: usize, src: usize, n: usize): usize;
+
+  private constructor();
+}
+
 interface Boolean {}
 interface Function {}
 interface IArguments {}
@@ -193,9 +247,7 @@ interface Number {}
 interface Object {}
 interface RegExp {}
 
-declare class String {
-  static fromCharCode(ls: i32, hs?: i32): string;
-  static fromCharCodes(arr: u16[]): string;
-  static fromCodePoint(cp: i32): string;
-  static fromCodePoints(arr: i32[]): string;
-}
+// Internal decorators (not yet implemented)
+
+/** Annotates an element being part of the global namespace. */
+declare function global(): any;
