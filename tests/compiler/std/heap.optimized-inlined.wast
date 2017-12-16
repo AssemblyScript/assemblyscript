@@ -8,7 +8,7 @@
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func $Heap.allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $heap/Heap.allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -103,12 +103,12 @@
    (get_global $HEAP_BASE)
   )
   (set_global $std/heap/ptr
-   (call $Heap.allocate
+   (call $heap/Heap.allocate
     (i32.const 10)
    )
   )
   (block
-   (block $__inlined_func$Heap.dispose
+   (block $__inlined_func$heap/Heap.dispose
     (set_local $0
      (get_global $std/heap/ptr)
     )

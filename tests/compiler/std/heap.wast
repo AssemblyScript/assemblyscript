@@ -12,7 +12,7 @@
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func $Heap.allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $heap/Heap.allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -109,18 +109,18 @@
    (get_local $4)
   )
  )
- (func $Heap.dispose (; 1 ;) (type $iv) (param $0 i32)
+ (func $heap/Heap.dispose (; 1 ;) (type $iv) (param $0 i32)
  )
  (func $start (; 2 ;) (type $v)
   (set_global $heap/HEAP_OFFSET
    (get_global $HEAP_BASE)
   )
   (set_global $std/heap/ptr
-   (call $Heap.allocate
+   (call $heap/Heap.allocate
     (i32.const 10)
    )
   )
-  (call $Heap.dispose
+  (call $heap/Heap.dispose
    (get_global $std/heap/ptr)
   )
  )
@@ -171,30 +171,37 @@
   isize
   usize
   HEAP_BASE
+  array/Array
   Array
+  error/Error
   Error
+  error/RangeError
   RangeError
   heap/ALIGN_LOG2
   heap/ALIGN_SIZE
   heap/ALIGN_MASK
   heap/HEAP_OFFSET
+  heap/Heap
   Heap
-  Heap.get_used
-  Heap.get_free
-  Heap.get_size
-  Heap.allocate
-  Heap.dispose
-  Heap.copy
+  heap/Heap.get_used
+  heap/Heap.get_free
+  heap/Heap.get_size
+  heap/Heap.allocate
+  heap/Heap.dispose
+  heap/Heap.copy
+  map/Map
   Map
+  set/Set
   Set
+  string/String
   String
   std/heap/ptr
 [program.exports]
-  Array
-  Error
-  RangeError
-  Heap
-  Map
-  Set
-  String
+  array/Array
+  error/Error
+  error/RangeError
+  heap/Heap
+  map/Map
+  set/Set
+  string/String
 ;)

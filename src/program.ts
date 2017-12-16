@@ -222,6 +222,13 @@ export class Program extends DiagnosticEmitter {
     const prototype: ClassPrototype = new ClassPrototype(this, declaration.identifier.name, internalName, declaration);
     this.elements.set(internalName, prototype);
 
+    if (hasDecorator("global", declaration.decorators)) {
+      if (this.elements.has(declaration.identifier.name))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      else
+        this.elements.set(declaration.identifier.name, prototype);
+    }
+
     if (namespace) {
       if (namespace.members) {
         if (namespace.members.has(declaration.identifier.name)) {
@@ -461,6 +468,13 @@ export class Program extends DiagnosticEmitter {
     const prototype: FunctionPrototype = new FunctionPrototype(this, declaration.identifier.name, internalName, declaration, null);
     this.elements.set(internalName, prototype);
 
+    if (hasDecorator("global", declaration.decorators)) {
+      if (this.elements.has(declaration.identifier.name))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      else
+        this.elements.set(declaration.identifier.name, prototype);
+    }
+
     if (namespace) {
       if (namespace.members) {
         if (namespace.members.has(declaration.identifier.name)) {
@@ -649,6 +663,13 @@ export class Program extends DiagnosticEmitter {
 
       const global: Global = new Global(this, internalName, declaration, null);
       this.elements.set(internalName, global);
+
+      if (hasDecorator("global", declaration.decorators)) {
+        if (this.elements.has(declaration.identifier.name))
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        else
+          this.elements.set(declaration.identifier.name, global);
+      }
 
       if (namespace) {
         if (namespace.members) {

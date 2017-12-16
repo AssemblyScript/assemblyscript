@@ -49,29 +49,36 @@
   isize
   usize
   HEAP_BASE
+  array/Array
   Array
+  error/Error
   Error
+  error/RangeError
   RangeError
   heap/ALIGN_LOG2
   heap/ALIGN_SIZE
   heap/ALIGN_MASK
   heap/HEAP_OFFSET
+  heap/Heap
   Heap
-  Heap.get_used
-  Heap.get_free
-  Heap.get_size
-  Heap.allocate
-  Heap.dispose
-  Heap.copy
+  heap/Heap.get_used
+  heap/Heap.get_free
+  heap/Heap.get_size
+  heap/Heap.allocate
+  heap/Heap.dispose
+  heap/Heap.copy
+  map/Map
   Map
+  set/Set
   Set
+  string/String
   String
 [program.exports]
-  Array
-  Error
-  RangeError
-  Heap
-  Map
-  Set
-  String
+  array/Array
+  error/Error
+  error/RangeError
+  heap/Heap
+  map/Map
+  set/Set
+  string/String
 ;)
