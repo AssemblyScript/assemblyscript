@@ -330,6 +330,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -371,6 +373,7 @@
   f64
   isize
   usize
+  HEAP_START
   tlsf/fls
   tlsf/ffs
   tlsf/ALIGN_SIZE_LOG2

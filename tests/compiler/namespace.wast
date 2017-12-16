@@ -19,6 +19,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -60,6 +62,7 @@
   f64
   isize
   usize
+  HEAP_START
   namespace/Outer
   namespace/Outer.Inner
   namespace/Outer.Inner.aVar

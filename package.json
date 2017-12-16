@@ -13,6 +13,7 @@
   "dependencies": {
     "@types/node": "^8.0.58",
     "binaryen": "40.0.0-nightly.20171209",
+    "glob": "^7.1.2",
     "minimist": "^1.2.0",
     "source-map-support": "^0.5.0"
   },
@@ -24,7 +25,6 @@
     "@types/minimist": "^1.2.0",
     "chalk": "^2.3.0",
     "diff": "^3.4.0",
-    "glob": "^7.1.2",
     "long": "^3.2.0",
     "ts-loader": "^3.2.0",
     "ts-node": "^3.3.0",

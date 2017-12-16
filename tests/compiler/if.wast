@@ -48,6 +48,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -89,6 +91,7 @@
   f64
   isize
   usize
+  HEAP_START
   if/ifThenElse
   if/ifThen
   if/ifThenElseBlock

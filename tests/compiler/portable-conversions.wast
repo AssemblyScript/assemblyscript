@@ -331,6 +331,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -372,6 +374,7 @@
   f64
   isize
   usize
+  HEAP_START
   portable-conversions/i
   portable-conversions/I
   portable-conversions/f

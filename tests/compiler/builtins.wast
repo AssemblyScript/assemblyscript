@@ -1035,6 +1035,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -1076,6 +1078,7 @@
   f64
   isize
   usize
+  HEAP_START
   builtins/b
   builtins/i
   builtins/I

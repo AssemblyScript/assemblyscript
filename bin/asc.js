@@ -1,6 +1,7 @@
 var fs = require("fs");
 var path = require("path");
 var minimist = require("minimist");
+var glob = require("glob");
 
 var assemblyscript;
 var isDev = true;
@@ -88,6 +89,17 @@ function checkDiagnostics(parser) {
     process.exit(1);
 }
 
+// Include standard library
+if (!args.noLib) {
+  var stdlibDir = path.join(__dirname + "..", "std", "assembly");
+  glob.sync("*.ts", { cwd: stdlibDir }).forEach(file => {
+    var nextPath = "std/" + file;
+    var nextText = fs.readFileSync(path.join(stdlibDir, file), { encoding: "utf8" });
+    parser = assemblyscript.parseFile(nextText, nextPath, parser, false);
+  });
+}
+
+// Include entry files
 args._.forEach(filename => {
   var entryPath = filename.replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
   var entryDir  = path.dirname(entryPath);
@@ -105,10 +117,11 @@ args._.forEach(filename => {
     }
   }
 
-  parser = assemblyscript.parseFile(entryText, entryPath, parser, true);
-
   var nextPath;
   var nextText;
+
+  // Load entry text
+  parser = assemblyscript.parseFile(entryText, entryPath, parser, true);
 
   while ((nextPath = parser.nextFile()) != null) {
     try {

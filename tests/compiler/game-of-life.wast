@@ -310,6 +310,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -351,6 +353,7 @@
   f64
   isize
   usize
+  HEAP_START
   ../../examples/game-of-life/assembly/game-of-life/w
   ../../examples/game-of-life/assembly/game-of-life/h
   ../../examples/game-of-life/assembly/game-of-life/s

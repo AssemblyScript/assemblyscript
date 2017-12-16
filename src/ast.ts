@@ -109,6 +109,7 @@ export enum NodeKind {
   SUPER,
   THIS,
   TRUE,
+  CONSTRUCTOR,
   UNARYPOSTFIX,
   UNARYPREFIX,
 
@@ -240,6 +241,12 @@ export abstract class Expression extends Node {
     return expr;
   }
 
+  static createConstructor(range: Range): ConstructorExpression {
+    const expr: ConstructorExpression = new ConstructorExpression();
+    expr.range = range;
+    return expr;
+  }
+
   static createElementAccess(expression: Expression, element: Expression, range: Range): ElementAccessExpression {
     const expr: ElementAccessExpression = new ElementAccessExpression();
     expr.range = range;
@@ -357,6 +364,16 @@ export abstract class Expression extends Node {
   }
 }
 
+export class IdentifierExpression extends Expression {
+
+  kind = NodeKind.IDENTIFIER;
+  name: string;
+
+  serialize(sb: string[]): void {
+    sb.push(this.name);
+  }
+}
+
 export const enum LiteralKind {
   FLOAT,
   INTEGER,
@@ -459,6 +476,11 @@ export class CallExpression extends Expression {
   }
 }
 
+export class ConstructorExpression extends IdentifierExpression {
+  kind = NodeKind.CONSTRUCTOR;
+  name = "this";
+}
+
 export class ElementAccessExpression extends Expression {
 
   kind = NodeKind.ELEMENTACCESS;
@@ -480,16 +502,6 @@ export class FloatLiteralExpression extends LiteralExpression {
 
   serialize(sb: string[]): void {
     sb.push(this.value.toString(10));
-  }
-}
-
-export class IdentifierExpression extends Expression {
-
-  kind = NodeKind.IDENTIFIER;
-  name: string;
-
-  serialize(sb: string[]): void {
-    sb.push(this.name);
   }
 }
 
@@ -641,8 +653,9 @@ export enum ModifierKind {
   PUBLIC,
   PRIVATE,
   PROTECTED,
+  READONLY,
   GET,
-  SET
+  SET,
 }
 
 export abstract class Statement extends Node {
@@ -1052,7 +1065,7 @@ export class ClassDeclaration extends DeclarationStatement {
     if (this._cachedInternalName !== null)
       return this._cachedInternalName;
     const globalDecorator: Decorator | null = this.decorators ? getDecoratorByName("global", this.decorators) : null;
-    if (globalDecorator && globalDecorator.expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>globalDecorator.expression).name == "global")
+    if (globalDecorator)
       return this._cachedInternalName = this.identifier.name;
     else
       return this._cachedInternalName = mangleInternalName(this);
@@ -1589,9 +1602,10 @@ export class Modifier extends Node {
       case ModifierKind.PRIVATE: sb.push("private"); break;
       case ModifierKind.PROTECTED: sb.push("protected"); break;
       case ModifierKind.PUBLIC: sb.push("public"); break;
+      case ModifierKind.READONLY: sb.push("readonly"); break;
       case ModifierKind.SET: sb.push("set"); break;
       case ModifierKind.STATIC: sb.push("static"); break;
-      default: sb.push("INVALID"); break;
+      default: throw new Error("unexpected modifier kind");
     }
   }
 }
@@ -1772,14 +1786,19 @@ export function hasModifier(kind: ModifierKind, modifiers: Modifier[] | null): b
   return false;
 }
 
-export function getDecoratorByName(name: string, decorators: Decorator[]): Decorator | null {
-  for (let i: i32 = 0, k: i32 = decorators.length; i < k; ++i) {
-    const decorator: Decorator = decorators[i];
-    const expression: Expression = decorator.expression;
-    if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).name == name)
-      return decorator;
-  }
+function getDecoratorByName(name: string, decorators: Decorator[] | null): Decorator | null {
+  if (decorators)
+    for (let i: i32 = 0, k: i32 = decorators.length; i < k; ++i) {
+      const decorator: Decorator = decorators[i];
+      const expression: Expression = decorator.expression;
+      if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).name == name)
+        return decorator;
+    }
   return null;
+}
+
+export function hasDecorator(name: string, decorators: Decorator[] | null): bool {
+  return getDecoratorByName(name, decorators) != null;
 }
 
 export function serialize(node: Node, indent: i32 = 0): string {

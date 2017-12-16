@@ -43,6 +43,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -84,6 +86,7 @@
   f64
   isize
   usize
+  HEAP_START
   class/Animal
   class/Animal.MAX
   class/Animal.add

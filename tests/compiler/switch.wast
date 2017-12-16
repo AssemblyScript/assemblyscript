@@ -147,6 +147,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -188,6 +190,7 @@
   f64
   isize
   usize
+  HEAP_START
   switch/doSwitch
   switch/doSwitchDefaultFirst
   switch/doSwitchDefaultOmitted

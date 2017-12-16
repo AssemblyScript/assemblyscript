@@ -19,6 +19,7 @@ import {
   LiteralKind,
   PropertyAccessExpression,
   StringLiteralExpression,
+  CallExpression,
 
   ClassDeclaration,
   DeclarationStatement,
@@ -101,7 +102,9 @@ export class Program extends DiagnosticEmitter {
       ["bool", Type.bool],
       ["f32", Type.f32],
       ["f64", Type.f64],
-      ["void", Type.void]
+      ["void", Type.void],
+      ["number", Type.f64],
+      ["boolean", Type.bool]
     ]);
 
     initializeBuiltins(this);
@@ -779,27 +782,26 @@ export class Program extends DiagnosticEmitter {
     // static or instance property (incl. enum values) or method
     } else if (expression.kind == NodeKind.PROPERTYACCESS) {
       return this.resolvePropertyAccess(<PropertyAccessExpression>expression, contextualFunction);
+
+    // instantiation
+    } else if (expression.kind == NodeKind.NEW) {
+      return this.resolveElement((<CallExpression>expression).expression, contextualFunction);
     }
 
     throw new Error("not implemented: " + expression.kind);
   }
 }
 
-function checkGlobalDecorator(decorators: Decorator[]): string | null {
-  for (let i: i32 = 0, k: i32 = decorators.length; i < k; ++i) {
-    const decorator: Decorator = decorators[i];
-    const expression: Expression = decorator.expression;
-    const args: Expression[] = decorator.arguments;
-    if (expression.kind == NodeKind.IDENTIFIER && args.length <= 1 && (<IdentifierExpression>expression).name == "global") {
-      if (args.length) {
-        const firstArg: Expression = args[0];
-        if (firstArg.kind == NodeKind.LITERAL && (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING)
-          return (<StringLiteralExpression>firstArg).value;
-      } else
-        return ""; // instead inherits declaration identifier
+function hasDecorator(name: string, decorators: Decorator[] | null): bool {
+  if (decorators)
+    for (let i: i32 = 0, k: i32 = decorators.length; i < k; ++i) {
+      const decorator: Decorator = decorators[i];
+      const expression: Expression = decorator.expression;
+      const args: Expression[] = decorator.arguments;
+      if (expression.kind == NodeKind.IDENTIFIER && args.length <= 1 && (<IdentifierExpression>expression).name == name)
+        return true;
     }
-  }
-  return null;
+  return false;
 }
 
 /** Indicates the specific kind of an {@link Element}. */
@@ -857,7 +859,11 @@ export enum ElementFlags {
   /** Is getter. */
   GETTER = 1 << 9,
   /** Is setter. */
-  SETTER = 1 << 10
+  SETTER = 1 << 10,
+  /** Is global. */
+  GLOBAL = 1 << 11,
+  /** Is read-only. */
+  READONLY = 1 << 12
 }
 
 /** Base class of all program elements. */
@@ -919,9 +925,13 @@ export abstract class Element {
   /** Whether an instance member or not. */
   get isInstance(): bool { return (this.flags & ElementFlags.INSTANCE) != 0; }
   set isInstance(is: bool) { if (is) this.flags |= ElementFlags.INSTANCE; else this.flags &= ~ElementFlags.INSTANCE; }
+
+  /** Whether a member of the global namespace or not. */
+  get isGlobal(): bool { return (this.flags & ElementFlags.GLOBAL) != 0; }
+  set isGlobal(is: bool) { if (is) this.flags |= ElementFlags.GLOBAL; else this.flags &= ~ElementFlags.GLOBAL; }
 }
 
-/** A namespace. Also the base class of other namespace-like program elements. */
+/** A namespace. */
 export class Namespace extends Element {
 
   kind = ElementKind.NAMESPACE;
@@ -985,8 +995,7 @@ export class EnumValue extends Element {
   constructor(enm: Enum, program: Program, internalName: string, declaration: EnumValueDeclaration | null = null) {
     super(program, internalName);
     this.enum = enm;
-    if (!(this.declaration = declaration))
-      this.hasConstantValue = true; // built-ins have constant values
+    this.declaration = declaration;
   }
 }
 
@@ -1185,7 +1194,7 @@ export class FunctionPrototype extends Element {
   resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Function | null {
     let resolvedTypeArguments: Type[] | null;
     if (this.isGeneric) {
-      assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
+      assert(typeArgumentNodes != null && typeArgumentNodes.length != 0, "" + this);
       if (!this.declaration)
         throw new Error("missing declaration");
       resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
@@ -1372,11 +1381,17 @@ export class FieldPrototype extends Element {
       for (let i: i32 = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
           case ModifierKind.EXPORT: this.isExported = true; break;
+          case ModifierKind.READONLY: this.isReadonly = true; break;
+          case ModifierKind.STATIC: break; // already handled
           default: throw new Error("unexpected modifier");
         }
       }
     }
   }
+
+  /** Whether the field is read-only or not. */
+  get isReadonly(): bool { return (this.flags & ElementFlags.READONLY) != 0; }
+  set isReadonly(is: bool) { if (is) this.flags |= ElementFlags.READONLY; else this.flags &= ~ElementFlags.READONLY; }
 }
 
 /** A resolved instance field. */

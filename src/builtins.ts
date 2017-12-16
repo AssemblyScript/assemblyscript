@@ -1,6 +1,6 @@
 import { Compiler, Target, ConversionKind, typeToNativeType, typeToNativeOne, typeToNativeZero } from "./compiler";
 import { DiagnosticCode } from "./diagnostics";
-import { Node, Expression } from "./ast";
+import { Node, Expression, IdentifierExpression } from "./ast";
 import { Type } from "./types";
 import { Module, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType, FunctionTypeRef } from "./module";
 import { Program, ElementFlags, Element, Global, FunctionPrototype, Local } from "./program";
@@ -9,6 +9,9 @@ import { Program, ElementFlags, Element, Global, FunctionPrototype, Local } from
 export function initialize(program: Program): void {
 
   // math
+  addConstant(program, "NaN", Type.f64);
+  addConstant(program, "Infinity", Type.f64);
+
   addFunction(program, "isNaN", true);
   addFunction(program, "isFinite", true);
   addFunction(program, "clz", true);
@@ -96,10 +99,22 @@ export function initialize(program: Program): void {
   if (program.target == Target.WASM64) {
     program.elements.set("isize", <Element>program.elements.get("i64"));
     program.elements.set("usize", <Element>program.elements.get("u64"));
+    addConstant(program, "HEAP_START", Type.usize64);
   } else {
     program.elements.set("isize", <Element>program.elements.get("i32"));
     program.elements.set("usize", <Element>program.elements.get("u32"));
+    addConstant(program, "HEAP_START", Type.usize32);
   }
+}
+
+/** Adds a built-in global to the specified program. */
+function addConstant(program: Program, name: string, type: Type): Global {
+  const global: Global = new Global(program, name, null, null);
+  global.isBuiltIn = true;
+  global.isConstant = true;
+  global.type = type;
+  program.elements.set(name, global);
+  return global;
 }
 
 /** Adds a built-in function to the specified program. */
@@ -109,6 +124,29 @@ function addFunction(program: Program, name: string, isGeneric: bool = false): F
   if (isGeneric) prototype.isGeneric = true;
   program.elements.set(name, prototype);
   return prototype;
+}
+
+export function compileGetGlobal(compiler: Compiler, global: Global): ExpressionRef {
+  switch (global.internalName) {
+
+    case "NaN":
+      if (compiler.currentType == Type.f32)
+        return compiler.module.createF32(NaN);
+      compiler.currentType = Type.f64;
+      return compiler.module.createF64(NaN);
+
+    case "Infinity":
+      if (compiler.currentType == Type.f32)
+        return compiler.module.createF32(Infinity);
+      compiler.currentType = Type.f64;
+      return compiler.module.createF64(Infinity);
+
+    case "HEAP_START": // never inlined
+      return compiler.module.createGetGlobal("HEAP_START", typeToNativeType(<Type>global.type));
+
+    default:
+      throw new Error("not implemented: " + global.internalName);
+  }
 }
 
 /** Compiles a call to a built-in function. */

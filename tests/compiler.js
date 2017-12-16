@@ -12,15 +12,25 @@ var Module = require("../src/module").Module;
 var Parser = require("../src/parser").Parser;
 
 var isCreate = process.argv[2] === "--create";
-var filter = process.argv.length > 2 && !isCreate ? "*" + process.argv[2] + "*.ts" : "*.ts";
+var filter = process.argv.length > 2 && !isCreate ? "**/" + process.argv[2] + ".ts" : "**/*.ts";
+
+var stdFiles = glob.sync("*.ts", { cwd: __dirname + "/../std/assembly" });
 
 glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
-  if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts"))
+  if (filename.charAt(0) == "_")
     return;
 
   console.log(chalk.default.whiteBright("Testing compiler/" + filename));
 
+  var fixture = path.basename(filename, ".ts");
   var parser = new Parser();
+  if (filename.startsWith("std/")) {
+    stdFiles.forEach(file => {
+      parser.parseFile(fs.readFileSync(__dirname + "/../std/assembly/" + file, { encoding: "utf8" }), file, false);
+    });
+    fixture = "std/" + fixture;
+  }
+
   var sourceText = fs.readFileSync(__dirname + "/compiler/" + filename, { encoding: "utf8" });
   parser.parseFile(sourceText, filename, true);
   var nextFile;
@@ -38,7 +48,6 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   var actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
   var actualOptimized = null;
   var actualInlined = null;
-  var fixture = path.basename(filename, ".ts") + ".wast";
 
   if (module.validate()) {
     console.log(chalk.default.green("validate OK"));
@@ -59,27 +68,27 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   }
 
   if (isCreate) {
-    fs.writeFileSync(__dirname + "/compiler/" + fixture, actual, { encoding: "utf8" });
+    fs.writeFileSync(__dirname + "/compiler/" + fixture + ".wast", actual, { encoding: "utf8" });
     console.log("Created");
     if (actualOptimized != null) {
-      fs.writeFileSync(__dirname + "/compiler/" + path.basename(filename, ".ts") + ".optimized.wast", actualOptimized, { encoding: "utf8" });
+      fs.writeFileSync(__dirname + "/compiler/" + fixture + ".optimized.wast", actualOptimized, { encoding: "utf8" });
       console.log("Created optimized");
     }
     if (actualInlined != null) {
       if (actualInlined != actualOptimized) {
-        fs.writeFileSync(__dirname + "/compiler/" + path.basename(filename, ".ts") + ".optimized-inlined.wast", actualInlined, { encoding: "utf8" });
+        fs.writeFileSync(__dirname + "/compiler/" + fixture + ".optimized-inlined.wast", actualInlined, { encoding: "utf8" });
         console.log("Created optimized & inlined");
       } else {
         try {
-          fs.unlinkSync(__dirname + "/compiler/" + path.basename(filename, ".ts") + ".optimized-inlined.wast");
+          fs.unlinkSync(__dirname + "/compiler/" + fixture + ".optimized-inlined.wast");
           console.log("Deleted optimized & inlined");
         } catch (e) {}
       }
     }
   } else {
     try {
-      var expected = fs.readFileSync(__dirname + "/compiler/" + fixture, { encoding: "utf8" });
-      var diffs = diff("compiler/" + fixture, expected, actual);
+      var expected = fs.readFileSync(__dirname + "/compiler/" + fixture + ".wast", { encoding: "utf8" });
+      var diffs = diff(filename + ".wast", expected, actual);
       if (diffs !== null) {
         process.exitCode = 1;
         console.log(diffs);

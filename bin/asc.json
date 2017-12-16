@@ -47,6 +47,10 @@
     "desc": "Disables assertions.",
     "type": "boolean"
   },
+  "noLib": {
+    "desc": "Does not include the standard library.",
+    "type": "boolean"
+  },
   "trapMode": {
     "desc": [
       "Sets the trap mode to use.",

@@ -694,6 +694,9 @@ export class Parser extends DiagnosticEmitter {
     else if (tn.skip(Token.ABSTRACT))
       modifiers = addModifier(Statement.createModifier(ModifierKind.ABSTRACT, tn.range()), modifiers);
 
+    if (tn.skip(Token.READONLY))
+      modifiers = addModifier(Statement.createModifier(ModifierKind.READONLY, tn.range()), modifiers);
+
     let isGetter: bool = false;
     let isSetter: bool = false;
     if (tn.skip(Token.GET)) {
@@ -704,15 +707,22 @@ export class Parser extends DiagnosticEmitter {
       isSetter = true;
     }
 
-    if (tn.skip(Token.IDENTIFIER)) {
-      const identifier: IdentifierExpression = Expression.createIdentifier(tn.readIdentifier(), tn.range());
+    if (tn.skip(Token.IDENTIFIER) || tn.skip(Token.CONSTRUCTOR)) {
+      const identifier: IdentifierExpression = tn.token == Token.CONSTRUCTOR
+        ? Expression.createConstructor(tn.range())
+        : Expression.createIdentifier(tn.readIdentifier(), tn.range());
       let typeParameters: TypeParameter[] | null;
       if (tn.skip(Token.LESSTHAN)) {
+        if (identifier.kind == NodeKind.CONSTRUCTOR)
+          this.error(DiagnosticCode.Type_parameters_cannot_appear_on_a_constructor_declaration, tn.range()); // recoverable
         typeParameters = this.parseTypeParameters(tn);
         if (!typeParameters)
           return null;
       } else
         typeParameters = [];
+
+      if (identifier.kind == NodeKind.CONSTRUCTOR && tn.peek() != Token.OPENPAREN)
+        this.error(DiagnosticCode.Constructor_implementation_is_missing, tn.range());
 
       // method: '(' Parameters (':' Type)? '{' Statement* '}' ';'?
       if (tn.skip(Token.OPENPAREN)) {
@@ -729,14 +739,18 @@ export class Parser extends DiagnosticEmitter {
         }
         let returnType: TypeNode | null = null;
         if (tn.skip(Token.COLON)) {
-          returnType = this.parseType(tn, isSetter);
+          if (identifier.kind == NodeKind.CONSTRUCTOR)
+            this.error(DiagnosticCode.Type_annotation_cannot_appear_on_a_constructor_declaration, tn.range());
+          else if (isSetter)
+            this.error(DiagnosticCode.A_set_accessor_cannot_have_a_return_type_annotation, tn.range());
+          returnType = this.parseType(tn, identifier.kind == NodeKind.CONSTRUCTOR || isSetter);
           if (!returnType)
             return null;
         } else {
           if (isSetter) {
             if (parameters.length)
               returnType = parameters[0].type;
-          } else
+          } else if (identifier.kind != NodeKind.CONSTRUCTOR)
             this.error(DiagnosticCode.Type_expected, tn.range()); // recoverable
         }
         let statements: Statement[] | null = null;
@@ -1323,36 +1337,21 @@ export class Parser extends DiagnosticEmitter {
 
     let p: Precedence = determinePrecedencePrefix(token);
     if (p != Precedence.INVALID) {
-      const operand: Expression | null = this.parseExpression(tn, p);
-      if (!operand)
-        return null;
+      let operand: Expression | null
 
       // TODO: SpreadExpression, YieldExpression (currently become unsupported UnaryPrefixExpressions)
 
       // NewExpression
       if (token == Token.NEW) {
-        if (operand.kind == NodeKind.IDENTIFIER || operand.kind == NodeKind.PROPERTYACCESS) {
-          const args: Expression[] = new Array();
-          if (tn.skip(Token.OPENPAREN)) {
-            if (tn.peek() != Token.CLOSEPAREN) {
-              do {
-                expr = this.parseExpression(tn, Precedence.COMMA + 1);
-                if (!expr)
-                  return null;
-                args.push(expr);
-              } while (tn.skip(Token.COMMA));
-            }
-            if (!tn.skip(Token.CLOSEPAREN)) {
-              this.error(DiagnosticCode._0_expected, tn.range(), ")");
-              return null;
-            }
-          }
-          return Expression.createNew(operand, [], args, tn.range(startPos, tn.pos));
-        } else {
-          this.error(DiagnosticCode.Identifier_expected, tn.range());
+        operand = this.parseExpression(tn, Precedence.CALL);
+        if (!operand)
           return null;
-        }
-      }
+        if (operand.kind == NodeKind.CALL)
+          return Expression.createNew((<CallExpression>operand).expression, (<CallExpression>operand).typeArguments, (<CallExpression>operand).arguments, tn.range(startPos, tn.pos));
+        this.error(DiagnosticCode.Operation_not_supported, tn.range());
+        return null;
+      } else
+        operand = this.parseExpression(tn, p);
 
       // UnaryPrefixExpression
       if (token == Token.PLUS_PLUS || token == Token.MINUS_MINUS)
@@ -1406,7 +1405,7 @@ export class Parser extends DiagnosticEmitter {
           this.error(DiagnosticCode._0_expected, tn.range(), ">");
           return null;
         }
-        expr = this.parseExpressionPrefix(tn);
+        expr = this.parseExpression(tn, Precedence.CALL);
         if (!expr)
           return null;
         return Expression.createAssertion(AssertionKind.PREFIX, <Expression>expr, <TypeNode>toType, tn.range(startPos, tn.pos));
@@ -1415,6 +1414,15 @@ export class Parser extends DiagnosticEmitter {
       // IdentifierExpression
       case Token.IDENTIFIER:
         return Expression.createIdentifier(tn.readIdentifier(), tn.range(startPos, tn.pos));
+
+      case Token.THIS:
+        return Expression.createThis(tn.range(startPos, tn.pos));
+
+      case Token.CONSTRUCTOR:
+        return Expression.createConstructor(tn.range(startPos, tn.pos));
+
+      case Token.SUPER:
+        return Expression.createSuper(tn.range(startPos, tn.pos));
 
       // StringLiteralExpression
       case Token.STRINGLITERAL:

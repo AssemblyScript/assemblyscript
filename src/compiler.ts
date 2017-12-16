@@ -1,4 +1,4 @@
-import { compileCall as compileBuiltinCall, initialize } from "./builtins";
+import { compileCall as compileBuiltinCall, compileGetGlobal as compileBuiltinGetGlobal, initialize } from "./builtins";
 import { PATH_DELIMITER } from "./constants";
 import { DiagnosticCode, DiagnosticEmitter } from "./diagnostics";
 import {
@@ -324,6 +324,10 @@ export class Compiler extends DiagnosticEmitter {
   compileGlobal(global: Global): bool {
     if (global.isCompiled)
       return true;
+    if (global.isBuiltIn)
+      if (compileBuiltinGetGlobal(this, global))
+        return true;
+
     const declaration: VariableLikeDeclarationStatement | null = global.declaration;
     let type: Type | null = global.type;
     if (!type) {
@@ -376,6 +380,7 @@ export class Compiler extends DiagnosticEmitter {
         initializer = typeToNativeZero(this.module, type);
     } else
       throw new Error("unexpected missing declaration or constant value");
+
     const internalName: string = global.internalName;
     if (initializeInStart) {
       this.module.addGlobal(internalName, nativeType, true, typeToNativeZero(this.module, type));
@@ -1606,14 +1611,15 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (element.kind == ElementKind.GLOBAL) {
-      this.compileGlobal(<Global>element);
-      if (!(<Global>element).isMutable)
+      if (!this.compileGlobal(<Global>element))
+        return this.module.createUnreachable();
+      this.currentType = <Type>(<Global>element).type;
+      if (!(<Global>element).isMutable) {
         this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, element.internalName);
+        return this.module.createUnreachable();
+      }
       if (tee) {
-        if (!(<Global>element).type)
-          return this.module.createUnreachable();
         const globalNativeType: NativeType = typeToNativeType(<Type>(<Global>element).type);
-        this.currentType = <Type>(<Global>element).type;
         return this.module.createBlock(null, [ // teeGlobal
           this.module.createSetGlobal((<Global>element).internalName, valueWithCorrectType),
           this.module.createGetGlobal((<Global>element).internalName, globalNativeType)
@@ -1759,22 +1765,6 @@ export class Compiler extends DiagnosticEmitter {
         this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
         this.currentType = this.options.target == Target.WASM64 ? Type.u64 : Type.u32;
         return this.module.createUnreachable();
-
-      case NodeKind.IDENTIFIER:
-        // TODO: some sort of resolveIdentifier maybe
-        if ((<IdentifierExpression>expression).name == "NaN") {
-          if (this.currentType == Type.f32)
-            return this.module.createF32(NaN);
-          this.currentType = Type.f64;
-          return this.module.createF64(NaN);
-        }
-        if ((<IdentifierExpression>expression).name == "Infinity") {
-          if (this.currentType == Type.f32)
-            return this.module.createF32(Infinity);
-          this.currentType = Type.f64;
-          return this.module.createF64(Infinity);
-        }
-        break;
     }
 
     const element: Element | null = this.program.resolveElement(expression, this.currentFunction); // reports
@@ -1789,6 +1779,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // global
     if (element.kind == ElementKind.GLOBAL) {
+      if (element.isBuiltIn)
+        return compileBuiltinGetGlobal(this, <Global>element);
+
       const global: Global = <Global>element;
       if (!this.compileGlobal(global)) // reports
         return this.module.createUnreachable();

@@ -1,6 +1,6 @@
 {
   "extends": "../../std/assembly.json",
   "include": [
-    "./*.ts"
+    "./**/*.ts"
   ]
 }

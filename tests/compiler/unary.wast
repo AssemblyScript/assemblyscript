@@ -623,6 +623,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -664,6 +666,7 @@
   f64
   isize
   usize
+  HEAP_START
   unary/i
   unary/I
   unary/f

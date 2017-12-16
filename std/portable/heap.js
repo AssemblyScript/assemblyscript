@@ -5,7 +5,7 @@ var HEAP_OFFSET = 0;
 
 Object.defineProperties(globalScope["Heap"] = {
   allocate: function allocate(size) {
-    if (!size) return 0;
+    if (!(size >>>= 0)) return 0;
     if (HEAP_OFFSET + size > HEAP.length) {
       var oldHeap = HEAP;
       HEAP = new Uint8Array(Math.max(65536, HEAP.length + size, HEAP.length * 2));
@@ -18,7 +18,7 @@ Object.defineProperties(globalScope["Heap"] = {
   },
   dispose: function dispose() { },
   copy: function copy(dest, src, n) {
-    HEAP.set(HEAP.subarray(src, src + n), dest);
+    HEAP.set(HEAP.subarray(src >>> 0, (src + n) >>> 0), dest >>> 0);
     return dest;
   }
 }, {
@@ -26,9 +26,6 @@ Object.defineProperties(globalScope["Heap"] = {
   free: { get: function get_free() { return HEAP.length - HEAP_OFFSET; } },
   size: { get: function get_size() { return HEAP.length; } }
 });
-globalScope["store"] = function store(ptr, val) {
-  binaryen.HEAPU8[ptr] = val;
-};
-globalScope["load"] = function load(ptr) {
-  return binaryen.HEAPU8[ptr];
-};
+
+globalScope["store"] = function store(ptr, val) { binaryen.HEAPU8[ptr] = val; };
+globalScope["load"] = function load(ptr) { return binaryen.HEAPU8[ptr]; };

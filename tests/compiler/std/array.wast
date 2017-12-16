@@ -1,10 +1,14 @@
 (module
  (type $v (func))
- (import "env" "external" (func $declare/external))
  (global $HEAP_START i32 (i32.const 4))
  (memory $0 1)
- (export "external" (func $declare/external))
  (export "memory" (memory $0))
+ (start $start)
+ (func $Array.test (; 0 ;) (type $v)
+ )
+ (func $start (; 1 ;) (type $v)
+  (call $Array.test)
+ )
 )
 (;
 [program.elements]
@@ -52,7 +56,20 @@
   isize
   usize
   HEAP_START
-  declare/external
+  Array
+  Array.fromPtr
+  Array.test
+  heap/ALIGN_LOG2
+  heap/ALIGN_SIZE
+  heap/ALIGN_MASK
+  heap/HEAP_OFFSET
+  Heap
+  Heap.allocate
+  Heap.dispose
+  Heap.get_used
+  Heap.get_free
+  Heap.get_size
+  Heap.copy
 [program.exports]
-  declare/external
+  
 ;)

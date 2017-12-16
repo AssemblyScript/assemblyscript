@@ -2,6 +2,7 @@
 // 1. C-like with no 'length' or 'push'
 // 2. Descriptors that can be constructed from lower level arrays
 
+@global()
 class Array<T> {
 
   readonly capacity: i32;
@@ -33,4 +34,6 @@ class Array<T> {
     this.ptr = 0;
     Heap.dispose(changetype<this,usize>(this));
   }
+
+  static test(): void {}
 }

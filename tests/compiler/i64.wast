@@ -1191,6 +1191,8 @@
 )
 (;
 [program.elements]
+  NaN
+  Infinity
   isNaN
   isFinite
   clz
@@ -1232,6 +1234,7 @@
   f64
   isize
   usize
+  HEAP_START
   ../../examples/i64-polyfill/assembly/i64/lo
   ../../examples/i64-polyfill/assembly/i64/hi
   ../../examples/i64-polyfill/assembly/i64/getLo
