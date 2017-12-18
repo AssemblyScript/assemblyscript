@@ -9,6 +9,7 @@
 */
 
 // TODO: div/mod
+// another option is to use a wasm-based polyfill, see examples/i64-polyfill.
 
 const I64_MIN_LO: i32 = 0;
 const I64_MIN_HI: i32 = 0x80000000 | 0;

@@ -107,7 +107,7 @@ export function initialize(program: Program): void {
   }
 }
 
-/** Adds a built-in global to the specified program. */
+/** Adds a built-in constant to the specified program. */
 function addConstant(program: Program, name: string, type: Type): Global {
   const global: Global = new Global(program, name, null, null);
   global.isBuiltIn = true;

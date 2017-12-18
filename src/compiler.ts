@@ -58,6 +58,7 @@ import {
   ForStatement,
   IfStatement,
   ImportStatement,
+  InterfaceDeclaration,
   MethodDeclaration,
   ModifierKind,
   NamespaceDeclaration,
@@ -93,8 +94,7 @@ import {
   UnaryPrefixExpression,
 
   // utility
-  hasModifier,
-  InterfaceDeclaration
+  hasModifier
 
 } from "./ast";
 import {
@@ -314,7 +314,7 @@ export class Compiler extends DiagnosticEmitter {
       return null;
     if (isModuleExport(element, declaration)) {
       if ((<Global>element).hasConstantValue)
-        this.module.addGlobalExport(element.internalName, declaration.identifier.name);
+        this.module.addGlobalExport(element.internalName, declaration.name.name);
       else
         this.warning(DiagnosticCode.Cannot_export_a_mutable_global, declaration.range);
     }
@@ -334,7 +334,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!declaration)
         throw new Error("unexpected missing declaration");
       if (!declaration.type) { // TODO: infer type
-        this.error(DiagnosticCode.Type_expected, declaration.identifier.range);
+        this.error(DiagnosticCode.Type_expected, declaration.name.range);
         return false;
       }
       type = this.program.resolveType(declaration.type); // reports
@@ -489,7 +489,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!instance)
       return;
     if (isModuleExport(instance, declaration))
-      this.module.addFunctionExport(instance.internalName, declaration.identifier.name);
+      this.module.addFunctionExport(instance.internalName, declaration.name.name);
   }
 
   compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Function | null {
@@ -509,12 +509,12 @@ export class Compiler extends DiagnosticEmitter {
 
     if (instance.isDeclared) {
       if (declaration.statements) {
-        this.error(DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts, declaration.identifier.range);
+        this.error(DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts, declaration.name.range);
         return false;
       }
     } else {
       if (!declaration.statements) {
-        this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.identifier.range);
+        this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.name.range);
         return false;
       }
     }
@@ -546,7 +546,7 @@ export class Compiler extends DiagnosticEmitter {
     // create the function
     const internalName: string = instance.internalName;
     if (instance.isDeclared) { // TODO: use parent namespace as externalModuleName, if applicable
-      this.module.addFunctionImport(internalName, "env", declaration.identifier.name, typeRef);
+      this.module.addFunctionImport(internalName, "env", declaration.name.name, typeRef);
     } else {
       this.module.addFunction(internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
     }
@@ -871,14 +871,14 @@ export class Compiler extends DiagnosticEmitter {
 
   compileIfStatement(statement: IfStatement): ExpressionRef {
     const condition: ExpressionRef = this.compileExpression(statement.condition, Type.i32);
-    const ifTrue: ExpressionRef = this.compileStatement(statement.statement);
-    const ifFalse: ExpressionRef = statement.elseStatement ? this.compileStatement(<Statement>statement.elseStatement) : 0;
+    const ifTrue: ExpressionRef = this.compileStatement(statement.ifTrue);
+    const ifFalse: ExpressionRef = statement.ifFalse ? this.compileStatement(<Statement>statement.ifFalse) : 0;
     return this.module.createIf(condition, ifTrue, ifFalse);
   }
 
   compileReturnStatement(statement: ReturnStatement): ExpressionRef {
     if (this.currentFunction) {
-      const expression: ExpressionRef = statement.expression ? this.compileExpression(<Expression>statement.expression, this.currentFunction.returnType) : 0;
+      const expression: ExpressionRef = statement.value ? this.compileExpression(<Expression>statement.value, this.currentFunction.returnType) : 0;
       return this.module.createReturn(expression);
     }
     return this.module.createUnreachable();
@@ -895,7 +895,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // prepend initializer to inner block
     const breaks: ExpressionRef[] = new Array(1 + k);
-    breaks[0] = this.module.createSetLocal(tempLocal.index, this.compileExpression(statement.expression, Type.i32)); // initializer
+    breaks[0] = this.module.createSetLocal(tempLocal.index, this.compileExpression(statement.condition, Type.i32)); // initializer
 
     // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
     let breakIndex: i32 = 1;
@@ -966,18 +966,18 @@ export class Compiler extends DiagnosticEmitter {
     for (let i: i32 = 0, k = declarations.length; i < k; ++i) {
       const declaration: VariableDeclaration = declarations[i];
       if (declaration.type) {
-        const name: string = declaration.identifier.name;
+        const name: string = declaration.name.name;
         const type: Type | null = this.program.resolveType(<TypeNode>declaration.type, this.currentFunction.contextualTypeArguments, true); // reports
         if (type) {
           if (this.currentFunction.locals.has(name))
-            this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, name); // recoverable
+            this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name); // recoverable
           else
             this.currentFunction.addLocal(<Type>type, name);
           if (declaration.initializer)
-            initializers.push(this.compileAssignment(declaration.identifier, <Expression>declaration.initializer, Type.void));
+            initializers.push(this.compileAssignment(declaration.name, <Expression>declaration.initializer, Type.void));
         }
       } else {
-        this.error(DiagnosticCode.Type_expected, declaration.identifier.range);
+        this.error(DiagnosticCode.Type_expected, declaration.name.range);
       }
     }
     return initializers.length ? this.module.createBlock(null, initializers, NativeType.None) : this.module.createNop();
@@ -1984,7 +1984,7 @@ export class Compiler extends DiagnosticEmitter {
     const operator: Token = expression.operator;
 
     // make a getter for the expression (also obtains the type)
-    const getValue: ExpressionRef = this.compileExpression(expression.expression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
+    const getValue: ExpressionRef = this.compileExpression(expression.operand, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
 
     // use a temp local for the intermediate value
     const tempLocal: Local = this.currentFunction.getTempLocal(this.currentType);
@@ -2015,7 +2015,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // make a setter that sets the new value (temp value +/- 1)
-    const setValue: ExpressionRef = this.compileAssignmentWithValue(expression.expression,
+    const setValue: ExpressionRef = this.compileAssignmentWithValue(expression.operand,
       this.module.createBinary(op,
         this.module.createGetLocal(tempLocal.index, nativeType),
         nativeOne
@@ -2034,7 +2034,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileUnaryPrefixExpression(expression: UnaryPrefixExpression, contextualType: Type): ExpressionRef {
-    const operandExpression: Expression = expression.expression;
+    const operandExpression: Expression = expression.operand;
 
     let operand: ExpressionRef;
     let op: UnaryOp;

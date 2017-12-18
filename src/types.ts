@@ -91,11 +91,11 @@ export class Type {
   }
 
   /** Composes the respective nullable type of this type. */
-  asNullable(): Type {
+  asNullable(): Type | null {
     assert(this.kind == TypeKind.USIZE);
     if (this.isNullable && !this.nullableType)
       (this.nullableType = new Type(this.kind, this.size)).isNullable = true;
-    return <Type>this.nullableType;
+    return this.nullableType;
   }
 
   /** Converts this type to its TypeScript representation. */
@@ -119,7 +119,7 @@ export class Type {
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
       case TypeKind.VOID: return "void";
-      default: assert(false); return "INVALID";
+      default: assert(false); return "";
     }
   }
 

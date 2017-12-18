@@ -1,5 +1,6 @@
 import { CharCode } from "./charcode";
 
+/** Normalizes the specified path, removing interior placeholders. Expects a posix-formatted string / not Windows compatible. */
 export function normalize(path: string, trimExtension: bool = false, separator: CharCode = CharCode.SLASH): string {
   // expects a relative path
 
@@ -77,10 +78,12 @@ export function normalize(path: string, trimExtension: bool = false, separator: 
   return len > 0 ? path : ".";
 }
 
+/** Resolves the specified path to a normalized path relative to the specified origin. */
 export function resolve(normalizedPath: string, normalizedOrigin: string, separator: CharCode = CharCode.SLASH): string {
   return normalize(dirname(normalizedOrigin, separator) + String.fromCharCode(separator) + normalizedPath);
 }
 
+/** Obtains the directory portion of a normalized path. */
 export function dirname(normalizedPath: string, separator: CharCode = CharCode.SLASH): string {
   let pos: i32 = normalizedPath.length;
   while (--pos > 0)

@@ -6,6 +6,31 @@
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
+  (if
+   (i32.const 0)
+   (unreachable)
+   (drop
+    (i32.const 1)
+   )
+  )
+  (if
+   (i32.const 1)
+   (drop
+    (i32.const 1)
+   )
+   (unreachable)
+  )
+  (if
+   (if (result i32)
+    (i32.const 0)
+    (unreachable)
+    (i32.const 1)
+   )
+   (drop
+    (i32.const 1)
+   )
+   (unreachable)
+  )
   (set_global $ternary/a
    (if (result i32)
     (i32.const 0)

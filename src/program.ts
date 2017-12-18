@@ -216,31 +216,31 @@ export class Program extends DiagnosticEmitter {
   private initializeClass(declaration: ClassDeclaration, namespace: Element | null = null): void {
     const internalName: string = declaration.internalName;
     if (this.elements.has(internalName)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
-    const prototype: ClassPrototype = new ClassPrototype(this, declaration.identifier.name, internalName, declaration);
+    const prototype: ClassPrototype = new ClassPrototype(this, declaration.name.name, internalName, declaration);
     this.elements.set(internalName, prototype);
 
     if (hasDecorator("global", declaration.decorators)) {
-      if (this.elements.has(declaration.identifier.name))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      if (this.elements.has(declaration.name.name))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       else
-        this.elements.set(declaration.identifier.name, prototype);
+        this.elements.set(declaration.name.name, prototype);
     }
 
     if (namespace) {
       if (namespace.members) {
-        if (namespace.members.has(declaration.identifier.name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        if (namespace.members.has(declaration.name.name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
         namespace.members = new Map();
-      namespace.members.set(declaration.identifier.name, prototype);
+      namespace.members.set(declaration.name.name, prototype);
     } else if (prototype.isExported) {
       if (this.exports.has(internalName)) {
-        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
       }
       this.exports.set(internalName, prototype);
@@ -265,18 +265,18 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeField(declaration: FieldDeclaration, classPrototype: ClassPrototype): void {
-    const name: string = declaration.identifier.name;
+    const name: string = declaration.name.name;
     const internalName: string = declaration.internalName;
 
     // static fields become global variables
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
       if (this.elements.has(internalName)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
         return;
       }
       if (classPrototype.members) {
         if (classPrototype.members.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
           return;
         }
       } else
@@ -289,7 +289,7 @@ export class Program extends DiagnosticEmitter {
     } else {
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
           return;
         }
       } else
@@ -300,18 +300,18 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeMethod(declaration: MethodDeclaration, classPrototype: ClassPrototype): void {
-    let name: string = declaration.identifier.name;
+    let name: string = declaration.name.name;
     const internalName: string = declaration.internalName;
 
     // static methods become global functions
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
       if (this.elements.has(internalName)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
         return;
       }
       if (classPrototype.members) {
         if (classPrototype.members.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
           return;
         }
       } else
@@ -324,7 +324,7 @@ export class Program extends DiagnosticEmitter {
     } else {
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
           return;
         }
       } else
@@ -337,7 +337,7 @@ export class Program extends DiagnosticEmitter {
   private initializeEnum(declaration: EnumDeclaration, namespace: Element | null = null): void {
     const internalName: string = declaration.internalName;
     if (this.elements.has(internalName)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
     const enm: Enum = new Enum(this, internalName, declaration);
@@ -345,32 +345,32 @@ export class Program extends DiagnosticEmitter {
 
     if (namespace) {
       if (namespace.members) {
-        if (namespace.members.has(declaration.identifier.name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        if (namespace.members.has(declaration.name.name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
         namespace.members = new Map();
-      namespace.members.set(declaration.identifier.name, enm);
+      namespace.members.set(declaration.name.name, enm);
     } else if (enm.isExported) {
       if (this.exports.has(internalName)) {
-        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
       }
       this.exports.set(internalName, enm);
     }
 
-    const values: EnumValueDeclaration[] = declaration.members;
+    const values: EnumValueDeclaration[] = declaration.values;
     for (let i: i32 = 0, k: i32 = values.length; i < k; ++i)
       this.initializeEnumValue(values[i], enm);
   }
 
   private initializeEnumValue(declaration: EnumValueDeclaration, enm: Enum): void {
-    const name: string = declaration.identifier.name;
+    const name: string = declaration.name.name;
     const internalName: string = declaration.internalName;
     if (enm.members) {
       if (enm.members.has(name)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         return;
       }
     } else
@@ -462,31 +462,31 @@ export class Program extends DiagnosticEmitter {
   private initializeFunction(declaration: FunctionDeclaration, namespace: Element | null = null): void {
     const internalName: string = declaration.internalName;
     if (this.elements.has(internalName)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
-    const prototype: FunctionPrototype = new FunctionPrototype(this, declaration.identifier.name, internalName, declaration, null);
+    const prototype: FunctionPrototype = new FunctionPrototype(this, declaration.name.name, internalName, declaration, null);
     this.elements.set(internalName, prototype);
 
     if (hasDecorator("global", declaration.decorators)) {
-      if (this.elements.has(declaration.identifier.name))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      if (this.elements.has(declaration.name.name))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       else
-        this.elements.set(declaration.identifier.name, prototype);
+        this.elements.set(declaration.name.name, prototype);
     }
 
     if (namespace) {
       if (namespace.members) {
-        if (namespace.members.has(declaration.identifier.name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        if (namespace.members.has(declaration.name.name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
         namespace.members = new Map();
-      namespace.members.set(declaration.identifier.name, prototype);
+      namespace.members.set(declaration.name.name, prototype);
     } else if (prototype.isExported) {
       if (this.exports.has(internalName)) {
-        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
       }
       this.exports.set(internalName, prototype);
@@ -504,7 +504,7 @@ export class Program extends DiagnosticEmitter {
   private initializeImport(declaration: ImportDeclaration, internalPath: string, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
     const internalName: string = declaration.internalName;
     if (this.elements.has(internalName)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
 
@@ -548,10 +548,10 @@ export class Program extends DiagnosticEmitter {
 
   private initializeInterface(declaration: InterfaceDeclaration, namespace: Element | null = null): void {
     const internalName: string = declaration.internalName;
-    const prototype: InterfacePrototype = new InterfacePrototype(this, declaration.identifier.name, internalName, declaration);
+    const prototype: InterfacePrototype = new InterfacePrototype(this, declaration.name.name, internalName, declaration);
 
     if (this.elements.has(internalName)) {
-      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
     this.elements.set(internalName, prototype);
@@ -559,7 +559,7 @@ export class Program extends DiagnosticEmitter {
     if (namespace) {
       if (namespace.members) {
         if (namespace.members.has(prototype.internalName)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -567,7 +567,7 @@ export class Program extends DiagnosticEmitter {
       namespace.members.set(prototype.internalName, prototype);
     } else if (prototype.isExported) {
       if (this.exports.has(internalName)) {
-        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
       }
       this.exports.set(internalName, prototype);
@@ -602,16 +602,16 @@ export class Program extends DiagnosticEmitter {
 
     if (parentNamespace) {
       if (parentNamespace.members) {
-        if (parentNamespace.members.has(declaration.identifier.name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        if (parentNamespace.members.has(declaration.name.name)) {
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
         parentNamespace.members = new Map();
-      parentNamespace.members.set(declaration.identifier.name, namespace);
+      parentNamespace.members.set(declaration.name.name, namespace);
     } else if (namespace.isExported) {
       if (this.exports.has(internalName)) {
-        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.identifier.range, internalName);
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
       }
       this.exports.set(internalName, namespace);
@@ -657,7 +657,7 @@ export class Program extends DiagnosticEmitter {
       const declaration: VariableDeclaration = declarations[i];
       const internalName: string = declaration.internalName;
       if (this.elements.has(internalName)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         continue;
       }
 
@@ -665,24 +665,24 @@ export class Program extends DiagnosticEmitter {
       this.elements.set(internalName, global);
 
       if (hasDecorator("global", declaration.decorators)) {
-        if (this.elements.has(declaration.identifier.name))
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+        if (this.elements.has(declaration.name.name))
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         else
-          this.elements.set(declaration.identifier.name, global);
+          this.elements.set(declaration.name.name, global);
       }
 
       if (namespace) {
         if (namespace.members) {
-          if (namespace.members.has(declaration.identifier.name)) {
-            this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+          if (namespace.members.has(declaration.name.name)) {
+            this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
             continue;
           }
         } else
           namespace.members = new Map();
-        namespace.members.set(declaration.identifier.name, global);
+        namespace.members.set(declaration.name.name, global);
       } else if (global.isExported) {
         if (this.exports.has(internalName))
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.identifier.range, internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         else
           this.exports.set(internalName, global);
       }
@@ -817,7 +817,7 @@ function hasDecorator(name: string, decorators: Decorator[] | null): bool {
   if (decorators)
     for (let i: i32 = 0, k: i32 = decorators.length; i < k; ++i) {
       const decorator: Decorator = decorators[i];
-      const expression: Expression = decorator.expression;
+      const expression: Expression = decorator.name;
       const args: Expression[] = decorator.arguments;
       if (expression.kind == NodeKind.IDENTIFIER && args.length <= 1 && (<IdentifierExpression>expression).name == name)
         return true;
@@ -1192,7 +1192,7 @@ export class FunctionPrototype extends Element {
       if (typeNode) {
         const type: Type | null = this.program.resolveType(<TypeNode>typeNode, contextualTypeArguments, true); // reports
         if (type) {
-          parameters[i] = new Parameter(declaration.parameters[i].identifier.name, type);
+          parameters[i] = new Parameter(declaration.parameters[i].name.name, type);
           parameterTypes[i] = <Type>type;
         } else
           return null;

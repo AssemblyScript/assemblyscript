@@ -183,9 +183,9 @@
   heap/HEAP_OFFSET
   heap/Heap
   Heap
-  heap/Heap.get_used
-  heap/Heap.get_free
-  heap/Heap.get_size
+  heap/Heap.used
+  heap/Heap.free
+  heap/Heap.size
   heap/Heap.allocate
   heap/Heap.dispose
   heap/Heap.copy

@@ -64,21 +64,30 @@ import {
   VariableDeclaration,
   WhileStatement,
 
-  hasModifier
+  addModifier,
+  getModifier,
+  hasModifier,
+  setReusableModifiers
 
 } from "./ast";
 
+/** Parser interface. */
 export class Parser extends DiagnosticEmitter {
 
+  /** Program being created. */
   program: Program;
+  /** Log of source file names to be requested. */
   backlog: string[] = new Array();
+  /** Log of source file names already processed. */
   seenlog: Set<string> = new Set();
 
+  /** Constructs a new parser. */
   constructor() {
     super();
     this.program = new Program(this.diagnostics);
   }
 
+  /** Parses a file and adds its definitions to the program. */
   parseFile(text: string, path: string, isEntry: bool): void {
     const normalizedPath: string = normalizePath(path);
     for (let i: i32 = 0, k: i32 = this.program.sources.length; i < k; ++i)
@@ -99,7 +108,6 @@ export class Parser extends DiagnosticEmitter {
       statement.parent = source;
       source.statements.push(statement);
     }
-    reusableModifiers = null;
   }
 
   parseTopLevelStatement(tn: Tokenizer, isNamespaceMember: bool = false): Statement | null {
@@ -129,6 +137,7 @@ export class Parser extends DiagnosticEmitter {
     tn.mark();
 
     let statement: Statement | null = null;
+    let modifier: Modifier | null;
     switch (tn.next()) {
 
       case Token.CONST:
@@ -175,12 +184,12 @@ export class Parser extends DiagnosticEmitter {
         break;
 
       case Token.IMPORT:
-        if (hasModifier(ModifierKind.EXPORT, modifiers)) {
-          statement = this.parseExportImport(tn, getModifier(ModifierKind.EXPORT, <Modifier[]>modifiers).range);
+        if (modifier = getModifier(ModifierKind.EXPORT, modifiers)) {
+          statement = this.parseExportImport(tn, modifier.range);
         } else
           statement = this.parseImport(tn);
         if (modifiers)
-          reusableModifiers = modifiers;
+          setReusableModifiers(modifiers);
         break;
 
       case Token.TYPE:
@@ -192,9 +201,9 @@ export class Parser extends DiagnosticEmitter {
           statement = this.parseExport(tn, modifiers); // TODO: why exactly does this have modifiers again?
         } else {
           if (modifiers) {
-            if (hasModifier(ModifierKind.DECLARE, modifiers))
-              this.error(DiagnosticCode._0_modifier_cannot_be_used_here, getModifier(ModifierKind.DECLARE, modifiers).range, "declare"); // recoverable
-            reusableModifiers = modifiers;
+            if (modifier = getModifier(ModifierKind.DECLARE, modifiers))
+              this.error(DiagnosticCode._0_modifier_cannot_be_used_here, modifier.range, "declare"); // recoverable
+            setReusableModifiers(modifiers);
           }
           tn.reset();
           if (!isNamespaceMember)
@@ -210,6 +219,7 @@ export class Parser extends DiagnosticEmitter {
     return statement;
   }
 
+  /** Obtains the next file to parse. */
   nextFile(): string | null {
     if (this.backlog.length) {
       const filename: string = this.backlog[0];
@@ -221,6 +231,7 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  /** Finishes parsing and returns the program. */
   finish(): Program {
     if (this.backlog.length)
       throw new Error("backlog is not empty");
@@ -775,12 +786,13 @@ export class Parser extends DiagnosticEmitter {
 
       // field: (':' Type)? ('=' Expression)? ';'?
       } else {
-        if (hasModifier(ModifierKind.ABSTRACT, modifiers))
-          this.error(DiagnosticCode._0_modifier_cannot_be_used_here, getModifier(ModifierKind.ABSTRACT, <Modifier[]>modifiers).range, "abstract"); // recoverable
-        if (hasModifier(ModifierKind.GET, modifiers))
-          this.error(DiagnosticCode._0_modifier_cannot_be_used_here, getModifier(ModifierKind.GET, <Modifier[]>modifiers).range, "get"); // recoverable
-        if (hasModifier(ModifierKind.SET, modifiers))
-          this.error(DiagnosticCode._0_modifier_cannot_be_used_here,getModifier(ModifierKind.SET, <Modifier[]>modifiers).range, "set"); // recoverable
+        let modifier: Modifier | null;
+        if (modifier = getModifier(ModifierKind.ABSTRACT, modifiers))
+          this.error(DiagnosticCode._0_modifier_cannot_be_used_here, modifier.range, "abstract"); // recoverable
+        if (modifier = getModifier(ModifierKind.GET, modifiers))
+          this.error(DiagnosticCode._0_modifier_cannot_be_used_here, modifier.range, "get"); // recoverable
+        if (modifier = getModifier(ModifierKind.SET, modifiers))
+          this.error(DiagnosticCode._0_modifier_cannot_be_used_here, modifier.range, "set"); // recoverable
         let type: TypeNode | null = null;
         if (tn.skip(Token.COLON)) {
           type = this.parseType(tn);
@@ -1323,7 +1335,7 @@ export class Parser extends DiagnosticEmitter {
   // expressions
   // see: http://www.engr.mun.ca/~theo/Misc/exp_parsing.htm#climbing
 
-  parseExpressionPrefix(tn: Tokenizer): Expression | null {
+  parseExpressionStart(tn: Tokenizer): Expression | null {
     const token: Token = tn.next();
     const startPos: i32 = tn.tokenPos;
     let expr: Expression | null = null;
@@ -1335,7 +1347,7 @@ export class Parser extends DiagnosticEmitter {
     if (token == Token.FALSE)
       return Node.createFalse(tn.range());
 
-    let p: Precedence = determinePrecedencePrefix(token);
+    let p: Precedence = determinePrecedenceStart(token);
     if (p != Precedence.INVALID) {
       let operand: Expression | null
 
@@ -1487,7 +1499,7 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseExpression(tn: Tokenizer, precedence: Precedence = 0): Expression | null {
-    let expr: Expression | null = this.parseExpressionPrefix(tn);
+    let expr: Expression | null = this.parseExpressionStart(tn);
     if (!expr)
       return null;
 
@@ -1581,7 +1593,7 @@ export class Parser extends DiagnosticEmitter {
   }
 }
 
-enum Precedence {
+const enum Precedence {
   COMMA,
   SPREAD,
   YIELD,
@@ -1606,7 +1618,8 @@ enum Precedence {
   INVALID = -1
 }
 
-function determinePrecedencePrefix(kind: Token): i32 {
+/** Determines the precedence of a starting token. */
+function determinePrecedenceStart(kind: Token): i32 {
   switch (kind) {
 
     case Token.DOT_DOT_DOT:
@@ -1634,7 +1647,8 @@ function determinePrecedencePrefix(kind: Token): i32 {
   }
 }
 
-function determinePrecedence(kind: Token): i32 { // non-prefix
+/** Determines the precende of a non-starting token. */
+function determinePrecedence(kind: Token): i32 {
   switch (kind) {
 
     case Token.COMMA:
@@ -1718,7 +1732,8 @@ function determinePrecedence(kind: Token): i32 { // non-prefix
   }
 }
 
-function isRightAssociative(kind: Token): bool { // non-prefix
+/** Determines whether a non-starting token is right associative. */
+function isRightAssociative(kind: Token): bool {
   switch (kind) {
 
     case Token.EQUALS:
@@ -1741,31 +1756,4 @@ function isRightAssociative(kind: Token): bool { // non-prefix
     default:
       return false;
   }
-}
-
-let reusableModifiers: Modifier[] | null = null;
-
-function createModifiers(): Modifier[] {
-  let ret: Modifier[];
-  if (reusableModifiers != null) {
-    ret = reusableModifiers;
-    reusableModifiers = null;
-  } else
-    ret = new Array(1);
-  ret.length = 0;
-  return ret;
-}
-
-function addModifier(modifier: Modifier, modifiers: Modifier[] | null): Modifier[] {
-  if (modifiers == null)
-    modifiers = createModifiers();
-  modifiers.push(modifier);
-  return modifiers;
-}
-
-function getModifier(kind: ModifierKind, modifiers: Modifier[]): Modifier {
-  for (let i: i32 = 0, k: i32 = modifiers.length; i < k; ++i)
-    if (modifiers[i].modifierKind == kind)
-      return modifiers[i];
-  throw new Error("no such modifier");
 }
