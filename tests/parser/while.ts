@@ -1,9 +1,10 @@
 while (1) {
   ;
 }
-while (true) {
+while (false) {
   ;
 }
 while ("str") {
   ;
 }
+while (1);

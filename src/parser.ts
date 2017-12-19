@@ -59,6 +59,7 @@ import {
   SwitchStatement,
   ThrowStatement,
   TryStatement,
+  TypeDeclaration,
   TypeParameter,
   VariableStatement,
   VariableDeclaration,
@@ -193,7 +194,9 @@ export class Parser extends DiagnosticEmitter {
         break;
 
       case Token.TYPE:
-        // TODO
+        statement = this.parseTypeDeclaration(tn, modifiers, decorators);
+        decorators = null;
+        break;
 
       default:
         if (hasModifier(ModifierKind.EXPORT, modifiers)) {
@@ -718,7 +721,7 @@ export class Parser extends DiagnosticEmitter {
       isSetter = true;
     }
 
-    if (tn.skip(Token.IDENTIFIER) || tn.skip(Token.CONSTRUCTOR)) {
+    if (tn.skip(Token.CONSTRUCTOR) || tn.skip(Token.IDENTIFIER)) { // order is important
       const identifier: IdentifierExpression = tn.token == Token.CONSTRUCTOR
         ? Node.createConstructor(tn.range())
         : Node.createIdentifier(tn.readIdentifier(), tn.range());
@@ -1017,6 +1020,9 @@ export class Parser extends DiagnosticEmitter {
       case Token.TRY:
         return this.parseTryStatement(tn);
 
+      case Token.TYPE:
+        return this.parseTypeDeclaration(tn, null);
+
       case Token.WHILE:
         return this.parseWhileStatement(tn);
 
@@ -1311,6 +1317,27 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  parseTypeDeclaration(tn: Tokenizer, modifiers: Modifier[] | null = null, decorators: Decorator[] | null = null): TypeDeclaration | null {
+    // at 'type': Identifier '=' Type ';'?
+    const startPos: i32 = decorators && decorators.length ? decorators[0].range.start
+                        : modifiers && modifiers.length ? modifiers[0].range.start
+                        : tn.tokenPos;
+    if (tn.skip(Token.IDENTIFIER)) {
+      const name: IdentifierExpression = Node.createIdentifier(tn.readIdentifier(), tn.range());
+      if (tn.skip(Token.EQUALS)) {
+        const type: TypeNode | null = this.parseType(tn);
+        if (!type)
+          return null;
+        const ret: TypeDeclaration = Node.createTypeDeclaration(name, type, modifiers, decorators, tn.range(startPos, tn.pos));
+        tn.skip(Token.SEMICOLON);
+        return ret;
+      } else
+        this.error(DiagnosticCode._0_expected, tn.range(), "=");
+    } else
+      this.error(DiagnosticCode.Identifier_expected, tn.range());
+    return null;
+  }
+
   parseWhileStatement(tn: Tokenizer): WhileStatement | null {
     // at 'while': '(' Expression ')' Statement ';'?
     const startRange: Range = tn.range();
@@ -1593,7 +1620,8 @@ export class Parser extends DiagnosticEmitter {
   }
 }
 
-const enum Precedence {
+/** Operator precedence from least to largest. */
+export const enum Precedence {
   COMMA,
   SPREAD,
   YIELD,

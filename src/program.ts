@@ -37,6 +37,7 @@ import {
   Modifier,
   NamespaceDeclaration,
   Statement,
+  TypeDeclaration,
   TypeParameter,
   VariableLikeDeclarationStatement,
   VariableDeclaration,
@@ -146,6 +147,10 @@ export class Program extends DiagnosticEmitter {
 
           case NodeKind.NAMESPACE:
             this.initializeNamespace(<NamespaceDeclaration>statement);
+            break;
+
+          case NodeKind.TYPEDECLARATION:
+            this.initializeType(<TypeDeclaration>statement);
             break;
 
           case NodeKind.VARIABLE:
@@ -641,6 +646,10 @@ export class Program extends DiagnosticEmitter {
           this.initializeNamespace(<NamespaceDeclaration>members[i], namespace);
           break;
 
+        case NodeKind.TYPEDECLARATION:
+          this.initializeType(<TypeDeclaration>members[i], namespace);
+          break;
+
         case NodeKind.VARIABLE:
           this.initializeVariables(<VariableStatement>members[i], namespace);
           break;
@@ -649,6 +658,17 @@ export class Program extends DiagnosticEmitter {
           throw new Error("unexpected namespace member");
       }
     }
+  }
+
+  private initializeType(declaration: TypeDeclaration, namespace: Element | null = null): void {
+    // type aliases are program globals
+    const name: string = declaration.name.name;
+    if (this.types.has(name)) {
+      this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name);
+      return;
+    }
+    // TODO: queue, then resolve
+    throw new Error("not implemented");
   }
 
   private initializeVariables(statement: VariableStatement, namespace: Element | null = null): void {

@@ -1139,9 +1139,9 @@ export class Compiler extends DiagnosticEmitter {
         if (fromType.kind == TypeKind.F32) {
           if (toType.isSignedInteger) {
             if (toType.isLongInteger)
-              expr = mod.createUnary(UnaryOp.TruncF32_I64, expr);
+              expr = mod.createUnary(UnaryOp.TruncF32ToI64, expr);
             else {
-              expr = mod.createUnary(UnaryOp.TruncF32_I32, expr);
+              expr = mod.createUnary(UnaryOp.TruncF32ToI32, expr);
               if (toType.isSmallInteger) {
                 expr = mod.createBinary(BinaryOp.ShlI32, expr, mod.createI32(toType.smallIntegerShift));
                 expr = mod.createBinary(BinaryOp.ShrI32, expr, mod.createI32(toType.smallIntegerShift));
@@ -1149,9 +1149,9 @@ export class Compiler extends DiagnosticEmitter {
             }
           } else {
             if (toType.isLongInteger)
-              expr = mod.createUnary(UnaryOp.TruncF32_U64, expr);
+              expr = mod.createUnary(UnaryOp.TruncF32ToU64, expr);
             else {
-              expr = mod.createUnary(UnaryOp.TruncF32_U32, expr);
+              expr = mod.createUnary(UnaryOp.TruncF32ToU32, expr);
               if (toType.isSmallInteger)
                 expr = mod.createBinary(BinaryOp.AndI32, expr, mod.createI32(toType.smallIntegerMask));
             }
@@ -1161,9 +1161,9 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           if (toType.isSignedInteger) {
             if (toType.isLongInteger)
-              expr = mod.createUnary(UnaryOp.TruncF64_I64, expr);
+              expr = mod.createUnary(UnaryOp.TruncF64ToI64, expr);
             else {
-              expr = mod.createUnary(UnaryOp.TruncF64_I32, expr);
+              expr = mod.createUnary(UnaryOp.TruncF64ToI32, expr);
               if (toType.isSmallInteger) {
                 expr = mod.createBinary(BinaryOp.ShlI32, expr, mod.createI32(toType.smallIntegerShift));
                 expr = mod.createBinary(BinaryOp.ShrI32, expr, mod.createI32(toType.smallIntegerShift));
@@ -1171,9 +1171,9 @@ export class Compiler extends DiagnosticEmitter {
             }
           } else {
             if (toType.isLongInteger)
-              expr = mod.createUnary(UnaryOp.TruncF64_U64, expr);
+              expr = mod.createUnary(UnaryOp.TruncF64ToU64, expr);
             else {
-              expr = mod.createUnary(UnaryOp.TruncF64_U32, expr);
+              expr = mod.createUnary(UnaryOp.TruncF64ToU32, expr);
               if (toType.isSmallInteger)
                 expr = mod.createBinary(BinaryOp.AndI32, expr, mod.createI32(toType.smallIntegerMask));
             }
@@ -1190,16 +1190,16 @@ export class Compiler extends DiagnosticEmitter {
         if (fromType.isLongInteger) {
           losesInformation = true;
           if (fromType.isSignedInteger)
-            expr = mod.createUnary(UnaryOp.ConvertI64_F32, expr);
+            expr = mod.createUnary(UnaryOp.ConvertI64ToF32, expr);
           else
-            expr = mod.createUnary(UnaryOp.ConvertU64_F32, expr);
+            expr = mod.createUnary(UnaryOp.ConvertU64ToF32, expr);
         } else {
           if (!fromType.isSmallInteger)
             losesInformation = true;
           if (fromType.isSignedInteger)
-            expr = mod.createUnary(UnaryOp.ConvertI32_F32, expr);
+            expr = mod.createUnary(UnaryOp.ConvertI32ToF32, expr);
           else
-            expr = mod.createUnary(UnaryOp.ConvertU32_F32, expr);
+            expr = mod.createUnary(UnaryOp.ConvertU32ToF32, expr);
         }
 
       // int to f64
@@ -1207,14 +1207,14 @@ export class Compiler extends DiagnosticEmitter {
         if (fromType.isLongInteger) {
           losesInformation = true;
           if (fromType.isSignedInteger)
-            expr = mod.createUnary(UnaryOp.ConvertI64_F64, expr);
+            expr = mod.createUnary(UnaryOp.ConvertI64ToF64, expr);
           else
-            expr = mod.createUnary(UnaryOp.ConvertU64_F64, expr);
+            expr = mod.createUnary(UnaryOp.ConvertU64ToF64, expr);
         } else
           if (fromType.isSignedInteger)
-            expr = mod.createUnary(UnaryOp.ConvertI32_F64, expr);
+            expr = mod.createUnary(UnaryOp.ConvertI32ToF64, expr);
           else
-            expr = mod.createUnary(UnaryOp.ConvertU32_F64, expr);
+            expr = mod.createUnary(UnaryOp.ConvertU32ToF64, expr);
       }
 
     // int to int

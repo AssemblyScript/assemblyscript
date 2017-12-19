@@ -95,28 +95,45 @@ export enum UnaryOp {
   ExtendI32 = _BinaryenExtendSInt32(),
   ExtendU32 = _BinaryenExtendUInt32(),
   WrapI64 = _BinaryenWrapInt64(),
-  TruncF32_I32 = _BinaryenTruncSFloat32ToInt32(),
-  TruncF32_I64 = _BinaryenTruncSFloat32ToInt64(),
-  TruncF32_U32 = _BinaryenTruncUFloat32ToInt32(),
-  TruncF32_U64 = _BinaryenTruncUFloat32ToInt64(),
-  TruncF64_I32 = _BinaryenTruncSFloat64ToInt32(),
-  TruncF64_I64 = _BinaryenTruncSFloat64ToInt64(),
-  TruncF64_U32 = _BinaryenTruncUFloat64ToInt32(),
-  TruncF64_U64 = _BinaryenTruncUFloat64ToInt64(),
+  TruncF32ToI32 = _BinaryenTruncSFloat32ToInt32(),
+  TruncF32ToI64 = _BinaryenTruncSFloat32ToInt64(),
+  TruncF32ToU32 = _BinaryenTruncUFloat32ToInt32(),
+  TruncF32ToU64 = _BinaryenTruncUFloat32ToInt64(),
+  TruncF64ToI32 = _BinaryenTruncSFloat64ToInt32(),
+  TruncF64ToI64 = _BinaryenTruncSFloat64ToInt64(),
+  TruncF64ToU32 = _BinaryenTruncUFloat64ToInt32(),
+  TruncF64ToU64 = _BinaryenTruncUFloat64ToInt64(),
   ReinterpretF32 = _BinaryenReinterpretFloat32(),
   ReinterpretF64 = _BinaryenReinterpretFloat64(),
-  ConvertI32_F32 = _BinaryenConvertSInt32ToFloat32(),
-  ConvertI32_F64 = _BinaryenConvertSInt32ToFloat64(),
-  ConvertU32_F32 = _BinaryenConvertUInt32ToFloat32(),
-  ConvertU32_F64 = _BinaryenConvertUInt32ToFloat64(),
-  ConvertI64_F32 = _BinaryenConvertSInt64ToFloat32(),
-  ConvertI64_F64 = _BinaryenConvertSInt64ToFloat64(),
-  ConvertU64_F32 = _BinaryenConvertUInt64ToFloat32(),
-  ConvertU64_F64 = _BinaryenConvertUInt64ToFloat64(),
+  ConvertI32ToF32 = _BinaryenConvertSInt32ToFloat32(),
+  ConvertI32ToF64 = _BinaryenConvertSInt32ToFloat64(),
+  ConvertU32ToF32 = _BinaryenConvertUInt32ToFloat32(),
+  ConvertU32ToF64 = _BinaryenConvertUInt32ToFloat64(),
+  ConvertI64ToF32 = _BinaryenConvertSInt64ToFloat32(),
+  ConvertI64ToF64 = _BinaryenConvertSInt64ToFloat64(),
+  ConvertU64ToF32 = _BinaryenConvertUInt64ToFloat32(),
+  ConvertU64ToF64 = _BinaryenConvertUInt64ToFloat64(),
   PromoteF32 = _BinaryenPromoteFloat32(),
   DemoteF64 = _BinaryenDemoteFloat64(),
   ReinterpretI32 = _BinaryenReinterpretInt32(),
   ReinterpretI64 = _BinaryenReinterpretInt64()
+
+  // see: https://github.com/WebAssembly/threads/blob/master/proposals/threads/Overview.md#new-sign-extending-operators
+  // ExtendI8ToI32 =_BinaryenExtendS8Int32()
+  // ExtendI16ToI32 = _BinaryenExtendS16Int32()
+  // ExtendI8ToI64 = _BinaryenExtendS8Int64() // operand is I64
+  // ExtendI16ToI64 = _BinaryenExtendS16Int64()
+  // ExtendI32ToI64 = _BinaryenExtendS32Int64()
+
+  // see: https://github.com/WebAssembly/nontrapping-float-to-int-conversions/blob/master/proposals/nontrapping-float-to-int-conversion/Overview.md#design
+  // TruncF32ToI32Sat
+  // TruncF32ToU32Sat
+  // TruncF64ToI32Sat
+  // TruncF64ToU32Sat
+  // TruncF32ToI64Sat
+  // TruncF32ToU64Sat
+  // TruncF64ToI64Sat
+  // TruncF64ToU64Sat
 }
 
 export enum BinaryOp {
@@ -202,7 +219,11 @@ export enum HostOp {
   PageSize = _BinaryenPageSize(),
   CurrentMemory = _BinaryenCurrentMemory(),
   GrowMemory = _BinaryenGrowMemory(),
-  HasFeature = _BinaryenHasFeature()
+  HasFeature = _BinaryenHasFeature(),
+
+  // see: https://github.com/WebAssembly/bulk-memory-operations/blob/master/proposals/bulk-memory-operations/Overview.md#design
+  // MoveMemory
+  // SetMemory
 }
 
 export enum AtomicRMWOp {

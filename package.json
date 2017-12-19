@@ -11,7 +11,7 @@
     "url": "https://github.com/AssemblyScript/next/issues"
   },
   "dependencies": {
-    "@types/node": "^8.0.58",
+    "@types/node": "^8.5.1",
     "binaryen": "40.0.0-nightly.20171209",
     "glob": "^7.1.2",
     "minimist": "^1.2.0",
@@ -20,14 +20,14 @@
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/diff": "^3.2.2",
-    "@types/glob": "^5.0.33",
+    "@types/glob": "^5.0.34",
     "@types/long": "^3.0.32",
     "@types/minimist": "^1.2.0",
     "chalk": "^2.3.0",
     "diff": "^3.4.0",
     "long": "^3.2.0",
     "ts-loader": "^3.2.0",
-    "ts-node": "^3.3.0",
+    "ts-node": "^4.0.2",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   },

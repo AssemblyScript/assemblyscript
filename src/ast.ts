@@ -62,6 +62,7 @@ export enum NodeKind {
   SWITCH,
   THROW,
   TRY,
+  TYPEDECLARATION,
   VARIABLE,             // wraps declarations
   VARIABLEDECLARATION,
   WHILE,
@@ -542,6 +543,17 @@ export abstract class Node {
     return stmt;
   }
 
+  static createTypeDeclaration(identifier: IdentifierExpression, alias: TypeNode, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): TypeDeclaration {
+    const stmt: TypeDeclaration = new TypeDeclaration();
+    stmt.range = range;
+    (stmt.name = identifier).parent = stmt;
+    (stmt.alias = alias).parent = stmt;
+    let i: i32, k: i32;
+    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    return stmt;
+  }
+
   static createVariable(declarations: VariableDeclaration[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): VariableStatement {
     const stmt: VariableStatement = new VariableStatement();
     stmt.range = range;
@@ -552,10 +564,10 @@ export abstract class Node {
     return stmt;
   }
 
-  static createVariableDeclaration(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): VariableDeclaration {
+  static createVariableDeclaration(name: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): VariableDeclaration {
     const elem: VariableDeclaration = new VariableDeclaration();
     elem.range = range;
-    (elem.name = identifier).parent = elem;
+    (elem.name = name).parent = elem;
     if (elem.type = type) (<TypeNode>type).parent = elem;
     if (elem.initializer = initializer) (<Expression>initializer).parent = elem;
     elem.modifiers = modifiers;
@@ -1861,6 +1873,33 @@ export class TryStatement extends Statement {
       }
     }
     sb.push("}");
+  }
+}
+
+/** Represents a `type` declaration. */
+export class TypeDeclaration extends DeclarationStatement {
+
+  kind = NodeKind.TYPEDECLARATION;
+
+  /** Type being aliased. */
+  alias: TypeNode;
+
+  serialize(sb: string[]): void {
+    let i: i32, k: i32;
+    if (this.decorators)
+      for (i = 0, k = this.decorators.length; i < k; ++i) {
+        this.decorators[i].serialize(sb);
+        sb.push("\n");
+      }
+    if (this.modifiers)
+      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+        (<Modifier[]>this.modifiers)[i].serialize(sb);
+        sb.push(" ");
+      }
+    sb.push("type ");
+    this.name.serialize(sb);
+    sb.push(" = ");
+    this.alias.serialize(sb);
   }
 }
 

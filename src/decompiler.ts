@@ -339,42 +339,42 @@ export class Decompiler {
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.TruncF32_I32:
+          case UnaryOp.TruncF32ToI32:
             this.push("<i32>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.TruncF32_I64:
+          case UnaryOp.TruncF32ToI64:
             this.push("<i64>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.TruncF32_U32:
+          case UnaryOp.TruncF32ToU32:
             this.push("<i32><u32>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.TruncF32_U64:
+          case UnaryOp.TruncF32ToU64:
             this.push("<i64><u64>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.TruncF64_I32:
+          case UnaryOp.TruncF64ToI32:
             this.push("<i32>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.TruncF64_I64:
+          case UnaryOp.TruncF64ToI64:
             this.push("<i64>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.TruncF64_U32:
+          case UnaryOp.TruncF64ToU32:
             this.push("<i32><u32>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.TruncF64_U64:
+          case UnaryOp.TruncF64ToU64:
             this.push("<i64><u64>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
@@ -391,42 +391,42 @@ export class Decompiler {
             this.push(")");
             return;
 
-          case UnaryOp.ConvertI32_F32:
+          case UnaryOp.ConvertI32ToF32:
             this.push("<f32>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.ConvertI32_F64:
+          case UnaryOp.ConvertI32ToF64:
             this.push("<f64>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.ConvertU32_F32:
+          case UnaryOp.ConvertU32ToF32:
             this.push("<f32><u32>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.ConvertU32_F64:
+          case UnaryOp.ConvertU32ToF64:
             this.push("<f64><u32>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.ConvertI64_F32:
+          case UnaryOp.ConvertI64ToF32:
             this.push("<f32>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.ConvertI64_F64:
+          case UnaryOp.ConvertI64ToF64:
             this.push("<f64>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.ConvertU64_F32:
+          case UnaryOp.ConvertU64ToF32:
             this.push("<f32><u64>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;
 
-          case UnaryOp.ConvertU64_F64:
+          case UnaryOp.ConvertU64ToF64:
             this.push("<f64><u64>");
             this.decompileExpression(_BinaryenUnaryGetValue(expr));
             return;

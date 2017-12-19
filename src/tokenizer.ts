@@ -24,6 +24,7 @@ import { Source } from "./ast";
 import { CharCode, isLineBreak, isWhiteSpace, isIdentifierStart, isIdentifierPart, isDecimalDigit, isOctalDigit, isKeywordCharacter } from "./util/charcode";
 import { I64 } from "./util/i64";
 
+/** Named token types. */
 export enum Token {
 
   // keywords
@@ -161,69 +162,72 @@ export enum Token {
   ENDOFFILE
 }
 
-const textToKeywordToken: Map<string,Token> = new Map([
-  ["abstract", Token.ABSTRACT],
-  ["as", Token.AS],
-  ["async", Token.ASYNC],
-  ["await", Token.AWAIT],
-  ["break", Token.BREAK],
-  ["case", Token.CASE],
-  ["catch", Token.CATCH],
-  ["class", Token.CLASS],
-  ["continue", Token.CONTINUE],
-  ["const", Token.CONST],
-  ["constructor", Token.CONSTRUCTOR],
-  ["debugger", Token.DEBUGGER],
-  ["declare", Token.DECLARE],
-  ["default", Token.DEFAULT],
-  ["delete", Token.DELETE],
-  ["do", Token.DO],
-  ["else", Token.ELSE],
-  ["enum", Token.ENUM],
-  ["export", Token.EXPORT],
-  ["extends", Token.EXTENDS],
-  ["false", Token.FALSE],
-  ["finally", Token.FINALLY],
-  ["for", Token.FOR],
-  ["from", Token.FROM],
-  ["function", Token.FUNCTION],
-  ["get", Token.GET],
-  ["if", Token.IF],
-  ["implements", Token.IMPLEMENTS],
-  ["import", Token.IMPORT],
-  ["in", Token.IN],
-  ["instanceof", Token.INSTANCEOF],
-  ["interface", Token.INTERFACE],
-  ["is", Token.IS],
-  ["keyof", Token.KEYOF],
-  ["let", Token.LET],
-  ["module", Token.MODULE],
-  ["namespace", Token.NAMESPACE],
-  ["new", Token.NEW],
-  ["null", Token.NULL],
-  ["of", Token.OF],
-  ["package", Token.PACKAGE],
-  ["private", Token.PRIVATE],
-  ["protected", Token.PROTECTED],
-  ["public", Token.PUBLIC],
-  ["readonly", Token.READONLY],
-  ["return", Token.RETURN],
-  ["set", Token.SET],
-  ["static", Token.STATIC],
-  ["super", Token.SUPER],
-  ["switch", Token.SWITCH],
-  ["this", Token.THIS],
-  ["throw", Token.THROW],
-  ["true", Token.TRUE],
-  ["try", Token.TRY],
-  ["type", Token.TYPE],
-  ["typeof", Token.TYPEOF],
-  ["var", Token.VAR],
-  ["void", Token.VOID],
-  ["while", Token.WHILE],
-  ["with", Token.WITH],
-  ["yield", Token.YIELD]
-]);
+function textToKeywordToken(text: string): Token {
+  switch (text) {
+    case "abstract": return Token.ABSTRACT;
+    case "as": return Token.AS;
+    case "async": return Token.ASYNC;
+    case "await": return Token.AWAIT;
+    case "break": return Token.BREAK;
+    case "case": return Token.CASE;
+    case "catch": return Token.CATCH;
+    case "class": return Token.CLASS;
+    case "continue": return Token.CONTINUE;
+    case "const": return Token.CONST;
+    case "constructor": return Token.CONSTRUCTOR;
+    case "debugger": return Token.DEBUGGER;
+    case "declare": return Token.DECLARE;
+    case "default": return Token.DEFAULT;
+    case "delete": return Token.DELETE;
+    case "do": return Token.DO;
+    case "else": return Token.ELSE;
+    case "enum": return Token.ENUM;
+    case "export": return Token.EXPORT;
+    case "extends": return Token.EXTENDS;
+    case "false": return Token.FALSE;
+    case "finally": return Token.FINALLY;
+    case "for": return Token.FOR;
+    case "from": return Token.FROM;
+    case "function": return Token.FUNCTION;
+    case "get": return Token.GET;
+    case "if": return Token.IF;
+    case "implements": return Token.IMPLEMENTS;
+    case "import": return Token.IMPORT;
+    case "in": return Token.IN;
+    case "instanceof": return Token.INSTANCEOF;
+    case "interface": return Token.INTERFACE;
+    case "is": return Token.IS;
+    case "keyof": return Token.KEYOF;
+    case "let": return Token.LET;
+    case "module": return Token.MODULE;
+    case "namespace": return Token.NAMESPACE;
+    case "new": return Token.NEW;
+    case "null": return Token.NULL;
+    case "of": return Token.OF;
+    case "package": return Token.PACKAGE;
+    case "private": return Token.PRIVATE;
+    case "protected": return Token.PROTECTED;
+    case "public": return Token.PUBLIC;
+    case "readonly": return Token.READONLY;
+    case "return": return Token.RETURN;
+    case "set": return Token.SET;
+    case "static": return Token.STATIC;
+    case "super": return Token.SUPER;
+    case "switch": return Token.SWITCH;
+    case "this": return Token.THIS;
+    case "throw": return Token.THROW;
+    case "true": return Token.TRUE;
+    case "try": return Token.TRY;
+    case "type": return Token.TYPE;
+    case "typeof": return Token.TYPEOF;
+    case "var": return Token.VAR;
+    case "void": return Token.VOID;
+    case "while": return Token.WHILE;
+    case "with": return Token.WITH;
+    case "yield": return Token.YIELD;
+    default: return Token.INVALID;
+  }
+}
 
 export function operatorTokenToString(token: Token): string {
   switch (token) {
@@ -279,13 +283,26 @@ export function operatorTokenToString(token: Token): string {
   }
 }
 
-const possibleIdentifiers: Set<string> = new Set([
-  "from",
-  "global",
-  "module",
-  "namespace",
-  "type"
-]);
+function isPossibleIdentifier(token: Token): bool {
+  switch (token) {
+    case Token.ABSTRACT:
+    case Token.AS:
+    case Token.CONSTRUCTOR:
+    case Token.DECLARE:
+    case Token.FROM:
+    case Token.GET:
+    case Token.IS:
+    case Token.KEYOF:
+    case Token.MODULE:
+    case Token.NAMESPACE:
+    case Token.READONLY:
+    case Token.SET:
+    case Token.TYPE:
+      return true;
+    default:
+      return false;
+  }
+}
 
 export class Range {
 
@@ -658,8 +675,9 @@ export class Tokenizer extends DiagnosticEmitter {
                 }
               }
               const keywordText: string = text.substring(posBefore, this.pos);
-              if (textToKeywordToken.has(keywordText) && !(preferIdentifier && possibleIdentifiers.has(keywordText)))
-                return <Token>textToKeywordToken.get(keywordText);
+              const keywordToken: Token = textToKeywordToken(keywordText);
+              if (keywordToken != Token.INVALID && !(preferIdentifier && isPossibleIdentifier(keywordToken)))
+                return keywordToken;
               this.pos = posBefore;
             }
             return Token.IDENTIFIER; // expects a call to readIdentifier

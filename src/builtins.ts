@@ -42,6 +42,8 @@ export function initialize(program: Program): void {
   // host operations
   addFunction(program, "current_memory");
   addFunction(program, "grow_memory");
+  // addFunction(program, "move_memory");
+  // addFunction(program, "set_memory");
 
   // imported
   addFunction(program, "parseInt");
@@ -588,6 +590,29 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], Type.i32);
       return module.createHost(HostOp.GrowMemory, null, [ arg0 ]);
+
+    // see: https://github.com/WebAssembly/bulk-memory-operations/blob/master/proposals/bulk-memory-operations/Overview.md
+    /*
+    case "move_memory": // move_memory(dest: usize, src: usize: n: usize) -> void
+      compiler.currentType = Type.void;
+      if (!validateCall(compiler, typeArguments, 0, operands, 3, reportNode))
+        return module.createUnreachable();
+      arg0 = compiler.compileExpression(operands[0], usizeType);
+      arg1 = compiler.compileExpression(operands[1], usizeType);
+      arg2 = compiler.compileExpression(operands[2], usizeType);
+      compiler.currentType = Type.void;
+      return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
+
+    case "set_memory": // set_memory(dest: usize, value: u32, n: usize) -> void
+      compiler.currentType = Type.void;
+      if (!validateCall(compiler, typeArguments, 0, operands, 3, reportNode))
+        return module.createUnreachable();
+      arg0 = compiler.compileExpression(operands[0], usizeType);
+      arg1 = compiler.compileExpression(operands[1], Type.u32);
+      arg2 = compiler.compileExpression(operands[2], usizeType);
+      compiler.currentType = Type.void;
+      return module.createHost(HostOp.SetMemory, null, [ arg0, arg1, arg2 ]);
+    */
 
     // imported
 
