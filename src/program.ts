@@ -76,6 +76,8 @@ export class Program extends DiagnosticEmitter {
   elements: Map<string,Element> = new Map();
   /** Types by internal name. */
   types: Map<string,Type> = noTypesYet;
+  /** Declared type aliases. */
+  typeAliases: Map<string,TypeNode> = new Map();
   /** Exports of individual files by internal name. Not global exports. */
   exports: Map<string,Element> = new Map();
 
@@ -663,12 +665,11 @@ export class Program extends DiagnosticEmitter {
   private initializeType(declaration: TypeDeclaration, namespace: Element | null = null): void {
     // type aliases are program globals
     const name: string = declaration.name.name;
-    if (this.types.has(name)) {
+    if (this.types.has(name) || this.typeAliases.has(name)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name);
       return;
     }
-    // TODO: queue, then resolve
-    throw new Error("not implemented");
+    this.typeAliases.set(name, declaration.alias);
   }
 
   private initializeVariables(statement: VariableStatement, namespace: Element | null = null): void {
@@ -739,6 +740,11 @@ export class Program extends DiagnosticEmitter {
 
     // check program-global type
     if (type = <Type | null>this.types.get(globalName))
+      return type;
+
+    // check type alias
+    let alias: TypeNode | null = <TypeNode | null>this.typeAliases.get(globalName);
+    if (alias && (type = this.resolveType(alias, null, reportNotFound)))
       return type;
 
     if (reportNotFound)

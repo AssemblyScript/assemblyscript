@@ -769,12 +769,18 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.TRY:
         return this.compileTryStatement(<TryStatement>statement);
 
+      case NodeKind.TYPEDECLARATION:
+        if (this.currentFunction == this.startFunction)
+          return this.module.createNop();
+        break; // must be top-level; function bodies are not initialized
+
       case NodeKind.VARIABLE:
         return this.compileVariableStatement(<VariableStatement>statement);
 
       case NodeKind.WHILE:
         return this.compileWhileStatement(<WhileStatement>statement);
     }
+    this.error(DiagnosticCode.Operation_not_supported, statement.range);
     throw new Error("unexpected statement kind");
   }
 

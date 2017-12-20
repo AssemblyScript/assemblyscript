@@ -54,6 +54,10 @@ export function initialize(program: Program): void {
   addFunction(program, "assert");
 
   // conversions and limits
+  let i32Func: FunctionPrototype,
+      u32Func: FunctionPrototype,
+      i64Func: FunctionPrototype,
+      u64Func: FunctionPrototype;
   addFunction(program, "i8").members = new Map([
     [ "MIN_VALUE", new Global(program, "i8.MIN_VALUE", null, Type.i8).withConstantIntegerValue(-128, -1) ],
     [ "MAX_VALUE", new Global(program, "i8.MAX_VALUE", null, Type.i8).withConstantIntegerValue(127, 0) ]
@@ -62,11 +66,11 @@ export function initialize(program: Program): void {
     [ "MIN_VALUE", new Global(program, "i16.MIN_VALUE", null, Type.i16).withConstantIntegerValue(-32768, -1) ],
     [ "MAX_VALUE", new Global(program, "i16.MAX_VALUE", null, Type.i16).withConstantIntegerValue(32767, 0) ]
   ]);
-  addFunction(program, "i32").members = new Map([
+  (i32Func = addFunction(program, "i32")).members = new Map([
     [ "MIN_VALUE", new Global(program, "i32.MIN_VALUE", null, Type.i32).withConstantIntegerValue(-2147483648, -1) ],
     [ "MAX_VALUE", new Global(program, "i32.MAX_VALUE", null, Type.i32).withConstantIntegerValue(2147483647, 0) ]
   ]);
-  addFunction(program, "i64").members = new Map([
+  (i64Func = addFunction(program, "i64")).members = new Map([
     [ "MIN_VALUE", new Global(program, "i64.MIN_VALUE", null, Type.i64).withConstantIntegerValue(0, -2147483648) ],
     [ "MAX_VALUE", new Global(program, "i64.MAX_VALUE", null, Type.i64).withConstantIntegerValue(-1, 2147483647) ]
   ]);
@@ -78,11 +82,11 @@ export function initialize(program: Program): void {
     [ "MIN_VALUE", new Global(program, "u16.MIN_VALUE", null, Type.u16).withConstantIntegerValue(0, 0) ],
     [ "MAX_VALUE", new Global(program, "u16.MAX_VALUE", null, Type.u16).withConstantIntegerValue(65535, 0) ]
   ]);
-  addFunction(program, "u32").members = new Map([
+  (u32Func = addFunction(program, "u32")).members = new Map([
     [ "MIN_VALUE", new Global(program, "u32.MIN_VALUE", null, Type.u32).withConstantIntegerValue(0, 0) ],
     [ "MAX_VALUE", new Global(program, "u32.MAX_VALUE", null, Type.u32).withConstantIntegerValue(-1, 0) ]
   ]);
-  addFunction(program, "u64").members = new Map([
+  (u64Func = addFunction(program, "u64")).members = new Map([
     [ "MIN_VALUE", new Global(program, "u64.MIN_VALUE", null, Type.u64).withConstantIntegerValue(0, 0) ],
     [ "MAX_VALUE", new Global(program, "u64.MAX_VALUE", null, Type.i64).withConstantIntegerValue(-1, -1) ]
   ]);
@@ -99,12 +103,12 @@ export function initialize(program: Program): void {
     [ "MAX_SAFE_INTEGER", new Global(program, "f64.MAX_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(9007199254740991) ]
   ]);
   if (program.target == Target.WASM64) {
-    program.elements.set("isize", <Element>program.elements.get("i64"));
-    program.elements.set("usize", <Element>program.elements.get("u64"));
+    program.elements.set("isize", i64Func);
+    program.elements.set("usize", u64Func);
     addConstant(program, "HEAP_BASE", Type.usize64);
   } else {
-    program.elements.set("isize", <Element>program.elements.get("i32"));
-    program.elements.set("usize", <Element>program.elements.get("u32"));
+    program.elements.set("isize", i32Func);
+    program.elements.set("usize", u32Func);
     addConstant(program, "HEAP_BASE", Type.usize32);
   }
 }
