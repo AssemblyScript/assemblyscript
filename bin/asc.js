@@ -91,7 +91,7 @@ function checkDiagnostics(parser) {
 
 // Include standard library
 if (!args.noLib) {
-  var stdlibDir = path.join(__dirname + "..", "std", "assembly");
+  var stdlibDir = path.join(__dirname, "..", "std", "assembly");
   glob.sync("*.ts", { cwd: stdlibDir }).forEach(file => {
     var nextText = fs.readFileSync(path.join(stdlibDir, file), { encoding: "utf8" });
     parser = assemblyscript.parseFile(nextText, "std:" + file, parser, false);
