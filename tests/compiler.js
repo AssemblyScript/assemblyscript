@@ -26,7 +26,7 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   var parser = new Parser();
   if (filename.startsWith("std/")) {
     stdFiles.forEach(file => {
-      parser.parseFile(fs.readFileSync(__dirname + "/../std/assembly/" + file, { encoding: "utf8" }), file, false);
+      parser.parseFile(fs.readFileSync(__dirname + "/../std/assembly/" + file, { encoding: "utf8" }), "std:" + path.basename(file), false);
     });
     fixture = "std/" + fixture;
   }

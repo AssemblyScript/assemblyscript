@@ -29,7 +29,7 @@ export class Heap {
     // just a big chunk of non-disposable memory for now
   }
 
-  static copy(dest: usize, src: usize, n: usize): usize {
+  static copy(dest: usize, src: usize, n: usize): usize { // TODO: use move_memory op once available
     assert(dest >= HEAP_BASE);
 
     // the following is based on musl's implementation of memcpy
@@ -172,6 +172,77 @@ export class Heap {
       store<u8>(dst++, load<u8>(src++));
     }
     return dest;
+  }
+
+  static fill(dest: usize, c: u8, n: usize): usize { // TODO: use set_memory op once available
+    assert(dest >= HEAP_BASE);
+
+    // the following is based on musl's implementation of memset
+    if (!n) return dest;
+
+    let s: usize = dest;
+
+    // Fill head and tail with minimal branching
+    store<u8>(s, c); store<u8>(s + n - 1, c);
+    if (n <= 2) return dest;
+    store<u8>(s + 1, c); store<u8>(s + n - 2, c);
+    store<u8>(s + 2, c); store<u8>(s + n - 3, c);
+    if (n <= 6) return dest;
+    store<u8>(s + 3, c); store<u8>(s + n - 4, c);
+    if (n <= 8) return dest;
+
+    // Align to 4 bytes
+    let k: usize = -s & 3;
+    s += k;
+    n -= k;
+    n &= -4;
+
+    let c32: u32 = -1 / 255 * c;
+
+    // Fill head and tail in preparation of setting 32 bytes at a time
+    store<u32>(s, c32);
+    store<u32>(s + n - 4, c32);
+    if (n <= 8) return dest;
+    store<u32>(s + 4, c32);
+    store<u32>(s + 8, c32);
+    store<u32>(s + n - 12, c32);
+    store<u32>(s + n - 8, c32);
+    if (n <= 24) return dest;
+    store<u32>(s + 12, c32);
+    store<u32>(s + 16, c32);
+    store<u32>(s + 20, c32);
+    store<u32>(s + 24, c32);
+    store<u32>(s + n - 28, c32);
+    store<u32>(s + n - 24, c32);
+    store<u32>(s + n - 20, c32);
+    store<u32>(s + n - 16, c32);
+
+    // Align to 8 bytes
+    k = 24 + (s & 4);
+    s += k;
+    n -= k;
+
+    // Set 32 bytes at a time
+    let c64: u64 = <u64>c32 | (<u64>c32 << 32);
+    while (n >= 32) {
+      store<u64>(s, c64);
+      store<u64>(s + 8, c64);
+      store<u64>(s + 16, c64);
+      store<u64>(s + 24, c64);
+      n -= 32; s += 32;
+    }
+
+    return dest;
+  }
+
+  static compare(vl: usize, vr: usize, n: usize): i32 {
+    if (vl == vr) return 0;
+
+    // the following is based on musl's implementation of memcmp
+    while (n && load<u8>(vl) == load<u8>(vr)) {
+      n--; vl++; vr++;
+    }
+    return n ? <i32>load<u8>(vl) - <i32>load<u8>(vr) : 0;
   }
 
   private constructor() {}

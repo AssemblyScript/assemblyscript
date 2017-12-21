@@ -914,7 +914,13 @@ export enum ElementFlags {
   /** Is global. */
   GLOBAL = 1 << 11,
   /** Is read-only. */
-  READONLY = 1 << 12
+  READONLY = 1 << 12,
+  /** Is a public member. */
+  PUBLIC = 1 << 13,
+  /** Is a protected member. */
+  PROTECTED = 1 << 14,
+  /** Is a private member. */
+  PRIVATE = 1 << 15
 }
 
 /** Base class of all program elements. */
@@ -1441,8 +1447,11 @@ export class FieldPrototype extends Element {
         switch (this.declaration.modifiers[i].modifierKind) {
           case ModifierKind.EXPORT: this.isExported = true; break;
           case ModifierKind.READONLY: this.isReadonly = true; break;
+          case ModifierKind.PRIVATE:
+          case ModifierKind.PROTECTED:
+          case ModifierKind.PUBLIC:
           case ModifierKind.STATIC: break; // already handled
-          default: throw new Error("unexpected modifier");
+          default: throw new Error("unexpected modifier: " + this.declaration.modifiers[i]);
         }
       }
     }

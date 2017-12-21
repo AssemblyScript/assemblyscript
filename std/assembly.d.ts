@@ -191,10 +191,25 @@ declare class Array<T> {
 
 /** Class representing a sequence of characters. */
 declare class String {
+
   static fromCharCode(ls: i32, hs?: i32): string;
   static fromCharCodes(arr: u16[]): string;
   static fromCodePoint(cp: i32): string;
   static fromCodePoints(arr: i32[]): string;
+
+  readonly length: u32;
+
+  charAt(index: u32): string;
+  charCodeAt(index: u32): u16;
+  concat(other: string): string;
+  endsWith(other: string): bool;
+  indexOf(other: string): u32;
+  startsWith(other: string): bool;
+  substr(start: u32, length?: u32): string;
+  substring(start: u32, end?: u32): string;
+  trim(): string;
+  trimLeft(): string;
+  trimRight(): string;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
@@ -237,6 +252,12 @@ declare class Heap {
   /** Copies a chunk of memory from one location to another. */
   static copy(dest: usize, src: usize, n: usize): usize;
 
+  /** Fills a chunk of memory with the specified byte value. */
+  static fill(dest: usize, c: u8, n: usize): usize;
+
+  /** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
+  static compare(vl: usize, vr: usize, n: usize): i32;
+
   private constructor();
 }
 
@@ -251,3 +272,6 @@ interface RegExp {}
 
 /** Annotates an element being part of the global namespace. */
 declare function global(): any;
+
+/** Annotates a method being an operator overload. */
+declare function operator(token: string): any;

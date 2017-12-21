@@ -49,36 +49,38 @@
   isize
   usize
   HEAP_BASE
-  array/Array
+  std:array/Array
   Array
-  error/Error
+  std:error/Error
   Error
-  error/RangeError
+  std:error/RangeError
   RangeError
-  heap/ALIGN_LOG2
-  heap/ALIGN_SIZE
-  heap/ALIGN_MASK
-  heap/HEAP_OFFSET
-  heap/Heap
+  std:heap/ALIGN_LOG2
+  std:heap/ALIGN_SIZE
+  std:heap/ALIGN_MASK
+  std:heap/HEAP_OFFSET
+  std:heap/Heap
   Heap
-  heap/Heap.used
-  heap/Heap.free
-  heap/Heap.size
-  heap/Heap.allocate
-  heap/Heap.dispose
-  heap/Heap.copy
-  map/Map
+  std:heap/Heap.used
+  std:heap/Heap.free
+  std:heap/Heap.size
+  std:heap/Heap.allocate
+  std:heap/Heap.dispose
+  std:heap/Heap.copy
+  std:heap/Heap.fill
+  std:heap/Heap.compare
+  std:map/Map
   Map
-  set/Set
+  std:set/Set
   Set
-  string/String
+  std:string/String
   String
 [program.exports]
-  array/Array
-  error/Error
-  error/RangeError
-  heap/Heap
-  map/Map
-  set/Set
-  string/String
+  std:array/Array
+  std:error/Error
+  std:error/RangeError
+  std:heap/Heap
+  std:map/Map
+  std:set/Set
+  std:string/String
 ;)

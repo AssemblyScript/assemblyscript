@@ -93,9 +93,8 @@ function checkDiagnostics(parser) {
 if (!args.noLib) {
   var stdlibDir = path.join(__dirname + "..", "std", "assembly");
   glob.sync("*.ts", { cwd: stdlibDir }).forEach(file => {
-    var nextPath = "std/" + file;
     var nextText = fs.readFileSync(path.join(stdlibDir, file), { encoding: "utf8" });
-    parser = assemblyscript.parseFile(nextText, nextPath, parser, false);
+    parser = assemblyscript.parseFile(nextText, "std:" + file, parser, false);
   });
 }
 
