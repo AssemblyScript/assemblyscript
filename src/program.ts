@@ -501,11 +501,21 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeImports(statement: ImportStatement, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
-    const members: ImportDeclaration[] = statement.declarations;
-    for (let i: i32 = 0, k: i32 = members.length; i < k; ++i) {
-      const declaration: ImportDeclaration = members[i];
-      this.initializeImport(declaration, statement.internalPath, queuedExports, queuedImports);
-    }
+    const declarations: ImportDeclaration[] | null = statement.declarations;
+    if (declarations) {
+      for (let i: i32 = 0, k: i32 = declarations.length; i < k; ++i) {
+        const declaration: ImportDeclaration = declarations[i];
+        this.initializeImport(declaration, statement.internalPath, queuedExports, queuedImports);
+      }
+    } else if (statement.namespaceName) {
+      const internalName: string = statement.range.source.internalPath + "/" + statement.namespaceName.name;
+      if (this.elements.has(internalName)) {
+        this.error(DiagnosticCode.Duplicate_identifier_0, statement.namespaceName.range, internalName);
+        return;
+      }
+      this.error(DiagnosticCode.Operation_not_supported, statement.range); // TODO
+    } else
+      assert(false);
   }
 
   private initializeImport(declaration: ImportDeclaration, internalPath: string, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {

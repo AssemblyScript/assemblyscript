@@ -731,6 +731,17 @@ export class Tokenizer extends DiagnosticEmitter {
     }
   }
 
+  // skipUntil(token1: Token, token2: Token = -1): bool {
+  //   let next: Token;
+  //   do {
+  //     if ((next = this.peek()) == Token.ENDOFFILE)
+  //       return false;
+  //     if (next == token1 || next == token2)
+  //       return true;
+  //     this.next();
+  //   } while (true);
+  // }
+
   mark(): void {
     this.markedPos = this.pos;
     this.markedToken = this.token;

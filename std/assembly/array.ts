@@ -1,9 +1,10 @@
 @global()
 export class Array<T> {
 
+  private ptr: usize;
+
   readonly capacity: i32;
   length: i32;
-  ptr: usize;
 
   constructor(capacity: i32 = 0) {
     if (capacity < 0)

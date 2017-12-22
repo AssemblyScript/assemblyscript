@@ -27,5 +27,5 @@ Object.defineProperties(globalScope["Heap"] = {
   size: { get: function get_size() { return HEAP.length; } }
 });
 
-globalScope["store"] = function store(ptr, val) { binaryen.HEAPU8[ptr] = val; };
-globalScope["load"] = function load(ptr) { return binaryen.HEAPU8[ptr]; };
+globalScope["store"] = function store(ptr, val) { HEAP[ptr] = val; };
+globalScope["load"] = function load(ptr) { return HEAP[ptr]; };

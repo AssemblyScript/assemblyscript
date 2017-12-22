@@ -93,7 +93,7 @@ export class Parser extends DiagnosticEmitter {
     const normalizedPath: string = normalizePath(path);
     for (let i: i32 = 0, k: i32 = this.program.sources.length; i < k; ++i)
       if (this.program.sources[i].normalizedPath == normalizedPath)
-        throw new Error("duplicate source");
+        return; // already parsed
     this.seenlog.add(normalizedPath);
 
     const source: Source = new Source(path, text, isEntry);
@@ -104,10 +104,10 @@ export class Parser extends DiagnosticEmitter {
 
     while (!tn.skip(Token.ENDOFFILE)) {
       const statement: Statement | null = this.parseTopLevelStatement(tn);
-      if (!statement)
-        return;
-      statement.parent = source;
-      source.statements.push(statement);
+      if (statement) {
+        statement.parent = source;
+        source.statements.push(statement);
+      }
     }
   }
 
@@ -201,7 +201,7 @@ export class Parser extends DiagnosticEmitter {
       default:
         if (hasModifier(ModifierKind.EXPORT, modifiers)) {
           tn.reset();
-          statement = this.parseExport(tn, modifiers); // TODO: why exactly does this have modifiers again?
+          statement = this.parseExport(tn, modifiers); // TODO: why exactly does this have modifiers again? 'declare'?
         } else {
           if (modifiers) {
             if (modifier = getModifier(ModifierKind.DECLARE, modifiers))
@@ -713,13 +713,10 @@ export class Parser extends DiagnosticEmitter {
 
     let isGetter: bool = false;
     let isSetter: bool = false;
-    if (tn.skip(Token.GET)) {
+    if (isGetter = tn.skip(Token.GET))
       modifiers = addModifier(Node.createModifier(ModifierKind.GET, tn.range()), modifiers);
-      isGetter = true;
-    } else if (tn.skip(Token.SET)) { // can't be both
+    else if (isSetter = tn.skip(Token.SET)) // can't be both
       modifiers = addModifier(Node.createModifier(ModifierKind.SET, tn.range()), modifiers);
-      isSetter = true;
-    }
 
     if (tn.skip(Token.CONSTRUCTOR) || tn.skip(Token.IDENTIFIER)) { // order is important
       const identifier: IdentifierExpression = tn.token == Token.CONSTRUCTOR
@@ -899,10 +896,12 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseImport(tn: Tokenizer): ImportStatement | null {
-    // at 'import': '{' (ImportMember (',' ImportMember)*)? '}' 'from' StringLiteral ';'?
-    const startRange: Range = tn.range();
+    // at 'import': ('{' (ImportMember (',' ImportMember)*)? '}' | '*' 'as' Identifier) 'from' StringLiteral ';'?
+    const startPos: i32 = tn.tokenPos;
+    let members: ImportDeclaration[] | null = null;
+    let namespaceName: IdentifierExpression | null = null;
     if (tn.skip(Token.OPENBRACE)) {
-      const members: ImportDeclaration[] = new Array();
+      members = new Array();
       if (!tn.skip(Token.CLOSEBRACE)) {
         do {
           const member: ImportDeclaration | null = this.parseImportDeclaration(tn);
@@ -915,22 +914,49 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      if (tn.skip(Token.FROM)) {
-        if (tn.skip(Token.STRINGLITERAL)) {
-          const path: StringLiteralExpression = Node.createStringLiteral(tn.readString(), tn.range());
-          const ret: ImportStatement = Node.createImport(members, path, Range.join(startRange, tn.range()));
-          if (!this.seenlog.has(ret.normalizedPath)) {
-            this.backlog.push(ret.normalizedPath);
-            this.seenlog.add(ret.normalizedPath);
-          }
-          tn.skip(Token.SEMICOLON);
-          return ret;
-        } else
-          this.error(DiagnosticCode.String_literal_expected, tn.range());
-      } else
-        this.error(DiagnosticCode._0_expected, tn.range(), "from");
-    } else
+    } else if (tn.skip(Token.ASTERISK)) {
+      if (tn.skip(Token.AS)) {
+        if (tn.skip(Token.IDENTIFIER)) {
+          namespaceName = Node.createIdentifier(tn.readIdentifier(), tn.range());
+        } else {
+          this.error(DiagnosticCode.Identifier_expected, tn.range());
+          return null;
+        }
+      } else {
+        this.error(DiagnosticCode._0_expected, tn.range(), "as");
+        return null;
+      }
+    } else {
       this.error(DiagnosticCode._0_expected, tn.range(), "{");
+      return null;
+    }
+    if (tn.skip(Token.FROM)) {
+      if (tn.skip(Token.STRINGLITERAL)) {
+        const path: StringLiteralExpression = Node.createStringLiteral(tn.readString(), tn.range());
+        let ret: ImportStatement;
+        if (members) {
+          if (!namespaceName)
+            ret = Node.createImport(members, path, tn.range(startPos, tn.pos));
+          else {
+            assert(false);
+            return null;
+          }
+        } else if (namespaceName) {
+          ret = Node.createImportAll(namespaceName, path, tn.range(startPos, tn.pos));
+        } else {
+          assert(false);
+          return null;
+        }
+        if (!this.seenlog.has(ret.normalizedPath)) {
+          this.backlog.push(ret.normalizedPath);
+          this.seenlog.add(ret.normalizedPath);
+        }
+        tn.skip(Token.SEMICOLON);
+        return ret;
+      } else
+        this.error(DiagnosticCode.String_literal_expected, tn.range());
+    } else
+      this.error(DiagnosticCode._0_expected, tn.range(), "from");
     return null;
   }
 
@@ -1363,7 +1389,7 @@ export class Parser extends DiagnosticEmitter {
   // see: http://www.engr.mun.ca/~theo/Misc/exp_parsing.htm#climbing
 
   parseExpressionStart(tn: Tokenizer): Expression | null {
-    const token: Token = tn.next();
+    const token: Token = tn.next(true);
     const startPos: i32 = tn.tokenPos;
     let expr: Expression | null = null;
 

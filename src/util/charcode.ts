@@ -22,7 +22,7 @@ export const enum CharCode {
   THINSPACE = 0x2009,
   HAIRSPACE = 0x200A,
   ZEROWIDTHSPACE = 0x200B,
-  NARRINOBREAKSPACE = 0x202F,
+  NARROWNOBREAKSPACE = 0x202F,
   IDEOGRAPHICSPACE = 0x3000,
   MATHEMATICALSPACE = 0x205F,
   OGHAM = 0x1680,
@@ -156,7 +156,7 @@ export function isWhiteSpace(c: i32): bool {
     case CharCode.NONBREAKINGSPACE:
     case CharCode.NEXTLINE:
     case CharCode.OGHAM:
-    case CharCode.NARRINOBREAKSPACE:
+    case CharCode.NARROWNOBREAKSPACE:
     case CharCode.MATHEMATICALSPACE:
     case CharCode.IDEOGRAPHICSPACE:
     case CharCode.BYTEORDERMARK:

@@ -66,7 +66,7 @@ if (args.help || args._.length < 1) {
     "Syntax:   asc [options] [entryFile ...]",
     "",
     "Examples: asc hello.ts",
-    "          asc hello.ts -b hello.wasm -t hello.wast -a hello.js",
+    "          asc hello.ts -b hello.wasm -t hello.wast",
     "          asc hello1.ts hello2.ts -b -O > hello.wasm",
     "",
     "Options:"

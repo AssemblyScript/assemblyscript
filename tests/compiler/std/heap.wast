@@ -2626,8 +2626,10 @@
   Map
   std:set/Set
   Set
+  std:string/EMPTY
   std:string/String
   String
+  std:string/isWhiteSpaceOrLineTerminator
   std/heap/size
   std/heap/ptr1
   std/heap/ptr2

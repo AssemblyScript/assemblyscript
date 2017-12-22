@@ -391,6 +391,18 @@ export abstract class Node {
     const stmt: ImportStatement = new ImportStatement();
     stmt.range = range;
     for (let i: i32 = 0, k: i32 = (stmt.declarations = declarations).length; i < k; ++i) declarations[i].parent = stmt;
+    stmt.namespaceName = null;
+    stmt.path = path;
+    stmt.normalizedPath = resolvePath(normalizePath(path.value), range.source.normalizedPath);
+    stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
+    return stmt;
+  }
+
+  static createImportAll(identifier: IdentifierExpression, path: StringLiteralExpression, range: Range): ImportStatement {
+    const stmt: ImportStatement = new ImportStatement();
+    stmt.range = range;
+    stmt.declarations = null;
+    stmt.namespaceName = identifier;
     stmt.path = path;
     stmt.normalizedPath = resolvePath(normalizePath(path.value), range.source.normalizedPath);
     stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
@@ -1569,8 +1581,10 @@ export class ImportStatement extends Statement {
 
   kind = NodeKind.IMPORT;
 
-  /** Array of member declarations. */
-  declarations: ImportDeclaration[];
+  /** Array of member declarations or `null` if an asterisk import. */
+  declarations: ImportDeclaration[] | null;
+  /** Name of the local namespace, if an asterisk import. */
+  namespaceName: IdentifierExpression | null;
   /** Path being imported from. */
   path: StringLiteralExpression;
   /** Normalized path. */
@@ -1579,13 +1593,22 @@ export class ImportStatement extends Statement {
   internalPath: string;
 
   serialize(sb: string[]): void {
-    sb.push("import {\n");
-    for (let i: i32 = 0, k: i32 = this.declarations.length; i < k; ++i) {
-      if (i > 0)
-        sb.push(",\n");
-      this.declarations[i].serialize(sb);
+    if (this.declarations) {
+      sb.push("import {\n");
+      for (let i: i32 = 0, k: i32 = this.declarations.length; i < k; ++i) {
+        if (i > 0)
+          sb.push(",\n");
+        this.declarations[i].serialize(sb);
+      }
+      sb.push("\n}");
+    } else {
+      sb.push("import * as ");
+      if (this.namespaceName)
+        this.namespaceName.serialize(sb);
+      else
+        throw new Error("missing asterisk import identifier");
     }
-    sb.push("\n} from ");
+    sb.push(" from ");
     this.path.serialize(sb);
   }
 }

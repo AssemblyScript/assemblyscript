@@ -73,8 +73,10 @@
   Map
   std:set/Set
   Set
+  std:string/EMPTY
   std:string/String
   String
+  std:string/isWhiteSpaceOrLineTerminator
 [program.exports]
   std:array/Array
   std:error/Error

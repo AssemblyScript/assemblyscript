@@ -2093,7 +2093,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createBinary(BinaryOp.EqF64, operand, this.module.createF64(0));
         }
         op = this.currentType.isLongInteger
-           ? UnaryOp.EqzI64 // TODO: does this yield i64 0/1?
+           ? UnaryOp.EqzI64
            : UnaryOp.EqzI32;
         this.currentType = Type.bool;
         break;
