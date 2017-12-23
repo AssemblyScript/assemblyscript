@@ -155,8 +155,6 @@ export class Type {
   static readonly f64: Type = new Type(TypeKind.F64, 64);
   /** No return type. */
   static readonly void: Type = new Type(TypeKind.VOID, 0);
-  /** Special type used in type inference. Alias of {@link Type.void}. */
-  static readonly auto: Type = Type.void;
 }
 
 /** Converts an array of types to its combined string representation. Usually type arguments. */

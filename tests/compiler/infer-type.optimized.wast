@@ -1,0 +1,12 @@
+(module
+ (type $v (func))
+ (memory $0 1)
+ (export "memory" (memory $0))
+ (start $start)
+ (func $infer-type/locals (; 0 ;) (type $v)
+  (nop)
+ )
+ (func $start (; 1 ;) (type $v)
+  (call $infer-type/locals)
+ )
+)

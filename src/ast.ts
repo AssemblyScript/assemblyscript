@@ -1059,8 +1059,7 @@ export class Source extends Node {
     for (let i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
       const statement: Statement = this.statements[i];
       statement.serialize(sb);
-      const last: string = sb[sb.length - 1];
-      if (last.charCodeAt(last.length - 1) == CharCode.CLOSEBRACE)
+      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
         sb.push("\n");
       else
         sb.push(";\n");

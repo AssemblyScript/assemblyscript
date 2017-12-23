@@ -324,48 +324,48 @@ export class Compiler extends DiagnosticEmitter {
   compileGlobal(global: Global): bool {
     if (global.isCompiled)
       return true;
-    if (global.isBuiltIn)
-      if (compileBuiltinGetGlobal(this, global))
-        return true;
+    if (global.isBuiltIn && compileBuiltinGetGlobal(this, global))
+      return true;
 
     const declaration: VariableLikeDeclarationStatement | null = global.declaration;
-    let type: Type | null = global.type;
-    if (!type) {
-      if (!declaration)
-        throw new Error("unexpected missing declaration");
-      if (!declaration.type) { // TODO: infer type
-        this.error(DiagnosticCode.Type_expected, declaration.name.range);
+    if (!global.type) {
+      if (declaration && declaration.type) {
+        global.type = this.program.resolveType(declaration.type); // reports
+        if (!global.type)
+          return false;
+      } else if (declaration && declaration.initializer) {
+        global.type = this.determineExpressionType(declaration.initializer);
+        if (!global.type)
+          return false;
+      } else if (declaration) {
+        this.error(DiagnosticCode.Type_expected, declaration.name.range.atEnd);
         return false;
-      }
-      type = this.program.resolveType(declaration.type); // reports
-      if (!type)
-        return false;
-      global.type = type;
+      } else
+        throw new Error("unable to infer type");
     }
     if (this.module.noEmit)
       return true;
-    const nativeType: NativeType = typeToNativeType(<Type>type);
+    const nativeType: NativeType = typeToNativeType(global.type);
     let initializer: ExpressionRef;
     let initializeInStart: bool = false;
     if (global.hasConstantValue) {
-      assert(type != null);
-      if (type.isLongInteger)
+      if (global.type.isLongInteger)
         initializer = global.constantIntegerValue ? this.module.createI64(global.constantIntegerValue.lo, global.constantIntegerValue.hi) : this.module.createI64(0, 0);
-      else if (type.kind == TypeKind.F32)
+      else if (global.type.kind == TypeKind.F32)
         initializer = this.module.createF32(global.constantFloatValue);
-      else if (type.kind == TypeKind.F64)
+      else if (global.type.kind == TypeKind.F64)
         initializer = this.module.createF64(global.constantFloatValue);
-      else if (type.isSmallInteger) {
-        if (type.isSignedInteger) {
-          const shift: i32 = type.smallIntegerShift;
+      else if (global.type.isSmallInteger) {
+        if (global.type.isSignedInteger) {
+          const shift: i32 = global.type.smallIntegerShift;
           initializer = this.module.createI32(global.constantIntegerValue ? global.constantIntegerValue.toI32() << shift >> shift : 0);
         } else
-          initializer = this.module.createI32(global.constantIntegerValue ? global.constantIntegerValue.toI32() & type.smallIntegerMask: 0);
+          initializer = this.module.createI32(global.constantIntegerValue ? global.constantIntegerValue.toI32() & global.type.smallIntegerMask: 0);
       } else
         initializer = this.module.createI32(global.constantIntegerValue ? global.constantIntegerValue.toI32() : 0);
     } else if (declaration) {
       if (declaration.initializer) {
-        initializer = this.compileExpression(declaration.initializer, type);
+        initializer = this.compileExpression(declaration.initializer, global.type);
         if (_BinaryenExpressionGetId(initializer) != ExpressionId.Const) {
           if (!global.isMutable) {
             initializer = this.precomputeExpressionRef(initializer);
@@ -377,13 +377,13 @@ export class Compiler extends DiagnosticEmitter {
             initializeInStart = true;
         }
       } else
-        initializer = typeToNativeZero(this.module, type);
+        initializer = typeToNativeZero(this.module, global.type);
     } else
       throw new Error("unexpected missing declaration or constant value");
 
     const internalName: string = global.internalName;
     if (initializeInStart) {
-      this.module.addGlobal(internalName, nativeType, true, typeToNativeZero(this.module, type));
+      this.module.addGlobal(internalName, nativeType, true, typeToNativeZero(this.module, global.type));
       this.startFunctionBody.push(this.module.createSetGlobal(internalName, initializer));
     } else {
       this.module.addGlobal(internalName, nativeType, global.isMutable, initializer);
@@ -717,7 +717,7 @@ export class Compiler extends DiagnosticEmitter {
   // types
 
   // TODO: try to get rid of this
-  determineExpressionType(expression: Expression, contextualType: Type): Type {
+  determineExpressionType(expression: Expression, contextualType: Type = Type.void): Type {
     const previousType: Type = this.currentType;
     const previousNoEmit: bool = this.module.noEmit;
     this.module.noEmit = true;
@@ -971,19 +971,26 @@ export class Compiler extends DiagnosticEmitter {
     const initializers: ExpressionRef[] = new Array();
     for (let i: i32 = 0, k = declarations.length; i < k; ++i) {
       const declaration: VariableDeclaration = declarations[i];
+      const name: string = declaration.name.name;
+      let type: Type | null = null;
       if (declaration.type) {
-        const name: string = declaration.name.name;
-        const type: Type | null = this.program.resolveType(<TypeNode>declaration.type, this.currentFunction.contextualTypeArguments, true); // reports
-        if (type) {
-          if (this.currentFunction.locals.has(name))
-            this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name); // recoverable
-          else
-            this.currentFunction.addLocal(<Type>type, name);
-          if (declaration.initializer)
-            initializers.push(this.compileAssignment(declaration.name, <Expression>declaration.initializer, Type.void));
-        }
+        type = this.program.resolveType(<TypeNode>declaration.type, this.currentFunction.contextualTypeArguments, true); // reports
+        if (!type)
+          continue;
+      } else if (declaration.initializer) {
+        type = this.determineExpressionType(declaration.initializer); // reports
+        if (!type)
+          continue;
       } else {
-        this.error(DiagnosticCode.Type_expected, declaration.name.range);
+        this.error(DiagnosticCode.Type_expected, declaration.name.range.atEnd);
+        continue;
+      }
+      if (this.currentFunction.locals.has(name))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name); // recoverable
+      else {
+        this.currentFunction.addLocal(type, name);
+        if (declaration.initializer)
+          initializers.push(this.compileAssignment(declaration.name, <Expression>declaration.initializer, Type.void));
       }
     }
     return initializers.length ? this.module.createBlock(null, initializers, NativeType.None) : this.module.createNop();
@@ -1099,11 +1106,6 @@ export class Compiler extends DiagnosticEmitter {
   convertExpression(expr: ExpressionRef, fromType: Type, toType: Type, conversionKind: ConversionKind, reportNode: Node): ExpressionRef {
     if (conversionKind == ConversionKind.NONE)
       return expr;
-
-    if (!fromType) {
-      _BinaryenExpressionPrint(expr);
-      throw new Error("WHAT");
-    }
 
     // void to any
     if (fromType.kind == TypeKind.VOID) {
@@ -1843,6 +1845,10 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createI64(intValue.lo, intValue.hi);
         if (contextualType.isSmallInteger)
           return this.module.createI32(intValue.toI32());
+        if (contextualType == Type.void && !intValue.fitsInI32) {
+          this.currentType = Type.i64;
+          return this.module.createI64(intValue.lo, intValue.hi);
+        }
         this.currentType = contextualType.isSignedInteger ? Type.i32 : Type.u32;
         return this.module.createI32(intValue.toI32());
       }
@@ -1942,7 +1948,7 @@ export class Compiler extends DiagnosticEmitter {
               : this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
           }
         } else {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
           return this.module.createUnreachable();
         }
         break;
