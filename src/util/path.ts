@@ -1,4 +1,6 @@
-import { CharCode } from "./charcode";
+import {
+  CharCode
+} from "./charcode";
 
 /** Normalizes the specified path, removing interior placeholders. Expects a posix-formatted string / not Windows compatible. */
 export function normalize(path: string, trimExtension: bool = false, separator: CharCode = CharCode.SLASH): string {

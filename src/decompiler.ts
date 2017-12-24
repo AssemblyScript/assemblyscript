@@ -1,20 +1,19 @@
 import {
-
   Module,
   NativeType,
   ExpressionId,
   UnaryOp,
   BinaryOp,
   HostOp,
-  FunctionTypeRef,
   FunctionRef,
   ExpressionRef,
   Index,
-
   readString
-
 } from "./module";
-import { I64 } from "./util/i64";
+
+import {
+  I64
+} from "./util/i64";
 
 // TODO :-)
 
@@ -40,7 +39,7 @@ export class Decompiler {
   }
 
   decompileFunction(func: FunctionRef): void {
-    const name: string = readString(_BinaryenFunctionGetName(func)) || "$" + this.functionId.toString(10)
+    const name: string = readString(_BinaryenFunctionGetName(func)) || "$" + this.functionId.toString(10);
     const body: ExpressionRef = _BinaryenFunctionGetBody(func);
     this.push("function ");
     this.push(name);
@@ -560,7 +559,7 @@ export class Decompiler {
             return;
 
           case BinaryOp.RotlI32:
-            this.push("rotl<i32>(")
+            this.push("rotl<i32>(");
             this.decompileExpression(_BinaryenBinaryGetLeft(expr));
             this.push(", ");
             this.decompileExpression(_BinaryenBinaryGetRight(expr));
@@ -568,7 +567,7 @@ export class Decompiler {
             return;
 
           case BinaryOp.RotrI32:
-            this.push("rotr<i32>(")
+            this.push("rotr<i32>(");
             this.decompileExpression(_BinaryenBinaryGetLeft(expr));
             this.push(", ");
             this.decompileExpression(_BinaryenBinaryGetRight(expr));
@@ -821,7 +820,7 @@ export class Decompiler {
 
       case ExpressionId.AtomicWake:
     }
-    throw new Error("not implemented: " + id);
+    throw new Error("not implemented");
   }
 
   private push(text: string): void {

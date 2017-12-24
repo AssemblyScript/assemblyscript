@@ -1,5 +1,10 @@
-import { Target } from "./compiler";
-import { I64, U64 } from "./util/i64";
+import {
+  Target
+} from "./compiler";
+
+import {
+  U64
+} from "./util/i64";
 
 export type ModuleRef = usize;
 export type FunctionTypeRef = usize;
@@ -917,7 +922,7 @@ function allocU8Array(u8s: Uint8Array | null): usize {
   const ptr: usize = Heap.allocate((<Uint8Array>u8s).length);
   let idx: usize = ptr;
   for (let i: i32 = 0, k: i32 = (<Uint8Array>u8s).length; i < k; ++i)
-    store<u8>(idx++, (<Uint8Array>u8s)[i])
+    store<u8>(idx++, (<Uint8Array>u8s)[i]);
   return ptr;
 }
 

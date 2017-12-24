@@ -7,27 +7,36 @@
 
 */
 
-import { Program } from "./program";
-import { Tokenizer, Token, Range } from "./tokenizer";
-import { DiagnosticCode, DiagnosticEmitter } from "./diagnostics";
-import { I64 } from "./util/i64";
-import { normalize as normalizePath } from "./util/path";
 import {
+  Program
+} from "./program";
 
+import {
+  Tokenizer,
+  Token,
+  Range
+} from "./tokenizer";
+
+import {
+  DiagnosticCode,
+  DiagnosticEmitter
+} from "./diagnostics";
+
+import {
+  normalize as normalizePath
+} from "./util/path";
+
+import {
   Node,
   NodeKind,
   Source,
-
-  // types
   TypeNode,
-
   // expressions
   AssertionKind,
   CallExpression,
   Expression,
   IdentifierExpression,
   StringLiteralExpression,
-
   // statements
   BlockStatement,
   BreakStatement,
@@ -64,12 +73,11 @@ import {
   VariableStatement,
   VariableDeclaration,
   WhileStatement,
-
+  // utility
   addModifier,
   getModifier,
   hasModifier,
   setReusableModifiers
-
 } from "./ast";
 
 /** Parser interface. */
@@ -1402,7 +1410,7 @@ export class Parser extends DiagnosticEmitter {
 
     let p: Precedence = determinePrecedenceStart(token);
     if (p != Precedence.INVALID) {
-      let operand: Expression | null
+      let operand: Expression | null;
 
       // TODO: SpreadExpression, YieldExpression (currently become unsupported UnaryPrefixExpressions)
 

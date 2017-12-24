@@ -1,8 +1,18 @@
-import { compileCall as compileBuiltinCall, compileGetGlobal as compileBuiltinGetGlobal, initialize } from "./builtins";
-import { PATH_DELIMITER } from "./constants";
-import { DiagnosticCode, DiagnosticEmitter } from "./diagnostics";
 import {
+  compileCall as compileBuiltinCall,
+  compileGetGlobal as compileBuiltinGetGlobal
+} from "./builtins";
 
+import {
+  PATH_DELIMITER
+} from "./constants";
+
+import {
+  DiagnosticCode,
+  DiagnosticEmitter
+} from "./diagnostics";
+
+import {
   Module,
   MemorySegment,
   ExpressionRef,
@@ -12,15 +22,14 @@ import {
   FunctionTypeRef,
   FunctionRef,
   ExpressionId
-
 } from "./module";
-import {
 
+import {
   Program,
   ClassPrototype,
-  Class, Element,
+  Class,
+  Element,
   ElementKind,
-  ElementFlags,
   Enum,
   FunctionPrototype,
   Function,
@@ -29,17 +38,17 @@ import {
   Namespace,
   Parameter,
   EnumValue
-
 } from "./program";
-import { Token } from "./tokenizer";
-import {
 
+import {
+  Token
+} from "./tokenizer";
+
+import {
   Node,
   NodeKind,
   TypeNode,
-  TypeParameter,
   Source,
-
   // statements
   BlockStatement,
   BreakStatement,
@@ -53,13 +62,11 @@ import {
   ExportMember,
   ExportStatement,
   ExpressionStatement,
-  FieldDeclaration,
   FunctionDeclaration,
   ForStatement,
   IfStatement,
   ImportStatement,
   InterfaceDeclaration,
-  MethodDeclaration,
   ModifierKind,
   NamespaceDeclaration,
   ReturnStatement,
@@ -72,9 +79,7 @@ import {
   VariableDeclaration,
   VariableStatement,
   WhileStatement,
-
   // expressions
-  ArrayLiteralExpression,
   AssertionExpression,
   BinaryExpression,
   CallExpression,
@@ -92,19 +97,24 @@ import {
   StringLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
-
   // utility
   hasModifier
-
 } from "./ast";
-import {
 
+import {
   Type,
   TypeKind,
-
+  typesToNativeTypes
 } from "./types";
-import { I64, U64 } from "./util/i64";
-import { sb } from "./util/sb";
+
+import {
+  I64,
+  U64
+} from "./util/i64";
+
+import {
+  sb
+} from "./util/sb";
 
 /** Compilation target. */
 export enum Target {
@@ -331,7 +341,6 @@ export class Compiler extends DiagnosticEmitter {
       return true;
 
     const declaration: VariableLikeDeclarationStatement | null = global.declaration;
-    let type: Type | null = null;
     let initExpr: ExpressionRef = 0;
 
     if (!global.type) { // infer type
@@ -353,7 +362,7 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("declaration expected");
     }
 
-    const nativeType: NativeType = typeToNativeType(global.type);
+    const nativeType: NativeType = global.type.toNativeType();
     let initializeInStart: bool = false;
 
     if (global.hasConstantValue) {
@@ -386,13 +395,13 @@ export class Compiler extends DiagnosticEmitter {
             initializeInStart = true;
         }
       } else
-        initExpr = typeToNativeZero(this.module, global.type);
+        initExpr = global.type.toNativeZero(this.module);
     } else
       throw new Error("declaration expected");
 
     const internalName: string = global.internalName;
     if (initializeInStart) {
-      this.module.addGlobal(internalName, nativeType, true, typeToNativeZero(this.module, global.type));
+      this.module.addGlobal(internalName, nativeType, true, global.type.toNativeZero(this.module));
       const setExpr: ExpressionRef = this.module.createSetGlobal(internalName, initExpr);
       if (!this.module.noEmit)
         this.startFunctionBody.push(setExpr);
@@ -547,14 +556,14 @@ export class Compiler extends DiagnosticEmitter {
 
     // create the function type
     let k: i32 = instance.parameters.length;
-    const nativeResultType: NativeType = typeToNativeType(instance.returnType);
+    const nativeResultType: NativeType = instance.returnType.toNativeType();
     const nativeParamTypes: NativeType[] = new Array(k);
     const signatureNameParts: string[] = new Array(k + 1);
     for (let i: i32 = 0; i < k; ++i) {
-      nativeParamTypes[i] = typeToNativeType(instance.parameters[i].type);
-      signatureNameParts[i] = typeToSignatureNamePart(instance.parameters[i].type);
+      nativeParamTypes[i] = instance.parameters[i].type.toNativeType();
+      signatureNameParts[i] = instance.parameters[i].type.toSignatureName();
     }
-    signatureNameParts[k] = typeToSignatureNamePart(instance.returnType);
+    signatureNameParts[k] = instance.returnType.toSignatureName();
     let typeRef: FunctionTypeRef = this.module.getFunctionTypeBySignature(nativeResultType, nativeParamTypes);
     if (!typeRef)
       typeRef = this.module.addFunctionType(signatureNameParts.join(""), nativeResultType, nativeParamTypes);
@@ -1101,10 +1110,10 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   precomputeExpressionRef(expr: ExpressionRef): ExpressionRef {
-    const nativeType: NativeType = typeToNativeType(this.currentType);
+    const nativeType: NativeType = this.currentType.toNativeType();
     let typeRef: FunctionTypeRef = this.module.getFunctionTypeBySignature(nativeType, []);
     if (!typeRef)
-      typeRef = this.module.addFunctionType(typeToSignatureNamePart(this.currentType), nativeType, []);
+      typeRef = this.module.addFunctionType(this.currentType.toSignatureName(), nativeType, []);
     const funcRef: FunctionRef = this.module.addFunction("__precompute", typeRef, [], expr);
     this.module.runPasses([ "precompute" ], funcRef);
     const ret: ExpressionRef = _BinaryenFunctionGetBody(funcRef);
@@ -1564,7 +1573,7 @@ export class Compiler extends DiagnosticEmitter {
             ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
             : this.module.createTeeLocal(tempLocal.index, left),
           right,
-          this.module.createGetLocal(tempLocal.index, typeToNativeType(tempLocal.type))
+          this.module.createGetLocal(tempLocal.index, tempLocal.type.toNativeType())
         );
 
       case Token.BAR_BAR: // left || right
@@ -1596,7 +1605,7 @@ export class Compiler extends DiagnosticEmitter {
             : this.currentType == Type.f32
             ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
             : this.module.createTeeLocal(tempLocal.index, left),
-          this.module.createGetLocal(tempLocal.index, typeToNativeType(tempLocal.type)),
+          this.module.createGetLocal(tempLocal.index, tempLocal.type.toNativeType()),
           right
         );
 
@@ -1665,7 +1674,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createUnreachable();
       }
       if (tee) {
-        const globalNativeType: NativeType = typeToNativeType(<Type>(<Global>element).type);
+        const globalNativeType: NativeType = (<Type>(<Global>element).type).toNativeType();
         return this.module.createBlock(null, [ // teeGlobal
           this.module.createSetGlobal((<Global>element).internalName, valueWithCorrectType),
           this.module.createGetGlobal((<Global>element).internalName, globalNativeType)
@@ -1724,7 +1733,6 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles a call to a function. If an instance method, `this` is the first element in `argumentExpressions`. */
   compileCall(functionInstance: Function, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
-    const previousType: Type = this.currentType;
 
     // validate and compile arguments
     const parameters: Parameter[] = functionInstance.parameters;
@@ -1765,10 +1773,10 @@ export class Compiler extends DiagnosticEmitter {
 
     // imported function
     if (functionInstance.isDeclared)
-      return this.module.createCallImport(functionInstance.internalName, operands, typeToNativeType(functionInstance.returnType));
+      return this.module.createCallImport(functionInstance.internalName, operands, functionInstance.returnType.toNativeType());
 
     // internal function
-    return this.module.createCall(functionInstance.internalName, operands, typeToNativeType(functionInstance.returnType));
+    return this.module.createCall(functionInstance.internalName, operands, functionInstance.returnType.toNativeType());
   }
 
   compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type): ExpressionRef {
@@ -1820,7 +1828,7 @@ export class Compiler extends DiagnosticEmitter {
     // local
     if (element.kind == ElementKind.LOCAL) {
       this.currentType = (<Local>element).type;
-      return this.module.createGetLocal((<Local>element).index, typeToNativeType(this.currentType));
+      return this.module.createGetLocal((<Local>element).index, this.currentType.toNativeType());
     }
 
     // global
@@ -1844,7 +1852,7 @@ export class Compiler extends DiagnosticEmitter {
         else
           throw new Error("unexpected global type");
       } else
-        return this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType));
+        return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
     }
 
     // field
@@ -1947,7 +1955,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // look up the property within the target to obtain the actual element
     let element: Element | null;
-    let expr: ExpressionRef;
     switch (target.kind) {
 
       case ElementKind.LOCAL:
@@ -1996,7 +2003,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.LOCAL:
-        return this.module.createGetLocal((<Local>element).index, typeToNativeType(this.currentType = (<Local>element).type));
+        return this.module.createGetLocal((<Local>element).index, (this.currentType = (<Local>element).type).toNativeType());
 
       case ElementKind.GLOBAL:
         if (!this.compileGlobal(<Global>element))
@@ -2010,7 +2017,7 @@ export class Compiler extends DiagnosticEmitter {
             : this.currentType.isLongInteger
             ? this.module.createI64((<I64>(<Global>element).constantIntegerValue).lo, (<I64>(<Global>element).constantIntegerValue).hi)
             : this.module.createI32((<I64>(<Global>element).constantIntegerValue).lo);
-        return this.module.createGetGlobal((<Global>element).internalName, typeToNativeType(this.currentType));
+        return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
 
       case ElementKind.FUNCTION: // getter
         if (!(<Function>element).prototype.isGetter) {
@@ -2156,66 +2163,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
-export function typeToNativeType(type: Type): NativeType {
-  return type.kind == TypeKind.F32
-       ? NativeType.F32
-       : type.kind == TypeKind.F64
-       ? NativeType.F64
-       : type.isLongInteger
-       ? NativeType.I64
-       : type.isAnyInteger || type.kind == TypeKind.BOOL
-       ? NativeType.I32
-       : NativeType.None;
-}
-
-export function typesToNativeTypes(types: Type[]): NativeType[] {
-  const k: i32 = types.length;
-  const ret: NativeType[] = new Array(k);
-  for (let i: i32 = 0; i < k; ++i)
-    ret[i] = typeToNativeType(types[i]);
-  return ret;
-}
-
-export function typeToNativeZero(module: Module, type: Type): ExpressionRef {
-  return type.kind == TypeKind.F32
-       ? module.createF32(0)
-       : type.kind == TypeKind.F64
-       ? module.createF64(0)
-       : type.isLongInteger
-       ? module.createI64(0, 0)
-       : module.createI32(0);
-}
-
-export function typeToNativeOne(module: Module, type: Type): ExpressionRef {
-  return type.kind == TypeKind.F32
-       ? module.createF32(1)
-       : type.kind == TypeKind.F64
-       ? module.createF64(1)
-       : type.isLongInteger
-       ? module.createI64(1, 0)
-       : module.createI32(1);
-}
-
-function typeToSignatureNamePart(type: Type): string {
-  return type.kind == TypeKind.VOID
-       ? "v"
-       : type.kind == TypeKind.F32
-       ? "f"
-       : type.kind == TypeKind.F64
-       ? "F"
-       : type.isLongInteger
-       ? "I"
-       : "i";
-}
-
-function typesToSignatureName(paramTypes: Type[], returnType: Type): string {
-  sb.length = 0;
-  for (let i: i32 = 0, k: i32 = paramTypes.length; i < k; ++i)
-    sb.push(typeToSignatureNamePart(paramTypes[i]));
-  sb.push(typeToSignatureNamePart(returnType));
-  return sb.join("");
-}
 
 function isModuleExport(element: Element, declaration: DeclarationStatement): bool {
   if (!element.isExported)

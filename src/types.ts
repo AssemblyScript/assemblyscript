@@ -1,5 +1,15 @@
-import { Class, Function } from "./program";
-import { sb } from "./util/sb";
+import {
+  Class,
+  Function
+} from "./program";
+
+import {
+  sb
+} from "./util/sb";
+
+import {
+  NativeType, ExpressionRef, Module
+} from "./module";
 
 /** Indicates the kind of a type. */
 export const enum TypeKind {
@@ -123,6 +133,48 @@ export class Type {
     }
   }
 
+  // Binaryen specific
+
+  /** Converts this type to its respective native type. */
+  toNativeType(): NativeType {
+    return this.kind == TypeKind.F32
+      ? NativeType.F32
+      : this.kind == TypeKind.F64
+      ? NativeType.F64
+      : this.isLongInteger
+      ? NativeType.I64
+      : this.isAnyInteger || this.kind == TypeKind.BOOL
+      ? NativeType.I32
+      : NativeType.None;
+  }
+
+  /** Converts this type to its native `0` value. */
+  toNativeZero(module: Module): ExpressionRef {
+    return this.kind == TypeKind.F32 ? module.createF32(0)
+         : this.kind == TypeKind.F64 ? module.createF64(0)
+         : this.isLongInteger ? module.createI64(0, 0)
+         : module.createI32(0);
+  }
+
+  /** Converts this type to its native `1` value. */
+  toNativeOne(module: Module): ExpressionRef {
+    return this.kind == TypeKind.F32 ? module.createF32(1)
+         : this.kind == TypeKind.F64 ? module.createF64(1)
+         : this.isLongInteger ? module.createI64(1, 0)
+         : module.createI32(1);
+  }
+
+  /** Converts this type to its signature name. */
+  toSignatureName(): string {
+    return this.kind == TypeKind.VOID ? "v"
+         : this.kind == TypeKind.F32 ? "f"
+         : this.kind == TypeKind.F64 ? "F"
+         : this.isLongInteger ? "I"
+         : "i";
+  }
+
+  // Types
+
   /** An 8-bit signed integer. */
   static readonly i8: Type  = new Type(TypeKind.I8, 8);
   /** A 16-bit signed integer. */
@@ -155,6 +207,15 @@ export class Type {
   static readonly f64: Type = new Type(TypeKind.F64, 64);
   /** No return type. */
   static readonly void: Type = new Type(TypeKind.VOID, 0);
+}
+
+/** Converts an array of types to an array of native types. */
+export function typesToNativeTypes(types: Type[]): NativeType[] {
+  const k: i32 = types.length;
+  const ret: NativeType[] = new Array(k);
+  for (let i: i32 = 0; i < k; ++i)
+    ret[i] = types[i].toNativeType();
+  return ret;
 }
 
 /** Converts an array of types to its combined string representation. Usually type arguments. */

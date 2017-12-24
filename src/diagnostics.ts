@@ -1,9 +1,25 @@
-import { Range } from "./ast";
-import { DiagnosticCode, diagnosticCodeToString } from "./diagnosticMessages.generated";
-import { CharCode, isLineBreak } from "./util/charcode";
-import { sb } from "./util/sb";
+import {
+  Range
+} from "./ast";
 
-export { DiagnosticCode, diagnosticCodeToString } from "./diagnosticMessages.generated";
+import {
+  DiagnosticCode,
+  diagnosticCodeToString
+} from "./diagnosticMessages.generated";
+
+import {
+  CharCode,
+  isLineBreak
+} from "./util/charcode";
+
+import {
+  sb
+} from "./util/sb";
+
+export {
+  DiagnosticCode,
+  diagnosticCodeToString
+} from "./diagnosticMessages.generated";
 
 export enum DiagnosticCategory {
   INFO,
@@ -75,8 +91,8 @@ export class DiagnosticMessage {
 
   toString(): string {
     if (this.range)
-      return diagnosticCategoryToString(this.category) + " " + this.code + ": \"" + this.message + "\" in " + this.range.source.path + " @ " + this.range.start + "," + this.range.end;
-    return diagnosticCategoryToString(this.category) + " " + this.code + ": " + this.message;
+      return diagnosticCategoryToString(this.category) + " " + this.code.toString(10) + ": \"" + this.message + "\" in " + this.range.source.path + " @ " + this.range.start.toString(10) + "," + this.range.end.toString(10);
+    return diagnosticCategoryToString(this.category) + " " + this.code.toString(10) + ": " + this.message;
   }
 }
 
@@ -84,7 +100,7 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
   // format context first (uses same string builder)
   let context: string = "";
   if (message.range && showContext)
-    context = formatDiagnosticContext(message.range, useColors)
+    context = formatDiagnosticContext(message.range, useColors);
 
   // general information
   sb.length = 0;

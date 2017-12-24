@@ -1,29 +1,49 @@
-import { initialize as initializeBuiltins } from "./builtins";
-import { Target, typeToNativeType } from "./compiler";
-import { GETTER_PREFIX, SETTER_PREFIX, PATH_DELIMITER } from "./constants";
-import { DiagnosticCode, DiagnosticMessage, DiagnosticEmitter } from "./diagnostics";
-import { Type, typesToString } from "./types";
-import { I64 } from "./util/i64";
 import {
+  initialize as initializeBuiltins
+} from "./builtins";
 
+import {
+  Target
+} from "./compiler";
+
+import {
+  PATH_DELIMITER
+} from "./constants";
+
+import {
+  DiagnosticCode,
+  DiagnosticMessage,
+  DiagnosticEmitter
+} from "./diagnostics";
+
+import {
+  Type,
+  typesToString
+} from "./types";
+
+import {
+  I64
+} from "./util/i64";
+
+import {
   ModifierKind,
   Node,
   NodeKind,
   Source,
   Range,
-
   TypeNode,
+  TypeParameter,
+  Decorator,
+
   Expression,
   IdentifierExpression,
-  LiteralExpression,
-  LiteralKind,
   PropertyAccessExpression,
   StringLiteralExpression,
   CallExpression,
 
+  Statement,
   ClassDeclaration,
   DeclarationStatement,
-  Decorator,
   EnumDeclaration,
   EnumValueDeclaration,
   ExportMember,
@@ -34,20 +54,18 @@ import {
   ImportStatement,
   InterfaceDeclaration,
   MethodDeclaration,
-  Modifier,
   NamespaceDeclaration,
-  Statement,
   TypeDeclaration,
-  TypeParameter,
   VariableLikeDeclarationStatement,
   VariableDeclaration,
   VariableStatement,
 
-  hasModifier,
-  mangleInternalName
-
+  hasModifier
 } from "./ast";
-import { NativeType } from "./module";
+
+import {
+  NativeType
+} from "./module";
 
 class QueuedExport {
   isReExport: bool;
@@ -845,7 +863,7 @@ export class Program extends DiagnosticEmitter {
       return this.resolveElement((<CallExpression>expression).expression, contextualFunction);
     }
 
-    throw new Error("not implemented: " + expression.kind);
+    throw new Error("not implemented");
   }
 }
 
@@ -1229,9 +1247,9 @@ export class FunctionPrototype extends Element {
     k = declaration.parameters.length;
     const parameters: Parameter[] = new Array(k);
     const parameterTypes: Type[] = new Array(k);
-    for (let i = 0; i < k; ++i) {
-      const typeNode: TypeNode | null = declaration.parameters[i].type;
-      if (typeNode) {
+    let typeNode: TypeNode | null ;
+    for (i = 0; i < k; ++i) {
+      if (typeNode = declaration.parameters[i].type) {
         const type: Type | null = this.program.resolveType(<TypeNode>typeNode, contextualTypeArguments, true); // reports
         if (type) {
           parameters[i] = new Parameter(declaration.parameters[i].name.name, type);
@@ -1243,9 +1261,8 @@ export class FunctionPrototype extends Element {
     }
 
     // resolve return type
-    const typeNode: TypeNode | null = declaration.returnType;
     let returnType: Type;
-    if (typeNode) {
+    if (typeNode = declaration.returnType) {
       const type: Type | null = this.program.resolveType(<TypeNode>typeNode, contextualTypeArguments, true); // reports
       if (type)
         returnType = <Type>type;
@@ -1265,7 +1282,7 @@ export class FunctionPrototype extends Element {
   resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Function | null {
     let resolvedTypeArguments: Type[] | null;
     if (this.isGeneric) {
-      assert(typeArgumentNodes != null && typeArgumentNodes.length != 0, "" + this);
+      assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
       if (!this.declaration)
         throw new Error("missing declaration");
       resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
@@ -1357,7 +1374,7 @@ export class Function extends Element {
   /** Gets a free temporary local of the specified type. */
   getTempLocal(type: Type): Local {
     let temps: Local[] | null;
-    switch (typeToNativeType(type)) {
+    switch (type.toNativeType()) {
       case NativeType.I32: temps = this.tempI32s; break;
       case NativeType.I64: temps = this.tempI64s; break;
       case NativeType.F32: temps = this.tempF32s; break;
@@ -1372,7 +1389,7 @@ export class Function extends Element {
   /** Frees the temporary local for reuse. */
   freeTempLocal(local: Local): void {
     let temps: Local[];
-    switch (typeToNativeType(local.type)) {
+    switch (local.type.toNativeType()) {
       case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
       case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
       case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
@@ -1385,7 +1402,7 @@ export class Function extends Element {
   /** Gets and immediately frees a temporary local of the specified type. */
   getAndFreeTempLocal(type: Type): Local {
     let temps: Local[];
-    switch (typeToNativeType(type)) {
+    switch (type.toNativeType()) {
       case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
       case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
       case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
@@ -1416,7 +1433,7 @@ export class Function extends Element {
     assert(length > 0);
     (<i32[]>this.breakStack).pop();
     if (length > 1) {
-      this.breakContext = (<i32[]>this.breakStack)[length - 2].toString(10)
+      this.breakContext = (<i32[]>this.breakStack)[length - 2].toString(10);
     } else {
       this.breakContext = null;
       this.breakStack = null;
@@ -1461,7 +1478,7 @@ export class FieldPrototype extends Element {
           case ModifierKind.PROTECTED:
           case ModifierKind.PUBLIC:
           case ModifierKind.STATIC: break; // already handled
-          default: throw new Error("unexpected modifier: " + this.declaration.modifiers[i]);
+          default: assert(false);
         }
       }
     }

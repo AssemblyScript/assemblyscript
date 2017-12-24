@@ -1,9 +1,38 @@
-import { Compiler, Target, ConversionKind, typeToNativeType, typeToNativeOne, typeToNativeZero } from "./compiler";
-import { DiagnosticCode } from "./diagnostics";
-import { Node, Expression, IdentifierExpression } from "./ast";
-import { Type } from "./types";
-import { Module, ExpressionRef, UnaryOp, BinaryOp, HostOp, NativeType, FunctionTypeRef } from "./module";
-import { Program, ElementFlags, Element, Global, FunctionPrototype, Local } from "./program";
+import {
+  Compiler,
+  Target,
+  ConversionKind
+} from "./compiler";
+
+import {
+  DiagnosticCode
+} from "./diagnostics";
+
+import {
+  Node,
+  Expression
+} from "./ast";
+
+import {
+  Type
+} from "./types";
+
+import {
+  Module,
+  UnaryOp,
+  BinaryOp,
+  HostOp,
+  NativeType,
+  ExpressionRef,
+  FunctionTypeRef
+} from "./module";
+
+import {
+  Program,
+  Global,
+  FunctionPrototype,
+  Local
+} from "./program";
 
 /** Initializes the specified program with built-in functions. */
 export function initialize(program: Program): void {
@@ -149,7 +178,7 @@ export function compileGetGlobal(compiler: Compiler, global: Global): Expression
       return compiler.module.createF64(Infinity);
 
     case "HEAP_BASE": // constant, but never inlined
-      return compiler.module.createGetGlobal("HEAP_BASE", typeToNativeType(compiler.currentType = <Type>global.type));
+      return compiler.module.createGetGlobal("HEAP_BASE", (compiler.currentType = <Type>global.type).toNativeType());
 
     default:
       throw new Error("not implemented: " + global.internalName);
@@ -539,7 +568,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], usizeType); // reports
       if ((compiler.currentType = typeArguments[0]) != Type.void)
-        return module.createLoad(typeArguments[0].byteSize, typeArguments[0].isSignedInteger, arg0, typeToNativeType(typeArguments[0]));
+        return module.createLoad(typeArguments[0].byteSize, typeArguments[0].isSignedInteger, arg0, typeArguments[0].toNativeType());
       break;
 
     case "store": // store<T>(offset: usize, value: T) -> void
@@ -550,7 +579,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       arg1 = compiler.compileExpression(operands[1], typeArguments[0]); // reports
       compiler.currentType = Type.void;
       if (typeArguments[0] != Type.void)
-        return module.createStore(typeArguments[0].byteSize, arg0, arg1, typeToNativeType(typeArguments[0]));
+        return module.createStore(typeArguments[0].byteSize, arg0, arg1, typeArguments[0].toNativeType());
       break;
 
     case "sizeof": // sizeof<T>() -> usize
@@ -685,7 +714,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         return module.createUnreachable();
       }
       arg0 = compiler.compileExpression(operands[0], Type.i32); // reports
-      arg1 = operands.length > 1 ? compiler.compileExpression(operands[1], usizeType) : typeToNativeZero(module, usizeType); // TODO: string type
+      arg1 = operands.length > 1 ? compiler.compileExpression(operands[1], usizeType) : usizeType.toNativeZero(module); // TODO: string type
       compiler.currentType = Type.void;
       return compiler.options.noAssert
         ? module.createNop()

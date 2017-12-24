@@ -1,8 +1,27 @@
-import { GETTER_PREFIX, SETTER_PREFIX, PATH_DELIMITER, PARENT_SUBST, STATIC_DELIMITER, INSTANCE_DELIMITER } from "./constants";
-import { Token, Tokenizer, operatorTokenToString, Range } from "./tokenizer";
-import { CharCode } from "./util/charcode";
-import { I64 } from "./util/i64";
-import { normalize as normalizePath, resolve as resolvePath } from "./util/path";
+import {
+  PATH_DELIMITER,
+  STATIC_DELIMITER,
+  INSTANCE_DELIMITER
+} from "./constants";
+
+import {
+  Token,
+  Tokenizer,
+  Range
+} from "./tokenizer";
+
+import{
+  CharCode
+} from "./util/charcode";
+
+import {
+  I64
+} from "./util/i64";
+
+import {
+  normalize as normalizePath,
+  resolve as resolvePath
+} from "./util/path";
 
 export { Range } from "./tokenizer";
 
@@ -489,7 +508,7 @@ export abstract class Node {
     (stmt.name = identifier).parent = stmt;
     for (i = 0, k = (stmt.typeParameters = typeParameters).length; i < k; ++i) typeParameters[i].parent = stmt;
     for (i = 0, k = (stmt.parameters = parameters).length; i < k; ++i) parameters[i].parent = stmt;
-    if (stmt.returnType = returnType) (<TypeNode>returnType).parent = stmt;;
+    if (stmt.returnType = returnType) (<TypeNode>returnType).parent = stmt;
     if (stmt.statements = statements) for (i = 0, k = (<Statement[]>statements).length; i < k; ++i) (<Statement[]>statements)[i].parent = stmt;
     if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
     if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
@@ -750,7 +769,7 @@ export class BinaryExpression extends Expression {
   serialize(sb: string[]): void {
     this.left.serialize(sb);
     sb.push(" ");
-    sb.push(operatorTokenToString(this.operator));
+    sb.push(Token.operatorToString(this.operator));
     sb.push(" ");
     this.right.serialize(sb);
   }
@@ -995,7 +1014,7 @@ export class UnaryPrefixExpression extends UnaryExpression {
   kind = NodeKind.UNARYPREFIX;
 
   serialize(sb: string[]): void {
-    sb.push(operatorTokenToString(this.operator));
+    sb.push(Token.operatorToString(this.operator));
     this.operand.serialize(sb);
   }
 }

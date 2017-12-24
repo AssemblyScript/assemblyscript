@@ -28,6 +28,7 @@
     "long": "^3.2.0",
     "ts-loader": "^3.2.0",
     "ts-node": "^4.0.2",
+    "tslint": "^5.8.0",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   },
@@ -45,7 +46,8 @@
     "test:config:src": "tsc --noEmit -p src --diagnostics --listFiles",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
-    "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path"
+    "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path",
+    "lint": "tslint --project src"
   },
   "files": [
     "bin/",

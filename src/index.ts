@@ -22,12 +22,33 @@
 
 */
 
-import { Module } from "./module";
-import { Compiler, Options, Target } from "./compiler";
-import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
-import { Parser } from "./parser";
-import { Program } from "./program";
-import { Decompiler } from "./decompiler";
+import {
+  Module
+} from "./module";
+
+import {
+  Compiler,
+  Options,
+  Target
+} from "./compiler";
+
+import {
+  DiagnosticMessage,
+  DiagnosticCategory,
+  formatDiagnosticMessage
+} from "./diagnostics";
+
+import {
+  Parser
+} from "./parser";
+
+import {
+  Program
+} from "./program";
+
+import {
+  Decompiler
+} from "./decompiler";
 
 /** Parses a single source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, parser: Parser | null = null, isEntry: bool = false): Parser {
