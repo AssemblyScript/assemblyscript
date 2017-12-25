@@ -5,10 +5,10 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AssemblyScript/next.git"
+    "url": "https://github.com/AssemblyScript/assemblyscript.git"
   },
   "bugs": {
-    "url": "https://github.com/AssemblyScript/next/issues"
+    "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
     "binaryen": "40.0.0-nightly.20171209",

@@ -137,15 +137,11 @@ export class Type {
 
   /** Converts this type to its respective native type. */
   toNativeType(): NativeType {
-    return this.kind == TypeKind.F32
-      ? NativeType.F32
-      : this.kind == TypeKind.F64
-      ? NativeType.F64
-      : this.isLongInteger
-      ? NativeType.I64
-      : this.isAnyInteger || this.kind == TypeKind.BOOL
-      ? NativeType.I32
-      : NativeType.None;
+    return this.kind == TypeKind.F32 ? NativeType.F32
+         : this.kind == TypeKind.F64 ? NativeType.F64
+         : this.isLongInteger ? NativeType.I64
+         : this.isAnyInteger ? NativeType.I32
+         : NativeType.None;
   }
 
   /** Converts this type to its native `0` value. */

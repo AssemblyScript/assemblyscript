@@ -134,6 +134,8 @@ export class Options {
   noTreeShaking: bool = false;
   /** If true, replaces assertions with nops. */
   noAssert: bool = false;
+  /** If true, does not set up a memory. */
+  noMemory: bool = false;
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -227,22 +229,23 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up memory
-    const initial: U64 = this.memoryOffset.clone();
-    if (this.options.target == Target.WASM64)
-      this.module.addGlobal("HEAP_BASE", NativeType.I64, false, this.module.createI64(initial.lo, initial.hi));
-    else
-      this.module.addGlobal("HEAP_BASE", NativeType.I32, false, this.module.createI32(initial.lo));
+    if (!this.options.noMemory) {
+      const initial: U64 = this.memoryOffset.clone();
+      if (this.options.target == Target.WASM64)
+        this.module.addGlobal("HEAP_BASE", NativeType.I64, false, this.module.createI64(initial.lo, initial.hi));
+      else
+        this.module.addGlobal("HEAP_BASE", NativeType.I32, false, this.module.createI32(initial.lo));
 
-    // determine initial page size
-    const initialOverlaps: U64 = initial.clone();
-    initialOverlaps.and32(0xffff);
-    if (!initialOverlaps.isZero) {
-      initial.or32(0xffff);
-      initial.add32(1);
+      // determine initial page size
+      const initialOverlaps: U64 = initial.clone();
+      initialOverlaps.and32(0xffff);
+      if (!initialOverlaps.isZero) {
+        initial.or32(0xffff);
+        initial.add32(1);
+      }
+      initial.shru32(16); // now is initial size in 64k pages
+        this.module.setMemory(initial.toI32(), Module.MAX_MEMORY_WASM32 /* TODO: not WASM64 compatible yet */, this.memorySegments, this.options.target, "memory");
     }
-    initial.shru32(16); // now is initial size in 64k pages
-    this.module.setMemory(initial.toI32(), Module.MAX_MEMORY_WASM32 /* TODO: not WASM64 compatible yet */, this.memorySegments, this.options.target, "memory");
-
     return this.module;
   }
 

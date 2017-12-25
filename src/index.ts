@@ -113,6 +113,11 @@ export function setNoAssert(options: Options, noAssert: bool): void {
   options.noAssert = noAssert;
 }
 
+/** Sets the `noMemory` option. */
+export function setNoMemory(options: Options, noMemory: bool): void {
+  options.noMemory = noMemory;
+}
+
 /** Compiles the sources computed by the parser to a module. */
 export function compile(parser: Parser, options: Options | null = null): Module {
   const program: Program = parser.finish();

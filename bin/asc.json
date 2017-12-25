@@ -51,6 +51,10 @@
     "desc": "Does not include the standard library.",
     "type": "boolean"
   },
+  "noMemory": {
+    "desc": "Does not set up a memory.",
+    "type": "boolean"
+  },
   "trapMode": {
     "desc": [
       "Sets the trap mode to use.",

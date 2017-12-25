@@ -143,6 +143,7 @@ var options = assemblyscript.createOptions();
 assemblyscript.setTarget(options, 0);
 assemblyscript.setNoTreeShaking(options, args.noTreeShaking);
 assemblyscript.setNoAssert(options, args.noAssert);
+assemblyscript.setNoMemory(options, args.noMemory);
 // TODO: noDebug binaryen feature, removing names the debug section
 
 var module = assemblyscript.compile(parser, options);

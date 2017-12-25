@@ -1,10 +1,28 @@
 {
-  "name": "@assemblyscript/i64-polyfill-example",
+  "name": "@assemblyscript/i64",
   "version": "1.0.0",
-  "private": true,
+  "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AssemblyScript/assemblyscript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AssemblyScript/assemblyscript/issues"
+  },
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
-    "build:untouched": "asc assembly/i64.ts -t i64.untouched.wast -b i64.untouched.wasm --validate",
-    "build:optimized": "asc -O assembly/i64.ts -b i64.optimized.wasm -t i64.optimized.wast --validate"
-  }
+    "build:untouched": "asc assembly/i64.ts -t i64.untouched.wast -b i64.untouched.wasm --noMemory --validate",
+    "build:optimized": "asc -O assembly/i64.ts -b i64.optimized.wasm -t i64.optimized.wast --noMemory --validate",
+    "test": "node tests"
+  },
+  "files": [
+    "assembly/",
+    "i64.optimized.wasm",
+    "index.d.ts",
+    "index.js",
+    "README.md"
+  ]
 }

@@ -3,34 +3,31 @@
 
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
 
-**AssemblyScript** is a new compiler targeting [WebAssembly](http://webassembly.org) while utilizing [TypeScript](http://www.typescriptlang.org)'s syntax and [node](https://nodejs.org)'s vibrant ecosystem. Instead of requiring complex toolchains to set up, you can simply `npm install` it - or run it in a browser.
-
-Note, though, that this version of the compiler (0.5.0, NEXT) is relatively new and does not yet support some features a TypeScript programmer might expect, e.g., strings, arrays and classes.
-
-See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for additional information and documentation.
-
-How does it work?
------------------
-
-By compiling syntactially (not necessarily semantically) valid TypeScript to [Binaryen](https://github.com/WebAssembly/binaryen) IR, the resulting module can be validated, optimized, emitted in WebAssembly text or binary format and converted to [asm.js](http://asmjs.org) as a polyfill.
+**AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). Unlike more complex toolchains, `asc` generates minimal WebAssembly modules while being just an `npm install` away.
 
 Examples
 --------
 
 A few early examples to get an idea:
 
-* **[Conway's Game of Life](./examples/game-of-life)** as seen on dcode.io<br />
-* **[i64 polyfill](./examples/i64-polyfill)** using 32-bit integers<br />
+* **[Conway's Game of Life](./examples/game-of-life)**<br />
+  Continuously updates the cellular automaton and visualizes its state on a canvas.
+
+* **[i64 polyfill](./examples/i64-polyfill)**<br />
+  Exposes WebAssembly's i64 operations to JavaScript using 32-bit integers (low and high bits).
+
+Or browse the [compiler tests](./tests/compiler) for a more in-depth overview of what's supported already.
 
 Getting started
 ---------------
 
-This version of the compiler is not on [npm](https://www.npmjs.com/package/assemblyscript), yet, but if you'd like to try it today or even plan to contribute, this is how you do it:
+Note that this version of the compiler is relatively new and does not yet support some features a TypeScript programmer might expect, e.g., strings, arrays and classes. It is not on [npm](https://www.npmjs.com/package/assemblyscript), yet, but you can already try it out today:
 
 ```
 $> git clone https://github.com/AssemblyScript/assemblyscript.git
 $> cd assemblyscript
 $> npm install
+$> npm link
 ```
 
 Author your module using either
@@ -41,8 +38,10 @@ Author your module using either
 and run:
 
 ```
-$> node bin/asc yourModule.ts
+$> asc yourModule.ts
 ```
+
+See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for additional documentation.
 
 Building
 --------
