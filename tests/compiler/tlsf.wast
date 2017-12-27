@@ -330,101 +330,101 @@
 )
 (;
 [program.elements]
-  NaN
-  Infinity
-  isNaN
-  isFinite
-  clz
-  ctz
-  popcnt
-  rotl
-  rotr
-  abs
-  max
-  min
-  ceil
-  floor
-  copysign
-  nearest
-  reinterpret
-  sqrt
-  trunc
-  load
-  store
-  sizeof
-  select
-  unreachable
-  current_memory
-  grow_memory
-  parseInt
-  parseFloat
-  changetype
-  assert
-  i8
-  i16
-  i32
-  i64
-  u8
-  u16
-  u32
-  u64
-  bool
-  f32
-  f64
-  isize
-  usize
-  HEAP_BASE
-  tlsf/fls
-  tlsf/ffs
-  tlsf/ALIGN_SIZE_LOG2
-  tlsf/ALIGN_SIZE
-  tlsf/SL_INDEX_COUNT_LOG2
-  tlsf/FL_INDEX_MAX
-  tlsf/SL_INDEX_COUNT
-  tlsf/FL_INDEX_SHIFT
-  tlsf/FL_INDEX_COUNT
-  tlsf/SMALL_BLOCK_SIZE
-  tlsf/BLOCK$PREV_PHYS_BLOCK_OFFSET
-  tlsf/BLOCK$TAGGED_SIZE_OFFSET
-  tlsf/BLOCK$NEXT_FREE_OFFSET
-  tlsf/BLOCK$PREV_FREE_OFFSET
-  tlsf/BLOCK$SIZE
-  tlsf/BLOCK_HEADER_FREE_BIT
-  tlsf/BLOCK_HEADER_PREV_FREE_BIT
-  tlsf/BLOCK_OVERHEAD
-  tlsf/BLOCK_START_OFFSET
-  tlsf/BLOCK_SIZE_MIN
-  tlsf/BLOCK_SIZE_MAX
-  tlsf/block$get_prev_phys_block
-  tlsf/block$set_prev_phys_block
-  tlsf/block$get_tagged_size
-  tlsf/block$set_tagged_size
-  tlsf/block_size
-  tlsf/block_set_size
-  tlsf/block$get_next_free
-  tlsf/block$set_next_free
-  tlsf/block$get_prev_free
-  tlsf/block$set_prev_free
-  tlsf/block_is_last
-  tlsf/block_is_free
-  tlsf/block_set_free
-  tlsf/block_set_used
-  tlsf/block_is_prev_free
-  tlsf/block_set_prev_free
-  tlsf/block_set_prev_used
-  tlsf/block_from_ptr
-  tlsf/block_to_ptr
-  tlsf/CONTROL$FL_BITMAP_OFFSET
-  tlsf/CONTROL$SL_BITMAP_OFFSET
-  tlsf/CONTROL$BLOCKS_OFFSET
-  tlsf/CONTROL$SIZE
-  tlsf/control$get_fl_bitmap
-  tlsf/control$set_fl_bitmap
-  tlsf/control$get_sl_bitmap
-  tlsf/control$set_sl_bitmap
-  tlsf/control$get_block
-  tlsf/control$set_block
-  tlsf/control$construct
+  GLOBAL: NaN
+  GLOBAL: Infinity
+  FUNCTION_PROTOTYPE: isNaN
+  FUNCTION_PROTOTYPE: isFinite
+  FUNCTION_PROTOTYPE: clz
+  FUNCTION_PROTOTYPE: ctz
+  FUNCTION_PROTOTYPE: popcnt
+  FUNCTION_PROTOTYPE: rotl
+  FUNCTION_PROTOTYPE: rotr
+  FUNCTION_PROTOTYPE: abs
+  FUNCTION_PROTOTYPE: max
+  FUNCTION_PROTOTYPE: min
+  FUNCTION_PROTOTYPE: ceil
+  FUNCTION_PROTOTYPE: floor
+  FUNCTION_PROTOTYPE: copysign
+  FUNCTION_PROTOTYPE: nearest
+  FUNCTION_PROTOTYPE: reinterpret
+  FUNCTION_PROTOTYPE: sqrt
+  FUNCTION_PROTOTYPE: trunc
+  FUNCTION_PROTOTYPE: load
+  FUNCTION_PROTOTYPE: store
+  FUNCTION_PROTOTYPE: sizeof
+  FUNCTION_PROTOTYPE: select
+  FUNCTION_PROTOTYPE: unreachable
+  FUNCTION_PROTOTYPE: current_memory
+  FUNCTION_PROTOTYPE: grow_memory
+  FUNCTION_PROTOTYPE: parseInt
+  FUNCTION_PROTOTYPE: parseFloat
+  FUNCTION_PROTOTYPE: changetype
+  FUNCTION_PROTOTYPE: assert
+  FUNCTION_PROTOTYPE: i8
+  FUNCTION_PROTOTYPE: i16
+  FUNCTION_PROTOTYPE: i32
+  FUNCTION_PROTOTYPE: i64
+  FUNCTION_PROTOTYPE: u8
+  FUNCTION_PROTOTYPE: u16
+  FUNCTION_PROTOTYPE: u32
+  FUNCTION_PROTOTYPE: u64
+  FUNCTION_PROTOTYPE: bool
+  FUNCTION_PROTOTYPE: f32
+  FUNCTION_PROTOTYPE: f64
+  FUNCTION_PROTOTYPE: isize
+  FUNCTION_PROTOTYPE: usize
+  GLOBAL: HEAP_BASE
+  FUNCTION_PROTOTYPE: tlsf/fls
+  FUNCTION_PROTOTYPE: tlsf/ffs
+  GLOBAL: tlsf/ALIGN_SIZE_LOG2
+  GLOBAL: tlsf/ALIGN_SIZE
+  GLOBAL: tlsf/SL_INDEX_COUNT_LOG2
+  GLOBAL: tlsf/FL_INDEX_MAX
+  GLOBAL: tlsf/SL_INDEX_COUNT
+  GLOBAL: tlsf/FL_INDEX_SHIFT
+  GLOBAL: tlsf/FL_INDEX_COUNT
+  GLOBAL: tlsf/SMALL_BLOCK_SIZE
+  GLOBAL: tlsf/BLOCK$PREV_PHYS_BLOCK_OFFSET
+  GLOBAL: tlsf/BLOCK$TAGGED_SIZE_OFFSET
+  GLOBAL: tlsf/BLOCK$NEXT_FREE_OFFSET
+  GLOBAL: tlsf/BLOCK$PREV_FREE_OFFSET
+  GLOBAL: tlsf/BLOCK$SIZE
+  GLOBAL: tlsf/BLOCK_HEADER_FREE_BIT
+  GLOBAL: tlsf/BLOCK_HEADER_PREV_FREE_BIT
+  GLOBAL: tlsf/BLOCK_OVERHEAD
+  GLOBAL: tlsf/BLOCK_START_OFFSET
+  GLOBAL: tlsf/BLOCK_SIZE_MIN
+  GLOBAL: tlsf/BLOCK_SIZE_MAX
+  FUNCTION_PROTOTYPE: tlsf/block$get_prev_phys_block
+  FUNCTION_PROTOTYPE: tlsf/block$set_prev_phys_block
+  FUNCTION_PROTOTYPE: tlsf/block$get_tagged_size
+  FUNCTION_PROTOTYPE: tlsf/block$set_tagged_size
+  FUNCTION_PROTOTYPE: tlsf/block_size
+  FUNCTION_PROTOTYPE: tlsf/block_set_size
+  FUNCTION_PROTOTYPE: tlsf/block$get_next_free
+  FUNCTION_PROTOTYPE: tlsf/block$set_next_free
+  FUNCTION_PROTOTYPE: tlsf/block$get_prev_free
+  FUNCTION_PROTOTYPE: tlsf/block$set_prev_free
+  FUNCTION_PROTOTYPE: tlsf/block_is_last
+  FUNCTION_PROTOTYPE: tlsf/block_is_free
+  FUNCTION_PROTOTYPE: tlsf/block_set_free
+  FUNCTION_PROTOTYPE: tlsf/block_set_used
+  FUNCTION_PROTOTYPE: tlsf/block_is_prev_free
+  FUNCTION_PROTOTYPE: tlsf/block_set_prev_free
+  FUNCTION_PROTOTYPE: tlsf/block_set_prev_used
+  FUNCTION_PROTOTYPE: tlsf/block_from_ptr
+  FUNCTION_PROTOTYPE: tlsf/block_to_ptr
+  GLOBAL: tlsf/CONTROL$FL_BITMAP_OFFSET
+  GLOBAL: tlsf/CONTROL$SL_BITMAP_OFFSET
+  GLOBAL: tlsf/CONTROL$BLOCKS_OFFSET
+  GLOBAL: tlsf/CONTROL$SIZE
+  FUNCTION_PROTOTYPE: tlsf/control$get_fl_bitmap
+  FUNCTION_PROTOTYPE: tlsf/control$set_fl_bitmap
+  FUNCTION_PROTOTYPE: tlsf/control$get_sl_bitmap
+  FUNCTION_PROTOTYPE: tlsf/control$set_sl_bitmap
+  FUNCTION_PROTOTYPE: tlsf/control$get_block
+  FUNCTION_PROTOTYPE: tlsf/control$set_block
+  FUNCTION_PROTOTYPE: tlsf/control$construct
 [program.exports]
-  tlsf/control$construct
+  FUNCTION_PROTOTYPE: tlsf/control$construct
 ;)

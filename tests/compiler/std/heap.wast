@@ -2558,88 +2558,88 @@
 )
 (;
 [program.elements]
-  NaN
-  Infinity
-  isNaN
-  isFinite
-  clz
-  ctz
-  popcnt
-  rotl
-  rotr
-  abs
-  max
-  min
-  ceil
-  floor
-  copysign
-  nearest
-  reinterpret
-  sqrt
-  trunc
-  load
-  store
-  sizeof
-  select
-  unreachable
-  current_memory
-  grow_memory
-  parseInt
-  parseFloat
-  changetype
-  assert
-  i8
-  i16
-  i32
-  i64
-  u8
-  u16
-  u32
-  u64
-  bool
-  f32
-  f64
-  isize
-  usize
-  HEAP_BASE
-  std:array/Array
-  Array
-  std:error/Error
-  Error
-  std:error/RangeError
-  RangeError
-  std:heap/ALIGN_LOG2
-  std:heap/ALIGN_SIZE
-  std:heap/ALIGN_MASK
-  std:heap/HEAP_OFFSET
-  std:heap/Heap
-  Heap
-  std:heap/Heap.used
-  std:heap/Heap.free
-  std:heap/Heap.size
-  std:heap/Heap.allocate
-  std:heap/Heap.dispose
-  std:heap/Heap.copy
-  std:heap/Heap.fill
-  std:heap/Heap.compare
-  std:map/Map
-  Map
-  std:set/Set
-  Set
-  std:string/EMPTY
-  std:string/String
-  String
-  std:string/isWhiteSpaceOrLineTerminator
-  std/heap/size
-  std/heap/ptr1
-  std/heap/ptr2
-  std/heap/i
+  GLOBAL: NaN
+  GLOBAL: Infinity
+  FUNCTION_PROTOTYPE: isNaN
+  FUNCTION_PROTOTYPE: isFinite
+  FUNCTION_PROTOTYPE: clz
+  FUNCTION_PROTOTYPE: ctz
+  FUNCTION_PROTOTYPE: popcnt
+  FUNCTION_PROTOTYPE: rotl
+  FUNCTION_PROTOTYPE: rotr
+  FUNCTION_PROTOTYPE: abs
+  FUNCTION_PROTOTYPE: max
+  FUNCTION_PROTOTYPE: min
+  FUNCTION_PROTOTYPE: ceil
+  FUNCTION_PROTOTYPE: floor
+  FUNCTION_PROTOTYPE: copysign
+  FUNCTION_PROTOTYPE: nearest
+  FUNCTION_PROTOTYPE: reinterpret
+  FUNCTION_PROTOTYPE: sqrt
+  FUNCTION_PROTOTYPE: trunc
+  FUNCTION_PROTOTYPE: load
+  FUNCTION_PROTOTYPE: store
+  FUNCTION_PROTOTYPE: sizeof
+  FUNCTION_PROTOTYPE: select
+  FUNCTION_PROTOTYPE: unreachable
+  FUNCTION_PROTOTYPE: current_memory
+  FUNCTION_PROTOTYPE: grow_memory
+  FUNCTION_PROTOTYPE: parseInt
+  FUNCTION_PROTOTYPE: parseFloat
+  FUNCTION_PROTOTYPE: changetype
+  FUNCTION_PROTOTYPE: assert
+  FUNCTION_PROTOTYPE: i8
+  FUNCTION_PROTOTYPE: i16
+  FUNCTION_PROTOTYPE: i32
+  FUNCTION_PROTOTYPE: i64
+  FUNCTION_PROTOTYPE: u8
+  FUNCTION_PROTOTYPE: u16
+  FUNCTION_PROTOTYPE: u32
+  FUNCTION_PROTOTYPE: u64
+  FUNCTION_PROTOTYPE: bool
+  FUNCTION_PROTOTYPE: f32
+  FUNCTION_PROTOTYPE: f64
+  FUNCTION_PROTOTYPE: isize
+  FUNCTION_PROTOTYPE: usize
+  GLOBAL: HEAP_BASE
+  CLASS_PROTOTYPE: std:array/Array
+  CLASS_PROTOTYPE: Array
+  CLASS_PROTOTYPE: std:error/Error
+  CLASS_PROTOTYPE: Error
+  CLASS_PROTOTYPE: std:error/RangeError
+  CLASS_PROTOTYPE: RangeError
+  GLOBAL: std:heap/ALIGN_LOG2
+  GLOBAL: std:heap/ALIGN_SIZE
+  GLOBAL: std:heap/ALIGN_MASK
+  GLOBAL: std:heap/HEAP_OFFSET
+  CLASS_PROTOTYPE: std:heap/Heap
+  CLASS_PROTOTYPE: Heap
+  PROPERTY: std:heap/Heap.used
+  PROPERTY: std:heap/Heap.free
+  PROPERTY: std:heap/Heap.size
+  FUNCTION_PROTOTYPE: std:heap/Heap.allocate
+  FUNCTION_PROTOTYPE: std:heap/Heap.dispose
+  FUNCTION_PROTOTYPE: std:heap/Heap.copy
+  FUNCTION_PROTOTYPE: std:heap/Heap.fill
+  FUNCTION_PROTOTYPE: std:heap/Heap.compare
+  CLASS_PROTOTYPE: std:map/Map
+  CLASS_PROTOTYPE: Map
+  CLASS_PROTOTYPE: std:set/Set
+  CLASS_PROTOTYPE: Set
+  GLOBAL: std:string/EMPTY
+  CLASS_PROTOTYPE: std:string/String
+  CLASS_PROTOTYPE: String
+  FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
+  GLOBAL: std/heap/size
+  GLOBAL: std/heap/ptr1
+  GLOBAL: std/heap/ptr2
+  GLOBAL: std/heap/i
 [program.exports]
-  std:array/Array
-  std:error/Error
-  std:error/RangeError
-  std:heap/Heap
-  std:map/Map
-  std:set/Set
-  std:string/String
+  CLASS_PROTOTYPE: std:array/Array
+  CLASS_PROTOTYPE: std:error/Error
+  CLASS_PROTOTYPE: std:error/RangeError
+  CLASS_PROTOTYPE: std:heap/Heap
+  CLASS_PROTOTYPE: std:map/Map
+  CLASS_PROTOTYPE: std:set/Set
+  CLASS_PROTOTYPE: std:string/String
 ;)

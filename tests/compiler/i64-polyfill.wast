@@ -1191,144 +1191,144 @@
 )
 (;
 [program.elements]
-  NaN
-  Infinity
-  isNaN
-  isFinite
-  clz
-  ctz
-  popcnt
-  rotl
-  rotr
-  abs
-  max
-  min
-  ceil
-  floor
-  copysign
-  nearest
-  reinterpret
-  sqrt
-  trunc
-  load
-  store
-  sizeof
-  select
-  unreachable
-  current_memory
-  grow_memory
-  parseInt
-  parseFloat
-  changetype
-  assert
-  i8
-  i16
-  i32
-  i64
-  u8
-  u16
-  u32
-  u64
-  bool
-  f32
-  f64
-  isize
-  usize
-  HEAP_BASE
-  ../../examples/i64-polyfill/assembly/i64/lo
-  ../../examples/i64-polyfill/assembly/i64/hi
-  ../../examples/i64-polyfill/assembly/i64/getLo
-  ../../examples/i64-polyfill/assembly/i64/getHi
-  ../../examples/i64-polyfill/assembly/i64/clz_
-  ../../examples/i64-polyfill/assembly/i64/ctz_
-  ../../examples/i64-polyfill/assembly/i64/popcnt_
-  ../../examples/i64-polyfill/assembly/i64/eqz
-  ../../examples/i64-polyfill/assembly/i64/add
-  ../../examples/i64-polyfill/assembly/i64/sub
-  ../../examples/i64-polyfill/assembly/i64/mul
-  ../../examples/i64-polyfill/assembly/i64/div_s
-  ../../examples/i64-polyfill/assembly/i64/div_u
-  ../../examples/i64-polyfill/assembly/i64/rem_s
-  ../../examples/i64-polyfill/assembly/i64/rem_u
-  ../../examples/i64-polyfill/assembly/i64/and
-  ../../examples/i64-polyfill/assembly/i64/or
-  ../../examples/i64-polyfill/assembly/i64/xor
-  ../../examples/i64-polyfill/assembly/i64/shl
-  ../../examples/i64-polyfill/assembly/i64/shr_s
-  ../../examples/i64-polyfill/assembly/i64/shr_u
-  ../../examples/i64-polyfill/assembly/i64/rotl_
-  ../../examples/i64-polyfill/assembly/i64/rotr_
-  ../../examples/i64-polyfill/assembly/i64/eq
-  ../../examples/i64-polyfill/assembly/i64/ne
-  ../../examples/i64-polyfill/assembly/i64/lt_s
-  ../../examples/i64-polyfill/assembly/i64/lt_u
-  ../../examples/i64-polyfill/assembly/i64/le_s
-  ../../examples/i64-polyfill/assembly/i64/le_u
-  ../../examples/i64-polyfill/assembly/i64/gt_s
-  ../../examples/i64-polyfill/assembly/i64/gt_u
-  ../../examples/i64-polyfill/assembly/i64/ge_s
-  ../../examples/i64-polyfill/assembly/i64/ge_u
+  GLOBAL: NaN
+  GLOBAL: Infinity
+  FUNCTION_PROTOTYPE: isNaN
+  FUNCTION_PROTOTYPE: isFinite
+  FUNCTION_PROTOTYPE: clz
+  FUNCTION_PROTOTYPE: ctz
+  FUNCTION_PROTOTYPE: popcnt
+  FUNCTION_PROTOTYPE: rotl
+  FUNCTION_PROTOTYPE: rotr
+  FUNCTION_PROTOTYPE: abs
+  FUNCTION_PROTOTYPE: max
+  FUNCTION_PROTOTYPE: min
+  FUNCTION_PROTOTYPE: ceil
+  FUNCTION_PROTOTYPE: floor
+  FUNCTION_PROTOTYPE: copysign
+  FUNCTION_PROTOTYPE: nearest
+  FUNCTION_PROTOTYPE: reinterpret
+  FUNCTION_PROTOTYPE: sqrt
+  FUNCTION_PROTOTYPE: trunc
+  FUNCTION_PROTOTYPE: load
+  FUNCTION_PROTOTYPE: store
+  FUNCTION_PROTOTYPE: sizeof
+  FUNCTION_PROTOTYPE: select
+  FUNCTION_PROTOTYPE: unreachable
+  FUNCTION_PROTOTYPE: current_memory
+  FUNCTION_PROTOTYPE: grow_memory
+  FUNCTION_PROTOTYPE: parseInt
+  FUNCTION_PROTOTYPE: parseFloat
+  FUNCTION_PROTOTYPE: changetype
+  FUNCTION_PROTOTYPE: assert
+  FUNCTION_PROTOTYPE: i8
+  FUNCTION_PROTOTYPE: i16
+  FUNCTION_PROTOTYPE: i32
+  FUNCTION_PROTOTYPE: i64
+  FUNCTION_PROTOTYPE: u8
+  FUNCTION_PROTOTYPE: u16
+  FUNCTION_PROTOTYPE: u32
+  FUNCTION_PROTOTYPE: u64
+  FUNCTION_PROTOTYPE: bool
+  FUNCTION_PROTOTYPE: f32
+  FUNCTION_PROTOTYPE: f64
+  FUNCTION_PROTOTYPE: isize
+  FUNCTION_PROTOTYPE: usize
+  GLOBAL: HEAP_BASE
+  GLOBAL: ../../examples/i64-polyfill/assembly/i64/lo
+  GLOBAL: ../../examples/i64-polyfill/assembly/i64/hi
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/getLo
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/getHi
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/clz_
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/ctz_
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/popcnt_
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/eqz
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/add
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/sub
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/mul
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/div_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/div_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/rem_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/rem_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/and
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/or
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/xor
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/shl
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/shr_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/shr_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/rotl_
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/rotr_
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/eq
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/ne
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/lt_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/lt_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/le_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/le_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/gt_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/gt_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/ge_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/ge_u
 [program.exports]
-  ../../examples/i64-polyfill/assembly/i64/getLo
-  ../../examples/i64-polyfill/assembly/i64/getHi
-  ../../examples/i64-polyfill/assembly/i64/clz
-  ../../examples/i64-polyfill/assembly/i64/ctz
-  ../../examples/i64-polyfill/assembly/i64/popcnt
-  ../../examples/i64-polyfill/assembly/i64/eqz
-  ../../examples/i64-polyfill/assembly/i64/add
-  ../../examples/i64-polyfill/assembly/i64/sub
-  ../../examples/i64-polyfill/assembly/i64/mul
-  ../../examples/i64-polyfill/assembly/i64/div_s
-  ../../examples/i64-polyfill/assembly/i64/div_u
-  ../../examples/i64-polyfill/assembly/i64/rem_s
-  ../../examples/i64-polyfill/assembly/i64/rem_u
-  ../../examples/i64-polyfill/assembly/i64/and
-  ../../examples/i64-polyfill/assembly/i64/or
-  ../../examples/i64-polyfill/assembly/i64/xor
-  ../../examples/i64-polyfill/assembly/i64/shl
-  ../../examples/i64-polyfill/assembly/i64/shr_s
-  ../../examples/i64-polyfill/assembly/i64/shr_u
-  ../../examples/i64-polyfill/assembly/i64/rotl
-  ../../examples/i64-polyfill/assembly/i64/rotr
-  ../../examples/i64-polyfill/assembly/i64/eq
-  ../../examples/i64-polyfill/assembly/i64/ne
-  ../../examples/i64-polyfill/assembly/i64/lt_s
-  ../../examples/i64-polyfill/assembly/i64/lt_u
-  ../../examples/i64-polyfill/assembly/i64/le_s
-  ../../examples/i64-polyfill/assembly/i64/le_u
-  ../../examples/i64-polyfill/assembly/i64/gt_s
-  ../../examples/i64-polyfill/assembly/i64/gt_u
-  ../../examples/i64-polyfill/assembly/i64/ge_s
-  ../../examples/i64-polyfill/assembly/i64/ge_u
-  i64-polyfill/getHi
-  i64-polyfill/getLo
-  i64-polyfill/clz
-  i64-polyfill/ctz
-  i64-polyfill/popcnt
-  i64-polyfill/eqz
-  i64-polyfill/add
-  i64-polyfill/sub
-  i64-polyfill/mul
-  i64-polyfill/div_s
-  i64-polyfill/div_u
-  i64-polyfill/rem_s
-  i64-polyfill/rem_u
-  i64-polyfill/and
-  i64-polyfill/or
-  i64-polyfill/xor
-  i64-polyfill/shl
-  i64-polyfill/shr_s
-  i64-polyfill/shr_u
-  i64-polyfill/rotl
-  i64-polyfill/rotr
-  i64-polyfill/eq
-  i64-polyfill/ne
-  i64-polyfill/lt_s
-  i64-polyfill/lt_u
-  i64-polyfill/le_s
-  i64-polyfill/le_u
-  i64-polyfill/gt_s
-  i64-polyfill/gt_u
-  i64-polyfill/ge_s
-  i64-polyfill/ge_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/getLo
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/getHi
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/clz
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/ctz
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/popcnt
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/eqz
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/add
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/sub
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/mul
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/div_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/div_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/rem_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/rem_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/and
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/or
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/xor
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/shl
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/shr_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/shr_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/rotl
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/rotr
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/eq
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/ne
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/lt_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/lt_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/le_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/le_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/gt_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/gt_u
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/ge_s
+  FUNCTION_PROTOTYPE: ../../examples/i64-polyfill/assembly/i64/ge_u
+  FUNCTION_PROTOTYPE: i64-polyfill/getHi
+  FUNCTION_PROTOTYPE: i64-polyfill/getLo
+  FUNCTION_PROTOTYPE: i64-polyfill/clz
+  FUNCTION_PROTOTYPE: i64-polyfill/ctz
+  FUNCTION_PROTOTYPE: i64-polyfill/popcnt
+  FUNCTION_PROTOTYPE: i64-polyfill/eqz
+  FUNCTION_PROTOTYPE: i64-polyfill/add
+  FUNCTION_PROTOTYPE: i64-polyfill/sub
+  FUNCTION_PROTOTYPE: i64-polyfill/mul
+  FUNCTION_PROTOTYPE: i64-polyfill/div_s
+  FUNCTION_PROTOTYPE: i64-polyfill/div_u
+  FUNCTION_PROTOTYPE: i64-polyfill/rem_s
+  FUNCTION_PROTOTYPE: i64-polyfill/rem_u
+  FUNCTION_PROTOTYPE: i64-polyfill/and
+  FUNCTION_PROTOTYPE: i64-polyfill/or
+  FUNCTION_PROTOTYPE: i64-polyfill/xor
+  FUNCTION_PROTOTYPE: i64-polyfill/shl
+  FUNCTION_PROTOTYPE: i64-polyfill/shr_s
+  FUNCTION_PROTOTYPE: i64-polyfill/shr_u
+  FUNCTION_PROTOTYPE: i64-polyfill/rotl
+  FUNCTION_PROTOTYPE: i64-polyfill/rotr
+  FUNCTION_PROTOTYPE: i64-polyfill/eq
+  FUNCTION_PROTOTYPE: i64-polyfill/ne
+  FUNCTION_PROTOTYPE: i64-polyfill/lt_s
+  FUNCTION_PROTOTYPE: i64-polyfill/lt_u
+  FUNCTION_PROTOTYPE: i64-polyfill/le_s
+  FUNCTION_PROTOTYPE: i64-polyfill/le_u
+  FUNCTION_PROTOTYPE: i64-polyfill/gt_s
+  FUNCTION_PROTOTYPE: i64-polyfill/gt_u
+  FUNCTION_PROTOTYPE: i64-polyfill/ge_s
+  FUNCTION_PROTOTYPE: i64-polyfill/ge_u
 ;)

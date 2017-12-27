@@ -608,12 +608,8 @@ export class Parser extends DiagnosticEmitter {
       returnType = this.parseType(tn, isSetter);
       if (!returnType)
         return null;
-    } else {
-      if (isSetter) {
-        if (parameters.length)
-          returnType = parameters[0].type;
-      } else
-        this.error(DiagnosticCode.Type_expected, tn.range(tn.pos)); // recoverable
+    } else if (!isSetter) {
+      this.error(DiagnosticCode.Type_expected, tn.range(tn.pos)); // recoverable
     }
     const isDeclare: bool = hasModifier(ModifierKind.DECLARE, modifiers);
     let statements: Statement[] | null = null;
@@ -765,13 +761,8 @@ export class Parser extends DiagnosticEmitter {
           returnType = this.parseType(tn, identifier.kind == NodeKind.CONSTRUCTOR || isSetter);
           if (!returnType)
             return null;
-        } else {
-          if (isSetter) {
-            if (parameters.length)
-              returnType = parameters[0].type;
-          } else if (identifier.kind != NodeKind.CONSTRUCTOR)
-            this.error(DiagnosticCode.Type_expected, tn.range()); // recoverable
-        }
+        } else if (!isSetter && identifier.kind != NodeKind.CONSTRUCTOR)
+          this.error(DiagnosticCode.Type_expected, tn.range()); // recoverable
         let statements: Statement[] | null = null;
         if (tn.skip(Token.OPENBRACE)) {
           if (parentIsDeclare)

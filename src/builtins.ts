@@ -34,7 +34,7 @@ import {
   Local
 } from "./program";
 
-/** Initializes the specified program with built-in functions. */
+/** Initializes the specified program with built-in constants and functions. */
 export function initialize(program: Program): void {
 
   // math
@@ -162,7 +162,7 @@ function addFunction(program: Program, name: string, isGeneric: bool = false): F
 }
 
 /** Compiles a get of a built-in global. */
-export function compileGetGlobal(compiler: Compiler, global: Global): ExpressionRef {
+export function compileGetConstant(compiler: Compiler, global: Global): ExpressionRef {
   switch (global.internalName) {
 
     case "NaN":

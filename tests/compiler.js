@@ -10,6 +10,7 @@ require("../src/glue/js");
 var Compiler = require("../src/compiler").Compiler;
 var Module = require("../src/module").Module;
 var Parser = require("../src/parser").Parser;
+var ElementKind = require("../src/program").ElementKind;
 
 var isCreate = process.argv[2] === "--create";
 var filter = process.argv.length > 2 && !isCreate ? "**/" + process.argv[2] + ".ts" : "**/*.ts";
@@ -45,7 +46,9 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   }
   var program = parser.finish();
   var module = Compiler.compile(program);
-  var actual = module.toText() + "(;\n[program.elements]\n  " + iterate(program.elements.keys()).join("\n  ") + "\n[program.exports]\n  " + iterate(program.exports.keys()).join("\n  ") + "\n;)\n";
+  var actual = module.toText() + "(;\n[program.elements]\n  " + elements(program.elements)
+                               +   "\n[program.exports]\n  "  + elements(program.exports)
+                               + "\n;)\n";
   var actualOptimized = null;
   var actualInlined = null;
 
@@ -54,9 +57,21 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     try {
       module.interpret();
       console.log(chalk.default.green("interpret OK"));
+      try {
+        var wasmModule = new WebAssembly.Module(module.toBinary());
+        var wasmInstance = new WebAssembly.Instance(wasmModule, {
+          env: {
+            external: function() {}
+          }
+        });
+        console.log(chalk.default.green("instantiate OK"));
+      } catch (e) {
+        process.exitCode = 1;
+        console.log(chalk.default.red("instantiate ERROR: ") + e);
+      }
     } catch (e) {
       process.exitCode = 1;
-      console.log(chalk.default.red("interpret ERROR"));
+      console.log(chalk.default.red("interpret ERROR:") + e);
     }
     module.optimize();
     actualOptimized = module.toText();
@@ -107,10 +122,10 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   console.log();
 });
 
-function iterate(it) {
-  var current;
+function elements(map) {
   var arr = [];
-  while ((current = it.next()) && !current.done)
-    arr.push(current.value);
-  return arr;
+  map.forEach((value, key) => {
+    arr.push(ElementKind[value.kind] + ": " + key);
+  });
+  return arr.join("\n  ");
 }

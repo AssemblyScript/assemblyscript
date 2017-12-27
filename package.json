@@ -37,6 +37,9 @@
   "bin": {
     "asc": "bin/asc"
   },
+  "engines": {
+    "node" : ">=8"
+  },
   "scripts": {
     "build": "webpack",
     "clean": "rm dist/assemblyscript.*",

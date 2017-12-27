@@ -2,7 +2,7 @@ namespace Outer {
   export namespace Inner {
     export let aVar: i32;
     export function aFunc(): void {}
-    export enum anEnum { ONE = 1 }
+    export enum anEnum { ONE = 1, TWO = 2 }
   }
 }
 

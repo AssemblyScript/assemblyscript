@@ -12,6 +12,9 @@
   },
   "main": "index.js",
   "types": "index.d.ts",
+  "engines": {
+    "node": ">=8"
+  },
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
     "build:untouched": "asc assembly/i64.ts -t i64.untouched.wast -b i64.untouched.wasm --noMemory --validate",

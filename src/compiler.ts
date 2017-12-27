@@ -1,6 +1,6 @@
 import {
   compileCall as compileBuiltinCall,
-  compileGetGlobal as compileBuiltinGetGlobal
+  compileGetConstant as compileBuiltinGetConstant
 } from "./builtins";
 
 import {
@@ -37,7 +37,8 @@ import {
   Local,
   Namespace,
   Parameter,
-  EnumValue
+  EnumValue,
+  Property
 } from "./program";
 
 import {
@@ -49,7 +50,8 @@ import {
   NodeKind,
   TypeNode,
   Source,
-  // statements
+
+  Statement,
   BlockStatement,
   BreakStatement,
   ClassDeclaration,
@@ -70,7 +72,6 @@ import {
   ModifierKind,
   NamespaceDeclaration,
   ReturnStatement,
-  Statement,
   SwitchCase,
   SwitchStatement,
   ThrowStatement,
@@ -79,12 +80,12 @@ import {
   VariableDeclaration,
   VariableStatement,
   WhileStatement,
-  // expressions
+
+  Expression,
   AssertionExpression,
   BinaryExpression,
   CallExpression,
   ElementAccessExpression,
-  Expression,
   FloatLiteralExpression,
   IdentifierExpression,
   IntegerLiteralExpression,
@@ -97,7 +98,7 @@ import {
   StringLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
-  // utility
+
   hasModifier
 } from "./ast";
 
@@ -340,7 +341,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileGlobal(global: Global): bool {
-    if (global.isCompiled || (global.isBuiltIn && compileBuiltinGetGlobal(this, global)))
+    if (global.isCompiled || (global.isBuiltIn && compileBuiltinGetConstant(this, global)))
       return true;
 
     const declaration: VariableLikeDeclarationStatement | null = global.declaration;
@@ -581,6 +582,21 @@ export class Compiler extends DiagnosticEmitter {
     instance.finalize();
     return true;
   }
+
+  // compilePropertyUsingTypeArguments(prototype: PropertyPrototype, contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Function | null {
+  //   let getter: Function | null = null;
+  //   let setter: Function | null = null;
+  //   if (prototype.getterPrototype) {
+  //     getter = prototype.getterPrototype.resolve([], contextualTypeArguments); // reports
+  //     if (prototype.setterPrototype)
+  //       setter = prototype.setterPrototype.resolve([], contextualTypeArguments); // reports
+  //   }
+
+  // }
+
+  // compileProperty(instance: Property): bool {
+
+  // }
 
   // namespaces
 
@@ -1625,37 +1641,83 @@ export class Compiler extends DiagnosticEmitter {
   compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef {
     let element: Element | null = null;
     switch (expression.kind) {
+
       case NodeKind.IDENTIFIER:
         element = this.program.resolveIdentifier(<IdentifierExpression>expression, this.currentFunction); // reports
         break;
+
       case NodeKind.PROPERTYACCESS:
         element = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression, this.currentFunction); // reports
         break;
+
       default:
         this.error(DiagnosticCode.Operation_not_supported, expression.range);
     }
     if (!element)
       return this.module.createUnreachable();
+
     let type: Type | null = null;
     switch (element.kind) {
+
       case ElementKind.LOCAL:
         type = (<Local>element).type;
         break;
+
       case ElementKind.GLOBAL:
         if (this.compileGlobal(<Global>element))
           type = (<Global>element).type;
         break;
+
+      case ElementKind.PROPERTY:
+        const setterPrototype: FunctionPrototype | null = (<Property>element).setterPrototype;
+        if (setterPrototype) {
+          const setterInstance: Function | null = setterPrototype.resolve(); // reports
+          if (setterInstance) {
+            if (contextualType == Type.void) { // just set if dropped anyway
+              return this.compileCall(setterInstance, [ valueExpression ], expression);
+            } else { // otherwise do a set followed by a get
+              const getterPrototype: FunctionPrototype | null = (<Property>element).getterPrototype;
+              if (getterPrototype) {
+                const getterInstance: Function | null = getterPrototype.resolve(); // reports
+                if (getterInstance) {
+                  return this.module.createBlock(null, [
+                    this.compileCall(setterInstance, [ valueExpression ], expression),
+                    this.compileCall(getterInstance, [], expression)
+                  ], getterInstance.returnType.toNativeType());
+                }
+              } else
+                this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, expression.range, (<Property>element).simpleName, (<Property>element).parent.internalName);
+            }
+          }
+        } else
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, expression.range, (<Property>element).simpleName, (<Property>element).parent.internalName);
+        return this.module.createUnreachable();
+
       default:
         this.error(DiagnosticCode.Operation_not_supported, expression.range);
     }
     if (!type)
       return this.module.createUnreachable();
+
     this.currentType = type;
     return this.compileAssignmentWithValue(expression, this.compileExpression(valueExpression, type, ConversionKind.IMPLICIT), contextualType != Type.void);
   }
 
   compileAssignmentWithValue(expression: Expression, valueWithCorrectType: ExpressionRef, tee: bool = false): ExpressionRef {
-    const element: Element | null = this.program.resolveElement(expression, this.currentFunction);
+    let element: Element | null = null;
+    switch (expression.kind) {
+
+      case NodeKind.IDENTIFIER:
+        element = this.program.resolveIdentifier(<IdentifierExpression>expression, this.currentFunction);
+        break;
+
+      case NodeKind.PROPERTYACCESS:
+        element = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression, this.currentFunction);
+        break;
+
+      default:
+        this.error(DiagnosticCode.Operation_not_supported, expression.range);
+    }
     if (!element)
       return this.module.createUnreachable();
 
@@ -1693,7 +1755,21 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileCallExpression(expression: CallExpression, contextualType: Type): ExpressionRef {
-    const element: Element | null = this.program.resolveElement(expression.expression, this.currentFunction); // reports
+    let element: Element | null = null;
+    switch (expression.expression.kind) {
+      // case NodeKind.SUPER:
+
+      case NodeKind.IDENTIFIER:
+        element = this.program.resolveIdentifier(<IdentifierExpression>expression.expression, this.currentFunction);
+        break;
+
+      case NodeKind.PROPERTYACCESS:
+        element = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression.expression, this.currentFunction);
+        break;
+
+      default:
+        throw new Error("not implemented");
+    }
     if (!element)
       return this.module.createUnreachable();
 
@@ -1837,7 +1913,7 @@ export class Compiler extends DiagnosticEmitter {
     // global
     if (element.kind == ElementKind.GLOBAL) {
       if (element.isBuiltIn)
-        return compileBuiltinGetGlobal(this, <Global>element);
+        return compileBuiltinGetConstant(this, <Global>element);
 
       const global: Global = <Global>element;
       if (!this.compileGlobal(global)) // reports
@@ -1984,16 +2060,17 @@ export class Compiler extends DiagnosticEmitter {
         if (target.members) {
           element = target.members.get(propertyName);
           if (!element) {
-            this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName);
+            this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
             return this.module.createUnreachable();
           }
 
           // handle enum values right away
           if (element.kind == ElementKind.ENUMVALUE) {
             this.currentType = Type.i32;
-            return (<EnumValue>element).hasConstantValue
-              ? this.module.createI32((<EnumValue>element).constantValue)
-              : this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
+            if ((<EnumValue>element).hasConstantValue)
+              return this.module.createI32((<EnumValue>element).constantValue)
+            this.compileEnum((<EnumValue>element).enum);
+            return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
           }
         } else {
           this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
@@ -2013,21 +2090,26 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         this.currentType = <Type>(<Global>element).type;
         if ((<Global>element).hasConstantValue)
-          return this.currentType== Type.f32
-            ? this.module.createF32((<Global>element).constantFloatValue)
-            : this.currentType == Type.f64
-            ? this.module.createF64((<Global>element).constantFloatValue)
-            : this.currentType.isLongInteger
-            ? this.module.createI64((<I64>(<Global>element).constantIntegerValue).lo, (<I64>(<Global>element).constantIntegerValue).hi)
-            : this.module.createI32((<I64>(<Global>element).constantIntegerValue).lo);
+          return this.currentType== Type.f32 ? this.module.createF32((<Global>element).constantFloatValue)
+               : this.currentType == Type.f64 ? this.module.createF64((<Global>element).constantFloatValue)
+               : this.currentType.isLongInteger
+                 ? this.module.createI64((<I64>(<Global>element).constantIntegerValue).lo, (<I64>(<Global>element).constantIntegerValue).hi)
+                 : this.module.createI32((<I64>(<Global>element).constantIntegerValue).lo);
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
 
-      case ElementKind.FUNCTION: // getter
-        if (!(<Function>element).prototype.isGetter) {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, element.internalName);
+      case ElementKind.PROPERTY: // getter
+        const getterPrototype: FunctionPrototype | null = (<Property>element).getterPrototype;
+        if (getterPrototype) {
+          const getterInstance: Function | null = getterPrototype.resolve([], this.currentFunction.contextualTypeArguments);
+          if (getterInstance) {
+            return this.compileCall(getterInstance, [], propertyAccess);
+          } else {
+            return this.module.createUnreachable();
+          }
+        } else {
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
           return this.module.createUnreachable();
         }
-        return this.compileCall(<Function>element, [], propertyAccess);
     }
     this.error(DiagnosticCode.Operation_not_supported, propertyAccess.range);
     throw new Error("not implemented");

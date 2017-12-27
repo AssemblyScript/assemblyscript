@@ -40,3 +40,7 @@ function refF(): f64 {
 }
 let rF = refF();
 rF;
+
+for (let a = 0, b = 10; a < b; ++a) {
+  ;
+}

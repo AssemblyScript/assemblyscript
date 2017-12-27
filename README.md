@@ -46,7 +46,7 @@ See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/w
 Building
 --------
 
-Building an UMD bundle to `dist/assemblyscript.js` (does not bundle [binaryen.js](https://github.com/AssemblyScript/binaryen.js) which remains an external dependency):
+Building an UMD bundle to `dist/assemblyscript.js` ([binaryen.js](https://github.com/AssemblyScript/binaryen.js) remains an external dependency):
 
 ```
 $> npm run build

@@ -1,4 +1,8 @@
 import {
+  Target
+} from "./compiler";
+
+import {
   Class,
   Function
 } from "./program";
@@ -204,6 +208,18 @@ export class Type {
   /** No return type. */
   static readonly void: Type = new Type(TypeKind.VOID, 0);
 }
+
+// export class ClassType extends Type {
+//   constructor(cls: Class) {
+//     super(TypeKind.USIZE, clz.size);
+//   }
+// }
+
+// export class FunctionType extends Type {
+//   constructor(fun: Function) {
+//     super(TypeKind.USIZE, fun.program.target == Target.WASM64 ? 8 : 4);
+//   }
+// }
 
 /** Converts an array of types to an array of native types. */
 export function typesToNativeTypes(types: Type[]): NativeType[] {

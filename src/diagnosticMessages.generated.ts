@@ -66,6 +66,7 @@ export enum DiagnosticCode {
   Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
+  _get_and_set_accessor_must_have_the_same_type = 2380,
   Constructor_implementation_is_missing = 2390,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Duplicate_function_implementation = 2393,
@@ -146,6 +147,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2349: return "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.";
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
+    case 2380: return "'get' and 'set' accessor must have the same type.";
     case 2390: return "Constructor implementation is missing.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2393: return "Duplicate function implementation.";
