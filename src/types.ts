@@ -211,10 +211,11 @@ export class Type {
 
 // export class ClassType extends Type {
 //   constructor(cls: Class) {
-//     super(TypeKind.USIZE, clz.size);
+//     super(TypeKind.USIZE, /* clz.size */ 4); // TODO
 //   }
 // }
 
+// // TODO: what about 'type fun = <T>(a: T) => T;' ?
 // export class FunctionType extends Type {
 //   constructor(fun: Function) {
 //     super(TypeKind.USIZE, fun.program.target == Target.WASM64 ? 8 : 4);

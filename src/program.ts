@@ -317,7 +317,7 @@ export class Program extends DiagnosticEmitter {
         }
       } else
         classPrototype.members = new Map();
-      const staticField = new Global(this, internalName, declaration, null);
+      const staticField = new Global(this, name, internalName, declaration, null);
       classPrototype.members.set(name, staticField);
       this.elements.set(internalName, staticField);
 
@@ -330,7 +330,7 @@ export class Program extends DiagnosticEmitter {
         }
       } else
         classPrototype.instanceMembers = new Map();
-      const instanceField = new FieldPrototype(classPrototype, internalName, declaration);
+      const instanceField = new FieldPrototype(classPrototype, name, internalName, declaration);
       classPrototype.instanceMembers.set(name, instanceField);
     }
   }
@@ -433,7 +433,7 @@ export class Program extends DiagnosticEmitter {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
-    const enm = new Enum(this, internalName, declaration);
+    const enm = new Enum(this, declaration.name.name, internalName, declaration);
     enm.namespace = namespace;
     this.elements.set(internalName, enm);
 
@@ -469,7 +469,7 @@ export class Program extends DiagnosticEmitter {
       }
     } else
       enm.members = new Map();
-    const value = new EnumValue(enm, this, internalName, declaration);
+    const value = new EnumValue(enm, this, name, internalName, declaration);
     enm.members.set(name, value);
   }
 
@@ -699,7 +699,7 @@ export class Program extends DiagnosticEmitter {
 
     let namespace = this.elements.get(internalName);
     if (!namespace) {
-      namespace = new Namespace(this, internalName, declaration);
+      namespace = new Namespace(this, declaration.name.name, internalName, declaration);
       namespace.namespace = parentNamespace;
       this.elements.set(internalName, namespace);
     }
@@ -780,7 +780,7 @@ export class Program extends DiagnosticEmitter {
         continue;
       }
 
-      const global = new Global(this, internalName, declaration, null);
+      const global = new Global(this, declaration.name.name, internalName, declaration, null);
       global.namespace = namespace;
       this.elements.set(internalName, global);
 
@@ -1041,6 +1041,8 @@ export abstract class Element {
   kind: ElementKind;
   /** Containing {@link Program}. */
   program: Program;
+  /** Simple name. */
+  simpleName: string;
   /** Internal name referring to this element. */
   internalName: string;
   /** Element flags. */
@@ -1051,8 +1053,9 @@ export abstract class Element {
   namespace: Element | null = null;
 
   /** Constructs a new element, linking it to its containing {@link Program}. */
-  protected constructor(program: Program, internalName: string) {
+  protected constructor(program: Program, simpleName: string, internalName: string) {
     this.program = program;
+    this.simpleName = simpleName;
     this.internalName = internalName;
   }
 
@@ -1111,8 +1114,8 @@ export class Namespace extends Element {
   declaration: NamespaceDeclaration | null; // more specific
 
   /** Constructs a new namespace. */
-  constructor(program: Program, internalName: string, declaration: NamespaceDeclaration | null = null) {
-    super(program, internalName);
+  constructor(program: Program, simpleName: string, internalName: string, declaration: NamespaceDeclaration | null = null) {
+    super(program, simpleName, internalName);
     if ((this.declaration = declaration) && this.declaration.modifiers) {
       for (let i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
@@ -1135,8 +1138,8 @@ export class Enum extends Element {
   declaration: EnumDeclaration | null;
 
   /** Constructs a new enum. */
-  constructor(program: Program, internalName: string, declaration: EnumDeclaration | null = null) {
-    super(program, internalName);
+  constructor(program: Program, simpleName: string, internalName: string, declaration: EnumDeclaration | null = null) {
+    super(program, simpleName, internalName);
     if ((this.declaration = declaration) && this.declaration.modifiers) {
       for (let i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
@@ -1163,8 +1166,8 @@ export class EnumValue extends Element {
   /** Constant value, if applicable. */
   constantValue: i32 = 0;
 
-  constructor(enm: Enum, program: Program, internalName: string, declaration: EnumValueDeclaration | null = null) {
-    super(program, internalName);
+  constructor(enm: Enum, program: Program, simpleName: string, internalName: string, declaration: EnumValueDeclaration | null = null) {
+    super(program, simpleName, internalName);
     this.enum = enm;
     this.declaration = declaration;
   }
@@ -1184,8 +1187,8 @@ export class Global extends Element {
   /** Constant float value, if applicable. */
   constantFloatValue: f64 = 0;
 
-  constructor(program: Program, internalName: string, declaration: VariableLikeDeclarationStatement | null = null, type: Type | null = null) {
-    super(program, internalName);
+  constructor(program: Program, simpleName: string, internalName: string, declaration: VariableLikeDeclarationStatement | null = null, type: Type | null = null) {
+    super(program, simpleName, internalName);
     if (this.declaration = declaration) {
       if (this.declaration.modifiers) {
         for (let i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
@@ -1250,8 +1253,8 @@ export class Local extends Element {
   /** Local type. */
   type: Type;
 
-  constructor(program: Program, internalName: string, index: i32, type: Type) {
-    super(program, internalName);
+  constructor(program: Program, simpleName: string, index: i32, type: Type) {
+    super(program, simpleName, simpleName);
     this.index = index;
     this.type = type;
   }
@@ -1268,13 +1271,10 @@ export class FunctionPrototype extends Element {
   classPrototype: ClassPrototype | null;
   /** Resolved instances. */
   instances: Map<string,Function> = new Map();
-  /** Simple name. */
-  simpleName: string;
 
   /** Constructs a new function prototype. */
   constructor(program: Program, simpleName: string, internalName: string, declaration: FunctionDeclaration | null, classPrototype: ClassPrototype | null = null) {
-    super(program, internalName);
-    this.simpleName = simpleName;
+    super(program, simpleName, internalName);
     if (this.declaration = declaration) {
       if (this.declaration.modifiers)
         for (let i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
@@ -1420,7 +1420,7 @@ export class Function extends Element {
 
   /** Constructs a new concrete function. */
   constructor(prototype: FunctionPrototype, internalName: string, typeArguments: Type[] | null, parameters: Parameter[], returnType: Type, instanceMethodOf: Class | null) {
-    super(prototype.program, internalName);
+    super(prototype.program, prototype.simpleName, internalName);
     this.prototype = prototype;
     this.typeArguments = typeArguments;
     this.parameters = parameters;
@@ -1559,8 +1559,8 @@ export class FieldPrototype extends Element {
   classPrototype: ClassPrototype;
 
   /** Constructs a new field prototype. */
-  constructor(classPrototype: ClassPrototype, internalName: string, declaration: FieldDeclaration | null = null) {
-    super(classPrototype.program, internalName);
+  constructor(classPrototype: ClassPrototype, simpleName: string, internalName: string, declaration: FieldDeclaration | null = null) {
+    super(classPrototype.program, simpleName, internalName);
     this.classPrototype = classPrototype;
     if ((this.declaration = declaration) && this.declaration.modifiers) {
       for (let i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
@@ -1598,7 +1598,7 @@ export class Field extends Element {
 
   /** Constructs a new field. */
   constructor(prototype: FieldPrototype, internalName: string, type: Type) {
-    super(prototype.program, internalName);
+    super(prototype.program, prototype.simpleName, internalName);
     this.flags = prototype.flags;
     this.type = type;
   }
@@ -1609,8 +1609,6 @@ export class Property extends Element {
 
   kind = ElementKind.PROPERTY;
 
-  /** Simple name. */
-  simpleName: string;
   /** Parent class prototype. */
   parent: ClassPrototype;
   /** Getter prototype. */
@@ -1620,8 +1618,7 @@ export class Property extends Element {
 
   /** Constructs a new property prototype. */
   constructor(program: Program, simpleName: string, internalName: string, parent: ClassPrototype) {
-    super(program, internalName);
-    this.simpleName = simpleName;
+    super(program, simpleName, internalName);
     this.parent = parent;
   }
 }
@@ -1637,12 +1634,9 @@ export class ClassPrototype extends Element {
   instances: Map<string,Class> = new Map();
   /** Instance member prototypes. */
   instanceMembers: Map<string,Element> | null = null;
-  /** Simple name. */
-  simpleName: string;
 
   constructor(program: Program, simpleName: string, internalName: string, declaration: ClassDeclaration | null = null) {
-    super(program, internalName);
-    this.simpleName = simpleName;
+    super(program, simpleName, internalName);
     if (this.declaration = declaration) {
       if (this.declaration.modifiers) {
         for (let i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
@@ -1736,7 +1730,7 @@ export class Class extends Element {
 
   /** Constructs a new class. */
   constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] = [], base: Class | null = null) {
-    super(prototype.program, internalName);
+    super(prototype.program, prototype.simpleName, internalName);
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.typeArguments = typeArguments;

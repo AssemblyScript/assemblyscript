@@ -363,6 +363,18 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     const nativeType = global.type.toNativeType();
+
+    if (global.isDeclared) {
+      if (global.isConstant) {
+        this.module.addGlobalImport(global.internalName, global.namespace ? global.namespace.simpleName : "env", global.simpleName, nativeType);
+        global.isCompiled = true;
+        return true;
+      } else if (declaration) {
+        this.error(DiagnosticCode.Operation_not_supported, declaration.range);
+      }
+      return false;
+    }
+
     let initializeInStart = false;
 
     if (global.hasConstantValue) {
@@ -569,8 +581,8 @@ export class Compiler extends DiagnosticEmitter {
       typeRef = this.module.addFunctionType(signatureNameParts.join(""), nativeResultType, nativeParamTypes);
 
     // create the function
-    if (instance.isDeclared) { // TODO: use parent namespace as externalModuleName, if applicable
-      this.module.addFunctionImport(instance.internalName, "env", declaration.name.name, typeRef);
+    if (instance.isDeclared) {
+      this.module.addFunctionImport(instance.internalName, instance.prototype.namespace ? instance.prototype.namespace.simpleName : "env", declaration.name.name, typeRef);
     } else {
       this.module.addFunction(instance.internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
     }

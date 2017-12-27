@@ -61,7 +61,12 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
         var wasmModule = new WebAssembly.Module(module.toBinary());
         var wasmInstance = new WebAssembly.Instance(wasmModule, {
           env: {
-            external: function() {}
+            externalFunc: function() {},
+            externalConst: 1
+          },
+          external: {
+            externalFunc: function() {},
+            externalConst: 2
           }
         });
         console.log(chalk.default.green("instantiate OK"));

@@ -1,10 +1,23 @@
 (module
  (type $v (func))
- (import "env" "external" (func $declare/external))
+ (import "env" "externalFunc" (func $declare/externalFunc))
+ (import "env" "externalConst" (global $declare/externalConst i32))
+ (import "external" "externalFunc" (func $declare/external.externalFunc))
+ (import "external" "externalConst" (global $declare/external.externalConst i32))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
- (export "external" (func $declare/external))
+ (export "test" (func $declare/test))
  (export "memory" (memory $0))
+ (func $declare/test (; 2 ;) (type $v)
+  (call $declare/externalFunc)
+  (drop
+   (get_global $declare/externalConst)
+  )
+  (call $declare/external.externalFunc)
+  (drop
+   (get_global $declare/external.externalConst)
+  )
+ )
 )
 (;
 [program.elements]
@@ -52,7 +65,12 @@
   FUNCTION_PROTOTYPE: isize
   FUNCTION_PROTOTYPE: usize
   GLOBAL: HEAP_BASE
-  FUNCTION_PROTOTYPE: declare/external
+  FUNCTION_PROTOTYPE: declare/externalFunc
+  GLOBAL: declare/externalConst
+  NAMESPACE: declare/external
+  FUNCTION_PROTOTYPE: declare/external.externalFunc
+  GLOBAL: declare/external.externalConst
+  FUNCTION_PROTOTYPE: declare/test
 [program.exports]
-  FUNCTION_PROTOTYPE: declare/external
+  FUNCTION_PROTOTYPE: declare/test
 ;)

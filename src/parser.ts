@@ -420,9 +420,10 @@ export class Parser extends DiagnosticEmitter {
       if (!initializer)
         return null;
     } else {
-      if (hasModifier(ModifierKind.CONST, parentModifiers))
-        this.error(DiagnosticCode._const_declarations_must_be_initialized, identifier.range);
-      else if (!type) // neither type nor initializer
+      if (hasModifier(ModifierKind.CONST, parentModifiers)) {
+        if (!hasModifier(ModifierKind.DECLARE, parentModifiers))
+          this.error(DiagnosticCode._const_declarations_must_be_initialized, identifier.range);
+      } else if (!type) // neither type nor initializer
         this.error(DiagnosticCode.Type_expected, tn.range(tn.pos)); // recoverable
     }
     return Node.createVariableDeclaration(identifier, type, initializer, parentModifiers, parentDecorators, Range.join(identifier.range, tn.range()));

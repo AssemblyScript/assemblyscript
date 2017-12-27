@@ -88,48 +88,48 @@ export function initialize(program: Program): void {
       i64Func: FunctionPrototype,
       u64Func: FunctionPrototype;
   addFunction(program, "i8").members = new Map([
-    [ "MIN_VALUE", new Global(program, "i8.MIN_VALUE", null, Type.i8).withConstantIntegerValue(-128, -1) ],
-    [ "MAX_VALUE", new Global(program, "i8.MAX_VALUE", null, Type.i8).withConstantIntegerValue(127, 0) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "i8.MIN_VALUE", null, Type.i8).withConstantIntegerValue(-128, -1) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "i8.MAX_VALUE", null, Type.i8).withConstantIntegerValue(127, 0) ]
   ]);
   addFunction(program, "i16").members = new Map([
-    [ "MIN_VALUE", new Global(program, "i16.MIN_VALUE", null, Type.i16).withConstantIntegerValue(-32768, -1) ],
-    [ "MAX_VALUE", new Global(program, "i16.MAX_VALUE", null, Type.i16).withConstantIntegerValue(32767, 0) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "i16.MIN_VALUE", null, Type.i16).withConstantIntegerValue(-32768, -1) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "i16.MAX_VALUE", null, Type.i16).withConstantIntegerValue(32767, 0) ]
   ]);
   (i32Func = addFunction(program, "i32")).members = new Map([
-    [ "MIN_VALUE", new Global(program, "i32.MIN_VALUE", null, Type.i32).withConstantIntegerValue(-2147483648, -1) ],
-    [ "MAX_VALUE", new Global(program, "i32.MAX_VALUE", null, Type.i32).withConstantIntegerValue(2147483647, 0) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "i32.MIN_VALUE", null, Type.i32).withConstantIntegerValue(-2147483648, -1) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "i32.MAX_VALUE", null, Type.i32).withConstantIntegerValue(2147483647, 0) ]
   ]);
   (i64Func = addFunction(program, "i64")).members = new Map([
-    [ "MIN_VALUE", new Global(program, "i64.MIN_VALUE", null, Type.i64).withConstantIntegerValue(0, -2147483648) ],
-    [ "MAX_VALUE", new Global(program, "i64.MAX_VALUE", null, Type.i64).withConstantIntegerValue(-1, 2147483647) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "i64.MIN_VALUE", null, Type.i64).withConstantIntegerValue(0, -2147483648) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "i64.MAX_VALUE", null, Type.i64).withConstantIntegerValue(-1, 2147483647) ]
   ]);
   addFunction(program, "u8").members = new Map([
-    [ "MIN_VALUE", new Global(program, "u8.MIN_VALUE", null, Type.u8).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "u8.MAX_VALUE", null, Type.u8).withConstantIntegerValue(255, 0) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "u8.MIN_VALUE", null, Type.u8).withConstantIntegerValue(0, 0) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "u8.MAX_VALUE", null, Type.u8).withConstantIntegerValue(255, 0) ]
   ]);
   addFunction(program, "u16").members = new Map([
-    [ "MIN_VALUE", new Global(program, "u16.MIN_VALUE", null, Type.u16).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "u16.MAX_VALUE", null, Type.u16).withConstantIntegerValue(65535, 0) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "u16.MIN_VALUE", null, Type.u16).withConstantIntegerValue(0, 0) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "u16.MAX_VALUE", null, Type.u16).withConstantIntegerValue(65535, 0) ]
   ]);
   (u32Func = addFunction(program, "u32")).members = new Map([
-    [ "MIN_VALUE", new Global(program, "u32.MIN_VALUE", null, Type.u32).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "u32.MAX_VALUE", null, Type.u32).withConstantIntegerValue(-1, 0) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "u32.MIN_VALUE", null, Type.u32).withConstantIntegerValue(0, 0) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "u32.MAX_VALUE", null, Type.u32).withConstantIntegerValue(-1, 0) ]
   ]);
   (u64Func = addFunction(program, "u64")).members = new Map([
-    [ "MIN_VALUE", new Global(program, "u64.MIN_VALUE", null, Type.u64).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "u64.MAX_VALUE", null, Type.i64).withConstantIntegerValue(-1, -1) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "u64.MIN_VALUE", null, Type.u64).withConstantIntegerValue(0, 0) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "u64.MAX_VALUE", null, Type.i64).withConstantIntegerValue(-1, -1) ]
   ]);
   addFunction(program, "bool").members = new Map([
-    [ "MIN_VALUE", new Global(program, "bool.MIN_VALUE", null, Type.bool).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "bool.MAX_VALUE", null, Type.bool).withConstantIntegerValue(1, 0) ]
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "bool.MIN_VALUE", null, Type.bool).withConstantIntegerValue(0, 0) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "bool.MAX_VALUE", null, Type.bool).withConstantIntegerValue(1, 0) ]
   ]);
   addFunction(program, "f32").members = new Map([
-    [ "MIN_SAFE_INTEGER", new Global(program, "f32.MIN_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(-16777215) ],
-    [ "MAX_SAFE_INTEGER", new Global(program, "f32.MAX_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(16777215) ]
+    [ "MIN_SAFE_INTEGER", new Global(program, "MIN_SAFE_INTEGER", "f32.MIN_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(-16777215) ],
+    [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f32.MAX_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(16777215) ]
   ]);
   addFunction(program, "f64").members = new Map([
-    [ "MIN_SAFE_INTEGER", new Global(program, "f64.MIN_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(-9007199254740991) ],
-    [ "MAX_SAFE_INTEGER", new Global(program, "f64.MAX_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(9007199254740991) ]
+    [ "MIN_SAFE_INTEGER", new Global(program, "MIN_SAFE_INTEGER", "f64.MIN_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(-9007199254740991) ],
+    [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f64.MAX_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(9007199254740991) ]
   ]);
   if (program.target == Target.WASM64) {
     program.elements.set("isize", i64Func);
@@ -144,7 +144,7 @@ export function initialize(program: Program): void {
 
 /** Adds a built-in constant to the specified program. */
 function addConstant(program: Program, name: string, type: Type): Global {
-  const global: Global = new Global(program, name, null, null);
+  const global: Global = new Global(program, name, name, null);
   global.isBuiltIn = true;
   global.isConstant = true;
   global.type = type;

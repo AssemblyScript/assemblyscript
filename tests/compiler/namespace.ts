@@ -9,3 +9,12 @@ namespace Outer {
 Outer.Inner.aVar;
 Outer.Inner.aFunc();
 Outer.Inner.anEnum.ONE;
+
+enum Joined {
+  THREE = 3
+}
+namespace Joined {
+  export function anotherFunc(): i32 { return Joined.THREE; }
+}
+
+Joined.anotherFunc();
