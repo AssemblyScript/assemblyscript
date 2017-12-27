@@ -1,19 +1,25 @@
 (module
+ (type $i (func (result i32)))
  (type $v (func))
  (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
  (global $namespace/Outer.Inner.anEnum.ONE i32 (i32.const 1))
  (global $namespace/Outer.Inner.anEnum.TWO i32 (i32.const 2))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
- (export "test" (func $namespace/test))
  (export "memory" (memory $0))
- (func $namespace/Outer.Inner.aFunc (; 0 ;) (type $v)
+ (start $start)
+ (func $namespace/Outer.Inner.aFunc (; 0 ;) (type $i) (result i32)
+  (return
+   (get_global $namespace/Outer.Inner.aVar)
+  )
  )
- (func $namespace/test (; 1 ;) (type $v)
+ (func $start (; 1 ;) (type $v)
   (drop
    (get_global $namespace/Outer.Inner.aVar)
   )
-  (call $namespace/Outer.Inner.aFunc)
+  (drop
+   (call $namespace/Outer.Inner.aFunc)
+  )
   (drop
    (get_global $namespace/Outer.Inner.anEnum.ONE)
   )
@@ -70,7 +76,6 @@
   GLOBAL: namespace/Outer.Inner.aVar
   FUNCTION_PROTOTYPE: namespace/Outer.Inner.aFunc
   ENUM: namespace/Outer.Inner.anEnum
-  FUNCTION_PROTOTYPE: namespace/test
 [program.exports]
-  FUNCTION_PROTOTYPE: namespace/test
+  
 ;)

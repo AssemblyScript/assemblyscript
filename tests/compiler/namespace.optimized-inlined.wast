@@ -1,11 +1,17 @@
 (module
+ (type $i (func (result i32)))
  (type $v (func))
+ (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
  (memory $0 1)
- (export "test" (func $namespace/test))
  (export "memory" (memory $0))
- (func $namespace/test (; 0 ;) (type $v)
-  (block $__inlined_func$namespace/Outer.Inner.aFunc
-   (nop)
+ (start $start)
+ (func $start (; 0 ;) (type $v)
+  (drop
+   (block (result i32)
+    (block $__inlined_func$namespace/Outer.Inner.aFunc (result i32)
+     (get_global $namespace/Outer.Inner.aVar)
+    )
+   )
   )
  )
 )

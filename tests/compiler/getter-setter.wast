@@ -7,12 +7,12 @@
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func $getter-setter/Foo.get_bar (; 0 ;) (type $i) (result i32)
+ (func $getter-setter/Foo.get:bar (; 0 ;) (type $i) (result i32)
   (return
    (get_global $getter-setter/Foo._bar)
   )
  )
- (func $getter-setter/Foo.set_bar (; 1 ;) (type $iv) (param $0 i32)
+ (func $getter-setter/Foo.set:bar (; 1 ;) (type $iv) (param $0 i32)
   (set_global $getter-setter/Foo._bar
    (get_local $0)
   )
@@ -21,19 +21,19 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $getter-setter/Foo.get_bar)
+     (call $getter-setter/Foo.get:bar)
      (i32.const 0)
     )
    )
    (unreachable)
   )
-  (call $getter-setter/Foo.set_bar
+  (call $getter-setter/Foo.set:bar
    (i32.const 1)
   )
   (if
    (i32.eqz
     (i32.eq
-     (call $getter-setter/Foo.get_bar)
+     (call $getter-setter/Foo.get:bar)
      (i32.const 1)
     )
    )
@@ -43,10 +43,10 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (call $getter-setter/Foo.set_bar
+      (call $getter-setter/Foo.set:bar
        (i32.const 2)
       )
-      (call $getter-setter/Foo.get_bar)
+      (call $getter-setter/Foo.get:bar)
      )
      (i32.const 2)
     )

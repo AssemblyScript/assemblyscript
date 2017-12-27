@@ -250,6 +250,7 @@ export class Program extends DiagnosticEmitter {
       return;
     }
     const prototype = new ClassPrototype(this, declaration.name.name, internalName, declaration);
+    prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
     // add program-level alias if annotated as @global
@@ -433,6 +434,7 @@ export class Program extends DiagnosticEmitter {
       return;
     }
     const enm = new Enum(this, internalName, declaration);
+    enm.namespace = namespace;
     this.elements.set(internalName, enm);
 
     if (namespace) {
@@ -558,6 +560,7 @@ export class Program extends DiagnosticEmitter {
       return;
     }
     const prototype = new FunctionPrototype(this, declaration.name.name, internalName, declaration, null);
+    prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
     if (hasDecorator("global", declaration.decorators)) {
@@ -648,12 +651,12 @@ export class Program extends DiagnosticEmitter {
 
   private initializeInterface(declaration: InterfaceDeclaration, namespace: Element | null = null): void {
     const internalName = declaration.internalName;
-    const prototype = new InterfacePrototype(this, declaration.name.name, internalName, declaration);
-
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
+    const prototype = new InterfacePrototype(this, declaration.name.name, internalName, declaration);
+    prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
     if (namespace) {
@@ -697,6 +700,7 @@ export class Program extends DiagnosticEmitter {
     let namespace = this.elements.get(internalName);
     if (!namespace) {
       namespace = new Namespace(this, internalName, declaration);
+      namespace.namespace = parentNamespace;
       this.elements.set(internalName, namespace);
     }
 
@@ -757,6 +761,7 @@ export class Program extends DiagnosticEmitter {
 
   private initializeType(declaration: TypeDeclaration, namespace: Element | null = null): void {
     // type aliases are program globals
+    // TODO: what about namespaced types?
     const name = declaration.name.name;
     if (this.types.has(name) || this.typeAliases.has(name)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name);
@@ -776,6 +781,7 @@ export class Program extends DiagnosticEmitter {
       }
 
       const global = new Global(this, internalName, declaration, null);
+      global.namespace = namespace;
       this.elements.set(internalName, global);
 
       if (hasDecorator("global", declaration.decorators)) {
@@ -868,17 +874,32 @@ export class Program extends DiagnosticEmitter {
     return typeArguments;
   }
 
-  /** Resolves an identifier to the element is refers to. */
+  /** Resolves an identifier to the element it refers to. */
   resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function): Element | null {
     const name = identifier.name;
     const local = contextualFunction.locals.get(name);
     if (local)
       return local;
+
     let element: Element | null;
+    let namespace: Element | null;
+
+    // search parent namespaces if applicable
+    if (contextualFunction && (namespace = contextualFunction.prototype.namespace)) {
+      do {
+        if (element = this.elements.get(namespace.internalName + STATIC_DELIMITER + name))
+          return element;
+      } while (namespace = namespace.namespace);
+    }
+
+    // search current file
     if (element = this.elements.get(identifier.range.source.internalPath + PATH_DELIMITER + name))
       return element;
+
+    // search global scope
     if (element = this.elements.get(name))
       return element;
+
     this.error(DiagnosticCode.Cannot_find_name_0, identifier.range, name);
     return null;
   }
@@ -1026,6 +1047,8 @@ export abstract class Element {
   flags: ElementFlags = ElementFlags.NONE;
   /** Namespaced member elements. */
   members: Map<string,Element> | null = null;
+  /** Parent namespace, if applicable. */
+  namespace: Element | null = null;
 
   /** Constructs a new element, linking it to its containing {@link Program}. */
   protected constructor(program: Program, internalName: string) {
@@ -1081,6 +1104,7 @@ export abstract class Element {
 /** A namespace. */
 export class Namespace extends Element {
 
+  // All elements have namespace semantics. This is an explicitly declared one.
   kind = ElementKind.NAMESPACE;
 
   /** Declaration reference. */
