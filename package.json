@@ -13,8 +13,7 @@
   "dependencies": {
     "binaryen": "40.0.0-nightly.20171209",
     "glob": "^7.1.2",
-    "minimist": "^1.2.0",
-    "source-map-support": "^0.5.0"
+    "minimist": "^1.2.0"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
@@ -26,6 +25,7 @@
     "chalk": "^2.3.0",
     "diff": "^3.4.0",
     "long": "^3.2.0",
+    "source-map-support": "^0.5.0",
     "ts-loader": "^3.2.0",
     "ts-node": "^4.0.2",
     "tslint": "^5.8.0",
@@ -42,15 +42,15 @@
   },
   "scripts": {
     "build": "webpack",
-    "clean": "rm dist/assemblyscript.*",
+    "clean": "node scripts/clean",
+    "lint": "tslint --project src",
     "test:config": "npm run test:config:assembly --scripts-prepend-node-path && npm run test:config:portable --scripts-prepend-node-path && npm run test:config:src --scripts-prepend-node-path",
     "test:config:assembly": "tsc --noEmit -p std/assembly --diagnostics --listFiles",
     "test:config:portable": "tsc --noEmit -p std/portable --diagnostics --listFiles",
     "test:config:src": "tsc --noEmit -p src --diagnostics --listFiles",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
-    "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path",
-    "lint": "tslint --project src"
+    "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path"
   },
   "files": [
     "bin/",

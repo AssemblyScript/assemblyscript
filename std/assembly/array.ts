@@ -18,10 +18,10 @@ export class Array<T> {
   }
 
   dispose(): void {
-    store<i64>(changetype<this,usize>(this), 0);
+    store<i64>(changetype<usize>(this), 0);
     Heap.dispose(this.ptr);
     this.ptr = 0;
-    Heap.dispose(changetype<this,usize>(this));
+    Heap.dispose(changetype<usize>(this));
   }
 
   // TODO

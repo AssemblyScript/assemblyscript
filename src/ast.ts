@@ -2185,15 +2185,14 @@ function builderEndsWith(sb: string[], code: CharCode): bool {
 export function escapeString(str: string): string {
   var k = str.length;
   var ret = new Array<string>(k);
-  ret.length = 0;
   for (var i = 0, c: string; i < k; ++i) {
     switch (c = str.charAt(i)) {
-      case "\\": ret.push("\\\\"); break;
-      case "\"": ret.push("\\\""); break;
-      case "\r": ret.push("\\r"); break;
-      case "\n": ret.push("\\n"); break;
-      case "\0": ret.push("\\0"); break;
-      default: ret.push(c);
+      case "\\": ret[i] = "\\\\"; break;
+      case "\"": ret[i] = "\\\""; break;
+      case "\r": ret[i] = "\\r"; break;
+      case "\n": ret[i] = "\\n"; break;
+      case "\0": ret[i] = "\\0"; break;
+      default: ret[i] = c;
     }
   }
   return "\"" + ret.join("") + "\"";

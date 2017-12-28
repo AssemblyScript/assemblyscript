@@ -116,7 +116,7 @@ declare function store<T = u8>(offset: usize, value: T): void;
 declare function unreachable(): any; // sic
 
 /** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
-declare function changetype<T1,T2>(value: T1): T2;
+declare function changetype<T>(value: any): T;
 /** Traps if the specified value evaluates to `false`. */
 declare function assert(isTrue: bool, message?: string): void;
 /** Parses an integer string to a 64-bit float. */

@@ -689,11 +689,11 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
     // other
 
-    case "changetype": // changetype<T1,T2>(value: T1) -> T2
-      if (!validateCall(compiler, typeArguments, 2, operands, 1, reportNode))
+    case "changetype": // changetype<T>(value: *) -> T
+      if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return module.createUnreachable();
-      if ((typeArguments[0] == usizeType && typeArguments[1].classType) || (typeArguments[0].classType && typeArguments[1] == usizeType)) {
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+      arg0 = compiler.compileExpression(operands[0], Type.void, ConversionKind.NONE);
+      if ((compiler.currentType == usizeType && typeArguments[1].classType) || (compiler.currentType.classType && typeArguments[1] == usizeType)) {
         compiler.currentType = typeArguments[1];
         return arg0;
       }

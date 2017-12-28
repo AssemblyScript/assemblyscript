@@ -162,7 +162,7 @@ declare const HEAP_BASE: usize;
 /** Determines the byte size of the specified core or class type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
 /** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
-declare function changetype<T1,T2>(value: T1): T2;
+declare function changetype<T>(value: any): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */

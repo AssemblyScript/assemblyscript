@@ -6,7 +6,7 @@ export enum DiagnosticCode {
   Operation_not_supported = 102,
   Operation_is_unsafe = 103,
   Cannot_export_a_mutable_global = 104,
-  Compiling_constant_global_with_non_constant_initializer_as_mutable = 105,
+  Compiling_constant_with_non_constant_initializer_as_mutable = 105,
   Type_0_cannot_be_changed_to_type_1 = 106,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
@@ -87,7 +87,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 102: return "Operation not supported.";
     case 103: return "Operation is unsafe.";
     case 104: return "Cannot export a mutable global.";
-    case 105: return "Compiling constant global with non-constant initializer as mutable.";
+    case 105: return "Compiling constant with non-constant initializer as mutable.";
     case 106: return "Type '{0}' cannot be changed to type '{1}'.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";

@@ -4,7 +4,7 @@
   "Operation not supported.": 102,
   "Operation is unsafe.": 103,
   "Cannot export a mutable global.": 104,
-  "Compiling constant global with non-constant initializer as mutable.": 105,
+  "Compiling constant with non-constant initializer as mutable.": 105,
   "Type '{0}' cannot be changed to type '{1}'.": 106,
 
   "Unterminated string literal.": 1002,

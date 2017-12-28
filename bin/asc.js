@@ -7,7 +7,7 @@ var assemblyscript;
 var isDev = true;
 try {
   assemblyscript = require("../dist/assemblyscript.js");
-  require("source-map-support").install();
+  try { require("source-map-support").install(); } catch (e) {} // optional
   isDev = false;
 } catch (e) {
   require("ts-node").register({ project: require("path").join(__dirname, "..", "src") });

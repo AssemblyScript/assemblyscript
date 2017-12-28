@@ -264,7 +264,7 @@ export class Module {
   static create(): Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
-    module.lit = changetype<usize,BinaryenLiteral>(Heap.allocate(16));
+    module.lit = changetype<BinaryenLiteral>(Heap.allocate(16));
     module.noEmit = false;
     return module;
   }
@@ -274,18 +274,18 @@ export class Module {
     try {
       var module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
-      module.lit = changetype<usize,BinaryenLiteral>(Heap.allocate(16));
+      module.lit = changetype<BinaryenLiteral>(Heap.allocate(16));
       module.noEmit = false;
       return module;
     } finally {
-      Heap.dispose(changetype<usize,usize>(cArr));
+      Heap.dispose(changetype<usize>(cArr));
     }
   }
 
   static createStub(): Module {
     var module = new Module();
     module.ref = 0;
-    module.lit = changetype<usize,BinaryenLiteral>(0);
+    module.lit = changetype<BinaryenLiteral>(0);
     module.noEmit = true;
     return module;
   }
@@ -806,7 +806,7 @@ export class Module {
   dispose(): void {
     if (!this.ref) return; // sic
     _BinaryenModuleDispose(this.ref);
-    Heap.dispose(changetype<BinaryenLiteral, usize>(this.lit));
+    Heap.dispose(changetype<usize>(this.lit));
   }
 
   createRelooper(): Relooper {

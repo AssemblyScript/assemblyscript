@@ -386,7 +386,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!global.isMutable) {
             initExpr = this.precomputeExpressionRef(initExpr);
             if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
-              this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
+              this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
               initializeInStart = true;
             }
           } else
@@ -461,7 +461,7 @@ export class Compiler extends DiagnosticEmitter {
               initExpr = this.precomputeExpressionRef(initExpr);
               if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
                 if (element.isConstant)
-                  this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
+                  this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
                 initInStart = true;
               }
             }
@@ -476,7 +476,7 @@ export class Compiler extends DiagnosticEmitter {
               this.module.createI32(1)
             );
             if (element.isConstant)
-              this.warning(DiagnosticCode.Compiling_constant_global_with_non_constant_initializer_as_mutable, declaration.range);
+              this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
             initInStart = true;
           }
           if (initInStart) {
@@ -1029,7 +1029,8 @@ export class Compiler extends DiagnosticEmitter {
               }
               this.currentFunction.locals.set(name, local);
               continue;
-            }
+            } else
+              this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
           } else {
             this.error(DiagnosticCode._const_declarations_must_be_initialized, declaration.range);
           }
