@@ -246,7 +246,7 @@ export class MemorySegment {
   offset: U64;
 
   static create(buffer: Uint8Array, offset: U64) {
-    const segment: MemorySegment = new MemorySegment();
+    var segment = new MemorySegment();
     segment.buffer = buffer;
     segment.offset = offset;
     return segment;
@@ -262,7 +262,7 @@ export class Module {
   static MAX_MEMORY_WASM32: Index = 0xffff;
 
   static create(): Module {
-    const module: Module = new Module();
+    var module = new Module();
     module.ref = _BinaryenModuleCreate();
     module.lit = changetype<usize,BinaryenLiteral>(Heap.allocate(16));
     module.noEmit = false;
@@ -270,9 +270,9 @@ export class Module {
   }
 
   static createFrom(buffer: Uint8Array): Module {
-    const cArr: usize = allocU8Array(buffer);
+    var cArr = allocU8Array(buffer);
     try {
-      const module: Module = new Module();
+      var module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
       module.lit = changetype<usize,BinaryenLiteral>(Heap.allocate(16));
       module.noEmit = false;
@@ -283,7 +283,7 @@ export class Module {
   }
 
   static createStub(): Module {
-    const module: Module = new Module();
+    var module = new Module();
     module.ref = 0;
     module.lit = changetype<usize,BinaryenLiteral>(0);
     module.noEmit = true;
@@ -296,8 +296,8 @@ export class Module {
 
   addFunctionType(name: string, result: NativeType, paramTypes: NativeType[]): FunctionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(name);
-    const cArr: usize = allocI32Array(paramTypes);
+    var cStr = allocString(name);
+    var cArr = allocI32Array(paramTypes);
     try {
       return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes.length);
     } finally {
@@ -308,7 +308,7 @@ export class Module {
 
   getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[]): FunctionTypeRef {
     if (this.noEmit) return 0;
-    const cArr: usize = allocI32Array(paramTypes);
+    var cArr = allocI32Array(paramTypes);
     try {
       return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes.length);
     } finally {
@@ -354,8 +354,8 @@ export class Module {
 
   createHost(op: HostOp, name: string | null = null, operands: ExpressionRef[] | null = null): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(name);
-    const cArr: usize = allocI32Array(operands);
+    var cStr = allocString(name);
+    var cArr = allocI32Array(operands);
     try {
       return _BinaryenHost(this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0);
     } finally {
@@ -376,7 +376,7 @@ export class Module {
 
   createGetGlobal(name: string, type: NativeType): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(name);
+    var cStr = allocString(name);
     try {
       return _BinaryenGetGlobal(this.ref, cStr, type);
     } finally {
@@ -433,7 +433,7 @@ export class Module {
 
   createSetGlobal(name: string, value: ExpressionRef): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(name);
+    var cStr = allocString(name);
     try {
       return _BinaryenSetGlobal(this.ref, cStr, value);
     } finally {
@@ -443,8 +443,8 @@ export class Module {
 
   createBlock(label: string | null, children: ExpressionRef[], type: NativeType = NativeType.Auto): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(label);
-    const cArr: usize = allocI32Array(children);
+    var cStr = allocString(label);
+    var cArr = allocI32Array(children);
     try {
       return _BinaryenBlock(this.ref, cStr, cArr, children.length, type);
     } finally {
@@ -455,7 +455,7 @@ export class Module {
 
   createBreak(label: string | null, condition: ExpressionRef = 0, value: ExpressionRef = 0): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(label);
+    var cStr = allocString(label);
     try {
       return _BinaryenBreak(this.ref, cStr, condition, value);
     } finally {
@@ -470,7 +470,7 @@ export class Module {
 
   createLoop(label: string | null, body: ExpressionRef): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(label);
+    var cStr = allocString(label);
     try {
       return _BinaryenLoop(this.ref, cStr, body);
     } finally {
@@ -500,11 +500,11 @@ export class Module {
 
   createSwitch(names: string[], defaultName: string | null, condition: ExpressionRef, value: ExpressionRef = 0): ExpressionRef {
     if (this.noEmit) return 0;
-    const strs: usize[] = new Array(names.length);
-    let i: i32, k: i32 = names.length;
-    for (i = 0; i < k; ++i) strs[i] = allocString(names[i]);
-    const cArr: usize = allocI32Array(strs);
-    const cStr: usize = allocString(defaultName);
+    var strs = new Array<usize>(names.length);
+    for (var i = 0, k: i32 = names.length; i < k; ++i)
+      strs[i] = allocString(names[i]);
+    var cArr = allocI32Array(strs);
+    var cStr = allocString(defaultName);
     try {
       return _BinaryenSwitch(this.ref, cArr, k, cStr, condition, value);
     } finally {
@@ -516,8 +516,8 @@ export class Module {
 
   createCall(target: string, operands: ExpressionRef[], returnType: NativeType): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(target);
-    const cArr: usize = allocI32Array(operands);
+    var cStr = allocString(target);
+    var cArr = allocI32Array(operands);
     try {
       return _BinaryenCall(this.ref, cStr, cArr, operands.length, returnType);
     } finally {
@@ -528,8 +528,8 @@ export class Module {
 
   createCallImport(target: string, operands: ExpressionRef[], returnType: NativeType): ExpressionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(target);
-    const cArr: usize = allocI32Array(operands);
+    var cStr = allocString(target);
+    var cArr = allocI32Array(operands);
     try {
       return _BinaryenCallImport(this.ref, cStr, cArr, operands.length, returnType);
     } finally {
@@ -547,7 +547,7 @@ export class Module {
 
   addGlobal(name: string, type: NativeType, mutable: bool, initializer: ExpressionRef): GlobalRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(name);
+    var cStr = allocString(name);
     try {
       return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
     } finally {
@@ -557,8 +557,8 @@ export class Module {
 
   addFunction(name: string, type: FunctionTypeRef, varTypes: NativeType[], body: ExpressionRef): FunctionRef {
     if (this.noEmit) return 0;
-    const cStr: usize = allocString(name);
-    const cArr: usize = allocI32Array(varTypes);
+    var cStr = allocString(name);
+    var cArr = allocI32Array(varTypes);
     try {
       return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes.length, body);
     } finally {
@@ -568,7 +568,7 @@ export class Module {
   }
 
   removeFunction(name: string): void {
-    const cStr: usize = allocString(name);
+    var cStr = allocString(name);
     try {
       _BinaryenRemoveFunction(this.ref, cStr);
     } finally {
@@ -578,8 +578,8 @@ export class Module {
 
   addFunctionExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
-    const cStr1: usize = allocString(internalName);
-    const cStr2: usize = allocString(externalName);
+    var cStr1 = allocString(internalName);
+    var cStr2 = allocString(externalName);
     try {
       return _BinaryenAddFunctionExport(this.ref, cStr1, cStr2);
     } finally {
@@ -590,8 +590,8 @@ export class Module {
 
   addTableExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
-    const cStr1: usize = allocString(internalName);
-    const cStr2: usize = allocString(externalName);
+    var cStr1 = allocString(internalName);
+    var cStr2 = allocString(externalName);
     try {
       return _BinaryenAddTableExport(this.ref, cStr1, cStr2);
     } finally {
@@ -602,8 +602,8 @@ export class Module {
 
   addMemoryExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
-    const cStr1: usize = allocString(internalName);
-    const cStr2: usize = allocString(externalName);
+    var cStr1 = allocString(internalName);
+    var cStr2 = allocString(externalName);
     try {
       return _BinaryenAddMemoryExport(this.ref, cStr1, cStr2);
     } finally {
@@ -614,8 +614,8 @@ export class Module {
 
   addGlobalExport(internalName: string, externalName: string): ExportRef {
     if (this.noEmit) return 0;
-    const cStr1: usize = allocString(internalName);
-    const cStr2: usize = allocString(externalName);
+    var cStr1 = allocString(internalName);
+    var cStr2 = allocString(externalName);
     try {
       return _BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
     } finally {
@@ -626,7 +626,7 @@ export class Module {
 
   removeExport(externalName: string): void {
     if (this.noEmit) return;
-    const cStr = allocString(externalName);
+    var cStr = allocString(externalName);
     try {
       _BinaryenRemoveExport(this.ref, cStr);
     } finally {
@@ -636,9 +636,9 @@ export class Module {
 
   addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, functionType: FunctionTypeRef): ImportRef {
     if (this.noEmit) return 0;
-    const cStr1: usize = allocString(internalName);
-    const cStr2: usize = allocString(externalModuleName);
-    const cStr3: usize = allocString(externalBaseName);
+    var cStr1 = allocString(internalName);
+    var cStr2 = allocString(externalModuleName);
+    var cStr3 = allocString(externalBaseName);
     try {
       return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
     } finally {
@@ -650,9 +650,9 @@ export class Module {
 
   addTableImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
     if (this.noEmit) return 0;
-    const cStr1: usize = allocString(internalName);
-    const cStr2: usize = allocString(externalModuleName);
-    const cStr3: usize = allocString(externalBaseName);
+    var cStr1 = allocString(internalName);
+    var cStr2 = allocString(externalModuleName);
+    var cStr3 = allocString(externalBaseName);
     try {
       return _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
     } finally {
@@ -664,9 +664,9 @@ export class Module {
 
   addMemoryImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
     if (this.noEmit) return 0;
-    const cStr1: usize = allocString(internalName);
-    const cStr2: usize = allocString(externalModuleName);
-    const cStr3: usize = allocString(externalBaseName);
+    var cStr1 = allocString(internalName);
+    var cStr2 = allocString(externalModuleName);
+    var cStr3 = allocString(externalBaseName);
     try {
       return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3);
     } finally {
@@ -678,9 +678,9 @@ export class Module {
 
   addGlobalImport(internalName: string, externalModuleName: string, externalBaseName: string, globalType: NativeType): ImportRef {
     if (this.noEmit) return 0;
-    const cStr1: usize = allocString(internalName);
-    const cStr2: usize = allocString(externalModuleName);
-    const cStr3: usize = allocString(externalBaseName);
+    var cStr1 = allocString(internalName);
+    var cStr2 = allocString(externalModuleName);
+    var cStr3 = allocString(externalBaseName);
     try {
       return _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
     } finally {
@@ -692,7 +692,7 @@ export class Module {
 
   removeImport(internalName: string): void {
     if (this.noEmit) return;
-    const cStr: usize = allocString(internalName);
+    var cStr = allocString(internalName);
     try {
       _BinaryenRemoveImport(this.ref, cStr);
     } finally {
@@ -702,23 +702,23 @@ export class Module {
 
   setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName: string | null = null): void {
     if (this.noEmit) return;
-    const cStr: usize = allocString(exportName);
-    let i: i32, k: i32 = segments.length;
-    const segs: usize[] = new Array(k);
-    const offs: ExpressionRef[] = new Array(k);
-    const sizs: Index[] = new Array(k);
-    for (i = 0; i < k; ++i) {
-      const buffer: Uint8Array = segments[i].buffer;
-      const offset: U64 = segments[i].offset;
+    var cStr = allocString(exportName);
+    var k = segments.length;
+    var segs = new Array<usize>(k);
+    var offs = new Array<ExpressionRef>(k);
+    var sizs = new Array<Index>(k);
+    for (var i = 0; i < k; ++i) {
+      var buffer = segments[i].buffer;
+      var offset = segments[i].offset;
       segs[i] = allocU8Array(buffer);
       offs[i] = target == Target.WASM64
         ? this.createI64(offset.lo, offset.hi)
         : this.createI32(offset.toI32());
       sizs[i] = buffer.length;
     }
-    const cArr1: usize = allocI32Array(segs);
-    const cArr2: usize = allocI32Array(offs);
-    const cArr3: usize = allocI32Array(sizs);
+    var cArr1 = allocI32Array(segs);
+    var cArr2 = allocI32Array(offs);
+    var cArr3 = allocI32Array(sizs);
     try {
       _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k);
     } finally {
@@ -732,7 +732,7 @@ export class Module {
 
   setFunctionTable(funcs: FunctionRef[]): void {
     if (this.noEmit) return;
-    const cArr: usize = allocI32Array(funcs);
+    var cArr = allocI32Array(funcs);
     try {
       _BinaryenSetFunctionTable(this.ref, cArr, funcs.length);
     } finally {
@@ -756,10 +756,11 @@ export class Module {
   }
 
   runPasses(passes: string[], func: FunctionRef = 0): void {
-    let i: i32, k: i32 = passes.length;
-    const names: usize[] = new Array(k);
-    for (i = 0; i < k; ++i) names[i] = allocString(passes[i]);
-    const cArr: usize = allocI32Array(names);
+    var k = passes.length;
+    var names = new Array<usize>(k);
+    for (var i = 0; i < k; ++i)
+      names[i] = allocString(passes[i]);
+    var cArr = allocI32Array(names);
     try {
       if (func)
         _BinaryenFunctionRunPasses(func, this.ref, cArr, k);
@@ -816,7 +817,7 @@ export class Module {
   cloneExpression(expr: ExpressionRef, noSideEffects: bool = false, maxDepth: i32 = 0x7fffffff): ExpressionRef {
     if (this.noEmit || maxDepth < 0) return 0;
 
-    let nested1: ExpressionRef,
+    var nested1: ExpressionRef,
         nested2: ExpressionRef;
 
     switch (_BinaryenExpressionGetId(expr)) {
@@ -862,7 +863,7 @@ export class Relooper {
   noEmit: bool;
 
   static create(module: Module): Relooper {
-    const relooper: Relooper = new Relooper();
+    var relooper = new Relooper();
     relooper.module = module;
     relooper.ref = _RelooperCreate();
     relooper.noEmit = false;
@@ -870,7 +871,7 @@ export class Relooper {
   }
 
   static createStub(module: Module): Relooper {
-    const relooper: Relooper = new Relooper();
+    var relooper = new Relooper();
     relooper.module = module;
     relooper.ref = 0;
     relooper.noEmit = true;
@@ -896,7 +897,7 @@ export class Relooper {
 
   addBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: i32[], code: ExpressionRef = 0): void {
     if (this.noEmit) return;
-    const cArr: usize = allocI32Array(indexes);
+    var cArr = allocI32Array(indexes);
     try {
       _RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
     } finally {
@@ -919,19 +920,19 @@ export function setAPITracing(on: bool): void {
 
 function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
-  const ptr: usize = Heap.allocate((<Uint8Array>u8s).length);
-  let idx: usize = ptr;
-  for (let i: i32 = 0, k: i32 = (<Uint8Array>u8s).length; i < k; ++i)
+  var ptr = Heap.allocate((<Uint8Array>u8s).length);
+  var idx = ptr;
+  for (var i = 0, k = (<Uint8Array>u8s).length; i < k; ++i)
     store<u8>(idx++, (<Uint8Array>u8s)[i]);
   return ptr;
 }
 
 function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
-  const ptr: usize = Heap.allocate((<i32[]>i32s).length << 2);
-  let idx: usize = ptr;
-  for (let i: i32 = 0, k: i32 = (<i32[]>i32s).length; i < k; ++i) {
-    let val: i32 = (<i32[]>i32s)[i];
+  var ptr = Heap.allocate((<i32[]>i32s).length << 2);
+  var idx = ptr;
+  for (var i = 0, k = (<i32[]>i32s).length; i < k; ++i) {
+    var val = (<i32[]>i32s)[i];
     // store<i32>(idx, val) is not portable
     store<u8>(idx    , ( val         & 0xff) as u8);
     store<u8>(idx + 1, ((val >>   8) & 0xff) as u8);
@@ -943,9 +944,9 @@ function allocI32Array(i32s: i32[] | null): usize {
 }
 
 function stringLengthUTF8(str: string): usize {
-  let len: i32 = 0;
-  for (let i: i32 = 0, k: i32 = str.length; i < k; ++i) {
-    let u: i32 = str.charCodeAt(i);
+  var len = 0;
+  for (var i = 0, k = str.length; i < k; ++i) {
+    var u = str.charCodeAt(i);
     if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k)
       u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
     if (u <= 0x7F)
@@ -966,10 +967,10 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str == null) return 0;
-  const ptr: usize = Heap.allocate(stringLengthUTF8((<string>str)) + 1);
-  let idx: usize = ptr;
-  for (let i: i32 = 0, k: i32 = (<string>str).length; i < k; ++i) {
-    let u: i32 = (<string>str).charCodeAt(i);
+  var ptr = Heap.allocate(stringLengthUTF8((<string>str)) + 1);
+  var idx = ptr;
+  for (var i = 0, k = (<string>str).length; i < k; ++i) {
+    var u = (<string>str).charCodeAt(i);
     if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k)
       u = 0x10000 + ((u & 0x3FF) << 10) | ((<string>str).charCodeAt(++i) & 0x3FF);
     if (u <= 0x7F)
@@ -1007,10 +1008,10 @@ function allocString(str: string | null): usize {
 
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
-  const arr: i32[] = [];
+  var arr = new Array<i32>();
   // the following is based on Emscripten's UTF8ArrayToString
-  let cp: u32;
-  let u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
+  var cp: u32;
+  var u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
   while (cp = load<u8>(ptr++)) {
     if (!(cp & 0x80)) {
       arr.push(cp);

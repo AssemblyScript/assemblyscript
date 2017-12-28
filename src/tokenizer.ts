@@ -376,7 +376,7 @@ export class Tokenizer extends DiagnosticEmitter {
     this.end = source.text.length;
     this.diagnostics = diagnostics ? diagnostics : new Array();
 
-    const text: string = source.text;
+    var text = source.text;
 
     // skip bom
     if (this.pos < this.end && text.charCodeAt(this.pos) == CharCode.BYTEORDERMARK)
@@ -397,13 +397,13 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   private unsafeNext(preferIdentifier: bool = false): Token {
-    const text: string = this.source.text;
+    var text = this.source.text;
     while (true) {
       if (this.pos >= this.end)
         return Token.ENDOFFILE;
 
       this.tokenPos = this.pos;
-      let c: i32 = text.charCodeAt(this.pos);
+      var c = text.charCodeAt(this.pos);
       switch (c) {
 
         case CharCode.CARRIAGERETURN:
@@ -534,7 +534,7 @@ export class Tokenizer extends DiagnosticEmitter {
               continue;
             }
             if (text.charCodeAt(this.pos) == CharCode.ASTERISK) { // multi-line comment
-              let closed: bool = false;
+              var closed = false;
               while (++this.pos < this.end) {
                 c = text.charCodeAt(this.pos);
                 if (c == CharCode.ASTERISK && this.pos + 1 < this.end && text.charCodeAt(this.pos + 1) == CharCode.SLASH) {
@@ -687,18 +687,18 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos++;
           return Token.AT;
 
-        default: {
+        default:
           if (isIdentifierStart(c)) {
             if (isKeywordCharacter(c)) {
-              const posBefore: i32 = this.pos;
+              var posBefore = this.pos;
               while (++this.pos < this.end && isIdentifierPart(c = text.charCodeAt(this.pos))) {
                 if (!isKeywordCharacter(c)) {
                   this.pos = posBefore;
                   return Token.IDENTIFIER;
                 }
               }
-              const keywordText: string = text.substring(posBefore, this.pos);
-              const keywordToken: Token = Token.fromKeyword(keywordText);
+              var keywordText = text.substring(posBefore, this.pos);
+              var keywordToken = Token.fromKeyword(keywordText);
               if (keywordToken != Token.INVALID && !(preferIdentifier && Token.isAlsoIdentifier(keywordToken)))
                 return keywordToken;
               this.pos = posBefore;
@@ -711,17 +711,16 @@ export class Tokenizer extends DiagnosticEmitter {
           this.error(DiagnosticCode.Invalid_character, this.range(this.pos, this.pos + 1));
           this.pos++;
           return Token.INVALID;
-        }
       }
     }
   }
 
   peek(checkOnNewLine: bool = false): Token {
-    const text: string = this.source.text;
+    var text = this.source.text;
     if (this.nextToken < 0) {
-      const posBefore: i32 = this.pos;
-      const tokenBefore: Token = this.token;
-      const tokenPosBefore: i32 = this.tokenPos;
+      var posBefore = this.pos;
+      var tokenBefore = this.token;
+      var tokenPosBefore = this.tokenPos;
       this.nextToken = this.unsafeNext();
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
@@ -740,9 +739,9 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   skip(token: Token): bool {
-    const posBefore: i32 = this.pos;
-    const tokenBefore: Token = this.token;
-    const tokenPosBefore: i32 = this.tokenPos;
+    var posBefore = this.pos;
+    var tokenBefore = this.token;
+    var tokenPosBefore = this.tokenPos;
     if ((this.token = this.unsafeNext(token == Token.IDENTIFIER)) == token) {
       this.nextToken = -1;
       return true;
@@ -755,7 +754,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   // skipUntil(token1: Token, token2: Token = -1): bool {
-  //   let next: Token;
+  //   var next: Token;
   //   do {
   //     if ((next = this.peek()) == Token.ENDOFFILE)
   //       return false;
@@ -788,24 +787,24 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readIdentifier(): string {
-    const text: string = this.source.text;
-    const start: i32 = this.pos;
+    var text = this.source.text;
+    var start = this.pos;
     while (++this.pos < this.end && isIdentifierPart(text.charCodeAt(this.pos)));
     return text.substring(start, this.pos);
   }
 
   readString(): string {
-    const text: string = this.source.text;
-    const quote: i32 = text.charCodeAt(this.pos++);
-    let start: i32 = this.pos;
-    let result: string = "";
+    var text = this.source.text;
+    var quote = text.charCodeAt(this.pos++);
+    var start = this.pos;
+    var result = "";
     while (true) {
       if (this.pos >= this.end) {
         result += text.substring(start, this.pos);
         this.error(DiagnosticCode.Unterminated_string_literal, this.range(start - 1, this.end));
         break;
       }
-      const c: i32 = text.charCodeAt(this.pos);
+      var c = text.charCodeAt(this.pos);
       if (c == quote) {
         result += text.substring(start, this.pos++);
         break;
@@ -832,8 +831,8 @@ export class Tokenizer extends DiagnosticEmitter {
       return "";
     }
 
-    const text: string = this.source.text;
-    const c: i32 = text.charCodeAt(this.pos++);
+    var text = this.source.text;
+    var c = text.charCodeAt(this.pos++);
     switch (c) {
 
       case CharCode._0:
@@ -891,10 +890,10 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readRegexp(): string {
-    let result: string = "";
-    let start: i32 = this.pos;
-    let escaped: bool = false;
-    const text: string = this.source.text;
+    var text = this.source.text;
+    var start = this.pos;
+    var result = "";
+    var escaped = false;
     while (true) {
       if (this.pos >= this.end) {
         result += text.substring(start, this.pos);
@@ -906,7 +905,7 @@ export class Tokenizer extends DiagnosticEmitter {
         escaped = true;
         continue;
       }
-      const c: i32 = text.charCodeAt(this.pos);
+      var c = text.charCodeAt(this.pos);
       if (c == CharCode.SLASH) {
         result += text.substring(start, this.pos);
         this.pos++;
@@ -923,7 +922,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   testInteger(): bool {
-    const text: string = this.source.text;
+    var text = this.source.text;
     if (text.charCodeAt(this.pos) == CharCode._0 && this.pos + 1 < this.end) {
       switch (text.charCodeAt(this.pos + 2)) {
         case CharCode.X:
@@ -935,9 +934,9 @@ export class Tokenizer extends DiagnosticEmitter {
           return true;
       }
     }
-    let pos: i32 = this.pos;
+    var pos = this.pos;
     while (pos < this.end) {
-      const c: i32 = text.charCodeAt(pos);
+      var c = text.charCodeAt(pos);
       if (c == CharCode.DOT || c == CharCode.E || c == CharCode.e)
         return false;
       if (c < CharCode._0 || c > CharCode._9)
@@ -948,7 +947,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readInteger(): I64 {
-    const text: string = this.source.text;
+    var text = this.source.text;
     if (text.charCodeAt(this.pos) == CharCode._0 && this.pos + 2 < this.end) {
       switch (text.charCodeAt(this.pos + 1)) {
         case CharCode.X:
@@ -965,9 +964,9 @@ export class Tokenizer extends DiagnosticEmitter {
           return this.readOctalInteger();
       }
       if (isOctalDigit(text.charCodeAt(this.pos + 1))) {
-        const start: i32 = this.pos;
+        var start = this.pos;
         this.pos++;
-        const value: I64 = this.readOctalInteger();
+        var value = this.readOctalInteger();
         this.error(DiagnosticCode.Octal_literals_are_not_allowed_in_strict_mode, this.range(start, this.pos));
         return value;
       }
@@ -976,11 +975,11 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readHexInteger(): I64 {
-    const text: string = this.source.text;
-    const start: i32 = this.pos;
-    let value: I64 = new I64(0, 0);
+    var text = this.source.text;
+    var start = this.pos;
+    var value = new I64(0, 0);
     while (this.pos < this.end) {
-      const c: i32 = text.charCodeAt(this.pos);
+      var c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 16 + c - CharCode._0;
         value.mul32(16);
@@ -1003,11 +1002,11 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readDecimalInteger(): I64 {
-    const text: string = this.source.text;
-    const start: i32 = this.pos;
-    let value: I64 = new I64(0, 0);
+    var text = this.source.text;
+    var start = this.pos;
+    var value = new I64(0, 0);
     while (this.pos < this.end) {
-      const c: i32 = text.charCodeAt(this.pos);
+      var c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 10 + c - CharCode._0;
         value.mul32(10);
@@ -1022,11 +1021,11 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readOctalInteger(): I64 {
-    const text: string = this.source.text;
-    const start: i32 = this.pos;
-    let value: I64 = new I64(0, 0);
+    var text = this.source.text;
+    var start = this.pos;
+    var value = new I64(0, 0);
     while (this.pos < this.end) {
-      const c: i32 = text.charCodeAt(this.pos);
+      var c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._7) {
         // value = value * 8 + c - CharCode._0;
         value.mul32(8);
@@ -1041,11 +1040,11 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readBinaryInteger(): I64 {
-    const text: string = this.source.text;
-    const start: i32 = this.pos;
-    let value: I64 = new I64();
+    var text = this.source.text;
+    var start = this.pos;
+    var value = new I64();
     while (this.pos < this.end) {
-      const c: i32 = text.charCodeAt(this.pos);
+      var c = text.charCodeAt(this.pos);
       if (c == CharCode._0) {
         // value = value * 2;
         value.mul32(2);
@@ -1064,8 +1063,8 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readFloat(): f64 {
-    let start: i32 = this.pos;
-    const text: string = this.source.text;
+    var start = this.pos;
+    var text = this.source.text;
     while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos)))
       this.pos++;
     if (this.pos < this.end && text.charCodeAt(this.pos) == CharCode.DOT) {
@@ -1074,7 +1073,7 @@ export class Tokenizer extends DiagnosticEmitter {
         this.pos++;
     }
     if (this.pos < this.end) {
-      const c: i32 = text.charCodeAt(this.pos);
+      var c = text.charCodeAt(this.pos);
       if (c == CharCode.E || c == CharCode.e) {
         if (++this.pos < this.end && text.charCodeAt(this.pos) == CharCode.MINUS)
           this.pos++;
@@ -1086,11 +1085,11 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readUnicodeEscape(): string {
-    let remain: i32 = 4;
-    let value: i32 = 0;
-    const text: string = this.source.text;
+    var remain = 4;
+    var value = 0;
+    var text = this.source.text;
     while (this.pos < this.end) {
-      const c: i32 = text.charCodeAt(this.pos++);
+      var c = text.charCodeAt(this.pos++);
       if (c >= CharCode._0 && c <= CharCode._9)
         value = value * 16 + c - CharCode._0;
       else if (c >= CharCode.A && c <= CharCode.F)
@@ -1112,17 +1111,17 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   private readExtendedUnicodeEscape(): string {
-    const start: i32 = this.pos;
-    const value: I64 = this.readHexInteger();
-    let invalid: bool = false;
+    var start = this.pos;
+    var value = this.readHexInteger();
+    var invalid = false;
 
     if (value.gt32(0x10FFFF)) {
       this.error(DiagnosticCode.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive, this.range(start, this.pos));
       invalid = true;
     }
 
-    const value32: i32 = value.toI32();
-    const text: string = this.source.text;
+    var value32 = value.toI32();
+    var text = this.source.text;
     if (this.pos >= this.end) {
       this.error(DiagnosticCode.Unexpected_end_of_text, this.range(start, this.end));
       invalid = true;

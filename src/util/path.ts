@@ -6,8 +6,8 @@ import {
 export function normalize(path: string, trimExtension: bool = false, separator: CharCode = CharCode.SLASH): string {
   // expects a relative path
 
-  let pos: i32 = 0;
-  let len: i32 = path.length;
+  var pos = 0;
+  var len = path.length;
 
   // trim leading './'
   while (pos + 1 < len && path.charCodeAt(pos) == CharCode.DOT && path.charCodeAt(pos + 1) == separator)
@@ -23,7 +23,7 @@ export function normalize(path: string, trimExtension: bool = false, separator: 
     pos = 0;
   }
 
-  let atEnd: bool;
+  var atEnd: bool;
   while (pos + 1 < len) {
     atEnd = false;
 
@@ -51,7 +51,7 @@ export function normalize(path: string, trimExtension: bool = false, separator: 
       ) {
 
         // find preceeding '/'
-        let ipos: i32 = pos;
+        var ipos = pos;
         while (--ipos >= 0) {
           if (path.charCodeAt(ipos) == separator) {
             if (pos - ipos != 3 || path.charCodeAt(ipos + 1) != CharCode.DOT || path.charCodeAt(ipos + 2) != CharCode.DOT) { // exclude '..' itself
@@ -87,7 +87,7 @@ export function resolve(normalizedPath: string, normalizedOrigin: string, separa
 
 /** Obtains the directory portion of a normalized path. */
 export function dirname(normalizedPath: string, separator: CharCode = CharCode.SLASH): string {
-  let pos: i32 = normalizedPath.length;
+  var pos = normalizedPath.length;
   while (--pos > 0)
     if (normalizedPath.charCodeAt(pos) == separator)
       return normalizedPath.substring(0, pos);

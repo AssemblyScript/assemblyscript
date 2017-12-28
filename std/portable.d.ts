@@ -157,6 +157,7 @@ declare class String {
   private constructor();
   indexOf(subject: string): i32;
   lastIndexOf(subject: string): i32;
+  charAt(index: i32): string;
   charCodeAt(index: i32): i32;
   substring(from: i32, to?: i32): string;
   startsWith(subject: string): bool;
@@ -205,15 +206,17 @@ declare class Map<K,V> {
   has(key: K): bool;
   get(key: K): V | null;
   clear(): void;
-  [Symbol.iterator](): Iterator<[K, V]>;
+  entries(): Iterable<[K, V]>;
+  keys(): Iterable<K>;
+  values(): Iterable<V>;
+  [Symbol.iterator](): Iterator<[K,V]>;
+}
+
+interface Iterable<T> {
+  [Symbol.iterator](): Iterator<T>;
 }
 
 interface Iterator<T> {}
-
-declare namespace JSON {
-  /** @deprecated */
-  function stringify(subject: any): string;
-}
 
 declare namespace console {
   /** @deprecated */

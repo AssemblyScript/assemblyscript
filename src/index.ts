@@ -67,7 +67,7 @@ export function nextFile(parser: Parser): string | null {
 
 /** Obtains the next diagnostic message. Returns `null` once there are no more messages. */
 export function nextDiagnostic(parser: Parser): DiagnosticMessage | null {
-  const program: Program = parser.program;
+  var program = parser.program;
   if (program.diagnosticsOffset < program.diagnostics.length)
     return program.diagnostics[program.diagnosticsOffset++];
   return null;
@@ -120,14 +120,14 @@ export function setNoMemory(options: Options, noMemory: bool): void {
 
 /** Compiles the sources computed by the parser to a module. */
 export function compile(parser: Parser, options: Options | null = null): Module {
-  const program: Program = parser.finish();
-  const compiler: Compiler = new Compiler(program, options);
+  var program = parser.finish();
+  var compiler = new Compiler(program, options);
   return compiler.compile();
 }
 
 /** Decompiles a module to its (low level) source. */
 export function decompile(module: Module): string {
-  const decompiler: Decompiler = new Decompiler();
+  var decompiler = new Decompiler();
   decompiler.decompile(module);
   return decompiler.finish();
 }

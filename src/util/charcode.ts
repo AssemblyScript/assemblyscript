@@ -208,9 +208,9 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
   if (code < map[0])
     return false;
 
-  let lo: i32 = 0;
-  let hi: i32 = map.length;
-  let mid: i32;
+  var lo = 0;
+  var hi = map.length;
+  var mid: i32;
 
   while (lo + 1 < hi) {
     mid = lo + (hi - lo) / 2;

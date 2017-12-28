@@ -108,7 +108,7 @@ export abstract class Node {
   // types
 
   static createType(identifier: IdentifierExpression, typeArguments: TypeNode[], isNullable: bool, range: Range): TypeNode {
-    const type: TypeNode = new TypeNode();
+    var type = new TypeNode();
     type.range = range;
     type.identifier = identifier;
     type.typeArguments = typeArguments;
@@ -119,22 +119,23 @@ export abstract class Node {
   // expressions
 
   static createIdentifier(name: string, range: Range): IdentifierExpression {
-    const expr: IdentifierExpression = new IdentifierExpression();
+    var expr = new IdentifierExpression();
     expr.range = range;
     expr.name = name;
     return expr;
   }
 
   static createArrayLiteral(elementExpressions: (Expression | null)[], range: Range): ArrayLiteralExpression {
-    const expr: ArrayLiteralExpression = new ArrayLiteralExpression();
+    var expr = new ArrayLiteralExpression();
     expr.range = range;
-    for (let i: i32 = 0, k: i32 = (expr.elementExpressions = elementExpressions).length; i < k; ++i)
-      if (elementExpressions[i]) (<Expression>elementExpressions[i]).parent = expr;
+    for (var i = 0, k = (expr.elementExpressions = elementExpressions).length; i < k; ++i)
+      if (elementExpressions[i])
+        (<Expression>elementExpressions[i]).parent = expr;
     return expr;
   }
 
   static createAssertion(assertionKind: AssertionKind, expression: Expression, toType: TypeNode, range: Range): AssertionExpression {
-    const expr: AssertionExpression = new AssertionExpression();
+    var expr = new AssertionExpression();
     expr.range = range;
     expr.assertionKind = assertionKind;
     (expr.expression = expression).parent = expr;
@@ -143,7 +144,7 @@ export abstract class Node {
   }
 
   static createBinary(operator: Token, left: Expression, right: Expression, range: Range): BinaryExpression {
-    const expr: BinaryExpression = new BinaryExpression();
+    var expr = new BinaryExpression();
     expr.range = range;
     expr.operator = operator;
     (expr.left = left).parent = expr;
@@ -152,23 +153,24 @@ export abstract class Node {
   }
 
   static createCall(expression: Expression, typeArguments: TypeNode[], args: Expression[], range: Range): CallExpression {
-    const expr: CallExpression = new CallExpression();
+    var expr = new CallExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
-    let i: i32, k: i32;
-    for (i = 0, k = (expr.typeArguments = typeArguments).length; i < k; ++i) typeArguments[i].parent = expr;
-    for (i = 0, k = (expr.arguments = args).length; i < k; ++i) args[i].parent = expr;
+    for (var i = 0, k = (expr.typeArguments = typeArguments).length; i < k; ++i)
+      typeArguments[i].parent = expr;
+    for (i = 0, k = (expr.arguments = args).length; i < k; ++i)
+      args[i].parent = expr;
     return expr;
   }
 
   static createConstructor(range: Range): ConstructorExpression {
-    const expr: ConstructorExpression = new ConstructorExpression();
+    var expr = new ConstructorExpression();
     expr.range = range;
     return expr;
   }
 
   static createElementAccess(expression: Expression, element: Expression, range: Range): ElementAccessExpression {
-    const expr: ElementAccessExpression = new ElementAccessExpression();
+    var expr = new ElementAccessExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
     (expr.elementExpression = element).parent = expr;
@@ -176,50 +178,51 @@ export abstract class Node {
   }
 
   static createFalse(range: Range): FalseExpression {
-    const expr: FalseExpression = new FalseExpression();
+    var expr = new FalseExpression();
     expr.range = range;
     return expr;
   }
 
   static createFloatLiteral(value: f64, range: Range): FloatLiteralExpression {
-    const expr: FloatLiteralExpression = new FloatLiteralExpression();
+    var expr = new FloatLiteralExpression();
     expr.range = range;
     expr.value = value;
     return expr;
   }
 
   static createIntegerLiteral(value: I64, range: Range): IntegerLiteralExpression {
-    const expr: IntegerLiteralExpression = new IntegerLiteralExpression();
+    var expr = new IntegerLiteralExpression();
     expr.range = range;
     expr.value = value;
     return expr;
   }
 
   static createNew(expression: Expression, typeArguments: TypeNode[], args: Expression[], range: Range): NewExpression {
-    const expr: NewExpression = new NewExpression();
+    var expr = new NewExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
-    let i: i32, k: i32;
-    for (i = 0, k = (expr.typeArguments = typeArguments).length; i < k; ++i) typeArguments[i].parent = expr;
-    for (i = 0, k = (expr.arguments = args).length; i < k; ++i) args[i].parent = expr;
+    for (var i = 0, k = (expr.typeArguments = typeArguments).length; i < k; ++i)
+      typeArguments[i].parent = expr;
+    for (i = 0, k = (expr.arguments = args).length; i < k; ++i)
+      args[i].parent = expr;
     return expr;
   }
 
   static createNull(range: Range): NullExpression {
-    const expr: NullExpression = new NullExpression();
+    var expr = new NullExpression();
     expr.range = range;
     return expr;
   }
 
   static createParenthesized(expression: Expression, range: Range): ParenthesizedExpression {
-    const expr: ParenthesizedExpression = new ParenthesizedExpression();
+    var expr = new ParenthesizedExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
     return expr;
   }
 
   static createPropertyAccess(expression: Expression, property: IdentifierExpression, range: Range): PropertyAccessExpression {
-    const expr: PropertyAccessExpression = new PropertyAccessExpression();
+    var expr = new PropertyAccessExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
     (expr.property = property).parent = expr;
@@ -227,14 +230,14 @@ export abstract class Node {
   }
 
   static createRegexpLiteral(value: string, range: Range): RegexpLiteralExpression {
-    const expr: RegexpLiteralExpression = new RegexpLiteralExpression();
+    var expr = new RegexpLiteralExpression();
     expr.range = range;
     expr.value = value;
     return expr;
   }
 
   static createTernary(condition: Expression, ifThen: Expression, ifElse: Expression, range: Range): TernaryExpression {
-    const expr: TernaryExpression = new TernaryExpression();
+    var expr = new TernaryExpression();
     expr.range = range;
     (expr.condition = condition).parent = expr;
     (expr.ifThen = ifThen).parent = expr;
@@ -243,32 +246,32 @@ export abstract class Node {
   }
 
   static createStringLiteral(value: string, range: Range): StringLiteralExpression {
-    const expr: StringLiteralExpression = new StringLiteralExpression();
+    var expr = new StringLiteralExpression();
     expr.range = range;
     expr.value = value;
     return expr;
   }
 
   static createSuper(range: Range): SuperExpression {
-    const expr: SuperExpression = new SuperExpression();
+    var expr = new SuperExpression();
     expr.range = range;
     return expr;
   }
 
   static createThis(range: Range): ThisExpression {
-    const expr: ThisExpression = new ThisExpression();
+    var expr = new ThisExpression();
     expr.range = range;
     return expr;
   }
 
   static createTrue(range: Range): TrueExpression {
-    const expr: TrueExpression = new TrueExpression();
+    var expr = new TrueExpression();
     expr.range = range;
     return expr;
   }
 
   static createUnaryPostfix(operator: Token, expression: Expression, range: Range): UnaryPostfixExpression {
-    const expr: UnaryPostfixExpression = new UnaryPostfixExpression();
+    var expr = new UnaryPostfixExpression();
     expr.range = range;
     expr.operator = operator;
     (expr.operand = expression).parent = expr;
@@ -276,7 +279,7 @@ export abstract class Node {
   }
 
   static createUnaryPrefix(operator: Token, expression: Expression, range: Range): UnaryPrefixExpression {
-    const expr: UnaryPrefixExpression = new UnaryPrefixExpression();
+    var expr = new UnaryPrefixExpression();
     expr.range = range;
     expr.operator = operator;
     (expr.operand = expression).parent = expr;
@@ -286,50 +289,61 @@ export abstract class Node {
   // statements
 
   static createBlock(statements: Statement[], range: Range): BlockStatement {
-    const stmt: BlockStatement = new BlockStatement();
+    var stmt = new BlockStatement();
     stmt.range = range;
-    for (let i: i32 = 0, k: i32 = (stmt.statements = statements).length; i < k; ++i) statements[i].parent = stmt;
+    for (var i: i32 = 0, k: i32 = (stmt.statements = statements).length; i < k; ++i)
+      statements[i].parent = stmt;
     return stmt;
   }
 
   static createBreak(label: IdentifierExpression | null, range: Range): BreakStatement {
-    const stmt: BreakStatement = new BreakStatement();
+    var stmt = new BreakStatement();
     stmt.range = range;
-    if (stmt.label = label) (<IdentifierExpression>label).parent = stmt;
+    if (stmt.label = label)
+      (<IdentifierExpression>label).parent = stmt;
     return stmt;
   }
 
   static createClass(identifier: IdentifierExpression, typeParameters: TypeParameter[], extendsType: TypeNode | null, implementsTypes: TypeNode[], members: DeclarationStatement[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): ClassDeclaration {
-    const stmt: ClassDeclaration = new ClassDeclaration();
+    var stmt = new ClassDeclaration();
     stmt.range = range;
-    let i: i32, k: i32;
     (stmt.name = identifier).parent = stmt;
-    for (i = 0, k = (stmt.typeParameters = typeParameters).length; i < k; ++i) typeParameters[i].parent = stmt;
-    if (stmt.extendsType = extendsType) (<TypeNode>extendsType).parent = stmt;
-    for (i = 0, k = (stmt.implementsTypes = implementsTypes).length; i < k; ++i) implementsTypes[i].parent = stmt;
-    for (i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
-    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    for (var i = 0, k = (stmt.typeParameters = typeParameters).length; i < k; ++i)
+      typeParameters[i].parent = stmt;
+    if (stmt.extendsType = extendsType)
+      (<TypeNode>extendsType).parent = stmt;
+    for (i = 0, k = (stmt.implementsTypes = implementsTypes).length; i < k; ++i)
+      implementsTypes[i].parent = stmt;
+    for (i = 0, k = (stmt.members = members).length; i < k; ++i)
+      members[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators)
+      for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i)
+        (<Decorator[]>decorators)[i].parent = stmt;
     return stmt;
   }
 
   static createContinue(label: IdentifierExpression | null, range: Range): ContinueStatement {
-    const stmt: ContinueStatement = new ContinueStatement();
+    var stmt = new ContinueStatement();
     stmt.range = range;
-    if (stmt.label = label) (<IdentifierExpression>label).parent = stmt;
+    if (stmt.label = label)
+      (<IdentifierExpression>label).parent = stmt;
     return stmt;
   }
 
   static createDecorator(expression: Expression, args: Expression[], range: Range): Decorator {
-    const stmt: Decorator = new Decorator();
+    var stmt = new Decorator();
     stmt.range = range;
     (stmt.name = expression).parent = stmt;
-    for (let i: i32 = 0, k: i32 = (stmt.arguments = args).length; i < k; ++i) args[i].parent = stmt;
+    for (var i: i32 = 0, k: i32 = (stmt.arguments = args).length; i < k; ++i)
+      args[i].parent = stmt;
     return stmt;
   }
 
   static createDo(statement: Statement, condition: Expression, range: Range): DoStatement {
-    const stmt: DoStatement = new DoStatement();
+    var stmt = new DoStatement();
     stmt.range = range;
     (stmt.statement = statement).parent = stmt;
     (stmt.condition = condition).parent = stmt;
@@ -337,44 +351,50 @@ export abstract class Node {
   }
 
   static createEmpty(range: Range): EmptyStatement {
-    const stmt: EmptyStatement = new EmptyStatement();
+    var stmt = new EmptyStatement();
     stmt.range = range;
     return stmt;
   }
 
   static createEnum(identifier: IdentifierExpression, members: EnumValueDeclaration[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): EnumDeclaration {
-    const stmt: EnumDeclaration = new EnumDeclaration();
+    var stmt = new EnumDeclaration();
     stmt.range = range;
-    let i: i32, k: i32;
     (stmt.name = identifier).parent = stmt;
-    for (i = 0, k = (stmt.values = members).length; i < k; ++i) members[i].parent = stmt;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
-    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    for (var i = 0, k = (stmt.values = members).length; i < k; ++i)
+      members[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators)
+      for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i)
+        (<Decorator[]>decorators)[i].parent = stmt;
     return stmt;
   }
 
   static createEnumValue(identifier: IdentifierExpression, value: Expression | null, range: Range): EnumValueDeclaration {
-    const stmt: EnumValueDeclaration = new EnumValueDeclaration();
+    var stmt = new EnumValueDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
-    if (stmt.value = value) (<Expression>value).parent = stmt;
+    if (stmt.value = value)
+      (<Expression>value).parent = stmt;
     return stmt;
   }
 
   static createExport(members: ExportMember[], path: StringLiteralExpression | null, modifiers: Modifier[] | null, range: Range): ExportStatement {
-    const stmt: ExportStatement = new ExportStatement();
+    var stmt = new ExportStatement();
     stmt.range = range;
-    let i: i32, k: i32;
-    for (i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
+    for (var i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
     stmt.path = path;
     stmt.normalizedPath = path ? resolvePath(normalizePath(path.value), range.source.normalizedPath) : null;
     stmt.internalPath = stmt.normalizedPath ? mangleInternalPath(stmt.normalizedPath) : null;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
     return stmt;
   }
 
   static createExportImport(identifier: IdentifierExpression, asIdentifier: IdentifierExpression, range: Range): ExportImportStatement {
-    const stmt: ExportImportStatement = new ExportImportStatement();
+    var stmt = new ExportImportStatement();
     stmt.range = range;
     (stmt.identifier = identifier).parent = stmt;
     (stmt.externalIdentifier = asIdentifier).parent = stmt;
@@ -382,7 +402,7 @@ export abstract class Node {
   }
 
   static createExportMember(identifier: IdentifierExpression, externalIdentifier: IdentifierExpression | null, range: Range): ExportMember {
-    const elem: ExportMember = new ExportMember();
+    var elem = new ExportMember();
     elem.range = range;
     (elem.identifier = identifier).parent = elem;
     (elem.externalIdentifier = externalIdentifier ? <IdentifierExpression>externalIdentifier : identifier).parent = elem;
@@ -391,25 +411,27 @@ export abstract class Node {
 
   /** Creates an expression statement. */
   static createExpression(expression: Expression): ExpressionStatement {
-    const stmt: ExpressionStatement = new ExpressionStatement();
+    var stmt = new ExpressionStatement();
     stmt.range = expression.range;
     (stmt.expression = expression).parent = stmt;
     return stmt;
   }
 
-  static createIf(condition: Expression, statement: Statement, elseStatement: Statement | null, range: Range): IfStatement {
-    const stmt: IfStatement = new IfStatement();
+  static createIf(condition: Expression, ifTrue: Statement, ifFalse: Statement | null, range: Range): IfStatement {
+    var stmt = new IfStatement();
     stmt.range = range;
     (stmt.condition = condition).parent = stmt;
-    (stmt.ifTrue = statement).parent = stmt;
-    if (stmt.ifFalse = elseStatement) (<Statement>elseStatement).parent = stmt;
+    (stmt.ifTrue = ifTrue).parent = stmt;
+    if (stmt.ifFalse = ifFalse)
+      (<Statement>ifFalse).parent = stmt;
     return stmt;
   }
 
   static createImport(declarations: ImportDeclaration[], path: StringLiteralExpression, range: Range): ImportStatement {
-    const stmt: ImportStatement = new ImportStatement();
+    var stmt = new ImportStatement();
     stmt.range = range;
-    for (let i: i32 = 0, k: i32 = (stmt.declarations = declarations).length; i < k; ++i) declarations[i].parent = stmt;
+    for (var i: i32 = 0, k: i32 = (stmt.declarations = declarations).length; i < k; ++i)
+      declarations[i].parent = stmt;
     stmt.namespaceName = null;
     stmt.path = path;
     stmt.normalizedPath = resolvePath(normalizePath(path.value), range.source.normalizedPath);
@@ -418,7 +440,7 @@ export abstract class Node {
   }
 
   static createImportAll(identifier: IdentifierExpression, path: StringLiteralExpression, range: Range): ImportStatement {
-    const stmt: ImportStatement = new ImportStatement();
+    var stmt = new ImportStatement();
     stmt.range = range;
     stmt.declarations = null;
     stmt.namespaceName = identifier;
@@ -429,7 +451,7 @@ export abstract class Node {
   }
 
   static createImportDeclaration(externalIdentifier: IdentifierExpression, identifier: IdentifierExpression | null, range: Range): ImportDeclaration {
-    const elem: ImportDeclaration = new ImportDeclaration();
+    var elem = new ImportDeclaration();
     elem.range = range;
     (elem.name = identifier ? <IdentifierExpression>identifier : externalIdentifier).parent = elem;
     (elem.externalIdentifier = externalIdentifier).parent = elem;
@@ -437,177 +459,229 @@ export abstract class Node {
   }
 
   static createInterface(identifier: IdentifierExpression, extendsType: TypeNode | null, members: DeclarationStatement[], modifiers: Modifier[] | null, range: Range): InterfaceDeclaration {
-    const stmt: InterfaceDeclaration = new InterfaceDeclaration();
+    var stmt = new InterfaceDeclaration();
     stmt.range = range;
-    let i: i32, k: i32;
     (stmt.name = identifier).parent = stmt;
-    if (stmt.extendsType = extendsType) (<TypeNode>extendsType).parent = stmt;
-    for (i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.extendsType = extendsType)
+      (<TypeNode>extendsType).parent = stmt;
+    for (var i = 0, k = (stmt.members = members).length; i < k; ++i)
+      members[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
     return stmt;
   }
 
   static createField(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): FieldDeclaration {
-    const stmt: FieldDeclaration = new FieldDeclaration();
+    var stmt = new FieldDeclaration();
     stmt.range = range;
-    let i: i32, k: i32;
     (stmt.name = identifier).parent = stmt;
-    if (stmt.type = type) (<TypeNode>type).parent = stmt;
-    if (stmt.initializer = initializer) (<Expression>initializer).parent = stmt;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
-    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    if (stmt.type = type)
+      (<TypeNode>type).parent = stmt;
+    if (stmt.initializer = initializer)
+      (<Expression>initializer).parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (var i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators)
+      for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i)
+        (<Decorator[]>decorators)[i].parent = stmt;
     return stmt;
   }
 
   static createFor(initializer: Statement | null, condition: Expression | null, incrementor: Expression | null, statement: Statement, range: Range): ForStatement {
-    const stmt: ForStatement = new ForStatement();
+    var stmt = new ForStatement();
     stmt.range = range;
-    if (stmt.initializer = initializer) (<Statement>initializer).parent = stmt;
-    if (stmt.condition = condition) (<Expression>condition).parent = stmt;
-    if (stmt.incrementor = incrementor) (<Expression>incrementor).parent = stmt;
+    if (stmt.initializer = initializer)
+      (<Statement>initializer).parent = stmt;
+    if (stmt.condition = condition)
+      (<Expression>condition).parent = stmt;
+    if (stmt.incrementor = incrementor)
+      (<Expression>incrementor).parent = stmt;
     (stmt.statement = statement).parent = stmt;
     return stmt;
   }
 
   static createTypeParameter(identifier: IdentifierExpression, extendsType: TypeNode | null, range: Range): TypeParameter {
-    const elem: TypeParameter = new TypeParameter();
+    var elem = new TypeParameter();
     elem.range = range;
     (elem.identifier = identifier).parent = elem;
-    if (elem.extendsType = extendsType) (<TypeNode>extendsType).parent = elem;
+    if (elem.extendsType = extendsType)
+      (<TypeNode>extendsType).parent = elem;
     return elem;
   }
 
   static createParameter(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, isRest: bool, range: Range): Parameter {
-    const elem: Parameter = new Parameter();
+    var elem = new Parameter();
     elem.range = range;
     (elem.name = identifier).parent = elem;
-    if (elem.type = type) (<TypeNode>type).parent = elem;
-    if (elem.initializer = initializer) (<Expression>initializer).parent = elem;
+    if (elem.type = type)
+      (<TypeNode>type).parent = elem;
+    if (elem.initializer = initializer)
+      (<Expression>initializer).parent = elem;
     elem.isRest = isRest;
     return elem;
   }
 
   static createFunction(identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): FunctionDeclaration {
-    const stmt: FunctionDeclaration = new FunctionDeclaration();
+    var stmt = new FunctionDeclaration();
     stmt.range = range;
-    let i: i32, k: i32;
     (stmt.name = identifier).parent = stmt;
-    for (i = 0, k = (stmt.typeParameters = typeParameters).length; i < k; ++i) typeParameters[i].parent = stmt;
-    for (i = 0, k = (stmt.parameters = parameters).length; i < k; ++i) parameters[i].parent = stmt;
-    if (stmt.returnType = returnType) (<TypeNode>returnType).parent = stmt;
-    if (stmt.statements = statements) for (i = 0, k = (<Statement[]>statements).length; i < k; ++i) (<Statement[]>statements)[i].parent = stmt;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
-    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    for (var i = 0, k = (stmt.typeParameters = typeParameters).length; i < k; ++i)
+      typeParameters[i].parent = stmt;
+    for (i = 0, k = (stmt.parameters = parameters).length; i < k; ++i)
+      parameters[i].parent = stmt;
+    if (stmt.returnType = returnType)
+      (<TypeNode>returnType).parent = stmt;
+    if (stmt.statements = statements)
+      for (i = 0, k = (<Statement[]>statements).length; i < k; ++i)
+        (<Statement[]>statements)[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators)
+      for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i)
+        (<Decorator[]>decorators)[i].parent = stmt;
     return stmt;
   }
 
   static createMethod(identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): MethodDeclaration {
-    const stmt: MethodDeclaration = new MethodDeclaration();
+    var stmt = new MethodDeclaration();
     stmt.range = range;
-    let i: i32, k: i32;
     (stmt.name = identifier).parent = stmt;
-    for (i = 0, k = (stmt.typeParameters = typeParameters).length; i < k; ++i) typeParameters[i].parent = stmt;
-    for (i = 0, k = (stmt.parameters = parameters).length; i < k; ++i) parameters[i].parent = stmt;
-    if (stmt.returnType = returnType) (<TypeNode>returnType).parent = stmt;
-    if (stmt.statements = statements) for (i = 0, k = (<Statement[]>statements).length; i < k; ++i) (<Statement[]>statements)[i].parent = stmt;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
-    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    for (var i = 0, k = (stmt.typeParameters = typeParameters).length; i < k; ++i)
+      typeParameters[i].parent = stmt;
+    for (i = 0, k = (stmt.parameters = parameters).length; i < k; ++i)
+      parameters[i].parent = stmt;
+    if (stmt.returnType = returnType)
+      (<TypeNode>returnType).parent = stmt;
+    if (stmt.statements = statements)
+      for (i = 0, k = (<Statement[]>statements).length; i < k; ++i)
+        (<Statement[]>statements)[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators)
+      for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i)
+        (<Decorator[]>decorators)[i].parent = stmt;
     return stmt;
   }
 
   static createModifier(kind: ModifierKind, range: Range): Modifier {
-    const elem: Modifier = new Modifier();
+    var elem = new Modifier();
     elem.range = range;
     elem.modifierKind = kind;
     return elem;
   }
 
   static createNamespace(identifier: IdentifierExpression, members: Statement[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): NamespaceDeclaration {
-    const stmt: NamespaceDeclaration = new NamespaceDeclaration();
+    var stmt = new NamespaceDeclaration();
     stmt.range = range;
-    let i: i32, k: i32;
     (stmt.name = identifier).parent = stmt;
-    for (i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
-    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    for (var i = 0, k = (stmt.members = members).length; i < k; ++i)
+      members[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators)
+      for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i)
+        (<Decorator[]>decorators)[i].parent = stmt;
     return stmt;
   }
 
   static createReturn(expression: Expression | null, range: Range): ReturnStatement {
-    const stmt: ReturnStatement = new ReturnStatement();
+    var stmt = new ReturnStatement();
     stmt.range = range;
-    if (stmt.value = expression) (<Expression>expression).parent = stmt;
+    if (stmt.value = expression)
+      (<Expression>expression).parent = stmt;
     return stmt;
   }
 
   static createSwitch(expression: Expression, cases: SwitchCase[], range: Range): SwitchStatement {
-    const stmt: SwitchStatement = new SwitchStatement();
+    var stmt = new SwitchStatement();
     stmt.range = range;
     (stmt.condition = expression).parent = stmt;
-    for (let i: i32 = 0, k: i32 = (stmt.cases = cases).length; i < k; ++i) cases[i].parent = stmt;
+    for (var i: i32 = 0, k: i32 = (stmt.cases = cases).length; i < k; ++i)
+      cases[i].parent = stmt;
     return stmt;
   }
 
   static createSwitchCase(label: Expression | null, statements: Statement[], range: Range): SwitchCase {
-    const elem: SwitchCase = new SwitchCase();
+    var elem = new SwitchCase();
     elem.range = range;
-    if (elem.label = label) (<Expression>label).parent = elem;
-    for (let i: i32 = 0, k: i32 = (elem.statements = statements).length; i < k; ++i) statements[i].parent = elem;
+    if (elem.label = label)
+      (<Expression>label).parent = elem;
+    for (var i: i32 = 0, k: i32 = (elem.statements = statements).length; i < k; ++i)
+      statements[i].parent = elem;
     return elem;
   }
 
   static createThrow(expression: Expression, range: Range): ThrowStatement {
-    const stmt: ThrowStatement = new ThrowStatement();
+    var stmt = new ThrowStatement();
     stmt.range = range;
     (stmt.value = expression).parent = stmt;
     return stmt;
   }
 
   static createTry(statements: Statement[], catchVariable: IdentifierExpression | null, catchStatements: Statement[] | null, finallyStatements: Statement[] | null, range: Range): TryStatement {
-    const stmt: TryStatement = new TryStatement();
+    var stmt = new TryStatement();
     stmt.range = range;
-    let i: i32, k: i32;
-    for (i = 0, k = (stmt.statements = statements).length; i < k; ++i) statements[i].parent = stmt;
-    if (stmt.catchVariable = catchVariable) (<IdentifierExpression>catchVariable).parent = stmt;
-    if (stmt.catchStatements = catchStatements) for (i = 0, k = (<Statement[]>catchStatements).length; i < k; ++i) (<Statement[]>catchStatements)[i].parent = stmt;
-    if (stmt.finallyStatements = finallyStatements) for (i = 0, k = (<Statement[]>finallyStatements).length; i < k; ++i) (<Statement[]>finallyStatements)[i].parent = stmt;
+    for (var i = 0, k = (stmt.statements = statements).length; i < k; ++i)
+      statements[i].parent = stmt;
+    if (stmt.catchVariable = catchVariable)
+      (<IdentifierExpression>catchVariable).parent = stmt;
+    if (stmt.catchStatements = catchStatements)
+      for (i = 0, k = (<Statement[]>catchStatements).length; i < k; ++i)
+        (<Statement[]>catchStatements)[i].parent = stmt;
+    if (stmt.finallyStatements = finallyStatements)
+      for (i = 0, k = (<Statement[]>finallyStatements).length; i < k; ++i)
+        (<Statement[]>finallyStatements)[i].parent = stmt;
     return stmt;
   }
 
   static createTypeDeclaration(identifier: IdentifierExpression, alias: TypeNode, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): TypeDeclaration {
-    const stmt: TypeDeclaration = new TypeDeclaration();
+    var stmt = new TypeDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
     (stmt.alias = alias).parent = stmt;
-    let i: i32, k: i32;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
-    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (var i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators)
+      for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i)
+        (<Decorator[]>decorators)[i].parent = stmt;
     return stmt;
   }
 
   static createVariable(declarations: VariableDeclaration[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): VariableStatement {
-    const stmt: VariableStatement = new VariableStatement();
+    var stmt = new VariableStatement();
     stmt.range = range;
-    let i: i32, k: i32;
-    for (i = 0, k = (stmt.declarations = declarations).length; i < k; ++i) declarations[i].parent = stmt;
-    if (stmt.modifiers = modifiers) for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i) (<Modifier[]>modifiers)[i].parent = stmt;
-    if (stmt.decorators = decorators) for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i) (<Decorator[]>decorators)[i].parent = stmt;
+    for (var i = 0, k = (stmt.declarations = declarations).length; i < k; ++i)
+      declarations[i].parent = stmt;
+    if (stmt.modifiers = modifiers)
+      for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
+        (<Modifier[]>modifiers)[i].parent = stmt;
+    if (stmt.decorators = decorators)
+      for (i = 0, k = (<Decorator[]>decorators).length; i < k; ++i)
+        (<Decorator[]>decorators)[i].parent = stmt;
     return stmt;
   }
 
   static createVariableDeclaration(name: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): VariableDeclaration {
-    const elem: VariableDeclaration = new VariableDeclaration();
+    var elem = new VariableDeclaration();
     elem.range = range;
     (elem.name = name).parent = elem;
-    if (elem.type = type) (<TypeNode>type).parent = elem;
-    if (elem.initializer = initializer) (<Expression>initializer).parent = elem;
+    if (elem.type = type)
+      (<TypeNode>type).parent = elem;
+    if (elem.initializer = initializer)
+      (<Expression>initializer).parent = elem;
     elem.modifiers = modifiers;
     elem.decorators = decorators;
     return elem;
   }
 
   static createWhile(condition: Expression, statement: Statement, range: Range): WhileStatement {
-    const stmt: WhileStatement = new WhileStatement();
+    var stmt = new WhileStatement();
     stmt.range = range;
     (stmt.condition = condition).parent = stmt;
     (stmt.statement = statement).parent = stmt;
@@ -633,7 +707,7 @@ export class TypeNode extends Node {
     this.identifier.serialize(sb);
     if (this.typeArguments.length) {
       sb.push("<");
-      for (let i: i32 = 0, k: i32 = this.typeArguments.length; i < k; ++i) {
+      for (var i = 0, k = this.typeArguments.length; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.typeArguments[i].serialize(sb);
@@ -712,7 +786,7 @@ export class ArrayLiteralExpression extends LiteralExpression {
 
   serialize(sb: string[]): void {
     sb.push("[");
-    for (let i: i32 = 0, k: i32 = this.elementExpressions.length; i < k; ++i) {
+    for (var i = 0, k = this.elementExpressions.length; i < k; ++i) {
       if (i > 0)
         sb.push(", ");
       if (this.elementExpressions[i])
@@ -789,10 +863,10 @@ export class CallExpression extends Expression {
 
   serialize(sb: string[]): void {
     this.expression.serialize(sb);
-    let i: i32, k: i32 = this.typeArguments.length;
+    var k = this.typeArguments.length;
     if (k) {
       sb.push("<");
-      for (i = 0; i < k; ++i) {
+      for (var i = 0; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.typeArguments[i].serialize(sb);
@@ -954,7 +1028,7 @@ export class StringLiteralExpression extends LiteralExpression {
   value: string;
 
   serialize(sb: string[]): void {
-    sb.push(JSON.stringify(this.value));
+    sb.push(escapeString(this.value));
   }
 }
 
@@ -1075,9 +1149,8 @@ export class Source extends Node {
   }
 
   serialize(sb: string[]): void {
-    for (let i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
-      const statement: Statement = this.statements[i];
-      statement.serialize(sb);
+    for (var i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
+      this.statements[i].serialize(sb);
       if (builderEndsWith(sb, CharCode.CLOSEBRACE))
         sb.push("\n");
       else
@@ -1125,7 +1198,7 @@ export class BlockStatement extends Statement {
 
   serialize(sb: string[]): void {
     sb.push("{\n");
-    for (let i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
+    for (var i = 0, k = this.statements.length; i < k; ++i) {
       this.statements[i].serialize(sb);
       if (builderEndsWith(sb, CharCode.CLOSEBRACE))
         sb.push("\n");
@@ -1168,9 +1241,8 @@ export class ClassDeclaration extends DeclarationStatement {
   members: DeclarationStatement[];
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.decorators)
-      for (i = 0, k = this.decorators.length; i < k; ++i) {
+      for (var i = 0, k = this.decorators.length; i < k; ++i) {
         this.decorators[i].serialize(sb);
         sb.push("\n");
       }
@@ -1245,7 +1317,7 @@ export class Decorator extends Statement {
     sb.push("@");
     this.name.serialize(sb);
     sb.push("(");
-    for (let i: i32 = 0, k: i32 = this.arguments.length; i < k; ++i) {
+    for (var i = 0, k = this.arguments.length; i < k; ++i) {
       if (i > 0)
         sb.push(", ");
       this.arguments[i].serialize(sb);
@@ -1293,9 +1365,8 @@ export class EnumDeclaration extends DeclarationStatement {
   values: EnumValueDeclaration[];
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+      for (var i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
         (<Modifier[]>this.modifiers)[i].serialize(sb);
         sb.push(" ");
       }
@@ -1384,9 +1455,8 @@ export class ExportStatement extends Statement {
   internalPath: string | null;
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
+      for (var i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
         (<Modifier[]>this.modifiers)[i].serialize(sb);
         sb.push(" ");
       }
@@ -1423,9 +1493,8 @@ export class FieldDeclaration extends VariableLikeDeclarationStatement {
   kind = NodeKind.FIELD;
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.decorators)
-      for (i = 0, k = this.decorators.length; i < k; ++i) {
+      for (var i = 0, k = this.decorators.length; i < k; ++i) {
         this.decorators[i].serialize(sb);
         sb.push("\n");
       }
@@ -1494,9 +1563,8 @@ export class FunctionDeclaration extends DeclarationStatement {
   statements: Statement[] | null;
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.decorators)
-      for (i = 0, k = this.decorators.length; i < k; ++i) {
+      for (var i = 0, k = this.decorators.length; i < k; ++i) {
         this.decorators[i].serialize(sb);
         sb.push("\n");
       }
@@ -1511,10 +1579,9 @@ export class FunctionDeclaration extends DeclarationStatement {
 
   protected serializeCommon(sb: string[]): void {
     this.name.serialize(sb);
-    let i: i32, k: i32;
     if (this.typeParameters.length) {
       sb.push("<");
-      for (i = 0, k = this.typeParameters.length; i < k; ++i) {
+      for (var i = 0, k = this.typeParameters.length; i < k; ++i) {
         if (i > 0)
           sb.push(", ");
         this.typeParameters[i].serialize(sb);
@@ -1535,7 +1602,7 @@ export class FunctionDeclaration extends DeclarationStatement {
     if (this.statements) {
       sb.push(" {\n");
       for (i = 0, k = (<Statement[]>this.statements).length; i < k; ++i) {
-        const statement: Statement = (<Statement[]>this.statements)[i];
+        var statement: Statement = (<Statement[]>this.statements)[i];
         statement.serialize(sb);
         if (builderEndsWith(sb, CharCode.CLOSEBRACE))
           sb.push("\n");
@@ -1613,7 +1680,7 @@ export class ImportStatement extends Statement {
   serialize(sb: string[]): void {
     if (this.declarations) {
       sb.push("import {\n");
-      for (let i: i32 = 0, k: i32 = this.declarations.length; i < k; ++i) {
+      for (var i: i32 = 0, k: i32 = this.declarations.length; i < k; ++i) {
         if (i > 0)
           sb.push(",\n");
         this.declarations[i].serialize(sb);
@@ -1637,15 +1704,14 @@ export class InterfaceDeclaration extends ClassDeclaration {
   kind = NodeKind.INTERFACE;
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.decorators)
-      for (i = 0, k = this.decorators.length; i < k; ++i) {
+      for (var i = 0, k = this.decorators.length; i < k; ++i) {
         this.decorators[i].serialize(sb);
         sb.push("\n");
       }
     if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
+      for (i = 0, k = this.modifiers.length; i < k; ++i) {
+        this.modifiers[i].serialize(sb);
         sb.push(" ");
       }
     sb.push("interface ");
@@ -1661,7 +1727,7 @@ export class InterfaceDeclaration extends ClassDeclaration {
     }
     if (this.extendsType) {
       sb.push(" extends ");
-      (<TypeNode>this.extendsType).serialize(sb);
+      this.extendsType.serialize(sb);
     }
     sb.push(" {\n");
     for (i = 0, k = this.members.length; i < k; ++i) {
@@ -1681,15 +1747,14 @@ export class MethodDeclaration extends FunctionDeclaration {
   kind = NodeKind.METHOD;
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.decorators)
-      for (i = 0, k = this.decorators.length; i < k; ++i) {
+      for (var i = 0, k = this.decorators.length; i < k; ++i) {
         this.decorators[i].serialize(sb);
         sb.push("\n");
       }
     if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
+      for (i = 0, k = this.modifiers.length; i < k; ++i) {
+        this.modifiers[i].serialize(sb);
         sb.push(" ");
       }
     super.serializeCommon(sb);
@@ -1705,15 +1770,14 @@ export class NamespaceDeclaration extends DeclarationStatement {
   members: Statement[];
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.decorators)
-      for (i = 0, k = this.decorators.length; i < k; ++i) {
+      for (var i = 0, k = this.decorators.length; i < k; ++i) {
         this.decorators[i].serialize(sb);
         sb.push("\n");
       }
     if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
+      for (i = 0, k = this.modifiers.length; i < k; ++i) {
+        this.modifiers[i].serialize(sb);
         sb.push(" ");
       }
     sb.push("namespace ");
@@ -1750,11 +1814,11 @@ export class Parameter extends Node {
     this.name.serialize(sb);
     if (this.type) {
       sb.push(": ");
-      (<TypeNode>this.type).serialize(sb);
+      this.type.serialize(sb);
     }
     if (this.initializer) {
       sb.push(" = ");
-      (<Expression>this.initializer).serialize(sb);
+      this.initializer.serialize(sb);
     }
   }
 }
@@ -1803,7 +1867,7 @@ export class ReturnStatement extends Statement {
   serialize(sb: string[]): void {
     if (this.value) {
       sb.push("return ");
-      (<Expression>this.value).serialize(sb);
+      this.value.serialize(sb);
     } else
       sb.push("return");
   }
@@ -1822,11 +1886,11 @@ export class SwitchCase extends Node {
   serialize(sb: string[]): void {
     if (this.label) {
       sb.push("case ");
-      (<Expression>this.label).serialize(sb);
+      this.label.serialize(sb);
       sb.push(":\n");
     } else
       sb.push("default:\n");
-    for (let i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
+    for (var i = 0, k = this.statements.length; i < k; ++i) {
       if (i > 0)
         sb.push("\n");
       this.statements[i].serialize(sb);
@@ -1852,7 +1916,7 @@ export class SwitchStatement extends Statement {
     sb.push("switch (");
     this.condition.serialize(sb);
     sb.push(") {\n");
-    for (let i: i32 = 0, k: i32 = this.cases.length; i < k; ++i) {
+    for (var i = 0, k = this.cases.length; i < k; ++i) {
       this.cases[i].serialize(sb);
       sb.push("\n");
     }
@@ -1891,8 +1955,7 @@ export class TryStatement extends Statement {
 
   serialize(sb: string[]): void {
     sb.push("try {\n");
-    let i: i32, k: i32;
-    for (i = 0, k = this.statements.length; i < k; ++i) {
+    for (var i = 0, k = this.statements.length; i < k; ++i) {
       this.statements[i].serialize(sb);
       sb.push(";\n");
     }
@@ -1926,9 +1989,8 @@ export class TypeDeclaration extends DeclarationStatement {
   alias: TypeNode;
 
   serialize(sb: string[]): void {
-    let i: i32, k: i32;
     if (this.decorators)
-      for (i = 0, k = this.decorators.length; i < k; ++i) {
+      for (var i = 0, k = this.decorators.length; i < k; ++i) {
         this.decorators[i].serialize(sb);
         sb.push("\n");
       }
@@ -1978,18 +2040,17 @@ export class VariableStatement extends Statement {
   declarations: VariableDeclaration[];
 
   serialize(sb: string[]): void {
-    let isConst: bool = false;
-    let i: i32, k: i32;
+    var isConst = false;
     if (this.decorators)
-      for (i = 0, k = this.decorators.length; i < k; ++i) {
+      for (var i = 0, k = this.decorators.length; i < k; ++i) {
         this.decorators[i].serialize(sb);
         sb.push("\n");
       }
     if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
+      for (i = 0, k = this.modifiers.length; i < k; ++i) {
+        this.modifiers[i].serialize(sb);
         sb.push(" ");
-        if ((<Modifier[]>this.modifiers)[i].modifierKind == ModifierKind.CONST)
+        if (this.modifiers[i].modifierKind == ModifierKind.CONST)
           isConst = true;
       }
     if (!isConst)
@@ -2021,7 +2082,7 @@ export class WhileStatement extends Statement {
 }
 
 /** Cached unused modifiers for reuse. */
-let reusableModifiers: Modifier[] | null = null;
+var reusableModifiers: Modifier[] | null = null;
 
 export function setReusableModifiers(modifiers: Modifier[]) {
   reusableModifiers = modifiers;
@@ -2029,7 +2090,7 @@ export function setReusableModifiers(modifiers: Modifier[]) {
 
 /** Creates a new modifiers array. */
 export function createModifiers(): Modifier[] {
-  let ret: Modifier[];
+  var ret: Modifier[];
   if (reusableModifiers != null) {
     ret = reusableModifiers;
     reusableModifiers = null;
@@ -2050,7 +2111,7 @@ export function addModifier(modifier: Modifier, modifiers: Modifier[] | null): M
 /** Gets a specific modifier from the specified array of modifiers. */
 export function getModifier(kind: ModifierKind, modifiers: Modifier[] | null): Modifier | null {
   if (modifiers)
-    for (let i: i32 = 0, k: i32 = modifiers.length; i < k; ++i)
+    for (var i = 0, k = modifiers.length; i < k; ++i)
       if (modifiers[i].modifierKind == kind)
         return modifiers[i];
   return null;
@@ -2064,9 +2125,9 @@ export function hasModifier(kind: ModifierKind, modifiers: Modifier[] | null): b
 /** Gets a specific decorator within the specified decorators, if present. */
 export function getDecorator(name: string, decorators: Decorator[] | null): Decorator | null {
   if (decorators)
-    for (let i: i32 = 0, k: i32 = decorators.length; i < k; ++i) {
-      const decorator: Decorator = decorators[i];
-      const expression: Expression = decorator.name;
+    for (var i = 0, k = decorators.length; i < k; ++i) {
+      var decorator = decorators[i];
+      var expression = decorator.name;
       if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).name == name)
         return decorator;
     }
@@ -2080,7 +2141,7 @@ export function hasDecorator(name: string, decorators: Decorator[] | null): bool
 
 /** Serializes the specified node to its TypeScript representation. */
 export function serialize(node: Node): string {
-  const sb: string[] = new Array(); // shared builder could grow too much
+  var sb = new Array<string>(); // shared builder could grow too much
   node.serialize(sb);
   return sb.join("");
 }
@@ -2097,8 +2158,8 @@ export function mangleInternalPath(path: string): string {
 
 /** Mangles a declaration's name to an internal name. */
 export function mangleInternalName(declaration: DeclarationStatement): string {
-  let name: string = declaration.name.name;
-  let parent: Node | null = declaration.parent;
+  var name = declaration.name.name;
+  var parent = declaration.parent;
   if (!parent)
     return name;
   if (declaration.kind == NodeKind.VARIABLEDECLARATION && parent.kind == NodeKind.VARIABLE) // skip over
@@ -2114,8 +2175,26 @@ export function mangleInternalName(declaration: DeclarationStatement): string {
 /** Tests if the specified builder ends with the specified char code. */
 function builderEndsWith(sb: string[], code: CharCode): bool {
   if (sb.length) {
-    const last: string = sb[sb.length - 1];
+    var last = sb[sb.length - 1];
     return select<bool>(last.charCodeAt(last.length - 1) == code, false, last.length > 0);
   }
   return false;
+}
+
+/** Escapes a string to a string literal. */
+export function escapeString(str: string): string {
+  var k = str.length;
+  var ret = new Array<string>(k);
+  ret.length = 0;
+  for (var i = 0, c: string; i < k; ++i) {
+    switch (c = str.charAt(i)) {
+      case "\\": ret.push("\\\\"); break;
+      case "\"": ret.push("\\\""); break;
+      case "\r": ret.push("\\r"); break;
+      case "\n": ret.push("\\n"); break;
+      case "\0": ret.push("\\0"); break;
+      default: ret.push(c);
+    }
+  }
+  return "\"" + ret.join("") + "\"";
 }

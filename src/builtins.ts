@@ -83,7 +83,7 @@ export function initialize(program: Program): void {
   addFunction(program, "assert");
 
   // conversions and limits
-  let i32Func: FunctionPrototype,
+  var i32Func: FunctionPrototype,
       u32Func: FunctionPrototype,
       i64Func: FunctionPrototype,
       u64Func: FunctionPrototype;
@@ -144,7 +144,7 @@ export function initialize(program: Program): void {
 
 /** Adds a built-in constant to the specified program. */
 function addConstant(program: Program, name: string, type: Type): Global {
-  const global: Global = new Global(program, name, name, null);
+  var global = new Global(program, name, name, null);
   global.isBuiltIn = true;
   global.isConstant = true;
   global.type = type;
@@ -154,9 +154,10 @@ function addConstant(program: Program, name: string, type: Type): Global {
 
 /** Adds a built-in function to the specified program. */
 function addFunction(program: Program, name: string, isGeneric: bool = false): FunctionPrototype {
-  let prototype: FunctionPrototype = new FunctionPrototype(program, name, name, null, null);
+  var prototype = new FunctionPrototype(program, name, name, null, null);
   prototype.isBuiltIn = true;
-  if (isGeneric) prototype.isGeneric = true;
+  if (isGeneric)
+    prototype.isGeneric = true;
   program.elements.set(name, prototype);
   return prototype;
 }
@@ -187,18 +188,18 @@ export function compileGetConstant(compiler: Compiler, global: Global): Expressi
 
 /** Compiles a call to a built-in function. */
 export function compileCall(compiler: Compiler, prototype: FunctionPrototype, typeArguments: Type[], operands: Expression[], reportNode: Node): ExpressionRef {
-  const module: Module = compiler.module;
-  const usizeType: Type = select<Type>(Type.usize64, Type.usize32, compiler.options.target == Target.WASM64);
-  const nativeUsizeType: NativeType = select<NativeType>(NativeType.I64, NativeType.I32, compiler.options.target == Target.WASM64);
+  var module = compiler.module;
+  var usizeType = select<Type>(Type.usize64, Type.usize32, compiler.options.target == Target.WASM64);
+  var nativeUsizeType = select<NativeType>(NativeType.I64, NativeType.I32, compiler.options.target == Target.WASM64);
 
-  let arg0: ExpressionRef,
+  var arg0: ExpressionRef,
       arg1: ExpressionRef,
       arg2: ExpressionRef;
 
-  let tempLocal0: Local;
-  let tempLocal1: Local;
+  var tempLocal0: Local,
+      tempLocal1: Local;
 
-  let ftype: FunctionTypeRef;
+  var ftype: FunctionTypeRef;
 
   switch (prototype.internalName) {
 

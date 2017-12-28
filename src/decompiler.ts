@@ -20,7 +20,7 @@ import {
 export class Decompiler {
 
   static decompile(module: Module): string {
-    const decompiler: Decompiler = new Decompiler();
+    var decompiler = new Decompiler();
     decompiler.decompile(module);
     return decompiler.finish();
   }
@@ -39,13 +39,12 @@ export class Decompiler {
   }
 
   decompileFunction(func: FunctionRef): void {
-    const name: string = readString(_BinaryenFunctionGetName(func)) || "$" + this.functionId.toString(10);
-    const body: ExpressionRef = _BinaryenFunctionGetBody(func);
+    var name = readString(_BinaryenFunctionGetName(func)) || "$" + this.functionId.toString(10);
+    var body = _BinaryenFunctionGetBody(func);
     this.push("function ");
     this.push(name);
     this.push("(");
-    let k: Index = _BinaryenFunctionGetNumParams(func);
-    for (let i: Index = 0; i < k; ++i) {
+     for (var i: Index = 0, k: Index = _BinaryenFunctionGetNumParams(func); i < k; ++i) {
       if (i > 0)
         this.push(", ");
       this.push("$");
@@ -67,12 +66,12 @@ export class Decompiler {
   }
 
   decompileExpression(expr: ExpressionRef): void {
-    const id: ExpressionId = _BinaryenExpressionGetId(expr);
-    const type: NativeType = _BinaryenExpressionGetType(expr);
+    var id = _BinaryenExpressionGetId(expr);
+    var type = _BinaryenExpressionGetType(expr);
 
-    let nested: ExpressionRef;
-    let string: string | null;
-    let i: Index, k: Index;
+    var nested: ExpressionRef;
+    var string: string | null;
+    var i: Index, k: Index;
 
     switch (id) {
 
@@ -829,7 +828,7 @@ export class Decompiler {
   }
 
   finish(): string {
-    const ret: string = this.text.join("");
+    var ret = this.text.join("");
     this.text = [];
     return ret;
   }

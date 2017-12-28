@@ -240,8 +240,8 @@ export class I64 {
       }
 
       // |other| >= 2, so |this/other| < |MIN_VALUE|
-      let tempLo: i32 = this.lo;
-      let tempHi: i32 = this.hi;
+      var tempLo = this.lo;
+      var tempHi = this.hi;
       this.shr32(1, 0);
       this.div32(lo, hi);
       this.shl32(1, 0);
@@ -308,12 +308,12 @@ export class I64 {
   }
 
   mod32(lo: i32, hi: i32 = 0): void {
-    const thisLo: i32 = this.lo;
-    const thisHi: i32 = this.hi;
+    var thisLo = this.lo;
+    var thisHi = this.hi;
     this.div32(lo, hi);
     this.mul32(lo, hi);
-    const resLo: i32 = this.lo;
-    const resHi: i32 = this.hi;
+    var resLo = this.lo;
+    var resHi = this.hi;
     this.lo = thisLo;
     this.hi = thisHi;
     this.sub32(resLo, resHi);
@@ -407,7 +407,7 @@ export class I64 {
   }
 
   toString(): string {
-    let negative: bool = false;
+    var negative = false;
     if (this.hi < 0) {
       i64_add_internal(~this.lo, ~this.hi, 1, 0);
       negative = true;
@@ -417,7 +417,7 @@ export class I64 {
     }
 
     if (i64_hi) {
-      let lo: string = (i64_lo as u32 >>> 0).toString(16);
+      var lo = (i64_lo as u32 >>> 0).toString(16);
       while (lo.length < 8)
         lo = "0" + lo;
       return (negative ? "-0x" : "0x") + (i64_hi as u32 >>> 0).toString(16) + lo;
@@ -426,21 +426,21 @@ export class I64 {
   }
 }
 
-let i64_lo: i32 = 0;
-let i64_hi: i32 = 0;
+var i64_lo = 0;
+var i64_hi = 0;
 
 function i64_add_internal(lo: i32, hi: i32, otherLo: i32, otherHi: i32): void {
-  let a48: i32 = hi >>> 16;
-  let a32: i32 = hi & 0xFFFF;
-  let a16: i32 = lo >>> 16;
-  let a00: i32 = lo & 0xFFFF;
+  var a48 = hi >>> 16;
+  var a32 = hi & 0xFFFF;
+  var a16 = lo >>> 16;
+  var a00 = lo & 0xFFFF;
 
-  let b48: i32 = otherHi >>> 16;
-  let b32: i32 = otherHi & 0xFFFF;
-  let b16: i32 = otherLo >>> 16;
-  let b00: i32 = otherLo & 0xFFFF;
+  var b48 = otherHi >>> 16;
+  var b32 = otherHi & 0xFFFF;
+  var b16 = otherLo >>> 16;
+  var b00 = otherLo & 0xFFFF;
 
-  let c48: i32 = 0, c32: i32 = 0, c16: i32 = 0, c00: i32 = 0;
+  var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
   c00 += a00 + b00;
   c16 += c00 >>> 16;
   c00 &= 0xFFFF;
@@ -458,15 +458,15 @@ function i64_add_internal(lo: i32, hi: i32, otherLo: i32, otherHi: i32): void {
 }
 
 function i64_mul_internal(lo: i32, hi: i32, otherLo: i32, otherHi: i32): void {
-  let a48: i32 = hi >>> 16;
-  let a32: i32 = hi & 0xFFFF;
-  let a16: i32 = lo >>> 16;
-  let a00: i32 = lo & 0xFFFF;
+  var a48 = hi >>> 16;
+  var a32 = hi & 0xFFFF;
+  var a16 = lo >>> 16;
+  var a00 = lo & 0xFFFF;
 
-  let b48: i32 = otherHi >>> 16;
-  let b32: i32 = otherHi & 0xFFFF;
-  let b16: i32 = otherLo >>> 16;
-  let b00: i32 = otherLo & 0xFFFF;
+  var b48 = otherHi >>> 16;
+  var b32 = otherHi & 0xFFFF;
+  var b16 = otherLo >>> 16;
+  var b00 = otherLo & 0xFFFF;
 
   var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
   c00 += a00 * b00;

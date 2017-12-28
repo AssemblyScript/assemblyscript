@@ -91,7 +91,7 @@ export class Type {
   /** Composes a class type from this type and a class. */
   asClass(classType: Class): Type {
     assert(this.kind == TypeKind.USIZE);
-    const ret: Type = new Type(this.kind, this.size);
+    var ret = new Type(this.kind, this.size);
     ret.classType = classType;
     return ret;
   }
@@ -99,7 +99,7 @@ export class Type {
   /** Composes a function type from this type and a function. */
   asFunction(functionType: Function): Type {
     assert(this.kind == TypeKind.USIZE);
-    const ret: Type = new Type(this.kind, this.size);
+    var ret = new Type(this.kind, this.size);
     ret.functionType = functionType;
     return ret;
   }
@@ -224,20 +224,20 @@ export class Type {
 
 /** Converts an array of types to an array of native types. */
 export function typesToNativeTypes(types: Type[]): NativeType[] {
-  const k: i32 = types.length;
-  const ret: NativeType[] = new Array(k);
-  for (let i: i32 = 0; i < k; ++i)
+  var k = types.length;
+  var ret = new Array<NativeType>(k);
+  for (var i = 0; i < k; ++i)
     ret[i] = types[i].toNativeType();
   return ret;
 }
 
 /** Converts an array of types to its combined string representation. Usually type arguments. */
 export function typesToString(types: Type[], prefix: string = "<", postfix: string = ">"): string {
-  const k: i32 = types.length;
+  var k = types.length;
   if (!k)
     return "";
   sb.length = 0;
-  for (let i: i32 = 0; i < k; ++i)
+  for (var i = 0; i < k; ++i)
     sb[i] = types[i].toString();
   return prefix + sb.join(", ") + postfix;
 }

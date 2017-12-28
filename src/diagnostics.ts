@@ -64,7 +64,7 @@ export class DiagnosticMessage {
   }
 
   static create(code: DiagnosticCode, category: DiagnosticCategory, arg0: string | null = null, arg1: string | null = null): DiagnosticMessage {
-    let message: string = diagnosticCodeToString(code);
+    var message = diagnosticCodeToString(code);
     if (arg0 != null)
       message = message.replace("{0}", arg0);
     if (arg1 != null)
@@ -98,7 +98,7 @@ export class DiagnosticMessage {
 
 export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: bool = false, showContext: bool = false): string {
   // format context first (uses same string builder)
-  let context: string = "";
+  var context = "";
   if (message.range && showContext)
     context = formatDiagnosticContext(message.range, useColors);
 
@@ -114,16 +114,16 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
 
   // range information if available
   if (message.range) {
-    const range: Range = message.range;
-    const text: string = range.source.text;
+    var range = message.range;
+    var text = range.source.text;
     if (showContext) {
       sb.push("\n");
       sb.push(context);
     }
     sb.push("\n");
-    let pos: i32 = range.start;
-    let line: i32 = 1;
-    let column: i32 = 1;
+    var pos = range.start;
+    var line = 1;
+    var column = 1;
     while (pos-- > 0)
       if (text.charCodeAt(pos) == CharCode.LINEFEED)
         line++;
@@ -141,10 +141,10 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
 }
 
 export function formatDiagnosticContext(range: Range, useColors: bool = false): string {
-  const text: string = range.source.text;
-  const len: i32 = text.length;
-  let start: i32 = range.start;
-  let end: i32 = range.end;
+  var text = range.source.text;
+  var len = text.length;
+  var start = range.start;
+  var end = range.end;
   while (start > 0 && !isLineBreak(text.charCodeAt(start - 1)))
     start--;
   while (end < len && !isLineBreak(text.charCodeAt(end)))
@@ -176,7 +176,7 @@ export abstract class DiagnosticEmitter {
   }
 
   emitDiagnostic(code: DiagnosticCode, category: DiagnosticCategory, range: Range, arg0: string | null = null, arg1: string | null = null) {
-    const message: DiagnosticMessage = DiagnosticMessage.create(code, category, arg0, arg1).withRange(range);
+    var message = DiagnosticMessage.create(code, category, arg0, arg1).withRange(range);
     this.diagnostics.push(message);
     if (!this.silentDiagnostics) {
       console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
