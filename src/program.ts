@@ -1485,7 +1485,8 @@ export class Function extends Element {
   /** Frees the temporary local for reuse. */
   freeTempLocal(local: Local): void {
     var temps: Local[];
-    switch (local.type.toNativeType()) {
+    assert(local.type != null);
+    switch ((<Type>local.type).toNativeType()) {
       case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
       case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
       case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
