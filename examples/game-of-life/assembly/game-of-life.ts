@@ -1,8 +1,8 @@
 // A simplified version of the game of life as seen on http://dcode.io
 
-let w: u32; // width
-let h: u32; // height
-let s: u32; // total size
+var w: u32; // width
+var h: u32; // height
+var s: u32; // total size
 
 /** Initializes width and height. */
 export function init(w_: u32, h_: u32): void {
@@ -13,10 +13,10 @@ export function init(w_: u32, h_: u32): void {
 
 /** Performs one step. */
 export function step(): void {
-  let y: u32, ym1: u32, yp1: u32; // y, y-1 and y+1
-  let x: u32, xm1: u32, xp1: u32; // x, x-1 and x+1
-  let hm1: u32 = h - 1, wm1: u32 = w - 1;
-  let n: u32, v: u8, c: u32 = 0;
+  var y: u32, ym1: u32, yp1: u32; // y, y-1 and y+1
+  var x: u32, xm1: u32, xp1: u32; // x, x-1 and x+1
+  var hm1: u32 = h - 1, wm1: u32 = w - 1;
+  var n: u32, v: u8, c: u32 = 0;
   for (y = 0; y < h; ++y) {
     ym1 = select<u32>(hm1, y - 1, y == 0);
     yp1 = select<u32>(0, y + 1, y == hm1);

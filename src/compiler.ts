@@ -38,7 +38,8 @@ import {
   Namespace,
   Parameter,
   EnumValue,
-  Property
+  Property,
+  VariableLikeElement
 } from "./program";
 
 import {
@@ -376,20 +377,7 @@ export class Compiler extends DiagnosticEmitter {
     var initializeInStart = false;
 
     if (global.hasConstantValue) {
-      if (global.type.isLongInteger)
-        initExpr = global.constantIntegerValue ? this.module.createI64(global.constantIntegerValue.lo, global.constantIntegerValue.hi) : this.module.createI64(0, 0);
-      else if (global.type.kind == TypeKind.F32)
-        initExpr = this.module.createF32(global.constantFloatValue);
-      else if (global.type.kind == TypeKind.F64)
-        initExpr = this.module.createF64(global.constantFloatValue);
-      else if (global.type.isSmallInteger) {
-        if (global.type.isSignedInteger) {
-          var shift = global.type.smallIntegerShift;
-          initExpr = this.module.createI32(global.constantIntegerValue ? global.constantIntegerValue.toI32() << shift >> shift : 0);
-        } else
-          initExpr = this.module.createI32(global.constantIntegerValue ? global.constantIntegerValue.toI32() & global.type.smallIntegerMask: 0);
-      } else
-        initExpr = this.module.createI32(global.constantIntegerValue ? global.constantIntegerValue.toI32() : 0);
+      initExpr = makeInlineConstant(global, this.module);
     } else if (declaration) {
       if (declaration.initializer) {
         if (!initExpr)
@@ -1018,6 +1006,34 @@ export class Compiler extends DiagnosticEmitter {
       if (this.currentFunction.locals.has(name))
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name); // recoverable
       else {
+        if (hasModifier(ModifierKind.CONST, declaration.modifiers)) {
+          if (init) {
+            init = this.precomputeExpressionRef(init);
+            if (_BinaryenExpressionGetId(init) == ExpressionId.Const) {
+              var local = new Local(this.program, name, -1, type);
+              switch (_BinaryenExpressionGetType(init)) {
+                case NativeType.I32:
+                  local = local.withConstantIntegerValue(_BinaryenConstGetValueI32(init), 0);
+                  break;
+                case NativeType.I64:
+                  local = local.withConstantIntegerValue(_BinaryenConstGetValueI64Low(init), _BinaryenConstGetValueI64High(init));
+                  break;
+                case NativeType.F32:
+                  local = local.withConstantFloatValue(<f64>_BinaryenConstGetValueF32(init));
+                  break;
+                case NativeType.F64:
+                  local = local.withConstantFloatValue(_BinaryenConstGetValueF64(init));
+                  break;
+                default:
+                  throw new Error("concrete type expected");
+              }
+              this.currentFunction.locals.set(name, local);
+              continue;
+            }
+          } else {
+            this.error(DiagnosticCode._const_declarations_must_be_initialized, declaration.range);
+          }
+        }
         this.currentFunction.addLocal(type, name);
         if (init)
           initializers.push(this.compileAssignmentWithValue(declaration.name, init));
@@ -1582,7 +1598,7 @@ export class Compiler extends DiagnosticEmitter {
             ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
             : this.module.createTeeLocal(tempLocal.index, left),
           right,
-          this.module.createGetLocal(tempLocal.index, tempLocal.type.toNativeType())
+          this.module.createGetLocal(tempLocal.index, this.currentType.toNativeType())
         );
 
       case Token.BAR_BAR: // left || right
@@ -1614,7 +1630,7 @@ export class Compiler extends DiagnosticEmitter {
             : this.currentType == Type.f32
             ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
             : this.module.createTeeLocal(tempLocal.index, left),
-          this.module.createGetLocal(tempLocal.index, tempLocal.type.toNativeType()),
+          this.module.createGetLocal(tempLocal.index, this.currentType.toNativeType()),
           right
         );
 
@@ -1712,8 +1728,9 @@ export class Compiler extends DiagnosticEmitter {
       return this.module.createUnreachable();
 
     if (element.kind == ElementKind.LOCAL) {
+      assert((<Local>element).type != null);
       if (tee) {
-        this.currentType = (<Local>element).type;
+        this.currentType = <Type>(<Local>element).type;
         return this.module.createTeeLocal((<Local>element).index, valueWithCorrectType);
       }
       this.currentType = Type.void;
@@ -1896,7 +1913,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // local
     if (element.kind == ElementKind.LOCAL) {
-      this.currentType = (<Local>element).type;
+      assert((<Local>element).type != null);
+      this.currentType = <Type>(<Local>element).type;
+      if ((<Local>element).hasConstantValue)
+        return makeInlineConstant(<Local>element, this.module);
+      assert((<Local>element).index >= 0);
       return this.module.createGetLocal((<Local>element).index, this.currentType.toNativeType());
     }
 
@@ -1910,18 +1931,9 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createUnreachable();
       assert(global.type != null);
       this.currentType = <Type>global.type;
-      if (global.hasConstantValue) {
-        if (global.type == Type.f32)
-          return this.module.createF32((<Global>element).constantFloatValue);
-        else if (global.type == Type.f64)
-          return this.module.createF64((<Global>element).constantFloatValue);
-        else if ((<Type>global.type).isLongInteger)
-          return this.module.createI64((<I64>global.constantIntegerValue).lo, (<I64>global.constantIntegerValue).hi);
-        else if ((<Type>global.type).isAnyInteger)
-          return this.module.createI32((<I64>global.constantIntegerValue).lo);
-        else
-          throw new Error("concrete type expected");
-      } else
+      if (global.hasConstantValue)
+        return makeInlineConstant(global, this.module);
+      else
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
     }
 
@@ -2020,9 +2032,10 @@ export class Compiler extends DiagnosticEmitter {
     switch (target.kind) {
 
       case ElementKind.LOCAL:
-        element = (<Local>target).type.classType;
+        assert((<Local>target).type != null);
+        element = (<Type>(<Local>target).type).classType;
         if (!element) {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Local>target).type.toString());
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Type>(<Local>target).type).toString());
           return this.module.createUnreachable();
         }
         target = element;
@@ -2033,7 +2046,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         element = (<Type>(<Global>target).type).classType;
         if (!element) {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Local>target).type.toString());
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Type>(<Local>target).type).toString());
           return this.module.createUnreachable();
         }
         target = element;
@@ -2066,7 +2079,8 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.LOCAL:
-        return this.module.createGetLocal((<Local>element).index, (this.currentType = (<Local>element).type).toNativeType());
+        assert((<Local>element).type != null);
+        return this.module.createGetLocal((<Local>element).index, (this.currentType = <Type>(<Local>element).type).toNativeType());
 
       case ElementKind.GLOBAL:
         if (!this.compileGlobal(<Global>element))
@@ -2074,12 +2088,9 @@ export class Compiler extends DiagnosticEmitter {
         assert((<Global>element).type != null);
         this.currentType = <Type>(<Global>element).type;
         if ((<Global>element).hasConstantValue)
-          return this.currentType== Type.f32 ? this.module.createF32((<Global>element).constantFloatValue)
-               : this.currentType == Type.f64 ? this.module.createF64((<Global>element).constantFloatValue)
-               : this.currentType.isLongInteger
-                 ? this.module.createI64((<I64>(<Global>element).constantIntegerValue).lo, (<I64>(<Global>element).constantIntegerValue).hi)
-                 : this.module.createI32((<I64>(<Global>element).constantIntegerValue).lo);
-        return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
+          return makeInlineConstant(<Global>element, this.module);
+        else
+          return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
 
       case ElementKind.PROPERTY: // getter
         var getterPrototype = (<Property>element).getterPrototype;
@@ -2114,22 +2125,23 @@ export class Compiler extends DiagnosticEmitter {
 
     // use a temp local for the intermediate value
     var tempLocal = this.currentFunction.getTempLocal(this.currentType);
+    assert(tempLocal.type != null);
 
     var op: BinaryOp;
     var nativeType: NativeType;
     var nativeOne: ExpressionRef;
 
-    if (tempLocal.type == Type.f32) {
+    if (<Type>tempLocal.type == Type.f32) {
       op = operator == Token.PLUS_PLUS ? BinaryOp.AddF32 : BinaryOp.SubF32;
       nativeType = NativeType.F32;
       nativeOne = this.module.createF32(1);
 
-    } else if (tempLocal.type == Type.f64) {
+    } else if (<Type>tempLocal.type == Type.f64) {
       op = operator == Token.PLUS_PLUS ? BinaryOp.AddF64 : BinaryOp.SubF64;
       nativeType = NativeType.F64;
       nativeOne = this.module.createF64(1);
 
-    } else if (tempLocal.type.isLongInteger) {
+    } else if ((<Type>tempLocal.type).isLongInteger) {
       op = operator == Token.PLUS_PLUS ? BinaryOp.AddI64 : BinaryOp.SubI64;
       nativeType = NativeType.I64;
       nativeOne = this.module.createI64(1, 0);
@@ -2150,7 +2162,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // NOTE: can't preemptively tee_local the return value on the stack because binaryen expects
     // this to be well-formed. becomes a tee_local when optimizing, though.
-    this.currentType = tempLocal.type;
+    this.currentType = <Type>tempLocal.type;
     this.currentFunction.freeTempLocal(tempLocal);
     return this.module.createBlock(null, [
       this.module.createSetLocal(tempLocal.index, getValue),  // +++ this.module.createTeeLocal(tempLocal.index, getValue),
@@ -2233,6 +2245,7 @@ export class Compiler extends DiagnosticEmitter {
 
 // helpers
 
+/** Tests whether an element is a module-level export from the entry file. */
 function isModuleExport(element: Element, declaration: DeclarationStatement): bool {
   if (!element.isExported)
     return false;
@@ -2250,4 +2263,29 @@ function isModuleExport(element: Element, declaration: DeclarationStatement): bo
   if (!parent)
     return false;
   return isModuleExport(parent, <DeclarationStatement>parentNode);
+}
+
+/** Creates an inlined expression of a constant variable-like element. */
+function makeInlineConstant(element: VariableLikeElement, module: Module): ExpressionRef {
+  assert(element.hasConstantValue);
+  assert(element.type != null);
+  if (<Type>element.type == Type.f32)
+    return module.createF32((<Global>element).constantFloatValue);
+  else if (<Type>element.type == Type.f64)
+    return module.createF64((<Global>element).constantFloatValue);
+  else if ((<Type>element.type).isLongInteger)
+    return element.constantIntegerValue
+      ? module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
+      : module.createI64(0, 0);
+  else if ((<Type>element.type).isSmallInteger) {
+    if ((<Type>element.type).isSignedInteger) {
+      var shift = (<Type>element.type).smallIntegerShift;
+      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
+    } else
+      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & (<Type>element.type).smallIntegerMask: 0);
+  } else if ((<Type>element.type).isAnyInteger)
+    return element.constantIntegerValue
+      ? module.createI32(element.constantIntegerValue.lo)
+      : module.createI32(0);
+  throw new Error("concrete type expected");
 }

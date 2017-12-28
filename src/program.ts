@@ -1173,10 +1173,9 @@ export class EnumValue extends Element {
   }
 }
 
-/** A global variable. */
-export class Global extends Element {
+export class VariableLikeElement extends Element {
 
-  kind = ElementKind.GLOBAL;
+  // kind varies
 
   /** Declaration reference. */
   declaration: VariableLikeDeclarationStatement | null;
@@ -1186,6 +1185,26 @@ export class Global extends Element {
   constantIntegerValue: I64 | null = null;
   /** Constant float value, if applicable. */
   constantFloatValue: f64 = 0;
+
+  withConstantIntegerValue(lo: i32, hi: i32): this {
+    this.constantIntegerValue = new I64(lo, hi);
+    this.hasConstantValue = true;
+    this.isMutable = false;
+    return this;
+  }
+
+  withConstantFloatValue(value: f64): this {
+    this.constantFloatValue = value;
+    this.hasConstantValue = true;
+    this.isMutable = false;
+    return this;
+  }
+}
+
+/** A global variable. */
+export class Global extends VariableLikeElement {
+
+  kind = ElementKind.GLOBAL;
 
   constructor(program: Program, simpleName: string, internalName: string, declaration: VariableLikeDeclarationStatement | null = null, type: Type | null = null) {
     super(program, simpleName, internalName);
@@ -1206,20 +1225,6 @@ export class Global extends Element {
       this.hasConstantValue = true; // built-ins have constant values
     }
     this.type = type; // resolved later if `null`
-  }
-
-  withConstantIntegerValue(lo: i32, hi: i32): this {
-    this.constantIntegerValue = new I64(lo, hi);
-    this.hasConstantValue = true;
-    this.isMutable = false;
-    return this;
-  }
-
-  withConstantFloatValue(value: f64): this {
-    this.constantFloatValue = value;
-    this.hasConstantValue = true;
-    this.isMutable = false;
-    return this;
   }
 }
 
@@ -1244,14 +1249,12 @@ export class Parameter {
 }
 
 /** A function local. */
-export class Local extends Element {
+export class Local extends VariableLikeElement {
 
   kind = ElementKind.LOCAL;
 
   /** Local index. */
   index: i32;
-  /** Local type. */
-  type: Type;
 
   constructor(program: Program, simpleName: string, index: i32, type: Type) {
     super(program, simpleName, simpleName);
