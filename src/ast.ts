@@ -1028,7 +1028,7 @@ export class StringLiteralExpression extends LiteralExpression {
   value: string;
 
   serialize(sb: string[]): void {
-    sb.push(escapeString(this.value));
+    sb.push(stringToLiteral(this.value));
   }
 }
 
@@ -2181,19 +2181,93 @@ function builderEndsWith(sb: string[], code: CharCode): bool {
   return false;
 }
 
-/** Escapes a string to a string literal. */
-export function escapeString(str: string): string {
-  var k = str.length;
-  var ret = new Array<string>(k);
-  for (var i = 0, c: string; i < k; ++i) {
-    switch (c = str.charAt(i)) {
-      case "\\": ret[i] = "\\\\"; break;
-      case "\"": ret[i] = "\\\""; break;
-      case "\r": ret[i] = "\\r"; break;
-      case "\n": ret[i] = "\\n"; break;
-      case "\0": ret[i] = "\\0"; break;
-      default: ret[i] = c;
+/** Converts a string to its literal representation including quotes. */
+export function stringToLiteral(str: string): string {
+  var ret = new Array<string>();
+  var off = 0;
+  for (var i = 0, k = str.length; i < k;) {
+    switch (str.charCodeAt(i)) {
+
+      case CharCode.NULL:
+        if (i > off)
+          ret.push(str.substring(off, off = i + 1));
+        ret.push("\\0");
+        off = ++i;
+        break;
+
+      case CharCode.BACKSPACE:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        off = ++i;
+        ret.push("\\b");
+        break;
+
+      case CharCode.TAB:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        off = ++i;
+        ret.push("\\t");
+        break;
+
+      case CharCode.LINEFEED:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        off = ++i;
+        ret.push("\\n");
+        break;
+
+      case CharCode.VERTICALTAB:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        off = ++i;
+        ret.push("\\v");
+        break;
+
+      case CharCode.FORMFEED:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        off = ++i;
+        ret.push("\\f");
+        break;
+
+      case CharCode.CARRIAGERETURN:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        ret.push("\\r");
+        off = ++i;
+        break;
+
+      case CharCode.DOUBLEQUOTE:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        ret.push("\\\"");
+        off = ++i;
+        break;
+
+      case CharCode.SINGLEQUOTE:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        ret.push("\\'");
+        off = ++i;
+        break;
+
+      case CharCode.BACKSLASH:
+        if (i > off)
+          ret.push(str.substring(off, i));
+        ret.push("\\\\");
+        off = ++i;
+        break;
+
+      default:
+        ++i;
+        break;
     }
   }
+  if (off == 0) {
+    assert(ret.length == 0);
+    return "\"" + str + "\"";
+  }
+  if (i > off)
+    ret.push(str.substring(off, i));
   return "\"" + ret.join("") + "\"";
 }

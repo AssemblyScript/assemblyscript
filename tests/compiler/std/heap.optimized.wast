@@ -473,14 +473,12 @@
   (loop $continue|0
    (if
     (if (result i32)
-     (tee_local $3
-      (get_local $2)
-     )
+     (get_local $2)
      (i32.rem_u
       (get_local $1)
       (i32.const 4)
      )
-     (get_local $3)
+     (get_local $2)
     )
     (block
      (set_local $4
@@ -2049,7 +2047,6 @@
   (get_local $0)
  )
  (func $std:heap/Heap.compare (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
   (if
    (i32.eq
     (get_local $0)
@@ -2062,9 +2059,7 @@
   (loop $continue|0
    (if
     (if (result i32)
-     (tee_local $3
-      (get_local $2)
-     )
+     (get_local $2)
      (i32.eq
       (i32.load8_u
        (get_local $0)
@@ -2073,7 +2068,7 @@
        (get_local $1)
       )
      )
-     (get_local $3)
+     (get_local $2)
     )
     (block
      (set_local $2

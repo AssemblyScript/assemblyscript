@@ -11,47 +11,37 @@
  (func $start (; 0 ;) (type $v)
   (local $0 i32)
   (local $1 f64)
-  (local $2 i64)
-  (local $3 f32)
   (drop
    (if (result i32)
-    (tee_local $0
-     (i32.const 0)
-    )
+    (i32.const 0)
     (unreachable)
-    (get_local $0)
+    (i32.const 0)
    )
   )
   (drop
    (if (result f64)
     (f64.ne
-     (tee_local $1
-      (f64.const 0)
-     )
+     (f64.const 0)
      (f64.const 0)
     )
     (unreachable)
-    (get_local $1)
+    (f64.const 0)
    )
   )
   (drop
    (if (result i32)
-    (tee_local $0
-     (i32.const 1)
-    )
-    (get_local $0)
+    (i32.const 1)
+    (i32.const 1)
     (unreachable)
    )
   )
   (drop
    (if (result f64)
     (f64.ne
-     (tee_local $1
-      (f64.const 1)
-     )
+     (f64.const 1)
      (f64.const 0)
     )
-    (get_local $1)
+    (f64.const 1)
     (unreachable)
    )
   )
@@ -59,11 +49,9 @@
    (if (result i32)
     (tee_local $0
      (if (result i32)
-      (tee_local $0
-       (i32.const 1)
-      )
+      (i32.const 1)
       (i32.const 2)
-      (get_local $0)
+      (i32.const 1)
      )
     )
     (get_local $0)
@@ -76,13 +64,11 @@
      (tee_local $1
       (if (result f64)
        (f64.ne
-        (tee_local $1
-         (f64.const 1)
-        )
+        (f64.const 1)
         (f64.const 0)
        )
        (f64.const 2)
-       (get_local $1)
+       (f64.const 1)
       )
      )
      (f64.const 0)
@@ -93,11 +79,9 @@
   )
   (set_global $logical/i
    (if (result i32)
-    (tee_local $0
-     (i32.const 1)
-    )
+    (i32.const 1)
     (i32.const 2)
-    (get_local $0)
+    (i32.const 1)
    )
   )
   (if
@@ -111,10 +95,8 @@
   )
   (set_global $logical/i
    (if (result i32)
-    (tee_local $0
-     (i32.const 0)
-    )
-    (get_local $0)
+    (i32.const 0)
+    (i32.const 0)
     (i32.const 1)
    )
   )
@@ -130,13 +112,11 @@
   (set_global $logical/I
    (if (result i64)
     (i64.ne
-     (tee_local $2
-      (i64.const 1)
-     )
+     (i64.const 1)
      (i64.const 0)
     )
     (i64.const 2)
-    (get_local $2)
+    (i64.const 1)
    )
   )
   (if
@@ -151,12 +131,10 @@
   (set_global $logical/I
    (if (result i64)
     (i64.ne
-     (tee_local $2
-      (i64.const 0)
-     )
+     (i64.const 0)
      (i64.const 0)
     )
-    (get_local $2)
+    (i64.const 0)
     (i64.const 1)
    )
   )
@@ -172,13 +150,11 @@
   (set_global $logical/f
    (if (result f32)
     (f32.ne
-     (tee_local $3
-      (f32.const 1)
-     )
+     (f32.const 1)
      (f32.const 0)
     )
     (f32.const 2)
-    (get_local $3)
+    (f32.const 1)
    )
   )
   (if
@@ -193,12 +169,10 @@
   (set_global $logical/f
    (if (result f32)
     (f32.ne
-     (tee_local $3
-      (f32.const 0)
-     )
+     (f32.const 0)
      (f32.const 0)
     )
-    (get_local $3)
+    (f32.const 0)
     (f32.const 1)
    )
   )
@@ -214,13 +188,11 @@
   (set_global $logical/F
    (if (result f64)
     (f64.ne
-     (tee_local $1
-      (f64.const 1)
-     )
+     (f64.const 1)
      (f64.const 0)
     )
     (f64.const 2)
-    (get_local $1)
+    (f64.const 1)
    )
   )
   (if
@@ -235,12 +207,10 @@
   (set_global $logical/F
    (if (result f64)
     (f64.ne
-     (tee_local $1
-      (f64.const 0)
-     )
+     (f64.const 0)
      (f64.const 0)
     )
-    (get_local $1)
+    (f64.const 0)
     (f64.const 1)
    )
   )

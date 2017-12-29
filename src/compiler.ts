@@ -1573,19 +1573,19 @@ export class Compiler extends DiagnosticEmitter {
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
-        // simplify if left is free of side effects while tolerating two levels of nesting, e.g., i32.load(i32.load(i32.const))
-        // if (condition = this.module.cloneExpression(left, true, 2))
-        //   return this.module.createIf(
-        //     this.currentType.isLongInteger
-        //       ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
-        //       : this.currentType == Type.f64
-        //       ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
-        //       : this.currentType == Type.f32
-        //       ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
-        //       : condition, // usual case: saves one EQZ when not using EQZ above
-        //      right,
-        //      left
-        //   );
+        // simplify if left is free of side effects while tolerating one level of nesting, e.g., i32.load(i32.const)
+        if (condition = this.module.cloneExpression(left, true, 1))
+          return this.module.createIf(
+            this.currentType.isLongInteger
+              ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
+              : this.currentType == Type.f64
+              ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
+              : this.currentType == Type.f32
+              ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
+              : condition, // usual case: saves one EQZ when not using EQZ above
+             right,
+             left
+          );
 
         // otherwise use a temporary local for the intermediate value
         tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
@@ -1606,19 +1606,19 @@ export class Compiler extends DiagnosticEmitter {
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
-        // simplify if left is free of side effects while tolerating two levels of nesting
-        // if (condition = this.module.cloneExpression(left, true, 2))
-        //   return this.module.createIf(
-        //     this.currentType.isLongInteger
-        //       ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
-        //       : this.currentType == Type.f64
-        //       ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
-        //       : this.currentType == Type.f32
-        //       ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
-        //       : condition, // usual case: saves one EQZ when not using EQZ above
-        //     left,
-        //     right
-        //   );
+        // simplify if left is free of side effects while tolerating one level of nesting
+        if (condition = this.module.cloneExpression(left, true, 1))
+          return this.module.createIf(
+            this.currentType.isLongInteger
+              ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
+              : this.currentType == Type.f64
+              ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
+              : this.currentType == Type.f32
+              ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
+              : condition, // usual case: saves one EQZ when not using EQZ above
+            left,
+            right
+          );
 
         // otherwise use a temporary local for the intermediate value
         tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);

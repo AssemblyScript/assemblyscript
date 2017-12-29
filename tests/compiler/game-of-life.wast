@@ -35,7 +35,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   (nop)
   (nop)
   (block
@@ -236,13 +235,14 @@
              (get_local $9)
              (if
               (if (result i32)
-               (tee_local $11
-                (i32.lt_u
-                 (get_local $8)
-                 (i32.const 2)
-                )
+               (i32.lt_u
+                (get_local $8)
+                (i32.const 2)
                )
-               (get_local $11)
+               (i32.lt_u
+                (get_local $8)
+                (i32.const 2)
+               )
                (i32.gt_u
                 (get_local $8)
                 (i32.const 3)

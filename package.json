@@ -11,7 +11,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "40.0.0-nightly.20171209",
+    "binaryen": "40.0.0-nightly.20171229",
     "glob": "^7.1.2",
     "minimist": "^1.2.0"
   },
@@ -21,13 +21,13 @@
     "@types/glob": "^5.0.34",
     "@types/long": "^3.0.32",
     "@types/minimist": "^1.2.0",
-    "@types/node": "^8.5.1",
+    "@types/node": "^8.5.2",
     "chalk": "^2.3.0",
     "diff": "^3.4.0",
     "long": "^3.2.0",
     "source-map-support": "^0.5.0",
     "ts-loader": "^3.2.0",
-    "ts-node": "^4.0.2",
+    "ts-node": "^4.1.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
@@ -38,7 +38,7 @@
     "asc": "bin/asc"
   },
   "engines": {
-    "node" : ">=8"
+    "node": ">=8"
   },
   "scripts": {
     "build": "webpack",

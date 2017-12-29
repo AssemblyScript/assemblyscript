@@ -15,33 +15,15 @@ export type ImportRef = usize;
 export type ExportRef = usize;
 export type Index = u32;
 
-// snip...
-declare function _BinaryenNone(): NativeType;
-declare function _BinaryenInt32(): NativeType;
-declare function _BinaryenInt64(): NativeType;
-declare function _BinaryenFloat32(): NativeType;
-declare function _BinaryenFloat64(): NativeType;
-declare function _BinaryenUndefined(): NativeType;
-export enum NativeType {
-  None = _BinaryenNone(),
-  I32 = _BinaryenInt32(),
-  I64 = _BinaryenInt64(),
-  F32 = _BinaryenFloat32(),
-  F64 =  _BinaryenFloat64(),
-  Unreachable = 5,
-  Auto = _BinaryenUndefined()
+ export enum NativeType {
+  None = _BinaryenTypeNone(),
+  I32 = _BinaryenTypeInt32(),
+  I64 = _BinaryenTypeInt64(),
+  F32 = _BinaryenTypeFloat32(),
+  F64 =  _BinaryenTypeFloat64(),
+  Unreachable = _BinaryenTypeUnreachable(),
+  Auto = _BinaryenTypeAuto()
 }
-// ...snap, once binaryen is updated
-
-// export enum NativeType {
-//   None = _BinaryenTypeNone(),
-//   I32 = _BinaryenTypeInt32(),
-//   I64 = _BinaryenTypeInt64(),
-//   F32 = _BinaryenTypeFloat32(),
-//   F64 =  _BinaryenTypeFloat64(),
-//   Unreachable = _BinaryenTypeUnreachable(),
-//   Auto = _BinaryenTypeAuto()
-// }
 
 export enum ExpressionId {
   Invalid = _BinaryenInvalidId(),
@@ -828,28 +810,35 @@ export class Module {
           case NativeType.I64: return this.createI64(_BinaryenConstGetValueI64Low(expr), _BinaryenConstGetValueI64High(expr));
           case NativeType.F32: return this.createF32(_BinaryenConstGetValueF32(expr));
           case NativeType.F64: return this.createF64(_BinaryenConstGetValueF64(expr));
-          default: throw new Error("unexpected constant type");
+          default: throw new Error("concrete type expected");
         }
 
       case ExpressionId.GetLocal:
         return _BinaryenGetLocal(this.ref, _BinaryenGetLocalGetIndex(expr), _BinaryenExpressionGetType(expr));
 
-      // case ExpressionId.GetGlobal: explodes if it doesn't have a name
-      //   return _BinaryenGetGlobal(this.ref, _BinaryenGetGlobalGetName(expr), _BinaryenExpressionGetType(expr));
+      case ExpressionId.GetGlobal:
+        var globalName = _BinaryenGetGlobalGetName(expr);
+        if (!globalName)
+          break;
+        return _BinaryenGetGlobal(this.ref, globalName, _BinaryenExpressionGetType(expr));
 
       case ExpressionId.Load:
-        if (!(nested1 = this.cloneExpression(_BinaryenLoadGetPtr(expr), noSideEffects, maxDepth - 1))) break;
+        if (!(nested1 = this.cloneExpression(_BinaryenLoadGetPtr(expr), noSideEffects, maxDepth - 1)))
+          break;
         return _BinaryenLoadIsAtomic(expr)
           ? _BinaryenAtomicLoad(this.ref, _BinaryenLoadGetBytes(expr), _BinaryenLoadGetOffset(expr), _BinaryenExpressionGetType(expr), nested1)
           : _BinaryenLoad(this.ref, _BinaryenLoadGetBytes(expr), _BinaryenLoadIsSigned(expr) ? 1 : 0, _BinaryenLoadGetOffset(expr),  _BinaryenLoadGetAlign(expr), _BinaryenExpressionGetType(expr), nested1);
 
       case ExpressionId.Unary:
-        if (!(nested1 = this.cloneExpression(_BinaryenUnaryGetValue(expr), noSideEffects, maxDepth - 1))) break;
+        if (!(nested1 = this.cloneExpression(_BinaryenUnaryGetValue(expr), noSideEffects, maxDepth - 1)))
+          break;
         return _BinaryenUnary(this.ref, _BinaryenUnaryGetOp(expr), nested1);
 
       case ExpressionId.Binary:
-        if (!(nested1 = this.cloneExpression(_BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth - 1))) break;
-        if (!(nested2 = this.cloneExpression(_BinaryenBinaryGetRight(expr), noSideEffects, maxDepth - 1))) break;
+        if (!(nested1 = this.cloneExpression(_BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth - 1)))
+          break;
+        if (!(nested2 = this.cloneExpression(_BinaryenBinaryGetRight(expr), noSideEffects, maxDepth - 1)))
+          break;
         return _BinaryenBinary(this.ref, _BinaryenBinaryGetOp(expr), nested1, nested2);
     }
     return 0;
