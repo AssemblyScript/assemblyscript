@@ -15,7 +15,7 @@ export type ImportRef = usize;
 export type ExportRef = usize;
 export type Index = u32;
 
- export enum NativeType {
+export enum NativeType {
   None = _BinaryenTypeNone(),
   I32 = _BinaryenTypeInt32(),
   I64 = _BinaryenTypeInt64(),
@@ -796,7 +796,7 @@ export class Module {
   }
 
   // currently supports side effect free expressions only
-  cloneExpression(expr: ExpressionRef, noSideEffects: bool = false, maxDepth: i32 = 0x7fffffff): ExpressionRef {
+  cloneExpression(expr: ExpressionRef, noSideEffects: bool = false, maxDepth: i32 = i32.MAX_VALUE): ExpressionRef {
     if (this.noEmit || maxDepth < 0) return 0;
 
     var nested1: ExpressionRef,
@@ -900,28 +900,24 @@ export class Relooper {
   }
 }
 
-export function setAPITracing(on: bool): void {
-  _BinaryenSetAPITracing(on ? 1 : 0);
-}
-
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js
 
 function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
-  var ptr = Heap.allocate((<Uint8Array>u8s).length);
+  var ptr = Heap.allocate(u8s.length);
   var idx = ptr;
-  for (var i = 0, k = (<Uint8Array>u8s).length; i < k; ++i)
-    store<u8>(idx++, (<Uint8Array>u8s)[i]);
+  for (var i = 0, k = u8s.length; i < k; ++i)
+    store<u8>(idx++, u8s[i]);
   return ptr;
 }
 
 function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
-  var ptr = Heap.allocate((<i32[]>i32s).length << 2);
+  var ptr = Heap.allocate(i32s.length << 2);
   var idx = ptr;
-  for (var i = 0, k = (<i32[]>i32s).length; i < k; ++i) {
-    var val = (<i32[]>i32s)[i];
+  for (var i = 0, k = i32s.length; i < k; ++i) {
+    var val = i32s[i];
     // store<i32>(idx, val) is not portable
     store<u8>(idx    , ( val         & 0xff) as u8);
     store<u8>(idx + 1, ((val >>   8) & 0xff) as u8);
@@ -956,12 +952,12 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str == null) return 0;
-  var ptr = Heap.allocate(stringLengthUTF8((<string>str)) + 1);
+  var ptr = Heap.allocate(stringLengthUTF8(str) + 1);
   var idx = ptr;
-  for (var i = 0, k = (<string>str).length; i < k; ++i) {
-    var u = (<string>str).charCodeAt(i);
+  for (var i = 0, k = str.length; i < k; ++i) {
+    var u = str.charCodeAt(i);
     if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k)
-      u = 0x10000 + ((u & 0x3FF) << 10) | ((<string>str).charCodeAt(++i) & 0x3FF);
+      u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
     if (u <= 0x7F)
       store<u8>(idx++, u as u8);
     else if (u <= 0x7FF) {

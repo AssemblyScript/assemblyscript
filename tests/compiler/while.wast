@@ -1,20 +1,47 @@
 (module
- (type $iv (func (param i32)))
+ (type $v (func))
+ (global $while/n (mut i32) (i32.const 10))
+ (global $while/m (mut i32) (i32.const 0))
+ (global $while/o (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
- (export "loopWhile" (func $while/loopWhile))
- (export "loopWhileInWhile" (func $while/loopWhileInWhile))
  (export "memory" (memory $0))
- (func $while/loopWhile (; 0 ;) (type $iv) (param $0 i32)
+ (start $start)
+ (func $start (; 0 ;) (type $v)
+  (local $0 i32)
   (block $break|0
    (loop $continue|0
     (if
-     (get_local $0)
+     (get_global $while/n)
      (block
-      (set_local $0
-       (i32.sub
-        (get_local $0)
-        (i32.const 1)
+      (block
+       (drop
+        (block (result i32)
+         (set_local $0
+          (get_global $while/n)
+         )
+         (set_global $while/n
+          (i32.sub
+           (get_local $0)
+           (i32.const 1)
+          )
+         )
+         (get_local $0)
+        )
+       )
+       (drop
+        (block (result i32)
+         (set_local $0
+          (get_global $while/m)
+         )
+         (set_global $while/m
+          (i32.add
+           (get_local $0)
+           (i32.const 1)
+          )
+         )
+         (get_local $0)
+        )
        )
       )
       (br $continue|0)
@@ -22,41 +49,217 @@
     )
    )
   )
- )
- (func $while/loopWhileInWhile (; 1 ;) (type $iv) (param $0 i32)
-  (block $break|0
-   (loop $continue|0
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $while/n)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $while/m)
+     (i32.const 10)
+    )
+   )
+   (unreachable)
+  )
+  (set_global $while/n
+   (i32.const 10)
+  )
+  (set_global $while/m
+   (i32.const 0)
+  )
+  (block $break|1
+   (loop $continue|1
     (if
-     (get_local $0)
+     (get_global $while/n)
      (block
       (block
-       (set_local $0
-        (i32.sub
+       (drop
+        (block (result i32)
+         (set_local $0
+          (get_global $while/n)
+         )
+         (set_global $while/n
+          (i32.sub
+           (get_local $0)
+           (i32.const 1)
+          )
+         )
          (get_local $0)
-         (i32.const 1)
         )
        )
-       (block $break|1
-        (loop $continue|1
+       (drop
+        (block (result i32)
+         (set_local $0
+          (get_global $while/m)
+         )
+         (set_global $while/m
+          (i32.add
+           (get_local $0)
+           (i32.const 1)
+          )
+         )
+         (get_local $0)
+        )
+       )
+       (block $break|2
+        (loop $continue|2
          (if
-          (get_local $0)
+          (get_global $while/n)
           (block
-           (set_local $0
-            (i32.sub
-             (get_local $0)
-             (i32.const 1)
+           (block
+            (drop
+             (block (result i32)
+              (set_local $0
+               (get_global $while/n)
+              )
+              (set_global $while/n
+               (i32.sub
+                (get_local $0)
+                (i32.const 1)
+               )
+              )
+              (get_local $0)
+             )
+            )
+            (drop
+             (block (result i32)
+              (set_local $0
+               (get_global $while/o)
+              )
+              (set_global $while/o
+               (i32.add
+                (get_local $0)
+                (i32.const 1)
+               )
+              )
+              (get_local $0)
+             )
             )
            )
-           (br $continue|1)
+           (br $continue|2)
           )
          )
         )
        )
+       (if
+        (i32.eqz
+         (i32.eq
+          (get_global $while/n)
+          (i32.const 0)
+         )
+        )
+        (unreachable)
+       )
+       (if
+        (i32.eqz
+         (i32.eq
+          (get_global $while/o)
+          (i32.const 9)
+         )
+        )
+        (unreachable)
+       )
       )
-      (br $continue|0)
+      (br $continue|1)
      )
     )
    )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $while/n)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $while/m)
+     (i32.const 1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $while/o)
+     (i32.const 9)
+    )
+   )
+   (unreachable)
+  )
+  (set_global $while/n
+   (i32.const 1)
+  )
+  (set_global $while/m
+   (i32.const 0)
+  )
+  (block $break|3
+   (loop $continue|3
+    (if
+     (if (result i32)
+      (tee_local $0
+       (block (result i32)
+        (set_local $0
+         (get_global $while/n)
+        )
+        (set_global $while/n
+         (i32.sub
+          (get_local $0)
+          (i32.const 1)
+         )
+        )
+        (get_local $0)
+       )
+      )
+      (block (result i32)
+       (set_global $while/m
+        (i32.add
+         (get_global $while/m)
+         (i32.const 1)
+        )
+       )
+       (get_global $while/m)
+      )
+      (get_local $0)
+     )
+     (block
+      (nop)
+      (br $continue|3)
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $while/n)
+     (i32.sub
+      (i32.const 0)
+      (i32.const 1)
+     )
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $while/m)
+     (i32.const 1)
+    )
+   )
+   (unreachable)
   )
  )
 )
@@ -106,9 +309,9 @@
   FUNCTION_PROTOTYPE: isize
   FUNCTION_PROTOTYPE: usize
   GLOBAL: HEAP_BASE
-  FUNCTION_PROTOTYPE: while/loopWhile
-  FUNCTION_PROTOTYPE: while/loopWhileInWhile
+  GLOBAL: while/n
+  GLOBAL: while/m
+  GLOBAL: while/o
 [program.exports]
-  FUNCTION_PROTOTYPE: while/loopWhile
-  FUNCTION_PROTOTYPE: while/loopWhileInWhile
+  
 ;)

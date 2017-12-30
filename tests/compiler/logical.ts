@@ -6,7 +6,7 @@
 1 && 2 || unreachable();
 1.0 && 2.0 || unreachable();
 
-let i: i32;
+var i: i32;
 
 i = 1 && 2;
 assert(i == 2);
@@ -14,7 +14,7 @@ assert(i == 2);
 i = 0 || 1;
 assert(i == 1);
 
-let I: i64;
+var I: i64;
 
 I = 1 && 2;
 assert(I == 2);
@@ -22,7 +22,7 @@ assert(I == 2);
 I = 0 || 1;
 assert(I == 1);
 
-let f: f32;
+var f: f32;
 
 f = 1.0 && 2.0;
 assert(f == 2.0);
@@ -30,7 +30,7 @@ assert(f == 2.0);
 f = 0.0 || 1.0;
 assert(f == 1.0);
 
-let F: f64;
+var F: f64;
 
 F = 1.0 && 2.0;
 assert(F == 2.0);

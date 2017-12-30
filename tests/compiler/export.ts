@@ -11,6 +11,7 @@ export { sub as renamed_sub };
 export const a: i32 = 1;
 
 const b: i32 = 2;
+b;
 
 export { b as renamed_b };
 

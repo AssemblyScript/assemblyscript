@@ -11,6 +11,24 @@
    )
    (unreachable)
   )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 1)
+     (i32.const 1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f64.gt
+     (f64.const 0.5)
+     (f64.const 0.4)
+    )
+   )
+   (unreachable)
+  )
  )
 )
 (;

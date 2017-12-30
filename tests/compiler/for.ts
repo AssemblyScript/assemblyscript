@@ -1,10 +1,10 @@
-let i: i32;
+var i: i32;
 for (i = 0; i < 10; ++i) {
   ;
 }
 assert(i == 10);
 
-for (let j: i32 = 0; j < 10; ++j) {
+for (var j: i32 = 0; j < 10; ++j) {
   ;
 }
 

@@ -840,8 +840,8 @@ export class Compiler extends DiagnosticEmitter {
 
   compileDoStatement(statement: DoStatement): ExpressionRef {
     var label = this.currentFunction.enterBreakContext();
-    var condition = this.compileExpression(statement.condition, Type.i32);
     var body = this.compileStatement(statement.statement);
+    var condition = this.compileExpression(statement.condition, Type.i32);
     this.currentFunction.leaveBreakContext();
     var breakLabel = "break|" + label;
     var continueLabel = "continue|" + label;
@@ -1494,8 +1494,11 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PERCENT:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        if (this.currentType.isAnyFloat)
-          throw new Error("not implemented"); // TODO: internal fmod, possibly simply imported from JS
+        if (this.currentType.isAnyFloat) {
+          // TODO: internal fmod, possibly simply imported from JS
+          this.error(DiagnosticCode.Operation_not_supported, expression.range);
+          return this.module.createUnreachable();
+        }
         op = this.currentType.isSignedInteger
            ? this.currentType.isLongInteger
              ? BinaryOp.RemI64

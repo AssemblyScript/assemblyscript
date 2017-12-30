@@ -1,7 +1,7 @@
-let i: i32 = 0;
-let I: i64 = 0;
-let f: f32 = 0;
-let F: f64 = 0;
+var i: i32 = 0;
+var I: i64 = 0;
+var f: f32 = 0;
+var F: f64 = 0;
 
 i8(i);
 i8(I);

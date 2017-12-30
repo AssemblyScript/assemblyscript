@@ -2182,7 +2182,7 @@ function builderEndsWith(sb: string[], code: CharCode): bool {
 }
 
 /** Converts a string to its literal representation including quotes. */
-export function stringToLiteral(str: string): string {
+export function stringToLiteral(str: string, singleQuoted: bool = false): string {
   var ret = new Array<string>();
   var off = 0;
   for (var i = 0, k = str.length; i < k;) {
@@ -2263,11 +2263,12 @@ export function stringToLiteral(str: string): string {
         break;
     }
   }
+  var quote = singleQuoted ? "'" : "\"";
   if (off == 0) {
     assert(ret.length == 0);
-    return "\"" + str + "\"";
+    return quote + str + quote;
   }
   if (i > off)
     ret.push(str.substring(off, i));
-  return "\"" + ret.join("") + "\"";
+  return quote + ret.join("") + quote;
 }

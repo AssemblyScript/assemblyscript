@@ -1,8 +1,8 @@
-let b: bool;
+var b: bool;
 
 // integers
 
-let i: i32;
+var i: i32;
 
 clz<i32>(1);
 ctz<i32>(1);
@@ -22,7 +22,7 @@ i = abs<i32>(-42); assert(i == 42);
 i = max<i32>(1, 2); assert(i == 2);
 i = min<i32>(1, 2); assert(i == 1);
 
-let I: i64;
+var I: i64;
 
 clz<i64>(1);
 ctz<i64>(1);
@@ -42,7 +42,7 @@ I = min<i64>(1, 2); assert(i == 1);
 
 // floats
 
-let f: f32;
+var f: f32;
 
 <f32>NaN;
 <f32>Infinity;
@@ -72,7 +72,7 @@ f = trunc<f32>(1.25);
 b = isNaN<f32>(1.25);
 b = isFinite<f32>(1.25);
 
-let F: f64;
+var F: f64;
 
 <f64>NaN;
 <f64>Infinity;
@@ -129,7 +129,7 @@ F = reinterpret<i64,f64>(25);
 
 // host
 
-let s: usize;
+var s: usize;
 
 current_memory();
 grow_memory(1);
@@ -179,8 +179,9 @@ assert(isFinite<f64>(0));
 
 // imported
 
-// TODO: Can't be interpreted due to 'Fatal: callImport: unknown import: env.parseInt'
-
-// parseInt(0);
-// parseInt(0, 10);
-// parseFloat(0);
+export function test(): void {
+  // cannot be interpreted
+  // parseInt("01");
+  // parseInt("1", 10);
+  // parseFloat("1.0");
+}

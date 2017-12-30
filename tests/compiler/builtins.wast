@@ -8,9 +8,12 @@
  (global $builtins/s (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
+ (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $builtins/test (; 0 ;) (type $v)
+ )
+ (func $start (; 1 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -1085,6 +1088,7 @@
   GLOBAL: builtins/f
   GLOBAL: builtins/F
   GLOBAL: builtins/s
+  FUNCTION_PROTOTYPE: builtins/test
 [program.exports]
-  
+  FUNCTION_PROTOTYPE: builtins/test
 ;)

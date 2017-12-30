@@ -1,7 +1,7 @@
 export function memcpy(dest: usize, src: usize, n: usize): usize {
   // the following is based on musl's implementation of memcpy
-  let d: usize = dest, s: usize = src;
-  let w: u32, x: u32;
+  var d: usize = dest, s: usize = src;
+  var w: u32, x: u32;
 
   // copy 1 byte each until src is aligned to 4 bytes
   while (n && s % 4) {
@@ -147,7 +147,7 @@ store<u64>(base + 8 , 0x2222222222222222);
 store<u64>(base + 16, 0x3333333333333333);
 store<u64>(base + 24, 0x4444444444444444);
 
-let dest: usize;
+var dest: usize;
 dest = memcpy(base + 1, base + 16, 4);
 assert(dest == base + 1);
 assert(load<u64>(base) == 0x1111113333333311);

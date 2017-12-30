@@ -180,9 +180,9 @@ export function control$construct(ptr: usize): void {
   block$set_next_free(ptr, ptr);
   block$set_prev_free(ptr, ptr);
   control$set_fl_bitmap(ptr, 0);
-  for (let flIndex: usize = 0; flIndex < FL_INDEX_COUNT; ++flIndex) {
+  for (var flIndex: usize = 0; flIndex < FL_INDEX_COUNT; ++flIndex) {
     control$set_sl_bitmap(ptr, flIndex, 0);
-    for (let slIndex: usize = 0; slIndex < SL_INDEX_COUNT; ++slIndex)
+    for (var slIndex: usize = 0; slIndex < SL_INDEX_COUNT; ++slIndex)
       control$set_block(ptr, flIndex, slIndex, ptr);
   }
 }

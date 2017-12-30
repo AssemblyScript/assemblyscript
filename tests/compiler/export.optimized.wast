@@ -10,6 +10,7 @@
  (export "renamed_b" (global $export/b))
  (export "two" (func $export/ns.two))
  (export "memory" (memory $0))
+ (start $export/ns.two)
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.add
    (get_local $0)

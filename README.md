@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
 
-**AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). Unlike more complex toolchains, `asc` generates minimal WebAssembly modules while being just an `npm install` away.
+**AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). Unlike other toolchains, `asc` generates minimal WebAssembly modules while being just an `npm install` away.
 
 Examples
 --------
@@ -15,6 +15,9 @@ A few early examples to get an idea:
 
 * **[i64 polyfill](./examples/i64-polyfill)**<br />
   Exposes WebAssembly's i64 operations to JavaScript using 32-bit integers (low and high bits).
+
+* **[PSON decoder](./examples/pson)**<br />
+  A PSON decoder implemented in AssemblyScript.
 
 Or browse the [compiler tests](./tests/compiler) for a more in-depth overview of what's supported already.
 

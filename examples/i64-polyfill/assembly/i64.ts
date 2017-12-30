@@ -1,5 +1,5 @@
-let lo: u32;
-let hi: u32;
+var lo: u32,
+    hi: u32;
 
 export function getLo(): u32 {
   return lo;

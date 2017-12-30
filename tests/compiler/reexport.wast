@@ -1,8 +1,8 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
- (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
+ (global $export/a i32 (i32.const 1))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "add" (func $export/add))
@@ -32,6 +32,9 @@
  (func $export/ns.two (; 2 ;) (type $v)
  )
  (func $start (; 3 ;) (type $v)
+  (drop
+   (i32.const 2)
+  )
   (drop
    (i32.add
     (call $export/add
