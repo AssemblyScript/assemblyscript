@@ -12,7 +12,9 @@ import {
 } from "./util/sb";
 
 import {
-  NativeType, ExpressionRef, Module
+  NativeType,
+  ExpressionRef,
+  Module
 } from "./module";
 
 /** Indicates the kind of a type. */
@@ -39,7 +41,6 @@ export const enum TypeKind {
 
   // other
   VOID
-  // SYMBOL ?
 }
 
 /** Represents a resolved type. */
@@ -87,6 +88,10 @@ export class Type {
   get isAnySize(): bool { return this.kind == TypeKind.ISIZE || this.kind == TypeKind.USIZE; }
   /** Tests if this type is of any float kind, i.e., `f32` or `f64`. */
   get isAnyFloat(): bool { return this.kind == TypeKind.F32 || this.kind == TypeKind.F64; }
+  /** Tests if this type is a class type. */
+  get isClass(): bool { return this.classType != null; }
+  /** Tests if this type is a function type. */
+  get isFunction(): bool { return this.functionType != null; }
 
   /** Composes a class type from this type and a class. */
   asClass(classType: Class): Type {
@@ -164,13 +169,30 @@ export class Type {
          : module.createI32(1);
   }
 
-  /** Converts this type to its signature name. */
-  toSignatureName(): string {
-    return this.kind == TypeKind.VOID ? "v"
-         : this.kind == TypeKind.F32 ? "f"
-         : this.kind == TypeKind.F64 ? "F"
-         : this.isLongInteger ? "I"
-         : "i";
+  /** Converts this type to its signature string. */
+  toSignatureString(): string {
+    switch (this.kind) {
+
+      default:
+        return "i";
+
+      case TypeKind.I64:
+      case TypeKind.U64:
+        return "I";
+
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        return select<string>("I", "i", this.size == 64);
+
+      case TypeKind.F32:
+        return "f";
+
+      case TypeKind.F64:
+        return "F";
+
+      case TypeKind.VOID:
+        return "v";
+    }
   }
 
   // Types
@@ -184,9 +206,9 @@ export class Type {
   /** A 64-bit signed integer. */
   static readonly i64: Type = new Type(TypeKind.I64, 64);
   /** A 32-bit signed size. WASM32 only. */
-  static readonly isize32: Type = new Type(TypeKind.I32, 32);
+  static readonly isize32: Type = new Type(TypeKind.ISIZE, 32);
   /** A 64-bit signed size. WASM64 only. */
-  static readonly isize64: Type = new Type(TypeKind.I64, 64);
+  static readonly isize64: Type = new Type(TypeKind.ISIZE, 64);
   /** An 8-bit unsigned integer. */
   static readonly u8: Type = new Type(TypeKind.U8, 8);
   /** A 16-bit unsigned integer. */
@@ -196,9 +218,9 @@ export class Type {
   /** A 64-bit unsigned integer. */
   static readonly u64: Type = new Type(TypeKind.U64, 64);
   /** A 32-bit unsigned size. WASM32 only. */
-  static readonly usize32: Type = new Type(TypeKind.U32, 32);
+  static readonly usize32: Type = new Type(TypeKind.USIZE, 32);
   /** A 64-bit unsigned size. WASM64 only. */
-  static readonly usize64: Type = new Type(TypeKind.U64, 64);
+  static readonly usize64: Type = new Type(TypeKind.USIZE, 64);
   /** A 1-bit unsigned integer. */
   static readonly bool: Type = new Type(TypeKind.BOOL, 1);
   /** A 32-bit float. */
@@ -208,19 +230,6 @@ export class Type {
   /** No return type. */
   static readonly void: Type = new Type(TypeKind.VOID, 0);
 }
-
-// export class ClassType extends Type {
-//   constructor(cls: Class) {
-//     super(TypeKind.USIZE, /* clz.size */ 4); // TODO
-//   }
-// }
-
-// // TODO: what about 'type fun = <T>(a: T) => T;' ?
-// export class FunctionType extends Type {
-//   constructor(fun: Function) {
-//     super(TypeKind.USIZE, fun.program.target == Target.WASM64 ? 8 : 4);
-//   }
-// }
 
 /** Converts an array of types to an array of native types. */
 export function typesToNativeTypes(types: Type[]): NativeType[] {
@@ -232,12 +241,12 @@ export function typesToNativeTypes(types: Type[]): NativeType[] {
 }
 
 /** Converts an array of types to its combined string representation. Usually type arguments. */
-export function typesToString(types: Type[], prefix: string = "<", postfix: string = ">"): string {
+export function typesToString(types: Type[]): string {
   var k = types.length;
   if (!k)
     return "";
-  sb.length = 0;
+  var sb = new Array<string>(k);
   for (var i = 0; i < k; ++i)
     sb[i] = types[i].toString();
-  return prefix + sb.join(", ") + postfix;
+  return sb.join(", ");
 }

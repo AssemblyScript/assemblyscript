@@ -152,12 +152,13 @@ export abstract class Node {
     return expr;
   }
 
-  static createCall(expression: Expression, typeArguments: TypeNode[], args: Expression[], range: Range): CallExpression {
+  static createCall(expression: Expression, typeArguments: TypeNode[] | null, args: Expression[], range: Range): CallExpression {
     var expr = new CallExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
-    for (var i = 0, k = (expr.typeArguments = typeArguments).length; i < k; ++i)
-      typeArguments[i].parent = expr;
+    if (expr.typeArguments = typeArguments)
+      for (var i = 0, k = (<TypeNode[]>typeArguments).length; i < k; ++i)
+        (<TypeNode[]>typeArguments)[i].parent = expr;
     for (i = 0, k = (expr.arguments = args).length; i < k; ++i)
       args[i].parent = expr;
     return expr;
@@ -197,12 +198,13 @@ export abstract class Node {
     return expr;
   }
 
-  static createNew(expression: Expression, typeArguments: TypeNode[], args: Expression[], range: Range): NewExpression {
+  static createNew(expression: Expression, typeArguments: TypeNode[] | null, args: Expression[], range: Range): NewExpression {
     var expr = new NewExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
-    for (var i = 0, k = (expr.typeArguments = typeArguments).length; i < k; ++i)
-      typeArguments[i].parent = expr;
+    if (expr.typeArguments = typeArguments)
+      for (var i = 0, k = (<TypeNode[]>typeArguments).length; i < k; ++i)
+        (<TypeNode[]>typeArguments)[i].parent = expr;
     for (i = 0, k = (expr.arguments = args).length; i < k; ++i)
       args[i].parent = expr;
     return expr;
@@ -333,12 +335,13 @@ export abstract class Node {
     return stmt;
   }
 
-  static createDecorator(expression: Expression, args: Expression[], range: Range): Decorator {
+  static createDecorator(expression: Expression, args: Expression[] | null, range: Range): Decorator {
     var stmt = new Decorator();
     stmt.range = range;
     (stmt.name = expression).parent = stmt;
-    for (var i: i32 = 0, k: i32 = (stmt.arguments = args).length; i < k; ++i)
-      args[i].parent = stmt;
+    if (stmt.arguments = args)
+      for (var i: i32 = 0, k: i32 = (<Expression[]>args).length; i < k; ++i)
+        (<Expression[]>args)[i].parent = stmt;
     return stmt;
   }
 
@@ -857,14 +860,14 @@ export class CallExpression extends Expression {
   /** Called expression. Usually an identifier or property access expression. */
   expression: Expression;
   /** Provided type arguments. */
-  typeArguments: TypeNode[];
+  typeArguments: TypeNode[] | null;
   /** Provided arguments. */
   arguments: Expression[];
 
   serialize(sb: string[]): void {
     this.expression.serialize(sb);
-    var k = this.typeArguments.length;
-    if (k) {
+    var k: i32;
+    if (this.typeArguments && (k = this.typeArguments.length)) {
       sb.push("<");
       for (var i = 0; i < k; ++i) {
         if (i > 0)
@@ -1311,18 +1314,20 @@ export class Decorator extends Statement {
   /** Name expression. */
   name: Expression;
   /** Argument expressions. */
-  arguments: Expression[];
+  arguments: Expression[] | null;
 
   serialize(sb: string[]): void {
     sb.push("@");
     this.name.serialize(sb);
-    sb.push("(");
-    for (var i = 0, k = this.arguments.length; i < k; ++i) {
-      if (i > 0)
-        sb.push(", ");
-      this.arguments[i].serialize(sb);
+    if (this.arguments) {
+      sb.push("(");
+      for (var i = 0, k = this.arguments.length; i < k; ++i) {
+        if (i > 0)
+          sb.push(", ");
+        this.arguments[i].serialize(sb);
+      }
+      sb.push(")");
     }
-    sb.push(")");
   }
 }
 

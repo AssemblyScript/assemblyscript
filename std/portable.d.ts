@@ -136,6 +136,8 @@ declare class Array<T> {
   constructor(capacity?: i32);
   push(value: T): void;
   pop(): T;
+  unshift(value: T): void;
+  shift(): T;
   join(delim: string): string;
   slice(from: i32, to?: i32): T[];
   splice(index: i32, count: i32): T[];

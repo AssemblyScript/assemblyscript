@@ -1,23 +1,72 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
+ (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $ifff (func (param i32 f32 f32) (result f32)))
+ (type $iv (func (param i32)))
  (type $v (func))
+ (global $class/Animal.ONE (mut i32) (i32.const 1))
  (memory $0 1)
+ (export "test" (func $class/test))
  (export "memory" (memory $0))
  (start $start)
  (func $class/Animal.add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.add
-   (get_local $0)
-   (get_local $1)
+   (i32.add
+    (get_local $0)
+    (get_local $1)
+   )
+   (get_global $class/Animal.ONE)
   )
  )
  (func $class/Animal.sub<f32> (; 1 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
-  (f32.sub
-   (get_local $0)
-   (get_local $1)
+  (f32.add
+   (f32.sub
+    (get_local $0)
+    (get_local $1)
+   )
+   (f32.convert_s/i32
+    (get_global $class/Animal.ONE)
+   )
   )
  )
- (func $start (; 2 ;) (type $v)
+ (func $class/Animal#instanceAdd (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.add
+   (i32.add
+    (get_local $1)
+    (get_local $2)
+   )
+   (get_global $class/Animal.ONE)
+  )
+ )
+ (func $class/Animal#instanceSub<f32> (; 3 ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
+  (f32.add
+   (f32.sub
+    (get_local $1)
+    (get_local $2)
+   )
+   (f32.convert_s/i32
+    (get_global $class/Animal.ONE)
+   )
+  )
+ )
+ (func $class/test (; 4 ;) (type $iv) (param $0 i32)
+  (drop
+   (call $class/Animal#instanceAdd
+    (get_local $0)
+    (i32.const 1)
+    (i32.const 2)
+   )
+  )
+  (drop
+   (call $class/Animal#instanceSub<f32>
+    (get_local $0)
+    (f32.const 1)
+    (f32.const 2)
+   )
+  )
+ )
+ (func $start (; 5 ;) (type $v)
   (drop
    (call $class/Animal.add
     (i32.const 1)

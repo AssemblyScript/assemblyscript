@@ -12,8 +12,9 @@ To build [assembly/pson.ts](./assembly/pson.ts) to an untouched and an optimized
 $> npm run build
 ```
 
-Afterwards, to run the included test, do:
+Afterwards, to run the included [test](./tests/index.js):
 
 ```
+$> npm install
 $> npm test
 ```

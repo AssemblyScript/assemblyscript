@@ -44,6 +44,7 @@ import {
   PropertyAccessExpression,
   StringLiteralExpression,
   CallExpression,
+  NewExpression,
 
   Statement,
   ClassDeclaration,
@@ -64,6 +65,7 @@ import {
   VariableDeclaration,
   VariableStatement,
 
+  hasDecorator,
   hasModifier,
   mangleInternalName
 } from "./ast";
@@ -175,7 +177,7 @@ export class Program extends DiagnosticEmitter {
             break;
 
           case NodeKind.TYPEDECLARATION:
-            this.initializeType(<TypeDeclaration>statement);
+            this.initializeTypeAlias(<TypeDeclaration>statement);
             break;
 
           case NodeKind.VARIABLE:
@@ -746,7 +748,7 @@ export class Program extends DiagnosticEmitter {
           break;
 
         case NodeKind.TYPEDECLARATION:
-          this.initializeType(<TypeDeclaration>members[i], namespace);
+          this.initializeTypeAlias(<TypeDeclaration>members[i], namespace);
           break;
 
         case NodeKind.VARIABLE:
@@ -759,7 +761,7 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeType(declaration: TypeDeclaration, namespace: Element | null = null): void {
+  private initializeTypeAlias(declaration: TypeDeclaration, namespace: Element | null = null): void {
     // type aliases are program globals
     // TODO: what about namespaced types?
     var name = declaration.name.name;
@@ -811,6 +813,19 @@ export class Program extends DiagnosticEmitter {
 
   /** Resolves a {@link TypeNode} to a concrete {@link Type}. */
   resolveType(node: TypeNode, contextualTypeArguments: Map<string,Type> | null = null, reportNotFound: bool = true): Type | null {
+    var globalName = node.identifier.name;
+    var localName = node.range.source.internalPath + PATH_DELIMITER + node.identifier.name;
+
+    var element: Element | null;
+
+    // check file-global / program-global element
+    if ((element = this.elements.get(localName)) || (element = this.elements.get(globalName))) {
+      switch (element.kind) {
+        case ElementKind.CLASS_PROTOTYPE:
+          var instance = (<ClassPrototype>element).resolveInclTypeArguments(node.typeArguments, contextualTypeArguments, null); // reports
+          return instance ? instance.type : null;
+      }
+    }
 
     // resolve parameters
     var k = node.typeArguments.length;
@@ -822,10 +837,13 @@ export class Program extends DiagnosticEmitter {
       paramTypes[i] = paramType;
     }
 
-    var globalName = node.identifier.name;
-    if (k) // can't be a placeholder if it has parameters
-      globalName += typesToString(paramTypes);
-    else if (contextualTypeArguments) {
+    if (k) { // can't be a placeholder if it has parameters
+      var instanceKey = typesToString(paramTypes);
+      if (instanceKey.length) {
+        localName += "<" + instanceKey + ">";
+        globalName += "<" + instanceKey + ">";
+      }
+    } else if (contextualTypeArguments) {
       var placeholderType = contextualTypeArguments.get(globalName);
       if (placeholderType)
         return placeholderType;
@@ -833,12 +851,8 @@ export class Program extends DiagnosticEmitter {
 
     var type: Type | null;
 
-    // check file-global type
-    if (type = this.types.get(node.range.source.internalPath + PATH_DELIMITER + globalName))
-      return type;
-
-    // check program-global type
-    if (type = this.types.get(globalName))
+    // check file-global / program-global type
+    if ((type = this.types.get(localName)) || (type = this.types.get(globalName)))
       return type;
 
     // check type alias
@@ -904,7 +918,7 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  /** Resolves a property access the element it refers to. */
+  /** Resolves a property access to the element it refers to. */
   resolvePropertyAccess(propertyAccess: PropertyAccessExpression, contextualFunction: Function): Element | null {
     var expression = propertyAccess.expression;
     var target: Element | null = null;
@@ -917,12 +931,27 @@ export class Program extends DiagnosticEmitter {
     if (!target)
       return null;
     var propertyName = propertyAccess.property.name;
-    if (target.members) {
-      var member = target.members.get(propertyName);
-      if (member)
-        return member;
+    switch (target.kind) {
+
+      case ElementKind.GLOBAL:
+      case ElementKind.LOCAL:
+        var type = (<VariableLikeElement>target).type;
+        assert(type != null);
+        if ((<Type>type).classType) {
+          target = <Class>(<Type>type).classType;
+          // fall-through
+        } else
+          break;
+
+      default:
+        if (target.members) {
+          var member = target.members.get(propertyName);
+          if (member)
+            return member;
+        }
+        break;
     }
-    this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, expression.range, (<PropertyAccessExpression>expression).property.name, target.internalName);
+    this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyAccess.property.name, target.internalName);
     return null;
   }
 
@@ -946,22 +975,11 @@ export class Program extends DiagnosticEmitter {
 
     // instantiation
     } else if (expression.kind == NodeKind.NEW) {
-      return this.resolveElement((<CallExpression>expression).expression, contextualFunction);
+      return this.resolveElement((<NewExpression>expression).expression, contextualFunction);
     }
 
     throw new Error("not implemented");
   }
-}
-
-function hasDecorator(name: string, decorators: Decorator[] | null): bool {
-  if (decorators)
-    for (var i = 0, k = decorators.length; i < k; ++i) {
-      var decorator = decorators[i];
-      var expression = decorator.name;
-      if (expression.kind == NodeKind.IDENTIFIER && decorator.arguments.length <= 1 && (<IdentifierExpression>expression).name == name)
-        return true;
-    }
-  return false;
 }
 
 /** Indicates the specific kind of an {@link Element}. */
@@ -1274,6 +1292,8 @@ export class FunctionPrototype extends Element {
   classPrototype: ClassPrototype | null;
   /** Resolved instances. */
   instances: Map<string,Function> = new Map();
+  /** Class type arguments, if a partially resolved method of a generic class. */
+  classTypeArguments: Type[] | null = null;
 
   /** Constructs a new function prototype. */
   constructor(program: Program, simpleName: string, internalName: string, declaration: FunctionDeclaration | null, classPrototype: ClassPrototype | null = null) {
@@ -1298,9 +1318,8 @@ export class FunctionPrototype extends Element {
       if (this.declaration.typeParameters.length)
         this.isGeneric = true;
     }
-    if (this.classPrototype = classPrototype) {
+    if (this.classPrototype = classPrototype)
       this.isInstance = true;
-    }
   }
 
   /** Whether a getter function or not. */
@@ -1314,8 +1333,8 @@ export class FunctionPrototype extends Element {
   // Whether a getter/setter function or not.
   get isAccessor(): bool { return (this.flags & (ElementFlags.GETTER | ElementFlags.SETTER)) != 0; }
 
-  resolve(typeArguments: Type[] | null = null, contextualTypeArguments: Map<string,Type> | null = null): Function | null {
-    var instanceKey = typeArguments ? typesToString(typeArguments, "", "") : "";
+  resolve(functionTypeArguments: Type[] | null = null, contextualTypeArguments: Map<string,Type> | null = null): Function | null {
+    var instanceKey = functionTypeArguments ? typesToString(functionTypeArguments) : "";
     var instance = this.instances.get(instanceKey);
     if (instance)
       return instance;
@@ -1323,16 +1342,34 @@ export class FunctionPrototype extends Element {
     if (!declaration)
       throw new Error("declaration expected"); // cannot resolve built-ins
 
-    // override call specific contextual type arguments
+    // inherit contextual type arguments
+    var inheritedTypeArguments = contextualTypeArguments;
+    contextualTypeArguments = new Map();
+    if (inheritedTypeArguments)
+      for (var [inheritedName, inheritedType] of inheritedTypeArguments)
+        contextualTypeArguments.set(inheritedName, inheritedType);
+
     var i: i32, k: i32;
-    if (typeArguments && (k = typeArguments.length)) {
-      var inheritedTypeArguments = contextualTypeArguments;
-      contextualTypeArguments = new Map();
-      if (inheritedTypeArguments)
-        for (var [inheritedName, inheritedType] of inheritedTypeArguments)
-          contextualTypeArguments.set(inheritedName, inheritedType);
+
+    // inherit class type arguments if a partially resolved instance method
+    if (this.classPrototype && this.classTypeArguments) {
+      var classDeclaration = this.classPrototype.declaration;
+      if (!classDeclaration)
+        throw new Error("declaration expected"); // cannot resolve built-ins
+      var classTypeParameters = classDeclaration.typeParameters;
+      if ((k = this.classTypeArguments.length) != classTypeParameters.length)
+        throw new Error("unexpected type argument count mismatch");
       for (i = 0; i < k; ++i)
-        contextualTypeArguments.set(declaration.typeParameters[i].identifier.name, typeArguments[i]);
+        contextualTypeArguments.set(classTypeParameters[i].identifier.name, this.classTypeArguments[i]);
+    }
+
+    // override call specific contextual type arguments
+    var functionTypeParameters = declaration.typeParameters;
+    if (functionTypeArguments && (k = functionTypeArguments.length)) {
+      if (k != functionTypeParameters.length)
+        throw new Error("unexpected type argument count mismatch");
+      for (i = 0; i < k; ++i)
+        contextualTypeArguments.set(functionTypeParameters[i].identifier.name, functionTypeArguments[i]);
     }
 
     // resolve parameters
@@ -1370,13 +1407,20 @@ export class FunctionPrototype extends Element {
     var internalName = this.internalName;
     if (instanceKey.length)
       internalName += "<" + instanceKey + ">";
-    instance = new Function(this, internalName, typeArguments, parameters, returnType, null); // TODO: class
+    var classInstance: Class | null = null;
+    if (this.classPrototype) {
+      classInstance = this.classPrototype.resolve(this.classTypeArguments, contextualTypeArguments); // reports
+      if (!classInstance)
+        return null;
+    }
+    instance = new Function(this, internalName, functionTypeArguments, parameters, returnType, classInstance);
+    instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
     return instance;
   }
 
   resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Function | null {
-    var resolvedTypeArguments: Type[] | null;
+    var resolvedTypeArguments: Type[] | null = null;
     if (this.isGeneric) {
       assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
       if (!this.declaration)
@@ -1384,11 +1428,19 @@ export class FunctionPrototype extends Element {
       resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
       if (!resolvedTypeArguments)
         return null;
-    } else {
-      assert(typeArgumentNodes == null || typeArgumentNodes.length == 0);
-      resolvedTypeArguments = [];
     }
     return this.resolve(resolvedTypeArguments, contextualTypeArguments);
+  }
+
+  resolvePartial(classTypeArguments: Type[] | null): FunctionPrototype | null {
+    assert(this.classPrototype != null);
+    if (classTypeArguments && classTypeArguments.length) {
+      var partialPrototype = new FunctionPrototype(this.program, this.simpleName, this.internalName, this.declaration, this.classPrototype);
+      partialPrototype.flags = this.flags;
+      partialPrototype.classTypeArguments = classTypeArguments;
+      return partialPrototype;
+    }
+    return this; // no need to clone
   }
 
   toString(): string { return this.simpleName; }
@@ -1435,9 +1487,10 @@ export class Function extends Element {
       assert(this.isInstance);
       this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));
       if (instanceMethodOf.contextualTypeArguments) {
-        if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
-        for (var [name, type] of instanceMethodOf.contextualTypeArguments)
-          this.contextualTypeArguments.set(name, type);
+        if (!this.contextualTypeArguments)
+          this.contextualTypeArguments = new Map();
+        for (var [inheritedName, inheritedType] of instanceMethodOf.contextualTypeArguments)
+          this.contextualTypeArguments.set(inheritedName, inheritedType);
       }
     } else
       assert(!this.isInstance);
@@ -1477,9 +1530,9 @@ export class Function extends Element {
       case NativeType.F64: temps = this.tempF64s; break;
       default: throw new Error("unexpected type");
     }
-    if (temps && temps.length > 0)
-      return temps.pop();
-    return this.addLocal(type);
+    return temps && temps.length > 0
+      ? temps.pop()
+      : this.addLocal(type);
   }
 
   /** Frees the temporary local for reuse. */
@@ -1584,6 +1637,12 @@ export class FieldPrototype extends Element {
   /** Whether the field is read-only or not. */
   get isReadonly(): bool { return (this.flags & ElementFlags.READONLY) != 0; }
   set isReadonly(is: bool) { if (is) this.flags |= ElementFlags.READONLY; else this.flags &= ~ElementFlags.READONLY; }
+
+  // resolve(contextualTypeArguments: Map<string,Type> | null = null): Field {
+  //   if (!this.declaration)
+  //     throw new Error("declaration expected");
+  //   this.declaration.type
+  // }
 }
 
 /** A resolved instance field. */
@@ -1595,10 +1654,12 @@ export class Field extends Element {
   prototype: FieldPrototype;
   /** Resolved type. */
   type: Type;
-  /** Constant integer value, if applicable. */
+  /** Constant integer value, if a constant static integer. */
   constantIntegerValue: I64 | null = null;
-  /** Constant float value, if applicable. */
+  /** Constant float value, if a constant static float. */
   constantFloatValue: f64 = 0;
+  /** Field memory offset, if an instance field. */
+  memoryOffset: i32 = -1;
 
   /** Constructs a new field. */
   constructor(prototype: FieldPrototype, internalName: string, type: Type) {
@@ -1657,36 +1718,31 @@ export class ClassPrototype extends Element {
     }
   }
 
-  resolve(typeArguments: Type[], contextualTypeArguments: Map<string,Type> | null): Class {
-    var instanceKey = typesToString(typeArguments, "", "");
+  resolve(typeArguments: Type[] | null, contextualTypeArguments: Map<string,Type> | null = null): Class {
+    var instanceKey = typeArguments ? typesToString(typeArguments) : "";
     var instance = this.instances.get(instanceKey);
     if (instance)
       return instance;
+
     var declaration = this.declaration;
     if (!declaration)
       throw new Error("declaration expected"); // cannot resolve built-ins
 
-    // override call specific contextual type arguments
-    var i: i32, k = typeArguments.length;
-    if (k) {
-      var inheritedTypeArguments = contextualTypeArguments;
-      contextualTypeArguments = new Map();
-      if (inheritedTypeArguments)
-        for (var [inheritedName, inheritedType] of inheritedTypeArguments)
-          contextualTypeArguments.set(inheritedName, inheritedType);
-      for (i = 0; i < k; ++i)
-        contextualTypeArguments.set(declaration.typeParameters[i].identifier.name, typeArguments[i]);
-    }
+    // inherit contextual type arguments
+    var inheritedTypeArguments = contextualTypeArguments;
+    contextualTypeArguments = new Map();
+    if (inheritedTypeArguments)
+      for (var [inheritedName, inheritedType] of inheritedTypeArguments)
+        contextualTypeArguments.set(inheritedName, inheritedType);
 
-    // TODO: set up instance fields and methods
-    if (this.instanceMembers)
-      for (var member of this.instanceMembers.values()) {
-        switch (member.kind) {
-          case ElementKind.FIELD_PROTOTYPE: break;
-          case ElementKind.FUNCTION_PROTOTYPE: break;
-          default: throw new Error("unexpected instance member");
-        }
-      }
+    if (declaration.extendsType) // TODO: base class
+      throw new Error("not implemented");
+
+    // override call specific contextual type arguments if provided
+    var i: i32, k: i32;
+    if (typeArguments)
+      for (var i = 0, k = typeArguments.length; i < k; ++i)
+        contextualTypeArguments.set(declaration.typeParameters[i].identifier.name, typeArguments[i]);
 
     var internalName = this.internalName;
     if (instanceKey.length)
@@ -1694,6 +1750,51 @@ export class ClassPrototype extends Element {
     instance = new Class(this, internalName, typeArguments, null); // TODO: base class
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
+
+    var memoryOffset: i32 = 0;
+
+    if (this.instanceMembers)
+      for (var member of this.instanceMembers.values()) {
+        switch (member.kind) {
+
+          case ElementKind.FIELD_PROTOTYPE: // fields are layed out in advance
+            if (!instance.members)
+              instance.members = new Map();
+            var fieldDeclaration = (<FieldPrototype>member).declaration;
+            if (!fieldDeclaration)
+              throw new Error("declaration expected");
+            if (!fieldDeclaration.type)
+              throw new Error("type expected"); // TODO: check if parent class defines a type for it already
+            var fieldType = this.program.resolveType(fieldDeclaration.type, instance.contextualTypeArguments); // reports
+            if (fieldType) {
+              var fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
+              switch (fieldType.byteSize) { // align
+                case 1: break;
+                case 2: if (memoryOffset & 1) ++memoryOffset; break;
+                case 4: if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1; break;
+                case 8: if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1; break;
+                default: assert(false);
+              }
+              fieldInstance.memoryOffset = memoryOffset;
+              memoryOffset += fieldType.byteSize;
+              instance.members.set(member.simpleName, fieldInstance);
+            }
+            break;
+
+          case ElementKind.FUNCTION_PROTOTYPE: // instance methods remain partially resolved prototypes until compiled
+            if (!instance.members)
+              instance.members = new Map();
+            var methodPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
+            if (methodPrototype)
+              instance.members.set(member.simpleName, methodPrototype);
+            break;
+
+          default:
+            throw new Error("instance member expected");
+        }
+      }
+
+    instance.type.byteSize = memoryOffset;
     return instance;
   }
 
@@ -1724,7 +1825,7 @@ export class Class extends Element {
   /** Prototype reference. */
   prototype: ClassPrototype;
   /** Resolved type arguments. */
-  typeArguments: Type[];
+  typeArguments: Type[] | null;
   /** Resolved class type. */
   type: Type;
   /** Base class, if applicable. */
@@ -1733,7 +1834,7 @@ export class Class extends Element {
   contextualTypeArguments: Map<string,Type> | null = null;
 
   /** Constructs a new class. */
-  constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] = [], base: Class | null = null) {
+  constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] | null = null, base: Class | null = null) {
     super(prototype.program, prototype.simpleName, internalName);
     this.prototype = prototype;
     this.flags = prototype.flags;
@@ -1750,17 +1851,20 @@ export class Class extends Element {
 
     // apply instance-specific contextual type arguments
     var declaration = this.prototype.declaration;
+    var i: i32, k: i32;
     if (declaration) { // irrelevant for built-ins
       var typeParameters = declaration.typeParameters;
-      if (typeParameters.length != typeArguments.length)
+      if (typeArguments) {
+        if (typeParameters.length != typeArguments.length)
+          throw new Error("unexpected type argument count mismatch");
+        if (k = typeArguments.length) {
+          if (!this.contextualTypeArguments)
+            this.contextualTypeArguments = new Map();
+          for (i = 0; i < k; ++i)
+            this.contextualTypeArguments.set(typeParameters[i].identifier.name, typeArguments[i]);
+        }
+      } else
         throw new Error("unexpected type argument count mismatch");
-      var k = typeArguments.length;
-      if (k) {
-        if (!this.contextualTypeArguments)
-          this.contextualTypeArguments = new Map();
-        for (var i = 0; i < k; ++i)
-          this.contextualTypeArguments.set(typeParameters[i].identifier.name, typeArguments[i]);
-      }
     }
   }
 

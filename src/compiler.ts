@@ -31,6 +31,8 @@ import {
   Element,
   ElementKind,
   Enum,
+  FieldPrototype,
+  Field,
   FunctionPrototype,
   Function,
   Global,
@@ -553,15 +555,23 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // create the function type
-    var k = instance.parameters.length;
+    var numParameters = instance.parameters.length;
+    var numParametersInclThis = instance.instanceMethodOf ? numParameters + 1 : numParameters;
+    var paramIndex = 0;
+
     var nativeResultType = instance.returnType.toNativeType();
-    var nativeParamTypes = new Array<NativeType>(k);
-    var signatureNameParts = new Array<string>(k + 1);
-    for (var i = 0; i < k; ++i) {
-      nativeParamTypes[i] = instance.parameters[i].type.toNativeType();
-      signatureNameParts[i] = instance.parameters[i].type.toSignatureName();
+    var nativeParamTypes = new Array<NativeType>(numParametersInclThis);
+    var signatureNameParts = new Array<string>(numParametersInclThis + 1);
+
+    if (instance.instanceMethodOf) {
+      nativeParamTypes[paramIndex] = select<NativeType>(NativeType.I64, NativeType.I32, this.options.target == Target.WASM64);
+      signatureNameParts[paramIndex++] = instance.instanceMethodOf.type.toSignatureString();
     }
-    signatureNameParts[k] = instance.returnType.toSignatureName();
+    for (var i = 0; i < numParameters; ++i) {
+      nativeParamTypes[paramIndex] = instance.parameters[i].type.toNativeType();
+      signatureNameParts[paramIndex++] = instance.parameters[i].type.toSignatureString();
+    }
+    signatureNameParts[paramIndex] = instance.returnType.toSignatureString();
     var typeRef = this.module.getFunctionTypeBySignature(nativeResultType, nativeParamTypes);
     if (!typeRef)
       typeRef = this.module.addFunctionType(signatureNameParts.join(""), nativeResultType, nativeParamTypes);
@@ -716,8 +726,11 @@ export class Compiler extends DiagnosticEmitter {
     this.compileClass(instance);
   }
 
-  compileClass(cls: Class) {
-    throw new Error("not implemented");
+  compileClass(instance: Class): bool {
+    if (instance.isCompiled)
+      return true;
+
+    return instance.isCompiled = true;
   }
 
   compileInterfaceDeclaration(declaration: InterfaceDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
@@ -788,7 +801,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.TYPEDECLARATION:
         if (this.currentFunction == this.startFunction)
           return this.module.createNop();
-        // fall-through: must be top-level; function bodies are not initialized
+        // fall-through: must be top-level; function bodies are not guaranteed to be evaluated
 
       default:
         throw new Error("statement expected");
@@ -819,7 +832,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var context = this.currentFunction.breakContext;
     if (context != null)
-      return this.module.createBreak("break|" + (<string>context));
+      return this.module.createBreak("break|" + context);
 
     this.error(DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement, statement.range);
     return this.module.createUnreachable();
@@ -831,8 +844,8 @@ export class Compiler extends DiagnosticEmitter {
       return this.module.createUnreachable();
     }
     var context = this.currentFunction.breakContext;
-    if (context != null && !this.disallowContinue)
-      return this.module.createBreak("continue|" + (<string>context));
+    if (context && !this.disallowContinue)
+      return this.module.createBreak("continue|" + context);
 
     this.error(DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement, statement.range);
     return this.module.createUnreachable();
@@ -914,7 +927,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // introduce a local for evaluating the condition (exactly once)
     var tempLocal = this.currentFunction.getTempLocal(Type.i32);
-    var i: i32, k = statement.cases.length;
+    var k = statement.cases.length;
 
     // prepend initializer to inner block
     var breaks = new Array<ExpressionRef>(1 + k);
@@ -923,7 +936,7 @@ export class Compiler extends DiagnosticEmitter {
     // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
     var breakIndex = 1;
     var defaultIndex = -1;
-    for (i = 0; i < k; ++i) {
+    for (var i = 0; i < k; ++i) {
       var case_ = statement.cases[i];
       if (case_.label) {
         breaks[breakIndex++] = this.module.createBreak("case" + i.toString(10) + "|" + context,
@@ -1139,7 +1152,7 @@ export class Compiler extends DiagnosticEmitter {
     var nativeType = this.currentType.toNativeType();
     var typeRef = this.module.getFunctionTypeBySignature(nativeType, []);
     if (!typeRef)
-      typeRef = this.module.addFunctionType(this.currentType.toSignatureName(), nativeType, []);
+      typeRef = this.module.addFunctionType(this.currentType.toSignatureString(), nativeType, []);
     var funcRef = this.module.addFunction("__precompute", typeRef, [], expr);
     this.module.runPasses([ "precompute" ], funcRef);
     var ret = _BinaryenFunctionGetBody(funcRef);
@@ -1307,7 +1320,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (losesInformation && conversionKind == ConversionKind.IMPLICIT)
-      this.error(DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast, reportNode.range, fromType.toString(), toType.toString());
+      this.error(DiagnosticCode.Conversion_from_type_0_to_1_possibly_loses_information_and_thus_requires_an_explicit_cast, reportNode.range, fromType.toString(), toType.toString());
 
     return expr;
   }
@@ -1333,68 +1346,200 @@ export class Compiler extends DiagnosticEmitter {
       case Token.LESSTHAN:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.LtF32
-           : this.currentType == Type.f64
-           ? BinaryOp.LtF64
-           : this.currentType.isSignedInteger
-           ? this.currentType.isLongInteger
-             ? BinaryOp.LtI64
-             : BinaryOp.LtI32
-           : this.currentType.isLongInteger
-             ? BinaryOp.LtU64
-             : BinaryOp.LtU32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+            op = BinaryOp.LtI32;
+            break;
+
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.LtI64, BinaryOp.LtI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+            op = BinaryOp.LtI64;
+            break;
+
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.LtU32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+            op = select<BinaryOp>(BinaryOp.LtU64, BinaryOp.LtU32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.U64:
+            op = BinaryOp.LtU64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.LtF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.LtF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         this.currentType = Type.bool;
         break;
 
       case Token.GREATERTHAN:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.GtF32
-           : this.currentType == Type.f64
-           ? BinaryOp.GtF64
-           : this.currentType.isSignedInteger
-           ? this.currentType.isLongInteger
-             ? BinaryOp.GtI64
-             : BinaryOp.GtI32
-           : this.currentType.isLongInteger
-             ? BinaryOp.GtU64
-             : BinaryOp.GtU32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+            op = BinaryOp.GtI32;
+            break;
+
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.GtI64, BinaryOp.GtI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+            op = BinaryOp.GtI64;
+            break;
+
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.GtU32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+            op = select<BinaryOp>(BinaryOp.GtU64, BinaryOp.GtU32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.U64:
+            op = BinaryOp.GtU64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.GtF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.GtF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         this.currentType = Type.bool;
         break;
 
       case Token.LESSTHAN_EQUALS:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.LeF32
-           : this.currentType == Type.f64
-           ? BinaryOp.LeF64
-           : this.currentType.isSignedInteger
-           ? this.currentType.isLongInteger
-             ? BinaryOp.LeI64
-             : BinaryOp.LeI32
-           : this.currentType.isLongInteger
-             ? BinaryOp.LeU64
-             : BinaryOp.LeU32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+            op = BinaryOp.LeI32;
+            break;
+
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.LeI64, BinaryOp.LeI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+            op = BinaryOp.LeI64;
+            break;
+
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.LeU32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+            op = select<BinaryOp>(BinaryOp.LeU64, BinaryOp.LeU32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.U64:
+            op = BinaryOp.LeU64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.LeF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.LeF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         this.currentType = Type.bool;
         break;
 
       case Token.GREATERTHAN_EQUALS:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.GeF32
-           : this.currentType == Type.f64
-           ? BinaryOp.GeF64
-           : this.currentType.isSignedInteger
-           ? this.currentType.isLongInteger
-             ? BinaryOp.GeI64
-             : BinaryOp.GeI32
-           : this.currentType.isLongInteger
-             ? BinaryOp.GeU64
-             : BinaryOp.GeU32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+            op = BinaryOp.GeI32;
+            break;
+
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.GeI64, BinaryOp.GeI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+            op = BinaryOp.GeI64;
+            break;
+
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.GeU32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+            op = select<BinaryOp>(BinaryOp.GeU64, BinaryOp.GeU32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.U64:
+            op = BinaryOp.GeU64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.GeF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.GeF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         this.currentType = Type.bool;
         break;
 
@@ -1402,13 +1547,41 @@ export class Compiler extends DiagnosticEmitter {
       case Token.EQUALS_EQUALS_EQUALS:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.EqF32
-           : this.currentType == Type.f64
-           ? BinaryOp.EqF64
-           : this.currentType.isLongInteger
-           ? BinaryOp.EqI64
-           : BinaryOp.EqI32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.EqI32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.EqI64, BinaryOp.EqI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.EqI64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.EqF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.EqF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         this.currentType = Type.bool;
         break;
 
@@ -1416,13 +1589,41 @@ export class Compiler extends DiagnosticEmitter {
       case Token.EXCLAMATION_EQUALS_EQUALS:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-          ? BinaryOp.NeF32
-          : this.currentType == Type.f64
-          ? BinaryOp.NeF64
-          : this.currentType.isLongInteger
-          ? BinaryOp.NeI64
-          : BinaryOp.NeI32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.NeI32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.NeI64, BinaryOp.NeI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.NeI64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.NeF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.NeF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         this.currentType = Type.bool;
         break;
 
@@ -1434,13 +1635,41 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PLUS:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.AddF32
-           : this.currentType == Type.f64
-           ? BinaryOp.AddF64
-           : this.currentType.isLongInteger
-           ? BinaryOp.AddI64
-           : BinaryOp.AddI32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.AddI32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.AddI64, BinaryOp.AddI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.AddI64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.AddF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.AddF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         break;
 
       case Token.MINUS_EQUALS:
@@ -1448,13 +1677,41 @@ export class Compiler extends DiagnosticEmitter {
       case Token.MINUS:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.SubF32
-           : this.currentType == Type.f64
-           ? BinaryOp.SubF64
-           : this.currentType.isLongInteger
-           ? BinaryOp.SubI64
-           : BinaryOp.SubI32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.SubI32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.SubI64, BinaryOp.SubI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.SubI64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.SubF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.SubF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         break;
 
       case Token.ASTERISK_EQUALS:
@@ -1462,13 +1719,41 @@ export class Compiler extends DiagnosticEmitter {
       case Token.ASTERISK:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.MulF32
-           : this.currentType == Type.f64
-           ? BinaryOp.MulF64
-           : this.currentType.isLongInteger
-           ? BinaryOp.MulI64
-           : BinaryOp.MulI32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.MulI32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.MulI64, BinaryOp.MulI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.MulI64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.MulF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.MulF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         break;
 
       case Token.SLASH_EQUALS:
@@ -1476,17 +1761,50 @@ export class Compiler extends DiagnosticEmitter {
       case Token.SLASH:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType == Type.f32
-           ? BinaryOp.DivF32
-           : this.currentType == Type.f64
-           ? BinaryOp.DivF64
-           : this.currentType.isSignedInteger
-           ? this.currentType.isLongInteger
-             ? BinaryOp.DivI64
-             : BinaryOp.DivI32
-           : this.currentType.isLongInteger
-             ? BinaryOp.DivU64
-             : BinaryOp.DivU32;
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+            op = BinaryOp.DivI32;
+            break;
+
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.DivI64, BinaryOp.DivI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+            op = BinaryOp.DivI64;
+            break;
+
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.DivU32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+            op = select<BinaryOp>(BinaryOp.DivU64, BinaryOp.DivU32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.U64:
+            op = BinaryOp.DivU64;
+            break;
+
+          case TypeKind.F32:
+            op = BinaryOp.DivF32;
+            break;
+
+          case TypeKind.F64:
+            op = BinaryOp.DivF64;
+            break;
+
+          default:
+            throw new Error("concrete type expected");
+        }
         break;
 
       case Token.PERCENT_EQUALS:
@@ -1494,18 +1812,48 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PERCENT:
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        if (this.currentType.isAnyFloat) {
-          // TODO: internal fmod, possibly simply imported from JS
-          this.error(DiagnosticCode.Operation_not_supported, expression.range);
-          return this.module.createUnreachable();
+
+        switch (this.currentType.kind) {
+
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+            op = BinaryOp.RemI32;
+            break;
+
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.RemI64, BinaryOp.RemI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+            op = BinaryOp.RemI64;
+            break;
+
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.RemU32;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+            op = select<BinaryOp>(BinaryOp.RemU64, BinaryOp.RemU32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.U64:
+            op = BinaryOp.RemU64;
+            break;
+
+          case TypeKind.F32:
+          case TypeKind.F64:
+            // TODO: internal fmod, possibly simply imported from JS
+            this.error(DiagnosticCode.Operation_not_supported, expression.range);
+            return this.module.createUnreachable();
+
+          default:
+            throw new Error("concrete type expected");
         }
-        op = this.currentType.isSignedInteger
-           ? this.currentType.isLongInteger
-             ? BinaryOp.RemI64
-             : BinaryOp.RemI32
-           : this.currentType.isLongInteger
-             ? BinaryOp.RemU64
-             : BinaryOp.RemU32;
         break;
 
       case Token.LESSTHAN_LESSTHAN_EQUALS:
@@ -1513,9 +1861,24 @@ export class Compiler extends DiagnosticEmitter {
       case Token.LESSTHAN_LESSTHAN:
         left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType.isLongInteger
-           ? BinaryOp.ShlI64
-           : BinaryOp.ShlI32;
+
+        switch (this.currentType.kind) {
+
+          default:
+            op = BinaryOp.ShlI32;
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.ShlI64;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.ShlI64, BinaryOp.ShlI32, this.options.target == Target.WASM64);
+            break;
+        }
         break;
 
       case Token.GREATERTHAN_GREATERTHAN_EQUALS:
@@ -1523,13 +1886,37 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN:
         left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType.isSignedInteger
-           ? this.currentType.isLongInteger
-             ? BinaryOp.ShrI64
-             : BinaryOp.ShrI32
-           : this.currentType.isLongInteger
-             ? BinaryOp.ShrU64
-             : BinaryOp.ShrU32;
+
+        switch (this.currentType.kind) {
+
+          default:
+            op = BinaryOp.ShrI32;
+            break;
+
+          case TypeKind.I64:
+            op = BinaryOp.ShrI64;
+            break;
+
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.ShrI64, BinaryOp.ShrI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL:
+            op = BinaryOp.ShrU32;
+            break;
+
+          case TypeKind.U64:
+            op = BinaryOp.ShrU64;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+            op = select<BinaryOp>(BinaryOp.ShrU64, BinaryOp.ShrU32, this.options.target == Target.WASM64);
+            break;
+        }
         break;
 
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
@@ -1537,9 +1924,24 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
         left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.u64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType.isLongInteger
-           ? BinaryOp.ShrU64
-           : BinaryOp.ShrU32;
+
+        switch (this.currentType.kind) {
+
+          default:
+            op = BinaryOp.ShrU32;
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.ShrU64;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.ShrU64, BinaryOp.ShrU32, this.options.target == Target.WASM64);
+            break;
+        }
         break;
 
       case Token.AMPERSAND_EQUALS:
@@ -1547,9 +1949,24 @@ export class Compiler extends DiagnosticEmitter {
       case Token.AMPERSAND:
         left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType.isLongInteger
-           ? BinaryOp.AndI64
-           : BinaryOp.AndI32;
+
+        switch (this.currentType.kind) {
+
+          default:
+            op = BinaryOp.AndI32;
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.AndI64;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.AndI64, BinaryOp.AndI32, this.options.target == Target.WASM64);
+            break;
+        }
         break;
 
       case Token.BAR_EQUALS:
@@ -1557,9 +1974,24 @@ export class Compiler extends DiagnosticEmitter {
       case Token.BAR:
         left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType.isLongInteger
-           ? BinaryOp.OrI64
-           : BinaryOp.OrI32;
+
+        switch (this.currentType.kind) {
+
+          default:
+            op = BinaryOp.OrI32;
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.OrI64;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.OrI64, BinaryOp.OrI32, this.options.target == Target.WASM64);
+            break;
+        }
         break;
 
       case Token.CARET_EQUALS:
@@ -1567,10 +1999,27 @@ export class Compiler extends DiagnosticEmitter {
       case Token.CARET:
         left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
-        op = this.currentType.isLongInteger
-           ? BinaryOp.XorI64
-           : BinaryOp.XorI32;
+
+        switch (this.currentType.kind) {
+
+          default:
+            op = BinaryOp.XorI32;
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = BinaryOp.XorI64;
+            break;
+
+          case TypeKind.USIZE:
+            // TODO: check operator overload
+          case TypeKind.ISIZE:
+            op = select<BinaryOp>(BinaryOp.XorI64, BinaryOp.XorI32, this.options.target == Target.WASM64);
+            break;
+        }
         break;
+
+      // logical (no overloading)
 
       case Token.AMPERSAND_AMPERSAND: // left && right
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
@@ -1767,15 +2216,18 @@ export class Compiler extends DiagnosticEmitter {
 
   compileCallExpression(expression: CallExpression, contextualType: Type): ExpressionRef {
     var element: Element | null = null;
+    var thisExpression: Expression;
     switch (expression.expression.kind) {
+      // case NodeKind.THIS:
       // case NodeKind.SUPER:
 
       case NodeKind.IDENTIFIER:
-        element = this.program.resolveIdentifier(<IdentifierExpression>expression.expression, this.currentFunction);
+        element = this.program.resolveIdentifier(thisExpression = <IdentifierExpression>expression.expression, this.currentFunction);
         break;
 
       case NodeKind.PROPERTYACCESS:
         element = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression.expression, this.currentFunction);
+        thisExpression = (<PropertyAccessExpression>expression.expression).expression;
         break;
 
       default:
@@ -1788,18 +2240,22 @@ export class Compiler extends DiagnosticEmitter {
       var functionPrototype = <FunctionPrototype>element;
       var functionInstance: Function | null = null;
       if (functionPrototype.isBuiltIn) {
-        var k = expression.typeArguments.length;
-        var resolvedTypeArguments = new Array<Type>(k);
-        sb.length = 0;
-        for (var i = 0; i < k; ++i) {
-          var resolvedType = this.program.resolveType(expression.typeArguments[i], this.currentFunction.contextualTypeArguments, true); // reports
-          if (!resolvedType)
-            return this.module.createUnreachable();
-          resolvedTypeArguments[i] = resolvedType;
-          sb.push(resolvedType.toString());
-        }
+        var resolvedTypeArguments: Type[] | null = null;
+        if (expression.typeArguments) {
+          var k = expression.typeArguments.length;
+          resolvedTypeArguments = new Array<Type>(k);
+          var sb = new Array<string>(k);
+          for (var i = 0; i < k; ++i) {
+            var resolvedType = this.program.resolveType(expression.typeArguments[i], this.currentFunction.contextualTypeArguments, true); // reports
+            if (!resolvedType)
+              return this.module.createUnreachable();
+            resolvedTypeArguments[i] = resolvedType;
+            sb[i] = resolvedType.toString();
+          }
+          functionInstance = functionPrototype.instances.get(sb.join(","));
+        } else
+          functionInstance = functionPrototype.instances.get("");
 
-        functionInstance = functionPrototype.instances.get(sb.join(","));
         if (!functionInstance) {
           this.currentType = contextualType;
           var expr = compileBuiltinCall(this, functionPrototype, resolvedTypeArguments, expression.arguments, expression);
@@ -1815,7 +2271,17 @@ export class Compiler extends DiagnosticEmitter {
       }
       if (!functionInstance)
         return this.module.createUnreachable();
-      return this.compileCall(functionInstance, expression.arguments, expression);
+
+      var numArguments = expression.arguments.length;
+      var numArgumentsInclThis = select<i32>(numArguments + 1, numArguments, functionInstance.instanceMethodOf != null);
+      var argumentIndex = 0;
+
+      var args = new Array<Expression>(numArgumentsInclThis);
+      if (functionInstance.instanceMethodOf)
+        args[argumentIndex++] = thisExpression;
+      for (i = 0; i < numArguments; ++i)
+        args[argumentIndex++] = expression.arguments[i];
+      return this.compileCall(functionInstance, args, expression);
     }
     this.error(DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, expression.range, element.internalName);
     return this.module.createUnreachable();
@@ -1826,30 +2292,42 @@ export class Compiler extends DiagnosticEmitter {
 
     // validate and compile arguments
     var parameters = functionInstance.parameters;
-    var parameterCount = parameters.length;
-    var argumentCount = argumentExpressions.length;
-    if (argumentExpressions.length > parameterCount) { // too many arguments
+
+    var numParameters = parameters.length;
+    var numParametersInclThis = select<i32>(numParameters + 1, numParameters, functionInstance.instanceMethodOf != null);
+    var numArgumentsInclThis = argumentExpressions.length;
+    var numArguments = select<i32>(numArgumentsInclThis - 1, numArgumentsInclThis, functionInstance.instanceMethodOf != null);
+
+    if (numArgumentsInclThis > numParametersInclThis) { // too many arguments
       this.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range,
-        (functionInstance.isInstance ? parameterCount - 1 : parameterCount).toString(10),
-        (functionInstance.isInstance ? argumentCount - 1 : argumentCount).toString(10)
+        numParameters.toString(10),
+        numArguments.toString(10)
       );
       return this.module.createUnreachable();
     }
-    var operands = new Array<ExpressionRef>(parameterCount);
-    for (var i = 0; i < parameterCount; ++i) {
-      if (argumentExpressions.length > i) {
-        operands[i] = this.compileExpression(argumentExpressions[i], parameters[i].type);
+    var operands = new Array<ExpressionRef>(numParametersInclThis);
+    var operandIndex = 0;
+    if (functionInstance.instanceMethodOf)
+      operands[operandIndex++] = this.compileExpression(argumentExpressions[0], functionInstance.instanceMethodOf.type);
+    for (; operandIndex < numParametersInclThis; ++operandIndex) {
+
+      // argument has been provided
+      if (numArgumentsInclThis > operandIndex) {
+        operands[operandIndex] = this.compileExpression(argumentExpressions[operandIndex], parameters[operandIndex + numParameters - numParametersInclThis].type);
+
+      // argument has been omitted
       } else {
-        var initializer = parameters[i].initializer;
-        if (initializer) { // omitted, uses initializer
+        var initializer = parameters[operandIndex + numParameters - numParametersInclThis].initializer;
+        if (initializer) { // fall back to provided initializer
+          operands[operandIndex] = this.compileExpression(initializer, parameters[operandIndex + numParameters - numParametersInclThis].type);
           // FIXME: here, the initializer is compiled in the caller's scope.
           // a solution could be to use a stub for each possible overload, calling the
           // full function with optional arguments being part of the stub's body.
-          operands[i] = this.compileExpression(initializer, parameters[i].type);
+
         } else { // too few arguments
           this.error(DiagnosticCode.Expected_at_least_0_arguments_but_got_1, reportNode.range,
-            (functionInstance.isInstance ? i : i + 1).toString(10),
-            (functionInstance.isInstance ? argumentCount - 1 : argumentCount).toString(10)
+            (operandIndex + numParametersInclThis - numParameters).toString(10),
+            numArguments.toString(10)
           );
           return this.module.createUnreachable();
         }
@@ -1870,8 +2348,24 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type): ExpressionRef {
-    var element = this.program.resolveElement(expression.expression, this.currentFunction); // reports
-    if (!element)
+    var targetExpression = expression.expression;
+    var target: Element | null = null;
+    switch (targetExpression.kind) {
+
+      // case NodeKind.THIS:
+
+      case NodeKind.IDENTIFIER:
+        target = this.program.resolveIdentifier(<IdentifierExpression>targetExpression, this.currentFunction);
+        break;
+
+      case NodeKind.PROPERTYACCESS:
+        target = this.program.resolvePropertyAccess(<PropertyAccessExpression>targetExpression, this.currentFunction);
+        break;
+
+      default:
+        this.error(DiagnosticCode.Operation_not_supported, expression.range);
+    }
+    if (!target)
       return this.module.createUnreachable();
     throw new Error("not implemented");
   }
@@ -2135,28 +2629,47 @@ export class Compiler extends DiagnosticEmitter {
     var nativeType: NativeType;
     var nativeOne: ExpressionRef;
 
-    if (<Type>tempLocal.type == Type.f32) {
-      op = operator == Token.PLUS_PLUS ? BinaryOp.AddF32 : BinaryOp.SubF32;
-      nativeType = NativeType.F32;
-      nativeOne = this.module.createF32(1);
+    switch ((<Type>tempLocal.type).kind) {
 
-    } else if (<Type>tempLocal.type == Type.f64) {
-      op = operator == Token.PLUS_PLUS ? BinaryOp.AddF64 : BinaryOp.SubF64;
-      nativeType = NativeType.F64;
-      nativeOne = this.module.createF64(1);
+      default:
+        op = select<BinaryOp>(BinaryOp.AddI32, BinaryOp.SubI32, operator == Token.PLUS_PLUS);
+        nativeType = NativeType.I32;
+        nativeOne = this.module.createI32(1);
+        break;
 
-    } else if ((<Type>tempLocal.type).isLongInteger) {
-      op = operator == Token.PLUS_PLUS ? BinaryOp.AddI64 : BinaryOp.SubI64;
-      nativeType = NativeType.I64;
-      nativeOne = this.module.createI64(1, 0);
+      case TypeKind.USIZE:
+        // TODO: check operator overload
+      case TypeKind.ISIZE:
+        if (this.options.target != Target.WASM64) {
+          op = select<BinaryOp>(BinaryOp.AddI32, BinaryOp.SubI32, operator == Token.PLUS_PLUS);
+          nativeType = NativeType.I32;
+          nativeOne = this.module.createI32(1);
+          break;
+        }
+        // fall-through
 
-    } else {
-      op = operator == Token.PLUS_PLUS ? BinaryOp.AddI32 : BinaryOp.SubI32;
-      nativeType = NativeType.I32;
-      nativeOne = this.module.createI32(1);
+      case TypeKind.I64:
+      case TypeKind.U64:
+        op = select<BinaryOp>(BinaryOp.AddI64, BinaryOp.SubI64, operator == Token.PLUS_PLUS);
+        nativeType = NativeType.I64;
+        nativeOne = this.module.createI64(1, 0);
+        break;
+
+      case TypeKind.F32:
+        op = select<BinaryOp>(BinaryOp.AddF32, BinaryOp.SubF32, operator == Token.PLUS_PLUS);
+        nativeType = NativeType.F32;
+        nativeOne = this.module.createF32(1);
+        break;
+
+      case TypeKind.F64:
+        op = select<BinaryOp>(BinaryOp.AddF64, BinaryOp.SubF64, operator == Token.PLUS_PLUS);
+        nativeType = NativeType.F64;
+        nativeOne = this.module.createF64(1);
+        break;
     }
 
     // make a setter that sets the new value (temp value +/- 1)
+    // note that this is not inlined below because it modifies currentType
     var setValue = this.compileAssignmentWithValue(expression.operand,
       this.module.createBinary(op,
         this.module.createGetLocal(tempLocal.index, nativeType),
@@ -2188,57 +2701,139 @@ export class Compiler extends DiagnosticEmitter {
 
       case Token.MINUS:
         operand = this.compileExpression(operandExpression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
-        if (this.currentType == Type.f32)
-          op = UnaryOp.NegF32;
-        else if (this.currentType == Type.f64)
-          op = UnaryOp.NegF64;
-        else
-          return this.currentType.isLongInteger
-               ? this.module.createBinary(BinaryOp.SubI64, this.module.createI64(0, 0), operand)
-               : this.module.createBinary(BinaryOp.SubI32, this.module.createI32(0), operand);
+        switch (this.currentType.kind) {
+
+          default:
+            return this.module.createBinary(BinaryOp.SubI32, this.module.createI32(0), operand);
+
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE:
+            if (this.options.target != Target.WASM64)
+              return this.module.createBinary(BinaryOp.SubI32, this.module.createI32(0), operand);
+            // fall-through
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            return this.module.createBinary(BinaryOp.SubI64, this.module.createI64(0, 0), operand);
+
+          case TypeKind.F32:
+            op = UnaryOp.NegF32;
+            break;
+
+          case TypeKind.F64:
+            op = UnaryOp.NegF64;
+            break;
+        }
         break;
 
       case Token.PLUS_PLUS:
         operand = this.compileExpression(operandExpression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
-        return this.currentType == Type.f32
-             ? this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.AddF32, operand, this.module.createF32(1)), contextualType != Type.void)
-             : this.currentType == Type.f64
-             ? this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.AddF64, operand, this.module.createF64(1)), contextualType != Type.void)
-             : this.currentType.isLongInteger
-             ? this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.AddI64, operand, this.module.createI64(1, 0)), contextualType != Type.void)
-             : this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.AddI32, operand, this.module.createI32(1)), contextualType != Type.void);
+        switch (this.currentType.kind) {
+
+          default:
+            operand = this.module.createBinary(BinaryOp.AddI32, operand, this.module.createI32(1));
+            break;
+
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE:
+            if (this.options.target != Target.WASM64) {
+              operand = this.module.createBinary(BinaryOp.AddI32, operand, this.module.createI32(1));
+              break;
+            }
+            // fall-through
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            operand = this.module.createBinary(BinaryOp.AddI64, operand, this.module.createI64(1, 0));
+            break;
+
+          case TypeKind.F32:
+            operand = this.module.createBinary(BinaryOp.AddF32, operand, this.module.createF32(1));
+            break;
+
+          case TypeKind.F64:
+            operand = this.module.createBinary(BinaryOp.AddF64, operand, this.module.createF64(1));
+            break;
+        }
+        return this.compileAssignmentWithValue(operandExpression, operand, contextualType != Type.void);
 
       case Token.MINUS_MINUS:
         operand = this.compileExpression(operandExpression, contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
-        return this.currentType == Type.f32
-             ? this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.SubF32, operand, this.module.createF32(1)), contextualType != Type.void)
-             : this.currentType == Type.f64
-             ? this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.SubF64, operand, this.module.createF64(1)), contextualType != Type.void)
-             : this.currentType.isLongInteger
-             ? this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.SubI64, operand, this.module.createI64(1, 0)), contextualType != Type.void)
-             : this.compileAssignmentWithValue(operandExpression, this.module.createBinary(BinaryOp.SubI32, operand, this.module.createI32(1)), contextualType != Type.void);
+        switch (this.currentType.kind) {
+
+          default:
+            operand = this.module.createBinary(BinaryOp.SubI32, operand, this.module.createI32(1));
+            break;
+
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE:
+            if (this.options.target != Target.WASM64) {
+              operand = this.module.createBinary(BinaryOp.SubI32, operand, this.module.createI32(1));
+              break;
+            }
+            // fall-through
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            operand = this.module.createBinary(BinaryOp.SubI64, operand, this.module.createI64(1, 0));
+            break;
+
+          case TypeKind.F32:
+            operand = this.module.createBinary(BinaryOp.SubF32, operand, this.module.createF32(1));
+            break;
+
+          case TypeKind.F64:
+            operand = this.module.createBinary(BinaryOp.SubF64, operand, this.module.createF64(1));
+            break;
+        }
+        return this.compileAssignmentWithValue(operandExpression, operand, contextualType != Type.void);
 
       case Token.EXCLAMATION:
         operand = this.compileExpression(operandExpression, Type.bool, ConversionKind.NONE);
-        if (this.currentType == Type.f32) {
-          this.currentType = Type.bool;
-          return this.module.createBinary(BinaryOp.EqF32, operand, this.module.createF32(0));
+        switch (this.currentType.kind) {
+
+          default:
+            op = UnaryOp.EqzI32;
+            break;
+
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE:
+            op = select<UnaryOp>(UnaryOp.EqzI64, UnaryOp.EqzI32, this.options.target == Target.WASM64);
+            break;
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            op = UnaryOp.EqzI64;
+            break;
+
+          case TypeKind.F32:
+            this.currentType = Type.bool;
+            return this.module.createBinary(BinaryOp.EqF32, operand, this.module.createF32(0));
+
+          case TypeKind.F64:
+            this.currentType = Type.bool;
+            return this.module.createBinary(BinaryOp.EqF64, operand, this.module.createF64(0));
         }
-        if (this.currentType == Type.f64) {
-          this.currentType = Type.bool;
-          return this.module.createBinary(BinaryOp.EqF64, operand, this.module.createF64(0));
-        }
-        op = this.currentType.isLongInteger
-           ? UnaryOp.EqzI64
-           : UnaryOp.EqzI32;
         this.currentType = Type.bool;
         break;
 
       case Token.TILDE:
         operand = this.compileExpression(operandExpression, contextualType.isAnyFloat ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT);
-        return this.currentType.isLongInteger
-             ? this.module.createBinary(BinaryOp.XorI64, operand, this.module.createI64(-1, -1))
-             : this.module.createBinary(BinaryOp.XorI32, operand, this.module.createI32(-1));
+        switch (this.currentType.kind) {
+
+          default:
+            return this.module.createBinary(BinaryOp.XorI32, operand, this.module.createI32(-1));
+
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE:
+            if (this.options.target != Target.WASM64)
+              return this.module.createBinary(BinaryOp.XorI32, operand, this.module.createI32(-1));
+            // fall-through
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            return this.module.createBinary(BinaryOp.XorI64, operand, this.module.createI64(-1, -1));
+        }
 
       default:
         throw new Error("unary operator expected");
@@ -2273,23 +2868,39 @@ function isModuleExport(element: Element, declaration: DeclarationStatement): bo
 function makeInlineConstant(element: VariableLikeElement, module: Module): ExpressionRef {
   assert(element.hasConstantValue);
   assert(element.type != null);
-  if (<Type>element.type == Type.f32)
-    return module.createF32((<Global>element).constantFloatValue);
-  else if (<Type>element.type == Type.f64)
-    return module.createF64((<Global>element).constantFloatValue);
-  else if ((<Type>element.type).isLongInteger)
-    return element.constantIntegerValue
-      ? module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
-      : module.createI64(0, 0);
-  else if ((<Type>element.type).isSmallInteger) {
-    if ((<Type>element.type).isSignedInteger) {
+  switch ((<Type>element.type).kind) {
+
+    case TypeKind.I8:
+    case TypeKind.I16:
       var shift = (<Type>element.type).smallIntegerShift;
       return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
-    } else
+
+    case TypeKind.U8:
+    case TypeKind.U16:
+    case TypeKind.BOOL:
       return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & (<Type>element.type).smallIntegerMask: 0);
-  } else if ((<Type>element.type).isAnyInteger)
-    return element.constantIntegerValue
-      ? module.createI32(element.constantIntegerValue.lo)
-      : module.createI32(0);
+
+    case TypeKind.I32:
+    case TypeKind.U32:
+      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
+
+    case TypeKind.ISIZE:
+    case TypeKind.USIZE:
+      if (element.program.target != Target.WASM64)
+        return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
+      // fall-through
+
+    case TypeKind.I64:
+    case TypeKind.U64:
+      return element.constantIntegerValue
+        ? module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
+        : module.createI64(0, 0);
+
+    case TypeKind.F32:
+      return module.createF32((<VariableLikeElement>element).constantFloatValue);
+
+    case TypeKind.F64:
+      return module.createF64((<VariableLikeElement>element).constantFloatValue);
+  }
   throw new Error("concrete type expected");
 }

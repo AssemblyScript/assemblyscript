@@ -68,9 +68,9 @@ export function nextFile(parser: Parser): string | null {
 /** Obtains the next diagnostic message. Returns `null` once there are no more messages. */
 export function nextDiagnostic(parser: Parser): DiagnosticMessage | null {
   var program = parser.program;
-  if (program.diagnosticsOffset < program.diagnostics.length)
-    return program.diagnostics[program.diagnosticsOffset++];
-  return null;
+  return program.diagnosticsOffset < program.diagnostics.length
+    ? program.diagnostics[program.diagnosticsOffset++]
+    : null;
 }
 
 /** Formats a diagnostic message to a string. */

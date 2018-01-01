@@ -372,12 +372,13 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
+      var args: Expression[] | null;
       if (tn.skip(Token.OPENPAREN)) {
-        var args = this.parseArguments(tn);
+        args = this.parseArguments(tn);
         if (args)
-          return Node.createDecorator(expression, <Expression[]>args, tn.range(startPos, tn.pos));
+          return Node.createDecorator(expression, args, tn.range(startPos, tn.pos));
       } else
-        this.error(DiagnosticCode._0_expected, tn.range(), "(");
+        return Node.createDecorator(expression, null, tn.range(startPos, tn.pos));
     } else
       this.error(DiagnosticCode.Identifier_expected, tn.range());
     return null;
@@ -1515,7 +1516,7 @@ export class Parser extends DiagnosticEmitter {
   }
 
   tryParseTypeArgumentsBeforeArguments(tn: Tokenizer): TypeNode[] | null {
-    // at '<': Identifier (',' Identifier)* '>' '('
+    // at '<': Type (',' Type)* '>' '('
     tn.mark();
     if (!tn.skip(Token.LESSTHAN))
       return null;
@@ -1529,11 +1530,12 @@ export class Parser extends DiagnosticEmitter {
       }
       typeArguments.push(type);
     } while (tn.skip(Token.COMMA));
-    if (!(tn.skip(Token.GREATERTHAN) && tn.skip(Token.OPENPAREN))) {
-      tn.reset();
-      return null;
-    }
-    return typeArguments;
+
+    if (tn.skip(Token.GREATERTHAN) && tn.skip(Token.OPENPAREN))
+      return typeArguments;
+
+    tn.reset();
+    return null;
   }
 
   parseArguments(tn: Tokenizer): Expression[] | null {
@@ -1562,13 +1564,13 @@ export class Parser extends DiagnosticEmitter {
     var startPos = expr.range.start;
 
     // CallExpression
-    var typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn);
+    var typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn); // skips '(' on success
     // there might be better ways to distinguish a LESSTHAN from a CALL with type arguments
     if (typeArguments || tn.skip(Token.OPENPAREN)) {
       var args = this.parseArguments(tn);
       if (!args)
         return null;
-      expr = Node.createCall(expr, <TypeNode[]>(typeArguments ? typeArguments : []), args, tn.range(startPos, tn.pos));
+      expr = Node.createCall(expr, typeArguments, args, tn.range(startPos, tn.pos));
     }
 
     var token: Token;

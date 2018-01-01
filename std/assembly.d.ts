@@ -272,10 +272,10 @@ interface RegExp {}
 // Internal decorators (not yet implemented)
 
 /** Annotates an element being part of the global namespace. */
-declare function global(): any;
+declare function global(target: Function): any;
 
 /** Annotates a method being an operator overload. */
 declare function operator(token: string): any;
 
-declare function struct(): any;
+declare function struct(target: Function): any;
 declare function size(size: usize): any;

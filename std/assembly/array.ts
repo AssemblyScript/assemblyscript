@@ -1,4 +1,4 @@
-@global()
+@global
 export class Array<T> {
 
   private ptr: usize;

@@ -1,7 +1,7 @@
 // code below is generated from diagnosticsMessages.json by scripts/build-diagnostics
 
 export enum DiagnosticCode {
-  Conversion_from_type_0_to_1_requires_an_explicit_cast = 100,
+  Conversion_from_type_0_to_1_possibly_loses_information_and_thus_requires_an_explicit_cast = 100,
   Basic_type_0_cannot_be_nullable = 101,
   Operation_not_supported = 102,
   Operation_is_unsafe = 103,
@@ -82,7 +82,7 @@ export enum DiagnosticCode {
 
 export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
-    case 100: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
+    case 100: return "Conversion from type '{0}' to '{1}' possibly loses information and thus requires an explicit cast.";
     case 101: return "Basic type '{0}' cannot be nullable.";
     case 102: return "Operation not supported.";
     case 103: return "Operation is unsafe.";

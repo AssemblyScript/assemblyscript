@@ -1,6 +1,6 @@
 const EMPTY: String = changetype<String>("");
 
-@global()
+@global
 export class String {
   // [key: number]: string;
 
