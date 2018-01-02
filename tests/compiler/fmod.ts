@@ -15,14 +15,16 @@ export function fmod(x: f64, y: f64): f64 {
   }
 
   if (!ex) {
-    for (var i = ux << 12; !(i >> 63); ex--) i <<= 1;
+    for (var i = ux << 12; !(i >> 63); i <<= 1)
+      --ex;
     ux <<= -ex + 1;
   } else {
     ux &= -1 >> 12;
     ux |= 1 << 52;
   }
   if (!ey) {
-    for (i = uy << 12; !(i >> 63); ey--) i <<= 1;
+    for (i = uy << 12; !(i >> 63); i <<= 1)
+      --ey;
     uy <<= -ey + 1;
   } else {
     uy &= -1 >> 12;
@@ -44,7 +46,8 @@ export function fmod(x: f64, y: f64): f64 {
       return 0 * x;
     ux = i;
   }
-  for (; !(ux >> 52); ex--) ux <<= 1;
+  for (; !(ux >> 52); ux <<= 1)
+    --ex;
 
   if (ex > 0) {
     ux -= 1 << 52;

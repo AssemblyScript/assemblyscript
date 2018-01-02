@@ -1545,6 +1545,11 @@ export class Compiler extends DiagnosticEmitter {
 
       case Token.EQUALS_EQUALS:
       case Token.EQUALS_EQUALS_EQUALS:
+
+        // NOTE that this favors correctness, in terms of emitting a binary expression, over
+        // checking for a possible use of unary EQZ. while the most classic of all optimizations,
+        // that's not what the source told us to do. for reference, `!left` emits unary EQZ.
+
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 

@@ -165,24 +165,16 @@
         )
        )
        (block
+        (set_local $4
+         (i32.sub
+          (get_local $4)
+          (i32.const 1)
+         )
+        )
         (set_local $9
          (i64.shl
           (get_local $9)
           (i64.const 1)
-         )
-        )
-        (drop
-         (block (result i32)
-          (set_local $8
-           (get_local $4)
-          )
-          (set_local $4
-           (i32.sub
-            (get_local $8)
-            (i32.const 1)
-           )
-          )
-          (get_local $8)
          )
         )
         (br $continue|0)
@@ -250,24 +242,16 @@
         )
        )
        (block
+        (set_local $5
+         (i32.sub
+          (get_local $5)
+          (i32.const 1)
+         )
+        )
         (set_local $9
          (i64.shl
           (get_local $9)
           (i64.const 1)
-         )
-        )
-        (drop
-         (block (result i32)
-          (set_local $8
-           (get_local $5)
-          )
-          (set_local $5
-           (i32.sub
-            (get_local $8)
-            (i32.const 1)
-           )
-          )
-          (get_local $8)
          )
         )
         (br $continue|1)
@@ -421,24 +405,16 @@
       )
      )
      (block
+      (set_local $4
+       (i32.sub
+        (get_local $4)
+        (i32.const 1)
+       )
+      )
       (set_local $2
        (i64.shl
         (get_local $2)
         (i64.const 1)
-       )
-      )
-      (drop
-       (block (result i32)
-        (set_local $8
-         (get_local $4)
-        )
-        (set_local $4
-         (i32.sub
-          (get_local $8)
-          (i32.const 1)
-         )
-        )
-        (get_local $8)
        )
       )
       (br $continue|3)

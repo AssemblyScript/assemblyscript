@@ -154,16 +154,16 @@
         )
        )
        (block
-        (set_local $4
-         (i64.shl
-          (get_local $4)
-          (i64.const 1)
-         )
-        )
         (set_local $3
          (i32.sub
           (get_local $3)
           (i32.const 1)
+         )
+        )
+        (set_local $4
+         (i64.shl
+          (get_local $4)
+          (i64.const 1)
          )
         )
         (br $continue|0)
@@ -211,16 +211,16 @@
         )
        )
        (block
-        (set_local $4
-         (i64.shl
-          (get_local $4)
-          (i64.const 1)
-         )
-        )
         (set_local $6
          (i32.sub
           (get_local $6)
           (i32.const 1)
+         )
+        )
+        (set_local $4
+         (i64.shl
+          (get_local $4)
+          (i64.const 1)
          )
         )
         (br $continue|1)
@@ -332,16 +332,16 @@
      )
     )
     (block
-     (set_local $2
-      (i64.shl
-       (get_local $2)
-       (i64.const 1)
-      )
-     )
      (set_local $3
       (i32.sub
        (get_local $3)
        (i32.const 1)
+      )
+     )
+     (set_local $2
+      (i64.shl
+       (get_local $2)
+       (i64.const 1)
       )
      )
      (br $continue|3)
