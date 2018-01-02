@@ -2088,6 +2088,7 @@ export class Compiler extends DiagnosticEmitter {
         );
 
       default:
+        this.error(DiagnosticCode.Operation_not_supported, expression.range);
         throw new Error("not implemented");
     }
     if (compound) {
