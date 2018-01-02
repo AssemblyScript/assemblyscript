@@ -125,12 +125,18 @@ export function initialize(program: Program): void {
     [ "MAX_VALUE", new Global(program, "MAX_VALUE", "bool.MAX_VALUE", null, Type.bool).withConstantIntegerValue(1, 0) ]
   ]);
   addFunction(program, "f32").members = new Map([
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "f32.MIN_VALUE", null, Type.f32).withConstantFloatValue(-3.40282347e+38) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "f32.MAX_VALUE", null, Type.f32).withConstantFloatValue(3.40282347e+38) ],
     [ "MIN_SAFE_INTEGER", new Global(program, "MIN_SAFE_INTEGER", "f32.MIN_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(-16777215) ],
-    [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f32.MAX_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(16777215) ]
+    [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f32.MAX_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(16777215) ],
+    [ "EPSILON", new Global(program, "EPSILON", "f32.EPSILON", null, Type.f32).withConstantFloatValue(1.19209290e-07) ]
   ]);
   addFunction(program, "f64").members = new Map([
+    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "f64.MIN_VALUE", null, Type.f64).withConstantFloatValue(-1.7976931348623157e+308) ],
+    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "f64.MAX_VALUE", null, Type.f64).withConstantFloatValue(1.7976931348623157e+308) ],
     [ "MIN_SAFE_INTEGER", new Global(program, "MIN_SAFE_INTEGER", "f64.MIN_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(-9007199254740991) ],
-    [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f64.MAX_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(9007199254740991) ]
+    [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f64.MAX_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(9007199254740991) ],
+    [ "EPSILON", new Global(program, "EPSILON", "f64.EPSILON", null, Type.f64).withConstantFloatValue(2.2204460492503131e-16) ]
   ]);
   if (program.target == Target.WASM64) {
     program.elements.set("isize", i64Func);
@@ -694,7 +700,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], Type.void, ConversionKind.NONE);
-      if ((compiler.currentType == usizeType && (<Type[]>typeArguments)[0].classType) || (compiler.currentType.classType && (<Type[]>typeArguments)[0] == usizeType)) {
+      if (compiler.currentType != Type.void && compiler.currentType.kind == (<Type[]>typeArguments)[0].kind) {
         compiler.currentType = (<Type[]>typeArguments)[0];
         return arg0;
       }

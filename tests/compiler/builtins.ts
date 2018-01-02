@@ -185,3 +185,36 @@ export function test(): void {
   // parseInt("1", 10);
   // parseFloat("1.0");
 }
+
+// limits
+
+assert(i8.MIN_VALUE == <i8>0x80);
+assert(i8.MAX_VALUE == 0x7f);
+assert(i16.MIN_VALUE == <i16>0x8000);
+assert(i16.MAX_VALUE == 0x7fff);
+assert(i32.MIN_VALUE == <i32>0x80000000);
+assert(i32.MAX_VALUE == 0x7fffffff);
+assert(i64.MIN_VALUE == <i64>0x8000000000000000);
+assert(i64.MAX_VALUE == 0x7fffffffffffffff);
+
+assert(u8.MIN_VALUE == 0);
+assert(u8.MAX_VALUE == 0xff);
+assert(u16.MIN_VALUE == 0);
+assert(u16.MAX_VALUE == 0xffff);
+assert(u32.MIN_VALUE == 0);
+assert(u32.MAX_VALUE == 0xffffffff);
+assert(u64.MIN_VALUE == 0);
+assert(u64.MAX_VALUE == 0xffffffffffffffff);
+assert(bool.MIN_VALUE == 0); assert(bool.MIN_VALUE == false);
+assert(bool.MAX_VALUE == 1); assert(bool.MAX_VALUE == true);
+
+assert(f32.MIN_VALUE == -3.40282347e+38);
+assert(f32.MAX_VALUE == 3.40282347e+38);
+assert(f32.MIN_SAFE_INTEGER == -16777215);
+assert(f32.MAX_SAFE_INTEGER == 16777215);
+assert(f32.EPSILON == 1.19209290e-07);
+assert(f64.MIN_VALUE == -1.7976931348623157e+308);
+assert(f64.MAX_VALUE == 1.7976931348623157e+308);
+assert(f64.MIN_SAFE_INTEGER == -9007199254740991);
+assert(f64.MAX_SAFE_INTEGER == 9007199254740991);
+assert(f64.EPSILON == 2.2204460492503131e-16);

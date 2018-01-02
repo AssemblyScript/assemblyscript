@@ -46,13 +46,15 @@ Object.defineProperties(
   globalScope["f32"] = function f32(value) { return Math.fround(value); }
 , {
   "MIN_SAFE_INTEGER": { value: -16777215, writable: false },
-  "MAX_SAFE_INTEGER": { value: 16777215, writable: false }
+  "MAX_SAFE_INTEGER": { value: 16777215, writable: false },
+  "EPSILON": { value: Math.fround(1.19209290e-07), writable: false }
 });
 Object.defineProperties(
   globalScope["f64"] = function f64(value) { return +value; }
 , {
   "MIN_SAFE_INTEGER": { value: -9007199254740991, writable: false },
-  "MAX_SAFE_INTEGER": { value: 9007199254740991, writable: false }
+  "MAX_SAFE_INTEGER": { value: 9007199254740991, writable: false },
+  "EPSILON": { value: 2.2204460492503131e-16, writable: false }
 });
 
 globalScope["clz"] = Math.clz32;

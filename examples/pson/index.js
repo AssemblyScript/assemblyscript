@@ -43,9 +43,6 @@ var pson = {
   },
   onBinary: function(offset, length) {
     console.log("binary(length=" + length + "): " + mem.slice(offset, offset + length));
-  },
-  onTruncated: function() {
-    console.log("buffer is truncated :-(");
   }
 };
 

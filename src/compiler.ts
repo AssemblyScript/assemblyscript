@@ -2362,6 +2362,8 @@ export class Compiler extends DiagnosticEmitter {
         target = this.program.resolvePropertyAccess(<PropertyAccessExpression>targetExpression, this.currentFunction);
         break;
 
+      // case NodeKind.ELEMENTACCESS:
+
       default:
         this.error(DiagnosticCode.Operation_not_supported, expression.range);
     }
@@ -2409,34 +2411,36 @@ export class Compiler extends DiagnosticEmitter {
     if (!element)
       return this.module.createUnreachable();
 
-    // local
-    if (element.kind == ElementKind.LOCAL) {
-      assert((<Local>element).type != null);
-      this.currentType = <Type>(<Local>element).type;
-      if ((<Local>element).hasConstantValue)
-        return makeInlineConstant(<Local>element, this.module);
-      assert((<Local>element).index >= 0);
-      return this.module.createGetLocal((<Local>element).index, this.currentType.toNativeType());
-    }
+    switch (element.kind) {
 
-    // global
-    if (element.kind == ElementKind.GLOBAL) {
-      if (element.isBuiltIn)
-        return compileBuiltinGetConstant(this, <Global>element);
+      case ElementKind.LOCAL:
+        assert((<Local>element).type != null);
+        this.currentType = <Type>(<Local>element).type;
+        if ((<Local>element).hasConstantValue)
+          return makeInlineConstant(<Local>element, this.module);
+        assert((<Local>element).index >= 0);
+        return this.module.createGetLocal((<Local>element).index, this.currentType.toNativeType());
 
-      var global = <Global>element;
-      if (!this.compileGlobal(global)) // reports
+      case ElementKind.GLOBAL:
+        if (element.isBuiltIn)
+          return compileBuiltinGetConstant(this, <Global>element);
+
+        var global = <Global>element;
+        if (!this.compileGlobal(global)) // reports
+          return this.module.createUnreachable();
+        assert(global.type != null); // has been resolved when compileGlobal succeeds
+        this.currentType = <Type>global.type;
+        if (global.hasConstantValue)
+          return makeInlineConstant(global, this.module);
+        else
+          return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
+
+      // case ElementKind.FIELD
+
+      default:
+        this.error(DiagnosticCode.Operation_not_supported, expression.range);
         return this.module.createUnreachable();
-      assert(global.type != null);
-      this.currentType = <Type>global.type;
-      if (global.hasConstantValue)
-        return makeInlineConstant(global, this.module);
-      else
-        return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
     }
-
-    this.error(DiagnosticCode.Operation_not_supported, expression.range);
-    return this.module.createUnreachable();
   }
 
   compileLiteralExpression(expression: LiteralExpression, contextualType: Type): ExpressionRef {
@@ -2456,13 +2460,17 @@ export class Compiler extends DiagnosticEmitter {
         if (contextualType == Type.bool && (intValue.isZero || intValue.isOne))
           return this.module.createI32(intValue.isZero ? 0 : 1);
         if (contextualType == Type.f64)
-          return this.module.createF64((<f64>intValue.lo) + (<f64>intValue.hi) * 0xffffffff);
+          return this.module.createF64(intValue.toF64());
         if (contextualType == Type.f32)
-          return this.module.createF32((<f32>intValue.lo) + (<f32>intValue.hi) * 0xffffffff);
+          return this.module.createF32(<f32>intValue.toF64());
         if (contextualType.isLongInteger)
           return this.module.createI64(intValue.lo, intValue.hi);
-        if (contextualType.isSmallInteger)
-          return this.module.createI32(intValue.toI32());
+        if (contextualType.isSmallInteger) {
+          var smallIntValue: i32 = contextualType.isSignedInteger
+            ? intValue.lo << contextualType.smallIntegerShift >> contextualType.smallIntegerShift
+            : intValue.lo & contextualType.smallIntegerMask;
+          return this.module.createI32(smallIntValue);
+        }
         if (contextualType == Type.void && !intValue.fitsInI32) {
           this.currentType = Type.i64;
           return this.module.createI64(intValue.lo, intValue.hi);

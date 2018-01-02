@@ -78,14 +78,22 @@ declare namespace bool {
 /** Converts any other numeric value to a 32-bit float. */
 declare function f32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): f32;
 declare namespace f32 {
+  /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f32;
+  /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f32;
+  /** Difference between 1 and the smallest representable value greater than 1. */
+  export const EPSILON: f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): f64;
 declare namespace f64 {
+  /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f64;
+  /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f64;
+  /** Difference between 1 and the smallest representable value greater than 1. */
+  export const EPSILON: f64;
 }
 
 // Portable built-ins

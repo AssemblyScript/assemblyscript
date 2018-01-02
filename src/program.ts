@@ -939,8 +939,10 @@ export class Program extends DiagnosticEmitter {
         target = this.resolvePropertyAccess(<PropertyAccessExpression>expression, contextualFunction);
         break;
 
+      // case NodeKind.ELEMENTACCESS:
+
       default:
-        throw new Error("target must be an identifier or property access");
+        throw new Error("property target expected");
     }
     if (!target)
       return null;

@@ -34,7 +34,6 @@ namespace pson {
   export declare function onDouble(value: f64): void;
   export declare function onString(offset: usize, length: u32): void;
   export declare function onBinary(offset: usize, length: u32): void;
-  export declare function onTruncated(): void;
 }
 
 var offset: usize = 0;
@@ -43,8 +42,7 @@ export function decode(length: usize): void {
   offset = 0;
   while (offset < length)
     decodeValue();
-  if (offset != length)
-    pson.onTruncated();
+  assert(offset == length);
 }
 
 function decodeValue(): void {

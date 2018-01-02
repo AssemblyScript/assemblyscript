@@ -17,6 +17,18 @@ export class Array<T> {
     }
   }
 
+  @operator("[]")
+  get(index: i32): T {
+    assert(index > 0 && index < this.capacity);
+    throw new Error("not implemented");
+  }
+
+  @operator("[]=")
+  set(index: i32, value: T): void {
+    assert(index > 0 && index < this.capacity);
+    throw new Error("not implemented");
+  }
+
   dispose(): void {
     store<i64>(changetype<usize>(this), 0);
     Heap.dispose(this.ptr);

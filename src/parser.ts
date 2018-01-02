@@ -717,12 +717,25 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.READONLY))
       modifiers = addModifier(Node.createModifier(ModifierKind.READONLY, tn.range()), modifiers);
 
+    // check if accessor: ('get' | 'set') ^\n Identifier
+    tn.mark();
     var isGetter = false;
     var isSetter = false;
-    if (isGetter = tn.skip(Token.GET))
-      modifiers = addModifier(Node.createModifier(ModifierKind.GET, tn.range()), modifiers);
-    else if (isSetter = tn.skip(Token.SET)) // can't be both
-      modifiers = addModifier(Node.createModifier(ModifierKind.SET, tn.range()), modifiers);
+    if (isGetter = tn.skip(Token.GET)) {
+      if (tn.peek(true, true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine)
+        modifiers = addModifier(Node.createModifier(ModifierKind.GET, tn.range()), modifiers);
+      else {
+        tn.reset();
+        isGetter = false;
+      }
+    } else if (isSetter = tn.skip(Token.SET)) { // can't be both
+      if (tn.peek(true, true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine)
+        modifiers = addModifier(Node.createModifier(ModifierKind.SET, tn.range()), modifiers);
+      else {
+        tn.reset();
+        isSetter = false;
+      }
+    }
 
     if (tn.skip(Token.CONSTRUCTOR) || tn.skip(Token.IDENTIFIER)) { // order is important
       var identifier: IdentifierExpression = tn.token == Token.CONSTRUCTOR

@@ -6,6 +6,34 @@
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
+ (global $i8.MIN_VALUE i32 (i32.const -128))
+ (global $i8.MAX_VALUE i32 (i32.const 127))
+ (global $i16.MIN_VALUE i32 (i32.const -32768))
+ (global $i16.MAX_VALUE i32 (i32.const 32767))
+ (global $i32.MIN_VALUE i32 (i32.const -2147483648))
+ (global $i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $i64.MIN_VALUE i64 (i64.const -9223372036854775808))
+ (global $i64.MAX_VALUE i64 (i64.const 9223372036854775807))
+ (global $u8.MIN_VALUE i32 (i32.const 0))
+ (global $u8.MAX_VALUE i32 (i32.const 255))
+ (global $u16.MIN_VALUE i32 (i32.const 0))
+ (global $u16.MAX_VALUE i32 (i32.const 65535))
+ (global $u32.MIN_VALUE i32 (i32.const 0))
+ (global $u32.MAX_VALUE i32 (i32.const -1))
+ (global $u64.MIN_VALUE i64 (i64.const 0))
+ (global $u64.MAX_VALUE i64 (i64.const -1))
+ (global $bool.MIN_VALUE i32 (i32.const 0))
+ (global $bool.MAX_VALUE i32 (i32.const 1))
+ (global $f32.MIN_VALUE f32 (f32.const -3402823466385288598117041e14))
+ (global $f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
+ (global $f32.MIN_SAFE_INTEGER f32 (f32.const -16777215))
+ (global $f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
+ (global $f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
+ (global $f64.MIN_VALUE f64 (f64.const -1797693134862315708145274e284))
+ (global $f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
+ (global $f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
+ (global $f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
+ (global $f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "test" (func $builtins/test))
@@ -1030,6 +1058,284 @@
       (get_local $5)
       (get_local $5)
      )
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const -128)
+     (i32.const -128)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 127)
+     (i32.const 127)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const -32768)
+     (i32.const -32768)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 32767)
+     (i32.const 32767)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const -2147483648)
+     (i32.const -2147483648)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 2147483647)
+     (i32.const 2147483647)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i64.eq
+     (i64.const -9223372036854775808)
+     (i64.const -9223372036854775808)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i64.eq
+     (i64.const 9223372036854775807)
+     (i64.const 9223372036854775807)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 255)
+     (i32.const 255)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 65535)
+     (i32.const 65535)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const -1)
+     (i32.const -1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i64.eq
+     (i64.const 0)
+     (i64.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i64.eq
+     (i64.const -1)
+     (i64.const -1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 1)
+     (i32.const 1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.const 1)
+     (i32.const 1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f32.eq
+     (f32.const -3402823466385288598117041e14)
+     (f32.neg
+      (f32.const 3402823466385288598117041e14)
+     )
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f32.eq
+     (f32.const 3402823466385288598117041e14)
+     (f32.const 3402823466385288598117041e14)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f32.eq
+     (f32.const -16777215)
+     (f32.neg
+      (f32.const 16777215)
+     )
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f32.eq
+     (f32.const 16777215)
+     (f32.const 16777215)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f32.eq
+     (f32.const 1.1920928955078125e-07)
+     (f32.const 1.1920928955078125e-07)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f64.eq
+     (f64.const -1797693134862315708145274e284)
+     (f64.neg
+      (f64.const 1797693134862315708145274e284)
+     )
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f64.eq
+     (f64.const 1797693134862315708145274e284)
+     (f64.const 1797693134862315708145274e284)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f64.eq
+     (f64.const -9007199254740991)
+     (f64.neg
+      (f64.const 9007199254740991)
+     )
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f64.eq
+     (f64.const 9007199254740991)
+     (f64.const 9007199254740991)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (f64.eq
+     (f64.const 2.220446049250313e-16)
+     (f64.const 2.220446049250313e-16)
     )
    )
    (unreachable)

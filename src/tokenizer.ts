@@ -730,13 +730,13 @@ export class Tokenizer extends DiagnosticEmitter {
     }
   }
 
-  peek(checkOnNewLine: bool = false): Token {
+  peek(checkOnNewLine: bool = false, preferIdentifier: bool = false, maxCompoundLength: i32 = i32.MAX_VALUE): Token {
     var text = this.source.text;
     if (this.nextToken < 0) {
       var posBefore = this.pos;
       var tokenBefore = this.token;
       var tokenPosBefore = this.tokenPos;
-      this.nextToken = this.unsafeNext();
+      this.nextToken = this.unsafeNext(preferIdentifier, maxCompoundLength);
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
         while (--this.tokenPos > posBefore) {
@@ -1096,7 +1096,7 @@ export class Tokenizer extends DiagnosticEmitter {
     if (this.pos < this.end) {
       var c = text.charCodeAt(this.pos);
       if (c == CharCode.E || c == CharCode.e) {
-        if (++this.pos < this.end && text.charCodeAt(this.pos) == CharCode.MINUS)
+        if (++this.pos < this.end && (text.charCodeAt(this.pos) == CharCode.MINUS || text.charCodeAt(this.pos) == CharCode.PLUS) && isDecimalDigit(text.charCodeAt(this.pos + 1)))
           ++this.pos;
         while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos)))
           ++this.pos;

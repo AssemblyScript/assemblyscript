@@ -60,6 +60,10 @@ export class I64 {
     return this.lo;
   }
 
+  toF64(): f64 {
+    return <f64>this.hi * 0x100000000 + <f64>(this.lo >>> 0);
+  }
+
   eq(other: I64): bool {
     return this.eq32(other.lo, other.hi);
   }
