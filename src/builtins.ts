@@ -694,11 +694,11 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return module.createUnreachable();
       arg0 = compiler.compileExpression(operands[0], Type.void, ConversionKind.NONE);
-      if ((compiler.currentType == usizeType && (<Type[]>typeArguments)[1].classType) || (compiler.currentType.classType && (<Type[]>typeArguments)[1] == usizeType)) {
-        compiler.currentType = (<Type[]>typeArguments)[1];
+      if ((compiler.currentType == usizeType && (<Type[]>typeArguments)[0].classType) || (compiler.currentType.classType && (<Type[]>typeArguments)[0] == usizeType)) {
+        compiler.currentType = (<Type[]>typeArguments)[0];
         return arg0;
       }
-      compiler.error(DiagnosticCode.Type_0_cannot_be_changed_to_type_1, reportNode.range, (<Type[]>typeArguments)[0].toString(), (<Type[]>typeArguments)[1].toString());
+      compiler.error(DiagnosticCode.Type_0_cannot_be_changed_to_type_1, reportNode.range, compiler.currentType.toString(), (<Type[]>typeArguments)[0].toString());
       return module.createUnreachable();
 
     case "assert": // assert(isTrue: bool) -> void

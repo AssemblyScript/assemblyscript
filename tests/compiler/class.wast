@@ -3,7 +3,7 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ifff (func (param i32 f32 f32) (result f32)))
- (type $iv (func (param i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $v (func))
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (global $HEAP_BASE i32 (i32.const 4))
@@ -59,7 +59,9 @@
    )
   )
  )
- (func $class/test (; 4 ;) (type $iv) (param $0 i32)
+ (func $class/test (; 4 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
   (drop
    (call $class/Animal#instanceAdd
     (get_local $0)
@@ -73,6 +75,19 @@
     (f32.const 1)
     (f32.const 2)
    )
+  )
+  (block
+   (set_local $1
+    (get_local $0)
+   )
+  )
+  (block
+   (set_local $2
+    (get_local $1)
+   )
+  )
+  (return
+   (get_local $2)
   )
  )
  (func $start (; 5 ;) (type $v)

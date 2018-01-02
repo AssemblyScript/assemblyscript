@@ -16,7 +16,11 @@ Animal.ONE;
 Animal.add(1,2);
 Animal.sub<f32>(1, 2);
 
-export function test(animal: Animal<f64>): void {
+export function test(animal: Animal<f64>): Animal<f64> {
   animal.instanceAdd(1, 2);
   animal.instanceSub<f32>(1, 2);
+
+  var ptr = changetype<usize>(animal);
+  var cls = changetype<Animal<f64>>(ptr);
+  return cls;
 }

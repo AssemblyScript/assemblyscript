@@ -1506,7 +1506,17 @@ export class Parser extends DiagnosticEmitter {
         return Node.createFloatLiteral(tn.readFloat(), tn.range(startPos, tn.pos));
 
       // RegexpLiteralExpression
-      case Token.REGEXPLITERAL:
+      /*
+      case Token.SLASH:
+        var regexpLit = Node.createRegexpLiteral(tn.readRegexp(), tn.range(startPos, tn.pos));
+        if (!tn.skip(Token.SLASH)) {
+          this.error(DiagnosticCode._0_expected, tn.range(), "/");
+          return null;
+        }
+        // TODO: modifiers, may be move to tokenizer
+        return regexpLit;
+      */
+      case Token.REGEXPLITERAL: // not yet supported
         return Node.createRegexpLiteral(tn.readRegexp(), tn.range(startPos, tn.pos));
 
       default:

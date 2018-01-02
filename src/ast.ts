@@ -10,7 +10,7 @@ import {
   Range
 } from "./tokenizer";
 
-import{
+import {
   CharCode
 } from "./util/charcode";
 
