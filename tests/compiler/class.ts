@@ -20,6 +20,14 @@ export function test(animal: Animal<f64>): Animal<f64> {
   animal.instanceAdd(1, 2);
   animal.instanceSub<f32>(1, 2);
 
+  animal.one;
+  animal.two;
+  animal.three;
+
+  animal.one = 0 + 1;
+  animal.two = 1 + 1;
+  animal.three = 1 + 1 + 1;
+
   var ptr = changetype<usize>(animal);
   var cls = changetype<Animal<f64>>(ptr);
   return cls;

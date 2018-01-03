@@ -441,9 +441,9 @@ export class Compiler extends DiagnosticEmitter {
     this.compileEnum(<Enum>element);
   }
 
-  compileEnum(element: Enum): void {
+  compileEnum(element: Enum): bool {
     if (element.isCompiled)
-      return;
+      return true;
 
     var previousValue: EnumValue | null = null;
     if (element.members)
@@ -500,7 +500,7 @@ export class Compiler extends DiagnosticEmitter {
           throw new Error("declaration expected");
         previousValue = <EnumValue>val;
       }
-    element.isCompiled = true;
+    return element.isCompiled = true;
   }
 
   // functions
@@ -2104,144 +2104,137 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef {
-    var element: Element | null = null;
-    switch (expression.kind) {
-
-      case NodeKind.IDENTIFIER:
-        element = this.program.resolveIdentifier(<IdentifierExpression>expression, this.currentFunction); // reports
-        break;
-
-      case NodeKind.PROPERTYACCESS:
-        element = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression, this.currentFunction); // reports
-        break;
-
-      default:
-        this.error(DiagnosticCode.Operation_not_supported, expression.range);
-    }
-    if (!element)
+    var resolved = this.program.resolveExpression(expression, this.currentFunction); // reports
+    if (!resolved)
       return this.module.createUnreachable();
 
-    var type: Type | null = null;
+    var element = resolved.element;
+    var elementType: Type;
     switch (element.kind) {
 
       case ElementKind.LOCAL:
-        type = (<Local>element).type;
+        elementType = (<Local>element).type;
         break;
 
       case ElementKind.GLOBAL:
-        if (this.compileGlobal(<Global>element))
-          type = (<Global>element).type;
+        if (!this.compileGlobal(<Global>element)) // reports
+          return this.module.createUnreachable();
+        assert((<Global>element).type != null);
+        elementType = <Type>(<Global>element).type;
+        break;
+
+      case ElementKind.FIELD:
+        elementType = (<Field>element).type;
         break;
 
       case ElementKind.PROPERTY:
         var setterPrototype = (<Property>element).setterPrototype;
         if (setterPrototype) {
           var setterInstance = setterPrototype.resolve(); // reports
-          if (setterInstance) {
-            if (contextualType == Type.void) { // just set if dropped anyway
-              return this.compileCall(setterInstance, [ valueExpression ], expression);
-            } else { // otherwise do a set followed by a get
-              var getterPrototype = (<Property>element).getterPrototype;
-              if (getterPrototype) {
-                var getterInstance = getterPrototype.resolve(); // reports
-                if (getterInstance) {
-                  return this.module.createBlock(null, [
-                    this.compileCall(setterInstance, [ valueExpression ], expression),
-                    this.compileCall(getterInstance, [], expression)
-                  ], getterInstance.returnType.toNativeType());
-                }
-              } else
-                this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, expression.range, (<Property>element).simpleName, (<Property>element).parent.internalName);
-            }
-          }
-        } else
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, expression.range, (<Property>element).simpleName, (<Property>element).parent.internalName);
+          if (!setterInstance)
+            return this.module.createUnreachable();
+          elementType = setterInstance.parameters[0].type;
+          break;
+        }
+        this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Property>element).internalName);
         return this.module.createUnreachable();
 
       default:
         this.error(DiagnosticCode.Operation_not_supported, expression.range);
+        return this.module.createUnreachable();
     }
-    if (!type)
+    if (!elementType)
       return this.module.createUnreachable();
 
-    this.currentType = type;
-    return this.compileAssignmentWithValue(expression, this.compileExpression(valueExpression, type, ConversionKind.IMPLICIT), contextualType != Type.void);
+    this.currentType = elementType;
+    return this.compileAssignmentWithValue(expression, this.compileExpression(valueExpression, elementType, ConversionKind.IMPLICIT), contextualType != Type.void);
   }
 
   compileAssignmentWithValue(expression: Expression, valueWithCorrectType: ExpressionRef, tee: bool = false): ExpressionRef {
-    var element: Element | null = null;
-    switch (expression.kind) {
-
-      case NodeKind.IDENTIFIER:
-        element = this.program.resolveIdentifier(<IdentifierExpression>expression, this.currentFunction);
-        break;
-
-      case NodeKind.PROPERTYACCESS:
-        element = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression, this.currentFunction);
-        break;
-
-      default:
-        this.error(DiagnosticCode.Operation_not_supported, expression.range);
-    }
-    if (!element)
+    var resolved = this.program.resolveExpression(expression, this.currentFunction); // reports
+    if (!resolved)
       return this.module.createUnreachable();
 
-    if (element.kind == ElementKind.LOCAL) {
-      assert((<Local>element).type != null);
-      if (tee) {
-        this.currentType = <Type>(<Local>element).type;
-        return this.module.createTeeLocal((<Local>element).index, valueWithCorrectType);
-      }
-      this.currentType = Type.void;
-      return this.module.createSetLocal((<Local>element).index, valueWithCorrectType);
-    }
+    var element = resolved.element;
+    switch (element.kind) {
 
-    if (element.kind == ElementKind.GLOBAL) {
-      if (!this.compileGlobal(<Global>element))
-        return this.module.createUnreachable();
-      this.currentType = <Type>(<Global>element).type;
-      if (!(<Global>element).isMutable) {
-        this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, element.internalName);
-        return this.module.createUnreachable();
-      }
-      if (tee) {
+      case ElementKind.LOCAL:
+        this.currentType = select<Type>((<Local>element).type, Type.void, tee);
+        if ((<Local>element).isConstant) {
+          this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
+          return this.module.createUnreachable();
+        }
+        return tee
+          ? this.module.createTeeLocal((<Local>element).index, valueWithCorrectType)
+          : this.module.createSetLocal((<Local>element).index, valueWithCorrectType);
+
+      case ElementKind.GLOBAL:
+        if (!this.compileGlobal(<Global>element))
+          return this.module.createUnreachable();
+        assert((<Global>element).type != null);
+        this.currentType = select<Type>(<Type>(<Global>element).type, Type.void, tee);
+        if ((<Local>element).isConstant) {
+          this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
+          return this.module.createUnreachable();
+        }
+        if (!tee)
+          return this.module.createSetGlobal((<Global>element).internalName, valueWithCorrectType);
         var globalNativeType = (<Type>(<Global>element).type).toNativeType();
-        return this.module.createBlock(null, [ // teeGlobal
+        return this.module.createBlock(null, [ // emulated teeGlobal
           this.module.createSetGlobal((<Global>element).internalName, valueWithCorrectType),
           this.module.createGetGlobal((<Global>element).internalName, globalNativeType)
         ], globalNativeType);
-      }
-      this.currentType = Type.void;
-      return this.module.createSetGlobal((<Global>element).internalName, valueWithCorrectType);
+
+      case ElementKind.FIELD:
+        if ((<Field>element).prototype.isReadonly) {
+          this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Field>element).internalName);
+          return this.module.createUnreachable();
+        }
+        assert(resolved.targetExpression != null);
+        var targetExpr = this.compileExpression(<Expression>resolved.targetExpression, Type.usize32);
+        this.currentType = select<Type>((<Field>element).type, Type.void, tee);
+        var elementNativeType = (<Field>element).type.toNativeType();
+        if (!tee)
+          return this.module.createStore((<Field>element).type.byteSize, targetExpr, valueWithCorrectType, elementNativeType, (<Field>element).memoryOffset);
+        var tempLocal = this.currentFunction.getAndFreeTempLocal((<Field>element).type);
+        return this.module.createBlock(null, [ // TODO: simplify if valueWithCorrectType has no side effects
+          this.module.createSetLocal(tempLocal.index, valueWithCorrectType),
+          this.module.createStore((<Field>element).type.byteSize, targetExpr, this.module.createGetLocal(tempLocal.index, elementNativeType), elementNativeType, (<Field>element).memoryOffset),
+          this.module.createGetLocal(tempLocal.index, elementNativeType)
+        ], elementNativeType);
+
+      case ElementKind.PROPERTY:
+        var setterPrototype = (<Property>element).setterPrototype;
+        if (setterPrototype) {
+          var setterInstance = setterPrototype.resolve(); // reports
+          if (setterInstance) {
+            if (!tee)
+              return this.makeCall(setterInstance, [ valueWithCorrectType ]);
+            var getterPrototype = (<Property>element).getterPrototype;
+            assert(getterPrototype != null);
+            var getterInstance = (<FunctionPrototype>getterPrototype).resolve(); // reports
+            if (getterInstance)
+              return this.module.createBlock(null, [
+                this.makeCall(setterInstance, [ valueWithCorrectType ]),
+                this.makeCall(getterInstance)
+              ], getterInstance.returnType.toNativeType());
+          }
+        } else
+          this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Property>element).internalName);
+        return this.module.createUnreachable();
+
+      default:
+        this.error(DiagnosticCode.Operation_not_supported, expression.range);
+        return this.module.createUnreachable();
     }
-
-    // TODO: fields, (setters)
-
-    throw new Error("not implemented");
   }
 
   compileCallExpression(expression: CallExpression, contextualType: Type): ExpressionRef {
-    var element: Element | null = null;
-    var thisExpression: Expression;
-    switch (expression.expression.kind) {
-      // case NodeKind.THIS:
-      // case NodeKind.SUPER:
-
-      case NodeKind.IDENTIFIER:
-        element = this.program.resolveIdentifier(thisExpression = <IdentifierExpression>expression.expression, this.currentFunction);
-        break;
-
-      case NodeKind.PROPERTYACCESS:
-        element = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression.expression, this.currentFunction);
-        thisExpression = (<PropertyAccessExpression>expression.expression).expression;
-        break;
-
-      default:
-        throw new Error("not implemented");
-    }
-    if (!element)
+    var resolved = this.program.resolveExpression(expression.expression, this.currentFunction); // reports
+    if (!resolved)
       return this.module.createUnreachable();
 
+    var element = resolved.element;
     if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
       var functionPrototype = <FunctionPrototype>element;
       var functionInstance: Function | null = null;
@@ -2283,8 +2276,10 @@ export class Compiler extends DiagnosticEmitter {
       var argumentIndex = 0;
 
       var args = new Array<Expression>(numArgumentsInclThis);
-      if (functionInstance.instanceMethodOf)
-        args[argumentIndex++] = thisExpression;
+      if (functionInstance.instanceMethodOf) {
+        assert(resolved.targetExpression != null);
+        args[argumentIndex++] = <Expression>resolved.targetExpression;
+      }
       for (i = 0; i < numArguments; ++i)
         args[argumentIndex++] = expression.arguments[i];
       return this.compileCall(functionInstance, args, expression);
@@ -2341,9 +2336,12 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     this.currentType = functionInstance.returnType;
+    return this.makeCall(functionInstance, operands);
+  }
 
-    if (!functionInstance.isCompiled)
-      this.compileFunction(functionInstance);
+  private makeCall(functionInstance: Function, operands: ExpressionRef[] | null = null): ExpressionRef {
+    if (!(functionInstance.isCompiled || this.compileFunction(functionInstance)))
+      return this.module.createUnreachable();
 
     // imported function
     if (functionInstance.isDeclared)
@@ -2354,31 +2352,15 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type): ExpressionRef {
-    var targetExpression = expression.expression;
-    var target: Element | null = null;
-    switch (targetExpression.kind) {
-
-      // case NodeKind.THIS:
-
-      case NodeKind.IDENTIFIER:
-        target = this.program.resolveIdentifier(<IdentifierExpression>targetExpression, this.currentFunction);
-        break;
-
-      case NodeKind.PROPERTYACCESS:
-        target = this.program.resolvePropertyAccess(<PropertyAccessExpression>targetExpression, this.currentFunction);
-        break;
-
-      // case NodeKind.ELEMENTACCESS:
-
-      default:
-        this.error(DiagnosticCode.Operation_not_supported, expression.range);
-    }
-    if (!target)
+    var resolved = this.program.resolveElementAccess(expression, this.currentFunction); // reports
+    if (!resolved)
       return this.module.createUnreachable();
-    throw new Error("not implemented");
+
+    throw new Error("not implemented"); // TODO
   }
 
   compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type): ExpressionRef {
+    // check special keywords first
     switch (expression.kind) {
 
       case NodeKind.NULL:
@@ -2406,22 +2388,32 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.THIS:
         if (this.currentFunction.instanceMethodOf) {
           this.currentType = this.currentFunction.instanceMethodOf.type;
-          return this.module.createGetLocal(0, this.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32);
+          return this.module.createGetLocal(0, this.currentType.toNativeType());
         }
+        this.currentType = select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64);
         this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
-        this.currentType = this.options.target == Target.WASM64 ? Type.u64 : Type.u32;
+        return this.module.createUnreachable();
+
+      case NodeKind.SUPER:
+        if (this.currentFunction.instanceMethodOf && this.currentFunction.instanceMethodOf.base) {
+          this.currentType = this.currentFunction.instanceMethodOf.base.type;
+          return this.module.createGetLocal(0, this.currentType.toNativeType());
+        }
+        this.currentType = select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64);
+        this.error(DiagnosticCode._super_can_only_be_referenced_in_a_derived_class, expression.range);
         return this.module.createUnreachable();
     }
 
-    var element = this.program.resolveElement(expression, this.currentFunction); // reports
-    if (!element)
+    // otherwise resolve
+    var resolved = this.program.resolveIdentifier(expression, this.currentFunction); // reports
+    if (!resolved)
       return this.module.createUnreachable();
 
+    var element = resolved.element;
     switch (element.kind) {
 
       case ElementKind.LOCAL:
-        assert((<Local>element).type != null);
-        this.currentType = <Type>(<Local>element).type;
+        this.currentType = (<Local>element).type;
         if ((<Local>element).hasConstantValue)
           return makeInlineConstant(<Local>element, this.module);
         assert((<Local>element).index >= 0);
@@ -2430,23 +2422,16 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
         if (element.isBuiltIn)
           return compileBuiltinGetConstant(this, <Global>element);
-
-        var global = <Global>element;
-        if (!this.compileGlobal(global)) // reports
+        if (!this.compileGlobal(<Global>element)) // reports
           return this.module.createUnreachable();
-        assert(global.type != null); // has been resolved when compileGlobal succeeds
-        this.currentType = <Type>global.type;
-        if (global.hasConstantValue)
-          return makeInlineConstant(global, this.module);
-        else
-          return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
-
-      // case ElementKind.FIELD
-
-      default:
-        this.error(DiagnosticCode.Operation_not_supported, expression.range);
-        return this.module.createUnreachable();
+        assert((<Global>element).type != null);
+        this.currentType = <Type>(<Global>element).type;
+        if ((<Global>element).hasConstantValue)
+          return makeInlineConstant(<Global>element, this.module);
+        return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
     }
+    this.error(DiagnosticCode.Operation_not_supported, expression.range);
+    return this.module.createUnreachable();
   }
 
   compileLiteralExpression(expression: LiteralExpression, contextualType: Type): ExpressionRef {
@@ -2502,124 +2487,50 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compilePropertyAccessExpression(propertyAccess: PropertyAccessExpression, contextualType: Type): ExpressionRef {
-    var expression = propertyAccess.expression;
-    var propertyName = propertyAccess.property.name;
-
-    // the lhs expression is either 'this', 'super', an identifier or another property access
-    var target: Element | null;
-    switch (expression.kind) {
-
-      case NodeKind.THIS:
-        if (!this.currentFunction.instanceMethodOf) {
-          this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
-          return this.module.createUnreachable();
-        }
-        target = this.currentFunction.instanceMethodOf;
-        break;
-
-      case NodeKind.SUPER:
-        if (!(this.currentFunction.instanceMethodOf && this.currentFunction.instanceMethodOf.base)) {
-          this.error(DiagnosticCode._super_can_only_be_referenced_in_a_derived_class, expression.range);
-          return this.module.createUnreachable();
-        }
-        target = this.currentFunction.instanceMethodOf.base;
-        break;
-
-      case NodeKind.IDENTIFIER:
-        target = this.program.resolveIdentifier(<IdentifierExpression>expression, this.currentFunction); // reports
-        break;
-
-      case NodeKind.PROPERTYACCESS:
-        target = this.program.resolvePropertyAccess(<PropertyAccessExpression>expression, this.currentFunction); // reports
-        break;
-
-      default:
-        throw new Error("lhs expression expected");
-    }
-    if (!target)
+    var resolved = this.program.resolvePropertyAccess(propertyAccess, this.currentFunction); // reports
+    if (!resolved)
       return this.module.createUnreachable();
 
-    // look up the property within the target to obtain the actual element
-    var element: Element | null;
-    switch (target.kind) {
-
-      case ElementKind.LOCAL:
-        assert((<Local>target).type != null);
-        element = (<Type>(<Local>target).type).classType;
-        if (!element) {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Type>(<Local>target).type).toString());
-          return this.module.createUnreachable();
-        }
-        target = element;
-        break;
-
-      case ElementKind.GLOBAL:
-        if (!this.compileGlobal(<Global>target))
-          return this.module.createUnreachable();
-        element = (<Type>(<Global>target).type).classType;
-        if (!element) {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, (<Type>(<Local>target).type).toString());
-          return this.module.createUnreachable();
-        }
-        target = element;
-        break;
-
-      default:
-        if (target.members) {
-          element = target.members.get(propertyName);
-          if (!element) {
-            this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
-            return this.module.createUnreachable();
-          }
-
-          // handle enum values right away
-          if (element.kind == ElementKind.ENUMVALUE) {
-            this.currentType = Type.i32;
-            if ((<EnumValue>element).hasConstantValue)
-              return this.module.createI32((<EnumValue>element).constantValue);
-            this.compileEnum((<EnumValue>element).enum);
-            return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
-          }
-        } else {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
-          return this.module.createUnreachable();
-        }
-        break;
-    }
-
-    // handle the element
+    var element = resolved.element;
     switch (element.kind) {
 
-      case ElementKind.LOCAL:
-        assert((<Local>element).type != null);
-        return this.module.createGetLocal((<Local>element).index, (this.currentType = <Type>(<Local>element).type).toNativeType());
-
-      case ElementKind.GLOBAL:
+      case ElementKind.GLOBAL: // static property
         if (!this.compileGlobal(<Global>element))
           return this.module.createUnreachable();
         assert((<Global>element).type != null);
         this.currentType = <Type>(<Global>element).type;
         if ((<Global>element).hasConstantValue)
           return makeInlineConstant(<Global>element, this.module);
-        else
-          return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
+        return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
 
-      case ElementKind.PROPERTY: // getter
-        var getterPrototype = (<Property>element).getterPrototype;
-        if (getterPrototype) {
-          var getterInstance = getterPrototype.resolve([], this.currentFunction.contextualTypeArguments);
-          if (getterInstance) {
-            return this.compileCall(getterInstance, [], propertyAccess);
-          } else {
-            return this.module.createUnreachable();
-          }
-        } else {
-          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
+      case ElementKind.ENUMVALUE: // enum value
+        if (!this.compileEnum((<EnumValue>element).enum))
           return this.module.createUnreachable();
-        }
+        this.currentType = Type.i32;
+        if ((<EnumValue>element).hasConstantValue)
+          return this.module.createI32((<EnumValue>element).constantValue);
+        return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
+
+      case ElementKind.FIELD: // instance field
+        assert(resolved.target != null);
+        assert(resolved.targetExpression != null);
+        assert((<Field>element).memoryOffset >= 0);
+        return this.module.createLoad((<Field>element).type.byteSize, (<Field>element).type.isSignedInteger,
+          this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64)),
+          (<Field>element).type.toNativeType(),
+          (<Field>element).memoryOffset
+        );
+
+      case ElementKind.PROPERTY: // instance property (here: getter)
+        var getter = (<Property>element).getterPrototype;
+        assert(getter != null);
+        var getterInstance = (<FunctionPrototype>getter).resolve(); // reports
+        if (!getterInstance)
+          return this.module.createUnreachable();
+        return this.compileCall(getterInstance, [], propertyAccess);
     }
     this.error(DiagnosticCode.Operation_not_supported, propertyAccess.range);
-    throw new Error("not implemented");
+    return this.module.createUnreachable();
   }
 
   compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {

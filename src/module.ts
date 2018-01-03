@@ -496,24 +496,24 @@ export class Module {
     }
   }
 
-  createCall(target: string, operands: ExpressionRef[], returnType: NativeType): ExpressionRef {
+  createCall(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef {
     if (this.noEmit) return 0;
     var cStr = allocString(target);
     var cArr = allocI32Array(operands);
     try {
-      return _BinaryenCall(this.ref, cStr, cArr, operands.length, returnType);
+      return _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
     } finally {
       Heap.dispose(cArr);
       Heap.dispose(cStr);
     }
   }
 
-  createCallImport(target: string, operands: ExpressionRef[], returnType: NativeType): ExpressionRef {
+  createCallImport(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef {
     if (this.noEmit) return 0;
     var cStr = allocString(target);
     var cArr = allocI32Array(operands);
     try {
-      return _BinaryenCallImport(this.ref, cStr, cArr, operands.length, returnType);
+      return _BinaryenCallImport(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
     } finally {
       Heap.dispose(cArr);
       Heap.dispose(cStr);

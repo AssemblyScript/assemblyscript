@@ -67,7 +67,10 @@ import {
 
   hasDecorator,
   hasModifier,
-  mangleInternalName
+  mangleInternalName,
+  ElementAccessExpression,
+  ThisExpression,
+  SuperExpression
 } from "./ast";
 
 import {
@@ -896,11 +899,11 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Resolves an identifier to the element it refers to. */
-  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function): Element | null {
+  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function): ResolvedElement | null {
     var name = identifier.name;
     var local = contextualFunction.locals.get(name);
     if (local)
-      return local;
+      return resolvedElement.set(local);
 
     var element: Element | null;
     var namespace: Element | null;
@@ -909,95 +912,130 @@ export class Program extends DiagnosticEmitter {
     if (contextualFunction && (namespace = contextualFunction.prototype.namespace)) {
       do {
         if (element = this.elements.get(namespace.internalName + STATIC_DELIMITER + name))
-          return element;
+          return resolvedElement.set(element);
       } while (namespace = namespace.namespace);
     }
 
     // search current file
     if (element = this.elements.get(identifier.range.source.internalPath + PATH_DELIMITER + name))
-      return element;
+      return resolvedElement.set(element);
 
     // search global scope
     if (element = this.elements.get(name))
-      return element;
+      return resolvedElement.set(element);
 
     this.error(DiagnosticCode.Cannot_find_name_0, identifier.range, name);
     return null;
   }
 
   /** Resolves a property access to the element it refers to. */
-  resolvePropertyAccess(propertyAccess: PropertyAccessExpression, contextualFunction: Function): Element | null {
-    var expression = propertyAccess.expression;
-    var target: Element | null = null;
-    switch (expression.kind) {
+  resolvePropertyAccess(propertyAccess: PropertyAccessExpression, contextualFunction: Function): ResolvedElement | null {
+    var resolved: ResolvedElement | null;
 
-      case NodeKind.IDENTIFIER:
-        target = this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
-        break;
-
-      case NodeKind.PROPERTYACCESS:
-        target = this.resolvePropertyAccess(<PropertyAccessExpression>expression, contextualFunction);
-        break;
-
-      // case NodeKind.ELEMENTACCESS:
-
-      default:
-        throw new Error("property target expected");
-    }
-    if (!target)
+    // start by resolving the lhs target (expression before the last dot)
+    var targetExpression = propertyAccess.expression;
+    if (!(resolved = this.resolveExpression(targetExpression, contextualFunction)))
       return null;
+    var target = resolved.element;
 
+    // at this point we know exactly what the target is, so look up the element within
     var propertyName = propertyAccess.property.name;
+    var targetType: Type | null;
     switch (target.kind) {
 
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
-        var type = (<VariableLikeElement>target).type;
-        assert(type != null); // locals don't have lazy types, unlike globals
-        if ((<Type>type).classType) {
-          target = <Class>(<Type>type).classType;
+        targetType = (<VariableLikeElement>target).type;
+        if (!targetType) // FIXME: are globals always resolved here?
+          throw new Error("type expected");
+        if (targetType.classType)
+          target = targetType.classType;
           // fall-through
-        } else
+        else
           break;
 
       default:
         if (target.members) {
           var member = target.members.get(propertyName);
           if (member)
-            return member;
+            return resolvedElement.set(member).withTarget(target, targetExpression);
         }
         break;
     }
-    this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyAccess.property.name, target.internalName);
+    this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
     return null;
   }
 
-  resolveElement(expression: Expression, contextualFunction: Function): Element | null {
+  resolveElementAccess(elementAccess: ElementAccessExpression, contextualFunction: Function): ResolvedElement | null {
+    var resolved: ResolvedElement | null;
 
-    // this -> Class
-    if (expression.kind == NodeKind.THIS) {
-      if (contextualFunction.instanceMethodOf)
-        return contextualFunction.instanceMethodOf;
-      this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
+    // start by resolving the lhs target (expression before the last dot)
+    var targetExpression = elementAccess.expression;
+    if (!(resolved = this.resolveExpression(targetExpression, contextualFunction)))
       return null;
-    }
+    var target = resolved.element;
 
-    // local or global name
-    if (expression.kind == NodeKind.IDENTIFIER) {
-      return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
-
-    // static or instance property (incl. enum values) or method
-    } else if (expression.kind == NodeKind.PROPERTYACCESS) {
-      return this.resolvePropertyAccess(<PropertyAccessExpression>expression, contextualFunction);
-
-    // instantiation
-    } else if (expression.kind == NodeKind.NEW) {
-      return this.resolveElement((<NewExpression>expression).expression, contextualFunction);
-    }
-
+    // at this point we know exactly what the target is, so make sure it is an array and look up the element within
     throw new Error("not implemented");
   }
+
+  resolveExpression(expression: Expression, contextualFunction: Function): ResolvedElement | null {
+    var classType: Class | null;
+    switch (expression.kind) {
+
+      case NodeKind.THIS: // -> Class
+        if (classType = contextualFunction.instanceMethodOf)
+          return resolvedElement.set(classType);
+        this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
+        return null;
+
+      case NodeKind.SUPER: // -> Class
+        if ((classType = contextualFunction.instanceMethodOf) && (classType = classType.base))
+          return resolvedElement.set(classType);
+        this.error(DiagnosticCode._super_can_only_be_referenced_in_a_derived_class, expression.range);
+        return null;
+
+      case NodeKind.IDENTIFIER:
+        return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
+
+      case NodeKind.PROPERTYACCESS:
+        return this.resolvePropertyAccess(<PropertyAccessExpression>expression, contextualFunction);
+
+      case NodeKind.ELEMENTACCESS:
+        return this.resolveElementAccess(<ElementAccessExpression>expression, contextualFunction);
+
+      default:
+        this.error(DiagnosticCode.Operation_not_supported, expression.range);
+        return null;
+    }
+  }
 }
+
+/** Common result structure returned when calling any of the resolve functions on a {@link Program}. */
+export class ResolvedElement {
+
+  /** The target element, if a property or element access */
+  target: Element | null;
+  /** The target element's sub-expression, if a property or element access. */
+  targetExpression: Expression | null;
+  /** The element being accessed. */
+  element: Element;
+
+  set(element: Element): this {
+    this.target = null;
+    this.targetExpression = null;
+    this.element = element;
+    return this;
+  }
+
+  withTarget(target: Element, targetExpression: Expression): this {
+    this.target = target;
+    this.targetExpression = targetExpression;
+    return this;
+  }
+}
+
+var resolvedElement = new ResolvedElement();
 
 /** Indicates the specific kind of an {@link Element}. */
 export enum ElementKind {
@@ -1288,6 +1326,7 @@ export class Local extends VariableLikeElement {
 
   kind = ElementKind.LOCAL;
 
+  type: Type; // more specific
   /** Local index. */
   index: i32;
 
@@ -1685,6 +1724,7 @@ export class Field extends Element {
   /** Constructs a new field. */
   constructor(prototype: FieldPrototype, internalName: string, type: Type) {
     super(prototype.program, prototype.simpleName, internalName);
+    this.prototype = prototype;
     this.flags = prototype.flags;
     this.type = type;
   }

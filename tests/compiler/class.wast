@@ -76,6 +76,45 @@
     (f32.const 2)
    )
   )
+  (drop
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (drop
+   (i32.load16_s offset=4
+    (get_local $0)
+   )
+  )
+  (drop
+   (i32.load8_s offset=6
+    (get_local $0)
+   )
+  )
+  (i32.store
+   (get_local $0)
+   (i32.add
+    (i32.const 0)
+    (i32.const 1)
+   )
+  )
+  (i32.store16 offset=4
+   (get_local $0)
+   (i32.add
+    (i32.const 1)
+    (i32.const 1)
+   )
+  )
+  (i32.store8 offset=6
+   (get_local $0)
+   (i32.add
+    (i32.add
+     (i32.const 1)
+     (i32.const 1)
+    )
+    (i32.const 1)
+   )
+  )
   (block
    (set_local $1
     (get_local $0)

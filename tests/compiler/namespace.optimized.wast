@@ -2,7 +2,6 @@
  (type $i (func (result i32)))
  (type $v (func))
  (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
- (global $namespace/Joined.THREE i32 (i32.const 3))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -10,7 +9,7 @@
   (get_global $namespace/Outer.Inner.aVar)
  )
  (func $namespace/Joined.anotherFunc (; 1 ;) (type $i) (result i32)
-  (get_global $namespace/Joined.THREE)
+  (i32.const 3)
  )
  (func $start (; 2 ;) (type $v)
   (drop
