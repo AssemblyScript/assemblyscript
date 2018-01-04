@@ -352,8 +352,10 @@ export class Compiler extends DiagnosticEmitter {
             return false;
         } else if (declaration.initializer) {
           initExpr = this.compileExpression(declaration.initializer, Type.void, ConversionKind.NONE); // reports and returns unreachable
-          if (this.currentType == Type.void)
+          if (this.currentType == Type.void) {
+            this.error(DiagnosticCode.Type_0_is_not_assignable_to_type_1, declaration.range, this.currentType.toString(), "<auto>");
             return false;
+          }
           global.type = this.currentType;
         } else {
           this.error(DiagnosticCode.Type_expected, declaration.name.range.atEnd);
@@ -1010,8 +1012,11 @@ export class Compiler extends DiagnosticEmitter {
           init = this.compileExpression(declaration.initializer, type); // reports and returns unreachable
       } else if (declaration.initializer) { // infer type
         init = this.compileExpression(declaration.initializer, Type.void, ConversionKind.NONE); // reports and returns unreachable
-        if ((type = this.currentType) == Type.void)
+        if (this.currentType == Type.void) {
+          this.error(DiagnosticCode.Type_0_is_not_assignable_to_type_1, declaration.range, this.currentType.toString(), "<auto>");
           continue;
+        }
+        type = this.currentType;
       } else {
         this.error(DiagnosticCode.Type_expected, declaration.name.range.atEnd);
         continue;
@@ -1168,8 +1173,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // void to any
     if (fromType.kind == TypeKind.VOID) {
-      this.error(DiagnosticCode.Operation_not_supported, reportNode.range);
-      throw new Error("unexpected conversion from void");
+      this.error(DiagnosticCode.Type_0_is_not_assignable_to_type_1, reportNode.range, fromType.toString(), toType.toString());
+      return this.module.createUnreachable();
     }
 
     // any to void
@@ -2108,6 +2113,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!resolved)
       return this.module.createUnreachable();
 
+    // to compile just the value, we need to know the target's type
     var element = resolved.element;
     var elementType: Type;
     switch (element.kind) {
@@ -2143,9 +2149,8 @@ export class Compiler extends DiagnosticEmitter {
         this.error(DiagnosticCode.Operation_not_supported, expression.range);
         return this.module.createUnreachable();
     }
-    if (!elementType)
-      return this.module.createUnreachable();
 
+    // now compile the value and do the assignment
     this.currentType = elementType;
     return this.compileAssignmentWithValue(expression, this.compileExpression(valueExpression, elementType, ConversionKind.IMPLICIT), contextualType != Type.void);
   }
@@ -2208,25 +2213,29 @@ export class Compiler extends DiagnosticEmitter {
         if (setterPrototype) {
           var setterInstance = setterPrototype.resolve(); // reports
           if (setterInstance) {
-            if (!tee)
+            assert(setterInstance.parameters.length == 1);
+            if (!tee) {
+              this.currentType = Type.void;
               return this.makeCall(setterInstance, [ valueWithCorrectType ]);
+            }
             var getterPrototype = (<Property>element).getterPrototype;
             assert(getterPrototype != null);
             var getterInstance = (<FunctionPrototype>getterPrototype).resolve(); // reports
-            if (getterInstance)
+            if (getterInstance) {
+              assert(getterInstance.parameters.length == 0);
+              this.currentType = getterInstance.returnType;
               return this.module.createBlock(null, [
                 this.makeCall(setterInstance, [ valueWithCorrectType ]),
                 this.makeCall(getterInstance)
               ], getterInstance.returnType.toNativeType());
+            }
           }
         } else
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Property>element).internalName);
         return this.module.createUnreachable();
-
-      default:
-        this.error(DiagnosticCode.Operation_not_supported, expression.range);
-        return this.module.createUnreachable();
     }
+    this.error(DiagnosticCode.Operation_not_supported, expression.range);
+    return this.module.createUnreachable();
   }
 
   compileCallExpression(expression: CallExpression, contextualType: Type): ExpressionRef {
@@ -2527,7 +2536,9 @@ export class Compiler extends DiagnosticEmitter {
         var getterInstance = (<FunctionPrototype>getter).resolve(); // reports
         if (!getterInstance)
           return this.module.createUnreachable();
-        return this.compileCall(getterInstance, [], propertyAccess);
+        assert(getterInstance.parameters.length == 0);
+        this.currentType = getterInstance.returnType;
+        return this.makeCall(getterInstance);
     }
     this.error(DiagnosticCode.Operation_not_supported, propertyAccess.range);
     return this.module.createUnreachable();

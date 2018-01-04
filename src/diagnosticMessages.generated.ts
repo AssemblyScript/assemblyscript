@@ -8,6 +8,8 @@ export enum DiagnosticCode {
   Cannot_export_a_mutable_global = 104,
   Compiling_constant_with_non_constant_initializer_as_mutable = 105,
   Type_0_cannot_be_changed_to_type_1 = 106,
+  Structs_cannot_extend_classes_and_vice_versa = 107,
+  Structs_cannot_implement_interfaces = 108,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -54,6 +56,7 @@ export enum DiagnosticCode {
   Unterminated_Unicode_escape_sequence = 1199,
   Decorators_are_not_valid_here = 1206,
   _abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration = 1242,
+  A_class_may_only_extend_another_class = 1311,
   Duplicate_identifier_0 = 2300,
   Cannot_find_name_0 = 2304,
   Module_0_has_no_exported_member_1 = 2305,
@@ -89,6 +92,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 104: return "Cannot export a mutable global.";
     case 105: return "Compiling constant with non-constant initializer as mutable.";
     case 106: return "Type '{0}' cannot be changed to type '{1}'.";
+    case 107: return "Structs cannot extend classes and vice-versa.";
+    case 108: return "Structs cannot implement interfaces.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -135,6 +140,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1199: return "Unterminated Unicode escape sequence.";
     case 1206: return "Decorators are not valid here.";
     case 1242: return "'abstract' modifier can only appear on a class, method, or property declaration.";
+    case 1311: return "A class may only extend another class.";
     case 2300: return "Duplicate identifier '{0}'.";
     case 2304: return "Cannot find name '{0}'.";
     case 2305: return "Module '{0}' has no exported member '{1}'.";

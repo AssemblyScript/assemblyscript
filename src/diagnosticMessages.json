@@ -6,6 +6,8 @@
   "Cannot export a mutable global.": 104,
   "Compiling constant with non-constant initializer as mutable.": 105,
   "Type '{0}' cannot be changed to type '{1}'.": 106,
+  "Structs cannot extend classes and vice-versa.": 107,
+  "Structs cannot implement interfaces.": 108,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
@@ -53,6 +55,7 @@
   "Unterminated Unicode escape sequence.": 1199,
   "Decorators are not valid here.": 1206,
   "'abstract' modifier can only appear on a class, method, or property declaration.": 1242,
+  "A class may only extend another class.": 1311,
 
   "Duplicate identifier '{0}'.": 2300,
   "Cannot find name '{0}'.": 2304,

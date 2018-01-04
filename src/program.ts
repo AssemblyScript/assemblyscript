@@ -265,6 +265,12 @@ export class Program extends DiagnosticEmitter {
       else
         this.elements.set(declaration.name.name, prototype);
     }
+    if (hasDecorator("struct", declaration.decorators)) {
+      prototype.isStruct = true;
+      if (declaration.implementsTypes && declaration.implementsTypes.length)
+        this.error(DiagnosticCode.Structs_cannot_implement_interfaces, Range.join(declaration.name.range, declaration.implementsTypes[declaration.implementsTypes.length - 1].range));
+    } else if (declaration.implementsTypes.length)
+      throw new Error("not implemented");
 
     // add as namespace member if applicable
     if (namespace) {
@@ -377,6 +383,9 @@ export class Program extends DiagnosticEmitter {
       } else
         classPrototype.instanceMembers = new Map();
       var instancePrototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
+      // if (classPrototype.isStruct && instancePrototype.isAbstract) {
+      //   this.error( Structs cannot declare abstract methods. );
+      // }
       classPrototype.instanceMembers.set(name, instancePrototype);
     }
   }
@@ -946,10 +955,10 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
         targetType = (<VariableLikeElement>target).type;
-        if (!targetType) // FIXME: are globals always resolved here?
-          throw new Error("type expected");
-        if (targetType.classType)
-          target = targetType.classType;
+        assert(targetType != null); // FIXME: this is a problem because auto-globals might not be
+                                    // resolved (and should not be attempted to be resolved) here
+        if ((<Type>targetType).classType)
+          target = <Class>(<Type>targetType).classType;
           // fall-through
         else
           break;
@@ -1104,7 +1113,11 @@ export enum ElementFlags {
   /** Is a protected member. */
   PROTECTED = 1 << 14,
   /** Is a private member. */
-  PRIVATE = 1 << 15
+  PRIVATE = 1 << 15,
+  /** Is an abstract member. */
+  ABSTRACT = 1 << 16,
+  /** Is a struct-like class with limited capabilites. */
+  STRUCT = 1 << 17
 }
 
 /** Base class of all program elements. */
@@ -1779,7 +1792,11 @@ export class ClassPrototype extends Element {
     }
   }
 
-  resolve(typeArguments: Type[] | null, contextualTypeArguments: Map<string,Type> | null = null): Class {
+  /** Whether a struct-like class with limited capabilities or not. */
+  get isStruct(): bool { return (this.flags & ElementFlags.STRUCT) != 0; }
+  set isStruct(is: bool) { if (is) this.flags |= ElementFlags.STRUCT; else this.flags &= ~ElementFlags.STRUCT; }
+
+  resolve(typeArguments: Type[] | null, contextualTypeArguments: Map<string,Type> | null = null): Class | null {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
     var instance = this.instances.get(instanceKey);
     if (instance)
@@ -1796,8 +1813,20 @@ export class ClassPrototype extends Element {
       for (var [inheritedName, inheritedType] of inheritedTypeArguments)
         contextualTypeArguments.set(inheritedName, inheritedType);
 
-    if (declaration.extendsType) // TODO: base class
-      throw new Error("not implemented");
+    var baseClass: Class | null = null;
+    if (declaration.extendsType) {
+      var baseClassType = this.program.resolveType(declaration.extendsType, null); // reports
+      if (!baseClassType)
+        return null;
+      if (!(baseClass = baseClassType.classType)) {
+        this.program.error(DiagnosticCode.A_class_may_only_extend_another_class, declaration.extendsType.range);
+        return null;
+      }
+      if (baseClass.prototype.isStruct != this.isStruct) {
+        this.program.error(DiagnosticCode.Structs_cannot_extend_classes_and_vice_versa, Range.join(declaration.name.range, declaration.extendsType.range));
+        return null;
+      }
+    }
 
     // override call specific contextual type arguments if provided
     var i: i32, k: i32;
@@ -1812,11 +1841,20 @@ export class ClassPrototype extends Element {
     var internalName = this.internalName;
     if (instanceKey.length)
       internalName += "<" + instanceKey + ">";
-    instance = new Class(this, internalName, typeArguments, null); // TODO: base class
+    instance = new Class(this, internalName, typeArguments, baseClass);
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
 
     var memoryOffset: i32 = 0;
+    if (baseClass) {
+      memoryOffset = baseClass.type.byteSize;
+      if (baseClass.members) {
+        if (!instance.members)
+          instance.members = new Map();
+        for (var inheritedMember of baseClass.members.values())
+          instance.members.set(inheritedMember.simpleName, inheritedMember);
+      }
+    }
 
     if (this.instanceMembers)
       for (var member of this.instanceMembers.values()) {
