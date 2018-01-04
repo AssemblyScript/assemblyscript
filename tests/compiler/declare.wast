@@ -1,7 +1,7 @@
 (module
  (type $v (func))
- (import "env" "externalFunc" (func $declare/externalFunc))
  (import "env" "externalConst" (global $declare/externalConst i32))
+ (import "env" "externalFunc" (func $declare/externalFunc))
  (import "external" "externalFunc" (func $declare/external.externalFunc))
  (import "external" "externalConst" (global $declare/external.externalConst i32))
  (global $HEAP_BASE i32 (i32.const 4))

@@ -1,9 +1,9 @@
 (module
  (type $v (func))
+ (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
- (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
  (global $i8.MIN_VALUE i32 (i32.const -128))

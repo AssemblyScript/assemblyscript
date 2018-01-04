@@ -333,7 +333,7 @@ export class Program extends DiagnosticEmitter {
         }
       } else
         classPrototype.members = new Map();
-      var staticField = new Global(this, name, internalName, declaration, null);
+      var staticField = new Global(this, name, internalName, declaration, Type.void);
       classPrototype.members.set(name, staticField);
       this.elements.set(internalName, staticField);
 
@@ -801,7 +801,7 @@ export class Program extends DiagnosticEmitter {
         continue;
       }
 
-      var global = new Global(this, declaration.name.name, internalName, declaration, null);
+      var global = new Global(this, declaration.name.name, internalName, declaration, /* resolved later */ Type.void);
       global.namespace = namespace;
       this.elements.set(internalName, global);
 
@@ -949,19 +949,16 @@ export class Program extends DiagnosticEmitter {
 
     // at this point we know exactly what the target is, so look up the element within
     var propertyName = propertyAccess.property.name;
-    var targetType: Type | null;
+    var targetType: Type;
     switch (target.kind) {
 
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
-        targetType = (<VariableLikeElement>target).type;
-        assert(targetType != null); // FIXME: this is a problem because auto-globals might not be
-                                    // resolved (and should not be attempted to be resolved) here
-        if ((<Type>targetType).classType)
-          target = <Class>(<Type>targetType).classType;
-          // fall-through
-        else
+      case ElementKind.FIELD:
+        if (!(targetType = (<VariableLikeElement>target).type).classType)
           break;
+        target = <Class>targetType.classType;
+        // fall-through
 
       default:
         if (target.members) {
@@ -1265,8 +1262,8 @@ export class VariableLikeElement extends Element {
 
   /** Declaration reference. */
   declaration: VariableLikeDeclarationStatement | null;
-  /** Resolved type, if resolved. */
-  type: Type | null;
+  /** Variable type. Is {@link Type.void} for type-inferred {@link Global}s before compilation. */
+  type: Type;
   /** Constant integer value, if applicable. */
   constantIntegerValue: I64 | null = null;
   /** Constant float value, if applicable. */
@@ -1292,7 +1289,7 @@ export class Global extends VariableLikeElement {
 
   kind = ElementKind.GLOBAL;
 
-  constructor(program: Program, simpleName: string, internalName: string, declaration: VariableLikeDeclarationStatement | null = null, type: Type | null = null) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: VariableLikeDeclarationStatement | null = null, type: Type) {
     super(program, simpleName, internalName);
     if (this.declaration = declaration) {
       if (this.declaration.modifiers) {
@@ -1310,7 +1307,7 @@ export class Global extends VariableLikeElement {
     } else {
       this.hasConstantValue = true; // built-ins have constant values
     }
-    this.type = type; // resolved later if `null`
+    this.type = type; // resolved later if `void`
   }
 }
 
@@ -1339,7 +1336,6 @@ export class Local extends VariableLikeElement {
 
   kind = ElementKind.LOCAL;
 
-  type: Type; // more specific
   /** Local index. */
   index: i32;
 
@@ -1679,12 +1675,10 @@ export class Function extends Element {
 }
 
 /** A yet unresolved instance field prototype. */
-export class FieldPrototype extends Element {
+export class FieldPrototype extends VariableLikeElement {
 
   kind = ElementKind.FIELD_PROTOTYPE;
 
-  /** Declaration reference. */
-  declaration: FieldDeclaration | null;
   /** Parent class prototype. */
   classPrototype: ClassPrototype;
 
@@ -1710,12 +1704,6 @@ export class FieldPrototype extends Element {
   /** Whether the field is read-only or not. */
   get isReadonly(): bool { return (this.flags & ElementFlags.READONLY) != 0; }
   set isReadonly(is: bool) { if (is) this.flags |= ElementFlags.READONLY; else this.flags &= ~ElementFlags.READONLY; }
-
-  // resolve(contextualTypeArguments: Map<string,Type> | null = null): Field {
-  //   if (!this.declaration)
-  //     throw new Error("declaration expected");
-  //   this.declaration.type
-  // }
 }
 
 /** A resolved instance field. */
@@ -1871,7 +1859,7 @@ export class ClassPrototype extends Element {
             var fieldType = this.program.resolveType(fieldDeclaration.type, instance.contextualTypeArguments); // reports
             if (fieldType) {
               var fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
-              switch (fieldType.byteSize) { // align
+              switch (fieldType.size >> 3) { // align (byteSize might vary if a class type)
                 case 1: break;
                 case 2: if (memoryOffset & 1) ++memoryOffset; break;
                 case 4: if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1; break;

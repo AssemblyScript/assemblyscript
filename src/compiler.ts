@@ -21,7 +21,8 @@ import {
   NativeType,
   FunctionTypeRef,
   FunctionRef,
-  ExpressionId
+  ExpressionId,
+  readString
 } from "./module";
 
 import {
@@ -295,9 +296,8 @@ export class Compiler extends DiagnosticEmitter {
             this.compileNamespaceDeclaration(<NamespaceDeclaration>statement);
           break;
 
-        case NodeKind.VARIABLE:
-          if (noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<VariableStatement>statement).modifiers))
-            this.compileVariableStatement(<VariableStatement>statement);
+        case NodeKind.VARIABLE: // global
+          this.compileVariableStatement(<VariableStatement>statement); // always because initializers might have side effects
           break;
 
         case NodeKind.EXPORT:
@@ -344,12 +344,17 @@ export class Compiler extends DiagnosticEmitter {
     var declaration = global.declaration;
     var initExpr: ExpressionRef = 0;
 
-    if (!global.type) { // infer type
+    if (global.type == Type.void) { // infer type
       if (declaration) {
         if (declaration.type) {
-          global.type = this.program.resolveType(declaration.type); // reports
-          if (!global.type)
+          var resolvedType = this.program.resolveType(declaration.type); // reports
+          if (!resolvedType)
             return false;
+          if (resolvedType == Type.void) {
+            this.error(DiagnosticCode.Type_0_is_not_assignable_to_type_1, declaration.range, "*", resolvedType.toString());
+            return false;
+          }
+          global.type = resolvedType;
         } else if (declaration.initializer) {
           initExpr = this.compileExpression(declaration.initializer, Type.void, ConversionKind.NONE); // reports and returns unreachable
           if (this.currentType == Type.void) {
@@ -2119,18 +2124,9 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.LOCAL:
-        elementType = (<Local>element).type;
-        break;
-
       case ElementKind.GLOBAL:
-        if (!this.compileGlobal(<Global>element)) // reports
-          return this.module.createUnreachable();
-        assert((<Global>element).type != null);
-        elementType = <Type>(<Global>element).type;
-        break;
-
       case ElementKind.FIELD:
-        elementType = (<Field>element).type;
+        elementType = (<VariableLikeElement>element).type;
         break;
 
       case ElementKind.PROPERTY:
@@ -2174,17 +2170,17 @@ export class Compiler extends DiagnosticEmitter {
           : this.module.createSetLocal((<Local>element).index, valueWithCorrectType);
 
       case ElementKind.GLOBAL:
-        if (!this.compileGlobal(<Global>element))
+        if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
-        assert((<Global>element).type != null);
-        this.currentType = select<Type>(<Type>(<Global>element).type, Type.void, tee);
+        assert((<Global>element).type != Type.void);
+        this.currentType = select<Type>((<Global>element).type, Type.void, tee);
         if ((<Local>element).isConstant) {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
           return this.module.createUnreachable();
         }
         if (!tee)
           return this.module.createSetGlobal((<Global>element).internalName, valueWithCorrectType);
-        var globalNativeType = (<Type>(<Global>element).type).toNativeType();
+        var globalNativeType = (<Global>element).type.toNativeType();
         return this.module.createBlock(null, [ // emulated teeGlobal
           this.module.createSetGlobal((<Global>element).internalName, valueWithCorrectType),
           this.module.createGetGlobal((<Global>element).internalName, globalNativeType)
@@ -2431,10 +2427,10 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
         if (element.isBuiltIn)
           return compileBuiltinGetConstant(this, <Global>element);
-        if (!this.compileGlobal(<Global>element)) // reports
+        if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
-        assert((<Global>element).type != null);
-        this.currentType = <Type>(<Global>element).type;
+        assert((<Global>element).type != Type.void);
+        this.currentType = (<Global>element).type;
         if ((<Global>element).hasConstantValue)
           return makeInlineConstant(<Global>element, this.module);
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
@@ -2504,10 +2500,10 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.GLOBAL: // static property
-        if (!this.compileGlobal(<Global>element))
+        if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
-        assert((<Global>element).type != null);
-        this.currentType = <Type>(<Global>element).type;
+        assert((<Global>element).type != Type.void);
+        this.currentType = (<Global>element).type;
         if ((<Global>element).hasConstantValue)
           return makeInlineConstant(<Global>element, this.module);
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
