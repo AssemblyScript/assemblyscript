@@ -439,11 +439,12 @@ export abstract class Node {
     return stmt;
   }
 
-  static createImportStatement(declarations: ImportDeclaration[], path: StringLiteralExpression, range: Range): ImportStatement {
+  static createImportStatement(declarations: ImportDeclaration[] | null, path: StringLiteralExpression, range: Range): ImportStatement {
     var stmt = new ImportStatement();
     stmt.range = range;
-    for (var i: i32 = 0, k: i32 = (stmt.declarations = declarations).length; i < k; ++i)
-      declarations[i].parent = stmt;
+    if (stmt.declarations = declarations)
+      for (var i: i32 = 0, k: i32 = (<ImportDeclaration[]>declarations).length; i < k; ++i)
+        (<ImportDeclaration[]>declarations)[i].parent = stmt;
     stmt.namespaceName = null;
     stmt.path = path;
     stmt.normalizedPath = resolvePath(normalizePath(path.value), range.source.normalizedPath);
@@ -1709,22 +1710,20 @@ export class ImportStatement extends Statement {
   internalPath: string;
 
   serialize(sb: string[]): void {
+    sb.push("import ");
     if (this.declarations) {
-      sb.push("import {\n");
+      sb.push("{\n");
       for (var i: i32 = 0, k: i32 = this.declarations.length; i < k; ++i) {
         if (i > 0)
           sb.push(",\n");
         this.declarations[i].serialize(sb);
       }
-      sb.push("\n}");
-    } else {
-      sb.push("import * as ");
-      if (this.namespaceName)
-        this.namespaceName.serialize(sb);
-      else
-        throw new Error("missing asterisk import identifier");
+      sb.push("\n} from ");
+    } else if (this.namespaceName) {
+      sb.push("* as ");
+      this.namespaceName.serialize(sb);
+      sb.push(" from ");
     }
-    sb.push(" from ");
     this.path.serialize(sb);
   }
 }

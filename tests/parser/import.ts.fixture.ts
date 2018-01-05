@@ -13,3 +13,4 @@ D as E,
 F
 } from "./other";
 import * as A from "./other";
+import "./other";

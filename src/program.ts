@@ -438,6 +438,7 @@ export class Program extends DiagnosticEmitter {
       else
         (<Property>propertyElement).setterPrototype = instancePrototype;
       classPrototype.instanceMembers.set(name, propertyElement);
+      this.elements.set(internalPropertyName, propertyElement);
     }
   }
 
@@ -614,8 +615,7 @@ export class Program extends DiagnosticEmitter {
         return;
       }
       this.error(DiagnosticCode.Operation_not_supported, statement.range); // TODO
-    } else
-      throw new Error("imports must either define members or a namespace");
+    }
   }
 
   private initializeImport(declaration: ImportDeclaration, internalPath: string, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
@@ -912,26 +912,27 @@ export class Program extends DiagnosticEmitter {
     var name = identifier.name;
     var local = contextualFunction.locals.get(name);
     if (local)
-      return resolvedElement.set(local);
+      return (resolvedElement || (resolvedElement = new ResolvedElement())).set(local);
 
     var element: Element | null;
     var namespace: Element | null;
 
-    // search parent namespaces if applicable
+    // search contextual parent namespaces if applicable
     if (contextualFunction && (namespace = contextualFunction.prototype.namespace)) {
       do {
         if (element = this.elements.get(namespace.internalName + STATIC_DELIMITER + name))
-          return resolvedElement.set(element);
+        // if ((namespace.members && (element = namespace.members.get(name))) || (element = this.elements.get(namespace.internalName + STATIC_DELIMITER + name)))
+          return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
       } while (namespace = namespace.namespace);
     }
 
     // search current file
     if (element = this.elements.get(identifier.range.source.internalPath + PATH_DELIMITER + name))
-      return resolvedElement.set(element);
+      return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
 
     // search global scope
     if (element = this.elements.get(name))
-      return resolvedElement.set(element);
+      return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
 
     this.error(DiagnosticCode.Cannot_find_name_0, identifier.range, name);
     return null;
@@ -939,13 +940,11 @@ export class Program extends DiagnosticEmitter {
 
   /** Resolves a property access to the element it refers to. */
   resolvePropertyAccess(propertyAccess: PropertyAccessExpression, contextualFunction: Function): ResolvedElement | null {
-    var resolved: ResolvedElement | null;
-
     // start by resolving the lhs target (expression before the last dot)
     var targetExpression = propertyAccess.expression;
-    if (!(resolved = this.resolveExpression(targetExpression, contextualFunction)))
+    if (!(resolvedElement = this.resolveExpression(targetExpression, contextualFunction)))
       return null;
-    var target = resolved.element;
+    var target = resolvedElement.element;
 
     // at this point we know exactly what the target is, so look up the element within
     var propertyName = propertyAccess.property.name;
@@ -973,16 +972,22 @@ export class Program extends DiagnosticEmitter {
   }
 
   resolveElementAccess(elementAccess: ElementAccessExpression, contextualFunction: Function): ResolvedElement | null {
-    var resolved: ResolvedElement | null;
-
     // start by resolving the lhs target (expression before the last dot)
     var targetExpression = elementAccess.expression;
-    if (!(resolved = this.resolveExpression(targetExpression, contextualFunction)))
+    if (!(resolvedElement = this.resolveExpression(targetExpression, contextualFunction)))
       return null;
-    var target = resolved.element;
+    var target = resolvedElement.element;
 
-    // at this point we know exactly what the target is, so make sure it is an array and look up the element within
-    throw new Error("not implemented");
+    switch (target.kind) {
+      case ElementKind.CLASS:
+        var type = (<Class>target).type;
+        if (type.classType) {
+          // TODO: check if array etc.
+        }
+        break;
+    }
+    this.error(DiagnosticCode.Operation_not_supported, elementAccess.range);
+    return null;
   }
 
   resolveExpression(expression: Expression, contextualFunction: Function): ResolvedElement | null {
@@ -991,13 +996,13 @@ export class Program extends DiagnosticEmitter {
 
       case NodeKind.THIS: // -> Class
         if (classType = contextualFunction.instanceMethodOf)
-          return resolvedElement.set(classType);
+          return (resolvedElement || (resolvedElement = new ResolvedElement())).set(classType);
         this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
         return null;
 
       case NodeKind.SUPER: // -> Class
         if ((classType = contextualFunction.instanceMethodOf) && (classType = classType.base))
-          return resolvedElement.set(classType);
+          return (resolvedElement || (resolvedElement = new ResolvedElement())).set(classType);
         this.error(DiagnosticCode._super_can_only_be_referenced_in_a_derived_class, expression.range);
         return null;
 
@@ -1009,11 +1014,9 @@ export class Program extends DiagnosticEmitter {
 
       case NodeKind.ELEMENTACCESS:
         return this.resolveElementAccess(<ElementAccessExpression>expression, contextualFunction);
-
-      default:
-        this.error(DiagnosticCode.Operation_not_supported, expression.range);
-        return null;
     }
+    this.error(DiagnosticCode.Operation_not_supported, expression.range);
+    return null;
   }
 }
 
@@ -1022,11 +1025,12 @@ export class ResolvedElement {
 
   /** The target element, if a property or element access */
   target: Element | null;
-  /** The target element's sub-expression, if a property or element access. */
+  /** The target element's expression, if a property or element access. */
   targetExpression: Expression | null;
   /** The element being accessed. */
   element: Element;
 
+  /** Clears the target and sets the resolved element. */
   set(element: Element): this {
     this.target = null;
     this.targetExpression = null;
@@ -1034,6 +1038,7 @@ export class ResolvedElement {
     return this;
   }
 
+  /** Sets the resolved target in addition to the previously set element. */
   withTarget(target: Element, targetExpression: Expression): this {
     this.target = target;
     this.targetExpression = targetExpression;
@@ -1041,7 +1046,8 @@ export class ResolvedElement {
   }
 }
 
-var resolvedElement = new ResolvedElement();
+// Cached result structure instance
+var resolvedElement: ResolvedElement | null;
 
 /** Indicates the specific kind of an {@link Element}. */
 export enum ElementKind {
@@ -1114,7 +1120,9 @@ export enum ElementFlags {
   /** Is an abstract member. */
   ABSTRACT = 1 << 16,
   /** Is a struct-like class with limited capabilites. */
-  STRUCT = 1 << 17
+  STRUCT = 1 << 17,
+  /** Has already inherited base class static members. */
+  HAS_STATIC_BASE_MEMBERS = 1 << 18
 }
 
 /** Base class of all program elements. */
@@ -1810,11 +1818,22 @@ export class ClassPrototype extends Element {
         this.program.error(DiagnosticCode.A_class_may_only_extend_another_class, declaration.extendsType.range);
         return null;
       }
+      if ((this.flags & ElementFlags.HAS_STATIC_BASE_MEMBERS) == 0) { // inherit static base members once
+        this.flags |= ElementFlags.HAS_STATIC_BASE_MEMBERS;
+        if (baseClass.prototype.members) {
+          if (!this.members)
+            this.members = new Map();
+          for (var baseMember of baseClass.prototype.members.values())
+            if (!baseMember.isInstance)
+              this.members.set(baseMember.simpleName, baseMember);
+        }
+      }
       if (baseClass.prototype.isStruct != this.isStruct) {
         this.program.error(DiagnosticCode.Structs_cannot_extend_classes_and_vice_versa, Range.join(declaration.name.range, declaration.extendsType.range));
         return null;
       }
-    }
+    } else
+      this.flags |= ElementFlags.HAS_STATIC_BASE_MEMBERS; // fwiw
 
     // override call specific contextual type arguments if provided
     var i: i32, k: i32;
@@ -1880,8 +1899,14 @@ export class ClassPrototype extends Element {
               instance.members.set(member.simpleName, methodPrototype);
             break;
 
+          case ElementKind.PROPERTY: // instance properties are just copied because there is nothing to partially-resolve
+            if (!instance.members)
+              instance.members = new Map();
+            instance.members.set(member.simpleName, member);
+            break;
+
           default:
-            throw new Error("instance member expected");
+            throw new Error("instance member expected: " + member.kind);
         }
       }
 
@@ -1931,11 +1956,14 @@ export class Class extends Element {
     this.type = (prototype.program.target == Target.WASM64 ? Type.usize64 : Type.usize32).asClass(this);
     this.base = base;
 
-    // inherit contextual type arguments from base class
-    if (base && base.contextualTypeArguments) {
-      if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
-      for (var [baseName, baseType] of base.contextualTypeArguments)
-        this.contextualTypeArguments.set(baseName, baseType);
+    // inherit static members and contextual type arguments from base class
+    if (base) {
+      if (base.contextualTypeArguments) {
+        if (!this.contextualTypeArguments)
+          this.contextualTypeArguments = new Map();
+        for (var [baseName, baseType] of base.contextualTypeArguments)
+          this.contextualTypeArguments.set(baseName, baseType);
+      }
     }
 
     // apply instance-specific contextual type arguments

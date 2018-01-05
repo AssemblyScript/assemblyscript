@@ -282,7 +282,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return module.createUnreachable();
       if ((compiler.currentType = (<Type[]>typeArguments)[0]).isAnyInteger) {
-          arg0 = compiler.compileExpression(operands[0], (<Type[]>typeArguments)[0]);
+        arg0 = compiler.compileExpression(operands[0], (<Type[]>typeArguments)[0]);
         return (compiler.currentType = (<Type[]>typeArguments)[0]).isLongInteger // sic
           ? module.createUnary(UnaryOp.ClzI64, arg0)
           : (<Type[]>typeArguments)[0].isSmallInteger

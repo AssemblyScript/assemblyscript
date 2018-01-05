@@ -46,14 +46,12 @@ export class CArray<T> {
   private constructor() {}
 
   @operator("[]")
-  get(index: i32): T {
-    assert(index >= 0);
-    return load<T>(index * sizeof<T>());
+  get(index: usize): T {
+    return load<T>(changetype<usize>(this) + index * sizeof<T>());
   }
 
   @operator("[]=")
-  set(index: i32, value: T): void {
-    assert(index >= 0);
-    store<T>(index * sizeof<T>(), value);
+  set(index: usize, value: T): void {
+    store<T>(changetype<usize>(this) + index * sizeof<T>(), value);
   }
 }

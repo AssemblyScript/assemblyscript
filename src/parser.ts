@@ -910,10 +910,11 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseImport(tn: Tokenizer): ImportStatement | null {
-    // at 'import': ('{' (ImportMember (',' ImportMember)*)? '}' | '*' 'as' Identifier) 'from' StringLiteral ';'?
+    // at 'import': ('{' (ImportMember (',' ImportMember)*)? '}' | '*' 'as' Identifier)? 'from' StringLiteral ';'?
     var startPos = tn.tokenPos;
     var members: ImportDeclaration[] | null = null;
     var namespaceName: IdentifierExpression | null = null;
+    var skipFrom = false;
     if (tn.skip(Token.OPENBRACE)) {
       members = new Array();
       if (!tn.skip(Token.CLOSEBRACE)) {
@@ -940,26 +941,18 @@ export class Parser extends DiagnosticEmitter {
         this.error(DiagnosticCode._0_expected, tn.range(), "as");
         return null;
       }
-    } else {
-      this.error(DiagnosticCode._0_expected, tn.range(), "{");
-      return null;
-    }
-    if (tn.skip(Token.FROM)) {
+    } else
+      skipFrom = true;
+
+    if (skipFrom || tn.skip(Token.FROM)) {
       if (tn.skip(Token.STRINGLITERAL)) {
         var path = Node.createStringLiteralExpression(tn.readString(), tn.range());
         var ret: ImportStatement;
-        if (members) {
-          if (!namespaceName)
-            ret = Node.createImportStatement(members, path, tn.range(startPos, tn.pos));
-          else {
-            assert(false);
-            return null;
-          }
-        } else if (namespaceName) {
+        if (namespaceName) {
+          assert(!members);
           ret = Node.createImportStatementWithWildcard(namespaceName, path, tn.range(startPos, tn.pos));
         } else {
-          assert(false);
-          return null;
+          ret = Node.createImportStatement(members, path, tn.range(startPos, tn.pos));
         }
         if (!this.seenlog.has(ret.normalizedPath)) {
           this.backlog.push(ret.normalizedPath);

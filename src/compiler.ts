@@ -453,25 +453,26 @@ export class Compiler extends DiagnosticEmitter {
     if (element.isCompiled)
       return true;
 
+    element.isCompiled = true; // members might reference each other, triggering another compile
     var previousValue: EnumValue | null = null;
     if (element.members)
       for (var member of element.members.values()) {
-        if (member.kind != ElementKind.ENUMVALUE)
+        if (member.kind != ElementKind.ENUMVALUE) // happens if an enum is also a namespace
           continue;
+        var initInStart = false;
         var val = <EnumValue>member;
         if (val.hasConstantValue) {
           this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
         } else if (val.declaration) {
-          var declaration = val.declaration;
+          var valueDeclaration = val.declaration;
           var initExpr: ExpressionRef;
-          var initInStart = false;
-          if (declaration.value) {
-            initExpr = this.compileExpression(<Expression>declaration.value, Type.i32);
+          if (valueDeclaration.value) {
+            initExpr = this.compileExpression(<Expression>valueDeclaration.value, Type.i32);
             if (!this.module.noEmit && _BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
               initExpr = this.precomputeExpressionRef(initExpr);
               if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
                 if (element.isConstant)
-                  this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
+                  this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, valueDeclaration.range);
                 initInStart = true;
               }
             }
@@ -486,7 +487,7 @@ export class Compiler extends DiagnosticEmitter {
               this.module.createI32(1)
             );
             if (element.isConstant)
-              this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
+              this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, valueDeclaration.range);
             initInStart = true;
           }
           if (initInStart) {
@@ -506,9 +507,11 @@ export class Compiler extends DiagnosticEmitter {
           }
         } else
           throw new Error("declaration expected");
+        if (element.declaration && isModuleExport(element, element.declaration) && !initInStart)
+          this.module.addGlobalExport(member.internalName, member.internalName);
         previousValue = <EnumValue>val;
       }
-    return element.isCompiled = true;
+    return true;
   }
 
   // functions
@@ -2167,6 +2170,8 @@ export class Compiler extends DiagnosticEmitter {
       return this.module.createUnreachable();
 
     var element = resolved.element;
+    var tempLocal: Local;
+    var targetExpr: ExpressionRef;
     switch (element.kind) {
 
       case ElementKind.LOCAL:
@@ -2202,12 +2207,12 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         }
         assert(resolved.targetExpression != null);
-        var targetExpr = this.compileExpression(<Expression>resolved.targetExpression, Type.usize32);
+        targetExpr = this.compileExpression(<Expression>resolved.targetExpression, Type.usize32);
         this.currentType = select<Type>((<Field>element).type, Type.void, tee);
         var elementNativeType = (<Field>element).type.toNativeType();
         if (!tee)
           return this.module.createStore((<Field>element).type.byteSize, targetExpr, valueWithCorrectType, elementNativeType, (<Field>element).memoryOffset);
-        var tempLocal = this.currentFunction.getAndFreeTempLocal((<Field>element).type);
+        tempLocal = this.currentFunction.getAndFreeTempLocal((<Field>element).type);
         return this.module.createBlock(null, [ // TODO: simplify if valueWithCorrectType has no side effects
           this.module.createSetLocal(tempLocal.index, valueWithCorrectType),
           this.module.createStore((<Field>element).type.byteSize, targetExpr, this.module.createGetLocal(tempLocal.index, elementNativeType), elementNativeType, (<Field>element).memoryOffset),
@@ -2221,8 +2226,15 @@ export class Compiler extends DiagnosticEmitter {
           if (setterInstance) {
             assert(setterInstance.parameters.length == 1);
             if (!tee) {
-              this.currentType = Type.void;
-              return this.makeCall(setterInstance, [ valueWithCorrectType ]);
+              if (setterInstance.isInstance) {
+                assert(resolved.targetExpression != null);
+                targetExpr = this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64));
+                this.currentType = Type.void;
+                return this.makeCall(setterInstance, [ targetExpr, valueWithCorrectType ]);
+              } else {
+                this.currentType = Type.void;
+                return this.makeCall(setterInstance, [ valueWithCorrectType ]);
+              }
             }
             var getterPrototype = (<Property>element).getterPrototype;
             assert(getterPrototype != null);
@@ -2230,10 +2242,19 @@ export class Compiler extends DiagnosticEmitter {
             if (getterInstance) {
               assert(getterInstance.parameters.length == 0);
               this.currentType = getterInstance.returnType;
-              return this.module.createBlock(null, [
-                this.makeCall(setterInstance, [ valueWithCorrectType ]),
-                this.makeCall(getterInstance)
-              ], getterInstance.returnType.toNativeType());
+              if (setterInstance.isInstance) {
+                assert(resolved.targetExpression != null);
+                targetExpr = this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64));
+                tempLocal = this.currentFunction.getAndFreeTempLocal(getterInstance.returnType);
+                return this.module.createBlock(null, [
+                  this.makeCall(setterInstance, [ this.module.createTeeLocal(tempLocal.index, targetExpr), valueWithCorrectType ]),
+                  this.makeCall(getterInstance, [ this.module.createGetLocal(tempLocal.index, tempLocal.type.toNativeType()) ])
+                ], getterInstance.returnType.toNativeType());
+              } else
+                return this.module.createBlock(null, [
+                  this.makeCall(setterInstance, [ valueWithCorrectType ]),
+                  this.makeCall(getterInstance)
+                ], getterInstance.returnType.toNativeType());
             }
           }
         } else
@@ -2517,6 +2538,7 @@ export class Compiler extends DiagnosticEmitter {
       return this.module.createUnreachable();
 
     var element = resolved.element;
+    var targetExpr: ExpressionRef;
     switch (element.kind) {
 
       case ElementKind.GLOBAL: // static property
@@ -2542,8 +2564,10 @@ export class Compiler extends DiagnosticEmitter {
         assert(resolved.target != null);
         assert(resolved.targetExpression != null);
         assert((<Field>element).memoryOffset >= 0);
+        targetExpr = this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64));
+        this.currentType = (<Field>element).type;
         return this.module.createLoad((<Field>element).type.byteSize, (<Field>element).type.isSignedInteger,
-          this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64)),
+          targetExpr,
           (<Field>element).type.toNativeType(),
           (<Field>element).memoryOffset
         );
@@ -2556,7 +2580,11 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         assert(getterInstance.parameters.length == 0);
         this.currentType = getterInstance.returnType;
-        return this.makeCall(getterInstance);
+        if (getterInstance.isInstance) {
+          var targetExpr = this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64))
+          return this.makeCall(getterInstance, [ targetExpr ]);
+        } else
+          return this.makeCall(getterInstance);
     }
     this.error(DiagnosticCode.Operation_not_supported, propertyAccess.range);
     return this.module.createUnreachable();
@@ -2802,11 +2830,11 @@ export class Compiler extends DiagnosticEmitter {
 function isModuleExport(element: Element, declaration: DeclarationStatement): bool {
   if (!element.isExported)
     return false;
-  if (declaration.range.source.isEntry)
-    return true;
   var parentNode = declaration.parent;
   if (!parentNode)
     return false;
+  if (declaration.range.source.isEntry && parentNode.kind != NodeKind.NAMESPACE)
+    return true;
   if (parentNode.kind == NodeKind.VARIABLE)
     if (!(parentNode = parentNode.parent))
       return false;
