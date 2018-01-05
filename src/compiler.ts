@@ -89,6 +89,7 @@ import {
   AssertionExpression,
   BinaryExpression,
   CallExpression,
+  CommaExpression,
   ElementAccessExpression,
   FloatLiteralExpression,
   IdentifierExpression,
@@ -338,7 +339,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileGlobal(global: Global): bool {
-    if (global.isCompiled || (global.isBuiltIn && compileBuiltinGetConstant(this, global)))
+    if (global.isCompiled || global.isBuiltIn)
       return true;
 
     var declaration = global.declaration;
@@ -1101,6 +1102,10 @@ export class Compiler extends DiagnosticEmitter {
 
       case NodeKind.CALL:
         expr = this.compileCallExpression(<CallExpression>expression, contextualType);
+        break;
+
+      case NodeKind.COMMA:
+        expr = this.compileCommaExpression(<CommaExpression>expression, contextualType);
         break;
 
       case NodeKind.ELEMENTACCESS:
@@ -2123,8 +2128,13 @@ export class Compiler extends DiagnosticEmitter {
     var elementType: Type;
     switch (element.kind) {
 
-      case ElementKind.LOCAL:
       case ElementKind.GLOBAL:
+        if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
+          return this.module.createUnreachable();
+        assert((<Global>element).type != Type.void);
+        // fall-through
+
+      case ElementKind.LOCAL:
       case ElementKind.FIELD:
         elementType = (<VariableLikeElement>element).type;
         break;
@@ -2356,6 +2366,16 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.createCall(functionInstance.internalName, operands, functionInstance.returnType.toNativeType());
   }
 
+  compileCommaExpression(expression: CommaExpression, contextualType: Type): ExpressionRef {
+    var expressions = expression.expressions;
+    var k = expressions.length;
+    var exprs = new Array<ExpressionRef>(k--);
+    for (var i = 0; i < k; ++i)
+      exprs[i] = this.compileExpression(expressions[i], Type.void);    // drop all
+    exprs[i] = this.compileExpression(expressions[i], contextualType); // except last
+    return this.module.createBlock(null, exprs, this.currentType.toNativeType());
+  }
+
   compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type): ExpressionRef {
     var resolved = this.program.resolveElementAccess(expression, this.currentFunction); // reports
     if (!resolved)
@@ -2426,7 +2446,7 @@ export class Compiler extends DiagnosticEmitter {
 
       case ElementKind.GLOBAL:
         if (element.isBuiltIn)
-          return compileBuiltinGetConstant(this, <Global>element);
+          return compileBuiltinGetConstant(this, <Global>element, expression);
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
@@ -2500,6 +2520,8 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.GLOBAL: // static property
+        if (element.isBuiltIn)
+          return compileBuiltinGetConstant(this, <Global>element, propertyAccess);
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);

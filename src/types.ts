@@ -146,27 +146,84 @@ export class Type {
 
   /** Converts this type to its respective native type. */
   toNativeType(): NativeType {
-    return this.kind == TypeKind.F32 ? NativeType.F32
-         : this.kind == TypeKind.F64 ? NativeType.F64
-         : this.isLongInteger ? NativeType.I64
-         : this.isAnyInteger ? NativeType.I32
-         : NativeType.None;
+    switch (this.kind) {
+
+      default:
+        return NativeType.I32;
+
+      case TypeKind.I64:
+      case TypeKind.U64:
+        return NativeType.I64;
+
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        return select<NativeType>(NativeType.I64, NativeType.I32, this.size == 64);
+
+      case TypeKind.F32:
+        return NativeType.F32;
+
+      case TypeKind.F64:
+        return NativeType.F64;
+
+      case TypeKind.VOID:
+        return NativeType.None;
+    }
   }
 
   /** Converts this type to its native `0` value. */
   toNativeZero(module: Module): ExpressionRef {
-    return this.kind == TypeKind.F32 ? module.createF32(0)
-         : this.kind == TypeKind.F64 ? module.createF64(0)
-         : this.isLongInteger ? module.createI64(0, 0)
-         : module.createI32(0);
+    switch (this.kind) {
+
+      case TypeKind.VOID:
+        assert(false);
+
+      default:
+        return module.createI32(0);
+
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        if (this.size != 64)
+          return module.createI32(0);
+        // fall-through
+
+      case TypeKind.I64:
+      case TypeKind.U64:
+        return module.createI64(0, 0);
+
+      case TypeKind.F32:
+        return module.createF32(0);
+
+      case TypeKind.F64:
+        return module.createF64(0);
+    }
   }
 
   /** Converts this type to its native `1` value. */
   toNativeOne(module: Module): ExpressionRef {
-    return this.kind == TypeKind.F32 ? module.createF32(1)
-         : this.kind == TypeKind.F64 ? module.createF64(1)
-         : this.isLongInteger ? module.createI64(1, 0)
-         : module.createI32(1);
+    switch (this.kind) {
+
+      case TypeKind.VOID:
+        assert(false);
+
+      default:
+        return module.createI32(1);
+
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        if (this.size != 64)
+          return module.createI32(1);
+        // fall-through
+
+      case TypeKind.I64:
+      case TypeKind.U64:
+        return module.createI64(1, 0);
+
+      case TypeKind.F32:
+        return module.createF32(1);
+
+      case TypeKind.F64:
+        return module.createF64(1);
+    }
   }
 
   /** Converts this type to its signature string. */

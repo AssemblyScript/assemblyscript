@@ -2600,6 +2600,8 @@
   GLOBAL: HEAP_BASE
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: Array
+  CLASS_PROTOTYPE: std:array/CArray
+  CLASS_PROTOTYPE: CArray
   CLASS_PROTOTYPE: std:error/Error
   CLASS_PROTOTYPE: Error
   CLASS_PROTOTYPE: std:error/RangeError
@@ -2632,6 +2634,7 @@
   GLOBAL: std/heap/i
 [program.exports]
   CLASS_PROTOTYPE: std:array/Array
+  CLASS_PROTOTYPE: std:array/CArray
   CLASS_PROTOTYPE: std:error/Error
   CLASS_PROTOTYPE: std:error/RangeError
   CLASS_PROTOTYPE: std:heap/Heap

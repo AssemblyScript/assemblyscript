@@ -39,6 +39,7 @@ export enum NodeKind {
   ASSERTION,
   BINARY,
   CALL,
+  COMMA,
   ELEMENTACCESS,
   FALSE,
   LITERAL,
@@ -118,14 +119,14 @@ export abstract class Node {
 
   // expressions
 
-  static createIdentifier(name: string, range: Range): IdentifierExpression {
+  static createIdentifierExpression(name: string, range: Range): IdentifierExpression {
     var expr = new IdentifierExpression();
     expr.range = range;
     expr.name = name;
     return expr;
   }
 
-  static createArrayLiteral(elementExpressions: (Expression | null)[], range: Range): ArrayLiteralExpression {
+  static createArrayLiteralExpression(elementExpressions: (Expression | null)[], range: Range): ArrayLiteralExpression {
     var expr = new ArrayLiteralExpression();
     expr.range = range;
     for (var i = 0, k = (expr.elementExpressions = elementExpressions).length; i < k; ++i)
@@ -134,7 +135,7 @@ export abstract class Node {
     return expr;
   }
 
-  static createAssertion(assertionKind: AssertionKind, expression: Expression, toType: TypeNode, range: Range): AssertionExpression {
+  static createAssertionExpression(assertionKind: AssertionKind, expression: Expression, toType: TypeNode, range: Range): AssertionExpression {
     var expr = new AssertionExpression();
     expr.range = range;
     expr.assertionKind = assertionKind;
@@ -143,7 +144,7 @@ export abstract class Node {
     return expr;
   }
 
-  static createBinary(operator: Token, left: Expression, right: Expression, range: Range): BinaryExpression {
+  static createBinaryExpression(operator: Token, left: Expression, right: Expression, range: Range): BinaryExpression {
     var expr = new BinaryExpression();
     expr.range = range;
     expr.operator = operator;
@@ -152,7 +153,7 @@ export abstract class Node {
     return expr;
   }
 
-  static createCall(expression: Expression, typeArguments: TypeNode[] | null, args: Expression[], range: Range): CallExpression {
+  static createCallExpression(expression: Expression, typeArguments: TypeNode[] | null, args: Expression[], range: Range): CallExpression {
     var expr = new CallExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
@@ -164,13 +165,21 @@ export abstract class Node {
     return expr;
   }
 
-  static createConstructor(range: Range): ConstructorExpression {
+  static createCommaExpression(expressions: Expression[], range: Range): CommaExpression {
+    var expr = new CommaExpression();
+    expr.range = range;
+    for (var i = 0, k = (expr.expressions = expressions).length; i < k; ++i)
+      expressions[i].parent = expr;
+    return expr;
+  }
+
+  static createConstructorExpression(range: Range): ConstructorExpression {
     var expr = new ConstructorExpression();
     expr.range = range;
     return expr;
   }
 
-  static createElementAccess(expression: Expression, element: Expression, range: Range): ElementAccessExpression {
+  static createElementAccessExpression(expression: Expression, element: Expression, range: Range): ElementAccessExpression {
     var expr = new ElementAccessExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
@@ -178,27 +187,27 @@ export abstract class Node {
     return expr;
   }
 
-  static createFalse(range: Range): FalseExpression {
+  static createFalseExpression(range: Range): FalseExpression {
     var expr = new FalseExpression();
     expr.range = range;
     return expr;
   }
 
-  static createFloatLiteral(value: f64, range: Range): FloatLiteralExpression {
+  static createFloatLiteralExpression(value: f64, range: Range): FloatLiteralExpression {
     var expr = new FloatLiteralExpression();
     expr.range = range;
     expr.value = value;
     return expr;
   }
 
-  static createIntegerLiteral(value: I64, range: Range): IntegerLiteralExpression {
+  static createIntegerLiteralExpression(value: I64, range: Range): IntegerLiteralExpression {
     var expr = new IntegerLiteralExpression();
     expr.range = range;
     expr.value = value;
     return expr;
   }
 
-  static createNew(expression: Expression, typeArguments: TypeNode[] | null, args: Expression[], range: Range): NewExpression {
+  static createNewExpression(expression: Expression, typeArguments: TypeNode[] | null, args: Expression[], range: Range): NewExpression {
     var expr = new NewExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
@@ -210,20 +219,20 @@ export abstract class Node {
     return expr;
   }
 
-  static createNull(range: Range): NullExpression {
+  static createNullExpression(range: Range): NullExpression {
     var expr = new NullExpression();
     expr.range = range;
     return expr;
   }
 
-  static createParenthesized(expression: Expression, range: Range): ParenthesizedExpression {
+  static createParenthesizedExpression(expression: Expression, range: Range): ParenthesizedExpression {
     var expr = new ParenthesizedExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
     return expr;
   }
 
-  static createPropertyAccess(expression: Expression, property: IdentifierExpression, range: Range): PropertyAccessExpression {
+  static createPropertyAccessExpression(expression: Expression, property: IdentifierExpression, range: Range): PropertyAccessExpression {
     var expr = new PropertyAccessExpression();
     expr.range = range;
     (expr.expression = expression).parent = expr;
@@ -231,14 +240,14 @@ export abstract class Node {
     return expr;
   }
 
-  static createRegexpLiteral(value: string, range: Range): RegexpLiteralExpression {
+  static createRegexpLiteralExpression(value: string, range: Range): RegexpLiteralExpression {
     var expr = new RegexpLiteralExpression();
     expr.range = range;
     expr.value = value;
     return expr;
   }
 
-  static createTernary(condition: Expression, ifThen: Expression, ifElse: Expression, range: Range): TernaryExpression {
+  static createTernaryExpression(condition: Expression, ifThen: Expression, ifElse: Expression, range: Range): TernaryExpression {
     var expr = new TernaryExpression();
     expr.range = range;
     (expr.condition = condition).parent = expr;
@@ -247,32 +256,32 @@ export abstract class Node {
     return expr;
   }
 
-  static createStringLiteral(value: string, range: Range): StringLiteralExpression {
+  static createStringLiteralExpression(value: string, range: Range): StringLiteralExpression {
     var expr = new StringLiteralExpression();
     expr.range = range;
     expr.value = value;
     return expr;
   }
 
-  static createSuper(range: Range): SuperExpression {
+  static createSuperExpression(range: Range): SuperExpression {
     var expr = new SuperExpression();
     expr.range = range;
     return expr;
   }
 
-  static createThis(range: Range): ThisExpression {
+  static createThisExpression(range: Range): ThisExpression {
     var expr = new ThisExpression();
     expr.range = range;
     return expr;
   }
 
-  static createTrue(range: Range): TrueExpression {
+  static createTrueExpression(range: Range): TrueExpression {
     var expr = new TrueExpression();
     expr.range = range;
     return expr;
   }
 
-  static createUnaryPostfix(operator: Token, expression: Expression, range: Range): UnaryPostfixExpression {
+  static createUnaryPostfixExpression(operator: Token, expression: Expression, range: Range): UnaryPostfixExpression {
     var expr = new UnaryPostfixExpression();
     expr.range = range;
     expr.operator = operator;
@@ -280,7 +289,7 @@ export abstract class Node {
     return expr;
   }
 
-  static createUnaryPrefix(operator: Token, expression: Expression, range: Range): UnaryPrefixExpression {
+  static createUnaryPrefixExpression(operator: Token, expression: Expression, range: Range): UnaryPrefixExpression {
     var expr = new UnaryPrefixExpression();
     expr.range = range;
     expr.operator = operator;
@@ -290,7 +299,7 @@ export abstract class Node {
 
   // statements
 
-  static createBlock(statements: Statement[], range: Range): BlockStatement {
+  static createBlockStatement(statements: Statement[], range: Range): BlockStatement {
     var stmt = new BlockStatement();
     stmt.range = range;
     for (var i: i32 = 0, k: i32 = (stmt.statements = statements).length; i < k; ++i)
@@ -298,7 +307,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createBreak(label: IdentifierExpression | null, range: Range): BreakStatement {
+  static createBreakStatement(label: IdentifierExpression | null, range: Range): BreakStatement {
     var stmt = new BreakStatement();
     stmt.range = range;
     if (stmt.label = label)
@@ -306,7 +315,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createClass(identifier: IdentifierExpression, typeParameters: TypeParameter[], extendsType: TypeNode | null, implementsTypes: TypeNode[], members: DeclarationStatement[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): ClassDeclaration {
+  static createClassDeclaration(identifier: IdentifierExpression, typeParameters: TypeParameter[], extendsType: TypeNode | null, implementsTypes: TypeNode[], members: DeclarationStatement[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): ClassDeclaration {
     var stmt = new ClassDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
@@ -327,7 +336,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createContinue(label: IdentifierExpression | null, range: Range): ContinueStatement {
+  static createContinueStatement(label: IdentifierExpression | null, range: Range): ContinueStatement {
     var stmt = new ContinueStatement();
     stmt.range = range;
     if (stmt.label = label)
@@ -345,7 +354,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createDo(statement: Statement, condition: Expression, range: Range): DoStatement {
+  static createDoStatement(statement: Statement, condition: Expression, range: Range): DoStatement {
     var stmt = new DoStatement();
     stmt.range = range;
     (stmt.statement = statement).parent = stmt;
@@ -353,13 +362,13 @@ export abstract class Node {
     return stmt;
   }
 
-  static createEmpty(range: Range): EmptyStatement {
+  static createEmptyStatement(range: Range): EmptyStatement {
     var stmt = new EmptyStatement();
     stmt.range = range;
     return stmt;
   }
 
-  static createEnum(identifier: IdentifierExpression, members: EnumValueDeclaration[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): EnumDeclaration {
+  static createEnumDeclaration(identifier: IdentifierExpression, members: EnumValueDeclaration[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): EnumDeclaration {
     var stmt = new EnumDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
@@ -374,7 +383,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createEnumValue(identifier: IdentifierExpression, value: Expression | null, range: Range): EnumValueDeclaration {
+  static createEnumValueDeclaration(identifier: IdentifierExpression, value: Expression | null, range: Range): EnumValueDeclaration {
     var stmt = new EnumValueDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
@@ -383,7 +392,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createExport(members: ExportMember[], path: StringLiteralExpression | null, modifiers: Modifier[] | null, range: Range): ExportStatement {
+  static createExportStatement(members: ExportMember[], path: StringLiteralExpression | null, modifiers: Modifier[] | null, range: Range): ExportStatement {
     var stmt = new ExportStatement();
     stmt.range = range;
     for (var i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
@@ -396,7 +405,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createExportImport(identifier: IdentifierExpression, asIdentifier: IdentifierExpression, range: Range): ExportImportStatement {
+  static createExportImportStatement(identifier: IdentifierExpression, asIdentifier: IdentifierExpression, range: Range): ExportImportStatement {
     var stmt = new ExportImportStatement();
     stmt.range = range;
     (stmt.identifier = identifier).parent = stmt;
@@ -413,14 +422,14 @@ export abstract class Node {
   }
 
   /** Creates an expression statement. */
-  static createExpression(expression: Expression): ExpressionStatement {
+  static createExpressionStatement(expression: Expression): ExpressionStatement {
     var stmt = new ExpressionStatement();
     stmt.range = expression.range;
     (stmt.expression = expression).parent = stmt;
     return stmt;
   }
 
-  static createIf(condition: Expression, ifTrue: Statement, ifFalse: Statement | null, range: Range): IfStatement {
+  static createIfStatement(condition: Expression, ifTrue: Statement, ifFalse: Statement | null, range: Range): IfStatement {
     var stmt = new IfStatement();
     stmt.range = range;
     (stmt.condition = condition).parent = stmt;
@@ -430,7 +439,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createImport(declarations: ImportDeclaration[], path: StringLiteralExpression, range: Range): ImportStatement {
+  static createImportStatement(declarations: ImportDeclaration[], path: StringLiteralExpression, range: Range): ImportStatement {
     var stmt = new ImportStatement();
     stmt.range = range;
     for (var i: i32 = 0, k: i32 = (stmt.declarations = declarations).length; i < k; ++i)
@@ -442,7 +451,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createImportAll(identifier: IdentifierExpression, path: StringLiteralExpression, range: Range): ImportStatement {
+  static createImportStatementWithWildcard(identifier: IdentifierExpression, path: StringLiteralExpression, range: Range): ImportStatement {
     var stmt = new ImportStatement();
     stmt.range = range;
     stmt.declarations = null;
@@ -461,7 +470,7 @@ export abstract class Node {
     return elem;
   }
 
-  static createInterface(identifier: IdentifierExpression, extendsType: TypeNode | null, members: DeclarationStatement[], modifiers: Modifier[] | null, range: Range): InterfaceDeclaration {
+  static createInterfaceDeclaration(identifier: IdentifierExpression, extendsType: TypeNode | null, members: DeclarationStatement[], modifiers: Modifier[] | null, range: Range): InterfaceDeclaration {
     var stmt = new InterfaceDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
@@ -475,7 +484,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createField(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): FieldDeclaration {
+  static createFieldDeclaration(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): FieldDeclaration {
     var stmt = new FieldDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
@@ -492,7 +501,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createFor(initializer: Statement | null, condition: Expression | null, incrementor: Expression | null, statement: Statement, range: Range): ForStatement {
+  static createForStatement(initializer: Statement | null, condition: Expression | null, incrementor: Expression | null, statement: Statement, range: Range): ForStatement {
     var stmt = new ForStatement();
     stmt.range = range;
     if (stmt.initializer = initializer)
@@ -526,7 +535,7 @@ export abstract class Node {
     return elem;
   }
 
-  static createFunction(identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): FunctionDeclaration {
+  static createFunctionDeclaration(identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): FunctionDeclaration {
     var stmt = new FunctionDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
@@ -548,7 +557,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createMethod(identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): MethodDeclaration {
+  static createMethodDeclaration(identifier: IdentifierExpression, typeParameters: TypeParameter[], parameters: Parameter[], returnType: TypeNode | null, statements: Statement[] | null, modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): MethodDeclaration {
     var stmt = new MethodDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
@@ -577,7 +586,7 @@ export abstract class Node {
     return elem;
   }
 
-  static createNamespace(identifier: IdentifierExpression, members: Statement[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): NamespaceDeclaration {
+  static createNamespaceDeclaration(identifier: IdentifierExpression, members: Statement[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): NamespaceDeclaration {
     var stmt = new NamespaceDeclaration();
     stmt.range = range;
     (stmt.name = identifier).parent = stmt;
@@ -592,7 +601,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createReturn(expression: Expression | null, range: Range): ReturnStatement {
+  static createReturnStatement(expression: Expression | null, range: Range): ReturnStatement {
     var stmt = new ReturnStatement();
     stmt.range = range;
     if (stmt.value = expression)
@@ -600,7 +609,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createSwitch(expression: Expression, cases: SwitchCase[], range: Range): SwitchStatement {
+  static createSwitchStatement(expression: Expression, cases: SwitchCase[], range: Range): SwitchStatement {
     var stmt = new SwitchStatement();
     stmt.range = range;
     (stmt.condition = expression).parent = stmt;
@@ -619,14 +628,14 @@ export abstract class Node {
     return elem;
   }
 
-  static createThrow(expression: Expression, range: Range): ThrowStatement {
+  static createThrowStatement(expression: Expression, range: Range): ThrowStatement {
     var stmt = new ThrowStatement();
     stmt.range = range;
     (stmt.value = expression).parent = stmt;
     return stmt;
   }
 
-  static createTry(statements: Statement[], catchVariable: IdentifierExpression | null, catchStatements: Statement[] | null, finallyStatements: Statement[] | null, range: Range): TryStatement {
+  static createTryStatement(statements: Statement[], catchVariable: IdentifierExpression | null, catchStatements: Statement[] | null, finallyStatements: Statement[] | null, range: Range): TryStatement {
     var stmt = new TryStatement();
     stmt.range = range;
     for (var i = 0, k = (stmt.statements = statements).length; i < k; ++i)
@@ -656,7 +665,7 @@ export abstract class Node {
     return stmt;
   }
 
-  static createVariable(declarations: VariableDeclaration[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): VariableStatement {
+  static createVariableStatement(declarations: VariableDeclaration[], modifiers: Modifier[] | null, decorators: Decorator[] | null, range: Range): VariableStatement {
     var stmt = new VariableStatement();
     stmt.range = range;
     for (var i = 0, k = (stmt.declarations = declarations).length; i < k; ++i)
@@ -683,7 +692,7 @@ export abstract class Node {
     return elem;
   }
 
-  static createWhile(condition: Expression, statement: Statement, range: Range): WhileStatement {
+  static createWhileStatement(condition: Expression, statement: Statement, range: Range): WhileStatement {
     var stmt = new WhileStatement();
     stmt.range = range;
     (stmt.condition = condition).parent = stmt;
@@ -883,6 +892,23 @@ export class CallExpression extends Expression {
       this.arguments[i].serialize(sb);
     }
     sb.push(")");
+  }
+}
+
+/** Represents a comma expression composed of multiple sequential expressions. */
+export class CommaExpression extends Expression {
+
+  kind = NodeKind.COMMA;
+
+  /** Sequential expressions. */
+  expressions: Expression[];
+
+  serialize(sb: string[]): void {
+    this.expressions[0].serialize(sb);
+    for (var i = 1, k = this.expressions.length; i < k; ++i) {
+      sb.push(",");
+      this.expressions[i].serialize(sb);
+    }
   }
 }
 

@@ -15,7 +15,7 @@ import {
 } from "./ast";
 
 import {
-  Type
+  Type, TypeKind
 } from "./types";
 
 import {
@@ -169,8 +169,8 @@ function addFunction(program: Program, name: string, isGeneric: bool = false): F
 }
 
 /** Compiles a get of a built-in global. */
-export function compileGetConstant(compiler: Compiler, global: Global): ExpressionRef {
-  switch (global.internalName) {
+export function compileGetConstant(compiler: Compiler, global: Global, reportNode: Node): ExpressionRef {
+  switch (global.internalName) { // switching on strings should become a compiler optimization eventually
 
     case "NaN":
       if (compiler.currentType == Type.f32)
@@ -186,10 +186,9 @@ export function compileGetConstant(compiler: Compiler, global: Global): Expressi
 
     case "HEAP_BASE": // constant, but never inlined
       return compiler.module.createGetGlobal("HEAP_BASE", (compiler.currentType = <Type>global.type).toNativeType());
-
-    default:
-      throw new Error("not implemented: " + global.internalName);
   }
+  compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
+  return compiler.module.createUnreachable();
 }
 
 /** Compiles a call to a built-in function. */
@@ -283,7 +282,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return module.createUnreachable();
       if ((compiler.currentType = (<Type[]>typeArguments)[0]).isAnyInteger) {
-        arg0 = compiler.compileExpression(operands[0], (<Type[]>typeArguments)[0]);
+          arg0 = compiler.compileExpression(operands[0], (<Type[]>typeArguments)[0]);
         return (compiler.currentType = (<Type[]>typeArguments)[0]).isLongInteger // sic
           ? module.createUnary(UnaryOp.ClzI64, arg0)
           : (<Type[]>typeArguments)[0].isSmallInteger
@@ -797,7 +796,8 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         return module.createUnreachable();
       return compiler.compileExpression(operands[0], Type.f64, ConversionKind.EXPLICIT);
   }
-  return 0;
+  compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
+  return module.createUnreachable();
 }
 
 /** Pre-validates a call to a built-in function. */
