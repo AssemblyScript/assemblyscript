@@ -13,15 +13,15 @@ export function init(w_: u32, h_: u32): void {
 
 /** Performs one step. */
 export function step(): void {
-  var hm1:u32 = h - 1,
-      wm1:u32 = w - 1;
+  var hm1 = h - 1,
+      wm1 = w - 1;
   for (var y: u32 = 0; y < h; ++y) {
-    var ym1:u32 = select<u32>(hm1, y - 1, y == 0),
-        yp1:u32 = select<u32>(0, y + 1, y == hm1);
+    var ym1 = select<u32>(hm1, y - 1, y == 0),
+        yp1 = select<u32>(0, y + 1, y == hm1);
     for (var x: u32 = 0; x < w; ++x) {
-      var xm1:u32 = select<u32>(wm1, x - 1, x == 0),
-          xp1:u32 = select<u32>(0, x + 1, x == wm1);
-      var n:u8 = load<u8>(ym1 * w + xm1) + load<u8>(ym1 * w + x) + load<u8>(ym1 * w + xp1)
+      var xm1 = select<u32>(wm1, x - 1, x == 0),
+          xp1 = select<u32>(0, x + 1, x == wm1);
+      var n = load<u8>(ym1 * w + xm1) + load<u8>(ym1 * w + x) + load<u8>(ym1 * w + xp1)
             + load<u8>(y   * w + xm1)                         + load<u8>(y   * w + xp1)
             + load<u8>(yp1 * w + xm1) + load<u8>(yp1 * w + x) + load<u8>(yp1 * w + xp1);
       if (load<u8>(y * w + x)) {
