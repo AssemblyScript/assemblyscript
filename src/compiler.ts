@@ -2043,7 +2043,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       // logical (no overloading)
-
+      case Token.AND: // left && right
       case Token.AMPERSAND_AMPERSAND: // left && right
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);

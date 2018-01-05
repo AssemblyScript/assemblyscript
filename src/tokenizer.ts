@@ -51,6 +51,7 @@ export enum Token {
   // discarded: ANY, BOOLEAN, NEVER, NUMBER, STRING, SYMBOL, UNDEFINED, LESSTHAN_SLASH
 
   ABSTRACT,
+  AND,
   AS,
   ASYNC,
   AWAIT,        // ES2017
@@ -187,6 +188,7 @@ export namespace Token {
   export function fromKeyword(text: string): Token {
     switch (text) {
       case "abstract": return Token.ABSTRACT;
+      case "and": return Token.AND;
       case "as": return Token.AS;
       case "async": return Token.ASYNC;
       case "await": return Token.AWAIT;
@@ -255,6 +257,7 @@ export namespace Token {
     switch (token) {
       case Token.DELETE: return "delete";
       case Token.IN: return "in";
+      case Token.AND: return "and";
       case Token.INSTANCEOF: return "instanceof";
       case Token.NEW: return "new";
       case Token.TYPEOF: return "typeof";
