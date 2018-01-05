@@ -1759,13 +1759,12 @@ function determinePrecedence(kind: Token): i32 {
     case Token.QUESTION:
       return Precedence.CONDITIONAL;
 
+    case Token.OR:
     case Token.BAR_BAR:
       return Precedence.LOGICAL_OR;
 
-    case Token.AMPERSAND_AMPERSAND:
-        return Precedence.LOGICAL_AND;
-
     case Token.AND:
+    case Token.AMPERSAND_AMPERSAND:
         return Precedence.LOGICAL_AND;
 
     case Token.BAR:

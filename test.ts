@@ -5,7 +5,7 @@
 // var x:int=43
 export function main():int {
 	var x=42;
-	var y=true and false
+	var y=true or false
 	if(y)x++
 	return x;
 }
