@@ -121,10 +121,11 @@ export class Program extends DiagnosticEmitter {
 
     this.types = new Map([
       ["i8", Type.i8],
-      ["short", Type.i8],
-      ["byte", Type.u8],
       ["i16", Type.i16],
       ["i32", Type.i32],
+      ["i64", Type.i64],
+      ["short", Type.i8],
+      ["byte", Type.u8],
       ["int", Type.i32],
       ["long", Type.i64],
       ["isize", target == Target.WASM64 ? Type.isize64 : Type.isize32],
@@ -135,8 +136,8 @@ export class Program extends DiagnosticEmitter {
       ["usize", target == Target.WASM64 ? Type.usize64 : Type.usize32],
       ["bool", Type.bool],
       ["f32", Type.f32],
-      ["float", Type.f32],
       ["f64", Type.f64],
+      ["float", Type.f32],
       ["double", Type.f64],
       ["void", Type.void],
       ["number", Type.f64],
