@@ -1763,7 +1763,10 @@ function determinePrecedence(kind: Token): i32 {
       return Precedence.LOGICAL_OR;
 
     case Token.AMPERSAND_AMPERSAND:
-      return Precedence.LOGICAL_AND;
+        return Precedence.LOGICAL_AND;
+
+    case Token.AND:
+        return Precedence.LOGICAL_AND;
 
     case Token.BAR:
       return Precedence.BITWISE_OR;
