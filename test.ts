@@ -1,8 +1,8 @@
 // time ./bin/asc test.ts -o test.wasm && wasmx test.wasm
-// time asc test.ts -o test.wasm && wasmx test.wasm
-// wasm test.wasm
+
 // var x=43 ERROR AS1110: Type expected. WHY NO INFERENCE?
 // var x:int=43
+
 export function main():int {
 	var x=42
 	var y=true or false
