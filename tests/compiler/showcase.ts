@@ -48,15 +48,15 @@ export enum AnEnum {
                               // or be omitted
   FOUR = AnEnum.TWO + 2,      // or reference other values (and remain constant through precomputation)
   FIVE,                       // and continue from there
-  FOURTYTWO = aMutableGlobal, // or reference mutable values but then can't be exported
-  FOURTYTHREE                 // and even continue from there without being exported (tsc doesn't allow this)
+  FORTYTWO = aMutableGlobal,  // or reference mutable values but then can't be exported
+  FORTYTHREE                  // and even continue from there without being exported (tsc doesn't allow this)
 }
 assert(AnEnum.ONE == 1);
 assert(AnEnum.TWO == 2);
 assert(AnEnum.FOUR == 4);
 assert(AnEnum.FIVE == 5);
-assert(AnEnum.FOURTYTWO == 42);
-assert(AnEnum.FOURTYTHREE == 43);
+assert(AnEnum.FORTYTWO == 42);
+assert(AnEnum.FORTYTHREE == 43);
 
 // In fact, there are a couple of things asc just waves through where tsc refuses to
 1, 2, 3;                      // for example not-so-useful comma expressions
@@ -94,13 +94,13 @@ class AClass {
   aField: i32;
 }
 class ADerivedClass extends AClass {
-  aNotherField: f32;
-  get aWildAccessorAppears(): f32 { return this.aNotherField; }
-  set aWildAccessorAppears(val: f32) { this.aNotherField = val; }
+  anotherField: f32;
+  get aWildAccessorAppears(): f32 { return this.anotherField; }
+  set aWildAccessorAppears(val: f32) { this.anotherField = val; }
 }
 var aClassInstance = changetype<ADerivedClass>(<usize>8);
 aClassInstance.aField = 42;
-aClassInstance.aNotherField = 9000;
+aClassInstance.anotherField = 9000;
 assert(load<i32>(8) == 42);
 assert(load<f32>(12) == 9000);
 

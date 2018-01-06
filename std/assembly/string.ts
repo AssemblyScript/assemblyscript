@@ -13,6 +13,7 @@ export class String {
     this.length = lenght;
   }
 
+  @operator("[]")
   charAt(pos: i32): String {
     assert(this != null);
     return pos < 0 || pos >= this.length ? EMPTY
@@ -39,7 +40,7 @@ export class String {
   }
 
   @operator("+")
-  concat(other: String): String {
+  concat(other: this): String {
     assert(this != null);
     assert(other != null);
     var thisLen: isize = this.length;
@@ -59,7 +60,7 @@ export class String {
     );
   }
 
-  endsWith(searchString: String, endPosition: i32 = 0x7fffffff): bool {
+  endsWith(searchString: this, endPosition: i32 = 0x7fffffff): bool {
     assert(this != null);
     assert(searchString != null);
     var end: isize = <isize>min<i32>(max<i32>(endPosition, 0), this.length);
@@ -71,18 +72,18 @@ export class String {
   }
 
   @operator("==")
-  equals(other: String): bool {
+  private __eq(other: this): bool {
     assert(this != null);
     assert(other != null);
     return this.length != other.length ? false
          : !Heap.compare(this.ptr, other.ptr, <usize>this.length);
   }
 
-  includes(searchString: String, position: i32 = 0): bool {
+  includes(searchString: this, position: i32 = 0): bool {
     return this.indexOf(searchString, position) != -1;
   }
 
-  indexOf(searchString: String, position: i32 = 0): i32 {
+  indexOf(searchString: this, position: i32 = 0): i32 {
     assert(this != null);
     assert(searchString != null);
     var pos: isize = position;
@@ -95,7 +96,7 @@ export class String {
     return -1;
   }
 
-  startsWith(searchString: String, position: i32 = 0): bool {
+  startsWith(searchString: this, position: i32 = 0): bool {
     assert(this != null);
     assert(searchString != null);
     var pos: isize = position;

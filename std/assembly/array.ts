@@ -18,13 +18,13 @@ export class Array<T> {
   }
 
   @operator("[]")
-  get(index: i32): T {
+  private __get(index: i32): T {
     assert(index > 0 && index < this.capacity);
     throw new Error("not implemented");
   }
 
   @operator("[]=")
-  set(index: i32, value: T): void {
+  private __set(index: i32, value: T): void {
     assert(index > 0 && index < this.capacity);
     throw new Error("not implemented");
   }
@@ -46,12 +46,12 @@ export class CArray<T> {
   private constructor() {}
 
   @operator("[]")
-  get(index: usize): T {
+  private __get(index: usize): T {
     return load<T>(changetype<usize>(this) + index * sizeof<T>());
   }
 
   @operator("[]=")
-  set(index: usize, value: T): void {
+  private __set(index: usize, value: T): void {
     store<T>(changetype<usize>(this) + index * sizeof<T>(), value);
   }
 }

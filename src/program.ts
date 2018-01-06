@@ -38,11 +38,17 @@ import {
   TypeNode,
   TypeParameter,
   Decorator,
+  DecoratorKind,
 
   Expression,
+  ElementAccessExpression,
   IdentifierExpression,
+  LiteralExpression,
+  LiteralKind,
   PropertyAccessExpression,
   StringLiteralExpression,
+  SuperExpression,
+  ThisExpression,
   CallExpression,
   NewExpression,
 
@@ -68,9 +74,7 @@ import {
   hasDecorator,
   hasModifier,
   mangleInternalName,
-  ElementAccessExpression,
-  ThisExpression,
-  SuperExpression
+  getFirstDecorator
 } from "./ast";
 
 import {
@@ -354,6 +358,7 @@ export class Program extends DiagnosticEmitter {
   private initializeMethod(declaration: MethodDeclaration, classPrototype: ClassPrototype): void {
     var name = declaration.name.name;
     var internalName = declaration.internalName;
+    var instancePrototype: FunctionPrototype | null = null;
 
     // static methods become global functions
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
@@ -382,11 +387,55 @@ export class Program extends DiagnosticEmitter {
         }
       } else
         classPrototype.instanceMembers = new Map();
-      var instancePrototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
+      instancePrototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
       // if (classPrototype.isStruct && instancePrototype.isAbstract) {
       //   this.error( Structs cannot declare abstract methods. );
       // }
       classPrototype.instanceMembers.set(name, instancePrototype);
+    }
+
+    // handle operator annotations. operators are instance methods taking a second argument of the
+    // instance's type. return values vary depending on the operation.
+    if (declaration.decorators) {
+      for (var i = 0, k = declaration.decorators.length; i < k; ++i) {
+        var decorator = declaration.decorators[i];
+        if (decorator.decoratorKind == DecoratorKind.OPERATOR) {
+          if (!instancePrototype) {
+            this.error(DiagnosticCode.Operation_not_supported, decorator.range);
+            continue;
+          }
+          var numArgs = decorator.arguments && decorator.arguments.length || 0;
+          if (numArgs == 1) {
+            var firstArg = (<Expression[]>decorator.arguments)[0];
+            if (firstArg.kind == NodeKind.LITERAL && (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING) {
+              switch ((<StringLiteralExpression>firstArg).value) {
+
+                case "[]":
+                  classPrototype.opIndexedGet = instancePrototype;
+                  break;
+
+                case "[]=":
+                  classPrototype.opIndexedSet = instancePrototype;
+                  break;
+
+                case "+":
+                  classPrototype.opConcat = instancePrototype;
+                  break;
+
+                case "==":
+                  classPrototype.opEquals = instancePrototype;
+                  break;
+
+                default: // TBD: does it make sense to provide more, even though not JS/TS-compatible?
+                  this.error(DiagnosticCode.Operation_not_supported, firstArg.range);
+              }
+            } else
+              this.error(DiagnosticCode.String_literal_expected, firstArg.range);
+          } else
+            this.error(DiagnosticCode.Expected_0_arguments_but_got_1, decorator.range, "1", numArgs.toString(0));
+        } else if (decorator.decoratorKind != DecoratorKind.CUSTOM) // methods support @operator only
+          this.error(DiagnosticCode.Operation_not_supported, decorator.range);
+      }
     }
   }
 
@@ -1449,6 +1498,7 @@ export class FunctionPrototype extends Element {
     }
 
     // resolve parameters
+    // TODO: 'this' type
     k = declaration.parameters.length;
     var parameters = new Array<Parameter>(k);
     var parameterTypes = new Array<Type>(k);
@@ -1466,6 +1516,7 @@ export class FunctionPrototype extends Element {
     }
 
     // resolve return type
+    // TODO: 'this' type
     var returnType: Type;
     if (this.isSetter) {
       returnType = Type.void; // not annotated
@@ -1769,6 +1820,15 @@ export class ClassPrototype extends Element {
   instances: Map<string,Class> = new Map();
   /** Instance member prototypes. */
   instanceMembers: Map<string,Element> | null = null;
+
+  /** Overloaded indexed get method, if any. */
+  opIndexedGet: FunctionPrototype | null;
+  /** Overloaded indexed set method, if any. */
+  opIndexedSet: FunctionPrototype | null;
+  /** Overloaded concatenation method, if any. */
+  opConcat: FunctionPrototype | null;
+  /** Overloaded equality comparison method, if any. */
+  opEquals: FunctionPrototype | null;
 
   constructor(program: Program, simpleName: string, internalName: string, declaration: ClassDeclaration | null = null) {
     super(program, simpleName, internalName);

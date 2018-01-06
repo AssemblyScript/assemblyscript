@@ -351,6 +351,31 @@ export abstract class Node {
     if (stmt.arguments = args)
       for (var i: i32 = 0, k: i32 = (<Expression[]>args).length; i < k; ++i)
         (<Expression[]>args)[i].parent = stmt;
+    if (expression.kind == NodeKind.IDENTIFIER) {
+      switch ((<IdentifierExpression>expression).name) {
+
+        case "global":
+          stmt.decoratorKind = DecoratorKind.GLOBAL;
+          break;
+
+        case "operator":
+          stmt.decoratorKind = DecoratorKind.OPERATOR;
+          break;
+
+        case "struct":
+          stmt.decoratorKind = DecoratorKind.STRUCT;
+          break;
+
+        case "size":
+          stmt.decoratorKind = DecoratorKind.SIZE;
+          break;
+
+        default:
+          stmt.decoratorKind = DecoratorKind.CUSTOM;
+          break;
+      }
+    } else
+      stmt.decoratorKind = DecoratorKind.CUSTOM;
     return stmt;
   }
 
@@ -1333,6 +1358,15 @@ export class ContinueStatement extends Statement {
   }
 }
 
+/** Built-in decorator kinds. */
+export const enum DecoratorKind {
+  CUSTOM,
+  GLOBAL,
+  OPERATOR,
+  STRUCT,
+  SIZE
+}
+
 /** Depresents a decorator. */
 export class Decorator extends Statement {
 
@@ -1342,6 +1376,8 @@ export class Decorator extends Statement {
   name: Expression;
   /** Argument expressions. */
   arguments: Expression[] | null;
+  /** Built-in kind, if applicable. */
+  decoratorKind: DecoratorKind;
 
   serialize(sb: string[]): void {
     sb.push("@");
@@ -2153,7 +2189,7 @@ export function hasModifier(kind: ModifierKind, modifiers: Modifier[] | null): b
 }
 
 /** Gets a specific decorator within the specified decorators, if present. */
-export function getDecorator(name: string, decorators: Decorator[] | null): Decorator | null {
+export function getFirstDecorator(name: string, decorators: Decorator[] | null): Decorator | null {
   if (decorators)
     for (var i = 0, k = decorators.length; i < k; ++i) {
       var decorator = decorators[i];
@@ -2166,7 +2202,7 @@ export function getDecorator(name: string, decorators: Decorator[] | null): Deco
 
 /** Tests if a specific decorator is present within the specified decorators. */
 export function hasDecorator(name: string, decorators: Decorator[] | null): bool {
-  return getDecorator(name, decorators) != null;
+  return getFirstDecorator(name, decorators) != null;
 }
 
 /** Serializes the specified node to its TypeScript representation. */

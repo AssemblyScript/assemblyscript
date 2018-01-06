@@ -34,8 +34,8 @@
  (global $showcase/AnEnum.TWO i32 (i32.const 2))
  (global $showcase/AnEnum.FOUR i32 (i32.const 4))
  (global $showcase/AnEnum.FIVE i32 (i32.const 5))
- (global $showcase/AnEnum.FOURTYTWO (mut i32) (i32.const 0))
- (global $showcase/AnEnum.FOURTYTHREE (mut i32) (i32.const 0))
+ (global $showcase/AnEnum.FORTYTWO (mut i32) (i32.const 0))
+ (global $showcase/AnEnum.FORTYTHREE (mut i32) (i32.const 0))
  (global $memcpy/dest (mut i32) (i32.const 0))
  (global $showcase/aClassInstance (mut i32) (i32.const 8))
  (global $showcase/AClass.aStaticField (mut i32) (i32.const 0))
@@ -3961,25 +3961,25 @@
    )
    (unreachable)
   )
-  (set_global $showcase/AnEnum.FOURTYTWO
+  (set_global $showcase/AnEnum.FORTYTWO
    (get_global $showcase/aMutableGlobal)
   )
-  (set_global $showcase/AnEnum.FOURTYTHREE
+  (set_global $showcase/AnEnum.FORTYTHREE
    (i32.add
-    (get_global $showcase/AnEnum.FOURTYTWO)
+    (get_global $showcase/AnEnum.FORTYTWO)
     (i32.const 1)
    )
   )
   (if
    (i32.ne
-    (get_global $showcase/AnEnum.FOURTYTWO)
+    (get_global $showcase/AnEnum.FORTYTWO)
     (i32.const 42)
    )
    (unreachable)
   )
   (if
    (i32.ne
-    (get_global $showcase/AnEnum.FOURTYTHREE)
+    (get_global $showcase/AnEnum.FORTYTHREE)
     (i32.const 43)
    )
    (unreachable)
