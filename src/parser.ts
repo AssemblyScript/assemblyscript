@@ -31,13 +31,14 @@ import {
   NodeKind,
   Source,
   TypeNode,
-  // expressions
+
+  Expression,
   AssertionKind,
   CallExpression,
-  Expression,
   IdentifierExpression,
   StringLiteralExpression,
-  // statements
+
+  Statement,
   BlockStatement,
   BreakStatement,
   ClassDeclaration,
@@ -63,7 +64,6 @@ import {
   NamespaceDeclaration,
   Parameter,
   ReturnStatement,
-  Statement,
   SwitchCase,
   SwitchStatement,
   ThrowStatement,
@@ -73,7 +73,7 @@ import {
   VariableStatement,
   VariableDeclaration,
   WhileStatement,
-  // utility
+
   addModifier,
   getModifier,
   hasModifier,
@@ -108,6 +108,7 @@ export class Parser extends DiagnosticEmitter {
     this.program.sources.push(source);
 
     var tn = new Tokenizer(source, this.program.diagnostics);
+    tn.silentDiagnostics = this.silentDiagnostics;
     source.tokenizer = tn;
 
     while (!tn.skip(Token.ENDOFFILE)) {
@@ -1512,18 +1513,15 @@ export class Parser extends DiagnosticEmitter {
         return Node.createFloatLiteralExpression(tn.readFloat(), tn.range(startPos, tn.pos));
 
       // RegexpLiteralExpression
-      /*
       case Token.SLASH:
-        var regexpLit = Node.createRegexpLiteral(tn.readRegexp(), tn.range(startPos, tn.pos));
+        var regexpPattern = tn.readRegexpPattern();
+        if (regexpPattern == null)
+          return null;
         if (!tn.skip(Token.SLASH)) {
           this.error(DiagnosticCode._0_expected, tn.range(), "/");
           return null;
         }
-        // TODO: modifiers, may be move to tokenizer
-        return regexpLit;
-      */
-      case Token.REGEXPLITERAL: // not yet supported
-        return Node.createRegexpLiteralExpression(tn.readRegexp(), tn.range(startPos, tn.pos));
+        return Node.createRegexpLiteralExpression(regexpPattern, tn.readRegexpModifiers(), tn.range(startPos, tn.pos));
 
       default:
         this.error(DiagnosticCode.Expression_expected, tn.range());

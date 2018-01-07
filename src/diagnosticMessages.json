@@ -63,6 +63,7 @@
   "Generic type '{0}' requires {1} type argument(s).": 2314,
   "Type '{0}' is not generic.": 2315,
   "Type '{0}' is not assignable to type '{1}'.": 2322,
+  "Index signature is missing in type '{0}'.": 2329,
   "'this' cannot be referenced in current location.": 2332,
   "'super' can only be referenced in a derived class.": 2335,
   "Property '{0}' does not exist on type '{1}'.": 2339,

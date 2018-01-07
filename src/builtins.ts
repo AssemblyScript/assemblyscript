@@ -212,6 +212,11 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
     case "isNaN": // isNaN<T>(value: T) -> bool
       compiler.currentType = Type.bool;
+      // if (operands.length != 1) {
+      //   compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range, "1", operands.length.toString(10));
+      //   return module.createUnreachable();
+      // }
+      // TODO: infer type argument if omitted
       if (!validateCall(compiler, typeArguments, 1, operands, 1, reportNode))
         return module.createUnreachable();
       if ((<Type[]>typeArguments)[0].isAnyInteger)

@@ -146,6 +146,7 @@ export class Program extends DiagnosticEmitter {
 
     var queuedExports = new Map<string,QueuedExport>();
     var queuedImports = new Array<QueuedImport>();
+    var queuedDerivedClasses = new Array<ClassPrototype>();
 
     // build initial lookup maps of internal names to declarations
     for (var i = 0, k = this.sources.length; i < k; ++i) {
@@ -156,7 +157,7 @@ export class Program extends DiagnosticEmitter {
         switch (statement.kind) {
 
           case NodeKind.CLASS:
-            this.initializeClass(<ClassDeclaration>statement);
+            this.initializeClass(<ClassDeclaration>statement, queuedDerivedClasses);
             break;
 
           case NodeKind.ENUM:
@@ -180,7 +181,7 @@ export class Program extends DiagnosticEmitter {
             break;
 
           case NodeKind.NAMESPACE:
-            this.initializeNamespace(<NamespaceDeclaration>statement);
+            this.initializeNamespace(<NamespaceDeclaration>statement, queuedDerivedClasses, null);
             break;
 
           case NodeKind.TYPEDECLARATION:
@@ -232,6 +233,22 @@ export class Program extends DiagnosticEmitter {
         }
       } while (currentExport);
     }
+
+    // resolve base prototypes of derived classes
+    for (i = 0, k = queuedDerivedClasses.length; i < k; ++i) {
+      var derivedDeclaration = queuedDerivedClasses[i].declaration;
+      assert(derivedDeclaration != null);
+      var derivedType = (<ClassDeclaration>derivedDeclaration).extendsType;
+      assert(derivedType != null);
+      var resolved = this.resolveIdentifier((<TypeNode>derivedType).identifier, null); // reports
+      if (resolved) {
+        if (resolved.element.kind != ElementKind.CLASS_PROTOTYPE) {
+          this.error(DiagnosticCode.A_class_may_only_extend_another_class, (<TypeNode>derivedType).range);
+          continue;
+        }
+        queuedDerivedClasses[i].basePrototype = <ClassPrototype>resolved.element;
+      }
+    }
   }
 
   /** Tries to resolve an import by traversing exports and queued exports. */
@@ -252,7 +269,7 @@ export class Program extends DiagnosticEmitter {
     } while (true);
   }
 
-  private initializeClass(declaration: ClassDeclaration, namespace: Element | null = null): void {
+  private initializeClass(declaration: ClassDeclaration, queuedDerivedClasses: ClassPrototype[], namespace: Element | null = null): void {
     var internalName = declaration.internalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
@@ -275,6 +292,10 @@ export class Program extends DiagnosticEmitter {
         this.error(DiagnosticCode.Structs_cannot_implement_interfaces, Range.join(declaration.name.range, declaration.implementsTypes[declaration.implementsTypes.length - 1].range));
     } else if (declaration.implementsTypes.length)
       throw new Error("not implemented");
+
+    // remember classes that extend another one
+    if (declaration.extendsType)
+      queuedDerivedClasses.push(prototype);
 
     // add as namespace member if applicable
     if (namespace) {
@@ -762,7 +783,7 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeNamespace(declaration: NamespaceDeclaration, parentNamespace: Element | null = null): void {
+  private initializeNamespace(declaration: NamespaceDeclaration, queuedExtendingClasses: ClassPrototype[], parentNamespace: Element | null = null): void {
     var internalName = declaration.internalName;
 
     var namespace = this.elements.get(internalName);
@@ -794,7 +815,7 @@ export class Program extends DiagnosticEmitter {
       switch (members[i].kind) {
 
         case NodeKind.CLASS:
-          this.initializeClass(<ClassDeclaration>members[i], namespace);
+          this.initializeClass(<ClassDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
 
         case NodeKind.ENUM:
@@ -810,7 +831,7 @@ export class Program extends DiagnosticEmitter {
           break;
 
         case NodeKind.NAMESPACE:
-          this.initializeNamespace(<NamespaceDeclaration>members[i], namespace);
+          this.initializeNamespace(<NamespaceDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
 
         case NodeKind.TYPEDECLARATION:
@@ -957,22 +978,26 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Resolves an identifier to the element it refers to. */
-  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function): ResolvedElement | null {
+  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function | null): ResolvedElement | null {
     var name = identifier.name;
-    var local = contextualFunction.locals.get(name);
-    if (local)
-      return (resolvedElement || (resolvedElement = new ResolvedElement())).set(local);
 
     var element: Element | null;
     var namespace: Element | null;
 
-    // search contextual parent namespaces if applicable
-    if (contextualFunction && (namespace = contextualFunction.prototype.namespace)) {
-      do {
-        if (element = this.elements.get(namespace.internalName + STATIC_DELIMITER + name))
-        // if ((namespace.members && (element = namespace.members.get(name))) || (element = this.elements.get(namespace.internalName + STATIC_DELIMITER + name)))
-          return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
-      } while (namespace = namespace.namespace);
+    if (contextualFunction) {
+      // check locals
+      var local = contextualFunction.locals.get(name);
+      if (local)
+        return (resolvedElement || (resolvedElement = new ResolvedElement())).set(local);
+
+      // search contextual parent namespaces if applicable
+      if (namespace = contextualFunction.prototype.namespace) {
+        do {
+          if (element = this.elements.get(namespace.internalName + STATIC_DELIMITER + name))
+          // if ((namespace.members && (element = namespace.members.get(name))) || (element = this.elements.get(namespace.internalName + STATIC_DELIMITER + name)))
+            return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
+        } while (namespace = namespace.namespace);
+      }
     }
 
     // search current file
@@ -998,6 +1023,7 @@ export class Program extends DiagnosticEmitter {
     // at this point we know exactly what the target is, so look up the element within
     var propertyName = propertyAccess.property.name;
     var targetType: Type;
+    var member: Element | null;
     switch (target.kind) {
 
       case ElementKind.GLOBAL:
@@ -1008,12 +1034,31 @@ export class Program extends DiagnosticEmitter {
         target = <Class>targetType.classType;
         // fall-through
 
-      default:
-        if (target.members) {
-          var member = target.members.get(propertyName);
-          if (member)
+      case ElementKind.CLASS_PROTOTYPE:
+      case ElementKind.CLASS:
+        do {
+          if (target.members && (member = target.members.get(propertyName)))
             return resolvedElement.set(member).withTarget(target, targetExpression);
-        }
+          // check inherited static members on the base prototype while target is a class prototype
+          if (target.kind == ElementKind.CLASS_PROTOTYPE) {
+            if ((<ClassPrototype>target).basePrototype)
+              target = <ClassPrototype>(<ClassPrototype>target).basePrototype;
+            else
+              break;
+          // or inherited instance members on the cbase class while target is a class instance
+          } else if (target.kind == ElementKind.CLASS) {
+            if ((<Class>target).base)
+              target = <Class>(<Class>target).base;
+            else
+              break;
+          } else
+            break;
+        } while (true);
+        break;
+
+      default: // enums or other namespace-like elements
+        if (target.members && (member = target.members.get(propertyName)))
+          return resolvedElement.set(member).withTarget(target, targetExpression);
         break;
     }
     this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
@@ -1026,16 +1071,19 @@ export class Program extends DiagnosticEmitter {
     if (!(resolvedElement = this.resolveExpression(targetExpression, contextualFunction)))
       return null;
     var target = resolvedElement.element;
-
     switch (target.kind) {
+
+      // TBD: should indexed access on static classes, like `Heap`, be a supported as well?
       case ElementKind.CLASS:
         var type = (<Class>target).type;
         if (type.classType) {
-          // TODO: check if array etc.
+          var indexedGet: FunctionPrototype | null;
+          if (indexedGet = (target = type.classType).prototype.opIndexedGet)
+            return resolvedElement.set(indexedGet).withTarget(target, targetExpression);
         }
         break;
     }
-    this.error(DiagnosticCode.Operation_not_supported, elementAccess.range);
+    this.error(DiagnosticCode.Index_signature_is_missing_in_type_0, targetExpression.range, target.internalName);
     return null;
   }
 
@@ -1820,15 +1868,17 @@ export class ClassPrototype extends Element {
   instances: Map<string,Class> = new Map();
   /** Instance member prototypes. */
   instanceMembers: Map<string,Element> | null = null;
+  /** Base class prototype, if applicable. */
+  basePrototype: ClassPrototype | null = null; // set in Program#initialize
 
   /** Overloaded indexed get method, if any. */
-  opIndexedGet: FunctionPrototype | null;
+  opIndexedGet: FunctionPrototype | null = null; // TODO: indexedGet and indexedSet as an accessor?
   /** Overloaded indexed set method, if any. */
-  opIndexedSet: FunctionPrototype | null;
+  opIndexedSet: FunctionPrototype | null = null;
   /** Overloaded concatenation method, if any. */
-  opConcat: FunctionPrototype | null;
+  opConcat: FunctionPrototype | null = null;
   /** Overloaded equality comparison method, if any. */
-  opEquals: FunctionPrototype | null;
+  opEquals: FunctionPrototype | null = null;
 
   constructor(program: Program, simpleName: string, internalName: string, declaration: ClassDeclaration | null = null) {
     super(program, simpleName, internalName);
@@ -1877,16 +1927,6 @@ export class ClassPrototype extends Element {
       if (!(baseClass = baseClassType.classType)) {
         this.program.error(DiagnosticCode.A_class_may_only_extend_another_class, declaration.extendsType.range);
         return null;
-      }
-      if ((this.flags & ElementFlags.HAS_STATIC_BASE_MEMBERS) == 0) { // inherit static base members once
-        this.flags |= ElementFlags.HAS_STATIC_BASE_MEMBERS;
-        if (baseClass.prototype.members) {
-          if (!this.members)
-            this.members = new Map();
-          for (var baseMember of baseClass.prototype.members.values())
-            if (!baseMember.isInstance)
-              this.members.set(baseMember.simpleName, baseMember);
-        }
       }
       if (baseClass.prototype.isStruct != this.isStruct) {
         this.program.error(DiagnosticCode.Structs_cannot_extend_classes_and_vice_versa, Range.join(declaration.name.range, declaration.extendsType.range));

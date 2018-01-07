@@ -30,8 +30,7 @@ export class Decompiler {
 
   private tempI64: I64 = new I64();
 
-  constructor() {
-  }
+  constructor() { }
 
   /** Decompiles a module to an AST that can then be serialized. */
   decompile(module: Module) {

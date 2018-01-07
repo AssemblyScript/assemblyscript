@@ -63,6 +63,7 @@ export enum DiagnosticCode {
   Generic_type_0_requires_1_type_argument_s = 2314,
   Type_0_is_not_generic = 2315,
   Type_0_is_not_assignable_to_type_1 = 2322,
+  Index_signature_is_missing_in_type_0 = 2329,
   _this_cannot_be_referenced_in_current_location = 2332,
   _super_can_only_be_referenced_in_a_derived_class = 2335,
   Property_0_does_not_exist_on_type_1 = 2339,
@@ -147,6 +148,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2314: return "Generic type '{0}' requires {1} type argument(s).";
     case 2315: return "Type '{0}' is not generic.";
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
+    case 2329: return "Index signature is missing in type '{0}'.";
     case 2332: return "'this' cannot be referenced in current location.";
     case 2335: return "'super' can only be referenced in a derived class.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";

@@ -240,10 +240,11 @@ export abstract class Node {
     return expr;
   }
 
-  static createRegexpLiteralExpression(value: string, range: Range): RegexpLiteralExpression {
+  static createRegexpLiteralExpression(pattern: string, modifiers: string, range: Range): RegexpLiteralExpression {
     var expr = new RegexpLiteralExpression();
     expr.range = range;
-    expr.value = value;
+    expr.pattern = pattern;
+    expr.modifiers = modifiers;
     return expr;
   }
 
@@ -1045,11 +1046,16 @@ export class RegexpLiteralExpression extends LiteralExpression {
   // kind = NodeKind.LITERAL
   literalKind = LiteralKind.REGEXP;
 
-  /** Value of the expression. */
-  value: string;
+  /** Regular expression pattern. */
+  pattern: string;
+  /** Regular expression modifiers. */
+  modifiers: string;
 
   serialize(sb: string[]): void {
-    sb.push(this.value);
+    sb.push("/");
+    sb.push(this.pattern);
+    sb.push("/");
+    sb.push(this.modifiers);
   }
 }
 

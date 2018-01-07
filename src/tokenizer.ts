@@ -4,18 +4,17 @@
  as much bookkeeping, simply skips over trivia and provides a more general
  mark/reset mechanism for the parser to utilize on ambiguous tokens.
 
- next()             advances the token
- peek()             peeks for the next token
- skip(token)        skips over a token if possible
- mark()             marks at current token
- reset()            resets to marked state
- range()            gets the range of the current token
+ next()                 advances the token
+ peek()                 peeks for the next token
+ skip(token)            skips over a token if possible
+ mark()                 marks at current token
+ reset()                resets to marked state
+ range()                gets the range of the current token
 
- readFloat()        on FLOATLITERAL
- readIdentifier()   on IDENTIFIER
- readInteger()      on INTEGERLITERAL
- readRegexp()       on REGEXPLITERAL    // TODO
- readString()       on STRINGLITERAL
+ readFloat()            on FLOATLITERAL
+ readIdentifier()       on IDENTIFIER
+ readInteger()          on INTEGERLITERAL
+ readString()           on STRINGLITERAL
 
 */
 
@@ -174,7 +173,6 @@ export enum Token {
   STRINGLITERAL,
   INTEGERLITERAL,
   FLOATLITERAL,
-  REGEXPLITERAL,
 
   // meta
 
@@ -562,8 +560,6 @@ export class Tokenizer extends DiagnosticEmitter {
               return Token.SLASH_EQUALS;
             }
           }
-          if (this.testRegexp())
-            return Token.REGEXPLITERAL; // expects a call to readRegexp
           return Token.SLASH;
 
         case CharCode._0:
@@ -905,21 +901,14 @@ export class Tokenizer extends DiagnosticEmitter {
     }
   }
 
-  testRegexp(): bool {
-    // TODO: this'll require more context
-    return false;
-  }
-
-  readRegexp(): string {
+  readRegexpPattern(): string | null {
     var text = this.source.text;
     var start = this.pos;
-    var result = "";
     var escaped = false;
     while (true) {
       if (this.pos >= this.end) {
-        result += text.substring(start, this.pos);
         this.error(DiagnosticCode.Unterminated_regular_expression_literal, this.range(start, this.end));
-        break;
+        return null;
       }
       if (text.charCodeAt(this.pos) == CharCode.BACKSLASH) {
         ++this.pos;
@@ -927,19 +916,36 @@ export class Tokenizer extends DiagnosticEmitter {
         continue;
       }
       var c = text.charCodeAt(this.pos);
-      if (c == CharCode.SLASH) {
-        result += text.substring(start, this.pos);
-        ++this.pos;
+      if (c == CharCode.SLASH && !escaped)
         break;
-      }
       if (isLineBreak(c)) {
-        result += text.substring(start, this.pos);
         this.error(DiagnosticCode.Unterminated_regular_expression_literal, this.range(start, this.pos));
-        break;
+        return null;
       }
       ++this.pos;
+      escaped = false;
     }
-    return result;
+    return text.substring(start, this.pos);
+  }
+
+  readRegexpModifiers(): string {
+    var text = this.source.text;
+    var start = this.pos;
+    /a/
+    while (this.pos < this.end) {
+      switch (text.charCodeAt(this.pos)) {
+
+        case CharCode.g:
+        case CharCode.i:
+        case CharCode.m:
+          ++this.pos;
+          break;
+
+        default:
+          return text.substring(start, this.pos);
+      }
+    }
+    return text.substring(start, this.pos);
   }
 
   testInteger(): bool {
