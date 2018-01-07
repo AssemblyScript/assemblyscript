@@ -2043,7 +2043,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       // logical (no overloading)
-
+      case Token.AND: // left and right
       case Token.AMPERSAND_AMPERSAND: // left && right
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
@@ -2077,6 +2077,7 @@ export class Compiler extends DiagnosticEmitter {
           this.module.createGetLocal(tempLocal.index, this.currentType.toNativeType())
         );
 
+      case Token.OR: // left or right
       case Token.BAR_BAR: // left || right
         left = this.compileExpression(expression.left, contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);

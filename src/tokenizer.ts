@@ -50,6 +50,7 @@ export enum Token {
   // discarded: ANY, BOOLEAN, NEVER, NUMBER, STRING, SYMBOL, UNDEFINED, LESSTHAN_SLASH
 
   ABSTRACT,
+  AND,
   AS,
   ASYNC,
   AWAIT,        // ES2017
@@ -89,6 +90,7 @@ export enum Token {
   NEW,          // ES2017
   NULL,         // ES
   OF,
+  OR,
   PACKAGE,      // ES2017 non-lexical
   PRIVATE,      // ES2017 non-lexical
   PROTECTED,    // ES2017 non-lexical
@@ -185,6 +187,7 @@ export namespace Token {
   export function fromKeyword(text: string): Token {
     switch (text) {
       case "abstract": return Token.ABSTRACT;
+      case "and": return Token.AND;
       case "as": return Token.AS;
       case "async": return Token.ASYNC;
       case "await": return Token.AWAIT;
@@ -224,6 +227,7 @@ export namespace Token {
       case "new": return Token.NEW;
       case "null": return Token.NULL;
       case "of": return Token.OF;
+      case "or": return Token.OR;
       case "package": return Token.PACKAGE;
       case "private": return Token.PRIVATE;
       case "protected": return Token.PROTECTED;
@@ -251,10 +255,12 @@ export namespace Token {
 
   export function operatorToString(token: Token): string {
     switch (token) {
+      case Token.AND: return "and";
       case Token.DELETE: return "delete";
       case Token.IN: return "in";
       case Token.INSTANCEOF: return "instanceof";
       case Token.NEW: return "new";
+      case Token.OR: return "or";
       case Token.TYPEOF: return "typeof";
       case Token.VOID: return "void";
       case Token.YIELD: return "yield";

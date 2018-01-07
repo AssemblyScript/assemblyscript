@@ -3,3 +3,6 @@ npm-debug.*
 dist/
 out/
 raw/
+.idea/
+test.wasm
+package-lock.json
