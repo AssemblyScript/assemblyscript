@@ -16,3 +16,15 @@ b/ig;
 
 // just a comment
 //ig;
+
+// duplicate flags
+
+/(abc)\//iig;
+
+// invalid flags
+
+/(abc)\//iX;
+
+// surrounding AST remains intact
+
+false && /abc/gX.test(someString) || true;

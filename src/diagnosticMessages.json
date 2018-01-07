@@ -8,6 +8,7 @@
   "Type '{0}' cannot be changed to type '{1}'.": 106,
   "Structs cannot extend classes and vice-versa.": 107,
   "Structs cannot implement interfaces.": 108,
+  "Invalid regular expression flags.": 109,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

@@ -901,14 +901,14 @@ export class Tokenizer extends DiagnosticEmitter {
     }
   }
 
-  readRegexpPattern(): string | null {
+  readRegexpPattern(): string {
     var text = this.source.text;
     var start = this.pos;
     var escaped = false;
     while (true) {
       if (this.pos >= this.end) {
         this.error(DiagnosticCode.Unterminated_regular_expression_literal, this.range(start, this.end));
-        return null;
+        break;
       }
       if (text.charCodeAt(this.pos) == CharCode.BACKSLASH) {
         ++this.pos;
@@ -920,7 +920,7 @@ export class Tokenizer extends DiagnosticEmitter {
         break;
       if (isLineBreak(c)) {
         this.error(DiagnosticCode.Unterminated_regular_expression_literal, this.range(start, this.pos));
-        return null;
+        break;
       }
       ++this.pos;
       escaped = false;
@@ -928,23 +928,35 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, this.pos);
   }
 
-  readRegexpModifiers(): string {
+  readRegexpFlags(): string {
     var text = this.source.text;
     var start = this.pos;
-    /a/
+    var flags = 0;
     while (this.pos < this.end) {
-      switch (text.charCodeAt(this.pos)) {
+      var c: i32 = text.charCodeAt(this.pos);
+      if (!isIdentifierPart(c))
+        break;
+      ++this.pos;
+      switch (c) {
 
+        // make sure each supported flag is unique
         case CharCode.g:
+          flags |= select<i32>(1, -1, !(flags & 1));
+          break;
         case CharCode.i:
+          flags |= select<i32>(2, -1, !(flags & 2));
+          break;
         case CharCode.m:
-          ++this.pos;
+          flags |= select<i32>(4, -1, !(flags & 4));
           break;
 
         default:
-          return text.substring(start, this.pos);
+          flags = -1;
+          break;
       }
     }
+    if (flags == -1)
+      this.error(DiagnosticCode.Invalid_regular_expression_flags, this.range(start, this.pos));
     return text.substring(start, this.pos);
   }
 

@@ -1426,8 +1426,11 @@ export class Parser extends DiagnosticEmitter {
           return Node.createNewExpression((<CallExpression>operand).expression, (<CallExpression>operand).typeArguments, (<CallExpression>operand).arguments, tn.range(startPos, tn.pos));
         this.error(DiagnosticCode.Operation_not_supported, tn.range());
         return null;
-      } else
+      } else {
         operand = this.parseExpression(tn, p);
+        if (!operand)
+          return null;
+      }
 
       // UnaryPrefixExpression
       if (token == Token.PLUS_PLUS || token == Token.MINUS_MINUS)
@@ -1513,15 +1516,14 @@ export class Parser extends DiagnosticEmitter {
         return Node.createFloatLiteralExpression(tn.readFloat(), tn.range(startPos, tn.pos));
 
       // RegexpLiteralExpression
+      // note that this also continues on invalid ones so the surrounding AST remains intact
       case Token.SLASH:
-        var regexpPattern = tn.readRegexpPattern();
-        if (regexpPattern == null)
-          return null;
+        var regexpPattern = tn.readRegexpPattern(); // also reports
         if (!tn.skip(Token.SLASH)) {
           this.error(DiagnosticCode._0_expected, tn.range(), "/");
           return null;
         }
-        return Node.createRegexpLiteralExpression(regexpPattern, tn.readRegexpModifiers(), tn.range(startPos, tn.pos));
+        return Node.createRegexpLiteralExpression(regexpPattern, tn.readRegexpFlags() /* also reports */, tn.range(startPos, tn.pos));
 
       default:
         this.error(DiagnosticCode.Expression_expected, tn.range());

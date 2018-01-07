@@ -240,11 +240,11 @@ export abstract class Node {
     return expr;
   }
 
-  static createRegexpLiteralExpression(pattern: string, modifiers: string, range: Range): RegexpLiteralExpression {
+  static createRegexpLiteralExpression(pattern: string, flags: string, range: Range): RegexpLiteralExpression {
     var expr = new RegexpLiteralExpression();
     expr.range = range;
     expr.pattern = pattern;
-    expr.modifiers = modifiers;
+    expr.patternFlags = flags;
     return expr;
   }
 
@@ -1048,14 +1048,14 @@ export class RegexpLiteralExpression extends LiteralExpression {
 
   /** Regular expression pattern. */
   pattern: string;
-  /** Regular expression modifiers. */
-  modifiers: string;
+  /** Regular expression flags. */
+  patternFlags: string;
 
   serialize(sb: string[]): void {
     sb.push("/");
     sb.push(this.pattern);
     sb.push("/");
-    sb.push(this.modifiers);
+    sb.push(this.patternFlags);
   }
 }
 
