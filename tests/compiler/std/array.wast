@@ -76,6 +76,16 @@
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: Set
   GLOBAL: std:string/EMPTY
+  GLOBAL: std:string/cp
+  GLOBAL: std:string/cn
+  GLOBAL: std:string/cx
+  GLOBAL: std:string/cX
+  GLOBAL: std:string/c0
+  GLOBAL: std:string/c9
+  GLOBAL: std:string/ca
+  GLOBAL: std:string/cz
+  GLOBAL: std:string/cA
+  GLOBAL: std:string/cZ
   CLASS_PROTOTYPE: std:string/String
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
