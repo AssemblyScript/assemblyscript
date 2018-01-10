@@ -472,12 +472,12 @@
   )
   (loop $continue|0
    (if
-    (if (result i32)
-     (get_local $2)
+    (select
      (i32.rem_u
       (get_local $1)
       (i32.const 4)
      )
+     (get_local $2)
      (get_local $2)
     )
     (block

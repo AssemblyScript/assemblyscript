@@ -160,20 +160,23 @@
    (loop $continue|3
     (if
      (if (result i32)
-      (tee_local $0
-       (block (result i32)
-        (set_local $0
-         (get_global $while/n)
-        )
-        (set_global $while/n
-         (i32.sub
-          (get_local $0)
-          (i32.const 1)
+      (i32.eqz
+       (tee_local $0
+        (block (result i32)
+         (set_local $0
+          (get_global $while/n)
          )
+         (set_global $while/n
+          (i32.sub
+           (get_local $0)
+           (i32.const 1)
+          )
+         )
+         (get_local $0)
         )
-        (get_local $0)
        )
       )
+      (get_local $0)
       (block (result i32)
        (set_global $while/m
         (i32.add
@@ -183,7 +186,6 @@
        )
        (get_global $while/m)
       )
-      (get_local $0)
      )
      (block
       (nop)

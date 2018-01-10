@@ -527,13 +527,15 @@
   (block $break|0
    (loop $continue|0
     (if
-     (if (result i32)
+     (select
       (get_local $2)
       (i32.rem_u
        (get_local $1)
        (i32.const 4)
       )
-      (get_local $2)
+      (i32.eqz
+       (get_local $2)
+      )
      )
      (block
       (block
@@ -2335,6 +2337,9 @@
    (loop $continue|0
     (if
      (if (result i32)
+      (i32.eqz
+       (get_local $2)
+      )
       (get_local $2)
       (i32.eq
        (i32.load8_u
@@ -2344,7 +2349,6 @@
         (get_local $1)
        )
       )
-      (get_local $2)
      )
      (block
       (block

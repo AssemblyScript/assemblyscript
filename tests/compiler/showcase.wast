@@ -134,13 +134,15 @@
   (block $break|0
    (loop $continue|0
     (if
-     (if (result i32)
+     (select
       (get_local $2)
       (i32.rem_u
        (get_local $4)
        (i32.const 4)
       )
-      (get_local $2)
+      (i32.eqz
+       (get_local $2)
+      )
      )
      (block
       (block
@@ -1988,32 +1990,42 @@
    )
   )
   (if
-   (if (result i32)
-    (tee_local $8
-     (if (result i32)
+   (i32.and
+    (if (result i32)
+     (i32.eqz
       (tee_local $8
-       (i64.eq
-        (i64.shl
-         (get_local $3)
-         (i64.const 1)
+       (i32.and
+        (if (result i32)
+         (i32.eqz
+          (tee_local $8
+           (i64.eq
+            (i64.shl
+             (get_local $3)
+             (i64.const 1)
+            )
+            (i64.const 0)
+           )
+          )
+         )
+         (f64.ne
+          (tee_local $7
+           (get_local $1)
+          )
+          (get_local $7)
+         )
+         (get_local $8)
         )
-        (i64.const 0)
+        (i32.const 1)
        )
-      )
-      (get_local $8)
-      (f64.ne
-       (tee_local $7
-        (get_local $1)
-       )
-       (get_local $7)
       )
      )
+     (i32.eq
+      (get_local $4)
+      (i32.const 2047)
+     )
+     (get_local $8)
     )
-    (get_local $8)
-    (i32.eq
-     (get_local $4)
-     (i32.const 2047)
-    )
+    (i32.const 1)
    )
    (return
     (f64.div
@@ -2448,32 +2460,42 @@
    )
   )
   (if
-   (if (result i32)
-    (tee_local $8
-     (if (result i32)
+   (i32.and
+    (if (result i32)
+     (i32.eqz
       (tee_local $8
-       (i32.eq
-        (i32.shl
-         (get_local $3)
-         (i32.const 1)
+       (i32.and
+        (if (result i32)
+         (i32.eqz
+          (tee_local $8
+           (i32.eq
+            (i32.shl
+             (get_local $3)
+             (i32.const 1)
+            )
+            (i32.const 0)
+           )
+          )
+         )
+         (f32.ne
+          (tee_local $7
+           (get_local $1)
+          )
+          (get_local $7)
+         )
+         (get_local $8)
         )
-        (i32.const 0)
+        (i32.const 1)
        )
-      )
-      (get_local $8)
-      (f32.ne
-       (tee_local $7
-        (get_local $1)
-       )
-       (get_local $7)
       )
      )
+     (i32.eq
+      (get_local $4)
+      (i32.const 255)
+     )
+     (get_local $8)
     )
-    (get_local $8)
-    (i32.eq
-     (get_local $4)
-     (i32.const 255)
-    )
+    (i32.const 1)
    )
    (return
     (f32.div
@@ -4209,75 +4231,85 @@
   )
   (drop
    (if (result i32)
+    (i32.eqz
+     (i32.const 0)
+    )
     (i32.const 0)
     (unreachable)
-    (i32.const 0)
    )
   )
   (drop
    (if (result f64)
-    (f64.ne
+    (f64.eq
      (f64.const 0)
      (f64.const 0)
     )
-    (unreachable)
     (f64.const 0)
+    (unreachable)
    )
   )
   (drop
    (if (result i32)
-    (i32.const 1)
-    (i32.const 1)
+    (i32.eqz
+     (i32.const 1)
+    )
     (unreachable)
+    (i32.const 1)
    )
   )
   (drop
    (if (result f64)
-    (f64.ne
+    (f64.eq
      (f64.const 1)
      (f64.const 0)
     )
-    (f64.const 1)
     (unreachable)
+    (f64.const 1)
    )
   )
   (drop
    (if (result i32)
-    (tee_local $0
-     (if (result i32)
-      (i32.const 1)
-      (i32.const 2)
-      (i32.const 1)
+    (i32.eqz
+     (tee_local $0
+      (select
+       (i32.const 1)
+       (i32.const 2)
+       (i32.eqz
+        (i32.const 1)
+       )
+      )
      )
     )
-    (get_local $0)
     (unreachable)
+    (get_local $0)
    )
   )
   (drop
    (if (result f64)
-    (f64.ne
+    (f64.eq
      (tee_local $3
-      (if (result f64)
-       (f64.ne
+      (select
+       (f64.const 1)
+       (f64.const 2)
+       (f64.eq
         (f64.const 1)
         (f64.const 0)
        )
-       (f64.const 2)
-       (f64.const 1)
       )
      )
      (f64.const 0)
     )
-    (get_local $3)
     (unreachable)
+    (get_local $3)
    )
   )
   (set_global $logical/i
-   (if (result i32)
+   (select
     (i32.const 1)
     (i32.const 2)
-    (i32.const 1)
+    (i32.eqz
+     (i32.const 1)
+    )
    )
   )
   (if
@@ -4290,10 +4322,12 @@
    (unreachable)
   )
   (set_global $logical/i
-   (if (result i32)
-    (i32.const 0)
-    (i32.const 0)
+   (select
     (i32.const 1)
+    (i32.const 0)
+    (i32.eqz
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -4306,13 +4340,12 @@
    (unreachable)
   )
   (set_global $logical/I
-   (if (result i64)
-    (i64.ne
-     (i64.const 1)
-     (i64.const 0)
-    )
-    (i64.const 2)
+   (select
     (i64.const 1)
+    (i64.const 2)
+    (i64.eqz
+     (i64.const 1)
+    )
    )
   )
   (if
@@ -4325,13 +4358,12 @@
    (unreachable)
   )
   (set_global $logical/I
-   (if (result i64)
-    (i64.ne
-     (i64.const 0)
+   (select
+    (i64.const 1)
+    (i64.const 0)
+    (i64.eqz
      (i64.const 0)
     )
-    (i64.const 0)
-    (i64.const 1)
    )
   )
   (if
@@ -4344,13 +4376,13 @@
    (unreachable)
   )
   (set_global $logical/f
-   (if (result f32)
-    (f32.ne
+   (select
+    (f32.const 1)
+    (f32.const 2)
+    (f32.eq
      (f32.const 1)
      (f32.const 0)
     )
-    (f32.const 2)
-    (f32.const 1)
    )
   )
   (if
@@ -4363,13 +4395,13 @@
    (unreachable)
   )
   (set_global $logical/f
-   (if (result f32)
-    (f32.ne
+   (select
+    (f32.const 1)
+    (f32.const 0)
+    (f32.eq
      (f32.const 0)
      (f32.const 0)
     )
-    (f32.const 0)
-    (f32.const 1)
    )
   )
   (if
@@ -4382,13 +4414,13 @@
    (unreachable)
   )
   (set_global $logical/F
-   (if (result f64)
-    (f64.ne
+   (select
+    (f64.const 1)
+    (f64.const 2)
+    (f64.eq
      (f64.const 1)
      (f64.const 0)
     )
-    (f64.const 2)
-    (f64.const 1)
    )
   )
   (if
@@ -4401,13 +4433,13 @@
    (unreachable)
   )
   (set_global $logical/F
-   (if (result f64)
-    (f64.ne
+   (select
+    (f64.const 1)
+    (f64.const 0)
+    (f64.eq
      (f64.const 0)
      (f64.const 0)
     )
-    (f64.const 0)
-    (f64.const 1)
    )
   )
   (if

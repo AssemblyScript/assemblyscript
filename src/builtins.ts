@@ -1,7 +1,9 @@
 import {
   Compiler,
   Target,
-  ConversionKind
+  ConversionKind,
+
+  makeSmallIntegerWrap
 } from "./compiler";
 
 import {
@@ -15,7 +17,9 @@ import {
 } from "./ast";
 
 import {
-  Type, TypeKind
+  Type,
+  TypeKind,
+  TypeFlags
 } from "./types";
 
 import {
@@ -511,23 +515,10 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
         case TypeKind.I8:
         case TypeKind.I16:
-          ret = module.createBinary(BinaryOp.ShrI32,
-            module.createBinary(BinaryOp.ShlI32,
-              module.createBinary(BinaryOp.RotlI32, arg0, arg1),
-              module.createI32(compiler.currentType.smallIntegerShift)
-            ),
-            module.createI32(compiler.currentType.smallIntegerShift)
-          );
-          break;
-
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.BOOL:
-          ret = module.createBinary(BinaryOp.AndI32,
-            module.createBinary(BinaryOp.RotlI32, arg0, arg1),
-            module.createI32(compiler.currentType.smallIntegerMask)
-          );
-          break;
+          ret = makeSmallIntegerWrap(module.createBinary(BinaryOp.RotlI32, arg0, arg1), compiler.currentType, module);
 
         case TypeKind.I32:
         case TypeKind.U32:
@@ -584,22 +575,10 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
         case TypeKind.I8:
         case TypeKind.I16:
-          ret = module.createBinary(BinaryOp.ShrI32,
-            module.createBinary(BinaryOp.ShlI32,
-              module.createBinary(BinaryOp.RotrI32, arg0, arg1),
-              module.createI32(compiler.currentType.smallIntegerShift)
-            ),
-            module.createI32(compiler.currentType.smallIntegerShift)
-          );
-          break;
-
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.BOOL:
-          ret = module.createBinary(BinaryOp.AndI32,
-            module.createBinary(BinaryOp.RotrI32, arg0, arg1),
-            module.createI32(compiler.currentType.smallIntegerMask)
-          );
+          ret = makeSmallIntegerWrap(module.createBinary(BinaryOp.RotrI32, arg0, arg1), compiler.currentType, module);
           break;
 
         case TypeKind.I32:
@@ -1249,7 +1228,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
         case TypeKind.F32:
           if (typeArguments) {
-            if (!(typeArguments[1].isAnyInteger && typeArguments[1].size == 32)) {
+            if (!(typeArguments[1].is(TypeFlags.INTEGER) && typeArguments[1].size == 32)) {
               compiler.error(DiagnosticCode.Type_0_cannot_be_reinterpreted_as_type_1, reportNode.range, typeArguments[0].toString(), typeArguments[1].toString());
               return module.createUnreachable();
             }
@@ -1261,7 +1240,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
         case TypeKind.F64:
           if (typeArguments) {
-            if (!(typeArguments[1].isLongInteger && !typeArguments[1].isReference)) {
+            if (!(typeArguments[1].is(TypeFlags.LONG | TypeFlags.INTEGER) && !typeArguments[1].isReference)) {
               compiler.error(DiagnosticCode.Type_0_cannot_be_reinterpreted_as_type_1, reportNode.range, typeArguments[0].toString(), typeArguments[1].toString());
               return module.createUnreachable();
             }
@@ -1390,7 +1369,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       }
       arg0 = compiler.compileExpression(operands[0], usizeType);
       compiler.currentType = typeArguments[0];
-      return module.createLoad(typeArguments[0].size >>> 3, typeArguments[0].isAnySignedInteger, arg0, typeArguments[0].toNativeType());
+      return module.createLoad(typeArguments[0].size >>> 3, typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER), arg0, typeArguments[0].toNativeType());
 
     case "store": // store<T?>(offset: usize, value: T) -> void
       compiler.currentType = Type.void;

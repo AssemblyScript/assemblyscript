@@ -86,12 +86,12 @@
   )
   (loop $continue|0
    (if
-    (if (result i32)
-     (get_local $2)
+    (select
      (i32.rem_u
       (get_local $3)
       (i32.const 4)
      )
+     (get_local $2)
      (get_local $2)
     )
     (block
@@ -1708,32 +1708,38 @@
    )
   )
   (if
-   (if (result i32)
+   (i32.and
     (if (result i32)
      (tee_local $7
-      (i64.eq
-       (i64.shl
-        (get_local $5)
-        (i64.const 1)
+      (i32.and
+       (if (result i32)
+        (tee_local $7
+         (i64.eq
+          (i64.shl
+           (get_local $5)
+           (i64.const 1)
+          )
+          (i64.const 0)
+         )
+        )
+        (get_local $7)
+        (f64.ne
+         (tee_local $9
+          (get_local $1)
+         )
+         (get_local $9)
+        )
        )
-       (i64.const 0)
+       (i32.const 1)
       )
      )
      (get_local $7)
-     (tee_local $7
-      (f64.ne
-       (tee_local $9
-        (get_local $1)
-       )
-       (get_local $9)
-      )
+     (i32.eq
+      (get_local $3)
+      (i32.const 2047)
      )
     )
-    (get_local $7)
-    (i32.eq
-     (get_local $3)
-     (i32.const 2047)
-    )
+    (i32.const 1)
    )
    (return
     (f64.div
@@ -2087,31 +2093,37 @@
    )
   )
   (if
-   (if (result i32)
+   (i32.and
     (if (result i32)
      (tee_local $3
-      (i32.eqz
-       (i32.shl
-        (get_local $5)
-        (i32.const 1)
+      (i32.and
+       (if (result i32)
+        (tee_local $3
+         (i32.eqz
+          (i32.shl
+           (get_local $5)
+           (i32.const 1)
+          )
+         )
+        )
+        (get_local $3)
+        (f32.ne
+         (tee_local $8
+          (get_local $1)
+         )
+         (get_local $8)
+        )
        )
+       (i32.const 1)
       )
      )
      (get_local $3)
-     (tee_local $3
-      (f32.ne
-       (tee_local $8
-        (get_local $1)
-       )
-       (get_local $8)
-      )
+     (i32.eq
+      (get_local $4)
+      (i32.const 255)
      )
     )
-    (get_local $3)
-    (i32.eq
-     (get_local $4)
-     (i32.const 255)
-    )
+    (i32.const 1)
    )
    (return
     (f32.div

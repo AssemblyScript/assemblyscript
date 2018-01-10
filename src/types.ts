@@ -43,11 +43,38 @@ export const enum TypeKind {
   VOID
 }
 
+/** Indicates capabilities of a type. */
+export const enum TypeFlags {
+  NONE = 0,
+  /** Is a signed type that can represent negative values. */
+  SIGNED = 1 << 0,
+  /** Is an unsigned type that cannot represent negative values. */
+  UNSIGNED = 1 << 1,
+  /** Is an integer type. */
+  INTEGER = 1 << 2,
+  /** Is a floating point type. */
+  FLOAT = 1 << 3,
+  /** Is a sized integer type with a target specific bit size. */
+  SIZE = 1 << 4,
+  /** Is a small type that is emulated in a larger type. */
+  SMALL = 1 << 5,
+  /** Is a long type larger than 32-bits. */
+  LONG = 1 << 6,
+  /** Is a value type. */
+  VALUE = 1 << 7,
+  /** Is a reference type. */
+  REFERENCE = 1 << 8,
+  /** Is a nullable type. */
+  NULLABLE = 1 << 9
+}
+
 /** Represents a resolved type. */
 export class Type {
 
   /** Type kind. */
   kind: TypeKind;
+  /** Type flags. */
+  flags: TypeFlags;
   /** Size in bits. */
   size: i32;
   /** Size in bytes. */
@@ -56,171 +83,34 @@ export class Type {
   classType: Class | null;
   /** Underlying function type, if a function type. */
   functionType: Function | null;
-  /** Whether nullable or not. */
-  isNullable: bool = false;
   /** Respective nullable type, if non-nullable. */
   nullableType: Type | null = null;
   /** Respective non-nullable type, if nullable. */
   nonNullableType: Type;
 
   /** Constructs a new resolved type. */
-  constructor(kind: TypeKind, size: i32) {
+  constructor(kind: TypeKind, flags: TypeFlags, size: i32) {
     this.kind = kind;
+    this.flags = flags;
     this.size = size;
     this.byteSize = <i32>ceil<f64>(<f64>size / 8);
     this.classType = null;
     this.nonNullableType = this;
   }
 
-  /** Sign-extending 32-bit shift, if a small signed integer. */
-  get smallIntegerShift(): i32 { return 32 - this.size; }
-  /** Truncating 32-bit mask, if a small unsigned integer. */
-  get smallIntegerMask(): i32 { return -1 >>> (32 - this.size); }
-
-  /** Tests if this type is of any integer kind. */
-  get isAnyInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.I32:
-      case TypeKind.I64:
-      case TypeKind.ISIZE:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.U64:
-      case TypeKind.USIZE:
-      case TypeKind.BOOL:
-        return true;
-      default:
-        return false;
-    }
+  /** Computes the sign-extending shift in the target type. */
+  computeSmallIntegerShift(targetType: Type) {
+    return targetType.size - this.size;
   }
 
-  /** Tests if this type is of any unsigned integer kind. */
-  get isAnyUnsignedInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.U64:
-      case TypeKind.USIZE:
-      case TypeKind.BOOL:
-        return true;
-      default:
-        return false;
-    }
+  /** Computes the truncating mask in the target type. */
+  computeSmallIntegerMask(targetType: Type) {
+    return -1 >>> (targetType.size - this.size);
   }
 
-  /** Tests if this type is of any signed integer kind. */
-  get isAnySignedInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.I32:
-      case TypeKind.I64:
-      case TypeKind.ISIZE:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  /** Tests if this type is of any small integer kind. */
-  get isSmallInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  /** Tests if this type is of any small signed integer kind. */
-  get isSmallSignedInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  /** Tests if this type is of any small unsigned integer kind. */
-  get isSmallUnsignedInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  /** Tests if this type is of any long integer kind. */
-  get isLongInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.I64:
-      case TypeKind.U64:
-        return true;
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE:
-        return this.size == 64;
-      default:
-        return false;
-    }
-  }
-
-  /** Tests if this type is of any long signed integer kind. */
-  get isLongSignedInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.I64:
-        return true;
-      case TypeKind.ISIZE:
-        return this.size == 64;
-      default:
-        return false;
-    }
-  }
-
-  /** Tests if this type is of any long unsigned integer kind. */
-  get isLongUnsignedInteger(): bool {
-    switch (this.kind) {
-      case TypeKind.U64:
-        return true;
-      case TypeKind.USIZE:
-        return this.size == 64;
-      default:
-        return false;
-    }
-  }
-
-  /** Tests if this type is of any size kind, that is `isize` or `usize`. */
-  get isAnySize(): bool {
-    switch (this.kind) {
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  /** Tests if this type is of any float kind, i.e., `f32` or `f64`. */
-  get isAnyFloat(): bool {
-    switch (this.kind) {
-      case TypeKind.F32:
-      case TypeKind.F64:
-        return true;
-      default:
-        return false;
-    }
+  /** Tests if this type has the specified capabilities. */
+  is(flags: TypeFlags): bool {
+    return (this.flags & flags) == flags;
   }
 
   /** Tests if this type is a class type. */
@@ -233,7 +123,7 @@ export class Type {
   /** Composes a class type from this type and a class. */
   asClass(classType: Class): Type {
     assert(this.kind == TypeKind.USIZE);
-    var ret = new Type(this.kind, this.size);
+    var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
     ret.classType = classType;
     return ret;
   }
@@ -241,16 +131,17 @@ export class Type {
   /** Composes a function type from this type and a function. */
   asFunction(functionType: Function): Type {
     assert(this.kind == TypeKind.USIZE && !this.isReference);
-    var ret = new Type(this.kind, this.size);
+    var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
     ret.functionType = functionType;
     return ret;
   }
 
   /** Composes the respective nullable type of this type. */
   asNullable(): Type | null {
-    assert(this.kind == TypeKind.USIZE && !this.isReference);
-    if (this.isNullable && !this.nullableType) {
-      (this.nullableType = new Type(this.kind, this.size)).isNullable = true;
+    assert(this.kind == TypeKind.USIZE);
+    if (!this.nullableType) {
+      assert(!this.is(TypeFlags.NULLABLE) && this.isReference);
+      this.nullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
       this.nullableType.classType = this.classType;
       this.nullableType.functionType = this.functionType;
     }
@@ -423,37 +314,37 @@ export class Type {
   // Types
 
   /** An 8-bit signed integer. */
-  static readonly i8: Type  = new Type(TypeKind.I8, 8);
+  static readonly i8: Type  = new Type(TypeKind.I8, TypeFlags.SIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 8);
   /** A 16-bit signed integer. */
-  static readonly i16: Type = new Type(TypeKind.I16, 16);
+  static readonly i16: Type = new Type(TypeKind.I16, TypeFlags.SIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 16);
   /** A 32-bit signed integer. */
-  static readonly i32: Type = new Type(TypeKind.I32, 32);
+  static readonly i32: Type = new Type(TypeKind.I32, TypeFlags.SIGNED | TypeFlags.INTEGER | TypeFlags.VALUE, 32);
   /** A 64-bit signed integer. */
-  static readonly i64: Type = new Type(TypeKind.I64, 64);
+  static readonly i64: Type = new Type(TypeKind.I64, TypeFlags.SIGNED | TypeFlags.LONG | TypeFlags.INTEGER | TypeFlags.VALUE, 64);
   /** A 32-bit signed size. WASM32 only. */
-  static readonly isize32: Type = new Type(TypeKind.ISIZE, 32);
+  static readonly isize32: Type = new Type(TypeKind.ISIZE, TypeFlags.SIGNED | TypeFlags.SIZE | TypeFlags.INTEGER | TypeFlags.VALUE, 32);
   /** A 64-bit signed size. WASM64 only. */
-  static readonly isize64: Type = new Type(TypeKind.ISIZE, 64);
+  static readonly isize64: Type = new Type(TypeKind.ISIZE, TypeFlags.SIGNED | TypeFlags.LONG | TypeFlags.SIZE | TypeFlags.INTEGER | TypeFlags.VALUE, 64);
   /** An 8-bit unsigned integer. */
-  static readonly u8: Type = new Type(TypeKind.U8, 8);
+  static readonly u8: Type = new Type(TypeKind.U8, TypeFlags.UNSIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 8);
   /** A 16-bit unsigned integer. */
-  static readonly u16: Type = new Type(TypeKind.U16, 16);
+  static readonly u16: Type = new Type(TypeKind.U16, TypeFlags.UNSIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 16);
   /** A 32-bit unsigned integer. */
-  static readonly u32: Type = new Type(TypeKind.U32, 32);
+  static readonly u32: Type = new Type(TypeKind.U32, TypeFlags.UNSIGNED | TypeFlags.INTEGER | TypeFlags.VALUE, 32);
   /** A 64-bit unsigned integer. */
-  static readonly u64: Type = new Type(TypeKind.U64, 64);
+  static readonly u64: Type = new Type(TypeKind.U64, TypeFlags.UNSIGNED | TypeFlags.LONG | TypeFlags.INTEGER | TypeFlags.VALUE, 64);
   /** A 32-bit unsigned size. WASM32 only. */
-  static readonly usize32: Type = new Type(TypeKind.USIZE, 32);
+  static readonly usize32: Type = new Type(TypeKind.USIZE, TypeFlags.UNSIGNED | TypeFlags.SIZE | TypeFlags.INTEGER | TypeFlags.VALUE, 32);
   /** A 64-bit unsigned size. WASM64 only. */
-  static readonly usize64: Type = new Type(TypeKind.USIZE, 64);
+  static readonly usize64: Type = new Type(TypeKind.USIZE, TypeFlags.UNSIGNED | TypeFlags.LONG | TypeFlags.SIZE | TypeFlags.INTEGER | TypeFlags.VALUE, 64);
   /** A 1-bit unsigned integer. */
-  static readonly bool: Type = new Type(TypeKind.BOOL, 1);
+  static readonly bool: Type = new Type(TypeKind.BOOL, TypeFlags.UNSIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 1);
   /** A 32-bit float. */
-  static readonly f32: Type = new Type(TypeKind.F32, 32);
+  static readonly f32: Type = new Type(TypeKind.F32, TypeFlags.SIGNED | TypeFlags.FLOAT | TypeFlags.VALUE, 32);
   /** A 64-bit float. */
-  static readonly f64: Type = new Type(TypeKind.F64, 64);
+  static readonly f64: Type = new Type(TypeKind.F64, TypeFlags.SIGNED | TypeFlags.LONG | TypeFlags.FLOAT | TypeFlags.VALUE, 64);
   /** No return type. */
-  static readonly void: Type = new Type(TypeKind.VOID, 0);
+  static readonly void: Type = new Type(TypeKind.VOID, TypeFlags.NONE, 0);
 }
 
 /** Converts an array of types to an array of native types. */
