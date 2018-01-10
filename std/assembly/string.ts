@@ -1,15 +1,15 @@
 const EMPTY: String = changetype<String>("");
 
-const cp = "+".charCodeAt(0);
-const cn = "-".charCodeAt(0);
-const cx = "x".charCodeAt(0);
-const cX = "X".charCodeAt(0);
-const c0 = "0".charCodeAt(0);
-const c9 = "9".charCodeAt(0);
-const ca = "a".charCodeAt(0);
-const cz = "z".charCodeAt(0);
-const cA = "A".charCodeAt(0);
-const cZ = "Z".charCodeAt(0);
+const cp = 43;  // "+"
+const cn = 45;  // "-"
+const cx = 120; // "x"
+const cX = 88;  // "X"
+const c0 = 48;  // "0"
+const c9 = 57;  // "9"
+const ca = 97;  // "a"
+const cz = 122; // "z"
+const cA = 65;  // "A"
+const cZ = 90;  // "Z"
 
 @global
 export class String {
