@@ -211,11 +211,11 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
 // @global
 // @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
 export function parseInt(str: string, radix: i32 = 0): f64 {
-  var len = str.length;
+  var len = <u32>str.length;
   if (len == 0 || (radix != 0 && radix < 2) || radix > 36)
     return NaN;
 
-  var s0 = str.charCodeAt(0);
+  var s0: u16 = str.charCodeAt(0);
   var neg = false;
   var pos: u32 = 0;
 
