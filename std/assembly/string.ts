@@ -252,7 +252,7 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
          if (c0 <= c && c <= c9) digit = c - c0;
     else if (ca <= c && c <= cz) digit = c - ca + 10;
     else if (cA <= c && c <= cZ) digit = c - cA + 10;
-    else return NaN;
+    else break;
 
     if (digit >= radix)
       break;
