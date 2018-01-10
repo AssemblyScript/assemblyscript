@@ -255,7 +255,7 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
     else return NaN;
 
     if (digit >= radix)
-      return NaN;
+      break;
 
     result *= radix;
     result += digit;
