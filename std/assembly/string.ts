@@ -217,28 +217,28 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
 
   var s0 = str.charCodeAt(0);
   var neg = false;
-  var offset: u32 = 0;
+  var index: u32 = 0;
 
   if (s0 == cp) {
-    offset = 1;
+    index = 1;
   } else if (s0 == cn) {
-    neg    = true;
-    offset = 1;
+    neg   = true;
+    index = 1;
   }
 
   if (radix == 0) {
-    if (str.charCodeAt(offset) == c0) {
-      var s1 = str.charCodeAt(offset + 1);
+    if (str.charCodeAt(index) == c0) {
+      var s1 = str.charCodeAt(index + 1);
       if (len > 1 && (s1 == cx || s1 == cX)) {
         if (len < 3)
           return NaN;
 
-        radix   = 16;
-        offset += 2;
+        radix = 16;
+        index += 2;
 
       } else {
-        radix   = 8;
-        offset += 1;
+        radix = 8;
+        index += 1;
       }
     } else {
       radix = 10;
@@ -246,8 +246,8 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
   }
 
   var result: f64 = 0;
-  for (var i: u32 = offset, len = str.length; i < len; ++i) {
-    var digit: i32, c: i32 = str.charCodeAt(i);
+  for (; index < len; ++index) {
+    var digit: i32, c: i32 = str.charCodeAt(index);
 
          if (c0 <= c && c <= c9) digit = c - c0;
     else if (ca <= c && c <= cz) digit = c - ca + 10;
