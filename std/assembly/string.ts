@@ -1,5 +1,16 @@
 const EMPTY: String = changetype<String>("");
 
+const cp = "+".charCodeAt(0);
+const cn = "-".charCodeAt(0);
+const cx = "x".charCodeAt(0);
+const cX = "X".charCodeAt(0);
+const c0 = "0".charCodeAt(0);
+const c9 = "9".charCodeAt(0);
+const ca = "a".charCodeAt(0);
+const cz = "z".charCodeAt(0);
+const cA = "A".charCodeAt(0);
+const cZ = "Z".charCodeAt(0);
+
 @global
 export class String {
   // [key: number]: string;
@@ -203,18 +214,6 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
   var len = str.length;
   if (len == 0 || (radix != 0 && radix < 2) || radix > 36)
     return NaN;
-
-  // TODO move consts out of function
-  var cp = "+".charCodeAt(0);
-  var cn = "-".charCodeAt(0);
-  var cx = "x".charCodeAt(0);
-  var cX = "X".charCodeAt(0);
-  var c0 = "0".charCodeAt(0);
-  var c9 = "9".charCodeAt(0);
-  var ca = "a".charCodeAt(0);
-  var cz = "z".charCodeAt(0);
-  var cA = "A".charCodeAt(0);
-  var cZ = "Z".charCodeAt(0);
 
   var s0 = str.charCodeAt(0);
   var neg = false;
