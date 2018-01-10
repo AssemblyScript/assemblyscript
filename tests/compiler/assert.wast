@@ -5,6 +5,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
+  (local $0 i32)
   (if
    (i32.eqz
     (i32.const 1)
@@ -13,10 +14,23 @@
   )
   (if
    (i32.eqz
-    (i32.eq
+    (i32.const 1)
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.gt_s
      (i32.const 1)
-     (i32.const 1)
+     (i32.const 0)
     )
+   )
+   (unreachable)
+  )
+  (if
+   (f64.eq
+    (f64.const 0.5)
+    (f64.const 0)
    )
    (unreachable)
   )
@@ -25,6 +39,35 @@
     (f64.gt
      (f64.const 0.5)
      (f64.const 0.4)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i64.eqz
+    (i64.const 4294967296)
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i64.gt_s
+     (i64.const 4294967296)
+     (i64.const 1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (if (result i32)
+     (i32.eqz
+      (tee_local $0
+       (i32.const 1)
+      )
+     )
+     (unreachable)
+     (get_local $0)
     )
    )
    (unreachable)
@@ -59,8 +102,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

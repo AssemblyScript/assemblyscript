@@ -188,14 +188,14 @@
     (set_local $2
      (i64.shl
       (get_local $2)
-      (i64.add
-       (i64.sub
-        (i64.const 0)
-        (i64.extend_u/i32
+      (i64.extend_u/i32
+       (i32.add
+        (i32.sub
+         (i32.const 0)
          (get_local $4)
         )
+        (i32.const 1)
        )
-       (i64.const 1)
       )
      )
     )
@@ -265,14 +265,14 @@
     (set_local $3
      (i64.shl
       (get_local $3)
-      (i64.add
-       (i64.sub
-        (i64.const 0)
-        (i64.extend_u/i32
+      (i64.extend_u/i32
+       (i32.add
+        (i32.sub
+         (i32.const 0)
          (get_local $5)
         )
+        (i32.const 1)
        )
-       (i64.const 1)
       )
      )
     )
@@ -348,18 +348,10 @@
         )
        )
       )
-      (drop
-       (block (result i32)
-        (set_local $8
-         (get_local $4)
-        )
-        (set_local $4
-         (i32.sub
-          (get_local $8)
-          (i32.const 1)
-         )
-        )
-        (get_local $8)
+      (set_local $4
+       (i32.sub
+        (get_local $4)
+        (i32.const 1)
        )
       )
       (br $continue|2)
@@ -455,14 +447,14 @@
    (set_local $2
     (i64.shr_u
      (get_local $2)
-     (i64.add
-      (i64.sub
-       (i64.const 0)
-       (i64.extend_u/i32
+     (i64.extend_u/i32
+      (i32.add
+       (i32.sub
+        (i32.const 0)
         (get_local $4)
        )
+       (i32.const 1)
       )
-      (i64.const 1)
      )
     )
    )
@@ -1076,8 +1068,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

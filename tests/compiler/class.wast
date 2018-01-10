@@ -100,19 +100,31 @@
   )
   (i32.store16 offset=4
    (get_local $0)
-   (i32.add
-    (i32.const 1)
-    (i32.const 1)
+   (i32.shr_s
+    (i32.shl
+     (i32.add
+      (i32.const 1)
+      (i32.const 1)
+     )
+     (i32.const 16)
+    )
+    (i32.const 16)
    )
   )
   (i32.store8 offset=6
    (get_local $0)
-   (i32.add
-    (i32.add
-     (i32.const 1)
-     (i32.const 1)
+   (i32.shr_s
+    (i32.shl
+     (i32.add
+      (i32.add
+       (i32.const 1)
+       (i32.const 1)
+      )
+      (i32.const 1)
+     )
+     (i32.const 24)
     )
-    (i32.const 1)
+    (i32.const 24)
    )
   )
   (block
@@ -184,8 +196,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

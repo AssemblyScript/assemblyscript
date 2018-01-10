@@ -58,8 +58,10 @@ export class Type {
   functionType: Function | null;
   /** Whether nullable or not. */
   isNullable: bool = false;
-  /** Respective nullable type, if nullable. */
+  /** Respective nullable type, if non-nullable. */
   nullableType: Type | null = null;
+  /** Respective non-nullable type, if nullable. */
+  nonNullableType: Type;
 
   /** Constructs a new resolved type. */
   constructor(kind: TypeKind, size: i32) {
@@ -67,6 +69,7 @@ export class Type {
     this.size = size;
     this.byteSize = <i32>ceil<f64>(<f64>size / 8);
     this.classType = null;
+    this.nonNullableType = this;
   }
 
   /** Sign-extending 32-bit shift, if a small signed integer. */
@@ -75,23 +78,157 @@ export class Type {
   get smallIntegerMask(): i32 { return -1 >>> (32 - this.size); }
 
   /** Tests if this type is of any integer kind. */
-  get isAnyInteger(): bool { return this.kind >= TypeKind.I8 && this.kind <= TypeKind.BOOL; }
-  /** Tests if this type is of any small integer kind. */
-  get isSmallInteger(): bool { return this.size != 0 && this.size < 32; }
-  /** Tests if this type is of any long integer kind. */
-  get isLongInteger(): bool { return this.size == 64 && this.kind != TypeKind.F64; }
+  get isAnyInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.I64:
+      case TypeKind.ISIZE:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.U64:
+      case TypeKind.USIZE:
+      case TypeKind.BOOL:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   /** Tests if this type is of any unsigned integer kind. */
-  get isUnsignedInteger(): bool { return this.kind >= TypeKind.U8 && this.kind <= TypeKind.BOOL; }
+  get isAnyUnsignedInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.U64:
+      case TypeKind.USIZE:
+      case TypeKind.BOOL:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   /** Tests if this type is of any signed integer kind. */
-  get isSignedInteger(): bool { return this.kind >= TypeKind.I8 && this.kind <= TypeKind.ISIZE; }
-  /** Tests if this type is of any size kind, i.e., `isize` or `usize`. */
-  get isAnySize(): bool { return this.kind == TypeKind.ISIZE || this.kind == TypeKind.USIZE; }
+  get isAnySignedInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.I64:
+      case TypeKind.ISIZE:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /** Tests if this type is of any small integer kind. */
+  get isSmallInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /** Tests if this type is of any small signed integer kind. */
+  get isSmallSignedInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /** Tests if this type is of any small unsigned integer kind. */
+  get isSmallUnsignedInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /** Tests if this type is of any long integer kind. */
+  get isLongInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.I64:
+      case TypeKind.U64:
+        return true;
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        return this.size == 64;
+      default:
+        return false;
+    }
+  }
+
+  /** Tests if this type is of any long signed integer kind. */
+  get isLongSignedInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.I64:
+        return true;
+      case TypeKind.ISIZE:
+        return this.size == 64;
+      default:
+        return false;
+    }
+  }
+
+  /** Tests if this type is of any long unsigned integer kind. */
+  get isLongUnsignedInteger(): bool {
+    switch (this.kind) {
+      case TypeKind.U64:
+        return true;
+      case TypeKind.USIZE:
+        return this.size == 64;
+      default:
+        return false;
+    }
+  }
+
+  /** Tests if this type is of any size kind, that is `isize` or `usize`. */
+  get isAnySize(): bool {
+    switch (this.kind) {
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   /** Tests if this type is of any float kind, i.e., `f32` or `f64`. */
-  get isAnyFloat(): bool { return this.kind == TypeKind.F32 || this.kind == TypeKind.F64; }
+  get isAnyFloat(): bool {
+    switch (this.kind) {
+      case TypeKind.F32:
+      case TypeKind.F64:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   /** Tests if this type is a class type. */
   get isClass(): bool { return this.classType != null; }
   /** Tests if this type is a function type. */
   get isFunction(): bool { return this.functionType != null; }
+  /** Tests if this type is a reference type. */
+  get isReference(): bool { return this.classType != null || this.functionType != null; }
 
   /** Composes a class type from this type and a class. */
   asClass(classType: Class): Type {
@@ -103,7 +240,7 @@ export class Type {
 
   /** Composes a function type from this type and a function. */
   asFunction(functionType: Function): Type {
-    assert(this.kind == TypeKind.USIZE);
+    assert(this.kind == TypeKind.USIZE && !this.isReference);
     var ret = new Type(this.kind, this.size);
     ret.functionType = functionType;
     return ret;
@@ -111,9 +248,12 @@ export class Type {
 
   /** Composes the respective nullable type of this type. */
   asNullable(): Type | null {
-    assert(this.kind == TypeKind.USIZE);
-    if (this.isNullable && !this.nullableType)
+    assert(this.kind == TypeKind.USIZE && !this.isReference);
+    if (this.isNullable && !this.nullableType) {
       (this.nullableType = new Type(this.kind, this.size)).isNullable = true;
+      this.nullableType.classType = this.classType;
+      this.nullableType.functionType = this.functionType;
+    }
     return this.nullableType;
   }
 
@@ -223,6 +363,34 @@ export class Type {
 
       case TypeKind.F64:
         return module.createF64(1);
+    }
+  }
+
+  /** Converts this type to its native `-1` value. */
+  toNativeNegOne(module: Module): ExpressionRef {
+    switch (this.kind) {
+
+      case TypeKind.VOID:
+        assert(false);
+
+      default:
+        return module.createI32(-1);
+
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        if (this.size != 64)
+          return module.createI32(-1);
+        // fall-through
+
+      case TypeKind.I64:
+      case TypeKind.U64:
+        return module.createI64(-1, -1);
+
+      case TypeKind.F32:
+        return module.createF32(-1);
+
+      case TypeKind.F64:
+        return module.createF64(-1);
     }
   }
 

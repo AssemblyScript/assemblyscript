@@ -77,17 +77,17 @@
   )
   (drop
    (select
-    (i32.sub
-     (i32.const 0)
-     (tee_local $0
-      (i32.sub
-       (i32.const 0)
-       (i32.const 42)
-      )
+    (tee_local $0
+     (i32.sub
+      (i32.const 0)
+      (i32.const 42)
      )
     )
-    (get_local $0)
-    (i32.lt_s
+    (i32.sub
+     (i32.const 0)
+     (get_local $0)
+    )
+    (i32.gt_s
      (get_local $0)
      (i32.const 0)
     )
@@ -150,17 +150,17 @@
   )
   (set_global $builtins/i
    (select
-    (i32.sub
-     (i32.const 0)
-     (tee_local $0
-      (i32.sub
-       (i32.const 0)
-       (i32.const 42)
-      )
+    (tee_local $0
+     (i32.sub
+      (i32.const 0)
+      (i32.const 42)
      )
     )
-    (get_local $0)
-    (i32.lt_s
+    (i32.sub
+     (i32.const 0)
+     (get_local $0)
+    )
+    (i32.gt_s
      (get_local $0)
      (i32.const 0)
     )
@@ -250,17 +250,17 @@
   )
   (drop
    (select
-    (i64.sub
-     (i64.const 0)
-     (tee_local $2
-      (i64.sub
-       (i64.const 0)
-       (i64.const 42)
-      )
+    (tee_local $2
+     (i64.sub
+      (i64.const 0)
+      (i64.const 42)
      )
     )
-    (get_local $2)
-    (i64.lt_s
+    (i64.sub
+     (i64.const 0)
+     (get_local $2)
+    )
+    (i64.gt_s
      (get_local $2)
      (i64.const 0)
     )
@@ -295,17 +295,17 @@
   )
   (set_global $builtins/I
    (select
-    (i64.sub
-     (i64.const 0)
-     (tee_local $2
-      (i64.sub
-       (i64.const 0)
-       (i64.const 42)
-      )
+    (tee_local $2
+     (i64.sub
+      (i64.const 0)
+      (i64.const 42)
      )
     )
-    (get_local $2)
-    (i64.lt_s
+    (i64.sub
+     (i64.const 0)
+     (get_local $2)
+    )
+    (i64.gt_s
      (get_local $2)
      (i64.const 0)
     )
@@ -1370,8 +1370,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

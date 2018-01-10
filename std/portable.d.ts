@@ -123,10 +123,10 @@ declare function store<T = u8>(offset: usize, value: T): void;
 /** Emits an unreachable operation that results in a runtime error when executed. */
 declare function unreachable(): any; // sic
 
-/** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
+/** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
-/** Traps if the specified value evaluates to `false`. */
-declare function assert(isTrue: bool, message?: string): void;
+/** Traps if the specified value is not true-ish, otherwise returns the value. */
+declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
 /** Parses a floating point string to a 64-bit float. */

@@ -64,18 +64,10 @@
          )
         )
        )
-       (drop
-        (block (result i32)
-         (set_local $7
-          (get_local $2)
-         )
-         (set_local $2
-          (i32.sub
-           (get_local $7)
-           (i32.const 1)
-          )
-         )
-         (get_local $7)
+       (set_local $2
+        (i32.sub
+         (get_local $2)
+         (i32.const 1)
         )
        )
       )
@@ -2079,8 +2071,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

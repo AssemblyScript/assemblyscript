@@ -93,7 +93,7 @@ function AssertionError(message) {
 AssertionError.prototype = Object.create(Error.prototype);
 AssertionError.prototype.name = "AssertionError";
 
-globalScope["assert"] = function assert(isTrue, message) { if (!isTrue) throw new AssertionError(message); };
+globalScope["assert"] = function assert(isTrueish, message) { if (isTrueish) return isTrueish; throw new AssertionError(message); };
 globalScope["changetype"] = function changetype(value) { return value; }
 
 String["fromCharCodes"] = function fromCharCodes(arr) { return String.fromCharCode.apply(String, arr); }

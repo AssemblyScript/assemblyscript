@@ -565,18 +565,10 @@
          )
         )
        )
-       (drop
-        (block (result i32)
-         (set_local $6
-          (get_local $2)
-         )
-         (set_local $2
-          (i32.sub
-           (get_local $6)
-           (i32.const 1)
-          )
-         )
-         (get_local $6)
+       (set_local $2
+        (i32.sub
+         (get_local $2)
+         (i32.const 1)
         )
        )
       )
@@ -2330,7 +2322,6 @@
   )
  )
  (func $std:heap/Heap.compare (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
   (if
    (i32.eq
     (get_local $0)
@@ -2357,46 +2348,22 @@
      )
      (block
       (block
-       (drop
-        (block (result i32)
-         (set_local $3
-          (get_local $2)
-         )
-         (set_local $2
-          (i32.sub
-           (get_local $3)
-           (i32.const 1)
-          )
-         )
-         (get_local $3)
+       (set_local $2
+        (i32.sub
+         (get_local $2)
+         (i32.const 1)
         )
        )
-       (drop
-        (block (result i32)
-         (set_local $3
-          (get_local $0)
-         )
-         (set_local $0
-          (i32.add
-           (get_local $3)
-           (i32.const 1)
-          )
-         )
-         (get_local $3)
+       (set_local $0
+        (i32.add
+         (get_local $0)
+         (i32.const 1)
         )
        )
-       (drop
-        (block (result i32)
-         (set_local $3
-          (get_local $1)
-         )
-         (set_local $1
-          (i32.add
-           (get_local $3)
-           (i32.const 1)
-          )
-         )
-         (get_local $3)
+       (set_local $1
+        (i32.add
+         (get_local $1)
+         (i32.const 1)
         )
        )
       )
@@ -2580,8 +2547,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8
@@ -2622,12 +2587,16 @@
   FUNCTION_PROTOTYPE: std:heap/Heap.compare
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: Map
+  CLASS_PROTOTYPE: std:regexp/RegExp
+  CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: Set
   GLOBAL: std:string/EMPTY
   CLASS_PROTOTYPE: std:string/String
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
+  FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: std:string/parseFloat
   GLOBAL: std/heap/size
   GLOBAL: std/heap/ptr1
   GLOBAL: std/heap/ptr2
@@ -2641,4 +2610,6 @@
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: std:string/String
+  FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: std:string/parseFloat
 ;)

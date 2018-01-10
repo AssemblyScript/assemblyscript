@@ -196,3 +196,15 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
       return false;
   }
 }
+
+// @global
+// @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
+export function parseInt(str: string, radix: i32 = 10): f64 {
+  throw new Error("not implemented");
+}
+
+// @global
+// @binding(CALL, [ STRING ], PASS_THRU)
+export function parseFloat(str: string): f64 {
+  throw new Error("not implemented");
+}

@@ -1,10 +1,10 @@
-const i = 10;
+const i = 10; // infers i32 because
 i;
 
-const I = 0x100000000;
+const I = 0x100000000; // infers i64 because the value doesn't fit into 32 bits
 I;
 
-const F = 1.5;
+const F = 1.5; // infers f64 because of float notation
 F;
 
 function locals(): void {

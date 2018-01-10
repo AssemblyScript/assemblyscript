@@ -17,13 +17,17 @@ var filter = process.argv.length > 2 && !isCreate ? "**/" + process.argv[2] + ".
 
 var stdFiles = glob.sync("*.ts", { cwd: __dirname + "/../std/assembly" });
 
+var success = 0;
+var failures = 0;
+
 glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   if (filename.charAt(0) == "_")
     return;
 
-  console.log(chalk.default.whiteBright("Testing compiler/" + filename));
+  console.log(chalk.whiteBright("Testing compiler/" + filename));
 
   var fixture = path.basename(filename, ".ts");
+  var startTime = process.hrtime();
   var parser = new Parser();
   if (filename.startsWith("std/")) {
     stdFiles.forEach(file => {
@@ -45,18 +49,24 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     parser.parseFile(nextSourceText, nextFile, false);
   }
   var program = parser.finish();
+  var parseTime = process.hrtime(startTime);
+  startTime = process.hrtime();
   var module = Compiler.compile(program);
+  var compileTime = process.hrtime(startTime);
   var actual = module.toText() + "(;\n[program.elements]\n  " + elements(program.elements)
                                +   "\n[program.exports]\n  "  + elements(program.exports)
                                + "\n;)\n";
   var actualOptimized = null;
   var actualInlined = null;
 
+  console.log("parse incl. I/O: " + ((parseTime[0] * 1e9 + parseTime[1]) / 1e6).toFixed(3) + "ms / compile: " + ((compileTime[0] * 1e9 + compileTime[1]) / 1e6).toFixed(3) + "ms");
+
+  var failed = false;
   if (module.validate()) {
-    console.log(chalk.default.green("validate OK"));
+    console.log(chalk.green("validate OK"));
     try {
       module.interpret();
-      console.log(chalk.default.green("interpret OK"));
+      console.log(chalk.green("interpret OK"));
       try {
         var binary = module.toBinary();
         var wasmModule = new WebAssembly.Module(binary);
@@ -70,22 +80,22 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
             externalConst: 2
           }
         });
-        console.log(chalk.default.green("instantiate OK"));
+        console.log(chalk.green("instantiate OK"));
       } catch (e) {
-        process.exitCode = 1;
-        console.log(chalk.default.red("instantiate ERROR: ") + e);
+        failed = true;
+        console.log(chalk.red("instantiate ERROR: ") + e);
       }
     } catch (e) {
-      process.exitCode = 1;
-      console.log(chalk.default.red("interpret ERROR:") + e);
+      failed = true;
+      console.log(chalk.red("interpret ERROR:") + e);
     }
     module.optimize();
     actualOptimized = module.toText();
     module.runPasses([ "inlining" ]);
     actualInlined = module.toText();
   } else {
-    process.exitCode = 1;
-    console.log(chalk.default.red("validate ERROR"));
+    failed = true;
+    console.log(chalk.red("validate ERROR"));
   }
 
   if (isCreate) {
@@ -107,25 +117,25 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
       }
     }
   } else {
+    var expected;
     try {
-      var expected = fs.readFileSync(__dirname + "/compiler/" + fixture + ".wast", { encoding: "utf8" });
-      var diffs = diff(filename + ".wast", expected, actual);
-      if (diffs !== null) {
-        process.exitCode = 1;
-        console.log(diffs);
-        console.log(chalk.default.red("diff ERROR"));
-      } else {
-        console.log(chalk.default.green("diff OK"));
-      }
+      expected = fs.readFileSync(__dirname + "/compiler/" + fixture + ".wast", { encoding: "utf8" });
     } catch (e) {
-      process.exitCode = 1;
-      console.log(e.message);
-      console.log(chalk.default.red("diff ERROR"));
+      expected = e.message + "\n";
     }
+    var diffs = diff(filename + ".wast", expected, actual);
+    if (diffs !== null) {
+      console.log(diffs);
+      console.log(chalk.red("diff ERROR"));
+      failed = true;
+    } else
+      console.log(chalk.green("diff OK"));
   }
 
   module.dispose();
   console.log();
+  if (failed)
+    ++failures;
 });
 
 function elements(map) {
@@ -135,3 +145,9 @@ function elements(map) {
   });
   return arr.join("\n  ");
 }
+
+if (failures) {
+  process.exitCode = 1;
+  console.log(chalk.red("ERROR: ") + failures + " compiler tests failed");
+} else
+  console.log(chalk.whiteBright("SUCCESS"));

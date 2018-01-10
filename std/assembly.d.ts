@@ -173,14 +173,14 @@ declare const Infinity: f32 | f64;
 declare const HEAP_BASE: usize;
 /** Determines the byte size of the specified core or class type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
-/** Changes the type of a value to another one. Useful for casting class instances to their pointer values and vice-versa. */
+/** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T = f32 | f64>(value: T): bool;
-/** Traps if the specified value evaluates to `false`. */
-declare function assert(isTrue: bool, message?: string): void;
+/** Traps if the specified value is not true-ish, otherwise returns the value. */
+declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
 /** Parses a string to a 64-bit float. */

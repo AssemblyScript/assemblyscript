@@ -2,7 +2,7 @@ var JsDiff = require("diff");
 var chalk = require("chalk");
 
 module.exports = function diff(filename, expected, actual) {
-  var diff = JsDiff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 2 });
+  var diff = JsDiff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 5 });
   if (!diff.hunks.length)
     return null;
 

@@ -10,6 +10,7 @@ var Parser = require("../src/parser").Parser;
 
 var isCreate = process.argv[2] === "--create";
 var filter = process.argv.length > 2 && !isCreate ? "*" + process.argv[2] + "*.ts" : "**.ts";
+var failures = 0;
 
 glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts"))
@@ -17,6 +18,7 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
 
   console.log(chalk.default.whiteBright("Testing parser/" + filename));
 
+  var failed = false;
   var parser = new Parser();
   parser.silentDiagnostics = true;
   var sourceText = fs.readFileSync(__dirname + "/parser/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n").replace(/^\/\/.*\r?\n/mg, "");
@@ -34,7 +36,7 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
     var expected = fs.readFileSync(__dirname + "/parser/" + fixture, { encoding: "utf8" });
     var diffs = diff("parser/" + fixture, expected, actual);
     if (diffs !== null) {
-      process.exitCode = 1;
+      failed = true;
       console.log(diffs);
       console.log(chalk.default.red("diff ERROR"));
     } else {
@@ -43,4 +45,12 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
   }
 
   console.log();
+  if (failed)
+    ++failures;
 });
+
+if (failures) {
+  process.exitCode = 1;
+  console.log(chalk.red("ERROR: ") + failures + " parser tests failed");
+} else
+  console.log(chalk.whiteBright("SUCCESS"));

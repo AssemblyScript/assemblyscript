@@ -351,6 +351,8 @@ export class Range {
   }
 }
 
+declare function parseFloat(str: string): f64;
+
 export class Tokenizer extends DiagnosticEmitter {
 
   source: Source;

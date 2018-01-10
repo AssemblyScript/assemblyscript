@@ -12,32 +12,16 @@
   (block $break|0
    (loop $continue|0
     (block
-     (drop
-      (block (result i32)
-       (set_local $0
-        (get_global $do/n)
-       )
-       (set_global $do/n
-        (i32.sub
-         (get_local $0)
-         (i32.const 1)
-        )
-       )
-       (get_local $0)
+     (set_global $do/n
+      (i32.sub
+       (get_global $do/n)
+       (i32.const 1)
       )
      )
-     (drop
-      (block (result i32)
-       (set_local $0
-        (get_global $do/m)
-       )
-       (set_global $do/m
-        (i32.add
-         (get_local $0)
-         (i32.const 1)
-        )
-       )
-       (get_local $0)
+     (set_global $do/m
+      (i32.add
+       (get_global $do/m)
+       (i32.const 1)
       )
      )
     )
@@ -107,63 +91,31 @@
   (block $break|2
    (loop $continue|2
     (block
-     (drop
-      (block (result i32)
-       (set_local $0
-        (get_global $do/n)
-       )
-       (set_global $do/n
-        (i32.sub
-         (get_local $0)
-         (i32.const 1)
-        )
-       )
-       (get_local $0)
+     (set_global $do/n
+      (i32.sub
+       (get_global $do/n)
+       (i32.const 1)
       )
      )
-     (drop
-      (block (result i32)
-       (set_local $0
-        (get_global $do/m)
-       )
-       (set_global $do/m
-        (i32.add
-         (get_local $0)
-         (i32.const 1)
-        )
-       )
-       (get_local $0)
+     (set_global $do/m
+      (i32.add
+       (get_global $do/m)
+       (i32.const 1)
       )
      )
      (block $break|3
       (loop $continue|3
        (block
-        (drop
-         (block (result i32)
-          (set_local $0
-           (get_global $do/n)
-          )
-          (set_global $do/n
-           (i32.sub
-            (get_local $0)
-            (i32.const 1)
-           )
-          )
-          (get_local $0)
+        (set_global $do/n
+         (i32.sub
+          (get_global $do/n)
+          (i32.const 1)
          )
         )
-        (drop
-         (block (result i32)
-          (set_local $0
-           (get_global $do/o)
-          )
-          (set_global $do/o
-           (i32.add
-            (get_local $0)
-            (i32.const 1)
-           )
-          )
-          (get_local $0)
+        (set_global $do/o
+         (i32.add
+          (get_global $do/o)
+          (i32.const 1)
          )
         )
        )
@@ -253,8 +205,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

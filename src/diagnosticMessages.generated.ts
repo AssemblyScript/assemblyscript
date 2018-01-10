@@ -11,6 +11,7 @@ export enum DiagnosticCode {
   Structs_cannot_extend_classes_and_vice_versa = 107,
   Structs_cannot_implement_interfaces = 108,
   Invalid_regular_expression_flags = 109,
+  Type_0_cannot_be_reinterpreted_as_type_1 = 110,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -97,6 +98,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 107: return "Structs cannot extend classes and vice-versa.";
     case 108: return "Structs cannot implement interfaces.";
     case 109: return "Invalid regular expression flags.";
+    case 110: return "Type '{0}' cannot be reinterpreted as type '{1}'.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

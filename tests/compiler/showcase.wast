@@ -172,18 +172,10 @@
          )
         )
        )
-       (drop
-        (block (result i32)
-         (set_local $7
-          (get_local $2)
-         )
-         (set_local $2
-          (i32.sub
-           (get_local $7)
-           (i32.const 1)
-          )
-         )
-         (get_local $7)
+       (set_local $2
+        (i32.sub
+         (get_local $2)
+         (i32.const 1)
         )
        )
       )
@@ -2114,14 +2106,14 @@
     (set_local $2
      (i64.shl
       (get_local $2)
-      (i64.add
-       (i64.sub
-        (i64.const 0)
-        (i64.extend_u/i32
+      (i64.extend_u/i32
+       (i32.add
+        (i32.sub
+         (i32.const 0)
          (get_local $4)
         )
+        (i32.const 1)
        )
-       (i64.const 1)
       )
      )
     )
@@ -2191,14 +2183,14 @@
     (set_local $3
      (i64.shl
       (get_local $3)
-      (i64.add
-       (i64.sub
-        (i64.const 0)
-        (i64.extend_u/i32
+      (i64.extend_u/i32
+       (i32.add
+        (i32.sub
+         (i32.const 0)
          (get_local $5)
         )
+        (i32.const 1)
        )
-       (i64.const 1)
       )
      )
     )
@@ -2274,18 +2266,10 @@
         )
        )
       )
-      (drop
-       (block (result i32)
-        (set_local $8
-         (get_local $4)
-        )
-        (set_local $4
-         (i32.sub
-          (get_local $8)
-          (i32.const 1)
-         )
-        )
-        (get_local $8)
+      (set_local $4
+       (i32.sub
+        (get_local $4)
+        (i32.const 1)
        )
       )
       (br $continue|2)
@@ -2381,14 +2365,14 @@
    (set_local $2
     (i64.shr_u
      (get_local $2)
-     (i64.add
-      (i64.sub
-       (i64.const 0)
-       (i64.extend_u/i32
+     (i64.extend_u/i32
+      (i32.add
+       (i32.sub
+        (i32.const 0)
         (get_local $4)
        )
+       (i32.const 1)
       )
-      (i64.const 1)
      )
     )
    )
@@ -2943,32 +2927,16 @@
     (i32.const 1)
    )
   )
-  (drop
-   (block (result i32)
-    (set_local $0
-     (get_global $unary/i)
-    )
-    (set_global $unary/i
-     (i32.add
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
-    (get_local $0)
+  (set_global $unary/i
+   (i32.add
+    (get_global $unary/i)
+    (i32.const 1)
    )
   )
-  (drop
-   (block (result i32)
-    (set_local $0
-     (get_global $unary/i)
-    )
-    (set_global $unary/i
-     (i32.sub
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
-    (get_local $0)
+  (set_global $unary/i
+   (i32.sub
+    (get_global $unary/i)
+    (i32.const 1)
    )
   )
   (set_global $unary/i
@@ -3093,32 +3061,16 @@
     (i64.const 1)
    )
   )
-  (drop
-   (block (result i64)
-    (set_local $1
-     (get_global $unary/I)
-    )
-    (set_global $unary/I
-     (i64.add
-      (get_local $1)
-      (i64.const 1)
-     )
-    )
-    (get_local $1)
+  (set_global $unary/I
+   (i64.add
+    (get_global $unary/I)
+    (i64.const 1)
    )
   )
-  (drop
-   (block (result i64)
-    (set_local $1
-     (get_global $unary/I)
-    )
-    (set_global $unary/I
-     (i64.sub
-      (get_local $1)
-      (i64.const 1)
-     )
-    )
-    (get_local $1)
+  (set_global $unary/I
+   (i64.sub
+    (get_global $unary/I)
+    (i64.const 1)
    )
   )
   (set_global $unary/I
@@ -3132,8 +3084,8 @@
   )
   (set_global $unary/I
    (i64.extend_s/i32
-    (i32.eqz
-     (i32.const 1)
+    (i64.eqz
+     (i64.const 1)
     )
    )
   )
@@ -3241,32 +3193,16 @@
     (f32.const 1)
    )
   )
-  (drop
-   (block (result f32)
-    (set_local $2
-     (get_global $unary/f)
-    )
-    (set_global $unary/f
-     (f32.add
-      (get_local $2)
-      (f32.const 1)
-     )
-    )
-    (get_local $2)
+  (set_global $unary/f
+   (f32.add
+    (get_global $unary/f)
+    (f32.const 1)
    )
   )
-  (drop
-   (block (result f32)
-    (set_local $2
-     (get_global $unary/f)
-    )
-    (set_global $unary/f
-     (f32.sub
-      (get_local $2)
-      (f32.const 1)
-     )
-    )
-    (get_local $2)
+  (set_global $unary/f
+   (f32.sub
+    (get_global $unary/f)
+    (f32.const 1)
    )
   )
   (set_global $unary/f
@@ -3373,32 +3309,16 @@
     (f64.const 1)
    )
   )
-  (drop
-   (block (result f64)
-    (set_local $3
-     (get_global $unary/F)
-    )
-    (set_global $unary/F
-     (f64.add
-      (get_local $3)
-      (f64.const 1)
-     )
-    )
-    (get_local $3)
+  (set_global $unary/F
+   (f64.add
+    (get_global $unary/F)
+    (f64.const 1)
    )
   )
-  (drop
-   (block (result f64)
-    (set_local $3
-     (get_global $unary/F)
-    )
-    (set_global $unary/F
-     (f64.sub
-      (get_local $3)
-      (f64.const 1)
-     )
-    )
-    (get_local $3)
+  (set_global $unary/F
+   (f64.sub
+    (get_global $unary/F)
+    (f64.const 1)
    )
   )
   (set_global $unary/F
@@ -4528,17 +4448,17 @@
   )
   (drop
    (select
-    (i32.sub
-     (i32.const 0)
-     (tee_local $0
-      (i32.sub
-       (i32.const 0)
-       (i32.const 42)
-      )
+    (tee_local $0
+     (i32.sub
+      (i32.const 0)
+      (i32.const 42)
      )
     )
-    (get_local $0)
-    (i32.lt_s
+    (i32.sub
+     (i32.const 0)
+     (get_local $0)
+    )
+    (i32.gt_s
      (get_local $0)
      (i32.const 0)
     )
@@ -4601,17 +4521,17 @@
   )
   (set_global $builtins/i
    (select
-    (i32.sub
-     (i32.const 0)
-     (tee_local $0
-      (i32.sub
-       (i32.const 0)
-       (i32.const 42)
-      )
+    (tee_local $0
+     (i32.sub
+      (i32.const 0)
+      (i32.const 42)
      )
     )
-    (get_local $0)
-    (i32.lt_s
+    (i32.sub
+     (i32.const 0)
+     (get_local $0)
+    )
+    (i32.gt_s
      (get_local $0)
      (i32.const 0)
     )
@@ -4701,17 +4621,17 @@
   )
   (drop
    (select
-    (i64.sub
-     (i64.const 0)
-     (tee_local $1
-      (i64.sub
-       (i64.const 0)
-       (i64.const 42)
-      )
+    (tee_local $1
+     (i64.sub
+      (i64.const 0)
+      (i64.const 42)
      )
     )
-    (get_local $1)
-    (i64.lt_s
+    (i64.sub
+     (i64.const 0)
+     (get_local $1)
+    )
+    (i64.gt_s
      (get_local $1)
      (i64.const 0)
     )
@@ -4746,17 +4666,17 @@
   )
   (set_global $builtins/I
    (select
-    (i64.sub
-     (i64.const 0)
-     (tee_local $1
-      (i64.sub
-       (i64.const 0)
-       (i64.const 42)
-      )
+    (tee_local $1
+     (i64.sub
+      (i64.const 0)
+      (i64.const 42)
      )
     )
-    (get_local $1)
-    (i64.lt_s
+    (i64.sub
+     (i64.const 0)
+     (get_local $1)
+    )
+    (i64.gt_s
      (get_local $1)
      (i64.const 0)
     )
@@ -6319,8 +6239,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

@@ -47,18 +47,10 @@
    (unreachable)
   )
   (block
-   (drop
-    (block (result i32)
-     (set_local $0
-      (get_global $comma/a)
-     )
-     (set_global $comma/a
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (get_local $0)
+   (set_global $comma/a
+    (i32.add
+     (get_global $comma/a)
+     (i32.const 1)
     )
    )
    (set_global $comma/b
@@ -93,18 +85,10 @@
   )
   (set_global $comma/b
    (block (result i32)
-    (drop
-     (block (result i32)
-      (set_local $0
-       (get_global $comma/a)
-      )
-      (set_global $comma/a
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (get_local $0)
+    (set_global $comma/a
+     (i32.add
+      (get_global $comma/a)
+      (i32.const 1)
      )
     )
     (get_global $comma/a)
@@ -130,18 +114,10 @@
   )
   (set_global $comma/a
    (block (result i32)
-    (drop
-     (block (result i32)
-      (set_local $0
-       (get_global $comma/a)
-      )
-      (set_global $comma/a
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (get_local $0)
+    (set_global $comma/a
+     (i32.add
+      (get_global $comma/a)
+      (i32.const 1)
      )
     )
     (block (result i32)
@@ -185,32 +161,16 @@
      (block
       (nop)
       (block
-       (drop
-        (block (result i32)
-         (set_local $0
-          (get_global $comma/a)
-         )
-         (set_global $comma/a
-          (i32.sub
-           (get_local $0)
-           (i32.const 1)
-          )
-         )
-         (get_local $0)
+       (set_global $comma/a
+        (i32.sub
+         (get_global $comma/a)
+         (i32.const 1)
         )
        )
-       (drop
-        (block (result i32)
-         (set_local $0
-          (get_local $1)
-         )
-         (set_local $1
-          (i32.add
-           (get_local $0)
-           (i32.const 1)
-          )
-         )
-         (get_local $0)
+       (set_local $1
+        (i32.add
+         (get_local $1)
+         (i32.const 1)
         )
        )
       )
@@ -269,8 +229,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

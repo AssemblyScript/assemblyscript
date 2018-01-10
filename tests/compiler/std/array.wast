@@ -31,8 +31,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8
@@ -73,12 +71,16 @@
   FUNCTION_PROTOTYPE: std:heap/Heap.compare
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: Map
+  CLASS_PROTOTYPE: std:regexp/RegExp
+  CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: Set
   GLOBAL: std:string/EMPTY
   CLASS_PROTOTYPE: std:string/String
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
+  FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: std:string/parseFloat
 [program.exports]
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: std:array/CArray
@@ -88,4 +90,6 @@
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: std:string/String
+  FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: std:string/parseFloat
 ;)

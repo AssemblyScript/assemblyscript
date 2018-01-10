@@ -79,32 +79,16 @@
     (i32.const 1)
    )
   )
-  (drop
-   (block (result i32)
-    (set_local $0
-     (get_global $unary/i)
-    )
-    (set_global $unary/i
-     (i32.add
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
-    (get_local $0)
+  (set_global $unary/i
+   (i32.add
+    (get_global $unary/i)
+    (i32.const 1)
    )
   )
-  (drop
-   (block (result i32)
-    (set_local $0
-     (get_global $unary/i)
-    )
-    (set_global $unary/i
-     (i32.sub
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
-    (get_local $0)
+  (set_global $unary/i
+   (i32.sub
+    (get_global $unary/i)
+    (i32.const 1)
    )
   )
   (set_global $unary/i
@@ -229,32 +213,16 @@
     (i64.const 1)
    )
   )
-  (drop
-   (block (result i64)
-    (set_local $1
-     (get_global $unary/I)
-    )
-    (set_global $unary/I
-     (i64.add
-      (get_local $1)
-      (i64.const 1)
-     )
-    )
-    (get_local $1)
+  (set_global $unary/I
+   (i64.add
+    (get_global $unary/I)
+    (i64.const 1)
    )
   )
-  (drop
-   (block (result i64)
-    (set_local $1
-     (get_global $unary/I)
-    )
-    (set_global $unary/I
-     (i64.sub
-      (get_local $1)
-      (i64.const 1)
-     )
-    )
-    (get_local $1)
+  (set_global $unary/I
+   (i64.sub
+    (get_global $unary/I)
+    (i64.const 1)
    )
   )
   (set_global $unary/I
@@ -268,8 +236,8 @@
   )
   (set_global $unary/I
    (i64.extend_s/i32
-    (i32.eqz
-     (i32.const 1)
+    (i64.eqz
+     (i64.const 1)
     )
    )
   )
@@ -377,32 +345,16 @@
     (f32.const 1)
    )
   )
-  (drop
-   (block (result f32)
-    (set_local $2
-     (get_global $unary/f)
-    )
-    (set_global $unary/f
-     (f32.add
-      (get_local $2)
-      (f32.const 1)
-     )
-    )
-    (get_local $2)
+  (set_global $unary/f
+   (f32.add
+    (get_global $unary/f)
+    (f32.const 1)
    )
   )
-  (drop
-   (block (result f32)
-    (set_local $2
-     (get_global $unary/f)
-    )
-    (set_global $unary/f
-     (f32.sub
-      (get_local $2)
-      (f32.const 1)
-     )
-    )
-    (get_local $2)
+  (set_global $unary/f
+   (f32.sub
+    (get_global $unary/f)
+    (f32.const 1)
    )
   )
   (set_global $unary/f
@@ -509,32 +461,16 @@
     (f64.const 1)
    )
   )
-  (drop
-   (block (result f64)
-    (set_local $3
-     (get_global $unary/F)
-    )
-    (set_global $unary/F
-     (f64.add
-      (get_local $3)
-      (f64.const 1)
-     )
-    )
-    (get_local $3)
+  (set_global $unary/F
+   (f64.add
+    (get_global $unary/F)
+    (f64.const 1)
    )
   )
-  (drop
-   (block (result f64)
-    (set_local $3
-     (get_global $unary/F)
-    )
-    (set_global $unary/F
-     (f64.sub
-      (get_local $3)
-      (f64.const 1)
-     )
-    )
-    (get_local $3)
+  (set_global $unary/F
+   (f64.sub
+    (get_global $unary/F)
+    (f64.const 1)
    )
   )
   (set_global $unary/F
@@ -649,8 +585,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

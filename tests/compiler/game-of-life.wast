@@ -133,20 +133,31 @@
             )
             (block
              (set_local $8
-              (i32.add
+              (i32.and
                (i32.add
                 (i32.add
                  (i32.add
                   (i32.add
                    (i32.add
                     (i32.add
-                     (i32.load8_u
-                      (i32.add
-                       (i32.mul
-                        (get_local $3)
-                        (get_global $../../examples/game-of-life/assembly/game-of-life/w)
+                     (i32.add
+                      (i32.load8_u
+                       (i32.add
+                        (i32.mul
+                         (get_local $3)
+                         (get_global $../../examples/game-of-life/assembly/game-of-life/w)
+                        )
+                        (get_local $6)
                        )
-                       (get_local $6)
+                      )
+                      (i32.load8_u
+                       (i32.add
+                        (i32.mul
+                         (get_local $3)
+                         (get_global $../../examples/game-of-life/assembly/game-of-life/w)
+                        )
+                        (get_local $5)
+                       )
                       )
                      )
                      (i32.load8_u
@@ -155,17 +166,17 @@
                         (get_local $3)
                         (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                        )
-                       (get_local $5)
+                       (get_local $7)
                       )
                      )
                     )
                     (i32.load8_u
                      (i32.add
                       (i32.mul
-                       (get_local $3)
+                       (get_local $2)
                        (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                       )
-                      (get_local $7)
+                      (get_local $6)
                      )
                     )
                    )
@@ -175,17 +186,17 @@
                       (get_local $2)
                       (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                      )
-                     (get_local $6)
+                     (get_local $7)
                     )
                    )
                   )
                   (i32.load8_u
                    (i32.add
                     (i32.mul
-                     (get_local $2)
+                     (get_local $4)
                      (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                     )
-                    (get_local $7)
+                    (get_local $6)
                    )
                   )
                  )
@@ -195,7 +206,7 @@
                     (get_local $4)
                     (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                    )
-                   (get_local $6)
+                   (get_local $5)
                   )
                  )
                 )
@@ -205,19 +216,11 @@
                    (get_local $4)
                    (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                   )
-                  (get_local $5)
+                  (get_local $7)
                  )
                 )
                )
-               (i32.load8_u
-                (i32.add
-                 (i32.mul
-                  (get_local $4)
-                  (get_global $../../examples/game-of-life/assembly/game-of-life/w)
-                 )
-                 (get_local $7)
-                )
-               )
+               (i32.const 255)
               )
              )
             )
@@ -334,8 +337,6 @@
   FUNCTION_PROTOTYPE: unreachable
   FUNCTION_PROTOTYPE: current_memory
   FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: parseInt
-  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
   FUNCTION_PROTOTYPE: i8

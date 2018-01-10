@@ -1827,14 +1827,14 @@
      )
      (i64.shl
       (get_local $2)
-      (i64.add
-       (i64.sub
-        (i64.const 0)
-        (i64.extend_u/i32
+      (i64.extend_u/i32
+       (i32.add
+        (i32.sub
+         (i32.const 0)
          (get_local $3)
         )
+        (i32.const 1)
        )
-       (i64.const 1)
       )
      )
     )
@@ -1884,14 +1884,14 @@
      )
      (i64.shl
       (get_local $5)
-      (i64.add
-       (i64.sub
-        (i64.const 0)
-        (i64.extend_u/i32
+      (i64.extend_u/i32
+       (i32.add
+        (i32.sub
+         (i32.const 0)
          (get_local $6)
         )
+        (i32.const 1)
        )
-       (i64.const 1)
       )
      )
     )
@@ -2025,14 +2025,14 @@
       )
       (i64.shr_u
        (get_local $2)
-       (i64.add
-        (i64.sub
-         (i64.const 0)
-         (i64.extend_u/i32
+       (i64.extend_u/i32
+        (i32.add
+         (i32.sub
+          (i32.const 0)
           (get_local $3)
          )
+         (i32.const 1)
         )
-        (i64.const 1)
        )
       )
      )
@@ -3465,14 +3465,14 @@
   )
   (set_global $builtins/i
    (select
+    (tee_local $2
+     (i32.const -42)
+    )
     (i32.sub
      (i32.const 0)
-     (tee_local $2
-      (i32.const -42)
-     )
+     (get_local $2)
     )
-    (get_local $2)
-    (i32.lt_s
+    (i32.gt_s
      (get_local $2)
      (i32.const 0)
     )
@@ -3544,14 +3544,14 @@
   )
   (set_global $builtins/I
    (select
+    (tee_local $3
+     (i64.const -42)
+    )
     (i64.sub
      (i64.const 0)
-     (tee_local $3
-      (i64.const -42)
-     )
+     (get_local $3)
     )
-    (get_local $3)
-    (i64.lt_s
+    (i64.gt_s
      (get_local $3)
      (i64.const 0)
     )
