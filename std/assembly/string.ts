@@ -199,8 +199,70 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
 
 // @global
 // @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
-export function parseInt(str: string, radix: i32 = 10): f64 {
-  throw new Error("not implemented");
+export function parseInt(str: string, radix: i32 = 0): f64 {
+  var len = str.length;
+  if (len == 0 || (radix != 0 && radix < 2) || radix > 36)
+    return NaN;
+
+  // TODO move consts out of function
+  var cp = "+".charCodeAt(0);
+  var cn = "-".charCodeAt(0);
+  var cx = "x".charCodeAt(0);
+  var cX = "X".charCodeAt(0);
+  var c0 = "0".charCodeAt(0);
+  var c9 = "9".charCodeAt(0);
+  var ca = "a".charCodeAt(0);
+  var cz = "z".charCodeAt(0);
+  var cA = "A".charCodeAt(0);
+  var cZ = "Z".charCodeAt(0);
+
+  var s0 = str.charCodeAt(0);
+  var neg = false;
+  var offset: u32 = 0;
+
+  if (s0 == cp) {
+    offset = 1;
+  } else if (s0 == cn) {
+    neg    = true;
+    offset = 1;
+  }
+
+  if (radix == 0) {
+    if (str.charCodeAt(offset) == c0) {
+      var s1 = str.charCodeAt(offset + 1);
+      if (len > 1 && (s1 == cx || s1 == cX)) {
+        if (len < 3)
+          return NaN;
+
+        radix   = 16;
+        offset += 2;
+
+      } else {
+        radix   = 8;
+        offset += 1;
+      }
+    } else {
+      radix = 10;
+    }
+  }
+
+  var result: f64 = 0;
+  for (var i: u32 = offset, len = str.length; i < len; ++i) {
+    var digit: i32, c: i32 = str.charCodeAt(i);
+
+         if (c0 <= c && c <= c9) digit = c - c0;
+    else if (ca <= c && c <= cz) digit = c - ca + 10;
+    else if (cA <= c && c <= cZ) digit = c - cA + 10;
+    else return NaN;
+
+    if (digit >= radix)
+      return NaN;
+
+    result *= radix;
+    result += digit;
+  }
+
+  return neg ? -result : result;
 }
 
 // @global
