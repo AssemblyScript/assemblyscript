@@ -216,15 +216,12 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
     return NaN;
 
   var s0: u16 = str.charCodeAt(0);
-  var neg = false;
   var pos: u32 = 0;
+  var neg = (s0 == cn);
 
-  if (s0 == cp || s0 == cn) {
+  if (s0 == cp || neg) {
     if (len == 1)
       return NaN;
-
-    if (s0 == cn)
-      neg = true;
 
     pos = 1;
   }
