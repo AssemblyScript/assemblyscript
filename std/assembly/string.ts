@@ -246,7 +246,9 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
   }
 
   var valid = false;
+  var isEnd = pos == len && len != 1;
   var result: f64 = 0;
+
   for (; pos < len; ++pos) {
     var digit: i32, c: i32 = str.charCodeAt(pos);
 
@@ -268,6 +270,9 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
     result *= radix;
     result += digit;
   }
+
+  if (!valid && isEnd)
+    return NaN;
 
   return neg ? -result : result;
 }
