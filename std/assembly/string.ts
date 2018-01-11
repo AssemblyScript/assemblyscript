@@ -230,15 +230,16 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
     if (str.charCodeAt(pos) == c0) {
       var s1 = str.charCodeAt(pos + 1);
       if (len > 1 && (s1 == cx || s1 == cX)) {
-        if (len < 3)
+        if (len < pos + 3)
           return NaN;
 
         radix = 16;
         pos += 2;
 
       } else {
-        radix = 8;
-        pos += 1;
+        // radix = 8;
+        // pos += 1;
+        radix = 10;
       }
     } else {
       radix = 10;
