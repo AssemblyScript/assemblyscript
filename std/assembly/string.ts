@@ -208,9 +208,9 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
   }
 }
 
-// @global
+@global
 // @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
-export function parseInt(str: string, radix: i32 = 0): f64 {
+export function parseInt(str: String, radix: i32 = 0): f64 {
   var len = <u32>str.length;
   if (len == 0 || (radix != 0 && radix < 2) || radix > 36)
     return NaN;
