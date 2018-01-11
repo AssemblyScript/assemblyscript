@@ -245,6 +245,7 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
     }
   }
 
+  var valid = false;
   var result: f64 = 0;
   for (; pos < len; ++pos) {
     var digit: i32, c: i32 = str.charCodeAt(pos);
@@ -252,10 +253,17 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
          if (c0 <= c && c <= c9) digit = c - c0;
     else if (ca <= c && c <= cz) digit = c - ca + 10;
     else if (cA <= c && c <= cZ) digit = c - cA + 10;
-    else break;
+    else {
+      if (valid) break;
+      return NaN;
+    }
 
-    if (digit >= radix)
-      break;
+    if (digit >= radix) {
+      if (valid) break;
+      return NaN;
+    }
+
+    valid = true;
 
     result *= radix;
     result += digit;
