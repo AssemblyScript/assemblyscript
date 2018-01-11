@@ -219,10 +219,13 @@ export function parseInt(str: string, radix: i32 = 0): f64 {
   var neg = false;
   var pos: u32 = 0;
 
-  if (s0 == cp) {
-    pos = 1;
-  } else if (s0 == cn) {
-    neg = true;
+  if (s0 == cp || s0 == cn) {
+    if (len == 1)
+      return NaN;
+
+    if (s0 == cn)
+      neg = true;
+
     pos = 1;
   }
 
