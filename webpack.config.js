@@ -46,7 +46,7 @@ module.exports = {
   plugins: [
     new NoEmitOnErrorsPlugin(),
     new CheckerPlugin({
-      tsconfig: path.resolve(__dirname, "src"),
+      tsconfig: path.resolve(__dirname, "src/tsconfig.json"),
       silent: true,
       tslint: false
     }),
