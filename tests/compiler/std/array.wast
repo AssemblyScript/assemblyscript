@@ -80,7 +80,9 @@
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
   FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseFloat
+  FUNCTION_PROTOTYPE: parseFloat
 [program.exports]
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: std:array/CArray
@@ -88,6 +90,7 @@
   CLASS_PROTOTYPE: std:error/RangeError
   CLASS_PROTOTYPE: std:heap/Heap
   CLASS_PROTOTYPE: std:map/Map
+  CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: std:string/String
   FUNCTION_PROTOTYPE: std:string/parseInt

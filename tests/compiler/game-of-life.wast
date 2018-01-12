@@ -237,19 +237,20 @@
              (if
               (i32.and
                (if (result i32)
-                (i32.eqz
+                (i32.ne
                  (i32.lt_u
                   (get_local $8)
                   (i32.const 2)
                  )
-                )
-                (i32.gt_u
-                 (get_local $8)
-                 (i32.const 3)
+                 (i32.const 0)
                 )
                 (i32.lt_u
                  (get_local $8)
                  (i32.const 2)
+                )
+                (i32.gt_u
+                 (get_local $8)
+                 (i32.const 3)
                 )
                )
                (i32.const 1)

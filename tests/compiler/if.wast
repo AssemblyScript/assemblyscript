@@ -1,11 +1,13 @@
 (module
  (type $ii (func (param i32) (result i32)))
+ (type $v (func))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "ifThenElse" (func $if/ifThenElse))
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElseBlock))
  (export "memory" (memory $0))
+ (start $start)
  (func $if/ifThenElse (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (if
    (get_local $0)
@@ -43,6 +45,74 @@
      (i32.const 0)
     )
    )
+  )
+ )
+ (func $start (; 3 ;) (type $v)
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $if/ifThenElse
+      (i32.const 0)
+     )
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $if/ifThenElse
+      (i32.const 1)
+     )
+     (i32.const 1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $if/ifThen
+      (i32.const 0)
+     )
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $if/ifThen
+      (i32.const 1)
+     )
+     (i32.const 1)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $if/ifThenElseBlock
+      (i32.const 0)
+     )
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $if/ifThenElseBlock
+      (i32.const 1)
+     )
+     (i32.const 1)
+    )
+   )
+   (unreachable)
   )
  )
 )

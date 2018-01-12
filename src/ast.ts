@@ -1176,12 +1176,20 @@ export enum ModifierKind {
 /** Base class of all statement nodes. */
 export abstract class Statement extends Node { }
 
+export enum SourceKind {
+  DEFAULT,
+  ENTRY,
+  STDLIB
+}
+
 /** A top-level source node. */
 export class Source extends Node {
 
   kind = NodeKind.SOURCE;
   parent = null;
 
+  /** Source kind. */
+  sourceKind: SourceKind;
   /** Path as provided to the parser. */
   path: string;
   /** Normalized path. */
@@ -1194,20 +1202,23 @@ export class Source extends Node {
   text: string;
   /** Tokenizer reference. */
   tokenizer: Tokenizer | null = null;
-  /** Whether an entry file or not. */
-  isEntry: bool;
 
   /** Constructs a new source node. */
-  constructor(path: string, text: string, isEntry: bool = false) {
+  constructor(path: string, text: string, kind: SourceKind = SourceKind.DEFAULT) {
     super();
+    this.sourceKind = kind;
     this.path = path;
     this.normalizedPath = normalizePath(path, true);
     this.internalPath = mangleInternalPath(this.normalizedPath);
     this.statements = new Array();
     this.range = new Range(this, 0, text.length);
     this.text = text;
-    this.isEntry = isEntry;
   }
+
+  /** Tests if this source is an entry file. */
+  get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
+  /** Tests if this source is a stdlib file. */
+  get isStdlib(): bool { return this.sourceKind == SourceKind.STDLIB; }
 
   serialize(sb: string[]): void {
     for (var i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
@@ -1236,6 +1247,8 @@ export abstract class DeclarationStatement extends Statement {
 
   /** Gets the mangled internal name of this declaration. */
   get internalName(): string { return this._cachedInternalName === null ? this._cachedInternalName = mangleInternalName(this) : this._cachedInternalName; }
+  /** Tests if this is a top-level declaration. */
+  get isTopLevel(): bool { return this.parent != null && this.parent.kind == NodeKind.SOURCE; }
 }
 
 /** Base class of all variable-like declaration statements with a type and initializer. */

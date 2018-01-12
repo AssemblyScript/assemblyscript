@@ -528,14 +528,15 @@
    (loop $continue|0
     (if
      (if (result i32)
-      (i32.eqz
+      (i32.ne
        (get_local $2)
+       (i32.const 0)
       )
-      (get_local $2)
       (i32.rem_u
        (get_local $1)
        (i32.const 4)
       )
+      (get_local $2)
      )
      (block
       (block
@@ -2337,10 +2338,10 @@
    (loop $continue|0
     (if
      (if (result i32)
-      (i32.eqz
+      (i32.ne
        (get_local $2)
+       (i32.const 0)
       )
-      (get_local $2)
       (i32.eq
        (i32.load8_u
         (get_local $0)
@@ -2349,6 +2350,7 @@
         (get_local $1)
        )
       )
+      (get_local $2)
      )
      (block
       (block
@@ -2600,7 +2602,9 @@
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
   FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseFloat
+  FUNCTION_PROTOTYPE: parseFloat
   GLOBAL: std/heap/size
   GLOBAL: std/heap/ptr1
   GLOBAL: std/heap/ptr2
@@ -2612,6 +2616,7 @@
   CLASS_PROTOTYPE: std:error/RangeError
   CLASS_PROTOTYPE: std:heap/Heap
   CLASS_PROTOTYPE: std:map/Map
+  CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: std:string/String
   FUNCTION_PROTOTYPE: std:string/parseInt

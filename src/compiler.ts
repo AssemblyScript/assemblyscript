@@ -54,6 +54,7 @@ import {
   NodeKind,
   TypeNode,
   Source,
+  SourceKind,
 
   Statement,
   BlockStatement,
@@ -2113,26 +2114,24 @@ export class Compiler extends DiagnosticEmitter {
           left = this.module.createTeeLocal(tempLocal.index, left);
         }
 
-        // make a condition that checks !left in case an optimizer can take advantage of guaranteed 0 or 1
-        // binaryen just switches the arms here, see: https://github.com/WebAssembly/binaryen/issues/1355
         possiblyOverflows = this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER);
-        condition = makeEqualsZero(left, this.currentType, this.module);
+        condition = makeIsTrueish(left, this.currentType, this.module);
 
         // simplify when cloning left without side effects was successful
         if (expr)
           expr = this.module.createIf(
-            condition, // if !left
-            expr,      // then cloned left
-            right      // else right
+            condition, // left
+            right,     // ? right
+            expr       // : cloned left
           );
 
         // otherwise make use of the temp. local
         else {
           assert(tempLocal);
           expr = this.module.createIf(
-            condition,   // if !left
-            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType()),
-            right
+            condition,
+            right,
+            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType())
           );
         }
         break;
@@ -2150,26 +2149,24 @@ export class Compiler extends DiagnosticEmitter {
           left = this.module.createTeeLocal(tempLocal.index, left);
         }
 
-        // make a condition that checks !left in case an optimizer can take advantage of guaranteed 0 or 1
-        // binaryen just switches the arms here, see: https://github.com/WebAssembly/binaryen/issues/1355
         possiblyOverflows = this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER); // if right already did
-        condition = makeEqualsZero(left, this.currentType, this.module);
+        condition = makeIsTrueish(left, this.currentType, this.module);
 
         // simplify when cloning left without side effects was successful
         if (expr)
           expr = this.module.createIf(
-            condition, // if !left
-            right,     // then right
-            expr       // else cloned left
+            condition, // left
+            expr,      // ? cloned left
+            right      // : right
           );
 
         // otherwise make use of the temp. local
         else {
           assert(tempLocal);
           expr = this.module.createIf(
-            condition,   // if !left
-            right,
-            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType())
+            condition,
+            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType()),
+            right
           );
         }
         break;
@@ -2482,7 +2479,7 @@ export class Compiler extends DiagnosticEmitter {
             assert(contextualType.kind == TypeKind.USIZE);
             this.currentType = Type.usize64;
           }
-          return this.module.createI64(0, 0);
+          return this.module.createI64(0);
         }
         if (!contextualType.classType) {
           assert(contextualType.kind == TypeKind.USIZE);
@@ -2706,7 +2703,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U64:
             op = BinaryOp.AddI64;
             nativeType = NativeType.I64;
-            nativeOne = this.module.createI64(1, 0);
+            nativeOne = this.module.createI64(1);
             break;
 
           case TypeKind.F32:
@@ -2754,7 +2751,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U64:
             op = BinaryOp.SubI64;
             nativeType = NativeType.I64;
-            nativeOne = this.module.createI64(1, 0);
+            nativeOne = this.module.createI64(1);
             break;
 
           case TypeKind.F32:
@@ -2851,7 +2848,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.I64:
           case TypeKind.U64:
-            expr = this.module.createBinary(BinaryOp.SubI64, this.module.createI64(0, 0), expr);
+            expr = this.module.createBinary(BinaryOp.SubI64, this.module.createI64(0), expr);
             break;
 
           case TypeKind.F32:
@@ -2892,7 +2889,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.I64:
           case TypeKind.U64:
-            expr = this.module.createBinary(BinaryOp.AddI64, expr, this.module.createI64(1, 0));
+            expr = this.module.createBinary(BinaryOp.AddI64, expr, this.module.createI64(1));
             break;
 
           case TypeKind.F32:
@@ -2934,7 +2931,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.I64:
           case TypeKind.U64:
-            expr = this.module.createBinary(BinaryOp.SubI64, expr, this.module.createI64(1, 0));
+            expr = this.module.createBinary(BinaryOp.SubI64, expr, this.module.createI64(1));
             break;
 
           case TypeKind.F32:
@@ -2949,7 +2946,7 @@ export class Compiler extends DiagnosticEmitter {
 
       case Token.EXCLAMATION: // must wrap small integers
         expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
-        expr = makeEqualsZero(expr, this.currentType, this.module);
+        expr = makeIsFalseish(expr, this.currentType, this.module);
         this.currentType = Type.bool;
         break;
 
@@ -3052,7 +3049,7 @@ function makeInlineConstant(element: VariableLikeElement, module: Module): Expre
     case TypeKind.U64:
       return element.constantIntegerValue
         ? module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
-        : module.createI64(0, 0);
+        : module.createI64(0);
 
     case TypeKind.F32:
       return module.createF32((<VariableLikeElement>element).constantFloatValue);
@@ -3114,7 +3111,8 @@ export function makeSmallIntegerWrap(expr: ExpressionRef, type: Type, module: Mo
   return expr;
 }
 
-export function makeEqualsZero(expr: ExpressionRef, type: Type, module: Module): ExpressionRef {
+/** Creates a comparison whether an expression is not 'true' in a broader sense. */
+export function makeIsFalseish(expr: ExpressionRef, type: Type, module: Module): ExpressionRef {
   switch (type.kind) {
 
     default: // any integer up to 32 bits
@@ -3126,8 +3124,9 @@ export function makeEqualsZero(expr: ExpressionRef, type: Type, module: Module):
       expr = module.createUnary(UnaryOp.EqzI64, expr);
       break;
 
-    case TypeKind.ISIZE:
     case TypeKind.USIZE:
+      // TODO: strings
+    case TypeKind.ISIZE:
       expr = module.createUnary(type.size == 64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32, expr);
       break;
 
@@ -3137,6 +3136,41 @@ export function makeEqualsZero(expr: ExpressionRef, type: Type, module: Module):
 
     case TypeKind.F64:
       expr = module.createBinary(BinaryOp.EqF64, expr, module.createF64(0));
+      break;
+
+    case TypeKind.VOID:
+      throw new Error("concrete type expected");
+  }
+  return expr;
+}
+
+/** Creates a comparison whether an expression is 'true' in a broader sense. */
+export function makeIsTrueish(expr: ExpressionRef, type: Type, module: Module): ExpressionRef {
+  switch (type.kind) {
+
+    default: // any integer up to 32 bits
+      expr = module.createBinary(BinaryOp.NeI32, expr, module.createI32(0));
+      break;
+
+    case TypeKind.I64:
+    case TypeKind.U64:
+      expr = module.createBinary(BinaryOp.NeI64, expr, module.createI64(0));
+      break;
+
+    case TypeKind.USIZE:
+      // TODO: strings
+    case TypeKind.ISIZE:
+      expr = type.size == 64
+        ? module.createBinary(BinaryOp.NeI64, expr, module.createI64(0))
+        : module.createBinary(BinaryOp.NeI32, expr, module.createI32(0));
+      break;
+
+    case TypeKind.F32:
+      expr = module.createBinary(BinaryOp.NeF32, expr, module.createF32(0));
+      break;
+
+    case TypeKind.F64:
+      expr = module.createBinary(BinaryOp.NeF64, expr, module.createF64(0));
       break;
 
     case TypeKind.VOID:

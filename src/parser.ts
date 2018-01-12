@@ -30,6 +30,7 @@ import {
   Node,
   NodeKind,
   Source,
+  SourceKind,
   TypeNode,
 
   Expression,
@@ -104,7 +105,7 @@ export class Parser extends DiagnosticEmitter {
         return; // already parsed
     this.seenlog.add(normalizedPath);
 
-    var source = new Source(path, text, isEntry);
+    var source = new Source(path, text, isEntry ? SourceKind.ENTRY : path.startsWith("std:") ? SourceKind.STDLIB : SourceKind.DEFAULT);
     this.program.sources.push(source);
 
     var tn = new Tokenizer(source, this.program.diagnostics);

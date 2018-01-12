@@ -306,7 +306,7 @@ export class Module {
     return _BinaryenConst(this.ref, this.lit);
   }
 
-  createI64(lo: i32, hi: i32): ExpressionRef {
+  createI64(lo: i32, hi: i32 = 0): ExpressionRef {
     if (this.noEmit) return 0;
     _BinaryenLiteralInt64(this.lit, lo, hi);
     return _BinaryenConst(this.ref, this.lit);
