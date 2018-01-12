@@ -210,16 +210,16 @@
          )
          (if
           (i32.and
-           (select
+           (if (result i32)
+            (i32.ge_u
+             (get_local $2)
+             (i32.const 2)
+            )
             (i32.gt_u
              (get_local $2)
              (i32.const 3)
             )
             (i32.lt_u
-             (get_local $2)
-             (i32.const 2)
-            )
-            (i32.ge_u
              (get_local $2)
              (i32.const 2)
             )

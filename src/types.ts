@@ -188,7 +188,7 @@ export class Type {
 
       case TypeKind.ISIZE:
       case TypeKind.USIZE:
-        return select<NativeType>(NativeType.I64, NativeType.I32, this.size == 64);
+        return this.size == 64 ? NativeType.I64 : NativeType.I32;
 
       case TypeKind.F32:
         return NativeType.F32;
@@ -298,7 +298,7 @@ export class Type {
 
       case TypeKind.ISIZE:
       case TypeKind.USIZE:
-        return select<string>("I", "i", this.size == 64);
+        return this.size == 64 ? "I" : "i";
 
       case TypeKind.F32:
         return "f";

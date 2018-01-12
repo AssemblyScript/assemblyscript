@@ -2248,7 +2248,7 @@ export function mangleInternalName(declaration: DeclarationStatement): string {
 function builderEndsWith(sb: string[], code: CharCode): bool {
   if (sb.length) {
     var last = sb[sb.length - 1];
-    return select<bool>(last.charCodeAt(last.length - 1) == code, false, last.length > 0);
+    return last.length > 0 ? last.charCodeAt(last.length - 1) == code : false;
   }
   return false;
 }

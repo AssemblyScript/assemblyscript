@@ -134,14 +134,14 @@
   (block $break|0
    (loop $continue|0
     (if
-     (select
+     (if (result i32)
+      (i32.eqz
+       (get_local $2)
+      )
       (get_local $2)
       (i32.rem_u
        (get_local $4)
        (i32.const 4)
-      )
-      (i32.eqz
-       (get_local $2)
       )
      )
      (block
@@ -4271,12 +4271,12 @@
    (if (result i32)
     (i32.eqz
      (tee_local $0
-      (select
-       (i32.const 1)
-       (i32.const 2)
+      (if (result i32)
        (i32.eqz
         (i32.const 1)
        )
+       (i32.const 1)
+       (i32.const 2)
       )
      )
     )
@@ -4288,13 +4288,13 @@
    (if (result f64)
     (f64.eq
      (tee_local $3
-      (select
-       (f64.const 1)
-       (f64.const 2)
+      (if (result f64)
        (f64.eq
         (f64.const 1)
         (f64.const 0)
        )
+       (f64.const 1)
+       (f64.const 2)
       )
      )
      (f64.const 0)
@@ -4304,12 +4304,12 @@
    )
   )
   (set_global $logical/i
-   (select
-    (i32.const 1)
-    (i32.const 2)
+   (if (result i32)
     (i32.eqz
      (i32.const 1)
     )
+    (i32.const 1)
+    (i32.const 2)
    )
   )
   (if
@@ -4322,12 +4322,12 @@
    (unreachable)
   )
   (set_global $logical/i
-   (select
-    (i32.const 1)
-    (i32.const 0)
+   (if (result i32)
     (i32.eqz
      (i32.const 0)
     )
+    (i32.const 1)
+    (i32.const 0)
    )
   )
   (if
@@ -4340,12 +4340,12 @@
    (unreachable)
   )
   (set_global $logical/I
-   (select
-    (i64.const 1)
-    (i64.const 2)
+   (if (result i64)
     (i64.eqz
      (i64.const 1)
     )
+    (i64.const 1)
+    (i64.const 2)
    )
   )
   (if
@@ -4358,12 +4358,12 @@
    (unreachable)
   )
   (set_global $logical/I
-   (select
-    (i64.const 1)
-    (i64.const 0)
+   (if (result i64)
     (i64.eqz
      (i64.const 0)
     )
+    (i64.const 1)
+    (i64.const 0)
    )
   )
   (if
@@ -4376,13 +4376,13 @@
    (unreachable)
   )
   (set_global $logical/f
-   (select
-    (f32.const 1)
-    (f32.const 2)
+   (if (result f32)
     (f32.eq
      (f32.const 1)
      (f32.const 0)
     )
+    (f32.const 1)
+    (f32.const 2)
    )
   )
   (if
@@ -4395,13 +4395,13 @@
    (unreachable)
   )
   (set_global $logical/f
-   (select
-    (f32.const 1)
-    (f32.const 0)
+   (if (result f32)
     (f32.eq
      (f32.const 0)
      (f32.const 0)
     )
+    (f32.const 1)
+    (f32.const 0)
    )
   )
   (if
@@ -4414,13 +4414,13 @@
    (unreachable)
   )
   (set_global $logical/F
-   (select
-    (f64.const 1)
-    (f64.const 2)
+   (if (result f64)
     (f64.eq
      (f64.const 1)
      (f64.const 0)
     )
+    (f64.const 1)
+    (f64.const 2)
    )
   )
   (if
@@ -4433,13 +4433,13 @@
    (unreachable)
   )
   (set_global $logical/F
-   (select
-    (f64.const 1)
-    (f64.const 0)
+   (if (result f64)
     (f64.eq
      (f64.const 0)
      (f64.const 0)
     )
+    (f64.const 1)
+    (f64.const 0)
    )
   )
   (if

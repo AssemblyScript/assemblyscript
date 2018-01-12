@@ -194,8 +194,8 @@ export function compileGetConstant(compiler: Compiler, global: Global, reportNod
 /** Compiles a call to a built-in function. */
 export function compileCall(compiler: Compiler, prototype: FunctionPrototype, typeArguments: Type[] | null, operands: Expression[], contextualType: Type, reportNode: Node): ExpressionRef {
   var module = compiler.module;
-  var usizeType = select<Type>(Type.usize64, Type.usize32, compiler.options.target == Target.WASM64);
-  var nativeUsizeType = select<NativeType>(NativeType.I64, NativeType.I32, compiler.options.target == Target.WASM64);
+  var usizeType = compiler.options.target == Target.WASM64 ? Type.usize64 : Type.usize32;
+  var nativeUsizeType = compiler.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32;
 
   var arg0: ExpressionRef,
       arg1: ExpressionRef,
@@ -365,7 +365,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           }
           // fall-through
         case TypeKind.ISIZE:
-          ret = module.createUnary(select<UnaryOp>(UnaryOp.ClzI64, UnaryOp.ClzI32, compiler.options.target == Target.WASM64), arg0);
+          ret = module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.ClzI64 : UnaryOp.ClzI32, arg0);
           break;
 
         case TypeKind.I64:
@@ -418,7 +418,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           }
           // fall-through
         case TypeKind.ISIZE:
-          ret = module.createUnary(select<UnaryOp>(UnaryOp.CtzI64, UnaryOp.CtzI32, compiler.options.target == Target.WASM64), arg0);
+          ret = module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.CtzI64 : UnaryOp.CtzI32, arg0);
           break;
 
         case TypeKind.I64:
@@ -471,7 +471,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           }
           // fall-through
         case TypeKind.ISIZE:
-          ret = module.createUnary(select<UnaryOp>(UnaryOp.PopcntI64, UnaryOp.PopcntI32, compiler.options.target == Target.WASM64), arg0);
+          ret = module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.PopcntI64 : UnaryOp.PopcntI32, arg0);
           break;
 
         case TypeKind.I64:
@@ -533,7 +533,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           }
           // fall-through
         case TypeKind.ISIZE:
-          ret = module.createBinary(select<BinaryOp>(BinaryOp.RotlI64, BinaryOp.RotlI32, compiler.options.target == Target.WASM64), arg0, arg1);
+          ret = module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.RotlI64 : BinaryOp.RotlI32, arg0, arg1);
           break;
 
         case TypeKind.I64:
@@ -594,7 +594,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           }
           // fall-through
         case TypeKind.ISIZE:
-          ret = module.createBinary(select<BinaryOp>(BinaryOp.RotrI64, BinaryOp.RotrI32, compiler.options.target == Target.WASM64), arg0, arg1);
+          ret = module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.RotrI64 : BinaryOp.RotrI32, arg0, arg1);
           break;
 
         case TypeKind.I64:
@@ -656,11 +656,11 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(usizeType);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
-            module.createBinary(select<BinaryOp>(BinaryOp.SubI64, BinaryOp.SubI32, compiler.options.target == Target.WASM64),
+            module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.SubI64 : BinaryOp.SubI32,
               usizeType.toNativeZero(module),
               module.createGetLocal(tempLocal0.index, nativeUsizeType)
             ),
-            module.createBinary(select<BinaryOp>(BinaryOp.GtI64, BinaryOp.GtI32, compiler.options.target == Target.WASM64),
+            module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.GtI64 : BinaryOp.GtI32,
               module.createGetLocal(tempLocal0.index, nativeUsizeType),
               usizeType.toNativeZero(module)
             )
@@ -809,7 +809,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(select<BinaryOp>(BinaryOp.GtI64, BinaryOp.GtI32, compiler.options.target == Target.WASM64),
+            module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.GtI64 : BinaryOp.GtI32,
               module.createGetLocal(tempLocal0.index, nativeUsizeType),
               module.createGetLocal(tempLocal1.index, nativeUsizeType)
             )
@@ -828,7 +828,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(select<BinaryOp>(BinaryOp.GtU64, BinaryOp.GtU32, compiler.options.target == Target.WASM64),
+            module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.GtU64 : BinaryOp.GtU32,
               module.createGetLocal(tempLocal0.index, nativeUsizeType),
               module.createGetLocal(tempLocal1.index, nativeUsizeType)
             )
@@ -943,7 +943,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(select<BinaryOp>(BinaryOp.LtI64, BinaryOp.LtI32, compiler.options.target == Target.WASM64),
+            module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.LtI64 : BinaryOp.LtI32,
               module.createGetLocal(tempLocal0.index, nativeUsizeType),
               module.createGetLocal(tempLocal1.index, nativeUsizeType)
             )
@@ -962,7 +962,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(select<BinaryOp>(BinaryOp.LtU64, BinaryOp.LtU32, compiler.options.target == Target.WASM64),
+            module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.LtU64 : BinaryOp.LtU32,
               module.createGetLocal(tempLocal0.index, nativeUsizeType),
               module.createGetLocal(tempLocal1.index, nativeUsizeType)
             )
@@ -1603,7 +1603,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           case TypeKind.ISIZE:
           case TypeKind.USIZE:
             ret = module.createIf(
-              module.createUnary(select(UnaryOp.EqzI64, UnaryOp.EqzI32, compiler.options.target == Target.WASM64),
+              module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
                 arg0
               ),
               module.createUnreachable()
@@ -1668,7 +1668,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           case TypeKind.USIZE:
             tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(usizeType);
             ret = module.createIf(
-              module.createUnary(select<UnaryOp>(UnaryOp.EqzI64, UnaryOp.EqzI32, compiler.options.target == Target.WASM64),
+              module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
                 module.createTeeLocal(tempLocal0.index, arg0)
               ),
               module.createUnreachable(),
@@ -1755,10 +1755,10 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         compiler.error(DiagnosticCode.Type_0_is_not_generic, reportNode.range, prototype.internalName);
       if (operands.length != 1) {
         compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range, "1", operands.length.toString(10));
-        compiler.currentType = select<Type>(Type.isize64, Type.isize32, compiler.options.target == Target.WASM64);
+        compiler.currentType = compiler.options.target == Target.WASM64 ? Type.isize64 : Type.isize32;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], select<Type>(Type.isize64, Type.isize32, compiler.options.target == Target.WASM64), ConversionKind.EXPLICIT);
+      return compiler.compileExpression(operands[0], compiler.options.target == Target.WASM64 ? Type.isize64 : Type.isize32, ConversionKind.EXPLICIT);
 
     case "u8":
       if (typeArguments)
