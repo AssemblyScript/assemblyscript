@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "binaryen": "40.0.0-nightly.20171229",
+    "fork-ts-checker-webpack-plugin": "^0.3.0",
     "glob": "^7.1.2",
     "minimist": "^1.2.0"
   },

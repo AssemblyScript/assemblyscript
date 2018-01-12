@@ -1,11 +1,19 @@
 {
   "compilerOptions": {
+    "target": "es5",
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noEmitOnError": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true
-  }
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+
+  "exclude": [
+		"node_modules",
+		"dist"
+	]
 }

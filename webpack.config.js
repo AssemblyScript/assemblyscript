@@ -1,5 +1,16 @@
-var path = require("path");
-var webpack = require("webpack");
+const path = require("path");
+const webpack = require("webpack");
+const CheckerPlugin = require('fork-ts-checker-webpack-plugin');
+
+const {
+  NoEmitOnErrorsPlugin,
+} = webpack;
+
+const {
+  OccurrenceOrderPlugin,
+  AggressiveMergingPlugin,
+  ModuleConcatenationPlugin,
+} = webpack.optimize;
 
 module.exports = {
   entry: [ "./src/glue/js.js", "./src/index.ts" ],
@@ -7,8 +18,18 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: "ts-loader",
-        exclude: /node_modules/
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+        },
+        exclude: [
+          /node_modules/,
+          /tests/,
+          /dist/,
+          /bin/,
+          /scripts/,
+          /examples/
+        ]
       }
     ]
   },
@@ -23,6 +44,12 @@ module.exports = {
     libraryTarget: "umd"
   },
   plugins: [
+    new NoEmitOnErrorsPlugin(),
+    new CheckerPlugin({
+      tsconfig: path.resolve(__dirname, "src"),
+      silent: true,
+      tslint: false
+    }),
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
       sourceMap: true
