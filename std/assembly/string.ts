@@ -208,7 +208,7 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
   }
 }
 
-@global
+// @global
 // @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
 export function parseInt(str: String, radix: i32 = 0): f64 {
   var len = <u32>str.length;

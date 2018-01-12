@@ -90,7 +90,6 @@
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
   FUNCTION_PROTOTYPE: std:string/parseInt
-  FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseFloat
 [program.exports]
   CLASS_PROTOTYPE: std:array/Array
