@@ -50,6 +50,9 @@ module.exports = {
       silent: true,
       tslint: false
     }),
+    new OccurrenceOrderPlugin(),
+    new AggressiveMergingPlugin(),
+    new ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
       sourceMap: true
