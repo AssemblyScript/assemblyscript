@@ -1,4 +1,3 @@
-@global
 export class Array<T> {
 
   private ptr: usize;
@@ -39,7 +38,6 @@ export class Array<T> {
   // TODO
 }
 
-@global
 @struct
 export class CArray<T> {
 

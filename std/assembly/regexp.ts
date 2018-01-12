@@ -1,5 +1,4 @@
-@global
-class RegExp {
+export class RegExp {
 
   // @binding(CALL_NEW, [ STRING, STRING], OBJECT_HANDLE)
   constructor(pattern: string, flags: string = "") { throw new Error("unreachable"); }

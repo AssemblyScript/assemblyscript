@@ -11,7 +11,6 @@ const cz: u16 = 122; // "z"
 const cA: u16 = 65;  // "A"
 const cZ: u16 = 90;  // "Z"
 
-@global
 export class String {
   // [key: number]: string;
 
@@ -208,7 +207,6 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
   }
 }
 
-// @global
 // @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
 export function parseInt(str: String, radix: i32 = 0): f64 {
   var len = <u32>str.length;
@@ -277,7 +275,6 @@ export function parseInt(str: String, radix: i32 = 0): f64 {
   return neg ? -result : result;
 }
 
-// @global
 // @binding(CALL, [ STRING ], PASS_THRU)
 export function parseFloat(str: string): f64 {
   throw new Error("not implemented");

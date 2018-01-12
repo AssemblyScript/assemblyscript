@@ -1,4 +1,3 @@
-@global
 export class Error {
 
   name: string = "Error";
@@ -10,7 +9,6 @@ export class Error {
   }
 }
 
-@global
 export class RangeError extends Error {
   name: string = "RangeError";
 }

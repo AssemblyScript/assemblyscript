@@ -219,7 +219,7 @@ export class Type {
 
       case TypeKind.I64:
       case TypeKind.U64:
-        return module.createI64(0, 0);
+        return module.createI64(0);
 
       case TypeKind.F32:
         return module.createF32(0);
@@ -247,7 +247,7 @@ export class Type {
 
       case TypeKind.I64:
       case TypeKind.U64:
-        return module.createI64(1, 0);
+        return module.createI64(1);
 
       case TypeKind.F32:
         return module.createF32(1);

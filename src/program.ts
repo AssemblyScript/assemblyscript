@@ -269,6 +269,15 @@ export class Program extends DiagnosticEmitter {
     } while (true);
   }
 
+  private checkGlobalAlias(element: Element, declaration: DeclarationStatement) {
+    if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(declaration.parent).kind == NodeKind.SOURCE && element.isExported)) {
+      if (this.elements.has(declaration.name.name))
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, element.internalName);
+      else
+        this.elements.set(declaration.name.name, element);
+    }
+  }
+
   private initializeClass(declaration: ClassDeclaration, queuedDerivedClasses: ClassPrototype[], namespace: Element | null = null): void {
     var internalName = declaration.internalName;
     if (this.elements.has(internalName)) {
@@ -279,13 +288,8 @@ export class Program extends DiagnosticEmitter {
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
-    // add program-level alias if annotated as @global
-    if (hasDecorator("global", declaration.decorators)) {
-      if (this.elements.has(declaration.name.name))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
-      else
-        this.elements.set(declaration.name.name, prototype);
-    }
+    this.checkGlobalAlias(prototype, declaration);
+
     if (hasDecorator("struct", declaration.decorators)) {
       prototype.isStruct = true;
       if (declaration.implementsTypes && declaration.implementsTypes.length)
@@ -522,6 +526,8 @@ export class Program extends DiagnosticEmitter {
     enm.namespace = namespace;
     this.elements.set(internalName, enm);
 
+    this.checkGlobalAlias(enm, declaration);
+
     if (namespace) {
       if (namespace.members) {
         if (namespace.members.has(declaration.name.name)) {
@@ -648,12 +654,7 @@ export class Program extends DiagnosticEmitter {
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
-    if (hasDecorator("global", declaration.decorators)) {
-      if (this.elements.has(declaration.name.name))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
-      else
-        this.elements.set(declaration.name.name, prototype);
-    }
+    this.checkGlobalAlias(prototype, declaration);
 
     if (namespace) {
       if (namespace.members) {
@@ -743,6 +744,8 @@ export class Program extends DiagnosticEmitter {
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
+    this.checkGlobalAlias(prototype, declaration);
+
     if (namespace) {
       if (namespace.members) {
         if (namespace.members.has(prototype.internalName)) {
@@ -791,6 +794,7 @@ export class Program extends DiagnosticEmitter {
       namespace = new Namespace(this, declaration.name.name, internalName, declaration);
       namespace.namespace = parentNamespace;
       this.elements.set(internalName, namespace);
+      this.checkGlobalAlias(namespace, declaration);
     }
 
     if (parentNamespace) {
@@ -875,7 +879,8 @@ export class Program extends DiagnosticEmitter {
       global.namespace = namespace;
       this.elements.set(internalName, global);
 
-      if (hasDecorator("global", declaration.decorators)) {
+      // differs a bit from this.checkGlobalAlias in that it checks the statement's parent
+      if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(statement.parent).kind == NodeKind.SOURCE && global.isExported)) {
         if (this.elements.has(declaration.name.name))
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         else
