@@ -11,9 +11,8 @@
     "experimentalDecorators": true,
     "typeRoots": ["node_modules/@types"]
   },
-
   "exclude": [
-		"node_modules",
-		"dist"
-	]
+  	"node_modules",
+  	"dist"
+  ]
 }
