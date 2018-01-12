@@ -27,12 +27,14 @@
    (loop $continue|0
     (if
      (if (result i32)
+      (i32.eqz
+       (get_local $2)
+      )
       (get_local $2)
       (i32.rem_u
        (get_local $4)
        (i32.const 4)
       )
-      (get_local $2)
      )
      (block
       (block

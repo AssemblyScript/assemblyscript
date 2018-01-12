@@ -150,4 +150,4 @@ if (failures) {
   process.exitCode = 1;
   console.log(chalk.red("ERROR: ") + failures + " compiler tests failed");
 } else
-  console.log(chalk.whiteBright("SUCCESS"));
+  console.log("[ " + chalk.whiteBright("SUCCESS") + " ]");

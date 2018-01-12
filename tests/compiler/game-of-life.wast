@@ -235,19 +235,24 @@
               )
              )
              (if
-              (if (result i32)
-               (i32.lt_u
-                (get_local $8)
-                (i32.const 2)
+              (i32.and
+               (if (result i32)
+                (i32.eqz
+                 (i32.lt_u
+                  (get_local $8)
+                  (i32.const 2)
+                 )
+                )
+                (i32.gt_u
+                 (get_local $8)
+                 (i32.const 3)
+                )
+                (i32.lt_u
+                 (get_local $8)
+                 (i32.const 2)
+                )
                )
-               (i32.lt_u
-                (get_local $8)
-                (i32.const 2)
-               )
-               (i32.gt_u
-                (get_local $8)
-                (i32.const 3)
-               )
+               (i32.const 1)
               )
               (i32.store8
                (i32.add

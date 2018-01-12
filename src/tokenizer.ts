@@ -943,13 +943,13 @@ export class Tokenizer extends DiagnosticEmitter {
 
         // make sure each supported flag is unique
         case CharCode.g:
-          flags |= select<i32>(1, -1, !(flags & 1));
+          flags |= flags & 1 ? -1 : 1;
           break;
         case CharCode.i:
-          flags |= select<i32>(2, -1, !(flags & 2));
+          flags |= flags & 2 ? -1 : 2;
           break;
         case CharCode.m:
-          flags |= select<i32>(4, -1, !(flags & 4));
+          flags |= flags & 4 ? -1 : 4;
           break;
 
         default:

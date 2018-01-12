@@ -429,4 +429,11 @@ declare function _RelooperAddBlockWithSwitch(relooper: RelooperRef, code: Binary
 declare function _RelooperAddBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: usize, numIndexes: BinaryenIndex, code: BinaryenExpressionRef): void;
 declare function _RelooperRenderAndDispose(relooper: RelooperRef, entry: RelooperBlockRef, labelHelper: BinaryenIndex, module: BinaryenModuleRef): BinaryenExpressionRef;
 
+declare function _BinaryenGetOptimizeLevel(): i32;
+declare function _BinaryenSetOptimizeLevel(level: i32): void;
+declare function _BinaryenGetShrinkLevel(): i32;
+declare function _BinaryenSetShrinkLevel(level: i32): void;
+declare function _BinaryenGetDebugInfo(): bool;
+declare function _BinaryenSetDebugInfo(on: bool): void;
+
 declare function _BinaryenSetAPITracing(on: i32): void;

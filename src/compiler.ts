@@ -110,6 +110,7 @@ import {
 import {
   Type,
   TypeKind,
+  TypeFlags,
   typesToNativeTypes
 } from "./types";
 
@@ -575,7 +576,7 @@ export class Compiler extends DiagnosticEmitter {
     var signatureNameParts = new Array<string>(numParametersInclThis + 1);
 
     if (instance.instanceMethodOf) {
-      nativeParamTypes[paramIndex] = select<NativeType>(NativeType.I64, NativeType.I32, this.options.target == Target.WASM64);
+      nativeParamTypes[paramIndex] = this.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32;
       signatureNameParts[paramIndex++] = instance.instanceMethodOf.type.toSignatureString();
     }
     for (var i = 0; i < numParameters; ++i) {
@@ -1196,21 +1197,20 @@ export class Compiler extends DiagnosticEmitter {
     if (toType.kind == TypeKind.VOID)
       return this.module.createDrop(expr);
 
-    var fromFloat = fromType.isAnyFloat;
-    var toFloat = toType.isAnyFloat;
-
     var mod = this.module;
     var losesInformation = false;
 
-    if (fromFloat) {
+    if (fromType.is(TypeFlags.FLOAT)) {
 
       // float to float
-      if (toFloat) {
+      if (toType.is(TypeFlags.FLOAT)) {
         if (fromType.kind == TypeKind.F32) {
 
           // f32 to f64
           if (toType.kind == TypeKind.F64)
             expr = mod.createUnary(UnaryOp.PromoteF32, expr);
+
+          // otherwise f32 to f32
 
         // f64 to f32
         } else if (toType.kind == TypeKind.F32) {
@@ -1218,125 +1218,104 @@ export class Compiler extends DiagnosticEmitter {
           expr = mod.createUnary(UnaryOp.DemoteF64, expr);
         }
 
+        // otherwise f64 to f64
+
       // float to int
-      } else {
+      } else if (toType.is(TypeFlags.INTEGER)) {
         losesInformation = true;
 
         // f32 to int
         if (fromType.kind == TypeKind.F32) {
-          if (toType.isAnySignedInteger) {
-            if (toType.isLongInteger)
+          if (toType.is(TypeFlags.SIGNED)) {
+            if (toType.is(TypeFlags.LONG))
               expr = mod.createUnary(UnaryOp.TruncF32ToI64, expr);
             else {
               expr = mod.createUnary(UnaryOp.TruncF32ToI32, expr);
-              if (toType.isSmallInteger) {
-                expr = mod.createBinary(BinaryOp.ShlI32, expr, mod.createI32(toType.smallIntegerShift));
-                expr = mod.createBinary(BinaryOp.ShrI32, expr, mod.createI32(toType.smallIntegerShift));
-              }
+              if (toType.is(TypeFlags.SMALL))
+                expr = makeSmallIntegerWrap(expr, toType, this.module);
             }
           } else {
-            if (toType.isLongInteger)
+            if (toType.is(TypeFlags.LONG))
               expr = mod.createUnary(UnaryOp.TruncF32ToU64, expr);
             else {
               expr = mod.createUnary(UnaryOp.TruncF32ToU32, expr);
-              if (toType.isSmallInteger)
-                expr = mod.createBinary(BinaryOp.AndI32, expr, mod.createI32(toType.smallIntegerMask));
+              if (toType.is(TypeFlags.SMALL))
+                expr = makeSmallIntegerWrap(expr, toType, this.module);
             }
           }
 
         // f64 to int
         } else {
-          if (toType.isAnySignedInteger) {
-            if (toType.isLongInteger)
+          if (toType.is(TypeFlags.SIGNED)) {
+            if (toType.is(TypeFlags.LONG))
               expr = mod.createUnary(UnaryOp.TruncF64ToI64, expr);
             else {
               expr = mod.createUnary(UnaryOp.TruncF64ToI32, expr);
-              if (toType.isSmallInteger) {
-                expr = mod.createBinary(BinaryOp.ShlI32, expr, mod.createI32(toType.smallIntegerShift));
-                expr = mod.createBinary(BinaryOp.ShrI32, expr, mod.createI32(toType.smallIntegerShift));
-              }
+              if (toType.is(TypeFlags.SMALL))
+                expr = makeSmallIntegerWrap(expr, toType, this.module);
             }
           } else {
-            if (toType.isLongInteger)
+            if (toType.is(TypeFlags.LONG))
               expr = mod.createUnary(UnaryOp.TruncF64ToU64, expr);
             else {
               expr = mod.createUnary(UnaryOp.TruncF64ToU32, expr);
-              if (toType.isSmallInteger)
-                expr = mod.createBinary(BinaryOp.AndI32, expr, mod.createI32(toType.smallIntegerMask));
+              if (toType.is(TypeFlags.SMALL))
+                expr = makeSmallIntegerWrap(expr, toType, this.module);
             }
           }
         }
 
+      // float to void
+      } else {
+        assert(toType.flags == TypeFlags.NONE);
+        expr = this.module.createDrop(expr);
       }
 
     // int to float
-    } else if (toFloat) {
+    } else if (fromType.is(TypeFlags.INTEGER) && toType.is(TypeFlags.FLOAT)) {
 
       // int to f32
       if (toType.kind == TypeKind.F32) {
-        if (fromType.isLongInteger) {
+        if (fromType.is(TypeFlags.LONG)) {
           losesInformation = true;
-          if (fromType.isAnySignedInteger)
-            expr = mod.createUnary(UnaryOp.ConvertI64ToF32, expr);
-          else
-            expr = mod.createUnary(UnaryOp.ConvertU64ToF32, expr);
+          expr = mod.createUnary(fromType.is(TypeFlags.SIGNED) ? UnaryOp.ConvertI64ToF32 : UnaryOp.ConvertU64ToF32, expr);
         } else {
-          if (!fromType.isSmallInteger)
-            losesInformation = true;
-          if (fromType.isAnySignedInteger)
-            expr = mod.createUnary(UnaryOp.ConvertI32ToF32, expr);
-          else
-            expr = mod.createUnary(UnaryOp.ConvertU32ToF32, expr);
+          losesInformation = !fromType.is(TypeFlags.SMALL);
+          expr = mod.createUnary(fromType.is(TypeFlags.SIGNED) ? UnaryOp.ConvertI32ToF32 : UnaryOp.ConvertU32ToF32, expr);
         }
 
       // int to f64
       } else {
-        if (fromType.isLongInteger) {
+        if (fromType.is(TypeFlags.LONG)) {
           losesInformation = true;
-          if (fromType.isAnySignedInteger)
-            expr = mod.createUnary(UnaryOp.ConvertI64ToF64, expr);
-          else
-            expr = mod.createUnary(UnaryOp.ConvertU64ToF64, expr);
+          expr = mod.createUnary(fromType.is(TypeFlags.SIGNED) ? UnaryOp.ConvertI64ToF64 : UnaryOp.ConvertU64ToF64, expr);
         } else
-          if (fromType.isAnySignedInteger)
-            expr = mod.createUnary(UnaryOp.ConvertI32ToF64, expr);
-          else
-            expr = mod.createUnary(UnaryOp.ConvertU32ToF64, expr);
+          expr = mod.createUnary(fromType.is(TypeFlags.SIGNED) ? UnaryOp.ConvertI32ToF64 : UnaryOp.ConvertU32ToF64, expr);
       }
 
     // int to int
     } else {
-      if (fromType.isLongInteger) {
+      if (fromType.is(TypeFlags.LONG)) {
 
         // i64 to i32
-        if (!toType.isLongInteger) {
+        if (!toType.is(TypeFlags.LONG)) {
           losesInformation = true;
           expr = mod.createUnary(UnaryOp.WrapI64, expr); // discards upper bits
-          if (toType.isSmallInteger) {
-            if (toType.isAnySignedInteger) {
-              expr = mod.createBinary(BinaryOp.ShlI32, expr, mod.createI32(toType.smallIntegerShift));
-              expr = mod.createBinary(BinaryOp.ShrI32, expr, mod.createI32(toType.smallIntegerShift));
-            } else
-              expr = mod.createBinary(BinaryOp.AndI32, expr, mod.createI32(toType.smallIntegerMask));
-          }
+          if (toType.is(TypeFlags.SMALL))
+            expr = makeSmallIntegerWrap(expr, toType, this.module);
         }
 
       // i32 to i64
-      } else if (toType.isLongInteger) {
-        if (toType.isAnySignedInteger)
-          expr = mod.createUnary(UnaryOp.ExtendI32, expr);
-        else
-          expr = mod.createUnary(UnaryOp.ExtendU32, expr);
+      } else if (toType.is(TypeFlags.LONG)) {
+        expr = mod.createUnary(toType.is(TypeFlags.SIGNED) ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32, expr);
 
-      // i32 or smaller to even smaller int
-      } else if (toType.isSmallInteger && fromType.size > toType.size) {
+      // i32 or smaller to even smaller or same size int with change of sign
+      } else if (toType.is(TypeFlags.SMALL) && (fromType.size > toType.size || (fromType.size == toType.size && fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED)))) {
         losesInformation = true;
-        if (toType.isAnySignedInteger) {
-          expr = mod.createBinary(BinaryOp.ShlI32, expr, mod.createI32(toType.smallIntegerShift));
-          expr = mod.createBinary(BinaryOp.ShrI32, expr, mod.createI32(toType.smallIntegerShift));
-        } else
-          expr = mod.createBinary(BinaryOp.AndI32, expr, mod.createI32(toType.smallIntegerMask));
+        expr = makeSmallIntegerWrap(expr, toType, this.module);
       }
+
+      // otherwise (smaller) i32/u32 to (same size) i32/u32
     }
 
     if (losesInformation && conversionKind == ConversionKind.IMPLICIT)
@@ -1360,13 +1339,12 @@ export class Compiler extends DiagnosticEmitter {
 
     var compound = false;
     var possiblyOverflows = false;
-
-    var tempLocal: Local;
+    var tempLocal: Local | null = null
 
     switch (expression.operator) {
 
       case Token.LESSTHAN:
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
         switch (this.currentType.kind) {
@@ -1382,7 +1360,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
 
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.LtI64, BinaryOp.LtI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.LtI64 : BinaryOp.LtI32, left, right);
             break;
 
           case TypeKind.U8:
@@ -1394,7 +1372,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.USIZE:
             // TODO: check operator overload
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.LtU64, BinaryOp.LtU32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.LtU64 : BinaryOp.LtU32, left, right);
             break;
 
           case TypeKind.U64:
@@ -1417,7 +1395,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.GREATERTHAN:
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
         switch (this.currentType.kind) {
@@ -1429,7 +1407,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
 
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.GtI64, BinaryOp.GtI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.GtI64 : BinaryOp.GtI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1445,7 +1423,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.USIZE:
             // TODO: check operator overload
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.GtU64, BinaryOp.GtU32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.GtU64 : BinaryOp.GtU32, left, right);
             break;
 
           case TypeKind.U64:
@@ -1468,7 +1446,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.LESSTHAN_EQUALS:
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
         switch (this.currentType.kind) {
@@ -1480,7 +1458,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
 
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.LeI64, BinaryOp.LeI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.LeI64 : BinaryOp.LeI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1496,7 +1474,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.USIZE:
             // TODO: check operator overload
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.LeU64, BinaryOp.LeU32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.LeU64 : BinaryOp.LeU32, left, right);
             break;
 
           case TypeKind.U64:
@@ -1519,7 +1497,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.GREATERTHAN_EQUALS:
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
         switch (this.currentType.kind) {
@@ -1531,7 +1509,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
 
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.GeI64, BinaryOp.GeI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.GeI64 : BinaryOp.GeI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1547,7 +1525,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.USIZE:
             // TODO: check operator overload
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.GeU64, BinaryOp.GeU32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.GeU64 : BinaryOp.GeU32, left, right);
             break;
 
           case TypeKind.U64:
@@ -1577,7 +1555,7 @@ export class Compiler extends DiagnosticEmitter {
         // checking for a possible use of unary EQZ. while the most classic of all optimizations,
         // that's not what the source told us to do. for reference, `!left` emits unary EQZ.
 
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
         switch (this.currentType.kind) {
@@ -1595,7 +1573,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.EqI64, BinaryOp.EqI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.EqI64 : BinaryOp.EqI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1621,7 +1599,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.EXCLAMATION_EQUALS_EQUALS:
         // TODO?
       case Token.EXCLAMATION_EQUALS:
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType);
 
         switch (this.currentType.kind) {
@@ -1639,7 +1617,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.NeI64, BinaryOp.NeI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.NeI64 : BinaryOp.NeI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1668,7 +1646,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PLUS_EQUALS:
         compound = true;
       case Token.PLUS: // retains low bits of small integers
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
         switch (this.currentType.kind) {
@@ -1687,7 +1665,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select(BinaryOp.AddI64, BinaryOp.AddI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.AddI64 : BinaryOp.AddI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1711,7 +1689,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.MINUS_EQUALS:
         compound = true;
       case Token.MINUS: // retains low bits of small integers
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
         switch (this.currentType.kind) {
@@ -1730,7 +1708,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.SubI64, BinaryOp.SubI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.SubI64 : BinaryOp.SubI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1755,7 +1733,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.ASTERISK_EQUALS:
         compound = true;
       case Token.ASTERISK: // retains low bits of small integers
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
         switch (this.currentType.kind) {
@@ -1775,7 +1753,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.MulI64, BinaryOp.MulI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.MulI64 : BinaryOp.MulI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1800,7 +1778,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.SLASH_EQUALS:
         compound = true;
       case Token.SLASH: // TODO: when can division remain unwrapped? does it overflow?
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT);
 
         switch (this.currentType.kind) {
@@ -1813,7 +1791,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
 
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.DivI64, BinaryOp.DivI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.DivI64 : BinaryOp.DivI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1830,7 +1808,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.USIZE:
             // TODO: check operator overload
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.DivU64, BinaryOp.DivU32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.DivU64 : BinaryOp.DivU32, left, right);
             break;
 
           case TypeKind.U64:
@@ -1854,7 +1832,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PERCENT_EQUALS:
         compound = true;
       case Token.PERCENT: // TODO: when can remainder remain unwrapped? may it overflow?
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT);
 
         switch (this.currentType.kind) {
@@ -1866,7 +1844,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
 
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.RemI64, BinaryOp.RemI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.RemI64 : BinaryOp.RemI32, left, right);
             break;
 
           case TypeKind.I64:
@@ -1882,7 +1860,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.USIZE:
             // TODO: check operator overload
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.RemU64, BinaryOp.RemU32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.RemU64 : BinaryOp.RemU32, left, right);
             break;
 
           case TypeKind.U64:
@@ -1905,7 +1883,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.LESSTHAN_LESSTHAN_EQUALS:
         compound = true;
       case Token.LESSTHAN_LESSTHAN: // retains low bits of small integers
-        left = this.compileExpression(expression.left, select(Type.i64, select(Type.i32, contextualType, contextualType == Type.void), contextualType.isAnyFloat), ConversionKind.NONE, false);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType.is(TypeFlags.FLOAT) ? Type.i64 : contextualType, ConversionKind.NONE, false);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
         switch (this.currentType.kind) {
@@ -1928,7 +1906,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.ShlI64, BinaryOp.ShlI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.ShlI64 : BinaryOp.ShlI32, left, right);
             break;
 
           case TypeKind.VOID:
@@ -1940,7 +1918,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_EQUALS:
         compound = true;
       case Token.GREATERTHAN_GREATERTHAN: // must wrap small integers
-        left = this.compileExpression(expression.left, select(Type.i64, select(Type.i32, contextualType, contextualType == Type.void), contextualType.isAnyFloat), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType.is(TypeFlags.FLOAT) ? Type.i64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT);
 
         switch (this.currentType.kind) {
@@ -1955,7 +1933,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
 
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.ShrI64, BinaryOp.ShrI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32, left, right);
             break;
 
           case TypeKind.U8:
@@ -1972,7 +1950,7 @@ export class Compiler extends DiagnosticEmitter {
 
           case TypeKind.USIZE:
             // TODO: check operator overload
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.ShrU64, BinaryOp.ShrU32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.ShrU64 : BinaryOp.ShrU32, left, right);
             break;
 
           case TypeKind.VOID:
@@ -1984,7 +1962,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
         compound = true;
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: // modifies low bits of small integers if unsigned
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.u64 : select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType == Type.void ? Type.u64 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT);
 
         switch (this.currentType.kind) {
@@ -2006,7 +1984,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.ShrU64, BinaryOp.ShrU32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.ShrU64 : BinaryOp.ShrU32, left, right);
             break;
 
           case TypeKind.VOID:
@@ -2018,7 +1996,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.AMPERSAND_EQUALS:
         compound = true;
       case Token.AMPERSAND: // retains low bits of small integers
-        left = this.compileExpression(expression.left, select(Type.i64, select(Type.i32, contextualType, contextualType == Type.void), contextualType.isAnyFloat), ConversionKind.NONE, false);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType.is(TypeFlags.FLOAT) ? Type.i64 : contextualType, ConversionKind.NONE, false);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
         switch (this.currentType.kind) {
@@ -2041,7 +2019,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.AndI64, BinaryOp.AndI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.AndI64 : BinaryOp.AndI32, left, right);
             break;
 
           case TypeKind.VOID:
@@ -2053,7 +2031,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.BAR_EQUALS:
         compound = true;
       case Token.BAR: // retains low bits of small integers
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType.is(TypeFlags.FLOAT) ? Type.i64 : contextualType, ConversionKind.NONE, false);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
         switch (this.currentType.kind) {
@@ -2076,7 +2054,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.OrI64, BinaryOp.OrI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.OrI64 : BinaryOp.OrI32, left, right);
             break;
 
           case TypeKind.VOID:
@@ -2088,7 +2066,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.CARET_EQUALS:
         compound = true;
       case Token.CARET: // retains low bits of small integers
-        left = this.compileExpression(expression.left, contextualType.isAnyFloat ? Type.i64 : select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType.is(TypeFlags.FLOAT) ? Type.i64 : contextualType, ConversionKind.NONE, false);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
         switch (this.currentType.kind) {
@@ -2111,7 +2089,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select<BinaryOp>(BinaryOp.XorI64, BinaryOp.XorI32, this.options.target == Target.WASM64), left, right);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.XorI64 : BinaryOp.XorI32, left, right);
             break;
 
           case TypeKind.VOID:
@@ -2123,75 +2101,77 @@ export class Compiler extends DiagnosticEmitter {
       // logical (no overloading)
 
       case Token.AMPERSAND_AMPERSAND: // left && right
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
-        right = this.compileExpression(expression.right, this.currentType);
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
+        right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
-        // simplify if left is free of side effects while tolerating one level of nesting, e.g., i32.load(i32.const)
-        if (condition = this.module.cloneExpression(left, true, 1)) {
-          expr = this.module.createIf(
-            this.currentType.isLongInteger
-              ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
-              : this.currentType == Type.f64
-              ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
-              : this.currentType == Type.f32
-              ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
-              : condition, // usual case: saves one EQZ when not using EQZ above
-             right,
-             left
-          );
-          break;
+        // clone left if free of side effects while tolerating one level of nesting
+        expr = this.module.cloneExpression(left, true, 1);
+
+        // if not possible, tee left to a temp. local
+        if (!expr) {
+          tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
+          left = this.module.createTeeLocal(tempLocal.index, left);
         }
 
-        // otherwise use a temporary local for the intermediate value
-        tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
-        condition = this.module.createTeeLocal(tempLocal.index, left);
-        expr = this.module.createIf(
-          this.currentType.isLongInteger
-            ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
-            : this.currentType == Type.f64
-            ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
-            : this.currentType == Type.f32
-            ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
-            : this.module.createTeeLocal(tempLocal.index, left),
-          right,
-          this.module.createGetLocal(tempLocal.index, this.currentType.toNativeType())
-        );
-        break;
+        // make a condition that checks !left in case an optimizer can take advantage of guaranteed 0 or 1
+        // binaryen just switches the arms here, see: https://github.com/WebAssembly/binaryen/issues/1355
+        possiblyOverflows = this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER);
+        condition = makeEqualsZero(left, this.currentType, this.module);
 
-      case Token.BAR_BAR: // left || right
-        left = this.compileExpression(expression.left, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
-        right = this.compileExpression(expression.right, this.currentType);
-
-        // simplify if left is free of side effects while tolerating one level of nesting
-        if (condition = this.module.cloneExpression(left, true, 1)) {
+        // simplify when cloning left without side effects was successful
+        if (expr)
           expr = this.module.createIf(
-            this.currentType.isLongInteger
-              ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
-              : this.currentType == Type.f64
-              ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
-              : this.currentType == Type.f32
-              ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
-              : condition, // usual case: saves one EQZ when not using EQZ above
-            left,
+            condition, // if !left
+            expr,      // then cloned left
+            right      // else right
+          );
+
+        // otherwise make use of the temp. local
+        else {
+          assert(tempLocal);
+          expr = this.module.createIf(
+            condition,   // if !left
+            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType()),
             right
           );
-          break;
+        }
+        break;
+
+      case Token.BAR_BAR:  // left || right
+        left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
+        right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
+
+        // clone left if free of side effects while tolerating one level of nesting
+        expr = this.module.cloneExpression(left, true, 1);
+
+        // if not possible, tee left to a temp. local
+        if (!expr) {
+          tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
+          left = this.module.createTeeLocal(tempLocal.index, left);
         }
 
-        // otherwise use a temporary local for the intermediate value
-        tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
-        condition = this.module.createTeeLocal(tempLocal.index, left);
-        expr = this.module.createIf(
-          this.currentType.isLongInteger
-            ? this.module.createBinary(BinaryOp.NeI64, condition, this.module.createI64(0, 0))
-            : this.currentType == Type.f64
-            ? this.module.createBinary(BinaryOp.NeF64, condition, this.module.createF64(0))
-            : this.currentType == Type.f32
-            ? this.module.createBinary(BinaryOp.NeF32, condition, this.module.createF32(0))
-            : this.module.createTeeLocal(tempLocal.index, left),
-          this.module.createGetLocal(tempLocal.index, this.currentType.toNativeType()),
-          right
-        );
+        // make a condition that checks !left in case an optimizer can take advantage of guaranteed 0 or 1
+        // binaryen just switches the arms here, see: https://github.com/WebAssembly/binaryen/issues/1355
+        possiblyOverflows = this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER); // if right already did
+        condition = makeEqualsZero(left, this.currentType, this.module);
+
+        // simplify when cloning left without side effects was successful
+        if (expr)
+          expr = this.module.createIf(
+            condition, // if !left
+            right,     // then right
+            expr       // else cloned left
+          );
+
+        // otherwise make use of the temp. local
+        else {
+          assert(tempLocal);
+          expr = this.module.createIf(
+            condition,   // if !left
+            right,
+            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType())
+          );
+        }
         break;
 
       default:
@@ -2199,8 +2179,8 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("not implemented");
     }
     if (possiblyOverflows && wrapSmallIntegers) {
-      assert(this.currentType.isSmallInteger);
-      expr = wrapSmallInteger(expr, this.currentType, this.module);
+      assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
+      expr = makeSmallIntegerWrap(expr, this.currentType, this.module);
     }
     return compound
       ? this.compileAssignmentWithValue(expression.left, expr, contextualType != Type.void)
@@ -2261,7 +2241,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.LOCAL:
-        this.currentType = select<Type>((<Local>element).type, Type.void, tee);
+        this.currentType = tee ? (<Local>element).type : Type.void;
         if ((<Local>element).isConstant) {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
           return this.module.createUnreachable();
@@ -2274,7 +2254,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
-        this.currentType = select<Type>((<Global>element).type, Type.void, tee);
+        this.currentType = tee ? (<Global>element).type : Type.void;
         if ((<Local>element).isConstant) {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
           return this.module.createUnreachable();
@@ -2293,8 +2273,9 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         }
         assert(resolved.targetExpression != null);
-        targetExpr = this.compileExpression(<Expression>resolved.targetExpression, Type.usize32);
-        this.currentType = select<Type>((<Field>element).type, Type.void, tee);
+        targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32, ConversionKind.NONE);
+        assert(this.currentType.classType);
+        this.currentType = tee ? (<Field>element).type : Type.void;
         var elementNativeType = (<Field>element).type.toNativeType();
         if (!tee)
           return this.module.createStore((<Field>element).type.byteSize, targetExpr, valueWithCorrectType, elementNativeType, (<Field>element).memoryOffset);
@@ -2314,7 +2295,8 @@ export class Compiler extends DiagnosticEmitter {
             if (!tee) {
               if (setterInstance.isInstance) {
                 assert(resolved.targetExpression != null);
-                targetExpr = this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64));
+                targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32, ConversionKind.NONE);
+                assert(this.currentType.classType);
                 this.currentType = Type.void;
                 return this.makeCall(setterInstance, [ targetExpr, valueWithCorrectType ]);
               } else {
@@ -2327,20 +2309,20 @@ export class Compiler extends DiagnosticEmitter {
             var getterInstance = (<FunctionPrototype>getterPrototype).resolve(); // reports
             if (getterInstance) {
               assert(getterInstance.parameters.length == 0);
-              this.currentType = getterInstance.returnType;
               if (setterInstance.isInstance) {
                 assert(resolved.targetExpression != null);
-                targetExpr = this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64));
+                targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32, ConversionKind.NONE);
+                assert(this.currentType.classType);
                 tempLocal = this.currentFunction.getAndFreeTempLocal(getterInstance.returnType);
                 return this.module.createBlock(null, [
                   this.makeCall(setterInstance, [ this.module.createTeeLocal(tempLocal.index, targetExpr), valueWithCorrectType ]),
                   this.makeCall(getterInstance, [ this.module.createGetLocal(tempLocal.index, tempLocal.type.toNativeType()) ])
-                ], getterInstance.returnType.toNativeType());
+                ], (this.currentType = getterInstance.returnType).toNativeType());
               } else
                 return this.module.createBlock(null, [
                   this.makeCall(setterInstance, [ valueWithCorrectType ]),
                   this.makeCall(getterInstance)
-                ], getterInstance.returnType.toNativeType());
+                ], (this.currentType = getterInstance.returnType).toNativeType());
             }
           }
         } else
@@ -2393,7 +2375,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createUnreachable();
 
       var numArguments = expression.arguments.length;
-      var numArgumentsInclThis = select<i32>(numArguments + 1, numArguments, functionInstance.instanceMethodOf != null);
+      var numArgumentsInclThis = functionInstance.instanceMethodOf != null ? numArguments + 1 : numArguments;
       var argumentIndex = 0;
 
       var args = new Array<Expression>(numArgumentsInclThis);
@@ -2416,9 +2398,9 @@ export class Compiler extends DiagnosticEmitter {
     var parameters = functionInstance.parameters;
 
     var numParameters = parameters.length;
-    var numParametersInclThis = select<i32>(numParameters + 1, numParameters, functionInstance.instanceMethodOf != null);
+    var numParametersInclThis = functionInstance.instanceMethodOf != null ? numParameters + 1 : numParameters;
     var numArgumentsInclThis = argumentExpressions.length;
-    var numArguments = select<i32>(numArgumentsInclThis - 1, numArgumentsInclThis, functionInstance.instanceMethodOf != null);
+    var numArguments = functionInstance.instanceMethodOf != null ? numArgumentsInclThis - 1 : numArgumentsInclThis;
 
     if (numArgumentsInclThis > numParametersInclThis) { // too many arguments
       this.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range,
@@ -2521,8 +2503,8 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = this.currentFunction.instanceMethodOf.type;
           return this.module.createGetLocal(0, this.currentType.toNativeType());
         }
-        this.currentType = select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64);
         this.error(DiagnosticCode._this_cannot_be_referenced_in_current_location, expression.range);
+        this.currentType = this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32;
         return this.module.createUnreachable();
 
       case NodeKind.SUPER:
@@ -2530,8 +2512,8 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = this.currentFunction.instanceMethodOf.base.type;
           return this.module.createGetLocal(0, this.currentType.toNativeType());
         }
-        this.currentType = select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64);
         this.error(DiagnosticCode._super_can_only_be_referenced_in_a_derived_class, expression.range);
+        this.currentType = this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32;
         return this.module.createUnreachable();
     }
 
@@ -2577,7 +2559,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createF64(floatValue);
       }
 
-      case LiteralKind.INTEGER: {
+      case LiteralKind.INTEGER:
         var intValue = (<IntegerLiteralExpression>expression).value;
         if (contextualType == Type.bool && (intValue.isZero || intValue.isOne))
           return this.module.createI32(intValue.isZero ? 0 : 1);
@@ -2585,25 +2567,23 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createF64(intValue.toF64());
         if (contextualType == Type.f32)
           return this.module.createF32(<f32>intValue.toF64());
-        if (contextualType.isLongInteger)
+        if (contextualType.is(TypeFlags.LONG | TypeFlags.INTEGER))
           return this.module.createI64(intValue.lo, intValue.hi);
         if (!intValue.fitsInI32) {
-          this.currentType = select(Type.i64, Type.u64, contextualType.isAnySignedInteger);
+          this.currentType = contextualType.is(TypeFlags.SIGNED) ? Type.i64 : Type.u64;
           return this.module.createI64(intValue.lo, intValue.hi);
         }
-        if (contextualType.isSmallInteger) {
-          var smallIntValue: i32 = contextualType.isAnySignedInteger
-            ? intValue.lo << contextualType.smallIntegerShift >> contextualType.smallIntegerShift
-            : intValue.lo & contextualType.smallIntegerMask;
-          return this.module.createI32(smallIntValue);
+        if (contextualType.is(TypeFlags.SMALL | TypeFlags.INTEGER)) {
+          var shift = contextualType.computeSmallIntegerShift(Type.i32);
+          var mask = contextualType.computeSmallIntegerMask(Type.i32);
+          return this.module.createI32(contextualType.is(TypeFlags.SIGNED) ? intValue.lo << shift >> shift : intValue.lo & mask);
         }
         if (contextualType == Type.void && !intValue.fitsInI32) {
           this.currentType = Type.i64;
           return this.module.createI64(intValue.lo, intValue.hi);
         }
-        this.currentType = contextualType.isAnySignedInteger ? Type.i32 : Type.u32;
+        this.currentType = contextualType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32;
         return this.module.createI32(intValue.toI32());
-      }
 
       // case LiteralKind.OBJECT:
       // case LiteralKind.REGEXP:
@@ -2653,9 +2633,9 @@ export class Compiler extends DiagnosticEmitter {
         assert(resolved.target != null);
         assert(resolved.targetExpression != null);
         assert((<Field>element).memoryOffset >= 0);
-        targetExpr = this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64));
+        targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32);
         this.currentType = (<Field>element).type;
-        return this.module.createLoad((<Field>element).type.byteSize, (<Field>element).type.isAnySignedInteger,
+        return this.module.createLoad((<Field>element).type.byteSize, (<Field>element).type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
           targetExpr,
           (<Field>element).type.toNativeType(),
           (<Field>element).memoryOffset
@@ -2670,7 +2650,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(getterInstance.parameters.length == 0);
         this.currentType = getterInstance.returnType;
         if (getterInstance.isInstance) {
-          var targetExpr = this.compileExpression(<Expression>resolved.targetExpression, select<Type>(Type.usize64, Type.usize32, this.options.target == Target.WASM64))
+          var targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32)
           return this.makeCall(getterInstance, [ targetExpr ]);
         } else
           return this.makeCall(getterInstance);
@@ -2690,7 +2670,7 @@ export class Compiler extends DiagnosticEmitter {
     var operator = expression.operator;
 
     // make a getter for the expression (also obtains the type)
-    var getValue = this.compileExpression(expression.operand, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+    var getValue = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
 
     var op: BinaryOp;
     var nativeType: NativeType;
@@ -2717,8 +2697,8 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            op = select(BinaryOp.AddI64, BinaryOp.AddI32, this.options.target == Target.WASM64);
-            nativeType = select(NativeType.I64, NativeType.I32, this.options.target == Target.WASM64);
+            op = this.options.target == Target.WASM64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
+            nativeType = this.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32;
             nativeOne = this.currentType.toNativeOne(this.module);
             break;
 
@@ -2765,8 +2745,8 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.USIZE:
             // TODO: check operator overload
           case TypeKind.ISIZE:
-            op = select(BinaryOp.SubI64, BinaryOp.SubI32, this.options.target == Target.WASM64);
-            nativeType = select(NativeType.I64, NativeType.I32, this.options.target == Target.WASM64);
+            op = this.options.target == Target.WASM64 ? BinaryOp.SubI64 : BinaryOp.SubI32;
+            nativeType = this.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32;
             nativeOne = this.currentType.toNativeOne(this.module);
             break;
 
@@ -2816,8 +2796,8 @@ export class Compiler extends DiagnosticEmitter {
       nativeOne
     );
     if (possiblyOverflows) {
-      assert(this.currentType.isSmallInteger);
-      setValue = wrapSmallInteger(setValue, this.currentType, this.module);
+      assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
+      setValue = makeSmallIntegerWrap(setValue, this.currentType, this.module);
     }
     setValue = this.compileAssignmentWithValue(expression.operand, setValue, false); // sets currentType = void
     this.currentType = tempLocal.type;
@@ -2841,12 +2821,12 @@ export class Compiler extends DiagnosticEmitter {
           this.error(DiagnosticCode.Operation_not_supported, expression.range);
           return this.module.createUnreachable();
         }
-        expr = this.compileExpression(expression.operand, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
-        possiblyOverflows = this.currentType.isSmallInteger; // if operand already did
+        expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
+        possiblyOverflows = this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER); // if operand already did
         break;
 
       case Token.MINUS:
-        expr = this.compileExpression(expression.operand, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+        expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
 
         switch (this.currentType.kind) {
 
@@ -2856,7 +2836,6 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.BOOL:
             possiblyOverflows = true; // or if operand already did
-            // fall-through
           default:
             expr = this.module.createBinary(BinaryOp.SubI32, this.module.createI32(0), expr);
             break;
@@ -2866,9 +2845,8 @@ export class Compiler extends DiagnosticEmitter {
               this.error(DiagnosticCode.Operation_not_supported, expression.range);
               return this.module.createUnreachable();
             }
-            // fall-through
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select(BinaryOp.SubI64, BinaryOp.SubI32, this.options.target == Target.WASM64), this.currentType.toNativeZero(this.module), expr);
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.SubI64 : BinaryOp.SubI32, this.currentType.toNativeZero(this.module), expr);
             break;
 
           case TypeKind.I64:
@@ -2888,7 +2866,7 @@ export class Compiler extends DiagnosticEmitter {
 
       case Token.PLUS_PLUS:
         compound = true;
-        expr = this.compileExpression(expression.operand, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+        expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
 
         switch (this.currentType.kind) {
 
@@ -2909,7 +2887,7 @@ export class Compiler extends DiagnosticEmitter {
             }
             // fall-through
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select(BinaryOp.AddI64, BinaryOp.AddI32, this.options.target == Target.WASM64), expr, this.currentType.toNativeOne(this.module));
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.AddI64 : BinaryOp.AddI32, expr, this.currentType.toNativeOne(this.module));
             break;
 
           case TypeKind.I64:
@@ -2929,7 +2907,7 @@ export class Compiler extends DiagnosticEmitter {
 
       case Token.MINUS_MINUS:
         compound = true;
-        expr = this.compileExpression(expression.operand, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE, false);
+        expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
 
         switch (this.currentType.kind) {
 
@@ -2951,7 +2929,7 @@ export class Compiler extends DiagnosticEmitter {
             }
             // fall-through
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select(BinaryOp.SubI64, BinaryOp.SubI32, this.options.target == Target.WASM64), expr, this.currentType.toNativeOne(this.module));
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.SubI64 : BinaryOp.SubI32, expr, this.currentType.toNativeOne(this.module));
             break;
 
           case TypeKind.I64:
@@ -2970,37 +2948,13 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.EXCLAMATION: // must wrap small integers
-        expr = this.compileExpression(expression.operand, select(Type.i32, contextualType, contextualType == Type.void), ConversionKind.NONE);
-
-        switch (this.currentType.kind) {
-
-          default:
-            expr = this.module.createUnary(UnaryOp.EqzI32, expr);
-            break;
-
-          case TypeKind.ISIZE:
-          case TypeKind.USIZE:
-            expr = this.module.createUnary(select<UnaryOp>(UnaryOp.EqzI64, UnaryOp.EqzI32, this.options.target == Target.WASM64), expr);
-            break;
-
-          case TypeKind.I64:
-          case TypeKind.U64:
-            expr = this.module.createUnary(UnaryOp.EqzI64, expr);
-            break;
-
-          case TypeKind.F32:
-            expr = this.module.createBinary(BinaryOp.EqF32, expr, this.module.createF32(0));
-            break;
-
-          case TypeKind.F64:
-            expr = this.module.createBinary(BinaryOp.EqF64, expr, this.module.createF64(0));
-            break;
-        }
+        expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
+        expr = makeEqualsZero(expr, this.currentType, this.module);
         this.currentType = Type.bool;
         break;
 
       case Token.TILDE: // retains low bits of small integers
-        expr = this.compileExpression(expression.operand, select(Type.i64, select(Type.i32, contextualType, contextualType == Type.void), contextualType.isAnyFloat), select(ConversionKind.NONE, ConversionKind.IMPLICIT, contextualType == Type.void), false);
+        expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType.is(TypeFlags.FLOAT) ? Type.i64 : contextualType, contextualType == Type.void ? ConversionKind.NONE : ConversionKind.IMPLICIT, false);
 
         switch (this.currentType.kind) {
 
@@ -3021,7 +2975,7 @@ export class Compiler extends DiagnosticEmitter {
             }
             // fall-through
           case TypeKind.ISIZE:
-            expr = this.module.createBinary(select(BinaryOp.XorI64, BinaryOp.XorI32, this.options.target == Target.WASM64), expr, this.currentType.toNativeNegOne(this.module));
+            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.XorI64 : BinaryOp.XorI32, expr, this.currentType.toNativeNegOne(this.module));
             break;
 
           case TypeKind.I64:
@@ -3036,8 +2990,8 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("unary operator expected");
     }
     if (possiblyOverflows && wrapSmallIntegers) {
-      assert(this.currentType.isSmallInteger);
-      expr = wrapSmallInteger(expr, this.currentType, this.module);
+      assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
+      expr = makeSmallIntegerWrap(expr, this.currentType, this.module);
     }
     return compound
       ? this.compileAssignmentWithValue(expression.operand, expr, contextualType != Type.void)
@@ -3075,13 +3029,14 @@ function makeInlineConstant(element: VariableLikeElement, module: Module): Expre
 
     case TypeKind.I8:
     case TypeKind.I16:
-      var shift = (<Type>element.type).smallIntegerShift;
+      var shift = element.type.computeSmallIntegerShift(Type.i32);
       return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
 
     case TypeKind.U8:
     case TypeKind.U16:
     case TypeKind.BOOL:
-      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & (<Type>element.type).smallIntegerMask: 0);
+      var mask = element.type.computeSmallIntegerMask(Type.i32);
+      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & mask : 0);
 
     case TypeKind.I32:
     case TypeKind.U32:
@@ -3109,7 +3064,7 @@ function makeInlineConstant(element: VariableLikeElement, module: Module): Expre
 }
 
 /** Wraps a 32-bit integer expression so it evaluates to a valid value in the range of the specified small integer type. */
-export function wrapSmallInteger(expr: ExpressionRef, type: Type, module: Module) {
+export function makeSmallIntegerWrap(expr: ExpressionRef, type: Type, module: Module) {
   switch (type.kind) {
 
     case TypeKind.I8:
@@ -3152,6 +3107,40 @@ export function wrapSmallInteger(expr: ExpressionRef, type: Type, module: Module
         module.createI32(0x1)
       );
       break;
+
+    case TypeKind.VOID:
+      throw new Error("concrete type expected");
+  }
+  return expr;
+}
+
+export function makeEqualsZero(expr: ExpressionRef, type: Type, module: Module): ExpressionRef {
+  switch (type.kind) {
+
+    default: // any integer up to 32 bits
+      expr = module.createUnary(UnaryOp.EqzI32, expr);
+      break;
+
+    case TypeKind.I64:
+    case TypeKind.U64:
+      expr = module.createUnary(UnaryOp.EqzI64, expr);
+      break;
+
+    case TypeKind.ISIZE:
+    case TypeKind.USIZE:
+      expr = module.createUnary(type.size == 64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32, expr);
+      break;
+
+    case TypeKind.F32:
+      expr = module.createBinary(BinaryOp.EqF32, expr, module.createF32(0));
+      break;
+
+    case TypeKind.F64:
+      expr = module.createBinary(BinaryOp.EqF64, expr, module.createF64(0));
+      break;
+
+    case TypeKind.VOID:
+      throw new Error("concrete type expected");
   }
   return expr;
 }
