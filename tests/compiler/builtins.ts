@@ -117,15 +117,15 @@ store<f64>(8, load<f64>(8));
 
 // reinterpretation
 
-reinterpret<f32,i32>(1.25);
-reinterpret<i32,f32>(25);
-reinterpret<f64,i64>(1.25);
-reinterpret<i64,f64>(25);
+reinterpret<i32>(1.25);
+reinterpret<f32>(25);
+reinterpret<i64>(1.25);
+reinterpret<f64>(25);
 
-i = reinterpret<f32,i32>(1.25);
-f = reinterpret<i32,f32>(25);
-I = reinterpret<f64,i64>(1.25);
-F = reinterpret<i64,f64>(25);
+i = reinterpret<i32>(1.25);
+f = reinterpret<f32>(25);
+I = reinterpret<i64>(1.25);
+F = reinterpret<f64>(25);
 
 // host
 

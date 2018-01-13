@@ -146,8 +146,8 @@ declare function copysign<T = f32 | f64>(x: T, y: T): T;
 declare function floor<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer tied to even of a 32-bit or 64-bit float. */
 declare function nearest<T = f32 | f64>(value: T): T;
-/** Reinterprets the bits of a value of type `T1` as type `T2`. Valid reinterpretations are i32 to/from f32 and i64 to/from f64. */
-declare function reinterpret<T1 = i32 | i64 | f32 | f64, T2 = i32 | i64 | f32 | f64>(value: T1): T2;
+/** Reinterprets the bits of the specified value as type `T`. Valid reinterpretations are u32/i32 to/from f32 and u64/i64 to/from f64. */
+declare function reinterpret<T = i32 | i64 | f32 | f64>(value: number): T;
 /** Selects one of two pre-evaluated values depending on the condition. */
 declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 /** Calculates the square root of a 32-bit or 64-bit float. */
