@@ -1349,7 +1349,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       }
       arg0 = compiler.compileExpression(operands[0], usizeType);
       compiler.currentType = typeArguments[0];
-      return module.createLoad(typeArguments[0].size >>> 3, typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER), arg0, typeArguments[0].toNativeType());
+      return module.createLoad(typeArguments[0].byteSize, typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER), arg0, typeArguments[0].toNativeType());
 
     case "store": // store<T?>(offset: usize, value: T) -> void
       compiler.currentType = Type.void;
@@ -1372,7 +1372,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       }
       type = compiler.currentType;
       compiler.currentType = Type.void;
-      return module.createStore(type.size >>> 3, arg0, arg1, type.toNativeType());
+      return module.createStore(type.byteSize, arg0, arg1, type.toNativeType());
 
     case "sizeof": // sizeof<T!>() -> usize
       compiler.currentType = usizeType;

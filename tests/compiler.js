@@ -72,11 +72,15 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
         var wasmModule = new WebAssembly.Module(binary);
         var wasmInstance = new WebAssembly.Instance(wasmModule, {
           env: {
-            externalFunc: function() {},
+            externalFunc: function(arg0, arg1, arg2) {
+              console.log("env.externalFunc called with: " + arg0 + ", " + arg1 + ", " + arg2);
+            },
             externalConst: 1
           },
           external: {
-            externalFunc: function() {},
+            externalFunc: function(arg0, arg1, arg2) {
+              console.log("external.externalFunc called with: " + arg0 + ", " + arg1 + ", " + arg2);
+            },
             externalConst: 2
           }
         });

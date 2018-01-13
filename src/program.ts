@@ -290,8 +290,8 @@ export class Program extends DiagnosticEmitter {
 
     this.checkGlobalAlias(prototype, declaration);
 
-    if (hasDecorator("struct", declaration.decorators)) {
-      prototype.isStruct = true;
+    if (hasDecorator("explicit", declaration.decorators)) {
+      prototype.isExplicit = true;
       if (declaration.implementsTypes && declaration.implementsTypes.length)
         this.error(DiagnosticCode.Structs_cannot_implement_interfaces, Range.join(declaration.name.range, declaration.implementsTypes[declaration.implementsTypes.length - 1].range));
     } else if (declaration.implementsTypes.length)
@@ -413,8 +413,8 @@ export class Program extends DiagnosticEmitter {
       } else
         classPrototype.instanceMembers = new Map();
       instancePrototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
-      // if (classPrototype.isStruct && instancePrototype.isAbstract) {
-      //   this.error( Structs cannot declare abstract methods. );
+      // if (classPrototype.isExplicit && instancePrototype.isAbstract) {
+      //   this.error( Explicit classes cannot declare abstract methods. );
       // }
       classPrototype.instanceMembers.set(name, instancePrototype);
     }
@@ -436,19 +436,19 @@ export class Program extends DiagnosticEmitter {
               switch ((<StringLiteralExpression>firstArg).value) {
 
                 case "[]":
-                  classPrototype.opIndexedGet = instancePrototype;
+                  classPrototype.fnIndexedGet = instancePrototype.simpleName;
                   break;
 
                 case "[]=":
-                  classPrototype.opIndexedSet = instancePrototype;
+                  classPrototype.fnIndexedSet = instancePrototype.simpleName;
                   break;
 
                 case "+":
-                  classPrototype.opConcat = instancePrototype;
+                  classPrototype.fnConcat = instancePrototype.simpleName;
                   break;
 
                 case "==":
-                  classPrototype.opEquals = instancePrototype;
+                  classPrototype.fnEquals = instancePrototype.simpleName;
                   break;
 
                 default: // TBD: does it make sense to provide more, even though not JS/TS-compatible?
@@ -1078,13 +1078,15 @@ export class Program extends DiagnosticEmitter {
     var target = resolvedElement.element;
     switch (target.kind) {
 
-      // TBD: should indexed access on static classes, like `Heap`, be a supported as well?
-      case ElementKind.CLASS:
-        var type = (<Class>target).type;
+      case ElementKind.GLOBAL:
+      case ElementKind.LOCAL:
+      case ElementKind.FIELD:
+        var type = (<VariableLikeElement>target).type;
         if (type.classType) {
-          var indexedGet: FunctionPrototype | null;
-          if (indexedGet = (target = type.classType).prototype.opIndexedGet)
-            return resolvedElement.set(indexedGet).withTarget(target, targetExpression);
+          var indexedGetName = (target = type.classType).prototype.fnIndexedGet;
+          var indexedGet: Element | null;
+          if (indexedGetName != null && target.members && (indexedGet = target.members.get(indexedGetName)) && indexedGet.kind == ElementKind.FUNCTION_PROTOTYPE)
+            return resolvedElement.set(indexedGet).withTarget(type.classType, targetExpression);
         }
         break;
     }
@@ -1221,8 +1223,8 @@ export enum ElementFlags {
   PRIVATE = 1 << 15,
   /** Is an abstract member. */
   ABSTRACT = 1 << 16,
-  /** Is a struct-like class with limited capabilites. */
-  STRUCT = 1 << 17,
+  /** Is an explicitly layed out and allocated class with limited capabilites. */
+  EXPLICIT = 1 << 17,
   /** Has already inherited base class static members. */
   HAS_STATIC_BASE_MEMBERS = 1 << 18
 }
@@ -1877,13 +1879,13 @@ export class ClassPrototype extends Element {
   basePrototype: ClassPrototype | null = null; // set in Program#initialize
 
   /** Overloaded indexed get method, if any. */
-  opIndexedGet: FunctionPrototype | null = null; // TODO: indexedGet and indexedSet as an accessor?
+  fnIndexedGet: string | null = null;
   /** Overloaded indexed set method, if any. */
-  opIndexedSet: FunctionPrototype | null = null;
+  fnIndexedSet: string | null = null;
   /** Overloaded concatenation method, if any. */
-  opConcat: FunctionPrototype | null = null;
+  fnConcat: string | null = null;
   /** Overloaded equality comparison method, if any. */
-  opEquals: FunctionPrototype | null = null;
+  fnEquals: string | null = null;
 
   constructor(program: Program, simpleName: string, internalName: string, declaration: ClassDeclaration | null = null) {
     super(program, simpleName, internalName);
@@ -1903,9 +1905,9 @@ export class ClassPrototype extends Element {
     }
   }
 
-  /** Whether a struct-like class with limited capabilities or not. */
-  get isStruct(): bool { return (this.flags & ElementFlags.STRUCT) != 0; }
-  set isStruct(is: bool) { if (is) this.flags |= ElementFlags.STRUCT; else this.flags &= ~ElementFlags.STRUCT; }
+  /** Whether explicitly layed out and allocated */
+  get isExplicit(): bool { return (this.flags & ElementFlags.EXPLICIT) != 0; }
+  set isExplicit(is: bool) { if (is) this.flags |= ElementFlags.EXPLICIT; else this.flags &= ~ElementFlags.EXPLICIT; }
 
   resolve(typeArguments: Type[] | null, contextualTypeArguments: Map<string,Type> | null = null): Class | null {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
@@ -1933,7 +1935,7 @@ export class ClassPrototype extends Element {
         this.program.error(DiagnosticCode.A_class_may_only_extend_another_class, declaration.extendsType.range);
         return null;
       }
-      if (baseClass.prototype.isStruct != this.isStruct) {
+      if (baseClass.prototype.isExplicit != this.isExplicit) {
         this.program.error(DiagnosticCode.Structs_cannot_extend_classes_and_vice_versa, Range.join(declaration.name.range, declaration.extendsType.range));
         return null;
       }
@@ -1957,9 +1959,9 @@ export class ClassPrototype extends Element {
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
 
-    var memoryOffset: i32 = 0;
+    var memoryOffset: u32 = 0;
     if (baseClass) {
-      memoryOffset = baseClass.type.byteSize;
+      memoryOffset = baseClass.currentMemoryOffset;
       if (baseClass.members) {
         if (!instance.members)
           instance.members = new Map();
@@ -1983,7 +1985,7 @@ export class ClassPrototype extends Element {
             var fieldType = this.program.resolveType(fieldDeclaration.type, instance.contextualTypeArguments); // reports
             if (fieldType) {
               var fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
-              switch (fieldType.size >> 3) { // align (byteSize might vary if a class type)
+              switch (fieldType.byteSize) { // align
                 case 1: break;
                 case 2: if (memoryOffset & 1) ++memoryOffset; break;
                 case 4: if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1; break;
@@ -2015,7 +2017,7 @@ export class ClassPrototype extends Element {
         }
       }
 
-    instance.type.byteSize = memoryOffset; // sizeof<this>() is its byte size in memory
+    instance.currentMemoryOffset = memoryOffset; // sizeof<this>() is its byte size in memory
     return instance;
   }
 
@@ -2051,6 +2053,8 @@ export class Class extends Element {
   base: Class | null;
   /** Contextual type arguments for fields and methods. */
   contextualTypeArguments: Map<string,Type> | null = null;
+  /** Current member memory offset. */
+  currentMemoryOffset: u32 = 0;
 
   /** Constructs a new class. */
   constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] | null = null, base: Class | null = null) {

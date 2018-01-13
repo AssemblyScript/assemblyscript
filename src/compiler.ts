@@ -2217,6 +2217,16 @@ export class Compiler extends DiagnosticEmitter {
         this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Property>element).internalName);
         return this.module.createUnreachable();
 
+      case ElementKind.FUNCTION_PROTOTYPE:
+        if (expression.kind == NodeKind.ELEMENTACCESS) { // @operator("[]")
+          assert(resolved.target && resolved.target.kind == ElementKind.CLASS && element.simpleName == (<Class>resolved.target).prototype.fnIndexedGet)
+          var resolvedIndexedSet = (<FunctionPrototype>element).resolve(null);
+          if (resolvedIndexedSet) {
+            elementType = resolvedIndexedSet.returnType;
+            break;
+          }
+        }
+        // fall-through
       default:
         this.error(DiagnosticCode.Operation_not_supported, expression.range);
         return this.module.createUnreachable();
@@ -2275,11 +2285,11 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = tee ? (<Field>element).type : Type.void;
         var elementNativeType = (<Field>element).type.toNativeType();
         if (!tee)
-          return this.module.createStore((<Field>element).type.byteSize, targetExpr, valueWithCorrectType, elementNativeType, (<Field>element).memoryOffset);
+          return this.module.createStore((<Field>element).type.size >> 3, targetExpr, valueWithCorrectType, elementNativeType, (<Field>element).memoryOffset);
         tempLocal = this.currentFunction.getAndFreeTempLocal((<Field>element).type);
         return this.module.createBlock(null, [ // TODO: simplify if valueWithCorrectType has no side effects
           this.module.createSetLocal(tempLocal.index, valueWithCorrectType),
-          this.module.createStore((<Field>element).type.byteSize, targetExpr, this.module.createGetLocal(tempLocal.index, elementNativeType), elementNativeType, (<Field>element).memoryOffset),
+          this.module.createStore((<Field>element).type.size >> 3, targetExpr, this.module.createGetLocal(tempLocal.index, elementNativeType), elementNativeType, (<Field>element).memoryOffset),
           this.module.createGetLocal(tempLocal.index, elementNativeType)
         ], elementNativeType);
 
@@ -2325,6 +2335,38 @@ export class Compiler extends DiagnosticEmitter {
         } else
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Property>element).internalName);
         return this.module.createUnreachable();
+
+      case ElementKind.FUNCTION_PROTOTYPE:
+        if (expression.kind == NodeKind.ELEMENTACCESS) { // @operator("[]")
+          assert(resolved.target && resolved.target.kind == ElementKind.CLASS);
+          var resolvedIndexedGet = (<FunctionPrototype>element).resolve();
+          if (!resolvedIndexedGet)
+            return this.module.createUnreachable();
+          var indexedSetName = (<Class>resolved.target).prototype.fnIndexedSet;
+          var indexedSet: Element | null;
+          if (indexedSetName != null && (<Class>resolved.target).members && (indexedSet = (<Map<string,Element>>(<Class>resolved.target).members).get(indexedSetName)) && indexedSet.kind == ElementKind.FUNCTION_PROTOTYPE) { // @operator("[]=")
+            var resolvedIndexedSet = (<FunctionPrototype>indexedSet).resolve();
+            if (!resolvedIndexedSet)
+              return this.module.createUnreachable();
+            targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32, ConversionKind.NONE);
+            assert(this.currentType.classType);
+            var elementExpr = this.compileExpression((<ElementAccessExpression>expression).elementExpression, Type.i32);
+            if (!tee) {
+              this.currentType = resolvedIndexedSet.returnType;
+              return this.makeCall(resolvedIndexedSet, [ targetExpr, elementExpr, valueWithCorrectType ]);
+            }
+            this.currentType = resolvedIndexedGet.returnType;
+            tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
+            return this.module.createBlock(null, [
+              this.makeCall(resolvedIndexedSet, [ targetExpr, elementExpr, this.module.createTeeLocal(tempLocal.index, valueWithCorrectType) ]),
+              this.module.createGetLocal(tempLocal.index, tempLocal.type.toNativeType()) // TODO: could be different from an actual __get (needs 2 temp locals)
+            ], this.currentType.toNativeType());
+          } else {
+            this.error(DiagnosticCode.Index_signature_in_type_0_only_permits_reading, expression.range, (<Class>resolved.target).internalName);
+            return this.module.createUnreachable();
+          }
+        }
+        // fall-through
     }
     this.error(DiagnosticCode.Operation_not_supported, expression.range);
     return this.module.createUnreachable();
@@ -2465,8 +2507,11 @@ export class Compiler extends DiagnosticEmitter {
     var resolved = this.program.resolveElementAccess(expression, this.currentFunction); // reports
     if (!resolved)
       return this.module.createUnreachable();
-
-    throw new Error("not implemented"); // TODO
+    assert(resolved.element.kind == ElementKind.FUNCTION_PROTOTYPE && resolved.target && resolved.target.kind == ElementKind.CLASS);
+    var instance = (<FunctionPrototype>resolved.element).resolve(null, (<Class>resolved.target).contextualTypeArguments);
+    if (!instance)
+      return this.module.createUnreachable();
+    return this.compileCall(instance, [ expression.expression, expression.elementExpression ], expression);
   }
 
   compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type): ExpressionRef {
@@ -2632,7 +2677,7 @@ export class Compiler extends DiagnosticEmitter {
         assert((<Field>element).memoryOffset >= 0);
         targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32);
         this.currentType = (<Field>element).type;
-        return this.module.createLoad((<Field>element).type.byteSize, (<Field>element).type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
+        return this.module.createLoad((<Field>element).type.size >> 3, (<Field>element).type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
           targetExpr,
           (<Field>element).type.toNativeType(),
           (<Field>element).memoryOffset

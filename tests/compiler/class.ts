@@ -10,7 +10,7 @@ class Animal<T> {
   instanceSub<T>(a: T, b: T): T { return a - b + <T>Animal.ONE; } // tsc does not allow this
 }
 
-assert(sizeof<Animal<f64>>() == 7);
+assert(sizeof<Animal<f64>>() == sizeof<usize>());
 
 Animal.ONE;
 Animal.add(1,2);

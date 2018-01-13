@@ -1691,11 +1691,9 @@
   )
   (get_local $0)
  )
- (func $std:heap/Heap.dispose (; 2 ;) (type $iv) (param $0 i32)
-  (nop)
- )
- (func $std:array/Array#__grow (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std:array/Array#__grow (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
   (if
    (i32.le_s
     (get_local $1)
@@ -1732,9 +1730,14 @@
     )
    )
   )
-  (call $std:heap/Heap.dispose
-   (i32.load
-    (get_local $0)
+  (block
+   (block $__inlined_func$std:heap/Heap.dispose
+    (set_local $3
+     (i32.load
+      (get_local $0)
+     )
+    )
+    (nop)
    )
   )
   (i32.store
@@ -1746,7 +1749,7 @@
    (get_local $1)
   )
  )
- (func $std:array/Array#push (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std:array/Array#push (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -1811,7 +1814,7 @@
   )
   (get_local $2)
  )
- (func $std:array/Array#__get (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std:array/Array#__get (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.ge_u
     (get_local $1)
@@ -1833,7 +1836,7 @@
    )
   )
  )
- (func $std:array/Array#pop (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std:array/Array#pop (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.and
@@ -1883,7 +1886,7 @@
    )
   )
  )
- (func $std:array/Array#unshift (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std:array/Array#unshift (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1986,7 +1989,7 @@
   )
   (get_local $3)
  )
- (func $std:heap/Heap.fill (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std:heap/Heap.fill (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -2342,7 +2345,7 @@
   )
   (get_local $0)
  )
- (func $std:array/Array#shift (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std:array/Array#shift (; 8 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.and
@@ -2429,7 +2432,7 @@
   )
   (get_local $1)
  )
- (func $start (; 10 ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   (set_global $std:heap/HEAP_OFFSET
    (get_global $HEAP_BASE)
   )

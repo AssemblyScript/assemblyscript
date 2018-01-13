@@ -202,6 +202,12 @@ declare class Array<T> {
   constructor(capacity?: i32);
 }
 
+/** Class representing a C-like array of values of type `T` with limited capabilities. */
+declare class CArray<T> {
+  [key: number]: T;
+  private constructor();
+}
+
 /** Class representing a sequence of characters. */
 declare class String {
 
@@ -281,13 +287,16 @@ interface Number {}
 interface Object {}
 interface RegExp {}
 
-// Internal decorators (not yet implemented)
+// Internal decorators
 
-/** Annotates an element being part of the global namespace. */
+/** Annotates an element as a program global. */
 declare function global(target: Function): any;
 
-/** Annotates a method being an operator overload. */
+/** Annotates a method as an operator overload. */
 declare function operator(token: string): any;
 
-declare function struct(target: Function): any;
-declare function size(size: usize): any;
+/** Annotates a class as explicitly layed out and allocated. */
+declare function explicit(target: Function): any;
+
+/** Annoates a class field with an explicit offset. */
+declare function offset(offset: usize): any;

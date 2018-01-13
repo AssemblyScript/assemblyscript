@@ -363,12 +363,12 @@ export abstract class Node {
           stmt.decoratorKind = DecoratorKind.OPERATOR;
           break;
 
-        case "struct":
-          stmt.decoratorKind = DecoratorKind.STRUCT;
+        case "explicit":
+          stmt.decoratorKind = DecoratorKind.EXPLICIT;
           break;
 
-        case "size":
-          stmt.decoratorKind = DecoratorKind.SIZE;
+        case "offset":
+          stmt.decoratorKind = DecoratorKind.OFFSET;
           break;
 
         default:
@@ -1382,8 +1382,8 @@ export const enum DecoratorKind {
   CUSTOM,
   GLOBAL,
   OPERATOR,
-  STRUCT,
-  SIZE
+  EXPLICIT,
+  OFFSET
 }
 
 /** Depresents a decorator. */

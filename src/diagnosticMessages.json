@@ -79,6 +79,7 @@
   "Export declaration conflicts with exported declaration of '{0}'.": 2484,
   "Cannot assign to '{0}' because it is a constant or a read-only property.": 2540,
   "The target of an assignment must be a variable or a property access.": 2541,
+  "Index signature in type '{0}' only permits reading.": 2542,
   "Expected {0} arguments, but got {1}.": 2554,
   "Expected at least {0} arguments, but got {1}.": 2555,
   "Expected {0} type arguments, but got {1}.": 2558,
