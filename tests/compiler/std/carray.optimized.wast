@@ -8,6 +8,13 @@
  (export "memory" (memory $0))
  (start $start)
  (func $std:array/CArray#__get (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (if
+   (i32.lt_s
+    (get_local $1)
+    (i32.const 0)
+   )
+   (unreachable)
+  )
   (i32.load
    (i32.add
     (get_local $0)
@@ -19,6 +26,13 @@
   )
  )
  (func $std:array/CArray#__set (; 1 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (if
+   (i32.lt_s
+    (get_local $1)
+    (i32.const 0)
+   )
+   (unreachable)
+  )
   (i32.store
    (i32.add
     (get_local $0)

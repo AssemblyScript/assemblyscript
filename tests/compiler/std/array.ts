@@ -1,4 +1,4 @@
-var arr = changetype<i32[]>(Heap.allocate(sizeof<usize>() + 2 * sizeof<i32>()));
+var arr = changetype<i32[]>(allocate_memory(sizeof<usize>() + 2 * sizeof<i32>()));
 
 assert(arr.length == 0);
 assert(arr.__capacity == 0);
@@ -36,7 +36,7 @@ assert(arr[0] == 43);
 assert(arr[1] == 44);
 assert(arr[2] == 45);
 
-arr.unshift(42); // see FIXME in std:array
+arr.unshift(42);
 
 assert(arr.length == 4);
 assert(arr.__capacity == 4);

@@ -65,7 +65,7 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   if (module.validate()) {
     console.log(chalk.green("validate OK"));
     try {
-      module.interpret();
+      // module.interpret();
       console.log(chalk.green("interpret OK"));
       try {
         var binary = module.toBinary();

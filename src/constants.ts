@@ -10,5 +10,5 @@ export const GETTER_PREFIX = "get:";
 export const SETTER_PREFIX = "set:";
 /** Delimiter used between class names and instance members. */
 export const INSTANCE_DELIMITER = "#";
-/** Delimited used between class and namespace names and static members. */
+/** Delimiter used between class and namespace names and static members. */
 export const STATIC_DELIMITER = ".";

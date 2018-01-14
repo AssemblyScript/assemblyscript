@@ -1,21 +1,21 @@
 const size: usize = 42;
-let ptr1: usize = Heap.allocate(size);
-let ptr2: usize = Heap.allocate(size);
+let ptr1: usize = allocate_memory(size);
+let ptr2: usize = allocate_memory(size);
 
 assert(ptr1 != ptr2);
 
-Heap.fill(ptr1, 0x12, size);
+set_memory(ptr1, 0x12, size);
 
 let i: usize;
 for (i = 0; i < size; ++i)
   assert(load<u8>(ptr1 + i) == 0x12);
 
-Heap.copy(ptr2, ptr1, size);
+move_memory(ptr2, ptr1, size);
 
 for (i = 0; i < size; ++i)
   assert(load<u8>(ptr2 + i) == 0x12);
 
-assert(Heap.compare(ptr1, ptr2, size) == 0);
+assert(compare_memory(ptr1, ptr2, size) == 0);
 
-Heap.dispose(ptr1);
-Heap.dispose(ptr2);
+free_memory(ptr1);
+free_memory(ptr2);

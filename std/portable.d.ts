@@ -116,6 +116,12 @@ declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
+/** Allocates a chunk of memory of the specified size and returns a pointer to it. */
+declare function allocate_memory(size: usize): usize;
+/** Disposes a chunk of memory by its pointer. */
+declare function free_memory(ptr: usize): void;
+/** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
+declare function move_memory(destination: usize, source: usize, n: usize): void;
 /** Loads a value of the specified type from memory. Type must be `u8`. */
 declare function load<T = u8>(offset: usize): T;
 /** Stores a value of the specified type to memory. Type must be `u8`. */

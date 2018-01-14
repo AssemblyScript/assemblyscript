@@ -162,6 +162,16 @@ declare function store<T>(offset: usize, value: T): void;
 declare function current_memory(): i32;
 /** Grows linear memory by a given unsigned delta of pages. One page is 64kb. Returns the previous memory size in units of pages or `-1` on failure. */
 declare function grow_memory(value: i32): i32;
+/** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
+declare function move_memory(destination: usize, source: usize, n: usize): void;
+/** Sets n bytes beginning at the specified destination in memory to the specified byte value. */
+declare function set_memory(destination: usize, value: u8, count: usize): void;
+/** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
+declare function compare_memory(vl: usize, vr: usize, n: usize): i32;
+/** Allocates a chunk of memory of the specified size and returns a pointer to it. */
+declare function allocate_memory(size: usize): usize;
+/** Disposes a chunk of memory by its pointer. */
+declare function free_memory(ptr: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
 declare function unreachable(): any; // sic
 
@@ -249,36 +259,6 @@ declare class Error {
 
 /** Class for indicating an error when a value is not in the set or range of allowed values. */
 declare class RangeError extends Error { }
-
-/** A static class representing the heap. */
-declare class Heap {
-
-  /** Gets the amount of used heap space, in bytes. */
-  static readonly used: usize;
-
-  /** Gets the amount of free heap space, in bytes. */
-  static readonly free: usize;
-
-  /** Gets the size of the heap, in bytes. */
-  static readonly size: usize;
-
-  /** Allocates a chunk of memory and returns a pointer to it. */
-  static allocate(size: usize): usize;
-
-  /** Disposes a chunk of memory by its pointer. */
-  static dispose(ptr: usize): void;
-
-  /** Copies a chunk of memory from one location to another. */
-  static copy(dest: usize, src: usize, n: usize): usize;
-
-  /** Fills a chunk of memory with the specified byte value. */
-  static fill(dest: usize, c: u8, n: usize): usize;
-
-  /** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
-  static compare(vl: usize, vr: usize, n: usize): i32;
-
-  private constructor();
-}
 
 interface Boolean {}
 interface Function {}

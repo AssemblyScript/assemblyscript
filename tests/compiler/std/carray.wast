@@ -8,6 +8,13 @@
  (export "memory" (memory $0))
  (start $start)
  (func $std:array/CArray#__get (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (if
+   (i32.lt_s
+    (get_local $1)
+    (i32.const 0)
+   )
+   (unreachable)
+  )
   (return
    (i32.load
     (i32.add
@@ -21,6 +28,13 @@
   )
  )
  (func $std:array/CArray#__set (; 1 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (if
+   (i32.lt_s
+    (get_local $1)
+    (i32.const 0)
+   )
+   (unreachable)
+  )
   (i32.store
    (i32.add
     (get_local $0)
@@ -247,16 +261,17 @@
   GLOBAL: std:heap/ALIGN_SIZE
   GLOBAL: std:heap/ALIGN_MASK
   GLOBAL: std:heap/HEAP_OFFSET
-  CLASS_PROTOTYPE: std:heap/Heap
-  CLASS_PROTOTYPE: Heap
-  PROPERTY: std:heap/Heap.used
-  PROPERTY: std:heap/Heap.free
-  PROPERTY: std:heap/Heap.size
-  FUNCTION_PROTOTYPE: std:heap/Heap.allocate
-  FUNCTION_PROTOTYPE: std:heap/Heap.dispose
-  FUNCTION_PROTOTYPE: std:heap/Heap.copy
-  FUNCTION_PROTOTYPE: std:heap/Heap.fill
-  FUNCTION_PROTOTYPE: std:heap/Heap.compare
+  FUNCTION_PROTOTYPE: std:heap/allocate_memory
+  FUNCTION_PROTOTYPE: allocate_memory
+  FUNCTION_PROTOTYPE: std:heap/free_memory
+  FUNCTION_PROTOTYPE: free_memory
+  FUNCTION_PROTOTYPE: std:heap/copy_memory
+  FUNCTION_PROTOTYPE: std:heap/move_memory
+  FUNCTION_PROTOTYPE: move_memory
+  FUNCTION_PROTOTYPE: std:heap/set_memory
+  FUNCTION_PROTOTYPE: set_memory
+  FUNCTION_PROTOTYPE: std:heap/compare_memory
+  FUNCTION_PROTOTYPE: compare_memory
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: Map
   CLASS_PROTOTYPE: std:regexp/RegExp
@@ -277,7 +292,11 @@
   CLASS_PROTOTYPE: std:array/CArray
   CLASS_PROTOTYPE: std:error/Error
   CLASS_PROTOTYPE: std:error/RangeError
-  CLASS_PROTOTYPE: std:heap/Heap
+  FUNCTION_PROTOTYPE: std:heap/allocate_memory
+  FUNCTION_PROTOTYPE: std:heap/free_memory
+  FUNCTION_PROTOTYPE: std:heap/move_memory
+  FUNCTION_PROTOTYPE: std:heap/set_memory
+  FUNCTION_PROTOTYPE: std:heap/compare_memory
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: std:set/Set
