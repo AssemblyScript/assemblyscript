@@ -2842,6 +2842,7 @@
   GLOBAL: HEAP_BASE
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: Array
+  PROPERTY: std:array/Array#length
   CLASS_PROTOTYPE: std:array/CArray
   CLASS_PROTOTYPE: CArray
   CLASS_PROTOTYPE: std:error/Error

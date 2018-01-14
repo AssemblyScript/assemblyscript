@@ -73,3 +73,30 @@ assert(arr.__capacity == 8);
 assert(arr[0] == 42);
 assert(arr[1] == 43);
 assert(arr[2] == 44);
+
+arr.reverse();
+
+assert(arr.length == 3);
+assert(arr.__capacity == 8);
+assert(arr[0] == 44);
+assert(arr[1] == 43);
+assert(arr[2] == 42);
+
+i = arr.indexOf(44);
+
+assert(i == 0);
+
+i = arr.indexOf(42);
+
+assert(i == 2);
+
+i = arr.indexOf(45);
+
+assert(i == - 1);
+
+arr.splice(1, 1);
+
+assert(arr.length == 2);
+assert(arr.__capacity == 8);
+assert(arr[0] == 44);
+assert(arr[1] == 42);

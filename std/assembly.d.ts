@@ -201,15 +201,19 @@ declare function parseFloat(str: string): f64;
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
   [key: number]: T;
-
-  /** Current maximum capacity of the array. */
-  readonly capacity: i32;
-
   /** Current length of the array. */
   length: i32;
-
   /** Constructs a new array. */
   constructor(capacity?: i32);
+  indexOf(searchElement: T, fromIndex?: i32): i32;
+  lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  push(element: T): void;
+  pop(): T;
+  shift(): T;
+  unshift(element: T): i32;
+  slice(from: i32, to?: i32): T[];
+  splice(start: i32, deleteCount?: i32): void;
+  reverse(): T[];
 }
 
 /** Class representing a C-like array of values of type `T` with limited capabilities. */

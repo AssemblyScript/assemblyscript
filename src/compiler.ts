@@ -2469,7 +2469,7 @@ export class Compiler extends DiagnosticEmitter {
 
         } else { // too few arguments
           this.error(DiagnosticCode.Expected_at_least_0_arguments_but_got_1, reportNode.range,
-            (operandIndex + numParametersInclThis - numParameters).toString(10),
+            (operandIndex + numParameters - numParametersInclThis).toString(10),
             numArguments.toString(10)
           );
           return this.module.createUnreachable();
@@ -2686,7 +2686,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.PROPERTY: // instance property (here: getter)
         var getter = (<Property>element).getterPrototype;
         assert(getter != null);
-        var getterInstance = (<FunctionPrototype>getter).resolve(); // reports
+        var getterInstance = (<FunctionPrototype>getter).resolve(null); // reports
         if (!getterInstance)
           return this.module.createUnreachable();
         assert(getterInstance.parameters.length == 0);

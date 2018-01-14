@@ -564,7 +564,7 @@ export class Parser extends DiagnosticEmitter {
       }
       var initializer: Expression | null = null;
       if (tn.skip(Token.EQUALS)) {
-        initializer = this.parseExpression(tn);
+        initializer = this.parseExpression(tn, Precedence.COMMA + 1);
         if (!initializer)
           return null;
       }

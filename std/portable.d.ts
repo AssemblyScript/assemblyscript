@@ -148,13 +148,17 @@ declare class Array<T> {
   [key: number]: T;
   length: i32;
   constructor(capacity?: i32);
-  push(value: T): void;
+  indexOf(searchElement: T, fromIndex?: i32): i32;
+  lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  push(element: T): void;
   pop(): T;
-  unshift(value: T): void;
   shift(): T;
-  join(delim: string): string;
+  unshift(element: T): i32;
   slice(from: i32, to?: i32): T[];
-  splice(index: i32, count: i32): T[];
+  splice(start: i32, deleteCount?: i32): void;
+  reverse(): T[];
+
+  join(delim: string): string;
 }
 
 declare class Uint8Array extends Array<u8> {}

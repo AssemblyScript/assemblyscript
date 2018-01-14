@@ -1562,7 +1562,7 @@ export class FunctionPrototype extends Element {
       if (typeNode = declaration.parameters[i].type) {
         var parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
         if (parameterType) {
-          parameters[i] = new Parameter(declaration.parameters[i].name.name, parameterType);
+          parameters[i] = new Parameter(declaration.parameters[i].name.name, parameterType, declaration.parameters[i].initializer);
           parameterTypes[i] = parameterType;
         } else
           return null;
@@ -2006,10 +2006,15 @@ export class ClassPrototype extends Element {
               instance.members.set(member.simpleName, methodPrototype);
             break;
 
-          case ElementKind.PROPERTY: // instance properties are just copied because there is nothing to partially-resolve
+          case ElementKind.PROPERTY: // instance properties are cloned with partially resolved getters and setters
             if (!instance.members)
               instance.members = new Map();
-            instance.members.set(member.simpleName, member);
+            assert((<Property>member).getterPrototype);
+            var instanceProperty = new Property(this.program, member.simpleName, member.internalName, this);
+            instanceProperty.getterPrototype = (<FunctionPrototype>(<Property>member).getterPrototype).resolvePartial(typeArguments);
+            if ((<Property>member).setterPrototype)
+              instanceProperty.setterPrototype = (<FunctionPrototype>(<Property>member).setterPrototype).resolvePartial(typeArguments);
+            instance.members.set(member.simpleName, instanceProperty);
             break;
 
           default:

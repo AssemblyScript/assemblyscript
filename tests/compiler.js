@@ -97,6 +97,8 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     actualOptimized = module.toText();
     module.runPasses([ "inlining" ]);
     actualInlined = module.toText();
+    if (isCreate)
+      fs.writeFileSync(__dirname + "/compiler/" + fixture + ".optimized.wasm", module.toBinary());
   } else {
     failed = true;
     console.log(chalk.red("validate ERROR"));
