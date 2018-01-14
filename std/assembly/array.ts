@@ -71,16 +71,19 @@ export class Array<T> {
 
   unshift(element: T): i32 {
     var oldCapacity = this.__capacity;
-    if (<u32>this.length >= oldCapacity)
-      this.__grow(max(this.length + 1, oldCapacity * 2));
-
-    // FIXME: this is inefficient because of two copies, one in __grow and one here
-    // move_memory(this.__memory + sizeof<T>(), this.__memory, oldCapacity * sizeof<T>());
-
-    if (oldCapacity)
-      for (var index: usize = oldCapacity; index > 0; --index)
-        store<T>(this.__memory + index * sizeof<T>(), load<T>(this.__memory + (index - 1) * sizeof<T>()));
-
+    if (<u32>this.length >= oldCapacity) {
+      // inlined `this.__grow(max(this.length + 1, oldCapacity * 2))` (avoids moving twice)
+      var newCapacity = max(this.length + 1, oldCapacity * 2);
+      assert(newCapacity > this.__capacity);
+      var newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
+      if (this.__memory) {
+        move_memory(newMemory + sizeof<T>(), this.__memory, oldCapacity * sizeof<T>());
+        free_memory(this.__memory);
+      }
+      this.__memory = newMemory;
+      this.__capacity = newCapacity;
+    } else
+      move_memory(this.__memory + sizeof<T>(), this.__memory, oldCapacity * sizeof<T>());
     store<T>(this.__memory, element);
     return ++this.length;
   }

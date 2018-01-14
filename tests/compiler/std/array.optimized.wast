@@ -2168,78 +2168,98 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (tee_local $2
+    (tee_local $4
      (i32.load offset=4
       (get_local $0)
      )
     )
    )
-   (call $std:array/Array#__grow
-    (get_local $0)
-    (select
-     (tee_local $3
-      (i32.add
-       (i32.load offset=8
-        (get_local $0)
+   (block
+    (if
+     (i32.le_s
+      (tee_local $2
+       (select
+        (tee_local $2
+         (i32.add
+          (i32.load offset=8
+           (get_local $0)
+          )
+          (i32.const 1)
+         )
+        )
+        (tee_local $3
+         (i32.mul
+          (get_local $4)
+          (i32.const 2)
+         )
+        )
+        (i32.gt_s
+         (get_local $2)
+         (get_local $3)
+        )
        )
-       (i32.const 1)
+      )
+      (i32.load offset=4
+       (get_local $0)
       )
      )
-     (tee_local $4
+     (unreachable)
+    )
+    (set_local $3
+     (call $std:heap/allocate_memory
       (i32.mul
        (get_local $2)
-       (i32.const 2)
+       (i32.const 4)
       )
-     )
-     (i32.gt_s
-      (get_local $3)
-      (get_local $4)
      )
     )
-   )
-  )
-  (if
-   (get_local $2)
-   (loop $continue|0
     (if
-     (i32.gt_u
-      (get_local $2)
-      (i32.const 0)
+     (i32.load
+      (get_local $0)
      )
      (block
-      (i32.store
+      (call $std:heap/move_memory
        (i32.add
-        (i32.load
-         (get_local $0)
-        )
-        (i32.mul
-         (get_local $2)
-         (i32.const 4)
-        )
+        (get_local $3)
+        (i32.const 4)
        )
        (i32.load
-        (i32.add
-         (i32.load
-          (get_local $0)
-         )
-         (i32.mul
-          (i32.sub
-           (get_local $2)
-           (i32.const 1)
-          )
-          (i32.const 4)
-         )
-        )
+        (get_local $0)
+       )
+       (i32.mul
+        (get_local $4)
+        (i32.const 4)
        )
       )
-      (set_local $2
-       (i32.sub
-        (get_local $2)
-        (i32.const 1)
+      (call $std:heap/free_memory
+       (i32.load
+        (get_local $0)
        )
       )
-      (br $continue|0)
      )
+    )
+    (i32.store
+     (get_local $0)
+     (get_local $3)
+    )
+    (i32.store offset=4
+     (get_local $0)
+     (get_local $2)
+    )
+   )
+   (call $std:heap/move_memory
+    (i32.add
+     (i32.load
+      (get_local $0)
+     )
+     (i32.const 4)
+    )
+    (i32.load
+     (get_local $0)
+    )
+    (i32.mul
+     (get_local $4)
+     (i32.const 4)
     )
    )
   )
@@ -2251,7 +2271,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (tee_local $3
+   (tee_local $2
     (i32.add
      (i32.load offset=8
       (get_local $0)
@@ -2260,7 +2280,7 @@
     )
    )
   )
-  (get_local $3)
+  (get_local $2)
  )
  (func $std:heap/set_memory (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i64)
