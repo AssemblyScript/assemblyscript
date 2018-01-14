@@ -279,6 +279,7 @@
   CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: Set
+  PROPERTY: std:set/Set#size
   GLOBAL: std:string/EMPTY
   CLASS_PROTOTYPE: std:string/String
   CLASS_PROTOTYPE: String

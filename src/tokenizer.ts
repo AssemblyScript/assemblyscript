@@ -309,6 +309,7 @@ export namespace Token {
       case Token.AS:
       case Token.CONSTRUCTOR:
       case Token.DECLARE:
+      case Token.DELETE:
       case Token.FROM:
       case Token.GET:
       case Token.IS:

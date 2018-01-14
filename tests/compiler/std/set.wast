@@ -3,16 +3,13 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iv (func (param i32)))
- (type $iiv (func (param i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
  (global $std:heap/HEAP_OFFSET (mut i32) (i32.const 0))
  (global $std:heap/ALIGN_LOG2 i32 (i32.const 3))
  (global $std:heap/ALIGN_SIZE i32 (i32.const 8))
  (global $std:heap/ALIGN_MASK i32 (i32.const 7))
- (global $std/array/arr (mut i32) (i32.const 0))
- (global $std/array/i (mut i32) (i32.const 0))
+ (global $std/set/set (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
@@ -114,7 +111,7 @@
    (get_local $4)
   )
  )
- (func $std:array/Array#get:length (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std:set/Set#get:size (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (i32.load offset=8
     (get_local $0)
@@ -2247,232 +2244,47 @@
  )
  (func $std:heap/free_memory (; 4 ;) (type $iv) (param $0 i32)
  )
- (func $std:array/Array#__grow (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std:set/Set#add (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (if
-   (i32.eqz
-    (i32.gt_s
-     (get_local $1)
-     (i32.load offset=4
-      (get_local $0)
-     )
-    )
-   )
-   (unreachable)
-  )
-  (block
-   (set_local $2
-    (call $std:heap/allocate_memory
-     (i32.mul
-      (get_local $1)
-      (i32.const 4)
-     )
-    )
-   )
-  )
-  (if
-   (i32.load
-    (get_local $0)
-   )
-   (block
-    (call $std:heap/move_memory
-     (get_local $2)
-     (i32.load
-      (get_local $0)
-     )
-     (i32.mul
-      (i32.load offset=4
-       (get_local $0)
-      )
-      (i32.const 4)
-     )
-    )
-    (call $std:heap/free_memory
-     (i32.load
-      (get_local $0)
-     )
-    )
-   )
-  )
-  (i32.store
-   (get_local $0)
-   (get_local $2)
-  )
-  (i32.store offset=4
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $std:array/Array#push (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (if
-   (i32.eq
-    (i32.load offset=8
-     (get_local $0)
-    )
-    (i32.load offset=4
-     (get_local $0)
-    )
-   )
-   (call $std:array/Array#__grow
-    (get_local $0)
-    (if (result i32)
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.shl
-      (i32.load offset=4
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-     (i32.const 1)
-    )
-   )
-  )
-  (i32.store
-   (i32.add
-    (i32.load
-     (get_local $0)
-    )
-    (i32.mul
-     (i32.load offset=8
-      (get_local $0)
-     )
-     (i32.const 4)
-    )
-   )
-   (get_local $1)
-  )
-  (return
-   (block (result i32)
-    (set_local $2
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.store offset=8
-     (get_local $0)
-     (get_local $2)
-    )
-    (get_local $2)
-   )
-  )
- )
- (func $std:array/Array#__get (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   (if
    (i32.ge_u
-    (get_local $1)
+    (i32.load offset=8
+     (get_local $0)
+    )
     (i32.load offset=4
      (get_local $0)
     )
    )
-   (unreachable)
-  )
-  (return
-   (i32.load
-    (i32.add
-     (i32.load
-      (get_local $0)
-     )
-     (i32.mul
-      (get_local $1)
-      (i32.const 4)
-     )
-    )
-   )
-  )
- )
- (func $std:array/Array#pop (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (if
-   (i32.lt_s
-    (i32.load offset=8
-     (get_local $0)
-    )
-    (i32.const 1)
-   )
-   (unreachable)
-  )
-  (return
-   (i32.load
-    (i32.add
-     (i32.load
-      (get_local $0)
-     )
-     (i32.mul
-      (block (result i32)
-       (set_local $1
-        (i32.sub
-         (i32.load offset=8
+   (block
+    (block
+     (set_local $4
+      (select
+       (tee_local $2
+        (i32.shl
+         (i32.load offset=4
           (get_local $0)
          )
          (i32.const 1)
         )
        )
-       (i32.store offset=8
-        (get_local $0)
-        (get_local $1)
+       (tee_local $3
+        (i32.const 8)
        )
-       (get_local $1)
-      )
-      (i32.const 4)
-     )
-    )
-   )
-  )
- )
- (func $std:array/Array#unshift (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (block
-   (set_local $2
-    (i32.load offset=4
-     (get_local $0)
-    )
-   )
-  )
-  (if
-   (i32.eq
-    (i32.load offset=8
-     (get_local $0)
-    )
-    (get_local $2)
-   )
-   (block
-    (block
-     (set_local $3
-      (if (result i32)
-       (get_local $2)
-       (i32.shl
+       (i32.gt_u
         (get_local $2)
-        (i32.const 1)
-       )
-       (i32.const 1)
-      )
-     )
-    )
-    (if
-     (i32.eqz
-      (i32.gt_s
-       (get_local $3)
-       (i32.load offset=4
-        (get_local $0)
+        (get_local $3)
        )
       )
      )
-     (unreachable)
     )
     (block
-     (set_local $4
+     (set_local $5
       (call $std:heap/allocate_memory
        (i32.mul
-        (get_local $3)
+        (get_local $4)
         (i32.const 4)
        )
       )
@@ -2484,15 +2296,14 @@
      )
      (block
       (call $std:heap/move_memory
-       (i32.add
-        (get_local $4)
-        (i32.const 4)
-       )
+       (get_local $5)
        (i32.load
         (get_local $0)
        )
        (i32.mul
-        (get_local $2)
+        (i32.load offset=4
+         (get_local $0)
+        )
         (i32.const 4)
        )
       )
@@ -2503,477 +2314,33 @@
       )
      )
     )
-    (i32.store
+    (i32.store offset=4
      (get_local $0)
      (get_local $4)
     )
-    (i32.store offset=4
-     (get_local $0)
-     (get_local $3)
-    )
-   )
-   (call $std:heap/move_memory
-    (i32.add
-     (i32.load
-      (get_local $0)
-     )
-     (i32.const 4)
-    )
-    (i32.load
-     (get_local $0)
-    )
-    (i32.mul
-     (get_local $2)
-     (i32.const 4)
-    )
-   )
-  )
-  (i32.store
-   (i32.load
-    (get_local $0)
-   )
-   (get_local $1)
-  )
-  (return
-   (block (result i32)
-    (set_local $5
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.store offset=8
+    (i32.store
      (get_local $0)
      (get_local $5)
     )
-    (get_local $5)
-   )
-  )
- )
- (func $std:heap/set_memory (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i64)
-  (if
-   (i32.eqz
-    (get_local $2)
-   )
-   (return)
-  )
-  (i32.store8
-   (get_local $0)
-   (get_local $1)
-  )
-  (i32.store8
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 1)
-   )
-   (get_local $1)
-  )
-  (if
-   (i32.le_u
-    (get_local $2)
-    (i32.const 2)
-   )
-   (return)
-  )
-  (i32.store8
-   (i32.add
-    (get_local $0)
-    (i32.const 1)
-   )
-   (get_local $1)
-  )
-  (i32.store8
-   (i32.add
-    (get_local $0)
-    (i32.const 2)
-   )
-   (get_local $1)
-  )
-  (i32.store8
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 2)
-   )
-   (get_local $1)
-  )
-  (i32.store8
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 3)
-   )
-   (get_local $1)
-  )
-  (if
-   (i32.le_u
-    (get_local $2)
-    (i32.const 6)
-   )
-   (return)
-  )
-  (i32.store8
-   (i32.add
-    (get_local $0)
-    (i32.const 3)
-   )
-   (get_local $1)
-  )
-  (i32.store8
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 4)
-   )
-   (get_local $1)
-  )
-  (if
-   (i32.le_u
-    (get_local $2)
-    (i32.const 8)
-   )
-   (return)
-  )
-  (block
-   (set_local $3
-    (i32.and
-     (i32.sub
-      (i32.const 0)
-      (get_local $0)
-     )
-     (i32.const 3)
-    )
-   )
-  )
-  (set_local $0
-   (i32.add
-    (get_local $0)
-    (get_local $3)
-   )
-  )
-  (set_local $2
-   (i32.sub
-    (get_local $2)
-    (get_local $3)
-   )
-  )
-  (set_local $2
-   (i32.and
-    (get_local $2)
-    (i32.sub
-     (i32.const 0)
-     (i32.const 4)
-    )
-   )
-  )
-  (block
-   (set_local $4
-    (i32.mul
-     (i32.div_u
-      (i32.sub
-       (i32.const 0)
-       (i32.const 1)
-      )
-      (i32.const 255)
-     )
-     (get_local $1)
-    )
    )
   )
   (i32.store
-   (get_local $0)
-   (get_local $4)
-  )
-  (i32.store
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 4)
-   )
-   (get_local $4)
-  )
-  (if
-   (i32.le_u
-    (get_local $2)
-    (i32.const 8)
-   )
-   (return)
-  )
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 4)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 8)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 12)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 8)
-   )
-   (get_local $4)
-  )
-  (if
-   (i32.le_u
-    (get_local $2)
-    (i32.const 24)
-   )
-   (return)
-  )
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 12)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 16)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 20)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 24)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 28)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 24)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 20)
-   )
-   (get_local $4)
-  )
-  (i32.store
-   (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 16)
-   )
-   (get_local $4)
-  )
-  (set_local $3
-   (i32.add
-    (i32.const 24)
-    (i32.and
-     (get_local $0)
-     (i32.const 4)
-    )
-   )
-  )
-  (set_local $0
-   (i32.add
-    (get_local $0)
-    (get_local $3)
-   )
-  )
-  (set_local $2
-   (i32.sub
-    (get_local $2)
-    (get_local $3)
-   )
-  )
-  (block
-   (set_local $5
-    (i64.or
-     (i64.extend_u/i32
-      (get_local $4)
-     )
-     (i64.shl
-      (i64.extend_u/i32
-       (get_local $4)
-      )
-      (i64.const 32)
-     )
-    )
-   )
-  )
-  (block $break|0
-   (loop $continue|0
-    (if
-     (i32.ge_u
-      (get_local $2)
-      (i32.const 32)
-     )
-     (block
-      (block
-       (i64.store
-        (get_local $0)
-        (get_local $5)
-       )
-       (i64.store
-        (i32.add
-         (get_local $0)
-         (i32.const 8)
-        )
-        (get_local $5)
-       )
-       (i64.store
-        (i32.add
-         (get_local $0)
-         (i32.const 16)
-        )
-        (get_local $5)
-       )
-       (i64.store
-        (i32.add
-         (get_local $0)
-         (i32.const 24)
-        )
-        (get_local $5)
-       )
-       (set_local $2
-        (i32.sub
-         (get_local $2)
-         (i32.const 32)
-        )
-       )
-       (set_local $0
-        (i32.add
-         (get_local $0)
-         (i32.const 32)
-        )
-       )
-      )
-      (br $continue|0)
-     )
-    )
-   )
-  )
- )
- (func $std:array/Array#shift (; 11 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (if
-   (i32.lt_s
-    (i32.load offset=8
-     (get_local $0)
-    )
-    (i32.const 1)
-   )
-   (unreachable)
-  )
-  (block
-   (set_local $1
-    (i32.load
-     (i32.load
-      (get_local $0)
-     )
-    )
-   )
-  )
-  (call $std:heap/move_memory
-   (i32.load
-    (get_local $0)
-   )
-   (i32.add
-    (i32.load
-     (get_local $0)
-    )
-    (i32.const 4)
-   )
-   (i32.mul
-    (i32.sub
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
-    (i32.const 4)
-   )
-  )
-  (call $std:heap/set_memory
    (i32.add
     (i32.load
      (get_local $0)
     )
     (i32.mul
-     (i32.sub
-      (i32.load offset=4
-       (get_local $0)
-      )
-      (i32.const 1)
+     (i32.load offset=8
+      (get_local $0)
      )
      (i32.const 4)
     )
    )
-   (i32.const 0)
-   (i32.const 4)
+   (get_local $1)
   )
   (i32.store offset=8
    (get_local $0)
-   (i32.sub
+   (i32.add
     (i32.load offset=8
      (get_local $0)
     )
@@ -2981,60 +2348,32 @@
    )
   )
   (return
-   (get_local $1)
+   (get_local $0)
   )
  )
- (func $std:array/Array#reverse (; 12 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $std:set/Set#has (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (block $break|0
    (block
-    (set_local $1
+    (set_local $2
      (i32.const 0)
     )
-    (set_local $2
-     (i32.sub
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 1)
+    (set_local $3
+     (i32.load offset=8
+      (get_local $0)
      )
     )
    )
    (loop $continue|0
     (if
      (i32.lt_u
-      (get_local $1)
       (get_local $2)
+      (get_local $3)
      )
      (block
-      (block
-       (block
-        (set_local $3
-         (i32.load
-          (i32.add
-           (i32.load
-            (get_local $0)
-           )
-           (i32.mul
-            (get_local $1)
-            (i32.const 4)
-           )
-          )
-         )
-        )
-       )
-       (i32.store
-        (i32.add
-         (i32.load
-          (get_local $0)
-         )
-         (i32.mul
-          (get_local $1)
-          (i32.const 4)
-         )
-        )
+      (if
+       (i32.eq
         (i32.load
          (i32.add
           (i32.load
@@ -3046,32 +2385,16 @@
           )
          )
         )
+        (get_local $1)
        )
-       (i32.store
-        (i32.add
-         (i32.load
-          (get_local $0)
-         )
-         (i32.mul
-          (get_local $2)
-          (i32.const 4)
-         )
-        )
-        (get_local $3)
+       (return
+        (i32.const 1)
        )
       )
-      (block
-       (set_local $1
-        (i32.add
-         (get_local $1)
-         (i32.const 1)
-        )
-       )
-       (set_local $2
-        (i32.sub
-         (get_local $2)
-         (i32.const 1)
-        )
+      (set_local $2
+       (i32.add
+        (get_local $2)
+        (i32.const 1)
        )
       )
       (br $continue|0)
@@ -3080,38 +2403,57 @@
    )
   )
   (return
-   (get_local $0)
+   (i32.const 0)
   )
  )
- (func $std:array/Array#indexOf (; 13 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.const 0)
-   )
-   (set_local $2
-    (i32.add
+ (func $std:set/Set#delete (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (block $break|0
+   (block
+    (set_local $2
+     (i32.const 0)
+    )
+    (set_local $3
      (i32.load offset=8
       (get_local $0)
      )
-     (get_local $2)
     )
    )
-  )
-  (block $break|0
    (loop $continue|0
     (if
      (i32.lt_u
       (get_local $2)
-      (i32.load offset=8
-       (get_local $0)
-      )
+      (get_local $3)
      )
      (block
-      (block
-       (if
-        (i32.eq
-         (i32.load
+      (if
+       (i32.eq
+        (i32.load
+         (i32.add
+          (i32.load
+           (get_local $0)
+          )
+          (i32.mul
+           (get_local $2)
+           (i32.const 4)
+          )
+         )
+        )
+        (get_local $1)
+       )
+       (block
+        (if
+         (i32.lt_u
+          (i32.add
+           (get_local $2)
+           (i32.const 1)
+          )
+          (i32.load offset=8
+           (get_local $0)
+          )
+         )
+         (call $std:heap/move_memory
           (i32.add
            (i32.load
             (get_local $0)
@@ -3121,18 +2463,47 @@
             (i32.const 4)
            )
           )
+          (i32.add
+           (i32.load
+            (get_local $0)
+           )
+           (i32.mul
+            (i32.add
+             (get_local $2)
+             (i32.const 1)
+            )
+            (i32.const 4)
+           )
+          )
+          (i32.sub
+           (i32.sub
+            (i32.load offset=8
+             (get_local $0)
+            )
+            (get_local $2)
+           )
+           (i32.const 1)
+          )
          )
-         (get_local $1)
+        )
+        (i32.store offset=8
+         (get_local $0)
+         (i32.sub
+          (i32.load offset=8
+           (get_local $0)
+          )
+          (i32.const 1)
+         )
         )
         (return
-         (get_local $2)
-        )
-       )
-       (set_local $2
-        (i32.add
-         (get_local $2)
          (i32.const 1)
         )
+       )
+      )
+      (set_local $2
+       (i32.add
+        (get_local $2)
+        (i32.const 1)
        )
       )
       (br $continue|0)
@@ -3141,126 +2512,20 @@
    )
   )
   (return
-   (i32.sub
-    (i32.const 0)
-    (i32.const 1)
-   )
+   (i32.const 0)
   )
  )
- (func $std:array/Array#splice (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.const 1)
-   )
-   (return)
-  )
-  (if
-   (i32.lt_s
-    (get_local $1)
-    (i32.const 0)
-   )
-   (block
-    (set_local $1
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (get_local $1)
-     )
-    )
-    (if
-     (i32.lt_s
-      (get_local $1)
-      (i32.const 0)
-     )
-     (set_local $1
-      (i32.const 0)
-     )
-     (if
-      (i32.ge_s
-       (get_local $1)
-       (i32.load offset=8
-        (get_local $0)
-       )
-      )
-      (return)
-     )
-    )
-   )
-   (if
-    (i32.ge_s
-     (get_local $1)
-     (i32.load offset=8
-      (get_local $0)
-     )
-    )
-    (return)
-   )
-  )
-  (set_local $2
-   (select
-    (tee_local $3
-     (get_local $2)
-    )
-    (tee_local $4
-     (i32.sub
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (get_local $1)
-     )
-    )
-    (i32.lt_s
-     (get_local $3)
-     (get_local $4)
-    )
-   )
-  )
-  (call $std:heap/move_memory
-   (i32.add
-    (i32.load
-     (get_local $0)
-    )
-    (i32.mul
-     (get_local $1)
-     (i32.const 4)
-    )
-   )
-   (i32.add
-    (i32.load
-     (get_local $0)
-    )
-    (i32.mul
-     (i32.add
-      (get_local $1)
-      (get_local $2)
-     )
-     (i32.const 4)
-    )
-   )
-   (i32.mul
-    (get_local $2)
-    (i32.const 4)
-   )
-  )
+ (func $std:set/Set#clear (; 8 ;) (type $iv) (param $0 i32)
   (i32.store offset=8
    (get_local $0)
-   (i32.sub
-    (i32.load offset=8
-     (get_local $0)
-    )
-    (get_local $2)
-   )
+   (i32.const 0)
   )
  )
- (func $start (; 15 ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   (set_global $std:heap/HEAP_OFFSET
    (get_global $HEAP_BASE)
   )
-  (set_global $std/array/arr
+  (set_global $std/set/set
    (call $std:heap/allocate_memory
     (i32.add
      (i32.const 4)
@@ -3274,19 +2539,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 0)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
+     (call $std:set/Set#get:size
+      (get_global $std/set/set)
      )
      (i32.const 0)
     )
@@ -3294,184 +2548,28 @@
    (unreachable)
   )
   (drop
-   (call $std:array/Array#push
-    (get_global $std/array/arr)
-    (i32.const 42)
+   (call $std:set/Set#add
+    (get_global $std/set/set)
+    (i32.const 1)
    )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 42)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 1)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 1)
-    )
-   )
-   (unreachable)
-  )
-  (set_global $std/array/i
-   (call $std:array/Array#pop
-    (get_global $std/array/arr)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (get_global $std/array/i)
-     (i32.const 42)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 0)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 1)
-    )
-   )
-   (unreachable)
   )
   (drop
-   (call $std:array/Array#push
-    (get_global $std/array/arr)
-    (i32.const 43)
+   (call $std:set/Set#add
+    (get_global $std/set/set)
+    (i32.const 0)
    )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 1)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 1)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 43)
-    )
-   )
-   (unreachable)
   )
   (drop
-   (call $std:array/Array#push
-    (get_global $std/array/arr)
-    (i32.const 44)
+   (call $std:set/Set#add
+    (get_global $std/set/set)
+    (i32.const 2)
    )
   )
   (if
    (i32.eqz
     (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 2)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 2)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 43)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 1)
-     )
-     (i32.const 44)
-    )
-   )
-   (unreachable)
-  )
-  (drop
-   (call $std:array/Array#push
-    (get_global $std/array/arr)
-    (i32.const 45)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
+     (call $std:set/Set#get:size
+      (get_global $std/set/set)
      )
      (i32.const 3)
     )
@@ -3480,495 +2578,53 @@
   )
   (if
    (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 4)
+    (call $std:set/Set#has
+     (get_global $std/set/set)
+     (i32.const 1)
     )
    )
    (unreachable)
   )
   (if
    (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 43)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 1)
-     )
-     (i32.const 44)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 2)
-     )
-     (i32.const 45)
-    )
-   )
-   (unreachable)
-  )
-  (drop
-   (call $std:array/Array#unshift
-    (get_global $std/array/arr)
-    (i32.const 42)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 4)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 4)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 42)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 1)
-     )
-     (i32.const 43)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 2)
-     )
-     (i32.const 44)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 3)
-     )
-     (i32.const 45)
-    )
-   )
-   (unreachable)
-  )
-  (drop
-   (call $std:array/Array#unshift
-    (get_global $std/array/arr)
-    (i32.const 41)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 5)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 8)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 41)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 1)
-     )
-     (i32.const 42)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 2)
-     )
-     (i32.const 43)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 3)
-     )
-     (i32.const 44)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 4)
-     )
-     (i32.const 45)
-    )
-   )
-   (unreachable)
-  )
-  (set_global $std/array/i
-   (call $std:array/Array#shift
-    (get_global $std/array/arr)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (get_global $std/array/i)
-     (i32.const 41)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 4)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 8)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 42)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 1)
-     )
-     (i32.const 43)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 2)
-     )
-     (i32.const 44)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 3)
-     )
-     (i32.const 45)
-    )
-   )
-   (unreachable)
-  )
-  (set_global $std/array/i
-   (call $std:array/Array#pop
-    (get_global $std/array/arr)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (get_global $std/array/i)
-     (i32.const 45)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 3)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 8)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 42)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 1)
-     )
-     (i32.const 43)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 2)
-     )
-     (i32.const 44)
-    )
-   )
-   (unreachable)
-  )
-  (drop
-   (call $std:array/Array#reverse
-    (get_global $std/array/arr)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
-     )
-     (i32.const 3)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 8)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 0)
-     )
-     (i32.const 44)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 1)
-     )
-     (i32.const 43)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
-      (i32.const 2)
-     )
-     (i32.const 42)
-    )
-   )
-   (unreachable)
-  )
-  (set_global $std/array/i
-   (call $std:array/Array#indexOf
-    (get_global $std/array/arr)
-    (i32.const 44)
-    (i32.const 0)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (get_global $std/array/i)
+    (call $std:set/Set#has
+     (get_global $std/set/set)
      (i32.const 0)
     )
    )
    (unreachable)
   )
-  (set_global $std/array/i
-   (call $std:array/Array#indexOf
-    (get_global $std/array/arr)
-    (i32.const 42)
-    (i32.const 0)
-   )
-  )
   (if
    (i32.eqz
-    (i32.eq
-     (get_global $std/array/i)
+    (call $std:set/Set#has
+     (get_global $std/set/set)
      (i32.const 2)
     )
    )
    (unreachable)
   )
-  (set_global $std/array/i
-   (call $std:array/Array#indexOf
-    (get_global $std/array/arr)
-    (i32.const 45)
+  (if
+   (i32.eqz
+    (i32.eqz
+     (call $std:set/Set#has
+      (get_global $std/set/set)
+      (i32.const 3)
+     )
+    )
+   )
+   (unreachable)
+  )
+  (drop
+   (call $std:set/Set#delete
+    (get_global $std/set/set)
     (i32.const 0)
    )
   )
   (if
    (i32.eqz
     (i32.eq
-     (get_global $std/array/i)
-     (i32.sub
-      (i32.const 0)
-      (i32.const 1)
-     )
-    )
-   )
-   (unreachable)
-  )
-  (call $std:array/Array#splice
-   (get_global $std/array/arr)
-   (i32.const 1)
-   (i32.const 1)
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (call $std:array/Array#get:length
-      (get_global $std/array/arr)
+     (call $std:set/Set#get:size
+      (get_global $std/set/set)
      )
      (i32.const 2)
     )
@@ -3977,35 +2633,54 @@
   )
   (if
    (i32.eqz
-    (i32.eq
-     (i32.load offset=4
-      (get_global $std/array/arr)
-     )
-     (i32.const 8)
+    (call $std:set/Set#has
+     (get_global $std/set/set)
+     (i32.const 1)
     )
    )
    (unreachable)
   )
   (if
    (i32.eqz
-    (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
+    (i32.eqz
+     (call $std:set/Set#has
+      (get_global $std/set/set)
       (i32.const 0)
      )
-     (i32.const 44)
     )
    )
    (unreachable)
   )
   (if
    (i32.eqz
+    (call $std:set/Set#has
+     (get_global $std/set/set)
+     (i32.const 2)
+    )
+   )
+   (unreachable)
+  )
+  (call $std:set/Set#clear
+   (get_global $std/set/set)
+  )
+  (if
+   (i32.eqz
     (i32.eq
-     (call $std:array/Array#__get
-      (get_global $std/array/arr)
+     (call $std:set/Set#get:size
+      (get_global $std/set/set)
+     )
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
+   (i32.eqz
+    (i32.eqz
+     (call $std:set/Set#has
+      (get_global $std/set/set)
       (i32.const 1)
      )
-     (i32.const 42)
     )
    )
    (unreachable)
@@ -4095,8 +2770,7 @@
   FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseFloat
   FUNCTION_PROTOTYPE: parseFloat
-  GLOBAL: std/array/arr
-  GLOBAL: std/array/i
+  GLOBAL: std/set/set
 [program.exports]
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: std:array/CArray

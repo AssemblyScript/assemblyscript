@@ -3027,6 +3027,15 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
 
+      case Token.TYPEOF:
+        // it might make sense to implement typeof in a way that a generic function can detect whether
+        // its type argument is a class type or string. that could then be used, for example, to
+        // generate hash codes for sets and maps, depending on the kind of type parameter we have.
+        // ideally the comparison would not involve actual string comparison and limit available
+        // operations to hard-coded string literals.
+        this.error(DiagnosticCode.Operation_not_supported, expression.range);
+        throw new Error("not implemented");
+
       default:
         this.error(DiagnosticCode.Operation_not_supported, expression.range);
         throw new Error("unary operator expected");

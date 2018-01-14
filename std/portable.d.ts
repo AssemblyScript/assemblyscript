@@ -214,14 +214,16 @@ declare class Symbol {
 
 declare class Set<T> {
   constructor(entries?: T[]);
-  add(value: T): void;
   has(value: T): bool;
+  add(value: T): void;
+  delete(value: T): bool;
   clear(): void;
   [Symbol.iterator](): Iterator<T>;
 }
 
 declare class Map<K,V> {
   constructor(entries?: [K, V][]);
+  readonly size: i32;
   set(key: K, value: V): void;
   has(key: K): bool;
   get(key: K): V | null;

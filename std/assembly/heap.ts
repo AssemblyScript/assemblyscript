@@ -214,7 +214,7 @@ export function set_memory(dest: usize, c: u8, n: usize): void {
   // based on musl's implementation of memset
   // becomes obsolete once https://github.com/WebAssembly/bulk-memory-operations lands
 
-  // fill head and tail wwith minimal branching
+  // fill head and tail with minimal branching
   if (!n)
     return;
   store<u8>(dest, c);

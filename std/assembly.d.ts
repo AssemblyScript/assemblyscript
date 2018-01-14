@@ -271,6 +271,14 @@ interface Number {}
 interface Object {}
 interface RegExp {}
 
+declare class Set<T> {
+  readonly size: i32;
+  has(value: T): bool;
+  add(value: T): void;
+  delete(value: T): bool;
+  clear(): void;
+}
+
 // Internal decorators
 
 /** Annotates an element as a program global. */
