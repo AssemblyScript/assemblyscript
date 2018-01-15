@@ -1,7 +1,7 @@
 /(abc)\//ig;
 /(abc)\//;
-let re = /(abc)\//ig;
-let noRe = !/(abc)\//i;
+var re = /(abc)\//ig;
+var noRe = !/(abc)\//i;
 b / ig;
 /(abc)\//iig;
 /(abc)\//iX;

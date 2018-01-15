@@ -11,10 +11,6 @@ import {
 } from "./tokenizer";
 
 import {
-  CharCode
-} from "./util/charcode";
-
-import {
   I64
 } from "./util/i64";
 
@@ -23,7 +19,10 @@ import {
   resolve as resolvePath
 } from "./util/path";
 
-export { Range } from "./tokenizer";
+export {
+  Token,
+  Range
+};
 
 /** Indicates the kind of a node. */
 export enum NodeKind {
@@ -58,39 +57,41 @@ export enum NodeKind {
   // statements
   BLOCK,
   BREAK,
-  CASE,
-  CLASS,                // is also declaration
   CONTINUE,
   DO,
   EMPTY,
-  ENUM,                 // is also declaration
-  ENUMVALUE,            // is also declaration
   EXPORT,
   EXPORTIMPORT,
-  EXPORTMEMBER,
   EXPRESSION,
-  INTERFACE,
   FOR,
-  FUNCTION,             // is also declaration
   IF,
-  IMPORT,               // wraps declarations
-  IMPORTDECLARATION,
-  METHOD,               // is also declaration
-  NAMESPACE,            // is also declaration
-  FIELD,
+  IMPORT,
   RETURN,
   SWITCH,
   THROW,
   TRY,
-  TYPEDECLARATION,
-  VARIABLE,             // wraps declarations
-  VARIABLEDECLARATION,
+  VARIABLE,
   WHILE,
+
+  // declaration statements
+  CLASSDECLARATION,
+  ENUMDECLARATION,
+  ENUMVALUEDECLARATION,
+  FIELDDECLARATION,
+  FUNCTIONDECLARATION,
+  IMPORTDECLARATION,
+  INTERFACEDECLARATION,
+  METHODDECLARATION,
+  NAMESPACEDECLARATION,
+  TYPEDECLARATION,
+  VARIABLEDECLARATION,
 
   // other
   DECORATOR,
+  EXPORTMEMBER,
   MODIFIER,
-  PARAMETER
+  PARAMETER,
+  SWITCHCASE
 }
 
 /** Base class of all nodes. */
@@ -102,9 +103,6 @@ export abstract class Node {
   range: Range;
   /** Parent node. */
   parent: Node | null = null;
-
-  /** Serializes this node to its TypeScript representation. Note that formatting is lost and long integers become hex literals. */
-  abstract serialize(sb: string[]): void;
 
   // types
 
@@ -447,7 +445,6 @@ export abstract class Node {
     return elem;
   }
 
-  /** Creates an expression statement. */
   static createExpressionStatement(expression: Expression): ExpressionStatement {
     var stmt = new ExpressionStatement();
     stmt.range = expression.range;
@@ -741,21 +738,6 @@ export class TypeNode extends Node {
   typeArguments: TypeNode[];
   /** Whether nullable or not. */
   isNullable: bool;
-
-  serialize(sb: string[]): void {
-    this.identifier.serialize(sb);
-    if (this.typeArguments.length) {
-      sb.push("<");
-      for (var i = 0, k = this.typeArguments.length; i < k; ++i) {
-        if (i > 0)
-          sb.push(", ");
-        this.typeArguments[i].serialize(sb);
-      }
-      sb.push(">");
-    }
-    if (this.isNullable)
-      sb.push(" | null");
-  }
 }
 
 /** Represents a type parameter. */
@@ -767,14 +749,6 @@ export class TypeParameter extends Node {
   identifier: IdentifierExpression;
   /** Extended type reference, if any. */
   extendsType: TypeNode | null;
-
-  serialize(sb: string[]): void {
-    this.identifier.serialize(sb);
-    if (this.extendsType) {
-      sb.push(" extends ");
-      (<TypeNode>this.extendsType).serialize(sb);
-    }
-  }
 }
 
 // expressions
@@ -784,15 +758,10 @@ export abstract class Expression extends Node { }
 
 /** Represents an identifier expression. */
 export class IdentifierExpression extends Expression {
-
   kind = NodeKind.IDENTIFIER;
 
   /** Textual name. */
   name: string;
-
-  serialize(sb: string[]): void {
-    sb.push(this.name);
-  }
 }
 
 /** Indicates the kind of a literal. */
@@ -807,7 +776,6 @@ export const enum LiteralKind {
 
 /** Base class of all literal expressions. */
 export abstract class LiteralExpression extends Expression {
-
   kind = NodeKind.LITERAL;
 
   /** Specific literal kind. */
@@ -816,23 +784,10 @@ export abstract class LiteralExpression extends Expression {
 
 /** Represents an `[]` literal expression. */
 export class ArrayLiteralExpression extends LiteralExpression {
-
-  // kind = NodeKind.LITERAL
   literalKind = LiteralKind.ARRAY;
 
   /** Nested element expressions. */
   elementExpressions: (Expression | null)[];
-
-  serialize(sb: string[]): void {
-    sb.push("[");
-    for (var i = 0, k = this.elementExpressions.length; i < k; ++i) {
-      if (i > 0)
-        sb.push(", ");
-      if (this.elementExpressions[i])
-        (<Expression>this.elementExpressions[i]).serialize(sb);
-    }
-    sb.push("]");
-  }
 }
 
 /** Indicates the kind of an assertion. */
@@ -843,7 +798,6 @@ export const enum AssertionKind {
 
 /** Represents an assertion expression. */
 export class AssertionExpression extends Expression {
-
   kind = NodeKind.ASSERTION;
 
   /** Specific kind of this assertion. */
@@ -852,24 +806,10 @@ export class AssertionExpression extends Expression {
   expression: Expression;
   /** Target type. */
   toType: TypeNode;
-
-  serialize(sb: string[]): void {
-    if (this.assertionKind == AssertionKind.PREFIX) {
-      sb.push("<");
-      this.toType.serialize(sb);
-      sb.push(">");
-      this.expression.serialize(sb);
-    } else {
-      this.expression.serialize(sb);
-      sb.push(" as ");
-      this.toType.serialize(sb);
-    }
-  }
 }
 
 /** Represents a binary expression. */
 export class BinaryExpression extends Expression {
-
   kind = NodeKind.BINARY;
 
   /** Operator token. */
@@ -878,19 +818,10 @@ export class BinaryExpression extends Expression {
   left: Expression;
   /** Right-hand side expression. */
   right: Expression;
-
-  serialize(sb: string[]): void {
-    this.left.serialize(sb);
-    sb.push(" ");
-    sb.push(Token.operatorToString(this.operator));
-    sb.push(" ");
-    this.right.serialize(sb);
-  }
 }
 
 /** Represents a call expression. */
 export class CallExpression extends Expression {
-
   kind = NodeKind.CALL;
 
   /** Called expression. Usually an identifier or property access expression. */
@@ -899,107 +830,51 @@ export class CallExpression extends Expression {
   typeArguments: TypeNode[] | null;
   /** Provided arguments. */
   arguments: Expression[];
-
-  serialize(sb: string[]): void {
-    this.expression.serialize(sb);
-    var k: i32;
-    if (this.typeArguments && (k = this.typeArguments.length)) {
-      sb.push("<");
-      for (var i = 0; i < k; ++i) {
-        if (i > 0)
-          sb.push(", ");
-        this.typeArguments[i].serialize(sb);
-      }
-      sb.push(">(");
-    } else
-      sb.push("(");
-    for (i = 0, k = this.arguments.length; i < k; ++i) {
-      if (i > 0)
-        sb.push(", ");
-      this.arguments[i].serialize(sb);
-    }
-    sb.push(")");
-  }
 }
 
 /** Represents a comma expression composed of multiple sequential expressions. */
 export class CommaExpression extends Expression {
-
   kind = NodeKind.COMMA;
 
   /** Sequential expressions. */
   expressions: Expression[];
-
-  serialize(sb: string[]): void {
-    this.expressions[0].serialize(sb);
-    for (var i = 1, k = this.expressions.length; i < k; ++i) {
-      sb.push(",");
-      this.expressions[i].serialize(sb);
-    }
-  }
 }
 
 /** Represents a `constructor` expression. */
 export class ConstructorExpression extends IdentifierExpression {
   kind = NodeKind.CONSTRUCTOR;
-  name = "this";
+  name = "constructor";
 }
 
 /** Represents an element access expression, e.g., array access. */
 export class ElementAccessExpression extends Expression {
-
   kind = NodeKind.ELEMENTACCESS;
 
   /** Expression being accessed. */
   expression: Expression;
   /** Element of the expression being accessed. */
   elementExpression: Expression;
-
-  serialize(sb: string[]): void {
-    this.expression.serialize(sb);
-    sb.push("[");
-    this.elementExpression.serialize(sb);
-    sb.push("]");
-  }
 }
 
 /** Represents a float literal expression. */
 export class FloatLiteralExpression extends LiteralExpression {
-
-  // kind = NodeKind.LITERAL
   literalKind = LiteralKind.FLOAT;
 
   /** Float value. */
   value: f64;
-
-  serialize(sb: string[]): void {
-    sb.push(this.value.toString(10));
-  }
 }
 
 /** Represents an integer literal expression. */
 export class IntegerLiteralExpression extends LiteralExpression {
-
-  // kind = NodeKind.LITERAL
   literalKind = LiteralKind.INTEGER;
 
   /** Integer value. */
   value: I64;
-
-  serialize(sb: string[]): void {
-    sb.push(this.value.toString());
-  }
 }
 
 /** Represents a `new` expression. Like a call but with its own kind. */
 export class NewExpression extends CallExpression {
-
   kind = NodeKind.NEW;
-
-  serialize(sb: string[]): void {
-    sb.push("new ");
-    super.serialize(sb);
-  }
 }
 
 /** Represents a `null` expression. */
@@ -1010,58 +885,34 @@ export class NullExpression extends IdentifierExpression {
 
 /** Represents a parenthesized expression. */
 export class ParenthesizedExpression extends Expression {
-
   kind = NodeKind.PARENTHESIZED;
 
   /** Expression in parenthesis. */
   expression: Expression;
-
-  serialize(sb: string[]): void {
-    sb.push("(");
-    this.expression.serialize(sb);
-    sb.push(")");
-  }
 }
 
 /** Represents a property access expression. */
 export class PropertyAccessExpression extends Expression {
-
   kind = NodeKind.PROPERTYACCESS;
 
   /** Expression being accessed. */
   expression: Expression;
   /** Property of the expression being accessed. */
   property: IdentifierExpression;
-
-  serialize(sb: string[]): void {
-    this.expression.serialize(sb);
-    sb.push(".");
-    this.property.serialize(sb);
-  }
 }
 
 /** Represents a regular expression literal expression. */
 export class RegexpLiteralExpression extends LiteralExpression {
-
-  // kind = NodeKind.LITERAL
   literalKind = LiteralKind.REGEXP;
 
   /** Regular expression pattern. */
   pattern: string;
   /** Regular expression flags. */
   patternFlags: string;
-
-  serialize(sb: string[]): void {
-    sb.push("/");
-    sb.push(this.pattern);
-    sb.push("/");
-    sb.push(this.patternFlags);
-  }
 }
 
 /** Represents a ternary expression, i.e., short if notation. */
 export class TernaryExpression extends Expression {
-
   kind = NodeKind.TERNARY;
 
   /** Condition expression. */
@@ -1070,27 +921,14 @@ export class TernaryExpression extends Expression {
   ifThen: Expression;
   /** Expression executed when condition is `false`. */
   ifElse: Expression;
-
-  serialize(sb: string[]): void {
-    this.condition.serialize(sb);
-    sb.push(" ? ");
-    this.ifThen.serialize(sb);
-    sb.push(" : ");
-    this.ifElse.serialize(sb);
-  }
 }
 
 /** Represents a string literal expression. */
 export class StringLiteralExpression extends LiteralExpression {
-
   literalKind = LiteralKind.STRING;
 
   /** String value without quotes. */
   value: string;
-
-  serialize(sb: string[]): void {
-    sb.push(stringToLiteral(this.value));
-  }
 }
 
 /** Represents a `super` expression. */
@@ -1120,8 +958,6 @@ export class FalseExpression extends IdentifierExpression {
 /** Base class of all unary expressions. */
 export abstract class UnaryExpression extends Expression {
 
-  // kind varies
-
   /** Operator token. */
   operator: Token;
   /** Operand expression. */
@@ -1130,28 +966,12 @@ export abstract class UnaryExpression extends Expression {
 
 /** Represents a unary postfix expression, e.g. a postfix increment. */
 export class UnaryPostfixExpression extends UnaryExpression {
-
   kind = NodeKind.UNARYPOSTFIX;
-
-  serialize(sb: string[]): void {
-    this.operand.serialize(sb);
-    switch (this.operator) {
-      case Token.PLUS_PLUS: sb.push("++"); break;
-      case Token.MINUS_MINUS: sb.push("--"); break;
-      default: sb.push("INVALID"); break;
-    }
-  }
 }
 
 /** Represents a unary prefix expression, e.g. a negation. */
 export class UnaryPrefixExpression extends UnaryExpression {
-
   kind = NodeKind.UNARYPREFIX;
-
-  serialize(sb: string[]): void {
-    sb.push(Token.operatorToString(this.operator));
-    this.operand.serialize(sb);
-  }
 }
 
 // statements
@@ -1184,7 +1004,6 @@ export enum SourceKind {
 
 /** A top-level source node. */
 export class Source extends Node {
-
   kind = NodeKind.SOURCE;
   parent = null;
 
@@ -1219,22 +1038,10 @@ export class Source extends Node {
   get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
   /** Tests if this source is a stdlib file. */
   get isStdlib(): bool { return this.sourceKind == SourceKind.STDLIB; }
-
-  serialize(sb: string[]): void {
-    for (var i: i32 = 0, k: i32 = this.statements.length; i < k; ++i) {
-      this.statements[i].serialize(sb);
-      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
-        sb.push("\n");
-      else
-        sb.push(";\n");
-    }
-  }
 }
 
 /** Base class of all declaration statements. */
 export abstract class DeclarationStatement extends Statement {
-
-  // kind varies
 
   /** Simple name being declared. */
   name: IdentifierExpression;
@@ -1254,8 +1061,6 @@ export abstract class DeclarationStatement extends Statement {
 /** Base class of all variable-like declaration statements with a type and initializer. */
 export abstract class VariableLikeDeclarationStatement extends DeclarationStatement {
 
-  // kind varies
-
   /** Variable type. */
   type: TypeNode | null;
   /** Variable initializer. */
@@ -1264,46 +1069,23 @@ export abstract class VariableLikeDeclarationStatement extends DeclarationStatem
 
 /** Represents a block statement. */
 export class BlockStatement extends Statement {
-
   kind = NodeKind.BLOCK;
 
   /** Contained statements. */
   statements: Statement[];
-
-  serialize(sb: string[]): void {
-    sb.push("{\n");
-    for (var i = 0, k = this.statements.length; i < k; ++i) {
-      this.statements[i].serialize(sb);
-      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
-        sb.push("\n");
-      else
-        sb.push(";\n");
-    }
-    sb.push("}");
-  }
 }
 
 /** Represents a `break` statement. */
 export class BreakStatement extends Statement {
-
   kind = NodeKind.BREAK;
 
   /** Target label, if applicable. */
   label: IdentifierExpression | null;
-
-  serialize(sb: string[]): void {
-    if (this.label) {
-      sb.push("break ");
-      (<IdentifierExpression>this.label).serialize(sb);
-    } else
-      sb.push("break");
-  }
 }
 
 /** Represents a `class` declaration. */
 export class ClassDeclaration extends DeclarationStatement {
-
-  kind = NodeKind.CLASS;
+  kind = NodeKind.CLASSDECLARATION;
 
   /** Accepted type parameters. */
   typeParameters: TypeParameter[];
@@ -1313,68 +1095,14 @@ export class ClassDeclaration extends DeclarationStatement {
   implementsTypes: TypeNode[];
   /** Class member declarations. */
   members: DeclarationStatement[];
-
-  serialize(sb: string[]): void {
-    if (this.decorators)
-      for (var i = 0, k = this.decorators.length; i < k; ++i) {
-        this.decorators[i].serialize(sb);
-        sb.push("\n");
-      }
-    if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
-        sb.push(" ");
-      }
-    sb.push("class ");
-    sb.push(this.name.name);
-    if (this.typeParameters.length) {
-      sb.push("<");
-      for (i = 0, k = this.typeParameters.length; i < k; ++i) {
-        if (i > 0)
-          sb.push(", ");
-        this.typeParameters[i].serialize(sb);
-      }
-      sb.push(">");
-    }
-    if (this.extendsType) {
-      sb.push(" extends ");
-      this.extendsType.serialize(sb);
-    }
-    if (this.implementsTypes.length) {
-      sb.push(" implements ");
-      for (i = 0, k = this.implementsTypes.length; i < k; ++i) {
-        if (i > 0)
-          sb.push(", ");
-        this.implementsTypes[i].serialize(sb);
-      }
-    }
-    sb.push(" {\n");
-    for (i = 0, k = this.members.length; i < k; ++i) {
-      this.members[i].serialize(sb);
-      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
-        sb.push("\n");
-      else
-        sb.push(";\n");
-    }
-    sb.push("}");
-  }
 }
 
 /** Represents a `continue` statement. */
 export class ContinueStatement extends Statement {
-
   kind = NodeKind.CONTINUE;
 
   /** Target label, if applicable. */
   label: IdentifierExpression | null;
-
-  serialize(sb: string[]): void {
-    if (this.label) {
-      sb.push("continue ");
-      (<IdentifierExpression>this.label).serialize(sb);
-    } else
-      sb.push("continue");
-  }
 }
 
 /** Built-in decorator kinds. */
@@ -1388,7 +1116,6 @@ export const enum DecoratorKind {
 
 /** Depresents a decorator. */
 export class Decorator extends Statement {
-
   kind = NodeKind.DECORATOR;
 
   /** Name expression. */
@@ -1397,137 +1124,63 @@ export class Decorator extends Statement {
   arguments: Expression[] | null;
   /** Built-in kind, if applicable. */
   decoratorKind: DecoratorKind;
-
-  serialize(sb: string[]): void {
-    sb.push("@");
-    this.name.serialize(sb);
-    if (this.arguments) {
-      sb.push("(");
-      for (var i = 0, k = this.arguments.length; i < k; ++i) {
-        if (i > 0)
-          sb.push(", ");
-        this.arguments[i].serialize(sb);
-      }
-      sb.push(")");
-    }
-  }
 }
 
 /** Represents a `do` statement. */
 export class DoStatement extends Statement {
-
   kind = NodeKind.DO;
 
   /** Statement being looped over. */
   statement: Statement;
   /** Condition when to repeat. */
   condition: Expression;
-
-  serialize(sb: string[]): void {
-    sb.push("do ");
-    this.statement.serialize(sb);
-    if (this.statement.kind == NodeKind.BLOCK)
-      sb.push(" while (");
-    else
-      sb.push(";\nwhile (");
-    this.condition.serialize(sb);
-    sb.push(")");
-  }
 }
 
 /** Represents an empty statement, i.e., a semicolon terminating nothing. */
 export class EmptyStatement extends Statement {
-
   kind = NodeKind.EMPTY;
-
-  serialize(sb: string[]): void {}
 }
 
 /** Represents an `enum` declaration. */
 export class EnumDeclaration extends DeclarationStatement {
-
-  kind = NodeKind.ENUM;
+  kind = NodeKind.ENUMDECLARATION;
 
   /** Enum value declarations. */
   values: EnumValueDeclaration[];
-
-  serialize(sb: string[]): void {
-    if (this.modifiers)
-      for (var i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
-        sb.push(" ");
-      }
-    sb.push("enum ");
-    this.name.serialize(sb);
-    sb.push(" {\n");
-    for (i = 0, k = this.values.length; i < k; ++i) {
-      if (i > 0)
-        sb.push(",\n");
-      this.values[i].serialize(sb);
-    }
-    sb.push("\n}");
-  }
 }
 
 /** Represents a value of an `enum` declaration. */
 export class EnumValueDeclaration extends DeclarationStatement {
-
-  kind = NodeKind.ENUMVALUE;
+  kind = NodeKind.ENUMVALUEDECLARATION;
   modifiers = null;
   // name is inherited
 
   /** Value expression. */
   value: Expression | null;
-
-  serialize(sb: string[]): void {
-    this.name.serialize(sb);
-    if (this.value) {
-      sb.push(" = ");
-      (<Expression>this.value).serialize(sb);
-    }
-  }
 }
 
 /** Represents an `export import` statement of an interface. */
 export class ExportImportStatement extends Node {
-
   kind = NodeKind.EXPORTIMPORT;
 
   /** Identifier being imported. */
   identifier: IdentifierExpression;
   /** Identifier being exported. */
   externalIdentifier: IdentifierExpression;
-
-  serialize(sb: string[]): void {
-    sb.push("export import ");
-    this.externalIdentifier.serialize(sb);
-    sb.push(" = ");
-    this.identifier.serialize(sb);
-  }
 }
 
 /** Represents a member of an `export` statement. */
 export class ExportMember extends Node {
-
   kind = NodeKind.EXPORTMEMBER;
 
   /** Identifier being exported. */
   identifier: IdentifierExpression;
   /** Identifier seen when imported again. */
   externalIdentifier: IdentifierExpression;
-
-  serialize(sb: string[]): void {
-    this.identifier.serialize(sb);
-    if (this.externalIdentifier.name != this.identifier.name) {
-      sb.push(" as ");
-      (<IdentifierExpression>this.externalIdentifier).serialize(sb);
-    }
-  }
 }
 
 /** Represents an `export` statement. */
 export class ExportStatement extends Statement {
-
   kind = NodeKind.EXPORT;
 
   /** Array of modifiers. */
@@ -1540,71 +1193,23 @@ export class ExportStatement extends Statement {
   normalizedPath: string | null;
   /** Mangled internal path being referenced, if `path` is set. */
   internalPath: string | null;
-
-  serialize(sb: string[]): void {
-    if (this.modifiers)
-      for (var i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
-        sb.push(" ");
-      }
-    sb.push("export {\n");
-    for (i = 0, k = this.members.length; i < k; ++i) {
-      if (i > 0)
-        sb.push(",\n");
-      this.members[i].serialize(sb);
-    }
-    if (this.path) {
-      sb.push("\n} from ");
-      this.path.serialize(sb);
-    } else
-      sb.push("\n}");
-  }
 }
 
 /** Represents an expression statement, i.e., an expression being used as a statement */
 export class ExpressionStatement extends Statement {
-
   kind = NodeKind.EXPRESSION;
 
   /** Expression being used as a statement.*/
   expression: Expression;
-
-  serialize(sb: string[]): void {
-    this.expression.serialize(sb);
-  }
 }
 
 /** Represents a field declaration within a `class`. */
 export class FieldDeclaration extends VariableLikeDeclarationStatement {
-
-  kind = NodeKind.FIELD;
-
-  serialize(sb: string[]): void {
-    if (this.decorators)
-      for (var i = 0, k = this.decorators.length; i < k; ++i) {
-        this.decorators[i].serialize(sb);
-        sb.push("\n");
-      }
-    if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
-        sb.push(" ");
-      }
-    this.name.serialize(sb);
-    if (this.type) {
-      sb.push(": ");
-      (<TypeNode>this.type).serialize(sb);
-    }
-    if (this.initializer) {
-      sb.push(" = ");
-      (<Expression>this.initializer).serialize(sb);
-    }
-  }
+  kind = NodeKind.FIELDDECLARATION;
 }
 
 /** Represents a `for` statement. */
 export class ForStatement extends Statement {
-
   kind = NodeKind.FOR;
 
   /** Initializer statement, if present. Either a {@link VariableStatement} or {@link ExpressionStatement}.  */
@@ -1615,30 +1220,11 @@ export class ForStatement extends Statement {
   incrementor: Expression | null;
   /** Statement being looped over. */
   statement: Statement;
-
-  serialize(sb: string[]): void {
-    sb.push("for (");
-    if (this.initializer)
-      this.initializer.serialize(sb);
-    if (this.condition) {
-      sb.push("; ");
-      this.condition.serialize(sb);
-    } else
-      sb.push(";");
-    if (this.incrementor) {
-      sb.push("; ");
-      this.incrementor.serialize(sb);
-    } else
-      sb.push(";");
-    sb.push(") ");
-    this.statement.serialize(sb);
-  }
 }
 
 /** Represents a `function` declaration. */
 export class FunctionDeclaration extends DeclarationStatement {
-
-  kind = NodeKind.FUNCTION;
+  kind = NodeKind.FUNCTIONDECLARATION;
 
   /** Accepted type parameters. */
   typeParameters: TypeParameter[];
@@ -1648,62 +1234,10 @@ export class FunctionDeclaration extends DeclarationStatement {
   returnType: TypeNode | null;
   /** Contained statements. */
   statements: Statement[] | null;
-
-  serialize(sb: string[]): void {
-    if (this.decorators)
-      for (var i = 0, k = this.decorators.length; i < k; ++i) {
-        this.decorators[i].serialize(sb);
-        sb.push("\n");
-      }
-    if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
-        sb.push(" ");
-      }
-    sb.push("function ");
-    this.serializeCommon(sb);
-  }
-
-  protected serializeCommon(sb: string[]): void {
-    this.name.serialize(sb);
-    if (this.typeParameters.length) {
-      sb.push("<");
-      for (var i = 0, k = this.typeParameters.length; i < k; ++i) {
-        if (i > 0)
-          sb.push(", ");
-        this.typeParameters[i].serialize(sb);
-      }
-      sb.push(">");
-    }
-    sb.push("(");
-    for (i = 0, k = this.parameters.length; i < k; ++i) {
-      if (i > 0)
-        sb.push(", ");
-      this.parameters[i].serialize(sb);
-    }
-    if (this.returnType && !hasModifier(ModifierKind.SET, this.modifiers)) {
-      sb.push("): ");
-      (<TypeNode>this.returnType).serialize(sb);
-    } else
-      sb.push(")");
-    if (this.statements) {
-      sb.push(" {\n");
-      for (i = 0, k = (<Statement[]>this.statements).length; i < k; ++i) {
-        var statement: Statement = (<Statement[]>this.statements)[i];
-        statement.serialize(sb);
-        if (builderEndsWith(sb, CharCode.CLOSEBRACE))
-          sb.push("\n");
-        else
-          sb.push(";\n");
-      }
-      sb.push("}");
-    }
-  }
 }
 
 /** Represents an `if` statement. */
 export class IfStatement extends Statement {
-
   kind = NodeKind.IF;
 
   /** Condition. */
@@ -1712,45 +1246,19 @@ export class IfStatement extends Statement {
   ifTrue: Statement;
   /** Statement executed when condition is `false`. */
   ifFalse: Statement | null;
-
-  serialize(sb: string[]): void {
-    sb.push("if (");
-    this.condition.serialize(sb);
-    sb.push(") ");
-    this.ifTrue.serialize(sb);
-    if (this.ifTrue.kind != NodeKind.BLOCK)
-      sb.push(";\n");
-    if (this.ifFalse) {
-      if (this.ifTrue.kind == NodeKind.BLOCK)
-        sb.push(" else ");
-      else
-        sb.push("else ");
-      (<Statement>this.ifFalse).serialize(sb);
-    }
-  }
 }
 
 /** Represents an `import` declaration, a single member within an {@link ImportStatement}. */
 export class ImportDeclaration extends DeclarationStatement {
-
   kind = NodeKind.IMPORTDECLARATION;
   modifiers = null;
 
   /** Identifier being imported. */
   externalIdentifier: IdentifierExpression;
-
-  serialize(sb: string[]): void {
-    this.externalIdentifier.serialize(sb);
-    if (this.externalIdentifier != this.name) {
-      sb.push(" as ");
-      (<IdentifierExpression>this.name).serialize(sb);
-    }
-  }
 }
 
 /** Represents an `import` statement. */
 export class ImportStatement extends Statement {
-
   kind = NodeKind.IMPORT;
 
   /** Array of member declarations or `null` if an asterisk import. */
@@ -1763,125 +1271,28 @@ export class ImportStatement extends Statement {
   normalizedPath: string;
   /** Mangled internal path being referenced. */
   internalPath: string;
-
-  serialize(sb: string[]): void {
-    sb.push("import ");
-    if (this.declarations) {
-      sb.push("{\n");
-      for (var i: i32 = 0, k: i32 = this.declarations.length; i < k; ++i) {
-        if (i > 0)
-          sb.push(",\n");
-        this.declarations[i].serialize(sb);
-      }
-      sb.push("\n} from ");
-    } else if (this.namespaceName) {
-      sb.push("* as ");
-      this.namespaceName.serialize(sb);
-      sb.push(" from ");
-    }
-    this.path.serialize(sb);
-  }
 }
 
 /** Represents an `interfarce` declaration. */
 export class InterfaceDeclaration extends ClassDeclaration {
-
-  kind = NodeKind.INTERFACE;
-
-  serialize(sb: string[]): void {
-    if (this.decorators)
-      for (var i = 0, k = this.decorators.length; i < k; ++i) {
-        this.decorators[i].serialize(sb);
-        sb.push("\n");
-      }
-    if (this.modifiers)
-      for (i = 0, k = this.modifiers.length; i < k; ++i) {
-        this.modifiers[i].serialize(sb);
-        sb.push(" ");
-      }
-    sb.push("interface ");
-    this.name.serialize(sb);
-    if (this.typeParameters.length) {
-      sb.push("<");
-      for (i = 0, k =  this.typeParameters.length; i < k; ++i) {
-        if (i > 0)
-          sb.push(", ");
-        this.typeParameters[i].serialize(sb);
-      }
-      sb.push(">");
-    }
-    if (this.extendsType) {
-      sb.push(" extends ");
-      this.extendsType.serialize(sb);
-    }
-    sb.push(" {\n");
-    for (i = 0, k = this.members.length; i < k; ++i) {
-      this.members[i].serialize(sb);
-      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
-        sb.push("\n");
-      else
-        sb.push(";\n");
-    }
-    sb.push("}");
-  }
+  kind = NodeKind.INTERFACEDECLARATION;
 }
 
 /** Represents a method declaration within a `class`. */
 export class MethodDeclaration extends FunctionDeclaration {
-
-  kind = NodeKind.METHOD;
-
-  serialize(sb: string[]): void {
-    if (this.decorators)
-      for (var i = 0, k = this.decorators.length; i < k; ++i) {
-        this.decorators[i].serialize(sb);
-        sb.push("\n");
-      }
-    if (this.modifiers)
-      for (i = 0, k = this.modifiers.length; i < k; ++i) {
-        this.modifiers[i].serialize(sb);
-        sb.push(" ");
-      }
-    super.serializeCommon(sb);
-  }
+  kind = NodeKind.METHODDECLARATION;
 }
 
 /** Represents a `namespace` declaration. */
 export class NamespaceDeclaration extends DeclarationStatement {
-
-  kind = NodeKind.NAMESPACE;
+  kind = NodeKind.NAMESPACEDECLARATION;
 
   /** Array of namespace members. */
   members: Statement[];
-
-  serialize(sb: string[]): void {
-    if (this.decorators)
-      for (var i = 0, k = this.decorators.length; i < k; ++i) {
-        this.decorators[i].serialize(sb);
-        sb.push("\n");
-      }
-    if (this.modifiers)
-      for (i = 0, k = this.modifiers.length; i < k; ++i) {
-        this.modifiers[i].serialize(sb);
-        sb.push(" ");
-      }
-    sb.push("namespace ");
-    this.name.serialize(sb);
-    sb.push(" {\n");
-    for (i = 0, k = this.members.length; i < k; ++i) {
-      this.members[i].serialize(sb);
-      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
-        sb.push("\n");
-      else
-        sb.push(";\n");
-    }
-    sb.push("}");
-  }
 }
 
 /** Represents a function parameter. */
 export class Parameter extends Node {
-
   kind = NodeKind.PARAMETER;
 
   /** Parameter name. */
@@ -1892,141 +1303,54 @@ export class Parameter extends Node {
   initializer: Expression | null;
   /** Whether a rest parameter or not. */
   isRest: bool;
-
-  serialize(sb: string[]): void {
-    if (this.isRest)
-      sb.push("...");
-    this.name.serialize(sb);
-    if (this.type) {
-      sb.push(": ");
-      this.type.serialize(sb);
-    }
-    if (this.initializer) {
-      sb.push(" = ");
-      this.initializer.serialize(sb);
-    }
-  }
 }
 
 /** Represents a single modifier. */
 export class Modifier extends Node {
-
   kind = NodeKind.MODIFIER;
 
   /** Specific modifier kind. */
   modifierKind: ModifierKind;
-
-  serialize(sb: string[]): void {
-    sb.push(this.toString());
-  }
-
-  /** Returns the TypeScript representation of this modifier. */
-  toString(): string {
-    switch (this.modifierKind) {
-      case ModifierKind.ABSTRACT: return "abstract";
-      case ModifierKind.ASYNC: return "async";
-      case ModifierKind.CONST: return "const";
-      case ModifierKind.DECLARE: return "declare";
-      case ModifierKind.EXPORT: return "export";
-      case ModifierKind.GET: return "get";
-      case ModifierKind.IMPORT: return "import";
-      case ModifierKind.PRIVATE: return "private";
-      case ModifierKind.PROTECTED: return "protected";
-      case ModifierKind.PUBLIC: return "public";
-      case ModifierKind.READONLY: return "readonly";
-      case ModifierKind.SET: return "set";
-      case ModifierKind.STATIC: return "static";
-      default: assert(false); return "";
-    }
-  }
 }
 
 /** Represents a `return` statement. */
 export class ReturnStatement extends Statement {
-
   kind = NodeKind.RETURN;
 
   /** Value expression being returned, if present. */
   value: Expression | null;
-
-  serialize(sb: string[]): void {
-    if (this.value) {
-      sb.push("return ");
-      this.value.serialize(sb);
-    } else
-      sb.push("return");
-  }
 }
 
 /** Represents a single `case` within a `switch` statement. */
 export class SwitchCase extends Node {
-
-  kind = NodeKind.CASE;
+  kind = NodeKind.SWITCHCASE;
 
   /** Label expression. `null` indicates the default case. */
   label: Expression | null;
   /** Contained statements. */
   statements: Statement[];
-
-  serialize(sb: string[]): void {
-    if (this.label) {
-      sb.push("case ");
-      this.label.serialize(sb);
-      sb.push(":\n");
-    } else
-      sb.push("default:\n");
-    for (var i = 0, k = this.statements.length; i < k; ++i) {
-      if (i > 0)
-        sb.push("\n");
-      this.statements[i].serialize(sb);
-      if (builderEndsWith(sb, CharCode.CLOSEBRACE))
-        sb.push("\n");
-      else
-        sb.push(";\n");
-    }
-  }
 }
 
 /** Represents a `switch` statement. */
 export class SwitchStatement extends Statement {
-
   kind = NodeKind.SWITCH;
 
   /** Condition expression. */
   condition: Expression;
   /** Contained cases. */
   cases: SwitchCase[];
-
-  serialize(sb: string[]): void {
-    sb.push("switch (");
-    this.condition.serialize(sb);
-    sb.push(") {\n");
-    for (var i = 0, k = this.cases.length; i < k; ++i) {
-      this.cases[i].serialize(sb);
-      sb.push("\n");
-    }
-    sb.push("}");
-  }
 }
 
 /** Represents a `throw` statement. */
 export class ThrowStatement extends Statement {
-
   kind = NodeKind.THROW;
 
   /** Value expression being thrown. */
   value: Expression;
-
-  serialize(sb: string[]): void {
-    sb.push("throw ");
-    this.value.serialize(sb);
-    sb.push(";");
-  }
 }
 
 /** Represents a `try` statement. */
 export class TryStatement extends Statement {
-
   kind = NodeKind.TRY;
 
   /** Contained statements. */
@@ -2037,84 +1361,26 @@ export class TryStatement extends Statement {
   catchStatements: Statement[] | null;
   /** Statements being executed in any case, if a `finally` clause is present. */
   finallyStatements: Statement[] | null;
-
-  serialize(sb: string[]): void {
-    sb.push("try {\n");
-    for (var i = 0, k = this.statements.length; i < k; ++i) {
-      this.statements[i].serialize(sb);
-      sb.push(";\n");
-    }
-    if (this.catchVariable) {
-      sb.push("} catch (");
-      (<IdentifierExpression>this.catchVariable).serialize(sb);
-      sb.push(") {\n");
-      if (this.catchStatements)
-        for (i = 0, k = (<Statement[]>this.catchStatements).length; i < k; ++i) {
-          (<Statement[]>this.catchStatements)[i].serialize(sb);
-          sb.push(";\n");
-        }
-    }
-    if (this.finallyStatements) {
-      sb.push("} finally {\n");
-      for (i = 0, k = (<Statement[]>this.finallyStatements).length; i < k; ++i) {
-        (<Statement[]>this.finallyStatements)[i].serialize(sb);
-        sb.push(";\n");
-      }
-    }
-    sb.push("}");
-  }
 }
 
 /** Represents a `type` declaration. */
 export class TypeDeclaration extends DeclarationStatement {
-
   kind = NodeKind.TYPEDECLARATION;
 
   /** Type being aliased. */
   alias: TypeNode;
-
-  serialize(sb: string[]): void {
-    if (this.decorators)
-      for (var i = 0, k = this.decorators.length; i < k; ++i) {
-        this.decorators[i].serialize(sb);
-        sb.push("\n");
-      }
-    if (this.modifiers)
-      for (i = 0, k = (<Modifier[]>this.modifiers).length; i < k; ++i) {
-        (<Modifier[]>this.modifiers)[i].serialize(sb);
-        sb.push(" ");
-      }
-    sb.push("type ");
-    this.name.serialize(sb);
-    sb.push(" = ");
-    this.alias.serialize(sb);
-  }
 }
 
 /** Represents a single variable declaration within a {@link VariableStatement}. */
 export class VariableDeclaration extends VariableLikeDeclarationStatement {
-
   kind = NodeKind.VARIABLEDECLARATION;
 
   /** Array of modifiers. */
   modifiers: Modifier[] | null;
-
-  serialize(sb: string[]): void {
-    this.name.serialize(sb);
-    if (this.type) {
-      sb.push(": ");
-      (<TypeNode>this.type).serialize(sb);
-    }
-    if (this.initializer) {
-      sb.push(" = ");
-      (<Expression>this.initializer).serialize(sb);
-    }
-  }
 }
 
 /** Represents a variable statement, i.e., a `var`, `let` or `const` statement. */
 export class VariableStatement extends Statement {
-
   kind = NodeKind.VARIABLE;
 
   /** Array of modifiers. */
@@ -2123,47 +1389,16 @@ export class VariableStatement extends Statement {
   decorators: Decorator[] | null;
   /** Array of member declarations. */
   declarations: VariableDeclaration[];
-
-  serialize(sb: string[]): void {
-    var isConst = false;
-    if (this.decorators)
-      for (var i = 0, k = this.decorators.length; i < k; ++i) {
-        this.decorators[i].serialize(sb);
-        sb.push("\n");
-      }
-    if (this.modifiers)
-      for (i = 0, k = this.modifiers.length; i < k; ++i) {
-        this.modifiers[i].serialize(sb);
-        sb.push(" ");
-        if (this.modifiers[i].modifierKind == ModifierKind.CONST)
-          isConst = true;
-      }
-    if (!isConst)
-      sb.push("let ");
-    for (i = 0, k = this.declarations.length; i < k; ++i) {
-      if (i > 0)
-        sb.push(", ");
-      this.declarations[i].serialize(sb);
-    }
-  }
 }
 
 /** Represents a `while` statement. */
 export class WhileStatement extends Statement {
-
   kind = NodeKind.WHILE;
 
   /** Condition expression. */
   condition: Expression;
   /** Statement being looped over. */
   statement: Statement;
-
-  serialize(sb: string[]): void {
-    sb.push("while (");
-    this.condition.serialize(sb);
-    sb.push(") ");
-    this.statement.serialize(sb);
-  }
 }
 
 /** Cached unused modifiers for reuse. */
@@ -2224,20 +1459,13 @@ export function hasDecorator(name: string, decorators: Decorator[] | null): bool
   return getFirstDecorator(name, decorators) != null;
 }
 
-/** Serializes the specified node to its TypeScript representation. */
-export function serialize(node: Node): string {
-  var sb = new Array<string>(); // shared builder could grow too much
-  node.serialize(sb);
-  return sb.join("");
-}
-
 /** Mangles a path to an internal path. */
 export function mangleInternalPath(path: string): string {
-  // TODO: not necessary with current config
-  /* if (PATH_DELIMITER.charCodeAt(0) != CharCode.SLASH)
-    path = path.replace("/", PATH_DELIMITER);
-  if (PARENT_SUBST != "..")
-    path = path.replace("..", PARENT_SUBST); */
+  // not necessary with current config
+  // if (PATH_DELIMITER.charCodeAt(0) != CharCode.SLASH)
+  //   path = path.replace("/", PATH_DELIMITER);
+  // if (PARENT_SUBST != "..")
+  //   path = path.replace("..", PARENT_SUBST);
   return path;
 }
 
@@ -2250,110 +1478,9 @@ export function mangleInternalName(declaration: DeclarationStatement): string {
   if (declaration.kind == NodeKind.VARIABLEDECLARATION && parent.kind == NodeKind.VARIABLE) // skip over
     if (!(parent = parent.parent))
       return name;
-  if (parent.kind == NodeKind.CLASS)
+  if (parent.kind == NodeKind.CLASSDECLARATION)
     return (<ClassDeclaration>parent).internalName + (hasModifier(ModifierKind.STATIC, declaration.modifiers) ? STATIC_DELIMITER : INSTANCE_DELIMITER) + name;
-  if (parent.kind == NodeKind.NAMESPACE || parent.kind == NodeKind.ENUM)
+  if (parent.kind == NodeKind.NAMESPACEDECLARATION || parent.kind == NodeKind.ENUMDECLARATION)
     return (<DeclarationStatement>parent).internalName + STATIC_DELIMITER + name;
   return declaration.range.source.internalPath + PATH_DELIMITER + name;
-}
-
-/** Tests if the specified builder ends with the specified char code. */
-function builderEndsWith(sb: string[], code: CharCode): bool {
-  if (sb.length) {
-    var last = sb[sb.length - 1];
-    return last.length > 0 ? last.charCodeAt(last.length - 1) == code : false;
-  }
-  return false;
-}
-
-/** Converts a string to its literal representation including quotes. */
-export function stringToLiteral(str: string, singleQuoted: bool = false): string {
-  var ret = new Array<string>();
-  var off = 0;
-  for (var i = 0, k = str.length; i < k;) {
-    switch (str.charCodeAt(i)) {
-
-      case CharCode.NULL:
-        if (i > off)
-          ret.push(str.substring(off, off = i + 1));
-        ret.push("\\0");
-        off = ++i;
-        break;
-
-      case CharCode.BACKSPACE:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        off = ++i;
-        ret.push("\\b");
-        break;
-
-      case CharCode.TAB:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        off = ++i;
-        ret.push("\\t");
-        break;
-
-      case CharCode.LINEFEED:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        off = ++i;
-        ret.push("\\n");
-        break;
-
-      case CharCode.VERTICALTAB:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        off = ++i;
-        ret.push("\\v");
-        break;
-
-      case CharCode.FORMFEED:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        off = ++i;
-        ret.push("\\f");
-        break;
-
-      case CharCode.CARRIAGERETURN:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        ret.push("\\r");
-        off = ++i;
-        break;
-
-      case CharCode.DOUBLEQUOTE:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        ret.push("\\\"");
-        off = ++i;
-        break;
-
-      case CharCode.SINGLEQUOTE:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        ret.push("\\'");
-        off = ++i;
-        break;
-
-      case CharCode.BACKSLASH:
-        if (i > off)
-          ret.push(str.substring(off, i));
-        ret.push("\\\\");
-        off = ++i;
-        break;
-
-      default:
-        ++i;
-        break;
-    }
-  }
-  var quote = singleQuoted ? "'" : "\"";
-  if (off == 0) {
-    assert(ret.length == 0);
-    return quote + str + quote;
-  }
-  if (i > off)
-    ret.push(str.substring(off, i));
-  return quote + ret.join("") + quote;
 }

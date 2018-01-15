@@ -275,17 +275,17 @@ export class Compiler extends DiagnosticEmitter {
       var statement = source.statements[i];
       switch (statement.kind) {
 
-        case NodeKind.CLASS:
+        case NodeKind.CLASSDECLARATION:
           if ((noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>statement).modifiers)) && !(<ClassDeclaration>statement).typeParameters.length)
             this.compileClassDeclaration(<ClassDeclaration>statement, []);
           break;
 
-        case NodeKind.ENUM:
+        case NodeKind.ENUMDECLARATION:
           if (noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>statement).modifiers))
             this.compileEnumDeclaration(<EnumDeclaration>statement);
           break;
 
-        case NodeKind.FUNCTION:
+        case NodeKind.FUNCTIONDECLARATION:
           if ((noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>statement).modifiers)) && !(<FunctionDeclaration>statement).typeParameters.length)
             this.compileFunctionDeclaration(<FunctionDeclaration>statement, []);
           break;
@@ -294,7 +294,7 @@ export class Compiler extends DiagnosticEmitter {
           this.compileSourceByPath((<ImportStatement>statement).normalizedPath, (<ImportStatement>statement).path);
           break;
 
-        case NodeKind.NAMESPACE:
+        case NodeKind.NAMESPACEDECLARATION:
           if (noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>statement).modifiers))
             this.compileNamespaceDeclaration(<NamespaceDeclaration>statement);
           break;
@@ -608,27 +608,27 @@ export class Compiler extends DiagnosticEmitter {
       var member = members[i];
       switch (member.kind) {
 
-        case NodeKind.CLASS:
+        case NodeKind.CLASSDECLARATION:
           if ((noTreeShaking || hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>member).modifiers)) && !(<ClassDeclaration>member).typeParameters.length)
             this.compileClassDeclaration(<ClassDeclaration>member, []);
           break;
 
-        case NodeKind.INTERFACE:
+        case NodeKind.INTERFACEDECLARATION:
           if ((noTreeShaking || hasModifier(ModifierKind.EXPORT, (<InterfaceDeclaration>member).modifiers)) && !(<InterfaceDeclaration>member).typeParameters.length)
             this.compileInterfaceDeclaration(<InterfaceDeclaration>member, []);
           break;
 
-        case NodeKind.ENUM:
+        case NodeKind.ENUMDECLARATION:
           if (noTreeShaking || hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>member).modifiers))
             this.compileEnumDeclaration(<EnumDeclaration>member);
           break;
 
-        case NodeKind.FUNCTION:
+        case NodeKind.FUNCTIONDECLARATION:
           if ((noTreeShaking || hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>member).modifiers)) && !(<FunctionDeclaration>member).typeParameters.length)
             this.compileFunctionDeclaration(<FunctionDeclaration>member, []);
           break;
 
-        case NodeKind.NAMESPACE:
+        case NodeKind.NAMESPACEDECLARATION:
           if (noTreeShaking || hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>member).modifiers))
             this.compileNamespaceDeclaration(<NamespaceDeclaration>member);
           break;
@@ -3059,12 +3059,12 @@ function isModuleExport(element: Element, declaration: DeclarationStatement): bo
   var parentNode = declaration.parent;
   if (!parentNode)
     return false;
-  if (declaration.range.source.isEntry && parentNode.kind != NodeKind.NAMESPACE)
+  if (declaration.range.source.isEntry && parentNode.kind != NodeKind.NAMESPACEDECLARATION)
     return true;
   if (parentNode.kind == NodeKind.VARIABLE)
     if (!(parentNode = parentNode.parent))
       return false;
-  if (parentNode.kind != NodeKind.NAMESPACE && parentNode.kind != NodeKind.CLASS)
+  if (parentNode.kind != NodeKind.NAMESPACEDECLARATION && parentNode.kind != NodeKind.CLASSDECLARATION)
     return false;
   var parent = element.program.elements.get((<DeclarationStatement>parentNode).internalName);
   if (!parent)

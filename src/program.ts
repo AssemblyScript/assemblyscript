@@ -156,11 +156,11 @@ export class Program extends DiagnosticEmitter {
         var statement = statements[j];
         switch (statement.kind) {
 
-          case NodeKind.CLASS:
+          case NodeKind.CLASSDECLARATION:
             this.initializeClass(<ClassDeclaration>statement, queuedDerivedClasses);
             break;
 
-          case NodeKind.ENUM:
+          case NodeKind.ENUMDECLARATION:
             this.initializeEnum(<EnumDeclaration>statement);
             break;
 
@@ -168,7 +168,7 @@ export class Program extends DiagnosticEmitter {
             this.initializeExports(<ExportStatement>statement, queuedExports);
             break;
 
-          case NodeKind.FUNCTION:
+          case NodeKind.FUNCTIONDECLARATION:
             this.initializeFunction(<FunctionDeclaration>statement);
             break;
 
@@ -176,11 +176,11 @@ export class Program extends DiagnosticEmitter {
             this.initializeImports(<ImportStatement>statement, queuedExports, queuedImports);
             break;
 
-          case NodeKind.INTERFACE:
+          case NodeKind.INTERFACEDECLARATION:
             this.initializeInterface(<InterfaceDeclaration>statement);
             break;
 
-          case NodeKind.NAMESPACE:
+          case NodeKind.NAMESPACEDECLARATION:
             this.initializeNamespace(<NamespaceDeclaration>statement, queuedDerivedClasses, null);
             break;
 
@@ -327,11 +327,11 @@ export class Program extends DiagnosticEmitter {
       var memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
 
-        case NodeKind.FIELD:
+        case NodeKind.FIELDDECLARATION:
           this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
 
-        case NodeKind.METHOD:
+        case NodeKind.METHODDECLARATION:
           var isGetter: bool;
           if ((isGetter = hasModifier(ModifierKind.GET, memberDeclaration.modifiers)) || hasModifier(ModifierKind.SET, memberDeclaration.modifiers))
             this.initializeAccessor(<MethodDeclaration>memberDeclaration, prototype, isGetter);
@@ -768,11 +768,11 @@ export class Program extends DiagnosticEmitter {
       var memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
 
-        case NodeKind.FIELD:
+        case NodeKind.FIELDDECLARATION:
           this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
 
-        case NodeKind.METHOD:
+        case NodeKind.METHODDECLARATION:
           var isGetter: bool;
           if ((isGetter = hasModifier(ModifierKind.GET, memberDeclaration.modifiers)) || hasModifier(ModifierKind.SET, memberDeclaration.modifiers))
             this.initializeAccessor(<MethodDeclaration>memberDeclaration, prototype, isGetter);
@@ -818,23 +818,23 @@ export class Program extends DiagnosticEmitter {
     for (var i = 0, k = members.length; i < k; ++i) {
       switch (members[i].kind) {
 
-        case NodeKind.CLASS:
+        case NodeKind.CLASSDECLARATION:
           this.initializeClass(<ClassDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
 
-        case NodeKind.ENUM:
+        case NodeKind.ENUMDECLARATION:
           this.initializeEnum(<EnumDeclaration>members[i], namespace);
           break;
 
-        case NodeKind.FUNCTION:
+        case NodeKind.FUNCTIONDECLARATION:
           this.initializeFunction(<FunctionDeclaration>members[i], namespace);
           break;
 
-        case NodeKind.INTERFACE:
+        case NodeKind.INTERFACEDECLARATION:
           this.initializeInterface(<InterfaceDeclaration>members[i], namespace);
           break;
 
-        case NodeKind.NAMESPACE:
+        case NodeKind.NAMESPACEDECLARATION:
           this.initializeNamespace(<NamespaceDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
 

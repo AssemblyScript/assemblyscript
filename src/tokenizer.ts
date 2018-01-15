@@ -249,60 +249,6 @@ export namespace Token {
     }
   }
 
-  export function operatorToString(token: Token): string {
-    switch (token) {
-      case Token.DELETE: return "delete";
-      case Token.IN: return "in";
-      case Token.INSTANCEOF: return "instanceof";
-      case Token.NEW: return "new";
-      case Token.TYPEOF: return "typeof";
-      case Token.VOID: return "void";
-      case Token.YIELD: return "yield";
-      case Token.DOT_DOT_DOT: return "...";
-      case Token.COMMA: return ",";
-      case Token.LESSTHAN: return "<";
-      case Token.GREATERTHAN: return ">";
-      case Token.LESSTHAN_EQUALS: return "<=";
-      case Token.GREATERTHAN_EQUALS: return ">=";
-      case Token.EQUALS_EQUALS: return "==";
-      case Token.EXCLAMATION_EQUALS: return "!=";
-      case Token.EQUALS_EQUALS_EQUALS: return "===";
-      case Token.EXCLAMATION_EQUALS_EQUALS: return "!==";
-      case Token.PLUS: return "+";
-      case Token.MINUS: return "-";
-      case Token.ASTERISK_ASTERISK: return "**";
-      case Token.ASTERISK: return "*";
-      case Token.SLASH: return "/";
-      case Token.PERCENT: return "%";
-      case Token.PLUS_PLUS: return "++";
-      case Token.MINUS_MINUS: return "--";
-      case Token.LESSTHAN_LESSTHAN: return "<<";
-      case Token.GREATERTHAN_GREATERTHAN: return ">>";
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: return ">>>";
-      case Token.AMPERSAND: return "&";
-      case Token.BAR: return "|";
-      case Token.CARET: return "^";
-      case Token.EXCLAMATION: return "!";
-      case Token.TILDE: return "~";
-      case Token.AMPERSAND_AMPERSAND: return "&&";
-      case Token.BAR_BAR: return "||";
-      case Token.EQUALS: return "=";
-      case Token.PLUS_EQUALS: return "+=";
-      case Token.MINUS_EQUALS: return "-=";
-      case Token.ASTERISK_EQUALS: return "*=";
-      case Token.ASTERISK_ASTERISK_EQUALS: return "**=";
-      case Token.SLASH_EQUALS: return "/=";
-      case Token.PERCENT_EQUALS: return "%=";
-      case Token.LESSTHAN_LESSTHAN_EQUALS: return "<<=";
-      case Token.GREATERTHAN_GREATERTHAN_EQUALS: return ">>=";
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: return ">>>=";
-      case Token.AMPERSAND_EQUALS: return "&=";
-      case Token.BAR_EQUALS: return "|=";
-      case Token.CARET_EQUALS: return "^=";
-      default: assert(false); return "";
-    }
-  }
-
   export function isAlsoIdentifier(token: Token): bool {
     switch (token) {
       case Token.ABSTRACT:
