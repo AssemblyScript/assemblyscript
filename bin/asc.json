@@ -58,11 +58,15 @@
   "trapMode": {
     "desc": [
       "Sets the trap mode to use.",
-      "allow  Allow trapping operations. This is the default.",
-      "clamp  Replace trapping operations with clamping semantics.",
-      "js     Replace trapping operations with JS semantics."
+      " allow  Allow trapping operations. This is the default.",
+      " clamp  Replace trapping operations with clamping semantics.",
+      " js     Replace trapping operations with JS semantics."
     ],
     "type": "string",
     "default": "allow"
+  },
+  "runPasses": {
+    "desc": "Specifies additional Binaryen passes to run.",
+    "type": "string"
   }
 }

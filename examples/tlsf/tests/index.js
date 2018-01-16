@@ -1,49 +1,63 @@
 var fs = require("fs");
-var tlsf = new WebAssembly.Instance(WebAssembly.Module(fs.readFileSync(__dirname + "/../tlsf.optimized.wasm")), {
-  env: {
-    log_i: function(i) { i == -1 ? console.log("---") : console.log("log_i -> " + i); }
-  }
-}).exports;
 
-console.log(Object.keys(tlsf));
+function test(file) {
+  console.log("Testing '" + file + "' ...");
 
-try {
-  var memSize = 0;
-  for (var j = 0; j < 500; ++j) {
-    var ptr;
-    var ptrs = [];
-    for (var i = 0; i < 256; ++i) {
-      var size = i * 64;
-      ptr = tlsf.allocate_memory(size);
-      console.log("allocate_memory(" + size + ") = " + ptr);
-      if (!(i % 4)) {
+  var tlsf = new WebAssembly.Instance(WebAssembly.Module(fs.readFileSync(__dirname + "/../" + file)), {
+    env: {
+      log_i: function(i) { i == -1 ? console.log("---") : console.log("log_i -> " + i); }
+    }
+  }).exports;
+
+  try {
+    var memSize = 0;
+    var ptr = 0;
+    for (var j = 0; j < 10000; ++j) {
+      if (!j || !((j + 1) % 1000))
+        console.log("run #" + (j + 1));
+      ptr;
+      var ptrs = [];
+      // allocate some blocks of unusual sizes
+      for (var i = 0; i < 2048; ++i) {
+        var size = i * 61;
+        ptr = tlsf.allocate_memory(size);
+        // immediately free every 4th
+        if (!(i % 4)) {
+          tlsf.free_memory(ptr);
+        } else {
+          ptrs.push(ptr);
+          // randomly free random blocks (if not the first run that determines max memory)
+          if (j && Math.random() < 0.25) {
+            ptr = ptrs.splice((Math.random() * ptrs.length)|0, 1)[0];
+            tlsf.free_memory(ptr);
+          }
+        }
+      }
+      tlsf.check();
+      // clean up by randomly freeing all blocks
+      while (ptrs.length) {
+        ptr = ptrs.splice((Math.random() * ptrs.length)|0, 1)[0];
         tlsf.free_memory(ptr);
-        console.log("free_memory(" + ptr + ")");
-      } else
-        ptrs.push(ptr);
+      }
+      if (memSize && memSize != tlsf.memory.buffer.byteLength)
+        throw new Error("memory should not grow multiple times: " + memSize + " != " + tlsf.memory.buffer.byteLength);
+      memSize = tlsf.memory.buffer.byteLength;
+      tlsf.check();
     }
-    while (ptrs.length) {
-      ptr = Math.random() < 0.5 ? ptrs.pop() : ptrs.shift();
-      console.log("free_memory(" + ptr + ")");
-      tlsf.free_memory(ptr);
-    }
-    if (memSize && memSize != tlsf.memory.length)
-      throw new Error("memory should not grow multiple times");
-    memSize = tlsf.memory.length;
+  } finally {
+    mem(tlsf.memory, 0, 4096);
+    console.log("memSize=" + memSize);
   }
-  var ptr = tlsf.allocate_memory(64);
-  console.log("allocate_memory(" + 64 + ") = " + ptr);
-} catch (e) {
-  console.log(e.stack);
-  mem(tlsf.memory);
+  console.log();
 }
 
-function mem(memory, offset) {
+function mem(memory, offset, count) {
   if (!offset) offset = 0;
+  if (!count) count = 1024;
   var mem = new Uint8Array(memory.buffer, offset);
   var stackTop = new Uint32Array(memory.buffer, 4, 1)[0];
   var hex = [];
-  for (var i = 0; i < 1024; ++i) {
+  for (var i = 0; i < count; ++i) {
     var o = (offset + i).toString(16);
     while (o.length < 3) o = "0" + o;
     if ((i & 15) === 0) {
@@ -55,3 +69,6 @@ function mem(memory, offset) {
   }
   console.log(hex.join(" ") + " ...");
 }
+
+test("tlsf.untouched.wasm");
+test("tlsf.optimized.wasm");

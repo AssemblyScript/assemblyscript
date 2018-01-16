@@ -167,6 +167,12 @@ else if (args.trapMode !== "allow") {
 if (args.optimize)
   module.optimize();
 
+if (args.runPasses) {
+  if (typeof args.runPasses === "string")
+    args.runPasses = args.runPasses.split(",");
+  module.runPasses(args.runPasses.map(pass => pass.trim()));
+}
+
 var hasOutput = false;
 
 if (args.outFile != null) {

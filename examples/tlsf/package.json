@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
     "build:untouched": "asc assembly/tlsf.ts -t tlsf.untouched.wast -b tlsf.untouched.wasm --validate",
-    "build:optimized": "asc -O assembly/tlsf.ts -b tlsf.optimized.wasm -t tlsf.optimized.wast --validate --noAssert",
+    "build:optimized": "asc -O assembly/tlsf.ts -b tlsf.optimized.wasm -t tlsf.optimized.wast --validate --noAssert --runPasses inlining",
     "test": "node tests"
   }
 }
