@@ -2693,6 +2693,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = getterInstance.returnType;
         if (getterInstance.isInstance) {
           var targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32)
+          this.currentType = getterInstance.returnType;
           return this.makeCall(getterInstance, [ targetExpr ]);
         } else
           return this.makeCall(getterInstance);

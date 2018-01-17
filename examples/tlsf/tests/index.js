@@ -21,6 +21,8 @@ function test(file) {
       for (var i = 0; i < 2048; ++i) {
         var size = i * 61;
         ptr = tlsf.allocate_memory(size);
+        if (tlsf.set_memory)
+          tlsf.set_memory(ptr, ptr % 256, size); // slow
         // immediately free every 4th
         if (!(i % 4)) {
           tlsf.free_memory(ptr);
@@ -33,7 +35,10 @@ function test(file) {
           }
         }
       }
-      tlsf.check();
+      if (tlsf.check)
+        tlsf.check();
+      if (tlsf.check_pool)
+        tlsf.check_pool(0);
       // clean up by randomly freeing all blocks
       while (ptrs.length) {
         ptr = ptrs.splice((Math.random() * ptrs.length)|0, 1)[0];
@@ -42,7 +47,10 @@ function test(file) {
       if (memSize && memSize != tlsf.memory.buffer.byteLength)
         throw new Error("memory should not grow multiple times: " + memSize + " != " + tlsf.memory.buffer.byteLength);
       memSize = tlsf.memory.buffer.byteLength;
-      tlsf.check();
+      if (tlsf.check)
+        tlsf.check();
+      if (tlsf.check_pool)
+        tlsf.check_pool(0);
     }
   } finally {
     mem(tlsf.memory, 0, 4096);

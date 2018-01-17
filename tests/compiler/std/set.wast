@@ -2772,19 +2772,34 @@
   FUNCTION_PROTOTYPE: parseFloat
   GLOBAL: std/set/set
 [program.exports]
+  CLASS_PROTOTYPE: Array
   CLASS_PROTOTYPE: std:array/Array
+  CLASS_PROTOTYPE: CArray
   CLASS_PROTOTYPE: std:array/CArray
+  CLASS_PROTOTYPE: Error
   CLASS_PROTOTYPE: std:error/Error
+  CLASS_PROTOTYPE: RangeError
   CLASS_PROTOTYPE: std:error/RangeError
+  FUNCTION_PROTOTYPE: allocate_memory
   FUNCTION_PROTOTYPE: std:heap/allocate_memory
+  FUNCTION_PROTOTYPE: free_memory
   FUNCTION_PROTOTYPE: std:heap/free_memory
+  FUNCTION_PROTOTYPE: move_memory
   FUNCTION_PROTOTYPE: std:heap/move_memory
+  FUNCTION_PROTOTYPE: set_memory
   FUNCTION_PROTOTYPE: std:heap/set_memory
+  FUNCTION_PROTOTYPE: compare_memory
   FUNCTION_PROTOTYPE: std:heap/compare_memory
+  CLASS_PROTOTYPE: Map
   CLASS_PROTOTYPE: std:map/Map
+  CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:regexp/RegExp
+  CLASS_PROTOTYPE: Set
   CLASS_PROTOTYPE: std:set/Set
+  CLASS_PROTOTYPE: String
   CLASS_PROTOTYPE: std:string/String
+  FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: std:string/parseFloat
 ;)

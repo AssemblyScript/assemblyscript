@@ -224,8 +224,10 @@ export class Program extends DiagnosticEmitter {
           if (!currentExport)
             this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedExport.member.externalIdentifier.range, (<StringLiteralExpression>(<ExportStatement>queuedExport.member.parent).path).value, queuedExport.member.externalIdentifier.name);
         } else {
-          element = this.elements.get(currentExport.referencedName);
-          if (element)
+          if (
+            (element = this.elements.get(currentExport.referencedName)) ||      // normal export
+            (element = this.elements.get(currentExport.member.identifier.name)) // stdlib re-export
+          )
             this.exports.set(exportName, element);
           else
             this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.range, queuedExport.member.identifier.name);
@@ -273,8 +275,10 @@ export class Program extends DiagnosticEmitter {
     if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(declaration.parent).kind == NodeKind.SOURCE && element.isExported)) {
       if (this.elements.has(declaration.name.name))
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, element.internalName);
-      else
+      else {
         this.elements.set(declaration.name.name, element);
+        this.exports.set(declaration.name.name, element);
+      }
     }
   }
 
@@ -1029,15 +1033,35 @@ export class Program extends DiagnosticEmitter {
     var propertyName = propertyAccess.property.name;
     var targetType: Type;
     var member: Element | null;
+
+    // Resolve variable-likes to their class type first
     switch (target.kind) {
 
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
       case ElementKind.FIELD:
-        if (!(targetType = (<VariableLikeElement>target).type).classType)
-          break;
+        if (!(targetType = (<VariableLikeElement>target).type).classType) {
+          console.log(propertyAccess.property.name + " on " + targetType);
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, targetType.toString());
+          return null;
+        }
         target = <Class>targetType.classType;
-        // fall-through
+        break;
+
+      case ElementKind.PROPERTY:
+        var getter = assert((<Property>target).getterPrototype).resolve(); // reports
+        if (!getter)
+          return null;
+        if (!(targetType = getter.returnType).classType) {
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, targetType.toString());
+          return null;
+        }
+        target = <Class>targetType.classType;
+        break;
+    }
+
+    // Look up the member within
+    switch (target.kind) {
 
       case ElementKind.CLASS_PROTOTYPE:
       case ElementKind.CLASS:
@@ -1066,6 +1090,7 @@ export class Program extends DiagnosticEmitter {
           return resolvedElement.set(member).withTarget(target, targetExpression);
         break;
     }
+
     this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
     return null;
   }
@@ -1179,7 +1204,7 @@ export enum ElementKind {
   FIELD_PROTOTYPE,
   /** A {@link Field}. */
   FIELD,
-  /** A {@link PropertyContainer}. */
+  /** A {@link Property}. */
   PROPERTY,
   /** A {@link Namespace}. */
   NAMESPACE
@@ -1789,10 +1814,12 @@ export class Function extends Element {
 }
 
 /** A yet unresolved instance field prototype. */
-export class FieldPrototype extends VariableLikeElement {
+export class FieldPrototype extends Element {
 
   kind = ElementKind.FIELD_PROTOTYPE;
 
+  /** Declaration reference. */
+  declaration: FieldDeclaration | null;
   /** Parent class prototype. */
   classPrototype: ClassPrototype;
 
@@ -1821,18 +1848,12 @@ export class FieldPrototype extends VariableLikeElement {
 }
 
 /** A resolved instance field. */
-export class Field extends Element {
+export class Field extends VariableLikeElement {
 
   kind = ElementKind.FIELD;
 
   /** Field prototype reference. */
   prototype: FieldPrototype;
-  /** Resolved type. */
-  type: Type;
-  /** Constant integer value, if a constant static integer. */
-  constantIntegerValue: I64 | null = null;
-  /** Constant float value, if a constant static float. */
-  constantFloatValue: f64 = 0;
   /** Field memory offset, if an instance field. */
   memoryOffset: i32 = -1;
 

@@ -1,4 +1,6 @@
-// based on https://github.com/mattconte/tlsf (BSD, see LICENSE file)
+////////////// TLSF (Two-Level Segregate Fit) Memory Allocator ////////////////
+//    based on https://github.com/mattconte/tlsf - BSD, see LICENSE file     //
+///////////////////////////////////////////////////////////////////////////////
 
 // Configuration
 
@@ -27,16 +29,151 @@ function fls<T>(word: T): i32 {
 /** Block header structure. */
 @explicit
 class BlockHeader {
-  /** Points to the previous physical block. Only valid if the previous block
-    * is free. Actually stored at the end of the previous block. */
+
+  ///////////////////////////////// Fields ////////////////////////////////////
+
+  /**
+   * Points to the previous physical block. Only valid if the previous block is
+   * free. Actually stored at the end of the previous block.
+   */
   prev_phys_block: BlockHeader;
-  /** The size of this block, excluding the block header. The two least
-    * significant bits are used to store the block status. */
+
+  /**
+   * The size of this block, excluding the block header. The two least
+   * significant bits are used to store the block status.
+   */
   tagged_size: usize;
+
   /** Next free block. Only valid if the block is free. */
   next_free: BlockHeader;
+
   /** Previous free block. Only valid if the block is free. */
   prev_free: BlockHeader;
+
+  ///////////////////////////////// Methods ///////////////////////////////////
+
+  /** Gets the size of this block, excluding the block header. */
+  get size(): usize {
+    return this.tagged_size & ~(block_header_free_bit | block_header_prev_free_bit);
+  }
+
+  /** Sets the size of this block, retaining tagged bits. */
+  set size(size: usize) {
+    this.tagged_size = size | (this.tagged_size & (block_header_free_bit | block_header_prev_free_bit));
+  }
+
+  /** Tests if this is the last block. */
+  get isLast(): bool {
+    return this.size == 0;
+  }
+
+  /** Tests if this block's status is 'free'. */
+  get isFree(): bool {
+    return (this.tagged_size & block_header_free_bit) == block_header_free_bit;
+  }
+
+  /** Sets this block's status to 'free'. */
+  setFree(): void {
+    this.tagged_size |= block_header_free_bit;
+  }
+
+  /** Sets this block's status to 'used'. */
+  setUsed(): void {
+    this.tagged_size &= ~block_header_free_bit;
+  }
+
+  /** Tests if the previous block is free. */
+  get isPrevFree(): bool {
+    return (this.tagged_size & block_header_prev_free_bit) == block_header_prev_free_bit;
+  }
+
+  /** Sets the previous block's status to 'free'. */
+  setPrevFree(): void {
+    this.tagged_size |= block_header_prev_free_bit;
+  }
+
+  /** Sets the previous block's status to 'used'. */
+  setPrevUsed(): void {
+    this.tagged_size &= ~block_header_prev_free_bit;
+  }
+
+  /** Gets the block header matching the specified payload pointer. */
+  static fromPayloadPtr(ptr: usize): BlockHeader {
+    return changetype<BlockHeader>(ptr - block_start_offset);
+  }
+
+  /** Returns the address of this block's payload. */
+  toPayloadPtr(): usize {
+    return changetype<usize>(this) + block_start_offset;
+  }
+
+  /** Gets the next block after this one using the specified size. */
+  static fromOffset(ptr: usize, size: usize): BlockHeader {
+    return changetype<BlockHeader>(ptr + <usize>size);
+  }
+
+  /** Gets the previous block. */
+  get prev(): BlockHeader {
+    assert(this.isPrevFree, "previous block must be free");
+    return this.prev_phys_block;
+  }
+
+  /** Gets the next block. */
+  get next(): BlockHeader {
+    assert(!this.isLast, "last block has no next block");
+    return BlockHeader.fromOffset(this.toPayloadPtr(), this.size - block_header_overhead);
+  }
+
+  /**
+   * Links this block with its physical next block and returns the next block.
+   */
+  linkNext(): BlockHeader {
+    var next = this.next;
+    next.prev_phys_block = this;
+    return next;
+  }
+
+  /** Marks this block as being 'free'. */
+  markAsFree(): void {
+    var next = this.linkNext(); // Link the block to the next block, first.
+    next.setPrevFree();
+    this.setFree();
+  }
+
+  /** Marks this block as being 'used'. */
+  markAsUsed(): void {
+    var next = this.next;
+    next.setPrevUsed();
+    this.setUsed();
+  }
+
+  /** Tests if this block can be splitted. */
+  canSplit(size: usize): bool {
+    return this.size >= sizeof_block_header_t + size;
+  }
+
+  /* Splits a block into two, the second of which is free. */
+  split(size: usize): BlockHeader {
+    // Calculate the amount of space left in the remaining block.
+    var remaining = BlockHeader.fromOffset(this.toPayloadPtr(), size - block_header_overhead);
+    var remain_size = this.size - (size + block_header_overhead);
+    assert(remaining.toPayloadPtr() == align_ptr(remaining.toPayloadPtr(), ALIGN_SIZE), "remaining block not aligned properly");
+    assert(this.size == remain_size + size + block_header_overhead);
+
+    remaining.size = remain_size;
+    assert(remaining.size >= block_size_min, "block split with invalid size");
+
+    this.size = size;
+    remaining.markAsFree();
+    return remaining;
+  }
+
+  /* Absorb a free block's storage into this (adjacent previous) free block. */
+  absorb(block: BlockHeader): void {
+    assert(!this.isLast, "previous block can't be last");
+    this.tagged_size += block.size + block_header_overhead; // Leaves flags untouched.
+    this.linkNext();
+  }
 }
 
 const sizeof_block_header_t: usize = 4 * sizeof<usize>();
@@ -62,111 +199,230 @@ const block_size_max: usize = <usize>1 << FL_INDEX_MAX;
 /* The TLSF control structure. */
 @explicit
 class Control extends BlockHeader { // Empty lists point at this block to indicate they are free.
+
+  ///////////////////////////////// Fields ////////////////////////////////////
+
   /* First level free list bitmap. */
   fl_bitmap: u32;
-  /** Second level free list bitmaps. */
+
+  /** Gets the second level free list bitmap for the specified index. Equivalent to `sl_bitmap[fl_index]`. */
   sl_bitmap(fl_index: u32): u32 {
     const offset: usize = sizeof_block_header_t + sizeof<u32>();
     return load<u32>(changetype<usize>(this) + offset + fl_index * sizeof<u32>());
   }
+
+  /** Sets the second level free list bitmap for the specified index. Equivalent to `sl_bitmap[fl_index] = sl_map`. */
   sl_bitmap_set(fl_index: u32, sl_map: u32): void {
     const offset: usize = sizeof_block_header_t + sizeof<u32>();
     return store<u32>(changetype<usize>(this) + offset + fl_index * sizeof<u32>(), sl_map);
   }
-  /** Head of free lists. */
+
+  /** Gets the head of the free list for the specified indexes. Equivalent to `blocks[fl_index][sl_index]`. */
   blocks(fl_index: u32, sl_index: u32): BlockHeader {
     const offset: usize = sizeof_block_header_t + sizeof<u32>() + FL_INDEX_COUNT * sizeof<u32>();
     return load<BlockHeader>(changetype<usize>(this) + offset + (fl_index * SL_INDEX_COUNT + sl_index) * sizeof<usize>());
   }
+
+  /** Sets the head of the free list for the specified indexes. Equivalent to `blocks[fl_index][sl_index] = block`. */
   blocks_set(fl_index: u32, sl_index: u32, block: BlockHeader): void {
     const offset: usize = sizeof_block_header_t + sizeof<u32>() + FL_INDEX_COUNT * sizeof<u32>();
     return store<BlockHeader>(changetype<usize>(this) + offset + (fl_index * SL_INDEX_COUNT + sl_index) * sizeof<usize>(), block);
+  }
+
+  ///////////////////////////////// Methods ///////////////////////////////////
+
+  /** Removes a given block from the free list. */
+  removeBlock(block: BlockHeader): void {
+    mapping_insert(block.size);
+    this.removeFreeBlock(block, fl_out, sl_out);
+  }
+
+  /** Inserts a given block into the free list. */
+  insertBlock(block: BlockHeader): void {
+    mapping_insert(block.size);
+    this.insertFreeBlock(block, fl_out, sl_out);
+  }
+
+  /* Inserts a free block into the free block list. */
+  insertFreeBlock(block: BlockHeader, fl: i32, sl: i32): void {
+    var current = this.blocks(fl, sl);
+    assert(current, "free list cannot have a null entry");
+    assert(block, "cannot insert a null entry into the free list");
+    block.next_free = current;
+    block.prev_free = this;
+    current.prev_free = block;
+
+    assert(block.toPayloadPtr() == align_ptr(block.toPayloadPtr(), ALIGN_SIZE), "block not aligned properly");
+
+    // Insert the new block at the head of the list, and mark the first-
+    // and second-level bitmaps appropriately.
+    this.blocks_set(fl, sl, block);
+    this.fl_bitmap |= (1 << fl);
+    this.sl_bitmap_set(fl, this.sl_bitmap(fl) | (1 << sl))
+  }
+
+  /* Removes a free block from the free list.*/
+  removeFreeBlock(block: BlockHeader, fl: i32, sl: i32): void {
+    var prev = block.prev_free;
+    var next = block.next_free;
+    assert(prev, "prev_free field can not be null");
+    assert(next, "next_free field can not be null");
+    next.prev_free = prev;
+    prev.next_free = next;
+    if (this.blocks(fl, sl) == block) {
+      this.blocks_set(fl, sl, next);
+      if (next == this) {
+        this.sl_bitmap_set(fl, this.sl_bitmap(fl) & ~(1 << sl));
+        if (!this.sl_bitmap(fl)) {
+          this.fl_bitmap &= ~(1 << fl);
+        }
+      }
+    }
+  }
+
+  /** Merges a just-freed block with an adjacent previous free block. */
+  mergePrevBlock(block: BlockHeader): BlockHeader {
+    if (block.isPrevFree) {
+      var prev = block.prev;
+      assert(prev, "prev physical block can't be null");
+      assert(prev.isFree, "prev block is not free though marked as such");
+      this.removeBlock(prev);
+      prev.absorb(block);
+      block = prev;
+    }
+    return block;
+  }
+
+  /** Merges a just-freed block with an adjacent free block. */
+  mergeNextBlock(block: BlockHeader): BlockHeader {
+    var next = block.next;
+    assert(next, "next physical block can't be null");
+    if (next.isFree) {
+      assert(!block.isLast, "previous block can't be last");
+      this.removeBlock(next);
+      block.absorb(next);
+    }
+    return block;
+  }
+
+  /** Trims any trailing block space off the end of a block and returns it to the pool. */
+  trimFreeBlock(block: BlockHeader, size: usize): void {
+    assert(block.isFree, "block must be free");
+    if (block.canSplit(size)) {
+      var remaining_block = block.split(size);
+      block.linkNext();
+      remaining_block.setPrevFree();
+      this.insertBlock(remaining_block);
+    }
+  }
+
+  /** Trims any trailing block space off the end of a used block and returns it to the pool. */
+  trimUsedBlock(block: BlockHeader, size: usize): void {
+    assert(!block.isFree, "block must be used");
+    if (block.canSplit(size)) {
+      // If the next block is free, we must coalesce.
+      var remaining_block = block.split(size);
+      remaining_block.setPrevUsed();
+      remaining_block = this.mergeNextBlock(remaining_block);
+      this.insertBlock(remaining_block);
+    }
+  }
+
+  trimFreeBlockLeading(block: BlockHeader, size: usize): BlockHeader {
+    var remaining_block = block;
+    if (block.canSplit(size)) {
+      remaining_block = block.split(size - block_header_overhead);
+      remaining_block.setPrevFree();
+      block.linkNext();
+      this.insertBlock(block);
+    }
+    return remaining_block;
+  }
+
+  locateFreeBlock(size: usize): BlockHeader {
+    var index: u64 = 0;
+    var block: BlockHeader = changetype<BlockHeader>(0);
+    if (size) {
+      mapping_search(size);
+      if (fl_out < FL_INDEX_MAX) {
+        block = find_suitable_block(this, fl_out, sl_out);
+      }
+    }
+    if (block) {
+      assert(block.size >= size);
+      this.removeFreeBlock(block, fl_out, sl_out);
+    }
+    return block;
+  }
+
+  prepareUsedBlock(block: BlockHeader, size: usize): usize {
+    var ptr: usize = 0;
+    if (block) {
+      assert(size, "size must be non-zero");
+      this.trimFreeBlock(block, size);
+      block.markAsUsed();
+      ptr = block.toPayloadPtr();
+    }
+    return ptr;
+  }
+
+  /** Creates a TLSF control structure at the specified memory address, providing the specified number of bytes. */
+  static create(mem: usize, bytes: usize): Control {
+    if ((mem % ALIGN_SIZE) != 0)
+      throw new RangeError("Memory must be aligned");
+
+    // Clear structure and point all empty lists at the null block.
+    var control = changetype<Control>(mem);
+    control.next_free = control;
+    control.prev_free = control;
+    control.fl_bitmap = 0;
+    for (var i = 0; i < FL_INDEX_COUNT; ++i) {
+      control.sl_bitmap_set(i, 0);
+      for (var j = 0; j < SL_INDEX_COUNT; ++j) {
+        control.blocks_set(i, j, control);
+      }
+    }
+
+    // Add the initial memory pool
+    control.addPool(mem + sizeof_control_t, bytes - sizeof_control_t);
+    return control;
+  }
+
+  /** Adds a pool of free memory. */
+  addPool(mem: usize, bytes: usize): void {
+    var block: BlockHeader;
+    var next: BlockHeader;
+
+    // Overhead of the TLSF structures in a given memory block, equal
+    // to the overhead of the free block and the sentinel block.
+    const pool_overhead: usize = 2 * block_header_overhead;
+
+    var pool_bytes = align_down(bytes - pool_overhead, ALIGN_SIZE);
+    if ((mem % ALIGN_SIZE) != 0)
+      throw new RangeError("Memory must be aligned");
+    if (pool_bytes < block_size_min || pool_bytes > block_size_max)
+      throw new RangeError("Memory size must be between min and max");
+
+    // Create the main free block. Offset the start of the block slightly
+    // so that the prev_phys_block field falls outside of the pool -
+    // it will never be used.
+    block = BlockHeader.fromOffset(mem, -block_header_overhead);
+    block.size = pool_bytes;
+    block.setFree();
+    block.setPrevUsed();
+    this.insertBlock(block);
+
+    // Split the block to create a zero-size sentinel block.
+    next = block.linkNext();
+    next.size = 0;
+    next.setUsed();
+    next.setPrevFree();
   }
 }
 
 const sizeof_control_t: usize = sizeof_block_header_t + (1 + FL_INDEX_COUNT) * sizeof<u32>() + FL_INDEX_COUNT * SL_INDEX_COUNT * sizeof<usize>();
 
-function block_size(block: BlockHeader): usize {
-  return block.tagged_size & ~(block_header_free_bit | block_header_prev_free_bit);
-}
-
-function block_set_size(block: BlockHeader, size: usize): void {
-  block.tagged_size = size | (block.tagged_size & (block_header_free_bit | block_header_prev_free_bit));
-}
-
-function block_is_last(block: BlockHeader): bool {
-  return block_size(block) == 0;
-}
-
-function block_is_free(block: BlockHeader): bool {
-  return (block.tagged_size & block_header_free_bit) == block_header_free_bit;
-}
-
-function block_set_free(block: BlockHeader): void {
-  block.tagged_size |= block_header_free_bit;
-}
-
-function block_set_used(block: BlockHeader): void {
-  block.tagged_size &= ~block_header_free_bit;
-}
-
-function block_is_prev_free(block: BlockHeader): bool {
-  return (block.tagged_size & block_header_prev_free_bit) == block_header_prev_free_bit;
-}
-
-function block_set_prev_free(block: BlockHeader): void {
-  block.tagged_size |= block_header_prev_free_bit;
-}
-
-function block_set_prev_used(block: BlockHeader): void {
-  block.tagged_size &= ~block_header_prev_free_bit;
-}
-
-function block_from_ptr(ptr: usize): BlockHeader {
-  return changetype<BlockHeader>(ptr - block_start_offset);
-}
-
-function block_to_ptr(block: BlockHeader): usize {
-  return changetype<usize>(block) + block_start_offset;
-}
-
-/* Return location of next block after block of given size. */
-function offset_to_block(ptr: usize, size: usize): BlockHeader {
-  return changetype<BlockHeader>(ptr + <usize>size);
-}
-
-/* Return location of previous block. */
-function block_prev(block: BlockHeader): BlockHeader {
-  assert(block_is_prev_free(block), "previous block must be free");
-  return block.prev_phys_block;
-}
-
-/* Return location of next existing block. */
-function block_next(block: BlockHeader): BlockHeader {
-  var next = offset_to_block(block_to_ptr(block), block_size(block) - block_header_overhead);
-  assert(!block_is_last(block), "last block has no next block");
-  return next;
-}
-
-/* Link a new block with its physical neighbor, return the neighbor. */
-function block_link_next(block: BlockHeader): BlockHeader {
-  var next = block_next(block);
-  next.prev_phys_block = block;
-  return next;
-}
-
-function block_mark_as_free(block: BlockHeader): void {
-  // Link the block to the next block, first.
-  var next = block_link_next(block);
-  block_set_prev_free(next);
-  block_set_free(block);
-}
-
-function block_mark_as_used(block: BlockHeader): void {
-  var next = block_next(block);
-  block_set_prev_used(next);
-  block_set_used(block);
-}
+// Alignment helpers
 
 function align_up(x: usize, align: usize): usize {
   assert(!(align & (align - 1)), "must align to a power of two");
@@ -185,8 +441,8 @@ function align_ptr(ptr: usize, align: usize): usize {
 }
 
 /**
- * Adjust an allocation size to be aligned to word size, and no smaller
- * than internal minimum.
+ * Adjusts an allocation size to be aligned to word size, and no smaller than
+ * the internal minimum.
  */
 function adjust_request_size(size: usize, align: usize): usize {
   var adjust: usize = 0;
@@ -197,15 +453,14 @@ function adjust_request_size(size: usize, align: usize): usize {
   return adjust;
 }
 
-// TLSF utility functions. In most cases, these are direct translations of
-// the documentation found in the white paper.
+// TLSF utility functions. In most cases, these are direct translations of the
+// documentation found in the white paper.
 
 var fl_out: i32, sl_out: i32;
 
 function mapping_insert(size: usize): void {
   var fl: i32, sl: i32;
-  if (size < SMALL_BLOCK_SIZE) {
-    // Store small blocks in first list.
+  if (size < SMALL_BLOCK_SIZE) { // Store small blocks in first list.
     fl = 0;
     sl = <i32>size / (SMALL_BLOCK_SIZE / SL_INDEX_COUNT);
   } else {
@@ -225,17 +480,14 @@ function mapping_search(size: usize): void {
   mapping_insert(size);
 }
 
-function search_suitable_block(control: Control, fl: i32, sl: i32): BlockHeader {
-  // First, search for a block in the list associated with the given
-	// fl/sl index.
+function find_suitable_block(control: Control, fl: i32, sl: i32): BlockHeader {
+  // Search for a block in the list associated with the given fl/sl index
   var sl_map = control.sl_bitmap(fl) & (<u32>~0 << sl);
   if (!sl_map) {
-    // No block exists. Search in the next largest first-level list.
+    // If no block exists, search in the next largest first-level list
     var fl_map = control.fl_bitmap & (<u32>~0 << (fl + 1));
-    if (!fl_map) {
-      // No free blocks available, memory has been exhausted.
-      return changetype<BlockHeader>(0);
-    }
+    if (!fl_map)
+      return changetype<BlockHeader>(0); // Memory pool has been exhausted
     fl = ffs<u32>(fl_map);
     fl_out = fl;
     sl_map = control.sl_bitmap(fl);
@@ -243,240 +495,57 @@ function search_suitable_block(control: Control, fl: i32, sl: i32): BlockHeader 
   assert(sl_map, "internal error - second level bitmap is null");
   sl = ffs<u32>(sl_map);
   sl_out = sl;
-  // Return the first block in the free list.
-  return control.blocks(fl, sl);
+  return control.blocks(fl, sl); // First block in the free list
 }
 
-/* Remove a free block from the free list.*/
-function remove_free_block(control: Control, block: BlockHeader, fl: i32, sl: i32): void {
-  var prev = block.prev_free;
-  var next = block.next_free;
-  assert(prev, "prev_free field can not be null");
-  assert(next, "next_free field can not be null");
-  next.prev_free = prev;
-  prev.next_free = next;
+// Exported interface
 
-  if (control.blocks(fl, sl) == block) {
-    control.blocks_set(fl, sl, next);
-    if (next == control) {
-      control.sl_bitmap_set(fl, control.sl_bitmap(fl) & ~(1 << sl));
-      if (!control.sl_bitmap(fl)) {
-        control.fl_bitmap &= ~(1 << fl);
-      }
-    }
+var TLSF: Control;
+
+/** Requests more memory from the host environment. */
+function request_memory(size: usize): void {
+  if (size & 0xffff) // Round size up to a full page
+    size = (size | 0xffff) + 1;
+  // At least double the memory for efficiency
+  var prev_pages = grow_memory(max<u32>(current_memory(), <u32>size >> 16));
+  if (prev_pages < 0)
+    unreachable(); // Out of host memory. This is bad.
+  var next_pages = current_memory();
+  TLSF.addPool(<usize>prev_pages << 16, <usize>(next_pages - prev_pages) << 16);
+}
+
+/** Allocates a chunk of memory of the specified size and returns a pointer to it. */
+export function allocate_memory(size: usize): usize {
+  if (!TLSF) // Initialize TLSF when actually used so it DCEs just fine otherwise
+    TLSF = Control.create(HEAP_BASE, (current_memory() << 16) - HEAP_BASE);
+  var control = changetype<Control>(TLSF);
+  var adjust = adjust_request_size(size, ALIGN_SIZE);
+  var block = control.locateFreeBlock(adjust);
+  if (!block && size > 0) {
+    request_memory(adjust);
+    block = control.locateFreeBlock(adjust);
+  }
+  return control.prepareUsedBlock(block, adjust);
+}
+
+/** Disposes a chunk of memory by its pointer. */
+export function free_memory(ptr: usize): void {
+  if (TLSF && ptr) {
+    var control = changetype<Control>(TLSF);
+    var block = BlockHeader.fromPayloadPtr(ptr);
+    assert(!block.isFree, "block already marked as free");
+    block.markAsFree();
+    block = control.mergePrevBlock(block);
+    block = control.mergeNextBlock(block);
+    control.insertBlock(block);
   }
 }
 
-/* Insert a free block into the free block list. */
-function insert_free_block(control: Control, block: BlockHeader, fl: i32, sl: i32): void {
-  var current = control.blocks(fl, sl);
-  assert(current, "free list cannot have a null entry");
-  assert(block, "cannot insert a null entry into the free list");
-  block.next_free = current;
-  block.prev_free = control;
-  current.prev_free = block;
+// Extra debugging
 
-  assert(block_to_ptr(block) == align_ptr(block_to_ptr(block), ALIGN_SIZE), "block not aligned properly");
-
-  // Insert the new block at the head of the list, and mark the first-
-	// and second-level bitmaps appropriately.
-  control.blocks_set(fl, sl, block);
-  control.fl_bitmap |= (1 << fl);
-  control.sl_bitmap_set(fl, control.sl_bitmap(fl) | (1 << sl))
-}
-
-/* Remove a given block from the free list. */
-function block_remove(control: Control, block: BlockHeader): void {
-  mapping_insert(block_size(block));
-  remove_free_block(control, block, fl_out, sl_out);
-}
-
-/* Insert a given block into the free list. */
-function block_insert(control: Control, block: BlockHeader): void {
-  mapping_insert(block_size(block));
-  insert_free_block(control, block, fl_out, sl_out);
-}
-
-function block_can_split(block: BlockHeader, size: usize): bool {
-  return block_size(block) >= sizeof_block_header_t + size;
-}
-
-/* Split a block into two, the second of which is free. */
-function block_split(block: BlockHeader, size: usize): BlockHeader {
-  // Calculate the amount of space left in the remaining block.
-  var remaining = offset_to_block(block_to_ptr(block), size - block_header_overhead);
-  var remain_size = block_size(block) - (size + block_header_overhead);
-
-  assert(block_to_ptr(remaining) == align_ptr(block_to_ptr(remaining), ALIGN_SIZE), "remaining block not aligned properly");
-  assert(block_size(block) == remain_size + size + block_header_overhead);
-  block_set_size(remaining, remain_size);
-  assert(block_size(remaining) >= block_size_min, "block split with invalid size");
-
-  block_set_size(block, size);
-  block_mark_as_free(remaining);
-  return remaining;
-}
-
-/* Absorb a free block's storage into an adjacent previous free block. */
-function block_absorb(prev: BlockHeader, block: BlockHeader): BlockHeader {
-  assert(!block_is_last(prev), "previous block can't be last");
-  // Note: Leaves flags untouched.
-  prev.tagged_size += block_size(block) + block_header_overhead;
-  block_link_next(prev);
-  return prev;
-}
-
-/* Merge a just-freed block with an adjacent previous free block. */
-function block_merge_prev(control: Control, block: BlockHeader): BlockHeader {
-  if (block_is_prev_free(block)) {
-    var prev = block_prev(block);
-    assert(prev, "prev physical block can't be null");
-    assert(block_is_free(prev), "prev block is not free though marked as such");
-    block_remove(control, prev);
-    block = block_absorb(prev, block);
-  }
-  return block;
-}
-
-/* Merge a just-freed block with an adjacent free block. */
-function block_merge_next(control: Control, block: BlockHeader): BlockHeader {
-  var next = block_next(block);
-  assert(next, "next physical block can't be null");
-  if (block_is_free(next)) {
-    assert(!block_is_last(block), "previous block can't be last");
-    block_remove(control, next);
-    block = block_absorb(block, next);
-  }
-  return block;
-}
-
-/* Trim any trailing block space off the end of a block, return to pool. */
-function block_trim_free(control: Control, block: BlockHeader, size: usize): void {
-  assert(block_is_free(block), "block must be free");
-  if (block_can_split(block, size)) {
-    var remaining_block = block_split(block, size);
-    block_link_next(block);
-    block_set_prev_free(remaining_block);
-    block_insert(control, remaining_block);
-  }
-}
-
-/* Trim any trailing block space off the end of a used block, return to pool. */
-function block_trim_used(control: Control, block: BlockHeader, size: usize): void {
-  assert(!block_is_free(block), "block must be used");
-  if (block_can_split(block, size)) {
-    // If the next block is free, we must coalesce.
-    var remaining_block = block_split(block, size);
-    block_set_prev_used(remaining_block);
-    remaining_block = block_merge_next(control, remaining_block);
-    block_insert(control, remaining_block);
-  }
-}
-
-function block_trim_free_leading(control: Control, block: BlockHeader, size: usize): BlockHeader {
-  var remaining_block = block;
-  if (block_can_split(block, size)) {
-    remaining_block = block_split(block, size - block_header_overhead);
-    block_set_prev_free(remaining_block);
-    block_link_next(block);
-    block_insert(control, block);
-  }
-  return remaining_block;
-}
-
-function block_locate_free(control: Control, size: usize): BlockHeader {
-  var index: u64 = 0;
-  var block: BlockHeader = changetype<BlockHeader>(0);
-  if (size) {
-    mapping_search(size);
-    if (fl_out < FL_INDEX_MAX) {
-      block = search_suitable_block(control, fl_out, sl_out);
-    }
-  }
-  if (block) {
-    assert(block_size(block) >= size);
-    remove_free_block(control, block, fl_out, sl_out);
-  }
-  return block;
-}
-
-function block_prepare_used(control: Control, block: BlockHeader, size: usize): usize {
-  var p: usize = 0;
-  if (block) {
-    assert(size, "size must be non-zero");
-    block_trim_free(control, block, size);
-    block_mark_as_used(block);
-    p = block_to_ptr(block);
-  }
-  return p;
-}
-
-/* Clear structure and point all empty lists at the null block. */
-function control_construct(control: Control): void {
-  control.next_free = control;
-  control.prev_free = control;
-  control.fl_bitmap = 0;
-  for (var i = 0; i < FL_INDEX_COUNT; ++i) {
-    control.sl_bitmap_set(i, 0);
-    for (var j = 0; j < SL_INDEX_COUNT; ++j) {
-      control.blocks_set(i, j, control);
-    }
-  }
-}
-
-var TLSF: usize = 0;
-
-function create(mem: usize): usize {
-  // Verify ffs/fls work properly
-  assert(!test_ffs_fls());
-  // SL_INDEX_COUNT must be <= number of bits in sl_bitmap's storage type
-  assert(sizeof<u32>() * 8 >= SL_INDEX_COUNT);
-  // Ensure we've properly tuned our sizes.
-  assert(ALIGN_SIZE == SMALL_BLOCK_SIZE / SL_INDEX_COUNT);
-  if ((mem % ALIGN_SIZE) != 0)
-    throw new RangeError("Memory must be aligned");
-  control_construct(changetype<Control>(mem));
-  return mem;
-}
-
-function create_with_pool(mem: usize, bytes: usize): usize {
-  var tlsf = create(mem);
-  add_pool(tlsf, mem + sizeof_control_t, bytes - sizeof_control_t);
-  return tlsf;
-}
-
-function add_pool(tlsf: usize, mem: usize, bytes: usize): usize {
-  var block: BlockHeader;
-  var next: BlockHeader;
-
-  // Overhead of the TLSF structures in a given memory block, equal
-  // to the overhead of the free block and the sentinel block.
-  const pool_overhead: usize = 2 * block_header_overhead;
-  var pool_bytes = align_down(bytes - pool_overhead, ALIGN_SIZE);
-  if ((mem % ALIGN_SIZE) != 0)
-    throw new RangeError("Memory must be aligned");
-  if (pool_bytes < block_size_min || pool_bytes > block_size_max)
-    throw new RangeError("Memory size must be between min and max");
-
-  // Create the main free block. Offset the start of the block slightly
-  // so that the prev_phys_block field falls outside of the pool -
-  // it will never be used.
-  block = offset_to_block(mem, -block_header_overhead);
-  block_set_size(block, pool_bytes);
-  block_set_free(block);
-  block_set_prev_used(block);
-  block_insert(changetype<Control>(tlsf), block);
-
-  // Split the block to create a zero-size sentinel block.
-  next = block_link_next(block);
-  block_set_size(next, 0);
-  block_set_used(next);
-  block_set_prev_free(next);
-
-  return mem;
-}
-
-// Tests
+assert(sizeof<u32>() * 8 >= SL_INDEX_COUNT, "SL_INDEX_COUNT must be <= number of bits in sl_bitmap's storage type");
+assert(ALIGN_SIZE == SMALL_BLOCK_SIZE / SL_INDEX_COUNT, "invalid alignment");
+assert(test_ffs_fls() == 0, "ffs/fls are not working properly");
 
 function test_ffs_fls(): i32 {
   var rv = 0;
@@ -494,9 +563,9 @@ function test_ffs_fls(): i32 {
   return rv;
 }
 
-export function check(): i32 {
+function check(): i32 {
   if (!TLSF)
-    TLSF = create_with_pool(HEAP_BASE, (current_memory() << 16) - HEAP_BASE);
+    TLSF = Control.create(HEAP_BASE, (current_memory() << 16) - HEAP_BASE);
   var control = changetype<Control>(TLSF);
   var status = 0;
   for (var i = 0; i < FL_INDEX_COUNT; ++i) {
@@ -518,17 +587,17 @@ export function check(): i32 {
         if (!assert(block != control, "block should not be null"))
           --status;
         while (block != control) {
-          if (!assert(block_is_free(block), "block should be free"))
+          if (!assert(block.isFree, "block should be free"))
             --status;
-          if (!assert(!block_is_prev_free(block), "blocks should have coalesced"))
+          if (!assert(!block.isPrevFree, "blocks should have coalesced"))
             --status;
-          if (!assert(!block_is_free(block_next(block)), "blocks should have coalesced"))
+          if (!assert(!block.next.isFree, "blocks should have coalesced"))
             --status;
-          if (!assert(block_is_prev_free(block_next(block)), "block should be free"))
+          if (!assert(block.next.isPrevFree, "block should be free"))
             --status;
-          if (!assert(block_size(block) >= block_size_min, "block not minimum size"))
+          if (!assert(block.size >= block_size_min, "block not minimum size"))
             --status;
-          mapping_insert(block_size(block));
+          mapping_insert(block.size);
           if (!assert(fl_out == i && sl_out == j, "block size indexed in wrong list"))
             --status;
           block = block.next_free;
@@ -539,42 +608,40 @@ export function check(): i32 {
   return status;
 }
 
-// Exported interface
+var integrity_prev_status: i32;
+var integrity_status: i32;
 
-function request_memory(size: usize): void {
-  // round size up to a full page
-  if (size & 0xffff)
-    size = (size | 0xffff) + 1;
-  // at least double memory for efficiency
-  var prev_pages = grow_memory(max<u32>(current_memory(), <u32>size >> 16));
-  if (prev_pages < 0) // out of host memory
-    unreachable();
-  var next_pages = current_memory();
-  add_pool(TLSF, <usize>prev_pages << 16, <usize>(next_pages - prev_pages) << 16);
+function integrity_walker(ptr: usize, size: usize, used: bool): void {
+  var block = BlockHeader.fromPayloadPtr(ptr);
+  var this_prev_status = block.isPrevFree;
+  var this_status = block.isFree;
+  var this_block_size = block.size;
+
+  var status = 0;
+  if (!assert(integrity_prev_status == this_prev_status, "prev status incorrect"))
+    --status;
+  if (!assert(size == this_block_size, "block size incorrect"))
+    --status;
+  integrity_prev_status = this_status;
+  integrity_status += status;
 }
 
-export function allocate_memory(size: usize): usize {
-  if (!TLSF) {
-    TLSF = create_with_pool(HEAP_BASE, (current_memory() << 16) - HEAP_BASE);
+function check_pool(pool: usize): i32 {
+  if (pool < 0x10000) { // first pool
+    pool = changetype<usize>(TLSF) + sizeof_control_t;
   }
-  var control = changetype<Control>(TLSF);
-  var adjust = adjust_request_size(size, ALIGN_SIZE);
-  var block = block_locate_free(control, adjust);
-  if (!block && adjust > 0) {
-    request_memory(adjust);
-    block = block_locate_free(control, adjust);
+  // inlined walk_bool with static integrity_walker
+  integrity_prev_status = integrity_status = 0;
+  var block = BlockHeader.fromOffset(pool, -block_header_overhead);
+  while (block && !block.isLast) {
+    integrity_walker(
+      block.toPayloadPtr(),
+      block.size,
+      !block.isFree
+    );
+    block = block.next;
   }
-  return block_prepare_used(control, block, adjust);
+  return integrity_status;
 }
 
-export function free_memory(ptr: usize): void {
-  if (TLSF && ptr) {
-    var control = changetype<Control>(TLSF);
-    var block = block_from_ptr(ptr);
-    assert(!block_is_free(block), "block already marked as free");
-    block_mark_as_free(block);
-    block = block_merge_prev(control, block);
-    block = block_merge_next(control, block);
-    block_insert(control, block);
-  }
-}
+// export { check, check_pool, set_memory };
