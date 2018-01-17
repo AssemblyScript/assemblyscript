@@ -1436,6 +1436,7 @@ export class Global extends VariableLikeElement {
             case ModifierKind.EXPORT: this.isExported = true; break;
             case ModifierKind.CONST: this.isConstant = true; break;
             case ModifierKind.DECLARE: this.isDeclared = true; break;
+            case ModifierKind.READONLY: this.isConstant = true; break;
             case ModifierKind.STATIC: break; // static fields become globals
             default: throw new Error("unexpected modifier");
           }

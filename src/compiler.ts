@@ -416,27 +416,37 @@ export class Compiler extends DiagnosticEmitter {
       if (!this.module.noEmit)
         this.startFunctionBody.push(setExpr);
     } else {
-      this.module.addGlobal(internalName, nativeType, global.isMutable, initExpr);
-      if (!global.isMutable && !this.module.noEmit) {
-        var exprType = _BinaryenExpressionGetType(initExpr);
-        switch (exprType) {
-          case NativeType.I32:
-            global.constantIntegerValue = new I64(_BinaryenConstGetValueI32(initExpr), 0);
-            break;
-          case NativeType.I64:
-            global.constantIntegerValue = new I64(_BinaryenConstGetValueI64Low(initExpr), _BinaryenConstGetValueI64High(initExpr));
-            break;
-          case NativeType.F32:
-            global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
-            break;
-          case NativeType.F64:
-            global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
-            break;
-          default:
-            throw new Error("concrete type expected");
+      // TODO: not necessary to create a global if constant and not a file-level export anyway
+      if (!global.isMutable) {
+        if (!this.module.noEmit) {
+          var exprType = _BinaryenExpressionGetType(initExpr);
+          switch (exprType) {
+
+            case NativeType.I32:
+              global.constantIntegerValue = new I64(_BinaryenConstGetValueI32(initExpr), 0);
+              break;
+
+            case NativeType.I64:
+              global.constantIntegerValue = new I64(_BinaryenConstGetValueI64Low(initExpr), _BinaryenConstGetValueI64High(initExpr));
+              break;
+
+            case NativeType.F32:
+              global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
+              break;
+
+            case NativeType.F64:
+              global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
+              break;
+
+            default:
+              throw new Error("concrete type expected");
+          }
+          global.hasConstantValue = true;
+          if (!declaration || isModuleExport(global, declaration))
+            this.module.addGlobal(internalName, nativeType, global.isMutable, initExpr);
         }
-        global.hasConstantValue = true;
-      }
+      } else if (!this.module.noEmit)
+        this.module.addGlobal(internalName, nativeType, global.isMutable, initExpr);
     }
     global.isCompiled = true;
     return true;
