@@ -7,6 +7,7 @@ require("ts-node").register({ project: require("path").join(__dirname, "..", "sr
 require("../src/glue/js");
 
 var Parser = require("../src/parser").Parser;
+var serializeSource = require("../src/extra/ast").serializeSource;
 
 var isCreate = process.argv[2] === "--create";
 var filter = process.argv.length > 2 && !isCreate ? "*" + process.argv[2] + "*.ts" : "**.ts";
@@ -25,7 +26,7 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
   parser.parseFile(sourceText, filename, true);
 
   var sb = [];
-  parser.program.sources[0].serialize(sb);
+  serializeSource(parser.program.sources[0], sb);
   var actual = sb.join("") + parser.diagnostics.map(diagnostic => "// " + diagnostic + "\n").join("");;
   var fixture = filename + ".fixture.ts";
 

@@ -246,7 +246,7 @@ export class Module {
   static create(): Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
-    module.lit = changetype<BinaryenLiteral>(Heap.allocate(16));
+    module.lit = changetype<BinaryenLiteral>(allocate_memory(16));
     module.noEmit = false;
     return module;
   }
@@ -256,11 +256,11 @@ export class Module {
     try {
       var module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
-      module.lit = changetype<BinaryenLiteral>(Heap.allocate(16));
+      module.lit = changetype<BinaryenLiteral>(allocate_memory(16));
       module.noEmit = false;
       return module;
     } finally {
-      Heap.dispose(changetype<usize>(cArr));
+      free_memory(changetype<usize>(cArr));
     }
   }
 
@@ -283,8 +283,8 @@ export class Module {
     try {
       return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes.length);
     } finally {
-      Heap.dispose(cArr);
-      Heap.dispose(cStr);
+      free_memory(cArr);
+      free_memory(cStr);
     }
   }
 
@@ -294,7 +294,7 @@ export class Module {
     try {
       return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes.length);
     } finally {
-      Heap.dispose(cArr);
+      free_memory(cArr);
     }
   }
 
@@ -341,8 +341,8 @@ export class Module {
     try {
       return _BinaryenHost(this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0);
     } finally {
-      Heap.dispose(cArr);
-      Heap.dispose(cStr);
+      free_memory(cArr);
+      free_memory(cStr);
     }
   }
 
@@ -362,7 +362,7 @@ export class Module {
     try {
       return _BinaryenGetGlobal(this.ref, cStr, type);
     } finally {
-      Heap.dispose(cStr);
+      free_memory(cStr);
     }
   }
 
@@ -419,7 +419,7 @@ export class Module {
     try {
       return _BinaryenSetGlobal(this.ref, cStr, value);
     } finally {
-      Heap.dispose(cStr);
+      free_memory(cStr);
     }
   }
 
@@ -430,8 +430,8 @@ export class Module {
     try {
       return _BinaryenBlock(this.ref, cStr, cArr, children.length, type);
     } finally {
-      Heap.dispose(cArr);
-      Heap.dispose(cStr);
+      free_memory(cArr);
+      free_memory(cStr);
     }
   }
 
@@ -441,7 +441,7 @@ export class Module {
     try {
       return _BinaryenBreak(this.ref, cStr, condition, value);
     } finally {
-      Heap.dispose(cStr);
+      free_memory(cStr);
     }
   }
 
@@ -456,7 +456,7 @@ export class Module {
     try {
       return _BinaryenLoop(this.ref, cStr, body);
     } finally {
-      Heap.dispose(cStr);
+      free_memory(cStr);
     }
   }
 
@@ -490,9 +490,9 @@ export class Module {
     try {
       return _BinaryenSwitch(this.ref, cArr, k, cStr, condition, value);
     } finally {
-      Heap.dispose(cStr);
-      Heap.dispose(cArr);
-      for (i = k - 1; i >= 0; --i) Heap.dispose(strs[i]);
+      free_memory(cStr);
+      free_memory(cArr);
+      for (i = k - 1; i >= 0; --i) free_memory(strs[i]);
     }
   }
 
@@ -503,8 +503,8 @@ export class Module {
     try {
       return _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
     } finally {
-      Heap.dispose(cArr);
-      Heap.dispose(cStr);
+      free_memory(cArr);
+      free_memory(cStr);
     }
   }
 
@@ -515,8 +515,8 @@ export class Module {
     try {
       return _BinaryenCallImport(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
     } finally {
-      Heap.dispose(cArr);
-      Heap.dispose(cStr);
+      free_memory(cArr);
+      free_memory(cStr);
     }
   }
 
@@ -533,7 +533,7 @@ export class Module {
     try {
       return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
     } finally {
-      Heap.dispose(cStr);
+      free_memory(cStr);
     }
   }
 
@@ -544,8 +544,8 @@ export class Module {
     try {
       return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes.length, body);
     } finally {
-      Heap.dispose(cArr);
-      Heap.dispose(cStr);
+      free_memory(cArr);
+      free_memory(cStr);
     }
   }
 
@@ -554,7 +554,7 @@ export class Module {
     try {
       _BinaryenRemoveFunction(this.ref, cStr);
     } finally {
-      Heap.dispose(cStr);
+      free_memory(cStr);
     }
   }
 
@@ -565,8 +565,8 @@ export class Module {
     try {
       return _BinaryenAddFunctionExport(this.ref, cStr1, cStr2);
     } finally {
-      Heap.dispose(cStr2);
-      Heap.dispose(cStr1);
+      free_memory(cStr2);
+      free_memory(cStr1);
     }
   }
 
@@ -577,8 +577,8 @@ export class Module {
     try {
       return _BinaryenAddTableExport(this.ref, cStr1, cStr2);
     } finally {
-      Heap.dispose(cStr2);
-      Heap.dispose(cStr1);
+      free_memory(cStr2);
+      free_memory(cStr1);
     }
   }
 
@@ -589,8 +589,8 @@ export class Module {
     try {
       return _BinaryenAddMemoryExport(this.ref, cStr1, cStr2);
     } finally {
-      Heap.dispose(cStr2);
-      Heap.dispose(cStr1);
+      free_memory(cStr2);
+      free_memory(cStr1);
     }
   }
 
@@ -601,8 +601,8 @@ export class Module {
     try {
       return _BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
     } finally {
-      Heap.dispose(cStr2);
-      Heap.dispose(cStr1);
+      free_memory(cStr2);
+      free_memory(cStr1);
     }
   }
 
@@ -612,7 +612,7 @@ export class Module {
     try {
       _BinaryenRemoveExport(this.ref, cStr);
     } finally {
-      Heap.dispose(cStr);
+      free_memory(cStr);
     }
   }
 
@@ -624,9 +624,9 @@ export class Module {
     try {
       return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
     } finally {
-      Heap.dispose(cStr3);
-      Heap.dispose(cStr2);
-      Heap.dispose(cStr1);
+      free_memory(cStr3);
+      free_memory(cStr2);
+      free_memory(cStr1);
     }
   }
 
@@ -638,9 +638,9 @@ export class Module {
     try {
       return _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
     } finally {
-      Heap.dispose(cStr3);
-      Heap.dispose(cStr2);
-      Heap.dispose(cStr1);
+      free_memory(cStr3);
+      free_memory(cStr2);
+      free_memory(cStr1);
     }
   }
 
@@ -652,9 +652,9 @@ export class Module {
     try {
       return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3);
     } finally {
-      Heap.dispose(cStr3);
-      Heap.dispose(cStr2);
-      Heap.dispose(cStr1);
+      free_memory(cStr3);
+      free_memory(cStr2);
+      free_memory(cStr1);
     }
   }
 
@@ -666,9 +666,9 @@ export class Module {
     try {
       return _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
     } finally {
-      Heap.dispose(cStr3);
-      Heap.dispose(cStr2);
-      Heap.dispose(cStr1);
+      free_memory(cStr3);
+      free_memory(cStr2);
+      free_memory(cStr1);
     }
   }
 
@@ -678,7 +678,7 @@ export class Module {
     try {
       _BinaryenRemoveImport(this.ref, cStr);
     } finally {
-      Heap.dispose(cStr);
+      free_memory(cStr);
     }
   }
 
@@ -704,11 +704,11 @@ export class Module {
     try {
       _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k);
     } finally {
-      Heap.dispose(cArr3);
-      Heap.dispose(cArr2);
-      Heap.dispose(cArr1);
-      for (i = k - 1; i >= 0; --i) Heap.dispose(segs[i]);
-      Heap.dispose(cStr);
+      free_memory(cArr3);
+      free_memory(cArr2);
+      free_memory(cArr1);
+      for (i = k - 1; i >= 0; --i) free_memory(segs[i]);
+      free_memory(cStr);
     }
   }
 
@@ -718,7 +718,7 @@ export class Module {
     try {
       _BinaryenSetFunctionTable(this.ref, cArr, funcs.length);
     } finally {
-      Heap.dispose(cArr);
+      free_memory(cArr);
     }
   }
 
@@ -749,8 +749,8 @@ export class Module {
       else
         _BinaryenModuleRunPasses(this.ref, cArr, k);
     } finally {
-      Heap.dispose(cArr);
-      for (; i >= 0; --i) Heap.dispose(names[i]);
+      free_memory(cArr);
+      for (; i >= 0; --i) free_memory(names[i]);
     }
   }
 
@@ -788,7 +788,7 @@ export class Module {
   dispose(): void {
     if (!this.ref) return; // sic
     _BinaryenModuleDispose(this.ref);
-    Heap.dispose(changetype<usize>(this.lit));
+    free_memory(changetype<usize>(this.lit));
   }
 
   createRelooper(): Relooper {
@@ -890,7 +890,7 @@ export class Relooper {
     try {
       _RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
     } finally {
-      Heap.dispose(cArr);
+      free_memory(cArr);
     }
   }
 
@@ -905,7 +905,7 @@ export class Relooper {
 
 function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
-  var ptr = Heap.allocate(u8s.length);
+  var ptr = allocate_memory(u8s.length);
   var idx = ptr;
   for (var i = 0, k = u8s.length; i < k; ++i)
     store<u8>(idx++, u8s[i]);
@@ -914,7 +914,7 @@ function allocU8Array(u8s: Uint8Array | null): usize {
 
 function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
-  var ptr = Heap.allocate(i32s.length << 2);
+  var ptr = allocate_memory(i32s.length << 2);
   var idx = ptr;
   for (var i = 0, k = i32s.length; i < k; ++i) {
     var val = i32s[i];
@@ -952,7 +952,7 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str == null) return 0;
-  var ptr = Heap.allocate(stringLengthUTF8(str) + 1);
+  var ptr = allocate_memory(stringLengthUTF8(str) + 1);
   var idx = ptr;
   for (var i = 0, k = str.length; i < k; ++i) {
     var u = str.charCodeAt(i);

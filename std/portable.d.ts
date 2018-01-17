@@ -116,6 +116,12 @@ declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
+/** Allocates a chunk of memory of the specified size and returns a pointer to it. */
+declare function allocate_memory(size: usize): usize;
+/** Disposes a chunk of memory by its pointer. */
+declare function free_memory(ptr: usize): void;
+/** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
+declare function move_memory(destination: usize, source: usize, n: usize): void;
 /** Loads a value of the specified type from memory. Type must be `u8`. */
 declare function load<T = u8>(offset: usize): T;
 /** Stores a value of the specified type to memory. Type must be `u8`. */
@@ -142,13 +148,17 @@ declare class Array<T> {
   [key: number]: T;
   length: i32;
   constructor(capacity?: i32);
-  push(value: T): void;
+  indexOf(searchElement: T, fromIndex?: i32): i32;
+  lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  push(element: T): void;
   pop(): T;
-  unshift(value: T): void;
   shift(): T;
-  join(delim: string): string;
+  unshift(element: T): i32;
   slice(from: i32, to?: i32): T[];
-  splice(index: i32, count: i32): T[];
+  splice(start: i32, deleteCount?: i32): void;
+  reverse(): T[];
+
+  join(delim: string): string;
 }
 
 declare class Uint8Array extends Array<u8> {}
@@ -204,14 +214,16 @@ declare class Symbol {
 
 declare class Set<T> {
   constructor(entries?: T[]);
-  add(value: T): void;
   has(value: T): bool;
+  add(value: T): void;
+  delete(value: T): bool;
   clear(): void;
   [Symbol.iterator](): Iterator<T>;
 }
 
 declare class Map<K,V> {
   constructor(entries?: [K, V][]);
+  readonly size: i32;
   set(key: K, value: V): void;
   has(key: K): bool;
   get(key: K): V | null;

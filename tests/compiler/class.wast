@@ -145,8 +145,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 7)
-     (i32.const 7)
+     (i32.const 4)
+     (i32.const 4)
     )
    )
    (unreachable)

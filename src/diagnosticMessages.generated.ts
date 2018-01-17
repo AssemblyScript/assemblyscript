@@ -79,6 +79,7 @@ export enum DiagnosticCode {
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
   Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
   The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
+  Index_signature_in_type_0_only_permits_reading = 2542,
   Expected_0_arguments_but_got_1 = 2554,
   Expected_at_least_0_arguments_but_got_1 = 2555,
   Expected_0_type_arguments_but_got_1 = 2558,
@@ -166,6 +167,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
     case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";
     case 2541: return "The target of an assignment must be a variable or a property access.";
+    case 2542: return "Index signature in type '{0}' only permits reading.";
     case 2554: return "Expected {0} arguments, but got {1}.";
     case 2555: return "Expected at least {0} arguments, but got {1}.";
     case 2558: return "Expected {0} type arguments, but got {1}.";

@@ -1,7 +1,7 @@
 export function fmod(x: f64, y: f64): f64 {
   // the following is based on musl's implementation of fmod
-  var ux = reinterpret<f64,u64>(x);
-  var uy = reinterpret<f64,u64>(y);
+  var ux = reinterpret<u64>(x);
+  var uy = reinterpret<u64>(y);
   var ex = <i32>(ux >> 52 & 0x7ff);
   var ey = <i32>(uy >> 52 & 0x7ff);
   var sx = <i32>(ux >> 63);
@@ -59,7 +59,7 @@ export function fmod(x: f64, y: f64): f64 {
     ux >>= -ex + 1;
   }
   ux |= <u64>sx << 63;
-  return reinterpret<u64,f64>(ux);
+  return reinterpret<f64>(ux);
 }
 
 assert(isNaN<f64>(fmod(1, NaN)));
@@ -69,8 +69,8 @@ assert(fmod(9.2, 3.7) - 1.8 < f64.EPSILON); // not exactly 1.8 (as in C)
 
 export function fmodf(x: f32, y: f32): f32 {
   // the following is based on musl's implementation of fmodf
-  var ux = reinterpret<f32,u32>(x);
-  var uy = reinterpret<f32,u32>(y);
+  var ux = reinterpret<u32>(x);
+  var uy = reinterpret<u32>(y);
   var ex = <i32>(ux >> 23 & 0xff);
   var ey = <i32>(uy >> 23 & 0xff);
   var sx = ux & 0x80000000;
@@ -128,7 +128,7 @@ export function fmodf(x: f32, y: f32): f32 {
     ux >>= -ex + 1;
   }
   ux |= sx;
-  return reinterpret<i32,f32>(ux);
+  return reinterpret<f32>(ux);
 }
 
 assert(isNaN<f32>(fmodf(1, NaN)));

@@ -564,7 +564,7 @@ export class Parser extends DiagnosticEmitter {
       }
       var initializer: Expression | null = null;
       if (tn.skip(Token.EQUALS)) {
-        initializer = this.parseExpression(tn);
+        initializer = this.parseExpression(tn, Precedence.COMMA + 1);
         if (!initializer)
           return null;
       }
@@ -1580,6 +1580,19 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = expr.range.start;
 
+    // ElementAccessExpression
+    if (tn.skip(Token.OPENBRACKET)) {
+      next = this.parseExpression(tn); // resets precedence
+      if (!next)
+        return null;
+      if (tn.skip(Token.CLOSEBRACKET))
+        expr = Node.createElementAccessExpression(<Expression>expr, <Expression>next, tn.range(startPos, tn.pos));
+      else {
+        this.error(DiagnosticCode._0_expected, tn.range(), "]");
+        return null;
+      }
+    }
+
     // CallExpression
     var typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn); // skips '(' on success
     // there might be better ways to distinguish a LESSTHAN from a CALL with type arguments
@@ -1593,7 +1606,6 @@ export class Parser extends DiagnosticEmitter {
     var token: Token;
     var next: Expression | null = null;
     var nextPrecedence: Precedence;
-
     while ((nextPrecedence = determinePrecedence(token = tn.peek())) >= precedence) { // precedence climbing
       tn.next();
 
@@ -1603,19 +1615,6 @@ export class Parser extends DiagnosticEmitter {
         if (!toType)
           return null;
         expr = Node.createAssertionExpression(AssertionKind.AS, expr, toType, tn.range(startPos, tn.pos));
-
-      // ElementAccessExpression
-      } else if (token == Token.OPENBRACKET) {
-        next = this.parseExpression(tn); // resets precedence
-        if (!next)
-          return null;
-
-        if (tn.skip(Token.CLOSEBRACKET))
-          expr = Node.createElementAccessExpression(<Expression>expr, <Expression>next, tn.range(startPos, tn.pos));
-        else {
-          this.error(DiagnosticCode._0_expected, tn.range(), "]");
-          return null;
-        }
 
       // UnaryPostfixExpression
       } else if (token == Token.PLUS_PLUS || token == Token.MINUS_MINUS) {

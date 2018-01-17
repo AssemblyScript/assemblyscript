@@ -1176,78 +1176,57 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       }
       return ret;
 
-    case "reinterpret": // reinterpret<T1?,T2?>(value: T1) -> T2
+    case "reinterpret": // reinterpret<T!>(value: *) -> T
       if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length >= 2)
-            compiler.currentType = typeArguments[1];
-          if (typeArguments.length != 2)
-            compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "2", typeArguments.length.toString(10));
+        if (!(typeArguments && typeArguments.length == 1)) {
+          if (typeArguments && typeArguments.length)
+            compiler.currentType = typeArguments[0];
+          compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0");
         }
         compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range, "1", operands.length.toString(10));
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 2) {
-          if (typeArguments.length >= 2)
-            compiler.currentType = typeArguments[1];
-          compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "2", typeArguments.length.toString(10));
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
-      } else
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+      if (!(typeArguments && typeArguments.length == 1)) {
+        if (typeArguments && typeArguments.length)
+          compiler.currentType = typeArguments[0];
+        compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0");
+        return module.createUnreachable();
+      }
 
-      switch (compiler.currentType.kind) {
+      switch (typeArguments[0].kind) {
 
         case TypeKind.I32:
         case TypeKind.U32:
-          if (typeArguments) {
-            if (typeArguments[1].kind != TypeKind.F32) {
-              compiler.error(DiagnosticCode.Type_0_cannot_be_reinterpreted_as_type_1, reportNode.range, typeArguments[0].toString(), typeArguments[1].toString());
-              return module.createUnreachable();
-            }
-            compiler.currentType = typeArguments[1];
-          } else
-            compiler.currentType = Type.f32;
-          ret = module.createUnary(UnaryOp.ReinterpretI32, arg0);
+          arg0 = compiler.compileExpression(operands[0], Type.f32);
+          ret = module.createUnary(UnaryOp.ReinterpretF32, arg0);
           break;
 
         case TypeKind.I64:
         case TypeKind.U64:
-          if (typeArguments) {
-            if (typeArguments[1].kind != TypeKind.F64) {
-              compiler.error(DiagnosticCode.Type_0_cannot_be_reinterpreted_as_type_1, reportNode.range, typeArguments[0].toString(), typeArguments[1].toString());
-              return module.createUnreachable();
-            }
-            compiler.currentType = typeArguments[1];
-          } else
-            compiler.currentType = Type.f64;
-          ret = module.createUnary(UnaryOp.ReinterpretI64, arg0);
+          arg0 = compiler.compileExpression(operands[0], Type.f64);
+          ret = module.createUnary(UnaryOp.ReinterpretF64, arg0);
+          break;
+
+        case TypeKind.USIZE:
+          if (typeArguments[0].isReference) {
+            compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
+            compiler.currentType = typeArguments[0];
+            return module.createUnreachable();
+          }
+          // fall-through
+        case TypeKind.ISIZE:
+          arg0 = compiler.compileExpression(operands[0], compiler.options.target == Target.WASM64 ? Type.f64 : Type.f32);
+          ret = module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.ReinterpretF64 : UnaryOp.ReinterpretF32, arg0);
           break;
 
         case TypeKind.F32:
-          if (typeArguments) {
-            if (!(typeArguments[1].is(TypeFlags.INTEGER) && typeArguments[1].size == 32)) {
-              compiler.error(DiagnosticCode.Type_0_cannot_be_reinterpreted_as_type_1, reportNode.range, typeArguments[0].toString(), typeArguments[1].toString());
-              return module.createUnreachable();
-            }
-            compiler.currentType = typeArguments[1];
-          } else
-            compiler.currentType = Type.i32;
-          ret = module.createUnary(UnaryOp.ReinterpretF32, arg0);
+          arg0 = compiler.compileExpression(operands[0], Type.u32);
+          ret = module.createUnary(UnaryOp.ReinterpretI32, arg0);
           break;
 
         case TypeKind.F64:
-          if (typeArguments) {
-            if (!(typeArguments[1].is(TypeFlags.LONG | TypeFlags.INTEGER) && !typeArguments[1].isReference)) {
-              compiler.error(DiagnosticCode.Type_0_cannot_be_reinterpreted_as_type_1, reportNode.range, typeArguments[0].toString(), typeArguments[1].toString());
-              return module.createUnreachable();
-            }
-            compiler.currentType = typeArguments[1];
-          } else
-            compiler.currentType = Type.i64;
-          ret = module.createUnary(UnaryOp.ReinterpretF64, arg0);
+          arg0 = compiler.compileExpression(operands[0], Type.u64);
+          ret = module.createUnary(UnaryOp.ReinterpretI64, arg0);
           break;
 
         default: // small integers and void
@@ -1255,6 +1234,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           ret = module.createUnreachable();
           break;
       }
+      compiler.currentType = typeArguments[0];
       return ret;
 
     case "sqrt": // sqrt<T?>(value: T) -> T
@@ -1369,7 +1349,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       }
       arg0 = compiler.compileExpression(operands[0], usizeType);
       compiler.currentType = typeArguments[0];
-      return module.createLoad(typeArguments[0].size >>> 3, typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER), arg0, typeArguments[0].toNativeType());
+      return module.createLoad(typeArguments[0].byteSize, typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER), arg0, typeArguments[0].toNativeType());
 
     case "store": // store<T?>(offset: usize, value: T) -> void
       compiler.currentType = Type.void;
@@ -1392,7 +1372,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       }
       type = compiler.currentType;
       compiler.currentType = Type.void;
-      return module.createStore(type.size >>> 3, arg0, arg1, type.toNativeType());
+      return module.createStore(type.byteSize, arg0, arg1, type.toNativeType());
 
     case "sizeof": // sizeof<T!>() -> usize
       compiler.currentType = usizeType;

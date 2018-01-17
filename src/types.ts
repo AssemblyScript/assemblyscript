@@ -76,8 +76,8 @@ export class Type {
   /** Type flags. */
   flags: TypeFlags;
   /** Size in bits. */
-  size: i32;
-  /** Size in bytes. */
+  size: u32;
+  /** Size in bytes. Ceiled to 8-bits. */
   byteSize: i32;
   /** Underlying class type, if a class type. */
   classType: Class | null;

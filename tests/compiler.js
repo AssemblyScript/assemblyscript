@@ -65,18 +65,22 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   if (module.validate()) {
     console.log(chalk.green("validate OK"));
     try {
-      module.interpret();
+      // module.interpret();
       console.log(chalk.green("interpret OK"));
       try {
         var binary = module.toBinary();
         var wasmModule = new WebAssembly.Module(binary);
         var wasmInstance = new WebAssembly.Instance(wasmModule, {
           env: {
-            externalFunc: function() {},
+            externalFunc: function(arg0, arg1, arg2) {
+              console.log("env.externalFunc called with: " + arg0 + ", " + arg1 + ", " + arg2);
+            },
             externalConst: 1
           },
           external: {
-            externalFunc: function() {},
+            externalFunc: function(arg0, arg1, arg2) {
+              console.log("external.externalFunc called with: " + arg0 + ", " + arg1 + ", " + arg2);
+            },
             externalConst: 2
           }
         });
@@ -93,6 +97,8 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     actualOptimized = module.toText();
     module.runPasses([ "inlining" ]);
     actualInlined = module.toText();
+    if (isCreate)
+      fs.writeFileSync(__dirname + "/compiler/" + fixture + ".optimized.wasm", module.toBinary());
   } else {
     failed = true;
     console.log(chalk.red("validate ERROR"));

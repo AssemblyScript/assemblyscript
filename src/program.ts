@@ -156,11 +156,11 @@ export class Program extends DiagnosticEmitter {
         var statement = statements[j];
         switch (statement.kind) {
 
-          case NodeKind.CLASS:
+          case NodeKind.CLASSDECLARATION:
             this.initializeClass(<ClassDeclaration>statement, queuedDerivedClasses);
             break;
 
-          case NodeKind.ENUM:
+          case NodeKind.ENUMDECLARATION:
             this.initializeEnum(<EnumDeclaration>statement);
             break;
 
@@ -168,7 +168,7 @@ export class Program extends DiagnosticEmitter {
             this.initializeExports(<ExportStatement>statement, queuedExports);
             break;
 
-          case NodeKind.FUNCTION:
+          case NodeKind.FUNCTIONDECLARATION:
             this.initializeFunction(<FunctionDeclaration>statement);
             break;
 
@@ -176,11 +176,11 @@ export class Program extends DiagnosticEmitter {
             this.initializeImports(<ImportStatement>statement, queuedExports, queuedImports);
             break;
 
-          case NodeKind.INTERFACE:
+          case NodeKind.INTERFACEDECLARATION:
             this.initializeInterface(<InterfaceDeclaration>statement);
             break;
 
-          case NodeKind.NAMESPACE:
+          case NodeKind.NAMESPACEDECLARATION:
             this.initializeNamespace(<NamespaceDeclaration>statement, queuedDerivedClasses, null);
             break;
 
@@ -224,8 +224,10 @@ export class Program extends DiagnosticEmitter {
           if (!currentExport)
             this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedExport.member.externalIdentifier.range, (<StringLiteralExpression>(<ExportStatement>queuedExport.member.parent).path).value, queuedExport.member.externalIdentifier.name);
         } else {
-          element = this.elements.get(currentExport.referencedName);
-          if (element)
+          if (
+            (element = this.elements.get(currentExport.referencedName)) ||      // normal export
+            (element = this.elements.get(currentExport.member.identifier.name)) // stdlib re-export
+          )
             this.exports.set(exportName, element);
           else
             this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.range, queuedExport.member.identifier.name);
@@ -273,8 +275,10 @@ export class Program extends DiagnosticEmitter {
     if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(declaration.parent).kind == NodeKind.SOURCE && element.isExported)) {
       if (this.elements.has(declaration.name.name))
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, element.internalName);
-      else
+      else {
         this.elements.set(declaration.name.name, element);
+        this.exports.set(declaration.name.name, element);
+      }
     }
   }
 
@@ -290,8 +294,8 @@ export class Program extends DiagnosticEmitter {
 
     this.checkGlobalAlias(prototype, declaration);
 
-    if (hasDecorator("struct", declaration.decorators)) {
-      prototype.isStruct = true;
+    if (hasDecorator("explicit", declaration.decorators)) {
+      prototype.isExplicit = true;
       if (declaration.implementsTypes && declaration.implementsTypes.length)
         this.error(DiagnosticCode.Structs_cannot_implement_interfaces, Range.join(declaration.name.range, declaration.implementsTypes[declaration.implementsTypes.length - 1].range));
     } else if (declaration.implementsTypes.length)
@@ -327,11 +331,11 @@ export class Program extends DiagnosticEmitter {
       var memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
 
-        case NodeKind.FIELD:
+        case NodeKind.FIELDDECLARATION:
           this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
 
-        case NodeKind.METHOD:
+        case NodeKind.METHODDECLARATION:
           var isGetter: bool;
           if ((isGetter = hasModifier(ModifierKind.GET, memberDeclaration.modifiers)) || hasModifier(ModifierKind.SET, memberDeclaration.modifiers))
             this.initializeAccessor(<MethodDeclaration>memberDeclaration, prototype, isGetter);
@@ -413,8 +417,8 @@ export class Program extends DiagnosticEmitter {
       } else
         classPrototype.instanceMembers = new Map();
       instancePrototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
-      // if (classPrototype.isStruct && instancePrototype.isAbstract) {
-      //   this.error( Structs cannot declare abstract methods. );
+      // if (classPrototype.isExplicit && instancePrototype.isAbstract) {
+      //   this.error( Explicit classes cannot declare abstract methods. );
       // }
       classPrototype.instanceMembers.set(name, instancePrototype);
     }
@@ -436,19 +440,19 @@ export class Program extends DiagnosticEmitter {
               switch ((<StringLiteralExpression>firstArg).value) {
 
                 case "[]":
-                  classPrototype.opIndexedGet = instancePrototype;
+                  classPrototype.fnIndexedGet = instancePrototype.simpleName;
                   break;
 
                 case "[]=":
-                  classPrototype.opIndexedSet = instancePrototype;
+                  classPrototype.fnIndexedSet = instancePrototype.simpleName;
                   break;
 
                 case "+":
-                  classPrototype.opConcat = instancePrototype;
+                  classPrototype.fnConcat = instancePrototype.simpleName;
                   break;
 
                 case "==":
-                  classPrototype.opEquals = instancePrototype;
+                  classPrototype.fnEquals = instancePrototype.simpleName;
                   break;
 
                 default: // TBD: does it make sense to provide more, even though not JS/TS-compatible?
@@ -768,11 +772,11 @@ export class Program extends DiagnosticEmitter {
       var memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
 
-        case NodeKind.FIELD:
+        case NodeKind.FIELDDECLARATION:
           this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
 
-        case NodeKind.METHOD:
+        case NodeKind.METHODDECLARATION:
           var isGetter: bool;
           if ((isGetter = hasModifier(ModifierKind.GET, memberDeclaration.modifiers)) || hasModifier(ModifierKind.SET, memberDeclaration.modifiers))
             this.initializeAccessor(<MethodDeclaration>memberDeclaration, prototype, isGetter);
@@ -818,23 +822,23 @@ export class Program extends DiagnosticEmitter {
     for (var i = 0, k = members.length; i < k; ++i) {
       switch (members[i].kind) {
 
-        case NodeKind.CLASS:
+        case NodeKind.CLASSDECLARATION:
           this.initializeClass(<ClassDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
 
-        case NodeKind.ENUM:
+        case NodeKind.ENUMDECLARATION:
           this.initializeEnum(<EnumDeclaration>members[i], namespace);
           break;
 
-        case NodeKind.FUNCTION:
+        case NodeKind.FUNCTIONDECLARATION:
           this.initializeFunction(<FunctionDeclaration>members[i], namespace);
           break;
 
-        case NodeKind.INTERFACE:
+        case NodeKind.INTERFACEDECLARATION:
           this.initializeInterface(<InterfaceDeclaration>members[i], namespace);
           break;
 
-        case NodeKind.NAMESPACE:
+        case NodeKind.NAMESPACEDECLARATION:
           this.initializeNamespace(<NamespaceDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
 
@@ -1029,15 +1033,35 @@ export class Program extends DiagnosticEmitter {
     var propertyName = propertyAccess.property.name;
     var targetType: Type;
     var member: Element | null;
+
+    // Resolve variable-likes to their class type first
     switch (target.kind) {
 
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
       case ElementKind.FIELD:
-        if (!(targetType = (<VariableLikeElement>target).type).classType)
-          break;
+        if (!(targetType = (<VariableLikeElement>target).type).classType) {
+          console.log(propertyAccess.property.name + " on " + targetType);
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, targetType.toString());
+          return null;
+        }
         target = <Class>targetType.classType;
-        // fall-through
+        break;
+
+      case ElementKind.PROPERTY:
+        var getter = assert((<Property>target).getterPrototype).resolve(); // reports
+        if (!getter)
+          return null;
+        if (!(targetType = getter.returnType).classType) {
+          this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, targetType.toString());
+          return null;
+        }
+        target = <Class>targetType.classType;
+        break;
+    }
+
+    // Look up the member within
+    switch (target.kind) {
 
       case ElementKind.CLASS_PROTOTYPE:
       case ElementKind.CLASS:
@@ -1066,6 +1090,7 @@ export class Program extends DiagnosticEmitter {
           return resolvedElement.set(member).withTarget(target, targetExpression);
         break;
     }
+
     this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, target.internalName);
     return null;
   }
@@ -1078,13 +1103,15 @@ export class Program extends DiagnosticEmitter {
     var target = resolvedElement.element;
     switch (target.kind) {
 
-      // TBD: should indexed access on static classes, like `Heap`, be a supported as well?
-      case ElementKind.CLASS:
-        var type = (<Class>target).type;
+      case ElementKind.GLOBAL:
+      case ElementKind.LOCAL:
+      case ElementKind.FIELD:
+        var type = (<VariableLikeElement>target).type;
         if (type.classType) {
-          var indexedGet: FunctionPrototype | null;
-          if (indexedGet = (target = type.classType).prototype.opIndexedGet)
-            return resolvedElement.set(indexedGet).withTarget(target, targetExpression);
+          var indexedGetName = (target = type.classType).prototype.fnIndexedGet;
+          var indexedGet: Element | null;
+          if (indexedGetName != null && target.members && (indexedGet = target.members.get(indexedGetName)) && indexedGet.kind == ElementKind.FUNCTION_PROTOTYPE)
+            return resolvedElement.set(indexedGet).withTarget(type.classType, targetExpression);
         }
         break;
     }
@@ -1177,7 +1204,7 @@ export enum ElementKind {
   FIELD_PROTOTYPE,
   /** A {@link Field}. */
   FIELD,
-  /** A {@link PropertyContainer}. */
+  /** A {@link Property}. */
   PROPERTY,
   /** A {@link Namespace}. */
   NAMESPACE
@@ -1221,8 +1248,8 @@ export enum ElementFlags {
   PRIVATE = 1 << 15,
   /** Is an abstract member. */
   ABSTRACT = 1 << 16,
-  /** Is a struct-like class with limited capabilites. */
-  STRUCT = 1 << 17,
+  /** Is an explicitly layed out and allocated class with limited capabilites. */
+  EXPLICIT = 1 << 17,
   /** Has already inherited base class static members. */
   HAS_STATIC_BASE_MEMBERS = 1 << 18
 }
@@ -1409,6 +1436,7 @@ export class Global extends VariableLikeElement {
             case ModifierKind.EXPORT: this.isExported = true; break;
             case ModifierKind.CONST: this.isConstant = true; break;
             case ModifierKind.DECLARE: this.isDeclared = true; break;
+            case ModifierKind.READONLY: this.isConstant = true; break;
             case ModifierKind.STATIC: break; // static fields become globals
             default: throw new Error("unexpected modifier");
           }
@@ -1560,7 +1588,7 @@ export class FunctionPrototype extends Element {
       if (typeNode = declaration.parameters[i].type) {
         var parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
         if (parameterType) {
-          parameters[i] = new Parameter(declaration.parameters[i].name.name, parameterType);
+          parameters[i] = new Parameter(declaration.parameters[i].name.name, parameterType, declaration.parameters[i].initializer);
           parameterTypes[i] = parameterType;
         } else
           return null;
@@ -1787,10 +1815,12 @@ export class Function extends Element {
 }
 
 /** A yet unresolved instance field prototype. */
-export class FieldPrototype extends VariableLikeElement {
+export class FieldPrototype extends Element {
 
   kind = ElementKind.FIELD_PROTOTYPE;
 
+  /** Declaration reference. */
+  declaration: FieldDeclaration | null;
   /** Parent class prototype. */
   classPrototype: ClassPrototype;
 
@@ -1819,18 +1849,12 @@ export class FieldPrototype extends VariableLikeElement {
 }
 
 /** A resolved instance field. */
-export class Field extends Element {
+export class Field extends VariableLikeElement {
 
   kind = ElementKind.FIELD;
 
   /** Field prototype reference. */
   prototype: FieldPrototype;
-  /** Resolved type. */
-  type: Type;
-  /** Constant integer value, if a constant static integer. */
-  constantIntegerValue: I64 | null = null;
-  /** Constant float value, if a constant static float. */
-  constantFloatValue: f64 = 0;
   /** Field memory offset, if an instance field. */
   memoryOffset: i32 = -1;
 
@@ -1877,13 +1901,13 @@ export class ClassPrototype extends Element {
   basePrototype: ClassPrototype | null = null; // set in Program#initialize
 
   /** Overloaded indexed get method, if any. */
-  opIndexedGet: FunctionPrototype | null = null; // TODO: indexedGet and indexedSet as an accessor?
+  fnIndexedGet: string | null = null;
   /** Overloaded indexed set method, if any. */
-  opIndexedSet: FunctionPrototype | null = null;
+  fnIndexedSet: string | null = null;
   /** Overloaded concatenation method, if any. */
-  opConcat: FunctionPrototype | null = null;
+  fnConcat: string | null = null;
   /** Overloaded equality comparison method, if any. */
-  opEquals: FunctionPrototype | null = null;
+  fnEquals: string | null = null;
 
   constructor(program: Program, simpleName: string, internalName: string, declaration: ClassDeclaration | null = null) {
     super(program, simpleName, internalName);
@@ -1903,9 +1927,9 @@ export class ClassPrototype extends Element {
     }
   }
 
-  /** Whether a struct-like class with limited capabilities or not. */
-  get isStruct(): bool { return (this.flags & ElementFlags.STRUCT) != 0; }
-  set isStruct(is: bool) { if (is) this.flags |= ElementFlags.STRUCT; else this.flags &= ~ElementFlags.STRUCT; }
+  /** Whether explicitly layed out and allocated */
+  get isExplicit(): bool { return (this.flags & ElementFlags.EXPLICIT) != 0; }
+  set isExplicit(is: bool) { if (is) this.flags |= ElementFlags.EXPLICIT; else this.flags &= ~ElementFlags.EXPLICIT; }
 
   resolve(typeArguments: Type[] | null, contextualTypeArguments: Map<string,Type> | null = null): Class | null {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
@@ -1933,7 +1957,7 @@ export class ClassPrototype extends Element {
         this.program.error(DiagnosticCode.A_class_may_only_extend_another_class, declaration.extendsType.range);
         return null;
       }
-      if (baseClass.prototype.isStruct != this.isStruct) {
+      if (baseClass.prototype.isExplicit != this.isExplicit) {
         this.program.error(DiagnosticCode.Structs_cannot_extend_classes_and_vice_versa, Range.join(declaration.name.range, declaration.extendsType.range));
         return null;
       }
@@ -1957,9 +1981,9 @@ export class ClassPrototype extends Element {
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
 
-    var memoryOffset: i32 = 0;
+    var memoryOffset: u32 = 0;
     if (baseClass) {
-      memoryOffset = baseClass.type.byteSize;
+      memoryOffset = baseClass.currentMemoryOffset;
       if (baseClass.members) {
         if (!instance.members)
           instance.members = new Map();
@@ -1983,7 +2007,7 @@ export class ClassPrototype extends Element {
             var fieldType = this.program.resolveType(fieldDeclaration.type, instance.contextualTypeArguments); // reports
             if (fieldType) {
               var fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
-              switch (fieldType.size >> 3) { // align (byteSize might vary if a class type)
+              switch (fieldType.byteSize) { // align
                 case 1: break;
                 case 2: if (memoryOffset & 1) ++memoryOffset; break;
                 case 4: if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1; break;
@@ -2004,10 +2028,15 @@ export class ClassPrototype extends Element {
               instance.members.set(member.simpleName, methodPrototype);
             break;
 
-          case ElementKind.PROPERTY: // instance properties are just copied because there is nothing to partially-resolve
+          case ElementKind.PROPERTY: // instance properties are cloned with partially resolved getters and setters
             if (!instance.members)
               instance.members = new Map();
-            instance.members.set(member.simpleName, member);
+            assert((<Property>member).getterPrototype);
+            var instanceProperty = new Property(this.program, member.simpleName, member.internalName, this);
+            instanceProperty.getterPrototype = (<FunctionPrototype>(<Property>member).getterPrototype).resolvePartial(typeArguments);
+            if ((<Property>member).setterPrototype)
+              instanceProperty.setterPrototype = (<FunctionPrototype>(<Property>member).setterPrototype).resolvePartial(typeArguments);
+            instance.members.set(member.simpleName, instanceProperty);
             break;
 
           default:
@@ -2015,7 +2044,7 @@ export class ClassPrototype extends Element {
         }
       }
 
-    instance.type.byteSize = memoryOffset; // sizeof<this>() is its byte size in memory
+    instance.currentMemoryOffset = memoryOffset; // sizeof<this>() is its byte size in memory
     return instance;
   }
 
@@ -2051,6 +2080,8 @@ export class Class extends Element {
   base: Class | null;
   /** Contextual type arguments for fields and methods. */
   contextualTypeArguments: Map<string,Type> | null = null;
+  /** Current member memory offset. */
+  currentMemoryOffset: u32 = 0;
 
   /** Constructs a new class. */
   constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] | null = null, base: Class | null = null) {
