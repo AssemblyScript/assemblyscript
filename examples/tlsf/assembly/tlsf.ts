@@ -541,7 +541,7 @@ function fls<T>(word: T): i32 {
   return (<i32>sizeof<T>() << 3) - 1 - <i32>clz(word);
 }
 
-var fl_out: i32, sl_out: i32;
+let fl_out: i32, sl_out: i32;
 
 function mapping_insert(size: usize): void {
   var fl: i32, sl: i32;
@@ -585,7 +585,7 @@ function find_suitable_block(control: Control, fl: i32, sl: i32): BlockHeader {
 
 // Exported interface
 
-var TLSF: Control;
+let TLSF: Control;
 
 /** Requests more memory from the host environment. */
 function request_memory(size: usize): void {
@@ -711,8 +711,8 @@ function check(): i32 {
   return status;
 }
 
-var integrity_prev_status: i32;
-var integrity_status: i32;
+let integrity_prev_status: i32,
+    integrity_status: i32;
 
 function integrity_walker(ptr: usize, size: usize, used: bool): void {
   var block = BlockHeader.fromDataPtr(ptr);

@@ -153,15 +153,17 @@ export class Parser extends DiagnosticEmitter {
 
       case Token.CONST:
         modifiers = addModifier(Node.createModifier(ModifierKind.CONST, tn.range()), modifiers);
-
         if (tn.skip(Token.ENUM)) {
           statement = this.parseEnum(tn, modifiers, decorators);
           break;
         }
-        // fall through
+        statement = this.parseVariable(tn, modifiers, decorators);
+        decorators = null;
+        break;
 
-      case Token.VAR:
       case Token.LET:
+        modifiers = addModifier(Node.createModifier(ModifierKind.LET, tn.range()), modifiers);
+      case Token.VAR:
         statement = this.parseVariable(tn, modifiers, decorators);
         decorators = null;
         break;
@@ -1032,6 +1034,8 @@ export class Parser extends DiagnosticEmitter {
         return this.parseIfStatement(tn);
 
       case Token.LET:
+        return this.parseVariable(tn, [ Node.createModifier(ModifierKind.LET, tn.range()) ], null);
+
       case Token.VAR:
         return this.parseVariable(tn, null, null);
 

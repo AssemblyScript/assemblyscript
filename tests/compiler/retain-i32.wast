@@ -593,10 +593,8 @@
    (i32.const 255)
   )
   (block $break|0
-   (block
-    (set_local $0
-     (i32.const -128)
-    )
+   (set_local $0
+    (i32.const -128)
    )
    (loop $continue|0
     (if

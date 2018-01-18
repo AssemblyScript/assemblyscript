@@ -175,10 +175,8 @@
    (i32.const 0)
   )
   (block $break|0
-   (block
-    (set_local $1
-     (i32.const 0)
-    )
+   (set_local $1
+    (i32.const 0)
    )
    (loop $continue|0
     (if
@@ -194,10 +192,8 @@
         (i32.const 0)
        )
        (block $break|1
-        (block
-         (set_local $2
-          (i32.const 0)
-         )
+        (set_local $2
+         (i32.const 0)
         )
         (loop $continue|1
          (if

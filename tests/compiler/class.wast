@@ -127,15 +127,11 @@
     (i32.const 24)
    )
   )
-  (block
-   (set_local $1
-    (get_local $0)
-   )
+  (set_local $1
+   (get_local $0)
   )
-  (block
-   (set_local $2
-    (get_local $1)
-   )
+  (set_local $2
+   (get_local $1)
   )
   (return
    (get_local $2)

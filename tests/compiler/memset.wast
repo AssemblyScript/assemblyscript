@@ -11,10 +11,8 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i64)
-  (block
-   (set_local $3
-    (get_local $0)
-   )
+  (set_local $3
+   (get_local $0)
   )
   (if
    (i32.eqz
@@ -116,15 +114,13 @@
     (get_local $3)
    )
   )
-  (block
-   (set_local $4
-    (i32.and
-     (i32.sub
-      (i32.const 0)
-      (get_local $0)
-     )
-     (i32.const 3)
+  (set_local $4
+   (i32.and
+    (i32.sub
+     (i32.const 0)
+     (get_local $0)
     )
+    (i32.const 3)
    )
   )
   (set_local $0
@@ -148,18 +144,16 @@
     )
    )
   )
-  (block
-   (set_local $5
-    (i32.mul
-     (i32.div_u
-      (i32.sub
-       (i32.const 0)
-       (i32.const 1)
-      )
-      (i32.const 255)
+  (set_local $5
+   (i32.mul
+    (i32.div_u
+     (i32.sub
+      (i32.const 0)
+      (i32.const 1)
      )
-     (get_local $1)
+     (i32.const 255)
     )
+    (get_local $1)
    )
   )
   (i32.store
@@ -317,18 +311,16 @@
     (get_local $4)
    )
   )
-  (block
-   (set_local $6
-    (i64.or
+  (set_local $6
+   (i64.or
+    (i64.extend_u/i32
+     (get_local $5)
+    )
+    (i64.shl
      (i64.extend_u/i32
       (get_local $5)
      )
-     (i64.shl
-      (i64.extend_u/i32
-       (get_local $5)
-      )
-      (i64.const 32)
-     )
+     (i64.const 32)
     )
    )
   )

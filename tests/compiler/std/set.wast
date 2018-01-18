@@ -27,10 +27,8 @@
     (i32.const 0)
    )
   )
-  (block
-   (set_local $1
-    (current_memory)
-   )
+  (set_local $1
+   (current_memory)
   )
   (if
    (i32.gt_u
@@ -79,10 +77,8 @@
     (unreachable)
    )
   )
-  (block
-   (set_local $4
-    (get_global $std:heap/HEAP_OFFSET)
-   )
+  (set_local $4
+   (get_global $std:heap/HEAP_OFFSET)
   )
   (if
    (i32.and
@@ -2217,20 +2213,22 @@
       (if
        (get_local $2)
        (block
-        (i32.store8
-         (i32.add
-          (get_local $0)
-          (tee_local $2
-           (i32.sub
-            (get_local $2)
-            (i32.const 1)
+        (block
+         (i32.store8
+          (i32.add
+           (get_local $0)
+           (tee_local $2
+            (i32.sub
+             (get_local $2)
+             (i32.const 1)
+            )
            )
           )
-         )
-         (i32.load8_u
-          (i32.add
-           (get_local $1)
-           (get_local $2)
+          (i32.load8_u
+           (i32.add
+            (get_local $1)
+            (get_local $2)
+           )
           )
          )
         )
@@ -2259,34 +2257,30 @@
     )
    )
    (block
-    (block
-     (set_local $4
-      (select
-       (tee_local $2
-        (i32.shl
-         (i32.load offset=4
-          (get_local $0)
-         )
-         (i32.const 1)
+    (set_local $4
+     (select
+      (tee_local $2
+       (i32.shl
+        (i32.load offset=4
+         (get_local $0)
         )
+        (i32.const 1)
        )
-       (tee_local $3
-        (i32.const 8)
-       )
-       (i32.gt_u
-        (get_local $2)
-        (get_local $3)
-       )
+      )
+      (tee_local $3
+       (i32.const 8)
+      )
+      (i32.gt_u
+       (get_local $2)
+       (get_local $3)
       )
      )
     )
-    (block
-     (set_local $5
-      (call $std:heap/allocate_memory
-       (i32.mul
-        (get_local $4)
-        (i32.const 4)
-       )
+    (set_local $5
+     (call $std:heap/allocate_memory
+      (i32.mul
+       (get_local $4)
+       (i32.const 4)
       )
      )
     )

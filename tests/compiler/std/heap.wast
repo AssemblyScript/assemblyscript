@@ -30,10 +30,8 @@
     (i32.const 0)
    )
   )
-  (block
-   (set_local $1
-    (current_memory)
-   )
+  (set_local $1
+   (current_memory)
   )
   (if
    (i32.gt_u
@@ -82,10 +80,8 @@
     (unreachable)
    )
   )
-  (block
-   (set_local $4
-    (get_global $std:heap/HEAP_OFFSET)
-   )
+  (set_local $4
+   (get_global $std:heap/HEAP_OFFSET)
   )
   (if
    (i32.and
@@ -210,15 +206,13 @@
    )
    (return)
   )
-  (block
-   (set_local $3
-    (i32.and
-     (i32.sub
-      (i32.const 0)
-      (get_local $0)
-     )
-     (i32.const 3)
+  (set_local $3
+   (i32.and
+    (i32.sub
+     (i32.const 0)
+     (get_local $0)
     )
+    (i32.const 3)
    )
   )
   (set_local $0
@@ -242,18 +236,16 @@
     )
    )
   )
-  (block
-   (set_local $4
-    (i32.mul
-     (i32.div_u
-      (i32.sub
-       (i32.const 0)
-       (i32.const 1)
-      )
-      (i32.const 255)
+  (set_local $4
+   (i32.mul
+    (i32.div_u
+     (i32.sub
+      (i32.const 0)
+      (i32.const 1)
      )
-     (get_local $1)
+     (i32.const 255)
     )
+    (get_local $1)
    )
   )
   (i32.store
@@ -407,18 +399,16 @@
     (get_local $3)
    )
   )
-  (block
-   (set_local $5
-    (i64.or
+  (set_local $5
+   (i64.or
+    (i64.extend_u/i32
+     (get_local $4)
+    )
+    (i64.shl
      (i64.extend_u/i32
       (get_local $4)
      )
-     (i64.shl
-      (i64.extend_u/i32
-       (get_local $4)
-      )
-      (i64.const 32)
-     )
+     (i64.const 32)
     )
    )
   )
@@ -2574,20 +2564,22 @@
       (if
        (get_local $2)
        (block
-        (i32.store8
-         (i32.add
-          (get_local $0)
-          (tee_local $2
-           (i32.sub
-            (get_local $2)
-            (i32.const 1)
+        (block
+         (i32.store8
+          (i32.add
+           (get_local $0)
+           (tee_local $2
+            (i32.sub
+             (get_local $2)
+             (i32.const 1)
+            )
            )
           )
-         )
-         (i32.load8_u
-          (i32.add
-           (get_local $1)
-           (get_local $2)
+          (i32.load8_u
+           (i32.add
+            (get_local $1)
+            (get_local $2)
+           )
           )
          )
         )

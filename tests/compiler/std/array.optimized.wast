@@ -2159,13 +2159,13 @@
     (if
      (i32.le_s
       (tee_local $3
-       (if (result i32)
-        (get_local $2)
+       (select
         (i32.shl
          (get_local $2)
          (i32.const 1)
         )
         (i32.const 1)
+        (get_local $2)
        )
       )
       (i32.load offset=4
@@ -2655,9 +2655,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (set_local $1
-   (i32.const 0)
-  )
   (set_local $2
    (i32.sub
     (i32.load offset=8

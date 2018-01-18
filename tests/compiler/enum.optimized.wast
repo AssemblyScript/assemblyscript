@@ -1,5 +1,4 @@
 (module
- (type $i (func (result i32)))
  (type $v (func))
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
@@ -30,12 +29,9 @@
  (export "enum/Mixed.FOUR" (global $enum/Mixed.FOUR))
  (export "memory" (memory $0))
  (start $start)
- (func $enum/getZero (; 0 ;) (type $i) (result i32)
-  (i32.const 0)
- )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 0 ;) (type $v)
   (set_global $enum/NonConstant.ZERO
-   (call $enum/getZero)
+   (i32.const 0)
   )
   (set_global $enum/NonConstant.ONE
    (i32.add

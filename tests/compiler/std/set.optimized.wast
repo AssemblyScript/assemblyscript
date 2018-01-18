@@ -1,7 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iv (func (param i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
  (global $std:heap/HEAP_OFFSET (mut i32) (i32.const 0))
@@ -1970,10 +1969,7 @@
    )
   )
  )
- (func $std:heap/free_memory (; 4 ;) (type $iv) (param $0 i32)
-  (nop)
- )
- (func $std:set/Set#add (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std:set/Set#add (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -1999,12 +1995,10 @@
            (i32.const 1)
           )
          )
-         (tee_local $3
-          (i32.const 8)
-         )
+         (i32.const 8)
          (i32.gt_u
           (get_local $2)
-          (get_local $3)
+          (i32.const 8)
          )
         )
        )
@@ -2029,7 +2023,7 @@
         (i32.const 4)
        )
       )
-      (call $std:heap/free_memory
+      (drop
        (i32.load
         (get_local $0)
        )
@@ -2071,12 +2065,9 @@
   )
   (get_local $0)
  )
- (func $std:set/Set#has (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std:set/Set#has (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (set_local $2
-   (i32.const 0)
-  )
   (set_local $3
    (i32.load offset=8
     (get_local $0)
@@ -2120,12 +2111,9 @@
   )
   (i32.const 0)
  )
- (func $std:set/Set#delete (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std:set/Set#delete (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (set_local $2
-   (i32.const 0)
-  )
   (set_local $3
    (i32.load offset=8
     (get_local $0)
@@ -2223,13 +2211,7 @@
   )
   (i32.const 0)
  )
- (func $std:set/Set#clear (; 8 ;) (type $iv) (param $0 i32)
-  (i32.store offset=8
-   (get_local $0)
-   (i32.const 0)
-  )
- )
- (func $start (; 9 ;) (type $v)
+ (func $start (; 7 ;) (type $v)
   (set_global $std:heap/HEAP_OFFSET
    (get_global $HEAP_BASE)
   )
@@ -2345,8 +2327,9 @@
    )
    (unreachable)
   )
-  (call $std:set/Set#clear
+  (i32.store offset=8
    (get_global $std/set/set)
+   (i32.const 0)
   )
   (if
    (call $std:set/Set#get:size

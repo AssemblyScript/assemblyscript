@@ -980,6 +980,7 @@ export class UnaryPrefixExpression extends UnaryExpression {
 export enum ModifierKind {
   ASYNC,
   CONST,
+  LET,
   DECLARE,
   EXPORT,
   IMPORT,
