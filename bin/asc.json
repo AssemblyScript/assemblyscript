@@ -10,9 +10,26 @@
     "aliases": [ "h" ]
   },
   "optimize": {
-    "desc": "Optimizes the module.",
-    "type": "boolean",
+    "desc": [
+      "Optimizes the module. Also accepts the optimize level:",
+      " -O    Equivalent to -O2s",
+      " -O0   Runs no optimization passes",
+      " -O1   Runs fast optimization passes",
+      " -O2   Runs default optimization passes",
+      " -O3   Runs all optimization passes",
+      " -O2s  Specifies optimize level 2 with shrink level 1",
+      " -O3z  etc."
+    ],
+    "type": "number",
     "aliases": [ "O" ]
+  },
+  "optimizeLevel": {
+    "desc": "How much to focus on optimizing code.",
+    "type": "number"
+  },
+  "shrinkLevel": {
+    "desc": "How much to focus on shrinking code size.",
+    "type": "number"
   },
   "validate": {
     "desc": "Validates the module.",
@@ -41,6 +58,10 @@
   },
   "noTreeShaking": {
     "desc": "Disables tree-shaking.",
+    "type": "boolean"
+  },
+  "noDebug": {
+    "desc": "Disables debug information in binaries.",
     "type": "boolean"
   },
   "noAssert": {

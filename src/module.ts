@@ -727,9 +727,19 @@ export class Module {
     _BinaryenSetStart(this.ref, func);
   }
 
+  setOptimizeLevel(level: i32 = 2): void {
+    _BinaryenSetOptimizeLevel(level);
+  }
+
+  setShrinkLevel(level: i32 = 1): void {
+    _BinaryenSetShrinkLevel(level);
+  }
+
+  setDebugInfo(on: bool = false): void {
+    _BinaryenSetDebugInfo(on);
+  }
+
   optimize(func: FunctionRef = 0): void {
-    // see: https://github.com/WebAssembly/binaryen/issues/1331#issuecomment-350328175
-    // this.runPasses([ "flatten", "ssa" ], func);
     if (func) {
       _BinaryenFunctionOptimize(func, this.ref);
     } else {

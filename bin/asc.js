@@ -32,7 +32,7 @@ Object.keys(conf).forEach(key => {
 
 var args = minimist(process.argv.slice(2), opts);
 var version = require("../package.json").version;
-var indent = 20;
+var indent = 24;
 if (isDev) version += "-dev";
 
 if (args.version) {
@@ -47,9 +47,9 @@ if (args.help || args._.length < 1) {
   Object.keys(conf).forEach(name => {
     var option = conf[name];
     var text = " ";
-    if (option.aliases && option.aliases[0].length === 1)
-      text += "-" + option.aliases[0] + ", ";
     text += "--" + name;
+    if (option.aliases && option.aliases[0].length === 1)
+      text += ", -" + option.aliases[0];
     while (text.length < indent)
       text += " ";
     if (Array.isArray(option.desc)) {
@@ -164,14 +164,62 @@ else if (args.trapMode !== "allow") {
   process.exit(1);
 }
 
-if (args.optimize)
-  module.optimize();
+var optimizeLevel = 0;
+var shrinkLevel = 0;
+var debugInfo = !args.noDebug;
+var runPasses = [];
 
+if (args["O"]) {
+  if (typeof args["O"] === "number")
+    optimizeLevel = args["O"];
+  else if (args["O"] === true) {
+    optimizeLevel = 2;
+    shrinkLevel = 1;
+  } else if (args["0"])
+    optimizeLevel = 0;
+  else if (args["1"])
+    optimizeLevel = 1;
+  else if (args["2"])
+    optimizeLevel = 2;
+  else if (args["3"])
+    optimizeLevel = 3;
+  else
+    optimizeLevel = 2;
+}
+if (args["s"])
+  shrinkLevel = 1;
+else if (args["z"])
+  shrinkLevel = 2;
+
+// Check explicit levels
+if (typeof args.optimizeLevel === "number")
+  optimizeLevel = args.optimizeLevel;
+if (typeof args.shrinkLevel === "number")
+  shrinkLevel = args.shrinkLevel;
+
+// Workaround for inlining not being performed (42.0.0)
+if ((optimizeLevel >= 2 || shrinkLevel >= 2) && !debugInfo)
+  runPasses = [ "inlining", "inlining-optimizing" ];
+
+// Check additional passes
 if (args.runPasses) {
   if (typeof args.runPasses === "string")
     args.runPasses = args.runPasses.split(",");
-  module.runPasses(args.runPasses.map(pass => pass.trim()));
+  if (args.runPasses.length)
+    args.runPasses.forEach(pass => {
+      if (runPasses.indexOf(pass) < 0)
+        runPasses.push(pass);
+    });
 }
+
+module.setOptimizeLevel(optimizeLevel);
+module.setShrinkLevel(shrinkLevel);
+module.setDebugInfo(debugInfo);
+
+if (optimizeLevel || shrinkLevel)
+  module.optimize();
+if (runPasses.length)
+  module.runPasses(runPasses.map(pass => pass.trim()));
 
 var hasOutput = false;
 
