@@ -136,8 +136,6 @@ export enum Target {
 export class Options {
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
-  /** If true, performs compilation as usual but doesn't produce any output (all calls to module become nops). */
-  noEmit: bool = false;
   /** If true, compiles everything instead of just reachable code. */
   noTreeShaking: bool = false;
   /** If true, replaces assertions with nops. */
@@ -199,7 +197,7 @@ export class Compiler extends DiagnosticEmitter {
     this.program = program;
     this.options = options ? options : new Options();
     this.memoryOffset = new U64(this.options.target == Target.WASM64 ? 8 : 4, 0); // leave space for `null`
-    this.module = this.options.noEmit ? Module.createStub() : Module.create();
+    this.module = Module.create();
 
     // set up start function
     var startFunctionTemplate = new FunctionPrototype(program, "start", "start", null);
@@ -315,8 +313,7 @@ export class Compiler extends DiagnosticEmitter {
           var previousFunction = this.currentFunction;
           this.currentFunction = this.startFunction;
           var expr = this.compileStatement(statement);
-          if (!this.module.noEmit)
-            this.startFunctionBody.push(expr);
+          this.startFunctionBody.push(expr);
           this.currentFunction = previousFunction;
           break;
       }
@@ -388,7 +385,7 @@ export class Compiler extends DiagnosticEmitter {
       if (declaration.initializer) {
         if (!initExpr)
           initExpr = this.compileExpression(declaration.initializer, global.type);
-        if (!this.module.noEmit && _BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+        if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
           if (!global.isMutable) {
             initExpr = this.precomputeExpressionRef(initExpr);
             if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
@@ -407,33 +404,30 @@ export class Compiler extends DiagnosticEmitter {
     if (initializeInStart) {
       this.module.addGlobal(internalName, nativeType, true, global.type.toNativeZero(this.module));
       var setExpr = this.module.createSetGlobal(internalName, initExpr);
-      if (!this.module.noEmit)
-        this.startFunctionBody.push(setExpr);
+      this.startFunctionBody.push(setExpr);
     } else {
       if (!global.isMutable) {
-        if (!this.module.noEmit) {
-          var exprType = _BinaryenExpressionGetType(initExpr);
-          switch (exprType) {
+        var exprType = _BinaryenExpressionGetType(initExpr);
+        switch (exprType) {
 
-            case NativeType.I32:
-              global.constantIntegerValue = new I64(_BinaryenConstGetValueI32(initExpr), 0);
-              break;
+          case NativeType.I32:
+            global.constantIntegerValue = new I64(_BinaryenConstGetValueI32(initExpr), 0);
+            break;
 
-            case NativeType.I64:
-              global.constantIntegerValue = new I64(_BinaryenConstGetValueI64Low(initExpr), _BinaryenConstGetValueI64High(initExpr));
-              break;
+          case NativeType.I64:
+            global.constantIntegerValue = new I64(_BinaryenConstGetValueI64Low(initExpr), _BinaryenConstGetValueI64High(initExpr));
+            break;
 
-            case NativeType.F32:
-              global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
-              break;
+          case NativeType.F32:
+            global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
+            break;
 
-            case NativeType.F64:
-              global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
-              break;
+          case NativeType.F64:
+            global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
+            break;
 
-            default:
-              throw new Error("concrete type expected");
-          }
+          default:
+            throw new Error("concrete type expected");
         }
         global.hasConstantValue = true;
         if (!declaration || declaration.isTopLevel) { // might be re-exported
@@ -477,7 +471,7 @@ export class Compiler extends DiagnosticEmitter {
           var initExpr: ExpressionRef;
           if (valueDeclaration.value) {
             initExpr = this.compileExpression(<Expression>valueDeclaration.value, Type.i32);
-            if (!this.module.noEmit && _BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+            if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
               initExpr = this.precomputeExpressionRef(initExpr);
               if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
                 if (element.isConstant)
@@ -502,17 +496,14 @@ export class Compiler extends DiagnosticEmitter {
           if (initInStart) {
             this.module.addGlobal(val.internalName, NativeType.I32, true, this.module.createI32(0));
             var setExpr = this.module.createSetGlobal(val.internalName, initExpr);
-            if (!this.module.noEmit)
-              this.startFunctionBody.push(setExpr);
+            this.startFunctionBody.push(setExpr);
           } else {
             this.module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
-            if (!this.module.noEmit) {
-              if (_BinaryenExpressionGetType(initExpr) == NativeType.I32) {
-                val.constantValue = _BinaryenConstGetValueI32(initExpr);
-                val.hasConstantValue = true;
-              } else
-                throw new Error("i32 expected");
-            }
+            if (_BinaryenExpressionGetType(initExpr) == NativeType.I32) {
+              val.constantValue = _BinaryenConstGetValueI32(initExpr);
+              val.hasConstantValue = true;
+            } else
+              throw new Error("i32 expected");
           }
         } else
           throw new Error("declaration expected");

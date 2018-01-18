@@ -13,11 +13,11 @@
     "desc": [
       "Optimizes the module. Also accepts the optimize level:",
       "",
-      " -O     Defaults: Equivalent to -O2s",
+      " -O     Uses defaults. Equivalent to -O2s",
       " -O0    Equivalent to --optimizeLevel 0",
       " -O1    Equivalent to --optimizeLevel 1",
       " -O2    Equivalent to --optimizeLevel 2",
-      " -O2    Equivalent to --optimizeLevel 3",
+      " -O3    Equivalent to --optimizeLevel 3",
       " -Oz    Equivalent to -O but with --shrinkLevel 2",
       " -O3s   Equivalent to -O3 with --shrinkLevel 1 etc.",
       ""
@@ -39,7 +39,7 @@
     "aliases": [ "c", "check" ]
   },
   "outFile": {
-    "desc": "Specifies the output file. Format is determined by file extension.",
+    "desc": "Specifies the output file. File extension indicates format.",
     "type": "string",
     "aliases": [ "o" ]
   },
@@ -59,15 +59,19 @@
     "aliases": [ "a" ]
   },
   "noTreeShaking": {
-    "desc": "Disables tree-shaking.",
+    "desc": "Disables compiler-level tree-shaking.",
     "type": "boolean"
   },
   "noDebug": {
-    "desc": "Disables debug information in binaries.",
+    "desc": "Disables maintaining debug information in binaries.",
     "type": "boolean"
   },
   "noAssert": {
-    "desc": "Disables assertions.",
+    "desc": "Replaces assertions with NOPs.",
+    "type": "boolean"
+  },
+  "noEmit": {
+    "desc": "Performs compilation as usual without emitting code.",
     "type": "boolean"
   },
   "noLib": {
@@ -91,7 +95,14 @@
     "default": "allow"
   },
   "runPasses": {
-    "desc": "Specifies additional Binaryen passes to run.",
+    "desc":  [
+      "Specifies additional Binaryen passes to run after other",
+      "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
+    ],
     "type": "string"
+  },
+  "measure": {
+    "desc": "Prints measuring information on I/O and compile times.",
+    "type": "boolean"
   }
 }

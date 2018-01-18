@@ -239,7 +239,6 @@ export class Module {
 
   ref: ModuleRef;
   lit: BinaryenLiteral;
-  noEmit: bool;
 
   static MAX_MEMORY_WASM32: Index = 0xffff;
 
@@ -247,7 +246,6 @@ export class Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
     module.lit = changetype<BinaryenLiteral>(allocate_memory(16));
-    module.noEmit = false;
     return module;
   }
 
@@ -257,19 +255,10 @@ export class Module {
       var module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
       module.lit = changetype<BinaryenLiteral>(allocate_memory(16));
-      module.noEmit = false;
-      return module;
+       return module;
     } finally {
       free_memory(changetype<usize>(cArr));
     }
-  }
-
-  static createStub(): Module {
-    var module = new Module();
-    module.ref = 0;
-    module.lit = changetype<BinaryenLiteral>(0);
-    module.noEmit = true;
-    return module;
   }
 
   private constructor() { }
@@ -277,7 +266,6 @@ export class Module {
   // types
 
   addFunctionType(name: string, result: NativeType, paramTypes: NativeType[]): FunctionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(name);
     var cArr = allocI32Array(paramTypes);
     try {
@@ -289,7 +277,6 @@ export class Module {
   }
 
   getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[]): FunctionTypeRef {
-    if (this.noEmit) return 0;
     var cArr = allocI32Array(paramTypes);
     try {
       return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes.length);
@@ -301,41 +288,34 @@ export class Module {
   // expressions
 
   createI32(value: i32): ExpressionRef {
-    if (this.noEmit) return 0;
     _BinaryenLiteralInt32(this.lit, value);
     return _BinaryenConst(this.ref, this.lit);
   }
 
   createI64(lo: i32, hi: i32 = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     _BinaryenLiteralInt64(this.lit, lo, hi);
     return _BinaryenConst(this.ref, this.lit);
   }
 
   createF32(value: f32): ExpressionRef {
-    if (this.noEmit) return 0;
     _BinaryenLiteralFloat32(this.lit, value);
     return _BinaryenConst(this.ref, this.lit);
   }
 
   createF64(value: f64): ExpressionRef {
-    if (this.noEmit) return 0;
     _BinaryenLiteralFloat64(this.lit, value);
     return _BinaryenConst(this.ref, this.lit);
   }
 
   createUnary(op: UnaryOp, expr: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenUnary(this.ref, op, expr);
   }
 
   createBinary(op: BinaryOp, left: ExpressionRef, right: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenBinary(this.ref, op, left, right);
   }
 
   createHost(op: HostOp, name: string | null = null, operands: ExpressionRef[] | null = null): ExpressionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(name);
     var cArr = allocI32Array(operands);
     try {
@@ -347,17 +327,14 @@ export class Module {
   }
 
   createGetLocal(index: i32, type: NativeType): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenGetLocal(this.ref, index, type);
   }
 
   createTeeLocal(index: i32, value: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenTeeLocal(this.ref, index, value);
   }
 
   createGetGlobal(name: string, type: NativeType): ExpressionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(name);
     try {
       return _BinaryenGetGlobal(this.ref, cStr, type);
@@ -367,54 +344,44 @@ export class Module {
   }
 
   createLoad(bytes: Index, signed: bool, ptr: ExpressionRef, type: NativeType, offset: Index = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, /* always aligned */ bytes, type, ptr);
   }
 
   createStore(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset: Index = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenStore(this.ref, bytes, offset, /* always aligned */ bytes, ptr, value, type);
   }
 
   createAtomicLoad(bytes: Index, ptr: ExpressionRef, type: NativeType, offset: Index = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr);
   }
 
   createAtomicStore(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset: Index = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type);
   }
 
   createAtomicRMW(op: AtomicRMWOp, bytes: Index, offset: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type);
   }
 
   createAtomicCmpxchg(bytes: Index, offset: Index, ptr: ExpressionRef, expected: ExpressionRef, replacement: ExpressionRef, type: NativeType): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type);
   }
 
   createAtomicWait(ptr: ExpressionRef, expected: ExpressionRef, timeout: ExpressionRef, expectedType: NativeType): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType);
   }
 
   createAtomicWake(ptr: ExpressionRef, wakeCount: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenAtomicWake(this.ref, ptr, wakeCount);
   }
 
   // statements
 
   createSetLocal(index: Index, value: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenSetLocal(this.ref, index, value);
   }
 
   createSetGlobal(name: string, value: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(name);
     try {
       return _BinaryenSetGlobal(this.ref, cStr, value);
@@ -424,7 +391,6 @@ export class Module {
   }
 
   createBlock(label: string | null, children: ExpressionRef[], type: NativeType = NativeType.Auto): ExpressionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(label);
     var cArr = allocI32Array(children);
     try {
@@ -436,7 +402,6 @@ export class Module {
   }
 
   createBreak(label: string | null, condition: ExpressionRef = 0, value: ExpressionRef = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(label);
     try {
       return _BinaryenBreak(this.ref, cStr, condition, value);
@@ -446,12 +411,10 @@ export class Module {
   }
 
   createDrop(expression: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenDrop(this.ref, expression);
   }
 
   createLoop(label: string | null, body: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(label);
     try {
       return _BinaryenLoop(this.ref, cStr, body);
@@ -461,27 +424,22 @@ export class Module {
   }
 
   createIf(condition: ExpressionRef, ifTrue: ExpressionRef, ifFalse: ExpressionRef = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenIf(this.ref, condition, ifTrue, ifFalse);
   }
 
   createNop(): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenNop(this.ref);
   }
 
   createReturn(expression: ExpressionRef = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenReturn(this.ref, expression);
   }
 
   createSelect(ifTrue: ExpressionRef, ifFalse: ExpressionRef, condition: ExpressionRef): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenSelect(this.ref, condition, ifTrue, ifFalse);
   }
 
   createSwitch(names: string[], defaultName: string | null, condition: ExpressionRef, value: ExpressionRef = 0): ExpressionRef {
-    if (this.noEmit) return 0;
     var strs = new Array<usize>(names.length);
     for (var i = 0, k: i32 = names.length; i < k; ++i)
       strs[i] = allocString(names[i]);
@@ -497,7 +455,6 @@ export class Module {
   }
 
   createCall(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(target);
     var cArr = allocI32Array(operands);
     try {
@@ -509,7 +466,6 @@ export class Module {
   }
 
   createCallImport(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(target);
     var cArr = allocI32Array(operands);
     try {
@@ -521,14 +477,12 @@ export class Module {
   }
 
   createUnreachable(): ExpressionRef {
-    if (this.noEmit) return 0;
     return _BinaryenUnreachable(this.ref);
   }
 
   // meta
 
   addGlobal(name: string, type: NativeType, mutable: bool, initializer: ExpressionRef): GlobalRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(name);
     try {
       return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
@@ -538,7 +492,6 @@ export class Module {
   }
 
   addFunction(name: string, type: FunctionTypeRef, varTypes: NativeType[], body: ExpressionRef): FunctionRef {
-    if (this.noEmit) return 0;
     var cStr = allocString(name);
     var cArr = allocI32Array(varTypes);
     try {
@@ -559,7 +512,6 @@ export class Module {
   }
 
   addFunctionExport(internalName: string, externalName: string): ExportRef {
-    if (this.noEmit) return 0;
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalName);
     try {
@@ -571,7 +523,6 @@ export class Module {
   }
 
   addTableExport(internalName: string, externalName: string): ExportRef {
-    if (this.noEmit) return 0;
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalName);
     try {
@@ -583,7 +534,6 @@ export class Module {
   }
 
   addMemoryExport(internalName: string, externalName: string): ExportRef {
-    if (this.noEmit) return 0;
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalName);
     try {
@@ -595,7 +545,6 @@ export class Module {
   }
 
   addGlobalExport(internalName: string, externalName: string): ExportRef {
-    if (this.noEmit) return 0;
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalName);
     try {
@@ -607,7 +556,6 @@ export class Module {
   }
 
   removeExport(externalName: string): void {
-    if (this.noEmit) return;
     var cStr = allocString(externalName);
     try {
       _BinaryenRemoveExport(this.ref, cStr);
@@ -617,7 +565,6 @@ export class Module {
   }
 
   addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, functionType: FunctionTypeRef): ImportRef {
-    if (this.noEmit) return 0;
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
@@ -631,7 +578,6 @@ export class Module {
   }
 
   addTableImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
-    if (this.noEmit) return 0;
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
@@ -645,7 +591,6 @@ export class Module {
   }
 
   addMemoryImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
-    if (this.noEmit) return 0;
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
@@ -659,7 +604,6 @@ export class Module {
   }
 
   addGlobalImport(internalName: string, externalModuleName: string, externalBaseName: string, globalType: NativeType): ImportRef {
-    if (this.noEmit) return 0;
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
@@ -673,7 +617,6 @@ export class Module {
   }
 
   removeImport(internalName: string): void {
-    if (this.noEmit) return;
     var cStr = allocString(internalName);
     try {
       _BinaryenRemoveImport(this.ref, cStr);
@@ -683,7 +626,6 @@ export class Module {
   }
 
   setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName: string | null = null): void {
-    if (this.noEmit) return;
     var cStr = allocString(exportName);
     var k = segments.length;
     var segs = new Array<usize>(k);
@@ -713,7 +655,6 @@ export class Module {
   }
 
   setFunctionTable(funcs: FunctionRef[]): void {
-    if (this.noEmit) return;
     var cArr = allocI32Array(funcs);
     try {
       _BinaryenSetFunctionTable(this.ref, cArr, funcs.length);
@@ -723,7 +664,6 @@ export class Module {
   }
 
   setStart(func: FunctionRef): void {
-    if (this.noEmit) return;
     _BinaryenSetStart(this.ref, func);
   }
 
@@ -765,7 +705,6 @@ export class Module {
   }
 
   validate(): bool {
-    if (this.noEmit) return false;
     return _BinaryenModuleValidate(this.ref) == 1;
   }
 
@@ -802,12 +741,13 @@ export class Module {
   }
 
   createRelooper(): Relooper {
-    return this.noEmit ? Relooper.createStub(this) : Relooper.create(this);
+    return Relooper.create(this);
   }
 
   // currently supports side effect free expressions only
   cloneExpression(expr: ExpressionRef, noSideEffects: bool = false, maxDepth: i32 = i32.MAX_VALUE): ExpressionRef {
-    if (this.noEmit || maxDepth < 0) return 0;
+    if (maxDepth < 0)
+      return 0;
 
     var nested1: ExpressionRef,
         nested2: ExpressionRef;
@@ -859,43 +799,36 @@ export class Relooper {
 
   module: Module;
   ref: RelooperRef;
-  noEmit: bool;
 
   static create(module: Module): Relooper {
     var relooper = new Relooper();
     relooper.module = module;
     relooper.ref = _RelooperCreate();
-    relooper.noEmit = false;
-    return relooper;
+      return relooper;
   }
 
   static createStub(module: Module): Relooper {
     var relooper = new Relooper();
     relooper.module = module;
     relooper.ref = 0;
-    relooper.noEmit = true;
     return relooper;
   }
 
   private constructor() {}
 
   addBlock(code: ExpressionRef): RelooperBlockRef {
-    if (this.noEmit) return 0;
     return _RelooperAddBlock(this.ref, code);
   }
 
   addBranch(from: RelooperBlockRef, to: RelooperBlockRef, condition: ExpressionRef = 0, code: ExpressionRef = 0): void {
-    if (this.noEmit) return;
     _RelooperAddBranch(from, to, condition, code);
   }
 
   addBlockWithSwitch(code: ExpressionRef, condition: ExpressionRef): RelooperBlockRef {
-    if (this.noEmit) return 0;
     return _RelooperAddBlockWithSwitch(this.ref, code, condition);
   }
 
   addBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: i32[], code: ExpressionRef = 0): void {
-    if (this.noEmit) return;
     var cArr = allocI32Array(indexes);
     try {
       _RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
@@ -905,7 +838,6 @@ export class Relooper {
   }
 
   renderAndDispose(entry: RelooperBlockRef, labelHelper: Index): ExpressionRef {
-    if (this.noEmit) return 0;
     return _RelooperRenderAndDispose(this.ref, entry, labelHelper, this.module.ref);
   }
 }
