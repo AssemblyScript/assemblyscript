@@ -164,18 +164,18 @@ else if (args.trapMode !== "allow") {
   process.exit(1);
 }
 
-var optimizeLevel = 0;
+var defaultOptimizeLevel = 2;
+var defaultShrinkLevel = 1;
+
+var optimizeLevel = -1;
 var shrinkLevel = 0;
 var debugInfo = !args.noDebug;
 var runPasses = [];
 
-if (args["O"]) {
-  if (typeof args["O"] === "number")
-    optimizeLevel = args["O"];
-  else if (args["O"] === true) {
-    optimizeLevel = 2;
-    shrinkLevel = 1;
-  } else if (args["0"])
+if (args.optimize !== false) {
+  if (typeof args.optimize === "number")
+    optimizeLevel = args.optimize;
+  else if (args["0"])
     optimizeLevel = 0;
   else if (args["1"])
     optimizeLevel = 1;
@@ -183,8 +183,11 @@ if (args["O"]) {
     optimizeLevel = 2;
   else if (args["3"])
     optimizeLevel = 3;
-  else
-    optimizeLevel = 2;
+  else if (args.optimize === true) {
+    optimizeLevel = defaultOptimizeLevel;
+    shrinkLevel = defaultShrinkLevel;
+  } else
+    optimizeLevel = 0;
 }
 if (args["s"])
   shrinkLevel = 1;
@@ -198,8 +201,8 @@ if (typeof args.shrinkLevel === "number")
   shrinkLevel = args.shrinkLevel;
 
 // Workaround for inlining not being performed (42.0.0)
-if ((optimizeLevel >= 2 || shrinkLevel >= 2) && !debugInfo)
-  runPasses = [ "inlining", "inlining-optimizing" ];
+// if ((optimizeLevel >= 2 || shrinkLevel >= 2) && !debugInfo)
+//   runPasses = [ "inlining", "inlining-optimizing" ];
 
 // Check additional passes
 if (args.runPasses) {
@@ -216,7 +219,7 @@ module.setOptimizeLevel(optimizeLevel);
 module.setShrinkLevel(shrinkLevel);
 module.setDebugInfo(debugInfo);
 
-if (optimizeLevel || shrinkLevel)
+if (optimizeLevel >= 0)
   module.optimize();
 if (runPasses.length)
   module.runPasses(runPasses.map(pass => pass.trim()));

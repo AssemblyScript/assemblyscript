@@ -98,7 +98,11 @@ class Control {
   /** Tests whether the collector is currently paused. */
   get paused(): bool { return (this.state & Control.PAUSED_BIT) != 0; }
   /** Sets whether the collector is currently paused. */
-  set paused(paused: bool) { this.state = paused ? this.state |= Control.PAUSED_BIT : this.state &= ~Control.PAUSED_BIT; }
+  set paused(paused: bool) {
+    this.state = paused
+      ? this.state |= Control.PAUSED_BIT
+      : this.state &= ~Control.PAUSED_BIT;
+  }
 
   ///////////////////////////////// Methods ///////////////////////////////////
 

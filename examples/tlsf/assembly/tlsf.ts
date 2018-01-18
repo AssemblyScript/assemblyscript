@@ -88,12 +88,12 @@ class BlockHeader {
   }
 
   /** Tags this block as 'free'. Careful: Does not update adjacent blocks. */
-  tagFree(): void {
+  tagAsFree(): void {
     this.tagged_size |= BlockHeader.FREE_BIT;
   }
 
   /** Tags this block as 'used'. Careful: Does not update adjacent blocks. */
-  tagUsed(): void {
+  tagAsUsed(): void {
     this.tagged_size &= ~BlockHeader.FREE_BIT;
   }
 
@@ -103,12 +103,12 @@ class BlockHeader {
   }
 
   /** Tags this block as 'prev is free'. Does not update adjacent blocks. */
-  tagPrevFree(): void {
+  tagAsPrevFree(): void {
     this.tagged_size |= BlockHeader.PREV_FREE_BIT;
   }
 
   /** Tags this block as 'prev is used'. Does not update adjacent blocks. */
-  tagPrevUsed(): void {
+  tagAsPrevUsed(): void {
     this.tagged_size &= ~BlockHeader.PREV_FREE_BIT;
   }
 
@@ -158,15 +158,15 @@ class BlockHeader {
   /** Marks this block as being 'free'. */
   markAsFree(): void {
     var next = this.linkNext(); // Link the block to the next block, first.
-    next.tagPrevFree();
-    this.tagFree();
+    next.tagAsPrevFree();
+    this.tagAsFree();
   }
 
   /** Marks this block as being 'used'. */
   markAsUsed(): void {
     var next = this.next;
-    next.tagPrevUsed();
-    this.tagUsed();
+    next.tagAsPrevUsed();
+    this.tagAsUsed();
   }
 
   /** Tests if this block can be splitted. */
@@ -377,7 +377,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     if (block.canSplit(size)) {
       var remaining_block = block.split(size);
       block.linkNext();
-      remaining_block.tagPrevFree();
+      remaining_block.tagAsPrevFree();
       this.insertBlock(remaining_block);
     }
   }
@@ -393,7 +393,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     if (block.canSplit(size)) {
       // If the next block is free, we must coalesce.
       var remaining_block = block.split(size);
-      remaining_block.tagPrevUsed();
+      remaining_block.tagAsPrevUsed();
       remaining_block = this.mergeNextBlock(remaining_block);
       this.insertBlock(remaining_block);
     }
@@ -403,7 +403,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     var remaining_block = block;
     if (block.canSplit(size)) {
       remaining_block = block.split(size - BlockHeader.OVERHEAD);
-      remaining_block.tagPrevFree();
+      remaining_block.tagAsPrevFree();
       block.linkNext();
       this.insertBlock(block);
     }
@@ -481,15 +481,15 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     // it will never be used.
     var block = BlockHeader.fromOffset(mem, -BlockHeader.OVERHEAD);
     block.size = pool_bytes;
-    block.tagFree();
-    block.tagPrevUsed();
+    block.tagAsFree();
+    block.tagAsPrevUsed();
     this.insertBlock(block);
 
     // Split the block to create a zero-size sentinel block.
     var next = block.linkNext();
     next.size = 0;
-    next.tagUsed();
-    next.tagPrevFree();
+    next.tagAsUsed();
+    next.tagAsPrevFree();
   }
 }
 

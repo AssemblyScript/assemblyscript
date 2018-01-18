@@ -12,23 +12,25 @@
   "optimize": {
     "desc": [
       "Optimizes the module. Also accepts the optimize level:",
-      " -O    Equivalent to -O2s",
-      " -O0   Runs no optimization passes",
-      " -O1   Runs fast optimization passes",
-      " -O2   Runs default optimization passes",
-      " -O3   Runs all optimization passes",
-      " -O2s  Specifies optimize level 2 with shrink level 1",
-      " -O3z  etc."
+      "",
+      " -O     Defaults: Equivalent to -O2s",
+      " -O0    Equivalent to --optimizeLevel 0",
+      " -O1    Equivalent to --optimizeLevel 1",
+      " -O2    Equivalent to --optimizeLevel 2",
+      " -O2    Equivalent to --optimizeLevel 3",
+      " -Oz    Equivalent to -O but with --shrinkLevel 2",
+      " -O3s   Equivalent to -O3 with --shrinkLevel 1 etc.",
+      ""
     ],
-    "type": "number",
+    "type": "boolean",
     "aliases": [ "O" ]
   },
   "optimizeLevel": {
-    "desc": "How much to focus on optimizing code.",
+    "desc": "How much to focus on optimizing code. [0-3]",
     "type": "number"
   },
   "shrinkLevel": {
-    "desc": "How much to focus on shrinking code size.",
+    "desc": "How much to focus on shrinking code size. [0-2]",
     "type": "number"
   },
   "validate": {
@@ -42,17 +44,17 @@
     "aliases": [ "o" ]
   },
   "binaryFile": {
-    "desc": "Specifies the binary format output file (.wasm).",
+    "desc": "Specifies the binary output file (.wasm).",
     "type": "string",
     "aliases": [ "b" ]
   },
   "textFile": {
-    "desc": "Specifies the text format output file (.wast).",
+    "desc": "Specifies the text output file (.wast).",
     "type": "string",
     "aliases": [ "t" ]
   },
   "asmjsFile": {
-    "desc": "Specifies the asm.js format output file (.js).",
+    "desc": "Specifies the asm.js output file (.js).",
     "type": "string",
     "aliases": [ "a" ]
   },
@@ -79,9 +81,11 @@
   "trapMode": {
     "desc": [
       "Sets the trap mode to use.",
+      "",
       " allow  Allow trapping operations. This is the default.",
       " clamp  Replace trapping operations with clamping semantics.",
-      " js     Replace trapping operations with JS semantics."
+      " js     Replace trapping operations with JS semantics.",
+      ""
     ],
     "type": "string",
     "default": "allow"
