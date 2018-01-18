@@ -1050,12 +1050,60 @@ export abstract class DeclarationStatement extends Statement {
   /** Array of decorators. */
   decorators: Decorator[] | null = null;
 
-  protected _cachedInternalName: string | null = null;
+  protected cachedProgramLevelInternalName: string | null = null;
+  protected cachedFileLevelInternalName: string | null = null;
 
-  /** Gets the mangled internal name of this declaration. */
-  get internalName(): string { return this._cachedInternalName === null ? this._cachedInternalName = mangleInternalName(this) : this._cachedInternalName; }
-  /** Tests if this is a top-level declaration. */
-  get isTopLevel(): bool { return this.parent != null && this.parent.kind == NodeKind.SOURCE; }
+  /** Gets the mangled program-level internal name of this declaration. */
+  get programLevelInternalName(): string {
+    if (!this.cachedProgramLevelInternalName)
+      this.cachedProgramLevelInternalName = mangleInternalName(this, true);
+    return this.cachedProgramLevelInternalName;
+  }
+
+  /** Gets the mangled file-level internal name of this declaration. */
+  get fileLevelInternalName(): string {
+    if (!this.cachedFileLevelInternalName)
+      this.cachedFileLevelInternalName = mangleInternalName(this, false);
+    return this.cachedFileLevelInternalName;
+  }
+
+  /** Tests if this is a top-level declaration within its source file. */
+  get isTopLevel(): bool {
+    var parent = this.parent;
+    if (!parent)
+      return false;
+    if (parent.kind == NodeKind.VARIABLE)
+      if (!(parent = parent.parent))
+        return false;
+    return parent.kind == NodeKind.SOURCE;
+  }
+
+  /** Tests if this declaration is a top-level export within its source file. */
+  get isTopLevelExport(): bool {
+    var parent = this.parent;
+    if (!parent)
+      return false;
+    if (parent.kind == NodeKind.VARIABLE)
+      if (!(parent = parent.parent))
+        return false;
+    if (parent.kind == NodeKind.NAMESPACEDECLARATION)
+      return hasModifier(ModifierKind.EXPORT, this.modifiers) && (<NamespaceDeclaration>parent).isTopLevelExport;
+    if (parent.kind == NodeKind.CLASSDECLARATION)
+      return hasModifier(ModifierKind.STATIC, this.modifiers) && (<ClassDeclaration>parent).isTopLevelExport;
+    return parent.kind == NodeKind.SOURCE && hasModifier(ModifierKind.EXPORT, this.modifiers);
+  }
+
+  /** Tests if this declaration exported by the given member needs an explicit export. */
+  needsExplicitExport(member: ExportMember): bool {
+    // This is necessary because module-level exports are automatically created for
+    // exported top level declarations of all sorts. In other words this function
+    // tests that this condition doesn't apply so the export isn't a duplicate.
+    return (
+      member.identifier.name != member.externalIdentifier.name || // if aliased
+      this.range.source != member.range.source ||                 // if a re-export
+      !this.isTopLevelExport                                      // if not top-level
+    );
+  }
 }
 
 /** Base class of all variable-like declaration statements with a type and initializer. */
@@ -1470,7 +1518,7 @@ export function mangleInternalPath(path: string): string {
 }
 
 /** Mangles a declaration's name to an internal name. */
-export function mangleInternalName(declaration: DeclarationStatement): string {
+export function mangleInternalName(declaration: DeclarationStatement, asGlobal: bool = false): string {
   var name = declaration.name.name;
   var parent = declaration.parent;
   if (!parent)
@@ -1479,8 +1527,10 @@ export function mangleInternalName(declaration: DeclarationStatement): string {
     if (!(parent = parent.parent))
       return name;
   if (parent.kind == NodeKind.CLASSDECLARATION)
-    return (<ClassDeclaration>parent).internalName + (hasModifier(ModifierKind.STATIC, declaration.modifiers) ? STATIC_DELIMITER : INSTANCE_DELIMITER) + name;
+    return mangleInternalName(<ClassDeclaration>parent, asGlobal) + (hasModifier(ModifierKind.STATIC, declaration.modifiers) ? STATIC_DELIMITER : INSTANCE_DELIMITER) + name;
   if (parent.kind == NodeKind.NAMESPACEDECLARATION || parent.kind == NodeKind.ENUMDECLARATION)
-    return (<DeclarationStatement>parent).internalName + STATIC_DELIMITER + name;
+    return mangleInternalName(<DeclarationStatement>parent, asGlobal) + STATIC_DELIMITER + name;
+  if (asGlobal)
+    return name;
   return declaration.range.source.internalPath + PATH_DELIMITER + name;
 }

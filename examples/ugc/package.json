@@ -1,0 +1,11 @@
+{
+  "name": "@assemblyscript/ugc",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:untouched && npm run build:optimized",
+    "build:untouched": "asc assembly/ugc.ts -t ugc.untouched.wast -b ugc.untouched.wasm --validate",
+    "build:optimized": "asc -O assembly/ugc.ts -b ugc.optimized.wasm -t ugc.optimized.wast --validate --noAssert --runPasses inlining",
+    "test": "node tests"
+  }
+}

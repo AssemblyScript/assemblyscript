@@ -110,7 +110,7 @@ export class Program extends DiagnosticEmitter {
   types: Map<string,Type> = noTypesYet;
   /** Declared type aliases. */
   typeAliases: Map<string,TypeNode> = new Map();
-  /** Exports of individual files by internal name. Not global exports. */
+  /** Exports of individual files by exported internal name. Not global exports. */
   exports: Map<string,Element> = new Map();
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
@@ -283,7 +283,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeClass(declaration: ClassDeclaration, queuedDerivedClasses: ClassPrototype[], namespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -351,17 +351,17 @@ export class Program extends DiagnosticEmitter {
 
   private initializeField(declaration: FieldDeclaration, classPrototype: ClassPrototype): void {
     var name = declaration.name.name;
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
 
     // static fields become global variables
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
       if (this.elements.has(internalName)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         return;
       }
       if (classPrototype.members) {
         if (classPrototype.members.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -374,7 +374,7 @@ export class Program extends DiagnosticEmitter {
     } else {
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -386,19 +386,19 @@ export class Program extends DiagnosticEmitter {
 
   private initializeMethod(declaration: MethodDeclaration, classPrototype: ClassPrototype): void {
     var name = declaration.name.name;
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     var instancePrototype: FunctionPrototype | null = null;
 
     // static methods become global functions
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
 
       if (this.elements.has(internalName)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         return;
       }
       if (classPrototype.members) {
         if (classPrototype.members.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -411,7 +411,7 @@ export class Program extends DiagnosticEmitter {
     } else {
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -470,7 +470,7 @@ export class Program extends DiagnosticEmitter {
 
   private initializeAccessor(declaration: MethodDeclaration, classPrototype: ClassPrototype, isGetter: bool): void {
     var propertyName = declaration.name.name;
-    var internalPropertyName = declaration.internalName;
+    var internalPropertyName = declaration.fileLevelInternalName;
 
     var propertyElement = this.elements.get(internalPropertyName);
     if (propertyElement) {
@@ -505,7 +505,7 @@ export class Program extends DiagnosticEmitter {
       var internalInstanceName = classPrototype.internalName + INSTANCE_DELIMITER + name;
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalPropertyName);
           return;
         }
       } else
@@ -521,7 +521,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeEnum(declaration: EnumDeclaration, namespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -556,7 +556,7 @@ export class Program extends DiagnosticEmitter {
 
   private initializeEnumValue(declaration: EnumValueDeclaration, enm: Enum): void {
     var name = declaration.name.name;
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (enm.members) {
       if (enm.members.has(name)) {
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
@@ -649,7 +649,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeFunction(declaration: FunctionDeclaration, namespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -694,7 +694,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeImport(declaration: ImportDeclaration, internalPath: string, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -739,7 +739,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeInterface(declaration: InterfaceDeclaration, namespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -791,7 +791,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeNamespace(declaration: NamespaceDeclaration, queuedExtendingClasses: ClassPrototype[], parentNamespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
 
     var namespace = this.elements.get(internalName);
     if (!namespace) {
@@ -873,7 +873,7 @@ export class Program extends DiagnosticEmitter {
     var declarations = statement.declarations;
     for (var i = 0, k = declarations.length; i < k; ++i) {
       var declaration = declarations[i];
-      var internalName = declaration.internalName;
+      var internalName = declaration.fileLevelInternalName;
       if (this.elements.has(internalName)) {
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         continue;

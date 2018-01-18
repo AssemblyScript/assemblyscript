@@ -16,18 +16,30 @@
    (get_local $1)
   )
  )
- (func $export/ns.two (; 2 ;) (type $v)
+ (func $export/mul (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (i32.mul
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func $export/ns.two (; 3 ;) (type $v)
   (nop)
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 4 ;) (type $v)
   (drop
    (i32.add
-    (call $export/add
-     (i32.const 1)
-     (i32.const 2)
+    (i32.add
+     (call $export/add
+      (i32.const 1)
+      (i32.const 2)
+     )
+     (call $export/sub
+      (i32.const 2)
+      (i32.const 3)
+     )
     )
-    (call $export/sub
-     (i32.const 2)
+    (call $export/mul
+     (i32.const 3)
      (i32.const 1)
     )
    )

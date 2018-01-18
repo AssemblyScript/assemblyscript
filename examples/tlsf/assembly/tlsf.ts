@@ -35,7 +35,7 @@ class BlockHeader {
   static readonly OVERHEAD: usize = sizeof<usize>();
 
   // User data starts directly after the size field in a used block.
-  static readonly USERDATA_OFFSET: usize = sizeof<usize>() + sizeof<usize>();
+  static readonly DATA_OFFSET: usize = sizeof<usize>() + sizeof<usize>();
 
   // A free block must be large enough to store its header minus the size of
   // the prev_phys_block field, and no larger than the number of addressable
@@ -114,12 +114,12 @@ class BlockHeader {
 
   /** Gets the block header matching the specified data pointer. */
   static fromDataPtr(ptr: usize): BlockHeader {
-    return changetype<BlockHeader>(ptr - BlockHeader.USERDATA_OFFSET);
+    return changetype<BlockHeader>(ptr - BlockHeader.DATA_OFFSET);
   }
 
   /** Returns the address of this block's data. */
   toDataPtr(): usize {
-    return changetype<usize>(this) + BlockHeader.USERDATA_OFFSET;
+    return changetype<usize>(this) + BlockHeader.DATA_OFFSET;
   }
 
   /** Gets the next block after this one using the specified size. */
@@ -174,7 +174,7 @@ class BlockHeader {
     return this.size >= BlockHeader.SIZE + size;
   }
 
-  /* Splits a block into two, the second of which is free. */
+  /** Splits a block into two, the second of which is free. */
   split(size: usize): BlockHeader {
     // Calculate the amount of space left in the remaining block.
     var remain = BlockHeader.fromOffset(
@@ -194,7 +194,7 @@ class BlockHeader {
     return remain;
   }
 
-  /* Absorb a free block's storage into this (adjacent previous) free block. */
+  /** Absorb a free block's storage into this (adjacent previous) free block. */
   absorb(block: BlockHeader): void {
     assert(!this.isLast,
       "previous block can't be last"
@@ -205,7 +205,7 @@ class BlockHeader {
   }
 }
 
-/* The TLSF control structure. */
+/** The TLSF control structure. */
 @explicit
 class Control extends BlockHeader { // Empty lists point here, indicating free
 
@@ -289,7 +289,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     this.insertFreeBlock(block, fl_out, sl_out);
   }
 
-  /* Inserts a free block into the free block list. */
+  /** Inserts a free block into the free block list. */
   insertFreeBlock(block: BlockHeader, fl: i32, sl: i32): void {
     var current = this.blocks(fl, sl);
     assert(current,
@@ -311,7 +311,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     this.sl_bitmap_set(fl, this.sl_bitmap(fl) | (1 << sl))
   }
 
-  /* Removes a free block from the free list.*/
+  /** Removes a free block from the free list.*/
   removeFreeBlock(block: BlockHeader, fl: i32, sl: i32): void {
     var prev = block.prev_free;
     var next = block.next_free;

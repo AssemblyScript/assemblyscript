@@ -326,17 +326,11 @@ export class Compiler extends DiagnosticEmitter {
   // globals
 
   compileGlobalDeclaration(declaration: VariableDeclaration, isConst: bool): Global | null {
-    var element = this.program.elements.get(declaration.internalName);
+    var element = this.program.elements.get(declaration.fileLevelInternalName);
     if (!element || element.kind != ElementKind.GLOBAL)
       throw new Error("global expected");
     if (!this.compileGlobal(<Global>element)) // reports
       return null;
-    if (isModuleExport(element, declaration)) {
-      if ((<Global>element).hasConstantValue)
-        this.module.addGlobalExport(element.internalName, declaration.name.name);
-      else
-        this.warning(DiagnosticCode.Cannot_export_a_mutable_global, declaration.range);
-    }
     return <Global>element;
   }
 
@@ -416,7 +410,6 @@ export class Compiler extends DiagnosticEmitter {
       if (!this.module.noEmit)
         this.startFunctionBody.push(setExpr);
     } else {
-      // TODO: not necessary to create a global if constant and not a file-level export anyway
       if (!global.isMutable) {
         if (!this.module.noEmit) {
           var exprType = _BinaryenExpressionGetType(initExpr);
@@ -441,11 +434,14 @@ export class Compiler extends DiagnosticEmitter {
             default:
               throw new Error("concrete type expected");
           }
-          global.hasConstantValue = true;
-          if (!declaration || isModuleExport(global, declaration))
-            this.module.addGlobal(internalName, nativeType, global.isMutable, initExpr);
         }
-      } else if (!this.module.noEmit)
+        global.hasConstantValue = true;
+        if (!declaration || declaration.isTopLevel) { // might be re-exported
+          this.module.addGlobal(internalName, nativeType, global.isMutable, initExpr);
+        }
+        if (declaration && declaration.range.source.isEntry && declaration.isTopLevelExport)
+          this.module.addGlobalExport(global.internalName, declaration.programLevelInternalName);
+      } else
         this.module.addGlobal(internalName, nativeType, global.isMutable, initExpr);
     }
     global.isCompiled = true;
@@ -454,11 +450,11 @@ export class Compiler extends DiagnosticEmitter {
 
   // enums
 
-  compileEnumDeclaration(declaration: EnumDeclaration): void {
-    var element = this.program.elements.get(declaration.internalName);
+  compileEnumDeclaration(declaration: EnumDeclaration): Enum | null {
+    var element = this.program.elements.get(declaration.fileLevelInternalName);
     if (!element || element.kind != ElementKind.ENUM)
       throw new Error("enum expected");
-    this.compileEnum(<Enum>element);
+    return this.compileEnum(<Enum>element) ? <Enum>element : null;
   }
 
   compileEnum(element: Enum): bool {
@@ -473,10 +469,11 @@ export class Compiler extends DiagnosticEmitter {
           continue;
         var initInStart = false;
         var val = <EnumValue>member;
+        var valueDeclaration = val.declaration;
         if (val.hasConstantValue) {
-          this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
-        } else if (val.declaration) {
-          var valueDeclaration = val.declaration;
+          if (!element.declaration || element.declaration.isTopLevelExport)
+            this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
+        } else if (valueDeclaration) {
           var initExpr: ExpressionRef;
           if (valueDeclaration.value) {
             initExpr = this.compileExpression(<Expression>valueDeclaration.value, Type.i32);
@@ -519,25 +516,26 @@ export class Compiler extends DiagnosticEmitter {
           }
         } else
           throw new Error("declaration expected");
-        if (element.declaration && isModuleExport(element, element.declaration) && !initInStart)
-          this.module.addGlobalExport(member.internalName, member.internalName);
         previousValue = <EnumValue>val;
+
+        // export values if the enum is exported
+        if (element.declaration && element.declaration.range.source.isEntry && element.declaration.isTopLevelExport) {
+          if (member.hasConstantValue)
+            this.module.addGlobalExport(member.internalName, member.internalName);
+          else if (valueDeclaration)
+            this.warning(DiagnosticCode.Cannot_export_a_mutable_global, valueDeclaration.range);
+        }
       }
     return true;
   }
 
   // functions
 
-  compileFunctionDeclaration(declaration: FunctionDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
-    var internalName = declaration.internalName;
-    var element = this.program.elements.get(internalName);
+  compileFunctionDeclaration(declaration: FunctionDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Function | null {
+    var element = this.program.elements.get(declaration.fileLevelInternalName);
     if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE)
       throw new Error("function expected");
-    var instance = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode); // reports
-    if (!instance)
-      return;
-    if (isModuleExport(instance, declaration))
-      this.module.addFunctionExport(instance.internalName, declaration.name.name);
+    return this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode); // reports
   }
 
   compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Function | null {
@@ -606,6 +604,9 @@ export class Compiler extends DiagnosticEmitter {
       this.module.addFunction(instance.internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
     }
     instance.finalize();
+    if (declaration.range.source.isEntry && declaration.isTopLevelExport) {
+      this.module.addFunctionExport(instance.internalName, declaration.name.name);
+    }
     return true;
   }
 
@@ -709,19 +710,25 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case ElementKind.FUNCTION_PROTOTYPE:
-          if (!(<FunctionPrototype>element).isGeneric) {
+          if (!(<FunctionPrototype>element).isGeneric && statement.range.source.isEntry) {
             var functionInstance = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
-            if (functionInstance && statement.range.source.isEntry)
-              this.module.addFunctionExport(functionInstance.internalName, member.externalIdentifier.name);
+            if (functionInstance) {
+              var functionDeclaration = functionInstance.prototype.declaration;
+              if (functionDeclaration && functionDeclaration.needsExplicitExport(member))
+                this.module.addFunctionExport(functionInstance.internalName, member.externalIdentifier.name);
+            }
           }
           break;
 
         case ElementKind.GLOBAL:
           if (this.compileGlobal(<Global>element) && statement.range.source.isEntry) {
-            if ((<Global>element).hasConstantValue)
-              this.module.addGlobalExport(element.internalName, member.externalIdentifier.name);
-            else
-              this.warning(DiagnosticCode.Cannot_export_a_mutable_global, member.range);
+            var globalDeclaration = (<Global>element).declaration;
+            if (globalDeclaration && globalDeclaration.needsExplicitExport(member)) {
+              if ((<Global>element).hasConstantValue)
+                  this.module.addGlobalExport(element.internalName, member.externalIdentifier.name);
+              else
+                this.warning(DiagnosticCode.Cannot_export_a_mutable_global, member.range);
+            }
           }
           break;
 
@@ -735,8 +742,7 @@ export class Compiler extends DiagnosticEmitter {
   // classes
 
   compileClassDeclaration(declaration: ClassDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
-    var internalName = declaration.internalName;
-    var element = this.program.elements.get(internalName);
+    var element = this.program.elements.get(declaration.fileLevelInternalName);
     if (!element || element.kind != ElementKind.CLASS_PROTOTYPE)
       throw new Error("class expected");
     this.compileClassUsingTypeArguments(<ClassPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode);
@@ -3062,26 +3068,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
-/** Tests whether an element is a module-level export from the entry file. */
-function isModuleExport(element: Element, declaration: DeclarationStatement): bool {
-  if (!element.isExported)
-    return false;
-  var parentNode = declaration.parent;
-  if (!parentNode)
-    return false;
-  if (declaration.range.source.isEntry && parentNode.kind != NodeKind.NAMESPACEDECLARATION)
-    return true;
-  if (parentNode.kind == NodeKind.VARIABLE)
-    if (!(parentNode = parentNode.parent))
-      return false;
-  if (parentNode.kind != NodeKind.NAMESPACEDECLARATION && parentNode.kind != NodeKind.CLASSDECLARATION)
-    return false;
-  var parent = element.program.elements.get((<DeclarationStatement>parentNode).internalName);
-  if (!parent)
-    return false;
-  return isModuleExport(parent, <DeclarationStatement>parentNode);
-}
 
 /** Creates an inlined expression of a constant variable-like element. */
 function makeInlineConstant(element: VariableLikeElement, module: Module): ExpressionRef {

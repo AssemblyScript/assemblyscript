@@ -20,7 +20,10 @@ A few early examples to get an idea:
   A PSON decoder implemented in AssemblyScript.
 
 * **[TLSF memory allocator](./examples/tlsf)**<br />
-  An early port of TLSF to AssemblyScript.
+  An port of TLSF to AssemblyScript.
+
+* **[μgc garbage collector](./examples/ugc)**<br />
+  An port of μgc to AssemblyScript.
 
 Or browse the [compiler tests](./tests/compiler) for a more in-depth overview of what's supported already. One of them is a [showcase](./tests/compiler/showcase.ts).
 

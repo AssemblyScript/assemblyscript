@@ -1,4 +1,4 @@
-tlsf.ts is based on:
+tlsf.ts is based on https://github.com/mattconte/tlsf
 
 Two Level Segregated Fit memory allocator, version 3.1.
 Written by Matthew Conte

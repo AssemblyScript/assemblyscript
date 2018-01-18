@@ -180,7 +180,7 @@ export abstract class DiagnosticEmitter {
     this.diagnostics.push(message);
     if (!this.silentDiagnostics) {
       console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
-      console.log(<string>new Error("stack").stack);
+      // console.log(<string>new Error("stack").stack);
     }
   }
 
