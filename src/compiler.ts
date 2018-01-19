@@ -1,11 +1,8 @@
 import {
   compileCall as compileBuiltinCall,
-  compileGetConstant as compileBuiltinGetConstant
+  compileGetConstant as compileBuiltinGetConstant,
+  compileAllocate as compileBuiltinAllocate
 } from "./builtins";
-
-import {
-  PATH_DELIMITER
-} from "./constants";
 
 import {
   DiagnosticCode,
@@ -45,7 +42,8 @@ import {
   VariableLikeElement,
   Flow,
   FlowFlags,
-  ElementFlags
+  ElementFlags,
+  PATH_DELIMITER
 } from "./program";
 
 import {
@@ -146,6 +144,10 @@ export class Options {
   noAssert: bool = false;
   /** If true, does not set up a memory. */
   noMemory: bool = false;
+  /** Memory allocation implementation to use. */
+  allocateImpl: string = "allocate_memory";
+  /** Memory freeing implementation to use. */
+  freeImpl: string = "free_memory";
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -545,15 +547,15 @@ export class Compiler extends DiagnosticEmitter {
       return true;
 
     var declaration = instance.prototype.declaration;
-    if (!declaration)
-      throw new Error("declaration expected"); // built-ins are not compiled here
 
     if (instance.is(ElementFlags.DECLARED)) {
-      if (declaration.statements) {
+      if (declaration && declaration.statements) {
         this.error(DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts, declaration.name.range);
         return false;
       }
     } else {
+      if (!declaration)
+        throw new Error("declaration expected"); // built-ins are not compiled here
       if (!declaration.statements) {
         this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.name.range);
         return false;
@@ -566,6 +568,7 @@ export class Compiler extends DiagnosticEmitter {
     // compile statements
     var stmts: ExpressionRef[] | null = null;
     if (!instance.is(ElementFlags.DECLARED)) {
+      declaration = assert(declaration);
       var previousFunction = this.currentFunction;
       this.currentFunction = instance;
       var statements = assert(declaration.statements);
@@ -601,12 +604,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // create the function
     if (instance.is(ElementFlags.DECLARED)) {
-      this.module.addFunctionImport(instance.internalName, instance.prototype.namespace ? instance.prototype.namespace.simpleName : "env", declaration.name.name, typeRef);
+      this.module.addFunctionImport(instance.internalName, instance.prototype.namespace ? instance.prototype.namespace.simpleName : "env", instance.simpleName, typeRef);
     } else {
       this.module.addFunction(instance.internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
     }
     instance.finalize();
-    if (declaration.range.source.isEntry && declaration.isTopLevelExport) {
+    if (declaration && declaration.range.source.isEntry && declaration.isTopLevelExport) {
       this.module.addFunctionExport(instance.internalName, declaration.name.name);
     }
     return true;
@@ -2637,7 +2640,8 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeCall(functionInstance, operands);
   }
 
-  private makeCall(functionInstance: Function, operands: ExpressionRef[] | null = null): ExpressionRef {
+  /** Makes a call operation as is. */
+  makeCall(functionInstance: Function, operands: ExpressionRef[] | null = null): ExpressionRef {
     if (!(functionInstance.is(ElementFlags.COMPILED) || this.compileFunction(functionInstance)))
       return this.module.createUnreachable();
 
@@ -2791,7 +2795,20 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileNewExpression(expression: NewExpression, contextualType: Type): ExpressionRef {
-    throw new Error("not implemented");
+    var resolved = this.program.resolveExpression(expression.expression, this.currentFunction); // reports
+    if (resolved) {
+      if (resolved.element.kind == ElementKind.CLASS_PROTOTYPE) {
+        var prototype = <ClassPrototype>resolved.element;
+        var instance = prototype.resolveInclTypeArguments(expression.typeArguments, null, expression); // reports
+        if (instance) {
+          // TODO: call constructor
+          this.currentType = instance.type;
+          return compileBuiltinAllocate(this, instance, expression);
+        }
+      } else
+        this.error(DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature, expression.expression.range);
+    }
+    return this.module.createUnreachable();
   }
 
   compileParenthesizedExpression(expression: ParenthesizedExpression, contextualType: Type): ExpressionRef {

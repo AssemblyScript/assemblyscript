@@ -2,7 +2,7 @@ import {
   PATH_DELIMITER,
   STATIC_DELIMITER,
   INSTANCE_DELIMITER
-} from "./constants";
+} from "./program";
 
 import {
   Token,
@@ -1508,16 +1508,6 @@ export function hasDecorator(name: string, decorators: Decorator[] | null): bool
   return getFirstDecorator(name, decorators) != null;
 }
 
-/** Mangles a path to an internal path. */
-export function mangleInternalPath(path: string): string {
-  // not necessary with current config
-  // if (PATH_DELIMITER.charCodeAt(0) != CharCode.SLASH)
-  //   path = path.replace("/", PATH_DELIMITER);
-  // if (PARENT_SUBST != "..")
-  //   path = path.replace("..", PARENT_SUBST);
-  return path;
-}
-
 /** Mangles a declaration's name to an internal name. */
 export function mangleInternalName(declaration: DeclarationStatement, asGlobal: bool = false): string {
   var name = declaration.name.name;
@@ -1534,4 +1524,14 @@ export function mangleInternalName(declaration: DeclarationStatement, asGlobal: 
   if (asGlobal)
     return name;
   return declaration.range.source.internalPath + PATH_DELIMITER + name;
+}
+
+/** Mangles an external to an internal path. */
+export function mangleInternalPath(path: string): string {
+  // not necessary with current config
+  // if (PATH_DELIMITER.charCodeAt(0) != CharCode.SLASH)
+  //   path = path.replace("/", PATH_DELIMITER);
+  // if (PARENT_SUBST != "..")
+  //   path = path.replace("..", PARENT_SUBST);
+  return path;
 }

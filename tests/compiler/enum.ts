@@ -24,6 +24,6 @@ function getZero(): i32 {
 }
 
 export enum NonConstant {
-  ZERO = getZero(),
-  ONE
+  ZERO = getZero(), // cannot export a mutable global
+  ONE               // cannot export a mutable global (tsc doesn't allow this)
 }

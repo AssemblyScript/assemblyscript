@@ -7,14 +7,6 @@ import {
 } from "./compiler";
 
 import {
-  PATH_DELIMITER,
-  GETTER_PREFIX,
-  SETTER_PREFIX,
-  STATIC_DELIMITER,
-  INSTANCE_DELIMITER
-} from "./constants";
-
-import {
   DiagnosticCode,
   DiagnosticMessage,
   DiagnosticEmitter
@@ -80,6 +72,19 @@ import {
 import {
   NativeType
 } from "./module";
+
+/** Path delimiter inserted between file system levels. */
+export const PATH_DELIMITER = "/";
+/** Substitution used to indicate the parent directory. */
+export const PARENT_SUBST = "..";
+/** Function name prefix used for getters. */
+export const GETTER_PREFIX = "get:";
+/** Function name prefix used for setters. */
+export const SETTER_PREFIX = "set:";
+/** Delimiter used between class names and instance members. */
+export const INSTANCE_DELIMITER = "#";
+/** Delimiter used between class and namespace names and static members. */
+export const STATIC_DELIMITER = ".";
 
 class QueuedExport {
   isReExport: bool;
