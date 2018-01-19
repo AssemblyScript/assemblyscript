@@ -34,20 +34,6 @@
     )
    )
   )
-  (drop
-   (select
-    (tee_local $2
-     (i32.const 1)
-    )
-    (tee_local $3
-     (i32.const 2)
-    )
-    (i32.lt_s
-     (get_local $2)
-     (get_local $3)
-    )
-   )
-  )
   (set_global $builtins/i
    (i32.const 31)
   )
@@ -90,9 +76,7 @@
     (tee_local $2
      (i32.const 1)
     )
-    (tee_local $3
-     (i32.const 2)
-    )
+    (i32.const 2)
     (i32.gt_s
      (get_local $2)
      (get_local $3)
@@ -108,12 +92,8 @@
   )
   (set_global $builtins/i
    (select
-    (tee_local $2
-     (i32.const 1)
-    )
-    (tee_local $3
-     (i32.const 2)
-    )
+    (i32.const 1)
+    (i32.const 2)
     (i32.lt_s
      (get_local $2)
      (get_local $3)
@@ -187,12 +167,8 @@
   )
   (set_global $builtins/I
    (select
-    (tee_local $4
-     (i64.const 1)
-    )
-    (tee_local $5
-     (i64.const 2)
-    )
+    (i64.const 1)
+    (i64.const 2)
     (i64.lt_s
      (get_local $4)
      (get_local $5)
@@ -251,9 +227,7 @@
    (select
     (f32.ne
      (f32.abs
-      (tee_local $0
-       (f32.const 1.25)
-      )
+      (f32.const 1.25)
      )
      (f32.const inf)
     )
@@ -309,9 +283,7 @@
    (select
     (f64.ne
      (f64.abs
-      (tee_local $1
-       (f64.const 1.25)
-      )
+      (f64.const 1.25)
      )
      (f64.const inf)
     )

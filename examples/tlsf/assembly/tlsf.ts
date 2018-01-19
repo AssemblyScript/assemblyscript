@@ -35,7 +35,7 @@ class BlockHeader {
   static readonly OVERHEAD: usize = sizeof<usize>();
 
   // User data starts directly after the size field in a used block.
-  static readonly USERDATA_OFFSET: usize = sizeof<usize>() + sizeof<usize>();
+  static readonly DATA_OFFSET: usize = sizeof<usize>() + sizeof<usize>();
 
   // A free block must be large enough to store its header minus the size of
   // the prev_phys_block field, and no larger than the number of addressable
@@ -88,12 +88,12 @@ class BlockHeader {
   }
 
   /** Tags this block as 'free'. Careful: Does not update adjacent blocks. */
-  tagFree(): void {
+  tagAsFree(): void {
     this.tagged_size |= BlockHeader.FREE_BIT;
   }
 
   /** Tags this block as 'used'. Careful: Does not update adjacent blocks. */
-  tagUsed(): void {
+  tagAsUsed(): void {
     this.tagged_size &= ~BlockHeader.FREE_BIT;
   }
 
@@ -103,23 +103,23 @@ class BlockHeader {
   }
 
   /** Tags this block as 'prev is free'. Does not update adjacent blocks. */
-  tagPrevFree(): void {
+  tagAsPrevFree(): void {
     this.tagged_size |= BlockHeader.PREV_FREE_BIT;
   }
 
   /** Tags this block as 'prev is used'. Does not update adjacent blocks. */
-  tagPrevUsed(): void {
+  tagAsPrevUsed(): void {
     this.tagged_size &= ~BlockHeader.PREV_FREE_BIT;
   }
 
   /** Gets the block header matching the specified data pointer. */
   static fromDataPtr(ptr: usize): BlockHeader {
-    return changetype<BlockHeader>(ptr - BlockHeader.USERDATA_OFFSET);
+    return changetype<BlockHeader>(ptr - BlockHeader.DATA_OFFSET);
   }
 
   /** Returns the address of this block's data. */
   toDataPtr(): usize {
-    return changetype<usize>(this) + BlockHeader.USERDATA_OFFSET;
+    return changetype<usize>(this) + BlockHeader.DATA_OFFSET;
   }
 
   /** Gets the next block after this one using the specified size. */
@@ -158,15 +158,15 @@ class BlockHeader {
   /** Marks this block as being 'free'. */
   markAsFree(): void {
     var next = this.linkNext(); // Link the block to the next block, first.
-    next.tagPrevFree();
-    this.tagFree();
+    next.tagAsPrevFree();
+    this.tagAsFree();
   }
 
   /** Marks this block as being 'used'. */
   markAsUsed(): void {
     var next = this.next;
-    next.tagPrevUsed();
-    this.tagUsed();
+    next.tagAsPrevUsed();
+    this.tagAsUsed();
   }
 
   /** Tests if this block can be splitted. */
@@ -174,7 +174,7 @@ class BlockHeader {
     return this.size >= BlockHeader.SIZE + size;
   }
 
-  /* Splits a block into two, the second of which is free. */
+  /** Splits a block into two, the second of which is free. */
   split(size: usize): BlockHeader {
     // Calculate the amount of space left in the remaining block.
     var remain = BlockHeader.fromOffset(
@@ -194,7 +194,7 @@ class BlockHeader {
     return remain;
   }
 
-  /* Absorb a free block's storage into this (adjacent previous) free block. */
+  /** Absorb a free block's storage into this (adjacent previous) free block. */
   absorb(block: BlockHeader): void {
     assert(!this.isLast,
       "previous block can't be last"
@@ -205,7 +205,7 @@ class BlockHeader {
   }
 }
 
-/* The TLSF control structure. */
+/** The TLSF control structure. */
 @explicit
 class Control extends BlockHeader { // Empty lists point here, indicating free
 
@@ -289,7 +289,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     this.insertFreeBlock(block, fl_out, sl_out);
   }
 
-  /* Inserts a free block into the free block list. */
+  /** Inserts a free block into the free block list. */
   insertFreeBlock(block: BlockHeader, fl: i32, sl: i32): void {
     var current = this.blocks(fl, sl);
     assert(current,
@@ -311,7 +311,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     this.sl_bitmap_set(fl, this.sl_bitmap(fl) | (1 << sl))
   }
 
-  /* Removes a free block from the free list.*/
+  /** Removes a free block from the free list.*/
   removeFreeBlock(block: BlockHeader, fl: i32, sl: i32): void {
     var prev = block.prev_free;
     var next = block.next_free;
@@ -377,7 +377,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     if (block.canSplit(size)) {
       var remaining_block = block.split(size);
       block.linkNext();
-      remaining_block.tagPrevFree();
+      remaining_block.tagAsPrevFree();
       this.insertBlock(remaining_block);
     }
   }
@@ -393,7 +393,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     if (block.canSplit(size)) {
       // If the next block is free, we must coalesce.
       var remaining_block = block.split(size);
-      remaining_block.tagPrevUsed();
+      remaining_block.tagAsPrevUsed();
       remaining_block = this.mergeNextBlock(remaining_block);
       this.insertBlock(remaining_block);
     }
@@ -403,7 +403,7 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     var remaining_block = block;
     if (block.canSplit(size)) {
       remaining_block = block.split(size - BlockHeader.OVERHEAD);
-      remaining_block.tagPrevFree();
+      remaining_block.tagAsPrevFree();
       block.linkNext();
       this.insertBlock(block);
     }
@@ -481,15 +481,15 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     // it will never be used.
     var block = BlockHeader.fromOffset(mem, -BlockHeader.OVERHEAD);
     block.size = pool_bytes;
-    block.tagFree();
-    block.tagPrevUsed();
+    block.tagAsFree();
+    block.tagAsPrevUsed();
     this.insertBlock(block);
 
     // Split the block to create a zero-size sentinel block.
     var next = block.linkNext();
     next.size = 0;
-    next.tagUsed();
-    next.tagPrevFree();
+    next.tagAsUsed();
+    next.tagAsPrevFree();
   }
 }
 
@@ -541,7 +541,7 @@ function fls<T>(word: T): i32 {
   return (<i32>sizeof<T>() << 3) - 1 - <i32>clz(word);
 }
 
-var fl_out: i32, sl_out: i32;
+let fl_out: i32, sl_out: i32;
 
 function mapping_insert(size: usize): void {
   var fl: i32, sl: i32;
@@ -585,7 +585,7 @@ function find_suitable_block(control: Control, fl: i32, sl: i32): BlockHeader {
 
 // Exported interface
 
-var TLSF: Control;
+let TLSF: Control;
 
 /** Requests more memory from the host environment. */
 function request_memory(size: usize): void {
@@ -711,8 +711,8 @@ function check(): i32 {
   return status;
 }
 
-var integrity_prev_status: i32;
-var integrity_status: i32;
+let integrity_prev_status: i32,
+    integrity_status: i32;
 
 function integrity_walker(ptr: usize, size: usize, used: bool): void {
   var block = BlockHeader.fromDataPtr(ptr);
@@ -749,4 +749,4 @@ function check_pool(pool: usize): i32 {
   return integrity_status;
 }
 
-// export { check, check_pool }; // Uncomment to enable in tests/index.js
+export { check, check_pool }; // Uncomment to enable in tests/index.js

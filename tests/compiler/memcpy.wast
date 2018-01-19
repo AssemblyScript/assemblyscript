@@ -13,10 +13,8 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (block
-   (set_local $3
-    (get_local $0)
-   )
+  (set_local $3
+   (get_local $0)
   )
   (nop)
   (block $break|0

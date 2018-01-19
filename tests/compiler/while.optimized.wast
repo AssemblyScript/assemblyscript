@@ -132,9 +132,7 @@
         (i32.const 1)
        )
       )
-      (tee_local $0
-       (get_local $0)
-      )
+      (get_local $0)
      )
      (block (result i32)
       (set_global $while/m

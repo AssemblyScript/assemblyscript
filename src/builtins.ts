@@ -36,7 +36,8 @@ import {
   Program,
   Global,
   FunctionPrototype,
-  Local
+  Local,
+  ElementFlags
 } from "./program";
 
 /** Initializes the specified program with built-in constants and functions. */
@@ -152,8 +153,8 @@ export function initialize(program: Program): void {
 /** Adds a built-in constant to the specified program. */
 function addConstant(program: Program, name: string, type: Type): Global {
   var global = new Global(program, name, name, null, type);
-  global.isBuiltIn = true;
-  global.isConstant = true;
+  global.set(ElementFlags.BUILTIN);
+  global.set(ElementFlags.CONSTANT);
   program.elements.set(name, global);
   return global;
 }
@@ -161,9 +162,9 @@ function addConstant(program: Program, name: string, type: Type): Global {
 /** Adds a built-in function to the specified program. */
 function addFunction(program: Program, name: string, isGeneric: bool = false): FunctionPrototype {
   var prototype = new FunctionPrototype(program, name, name, null, null);
-  prototype.isBuiltIn = true;
+  prototype.set(ElementFlags.BUILTIN);
   if (isGeneric)
-    prototype.isGeneric = true;
+    prototype.set(ElementFlags.GENERIC);
   program.elements.set(name, prototype);
   return prototype;
 }

@@ -33,9 +33,6 @@
    )
    (unreachable)
   )
-  (set_local $0
-   (i32.const 0)
-  )
   (loop $continue|1
    (if
     (i32.lt_s

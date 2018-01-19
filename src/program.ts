@@ -110,7 +110,7 @@ export class Program extends DiagnosticEmitter {
   types: Map<string,Type> = noTypesYet;
   /** Declared type aliases. */
   typeAliases: Map<string,TypeNode> = new Map();
-  /** Exports of individual files by internal name. Not global exports. */
+  /** Exports of individual files by exported internal name. Not global exports. */
   exports: Map<string,Element> = new Map();
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
@@ -272,7 +272,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private checkGlobalAlias(element: Element, declaration: DeclarationStatement) {
-    if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(declaration.parent).kind == NodeKind.SOURCE && element.isExported)) {
+    if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(declaration.parent).kind == NodeKind.SOURCE && element.is(ElementFlags.EXPORTED))) {
       if (this.elements.has(declaration.name.name))
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, element.internalName);
       else {
@@ -283,7 +283,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeClass(declaration: ClassDeclaration, queuedDerivedClasses: ClassPrototype[], namespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -317,7 +317,7 @@ export class Program extends DiagnosticEmitter {
       namespace.members.set(declaration.name.name, prototype);
 
     // otherwise add to file-level exports if exported
-    } else if (prototype.isExported) {
+    } else if (prototype.is(ElementFlags.EXPORTED)) {
       if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
@@ -351,17 +351,17 @@ export class Program extends DiagnosticEmitter {
 
   private initializeField(declaration: FieldDeclaration, classPrototype: ClassPrototype): void {
     var name = declaration.name.name;
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
 
     // static fields become global variables
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
       if (this.elements.has(internalName)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         return;
       }
       if (classPrototype.members) {
         if (classPrototype.members.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -374,7 +374,7 @@ export class Program extends DiagnosticEmitter {
     } else {
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -386,19 +386,19 @@ export class Program extends DiagnosticEmitter {
 
   private initializeMethod(declaration: MethodDeclaration, classPrototype: ClassPrototype): void {
     var name = declaration.name.name;
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     var instancePrototype: FunctionPrototype | null = null;
 
     // static methods become global functions
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
 
       if (this.elements.has(internalName)) {
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         return;
       }
       if (classPrototype.members) {
         if (classPrototype.members.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -411,7 +411,7 @@ export class Program extends DiagnosticEmitter {
     } else {
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
@@ -470,7 +470,7 @@ export class Program extends DiagnosticEmitter {
 
   private initializeAccessor(declaration: MethodDeclaration, classPrototype: ClassPrototype, isGetter: bool): void {
     var propertyName = declaration.name.name;
-    var internalPropertyName = declaration.internalName;
+    var internalPropertyName = declaration.fileLevelInternalName;
 
     var propertyElement = this.elements.get(internalPropertyName);
     if (propertyElement) {
@@ -505,7 +505,7 @@ export class Program extends DiagnosticEmitter {
       var internalInstanceName = classPrototype.internalName + INSTANCE_DELIMITER + name;
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, declaration.internalName);
+          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalPropertyName);
           return;
         }
       } else
@@ -521,7 +521,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeEnum(declaration: EnumDeclaration, namespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -541,7 +541,7 @@ export class Program extends DiagnosticEmitter {
       } else
         namespace.members = new Map();
       namespace.members.set(declaration.name.name, enm);
-    } else if (enm.isExported) {
+    } else if (enm.is(ElementFlags.EXPORTED)) {
       if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
@@ -556,7 +556,7 @@ export class Program extends DiagnosticEmitter {
 
   private initializeEnumValue(declaration: EnumValueDeclaration, enm: Enum): void {
     var name = declaration.name.name;
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (enm.members) {
       if (enm.members.has(name)) {
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
@@ -649,7 +649,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeFunction(declaration: FunctionDeclaration, namespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -669,7 +669,7 @@ export class Program extends DiagnosticEmitter {
       } else
         namespace.members = new Map();
       namespace.members.set(declaration.name.name, prototype);
-    } else if (prototype.isExported) {
+    } else if (prototype.is(ElementFlags.EXPORTED)) {
       if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
@@ -694,7 +694,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeImport(declaration: ImportDeclaration, internalPath: string, queuedExports: Map<string,QueuedExport>, queuedImports: QueuedImport[]): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -739,7 +739,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeInterface(declaration: InterfaceDeclaration, namespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
     if (this.elements.has(internalName)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
@@ -759,7 +759,7 @@ export class Program extends DiagnosticEmitter {
       } else
         namespace.members = new Map();
       namespace.members.set(prototype.internalName, prototype);
-    } else if (prototype.isExported) {
+    } else if (prototype.is(ElementFlags.EXPORTED)) {
       if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
@@ -791,7 +791,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeNamespace(declaration: NamespaceDeclaration, queuedExtendingClasses: ClassPrototype[], parentNamespace: Element | null = null): void {
-    var internalName = declaration.internalName;
+    var internalName = declaration.fileLevelInternalName;
 
     var namespace = this.elements.get(internalName);
     if (!namespace) {
@@ -810,7 +810,7 @@ export class Program extends DiagnosticEmitter {
       } else
         parentNamespace.members = new Map();
       parentNamespace.members.set(declaration.name.name, namespace);
-    } else if (namespace.isExported) {
+    } else if (namespace.is(ElementFlags.EXPORTED)) {
       if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
         return;
@@ -873,7 +873,7 @@ export class Program extends DiagnosticEmitter {
     var declarations = statement.declarations;
     for (var i = 0, k = declarations.length; i < k; ++i) {
       var declaration = declarations[i];
-      var internalName = declaration.internalName;
+      var internalName = declaration.fileLevelInternalName;
       if (this.elements.has(internalName)) {
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         continue;
@@ -884,7 +884,7 @@ export class Program extends DiagnosticEmitter {
       this.elements.set(internalName, global);
 
       // differs a bit from this.checkGlobalAlias in that it checks the statement's parent
-      if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(statement.parent).kind == NodeKind.SOURCE && global.isExported)) {
+      if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(statement.parent).kind == NodeKind.SOURCE && global.is(ElementFlags.EXPORTED))) {
         if (this.elements.has(declaration.name.name))
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         else
@@ -900,7 +900,7 @@ export class Program extends DiagnosticEmitter {
         } else
           namespace.members = new Map();
         namespace.members.set(declaration.name.name, global);
-      } else if (global.isExported) {
+      } else if (global.is(ElementFlags.EXPORTED)) {
         if (this.exports.has(internalName))
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
         else
@@ -994,8 +994,9 @@ export class Program extends DiagnosticEmitter {
     var namespace: Element | null;
 
     if (contextualFunction) {
+
       // check locals
-      var local = contextualFunction.locals.get(name);
+      var local = contextualFunction.flow.getScopedLocal(name);
       if (local)
         return (resolvedElement || (resolvedElement = new ResolvedElement())).set(local);
 
@@ -1228,8 +1229,8 @@ export enum ElementFlags {
   GENERIC = 1 << 5,
   /** Is constant. */
   CONSTANT = 1 << 6,
-  /** Has constant value. */
-  CONSTANT_VALUE = 1 << 7,
+  /** Has a constant value and is therefore inlined. */
+  INLINED = 1 << 7,
   /** Is instance member. */
   INSTANCE = 1 << 8,
   /** Is getter. */
@@ -1251,7 +1252,9 @@ export enum ElementFlags {
   /** Is an explicitly layed out and allocated class with limited capabilites. */
   EXPLICIT = 1 << 17,
   /** Has already inherited base class static members. */
-  HAS_STATIC_BASE_MEMBERS = 1 << 18
+  HAS_STATIC_BASE_MEMBERS = 1 << 18,
+  /** Is scoped. */
+  SCOPED = 1 << 19
 }
 
 /** Base class of all program elements. */
@@ -1279,49 +1282,11 @@ export abstract class Element {
     this.internalName = internalName;
   }
 
-  /** Whether compiled or not. */
-  get isCompiled(): bool { return (this.flags & ElementFlags.COMPILED) != 0; }
-  set isCompiled(is: bool) { if (is) this.flags |= ElementFlags.COMPILED; else this.flags &= ~ElementFlags.COMPILED; }
+  /** Tests if this element has a specific flag or flags. */
+  is(flag: ElementFlags): bool { return (this.flags & flag) == flag; }
 
-  /** Whether imported or not. */
-  get isImported(): bool { return (this.flags & ElementFlags.IMPORTED) != 0; }
-  set isImported(is: bool) { if (is) this.flags |= ElementFlags.IMPORTED; else this.flags &= ~ElementFlags.IMPORTED; }
-
-  /** Whether exported or not. */
-  get isExported(): bool { return (this.flags & ElementFlags.EXPORTED) != 0; }
-  set isExported(is: bool) { if (is) this.flags |= ElementFlags.EXPORTED; else this.flags &= ~ElementFlags.EXPORTED; }
-
-  /** Whether built-in or not. */
-  get isBuiltIn(): bool { return (this.flags & ElementFlags.BUILTIN) != 0; }
-  set isBuiltIn(is: bool) { if (is) this.flags |= ElementFlags.BUILTIN; else this.flags &= ~ElementFlags.BUILTIN; }
-
-  /** Whether declared or not. */
-  get isDeclared(): bool { return (this.flags & ElementFlags.DECLARED) != 0; }
-  set isDeclared(is: bool) { if (is) this.flags |= ElementFlags.DECLARED; else this.flags &= ~ElementFlags.DECLARED; }
-
-  /** Whether generic or not. */
-  get isGeneric(): bool { return (this.flags & ElementFlags.GENERIC) != 0; }
-  set isGeneric(is: bool) { if (is) this.flags |= ElementFlags.GENERIC; else this.flags &= ~ElementFlags.GENERIC; }
-
-  /** Whether constant or not. */
-  get isConstant(): bool { return (this.flags & ElementFlags.CONSTANT) != 0; }
-  set isConstant(is: bool) { if (is) this.flags |= ElementFlags.CONSTANT; else this.flags &= ~ElementFlags.CONSTANT; }
-
-  /** Whether mutable or not. */
-  get isMutable(): bool { return !(this.flags & ElementFlags.CONSTANT); } // reuses constant flag
-  set isMutable(is: bool) { if (is) this.flags &= ~ElementFlags.CONSTANT; else this.flags |= ElementFlags.CONSTANT; }
-
-  /** Whether this element has a constant value or not. */
-  get hasConstantValue(): bool { return (this.flags & ElementFlags.CONSTANT_VALUE) != 0; }
-  set hasConstantValue(is: bool) { if (is) this.flags |= ElementFlags.CONSTANT_VALUE; else this.flags &= ~ElementFlags.CONSTANT_VALUE; }
-
-  /** Whether an instance member or not. */
-  get isInstance(): bool { return (this.flags & ElementFlags.INSTANCE) != 0; }
-  set isInstance(is: bool) { if (is) this.flags |= ElementFlags.INSTANCE; else this.flags &= ~ElementFlags.INSTANCE; }
-
-  /** Whether a member of the global namespace or not. */
-  get isGlobal(): bool { return (this.flags & ElementFlags.GLOBAL) != 0; }
-  set isGlobal(is: bool) { if (is) this.flags |= ElementFlags.GLOBAL; else this.flags &= ~ElementFlags.GLOBAL; }
+  /** Sets a specific flag or flags. */
+  set(flag: ElementFlags): void { this.flags |= flag; }
 }
 
 /** A namespace. */
@@ -1339,9 +1304,9 @@ export class Namespace extends Element {
     if ((this.declaration = declaration) && this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.IMPORT: this.isImported = true; break;
-          case ModifierKind.EXPORT: this.isExported = true; break;
-          case ModifierKind.DECLARE: this.isDeclared = true; break;
+          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
+          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
           default: throw new Error("unexpected modifier");
         }
       }
@@ -1363,10 +1328,10 @@ export class Enum extends Element {
     if ((this.declaration = declaration) && this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.EXPORT: this.isExported = true; break;
-          case ModifierKind.IMPORT: this.isImported = true; break;
-          case ModifierKind.DECLARE: this.isDeclared = true; break;
-          case ModifierKind.CONST: this.isConstant = true; break;
+          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
+          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+          case ModifierKind.CONST: this.set(ElementFlags.CONSTANT); break;
           default: throw new Error("unexpected modifier");
         }
       }
@@ -1408,15 +1373,13 @@ export class VariableLikeElement extends Element {
 
   withConstantIntegerValue(lo: i32, hi: i32): this {
     this.constantIntegerValue = new I64(lo, hi);
-    this.hasConstantValue = true;
-    this.isMutable = false;
+    this.set(ElementFlags.CONSTANT | ElementFlags.INLINED);
     return this;
   }
 
   withConstantFloatValue(value: f64): this {
     this.constantFloatValue = value;
-    this.hasConstantValue = true;
-    this.isMutable = false;
+    this.set(ElementFlags.CONSTANT | ElementFlags.INLINED);
     return this;
   }
 }
@@ -1432,18 +1395,19 @@ export class Global extends VariableLikeElement {
       if (this.declaration.modifiers) {
         for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
           switch (this.declaration.modifiers[i].modifierKind) {
-            case ModifierKind.IMPORT: this.isImported = true; break;
-            case ModifierKind.EXPORT: this.isExported = true; break;
-            case ModifierKind.CONST: this.isConstant = true; break;
-            case ModifierKind.DECLARE: this.isDeclared = true; break;
-            case ModifierKind.READONLY: this.isConstant = true; break;
+            case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
+            case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+            case ModifierKind.CONST: this.set(ElementFlags.CONSTANT); break;
+            case ModifierKind.LET: this.set(ElementFlags.SCOPED); break;
+            case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+            case ModifierKind.READONLY: this.set(this.declaration.initializer ? ElementFlags.CONSTANT | ElementFlags.READONLY : ElementFlags.READONLY); break;
             case ModifierKind.STATIC: break; // static fields become globals
             default: throw new Error("unexpected modifier");
           }
         }
       }
     } else {
-      this.hasConstantValue = true; // built-ins have constant values
+      this.set(ElementFlags.CONSTANT | ElementFlags.INLINED); // built-ins have constant values
     }
     this.type = type; // resolved later if `void`
   }
@@ -1505,11 +1469,11 @@ export class FunctionPrototype extends Element {
       if (this.declaration.modifiers)
         for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
           switch (this.declaration.modifiers[i].modifierKind) {
-            case ModifierKind.IMPORT: this.isImported = true; break;
-            case ModifierKind.EXPORT: this.isExported = true; break;
-            case ModifierKind.DECLARE: this.isDeclared = true; break;
-            case ModifierKind.GET: this.isGetter = true; break;
-            case ModifierKind.SET: this.isSetter = true; break;
+            case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
+            case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+            case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+            case ModifierKind.GET: this.set(ElementFlags.GETTER); break;
+            case ModifierKind.SET: this.set(ElementFlags.SETTER); break;
             case ModifierKind.STATIC:
             case ModifierKind.ABSTRACT:
             case ModifierKind.PRIVATE:
@@ -1519,10 +1483,10 @@ export class FunctionPrototype extends Element {
           }
         }
       if (this.declaration.typeParameters.length)
-        this.isGeneric = true;
+        this.set(ElementFlags.GENERIC);
     }
     if (this.classPrototype = classPrototype)
-      this.isInstance = true;
+      this.set(ElementFlags.INSTANCE);
   }
 
   /** Whether a getter function or not. */
@@ -1629,7 +1593,7 @@ export class FunctionPrototype extends Element {
 
   resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Function | null {
     var resolvedTypeArguments: Type[] | null = null;
-    if (this.isGeneric) {
+    if (this.is(ElementFlags.GENERIC)) {
       assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
       if (!this.declaration)
         throw new Error("cannot resolve built-ins");
@@ -1678,6 +1642,8 @@ export class Function extends Element {
   breakContext: string | null = null;
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
+  /** Current control flow. */
+  flow: Flow;
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
@@ -1693,7 +1659,7 @@ export class Function extends Element {
     this.flags = prototype.flags;
     var localIndex = 0;
     if (instanceMethodOf) {
-      assert(this.isInstance); // internal error
+      assert(this.is(ElementFlags.INSTANCE)); // internal error
       this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));
       if (instanceMethodOf.contextualTypeArguments) {
         if (!this.contextualTypeArguments)
@@ -1702,18 +1668,19 @@ export class Function extends Element {
           this.contextualTypeArguments.set(inheritedName, inheritedType);
       }
     } else
-      assert(!this.isInstance); // internal error
+      assert(!this.is(ElementFlags.INSTANCE)); // internal error
     for (var i = 0, k = parameters.length; i < k; ++i) {
       var parameter = parameters[i];
       this.locals.set(parameter.name, new Local(prototype.program, parameter.name, localIndex++, parameter.type));
     }
+    this.flow = Flow.create(this);
   }
 
   /** Adds a local of the specified type, with an optional name. */
   addLocal(type: Type, name: string | null = null): Local {
     // if it has a name, check previously as this method will throw otherwise
     var localIndex = this.parameters.length + this.additionalLocals.length;
-    if (this.isInstance) localIndex++; // plus 'this'
+    if (this.is(ElementFlags.INSTANCE)) localIndex++; // plus 'this'
     var local = new Local(this.prototype.program, name ? name : "anonymous$" + localIndex.toString(10), localIndex, type);
     if (name) {
       if (this.locals.has(name))
@@ -1831,8 +1798,8 @@ export class FieldPrototype extends Element {
     if ((this.declaration = declaration) && this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.EXPORT: this.isExported = true; break;
-          case ModifierKind.READONLY: this.isReadonly = true; break;
+          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+          case ModifierKind.READONLY: this.set(ElementFlags.READONLY); break;
           case ModifierKind.PRIVATE:
           case ModifierKind.PROTECTED:
           case ModifierKind.PUBLIC:
@@ -1915,15 +1882,15 @@ export class ClassPrototype extends Element {
       if (this.declaration.modifiers) {
         for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
           switch (this.declaration.modifiers[i].modifierKind) {
-            case ModifierKind.IMPORT: this.isImported = true; break;
-            case ModifierKind.EXPORT: this.isExported = true; break;
-            case ModifierKind.DECLARE: this.isDeclared = true; break;
+            case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
+            case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+            case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
             default: throw new Error("unexpected modifier");
           }
         }
       }
       if (this.declaration.typeParameters.length)
-        this.isGeneric = true;
+        this.set(ElementFlags.GENERIC);
     }
   }
 
@@ -2050,7 +2017,7 @@ export class ClassPrototype extends Element {
 
   resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Class | null {
     var resolvedTypeArguments: Type[] | null = null;
-    if (this.isGeneric) {
+    if (this.is(ElementFlags.GENERIC)) {
       assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
       if (!this.declaration)
         throw new Error("cannot resolve built-ins");
@@ -2151,5 +2118,110 @@ export class Interface extends Class {
   /** Constructs a new interface. */
   constructor(prototype: InterfacePrototype, internalName: string, typeArguments: Type[] = [], base: Interface | null = null) {
     super(prototype, internalName, typeArguments, base);
+  }
+}
+
+/** Control flow flags indicating specific conditions. */
+export const enum FlowFlags {
+  /** No specific conditions. */
+  NONE = 0,
+  /** This branch always returns. */
+  RETURNS = 1 << 0,
+  /** This branch possibly throws. */
+  POSSIBLY_THROWS = 1 << 1,
+}
+
+/** A control flow evaluator. */
+export class Flow {
+
+  /** Parent flow. */
+  parent: Flow | null;
+  /** Flow flags indicating specific conditions. */
+  flags: FlowFlags;
+  /** Function this flow belongs to. */
+  currentFunction: Function;
+  /** The label we break to when encountering a continue statement. */
+  continueLabel: string | null;
+  /** The label we break to when encountering a break statement. */
+  breakLabel: string | null;
+  /** Scoped local variables. */
+  scopedLocals: Map<string,Local> | null = null;
+
+  /** Creates the parent flow of the specified function. */
+  static create(currentFunction: Function): Flow {
+    var parentFlow = new Flow();
+    parentFlow.parent = null;
+    parentFlow.flags = FlowFlags.NONE;
+    parentFlow.currentFunction = currentFunction;
+    parentFlow.continueLabel = null;
+    parentFlow.breakLabel = null;
+    return parentFlow;
+  }
+
+  private constructor() { }
+
+  /** Tests if this flow has the specified flag or flags. */
+  is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
+
+  /** Sets the specified flag or flags. */
+  set(flag: FlowFlags): void { this.flags |= flag; }
+
+  /** Enters a new branch or scope and returns the new flow. */
+  enterBranchOrScope(): Flow {
+    var branchFlow = new Flow();
+    branchFlow.parent = this;
+    branchFlow.flags = this.flags;
+    branchFlow.currentFunction = this.currentFunction;
+    branchFlow.continueLabel = this.continueLabel;
+    branchFlow.breakLabel = this.breakLabel;
+    return branchFlow;
+  }
+
+  /** Leaves the current branch or scope and returns the parent flow. */
+  leaveBranchOrScope(): Flow {
+    var parent = assert(this.parent);
+    if (this.scopedLocals) {
+      for (var scopedLocal of this.scopedLocals.values())
+        this.currentFunction.freeTempLocal(scopedLocal);
+      this.scopedLocals = null;
+    }
+    // Mark parent as THROWS if any child throws
+    if (this.is(FlowFlags.POSSIBLY_THROWS))
+       parent.set(FlowFlags.POSSIBLY_THROWS);
+
+    this.continueLabel = null;
+    this.breakLabel = null;
+    return parent;
+  }
+
+  /** Adds a new scoped local of the specified name. */
+  addScopedLocal(name: string, type: Type, reportNode: Node): void {
+    var scopedLocal = this.currentFunction.getTempLocal(type);
+    if (!this.scopedLocals)
+      this.scopedLocals = new Map();
+    else if (this.scopedLocals.has(name)) {
+      this.currentFunction.program.error(DiagnosticCode.Duplicate_identifier_0, reportNode.range);
+      return;
+    }
+    this.scopedLocals.set(name, scopedLocal);
+  }
+
+  /** Gets the local of the specified name in the current scope. */
+  getScopedLocal(name: string): Local | null {
+    var local: Local | null;
+    var current: Flow | null = this;
+    do {
+      if (current.scopedLocals && (local = current.scopedLocals.get(name)))
+        return local;
+    } while (current = current.parent);
+    return this.currentFunction.locals.get(name);
+  }
+
+  /** Finalizes this flow. Must be the topmost parent flow of the function. */
+  finalize(): bool {
+    assert(this.parent == null, "must be the topmost parent flow");
+    this.continueLabel = null;
+    this.breakLabel = null;
+    return this.is(FlowFlags.RETURNS);
   }
 }

@@ -22,35 +22,23 @@
   (local $3 i32)
   (local $4 i64)
   (local $5 f64)
-  (block
-   (set_local $0
-    (i32.const 10)
-   )
+  (set_local $0
+   (i32.const 10)
   )
-  (block
-   (set_local $1
-    (i64.const 4294967296)
-   )
+  (set_local $1
+   (i64.const 4294967296)
   )
-  (block
-   (set_local $2
-    (f64.const 1.5)
-   )
+  (set_local $2
+   (f64.const 1.5)
   )
-  (block
-   (set_local $3
-    (i32.const 10)
-   )
+  (set_local $3
+   (i32.const 10)
   )
-  (block
-   (set_local $4
-    (i64.const 4294967296)
-   )
+  (set_local $4
+   (i64.const 4294967296)
   )
-  (block
-   (set_local $5
-    (f64.const 1.5)
-   )
+  (set_local $5
+   (f64.const 1.5)
   )
  )
  (func $infer-type/reti (; 1 ;) (type $i) (result i32)
@@ -126,7 +114,9 @@
       (get_local $1)
      )
      (block
-      (nop)
+      (block
+       (nop)
+      )
       (set_local $0
        (i32.add
         (get_local $0)

@@ -1,5 +1,5 @@
-TLSF
-====
+TLSF memory allocator
+=====================
 
 A port of [Matt Conte's implementation](https://github.com/mattconte/tlsf) of the [TLSF](http://www.gii.upv.es/tlsf/) memory allocator to AssemblyScript.
 

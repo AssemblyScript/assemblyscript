@@ -3,15 +3,17 @@
  (type $v (func))
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
+ (global $export/c i32 (i32.const 3))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "add" (func $export/add))
- (export "renamed_sub" (func $export/sub))
+ (export "sub" (func $export/sub))
+ (export "renamed_mul" (func $export/mul))
  (export "a" (global $export/a))
- (export "renamed_b" (global $export/b))
+ (export "b" (global $export/b))
+ (export "renamed_c" (global $export/c))
  (export "two" (func $export/ns.two))
  (export "memory" (memory $0))
- (start $start)
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (i32.add
@@ -28,12 +30,15 @@
    )
   )
  )
- (func $export/ns.two (; 2 ;) (type $v)
- )
- (func $start (; 3 ;) (type $v)
-  (drop
-   (i32.const 2)
+ (func $export/mul (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (return
+   (i32.mul
+    (get_local $0)
+    (get_local $1)
+   )
   )
+ )
+ (func $export/ns.two (; 3 ;) (type $v)
  )
 )
 (;
@@ -82,15 +87,19 @@
   GLOBAL: HEAP_BASE
   FUNCTION_PROTOTYPE: export/add
   FUNCTION_PROTOTYPE: export/sub
+  FUNCTION_PROTOTYPE: export/mul
   GLOBAL: export/a
   GLOBAL: export/b
+  GLOBAL: export/c
   NAMESPACE: export/ns
   FUNCTION_PROTOTYPE: export/ns.one
   FUNCTION_PROTOTYPE: export/ns.two
 [program.exports]
   FUNCTION_PROTOTYPE: export/add
-  FUNCTION_PROTOTYPE: export/renamed_sub
+  FUNCTION_PROTOTYPE: export/sub
+  FUNCTION_PROTOTYPE: export/renamed_mul
   GLOBAL: export/a
-  GLOBAL: export/renamed_b
+  GLOBAL: export/b
+  GLOBAL: export/renamed_c
   NAMESPACE: export/ns
 ;)

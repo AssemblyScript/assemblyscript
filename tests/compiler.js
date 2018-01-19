@@ -51,13 +51,19 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   var program = parser.finish();
   var parseTime = process.hrtime(startTime);
   startTime = process.hrtime();
-  var module = Compiler.compile(program);
+  var module;
+  try {
+    module = Compiler.compile(program);
+  } catch (e) {
+    failed = true;
+    module = Module.create();
+    console.log(chalk.red("compile ERROR: ") + e.stack);
+  }
   var compileTime = process.hrtime(startTime);
   var actual = module.toText() + "(;\n[program.elements]\n  " + elements(program.elements)
                                +   "\n[program.exports]\n  "  + elements(program.exports)
                                + "\n;)\n";
   var actualOptimized = null;
-  var actualInlined = null;
 
   console.log("parse incl. I/O: " + ((parseTime[0] * 1e9 + parseTime[1]) / 1e6).toFixed(3) + "ms / compile: " + ((compileTime[0] * 1e9 + compileTime[1]) / 1e6).toFixed(3) + "ms");
 
@@ -65,7 +71,10 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   if (module.validate()) {
     console.log(chalk.green("validate OK"));
     try {
-      // module.interpret();
+      // already covered by instantiate below, which is also able to use imports, but doesn't
+      // provide as much debugging information. might be necessary to remove this one once imports
+      // are tested more.
+      module.interpret();
       console.log(chalk.green("interpret OK"));
       try {
         var binary = module.toBinary();
@@ -87,16 +96,14 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
         console.log(chalk.green("instantiate OK"));
       } catch (e) {
         failed = true;
-        console.log(chalk.red("instantiate ERROR: ") + e);
+        console.log(chalk.red("instantiate ERROR: ") + e.stack);
       }
     } catch (e) {
       failed = true;
-      console.log(chalk.red("interpret ERROR:") + e);
+      console.log(chalk.red("interpret ERROR:") + e.stack);
     }
     module.optimize();
     actualOptimized = module.toText();
-    module.runPasses([ "inlining" ]);
-    actualInlined = module.toText();
     if (isCreate)
       fs.writeFileSync(__dirname + "/compiler/" + fixture + ".optimized.wasm", module.toBinary());
   } else {
@@ -110,17 +117,6 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
     if (actualOptimized != null) {
       fs.writeFileSync(__dirname + "/compiler/" + fixture + ".optimized.wast", actualOptimized, { encoding: "utf8" });
       console.log("Created optimized");
-    }
-    if (actualInlined != null) {
-      if (actualInlined != actualOptimized) {
-        fs.writeFileSync(__dirname + "/compiler/" + fixture + ".optimized-inlined.wast", actualInlined, { encoding: "utf8" });
-        console.log("Created optimized & inlined");
-      } else {
-        try {
-          fs.unlinkSync(__dirname + "/compiler/" + fixture + ".optimized-inlined.wast");
-          console.log("Deleted optimized & inlined");
-        } catch (e) {}
-      }
     }
   } else {
     var expected;

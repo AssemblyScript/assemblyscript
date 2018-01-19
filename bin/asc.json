@@ -10,9 +10,28 @@
     "aliases": [ "h" ]
   },
   "optimize": {
-    "desc": "Optimizes the module.",
+    "desc": [
+      "Optimizes the module. Also accepts the optimize level:",
+      "",
+      " -O     Uses defaults. Equivalent to -O2s",
+      " -O0    Equivalent to --optimizeLevel 0",
+      " -O1    Equivalent to --optimizeLevel 1",
+      " -O2    Equivalent to --optimizeLevel 2",
+      " -O3    Equivalent to --optimizeLevel 3",
+      " -Oz    Equivalent to -O but with --shrinkLevel 2",
+      " -O3s   Equivalent to -O3 with --shrinkLevel 1 etc.",
+      ""
+    ],
     "type": "boolean",
     "aliases": [ "O" ]
+  },
+  "optimizeLevel": {
+    "desc": "How much to focus on optimizing code. [0-3]",
+    "type": "number"
+  },
+  "shrinkLevel": {
+    "desc": "How much to focus on shrinking code size. [0-2]",
+    "type": "number"
   },
   "validate": {
     "desc": "Validates the module.",
@@ -20,31 +39,39 @@
     "aliases": [ "c", "check" ]
   },
   "outFile": {
-    "desc": "Specifies the output file. Format is determined by file extension.",
+    "desc": "Specifies the output file. File extension indicates format.",
     "type": "string",
     "aliases": [ "o" ]
   },
   "binaryFile": {
-    "desc": "Specifies the binary format output file (.wasm).",
+    "desc": "Specifies the binary output file (.wasm).",
     "type": "string",
     "aliases": [ "b" ]
   },
   "textFile": {
-    "desc": "Specifies the text format output file (.wast).",
+    "desc": "Specifies the text output file (.wast).",
     "type": "string",
     "aliases": [ "t" ]
   },
   "asmjsFile": {
-    "desc": "Specifies the asm.js format output file (.js).",
+    "desc": "Specifies the asm.js output file (.js).",
     "type": "string",
     "aliases": [ "a" ]
   },
   "noTreeShaking": {
-    "desc": "Disables tree-shaking.",
+    "desc": "Disables compiler-level tree-shaking.",
+    "type": "boolean"
+  },
+  "noDebug": {
+    "desc": "Disables maintaining debug information in binaries.",
     "type": "boolean"
   },
   "noAssert": {
-    "desc": "Disables assertions.",
+    "desc": "Replaces assertions with NOPs.",
+    "type": "boolean"
+  },
+  "noEmit": {
+    "desc": "Performs compilation as usual without emitting code.",
     "type": "boolean"
   },
   "noLib": {
@@ -58,15 +85,24 @@
   "trapMode": {
     "desc": [
       "Sets the trap mode to use.",
+      "",
       " allow  Allow trapping operations. This is the default.",
       " clamp  Replace trapping operations with clamping semantics.",
-      " js     Replace trapping operations with JS semantics."
+      " js     Replace trapping operations with JS semantics.",
+      ""
     ],
     "type": "string",
     "default": "allow"
   },
   "runPasses": {
-    "desc": "Specifies additional Binaryen passes to run.",
+    "desc":  [
+      "Specifies additional Binaryen passes to run after other",
+      "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
+    ],
     "type": "string"
+  },
+  "measure": {
+    "desc": "Prints measuring information on I/O and compile times.",
+    "type": "boolean"
   }
 }

@@ -1,7 +1,5 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiv (func (param i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iv (func (param i32)))
  (type $v (func))
@@ -10,8 +8,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $tlsf/fls (; 0 ;) (type $ii) (param $0 i32) (result i32)
-  (if (result i32)
-   (get_local $0)
+  (select
    (i32.sub
     (i32.const 31)
     (i32.clz
@@ -19,67 +16,19 @@
     )
    )
    (i32.const -1)
+   (get_local $0)
   )
  )
  (func $tlsf/ffs (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (if (result i32)
-   (get_local $0)
+  (select
    (i32.ctz
     (get_local $0)
    )
    (i32.const -1)
+   (get_local $0)
   )
  )
- (func $tlsf/block$set_next_free (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 8)
-   )
-   (get_local $1)
-  )
- )
- (func $tlsf/block$set_prev_free (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 12)
-   )
-   (get_local $1)
-  )
- )
- (func $tlsf/control$set_fl_bitmap (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (i32.store
-   (i32.add
-    (get_local $0)
-    (i32.const 16)
-   )
-   (get_local $1)
-  )
- )
- (func $tlsf/control$set_sl_bitmap (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (if
-   (i32.ge_u
-    (get_local $1)
-    (i32.const 23)
-   )
-   (unreachable)
-  )
-  (i32.store
-   (i32.add
-    (i32.add
-     (get_local $0)
-     (i32.const 20)
-    )
-    (i32.mul
-     (get_local $1)
-     (i32.const 4)
-    )
-   )
-   (get_local $2)
-  )
- )
- (func $tlsf/control$set_block (; 6 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $tlsf/control$set_block (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (if
    (i32.ge_u
     (get_local $1)
@@ -114,55 +63,92 @@
    (get_local $3)
   )
  )
- (func $tlsf/control$construct (; 7 ;) (type $iv) (param $0 i32)
+ (func $tlsf/control$construct (; 3 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (call $tlsf/block$set_next_free
-   (get_local $0)
-   (get_local $0)
+  (local $3 i32)
+  (i32.store
+   (i32.add
+    (tee_local $3
+     (get_local $0)
+    )
+    (i32.const 8)
+   )
+   (tee_local $1
+    (get_local $0)
+   )
   )
-  (call $tlsf/block$set_prev_free
-   (get_local $0)
-   (get_local $0)
+  (i32.store
+   (i32.add
+    (tee_local $3
+     (get_local $0)
+    )
+    (i32.const 12)
+   )
+   (tee_local $1
+    (get_local $0)
+   )
   )
-  (call $tlsf/control$set_fl_bitmap
-   (get_local $0)
-   (i32.const 0)
-  )
-  (set_local $1
+  (i32.store
+   (i32.add
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 16)
+   )
    (i32.const 0)
   )
   (loop $continue|0
    (if
     (i32.lt_u
-     (get_local $1)
+     (get_local $2)
      (i32.const 23)
     )
     (block
-     (call $tlsf/control$set_sl_bitmap
+     (set_local $3
       (get_local $0)
-      (get_local $1)
+     )
+     (if
+      (i32.ge_u
+       (tee_local $1
+        (get_local $2)
+       )
+       (i32.const 23)
+      )
+      (unreachable)
+     )
+     (i32.store
+      (i32.add
+       (i32.add
+        (get_local $3)
+        (i32.const 20)
+       )
+       (i32.mul
+        (get_local $1)
+        (i32.const 4)
+       )
+      )
       (i32.const 0)
      )
-     (set_local $2
+     (set_local $1
       (i32.const 0)
      )
      (loop $continue|1
       (if
        (i32.lt_u
-        (get_local $2)
+        (get_local $1)
         (i32.const 32)
        )
        (block
         (call $tlsf/control$set_block
          (get_local $0)
-         (get_local $1)
          (get_local $2)
+         (get_local $1)
          (get_local $0)
         )
-        (set_local $2
+        (set_local $1
          (i32.add
-          (get_local $2)
+          (get_local $1)
           (i32.const 1)
          )
         )
@@ -170,9 +156,9 @@
        )
       )
      )
-     (set_local $1
+     (set_local $2
       (i32.add
-       (get_local $1)
+       (get_local $2)
        (i32.const 1)
       )
      )
@@ -181,7 +167,7 @@
    )
   )
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 4 ;) (type $v)
   (if
    (i32.ne
     (call $tlsf/fls

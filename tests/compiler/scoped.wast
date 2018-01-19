@@ -1,29 +1,32 @@
 (module
  (type $v (func))
- (global $for/i (mut i32) (i32.const 0))
+ (global $scoped/aGlobal (mut i32) (i32.const 1))
+ (global $scoped/aConstant i32 (i32.const 3))
+ (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i64)
+  (local $3 f32)
   (block $break|0
-   (set_global $for/i
+   (set_local $0
     (i32.const 0)
    )
    (loop $continue|0
     (if
      (i32.lt_s
-      (get_global $for/i)
-      (i32.const 10)
+      (get_local $0)
+      (i32.const 1)
      )
      (block
-      (block
-       (nop)
-      )
-      (set_global $for/i
+      (nop)
+      (set_local $0
        (i32.add
-        (get_global $for/i)
+        (get_local $0)
         (i32.const 1)
        )
       )
@@ -32,32 +35,23 @@
     )
    )
   )
-  (if
-   (i32.eqz
-    (i32.eq
-     (get_global $for/i)
-     (i32.const 10)
-    )
-   )
-   (unreachable)
-  )
   (block $break|1
-   (set_local $0
+   (set_local $1
     (i32.const 0)
    )
    (loop $continue|1
     (if
      (i32.lt_s
-      (get_local $0)
-      (i32.const 10)
+      (get_local $1)
+      (i32.const 1)
      )
      (block
-      (block
-       (nop)
+      (drop
+       (get_local $1)
       )
-      (set_local $0
+      (set_local $1
        (i32.add
-        (get_local $0)
+        (get_local $1)
         (i32.const 1)
        )
       )
@@ -66,84 +60,13 @@
     )
    )
   )
-  (block $break|2
-   (nop)
-   (loop $continue|2
-    (if
-     (i32.gt_s
-      (get_global $for/i)
-      (i32.const 0)
-     )
-     (block
-      (nop)
-      (set_global $for/i
-       (i32.sub
-        (get_global $for/i)
-        (i32.const 1)
-       )
-      )
-      (br $continue|2)
-     )
-    )
+  (block
+   (set_local $2
+    (i64.const 5)
    )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (get_global $for/i)
-     (i32.const 0)
-    )
-   )
-   (unreachable)
-  )
-  (block $break|3
-   (nop)
-   (loop $continue|3
-    (if
-     (i32.const 1)
-     (block
-      (if
-       (i32.eq
-        (get_global $for/i)
-        (i32.const 10)
-       )
-       (br $break|3)
-      )
-      (set_global $for/i
-       (i32.add
-        (get_global $for/i)
-        (i32.const 1)
-       )
-      )
-      (br $continue|3)
-     )
-    )
-   )
-  )
-  (block $break|4
-   (nop)
-   (loop $continue|4
-    (if
-     (i32.const 1)
-     (block
-      (if
-       (i32.eq
-        (block (result i32)
-         (set_global $for/i
-          (i32.sub
-           (get_global $for/i)
-           (i32.const 1)
-          )
-         )
-         (get_global $for/i)
-        )
-        (i32.const 0)
-       )
-       (br $break|4)
-      )
-      (nop)
-      (br $continue|4)
-     )
+   (block
+    (set_local $3
+     (f32.const 10)
     )
    )
   )
@@ -193,7 +116,9 @@
   FUNCTION_PROTOTYPE: isize
   FUNCTION_PROTOTYPE: usize
   GLOBAL: HEAP_BASE
-  GLOBAL: for/i
+  GLOBAL: scoped/aGlobal
+  GLOBAL: scoped/aConstant
+  GLOBAL: scoped/aStartFunctionLocal
 [program.exports]
   
 ;)

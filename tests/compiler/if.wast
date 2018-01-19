@@ -6,6 +6,7 @@
  (export "ifThenElse" (func $if/ifThenElse))
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElseBlock))
+ (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
  (export "memory" (memory $0))
  (start $start)
  (func $if/ifThenElse (; 0 ;) (type $ii) (param $0 i32) (result i32)
@@ -47,7 +48,16 @@
    )
   )
  )
- (func $start (; 3 ;) (type $v)
+ (func $if/ifAlwaysReturns (; 3 ;) (type $ii) (param $0 i32) (result i32)
+  (if
+   (get_local $0)
+   (return
+    (i32.const 1)
+   )
+   (unreachable)
+  )
+ )
+ (func $start (; 4 ;) (type $v)
   (if
    (i32.eqz
     (i32.eq
@@ -163,8 +173,10 @@
   FUNCTION_PROTOTYPE: if/ifThenElse
   FUNCTION_PROTOTYPE: if/ifThen
   FUNCTION_PROTOTYPE: if/ifThenElseBlock
+  FUNCTION_PROTOTYPE: if/ifAlwaysReturns
 [program.exports]
   FUNCTION_PROTOTYPE: if/ifThenElse
   FUNCTION_PROTOTYPE: if/ifThen
   FUNCTION_PROTOTYPE: if/ifThenElseBlock
+  FUNCTION_PROTOTYPE: if/ifAlwaysReturns
 ;)

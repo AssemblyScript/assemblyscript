@@ -42,7 +42,10 @@ import {
   Parameter,
   EnumValue,
   Property,
-  VariableLikeElement
+  VariableLikeElement,
+  Flow,
+  FlowFlags,
+  ElementFlags
 } from "./program";
 
 import {
@@ -112,6 +115,7 @@ import {
   Type,
   TypeKind,
   TypeFlags,
+
   typesToNativeTypes
 } from "./types";
 
@@ -136,8 +140,6 @@ export enum Target {
 export class Options {
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
-  /** If true, performs compilation as usual but doesn't produce any output (all calls to module become nops). */
-  noEmit: bool = false;
   /** If true, compiles everything instead of just reachable code. */
   noTreeShaking: bool = false;
   /** If true, replaces assertions with nops. */
@@ -168,17 +170,13 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Start function being compiled. */
   startFunction: Function;
-  /** Start function expressions. */
+  /** Start function statements. */
   startFunctionBody: ExpressionRef[] = new Array();
 
-  /** Current type in compilation. */
-  currentType: Type = Type.void;
   /** Current function in compilation. */
   currentFunction: Function;
-  /** Marker indicating whether continue statements are allowed in the current break context. */
-  disallowContinue: bool = true;
-  /** Marker indicating that a new variable, if present, is always a local. Used to distinguish locals from globals in the start function. */
-  variableIsLocal: bool = false;
+  /** Current type in compilation. */
+  currentType: Type = Type.void;
 
   /** Counting memory offset. */
   memoryOffset: U64 = new U64(8, 0); // leave space for (any size of) NULL
@@ -199,7 +197,7 @@ export class Compiler extends DiagnosticEmitter {
     this.program = program;
     this.options = options ? options : new Options();
     this.memoryOffset = new U64(this.options.target == Target.WASM64 ? 8 : 4, 0); // leave space for `null`
-    this.module = this.options.noEmit ? Module.createStub() : Module.create();
+    this.module = Module.create();
 
     // set up start function
     var startFunctionTemplate = new FunctionPrototype(program, "start", "start", null);
@@ -299,8 +297,10 @@ export class Compiler extends DiagnosticEmitter {
             this.compileNamespaceDeclaration(<NamespaceDeclaration>statement);
           break;
 
-        case NodeKind.VARIABLE: // global
-          this.compileVariableStatement(<VariableStatement>statement); // always because initializers might have side effects
+        case NodeKind.VARIABLE: // global, always compiled because initializers might have side effects
+          var variableInit = this.compileVariableStatement(<VariableStatement>statement);
+          if (variableInit)
+            this.startFunctionBody.push(variableInit);
           break;
 
         case NodeKind.EXPORT:
@@ -315,8 +315,7 @@ export class Compiler extends DiagnosticEmitter {
           var previousFunction = this.currentFunction;
           this.currentFunction = this.startFunction;
           var expr = this.compileStatement(statement);
-          if (!this.module.noEmit)
-            this.startFunctionBody.push(expr);
+          this.startFunctionBody.push(expr);
           this.currentFunction = previousFunction;
           break;
       }
@@ -325,23 +324,17 @@ export class Compiler extends DiagnosticEmitter {
 
   // globals
 
-  compileGlobalDeclaration(declaration: VariableDeclaration, isConst: bool): Global | null {
-    var element = this.program.elements.get(declaration.internalName);
+  compileGlobalDeclaration(declaration: VariableDeclaration): Global | null {
+    var element = this.program.elements.get(declaration.fileLevelInternalName);
     if (!element || element.kind != ElementKind.GLOBAL)
       throw new Error("global expected");
     if (!this.compileGlobal(<Global>element)) // reports
       return null;
-    if (isModuleExport(element, declaration)) {
-      if ((<Global>element).hasConstantValue)
-        this.module.addGlobalExport(element.internalName, declaration.name.name);
-      else
-        this.warning(DiagnosticCode.Cannot_export_a_mutable_global, declaration.range);
-    }
     return <Global>element;
   }
 
   compileGlobal(global: Global): bool {
-    if (global.isCompiled || global.isBuiltIn)
+    if (global.is(ElementFlags.COMPILED) || global.is(ElementFlags.BUILTIN))
       return true;
 
     var declaration = global.declaration;
@@ -375,10 +368,10 @@ export class Compiler extends DiagnosticEmitter {
 
     var nativeType = global.type.toNativeType();
 
-    if (global.isDeclared) {
-      if (global.isConstant) {
+    if (global.is(ElementFlags.DECLARED)) {
+      if (global.is(ElementFlags.CONSTANT)) {
         this.module.addGlobalImport(global.internalName, global.namespace ? global.namespace.simpleName : "env", global.simpleName, nativeType);
-        global.isCompiled = true;
+        global.set(ElementFlags.COMPILED);
         return true;
       } else if (declaration) {
         this.error(DiagnosticCode.Operation_not_supported, declaration.range);
@@ -388,14 +381,14 @@ export class Compiler extends DiagnosticEmitter {
 
     var initializeInStart = false;
 
-    if (global.hasConstantValue) {
+    if (global.is(ElementFlags.INLINED)) {
       initExpr = makeInlineConstant(global, this.module);
     } else if (declaration) {
       if (declaration.initializer) {
         if (!initExpr)
           initExpr = this.compileExpression(declaration.initializer, global.type);
-        if (!this.module.noEmit && _BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
-          if (!global.isMutable) {
+        if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+          if (global.is(ElementFlags.CONSTANT)) {
             initExpr = this.precomputeExpressionRef(initExpr);
             if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
               this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
@@ -413,59 +406,60 @@ export class Compiler extends DiagnosticEmitter {
     if (initializeInStart) {
       this.module.addGlobal(internalName, nativeType, true, global.type.toNativeZero(this.module));
       var setExpr = this.module.createSetGlobal(internalName, initExpr);
-      if (!this.module.noEmit)
-        this.startFunctionBody.push(setExpr);
+      this.startFunctionBody.push(setExpr);
     } else {
-      // TODO: not necessary to create a global if constant and not a file-level export anyway
-      if (!global.isMutable) {
-        if (!this.module.noEmit) {
-          var exprType = _BinaryenExpressionGetType(initExpr);
-          switch (exprType) {
+      if (global.is(ElementFlags.CONSTANT)) {
+        var exprType = _BinaryenExpressionGetType(initExpr);
+        switch (exprType) {
 
-            case NativeType.I32:
-              global.constantIntegerValue = new I64(_BinaryenConstGetValueI32(initExpr), 0);
-              break;
+          case NativeType.I32:
+            global.constantIntegerValue = new I64(_BinaryenConstGetValueI32(initExpr), 0);
+            break;
 
-            case NativeType.I64:
-              global.constantIntegerValue = new I64(_BinaryenConstGetValueI64Low(initExpr), _BinaryenConstGetValueI64High(initExpr));
-              break;
+          case NativeType.I64:
+            global.constantIntegerValue = new I64(_BinaryenConstGetValueI64Low(initExpr), _BinaryenConstGetValueI64High(initExpr));
+            break;
 
-            case NativeType.F32:
-              global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
-              break;
+          case NativeType.F32:
+            global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
+            break;
 
-            case NativeType.F64:
-              global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
-              break;
+          case NativeType.F64:
+            global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
+            break;
 
-            default:
-              throw new Error("concrete type expected");
-          }
-          global.hasConstantValue = true;
-          if (!declaration || isModuleExport(global, declaration))
-            this.module.addGlobal(internalName, nativeType, global.isMutable, initExpr);
+          default:
+            throw new Error("concrete type expected");
         }
-      } else if (!this.module.noEmit)
-        this.module.addGlobal(internalName, nativeType, global.isMutable, initExpr);
+        global.set(ElementFlags.INLINED);
+        if (!declaration || declaration.isTopLevel) { // might be re-exported
+          this.module.addGlobal(internalName, nativeType, !global.is(ElementFlags.CONSTANT), initExpr);
+        }
+        if (declaration && declaration.range.source.isEntry && declaration.isTopLevelExport)
+          this.module.addGlobalExport(global.internalName, declaration.programLevelInternalName);
+      } else
+        this.module.addGlobal(internalName, nativeType, !global.is(ElementFlags.CONSTANT), initExpr);
     }
-    global.isCompiled = true;
+    global.set(ElementFlags.COMPILED);
     return true;
   }
 
   // enums
 
-  compileEnumDeclaration(declaration: EnumDeclaration): void {
-    var element = this.program.elements.get(declaration.internalName);
+  compileEnumDeclaration(declaration: EnumDeclaration): Enum | null {
+    var element = this.program.elements.get(declaration.fileLevelInternalName);
     if (!element || element.kind != ElementKind.ENUM)
       throw new Error("enum expected");
-    this.compileEnum(<Enum>element);
+    return this.compileEnum(<Enum>element) ? <Enum>element : null;
   }
 
   compileEnum(element: Enum): bool {
-    if (element.isCompiled)
+    if (element.is(ElementFlags.COMPILED))
       return true;
 
-    element.isCompiled = true; // members might reference each other, triggering another compile
+    // members might reference each other, triggering another compile
+    element.set(ElementFlags.COMPILED);
+
     var previousValue: EnumValue | null = null;
     if (element.members)
       for (var member of element.members.values()) {
@@ -473,24 +467,25 @@ export class Compiler extends DiagnosticEmitter {
           continue;
         var initInStart = false;
         var val = <EnumValue>member;
-        if (val.hasConstantValue) {
-          this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
-        } else if (val.declaration) {
-          var valueDeclaration = val.declaration;
+        var valueDeclaration = val.declaration;
+        if (val.is(ElementFlags.INLINED)) {
+          if (!element.declaration || element.declaration.isTopLevelExport)
+            this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
+        } else if (valueDeclaration) {
           var initExpr: ExpressionRef;
           if (valueDeclaration.value) {
             initExpr = this.compileExpression(<Expression>valueDeclaration.value, Type.i32);
-            if (!this.module.noEmit && _BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+            if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
               initExpr = this.precomputeExpressionRef(initExpr);
               if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
-                if (element.isConstant)
+                if (element.is(ElementFlags.CONSTANT))
                   this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, valueDeclaration.range);
                 initInStart = true;
               }
             }
           } else if (previousValue == null) {
             initExpr = this.module.createI32(0);
-          } else if (previousValue.hasConstantValue) {
+          } else if (previousValue.is(ElementFlags.INLINED)) {
             initExpr = this.module.createI32(previousValue.constantValue + 1);
           } else {
             // in TypeScript this errors with TS1061, but actually we can do:
@@ -498,46 +493,44 @@ export class Compiler extends DiagnosticEmitter {
               this.module.createGetGlobal(previousValue.internalName, NativeType.I32),
               this.module.createI32(1)
             );
-            if (element.isConstant)
+            if (element.is(ElementFlags.CONSTANT))
               this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, valueDeclaration.range);
             initInStart = true;
           }
           if (initInStart) {
             this.module.addGlobal(val.internalName, NativeType.I32, true, this.module.createI32(0));
             var setExpr = this.module.createSetGlobal(val.internalName, initExpr);
-            if (!this.module.noEmit)
-              this.startFunctionBody.push(setExpr);
+            this.startFunctionBody.push(setExpr);
           } else {
             this.module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
-            if (!this.module.noEmit) {
-              if (_BinaryenExpressionGetType(initExpr) == NativeType.I32) {
-                val.constantValue = _BinaryenConstGetValueI32(initExpr);
-                val.hasConstantValue = true;
-              } else
-                throw new Error("i32 expected");
-            }
+            if (_BinaryenExpressionGetType(initExpr) == NativeType.I32) {
+              val.constantValue = _BinaryenConstGetValueI32(initExpr);
+              val.set(ElementFlags.INLINED);
+            } else
+              throw new Error("i32 expected");
           }
         } else
           throw new Error("declaration expected");
-        if (element.declaration && isModuleExport(element, element.declaration) && !initInStart)
-          this.module.addGlobalExport(member.internalName, member.internalName);
         previousValue = <EnumValue>val;
+
+        // export values if the enum is exported
+        if (element.declaration && element.declaration.range.source.isEntry && element.declaration.isTopLevelExport) {
+          if (member.is(ElementFlags.INLINED))
+            this.module.addGlobalExport(member.internalName, member.internalName);
+          else if (valueDeclaration)
+            this.warning(DiagnosticCode.Cannot_export_a_mutable_global, valueDeclaration.range);
+        }
       }
     return true;
   }
 
   // functions
 
-  compileFunctionDeclaration(declaration: FunctionDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
-    var internalName = declaration.internalName;
-    var element = this.program.elements.get(internalName);
+  compileFunctionDeclaration(declaration: FunctionDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Function | null {
+    var element = this.program.elements.get(declaration.fileLevelInternalName);
     if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE)
       throw new Error("function expected");
-    var instance = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode); // reports
-    if (!instance)
-      return;
-    if (isModuleExport(instance, declaration))
-      this.module.addFunctionExport(instance.internalName, declaration.name.name);
+    return this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode); // reports
   }
 
   compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): Function | null {
@@ -548,14 +541,14 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileFunction(instance: Function): bool {
-    if (instance.isCompiled)
+    if (instance.is(ElementFlags.COMPILED))
       return true;
 
     var declaration = instance.prototype.declaration;
     if (!declaration)
       throw new Error("declaration expected"); // built-ins are not compiled here
 
-    if (instance.isDeclared) {
+    if (instance.is(ElementFlags.DECLARED)) {
       if (declaration.statements) {
         this.error(DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts, declaration.name.range);
         return false;
@@ -566,14 +559,21 @@ export class Compiler extends DiagnosticEmitter {
         return false;
       }
     }
-    instance.isCompiled = true;
+
+    // might trigger compilation of other functions referring to this one
+    instance.set(ElementFlags.COMPILED);
 
     // compile statements
     var stmts: ExpressionRef[] | null = null;
-    if (!instance.isDeclared) {
+    if (!instance.is(ElementFlags.DECLARED)) {
       var previousFunction = this.currentFunction;
       this.currentFunction = instance;
-      stmts = this.compileStatements(<Statement[]>declaration.statements);
+      var statements = assert(declaration.statements);
+      stmts = this.compileStatements(statements);
+      // make sure the top-level branch or all child branches return
+      var allBranchesReturn = this.currentFunction.flow.finalize();
+      if (instance.returnType != Type.void && !allBranchesReturn)
+        this.error(DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value, assert(declaration.returnType).range);
       this.currentFunction = previousFunction;
     }
 
@@ -600,12 +600,15 @@ export class Compiler extends DiagnosticEmitter {
       typeRef = this.module.addFunctionType(signatureNameParts.join(""), nativeResultType, nativeParamTypes);
 
     // create the function
-    if (instance.isDeclared) {
+    if (instance.is(ElementFlags.DECLARED)) {
       this.module.addFunctionImport(instance.internalName, instance.prototype.namespace ? instance.prototype.namespace.simpleName : "env", declaration.name.name, typeRef);
     } else {
       this.module.addFunction(instance.internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
     }
     instance.finalize();
+    if (declaration.range.source.isEntry && declaration.isTopLevelExport) {
+      this.module.addFunctionExport(instance.internalName, declaration.name.name);
+    }
     return true;
   }
 
@@ -644,8 +647,11 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case NodeKind.VARIABLE:
-          if (noTreeShaking || hasModifier(ModifierKind.EXPORT, (<VariableStatement>member).modifiers))
-            this.compileVariableStatement(<VariableStatement>member);
+          if (noTreeShaking || hasModifier(ModifierKind.EXPORT, (<VariableStatement>member).modifiers)) {
+            var variableInit = this.compileVariableStatement(<VariableStatement>member, true);
+            if (variableInit)
+              this.startFunctionBody.push(variableInit);
+          }
           break;
 
         default:
@@ -663,7 +669,7 @@ export class Compiler extends DiagnosticEmitter {
       switch (element.kind) {
 
         case ElementKind.CLASS_PROTOTYPE:
-          if ((noTreeShaking || (<ClassPrototype>element).isExported) && !(<ClassPrototype>element).isGeneric)
+          if ((noTreeShaking || (<ClassPrototype>element).is(ElementFlags.EXPORTED)) && !(<ClassPrototype>element).is(ElementFlags.GENERIC))
             this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
           break;
 
@@ -672,7 +678,7 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case ElementKind.FUNCTION_PROTOTYPE:
-          if ((noTreeShaking || (<FunctionPrototype>element).isExported) && !(<FunctionPrototype>element).isGeneric)
+          if ((noTreeShaking || (<FunctionPrototype>element).is(ElementFlags.EXPORTED)) && !(<FunctionPrototype>element).is(ElementFlags.GENERIC))
             this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
           break;
 
@@ -700,7 +706,7 @@ export class Compiler extends DiagnosticEmitter {
       switch (element.kind) {
 
         case ElementKind.CLASS_PROTOTYPE:
-          if (!(<ClassPrototype>element).isGeneric)
+          if (!(<ClassPrototype>element).is(ElementFlags.GENERIC))
             this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
           break;
 
@@ -709,19 +715,25 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case ElementKind.FUNCTION_PROTOTYPE:
-          if (!(<FunctionPrototype>element).isGeneric) {
+          if (!(<FunctionPrototype>element).is(ElementFlags.GENERIC) && statement.range.source.isEntry) {
             var functionInstance = this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
-            if (functionInstance && statement.range.source.isEntry)
-              this.module.addFunctionExport(functionInstance.internalName, member.externalIdentifier.name);
+            if (functionInstance) {
+              var functionDeclaration = functionInstance.prototype.declaration;
+              if (functionDeclaration && functionDeclaration.needsExplicitExport(member))
+                this.module.addFunctionExport(functionInstance.internalName, member.externalIdentifier.name);
+            }
           }
           break;
 
         case ElementKind.GLOBAL:
           if (this.compileGlobal(<Global>element) && statement.range.source.isEntry) {
-            if ((<Global>element).hasConstantValue)
-              this.module.addGlobalExport(element.internalName, member.externalIdentifier.name);
-            else
-              this.warning(DiagnosticCode.Cannot_export_a_mutable_global, member.range);
+            var globalDeclaration = (<Global>element).declaration;
+            if (globalDeclaration && globalDeclaration.needsExplicitExport(member)) {
+              if ((<Global>element).is(ElementFlags.INLINED))
+                  this.module.addGlobalExport(element.internalName, member.externalIdentifier.name);
+              else
+                this.warning(DiagnosticCode.Cannot_export_a_mutable_global, member.range);
+            }
           }
           break;
 
@@ -735,8 +747,7 @@ export class Compiler extends DiagnosticEmitter {
   // classes
 
   compileClassDeclaration(declaration: ClassDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
-    var internalName = declaration.internalName;
-    var element = this.program.elements.get(internalName);
+    var element = this.program.elements.get(declaration.fileLevelInternalName);
     if (!element || element.kind != ElementKind.CLASS_PROTOTYPE)
       throw new Error("class expected");
     this.compileClassUsingTypeArguments(<ClassPrototype>element, typeArguments, contextualTypeArguments, alternativeReportNode);
@@ -750,10 +761,10 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileClass(instance: Class): bool {
-    if (instance.isCompiled)
+    if (instance.is(ElementFlags.COMPILED))
       return true;
-
-    return instance.isCompiled = true;
+    instance.set(ElementFlags.COMPILED);
+    return true;
   }
 
   compileInterfaceDeclaration(declaration: InterfaceDeclaration, typeArguments: TypeNode[], contextualTypeArguments: Map<string,Type> | null = null, alternativeReportNode: Node | null = null): void {
@@ -816,7 +827,8 @@ export class Compiler extends DiagnosticEmitter {
         return this.compileTryStatement(<TryStatement>statement);
 
       case NodeKind.VARIABLE:
-        return this.compileVariableStatement(<VariableStatement>statement);
+        var variableInit = this.compileVariableStatement(<VariableStatement>statement);
+        return variableInit ? variableInit : this.module.createNop();
 
       case NodeKind.WHILE:
         return this.compileWhileStatement(<WhileStatement>statement);
@@ -841,11 +853,23 @@ export class Compiler extends DiagnosticEmitter {
 
   compileBlockStatement(statement: BlockStatement): ExpressionRef {
     var statements = statement.statements;
-    if (statements.length == 0)
-      return this.module.createNop();
-    if (statements.length == 1)
-      return this.compileStatement(statements[0]);
-    return this.module.createBlock(null, this.compileStatements(statements), NativeType.None);
+
+    // NOTE that we could optimize this to a NOP if empty or unwrap a single
+    // statement, but that's not what the source told us to do and left to the
+    // optimizer.
+
+    // Not actually a branch, but can contain its own scoped variables.
+    this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
+
+    var stmt = this.module.createBlock(null, this.compileStatements(statements), NativeType.None);
+    var stmtReturns = this.currentFunction.flow.is(FlowFlags.RETURNS);
+
+    // Switch back to the parent flow
+    this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
+    if (stmtReturns)
+      this.currentFunction.flow.set(FlowFlags.RETURNS);
+
+    return stmt;
   }
 
   compileBreakStatement(statement: BreakStatement): ExpressionRef {
@@ -853,12 +877,12 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.Operation_not_supported, statement.label.range);
       return this.module.createUnreachable();
     }
-    var context = this.currentFunction.breakContext;
-    if (context != null)
-      return this.module.createBreak("break|" + context);
-
-    this.error(DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement, statement.range);
-    return this.module.createUnreachable();
+    var breakLabel = this.currentFunction.flow.breakLabel;
+    if (breakLabel == null) {
+      this.error(DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement, statement.range);
+      return this.module.createUnreachable();
+    }
+    return this.module.createBreak(breakLabel);
   }
 
   compileContinueStatement(statement: ContinueStatement): ExpressionRef {
@@ -866,21 +890,35 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.Operation_not_supported, statement.label.range);
       return this.module.createUnreachable();
     }
-    var context = this.currentFunction.breakContext;
-    if (context && !this.disallowContinue)
-      return this.module.createBreak("continue|" + context);
-
-    this.error(DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement, statement.range);
-    return this.module.createUnreachable();
+    // Check if 'continue' is allowed here
+    var continueLabel = this.currentFunction.flow.continueLabel;
+    if (continueLabel == null) {
+      this.error(DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement, statement.range);
+      return this.module.createUnreachable();
+    }
+    return this.module.createBreak(continueLabel);
   }
 
   compileDoStatement(statement: DoStatement): ExpressionRef {
+
+    // A do statement does not initiate a new branch because it is executed at
+    // least once, but has its own break and continue labels.
     var label = this.currentFunction.enterBreakContext();
+    var previousBreakLabel = this.currentFunction.flow.breakLabel;
+    var previousContinueLabel = this.currentFunction.flow.continueLabel;
+    var breakLabel = this.currentFunction.flow.breakLabel = "break|" + label;
+    var continueLabel = this.currentFunction.flow.continueLabel = "continue|" + label;
+
     var body = this.compileStatement(statement.statement);
+
+    // Reset to the previous break and continue labels, if any.
+    this.currentFunction.flow.breakLabel = previousBreakLabel;
+    this.currentFunction.flow.continueLabel = previousContinueLabel;
+
     var condition = this.compileExpression(statement.condition, Type.i32);
+
     this.currentFunction.leaveBreakContext();
-    var breakLabel = "break|" + label;
-    var continueLabel = "continue|" + label;
+
     return this.module.createBlock(breakLabel, [
       this.module.createLoop(continueLabel,
         this.module.createBlock(null, [
@@ -904,19 +942,27 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileForStatement(statement: ForStatement): ExpressionRef {
+
+    // A for statement initiates a new branch with its own scoped variables
+    // possibly declared in its initializer, and break context.
     var context = this.currentFunction.enterBreakContext();
-    var variableWasLocal = this.variableIsLocal;
-    if (this.currentFunction == this.startFunction)
-      this.variableIsLocal = true;
+    this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
+    var breakLabel = this.currentFunction.flow.breakLabel = "break|" + context;
+    var continueLabel = this.currentFunction.flow.continueLabel = "continue|" + context;
+
+    // Compile in correct order
     var initializer = statement.initializer ? this.compileStatement(<Statement>statement.initializer) : this.module.createNop();
-    this.variableIsLocal = variableWasLocal;
     var condition = statement.condition ? this.compileExpression(<Expression>statement.condition, Type.i32) : this.module.createI32(1);
     var incrementor = statement.incrementor ? this.compileExpression(<Expression>statement.incrementor, Type.void) : this.module.createNop();
     var body = this.compileStatement(statement.statement);
+    var alwaysReturns = !statement.condition && this.currentFunction.flow.is(FlowFlags.RETURNS);
+    // TODO: check other always-true conditions as well, not just omitted
+
+    // Switch back to the parent flow
+    this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
     this.currentFunction.leaveBreakContext();
-    var continueLabel = "continue|" + context;
-    var breakLabel = "break|" + context;
-    return this.module.createBlock(breakLabel, [
+
+    var expr = this.module.createBlock(breakLabel, [
       initializer,
       this.module.createLoop(continueLabel, this.module.createBlock(null, [
         this.module.createIf(condition, this.module.createBlock(null, [
@@ -926,33 +972,65 @@ export class Compiler extends DiagnosticEmitter {
         ], NativeType.None))
       ], NativeType.None))
     ], NativeType.None);
+
+    // If the loop is guaranteed to run and return, propagate that and append a hint
+    if (alwaysReturns) {
+      this.currentFunction.flow.set(FlowFlags.RETURNS);
+      expr = this.module.createBlock(null, [
+        expr,
+        this.module.createUnreachable()
+      ]);
+    }
+    return expr;
   }
 
   compileIfStatement(statement: IfStatement): ExpressionRef {
+
+    // The condition doesn't initiate a branch yet
     var condition = this.compileExpression(statement.condition, Type.i32);
+
+    // Each arm initiates a branch
+    this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
     var ifTrue = this.compileStatement(statement.ifTrue);
-    var ifFalse = statement.ifFalse ? this.compileStatement(<Statement>statement.ifFalse) : <ExpressionRef>0;
+    var ifTrueReturns = this.currentFunction.flow.is(FlowFlags.RETURNS);
+    this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
+
+    var ifFalse: ExpressionRef = 0;
+    var ifFalseReturns = false;
+    if (statement.ifFalse) {
+      this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
+      ifFalse = this.compileStatement(statement.ifFalse);
+      ifFalseReturns = this.currentFunction.flow.is(FlowFlags.RETURNS);
+      this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
+    }
+    if (ifTrueReturns && ifFalseReturns) // not necessary to append a hint
+      this.currentFunction.flow.set(FlowFlags.RETURNS);
     return this.module.createIf(condition, ifTrue, ifFalse);
   }
 
   compileReturnStatement(statement: ReturnStatement): ExpressionRef {
-    if (this.currentFunction) {
-      var expression = statement.value ? this.compileExpression(<Expression>statement.value, this.currentFunction.returnType) : <ExpressionRef>0;
-      return this.module.createReturn(expression);
-    }
-    return this.module.createUnreachable();
+    assert(this.currentFunction);
+
+    var expression: ExpressionRef = 0;
+    if (statement.value)
+      expression = this.compileExpression(<Expression>statement.value, this.currentFunction.returnType);
+
+    // Remember that this flow returns
+    this.currentFunction.flow.set(FlowFlags.RETURNS);
+
+    return this.module.createReturn(expression);
   }
 
   compileSwitchStatement(statement: SwitchStatement): ExpressionRef {
+
+    // Everything within a switch uses the same break context
     var context = this.currentFunction.enterBreakContext();
-    var previousDisallowContinue = this.disallowContinue;
-    this.disallowContinue = true;
 
     // introduce a local for evaluating the condition (exactly once)
     var tempLocal = this.currentFunction.getTempLocal(Type.i32);
     var k = statement.cases.length;
 
-    // prepend initializer to inner block
+    // Prepend initializer to inner block. Does not initiate a new branch, yet.
     var breaks = new Array<ExpressionRef>(1 + k);
     breaks[0] = this.module.createSetLocal(tempLocal.index, this.compileExpression(statement.condition, Type.i32)); // initializer
 
@@ -982,24 +1060,49 @@ export class Compiler extends DiagnosticEmitter {
 
     // nest blocks in order
     var currentBlock = this.module.createBlock("case0|" + context, breaks, NativeType.None);
+    var alwaysReturns = true;
     for (i = 0; i < k; ++i) {
       case_ = statement.cases[i];
-      var nextLabel = i == k - 1 ? "break|" + context : "case" + (i + 1).toString(10) + "|" + context;
       var l = case_.statements.length;
       var body = new Array<ExpressionRef>(1 + l);
       body[0] = currentBlock;
+
+      // Each switch case initiates a new branch
+      this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
+      var breakLabel = this.currentFunction.flow.breakLabel = "break|" + context;
+
+      var fallsThrough = i != k - 1;
+      var nextLabel = !fallsThrough ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
       for (var j = 0; j < l; ++j)
         body[j + 1] = this.compileStatement(case_.statements[j]);
+      if (!(fallsThrough || this.currentFunction.flow.is(FlowFlags.RETURNS)))
+        alwaysReturns = false; // ignore fall-throughs
+
+      // Switch back to the parent flow
+      this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
+
       currentBlock = this.module.createBlock(nextLabel, body, NativeType.None);
     }
     this.currentFunction.leaveBreakContext();
-    this.disallowContinue = previousDisallowContinue;
 
+    // If the switch has a default and always returns, propagate that
+    if (defaultIndex >= 0 && alwaysReturns) {
+      this.currentFunction.flow.set(FlowFlags.RETURNS);
+      // Binaryen understands that so we don't need a hint
+    }
     return currentBlock;
   }
 
   compileThrowStatement(statement: ThrowStatement): ExpressionRef {
-    return this.module.createUnreachable(); // TODO: waiting for exception-handling spec
+
+    // Remember that this branch possibly throws
+    this.currentFunction.flow.set(FlowFlags.POSSIBLY_THROWS);
+
+    // FIXME: without try-catch it is safe to assume RETURNS as well for now
+    this.currentFunction.flow.set(FlowFlags.RETURNS);
+
+    // TODO: requires exception-handling spec.
+    return this.module.createUnreachable();
   }
 
   compileTryStatement(statement: TryStatement): ExpressionRef {
@@ -1008,16 +1111,28 @@ export class Compiler extends DiagnosticEmitter {
     // worthwhile to investigate lowering returns to block results (here)?
   }
 
-  compileVariableStatement(statement: VariableStatement): ExpressionRef {
+  /**
+   * Compiles a variable statement. Returns `0` if an initializer is not
+   * necessary.
+   */
+  compileVariableStatement(statement: VariableStatement, isKnownGlobal: bool = false): ExpressionRef {
     var declarations = statement.declarations;
 
-    // top-level variables become globals
-    if (this.currentFunction == this.startFunction && !this.variableIsLocal) {
-      var isConst = hasModifier(ModifierKind.CONST, statement.modifiers);
+    // top-level variables and constants become globals
+    if (isKnownGlobal || (
+      this.currentFunction == this.startFunction &&
+      statement.parent && statement.parent.kind == NodeKind.SOURCE
+    )) {
+      // NOTE that the above condition also covers top-level variables declared with 'let', even
+      // though such variables could also become start function locals if, and only if, not used
+      // within any function declared in the same source, which is unknown at this point. the only
+      // efficient way to deal with this would be to keep track of all occasions it is used and
+      // replace these instructions afterwards, dynamically. (TOOD: what about a Binaryen pass?)
       for (var i = 0, k = declarations.length; i < k; ++i)
-        this.compileGlobalDeclaration(declarations[i], isConst);
-      return this.module.createNop();
+        this.compileGlobalDeclaration(declarations[i]);
+      return 0;
     }
+
     // other variables become locals
     var initializers = new Array<ExpressionRef>();
     for (i = 0, k = declarations.length; i < k; ++i) {
@@ -1042,54 +1157,76 @@ export class Compiler extends DiagnosticEmitter {
         this.error(DiagnosticCode.Type_expected, declaration.name.range.atEnd);
         continue;
       }
-      if (this.currentFunction.locals.has(name))
-        this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name); // recoverable
-      else {
-        if (hasModifier(ModifierKind.CONST, declaration.modifiers)) {
-          if (init) {
-            init = this.precomputeExpressionRef(init);
-            if (_BinaryenExpressionGetId(init) == ExpressionId.Const) {
-              var local = new Local(this.program, name, -1, type);
-              switch (_BinaryenExpressionGetType(init)) {
-                case NativeType.I32:
-                  local = local.withConstantIntegerValue(_BinaryenConstGetValueI32(init), 0);
-                  break;
-                case NativeType.I64:
-                  local = local.withConstantIntegerValue(_BinaryenConstGetValueI64Low(init), _BinaryenConstGetValueI64High(init));
-                  break;
-                case NativeType.F32:
-                  local = local.withConstantFloatValue(<f64>_BinaryenConstGetValueF32(init));
-                  break;
-                case NativeType.F64:
-                  local = local.withConstantFloatValue(_BinaryenConstGetValueF64(init));
-                  break;
-                default:
-                  throw new Error("concrete type expected");
-              }
-              this.currentFunction.locals.set(name, local);
-              continue;
-            } else
-              this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
-          } else {
-            this.error(DiagnosticCode._const_declarations_must_be_initialized, declaration.range);
-          }
-        }
-        this.currentFunction.addLocal(type, name);
-        if (init)
-          initializers.push(this.compileAssignmentWithValue(declaration.name, init));
+      if (hasModifier(ModifierKind.CONST, declaration.modifiers)) {
+        if (init) {
+          init = this.precomputeExpressionRef(init);
+          if (_BinaryenExpressionGetId(init) == ExpressionId.Const) {
+            var local = new Local(this.program, name, -1, type);
+            switch (_BinaryenExpressionGetType(init)) {
+              case NativeType.I32:
+                local = local.withConstantIntegerValue(_BinaryenConstGetValueI32(init), 0);
+                break;
+              case NativeType.I64:
+                local = local.withConstantIntegerValue(_BinaryenConstGetValueI64Low(init), _BinaryenConstGetValueI64High(init));
+                break;
+              case NativeType.F32:
+                local = local.withConstantFloatValue(<f64>_BinaryenConstGetValueF32(init));
+                break;
+              case NativeType.F64:
+                local = local.withConstantFloatValue(_BinaryenConstGetValueF64(init));
+                break;
+              default:
+                throw new Error("concrete type expected");
+            }
+            // Create a virtual local that doesn't actually exist in WebAssembly
+            var scopedLocals = this.currentFunction.flow.scopedLocals;
+            if (!scopedLocals)
+              scopedLocals = this.currentFunction.flow.scopedLocals = new Map();
+            else if (scopedLocals.has(name)) {
+              this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name);
+              return 0;
+            }
+            scopedLocals.set(name, local);
+            return 0;
+          } else
+            this.warning(DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable, declaration.range);
+        } else
+          this.error(DiagnosticCode._const_declarations_must_be_initialized, declaration.range);
       }
+      if (hasModifier(ModifierKind.LET, declaration.modifiers)) // here: not top-level
+        this.currentFunction.flow.addScopedLocal(name, type, declaration.name); // reports
+      else
+        this.currentFunction.addLocal(type, name); // reports
+      if (init)
+        initializers.push(this.compileAssignmentWithValue(declaration.name, init));
     }
-    return initializers.length ? this.module.createBlock(null, initializers, NativeType.None) : this.module.createNop();
+    return initializers.length     // we can unwrap these here because the
+        ? initializers.length == 1 // source didn't tell us exactly what to do
+          ? initializers[0]
+          : this.module.createBlock(null, initializers, NativeType.None)
+        : 0;
   }
 
   compileWhileStatement(statement: WhileStatement): ExpressionRef {
-    var label = this.currentFunction.enterBreakContext();
+
+    // The condition does not yet initialize a branch
     var condition = this.compileExpression(statement.condition, Type.i32);
-    var breakLabel = "break|" + label;
-    var continueLabel = "continue|" + label;
+
+    // Statements initiate a new branch with its own break context
+    var label = this.currentFunction.enterBreakContext();
+    this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
+    var breakLabel = this.currentFunction.flow.breakLabel = "break|" + label;
+    var continueLabel = this.currentFunction.flow.continueLabel = "continue|" + label;
+
     var body = this.compileStatement(statement.statement);
+    var alwaysReturns = false && this.currentFunction.flow.is(FlowFlags.RETURNS);
+    // TODO: evaluate possible always-true conditions
+
+    // Switch back to the parent flow
+    this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
     this.currentFunction.leaveBreakContext();
-    return this.module.createBlock(breakLabel, [
+
+    var expr = this.module.createBlock(breakLabel, [
       this.module.createLoop(continueLabel,
         this.module.createIf(condition, this.module.createBlock(null, [
           body,
@@ -1097,6 +1234,15 @@ export class Compiler extends DiagnosticEmitter {
         ], NativeType.None))
       )
     ], NativeType.None);
+
+    // If the loop is guaranteed to run and return, propagate that and append a hint
+    if (alwaysReturns) {
+      expr = this.module.createBlock(null, [
+        expr,
+        this.module.createUnreachable()
+      ]);
+    }
+    return expr;
   }
 
   // expressions
@@ -2259,7 +2405,7 @@ export class Compiler extends DiagnosticEmitter {
 
       case ElementKind.LOCAL:
         this.currentType = tee ? (<Local>element).type : Type.void;
-        if ((<Local>element).isConstant) {
+        if ((<Local>element).is(ElementFlags.CONSTANT)) {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
           return this.module.createUnreachable();
         }
@@ -2272,7 +2418,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
         this.currentType = tee ? (<Global>element).type : Type.void;
-        if ((<Local>element).isConstant) {
+        if ((<Local>element).is(ElementFlags.CONSTANT)) {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
           return this.module.createUnreachable();
         }
@@ -2310,7 +2456,7 @@ export class Compiler extends DiagnosticEmitter {
           if (setterInstance) {
             assert(setterInstance.parameters.length == 1);
             if (!tee) {
-              if (setterInstance.isInstance) {
+              if (setterInstance.is(ElementFlags.INSTANCE)) {
                 assert(resolved.targetExpression != null);
                 targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32, ConversionKind.NONE);
                 assert(this.currentType.classType);
@@ -2326,7 +2472,7 @@ export class Compiler extends DiagnosticEmitter {
             var getterInstance = (<FunctionPrototype>getterPrototype).resolve(); // reports
             if (getterInstance) {
               assert(getterInstance.parameters.length == 0);
-              if (setterInstance.isInstance) {
+              if (setterInstance.is(ElementFlags.INSTANCE)) {
                 assert(resolved.targetExpression != null);
                 targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32, ConversionKind.NONE);
                 assert(this.currentType.classType);
@@ -2391,7 +2537,7 @@ export class Compiler extends DiagnosticEmitter {
     if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
       var functionPrototype = <FunctionPrototype>element;
       var functionInstance: Function | null = null;
-      if (functionPrototype.isBuiltIn) {
+      if (functionPrototype.is(ElementFlags.BUILTIN)) {
         var resolvedTypeArguments: Type[] | null = null;
         if (expression.typeArguments) {
           var k = expression.typeArguments.length;
@@ -2492,11 +2638,11 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   private makeCall(functionInstance: Function, operands: ExpressionRef[] | null = null): ExpressionRef {
-    if (!(functionInstance.isCompiled || this.compileFunction(functionInstance)))
+    if (!(functionInstance.is(ElementFlags.COMPILED) || this.compileFunction(functionInstance)))
       return this.module.createUnreachable();
 
     // imported function
-    if (functionInstance.isDeclared)
+    if (functionInstance.is(ElementFlags.DECLARED))
       return this.module.createCallImport(functionInstance.internalName, operands, functionInstance.returnType.toNativeType());
 
     // internal function
@@ -2579,19 +2725,19 @@ export class Compiler extends DiagnosticEmitter {
 
       case ElementKind.LOCAL:
         this.currentType = (<Local>element).type;
-        if ((<Local>element).hasConstantValue)
+        if ((<Local>element).is(ElementFlags.INLINED))
           return makeInlineConstant(<Local>element, this.module);
         assert((<Local>element).index >= 0);
         return this.module.createGetLocal((<Local>element).index, this.currentType.toNativeType());
 
       case ElementKind.GLOBAL:
-        if (element.isBuiltIn)
+        if (element.is(ElementFlags.BUILTIN))
           return compileBuiltinGetConstant(this, <Global>element, expression);
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
         this.currentType = (<Global>element).type;
-        if ((<Global>element).hasConstantValue)
+        if ((<Global>element).is(ElementFlags.INLINED))
           return makeInlineConstant(<Global>element, this.module);
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
     }
@@ -2663,13 +2809,13 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.GLOBAL: // static property
-        if (element.isBuiltIn)
+        if (element.is(ElementFlags.BUILTIN))
           return compileBuiltinGetConstant(this, <Global>element, propertyAccess);
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
         this.currentType = (<Global>element).type;
-        if ((<Global>element).hasConstantValue)
+        if ((<Global>element).is(ElementFlags.INLINED))
           return makeInlineConstant(<Global>element, this.module);
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
 
@@ -2677,7 +2823,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileEnum((<EnumValue>element).enum))
           return this.module.createUnreachable();
         this.currentType = Type.i32;
-        if ((<EnumValue>element).hasConstantValue)
+        if ((<EnumValue>element).is(ElementFlags.INLINED))
           return this.module.createI32((<EnumValue>element).constantValue);
         return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
 
@@ -2701,7 +2847,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         assert(getterInstance.parameters.length == 0);
         this.currentType = getterInstance.returnType;
-        if (getterInstance.isInstance) {
+        if (getterInstance.is(ElementFlags.INSTANCE)) {
           var targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32)
           this.currentType = getterInstance.returnType;
           return this.makeCall(getterInstance, [ targetExpr ]);
@@ -3063,29 +3209,9 @@ export class Compiler extends DiagnosticEmitter {
 
 // helpers
 
-/** Tests whether an element is a module-level export from the entry file. */
-function isModuleExport(element: Element, declaration: DeclarationStatement): bool {
-  if (!element.isExported)
-    return false;
-  var parentNode = declaration.parent;
-  if (!parentNode)
-    return false;
-  if (declaration.range.source.isEntry && parentNode.kind != NodeKind.NAMESPACEDECLARATION)
-    return true;
-  if (parentNode.kind == NodeKind.VARIABLE)
-    if (!(parentNode = parentNode.parent))
-      return false;
-  if (parentNode.kind != NodeKind.NAMESPACEDECLARATION && parentNode.kind != NodeKind.CLASSDECLARATION)
-    return false;
-  var parent = element.program.elements.get((<DeclarationStatement>parentNode).internalName);
-  if (!parent)
-    return false;
-  return isModuleExport(parent, <DeclarationStatement>parentNode);
-}
-
 /** Creates an inlined expression of a constant variable-like element. */
 function makeInlineConstant(element: VariableLikeElement, module: Module): ExpressionRef {
-  assert(element.hasConstantValue);
+  assert(element.is(ElementFlags.INLINED));
   assert(element.type != null);
   switch ((<Type>element.type).kind) {
 
