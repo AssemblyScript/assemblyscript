@@ -49,6 +49,7 @@
   GLOBAL: HEAP_BASE
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: Array
+  PROPERTY: std:array/Array#length
   CLASS_PROTOTYPE: std:array/CArray
   CLASS_PROTOTYPE: CArray
   CLASS_PROTOTYPE: std:error/Error
@@ -59,22 +60,24 @@
   GLOBAL: std:heap/ALIGN_SIZE
   GLOBAL: std:heap/ALIGN_MASK
   GLOBAL: std:heap/HEAP_OFFSET
-  CLASS_PROTOTYPE: std:heap/Heap
-  CLASS_PROTOTYPE: Heap
-  PROPERTY: std:heap/Heap.used
-  PROPERTY: std:heap/Heap.free
-  PROPERTY: std:heap/Heap.size
-  FUNCTION_PROTOTYPE: std:heap/Heap.allocate
-  FUNCTION_PROTOTYPE: std:heap/Heap.dispose
-  FUNCTION_PROTOTYPE: std:heap/Heap.copy
-  FUNCTION_PROTOTYPE: std:heap/Heap.fill
-  FUNCTION_PROTOTYPE: std:heap/Heap.compare
+  FUNCTION_PROTOTYPE: std:heap/allocate_memory
+  FUNCTION_PROTOTYPE: allocate_memory
+  FUNCTION_PROTOTYPE: std:heap/free_memory
+  FUNCTION_PROTOTYPE: free_memory
+  FUNCTION_PROTOTYPE: std:heap/copy_memory
+  FUNCTION_PROTOTYPE: std:heap/move_memory
+  FUNCTION_PROTOTYPE: move_memory
+  FUNCTION_PROTOTYPE: std:heap/set_memory
+  FUNCTION_PROTOTYPE: set_memory
+  FUNCTION_PROTOTYPE: std:heap/compare_memory
+  FUNCTION_PROTOTYPE: compare_memory
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: Map
   CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
   CLASS_PROTOTYPE: Set
+  PROPERTY: std:set/Set#size
   GLOBAL: std:string/EMPTY
   GLOBAL: std:string/cp
   GLOBAL: std:string/cn
@@ -94,15 +97,34 @@
   FUNCTION_PROTOTYPE: std:string/parseFloat
   FUNCTION_PROTOTYPE: parseFloat
 [program.exports]
+  CLASS_PROTOTYPE: Array
   CLASS_PROTOTYPE: std:array/Array
+  CLASS_PROTOTYPE: CArray
   CLASS_PROTOTYPE: std:array/CArray
+  CLASS_PROTOTYPE: Error
   CLASS_PROTOTYPE: std:error/Error
+  CLASS_PROTOTYPE: RangeError
   CLASS_PROTOTYPE: std:error/RangeError
-  CLASS_PROTOTYPE: std:heap/Heap
+  FUNCTION_PROTOTYPE: allocate_memory
+  FUNCTION_PROTOTYPE: std:heap/allocate_memory
+  FUNCTION_PROTOTYPE: free_memory
+  FUNCTION_PROTOTYPE: std:heap/free_memory
+  FUNCTION_PROTOTYPE: move_memory
+  FUNCTION_PROTOTYPE: std:heap/move_memory
+  FUNCTION_PROTOTYPE: set_memory
+  FUNCTION_PROTOTYPE: std:heap/set_memory
+  FUNCTION_PROTOTYPE: compare_memory
+  FUNCTION_PROTOTYPE: std:heap/compare_memory
+  CLASS_PROTOTYPE: Map
   CLASS_PROTOTYPE: std:map/Map
+  CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:regexp/RegExp
+  CLASS_PROTOTYPE: Set
   CLASS_PROTOTYPE: std:set/Set
+  CLASS_PROTOTYPE: String
   CLASS_PROTOTYPE: std:string/String
+  FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: std:string/parseFloat
 ;)
