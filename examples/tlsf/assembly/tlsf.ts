@@ -749,4 +749,4 @@ function check_pool(pool: usize): i32 {
   return integrity_status;
 }
 
-// export { check, check_pool }; // Uncomment to enable in tests/index.js
+export { check, check_pool }; // Uncomment to enable in tests/index.js

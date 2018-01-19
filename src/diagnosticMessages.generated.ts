@@ -70,6 +70,7 @@ export enum DiagnosticCode {
   _super_can_only_be_referenced_in_a_derived_class = 2335,
   Property_0_does_not_exist_on_type_1 = 2339,
   Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
+  A_function_whose_declared_type_is_not_void_must_return_a_value = 2355,
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
   _get_and_set_accessor_must_have_the_same_type = 2380,
@@ -158,6 +159,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2335: return "'super' can only be referenced in a derived class.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";
     case 2349: return "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.";
+    case 2355: return "A function whose declared type is not 'void' must return a value.";
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
     case 2380: return "'get' and 'set' accessor must have the same type.";

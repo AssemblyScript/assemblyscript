@@ -2123,9 +2123,12 @@ export class Interface extends Class {
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
+  /** No specific conditions. */
   NONE = 0,
+  /** This branch always returns. */
   RETURNS = 1 << 0,
-  THROWS = 1 << 1
+  /** This branch possibly throws. */
+  POSSIBLY_THROWS = 1 << 1,
 }
 
 /** A control flow evaluator. */
@@ -2147,6 +2150,7 @@ export class Flow {
   /** Creates the parent flow of the specified function. */
   static create(currentFunction: Function): Flow {
     var parentFlow = new Flow();
+    parentFlow.parent = null;
     parentFlow.flags = FlowFlags.NONE;
     parentFlow.currentFunction = currentFunction;
     parentFlow.continueLabel = null;
@@ -2162,8 +2166,8 @@ export class Flow {
   /** Sets the specified flag or flags. */
   set(flag: FlowFlags): void { this.flags |= flag; }
 
-  /** Enters a new branch and returns the new flow. */
-  enterBranch(): Flow {
+  /** Enters a new branch or scope and returns the new flow. */
+  enterBranchOrScope(): Flow {
     var branchFlow = new Flow();
     branchFlow.parent = this;
     branchFlow.flags = this.flags;
@@ -2173,14 +2177,21 @@ export class Flow {
     return branchFlow;
   }
 
-  /** Leaves the current branch and returns the parent flow. */
-  leaveBranch(): Flow {
+  /** Leaves the current branch or scope and returns the parent flow. */
+  leaveBranchOrScope(): Flow {
+    var parent = assert(this.parent);
     if (this.scopedLocals) {
       for (var scopedLocal of this.scopedLocals.values())
         this.currentFunction.freeTempLocal(scopedLocal);
       this.scopedLocals = null;
     }
-    return assert(this.parent);
+    // Mark parent as THROWS if any child throws
+    if (this.is(FlowFlags.POSSIBLY_THROWS))
+       parent.set(FlowFlags.POSSIBLY_THROWS);
+
+    this.continueLabel = null;
+    this.breakLabel = null;
+    return parent;
   }
 
   /** Adds a new scoped local of the specified name. */
@@ -2197,7 +2208,6 @@ export class Flow {
 
   /** Gets the local of the specified name in the current scope. */
   getScopedLocal(name: string): Local | null {
-    // console.log("checking: " + name);
     var local: Local | null;
     var current: Flow | null = this;
     do {
@@ -2205,5 +2215,13 @@ export class Flow {
         return local;
     } while (current = current.parent);
     return this.currentFunction.locals.get(name);
+  }
+
+  /** Finalizes this flow. Must be the topmost parent flow of the function. */
+  finalize(): bool {
+    assert(this.parent == null, "must be the topmost parent flow");
+    this.continueLabel = null;
+    this.breakLabel = null;
+    return this.is(FlowFlags.RETURNS);
   }
 }

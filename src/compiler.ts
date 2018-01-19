@@ -203,7 +203,7 @@ export class Compiler extends DiagnosticEmitter {
     var startFunctionTemplate = new FunctionPrototype(program, "start", "start", null);
     var startFunctionInstance = new Function(startFunctionTemplate, startFunctionTemplate.internalName, [], [], Type.void, null);
     this.currentFunction = this.startFunction = startFunctionInstance;
-   }
+  }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
   compile(): Module {
@@ -568,7 +568,12 @@ export class Compiler extends DiagnosticEmitter {
     if (!instance.is(ElementFlags.DECLARED)) {
       var previousFunction = this.currentFunction;
       this.currentFunction = instance;
-      stmts = this.compileStatements(<Statement[]>declaration.statements);
+      var statements = assert(declaration.statements);
+      stmts = this.compileStatements(statements);
+      // make sure the top-level branch or all child branches return
+      var allBranchesReturn = this.currentFunction.flow.finalize();
+      if (instance.returnType != Type.void && !allBranchesReturn)
+        this.error(DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value, assert(declaration.returnType).range);
       this.currentFunction = previousFunction;
     }
 
@@ -854,12 +859,15 @@ export class Compiler extends DiagnosticEmitter {
     // optimizer.
 
     // Not actually a branch, but can contain its own scoped variables.
-    this.currentFunction.flow = this.currentFunction.flow.enterBranch();
+    this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
 
     var stmt = this.module.createBlock(null, this.compileStatements(statements), NativeType.None);
+    var stmtReturns = this.currentFunction.flow.is(FlowFlags.RETURNS);
 
     // Switch back to the parent flow
-    this.currentFunction.flow = this.currentFunction.flow.leaveBranch();
+    this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
+    if (stmtReturns)
+      this.currentFunction.flow.set(FlowFlags.RETURNS);
 
     return stmt;
   }
@@ -938,7 +946,7 @@ export class Compiler extends DiagnosticEmitter {
     // A for statement initiates a new branch with its own scoped variables
     // possibly declared in its initializer, and break context.
     var context = this.currentFunction.enterBreakContext();
-    this.currentFunction.flow = this.currentFunction.flow.enterBranch();
+    this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
     var breakLabel = this.currentFunction.flow.breakLabel = "break|" + context;
     var continueLabel = this.currentFunction.flow.continueLabel = "continue|" + context;
 
@@ -947,12 +955,14 @@ export class Compiler extends DiagnosticEmitter {
     var condition = statement.condition ? this.compileExpression(<Expression>statement.condition, Type.i32) : this.module.createI32(1);
     var incrementor = statement.incrementor ? this.compileExpression(<Expression>statement.incrementor, Type.void) : this.module.createNop();
     var body = this.compileStatement(statement.statement);
+    var alwaysReturns = !statement.condition && this.currentFunction.flow.is(FlowFlags.RETURNS);
+    // TODO: check other always-true conditions as well, not just omitted
 
     // Switch back to the parent flow
-    this.currentFunction.flow = this.currentFunction.flow.leaveBranch();
+    this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
     this.currentFunction.leaveBreakContext();
 
-    return this.module.createBlock(breakLabel, [
+    var expr = this.module.createBlock(breakLabel, [
       initializer,
       this.module.createLoop(continueLabel, this.module.createBlock(null, [
         this.module.createIf(condition, this.module.createBlock(null, [
@@ -962,6 +972,16 @@ export class Compiler extends DiagnosticEmitter {
         ], NativeType.None))
       ], NativeType.None))
     ], NativeType.None);
+
+    // If the loop is guaranteed to run and return, propagate that and append a hint
+    if (alwaysReturns) {
+      this.currentFunction.flow.set(FlowFlags.RETURNS);
+      expr = this.module.createBlock(null, [
+        expr,
+        this.module.createUnreachable()
+      ]);
+    }
+    return expr;
   }
 
   compileIfStatement(statement: IfStatement): ExpressionRef {
@@ -970,16 +990,21 @@ export class Compiler extends DiagnosticEmitter {
     var condition = this.compileExpression(statement.condition, Type.i32);
 
     // Each arm initiates a branch
-    this.currentFunction.flow = this.currentFunction.flow.enterBranch();
+    this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
     var ifTrue = this.compileStatement(statement.ifTrue);
-    this.currentFunction.flow = this.currentFunction.flow.leaveBranch();
+    var ifTrueReturns = this.currentFunction.flow.is(FlowFlags.RETURNS);
+    this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
 
     var ifFalse: ExpressionRef = 0;
+    var ifFalseReturns = false;
     if (statement.ifFalse) {
-      this.currentFunction.flow = this.currentFunction.flow.enterBranch();
+      this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
       ifFalse = this.compileStatement(statement.ifFalse);
-      this.currentFunction.flow = this.currentFunction.flow.leaveBranch();
+      ifFalseReturns = this.currentFunction.flow.is(FlowFlags.RETURNS);
+      this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
     }
+    if (ifTrueReturns && ifFalseReturns) // not necessary to append a hint
+      this.currentFunction.flow.set(FlowFlags.RETURNS);
     return this.module.createIf(condition, ifTrue, ifFalse);
   }
 
@@ -1035,6 +1060,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // nest blocks in order
     var currentBlock = this.module.createBlock("case0|" + context, breaks, NativeType.None);
+    var alwaysReturns = true;
     for (i = 0; i < k; ++i) {
       case_ = statement.cases[i];
       var l = case_.statements.length;
@@ -1042,26 +1068,38 @@ export class Compiler extends DiagnosticEmitter {
       body[0] = currentBlock;
 
       // Each switch case initiates a new branch
-      this.currentFunction.flow = this.currentFunction.flow.enterBranch();
+      this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
       var breakLabel = this.currentFunction.flow.breakLabel = "break|" + context;
 
-      var nextLabel = i == k - 1 ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
+      var fallsThrough = i != k - 1;
+      var nextLabel = !fallsThrough ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
       for (var j = 0; j < l; ++j)
         body[j + 1] = this.compileStatement(case_.statements[j]);
+      if (!(fallsThrough || this.currentFunction.flow.is(FlowFlags.RETURNS)))
+        alwaysReturns = false; // ignore fall-throughs
 
       // Switch back to the parent flow
-      this.currentFunction.flow = this.currentFunction.flow.leaveBranch();
+      this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
 
       currentBlock = this.module.createBlock(nextLabel, body, NativeType.None);
     }
     this.currentFunction.leaveBreakContext();
+
+    // If the switch has a default and always returns, propagate that
+    if (defaultIndex >= 0 && alwaysReturns) {
+      this.currentFunction.flow.set(FlowFlags.RETURNS);
+      // Binaryen understands that so we don't need a hint
+    }
     return currentBlock;
   }
 
   compileThrowStatement(statement: ThrowStatement): ExpressionRef {
 
     // Remember that this branch possibly throws
-    this.currentFunction.flow.set(FlowFlags.THROWS);
+    this.currentFunction.flow.set(FlowFlags.POSSIBLY_THROWS);
+
+    // FIXME: without try-catch it is safe to assume RETURNS as well for now
+    this.currentFunction.flow.set(FlowFlags.RETURNS);
 
     // TODO: requires exception-handling spec.
     return this.module.createUnreachable();
@@ -1176,17 +1214,19 @@ export class Compiler extends DiagnosticEmitter {
 
     // Statements initiate a new branch with its own break context
     var label = this.currentFunction.enterBreakContext();
-    this.currentFunction.flow = this.currentFunction.flow.enterBranch();
+    this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
     var breakLabel = this.currentFunction.flow.breakLabel = "break|" + label;
     var continueLabel = this.currentFunction.flow.continueLabel = "continue|" + label;
 
     var body = this.compileStatement(statement.statement);
+    var alwaysReturns = false && this.currentFunction.flow.is(FlowFlags.RETURNS);
+    // TODO: evaluate possible always-true conditions
 
     // Switch back to the parent flow
-    this.currentFunction.flow = this.currentFunction.flow.leaveBranch();
+    this.currentFunction.flow = this.currentFunction.flow.leaveBranchOrScope();
     this.currentFunction.leaveBreakContext();
 
-    return this.module.createBlock(breakLabel, [
+    var expr = this.module.createBlock(breakLabel, [
       this.module.createLoop(continueLabel,
         this.module.createIf(condition, this.module.createBlock(null, [
           body,
@@ -1194,6 +1234,15 @@ export class Compiler extends DiagnosticEmitter {
         ], NativeType.None))
       )
     ], NativeType.None);
+
+    // If the loop is guaranteed to run and return, propagate that and append a hint
+    if (alwaysReturns) {
+      expr = this.module.createBlock(null, [
+        expr,
+        this.module.createUnreachable()
+      ]);
+    }
+    return expr;
   }
 
   // expressions

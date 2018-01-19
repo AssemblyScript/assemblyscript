@@ -29,3 +29,10 @@ export function ifThenElseBlock(n: i32): bool {
 
 assert(ifThenElseBlock(0) == false);
 assert(ifThenElseBlock(1) == true);
+
+export function ifAlwaysReturns(n: i32): bool {
+  if (n)
+    return true;
+  else
+    throw new Error("error");
+}

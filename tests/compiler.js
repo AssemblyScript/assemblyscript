@@ -64,7 +64,6 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
                                +   "\n[program.exports]\n  "  + elements(program.exports)
                                + "\n;)\n";
   var actualOptimized = null;
-  // var actualInlined = null;
 
   console.log("parse incl. I/O: " + ((parseTime[0] * 1e9 + parseTime[1]) / 1e6).toFixed(3) + "ms / compile: " + ((compileTime[0] * 1e9 + compileTime[1]) / 1e6).toFixed(3) + "ms");
 
@@ -72,7 +71,10 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   if (module.validate()) {
     console.log(chalk.green("validate OK"));
     try {
-      // module.interpret();
+      // already covered by instantiate below, which is also able to use imports, but doesn't
+      // provide as much debugging information. might be necessary to remove this one once imports
+      // are tested more.
+      module.interpret();
       console.log(chalk.green("interpret OK"));
       try {
         var binary = module.toBinary();
