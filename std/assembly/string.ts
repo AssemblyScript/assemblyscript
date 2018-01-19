@@ -201,13 +201,13 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
 
 // @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
 export function parseInt(str: String, radix: i32 = 0): f64 {
-  let len = <u32>str.length;
+  var len = <u32>str.length;
   if (len == 0 || (radix != 0 && radix < 2) || radix > 36)
     return NaN;
 
-  let s0: u16 = str.charCodeAt(0);
-  let pos: u32 = 0;
-  let neg = (s0 == cn);
+  var s0: u16 = str.charCodeAt(0);
+  var pos: u32 = 0;
+  var neg = (s0 == cn);
 
   if (s0 == cp || neg) {
     if (len == 1)
@@ -218,7 +218,7 @@ export function parseInt(str: String, radix: i32 = 0): f64 {
 
   if (radix == 0) {
     if (str.charCodeAt(pos) == c0) {
-      let s1 = str.charCodeAt(pos + 1);
+      var s1 = str.charCodeAt(pos + 1);
       if (len > 1 && (s1 == cx || s1 == cX)) {
         if (len < pos + 3)
           return NaN;
@@ -236,11 +236,11 @@ export function parseInt(str: String, radix: i32 = 0): f64 {
     }
   }
 
-  let valid = false;
-  let result: f64 = 0;
+  var valid = false;
+  var result: f64 = 0;
 
   for (; pos < len; ++pos) {
-    let digit: i32, c: i32 = str.charCodeAt(pos);
+    var digit: i32, c: i32 = str.charCodeAt(pos);
 
          if (c0 <= c && c <= c9) digit = c - c0;
     else if (ca <= c && c <= cz) digit = c - ca + 10;
