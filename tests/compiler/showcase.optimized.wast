@@ -1800,12 +1800,9 @@
       (i64.shl
        (get_local $2)
        (i64.extend_u/i32
-        (i32.add
-         (i32.sub
-          (i32.const 0)
-          (get_local $3)
-         )
+        (i32.sub
          (i32.const 1)
+         (get_local $3)
         )
        )
       )
@@ -1857,12 +1854,9 @@
       (i64.shl
        (get_local $5)
        (i64.extend_u/i32
-        (i32.add
-         (i32.sub
-          (i32.const 0)
-          (get_local $6)
-         )
+        (i32.sub
          (i32.const 1)
+         (get_local $6)
         )
        )
       )
@@ -1983,12 +1977,9 @@
         (i64.shr_u
          (get_local $2)
          (i64.extend_u/i32
-          (i32.add
-           (i32.sub
-            (i32.const 0)
-            (get_local $3)
-           )
+          (i32.sub
            (i32.const 1)
+           (get_local $3)
           )
          )
         )
@@ -2173,12 +2164,9 @@
       )
       (i32.shl
        (get_local $2)
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $4)
-        )
+       (i32.sub
         (i32.const 1)
+        (get_local $4)
        )
       )
      )
@@ -2228,12 +2216,9 @@
       )
       (i32.shl
        (get_local $5)
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $6)
-        )
+       (i32.sub
         (i32.const 1)
+        (get_local $6)
        )
       )
      )
@@ -2350,12 +2335,9 @@
         )
         (i32.shr_u
          (get_local $2)
-         (i32.add
-          (i32.sub
-           (i32.const 0)
-           (get_local $4)
-          )
+         (i32.sub
           (i32.const 1)
+          (get_local $4)
          )
         )
         (i32.gt_s

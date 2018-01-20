@@ -326,8 +326,9 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     if (this.blocks(fl, sl) == block) {
       this.blocks_set(fl, sl, next);
       if (next == this) {
-        this.sl_bitmap_set(fl, this.sl_bitmap(fl) & ~(1 << sl));
-        if (!this.sl_bitmap(fl)) {
+        var sl_bitmap = this.sl_bitmap(fl) & ~(1 << sl);
+        this.sl_bitmap_set(fl, sl_bitmap);
+        if (!sl_bitmap) {
           this.fl_bitmap &= ~(1 << fl);
         }
       }

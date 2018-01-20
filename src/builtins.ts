@@ -38,7 +38,8 @@ import {
   FunctionPrototype,
   Local,
   ElementFlags,
-  Class
+  Class,
+  ElementKind
 } from "./program";
 
 /** Initializes the specified program with built-in constants and functions. */
@@ -1826,24 +1827,27 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
   return module.createUnreachable();
 }
 
-/** Compiles an allocation of the specified class. */
+/** Compiles a memory allocation for an instance of the specified class. */
 export function compileAllocate(compiler: Compiler, cls: Class, reportNode: Node): ExpressionRef {
   var program = cls.program;
   var prototype = program.elements.get(compiler.options.allocateImpl);
   if (prototype) {
-    var instance = (<FunctionPrototype>prototype).resolve(); // reports
-    if (instance) {
-      var usizeType = program.target == Target.WASM64 ? Type.usize64 : Type.usize32;
-      if (!instance.is(ElementFlags.GENERIC) && instance.returnType == usizeType && instance.parameters.length == 1 && instance.parameters[0].type == usizeType) {
-        if (compiler.compileFunction(instance)) // reports
-          return compiler.makeCall(instance, [
-            program.target == Target.WASM64
-              ? compiler.module.createI64(cls.currentMemoryOffset)
-              : compiler.module.createI32(cls.currentMemoryOffset)
-          ]);
-      } else
-        program.error(DiagnosticCode.Implementation_0_must_match_the_signature_1, reportNode.range, compiler.options.allocateImpl, "(size: usize): usize");
-    }
+    if (prototype.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      var instance = (<FunctionPrototype>prototype).resolve(); // reports
+      if (instance) {
+        var usizeType = program.target == Target.WASM64 ? Type.usize64 : Type.usize32;
+        if (!instance.is(ElementFlags.GENERIC) && instance.returnType == usizeType && instance.parameters.length == 1 && instance.parameters[0].type == usizeType) {
+          if (compiler.compileFunction(instance)) // reports
+            return compiler.makeCall(instance, [
+              program.target == Target.WASM64
+                ? compiler.module.createI64(cls.currentMemoryOffset)
+                : compiler.module.createI32(cls.currentMemoryOffset)
+            ]);
+        } else
+          program.error(DiagnosticCode.Implementation_0_must_match_the_signature_1, reportNode.range, compiler.options.allocateImpl, "(size: usize): usize");
+      }
+    } else
+      program.error(DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, reportNode.range, prototype.internalName);
   } else
     program.error(DiagnosticCode.Cannot_find_name_0, reportNode.range, compiler.options.allocateImpl);
   return compiler.module.createUnreachable();
