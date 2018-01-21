@@ -136,6 +136,7 @@ export enum Target {
 
 /** Compiler options. */
 export class Options {
+
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
   /** If true, compiles everything instead of just reachable code. */
@@ -148,6 +149,15 @@ export class Options {
   allocateImpl: string = "allocate_memory";
   /** Memory freeing implementation to use. */
   freeImpl: string = "free_memory";
+
+  /** Tests if the target is WASM64 or, otherwise, WASM32. */
+  get isWasm64(): bool { return this.target == Target.WASM64; }
+  /** Gets the unsigned size type matching the target. */
+  get usizeType(): Type { return this.target == Target.WASM64 ? Type.usize64 : Type.usize32; }
+  /** Gets the signed size type matching the target. */
+  get isizeType(): Type { return this.target == Target.WASM64 ? Type.isize64 : Type.isize32; }
+  /** Gets the native size type matching the target. */
+  get nativeSizeType(): NativeType { return this.target == Target.WASM64 ? NativeType.I64 : NativeType.I32; }
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -198,7 +208,7 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     this.options = options ? options : new Options();
-    this.memoryOffset = new U64(this.options.target == Target.WASM64 ? 8 : 4, 0); // leave space for `null`
+    this.memoryOffset = new U64(this.options.usizeType.byteSize); // leave space for `null`
     this.module = Module.create();
 
     // set up start function
@@ -211,7 +221,7 @@ export class Compiler extends DiagnosticEmitter {
   compile(): Module {
 
     // initialize lookup maps, built-ins, imports, exports, etc.
-    this.program.initialize(this.options.target);
+    this.program.initialize(this.options);
 
     // compile entry file (exactly one, usually)
     var sources = this.program.sources;
@@ -3249,7 +3259,7 @@ function makeInlineConstant(element: VariableLikeElement, module: Module): Expre
 
     case TypeKind.ISIZE:
     case TypeKind.USIZE:
-      if (element.program.target != Target.WASM64)
+      if (!element.program.options.isWasm64)
         return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
       // fall-through
 

@@ -142,7 +142,7 @@ export function initialize(program: Program): void {
     [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f64.MAX_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(9007199254740991) ],
     [ "EPSILON", new Global(program, "EPSILON", "f64.EPSILON", null, Type.f64).withConstantFloatValue(2.2204460492503131e-16) ]
   ]);
-  if (program.target == Target.WASM64) {
+  if (program.options.isWasm64) {
     program.elements.set("isize", i64Func);
     program.elements.set("usize", u64Func);
     addConstant(program, "HEAP_BASE", Type.usize64);
@@ -198,8 +198,6 @@ export function compileGetConstant(compiler: Compiler, global: Global, reportNod
 /** Compiles a call to a built-in function. */
 export function compileCall(compiler: Compiler, prototype: FunctionPrototype, typeArguments: Type[] | null, operands: Expression[], contextualType: Type, reportNode: Node): ExpressionRef {
   var module = compiler.module;
-  var usizeType = compiler.options.target == Target.WASM64 ? Type.usize64 : Type.usize32;
-  var nativeUsizeType = compiler.options.target == Target.WASM64 ? NativeType.I64 : NativeType.I32;
 
   var arg0: ExpressionRef,
       arg1: ExpressionRef,
@@ -659,16 +657,16 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           break;
 
         case TypeKind.ISIZE:
-          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(usizeType);
+          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.SubI64 : BinaryOp.SubI32,
-              usizeType.toNativeZero(module),
-              module.createGetLocal(tempLocal0.index, nativeUsizeType)
+              compiler.options.usizeType.toNativeZero(module),
+              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType)
             ),
             module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.GtI64 : BinaryOp.GtI32,
-              module.createGetLocal(tempLocal0.index, nativeUsizeType),
-              usizeType.toNativeZero(module)
+              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
+              compiler.options.usizeType.toNativeZero(module)
             )
           );
           break;
@@ -809,15 +807,15 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           break;
 
         case TypeKind.ISIZE:
-          tempLocal0 = compiler.currentFunction.getTempLocal(usizeType);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(usizeType);
+          tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
+          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.GtI64 : BinaryOp.GtI32,
-              module.createGetLocal(tempLocal0.index, nativeUsizeType),
-              module.createGetLocal(tempLocal1.index, nativeUsizeType)
+              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
+              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
             )
           );
           break;
@@ -828,15 +826,15 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
             ret = module.createUnreachable();
             break;
           }
-          tempLocal0 = compiler.currentFunction.getTempLocal(usizeType);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(usizeType);
+          tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
+          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.GtU64 : BinaryOp.GtU32,
-              module.createGetLocal(tempLocal0.index, nativeUsizeType),
-              module.createGetLocal(tempLocal1.index, nativeUsizeType)
+              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
+              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
             )
           );
           break;
@@ -943,15 +941,15 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           break;
 
         case TypeKind.ISIZE:
-          tempLocal0 = compiler.currentFunction.getTempLocal(usizeType);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(usizeType);
+          tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
+          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.LtI64 : BinaryOp.LtI32,
-              module.createGetLocal(tempLocal0.index, nativeUsizeType),
-              module.createGetLocal(tempLocal1.index, nativeUsizeType)
+              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
+              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
             )
           );
           break;
@@ -962,15 +960,15 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
             ret = module.createUnreachable();
             break;
           }
-          tempLocal0 = compiler.currentFunction.getTempLocal(usizeType);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(usizeType);
+          tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
+          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(compiler.options.target == Target.WASM64 ? BinaryOp.LtU64 : BinaryOp.LtU32,
-              module.createGetLocal(tempLocal0.index, nativeUsizeType),
-              module.createGetLocal(tempLocal1.index, nativeUsizeType)
+              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
+              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
             )
           );
           break;
@@ -1356,7 +1354,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0");
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(operands[0], usizeType);
+      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
       offset = operands.length == 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
       if (offset < 0)
         return module.createUnreachable();
@@ -1379,10 +1377,10 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments.length.toString(10));
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], usizeType);
+        arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
         arg1 = compiler.compileExpression(operands[1], typeArguments[0]);
       } else {
-        arg0 = compiler.compileExpression(operands[0], usizeType);
+        arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
         arg1 = compiler.compileExpression(operands[1], Type.i32, ConversionKind.NONE);
       }
       type = compiler.currentType;
@@ -1393,7 +1391,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       return module.createStore(type.byteSize, arg0, arg1, type.toNativeType(), offset);
 
     case "sizeof": // sizeof<T!>() -> usize
-      compiler.currentType = usizeType;
+      compiler.currentType = compiler.options.usizeType;
       if (operands.length != 0) {
         if (!(typeArguments && typeArguments.length == 1))
           compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0");
@@ -1405,7 +1403,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
           compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments.length.toString(10));
           return module.createUnreachable();
         }
-        ret = usizeType.size == 64 ? module.createI64(typeArguments[0].byteSize, 0) : module.createI32(typeArguments[0].byteSize);
+        ret = compiler.options.isWasm64 ? module.createI64(typeArguments[0].byteSize, 0) : module.createI32(typeArguments[0].byteSize);
       } else {
         compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", "0");
         return module.createUnreachable();
@@ -1489,9 +1487,9 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(operands[0], usizeType);
-      arg1 = compiler.compileExpression(operands[1], usizeType);
-      arg2 = compiler.compileExpression(operands[2], usizeType);
+      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
+      arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType);
+      arg2 = compiler.compileExpression(operands[2], compiler.options.usizeType);
       compiler.currentType = Type.void;
       throw new Error("not implemented");
       // return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
@@ -1504,9 +1502,9 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(operands[0], usizeType);
+      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
       arg1 = compiler.compileExpression(operands[1], Type.u32);
-      arg2 = compiler.compileExpression(operands[2], usizeType);
+      arg2 = compiler.compileExpression(operands[2], compiler.options.usizeType);
       compiler.currentType = Type.void;
       throw new Error("not implemented");
       // return module.createHost(HostOp.SetMemory, null, [ arg0, arg1, arg2 ]);
@@ -1529,7 +1527,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         compiler.currentType = typeArguments[0];
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(operands[0], usizeType, ConversionKind.NONE);
+      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, ConversionKind.NONE);
       compiler.currentType = typeArguments[0];
       if (compiler.currentType.kind != TypeKind.USIZE) {
         compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
@@ -1664,13 +1662,13 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
           case TypeKind.ISIZE:
           case TypeKind.USIZE:
-            tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(usizeType);
+            tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
             ret = module.createIf(
               module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
                 module.createTeeLocal(tempLocal0.index, arg0)
               ),
               module.createUnreachable(),
-              module.createGetLocal(tempLocal0.index, nativeUsizeType)
+              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType)
             );
             break;
 
@@ -1803,10 +1801,10 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         compiler.error(DiagnosticCode.Type_0_is_not_generic, reportNode.range, prototype.internalName);
       if (operands.length != 1) {
         compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range, "1", operands.length.toString(10));
-        compiler.currentType = usizeType;
+        compiler.currentType = compiler.options.usizeType;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], usizeType, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(operands[0], compiler.options.usizeType, ConversionKind.EXPLICIT);
 
     case "bool":
       if (typeArguments)
@@ -1878,11 +1876,10 @@ export function compileAllocate(compiler: Compiler, cls: Class, reportNode: Node
     if (prototype.kind == ElementKind.FUNCTION_PROTOTYPE) {
       var instance = (<FunctionPrototype>prototype).resolve(); // reports
       if (instance) {
-        var usizeType = program.target == Target.WASM64 ? Type.usize64 : Type.usize32;
-        if (!instance.is(ElementFlags.GENERIC) && instance.returnType == usizeType && instance.parameters.length == 1 && instance.parameters[0].type == usizeType) {
+        if (!instance.is(ElementFlags.GENERIC) && instance.returnType == compiler.options.usizeType && instance.parameters.length == 1 && instance.parameters[0].type == compiler.options.usizeType) {
           if (compiler.compileFunction(instance)) // reports
             return compiler.makeCall(instance, [
-              program.target == Target.WASM64
+              compiler.options.isWasm64
                 ? compiler.module.createI64(cls.currentMemoryOffset)
                 : compiler.module.createI32(cls.currentMemoryOffset)
             ]);

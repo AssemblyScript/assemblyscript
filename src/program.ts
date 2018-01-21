@@ -3,7 +3,7 @@ import {
 } from "./builtins";
 
 import {
-  Target
+  Options
 } from "./compiler";
 
 import {
@@ -107,8 +107,8 @@ export class Program extends DiagnosticEmitter {
   sources: Source[];
   /** Diagnostic offset used where sequentially obtaining the next diagnostic. */
   diagnosticsOffset: i32 = 0;
-  /** WebAssembly target. */
-  target: Target = Target.WASM32; // set on initialization
+  /** Compiler options. */
+  options: Options;
   /** Elements by internal name. */
   elements: Map<string,Element> = new Map();
   /** Types by internal name. */
@@ -125,20 +125,20 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Initializes the program and its elements prior to compilation. */
-  initialize(target: Target = Target.WASM32): void {
-    this.target = target;
+  initialize(options: Options): void {
+    this.options = options;
 
     this.types = new Map([
       ["i8", Type.i8],
       ["i16", Type.i16],
       ["i32", Type.i32],
       ["i64", Type.i64],
-      ["isize", target == Target.WASM64 ? Type.isize64 : Type.isize32],
+      ["isize", options.isizeType],
       ["u8", Type.u8],
       ["u16", Type.u16],
       ["u32", Type.u32],
       ["u64", Type.u64],
-      ["usize", target == Target.WASM64 ? Type.usize64 : Type.usize32],
+      ["usize", options.usizeType],
       ["bool", Type.bool],
       ["f32", Type.f32],
       ["f64", Type.f64],
@@ -2061,7 +2061,7 @@ export class Class extends Element {
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.typeArguments = typeArguments;
-    this.type = (prototype.program.target == Target.WASM64 ? Type.usize64 : Type.usize32).asClass(this);
+    this.type = prototype.program.options.usizeType.asClass(this);
     this.base = base;
 
     // inherit static members and contextual type arguments from base class
