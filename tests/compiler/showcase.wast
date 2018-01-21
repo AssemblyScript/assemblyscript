@@ -1,6 +1,6 @@
 (module
- (type $ii (func (param i32) (result i32)))
  (type $i (func (result i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $FFF (func (param f64 f64) (result f64)))
@@ -33,6 +33,7 @@
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
+ (global $builtins/constantOffset i32 (i32.const 8))
  (global $builtins/s (mut i32) (i32.const 0))
  (global $i8.MIN_VALUE i32 (i32.const -128))
  (global $i8.MAX_VALUE i32 (i32.const 127))
@@ -5134,6 +5135,66 @@
     (i32.const 8)
    )
   )
+  (set_global $builtins/i
+   (i32.load offset=8
+    (i32.const 0)
+   )
+  )
+  (i32.store offset=8
+   (i32.const 0)
+   (get_global $builtins/i)
+  )
+  (i32.store offset=8
+   (i32.const 0)
+   (i32.load offset=8
+    (i32.const 0)
+   )
+  )
+  (set_global $builtins/I
+   (i64.load offset=8
+    (i32.const 0)
+   )
+  )
+  (i64.store offset=8
+   (i32.const 0)
+   (get_global $builtins/I)
+  )
+  (i64.store offset=8
+   (i32.const 0)
+   (i64.load offset=8
+    (i32.const 0)
+   )
+  )
+  (set_global $builtins/f
+   (f32.load offset=8
+    (i32.const 0)
+   )
+  )
+  (f32.store offset=8
+   (i32.const 0)
+   (get_global $builtins/f)
+  )
+  (f32.store offset=8
+   (i32.const 0)
+   (f32.load offset=8
+    (i32.const 0)
+   )
+  )
+  (set_global $builtins/F
+   (f64.load offset=8
+    (i32.const 0)
+   )
+  )
+  (f64.store offset=8
+   (i32.const 0)
+   (get_global $builtins/F)
+  )
+  (f64.store offset=8
+   (i32.const 0)
+   (f64.load offset=8
+    (i32.const 0)
+   )
+  )
   (drop
    (i32.reinterpret/f32
     (f32.const 1.25)
@@ -6307,6 +6368,7 @@
   GLOBAL: builtins/I
   GLOBAL: builtins/f
   GLOBAL: builtins/F
+  GLOBAL: builtins/constantOffset
   GLOBAL: builtins/s
   FUNCTION_PROTOTYPE: builtins/test
   FUNCTION_PROTOTYPE: memcpy/memcpy

@@ -155,9 +155,9 @@ declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
-declare function load<T>(offset: usize): T;
+declare function load<T>(ptr: usize, constantOffset?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
-declare function store<T>(offset: usize, value: T): void;
+declare function store<T>(ptr: usize, value: T, constantOffset?: usize): void;
 /** Returns the current memory size in units of pages. One page is 64kb. */
 declare function current_memory(): i32;
 /** Grows linear memory by a given unsigned delta of pages. One page is 64kb. Returns the previous memory size in units of pages or `-1` on failure. */

@@ -115,6 +115,16 @@ store<f32>(8, load<f32>(8));
 F = load<f64>(8); store<f64>(8, F);
 store<f64>(8, load<f64>(8));
 
+const constantOffset: usize = 8;
+i = load<i32>(0, constantOffset); store<i32>(0, i, constantOffset);
+store<i32>(0, load<i32>(0, constantOffset), constantOffset);
+I = load<i64>(0, constantOffset); store<i64>(0, I, constantOffset);
+store<i64>(0, load<i64>(0, constantOffset), constantOffset);
+f = load<f32>(0, constantOffset); store<f32>(0, f, constantOffset);
+store<f32>(0, load<f32>(0, constantOffset), constantOffset);
+F = load<f64>(0, constantOffset); store<f64>(0, F, constantOffset);
+store<f64>(0, load<f64>(0, constantOffset), constantOffset);
+
 // reinterpretation
 
 reinterpret<i32>(1.25);
