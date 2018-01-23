@@ -84,39 +84,28 @@
        )
        (block
         (set_local $2
-         (i32.and
+         (i32.add
           (i32.add
            (i32.add
             (i32.add
              (i32.add
               (i32.add
                (i32.add
-                (i32.add
-                 (i32.load8_u
-                  (i32.add
-                   (i32.mul
-                    (get_local $3)
-                    (get_global $../../examples/game-of-life/assembly/game-of-life/w)
-                   )
-                   (tee_local $2
-                    (select
-                     (i32.sub
-                      (get_local $1)
-                      (i32.const 1)
-                     )
-                     (get_local $6)
-                     (get_local $1)
-                    )
-                   )
+                (i32.load8_u
+                 (i32.add
+                  (i32.mul
+                   (get_local $3)
+                   (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                   )
-                 )
-                 (i32.load8_u
-                  (i32.add
-                   (i32.mul
-                    (get_local $3)
-                    (get_global $../../examples/game-of-life/assembly/game-of-life/w)
+                  (tee_local $2
+                   (select
+                    (i32.sub
+                     (get_local $1)
+                     (i32.const 1)
+                    )
+                    (get_local $6)
+                    (get_local $1)
                    )
-                   (get_local $1)
                   )
                  )
                 )
@@ -126,29 +115,29 @@
                    (get_local $3)
                    (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                   )
-                  (tee_local $7
-                   (select
-                    (i32.const 0)
-                    (i32.add
-                     (get_local $1)
-                     (i32.const 1)
-                    )
-                    (i32.eq
-                     (get_local $1)
-                     (get_local $6)
-                    )
-                   )
-                  )
+                  (get_local $1)
                  )
                 )
                )
                (i32.load8_u
                 (i32.add
                  (i32.mul
-                  (get_local $0)
+                  (get_local $3)
                   (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                  )
-                 (get_local $2)
+                 (tee_local $7
+                  (select
+                   (i32.const 0)
+                   (i32.add
+                    (get_local $1)
+                    (i32.const 1)
+                   )
+                   (i32.eq
+                    (get_local $1)
+                    (get_local $6)
+                   )
+                  )
+                 )
                 )
                )
               )
@@ -158,17 +147,17 @@
                  (get_local $0)
                  (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                 )
-                (get_local $7)
+                (get_local $2)
                )
               )
              )
              (i32.load8_u
               (i32.add
                (i32.mul
-                (get_local $4)
+                (get_local $0)
                 (get_global $../../examples/game-of-life/assembly/game-of-life/w)
                )
-               (get_local $2)
+               (get_local $7)
               )
              )
             )
@@ -178,7 +167,7 @@
                (get_local $4)
                (get_global $../../examples/game-of-life/assembly/game-of-life/w)
               )
-              (get_local $1)
+              (get_local $2)
              )
             )
            )
@@ -188,11 +177,19 @@
               (get_local $4)
               (get_global $../../examples/game-of-life/assembly/game-of-life/w)
              )
-             (get_local $7)
+             (get_local $1)
             )
            )
           )
-          (i32.const 255)
+          (i32.load8_u
+           (i32.add
+            (i32.mul
+             (get_local $4)
+             (get_global $../../examples/game-of-life/assembly/game-of-life/w)
+            )
+            (get_local $7)
+           )
+          )
          )
         )
         (if
@@ -208,15 +205,15 @@
          (if
           (i32.and
            (select
-            (i32.lt_u
+            (i32.lt_s
              (get_local $2)
              (i32.const 2)
             )
-            (i32.gt_u
+            (i32.gt_s
              (get_local $2)
              (i32.const 3)
             )
-            (i32.lt_u
+            (i32.lt_s
              (get_local $2)
              (i32.const 2)
             )

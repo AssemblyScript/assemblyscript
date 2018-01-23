@@ -240,7 +240,8 @@ export class Module {
   ref: ModuleRef;
   lit: BinaryenLiteral;
 
-  static MAX_MEMORY_WASM32: Index = 0xffff;
+  static readonly MAX_MEMORY_WASM32: Index = 0xffff;
+  // TODO: static readonly MAX_MEMORY_WASM64
 
   static create(): Module {
     var module = new Module();

@@ -2134,6 +2134,10 @@ export const enum FlowFlags {
   RETURNS = 1 << 0,
   /** This branch possibly throws. */
   POSSIBLY_THROWS = 1 << 1,
+  /** This branch possible breaks. */
+  POSSIBLY_BREAKS = 1 << 2,
+  /** This branch possible continues. */
+  POSSIBLY_CONTINUES = 1 << 3
 }
 
 /** A control flow evaluator. */
@@ -2185,17 +2189,22 @@ export class Flow {
   /** Leaves the current branch or scope and returns the parent flow. */
   leaveBranchOrScope(): Flow {
     var parent = assert(this.parent);
+
+    // Free block-scoped locals
     if (this.scopedLocals) {
       for (var scopedLocal of this.scopedLocals.values())
         this.currentFunction.freeTempLocal(scopedLocal);
       this.scopedLocals = null;
     }
-    // Mark parent as THROWS if any child throws
-    if (this.is(FlowFlags.POSSIBLY_THROWS))
-       parent.set(FlowFlags.POSSIBLY_THROWS);
 
-    this.continueLabel = null;
-    this.breakLabel = null;
+    // Propagate flags to parent
+    if (this.is(FlowFlags.POSSIBLY_THROWS))
+      parent.set(FlowFlags.POSSIBLY_THROWS);
+    if (this.is(FlowFlags.POSSIBLY_BREAKS) && parent.breakLabel == this.breakLabel)
+      parent.set(FlowFlags.POSSIBLY_BREAKS);
+    if (this.is(FlowFlags.POSSIBLY_CONTINUES) && parent.continueLabel == this.continueLabel)
+      parent.set(FlowFlags.POSSIBLY_CONTINUES);
+
     return parent;
   }
 

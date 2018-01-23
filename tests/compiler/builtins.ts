@@ -125,6 +125,47 @@ store<f32>(0, load<f32>(0, constantOffset), constantOffset);
 F = load<f64>(0, constantOffset); store<f64>(0, F, constantOffset);
 store<f64>(0, load<f64>(0, constantOffset), constantOffset);
 
+// load and store smaller types
+
+i = load<i8>(8);
+i = load<i16>(8);
+i = load<i32>(8);
+
+i = load<u8>(8);
+i = load<u16>(8);
+i = load<u32>(8);
+
+var u: u32;
+u = load<u8>(8);
+u = load<u16>(8);
+u = load<u32>(8);
+
+u = load<i8>(8);
+u = load<i16>(8);
+u = load<i32>(8);
+
+I = load<i8>(8);
+I = load<i16>(8);
+I = load<i32>(8);
+I = load<i64>(8);
+
+var U: u64;
+U = load<u8>(8);
+U = load<u16>(8);
+U = load<u32>(8);
+U = load<u64>(8);
+
+store<i8>(8, <i32>1);
+store<i16>(8, <i32>1);
+store<i32>(8, <i32>1);
+
+store<i8>(8, <i64>1);
+store<i16>(8, <i64>1);
+store<i32>(8, <i64>1);
+store<i64>(8, <i64>1);
+
+store<i64>(8, <i32>1); // must extend
+
 // reinterpretation
 
 reinterpret<i32>(1.25);

@@ -578,15 +578,15 @@ export class Compiler extends DiagnosticEmitter {
     // compile statements
     var stmts: ExpressionRef[] | null = null;
     if (!instance.is(ElementFlags.DECLARED)) {
-      declaration = assert(declaration);
+      declaration = assert(declaration, "declaration expected");
       var previousFunction = this.currentFunction;
       this.currentFunction = instance;
-      var statements = assert(declaration.statements);
+      var statements = assert(declaration.statements, "implementation expected");
       stmts = this.compileStatements(statements);
       // make sure the top-level branch or all child branches return
       var allBranchesReturn = this.currentFunction.flow.finalize();
       if (instance.returnType != Type.void && !allBranchesReturn)
-        this.error(DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value, assert(declaration.returnType).range);
+        this.error(DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value, assert(declaration.returnType, "return type expected").range);
       this.currentFunction = previousFunction;
     }
 
@@ -895,6 +895,7 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement, statement.range);
       return this.module.createUnreachable();
     }
+    this.currentFunction.flow.set(FlowFlags.POSSIBLY_BREAKS);
     return this.module.createBreak(breakLabel);
   }
 
@@ -909,6 +910,7 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement, statement.range);
       return this.module.createUnreachable();
     }
+    this.currentFunction.flow.set(FlowFlags.POSSIBLY_CONTINUES);
     return this.module.createBreak(continueLabel);
   }
 
@@ -1022,8 +1024,6 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileReturnStatement(statement: ReturnStatement): ExpressionRef {
-    assert(this.currentFunction);
-
     var expression: ExpressionRef = 0;
     if (statement.value)
       expression = this.compileExpression(<Expression>statement.value, this.currentFunction.returnType);
@@ -1353,7 +1353,7 @@ export class Compiler extends DiagnosticEmitter {
 
   convertExpression(expr: ExpressionRef, fromType: Type, toType: Type, conversionKind: ConversionKind, reportNode: Node): ExpressionRef {
     if (conversionKind == ConversionKind.NONE) {
-      assert(false);
+      assert(false, "concrete type expected");
       return expr;
     }
 
@@ -1437,7 +1437,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // float to void
       } else {
-        assert(toType.flags == TypeFlags.NONE);
+        assert(toType.flags == TypeFlags.NONE, "void type expected");
         expr = this.module.createDrop(expr);
       }
 
@@ -2296,11 +2296,10 @@ export class Compiler extends DiagnosticEmitter {
 
         // otherwise make use of the temp. local
         else {
-          assert(tempLocal);
           expr = this.module.createIf(
             condition,
             right,
-            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType())
+            this.module.createGetLocal(assert(tempLocal, "tempLocal must be set").index, this.currentType.toNativeType())
           );
         }
         break;
@@ -2331,10 +2330,9 @@ export class Compiler extends DiagnosticEmitter {
 
         // otherwise make use of the temp. local
         else {
-          assert(tempLocal);
           expr = this.module.createIf(
             condition,
-            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType()),
+            this.module.createGetLocal(assert(tempLocal, "tempLocal must be set").index, this.currentType.toNativeType()),
             right
           );
         }
@@ -2345,7 +2343,7 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("not implemented");
     }
     if (possiblyOverflows && wrapSmallIntegers) {
-      assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
+      assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER)), "small integer type expected";
       expr = makeSmallIntegerWrap(expr, this.currentType, this.module);
     }
     return compound
@@ -2366,7 +2364,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
-        assert((<Global>element).type != Type.void);
+        assert((<Global>element).type != Type.void, "concrete type expected");
         // fall-through
 
       case ElementKind.LOCAL:
@@ -2429,7 +2427,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
-        assert((<Global>element).type != Type.void);
+        assert((<Global>element).type != Type.void, "concrete type expected");
         this.currentType = tee ? (<Global>element).type : Type.void;
         if ((<Local>element).is(ElementFlags.CONSTANT)) {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
@@ -2448,9 +2446,9 @@ export class Compiler extends DiagnosticEmitter {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Field>element).internalName);
           return this.module.createUnreachable();
         }
-        assert(resolved.targetExpression != null);
+        assert(resolved.targetExpression != null, "target expression expected");
         targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32, ConversionKind.NONE);
-        assert(this.currentType.classType);
+        assert(this.currentType.classType, "class type expected");
         this.currentType = tee ? (<Field>element).type : Type.void;
         var elementNativeType = (<Field>element).type.toNativeType();
         if (!tee)

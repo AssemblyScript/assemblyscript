@@ -1338,7 +1338,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
 
     // memory access
 
-    case "load": // load<T!>(offset: usize, constantOffset?: usize) -> T
+    case "load": // load<T!>(offset: usize, constantOffset?: usize) -> *
       if (operands.length < 1 || operands.length > 2) {
         if (!(typeArguments && typeArguments.length == 1))
           compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0");
@@ -1358,37 +1358,43 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       offset = operands.length == 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
       if (offset < 0)
         return module.createUnreachable();
-      compiler.currentType = typeArguments[0];
-      return module.createLoad(typeArguments[0].byteSize, typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER), arg0, typeArguments[0].toNativeType(), offset);
+      return module.createLoad(typeArguments[0].byteSize, typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER), arg0,
+        typeArguments[0].is(TypeFlags.INTEGER) && contextualType.is(TypeFlags.INTEGER) && contextualType.size >= typeArguments[0].size
+          ? (compiler.currentType = contextualType).toNativeType()
+          : (compiler.currentType = typeArguments[0]).toNativeType()
+      , offset);
 
-    case "store": // store<T?>(offset: usize, value: T, constantOffset?: usize) -> void
+    case "store": // store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
       compiler.currentType = Type.void;
       if (operands.length < 2 || operands.length > 3) {
-        if (typeArguments && typeArguments.length != 1)
-          compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments.length.toString(10));
+        if (!(typeArguments && typeArguments.length == 1))
+          compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0");
         if (operands.length < 2)
           compiler.error(DiagnosticCode.Expected_at_least_0_arguments_but_got_1, reportNode.range, "2", operands.length.toString(10));
         else
           compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range, "3", operands.length.toString(10));
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments.length.toString(10));
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
-        arg1 = compiler.compileExpression(operands[1], typeArguments[0]);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
-        arg1 = compiler.compileExpression(operands[1], Type.i32, ConversionKind.NONE);
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(DiagnosticCode.Expected_0_type_arguments_but_got_1, reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0");
+        return module.createUnreachable();
       }
-      type = compiler.currentType;
+      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
+      arg1 = compiler.compileExpression(operands[1], typeArguments[0],
+        typeArguments[0].is(TypeFlags.INTEGER)
+          ? ConversionKind.NONE // wraps a larger integer type to a smaller one, i.e. i32.store8
+          : ConversionKind.IMPLICIT
+      );
+      if (compiler.currentType.is(TypeFlags.INTEGER) && typeArguments[0].is(TypeFlags.INTEGER) && typeArguments[0].size > compiler.currentType.size) {
+        arg1 = compiler.convertExpression(arg1, compiler.currentType, typeArguments[0], ConversionKind.IMPLICIT, operands[1]);
+        type = typeArguments[0];
+      } else
+        type = compiler.currentType;
       offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0)
         return module.createUnreachable();
       compiler.currentType = Type.void;
-      return module.createStore(type.byteSize, arg0, arg1, type.toNativeType(), offset);
+      return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
 
     case "sizeof": // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
