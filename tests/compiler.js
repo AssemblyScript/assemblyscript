@@ -84,7 +84,14 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
             externalFunc: function(arg0, arg1, arg2) {
               console.log("env.externalFunc called with: " + arg0 + ", " + arg1 + ", " + arg2);
             },
-            externalConst: 1
+            externalConst: 1,
+            allocate_memory: function(size) {
+              console.log("env.allocate_memory called with: " + size);
+              return 0;
+            },
+            free_memory: function(ptr) {
+              console.log("env.free_memory called with: " + ptr);
+            }
           },
           external: {
             externalFunc: function(arg0, arg1, arg2) {

@@ -21,9 +21,11 @@ export function step(): void {
     for (var x: u32 = 0; x < w; ++x) {
       var xm1 = select<u32>(wm1, x - 1, x == 0),
           xp1 = select<u32>(0, x + 1, x == wm1);
-      var n = load<u8>(ym1 * w + xm1) + load<u8>(ym1 * w + x) + load<u8>(ym1 * w + xp1)
-            + load<u8>(y   * w + xm1)                         + load<u8>(y   * w + xp1)
-            + load<u8>(yp1 * w + xm1) + load<u8>(yp1 * w + x) + load<u8>(yp1 * w + xp1);
+      var n = (
+        load<u8>(ym1 * w + xm1) + load<u8>(ym1 * w + x) + load<u8>(ym1 * w + xp1) +
+        load<u8>(y   * w + xm1)                         + load<u8>(y   * w + xp1) +
+        load<u8>(yp1 * w + xm1) + load<u8>(yp1 * w + x) + load<u8>(yp1 * w + xp1)
+      );
       if (load<u8>(y * w + x)) {
         if (n < 2 || n > 3)
           store<u8>(s + y * w + x, 0);

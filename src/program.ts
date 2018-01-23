@@ -3,16 +3,8 @@ import {
 } from "./builtins";
 
 import {
-  Target
+  Options
 } from "./compiler";
-
-import {
-  PATH_DELIMITER,
-  GETTER_PREFIX,
-  SETTER_PREFIX,
-  STATIC_DELIMITER,
-  INSTANCE_DELIMITER
-} from "./constants";
 
 import {
   DiagnosticCode,
@@ -81,6 +73,19 @@ import {
   NativeType
 } from "./module";
 
+/** Path delimiter inserted between file system levels. */
+export const PATH_DELIMITER = "/";
+/** Substitution used to indicate the parent directory. */
+export const PARENT_SUBST = "..";
+/** Function name prefix used for getters. */
+export const GETTER_PREFIX = "get:";
+/** Function name prefix used for setters. */
+export const SETTER_PREFIX = "set:";
+/** Delimiter used between class names and instance members. */
+export const INSTANCE_DELIMITER = "#";
+/** Delimiter used between class and namespace names and static members. */
+export const STATIC_DELIMITER = ".";
+
 class QueuedExport {
   isReExport: bool;
   referencedName: string;
@@ -102,8 +107,8 @@ export class Program extends DiagnosticEmitter {
   sources: Source[];
   /** Diagnostic offset used where sequentially obtaining the next diagnostic. */
   diagnosticsOffset: i32 = 0;
-  /** WebAssembly target. */
-  target: Target = Target.WASM32; // set on initialization
+  /** Compiler options. */
+  options: Options;
   /** Elements by internal name. */
   elements: Map<string,Element> = new Map();
   /** Types by internal name. */
@@ -120,20 +125,20 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Initializes the program and its elements prior to compilation. */
-  initialize(target: Target = Target.WASM32): void {
-    this.target = target;
+  initialize(options: Options): void {
+    this.options = options;
 
     this.types = new Map([
       ["i8", Type.i8],
       ["i16", Type.i16],
       ["i32", Type.i32],
       ["i64", Type.i64],
-      ["isize", target == Target.WASM64 ? Type.isize64 : Type.isize32],
+      ["isize", options.isizeType],
       ["u8", Type.u8],
       ["u16", Type.u16],
       ["u32", Type.u32],
       ["u64", Type.u64],
-      ["usize", target == Target.WASM64 ? Type.usize64 : Type.usize32],
+      ["usize", options.usizeType],
       ["bool", Type.bool],
       ["f32", Type.f32],
       ["f64", Type.f64],
@@ -2056,7 +2061,7 @@ export class Class extends Element {
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.typeArguments = typeArguments;
-    this.type = (prototype.program.target == Target.WASM64 ? Type.usize64 : Type.usize32).asClass(this);
+    this.type = prototype.program.options.usizeType.asClass(this);
     this.base = base;
 
     // inherit static members and contextual type arguments from base class
@@ -2129,6 +2134,10 @@ export const enum FlowFlags {
   RETURNS = 1 << 0,
   /** This branch possibly throws. */
   POSSIBLY_THROWS = 1 << 1,
+  /** This branch possible breaks. */
+  POSSIBLY_BREAKS = 1 << 2,
+  /** This branch possible continues. */
+  POSSIBLY_CONTINUES = 1 << 3
 }
 
 /** A control flow evaluator. */
@@ -2180,17 +2189,22 @@ export class Flow {
   /** Leaves the current branch or scope and returns the parent flow. */
   leaveBranchOrScope(): Flow {
     var parent = assert(this.parent);
+
+    // Free block-scoped locals
     if (this.scopedLocals) {
       for (var scopedLocal of this.scopedLocals.values())
         this.currentFunction.freeTempLocal(scopedLocal);
       this.scopedLocals = null;
     }
-    // Mark parent as THROWS if any child throws
-    if (this.is(FlowFlags.POSSIBLY_THROWS))
-       parent.set(FlowFlags.POSSIBLY_THROWS);
 
-    this.continueLabel = null;
-    this.breakLabel = null;
+    // Propagate flags to parent
+    if (this.is(FlowFlags.POSSIBLY_THROWS))
+      parent.set(FlowFlags.POSSIBLY_THROWS);
+    if (this.is(FlowFlags.POSSIBLY_BREAKS) && parent.breakLabel == this.breakLabel)
+      parent.set(FlowFlags.POSSIBLY_BREAKS);
+    if (this.is(FlowFlags.POSSIBLY_CONTINUES) && parent.continueLabel == this.continueLabel)
+      parent.set(FlowFlags.POSSIBLY_CONTINUES);
+
     return parent;
   }
 

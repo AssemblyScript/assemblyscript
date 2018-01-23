@@ -29,11 +29,15 @@ function move_memory(dest, src, n) {
 };
 
 globalScope["store"] =
-function store(ptr, val) {
+function store(ptr, val, off) {
+  if (typeof off === "number")
+    ptr += off;
   HEAP[ptr] = val;
 };
 
 globalScope["load"] =
 function load(ptr) {
+  if (typeof off === "number")
+    ptr += off;
   return HEAP[ptr];
 };

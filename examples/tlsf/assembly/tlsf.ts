@@ -229,9 +229,8 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     const offset = BlockHeader.SIZE + sizeof<u32>();
     return load<u32>(
       changetype<usize>(this)
-      + offset
       + fl_index * sizeof<u32>()
-    );
+    , offset);
   }
 
   /**
@@ -242,10 +241,9 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     const offset = BlockHeader.SIZE + sizeof<u32>();
     return store<u32>(
       changetype<usize>(this)
-      + offset
       + fl_index * sizeof<u32>(),
       sl_map
-    );
+    , offset);
   }
 
   /**
@@ -256,9 +254,8 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     const offset = BlockHeader.SIZE + (1 + FL_INDEX_COUNT) * sizeof<u32>();
     return load<BlockHeader>(
       changetype<usize>(this)
-      + offset
       + (fli * SL_INDEX_COUNT + sli) * sizeof<usize>()
-    );
+    , offset);
   }
 
   /**
@@ -269,10 +266,9 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     const offset = BlockHeader.SIZE + (1 + FL_INDEX_COUNT) * sizeof<u32>();
     return store<BlockHeader>(
       changetype<usize>(this)
-      + offset
       + (fl_index * SL_INDEX_COUNT + sl_index) * sizeof<usize>(),
       block
-    );
+    , offset);
   }
 
   ///////////////////////////////// Methods ///////////////////////////////////
@@ -326,8 +322,9 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     if (this.blocks(fl, sl) == block) {
       this.blocks_set(fl, sl, next);
       if (next == this) {
-        this.sl_bitmap_set(fl, this.sl_bitmap(fl) & ~(1 << sl));
-        if (!this.sl_bitmap(fl)) {
+        var sl_bitmap = this.sl_bitmap(fl) & ~(1 << sl);
+        this.sl_bitmap_set(fl, sl_bitmap);
+        if (!sl_bitmap) {
           this.fl_bitmap &= ~(1 << fl);
         }
       }
@@ -650,9 +647,11 @@ function test_ffs_fls(): i32 {
   rv += (ffs<u32>(0x80008000) == 15) ? 0 : 0x20;
   rv += (fls<u32>(0x80000008) == 31) ? 0 : 0x40;
   rv += (fls<u32>(0x7FFFFFFF) == 30) ? 0 : 0x80;
-  rv += (fls<u64>(0x80000000) == 31) ? 0 : 0x100;
-  rv += (fls<u64>(0x100000000) == 32) ? 0 : 0x200;
-  rv += (fls<u64>(0xffffffffffffffff) == 63) ? 0 : 0x400;
+  if (sizeof<usize>() == 8) {
+    rv += (fls<u64>(0x80000000) == 31) ? 0 : 0x100;
+    rv += (fls<u64>(0x100000000) == 32) ? 0 : 0x200;
+    rv += (fls<u64>(0xffffffffffffffff) == 63) ? 0 : 0x400;
+  }
   return rv;
 }
 

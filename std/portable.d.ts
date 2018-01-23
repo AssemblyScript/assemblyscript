@@ -123,9 +123,9 @@ declare function free_memory(ptr: usize): void;
 /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
 declare function move_memory(destination: usize, source: usize, n: usize): void;
 /** Loads a value of the specified type from memory. Type must be `u8`. */
-declare function load<T = u8>(offset: usize): T;
+declare function load<T = u8>(ptr: usize, constantOffset?: usize): T;
 /** Stores a value of the specified type to memory. Type must be `u8`. */
-declare function store<T = u8>(offset: usize, value: T): void;
+declare function store<T = u8>(ptr: usize, value: T, constantOffset?: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. */
 declare function unreachable(): any; // sic
 

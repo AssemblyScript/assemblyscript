@@ -1,11 +1,8 @@
 import {
   compileCall as compileBuiltinCall,
-  compileGetConstant as compileBuiltinGetConstant
+  compileGetConstant as compileBuiltinGetConstant,
+  compileAllocate as compileBuiltinAllocate
 } from "./builtins";
-
-import {
-  PATH_DELIMITER
-} from "./constants";
 
 import {
   DiagnosticCode,
@@ -45,7 +42,8 @@ import {
   VariableLikeElement,
   Flow,
   FlowFlags,
-  ElementFlags
+  ElementFlags,
+  PATH_DELIMITER
 } from "./program";
 
 import {
@@ -138,6 +136,7 @@ export enum Target {
 
 /** Compiler options. */
 export class Options {
+
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
   /** If true, compiles everything instead of just reachable code. */
@@ -146,6 +145,19 @@ export class Options {
   noAssert: bool = false;
   /** If true, does not set up a memory. */
   noMemory: bool = false;
+  /** Memory allocation implementation to use. */
+  allocateImpl: string = "allocate_memory";
+  /** Memory freeing implementation to use. */
+  freeImpl: string = "free_memory";
+
+  /** Tests if the target is WASM64 or, otherwise, WASM32. */
+  get isWasm64(): bool { return this.target == Target.WASM64; }
+  /** Gets the unsigned size type matching the target. */
+  get usizeType(): Type { return this.target == Target.WASM64 ? Type.usize64 : Type.usize32; }
+  /** Gets the signed size type matching the target. */
+  get isizeType(): Type { return this.target == Target.WASM64 ? Type.isize64 : Type.isize32; }
+  /** Gets the native size type matching the target. */
+  get nativeSizeType(): NativeType { return this.target == Target.WASM64 ? NativeType.I64 : NativeType.I32; }
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -196,7 +208,7 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     this.options = options ? options : new Options();
-    this.memoryOffset = new U64(this.options.target == Target.WASM64 ? 8 : 4, 0); // leave space for `null`
+    this.memoryOffset = new U64(this.options.usizeType.byteSize); // leave space for `null`
     this.module = Module.create();
 
     // set up start function
@@ -209,7 +221,7 @@ export class Compiler extends DiagnosticEmitter {
   compile(): Module {
 
     // initialize lookup maps, built-ins, imports, exports, etc.
-    this.program.initialize(this.options.target);
+    this.program.initialize(this.options);
 
     // compile entry file (exactly one, usually)
     var sources = this.program.sources;
@@ -382,7 +394,7 @@ export class Compiler extends DiagnosticEmitter {
     var initializeInStart = false;
 
     if (global.is(ElementFlags.INLINED)) {
-      initExpr = makeInlineConstant(global, this.module);
+      initExpr = this.compileInlineConstant(global, global.type);
     } else if (declaration) {
       if (declaration.initializer) {
         if (!initExpr)
@@ -545,15 +557,15 @@ export class Compiler extends DiagnosticEmitter {
       return true;
 
     var declaration = instance.prototype.declaration;
-    if (!declaration)
-      throw new Error("declaration expected"); // built-ins are not compiled here
 
     if (instance.is(ElementFlags.DECLARED)) {
-      if (declaration.statements) {
+      if (declaration && declaration.statements) {
         this.error(DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts, declaration.name.range);
         return false;
       }
     } else {
+      if (!declaration)
+        throw new Error("declaration expected"); // built-ins are not compiled here
       if (!declaration.statements) {
         this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, declaration.name.range);
         return false;
@@ -566,14 +578,15 @@ export class Compiler extends DiagnosticEmitter {
     // compile statements
     var stmts: ExpressionRef[] | null = null;
     if (!instance.is(ElementFlags.DECLARED)) {
+      declaration = assert(declaration, "declaration expected");
       var previousFunction = this.currentFunction;
       this.currentFunction = instance;
-      var statements = assert(declaration.statements);
+      var statements = assert(declaration.statements, "implementation expected");
       stmts = this.compileStatements(statements);
       // make sure the top-level branch or all child branches return
       var allBranchesReturn = this.currentFunction.flow.finalize();
       if (instance.returnType != Type.void && !allBranchesReturn)
-        this.error(DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value, assert(declaration.returnType).range);
+        this.error(DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value, assert(declaration.returnType, "return type expected").range);
       this.currentFunction = previousFunction;
     }
 
@@ -601,12 +614,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // create the function
     if (instance.is(ElementFlags.DECLARED)) {
-      this.module.addFunctionImport(instance.internalName, instance.prototype.namespace ? instance.prototype.namespace.simpleName : "env", declaration.name.name, typeRef);
+      this.module.addFunctionImport(instance.internalName, instance.prototype.namespace ? instance.prototype.namespace.simpleName : "env", instance.simpleName, typeRef);
     } else {
       this.module.addFunction(instance.internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
     }
     instance.finalize();
-    if (declaration.range.source.isEntry && declaration.isTopLevelExport) {
+    if (declaration && declaration.range.source.isEntry && declaration.isTopLevelExport) {
       this.module.addFunctionExport(instance.internalName, declaration.name.name);
     }
     return true;
@@ -882,6 +895,7 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement, statement.range);
       return this.module.createUnreachable();
     }
+    this.currentFunction.flow.set(FlowFlags.POSSIBLY_BREAKS);
     return this.module.createBreak(breakLabel);
   }
 
@@ -896,6 +910,7 @@ export class Compiler extends DiagnosticEmitter {
       this.error(DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement, statement.range);
       return this.module.createUnreachable();
     }
+    this.currentFunction.flow.set(FlowFlags.POSSIBLY_CONTINUES);
     return this.module.createBreak(continueLabel);
   }
 
@@ -1009,8 +1024,6 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileReturnStatement(statement: ReturnStatement): ExpressionRef {
-    assert(this.currentFunction);
-
     var expression: ExpressionRef = 0;
     if (statement.value)
       expression = this.compileExpression(<Expression>statement.value, this.currentFunction.returnType);
@@ -1247,6 +1260,53 @@ export class Compiler extends DiagnosticEmitter {
 
   // expressions
 
+  /** Compiles an inlined constant value of a variable-like element. */
+  compileInlineConstant(element: VariableLikeElement, contextualType: Type): ExpressionRef {
+    assert(element.is(ElementFlags.INLINED));
+
+    switch (element.type.is(TypeFlags.INTEGER) && contextualType.is(TypeFlags.INTEGER) && element.type.size <= contextualType.size
+      ? (this.currentType = contextualType).kind // essentially precomputes a (sign-)extension
+      : (this.currentType = element.type).kind
+    ) {
+
+      case TypeKind.I8:
+      case TypeKind.I16:
+        var shift = element.type.computeSmallIntegerShift(Type.i32);
+        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
+
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL:
+        var mask = element.type.computeSmallIntegerMask(Type.i32);
+        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & mask : 0);
+
+      case TypeKind.I32:
+      case TypeKind.U32:
+        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
+
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        if (!element.program.options.isWasm64)
+          return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
+        // fall-through
+
+      case TypeKind.I64:
+      case TypeKind.U64:
+        return element.constantIntegerValue
+          ? this.module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
+          : this.module.createI64(0);
+
+      case TypeKind.F32:
+        return this.module.createF32((<VariableLikeElement>element).constantFloatValue);
+
+      case TypeKind.F64:
+        return this.module.createF64((<VariableLikeElement>element).constantFloatValue);
+
+      default:
+        throw new Error("concrete type expected");
+    }
+  }
+
   compileExpression(expression: Expression, contextualType: Type, conversionKind: ConversionKind = ConversionKind.IMPLICIT, wrapSmallIntegers: bool = true): ExpressionRef {
     this.currentType = contextualType;
 
@@ -1340,7 +1400,7 @@ export class Compiler extends DiagnosticEmitter {
 
   convertExpression(expr: ExpressionRef, fromType: Type, toType: Type, conversionKind: ConversionKind, reportNode: Node): ExpressionRef {
     if (conversionKind == ConversionKind.NONE) {
-      assert(false);
+      assert(false, "concrete type expected");
       return expr;
     }
 
@@ -1424,7 +1484,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // float to void
       } else {
-        assert(toType.flags == TypeFlags.NONE);
+        assert(toType.flags == TypeFlags.NONE, "void type expected");
         expr = this.module.createDrop(expr);
       }
 
@@ -2283,11 +2343,10 @@ export class Compiler extends DiagnosticEmitter {
 
         // otherwise make use of the temp. local
         else {
-          assert(tempLocal);
           expr = this.module.createIf(
             condition,
             right,
-            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType())
+            this.module.createGetLocal(assert(tempLocal, "tempLocal must be set").index, this.currentType.toNativeType())
           );
         }
         break;
@@ -2318,10 +2377,9 @@ export class Compiler extends DiagnosticEmitter {
 
         // otherwise make use of the temp. local
         else {
-          assert(tempLocal);
           expr = this.module.createIf(
             condition,
-            this.module.createGetLocal((<Local>tempLocal).index, this.currentType.toNativeType()),
+            this.module.createGetLocal(assert(tempLocal, "tempLocal must be set").index, this.currentType.toNativeType()),
             right
           );
         }
@@ -2332,7 +2390,7 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("not implemented");
     }
     if (possiblyOverflows && wrapSmallIntegers) {
-      assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
+      assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER)), "small integer type expected";
       expr = makeSmallIntegerWrap(expr, this.currentType, this.module);
     }
     return compound
@@ -2353,7 +2411,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
-        assert((<Global>element).type != Type.void);
+        assert((<Global>element).type != Type.void, "concrete type expected");
         // fall-through
 
       case ElementKind.LOCAL:
@@ -2416,7 +2474,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
-        assert((<Global>element).type != Type.void);
+        assert((<Global>element).type != Type.void, "concrete type expected");
         this.currentType = tee ? (<Global>element).type : Type.void;
         if ((<Local>element).is(ElementFlags.CONSTANT)) {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Local>element).internalName);
@@ -2435,9 +2493,9 @@ export class Compiler extends DiagnosticEmitter {
           this.error(DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, expression.range, (<Field>element).internalName);
           return this.module.createUnreachable();
         }
-        assert(resolved.targetExpression != null);
+        assert(resolved.targetExpression != null, "target expression expected");
         targetExpr = this.compileExpression(<Expression>resolved.targetExpression, this.options.target == Target.WASM64 ? Type.usize64 : Type.usize32, ConversionKind.NONE);
-        assert(this.currentType.classType);
+        assert(this.currentType.classType, "class type expected");
         this.currentType = tee ? (<Field>element).type : Type.void;
         var elementNativeType = (<Field>element).type.toNativeType();
         if (!tee)
@@ -2637,7 +2695,8 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeCall(functionInstance, operands);
   }
 
-  private makeCall(functionInstance: Function, operands: ExpressionRef[] | null = null): ExpressionRef {
+  /** Makes a call operation as is. */
+  makeCall(functionInstance: Function, operands: ExpressionRef[] | null = null): ExpressionRef {
     if (!(functionInstance.is(ElementFlags.COMPILED) || this.compileFunction(functionInstance)))
       return this.module.createUnreachable();
 
@@ -2724,10 +2783,10 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.LOCAL:
-        this.currentType = (<Local>element).type;
         if ((<Local>element).is(ElementFlags.INLINED))
-          return makeInlineConstant(<Local>element, this.module);
+          return this.compileInlineConstant(<Local>element, contextualType);
         assert((<Local>element).index >= 0);
+        this.currentType = (<Local>element).type;
         return this.module.createGetLocal((<Local>element).index, this.currentType.toNativeType());
 
       case ElementKind.GLOBAL:
@@ -2736,9 +2795,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
-        this.currentType = (<Global>element).type;
         if ((<Global>element).is(ElementFlags.INLINED))
-          return makeInlineConstant(<Global>element, this.module);
+          return this.compileInlineConstant(<Global>element, contextualType);
+        this.currentType = (<Global>element).type;
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
     }
     this.error(DiagnosticCode.Operation_not_supported, expression.range);
@@ -2791,7 +2850,20 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileNewExpression(expression: NewExpression, contextualType: Type): ExpressionRef {
-    throw new Error("not implemented");
+    var resolved = this.program.resolveExpression(expression.expression, this.currentFunction); // reports
+    if (resolved) {
+      if (resolved.element.kind == ElementKind.CLASS_PROTOTYPE) {
+        var prototype = <ClassPrototype>resolved.element;
+        var instance = prototype.resolveInclTypeArguments(expression.typeArguments, null, expression); // reports
+        if (instance) {
+          // TODO: call constructor
+          this.currentType = instance.type;
+          return compileBuiltinAllocate(this, instance, expression);
+        }
+      } else
+        this.error(DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature, expression.expression.range);
+    }
+    return this.module.createUnreachable();
   }
 
   compileParenthesizedExpression(expression: ParenthesizedExpression, contextualType: Type): ExpressionRef {
@@ -2814,9 +2886,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
-        this.currentType = (<Global>element).type;
         if ((<Global>element).is(ElementFlags.INLINED))
-          return makeInlineConstant(<Global>element, this.module);
+          return this.compileInlineConstant(<Global>element, contextualType);
+        this.currentType = (<Global>element).type;
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
 
       case ElementKind.ENUMVALUE: // enum value
@@ -3208,48 +3280,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
-/** Creates an inlined expression of a constant variable-like element. */
-function makeInlineConstant(element: VariableLikeElement, module: Module): ExpressionRef {
-  assert(element.is(ElementFlags.INLINED));
-  assert(element.type != null);
-  switch ((<Type>element.type).kind) {
-
-    case TypeKind.I8:
-    case TypeKind.I16:
-      var shift = element.type.computeSmallIntegerShift(Type.i32);
-      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
-
-    case TypeKind.U8:
-    case TypeKind.U16:
-    case TypeKind.BOOL:
-      var mask = element.type.computeSmallIntegerMask(Type.i32);
-      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & mask : 0);
-
-    case TypeKind.I32:
-    case TypeKind.U32:
-      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
-
-    case TypeKind.ISIZE:
-    case TypeKind.USIZE:
-      if (element.program.target != Target.WASM64)
-        return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
-      // fall-through
-
-    case TypeKind.I64:
-    case TypeKind.U64:
-      return element.constantIntegerValue
-        ? module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
-        : module.createI64(0);
-
-    case TypeKind.F32:
-      return module.createF32((<VariableLikeElement>element).constantFloatValue);
-
-    case TypeKind.F64:
-      return module.createF64((<VariableLikeElement>element).constantFloatValue);
-  }
-  throw new Error("concrete type expected");
-}
 
 /** Wraps a 32-bit integer expression so it evaluates to a valid value in the range of the specified small integer type. */
 export function makeSmallIntegerWrap(expr: ExpressionRef, type: Type, module: Module) {

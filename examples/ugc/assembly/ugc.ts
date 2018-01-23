@@ -273,7 +273,7 @@ function gc_scan_fn(control: Control, header: ObjectHeader | null): void {
   } else {
     // visit all referenced objects using the compiler's knowledge of this
     // object's layout
-    var classId = load<u32>(changetype<usize>(header) + ObjectHeader.SIZE);
+    var classId = load<u32>(changetype<usize>(header), ObjectHeader.SIZE);
     // switch (classId) {
       // arrays
       // strings

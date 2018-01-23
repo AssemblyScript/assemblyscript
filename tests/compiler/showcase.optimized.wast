@@ -24,6 +24,8 @@
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
+ (global $builtins/u (mut i32) (i32.const 0))
+ (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
  (global $showcase/ANamespace.aNamespacedGlobal (mut i32) (i32.const 42))
  (global $showcase/AnEnum.ONE i32 (i32.const 1))
@@ -1800,12 +1802,9 @@
       (i64.shl
        (get_local $2)
        (i64.extend_u/i32
-        (i32.add
-         (i32.sub
-          (i32.const 0)
-          (get_local $3)
-         )
+        (i32.sub
          (i32.const 1)
+         (get_local $3)
         )
        )
       )
@@ -1857,12 +1856,9 @@
       (i64.shl
        (get_local $5)
        (i64.extend_u/i32
-        (i32.add
-         (i32.sub
-          (i32.const 0)
-          (get_local $6)
-         )
+        (i32.sub
          (i32.const 1)
+         (get_local $6)
         )
        )
       )
@@ -1983,12 +1979,9 @@
         (i64.shr_u
          (get_local $2)
          (i64.extend_u/i32
-          (i32.add
-           (i32.sub
-            (i32.const 0)
-            (get_local $3)
-           )
+          (i32.sub
            (i32.const 1)
+           (get_local $3)
           )
          )
         )
@@ -2173,12 +2166,9 @@
       )
       (i32.shl
        (get_local $2)
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $4)
-        )
+       (i32.sub
         (i32.const 1)
+        (get_local $4)
        )
       )
      )
@@ -2228,12 +2218,9 @@
       )
       (i32.shl
        (get_local $5)
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $6)
-        )
+       (i32.sub
         (i32.const 1)
+        (get_local $6)
        )
       )
      )
@@ -2350,12 +2337,9 @@
         )
         (i32.shr_u
          (get_local $2)
-         (i32.add
-          (i32.sub
-           (i32.const 0)
-           (get_local $4)
-          )
+         (i32.sub
           (i32.const 1)
+          (get_local $4)
          )
         )
         (i32.gt_s
@@ -3615,6 +3599,198 @@
    (f64.load
     (i32.const 8)
    )
+  )
+  (set_global $builtins/i
+   (i32.load
+    (i32.const 8)
+   )
+  )
+  (i32.store
+   (i32.const 8)
+   (get_global $builtins/i)
+  )
+  (i32.store
+   (i32.const 8)
+   (i32.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/I
+   (i64.load
+    (i32.const 8)
+   )
+  )
+  (i64.store
+   (i32.const 8)
+   (get_global $builtins/I)
+  )
+  (i64.store
+   (i32.const 8)
+   (i64.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/f
+   (f32.load
+    (i32.const 8)
+   )
+  )
+  (f32.store
+   (i32.const 8)
+   (get_global $builtins/f)
+  )
+  (f32.store
+   (i32.const 8)
+   (f32.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/F
+   (f64.load
+    (i32.const 8)
+   )
+  )
+  (f64.store
+   (i32.const 8)
+   (get_global $builtins/F)
+  )
+  (f64.store
+   (i32.const 8)
+   (f64.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/i
+   (i32.load8_s
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/i
+   (i32.load16_s
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/i
+   (i32.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/i
+   (i32.load8_u
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/i
+   (i32.load16_u
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/i
+   (i32.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/u
+   (i32.load8_u
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/u
+   (i32.load16_u
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/u
+   (i32.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/u
+   (i32.load8_s
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/u
+   (i32.load16_s
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/u
+   (i32.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/I
+   (i64.load8_s
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/I
+   (i64.load16_s
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/I
+   (i64.load32_s
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/I
+   (i64.load
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/U
+   (i64.load8_u
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/U
+   (i64.load16_u
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/U
+   (i64.load32_u
+    (i32.const 8)
+   )
+  )
+  (set_global $builtins/U
+   (i64.load
+    (i32.const 8)
+   )
+  )
+  (i32.store8
+   (i32.const 8)
+   (i32.const 1)
+  )
+  (i32.store16
+   (i32.const 8)
+   (i32.const 1)
+  )
+  (i32.store
+   (i32.const 8)
+   (i32.const 1)
+  )
+  (i64.store8
+   (i32.const 8)
+   (i64.const 1)
+  )
+  (i64.store16
+   (i32.const 8)
+   (i64.const 1)
+  )
+  (i64.store32
+   (i32.const 8)
+   (i64.const 1)
+  )
+  (i64.store
+   (i32.const 8)
+   (i64.const 1)
+  )
+  (i64.store
+   (i32.const 8)
+   (i64.const 1)
   )
   (set_global $builtins/i
    (i32.const 1067450368)
