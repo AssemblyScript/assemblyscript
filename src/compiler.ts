@@ -394,7 +394,7 @@ export class Compiler extends DiagnosticEmitter {
     var initializeInStart = false;
 
     if (global.is(ElementFlags.INLINED)) {
-      initExpr = makeInlineConstant(global, this.module);
+      initExpr = this.compileInlineConstant(global, global.type);
     } else if (declaration) {
       if (declaration.initializer) {
         if (!initExpr)
@@ -1259,6 +1259,53 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   // expressions
+
+  /** Compiles an inlined constant value of a variable-like element. */
+  compileInlineConstant(element: VariableLikeElement, contextualType: Type): ExpressionRef {
+    assert(element.is(ElementFlags.INLINED));
+
+    switch (element.type.is(TypeFlags.INTEGER) && contextualType.is(TypeFlags.INTEGER) && element.type.size <= contextualType.size
+      ? (this.currentType = contextualType).kind // essentially precomputes a (sign-)extension
+      : (this.currentType = element.type).kind
+    ) {
+
+      case TypeKind.I8:
+      case TypeKind.I16:
+        var shift = element.type.computeSmallIntegerShift(Type.i32);
+        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
+
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL:
+        var mask = element.type.computeSmallIntegerMask(Type.i32);
+        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & mask : 0);
+
+      case TypeKind.I32:
+      case TypeKind.U32:
+        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
+
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE:
+        if (!element.program.options.isWasm64)
+          return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
+        // fall-through
+
+      case TypeKind.I64:
+      case TypeKind.U64:
+        return element.constantIntegerValue
+          ? this.module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
+          : this.module.createI64(0);
+
+      case TypeKind.F32:
+        return this.module.createF32((<VariableLikeElement>element).constantFloatValue);
+
+      case TypeKind.F64:
+        return this.module.createF64((<VariableLikeElement>element).constantFloatValue);
+
+      default:
+        throw new Error("concrete type expected");
+    }
+  }
 
   compileExpression(expression: Expression, contextualType: Type, conversionKind: ConversionKind = ConversionKind.IMPLICIT, wrapSmallIntegers: bool = true): ExpressionRef {
     this.currentType = contextualType;
@@ -2736,10 +2783,10 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
 
       case ElementKind.LOCAL:
-        this.currentType = (<Local>element).type;
         if ((<Local>element).is(ElementFlags.INLINED))
-          return makeInlineConstant(<Local>element, this.module);
+          return this.compileInlineConstant(<Local>element, contextualType);
         assert((<Local>element).index >= 0);
+        this.currentType = (<Local>element).type;
         return this.module.createGetLocal((<Local>element).index, this.currentType.toNativeType());
 
       case ElementKind.GLOBAL:
@@ -2748,9 +2795,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
-        this.currentType = (<Global>element).type;
         if ((<Global>element).is(ElementFlags.INLINED))
-          return makeInlineConstant(<Global>element, this.module);
+          return this.compileInlineConstant(<Global>element, contextualType);
+        this.currentType = (<Global>element).type;
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
     }
     this.error(DiagnosticCode.Operation_not_supported, expression.range);
@@ -2839,9 +2886,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>element)) // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         assert((<Global>element).type != Type.void);
-        this.currentType = (<Global>element).type;
         if ((<Global>element).is(ElementFlags.INLINED))
-          return makeInlineConstant(<Global>element, this.module);
+          return this.compileInlineConstant(<Global>element, contextualType);
+        this.currentType = (<Global>element).type;
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
 
       case ElementKind.ENUMVALUE: // enum value
@@ -3233,48 +3280,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
-/** Creates an inlined expression of a constant variable-like element. */
-function makeInlineConstant(element: VariableLikeElement, module: Module): ExpressionRef {
-  assert(element.is(ElementFlags.INLINED));
-  assert(element.type != null);
-  switch ((<Type>element.type).kind) {
-
-    case TypeKind.I8:
-    case TypeKind.I16:
-      var shift = element.type.computeSmallIntegerShift(Type.i32);
-      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
-
-    case TypeKind.U8:
-    case TypeKind.U16:
-    case TypeKind.BOOL:
-      var mask = element.type.computeSmallIntegerMask(Type.i32);
-      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & mask : 0);
-
-    case TypeKind.I32:
-    case TypeKind.U32:
-      return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
-
-    case TypeKind.ISIZE:
-    case TypeKind.USIZE:
-      if (!element.program.options.isWasm64)
-        return module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
-      // fall-through
-
-    case TypeKind.I64:
-    case TypeKind.U64:
-      return element.constantIntegerValue
-        ? module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
-        : module.createI64(0);
-
-    case TypeKind.F32:
-      return module.createF32((<VariableLikeElement>element).constantFloatValue);
-
-    case TypeKind.F64:
-      return module.createF64((<VariableLikeElement>element).constantFloatValue);
-  }
-  throw new Error("concrete type expected");
-}
 
 /** Wraps a 32-bit integer expression so it evaluates to a valid value in the range of the specified small integer type. */
 export function makeSmallIntegerWrap(expr: ExpressionRef, type: Type, module: Module) {
