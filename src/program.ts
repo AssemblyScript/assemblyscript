@@ -992,18 +992,24 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Resolves an identifier to the element it refers to. */
-  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function | null): ResolvedElement | null {
+  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function | null, contextualEnum: Enum | null = null): ResolvedElement | null {
     var name = identifier.name;
 
     var element: Element | null;
     var namespace: Element | null;
+    var reference: Element | null;
 
-    if (contextualFunction) {
+    // check siblings
+    if (contextualEnum) {
+
+      if (contextualEnum.members && (element = contextualEnum.members.get(name)) && element.kind == ElementKind.ENUMVALUE)
+        return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
+
+    } else if (contextualFunction) {
 
       // check locals
-      var local = contextualFunction.flow.getScopedLocal(name);
-      if (local)
-        return (resolvedElement || (resolvedElement = new ResolvedElement())).set(local);
+      if (element = contextualFunction.flow.getScopedLocal(name))
+        return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
 
       // search contextual parent namespaces if applicable
       if (namespace = contextualFunction.prototype.namespace) {
@@ -1259,7 +1265,9 @@ export enum ElementFlags {
   /** Has already inherited base class static members. */
   HAS_STATIC_BASE_MEMBERS = 1 << 18,
   /** Is scoped. */
-  SCOPED = 1 << 19
+  SCOPED = 1 << 19,
+  /** Is the start function. */
+  START = 1 << 20
 }
 
 /** Base class of all program elements. */

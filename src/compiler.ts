@@ -187,6 +187,8 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Current function in compilation. */
   currentFunction: Function;
+  /** Current enum in compilation. */
+  currentEnum: Enum | null = null;
   /** Current type in compilation. */
   currentType: Type = Type.void;
 
@@ -214,6 +216,7 @@ export class Compiler extends DiagnosticEmitter {
     // set up start function
     var startFunctionTemplate = new FunctionPrototype(program, "start", "start", null);
     var startFunctionInstance = new Function(startFunctionTemplate, startFunctionTemplate.internalName, [], [], Type.void, null);
+    startFunctionInstance.set(ElementFlags.START);
     this.currentFunction = this.startFunction = startFunctionInstance;
   }
 
@@ -472,6 +475,7 @@ export class Compiler extends DiagnosticEmitter {
     // members might reference each other, triggering another compile
     element.set(ElementFlags.COMPILED);
 
+    this.currentEnum = element;
     var previousValue: EnumValue | null = null;
     if (element.members)
       for (var member of element.members.values()) {
@@ -480,6 +484,7 @@ export class Compiler extends DiagnosticEmitter {
         var initInStart = false;
         var val = <EnumValue>member;
         var valueDeclaration = val.declaration;
+        val.set(ElementFlags.COMPILED);
         if (val.is(ElementFlags.INLINED)) {
           if (!element.declaration || element.declaration.isTopLevelExport)
             this.module.addGlobal(val.internalName, NativeType.I32, false, this.module.createI32(val.constantValue));
@@ -533,6 +538,7 @@ export class Compiler extends DiagnosticEmitter {
             this.warning(DiagnosticCode.Cannot_export_a_mutable_global, valueDeclaration.range);
         }
       }
+    this.currentEnum = null;
     return true;
   }
 
@@ -2775,7 +2781,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise resolve
-    var resolved = this.program.resolveIdentifier(expression, this.currentFunction); // reports
+    var resolved = this.program.resolveIdentifier(expression, this.currentFunction, this.currentEnum); // reports
     if (!resolved)
       return this.module.createUnreachable();
 
@@ -2799,6 +2805,17 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(<Global>element, contextualType);
         this.currentType = (<Global>element).type;
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
+
+      case ElementKind.ENUMVALUE: // here: if referenced from within the same enum
+        if (!element.is(ElementFlags.COMPILED)) {
+          this.error(DiagnosticCode.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums, expression.range);
+          this.currentType = Type.i32;
+          return this.module.createUnreachable();
+        }
+        this.currentType = Type.i32;
+        if ((<EnumValue>element).is(ElementFlags.INLINED))
+          return this.module.createI32((<EnumValue>element).constantValue);
+        return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
     }
     this.error(DiagnosticCode.Operation_not_supported, expression.range);
     return this.module.createUnreachable();

@@ -86,6 +86,7 @@
   "Expected {0} arguments, but got {1}.": 2554,
   "Expected at least {0} arguments, but got {1}.": 2555,
   "Expected {0} type arguments, but got {1}.": 2558,
+  "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
   "Namespace '{0}' has no exported member '{1}'.": 2694,
 
   "File '{0}' not found.": 6054

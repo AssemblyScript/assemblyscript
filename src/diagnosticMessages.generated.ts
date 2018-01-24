@@ -86,6 +86,7 @@ export enum DiagnosticCode {
   Expected_0_arguments_but_got_1 = 2554,
   Expected_at_least_0_arguments_but_got_1 = 2555,
   Expected_0_type_arguments_but_got_1 = 2558,
+  A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums = 2651,
   Namespace_0_has_no_exported_member_1 = 2694,
   File_0_not_found = 6054
 }
@@ -177,6 +178,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2554: return "Expected {0} arguments, but got {1}.";
     case 2555: return "Expected at least {0} arguments, but got {1}.";
     case 2558: return "Expected {0} type arguments, but got {1}.";
+    case 2651: return "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.";
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 6054: return "File '{0}' not found.";
     default: return "";
