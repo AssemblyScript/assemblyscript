@@ -11,94 +11,95 @@ const cz: u16 = 122; // "z"
 const cA: u16 = 65;  // "A"
 const cZ: u16 = 90;  // "Z"
 
+function allocate(length: i32): String {
+  var ptr = allocate_memory(4 + length * 2);
+  store<i32>(ptr, length);
+  return changetype<String>(ptr);
+}
+
+@unmanaged
 export class String {
 
-  private __memory: usize;
   readonly length: i32;
-
-  constructor(ptr: usize, length: i32) {
-    if (length < 0)
-      throw new RangeError("invalid length");
-    this.__memory = ptr;
-    this.length = length;
-  }
 
   @operator("[]")
   charAt(pos: i32): String {
     if (<u32>pos >= this.length)
-      return changetype<String>("");
-    return new String(this.__memory + (<usize>pos << 1), 1);
+      return EMPTY;
+    var out = allocate(1);
+    store<u16>(changetype<usize>(out), load<u16>(changetype<usize>(this) + (<usize>pos << 1), 4), 4);
+    return out;
   }
 
   charCodeAt(pos: i32): i32 {
     if (<u32>pos >= this.length)
       return -1; // NaN
-    return load<u16>(this.__memory + (<usize>pos << 1));
+    return load<u16>(changetype<usize>(this) + (<usize>pos << 1), 4);
   }
 
   codePointAt(pos: i32): i32 {
     if (<u32>pos >= this.length)
       return -1; // undefined
-    var first = <i32>load<u16>(this.__memory + (<usize>pos << 1));
+    var first = <i32>load<u16>(changetype<usize>(this) + (<usize>pos << 1), 4);
     if (first < 0xD800 || first > 0xDBFF || pos + 1 == this.length)
       return first;
-    var second = <i32>load<u16>(this.__memory + ((<usize>pos + 1) << 1));
+    var second = <i32>load<u16>(changetype<usize>(this) + ((<usize>pos + 1) << 1), 4);
     if (second < 0xDC00 || second > 0xDFFF)
       return first;
     return ((first - 0xD800) << 10) + (second - 0xDC00) + 0x10000;
   }
 
   @operator("+")
-  concat(other: this): String {
+  concat(other: String): String {
     assert(this != null);
     assert(other != null);
     var thisLen: isize = this.length;
     var otherLen: isize = other.length;
     var len: usize = thisLen + otherLen;
-    var newMemory = allocate_memory(len << 1);
-    move_memory(newMemory, this.__memory, thisLen << 1);
-    move_memory(newMemory + (thisLen << 1), other.__memory, otherLen << 1);
-    return new String(newMemory, <i32>len);
+    var out = allocate(len);
+    move_memory(changetype<usize>(out) + 4, changetype<usize>(this) + 4, thisLen << 1);
+    move_memory(changetype<usize>(out) + 4 + (thisLen << 1), changetype<usize>(other) + 4, otherLen << 1);
+    return out;
   }
 
-  endsWith(searchString: this, endPosition: i32 = 0x7fffffff): bool {
+  endsWith(searchString: String, endPosition: i32 = 0x7fffffff): bool {
     assert(searchString != null);
     var end: isize = <isize>min<i32>(max<i32>(endPosition, 0), this.length);
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
     if (start < 0)
       return false;
-    return !compare_memory(this.__memory + (start << 1), searchString.__memory, searchLength << 1);
+    return !compare_memory(changetype<usize>(this) + 4 + (start << 1), changetype<usize>(searchString) + 4, searchLength << 1);
   }
 
   @operator("==")
-  private __eq(other: this): bool {
+  private __eq(other: String): bool {
     if (this == null)
       return other == null;
     else if (other == null)
       return false;
     if (this.length != other.length)
       return false;
-    return !compare_memory(this.__memory, other.__memory, <usize>this.length);
+    return !compare_memory(changetype<usize>(this) + 4, changetype<usize>(other) + 4, <usize>(this.length << 1));
   }
 
-  includes(searchString: this, position: i32 = 0): bool {
+  includes(searchString: String, position: i32 = 0): bool {
     return this.indexOf(searchString, position) != -1;
   }
 
-  indexOf(searchString: this, position: i32 = 0): i32 {
+  indexOf(searchString: String, position: i32 = 0): i32 {
     assert(searchString != null);
     var pos: isize = position;
     var len: isize = this.length;
     var start: isize = min<isize>(max<isize>(pos, 0), len);
     var searchLen: isize = searchString.length;
     for (var k: usize = start; <isize>k + searchLen <= len; ++k)
-      if (!compare_memory(this.__memory + (k << 1), searchString.__memory, searchLen << 1))
+      if (!compare_memory(changetype<usize>(this) + 4 + (k << 1), changetype<usize>(searchString) + 4, searchLen << 1))
         return <i32>k;
     return -1;
   }
 
-  startsWith(searchString: this, position: i32 = 0): bool {
+  startsWith(searchString: String, position: i32 = 0): bool {
     assert(this != null);
     assert(searchString != null);
     var pos: isize = position;
@@ -107,7 +108,7 @@ export class String {
     var searchLength: isize = searchString.length;
     if (searchLength + start > len)
       return false;
-    return !compare_memory(this.__memory + (start << 1), searchString.__memory, searchLength << 1);
+    return !compare_memory(changetype<usize>(this) + 4 + (start << 1), changetype<usize>(searchString) + 4, searchLength << 1);
   }
 
   substr(start: i32, length: i32 = i32.MAX_VALUE): String {
@@ -120,7 +121,9 @@ export class String {
     var resultLength: isize = min<isize>(max<isize>(end, 0), size - intStart);
     if (resultLength < 0)
       return EMPTY;
-    return new String(this.__memory + (intStart << 1), <i32>resultLength);
+    var out = allocate(resultLength);
+    move_memory(changetype<usize>(out) + 4, changetype<usize>(this) + 4 + (intStart << 1), <usize>resultLength << 1);
+    return out;
   }
 
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
@@ -135,46 +138,55 @@ export class String {
       return EMPTY;
     if (!from && to == this.length)
       return this;
-    return new String(this.__memory + (from << 1), len);
+    var out = allocate(len);
+    move_memory(changetype<usize>(out) + 4, changetype<usize>(this) + 4 + (from << 1), len << 1);
+    return out;
   }
 
   trim(): String {
     assert(this != null);
     var length: usize = this.length;
-    while (length && isWhiteSpaceOrLineTerminator(load<u16>(this.__memory + (length << 1))))
+    while (length && isWhiteSpaceOrLineTerminator(load<u16>(changetype<usize>(this) + (length << 1), 4)))
       --length;
     var start: usize = 0;
-    while (start < length && isWhiteSpaceOrLineTerminator(load<u16>(this.__memory + (start << 1)))) {
+    while (start < length && isWhiteSpaceOrLineTerminator(load<u16>(changetype<usize>(this) + (start << 1), 4))) {
       ++start; --length;
     }
     if (!length)
       return EMPTY;
     if (!start && length == this.length)
       return this;
-    return new String(this.__memory + (start << 1), length);
+    var out = allocate(length);
+    move_memory(changetype<usize>(out) + 4, changetype<usize>(this) + 4 + (start << 1), length << 1);
+    return out;
   }
 
   trimLeft(): String {
     assert(this != null);
     var start: isize = 0;
     var len: isize = this.length;
-    while (start < len && isWhiteSpaceOrLineTerminator(load<u16>(this.__memory + (start << 1))))
+    while (start < len && isWhiteSpaceOrLineTerminator(load<u16>(changetype<usize>(this) + (start << 1), 4)))
       ++start;
     if (!start)
       return this;
-    return new String(this.__memory + (start << 1), <i32>(len - start));
+    var outLen = len - start;
+    var out = allocate(outLen);
+    move_memory(changetype<usize>(out) + 4, changetype<usize>(this) + 4 + (start << 1), outLen << 1);
+    return out;
   }
 
   trimRight(): String {
     assert(this != null);
     var len: isize = this.length;
-    while (len > 0 && isWhiteSpaceOrLineTerminator(load<u16>(this.__memory + (len << 1))))
+    while (len > 0 && isWhiteSpaceOrLineTerminator(load<u16>(changetype<usize>(this) + (len << 1), 4)))
       --len;
     if (len <= 0)
       return EMPTY;
     if (<i32>len == this.length)
       return this;
-    return new String(this.__memory, <i32>len);
+    var out = allocate(len);
+    move_memory(changetype<usize>(out) + 4, changetype<usize>(this) + 4, len << 1);
+    return out;
   }
 }
 

@@ -276,15 +276,17 @@ export class Program extends DiagnosticEmitter {
     } while (true);
   }
 
-  private checkGlobalAlias(element: Element, declaration: DeclarationStatement) {
+  private checkGlobalAlias(element: Element, declaration: DeclarationStatement): bool {
     if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(declaration.parent).kind == NodeKind.SOURCE && element.is(ElementFlags.EXPORTED))) {
       if (this.elements.has(declaration.name.name))
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, element.internalName);
       else {
         this.elements.set(declaration.name.name, element);
         this.exports.set(declaration.name.name, element);
+        return true;
       }
     }
+    return false;
   }
 
   private initializeClass(declaration: ClassDeclaration, queuedDerivedClasses: ClassPrototype[], namespace: Element | null = null): void {
@@ -297,10 +299,8 @@ export class Program extends DiagnosticEmitter {
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
-    this.checkGlobalAlias(prototype, declaration);
-
-    if (hasDecorator("explicit", declaration.decorators)) {
-      prototype.isExplicit = true;
+    if (hasDecorator("unmanaged", declaration.decorators)) {
+      prototype.isUnmanaged = true;
       if (declaration.implementsTypes && declaration.implementsTypes.length)
         this.error(DiagnosticCode.Structs_cannot_implement_interfaces, Range.join(declaration.name.range, declaration.implementsTypes[declaration.implementsTypes.length - 1].range));
     } else if (declaration.implementsTypes.length)
@@ -352,6 +352,16 @@ export class Program extends DiagnosticEmitter {
           throw new Error("class member expected");
       }
     }
+
+    if (this.checkGlobalAlias(prototype, declaration)) {
+      if (declaration.name.name === "String") {
+        var instance = prototype.resolve(null, null);
+        if (instance) {
+          assert(!this.types.has("string"));
+          this.types.set("string", instance.type);
+        }
+      }
+    }
   }
 
   private initializeField(declaration: FieldDeclaration, classPrototype: ClassPrototype): void {
@@ -396,6 +406,7 @@ export class Program extends DiagnosticEmitter {
 
     // static methods become global functions
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
+      assert(declaration.name.kind != NodeKind.CONSTRUCTOR);
 
       if (this.elements.has(internalName)) {
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
@@ -422,10 +433,16 @@ export class Program extends DiagnosticEmitter {
       } else
         classPrototype.instanceMembers = new Map();
       instancePrototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
-      // if (classPrototype.isExplicit && instancePrototype.isAbstract) {
-      //   this.error( Explicit classes cannot declare abstract methods. );
+      // if (classPrototype.isUnmanaged && instancePrototype.isAbstract) {
+      //   this.error( Unmanaged classes cannot declare abstract methods. );
       // }
       classPrototype.instanceMembers.set(name, instancePrototype);
+      if (declaration.name.kind == NodeKind.CONSTRUCTOR) {
+        if (classPrototype.constructorPrototype)
+          this.error(DiagnosticCode.Multiple_constructor_implementations_are_not_allowed, declaration.name.range);
+        else
+          classPrototype.constructorPrototype = instancePrototype;
+      }
     }
 
     // handle operator annotations. operators are instance methods taking a second argument of the
@@ -992,18 +1009,24 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Resolves an identifier to the element it refers to. */
-  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function | null): ResolvedElement | null {
+  resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function | null, contextualEnum: Enum | null = null): ResolvedElement | null {
     var name = identifier.name;
 
     var element: Element | null;
     var namespace: Element | null;
+    var reference: Element | null;
 
-    if (contextualFunction) {
+    // check siblings
+    if (contextualEnum) {
+
+      if (contextualEnum.members && (element = contextualEnum.members.get(name)) && element.kind == ElementKind.ENUMVALUE)
+        return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
+
+    } else if (contextualFunction) {
 
       // check locals
-      var local = contextualFunction.flow.getScopedLocal(name);
-      if (local)
-        return (resolvedElement || (resolvedElement = new ResolvedElement())).set(local);
+      if (element = contextualFunction.flow.getScopedLocal(name))
+        return (resolvedElement || (resolvedElement = new ResolvedElement())).set(element);
 
       // search contextual parent namespaces if applicable
       if (namespace = contextualFunction.prototype.namespace) {
@@ -1254,12 +1277,14 @@ export enum ElementFlags {
   PRIVATE = 1 << 15,
   /** Is an abstract member. */
   ABSTRACT = 1 << 16,
-  /** Is an explicitly layed out and allocated class with limited capabilites. */
-  EXPLICIT = 1 << 17,
+  /** Is an unmanaged class with limited capabilites. */
+  UNMANAGED = 1 << 17,
   /** Has already inherited base class static members. */
   HAS_STATIC_BASE_MEMBERS = 1 << 18,
   /** Is scoped. */
-  SCOPED = 1 << 19
+  SCOPED = 1 << 19,
+  /** Is the start function. */
+  START = 1 << 20
 }
 
 /** Base class of all program elements. */
@@ -1871,6 +1896,8 @@ export class ClassPrototype extends Element {
   instanceMembers: Map<string,Element> | null = null;
   /** Base class prototype, if applicable. */
   basePrototype: ClassPrototype | null = null; // set in Program#initialize
+  /** Constructor prototype. */
+  constructorPrototype: FunctionPrototype | null = null;
 
   /** Overloaded indexed get method, if any. */
   fnIndexedGet: string | null = null;
@@ -1899,9 +1926,9 @@ export class ClassPrototype extends Element {
     }
   }
 
-  /** Whether explicitly layed out and allocated */
-  get isExplicit(): bool { return (this.flags & ElementFlags.EXPLICIT) != 0; }
-  set isExplicit(is: bool) { if (is) this.flags |= ElementFlags.EXPLICIT; else this.flags &= ~ElementFlags.EXPLICIT; }
+  /** Whether an unamanaged class or not. */
+  get isUnmanaged(): bool { return (this.flags & ElementFlags.UNMANAGED) != 0; }
+  set isUnmanaged(is: bool) { if (is) this.flags |= ElementFlags.UNMANAGED; else this.flags &= ~ElementFlags.UNMANAGED; }
 
   resolve(typeArguments: Type[] | null, contextualTypeArguments: Map<string,Type> | null = null): Class | null {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
@@ -1929,7 +1956,7 @@ export class ClassPrototype extends Element {
         this.program.error(DiagnosticCode.A_class_may_only_extend_another_class, declaration.extendsType.range);
         return null;
       }
-      if (baseClass.prototype.isExplicit != this.isExplicit) {
+      if (baseClass.prototype.isUnmanaged != this.isUnmanaged) {
         this.program.error(DiagnosticCode.Structs_cannot_extend_classes_and_vice_versa, Range.join(declaration.name.range, declaration.extendsType.range));
         return null;
       }

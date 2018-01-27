@@ -27,3 +27,8 @@ export enum NonConstant {
   ZERO = getZero(), // cannot export a mutable global
   ONE               // cannot export a mutable global (tsc doesn't allow this)
 }
+
+export enum SelfReference {
+  ZERO,
+  ONE = ZERO + 1
+}

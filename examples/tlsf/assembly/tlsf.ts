@@ -17,7 +17,7 @@ const FL_INDEX_COUNT: u32 = FL_INDEX_MAX - FL_INDEX_SHIFT + 1;
 const SMALL_BLOCK_SIZE: u32 = 1 << FL_INDEX_SHIFT;
 
 /** Block header structure. */
-@explicit
+@unmanaged
 class BlockHeader {
 
   /////////////////////////////// Constants ///////////////////////////////////
@@ -41,7 +41,7 @@ class BlockHeader {
   // the prev_phys_block field, and no larger than the number of addressable
   // bits for FL_INDEX.
   static readonly BLOCK_SIZE_MIN: usize = BlockHeader.SIZE - sizeof<usize>();
-  static readonly BLOCK_SIZE_MAX: usize = <usize>1 << FL_INDEX_MAX;
+  static readonly BLOCK_SIZE_MAX: usize = 1 << <usize>FL_INDEX_MAX;
 
   ///////////////////////////////// Fields ////////////////////////////////////
 
@@ -157,7 +157,7 @@ class BlockHeader {
 
   /** Marks this block as being 'free'. */
   markAsFree(): void {
-    var next = this.linkNext(); // Link the block to the next block, first.
+    var next = this.linkNext(); // Link the block to the next block first.
     next.tagAsPrevFree();
     this.tagAsFree();
   }
@@ -206,7 +206,7 @@ class BlockHeader {
 }
 
 /** The TLSF control structure. */
-@explicit
+@unmanaged
 class Control extends BlockHeader { // Empty lists point here, indicating free
 
   // The control structure uses 3188 bytes in WASM32.
@@ -297,6 +297,9 @@ class Control extends BlockHeader { // Empty lists point here, indicating free
     block.next_free = current;
     block.prev_free = this;
     current.prev_free = block;
+    assert(block.isFree,
+      "block must be free"
+    );
     assert(block.toDataPtr() == align_ptr(block.toDataPtr(), ALIGN_SIZE),
       "block not aligned properly"
     );

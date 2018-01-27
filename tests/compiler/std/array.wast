@@ -4037,8 +4037,8 @@
   FUNCTION_PROTOTYPE: usize
   GLOBAL: HEAP_BASE
   CLASS_PROTOTYPE: std:array/Array
-  CLASS_PROTOTYPE: Array
   PROPERTY: std:array/Array#length
+  CLASS_PROTOTYPE: Array
   CLASS_PROTOTYPE: std:array/CArray
   CLASS_PROTOTYPE: CArray
   CLASS_PROTOTYPE: std:error/Error
@@ -4065,8 +4065,8 @@
   CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
-  CLASS_PROTOTYPE: Set
   PROPERTY: std:set/Set#size
+  CLASS_PROTOTYPE: Set
   GLOBAL: std:string/EMPTY
   GLOBAL: std:string/cp
   GLOBAL: std:string/cn
@@ -4078,6 +4078,7 @@
   GLOBAL: std:string/cz
   GLOBAL: std:string/cA
   GLOBAL: std:string/cZ
+  FUNCTION_PROTOTYPE: std:string/allocate
   CLASS_PROTOTYPE: std:string/String
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
@@ -4088,14 +4089,14 @@
   GLOBAL: std/array/arr
   GLOBAL: std/array/i
 [program.exports]
-  CLASS_PROTOTYPE: Array
   CLASS_PROTOTYPE: std:array/Array
-  CLASS_PROTOTYPE: CArray
+  CLASS_PROTOTYPE: Array
   CLASS_PROTOTYPE: std:array/CArray
-  CLASS_PROTOTYPE: Error
+  CLASS_PROTOTYPE: CArray
   CLASS_PROTOTYPE: std:error/Error
-  CLASS_PROTOTYPE: RangeError
+  CLASS_PROTOTYPE: Error
   CLASS_PROTOTYPE: std:error/RangeError
+  CLASS_PROTOTYPE: RangeError
   FUNCTION_PROTOTYPE: allocate_memory
   FUNCTION_PROTOTYPE: std:heap/allocate_memory
   FUNCTION_PROTOTYPE: free_memory
@@ -4106,14 +4107,14 @@
   FUNCTION_PROTOTYPE: std:heap/set_memory
   FUNCTION_PROTOTYPE: compare_memory
   FUNCTION_PROTOTYPE: std:heap/compare_memory
-  CLASS_PROTOTYPE: Map
   CLASS_PROTOTYPE: std:map/Map
-  CLASS_PROTOTYPE: RegExp
+  CLASS_PROTOTYPE: Map
   CLASS_PROTOTYPE: std:regexp/RegExp
-  CLASS_PROTOTYPE: Set
+  CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
-  CLASS_PROTOTYPE: String
+  CLASS_PROTOTYPE: Set
   CLASS_PROTOTYPE: std:string/String
+  CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseInt
   FUNCTION_PROTOTYPE: parseFloat

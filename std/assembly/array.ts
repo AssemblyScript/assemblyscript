@@ -163,7 +163,7 @@ export class Array<T> {
   }
 }
 
-@explicit
+@unmanaged
 export class CArray<T> {
 
   private constructor() {}

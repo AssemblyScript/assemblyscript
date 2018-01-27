@@ -361,8 +361,8 @@ export abstract class Node {
           stmt.decoratorKind = DecoratorKind.OPERATOR;
           break;
 
-        case "explicit":
-          stmt.decoratorKind = DecoratorKind.EXPLICIT;
+        case "unmanaged":
+          stmt.decoratorKind = DecoratorKind.UNMANAGED;
           break;
 
         case "offset":
@@ -1159,7 +1159,7 @@ export const enum DecoratorKind {
   CUSTOM,
   GLOBAL,
   OPERATOR,
-  EXPLICIT,
+  UNMANAGED,
   OFFSET
 }
 

@@ -11,7 +11,7 @@ const SWEEP: u8 = 2;
 const GRAY: u32 = 2;
 
 /** Header for a managed object. */
-@explicit
+@unmanaged
 class ObjectHeader {
 
   /////////////////////////////// Constants ///////////////////////////////////
@@ -73,7 +73,7 @@ class ObjectHeader {
 }
 
 /** Garbage collector data. */
-@explicit
+@unmanaged
 class Control {
 
   /////////////////////////////// Constants ///////////////////////////////////
