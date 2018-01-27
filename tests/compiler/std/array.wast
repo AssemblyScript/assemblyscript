@@ -4068,6 +4068,7 @@
   PROPERTY: std:set/Set#size
   CLASS_PROTOTYPE: Set
   GLOBAL: std:string/EMPTY
+  GLOBAL: std:string/HEAD
   FUNCTION_PROTOTYPE: std:string/allocate
   CLASS_PROTOTYPE: std:string/String
   CLASS_PROTOTYPE: String

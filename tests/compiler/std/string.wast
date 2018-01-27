@@ -4,6 +4,7 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
  (global $std/string/str (mut i32) (i32.const 8))
+ (global $std:string/HEAD i32 (i32.const 4))
  (global $HEAP_BASE i32 (i32.const 102))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
@@ -602,6 +603,7 @@
   PROPERTY: std:set/Set#size
   CLASS_PROTOTYPE: Set
   GLOBAL: std:string/EMPTY
+  GLOBAL: std:string/HEAD
   FUNCTION_PROTOTYPE: std:string/allocate
   CLASS_PROTOTYPE: std:string/String
   CLASS_PROTOTYPE: String
