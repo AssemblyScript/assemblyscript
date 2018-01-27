@@ -1578,19 +1578,8 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         return arg0;
       }
 
-      var abort: ExpressionRef = module.createUnreachable();
-      var abortPrototype = compiler.program.elements.get("abort");
-      if (abortPrototype && abortPrototype.kind == ElementKind.FUNCTION_PROTOTYPE) {
-        var abortInstance = (<FunctionPrototype>abortPrototype).resolve();
-        if (abortInstance && compiler.compileFunction(abortInstance)) {
-          abort = compiler.makeCall(abortInstance, [
-            operands.length == 2 ? compiler.compileExpression(operands[1], compiler.options.usizeType) : compiler.options.usizeType.toNativeZero(module),
-            compiler.compileStaticString(reportNode.range.source.path),
-            module.createI32(reportNode.range.line),
-            module.createI32(reportNode.range.column)
-          ]);
-        }
-      }
+      var abort = compileAbort(compiler, operands.length == 2 ? operands[1] : null, reportNode);
+
       compiler.currentType = type.nonNullableType;
 
       if (contextualType == Type.void) { // simplify if dropped anyway
@@ -1910,4 +1899,36 @@ export function compileAllocate(compiler: Compiler, cls: Class, reportNode: Node
   } else
     program.error(DiagnosticCode.Cannot_find_name_0, reportNode.range, compiler.options.allocateImpl);
   return compiler.module.createUnreachable();
+}
+
+/** Compiles an abort wired to the global 'abort' function if present. */
+export function compileAbort(compiler: Compiler, message: Expression | null, reportNode: Node): ExpressionRef {
+  var module = compiler.module;
+
+  var abort: ExpressionRef = module.createUnreachable();
+  var abortPrototype = compiler.program.elements.get("abort");
+  var stringType = compiler.program.types.get("string");
+  if (abortPrototype && abortPrototype.kind == ElementKind.FUNCTION_PROTOTYPE && stringType) {
+    var abortInstance = (<FunctionPrototype>abortPrototype).resolve();
+    if (abortInstance) {
+      if (abortInstance.parameters.length != 4) {
+        // TODO: validate parameter types (currently becomes a validation error if invalid)
+        var abortDeclaration = assert((<FunctionPrototype>abortPrototype).declaration);
+        compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, abortDeclaration.name.range, "4", abortInstance.parameters.length.toString(10));
+      } else if (compiler.compileFunction(abortInstance)) {
+        abort = module.createBlock(null, [
+          compiler.makeCall(abortInstance, [
+            message != null
+              ? compiler.compileExpression(message, stringType)
+              : compiler.options.usizeType.toNativeZero(module),
+            compiler.compileStaticString(reportNode.range.source.path),
+            module.createI32(reportNode.range.line),
+            module.createI32(reportNode.range.column)
+          ]),
+          abort
+        ]);
+      }
+    }
+  }
+  return abort;
 }
