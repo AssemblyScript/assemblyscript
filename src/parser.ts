@@ -741,22 +741,20 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    if (tn.skip(Token.CONSTRUCTOR) || tn.skip(Token.IDENTIFIER)) { // order is important
-      var identifier: IdentifierExpression = tn.token == Token.CONSTRUCTOR
+    var isConstructor = tn.skip(Token.CONSTRUCTOR);
+    if (isConstructor || tn.skip(Token.IDENTIFIER)) {
+      var identifier = isConstructor
         ? Node.createConstructorExpression(tn.range())
         : Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       var typeParameters: TypeParameter[] | null;
       if (tn.skip(Token.LESSTHAN)) {
-        if (identifier.kind == NodeKind.CONSTRUCTOR)
+        if (isConstructor)
           this.error(DiagnosticCode.Type_parameters_cannot_appear_on_a_constructor_declaration, tn.range()); // recoverable
         typeParameters = this.parseTypeParameters(tn);
         if (!typeParameters)
           return null;
       } else
         typeParameters = [];
-
-      if (identifier.kind == NodeKind.CONSTRUCTOR && tn.peek() != Token.OPENPAREN)
-        this.error(DiagnosticCode.Constructor_implementation_is_missing, tn.range());
 
       // method: '(' Parameters (':' Type)? '{' Statement* '}' ';'?
       if (tn.skip(Token.OPENPAREN)) {
@@ -801,6 +799,12 @@ export class Parser extends DiagnosticEmitter {
         var retMethod = Node.createMethodDeclaration(identifier, <TypeParameter[]>typeParameters, <Parameter[]>parameters, returnType, statements, modifiers, decorators, tn.range(startPos, tn.pos));
         tn.skip(Token.SEMICOLON);
         return retMethod;
+
+      } else if (isConstructor) {
+        this.error(DiagnosticCode.Constructor_implementation_is_missing, identifier.range());
+
+      } else if (isGetter || isSetter) {
+        this.error(DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration, identifier.range());
 
       // field: (':' Type)? ('=' Expression)? ';'?
       } else {

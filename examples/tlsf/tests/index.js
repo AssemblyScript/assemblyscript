@@ -53,7 +53,7 @@ function test(file) {
         tlsf.check_pool(0);
     }
   } finally {
-    mem(tlsf.memory, 0, 4096);
+    // mem(tlsf.memory, 0, 4096);
     console.log("memSize=" + memSize);
   }
   console.log();

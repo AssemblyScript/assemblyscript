@@ -1566,9 +1566,8 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       } else
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
 
-      // TODO: report message to embedder, requires strings
       type = compiler.currentType;
-      // arg1 = operands.length == 2 ? compiler.compileExpression(operands[1], Type.string) : usizeType.toNativeZero(module);
+      arg1 = operands.length == 2 ? compiler.compileExpression(operands[1], compiler.options.usizeType) : compiler.options.usizeType.toNativeZero(module);
       compiler.currentType = type.nonNullableType;
 
       // just return ifTrueish if assertions are disabled, or simplify if dropped anyway

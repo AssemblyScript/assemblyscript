@@ -1,7 +1,8 @@
 (module
  (type $v (func))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 36))
  (memory $0 1)
+ (data (i32.const 8) "\0c\00\00\00m\00u\00s\00t\00 \00b\00e\00 \00t\00r\00u\00e\00")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
