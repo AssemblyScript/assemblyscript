@@ -2862,33 +2862,36 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createI32(intValue.toI32());
 
       case LiteralKind.STRING:
-        var stringValue = (<StringLiteralExpression>expression).value;
-        var stringSegment: MemorySegment | null = this.stringSegments.get(stringValue);
-        if (!stringSegment) {
-          var stringLength = stringValue.length;
-          var stringBuffer = new Uint8Array(4 + stringLength * 2);
-          stringBuffer[0] =  stringLength         & 0xff;
-          stringBuffer[1] = (stringLength >>>  8) & 0xff;
-          stringBuffer[2] = (stringLength >>> 16) & 0xff;
-          stringBuffer[3] = (stringLength >>> 24) & 0xff;
-          for (var i = 0; i < stringLength; ++i) {
-            stringBuffer[4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
-            stringBuffer[5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
-          }
-          stringSegment = this.addMemorySegment(stringBuffer);
-          this.stringSegments.set(stringValue, stringSegment);
-        }
-        var stringOffset = stringSegment.offset;
-        this.currentType = this.options.usizeType;
-        return this.options.isWasm64
-          ? this.module.createI64(stringOffset.lo, stringOffset.hi)
-          : this.module.createI32(stringOffset.lo);
+        return this.compileStaticString((<StringLiteralExpression>expression).value);
 
       // case LiteralKind.OBJECT:
       // case LiteralKind.REGEXP:
       // case LiteralKind.STRING:
     }
     throw new Error("not implemented");
+  }
+
+  compileStaticString(stringValue: string): ExpressionRef {
+    var stringSegment: MemorySegment | null = this.stringSegments.get(stringValue);
+    if (!stringSegment) {
+      var stringLength = stringValue.length;
+      var stringBuffer = new Uint8Array(4 + stringLength * 2);
+      stringBuffer[0] =  stringLength         & 0xff;
+      stringBuffer[1] = (stringLength >>>  8) & 0xff;
+      stringBuffer[2] = (stringLength >>> 16) & 0xff;
+      stringBuffer[3] = (stringLength >>> 24) & 0xff;
+      for (var i = 0; i < stringLength; ++i) {
+        stringBuffer[4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
+        stringBuffer[5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
+      }
+      stringSegment = this.addMemorySegment(stringBuffer);
+      this.stringSegments.set(stringValue, stringSegment);
+    }
+    var stringOffset = stringSegment.offset;
+    this.currentType = this.options.usizeType;
+    return this.options.isWasm64
+      ? this.module.createI64(stringOffset.lo, stringOffset.hi)
+      : this.module.createI32(stringOffset.lo);
   }
 
   compileNewExpression(expression: NewExpression, contextualType: Type): ExpressionRef {

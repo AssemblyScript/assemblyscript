@@ -121,20 +121,12 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
       sb.push(context);
     }
     sb.push("\n");
-    var pos = range.start;
-    var line = 1;
-    var column = 1;
-    while (pos-- > 0)
-      if (text.charCodeAt(pos) == CharCode.LINEFEED)
-        line++;
-      else if (line == 1)
-        column++;
     sb.push(" in ");
     sb.push(range.source.path);
     sb.push("(");
-    sb.push(line.toString(10));
+    sb.push(range.line.toString(10));
     sb.push(",");
-    sb.push(column.toString(10));
+    sb.push(range.column.toString(10));
     sb.push(")");
   }
   return sb.join("");

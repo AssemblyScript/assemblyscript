@@ -293,6 +293,27 @@ export class Range {
   get atStart(): Range { return new Range(this.source, this.start, this.start); }
   get atEnd(): Range { return new Range(this.source, this.end, this.end); }
 
+  get line(): i32 {
+    var text = this.source.text;
+    var pos = this.start;
+    var line = 1;
+    while (pos-- > 0)
+      if (text.charCodeAt(pos) == CharCode.LINEFEED)
+        line++;
+    return line;
+  }
+
+  get column(): i32 {
+    var text = this.source.text;
+    var pos = this.start;
+    var column = 1;
+    while (pos-- > 0)
+      if (text.charCodeAt(pos) == CharCode.LINEFEED)
+        break;
+      column++;
+    return column;
+  }
+
   toString(): string {
     return this.source.text.substring(this.start, this.end);
   }

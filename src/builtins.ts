@@ -1567,7 +1567,6 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
 
       type = compiler.currentType;
-      arg1 = operands.length == 2 ? compiler.compileExpression(operands[1], compiler.options.usizeType) : compiler.options.usizeType.toNativeZero(module);
       compiler.currentType = type.nonNullableType;
 
       // just return ifTrueish if assertions are disabled, or simplify if dropped anyway
@@ -1579,6 +1578,21 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         return arg0;
       }
 
+      var abort: ExpressionRef = module.createUnreachable();
+      var abortPrototype = compiler.program.elements.get("abort");
+      if (abortPrototype && abortPrototype.kind == ElementKind.FUNCTION_PROTOTYPE) {
+        var abortInstance = (<FunctionPrototype>abortPrototype).resolve();
+        if (abortInstance && compiler.compileFunction(abortInstance)) {
+          abort = compiler.makeCall(abortInstance, [
+            operands.length == 2 ? compiler.compileExpression(operands[1], compiler.options.usizeType) : compiler.options.usizeType.toNativeZero(module),
+            compiler.compileStaticString(reportNode.range.source.path),
+            module.createI32(reportNode.range.line),
+            module.createI32(reportNode.range.column)
+          ]);
+        }
+      }
+      compiler.currentType = type.nonNullableType;
+
       if (contextualType == Type.void) { // simplify if dropped anyway
         switch (compiler.currentType.kind) {
 
@@ -1587,7 +1601,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
               module.createUnary(UnaryOp.EqzI32,
                 arg0
               ),
-              module.createUnreachable()
+              abort
             );
             break;
 
@@ -1597,7 +1611,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
               module.createUnary(UnaryOp.EqzI64,
                 arg0
               ),
-              module.createUnreachable()
+              abort
             );
             break;
 
@@ -1607,7 +1621,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
               module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
                 arg0
               ),
-              module.createUnreachable()
+              abort
             );
             break;
 
@@ -1619,7 +1633,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
                 arg0,
                 module.createF32(0)
               ),
-              module.createUnreachable()
+              abort
             );
             break;
 
@@ -1629,13 +1643,13 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
                 arg0,
                 module.createF64(0)
               ),
-              module.createUnreachable()
+              abort
             );
             break;
 
           case TypeKind.VOID:
             compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
-            ret = module.createUnreachable();
+            ret = abort;
             break;
         }
         compiler.currentType = Type.void;
@@ -1648,7 +1662,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
               module.createUnary(UnaryOp.EqzI32,
                 module.createTeeLocal(tempLocal0.index, arg0)
               ),
-              module.createUnreachable(),
+              abort,
               module.createGetLocal(tempLocal0.index, NativeType.I32)
             );
             break;
@@ -1660,7 +1674,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
               module.createUnary(UnaryOp.EqzI64,
                 module.createTeeLocal(tempLocal0.index, arg0)
               ),
-              module.createUnreachable(),
+              abort,
               module.createGetLocal(tempLocal0.index, NativeType.I64)
             );
             break;
@@ -1672,7 +1686,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
               module.createUnary(compiler.options.target == Target.WASM64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
                 module.createTeeLocal(tempLocal0.index, arg0)
               ),
-              module.createUnreachable(),
+              abort,
               module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType)
             );
             break;
@@ -1684,7 +1698,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
                 module.createTeeLocal(tempLocal0.index, arg0),
                 module.createF32(0)
               ),
-              module.createUnreachable(),
+              abort,
               module.createGetLocal(tempLocal0.index, NativeType.F32)
             );
             break;
@@ -1696,14 +1710,14 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
                 module.createTeeLocal(tempLocal0.index, arg0),
                 module.createF64(0)
               ),
-              module.createUnreachable(),
+              abort,
               module.createGetLocal(tempLocal0.index, NativeType.F64)
             );
             break;
 
           case TypeKind.VOID:
             compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
-            ret = module.createUnreachable();
+            ret = abort;
             break;
         }
       }
