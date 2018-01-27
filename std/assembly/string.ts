@@ -217,7 +217,7 @@ export function parseInt(str: String, radix: i32 = 0): f64 {
   if (len == 0 || (radix != 0 && radix < 2) || radix > 36)
     return NaN;
 
-  var s0: u16 = str.charCodeAt(0);
+  var s0 = str.charCodeAt(0);
   var pos: u32 = 0;
   var neg = (s0 == cn);
 

@@ -12,10 +12,9 @@
  (global $std/string/strHexInvalid (mut i32) (i32.const 112))
  (global $std/string/strHexnInvalid (mut i32) (i32.const 120))
  (global $std/string/strHexnnInv (mut i32) (i32.const 136))
- (global $std/string/strHexInvChar (mut i32) (i32.const 152))
- (global $std/string/str123n (mut i32) (i32.const 168))
- (global $std/string/strHexn (mut i32) (i32.const 184))
- (global $std/string/strHexp (mut i32) (i32.const 200))
+ (global $std/string/str123n (mut i32) (i32.const 152))
+ (global $std/string/strHexn (mut i32) (i32.const 168))
+ (global $std/string/strHexp (mut i32) (i32.const 184))
  (global $std:string/cn i32 (i32.const 45))
  (global $std:string/cp i32 (i32.const 43))
  (global $std:string/c0 i32 (i32.const 48))
@@ -26,7 +25,7 @@
  (global $std:string/cz i32 (i32.const 122))
  (global $std:string/cA i32 (i32.const 65))
  (global $std:string/cZ i32 (i32.const 90))
- (global $HEAP_BASE i32 (i32.const 270))
+ (global $HEAP_BASE i32 (i32.const 254))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 48) "\03\00\00\001\002\003\00")
@@ -36,15 +35,14 @@
  (data (i32.const 112) "\02\00\00\000\00x\00")
  (data (i32.const 120) "\03\00\00\00-\000\00x\00")
  (data (i32.const 136) "\06\00\00\00-\00-\000\00x\001\000\00")
- (data (i32.const 152) "\06\00\00\00-\00-\000\00x\001\00g\00")
- (data (i32.const 168) "\04\00\00\00-\001\002\003\00")
- (data (i32.const 184) "\05\00\00\00-\000\00x\001\000\00")
- (data (i32.const 200) "\05\00\00\00+\000\00x\001\000\00")
- (data (i32.const 216) "\02\00\00\00h\00i\00")
- (data (i32.const 224) "\06\00\00\00s\00t\00r\00i\00n\00g\00")
- (data (i32.const 240) "\03\00\00\00I\00\'\00m\00")
- (data (i32.const 256) "\01\00\00\00,\00")
- (data (i32.const 264) "\01\00\00\00x\00")
+ (data (i32.const 152) "\04\00\00\00-\001\002\003\00")
+ (data (i32.const 168) "\05\00\00\00-\000\00x\001\000\00")
+ (data (i32.const 184) "\05\00\00\00+\000\00x\001\000\00")
+ (data (i32.const 200) "\02\00\00\00h\00i\00")
+ (data (i32.const 208) "\06\00\00\00s\00t\00r\00i\00n\00g\00")
+ (data (i32.const 224) "\03\00\00\00I\00\'\00m\00")
+ (data (i32.const 240) "\01\00\00\00,\00")
+ (data (i32.const 248) "\01\00\00\00x\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -533,12 +531,9 @@
    )
   )
   (set_local $4
-   (i32.and
-    (call $std:string/String#charCodeAt
-     (get_local $0)
-     (i32.const 0)
-    )
-    (i32.const 65535)
+   (call $std:string/String#charCodeAt
+    (get_local $0)
+    (i32.const 0)
    )
   )
   (set_local $5
@@ -919,7 +914,7 @@
    (i32.eqz
     (call $std:string/String#startsWith
      (get_global $std/string/str)
-     (i32.const 216)
+     (i32.const 200)
      (i32.const 0)
     )
    )
@@ -929,7 +924,7 @@
    (i32.eqz
     (call $std:string/String#endsWith
      (get_global $std/string/str)
-     (i32.const 224)
+     (i32.const 208)
      (i32.const 2147483647)
     )
    )
@@ -939,7 +934,7 @@
    (i32.eqz
     (call $std:string/String#includes
      (get_global $std/string/str)
-     (i32.const 240)
+     (i32.const 224)
      (i32.const 0)
     )
    )
@@ -950,7 +945,7 @@
     (i32.eq
      (call $std:string/String#indexOf
       (get_global $std/string/str)
-      (i32.const 256)
+      (i32.const 240)
       (i32.const 0)
      )
      (i32.const 2)
@@ -963,7 +958,7 @@
     (i32.eq
      (call $std:string/String#indexOf
       (get_global $std/string/str)
-      (i32.const 264)
+      (i32.const 248)
       (i32.const 0)
      )
      (i32.sub
@@ -1181,20 +1176,6 @@
     (f64.ne
      (tee_local $0
       (call $std:string/parseInt
-       (get_global $std/string/strHexInvChar)
-       (i32.const 0)
-      )
-     )
-     (get_local $0)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (i32.eqz
-    (f64.ne
-     (tee_local $0
-      (call $std:string/parseInt
        (get_global $std/string/str123)
        (i32.const 1)
       )
@@ -1322,7 +1303,6 @@
   GLOBAL: std/string/strHexInvalid
   GLOBAL: std/string/strHexnInvalid
   GLOBAL: std/string/strHexnnInv
-  GLOBAL: std/string/strHexInvChar
   GLOBAL: std/string/str123n
   GLOBAL: std/string/strHexn
   GLOBAL: std/string/strHexp

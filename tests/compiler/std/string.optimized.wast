@@ -12,10 +12,9 @@
  (global $std/string/strHexInvalid (mut i32) (i32.const 112))
  (global $std/string/strHexnInvalid (mut i32) (i32.const 120))
  (global $std/string/strHexnnInv (mut i32) (i32.const 136))
- (global $std/string/strHexInvChar (mut i32) (i32.const 152))
- (global $std/string/str123n (mut i32) (i32.const 168))
- (global $std/string/strHexn (mut i32) (i32.const 184))
- (global $std/string/strHexp (mut i32) (i32.const 200))
+ (global $std/string/str123n (mut i32) (i32.const 152))
+ (global $std/string/strHexn (mut i32) (i32.const 168))
+ (global $std/string/strHexp (mut i32) (i32.const 184))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g")
  (data (i32.const 48) "\03\00\00\001\002\003")
@@ -25,15 +24,14 @@
  (data (i32.const 112) "\02\00\00\000\00x")
  (data (i32.const 120) "\03\00\00\00-\000\00x")
  (data (i32.const 136) "\06\00\00\00-\00-\000\00x\001\000")
- (data (i32.const 152) "\06\00\00\00-\00-\000\00x\001\00g")
- (data (i32.const 168) "\04\00\00\00-\001\002\003")
- (data (i32.const 184) "\05\00\00\00-\000\00x\001\000")
- (data (i32.const 200) "\05\00\00\00+\000\00x\001\000")
- (data (i32.const 216) "\02\00\00\00h\00i")
- (data (i32.const 224) "\06\00\00\00s\00t\00r\00i\00n\00g")
- (data (i32.const 240) "\03\00\00\00I\00\'\00m")
- (data (i32.const 256) "\01\00\00\00,")
- (data (i32.const 264) "\01\00\00\00x")
+ (data (i32.const 152) "\04\00\00\00-\001\002\003")
+ (data (i32.const 168) "\05\00\00\00-\000\00x\001\000")
+ (data (i32.const 184) "\05\00\00\00+\000\00x\001\000")
+ (data (i32.const 200) "\02\00\00\00h\00i")
+ (data (i32.const 208) "\06\00\00\00s\00t\00r\00i\00n\00g")
+ (data (i32.const 224) "\03\00\00\00I\00\'\00m")
+ (data (i32.const 240) "\01\00\00\00,")
+ (data (i32.const 248) "\01\00\00\00x")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -408,12 +406,9 @@
    (set_local $7
     (i32.eq
      (tee_local $2
-      (i32.and
-       (call $std:string/String#charCodeAt
-        (get_local $0)
-        (i32.const 0)
-       )
-       (i32.const 65535)
+      (call $std:string/String#charCodeAt
+       (get_local $0)
+       (i32.const 0)
       )
      )
      (i32.const 45)
@@ -717,7 +712,7 @@
    (i32.eqz
     (call $std:string/String#startsWith
      (get_global $std/string/str)
-     (i32.const 216)
+     (i32.const 200)
      (i32.const 0)
     )
    )
@@ -727,7 +722,7 @@
    (i32.eqz
     (call $std:string/String#endsWith
      (get_global $std/string/str)
-     (i32.const 224)
+     (i32.const 208)
      (i32.const 2147483647)
     )
    )
@@ -738,7 +733,7 @@
     (i32.ne
      (call $std:string/String#indexOf
       (get_global $std/string/str)
-      (i32.const 240)
+      (i32.const 224)
       (i32.const 0)
      )
      (i32.const -1)
@@ -750,7 +745,7 @@
    (i32.ne
     (call $std:string/String#indexOf
      (get_global $std/string/str)
-     (i32.const 256)
+     (i32.const 240)
      (i32.const 0)
     )
     (i32.const 2)
@@ -761,7 +756,7 @@
    (i32.ne
     (call $std:string/String#indexOf
      (get_global $std/string/str)
-     (i32.const 264)
+     (i32.const 248)
      (i32.const 0)
     )
     (i32.const -1)
@@ -929,18 +924,6 @@
     (tee_local $0
      (call $std:string/parseInt
       (get_global $std/string/strHexnnInv)
-      (i32.const 0)
-     )
-    )
-    (get_local $0)
-   )
-   (unreachable)
-  )
-  (if
-   (f64.eq
-    (tee_local $0
-     (call $std:string/parseInt
-      (get_global $std/string/strHexInvChar)
       (i32.const 0)
      )
     )

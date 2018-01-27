@@ -8,7 +8,7 @@ var strHex: string = "0x10";
 var strHexInvalid: string = "0x";
 var strHexnInvalid: string = "-0x";
 var strHexnnInv: string = "--0x10";
-var strHexInvChar: string = "--0x1g";
+// var strHexInvChar: string = "0x1g";
 var str123n: string = "-123";
 var strHexn: string = "-0x10";
 var strHexp: string = "+0x10";
@@ -43,7 +43,7 @@ assert(isNaN(parseInt(strab123)));
 assert(isNaN(parseInt(strHexInvalid)));
 assert(isNaN(parseInt(strHexnInvalid)));
 assert(isNaN(parseInt(strHexnnInv)));
-assert(isNaN(parseInt(strHexInvChar)));
+// assert(isNaN(parseInt(strHexInvChar)));
 
 // Unsupported radix
 assert(isNaN(parseInt(str123, 1)));
