@@ -278,6 +278,10 @@ export class Range {
   start: i32;
   end: i32;
 
+  // TODO: set these while tokenizing
+  // line: i32;
+  // column: i32;
+
   constructor(source: Source, start: i32, end: i32) {
     this.source = source;
     this.start = start;
@@ -292,6 +296,27 @@ export class Range {
 
   get atStart(): Range { return new Range(this.source, this.start, this.start); }
   get atEnd(): Range { return new Range(this.source, this.end, this.end); }
+
+  get line(): i32 {
+    var text = this.source.text;
+    var pos = this.start;
+    var line = 1;
+    while (pos-- > 0)
+      if (text.charCodeAt(pos) == CharCode.LINEFEED)
+        line++;
+    return line;
+  }
+
+  get column(): i32 {
+    var text = this.source.text;
+    var pos = this.start;
+    var column = 1;
+    while (pos-- > 0)
+      if (text.charCodeAt(pos) == CharCode.LINEFEED)
+        break;
+      column++;
+    return column;
+  }
 
   toString(): string {
     return this.source.text.substring(this.start, this.end);

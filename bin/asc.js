@@ -105,8 +105,8 @@ function checkDiagnostics(parser) {
 }
 
 // Include standard library
+var stdlibDir = path.join(__dirname, "..", "std", "assembly");
 if (!args.noLib) {
-  var stdlibDir = path.join(__dirname, "..", "std", "assembly");
   var notIoTime = 0;
   readTime += measure(() => {
     glob.sync("*.ts", { cwd: stdlibDir }).forEach(file => {
@@ -156,7 +156,10 @@ args._.forEach(filename => {
   while ((nextPath = parser.nextFile()) != null) {
     try {
       readTime += measure(() => {
-        nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
+        if (nextPath.starsWith("std:"))
+          nextText = fs.readFileSync(stdlibDir + "/" + nextPath.substring(4) + ".ts", { encoding: "utf8" });
+        else
+          nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
       });
       ++readCount;
     } catch (e) {

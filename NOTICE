@@ -1,4 +1,13 @@
-Includes parts of TypeScript:
+Copyright (c) 2017-2018 AssemblyScript authors.
+
+The following authors have all licensed their contributions to AssemblyScript
+under the licensing terms detailed in LICENSE.
+
+* Daniel Wirtz <dcode@dcode.io>
+
+================================================================================
+
+This program includes parts of TypeScript:
 
   https://github.com/Microsoft/TypeScript
 
@@ -6,7 +15,9 @@ Includes parts of TypeScript:
   Apache License, Version 2.0
   https://www.apache.org/licenses/LICENSE-2.0
 
-Includes parts of Binaryen:
+================================================================================
+
+This program includes parts of Binaryen:
 
   https://github.com/WebAssembly/binaryen
 
@@ -14,7 +25,9 @@ Includes parts of Binaryen:
   Apache License, Version 2.0
   https://www.apache.org/licenses/LICENSE-2.0
 
-Includes parts of musl:
+================================================================================
+
+This program includes parts of musl:
 
   http://www.musl-libc.org
 

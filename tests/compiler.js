@@ -15,7 +15,8 @@ var ElementKind = require("../src/program").ElementKind;
 var isCreate = process.argv[2] === "--create";
 var filter = process.argv.length > 2 && !isCreate ? "**/" + process.argv[2] + ".ts" : "**/*.ts";
 
-var stdFiles = glob.sync("*.ts", { cwd: __dirname + "/../std/assembly" });
+var stdDir = __dirname + "/../std/assembly";
+var stdFiles = glob.sync("*.ts", { cwd: stdDir });
 
 var success = 0;
 var failures = 0;
@@ -42,7 +43,10 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
   while ((nextFile = parser.nextFile()) !== null) {
     var nextSourceText;
     try {
-      nextSourceText = fs.readFileSync(path.join(__dirname, "compiler", nextFile + ".ts"), { encoding: "utf8" });
+      if (nextFile.startsWith("std:"))
+        nextSourceText = fs.readFileSync(path.join(stdDir, nextFile.substring(4) + ".ts"), { encoding: "utf8" });
+      else
+        nextSourceText = fs.readFileSync(path.join(__dirname, "compiler", nextFile + ".ts"), { encoding: "utf8" });
     } catch (e) {
       nextSourceText = fs.readFileSync(path.join(__dirname, "compiler", nextFile, "index.ts"), { encoding: "utf8" });
     }

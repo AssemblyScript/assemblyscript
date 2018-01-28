@@ -131,7 +131,9 @@
    (i32.eqz
     (get_local $1)
    )
-   (unreachable)
+   (set_local $1
+    (i32.const 56)
+   )
   )
   (if
    (i32.gt_s
@@ -174,7 +176,7 @@
    )
   )
   (i32.eqz
-   (call $std:heap/compare_memory
+   (call $std:memory/compare_memory
     (i32.add
      (i32.add
       (get_local $0)
@@ -200,9 +202,17 @@
   (local $3 i32)
   (if
    (i32.eqz
-    (get_local $1)
+    (get_local $0)
    )
    (unreachable)
+  )
+  (if
+   (i32.eqz
+    (get_local $1)
+   )
+   (return
+    (i32.const 0)
+   )
   )
   (if
    (i32.lt_s
@@ -243,7 +253,7 @@
    )
   )
   (i32.eqz
-   (call $std:heap/compare_memory
+   (call $std:memory/compare_memory
     (i32.add
      (i32.add
       (get_local $0)
@@ -271,9 +281,17 @@
   (local $5 i32)
   (if
    (i32.eqz
-    (get_local $1)
+    (get_local $0)
    )
    (unreachable)
+  )
+  (if
+   (i32.eqz
+    (get_local $1)
+   )
+   (set_local $1
+    (i32.const 56)
+   )
   )
   (set_local $4
    (i32.load
@@ -317,7 +335,7 @@
     (block
      (if
       (i32.eqz
-       (call $std:heap/compare_memory
+       (call $std:memory/compare_memory
         (i32.add
          (i32.add
           (get_local $0)

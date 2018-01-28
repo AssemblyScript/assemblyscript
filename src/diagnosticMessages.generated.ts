@@ -1,18 +1,19 @@
 // code below is generated from diagnosticsMessages.json by scripts/build-diagnostics
 
 export enum DiagnosticCode {
-  Conversion_from_type_0_to_1_possibly_loses_information_and_thus_requires_an_explicit_cast = 100,
-  Basic_type_0_cannot_be_nullable = 101,
-  Operation_not_supported = 102,
-  Operation_is_unsafe = 103,
-  Cannot_export_a_mutable_global = 104,
-  Compiling_constant_with_non_constant_initializer_as_mutable = 105,
-  Type_0_cannot_be_changed_to_type_1 = 106,
-  Structs_cannot_extend_classes_and_vice_versa = 107,
-  Structs_cannot_implement_interfaces = 108,
-  Invalid_regular_expression_flags = 109,
-  Type_0_cannot_be_reinterpreted_as_type_1 = 110,
-  Implementation_0_must_match_the_signature_1 = 111,
+  Operation_not_supported = 100,
+  Operation_is_unsafe = 101,
+  Conversion_from_type_0_to_1_possibly_loses_information_and_thus_requires_an_explicit_cast = 200,
+  Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
+  Type_0_cannot_be_changed_to_type_1 = 202,
+  Type_0_cannot_be_reinterpreted_as_type_1 = 203,
+  Basic_type_0_cannot_be_nullable = 204,
+  Cannot_export_a_mutable_global = 205,
+  Compiling_constant_with_non_constant_initializer_as_mutable = 206,
+  Structs_cannot_extend_classes_and_vice_versa = 207,
+  Structs_cannot_implement_interfaces = 208,
+  Invalid_regular_expression_flags = 209,
+  Implementation_0_must_match_the_signature_1 = 210,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -94,18 +95,19 @@ export enum DiagnosticCode {
 
 export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
-    case 100: return "Conversion from type '{0}' to '{1}' possibly loses information and thus requires an explicit cast.";
-    case 101: return "Basic type '{0}' cannot be nullable.";
-    case 102: return "Operation not supported.";
-    case 103: return "Operation is unsafe.";
-    case 104: return "Cannot export a mutable global.";
-    case 105: return "Compiling constant with non-constant initializer as mutable.";
-    case 106: return "Type '{0}' cannot be changed to type '{1}'.";
-    case 107: return "Structs cannot extend classes and vice-versa.";
-    case 108: return "Structs cannot implement interfaces.";
-    case 109: return "Invalid regular expression flags.";
-    case 110: return "Type '{0}' cannot be reinterpreted as type '{1}'.";
-    case 111: return "Implementation '{0}' must match the signature '{1}'.";
+    case 100: return "Operation not supported.";
+    case 101: return "Operation is unsafe.";
+    case 200: return "Conversion from type '{0}' to '{1}' possibly loses information and thus requires an explicit cast.";
+    case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
+    case 202: return "Type '{0}' cannot be changed to type '{1}'.";
+    case 203: return "Type '{0}' cannot be reinterpreted as type '{1}'.";
+    case 204: return "Basic type '{0}' cannot be nullable.";
+    case 205: return "Cannot export a mutable global.";
+    case 206: return "Compiling constant with non-constant initializer as mutable.";
+    case 207: return "Structs cannot extend classes and vice-versa.";
+    case 208: return "Structs cannot implement interfaces.";
+    case 209: return "Invalid regular expression flags.";
+    case 210: return "Implementation '{0}' must match the signature '{1}'.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

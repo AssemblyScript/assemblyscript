@@ -2652,8 +2652,11 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.createUnreachable();
   }
 
-  /** Compiles a call to a function. If an instance method, `this` is the first element in `argumentExpressions`. */
-  compileCall(functionInstance: Function, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
+  /**
+   * Compiles a call to a function. If an instance method, `this` is the first element in
+   * `argumentExpressions` or can be specified explicitly as the last argument.
+   */
+  compileCall(functionInstance: Function, argumentExpressions: Expression[], reportNode: Node, thisArg: ExpressionRef = 0): ExpressionRef {
 
     // validate and compile arguments
     var parameters = functionInstance.parameters;
@@ -2662,6 +2665,8 @@ export class Compiler extends DiagnosticEmitter {
     var numParametersInclThis = functionInstance.instanceMethodOf != null ? numParameters + 1 : numParameters;
     var numArgumentsInclThis = argumentExpressions.length;
     var numArguments = functionInstance.instanceMethodOf != null ? numArgumentsInclThis - 1 : numArgumentsInclThis;
+    if (thisArg)
+      numArgumentsInclThis++;
 
     if (numArgumentsInclThis > numParametersInclThis) { // too many arguments
       this.error(DiagnosticCode.Expected_0_arguments_but_got_1, reportNode.range,
@@ -2672,13 +2677,18 @@ export class Compiler extends DiagnosticEmitter {
     }
     var operands = new Array<ExpressionRef>(numParametersInclThis);
     var operandIndex = 0;
-    if (functionInstance.instanceMethodOf)
-      operands[operandIndex++] = this.compileExpression(argumentExpressions[0], functionInstance.instanceMethodOf.type);
+    var argumentIndex = 0;
+    if (functionInstance.instanceMethodOf) {
+      if (thisArg)
+        operands[operandIndex++] = thisArg;
+      else
+        operands[operandIndex++] = this.compileExpression(argumentExpressions[argumentIndex++], functionInstance.instanceMethodOf.type);
+    }
     for (; operandIndex < numParametersInclThis; ++operandIndex) {
 
       // argument has been provided
       if (numArgumentsInclThis > operandIndex) {
-        operands[operandIndex] = this.compileExpression(argumentExpressions[operandIndex], parameters[operandIndex + numParameters - numParametersInclThis].type);
+        operands[operandIndex] = this.compileExpression(argumentExpressions[argumentIndex++], parameters[operandIndex + numParameters - numParametersInclThis].type);
 
       // argument has been omitted
       } else {
@@ -2862,33 +2872,35 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createI32(intValue.toI32());
 
       case LiteralKind.STRING:
-        var stringValue = (<StringLiteralExpression>expression).value;
-        var stringSegment: MemorySegment | null = this.stringSegments.get(stringValue);
-        if (!stringSegment) {
-          var stringLength = stringValue.length;
-          var stringBuffer = new Uint8Array(4 + stringLength * 2);
-          stringBuffer[0] =  stringLength         & 0xff;
-          stringBuffer[1] = (stringLength >>>  8) & 0xff;
-          stringBuffer[2] = (stringLength >>> 16) & 0xff;
-          stringBuffer[3] = (stringLength >>> 24) & 0xff;
-          for (var i = 0; i < stringLength; ++i) {
-            stringBuffer[4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
-            stringBuffer[5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
-          }
-          stringSegment = this.addMemorySegment(stringBuffer);
-          this.stringSegments.set(stringValue, stringSegment);
-        }
-        var stringOffset = stringSegment.offset;
-        this.currentType = this.options.usizeType;
-        return this.options.isWasm64
-          ? this.module.createI64(stringOffset.lo, stringOffset.hi)
-          : this.module.createI32(stringOffset.lo);
+        return this.compileStaticString((<StringLiteralExpression>expression).value);
 
       // case LiteralKind.OBJECT:
       // case LiteralKind.REGEXP:
-      // case LiteralKind.STRING:
     }
     throw new Error("not implemented");
+  }
+
+  compileStaticString(stringValue: string): ExpressionRef {
+    var stringSegment: MemorySegment | null = this.stringSegments.get(stringValue);
+    if (!stringSegment) {
+      var stringLength = stringValue.length;
+      var stringBuffer = new Uint8Array(4 + stringLength * 2);
+      stringBuffer[0] =  stringLength         & 0xff;
+      stringBuffer[1] = (stringLength >>>  8) & 0xff;
+      stringBuffer[2] = (stringLength >>> 16) & 0xff;
+      stringBuffer[3] = (stringLength >>> 24) & 0xff;
+      for (var i = 0; i < stringLength; ++i) {
+        stringBuffer[4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
+        stringBuffer[5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
+      }
+      stringSegment = this.addMemorySegment(stringBuffer);
+      this.stringSegments.set(stringValue, stringSegment);
+    }
+    var stringOffset = stringSegment.offset;
+    this.currentType = this.options.usizeType;
+    return this.options.isWasm64
+      ? this.module.createI64(stringOffset.lo, stringOffset.hi)
+      : this.module.createI32(stringOffset.lo);
   }
 
   compileNewExpression(expression: NewExpression, contextualType: Type): ExpressionRef {
@@ -2898,9 +2910,46 @@ export class Compiler extends DiagnosticEmitter {
         var prototype = <ClassPrototype>resolved.element;
         var instance = prototype.resolveInclTypeArguments(expression.typeArguments, null, expression); // reports
         if (instance) {
-          // TODO: call constructor
+          var thisExpr = compileBuiltinAllocate(this, instance, expression);
+          var initializers = new Array<ExpressionRef>();
+
+          // use a temp local for 'this'
+          var tempLocal = this.currentFunction.getTempLocal(this.options.usizeType);
+          initializers.push(this.module.createSetLocal(tempLocal.index, thisExpr));
+
+          // apply field initializers
+          if (instance.members)
+            for (var member of instance.members.values()) {
+              if (member.kind == ElementKind.FIELD) {
+                var field = <Field>member;
+                var fieldDeclaration = field.prototype.declaration;
+                if (field.is(ElementFlags.CONSTANT)) {
+                  assert(false); // there are no built-in fields currently
+                } else if (fieldDeclaration && fieldDeclaration.initializer) {
+                  initializers.push(this.module.createStore(field.type.byteSize,
+                    this.module.createGetLocal(tempLocal.index, this.options.nativeSizeType),
+                    this.compileExpression(fieldDeclaration.initializer, field.type),
+                    field.type.toNativeType(),
+                    field.memoryOffset
+                  ));
+                }
+              }
+            }
+
+          // apply constructor
+          var constructorInstance = instance.constructorInstance;
+          if (constructorInstance)
+            initializers.push(this.compileCall(constructorInstance, expression.arguments, expression,
+              this.module.createGetLocal(tempLocal.index, this.options.nativeSizeType)
+            ));
+
+          // return 'this'
+          initializers.push(this.module.createGetLocal(tempLocal.index, this.options.nativeSizeType));
+          this.currentFunction.freeTempLocal(tempLocal);
+          thisExpr = this.module.createBlock(null, initializers, this.options.nativeSizeType);
+
           this.currentType = instance.type;
-          return compileBuiltinAllocate(this, instance, expression);
+          return thisExpr;
         }
       } else
         this.error(DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature, expression.expression.range);

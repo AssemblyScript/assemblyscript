@@ -237,6 +237,7 @@ declare class String {
   concat(other: string): string;
   endsWith(other: string): bool;
   indexOf(other: string): u32;
+  includes(other: string): bool;
   startsWith(other: string): bool;
   substr(start: u32, length?: u32): string;
   substring(start: u32, end?: u32): string;

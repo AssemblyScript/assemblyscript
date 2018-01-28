@@ -19,6 +19,8 @@ export class Set<T> {
   // FIXME: not a proper set implementation, just a filler
 
   has(value: T): bool {
+    assert(this != null);
+
     for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index)
       if (load<T>(this.__memory + index * sizeof<T>()) == value)
         return true;
@@ -26,6 +28,8 @@ export class Set<T> {
   }
 
   add(value: T): Set<T> {
+    assert(this != null);
+
     if (this.__size >= this.__capacity) {
       var newCapacity = max(this.__capacity << 1, 8);
       var newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
@@ -42,6 +46,8 @@ export class Set<T> {
   }
 
   delete(value: T): bool {
+    assert(this != null);
+
     for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index)
       if (load<T>(this.__memory + index * sizeof<T>()) == value) {
         if (index + 1 < this.__size)
@@ -53,6 +59,8 @@ export class Set<T> {
   }
 
   clear(): void {
+    assert(this != null);
+
     this.__size = 0;
   }
 
