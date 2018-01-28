@@ -15,6 +15,7 @@
  (global $std/string/str123n (mut i32) (i32.const 152))
  (global $std/string/strHexn (mut i32) (i32.const 168))
  (global $std/string/strHexp (mut i32) (i32.const 184))
+ (global $std:string/HEAD i32 (i32.const 4))
  (global $std:string/cn i32 (i32.const 45))
  (global $std:string/cp i32 (i32.const 43))
  (global $std:string/c0 i32 (i32.const 48))
@@ -25,7 +26,7 @@
  (global $std:string/cz i32 (i32.const 122))
  (global $std:string/cA i32 (i32.const 65))
  (global $std:string/cZ i32 (i32.const 90))
- (global $HEAP_BASE i32 (i32.const 254))
+ (global $HEAP_BASE i32 (i32.const 270))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 48) "\03\00\00\001\002\003\00")
@@ -39,10 +40,11 @@
  (data (i32.const 168) "\05\00\00\00-\000\00x\001\000\00")
  (data (i32.const 184) "\05\00\00\00+\000\00x\001\000\00")
  (data (i32.const 200) "\02\00\00\00h\00i\00")
- (data (i32.const 208) "\06\00\00\00s\00t\00r\00i\00n\00g\00")
- (data (i32.const 224) "\03\00\00\00I\00\'\00m\00")
- (data (i32.const 240) "\01\00\00\00,\00")
- (data (i32.const 248) "\01\00\00\00x\00")
+ (data (i32.const 208) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 224) "\06\00\00\00s\00t\00r\00i\00n\00g\00")
+ (data (i32.const 240) "\03\00\00\00I\00\'\00m\00")
+ (data (i32.const 256) "\01\00\00\00,\00")
+ (data (i32.const 264) "\01\00\00\00x\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -173,7 +175,7 @@
     (i32.const 0)
    )
    (set_local $1
-    (i32.const 56)
+    (i32.const 208)
    )
   )
   (set_local $3
@@ -370,7 +372,7 @@
     (i32.const 0)
    )
    (set_local $1
-    (i32.const 56)
+    (i32.const 208)
    )
   )
   (set_local $3
@@ -951,7 +953,7 @@
    (i32.eqz
     (call $std:string/String#endsWith
      (get_global $std/string/str)
-     (i32.const 208)
+     (i32.const 224)
      (i32.const 2147483647)
     )
    )
@@ -961,7 +963,7 @@
    (i32.eqz
     (call $std:string/String#includes
      (get_global $std/string/str)
-     (i32.const 224)
+     (i32.const 240)
      (i32.const 0)
     )
    )
@@ -972,7 +974,7 @@
     (i32.eq
      (call $std:string/String#indexOf
       (get_global $std/string/str)
-      (i32.const 240)
+      (i32.const 256)
       (i32.const 0)
      )
      (i32.const 2)
@@ -985,7 +987,7 @@
     (i32.eq
      (call $std:string/String#indexOf
       (get_global $std/string/str)
-      (i32.const 248)
+      (i32.const 264)
       (i32.const 0)
      )
      (i32.sub

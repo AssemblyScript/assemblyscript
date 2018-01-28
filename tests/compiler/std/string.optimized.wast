@@ -28,14 +28,21 @@
  (data (i32.const 168) "\05\00\00\00-\000\00x\001\000")
  (data (i32.const 184) "\05\00\00\00+\000\00x\001\000")
  (data (i32.const 200) "\02\00\00\00h\00i")
- (data (i32.const 208) "\06\00\00\00s\00t\00r\00i\00n\00g")
- (data (i32.const 224) "\03\00\00\00I\00\'\00m")
- (data (i32.const 240) "\01\00\00\00,")
- (data (i32.const 248) "\01\00\00\00x")
+ (data (i32.const 208) "\04\00\00\00n\00u\00l\00l")
+ (data (i32.const 224) "\06\00\00\00s\00t\00r\00i\00n\00g")
+ (data (i32.const 240) "\03\00\00\00I\00\'\00m")
+ (data (i32.const 256) "\01\00\00\00,")
+ (data (i32.const 264) "\01\00\00\00x")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
  (func $std:string/String#charCodeAt (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (unreachable)
+  )
   (if
    (i32.ge_u
     (get_local $1)
@@ -57,7 +64,7 @@
    )
   )
  )
- (func $std:heap/compare_memory (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std:memory/compare_memory (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (if
    (i32.eq
     (get_local $0)
@@ -132,7 +139,7 @@
     (get_local $1)
    )
    (set_local $1
-    (i32.const 56)
+    (i32.const 208)
    )
   )
   (if
@@ -290,7 +297,7 @@
     (get_local $1)
    )
    (set_local $1
-    (i32.const 56)
+    (i32.const 208)
    )
   )
   (set_local $4
@@ -740,7 +747,7 @@
    (i32.eqz
     (call $std:string/String#endsWith
      (get_global $std/string/str)
-     (i32.const 208)
+     (i32.const 224)
      (i32.const 2147483647)
     )
    )
@@ -751,7 +758,7 @@
     (i32.ne
      (call $std:string/String#indexOf
       (get_global $std/string/str)
-      (i32.const 224)
+      (i32.const 240)
       (i32.const 0)
      )
      (i32.const -1)
@@ -763,7 +770,7 @@
    (i32.ne
     (call $std:string/String#indexOf
      (get_global $std/string/str)
-     (i32.const 240)
+     (i32.const 256)
      (i32.const 0)
     )
     (i32.const 2)
@@ -774,7 +781,7 @@
    (i32.ne
     (call $std:string/String#indexOf
      (get_global $std/string/str)
-     (i32.const 248)
+     (i32.const 264)
      (i32.const 0)
     )
     (i32.const -1)
