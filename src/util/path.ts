@@ -82,6 +82,8 @@ export function normalize(path: string, trimExtension: bool = false, separator: 
 
 /** Resolves the specified path to a normalized path relative to the specified origin. */
 export function resolve(normalizedPath: string, normalizedOrigin: string, separator: CharCode = CharCode.SLASH): string {
+  if (normalizedPath.startsWith("std:"))
+    return normalizedPath;
   return normalize(dirname(normalizedOrigin, separator) + String.fromCharCode(separator) + normalizedPath);
 }
 

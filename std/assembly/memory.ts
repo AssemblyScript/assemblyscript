@@ -1,5 +1,3 @@
-import "std:memory/arena";
-
 function copy_memory(dest: usize, src: usize, n: usize): void {
   // based on musl's implementation of memcpy
   // not a future instruction and sufficiently covered by the upcoming move_memory intrinsic

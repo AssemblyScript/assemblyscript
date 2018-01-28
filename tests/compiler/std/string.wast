@@ -636,16 +636,6 @@
   FUNCTION_PROTOTYPE: parseFloat
   GLOBAL: std/string/str
   FUNCTION_PROTOTYPE: std/string/getString
-  GLOBAL: std:memory/arena/ALIGN_LOG2
-  GLOBAL: std:memory/arena/ALIGN_SIZE
-  GLOBAL: std:memory/arena/ALIGN_MASK
-  GLOBAL: std:memory/arena/HEAP_OFFSET
-  FUNCTION_PROTOTYPE: std:memory/arena/allocate_memory
-  FUNCTION_PROTOTYPE: allocate_memory
-  FUNCTION_PROTOTYPE: std:memory/arena/free_memory
-  FUNCTION_PROTOTYPE: free_memory
-  FUNCTION_PROTOTYPE: std:memory/arena/clear_memory
-  FUNCTION_PROTOTYPE: clear_memory
 [program.exports]
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: Array
@@ -674,10 +664,4 @@
   FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: std:string/parseFloat
   FUNCTION_PROTOTYPE: std/string/getString
-  FUNCTION_PROTOTYPE: allocate_memory
-  FUNCTION_PROTOTYPE: std:memory/arena/allocate_memory
-  FUNCTION_PROTOTYPE: free_memory
-  FUNCTION_PROTOTYPE: std:memory/arena/free_memory
-  FUNCTION_PROTOTYPE: clear_memory
-  FUNCTION_PROTOTYPE: std:memory/arena/clear_memory
 ;)

@@ -1,3 +1,5 @@
+import "std:memory/arena";
+
 // note that this doesn't test a real set implementation yet, see std/assembly/set.ts
 
 var set = changetype<Set<i32>>(allocate_memory(sizeof<usize>() + 2 * sizeof<i32>()));

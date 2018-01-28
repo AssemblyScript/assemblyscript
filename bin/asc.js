@@ -156,7 +156,7 @@ args._.forEach(filename => {
   while ((nextPath = parser.nextFile()) != null) {
     try {
       readTime += measure(() => {
-        if (nextPath.starsWith("std:"))
+        if (nextPath.startsWith("std:"))
           nextText = fs.readFileSync(stdlibDir + "/" + nextPath.substring(4) + ".ts", { encoding: "utf8" });
         else
           nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
