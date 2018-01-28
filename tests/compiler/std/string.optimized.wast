@@ -507,11 +507,11 @@
           )
           (i32.const 1)
          )
-         (i32.gt_u
+         (i32.gt_s
           (get_local $4)
           (i32.const 1)
          )
-         (i32.gt_u
+         (i32.gt_s
           (get_local $4)
           (i32.const 1)
          )
@@ -520,7 +520,7 @@
        )
        (block (result i32)
         (br_if $folding-inner0
-         (i32.lt_u
+         (i32.lt_s
           (get_local $4)
           (i32.add
            (get_local $3)
@@ -545,7 +545,7 @@
    (block $break|0
     (loop $continue|0
      (if
-      (i32.lt_u
+      (i32.lt_s
        (get_local $3)
        (get_local $4)
       )
@@ -681,7 +681,7 @@
       (i32.eqz
        (get_local $5)
       )
-      (i32.gt_u
+      (i32.gt_s
        (get_local $4)
        (i32.const 2)
       )

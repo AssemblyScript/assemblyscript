@@ -634,7 +634,7 @@
       (i32.and
        (if (result i32)
         (i32.ne
-         (i32.gt_u
+         (i32.gt_s
           (get_local $2)
           (i32.const 1)
          )
@@ -660,7 +660,7 @@
          )
          (i32.const 1)
         )
-        (i32.gt_u
+        (i32.gt_s
          (get_local $2)
          (i32.const 1)
         )
@@ -669,7 +669,7 @@
       )
       (block
        (if
-        (i32.lt_u
+        (i32.lt_s
          (get_local $2)
          (i32.add
           (get_local $5)
@@ -710,7 +710,7 @@
    (nop)
    (loop $continue|0
     (if
-     (i32.lt_u
+     (i32.lt_s
       (get_local $5)
       (get_local $2)
      )
@@ -876,7 +876,7 @@
       )
       (i32.const 0)
      )
-     (i32.gt_u
+     (i32.gt_s
       (get_local $2)
       (i32.const 2)
      )
