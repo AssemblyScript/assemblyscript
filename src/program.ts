@@ -436,13 +436,15 @@ export class Program extends DiagnosticEmitter {
       // if (classPrototype.isUnmanaged && instancePrototype.isAbstract) {
       //   this.error( Unmanaged classes cannot declare abstract methods. );
       // }
-      classPrototype.instanceMembers.set(name, prototype);
       if (declaration.name.kind == NodeKind.CONSTRUCTOR) {
         if (classPrototype.constructorPrototype)
           this.error(DiagnosticCode.Multiple_constructor_implementations_are_not_allowed, declaration.name.range);
-        else
+        else {
+          prototype.set(ElementFlags.CONSTRUCTOR);
           classPrototype.constructorPrototype = prototype;
-      }
+        }
+      } else
+        classPrototype.instanceMembers.set(name, prototype);
     }
 
     this.checkOperators(declaration.decorators, prototype, classPrototype);
@@ -1075,7 +1077,6 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.LOCAL:
       case ElementKind.FIELD:
         if (!(targetType = (<VariableLikeElement>target).type).classType) {
-          console.log(propertyAccess.property.name + " on " + targetType);
           this.error(DiagnosticCode.Property_0_does_not_exist_on_type_1, propertyAccess.property.range, propertyName, targetType.toString());
           return null;
         }
@@ -1282,10 +1283,10 @@ export enum ElementFlags {
   PRIVATE = 1 << 15,
   /** Is an abstract member. */
   ABSTRACT = 1 << 16,
+  /** Is a constructor. */
+  CONSTRUCTOR = 1 << 17,
   /** Is an unmanaged class with limited capabilites. */
-  UNMANAGED = 1 << 17,
-  /** Has already inherited base class static members. */
-  HAS_STATIC_BASE_MEMBERS = 1 << 18,
+  UNMANAGED = 1 << 18,
   /** Is scoped. */
   SCOPED = 1 << 19,
   /** Is the start function. */
@@ -1524,17 +1525,6 @@ export class FunctionPrototype extends Element {
       this.set(ElementFlags.INSTANCE);
   }
 
-  /** Whether a getter function or not. */
-  get isGetter(): bool { return (this.flags & ElementFlags.GETTER) != 0; }
-  set isGetter(is: bool) { if (is) this.flags |= ElementFlags.GETTER; else this.flags &= ~ElementFlags.GETTER; }
-
-  /** Whether a setter function or not. */
-  get isSetter(): bool { return (this.flags & ElementFlags.SETTER) != 0; }
-  set isSetter(is: bool) { if (is) this.flags |= ElementFlags.SETTER; else this.flags &= ~ElementFlags.SETTER; }
-
-  // Whether a getter/setter function or not.
-  get isAccessor(): bool { return (this.flags & (ElementFlags.GETTER | ElementFlags.SETTER)) != 0; }
-
   resolve(functionTypeArguments: Type[] | null = null, contextualTypeArguments: Map<string,Type> | null = null): Function | null {
     var instanceKey = functionTypeArguments ? typesToString(functionTypeArguments) : "";
     var instance = this.instances.get(instanceKey);
@@ -1584,29 +1574,11 @@ export class FunctionPrototype extends Element {
     var parameterTypes = new Array<Type>(k);
     var typeNode: TypeNode | null;
     for (i = 0; i < k; ++i) {
-      if (typeNode = declaration.parameters[i].type) {
-        var parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
-        if (parameterType) {
-          parameters[i] = new Parameter(declaration.parameters[i].name.name, parameterType, declaration.parameters[i].initializer);
-          parameterTypes[i] = parameterType;
-        } else
-          return null;
-      } else
-        return null;
-    }
-
-    // resolve return type
-    // TODO: 'this' type
-    var returnType: Type;
-    if (this.isSetter) {
-      returnType = Type.void; // not annotated
-    } else {
-      if (typeNode = declaration.returnType) {
-        var type = this.program.resolveType(<TypeNode>typeNode, contextualTypeArguments, true); // reports
-        if (type)
-          returnType = type;
-        else
-          return null;
+      typeNode = assert(declaration.parameters[i].type);
+      var parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
+      if (parameterType) {
+        parameters[i] = new Parameter(declaration.parameters[i].name.name, parameterType, declaration.parameters[i].initializer);
+        parameterTypes[i] = parameterType;
       } else
         return null;
     }
@@ -1620,6 +1592,21 @@ export class FunctionPrototype extends Element {
       if (!classInstance)
         return null;
     }
+
+    // resolve return type
+    // TODO: 'this' type
+    var returnType: Type;
+    if (this.is(ElementFlags.SETTER) || this.is(ElementFlags.CONSTRUCTOR)) {
+      returnType = Type.void; // not annotated
+    } else {
+      typeNode = assert(declaration.returnType);
+      var type = this.program.resolveType(<TypeNode>typeNode, contextualTypeArguments, true); // reports
+      if (type)
+        returnType = type;
+      else
+        return null;
+    }
+
     instance = new Function(this, internalName, functionTypeArguments, parameters, returnType, classInstance);
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
@@ -1965,8 +1952,7 @@ export class ClassPrototype extends Element {
         this.program.error(DiagnosticCode.Structs_cannot_extend_classes_and_vice_versa, Range.join(declaration.name.range, declaration.extendsType.range));
         return null;
       }
-    } else
-      this.flags |= ElementFlags.HAS_STATIC_BASE_MEMBERS; // fwiw
+    }
 
     // override call specific contextual type arguments if provided
     var i: i32, k: i32;
@@ -1994,6 +1980,13 @@ export class ClassPrototype extends Element {
         for (var inheritedMember of baseClass.members.values())
           instance.members.set(inheritedMember.simpleName, inheritedMember);
       }
+    }
+
+    if (this.constructorPrototype) {
+      var partialConstructor = this.constructorPrototype.resolvePartial(typeArguments); // reports
+      if (partialConstructor)
+        instance.constructorInstance = partialConstructor.resolve(); // reports
+      // TODO: ^ doesn't know the return type, hence returns null
     }
 
     if (this.instanceMembers)
@@ -2086,6 +2079,8 @@ export class Class extends Element {
   contextualTypeArguments: Map<string,Type> | null = null;
   /** Current member memory offset. */
   currentMemoryOffset: u32 = 0;
+  /** Constructor instance. */
+  constructorInstance: Function | null = null;
 
   /** Constructs a new class. */
   constructor(prototype: ClassPrototype, internalName: string, typeArguments: Type[] | null = null, base: Class | null = null) {

@@ -176,6 +176,7 @@ declare class String {
   readonly length: i32;
   private constructor();
   indexOf(subject: string): i32;
+  includes(other: string): bool;
   lastIndexOf(subject: string): i32;
   charAt(index: i32): string;
   charCodeAt(index: i32): i32;
