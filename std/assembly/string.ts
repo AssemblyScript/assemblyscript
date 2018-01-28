@@ -348,23 +348,23 @@ const enum CharCode {
 }
 
 export function parseInt(str: String, radix: i32 = 0): i64 {
-  var len = str.length;
-  var ptr = changetype<usize>(str) + HEAD;
+  var len: i32 = str.length;
   if (!len)
     return 0; // (NaN)
-  var code = <i32>load<u16>(ptr);
+  var ptr = changetype<usize>(str) /* + HEAD -> offset */;
+  var code = <i32>load<u16>(ptr, HEAD);
 
   // determine sign
   var sign: i64;
   if (code == CharCode.MINUS) {
     if (!--len)
       return 0; // (NaN)
-    code = <i32>load<u16>(ptr += 2);
+    code = <i32>load<u16>(ptr += 2, HEAD);
     sign = -1;
   } else if (code == CharCode.PLUS) {
     if (!--len)
       return 0; // (NaN)
-    code = <i32>load<u16>(ptr += 2);
+    code = <i32>load<u16>(ptr += 2, HEAD);
     sign = 1;
   } else
     sign = 1;
@@ -372,7 +372,7 @@ export function parseInt(str: String, radix: i32 = 0): i64 {
   // determine radix
   if (!radix) {
     if (code == CharCode._0 && len > 2) {
-      switch (<i32>load<u16>(ptr + 2)) {
+      switch (<i32>load<u16>(ptr + 2, HEAD)) {
 
         case CharCode.B:
         case CharCode.b:
@@ -396,12 +396,13 @@ export function parseInt(str: String, radix: i32 = 0): i64 {
           radix = 10;
       }
     } else radix = 10;
-  }
+  } else if (radix < 2 || radix > 36)
+    return 0; // (NaN)
 
   // calculate value
   var num: i64 = 0;
   while (len--) {
-    code = <i32>load<u16>(ptr);
+    code = <i32>load<u16>(ptr, HEAD);
     if (code >= CharCode._0 && code <= CharCode._9)
       code -= CharCode._0;
     else if (code >= CharCode.A && code <= CharCode.Z)
