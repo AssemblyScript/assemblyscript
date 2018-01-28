@@ -19,3 +19,8 @@ assert(compare_memory(ptr1, ptr2, size) == 0);
 
 free_memory(ptr1);
 free_memory(ptr2);
+
+// arena
+clear_memory();
+ptr1 = allocate_memory(size);
+assert(ptr1 == HEAP_BASE);

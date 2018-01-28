@@ -1,7 +1,7 @@
 (module
  (type $i (func (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
+ (type $iiiv (func (param i32 i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iv (func (param i32)))
  (type $v (func))
@@ -17,7 +17,106 @@
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func $std:memory/set_memory (; 0 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $std:memory/arena/allocate_memory (; 0 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (set_local $1
+   (get_global $std:memory/arena/HEAP_OFFSET)
+  )
+  (set_local $2
+   (i32.and
+    (i32.add
+     (i32.add
+      (get_local $1)
+      (get_local $0)
+     )
+     (i32.const 7)
+    )
+    (i32.xor
+     (i32.const 7)
+     (i32.const -1)
+    )
+   )
+  )
+  (set_local $3
+   (i32.shl
+    (current_memory)
+    (i32.const 16)
+   )
+  )
+  (if
+   (i32.and
+    (if (result i32)
+     (i32.ne
+      (i32.gt_u
+       (get_local $2)
+       (get_local $3)
+      )
+      (i32.const 0)
+     )
+     (i32.lt_s
+      (grow_memory
+       (select
+        (tee_local $4
+         (i32.shr_u
+          (i32.sub
+           (i32.and
+            (i32.add
+             (get_local $2)
+             (i32.const 65535)
+            )
+            (i32.xor
+             (i32.const 65535)
+             (i32.const -1)
+            )
+           )
+           (get_local $3)
+          )
+          (i32.const 16)
+         )
+        )
+        (tee_local $5
+         (i32.shr_u
+          (get_local $3)
+          (i32.const 16)
+         )
+        )
+        (i32.gt_u
+         (get_local $4)
+         (get_local $5)
+        )
+       )
+      )
+      (i32.const 0)
+     )
+     (i32.gt_u
+      (get_local $2)
+      (get_local $3)
+     )
+    )
+    (i32.const 1)
+   )
+   (unreachable)
+  )
+  (set_global $std:memory/arena/HEAP_OFFSET
+   (get_local $2)
+  )
+  (return
+   (get_local $1)
+  )
+ )
+ (func $std:memory/set_memory (; 1 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -370,104 +469,6 @@
      )
     )
    )
-  )
- )
- (func $std:memory/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (return
-    (i32.const 0)
-   )
-  )
-  (set_local $1
-   (current_memory)
-  )
-  (if
-   (i32.gt_u
-    (i32.add
-     (get_global $std:memory/arena/HEAP_OFFSET)
-     (get_local $0)
-    )
-    (i32.shl
-     (get_local $1)
-     (i32.const 16)
-    )
-   )
-   (if
-    (i32.lt_s
-     (grow_memory
-      (select
-       (tee_local $2
-        (i32.trunc_s/f64
-         (f64.ceil
-          (f64.div
-           (f64.convert_u/i32
-            (get_local $0)
-           )
-           (f64.const 65536)
-          )
-         )
-        )
-       )
-       (tee_local $3
-        (i32.sub
-         (i32.mul
-          (get_local $1)
-          (i32.const 2)
-         )
-         (get_local $1)
-        )
-       )
-       (i32.gt_s
-        (get_local $2)
-        (get_local $3)
-       )
-      )
-     )
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (set_local $4
-   (get_global $std:memory/arena/HEAP_OFFSET)
-  )
-  (if
-   (i32.and
-    (block (result i32)
-     (set_global $std:memory/arena/HEAP_OFFSET
-      (i32.add
-       (get_global $std:memory/arena/HEAP_OFFSET)
-       (get_local $0)
-      )
-     )
-     (get_global $std:memory/arena/HEAP_OFFSET)
-    )
-    (i32.const 7)
-   )
-   (set_global $std:memory/arena/HEAP_OFFSET
-    (i32.add
-     (i32.or
-      (get_global $std:memory/arena/HEAP_OFFSET)
-      (i32.const 7)
-     )
-     (i32.const 1)
-    )
-   )
-  )
-  (call $std:memory/set_memory
-   (get_local $4)
-   (i32.const 0)
-   (get_local $0)
-  )
-  (return
-   (get_local $4)
   )
  )
  (func $std:memory/copy_memory (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -2667,7 +2668,12 @@
  )
  (func $std:memory/arena/free_memory (; 5 ;) (type $iv) (param $0 i32)
  )
- (func $start (; 6 ;) (type $v)
+ (func $std:memory/arena/clear_memory (; 6 ;) (type $v)
+  (set_global $std:memory/arena/HEAP_OFFSET
+   (get_global $HEAP_BASE)
+  )
+ )
+ (func $start (; 7 ;) (type $v)
   (set_global $std:memory/arena/HEAP_OFFSET
    (get_global $HEAP_BASE)
   )
@@ -2790,6 +2796,21 @@
   )
   (call $std:memory/arena/free_memory
    (get_global $std/heap/ptr2)
+  )
+  (call $std:memory/arena/clear_memory)
+  (set_global $std/heap/ptr1
+   (call $std:memory/arena/allocate_memory
+    (i32.const 42)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/heap/ptr1)
+     (get_global $HEAP_BASE)
+    )
+   )
+   (unreachable)
   )
  )
 )
