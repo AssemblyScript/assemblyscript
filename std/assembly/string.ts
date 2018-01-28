@@ -1,6 +1,17 @@
 // singleton empty string
 const EMPTY: String = changetype<String>("");
 
+const cp: u16 = 43;  // "+"
+const cn: u16 = 45;  // "-"
+const cx: u16 = 120; // "x"
+const cX: u16 = 88;  // "X"
+const c0: u16 = 48;  // "0"
+const c9: u16 = 57;  // "9"
+const ca: u16 = 97;  // "a"
+const cz: u16 = 122; // "z"
+const cA: u16 = 65;  // "A"
+const cZ: u16 = 90;  // "Z"
+
 // number of bytes preceeding string data
 const HEAD: usize = 4;
 
@@ -323,8 +334,71 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
 }
 
 // @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
-export function parseInt(str: string, radix: i32 = 10): f64 {
-  throw new Error("not implemented");
+export function parseInt(str: String, radix: i32 = 0): f64 {
+  var len = <i32>str.length;
+  if (len == 0 || (radix != 0 && radix < 2) || radix > 36)
+    return NaN;
+
+  var s0 = str.charCodeAt(0);
+  var pos: i32 = 0;
+  var neg = (s0 == cn);
+
+  if (s0 == cp || neg) {
+    if (len == 1)
+      return NaN;
+
+    pos = 1;
+  }
+
+  if (radix == 0) {
+    if (str.charCodeAt(pos) == c0) {
+      var s1 = str.charCodeAt(pos + 1);
+      if (len > 1 && (s1 == cx || s1 == cX)) {
+        if (len < pos + 3)
+          return NaN;
+
+        radix = 16;
+        pos += 2;
+
+      } else {
+        // radix = 8;
+        // pos += 1;
+        radix = 10;
+      }
+    } else {
+      radix = 10;
+    }
+  }
+
+  var valid = false;
+  var result: f64 = 0;
+
+  for (; pos < len; ++pos) {
+    var digit: i32, c = str.charCodeAt(pos);
+
+         if (c0 <= c && c <= c9) digit = c - c0;
+    else if (ca <= c && c <= cz) digit = c - ca + 10;
+    else if (cA <= c && c <= cZ) digit = c - cA + 10;
+    else {
+      if (valid) break;
+      return NaN;
+    }
+
+    if (digit >= radix) {
+      if (valid) break;
+      return NaN;
+    }
+
+    valid = true;
+
+    result *= radix;
+    result += digit;
+  }
+
+  if (!valid && len > 2)
+    return NaN;
+
+  return neg ? -result : result;
 }
 
 // @binding(CALL, [ STRING ], PASS_THRU)

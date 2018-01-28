@@ -273,6 +273,16 @@
   PROPERTY: std:set/Set#size
   CLASS_PROTOTYPE: Set
   GLOBAL: std:string/EMPTY
+  GLOBAL: std:string/cp
+  GLOBAL: std:string/cn
+  GLOBAL: std:string/cx
+  GLOBAL: std:string/cX
+  GLOBAL: std:string/c0
+  GLOBAL: std:string/c9
+  GLOBAL: std:string/ca
+  GLOBAL: std:string/cz
+  GLOBAL: std:string/cA
+  GLOBAL: std:string/cZ
   GLOBAL: std:string/HEAD
   FUNCTION_PROTOTYPE: std:string/allocate
   CLASS_PROTOTYPE: std:string/String
