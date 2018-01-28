@@ -1973,6 +1973,12 @@
   (local $2 i32)
   (local $3 i32)
   (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (unreachable)
+  )
+  (if
    (i32.ge_u
     (i32.load offset=8
      (get_local $0)
@@ -2068,6 +2074,12 @@
  (func $std:set/Set#has (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (unreachable)
+  )
   (set_local $3
    (i32.load offset=8
     (get_local $0)
@@ -2114,6 +2126,12 @@
  (func $std:set/Set#delete (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (unreachable)
+  )
   (set_local $3
    (i32.load offset=8
     (get_local $0)
@@ -2212,6 +2230,7 @@
   (i32.const 0)
  )
  (func $start (; 7 ;) (type $v)
+  (local $0 i32)
   (set_global $std:heap/HEAP_OFFSET
    (get_global $HEAP_BASE)
   )
@@ -2327,8 +2346,16 @@
    )
    (unreachable)
   )
+  (if
+   (i32.eqz
+    (tee_local $0
+     (get_global $std/set/set)
+    )
+   )
+   (unreachable)
+  )
   (i32.store offset=8
-   (get_global $std/set/set)
+   (get_local $0)
    (i32.const 0)
   )
   (if

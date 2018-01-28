@@ -278,6 +278,10 @@ export class Range {
   start: i32;
   end: i32;
 
+  // TODO: set these while tokenizing
+  // line: i32;
+  // column: i32;
+
   constructor(source: Source, start: i32, end: i32) {
     this.source = source;
     this.start = start;

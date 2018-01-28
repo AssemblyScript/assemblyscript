@@ -2248,6 +2248,15 @@
   (local $4 i32)
   (local $5 i32)
   (if
+   (i32.eqz
+    (i32.ne
+     (get_local $0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
+  (if
    (i32.ge_u
     (i32.load offset=8
      (get_local $0)
@@ -2348,6 +2357,15 @@
  (func $std:set/Set#has (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (if
+   (i32.eqz
+    (i32.ne
+     (get_local $0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
   (block $break|0
    (block
     (set_local $2
@@ -2403,6 +2421,15 @@
  (func $std:set/Set#delete (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (if
+   (i32.eqz
+    (i32.ne
+     (get_local $0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
   (block $break|0
    (block
     (set_local $2
@@ -2510,6 +2537,15 @@
   )
  )
  (func $std:set/Set#clear (; 8 ;) (type $iv) (param $0 i32)
+  (if
+   (i32.eqz
+    (i32.ne
+     (get_local $0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
   (i32.store offset=8
    (get_local $0)
    (i32.const 0)
@@ -2760,6 +2796,8 @@
   GLOBAL: std:string/HEAD
   FUNCTION_PROTOTYPE: std:string/allocate
   CLASS_PROTOTYPE: std:string/String
+  FUNCTION_PROTOTYPE: std:string/String.__concat
+  FUNCTION_PROTOTYPE: std:string/String.__eq
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
   FUNCTION_PROTOTYPE: std:string/parseInt

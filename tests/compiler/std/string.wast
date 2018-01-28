@@ -5,18 +5,28 @@
  (type $v (func))
  (global $std/string/str (mut i32) (i32.const 8))
  (global $std:string/HEAD i32 (i32.const 4))
- (global $HEAP_BASE i32 (i32.const 102))
+ (global $HEAP_BASE i32 (i32.const 118))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 48) "\02\00\00\00h\00i\00")
- (data (i32.const 56) "\06\00\00\00s\00t\00r\00i\00n\00g\00")
- (data (i32.const 72) "\03\00\00\00I\00\'\00m\00")
- (data (i32.const 88) "\01\00\00\00,\00")
- (data (i32.const 96) "\01\00\00\00x\00")
+ (data (i32.const 56) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 72) "\06\00\00\00s\00t\00r\00i\00n\00g\00")
+ (data (i32.const 88) "\03\00\00\00I\00\'\00m\00")
+ (data (i32.const 104) "\01\00\00\00,\00")
+ (data (i32.const 112) "\01\00\00\00x\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
  (func $std:string/String#charCodeAt (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (if
+   (i32.eqz
+    (i32.ne
+     (get_local $0)
+     (i32.const 0)
+    )
+   )
+   (unreachable)
+  )
   (if
    (i32.ge_u
     (get_local $1)
@@ -129,13 +139,13 @@
    (unreachable)
   )
   (if
-   (i32.eqz
-    (i32.ne
-     (get_local $1)
-     (i32.const 0)
-    )
+   (i32.eq
+    (get_local $1)
+    (i32.const 0)
    )
-   (unreachable)
+   (set_local $1
+    (i32.const 56)
+   )
   )
   (set_local $3
    (get_local $2)
@@ -221,11 +231,20 @@
   (if
    (i32.eqz
     (i32.ne
-     (get_local $1)
+     (get_local $0)
      (i32.const 0)
     )
    )
    (unreachable)
+  )
+  (if
+   (i32.eq
+    (get_local $1)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 0)
+   )
   )
   (set_local $5
    (select
@@ -310,11 +329,20 @@
   (if
    (i32.eqz
     (i32.ne
-     (get_local $1)
+     (get_local $0)
      (i32.const 0)
     )
    )
    (unreachable)
+  )
+  (if
+   (i32.eq
+    (get_local $1)
+    (i32.const 0)
+   )
+   (set_local $1
+    (i32.const 56)
+   )
   )
   (set_local $3
    (get_local $2)
@@ -480,7 +508,7 @@
    (i32.eqz
     (call $std:string/String#endsWith
      (get_global $std/string/str)
-     (i32.const 56)
+     (i32.const 72)
      (i32.const 2147483647)
     )
    )
@@ -490,7 +518,7 @@
    (i32.eqz
     (call $std:string/String#includes
      (get_global $std/string/str)
-     (i32.const 72)
+     (i32.const 88)
      (i32.const 0)
     )
    )
@@ -501,7 +529,7 @@
     (i32.eq
      (call $std:string/String#indexOf
       (get_global $std/string/str)
-      (i32.const 88)
+      (i32.const 104)
       (i32.const 0)
      )
      (i32.const 2)
@@ -514,7 +542,7 @@
     (i32.eq
      (call $std:string/String#indexOf
       (get_global $std/string/str)
-      (i32.const 96)
+      (i32.const 112)
       (i32.const 0)
      )
      (i32.sub
@@ -606,6 +634,8 @@
   GLOBAL: std:string/HEAD
   FUNCTION_PROTOTYPE: std:string/allocate
   CLASS_PROTOTYPE: std:string/String
+  FUNCTION_PROTOTYPE: std:string/String.__concat
+  FUNCTION_PROTOTYPE: std:string/String.__eq
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
   FUNCTION_PROTOTYPE: std:string/parseInt

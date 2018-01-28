@@ -2867,6 +2867,8 @@
   GLOBAL: std:string/HEAD
   FUNCTION_PROTOTYPE: std:string/allocate
   CLASS_PROTOTYPE: std:string/String
+  FUNCTION_PROTOTYPE: std:string/String.__concat
+  FUNCTION_PROTOTYPE: std:string/String.__eq
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
   FUNCTION_PROTOTYPE: std:string/parseInt

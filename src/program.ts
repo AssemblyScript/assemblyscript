@@ -402,7 +402,7 @@ export class Program extends DiagnosticEmitter {
   private initializeMethod(declaration: MethodDeclaration, classPrototype: ClassPrototype): void {
     var name = declaration.name.name;
     var internalName = declaration.fileLevelInternalName;
-    var instancePrototype: FunctionPrototype | null = null;
+    var prototype: FunctionPrototype | null = null;
 
     // static methods become global functions
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
@@ -419,9 +419,9 @@ export class Program extends DiagnosticEmitter {
         }
       } else
         classPrototype.members = new Map();
-      var staticPrototype = new FunctionPrototype(this, name, internalName, declaration, null);
-      classPrototype.members.set(name, staticPrototype);
-      this.elements.set(internalName, staticPrototype);
+      prototype = new FunctionPrototype(this, name, internalName, declaration, null);
+      classPrototype.members.set(name, prototype);
+      this.elements.set(internalName, prototype);
 
     // instance methods are remembered until resolved
     } else {
@@ -432,26 +432,31 @@ export class Program extends DiagnosticEmitter {
         }
       } else
         classPrototype.instanceMembers = new Map();
-      instancePrototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
+      prototype = new FunctionPrototype(this, name, internalName, declaration, classPrototype);
       // if (classPrototype.isUnmanaged && instancePrototype.isAbstract) {
       //   this.error( Unmanaged classes cannot declare abstract methods. );
       // }
-      classPrototype.instanceMembers.set(name, instancePrototype);
+      classPrototype.instanceMembers.set(name, prototype);
       if (declaration.name.kind == NodeKind.CONSTRUCTOR) {
         if (classPrototype.constructorPrototype)
           this.error(DiagnosticCode.Multiple_constructor_implementations_are_not_allowed, declaration.name.range);
         else
-          classPrototype.constructorPrototype = instancePrototype;
+          classPrototype.constructorPrototype = prototype;
       }
     }
 
-    // handle operator annotations. operators are instance methods taking a second argument of the
-    // instance's type. return values vary depending on the operation.
-    if (declaration.decorators) {
-      for (var i = 0, k = declaration.decorators.length; i < k; ++i) {
-        var decorator = declaration.decorators[i];
+    this.checkOperators(declaration.decorators, prototype, classPrototype);
+  }
+
+  private checkOperators(decorators: Decorator[] | null, prototype: FunctionPrototype, classPrototype: ClassPrototype) {
+    // handle operator annotations. operators are either instance methods taking a second argument of the
+    // instance's type or static methods taking two arguments of the instance's type. return values vary
+    // depending on the operation.
+    if (decorators) {
+      for (var i = 0, k = decorators.length; i < k; ++i) {
+        var decorator = decorators[i];
         if (decorator.decoratorKind == DecoratorKind.OPERATOR) {
-          if (!instancePrototype) {
+          if (!prototype) {
             this.error(DiagnosticCode.Operation_not_supported, decorator.range);
             continue;
           }
@@ -462,22 +467,22 @@ export class Program extends DiagnosticEmitter {
               switch ((<StringLiteralExpression>firstArg).value) {
 
                 case "[]":
-                  classPrototype.fnIndexedGet = instancePrototype.simpleName;
+                  classPrototype.fnIndexedGet = prototype.simpleName;
                   break;
 
                 case "[]=":
-                  classPrototype.fnIndexedSet = instancePrototype.simpleName;
+                  classPrototype.fnIndexedSet = prototype.simpleName;
                   break;
 
                 case "+":
-                  classPrototype.fnConcat = instancePrototype.simpleName;
+                  classPrototype.fnConcat = prototype.simpleName;
                   break;
 
                 case "==":
-                  classPrototype.fnEquals = instancePrototype.simpleName;
+                  classPrototype.fnEquals = prototype.simpleName;
                   break;
 
-                default: // TBD: does it make sense to provide more, even though not JS/TS-compatible?
+                default:
                   this.error(DiagnosticCode.Operation_not_supported, firstArg.range);
               }
             } else

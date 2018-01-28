@@ -107,7 +107,7 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
   if (useColors) sb.push(diagnosticCategoryToColor(message.category));
   sb.push(diagnosticCategoryToString(message.category));
   if (useColors) sb.push(colorReset);
-  sb.push(" AS");
+  sb.push(message.code < 1000 ? " AS" : " TS");
   sb.push(message.code.toString(10));
   sb.push(": ");
   sb.push(message.message);
