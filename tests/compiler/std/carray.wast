@@ -258,23 +258,15 @@
   CLASS_PROTOTYPE: Error
   CLASS_PROTOTYPE: std:error/RangeError
   CLASS_PROTOTYPE: RangeError
-  GLOBAL: std:heap/ALIGN_LOG2
-  GLOBAL: std:heap/ALIGN_SIZE
-  GLOBAL: std:heap/ALIGN_MASK
-  GLOBAL: std:heap/HEAP_OFFSET
-  FUNCTION_PROTOTYPE: std:heap/allocate_memory
-  FUNCTION_PROTOTYPE: allocate_memory
-  FUNCTION_PROTOTYPE: std:heap/free_memory
-  FUNCTION_PROTOTYPE: free_memory
-  FUNCTION_PROTOTYPE: std:heap/copy_memory
-  FUNCTION_PROTOTYPE: std:heap/move_memory
-  FUNCTION_PROTOTYPE: move_memory
-  FUNCTION_PROTOTYPE: std:heap/set_memory
-  FUNCTION_PROTOTYPE: set_memory
-  FUNCTION_PROTOTYPE: std:heap/compare_memory
-  FUNCTION_PROTOTYPE: compare_memory
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: Map
+  FUNCTION_PROTOTYPE: std:memory/copy_memory
+  FUNCTION_PROTOTYPE: std:memory/move_memory
+  FUNCTION_PROTOTYPE: move_memory
+  FUNCTION_PROTOTYPE: std:memory/set_memory
+  FUNCTION_PROTOTYPE: set_memory
+  FUNCTION_PROTOTYPE: std:memory/compare_memory
+  FUNCTION_PROTOTYPE: compare_memory
   CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
@@ -293,6 +285,16 @@
   FUNCTION_PROTOTYPE: std:string/parseFloat
   FUNCTION_PROTOTYPE: parseFloat
   GLOBAL: std/carray/arr
+  GLOBAL: std:memory/arena/ALIGN_LOG2
+  GLOBAL: std:memory/arena/ALIGN_SIZE
+  GLOBAL: std:memory/arena/ALIGN_MASK
+  GLOBAL: std:memory/arena/HEAP_OFFSET
+  FUNCTION_PROTOTYPE: std:memory/arena/allocate_memory
+  FUNCTION_PROTOTYPE: allocate_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/free_memory
+  FUNCTION_PROTOTYPE: free_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/clear_memory
+  FUNCTION_PROTOTYPE: clear_memory
 [program.exports]
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: Array
@@ -302,18 +304,14 @@
   CLASS_PROTOTYPE: Error
   CLASS_PROTOTYPE: std:error/RangeError
   CLASS_PROTOTYPE: RangeError
-  FUNCTION_PROTOTYPE: allocate_memory
-  FUNCTION_PROTOTYPE: std:heap/allocate_memory
-  FUNCTION_PROTOTYPE: free_memory
-  FUNCTION_PROTOTYPE: std:heap/free_memory
-  FUNCTION_PROTOTYPE: move_memory
-  FUNCTION_PROTOTYPE: std:heap/move_memory
-  FUNCTION_PROTOTYPE: set_memory
-  FUNCTION_PROTOTYPE: std:heap/set_memory
-  FUNCTION_PROTOTYPE: compare_memory
-  FUNCTION_PROTOTYPE: std:heap/compare_memory
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: Map
+  FUNCTION_PROTOTYPE: move_memory
+  FUNCTION_PROTOTYPE: std:memory/move_memory
+  FUNCTION_PROTOTYPE: set_memory
+  FUNCTION_PROTOTYPE: std:memory/set_memory
+  FUNCTION_PROTOTYPE: compare_memory
+  FUNCTION_PROTOTYPE: std:memory/compare_memory
   CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
@@ -324,4 +322,10 @@
   FUNCTION_PROTOTYPE: std:string/parseInt
   FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: std:string/parseFloat
+  FUNCTION_PROTOTYPE: allocate_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/allocate_memory
+  FUNCTION_PROTOTYPE: free_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/free_memory
+  FUNCTION_PROTOTYPE: clear_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/clear_memory
 ;)

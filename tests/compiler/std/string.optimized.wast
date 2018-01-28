@@ -43,7 +43,7 @@
    )
   )
  )
- (func $std:heap/compare_memory (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std:memory/compare_memory (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (if
    (i32.eq
     (get_local $0)
@@ -162,7 +162,7 @@
    )
   )
   (i32.eqz
-   (call $std:heap/compare_memory
+   (call $std:memory/compare_memory
     (i32.add
      (i32.add
       (get_local $0)
@@ -239,7 +239,7 @@
    )
   )
   (i32.eqz
-   (call $std:heap/compare_memory
+   (call $std:memory/compare_memory
     (i32.add
      (i32.add
       (get_local $0)
@@ -321,7 +321,7 @@
     (block
      (if
       (i32.eqz
-       (call $std:heap/compare_memory
+       (call $std:memory/compare_memory
         (i32.add
          (i32.add
           (get_local $0)

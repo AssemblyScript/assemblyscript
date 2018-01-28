@@ -1,15 +1,15 @@
 (module
  (type $i (func (result i32)))
- (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iv (func (param i32)))
  (type $v (func))
  (global $std/heap/size i32 (i32.const 42))
- (global $std:heap/HEAP_OFFSET (mut i32) (i32.const 0))
- (global $std:heap/ALIGN_LOG2 i32 (i32.const 3))
- (global $std:heap/ALIGN_SIZE i32 (i32.const 8))
- (global $std:heap/ALIGN_MASK i32 (i32.const 7))
+ (global $std:memory/arena/HEAP_OFFSET (mut i32) (i32.const 0))
+ (global $std:memory/arena/ALIGN_LOG2 i32 (i32.const 3))
+ (global $std:memory/arena/ALIGN_SIZE i32 (i32.const 8))
+ (global $std:memory/arena/ALIGN_MASK i32 (i32.const 7))
  (global $std/heap/ptr1 (mut i32) (i32.const 0))
  (global $std/heap/ptr2 (mut i32) (i32.const 0))
  (global $std/heap/i (mut i32) (i32.const 0))
@@ -17,100 +17,7 @@
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func $std:heap/allocate_memory (; 0 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (return
-    (i32.const 0)
-   )
-  )
-  (set_local $1
-   (current_memory)
-  )
-  (if
-   (i32.gt_u
-    (i32.add
-     (get_global $std:heap/HEAP_OFFSET)
-     (get_local $0)
-    )
-    (i32.shl
-     (get_local $1)
-     (i32.const 16)
-    )
-   )
-   (if
-    (i32.lt_s
-     (grow_memory
-      (select
-       (tee_local $2
-        (i32.trunc_s/f64
-         (f64.ceil
-          (f64.div
-           (f64.convert_u/i32
-            (get_local $0)
-           )
-           (f64.const 65536)
-          )
-         )
-        )
-       )
-       (tee_local $3
-        (i32.sub
-         (i32.mul
-          (get_local $1)
-          (i32.const 2)
-         )
-         (get_local $1)
-        )
-       )
-       (i32.gt_s
-        (get_local $2)
-        (get_local $3)
-       )
-      )
-     )
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (set_local $4
-   (get_global $std:heap/HEAP_OFFSET)
-  )
-  (if
-   (i32.and
-    (block (result i32)
-     (set_global $std:heap/HEAP_OFFSET
-      (i32.add
-       (get_global $std:heap/HEAP_OFFSET)
-       (get_local $0)
-      )
-     )
-     (get_global $std:heap/HEAP_OFFSET)
-    )
-    (i32.const 7)
-   )
-   (set_global $std:heap/HEAP_OFFSET
-    (i32.add
-     (i32.or
-      (get_global $std:heap/HEAP_OFFSET)
-      (i32.const 7)
-     )
-     (i32.const 1)
-    )
-   )
-  )
-  (return
-   (get_local $4)
-  )
- )
- (func $std:heap/set_memory (; 1 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $std:memory/set_memory (; 0 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -465,7 +372,105 @@
    )
   )
  )
- (func $std:heap/copy_memory (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $std:memory/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (set_local $1
+   (current_memory)
+  )
+  (if
+   (i32.gt_u
+    (i32.add
+     (get_global $std:memory/arena/HEAP_OFFSET)
+     (get_local $0)
+    )
+    (i32.shl
+     (get_local $1)
+     (i32.const 16)
+    )
+   )
+   (if
+    (i32.lt_s
+     (grow_memory
+      (select
+       (tee_local $2
+        (i32.trunc_s/f64
+         (f64.ceil
+          (f64.div
+           (f64.convert_u/i32
+            (get_local $0)
+           )
+           (f64.const 65536)
+          )
+         )
+        )
+       )
+       (tee_local $3
+        (i32.sub
+         (i32.mul
+          (get_local $1)
+          (i32.const 2)
+         )
+         (get_local $1)
+        )
+       )
+       (i32.gt_s
+        (get_local $2)
+        (get_local $3)
+       )
+      )
+     )
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_local $4
+   (get_global $std:memory/arena/HEAP_OFFSET)
+  )
+  (if
+   (i32.and
+    (block (result i32)
+     (set_global $std:memory/arena/HEAP_OFFSET
+      (i32.add
+       (get_global $std:memory/arena/HEAP_OFFSET)
+       (get_local $0)
+      )
+     )
+     (get_global $std:memory/arena/HEAP_OFFSET)
+    )
+    (i32.const 7)
+   )
+   (set_global $std:memory/arena/HEAP_OFFSET
+    (i32.add
+     (i32.or
+      (get_global $std:memory/arena/HEAP_OFFSET)
+      (i32.const 7)
+     )
+     (i32.const 1)
+    )
+   )
+  )
+  (call $std:memory/set_memory
+   (get_local $4)
+   (i32.const 0)
+   (get_local $0)
+  )
+  (return
+   (get_local $4)
+  )
+ )
+ (func $std:memory/copy_memory (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2265,7 +2270,7 @@
    )
   )
  )
- (func $std:heap/move_memory (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $std:memory/move_memory (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -2301,7 +2306,7 @@
     (i32.const 1)
    )
    (block
-    (call $std:heap/copy_memory
+    (call $std:memory/copy_memory
      (get_local $0)
      (get_local $1)
      (get_local $2)
@@ -2591,7 +2596,7 @@
    )
   )
  )
- (func $std:heap/compare_memory (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std:memory/compare_memory (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (if
    (i32.eq
     (get_local $0)
@@ -2660,19 +2665,19 @@
    )
   )
  )
- (func $std:heap/free_memory (; 5 ;) (type $iv) (param $0 i32)
+ (func $std:memory/arena/free_memory (; 5 ;) (type $iv) (param $0 i32)
  )
  (func $start (; 6 ;) (type $v)
-  (set_global $std:heap/HEAP_OFFSET
+  (set_global $std:memory/arena/HEAP_OFFSET
    (get_global $HEAP_BASE)
   )
   (set_global $std/heap/ptr1
-   (call $std:heap/allocate_memory
+   (call $std:memory/arena/allocate_memory
     (i32.const 42)
    )
   )
   (set_global $std/heap/ptr2
-   (call $std:heap/allocate_memory
+   (call $std:memory/arena/allocate_memory
     (i32.const 42)
    )
   )
@@ -2685,7 +2690,7 @@
    )
    (unreachable)
   )
-  (call $std:heap/set_memory
+  (call $std:memory/set_memory
    (get_global $std/heap/ptr1)
    (i32.const 18)
    (i32.const 42)
@@ -2726,7 +2731,7 @@
     )
    )
   )
-  (call $std:heap/move_memory
+  (call $std:memory/move_memory
    (get_global $std/heap/ptr2)
    (get_global $std/heap/ptr1)
    (i32.const 42)
@@ -2770,7 +2775,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $std:heap/compare_memory
+     (call $std:memory/compare_memory
       (get_global $std/heap/ptr1)
       (get_global $std/heap/ptr2)
       (i32.const 42)
@@ -2780,10 +2785,10 @@
    )
    (unreachable)
   )
-  (call $std:heap/free_memory
+  (call $std:memory/arena/free_memory
    (get_global $std/heap/ptr1)
   )
-  (call $std:heap/free_memory
+  (call $std:memory/arena/free_memory
    (get_global $std/heap/ptr2)
   )
  )
@@ -2841,23 +2846,15 @@
   CLASS_PROTOTYPE: Error
   CLASS_PROTOTYPE: std:error/RangeError
   CLASS_PROTOTYPE: RangeError
-  GLOBAL: std:heap/ALIGN_LOG2
-  GLOBAL: std:heap/ALIGN_SIZE
-  GLOBAL: std:heap/ALIGN_MASK
-  GLOBAL: std:heap/HEAP_OFFSET
-  FUNCTION_PROTOTYPE: std:heap/allocate_memory
-  FUNCTION_PROTOTYPE: allocate_memory
-  FUNCTION_PROTOTYPE: std:heap/free_memory
-  FUNCTION_PROTOTYPE: free_memory
-  FUNCTION_PROTOTYPE: std:heap/copy_memory
-  FUNCTION_PROTOTYPE: std:heap/move_memory
-  FUNCTION_PROTOTYPE: move_memory
-  FUNCTION_PROTOTYPE: std:heap/set_memory
-  FUNCTION_PROTOTYPE: set_memory
-  FUNCTION_PROTOTYPE: std:heap/compare_memory
-  FUNCTION_PROTOTYPE: compare_memory
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: Map
+  FUNCTION_PROTOTYPE: std:memory/copy_memory
+  FUNCTION_PROTOTYPE: std:memory/move_memory
+  FUNCTION_PROTOTYPE: move_memory
+  FUNCTION_PROTOTYPE: std:memory/set_memory
+  FUNCTION_PROTOTYPE: set_memory
+  FUNCTION_PROTOTYPE: std:memory/compare_memory
+  FUNCTION_PROTOTYPE: compare_memory
   CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
@@ -2879,6 +2876,16 @@
   GLOBAL: std/heap/ptr1
   GLOBAL: std/heap/ptr2
   GLOBAL: std/heap/i
+  GLOBAL: std:memory/arena/ALIGN_LOG2
+  GLOBAL: std:memory/arena/ALIGN_SIZE
+  GLOBAL: std:memory/arena/ALIGN_MASK
+  GLOBAL: std:memory/arena/HEAP_OFFSET
+  FUNCTION_PROTOTYPE: std:memory/arena/allocate_memory
+  FUNCTION_PROTOTYPE: allocate_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/free_memory
+  FUNCTION_PROTOTYPE: free_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/clear_memory
+  FUNCTION_PROTOTYPE: clear_memory
 [program.exports]
   CLASS_PROTOTYPE: std:array/Array
   CLASS_PROTOTYPE: Array
@@ -2888,18 +2895,14 @@
   CLASS_PROTOTYPE: Error
   CLASS_PROTOTYPE: std:error/RangeError
   CLASS_PROTOTYPE: RangeError
-  FUNCTION_PROTOTYPE: allocate_memory
-  FUNCTION_PROTOTYPE: std:heap/allocate_memory
-  FUNCTION_PROTOTYPE: free_memory
-  FUNCTION_PROTOTYPE: std:heap/free_memory
-  FUNCTION_PROTOTYPE: move_memory
-  FUNCTION_PROTOTYPE: std:heap/move_memory
-  FUNCTION_PROTOTYPE: set_memory
-  FUNCTION_PROTOTYPE: std:heap/set_memory
-  FUNCTION_PROTOTYPE: compare_memory
-  FUNCTION_PROTOTYPE: std:heap/compare_memory
   CLASS_PROTOTYPE: std:map/Map
   CLASS_PROTOTYPE: Map
+  FUNCTION_PROTOTYPE: move_memory
+  FUNCTION_PROTOTYPE: std:memory/move_memory
+  FUNCTION_PROTOTYPE: set_memory
+  FUNCTION_PROTOTYPE: std:memory/set_memory
+  FUNCTION_PROTOTYPE: compare_memory
+  FUNCTION_PROTOTYPE: std:memory/compare_memory
   CLASS_PROTOTYPE: std:regexp/RegExp
   CLASS_PROTOTYPE: RegExp
   CLASS_PROTOTYPE: std:set/Set
@@ -2910,4 +2913,10 @@
   FUNCTION_PROTOTYPE: std:string/parseInt
   FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: std:string/parseFloat
+  FUNCTION_PROTOTYPE: allocate_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/allocate_memory
+  FUNCTION_PROTOTYPE: free_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/free_memory
+  FUNCTION_PROTOTYPE: clear_memory
+  FUNCTION_PROTOTYPE: std:memory/arena/clear_memory
 ;)
