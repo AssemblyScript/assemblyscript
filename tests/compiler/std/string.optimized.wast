@@ -2,6 +2,7 @@
  (type $i (func (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iiI (func (param i32 i32) (result i64)))
  (type $v (func))
  (global $std/string/str (mut i32) (i32.const 8))
  (memory $0 1)
@@ -12,6 +13,14 @@
  (data (i32.const 88) "\03\00\00\00I\00\'\00m")
  (data (i32.const 104) "\01\00\00\00,")
  (data (i32.const 112) "\01\00\00\00x")
+ (data (i32.const 120) "\01\00\00\000")
+ (data (i32.const 128) "\01\00\00\001")
+ (data (i32.const 136) "\05\00\00\000\00b\001\000\001")
+ (data (i32.const 152) "\05\00\00\000\00o\007\000\007")
+ (data (i32.const 168) "\05\00\00\000\00x\00f\000\00f")
+ (data (i32.const 184) "\05\00\00\000\00x\00F\000\00F")
+ (data (i32.const 200) "\03\00\00\000\001\001")
+ (data (i32.const 216) "\04\00\00\000\00x\001\00g")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -361,7 +370,369 @@
  (func $std/string/getString (; 5 ;) (type $i) (result i32)
   (get_global $std/string/str)
  )
- (func $start (; 6 ;) (type $v)
+ (func $std:string/parseInt (; 6 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i64)
+  (local $5 i64)
+  (set_local $3
+   (i32.add
+    (get_local $0)
+    (i32.const 4)
+   )
+  )
+  (if
+   (i32.eqz
+    (tee_local $0
+     (i32.load
+      (get_local $0)
+     )
+    )
+   )
+   (return
+    (i64.const 0)
+   )
+  )
+  (set_local $5
+   (if (result i64)
+    (i32.eq
+     (tee_local $2
+      (i32.load16_u
+       (get_local $3)
+      )
+     )
+     (i32.const 45)
+    )
+    (block (result i64)
+     (if
+      (i32.eqz
+       (tee_local $0
+        (i32.sub
+         (get_local $0)
+         (i32.const 1)
+        )
+       )
+      )
+      (return
+       (i64.const 0)
+      )
+     )
+     (set_local $2
+      (i32.load16_u
+       (tee_local $3
+        (i32.add
+         (get_local $3)
+         (i32.const 2)
+        )
+       )
+      )
+     )
+     (i64.const -1)
+    )
+    (if (result i64)
+     (i32.eq
+      (get_local $2)
+      (i32.const 43)
+     )
+     (block (result i64)
+      (if
+       (i32.eqz
+        (tee_local $0
+         (i32.sub
+          (get_local $0)
+          (i32.const 1)
+         )
+        )
+       )
+       (return
+        (i64.const 0)
+       )
+      )
+      (set_local $2
+       (i32.load16_u
+        (tee_local $3
+         (i32.add
+          (get_local $3)
+          (i32.const 2)
+         )
+        )
+       )
+      )
+      (i64.const 1)
+     )
+     (i64.const 1)
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $1)
+   )
+   (set_local $1
+    (if (result i32)
+     (i32.and
+      (select
+       (i32.gt_s
+        (get_local $0)
+        (i32.const 2)
+       )
+       (i32.eq
+        (get_local $2)
+        (i32.const 48)
+       )
+       (i32.eq
+        (get_local $2)
+        (i32.const 48)
+       )
+      )
+      (i32.const 1)
+     )
+     (block $break|0 (result i32)
+      (block $case6|0
+       (block $case5|0
+        (block $case3|0
+         (if
+          (i32.eqz
+           (i32.or
+            (i32.eq
+             (tee_local $2
+              (i32.load16_u
+               (i32.add
+                (get_local $3)
+                (i32.const 2)
+               )
+              )
+             )
+             (i32.const 66)
+            )
+            (i32.eq
+             (get_local $2)
+             (i32.const 98)
+            )
+           )
+          )
+          (block
+           (br_if $case3|0
+            (i32.or
+             (i32.eq
+              (get_local $2)
+              (i32.const 79)
+             )
+             (i32.eq
+              (get_local $2)
+              (i32.const 111)
+             )
+            )
+           )
+           (br_if $case5|0
+            (i32.or
+             (i32.eq
+              (get_local $2)
+              (i32.const 88)
+             )
+             (i32.eq
+              (get_local $2)
+              (i32.const 120)
+             )
+            )
+           )
+           (br $case6|0)
+          )
+         )
+         (set_local $3
+          (i32.add
+           (get_local $3)
+           (i32.const 4)
+          )
+         )
+         (set_local $0
+          (i32.sub
+           (get_local $0)
+           (i32.const 2)
+          )
+         )
+         (br $break|0
+          (i32.const 2)
+         )
+        )
+        (set_local $3
+         (i32.add
+          (get_local $3)
+          (i32.const 4)
+         )
+        )
+        (set_local $0
+         (i32.sub
+          (get_local $0)
+          (i32.const 2)
+         )
+        )
+        (br $break|0
+         (i32.const 8)
+        )
+       )
+       (set_local $3
+        (i32.add
+         (get_local $3)
+         (i32.const 4)
+        )
+       )
+       (set_local $0
+        (i32.sub
+         (get_local $0)
+         (i32.const 2)
+        )
+       )
+       (br $break|0
+        (i32.const 16)
+       )
+      )
+      (i32.const 10)
+     )
+     (i32.const 10)
+    )
+   )
+  )
+  (loop $continue|1
+   (if
+    (block (result i32)
+     (set_local $0
+      (i32.sub
+       (tee_local $2
+        (get_local $0)
+       )
+       (i32.const 1)
+      )
+     )
+     (get_local $2)
+    )
+    (block
+     (if
+      (i32.and
+       (select
+        (i32.le_s
+         (tee_local $2
+          (i32.load16_u
+           (get_local $3)
+          )
+         )
+         (i32.const 57)
+        )
+        (i32.ge_s
+         (get_local $2)
+         (i32.const 48)
+        )
+        (i32.ge_s
+         (get_local $2)
+         (i32.const 48)
+        )
+       )
+       (i32.const 1)
+      )
+      (set_local $2
+       (i32.sub
+        (get_local $2)
+        (i32.const 48)
+       )
+      )
+      (if
+       (i32.and
+        (select
+         (i32.le_s
+          (get_local $2)
+          (i32.const 90)
+         )
+         (i32.ge_s
+          (get_local $2)
+          (i32.const 65)
+         )
+         (i32.ge_s
+          (get_local $2)
+          (i32.const 65)
+         )
+        )
+        (i32.const 1)
+       )
+       (set_local $2
+        (i32.sub
+         (get_local $2)
+         (i32.const 55)
+        )
+       )
+       (if
+        (i32.and
+         (select
+          (i32.le_s
+           (get_local $2)
+           (i32.const 122)
+          )
+          (i32.ge_s
+           (get_local $2)
+           (i32.const 97)
+          )
+          (i32.ge_s
+           (get_local $2)
+           (i32.const 97)
+          )
+         )
+         (i32.const 1)
+        )
+        (set_local $2
+         (i32.sub
+          (get_local $2)
+          (i32.const 87)
+         )
+        )
+        (return
+         (i64.mul
+          (get_local $5)
+          (get_local $4)
+         )
+        )
+       )
+      )
+     )
+     (if
+      (i32.ge_s
+       (get_local $2)
+       (get_local $1)
+      )
+      (return
+       (i64.mul
+        (get_local $5)
+        (get_local $4)
+       )
+      )
+     )
+     (set_local $4
+      (i64.add
+       (i64.mul
+        (get_local $4)
+        (i64.extend_s/i32
+         (get_local $1)
+        )
+       )
+       (i64.extend_s/i32
+        (get_local $2)
+       )
+      )
+     )
+     (set_local $3
+      (i32.add
+       (get_local $3)
+       (i32.const 2)
+      )
+     )
+     (br $continue|1)
+    )
+   )
+  )
+  (i64.mul
+   (get_local $5)
+   (get_local $4)
+  )
+ )
+ (func $start (; 7 ;) (type $v)
   (if
    (i32.ne
     (get_global $std/string/str)
@@ -440,6 +811,86 @@
      (i32.const 0)
     )
     (i32.const -1)
+   )
+   (unreachable)
+  )
+  (if
+   (i64.ne
+    (call $std:string/parseInt
+     (i32.const 120)
+     (i32.const 0)
+    )
+    (i64.const 0)
+   )
+   (unreachable)
+  )
+  (if
+   (i64.ne
+    (call $std:string/parseInt
+     (i32.const 128)
+     (i32.const 0)
+    )
+    (i64.const 1)
+   )
+   (unreachable)
+  )
+  (if
+   (i64.ne
+    (call $std:string/parseInt
+     (i32.const 136)
+     (i32.const 0)
+    )
+    (i64.const 5)
+   )
+   (unreachable)
+  )
+  (if
+   (i64.ne
+    (call $std:string/parseInt
+     (i32.const 152)
+     (i32.const 0)
+    )
+    (i64.const 455)
+   )
+   (unreachable)
+  )
+  (if
+   (i64.ne
+    (call $std:string/parseInt
+     (i32.const 168)
+     (i32.const 0)
+    )
+    (i64.const 3855)
+   )
+   (unreachable)
+  )
+  (if
+   (i64.ne
+    (call $std:string/parseInt
+     (i32.const 184)
+     (i32.const 0)
+    )
+    (i64.const 3855)
+   )
+   (unreachable)
+  )
+  (if
+   (i64.ne
+    (call $std:string/parseInt
+     (i32.const 200)
+     (i32.const 0)
+    )
+    (i64.const 11)
+   )
+   (unreachable)
+  )
+  (if
+   (i64.ne
+    (call $std:string/parseInt
+     (i32.const 216)
+     (i32.const 0)
+    )
+    (i64.const 1)
    )
    (unreachable)
   )

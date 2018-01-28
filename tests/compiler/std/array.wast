@@ -4073,6 +4073,7 @@
   FUNCTION_PROTOTYPE: std:string/String.__eq
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: std:string/isWhiteSpaceOrLineTerminator
+  ENUM: std:string/CharCode
   FUNCTION_PROTOTYPE: std:string/parseInt
   FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseFloat

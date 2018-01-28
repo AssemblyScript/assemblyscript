@@ -2836,6 +2836,7 @@ export class Compiler extends DiagnosticEmitter {
   compileLiteralExpression(expression: LiteralExpression, contextualType: Type): ExpressionRef {
     switch (expression.literalKind) {
       // case LiteralKind.ARRAY:
+        // return this.compileStaticArray(...);
 
       case LiteralKind.FLOAT: {
         var floatValue = (<FloatLiteralExpression>expression).value;
@@ -2901,6 +2902,10 @@ export class Compiler extends DiagnosticEmitter {
     return this.options.isWasm64
       ? this.module.createI64(stringOffset.lo, stringOffset.hi)
       : this.module.createI32(stringOffset.lo);
+  }
+
+  compileStaticArray(elementType: Type, expressions: Expression): ExpressionRef {
+    throw new Error("not implemented");
   }
 
   compileNewExpression(expression: NewExpression, contextualType: Type): ExpressionRef {

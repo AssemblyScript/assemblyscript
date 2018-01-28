@@ -322,9 +322,100 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
   }
 }
 
-// @binding(CALL, [ STRING, PASS_THRU ], PASS_THRU)
-export function parseInt(str: string, radix: i32 = 10): f64 {
-  throw new Error("not implemented");
+const enum CharCode {
+  PLUS = 0x2B,
+  MINUS = 0x2D,
+  _0 = 0x30,
+  _1 = 0x31,
+  _2 = 0x32,
+  _3 = 0x33,
+  _4 = 0x34,
+  _5 = 0x35,
+  _6 = 0x36,
+  _7 = 0x37,
+  _8 = 0x38,
+  _9 = 0x39,
+  A = 0x41,
+  B = 0x42,
+  O = 0x4F,
+  X = 0x58,
+  Z = 0x5a,
+  a = 0x61,
+  b = 0x62,
+  o = 0x6F,
+  x = 0x78,
+  z = 0x7A
+}
+
+export function parseInt(str: String, radix: i32 = 0): i64 {
+  var len = str.length;
+  var ptr = changetype<usize>(str) + HEAD;
+  if (!len)
+    return 0; // (NaN)
+  var code = <i32>load<u16>(ptr);
+
+  // determine sign
+  var sign: i64;
+  if (code == CharCode.MINUS) {
+    if (!--len)
+      return 0; // (NaN)
+    code = <i32>load<u16>(ptr += 2);
+    sign = -1;
+  } else if (code == CharCode.PLUS) {
+    if (!--len)
+      return 0; // (NaN)
+    code = <i32>load<u16>(ptr += 2);
+    sign = 1;
+  } else
+    sign = 1;
+
+  // determine radix
+  if (!radix) {
+    if (code == CharCode._0 && len > 2) {
+      switch (<i32>load<u16>(ptr + 2)) {
+
+        case CharCode.B:
+        case CharCode.b:
+          ptr += 4; len -= 2;
+          radix = 2;
+          break;
+
+        case CharCode.O:
+        case CharCode.o:
+          ptr += 4; len -= 2;
+          radix = 8;
+          break;
+
+        case CharCode.X:
+        case CharCode.x:
+          ptr += 4; len -= 2;
+          radix = 16;
+          break;
+
+        default:
+          radix = 10;
+      }
+    } else radix = 10;
+  }
+
+  // calculate value
+  var num: i64 = 0;
+  while (len--) {
+    code = <i32>load<u16>(ptr);
+    if (code >= CharCode._0 && code <= CharCode._9)
+      code -= CharCode._0;
+    else if (code >= CharCode.A && code <= CharCode.Z)
+      code -= CharCode.A - 10;
+    else if (code >= CharCode.a && code <= CharCode.z)
+      code -= CharCode.a - 10;
+    else
+      return sign * num;
+    if (code >= radix)
+      return sign * num;
+    num = (num * radix) + code;
+    ptr += 2;
+  }
+  return sign * num;
 }
 
 // @binding(CALL, [ STRING ], PASS_THRU)

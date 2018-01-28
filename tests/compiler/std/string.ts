@@ -16,3 +16,12 @@ assert(str.indexOf("x") == -1);
 export function getString(): string {
   return str;
 }
+
+assert(parseInt("0") == 0);
+assert(parseInt("1") == 1);
+assert(parseInt("0b101") == 0b101);
+assert(parseInt("0o707") == 0o707);
+assert(parseInt("0xf0f") == 0xf0f);
+assert(parseInt("0xF0F") == 0xf0f);
+assert(parseInt("011") == 11); // not octal
+assert(parseInt("0x1g") == 1); // not valid
