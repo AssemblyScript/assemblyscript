@@ -102,6 +102,7 @@ import {
   ParenthesizedExpression,
   PropertyAccessExpression,
   TernaryExpression,
+  ArrayLiteralExpression,
   StringLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
@@ -2835,8 +2836,13 @@ export class Compiler extends DiagnosticEmitter {
 
   compileLiteralExpression(expression: LiteralExpression, contextualType: Type): ExpressionRef {
     switch (expression.literalKind) {
-      // case LiteralKind.ARRAY:
-        // return this.compileStaticArray(...);
+
+      case LiteralKind.ARRAY:
+        var classType = contextualType.classType;
+        if (classType && classType == this.program.elements.get("Array") && classType.typeArguments && classType.typeArguments.length == 1)
+          return this.compileStaticArray(classType.typeArguments[0], (<ArrayLiteralExpression>expression).elementExpressions);
+        this.error(DiagnosticCode.Operation_not_supported, expression.range);
+        return this.module.createUnreachable();
 
       case LiteralKind.FLOAT: {
         var floatValue = (<FloatLiteralExpression>expression).value;
@@ -2904,7 +2910,19 @@ export class Compiler extends DiagnosticEmitter {
       : this.module.createI32(stringOffset.lo);
   }
 
-  compileStaticArray(elementType: Type, expressions: Expression): ExpressionRef {
+  compileStaticArray(elementType: Type, expressions: (Expression | null)[]): ExpressionRef {
+    // compile as static if all element expressions are precomputable, otherwise
+    // initialize in place.
+    var exprs = new Array<ExpressionRef>(expressions.length);
+    var isStatic = true;
+    var expr: BinaryenExpressionRef;
+    for (var i = 0; i < expressions.length; ++i) {
+      exprs[i] = expressions[i] ? this.compileExpression(<Expression>expressions[i], elementType) : elementType.toNativeZero(this.module);
+      if (isStatic && _BinaryenExpressionGetId(expr = this.precomputeExpressionRef(exprs[i])) == ExpressionId.Const) {
+        // TODO: use multiple arrays of possible native types?
+      } else
+        isStatic = false;
+    }
     throw new Error("not implemented");
   }
 

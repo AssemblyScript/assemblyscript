@@ -78,8 +78,8 @@ glob.sync(filter, { cwd: __dirname + "/compiler" }).forEach(filename => {
       // already covered by instantiate below, which is also able to use imports, but doesn't
       // provide as much debugging information. might be necessary to remove this one once imports
       // are tested more.
-      module.interpret();
-      console.log(chalk.green("interpret OK"));
+      // module.interpret();
+      // console.log(chalk.green("interpret OK"));
       try {
         var binary = module.toBinary();
         var wasmModule = new WebAssembly.Module(binary);

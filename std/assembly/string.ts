@@ -325,6 +325,7 @@ function isWhiteSpaceOrLineTerminator(c: u16): bool {
 const enum CharCode {
   PLUS = 0x2B,
   MINUS = 0x2D,
+  DOT = 0x2E,
   _0 = 0x30,
   _1 = 0x31,
   _2 = 0x32,
@@ -337,11 +338,13 @@ const enum CharCode {
   _9 = 0x39,
   A = 0x41,
   B = 0x42,
+  E = 0x45,
   O = 0x4F,
   X = 0x58,
   Z = 0x5a,
   a = 0x61,
   b = 0x62,
+  e = 0x65,
   o = 0x6F,
   x = 0x78,
   z = 0x7A
@@ -410,16 +413,62 @@ export function parseInt(str: String, radix: i32 = 0): i64 {
     else if (code >= CharCode.a && code <= CharCode.z)
       code -= CharCode.a - 10;
     else
-      return sign * num;
+      break;
     if (code >= radix)
-      return sign * num;
+      break;
     num = (num * radix) + code;
     ptr += 2;
   }
   return sign * num;
 }
 
-// @binding(CALL, [ STRING ], PASS_THRU)
 export function parseFloat(str: string): f64 {
-  throw new Error("not implemented");
+  var len: i32 = str.length;
+  if (!len)
+    return NaN;
+  var ptr = changetype<usize>(str) /* + HEAD -> offset */;
+  var code = <i32>load<u16>(ptr, HEAD);
+
+  // determine sign
+  var sign: f64;
+  if (code == CharCode.MINUS) {
+    if (!--len)
+      return NaN;
+    code = <i32>load<u16>(ptr += 2, HEAD);
+    sign = -1;
+  } else if (code == CharCode.PLUS) {
+    if (!--len)
+      return NaN;
+    code = <i32>load<u16>(ptr += 2, HEAD);
+    sign = 1;
+  } else
+    sign = 1;
+
+  // calculate value
+  var num: f64 = 0;
+  while (len--) {
+    code = <i32>load<u16>(ptr, HEAD);
+    if (code == CharCode.DOT) {
+      ptr += 2;
+      var fac: f64 = 0.1; // precision :(
+      while (len--) {
+        code = <i32>load<u16>(ptr, HEAD);
+        if (code == CharCode.E || code == CharCode.e)
+          assert(false); // TODO
+        code -= CharCode._0;
+        if (<u32>code > 9)
+          break;
+        num += <f64>code * fac;
+        fac *= 0.1;
+        ptr += 2;
+      }
+      break;
+    }
+    code -= CharCode._0;
+    if (<u32>code >= 10)
+      break;
+    num = (num * 10) + code;
+    ptr += 2;
+  }
+  return sign * num;
 }

@@ -13,7 +13,8 @@ import {
 import {
   Node,
   Expression,
-  BinaryExpression
+  BinaryExpression,
+  SourceKind
 } from "./ast";
 
 import {
@@ -1539,6 +1540,8 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
         return module.createUnreachable();
       }
+      if (reportNode.range.source.sourceKind != SourceKind.STDLIB)
+        compiler.warning(DiagnosticCode.Operation_is_unsafe, reportNode.range);
       return arg0; // any usize to any usize
 
     case "assert": // assert<T?>(isTrueish: T, message?: string) -> T with T != null (see also assembly.d.ts)
