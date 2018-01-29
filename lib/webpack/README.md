@@ -11,3 +11,5 @@ import Module from "@assemblyscript/webpack!module.wasm";
 
 var myModule = Module({ imports: { ... }});
 ```
+
+TODO: Wire .ts files to the compiler API, accepting options, but also keep raw .wasm support.

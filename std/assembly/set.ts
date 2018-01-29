@@ -66,3 +66,14 @@ export class Set<T> {
 
   // TODO: think about iterators
 }
+
+// class SetIterator<T> extends Iterator<T> {
+
+//   get done(): bool {
+//     throw new Error("not implemented");
+//   }
+
+//   next(): T {
+//     throw new Error("not implemented");
+//   }
+// }

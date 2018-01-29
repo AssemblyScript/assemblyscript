@@ -33,10 +33,12 @@ import {
   DecoratorKind,
 
   Expression,
+  AssertionExpression,
   ElementAccessExpression,
   IdentifierExpression,
   LiteralExpression,
   LiteralKind,
+  ParenthesizedExpression,
   PropertyAccessExpression,
   StringLiteralExpression,
   SuperExpression,
@@ -66,7 +68,8 @@ import {
   hasDecorator,
   hasModifier,
   mangleInternalName,
-  getFirstDecorator
+  getFirstDecorator,
+  BinaryExpression
 } from "./ast";
 
 import {
@@ -1156,7 +1159,21 @@ export class Program extends DiagnosticEmitter {
 
   resolveExpression(expression: Expression, contextualFunction: Function): ResolvedElement | null {
     var classType: Class | null;
+
+    while (expression.kind == NodeKind.PARENTHESIZED)
+      expression = (<ParenthesizedExpression>expression).expression;
+
     switch (expression.kind) {
+
+      case NodeKind.ASSERTION:
+        var type = this.resolveType((<AssertionExpression>expression).toType); // reports
+        if (type && (classType = type.classType))
+          return (resolvedElement || (resolvedElement = new ResolvedElement())).set(classType);
+        return null;
+
+      case NodeKind.BINARY:
+        // TODO: string concatenation, mostly
+        throw new Error("not implemented");
 
       case NodeKind.THIS: // -> Class
         if (classType = contextualFunction.instanceMethodOf)

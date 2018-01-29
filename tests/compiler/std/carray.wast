@@ -259,6 +259,7 @@
   CLASS_PROTOTYPE: std:error/RangeError
   CLASS_PROTOTYPE: RangeError
   CLASS_PROTOTYPE: std:map/Map
+  PROPERTY: std:map/Map#size
   CLASS_PROTOTYPE: Map
   FUNCTION_PROTOTYPE: std:memory/copy_memory
   FUNCTION_PROTOTYPE: std:memory/move_memory

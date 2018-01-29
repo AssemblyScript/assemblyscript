@@ -13,5 +13,5 @@ var myModule = ...;
 
 var helpers = utils(myModule);
 
-var str = helpers.getString(myModule.exportReturningAString());
+var str = helpers.string(myModule.exportReturningAString());
 ```

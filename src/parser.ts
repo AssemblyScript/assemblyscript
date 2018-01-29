@@ -36,6 +36,7 @@ import {
   Expression,
   AssertionKind,
   CallExpression,
+  ElementAccessExpression,
   IdentifierExpression,
   StringLiteralExpression,
 
@@ -1467,7 +1468,7 @@ export class Parser extends DiagnosticEmitter {
         var elementExpressions = new Array<Expression | null>();
         if (!tn.skip(Token.CLOSEBRACKET)) {
           do {
-            if (tn.peek() == Token.COMMA || tn.peek() == Token.CLOSEBRACKET)
+            if (tn.peek() == Token.COMMA)
               expr = null; // omitted
             else {
               expr = this.parseExpression(tn, Precedence.COMMA + 1);
@@ -1475,6 +1476,8 @@ export class Parser extends DiagnosticEmitter {
                 return null;
             }
             elementExpressions.push(expr);
+            if (tn.peek() == Token.CLOSEBRACKET)
+              break;
           } while (tn.skip(Token.COMMA));
           if (!tn.skip(Token.CLOSEBRACKET)) {
             this.error(DiagnosticCode._0_expected, tn.range(), "]");
@@ -1588,19 +1591,6 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = expr.range.start;
 
-    // ElementAccessExpression
-    if (tn.skip(Token.OPENBRACKET)) {
-      next = this.parseExpression(tn); // resets precedence
-      if (!next)
-        return null;
-      if (tn.skip(Token.CLOSEBRACKET))
-        expr = Node.createElementAccessExpression(<Expression>expr, <Expression>next, tn.range(startPos, tn.pos));
-      else {
-        this.error(DiagnosticCode._0_expected, tn.range(), "]");
-        return null;
-      }
-    }
-
     // CallExpression
     var typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn); // skips '(' on success
     // there might be better ways to distinguish a LESSTHAN from a CALL with type arguments
@@ -1617,70 +1607,93 @@ export class Parser extends DiagnosticEmitter {
     while ((nextPrecedence = determinePrecedence(token = tn.peek())) >= precedence) { // precedence climbing
       tn.next();
 
-      // AssertionExpression
-      if (token == Token.AS) {
-        var toType = this.parseType(tn);
-        if (!toType)
-          return null;
-        expr = Node.createAssertionExpression(AssertionKind.AS, expr, toType, tn.range(startPos, tn.pos));
+      switch (token) {
 
-      // UnaryPostfixExpression
-      } else if (token == Token.PLUS_PLUS || token == Token.MINUS_MINUS) {
-        if (expr.kind != NodeKind.IDENTIFIER && expr.kind != NodeKind.ELEMENTACCESS && expr.kind != NodeKind.PROPERTYACCESS)
-          this.error(DiagnosticCode.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access, expr.range);
-        expr = Node.createUnaryPostfixExpression(token, expr, tn.range(startPos, tn.pos));
-
-      // TernaryExpression
-      } else if (token == Token.QUESTION) {
-        var ifThen = this.parseExpression(tn);
-        if (!ifThen)
-          return null;
-        if (tn.skip(Token.COLON)) {
-          var ifElse = this.parseExpression(tn);
-          if (!ifElse)
+        // AssertionExpression
+        case Token.AS:
+          var toType = this.parseType(tn);
+          if (!toType)
             return null;
-          expr = Node.createTernaryExpression(<Expression>expr, <Expression>ifThen, <Expression>ifElse, tn.range(startPos, tn.pos));
-        } else {
-          this.error(DiagnosticCode._0_expected, tn.range(), ":");
-          return null;
-        }
+          expr = Node.createAssertionExpression(AssertionKind.AS, expr, toType, tn.range(startPos, tn.pos));
+          break;
 
-      // CommaExpression
-      } else if (token == Token.COMMA) {
-        var commaExprs = new Array<Expression>(1);
-        commaExprs[0] = <Expression>expr;
-        do {
-          expr = this.parseExpression(tn, Precedence.COMMA + 1);
-          if (!expr)
+        // ElementAccessExpression
+        case Token.OPENBRACKET:
+          next = this.parseExpression(tn);
+          if (!next)
             return null;
-          commaExprs.push(expr);
-        } while (tn.skip(Token.COMMA));
-        expr = Node.createCommaExpression(commaExprs, tn.range(startPos, tn.pos));
-
-      } else {
-        next = this.parseExpression(tn, isRightAssociative(token) ? nextPrecedence : 1 + nextPrecedence);
-        if (!next)
-          return null;
-
-        // PropertyAccessExpression
-        if (token == Token.DOT) {
-          if (next.kind == NodeKind.IDENTIFIER) {
-            expr = Node.createPropertyAccessExpression(<Expression>expr, <IdentifierExpression>next, tn.range(startPos, tn.pos));
-          } else if (next.kind == NodeKind.CALL) { // amend
-            var propertyCall = <CallExpression>next;
-            if (propertyCall.expression.kind == NodeKind.IDENTIFIER) {
-              propertyCall.expression = Node.createPropertyAccessExpression(<Expression>expr, <IdentifierExpression>propertyCall.expression, tn.range(startPos, tn.pos));
-            } else
-              throw new Error("unexpected expression kind");
-            expr = propertyCall;
-          } else {
-            this.error(DiagnosticCode.Identifier_expected, next.range);
+          if (!tn.skip(Token.CLOSEBRACKET)) {
+            this.error(DiagnosticCode._0_expected, tn.range(), "]");
             return null;
           }
+          expr = Node.createElementAccessExpression(<Expression>expr, <Expression>next, tn.range(startPos, tn.pos));
+          break;
 
-        // BinaryExpression
-        } else
-          expr = Node.createBinaryExpression(token, <Expression>expr, <Expression>next, tn.range(startPos, tn.pos));
+        // UnaryPostfixExpression
+        case Token.PLUS_PLUS:
+        case Token.MINUS_MINUS:
+          if (expr.kind != NodeKind.IDENTIFIER && expr.kind != NodeKind.ELEMENTACCESS && expr.kind != NodeKind.PROPERTYACCESS)
+            this.error(DiagnosticCode.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access, expr.range);
+          expr = Node.createUnaryPostfixExpression(token, expr, tn.range(startPos, tn.pos));
+          break;
+
+        // TernaryExpression
+        case Token.QUESTION:
+          var ifThen = this.parseExpression(tn);
+          if (!ifThen)
+            return null;
+          if (tn.skip(Token.COLON)) {
+            var ifElse = this.parseExpression(tn);
+            if (!ifElse)
+              return null;
+            expr = Node.createTernaryExpression(<Expression>expr, <Expression>ifThen, <Expression>ifElse, tn.range(startPos, tn.pos));
+          } else {
+            this.error(DiagnosticCode._0_expected, tn.range(), ":");
+            return null;
+          }
+          break;
+
+        // CommaExpression
+        case Token.COMMA:
+          var commaExprs = new Array<Expression>(1);
+          commaExprs[0] = <Expression>expr;
+          do {
+            expr = this.parseExpression(tn, Precedence.COMMA + 1);
+            if (!expr)
+              return null;
+            commaExprs.push(expr);
+          } while (tn.skip(Token.COMMA));
+          expr = Node.createCommaExpression(commaExprs, tn.range(startPos, tn.pos));
+          break;
+
+        default:
+          next = this.parseExpression(tn, isRightAssociative(token) ? nextPrecedence : 1 + nextPrecedence);
+          if (!next)
+            return null;
+
+          // PropertyAccessExpression
+          if (token == Token.DOT) {
+            if (next.kind == NodeKind.IDENTIFIER)
+              expr = Node.createPropertyAccessExpression(<Expression>expr, <IdentifierExpression>next, tn.range(startPos, tn.pos));
+            else if (next.kind == NodeKind.CALL) { // join
+              var propertyCall = <CallExpression>next;
+              if (propertyCall.expression.kind == NodeKind.IDENTIFIER) {
+                propertyCall.expression = Node.createPropertyAccessExpression(<Expression>expr, <IdentifierExpression>propertyCall.expression, tn.range(startPos, tn.pos));
+              } else {
+                this.error(DiagnosticCode.Identifier_expected, propertyCall.expression.range);
+                return null;
+              }
+              expr = propertyCall;
+            } else {
+              this.error(DiagnosticCode.Identifier_expected, next.range);
+              return null;
+            }
+
+          // BinaryExpression
+          } else
+            expr = Node.createBinaryExpression(token, <Expression>expr, <Expression>next, tn.range(startPos, tn.pos));
+
+          break;
       }
     }
     return expr;
@@ -1820,6 +1833,7 @@ function determinePrecedence(kind: Token): i32 {
 
     case Token.DOT:
     case Token.NEW:
+    case Token.OPENBRACKET:
       return Precedence.MEMBERACCESS;
 
     default:
