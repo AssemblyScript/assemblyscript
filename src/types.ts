@@ -99,12 +99,12 @@ export class Type {
   }
 
   /** Computes the sign-extending shift in the target type. */
-  computeSmallIntegerShift(targetType: Type) {
+  computeSmallIntegerShift(targetType: Type): u32 {
     return targetType.size - this.size;
   }
 
   /** Computes the truncating mask in the target type. */
-  computeSmallIntegerMask(targetType: Type) {
+  computeSmallIntegerMask(targetType: Type): u32 {
     return -1 >>> (targetType.size - this.size);
   }
 
