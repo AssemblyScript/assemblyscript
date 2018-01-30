@@ -104,13 +104,22 @@ function checkDiagnostics(parser) {
     process.exit(1);
 }
 
-// Include standard library
-var stdlibDir = path.join(__dirname, "..", "std", "assembly");
-if (!args.noLib) {
+// Include standard library if --noLib isn't set
+var libDirs = args.noLib ? [] : [ path.join(__dirname, "..", "std", "assembly") ];
+
+// Include custom library components (with or without stdlib)
+if (args.lib) {
+  if (Array.isArray(args.lib))
+    Array.prototype.push.apply(libDirs, args.lib.map(dir));
+  else
+    libDirs.push(args.lib);
+}
+
+libDirs.forEach(libDir => {
   var notIoTime = 0;
   readTime += measure(() => {
-    glob.sync("*.ts", { cwd: stdlibDir }).forEach(file => {
-      var nextText = fs.readFileSync(path.join(stdlibDir, file), { encoding: "utf8" });
+    glob.sync("*.ts", { cwd: libDir }).forEach(file => {
+      var nextText = fs.readFileSync(path.join(libDir, file), { encoding: "utf8" });
       ++readCount;
       var time = measure(() => {
         parser = assemblyscript.parseFile(nextText, "std:" + file, parser, false);
@@ -119,7 +128,7 @@ if (!args.noLib) {
       notIoTime += time;
     });
   }) - notIoTime;
-}
+});
 
 // Include entry files
 args._.forEach(filename => {
@@ -154,25 +163,40 @@ args._.forEach(filename => {
   });
 
   while ((nextPath = parser.nextFile()) != null) {
-    try {
-      readTime += measure(() => {
-        if (nextPath.startsWith("std:"))
-          nextText = fs.readFileSync(stdlibDir + "/" + nextPath.substring(4) + ".ts", { encoding: "utf8" });
-        else
-          nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
-      });
-      ++readCount;
-    } catch (e) {
-      try {
+    var found = false;
+    if (nextPath.startsWith("std:")) {
+      for (var i = 0; i < libDirs.length; ++i) {
         readTime += measure(() => {
-          nextText = fs.readFileSync(nextPath + "/index.ts", { encoding: "utf8" });
+          try {
+            nextText = fs.readFileSync(libDirs[i] + "/" + nextPath.substring(4) + ".ts", { encoding: "utf8" });
+            found = true;
+          } catch (e) {}
         });
         ++readCount;
-        nextPath = nextPath + "/index";
-      } catch (e) {
-        console.error("Imported file '" + nextPath + ".ts' not found.");
-        process.exit(1);
+        if (found)
+          break;
       }
+    } else {
+      readTime += measure(() => {
+        try {
+          nextText = fs.readFileSync(nextPath + "/index.ts", { encoding: "utf8" });
+          found = true;
+        } catch (e) {}
+      });
+      ++readCount;
+      if (!found) {
+        readTime += measure(() => {
+          try {
+            nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
+            found = true;
+          } catch (e) {}
+        });
+        ++readCount;
+      }
+    }
+    if (!found) {
+      console.error("Imported file '" + nextPath + ".ts' not found.");
+      process.exit(1);
     }
     parseTime += measure(() => {
       assemblyscript.parseFile(nextText, nextPath, parser);

@@ -74,13 +74,17 @@
     "desc": "Performs compilation as usual without emitting code.",
     "type": "boolean"
   },
+  "noMemory": {
+    "desc": "Does not set up a memory.",
+    "type": "boolean"
+  },
   "noLib": {
     "desc": "Does not include the standard library.",
     "type": "boolean"
   },
-  "noMemory": {
-    "desc": "Does not set up a memory.",
-    "type": "boolean"
+  "lib": {
+    "desc": "Adds one or multiple paths to custom library components.",
+    "type": "string"
   },
   "trapMode": {
     "desc": [
