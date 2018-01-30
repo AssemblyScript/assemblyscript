@@ -2,7 +2,6 @@
  (type $i (func (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiI (func (param i32 i32) (result i64)))
  (type $iiF (func (param i32 i32) (result f64)))
  (type $iF (func (param i32) (result f64)))
  (type $v (func))
@@ -500,13 +499,13 @@
    (get_global $std/string/str)
   )
  )
- (func $std:string/parseI64 (; 7 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
+ (func $std:string/parse<f64> (; 7 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i64)
+  (local $5 f64)
   (local $6 i32)
-  (local $7 i64)
+  (local $7 f64)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -517,7 +516,7 @@
     (get_local $2)
    )
    (return
-    (i64.const 0)
+    (f64.const nan:0x8000000000000)
    )
   )
   (set_local $3
@@ -545,7 +544,7 @@
       )
      )
      (return
-      (i64.const 0)
+      (f64.const nan:0x8000000000000)
      )
     )
     (set_local $4
@@ -559,9 +558,8 @@
      )
     )
     (set_local $5
-     (i64.sub
-      (i64.const 0)
-      (i64.const 1)
+     (f64.neg
+      (f64.const 1)
      )
     )
    )
@@ -581,7 +579,7 @@
        )
       )
       (return
-       (i64.const 0)
+       (f64.const nan:0x8000000000000)
       )
      )
      (set_local $4
@@ -595,11 +593,11 @@
       )
      )
      (set_local $5
-      (i64.const 1)
+      (f64.const 1)
      )
     )
     (set_local $5
-     (i64.const 1)
+     (f64.const 1)
     )
    )
   )
@@ -766,12 +764,12 @@
      (i32.const 1)
     )
     (return
-     (i64.const 0)
+     (f64.const nan:0x8000000000000)
     )
    )
   )
   (set_local $7
-   (i64.const 0)
+   (f64.const 0)
   )
   (block $break|1
    (loop $continue|1
@@ -894,14 +892,14 @@
         (br $break|1)
        )
        (set_local $7
-        (i64.add
-         (i64.mul
+        (f64.add
+         (f64.mul
           (get_local $7)
-          (i64.extend_s/i32
+          (f64.convert_s/i32
            (get_local $1)
           )
          )
-         (i64.extend_s/i32
+         (f64.convert_s/i32
           (get_local $4)
          )
         )
@@ -919,113 +917,17 @@
    )
   )
   (return
-   (i64.mul
+   (f64.mul
     (get_local $5)
     (get_local $7)
    )
   )
  )
  (func $std:string/parseInt (; 8 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (set_local $2
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (if
-   (i32.eqz
-    (get_local $2)
-   )
-   (return
-    (f64.const nan:0x8000000000000)
-   )
-  )
-  (set_local $3
-   (get_local $0)
-  )
-  (set_local $4
-   (i32.load16_u offset=4
-    (get_local $3)
-   )
-  )
-  (if
-   (i32.eq
-    (get_local $4)
-    (i32.const 45)
-   )
-   (if
-    (i32.eqz
-     (tee_local $2
-      (i32.sub
-       (get_local $2)
-       (i32.const 1)
-      )
-     )
-    )
-    (return
-     (f64.const nan:0x8000000000000)
-    )
-   )
-   (if
-    (i32.eq
-     (get_local $4)
-     (i32.const 43)
-    )
-    (if
-     (i32.eqz
-      (tee_local $2
-       (i32.sub
-        (get_local $2)
-        (i32.const 1)
-       )
-      )
-     )
-     (return
-      (f64.const nan:0x8000000000000)
-     )
-    )
-   )
-  )
-  (if
-   (if (result i32)
-    (i32.ne
-     (get_local $1)
-     (i32.const 0)
-    )
-    (i32.and
-     (if (result i32)
-      (i32.ne
-       (i32.lt_s
-        (get_local $1)
-        (i32.const 2)
-       )
-       (i32.const 0)
-      )
-      (i32.lt_s
-       (get_local $1)
-       (i32.const 2)
-      )
-      (i32.gt_s
-       (get_local $1)
-       (i32.const 36)
-      )
-     )
-     (i32.const 1)
-    )
-    (get_local $1)
-   )
-   (return
-    (f64.const nan:0x8000000000000)
-   )
-  )
   (return
-   (f64.convert_s/i64
-    (call $std:string/parseI64
-     (get_local $0)
-     (get_local $1)
-    )
+   (call $std:string/parse<f64>
+    (get_local $0)
+    (get_local $1)
    )
   )
  )
@@ -1634,8 +1536,11 @@
   ENUM: std:string/CharCode
   FUNCTION_PROTOTYPE: std:string/parseInt
   FUNCTION_PROTOTYPE: parseInt
+  FUNCTION_PROTOTYPE: std:string/parseI32
+  FUNCTION_PROTOTYPE: parseI32
   FUNCTION_PROTOTYPE: std:string/parseI64
   FUNCTION_PROTOTYPE: parseI64
+  FUNCTION_PROTOTYPE: std:string/parse
   FUNCTION_PROTOTYPE: std:string/parseFloat
   FUNCTION_PROTOTYPE: parseFloat
   GLOBAL: std/string/str
@@ -1665,6 +1570,8 @@
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: parseI32
+  FUNCTION_PROTOTYPE: std:string/parseI32
   FUNCTION_PROTOTYPE: parseI64
   FUNCTION_PROTOTYPE: std:string/parseI64
   FUNCTION_PROTOTYPE: parseFloat

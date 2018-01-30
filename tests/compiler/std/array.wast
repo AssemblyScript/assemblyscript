@@ -4077,8 +4077,11 @@
   ENUM: std:string/CharCode
   FUNCTION_PROTOTYPE: std:string/parseInt
   FUNCTION_PROTOTYPE: parseInt
+  FUNCTION_PROTOTYPE: std:string/parseI32
+  FUNCTION_PROTOTYPE: parseI32
   FUNCTION_PROTOTYPE: std:string/parseI64
   FUNCTION_PROTOTYPE: parseI64
+  FUNCTION_PROTOTYPE: std:string/parse
   FUNCTION_PROTOTYPE: std:string/parseFloat
   FUNCTION_PROTOTYPE: parseFloat
   GLOBAL: std/array/arr
@@ -4118,6 +4121,8 @@
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: parseI32
+  FUNCTION_PROTOTYPE: std:string/parseI32
   FUNCTION_PROTOTYPE: parseI64
   FUNCTION_PROTOTYPE: std:string/parseI64
   FUNCTION_PROTOTYPE: parseFloat

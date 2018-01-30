@@ -98,3 +98,7 @@ globalScope["changetype"] = function changetype(value) { return value; }
 
 String["fromCharCodes"] = function fromCharCodes(arr) { return String.fromCharCode.apply(String, arr); }
 String["fromCodePoints"] = function fromCodePoints(arr) { return String.fromCodePoint.apply(String, arr); }
+
+globalScope["parseI32"] = function parseI32(str, radix) {
+  return parseInt(str) | 0;
+};

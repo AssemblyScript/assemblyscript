@@ -351,45 +351,34 @@ const enum CharCode {
 }
 
 export function parseInt(str: String, radix: i32 = 0): f64 {
-  var len: i32 = str.length;
-  if (!len)
-    return NaN;
-  var ptr = changetype<usize>(str) /* + HEAD -> offset */;
-  var code = <i32>load<u16>(ptr, HEAD);
+  return parse<f64>(str, radix);
+}
 
-  // pre-check sign
-  if (code == CharCode.MINUS) {
-    if (!--len)
-      return NaN;
-  } else if (code == CharCode.PLUS) {
-    if (!--len)
-      return NaN;
-  }
-
-  // pre-check radix
-  if (radix && (radix < 2 || radix > 36))
-    return NaN;
-
-  return <f64>parseI64(str, radix);
+export function parseI32(str: String, radix: i32 = 0): i32 {
+  return parse<i32>(str, radix);
 }
 
 export function parseI64(str: String, radix: i32 = 0): i64 {
+  return parse<i64>(str, radix);
+}
+
+function parse<T>(str: String, radix: i32 = 0): T {
   var len: i32 = str.length;
   if (!len)
-    return 0; // (NaN)
+    return <T>NaN;
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
   var code = <i32>load<u16>(ptr, HEAD);
 
   // determine sign
-  var sign: i64;
+  var sign: T;
   if (code == CharCode.MINUS) {
     if (!--len)
-      return 0; // (NaN)
+      return <T>NaN;
     code = <i32>load<u16>(ptr += 2, HEAD);
     sign = -1;
   } else if (code == CharCode.PLUS) {
     if (!--len)
-      return 0; // (NaN)
+      return <T>NaN;
     code = <i32>load<u16>(ptr += 2, HEAD);
     sign = 1;
   } else
@@ -423,10 +412,10 @@ export function parseI64(str: String, radix: i32 = 0): i64 {
       }
     } else radix = 10;
   } else if (radix < 2 || radix > 36)
-    return 0; // (NaN)
+    return <T>NaN;
 
   // calculate value
-  var num: i64 = 0;
+  var num: T = 0;
   while (len--) {
     code = <i32>load<u16>(ptr, HEAD);
     if (code >= CharCode._0 && code <= CharCode._9)
