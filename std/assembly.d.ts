@@ -189,10 +189,12 @@ declare function changetype<T>(value: any): T;
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T = f32 | f64>(value: T): bool;
-/** Traps if the specified value is not true-ish, otherwise returns the value. */
+/** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
+/** Parses an integer string to a 64-bit integer. */
+declare function parseI64(str: string, radix?: i32): i64;
 /** Parses a string to a 64-bit float. */
 declare function parseFloat(str: string): f64;
 

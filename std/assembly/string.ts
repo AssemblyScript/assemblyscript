@@ -350,7 +350,30 @@ const enum CharCode {
   z = 0x7A
 }
 
-export function parseInt(str: String, radix: i32 = 0): i64 {
+export function parseInt(str: String, radix: i32 = 0): f64 {
+  var len: i32 = str.length;
+  if (!len)
+    return NaN;
+  var ptr = changetype<usize>(str) /* + HEAD -> offset */;
+  var code = <i32>load<u16>(ptr, HEAD);
+
+  // pre-check sign
+  if (code == CharCode.MINUS) {
+    if (!--len)
+      return NaN;
+  } else if (code == CharCode.PLUS) {
+    if (!--len)
+      return NaN;
+  }
+
+  // pre-check radix
+  if (radix && (radix < 2 || radix > 36))
+    return NaN;
+
+  return <f64>parseI64(str, radix);
+}
+
+export function parseI64(str: String, radix: i32 = 0): i64 {
   var len: i32 = str.length;
   if (!len)
     return 0; // (NaN)
@@ -422,7 +445,7 @@ export function parseInt(str: String, radix: i32 = 0): i64 {
   return sign * num;
 }
 
-export function parseFloat(str: string): f64 {
+export function parseFloat(str: String): f64 {
   var len: i32 = str.length;
   if (!len)
     return NaN;

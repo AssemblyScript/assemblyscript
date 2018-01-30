@@ -234,6 +234,8 @@
   ENUM: std:string/CharCode
   FUNCTION_PROTOTYPE: std:string/parseInt
   FUNCTION_PROTOTYPE: parseInt
+  FUNCTION_PROTOTYPE: std:string/parseI64
+  FUNCTION_PROTOTYPE: parseI64
   FUNCTION_PROTOTYPE: std:string/parseFloat
   FUNCTION_PROTOTYPE: parseFloat
   CLASS_PROTOTYPE: std/new/AClass
@@ -274,6 +276,8 @@
   CLASS_PROTOTYPE: String
   FUNCTION_PROTOTYPE: parseInt
   FUNCTION_PROTOTYPE: std:string/parseInt
+  FUNCTION_PROTOTYPE: parseI64
+  FUNCTION_PROTOTYPE: std:string/parseI64
   FUNCTION_PROTOTYPE: parseFloat
   FUNCTION_PROTOTYPE: std:string/parseFloat
   FUNCTION_PROTOTYPE: allocate_memory

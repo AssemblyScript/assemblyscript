@@ -3,6 +3,7 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiI (func (param i32 i32) (result i64)))
+ (type $iiF (func (param i32 i32) (result f64)))
  (type $iF (func (param i32) (result f64)))
  (type $v (func))
  (global $std/string/str (mut i32) (i32.const 8))
@@ -374,7 +375,7 @@
  (func $std/string/getString (; 5 ;) (type $i) (result i32)
   (get_global $std/string/str)
  )
- (func $std:string/parseInt (; 6 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
+ (func $std:string/parseI64 (; 6 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -741,7 +742,93 @@
    (get_local $4)
   )
  )
- (func $std:string/parseFloat (; 7 ;) (type $iF) (param $0 i32) (result f64)
+ (func $std:string/parseInt (; 7 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+  (local $2 i32)
+  (local $3 i32)
+  (if
+   (i32.eqz
+    (tee_local $2
+     (i32.load
+      (get_local $0)
+     )
+    )
+   )
+   (return
+    (f64.const nan:0x8000000000000)
+   )
+  )
+  (if
+   (i32.eq
+    (tee_local $3
+     (i32.load16_u offset=4
+      (get_local $0)
+     )
+    )
+    (i32.const 45)
+   )
+   (if
+    (i32.eqz
+     (i32.sub
+      (get_local $2)
+      (i32.const 1)
+     )
+    )
+    (return
+     (f64.const nan:0x8000000000000)
+    )
+   )
+   (if
+    (i32.eq
+     (get_local $3)
+     (i32.const 43)
+    )
+    (if
+     (i32.eqz
+      (i32.sub
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
+     (return
+      (f64.const nan:0x8000000000000)
+     )
+    )
+   )
+  )
+  (if
+   (select
+    (i32.and
+     (select
+      (i32.lt_s
+       (get_local $1)
+       (i32.const 2)
+      )
+      (i32.gt_s
+       (get_local $1)
+       (i32.const 36)
+      )
+      (i32.lt_s
+       (get_local $1)
+       (i32.const 2)
+      )
+     )
+     (i32.const 1)
+    )
+    (get_local $1)
+    (get_local $1)
+   )
+   (return
+    (f64.const nan:0x8000000000000)
+   )
+  )
+  (f64.convert_s/i64
+   (call $std:string/parseI64
+    (get_local $0)
+    (get_local $1)
+   )
+  )
+ )
+ (func $std:string/parseFloat (; 8 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -985,7 +1072,7 @@
    (get_local $3)
   )
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   (if
    (i32.ne
     (get_global $std/string/str)
@@ -1068,82 +1155,82 @@
    (unreachable)
   )
   (if
-   (i64.ne
+   (f64.ne
     (call $std:string/parseInt
      (i32.const 120)
      (i32.const 0)
     )
-    (i64.const 0)
+    (f64.const 0)
    )
    (unreachable)
   )
   (if
-   (i64.ne
+   (f64.ne
     (call $std:string/parseInt
      (i32.const 128)
      (i32.const 0)
     )
-    (i64.const 1)
+    (f64.const 1)
    )
    (unreachable)
   )
   (if
-   (i64.ne
+   (f64.ne
     (call $std:string/parseInt
      (i32.const 136)
      (i32.const 0)
     )
-    (i64.const 5)
+    (f64.const 5)
    )
    (unreachable)
   )
   (if
-   (i64.ne
+   (f64.ne
     (call $std:string/parseInt
      (i32.const 152)
      (i32.const 0)
     )
-    (i64.const 455)
+    (f64.const 455)
    )
    (unreachable)
   )
   (if
-   (i64.ne
+   (f64.ne
     (call $std:string/parseInt
      (i32.const 168)
      (i32.const 0)
     )
-    (i64.const 3855)
+    (f64.const 3855)
    )
    (unreachable)
   )
   (if
-   (i64.ne
+   (f64.ne
     (call $std:string/parseInt
      (i32.const 184)
      (i32.const 0)
     )
-    (i64.const 3855)
+    (f64.const 3855)
    )
    (unreachable)
   )
   (if
-   (i64.ne
+   (f64.ne
     (call $std:string/parseInt
      (i32.const 200)
      (i32.const 0)
     )
-    (i64.const 11)
+    (f64.const 11)
    )
    (unreachable)
   )
   (if
-   (i64.ne
+   (f64.ne
     (call $std:string/parseInt
      (i32.const 216)
      (i32.const 0)
     )
-    (i64.const 1)
+    (f64.const 1)
    )
    (unreachable)
   )
