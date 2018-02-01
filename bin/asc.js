@@ -1,7 +1,9 @@
-var fs = require("fs");
-var path = require("path");
-var minimist = require("minimist");
-var glob = require("glob");
+#!/usr/bin/env node
+const fs = require("fs");
+const path = require("path");
+const minimist = require("minimist");
+const glob = require("glob");
+const { SourceMapConsumer, SourceMapGenerator } = require("source-map");
 
 var assemblyscript;
 var isDev = true;
@@ -15,8 +17,8 @@ try {
   assemblyscript = require("../src");
 }
 
-var conf = require("./asc.json");
-var opts = {};
+const conf = require("./asc.json");
+const opts = {};
 
 Object.keys(conf).forEach(key => {
   var opt = conf[key];
@@ -30,9 +32,10 @@ Object.keys(conf).forEach(key => {
     (opts.boolean || (opts.boolean = [])).push(key);
 });
 
-var args = minimist(process.argv.slice(2), opts);
+const args = minimist(process.argv.slice(2), opts);
+const indent = 24;
+
 var version = require("../package.json").version;
-var indent = 24;
 if (isDev) version += "-dev";
 
 if (args.version) {
@@ -43,7 +46,7 @@ if (args.version) {
 }
 
 if (args.help || args._.length < 1) {
-  var options = [];
+  const options = [];
   Object.keys(conf).forEach(name => {
     var option = conf[name];
     var text = " ";
@@ -79,6 +82,7 @@ var parser = null;
 var readTime = 0;
 var readCount = 0;
 var writeTime = 0;
+var writeCount = 0;
 var parseTime = 0;
 var compileTime = 0;
 var validateTime = 0;
@@ -122,7 +126,7 @@ libDirs.forEach(libDir => {
       var nextText = fs.readFileSync(path.join(libDir, file), { encoding: "utf8" });
       ++readCount;
       var time = measure(() => {
-        parser = assemblyscript.parseFile(nextText, "std:" + file, parser, false);
+        parser = assemblyscript.parseFile(nextText, ".std/" + file, parser, false);
       });
       parseTime += time;
       notIoTime += time;
@@ -139,12 +143,14 @@ args._.forEach(filename => {
   try {
     readTime += measure(() => {
       entryText = fs.readFileSync(entryPath + ".ts", { encoding: "utf8" });
+      entryPath += ".ts";
     });
     ++readCount;
   } catch (e) {
     try {
       readTime += measure(() => {
         entryText = fs.readFileSync(entryPath + "/index.ts", { encoding: "utf8" });
+        entryPath += "/index.ts";
       });
       ++readCount;
       entryPath = entryPath + "/index";
@@ -154,7 +160,7 @@ args._.forEach(filename => {
     }
   }
 
-  var nextPath;
+  var nextFile;
   var nextText;
 
   // Load entry text
@@ -162,13 +168,14 @@ args._.forEach(filename => {
     parser = assemblyscript.parseFile(entryText, entryPath, parser, true);
   });
 
-  while ((nextPath = parser.nextFile()) != null) {
+  while ((nextFile = parser.nextFile()) != null) {
     var found = false;
-    if (nextPath.startsWith("std:")) {
+    if (nextFile.startsWith(".std/")) {
       for (var i = 0; i < libDirs.length; ++i) {
         readTime += measure(() => {
           try {
-            nextText = fs.readFileSync(libDirs[i] + "/" + nextPath.substring(4) + ".ts", { encoding: "utf8" });
+            nextText = fs.readFileSync(path.join(libDirs[i], nextFile.substring(4) + ".ts"), { encoding: "utf8" });
+            nextFile = nextFile + ".ts";
             found = true;
           } catch (e) {}
         });
@@ -179,7 +186,8 @@ args._.forEach(filename => {
     } else {
       readTime += measure(() => {
         try {
-          nextText = fs.readFileSync(nextPath + "/index.ts", { encoding: "utf8" });
+          nextText = fs.readFileSync(nextFile + ".ts", { encoding: "utf8" });
+          nextFile = nextFile + ".ts";
           found = true;
         } catch (e) {}
       });
@@ -187,7 +195,8 @@ args._.forEach(filename => {
       if (!found) {
         readTime += measure(() => {
           try {
-            nextText = fs.readFileSync(nextPath + ".ts", { encoding: "utf8" });
+            nextText = fs.readFileSync(nextFile + "/index.ts", { encoding: "utf8" });
+            nextFile = nextFile + "/index.ts";
             found = true;
           } catch (e) {}
         });
@@ -195,11 +204,11 @@ args._.forEach(filename => {
       }
     }
     if (!found) {
-      console.error("Imported file '" + nextPath + ".ts' not found.");
+      console.error("Imported file '" + nextFile + ".ts' not found.");
       process.exit(1);
     }
     parseTime += measure(() => {
-      assemblyscript.parseFile(nextText, nextPath, parser);
+      assemblyscript.parseFile(nextText, nextFile, parser);
     });
   }
   checkDiagnostics(parser);
@@ -210,6 +219,7 @@ assemblyscript.setTarget(options, 0);
 assemblyscript.setNoTreeShaking(options, args.noTreeShaking);
 assemblyscript.setNoAssert(options, args.noAssert);
 assemblyscript.setNoMemory(options, args.noMemory);
+assemblyscript.setSourceMap(options, args.sourceMap != null);
 
 var module;
 compileTime += measure(() => {
@@ -221,6 +231,7 @@ if (args.validate)
   validateTime += measure(() => {
     if (!module.validate()) {
       module.dispose();
+      console.error("Validation failed");
       process.exit(1);
     }
   });
@@ -234,7 +245,7 @@ else if (args.trapMode === "js")
     module.runPasses([ "trap-mode-js" ]);
   });
 else if (args.trapMode !== "allow") {
-  console.log("Unsupported trap mode: " + args.trapMode);
+  console.error("Unsupported trap mode: " + args.trapMode);
   process.exit(1);
 }
 
@@ -298,6 +309,40 @@ if (runPasses.length)
     module.runPasses(runPasses.map(pass => pass.trim()));
   });
 
+function processSourceMap(sourceMap, sourceMapURL) {
+  var json = JSON.parse(sourceMap);
+  return SourceMapConsumer.with(sourceMap, sourceMapURL, consumer => {
+    var generator = SourceMapGenerator.fromSourceMap(consumer);
+    json.sources.forEach(name => {
+      var text, found = false;
+      if (name.startsWith(".std/")) {
+        for (var i = 0, k = libDirs.length; i < k; ++i) {
+          readTime += measure(() => {
+            try {
+              text = fs.readFileSync(path.join(libDirs[i], name.substring(4)), { encoding: "utf8" });
+              found = true;
+            } catch (e) {}
+          });
+          ++readCount;
+        }
+      } else {
+        readTime += measure(() => {
+          try {
+            text = fs.readFileSync(name, { encoding: "utf8" });
+            found = true;
+          } catch (e) {}
+        });
+        ++readCount;
+      }
+      if (found)
+        generator.setSourceContent(name, text);
+      else
+        console.error("No source content found for file '" + name + "'.");
+    });
+    return generator.toString();
+  });
+}
+
 if (!args.noEmit) {
   var hasOutput = false;
 
@@ -310,47 +355,69 @@ if (!args.noEmit) {
       args.binaryFile = args.outFile;
   }
   if (args.binaryFile != null && args.binaryFile.length) {
+    var sourceMapURL = args.sourceMap != null
+      ? args.sourceMap.length
+        ? args.sourceMap
+        : path.basename(args.binaryFile) + ".map"
+      : null;
+    var binary;
     writeTime += measure(() => {
-      fs.writeFileSync(args.binaryFile, module.toBinary());
+      binary = module.toBinary(sourceMapURL); // FIXME: 'not a valid URL' in FF
+      fs.writeFileSync(args.binaryFile, binary.output);
     });
+    ++writeCount;
+    if (binary.sourceMap != null)
+      processSourceMap(binary.sourceMap).then(sourceMap => {
+        writeTime += measure(() => {
+          fs.writeFileSync(path.join(path.dirname(args.binaryFile), path.basename(sourceMapURL)), sourceMap, { encoding: "utf8" });
+        }, err => {
+          throw err;
+        });
+        ++writeCount;
+      });
     hasOutput = true;
   }
   if (args.textFile != null && args.textFile.length) {
     writeTime += measure(() => {
       fs.writeFileSync(args.textFile, module.toText(), { encoding: "utf8" });
     });
+    ++writeCount;
     hasOutput = true;
   }
   if (args.asmjsFile != null && args.asmjsFile.length) {
     writeTime += measure(() => {
       fs.writeFileSync(args.asmjsFile, module.toAsmjs(), { encoding: "utf8" });
     });
+    ++writeCount;
     hasOutput = true;
   }
   if (!hasOutput) {
-    if (args.binaryFile === "")
+    if (args.binaryFile === "") {
       writeTime += measure(() => {
         process.stdout.write(Buffer.from(module.toBinary()));
       });
-    else if (args.asmjsFile === "")
+      ++writeCount;
+    } else if (args.asmjsFile === "") {
       writeTime += measure(() => {
         module.printAsmjs();
       });
-    else
+      ++writeCount;
+    } else {
       writeTime += measure(() => {
         module.print();
       });
+      ++writeCount;
+    }
   }
 }
 
 module.dispose();
 
-if (args.measure)
-  console.error([
-    "I/O Read  : " + (readTime     ? (readTime     / 1e6).toFixed(3) + " ms (" + readCount + " files)" : "N/A"),
-    "I/O Write : " + (writeTime    ? (writeTime    / 1e6).toFixed(3) + " ms" : "N/A"),
-    "Parse     : " + (parseTime    ? (parseTime    / 1e6).toFixed(3) + " ms" : "N/A"),
-    "Compile   : " + (compileTime  ? (compileTime  / 1e6).toFixed(3) + " ms" : "N/A"),
-    "Validate  : " + (validateTime ? (validateTime / 1e6).toFixed(3) + " ms" : "N/A"),
-    "Optimize  : " + (optimizeTime ? (optimizeTime / 1e6).toFixed(3) + " ms" : "N/A")
-  ].join("\n"));
+if (args.measure) process.on("beforeExit", () => console.error([
+  "I/O Read  : " + (readTime     ? (readTime     / 1e6).toFixed(3) + " ms (" + readCount + " files)" : "N/A"),
+  "I/O Write : " + (writeTime    ? (writeTime    / 1e6).toFixed(3) + " ms (" + writeCount + " files)" : "N/A"),
+  "Parse     : " + (parseTime    ? (parseTime    / 1e6).toFixed(3) + " ms" : "N/A"),
+  "Compile   : " + (compileTime  ? (compileTime  / 1e6).toFixed(3) + " ms" : "N/A"),
+  "Validate  : " + (validateTime ? (validateTime / 1e6).toFixed(3) + " ms" : "N/A"),
+  "Optimize  : " + (optimizeTime ? (optimizeTime / 1e6).toFixed(3) + " ms" : "N/A")
+].join("\n")));

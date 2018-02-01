@@ -1,7 +1,8 @@
-TLSF memory allocator
-=====================
+![](https://s.gravatar.com/avatar/f105de3decfafc734b8eabe9a960b25d?size=48) TLSF
+=================
 
-A port of [Matt Conte's implementation](https://github.com/mattconte/tlsf) of the [TLSF](http://www.gii.upv.es/tlsf/) memory allocator to AssemblyScript.
+An implementation of the [Two Level Segregate Fit](http://www.gii.upv.es/tlsf/main/docs)
+memory allocator in AssemblyScript.
 
 Instructions
 ------------

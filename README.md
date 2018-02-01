@@ -20,7 +20,7 @@ A few early examples to get an idea:
   A PSON decoder implemented in AssemblyScript.
 
 * **[TLSF memory allocator](./examples/tlsf)**<br />
-  A port of TLSF to AssemblyScript.
+  An implementation of the TLSF memory allocator in AssemblyScript.
 
 * **[μgc garbage collector](./examples/ugc)**<br />
   A port of μgc to AssemblyScript.

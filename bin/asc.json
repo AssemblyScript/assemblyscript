@@ -30,7 +30,7 @@
     "type": "number"
   },
   "shrinkLevel": {
-    "desc": "How much to focus on shrinking code size. [0-2]",
+    "desc": "How much to focus on shrinking code size. [0-2, s=1, z=2]",
     "type": "number"
   },
   "validate": {
@@ -57,6 +57,13 @@
     "desc": "Specifies the asm.js output file (.js).",
     "type": "string",
     "aliases": [ "a" ]
+  },
+  "sourceMap": {
+    "desc": [
+      "Enables source map generation. Optionally takes the URL",
+      "used to reference the source map from the binary file."
+    ],
+    "type": "string"
   },
   "noTreeShaking": {
     "desc": "Disables compiler-level tree-shaking.",
