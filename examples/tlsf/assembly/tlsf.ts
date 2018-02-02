@@ -10,7 +10,7 @@
 
 const AL_BITS: u32 = sizeof<usize>() == sizeof<u32>() ? 2 : 3;
 const AL_SIZE: usize = 1 << <usize>AL_BITS;
-const AL_MASK: usize = (1 << <usize>AL_BITS) - 1;
+const AL_MASK: usize = AL_SIZE - 1;
 
 const SL_BITS: u32 = 5;
 const SL_SIZE: usize = 1 << <usize>SL_BITS;
@@ -72,7 +72,7 @@ class Block {
 
   /** Gets this block's left (free) block in memory. */
   get left(): Block {
-    assert(this.info & LEFT_FREE); // must be free to host a jump
+    assert(this.info & LEFT_FREE); // must be free to contain a jump
     return assert(
       load<Block>(changetype<usize>(this) - sizeof<usize>())
     ); // can't be null
@@ -80,7 +80,7 @@ class Block {
 
   /** Gets this block's right block in memory. */
   get right(): Block {
-    assert(this.info & ~TAGS); // can't skip over the tail block
+    assert(this.info & ~TAGS); // can't skip beyond the tail block
     return assert(
       changetype<Block>(
         changetype<usize>(this) + Block.INFO + (this.info & ~TAGS)
@@ -172,37 +172,43 @@ class Root {
   /** Inserts a previously used block back into the free list. */
   insert(block: Block): void {
     // check as much as possible here to prevent invalid free blocks
-    assert(block);              // cannot be null
-    assert(block.info & FREE);  // must be free
+    assert(block); // cannot be null
+    var blockInfo = block.info;
+    assert(blockInfo & FREE); // must be free
     var size: usize;
     assert(
       (size = block.info & ~TAGS) >= Block.MIN_SIZE && size < Block.MAX_SIZE
     ); // must be valid, not necessary to compute yet if noAssert=true
 
     var right: Block = assert(block.right); // can't be null
+    var rightInfo = right.info;
 
     // merge with right block if also free
-    if (right.info & FREE) {
+    if (rightInfo & FREE) {
       this.remove(right);
-      block.info += Block.INFO + (right.info & ~TAGS);
+      block.info = (blockInfo += Block.INFO + (rightInfo & ~TAGS));
       right = block.right;
+      rightInfo = right.info;
       // jump is set below
     }
 
     // merge with left block if also free
-    if (block.info & LEFT_FREE) {
+    if (blockInfo & LEFT_FREE) {
       var left: Block = assert(block.left); // can't be null
-      assert(left.info & FREE); // must be free according to tags
+      var leftInfo = left.info;
+      assert(leftInfo & FREE); // must be free according to tags
       this.remove(left);
-      left.info += Block.INFO + (block.info & ~TAGS);
+      left.info = (leftInfo += Block.INFO + (blockInfo & ~TAGS));
       block = left;
+      blockInfo = leftInfo;
       // jump is set below
     }
 
-    right.info |= LEFT_FREE;
+    right.info = rightInfo | LEFT_FREE;
     this.setJump(block, right);
+    // right is no longer used now, hence rightInfo is not synced
 
-    size = block.info & ~TAGS;
+    size = blockInfo & ~TAGS;
     assert(size >= Block.MIN_SIZE && size < Block.MAX_SIZE); // must be valid
 
     // mapping_insert
@@ -234,8 +240,9 @@ class Root {
    * again.
    */
   private remove(block: Block): void {
-    assert(block.info & FREE); // must be free
-    var size = block.info & ~TAGS;
+    var blockInfo = block.info;
+    assert(blockInfo & FREE); // must be free
+    var size = blockInfo & ~TAGS;
     assert(size >= Block.MIN_SIZE && size < Block.MAX_SIZE); // must be valid
 
     // mapping_insert
@@ -326,17 +333,17 @@ class Root {
    * splitting it if possible, and returns its data pointer.
    */
   use(block: Block, size: usize): usize {
-    assert(block.info & FREE); // must be free so we can use it
+    var blockInfo = block.info;
+    assert(blockInfo & FREE); // must be free so we can use it
     assert(size >= Block.MIN_SIZE && size < Block.MAX_SIZE); // must be valid
     assert(!(size & AL_MASK)); // size must be aligned so the new block is
 
     this.remove(block);
-    block.info &= ~FREE;
 
     // split if the block can hold another MIN_SIZE block
-    var remaining = (block.info & ~TAGS) - size;
+    var remaining = (blockInfo & ~TAGS) - size;
     if (remaining >= Block.INFO + Block.MIN_SIZE) {
-      block.info = size | (block.info & TAGS);
+      block.info = size | (blockInfo & LEFT_FREE); // also discards FREE
 
       var spare = changetype<Block>(
         changetype<usize>(block) + Block.INFO + size
@@ -344,8 +351,9 @@ class Root {
       spare.info = (remaining - Block.INFO) | FREE; // not LEFT_FREE
       this.insert(spare); // also sets jump
 
-    // otherwise just tag right block as no longer LEFT_FREE
+    // otherwise tag block as no longer FREE and right as no longer LEFT_FREE
     } else {
+      block.info = blockInfo & ~FREE;
       var right: Block = assert(block.right); // can't be null (tail)
       right.info &= ~LEFT_FREE;
     }
@@ -449,8 +457,9 @@ export function free_memory(data: usize): void {
   var root = ROOT;
   if (root && data) {
     var block = changetype<Block>(data - Block.INFO);
-    assert(!(block.info & FREE)); // must be used
-    block.info |= FREE;
+    var blockInfo = block.info;
+    assert(!(blockInfo & FREE)); // must be used
+    block.info = blockInfo | FREE;
     root.insert(changetype<Block>(data - Block.INFO));
   }
 }
