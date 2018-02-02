@@ -1,11 +1,11 @@
 {
   "version": {
-    "desc": "Prints the compiler's version.",
+    "desc": "Prints just the compiler's version and exits.",
     "type": "boolean",
     "aliases": [ "v" ]
   },
   "help": {
-    "desc": "Prints this message.",
+    "desc": "Prints this message and exits.",
     "type": "boolean",
     "aliases": [ "h" ]
   },
@@ -34,7 +34,7 @@
     "type": "number"
   },
   "validate": {
-    "desc": "Validates the module.",
+    "desc": "Validates the module using Binaryen. Exits if invalid.",
     "type": "boolean",
     "aliases": [ "c", "check" ]
   },
@@ -66,31 +66,34 @@
     "type": "string"
   },
   "noTreeShaking": {
-    "desc": "Disables compiler-level tree-shaking.",
+    "desc": "Disables compiler-level tree-shaking, compiling everything.",
     "type": "boolean"
   },
   "noDebug": {
-    "desc": "Disables maintaining debug information in binaries.",
+    "desc": "Disables maintaining of debug information in binaries.",
     "type": "boolean"
   },
   "noAssert": {
-    "desc": "Replaces assertions with NOPs.",
+    "desc": "Replaces assertions with just their value without trapping.",
     "type": "boolean"
   },
   "noEmit": {
-    "desc": "Performs compilation as usual without emitting code.",
+    "desc": "Performs compilation as usual but does not emit code.",
     "type": "boolean"
   },
   "noMemory": {
-    "desc": "Does not set up a memory.",
+    "desc": "Does not set up a memory. Useful for low-level WebAssembly.",
     "type": "boolean"
   },
   "noLib": {
-    "desc": "Does not include the standard library.",
+    "desc": "Does not include the shipped standard library.",
     "type": "boolean"
   },
   "lib": {
-    "desc": "Adds one or multiple paths to custom library components.",
+    "desc": [
+      "Adds one or multiple paths to custom library components and",
+      "uses exports of all top-level files at this path as globals."
+    ],
     "type": "string"
   },
   "trapMode": {

@@ -1,11 +1,10 @@
-var fs = require("fs");
-
-var runner = require("./runner");
+const fs = require("fs");
+const runner = require("./runner");
 
 function test(file) {
   console.log("Testing '" + file + "' ...\n");
 
-  var exports = new WebAssembly.Instance(WebAssembly.Module(fs.readFileSync(__dirname + "/../" + file)), {
+  const exports = new WebAssembly.Instance(WebAssembly.Module(fs.readFileSync(__dirname + "/../" + file)), {
     env: {
       abort: function(msg, file, line, column) {
         throw Error("Assertion failed: " + (msg ? "'" + getString(msg) + "' " : "") + "at " + getString(file) + ":" + line + ":" + column);
@@ -21,28 +20,9 @@ function test(file) {
     return String.fromCharCode.apply(String, str);
   }
 
-  runner(exports, 10, 20000); // picked so I/O isn't the bottleneck
+  runner(exports, 50, 20000); // picked so I/O isn't the bottleneck
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
-}
-
-function mem(memory, offset, count) {
-  if (!offset) offset = 0;
-  if (!count) count = 1024;
-  var mem = new Uint8Array(memory.buffer, offset);
-  var stackTop = new Uint32Array(memory.buffer, 4, 1)[0];
-  var hex = [];
-  for (var i = 0; i < count; ++i) {
-    var o = (offset + i).toString(16);
-    while (o.length < 3) o = "0" + o;
-    if ((i & 15) === 0) {
-      hex.push("\n" + o + ":");
-    }
-    var h = mem[i].toString(16);
-    if (h.length < 2) h = "0" + h;
-    hex.push(h);
-  }
-  console.log(hex.join(" ") + " ...");
 }
 
 test("tlsf.untouched.wasm");
