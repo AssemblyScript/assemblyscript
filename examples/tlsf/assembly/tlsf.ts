@@ -323,9 +323,9 @@ class Root {
 
   /**
    * Uses the specified free block, removing it from internal maps and
-   * splitting it if possible.
+   * splitting it if possible, and returns its data pointer.
    */
-  use(block: Block, size: usize): void {
+  use(block: Block, size: usize): usize {
     assert(block.info & FREE); // must be free so we can use it
     assert(size >= Block.MIN_SIZE && size < Block.MAX_SIZE); // must be valid
     assert(!(size & AL_MASK)); // size must be aligned so the new block is
@@ -349,6 +349,8 @@ class Root {
       var right: Block = assert(block.right); // can't be null (tail)
       right.info &= ~LEFT_FREE;
     }
+
+    return changetype<usize>(block) + Block.INFO;
   }
 
   /** Adds more memory to the pool. */
@@ -409,9 +411,9 @@ export function allocate_memory(size: usize): usize {
     var rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
     ROOT = root = changetype<Root>(rootOffset);
     root.flMap = 0;
-    for (var fl = 0; fl < FL_BITS; ++fl) {
+    for (var fl: usize = 0; fl < FL_BITS; ++fl) {
       root.setSLMap(fl, 0);
-      for (var sl = 0; sl < SL_SIZE; ++sl)
+      for (var sl: u32 = 0; sl < SL_SIZE; ++sl)
         root.setHead(fl, sl, null);
     }
     root.addMemory(rootOffset + Root.SIZE, current_memory() << 16);
@@ -436,8 +438,7 @@ export function allocate_memory(size: usize): usize {
     }
 
     assert((block.info & ~TAGS) >= size);
-    root.use(block, size);
-    data = changetype<usize>(block) + Block.INFO;
+    data = root.use(block, size);
   }
 
   return data;
@@ -454,4 +455,5 @@ export function free_memory(data: usize): void {
   }
 }
 
-export { set_memory };
+// For stand-alone usage, e.g., in tests
+export { move_memory, set_memory, compare_memory };
