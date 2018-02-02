@@ -339,10 +339,9 @@ function processSourceMap(sourceMap, sourceMapURL) {
         });
         ++readCount;
       }
-      if (found) {
+      if (found)
         generator.setSourceContent(name, text);
-        console.log(name + " ???");
-      } else
+      else
         console.error("No source content found for file '" + name + "'.");
     });
     return generator.toString();
@@ -368,7 +367,8 @@ if (!args.noEmit) {
       : null;
     var binary;
     writeTime += measure(() => {
-      binary = module.toBinary("http://127.0.0.1:8080/"+sourceMapURL); // FIXME: 'not a valid URL' in FF
+      // FIXME: 'not a valid URL' in FF (wants http(s)://.../url)
+      binary = module.toBinary(sourceMapURL);
       fs.writeFileSync(args.binaryFile, binary.output);
     });
     ++writeCount;
