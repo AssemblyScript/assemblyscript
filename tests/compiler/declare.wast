@@ -9,11 +9,15 @@
  (export "test" (func $declare/test))
  (export "memory" (memory $0))
  (func $declare/test (; 2 ;) (type $v)
+  ;;@ declare.ts:11:2
   (call $declare/externalFunc)
+  ;;@ declare.ts:12:2
   (drop
    (get_global $declare/externalConst)
   )
+  ;;@ declare.ts:13:11
   (call $declare/external.externalFunc)
+  ;;@ declare.ts:14:2
   (drop
    (get_global $declare/external.externalConst)
   )
@@ -49,6 +53,7 @@
   FUNCTION_PROTOTYPE: grow_memory
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
+  FUNCTION_PROTOTYPE: abort
   FUNCTION_PROTOTYPE: i8
   FUNCTION_PROTOTYPE: i16
   FUNCTION_PROTOTYPE: i32

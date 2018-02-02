@@ -61,16 +61,14 @@ declare type BinaryenModuleRef = usize;
 declare function _BinaryenModuleCreate(): BinaryenModuleRef;
 declare function _BinaryenModuleDispose(module: BinaryenModuleRef): void;
 
-declare type BinaryenLiteral = usize;
-
-// LLVM C ABI with `out` being a buffer of 16 bytes receiving the BinaryenLiteral struct.
-// union value starts at offset 8 due to alignment (?)
-declare function _BinaryenLiteralInt32(out: BinaryenLiteral, x: i32): void;
-declare function _BinaryenLiteralInt64(out: BinaryenLiteral, x: i32, y: i32): void;
-declare function _BinaryenLiteralFloat32(out: BinaryenLiteral, x: f32): void;
-declare function _BinaryenLiteralFloat64(out: BinaryenLiteral, x: f64): void;
-declare function _BinaryenLiteralFloat32Bits(out: BinaryenLiteral, x: i32): void;
-declare function _BinaryenLiteralFloat64Bits(out: BinaryenLiteral, x: i32, y: i32): void;
+// LLVM C ABI with `out` being a large enough buffer receiving the
+// BinaryenLiteral struct.
+declare function _BinaryenLiteralInt32(out: usize, x: i32): void;
+declare function _BinaryenLiteralInt64(out: usize, x: i32, y: i32): void;
+declare function _BinaryenLiteralFloat32(out: usize, x: f32): void;
+declare function _BinaryenLiteralFloat64(out: usize, x: f64): void;
+declare function _BinaryenLiteralFloat32Bits(out: usize, x: i32): void;
+declare function _BinaryenLiteralFloat64Bits(out: usize, x: i32, y: i32): void;
 
 declare type BinaryenOp = i32;
 
@@ -231,7 +229,7 @@ declare function _BinaryenGetGlobal(module: BinaryenModuleRef, name: usize, type
 declare function _BinaryenSetGlobal(module: BinaryenModuleRef, name: usize, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenLoad(module: BinaryenModuleRef, bytes: u32, signed: i8, offset: u32, align: u32, type: BinaryenType, ptr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenStore(module: BinaryenModuleRef, bytes: u32, offset: u32, align: u32, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
-declare function _BinaryenConst(module: BinaryenModuleRef, value: BinaryenLiteral): BinaryenExpressionRef;
+declare function _BinaryenConst(module: BinaryenModuleRef, value: usize): BinaryenExpressionRef;
 declare function _BinaryenUnary(module: BinaryenModuleRef, op: BinaryenOp, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenBinary(module: BinaryenModuleRef, op: BinaryenOp, left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSelect(module: BinaryenModuleRef, condition: BinaryenExpressionRef, ifTrue: BinaryenExpressionRef, ifFalse: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -381,6 +379,7 @@ declare function _BinaryenFunctionGetVar(func: BinaryenFunctionRef, index: Binar
 declare function _BinaryenFunctionGetBody(func: BinaryenFunctionRef): BinaryenExpressionRef;
 declare function _BinaryenFunctionOptimize(func: BinaryenFunctionRef, module: BinaryenModuleRef): void;
 declare function _BinaryenFunctionRunPasses(func: BinaryenFunctionRef, module: BinaryenModuleRef, passes: usize, numPasses: BinaryenIndex): void;
+declare function _BinaryenFunctionSetDebugLocation(func: BinaryenFunctionRef, expr: BinaryenExpressionRef, fileIndex: BinaryenIndex, lineNumber: BinaryenIndex, columnNumber: BinaryenIndex): void;
 
 declare type BinaryenImportRef = usize;
 
@@ -415,9 +414,11 @@ declare function _BinaryenModuleValidate(module: BinaryenModuleRef): i32;
 declare function _BinaryenModuleOptimize(module: BinaryenModuleRef): void;
 declare function _BinaryenModuleRunPasses(module: BinaryenModuleRef, passes: usize, numPasses: BinaryenIndex): void;
 declare function _BinaryenModuleAutoDrop(module: BinaryenModuleRef): void;
-declare function _BinaryenModuleWrite(module: BinaryenModuleRef, output: usize, outputSize: usize): usize;
+declare function _BinaryenModuleAllocateAndWrite(out: usize, module: BinaryenModuleRef, sourceMapUrl: usize): void;
 declare function _BinaryenModuleRead(input: usize, inputSize: usize): BinaryenModuleRef;
 declare function _BinaryenModuleInterpret(module: BinaryenModuleRef): void;
+declare function _BinaryenModuleAddDebugInfoFileName(module: BinaryenModuleRef, filename: usize): BinaryenIndex;
+declare function _BinaryenModuleGetDebugInfoFileName(module: BinaryenModuleRef, index: BinaryenIndex): usize;
 
 declare type RelooperRef = usize;
 declare type RelooperBlockRef = usize;

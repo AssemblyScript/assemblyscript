@@ -9,12 +9,7 @@
   (i32.const 3)
  )
  (func $start (; 1 ;) (type $v)
-  (if
-   (i32.ne
-    (call $inlining/test)
-    (i32.const 3)
-   )
-   (unreachable)
-  )
+  ;;@ inlining.ts:8:0
+  (nop)
  )
 )

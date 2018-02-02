@@ -17,6 +17,9 @@ try {
   assemblyscript = require("../src");
 }
 
+const SOURCEMAP_ROOT = "assemblyscript:///";
+const LIBRARY_PREFIX = assemblyscript.LIBRARY_PREFIX;
+
 const conf = require("./asc.json");
 const opts = {};
 
@@ -126,7 +129,7 @@ libDirs.forEach(libDir => {
       var nextText = fs.readFileSync(path.join(libDir, file), { encoding: "utf8" });
       ++readCount;
       var time = measure(() => {
-        parser = assemblyscript.parseFile(nextText, ".std/" + file, parser, false);
+        parser = assemblyscript.parseFile(nextText, LIBRARY_PREFIX + file, parser, false);
       });
       parseTime += time;
       notIoTime += time;
@@ -170,7 +173,7 @@ args._.forEach(filename => {
 
   while ((nextFile = parser.nextFile()) != null) {
     var found = false;
-    if (nextFile.startsWith(".std/")) {
+    if (nextFile.startsWith(LIBRARY_PREFIX)) {
       for (var i = 0; i < libDirs.length; ++i) {
         readTime += measure(() => {
           try {
@@ -311,15 +314,17 @@ if (runPasses.length)
 
 function processSourceMap(sourceMap, sourceMapURL) {
   var json = JSON.parse(sourceMap);
-  return SourceMapConsumer.with(sourceMap, sourceMapURL, consumer => {
+  json.sources = json.sources.map(name => SOURCEMAP_ROOT + name);
+  var libPrefix = SOURCEMAP_ROOT + LIBRARY_PREFIX;
+  return SourceMapConsumer.with(json, sourceMapURL, consumer => {
     var generator = SourceMapGenerator.fromSourceMap(consumer);
     json.sources.forEach(name => {
       var text, found = false;
-      if (name.startsWith(".std/")) {
+      if (name.startsWith(libPrefix)) {
         for (var i = 0, k = libDirs.length; i < k; ++i) {
           readTime += measure(() => {
             try {
-              text = fs.readFileSync(path.join(libDirs[i], name.substring(4)), { encoding: "utf8" });
+              text = fs.readFileSync(path.join(libDirs[i], name.substring(libPrefix.length)), { encoding: "utf8" });
               found = true;
             } catch (e) {}
           });
@@ -328,15 +333,16 @@ function processSourceMap(sourceMap, sourceMapURL) {
       } else {
         readTime += measure(() => {
           try {
-            text = fs.readFileSync(name, { encoding: "utf8" });
+            text = fs.readFileSync(name.substring(SOURCEMAP_ROOT.length), { encoding: "utf8" });
             found = true;
           } catch (e) {}
         });
         ++readCount;
       }
-      if (found)
+      if (found) {
         generator.setSourceContent(name, text);
-      else
+        console.log(name + " ???");
+      } else
         console.error("No source content found for file '" + name + "'.");
     });
     return generator.toString();
@@ -362,7 +368,7 @@ if (!args.noEmit) {
       : null;
     var binary;
     writeTime += measure(() => {
-      binary = module.toBinary(sourceMapURL); // FIXME: 'not a valid URL' in FF
+      binary = module.toBinary("http://127.0.0.1:8080/"+sourceMapURL); // FIXME: 'not a valid URL' in FF
       fs.writeFileSync(args.binaryFile, binary.output);
     });
     ++writeCount;

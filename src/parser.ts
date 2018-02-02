@@ -8,7 +8,8 @@
 */
 
 import {
-  Program
+  Program,
+  LIBRARY_PREFIX
 } from "./program";
 
 import {
@@ -106,7 +107,7 @@ export class Parser extends DiagnosticEmitter {
         return; // already parsed
     this.seenlog.add(normalizedPath);
 
-    var source = new Source(path, text, isEntry ? SourceKind.ENTRY : path.startsWith("std:") ? SourceKind.STDLIB : SourceKind.DEFAULT);
+    var source = new Source(normalizedPath, text, isEntry ? SourceKind.ENTRY : path.startsWith(LIBRARY_PREFIX) ? SourceKind.LIBRARY : SourceKind.DEFAULT);
     this.program.sources.push(source);
 
     var tn = new Tokenizer(source, this.program.diagnostics);

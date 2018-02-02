@@ -310,17 +310,20 @@ export class Range {
   get column(): i32 {
     var text = this.source.text;
     var pos = this.start;
-    var column = 1;
-    while (pos-- > 0)
+    var column = 0;
+    while (pos-- > 0) {
       if (text.charCodeAt(pos) == CharCode.LINEFEED)
         break;
       column++;
+    }
     return column;
   }
 
   toString(): string {
     return this.source.text.substring(this.start, this.end);
   }
+
+  debugInfoRef: usize = 0;
 }
 
 declare function parseFloat(str: string): f64;

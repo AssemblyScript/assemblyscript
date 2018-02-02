@@ -1,6 +1,8 @@
-// A simple arena allocator that provides a `clear_memory` function to reset
-// the heap to its initial state. A user has to make sure that there are no
-// more references to cleared memory afterwards. Always aligns to 8 bytes.
+/////////////// A simple yet effective Arena Memory Allocator /////////////////
+
+// Provides a `reset_memory` function to reset the heap to its initial state. A
+// user has to make sure that there are no more references to cleared memory
+// afterwards. Always aligns to 8 bytes.
 
 const ALIGN_LOG2: usize = 3;
 const ALIGN_SIZE: usize = 1 << ALIGN_LOG2;
@@ -27,6 +29,6 @@ export function free_memory(ptr: usize): void {
   // nop
 }
 
-export function clear_memory(): void {
+export function reset_memory(): void {
   HEAP_OFFSET = HEAP_BASE;
 }

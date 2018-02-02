@@ -1,8 +1,7 @@
 ![](https://s.gravatar.com/avatar/f105de3decfafc734b8eabe9a960b25d?size=48) TLSF
 =================
 
-An implementation of the [Two Level Segregate Fit](http://www.gii.upv.es/tlsf/main/docs)
-memory allocator in AssemblyScript.
+An implementation of the [Two Level Segregate Fit](http://www.gii.upv.es/tlsf/main/docs) memory allocator in AssemblyScript.
 
 Instructions
 ------------

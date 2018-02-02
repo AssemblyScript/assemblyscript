@@ -1,4 +1,4 @@
-import "std:memory/arena";
+import "allocator/arena";
 
 const size: usize = 42;
 let ptr1: usize = allocate_memory(size);
@@ -22,6 +22,6 @@ assert(compare_memory(ptr1, ptr2, size) == 0);
 free_memory(ptr1);
 free_memory(ptr2);
 
-clear_memory();
+reset_memory();
 ptr1 = allocate_memory(size);
 assert(ptr1 == HEAP_BASE);

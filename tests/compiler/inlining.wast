@@ -8,19 +8,26 @@
  (export "memory" (memory $0))
  (start $start)
  (func $inlining/test (; 0 ;) (type $i) (result i32)
+  ;;@ inlining.ts:4:2
   (nop)
+  ;;@ inlining.ts:5:26
   (return
+   ;;@ inlining.ts:5:9
    (i32.add
     (i32.const 1)
+    ;;@ inlining.ts:5:26
     (i32.const 2)
    )
   )
  )
  (func $start (; 1 ;) (type $v)
+  ;;@ inlining.ts:8:0
   (if
    (i32.eqz
+    ;;@ inlining.ts:8:7
     (i32.eq
      (call $inlining/test)
+     ;;@ inlining.ts:8:17
      (i32.const 3)
     )
    )
@@ -58,6 +65,7 @@
   FUNCTION_PROTOTYPE: grow_memory
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
+  FUNCTION_PROTOTYPE: abort
   FUNCTION_PROTOTYPE: i8
   FUNCTION_PROTOTYPE: i16
   FUNCTION_PROTOTYPE: i32

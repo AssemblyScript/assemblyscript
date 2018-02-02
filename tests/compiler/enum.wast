@@ -36,12 +36,14 @@
  (export "memory" (memory $0))
  (start $start)
  (func $enum/getZero (; 0 ;) (type $i) (result i32)
+  ;;@ enum.ts:23:9
   (return
    (i32.const 0)
   )
  )
  (func $start (; 1 ;) (type $v)
   (set_global $enum/NonConstant.ZERO
+   ;;@ enum.ts:27:9
    (call $enum/getZero)
   )
   (set_global $enum/NonConstant.ONE
@@ -82,6 +84,7 @@
   FUNCTION_PROTOTYPE: grow_memory
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
+  FUNCTION_PROTOTYPE: abort
   FUNCTION_PROTOTYPE: i8
   FUNCTION_PROTOTYPE: i16
   FUNCTION_PROTOTYPE: i32

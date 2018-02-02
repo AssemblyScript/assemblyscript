@@ -421,8 +421,17 @@ export abstract class Node {
     stmt.range = range;
     for (var i = 0, k = (stmt.members = members).length; i < k; ++i) members[i].parent = stmt;
     stmt.path = path;
-    stmt.normalizedPath = path ? resolvePath(normalizePath(path.value), range.source.normalizedPath) : null;
-    stmt.internalPath = stmt.normalizedPath ? mangleInternalPath(stmt.normalizedPath) : null;
+    if (path) {
+      var normalizedPath = normalizePath(path.value);
+      if (path.value.startsWith(".")) // relative
+        stmt.normalizedPath = resolvePath(normalizedPath, range.source.normalizedPath);
+      else // absolute
+        stmt.normalizedPath = normalizedPath;
+      stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
+    } else {
+      stmt.normalizedPath = null;
+      stmt.internalPath = null;
+    }
     if (stmt.modifiers = modifiers)
       for (i = 0, k = (<Modifier[]>modifiers).length; i < k; ++i)
         (<Modifier[]>modifiers)[i].parent = stmt;
@@ -470,7 +479,11 @@ export abstract class Node {
         (<ImportDeclaration[]>declarations)[i].parent = stmt;
     stmt.namespaceName = null;
     stmt.path = path;
-    stmt.normalizedPath = resolvePath(normalizePath(path.value), range.source.normalizedPath);
+    var normalizedPath = normalizePath(path.value);
+    if (path.value.startsWith(".")) // relative
+      stmt.normalizedPath = resolvePath(normalizedPath, range.source.normalizedPath);
+    else // absolute
+      stmt.normalizedPath = normalizedPath;
     stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
     return stmt;
   }
@@ -1000,7 +1013,7 @@ export abstract class Statement extends Node { }
 export enum SourceKind {
   DEFAULT,
   ENTRY,
-  STDLIB
+  LIBRARY
 }
 
 /** A top-level source node. */
@@ -1010,8 +1023,6 @@ export class Source extends Node {
 
   /** Source kind. */
   sourceKind: SourceKind;
-  /** Path as provided to the parser. */
-  path: string;
   /** Normalized path. */
   normalizedPath: string;
   /** Path used internally. */
@@ -1022,13 +1033,14 @@ export class Source extends Node {
   text: string;
   /** Tokenizer reference. */
   tokenizer: Tokenizer | null = null;
+  /** Source map index. */
+  debugInfoIndex: i32 = -1;
 
   /** Constructs a new source node. */
-  constructor(path: string, text: string, kind: SourceKind = SourceKind.DEFAULT) {
+  constructor(normalizedPath: string, text: string, kind: SourceKind = SourceKind.DEFAULT) {
     super();
     this.sourceKind = kind;
-    this.path = path;
-    this.normalizedPath = normalizePath(path, true);
+    this.normalizedPath = normalizedPath;
     this.internalPath = mangleInternalPath(this.normalizedPath);
     this.statements = new Array();
     this.range = new Range(this, 0, text.length);
@@ -1038,7 +1050,7 @@ export class Source extends Node {
   /** Tests if this source is an entry file. */
   get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
   /** Tests if this source is a stdlib file. */
-  get isStdlib(): bool { return this.sourceKind == SourceKind.STDLIB; }
+  get isStdlib(): bool { return this.sourceKind == SourceKind.LIBRARY; }
 }
 
 /** Base class of all declaration statements. */
@@ -1345,7 +1357,7 @@ export class Parameter extends Node {
   kind = NodeKind.PARAMETER;
 
   /** Parameter name. */
-  name: IdentifierExpression;
+  name: IdentifierExpression | null;
   /** Parameter type. */
   type: TypeNode | null;
   /** Initializer expression, if present. */
@@ -1528,6 +1540,8 @@ export function mangleInternalName(declaration: DeclarationStatement, asGlobal: 
 
 /** Mangles an external to an internal path. */
 export function mangleInternalPath(path: string): string {
+  if (path.endsWith(".ts"))
+    path = path.substring(0, path.length - 3);
   // not necessary with current config
   // if (PATH_DELIMITER.charCodeAt(0) != CharCode.SLASH)
   //   path = path.replace("/", PATH_DELIMITER);

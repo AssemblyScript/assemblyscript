@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
-    "build:untouched": "asc assembly/pson.ts -b pson.untouched.wasm -t pson.untouched.wast --validate",
-    "build:optimized": "asc -O assembly/pson.ts -b pson.optimized.wasm -t pson.optimized.wast --validate",
+    "build:untouched": "asc assembly/pson.ts -b pson.untouched.wasm -t pson.untouched.wast --validate --sourceMap --measure",
+    "build:optimized": "asc -O assembly/pson.ts -b pson.optimized.wasm -t pson.optimized.wast --validate --sourceMap --measure",
     "test": "node tests"
   },
   "devDependencies": {

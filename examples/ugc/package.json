@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
-    "build:untouched": "asc assembly/ugc.ts -t ugc.untouched.wast -b ugc.untouched.wasm --validate",
-    "build:optimized": "asc -O3 assembly/ugc.ts -b ugc.optimized.wasm -t ugc.optimized.wast --validate --noDebug --noAssert",
+    "build:untouched": "asc assembly/ugc.ts -t ugc.untouched.wast -b ugc.untouched.wasm --validate --sourceMap --measure",
+    "build:optimized": "asc -O3 assembly/ugc.ts -b ugc.optimized.wasm -t ugc.optimized.wast --validate --noDebug --noAssert --sourceMap --measure",
     "test": "node tests"
   }
 }

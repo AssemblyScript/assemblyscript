@@ -1,4 +1,4 @@
-import "std:memory/arena";
+import "allocator/arena";
 
 var arr = changetype<i32[]>(allocate_memory(sizeof<usize>() + 2 * sizeof<i32>()));
 

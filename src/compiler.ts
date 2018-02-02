@@ -43,7 +43,8 @@ import {
   Flow,
   FlowFlags,
   ElementFlags,
-  PATH_DELIMITER
+  PATH_DELIMITER,
+  LIBRARY_PREFIX
 } from "./program";
 
 import {
@@ -56,6 +57,7 @@ import {
   TypeNode,
   Source,
   SourceKind,
+  Range,
 
   Statement,
   BlockStatement,
@@ -150,6 +152,8 @@ export class Options {
   allocateImpl: string = "allocate_memory";
   /** Memory freeing implementation to use. */
   freeImpl: string = "free_memory";
+  /** If true, generates information necessary for source maps. */
+  sourceMap: bool = false;
 
   /** Tests if the target is WASM64 or, otherwise, WASM32. */
   get isWasm64(): bool { return this.target == Target.WASM64; }
@@ -216,7 +220,7 @@ export class Compiler extends DiagnosticEmitter {
     this.memoryOffset = new U64(this.options.usizeType.byteSize); // leave space for `null`
     this.module = Module.create();
 
-    // set up start function
+    // set up the start function wrapping top-level statements, of all files.
     var startFunctionTemplate = new FunctionPrototype(program, "start", "start", null);
     var startFunctionInstance = new Function(startFunctionTemplate, startFunctionTemplate.internalName, [], [], Type.void, null);
     startFunctionInstance.set(ElementFlags.START);
@@ -229,40 +233,40 @@ export class Compiler extends DiagnosticEmitter {
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize(this.options);
 
-    // compile entry file (exactly one, usually)
     var sources = this.program.sources;
-    for (var i = 0, k = sources.length; i < k; ++i)
-      if (sources[i].isEntry)
-        this.compileSource(sources[i]);
 
-    // make start function if not empty
+    // compile entry file(s) while traversing to reachable elements
+    for (var i = 0, k = sources.length; i < k; ++i)
+      if (sources[i].isEntry) this.compileSource(sources[i]);
+
+    // compile the start function if not empty
     if (this.startFunctionBody.length) {
       var typeRef = this.module.getFunctionTypeBySignature(NativeType.None, []);
-      if (!typeRef)
-        typeRef = this.module.addFunctionType("v", NativeType.None, []);
+      if (!typeRef) typeRef = this.module.addFunctionType("v", NativeType.None, []);
+      var ref: FunctionRef;
       this.module.setStart(
-        this.module.addFunction(this.startFunction.prototype.internalName, typeRef, typesToNativeTypes(this.startFunction.additionalLocals),
+        ref = this.module.addFunction(this.startFunction.prototype.internalName, typeRef, typesToNativeTypes(this.startFunction.additionalLocals),
           this.module.createBlock(null, this.startFunctionBody)
         )
       );
+      this.startFunction.finalize(this.module, ref);
     }
 
-    // set up memory
+    // set up static memory segments and the heap base pointer
     if (!this.options.noMemory) {
       var initial = this.memoryOffset.clone();
+      var alignMask = this.options.usizeType.byteSize - 1;
+      initial.add32(alignMask); // align to 4/8 bytes
+      initial.and32(~alignMask, ~0);
       if (this.options.target == Target.WASM64)
         this.module.addGlobal("HEAP_BASE", NativeType.I64, false, this.module.createI64(initial.lo, initial.hi));
       else
         this.module.addGlobal("HEAP_BASE", NativeType.I32, false, this.module.createI32(initial.lo));
 
       // determine initial page size
-      var initialOverlaps = initial.clone();
-      initialOverlaps.and32(0xffff);
-      if (!initialOverlaps.isZero) {
-        initial.or32(0xffff);
-        initial.add32(1);
-      }
-      initial.shru32(16); // now is initial size in 64k pages
+      initial.add32(0xffff); // align to page size
+      initial.and32(~0xffff, ~0);
+      initial.shru32(16); // ^= number of pages
       this.module.setMemory(initial.toI32(), Module.MAX_MEMORY_WASM32 /* TODO: not WASM64 compatible yet */, this.memorySegments, this.options.target, "memory");
     }
     return this.module;
@@ -270,39 +274,68 @@ export class Compiler extends DiagnosticEmitter {
 
   // sources
 
-  compileSourceByPath(normalizedPath: string, reportNode: Node): void {
-    for (var i = 0, k = this.program.sources.length; i < k; ++i) {
-      var importedSource = this.program.sources[i];
-      if (importedSource.normalizedPath == normalizedPath) {
-        this.compileSource(importedSource);
+  compileSourceByPath(normalizedPathWithoutExtension: string, reportNode: Node): void {
+    var sources = this.program.sources;
+
+    var expected = normalizedPathWithoutExtension + ".ts";
+    for (var i = 0, k = sources.length; i < k; ++i) {
+      var source = sources[i];
+      var actual = source.normalizedPath;
+      if (source.normalizedPath == expected) {
+        this.compileSource(source);
         return;
       }
     }
-    this.error(DiagnosticCode.File_0_not_found, reportNode.range, normalizedPath);
+
+    expected = normalizedPathWithoutExtension + "/index.ts";
+    for (var i = 0, k = sources.length; i < k; ++i) {
+      var source = sources[i];
+      var actual = source.normalizedPath;
+      if (source.normalizedPath == expected) {
+        this.compileSource(source);
+        return;
+      }
+    }
+
+    expected = LIBRARY_PREFIX + normalizedPathWithoutExtension + ".ts";
+    for (var i = 0, k = sources.length; i < k; ++i) {
+      var source = sources[i];
+      var actual = source.normalizedPath;
+      if (source.normalizedPath == expected) {
+        this.compileSource(source);
+        return;
+      }
+    }
+
+    this.error(DiagnosticCode.File_0_not_found, reportNode.range, normalizedPathWithoutExtension);
   }
 
   compileSource(source: Source): void {
-    if (this.files.has(source.normalizedPath))
+    var files = this.files;
+    if (files.has(source.normalizedPath))
       return;
-    this.files.add(source.normalizedPath);
+    files.add(source.normalizedPath);
 
     var noTreeShaking = this.options.noTreeShaking;
-    for (var i = 0, k = source.statements.length; i < k; ++i) {
-      var statement = source.statements[i];
+    var isEntry = source.isEntry;
+    var startFunctionBody = this.startFunctionBody;
+    var statements = source.statements;
+    for (var i = 0, k = statements.length; i < k; ++i) {
+      var statement = statements[i];
       switch (statement.kind) {
 
         case NodeKind.CLASSDECLARATION:
-          if ((noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>statement).modifiers)) && !(<ClassDeclaration>statement).typeParameters.length)
+          if ((noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>statement).modifiers)) && !(<ClassDeclaration>statement).typeParameters.length)
             this.compileClassDeclaration(<ClassDeclaration>statement, []);
           break;
 
         case NodeKind.ENUMDECLARATION:
-          if (noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>statement).modifiers))
+          if (noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>statement).modifiers))
             this.compileEnumDeclaration(<EnumDeclaration>statement);
           break;
 
         case NodeKind.FUNCTIONDECLARATION:
-          if ((noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>statement).modifiers)) && !(<FunctionDeclaration>statement).typeParameters.length)
+          if ((noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>statement).modifiers)) && !(<FunctionDeclaration>statement).typeParameters.length)
             this.compileFunctionDeclaration(<FunctionDeclaration>statement, []);
           break;
 
@@ -311,20 +344,19 @@ export class Compiler extends DiagnosticEmitter {
           break;
 
         case NodeKind.NAMESPACEDECLARATION:
-          if (noTreeShaking || source.isEntry && hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>statement).modifiers))
+          if (noTreeShaking || isEntry && hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>statement).modifiers))
             this.compileNamespaceDeclaration(<NamespaceDeclaration>statement);
           break;
 
         case NodeKind.VARIABLE: // global, always compiled because initializers might have side effects
           var variableInit = this.compileVariableStatement(<VariableStatement>statement);
-          if (variableInit)
-            this.startFunctionBody.push(variableInit);
+          if (variableInit) startFunctionBody.push(variableInit);
           break;
 
         case NodeKind.EXPORT:
           if ((<ExportStatement>statement).normalizedPath != null)
             this.compileSourceByPath(<string>(<ExportStatement>statement).normalizedPath, <StringLiteralExpression>(<ExportStatement>statement).path);
-          if (noTreeShaking || source.isEntry)
+          if (noTreeShaking || isEntry)
             this.compileExportStatement(<ExportStatement>statement);
           break;
 
@@ -365,14 +397,14 @@ export class Compiler extends DiagnosticEmitter {
           if (!resolvedType)
             return false;
           if (resolvedType == Type.void) {
-            this.error(DiagnosticCode.Type_0_is_not_assignable_to_type_1, declaration.range, "*", resolvedType.toString());
+            this.error(DiagnosticCode.Type_0_is_not_assignable_to_type_1, declaration.type.range, "*", resolvedType.toString());
             return false;
           }
           global.type = resolvedType;
         } else if (declaration.initializer) { // infer type using void/NONE for proper literal inference
           initExpr = this.compileExpression(declaration.initializer, Type.void, ConversionKind.NONE); // reports
           if (this.currentType == Type.void) {
-            this.error(DiagnosticCode.Type_0_is_not_assignable_to_type_1, declaration.range, this.currentType.toString(), "<auto>");
+            this.error(DiagnosticCode.Type_0_is_not_assignable_to_type_1, declaration.initializer.range, this.currentType.toString(), "<auto>");
             return false;
           }
           global.type = this.currentType;
@@ -622,15 +654,17 @@ export class Compiler extends DiagnosticEmitter {
       typeRef = this.module.addFunctionType(signatureNameParts.join(""), nativeResultType, nativeParamTypes);
 
     // create the function
-    if (instance.is(ElementFlags.DECLARED)) {
-      this.module.addFunctionImport(instance.internalName, instance.prototype.namespace ? instance.prototype.namespace.simpleName : "env", instance.simpleName, typeRef);
-    } else {
-      this.module.addFunction(instance.internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
-    }
-    instance.finalize();
-    if (declaration && declaration.range.source.isEntry && declaration.isTopLevelExport) {
+    var ref: FunctionRef;
+    if (instance.is(ElementFlags.DECLARED))
+      ref = this.module.addFunctionImport(instance.internalName, instance.prototype.namespace ? instance.prototype.namespace.simpleName : "env", instance.simpleName, typeRef);
+    else
+      ref = this.module.addFunction(instance.internalName, typeRef, typesToNativeTypes(instance.additionalLocals), this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None));
+
+    // check module export
+    if (declaration && declaration.range.source.isEntry && declaration.isTopLevelExport)
       this.module.addFunctionExport(instance.internalName, declaration.name.name);
-    }
+
+    instance.finalize(this.module, ref);
     return true;
   }
 
@@ -810,50 +844,65 @@ export class Compiler extends DiagnosticEmitter {
   // statements
 
   compileStatement(statement: Statement): ExpressionRef {
+    var expr: ExpressionRef;
     switch (statement.kind) {
 
       case NodeKind.BLOCK:
-        return this.compileBlockStatement(<BlockStatement>statement);
+        expr = this.compileBlockStatement(<BlockStatement>statement);
+        break;
 
       case NodeKind.BREAK:
-        return this.compileBreakStatement(<BreakStatement>statement);
+        expr = this.compileBreakStatement(<BreakStatement>statement);
+        break;
 
       case NodeKind.CONTINUE:
-        return this.compileContinueStatement(<ContinueStatement>statement);
+        expr = this.compileContinueStatement(<ContinueStatement>statement);
+        break;
 
       case NodeKind.DO:
-        return this.compileDoStatement(<DoStatement>statement);
+        expr = this.compileDoStatement(<DoStatement>statement);
+        break;
 
       case NodeKind.EMPTY:
-        return this.compileEmptyStatement(<EmptyStatement>statement);
+        expr = this.compileEmptyStatement(<EmptyStatement>statement);
+        break;
 
       case NodeKind.EXPRESSION:
-        return this.compileExpressionStatement(<ExpressionStatement>statement);
+        expr = this.compileExpressionStatement(<ExpressionStatement>statement);
+        break;
 
       case NodeKind.FOR:
-        return this.compileForStatement(<ForStatement>statement);
+        expr = this.compileForStatement(<ForStatement>statement);
+        break;
 
       case NodeKind.IF:
-        return this.compileIfStatement(<IfStatement>statement);
+        expr = this.compileIfStatement(<IfStatement>statement);
+        break;
 
       case NodeKind.RETURN:
-        return this.compileReturnStatement(<ReturnStatement>statement);
+        expr = this.compileReturnStatement(<ReturnStatement>statement);
+        break;
 
       case NodeKind.SWITCH:
-        return this.compileSwitchStatement(<SwitchStatement>statement);
+        expr = this.compileSwitchStatement(<SwitchStatement>statement);
+        break;
 
       case NodeKind.THROW:
-        return this.compileThrowStatement(<ThrowStatement>statement);
+        expr = this.compileThrowStatement(<ThrowStatement>statement);
+        break;
 
       case NodeKind.TRY:
-        return this.compileTryStatement(<TryStatement>statement);
+        expr = this.compileTryStatement(<TryStatement>statement);
+        break;
 
       case NodeKind.VARIABLE:
         var variableInit = this.compileVariableStatement(<VariableStatement>statement);
-        return variableInit ? variableInit : this.module.createNop();
+        expr = variableInit ? variableInit : this.module.createNop();
+        break;
 
       case NodeKind.WHILE:
-        return this.compileWhileStatement(<WhileStatement>statement);
+        expr = this.compileWhileStatement(<WhileStatement>statement);
+        break;
 
       case NodeKind.TYPEDECLARATION:
         if (this.currentFunction == this.startFunction)
@@ -863,6 +912,9 @@ export class Compiler extends DiagnosticEmitter {
       default:
         throw new Error("statement expected");
     }
+
+    this.addDebugLocation(expr, statement.range);
+    return expr;
   }
 
   compileStatements(statements: Statement[]): ExpressionRef[] {
@@ -1095,8 +1147,9 @@ export class Compiler extends DiagnosticEmitter {
 
       var fallsThrough = i != k - 1;
       var nextLabel = !fallsThrough ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
-      for (var j = 0; j < l; ++j)
+      for (var j = 0; j < l; ++j) {
         body[j + 1] = this.compileStatement(case_.statements[j]);
+      }
       if (!(fallsThrough || this.currentFunction.flow.is(FlowFlags.RETURNS)))
         alwaysReturns = false; // ignore fall-throughs
 
@@ -1386,6 +1439,8 @@ export class Compiler extends DiagnosticEmitter {
       expr = this.convertExpression(expr, this.currentType, contextualType, conversionKind, expression);
       this.currentType = contextualType;
     }
+
+    this.addDebugLocation(expr, expression.range);
     return expr;
   }
 
@@ -2330,8 +2385,8 @@ export class Compiler extends DiagnosticEmitter {
         left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
-        // clone left if free of side effects while tolerating one level of nesting
-        expr = this.module.cloneExpression(left, true, 1);
+        // clone left if free of side effects
+        expr = this.module.cloneExpression(left, true, 0);
 
         // if not possible, tee left to a temp. local
         if (!expr) {
@@ -2364,8 +2419,8 @@ export class Compiler extends DiagnosticEmitter {
         left = this.compileExpression(expression.left, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE);
         right = this.compileExpression(expression.right, this.currentType, ConversionKind.IMPLICIT, false);
 
-        // clone left if free of side effects while tolerating one level of nesting
-        expr = this.module.cloneExpression(left, true, 1);
+        // clone left if free of side effects
+        expr = this.module.cloneExpression(left, true, 0);
 
         // if not possible, tee left to a temp. local
         if (!expr) {
@@ -3390,6 +3445,18 @@ export class Compiler extends DiagnosticEmitter {
     return compound
       ? this.compileAssignmentWithValue(expression.operand, expr, contextualType != Type.void)
       : expr;
+  }
+
+  addDebugLocation(expr: ExpressionRef, range: Range): void {
+    if (this.options.sourceMap != null) {
+      var source = range.source;
+      if (source.debugInfoIndex < 0)
+        source.debugInfoIndex = this.module.addDebugInfoFile(source.normalizedPath);
+      range.debugInfoRef = expr;
+      if (!this.currentFunction.debugLocations)
+        (this.currentFunction.debugLocations = new Array(8)).length = 0;
+      this.currentFunction.debugLocations.push(range);
+    }
   }
 }
 

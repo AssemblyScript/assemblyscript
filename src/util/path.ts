@@ -2,8 +2,10 @@ import {
   CharCode
 } from "./charcode";
 
+const separator = CharCode.SLASH;
+
 /** Normalizes the specified path, removing interior placeholders. Expects a posix-formatted string / not Windows compatible. */
-export function normalize(path: string, trimExtension: bool = false, separator: CharCode = CharCode.SLASH): string {
+export function normalize(path: string): string {
   // expects a relative path
 
   var pos = 0;
@@ -14,8 +16,8 @@ export function normalize(path: string, trimExtension: bool = false, separator: 
     pos += 2;
 
   // trim extension if requested
-  if (trimExtension && len > pos + 3 && path.charCodeAt(len - 3) == CharCode.DOT && (path.charCodeAt(len - 2) == CharCode.t || path.charCodeAt(len - 2) == CharCode.a) && path.charCodeAt(len - 1) == CharCode.s)
-    len = len - 3;
+  // if (trimExtension && len > pos + 3 && path.charCodeAt(len - 3) == CharCode.DOT && (path.charCodeAt(len - 2) == CharCode.t || path.charCodeAt(len - 2) == CharCode.a) && path.charCodeAt(len - 1) == CharCode.s)
+  //   len = len - 3;
 
   if (pos > 0 || len < path.length) {
     path = path.substring(pos, len);
@@ -81,14 +83,14 @@ export function normalize(path: string, trimExtension: bool = false, separator: 
 }
 
 /** Resolves the specified path to a normalized path relative to the specified origin. */
-export function resolve(normalizedPath: string, normalizedOrigin: string, separator: CharCode = CharCode.SLASH): string {
-  if (normalizedPath.startsWith("std:"))
+export function resolve(normalizedPath: string, normalizedOrigin: string): string {
+  if (normalizedPath.startsWith("std/"))
     return normalizedPath;
-  return normalize(dirname(normalizedOrigin, separator) + String.fromCharCode(separator) + normalizedPath);
+  return normalize(dirname(normalizedOrigin) + String.fromCharCode(separator) + normalizedPath);
 }
 
 /** Obtains the directory portion of a normalized path. */
-export function dirname(normalizedPath: string, separator: CharCode = CharCode.SLASH): string {
+export function dirname(normalizedPath: string): string {
   var pos = normalizedPath.length;
   while (--pos > 0)
     if (normalizedPath.charCodeAt(pos) == separator)

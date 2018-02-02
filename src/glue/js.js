@@ -34,15 +34,7 @@ globalScope["load"] = function load(ptr) {
 
 // Implement module stubs
 var Module = require("../module").Module;
-Module.prototype.toBinary = function toBinary(bufferSize) {
-  if (!bufferSize) bufferSize = 1024 * 1024; // FIXME: see binaryen.js-post.js in Binaryen
-  var ptr = allocate_memory(bufferSize);
-  var len = this.write(ptr, bufferSize);
-  var ret = new Uint8Array(len);
-  ret.set(binaryen.HEAPU8.subarray(ptr, ptr + len));
-  free_memory(ptr);
-  return ret;
-};
+
 Module.prototype.toText = function toText() {
   var previousPrint = binaryen.print;
   var ret = "";
@@ -51,6 +43,7 @@ Module.prototype.toText = function toText() {
   binaryen.print = previousPrint;
   return ret;
 };
+
 Module.prototype.toAsmjs = function toAsmjs() {
   var previousPrint = binaryen.print;
   var ret = "";

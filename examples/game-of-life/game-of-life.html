@@ -5,7 +5,7 @@ fetch("game-of-life.optimized.wasm").then(response => response.arrayBuffer()).th
 
   // Instantiate the module
   var module = new WebAssembly.Module(binary);
-  var instance = new WebAssembly.Instance(module, { /* no imports */ });
+  var instance = new WebAssembly.Instance(module, { env: { abort: function() {} } });
 
   // Set up the canvas with a 2D rendering context
   var cnv = document.getElementById("canvas");

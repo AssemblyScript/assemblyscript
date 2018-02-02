@@ -91,7 +91,7 @@ export class DiagnosticMessage {
 
   toString(): string {
     if (this.range)
-      return diagnosticCategoryToString(this.category) + " " + this.code.toString(10) + ": \"" + this.message + "\" in " + this.range.source.path + " @ " + this.range.start.toString(10) + "," + this.range.end.toString(10);
+      return diagnosticCategoryToString(this.category) + " " + this.code.toString(10) + ": \"" + this.message + "\" in " + this.range.source.normalizedPath + " @ " + this.range.start.toString(10) + "," + this.range.end.toString(10);
     return diagnosticCategoryToString(this.category) + " " + this.code.toString(10) + ": " + this.message;
   }
 }
@@ -122,7 +122,7 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
     }
     sb.push("\n");
     sb.push(" in ");
-    sb.push(range.source.path);
+    sb.push(range.source.normalizedPath);
     sb.push("(");
     sb.push(range.line.toString(10));
     sb.push(",");

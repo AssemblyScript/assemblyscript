@@ -37,7 +37,9 @@ import {
 import {
   Program,
   Global,
+  Function,
   FunctionPrototype,
+  Parameter,
   Local,
   ElementFlags,
   Class,
@@ -87,6 +89,18 @@ export function initialize(program: Program): void {
   // other
   addFunction(program, "changetype", true);
   addFunction(program, "assert");
+
+  // abort is special in that it is imported conditionally. for example, when
+  // compiling with noAssert=true, it isn't necessary that it is present, that
+  // is if a user doesn't call it manually.
+  var abortPrototype = addFunction(program, "abort");
+  abortPrototype.set(ElementFlags.DECLARED);
+  abortPrototype.instances.set("", new Function(abortPrototype, "abort", null, [
+    new Parameter(null, program.options.usizeType), // message (string)
+    new Parameter(null, program.options.usizeType), // file name (string)
+    new Parameter(null, Type.u32),                  // line number
+    new Parameter(null, Type.u32)                   // column number
+  ], Type.void, null));
 
   // conversions and limits
   var i32Func: FunctionPrototype,
@@ -1540,8 +1554,8 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
         compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
         return module.createUnreachable();
       }
-      if (reportNode.range.source.sourceKind != SourceKind.STDLIB)
-        compiler.warning(DiagnosticCode.Operation_is_unsafe, reportNode.range);
+      // if (reportNode.range.source.sourceKind != SourceKind.STDLIB)
+      //  compiler.warning(DiagnosticCode.Operation_is_unsafe, reportNode.range);
       return arg0; // any usize to any usize
 
     case "assert": // assert<T?>(isTrueish: T, message?: string) -> T with T != null (see also assembly.d.ts)
@@ -1904,7 +1918,7 @@ export function compileAllocate(compiler: Compiler, cls: Class, reportNode: Node
   return compiler.module.createUnreachable();
 }
 
-/** Compiles an abort wired to the global 'abort' function if present. */
+/** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(compiler: Compiler, message: Expression | null, reportNode: Node): ExpressionRef {
   var module = compiler.module;
 
@@ -1913,24 +1927,19 @@ export function compileAbort(compiler: Compiler, message: Expression | null, rep
   var stringType = compiler.program.types.get("string");
   if (abortPrototype && abortPrototype.kind == ElementKind.FUNCTION_PROTOTYPE && stringType) {
     var abortInstance = (<FunctionPrototype>abortPrototype).resolve();
-    if (abortInstance) {
-      if (abortInstance.parameters.length != 4) {
-        // TODO: validate parameter types (currently becomes a validation error if invalid)
-        var abortDeclaration = assert((<FunctionPrototype>abortPrototype).declaration);
-        compiler.error(DiagnosticCode.Expected_0_arguments_but_got_1, abortDeclaration.name.range, "4", abortInstance.parameters.length.toString(10));
-      } else if (compiler.compileFunction(abortInstance)) {
-        abort = module.createBlock(null, [
-          compiler.makeCall(abortInstance, [
-            message != null
-              ? compiler.compileExpression(message, stringType)
-              : compiler.options.usizeType.toNativeZero(module),
-            compiler.compileStaticString(reportNode.range.source.path),
-            module.createI32(reportNode.range.line),
-            module.createI32(reportNode.range.column)
-          ]),
-          abort
-        ]);
-      }
+    if (abortInstance && compiler.compileFunction(abortInstance)) { // reports
+      assert(abortInstance.parameters.length == 4); // to be sure
+      abort = module.createBlock(null, [
+        compiler.makeCall(abortInstance, [
+          message != null
+            ? compiler.compileExpression(message, stringType)
+            : compiler.options.usizeType.toNativeZero(module),
+          compiler.compileStaticString(reportNode.range.source.normalizedPath),
+          module.createI32(reportNode.range.line),
+          module.createI32(reportNode.range.column)
+        ]),
+        abort
+      ]);
     }
   }
   return abort;

@@ -12,7 +12,7 @@ module.exports = {
       }
     ]
   },
-  externals: [ "binaryen" ],
+  externals: [ "binaryen", "../../lib/binaryen" ],
   resolve: {
     extensions: [ ".ts", ".js" ]
   },

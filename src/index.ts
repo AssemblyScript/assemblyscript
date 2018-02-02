@@ -50,6 +50,8 @@ import {
   Decompiler
 } from "./decompiler";
 
+export { LIBRARY_PREFIX } from "./program";
+
 /** Parses a single source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, parser: Parser | null = null, isEntry: bool = false): Parser {
   if (!parser) {
@@ -118,6 +120,11 @@ export function setNoMemory(options: Options, noMemory: bool): void {
   options.noMemory = noMemory;
 }
 
+/** Sets the `sourceMap` option. */
+export function setSourceMap(options: Options, sourceMap: bool): void {
+  options.sourceMap = sourceMap;
+}
+
 /** Compiles the sources computed by the parser to a module. */
 export function compile(parser: Parser, options: Options | null = null): Module {
   var program = parser.finish();
@@ -131,3 +138,4 @@ export function decompile(module: Module): string {
   decompiler.decompile(module);
   return decompiler.finish();
 }
+

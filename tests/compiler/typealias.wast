@@ -7,6 +7,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $typealias/alias (; 0 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ typealias.ts:4:9
   (return
    (get_local $0)
   )
@@ -45,6 +46,7 @@
   FUNCTION_PROTOTYPE: grow_memory
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
+  FUNCTION_PROTOTYPE: abort
   FUNCTION_PROTOTYPE: i8
   FUNCTION_PROTOTYPE: i16
   FUNCTION_PROTOTYPE: i32

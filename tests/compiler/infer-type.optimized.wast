@@ -23,13 +23,16 @@
   )
   (loop $continue|0
    (if
+    ;;@ infer-type.ts:44:24
     (i32.lt_u
      (get_local $0)
      (i32.const 10)
     )
     (block
+     ;;@ infer-type.ts:44:31
      (set_local $0
       (i32.add
+       ;;@ infer-type.ts:44:33
        (get_local $0)
        (i32.const 1)
       )

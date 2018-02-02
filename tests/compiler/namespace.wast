@@ -10,25 +10,32 @@
  (export "memory" (memory $0))
  (start $start)
  (func $namespace/Outer.Inner.aFunc (; 0 ;) (type $i) (result i32)
+  ;;@ namespace.ts:4:42
   (return
    (get_global $namespace/Outer.Inner.aVar)
   )
  )
  (func $namespace/Joined.anotherFunc (; 1 ;) (type $i) (result i32)
+  ;;@ namespace.ts:17:53
   (return
+   ;;@ namespace.ts:17:46
    (i32.const 3)
   )
  )
  (func $start (; 2 ;) (type $v)
+  ;;@ namespace.ts:9:0
   (drop
    (get_global $namespace/Outer.Inner.aVar)
   )
+  ;;@ namespace.ts:10:12
   (drop
    (call $namespace/Outer.Inner.aFunc)
   )
+  ;;@ namespace.ts:11:0
   (drop
    (i32.const 1)
   )
+  ;;@ namespace.ts:20:7
   (drop
    (call $namespace/Joined.anotherFunc)
   )
@@ -64,6 +71,7 @@
   FUNCTION_PROTOTYPE: grow_memory
   FUNCTION_PROTOTYPE: changetype
   FUNCTION_PROTOTYPE: assert
+  FUNCTION_PROTOTYPE: abort
   FUNCTION_PROTOTYPE: i8
   FUNCTION_PROTOTYPE: i16
   FUNCTION_PROTOTYPE: i32

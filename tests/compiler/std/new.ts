@@ -1,4 +1,4 @@
-import "std:memory/arena";
+import "allocator/arena";
 
 class AClass {
   static aStaticField: i32 = 0;

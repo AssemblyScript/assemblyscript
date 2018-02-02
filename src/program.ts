@@ -73,7 +73,10 @@ import {
 } from "./ast";
 
 import {
-  NativeType
+  Module,
+  NativeType,
+  ExpressionRef,
+  FunctionRef,
 } from "./module";
 
 /** Path delimiter inserted between file system levels. */
@@ -88,6 +91,10 @@ export const SETTER_PREFIX = "set:";
 export const INSTANCE_DELIMITER = "#";
 /** Delimiter used between class and namespace names and static members. */
 export const STATIC_DELIMITER = ".";
+/** Substitution used to indicate a library directory. */
+export const LIBRARY_SUBST = "(lib)";
+/** Library directory prefix. */
+export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
 
 class QueuedExport {
   isReExport: bool;
@@ -1454,6 +1461,9 @@ export class Global extends VariableLikeElement {
             case ModifierKind.LET: this.set(ElementFlags.SCOPED); break;
             case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
             case ModifierKind.READONLY: this.set(this.declaration.initializer ? ElementFlags.CONSTANT | ElementFlags.READONLY : ElementFlags.READONLY); break;
+            case ModifierKind.PUBLIC:
+            case ModifierKind.PRIVATE:
+            case ModifierKind.PROTECTED:
             case ModifierKind.STATIC: break; // static fields become globals
             default: throw new Error("unexpected modifier");
           }
@@ -1472,14 +1482,14 @@ export class Parameter {
   // not an Element on its own
 
   /** Parameter name. */
-  name: string;
+  name: string | null;
   /** Parameter type. */
   type: Type;
   /** Parameter initializer. */
   initializer: Expression | null;
 
   /** Constructs a new function parameter. */
-  constructor(name: string, type: Type, initializer: Expression | null = null) {
+  constructor(name: string | null, type: Type, initializer: Expression | null = null) {
     this.name = name;
     this.type = type;
     this.initializer = initializer;
@@ -1591,10 +1601,11 @@ export class FunctionPrototype extends Element {
     var parameterTypes = new Array<Type>(k);
     var typeNode: TypeNode | null;
     for (i = 0; i < k; ++i) {
-      typeNode = assert(declaration.parameters[i].type);
+      var parameterDeclaration = declaration.parameters[i];
+      typeNode = assert(parameterDeclaration.type);
       var parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
       if (parameterType) {
-        parameters[i] = new Parameter(declaration.parameters[i].name.name, parameterType, declaration.parameters[i].initializer);
+        parameters[i] = new Parameter(parameterDeclaration.name ? parameterDeclaration.name.name : null, parameterType, parameterDeclaration.initializer);
         parameterTypes[i] = parameterType;
       } else
         return null;
@@ -1683,6 +1694,8 @@ export class Function extends Element {
   contextualTypeArguments: Map<string,Type> | null;
   /** Current control flow. */
   flow: Flow;
+  /** Remembered debug locations. */
+  debugLocations: Range[] | null = null;
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
@@ -1696,21 +1709,24 @@ export class Function extends Element {
     this.returnType = returnType;
     this.instanceMethodOf = instanceMethodOf;
     this.flags = prototype.flags;
-    var localIndex = 0;
-    if (instanceMethodOf) {
-      assert(this.is(ElementFlags.INSTANCE)); // internal error
-      this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));
-      if (instanceMethodOf.contextualTypeArguments) {
-        if (!this.contextualTypeArguments)
-          this.contextualTypeArguments = new Map();
-        for (var [inheritedName, inheritedType] of instanceMethodOf.contextualTypeArguments)
-          this.contextualTypeArguments.set(inheritedName, inheritedType);
+    if (!prototype.is(ElementFlags.BUILTIN | ElementFlags.DECLARED)) {
+      var localIndex = 0;
+      if (instanceMethodOf) {
+        assert(this.is(ElementFlags.INSTANCE)); // internal error
+        this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));
+        if (instanceMethodOf.contextualTypeArguments) {
+          if (!this.contextualTypeArguments)
+            this.contextualTypeArguments = new Map();
+          for (var [inheritedName, inheritedType] of instanceMethodOf.contextualTypeArguments)
+            this.contextualTypeArguments.set(inheritedName, inheritedType);
+        }
+      } else
+        assert(!this.is(ElementFlags.INSTANCE)); // internal error
+      for (var i = 0, k = parameters.length; i < k; ++i) {
+        var parameter = parameters[i];
+        var parameterName = assert(parameter.name, "parameter must be named"); // not a builtin or declared
+        this.locals.set(parameterName, new Local(prototype.program, parameterName, localIndex++, parameter.type));
       }
-    } else
-      assert(!this.is(ElementFlags.INSTANCE)); // internal error
-    for (var i = 0, k = parameters.length; i < k; ++i) {
-      var parameter = parameters[i];
-      this.locals.set(parameter.name, new Local(prototype.program, parameter.name, localIndex++, parameter.type));
     }
     this.flow = Flow.create(this);
   }
@@ -1806,11 +1822,20 @@ export class Function extends Element {
   }
 
   /** Finalizes the function once compiled, releasing no longer needed resources. */
-  finalize(): void {
+  finalize(module: Module, ref: FunctionRef): void {
     assert(!this.breakStack || !this.breakStack.length); // internal error
     this.breakStack = null;
     this.breakContext = null;
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
+    if (this.program.options.sourceMap) {
+      var debugLocations = this.debugLocations;
+      if (debugLocations)
+        for (var i = 0, k = debugLocations.length; i < k; ++i) {
+          var debugLocation = debugLocations[i];
+          module.setDebugLocation(ref, debugLocation.debugInfoRef, debugLocation.source.debugInfoIndex, debugLocation.line, debugLocation.column);
+        }
+    }
+    this.debugLocations = null;
   }
 
   /** Returns the TypeScript representation of this function. */

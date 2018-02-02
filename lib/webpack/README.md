@@ -1,4 +1,4 @@
-![](https://s.gravatar.com/avatar/f105de3decfafc734b8eabe9a960b25d?size=64) webpack
+![](https://s.gravatar.com/avatar/f105de3decfafc734b8eabe9a960b25d?size=48) webpack
 =================
 
 [webpack](https://webpack.js.org/) loader for [AssemblyScript](http://assemblyscript.org) modules.
@@ -7,9 +7,9 @@ Usage
 -----
 
 ```js
-import Module from "@assemblyscript/webpack!module.wasm";
+import MyModule from "@assemblyscript/webpack!mymodule.wasm";
 
-var myModule = Module({ imports: { ... }});
+var myModule = new MyModule({ imports: { /* if any */ } });
 ```
 
-TODO: Wire .ts files to the compiler API, accepting options, but also keep raw .wasm support.
+TODO: Pipe .ts files through `asc`, accepting the usual options, but also keep raw .wasm support.

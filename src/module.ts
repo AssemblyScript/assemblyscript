@@ -238,7 +238,7 @@ export class MemorySegment {
 export class Module {
 
   ref: ModuleRef;
-  lit: BinaryenLiteral;
+  out: usize;
 
   static readonly MAX_MEMORY_WASM32: Index = 0xffff;
   // TODO: static readonly MAX_MEMORY_WASM64
@@ -246,7 +246,7 @@ export class Module {
   static create(): Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
-    module.lit = changetype<BinaryenLiteral>(allocate_memory(16));
+    module.out = allocate_memory(16);
     return module;
   }
 
@@ -255,7 +255,7 @@ export class Module {
     try {
       var module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
-      module.lit = changetype<BinaryenLiteral>(allocate_memory(16));
+      module.out = allocate_memory(3 * 8); // LLVM C-ABI, max used is 3 * usize
        return module;
     } finally {
       free_memory(changetype<usize>(cArr));
@@ -289,23 +289,27 @@ export class Module {
   // expressions
 
   createI32(value: i32): ExpressionRef {
-    _BinaryenLiteralInt32(this.lit, value);
-    return _BinaryenConst(this.ref, this.lit);
+    var out = this.out;
+    _BinaryenLiteralInt32(out, value);
+    return _BinaryenConst(this.ref, out);
   }
 
   createI64(lo: i32, hi: i32 = 0): ExpressionRef {
-    _BinaryenLiteralInt64(this.lit, lo, hi);
-    return _BinaryenConst(this.ref, this.lit);
+    var out = this.out;
+    _BinaryenLiteralInt64(out, lo, hi);
+    return _BinaryenConst(this.ref, out);
   }
 
   createF32(value: f32): ExpressionRef {
-    _BinaryenLiteralFloat32(this.lit, value);
-    return _BinaryenConst(this.ref, this.lit);
+    var out = this.out;
+    _BinaryenLiteralFloat32(out, value);
+    return _BinaryenConst(this.ref, out);
   }
 
   createF64(value: f64): ExpressionRef {
-    _BinaryenLiteralFloat64(this.lit, value);
-    return _BinaryenConst(this.ref, this.lit);
+    var out = this.out;
+    _BinaryenLiteralFloat64(out, value);
+    return _BinaryenConst(this.ref, out);
   }
 
   createUnary(op: UnaryOp, expr: ExpressionRef): ExpressionRef {
@@ -713,10 +717,6 @@ export class Module {
     _BinaryenModuleInterpret(this.ref);
   }
 
-  write(output: usize, outputSize: usize = 1048576): usize {
-    return _BinaryenModuleWrite(this.ref, output, outputSize);
-  }
-
   print(): void {
     _BinaryenModulePrint(this.ref);
   }
@@ -725,9 +725,25 @@ export class Module {
     _BinaryenModulePrintAsmjs(this.ref);
   }
 
-  toBinary(bufferSize: usize = 1048576): Uint8Array {
-    // FIXME: target specific / JS glue overrides this
-    throw new Error("not implemented");
+  toBinary(sourceMapUrl: string | null): Binary {
+    var out = this.out;
+    var cStr = allocString(sourceMapUrl);
+    var binaryPtr: usize = 0;
+    var sourceMapPtr: usize = 0;
+    try {
+      _BinaryenModuleAllocateAndWrite(out, this.ref, cStr);
+      binaryPtr    = readInt(out);
+      var binaryBytes  = readInt(out + 4);
+      sourceMapPtr = readInt(out + 4 * 2);
+      var ret = new Binary();
+      ret.output = readBuffer(binaryPtr, binaryBytes);
+      ret.sourceMap = readString(sourceMapPtr);
+      return ret;
+    } finally {
+      if (cStr) free_memory(cStr);
+      if (binaryPtr) free_memory(binaryPtr);
+      if (sourceMapPtr) free_memory(sourceMapPtr);
+    }
   }
 
   toText(): string {
@@ -738,7 +754,7 @@ export class Module {
   dispose(): void {
     if (!this.ref) return; // sic
     _BinaryenModuleDispose(this.ref);
-    free_memory(changetype<usize>(this.lit));
+    free_memory(this.out);
   }
 
   createRelooper(): Relooper {
@@ -793,6 +809,25 @@ export class Module {
         return _BinaryenBinary(this.ref, _BinaryenBinaryGetOp(expr), nested1, nested2);
     }
     return 0;
+  }
+
+  // source map generation
+
+  addDebugInfoFile(name: string): Index {
+    var cStr = allocString(name);
+    try {
+      return _BinaryenModuleAddDebugInfoFileName(this.ref, cStr);
+    } finally {
+      free_memory(cStr);
+    }
+  }
+
+  getDebugInfoFile(index: Index): string | null {
+    return readString(_BinaryenModuleGetDebugInfoFileName(this.ref, index));
+  }
+
+  setDebugLocation(func: FunctionRef, expr: ExpressionRef, fileIndex: Index, lineNumber: Index, columnNumber: Index): void {
+    _BinaryenFunctionSetDebugLocation(func, expr, fileIndex, lineNumber, columnNumber);
   }
 }
 
@@ -934,6 +969,22 @@ function allocString(str: string | null): usize {
   return ptr;
 }
 
+export function readInt(ptr: usize): i32 {
+  return (
+     load<u8>(ptr    )        |
+    (load<u8>(ptr + 1) <<  8) |
+    (load<u8>(ptr + 2) << 16) |
+    (load<u8>(ptr + 3) << 24)
+  );
+}
+
+export function readBuffer(ptr: usize, length: usize): Uint8Array {
+  var ret = new Uint8Array(length);
+  for (var i: usize = 0; i < length; ++i)
+    ret[i] = load<u8>(ptr + i);
+  return ret;
+}
+
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
   var arr = new Array<i32>();
@@ -977,4 +1028,12 @@ export function readString(ptr: usize): string | null {
   }
   // return String.fromCharCodes(arr);
   return String.fromCodePoints(arr);
+}
+
+/** Result structure of {@link Module#toBinary}. */
+class Binary {
+  /** WebAssembly binary. */
+  output: Uint8Array;
+  /** Source map, if generated. */
+  sourceMap: string | null;
 }

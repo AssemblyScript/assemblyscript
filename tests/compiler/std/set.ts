@@ -1,4 +1,4 @@
-import "std:memory/arena";
+import "allocator/arena";
 
 // note that this doesn't test a real set implementation yet, see std/assembly/set.ts
 
