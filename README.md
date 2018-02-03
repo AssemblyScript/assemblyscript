@@ -19,13 +19,13 @@ A few early examples to get an idea:
   Exposes WebAssembly's i64 operations to JavaScript using 32-bit integers (low and high bits).
 
 * **[PSON decoder](./examples/pson)**<br />
-  A PSON decoder implemented in AssemblyScript.
+  A simple decoder for the PSON binary format.
 
 * **[TLSF memory allocator](./examples/tlsf)**<br />
-  An implementation of the TLSF memory allocator in AssemblyScript.
+  An implementation of the TLSF memory allocator.
 
 * **[μgc garbage collector](./examples/ugc)**<br />
-  A port of μgc to AssemblyScript.
+  A port of the μgc garbage collector library.
 
 Or browse the [compiler tests](./tests/compiler) for a more in-depth overview of what's supported already. One of them is a [showcase](./tests/compiler/showcase.ts).
 

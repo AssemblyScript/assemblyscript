@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("./asc.js");
+require("./asc.js").main(process.argv.slice(2));
