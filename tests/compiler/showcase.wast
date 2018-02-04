@@ -1,4 +1,5 @@
 (module
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
@@ -8,6 +9,7 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ifv (func (param i32 f32)))
  (type $if (func (param i32) (result f32)))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $showcase/aConstantGlobal i32 (i32.const 42))
  (global $showcase/anExportedConstantGlobal f32 (f32.const 42))
  (global $showcase/aMutableGlobal (mut i32) (i32.const 42))
@@ -76,8 +78,13 @@
  (global $memcpy/dest (mut i32) (i32.const 0))
  (global $showcase/aClassInstance (mut i32) (i32.const 8))
  (global $showcase/AClass.aStaticField (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 140))
  (memory $0 1)
+ (data (i32.const 8) "\n\00\00\00l\00o\00g\00i\00c\00a\00l\00.\00t\00s\00")
+ (data (i32.const 32) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
+ (data (i32.const 64) "\0b\00\00\00s\00h\00o\00w\00c\00a\00s\00e\00.\00t\00s\00")
+ (data (i32.const 96) "\t\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s\00")
+ (data (i32.const 120) "\07\00\00\00f\00m\00o\00d\00.\00t\00s\00")
  (export "anExportedConstantGlobal" (global $showcase/anExportedConstantGlobal))
  (export "aConstantGlobal" (global $showcase/aConstantGlobal))
  (export "anAliasedConstantGlobal" (global $showcase/anExportedConstantGlobal))
@@ -88,13 +95,13 @@
  (export "anExportedFunction" (func $showcase/anExportedFunction))
  (export "memory" (memory $0))
  (start $start)
- (func $showcase/ANamespace.aNamespacedFunction (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $showcase/ANamespace.aNamespacedFunction (; 1 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ showcase.ts:38:60
   (return
    (get_local $0)
   )
  )
- (func $showcase/addGeneric<i32> (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $showcase/addGeneric<i32> (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   ;;@ showcase.ts:64:16
   (return
    ;;@ showcase.ts:64:9
@@ -105,7 +112,7 @@
    )
   )
  )
- (func $showcase/addGeneric<f32> (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $showcase/addGeneric<f32> (; 3 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   ;;@ showcase.ts:64:16
   (return
    ;;@ showcase.ts:64:9
@@ -116,7 +123,7 @@
    )
   )
  )
- (func $showcase/addGeneric<f64> (; 3 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $showcase/addGeneric<f64> (; 4 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   ;;@ showcase.ts:64:16
   (return
    ;;@ showcase.ts:64:9
@@ -127,9 +134,9 @@
    )
   )
  )
- (func $showcase/anExportedFunction (; 4 ;) (type $v)
+ (func $showcase/anExportedFunction (; 5 ;) (type $v)
  )
- (func $memcpy/memcpy (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memcpy/memcpy (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2386,7 +2393,7 @@
    (get_local $3)
   )
  )
- (func $fmod/fmod (; 6 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $fmod/fmod (; 7 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -3025,7 +3032,7 @@
    )
   )
  )
- (func $fmod/fmodf (; 7 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $fmod/fmodf (; 8 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3644,7 +3651,7 @@
    )
   )
  )
- (func $showcase/ADerivedClass#set:aWildAccessorAppears (; 8 ;) (type $ifv) (param $0 i32) (param $1 f32)
+ (func $showcase/ADerivedClass#set:aWildAccessorAppears (; 9 ;) (type $ifv) (param $0 i32) (param $1 f32)
   ;;@ showcase.ts:99:39
   (f32.store offset=4
    (get_local $0)
@@ -3652,7 +3659,7 @@
    (get_local $1)
   )
  )
- (func $showcase/ADerivedClass#get:aWildAccessorAppears (; 9 ;) (type $if) (param $0 i32) (result f32)
+ (func $showcase/ADerivedClass#get:aWildAccessorAppears (; 10 ;) (type $if) (param $0 i32) (result f32)
   ;;@ showcase.ts:98:48
   (return
    ;;@ showcase.ts:98:43
@@ -3661,7 +3668,7 @@
    )
   )
  )
- (func $start (; 10 ;) (type $v)
+ (func $start (; 11 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   (local $2 f32)
@@ -5633,7 +5640,15 @@
      (i32.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 12)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ logical.ts:14:0
   (set_global $logical/i
@@ -5658,7 +5673,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 15)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ logical.ts:19:0
   (set_global $logical/I
@@ -5683,7 +5706,15 @@
      (i64.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 20)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ logical.ts:22:0
   (set_global $logical/I
@@ -5708,7 +5739,15 @@
      (i64.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 23)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ logical.ts:27:0
   (set_global $logical/f
@@ -5733,7 +5772,15 @@
      (f32.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 28)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ logical.ts:30:0
   (set_global $logical/f
@@ -5758,7 +5805,15 @@
      (f32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 31)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ logical.ts:35:0
   (set_global $logical/F
@@ -5783,7 +5838,15 @@
      (f64.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 36)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ logical.ts:38:0
   (set_global $logical/F
@@ -5808,7 +5871,15 @@
      (f64.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 39)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:7:0
   (drop
@@ -5980,7 +6051,15 @@
      (i32.const 42)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 21)
+     (i32.const 19)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:22:0
   (set_global $builtins/i
@@ -6010,7 +6089,15 @@
      (i32.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 22)
+     (i32.const 20)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:23:0
   (set_global $builtins/i
@@ -6040,7 +6127,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 23)
+     (i32.const 20)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:27:0
   (drop
@@ -6178,7 +6273,15 @@
      (i64.const 42)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 39)
+     (i32.const 19)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:40:0
   (set_global $builtins/I
@@ -6208,7 +6311,15 @@
      (i64.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 40)
+     (i32.const 20)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:41:0
   (set_global $builtins/I
@@ -6238,7 +6349,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 41)
+     (i32.const 20)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:47:0
   (drop
@@ -7365,7 +7484,15 @@
      (f64.const nan:0x8000000000000)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 221)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:222:0
   (if
@@ -7379,7 +7506,15 @@
      (get_local $2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 222)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:223:0
   (if
@@ -7393,7 +7528,15 @@
      (get_local $3)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 223)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:224:0
   (if
@@ -7419,7 +7562,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 224)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:225:0
   (if
@@ -7445,7 +7596,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 225)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:226:0
   (if
@@ -7471,7 +7630,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 226)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:227:0
   (if
@@ -7497,7 +7664,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 227)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:228:0
   (if
@@ -7520,7 +7695,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 228)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:229:0
   (if
@@ -7543,7 +7726,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 229)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:242:0
   (if
@@ -7555,7 +7746,15 @@
      (i32.const -128)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 242)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:243:0
   (if
@@ -7567,7 +7766,15 @@
      (i32.const 127)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 243)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:244:0
   (if
@@ -7579,7 +7786,15 @@
      (i32.const -32768)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 244)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:245:0
   (if
@@ -7591,7 +7806,15 @@
      (i32.const 32767)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 245)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:246:0
   (if
@@ -7603,7 +7826,15 @@
      (i32.const -2147483648)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 246)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:247:0
   (if
@@ -7615,7 +7846,15 @@
      (i32.const 2147483647)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 247)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:248:0
   (if
@@ -7627,7 +7866,15 @@
      (i64.const -9223372036854775808)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 248)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:249:0
   (if
@@ -7639,7 +7886,15 @@
      (i64.const 9223372036854775807)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 249)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:251:0
   (if
@@ -7651,7 +7906,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 251)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:252:0
   (if
@@ -7663,7 +7926,15 @@
      (i32.const 255)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 252)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:253:0
   (if
@@ -7675,7 +7946,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 253)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:254:0
   (if
@@ -7687,7 +7966,15 @@
      (i32.const 65535)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 254)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:255:0
   (if
@@ -7699,7 +7986,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 255)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:256:0
   (if
@@ -7711,7 +8006,15 @@
      (i32.const -1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 256)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:257:0
   (if
@@ -7723,7 +8026,15 @@
      (i64.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 257)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:258:0
   (if
@@ -7735,7 +8046,15 @@
      (i64.const -1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 258)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:259:0
   (if
@@ -7747,7 +8066,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 259)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:259:29
   (if
@@ -7759,7 +8086,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 259)
+     (i32.const 29)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:260:0
   (if
@@ -7771,7 +8106,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 260)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:260:29
   (if
@@ -7783,7 +8126,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 260)
+     (i32.const 29)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:262:0
   (if
@@ -7798,7 +8149,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 262)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:263:0
   (if
@@ -7810,7 +8169,15 @@
      (f32.const 3402823466385288598117041e14)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 263)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:264:0
   (if
@@ -7825,7 +8192,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 264)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:265:0
   (if
@@ -7837,7 +8212,15 @@
      (f32.const 16777215)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 265)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:266:0
   (if
@@ -7849,7 +8232,15 @@
      (f32.const 1.1920928955078125e-07)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 266)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:267:0
   (if
@@ -7864,7 +8255,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 267)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:268:0
   (if
@@ -7876,7 +8275,15 @@
      (f64.const 1797693134862315708145274e284)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 268)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:269:0
   (if
@@ -7891,7 +8298,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 269)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:270:0
   (if
@@ -7903,7 +8318,15 @@
      (f64.const 9007199254740991)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 270)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:271:0
   (if
@@ -7915,7 +8338,15 @@
      (f64.const 2.220446049250313e-16)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 271)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:42:0
   (if
@@ -7931,7 +8362,15 @@
      (i32.const 42)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 42)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   (set_global $showcase/AnEnum.FORTYTWO
    ;;@ showcase.ts:51:13
@@ -7953,7 +8392,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 54)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:55:0
   (if
@@ -7965,7 +8412,15 @@
      (i32.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 55)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:56:0
   (if
@@ -7977,7 +8432,15 @@
      (i32.const 4)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 56)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:57:0
   (if
@@ -7989,7 +8452,15 @@
      (i32.const 5)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 57)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:58:0
   (if
@@ -8001,7 +8472,15 @@
      (i32.const 42)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 58)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:59:0
   (if
@@ -8013,7 +8492,15 @@
      (i32.const 43)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 59)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:62:0
   (block
@@ -8138,7 +8625,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 151)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:152:0
   (if
@@ -8153,7 +8648,15 @@
      (i64.const 1229783084848853777)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 152)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:154:0
   (set_global $memcpy/dest
@@ -8177,7 +8680,15 @@
      (i32.const 8)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 155)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:156:0
   (if
@@ -8192,7 +8703,15 @@
      (i64.const 1229783084848853777)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 156)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:157:0
   (if
@@ -8211,7 +8730,15 @@
      (i64.const 2459565876494606882)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 157)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:158:0
   (if
@@ -8230,7 +8757,15 @@
      (i64.const 3689348814741910323)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 158)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:159:0
   (if
@@ -8249,7 +8784,15 @@
      (i64.const 4919131752989213764)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 159)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:161:0
   (set_global $memcpy/dest
@@ -8284,7 +8827,15 @@
      (i64.const 4919131679688438545)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 162)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:164:0
   (set_global $memcpy/dest
@@ -8319,7 +8870,15 @@
      (i64.const 4919131679688438545)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 165)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:166:0
   (if
@@ -8338,7 +8897,15 @@
      (i64.const 3689348814741910323)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 166)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:167:0
   (if
@@ -8357,7 +8924,15 @@
      (i64.const 3694152654344438852)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 167)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memcpy.ts:168:0
   (if
@@ -8376,7 +8951,15 @@
      (i64.const 4919131752989213764)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 168)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:65:0
   (if
@@ -8395,7 +8978,15 @@
      (get_local $3)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 65)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:66:0
   (if
@@ -8412,7 +9003,15 @@
      (f64.const 0.5)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 66)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:67:0
   (if
@@ -8433,7 +9032,15 @@
      (f64.const 2.220446049250313e-16)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 67)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:68:0
   (if
@@ -8454,7 +9061,15 @@
      (f64.const 2.220446049250313e-16)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 68)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:134:0
   (if
@@ -8473,7 +9088,15 @@
      (get_local $2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 134)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:135:0
   (if
@@ -8490,7 +9113,15 @@
      (f32.const 0.5)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 135)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:136:0
   (if
@@ -8511,7 +9142,15 @@
      (f32.const 1.1920928955078125e-07)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 136)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:137:0
   (if
@@ -8532,7 +9171,15 @@
      (f32.const 1.1920928955078125e-07)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 137)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:102:0
   (i32.store
@@ -8559,7 +9206,15 @@
      (i32.const 42)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 104)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:105:0
   (if
@@ -8574,7 +9229,15 @@
      (f32.const 9e3)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 105)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:107:0
   (call $showcase/ADerivedClass#set:aWildAccessorAppears
@@ -8594,7 +9257,15 @@
      (f32.const 123)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 108)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ showcase.ts:110:0
   (set_global $showcase/AClass.aStaticField
@@ -8611,110 +9282,15 @@
      (get_global $showcase/aClassInstance)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 64)
+     (i32.const 111)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
  )
 )
-(;
-[program.elements]
-  GLOBAL: NaN
-  GLOBAL: Infinity
-  FUNCTION_PROTOTYPE: isNaN
-  FUNCTION_PROTOTYPE: isFinite
-  FUNCTION_PROTOTYPE: clz
-  FUNCTION_PROTOTYPE: ctz
-  FUNCTION_PROTOTYPE: popcnt
-  FUNCTION_PROTOTYPE: rotl
-  FUNCTION_PROTOTYPE: rotr
-  FUNCTION_PROTOTYPE: abs
-  FUNCTION_PROTOTYPE: max
-  FUNCTION_PROTOTYPE: min
-  FUNCTION_PROTOTYPE: ceil
-  FUNCTION_PROTOTYPE: floor
-  FUNCTION_PROTOTYPE: copysign
-  FUNCTION_PROTOTYPE: nearest
-  FUNCTION_PROTOTYPE: reinterpret
-  FUNCTION_PROTOTYPE: sqrt
-  FUNCTION_PROTOTYPE: trunc
-  FUNCTION_PROTOTYPE: load
-  FUNCTION_PROTOTYPE: store
-  FUNCTION_PROTOTYPE: sizeof
-  FUNCTION_PROTOTYPE: select
-  FUNCTION_PROTOTYPE: unreachable
-  FUNCTION_PROTOTYPE: current_memory
-  FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: changetype
-  FUNCTION_PROTOTYPE: assert
-  FUNCTION_PROTOTYPE: abort
-  FUNCTION_PROTOTYPE: i8
-  FUNCTION_PROTOTYPE: i16
-  FUNCTION_PROTOTYPE: i32
-  FUNCTION_PROTOTYPE: i64
-  FUNCTION_PROTOTYPE: u8
-  FUNCTION_PROTOTYPE: u16
-  FUNCTION_PROTOTYPE: u32
-  FUNCTION_PROTOTYPE: u64
-  FUNCTION_PROTOTYPE: bool
-  FUNCTION_PROTOTYPE: f32
-  FUNCTION_PROTOTYPE: f64
-  FUNCTION_PROTOTYPE: isize
-  FUNCTION_PROTOTYPE: usize
-  GLOBAL: HEAP_BASE
-  GLOBAL: showcase/aConstantGlobal
-  GLOBAL: showcase/anExportedConstantGlobal
-  GLOBAL: showcase/aMutableGlobal
-  GLOBAL: showcase/anInferredI32
-  GLOBAL: showcase/anInferredI64
-  GLOBAL: showcase/anInferredF64
-  GLOBAL: showcase/anInferredF32
-  NAMESPACE: showcase/ANamespace
-  GLOBAL: showcase/ANamespace.aNamespacedGlobal
-  FUNCTION_PROTOTYPE: showcase/ANamespace.aNamespacedFunction
-  ENUM: showcase/AnEnum
-  FUNCTION_PROTOTYPE: showcase/addGeneric
-  FUNCTION_PROTOTYPE: showcase/anUnusedFunction
-  FUNCTION_PROTOTYPE: showcase/anExportedFunction
-  CLASS_PROTOTYPE: showcase/AClass
-  GLOBAL: showcase/AClass.aStaticField
-  CLASS_PROTOTYPE: showcase/ADerivedClass
-  PROPERTY: showcase/ADerivedClass#aWildAccessorAppears
-  GLOBAL: showcase/aClassInstance
-  GLOBAL: unary/i
-  GLOBAL: unary/I
-  GLOBAL: unary/f
-  GLOBAL: unary/F
-  GLOBAL: binary/b
-  GLOBAL: binary/i
-  GLOBAL: binary/I
-  GLOBAL: binary/f
-  GLOBAL: binary/F
-  GLOBAL: logical/i
-  GLOBAL: logical/I
-  GLOBAL: logical/f
-  GLOBAL: logical/F
-  GLOBAL: builtins/b
-  GLOBAL: builtins/i
-  GLOBAL: builtins/I
-  GLOBAL: builtins/f
-  GLOBAL: builtins/F
-  GLOBAL: builtins/constantOffset
-  GLOBAL: builtins/u
-  GLOBAL: builtins/U
-  GLOBAL: builtins/s
-  FUNCTION_PROTOTYPE: builtins/test
-  FUNCTION_PROTOTYPE: memcpy/memcpy
-  GLOBAL: memcpy/base
-  GLOBAL: memcpy/dest
-  FUNCTION_PROTOTYPE: fmod/fmod
-  FUNCTION_PROTOTYPE: fmod/fmodf
-[program.exports]
-  GLOBAL: showcase/anExportedConstantGlobal
-  GLOBAL: showcase/aConstantGlobal
-  GLOBAL: showcase/anAliasedConstantGlobal
-  ENUM: showcase/AnEnum
-  FUNCTION_PROTOTYPE: showcase/anExportedFunction
-  FUNCTION_PROTOTYPE: builtins/test
-  FUNCTION_PROTOTYPE: memcpy/memcpy
-  FUNCTION_PROTOTYPE: fmod/fmod
-  FUNCTION_PROTOTYPE: fmod/fmodf
-;)

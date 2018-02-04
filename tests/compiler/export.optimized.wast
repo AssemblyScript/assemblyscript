@@ -14,26 +14,20 @@
  (export "two" (func $export/ns.two))
  (export "memory" (memory $0))
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ export.ts:2:9
   (i32.add
    (get_local $0)
-   ;;@ export.ts:2:13
    (get_local $1)
   )
  )
  (func $export/sub (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ export.ts:6:9
   (i32.sub
    (get_local $0)
-   ;;@ export.ts:6:13
    (get_local $1)
   )
  )
  (func $export/mul (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ export.ts:12:9
   (i32.mul
    (get_local $0)
-   ;;@ export.ts:12:13
    (get_local $1)
   )
  )

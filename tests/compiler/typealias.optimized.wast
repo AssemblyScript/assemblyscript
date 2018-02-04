@@ -6,7 +6,6 @@
  (export "memory" (memory $0))
  (start $start)
  (func $typealias/alias (; 0 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ typealias.ts:4:9
   (get_local $0)
  )
  (func $start (; 1 ;) (type $v)

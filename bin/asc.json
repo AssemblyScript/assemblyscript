@@ -38,6 +38,10 @@
     "type": "boolean",
     "aliases": [ "c", "check" ]
   },
+  "baseDir": {
+    "desc": "Specifies the base directory of input and output files.",
+    "type": "string"
+  },
   "outFile": {
     "desc": "Specifies the output file. File extension indicates format.",
     "type": "string",

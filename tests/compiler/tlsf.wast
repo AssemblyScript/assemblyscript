@@ -1,11 +1,12 @@
 (module
  (type $ii (func (param i32) (result i32)))
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iv (func (param i32)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $tlsf/ALIGN_SIZE_LOG2 i32 (i32.const 3))
  (global $tlsf/ALIGN_SIZE i32 (i32.const 8))
  (global $tlsf/SL_INDEX_COUNT_LOG2 i32 (i32.const 5))
@@ -29,12 +30,13 @@
  (global $tlsf/CONTROL$SL_BITMAP_OFFSET i32 (i32.const 20))
  (global $tlsf/CONTROL$BLOCKS_OFFSET i32 (i32.const 112))
  (global $tlsf/CONTROL$SIZE i32 (i32.const 3056))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 28))
  (memory $0 1)
+ (data (i32.const 8) "\07\00\00\00t\00l\00s\00f\00.\00t\00s\00")
  (export "control$construct" (func $tlsf/control$construct))
  (export "memory" (memory $0))
  (start $start)
- (func $tlsf/fls (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $tlsf/fls (; 1 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ tlsf.ts:7:39
   (return
    ;;@ tlsf.ts:7:9
@@ -61,7 +63,7 @@
    )
   )
  )
- (func $tlsf/ffs (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $tlsf/ffs (; 2 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ tlsf.ts:17:35
   (return
    ;;@ tlsf.ts:17:9
@@ -84,7 +86,7 @@
    )
   )
  )
- (func $tlsf/block$set_next_free (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $tlsf/block$set_next_free (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
   ;;@ tlsf.ts:89:2
   (i32.store
    ;;@ tlsf.ts:89:15
@@ -97,7 +99,7 @@
    (get_local $1)
   )
  )
- (func $tlsf/block$set_prev_free (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $tlsf/block$set_prev_free (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
   ;;@ tlsf.ts:97:2
   (i32.store
    ;;@ tlsf.ts:97:15
@@ -110,7 +112,7 @@
    (get_local $1)
   )
  )
- (func $tlsf/control$set_fl_bitmap (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $tlsf/control$set_fl_bitmap (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
   ;;@ tlsf.ts:153:2
   (i32.store
    ;;@ tlsf.ts:153:13
@@ -123,7 +125,7 @@
    (get_local $1)
   )
  )
- (func $tlsf/control$set_sl_bitmap (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $tlsf/control$set_sl_bitmap (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   ;;@ tlsf.ts:162:2
   (if
    (i32.eqz
@@ -134,7 +136,15 @@
      (i32.const 23)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 162)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:163:2
   (i32.store
@@ -156,7 +166,7 @@
    (get_local $2)
   )
  )
- (func $tlsf/control$set_block (; 6 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $tlsf/control$set_block (; 7 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   ;;@ tlsf.ts:173:2
   (if
    (i32.eqz
@@ -167,7 +177,15 @@
      (i32.const 23)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 173)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:174:2
   (if
@@ -179,7 +197,15 @@
      (i32.const 32)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 174)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:175:2
   (i32.store
@@ -210,7 +236,7 @@
    (get_local $3)
   )
  )
- (func $tlsf/control$construct (; 7 ;) (type $iv) (param $0 i32)
+ (func $tlsf/control$construct (; 8 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   ;;@ tlsf.ts:180:2
@@ -315,7 +341,7 @@
    )
   )
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   ;;@ tlsf.ts:10:0
   (if
    (i32.eqz
@@ -333,7 +359,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 10)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:11:0
   (if
@@ -348,7 +382,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 11)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:12:0
   (if
@@ -363,7 +405,15 @@
      (i32.const 31)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 12)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:13:0
   (if
@@ -378,7 +428,15 @@
      (i32.const 30)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 13)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:20:0
   (if
@@ -397,7 +455,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 20)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:21:0
   (if
@@ -412,7 +478,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 21)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:22:0
   (if
@@ -427,7 +501,15 @@
      (i32.const 31)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 22)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:29:0
   (if
@@ -439,7 +521,15 @@
      (i32.const 8)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 29)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ tlsf.ts:190:0
   (call $tlsf/control$construct
@@ -451,102 +541,3 @@
   )
  )
 )
-(;
-[program.elements]
-  GLOBAL: NaN
-  GLOBAL: Infinity
-  FUNCTION_PROTOTYPE: isNaN
-  FUNCTION_PROTOTYPE: isFinite
-  FUNCTION_PROTOTYPE: clz
-  FUNCTION_PROTOTYPE: ctz
-  FUNCTION_PROTOTYPE: popcnt
-  FUNCTION_PROTOTYPE: rotl
-  FUNCTION_PROTOTYPE: rotr
-  FUNCTION_PROTOTYPE: abs
-  FUNCTION_PROTOTYPE: max
-  FUNCTION_PROTOTYPE: min
-  FUNCTION_PROTOTYPE: ceil
-  FUNCTION_PROTOTYPE: floor
-  FUNCTION_PROTOTYPE: copysign
-  FUNCTION_PROTOTYPE: nearest
-  FUNCTION_PROTOTYPE: reinterpret
-  FUNCTION_PROTOTYPE: sqrt
-  FUNCTION_PROTOTYPE: trunc
-  FUNCTION_PROTOTYPE: load
-  FUNCTION_PROTOTYPE: store
-  FUNCTION_PROTOTYPE: sizeof
-  FUNCTION_PROTOTYPE: select
-  FUNCTION_PROTOTYPE: unreachable
-  FUNCTION_PROTOTYPE: current_memory
-  FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: changetype
-  FUNCTION_PROTOTYPE: assert
-  FUNCTION_PROTOTYPE: abort
-  FUNCTION_PROTOTYPE: i8
-  FUNCTION_PROTOTYPE: i16
-  FUNCTION_PROTOTYPE: i32
-  FUNCTION_PROTOTYPE: i64
-  FUNCTION_PROTOTYPE: u8
-  FUNCTION_PROTOTYPE: u16
-  FUNCTION_PROTOTYPE: u32
-  FUNCTION_PROTOTYPE: u64
-  FUNCTION_PROTOTYPE: bool
-  FUNCTION_PROTOTYPE: f32
-  FUNCTION_PROTOTYPE: f64
-  FUNCTION_PROTOTYPE: isize
-  FUNCTION_PROTOTYPE: usize
-  GLOBAL: HEAP_BASE
-  FUNCTION_PROTOTYPE: tlsf/fls
-  FUNCTION_PROTOTYPE: tlsf/ffs
-  GLOBAL: tlsf/ALIGN_SIZE_LOG2
-  GLOBAL: tlsf/ALIGN_SIZE
-  GLOBAL: tlsf/SL_INDEX_COUNT_LOG2
-  GLOBAL: tlsf/FL_INDEX_MAX
-  GLOBAL: tlsf/SL_INDEX_COUNT
-  GLOBAL: tlsf/FL_INDEX_SHIFT
-  GLOBAL: tlsf/FL_INDEX_COUNT
-  GLOBAL: tlsf/SMALL_BLOCK_SIZE
-  GLOBAL: tlsf/BLOCK$PREV_PHYS_BLOCK_OFFSET
-  GLOBAL: tlsf/BLOCK$TAGGED_SIZE_OFFSET
-  GLOBAL: tlsf/BLOCK$NEXT_FREE_OFFSET
-  GLOBAL: tlsf/BLOCK$PREV_FREE_OFFSET
-  GLOBAL: tlsf/BLOCK$SIZE
-  GLOBAL: tlsf/BLOCK_HEADER_FREE_BIT
-  GLOBAL: tlsf/BLOCK_HEADER_PREV_FREE_BIT
-  GLOBAL: tlsf/BLOCK_OVERHEAD
-  GLOBAL: tlsf/BLOCK_START_OFFSET
-  GLOBAL: tlsf/BLOCK_SIZE_MIN
-  GLOBAL: tlsf/BLOCK_SIZE_MAX
-  FUNCTION_PROTOTYPE: tlsf/block$get_prev_phys_block
-  FUNCTION_PROTOTYPE: tlsf/block$set_prev_phys_block
-  FUNCTION_PROTOTYPE: tlsf/block$get_tagged_size
-  FUNCTION_PROTOTYPE: tlsf/block$set_tagged_size
-  FUNCTION_PROTOTYPE: tlsf/block_size
-  FUNCTION_PROTOTYPE: tlsf/block_set_size
-  FUNCTION_PROTOTYPE: tlsf/block$get_next_free
-  FUNCTION_PROTOTYPE: tlsf/block$set_next_free
-  FUNCTION_PROTOTYPE: tlsf/block$get_prev_free
-  FUNCTION_PROTOTYPE: tlsf/block$set_prev_free
-  FUNCTION_PROTOTYPE: tlsf/block_is_last
-  FUNCTION_PROTOTYPE: tlsf/block_is_free
-  FUNCTION_PROTOTYPE: tlsf/block_set_free
-  FUNCTION_PROTOTYPE: tlsf/block_set_used
-  FUNCTION_PROTOTYPE: tlsf/block_is_prev_free
-  FUNCTION_PROTOTYPE: tlsf/block_set_prev_free
-  FUNCTION_PROTOTYPE: tlsf/block_set_prev_used
-  FUNCTION_PROTOTYPE: tlsf/block_from_ptr
-  FUNCTION_PROTOTYPE: tlsf/block_to_ptr
-  GLOBAL: tlsf/CONTROL$FL_BITMAP_OFFSET
-  GLOBAL: tlsf/CONTROL$SL_BITMAP_OFFSET
-  GLOBAL: tlsf/CONTROL$BLOCKS_OFFSET
-  GLOBAL: tlsf/CONTROL$SIZE
-  FUNCTION_PROTOTYPE: tlsf/control$get_fl_bitmap
-  FUNCTION_PROTOTYPE: tlsf/control$set_fl_bitmap
-  FUNCTION_PROTOTYPE: tlsf/control$get_sl_bitmap
-  FUNCTION_PROTOTYPE: tlsf/control$set_sl_bitmap
-  FUNCTION_PROTOTYPE: tlsf/control$get_block
-  FUNCTION_PROTOTYPE: tlsf/control$set_block
-  FUNCTION_PROTOTYPE: tlsf/control$construct
-[program.exports]
-  FUNCTION_PROTOTYPE: tlsf/control$construct
-;)

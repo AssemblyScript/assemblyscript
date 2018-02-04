@@ -1,13 +1,16 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $memmove/base i32 (i32.const 8))
  (global $memmove/dest (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 32))
  (memory $0 1)
+ (data (i32.const 8) "\n\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func $memmove/memmove (; 0 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memmove/memmove (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   ;;@ memmove.ts:2:2
@@ -403,7 +406,7 @@
    (get_local $3)
   )
  )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   ;;@ memmove.ts:48:0
   (i64.store
    ;;@ memmove.ts:48:11
@@ -478,7 +481,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 55)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:56:0
   (if
@@ -493,7 +504,15 @@
      (i64.const 1229783084848853777)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 56)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:58:0
   (set_global $memmove/dest
@@ -517,7 +536,15 @@
      (i32.const 8)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 59)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:60:0
   (if
@@ -532,7 +559,15 @@
      (i64.const 1229783084848853777)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 60)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:61:0
   (if
@@ -551,7 +586,15 @@
      (i64.const 2459565876494606882)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 61)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:62:0
   (if
@@ -570,7 +613,15 @@
      (i64.const 3689348814741910323)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 62)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:63:0
   (if
@@ -589,7 +640,15 @@
      (i64.const 4919131752989213764)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 63)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:65:0
   (set_global $memmove/dest
@@ -624,7 +683,15 @@
      (i64.const 4919131679688438545)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 66)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:68:0
   (set_global $memmove/dest
@@ -659,7 +726,15 @@
      (i64.const 4919131679688438545)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 69)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:70:0
   (if
@@ -678,7 +753,15 @@
      (i64.const 3689348814741910323)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 70)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:71:0
   (if
@@ -697,7 +780,15 @@
      (i64.const 3694152654344438852)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 71)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memmove.ts:72:0
   (if
@@ -716,58 +807,15 @@
      (i64.const 4919131752989213764)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 72)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
  )
 )
-(;
-[program.elements]
-  GLOBAL: NaN
-  GLOBAL: Infinity
-  FUNCTION_PROTOTYPE: isNaN
-  FUNCTION_PROTOTYPE: isFinite
-  FUNCTION_PROTOTYPE: clz
-  FUNCTION_PROTOTYPE: ctz
-  FUNCTION_PROTOTYPE: popcnt
-  FUNCTION_PROTOTYPE: rotl
-  FUNCTION_PROTOTYPE: rotr
-  FUNCTION_PROTOTYPE: abs
-  FUNCTION_PROTOTYPE: max
-  FUNCTION_PROTOTYPE: min
-  FUNCTION_PROTOTYPE: ceil
-  FUNCTION_PROTOTYPE: floor
-  FUNCTION_PROTOTYPE: copysign
-  FUNCTION_PROTOTYPE: nearest
-  FUNCTION_PROTOTYPE: reinterpret
-  FUNCTION_PROTOTYPE: sqrt
-  FUNCTION_PROTOTYPE: trunc
-  FUNCTION_PROTOTYPE: load
-  FUNCTION_PROTOTYPE: store
-  FUNCTION_PROTOTYPE: sizeof
-  FUNCTION_PROTOTYPE: select
-  FUNCTION_PROTOTYPE: unreachable
-  FUNCTION_PROTOTYPE: current_memory
-  FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: changetype
-  FUNCTION_PROTOTYPE: assert
-  FUNCTION_PROTOTYPE: abort
-  FUNCTION_PROTOTYPE: i8
-  FUNCTION_PROTOTYPE: i16
-  FUNCTION_PROTOTYPE: i32
-  FUNCTION_PROTOTYPE: i64
-  FUNCTION_PROTOTYPE: u8
-  FUNCTION_PROTOTYPE: u16
-  FUNCTION_PROTOTYPE: u32
-  FUNCTION_PROTOTYPE: u64
-  FUNCTION_PROTOTYPE: bool
-  FUNCTION_PROTOTYPE: f32
-  FUNCTION_PROTOTYPE: f64
-  FUNCTION_PROTOTYPE: isize
-  FUNCTION_PROTOTYPE: usize
-  GLOBAL: HEAP_BASE
-  FUNCTION_PROTOTYPE: memmove/memmove
-  GLOBAL: memmove/base
-  GLOBAL: memmove/dest
-[program.exports]
-  
-;)

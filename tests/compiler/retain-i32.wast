@@ -1,6 +1,8 @@
 (module
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $i8.MAX_VALUE i32 (i32.const 127))
  (global $i8.MIN_VALUE i32 (i32.const -128))
  (global $u8.MAX_VALUE i32 (i32.const 255))
@@ -12,11 +14,12 @@
  (global $u32.MAX_VALUE i32 (i32.const -1))
  (global $retain-i32/si (mut i32) (i32.const 0))
  (global $retain-i32/ui (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 40))
  (memory $0 1)
+ (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func $retain-i32/test (; 0 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $retain-i32/test (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
   ;;@ retain-i32.ts:4:2
   (if
    (i32.eqz
@@ -61,7 +64,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 4)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:5:2
   (if
@@ -107,7 +118,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 5)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:6:2
   (if
@@ -153,7 +172,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 6)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:7:2
   (if
@@ -199,7 +226,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 7)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:8:2
   (if
@@ -245,7 +280,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 8)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:9:2
   (if
@@ -291,7 +334,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 9)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:10:2
   (if
@@ -337,7 +388,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 10)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:13:2
   (if
@@ -371,7 +430,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 13)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:14:2
   (if
@@ -405,7 +472,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 14)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:15:2
   (if
@@ -439,7 +514,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 15)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:16:2
   (if
@@ -473,7 +556,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 16)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:17:2
   (if
@@ -507,7 +598,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 17)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:18:2
   (if
@@ -541,7 +640,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 18)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:19:2
   (if
@@ -575,10 +682,18 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 19)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
   )
  )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   (local $0 i32)
   ;;@ retain-i32.ts:23:0
   (call $retain-i32/test
@@ -923,7 +1038,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 78)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:80:0
   (set_global $retain-i32/si
@@ -964,7 +1087,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 81)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:83:0
   (set_global $retain-i32/si
@@ -1001,7 +1132,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 84)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:86:0
   (set_global $retain-i32/si
@@ -1048,7 +1187,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 87)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:89:0
   (set_global $retain-i32/si
@@ -1093,7 +1240,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 90)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:92:0
   (set_global $retain-i32/si
@@ -1140,7 +1295,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 93)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:95:0
   (set_global $retain-i32/si
@@ -1197,7 +1360,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 96)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:98:0
   (set_global $retain-i32/si
@@ -1218,7 +1389,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 99)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:101:0
   (set_global $retain-i32/si
@@ -1239,7 +1418,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 102)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:104:0
   (set_global $retain-i32/si
@@ -1270,7 +1457,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 105)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:107:0
   (set_global $retain-i32/si
@@ -1301,7 +1496,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 108)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:112:0
   (set_global $retain-i32/ui
@@ -1329,7 +1532,15 @@
      (i32.const 255)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 113)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:115:0
   (set_global $retain-i32/ui
@@ -1357,7 +1568,15 @@
      (i32.const 255)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 116)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:118:0
   (set_global $retain-i32/ui
@@ -1381,7 +1600,15 @@
      (i32.const 254)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 119)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:121:0
   (set_global $retain-i32/ui
@@ -1405,7 +1632,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 122)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:124:0
   (set_global $retain-i32/ui
@@ -1429,7 +1664,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 125)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:127:0
   (set_global $retain-i32/ui
@@ -1450,7 +1693,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 128)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ retain-i32.ts:130:0
   (set_global $retain-i32/ui
@@ -1471,58 +1722,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 131)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
  )
 )
-(;
-[program.elements]
-  GLOBAL: NaN
-  GLOBAL: Infinity
-  FUNCTION_PROTOTYPE: isNaN
-  FUNCTION_PROTOTYPE: isFinite
-  FUNCTION_PROTOTYPE: clz
-  FUNCTION_PROTOTYPE: ctz
-  FUNCTION_PROTOTYPE: popcnt
-  FUNCTION_PROTOTYPE: rotl
-  FUNCTION_PROTOTYPE: rotr
-  FUNCTION_PROTOTYPE: abs
-  FUNCTION_PROTOTYPE: max
-  FUNCTION_PROTOTYPE: min
-  FUNCTION_PROTOTYPE: ceil
-  FUNCTION_PROTOTYPE: floor
-  FUNCTION_PROTOTYPE: copysign
-  FUNCTION_PROTOTYPE: nearest
-  FUNCTION_PROTOTYPE: reinterpret
-  FUNCTION_PROTOTYPE: sqrt
-  FUNCTION_PROTOTYPE: trunc
-  FUNCTION_PROTOTYPE: load
-  FUNCTION_PROTOTYPE: store
-  FUNCTION_PROTOTYPE: sizeof
-  FUNCTION_PROTOTYPE: select
-  FUNCTION_PROTOTYPE: unreachable
-  FUNCTION_PROTOTYPE: current_memory
-  FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: changetype
-  FUNCTION_PROTOTYPE: assert
-  FUNCTION_PROTOTYPE: abort
-  FUNCTION_PROTOTYPE: i8
-  FUNCTION_PROTOTYPE: i16
-  FUNCTION_PROTOTYPE: i32
-  FUNCTION_PROTOTYPE: i64
-  FUNCTION_PROTOTYPE: u8
-  FUNCTION_PROTOTYPE: u16
-  FUNCTION_PROTOTYPE: u32
-  FUNCTION_PROTOTYPE: u64
-  FUNCTION_PROTOTYPE: bool
-  FUNCTION_PROTOTYPE: f32
-  FUNCTION_PROTOTYPE: f64
-  FUNCTION_PROTOTYPE: isize
-  FUNCTION_PROTOTYPE: usize
-  GLOBAL: HEAP_BASE
-  FUNCTION_PROTOTYPE: retain-i32/test
-  GLOBAL: retain-i32/si
-  GLOBAL: retain-i32/ui
-[program.exports]
-  
-;)

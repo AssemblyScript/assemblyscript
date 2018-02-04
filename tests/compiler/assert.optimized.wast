@@ -1,25 +1,32 @@
 (module
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (memory $0 1)
+ (data (i32.const 8) "\t\00\00\00a\00s\00s\00e\00r\00t\00.\00t\00s")
+ (data (i32.const 32) "\0c\00\00\00m\00u\00s\00t\00 \00b\00e\00 \00t\00r\00u\00e")
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $start (; 1 ;) (type $v)
   (local $0 i32)
-  ;;@ assert.ts:10:0
   (if
-   ;;@ assert.ts:10:4
    (i32.eqz
-    ;;@ assert.ts:10:5
     (if (result i32)
      (tee_local $0
-      ;;@ assert.ts:10:12
       (i32.const 1)
      )
      (get_local $0)
-     (unreachable)
+     (block
+      (call $abort
+       (i32.const 32)
+       (i32.const 8)
+       (i32.const 10)
+       (i32.const 5)
+      )
+      (unreachable)
+     )
     )
    )
-   ;;@ assert.ts:11:2
    (unreachable)
   )
  )

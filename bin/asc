@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("./asc.js").main(process.argv.slice(2));
+process.exitCode = require("./asc.js").main(process.argv.slice(2));

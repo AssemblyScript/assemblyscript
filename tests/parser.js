@@ -21,7 +21,7 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
 
   var failed = false;
   var parser = new Parser();
-  parser.silentDiagnostics = true;
+  // parser.silentDiagnostics = true;
   var sourceText = fs.readFileSync(__dirname + "/parser/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n").replace(/^\/\/.*\r?\n/mg, "");
   parser.parseFile(sourceText, filename, true);
 

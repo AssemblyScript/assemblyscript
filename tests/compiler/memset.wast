@@ -1,12 +1,15 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 32))
  (memory $0 1)
+ (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func $memset/memset (; 0 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memset/memset (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -556,7 +559,7 @@
    (get_local $3)
   )
  )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   (set_global $memset/dest
    ;;@ memset.ts:69:11
    (get_global $HEAP_BASE)
@@ -585,7 +588,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 72)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memset.ts:73:0
   (if
@@ -604,7 +615,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 73)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memset.ts:75:0
   (drop
@@ -634,7 +653,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 77)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memset.ts:78:0
   (if
@@ -653,7 +680,15 @@
      (i32.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 78)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memset.ts:79:0
   (if
@@ -672,7 +707,15 @@
      (i32.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 79)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ memset.ts:80:0
   (if
@@ -691,57 +734,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 80)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
  )
 )
-(;
-[program.elements]
-  GLOBAL: NaN
-  GLOBAL: Infinity
-  FUNCTION_PROTOTYPE: isNaN
-  FUNCTION_PROTOTYPE: isFinite
-  FUNCTION_PROTOTYPE: clz
-  FUNCTION_PROTOTYPE: ctz
-  FUNCTION_PROTOTYPE: popcnt
-  FUNCTION_PROTOTYPE: rotl
-  FUNCTION_PROTOTYPE: rotr
-  FUNCTION_PROTOTYPE: abs
-  FUNCTION_PROTOTYPE: max
-  FUNCTION_PROTOTYPE: min
-  FUNCTION_PROTOTYPE: ceil
-  FUNCTION_PROTOTYPE: floor
-  FUNCTION_PROTOTYPE: copysign
-  FUNCTION_PROTOTYPE: nearest
-  FUNCTION_PROTOTYPE: reinterpret
-  FUNCTION_PROTOTYPE: sqrt
-  FUNCTION_PROTOTYPE: trunc
-  FUNCTION_PROTOTYPE: load
-  FUNCTION_PROTOTYPE: store
-  FUNCTION_PROTOTYPE: sizeof
-  FUNCTION_PROTOTYPE: select
-  FUNCTION_PROTOTYPE: unreachable
-  FUNCTION_PROTOTYPE: current_memory
-  FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: changetype
-  FUNCTION_PROTOTYPE: assert
-  FUNCTION_PROTOTYPE: abort
-  FUNCTION_PROTOTYPE: i8
-  FUNCTION_PROTOTYPE: i16
-  FUNCTION_PROTOTYPE: i32
-  FUNCTION_PROTOTYPE: i64
-  FUNCTION_PROTOTYPE: u8
-  FUNCTION_PROTOTYPE: u16
-  FUNCTION_PROTOTYPE: u32
-  FUNCTION_PROTOTYPE: u64
-  FUNCTION_PROTOTYPE: bool
-  FUNCTION_PROTOTYPE: f32
-  FUNCTION_PROTOTYPE: f64
-  FUNCTION_PROTOTYPE: isize
-  FUNCTION_PROTOTYPE: usize
-  GLOBAL: HEAP_BASE
-  FUNCTION_PROTOTYPE: memset/memset
-  GLOBAL: memset/dest
-[program.exports]
-  
-;)

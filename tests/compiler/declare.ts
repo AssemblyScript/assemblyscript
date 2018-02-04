@@ -1,15 +1,13 @@
-declare function externalFunc(): void;
-declare const externalConst: i32;
+declare function externalFunction(): void;
+declare const externalConstant: i32;
 
-namespace external {
-  export declare function externalFunc(): void;
-  export declare const externalConst: i32;
+externalFunction();
+assert(externalConstant == 1);
+
+namespace my {
+  export declare function externalFunction(): void;
+  export declare const externalConstant: i32;
 }
 
-export function test(): void {
-  // cannot be interpreted
-  externalFunc();
-  externalConst;
-  external.externalFunc();
-  external.externalConst;
-}
+my.externalFunction();
+assert(my.externalConstant == 2);

@@ -138,4 +138,3 @@ export function decompile(module: Module): string {
   decompiler.decompile(module);
   return decompiler.finish();
 }
-

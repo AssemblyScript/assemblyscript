@@ -1,6 +1,8 @@
 (module
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
@@ -38,14 +40,15 @@
  (global $f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 36))
  (memory $0 1)
+ (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
  (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (start $start)
- (func $builtins/test (; 0 ;) (type $v)
+ (func $builtins/test (; 1 ;) (type $v)
  )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -222,7 +225,15 @@
      (i32.const 42)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 21)
+     (i32.const 19)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:22:0
   (set_global $builtins/i
@@ -252,7 +263,15 @@
      (i32.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 22)
+     (i32.const 20)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:23:0
   (set_global $builtins/i
@@ -282,7 +301,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 23)
+     (i32.const 20)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:27:0
   (drop
@@ -420,7 +447,15 @@
      (i64.const 42)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 39)
+     (i32.const 19)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:40:0
   (set_global $builtins/I
@@ -450,7 +485,15 @@
      (i64.const 2)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 40)
+     (i32.const 20)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:41:0
   (set_global $builtins/I
@@ -480,7 +523,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 41)
+     (i32.const 20)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:47:0
   (drop
@@ -1607,7 +1658,15 @@
      (f64.const nan:0x8000000000000)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 221)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:222:0
   (if
@@ -1621,7 +1680,15 @@
      (get_local $4)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 222)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:223:0
   (if
@@ -1635,7 +1702,15 @@
      (get_local $5)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 223)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:224:0
   (if
@@ -1661,7 +1736,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 224)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:225:0
   (if
@@ -1687,7 +1770,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 225)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:226:0
   (if
@@ -1713,7 +1804,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 226)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:227:0
   (if
@@ -1739,7 +1838,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 227)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:228:0
   (if
@@ -1762,7 +1869,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 228)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:229:0
   (if
@@ -1785,7 +1900,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 229)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:242:0
   (if
@@ -1797,7 +1920,15 @@
      (i32.const -128)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 242)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:243:0
   (if
@@ -1809,7 +1940,15 @@
      (i32.const 127)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 243)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:244:0
   (if
@@ -1821,7 +1960,15 @@
      (i32.const -32768)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 244)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:245:0
   (if
@@ -1833,7 +1980,15 @@
      (i32.const 32767)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 245)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:246:0
   (if
@@ -1845,7 +2000,15 @@
      (i32.const -2147483648)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 246)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:247:0
   (if
@@ -1857,7 +2020,15 @@
      (i32.const 2147483647)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 247)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:248:0
   (if
@@ -1869,7 +2040,15 @@
      (i64.const -9223372036854775808)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 248)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:249:0
   (if
@@ -1881,7 +2060,15 @@
      (i64.const 9223372036854775807)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 249)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:251:0
   (if
@@ -1893,7 +2080,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 251)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:252:0
   (if
@@ -1905,7 +2100,15 @@
      (i32.const 255)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 252)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:253:0
   (if
@@ -1917,7 +2120,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 253)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:254:0
   (if
@@ -1929,7 +2140,15 @@
      (i32.const 65535)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 254)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:255:0
   (if
@@ -1941,7 +2160,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 255)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:256:0
   (if
@@ -1953,7 +2180,15 @@
      (i32.const -1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 256)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:257:0
   (if
@@ -1965,7 +2200,15 @@
      (i64.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 257)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:258:0
   (if
@@ -1977,7 +2220,15 @@
      (i64.const -1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 258)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:259:0
   (if
@@ -1989,7 +2240,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 259)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:259:29
   (if
@@ -2001,7 +2260,15 @@
      (i32.const 0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 259)
+     (i32.const 29)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:260:0
   (if
@@ -2013,7 +2280,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 260)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:260:29
   (if
@@ -2025,7 +2300,15 @@
      (i32.const 1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 260)
+     (i32.const 29)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:262:0
   (if
@@ -2040,7 +2323,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 262)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:263:0
   (if
@@ -2052,7 +2343,15 @@
      (f32.const 3402823466385288598117041e14)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 263)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:264:0
   (if
@@ -2067,7 +2366,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 264)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:265:0
   (if
@@ -2079,7 +2386,15 @@
      (f32.const 16777215)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 265)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:266:0
   (if
@@ -2091,7 +2406,15 @@
      (f32.const 1.1920928955078125e-07)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 266)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:267:0
   (if
@@ -2106,7 +2429,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 267)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:268:0
   (if
@@ -2118,7 +2449,15 @@
      (f64.const 1797693134862315708145274e284)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 268)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:269:0
   (if
@@ -2133,7 +2472,15 @@
      )
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 269)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:270:0
   (if
@@ -2145,7 +2492,15 @@
      (f64.const 9007199254740991)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 270)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ builtins.ts:271:0
   (if
@@ -2157,65 +2512,15 @@
      (f64.const 2.220446049250313e-16)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 271)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
  )
 )
-(;
-[program.elements]
-  GLOBAL: NaN
-  GLOBAL: Infinity
-  FUNCTION_PROTOTYPE: isNaN
-  FUNCTION_PROTOTYPE: isFinite
-  FUNCTION_PROTOTYPE: clz
-  FUNCTION_PROTOTYPE: ctz
-  FUNCTION_PROTOTYPE: popcnt
-  FUNCTION_PROTOTYPE: rotl
-  FUNCTION_PROTOTYPE: rotr
-  FUNCTION_PROTOTYPE: abs
-  FUNCTION_PROTOTYPE: max
-  FUNCTION_PROTOTYPE: min
-  FUNCTION_PROTOTYPE: ceil
-  FUNCTION_PROTOTYPE: floor
-  FUNCTION_PROTOTYPE: copysign
-  FUNCTION_PROTOTYPE: nearest
-  FUNCTION_PROTOTYPE: reinterpret
-  FUNCTION_PROTOTYPE: sqrt
-  FUNCTION_PROTOTYPE: trunc
-  FUNCTION_PROTOTYPE: load
-  FUNCTION_PROTOTYPE: store
-  FUNCTION_PROTOTYPE: sizeof
-  FUNCTION_PROTOTYPE: select
-  FUNCTION_PROTOTYPE: unreachable
-  FUNCTION_PROTOTYPE: current_memory
-  FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: changetype
-  FUNCTION_PROTOTYPE: assert
-  FUNCTION_PROTOTYPE: abort
-  FUNCTION_PROTOTYPE: i8
-  FUNCTION_PROTOTYPE: i16
-  FUNCTION_PROTOTYPE: i32
-  FUNCTION_PROTOTYPE: i64
-  FUNCTION_PROTOTYPE: u8
-  FUNCTION_PROTOTYPE: u16
-  FUNCTION_PROTOTYPE: u32
-  FUNCTION_PROTOTYPE: u64
-  FUNCTION_PROTOTYPE: bool
-  FUNCTION_PROTOTYPE: f32
-  FUNCTION_PROTOTYPE: f64
-  FUNCTION_PROTOTYPE: isize
-  FUNCTION_PROTOTYPE: usize
-  GLOBAL: HEAP_BASE
-  GLOBAL: builtins/b
-  GLOBAL: builtins/i
-  GLOBAL: builtins/I
-  GLOBAL: builtins/f
-  GLOBAL: builtins/F
-  GLOBAL: builtins/constantOffset
-  GLOBAL: builtins/u
-  GLOBAL: builtins/U
-  GLOBAL: builtins/s
-  FUNCTION_PROTOTYPE: builtins/test
-[program.exports]
-  FUNCTION_PROTOTYPE: builtins/test
-;)

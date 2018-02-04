@@ -1,16 +1,19 @@
 (module
  (type $FFF (func (param f64 f64) (result f64)))
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 28))
  (memory $0 1)
+ (data (i32.const 8) "\07\00\00\00f\00m\00o\00d\00.\00t\00s\00")
  (export "fmod" (func $fmod/fmod))
  (export "fmodf" (func $fmod/fmodf))
  (export "memory" (memory $0))
  (start $start)
- (func $fmod/fmod (; 0 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $fmod/fmod (; 1 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -649,7 +652,7 @@
    )
   )
  )
- (func $fmod/fmodf (; 1 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $fmod/fmodf (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1268,7 +1271,7 @@
    )
   )
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   (local $0 f64)
   (local $1 f32)
   ;;@ fmod.ts:65:0
@@ -1288,7 +1291,15 @@
      (get_local $0)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 65)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:66:0
   (if
@@ -1305,7 +1316,15 @@
      (f64.const 0.5)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 66)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:67:0
   (if
@@ -1326,7 +1345,15 @@
      (f64.const 2.220446049250313e-16)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 67)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:68:0
   (if
@@ -1347,7 +1374,15 @@
      (f64.const 2.220446049250313e-16)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 68)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:134:0
   (if
@@ -1366,7 +1401,15 @@
      (get_local $1)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 134)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:135:0
   (if
@@ -1383,7 +1426,15 @@
      (f32.const 0.5)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 135)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:136:0
   (if
@@ -1404,7 +1455,15 @@
      (f32.const 1.1920928955078125e-07)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 136)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   ;;@ fmod.ts:137:0
   (if
@@ -1425,58 +1484,15 @@
      (f32.const 1.1920928955078125e-07)
     )
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 137)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
  )
 )
-(;
-[program.elements]
-  GLOBAL: NaN
-  GLOBAL: Infinity
-  FUNCTION_PROTOTYPE: isNaN
-  FUNCTION_PROTOTYPE: isFinite
-  FUNCTION_PROTOTYPE: clz
-  FUNCTION_PROTOTYPE: ctz
-  FUNCTION_PROTOTYPE: popcnt
-  FUNCTION_PROTOTYPE: rotl
-  FUNCTION_PROTOTYPE: rotr
-  FUNCTION_PROTOTYPE: abs
-  FUNCTION_PROTOTYPE: max
-  FUNCTION_PROTOTYPE: min
-  FUNCTION_PROTOTYPE: ceil
-  FUNCTION_PROTOTYPE: floor
-  FUNCTION_PROTOTYPE: copysign
-  FUNCTION_PROTOTYPE: nearest
-  FUNCTION_PROTOTYPE: reinterpret
-  FUNCTION_PROTOTYPE: sqrt
-  FUNCTION_PROTOTYPE: trunc
-  FUNCTION_PROTOTYPE: load
-  FUNCTION_PROTOTYPE: store
-  FUNCTION_PROTOTYPE: sizeof
-  FUNCTION_PROTOTYPE: select
-  FUNCTION_PROTOTYPE: unreachable
-  FUNCTION_PROTOTYPE: current_memory
-  FUNCTION_PROTOTYPE: grow_memory
-  FUNCTION_PROTOTYPE: changetype
-  FUNCTION_PROTOTYPE: assert
-  FUNCTION_PROTOTYPE: abort
-  FUNCTION_PROTOTYPE: i8
-  FUNCTION_PROTOTYPE: i16
-  FUNCTION_PROTOTYPE: i32
-  FUNCTION_PROTOTYPE: i64
-  FUNCTION_PROTOTYPE: u8
-  FUNCTION_PROTOTYPE: u16
-  FUNCTION_PROTOTYPE: u32
-  FUNCTION_PROTOTYPE: u64
-  FUNCTION_PROTOTYPE: bool
-  FUNCTION_PROTOTYPE: f32
-  FUNCTION_PROTOTYPE: f64
-  FUNCTION_PROTOTYPE: isize
-  FUNCTION_PROTOTYPE: usize
-  GLOBAL: HEAP_BASE
-  FUNCTION_PROTOTYPE: fmod/fmod
-  FUNCTION_PROTOTYPE: fmod/fmodf
-[program.exports]
-  FUNCTION_PROTOTYPE: fmod/fmod
-  FUNCTION_PROTOTYPE: fmod/fmodf
-;)

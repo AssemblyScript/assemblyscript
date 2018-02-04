@@ -111,7 +111,7 @@ export class Parser extends DiagnosticEmitter {
     this.program.sources.push(source);
 
     var tn = new Tokenizer(source, this.program.diagnostics);
-    tn.silentDiagnostics = this.silentDiagnostics;
+    // tn.silentDiagnostics = this.silentDiagnostics;
     source.tokenizer = tn;
 
     while (!tn.skip(Token.ENDOFFILE)) {
