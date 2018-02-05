@@ -4,6 +4,7 @@ const os = require("os");
 const chalk = require("chalk");
 const glob = require("glob");
 const minimist = require("minimist");
+
 const diff = require("./util/diff");
 const asc = require("../bin/asc.js");
 
@@ -13,9 +14,12 @@ const args = minimist(process.argv.slice(2), {
 });
 
 if (args.help) {
-  console.log("Usage: npm run test:compiler -- [test1, test2 ...] [--create]\n");
-  console.log("Runs all tests if no tests have been specified.");
-  console.log("Recreates affected fixtures if --create is specified.");
+  console.log([
+    "Usage: npm run test:compiler -- [test1, test2 ...] [--create]",
+    "",
+    "Runs all tests if no tests have been specified.",
+    "Recreates affected fixtures if --create is specified."
+  ].join(os.EOL) + os.EOL);
   process.exit(0);
 }
 
@@ -38,7 +42,7 @@ if (args._.length) {
 
 // TODO: asc's callback is synchronous here. This might change.
 tests.forEach(filename => {
-  console.log(chalk.whiteBright("Testing compiler/" + filename));
+  console.log(chalk.whiteBright("Testing compiler/" + filename) + "\n");
 
   const basename = filename.replace(/\.ts$/, "");
 
@@ -47,50 +51,59 @@ tests.forEach(filename => {
 
   var failed = false;
 
-  // TODO: also stdout/stderr and diff it (-> expected failures)
+  // TODO: also save stdout/stderr and diff it (-> expected failures)
 
   // Build unoptimized
-  asc.main([
+  asc.main( [
     filename,
     "--baseDir", basedir,
-    "-t", // -> stdout
-    "--sourceMap"
+    "--validate",
+    "--sourceMap",
+    "--measure",
+    "--textFile" // -> stdout
   ], {
     stdout: stdout,
     stderr: stderr
   }, err => {
+    console.log();
     if (err)
       stderr.write(err + os.EOL);
     if (args.create) {
       fs.writeFileSync(path.join(basedir, basename + ".wast"), stdout.toString(), { encoding: "utf8" });
-      console.log("Recreated fixture.");
+      console.log("- " + chalk.yellow("Created fixture"));
     } else {
       let actual = stdout.toString();
       let expected = fs.readFileSync(path.join(basedir, basename + ".wast"), { encoding: "utf8" });
       let diffs = diff(basename + ".wast", expected, actual);
       if (diffs !== null) {
         console.log(diffs);
-        console.log(chalk.red("diff ERROR"));
+        console.log("- " + chalk.red("diff ERROR"));
         failed = true;
       } else
-        console.log(chalk.green("diff OK"));
+        console.log("- " + chalk.green("diff OK"));
     }
+    console.log();
 
     stdout.length = 0;
     stderr.length = 0;
-    stderr.print = false;
 
     // Build optimized
-    asc.main([
+    var cmd = [
       filename,
       "--baseDir", basedir,
-      "-t", basename + ".optimized.wast",
-      "-b", // -> stdout
-      "-O"
-    ], {
+      "--validate",
+      "--optimize",
+      "--measure",
+      "--binaryFile" // -> stdout
+    ];
+    if (args.create) cmd.push(
+      "--textFile", basename + ".optimized.wast"
+    );
+    asc.main(cmd, {
       stdout: stdout,
       stderr: stderr
     }, err => {
+      console.log();
       if (err)
         stderr.write(err + os.EOL);
 
@@ -109,9 +122,9 @@ tests.forEach(filename => {
             externalConstant: 2
           }
         });
-        console.log(chalk.green("instantiate OK"));
+        console.log("- " + chalk.green("instantiate OK"));
       } catch (e) {
-        console.log(chalk.red("instantiate ERROR: ") + e);
+        console.log("- " + chalk.red("instantiate ERROR: ") + e);
         failed = true;
       }
 
@@ -129,10 +142,11 @@ function createMemoryStream(print) {
   stream.write = function(chunk) {
     if (typeof chunk === "string") {
       this.push(Buffer.from(chunk, "utf8"));
-      if (stream.print)
-        process.stderr.write(chunk);
-    } else
+    } else {
       this.push(chunk);
+    }
+    if (stream.print)
+      process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  "));
   };
   stream.toBuffer = function() {
     return Buffer.concat(this);

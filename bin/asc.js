@@ -1,19 +1,22 @@
-const fs = require("fs");
 const path = require("path");
+const fs = require("fs");
 const os = require("os");
 
 // Use distribution files if present, otherwise run the sources directly
-var assemblyscript;
-var isDev = true;
-try {
-  assemblyscript = require("../dist/assemblyscript.js");
-  isDev = false;
-  try { require("source-map-support").install(); } catch (e) {} // optional
-} catch (e) {
-  require("ts-node").register({ project: require("path").join(__dirname, "..", "src") });
-  require("../src/glue/js");
-  assemblyscript = require("../src");
-}
+const { assemblyscript, isDev } = (function bootstrap() {
+  var assemblyscript, isDev;
+  try {
+    assemblyscript = require("../dist/assemblyscript.js");
+    isDev = false;
+    try { require("source-map-support").install(); } catch (e) {} // optional
+  } catch (e) {
+    require("ts-node").register({ project: require("path").join(__dirname, "..", "src") });
+    require("../src/glue/js");
+    assemblyscript = require("../src");
+    isDev = true;
+  }
+  return { assemblyscript, isDev };
+})();
 
 // Common constants
 const VERSION = require("../package.json").version + (isDev ? "-dev" : "");
@@ -36,19 +39,18 @@ function main(argv, options, callback) {
   const stderr = options.stderr || process.stderr;
 
   // Record compilation times
-  var stats = createStats();
+  const stats = createStats();
 
   const args = parseArguments(argv);
   const indent = 24;
 
-  // Use default callback is none is provided
+  // Use default callback if none is provided
   if (!callback) callback = function defaultCallback(err) {
     var code = 0;
     if (err) {
       stderr.write(err + os.EOL);
       code = 1;
-    } else if (args.measure)
-      printStats(stats, stderr);
+    }
     return code;
   };
 
@@ -71,7 +73,7 @@ function main(argv, options, callback) {
         text += " ";
       if (Array.isArray(option.desc)) {
         opts.push(text + option.desc[0] + option.desc.slice(1).map(line => {
-          for (var i = 0; i < indent; ++i)
+          for (let i = 0; i < indent; ++i)
             line = " " + line;
           return os.EOL + line;
         }).join(""));
@@ -100,10 +102,9 @@ function main(argv, options, callback) {
 
   // Include custom library components (with or without stdlib)
   if (args.lib) {
-    if (Array.isArray(args.lib))
-      Array.prototype.push.apply(libDirs, args.lib.map(dir));
-    else
-      libDirs.push(args.lib);
+    if (typeof args.lib === "string")
+      args.lib = args.lib.split(",");
+    Array.prototype.push.apply(libDirs, args.lib.map(trim));
   }
 
   // Begin parsing
@@ -113,114 +114,75 @@ function main(argv, options, callback) {
   for (let i = 0, k = args._.length; i < k; ++i) {
     const filename = args._[i];
 
-    let entryPath = filename.replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
-    let entryText;
+    let sourcePath = filename.replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
 
     // Try entryPath.ts, then entryPath/index.ts
-    try {
-      stats.readTime += measure(() => {
-        entryText = fs.readFileSync(path.join(baseDir, entryPath) + ".ts", { encoding: "utf8" });
-        entryPath += ".ts";
-      });
-      ++stats.readCount;
-    } catch (e) {
-      try {
-        stats.readTime += measure(() => {
-          entryText = fs.readFileSync(path.join(baseDir, entryPath, "index.ts"), { encoding: "utf8" });
-          entryPath += "/index.ts";
-        });
-        ++stats.readCount;
-        entryPath = entryPath + "/index";
-      } catch (e) {
-        return callback(Error("Entry file '" + entryPath + ".ts' not found."));
-      }
-    }
+    let sourceText = readFile(path.join(baseDir, sourcePath) + ".ts");
+    if (sourceText === null) {
+      sourceText = readFile(path.join(baseDir, sourcePath, "index.ts"));
+      if (sourceText === null)
+        return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
+      else
+        sourcePath += "/index.ts";
+    } else
+      sourcePath += ".ts";
 
-    stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(entryText, entryPath, parser, true);
-    });
+    stats.parseCount++;
+    stats.parseTime += measure(() => parser = assemblyscript.parseFile(sourceText, sourcePath, parser, true));
 
-    let nextFile;
-    let nextText;
-
-    while ((nextFile = parser.nextFile()) != null) {
+    while ((sourcePath = parser.nextFile()) != null) {
       let found = false;
 
       // Load library file if explicitly requested
-      if (nextFile.startsWith(LIBRARY_PREFIX)) {
-        for (let i = 0; i < libDirs.length; ++i) {
-          stats.readTime += measure(() => {
-            try {
-              nextText = fs.readFileSync(path.join(libDirs[i], nextFile.substring(4) + ".ts"), { encoding: "utf8" });
-              nextFile = nextFile + ".ts";
-              found = true;
-            } catch (e) {}
-          });
-          ++stats.readCount;
-          if (found)
+      if (sourcePath.startsWith(LIBRARY_PREFIX)) {
+        for (let i = 0, k = libDirs.length; i < k; ++i) {
+          sourceText = readFile(path.join(libDirs[i], sourcePath.substring(LIBRARY_PREFIX.length) + ".ts"));
+          if (sourceText !== null) {
+            sourcePath += ".ts";
             break;
+          }
         }
 
       // Otherwise try nextFile.ts, nextFile/index.ts, (lib)/nextFile.ts
       } else {
-        stats.readTime += measure(() => {
-          try {
-            nextText = fs.readFileSync(path.join(baseDir, nextFile + ".ts"), { encoding: "utf8" });
-            nextFile = nextFile + ".ts";
-            found = true;
-          } catch (e) {}
-        });
-        ++stats.readCount;
-        if (!found) {
-          stats.readTime += measure(() => {
-            try {
-              nextText = fs.readFileSync(path.join(baseDir, nextFile, "index.ts"), { encoding: "utf8" });
-              nextFile = nextFile + "/index.ts";
-              found = true;
-            } catch (e) {}
-          });
-          ++stats.readCount;
-        }
-        if (!found) {
-          for (let i = 0; i < libDirs.length; ++i) {
-            stats.readTime += measure(() => {
-              try {
-                nextText = fs.readFileSync(path.join(libDirs[i], nextFile + ".ts"), { encoding: "utf8" });
-                nextFile = LIBRARY_PREFIX + nextFile + ".ts";
-                found = true;
-              } catch (e) {}
-            });
-            ++stats.readCount;
-            if (found)
-              break;
-          }
-        }
+        sourceText = readFile(path.join(baseDir, sourcePath + ".ts"));
+        if (sourceText === null) {
+          sourceText = readFile(path.join(baseDir, sourcePath, "index.ts"));
+          if (sourceText === null) {
+            for (let i = 0, k =libDirs.length; i < k; ++i) {
+              sourceText = readFile(path.join(libDirs[i], sourcePath + ".ts"));
+              if (sourceText !== null) {
+                sourcePath = LIBRARY_PREFIX + sourcePath + ".ts";
+                break;
+              }
+            }
+            if (sourceText === null)
+              return callback(Error("Import file '" + sourcePath + ".ts' not found."));
+          } else
+            sourcePath += "/index.ts";
+        } else
+          sourcePath += ".ts";
       }
-      if (!found)
-        return callback(Error("Import file '" + nextFile + ".ts' not found."));
-      stats.parseTime += measure(() => {
-        assemblyscript.parseFile(nextText, nextFile, parser);
-      });
+      stats.parseCount++;
+      stats.parseTime += measure(() => assemblyscript.parseFile(sourceText, sourcePath, parser));
     }
     if (checkDiagnostics(parser, stderr))
       return callback(Error("Parse error"));
   }
 
-  // Include library components
+  // Include (other) library components
   for (let i = 0, k = libDirs.length; i < k; ++i) {
     let libDir = libDirs[i];
-    let notReadTime = 0;
-    stats.readTime += measure(() => {
-      require("glob").sync("*.ts", { cwd: libDir }).forEach(file => {
-        var nextText = fs.readFileSync(path.join(libDir, file), { encoding: "utf8" });
-        ++stats.readCount;
-        var time = measure(() => {
-          parser = assemblyscript.parseFile(nextText, LIBRARY_PREFIX + file, parser, false);
-        });
-        stats.parseTime += time;
-        notReadTime += time;
-      });
-    }) - notReadTime;
+    let libFiles;
+    stats.readTime += measure(() => { libFiles = require("glob").sync("*.ts", { cwd: libDir }) });
+    for (let j = 0, l = libFiles.length; j < l; ++j) {
+      let libPath = libFiles[j];
+      let libText = readFile(path.join(libDir, libPath));
+      if (libText === null)
+        return callback(Error("Library file '" + libPath + "' could not be read."));
+      stats.parseCount++;
+      stats.parseTime += measure(() => { parser = assemblyscript.parseFile(libText, LIBRARY_PREFIX + libPath, parser, false); });
+    }
   }
 
   // Begin compilation
@@ -232,9 +194,8 @@ function main(argv, options, callback) {
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
 
   var module;
-  stats.compileTime += measure(() => {
-    module = assemblyscript.compile(parser, compilerOptions);
-  });
+  stats.compileCount++;
+  stats.compileTime += measure(() => module = assemblyscript.compile(parser, compilerOptions));
   if (checkDiagnostics(parser, stderr)) {
     if (module) module.dispose();
     return callback(Error("Compile error"));
@@ -242,6 +203,7 @@ function main(argv, options, callback) {
 
   // Validate the module if requested
   if (args.validate) {
+    stats.validateCount++;
     stats.validateTime += measure(() => {
       if (!module.validate()) {
         module.dispose();
@@ -252,8 +214,10 @@ function main(argv, options, callback) {
 
   // Set Binaryen-specific options
   if (args.trapMode === "clamp") {
+    stats.optimizeCount++;
     stats.optimizeTime += measure(() => module.runPasses([ "trap-mode-clamp" ]));
   } else if (args.trapMode === "js") {
+    stats.optimizeCount++;
     stats.optimizeTime += measure(() => module.runPasses([ "trap-mode-js" ]));
   } else if (args.trapMode !== "allow") {
     module.dispose();
@@ -311,12 +275,16 @@ function main(argv, options, callback) {
   }
 
   // Optimize the module if requested
-  if (optimizeLevel >= 0)
+  if (optimizeLevel >= 0) {
+    stats.optimizeCount++;
     stats.optimizeTime += measure(() => module.optimize());
+  }
 
   // Run additional passes if requested
-  if (runPasses.length)
+  if (runPasses.length) {
+    stats.optimizeCount++;
     stats.optimizeTime += measure(() => module.runPasses(runPasses.map(pass => pass.trim())));
+  }
 
   // Prepare output
   if (!args.noEmit) {
@@ -340,14 +308,13 @@ function main(argv, options, callback) {
         : null;
 
       let binary;
-      stats.writeTime += measure(() => binary = module.toBinary(sourceMapURL));
+      stats.emitCount++;
+      stats.emitTime += measure(() => binary = module.toBinary(sourceMapURL));
 
       if (args.binaryFile.length) {
-        stats.writeTime += measure(() => fs.writeFileSync(path.join(baseDir, args.binaryFile), binary.output));
-        ++stats.writeCount;
+        writeFile(path.join(baseDir, args.binaryFile), binary.output);
       } else {
-        stats.writeTime += measure(() => stdout.write(Buffer.from(binary.output)));
-        ++stats.writeCount;
+        writeStdout(binary.output);
         hasStdout = true;
       }
 
@@ -357,65 +324,89 @@ function main(argv, options, callback) {
           let sourceMap = JSON.parse(binary.sourceMap);
           sourceMap.sourceRoot = SOURCEMAP_ROOT;
           sourceMap.sources.forEach((name, index) => {
-            var text, found = false;
+            let text = null;
             if (name.startsWith(LIBRARY_PREFIX)) {
-              for (var i = 0, k = libDirs.length; i < k; ++i) {
-                stats.readTime += measure(() => {
-                  try {
-                    text = fs.readFileSync(path.join(libDirs[i], name.substring(LIBRARY_PREFIX.length)), { encoding: "utf8" });
-                    found = true;
-                  } catch (e) {}
-                });
-                ++stats.readCount;
+              for (let i = 0, k = libDirs.length; i < k; ++i) {
+                text = readFile(path.join(libDirs[i], name.substring(LIBRARY_PREFIX.length)));
+                if (text !== null) break;
               }
-            } else {
-              stats.readTime += measure(() => {
-                try {
-                  text = fs.readFileSync(path.join(baseDir, name), { encoding: "utf8" });
-                  found = true;
-                } catch (e) {}
-              });
-              ++stats.readCount;
-            }
-            if (!found)
+            } else
+              text = readFile(path.join(baseDir, name));
+            if (text === null)
               return callback(Error("Source file '" + name + "' not found."));
             (sourceMap.sourceContents || (sourceMap.sourceContents = []))[index] = text;
           });
-          stats.writeTime += measure(() => fs.writeFileSync(path.join(baseDir, path.dirname(args.binaryFile), path.basename(sourceMapURL)), JSON.stringify(sourceMap), { encoding: "utf8" }));
-          ++stats.writeCount;
+          writeFile(path.join(baseDir, path.dirname(args.binaryFile), path.basename(sourceMapURL)), JSON.stringify(sourceMap));
         } else {
-          stderr.write("Cannot write source map because binary already uses stdout." + os.EOL);
+          stderr.write("Cannot write source map because binary already occupies stdout." + os.EOL);
         }
       }
     }
 
     // Write text
-    if (args.textFile != null) {
-      if (args.textFile.length) {
-        stats.writeTime += measure(() => fs.writeFileSync(path.join(baseDir, args.textFile), module.toText(), { encoding: "utf8" }));
-        ++stats.writeCount;
+    if (args.textFile != null || (args.binaryFile == null && args.asmjsFile == null)) {
+      let text;
+      if (args.textFile && args.textFile.length) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => text = module.toText());
+        writeFile(path.join(baseDir, args.textFile), text);
       } else if (!hasStdout) {
-        stats.writeTime += measure(() => stdout.write(module.toText()));
-        ++stats.writeCount;
+        stats.emitCount++;
+        stats.emitTime += measure(() => text = module.toText());
+        writeStdout(text);
         hasStdout = true;
       }
     }
 
     // Write asm.js
     if (args.asmjsFile != null && args.asmjsFile.length) {
+      let asm;
       if (args.asmjsFile.length) {
-        stats.writeTime += measure(() => fs.writeFileSync(path.join(baseDir, args.asmjsFile), module.toAsmjs(), { encoding: "utf8" }));
-        ++stats.writeCount;
+        stats.emitCount++;
+        stats.emitTime += measure(() => asm = module.toAsmjs());
+        writeFile(path.join(baseDir, args.asmjsFile), asm);
       } else if (!hasStdout) {
-        stats.writeTime += measure(() => stdout.write(Buffer.from(module.toBinary().output)));
-        ++stats.writeCount;
+        stats.emitCount++;
+        stats.emitTime += measure(() => asm = module.toAsmjs());
+        writeStdout(asm);
         hasStdout = true;
       }
     }
   }
 
   module.dispose();
+  if (args.measure)
+    printStats(stats, stderr);
   return callback(null);
+
+  function readFile(filename) {
+    try {
+      var text;
+      stats.readCount++;
+      stats.readTime += measure(() => text = fs.readFileSync(filename, { encoding: "utf8" }));
+      return text;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeFile(filename, contents) {
+    try {
+      stats.writeCount++;
+      stats.writeTime += measure(() => fs.writeFileSync(filename, contents, typeof contents === "string" ? { encoding: "utf8" } : undefined));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function writeStdout(contents) {
+    if (!writeStdout.used) {
+      stats.writeCount++;
+      writeStdout.used = true;
+    }
+    stats.writeTime += measure(() => stdout.write(contents, typeof contents === "string" ? { encoding: "utf8" } : undefined));
+  }
 }
 
 exports.main = main;
@@ -457,9 +448,15 @@ function createStats() {
     writeTime: 0,
     writeCount: 0,
     parseTime: 0,
+    parseCount: 0,
     compileTime: 0,
+    compileCount: 0,
+    emitTime: 0,
+    emitCount: 0,
     validateTime: 0,
-    optimizeTime: 0
+    validateCount: 0,
+    optimizeTime: 0,
+    optimizeCount: 0
   };
 }
 
@@ -478,10 +475,11 @@ function printStats(stats, output) {
   (output || process.stdout).write([
     "I/O Read  : " + (stats.readTime     ? (stats.readTime     / 1e6).toFixed(3) + " ms (" + stats.readCount + " files)" : "N/A"),
     "I/O Write : " + (stats.writeTime    ? (stats.writeTime    / 1e6).toFixed(3) + " ms (" + stats.writeCount + " files)" : "N/A"),
-    "Parse     : " + (stats.parseTime    ? (stats.parseTime    / 1e6).toFixed(3) + " ms" : "N/A"),
-    "Compile   : " + (stats.compileTime  ? (stats.compileTime  / 1e6).toFixed(3) + " ms" : "N/A"),
-    "Validate  : " + (stats.validateTime ? (stats.validateTime / 1e6).toFixed(3) + " ms" : "N/A"),
-    "Optimize  : " + (stats.optimizeTime ? (stats.optimizeTime / 1e6).toFixed(3) + " ms" : "N/A")
+    "Parse     : " + (stats.parseTime    ? (stats.parseTime    / 1e6).toFixed(3) + " ms (" + stats.parseCount + " times)" : "N/A"),
+    "Compile   : " + (stats.compileTime  ? (stats.compileTime  / 1e6).toFixed(3) + " ms (" + stats.compileCount + " times)" : "N/A"),
+    "Emit      : " + (stats.emitTime     ? (stats.emitTime     / 1e6).toFixed(3) + " ms (" + stats.emitCount + " times)" : "N/A"),
+    "Validate  : " + (stats.validateTime ? (stats.validateTime / 1e6).toFixed(3) + " ms (" + stats.validateCount + " times)" : "N/A"),
+    "Optimize  : " + (stats.optimizeTime ? (stats.optimizeTime / 1e6).toFixed(3) + " ms (" + stats.optimizeCount + " times)" : "N/A")
   ].join(os.EOL) + os.EOL);
 }
 
