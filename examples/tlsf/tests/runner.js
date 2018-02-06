@@ -37,35 +37,36 @@ function runner(tlsf, runs, allocs) {
   tlsf.free_memory(base);
   console.log("mem initial: " + tlsf.memory.buffer.byteLength);
 
-  for (var j = 0; j < runs; ++j) {
-    console.log("run " + (j + 1) + " (" + allocs + " allocations) ...");
-    for (var i = 0; i < allocs; ++i) {
-      var ptr = randomAlloc();
+  try {
+    for (var j = 0; j < runs; ++j) {
+      console.log("run " + (j + 1) + " (" + allocs + " allocations) ...");
+      for (var i = 0; i < allocs; ++i) {
+        var ptr = randomAlloc();
 
-      // immediately free every 4th
-      if (!(i % 4)) preciseFree(ptr);
+        // immediately free every 4th
+        if (!(i % 4)) preciseFree(ptr);
 
-      // occasionally free random blocks
-      else if (ptrs.length && Math.random() < 0.33) randomFree();
+        // occasionally free random blocks
+        else if (ptrs.length && Math.random() < 0.33) randomFree();
 
-      // ^ sums up to clearing about half the blocks half-way
+        // ^ sums up to clearing about half the blocks half-way
+      }
+      // free the rest, randomly
+      while (ptrs.length) randomFree();
+
+      // should now be possible to reuse the entire memory
+      // just try a large portion of the memory here because of SL+1 for allocs
+      var size = ((tlsf.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
+      var ptr = tlsf.allocate_memory(size);
+      if (tlsf.set_memory)
+        tlsf.set_memory(ptr, 0xac, size);
+      if (ptr !== base)
+        throw Error("expected " + base + " but got " + ptr);
+      tlsf.free_memory(ptr);
     }
-    // free the rest, randomly
-    while (ptrs.length) randomFree();
-
-    // should now be possible to reuse the entire first page (remember: sl+1)
-    // e.g. with base 3088 (3048 optimized due to static memory):
-    var size = 0x10000 - base - 4 - 1008;
-    // 61436 (1110111111111100b) -> fl = 15, sl = 27
-    // 61437 (61440 aligned, 1111000000000000b) -> fl = 15, sl = 28
-    // NOTE that this calculation will be different if static memory changes
-    var ptr = tlsf.allocate_memory(size);
-    tlsf.set_memory(ptr, 0xac, size);
-    if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
-    tlsf.free_memory(ptr);
+  } finally {
+    // mem(tlsf.memory, 0, 0x10000);
   }
-
-  mem(tlsf.memory, 0, 0x10000); // should end in 02 00 00 00 (tail LEFT_FREE)
 }
 
 function mem(memory, offset, count) {

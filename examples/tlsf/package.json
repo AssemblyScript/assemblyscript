@@ -6,6 +6,7 @@
     "build": "npm run build:untouched && npm run build:optimized",
     "build:untouched": "asc assembly/tlsf.ts -t tlsf.untouched.wast -b tlsf.untouched.wasm --validate --sourceMap --measure",
     "build:optimized": "asc -O3 assembly/tlsf.ts -b tlsf.optimized.wasm -t tlsf.optimized.wast --validate --noDebug --noAssert --sourceMap --measure",
-    "test": "node tests"
+    "test": "node tests",
+    "test:forever": "node tests/forever"
   }
 }

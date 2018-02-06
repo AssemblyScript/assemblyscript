@@ -20,7 +20,7 @@ function test(file) {
     return String.fromCharCode.apply(String, str);
   }
 
-  runner(exports, 50, 20000); // picked so I/O isn't the bottleneck
+  runner(exports, 5, 20000); // picked so I/O isn't the bottleneck
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
 }

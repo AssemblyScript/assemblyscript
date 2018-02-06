@@ -107,7 +107,9 @@ class Block {
 // ├───────────────────────────────────────────────────────────────┤      │
 // │                              ...                              │ ◄────┤
 // ├───────────────────────────────────────────────────────────────┤      │
-// │                           head[736]                           │ ◄────┘
+// │                           head[736]                           │ ◄────┤
+// ╞═══════════════════════════════════════════════════════════════╡      │
+// │                            tailRef                            │ ◄────┘
 // └───────────────────────────────────────────────────────────────┘   SIZE   ┘
 // S: Small blocks map, P: Possibly padded if 64-bit
 
@@ -164,10 +166,16 @@ class Root {
     , Root.HL_START);
   }
 
-  /** Total size of the {@link Root} structure. */
-  static readonly SIZE: usize = (
+  /** End offset of FL/SL heads. */
+  private static readonly HL_END: usize = (
     Root.HL_START + FL_BITS * SL_SIZE * sizeof<usize>()
   );
+
+  get tailRef(): usize { return load<usize>(0, Root.HL_END); }
+  set tailRef(value: usize) { store<usize>(0, value, Root.HL_END); }
+
+  /** Total size of the {@link Root} structure. */
+  static readonly SIZE: usize = Root.HL_END + sizeof<usize>();
 
   /** Inserts a previously used block back into the free list. */
   insert(block: Block): void {
@@ -363,12 +371,24 @@ class Root {
 
   /** Adds more memory to the pool. */
   addMemory(start: usize, end: usize): bool {
-    start = (start + AL_MASK) & ~AL_MASK;
-    end -= end & AL_MASK;
+    assert(start <= end);
+    assert(!(start & AL_MASK)); // must be aligned
+    assert(!(end & AL_MASK)); // must be aligned
 
-    // TODO: merge with current tail if adjacent
+    var tailRef = this.tailRef;
+    var tailInfo: usize = 0;
+    if (tailRef) {
+      assert(start >= tailRef + sizeof<usize>()); // starts after tail
 
-    assert(start <= end); // to be sure
+      // merge with current tail if adjacent
+      if (start - Block.INFO == tailRef) {
+        start -= Block.INFO;
+        let tail = changetype<Block>(tailRef);
+        tailInfo = tail.info;
+      }
+
+    } else
+      assert(start >= changetype<usize>(this) + Root.SIZE); // starts after root
 
     // check if size is large enough for a free block and the tail block
     var size = end - start;
@@ -378,13 +398,14 @@ class Root {
     // left size is total minus its own and the zero-length tail's header
     var leftSize = size - 2 * Block.INFO;
     var left = changetype<Block>(start);
-    left.info = leftSize | FREE;
+    left.info = leftSize | FREE | (tailInfo & LEFT_FREE);
     left.prev = null;
     left.next = null;
 
     // tail is a zero-length used block
     var tail = changetype<Block>(start + size - Block.INFO);
     tail.info = 0 | LEFT_FREE;
+    this.tailRef = changetype<usize>(tail);
 
     this.insert(left); // also sets jump
 
@@ -418,6 +439,7 @@ export function allocate_memory(size: usize): usize {
   if (!root) {
     var rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
     ROOT = root = changetype<Root>(rootOffset);
+    root.tailRef = 0;
     root.flMap = 0;
     for (var fl: usize = 0; fl < FL_BITS; ++fl) {
       root.setSLMap(fl, 0);
@@ -465,4 +487,4 @@ export function free_memory(data: usize): void {
 }
 
 // For stand-alone usage, e.g., in tests
-export { move_memory, set_memory, compare_memory };
+// export { move_memory, set_memory, compare_memory };

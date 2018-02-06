@@ -314,35 +314,124 @@ export class Type {
   // Types
 
   /** An 8-bit signed integer. */
-  static readonly i8: Type  = new Type(TypeKind.I8, TypeFlags.SIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 8);
+  static readonly i8: Type  = new Type(TypeKind.I8,
+    TypeFlags.SIGNED   |
+    TypeFlags.SMALL    |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,   8
+  );
+
   /** A 16-bit signed integer. */
-  static readonly i16: Type = new Type(TypeKind.I16, TypeFlags.SIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 16);
+  static readonly i16: Type = new Type(TypeKind.I16,
+    TypeFlags.SIGNED   |
+    TypeFlags.SMALL    |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  16
+  );
+
   /** A 32-bit signed integer. */
-  static readonly i32: Type = new Type(TypeKind.I32, TypeFlags.SIGNED | TypeFlags.INTEGER | TypeFlags.VALUE, 32);
+  static readonly i32: Type = new Type(TypeKind.I32,
+    TypeFlags.SIGNED   |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  32
+  );
+
   /** A 64-bit signed integer. */
-  static readonly i64: Type = new Type(TypeKind.I64, TypeFlags.SIGNED | TypeFlags.LONG | TypeFlags.INTEGER | TypeFlags.VALUE, 64);
+  static readonly i64: Type = new Type(TypeKind.I64,
+    TypeFlags.SIGNED   |
+    TypeFlags.LONG     |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  64
+  );
+
   /** A 32-bit signed size. WASM32 only. */
-  static readonly isize32: Type = new Type(TypeKind.ISIZE, TypeFlags.SIGNED | TypeFlags.SIZE | TypeFlags.INTEGER | TypeFlags.VALUE, 32);
+  static readonly isize32: Type = new Type(TypeKind.ISIZE,
+    TypeFlags.SIGNED   |
+    TypeFlags.SIZE     |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  32
+  );
+
   /** A 64-bit signed size. WASM64 only. */
-  static readonly isize64: Type = new Type(TypeKind.ISIZE, TypeFlags.SIGNED | TypeFlags.LONG | TypeFlags.SIZE | TypeFlags.INTEGER | TypeFlags.VALUE, 64);
+  static readonly isize64: Type = new Type(TypeKind.ISIZE,
+    TypeFlags.SIGNED   |
+    TypeFlags.LONG     |
+    TypeFlags.SIZE     |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  64
+  );
+
   /** An 8-bit unsigned integer. */
-  static readonly u8: Type = new Type(TypeKind.U8, TypeFlags.UNSIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 8);
+  static readonly u8: Type = new Type(TypeKind.U8,
+    TypeFlags.UNSIGNED |
+    TypeFlags.SMALL    |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,   8
+  );
+
   /** A 16-bit unsigned integer. */
-  static readonly u16: Type = new Type(TypeKind.U16, TypeFlags.UNSIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 16);
+  static readonly u16: Type = new Type(TypeKind.U16,
+    TypeFlags.UNSIGNED |
+    TypeFlags.SMALL    |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  16
+  );
+
   /** A 32-bit unsigned integer. */
-  static readonly u32: Type = new Type(TypeKind.U32, TypeFlags.UNSIGNED | TypeFlags.INTEGER | TypeFlags.VALUE, 32);
+  static readonly u32: Type = new Type(TypeKind.U32,
+    TypeFlags.UNSIGNED |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  32
+  );
+
   /** A 64-bit unsigned integer. */
-  static readonly u64: Type = new Type(TypeKind.U64, TypeFlags.UNSIGNED | TypeFlags.LONG | TypeFlags.INTEGER | TypeFlags.VALUE, 64);
+  static readonly u64: Type = new Type(TypeKind.U64,
+    TypeFlags.UNSIGNED |
+    TypeFlags.LONG     |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  64
+  );
+
   /** A 32-bit unsigned size. WASM32 only. */
-  static readonly usize32: Type = new Type(TypeKind.USIZE, TypeFlags.UNSIGNED | TypeFlags.SIZE | TypeFlags.INTEGER | TypeFlags.VALUE, 32);
+  static readonly usize32: Type = new Type(TypeKind.USIZE,
+    TypeFlags.UNSIGNED |
+    TypeFlags.SIZE     |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  32
+  );
+
   /** A 64-bit unsigned size. WASM64 only. */
-  static readonly usize64: Type = new Type(TypeKind.USIZE, TypeFlags.UNSIGNED | TypeFlags.LONG | TypeFlags.SIZE | TypeFlags.INTEGER | TypeFlags.VALUE, 64);
+  static readonly usize64: Type = new Type(TypeKind.USIZE,
+    TypeFlags.UNSIGNED |
+    TypeFlags.LONG     |
+    TypeFlags.SIZE     |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,  64
+  );
+
   /** A 1-bit unsigned integer. */
-  static readonly bool: Type = new Type(TypeKind.BOOL, TypeFlags.UNSIGNED | TypeFlags.SMALL | TypeFlags.INTEGER | TypeFlags.VALUE, 1);
+  static readonly bool: Type = new Type(TypeKind.BOOL,
+    TypeFlags.UNSIGNED |
+    TypeFlags.SMALL    |
+    TypeFlags.INTEGER  |
+    TypeFlags.VALUE,   1
+  );
+
   /** A 32-bit float. */
-  static readonly f32: Type = new Type(TypeKind.F32, TypeFlags.SIGNED | TypeFlags.FLOAT | TypeFlags.VALUE, 32);
+  static readonly f32: Type = new Type(TypeKind.F32,
+    TypeFlags.SIGNED   |
+    TypeFlags.FLOAT    |
+    TypeFlags.VALUE,  32
+  );
+
   /** A 64-bit float. */
-  static readonly f64: Type = new Type(TypeKind.F64, TypeFlags.SIGNED | TypeFlags.LONG | TypeFlags.FLOAT | TypeFlags.VALUE, 64);
+  static readonly f64: Type = new Type(TypeKind.F64,
+    TypeFlags.SIGNED   |
+    TypeFlags.LONG     |
+    TypeFlags.FLOAT    |
+    TypeFlags.VALUE,  64
+  );
+
   /** No return type. */
   static readonly void: Type = new Type(TypeKind.VOID, TypeFlags.NONE, 0);
 }
@@ -356,7 +445,7 @@ export function typesToNativeTypes(types: Type[]): NativeType[] {
   return ret;
 }
 
-/** Converts an array of types to its combined string representation. Usually type arguments. */
+/** Converts an array of types to its combined string representation. */
 export function typesToString(types: Type[]): string {
   var k = types.length;
   if (!k)
