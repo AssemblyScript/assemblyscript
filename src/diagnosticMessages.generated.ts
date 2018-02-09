@@ -21,11 +21,14 @@ export enum DiagnosticCode {
   Trailing_comma_not_allowed = 1009,
   Unexpected_token = 1012,
   A_rest_parameter_must_be_last_in_a_parameter_list = 1014,
+  Parameter_cannot_have_question_mark_and_initializer = 1015,
   A_required_parameter_cannot_follow_an_optional_parameter = 1016,
   Enum_member_must_have_initializer = 1061,
   Statements_are_not_allowed_in_ambient_contexts = 1036,
   Initializers_are_not_allowed_in_ambient_contexts = 1039,
   _0_modifier_cannot_be_used_here = 1042,
+  A_rest_parameter_cannot_be_optional = 1047,
+  A_rest_parameter_cannot_have_an_initializer = 1048,
   A_set_accessor_must_have_exactly_one_parameter = 1049,
   A_set_accessor_parameter_cannot_have_an_initializer = 1052,
   A_get_accessor_cannot_have_parameters = 1054,
@@ -115,11 +118,14 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1009: return "Trailing comma not allowed.";
     case 1012: return "Unexpected token.";
     case 1014: return "A rest parameter must be last in a parameter list.";
+    case 1015: return "Parameter cannot have question mark and initializer.";
     case 1016: return "A required parameter cannot follow an optional parameter.";
     case 1061: return "Enum member must have initializer.";
     case 1036: return "Statements are not allowed in ambient contexts.";
     case 1039: return "Initializers are not allowed in ambient contexts.";
     case 1042: return "'{0}' modifier cannot be used here.";
+    case 1047: return "A rest parameter cannot be optional.";
+    case 1048: return "A rest parameter cannot have an initializer.";
     case 1049: return "A 'set' accessor must have exactly one parameter.";
     case 1052: return "A 'set' accessor parameter cannot have an initializer.";
     case 1054: return "A 'get' accessor cannot have parameters.";

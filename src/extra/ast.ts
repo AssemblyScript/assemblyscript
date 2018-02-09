@@ -69,6 +69,7 @@ import {
   Modifier,
   ModifierKind,
   Parameter,
+  ParameterKind,
   ExportMember,
   SwitchCase,
 
@@ -1189,11 +1190,14 @@ export function serializeModifier(node: Modifier, sb: string[]): void {
 }
 
 export function serializeParameter(node: Parameter, sb: string[]): void {
-  if (node.isRest)
+  if (node.parameterKind == ParameterKind.REST)
     sb.push("...");
   serializeIdentifierExpression(node.name, sb);
   if (node.type) {
-    sb.push(": ");
+    if (node.parameterKind == ParameterKind.OPTIONAL && !node.initializer)
+      sb.push("?: ");
+    else
+      sb.push(": ");
     serializeTypeNode(node.type, sb);
   }
   if (node.initializer) {

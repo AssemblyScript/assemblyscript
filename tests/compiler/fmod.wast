@@ -4,8 +4,6 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
  (global $HEAP_BASE i32 (i32.const 28))
  (memory $0 1)
  (data (i32.const 8) "\07\00\00\00f\00m\00o\00d\00.\00t\00s\00")

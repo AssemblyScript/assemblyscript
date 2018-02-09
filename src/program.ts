@@ -1,8 +1,4 @@
 import {
-  initialize as initializeBuiltins
-} from "./builtins";
-
-import {
   Options
 } from "./compiler";
 
@@ -157,8 +153,6 @@ export class Program extends DiagnosticEmitter {
       ["boolean", Type.bool]
     ]);
 
-    initializeBuiltins(this);
-
     var queuedExports = new Map<string,QueuedExport>();
     var queuedImports = new Array<QueuedImport>();
     var queuedDerivedClasses = new Array<ClassPrototype>();
@@ -230,9 +224,8 @@ export class Program extends DiagnosticEmitter {
       var currentExport: QueuedExport | null = queuedExport; // nullable below
       do {
         if (currentExport.isReExport) {
-          element = this.exports.get(currentExport.referencedName);
-          if (element) {
-            this.exports.set(exportName, element);
+          if (element = this.exports.get(currentExport.referencedName)) {
+            this.setExportAndCheckLibrary(exportName, element, currentExport.member.externalIdentifier);
             break;
           }
           currentExport = queuedExports.get(currentExport.referencedName);
@@ -241,9 +234,9 @@ export class Program extends DiagnosticEmitter {
         } else {
           if (
             (element = this.elements.get(currentExport.referencedName)) ||      // normal export
-            (element = this.elements.get(currentExport.member.identifier.name)) // stdlib re-export
+            (element = this.elements.get(currentExport.member.identifier.name)) // library re-export
           )
-            this.exports.set(exportName, element);
+            this.setExportAndCheckLibrary(exportName, element, currentExport.member.externalIdentifier);
           else
             this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.range, queuedExport.member.identifier.name);
           break;
@@ -272,8 +265,7 @@ export class Program extends DiagnosticEmitter {
   private tryResolveImport(referencedName: string, queuedExports: Map<string,QueuedExport>): Element | null {
     var element: Element | null;
     do {
-      element = this.exports.get(referencedName);
-      if (element)
+      if (element = this.exports.get(referencedName))
         return element;
       var queuedExport = queuedExports.get(referencedName);
       if (!queuedExport)
@@ -286,17 +278,33 @@ export class Program extends DiagnosticEmitter {
     } while (true);
   }
 
-  private checkGlobalAlias(element: Element, declaration: DeclarationStatement): bool {
-    if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(declaration.parent).kind == NodeKind.SOURCE && element.is(ElementFlags.EXPORTED))) {
+  private checkInternalDecorators(element: Element, declaration: DeclarationStatement): void {
+    var isBuiltin: bool = hasDecorator("builtin", declaration.decorators);
+    if (isBuiltin)
+      element.set(ElementFlags.BUILTIN);
+    if (
+      hasDecorator("global", declaration.decorators) ||
+      (
+        declaration.range.source.isLibrary &&
+        element.is(ElementFlags.EXPORTED) &&
+        (
+          assert(declaration.parent).kind == NodeKind.SOURCE ||
+          (
+            <Node>declaration.parent).kind == NodeKind.VARIABLE &&
+            assert((<Node>declaration.parent).parent).kind == NodeKind.SOURCE
+          )
+        )
+    ) {
+      element.set(ElementFlags.GLOBAL);
       if (this.elements.has(declaration.name.name))
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, element.internalName);
       else {
         this.elements.set(declaration.name.name, element);
         this.exports.set(declaration.name.name, element);
-        return true;
+        if (isBuiltin)
+          element.internalName = declaration.name.name;
       }
     }
-    return false;
   }
 
   private initializeClass(declaration: ClassDeclaration, queuedDerivedClasses: ClassPrototype[], namespace: Element | null = null): void {
@@ -308,6 +316,8 @@ export class Program extends DiagnosticEmitter {
     var prototype = new ClassPrototype(this, declaration.name.name, internalName, declaration);
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
+
+    this.checkInternalDecorators(prototype, declaration);
 
     if (hasDecorator("unmanaged", declaration.decorators)) {
       prototype.isUnmanaged = true;
@@ -363,14 +373,11 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    if (this.checkGlobalAlias(prototype, declaration)) {
-      if (declaration.name.name === "String") {
-        var instance = prototype.resolve(null, null);
-        if (instance) {
-          assert(!this.types.has("string"));
-          this.types.set("string", instance.type);
-        }
-      }
+    // check and possibly register string type
+    if (prototype.is(ElementFlags.GLOBAL) && declaration.name.name === "String" && !this.types.has("string")) {
+      var instance = prototype.resolve(null);
+      if (instance)
+        this.types.set("string", instance.type);
     }
   }
 
@@ -569,7 +576,7 @@ export class Program extends DiagnosticEmitter {
     enm.namespace = namespace;
     this.elements.set(internalName, enm);
 
-    this.checkGlobalAlias(enm, declaration);
+    this.checkInternalDecorators(enm, declaration);
 
     if (namespace) {
       if (namespace.members) {
@@ -613,6 +620,18 @@ export class Program extends DiagnosticEmitter {
       this.initializeExport(members[i], statement.internalPath, queuedExports);
   }
 
+  private setExportAndCheckLibrary(name: string, element: Element, identifier: IdentifierExpression): void {
+    this.exports.set(name, element);
+    if (identifier.range.source.isLibrary) { // add global alias
+      if (this.elements.has(identifier.name))
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, identifier.range, identifier.name);
+      else {
+        element.internalName = identifier.name;
+        this.elements.set(identifier.name, element);
+      }
+    }
+  }
+
   private initializeExport(member: ExportMember, internalPath: string | null, queuedExports: Map<string,QueuedExport>): void {
     var externalName = member.range.source.internalPath + PATH_DELIMITER + member.externalIdentifier.name;
     if (this.exports.has(externalName)) {
@@ -620,6 +639,7 @@ export class Program extends DiagnosticEmitter {
       return;
     }
     var referencedName: string;
+    var referencedElement: Element | null;
     var queuedExport: QueuedExport | null;
 
     // export local element
@@ -627,8 +647,8 @@ export class Program extends DiagnosticEmitter {
       referencedName = member.range.source.internalPath + PATH_DELIMITER + member.identifier.name;
 
       // resolve right away if the element exists
-      if (this.elements.has(referencedName)) {
-        this.exports.set(externalName, <Element>this.elements.get(referencedName));
+      if (referencedElement = this.elements.get(referencedName)) {
+        this.setExportAndCheckLibrary(externalName, referencedElement, member.externalIdentifier);
         return;
       }
 
@@ -648,8 +668,8 @@ export class Program extends DiagnosticEmitter {
       referencedName = (<string>internalPath) + PATH_DELIMITER + member.identifier.name;
 
       // resolve right away if the export exists
-      if (this.exports.has(referencedName)) {
-        this.exports.set(externalName, <Element>this.exports.get(referencedName));
+      if (referencedElement = this.elements.get(referencedName)) {
+        this.setExportAndCheckLibrary(externalName, referencedElement, member.externalIdentifier);
         return;
       }
 
@@ -657,8 +677,8 @@ export class Program extends DiagnosticEmitter {
       var seen = new Set<QueuedExport>();
       while (queuedExport = queuedExports.get(referencedName)) {
         if (queuedExport.isReExport) {
-          if (this.exports.has(queuedExport.referencedName)) {
-            this.exports.set(externalName, <Element>this.exports.get(referencedName));
+          if (referencedElement = this.exports.get(queuedExport.referencedName)) {
+            this.setExportAndCheckLibrary(externalName, referencedElement, member.externalIdentifier);
             return;
           }
           referencedName = queuedExport.referencedName;
@@ -666,8 +686,8 @@ export class Program extends DiagnosticEmitter {
             break;
           seen.add(queuedExport);
         } else {
-          if (this.elements.has(queuedExport.referencedName)) {
-            this.exports.set(externalName, <Element>this.elements.get(referencedName));
+          if (referencedElement = this.elements.get(queuedExport.referencedName)) {
+            this.setExportAndCheckLibrary(externalName, referencedElement, member.externalIdentifier);
             return;
           }
           break;
@@ -697,7 +717,7 @@ export class Program extends DiagnosticEmitter {
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
-    this.checkGlobalAlias(prototype, declaration);
+    this.checkInternalDecorators(prototype, declaration);
 
     if (namespace) {
       if (namespace.members) {
@@ -787,7 +807,7 @@ export class Program extends DiagnosticEmitter {
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
-    this.checkGlobalAlias(prototype, declaration);
+    this.checkInternalDecorators(prototype, declaration);
 
     if (namespace) {
       if (namespace.members) {
@@ -837,7 +857,7 @@ export class Program extends DiagnosticEmitter {
       namespace = new Namespace(this, declaration.name.name, internalName, declaration);
       namespace.namespace = parentNamespace;
       this.elements.set(internalName, namespace);
-      this.checkGlobalAlias(namespace, declaration);
+      this.checkInternalDecorators(namespace, declaration);
     }
 
     if (parentNamespace) {
@@ -922,13 +942,7 @@ export class Program extends DiagnosticEmitter {
       global.namespace = namespace;
       this.elements.set(internalName, global);
 
-      // differs a bit from this.checkGlobalAlias in that it checks the statement's parent
-      if (hasDecorator("global", declaration.decorators) || (declaration.range.source.isStdlib && assert(statement.parent).kind == NodeKind.SOURCE && global.is(ElementFlags.EXPORTED))) {
-        if (this.elements.has(declaration.name.name))
-          this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
-        else
-          this.elements.set(declaration.name.name, global);
-      }
+      this.checkInternalDecorators(global, declaration);
 
       if (namespace) {
         if (namespace.members) {
@@ -1202,6 +1216,18 @@ export class Program extends DiagnosticEmitter {
 
       case NodeKind.ELEMENTACCESS:
         return this.resolveElementAccess(<ElementAccessExpression>expression, contextualFunction);
+
+      case NodeKind.CALL:
+        var resolved = this.resolveExpression((<CallExpression>expression).expression, contextualFunction);
+        if (resolved) {
+          var element = resolved.element;
+          if (element && element.kind == ElementKind.FUNCTION_PROTOTYPE) {
+            var instance = (<FunctionPrototype>element).resolveInclTypeArguments((<CallExpression>expression).typeArguments, null, expression);
+            if (instance && instance.returnType.classType)
+              return (resolvedElement || (resolvedElement = new ResolvedElement())).set(instance.returnType.classType);
+          }
+        }
+        break;
     }
     this.error(DiagnosticCode.Operation_not_supported, expression.range);
     return null;
@@ -1356,12 +1382,13 @@ export class Namespace extends Element {
   kind = ElementKind.NAMESPACE;
 
   /** Declaration reference. */
-  declaration: NamespaceDeclaration | null; // more specific
+  declaration: NamespaceDeclaration; // more specific
 
   /** Constructs a new namespace. */
-  constructor(program: Program, simpleName: string, internalName: string, declaration: NamespaceDeclaration | null = null) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: NamespaceDeclaration) {
     super(program, simpleName, internalName);
-    if ((this.declaration = declaration) && this.declaration.modifiers) {
+    this.declaration = declaration;
+    if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
           case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
@@ -1380,12 +1407,13 @@ export class Enum extends Element {
   kind = ElementKind.ENUM;
 
   /** Declaration reference. */
-  declaration: EnumDeclaration | null;
+  declaration: EnumDeclaration;
 
   /** Constructs a new enum. */
-  constructor(program: Program, simpleName: string, internalName: string, declaration: EnumDeclaration | null = null) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: EnumDeclaration) {
     super(program, simpleName, internalName);
-    if ((this.declaration = declaration) && this.declaration.modifiers) {
+    this.declaration = declaration;
+    if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
           case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
@@ -1405,13 +1433,13 @@ export class EnumValue extends Element {
   kind = ElementKind.ENUMVALUE;
 
   /** Declaration reference. */
-  declaration: EnumValueDeclaration | null;
+  declaration: EnumValueDeclaration;
   /** Parent enum. */
   enum: Enum;
   /** Constant value, if applicable. */
   constantValue: i32 = 0;
 
-  constructor(enm: Enum, program: Program, simpleName: string, internalName: string, declaration: EnumValueDeclaration | null = null) {
+  constructor(enm: Enum, program: Program, simpleName: string, internalName: string, declaration: EnumValueDeclaration) {
     super(program, simpleName, internalName);
     this.enum = enm;
     this.declaration = declaration;
@@ -1423,7 +1451,7 @@ export class VariableLikeElement extends Element {
   // kind varies
 
   /** Declaration reference. */
-  declaration: VariableLikeDeclarationStatement | null;
+  declaration: VariableLikeDeclarationStatement;
   /** Variable type. Is {@link Type.void} for type-inferred {@link Global}s before compilation. */
   type: Type;
   /** Constant integer value, if applicable. */
@@ -1449,28 +1477,25 @@ export class Global extends VariableLikeElement {
 
   kind = ElementKind.GLOBAL;
 
-  constructor(program: Program, simpleName: string, internalName: string, declaration: VariableLikeDeclarationStatement | null = null, type: Type) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: VariableLikeDeclarationStatement, type: Type) {
     super(program, simpleName, internalName);
-    if (this.declaration = declaration) {
-      if (this.declaration.modifiers) {
-        for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-          switch (this.declaration.modifiers[i].modifierKind) {
-            case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-            case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-            case ModifierKind.CONST: this.set(ElementFlags.CONSTANT); break;
-            case ModifierKind.LET: this.set(ElementFlags.SCOPED); break;
-            case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
-            case ModifierKind.READONLY: this.set(this.declaration.initializer ? ElementFlags.CONSTANT | ElementFlags.READONLY : ElementFlags.READONLY); break;
-            case ModifierKind.PUBLIC:
-            case ModifierKind.PRIVATE:
-            case ModifierKind.PROTECTED:
-            case ModifierKind.STATIC: break; // static fields become globals
-            default: throw new Error("unexpected modifier");
-          }
+    this.declaration = declaration;
+    if (this.declaration.modifiers) {
+      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
+        switch (this.declaration.modifiers[i].modifierKind) {
+          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
+          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+          case ModifierKind.CONST: this.set(ElementFlags.CONSTANT); break;
+          case ModifierKind.LET: this.set(ElementFlags.SCOPED); break;
+          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+          case ModifierKind.READONLY: this.set(this.declaration.initializer ? ElementFlags.CONSTANT | ElementFlags.READONLY : ElementFlags.READONLY); break;
+          case ModifierKind.PUBLIC:
+          case ModifierKind.PRIVATE:
+          case ModifierKind.PROTECTED:
+          case ModifierKind.STATIC: break; // static fields become globals
+          default: throw new Error("unexpected modifier");
         }
       }
-    } else {
-      this.set(ElementFlags.CONSTANT | ElementFlags.INLINED); // built-ins have constant values
     }
     this.type = type; // resolved later if `void`
   }
@@ -1482,14 +1507,14 @@ export class Parameter {
   // not an Element on its own
 
   /** Parameter name. */
-  name: string | null;
+  name: string;
   /** Parameter type. */
   type: Type;
   /** Parameter initializer. */
   initializer: Expression | null;
 
   /** Constructs a new function parameter. */
-  constructor(name: string | null, type: Type, initializer: Expression | null = null) {
+  constructor(name: string, type: Type, initializer: Expression | null = null) {
     this.name = name;
     this.type = type;
     this.initializer = initializer;
@@ -1517,7 +1542,7 @@ export class FunctionPrototype extends Element {
   kind = ElementKind.FUNCTION_PROTOTYPE;
 
   /** Declaration reference. */
-  declaration: FunctionDeclaration | null;
+  declaration: FunctionDeclaration;
   /** If an instance method, the class prototype reference. */
   classPrototype: ClassPrototype | null;
   /** Resolved instances. */
@@ -1526,28 +1551,27 @@ export class FunctionPrototype extends Element {
   classTypeArguments: Type[] | null = null;
 
   /** Constructs a new function prototype. */
-  constructor(program: Program, simpleName: string, internalName: string, declaration: FunctionDeclaration | null, classPrototype: ClassPrototype | null = null) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: FunctionDeclaration, classPrototype: ClassPrototype | null = null) {
     super(program, simpleName, internalName);
-    if (this.declaration = declaration) {
-      if (this.declaration.modifiers)
-        for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-          switch (this.declaration.modifiers[i].modifierKind) {
-            case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-            case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-            case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
-            case ModifierKind.GET: this.set(ElementFlags.GETTER); break;
-            case ModifierKind.SET: this.set(ElementFlags.SETTER); break;
-            case ModifierKind.STATIC:
-            case ModifierKind.ABSTRACT:
-            case ModifierKind.PRIVATE:
-            case ModifierKind.PROTECTED:
-            case ModifierKind.PUBLIC: break; // already handled
-            default: throw new Error("unexpected modifier");
-          }
+    this.declaration = declaration;
+    if (this.declaration.modifiers)
+      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
+        switch (this.declaration.modifiers[i].modifierKind) {
+          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
+          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+          case ModifierKind.GET: this.set(ElementFlags.GETTER); break;
+          case ModifierKind.SET: this.set(ElementFlags.SETTER); break;
+          case ModifierKind.STATIC:
+          case ModifierKind.ABSTRACT:
+          case ModifierKind.PRIVATE:
+          case ModifierKind.PROTECTED:
+          case ModifierKind.PUBLIC: break; // already handled
+          default: throw new Error("unexpected modifier");
         }
-      if (this.declaration.typeParameters.length)
-        this.set(ElementFlags.GENERIC);
-    }
+      }
+    if (this.declaration.typeParameters.length)
+      this.set(ElementFlags.GENERIC);
     if (this.classPrototype = classPrototype)
       this.set(ElementFlags.INSTANCE);
   }
@@ -1559,8 +1583,6 @@ export class FunctionPrototype extends Element {
       return instance;
 
     var declaration = this.declaration;
-    if (!declaration)
-      throw new Error("cannot resolve built-ins");
 
     // inherit contextual type arguments
     var inheritedTypeArguments = contextualTypeArguments;
@@ -1576,8 +1598,6 @@ export class FunctionPrototype extends Element {
       if (!this.classPrototype)
         throw new Error("partially resolved instance method must reference its class prototype");
       var classDeclaration = (<ClassPrototype>this.classPrototype).declaration;
-      if (!classDeclaration)
-        throw new Error("cannot resolve built-ins");
       var classTypeParameters = classDeclaration.typeParameters;
       if ((k = this.classTypeArguments.length) != classTypeParameters.length)
         throw new Error("type argument count mismatch");
@@ -1605,7 +1625,7 @@ export class FunctionPrototype extends Element {
       typeNode = assert(parameterDeclaration.type);
       var parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
       if (parameterType) {
-        parameters[i] = new Parameter(parameterDeclaration.name ? parameterDeclaration.name.name : null, parameterType, parameterDeclaration.initializer);
+        parameters[i] = new Parameter(parameterDeclaration.name.name, parameterType, parameterDeclaration.initializer);
         parameterTypes[i] = parameterType;
       } else
         return null;
@@ -1641,13 +1661,11 @@ export class FunctionPrototype extends Element {
     return instance;
   }
 
-  resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, alternativeReportNode: Node | null): Function | null {
+  resolveInclTypeArguments(typeArgumentNodes: TypeNode[] | null, contextualTypeArguments: Map<string,Type> | null, reportNode: Node): Function | null {
     var resolvedTypeArguments: Type[] | null = null;
     if (this.is(ElementFlags.GENERIC)) {
       assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
-      if (!this.declaration)
-        throw new Error("cannot resolve built-ins");
-      resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
+      resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, reportNode);
       if (!resolvedTypeArguments)
         return null;
     }
@@ -1709,7 +1727,7 @@ export class Function extends Element {
     this.returnType = returnType;
     this.instanceMethodOf = instanceMethodOf;
     this.flags = prototype.flags;
-    if (!prototype.is(ElementFlags.BUILTIN | ElementFlags.DECLARED)) {
+    if (!(prototype.is(ElementFlags.BUILTIN) || prototype.is(ElementFlags.DECLARED))) {
       var localIndex = 0;
       if (instanceMethodOf) {
         assert(this.is(ElementFlags.INSTANCE)); // internal error
@@ -1851,15 +1869,16 @@ export class FieldPrototype extends Element {
   kind = ElementKind.FIELD_PROTOTYPE;
 
   /** Declaration reference. */
-  declaration: FieldDeclaration | null;
+  declaration: FieldDeclaration;
   /** Parent class prototype. */
   classPrototype: ClassPrototype;
 
   /** Constructs a new field prototype. */
-  constructor(classPrototype: ClassPrototype, simpleName: string, internalName: string, declaration: FieldDeclaration | null = null) {
+  constructor(classPrototype: ClassPrototype, simpleName: string, internalName: string, declaration: FieldDeclaration) {
     super(classPrototype.program, simpleName, internalName);
     this.classPrototype = classPrototype;
-    if ((this.declaration = declaration) && this.declaration.modifiers) {
+    this.declaration = declaration;
+    if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
           case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
@@ -1923,7 +1942,7 @@ export class ClassPrototype extends Element {
   kind = ElementKind.CLASS_PROTOTYPE;
 
   /** Declaration reference. */
-  declaration: ClassDeclaration | null;
+  declaration: ClassDeclaration;
   /** Resolved instances. */
   instances: Map<string,Class> = new Map();
   /** Instance member prototypes. */
@@ -1942,22 +1961,21 @@ export class ClassPrototype extends Element {
   /** Overloaded equality comparison method, if any. */
   fnEquals: string | null = null;
 
-  constructor(program: Program, simpleName: string, internalName: string, declaration: ClassDeclaration | null = null) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: ClassDeclaration) {
     super(program, simpleName, internalName);
-    if (this.declaration = declaration) {
-      if (this.declaration.modifiers) {
-        for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-          switch (this.declaration.modifiers[i].modifierKind) {
-            case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-            case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-            case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
-            default: throw new Error("unexpected modifier");
-          }
+    this.declaration = declaration;
+    if (this.declaration.modifiers) {
+      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
+        switch (this.declaration.modifiers[i].modifierKind) {
+          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
+          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
+          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+          default: throw new Error("unexpected modifier");
         }
       }
-      if (this.declaration.typeParameters.length)
-        this.set(ElementFlags.GENERIC);
     }
+    if (this.declaration.typeParameters.length)
+      this.set(ElementFlags.GENERIC);
   }
 
   /** Whether an unamanaged class or not. */
@@ -1970,10 +1988,6 @@ export class ClassPrototype extends Element {
     if (instance)
       return instance;
 
-    var declaration = this.declaration;
-    if (!declaration)
-      throw new Error("cannot resolve built-ins");
-
     // inherit contextual type arguments
     var inheritedTypeArguments = contextualTypeArguments;
     contextualTypeArguments = new Map();
@@ -1981,6 +1995,7 @@ export class ClassPrototype extends Element {
       for (var [inheritedName, inheritedType] of inheritedTypeArguments)
         contextualTypeArguments.set(inheritedName, inheritedType);
 
+    var declaration = this.declaration;
     var baseClass: Class | null = null;
     if (declaration.extendsType) {
       var baseClassType = this.program.resolveType(declaration.extendsType, null); // reports
@@ -2039,8 +2054,6 @@ export class ClassPrototype extends Element {
             if (!instance.members)
               instance.members = new Map();
             var fieldDeclaration = (<FieldPrototype>member).declaration;
-            if (!fieldDeclaration)
-              throw new Error("cannot resolve built-ins");
             if (!fieldDeclaration.type)
               throw new Error("type expected"); // TODO: check if parent class defines a type for it already
             var fieldType = this.program.resolveType(fieldDeclaration.type, instance.contextualTypeArguments); // reports
@@ -2091,8 +2104,6 @@ export class ClassPrototype extends Element {
     var resolvedTypeArguments: Type[] | null = null;
     if (this.is(ElementFlags.GENERIC)) {
       assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
-      if (!this.declaration)
-        throw new Error("cannot resolve built-ins");
       resolvedTypeArguments = this.program.resolveTypeArguments(this.declaration.typeParameters, typeArgumentNodes, contextualTypeArguments, alternativeReportNode);
       if (!resolvedTypeArguments)
         return null;
@@ -2171,10 +2182,10 @@ export class InterfacePrototype extends ClassPrototype {
   kind = ElementKind.INTERFACE_PROTOTYPE;
 
   /** Declaration reference. */
-  declaration: InterfaceDeclaration | null; // more specific
+  declaration: InterfaceDeclaration; // more specific
 
   /** Constructs a new interface prototype. */
-  constructor(program: Program, simpleName: string, internalName: string, declaration: InterfaceDeclaration | null = null) {
+  constructor(program: Program, simpleName: string, internalName: string, declaration: InterfaceDeclaration) {
     super(program, simpleName, internalName, declaration);
   }
 }

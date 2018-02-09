@@ -383,8 +383,7 @@ class Root {
       // merge with current tail if adjacent
       if (start - Block.INFO == tailRef) {
         start -= Block.INFO;
-        let tail = changetype<Block>(tailRef);
-        tailInfo = tail.info;
+        tailInfo = changetype<Block>(tailRef).info;
       }
 
     } else
@@ -407,7 +406,7 @@ class Root {
     tail.info = 0 | LEFT_FREE;
     this.tailRef = changetype<usize>(tail);
 
-    this.insert(left); // also sets jump
+    this.insert(left); // also merges with free left before tail / sets jump
 
     return true;
   }

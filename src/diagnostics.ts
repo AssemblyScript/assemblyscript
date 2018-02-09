@@ -170,10 +170,8 @@ export abstract class DiagnosticEmitter {
   emitDiagnostic(code: DiagnosticCode, category: DiagnosticCategory, range: Range, arg0: string | null = null, arg1: string | null = null) {
     var message = DiagnosticMessage.create(code, category, arg0, arg1).withRange(range);
     this.diagnostics.push(message);
-    /* if (!this.silentDiagnostics) {
-      console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
-      console.log(<string>new Error("stack").stack);
-    } */
+    // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
+    // console.log(<string>new Error("stack").stack);
   }
 
   error(code: DiagnosticCode, range: Range, arg0: string | null = null, arg1: string | null = null): void {

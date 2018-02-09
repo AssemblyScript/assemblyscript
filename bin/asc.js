@@ -48,7 +48,7 @@ function main(argv, options, callback) {
   if (!callback) callback = function defaultCallback(err) {
     var code = 0;
     if (err) {
-      stderr.write(err + os.EOL);
+      stderr.write(err.stack + os.EOL);
       code = 1;
     }
     return code;
@@ -195,7 +195,11 @@ function main(argv, options, callback) {
 
   var module;
   stats.compileCount++;
-  stats.compileTime += measure(() => module = assemblyscript.compile(parser, compilerOptions));
+  try {
+    stats.compileTime += measure(() => module = assemblyscript.compile(parser, compilerOptions));
+  } catch (e) {
+    return callback(e);
+  }
   if (checkDiagnostics(parser, stderr)) {
     if (module) module.dispose();
     return callback(Error("Compile error"));

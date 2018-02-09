@@ -560,7 +560,7 @@ export abstract class Node {
     return elem;
   }
 
-  static createParameter(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, isRest: bool, range: Range): Parameter {
+  static createParameter(identifier: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, kind: ParameterKind, range: Range): Parameter {
     var elem = new Parameter();
     elem.range = range;
     (elem.name = identifier).parent = elem;
@@ -568,7 +568,7 @@ export abstract class Node {
       (<TypeNode>type).parent = elem;
     if (elem.initializer = initializer)
       (<Expression>initializer).parent = elem;
-    elem.isRest = isRest;
+    elem.parameterKind = kind;
     return elem;
   }
 
@@ -1050,7 +1050,7 @@ export class Source extends Node {
   /** Tests if this source is an entry file. */
   get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
   /** Tests if this source is a stdlib file. */
-  get isStdlib(): bool { return this.sourceKind == SourceKind.LIBRARY; }
+  get isLibrary(): bool { return this.sourceKind == SourceKind.LIBRARY; }
 }
 
 /** Base class of all declaration statements. */
@@ -1352,18 +1352,28 @@ export class NamespaceDeclaration extends DeclarationStatement {
   members: Statement[];
 }
 
+/** Represents the kind of a parameter. */
+export enum ParameterKind {
+  /** No specific flags. */
+  DEFAULT,
+  /** Is an optional parameter. */
+  OPTIONAL,
+  /** Is a rest parameter. */
+  REST
+}
+
 /** Represents a function parameter. */
 export class Parameter extends Node {
   kind = NodeKind.PARAMETER;
 
   /** Parameter name. */
-  name: IdentifierExpression | null;
+  name: IdentifierExpression;
   /** Parameter type. */
   type: TypeNode | null;
+  /** Parameter kind. */
+  parameterKind: ParameterKind;
   /** Initializer expression, if present. */
   initializer: Expression | null;
-  /** Whether a rest parameter or not. */
-  isRest: bool;
 }
 
 /** Represents a single modifier. */

@@ -24,6 +24,10 @@ import {
 } from "./diagnostics";
 
 import {
+  I64
+} from "./util/i64";
+
+import {
   normalize as normalizePath
 } from "./util/path";
 
@@ -66,6 +70,7 @@ import {
   ModifierKind,
   NamespaceDeclaration,
   Parameter,
+  ParameterKind,
   ReturnStatement,
   SwitchCase,
   SwitchStatement,
@@ -533,12 +538,34 @@ export class Parser extends DiagnosticEmitter {
   parseParameters(tn: Tokenizer): Parameter[] | null {
     // at '(': (Parameter (',' Parameter)*)? ')'
     var parameters = new Array<Parameter>();
+    var seenRest: Parameter | null = null;
+    var seenOptional = false;
+    var reportedRest = false;
     if (tn.peek() != Token.CLOSEPAREN) {
       do {
         var param = this.parseParameter(tn);
         if (!param)
           return null;
-        parameters.push(<Parameter>param);
+        if (seenRest && !reportedRest) {
+          this.error(DiagnosticCode.A_rest_parameter_must_be_last_in_a_parameter_list, seenRest.name.range);
+          reportedRest = true;
+        }
+        switch (param.parameterKind) {
+
+          default:
+            if (seenOptional)
+              this.error(DiagnosticCode.A_required_parameter_cannot_follow_an_optional_parameter, param.name.range);
+            break;
+
+          case ParameterKind.OPTIONAL:
+            seenOptional = true;
+            break;
+
+          case ParameterKind.REST:
+            seenRest = param;
+            break;
+        }
+        parameters.push(param);
       } while (tn.skip(Token.COMMA));
     }
     if (tn.skip(Token.CLOSEPAREN))
@@ -549,8 +576,11 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseParameter(tn: Tokenizer): Parameter | null {
-    // '...'? Identifier (':' Type)? ('=' Expression)?
+    // '...'? Identifier '?'? (':' Type)? ('=' Expression)?
     var isRest = false;
+    var seenRest = false;
+    var isOptional = false;
+    var seenOptional = false;
     var startRange: Range | null = null;
     if (tn.skip(Token.DOT_DOT_DOT)) {
       isRest = true;
@@ -561,6 +591,10 @@ export class Parser extends DiagnosticEmitter {
         startRange = tn.range();
       var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       var type: TypeNode | null = null;
+      if (isOptional = tn.skip(Token.QUESTION)) {
+        if (isRest)
+          this.error(DiagnosticCode.A_rest_parameter_cannot_be_optional, identifier.range);
+      }
       if (tn.skip(Token.COLON)) {
         type = this.parseType(tn);
         if (!type)
@@ -568,11 +602,17 @@ export class Parser extends DiagnosticEmitter {
       }
       var initializer: Expression | null = null;
       if (tn.skip(Token.EQUALS)) {
+        if (isRest)
+          this.error(DiagnosticCode.A_rest_parameter_cannot_have_an_initializer, identifier.range);
+        if (isOptional)
+          this.error(DiagnosticCode.Parameter_cannot_have_question_mark_and_initializer, identifier.range);
+        else
+          isOptional = true;
         initializer = this.parseExpression(tn, Precedence.COMMA + 1);
         if (!initializer)
           return null;
       }
-      return Node.createParameter(identifier, type, initializer, isRest, Range.join(<Range>startRange, tn.range()));
+      return Node.createParameter(identifier, type, initializer, isRest ? ParameterKind.REST : isOptional ? ParameterKind.OPTIONAL : ParameterKind.DEFAULT, Range.join(<Range>startRange, tn.range()));
     } else
       this.error(DiagnosticCode.Identifier_expected, tn.range());
     return null;

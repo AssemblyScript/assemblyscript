@@ -46,147 +46,6 @@ import {
   ElementKind
 } from "./program";
 
-/** Initializes the specified program with built-in constants and functions. */
-export function initialize(program: Program): void {
-
-  // math
-  addConstant(program, "NaN", Type.f64);
-  addConstant(program, "Infinity", Type.f64);
-
-  addFunction(program, "isNaN", true);
-  addFunction(program, "isFinite", true);
-  addFunction(program, "clz", true);
-  addFunction(program, "ctz", true);
-  addFunction(program, "popcnt", true);
-  addFunction(program, "rotl", true);
-  addFunction(program, "rotr", true);
-  addFunction(program, "abs", true);
-  addFunction(program, "max", true);
-  addFunction(program, "min", true);
-  addFunction(program, "ceil", true);
-  addFunction(program, "floor", true);
-  addFunction(program, "copysign", true);
-  addFunction(program, "nearest", true);
-  addFunction(program, "reinterpret", true);
-  addFunction(program, "sqrt", true);
-  addFunction(program, "trunc", true);
-
-  // memory access
-  addFunction(program, "load", true);
-  addFunction(program, "store", true);
-  addFunction(program, "sizeof", true);
-
-  // control flow
-  addFunction(program, "select", true);
-  addFunction(program, "unreachable");
-
-  // host operations
-  addFunction(program, "current_memory");
-  addFunction(program, "grow_memory");
-  // addFunction(program, "move_memory");
-  // addFunction(program, "set_memory");
-
-  // other
-  addFunction(program, "changetype", true);
-  addFunction(program, "assert");
-
-  // abort is special in that it is imported conditionally. for example, when
-  // compiling with noAssert=true, it isn't necessary that it is present, that
-  // is if a user doesn't call it manually.
-  var abortPrototype = addFunction(program, "abort");
-  abortPrototype.set(ElementFlags.DECLARED);
-  abortPrototype.instances.set("", new Function(abortPrototype, "abort", null, [
-    new Parameter(null, program.options.usizeType), // message (string)
-    new Parameter(null, program.options.usizeType), // file name (string)
-    new Parameter(null, Type.u32),                  // line number
-    new Parameter(null, Type.u32)                   // column number
-  ], Type.void, null));
-
-  // conversions and limits
-  var i32Func: FunctionPrototype,
-      u32Func: FunctionPrototype,
-      i64Func: FunctionPrototype,
-      u64Func: FunctionPrototype;
-  addFunction(program, "i8").members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "i8.MIN_VALUE", null, Type.i8).withConstantIntegerValue(-128, -1) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "i8.MAX_VALUE", null, Type.i8).withConstantIntegerValue(127, 0) ]
-  ]);
-  addFunction(program, "i16").members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "i16.MIN_VALUE", null, Type.i16).withConstantIntegerValue(-32768, -1) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "i16.MAX_VALUE", null, Type.i16).withConstantIntegerValue(32767, 0) ]
-  ]);
-  (i32Func = addFunction(program, "i32")).members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "i32.MIN_VALUE", null, Type.i32).withConstantIntegerValue(-2147483648, -1) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "i32.MAX_VALUE", null, Type.i32).withConstantIntegerValue(2147483647, 0) ]
-  ]);
-  (i64Func = addFunction(program, "i64")).members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "i64.MIN_VALUE", null, Type.i64).withConstantIntegerValue(0, -2147483648) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "i64.MAX_VALUE", null, Type.i64).withConstantIntegerValue(-1, 2147483647) ]
-  ]);
-  addFunction(program, "u8").members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "u8.MIN_VALUE", null, Type.u8).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "u8.MAX_VALUE", null, Type.u8).withConstantIntegerValue(255, 0) ]
-  ]);
-  addFunction(program, "u16").members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "u16.MIN_VALUE", null, Type.u16).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "u16.MAX_VALUE", null, Type.u16).withConstantIntegerValue(65535, 0) ]
-  ]);
-  (u32Func = addFunction(program, "u32")).members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "u32.MIN_VALUE", null, Type.u32).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "u32.MAX_VALUE", null, Type.u32).withConstantIntegerValue(-1, 0) ]
-  ]);
-  (u64Func = addFunction(program, "u64")).members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "u64.MIN_VALUE", null, Type.u64).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "u64.MAX_VALUE", null, Type.i64).withConstantIntegerValue(-1, -1) ]
-  ]);
-  addFunction(program, "bool").members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "bool.MIN_VALUE", null, Type.bool).withConstantIntegerValue(0, 0) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "bool.MAX_VALUE", null, Type.bool).withConstantIntegerValue(1, 0) ]
-  ]);
-  addFunction(program, "f32").members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "f32.MIN_VALUE", null, Type.f32).withConstantFloatValue(-3.40282347e+38) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "f32.MAX_VALUE", null, Type.f32).withConstantFloatValue(3.40282347e+38) ],
-    [ "MIN_SAFE_INTEGER", new Global(program, "MIN_SAFE_INTEGER", "f32.MIN_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(-16777215) ],
-    [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f32.MAX_SAFE_INTEGER", null, Type.f32).withConstantFloatValue(16777215) ],
-    [ "EPSILON", new Global(program, "EPSILON", "f32.EPSILON", null, Type.f32).withConstantFloatValue(1.19209290e-07) ]
-  ]);
-  addFunction(program, "f64").members = new Map([
-    [ "MIN_VALUE", new Global(program, "MIN_VALUE", "f64.MIN_VALUE", null, Type.f64).withConstantFloatValue(-1.7976931348623157e+308) ],
-    [ "MAX_VALUE", new Global(program, "MAX_VALUE", "f64.MAX_VALUE", null, Type.f64).withConstantFloatValue(1.7976931348623157e+308) ],
-    [ "MIN_SAFE_INTEGER", new Global(program, "MIN_SAFE_INTEGER", "f64.MIN_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(-9007199254740991) ],
-    [ "MAX_SAFE_INTEGER", new Global(program, "MAX_SAFE_INTEGER", "f64.MAX_SAFE_INTEGER", null, Type.f64).withConstantFloatValue(9007199254740991) ],
-    [ "EPSILON", new Global(program, "EPSILON", "f64.EPSILON", null, Type.f64).withConstantFloatValue(2.2204460492503131e-16) ]
-  ]);
-  if (program.options.isWasm64) {
-    program.elements.set("isize", i64Func);
-    program.elements.set("usize", u64Func);
-    addConstant(program, "HEAP_BASE", Type.usize64);
-  } else {
-    program.elements.set("isize", i32Func);
-    program.elements.set("usize", u32Func);
-    addConstant(program, "HEAP_BASE", Type.usize32);
-  }
-}
-
-/** Adds a built-in constant to the specified program. */
-function addConstant(program: Program, name: string, type: Type): Global {
-  var global = new Global(program, name, name, null, type);
-  global.set(ElementFlags.BUILTIN);
-  global.set(ElementFlags.CONSTANT);
-  program.elements.set(name, global);
-  return global;
-}
-
-/** Adds a built-in function to the specified program. */
-function addFunction(program: Program, name: string, isGeneric: bool = false): FunctionPrototype {
-  var prototype = new FunctionPrototype(program, name, name, null, null);
-  prototype.set(ElementFlags.BUILTIN);
-  if (isGeneric)
-    prototype.set(ElementFlags.GENERIC);
-  program.elements.set(name, prototype);
-  return prototype;
-}
-
 /** Compiles a get of a built-in global. */
 export function compileGetConstant(compiler: Compiler, global: Global, reportNode: Node): ExpressionRef {
   switch (global.internalName) { // switching on strings should become a compiler optimization eventually
@@ -204,7 +63,8 @@ export function compileGetConstant(compiler: Compiler, global: Global, reportNod
       return compiler.module.createF64(Infinity);
 
     case "HEAP_BASE": // constant, but never inlined
-      return compiler.module.createGetGlobal("HEAP_BASE", (compiler.currentType = <Type>global.type).toNativeType());
+      compiler.currentType = compiler.options.usizeType;
+      return compiler.module.createGetGlobal("HEAP_BASE", compiler.options.nativeSizeType);
   }
   compiler.error(DiagnosticCode.Operation_not_supported, reportNode.range);
   return compiler.module.createUnreachable();

@@ -169,6 +169,8 @@ declare class Uint32Array extends Array<u32> {}
 declare class Int8Array extends Array<i8> {}
 declare class Int16Array extends Array<i16> {}
 declare class Int32Array extends Array<i32> {}
+declare class Float32Array extends Array<f32> {}
+declare class Float64Array extends Array<f64> {}
 
 declare class String {
   static fromCharCode(ls: i32, hs?: i32): string;
