@@ -46,8 +46,9 @@ tests.forEach(filename => {
 
   const basename = filename.replace(/\.ts$/, "");
 
-  const stdout = createMemoryStream();
-  const stderr = createMemoryStream(true);
+  const stdout = asc.createMemoryStream();
+  const stderr = asc.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
+  stderr.isTTY = true;
 
   var failed = false;
 
@@ -134,28 +135,6 @@ tests.forEach(filename => {
     });
   });
 });
-
-function createMemoryStream(print) {
-  var stream = [];
-  if (stream.print = print)
-    stream.isTTY = process.stderr.isTTY;
-  stream.write = function(chunk) {
-    if (typeof chunk === "string") {
-      this.push(Buffer.from(chunk, "utf8"));
-    } else {
-      this.push(chunk);
-    }
-    if (stream.print)
-      process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  "));
-  };
-  stream.toBuffer = function() {
-    return Buffer.concat(this);
-  };
-  stream.toString = function() {
-    return this.toBuffer().toString("utf8");
-  };
-  return stream;
-}
 
 if (failures) {
   process.exitCode = 1;

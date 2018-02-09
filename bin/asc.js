@@ -3,28 +3,32 @@ const fs = require("fs");
 const os = require("os");
 
 // Use distribution files if present, otherwise run the sources directly
-const { assemblyscript, isDev } = (function bootstrap() {
-  var assemblyscript, isDev;
+var assemblyscript, isDev;
+try {
+  assemblyscript = require("../dist/assemblyscript.js");
+  isDev = false;
+  try { require("source-map-support").install(); } catch (e) {} // optional
+} catch (e) {
   try {
-    assemblyscript = require("../dist/assemblyscript.js");
-    isDev = false;
-    try { require("source-map-support").install(); } catch (e) {} // optional
-  } catch (e) {
     require("ts-node").register({ project: require("path").join(__dirname, "..", "src") });
     require("../src/glue/js");
     assemblyscript = require("../src");
     isDev = true;
+  } catch (e) {
+    assemblyscript = require("./assemblyscript"); // last resort: browser bundle under node
+    isDev = false;
   }
-  return { assemblyscript, isDev };
-})();
+}
 
 // Common constants
-const VERSION = require("../package.json").version + (isDev ? "-dev" : "");
+
+const VERSION = typeof BUNDLE_VERSION === "string" ? BUNDLE_VERSION : require("../package.json").version + (isDev ? "-dev" : "");
 const OPTIONS = require("./asc.json");
 const SOURCEMAP_ROOT = "assemblyscript:///";
 const LIBRARY_PREFIX = assemblyscript.LIBRARY_PREFIX;
 const DEFAULT_OPTIMIZE_LEVEL = 2;
 const DEFAULT_SHRINK_LEVEL = 1;
+const LIBRARY = typeof BUNDLE_LIBRARY !== "undefined" ? BUNDLE_LIBRARY : {};
 
 exports.VERSION = VERSION;
 
@@ -37,6 +41,18 @@ function main(argv, options, callback) {
 
   const stdout = options.stdout || process.stdout;
   const stderr = options.stderr || process.stderr;
+  const readFile = options.readFile || readFileNode;
+  const writeFile = options.writeFile || writeFileNode;
+  const listFiles = options.listFiles || listFilesNode;
+
+  // All of the above must be specified in browser environments
+  if (!stdout) throw Error("'options.stdout' must be specified");
+  if (!stderr) throw Error("'options.stderr' must be specified");
+  if (!fs.readFileSync) {
+    if (readFile === readFileNode) throw Error("'options.readFile' must be specified");
+    if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
+    if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
+  }
 
   // Record compilation times
   const stats = createStats();
@@ -98,7 +114,8 @@ function main(argv, options, callback) {
   const baseDir = args.baseDir != null ? path.resolve(args.baseDir) : process.cwd();
 
   // Include standard library if --noLib isn't set
-  const libDirs = args.noLib ? [] : [ path.join(__dirname, "..", "std", "assembly") ];
+  const stdLibDir = path.join(__dirname, "..", "std", "assembly");
+  const libDirs = args.noLib ? [] : [ stdLibDir ];
 
   // Include custom library components (with or without stdlib)
   if (args.lib) {
@@ -136,10 +153,14 @@ function main(argv, options, callback) {
       // Load library file if explicitly requested
       if (sourcePath.startsWith(LIBRARY_PREFIX)) {
         for (let i = 0, k = libDirs.length; i < k; ++i) {
-          sourceText = readFile(path.join(libDirs[i], sourcePath.substring(LIBRARY_PREFIX.length) + ".ts"));
-          if (sourceText !== null) {
-            sourcePath += ".ts";
-            break;
+          if (LIBRARY.hasOwnProperty(sourcePath))
+            sourceText = LIBRARY[sourcePath];
+          else {
+            sourceText = readFile(path.join(libDirs[i], sourcePath.substring(LIBRARY_PREFIX.length) + ".ts"));
+            if (sourceText !== null) {
+              sourcePath += ".ts";
+              break;
+            }
           }
         }
 
@@ -149,11 +170,15 @@ function main(argv, options, callback) {
         if (sourceText === null) {
           sourceText = readFile(path.join(baseDir, sourcePath, "index.ts"));
           if (sourceText === null) {
-            for (let i = 0, k =libDirs.length; i < k; ++i) {
-              sourceText = readFile(path.join(libDirs[i], sourcePath + ".ts"));
-              if (sourceText !== null) {
-                sourcePath = LIBRARY_PREFIX + sourcePath + ".ts";
-                break;
+            for (let i = 0, k = libDirs.length; i < k; ++i) {
+              if (LIBRARY.hasOwnProperty(LIBRARY_PREFIX + sourcePath))
+                sourceText = LIBRARY[LIBRARY_PREFIX + sourcePath];
+              else {
+                sourceText = readFile(path.join(libDirs[i], sourcePath + ".ts"));
+                if (sourceText !== null) {
+                  sourcePath = LIBRARY_PREFIX + sourcePath + ".ts";
+                  break;
+                }
               }
             }
             if (sourceText === null)
@@ -171,10 +196,18 @@ function main(argv, options, callback) {
   }
 
   // Include (other) library components
+  var hasBundledLibrary = false;
+  if (!args.noLib)
+    Object.keys(LIBRARY).forEach(libPath => {
+      if (libPath.lastIndexOf("/") >= LIBRARY_PREFIX.length) return;
+      stats.parseCount++;
+      stats.parseTime += measure(() => { parser = assemblyscript.parseFile(LIBRARY[libPath], libPath + ".ts", parser, false); });
+      hasBundledLibrary = true;
+    });
   for (let i = 0, k = libDirs.length; i < k; ++i) {
+    if (i === 0 && hasBundledLibrary) continue;
     let libDir = libDirs[i];
-    let libFiles;
-    stats.readTime += measure(() => { libFiles = require("glob").sync("*.ts", { cwd: libDir }) });
+    let libFiles = listFiles(libDir);
     for (let j = 0, l = libFiles.length; j < l; ++j) {
       let libPath = libFiles[j];
       let libText = readFile(path.join(libDir, libPath));
@@ -383,24 +416,34 @@ function main(argv, options, callback) {
     printStats(stats, stderr);
   return callback(null);
 
-  function readFile(filename) {
+  function readFileNode(filename) {
     try {
       var text;
       stats.readCount++;
-      stats.readTime += measure(() => text = fs.readFileSync(filename, { encoding: "utf8" }));
+      stats.readTime += measure(() => { text = fs.readFileSync(filename, { encoding: "utf8" }); });
       return text;
     } catch (e) {
       return null;
     }
   }
 
-  function writeFile(filename, contents) {
+  function writeFileNode(filename, contents) {
     try {
       stats.writeCount++;
       stats.writeTime += measure(() => fs.writeFileSync(filename, contents, typeof contents === "string" ? { encoding: "utf8" } : undefined));
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  function listFilesNode(dirname) {
+    var files;
+    try {
+      stats.readTime += measure(() => { files = require("glob").sync("*.ts", { cwd: dirname }) });
+      return files;
+    } catch (e) {
+      return [];
     }
   }
 
@@ -464,7 +507,8 @@ function createStats() {
   };
 }
 
-exports.createStats = createStats;
+if (!process.hrtime)
+  process.hrtime = require("browser-process-hrtime");
 
 function measure(fn) {
   const start = process.hrtime();
@@ -488,3 +532,24 @@ function printStats(stats, output) {
 }
 
 exports.printStats = printStats;
+
+function createMemoryStream(fn) {
+  var stream = [];
+  stream.write = function(chunk) {
+    if (typeof chunk === "string") {
+      this.push(Buffer.from(chunk, "utf8"));
+    } else {
+      this.push(chunk);
+    }
+    if (fn) fn(chunk);
+  };
+  stream.toBuffer = function() {
+    return Buffer.concat(this);
+  };
+  stream.toString = function() {
+    return this.toBuffer().toString("utf8");
+  };
+  return stream;
+}
+
+exports.createMemoryStream = createMemoryStream;

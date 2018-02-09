@@ -17,6 +17,8 @@
     "ts-node": "^4.1.0"
   },
   "devDependencies": {
+    "babel-minify-webpack-plugin": "^0.3.0",
+    "browser-process-hrtime": "^0.1.2",
     "chalk": "^2.3.0",
     "diff": "^3.4.0",
     "long": "^4.0.0",

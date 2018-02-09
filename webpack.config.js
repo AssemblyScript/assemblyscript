@@ -1,7 +1,9 @@
-var path = require("path");
-var webpack = require("webpack");
+const path = require("path");
+const fs = require("fs");
+const webpack = require("webpack");
 
-module.exports = {
+// Build just the C-like library
+const lib = {
   entry: [ "./src/glue/js.js", "./src/index.ts" ],
   module: {
     rules: [
@@ -12,7 +14,7 @@ module.exports = {
       }
     ]
   },
-  externals: [ "binaryen", "../../lib/binaryen" ],
+  externals: [ "binaryen" ],
   resolve: {
     extensions: [ ".ts", ".js" ]
   },
@@ -31,4 +33,57 @@ module.exports = {
       filename: "assemblyscript.js.map"
     })
   ]
-}
+};
+
+// Build asc for browser usage
+const BabelMinifyPlugin = require("babel-minify-webpack-plugin");
+const bin = {
+  context: path.join(__dirname, "bin"),
+  entry: [ "./asc.js" ],
+  externals: [{
+    "../dist/assemblyscript.js": {
+      commonjs: "assemblyscript",
+      commonjs2: "assemblyscript",
+      amd: "assemblyscript",
+      root: "_"
+    },
+  }, "./assemblyscript", "source-map-support"],
+  node: {
+    "fs": "empty",
+    "global": true,
+    "process": "mock",
+    "crypto": "empty"
+  },
+  output: {
+    filename: "asc.js",
+    path: path.resolve(__dirname, "dist"),
+    library: "asc",
+    libraryTarget: "umd"
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      BUNDLE_VERSION: JSON.stringify(require("./package.json").version),
+      BUNDLE_LIBRARY: (() => {
+        const libDir = path.join(__dirname, "std", "assembly");
+        const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
+        const lib = {};
+        libFiles.forEach(file => {
+          var source = fs.readFileSync(path.join(libDir, file), { encoding: "utf8" });
+          lib["(lib)/" + file.replace(/\.ts$/, "")] = JSON.stringify(source);
+        });
+        return lib;
+      })(),
+      __dirname: JSON.stringify(".")
+    }),
+    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob)$/),
+    // Error: original.line and original.column are not numbers -- you probably meant to omit the
+    // original mapping entirely and only map the generated position. If so, pass null for the
+    // original mapping instead of an object with empty or null values.
+    // new BabelMinifyPlugin(/* {}, { sourceMap: true } */),
+    new webpack.SourceMapDevToolPlugin({
+      filename: "asc.js.map"
+    }),
+  ]
+};
+
+module.exports = [ lib, bin ];
