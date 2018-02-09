@@ -475,13 +475,15 @@ export function allocate_memory(size: usize): usize {
 
 /** Frees the chunk of memory at the specified address. */
 export function free_memory(data: usize): void {
-  var root = ROOT;
-  if (root && data) {
-    var block = changetype<Block>(data - Block.INFO);
-    var blockInfo = block.info;
-    assert(!(blockInfo & FREE)); // must be used
-    block.info = blockInfo | FREE;
-    root.insert(changetype<Block>(data - Block.INFO));
+  if (data) {
+    var root = ROOT;
+    if (root) {
+      var block = changetype<Block>(data - Block.INFO);
+      var blockInfo = block.info;
+      assert(!(blockInfo & FREE)); // must be used
+      block.info = blockInfo | FREE;
+      root.insert(changetype<Block>(data - Block.INFO));
+    }
   }
 }
 
