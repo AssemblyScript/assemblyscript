@@ -44,6 +44,7 @@ function main(argv, options, callback) {
   const readFile = options.readFile || readFileNode;
   const writeFile = options.writeFile || writeFileNode;
   const listFiles = options.listFiles || listFilesNode;
+  const stats = options.stats || createStats();
 
   // All of the above must be specified in browser environments
   if (!stdout) throw Error("'options.stdout' must be specified");
@@ -53,9 +54,6 @@ function main(argv, options, callback) {
     if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
     if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
   }
-
-  // Record compilation times
-  const stats = createStats();
 
   const args = parseArguments(argv);
   const indent = 24;
@@ -506,6 +504,8 @@ function createStats() {
     optimizeCount: 0
   };
 }
+
+exports.createStats = createStats;
 
 if (!process.hrtime)
   process.hrtime = require("browser-process-hrtime");

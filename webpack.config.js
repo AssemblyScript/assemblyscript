@@ -68,6 +68,7 @@ const bin = {
         const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
         const lib = {};
         libFiles.forEach(file => {
+          // console.log("bundling '(lib)/" + file + "'");
           var source = fs.readFileSync(path.join(libDir, file), { encoding: "utf8" });
           lib["(lib)/" + file.replace(/\.ts$/, "")] = JSON.stringify(source);
         });
