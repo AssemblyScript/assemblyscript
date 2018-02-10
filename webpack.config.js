@@ -84,10 +84,10 @@ const bin = {
     // Error: original.line and original.column are not numbers -- you probably meant to omit the
     // original mapping entirely and only map the generated position. If so, pass null for the
     // original mapping instead of an object with empty or null values.
-    // new BabelMinifyPlugin(/* {}, { sourceMap: true } */),
-    new webpack.SourceMapDevToolPlugin({
-      filename: "asc.js.map"
-    }),
+    new BabelMinifyPlugin(/* {}, { sourceMap: true } */),
+    // new webpack.SourceMapDevToolPlugin({
+    //   filename: "asc.js.map"
+    // }),
   ]
 };
 
