@@ -14,29 +14,29 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  ;;@ overflow.ts:11:2
+  ;;@ overflow.ts:13:2
   (set_local $0
-   ;;@ overflow.ts:11:20
+   ;;@ overflow.ts:13:20
    (i32.const 255)
   )
-  ;;@ overflow.ts:12:2
+  ;;@ overflow.ts:14:2
   (set_local $0
    (i32.and
     (i32.add
      (get_local $0)
-     ;;@ overflow.ts:12:13
+     ;;@ overflow.ts:14:13
      (i32.const 1)
     )
     (i32.const 255)
    )
   )
-  ;;@ overflow.ts:13:2
+  ;;@ overflow.ts:15:2
   (if
    (i32.eqz
-    ;;@ overflow.ts:13:9
+    ;;@ overflow.ts:15:9
     (i32.eq
      (get_local $0)
-     ;;@ overflow.ts:13:20
+     ;;@ overflow.ts:15:20
      (i32.const 0)
     )
    )
@@ -44,40 +44,40 @@
     (call $abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 13)
+     (i32.const 15)
      (i32.const 2)
     )
     (unreachable)
    )
   )
-  ;;@ overflow.ts:15:2
+  ;;@ overflow.ts:17:2
   (set_local $1
-   ;;@ overflow.ts:15:27
+   ;;@ overflow.ts:17:27
    (i32.const 255)
   )
-  ;;@ overflow.ts:16:2
+  ;;@ overflow.ts:18:2
   (set_local $2
-   ;;@ overflow.ts:16:27
+   ;;@ overflow.ts:18:27
    (i32.const 1)
   )
-  ;;@ overflow.ts:17:2
+  ;;@ overflow.ts:19:2
   (set_local $1
    (i32.and
     (i32.add
      (get_local $1)
-     ;;@ overflow.ts:17:20
+     ;;@ overflow.ts:19:20
      (get_local $2)
     )
     (i32.const 255)
    )
   )
-  ;;@ overflow.ts:18:2
+  ;;@ overflow.ts:20:2
   (if
    (i32.eqz
-    ;;@ overflow.ts:18:9
+    ;;@ overflow.ts:20:9
     (i32.eq
      (get_local $1)
-     ;;@ overflow.ts:18:27
+     ;;@ overflow.ts:20:27
      (i32.const 0)
     )
    )
@@ -85,7 +85,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 18)
+     (i32.const 20)
      (i32.const 2)
     )
     (unreachable)
@@ -93,24 +93,24 @@
   )
  )
  (func $start (; 2 ;) (type $v)
-  ;;@ overflow.ts:2:0
+  ;;@ overflow.ts:4:0
   (set_global $overflow/badByte
    (i32.and
     (i32.add
      (get_global $overflow/badByte)
-     ;;@ overflow.ts:2:11
+     ;;@ overflow.ts:4:11
      (i32.const 1)
     )
     (i32.const 255)
    )
   )
-  ;;@ overflow.ts:3:0
+  ;;@ overflow.ts:5:0
   (if
    (i32.eqz
-    ;;@ overflow.ts:3:7
+    ;;@ overflow.ts:5:7
     (i32.eq
      (get_global $overflow/badByte)
-     ;;@ overflow.ts:3:18
+     ;;@ overflow.ts:5:18
      (i32.const 0)
     )
    )
@@ -118,30 +118,30 @@
     (call $abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3)
+     (i32.const 5)
      (i32.const 0)
     )
     (unreachable)
    )
   )
-  ;;@ overflow.ts:7:0
+  ;;@ overflow.ts:9:0
   (set_global $overflow/anotherBadByte
    (i32.and
     (i32.add
      (get_global $overflow/anotherBadByte)
-     ;;@ overflow.ts:7:18
+     ;;@ overflow.ts:9:18
      (get_global $overflow/badIncrementer)
     )
     (i32.const 255)
    )
   )
-  ;;@ overflow.ts:8:0
+  ;;@ overflow.ts:10:0
   (if
    (i32.eqz
-    ;;@ overflow.ts:8:7
+    ;;@ overflow.ts:10:7
     (i32.eq
      (get_global $overflow/anotherBadByte)
-     ;;@ overflow.ts:8:25
+     ;;@ overflow.ts:10:25
      (i32.const 0)
     )
    )
@@ -149,13 +149,13 @@
     (call $abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 8)
+     (i32.const 10)
      (i32.const 0)
     )
     (unreachable)
    )
   )
-  ;;@ overflow.ts:21:0
+  ;;@ overflow.ts:23:0
   (call $overflow/local)
  )
 )
