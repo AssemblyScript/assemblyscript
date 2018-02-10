@@ -2,6 +2,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (type $i (func (result i32)))
+ (type $iv (func (param i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $overflow/badByte (mut i32) (i32.const 255))
  (global $overflow/anotherBadByte (mut i32) (i32.const 255))
@@ -23,7 +24,27 @@
    (i32.const 0)
   )
  )
- (func $start (; 3 ;) (type $v)
+ (func $overflow/storeU8FFadd1 (; 3 ;) (type $iv) (param $0 i32)
+  (i32.store8
+   (i32.const 0)
+   (get_local $0)
+  )
+  (if
+   (i32.load8_u
+    (i32.const 0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 36)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $start (; 4 ;) (type $v)
   (set_global $overflow/badByte
    (i32.and
     (i32.add
@@ -86,6 +107,78 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 32)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $overflow/valueU8
+   (i32.const 255)
+  )
+  (call $overflow/storeU8FFadd1
+   (i32.and
+    (i32.add
+     (get_global $overflow/valueU8)
+     (i32.const 1)
+    )
+    (i32.const 255)
+   )
+  )
+  (i32.store8
+   (i32.const 0)
+   (i32.add
+    (get_global $overflow/valueU8)
+    (i32.const 1)
+   )
+  )
+  (if
+   (i32.load8_u
+    (i32.const 0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 43)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $overflow/valueU8
+   (i32.and
+    (i32.add
+     (get_global $overflow/valueU8)
+     (i32.const 1)
+    )
+    (i32.const 255)
+   )
+  )
+  (i32.store8
+   (i32.const 0)
+   (get_global $overflow/valueU8)
+  )
+  (if
+   (i32.load8_u
+    (i32.const 0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 46)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (get_global $overflow/valueU8)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 47)
      (i32.const 0)
     )
     (unreachable)

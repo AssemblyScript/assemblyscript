@@ -2,6 +2,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (type $i (func (result i32)))
+ (type $iv (func (param i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $overflow/badByte (mut i32) (i32.const 255))
  (global $overflow/anotherBadByte (mut i32) (i32.const 255))
@@ -111,7 +112,39 @@
    )
   )
  )
- (func $start (; 3 ;) (type $v)
+ (func $overflow/storeU8FFadd1 (; 3 ;) (type $iv) (param $0 i32)
+  ;;@ overflow.ts:35:2
+  (i32.store8
+   ;;@ overflow.ts:35:12
+   (i32.const 0)
+   ;;@ overflow.ts:35:15
+   (get_local $0)
+  )
+  ;;@ overflow.ts:36:2
+  (if
+   (i32.eqz
+    ;;@ overflow.ts:36:9
+    (i32.eq
+     (i32.load8_u
+      ;;@ overflow.ts:36:18
+      (i32.const 0)
+     )
+     ;;@ overflow.ts:36:24
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 36)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $start (; 4 ;) (type $v)
   ;;@ overflow.ts:4:0
   (set_global $overflow/badByte
    (i32.and
@@ -206,6 +239,122 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 32)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ overflow.ts:39:0
+  (set_global $overflow/valueU8
+   ;;@ overflow.ts:39:10
+   (i32.const 255)
+  )
+  ;;@ overflow.ts:40:0
+  (call $overflow/storeU8FFadd1
+   ;;@ overflow.ts:40:14
+   (i32.and
+    (i32.add
+     (get_global $overflow/valueU8)
+     ;;@ overflow.ts:40:24
+     (i32.const 1)
+    )
+    (i32.const 255)
+   )
+  )
+  ;;@ overflow.ts:42:0
+  (i32.store8
+   ;;@ overflow.ts:42:10
+   (i32.const 0)
+   ;;@ overflow.ts:42:13
+   (i32.and
+    (i32.add
+     (get_global $overflow/valueU8)
+     ;;@ overflow.ts:42:23
+     (i32.const 1)
+    )
+    (i32.const 255)
+   )
+  )
+  ;;@ overflow.ts:43:0
+  (if
+   (i32.eqz
+    ;;@ overflow.ts:43:7
+    (i32.eq
+     (i32.load8_u
+      ;;@ overflow.ts:43:16
+      (i32.const 0)
+     )
+     ;;@ overflow.ts:43:22
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 43)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ overflow.ts:45:0
+  (i32.store8
+   ;;@ overflow.ts:45:10
+   (i32.const 0)
+   ;;@ overflow.ts:45:13
+   (block (result i32)
+    (set_global $overflow/valueU8
+     (i32.and
+      (i32.add
+       ;;@ overflow.ts:45:15
+       (get_global $overflow/valueU8)
+       (i32.const 1)
+      )
+      (i32.const 255)
+     )
+    )
+    (get_global $overflow/valueU8)
+   )
+  )
+  ;;@ overflow.ts:46:0
+  (if
+   (i32.eqz
+    ;;@ overflow.ts:46:7
+    (i32.eq
+     (i32.load8_u
+      ;;@ overflow.ts:46:16
+      (i32.const 0)
+     )
+     ;;@ overflow.ts:46:22
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 46)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ overflow.ts:47:0
+  (if
+   (i32.eqz
+    ;;@ overflow.ts:47:7
+    (i32.eq
+     (get_global $overflow/valueU8)
+     ;;@ overflow.ts:47:18
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 47)
      (i32.const 0)
     )
     (unreachable)
