@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 
-// Build just the C-like library
+// Build the C-like library
 const lib = {
   entry: [ "./src/glue/js.js", "./src/index.ts" ],
   module: {
@@ -47,7 +47,11 @@ const bin = {
       amd: "assemblyscript",
       root: "_"
     },
-  }, "./assemblyscript", "source-map-support"],
+    "./assemblyscript": {
+      commonjs: "./assemblyscript",
+      commonjs2: "./assemblyscript"
+    }
+  }],
   node: {
     "fs": "empty",
     "global": true,
@@ -76,7 +80,7 @@ const bin = {
       })(),
       __dirname: JSON.stringify(".")
     }),
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob)$/),
+    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob|source\-map\-support)$/),
     // Error: original.line and original.column are not numbers -- you probably meant to omit the
     // original mapping entirely and only map the generated position. If so, pass null for the
     // original mapping instead of an object with empty or null values.
