@@ -1,5 +1,7 @@
 var asc = require("../dist/asc.js");
 
+console.log(Object.keys(asc));
+
 var stdout = asc.createMemoryStream();
 var stderr = asc.createMemoryStream();
 var stats  = asc.createStats();

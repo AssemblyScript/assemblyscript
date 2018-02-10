@@ -22,15 +22,15 @@ try {
 
 // Common constants
 
-const VERSION = typeof BUNDLE_VERSION === "string" ? BUNDLE_VERSION : require("../package.json").version + (isDev ? "-dev" : "");
-const OPTIONS = require("./asc.json");
+const isBundle = typeof BUNDLE_VERSION === "string";
+const VERSION = exports.version = isBundle ? BUNDLE_VERSION : require("../package.json").version + (isDev ? "-dev" : "");
+const OPTIONS = exports.options = require("./asc.json");
 const SOURCEMAP_ROOT = "assemblyscript:///";
 const LIBRARY_PREFIX = assemblyscript.LIBRARY_PREFIX;
-const DEFAULT_OPTIMIZE_LEVEL = 2;
-const DEFAULT_SHRINK_LEVEL = 1;
-const LIBRARY = typeof BUNDLE_LIBRARY !== "undefined" ? BUNDLE_LIBRARY : {};
-
-exports.VERSION = VERSION;
+const DEFAULT_OPTIMIZE_LEVEL = exports.defaultOptimizeLevel = 2;
+const DEFAULT_SHRINK_LEVEL = exports.defaultShrinkLevel = 1;
+const LIBRARY_FILES = exports.libraryFiles = isBundle ? BUNDLE_LIBRARY : {};
+const DEFINITION_FILES = exports.definitionFiles = isBundle ? BUNDLE_DEFINITIONS : {};
 
 function main(argv, options, callback) {
   if (typeof options === "function") {
@@ -151,8 +151,8 @@ function main(argv, options, callback) {
       // Load library file if explicitly requested
       if (sourcePath.startsWith(LIBRARY_PREFIX)) {
         for (let i = 0, k = libDirs.length; i < k; ++i) {
-          if (LIBRARY.hasOwnProperty(sourcePath))
-            sourceText = LIBRARY[sourcePath];
+          if (LIBRARY_FILES.hasOwnProperty(sourcePath))
+            sourceText = LIBRARY_FILES[sourcePath];
           else {
             sourceText = readFile(path.join(libDirs[i], sourcePath.substring(LIBRARY_PREFIX.length) + ".ts"));
             if (sourceText !== null) {
@@ -169,8 +169,8 @@ function main(argv, options, callback) {
           sourceText = readFile(path.join(baseDir, sourcePath, "index.ts"));
           if (sourceText === null) {
             for (let i = 0, k = libDirs.length; i < k; ++i) {
-              if (LIBRARY.hasOwnProperty(LIBRARY_PREFIX + sourcePath))
-                sourceText = LIBRARY[LIBRARY_PREFIX + sourcePath];
+              if (LIBRARY_FILES.hasOwnProperty(LIBRARY_PREFIX + sourcePath))
+                sourceText = LIBRARY_FILES[LIBRARY_PREFIX + sourcePath];
               else {
                 sourceText = readFile(path.join(libDirs[i], sourcePath + ".ts"));
                 if (sourceText !== null) {
@@ -196,10 +196,10 @@ function main(argv, options, callback) {
   // Include (other) library components
   var hasBundledLibrary = false;
   if (!args.noLib)
-    Object.keys(LIBRARY).forEach(libPath => {
+    Object.keys(LIBRARY_FILES).forEach(libPath => {
       if (libPath.lastIndexOf("/") >= LIBRARY_PREFIX.length) return;
       stats.parseCount++;
-      stats.parseTime += measure(() => { parser = assemblyscript.parseFile(LIBRARY[libPath], libPath + ".ts", parser, false); });
+      stats.parseTime += measure(() => { parser = assemblyscript.parseFile(LIBRARY_FILES[libPath], libPath + ".ts", parser, false); });
       hasBundledLibrary = true;
     });
   for (let i = 0, k = libDirs.length; i < k; ++i) {

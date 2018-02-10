@@ -71,13 +71,13 @@ const bin = {
         const libDir = path.join(__dirname, "std", "assembly");
         const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
         const lib = {};
-        libFiles.forEach(file => {
-          // console.log("bundling '(lib)/" + file + "'");
-          var source = fs.readFileSync(path.join(libDir, file), { encoding: "utf8" });
-          lib["(lib)/" + file.replace(/\.ts$/, "")] = JSON.stringify(source);
-        });
+        libFiles.forEach(file => lib["(lib)/" + file.replace(/\.ts$/, "")] = bundleFile(path.join(libDir, file)));
         return lib;
       })(),
+      BUNDLE_DEFINITIONS: {
+        "assembly": bundleFile(path.join(__dirname, "std", "assembly.d.ts")),
+        "portable": bundleFile(path.join(__dirname, "std", "portable.d.ts"))
+      },
       __dirname: JSON.stringify(".")
     }),
     new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob|source\-map\-support)$/),
@@ -90,5 +90,9 @@ const bin = {
     // }),
   ]
 };
+
+function bundleFile(filename) {
+  return JSON.stringify(fs.readFileSync(filename, { encoding: "utf8" }).replace(/\r\n/g, "\n"));
+}
 
 module.exports = [ lib, bin ];
