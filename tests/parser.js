@@ -27,14 +27,14 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
 
   var sb = [];
   serializeSource(parser.program.sources[0], sb);
-  var actual = sb.join("") + parser.diagnostics.map(diagnostic => "// " + diagnostic + "\n").join("");;
+  var actual = sb.join("") + parser.diagnostics.map(diagnostic => "// " + diagnostic + "\n").join("");
   var fixture = filename + ".fixture.ts";
 
   if (isCreate) {
     fs.writeFileSync(__dirname + "/parser/" + fixture, actual, { encoding: "utf8" });
     console.log("Created\n");
   } else {
-    var expected = fs.readFileSync(__dirname + "/parser/" + fixture, { encoding: "utf8" });
+    var expected = fs.readFileSync(__dirname + "/parser/" + fixture, { encoding: "utf8" }).replace(/\r\n/g, "\n");
     var diffs = diff("parser/" + fixture, expected, actual);
     if (diffs !== null) {
       failed = true;

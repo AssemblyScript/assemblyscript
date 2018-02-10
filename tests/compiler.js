@@ -69,12 +69,12 @@ tests.forEach(filename => {
     console.log();
     if (err)
       stderr.write(err + os.EOL);
+    var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
-      fs.writeFileSync(path.join(basedir, basename + ".wast"), stdout.toString(), { encoding: "utf8" });
+      fs.writeFileSync(path.join(basedir, basename + ".wast"), actual, { encoding: "utf8" });
       console.log("- " + chalk.yellow("Created fixture"));
     } else {
-      let actual = stdout.toString();
-      let expected = fs.readFileSync(path.join(basedir, basename + ".wast"), { encoding: "utf8" });
+      let expected = fs.readFileSync(path.join(basedir, basename + ".wast"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
       let diffs = diff(basename + ".wast", expected, actual);
       if (diffs !== null) {
         console.log(diffs);

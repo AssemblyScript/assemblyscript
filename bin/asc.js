@@ -553,3 +553,18 @@ function createMemoryStream(fn) {
 }
 
 exports.createMemoryStream = createMemoryStream;
+
+exports.tscOptions = {
+  alwaysStrict: true,
+  noImplicitAny: true,
+  noImplicitReturns: true,
+  noImplicitThis: true,
+  noEmitOnError: true,
+  strictNullChecks: true,
+  experimentalDecorators: true,
+  target: "esnext",
+  module: "commonjs",
+  noLib: true,
+  types: [],
+  allowJs: false
+};
