@@ -5,7 +5,7 @@ var child_process = require("child_process");
 var count = 0;
 while (true) {
   console.log("[ #" + ++count + " ]\n");
-  var res = child_process.spawnSync("node", [ "tests" ], { stdio: "inherit" });
+  var res = child_process.spawnSync("node", [ __dirname ], { stdio: "inherit" });
   if (res.status !== 0)
     throw Error("exited with " + res.status);
   if (res.error)

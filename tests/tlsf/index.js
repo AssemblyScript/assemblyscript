@@ -4,7 +4,7 @@ const runner = require("./runner");
 function test(file) {
   console.log("Testing '" + file + "' ...\n");
 
-  const exports = new WebAssembly.Instance(WebAssembly.Module(fs.readFileSync(__dirname + "/../" + file)), {
+  const exports = new WebAssembly.Instance(WebAssembly.Module(fs.readFileSync(__dirname + "/" + file)), {
     env: {
       abort: function(msg, file, line, column) {
         throw Error("Assertion failed: " + (msg ? "'" + getString(msg) + "' " : "") + "at " + getString(file) + ":" + line + ":" + column);
