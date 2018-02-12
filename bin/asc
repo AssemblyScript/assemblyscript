@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-process.exitCode = require("./asc.js").main(process.argv.slice(2));
+const asc = module.exports = require("./asc.js");
+if (process.argv[1] === __filename)
+  process.exitCode = asc.main(process.argv.slice(2));
