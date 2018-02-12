@@ -5,13 +5,13 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
   var w: u32, x: u32;
 
   // copy 1 byte each until src is aligned to 4 bytes
-  while (n && src % 4) {
+  while (n && (src & 3)) {
     store<u8>(dest++, load<u8>(src++));
     n--;
   }
 
   // if dst is aligned to 4 bytes as well, copy 4 bytes each
-  if (dest % 4 == 0) {
+  if ((dest & 3) == 0) {
     while (n >= 16) {
       store<u32>(dest     , load<u32>(src     ));
       store<u32>(dest +  4, load<u32>(src +  4));
@@ -41,7 +41,7 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
   // if dst is not aligned to 4 bytes, use alternating shifts to copy 4 bytes each
   // doing shifts if faster when copying enough bytes (here: 32 or more)
   if (n >= 32) {
-    switch (dest % 4) {
+    switch (dest & 3) {
       // known to be != 0
       case 1:
         w = load<u32>(src);
@@ -152,8 +152,8 @@ export function move_memory(dest: usize, src: usize, n: usize): void {
     return;
   }
   if (dest < src) {
-    if (src % 8 == dest % 8) {
-      while (dest % 8) {
+    if ((src & 7) == (dest & 7)) {
+      while (dest & 7) {
         if (!n)
           return;
         --n;
@@ -161,9 +161,9 @@ export function move_memory(dest: usize, src: usize, n: usize): void {
       }
       while (n >= 8) {
         store<u64>(dest, load<u64>(src));
-        n -= 8;
+        n    -= 8;
         dest += 8;
-        src += 8;
+        src  += 8;
       }
     }
     while (n) {
@@ -171,8 +171,8 @@ export function move_memory(dest: usize, src: usize, n: usize): void {
       --n;
     }
   } else {
-    if (src % 8 == dest % 8) {
-      while ((dest + n) % 8) {
+    if ((src & 7) == (dest & 7)) {
+      while ((dest + n) & 7) {
         if (!n)
           return;
         store<u8>(dest + --n, load<u8>(src + n));
@@ -217,7 +217,7 @@ export function set_memory(dest: usize, c: u8, n: usize): void {
   n -= k;
   n &= -4;
 
-  var c32: u32 = -1 / 255 * c;
+  var c32: u32 = (-1 / 255) * c;
 
   // fill head/tail up to 28 bytes each in preparation
   store<u32>(dest, c32);
