@@ -1,9 +1,6 @@
-dist: trusty
 language: node_js
 node_js:
-  - lts/*
-  - node
-jobs:
-  include:
-    - stage: build
-      script: npm run build
+- lts/*
+- node
+before_script: npm run clean && node bin/asc -v && npm test
+script: npm run build && node bin/asc -v && npm test
