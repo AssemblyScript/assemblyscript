@@ -141,7 +141,7 @@
    (loop $continue|0
     (if
      ;;@ infer-type.ts:44:24
-     (i32.lt_u
+     (i32.lt_s
       (get_local $0)
       ;;@ infer-type.ts:44:28
       (get_local $1)

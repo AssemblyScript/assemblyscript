@@ -4,9 +4,9 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $HEAP_BASE i32 (i32.const 28))
+ (global $HEAP_BASE i32 (i32.const 24))
  (memory $0 1)
- (data (i32.const 8) "\07\00\00\00f\00m\00o\00d\00.\00t\00s\00")
+ (data (i32.const 4) "\07\00\00\00f\00m\00o\00d\00.\00t\00s\00")
  (export "fmod" (func $fmod/fmod))
  (export "fmodf" (func $fmod/fmodf))
  (export "memory" (memory $0))
@@ -278,12 +278,8 @@
       (get_local $2)
       ;;@ fmod.ts:23:10
       (i64.shr_u
-       (i64.sub
-        (i64.const 0)
-        ;;@ fmod.ts:23:11
-        (i64.const 1)
-       )
-       ;;@ fmod.ts:23:16
+       (i64.const -1)
+       ;;@ fmod.ts:23:21
        (i64.const 12)
       )
      )
@@ -382,12 +378,8 @@
       (get_local $3)
       ;;@ fmod.ts:31:10
       (i64.shr_u
-       (i64.sub
-        (i64.const 0)
-        ;;@ fmod.ts:31:11
-        (i64.const 1)
-       )
-       ;;@ fmod.ts:31:16
+       (i64.const -1)
+       ;;@ fmod.ts:31:21
        (i64.const 12)
       )
      )
@@ -908,12 +900,8 @@
       (get_local $2)
       ;;@ fmod.ts:92:10
       (i32.shr_u
-       (i32.sub
-        (i32.const 0)
-        ;;@ fmod.ts:92:11
-        (i32.const 1)
-       )
-       ;;@ fmod.ts:92:16
+       (i32.const -1)
+       ;;@ fmod.ts:92:21
        (i32.const 9)
       )
      )
@@ -1010,12 +998,8 @@
       (get_local $3)
       ;;@ fmod.ts:100:10
       (i32.shr_u
-       (i32.sub
-        (i32.const 0)
-        ;;@ fmod.ts:100:11
-        (i32.const 1)
-       )
-       ;;@ fmod.ts:100:16
+       (i32.const -1)
+       ;;@ fmod.ts:100:21
        (i32.const 9)
       )
      )
@@ -1292,7 +1276,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 65)
      (i32.const 0)
     )
@@ -1317,7 +1301,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 66)
      (i32.const 0)
     )
@@ -1346,7 +1330,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 67)
      (i32.const 0)
     )
@@ -1375,7 +1359,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 68)
      (i32.const 0)
     )
@@ -1402,7 +1386,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 134)
      (i32.const 0)
     )
@@ -1427,7 +1411,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 135)
      (i32.const 0)
     )
@@ -1456,7 +1440,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 136)
      (i32.const 0)
     )
@@ -1485,7 +1469,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 137)
      (i32.const 0)
     )

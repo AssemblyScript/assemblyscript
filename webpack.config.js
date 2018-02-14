@@ -4,7 +4,7 @@ const webpack = require("webpack");
 
 // Build the C-like library
 const lib = {
-  entry: [ "./src/glue/js.js", "./src/index.ts" ],
+  entry: [ "./src/glue/js", "./src/index.ts" ],
   module: {
     rules: [
       {

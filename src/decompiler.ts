@@ -11,10 +11,6 @@ import {
   readString
 } from "./module";
 
-import {
-  I64
-} from "./util/i64";
-
 // TODO :-)
 
 export class Decompiler {
@@ -27,8 +23,6 @@ export class Decompiler {
 
   text: string[] = [];
   functionId: i32 = 0;
-
-  private tempI64: I64 = new I64();
 
   constructor() { }
 
@@ -183,9 +177,14 @@ export class Decompiler {
             return;
 
           case NativeType.I64:
-            this.tempI64.lo = _BinaryenConstGetValueI64Low(expr);
-            this.tempI64.hi = _BinaryenConstGetValueI64High(expr);
-            this.push(this.tempI64.toString());
+            this.push(
+              i64_to_string(
+                i64_new(
+                  _BinaryenConstGetValueI64Low(expr),
+                  _BinaryenConstGetValueI64High(expr)
+                )
+              )
+            );
             return;
 
           case NativeType.F32:

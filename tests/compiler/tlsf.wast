@@ -30,9 +30,9 @@
  (global $tlsf/CONTROL$SL_BITMAP_OFFSET i32 (i32.const 20))
  (global $tlsf/CONTROL$BLOCKS_OFFSET i32 (i32.const 112))
  (global $tlsf/CONTROL$SIZE i32 (i32.const 3056))
- (global $HEAP_BASE i32 (i32.const 28))
+ (global $HEAP_BASE i32 (i32.const 24))
  (memory $0 1)
- (data (i32.const 8) "\07\00\00\00t\00l\00s\00f\00.\00t\00s\00")
+ (data (i32.const 4) "\07\00\00\00t\00l\00s\00f\00.\00t\00s\00")
  (export "control$construct" (func $tlsf/control$construct))
  (export "memory" (memory $0))
  (start $start)
@@ -46,11 +46,7 @@
      (get_local $0)
     )
     ;;@ tlsf.ts:7:17
-    (i32.sub
-     (i32.const 0)
-     ;;@ tlsf.ts:7:18
-     (i32.const 1)
-    )
+    (i32.const -1)
     ;;@ tlsf.ts:7:21
     (i32.sub
      (i32.const 31)
@@ -73,11 +69,7 @@
      (get_local $0)
     )
     ;;@ tlsf.ts:17:17
-    (i32.sub
-     (i32.const 0)
-     ;;@ tlsf.ts:17:18
-     (i32.const 1)
-    )
+    (i32.const -1)
     ;;@ tlsf.ts:17:22
     (i32.ctz
      ;;@ tlsf.ts:17:31
@@ -139,7 +131,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 162)
      (i32.const 2)
     )
@@ -180,7 +172,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 173)
      (i32.const 2)
     )
@@ -200,7 +192,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 174)
      (i32.const 2)
     )
@@ -352,17 +344,13 @@
       (i32.const 0)
      )
      ;;@ tlsf.ts:10:17
-     (i32.sub
-      (i32.const 0)
-      ;;@ tlsf.ts:10:18
-      (i32.const 1)
-     )
+     (i32.const -1)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 10)
      (i32.const 0)
     )
@@ -385,7 +373,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 11)
      (i32.const 0)
     )
@@ -408,7 +396,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 12)
      (i32.const 0)
     )
@@ -431,7 +419,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 13)
      (i32.const 0)
     )
@@ -448,17 +436,13 @@
       (i32.const 0)
      )
      ;;@ tlsf.ts:20:17
-     (i32.sub
-      (i32.const 0)
-      ;;@ tlsf.ts:20:18
-      (i32.const 1)
-     )
+     (i32.const -1)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 20)
      (i32.const 0)
     )
@@ -481,7 +465,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 21)
      (i32.const 0)
     )
@@ -504,7 +488,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 22)
      (i32.const 0)
     )
@@ -524,7 +508,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 29)
      (i32.const 0)
     )

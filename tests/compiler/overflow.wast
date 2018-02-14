@@ -8,9 +8,9 @@
  (global $overflow/anotherBadByte (mut i32) (i32.const 255))
  (global $overflow/badIncrementer (mut i32) (i32.const 1))
  (global $overflow/valueU8 (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 36))
+ (global $HEAP_BASE i32 (i32.const 32))
  (memory $0 1)
- (data (i32.const 8) "\0b\00\00\00o\00v\00e\00r\00f\00l\00o\00w\00.\00t\00s\00")
+ (data (i32.const 4) "\0b\00\00\00o\00v\00e\00r\00f\00l\00o\00w\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $overflow/local (; 1 ;) (type $v)
@@ -46,7 +46,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 15)
      (i32.const 2)
     )
@@ -87,7 +87,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 20)
      (i32.const 2)
     )
@@ -136,7 +136,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 36)
      (i32.const 2)
     )
@@ -169,7 +169,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 5)
      (i32.const 0)
     )
@@ -200,7 +200,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 10)
      (i32.const 0)
     )
@@ -237,7 +237,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 32)
      (i32.const 0)
     )
@@ -291,7 +291,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 43)
      (i32.const 0)
     )
@@ -333,7 +333,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 46)
      (i32.const 0)
     )
@@ -353,7 +353,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 47)
      (i32.const 0)
     )

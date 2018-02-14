@@ -39,10 +39,6 @@ import {
   isKeywordCharacter
 } from "./util/charcode";
 
-import {
-  I64
-} from "./util/i64";
-
 /** Named token types. */
 export enum Token {
 
@@ -993,21 +989,19 @@ export class Tokenizer extends DiagnosticEmitter {
   readHexInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
-    var value = new I64(0, 0);
+    var value = i64_new(0, 0);
+    var i64_16 = i64_new(16, 0);
     while (this.pos < this.end) {
       var c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 16 + c - CharCode._0;
-        value.mul32(16);
-        value.add32(c - CharCode._0);
-      } else if (c >= CharCode.A && c <= CharCode.F) {
+        value = i64_add(i64_mul(value, i64_16), i64_new(c - CharCode._0, 0));
+       } else if (c >= CharCode.A && c <= CharCode.F) {
         // value = value * 16 + 10 + c - CharCode.A;
-        value.mul32(16);
-        value.add32(10 + c - CharCode.A);
+        value = i64_add(i64_mul(value, i64_16), i64_new(10 + c - CharCode.A, 0));
       } else if (c >= CharCode.a && c <= CharCode.f) {
         // value = value * 16 + 10 + c - CharCode.a;
-        value.mul32(16);
-        value.add32(10 + c - CharCode.a);
+        value = i64_add(i64_mul(value, i64_16), i64_new(10 + c - CharCode.a, 0));
       } else
         break;
       ++this.pos;
@@ -1020,13 +1014,13 @@ export class Tokenizer extends DiagnosticEmitter {
   readDecimalInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
-    var value = new I64(0, 0);
+    var value = i64_new(0, 0);
+    var i64_10 = i64_new(10, 0);
     while (this.pos < this.end) {
       var c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 10 + c - CharCode._0;
-        value.mul32(10);
-        value.add32(c - CharCode._0);
+        value = i64_add(i64_mul(value, i64_10), i64_new(c - CharCode._0, 0));
       } else
         break;
       ++this.pos;
@@ -1039,13 +1033,13 @@ export class Tokenizer extends DiagnosticEmitter {
   readOctalInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
-    var value = new I64(0, 0);
+    var value = i64_new(0, 0);
+    var i64_8 = i64_new(8, 0);
     while (this.pos < this.end) {
       var c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._7) {
         // value = value * 8 + c - CharCode._0;
-        value.mul32(8);
-        value.add32(c - CharCode._0);
+        value = i64_add(i64_mul(value, i64_8), i64_new(c - CharCode._0, 0));
       } else
         break;
       ++this.pos;
@@ -1058,18 +1052,18 @@ export class Tokenizer extends DiagnosticEmitter {
   readBinaryInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
-    var value = new I64();
+    var value = i64_new(0, 0);
+    var i64_2 = i64_new(2, 0);
+    var i64_1 = i64_new(1, 0);
     while (this.pos < this.end) {
       var c = text.charCodeAt(this.pos);
       if (c == CharCode._0) {
         // value = value * 2;
-        value.mul32(2);
+        value = i64_mul(value, i64_2);
       } else if (c == CharCode._1) {
         // value = value * 2 + 1;
-        value.mul32(2);
-        value.add32(1);
-      }
-      else
+        value = i64_add(i64_mul(value, i64_2), i64_1);
+      } else
         break;
       ++this.pos;
     }
@@ -1129,14 +1123,15 @@ export class Tokenizer extends DiagnosticEmitter {
   private readExtendedUnicodeEscape(): string {
     var start = this.pos;
     var value = this.readHexInteger();
+    var value32 = i64_low(value);
     var invalid = false;
 
-    if (value.gt32(0x10FFFF)) {
+    assert(!i64_high(value));
+    if (value32 > 0x10FFFF) {
       this.error(DiagnosticCode.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive, this.range(start, this.pos));
       invalid = true;
     }
 
-    var value32 = value.toI32();
     var text = this.source.text;
     if (this.pos >= this.end) {
       this.error(DiagnosticCode.Unexpected_end_of_text, this.range(start, this.end));

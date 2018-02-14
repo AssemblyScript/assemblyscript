@@ -11,17 +11,18 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "42.0.0-nightly.20180208",
+    "@types/long": "^3.0.32",
+    "binaryen": "42.0.0-nightly.20180213",
     "glob": "^7.1.2",
+    "long": "^4.0.0",
     "minimist": "^1.2.0",
     "ts-node": "^4.1.0"
   },
   "devDependencies": {
     "babel-minify-webpack-plugin": "^0.3.0",
     "browser-process-hrtime": "^0.1.2",
-    "chalk": "^2.3.0",
+    "chalk": "^2.3.1",
     "diff": "^3.4.0",
-    "long": "^4.0.0",
     "source-map-support": "^0.5.3",
     "ts-loader": "^3.5.0",
     "tslint": "^5.9.1",

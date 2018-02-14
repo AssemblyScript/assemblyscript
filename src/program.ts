@@ -14,10 +14,6 @@ import {
 } from "./types";
 
 import {
-  I64
-} from "./util/i64";
-
-import {
   ModifierKind,
   Node,
   NodeKind,
@@ -1446,6 +1442,12 @@ export class EnumValue extends Element {
   }
 }
 
+export const enum ConstantValueKind {
+  NONE,
+  INTEGER,
+  FLOAT
+}
+
 export class VariableLikeElement extends Element {
 
   // kind varies
@@ -1454,18 +1456,22 @@ export class VariableLikeElement extends Element {
   declaration: VariableLikeDeclarationStatement;
   /** Variable type. Is {@link Type.void} for type-inferred {@link Global}s before compilation. */
   type: Type;
+  /** Constant value kind. */
+  constantValueKind: ConstantValueKind = ConstantValueKind.NONE;
   /** Constant integer value, if applicable. */
-  constantIntegerValue: I64 | null = null;
+  constantIntegerValue: I64;
   /** Constant float value, if applicable. */
-  constantFloatValue: f64 = 0;
+  constantFloatValue: f64;
 
   withConstantIntegerValue(lo: i32, hi: i32): this {
-    this.constantIntegerValue = new I64(lo, hi);
+    this.constantValueKind = ConstantValueKind.INTEGER;
+    this.constantIntegerValue = i64_new(lo, hi);
     this.set(ElementFlags.CONSTANT | ElementFlags.INLINED);
     return this;
   }
 
   withConstantFloatValue(value: f64): this {
+    this.constantValueKind = ConstantValueKind.FLOAT;
     this.constantFloatValue = value;
     this.set(ElementFlags.CONSTANT | ElementFlags.INLINED);
     return this;

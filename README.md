@@ -5,7 +5,7 @@
 
 **AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates minimal WebAssembly modules while being just an `npm install` away.
 
-See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for further instructions and documentation. You can also try it out in [Web Assembly Studio](https://webassembly.studio)!
+See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for further instructions and documentation. You can also try it out in [WebAssembly Studio](https://webassembly.studio)!
 
 Examples
 --------

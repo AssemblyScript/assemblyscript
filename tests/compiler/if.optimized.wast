@@ -4,7 +4,7 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\05\00\00\00i\00f\00.\00t\00s")
+ (data (i32.const 4) "\05\00\00\00i\00f\00.\00t\00s")
  (export "ifThenElse" (func $if/ifThenElse))
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElse))
@@ -44,7 +44,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 8)
      (i32.const 0)
     )
@@ -61,7 +61,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 9)
      (i32.const 0)
     )
@@ -75,7 +75,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 17)
      (i32.const 0)
     )
@@ -92,7 +92,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 18)
      (i32.const 0)
     )
@@ -106,7 +106,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 30)
      (i32.const 0)
     )
@@ -123,7 +123,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 31)
      (i32.const 0)
     )

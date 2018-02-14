@@ -353,7 +353,7 @@ exports.main = function main(argv, options, callback) {
   else if (args.shrinkLevel === "z")
     shrinkLevel = 2;
 
-  module.setOptimizeLevel(optimizeLevel);
+  module.setOptimizeLevel(optimizeLevel > 0 ? optimizeLevel : 0);
   module.setShrinkLevel(shrinkLevel);
   module.setDebugInfo(debugInfo);
 
@@ -371,7 +371,9 @@ exports.main = function main(argv, options, callback) {
   // Optimize the module if requested
   if (optimizeLevel >= 0) {
     stats.optimizeCount++;
-    stats.optimizeTime += measure(() => module.optimize());
+    stats.optimizeTime += measure(() => {
+      module.optimize();
+    });
   }
 
   // Run additional passes if requested
@@ -405,7 +407,9 @@ exports.main = function main(argv, options, callback) {
 
       let binary;
       stats.emitCount++;
-      stats.emitTime += measure(() => binary = module.toBinary(sourceMapURL));
+      stats.emitTime += measure(() => {
+        binary = module.toBinary(sourceMapURL)
+      });
 
       if (args.binaryFile.length) {
         writeFile(path.join(baseDir, args.binaryFile), binary.output);
@@ -458,11 +462,15 @@ exports.main = function main(argv, options, callback) {
       let text;
       if (args.textFile && args.textFile.length) {
         stats.emitCount++;
-        stats.emitTime += measure(() => text = module.toText());
+        stats.emitTime += measure(() => {
+          text = module.toText();
+        });
         writeFile(path.join(baseDir, args.textFile), text);
       } else if (!hasStdout) {
         stats.emitCount++;
-        stats.emitTime += measure(() => text = module.toText());
+        stats.emitTime += measure(() => {
+          text = module.toText()
+        });
         writeStdout(text);
         hasStdout = true;
       }
@@ -473,11 +481,15 @@ exports.main = function main(argv, options, callback) {
       let asm;
       if (args.asmjsFile.length) {
         stats.emitCount++;
-        stats.emitTime += measure(() => asm = module.toAsmjs());
+        stats.emitTime += measure(() => {
+          asm = module.toAsmjs();
+        });
         writeFile(path.join(baseDir, args.asmjsFile), asm);
       } else if (!hasStdout) {
         stats.emitCount++;
-        stats.emitTime += measure(() => asm = module.toAsmjs());
+        stats.emitTime += measure(() => {
+          asm = module.toAsmjs();
+        });
         writeStdout(asm);
         hasStdout = true;
       }

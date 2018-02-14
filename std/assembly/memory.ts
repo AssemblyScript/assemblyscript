@@ -217,7 +217,7 @@ export function set_memory(dest: usize, c: u8, n: usize): void {
   n -= k;
   n &= -4;
 
-  var c32: u32 = (-1 / 255) * c;
+  var c32: u32 = <u32>-1 / 255 * c;
 
   // fill head/tail up to 28 bytes each in preparation
   store<u32>(dest, c32);

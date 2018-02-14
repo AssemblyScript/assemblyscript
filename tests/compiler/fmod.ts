@@ -20,7 +20,7 @@ export function fmod(x: f64, y: f64): f64 {
       --ex;
     ux <<= -ex + 1;
   } else {
-    ux &= -1 >> 12;
+    ux &= <u64>-1 >> 12;
     ux |= 1 << 52;
   }
   if (!ey) {
@@ -28,7 +28,7 @@ export function fmod(x: f64, y: f64): f64 {
       --ey;
     uy <<= -ey + 1;
   } else {
-    uy &= -1 >> 12;
+    uy &= <u64>-1 >> 12;
     uy |= 1 << 52;
   }
 
@@ -89,7 +89,7 @@ export function fmodf(x: f32, y: f32): f32 {
       --ex;
     ux <<= -ex + 1;
   } else {
-    ux &= -1 >> 9;
+    ux &= <u32>-1 >> 9;
     ux |= 1 << 23;
   }
   if (!ey) {
@@ -97,7 +97,7 @@ export function fmodf(x: f32, y: f32): f32 {
       --ey;
     uy <<= -ey + 1;
   } else {
-    uy &= -1 >> 9;
+    uy &= <u32>-1 >> 9;
     uy |= 1 << 23;
   }
 

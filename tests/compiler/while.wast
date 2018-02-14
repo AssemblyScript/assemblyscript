@@ -5,9 +5,9 @@
  (global $while/n (mut i32) (i32.const 10))
  (global $while/m (mut i32) (i32.const 0))
  (global $while/o (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 28))
+ (global $HEAP_BASE i32 (i32.const 24))
  (memory $0 1)
- (data (i32.const 8) "\08\00\00\00w\00h\00i\00l\00e\00.\00t\00s\00")
+ (data (i32.const 4) "\08\00\00\00w\00h\00i\00l\00e\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 1 ;) (type $v)
@@ -53,7 +53,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 8)
      (i32.const 0)
     )
@@ -73,7 +73,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 9)
      (i32.const 0)
     )
@@ -153,7 +153,7 @@
         (block
          (call $abort
           (i32.const 0)
-          (i32.const 8)
+          (i32.const 4)
           (i32.const 21)
           (i32.const 2)
          )
@@ -173,7 +173,7 @@
         (block
          (call $abort
           (i32.const 0)
-          (i32.const 8)
+          (i32.const 4)
           (i32.const 22)
           (i32.const 2)
          )
@@ -199,7 +199,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 24)
      (i32.const 0)
     )
@@ -219,7 +219,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 25)
      (i32.const 0)
     )
@@ -239,7 +239,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 26)
      (i32.const 0)
     )
@@ -307,17 +307,13 @@
     (i32.eq
      (get_global $while/n)
      ;;@ while.ts:31:12
-     (i32.sub
-      (i32.const 0)
-      ;;@ while.ts:31:13
-      (i32.const 1)
-     )
+     (i32.const -1)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 31)
      (i32.const 0)
     )
@@ -337,7 +333,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 32)
      (i32.const 0)
     )

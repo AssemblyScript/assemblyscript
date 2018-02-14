@@ -4,7 +4,7 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 4) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
  (export "test" (func $inlining/test))
  (export "memory" (memory $0))
  (start $start)
@@ -20,7 +20,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 8)
      (i32.const 0)
     )

@@ -7,7 +7,7 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\07\00\00\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 4) "\07\00\00\00t\00l\00s\00f\00.\00t\00s")
  (export "control$construct" (func $tlsf/control$construct))
  (export "memory" (memory $0))
  (start $start)
@@ -68,7 +68,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 162)
      (i32.const 2)
     )
@@ -98,7 +98,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 173)
      (i32.const 2)
     )
@@ -113,7 +113,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 174)
      (i32.const 2)
     )
@@ -215,7 +215,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 10)
      (i32.const 0)
     )
@@ -229,7 +229,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 11)
      (i32.const 0)
     )
@@ -246,7 +246,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 12)
      (i32.const 0)
     )
@@ -263,7 +263,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 13)
      (i32.const 0)
     )
@@ -280,7 +280,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 20)
      (i32.const 0)
     )
@@ -294,7 +294,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 21)
      (i32.const 0)
     )
@@ -311,7 +311,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 22)
      (i32.const 0)
     )

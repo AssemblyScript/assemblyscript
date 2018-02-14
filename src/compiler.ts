@@ -43,6 +43,8 @@ import {
   Flow,
   FlowFlags,
   ElementFlags,
+  ConstantValueKind,
+
   PATH_DELIMITER,
   LIBRARY_PREFIX
 } from "./program";
@@ -121,11 +123,6 @@ import {
 } from "./types";
 
 import {
-  I64,
-  U64
-} from "./util/i64";
-
-import {
   sb
 } from "./util/sb";
 
@@ -198,7 +195,7 @@ export class Compiler extends DiagnosticEmitter {
   currentType: Type = Type.void;
 
   /** Counting memory offset. */
-  memoryOffset: U64 = new U64(8, 0); // leave space for (any size of) NULL
+  memoryOffset: I64;
   /** Memory segments being compiled. */
   memorySegments: MemorySegment[] = new Array();
   /** Map of already compiled static string segments. */
@@ -217,7 +214,7 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     this.options = options ? options : new Options();
-    this.memoryOffset = new U64(this.options.usizeType.byteSize); // leave space for `null`
+    this.memoryOffset = i64_new(this.options.usizeType.byteSize, 0); // leave space for `null`
     this.module = Module.create();
   }
 
@@ -255,20 +252,16 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up static memory segments and the heap base pointer
     if (!this.options.noMemory) {
-      var initial = this.memoryOffset.clone();
-      var alignMask = this.options.usizeType.byteSize - 1;
-      initial.add32(alignMask); // align to 4/8 bytes
-      initial.and32(~alignMask, ~0);
+      var memoryOffset = this.memoryOffset;
+      this.memoryOffset = memoryOffset = i64_align(memoryOffset, this.options.usizeType.byteSize);
       if (this.options.target == Target.WASM64)
-        this.module.addGlobal("HEAP_BASE", NativeType.I64, false, this.module.createI64(initial.lo, initial.hi));
+        this.module.addGlobal("HEAP_BASE", NativeType.I64, false, this.module.createI64(i64_low(memoryOffset), i64_high(memoryOffset)));
       else
-        this.module.addGlobal("HEAP_BASE", NativeType.I32, false, this.module.createI32(initial.lo));
+        this.module.addGlobal("HEAP_BASE", NativeType.I32, false, this.module.createI32(i64_low(memoryOffset)));
 
       // determine initial page size
-      initial.add32(0xffff); // align to page size
-      initial.and32(~0xffff, ~0);
-      initial.shru32(16); // ^= number of pages
-      this.module.setMemory(initial.toI32(), Module.MAX_MEMORY_WASM32 /* TODO: not WASM64 compatible yet */, this.memorySegments, this.options.target, "memory");
+      var pages = i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0));
+      this.module.setMemory(i64_low(pages), Module.MAX_MEMORY_WASM32 /* TODO: not WASM64 compatible yet */, this.memorySegments, this.options.target, "memory");
     }
     return this.module;
   }
@@ -458,18 +451,22 @@ export class Compiler extends DiagnosticEmitter {
         switch (exprType) {
 
           case NativeType.I32:
-            global.constantIntegerValue = new I64(_BinaryenConstGetValueI32(initExpr), 0);
+            global.constantValueKind = ConstantValueKind.INTEGER;
+            global.constantIntegerValue = i64_new(_BinaryenConstGetValueI32(initExpr), 0);
             break;
 
           case NativeType.I64:
-            global.constantIntegerValue = new I64(_BinaryenConstGetValueI64Low(initExpr), _BinaryenConstGetValueI64High(initExpr));
+            global.constantValueKind = ConstantValueKind.INTEGER;
+            global.constantIntegerValue = i64_new(_BinaryenConstGetValueI64Low(initExpr), _BinaryenConstGetValueI64High(initExpr));
             break;
 
           case NativeType.F32:
+            global.constantValueKind = ConstantValueKind.FLOAT;
             global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
             break;
 
           case NativeType.F64:
+            global.constantValueKind = ConstantValueKind.FLOAT;
             global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
             break;
 
@@ -819,14 +816,11 @@ export class Compiler extends DiagnosticEmitter {
   // memory
 
   /** Adds a static memory segment with the specified data.  */
-  addMemorySegment(buffer: Uint8Array): MemorySegment {
-    if (this.memoryOffset.lo & 7) { // align to 8 bytes so any native data type is aligned here
-      this.memoryOffset.or32(7);
-      this.memoryOffset.add32(1);
-    }
-    var segment = MemorySegment.create(buffer, this.memoryOffset.clone());
+  addMemorySegment(buffer: Uint8Array, alignment: i32 = 8): MemorySegment {
+    var memoryOffset = i64_align(this.memoryOffset, alignment);
+    var segment = MemorySegment.create(buffer, memoryOffset);
     this.memorySegments.push(segment);
-    this.memoryOffset.add32(buffer.length);
+    this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
     return segment;
   }
 
@@ -1315,7 +1309,7 @@ export class Compiler extends DiagnosticEmitter {
   compileInlineConstant(element: VariableLikeElement, contextualType: Type): ExpressionRef {
     assert(element.is(ElementFlags.INLINED));
 
-    switch (element.type.is(TypeFlags.INTEGER) && contextualType.is(TypeFlags.INTEGER) && element.type.size <= contextualType.size
+    switch (element.type.is(TypeFlags.INTEGER) && contextualType.is(TypeFlags.INTEGER) && element.type.size < contextualType.size
       ? (this.currentType = contextualType).kind // essentially precomputes a (sign-)extension
       : (this.currentType = element.type).kind
     ) {
@@ -1323,32 +1317,32 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I8:
       case TypeKind.I16:
         var shift = element.type.computeSmallIntegerShift(Type.i32);
-        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() << shift >> shift : 0);
+        return this.module.createI32(element.constantValueKind == ConstantValueKind.INTEGER ? i64_low(element.constantIntegerValue) << shift >> shift : 0);
 
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.BOOL:
         var mask = element.type.computeSmallIntegerMask(Type.i32);
-        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.toI32() & mask : 0);
+        return this.module.createI32(element.constantValueKind == ConstantValueKind.INTEGER ? i64_low(element.constantIntegerValue) & mask : 0);
 
       case TypeKind.I32:
       case TypeKind.U32:
-        return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
+        return this.module.createI32(element.constantValueKind == ConstantValueKind.INTEGER ? i64_low(element.constantIntegerValue) : 0)
 
       case TypeKind.ISIZE:
       case TypeKind.USIZE:
         if (!element.program.options.isWasm64)
-          return this.module.createI32(element.constantIntegerValue ? element.constantIntegerValue.lo : 0)
+          return this.module.createI32(element.constantValueKind == ConstantValueKind.INTEGER ? i64_low(element.constantIntegerValue) : 0)
         // fall-through
 
       case TypeKind.I64:
       case TypeKind.U64:
-        return element.constantIntegerValue
-          ? this.module.createI64(element.constantIntegerValue.lo, element.constantIntegerValue.hi)
+        return element.constantValueKind == ConstantValueKind.INTEGER
+          ? this.module.createI64(i64_low(element.constantIntegerValue), i64_high(element.constantIntegerValue))
           : this.module.createI64(0);
 
       case TypeKind.F32:
-        return this.module.createF32((<VariableLikeElement>element).constantFloatValue);
+        return this.module.createF32((<VariableLikeElement>element).constantFloatValue); // safe because it's a 'number' in JS
 
       case TypeKind.F64:
         return this.module.createF64((<VariableLikeElement>element).constantFloatValue);
@@ -2889,10 +2883,11 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.createUnreachable();
   }
 
-  compileLiteralExpression(expression: LiteralExpression, contextualType: Type): ExpressionRef {
+  compileLiteralExpression(expression: LiteralExpression, contextualType: Type, implicitNegate: bool = false): ExpressionRef {
     switch (expression.literalKind) {
 
       case LiteralKind.ARRAY:
+        assert(!implicitNegate);
         var classType = contextualType.classType;
         if (classType && classType == this.program.elements.get("Array") && classType.typeArguments && classType.typeArguments.length == 1)
           return this.compileStaticArray(classType.typeArguments[0], (<ArrayLiteralExpression>expression).elementExpressions);
@@ -2901,6 +2896,8 @@ export class Compiler extends DiagnosticEmitter {
 
       case LiteralKind.FLOAT: {
         var floatValue = (<FloatLiteralExpression>expression).value;
+        if (implicitNegate)
+          floatValue = -floatValue;
         if (contextualType == Type.f32)
           return this.module.createF32(<f32>floatValue);
         this.currentType = Type.f64;
@@ -2909,31 +2906,97 @@ export class Compiler extends DiagnosticEmitter {
 
       case LiteralKind.INTEGER:
         var intValue = (<IntegerLiteralExpression>expression).value;
-        if (contextualType == Type.bool && (intValue.isZero || intValue.isOne))
-          return this.module.createI32(intValue.isZero ? 0 : 1);
-        if (contextualType == Type.f64)
-          return this.module.createF64(intValue.toF64());
-        if (contextualType == Type.f32)
-          return this.module.createF32(<f32>intValue.toF64());
-        if (contextualType.is(TypeFlags.LONG | TypeFlags.INTEGER))
-          return this.module.createI64(intValue.lo, intValue.hi);
-        if (!intValue.fitsInI32) {
-          this.currentType = contextualType.is(TypeFlags.SIGNED) ? Type.i64 : Type.u64;
-          return this.module.createI64(intValue.lo, intValue.hi);
+        if (implicitNegate)
+          intValue = i64_sub(i64_new(0), intValue);
+        switch (contextualType.kind) {
+
+          // compile to contextualType if matching
+
+          case TypeKind.I8:
+            if (i64_is_i8(intValue))
+              return this.module.createI32(i64_low(intValue));
+            break;
+
+          case TypeKind.I16:
+            if (i64_is_i16(intValue))
+              return this.module.createI32(i64_low(intValue));
+            break;
+
+          case TypeKind.I32:
+            if (i64_is_i32(intValue))
+              return this.module.createI32(i64_low(intValue));
+            break;
+
+          case TypeKind.U8:
+            if (i64_is_u8(intValue))
+              return this.module.createI32(i64_low(intValue));
+            break;
+
+          case TypeKind.U16:
+            if (i64_is_u16(intValue))
+              return this.module.createI32(i64_low(intValue));
+            break;
+
+          case TypeKind.U32:
+            if (i64_is_u32(intValue))
+              return this.module.createI32(i64_low(intValue));
+            break;
+
+          case TypeKind.BOOL:
+            if (i64_is_bool(intValue))
+              return this.module.createI32(i64_low(intValue));
+            break;
+
+          case TypeKind.ISIZE:
+            if (!this.options.isWasm64) {
+              if (i64_is_u32(intValue))
+                return this.module.createI32(i64_low(intValue));
+              break;
+            }
+            return this.module.createI64(i64_low(intValue), i64_high(intValue));
+
+          case TypeKind.USIZE:
+            if (!this.options.isWasm64) {
+              if (i64_is_u32(intValue))
+                return this.module.createI32(i64_low(intValue));
+              break;
+            }
+            return this.module.createI64(i64_low(intValue), i64_high(intValue));
+
+          case TypeKind.I64:
+          case TypeKind.U64:
+            return this.module.createI64(i64_low(intValue), i64_high(intValue));
+
+          case TypeKind.F32:
+            if (i64_is_f32(intValue))
+              return this.module.createF32(i64_to_f32(intValue));
+            break;
+
+          case TypeKind.F64:
+            if (i64_is_f64(intValue))
+              return this.module.createF64(i64_to_f64(intValue));
+            break;
+
+          case TypeKind.VOID:
+            break;
+
+          default:
+            assert(false);
+            break;
         }
-        if (contextualType.is(TypeFlags.SMALL | TypeFlags.INTEGER)) {
-          var shift = contextualType.computeSmallIntegerShift(Type.i32);
-          var mask = contextualType.computeSmallIntegerMask(Type.i32);
-          return this.module.createI32(contextualType.is(TypeFlags.SIGNED) ? intValue.lo << shift >> shift : intValue.lo & mask);
-        }
-        if (contextualType == Type.void && !intValue.fitsInI32) {
+
+        // otherwise compile to best fitting native type
+
+        if (i64_is_i32(intValue)) {
+          this.currentType = Type.i32;
+          return this.module.createI32(i64_low(intValue));
+        } else {
           this.currentType = Type.i64;
-          return this.module.createI64(intValue.lo, intValue.hi);
+          return this.module.createI64(i64_low(intValue), i64_high(intValue));
         }
-        this.currentType = contextualType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32;
-        return this.module.createI32(intValue.toI32());
 
       case LiteralKind.STRING:
+        assert(!implicitNegate);
         return this.compileStaticString((<StringLiteralExpression>expression).value);
 
       // case LiteralKind.OBJECT:
@@ -2955,14 +3018,15 @@ export class Compiler extends DiagnosticEmitter {
         stringBuffer[4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
         stringBuffer[5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
       }
-      stringSegment = this.addMemorySegment(stringBuffer);
+      stringSegment = this.addMemorySegment(stringBuffer, this.options.usizeType.byteSize);
       this.stringSegments.set(stringValue, stringSegment);
     }
     var stringOffset = stringSegment.offset;
     this.currentType = this.options.usizeType;
-    return this.options.isWasm64
-      ? this.module.createI64(stringOffset.lo, stringOffset.hi)
-      : this.module.createI32(stringOffset.lo);
+    if (this.options.isWasm64)
+      return this.module.createI64(i64_low(stringOffset), i64_high(stringOffset));
+    assert(i64_is_i32(stringOffset));
+    return this.module.createI32(i64_low(stringOffset));
   }
 
   compileStaticArray(elementType: Type, expressions: (Expression | null)[]): ExpressionRef {
@@ -3009,7 +3073,7 @@ export class Compiler extends DiagnosticEmitter {
               break;
 
             case NativeType.I64:
-              changetype<I64[]>(values)[i] = new I64(_BinaryenConstGetValueI64Low(expr), _BinaryenConstGetValueI64High(expr));
+              changetype<I64[]>(values)[i] = i64_new(_BinaryenConstGetValueI64Low(expr), _BinaryenConstGetValueI64High(expr));
               break;
 
             case NativeType.F32:
@@ -3325,41 +3389,49 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.MINUS:
-        expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
+        if (expression.operand.kind == NodeKind.LITERAL && (
+          (<LiteralExpression>expression.operand).literalKind == LiteralKind.INTEGER ||
+          (<LiteralExpression>expression.operand).literalKind == LiteralKind.FLOAT
+        )) {
+          // implicitly negate integer and float literals. also enables proper checking of literal ranges.
+          expr = this.compileLiteralExpression(<LiteralExpression>expression.operand, contextualType, true);
+          this.addDebugLocation(expr, expression.range); // compileExpression normally does this
+        } else {
+          expr = this.compileExpression(expression.operand, contextualType == Type.void ? Type.i32 : contextualType, ConversionKind.NONE, false);
+          switch (this.currentType.kind) {
 
-        switch (this.currentType.kind) {
+            case TypeKind.I8:
+            case TypeKind.I16:
+            case TypeKind.U8:
+            case TypeKind.U16:
+            case TypeKind.BOOL:
+              possiblyOverflows = true; // or if operand already did
+            default:
+              expr = this.module.createBinary(BinaryOp.SubI32, this.module.createI32(0), expr);
+              break;
 
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true; // or if operand already did
-          default:
-            expr = this.module.createBinary(BinaryOp.SubI32, this.module.createI32(0), expr);
-            break;
+            case TypeKind.USIZE:
+              if (this.currentType.isReference) {
+                this.error(DiagnosticCode.Operation_not_supported, expression.range);
+                return this.module.createUnreachable();
+              }
+            case TypeKind.ISIZE:
+              expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.SubI64 : BinaryOp.SubI32, this.currentType.toNativeZero(this.module), expr);
+              break;
 
-          case TypeKind.USIZE:
-            if (this.currentType.isReference) {
-              this.error(DiagnosticCode.Operation_not_supported, expression.range);
-              return this.module.createUnreachable();
-            }
-          case TypeKind.ISIZE:
-            expr = this.module.createBinary(this.options.target == Target.WASM64 ? BinaryOp.SubI64 : BinaryOp.SubI32, this.currentType.toNativeZero(this.module), expr);
-            break;
+            case TypeKind.I64:
+            case TypeKind.U64:
+              expr = this.module.createBinary(BinaryOp.SubI64, this.module.createI64(0), expr);
+              break;
 
-          case TypeKind.I64:
-          case TypeKind.U64:
-            expr = this.module.createBinary(BinaryOp.SubI64, this.module.createI64(0), expr);
-            break;
+            case TypeKind.F32:
+              expr = this.module.createUnary(UnaryOp.NegF32, expr);
+              break;
 
-          case TypeKind.F32:
-            expr = this.module.createUnary(UnaryOp.NegF32, expr);
-            break;
-
-          case TypeKind.F64:
-            expr = this.module.createUnary(UnaryOp.NegF64, expr);
-            break;
+            case TypeKind.F64:
+              expr = this.module.createUnary(UnaryOp.NegF64, expr);
+              break;
+          }
         }
         break;
 

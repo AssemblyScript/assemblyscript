@@ -15,9 +15,9 @@
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr2 (mut i32) (i32.const 0))
  (global $std/allocator_arena/i (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 56))
+ (global $HEAP_BASE i32 (i32.const 52))
  (memory $0 1)
- (data (i32.const 8) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s\00")
+ (data (i32.const 4) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func "$(lib)/allocator/arena/allocate_memory" (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -336,11 +336,7 @@
    (i32.and
     (get_local $2)
     ;;@ (lib)/memory.ts:218:7
-    (i32.sub
-     (i32.const 0)
-     ;;@ (lib)/memory.ts:218:8
-     (i32.const 4)
-    )
+    (i32.const -4)
    )
   )
   ;;@ (lib)/memory.ts:220:2
@@ -348,16 +344,11 @@
    ;;@ (lib)/memory.ts:220:17
    (i32.mul
     (i32.div_u
-     ;;@ (lib)/memory.ts:220:18
-     (i32.sub
-      (i32.const 0)
-      ;;@ (lib)/memory.ts:220:19
-      (i32.const 1)
-     )
-     ;;@ (lib)/memory.ts:220:23
+     (i32.const -1)
+     ;;@ (lib)/memory.ts:220:27
      (i32.const 255)
     )
-    ;;@ (lib)/memory.ts:220:30
+    ;;@ (lib)/memory.ts:220:33
     (get_local $1)
    )
   )
@@ -3493,7 +3484,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 7)
      (i32.const 0)
     )
@@ -3545,7 +3536,7 @@
        (block
         (call $abort
          (i32.const 0)
-         (i32.const 8)
+         (i32.const 4)
          (i32.const 13)
          (i32.const 2)
         )
@@ -3610,7 +3601,7 @@
        (block
         (call $abort
          (i32.const 0)
-         (i32.const 8)
+         (i32.const 4)
          (i32.const 18)
          (i32.const 2)
         )
@@ -3650,7 +3641,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 20)
      (i32.const 0)
     )
@@ -3690,7 +3681,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 27)
      (i32.const 0)
     )

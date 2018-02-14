@@ -20,11 +20,7 @@
   )
   ;;@ unary.ts:2:0
   (drop
-   (i32.sub
-    (i32.const 0)
-    ;;@ unary.ts:2:1
-    (i32.const 1)
-   )
+   (i32.const -1)
   )
   ;;@ unary.ts:3:0
   (drop
@@ -48,10 +44,7 @@
   )
   ;;@ unary.ts:6:0
   (drop
-   (f64.neg
-    ;;@ unary.ts:6:1
-    (f64.const 1.25)
-   )
+   (f64.const -1.25)
   )
   ;;@ unary.ts:7:0
   (drop
@@ -127,11 +120,7 @@
   ;;@ unary.ts:21:0
   (set_global $unary/i
    ;;@ unary.ts:21:4
-   (i32.sub
-    (i32.const 0)
-    ;;@ unary.ts:21:5
-    (i32.const 1)
-   )
+   (i32.const -1)
   )
   ;;@ unary.ts:22:0
   (set_global $unary/i
@@ -307,11 +296,7 @@
   ;;@ unary.ts:45:0
   (set_global $unary/I
    ;;@ unary.ts:45:4
-   (i64.sub
-    (i64.const 0)
-    ;;@ unary.ts:45:5
-    (i64.const 1)
-   )
+   (i64.const -1)
   )
   ;;@ unary.ts:46:0
   (set_global $unary/I
@@ -483,10 +468,7 @@
   ;;@ unary.ts:68:0
   (set_global $unary/f
    ;;@ unary.ts:68:4
-   (f32.neg
-    ;;@ unary.ts:68:5
-    (f32.const 1.25)
-   )
+   (f32.const -1.25)
   )
   ;;@ unary.ts:69:0
   (set_global $unary/i
@@ -637,10 +619,7 @@
   ;;@ unary.ts:89:0
   (set_global $unary/F
    ;;@ unary.ts:89:4
-   (f64.neg
-    ;;@ unary.ts:89:5
-    (f64.const 1.25)
-   )
+   (f64.const -1.25)
   )
   ;;@ unary.ts:90:0
   (set_global $unary/I

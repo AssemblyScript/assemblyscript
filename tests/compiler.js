@@ -106,7 +106,7 @@ tests.forEach(filename => {
     }, err => {
       console.log();
       if (err)
-        stderr.write(err + os.EOL);
+        stderr.write(err.stack + os.EOL);
 
       // Instantiate
       try {

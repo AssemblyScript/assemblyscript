@@ -1,8 +1,5 @@
 (module
  (type $i (func (result i32)))
- (type $I (func (result i64)))
- (type $f (func (result f32)))
- (type $F (func (result f64)))
  (type $v (func))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)

@@ -6,7 +6,7 @@
  (global $do/m (mut i32) (i32.const 0))
  (global $do/o (mut i32) (i32.const 0))
  (memory $0 1)
- (data (i32.const 8) "\05\00\00\00d\00o\00.\00t\00s")
+ (data (i32.const 4) "\05\00\00\00d\00o\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 1 ;) (type $v)
@@ -33,7 +33,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 7)
      (i32.const 0)
     )
@@ -48,7 +48,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 8)
      (i32.const 0)
     )
@@ -79,7 +79,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 12)
      (i32.const 0)
     )
@@ -127,7 +127,7 @@
     (block
      (call $abort
       (i32.const 0)
-      (i32.const 8)
+      (i32.const 4)
       (i32.const 24)
       (i32.const 2)
      )
@@ -142,7 +142,7 @@
     (block
      (call $abort
       (i32.const 0)
-      (i32.const 8)
+      (i32.const 4)
       (i32.const 25)
       (i32.const 2)
      )
@@ -158,7 +158,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 27)
      (i32.const 0)
     )
@@ -173,7 +173,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 28)
      (i32.const 0)
     )
@@ -188,7 +188,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 29)
      (i32.const 0)
     )

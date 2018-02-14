@@ -8,10 +8,10 @@
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global "$(lib)/allocator/arena/HEAP_OFFSET" (mut i32) (i32.const 0))
  (global $std/set/set (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 60))
+ (global $HEAP_BASE i32 (i32.const 56))
  (memory $0 1)
- (data (i32.const 8) "\n\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
- (data (i32.const 32) "\0c\00\00\00(\00l\00i\00b\00)\00/\00s\00e\00t\00.\00t\00s")
+ (data (i32.const 4) "\n\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
+ (data (i32.const 28) "\0c\00\00\00(\00l\00i\00b\00)\00/\00s\00e\00t\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func "$(lib)/allocator/arena/allocate_memory" (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -1980,7 +1980,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 32)
+     (i32.const 28)
      (i32.const 31)
      (i32.const 4)
     )
@@ -2092,7 +2092,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 32)
+     (i32.const 28)
      (i32.const 22)
      (i32.const 4)
     )
@@ -2152,7 +2152,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 32)
+     (i32.const 28)
      (i32.const 49)
      (i32.const 4)
     )
@@ -2264,7 +2264,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 32)
+     (i32.const 28)
      (i32.const 62)
      (i32.const 4)
     )
@@ -2292,7 +2292,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 7)
      (i32.const 0)
     )
@@ -2327,7 +2327,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 13)
      (i32.const 0)
     )
@@ -2344,7 +2344,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 15)
      (i32.const 0)
     )
@@ -2361,7 +2361,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 16)
      (i32.const 0)
     )
@@ -2378,7 +2378,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 17)
      (i32.const 0)
     )
@@ -2393,7 +2393,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 18)
      (i32.const 0)
     )
@@ -2416,7 +2416,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 22)
      (i32.const 0)
     )
@@ -2433,7 +2433,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 23)
      (i32.const 0)
     )
@@ -2448,7 +2448,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 24)
      (i32.const 0)
     )
@@ -2465,7 +2465,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 25)
      (i32.const 0)
     )
@@ -2482,7 +2482,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 29)
      (i32.const 0)
     )
@@ -2497,7 +2497,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 30)
      (i32.const 0)
     )

@@ -2,10 +2,6 @@ import {
   Target
 } from "./compiler";
 
-import {
-  U64
-} from "./util/i64";
-
 export type ModuleRef = usize;
 export type FunctionTypeRef = usize;
 export type FunctionRef = usize;
@@ -225,9 +221,9 @@ export enum AtomicRMWOp {
 export class MemorySegment {
 
   buffer: Uint8Array;
-  offset: U64;
+  offset: I64;
 
-  static create(buffer: Uint8Array, offset: U64) {
+  static create(buffer: Uint8Array, offset: I64) {
     var segment = new MemorySegment();
     segment.buffer = buffer;
     segment.offset = offset;
@@ -641,8 +637,8 @@ export class Module {
       var offset = segments[i].offset;
       segs[i] = allocU8Array(buffer);
       offs[i] = target == Target.WASM64
-        ? this.createI64(offset.lo, offset.hi)
-        : this.createI32(offset.toI32());
+        ? this.createI64(i64_low(offset), i64_high(offset))
+        : this.createI32(i64_low(offset));
       sizs[i] = buffer.length;
     }
     var cArr1 = allocI32Array(segs);
@@ -747,8 +743,11 @@ export class Module {
   }
 
   toText(): string {
-    // FIXME: target specific / JS glue overrides this
-    throw new Error("not implemented");
+    throw new Error("not implemented"); // JS glue overrides this
+  }
+
+  toAsmjs(): string {
+    throw new Error("not implemented"); // JS glue overrides this
   }
 
   dispose(): void {

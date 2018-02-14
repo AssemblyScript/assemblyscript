@@ -11,10 +11,6 @@ import {
 } from "./tokenizer";
 
 import {
-  I64
-} from "./util/i64";
-
-import {
   normalize as normalizePath,
   resolve as resolvePath
 } from "./util/path";

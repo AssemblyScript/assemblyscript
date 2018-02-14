@@ -7,7 +7,7 @@
  (type $iF (func (param i32) (result f64)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $std/string/str (mut i32) (i32.const 8))
+ (global $std/string/str (mut i32) (i32.const 4))
  (global "$(lib)/string/HEAD" i32 (i32.const 4))
  (global "$(lib)/string/CharCode.PLUS" i32 (i32.const 43))
  (global "$(lib)/string/CharCode.MINUS" i32 (i32.const 45))
@@ -34,28 +34,28 @@
  (global "$(lib)/string/CharCode.o" i32 (i32.const 111))
  (global "$(lib)/string/CharCode.x" i32 (i32.const 120))
  (global "$(lib)/string/CharCode.z" i32 (i32.const 122))
- (global $HEAP_BASE i32 (i32.const 356))
+ (global $HEAP_BASE i32 (i32.const 320))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
- (data (i32.const 48) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 80) "\0f\00\00\00(\00l\00i\00b\00)\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 120) "\02\00\00\00h\00i\00")
- (data (i32.const 128) "\04\00\00\00n\00u\00l\00l\00")
- (data (i32.const 144) "\06\00\00\00s\00t\00r\00i\00n\00g\00")
- (data (i32.const 160) "\03\00\00\00I\00\'\00m\00")
- (data (i32.const 176) "\01\00\00\00,\00")
- (data (i32.const 184) "\01\00\00\00x\00")
- (data (i32.const 192) "\01\00\00\000\00")
- (data (i32.const 200) "\01\00\00\001\00")
- (data (i32.const 208) "\05\00\00\000\00b\001\000\001\00")
- (data (i32.const 224) "\05\00\00\000\00o\007\000\007\00")
- (data (i32.const 240) "\05\00\00\000\00x\00f\000\00f\00")
- (data (i32.const 256) "\05\00\00\000\00x\00F\000\00F\00")
- (data (i32.const 272) "\03\00\00\000\001\001\00")
- (data (i32.const 288) "\04\00\00\000\00x\001\00g\00")
- (data (i32.const 304) "\03\00\00\000\00.\001\00")
- (data (i32.const 320) "\03\00\00\00.\002\005\00")
- (data (i32.const 336) "\08\00\00\00.\001\00f\00o\00o\00b\00a\00r\00")
+ (data (i32.const 4) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
+ (data (i32.const 40) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 72) "\0f\00\00\00(\00l\00i\00b\00)\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 108) "\02\00\00\00h\00i\00")
+ (data (i32.const 116) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 128) "\06\00\00\00s\00t\00r\00i\00n\00g\00")
+ (data (i32.const 144) "\03\00\00\00I\00\'\00m\00")
+ (data (i32.const 156) "\01\00\00\00,\00")
+ (data (i32.const 164) "\01\00\00\00x\00")
+ (data (i32.const 172) "\01\00\00\000\00")
+ (data (i32.const 180) "\01\00\00\001\00")
+ (data (i32.const 188) "\05\00\00\000\00b\001\000\001\00")
+ (data (i32.const 204) "\05\00\00\000\00o\007\000\007\00")
+ (data (i32.const 220) "\05\00\00\000\00x\00f\000\00f\00")
+ (data (i32.const 236) "\05\00\00\000\00x\00F\000\00F\00")
+ (data (i32.const 252) "\03\00\00\000\001\001\00")
+ (data (i32.const 264) "\04\00\00\000\00x\001\00g\00")
+ (data (i32.const 276) "\03\00\00\000\00.\001\00")
+ (data (i32.const 288) "\03\00\00\00.\002\005\00")
+ (data (i32.const 300) "\08\00\00\00.\001\00f\00o\00o\00b\00a\00r\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -73,7 +73,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 80)
+     (i32.const 72)
      (i32.const 38)
      (i32.const 4)
     )
@@ -93,11 +93,7 @@
    ;;@ (lib)/string.ts:41:14
    (return
     ;;@ (lib)/string.ts:41:13
-    (i32.sub
-     (i32.const 0)
-     ;;@ (lib)/string.ts:41:14
-     (i32.const 1)
-    )
+    (i32.const -1)
    )
   )
   ;;@ (lib)/string.ts:46:4
@@ -227,7 +223,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 80)
+     (i32.const 72)
      (i32.const 166)
      (i32.const 4)
     )
@@ -245,7 +241,7 @@
    ;;@ (lib)/string.ts:169:6
    (set_local $1
     ;;@ (lib)/string.ts:169:21
-    (i32.const 128)
+    (i32.const 116)
    )
   )
   ;;@ (lib)/string.ts:171:4
@@ -372,7 +368,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 80)
+     (i32.const 72)
      (i32.const 103)
      (i32.const 4)
     )
@@ -512,7 +508,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 80)
+     (i32.const 72)
      (i32.const 144)
      (i32.const 4)
     )
@@ -530,7 +526,7 @@
    ;;@ (lib)/string.ts:147:6
    (set_local $1
     ;;@ (lib)/string.ts:147:21
-    (i32.const 128)
+    (i32.const 116)
    )
   )
   ;;@ (lib)/string.ts:149:4
@@ -661,11 +657,7 @@
   ;;@ (lib)/string.ts:162:12
   (return
    ;;@ (lib)/string.ts:162:11
-   (i32.sub
-    (i32.const 0)
-    ;;@ (lib)/string.ts:162:12
-    (i32.const 1)
-   )
+   (i32.const -1)
   )
  )
  (func "$(lib)/string/String#includes" (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -683,11 +675,7 @@
      (get_local $2)
     )
     ;;@ (lib)/string.ts:140:51
-    (i32.sub
-     (i32.const 0)
-     ;;@ (lib)/string.ts:140:52
-     (i32.const 1)
-    )
+    (i32.const -1)
    )
   )
  )
@@ -785,10 +773,7 @@
     ;;@ (lib)/string.ts:378:4
     (set_local $5
      ;;@ (lib)/string.ts:378:11
-     (f64.neg
-      ;;@ (lib)/string.ts:378:12
-      (f64.const 1)
-     )
+     (f64.const -1)
     )
    )
    ;;@ (lib)/string.ts:379:9
@@ -1358,10 +1343,7 @@
     ;;@ (lib)/string.ts:450:4
     (set_local $4
      ;;@ (lib)/string.ts:450:11
-     (f64.neg
-      ;;@ (lib)/string.ts:450:12
-      (f64.const 1)
-     )
+     (f64.const -1)
     )
    )
    ;;@ (lib)/string.ts:451:9
@@ -1535,7 +1517,7 @@
                 (block
                  (call $abort
                   (i32.const 0)
-                  (i32.const 80)
+                  (i32.const 72)
                   (i32.const 469)
                   (i32.const 10)
                  )
@@ -1669,13 +1651,13 @@
     (i32.eq
      (get_global $std/string/str)
      ;;@ std/string.ts:6:33
-     (i32.const 8)
+     (i32.const 4)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 6)
      (i32.const 0)
     )
@@ -1697,7 +1679,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 8)
      (i32.const 0)
     )
@@ -1723,7 +1705,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 9)
      (i32.const 0)
     )
@@ -1738,7 +1720,7 @@
      ;;@ std/string.ts:10:7
      (get_global $std/string/str)
      ;;@ std/string.ts:10:22
-     (i32.const 120)
+     (i32.const 108)
      ;;@ (lib)/string.ts:165:51
      (i32.const 0)
     )
@@ -1746,7 +1728,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 10)
      (i32.const 0)
     )
@@ -1761,7 +1743,7 @@
      ;;@ std/string.ts:11:7
      (get_global $std/string/str)
      ;;@ std/string.ts:11:20
-     (i32.const 144)
+     (i32.const 128)
      ;;@ (lib)/string.ts:102:52
      (i32.const 2147483647)
     )
@@ -1769,7 +1751,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 11)
      (i32.const 0)
     )
@@ -1784,7 +1766,7 @@
      ;;@ std/string.ts:12:7
      (get_global $std/string/str)
      ;;@ std/string.ts:12:20
-     (i32.const 160)
+     (i32.const 144)
      ;;@ (lib)/string.ts:139:49
      (i32.const 0)
     )
@@ -1792,7 +1774,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 12)
      (i32.const 0)
     )
@@ -1809,7 +1791,7 @@
       ;;@ std/string.ts:13:7
       (get_global $std/string/str)
       ;;@ std/string.ts:13:19
-      (i32.const 176)
+      (i32.const 156)
       (i32.const 0)
      )
      ;;@ std/string.ts:13:27
@@ -1819,7 +1801,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 13)
      (i32.const 0)
     )
@@ -1836,22 +1818,18 @@
       ;;@ std/string.ts:14:7
       (get_global $std/string/str)
       ;;@ std/string.ts:14:19
-      (i32.const 184)
+      (i32.const 164)
       ;;@ (lib)/string.ts:143:48
       (i32.const 0)
      )
      ;;@ std/string.ts:14:27
-     (i32.sub
-      (i32.const 0)
-      ;;@ std/string.ts:14:28
-      (i32.const 1)
-     )
+     (i32.const -1)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 14)
      (i32.const 0)
     )
@@ -1865,7 +1843,7 @@
     (f64.eq
      (call "$(lib)/string/parseInt"
       ;;@ std/string.ts:20:16
-      (i32.const 192)
+      (i32.const 172)
       (i32.const 0)
      )
      ;;@ std/string.ts:20:24
@@ -1875,7 +1853,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 20)
      (i32.const 0)
     )
@@ -1889,7 +1867,7 @@
     (f64.eq
      (call "$(lib)/string/parseInt"
       ;;@ std/string.ts:21:16
-      (i32.const 200)
+      (i32.const 180)
       (i32.const 0)
      )
      ;;@ std/string.ts:21:24
@@ -1899,7 +1877,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 21)
      (i32.const 0)
     )
@@ -1913,7 +1891,7 @@
     (f64.eq
      (call "$(lib)/string/parseInt"
       ;;@ std/string.ts:22:16
-      (i32.const 208)
+      (i32.const 188)
       (i32.const 0)
      )
      ;;@ std/string.ts:22:28
@@ -1923,7 +1901,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 22)
      (i32.const 0)
     )
@@ -1937,7 +1915,7 @@
     (f64.eq
      (call "$(lib)/string/parseInt"
       ;;@ std/string.ts:23:16
-      (i32.const 224)
+      (i32.const 204)
       (i32.const 0)
      )
      ;;@ std/string.ts:23:28
@@ -1947,7 +1925,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 23)
      (i32.const 0)
     )
@@ -1961,7 +1939,7 @@
     (f64.eq
      (call "$(lib)/string/parseInt"
       ;;@ std/string.ts:24:16
-      (i32.const 240)
+      (i32.const 220)
       (i32.const 0)
      )
      ;;@ std/string.ts:24:28
@@ -1971,7 +1949,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 24)
      (i32.const 0)
     )
@@ -1985,7 +1963,7 @@
     (f64.eq
      (call "$(lib)/string/parseInt"
       ;;@ std/string.ts:25:16
-      (i32.const 256)
+      (i32.const 236)
       (i32.const 0)
      )
      ;;@ std/string.ts:25:28
@@ -1995,7 +1973,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 25)
      (i32.const 0)
     )
@@ -2009,7 +1987,7 @@
     (f64.eq
      (call "$(lib)/string/parseInt"
       ;;@ std/string.ts:26:16
-      (i32.const 272)
+      (i32.const 252)
       (i32.const 0)
      )
      ;;@ std/string.ts:26:26
@@ -2019,7 +1997,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 26)
      (i32.const 0)
     )
@@ -2033,7 +2011,7 @@
     (f64.eq
      (call "$(lib)/string/parseInt"
       ;;@ std/string.ts:27:16
-      (i32.const 288)
+      (i32.const 264)
       ;;@ (lib)/string.ts:353:51
       (i32.const 0)
      )
@@ -2044,7 +2022,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 27)
      (i32.const 0)
     )
@@ -2058,7 +2036,7 @@
     (f64.eq
      (call "$(lib)/string/parseFloat"
       ;;@ std/string.ts:29:18
-      (i32.const 192)
+      (i32.const 172)
      )
      ;;@ std/string.ts:29:26
      (f64.const 0)
@@ -2067,7 +2045,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 29)
      (i32.const 0)
     )
@@ -2081,7 +2059,7 @@
     (f64.eq
      (call "$(lib)/string/parseFloat"
       ;;@ std/string.ts:30:18
-      (i32.const 200)
+      (i32.const 180)
      )
      ;;@ std/string.ts:30:26
      (f64.const 1)
@@ -2090,7 +2068,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 30)
      (i32.const 0)
     )
@@ -2104,7 +2082,7 @@
     (f64.eq
      (call "$(lib)/string/parseFloat"
       ;;@ std/string.ts:31:18
-      (i32.const 304)
+      (i32.const 276)
      )
      ;;@ std/string.ts:31:28
      (f64.const 0.1)
@@ -2113,7 +2091,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 31)
      (i32.const 0)
     )
@@ -2127,7 +2105,7 @@
     (f64.eq
      (call "$(lib)/string/parseFloat"
       ;;@ std/string.ts:32:18
-      (i32.const 320)
+      (i32.const 288)
      )
      ;;@ std/string.ts:32:28
      (f64.const 0.25)
@@ -2136,7 +2114,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 32)
      (i32.const 0)
     )
@@ -2150,7 +2128,7 @@
     (f64.eq
      (call "$(lib)/string/parseFloat"
       ;;@ std/string.ts:33:18
-      (i32.const 336)
+      (i32.const 300)
      )
      ;;@ std/string.ts:33:33
      (f64.const 0.1)
@@ -2159,7 +2137,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 48)
+     (i32.const 40)
      (i32.const 33)
      (i32.const 0)
     )

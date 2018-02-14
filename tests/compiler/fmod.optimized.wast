@@ -5,7 +5,7 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\07\00\00\00f\00m\00o\00d\00.\00t\00s")
+ (data (i32.const 4) "\07\00\00\00f\00m\00o\00d\00.\00t\00s")
  (export "fmod" (func $fmod/fmod))
  (export "fmodf" (func $fmod/fmodf))
  (export "memory" (memory $0))
@@ -750,7 +750,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 65)
      (i32.const 0)
     )
@@ -768,7 +768,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 66)
      (i32.const 0)
     )
@@ -791,7 +791,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 67)
      (i32.const 0)
     )
@@ -814,7 +814,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 68)
      (i32.const 0)
     )
@@ -834,7 +834,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 134)
      (i32.const 0)
     )
@@ -852,7 +852,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 135)
      (i32.const 0)
     )
@@ -875,7 +875,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 136)
      (i32.const 0)
     )
@@ -898,7 +898,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 137)
      (i32.const 0)
     )

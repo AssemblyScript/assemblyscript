@@ -24,10 +24,6 @@ import {
 } from "./diagnostics";
 
 import {
-  I64
-} from "./util/i64";
-
-import {
   normalize as normalizePath
 } from "./util/path";
 

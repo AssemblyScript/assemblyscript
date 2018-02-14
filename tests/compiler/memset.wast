@@ -4,9 +4,9 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 32))
+ (global $HEAP_BASE i32 (i32.const 28))
  (memory $0 1)
- (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
+ (data (i32.const 4) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $memset/memset (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -204,11 +204,7 @@
    (i32.and
     (get_local $2)
     ;;@ memset.ts:27:7
-    (i32.sub
-     (i32.const 0)
-     ;;@ memset.ts:27:8
-     (i32.const 4)
-    )
+    (i32.const -4)
    )
   )
   ;;@ memset.ts:29:2
@@ -216,15 +212,11 @@
    ;;@ memset.ts:29:17
    (i32.mul
     (i32.div_u
-     (i32.sub
-      (i32.const 0)
-      ;;@ memset.ts:29:18
-      (i32.const 1)
-     )
-     ;;@ memset.ts:29:22
+     (i32.const -1)
+     ;;@ memset.ts:29:27
      (i32.const 255)
     )
-    ;;@ memset.ts:29:28
+    ;;@ memset.ts:29:33
     (get_local $1)
    )
   )
@@ -591,7 +583,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 72)
      (i32.const 0)
     )
@@ -618,7 +610,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 73)
      (i32.const 0)
     )
@@ -656,7 +648,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 77)
      (i32.const 0)
     )
@@ -683,7 +675,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 78)
      (i32.const 0)
     )
@@ -710,7 +702,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 79)
      (i32.const 0)
     )
@@ -737,7 +729,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 80)
      (i32.const 0)
     )

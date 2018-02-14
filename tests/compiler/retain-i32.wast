@@ -1,14 +1,13 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiv (func (param i32 i32)))
- (type $i (func (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $retain-i32/si (mut i32) (i32.const 0))
  (global $retain-i32/ui (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 40))
+ (global $HEAP_BASE i32 (i32.const 36))
  (memory $0 1)
- (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
+ (data (i32.const 4) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $retain-i32/test (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -59,7 +58,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 4)
      (i32.const 2)
     )
@@ -113,7 +112,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 5)
      (i32.const 2)
     )
@@ -167,7 +166,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 6)
      (i32.const 2)
     )
@@ -221,7 +220,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 7)
      (i32.const 2)
     )
@@ -275,7 +274,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 8)
      (i32.const 2)
     )
@@ -329,7 +328,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 9)
      (i32.const 2)
     )
@@ -383,7 +382,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 10)
      (i32.const 2)
     )
@@ -425,7 +424,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 13)
      (i32.const 2)
     )
@@ -467,7 +466,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 14)
      (i32.const 2)
     )
@@ -509,7 +508,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 15)
      (i32.const 2)
     )
@@ -551,7 +550,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 16)
      (i32.const 2)
     )
@@ -593,7 +592,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 17)
      (i32.const 2)
     )
@@ -635,7 +634,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 18)
      (i32.const 2)
     )
@@ -677,7 +676,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 19)
      (i32.const 2)
     )
@@ -718,11 +717,7 @@
   ;;@ retain-i32.ts:29:0
   (call $retain-i32/test
    ;;@ retain-i32.ts:29:5
-   (i32.sub
-    (i32.const 0)
-    ;;@ retain-i32.ts:29:6
-    (i32.const 1)
-   )
+   (i32.const -1)
    ;;@ retain-i32.ts:29:9
    (i32.const 127)
   )
@@ -731,11 +726,7 @@
    ;;@ retain-i32.ts:30:5
    (i32.const 127)
    ;;@ retain-i32.ts:30:19
-   (i32.sub
-    (i32.const 0)
-    ;;@ retain-i32.ts:30:20
-    (i32.const 1)
-   )
+   (i32.const -1)
   )
   ;;@ retain-i32.ts:32:0
   (call $retain-i32/test
@@ -768,11 +759,7 @@
   ;;@ retain-i32.ts:38:0
   (call $retain-i32/test
    ;;@ retain-i32.ts:38:5
-   (i32.sub
-    (i32.const 0)
-    ;;@ retain-i32.ts:38:6
-    (i32.const 1)
-   )
+   (i32.const -1)
    ;;@ retain-i32.ts:38:9
    (i32.const -128)
   )
@@ -781,11 +768,7 @@
    ;;@ retain-i32.ts:39:5
    (i32.const -128)
    ;;@ retain-i32.ts:39:19
-   (i32.sub
-    (i32.const 0)
-    ;;@ retain-i32.ts:39:20
-    (i32.const 1)
-   )
+   (i32.const -1)
   )
   ;;@ retain-i32.ts:41:0
   (call $retain-i32/test
@@ -846,11 +829,7 @@
   ;;@ retain-i32.ts:53:0
   (call $retain-i32/test
    ;;@ retain-i32.ts:53:5
-   (i32.sub
-    (i32.const 0)
-    ;;@ retain-i32.ts:53:6
-    (i32.const 1)
-   )
+   (i32.const -1)
    ;;@ retain-i32.ts:53:9
    (i32.const 255)
   )
@@ -859,11 +838,7 @@
    ;;@ retain-i32.ts:54:5
    (i32.const 255)
    ;;@ retain-i32.ts:54:19
-   (i32.sub
-    (i32.const 0)
-    ;;@ retain-i32.ts:54:20
-    (i32.const 1)
-   )
+   (i32.const -1)
   )
   ;;@ retain-i32.ts:56:0
   (call $retain-i32/test
@@ -906,11 +881,7 @@
        ;;@ retain-i32.ts:62:2
        (call $retain-i32/test
         ;;@ retain-i32.ts:62:7
-        (i32.sub
-         (i32.const 0)
-         ;;@ retain-i32.ts:62:8
-         (i32.const 1)
-        )
+        (i32.const -1)
         ;;@ retain-i32.ts:62:11
         (get_local $0)
        )
@@ -1017,23 +988,13 @@
     (i32.eq
      (get_global $retain-i32/si)
      ;;@ retain-i32.ts:78:13
-     (i32.shr_s
-      (i32.shl
-       (i32.sub
-        (i32.const 0)
-        ;;@ retain-i32.ts:78:14
-        (i32.const 1)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
+     (i32.const -1)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 78)
      (i32.const 0)
     )
@@ -1066,23 +1027,13 @@
     (i32.eq
      (get_global $retain-i32/si)
      ;;@ retain-i32.ts:81:13
-     (i32.shr_s
-      (i32.shl
-       (i32.sub
-        (i32.const 0)
-        ;;@ retain-i32.ts:81:14
-        (i32.const 1)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
+     (i32.const -1)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 81)
      (i32.const 0)
     )
@@ -1111,23 +1062,13 @@
     (i32.eq
      (get_global $retain-i32/si)
      ;;@ retain-i32.ts:84:13
-     (i32.shr_s
-      (i32.shl
-       (i32.sub
-        (i32.const 0)
-        ;;@ retain-i32.ts:84:14
-        (i32.const 2)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
+     (i32.const -2)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 84)
      (i32.const 0)
     )
@@ -1142,17 +1083,7 @@
      (i32.sub
       (i32.const 0)
       ;;@ retain-i32.ts:86:6
-      (i32.shr_s
-       (i32.shl
-        (i32.sub
-         (i32.const 0)
-         ;;@ retain-i32.ts:86:8
-         (i32.const -128)
-        )
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
+      (i32.const -128)
      )
      (i32.const 24)
     )
@@ -1166,23 +1097,13 @@
     (i32.eq
      (get_global $retain-i32/si)
      ;;@ retain-i32.ts:87:13
-     (i32.shr_s
-      (i32.shl
-       (i32.sub
-        (i32.const 0)
-        ;;@ retain-i32.ts:87:14
-        (i32.const -128)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
+     (i32.const -128)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 87)
      (i32.const 0)
     )
@@ -1195,17 +1116,9 @@
    (i32.shr_s
     (i32.shl
      (i32.mul
-      (i32.sub
-       (i32.const 0)
-       ;;@ retain-i32.ts:89:6
-       (i32.const -128)
-      )
+      (i32.const -128)
       ;;@ retain-i32.ts:89:12
-      (i32.sub
-       (i32.const 0)
-       ;;@ retain-i32.ts:89:13
-       (i32.const 1)
-      )
+      (i32.const -1)
      )
      (i32.const 24)
     )
@@ -1219,23 +1132,13 @@
     (i32.eq
      (get_global $retain-i32/si)
      ;;@ retain-i32.ts:90:13
-     (i32.shr_s
-      (i32.shl
-       (i32.sub
-        (i32.const 0)
-        ;;@ retain-i32.ts:90:14
-        (i32.const -128)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
+     (i32.const -128)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 90)
      (i32.const 0)
     )
@@ -1250,17 +1153,7 @@
      (i32.div_s
       (i32.const 127)
       ;;@ retain-i32.ts:92:11
-      (i32.shr_s
-       (i32.shl
-        (i32.sub
-         (i32.const 0)
-         ;;@ retain-i32.ts:92:12
-         (i32.const 1)
-        )
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
+      (i32.const -1)
      )
      (i32.const 24)
     )
@@ -1274,23 +1167,13 @@
     (i32.eq
      (get_global $retain-i32/si)
      ;;@ retain-i32.ts:93:13
-     (i32.shr_s
-      (i32.shl
-       (i32.sub
-        (i32.const 0)
-        ;;@ retain-i32.ts:93:14
-        (i32.const 127)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
+     (i32.const -127)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 93)
      (i32.const 0)
     )
@@ -1303,29 +1186,9 @@
    (i32.shr_s
     (i32.shl
      (i32.div_s
-      (i32.shr_s
-       (i32.shl
-        (i32.sub
-         (i32.const 0)
-         ;;@ retain-i32.ts:95:6
-         (i32.const -128)
-        )
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
+      (i32.const -128)
       ;;@ retain-i32.ts:95:12
-      (i32.shr_s
-       (i32.shl
-        (i32.sub
-         (i32.const 0)
-         ;;@ retain-i32.ts:95:13
-         (i32.const 1)
-        )
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
+      (i32.const -1)
      )
      (i32.const 24)
     )
@@ -1339,23 +1202,13 @@
     (i32.eq
      (get_global $retain-i32/si)
      ;;@ retain-i32.ts:96:13
-     (i32.shr_s
-      (i32.shl
-       (i32.sub
-        (i32.const 0)
-        ;;@ retain-i32.ts:96:14
-        (i32.const -128)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
+     (i32.const -128)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 96)
      (i32.const 0)
     )
@@ -1384,7 +1237,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 99)
      (i32.const 0)
     )
@@ -1413,7 +1266,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 102)
      (i32.const 0)
     )
@@ -1424,17 +1277,7 @@
   (set_global $retain-i32/si
    ;;@ retain-i32.ts:104:5
    (i32.rem_s
-    (i32.shr_s
-     (i32.shl
-      (i32.sub
-       (i32.const 0)
-       ;;@ retain-i32.ts:104:6
-       (i32.const -128)
-      )
-      (i32.const 24)
-     )
-     (i32.const 24)
-    )
+    (i32.const -128)
     ;;@ retain-i32.ts:104:12
     (i32.const 2)
    )
@@ -1452,7 +1295,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 105)
      (i32.const 0)
     )
@@ -1465,17 +1308,7 @@
    (i32.rem_s
     (i32.const 1)
     ;;@ retain-i32.ts:107:9
-    (i32.shr_s
-     (i32.shl
-      (i32.sub
-       (i32.const 0)
-       ;;@ retain-i32.ts:107:10
-       (i32.const -128)
-      )
-      (i32.const 24)
-     )
-     (i32.const 24)
-    )
+    (i32.const -128)
    )
   )
   ;;@ retain-i32.ts:108:0
@@ -1491,7 +1324,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 108)
      (i32.const 0)
     )
@@ -1527,7 +1360,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 113)
      (i32.const 0)
     )
@@ -1563,7 +1396,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 116)
      (i32.const 0)
     )
@@ -1595,7 +1428,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 119)
      (i32.const 0)
     )
@@ -1627,7 +1460,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 122)
      (i32.const 0)
     )
@@ -1659,7 +1492,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 125)
      (i32.const 0)
     )
@@ -1688,7 +1521,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 128)
      (i32.const 0)
     )
@@ -1717,7 +1550,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 4)
      (i32.const 131)
      (i32.const 0)
     )
