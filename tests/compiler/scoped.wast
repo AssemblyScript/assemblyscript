@@ -1,4 +1,5 @@
 (module
+ (type $iv (func (param i32)))
  (type $v (func))
  (global $scoped/aGlobal (mut i32) (i32.const 1))
  (global $scoped/aConstant i32 (i32.const 3))
@@ -7,7 +8,28 @@
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $scoped/fn (; 0 ;) (type $iv) (param $0 i32)
+  (local $1 i32)
+  ;;@ scoped.ts:18:2
+  (block
+   ;;@ scoped.ts:19:4
+   (set_local $1
+    ;;@ scoped.ts:19:18
+    (i32.const 0)
+   )
+  )
+  ;;@ scoped.ts:21:2
+  (block
+   ;;@ scoped.ts:22:4
+   (nop)
+   ;;@ scoped.ts:23:4
+   (set_local $1
+    ;;@ scoped.ts:23:8
+    (get_local $0)
+   )
+  )
+ )
+ (func $start (; 1 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -91,6 +113,11 @@
      (f32.const 10)
     )
    )
+  )
+  ;;@ scoped.ts:26:0
+  (call $scoped/fn
+   ;;@ scoped.ts:26:3
+   (i32.const 42)
   )
  )
 )

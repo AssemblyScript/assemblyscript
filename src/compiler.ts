@@ -648,7 +648,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // check module export
     if (declaration.range.source.isEntry && declaration.isTopLevelExport)
-      this.module.addFunctionExport(instance.internalName, declaration.name.name);
+      this.module.addFunctionExport(instance.internalName, declaration.name.text);
 
     instance.finalize(this.module, ref);
     return true;
@@ -741,7 +741,7 @@ export class Compiler extends DiagnosticEmitter {
     var members = statement.members;
     for (var i = 0, k = members.length; i < k; ++i) {
       var member = members[i];
-      var internalExportName = statement.range.source.internalPath + PATH_DELIMITER + member.externalIdentifier.name;
+      var internalExportName = statement.range.source.internalPath + PATH_DELIMITER + member.externalName.text;
       var element = this.program.exports.get(internalExportName);
       if (!element) // reported in Program#initialize
         continue;
@@ -762,7 +762,7 @@ export class Compiler extends DiagnosticEmitter {
             if (functionInstance) {
               var functionDeclaration = functionInstance.prototype.declaration;
               if (functionDeclaration && functionDeclaration.needsExplicitExport(member))
-                this.module.addFunctionExport(functionInstance.internalName, member.externalIdentifier.name);
+                this.module.addFunctionExport(functionInstance.internalName, member.externalName.text);
             }
           }
           break;
@@ -772,7 +772,7 @@ export class Compiler extends DiagnosticEmitter {
             var globalDeclaration = (<Global>element).declaration;
             if (globalDeclaration && globalDeclaration.needsExplicitExport(member)) {
               if ((<Global>element).is(ElementFlags.INLINED))
-                  this.module.addGlobalExport(element.internalName, member.externalIdentifier.name);
+                  this.module.addGlobalExport(element.internalName, member.externalName.text);
               else
                 this.warning(DiagnosticCode.Cannot_export_a_mutable_global, member.range);
             }
@@ -1195,7 +1195,7 @@ export class Compiler extends DiagnosticEmitter {
     var initializers = new Array<ExpressionRef>();
     for (i = 0, k = declarations.length; i < k; ++i) {
       var declaration = declarations[i];
-      var name = declaration.name.name;
+      var name = declaration.name.text;
       var type: Type | null = null;
       var init: ExpressionRef = 0;
       if (declaration.type) {

@@ -12,9 +12,7 @@ import {
 
 import {
   Node,
-  Expression,
-  BinaryExpression,
-  SourceKind
+  Expression
 } from "./ast";
 
 import {
@@ -24,7 +22,6 @@ import {
 } from "./types";
 
 import {
-  Module,
   UnaryOp,
   BinaryOp,
   HostOp,
@@ -35,11 +32,8 @@ import {
 } from "./module";
 
 import {
-  Program,
   Global,
-  Function,
   FunctionPrototype,
-  Parameter,
   Local,
   ElementFlags,
   Class,
@@ -48,21 +42,21 @@ import {
 
 /** Compiles a get of a built-in global. */
 export function compileGetConstant(compiler: Compiler, global: Global, reportNode: Node): ExpressionRef {
-  switch (global.internalName) { // switching on strings should become a compiler optimization eventually
+  switch (global.internalName) {
 
-    case "NaN":
+    case "NaN": // context-sensitive
       if (compiler.currentType == Type.f32)
         return compiler.module.createF32(NaN);
       compiler.currentType = Type.f64;
       return compiler.module.createF64(NaN);
 
-    case "Infinity":
+    case "Infinity": // context-sensitive
       if (compiler.currentType == Type.f32)
         return compiler.module.createF32(Infinity);
       compiler.currentType = Type.f64;
       return compiler.module.createF64(Infinity);
 
-    case "HEAP_BASE": // constant, but never inlined
+    case "HEAP_BASE": // never inlined for linking purposes
       compiler.currentType = compiler.options.usizeType;
       return compiler.module.createGetGlobal("HEAP_BASE", compiler.options.nativeSizeType);
   }
@@ -83,9 +77,7 @@ export function compileCall(compiler: Compiler, prototype: FunctionPrototype, ty
       tempLocal1: Local;
 
   var type: Type,
-      ftype: FunctionTypeRef;
-
-  var offset: i32;
+      offset: i32;
 
   // NOTE that some implementations below make use of the select expression where straight-forward.
   // whether worth or not should probably be tested once it's known if/how embedders handle it.

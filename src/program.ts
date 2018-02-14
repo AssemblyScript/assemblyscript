@@ -60,7 +60,6 @@ import {
   hasDecorator,
   hasModifier,
   mangleInternalName,
-  getFirstDecorator,
   BinaryExpression
 } from "./ast";
 
@@ -210,7 +209,7 @@ export class Program extends DiagnosticEmitter {
         this.elements.set(queuedImport.internalName, element);
         queuedImports.splice(i, 1);
       } else {
-        this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedImport.declaration.range, (<ImportStatement>queuedImport.declaration.parent).path.value, queuedImport.declaration.externalIdentifier.name);
+        this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedImport.declaration.range, (<ImportStatement>queuedImport.declaration.parent).path.value, queuedImport.declaration.externalName.text);
         ++i;
       }
     }
@@ -221,20 +220,20 @@ export class Program extends DiagnosticEmitter {
       do {
         if (currentExport.isReExport) {
           if (element = this.exports.get(currentExport.referencedName)) {
-            this.setExportAndCheckLibrary(exportName, element, currentExport.member.externalIdentifier);
+            this.setExportAndCheckLibrary(exportName, element, currentExport.member.externalName);
             break;
           }
           currentExport = queuedExports.get(currentExport.referencedName);
           if (!currentExport)
-            this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedExport.member.externalIdentifier.range, (<StringLiteralExpression>(<ExportStatement>queuedExport.member.parent).path).value, queuedExport.member.externalIdentifier.name);
+            this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedExport.member.externalName.range, (<StringLiteralExpression>(<ExportStatement>queuedExport.member.parent).path).value, queuedExport.member.externalName.text);
         } else {
           if (
             (element = this.elements.get(currentExport.referencedName)) ||      // normal export
-            (element = this.elements.get(currentExport.member.identifier.name)) // library re-export
+            (element = this.elements.get(currentExport.member.name.text)) // library re-export
           )
-            this.setExportAndCheckLibrary(exportName, element, currentExport.member.externalIdentifier);
+            this.setExportAndCheckLibrary(exportName, element, currentExport.member.externalName);
           else
-            this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.range, queuedExport.member.identifier.name);
+            this.error(DiagnosticCode.Cannot_find_name_0, queuedExport.member.range, queuedExport.member.name.text);
           break;
         }
       } while (currentExport);
@@ -246,7 +245,7 @@ export class Program extends DiagnosticEmitter {
       assert(derivedDeclaration != null);
       var derivedType = (<ClassDeclaration>derivedDeclaration).extendsType;
       assert(derivedType != null);
-      var resolved = this.resolveIdentifier((<TypeNode>derivedType).identifier, null); // reports
+      var resolved = this.resolveIdentifier((<TypeNode>derivedType).name, null); // reports
       if (resolved) {
         if (resolved.element.kind != ElementKind.CLASS_PROTOTYPE) {
           this.error(DiagnosticCode.A_class_may_only_extend_another_class, (<TypeNode>derivedType).range);
@@ -292,13 +291,13 @@ export class Program extends DiagnosticEmitter {
         )
     ) {
       element.set(ElementFlags.GLOBAL);
-      if (this.elements.has(declaration.name.name))
+      if (this.elements.has(declaration.name.text))
         this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, element.internalName);
       else {
-        this.elements.set(declaration.name.name, element);
-        this.exports.set(declaration.name.name, element);
+        this.elements.set(declaration.name.text, element);
+        this.exports.set(declaration.name.text, element);
         if (isBuiltin)
-          element.internalName = declaration.name.name;
+          element.internalName = declaration.name.text;
       }
     }
   }
@@ -309,7 +308,7 @@ export class Program extends DiagnosticEmitter {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
-    var prototype = new ClassPrototype(this, declaration.name.name, internalName, declaration);
+    var prototype = new ClassPrototype(this, declaration.name.text, internalName, declaration);
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
@@ -329,13 +328,13 @@ export class Program extends DiagnosticEmitter {
     // add as namespace member if applicable
     if (namespace) {
       if (namespace.members) {
-        if (namespace.members.has(declaration.name.name)) {
+        if (namespace.members.has(declaration.name.text)) {
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
         namespace.members = new Map();
-      namespace.members.set(declaration.name.name, prototype);
+      namespace.members.set(declaration.name.text, prototype);
 
     // otherwise add to file-level exports if exported
     } else if (prototype.is(ElementFlags.EXPORTED)) {
@@ -370,7 +369,7 @@ export class Program extends DiagnosticEmitter {
     }
 
     // check and possibly register string type
-    if (prototype.is(ElementFlags.GLOBAL) && declaration.name.name === "String" && !this.types.has("string")) {
+    if (prototype.is(ElementFlags.GLOBAL) && declaration.name.text === "String" && !this.types.has("string")) {
       var instance = prototype.resolve(null);
       if (instance)
         this.types.set("string", instance.type);
@@ -378,7 +377,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeField(declaration: FieldDeclaration, classPrototype: ClassPrototype): void {
-    var name = declaration.name.name;
+    var name = declaration.name.text;
     var internalName = declaration.fileLevelInternalName;
 
     // static fields become global variables
@@ -413,7 +412,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeMethod(declaration: MethodDeclaration, classPrototype: ClassPrototype): void {
-    var name = declaration.name.name;
+    var name = declaration.name.text;
     var internalName = declaration.fileLevelInternalName;
     var prototype: FunctionPrototype | null = null;
 
@@ -511,7 +510,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeAccessor(declaration: MethodDeclaration, classPrototype: ClassPrototype, isGetter: bool): void {
-    var propertyName = declaration.name.name;
+    var propertyName = declaration.name.text;
     var internalPropertyName = declaration.fileLevelInternalName;
 
     var propertyElement = this.elements.get(internalPropertyName);
@@ -568,7 +567,7 @@ export class Program extends DiagnosticEmitter {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
-    var enm = new Enum(this, declaration.name.name, internalName, declaration);
+    var enm = new Enum(this, declaration.name.text, internalName, declaration);
     enm.namespace = namespace;
     this.elements.set(internalName, enm);
 
@@ -576,13 +575,13 @@ export class Program extends DiagnosticEmitter {
 
     if (namespace) {
       if (namespace.members) {
-        if (namespace.members.has(declaration.name.name)) {
+        if (namespace.members.has(declaration.name.text)) {
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
         namespace.members = new Map();
-      namespace.members.set(declaration.name.name, enm);
+      namespace.members.set(declaration.name.text, enm);
     } else if (enm.is(ElementFlags.EXPORTED)) {
       if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
@@ -597,7 +596,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeEnumValue(declaration: EnumValueDeclaration, enm: Enum): void {
-    var name = declaration.name.name;
+    var name = declaration.name.text;
     var internalName = declaration.fileLevelInternalName;
     if (enm.members) {
       if (enm.members.has(name)) {
@@ -619,19 +618,19 @@ export class Program extends DiagnosticEmitter {
   private setExportAndCheckLibrary(name: string, element: Element, identifier: IdentifierExpression): void {
     this.exports.set(name, element);
     if (identifier.range.source.isLibrary) { // add global alias
-      if (this.elements.has(identifier.name))
-        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, identifier.range, identifier.name);
+      if (this.elements.has(identifier.text))
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, identifier.range, identifier.text);
       else {
-        element.internalName = identifier.name;
-        this.elements.set(identifier.name, element);
+        element.internalName = identifier.text;
+        this.elements.set(identifier.text, element);
       }
     }
   }
 
   private initializeExport(member: ExportMember, internalPath: string | null, queuedExports: Map<string,QueuedExport>): void {
-    var externalName = member.range.source.internalPath + PATH_DELIMITER + member.externalIdentifier.name;
+    var externalName = member.range.source.internalPath + PATH_DELIMITER + member.externalName.text;
     if (this.exports.has(externalName)) {
-      this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalIdentifier.range, externalName);
+      this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalName.range, externalName);
       return;
     }
     var referencedName: string;
@@ -640,17 +639,17 @@ export class Program extends DiagnosticEmitter {
 
     // export local element
     if (internalPath == null) {
-      referencedName = member.range.source.internalPath + PATH_DELIMITER + member.identifier.name;
+      referencedName = member.range.source.internalPath + PATH_DELIMITER + member.name.text;
 
       // resolve right away if the element exists
       if (referencedElement = this.elements.get(referencedName)) {
-        this.setExportAndCheckLibrary(externalName, referencedElement, member.externalIdentifier);
+        this.setExportAndCheckLibrary(externalName, referencedElement, member.externalName);
         return;
       }
 
       // otherwise queue it
       if (queuedExports.has(externalName)) {
-        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalIdentifier.range, externalName);
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalName.range, externalName);
         return;
       }
       queuedExport = new QueuedExport();
@@ -661,11 +660,11 @@ export class Program extends DiagnosticEmitter {
 
     // export external element
     } else {
-      referencedName = (<string>internalPath) + PATH_DELIMITER + member.identifier.name;
+      referencedName = (<string>internalPath) + PATH_DELIMITER + member.name.text;
 
       // resolve right away if the export exists
       if (referencedElement = this.elements.get(referencedName)) {
-        this.setExportAndCheckLibrary(externalName, referencedElement, member.externalIdentifier);
+        this.setExportAndCheckLibrary(externalName, referencedElement, member.externalName);
         return;
       }
 
@@ -674,7 +673,7 @@ export class Program extends DiagnosticEmitter {
       while (queuedExport = queuedExports.get(referencedName)) {
         if (queuedExport.isReExport) {
           if (referencedElement = this.exports.get(queuedExport.referencedName)) {
-            this.setExportAndCheckLibrary(externalName, referencedElement, member.externalIdentifier);
+            this.setExportAndCheckLibrary(externalName, referencedElement, member.externalName);
             return;
           }
           referencedName = queuedExport.referencedName;
@@ -683,7 +682,7 @@ export class Program extends DiagnosticEmitter {
           seen.add(queuedExport);
         } else {
           if (referencedElement = this.elements.get(queuedExport.referencedName)) {
-            this.setExportAndCheckLibrary(externalName, referencedElement, member.externalIdentifier);
+            this.setExportAndCheckLibrary(externalName, referencedElement, member.externalName);
             return;
           }
           break;
@@ -692,7 +691,7 @@ export class Program extends DiagnosticEmitter {
 
       // otherwise queue it
       if (queuedExports.has(externalName)) {
-        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalIdentifier.range, externalName);
+        this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, member.externalName.range, externalName);
         return;
       }
       queuedExport = new QueuedExport();
@@ -709,7 +708,7 @@ export class Program extends DiagnosticEmitter {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
-    var prototype = new FunctionPrototype(this, declaration.name.name, internalName, declaration, null);
+    var prototype = new FunctionPrototype(this, declaration.name.text, internalName, declaration, null);
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
@@ -717,13 +716,13 @@ export class Program extends DiagnosticEmitter {
 
     if (namespace) {
       if (namespace.members) {
-        if (namespace.members.has(declaration.name.name)) {
+        if (namespace.members.has(declaration.name.text)) {
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
         namespace.members = new Map();
-      namespace.members.set(declaration.name.name, prototype);
+      namespace.members.set(declaration.name.text, prototype);
     } else if (prototype.is(ElementFlags.EXPORTED)) {
       if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
@@ -739,7 +738,7 @@ export class Program extends DiagnosticEmitter {
       for (var i = 0, k = declarations.length; i < k; ++i)
         this.initializeImport(declarations[i], statement.internalPath, queuedExports, queuedImports);
     } else if (statement.namespaceName) {
-      var internalName = statement.range.source.internalPath + "/" + statement.namespaceName.name;
+      var internalName = statement.range.source.internalPath + "/" + statement.namespaceName.text;
       if (this.elements.has(internalName)) {
         this.error(DiagnosticCode.Duplicate_identifier_0, statement.namespaceName.range, internalName);
         return;
@@ -755,7 +754,7 @@ export class Program extends DiagnosticEmitter {
       return;
     }
 
-    var referencedName = internalPath + PATH_DELIMITER + declaration.externalIdentifier.name;
+    var referencedName = internalPath + PATH_DELIMITER + declaration.externalName.text;
 
     // resolve right away if the export exists
     if (this.exports.has(referencedName)) {
@@ -799,7 +798,7 @@ export class Program extends DiagnosticEmitter {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
       return;
     }
-    var prototype = new InterfacePrototype(this, declaration.name.name, internalName, declaration);
+    var prototype = new InterfacePrototype(this, declaration.name.text, internalName, declaration);
     prototype.namespace = namespace;
     this.elements.set(internalName, prototype);
 
@@ -850,7 +849,7 @@ export class Program extends DiagnosticEmitter {
 
     var namespace = this.elements.get(internalName);
     if (!namespace) {
-      namespace = new Namespace(this, declaration.name.name, internalName, declaration);
+      namespace = new Namespace(this, declaration.name.text, internalName, declaration);
       namespace.namespace = parentNamespace;
       this.elements.set(internalName, namespace);
       this.checkInternalDecorators(namespace, declaration);
@@ -858,13 +857,13 @@ export class Program extends DiagnosticEmitter {
 
     if (parentNamespace) {
       if (parentNamespace.members) {
-        if (parentNamespace.members.has(declaration.name.name)) {
+        if (parentNamespace.members.has(declaration.name.text)) {
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
           return;
         }
       } else
         parentNamespace.members = new Map();
-      parentNamespace.members.set(declaration.name.name, namespace);
+      parentNamespace.members.set(declaration.name.text, namespace);
     } else if (namespace.is(ElementFlags.EXPORTED)) {
       if (this.exports.has(internalName)) {
         this.error(DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0, declaration.name.range, internalName);
@@ -916,7 +915,7 @@ export class Program extends DiagnosticEmitter {
   private initializeTypeAlias(declaration: TypeDeclaration, namespace: Element | null = null): void {
     // type aliases are program globals
     // TODO: what about namespaced types?
-    var name = declaration.name.name;
+    var name = declaration.name.text;
     if (this.types.has(name) || this.typeAliases.has(name)) {
       this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, name);
       return;
@@ -934,7 +933,7 @@ export class Program extends DiagnosticEmitter {
         continue;
       }
 
-      var global = new Global(this, declaration.name.name, internalName, declaration, /* resolved later */ Type.void);
+      var global = new Global(this, declaration.name.text, internalName, declaration, /* resolved later */ Type.void);
       global.namespace = namespace;
       this.elements.set(internalName, global);
 
@@ -942,13 +941,13 @@ export class Program extends DiagnosticEmitter {
 
       if (namespace) {
         if (namespace.members) {
-          if (namespace.members.has(declaration.name.name)) {
+          if (namespace.members.has(declaration.name.text)) {
             this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
             continue;
           }
         } else
           namespace.members = new Map();
-        namespace.members.set(declaration.name.name, global);
+        namespace.members.set(declaration.name.text, global);
       } else if (global.is(ElementFlags.EXPORTED)) {
         if (this.exports.has(internalName))
           this.error(DiagnosticCode.Duplicate_identifier_0, declaration.name.range, internalName);
@@ -960,8 +959,8 @@ export class Program extends DiagnosticEmitter {
 
   /** Resolves a {@link TypeNode} to a concrete {@link Type}. */
   resolveType(node: TypeNode, contextualTypeArguments: Map<string,Type> | null = null, reportNotFound: bool = true): Type | null {
-    var globalName = node.identifier.name;
-    var localName = node.range.source.internalPath + PATH_DELIMITER + node.identifier.name;
+    var globalName = node.name.text;
+    var localName = node.range.source.internalPath + PATH_DELIMITER + node.name.text;
 
     var element: Element | null;
 
@@ -1008,7 +1007,7 @@ export class Program extends DiagnosticEmitter {
       return type;
 
     if (reportNotFound)
-      this.error(DiagnosticCode.Cannot_find_name_0, node.identifier.range, globalName);
+      this.error(DiagnosticCode.Cannot_find_name_0, node.name.range, globalName);
 
     return null;
   }
@@ -1037,7 +1036,7 @@ export class Program extends DiagnosticEmitter {
 
   /** Resolves an identifier to the element it refers to. */
   resolveIdentifier(identifier: IdentifierExpression, contextualFunction: Function | null, contextualEnum: Enum | null = null): ResolvedElement | null {
-    var name = identifier.name;
+    var name = identifier.text;
 
     var element: Element | null;
     var namespace: Element | null;
@@ -1086,7 +1085,7 @@ export class Program extends DiagnosticEmitter {
     var target = resolvedElement.element;
 
     // at this point we know exactly what the target is, so look up the element within
-    var propertyName = propertyAccess.property.name;
+    var propertyName = propertyAccess.property.text;
     var targetType: Type;
     var member: Element | null;
 
@@ -1608,7 +1607,7 @@ export class FunctionPrototype extends Element {
       if ((k = this.classTypeArguments.length) != classTypeParameters.length)
         throw new Error("type argument count mismatch");
       for (i = 0; i < k; ++i)
-        contextualTypeArguments.set(classTypeParameters[i].identifier.name, this.classTypeArguments[i]);
+        contextualTypeArguments.set(classTypeParameters[i].name.text, this.classTypeArguments[i]);
     }
 
     // override call specific contextual type arguments
@@ -1617,7 +1616,7 @@ export class FunctionPrototype extends Element {
       if (k != functionTypeParameters.length)
         throw new Error("type argument count mismatch");
       for (i = 0; i < k; ++i)
-        contextualTypeArguments.set(functionTypeParameters[i].identifier.name, functionTypeArguments[i]);
+        contextualTypeArguments.set(functionTypeParameters[i].name.text, functionTypeArguments[i]);
     }
 
     // resolve parameters
@@ -1631,7 +1630,7 @@ export class FunctionPrototype extends Element {
       typeNode = assert(parameterDeclaration.type);
       var parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
       if (parameterType) {
-        parameters[i] = new Parameter(parameterDeclaration.name.name, parameterType, parameterDeclaration.initializer);
+        parameters[i] = new Parameter(parameterDeclaration.name.text, parameterType, parameterDeclaration.initializer);
         parameterTypes[i] = parameterType;
       } else
         return null;
@@ -1785,9 +1784,12 @@ export class Function extends Element {
       case NativeType.F64: temps = this.tempF64s; break;
       default: throw new Error("concrete type expected");
     }
-    return temps && temps.length > 0
-      ? temps.pop()
-      : this.addLocal(type);
+    if (temps && temps.length) {
+      var ret = temps.pop();
+      ret.type = type;
+      return ret;
+    }
+    return this.addLocal(type);
   }
 
   /** Frees the temporary local for reuse. */
@@ -2023,7 +2025,7 @@ export class ClassPrototype extends Element {
       if ((k = typeArguments.length) != declaration.typeParameters.length)
         throw new Error("type argument count mismatch");
       for (var i = 0; i < k; ++i)
-        contextualTypeArguments.set(declaration.typeParameters[i].identifier.name, typeArguments[i]);
+        contextualTypeArguments.set(declaration.typeParameters[i].name.text, typeArguments[i]);
     } else if (declaration.typeParameters.length)
       throw new Error("type argument count mismatch");
 
@@ -2172,7 +2174,7 @@ export class Class extends Element {
           if (!this.contextualTypeArguments)
             this.contextualTypeArguments = new Map();
           for (i = 0; i < k; ++i)
-            this.contextualTypeArguments.set(typeParameters[i].identifier.name, typeArguments[i]);
+            this.contextualTypeArguments.set(typeParameters[i].name.text, typeArguments[i]);
         }
       } else if (typeParameters.length)
         throw new Error("type argument count mismatch");

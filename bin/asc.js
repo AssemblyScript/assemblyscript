@@ -173,7 +173,7 @@ exports.main = function main(argv, options, callback) {
 
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(sourceText, sourcePath, parser, true);
+      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
     });
 
     while ((sourcePath = parser.nextFile()) != null) {
@@ -226,7 +226,7 @@ exports.main = function main(argv, options, callback) {
       }
       stats.parseCount++;
       stats.parseTime += measure(() => {
-        assemblyscript.parseFile(sourceText, sourcePath, parser);
+        assemblyscript.parseFile(sourceText, sourcePath, false, parser);
       });
     }
     if (checkDiagnostics(parser, stderr))
@@ -244,6 +244,7 @@ exports.main = function main(argv, options, callback) {
         parser = assemblyscript.parseFile(
           exports.libraryFiles[libPath],
           libPath + ".ts",
+          false,
           parser
         );
       });
@@ -263,6 +264,7 @@ exports.main = function main(argv, options, callback) {
         parser = assemblyscript.parseFile(
           libText,
           exports.libraryPrefix + libPath,
+          false,
           parser
         );
       });

@@ -1,30 +1,4 @@
-/*
-
- Exports a C-like API to the embedder.
-
- [obtain entrySource, entryPath]
- parseFile(entrySource, entryPath) -> parser
- while nextPath = nextFile(parser)
-   [obtain nextSource]
-   parseFile(nextSource, nextPath)
-
- Checking for errors:
-
- while diagnostic = nextDiagnostic(parser)
-   [print] formatDiagnostic(diagnostic, useColors?, showContext?)
-   if (isError(diagnostic))
-     [abort parsing afterwards]
-
- compile(parser) -> module
-
- [check diagnostics again]
- [output module]
-
-*/
-
-import {
-  Module
-} from "./module";
+//////////////////////// Low-level C-Like Compiler API /////////////////////////
 
 import {
   Compiler,
@@ -33,27 +7,27 @@ import {
 } from "./compiler";
 
 import {
+  Decompiler
+} from "./decompiler";
+
+import {
   DiagnosticMessage,
   DiagnosticCategory,
   formatDiagnosticMessage
 } from "./diagnostics";
 
 import {
+  Module
+} from "./module";
+
+import {
   Parser
 } from "./parser";
 
-import {
-  Program
-} from "./program";
-
-import {
-  Decompiler
-} from "./decompiler";
-
-export { LIBRARY_PREFIX } from "./program";
-
-/** Parses a single source file. If `parser` has been omitted a new one is created. */
-export function parseFile(text: string, path: string, parser: Parser | null = null, isEntry: bool = false): Parser {
+/** Parses a source file. If `parser` has been omitted a new one is created. */
+export function parseFile(text: string, path: string, isEntry: bool = false,
+  parser: Parser | null = null
+): Parser {
   if (!parser) {
     parser = new Parser();
     isEntry = true;
@@ -62,12 +36,12 @@ export function parseFile(text: string, path: string, parser: Parser | null = nu
   return parser;
 }
 
-/** Obtains the path to the next file required by the parser. Returns `null` once complete. */
+/** Obtains the next required file's path. Returns `null` once complete. */
 export function nextFile(parser: Parser): string | null {
   return parser.nextFile();
 }
 
-/** Obtains the next diagnostic message. Returns `null` once there are no more messages. */
+/** Obtains the next diagnostic message. Returns `null` once complete. */
 export function nextDiagnostic(parser: Parser): DiagnosticMessage | null {
   var program = parser.program;
   return program.diagnosticsOffset < program.diagnostics.length
@@ -76,9 +50,7 @@ export function nextDiagnostic(parser: Parser): DiagnosticMessage | null {
 }
 
 /** Formats a diagnostic message to a string. */
-export function formatDiagnostic(message: DiagnosticMessage, useColors: bool, showContext: bool): string {
-  return formatDiagnosticMessage(message, useColors, showContext);
-}
+export { formatDiagnosticMessage as formatDiagnostic };
 
 /** Tests whether a diagnostic is informatory. */
 export function isInfo(message: DiagnosticMessage): bool {
@@ -138,3 +110,6 @@ export function decompile(module: Module): string {
   decompiler.decompile(module);
   return decompiler.finish();
 }
+
+/** Prefix indicating a library file. */
+export { LIBRARY_PREFIX } from "./program";

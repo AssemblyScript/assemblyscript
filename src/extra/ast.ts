@@ -309,7 +309,7 @@ export function serializeSource(source: Source, sb: string[]): void {
 // types
 
 export function serializeTypeNode(node: TypeNode, sb: string[]): void {
-  serializeIdentifierExpression(<IdentifierExpression>node.identifier, sb);
+  serializeIdentifierExpression(<IdentifierExpression>node.name, sb);
   if (node.typeArguments.length) {
     sb.push("<");
     for (var i = 0, k = node.typeArguments.length; i < k; ++i) {
@@ -324,7 +324,7 @@ export function serializeTypeNode(node: TypeNode, sb: string[]): void {
 }
 
 export function serializeTypeParameter(node: TypeParameter, sb: string[]): void {
-  serializeIdentifierExpression(node.identifier, sb);
+  serializeIdentifierExpression(node.name, sb);
   if (node.extendsType) {
     sb.push(" extends ");
     serializeTypeNode(node.extendsType, sb);
@@ -338,7 +338,7 @@ export function serializeExpression(node: Expression, sb: string[]): void {
 }
 
 export function serializeIdentifierExpression(node: IdentifierExpression, sb: string[]): void {
-  sb.push(node.name);
+  sb.push(node.text);
 }
 
 export function serializeArrayLiteralExpression(node: ArrayLiteralExpression, sb: string[]): void {
@@ -705,7 +705,7 @@ export function serializeClassDeclaration(node: ClassDeclaration, sb: string[]):
       sb.push(" ");
     }
   sb.push("class ");
-  sb.push(node.name.name);
+  sb.push(node.name.text);
   if (node.typeParameters.length) {
     sb.push("<");
     for (i = 0, k = node.typeParameters.length; i < k; ++i) {
@@ -779,16 +779,16 @@ export function serializeEnumValueDeclaration(node: EnumValueDeclaration, sb: st
 
 export function serializeExportImportStatement(node: ExportImportStatement, sb: string[]): void {
   sb.push("export import ");
-  serializeIdentifierExpression(node.externalIdentifier, sb);
+  serializeIdentifierExpression(node.externalName, sb);
   sb.push(" = ");
-  serializeIdentifierExpression(node.identifier, sb);
+  serializeIdentifierExpression(node.name, sb);
 }
 
 export function serializeExportMember(node: ExportMember, sb: string[]): void {
-  serializeIdentifierExpression(node.identifier, sb);
-  if (node.externalIdentifier.name != node.identifier.name) {
+  serializeIdentifierExpression(node.name, sb);
+  if (node.externalName.text != node.name.text) {
     sb.push(" as ");
-    serializeIdentifierExpression(node.externalIdentifier, sb);
+    serializeIdentifierExpression(node.externalName, sb);
   }
 }
 
@@ -922,8 +922,8 @@ export function serializeIfStatement(node: IfStatement, sb: string[]): void {
 }
 
 export function serializeImportDeclaration(node: ImportDeclaration, sb: string[]): void {
-  serializeIdentifierExpression(node.externalIdentifier, sb);
-  if (node.externalIdentifier != node.name) {
+  serializeIdentifierExpression(node.externalName, sb);
+  if (node.externalName.text != node.name.text) {
     sb.push(" as ");
     serializeIdentifierExpression(node.name, sb);
   }

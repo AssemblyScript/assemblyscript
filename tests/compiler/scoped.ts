@@ -12,3 +12,15 @@ for (let aGlobal /* that shadows */: i32 = 0; aGlobal < 1; ++aGlobal)
     let /* still not */ aConstant: f32 = 10;
   }
 }
+
+// regression test: reused local should be updated with new requested type
+function fn(c: i32): void {
+  {
+    let a: bool = 0;
+  }
+  {
+    let b: i32;
+    b = c; // should not issue a conversion warning mentioning 'bool'
+  }
+}
+fn(42);

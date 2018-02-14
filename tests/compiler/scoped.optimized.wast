@@ -1,9 +1,13 @@
 (module
+ (type $iv (func (param i32)))
  (type $v (func))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $scoped/fn (; 0 ;) (type $iv) (param $0 i32)
+  (nop)
+ )
+ (func $start (; 1 ;) (type $v)
   (local $0 i32)
   (loop $continue|0
    (if
@@ -41,6 +45,9 @@
      (br $continue|1)
     )
    )
+  )
+  (call $scoped/fn
+   (i32.const 42)
   )
  )
 )
