@@ -3343,32 +3343,42 @@ export class Compiler extends DiagnosticEmitter {
         throw new Error("unary postfix operator expected");
     }
 
+    var setValue: ExpressionRef;
+    var tempLocal: Local | null = null;
+
     // simplify if dropped anyway
-    if (contextualType == Type.void)
-      return this.compileAssignmentWithValue(expression.operand,
-        this.module.createBinary(op,
-          getValue,
-          nativeOne
-        ), false
+    if (contextualType == Type.void) {
+      setValue = this.module.createBinary(op,
+        getValue,
+        nativeOne
       );
 
-    // use a temp local for the intermediate value and prepare a setter
-    var tempLocal = this.currentFunction.getTempLocal(this.currentType);
-    var setValue = this.module.createBinary(op,
-      this.module.createGetLocal(tempLocal.index, nativeType),
-      nativeOne
-    );
+    // otherwise use a temp local for the intermediate value
+    } else {
+      tempLocal = this.currentFunction.getTempLocal(this.currentType);
+      setValue = this.module.createBinary(op,
+        this.module.createGetLocal(tempLocal.index, nativeType),
+        nativeOne
+      );
+    }
+
     if (possiblyOverflows) {
       assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
       setValue = makeSmallIntegerWrap(setValue, this.currentType, this.module);
     }
+
     setValue = this.compileAssignmentWithValue(expression.operand, setValue, false); // sets currentType = void
-    this.currentType = tempLocal.type;
-    this.currentFunction.freeTempLocal(tempLocal);
+    if (contextualType == Type.void) {
+      assert(!tempLocal);
+      return setValue;
+    }
+
+    this.currentType = assert(tempLocal).type;
+    this.currentFunction.freeTempLocal(<Local>tempLocal);
     return this.module.createBlock(null, [
-      this.module.createSetLocal(tempLocal.index, getValue),
+      this.module.createSetLocal((<Local>tempLocal).index, getValue),
       setValue,
-      this.module.createGetLocal(tempLocal.index, nativeType)
+      this.module.createGetLocal((<Local>tempLocal).index, nativeType)
     ], nativeType);
   }
 
