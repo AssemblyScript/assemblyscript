@@ -97,6 +97,11 @@ export function setSourceMap(options: Options, sourceMap: bool): void {
   options.sourceMap = sourceMap;
 }
 
+/** Sets the `memoryBase` option. */
+export function setMemoryBase(options: Options, memoryBase: u32): void {
+  options.memoryBase = memoryBase;
+}
+
 /** Compiles the sources computed by the parser to a module. */
 export function compile(parser: Parser, options: Options | null = null): Module {
   var program = parser.finish();

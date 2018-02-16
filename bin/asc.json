@@ -89,6 +89,10 @@
     "desc": "Does not set up a memory. Useful for low-level WebAssembly.",
     "type": "boolean"
   },
+  "memoryBase": {
+    "desc": "Sets the start offset of compiler-generated static memory.",
+    "type": "number"
+  },
   "noLib": {
     "desc": "Does not include the shipped standard library.",
     "type": "boolean"

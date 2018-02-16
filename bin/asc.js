@@ -277,6 +277,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setNoTreeShaking(compilerOptions, !!args.noTreeShaking);
   assemblyscript.setNoAssert(compilerOptions, !!args.noAssert);
   assemblyscript.setNoMemory(compilerOptions, !!args.noMemory);
+  assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
 
   var module;

@@ -141,6 +141,8 @@ export class Options {
   noAssert: bool = false;
   /** If true, does not set up a memory. */
   noMemory: bool = false;
+  /** Static memory start offset. */
+  memoryBase: u32 = 0;
   /** Memory allocation implementation to use. */
   allocateImpl: string = "allocate_memory";
   /** Memory freeing implementation to use. */
@@ -210,7 +212,7 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     this.options = options ? options : new Options();
-    this.memoryOffset = i64_new(this.options.usizeType.byteSize, 0); // leave space for `null`
+    this.memoryOffset = i64_new(max(this.options.memoryBase, this.options.usizeType.byteSize), 0); // leave space for `null`
     this.module = Module.create();
   }
 
