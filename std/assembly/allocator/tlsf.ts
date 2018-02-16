@@ -486,3 +486,5 @@ export function free_memory(data: usize): void {
     }
   }
 }
+
+export { reset_memory } from "./none";

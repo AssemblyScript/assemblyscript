@@ -8,10 +8,6 @@ import {
 } from "./program";
 
 import {
-  sb
-} from "./util/sb";
-
-import {
   NativeType,
   ExpressionRef,
   Module

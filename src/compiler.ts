@@ -122,10 +122,6 @@ import {
   typesToNativeTypes
 } from "./types";
 
-import {
-  sb
-} from "./util/sb";
-
 /** Compilation target. */
 export enum Target {
   /** WebAssembly with 32-bit pointers. */

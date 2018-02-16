@@ -96,6 +96,7 @@ class QueuedExport {
 class QueuedImport {
   internalName: string;
   referencedName: string;
+  referencedNameAlt: string;
   declaration: ImportDeclaration;
 }
 
@@ -209,8 +210,14 @@ export class Program extends DiagnosticEmitter {
         this.elements.set(queuedImport.internalName, element);
         queuedImports.splice(i, 1);
       } else {
-        this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedImport.declaration.range, (<ImportStatement>queuedImport.declaration.parent).path.value, queuedImport.declaration.externalName.text);
-        ++i;
+        element = this.tryResolveImport(queuedImport.referencedNameAlt, queuedExports);
+        if (element) {
+          this.elements.set(queuedImport.internalName, element);
+          queuedImports.splice(i, 1);
+        } else {
+          this.error(DiagnosticCode.Module_0_has_no_exported_member_1, queuedImport.declaration.range, (<ImportStatement>queuedImport.declaration.parent).path.value, queuedImport.declaration.externalName.text);
+          ++i;
+        }
       }
     }
 
@@ -756,38 +763,24 @@ export class Program extends DiagnosticEmitter {
 
     var referencedName = internalPath + PATH_DELIMITER + declaration.externalName.text;
 
-    // resolve right away if the export exists
-    if (this.exports.has(referencedName)) {
-      this.elements.set(internalName, <Element>this.exports.get(referencedName));
+    // resolve right away if the exact export exists
+    var element: Element | null;
+    if (element = this.exports.get(referencedName)) {
+      this.elements.set(internalName, element);
       return;
     }
 
-    // walk already known queued exports
-    var seen = new Set<QueuedExport>();
-    var queuedExport: QueuedExport | null;
-    while (queuedExport = queuedExports.get(referencedName)) {
-      if (queuedExport.isReExport) {
-        if (this.exports.has(queuedExport.referencedName)) {
-          this.elements.set(internalName, <Element>this.exports.get(referencedName));
-          return;
-        }
-        referencedName = queuedExport.referencedName;
-        if (seen.has(queuedExport))
-          break;
-        seen.add(queuedExport);
-      } else {
-        if (this.elements.has(queuedExport.referencedName)) {
-          this.elements.set(internalName, <Element>this.elements.get(referencedName));
-          return;
-        }
-        break;
-      }
-    }
-
     // otherwise queue it
+    var indexPart = PATH_DELIMITER + "index";
     var queuedImport = new QueuedImport();
     queuedImport.internalName = internalName;
-    queuedImport.referencedName = referencedName;
+    if (internalPath.endsWith(indexPart)) {
+      queuedImport.referencedName = referencedName; // try exact first
+      queuedImport.referencedNameAlt = internalPath.substring(0, internalPath.length - indexPart.length + 1) + declaration.externalName.text;
+    } else {
+      queuedImport.referencedName = referencedName; // try exact first
+      queuedImport.referencedNameAlt = internalPath + indexPart + PATH_DELIMITER + declaration.externalName.text;
+    }
     queuedImport.declaration = declaration;
     queuedImports.push(queuedImport);
   }

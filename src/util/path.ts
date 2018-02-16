@@ -1,23 +1,26 @@
+//////////////////////////// Internal path utility /////////////////////////////
+
 import {
   CharCode
 } from "./charcode";
 
 const separator = CharCode.SLASH;
 
-/** Normalizes the specified path, removing interior placeholders. Expects a posix-formatted string / not Windows compatible. */
+/**
+ * Normalizes the specified path, removing interior placeholders.
+ * Expects a posix-compatible relative path (not Windows compatible).
+ */
 export function normalize(path: string): string {
-  // expects a relative path
-
   var pos = 0;
   var len = path.length;
 
   // trim leading './'
-  while (pos + 1 < len && path.charCodeAt(pos) == CharCode.DOT && path.charCodeAt(pos + 1) == separator)
+  while (pos + 1 < len &&
+    path.charCodeAt(pos) == CharCode.DOT &&
+    path.charCodeAt(pos + 1) == separator
+  ) {
     pos += 2;
-
-  // trim extension if requested
-  // if (trimExtension && len > pos + 3 && path.charCodeAt(len - 3) == CharCode.DOT && (path.charCodeAt(len - 2) == CharCode.t || path.charCodeAt(len - 2) == CharCode.a) && path.charCodeAt(len - 1) == CharCode.s)
-  //   len = len - 3;
+  }
 
   if (pos > 0 || len < path.length) {
     path = path.substring(pos, len);
@@ -30,13 +33,15 @@ export function normalize(path: string): string {
     atEnd = false;
 
     // we are only interested in '/.' sequences ...
-    if (path.charCodeAt(pos) == separator && path.charCodeAt(pos + 1) == CharCode.DOT) {
-
+    if (
+      path.charCodeAt(pos) == separator &&
+      path.charCodeAt(pos + 1) == CharCode.DOT
+    ) {
       // '/.' ( '/' | $ )
-      if (
-        (atEnd = pos + 2 == len)
-        ||
-        pos + 2 < len && path.charCodeAt(pos + 2) == separator
+      atEnd = pos + 2 == len;
+      if (atEnd ||
+        pos + 2 < len &&
+        path.charCodeAt(pos + 2) == separator
       ) {
         path = atEnd
           ? path.substring(0, pos)
@@ -46,17 +51,20 @@ export function normalize(path: string): string {
       }
 
       // '/.' ( './' | '.' $ )
-      if (
-        (atEnd = pos + 3 == len) && path.charCodeAt(pos + 2) == CharCode.DOT
-        ||
-        pos + 3 < len && path.charCodeAt(pos + 2) == CharCode.DOT && path.charCodeAt(pos + 3) == separator
+      atEnd = pos + 3 == len;
+      if (atEnd && path.charCodeAt(pos + 2) == CharCode.DOT ||
+        pos + 3 < len &&
+        path.charCodeAt(pos + 2) == CharCode.DOT &&
+        path.charCodeAt(pos + 3) == separator
       ) {
-
         // find preceeding '/'
         var ipos = pos;
         while (--ipos >= 0) {
           if (path.charCodeAt(ipos) == separator) {
-            if (pos - ipos != 3 || path.charCodeAt(ipos + 1) != CharCode.DOT || path.charCodeAt(ipos + 2) != CharCode.DOT) { // exclude '..' itself
+            if (pos - ipos != 3 ||
+              path.charCodeAt(ipos + 1) != CharCode.DOT ||
+              path.charCodeAt(ipos + 2) != CharCode.DOT
+            ) { // exclude '..' itself
               path = atEnd
                 ? path.substring(0, ipos)
                 : path.substring(0, ipos) + path.substring(pos + 3);
@@ -69,7 +77,10 @@ export function normalize(path: string): string {
 
         // if there's no preceeding '/', trim start if non-empty
         if (ipos < 0 && pos > 0) {
-          if (pos != 2 || path.charCodeAt(0) != CharCode.DOT || path.charCodeAt(1) != CharCode.DOT) { // exclude '..' itself
+          if (pos != 2 ||
+            path.charCodeAt(0) != CharCode.DOT ||
+            path.charCodeAt(1) != CharCode.DOT
+          ) { // exclude '..' itself
             path = path.substring(pos + 4);
             len = path.length;
             continue;
@@ -82,11 +93,13 @@ export function normalize(path: string): string {
   return len > 0 ? path : ".";
 }
 
-/** Resolves the specified path to a normalized path relative to the specified origin. */
-export function resolve(normalizedPath: string, normalizedOrigin: string): string {
+/** Resolves the specified path relative to the specified origin. */
+export function resolve(normalizedPath: string, origin: string): string {
   if (normalizedPath.startsWith("std/"))
     return normalizedPath;
-  return normalize(dirname(normalizedOrigin) + String.fromCharCode(separator) + normalizedPath);
+  return normalize(
+    dirname(origin) + String.fromCharCode(separator) + normalizedPath
+  );
 }
 
 /** Obtains the directory portion of a normalized path. */

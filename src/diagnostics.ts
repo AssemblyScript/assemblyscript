@@ -12,10 +12,6 @@ import {
   isLineBreak
 } from "./util/charcode";
 
-import {
-  sb
-} from "./util/sb";
-
 export {
   DiagnosticCode,
   diagnosticCodeToString
@@ -103,7 +99,7 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
     context = formatDiagnosticContext(message.range, useColors);
 
   // general information
-  sb.length = 0;
+  var sb: string[] = [];
   if (useColors) sb.push(diagnosticCategoryToColor(message.category));
   sb.push(diagnosticCategoryToString(message.category));
   if (useColors) sb.push(colorReset);
@@ -141,10 +137,11 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
     start--;
   while (end < len && !isLineBreak(text.charCodeAt(end)))
     end++;
-  sb.length = 0;
-  sb.push("\n ");
-  sb.push(text.substring(start, end));
-  sb.push("\n ");
+  var sb: string[] = [
+    "\n ",
+    text.substring(start, end),
+    "\n "
+  ];
   while (start < range.start) {
     sb.push(" ");
     start++;

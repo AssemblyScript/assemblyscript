@@ -1644,7 +1644,9 @@ export class WhileStatement extends Statement {
 /** Cached unused modifiers for reuse. */
 var reusableModifiers: Modifier[] | null = null;
 
-export function setReusableModifiers(modifiers: Modifier[]) {
+export function setReusableModifiers(
+  modifiers: Modifier[]
+): void {
   reusableModifiers = modifiers;
 }
 
@@ -1660,16 +1662,22 @@ export function createModifiers(): Modifier[] {
   return ret;
 }
 
-/** Adds a modifier to a modifiers array. Creates and returns a new array if `null`. */
-export function addModifier(modifier: Modifier, modifiers: Modifier[] | null): Modifier[] {
+/** Adds a modifier to a set of modifiers. Creates a new set if `null`. */
+export function addModifier(
+  modifier: Modifier,
+  modifiers: Modifier[] | null
+): Modifier[] {
   if (modifiers == null)
     modifiers = createModifiers();
   modifiers.push(modifier);
   return modifiers;
 }
 
-/** Gets a specific modifier from the specified array of modifiers. */
-export function getModifier(kind: ModifierKind, modifiers: Modifier[] | null): Modifier | null {
+/** Gets a specific modifier from the specified set of modifiers. */
+export function getModifier(
+  kind: ModifierKind,
+  modifiers: Modifier[] | null
+): Modifier | null {
   if (modifiers)
     for (var i = 0, k = modifiers.length; i < k; ++i)
       if (modifiers[i].modifierKind == kind)
@@ -1677,13 +1685,19 @@ export function getModifier(kind: ModifierKind, modifiers: Modifier[] | null): M
   return null;
 }
 
-/** Tests whether a specific modifier exists in the specified array of modifiers. */
-export function hasModifier(kind: ModifierKind, modifiers: Modifier[] | null): bool {
+/** Tests whether a modifier exists in the specified set of modifiers. */
+export function hasModifier(
+  kind: ModifierKind,
+  modifiers: Modifier[] | null
+): bool {
   return getModifier(kind, modifiers) != null;
 }
 
-/** Gets a specific decorator within the specified decorators, if present. */
-export function getFirstDecorator(name: string, decorators: Decorator[] | null): Decorator | null {
+/** Gets the first decorator by name within at set of decorators, if present. */
+export function getFirstDecorator(
+  name: string,
+  decorators: Decorator[] | null
+): Decorator | null {
   if (decorators)
     for (var i = 0, k = decorators.length; i < k; ++i) {
       var decorator = decorators[i];
@@ -1695,12 +1709,18 @@ export function getFirstDecorator(name: string, decorators: Decorator[] | null):
 }
 
 /** Tests if a specific decorator is present within the specified decorators. */
-export function hasDecorator(name: string, decorators: Decorator[] | null): bool {
+export function hasDecorator(
+  name: string,
+  decorators: Decorator[] | null
+): bool {
   return getFirstDecorator(name, decorators) != null;
 }
 
 /** Mangles a declaration's name to an internal name. */
-export function mangleInternalName(declaration: DeclarationStatement, asGlobal: bool = false): string {
+export function mangleInternalName(
+  declaration: DeclarationStatement,
+  asGlobal: bool = false
+): string {
   var name = declaration.name.text;
   var parent = declaration.parent;
   if (!parent)
@@ -1720,18 +1740,26 @@ export function mangleInternalName(declaration: DeclarationStatement, asGlobal: 
 }
 
 /** Mangles an external to an internal path. */
-export function mangleInternalPath(path: string): string {
+export function mangleInternalPath(
+  path: string
+): string {
   if (path.endsWith(".ts"))
     path = path.substring(0, path.length - 3);
   return path;
 }
 
-function setParent(nodes: Node[], parent: Node): void {
+function setParent(
+  nodes: Node[],
+  parent: Node
+): void {
   for (var i = 0, k = nodes.length; i < k; ++i)
     nodes[i].parent = parent;
 }
 
-function setParentOpt(nodes: (Node | null)[], parent: Node): void {
+function setParentOpt(
+  nodes: (Node | null)[],
+  parent: Node
+): void {
   for (var i = 0, k = nodes.length; i < k; ++i) {
     var node = nodes[i];
     if (node)

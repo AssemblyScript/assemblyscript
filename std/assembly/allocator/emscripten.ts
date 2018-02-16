@@ -15,6 +15,4 @@ export function free_memory(ptr: usize): void {
   _free(ptr);
 }
 
-export function reset_memory(): void {
-  throw new Error("not supported");
-}
+export { reset_memory } from "./none";
