@@ -1,4 +1,5 @@
-///////////////////////// Abstract Syntax Tree Extras //////////////////////////
+// Abstract Syntax Tree extras that are not needed in a standalone compiler but
+// quite useful for testing the parser.
 
 import {
   Token,

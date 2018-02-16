@@ -1,5 +1,3 @@
-///////////////////////////// Abstract Syntax Tree /////////////////////////////
-
 import {
   PATH_DELIMITER,
   STATIC_DELIMITER,

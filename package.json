@@ -11,7 +11,6 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "@types/long": "^3.0.32",
     "binaryen": "42.0.0-nightly.20180213",
     "glob": "^7.1.2",
     "long": "^4.0.0",
@@ -26,7 +25,7 @@
     "source-map-support": "^0.5.3",
     "ts-loader": "^3.5.0",
     "tslint": "^5.9.1",
-    "typescript": "^2.7.1",
+    "typescript": "^2.7.2",
     "webpack": "^3.11.0"
   },
   "main": "index.js",

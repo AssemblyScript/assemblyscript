@@ -1,5 +1,3 @@
-//////////////////////////// Internal path utility /////////////////////////////
-
 import {
   CharCode
 } from "./charcode";

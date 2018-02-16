@@ -1,5 +1,3 @@
-//////////////////////////// Character codes utility ////////////////////////////
-
 /** An enum of named character codes. */
 export const enum CharCode {
 

@@ -713,14 +713,6 @@ export class Module {
     _BinaryenModuleInterpret(this.ref);
   }
 
-  print(): void {
-    _BinaryenModulePrint(this.ref);
-  }
-
-  printAsmjs(): void {
-    _BinaryenModulePrintAsmjs(this.ref);
-  }
-
   toBinary(sourceMapUrl: string | null): Binary {
     var out = this.out;
     var cStr = allocString(sourceMapUrl);
