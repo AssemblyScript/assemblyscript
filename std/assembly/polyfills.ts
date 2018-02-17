@@ -18,7 +18,7 @@ export function bswap<T>(value: T): T {
 
     return <T>rotr<u64>(a | b, 32);
   }
-  unreachable();
+  throw new TypeError("Unsupported type");
   return <T>0;
 }
 
@@ -32,6 +32,6 @@ export function bswap16<T>(value: T): T {
   ) {
     return rotr<T>(value, 8);
   }
-  unreachable();
+  throw new TypeError("Unsupported type");
   return <T>0;
 }

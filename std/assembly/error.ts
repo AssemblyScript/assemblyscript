@@ -12,3 +12,7 @@ export class Error {
 export class RangeError extends Error {
   name: string = "RangeError";
 }
+
+export class TypeError extends Error {
+  name: string = "TypeError";
+}
