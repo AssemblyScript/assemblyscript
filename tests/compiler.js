@@ -59,7 +59,6 @@ tests.forEach(filename => {
     filename,
     "--baseDir", basedir,
     "--validate",
-    "--sourceMap",
     "--measure",
     "--textFile" // -> stdout
   ], {
@@ -71,11 +70,11 @@ tests.forEach(filename => {
       stderr.write(err + os.EOL);
     var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
-      fs.writeFileSync(path.join(basedir, basename + ".wat"), actual, { encoding: "utf8" });
+      fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
       console.log("- " + chalk.yellow("Created fixture"));
     } else {
-      let expected = fs.readFileSync(path.join(basedir, basename + ".wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
-      let diffs = diff(basename + ".wat", expected, actual);
+      let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
+      let diffs = diff(basename + ".untouched.wat", expected, actual);
       if (diffs !== null) {
         console.log(diffs);
         console.log("- " + chalk.red("diff ERROR"));
