@@ -431,6 +431,7 @@ var ROOT: Root = changetype<Root>(0);
 // External interface
 
 /** Allocates a chunk of memory. */
+@global
 export function allocate_memory(size: usize): usize {
 
   // initialize if necessary
@@ -474,6 +475,7 @@ export function allocate_memory(size: usize): usize {
 }
 
 /** Frees the chunk of memory at the specified address. */
+@global
 export function free_memory(data: usize): void {
   if (data) {
     var root = ROOT;

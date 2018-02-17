@@ -9,7 +9,8 @@
 
 import {
   Program,
-  LIBRARY_PREFIX
+  LIBRARY_PREFIX,
+  PATH_DELIMITER
 } from "./program";
 
 import {
@@ -108,7 +109,7 @@ export class Parser extends DiagnosticEmitter {
         return; // already parsed
     this.seenlog.add(normalizedPath);
 
-    var source = new Source(normalizedPath, text, isEntry ? SourceKind.ENTRY : path.startsWith(LIBRARY_PREFIX) ? SourceKind.LIBRARY : SourceKind.DEFAULT);
+    var source = new Source(normalizedPath, text, isEntry ? SourceKind.ENTRY : path.startsWith(LIBRARY_PREFIX) && path.indexOf(PATH_DELIMITER, LIBRARY_PREFIX.length) < 0 ? SourceKind.LIBRARY : SourceKind.DEFAULT);
     this.program.sources.push(source);
 
     var tn = new Tokenizer(source, this.program.diagnostics);

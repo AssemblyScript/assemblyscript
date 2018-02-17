@@ -10,6 +10,7 @@ const ALIGN_MASK: usize = ALIGN_SIZE - 1;
 
 var HEAP_OFFSET: usize = HEAP_BASE;
 
+@global
 export function allocate_memory(size: usize): usize {
   if (!size) return 0;
   var ptr = HEAP_OFFSET;
@@ -25,10 +26,12 @@ export function allocate_memory(size: usize): usize {
   return ptr;
 }
 
+@global
 export function free_memory(ptr: usize): void {
   // nop
 }
 
+@global
 export function reset_memory(): void {
   HEAP_OFFSET = HEAP_BASE;
 }
