@@ -176,9 +176,8 @@ declare function free_memory(ptr: usize): void;
 declare function unreachable(): any; // sic
 
 /** Polyfills **/
-declare function bswap64(value: u64): u64;
-declare function bswap32(value: u32): u32;
-declare function bswap16(value: u16): u16;
+declare function bswap<T = i32 | u32 | i64 | u64>(value: T): T;
+declare function bswap16<T = i16 | u16 | i32 | u32 | i64 | u64>(value: T): T;
 
 /** NaN (not a number) as a 32-bit or 64-bit float depending on context. */
 declare const NaN: f32 | f64;
