@@ -71,6 +71,19 @@ globalScope["select"] = function select(ifTrue, ifFalse, condition) { return con
 globalScope["sqrt"] = Math.sqrt;
 globalScope["trunc"] = Math.trunc;
 
+globalScope["bswap"] = function bswap(value) {
+	var a = value >> 8 & 0x00FF00FF;
+	var b = (value & 0x00FF00FF) << 8;
+	value = a | b;
+	a = x >> 16 & 0x0000FFFF;
+	b = (x & 0x0000FFFF) << 16;
+	return a | b;
+}
+
+globalScope["bswap16"] = function bswap(value) {
+  return ((value << 8) & 0xFF00) | ((value >> 8) & 0x00FF) | (value & 0xFFFF0000);
+}
+
 function UnreachableError() {
   if (Error.captureStackTrace)
     Error.captureStackTrace(this, UnreachableError);
