@@ -1,7 +1,7 @@
 export function bswap<T>(value: T): T {
-  if (sizeof<T>() == 1) {
-    return value;
-  } else if (sizeof<T>() == 2) {
+  assert(sizeof<T>() == 1 || sizeof<T>() == 2 || sizeof<T>() == 4 || sizeof<T>() == 8);
+
+  if (sizeof<T>() == 2) {
     return bswap16<T>(value);
   } else if (sizeof<T>() == 4) {
     return <T>(
@@ -18,14 +18,14 @@ export function bswap<T>(value: T): T {
 
     return <T>rotr<u64>(a | b, 32);
   }
-  throw new TypeError("Unsupported type");
+  return value;
 }
 
 export function bswap16<T>(value: T): T {
-  if (sizeof<T>() == 1) {
-    return value;
-  } else if (sizeof<T>() == 2 || sizeof<T>() == 4) {
+  assert(sizeof<T>() == 1 || sizeof<T>() == 2 || sizeof<T>() == 4);
+
+  if (sizeof<T>() == 2 || sizeof<T>() == 4) {
     return <T>(((value << 8) & <T>0xFF00) | ((value >> 8) & <T>0x00FF) | (value & <T>0xFFFF0000));
   }
-  throw new TypeError("Unsupported type");
+  return value;
 }
