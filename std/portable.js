@@ -72,12 +72,12 @@ globalScope["sqrt"] = Math.sqrt;
 globalScope["trunc"] = Math.trunc;
 
 globalScope["bswap"] = function bswap(value) {
-	var a = value >> 8 & 0x00FF00FF;
-	var b = (value & 0x00FF00FF) << 8;
-	value = a | b;
-	a = x >> 16 & 0x0000FFFF;
-	b = (x & 0x0000FFFF) << 16;
-	return a | b;
+  var a = value >> 8 & 0x00FF00FF;
+  var b = (value & 0x00FF00FF) << 8;
+  value = a | b;
+  a = value >> 16 & 0x0000FFFF;
+  b = (value & 0x0000FFFF) << 16;
+  return a | b;
 }
 
 globalScope["bswap16"] = function bswap16(value) {
