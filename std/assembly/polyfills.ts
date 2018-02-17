@@ -1,5 +1,9 @@
 export function bswap<T>(value: T): T {
-  if (sizeof<T>() == 4) {
+  if (sizeof<T>() == 1) {
+    return value;
+  } else if (sizeof<T>() == 2) {
+    return bswap16<T>(value);
+  } else if (sizeof<T>() == 4) {
     return <T>(
       rotl<u32>(<u32>value & 0xFF00FF00, 8) |
       rotr<u32>(<u32>value & 0x00FF00FF, 8)
@@ -19,7 +23,9 @@ export function bswap<T>(value: T): T {
 }
 
 export function bswap16<T>(value: T): T {
-  if (
+  if (sizeof<T>() == 1) {
+    return value;
+  } else if (
     sizeof<T>() == 2 ||
     sizeof<T>() == 4 ||
     sizeof<T>() == 8
