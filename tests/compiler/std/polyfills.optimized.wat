@@ -1,15 +1,42 @@
 (module
- (type $ii (func (param i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $II (func (param i64) (result i64)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 4) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s")
+ (data (i32.const 4) "\12\00\00\00(\00l\00i\00b\00)\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s")
+ (data (i32.const 44) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func "$(lib)/polyfills/bswap16<u16>" (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (i32.const 1)
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 0)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 25)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
   (if
    (i32.and
     (if (result i32)
@@ -46,15 +73,77 @@
     )
    )
   )
-  (unreachable)
+  (get_local $0)
  )
  (func "$(lib)/polyfills/bswap<u16>" (; 2 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (if (result i32)
+         (tee_local $1
+          (i32.and
+           (i32.const 1)
+           (i32.const 1)
+          )
+         )
+         (get_local $1)
+         (i32.const 0)
+        )
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 0)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 2)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
   (call "$(lib)/polyfills/bswap16<u16>"
    (get_local $0)
   )
  )
  (func "$(lib)/polyfills/bswap16<i16>" (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (i32.const 1)
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 0)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 25)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
   (if
    (i32.and
     (if (result i32)
@@ -106,9 +195,45 @@
     )
    )
   )
-  (unreachable)
+  (get_local $0)
  )
  (func "$(lib)/polyfills/bswap<i16>" (; 4 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (if (result i32)
+         (tee_local $1
+          (i32.and
+           (i32.const 1)
+           (i32.const 1)
+          )
+         )
+         (get_local $1)
+         (i32.const 0)
+        )
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 0)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 2)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
   (call "$(lib)/polyfills/bswap16<i16>"
    (get_local $0)
   )
@@ -116,8 +241,40 @@
  (func "$(lib)/polyfills/bswap16<u32>" (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (i32.const 0)
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 1)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 25)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
    (i32.and
-    (i32.const 1)
+    (if (result i32)
+     (tee_local $1
+      (i32.const 0)
+     )
+     (get_local $1)
+     (i32.const 1)
+    )
     (i32.const 1)
    )
    (return
@@ -145,9 +302,45 @@
     )
    )
   )
-  (unreachable)
+  (get_local $0)
  )
  (func "$(lib)/polyfills/bswap<u32>" (; 6 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (if (result i32)
+         (tee_local $1
+          (i32.and
+           (i32.const 0)
+           (i32.const 1)
+          )
+         )
+         (get_local $1)
+         (i32.const 1)
+        )
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 0)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 2)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
   (i32.or
    (i32.rotl
     (i32.and
@@ -168,8 +361,40 @@
  (func "$(lib)/polyfills/bswap16<i32>" (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (i32.const 0)
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 1)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 25)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
    (i32.and
-    (i32.const 1)
+    (if (result i32)
+     (tee_local $1
+      (i32.const 0)
+     )
+     (get_local $1)
+     (i32.const 1)
+    )
     (i32.const 1)
    )
    (return
@@ -197,15 +422,50 @@
     )
    )
   )
-  (unreachable)
+  (get_local $0)
  )
  (func "$(lib)/polyfills/bswap<u64>" (; 8 ;) (type $II) (param $0 i64) (result i64)
-  (local $1 i64)
+  (local $1 i32)
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (if (result i32)
+         (tee_local $1
+          (i32.and
+           (i32.const 0)
+           (i32.const 1)
+          )
+         )
+         (get_local $1)
+         (i32.const 0)
+        )
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 1)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 2)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
   (i64.rotr
    (i64.or
     (i64.and
      (i64.shr_u
-      (tee_local $1
+      (tee_local $0
        (i64.or
         (i64.and
          (i64.shr_u
@@ -229,7 +489,7 @@
     )
     (i64.shl
      (i64.and
-      (get_local $1)
+      (get_local $0)
       (i64.const 281470681808895)
      )
      (i64.const 16)
@@ -249,7 +509,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 4)
      (i32.const 0)
     )
@@ -266,7 +526,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 5)
      (i32.const 0)
     )
@@ -283,7 +543,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 8)
      (i32.const 0)
     )
@@ -300,7 +560,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 9)
      (i32.const 0)
     )
@@ -317,7 +577,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 12)
      (i32.const 0)
     )
@@ -334,7 +594,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 13)
      (i32.const 0)
     )
@@ -351,7 +611,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 16)
      (i32.const 0)
     )
@@ -368,7 +628,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 17)
      (i32.const 0)
     )
@@ -385,7 +645,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 20)
      (i32.const 0)
     )
@@ -402,7 +662,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 21)
      (i32.const 0)
     )
@@ -419,7 +679,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 24)
      (i32.const 0)
     )
@@ -436,7 +696,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 44)
      (i32.const 25)
      (i32.const 0)
     )
