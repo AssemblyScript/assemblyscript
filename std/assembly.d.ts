@@ -175,8 +175,9 @@ declare function free_memory(ptr: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
 declare function unreachable(): any; // sic
 
-/** Polyfills **/
+/** [Polyfill] Performs the sign-agnostic reverse bytes **/
 declare function bswap<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
+/** [Polyfill] Performs the sign-agnostic reverse bytes only for last 16-bit **/
 declare function bswap16<T = i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 /** NaN (not a number) as a 32-bit or 64-bit float depending on context. */
