@@ -184,9 +184,9 @@ declare class String {
   static fromCodePoints(arr: i32[]): string;
   readonly length: i32;
   private constructor();
-  indexOf(subject: string): i32;
+  indexOf(subject: string, position?: i32): i32;
   includes(other: string): bool;
-  lastIndexOf(subject: string): i32;
+  lastIndexOf(subject: string, position?: i32): i32;
   charAt(index: i32): string;
   charCodeAt(index: i32): i32;
   substring(from: i32, to?: i32): string;

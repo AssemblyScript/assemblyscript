@@ -129,7 +129,7 @@ exports.main = function main(argv, options, callback) {
       "Syntax:   asc [entryFile ...] [options]",
       "",
       "Examples: asc hello.ts",
-      "          asc hello.ts -b hello.wasm -t hello.wast",
+      "          asc hello.ts -b hello.wasm -t hello.wat",
       "          asc hello1.ts hello2.ts -b -O > hello.wasm",
       "",
       "Options:"
@@ -392,7 +392,7 @@ exports.main = function main(argv, options, callback) {
     let hasStdout = false;
 
     if (args.outFile != null) {
-      if (/\.wast$/.test(args.outFile) && args.textFile == null)
+      if (/\.was?t$/.test(args.outFile) && args.textFile == null)
         args.textFile = args.outFile;
       else if (/\.js$/.test(args.outFile) && args.asmjsFile == null)
         args.asmjsFile = args.outFile;

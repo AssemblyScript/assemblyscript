@@ -17,8 +17,8 @@
   },
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
-    "build:untouched": "asc assembly/i64.ts -t i64.untouched.wast -b i64.untouched.wasm --noMemory --validate --sourceMap --measure",
-    "build:optimized": "asc -O assembly/i64.ts -b i64.optimized.wasm -t i64.optimized.wast --noMemory --validate --sourceMap --measure",
+    "build:untouched": "asc assembly/i64.ts -t i64.untouched.wat -b i64.untouched.wasm --noMemory --validate --sourceMap --measure",
+    "build:optimized": "asc -O assembly/i64.ts -b i64.optimized.wasm -t i64.optimized.wat --noMemory --validate --sourceMap --measure",
     "test": "node tests"
   },
   "files": [
