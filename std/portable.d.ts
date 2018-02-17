@@ -129,7 +129,7 @@ declare function store<T = u8>(ptr: usize, value: T, constantOffset?: usize): vo
 /** Emits an unreachable operation that results in a runtime error when executed. */
 declare function unreachable(): any; // sic
 
-declare function bswap64(value: u64): u64;
+// declare function bswap64(value: u64): u64;
 declare function bswap32(value: u32): u32;
 declare function bswap16(value: u16): u16;
 
