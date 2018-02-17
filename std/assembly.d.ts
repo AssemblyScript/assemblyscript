@@ -175,6 +175,7 @@ declare function free_memory(ptr: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
 declare function unreachable(): any; // sic
 
+/** Polyfills **/
 declare function bswap64(value: u64): u64;
 declare function bswap32(value: u32): u32;
 declare function bswap16(value: u16): u16;
