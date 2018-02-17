@@ -131,8 +131,8 @@ declare function unreachable(): any; // sic
 
 /** Polyfills **/
 // declare function bswap64(value: u64): u64;
-declare function bswap<T = i32 | u32>(value: T): T;
-declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
+declare function bswap<T = i8 | u8 | i16 | u16 | i32 | u32 | isize | usize>(value: T): T;
+declare function bswap16<T = i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
