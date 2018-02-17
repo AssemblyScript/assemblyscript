@@ -30,7 +30,7 @@ export function bswap16<T>(value: T): T {
     sizeof<T>() == 4 ||
     sizeof<T>() == 8
   ) {
-    return rotr<T>(value, 8);
+    return <T>(((value << 8) & 0xFF00) | ((value >> 8) & 0x00FF));
   }
   throw new TypeError("Unsupported type");
   return <T>0;
