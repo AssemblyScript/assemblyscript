@@ -80,7 +80,7 @@ globalScope["bswap"] = function bswap(value) {
 	return a | b;
 }
 
-globalScope["bswap16"] = function bswap(value) {
+globalScope["bswap16"] = function bswap16(value) {
   return ((value << 8) & 0xFF00) | ((value >> 8) & 0x00FF) | (value & 0xFFFF0000);
 }
 
