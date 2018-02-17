@@ -219,9 +219,8 @@ export function bswap64(value: u64): u64 {
 }
 
 export function bswap32(value: u32): u32 {
-  var a: u32 = (value >> 8) & 0x00FF00FF;
-  var b: u32 = (value & 0x00FF00FF) << 8;
-  return rotr<u32>(a | b, 16);
+  return rotl<u32>(value & 0xFF00FF00, 8) |
+         rotr<u32>(value & 0x00FF00FF, 8);
 }
 
 export function bswap16(value: u16): u16 {
