@@ -26,106 +26,106 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  ;;@ (lib)/allocator/arena.ts:14:2
+  ;;@ (lib)/allocator/arena.ts:15:2
   (if
-   ;;@ (lib)/allocator/arena.ts:14:6
+   ;;@ (lib)/allocator/arena.ts:15:6
    (i32.eqz
-    ;;@ (lib)/allocator/arena.ts:14:7
+    ;;@ (lib)/allocator/arena.ts:15:7
     (get_local $0)
    )
-   ;;@ (lib)/allocator/arena.ts:14:20
+   ;;@ (lib)/allocator/arena.ts:15:20
    (return
     (i32.const 0)
    )
   )
-  ;;@ (lib)/allocator/arena.ts:15:2
+  ;;@ (lib)/allocator/arena.ts:16:2
   (set_local $1
-   ;;@ (lib)/allocator/arena.ts:15:12
+   ;;@ (lib)/allocator/arena.ts:16:12
    (get_global "$(lib)/allocator/arena/HEAP_OFFSET")
   )
-  ;;@ (lib)/allocator/arena.ts:16:2
+  ;;@ (lib)/allocator/arena.ts:17:2
   (set_local $2
-   ;;@ (lib)/allocator/arena.ts:16:12
+   ;;@ (lib)/allocator/arena.ts:17:12
    (i32.and
     (i32.add
-     ;;@ (lib)/allocator/arena.ts:16:13
+     ;;@ (lib)/allocator/arena.ts:17:13
      (i32.add
       (get_local $1)
-      ;;@ (lib)/allocator/arena.ts:16:19
+      ;;@ (lib)/allocator/arena.ts:17:19
       (get_local $0)
      )
-     ;;@ (lib)/allocator/arena.ts:16:26
+     ;;@ (lib)/allocator/arena.ts:17:26
      (i32.const 7)
     )
-    ;;@ (lib)/allocator/arena.ts:16:40
+    ;;@ (lib)/allocator/arena.ts:17:40
     (i32.xor
-     ;;@ (lib)/allocator/arena.ts:16:41
+     ;;@ (lib)/allocator/arena.ts:17:41
      (i32.const 7)
      (i32.const -1)
     )
    )
   )
-  ;;@ (lib)/allocator/arena.ts:17:2
+  ;;@ (lib)/allocator/arena.ts:18:2
   (set_local $3
-   ;;@ (lib)/allocator/arena.ts:17:14
+   ;;@ (lib)/allocator/arena.ts:18:14
    (i32.shl
     (current_memory)
-    ;;@ (lib)/allocator/arena.ts:17:41
+    ;;@ (lib)/allocator/arena.ts:18:41
     (i32.const 16)
    )
   )
-  ;;@ (lib)/allocator/arena.ts:18:2
+  ;;@ (lib)/allocator/arena.ts:19:2
   (if
-   ;;@ (lib)/allocator/arena.ts:18:6
+   ;;@ (lib)/allocator/arena.ts:19:6
    (i32.and
     (if (result i32)
      (i32.ne
       (tee_local $4
        (i32.gt_u
         (get_local $2)
-        ;;@ (lib)/allocator/arena.ts:18:12
+        ;;@ (lib)/allocator/arena.ts:19:12
         (get_local $3)
        )
       )
       (i32.const 0)
      )
-     ;;@ (lib)/allocator/arena.ts:18:21
+     ;;@ (lib)/allocator/arena.ts:19:21
      (i32.lt_s
       (grow_memory
-       ;;@ (lib)/allocator/arena.ts:19:4
+       ;;@ (lib)/allocator/arena.ts:20:4
        (select
         (tee_local $4
-         ;;@ (lib)/allocator/arena.ts:20:6
+         ;;@ (lib)/allocator/arena.ts:21:6
          (i32.shr_u
           (i32.sub
-           ;;@ (lib)/allocator/arena.ts:20:7
+           ;;@ (lib)/allocator/arena.ts:21:7
            (i32.and
-            ;;@ (lib)/allocator/arena.ts:20:8
+            ;;@ (lib)/allocator/arena.ts:21:8
             (i32.add
-             ;;@ (lib)/allocator/arena.ts:20:9
+             ;;@ (lib)/allocator/arena.ts:21:9
              (get_local $2)
-             ;;@ (lib)/allocator/arena.ts:20:15
+             ;;@ (lib)/allocator/arena.ts:21:15
              (i32.const 65535)
             )
-            ;;@ (lib)/allocator/arena.ts:20:25
+            ;;@ (lib)/allocator/arena.ts:21:25
             (i32.xor
-             ;;@ (lib)/allocator/arena.ts:20:26
+             ;;@ (lib)/allocator/arena.ts:21:26
              (i32.const 65535)
              (i32.const -1)
             )
            )
-           ;;@ (lib)/allocator/arena.ts:20:36
+           ;;@ (lib)/allocator/arena.ts:21:36
            (get_local $3)
           )
-          ;;@ (lib)/allocator/arena.ts:20:46
+          ;;@ (lib)/allocator/arena.ts:21:46
           (i32.const 16)
          )
         )
         (tee_local $5
-         ;;@ (lib)/allocator/arena.ts:21:6
+         ;;@ (lib)/allocator/arena.ts:22:6
          (i32.shr_u
           (get_local $3)
-          ;;@ (lib)/allocator/arena.ts:21:46
+          ;;@ (lib)/allocator/arena.ts:22:46
           (i32.const 16)
          )
         )
@@ -135,22 +135,22 @@
         )
        )
       )
-      ;;@ (lib)/allocator/arena.ts:23:6
+      ;;@ (lib)/allocator/arena.ts:24:6
       (i32.const 0)
      )
      (get_local $4)
     )
     (i32.const 1)
    )
-   ;;@ (lib)/allocator/arena.ts:23:9
+   ;;@ (lib)/allocator/arena.ts:24:9
    (unreachable)
   )
-  ;;@ (lib)/allocator/arena.ts:24:2
+  ;;@ (lib)/allocator/arena.ts:25:2
   (set_global "$(lib)/allocator/arena/HEAP_OFFSET"
-   ;;@ (lib)/allocator/arena.ts:24:16
+   ;;@ (lib)/allocator/arena.ts:25:16
    (get_local $2)
   )
-  ;;@ (lib)/allocator/arena.ts:25:9
+  ;;@ (lib)/allocator/arena.ts:26:9
   (return
    (get_local $1)
   )
@@ -3446,9 +3446,9 @@
  (func "$(lib)/allocator/arena/free_memory" (; 6 ;) (type $iv) (param $0 i32)
  )
  (func "$(lib)/allocator/arena/reset_memory" (; 7 ;) (type $v)
-  ;;@ (lib)/allocator/arena.ts:33:2
+  ;;@ (lib)/allocator/arena.ts:36:2
   (set_global "$(lib)/allocator/arena/HEAP_OFFSET"
-   ;;@ (lib)/allocator/arena.ts:33:16
+   ;;@ (lib)/allocator/arena.ts:36:16
    (get_global $HEAP_BASE)
   )
  )

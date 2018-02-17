@@ -1,4 +1,3 @@
-*.wast
 *.wasm
 *.wasm.map
 node_modules/

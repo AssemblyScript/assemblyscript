@@ -4,18 +4,21 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iv (func (param i32)))
+ (type $iiv (func (param i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
+ (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global "$(lib)/allocator/arena/ALIGN_LOG2" i32 (i32.const 3))
  (global "$(lib)/allocator/arena/ALIGN_SIZE" i32 (i32.const 8))
  (global "$(lib)/allocator/arena/ALIGN_MASK" i32 (i32.const 7))
  (global "$(lib)/allocator/arena/HEAP_OFFSET" (mut i32) (i32.const 0))
- (global $std/set/set (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 56))
+ (global $std/array/arr (mut i32) (i32.const 0))
+ (global $std/array/i (mut i32) (i32.const 0))
+ (global $HEAP_BASE i32 (i32.const 64))
  (memory $0 1)
- (data (i32.const 4) "\n\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s\00")
- (data (i32.const 28) "\0c\00\00\00(\00l\00i\00b\00)\00/\00s\00e\00t\00.\00t\00s\00")
+ (data (i32.const 4) "\0c\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 32) "\0e\00\00\00(\00l\00i\00b\00)\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func "$(lib)/allocator/arena/allocate_memory" (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -24,106 +27,106 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  ;;@ (lib)/allocator/arena.ts:14:2
+  ;;@ (lib)/allocator/arena.ts:15:2
   (if
-   ;;@ (lib)/allocator/arena.ts:14:6
+   ;;@ (lib)/allocator/arena.ts:15:6
    (i32.eqz
-    ;;@ (lib)/allocator/arena.ts:14:7
+    ;;@ (lib)/allocator/arena.ts:15:7
     (get_local $0)
    )
-   ;;@ (lib)/allocator/arena.ts:14:20
+   ;;@ (lib)/allocator/arena.ts:15:20
    (return
     (i32.const 0)
    )
   )
-  ;;@ (lib)/allocator/arena.ts:15:2
+  ;;@ (lib)/allocator/arena.ts:16:2
   (set_local $1
-   ;;@ (lib)/allocator/arena.ts:15:12
+   ;;@ (lib)/allocator/arena.ts:16:12
    (get_global "$(lib)/allocator/arena/HEAP_OFFSET")
   )
-  ;;@ (lib)/allocator/arena.ts:16:2
+  ;;@ (lib)/allocator/arena.ts:17:2
   (set_local $2
-   ;;@ (lib)/allocator/arena.ts:16:12
+   ;;@ (lib)/allocator/arena.ts:17:12
    (i32.and
     (i32.add
-     ;;@ (lib)/allocator/arena.ts:16:13
+     ;;@ (lib)/allocator/arena.ts:17:13
      (i32.add
       (get_local $1)
-      ;;@ (lib)/allocator/arena.ts:16:19
+      ;;@ (lib)/allocator/arena.ts:17:19
       (get_local $0)
      )
-     ;;@ (lib)/allocator/arena.ts:16:26
+     ;;@ (lib)/allocator/arena.ts:17:26
      (i32.const 7)
     )
-    ;;@ (lib)/allocator/arena.ts:16:40
+    ;;@ (lib)/allocator/arena.ts:17:40
     (i32.xor
-     ;;@ (lib)/allocator/arena.ts:16:41
+     ;;@ (lib)/allocator/arena.ts:17:41
      (i32.const 7)
      (i32.const -1)
     )
    )
   )
-  ;;@ (lib)/allocator/arena.ts:17:2
+  ;;@ (lib)/allocator/arena.ts:18:2
   (set_local $3
-   ;;@ (lib)/allocator/arena.ts:17:14
+   ;;@ (lib)/allocator/arena.ts:18:14
    (i32.shl
     (current_memory)
-    ;;@ (lib)/allocator/arena.ts:17:41
+    ;;@ (lib)/allocator/arena.ts:18:41
     (i32.const 16)
    )
   )
-  ;;@ (lib)/allocator/arena.ts:18:2
+  ;;@ (lib)/allocator/arena.ts:19:2
   (if
-   ;;@ (lib)/allocator/arena.ts:18:6
+   ;;@ (lib)/allocator/arena.ts:19:6
    (i32.and
     (if (result i32)
      (i32.ne
       (tee_local $4
        (i32.gt_u
         (get_local $2)
-        ;;@ (lib)/allocator/arena.ts:18:12
+        ;;@ (lib)/allocator/arena.ts:19:12
         (get_local $3)
        )
       )
       (i32.const 0)
      )
-     ;;@ (lib)/allocator/arena.ts:18:21
+     ;;@ (lib)/allocator/arena.ts:19:21
      (i32.lt_s
       (grow_memory
-       ;;@ (lib)/allocator/arena.ts:19:4
+       ;;@ (lib)/allocator/arena.ts:20:4
        (select
         (tee_local $4
-         ;;@ (lib)/allocator/arena.ts:20:6
+         ;;@ (lib)/allocator/arena.ts:21:6
          (i32.shr_u
           (i32.sub
-           ;;@ (lib)/allocator/arena.ts:20:7
+           ;;@ (lib)/allocator/arena.ts:21:7
            (i32.and
-            ;;@ (lib)/allocator/arena.ts:20:8
+            ;;@ (lib)/allocator/arena.ts:21:8
             (i32.add
-             ;;@ (lib)/allocator/arena.ts:20:9
+             ;;@ (lib)/allocator/arena.ts:21:9
              (get_local $2)
-             ;;@ (lib)/allocator/arena.ts:20:15
+             ;;@ (lib)/allocator/arena.ts:21:15
              (i32.const 65535)
             )
-            ;;@ (lib)/allocator/arena.ts:20:25
+            ;;@ (lib)/allocator/arena.ts:21:25
             (i32.xor
-             ;;@ (lib)/allocator/arena.ts:20:26
+             ;;@ (lib)/allocator/arena.ts:21:26
              (i32.const 65535)
              (i32.const -1)
             )
            )
-           ;;@ (lib)/allocator/arena.ts:20:36
+           ;;@ (lib)/allocator/arena.ts:21:36
            (get_local $3)
           )
-          ;;@ (lib)/allocator/arena.ts:20:46
+          ;;@ (lib)/allocator/arena.ts:21:46
           (i32.const 16)
          )
         )
         (tee_local $5
-         ;;@ (lib)/allocator/arena.ts:21:6
+         ;;@ (lib)/allocator/arena.ts:22:6
          (i32.shr_u
           (get_local $3)
-          ;;@ (lib)/allocator/arena.ts:21:46
+          ;;@ (lib)/allocator/arena.ts:22:46
           (i32.const 16)
          )
         )
@@ -133,30 +136,30 @@
         )
        )
       )
-      ;;@ (lib)/allocator/arena.ts:23:6
+      ;;@ (lib)/allocator/arena.ts:24:6
       (i32.const 0)
      )
      (get_local $4)
     )
     (i32.const 1)
    )
-   ;;@ (lib)/allocator/arena.ts:23:9
+   ;;@ (lib)/allocator/arena.ts:24:9
    (unreachable)
   )
-  ;;@ (lib)/allocator/arena.ts:24:2
+  ;;@ (lib)/allocator/arena.ts:25:2
   (set_global "$(lib)/allocator/arena/HEAP_OFFSET"
-   ;;@ (lib)/allocator/arena.ts:24:16
+   ;;@ (lib)/allocator/arena.ts:25:16
    (get_local $2)
   )
-  ;;@ (lib)/allocator/arena.ts:25:9
+  ;;@ (lib)/allocator/arena.ts:26:9
   (return
    (get_local $1)
   )
  )
- (func "$(lib)/set/Set#get:size" (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ (lib)/set.ts:16:16
+ (func "$(lib)/array/Array#get:length" (; 2 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ (lib)/array.ts:26:16
   (return
-   ;;@ (lib)/set.ts:16:11
+   ;;@ (lib)/array.ts:26:11
    (i32.load offset=8
     (get_local $0)
    )
@@ -2843,546 +2846,1501 @@
  )
  (func "$(lib)/allocator/arena/free_memory" (; 5 ;) (type $iv) (param $0 i32)
  )
- (func "$(lib)/set/Set#add" (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/Array#__grow" (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  ;;@ (lib)/set.ts:31:4
+  ;;@ (lib)/array.ts:8:4
   (if
    (i32.eqz
-    ;;@ (lib)/set.ts:31:11
-    (i32.ne
-     (get_local $0)
-     ;;@ (lib)/set.ts:31:19
-     (i32.const 0)
+    ;;@ (lib)/array.ts:8:11
+    (i32.gt_s
+     (get_local $1)
+     ;;@ (lib)/array.ts:8:25
+     (i32.load offset=4
+      (get_local $0)
+     )
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 28)
-     (i32.const 31)
+     (i32.const 32)
+     (i32.const 8)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/set.ts:33:4
+  ;;@ (lib)/array.ts:9:4
+  (set_local $2
+   ;;@ (lib)/array.ts:9:20
+   (call "$(lib)/allocator/arena/allocate_memory"
+    ;;@ (lib)/array.ts:9:36
+    (i32.mul
+     (get_local $1)
+     ;;@ (lib)/array.ts:9:57
+     (i32.const 4)
+    )
+   )
+  )
+  ;;@ (lib)/array.ts:10:4
   (if
-   ;;@ (lib)/set.ts:33:8
-   (i32.ge_u
+   ;;@ (lib)/array.ts:10:8
+   (i32.load
+    (get_local $0)
+   )
+   ;;@ (lib)/array.ts:10:23
+   (block
+    ;;@ (lib)/array.ts:11:6
+    (call "$(lib)/memory/move_memory"
+     ;;@ (lib)/array.ts:11:18
+     (get_local $2)
+     ;;@ (lib)/array.ts:11:29
+     (i32.load
+      (get_local $0)
+     )
+     ;;@ (lib)/array.ts:11:44
+     (i32.mul
+      (i32.load offset=4
+       (get_local $0)
+      )
+      ;;@ (lib)/array.ts:11:62
+      (i32.const 4)
+     )
+    )
+    ;;@ (lib)/array.ts:12:6
+    (call "$(lib)/allocator/arena/free_memory"
+     ;;@ (lib)/array.ts:12:18
+     (i32.load
+      (get_local $0)
+     )
+    )
+   )
+  )
+  ;;@ (lib)/array.ts:14:4
+  (i32.store
+   (get_local $0)
+   ;;@ (lib)/array.ts:14:20
+   (get_local $2)
+  )
+  ;;@ (lib)/array.ts:15:4
+  (i32.store offset=4
+   (get_local $0)
+   ;;@ (lib)/array.ts:15:22
+   (get_local $1)
+  )
+ )
+ (func "$(lib)/array/Array#push" (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  ;;@ (lib)/array.ts:78:4
+  (if
+   ;;@ (lib)/array.ts:78:8
+   (i32.eq
     (i32.load offset=8
      (get_local $0)
     )
-    ;;@ (lib)/set.ts:33:23
+    ;;@ (lib)/array.ts:78:25
     (i32.load offset=4
      (get_local $0)
     )
    )
-   ;;@ (lib)/set.ts:33:40
-   (block
-    ;;@ (lib)/set.ts:34:6
-    (set_local $4
-     ;;@ (lib)/set.ts:34:24
-     (select
-      (tee_local $2
-       ;;@ (lib)/set.ts:34:28
-       (i32.shl
-        (i32.load offset=4
-         (get_local $0)
-        )
-        ;;@ (lib)/set.ts:34:47
-        (i32.const 1)
-       )
-      )
-      (tee_local $3
-       ;;@ (lib)/set.ts:34:50
-       (i32.const 8)
-      )
-      (i32.gt_u
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-    )
-    ;;@ (lib)/set.ts:35:6
-    (set_local $5
-     ;;@ (lib)/set.ts:35:22
-     (call "$(lib)/allocator/arena/allocate_memory"
-      ;;@ (lib)/set.ts:35:38
-      (i32.mul
-       (get_local $4)
-       ;;@ (lib)/set.ts:35:59
-       (i32.const 4)
-      )
-     )
-    )
-    ;;@ (lib)/set.ts:36:6
-    (if
-     ;;@ (lib)/set.ts:36:10
-     (i32.load
+   ;;@ (lib)/array.ts:79:11
+   (call "$(lib)/array/Array#__grow"
+    ;;@ (lib)/array.ts:79:6
+    (get_local $0)
+    ;;@ (lib)/array.ts:79:18
+    (if (result i32)
+     (i32.load offset=4
       (get_local $0)
      )
-     ;;@ (lib)/set.ts:36:25
-     (block
-      ;;@ (lib)/set.ts:37:8
-      (call "$(lib)/memory/move_memory"
-       ;;@ (lib)/set.ts:37:20
-       (get_local $5)
-       ;;@ (lib)/set.ts:37:31
-       (i32.load
-        (get_local $0)
-       )
-       ;;@ (lib)/set.ts:37:46
-       (i32.mul
-        (i32.load offset=4
-         ;;@ (lib)/set.ts:37:53
-         (get_local $0)
-        )
-        ;;@ (lib)/set.ts:37:71
-        (i32.const 4)
-       )
+     ;;@ (lib)/array.ts:79:36
+     (i32.shl
+      (i32.load offset=4
+       (get_local $0)
       )
-      ;;@ (lib)/set.ts:38:8
-      (call "$(lib)/allocator/arena/free_memory"
-       ;;@ (lib)/set.ts:38:20
-       (i32.load
-        (get_local $0)
-       )
-      )
+      ;;@ (lib)/array.ts:79:55
+      (i32.const 1)
      )
-    )
-    ;;@ (lib)/set.ts:40:6
-    (i32.store offset=4
-     (get_local $0)
-     ;;@ (lib)/set.ts:40:24
-     (get_local $4)
-    )
-    ;;@ (lib)/set.ts:41:6
-    (i32.store
-     (get_local $0)
-     ;;@ (lib)/set.ts:41:22
-     (get_local $5)
+     ;;@ (lib)/array.ts:79:59
+     (i32.const 1)
     )
    )
   )
-  ;;@ (lib)/set.ts:43:4
+  ;;@ (lib)/array.ts:80:4
   (i32.store
-   ;;@ (lib)/set.ts:43:13
+   ;;@ (lib)/array.ts:80:13
    (i32.add
     (i32.load
      (get_local $0)
     )
-    ;;@ (lib)/set.ts:43:29
+    ;;@ (lib)/array.ts:80:29
     (i32.mul
      (i32.load offset=8
-      ;;@ (lib)/set.ts:43:36
       (get_local $0)
      )
-     ;;@ (lib)/set.ts:43:50
+     ;;@ (lib)/array.ts:80:45
      (i32.const 4)
     )
    )
-   ;;@ (lib)/set.ts:43:63
+   ;;@ (lib)/array.ts:80:58
    (get_local $1)
   )
-  ;;@ (lib)/set.ts:44:4
-  (i32.store offset=8
-   ;;@ (lib)/set.ts:44:6
-   (get_local $0)
-   (i32.add
-    (i32.load offset=8
-     (get_local $0)
-    )
-    (i32.const 1)
-   )
-  )
-  ;;@ (lib)/set.ts:45:11
+  ;;@ (lib)/array.ts:81:18
   (return
-   (get_local $0)
-  )
- )
- (func "$(lib)/set/Set#has" (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  ;;@ (lib)/set.ts:22:4
-  (if
-   (i32.eqz
-    ;;@ (lib)/set.ts:22:11
-    (i32.ne
-     (get_local $0)
-     ;;@ (lib)/set.ts:22:19
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 28)
-     (i32.const 22)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  ;;@ (lib)/set.ts:24:4
-  (block $break|0
-   (block
+   ;;@ (lib)/array.ts:81:11
+   (block (result i32)
     (set_local $2
-     ;;@ (lib)/set.ts:24:28
-     (i32.const 0)
-    )
-    (set_local $3
-     ;;@ (lib)/set.ts:24:46
-     (i32.load offset=8
-      (get_local $0)
-     )
-    )
-   )
-   (loop $continue|0
-    (if
-     ;;@ (lib)/set.ts:24:59
-     (i32.lt_u
-      (get_local $2)
-      ;;@ (lib)/set.ts:24:67
-      (get_local $3)
-     )
-     (block
-      ;;@ (lib)/set.ts:25:6
-      (if
-       ;;@ (lib)/set.ts:25:10
-       (i32.eq
-        (i32.load
-         ;;@ (lib)/set.ts:25:18
-         (i32.add
-          (i32.load
-           (get_local $0)
-          )
-          ;;@ (lib)/set.ts:25:34
-          (i32.mul
-           (get_local $2)
-           ;;@ (lib)/set.ts:25:42
-           (i32.const 4)
-          )
-         )
-        )
-        ;;@ (lib)/set.ts:25:58
-        (get_local $1)
-       )
-       ;;@ (lib)/set.ts:26:15
-       (return
-        (i32.const 1)
-       )
+     (i32.add
+      ;;@ (lib)/array.ts:81:13
+      (i32.load offset=8
+       (get_local $0)
       )
-      ;;@ (lib)/set.ts:24:74
-      (set_local $2
-       (i32.add
-        ;;@ (lib)/set.ts:24:76
-        (get_local $2)
-        (i32.const 1)
-       )
-      )
-      (br $continue|0)
+      (i32.const 1)
      )
     )
-   )
-  )
-  ;;@ (lib)/set.ts:27:11
-  (return
-   (i32.const 0)
-  )
- )
- (func "$(lib)/set/Set#delete" (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  ;;@ (lib)/set.ts:49:4
-  (if
-   (i32.eqz
-    ;;@ (lib)/set.ts:49:11
-    (i32.ne
+    (i32.store offset=8
      (get_local $0)
-     ;;@ (lib)/set.ts:49:19
-     (i32.const 0)
+     (get_local $2)
     )
+    (get_local $2)
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 28)
-     (i32.const 49)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  ;;@ (lib)/set.ts:51:4
-  (block $break|0
-   (block
-    (set_local $2
-     ;;@ (lib)/set.ts:51:28
-     (i32.const 0)
-    )
-    (set_local $3
-     ;;@ (lib)/set.ts:51:46
-     (i32.load offset=8
-      (get_local $0)
-     )
-    )
-   )
-   (loop $continue|0
-    (if
-     ;;@ (lib)/set.ts:51:59
-     (i32.lt_u
-      (get_local $2)
-      ;;@ (lib)/set.ts:51:67
-      (get_local $3)
-     )
-     (block
-      ;;@ (lib)/set.ts:52:6
-      (if
-       ;;@ (lib)/set.ts:52:10
-       (i32.eq
-        (i32.load
-         ;;@ (lib)/set.ts:52:18
-         (i32.add
-          (i32.load
-           (get_local $0)
-          )
-          ;;@ (lib)/set.ts:52:34
-          (i32.mul
-           (get_local $2)
-           ;;@ (lib)/set.ts:52:42
-           (i32.const 4)
-          )
-         )
-        )
-        ;;@ (lib)/set.ts:52:58
-        (get_local $1)
-       )
-       ;;@ (lib)/set.ts:52:65
-       (block
-        ;;@ (lib)/set.ts:53:8
-        (if
-         ;;@ (lib)/set.ts:53:12
-         (i32.lt_u
-          (i32.add
-           (get_local $2)
-           ;;@ (lib)/set.ts:53:20
-           (i32.const 1)
-          )
-          ;;@ (lib)/set.ts:53:24
-          (i32.load offset=8
-           (get_local $0)
-          )
-         )
-         ;;@ (lib)/set.ts:54:10
-         (call "$(lib)/memory/move_memory"
-          ;;@ (lib)/set.ts:54:22
-          (i32.add
-           (i32.load
-            (get_local $0)
-           )
-           ;;@ (lib)/set.ts:54:38
-           (i32.mul
-            (get_local $2)
-            ;;@ (lib)/set.ts:54:46
-            (i32.const 4)
-           )
-          )
-          ;;@ (lib)/set.ts:54:59
-          (i32.add
-           (i32.load
-            (get_local $0)
-           )
-           ;;@ (lib)/set.ts:54:75
-           (i32.mul
-            (i32.add
-             ;;@ (lib)/set.ts:54:76
-             (get_local $2)
-             ;;@ (lib)/set.ts:54:84
-             (i32.const 1)
-            )
-            ;;@ (lib)/set.ts:54:89
-            (i32.const 4)
-           )
-          )
-          ;;@ (lib)/set.ts:54:102
-          (i32.sub
-           (i32.sub
-            (i32.load offset=8
-             (get_local $0)
-            )
-            ;;@ (lib)/set.ts:54:116
-            (get_local $2)
-           )
-           ;;@ (lib)/set.ts:54:124
-           (i32.const 1)
-          )
-         )
-        )
-        ;;@ (lib)/set.ts:55:8
-        (i32.store offset=8
-         ;;@ (lib)/set.ts:55:10
-         (get_local $0)
-         (i32.sub
-          (i32.load offset=8
-           (get_local $0)
-          )
-          (i32.const 1)
-         )
-        )
-        ;;@ (lib)/set.ts:56:15
-        (return
-         (i32.const 1)
-        )
-       )
-      )
-      ;;@ (lib)/set.ts:51:74
-      (set_local $2
-       (i32.add
-        ;;@ (lib)/set.ts:51:76
-        (get_local $2)
-        (i32.const 1)
-       )
-      )
-      (br $continue|0)
-     )
-    )
-   )
-  )
-  ;;@ (lib)/set.ts:58:11
-  (return
-   (i32.const 0)
   )
  )
- (func "$(lib)/set/Set#clear" (; 9 ;) (type $iv) (param $0 i32)
-  ;;@ (lib)/set.ts:62:4
+ (func "$(lib)/array/Array#__get" (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  ;;@ (lib)/array.ts:39:4
   (if
-   (i32.eqz
-    ;;@ (lib)/set.ts:62:11
-    (i32.ne
+   ;;@ (lib)/array.ts:39:8
+   (i32.ge_u
+    (get_local $1)
+    ;;@ (lib)/array.ts:39:22
+    (i32.load offset=4
      (get_local $0)
-     ;;@ (lib)/set.ts:62:19
-     (i32.const 0)
     )
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 28)
-     (i32.const 62)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
+   ;;@ (lib)/array.ts:40:6
+   (unreachable)
   )
-  ;;@ (lib)/set.ts:64:4
-  (i32.store offset=8
-   (get_local $0)
-   ;;@ (lib)/set.ts:64:18
-   (i32.const 0)
-  )
- )
- (func $start (; 10 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/HEAP_OFFSET"
-   ;;@ (lib)/allocator/arena.ts:11:25
-   (get_global $HEAP_BASE)
-  )
-  (set_global $std/set/set
-   ;;@ std/set.ts:5:10
-   (call "$(lib)/allocator/arena/allocate_memory"
-    ;;@ std/set.ts:5:47
+  ;;@ (lib)/array.ts:41:61
+  (return
+   ;;@ (lib)/array.ts:41:11
+   (i32.load
+    ;;@ (lib)/array.ts:41:19
     (i32.add
-     (i32.const 4)
-     ;;@ std/set.ts:5:65
+     (i32.load
+      (get_local $0)
+     )
+     ;;@ (lib)/array.ts:41:35
      (i32.mul
-      (i32.const 2)
-      ;;@ std/set.ts:5:69
+      (get_local $1)
+      ;;@ (lib)/array.ts:41:50
       (i32.const 4)
      )
     )
    )
   )
-  ;;@ std/set.ts:7:0
+ )
+ (func "$(lib)/array/Array#pop" (; 9 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  ;;@ (lib)/array.ts:85:4
   (if
-   (i32.eqz
-    ;;@ std/set.ts:7:7
-    (i32.eq
-     (call "$(lib)/set/Set#get:size"
-      (get_global $std/set/set)
-     )
-     ;;@ std/set.ts:7:19
-     (i32.const 0)
+   ;;@ (lib)/array.ts:85:8
+   (i32.lt_s
+    (i32.load offset=8
+     (get_local $0)
     )
+    ;;@ (lib)/array.ts:85:24
+    (i32.const 1)
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 7)
-     (i32.const 0)
+   ;;@ (lib)/array.ts:86:6
+   (unreachable)
+  )
+  ;;@ (lib)/array.ts:87:64
+  (return
+   ;;@ (lib)/array.ts:87:11
+   (i32.load
+    ;;@ (lib)/array.ts:87:19
+    (i32.add
+     (i32.load
+      (get_local $0)
+     )
+     ;;@ (lib)/array.ts:87:35
+     (i32.mul
+      (block (result i32)
+       (set_local $1
+        (i32.sub
+         ;;@ (lib)/array.ts:87:37
+         (i32.load offset=8
+          (get_local $0)
+         )
+         (i32.const 1)
+        )
+       )
+       (i32.store offset=8
+        (get_local $0)
+        (get_local $1)
+       )
+       (get_local $1)
+      )
+      ;;@ (lib)/array.ts:87:53
+      (i32.const 4)
+     )
     )
-    (unreachable)
    )
   )
-  ;;@ std/set.ts:9:4
-  (drop
-   (call "$(lib)/set/Set#add"
-    ;;@ std/set.ts:9:0
-    (get_global $std/set/set)
-    ;;@ std/set.ts:9:8
+ )
+ (func "$(lib)/array/Array#unshift" (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  ;;@ (lib)/array.ts:101:4
+  (set_local $2
+   ;;@ (lib)/array.ts:101:22
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
+  ;;@ (lib)/array.ts:102:4
+  (if
+   ;;@ (lib)/array.ts:102:8
+   (i32.eq
+    (i32.load offset=8
+     (get_local $0)
+    )
+    ;;@ (lib)/array.ts:102:25
+    (get_local $2)
+   )
+   ;;@ (lib)/array.ts:102:38
+   (block
+    ;;@ (lib)/array.ts:104:6
+    (set_local $3
+     ;;@ (lib)/array.ts:104:29
+     (if (result i32)
+      (get_local $2)
+      ;;@ (lib)/array.ts:104:43
+      (i32.shl
+       (get_local $2)
+       ;;@ (lib)/array.ts:104:58
+       (i32.const 1)
+      )
+      ;;@ (lib)/array.ts:104:62
+      (i32.const 1)
+     )
+    )
+    ;;@ (lib)/array.ts:105:6
+    (if
+     (i32.eqz
+      ;;@ (lib)/array.ts:105:13
+      (i32.gt_s
+       (get_local $3)
+       ;;@ (lib)/array.ts:105:27
+       (i32.load offset=4
+        (get_local $0)
+       )
+      )
+     )
+     (block
+      (call $abort
+       (i32.const 0)
+       (i32.const 32)
+       (i32.const 105)
+       (i32.const 6)
+      )
+      (unreachable)
+     )
+    )
+    ;;@ (lib)/array.ts:106:6
+    (set_local $4
+     ;;@ (lib)/array.ts:106:22
+     (call "$(lib)/allocator/arena/allocate_memory"
+      ;;@ (lib)/array.ts:106:38
+      (i32.mul
+       (get_local $3)
+       ;;@ (lib)/array.ts:106:59
+       (i32.const 4)
+      )
+     )
+    )
+    ;;@ (lib)/array.ts:107:6
+    (if
+     ;;@ (lib)/array.ts:107:10
+     (i32.load
+      (get_local $0)
+     )
+     ;;@ (lib)/array.ts:107:25
+     (block
+      ;;@ (lib)/array.ts:108:8
+      (call "$(lib)/memory/move_memory"
+       ;;@ (lib)/array.ts:108:20
+       (i32.add
+        (get_local $4)
+        ;;@ (lib)/array.ts:108:32
+        (i32.const 4)
+       )
+       ;;@ (lib)/array.ts:108:45
+       (i32.load
+        (get_local $0)
+       )
+       ;;@ (lib)/array.ts:108:60
+       (i32.mul
+        (get_local $2)
+        ;;@ (lib)/array.ts:108:74
+        (i32.const 4)
+       )
+      )
+      ;;@ (lib)/array.ts:109:8
+      (call "$(lib)/allocator/arena/free_memory"
+       ;;@ (lib)/array.ts:109:20
+       (i32.load
+        (get_local $0)
+       )
+      )
+     )
+    )
+    ;;@ (lib)/array.ts:111:6
+    (i32.store
+     (get_local $0)
+     ;;@ (lib)/array.ts:111:22
+     (get_local $4)
+    )
+    ;;@ (lib)/array.ts:112:6
+    (i32.store offset=4
+     (get_local $0)
+     ;;@ (lib)/array.ts:112:24
+     (get_local $3)
+    )
+   )
+   ;;@ (lib)/array.ts:114:6
+   (call "$(lib)/memory/move_memory"
+    ;;@ (lib)/array.ts:114:18
+    (i32.add
+     (i32.load
+      (get_local $0)
+     )
+     ;;@ (lib)/array.ts:114:34
+     (i32.const 4)
+    )
+    ;;@ (lib)/array.ts:114:47
+    (i32.load
+     (get_local $0)
+    )
+    ;;@ (lib)/array.ts:114:62
+    (i32.mul
+     (get_local $2)
+     ;;@ (lib)/array.ts:114:76
+     (i32.const 4)
+    )
+   )
+  )
+  ;;@ (lib)/array.ts:115:4
+  (i32.store
+   ;;@ (lib)/array.ts:115:13
+   (i32.load
+    (get_local $0)
+   )
+   ;;@ (lib)/array.ts:115:28
+   (get_local $1)
+  )
+  ;;@ (lib)/array.ts:116:18
+  (return
+   ;;@ (lib)/array.ts:116:11
+   (block (result i32)
+    (set_local $5
+     (i32.add
+      ;;@ (lib)/array.ts:116:13
+      (i32.load offset=8
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store offset=8
+     (get_local $0)
+     (get_local $5)
+    )
+    (get_local $5)
+   )
+  )
+ )
+ (func "$(lib)/memory/set_memory" (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i64)
+  ;;@ (lib)/memory.ts:196:2
+  (if
+   ;;@ (lib)/memory.ts:196:6
+   (i32.eqz
+    ;;@ (lib)/memory.ts:196:7
+    (get_local $2)
+   )
+   ;;@ (lib)/memory.ts:197:4
+   (return)
+  )
+  ;;@ (lib)/memory.ts:198:2
+  (i32.store8
+   ;;@ (lib)/memory.ts:198:12
+   (get_local $0)
+   ;;@ (lib)/memory.ts:198:18
+   (get_local $1)
+  )
+  ;;@ (lib)/memory.ts:199:2
+  (i32.store8
+   ;;@ (lib)/memory.ts:199:12
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:199:19
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:199:23
+    (i32.const 1)
+   )
+   ;;@ (lib)/memory.ts:199:26
+   (get_local $1)
+  )
+  ;;@ (lib)/memory.ts:200:2
+  (if
+   ;;@ (lib)/memory.ts:200:6
+   (i32.le_u
+    (get_local $2)
+    ;;@ (lib)/memory.ts:200:11
+    (i32.const 2)
+   )
+   ;;@ (lib)/memory.ts:201:4
+   (return)
+  )
+  ;;@ (lib)/memory.ts:203:2
+  (i32.store8
+   ;;@ (lib)/memory.ts:203:12
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:203:19
+    (i32.const 1)
+   )
+   ;;@ (lib)/memory.ts:203:22
+   (get_local $1)
+  )
+  ;;@ (lib)/memory.ts:204:2
+  (i32.store8
+   ;;@ (lib)/memory.ts:204:12
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:204:19
+    (i32.const 2)
+   )
+   ;;@ (lib)/memory.ts:204:22
+   (get_local $1)
+  )
+  ;;@ (lib)/memory.ts:205:2
+  (i32.store8
+   ;;@ (lib)/memory.ts:205:12
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:205:19
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:205:23
+    (i32.const 2)
+   )
+   ;;@ (lib)/memory.ts:205:26
+   (get_local $1)
+  )
+  ;;@ (lib)/memory.ts:206:2
+  (i32.store8
+   ;;@ (lib)/memory.ts:206:12
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:206:19
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:206:23
+    (i32.const 3)
+   )
+   ;;@ (lib)/memory.ts:206:26
+   (get_local $1)
+  )
+  ;;@ (lib)/memory.ts:207:2
+  (if
+   ;;@ (lib)/memory.ts:207:6
+   (i32.le_u
+    (get_local $2)
+    ;;@ (lib)/memory.ts:207:11
+    (i32.const 6)
+   )
+   ;;@ (lib)/memory.ts:208:4
+   (return)
+  )
+  ;;@ (lib)/memory.ts:209:2
+  (i32.store8
+   ;;@ (lib)/memory.ts:209:12
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:209:19
+    (i32.const 3)
+   )
+   ;;@ (lib)/memory.ts:209:22
+   (get_local $1)
+  )
+  ;;@ (lib)/memory.ts:210:2
+  (i32.store8
+   ;;@ (lib)/memory.ts:210:12
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:210:19
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:210:23
+    (i32.const 4)
+   )
+   ;;@ (lib)/memory.ts:210:26
+   (get_local $1)
+  )
+  ;;@ (lib)/memory.ts:211:2
+  (if
+   ;;@ (lib)/memory.ts:211:6
+   (i32.le_u
+    (get_local $2)
+    ;;@ (lib)/memory.ts:211:11
+    (i32.const 8)
+   )
+   ;;@ (lib)/memory.ts:212:4
+   (return)
+  )
+  ;;@ (lib)/memory.ts:215:2
+  (set_local $3
+   ;;@ (lib)/memory.ts:215:17
+   (i32.and
+    (i32.sub
+     (i32.const 0)
+     ;;@ (lib)/memory.ts:215:18
+     (get_local $0)
+    )
+    ;;@ (lib)/memory.ts:215:25
+    (i32.const 3)
+   )
+  )
+  ;;@ (lib)/memory.ts:216:2
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:216:10
+    (get_local $3)
+   )
+  )
+  ;;@ (lib)/memory.ts:217:2
+  (set_local $2
+   (i32.sub
+    (get_local $2)
+    ;;@ (lib)/memory.ts:217:7
+    (get_local $3)
+   )
+  )
+  ;;@ (lib)/memory.ts:218:2
+  (set_local $2
+   (i32.and
+    (get_local $2)
+    ;;@ (lib)/memory.ts:218:7
+    (i32.const -4)
+   )
+  )
+  ;;@ (lib)/memory.ts:220:2
+  (set_local $4
+   ;;@ (lib)/memory.ts:220:17
+   (i32.mul
+    (i32.div_u
+     (i32.const -1)
+     ;;@ (lib)/memory.ts:220:27
+     (i32.const 255)
+    )
+    ;;@ (lib)/memory.ts:220:33
+    (get_local $1)
+   )
+  )
+  ;;@ (lib)/memory.ts:223:2
+  (i32.store
+   ;;@ (lib)/memory.ts:223:13
+   (get_local $0)
+   ;;@ (lib)/memory.ts:223:19
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:224:2
+  (i32.store
+   ;;@ (lib)/memory.ts:224:13
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:224:20
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:224:24
+    (i32.const 4)
+   )
+   ;;@ (lib)/memory.ts:224:27
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:225:2
+  (if
+   ;;@ (lib)/memory.ts:225:6
+   (i32.le_u
+    (get_local $2)
+    ;;@ (lib)/memory.ts:225:11
+    (i32.const 8)
+   )
+   ;;@ (lib)/memory.ts:226:4
+   (return)
+  )
+  ;;@ (lib)/memory.ts:227:2
+  (i32.store
+   ;;@ (lib)/memory.ts:227:13
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:227:20
+    (i32.const 4)
+   )
+   ;;@ (lib)/memory.ts:227:23
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:228:2
+  (i32.store
+   ;;@ (lib)/memory.ts:228:13
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:228:20
+    (i32.const 8)
+   )
+   ;;@ (lib)/memory.ts:228:23
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:229:2
+  (i32.store
+   ;;@ (lib)/memory.ts:229:13
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:229:20
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:229:24
+    (i32.const 12)
+   )
+   ;;@ (lib)/memory.ts:229:28
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:230:2
+  (i32.store
+   ;;@ (lib)/memory.ts:230:13
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:230:20
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:230:24
+    (i32.const 8)
+   )
+   ;;@ (lib)/memory.ts:230:27
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:231:2
+  (if
+   ;;@ (lib)/memory.ts:231:6
+   (i32.le_u
+    (get_local $2)
+    ;;@ (lib)/memory.ts:231:11
+    (i32.const 24)
+   )
+   ;;@ (lib)/memory.ts:232:4
+   (return)
+  )
+  ;;@ (lib)/memory.ts:233:2
+  (i32.store
+   ;;@ (lib)/memory.ts:233:13
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:233:20
+    (i32.const 12)
+   )
+   ;;@ (lib)/memory.ts:233:24
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:234:2
+  (i32.store
+   ;;@ (lib)/memory.ts:234:13
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:234:20
+    (i32.const 16)
+   )
+   ;;@ (lib)/memory.ts:234:24
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:235:2
+  (i32.store
+   ;;@ (lib)/memory.ts:235:13
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:235:20
+    (i32.const 20)
+   )
+   ;;@ (lib)/memory.ts:235:24
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:236:2
+  (i32.store
+   ;;@ (lib)/memory.ts:236:13
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:236:20
+    (i32.const 24)
+   )
+   ;;@ (lib)/memory.ts:236:24
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:237:2
+  (i32.store
+   ;;@ (lib)/memory.ts:237:13
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:237:20
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:237:24
+    (i32.const 28)
+   )
+   ;;@ (lib)/memory.ts:237:28
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:238:2
+  (i32.store
+   ;;@ (lib)/memory.ts:238:13
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:238:20
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:238:24
+    (i32.const 24)
+   )
+   ;;@ (lib)/memory.ts:238:28
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:239:2
+  (i32.store
+   ;;@ (lib)/memory.ts:239:13
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:239:20
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:239:24
+    (i32.const 20)
+   )
+   ;;@ (lib)/memory.ts:239:28
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:240:2
+  (i32.store
+   ;;@ (lib)/memory.ts:240:13
+   (i32.sub
+    (i32.add
+     (get_local $0)
+     ;;@ (lib)/memory.ts:240:20
+     (get_local $2)
+    )
+    ;;@ (lib)/memory.ts:240:24
+    (i32.const 16)
+   )
+   ;;@ (lib)/memory.ts:240:28
+   (get_local $4)
+  )
+  ;;@ (lib)/memory.ts:243:2
+  (set_local $3
+   ;;@ (lib)/memory.ts:243:6
+   (i32.add
+    (i32.const 24)
+    ;;@ (lib)/memory.ts:243:11
+    (i32.and
+     ;;@ (lib)/memory.ts:243:12
+     (get_local $0)
+     ;;@ (lib)/memory.ts:243:19
+     (i32.const 4)
+    )
+   )
+  )
+  ;;@ (lib)/memory.ts:244:2
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    ;;@ (lib)/memory.ts:244:10
+    (get_local $3)
+   )
+  )
+  ;;@ (lib)/memory.ts:245:2
+  (set_local $2
+   (i32.sub
+    (get_local $2)
+    ;;@ (lib)/memory.ts:245:7
+    (get_local $3)
+   )
+  )
+  ;;@ (lib)/memory.ts:248:2
+  (set_local $5
+   ;;@ (lib)/memory.ts:248:17
+   (i64.or
+    (i64.extend_u/i32
+     (get_local $4)
+    )
+    ;;@ (lib)/memory.ts:248:28
+    (i64.shl
+     ;;@ (lib)/memory.ts:248:29
+     (i64.extend_u/i32
+      (get_local $4)
+     )
+     ;;@ (lib)/memory.ts:248:41
+     (i64.const 32)
+    )
+   )
+  )
+  ;;@ (lib)/memory.ts:249:2
+  (block $break|0
+   (loop $continue|0
+    (if
+     ;;@ (lib)/memory.ts:249:9
+     (i32.ge_u
+      (get_local $2)
+      ;;@ (lib)/memory.ts:249:14
+      (i32.const 32)
+     )
+     (block
+      (block
+       ;;@ (lib)/memory.ts:250:4
+       (i64.store
+        ;;@ (lib)/memory.ts:250:15
+        (get_local $0)
+        ;;@ (lib)/memory.ts:250:21
+        (get_local $5)
+       )
+       ;;@ (lib)/memory.ts:251:4
+       (i64.store
+        ;;@ (lib)/memory.ts:251:15
+        (i32.add
+         (get_local $0)
+         ;;@ (lib)/memory.ts:251:22
+         (i32.const 8)
+        )
+        ;;@ (lib)/memory.ts:251:25
+        (get_local $5)
+       )
+       ;;@ (lib)/memory.ts:252:4
+       (i64.store
+        ;;@ (lib)/memory.ts:252:15
+        (i32.add
+         (get_local $0)
+         ;;@ (lib)/memory.ts:252:22
+         (i32.const 16)
+        )
+        ;;@ (lib)/memory.ts:252:26
+        (get_local $5)
+       )
+       ;;@ (lib)/memory.ts:253:4
+       (i64.store
+        ;;@ (lib)/memory.ts:253:15
+        (i32.add
+         (get_local $0)
+         ;;@ (lib)/memory.ts:253:22
+         (i32.const 24)
+        )
+        ;;@ (lib)/memory.ts:253:26
+        (get_local $5)
+       )
+       ;;@ (lib)/memory.ts:254:4
+       (set_local $2
+        (i32.sub
+         (get_local $2)
+         ;;@ (lib)/memory.ts:254:9
+         (i32.const 32)
+        )
+       )
+       ;;@ (lib)/memory.ts:255:4
+       (set_local $0
+        (i32.add
+         (get_local $0)
+         ;;@ (lib)/memory.ts:255:12
+         (i32.const 32)
+        )
+       )
+      )
+      (br $continue|0)
+     )
+    )
+   )
+  )
+ )
+ (func "$(lib)/array/Array#shift" (; 12 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  ;;@ (lib)/array.ts:91:4
+  (if
+   ;;@ (lib)/array.ts:91:8
+   (i32.lt_s
+    (i32.load offset=8
+     (get_local $0)
+    )
+    ;;@ (lib)/array.ts:91:24
+    (i32.const 1)
+   )
+   ;;@ (lib)/array.ts:92:6
+   (unreachable)
+  )
+  ;;@ (lib)/array.ts:93:4
+  (set_local $1
+   ;;@ (lib)/array.ts:93:18
+   (i32.load
+    ;;@ (lib)/array.ts:93:26
+    (i32.load
+     (get_local $0)
+    )
+   )
+  )
+  ;;@ (lib)/array.ts:94:4
+  (call "$(lib)/memory/move_memory"
+   ;;@ (lib)/array.ts:94:16
+   (i32.load
+    (get_local $0)
+   )
+   ;;@ (lib)/array.ts:94:31
+   (i32.add
+    (i32.load
+     (get_local $0)
+    )
+    ;;@ (lib)/array.ts:94:47
+    (i32.const 4)
+   )
+   ;;@ (lib)/array.ts:94:60
+   (i32.mul
+    (i32.sub
+     ;;@ (lib)/array.ts:94:61
+     (i32.load offset=4
+      (get_local $0)
+     )
+     ;;@ (lib)/array.ts:94:79
+     (i32.const 1)
+    )
+    ;;@ (lib)/array.ts:94:84
+    (i32.const 4)
+   )
+  )
+  ;;@ (lib)/array.ts:95:4
+  (call "$(lib)/memory/set_memory"
+   ;;@ (lib)/array.ts:95:15
+   (i32.add
+    (i32.load
+     (get_local $0)
+    )
+    ;;@ (lib)/array.ts:95:31
+    (i32.mul
+     (i32.sub
+      ;;@ (lib)/array.ts:95:32
+      (i32.load offset=4
+       (get_local $0)
+      )
+      ;;@ (lib)/array.ts:95:50
+      (i32.const 1)
+     )
+     ;;@ (lib)/array.ts:95:55
+     (i32.const 4)
+    )
+   )
+   ;;@ (lib)/array.ts:95:68
+   (i32.const 0)
+   ;;@ (lib)/array.ts:95:71
+   (i32.const 4)
+  )
+  ;;@ (lib)/array.ts:96:4
+  (i32.store offset=8
+   ;;@ (lib)/array.ts:96:6
+   (get_local $0)
+   (i32.sub
+    (i32.load offset=8
+     (get_local $0)
+    )
     (i32.const 1)
    )
   )
-  ;;@ std/set.ts:10:4
-  (drop
-   (call "$(lib)/set/Set#add"
-    ;;@ std/set.ts:10:0
-    (get_global $std/set/set)
-    ;;@ std/set.ts:10:8
+  ;;@ (lib)/array.ts:97:11
+  (return
+   (get_local $1)
+  )
+ )
+ (func "$(lib)/array/Array#reverse" (; 13 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  ;;@ (lib)/array.ts:157:4
+  (block $break|0
+   (block
+    (set_local $1
+     ;;@ (lib)/array.ts:157:28
+     (i32.const 0)
+    )
+    (set_local $2
+     ;;@ (lib)/array.ts:157:45
+     (i32.sub
+      (i32.load offset=8
+       ;;@ (lib)/array.ts:157:52
+       (get_local $0)
+      )
+      ;;@ (lib)/array.ts:157:68
+      (i32.const 1)
+     )
+    )
+   )
+   (loop $continue|0
+    (if
+     ;;@ (lib)/array.ts:157:71
+     (i32.lt_u
+      (get_local $1)
+      ;;@ (lib)/array.ts:157:79
+      (get_local $2)
+     )
+     (block
+      (block
+       ;;@ (lib)/array.ts:158:6
+       (set_local $3
+        ;;@ (lib)/array.ts:158:17
+        (i32.load
+         ;;@ (lib)/array.ts:158:25
+         (i32.add
+          (i32.load
+           (get_local $0)
+          )
+          ;;@ (lib)/array.ts:158:41
+          (i32.mul
+           (get_local $1)
+           ;;@ (lib)/array.ts:158:49
+           (i32.const 4)
+          )
+         )
+        )
+       )
+       ;;@ (lib)/array.ts:159:6
+       (i32.store
+        ;;@ (lib)/array.ts:159:15
+        (i32.add
+         (i32.load
+          (get_local $0)
+         )
+         ;;@ (lib)/array.ts:159:31
+         (i32.mul
+          (get_local $1)
+          ;;@ (lib)/array.ts:159:39
+          (i32.const 4)
+         )
+        )
+        ;;@ (lib)/array.ts:159:52
+        (i32.load
+         ;;@ (lib)/array.ts:159:60
+         (i32.add
+          (i32.load
+           (get_local $0)
+          )
+          ;;@ (lib)/array.ts:159:76
+          (i32.mul
+           (get_local $2)
+           ;;@ (lib)/array.ts:159:83
+           (i32.const 4)
+          )
+         )
+        )
+       )
+       ;;@ (lib)/array.ts:160:6
+       (i32.store
+        ;;@ (lib)/array.ts:160:15
+        (i32.add
+         (i32.load
+          (get_local $0)
+         )
+         ;;@ (lib)/array.ts:160:31
+         (i32.mul
+          (get_local $2)
+          ;;@ (lib)/array.ts:160:38
+          (i32.const 4)
+         )
+        )
+        ;;@ (lib)/array.ts:160:51
+        (get_local $3)
+       )
+      )
+      ;;@ (lib)/array.ts:157:85
+      (block
+       (set_local $1
+        (i32.add
+         ;;@ (lib)/array.ts:157:87
+         (get_local $1)
+         (i32.const 1)
+        )
+       )
+       ;;@ (lib)/array.ts:157:94
+       (set_local $2
+        (i32.sub
+         ;;@ (lib)/array.ts:157:96
+         (get_local $2)
+         (i32.const 1)
+        )
+       )
+      )
+      (br $continue|0)
+     )
+    )
+   )
+  )
+  ;;@ (lib)/array.ts:162:11
+  (return
+   (get_local $0)
+  )
+ )
+ (func "$(lib)/array/Array#indexOf" (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  ;;@ (lib)/array.ts:54:4
+  (if
+   ;;@ (lib)/array.ts:54:8
+   (i32.lt_s
+    (get_local $2)
+    ;;@ (lib)/array.ts:54:20
     (i32.const 0)
    )
-  )
-  ;;@ std/set.ts:11:4
-  (drop
-   (call "$(lib)/set/Set#add"
-    ;;@ std/set.ts:11:0
-    (get_global $std/set/set)
-    ;;@ std/set.ts:11:8
-    (i32.const 2)
+   ;;@ (lib)/array.ts:55:6
+   (set_local $2
+    ;;@ (lib)/array.ts:55:18
+    (i32.add
+     (i32.load offset=8
+      (get_local $0)
+     )
+     ;;@ (lib)/array.ts:55:34
+     (get_local $2)
+    )
    )
   )
-  ;;@ std/set.ts:13:0
+  ;;@ (lib)/array.ts:56:4
+  (block $break|0
+   (loop $continue|0
+    (if
+     ;;@ (lib)/array.ts:56:11
+     (i32.lt_u
+      (get_local $2)
+      ;;@ (lib)/array.ts:56:28
+      (i32.load offset=8
+       (get_local $0)
+      )
+     )
+     (block
+      (block
+       ;;@ (lib)/array.ts:57:6
+       (if
+        ;;@ (lib)/array.ts:57:10
+        (i32.eq
+         (i32.load
+          ;;@ (lib)/array.ts:57:18
+          (i32.add
+           (i32.load
+            (get_local $0)
+           )
+           ;;@ (lib)/array.ts:57:34
+           (i32.mul
+            (get_local $2)
+            ;;@ (lib)/array.ts:57:46
+            (i32.const 4)
+           )
+          )
+         )
+         ;;@ (lib)/array.ts:57:62
+         (get_local $1)
+        )
+        ;;@ (lib)/array.ts:58:15
+        (return
+         (get_local $2)
+        )
+       )
+       ;;@ (lib)/array.ts:59:6
+       (set_local $2
+        (i32.add
+         ;;@ (lib)/array.ts:59:8
+         (get_local $2)
+         (i32.const 1)
+        )
+       )
+      )
+      (br $continue|0)
+     )
+    )
+   )
+  )
+  ;;@ (lib)/array.ts:61:12
+  (return
+   ;;@ (lib)/array.ts:61:11
+   (i32.const -1)
+  )
+ )
+ (func "$(lib)/array/Array#splice" (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  ;;@ (lib)/array.ts:141:4
+  (if
+   ;;@ (lib)/array.ts:141:8
+   (i32.lt_s
+    (get_local $2)
+    ;;@ (lib)/array.ts:141:22
+    (i32.const 1)
+   )
+   ;;@ (lib)/array.ts:142:6
+   (return)
+  )
+  ;;@ (lib)/array.ts:143:4
+  (if
+   ;;@ (lib)/array.ts:143:8
+   (i32.lt_s
+    (get_local $1)
+    ;;@ (lib)/array.ts:143:16
+    (i32.const 0)
+   )
+   ;;@ (lib)/array.ts:143:19
+   (block
+    ;;@ (lib)/array.ts:144:6
+    (set_local $1
+     ;;@ (lib)/array.ts:144:14
+     (i32.add
+      (i32.load offset=8
+       (get_local $0)
+      )
+      ;;@ (lib)/array.ts:144:30
+      (get_local $1)
+     )
+    )
+    ;;@ (lib)/array.ts:145:6
+    (if
+     ;;@ (lib)/array.ts:145:10
+     (i32.lt_s
+      (get_local $1)
+      ;;@ (lib)/array.ts:145:18
+      (i32.const 0)
+     )
+     ;;@ (lib)/array.ts:146:8
+     (set_local $1
+      ;;@ (lib)/array.ts:146:16
+      (i32.const 0)
+     )
+     ;;@ (lib)/array.ts:147:11
+     (if
+      ;;@ (lib)/array.ts:147:15
+      (i32.ge_s
+       (get_local $1)
+       ;;@ (lib)/array.ts:147:24
+       (i32.load offset=8
+        (get_local $0)
+       )
+      )
+      ;;@ (lib)/array.ts:148:8
+      (return)
+     )
+    )
+   )
+   ;;@ (lib)/array.ts:149:11
+   (if
+    ;;@ (lib)/array.ts:149:15
+    (i32.ge_s
+     (get_local $1)
+     ;;@ (lib)/array.ts:149:24
+     (i32.load offset=8
+      (get_local $0)
+     )
+    )
+    ;;@ (lib)/array.ts:150:6
+    (return)
+   )
+  )
+  ;;@ (lib)/array.ts:151:4
+  (set_local $2
+   ;;@ (lib)/array.ts:151:18
+   (select
+    (tee_local $3
+     ;;@ (lib)/array.ts:151:22
+     (get_local $2)
+    )
+    (tee_local $4
+     ;;@ (lib)/array.ts:151:35
+     (i32.sub
+      (i32.load offset=8
+       (get_local $0)
+      )
+      ;;@ (lib)/array.ts:151:51
+      (get_local $1)
+     )
+    )
+    (i32.lt_s
+     (get_local $3)
+     (get_local $4)
+    )
+   )
+  )
+  ;;@ (lib)/array.ts:152:4
+  (call "$(lib)/memory/move_memory"
+   ;;@ (lib)/array.ts:152:16
+   (i32.add
+    (i32.load
+     (get_local $0)
+    )
+    ;;@ (lib)/array.ts:152:32
+    (i32.mul
+     (get_local $1)
+     ;;@ (lib)/array.ts:152:47
+     (i32.const 4)
+    )
+   )
+   ;;@ (lib)/array.ts:152:60
+   (i32.add
+    (i32.load
+     (get_local $0)
+    )
+    ;;@ (lib)/array.ts:152:76
+    (i32.mul
+     (i32.add
+      ;;@ (lib)/array.ts:152:84
+      (get_local $1)
+      ;;@ (lib)/array.ts:152:92
+      (get_local $2)
+     )
+     ;;@ (lib)/array.ts:152:107
+     (i32.const 4)
+    )
+   )
+   ;;@ (lib)/array.ts:152:120
+   (i32.mul
+    (get_local $2)
+    ;;@ (lib)/array.ts:152:134
+    (i32.const 4)
+   )
+  )
+  ;;@ (lib)/array.ts:153:4
+  (i32.store offset=8
+   (get_local $0)
+   (i32.sub
+    (i32.load offset=8
+     (get_local $0)
+    )
+    ;;@ (lib)/array.ts:153:21
+    (get_local $2)
+   )
+  )
+ )
+ (func $start (; 16 ;) (type $v)
+  (set_global "$(lib)/allocator/arena/HEAP_OFFSET"
+   ;;@ (lib)/allocator/arena.ts:11:25
+   (get_global $HEAP_BASE)
+  )
+  (set_global $std/array/arr
+   ;;@ std/array.ts:3:10
+   (call "$(lib)/allocator/arena/allocate_memory"
+    ;;@ std/array.ts:3:44
+    (i32.add
+     (i32.const 4)
+     ;;@ std/array.ts:3:62
+     (i32.mul
+      (i32.const 2)
+      ;;@ std/array.ts:3:66
+      (i32.const 4)
+     )
+    )
+   )
+  )
+  ;;@ std/array.ts:5:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:13:7
+    ;;@ std/array.ts:5:7
     (i32.eq
-     (call "$(lib)/set/Set#get:size"
-      (get_global $std/set/set)
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
      )
-     ;;@ std/set.ts:13:19
-     (i32.const 3)
+     ;;@ std/array.ts:5:21
+     (i32.const 0)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 13)
+     (i32.const 5)
      (i32.const 0)
     )
     (unreachable)
    )
   )
-  ;;@ std/set.ts:15:0
+  ;;@ std/array.ts:6:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:15:11
-    (call "$(lib)/set/Set#has"
-     ;;@ std/set.ts:15:7
-     (get_global $std/set/set)
-     ;;@ std/set.ts:15:15
+    ;;@ std/array.ts:6:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:6:25
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 6)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:8:4
+  (drop
+   (call "$(lib)/array/Array#push"
+    ;;@ std/array.ts:8:0
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:8:9
+    (i32.const 42)
+   )
+  )
+  ;;@ std/array.ts:10:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:10:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:10:11
+      (i32.const 0)
+     )
+     ;;@ std/array.ts:10:17
+     (i32.const 42)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 10)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:11:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:11:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:11:21
      (i32.const 1)
     )
    )
@@ -3390,21 +4348,49 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 15)
+     (i32.const 11)
      (i32.const 0)
     )
     (unreachable)
    )
   )
-  ;;@ std/set.ts:16:0
+  ;;@ std/array.ts:12:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:16:11
-    (call "$(lib)/set/Set#has"
-     ;;@ std/set.ts:16:7
-     (get_global $std/set/set)
-     ;;@ std/set.ts:16:15
+    ;;@ std/array.ts:12:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:12:25
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
      (i32.const 0)
+     (i32.const 4)
+     (i32.const 12)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   ;;@ std/array.ts:14:12
+   (call "$(lib)/array/Array#pop"
+    ;;@ std/array.ts:14:8
+    (get_global $std/array/arr)
+   )
+  )
+  ;;@ std/array.ts:16:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:16:7
+    (i32.eq
+     (get_global $std/array/i)
+     ;;@ std/array.ts:16:12
+     (i32.const 42)
     )
    )
    (block
@@ -3417,15 +4403,16 @@
     (unreachable)
    )
   )
-  ;;@ std/set.ts:17:0
+  ;;@ std/array.ts:17:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:17:11
-    (call "$(lib)/set/Set#has"
-     ;;@ std/set.ts:17:7
-     (get_global $std/set/set)
-     ;;@ std/set.ts:17:15
-     (i32.const 2)
+    ;;@ std/array.ts:17:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:17:21
+     (i32.const 0)
     )
    )
    (block
@@ -3438,18 +4425,16 @@
     (unreachable)
    )
   )
-  ;;@ std/set.ts:18:0
+  ;;@ std/array.ts:18:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:18:7
-    (i32.eqz
-     ;;@ std/set.ts:18:12
-     (call "$(lib)/set/Set#has"
-      ;;@ std/set.ts:18:8
-      (get_global $std/set/set)
-      ;;@ std/set.ts:18:16
-      (i32.const 3)
+    ;;@ std/array.ts:18:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
      )
+     ;;@ std/array.ts:18:25
+     (i32.const 1)
     )
    )
    (block
@@ -3462,25 +4447,25 @@
     (unreachable)
    )
   )
-  ;;@ std/set.ts:20:4
+  ;;@ std/array.ts:20:4
   (drop
-   (call "$(lib)/set/Set#delete"
-    ;;@ std/set.ts:20:0
-    (get_global $std/set/set)
-    ;;@ std/set.ts:20:11
-    (i32.const 0)
+   (call "$(lib)/array/Array#push"
+    ;;@ std/array.ts:20:0
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:20:9
+    (i32.const 43)
    )
   )
-  ;;@ std/set.ts:22:0
+  ;;@ std/array.ts:22:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:22:7
+    ;;@ std/array.ts:22:7
     (i32.eq
-     (call "$(lib)/set/Set#get:size"
-      (get_global $std/set/set)
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
      )
-     ;;@ std/set.ts:22:19
-     (i32.const 2)
+     ;;@ std/array.ts:22:21
+     (i32.const 1)
     )
    )
    (block
@@ -3493,14 +4478,15 @@
     (unreachable)
    )
   )
-  ;;@ std/set.ts:23:0
+  ;;@ std/array.ts:23:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:23:11
-    (call "$(lib)/set/Set#has"
-     ;;@ std/set.ts:23:7
-     (get_global $std/set/set)
-     ;;@ std/set.ts:23:15
+    ;;@ std/array.ts:23:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:23:25
      (i32.const 1)
     )
    )
@@ -3514,18 +4500,18 @@
     (unreachable)
    )
   )
-  ;;@ std/set.ts:24:0
+  ;;@ std/array.ts:24:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:24:7
-    (i32.eqz
-     ;;@ std/set.ts:24:12
-     (call "$(lib)/set/Set#has"
-      ;;@ std/set.ts:24:8
-      (get_global $std/set/set)
-      ;;@ std/set.ts:24:16
+    ;;@ std/array.ts:24:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:24:11
       (i32.const 0)
      )
+     ;;@ std/array.ts:24:17
+     (i32.const 43)
     )
    )
    (block
@@ -3538,14 +4524,24 @@
     (unreachable)
    )
   )
-  ;;@ std/set.ts:25:0
+  ;;@ std/array.ts:26:4
+  (drop
+   (call "$(lib)/array/Array#push"
+    ;;@ std/array.ts:26:0
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:26:9
+    (i32.const 44)
+   )
+  )
+  ;;@ std/array.ts:28:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:25:11
-    (call "$(lib)/set/Set#has"
-     ;;@ std/set.ts:25:7
-     (get_global $std/set/set)
-     ;;@ std/set.ts:25:15
+    ;;@ std/array.ts:28:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:28:21
      (i32.const 2)
     )
    )
@@ -3553,27 +4549,22 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 25)
+     (i32.const 28)
      (i32.const 0)
     )
     (unreachable)
    )
   )
-  ;;@ std/set.ts:27:4
-  (call "$(lib)/set/Set#clear"
-   ;;@ std/set.ts:27:0
-   (get_global $std/set/set)
-  )
-  ;;@ std/set.ts:29:0
+  ;;@ std/array.ts:29:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:29:7
+    ;;@ std/array.ts:29:7
     (i32.eq
-     (call "$(lib)/set/Set#get:size"
-      (get_global $std/set/set)
+     (i32.load offset=4
+      (get_global $std/array/arr)
      )
-     ;;@ std/set.ts:29:19
-     (i32.const 0)
+     ;;@ std/array.ts:29:25
+     (i32.const 2)
     )
    )
    (block
@@ -3586,18 +4577,18 @@
     (unreachable)
    )
   )
-  ;;@ std/set.ts:30:0
+  ;;@ std/array.ts:30:0
   (if
    (i32.eqz
-    ;;@ std/set.ts:30:7
-    (i32.eqz
-     ;;@ std/set.ts:30:12
-     (call "$(lib)/set/Set#has"
-      ;;@ std/set.ts:30:8
-      (get_global $std/set/set)
-      ;;@ std/set.ts:30:16
-      (i32.const 1)
+    ;;@ std/array.ts:30:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:30:11
+      (i32.const 0)
      )
+     ;;@ std/array.ts:30:17
+     (i32.const 43)
     )
    )
    (block
@@ -3605,6 +4596,1107 @@
      (i32.const 0)
      (i32.const 4)
      (i32.const 30)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:31:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:31:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:31:11
+      (i32.const 1)
+     )
+     ;;@ std/array.ts:31:17
+     (i32.const 44)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 31)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:33:4
+  (drop
+   (call "$(lib)/array/Array#push"
+    ;;@ std/array.ts:33:0
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:33:9
+    (i32.const 45)
+   )
+  )
+  ;;@ std/array.ts:35:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:35:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:35:21
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 35)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:36:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:36:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:36:25
+     (i32.const 4)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 36)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:37:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:37:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:37:11
+      (i32.const 0)
+     )
+     ;;@ std/array.ts:37:17
+     (i32.const 43)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 37)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:38:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:38:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:38:11
+      (i32.const 1)
+     )
+     ;;@ std/array.ts:38:17
+     (i32.const 44)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 38)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:39:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:39:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:39:11
+      (i32.const 2)
+     )
+     ;;@ std/array.ts:39:17
+     (i32.const 45)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 39)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:41:4
+  (drop
+   (call "$(lib)/array/Array#unshift"
+    ;;@ std/array.ts:41:0
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:41:12
+    (i32.const 42)
+   )
+  )
+  ;;@ std/array.ts:43:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:43:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:43:21
+     (i32.const 4)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 43)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:44:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:44:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:44:25
+     (i32.const 4)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 44)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:45:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:45:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:45:11
+      (i32.const 0)
+     )
+     ;;@ std/array.ts:45:17
+     (i32.const 42)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 45)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:46:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:46:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:46:11
+      (i32.const 1)
+     )
+     ;;@ std/array.ts:46:17
+     (i32.const 43)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 46)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:47:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:47:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:47:11
+      (i32.const 2)
+     )
+     ;;@ std/array.ts:47:17
+     (i32.const 44)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 47)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:48:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:48:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:48:11
+      (i32.const 3)
+     )
+     ;;@ std/array.ts:48:17
+     (i32.const 45)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 48)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:50:4
+  (drop
+   (call "$(lib)/array/Array#unshift"
+    ;;@ std/array.ts:50:0
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:50:12
+    (i32.const 41)
+   )
+  )
+  ;;@ std/array.ts:52:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:52:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:52:21
+     (i32.const 5)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 52)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:53:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:53:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:53:25
+     (i32.const 8)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 53)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:54:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:54:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:54:11
+      (i32.const 0)
+     )
+     ;;@ std/array.ts:54:17
+     (i32.const 41)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 54)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:55:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:55:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:55:11
+      (i32.const 1)
+     )
+     ;;@ std/array.ts:55:17
+     (i32.const 42)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 55)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:56:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:56:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:56:11
+      (i32.const 2)
+     )
+     ;;@ std/array.ts:56:17
+     (i32.const 43)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 56)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:57:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:57:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:57:11
+      (i32.const 3)
+     )
+     ;;@ std/array.ts:57:17
+     (i32.const 44)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 57)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:58:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:58:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:58:11
+      (i32.const 4)
+     )
+     ;;@ std/array.ts:58:17
+     (i32.const 45)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 58)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:60:0
+  (set_global $std/array/i
+   ;;@ std/array.ts:60:8
+   (call "$(lib)/array/Array#shift"
+    ;;@ std/array.ts:60:4
+    (get_global $std/array/arr)
+   )
+  )
+  ;;@ std/array.ts:62:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:62:7
+    (i32.eq
+     (get_global $std/array/i)
+     ;;@ std/array.ts:62:12
+     (i32.const 41)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 62)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:63:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:63:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:63:21
+     (i32.const 4)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 63)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:64:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:64:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:64:25
+     (i32.const 8)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 64)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:65:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:65:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:65:11
+      (i32.const 0)
+     )
+     ;;@ std/array.ts:65:17
+     (i32.const 42)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 65)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:66:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:66:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:66:11
+      (i32.const 1)
+     )
+     ;;@ std/array.ts:66:17
+     (i32.const 43)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 66)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:67:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:67:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:67:11
+      (i32.const 2)
+     )
+     ;;@ std/array.ts:67:17
+     (i32.const 44)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 67)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:68:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:68:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:68:11
+      (i32.const 3)
+     )
+     ;;@ std/array.ts:68:17
+     (i32.const 45)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 68)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:70:0
+  (set_global $std/array/i
+   ;;@ std/array.ts:70:8
+   (call "$(lib)/array/Array#pop"
+    ;;@ std/array.ts:70:4
+    (get_global $std/array/arr)
+   )
+  )
+  ;;@ std/array.ts:72:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:72:7
+    (i32.eq
+     (get_global $std/array/i)
+     ;;@ std/array.ts:72:12
+     (i32.const 45)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 72)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:73:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:73:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:73:21
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 73)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:74:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:74:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:74:25
+     (i32.const 8)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 74)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:75:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:75:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:75:11
+      (i32.const 0)
+     )
+     ;;@ std/array.ts:75:17
+     (i32.const 42)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 75)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:76:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:76:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:76:11
+      (i32.const 1)
+     )
+     ;;@ std/array.ts:76:17
+     (i32.const 43)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 76)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:77:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:77:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:77:11
+      (i32.const 2)
+     )
+     ;;@ std/array.ts:77:17
+     (i32.const 44)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 77)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:79:4
+  (drop
+   (call "$(lib)/array/Array#reverse"
+    ;;@ std/array.ts:79:0
+    (get_global $std/array/arr)
+   )
+  )
+  ;;@ std/array.ts:81:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:81:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:81:21
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 81)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:82:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:82:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:82:25
+     (i32.const 8)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 82)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:83:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:83:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:83:11
+      (i32.const 0)
+     )
+     ;;@ std/array.ts:83:17
+     (i32.const 44)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 83)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:84:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:84:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:84:11
+      (i32.const 1)
+     )
+     ;;@ std/array.ts:84:17
+     (i32.const 43)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 84)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:85:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:85:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:85:11
+      (i32.const 2)
+     )
+     ;;@ std/array.ts:85:17
+     (i32.const 42)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 85)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:87:0
+  (set_global $std/array/i
+   ;;@ std/array.ts:87:8
+   (call "$(lib)/array/Array#indexOf"
+    ;;@ std/array.ts:87:4
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:87:16
+    (i32.const 44)
+    (i32.const 0)
+   )
+  )
+  ;;@ std/array.ts:89:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:89:7
+    (i32.eq
+     (get_global $std/array/i)
+     ;;@ std/array.ts:89:12
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 89)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:91:0
+  (set_global $std/array/i
+   ;;@ std/array.ts:91:8
+   (call "$(lib)/array/Array#indexOf"
+    ;;@ std/array.ts:91:4
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:91:16
+    (i32.const 42)
+    (i32.const 0)
+   )
+  )
+  ;;@ std/array.ts:93:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:93:7
+    (i32.eq
+     (get_global $std/array/i)
+     ;;@ std/array.ts:93:12
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 93)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:95:0
+  (set_global $std/array/i
+   ;;@ std/array.ts:95:8
+   (call "$(lib)/array/Array#indexOf"
+    ;;@ std/array.ts:95:4
+    (get_global $std/array/arr)
+    ;;@ std/array.ts:95:16
+    (i32.const 45)
+    ;;@ (lib)/array.ts:53:45
+    (i32.const 0)
+   )
+  )
+  ;;@ std/array.ts:97:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:97:7
+    (i32.eq
+     (get_global $std/array/i)
+     ;;@ std/array.ts:97:12
+     (i32.const -1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 97)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:99:4
+  (call "$(lib)/array/Array#splice"
+   ;;@ std/array.ts:99:0
+   (get_global $std/array/arr)
+   ;;@ std/array.ts:99:11
+   (i32.const 1)
+   ;;@ std/array.ts:99:14
+   (i32.const 1)
+  )
+  ;;@ std/array.ts:101:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:101:7
+    (i32.eq
+     (call "$(lib)/array/Array#get:length"
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:101:21
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 101)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:102:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:102:7
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/array/arr)
+     )
+     ;;@ std/array.ts:102:25
+     (i32.const 8)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 102)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:103:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:103:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:103:11
+      (i32.const 0)
+     )
+     ;;@ std/array.ts:103:17
+     (i32.const 44)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 103)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ std/array.ts:104:0
+  (if
+   (i32.eqz
+    ;;@ std/array.ts:104:7
+    (i32.eq
+     (call "$(lib)/array/Array#__get"
+      (get_global $std/array/arr)
+      ;;@ std/array.ts:104:11
+      (i32.const 1)
+     )
+     ;;@ std/array.ts:104:17
+     (i32.const 42)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 104)
      (i32.const 0)
     )
     (unreachable)

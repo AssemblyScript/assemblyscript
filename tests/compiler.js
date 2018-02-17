@@ -71,11 +71,11 @@ tests.forEach(filename => {
       stderr.write(err + os.EOL);
     var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
-      fs.writeFileSync(path.join(basedir, basename + ".wast"), actual, { encoding: "utf8" });
+      fs.writeFileSync(path.join(basedir, basename + ".wat"), actual, { encoding: "utf8" });
       console.log("- " + chalk.yellow("Created fixture"));
     } else {
-      let expected = fs.readFileSync(path.join(basedir, basename + ".wast"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
-      let diffs = diff(basename + ".wast", expected, actual);
+      let expected = fs.readFileSync(path.join(basedir, basename + ".wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
+      let diffs = diff(basename + ".wat", expected, actual);
       if (diffs !== null) {
         console.log(diffs);
         console.log("- " + chalk.red("diff ERROR"));
@@ -98,7 +98,7 @@ tests.forEach(filename => {
       "--binaryFile" // -> stdout
     ];
     if (args.create) cmd.push(
-      "--textFile", basename + ".optimized.wast"
+      "--textFile", basename + ".optimized.wat"
     );
     asc.main(cmd, {
       stdout: stdout,
