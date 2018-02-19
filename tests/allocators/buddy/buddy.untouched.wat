@@ -30,68 +30,68 @@
  (start $start)
  (func $assembly/buddy/update_max_ptr (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  ;;@ assembly/buddy.ts:175:2
+  ;;@ assembly/buddy.ts:170:2
   (if
-   ;;@ assembly/buddy.ts:175:6
+   ;;@ assembly/buddy.ts:170:6
    (i32.gt_u
     (get_local $0)
-    ;;@ assembly/buddy.ts:175:18
+    ;;@ assembly/buddy.ts:170:18
     (get_global $assembly/buddy/max_ptr)
    )
-   ;;@ assembly/buddy.ts:175:27
+   ;;@ assembly/buddy.ts:170:27
    (block
-    ;;@ assembly/buddy.ts:176:4
+    ;;@ assembly/buddy.ts:171:4
     (set_local $1
-     ;;@ assembly/buddy.ts:176:16
+     ;;@ assembly/buddy.ts:171:16
      (i32.shr_u
       (i32.and
-       ;;@ assembly/buddy.ts:176:17
+       ;;@ assembly/buddy.ts:171:17
        (i32.add
-        ;;@ assembly/buddy.ts:176:18
+        ;;@ assembly/buddy.ts:171:18
         (i32.sub
-         ;;@ assembly/buddy.ts:176:19
+         ;;@ assembly/buddy.ts:171:19
          (get_local $0)
-         ;;@ assembly/buddy.ts:176:31
+         ;;@ assembly/buddy.ts:171:31
          (get_global $assembly/buddy/max_ptr)
         )
-        ;;@ assembly/buddy.ts:176:42
+        ;;@ assembly/buddy.ts:171:42
         (i32.const 65535)
        )
-       ;;@ assembly/buddy.ts:176:52
+       ;;@ assembly/buddy.ts:171:52
        (i32.xor
-        ;;@ assembly/buddy.ts:176:53
+        ;;@ assembly/buddy.ts:171:53
         (i32.const 65535)
         (i32.const -1)
        )
       )
-      ;;@ assembly/buddy.ts:176:65
+      ;;@ assembly/buddy.ts:171:65
       (i32.const 16)
      )
     )
-    ;;@ assembly/buddy.ts:177:4
+    ;;@ assembly/buddy.ts:172:4
     (if
-     ;;@ assembly/buddy.ts:177:8
+     ;;@ assembly/buddy.ts:172:8
      (i32.lt_s
       (grow_memory
-       ;;@ assembly/buddy.ts:177:20
+       ;;@ assembly/buddy.ts:172:20
        (get_local $1)
       )
-      ;;@ assembly/buddy.ts:177:29
+      ;;@ assembly/buddy.ts:172:29
       (i32.const 0)
      )
-     ;;@ assembly/buddy.ts:178:13
+     ;;@ assembly/buddy.ts:173:13
      (return
       (i32.const 0)
      )
     )
-    ;;@ assembly/buddy.ts:180:4
+    ;;@ assembly/buddy.ts:175:4
     (set_global $assembly/buddy/max_ptr
-     ;;@ assembly/buddy.ts:180:14
+     ;;@ assembly/buddy.ts:175:14
      (get_local $0)
     )
    )
   )
-  ;;@ assembly/buddy.ts:182:9
+  ;;@ assembly/buddy.ts:177:9
   (return
    (i32.const 1)
   )
@@ -120,109 +120,107 @@
   ;;@ assembly/buddy.ts:97:58
   (return
    ;;@ assembly/buddy.ts:97:9
-   (i32.load
-    ;;@ assembly/buddy.ts:97:20
-    (i32.add
-     (get_global $assembly/buddy/BUCKET_START)
-     ;;@ assembly/buddy.ts:97:35
-     (i32.mul
-      (get_local $0)
-      ;;@ assembly/buddy.ts:97:43
-      (i32.const 4)
-     )
+   (i32.add
+    ;;@ assembly/buddy.ts:97:26
+    (get_global $assembly/buddy/BUCKET_START)
+    ;;@ assembly/buddy.ts:97:41
+    (i32.mul
+     (get_local $0)
+     ;;@ assembly/buddy.ts:97:49
+     (i32.const 8)
     )
    )
   )
  )
  (func $assembly/buddy/list_init (; 3 ;) (type $iv) (param $0 i32)
-  ;;@ assembly/buddy.ts:191:2
+  ;;@ assembly/buddy.ts:186:2
   (i32.store
    (get_local $0)
-   ;;@ assembly/buddy.ts:191:14
+   ;;@ assembly/buddy.ts:186:14
    (get_local $0)
   )
-  ;;@ assembly/buddy.ts:192:2
+  ;;@ assembly/buddy.ts:187:2
   (i32.store offset=4
    (get_local $0)
-   ;;@ assembly/buddy.ts:192:14
+   ;;@ assembly/buddy.ts:187:14
    (get_local $0)
   )
  )
  (func $assembly/buddy/list_push (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  ;;@ assembly/buddy.ts:200:2
+  ;;@ assembly/buddy.ts:195:2
   (set_local $2
-   ;;@ assembly/buddy.ts:200:13
+   ;;@ assembly/buddy.ts:195:13
    (i32.load
     (get_local $0)
    )
   )
-  ;;@ assembly/buddy.ts:201:2
+  ;;@ assembly/buddy.ts:196:2
   (i32.store
    (get_local $1)
-   ;;@ assembly/buddy.ts:201:15
+   ;;@ assembly/buddy.ts:196:15
    (get_local $2)
   )
-  ;;@ assembly/buddy.ts:202:2
+  ;;@ assembly/buddy.ts:197:2
   (i32.store offset=4
    (get_local $1)
-   ;;@ assembly/buddy.ts:202:15
+   ;;@ assembly/buddy.ts:197:15
    (get_local $0)
   )
-  ;;@ assembly/buddy.ts:203:2
+  ;;@ assembly/buddy.ts:198:2
   (i32.store offset=4
    (get_local $2)
-   ;;@ assembly/buddy.ts:203:14
+   ;;@ assembly/buddy.ts:198:14
    (get_local $1)
   )
-  ;;@ assembly/buddy.ts:204:2
+  ;;@ assembly/buddy.ts:199:2
   (i32.store
    (get_local $0)
-   ;;@ assembly/buddy.ts:204:14
+   ;;@ assembly/buddy.ts:199:14
    (get_local $1)
   )
  )
  (func $assembly/buddy/bucket_for_request (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  ;;@ assembly/buddy.ts:271:2
+  ;;@ assembly/buddy.ts:266:2
   (set_local $1
-   ;;@ assembly/buddy.ts:271:15
+   ;;@ assembly/buddy.ts:266:15
    (i32.sub
     (i32.const 28)
-    ;;@ assembly/buddy.ts:271:30
+    ;;@ assembly/buddy.ts:266:30
     (i32.const 1)
    )
   )
-  ;;@ assembly/buddy.ts:272:2
+  ;;@ assembly/buddy.ts:267:2
   (set_local $2
-   ;;@ assembly/buddy.ts:272:13
+   ;;@ assembly/buddy.ts:267:13
    (i32.const 16)
   )
-  ;;@ assembly/buddy.ts:274:2
+  ;;@ assembly/buddy.ts:269:2
   (block $break|0
    (loop $continue|0
     (if
-     ;;@ assembly/buddy.ts:274:9
+     ;;@ assembly/buddy.ts:269:9
      (i32.lt_u
       (get_local $2)
-      ;;@ assembly/buddy.ts:274:16
+      ;;@ assembly/buddy.ts:269:16
       (get_local $0)
      )
      (block
       (block
-       ;;@ assembly/buddy.ts:275:4
+       ;;@ assembly/buddy.ts:270:4
        (set_local $1
         (i32.sub
          (get_local $1)
          (i32.const 1)
         )
        )
-       ;;@ assembly/buddy.ts:276:4
+       ;;@ assembly/buddy.ts:271:4
        (set_local $2
         (i32.mul
          (get_local $2)
-         ;;@ assembly/buddy.ts:276:12
+         ;;@ assembly/buddy.ts:271:12
          (i32.const 2)
         )
        )
@@ -232,47 +230,188 @@
     )
    )
   )
-  ;;@ assembly/buddy.ts:279:9
+  ;;@ assembly/buddy.ts:274:9
   (return
    (get_local $1)
   )
  )
  (func $assembly/buddy/node_for_ptr (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ assembly/buddy.ts:246:75
+  ;;@ assembly/buddy.ts:241:75
   (return
-   ;;@ assembly/buddy.ts:246:9
+   ;;@ assembly/buddy.ts:241:9
    (i32.sub
     (i32.add
      (i32.shr_u
-      ;;@ assembly/buddy.ts:246:10
+      ;;@ assembly/buddy.ts:241:10
       (i32.sub
-       ;;@ assembly/buddy.ts:246:11
+       ;;@ assembly/buddy.ts:241:11
        (get_local $0)
-       ;;@ assembly/buddy.ts:246:17
+       ;;@ assembly/buddy.ts:241:17
        (get_global $assembly/buddy/base_ptr)
       )
-      ;;@ assembly/buddy.ts:246:30
+      ;;@ assembly/buddy.ts:241:30
       (i32.sub
-       ;;@ assembly/buddy.ts:246:31
+       ;;@ assembly/buddy.ts:241:31
        (i32.const 31)
-       ;;@ assembly/buddy.ts:246:48
+       ;;@ assembly/buddy.ts:241:48
        (get_local $1)
       )
      )
-     ;;@ assembly/buddy.ts:246:59
+     ;;@ assembly/buddy.ts:241:59
      (i32.shl
-      ;;@ assembly/buddy.ts:246:60
+      ;;@ assembly/buddy.ts:241:60
       (i32.const 1)
-      ;;@ assembly/buddy.ts:246:65
+      ;;@ assembly/buddy.ts:241:65
       (get_local $1)
      )
     )
-    ;;@ assembly/buddy.ts:246:75
+    ;;@ assembly/buddy.ts:241:75
     (i32.const 1)
    )
   )
  )
  (func $assembly/buddy/node_is_split (; 7 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ assembly/buddy.ts:142:2
+  (if
+   (i32.eqz
+    ;;@ assembly/buddy.ts:142:9
+    (i32.lt_u
+     (get_local $0)
+     ;;@ assembly/buddy.ts:142:17
+     (i32.const 16777216)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 142)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ assembly/buddy.ts:143:37
+  (return
+   ;;@ assembly/buddy.ts:143:9
+   (i32.load8_u
+    ;;@ assembly/buddy.ts:143:18
+    (i32.add
+     (get_global $assembly/buddy/SPLIT_START)
+     ;;@ assembly/buddy.ts:143:32
+     (get_local $0)
+    )
+   )
+  )
+ )
+ (func $assembly/buddy/parent_is_split (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ assembly/buddy.ts:248:2
+  (set_local $0
+   ;;@ assembly/buddy.ts:248:10
+   (i32.div_u
+    (i32.sub
+     ;;@ assembly/buddy.ts:248:11
+     (get_local $0)
+     ;;@ assembly/buddy.ts:248:19
+     (i32.const 1)
+    )
+    ;;@ assembly/buddy.ts:248:24
+    (i32.const 2)
+   )
+  )
+  ;;@ assembly/buddy.ts:249:58
+  (return
+   ;;@ assembly/buddy.ts:249:9
+   (i32.and
+    (i32.shr_s
+     ;;@ assembly/buddy.ts:249:10
+     (call $assembly/buddy/node_is_split
+      ;;@ assembly/buddy.ts:249:24
+      (i32.div_u
+       (get_local $0)
+       ;;@ assembly/buddy.ts:249:32
+       (i32.const 8)
+      )
+     )
+     ;;@ assembly/buddy.ts:249:38
+     (i32.rem_u
+      ;;@ assembly/buddy.ts:249:44
+      (get_local $0)
+      ;;@ assembly/buddy.ts:249:52
+      (i32.const 8)
+     )
+    )
+    ;;@ assembly/buddy.ts:249:58
+    (i32.const 1)
+   )
+  )
+ )
+ (func $assembly/buddy/list_remove (; 9 ;) (type $iv) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  ;;@ assembly/buddy.ts:209:2
+  (set_local $1
+   ;;@ assembly/buddy.ts:209:13
+   (i32.load
+    (get_local $0)
+   )
+  )
+  ;;@ assembly/buddy.ts:210:2
+  (set_local $2
+   ;;@ assembly/buddy.ts:210:13
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
+  ;;@ assembly/buddy.ts:211:2
+  (i32.store offset=4
+   (get_local $1)
+   ;;@ assembly/buddy.ts:211:14
+   (get_local $2)
+  )
+  ;;@ assembly/buddy.ts:212:2
+  (i32.store
+   (get_local $2)
+   ;;@ assembly/buddy.ts:212:14
+   (get_local $1)
+  )
+ )
+ (func $assembly/buddy/ptr_for_node (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  ;;@ assembly/buddy.ts:232:77
+  (return
+   ;;@ assembly/buddy.ts:232:9
+   (i32.add
+    (get_global $assembly/buddy/base_ptr)
+    ;;@ assembly/buddy.ts:232:20
+    (i32.shl
+     ;;@ assembly/buddy.ts:232:21
+     (i32.add
+      ;;@ assembly/buddy.ts:232:22
+      (i32.sub
+       (get_local $0)
+       ;;@ assembly/buddy.ts:232:30
+       (i32.shl
+        ;;@ assembly/buddy.ts:232:31
+        (i32.const 1)
+        ;;@ assembly/buddy.ts:232:36
+        (get_local $1)
+       )
+      )
+      ;;@ assembly/buddy.ts:232:46
+      (i32.const 1)
+     )
+     ;;@ assembly/buddy.ts:232:52
+     (i32.sub
+      ;;@ assembly/buddy.ts:232:53
+      (i32.const 31)
+      ;;@ assembly/buddy.ts:232:70
+      (get_local $1)
+     )
+    )
+   )
+  )
+ )
+ (func $assembly/buddy/node_set_split (; 11 ;) (type $iiv) (param $0 i32) (param $1 i32)
   ;;@ assembly/buddy.ts:147:2
   (if
    (i32.eqz
@@ -293,203 +432,62 @@
     (unreachable)
    )
   )
-  ;;@ assembly/buddy.ts:148:37
-  (return
-   ;;@ assembly/buddy.ts:148:9
-   (i32.load8_u
-    ;;@ assembly/buddy.ts:148:18
-    (i32.add
-     (get_global $assembly/buddy/SPLIT_START)
-     ;;@ assembly/buddy.ts:148:32
-     (get_local $0)
-    )
-   )
-  )
- )
- (func $assembly/buddy/parent_is_split (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ assembly/buddy.ts:253:2
-  (set_local $0
-   ;;@ assembly/buddy.ts:253:10
-   (i32.div_u
-    (i32.sub
-     ;;@ assembly/buddy.ts:253:11
-     (get_local $0)
-     ;;@ assembly/buddy.ts:253:19
-     (i32.const 1)
-    )
-    ;;@ assembly/buddy.ts:253:24
-    (i32.const 2)
-   )
-  )
-  ;;@ assembly/buddy.ts:254:58
-  (return
-   ;;@ assembly/buddy.ts:254:9
-   (i32.and
-    (i32.shr_s
-     ;;@ assembly/buddy.ts:254:10
-     (call $assembly/buddy/node_is_split
-      ;;@ assembly/buddy.ts:254:24
-      (i32.div_u
-       (get_local $0)
-       ;;@ assembly/buddy.ts:254:32
-       (i32.const 8)
-      )
-     )
-     ;;@ assembly/buddy.ts:254:38
-     (i32.rem_u
-      ;;@ assembly/buddy.ts:254:44
-      (get_local $0)
-      ;;@ assembly/buddy.ts:254:52
-      (i32.const 8)
-     )
-    )
-    ;;@ assembly/buddy.ts:254:58
-    (i32.const 1)
-   )
-  )
- )
- (func $assembly/buddy/list_remove (; 9 ;) (type $iv) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  ;;@ assembly/buddy.ts:214:2
-  (set_local $1
-   ;;@ assembly/buddy.ts:214:13
-   (i32.load
-    (get_local $0)
-   )
-  )
-  ;;@ assembly/buddy.ts:215:2
-  (set_local $2
-   ;;@ assembly/buddy.ts:215:13
-   (i32.load offset=4
-    (get_local $0)
-   )
-  )
-  ;;@ assembly/buddy.ts:216:2
-  (i32.store offset=4
-   (get_local $1)
-   ;;@ assembly/buddy.ts:216:14
-   (get_local $2)
-  )
-  ;;@ assembly/buddy.ts:217:2
-  (i32.store
-   (get_local $2)
-   ;;@ assembly/buddy.ts:217:14
-   (get_local $1)
-  )
- )
- (func $assembly/buddy/ptr_for_node (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ assembly/buddy.ts:237:77
-  (return
-   ;;@ assembly/buddy.ts:237:9
-   (i32.add
-    (get_global $assembly/buddy/base_ptr)
-    ;;@ assembly/buddy.ts:237:20
-    (i32.shl
-     ;;@ assembly/buddy.ts:237:21
-     (i32.add
-      ;;@ assembly/buddy.ts:237:22
-      (i32.sub
-       (get_local $0)
-       ;;@ assembly/buddy.ts:237:30
-       (i32.shl
-        ;;@ assembly/buddy.ts:237:31
-        (i32.const 1)
-        ;;@ assembly/buddy.ts:237:36
-        (get_local $1)
-       )
-      )
-      ;;@ assembly/buddy.ts:237:46
-      (i32.const 1)
-     )
-     ;;@ assembly/buddy.ts:237:52
-     (i32.sub
-      ;;@ assembly/buddy.ts:237:53
-      (i32.const 31)
-      ;;@ assembly/buddy.ts:237:70
-      (get_local $1)
-     )
-    )
-   )
-  )
- )
- (func $assembly/buddy/node_set_split (; 11 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  ;;@ assembly/buddy.ts:152:2
-  (if
-   (i32.eqz
-    ;;@ assembly/buddy.ts:152:9
-    (i32.lt_u
-     (get_local $0)
-     ;;@ assembly/buddy.ts:152:17
-     (i32.const 16777216)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 152)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  ;;@ assembly/buddy.ts:153:2
+  ;;@ assembly/buddy.ts:148:2
   (i32.store8
-   ;;@ assembly/buddy.ts:153:12
+   ;;@ assembly/buddy.ts:148:12
    (i32.add
     (get_global $assembly/buddy/SPLIT_START)
-    ;;@ assembly/buddy.ts:153:26
+    ;;@ assembly/buddy.ts:148:26
     (get_local $0)
    )
-   ;;@ assembly/buddy.ts:153:33
+   ;;@ assembly/buddy.ts:148:33
    (get_local $1)
   )
  )
  (func $assembly/buddy/flip_parent_is_split (; 12 ;) (type $iv) (param $0 i32)
   (local $1 i32)
-  ;;@ assembly/buddy.ts:261:2
+  ;;@ assembly/buddy.ts:256:2
   (set_local $0
-   ;;@ assembly/buddy.ts:261:10
+   ;;@ assembly/buddy.ts:256:10
    (i32.div_u
     (i32.sub
-     ;;@ assembly/buddy.ts:261:11
+     ;;@ assembly/buddy.ts:256:11
      (get_local $0)
-     ;;@ assembly/buddy.ts:261:19
+     ;;@ assembly/buddy.ts:256:19
      (i32.const 1)
     )
-    ;;@ assembly/buddy.ts:261:24
+    ;;@ assembly/buddy.ts:256:24
     (i32.const 2)
    )
   )
-  ;;@ assembly/buddy.ts:262:2
+  ;;@ assembly/buddy.ts:257:2
   (set_local $1
-   ;;@ assembly/buddy.ts:262:18
+   ;;@ assembly/buddy.ts:257:18
    (i32.div_u
     (get_local $0)
-    ;;@ assembly/buddy.ts:262:26
+    ;;@ assembly/buddy.ts:257:26
     (i32.const 8)
    )
   )
-  ;;@ assembly/buddy.ts:263:2
+  ;;@ assembly/buddy.ts:258:2
   (call $assembly/buddy/node_set_split
-   ;;@ assembly/buddy.ts:263:17
+   ;;@ assembly/buddy.ts:258:17
    (get_local $1)
-   ;;@ assembly/buddy.ts:263:28
+   ;;@ assembly/buddy.ts:258:28
    (i32.xor
     (call $assembly/buddy/node_is_split
-     ;;@ assembly/buddy.ts:263:42
+     ;;@ assembly/buddy.ts:258:42
      (get_local $1)
     )
-    ;;@ assembly/buddy.ts:263:55
+    ;;@ assembly/buddy.ts:258:55
     (i32.shl
-     ;;@ assembly/buddy.ts:263:61
+     ;;@ assembly/buddy.ts:258:61
      (i32.const 1)
-     ;;@ assembly/buddy.ts:263:66
+     ;;@ assembly/buddy.ts:258:66
      (i32.rem_u
-      ;;@ assembly/buddy.ts:263:67
+      ;;@ assembly/buddy.ts:258:67
       (get_local $0)
-      ;;@ assembly/buddy.ts:263:75
+      ;;@ assembly/buddy.ts:258:75
       (i32.const 8)
      )
     )
@@ -499,56 +497,56 @@
  (func $assembly/buddy/lower_bucket_limit (; 13 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  ;;@ assembly/buddy.ts:288:2
+  ;;@ assembly/buddy.ts:283:2
   (block $break|0
    (loop $continue|0
     (if
-     ;;@ assembly/buddy.ts:288:9
+     ;;@ assembly/buddy.ts:283:9
      (i32.lt_u
       (get_local $0)
-      ;;@ assembly/buddy.ts:288:18
+      ;;@ assembly/buddy.ts:283:18
       (get_global $assembly/buddy/bucket_limit)
      )
      (block
       (block
-       ;;@ assembly/buddy.ts:289:4
+       ;;@ assembly/buddy.ts:284:4
        (set_local $1
-        ;;@ assembly/buddy.ts:289:15
+        ;;@ assembly/buddy.ts:284:15
         (call $assembly/buddy/node_for_ptr
-         ;;@ assembly/buddy.ts:289:28
+         ;;@ assembly/buddy.ts:284:28
          (get_global $assembly/buddy/base_ptr)
-         ;;@ assembly/buddy.ts:289:38
+         ;;@ assembly/buddy.ts:284:38
          (get_global $assembly/buddy/bucket_limit)
         )
        )
-       ;;@ assembly/buddy.ts:290:4
+       ;;@ assembly/buddy.ts:285:4
        (nop)
-       ;;@ assembly/buddy.ts:298:4
+       ;;@ assembly/buddy.ts:293:4
        (if
-        ;;@ assembly/buddy.ts:298:8
+        ;;@ assembly/buddy.ts:293:8
         (i32.eqz
-         ;;@ assembly/buddy.ts:298:9
+         ;;@ assembly/buddy.ts:293:9
          (call $assembly/buddy/parent_is_split
-          ;;@ assembly/buddy.ts:298:25
+          ;;@ assembly/buddy.ts:293:25
           (get_local $1)
          )
         )
-        ;;@ assembly/buddy.ts:298:32
+        ;;@ assembly/buddy.ts:293:32
         (block
-         ;;@ assembly/buddy.ts:299:6
+         ;;@ assembly/buddy.ts:294:6
          (call $assembly/buddy/list_remove
-          ;;@ assembly/buddy.ts:299:18
+          ;;@ assembly/buddy.ts:294:18
           (get_global $assembly/buddy/base_ptr)
          )
-         ;;@ assembly/buddy.ts:300:6
+         ;;@ assembly/buddy.ts:295:6
          (call $assembly/buddy/list_init
-          ;;@ assembly/buddy.ts:300:16
+          ;;@ assembly/buddy.ts:295:16
           (call $assembly/buddy/get_bucket
-           ;;@ assembly/buddy.ts:300:27
+           ;;@ assembly/buddy.ts:295:27
            (block (result i32)
             (set_global $assembly/buddy/bucket_limit
              (i32.sub
-              ;;@ assembly/buddy.ts:300:29
+              ;;@ assembly/buddy.ts:295:29
               (get_global $assembly/buddy/bucket_limit)
               (i32.const 1)
              )
@@ -557,72 +555,72 @@
            )
           )
          )
-         ;;@ assembly/buddy.ts:301:6
+         ;;@ assembly/buddy.ts:296:6
          (call $assembly/buddy/list_push
-          ;;@ assembly/buddy.ts:301:16
+          ;;@ assembly/buddy.ts:296:16
           (call $assembly/buddy/get_bucket
-           ;;@ assembly/buddy.ts:301:27
+           ;;@ assembly/buddy.ts:296:27
            (get_global $assembly/buddy/bucket_limit)
           )
-          ;;@ assembly/buddy.ts:301:42
+          ;;@ assembly/buddy.ts:296:42
           (get_global $assembly/buddy/base_ptr)
          )
-         ;;@ assembly/buddy.ts:302:6
+         ;;@ assembly/buddy.ts:297:6
          (br $continue|0)
         )
        )
-       ;;@ assembly/buddy.ts:313:4
+       ;;@ assembly/buddy.ts:308:4
        (set_local $2
-        ;;@ assembly/buddy.ts:313:18
+        ;;@ assembly/buddy.ts:308:18
         (call $assembly/buddy/ptr_for_node
-         ;;@ assembly/buddy.ts:313:31
+         ;;@ assembly/buddy.ts:308:31
          (i32.add
           (get_local $1)
-          ;;@ assembly/buddy.ts:313:38
+          ;;@ assembly/buddy.ts:308:38
           (i32.const 1)
          )
-         ;;@ assembly/buddy.ts:313:41
+         ;;@ assembly/buddy.ts:308:41
          (get_global $assembly/buddy/bucket_limit)
         )
        )
-       ;;@ assembly/buddy.ts:314:4
+       ;;@ assembly/buddy.ts:309:4
        (if
-        ;;@ assembly/buddy.ts:314:8
+        ;;@ assembly/buddy.ts:309:8
         (i32.eqz
-         ;;@ assembly/buddy.ts:314:9
+         ;;@ assembly/buddy.ts:309:9
          (call $assembly/buddy/update_max_ptr
-          ;;@ assembly/buddy.ts:314:24
+          ;;@ assembly/buddy.ts:309:24
           (i32.add
            (get_local $2)
-           ;;@ assembly/buddy.ts:314:38
+           ;;@ assembly/buddy.ts:309:38
            (i32.const 8)
           )
          )
         )
-        ;;@ assembly/buddy.ts:315:13
+        ;;@ assembly/buddy.ts:310:13
         (return
          (i32.const 0)
         )
        )
-       ;;@ assembly/buddy.ts:317:4
+       ;;@ assembly/buddy.ts:312:4
        (call $assembly/buddy/list_push
-        ;;@ assembly/buddy.ts:317:14
+        ;;@ assembly/buddy.ts:312:14
         (call $assembly/buddy/get_bucket
-         ;;@ assembly/buddy.ts:317:25
+         ;;@ assembly/buddy.ts:312:25
          (get_global $assembly/buddy/bucket_limit)
         )
-        ;;@ assembly/buddy.ts:317:40
+        ;;@ assembly/buddy.ts:312:40
         (get_local $2)
        )
-       ;;@ assembly/buddy.ts:318:4
+       ;;@ assembly/buddy.ts:313:4
        (call $assembly/buddy/list_init
-        ;;@ assembly/buddy.ts:318:14
+        ;;@ assembly/buddy.ts:313:14
         (call $assembly/buddy/get_bucket
-         ;;@ assembly/buddy.ts:318:25
+         ;;@ assembly/buddy.ts:313:25
          (block (result i32)
           (set_global $assembly/buddy/bucket_limit
            (i32.sub
-            ;;@ assembly/buddy.ts:318:27
+            ;;@ assembly/buddy.ts:313:27
             (get_global $assembly/buddy/bucket_limit)
             (i32.const 1)
            )
@@ -631,31 +629,31 @@
          )
         )
        )
-       ;;@ assembly/buddy.ts:324:4
+       ;;@ assembly/buddy.ts:319:4
        (set_local $1
-        ;;@ assembly/buddy.ts:324:11
+        ;;@ assembly/buddy.ts:319:11
         (i32.div_u
          (i32.sub
-          ;;@ assembly/buddy.ts:324:12
+          ;;@ assembly/buddy.ts:319:12
           (get_local $1)
-          ;;@ assembly/buddy.ts:324:19
+          ;;@ assembly/buddy.ts:319:19
           (i32.const 1)
          )
-         ;;@ assembly/buddy.ts:324:24
+         ;;@ assembly/buddy.ts:319:24
          (i32.const 2)
         )
        )
-       ;;@ assembly/buddy.ts:325:4
+       ;;@ assembly/buddy.ts:320:4
        (if
-        ;;@ assembly/buddy.ts:325:8
+        ;;@ assembly/buddy.ts:320:8
         (i32.ne
          (get_local $1)
-         ;;@ assembly/buddy.ts:325:16
+         ;;@ assembly/buddy.ts:320:16
          (i32.const 0)
         )
-        ;;@ assembly/buddy.ts:326:6
+        ;;@ assembly/buddy.ts:321:6
         (call $assembly/buddy/flip_parent_is_split
-         ;;@ assembly/buddy.ts:326:27
+         ;;@ assembly/buddy.ts:321:27
          (get_local $1)
         )
        )
@@ -665,39 +663,39 @@
     )
    )
   )
-  ;;@ assembly/buddy.ts:330:9
+  ;;@ assembly/buddy.ts:325:9
   (return
    (i32.const 1)
   )
  )
  (func $assembly/buddy/list_pop (; 14 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  ;;@ assembly/buddy.ts:224:2
+  ;;@ assembly/buddy.ts:219:2
   (set_local $1
-   ;;@ assembly/buddy.ts:224:13
+   ;;@ assembly/buddy.ts:219:13
    (i32.load
     (get_local $0)
    )
   )
-  ;;@ assembly/buddy.ts:225:2
+  ;;@ assembly/buddy.ts:220:2
   (if
-   ;;@ assembly/buddy.ts:225:6
+   ;;@ assembly/buddy.ts:220:6
    (i32.eq
     (get_local $1)
-    ;;@ assembly/buddy.ts:225:14
+    ;;@ assembly/buddy.ts:220:14
     (get_local $0)
    )
-   ;;@ assembly/buddy.ts:225:27
+   ;;@ assembly/buddy.ts:220:27
    (return
     (i32.const 0)
    )
   )
-  ;;@ assembly/buddy.ts:226:2
+  ;;@ assembly/buddy.ts:221:2
   (call $assembly/buddy/list_remove
-   ;;@ assembly/buddy.ts:226:14
+   ;;@ assembly/buddy.ts:221:14
    (get_local $1)
   )
-  ;;@ assembly/buddy.ts:227:9
+  ;;@ assembly/buddy.ts:222:9
   (return
    (get_local $1)
   )
@@ -710,382 +708,385 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  ;;@ assembly/buddy.ts:335:2
+  ;;@ assembly/buddy.ts:332:2
   (nop)
-  ;;@ assembly/buddy.ts:342:2
+  ;;@ assembly/buddy.ts:339:2
   (if
-   ;;@ assembly/buddy.ts:342:6
+   ;;@ assembly/buddy.ts:339:6
    (i32.gt_u
     (i32.add
      (get_local $0)
-     ;;@ assembly/buddy.ts:342:16
+     ;;@ assembly/buddy.ts:339:16
      (i32.const 8)
     )
-    ;;@ assembly/buddy.ts:342:30
+    ;;@ assembly/buddy.ts:339:30
     (i32.const -2147483648)
    )
-   ;;@ assembly/buddy.ts:343:11
+   ;;@ assembly/buddy.ts:340:11
    (return
     (i32.const 0)
    )
   )
-  ;;@ assembly/buddy.ts:351:2
+  ;;@ assembly/buddy.ts:348:2
   (if
-   ;;@ assembly/buddy.ts:351:6
+   ;;@ assembly/buddy.ts:348:6
    (i32.eq
     (get_global $assembly/buddy/base_ptr)
-    ;;@ assembly/buddy.ts:351:18
+    ;;@ assembly/buddy.ts:348:18
     (i32.const 0)
    )
-   ;;@ assembly/buddy.ts:351:21
+   ;;@ assembly/buddy.ts:348:21
    (block
-    ;;@ assembly/buddy.ts:352:4
+    ;;@ assembly/buddy.ts:349:4
     (set_global $assembly/buddy/base_ptr
-     ;;@ assembly/buddy.ts:352:15
-     (block (result i32)
-      (set_global $assembly/buddy/max_ptr
-       ;;@ assembly/buddy.ts:352:25
-       (get_global $assembly/buddy/SPLIT_END)
-      )
-      (get_global $assembly/buddy/max_ptr)
+     ;;@ assembly/buddy.ts:349:15
+     (get_global $assembly/buddy/SPLIT_END)
+    )
+    ;;@ assembly/buddy.ts:350:4
+    (set_global $assembly/buddy/max_ptr
+     ;;@ assembly/buddy.ts:350:14
+     (i32.shl
+      (current_memory)
+      ;;@ assembly/buddy.ts:350:41
+      (i32.const 16)
      )
     )
-    ;;@ assembly/buddy.ts:353:4
+    ;;@ assembly/buddy.ts:351:4
     (set_global $assembly/buddy/bucket_limit
-     ;;@ assembly/buddy.ts:353:19
+     ;;@ assembly/buddy.ts:351:19
      (i32.sub
       (i32.const 28)
-      ;;@ assembly/buddy.ts:353:34
+      ;;@ assembly/buddy.ts:351:34
       (i32.const 1)
      )
     )
-    ;;@ assembly/buddy.ts:354:4
+    ;;@ assembly/buddy.ts:352:4
     (drop
      (call $assembly/buddy/update_max_ptr
-      ;;@ assembly/buddy.ts:354:19
+      ;;@ assembly/buddy.ts:352:19
       (i32.add
        (get_global $assembly/buddy/base_ptr)
-       ;;@ assembly/buddy.ts:354:30
+       ;;@ assembly/buddy.ts:352:30
        (i32.const 8)
       )
      )
     )
-    ;;@ assembly/buddy.ts:355:4
+    ;;@ assembly/buddy.ts:353:4
     (call $assembly/buddy/list_init
-     ;;@ assembly/buddy.ts:355:14
+     ;;@ assembly/buddy.ts:353:14
      (call $assembly/buddy/get_bucket
-      ;;@ assembly/buddy.ts:355:25
+      ;;@ assembly/buddy.ts:353:25
       (i32.sub
        (i32.const 28)
-       ;;@ assembly/buddy.ts:355:40
+       ;;@ assembly/buddy.ts:353:40
        (i32.const 1)
       )
      )
     )
-    ;;@ assembly/buddy.ts:356:4
+    ;;@ assembly/buddy.ts:354:4
     (call $assembly/buddy/list_push
-     ;;@ assembly/buddy.ts:356:14
+     ;;@ assembly/buddy.ts:354:14
      (call $assembly/buddy/get_bucket
-      ;;@ assembly/buddy.ts:356:25
+      ;;@ assembly/buddy.ts:354:25
       (i32.sub
        (i32.const 28)
-       ;;@ assembly/buddy.ts:356:40
+       ;;@ assembly/buddy.ts:354:40
        (i32.const 1)
       )
      )
-     ;;@ assembly/buddy.ts:356:44
+     ;;@ assembly/buddy.ts:354:44
      (get_global $assembly/buddy/base_ptr)
     )
    )
   )
-  ;;@ assembly/buddy.ts:363:2
+  ;;@ assembly/buddy.ts:361:2
   (set_local $2
-   ;;@ assembly/buddy.ts:363:11
+   ;;@ assembly/buddy.ts:361:11
    (call $assembly/buddy/bucket_for_request
-    ;;@ assembly/buddy.ts:363:30
+    ;;@ assembly/buddy.ts:361:30
     (i32.add
      (get_local $0)
-     ;;@ assembly/buddy.ts:363:40
+     ;;@ assembly/buddy.ts:361:40
      (i32.const 8)
     )
    )
   )
-  ;;@ assembly/buddy.ts:364:2
+  ;;@ assembly/buddy.ts:362:2
   (set_local $1
-   ;;@ assembly/buddy.ts:364:20
+   ;;@ assembly/buddy.ts:362:20
    (get_local $2)
   )
-  ;;@ assembly/buddy.ts:371:2
+  ;;@ assembly/buddy.ts:369:2
   (block $break|0
    (loop $continue|0
     (if
-     ;;@ assembly/buddy.ts:371:9
+     ;;@ assembly/buddy.ts:369:9
      (i32.ne
       (i32.add
        (get_local $2)
-       ;;@ assembly/buddy.ts:371:18
+       ;;@ assembly/buddy.ts:369:18
        (i32.const 1)
       )
-      ;;@ assembly/buddy.ts:371:23
+      ;;@ assembly/buddy.ts:369:23
       (i32.const 0)
      )
      (block
       (block
-       ;;@ assembly/buddy.ts:372:4
+       ;;@ assembly/buddy.ts:370:4
        (nop)
-       ;;@ assembly/buddy.ts:373:4
+       ;;@ assembly/buddy.ts:371:4
        (nop)
-       ;;@ assembly/buddy.ts:379:4
+       ;;@ assembly/buddy.ts:377:4
        (if
-        ;;@ assembly/buddy.ts:379:8
+        ;;@ assembly/buddy.ts:377:8
         (i32.eqz
-         ;;@ assembly/buddy.ts:379:9
+         ;;@ assembly/buddy.ts:377:9
          (call $assembly/buddy/lower_bucket_limit
-          ;;@ assembly/buddy.ts:379:28
+          ;;@ assembly/buddy.ts:377:28
           (get_local $2)
          )
         )
-        ;;@ assembly/buddy.ts:380:13
+        ;;@ assembly/buddy.ts:378:13
         (return
          (i32.const 0)
         )
        )
-       ;;@ assembly/buddy.ts:387:4
+       ;;@ assembly/buddy.ts:385:4
        (set_local $6
-        ;;@ assembly/buddy.ts:387:10
+        ;;@ assembly/buddy.ts:385:10
         (call $assembly/buddy/list_pop
-         ;;@ assembly/buddy.ts:387:37
+         ;;@ assembly/buddy.ts:385:37
          (call $assembly/buddy/get_bucket
-          ;;@ assembly/buddy.ts:387:48
+          ;;@ assembly/buddy.ts:385:48
           (get_local $2)
          )
         )
        )
-       ;;@ assembly/buddy.ts:388:4
+       ;;@ assembly/buddy.ts:386:4
        (if
-        ;;@ assembly/buddy.ts:388:8
+        ;;@ assembly/buddy.ts:386:8
         (i32.eqz
-         ;;@ assembly/buddy.ts:388:9
+         ;;@ assembly/buddy.ts:386:9
          (get_local $6)
         )
-        ;;@ assembly/buddy.ts:388:14
+        ;;@ assembly/buddy.ts:386:14
         (block
-         ;;@ assembly/buddy.ts:393:6
+         ;;@ assembly/buddy.ts:391:6
          (if
-          ;;@ assembly/buddy.ts:393:10
+          ;;@ assembly/buddy.ts:391:10
           (i32.and
            (if (result i32)
             (i32.ne
              (tee_local $7
               (i32.ne
                (get_local $2)
-               ;;@ assembly/buddy.ts:393:20
+               ;;@ assembly/buddy.ts:391:20
                (get_global $assembly/buddy/bucket_limit)
               )
              )
              (i32.const 0)
             )
             (get_local $7)
-            ;;@ assembly/buddy.ts:393:36
+            ;;@ assembly/buddy.ts:391:36
             (i32.eq
              (get_local $2)
-             ;;@ assembly/buddy.ts:393:46
+             ;;@ assembly/buddy.ts:391:46
              (i32.const 0)
             )
            )
            (i32.const 1)
           )
-          ;;@ assembly/buddy.ts:393:49
+          ;;@ assembly/buddy.ts:391:49
           (block
-           ;;@ assembly/buddy.ts:394:8
+           ;;@ assembly/buddy.ts:392:8
            (set_local $2
             (i32.sub
              (get_local $2)
              (i32.const 1)
             )
            )
-           ;;@ assembly/buddy.ts:395:8
+           ;;@ assembly/buddy.ts:393:8
            (br $continue|0)
           )
          )
-         ;;@ assembly/buddy.ts:405:6
+         ;;@ assembly/buddy.ts:403:6
          (if
-          ;;@ assembly/buddy.ts:405:10
+          ;;@ assembly/buddy.ts:403:10
           (i32.eqz
-           ;;@ assembly/buddy.ts:405:11
+           ;;@ assembly/buddy.ts:403:11
            (call $assembly/buddy/lower_bucket_limit
-            ;;@ assembly/buddy.ts:405:30
+            ;;@ assembly/buddy.ts:403:30
             (i32.sub
              (get_local $2)
-             ;;@ assembly/buddy.ts:405:39
+             ;;@ assembly/buddy.ts:403:39
              (i32.const 1)
             )
            )
           )
-          ;;@ assembly/buddy.ts:406:15
+          ;;@ assembly/buddy.ts:404:15
           (return
            (i32.const 0)
           )
          )
-         ;;@ assembly/buddy.ts:408:6
+         ;;@ assembly/buddy.ts:406:6
          (set_local $6
-          ;;@ assembly/buddy.ts:408:12
+          ;;@ assembly/buddy.ts:406:12
           (call $assembly/buddy/list_pop
-           ;;@ assembly/buddy.ts:408:39
+           ;;@ assembly/buddy.ts:406:39
            (call $assembly/buddy/get_bucket
-            ;;@ assembly/buddy.ts:408:50
+            ;;@ assembly/buddy.ts:406:50
             (get_local $2)
            )
           )
          )
         )
        )
-       ;;@ assembly/buddy.ts:415:4
+       ;;@ assembly/buddy.ts:413:4
        (set_local $3
-        ;;@ assembly/buddy.ts:415:11
+        ;;@ assembly/buddy.ts:413:11
         (i32.shl
          (i32.const 1)
-         ;;@ assembly/buddy.ts:415:16
+         ;;@ assembly/buddy.ts:413:16
          (i32.sub
-          ;;@ assembly/buddy.ts:415:17
+          ;;@ assembly/buddy.ts:413:17
           (i32.const 31)
-          ;;@ assembly/buddy.ts:415:34
+          ;;@ assembly/buddy.ts:413:34
           (get_local $2)
          )
         )
        )
-       ;;@ assembly/buddy.ts:416:4
+       ;;@ assembly/buddy.ts:414:4
        (set_local $4
-        ;;@ assembly/buddy.ts:416:19
+        ;;@ assembly/buddy.ts:414:19
         (if (result i32)
          (i32.lt_u
           (get_local $2)
-          ;;@ assembly/buddy.ts:416:28
+          ;;@ assembly/buddy.ts:414:28
           (get_local $1)
          )
-         ;;@ assembly/buddy.ts:416:46
+         ;;@ assembly/buddy.ts:414:46
          (i32.add
           (i32.div_u
            (get_local $3)
-           ;;@ assembly/buddy.ts:416:53
+           ;;@ assembly/buddy.ts:414:53
            (i32.const 2)
           )
-          ;;@ assembly/buddy.ts:416:57
+          ;;@ assembly/buddy.ts:414:57
           (i32.const 8)
          )
-         ;;@ assembly/buddy.ts:416:69
+         ;;@ assembly/buddy.ts:414:69
          (get_local $3)
         )
        )
-       ;;@ assembly/buddy.ts:417:4
+       ;;@ assembly/buddy.ts:415:4
        (if
-        ;;@ assembly/buddy.ts:417:8
+        ;;@ assembly/buddy.ts:415:8
         (i32.eqz
-         ;;@ assembly/buddy.ts:417:9
+         ;;@ assembly/buddy.ts:415:9
          (call $assembly/buddy/update_max_ptr
-          ;;@ assembly/buddy.ts:417:24
+          ;;@ assembly/buddy.ts:415:24
           (i32.add
            (get_local $6)
-           ;;@ assembly/buddy.ts:417:30
+           ;;@ assembly/buddy.ts:415:30
            (get_local $4)
           )
          )
         )
-        ;;@ assembly/buddy.ts:417:45
+        ;;@ assembly/buddy.ts:415:45
         (block
-         ;;@ assembly/buddy.ts:418:6
+         ;;@ assembly/buddy.ts:416:6
          (call $assembly/buddy/list_push
-          ;;@ assembly/buddy.ts:418:16
+          ;;@ assembly/buddy.ts:416:16
           (call $assembly/buddy/get_bucket
-           ;;@ assembly/buddy.ts:418:27
+           ;;@ assembly/buddy.ts:416:27
            (get_local $2)
           )
-          ;;@ assembly/buddy.ts:418:36
+          ;;@ assembly/buddy.ts:416:36
           (get_local $6)
          )
-         ;;@ assembly/buddy.ts:419:13
+         ;;@ assembly/buddy.ts:417:13
          (return
           (i32.const 0)
          )
         )
        )
-       ;;@ assembly/buddy.ts:433:4
+       ;;@ assembly/buddy.ts:431:4
        (set_local $5
-        ;;@ assembly/buddy.ts:433:8
+        ;;@ assembly/buddy.ts:431:8
         (call $assembly/buddy/node_for_ptr
-         ;;@ assembly/buddy.ts:433:21
+         ;;@ assembly/buddy.ts:431:21
          (get_local $6)
-         ;;@ assembly/buddy.ts:433:26
+         ;;@ assembly/buddy.ts:431:26
          (get_local $2)
         )
        )
-       ;;@ assembly/buddy.ts:434:4
+       ;;@ assembly/buddy.ts:432:4
        (if
-        ;;@ assembly/buddy.ts:434:8
+        ;;@ assembly/buddy.ts:432:8
         (i32.ne
          (get_local $5)
-         ;;@ assembly/buddy.ts:434:13
+         ;;@ assembly/buddy.ts:432:13
          (i32.const 0)
         )
-        ;;@ assembly/buddy.ts:435:6
+        ;;@ assembly/buddy.ts:433:6
         (call $assembly/buddy/flip_parent_is_split
-         ;;@ assembly/buddy.ts:435:27
+         ;;@ assembly/buddy.ts:433:27
          (get_local $5)
         )
        )
-       ;;@ assembly/buddy.ts:445:4
+       ;;@ assembly/buddy.ts:443:4
        (block $break|1
         (loop $continue|1
          (if
-          ;;@ assembly/buddy.ts:445:11
+          ;;@ assembly/buddy.ts:443:11
           (i32.lt_u
            (get_local $2)
-           ;;@ assembly/buddy.ts:445:20
+           ;;@ assembly/buddy.ts:443:20
            (get_local $1)
           )
           (block
            (block
-            ;;@ assembly/buddy.ts:446:6
+            ;;@ assembly/buddy.ts:444:6
             (set_local $5
-             ;;@ assembly/buddy.ts:446:10
+             ;;@ assembly/buddy.ts:444:10
              (i32.add
               (i32.mul
                (get_local $5)
-               ;;@ assembly/buddy.ts:446:14
+               ;;@ assembly/buddy.ts:444:14
                (i32.const 2)
               )
-              ;;@ assembly/buddy.ts:446:18
+              ;;@ assembly/buddy.ts:444:18
               (i32.const 1)
              )
             )
-            ;;@ assembly/buddy.ts:447:6
+            ;;@ assembly/buddy.ts:445:6
             (set_local $2
              (i32.add
               (get_local $2)
               (i32.const 1)
              )
             )
-            ;;@ assembly/buddy.ts:448:6
+            ;;@ assembly/buddy.ts:446:6
             (call $assembly/buddy/flip_parent_is_split
-             ;;@ assembly/buddy.ts:448:27
+             ;;@ assembly/buddy.ts:446:27
              (get_local $5)
             )
-            ;;@ assembly/buddy.ts:449:6
+            ;;@ assembly/buddy.ts:447:6
             (call $assembly/buddy/list_push
-             ;;@ assembly/buddy.ts:449:16
+             ;;@ assembly/buddy.ts:447:16
              (call $assembly/buddy/get_bucket
-              ;;@ assembly/buddy.ts:449:27
+              ;;@ assembly/buddy.ts:447:27
               (get_local $2)
              )
-             ;;@ assembly/buddy.ts:449:36
+             ;;@ assembly/buddy.ts:447:36
              (call $assembly/buddy/ptr_for_node
-              ;;@ assembly/buddy.ts:449:66
+              ;;@ assembly/buddy.ts:447:66
               (i32.add
                (get_local $5)
-               ;;@ assembly/buddy.ts:449:70
+               ;;@ assembly/buddy.ts:447:70
                (i32.const 1)
               )
-              ;;@ assembly/buddy.ts:449:73
+              ;;@ assembly/buddy.ts:447:73
               (get_local $2)
              )
             )
@@ -1095,19 +1096,19 @@
          )
         )
        )
-       ;;@ assembly/buddy.ts:456:4
+       ;;@ assembly/buddy.ts:454:4
        (i32.store
-        ;;@ assembly/buddy.ts:456:17
+        ;;@ assembly/buddy.ts:454:17
         (get_local $6)
-        ;;@ assembly/buddy.ts:456:22
+        ;;@ assembly/buddy.ts:454:22
         (get_local $0)
        )
-       ;;@ assembly/buddy.ts:457:17
+       ;;@ assembly/buddy.ts:455:17
        (return
-        ;;@ assembly/buddy.ts:457:11
+        ;;@ assembly/buddy.ts:455:11
         (i32.add
          (get_local $6)
-         ;;@ assembly/buddy.ts:457:17
+         ;;@ assembly/buddy.ts:455:17
          (i32.const 8)
         )
        )
@@ -1117,7 +1118,7 @@
     )
    )
   )
-  ;;@ assembly/buddy.ts:460:9
+  ;;@ assembly/buddy.ts:458:9
   (return
    (i32.const 0)
   )
@@ -1126,132 +1127,132 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  ;;@ assembly/buddy.ts:465:2
+  ;;@ assembly/buddy.ts:463:2
   (nop)
-  ;;@ assembly/buddy.ts:470:2
+  ;;@ assembly/buddy.ts:468:2
   (if
-   ;;@ assembly/buddy.ts:470:6
+   ;;@ assembly/buddy.ts:468:6
    (i32.eqz
-    ;;@ assembly/buddy.ts:470:7
+    ;;@ assembly/buddy.ts:468:7
     (get_local $0)
    )
-   ;;@ assembly/buddy.ts:471:4
+   ;;@ assembly/buddy.ts:469:4
    (return)
   )
-  ;;@ assembly/buddy.ts:479:2
+  ;;@ assembly/buddy.ts:477:2
   (set_local $0
-   ;;@ assembly/buddy.ts:479:8
+   ;;@ assembly/buddy.ts:477:8
    (i32.sub
     (get_local $0)
-    ;;@ assembly/buddy.ts:479:14
+    ;;@ assembly/buddy.ts:477:14
     (i32.const 8)
    )
   )
-  ;;@ assembly/buddy.ts:480:2
+  ;;@ assembly/buddy.ts:478:2
   (set_local $1
-   ;;@ assembly/buddy.ts:480:11
+   ;;@ assembly/buddy.ts:478:11
    (call $assembly/buddy/bucket_for_request
-    ;;@ assembly/buddy.ts:480:30
+    ;;@ assembly/buddy.ts:478:30
     (i32.add
      (i32.load
-      ;;@ assembly/buddy.ts:480:42
+      ;;@ assembly/buddy.ts:478:42
       (get_local $0)
      )
-     ;;@ assembly/buddy.ts:480:49
+     ;;@ assembly/buddy.ts:478:49
      (i32.const 8)
     )
    )
   )
-  ;;@ assembly/buddy.ts:481:2
+  ;;@ assembly/buddy.ts:479:2
   (set_local $2
-   ;;@ assembly/buddy.ts:481:6
+   ;;@ assembly/buddy.ts:479:6
    (call $assembly/buddy/node_for_ptr
-    ;;@ assembly/buddy.ts:481:19
+    ;;@ assembly/buddy.ts:479:19
     (get_local $0)
-    ;;@ assembly/buddy.ts:481:24
+    ;;@ assembly/buddy.ts:479:24
     (get_local $1)
    )
   )
-  ;;@ assembly/buddy.ts:487:2
+  ;;@ assembly/buddy.ts:485:2
   (block $break|0
    (loop $continue|0
     (if
-     ;;@ assembly/buddy.ts:487:9
+     ;;@ assembly/buddy.ts:485:9
      (i32.ne
       (get_local $2)
-      ;;@ assembly/buddy.ts:487:14
+      ;;@ assembly/buddy.ts:485:14
       (i32.const 0)
      )
      (block
       (block
-       ;;@ assembly/buddy.ts:494:4
+       ;;@ assembly/buddy.ts:492:4
        (call $assembly/buddy/flip_parent_is_split
-        ;;@ assembly/buddy.ts:494:25
+        ;;@ assembly/buddy.ts:492:25
         (get_local $2)
        )
-       ;;@ assembly/buddy.ts:504:4
+       ;;@ assembly/buddy.ts:502:4
        (if
-        ;;@ assembly/buddy.ts:504:8
+        ;;@ assembly/buddy.ts:502:8
         (if (result i32)
          (i32.ne
           (tee_local $3
            (call $assembly/buddy/parent_is_split
-            ;;@ assembly/buddy.ts:504:24
+            ;;@ assembly/buddy.ts:502:24
             (get_local $2)
            )
           )
           (i32.const 0)
          )
          (get_local $3)
-         ;;@ assembly/buddy.ts:504:30
+         ;;@ assembly/buddy.ts:502:30
          (i32.eq
           (get_local $1)
-          ;;@ assembly/buddy.ts:504:40
+          ;;@ assembly/buddy.ts:502:40
           (get_global $assembly/buddy/bucket_limit)
          )
         )
-        ;;@ assembly/buddy.ts:505:6
+        ;;@ assembly/buddy.ts:503:6
         (br $break|0)
        )
-       ;;@ assembly/buddy.ts:515:4
+       ;;@ assembly/buddy.ts:513:4
        (call $assembly/buddy/list_remove
-        ;;@ assembly/buddy.ts:515:16
+        ;;@ assembly/buddy.ts:513:16
         (call $assembly/buddy/ptr_for_node
-         ;;@ assembly/buddy.ts:515:46
+         ;;@ assembly/buddy.ts:513:46
          (i32.add
           (i32.xor
-           ;;@ assembly/buddy.ts:515:47
+           ;;@ assembly/buddy.ts:513:47
            (i32.sub
-            ;;@ assembly/buddy.ts:515:48
+            ;;@ assembly/buddy.ts:513:48
             (get_local $2)
-            ;;@ assembly/buddy.ts:515:52
+            ;;@ assembly/buddy.ts:513:52
             (i32.const 1)
            )
-           ;;@ assembly/buddy.ts:515:57
+           ;;@ assembly/buddy.ts:513:57
            (i32.const 1)
           )
-          ;;@ assembly/buddy.ts:515:62
+          ;;@ assembly/buddy.ts:513:62
           (i32.const 1)
          )
-         ;;@ assembly/buddy.ts:515:65
+         ;;@ assembly/buddy.ts:513:65
          (get_local $1)
         )
        )
-       ;;@ assembly/buddy.ts:516:4
+       ;;@ assembly/buddy.ts:514:4
        (set_local $2
-        ;;@ assembly/buddy.ts:516:8
+        ;;@ assembly/buddy.ts:514:8
         (i32.div_u
          (i32.sub
-          ;;@ assembly/buddy.ts:516:9
+          ;;@ assembly/buddy.ts:514:9
           (get_local $2)
-          ;;@ assembly/buddy.ts:516:13
+          ;;@ assembly/buddy.ts:514:13
           (i32.const 1)
          )
-         ;;@ assembly/buddy.ts:516:18
+         ;;@ assembly/buddy.ts:514:18
          (i32.const 2)
         )
        )
-       ;;@ assembly/buddy.ts:517:4
+       ;;@ assembly/buddy.ts:515:4
        (set_local $1
         (i32.sub
          (get_local $1)
@@ -1264,18 +1265,18 @@
     )
    )
   )
-  ;;@ assembly/buddy.ts:526:2
+  ;;@ assembly/buddy.ts:524:2
   (call $assembly/buddy/list_push
-   ;;@ assembly/buddy.ts:526:12
+   ;;@ assembly/buddy.ts:524:12
    (call $assembly/buddy/get_bucket
-    ;;@ assembly/buddy.ts:526:23
+    ;;@ assembly/buddy.ts:524:23
     (get_local $1)
    )
-   ;;@ assembly/buddy.ts:526:32
+   ;;@ assembly/buddy.ts:524:32
    (call $assembly/buddy/ptr_for_node
-    ;;@ assembly/buddy.ts:526:62
+    ;;@ assembly/buddy.ts:524:62
     (get_local $2)
-    ;;@ assembly/buddy.ts:526:65
+    ;;@ assembly/buddy.ts:524:65
     (get_local $1)
    )
   )
@@ -1293,22 +1294,22 @@
     (i32.mul
      (i32.const 28)
      ;;@ assembly/buddy.ts:93:54
-     (i32.const 4)
+     (i32.const 8)
     )
    )
   )
   (set_global $assembly/buddy/SPLIT_START
-   ;;@ assembly/buddy.ts:143:25
+   ;;@ assembly/buddy.ts:138:25
    (get_global $assembly/buddy/BUCKET_END)
   )
   (set_global $assembly/buddy/SPLIT_END
-   ;;@ assembly/buddy.ts:144:23
+   ;;@ assembly/buddy.ts:139:23
    (i32.add
     (get_global $assembly/buddy/SPLIT_START)
-    ;;@ assembly/buddy.ts:144:37
+    ;;@ assembly/buddy.ts:139:37
     (i32.mul
      (i32.const 16777216)
-     ;;@ assembly/buddy.ts:144:51
+     ;;@ assembly/buddy.ts:139:51
      (i32.const 1)
     )
    )

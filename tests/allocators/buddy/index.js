@@ -19,9 +19,16 @@ function test(file) {
     return String.fromCharCode.apply(String, str);
   }
 
-  var ptr = exports.allocate_memory(16);
-  exports.free_memory(ptr);
-  // runner(exports, 20, 20000); // picked so I/O isn't the bottleneck
+  // TODO: create an actual test-runner
+  var ptr1 = exports.allocate_memory(16);
+  var ptr2 = exports.allocate_memory(16);
+  if (ptr1 == ptr2) throw Error();
+  exports.free_memory(ptr1);
+  exports.free_memory(ptr2);
+  ptr2 = exports.allocate_memory(16);
+  if (ptr1 != ptr2) throw Error();
+  exports.free_memory(ptr2);
+
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
 }

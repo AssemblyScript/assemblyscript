@@ -90,16 +90,11 @@ class List {
  * MAX_ALLOC (i.e. the whole address space).
  */
 var BUCKET_START: usize = HEAP_BASE;
-var BUCKET_END: usize = BUCKET_START + BUCKET_COUNT * sizeof<usize>();
+var BUCKET_END: usize = BUCKET_START + BUCKET_COUNT * List.SIZE;
 
 function get_bucket(index: usize): List {
   assert(index < BUCKET_COUNT);
-  return load<List>(BUCKET_START + index * sizeof<usize>());
-}
-
-function set_bucket(index: usize, list: List): void {
-  assert(index < BUCKET_COUNT);
-  store<List>(BUCKET_START + index * sizeof<usize>(), list);
+  return changetype<List>(BUCKET_START + index * List.SIZE);
 }
 
 /*
@@ -330,6 +325,8 @@ function lower_bucket_limit(bucket: usize): u32 {
   return 1;
 }
 
+declare function logi(i: i32): void;
+
 @global
 function allocate_memory(request: usize): usize {
   var original_bucket: usize, bucket: usize;
@@ -349,7 +346,8 @@ function allocate_memory(request: usize): usize {
    * possible allocation size. More memory will be reserved later as needed.
    */
   if (base_ptr == 0) {
-    base_ptr = max_ptr = SPLIT_END;
+    base_ptr = SPLIT_END;
+    max_ptr = <usize>current_memory() << 16; // differs, must grow first
     bucket_limit = BUCKET_COUNT - 1;
     update_max_ptr(base_ptr + List.SIZE);
     list_init(get_bucket(BUCKET_COUNT - 1));
