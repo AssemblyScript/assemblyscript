@@ -129,6 +129,11 @@ declare function store<T = u8>(ptr: usize, value: T, constantOffset?: usize): vo
 /** Emits an unreachable operation that results in a runtime error when executed. */
 declare function unreachable(): any; // sic
 
+/** [Polyfill] Performs the sign-agnostic reverse bytes **/
+declare function bswap<T = i32 | u32 | isize | usize>(value: T): T;
+/** [Polyfill] Performs the sign-agnostic reverse bytes only for last 16-bit **/
+declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
+
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
 /** Traps if the specified value is not true-ish, otherwise returns the value. */
