@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "npm run build:untouched && npm run build:optimized",
+    "build:untouched": "asc assembly/index.ts -t buddy.untouched.wat -b buddy.untouched.wasm --validate --sourceMap --measure",
+    "build:optimized": "asc assembly/index.ts -t buddy.optimized.wat -b buddy.optimized.wasm --validate --sourceMap --measure --noDebug --noAssert --optimize",
+    "test": "node ./index"
+  }
+}
