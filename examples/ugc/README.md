@@ -6,7 +6,7 @@ A port of [Bach Le's μgc garbage collector library](https://github.com/bullno1/
 Instructions
 ------------
 
-To build [assembly/ugc.ts](./assembly/ugc.ts) to an untouched and an optimized `.wasm` including their respective `.wast` representations, run:
+To build [assembly/ugc.ts](./assembly/ugc.ts) to an untouched and an optimized `.wasm` including their respective `.wat` representations, run:
 
 ```
 $> npm run build

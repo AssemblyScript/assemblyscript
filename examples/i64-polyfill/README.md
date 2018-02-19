@@ -119,7 +119,7 @@ API
 Building
 --------
 
-To build [assembly/i64.ts](./assembly/i64.ts) to an untouched and an optimized `.wasm` including their respective `.wast` representations, run:
+To build [assembly/i64.ts](./assembly/i64.ts) to an untouched and an optimized `.wasm` including their respective `.wat` representations, run:
 
 ```
 $> npm run build

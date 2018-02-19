@@ -6,7 +6,7 @@ An [AssemblyScript](http://assemblyscript.org) example. Continuously updates the
 Instructions
 ------------
 
-To build [assembly/game-of-life.ts](./assembly/game-of-life.ts) to an untouched and an optimized `.wasm` including their respective `.wast` representations, run:
+To build [assembly/game-of-life.ts](./assembly/game-of-life.ts) to an untouched and an optimized `.wasm` including their respective `.wat` representations, run:
 
 ```
 $> npm run build

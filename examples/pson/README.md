@@ -6,7 +6,7 @@ An [AssemblyScript](http://assemblyscript.org) example. Decodes a [PSON](https:/
 Instructions
 ------------
 
-To build [assembly/pson.ts](./assembly/pson.ts) to an untouched and an optimized `.wasm` including their respective `.wast` representations, run:
+To build [assembly/pson.ts](./assembly/pson.ts) to an untouched and an optimized `.wasm` including their respective `.wat` representations, run:
 
 ```
 $> npm run build
