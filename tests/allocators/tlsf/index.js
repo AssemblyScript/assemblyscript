@@ -1,5 +1,4 @@
 const fs = require("fs");
-const runner = require("./runner");
 
 function test(file) {
   console.log("Testing '" + file + "' ...\n");
@@ -20,7 +19,7 @@ function test(file) {
     return String.fromCharCode.apply(String, str);
   }
 
-  runner(exports, 20, 20000); // picked so I/O isn't the bottleneck
+  require("../runner")(exports, 20, 20000); // picked so I/O isn't the bottleneck
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
 }

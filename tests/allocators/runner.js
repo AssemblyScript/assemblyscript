@@ -1,15 +1,15 @@
-function runner(tlsf, runs, allocs) {
+function runner(allocator, runs, allocs) {
   var ptrs = [];
 
   function randomAlloc(maxSize) {
     if (!maxSize) maxSize = 8192;
     var size = ((Math.random() * maxSize) >>> 0) + 1;
     size = (size + 3) & ~3;
-    var ptr = tlsf.allocate_memory(size);
+    var ptr = allocator.allocate_memory(size);
     if (!ptr) throw Error();
     if (ptrs.indexOf(ptr) >= 0) throw Error();
-    if (tlsf.set_memory)
-      tlsf.set_memory(ptr, 0xdc, size);
+    if (allocator.set_memory)
+      allocator.set_memory(ptr, 0xdc, size);
     ptrs.push(ptr);
     return ptr;
   }
@@ -20,7 +20,7 @@ function runner(tlsf, runs, allocs) {
     var ptr = ptrs[idx];
     ptrs.splice(idx, 1);
     if (typeof ptr !== "number") throw Error();
-    tlsf.free_memory(ptr);
+    allocator.free_memory(ptr);
   }
 
   function randomFree() {
@@ -28,14 +28,14 @@ function runner(tlsf, runs, allocs) {
     var ptr = ptrs[idx];
     if (typeof ptr !== "number") throw Error();
     ptrs.splice(idx, 1);
-    tlsf.free_memory(ptr);
+    allocator.free_memory(ptr);
   }
 
   // remember the smallest possible memory address
-  var base = tlsf.allocate_memory(64);
+  var base = allocator.allocate_memory(64);
   console.log("base: " + base);
-  tlsf.free_memory(base);
-  console.log("mem initial: " + tlsf.memory.buffer.byteLength);
+  allocator.free_memory(base);
+  console.log("mem initial: " + allocator.memory.buffer.byteLength);
 
   try {
     for (var j = 0; j < runs; ++j) {
@@ -55,17 +55,18 @@ function runner(tlsf, runs, allocs) {
       while (ptrs.length) randomFree();
 
       // should now be possible to reuse the entire memory
-      // just try a large portion of the memory here because of SL+1 for allocs
-      var size = ((tlsf.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
-      var ptr = tlsf.allocate_memory(size);
-      if (tlsf.set_memory)
-        tlsf.set_memory(ptr, 0xac, size);
+      // just try a large portion of the memory here, for example because of
+      // SL+1 for allocations in TLSF
+      var size = ((allocator.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
+      var ptr = allocator.allocate_memory(size);
+      if (allocator.set_memory)
+        allocator.set_memory(ptr, 0xac, size);
       if (ptr !== base)
         throw Error("expected " + base + " but got " + ptr);
-      tlsf.free_memory(ptr);
+      allocator.free_memory(ptr);
     }
   } finally {
-    // mem(tlsf.memory, 0, 0x10000);
+    // mem(allocator.memory, 0, 0x10000);
   }
 }
 

@@ -19,15 +19,7 @@ function test(file) {
     return String.fromCharCode.apply(String, str);
   }
 
-  // TODO: create an actual test-runner
-  var ptr1 = exports.allocate_memory(16);
-  var ptr2 = exports.allocate_memory(16);
-  if (ptr1 == ptr2) throw Error();
-  exports.free_memory(ptr1);
-  exports.free_memory(ptr2);
-  ptr2 = exports.allocate_memory(16);
-  if (ptr1 != ptr2) throw Error();
-  exports.free_memory(ptr2);
+  require("../runner")(exports, 20, 20000);
 
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
