@@ -5,6 +5,6 @@
     "build:untouched": "asc assembly/index.ts -t tlsf.untouched.wat -b tlsf.untouched.wasm --validate --sourceMap --measure",
     "build:optimized": "asc assembly/index.ts -t tlsf.optimized.wat -b tlsf.optimized.wasm --validate --sourceMap --measure --noDebug --noAssert --optimize",
     "test": "node ./index",
-    "test:forever": "node ./forever"
+    "test:forever": "node ../forever tlsf"
   }
 }

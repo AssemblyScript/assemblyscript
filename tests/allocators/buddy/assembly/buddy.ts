@@ -89,12 +89,12 @@ class List {
  * for that size. The bucket at index 0 corresponds to an allocation size of
  * MAX_ALLOC (i.e. the whole address space).
  */
-var BUCKET_START: usize = HEAP_BASE;
-var BUCKET_END: usize = BUCKET_START + BUCKET_COUNT * List.SIZE;
+var BUCKETS_START: usize = HEAP_BASE;
+var BUCKETS_END: usize = BUCKETS_START + BUCKET_COUNT * List.SIZE;
 
-function get_bucket(index: usize): List {
+function buckets$get(index: usize): List {
   assert(index < BUCKET_COUNT);
-  return changetype<List>(BUCKET_START + index * List.SIZE);
+  return changetype<List>(BUCKETS_START + index * List.SIZE);
 }
 
 /*
@@ -135,17 +135,17 @@ var bucket_limit: usize;
  * since we only ever care about parent nodes.
  */
 const SPLIT_COUNT: usize = (1 << (BUCKET_COUNT - 1)) / 8;
-var SPLIT_START: usize = BUCKET_END;
-var SPLIT_END: usize = SPLIT_START + SPLIT_COUNT * sizeof<u8>();
+var NODE_IS_SPLIT_START: usize = BUCKETS_END;
+var NODE_IS_SPLIT_END: usize = NODE_IS_SPLIT_START + SPLIT_COUNT * sizeof<u8>();
 
-function node_is_split(index: usize): i32 {
+function node_is_split$get(index: usize): i32 {
   assert(index < SPLIT_COUNT);
-  return load<u8>(SPLIT_START + index);
+  return load<u8>(NODE_IS_SPLIT_START + index);
 }
 
-function node_set_split(index: usize, state: i32): void {
+function node_is_split$set(index: usize, state: i32): void {
   assert(index < SPLIT_COUNT);
-  store<u8>(SPLIT_START + index, state);
+  store<u8>(NODE_IS_SPLIT_START + index, state);
 }
 
 /*
@@ -166,15 +166,21 @@ var max_ptr: usize;
  * front. It's only reserved when it's needed by calling this function. This
  * will return false if the memory could not be reserved.
  */
-function update_max_ptr(new_value: usize): bool {
+function update_max_ptr(new_value: usize): i32 {
   if (new_value > max_ptr) {
-    var pages = (((new_value - max_ptr) + 0xffff) & ~0xffff) >>> 16;
-    if (grow_memory(pages) < 0) {
-      return false;
+    // if (brk(new_value)) {
+    //   return 0;
+    // }
+    var oldPages = current_memory();
+    var newPages = <u32>(((new_value + 0xffff) & ~0xffff) >> 16);
+    assert(newPages > oldPages);
+    if (grow_memory(newPages - oldPages) < 0) {
+      return 0;
     }
-    max_ptr = new_value;
+    // max_ptr = new_value;
+    max_ptr = <usize>newPages << 16;
   }
-  return true;
+  return 1;
 }
 
 /*
@@ -246,7 +252,7 @@ function node_for_ptr(ptr: usize, bucket: usize): usize {
  */
 function parent_is_split(index: usize): i32 {
   index = (index - 1) / 2;
-  return (node_is_split(index / 8) >> <i32>(index % 8)) & 1;
+  return (node_is_split$get(index / 8) >>> <i32>(index % 8)) & 1;
 }
 
 /*
@@ -255,7 +261,9 @@ function parent_is_split(index: usize): i32 {
 function flip_parent_is_split(index: usize): void {
   index = (index - 1) / 2;
   var indexDiv8 = index / 8;
-  node_set_split(indexDiv8, node_is_split(indexDiv8) ^ <i32>(1 << (index % 8)));
+  node_is_split$set(indexDiv8,
+    node_is_split$get(indexDiv8) ^ <i32>(1 << (index % 8))
+  );
 }
 
 /*
@@ -292,8 +300,8 @@ function lower_bucket_limit(bucket: usize): u32 {
      */
     if (!parent_is_split(root)) {
       list_remove(changetype<List>(base_ptr));
-      list_init(get_bucket(--bucket_limit));
-      list_push(get_bucket(bucket_limit), changetype<List>(base_ptr));
+      list_init(buckets$get(--bucket_limit));
+      list_push(buckets$get(bucket_limit), changetype<List>(base_ptr));
       continue;
     }
 
@@ -309,8 +317,8 @@ function lower_bucket_limit(bucket: usize): u32 {
     if (!update_max_ptr(right_child + List.SIZE)) {
       return 0;
     }
-    list_push(get_bucket(bucket_limit), changetype<List>(right_child));
-    list_init(get_bucket(--bucket_limit));
+    list_push(buckets$get(bucket_limit), changetype<List>(right_child));
+    list_init(buckets$get(--bucket_limit));
 
     /*
      * Set the grandparent's SPLIT flag so if we need to lower the bucket limit
@@ -324,8 +332,6 @@ function lower_bucket_limit(bucket: usize): u32 {
 
   return 1;
 }
-
-declare function logi(i: i32): void;
 
 @global
 function allocate_memory(request: usize): usize {
@@ -346,12 +352,15 @@ function allocate_memory(request: usize): usize {
    * possible allocation size. More memory will be reserved later as needed.
    */
   if (base_ptr == 0) {
-    base_ptr = SPLIT_END;
-    max_ptr = <usize>current_memory() << 16; // differs, must grow first
+    // base_ptr = max_ptr = (uint8_t *)sbrk(0);
+    base_ptr = (NODE_IS_SPLIT_END + 7) & ~7; // must be aligned
+    max_ptr = <usize>current_memory() << 16; // must grow first
     bucket_limit = BUCKET_COUNT - 1;
-    update_max_ptr(base_ptr + List.SIZE);
-    list_init(get_bucket(BUCKET_COUNT - 1));
-    list_push(get_bucket(BUCKET_COUNT - 1), changetype<List>(base_ptr));
+    if (!update_max_ptr(base_ptr + List.SIZE)) {
+      return 0;
+    }
+    list_init(buckets$get(BUCKET_COUNT - 1));
+    list_push(buckets$get(BUCKET_COUNT - 1), changetype<List>(base_ptr));
   }
 
   /*
@@ -382,7 +391,7 @@ function allocate_memory(request: usize): usize {
      * Try to pop a block off the free list for this bucket. If the free list
      * is empty, we're going to have to split a larger block instead.
      */
-    ptr = changetype<usize>(list_pop(get_bucket(bucket)));
+    ptr = changetype<usize>(list_pop(buckets$get(bucket)));
     if (!ptr) {
       /*
        * If we're not at the root of the tree or it's impossible to grow the
@@ -403,7 +412,7 @@ function allocate_memory(request: usize): usize {
       if (!lower_bucket_limit(bucket - 1)) {
         return 0;
       }
-      ptr = changetype<usize>(list_pop(get_bucket(bucket)));
+      ptr = changetype<usize>(list_pop(buckets$get(bucket)));
     }
 
     /*
@@ -413,7 +422,7 @@ function allocate_memory(request: usize): usize {
     size = 1 << (MAX_ALLOC_LOG2 - bucket);
     bytes_needed = bucket < original_bucket ? size / 2 + List.SIZE : size;
     if (!update_max_ptr(ptr + bytes_needed)) {
-      list_push(get_bucket(bucket), changetype<List>(ptr));
+      list_push(buckets$get(bucket), changetype<List>(ptr));
       return 0;
     }
 
@@ -444,7 +453,10 @@ function allocate_memory(request: usize): usize {
       i = i * 2 + 1;
       bucket++;
       flip_parent_is_split(i);
-      list_push(get_bucket(bucket), changetype<List>(ptr_for_node(i + 1, bucket)));
+      list_push(
+        buckets$get(bucket),
+        changetype<List>(ptr_for_node(i + 1, bucket))
+      );
     }
 
     /*
@@ -521,5 +533,5 @@ function free_memory(ptr: usize): void {
    * followed by a "malloc" of the same size to ideally use the same address
    * for better memory locality.
    */
-  list_push(get_bucket(bucket), changetype<List>(ptr_for_node(i, bucket)));
+  list_push(buckets$get(bucket), changetype<List>(ptr_for_node(i, bucket)));
 }

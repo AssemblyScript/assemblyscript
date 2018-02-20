@@ -35,7 +35,8 @@ function runner(allocator, runs, allocs) {
   var base = allocator.allocate_memory(64);
   console.log("base: " + base);
   allocator.free_memory(base);
-  console.log("mem initial: " + allocator.memory.buffer.byteLength);
+  var currentMem = allocator.memory.buffer.byteLength;
+  console.log("mem initial: " + currentMem);
 
   try {
     for (var j = 0; j < runs; ++j) {
@@ -64,6 +65,10 @@ function runner(allocator, runs, allocs) {
       if (ptr !== base)
         throw Error("expected " + base + " but got " + ptr);
       allocator.free_memory(ptr);
+      if (allocator.memory.buffer.byteLength > currentMem) {
+        currentMem = allocator.memory.buffer.byteLength;
+        console.log("mem changed: " + currentMem);
+      }
     }
   } finally {
     // mem(allocator.memory, 0, 0x10000);
