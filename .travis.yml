@@ -1,9 +1,26 @@
 language: node_js
-node_js:
-- lts/*
-- node
-before_script:
-- npm run lint
-- npm run clean && node bin/asc -v && npm test
-script:
-- npm run build && node bin/asc -v && npm test
+jobs:
+  include:
+
+  - stage: lint
+    node_js: node
+    script: npm run lint
+    env: DESC="Checks the sources with TSLint"
+
+  - stage: test
+    node_js: lts/*
+    script: npm run clean && node bin/asc -v && npm test
+    env: DESC="Tests the sources on latest node.js LTS"
+  - stage: test
+    node_js: node
+    script: npm run clean && node bin/asc -v && npm test
+    env: DESC="Tests the sources on latest stable node.js"
+
+  - stage: build
+    node_js: lts/*
+    script: npm run build && node bin/asc -v && npm test
+    env: DESC="Builds and tests the bundle on latest node.js LTS"
+  - stage: build
+    node_js: node
+    script: npm run build && node bin/asc -v && npm test
+    env: DESC="Builds and tests the bundle on latest stable node.js"
