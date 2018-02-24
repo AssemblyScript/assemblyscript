@@ -1,4 +1,5 @@
 // code below is generated from diagnosticsMessages.json by scripts/build-diagnostics
+/* tslint:disable:max-line-length */
 
 export enum DiagnosticCode {
   Operation_not_supported = 100,

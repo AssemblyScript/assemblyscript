@@ -1,13 +1,21 @@
 {
+  "rulesDirectory": [
+    "./lib/tslint",
+    "./lib/tslint/internal"
+  ],
   "defaultSeverity": "warning",
   "rules": {
+    "as-diagnostics": true,
+    "as-types": { "severity": "error" },
     "adjacent-overload-signatures": true,
     "ban-types": [ true, ["Object"], ["any"], ["undefined"], ["never"] ],
+    "curly": [true, "ignore-same-line"],
     "deprecation": true,
     "encoding": true,
     "eofline": true,
     "indent": [true, "spaces", 2],
     "label-position": true,
+    "max-line-length": [ true, { "limit": 120, "ignore-pattern": " *DiagnosticCode\\.[^ ]+,$" } ],
     "member-access": [ true, "no-public" ],
     "new-parens": true,
     "no-any": true,
@@ -34,17 +42,22 @@
     "no-sparse-arrays": true,
     "no-string-literal": true,
     "no-string-throw": true,
-    "no-this-assignment": true,
     "no-trailing-whitespace": true,
     "no-unbound-method": true,
     "no-unsafe-any": true,
     "no-unused-variable": true,
     "no-void-expression": true,
-    "object-literal-shorthand": [true, "never"],
+    "object-literal-shorthand": [ true, "never" ],
     "prefer-method-signature": true,
     "quotemark": [true, "double"],
     "radix": true,
     "restrict-plus-operands": true,
+    "semicolon": [true, "always"]
+  },
+  "jsRules": {
+    "quotemark": [true, "double"],
+    "radix": true,
+    "max-line-length": [ true, { "limit": 120, "ignore-pattern": " *DiagnosticCode\\.[^ ]+,$" } ],
     "semicolon": [true, "always"]
   }
 }

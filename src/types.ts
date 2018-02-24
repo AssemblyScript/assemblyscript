@@ -1,8 +1,4 @@
 import {
-  Target
-} from "./compiler";
-
-import {
   Class,
   Function
 } from "./program";
@@ -158,9 +154,11 @@ export class Type {
       case TypeKind.U64: return "u64";
       case TypeKind.USIZE:
         if (kindOnly) return "usize";
-        return this.classType ? this.classType.toString()
-             : this.functionType ? this.functionType.toTypeString()
-             : "usize";
+        return this.classType
+          ? this.classType.toString()
+          : this.functionType
+            ? this.functionType.toTypeString()
+            : "usize";
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
@@ -209,8 +207,7 @@ export class Type {
 
       case TypeKind.ISIZE:
       case TypeKind.USIZE:
-        if (this.size != 64)
-          return module.createI32(0);
+        if (this.size != 64) return module.createI32(0);
         // fall-through
 
       case TypeKind.I64:
@@ -237,8 +234,7 @@ export class Type {
 
       case TypeKind.ISIZE:
       case TypeKind.USIZE:
-        if (this.size != 64)
-          return module.createI32(1);
+        if (this.size != 64) return module.createI32(1);
         // fall-through
 
       case TypeKind.I64:
@@ -265,8 +261,7 @@ export class Type {
 
       case TypeKind.ISIZE:
       case TypeKind.USIZE:
-        if (this.size != 64)
-          return module.createI32(-1);
+        if (this.size != 64) return module.createI32(-1);
         // fall-through
 
       case TypeKind.I64:
@@ -436,18 +431,19 @@ export class Type {
 export function typesToNativeTypes(types: Type[]): NativeType[] {
   var k = types.length;
   var ret = new Array<NativeType>(k);
-  for (var i = 0; i < k; ++i)
+  for (var i = 0; i < k; ++i) {
     ret[i] = types[i].toNativeType();
+  }
   return ret;
 }
 
 /** Converts an array of types to its combined string representation. */
 export function typesToString(types: Type[]): string {
   var k = types.length;
-  if (!k)
-    return "";
+  if (!k) return "";
   var sb = new Array<string>(k);
-  for (var i = 0; i < k; ++i)
+  for (var i = 0; i < k; ++i) {
     sb[i] = types[i].toString();
+  }
   return sb.join(", ");
 }

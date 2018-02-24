@@ -38,8 +38,7 @@ export class Decompiler {
     this.push(name);
     this.push("(");
      for (var i: Index = 0, k: Index = _BinaryenFunctionGetNumParams(func); i < k; ++i) {
-      if (i > 0)
-        this.push(", ");
+      if (i > 0) this.push(", ");
       this.push("$");
       this.push(i.toString(10));
       this.push(": ");
@@ -119,8 +118,9 @@ export class Decompiler {
           this.push("break ");
           this.push(string);
           this.push(";\n");
-        } else
+        } else {
           this.push("break;\n");
+        }
         return;
 
       case ExpressionId.Switch:

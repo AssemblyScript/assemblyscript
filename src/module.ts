@@ -108,7 +108,7 @@ export enum UnaryOp {
   // ExtendI16ToI64 = _BinaryenExtendS16Int64()
   // ExtendI32ToI64 = _BinaryenExtendS32Int64()
 
-  // see: https://github.com/WebAssembly/nontrapping-float-to-int-conversions/blob/master/proposals/nontrapping-float-to-int-conversion/Overview.md#design
+  // see: https://github.com/WebAssembly/nontrapping-float-to-int-conversions
   // TruncF32ToI32Sat
   // TruncF32ToU32Sat
   // TruncF64ToI32Sat
@@ -204,7 +204,7 @@ export enum HostOp {
   GrowMemory = _BinaryenGrowMemory(),
   HasFeature = _BinaryenHasFeature(),
 
-  // see: https://github.com/WebAssembly/bulk-memory-operations/blob/master/proposals/bulk-memory-operations/Overview.md#design
+  // see: https://github.com/WebAssembly/bulk-memory-operations
   // MoveMemory
   // SetMemory
 }
@@ -262,7 +262,11 @@ export class Module {
 
   // types
 
-  addFunctionType(name: string, result: NativeType, paramTypes: NativeType[]): FunctionRef {
+  addFunctionType(
+    name: string,
+    result: NativeType,
+    paramTypes: NativeType[]
+  ): FunctionRef {
     var cStr = allocString(name);
     var cArr = allocI32Array(paramTypes);
     try {
@@ -273,7 +277,10 @@ export class Module {
     }
   }
 
-  getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[]): FunctionTypeRef {
+  getFunctionTypeBySignature(
+    result: NativeType,
+    paramTypes: NativeType[]
+  ): FunctionTypeRef {
     var cArr = allocI32Array(paramTypes);
     try {
       return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes.length);
@@ -282,7 +289,7 @@ export class Module {
     }
   }
 
-  // expressions
+  // constants
 
   createI32(value: i32): ExpressionRef {
     var out = this.out;
@@ -290,9 +297,9 @@ export class Module {
     return _BinaryenConst(this.ref, out);
   }
 
-  createI64(lo: i32, hi: i32 = 0): ExpressionRef {
+  createI64(valueLow: i32, valueHigh: i32 = 0): ExpressionRef {
     var out = this.out;
-    _BinaryenLiteralInt64(out, lo, hi);
+    _BinaryenLiteralInt64(out, valueLow, valueHigh);
     return _BinaryenConst(this.ref, out);
   }
 
@@ -308,15 +315,28 @@ export class Module {
     return _BinaryenConst(this.ref, out);
   }
 
-  createUnary(op: UnaryOp, expr: ExpressionRef): ExpressionRef {
+  // expressions
+
+  createUnary(
+    op: UnaryOp,
+    expr: ExpressionRef
+  ): ExpressionRef {
     return _BinaryenUnary(this.ref, op, expr);
   }
 
-  createBinary(op: BinaryOp, left: ExpressionRef, right: ExpressionRef): ExpressionRef {
+  createBinary(
+    op: BinaryOp,
+    left: ExpressionRef,
+    right: ExpressionRef
+  ): ExpressionRef {
     return _BinaryenBinary(this.ref, op, left, right);
   }
 
-  createHost(op: HostOp, name: string | null = null, operands: ExpressionRef[] | null = null): ExpressionRef {
+  createHost(
+    op: HostOp,
+    name: string | null = null,
+    operands: ExpressionRef[] | null = null
+  ): ExpressionRef {
     var cStr = allocString(name);
     var cArr = allocI32Array(operands);
     try {
@@ -327,15 +347,24 @@ export class Module {
     }
   }
 
-  createGetLocal(index: i32, type: NativeType): ExpressionRef {
+  createGetLocal(
+    index: i32,
+    type: NativeType
+  ): ExpressionRef {
     return _BinaryenGetLocal(this.ref, index, type);
   }
 
-  createTeeLocal(index: i32, value: ExpressionRef): ExpressionRef {
+  createTeeLocal(
+    index: i32,
+    value: ExpressionRef
+  ): ExpressionRef {
     return _BinaryenTeeLocal(this.ref, index, value);
   }
 
-  createGetGlobal(name: string, type: NativeType): ExpressionRef {
+  createGetGlobal(
+    name: string,
+    type: NativeType
+  ): ExpressionRef {
     var cStr = allocString(name);
     try {
       return _BinaryenGetGlobal(this.ref, cStr, type);
@@ -344,45 +373,96 @@ export class Module {
     }
   }
 
-  createLoad(bytes: Index, signed: bool, ptr: ExpressionRef, type: NativeType, offset: Index = 0): ExpressionRef {
+  createLoad(
+    bytes: Index,
+    signed: bool,
+    ptr: ExpressionRef,
+    type: NativeType,
+    offset: Index = 0
+  ): ExpressionRef {
     return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, /* always aligned */ bytes, type, ptr);
   }
 
-  createStore(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset: Index = 0): ExpressionRef {
+  createStore(
+    bytes: Index,
+    ptr: ExpressionRef,
+    value: ExpressionRef,
+    type: NativeType,
+    offset: Index = 0
+  ): ExpressionRef {
     return _BinaryenStore(this.ref, bytes, offset, /* always aligned */ bytes, ptr, value, type);
   }
 
-  createAtomicLoad(bytes: Index, ptr: ExpressionRef, type: NativeType, offset: Index = 0): ExpressionRef {
+  createAtomicLoad(
+    bytes: Index,
+    ptr: ExpressionRef,
+    type: NativeType,
+    offset: Index = 0
+  ): ExpressionRef {
     return _BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr);
   }
 
-  createAtomicStore(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset: Index = 0): ExpressionRef {
+  createAtomicStore(
+    bytes: Index,
+    ptr: ExpressionRef,
+    value: ExpressionRef,
+    type: NativeType,
+    offset: Index = 0
+  ): ExpressionRef {
     return _BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type);
   }
 
-  createAtomicRMW(op: AtomicRMWOp, bytes: Index, offset: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType): ExpressionRef {
+  createAtomicRMW(
+    op: AtomicRMWOp,
+    bytes: Index,
+    offset: Index,
+    ptr: ExpressionRef,
+    value: ExpressionRef,
+    type: NativeType
+  ): ExpressionRef {
     return _BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type);
   }
 
-  createAtomicCmpxchg(bytes: Index, offset: Index, ptr: ExpressionRef, expected: ExpressionRef, replacement: ExpressionRef, type: NativeType): ExpressionRef {
+  createAtomicCmpxchg(
+    bytes: Index,
+    offset: Index,
+    ptr: ExpressionRef,
+    expected: ExpressionRef,
+    replacement: ExpressionRef,
+    type: NativeType
+  ): ExpressionRef {
     return _BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type);
   }
 
-  createAtomicWait(ptr: ExpressionRef, expected: ExpressionRef, timeout: ExpressionRef, expectedType: NativeType): ExpressionRef {
+  createAtomicWait(
+    ptr: ExpressionRef,
+    expected: ExpressionRef,
+    timeout: ExpressionRef,
+    expectedType: NativeType
+  ): ExpressionRef {
     return _BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType);
   }
 
-  createAtomicWake(ptr: ExpressionRef, wakeCount: ExpressionRef): ExpressionRef {
+  createAtomicWake(
+    ptr: ExpressionRef,
+    wakeCount: ExpressionRef
+  ): ExpressionRef {
     return _BinaryenAtomicWake(this.ref, ptr, wakeCount);
   }
 
   // statements
 
-  createSetLocal(index: Index, value: ExpressionRef): ExpressionRef {
+  createSetLocal(
+    index: Index,
+    value: ExpressionRef
+  ): ExpressionRef {
     return _BinaryenSetLocal(this.ref, index, value);
   }
 
-  createSetGlobal(name: string, value: ExpressionRef): ExpressionRef {
+  createSetGlobal(
+    name: string,
+    value: ExpressionRef
+  ): ExpressionRef {
     var cStr = allocString(name);
     try {
       return _BinaryenSetGlobal(this.ref, cStr, value);
@@ -391,7 +471,11 @@ export class Module {
     }
   }
 
-  createBlock(label: string | null, children: ExpressionRef[], type: NativeType = NativeType.Auto): ExpressionRef {
+  createBlock(
+    label: string | null,
+    children: ExpressionRef[],
+    type: NativeType = NativeType.None
+  ): ExpressionRef {
     var cStr = allocString(label);
     var cArr = allocI32Array(children);
     try {
@@ -402,7 +486,11 @@ export class Module {
     }
   }
 
-  createBreak(label: string | null, condition: ExpressionRef = 0, value: ExpressionRef = 0): ExpressionRef {
+  createBreak(
+    label: string | null,
+    condition: ExpressionRef = 0,
+    value: ExpressionRef = 0
+  ): ExpressionRef {
     var cStr = allocString(label);
     try {
       return _BinaryenBreak(this.ref, cStr, condition, value);
@@ -411,11 +499,16 @@ export class Module {
     }
   }
 
-  createDrop(expression: ExpressionRef): ExpressionRef {
+  createDrop(
+    expression: ExpressionRef
+  ): ExpressionRef {
     return _BinaryenDrop(this.ref, expression);
   }
 
-  createLoop(label: string | null, body: ExpressionRef): ExpressionRef {
+  createLoop(
+    label: string | null,
+    body: ExpressionRef
+  ): ExpressionRef {
     var cStr = allocString(label);
     try {
       return _BinaryenLoop(this.ref, cStr, body);
@@ -424,7 +517,11 @@ export class Module {
     }
   }
 
-  createIf(condition: ExpressionRef, ifTrue: ExpressionRef, ifFalse: ExpressionRef = 0): ExpressionRef {
+  createIf(
+    condition: ExpressionRef,
+    ifTrue: ExpressionRef,
+    ifFalse: ExpressionRef = 0
+  ): ExpressionRef {
     return _BinaryenIf(this.ref, condition, ifTrue, ifFalse);
   }
 
@@ -432,18 +529,30 @@ export class Module {
     return _BinaryenNop(this.ref);
   }
 
-  createReturn(expression: ExpressionRef = 0): ExpressionRef {
+  createReturn(
+    expression: ExpressionRef = 0
+  ): ExpressionRef {
     return _BinaryenReturn(this.ref, expression);
   }
 
-  createSelect(ifTrue: ExpressionRef, ifFalse: ExpressionRef, condition: ExpressionRef): ExpressionRef {
+  createSelect(
+    ifTrue: ExpressionRef,
+    ifFalse: ExpressionRef,
+    condition: ExpressionRef
+  ): ExpressionRef {
     return _BinaryenSelect(this.ref, condition, ifTrue, ifFalse);
   }
 
-  createSwitch(names: string[], defaultName: string | null, condition: ExpressionRef, value: ExpressionRef = 0): ExpressionRef {
+  createSwitch(
+    names: string[],
+    defaultName: string | null,
+    condition: ExpressionRef,
+    value: ExpressionRef = 0
+  ): ExpressionRef {
     var strs = new Array<usize>(names.length);
-    for (var i = 0, k: i32 = names.length; i < k; ++i)
+    for (var i = 0, k: i32 = names.length; i < k; ++i) {
       strs[i] = allocString(names[i]);
+    }
     var cArr = allocI32Array(strs);
     var cStr = allocString(defaultName);
     try {
@@ -455,7 +564,11 @@ export class Module {
     }
   }
 
-  createCall(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef {
+  createCall(
+    target: string,
+    operands: ExpressionRef[] | null,
+    returnType: NativeType
+  ): ExpressionRef {
     var cStr = allocString(target);
     var cArr = allocI32Array(operands);
     try {
@@ -466,7 +579,11 @@ export class Module {
     }
   }
 
-  createCallImport(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef {
+  createCallImport(
+    target: string,
+    operands: ExpressionRef[] | null,
+    returnType: NativeType
+  ): ExpressionRef {
     var cStr = allocString(target);
     var cArr = allocI32Array(operands);
     try {
@@ -483,7 +600,12 @@ export class Module {
 
   // meta
 
-  addGlobal(name: string, type: NativeType, mutable: bool, initializer: ExpressionRef): GlobalRef {
+  addGlobal(
+    name: string,
+    type: NativeType,
+    mutable: bool,
+    initializer: ExpressionRef
+  ): GlobalRef {
     var cStr = allocString(name);
     try {
       return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
@@ -492,7 +614,12 @@ export class Module {
     }
   }
 
-  addFunction(name: string, type: FunctionTypeRef, varTypes: NativeType[], body: ExpressionRef): FunctionRef {
+  addFunction(
+    name: string,
+    type: FunctionTypeRef,
+    varTypes: NativeType[],
+    body: ExpressionRef
+  ): FunctionRef {
     var cStr = allocString(name);
     var cArr = allocI32Array(varTypes);
     try {
@@ -512,7 +639,10 @@ export class Module {
     }
   }
 
-  addFunctionExport(internalName: string, externalName: string): ExportRef {
+  addFunctionExport(
+    internalName: string,
+    externalName: string
+  ): ExportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalName);
     try {
@@ -523,7 +653,10 @@ export class Module {
     }
   }
 
-  addTableExport(internalName: string, externalName: string): ExportRef {
+  addTableExport(
+    internalName: string,
+    externalName: string
+  ): ExportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalName);
     try {
@@ -534,7 +667,10 @@ export class Module {
     }
   }
 
-  addMemoryExport(internalName: string, externalName: string): ExportRef {
+  addMemoryExport(
+    internalName: string,
+    externalName: string
+  ): ExportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalName);
     try {
@@ -545,7 +681,10 @@ export class Module {
     }
   }
 
-  addGlobalExport(internalName: string, externalName: string): ExportRef {
+  addGlobalExport(
+    internalName: string,
+    externalName: string
+  ): ExportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalName);
     try {
@@ -565,7 +704,12 @@ export class Module {
     }
   }
 
-  addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, functionType: FunctionTypeRef): ImportRef {
+  addFunctionImport(
+    internalName: string,
+    externalModuleName: string,
+    externalBaseName: string,
+    functionType: FunctionTypeRef
+  ): ImportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
@@ -578,7 +722,11 @@ export class Module {
     }
   }
 
-  addTableImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
+  addTableImport(
+    internalName: string,
+    externalModuleName: string,
+    externalBaseName: string
+  ): ImportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
@@ -591,7 +739,11 @@ export class Module {
     }
   }
 
-  addMemoryImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef {
+  addMemoryImport(
+    internalName: string,
+    externalModuleName: string,
+    externalBaseName: string
+  ): ImportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
@@ -604,7 +756,12 @@ export class Module {
     }
   }
 
-  addGlobalImport(internalName: string, externalModuleName: string, externalBaseName: string, globalType: NativeType): ImportRef {
+  addGlobalImport(
+    internalName: string,
+    externalModuleName: string,
+    externalBaseName: string,
+    globalType: NativeType
+  ): ImportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
@@ -626,7 +783,13 @@ export class Module {
     }
   }
 
-  setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName: string | null = null): void {
+  setMemory(
+    initial: Index,
+    maximum: Index,
+    segments: MemorySegment[],
+    target: Target,
+    exportName: string | null = null
+  ): void {
     var cStr = allocString(exportName);
     var k = segments.length;
     var segs = new Array<usize>(k);
@@ -691,14 +854,16 @@ export class Module {
   runPasses(passes: string[], func: FunctionRef = 0): void {
     var k = passes.length;
     var names = new Array<usize>(k);
-    for (var i = 0; i < k; ++i)
+    for (var i = 0; i < k; ++i) {
       names[i] = allocString(passes[i]);
+    }
     var cArr = allocI32Array(names);
     try {
-      if (func)
+      if (func) {
         _BinaryenFunctionRunPasses(func, this.ref, cArr, k);
-      else
+      } else {
         _BinaryenModuleRunPasses(this.ref, cArr, k);
+      }
     } finally {
       free_memory(cArr);
       for (; i >= 0; --i) free_memory(names[i]);
@@ -752,10 +917,12 @@ export class Module {
     return Relooper.create(this);
   }
 
-  // currently supports side effect free expressions only
-  cloneExpression(expr: ExpressionRef, noSideEffects: bool = false, maxDepth: i32 = i32.MAX_VALUE): ExpressionRef {
-    if (maxDepth < 0)
-      return 0;
+  cloneExpression(expr: ExpressionRef,
+    noSideEffects: bool = false,
+    maxDepth: i32 = i32.MAX_VALUE
+  ): ExpressionRef { // currently supports side effect free expressions only
+    if (maxDepth < 0) return 0;
+    maxDepth -= 1;
 
     var nested1: ExpressionRef,
         nested2: ExpressionRef;
@@ -764,39 +931,65 @@ export class Module {
 
       case ExpressionId.Const:
         switch (_BinaryenExpressionGetType(expr)) {
-          case NativeType.I32: return this.createI32(_BinaryenConstGetValueI32(expr));
-          case NativeType.I64: return this.createI64(_BinaryenConstGetValueI64Low(expr), _BinaryenConstGetValueI64High(expr));
-          case NativeType.F32: return this.createF32(_BinaryenConstGetValueF32(expr));
-          case NativeType.F64: return this.createF64(_BinaryenConstGetValueF64(expr));
-          default: throw new Error("concrete type expected");
+          case NativeType.I32:
+            return this.createI32(_BinaryenConstGetValueI32(expr));
+          case NativeType.I64:
+            return this.createI64(
+              _BinaryenConstGetValueI64Low(expr),
+              _BinaryenConstGetValueI64High(expr)
+            );
+          case NativeType.F32:
+            return this.createF32(_BinaryenConstGetValueF32(expr));
+          case NativeType.F64:
+            return this.createF64(_BinaryenConstGetValueF64(expr));
+          default:
+            throw new Error("concrete type expected");
         }
 
       case ExpressionId.GetLocal:
-        return _BinaryenGetLocal(this.ref, _BinaryenGetLocalGetIndex(expr), _BinaryenExpressionGetType(expr));
+        return _BinaryenGetLocal(this.ref,
+          _BinaryenGetLocalGetIndex(expr),
+          _BinaryenExpressionGetType(expr)
+        );
 
       case ExpressionId.GetGlobal:
         var globalName = _BinaryenGetGlobalGetName(expr);
-        if (!globalName)
-          break;
+        if (!globalName) break;
         return _BinaryenGetGlobal(this.ref, globalName, _BinaryenExpressionGetType(expr));
 
       case ExpressionId.Load:
-        if (!(nested1 = this.cloneExpression(_BinaryenLoadGetPtr(expr), noSideEffects, maxDepth - 1)))
+        if (!(nested1 = this.cloneExpression(_BinaryenLoadGetPtr(expr), noSideEffects, maxDepth))) {
           break;
+        }
         return _BinaryenLoadIsAtomic(expr)
-          ? _BinaryenAtomicLoad(this.ref, _BinaryenLoadGetBytes(expr), _BinaryenLoadGetOffset(expr), _BinaryenExpressionGetType(expr), nested1)
-          : _BinaryenLoad(this.ref, _BinaryenLoadGetBytes(expr), _BinaryenLoadIsSigned(expr) ? 1 : 0, _BinaryenLoadGetOffset(expr),  _BinaryenLoadGetAlign(expr), _BinaryenExpressionGetType(expr), nested1);
+          ? _BinaryenAtomicLoad(this.ref,
+              _BinaryenLoadGetBytes(expr),
+              _BinaryenLoadGetOffset(expr),
+              _BinaryenExpressionGetType(expr),
+              nested1
+            )
+          : _BinaryenLoad(this.ref,
+              _BinaryenLoadGetBytes(expr),
+              _BinaryenLoadIsSigned(expr) ? 1 : 0,
+              _BinaryenLoadGetOffset(expr),
+               _BinaryenLoadGetAlign(expr),
+               _BinaryenExpressionGetType(expr),
+               nested1
+            );
 
       case ExpressionId.Unary:
-        if (!(nested1 = this.cloneExpression(_BinaryenUnaryGetValue(expr), noSideEffects, maxDepth - 1)))
+        if (!(nested1 = this.cloneExpression(_BinaryenUnaryGetValue(expr), noSideEffects, maxDepth))) {
           break;
+        }
         return _BinaryenUnary(this.ref, _BinaryenUnaryGetOp(expr), nested1);
 
       case ExpressionId.Binary:
-        if (!(nested1 = this.cloneExpression(_BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth - 1)))
+        if (!(nested1 = this.cloneExpression(_BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth))) {
           break;
-        if (!(nested2 = this.cloneExpression(_BinaryenBinaryGetRight(expr), noSideEffects, maxDepth - 1)))
+        }
+        if (!(nested2 = this.cloneExpression(_BinaryenBinaryGetRight(expr), noSideEffects, maxDepth))) {
           break;
+        }
         return _BinaryenBinary(this.ref, _BinaryenBinaryGetOp(expr), nested1, nested2);
     }
     return 0;
@@ -817,7 +1010,13 @@ export class Module {
     return readString(_BinaryenModuleGetDebugInfoFileName(this.ref, index));
   }
 
-  setDebugLocation(func: FunctionRef, expr: ExpressionRef, fileIndex: Index, lineNumber: Index, columnNumber: Index): void {
+  setDebugLocation(
+    func: FunctionRef,
+    expr: ExpressionRef,
+    fileIndex: Index,
+    lineNumber: Index,
+    columnNumber: Index
+  ): void {
     _BinaryenFunctionSetDebugLocation(func, expr, fileIndex, lineNumber, columnNumber);
   }
 }
@@ -876,8 +1075,9 @@ function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
   var ptr = allocate_memory(u8s.length);
   var idx = ptr;
-  for (var i = 0, k = u8s.length; i < k; ++i)
+  for (var i = 0, k = u8s.length; i < k; ++i) {
     store<u8>(idx++, u8s[i]);
+  }
   return ptr;
 }
 
@@ -901,20 +1101,22 @@ function stringLengthUTF8(str: string): usize {
   var len = 0;
   for (var i = 0, k = str.length; i < k; ++i) {
     var u = str.charCodeAt(i);
-    if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k)
+    if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
       u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
-    if (u <= 0x7F)
+    }
+    if (u <= 0x7F) {
       ++len;
-    else if (u <= 0x7FF)
+    } else if (u <= 0x7FF) {
       len += 2;
-    else if (u <= 0xFFFF)
+    } else if (u <= 0xFFFF) {
       len += 3;
-    else if (u <= 0x1FFFFF)
+    } else if (u <= 0x1FFFFF) {
       len += 4;
-    else if (u <= 0x3FFFFFF)
+    } else if (u <= 0x3FFFFFF) {
       len += 5;
-    else
+    } else {
       len += 6;
+    }
   }
   return len;
 }
@@ -925,11 +1127,12 @@ function allocString(str: string | null): usize {
   var idx = ptr;
   for (var i = 0, k = str.length; i < k; ++i) {
     var u = str.charCodeAt(i);
-    if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k)
+    if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
       u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
-    if (u <= 0x7F)
+    }
+    if (u <= 0x7F) {
       store<u8>(idx++, u as u8);
-    else if (u <= 0x7FF) {
+    } else if (u <= 0x7FF) {
       store<u8>(idx++, (0xC0 |  (u >>> 6)       ) as u8);
       store<u8>(idx++, (0x80 | ( u         & 63)) as u8);
     } else if (u <= 0xFFFF) {
@@ -971,8 +1174,9 @@ export function readInt(ptr: usize): i32 {
 
 export function readBuffer(ptr: usize, length: usize): Uint8Array {
   var ret = new Uint8Array(length);
-  for (var i: usize = 0; i < length; ++i)
+  for (var i: usize = 0; i < length; ++i) {
     ret[i] = load<u8>(ptr + i);
+  }
   return ret;
 }
 

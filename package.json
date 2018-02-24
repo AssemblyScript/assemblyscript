@@ -11,14 +11,15 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "44.0.0",
     "glob": "^7.1.2",
     "long": "^4.0.0",
     "minimist": "^1.2.0",
-    "ts-node": "^4.1.0"
+    "ts-node": "^5.0.0"
   },
   "devDependencies": {
+    "@types/node": "^9.4.6",
     "babel-minify-webpack-plugin": "^0.3.0",
+    "binaryen": "44.0.0-nightly.20180224",
     "browser-process-hrtime": "^0.1.2",
     "chalk": "^2.3.1",
     "diff": "^3.4.0",
@@ -39,7 +40,7 @@
   "scripts": {
     "build": "webpack",
     "clean": "node scripts/clean",
-    "lint": "tslint --project src",
+    "lint": "tslint -c tslint.json --project src --formatters-dir lib/tslint --format as",
     "test:config": "npm run test:config:portable --scripts-prepend-node-path && npm run test:config:src --scripts-prepend-node-path",
     "test:config:portable": "tsc --noEmit -p std/portable --diagnostics --listFiles",
     "test:config:src": "tsc --noEmit -p src --diagnostics --listFiles",

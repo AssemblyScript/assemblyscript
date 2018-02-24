@@ -8,7 +8,6 @@ import {
 } from "./diagnosticMessages.generated";
 
 import {
-  CharCode,
   isLineBreak
 } from "./util/charcode";
 
@@ -59,24 +58,39 @@ export class DiagnosticMessage {
     this.message = message;
   }
 
-  static create(code: DiagnosticCode, category: DiagnosticCategory, arg0: string | null = null, arg1: string | null = null): DiagnosticMessage {
+  static create(
+    code: DiagnosticCode,
+    category: DiagnosticCategory,
+    arg0: string | null = null,
+    arg1: string | null = null
+  ): DiagnosticMessage {
     var message = diagnosticCodeToString(code);
-    if (arg0 != null)
-      message = message.replace("{0}", arg0);
-    if (arg1 != null)
-      message = message.replace("{1}", arg1);
+    if (arg0 != null) message = message.replace("{0}", arg0);
+    if (arg1 != null) message = message.replace("{1}", arg1);
     return new DiagnosticMessage(code, category, message);
   }
 
-  static createInfo(code: DiagnosticCode, arg0: string | null = null, arg1: string | null = null): DiagnosticMessage {
+  static createInfo(
+    code: DiagnosticCode,
+    arg0: string | null = null,
+    arg1: string | null = null
+  ): DiagnosticMessage {
     return DiagnosticMessage.create(code, DiagnosticCategory.INFO, arg0, arg1);
   }
 
-  static createWarning(code: DiagnosticCode, arg0: string | null = null, arg1: string | null = null): DiagnosticMessage {
+  static createWarning(
+    code: DiagnosticCode,
+    arg0: string | null = null,
+    arg1: string | null = null
+  ): DiagnosticMessage {
     return DiagnosticMessage.create(code, DiagnosticCategory.WARNING, arg0, arg1);
   }
 
-  static createError(code: DiagnosticCode, arg0: string | null = null, arg1: string | null = null): DiagnosticMessage {
+  static createError(
+    code: DiagnosticCode,
+    arg0: string | null = null,
+    arg1: string | null = null
+  ): DiagnosticMessage {
     return DiagnosticMessage.create(code, DiagnosticCategory.ERROR, arg0, arg1);
   }
 
@@ -86,17 +100,41 @@ export class DiagnosticMessage {
   }
 
   toString(): string {
-    if (this.range)
-      return diagnosticCategoryToString(this.category) + " " + this.code.toString(10) + ": \"" + this.message + "\" in " + this.range.source.normalizedPath + " @ " + this.range.start.toString(10) + "," + this.range.end.toString(10);
-    return diagnosticCategoryToString(this.category) + " " + this.code.toString(10) + ": " + this.message;
+    if (this.range) {
+      return (
+        diagnosticCategoryToString(this.category) +
+        " " +
+        this.code.toString(10) +
+        ": \"" +
+        this.message +
+        "\" in " +
+        this.range.source.normalizedPath +
+        " @ " +
+        this.range.start.toString(10) +
+        "," +
+        this.range.end.toString(10)
+      );
+    }
+    return (
+      diagnosticCategoryToString(this.category) +
+      " " +
+      this.code.toString(10) +
+      ": " +
+      this.message
+    );
   }
 }
 
-export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: bool = false, showContext: bool = false): string {
+export function formatDiagnosticMessage(
+  message: DiagnosticMessage,
+  useColors: bool = false,
+  showContext: bool = false
+): string {
   // format context first (uses same string builder)
   var context = "";
-  if (message.range && showContext)
+  if (message.range && showContext) {
     context = formatDiagnosticContext(message.range, useColors);
+  }
 
   // general information
   var sb: string[] = [];
@@ -111,7 +149,6 @@ export function formatDiagnosticMessage(message: DiagnosticMessage, useColors: b
   // range information if available
   if (message.range) {
     var range = message.range;
-    var text = range.source.text;
     if (showContext) {
       sb.push("\n");
       sb.push(context);
@@ -133,10 +170,12 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
   var len = text.length;
   var start = range.start;
   var end = range.end;
-  while (start > 0 && !isLineBreak(text.charCodeAt(start - 1)))
+  while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) {
     start--;
-  while (end < len && !isLineBreak(text.charCodeAt(end)))
+  }
+  while (end < len && !isLineBreak(text.charCodeAt(end))) {
     end++;
+  }
   var sb: string[] = [
     "\n ",
     text.substring(start, end),
@@ -149,8 +188,11 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
   if (useColors) sb.push(colorRed);
   if (range.start == range.end) {
     sb.push("^");
-  } else while (start++ < range.end)
-    sb.push("~");
+  } else {
+    while (start++ < range.end) {
+      sb.push("~");
+    }
+  }
   if (useColors) sb.push(colorReset);
   return sb.join("");
 }
@@ -164,7 +206,13 @@ export abstract class DiagnosticEmitter {
     this.diagnostics = diagnostics ? <DiagnosticMessage[]>diagnostics : new Array();
   }
 
-  emitDiagnostic(code: DiagnosticCode, category: DiagnosticCategory, range: Range, arg0: string | null = null, arg1: string | null = null) {
+  emitDiagnostic(
+    code: DiagnosticCode,
+    category: DiagnosticCategory,
+    range: Range,
+    arg0: string | null = null,
+    arg1: string | null = null
+  ) {
     var message = DiagnosticMessage.create(code, category, arg0, arg1).withRange(range);
     this.diagnostics.push(message);
     // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary

@@ -6,7 +6,6 @@ const aConst: i32 = 0;
 function aFunc(): void {
 }
 enum AnEnum {
-
 }
 class AClass {
 }

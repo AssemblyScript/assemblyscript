@@ -93,8 +93,9 @@ export function normalize(path: string): string {
 
 /** Resolves the specified path relative to the specified origin. */
 export function resolve(normalizedPath: string, origin: string): string {
-  if (normalizedPath.startsWith("std/"))
+  if (normalizedPath.startsWith("std/")) {
     return normalizedPath;
+  }
   return normalize(
     dirname(origin) + String.fromCharCode(separator) + normalizedPath
   );
@@ -103,8 +104,10 @@ export function resolve(normalizedPath: string, origin: string): string {
 /** Obtains the directory portion of a normalized path. */
 export function dirname(normalizedPath: string): string {
   var pos = normalizedPath.length;
-  while (--pos > 0)
-    if (normalizedPath.charCodeAt(pos) == separator)
+  while (--pos > 0) {
+    if (normalizedPath.charCodeAt(pos) == separator) {
       return normalizedPath.substring(0, pos);
+    }
+  }
   return ".";
 }

@@ -13,13 +13,13 @@ try {
 } catch (e) {
   try {
     require("ts-node").register({
-      project: path.join(__dirname, "..", "src")
+      project: path.join(__dirname, "..", "src", "tsconfig.json")
     });
     require("../src/glue/js");
     assemblyscript = require("../src");
     isDev = true;
   } catch (e) {
-    // last resort: browser bundle under node
+    // last resort: browser bundle under node (relative to 'dist/')
     assemblyscript = require("./assemblyscript");
     isDev = false;
   }
@@ -480,7 +480,7 @@ exports.main = function main(argv, options, callback) {
     }
 
     // Write asm.js
-    if (args.asmjsFile != null && args.asmjsFile.length) {
+    if (args.asmjsFile != null) {
       let asm;
       if (args.asmjsFile.length) {
         stats.emitCount++;

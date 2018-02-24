@@ -338,8 +338,7 @@ const unicodeIdentifierPart: u16[] = [
 ];
 
 function lookupInUnicodeMap(code: u16, map: u16[]): bool {
-  if (code < map[0])
-    return false;
+  if (code < map[0]) return false;
 
   var lo = 0;
   var hi = map.length;
@@ -348,12 +347,14 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
   while (lo + 1 < hi) {
     mid = lo + (hi - lo) / 2;
     mid -= mid % 2;
-    if (map[mid] <= code && code <= map[mid + 1])
+    if (map[mid] <= code && code <= map[mid + 1]) {
       return true;
-    if (code < map[mid])
+    }
+    if (code < map[mid]) {
       hi = mid;
-    else
+    } else {
       lo = mid + 2;
+    }
   }
   return false;
 }

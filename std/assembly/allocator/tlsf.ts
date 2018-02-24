@@ -459,9 +459,11 @@ export function allocate_memory(size: usize): usize {
 
       // request more memory
       var pagesBefore = current_memory();
-      var pagesWanted = max(pagesBefore, ((size + 0xffff) & ~0xffff) >>> 16);
+      var pagesNeeded = ((size + 0xffff) & ~0xffff) >>> 16;
+      var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
       if (grow_memory(pagesWanted) < 0)
-        unreachable(); // out of memory
+        if (grow_memory(pagesNeeded) < 0)
+          unreachable(); // out of memory
       var pagesAfter = current_memory();
       root.addMemory(<usize>pagesBefore << 16, <usize>pagesAfter << 16);
       block = assert(root.search(size)); // must be found now

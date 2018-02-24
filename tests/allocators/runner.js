@@ -38,11 +38,20 @@ function runner(allocator, runs, allocs) {
   var currentMem = allocator.memory.buffer.byteLength;
   console.log("mem initial: " + currentMem);
 
+  function testMemChanged() {
+    var actualMem = allocator.memory.buffer.byteLength;
+    if (actualMem > currentMem) {
+      console.log("mem changed: " + currentMem + " -> " + actualMem);
+      currentMem = actualMem;
+    }
+  }
+
   try {
     for (var j = 0; j < runs; ++j) {
       console.log("run " + (j + 1) + " (" + allocs + " allocations) ...");
       for (var i = 0; i < allocs; ++i) {
         var ptr = randomAlloc();
+        testMemChanged();
 
         // immediately free every 4th
         if (!(i % 4)) preciseFree(ptr);
@@ -65,10 +74,7 @@ function runner(allocator, runs, allocs) {
       if (ptr !== base)
         throw Error("expected " + base + " but got " + ptr);
       allocator.free_memory(ptr);
-      if (allocator.memory.buffer.byteLength > currentMem) {
-        currentMem = allocator.memory.buffer.byteLength;
-        console.log("mem changed: " + currentMem);
-      }
+      testMemChanged();
     }
   } finally {
     // mem(allocator.memory, 0, 0x10000);

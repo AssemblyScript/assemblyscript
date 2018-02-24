@@ -2,7 +2,10 @@ var fs = require("fs");
 
 var messages = require(__dirname + "/../src/diagnosticMessages.json");
 
-var sb = [ "// code below is generated from diagnosticsMessages.json by scripts/build-diagnostics\n\n" ];
+var sb = [
+  "// code below is generated from diagnosticsMessages.json by scripts/build-diagnostics\n",
+  "/* tslint:disable:max-line-length */\n\n"
+];
 
 function makeKey(text) {
   return text.replace(/[^\w]+/g, "_").replace(/_+$/, "");

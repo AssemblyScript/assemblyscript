@@ -434,8 +434,9 @@ export abstract class Node {
         case "offset": stmt.decoratorKind = DecoratorKind.OFFSET; break;
         default: stmt.decoratorKind = DecoratorKind.CUSTOM; break;
       }
-    } else
+    } else {
       stmt.decoratorKind = DecoratorKind.CUSTOM;
+    }
     return stmt;
   }
 
@@ -499,13 +500,14 @@ export abstract class Node {
     stmt.path = path;
     if (path) {
       var normalizedPath = normalizePath(path.value);
-      if (path.value.startsWith(".")) // relative
+      if (path.value.startsWith(".")) { // relative
         stmt.normalizedPath = resolvePath(
           normalizedPath,
           range.source.normalizedPath
         );
-      else // absolute
+      } else { // absolute
         stmt.normalizedPath = normalizedPath;
+      }
       stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
     } else {
       stmt.normalizedPath = null;
@@ -535,10 +537,11 @@ export abstract class Node {
     var elem = new ExportMember();
     elem.range = range;
     elem.name = name; name.parent = elem;
-    if (!externalName)
+    if (!externalName) {
       externalName = name;
-    else
+    } else {
       externalName.parent = elem;
+    }
     elem.externalName = externalName;
     return elem;
   }
@@ -577,13 +580,14 @@ export abstract class Node {
     stmt.namespaceName = null;
     stmt.path = path;
     var normalizedPath = normalizePath(path.value);
-    if (path.value.startsWith(".")) // relative
+    if (path.value.startsWith(".")) { // relative
       stmt.normalizedPath = resolvePath(
         normalizedPath,
         range.source.normalizedPath
       );
-    else // absolute
+    } else { // absolute
       stmt.normalizedPath = normalizedPath;
+    }
     stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
     return stmt;
   }
@@ -614,10 +618,11 @@ export abstract class Node {
     var elem = new ImportDeclaration();
     elem.range = range;
     elem.externalName = externalName; externalName.parent = elem;
-    if (!name)
+    if (!name) {
       name = externalName;
-    else
+    } else {
       name.parent = elem;
+    }
     elem.name = name;
     return elem;
   }
@@ -996,7 +1001,7 @@ export class CallExpression extends Expression {
   arguments: Expression[];
 }
 
-/** Represents a comma expression composed of multiple sequential expressions. */
+/** Represents a comma expression composed of multiple expressions. */
 export class CommaExpression extends Expression {
   kind = NodeKind.COMMA;
 
@@ -1223,47 +1228,50 @@ export abstract class DeclarationStatement extends Statement {
 
   /** Gets the mangled program-level internal name of this declaration. */
   get programLevelInternalName(): string {
-    if (!this.cachedProgramLevelInternalName)
+    if (!this.cachedProgramLevelInternalName) {
       this.cachedProgramLevelInternalName = mangleInternalName(this, true);
+    }
     return this.cachedProgramLevelInternalName;
   }
 
   /** Gets the mangled file-level internal name of this declaration. */
   get fileLevelInternalName(): string {
-    if (!this.cachedFileLevelInternalName)
+    if (!this.cachedFileLevelInternalName) {
       this.cachedFileLevelInternalName = mangleInternalName(this, false);
+    }
     return this.cachedFileLevelInternalName;
   }
 
   /** Tests if this is a top-level declaration within its source file. */
   get isTopLevel(): bool {
     var parent = this.parent;
-    if (!parent)
+    if (!parent) {
       return false;
-    if (parent.kind == NodeKind.VARIABLE)
-      if (!(parent = parent.parent))
-        return false;
+    }
+    if (parent.kind == NodeKind.VARIABLE && !(parent = parent.parent)) {
+      return false;
+    }
     return parent.kind == NodeKind.SOURCE;
   }
 
   /** Tests if this declaration is a top-level export within its source file. */
   get isTopLevelExport(): bool {
     var parent = this.parent;
-    if (!parent)
+    if (!parent || (parent.kind == NodeKind.VARIABLE && !(parent = parent.parent))) {
       return false;
-    if (parent.kind == NodeKind.VARIABLE)
-      if (!(parent = parent.parent))
-        return false;
-    if (parent.kind == NodeKind.NAMESPACEDECLARATION)
+    }
+    if (parent.kind == NodeKind.NAMESPACEDECLARATION) {
       return (
         hasModifier(ModifierKind.EXPORT, this.modifiers) &&
         (<NamespaceDeclaration>parent).isTopLevelExport
       );
-    if (parent.kind == NodeKind.CLASSDECLARATION)
+    }
+    if (parent.kind == NodeKind.CLASSDECLARATION) {
       return (
         hasModifier(ModifierKind.STATIC, this.modifiers) &&
         (<ClassDeclaration>parent).isTopLevelExport
       );
+    }
     return (
       parent.kind == NodeKind.SOURCE &&
       hasModifier(ModifierKind.EXPORT, this.modifiers)
@@ -1642,9 +1650,7 @@ export class WhileStatement extends Statement {
 /** Cached unused modifiers for reuse. */
 var reusableModifiers: Modifier[] | null = null;
 
-export function setReusableModifiers(
-  modifiers: Modifier[]
-): void {
+export function setReusableModifiers(modifiers: Modifier[]): void {
   reusableModifiers = modifiers;
 }
 
@@ -1654,113 +1660,105 @@ export function createModifiers(): Modifier[] {
   if (reusableModifiers != null) {
     ret = reusableModifiers;
     reusableModifiers = null;
-  } else
-    ret = new Array(1);
+  } else {
+    ret = [];
+  }
   ret.length = 0;
   return ret;
 }
 
+// Utility
+
 /** Adds a modifier to a set of modifiers. Creates a new set if `null`. */
-export function addModifier(
-  modifier: Modifier,
-  modifiers: Modifier[] | null
-): Modifier[] {
-  if (modifiers == null)
-    modifiers = createModifiers();
+export function addModifier(modifier: Modifier, modifiers: Modifier[] | null): Modifier[] {
+  if (modifiers == null) modifiers = createModifiers();
   modifiers.push(modifier);
   return modifiers;
 }
 
 /** Gets a specific modifier from the specified set of modifiers. */
-export function getModifier(
-  kind: ModifierKind,
-  modifiers: Modifier[] | null
-): Modifier | null {
-  if (modifiers)
-    for (var i = 0, k = modifiers.length; i < k; ++i)
-      if (modifiers[i].modifierKind == kind)
+export function getModifier(kind: ModifierKind, modifiers: Modifier[] | null): Modifier | null {
+  if (modifiers) {
+    for (var i = 0, k = modifiers.length; i < k; ++i) {
+      if (modifiers[i].modifierKind == kind) {
         return modifiers[i];
+      }
+    }
+  }
   return null;
 }
 
 /** Tests whether a modifier exists in the specified set of modifiers. */
-export function hasModifier(
-  kind: ModifierKind,
-  modifiers: Modifier[] | null
-): bool {
+export function hasModifier(kind: ModifierKind, modifiers: Modifier[] | null): bool {
   return getModifier(kind, modifiers) != null;
 }
 
 /** Gets the first decorator by name within at set of decorators, if present. */
-export function getFirstDecorator(
-  name: string,
-  decorators: Decorator[] | null
-): Decorator | null {
-  if (decorators)
+export function getFirstDecorator(name: string, decorators: Decorator[] | null): Decorator | null {
+  if (decorators) {
     for (var i = 0, k = decorators.length; i < k; ++i) {
       var decorator = decorators[i];
       var expression = decorator.name;
-      if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).text == name)
+      if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).text == name) {
         return decorator;
+      }
     }
+  }
   return null;
 }
 
 /** Tests if a specific decorator is present within the specified decorators. */
-export function hasDecorator(
-  name: string,
-  decorators: Decorator[] | null
-): bool {
+export function hasDecorator(name: string, decorators: Decorator[] | null): bool {
   return getFirstDecorator(name, decorators) != null;
 }
 
 /** Mangles a declaration's name to an internal name. */
-export function mangleInternalName(
-  declaration: DeclarationStatement,
-  asGlobal: bool = false
-): string {
+export function mangleInternalName(declaration: DeclarationStatement, asGlobal: bool = false): string {
   var name = declaration.name.text;
   var parent = declaration.parent;
-  if (!parent)
-    return name;
-  if (declaration.kind == NodeKind.VARIABLEDECLARATION && parent.kind == NodeKind.VARIABLE) // skip over
-    if (!(parent = parent.parent))
-      return name;
-  if (parent.kind == NodeKind.CLASSDECLARATION)
+  if (!parent) return name;
+  if (
+    declaration.kind == NodeKind.VARIABLEDECLARATION &&
+    parent.kind == NodeKind.VARIABLE
+  ) { // skip over
+    if (!(parent = parent.parent)) return name;
+  }
+  if (parent.kind == NodeKind.CLASSDECLARATION) {
     return mangleInternalName(<ClassDeclaration>parent, asGlobal) + (
-      hasModifier(ModifierKind.STATIC, declaration.modifiers) ? STATIC_DELIMITER : INSTANCE_DELIMITER
+      hasModifier(ModifierKind.STATIC, declaration.modifiers)
+        ? STATIC_DELIMITER
+        : INSTANCE_DELIMITER
     ) + name;
-  if (parent.kind == NodeKind.NAMESPACEDECLARATION || parent.kind == NodeKind.ENUMDECLARATION)
-    return mangleInternalName(<DeclarationStatement>parent, asGlobal) + STATIC_DELIMITER + name;
-  if (asGlobal)
-    return name;
-  return declaration.range.source.internalPath + PATH_DELIMITER + name;
+  }
+  if (
+    parent.kind == NodeKind.NAMESPACEDECLARATION ||
+    parent.kind == NodeKind.ENUMDECLARATION
+  ) {
+    return mangleInternalName(<DeclarationStatement>parent, asGlobal) +
+           STATIC_DELIMITER + name;
+  }
+  return asGlobal
+    ? name
+    : declaration.range.source.internalPath + PATH_DELIMITER + name;
 }
 
 /** Mangles an external to an internal path. */
-export function mangleInternalPath(
-  path: string
-): string {
-  if (path.endsWith(".ts"))
-    path = path.substring(0, path.length - 3);
+export function mangleInternalPath(path: string): string {
+  if (path.endsWith(".ts")) path = path.substring(0, path.length - 3);
   return path;
 }
 
-function setParent(
-  nodes: Node[],
-  parent: Node
-): void {
-  for (var i = 0, k = nodes.length; i < k; ++i)
+// Helpers
+
+function setParent(nodes: Node[], parent: Node): void {
+  for (var i = 0, k = nodes.length; i < k; ++i) {
     nodes[i].parent = parent;
+  }
 }
 
-function setParentOpt(
-  nodes: (Node | null)[],
-  parent: Node
-): void {
+function setParentOpt(nodes: (Node | null)[], parent: Node): void {
   for (var i = 0, k = nodes.length; i < k; ++i) {
     var node = nodes[i];
-    if (node)
-      node.parent = parent;
+    if (node) node.parent = parent;
   }
 }
