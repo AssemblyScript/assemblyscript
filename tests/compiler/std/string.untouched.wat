@@ -71,7 +71,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 38)
+     (i32.const 39)
      (i32.const 4)
     )
     (unreachable)
@@ -187,7 +187,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 166)
+     (i32.const 168)
      (i32.const 4)
     )
     (unreachable)
@@ -215,7 +215,7 @@
     (tee_local $5
      (select
       (tee_local $5
-       (get_local $2)
+       (get_local $3)
       )
       (tee_local $6
        (i32.const 0)
@@ -294,7 +294,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 103)
+     (i32.const 105)
      (i32.const 4)
     )
     (unreachable)
@@ -400,7 +400,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 144)
+     (i32.const 145)
      (i32.const 4)
     )
     (unreachable)
@@ -467,31 +467,33 @@
       (get_local $4)
      )
      (block
-      (if
-       (i32.eqz
-        (call "$(lib)/memory/compare_memory"
-         (i32.add
+      (block
+       (if
+        (i32.eqz
+         (call "$(lib)/memory/compare_memory"
           (i32.add
-           (get_local $0)
+           (i32.add
+            (get_local $0)
+            (i32.const 4)
+           )
+           (i32.shl
+            (get_local $9)
+            (i32.const 1)
+           )
+          )
+          (i32.add
+           (get_local $1)
            (i32.const 4)
           )
           (i32.shl
-           (get_local $9)
+           (get_local $8)
            (i32.const 1)
           )
          )
-         (i32.add
-          (get_local $1)
-          (i32.const 4)
-         )
-         (i32.shl
-          (get_local $8)
-          (i32.const 1)
-         )
         )
-       )
-       (return
-        (get_local $9)
+        (return
+         (get_local $9)
+        )
        )
       )
       (set_local $9
@@ -1142,7 +1144,7 @@
                  (call $abort
                   (i32.const 0)
                   (i32.const 72)
-                  (i32.const 469)
+                  (i32.const 493)
                   (i32.const 10)
                  )
                  (unreachable)

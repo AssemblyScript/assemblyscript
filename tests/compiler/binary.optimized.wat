@@ -70,12 +70,6 @@
    )
   )
   (set_global $binary/i
-   (i32.mul
-    (get_global $binary/i)
-    (i32.const 1)
-   )
-  )
-  (set_global $binary/i
    (i32.div_s
     (get_global $binary/i)
     (i32.const 1)
@@ -131,12 +125,6 @@
   )
   (set_global $binary/i
    (i32.sub
-    (get_global $binary/i)
-    (i32.const 1)
-   )
-  )
-  (set_global $binary/i
-   (i32.mul
     (get_global $binary/i)
     (i32.const 1)
    )

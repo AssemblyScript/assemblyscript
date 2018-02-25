@@ -89,7 +89,12 @@ export declare function changetype<T>(value: void): T;
 export declare function assert<T>(isTrueish: T, message?: string): T;
 
 @builtin
-export declare function abort(message?: string | null, fileName?: string | null, lineNumber?: u32, columnNumber?: u32): void;
+export declare function abort(
+  message?: string | null,
+  fileName?: string | null,
+  lineNumber?: u32,
+  columnNumber?: u32
+): void;
 
 @builtin
 declare function i8(value: void): i8;
@@ -126,8 +131,12 @@ export { i64 };
 @builtin
 declare function isize(value: void): isize;
 namespace isize {
-  export const MIN_VALUE: isize = sizeof<i32>() == sizeof<isize>() ? -2147483648 : <usize>-9223372036854775808;
-  export const MAX_VALUE: isize = sizeof<i32>() == sizeof<isize>() ? 2147483647 : <usize>9223372036854775807;
+  export const MIN_VALUE: isize = sizeof<i32>() == sizeof<isize>()
+    ? -2147483648
+    : <usize>-9223372036854775808;
+  export const MAX_VALUE: isize = sizeof<i32>() == sizeof<isize>()
+    ? 2147483647
+    : <usize>9223372036854775807;
 }
 export { isize };
 
@@ -167,7 +176,9 @@ export { u64 };
 declare function usize(value: void): usize;
 namespace usize {
   export const MIN_VALUE: usize = 0;
-  export const MAX_VALUE: usize = sizeof<u32>() == sizeof<usize>() ? 4294967295 : <usize>18446744073709551615;
+  export const MAX_VALUE: usize = sizeof<u32>() == sizeof<usize>()
+    ? 4294967295
+    : <usize>18446744073709551615;
 }
 export { usize };
 

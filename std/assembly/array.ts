@@ -16,9 +16,12 @@ export class Array<T> {
   }
 
   constructor(capacity: i32 = 0) {
-    if (capacity < 0)
+    if (capacity < 0) {
       throw new RangeError("Invalid array length");
-    this.__memory = capacity ? allocate_memory(<usize>capacity * sizeof<T>()) : 0;
+    }
+    this.__memory = capacity
+      ? allocate_memory(<usize>capacity * sizeof<T>())
+      : 0;
     this.__capacity = this.__length = capacity;
   }
 
@@ -27,72 +30,92 @@ export class Array<T> {
   }
 
   set length(length: i32) {
-    if (length < 0)
+    if (length < 0) {
       throw new RangeError("Invalid array length");
-    if (length > this.__capacity)
+    }
+    if (length > this.__capacity) {
       this.__grow(max(length, this.__capacity << 1));
+    }
     this.__length = length;
   }
 
   @operator("[]")
   private __get(index: i32): T {
-    if (<u32>index >= this.__capacity)
+    if (<u32>index >= this.__capacity) {
       throw new Error("Index out of bounds"); // return changetype<T>(0) ?
+    }
     return load<T>(this.__memory + <usize>index * sizeof<T>());
   }
 
   @operator("[]=")
   private __set(index: i32, value: T): void {
-    if (index < 0)
+    if (index < 0) {
       throw new Error("Index out of bounds");
-    if (index >= this.__capacity)
+    }
+    if (index >= this.__capacity) {
       this.__grow(max(index + 1, this.__capacity << 1));
+    }
     store<T>(this.__memory + <usize>index * sizeof<T>(), value);
   }
 
   indexOf(searchElement: T, fromIndex: i32 = 0): i32 {
-    if (fromIndex < 0)
+    if (fromIndex < 0) {
       fromIndex = this.__length + fromIndex;
+    }
     while (<u32>fromIndex < this.__length) {
-      if (load<T>(this.__memory + fromIndex * sizeof<T>()) == searchElement)
+      if (load<T>(this.__memory + fromIndex * sizeof<T>()) == searchElement) {
         return fromIndex;
+      }
       ++fromIndex;
     }
     return -1;
   }
 
   lastIndexOf(searchElement: T, fromIndex: i32 = 0): i32 {
-    if (fromIndex < 0)
+    if (fromIndex < 0) {
       fromIndex = this.__length + fromIndex;
-    else if (fromIndex >= this.__length)
+    } else if (fromIndex >= this.__length) {
       fromIndex = this.__length - 1;
+    }
     while (fromIndex >= 0) {
-      if (load<T>(this.__memory + fromIndex * sizeof<T>()) == searchElement)
+      if (load<T>(this.__memory + fromIndex * sizeof<T>()) == searchElement) {
         return fromIndex;
+      }
       --fromIndex;
     }
     return -1;
   }
 
   push(element: T): i32 {
-    if (this.__length == this.__capacity)
+    if (this.__length == this.__capacity) {
       this.__grow(this.__capacity ? this.__capacity << 1 : 1);
+    }
     store<T>(this.__memory + this.__length * sizeof<T>(), element);
     return ++this.__length;
   }
 
   pop(): T {
-    if (this.__length < 1)
+    if (this.__length < 1) {
       throw new RangeError("Array is empty"); // return changetype<T>(0) ?
+    }
     return load<T>(this.__memory + --this.__length * sizeof<T>());
   }
 
   shift(): T {
-    if (this.__length < 1)
+    if (this.__length < 1) {
       throw new RangeError("Array is empty"); // return changetype<T>(0) ?
+    }
     var element = load<T>(this.__memory);
-    move_memory(this.__memory, this.__memory + sizeof<T>(), (this.__capacity - 1) * sizeof<T>());
-    set_memory(this.__memory + (this.__capacity - 1) * sizeof<T>(), 0, sizeof<T>());
+    move_memory(
+      this.__memory,
+      this.__memory + sizeof<T>(),
+      (this.__capacity - 1) * sizeof<T>()
+    );
+    set_memory(
+      this.__memory + (this.__capacity - 1) * sizeof<T>(),
+      0,
+      sizeof<T>()
+    );
     --this.__length;
     return element;
   }
@@ -105,13 +128,22 @@ export class Array<T> {
       assert(newCapacity > this.__capacity);
       var newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
       if (this.__memory) {
-        move_memory(newMemory + sizeof<T>(), this.__memory, oldCapacity * sizeof<T>());
+        move_memory(
+          newMemory + sizeof<T>(),
+          this.__memory,
+          oldCapacity * sizeof<T>()
+        );
         free_memory(this.__memory);
       }
       this.__memory = newMemory;
       this.__capacity = newCapacity;
-    } else
-      move_memory(this.__memory + sizeof<T>(), this.__memory, oldCapacity * sizeof<T>());
+    } else {
+      move_memory(
+        this.__memory + sizeof<T>(),
+        this.__memory,
+        oldCapacity * sizeof<T>()
+      );
+    }
     store<T>(this.__memory, element);
     return ++this.__length;
   }
@@ -119,37 +151,53 @@ export class Array<T> {
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
     if (begin < 0) {
       begin = this.__length + begin;
-      if (begin < 0)
+      if (begin < 0) {
         begin = 0;
-    } else if (begin > this.__length)
+      }
+    } else if (begin > this.__length) {
       begin = this.__length;
-    if (end < 0)
+    }
+    if (end < 0) {
       end = this.__length + end;
-    else if (end > this.__length)
+    } else if (end > this.__length) {
       end = this.__length;
-    if (end < begin)
+    }
+    if (end < begin) {
       end = begin;
+    }
     var capacity = end - begin;
     assert(capacity >= 0);
     var sliced = new Array<T>(capacity);
-    if (capacity)
-      move_memory(sliced.__memory, this.__memory + <usize>begin * sizeof<T>(), <usize>capacity * sizeof<T>());
+    if (capacity) {
+      move_memory(
+        sliced.__memory,
+        this.__memory + <usize>begin * sizeof<T>(),
+        <usize>capacity * sizeof<T>()
+      );
+    }
     return sliced;
   }
 
   splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): void {
-    if (deleteCount < 1)
+    if (deleteCount < 1) {
       return;
+    }
     if (start < 0) {
       start = this.__length + start;
-      if (start < 0)
+      if (start < 0) {
         start = 0;
-      else if (start >= this.__length)
+      } else if (start >= this.__length) {
         return;
-    } else if (start >= this.__length)
+      }
+    } else if (start >= this.__length) {
       return;
+    }
     deleteCount = min(deleteCount, this.__length - start);
-    move_memory(this.__memory + <usize>start * sizeof<T>(), this.__memory + <usize>(start + deleteCount) * sizeof<T>(), deleteCount * sizeof<T>());
+    move_memory(
+      this.__memory + <usize>start * sizeof<T>(),
+      this.__memory + <usize>(start + deleteCount) * sizeof<T>(),
+      deleteCount * sizeof<T>()
+    );
     this.__length -= deleteCount;
   }
 
@@ -170,15 +218,17 @@ export class CArray<T> {
 
   @operator("[]")
   private __get(index: i32): T {
-    if (index < 0)
+    if (index < 0) {
       throw new RangeError("Index out of range");
+    }
     return load<T>(changetype<usize>(this) + <usize>index * sizeof<T>());
   }
 
   @operator("[]=")
   private __set(index: i32, value: T): void {
-    if (index < 0)
+    if (index < 0) {
       throw new RangeError("Index out of range");
+    }
     store<T>(changetype<usize>(this) + <usize>index * sizeof<T>(), value);
   }
 }

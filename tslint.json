@@ -45,7 +45,7 @@
     "no-trailing-whitespace": true,
     "no-unbound-method": true,
     "no-unsafe-any": true,
-    "no-unused-variable": true,
+    "no-unused-variable": [true, {"ignore-pattern": "^_"}],
     "no-void-expression": true,
     "object-literal-shorthand": [ true, "never" ],
     "prefer-method-signature": true,

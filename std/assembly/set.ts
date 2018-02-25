@@ -21,9 +21,11 @@ export class Set<T> {
   has(value: T): bool {
     assert(this != null);
 
-    for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index)
-      if (load<T>(this.__memory + index * sizeof<T>()) == value)
+    for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index) {
+      if (load<T>(this.__memory + index * sizeof<T>()) == value) {
         return true;
+      }
+    }
     return false;
   }
 
@@ -48,13 +50,19 @@ export class Set<T> {
   delete(value: T): bool {
     assert(this != null);
 
-    for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index)
+    for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index) {
       if (load<T>(this.__memory + index * sizeof<T>()) == value) {
-        if (index + 1 < this.__size)
-          move_memory(this.__memory + index * sizeof<T>(), this.__memory + (index + 1) * sizeof<T>(), this.__size - index - 1);
+        if (index + 1 < this.__size) {
+          move_memory(
+            this.__memory + index * sizeof<T>(),
+            this.__memory + (index + 1) * sizeof<T>(),
+            this.__size - index - 1
+          );
+        }
         --this.__size;
         return true;
       }
+    }
     return false;
   }
 

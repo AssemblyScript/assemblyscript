@@ -155,7 +155,7 @@ declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
-declare function load<T>(ptr: usize, constantOffset?: usize): any;
+declare function load<T>(ptr: usize, constantOffset?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
 declare function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
 /** Returns the current memory size in units of pages. One page is 64kb. */
@@ -292,10 +292,10 @@ declare class Set<T> {
 // Internal decorators
 
 /** Annotates an element as a program global. */
-declare function global(target: Function): any;
+declare function global(target: Function, propertyKey: string, descriptor: any): void;
 
 /** Annotates a method as an operator overload. */
-declare function operator(token: string): any;
+declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
 
 /** Annotates a class as being unmanaged with limited capabilities. */
 declare function unmanaged(target: Function): any;

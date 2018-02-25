@@ -40,13 +40,14 @@
   "scripts": {
     "build": "webpack",
     "clean": "node scripts/clean",
-    "lint": "tslint -c tslint.json --project src --formatters-dir lib/tslint --format as",
-    "test:config": "npm run test:config:portable --scripts-prepend-node-path && npm run test:config:src --scripts-prepend-node-path",
-    "test:config:portable": "tsc --noEmit -p std/portable --diagnostics --listFiles",
-    "test:config:src": "tsc --noEmit -p src --diagnostics --listFiles",
+    "lint": "npm run lint:compiler && npm run lint:library",
+    "lint:compiler": "tslint -c tslint.json --project src --formatters-dir lib/tslint --format as",
+    "lint:library": "tslint -c tslint.json --project std/assembly --formatters-dir lib/tslint --format as",
+    "test:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
-    "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path"
+    "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path",
+    "all": "npm run lint && npm run clean && npm test && npm run build && npm test"
   },
   "files": [
     "bin/",

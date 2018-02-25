@@ -92,12 +92,12 @@
   )
   (loop $continue|0
    (if
-    (if (result i32)
-     (get_local $2)
-     (i32.rem_u
+    (select
+     (i32.and
       (get_local $1)
-      (i32.const 4)
+      (i32.const 3)
      )
+     (get_local $2)
      (get_local $2)
     )
     (block
@@ -137,9 +137,9 @@
   )
   (if
    (i32.eqz
-    (i32.rem_u
+    (i32.and
      (get_local $0)
-     (i32.const 4)
+     (i32.const 3)
     )
    )
    (block
@@ -343,9 +343,9 @@
        (block $tablify|0
         (br_table $case0|2 $case1|2 $case2|2 $tablify|0
          (i32.sub
-          (i32.rem_u
+          (i32.and
            (get_local $0)
-           (i32.const 4)
+           (i32.const 3)
           )
           (i32.const 1)
          )
@@ -2859,12 +2859,6 @@
    )
   )
   (set_global $binary/i
-   (i32.mul
-    (get_global $binary/i)
-    (i32.const 1)
-   )
-  )
-  (set_global $binary/i
    (i32.div_s
     (get_global $binary/i)
     (i32.const 1)
@@ -2920,12 +2914,6 @@
   )
   (set_global $binary/i
    (i32.sub
-    (get_global $binary/i)
-    (i32.const 1)
-   )
-  )
-  (set_global $binary/i
-   (i32.mul
     (get_global $binary/i)
     (i32.const 1)
    )

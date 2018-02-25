@@ -15,6 +15,6 @@
   "files": [
     "./portable.d.ts",
     "./portable.js",
-    "./portable/heap.js"
+    "./portable/memory.js"
   ]
 }

@@ -1,9 +1,0 @@
-{
-  "extends": "../portable.json",
-  "compilerOptions": {
-    "diagnostics": true
-  },
-  "include": [
-    "./**/*.ts"
-  ]
-}

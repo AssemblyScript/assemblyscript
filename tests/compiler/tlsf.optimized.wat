@@ -81,9 +81,9 @@
      (get_local $0)
      (i32.const 20)
     )
-    (i32.mul
+    (i32.shl
      (get_local $1)
-     (i32.const 4)
+     (i32.const 2)
     )
    )
    (get_local $2)
@@ -126,15 +126,15 @@
      (get_local $0)
      (i32.const 112)
     )
-    (i32.mul
+    (i32.shl
      (i32.add
-      (i32.mul
+      (i32.shl
        (get_local $1)
-       (i32.const 32)
+       (i32.const 5)
       )
       (get_local $2)
      )
-     (i32.const 4)
+     (i32.const 2)
     )
    )
    (get_local $3)

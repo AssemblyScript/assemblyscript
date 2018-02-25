@@ -17,7 +17,6 @@ const SL_SIZE: usize = 1 << <usize>SL_BITS;
 
 const SB_BITS: usize = <usize>(SL_BITS + AL_BITS);
 const SB_SIZE: usize = 1 << <usize>SB_BITS;
-const SB_MASK: usize = SB_SIZE - 1;
 
 const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
   ? 30 // ^= up to 1GB per block
@@ -267,10 +266,8 @@ class Root {
     // link previous and next free block
     var prev = block.prev;
     var next = block.next;
-    if (prev)
-      prev.next = next;
-    if (next)
-      next.prev = prev;
+    if (prev) prev.next = next;
+    if (next) next.prev = prev;
 
     // update head if we are removing it
     if (block == this.getHead(fl, sl)) {
@@ -282,8 +279,7 @@ class Root {
         this.setSLMap(fl, slMap &= ~(1 << sl));
 
         // clear first level map if second level is empty now
-        if (!slMap)
-          this.flMap &= ~(1 << fl);
+        if (!slMap) this.flMap &= ~(1 << fl);
       }
     }
   }
@@ -320,10 +316,10 @@ class Root {
         slMap = assert(this.getSLMap(fl)); // can't be zero if fl points here
         head = this.getHead(fl, ffs<u32>(slMap));
       }
-    } else
+    } else {
       head = this.getHead(fl, ffs<u32>(slMap));
-
-      return head;
+    }
+    return head;
   }
 
   /** Links a free left with its right block in memory. */
@@ -386,13 +382,15 @@ class Root {
         tailInfo = changetype<Block>(tailRef).info;
       }
 
-    } else
+    } else {
       assert(start >= changetype<usize>(this) + Root.SIZE); // starts after root
+    }
 
     // check if size is large enough for a free block and the tail block
     var size = end - start;
-    if (size < Block.INFO + Block.MIN_SIZE + Block.INFO)
+    if (size < Block.INFO + Block.MIN_SIZE + Block.INFO) {
       return false;
+    }
 
     // left size is total minus its own and the zero-length tail's header
     var leftSize = size - 2 * Block.INFO;
@@ -443,8 +441,9 @@ export function allocate_memory(size: usize): usize {
     root.flMap = 0;
     for (var fl: usize = 0; fl < FL_BITS; ++fl) {
       root.setSLMap(fl, 0);
-      for (var sl: u32 = 0; sl < SL_SIZE; ++sl)
+      for (var sl: u32 = 0; sl < SL_SIZE; ++sl) {
         root.setHead(fl, sl, null);
+      }
     }
     root.addMemory(rootOffset + Root.SIZE, current_memory() << 16);
   }
@@ -461,9 +460,11 @@ export function allocate_memory(size: usize): usize {
       var pagesBefore = current_memory();
       var pagesNeeded = ((size + 0xffff) & ~0xffff) >>> 16;
       var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-      if (grow_memory(pagesWanted) < 0)
-        if (grow_memory(pagesNeeded) < 0)
+      if (grow_memory(pagesWanted) < 0) {
+        if (grow_memory(pagesNeeded) < 0) {
           unreachable(); // out of memory
+        }
+      }
       var pagesAfter = current_memory();
       root.addMemory(<usize>pagesBefore << 16, <usize>pagesAfter << 16);
       block = assert(root.search(size)); // must be found now

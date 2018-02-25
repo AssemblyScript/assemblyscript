@@ -21,9 +21,9 @@
   (i32.load
    (i32.add
     (get_local $0)
-    (i32.mul
+    (i32.shl
      (get_local $1)
-     (i32.const 4)
+     (i32.const 2)
     )
    )
   )
@@ -39,9 +39,9 @@
   (i32.store
    (i32.add
     (get_local $0)
-    (i32.mul
+    (i32.shl
      (get_local $1)
-     (i32.const 4)
+     (i32.const 2)
     )
    )
    (get_local $2)

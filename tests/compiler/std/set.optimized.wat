@@ -1981,7 +1981,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 28)
-     (i32.const 31)
+     (i32.const 33)
      (i32.const 4)
     )
     (unreachable)
@@ -1999,7 +1999,7 @@
    (block
     (set_local $2
      (call "$(lib)/allocator/arena/allocate_memory"
-      (i32.mul
+      (i32.shl
        (tee_local $3
         (select
          (tee_local $2
@@ -2019,7 +2019,7 @@
          )
         )
        )
-       (i32.const 4)
+       (i32.const 2)
       )
      )
     )
@@ -2033,11 +2033,11 @@
        (i32.load
         (get_local $0)
        )
-       (i32.mul
+       (i32.shl
         (i32.load offset=4
          (get_local $0)
         )
-        (i32.const 4)
+        (i32.const 2)
        )
       )
       (call "$(lib)/allocator/arena/free_memory"
@@ -2062,11 +2062,11 @@
     (i32.load
      (get_local $0)
     )
-    (i32.mul
+    (i32.shl
      (i32.load offset=8
       (get_local $0)
      )
-     (i32.const 4)
+     (i32.const 2)
     )
    )
    (get_local $1)
@@ -2118,9 +2118,9 @@
          (i32.load
           (get_local $0)
          )
-         (i32.mul
+         (i32.shl
           (get_local $2)
-          (i32.const 4)
+          (i32.const 2)
          )
         )
        )
@@ -2153,7 +2153,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 28)
-     (i32.const 49)
+     (i32.const 51)
      (i32.const 4)
     )
     (unreachable)
@@ -2178,9 +2178,9 @@
          (i32.load
           (get_local $0)
          )
-         (i32.mul
+         (i32.shl
           (get_local $2)
-          (i32.const 4)
+          (i32.const 2)
          )
         )
        )
@@ -2202,21 +2202,21 @@
           (i32.load
            (get_local $0)
           )
-          (i32.mul
+          (i32.shl
            (get_local $2)
-           (i32.const 4)
+           (i32.const 2)
           )
          )
          (i32.add
           (i32.load
            (get_local $0)
           )
-          (i32.mul
+          (i32.shl
            (i32.add
             (get_local $2)
             (i32.const 1)
            )
-           (i32.const 4)
+           (i32.const 2)
           )
          )
          (i32.sub
@@ -2265,7 +2265,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 28)
-     (i32.const 62)
+     (i32.const 70)
      (i32.const 4)
     )
     (unreachable)

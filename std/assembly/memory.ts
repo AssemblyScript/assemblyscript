@@ -145,8 +145,7 @@ export function move_memory(dest: usize, src: usize, n: usize): void {
   // based on musl's implementation of memmove
   // becomes obsolete once https://github.com/WebAssembly/bulk-memory-operations lands
 
-  if (dest == src)
-    return;
+  if (dest == src) return;
   if (src + n <= dest || dest + n <= src) {
     copy_memory(dest, src, n);
     return;
@@ -154,8 +153,7 @@ export function move_memory(dest: usize, src: usize, n: usize): void {
   if (dest < src) {
     if ((src & 7) == (dest & 7)) {
       while (dest & 7) {
-        if (!n)
-          return;
+        if (!n) return;
         --n;
         store<u8>(dest++, load<u8>(src++));
       }
@@ -173,8 +171,7 @@ export function move_memory(dest: usize, src: usize, n: usize): void {
   } else {
     if ((src & 7) == (dest & 7)) {
       while ((dest + n) & 7) {
-        if (!n)
-          return;
+        if (!n) return;
         store<u8>(dest + --n, load<u8>(src + n));
       }
       while (n >= 8) {
@@ -193,23 +190,19 @@ export function set_memory(dest: usize, c: u8, n: usize): void {
   // becomes obsolete once https://github.com/WebAssembly/bulk-memory-operations lands
 
   // fill head and tail with minimal branching
-  if (!n)
-    return;
+  if (!n) return;
   store<u8>(dest, c);
   store<u8>(dest + n - 1, c);
-  if (n <= 2)
-    return;
+  if (n <= 2) return;
 
   store<u8>(dest + 1, c);
   store<u8>(dest + 2, c);
   store<u8>(dest + n - 2, c);
   store<u8>(dest + n - 3, c);
-  if (n <= 6)
-    return;
+  if (n <= 6) return;
   store<u8>(dest + 3, c);
   store<u8>(dest + n - 4, c);
-  if (n <= 8)
-    return;
+  if (n <= 8) return;
 
   // advance pointer to align it at 4-byte boundary
   var k: usize = -dest & 3;
@@ -222,14 +215,12 @@ export function set_memory(dest: usize, c: u8, n: usize): void {
   // fill head/tail up to 28 bytes each in preparation
   store<u32>(dest, c32);
   store<u32>(dest + n - 4, c32);
-  if (n <= 8)
-    return;
+  if (n <= 8) return;
   store<u32>(dest + 4, c32);
   store<u32>(dest + 8, c32);
   store<u32>(dest + n - 12, c32);
   store<u32>(dest + n - 8, c32);
-  if (n <= 24)
-    return;
+  if (n <= 24) return;
   store<u32>(dest + 12, c32);
   store<u32>(dest + 16, c32);
   store<u32>(dest + 20, c32);
@@ -259,8 +250,7 @@ export function set_memory(dest: usize, c: u8, n: usize): void {
 export function compare_memory(vl: usize, vr: usize, n: usize): i32 {
   // based on musl's implementation of memcmp
   // provided because there's no proposed alternative
-  if (vl == vr)
-    return 0;
+  if (vl == vr) return 0;
   while (n && load<u8>(vl) == load<u8>(vr)) {
     n--;
     vl++;
