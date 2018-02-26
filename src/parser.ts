@@ -79,7 +79,8 @@ import {
   addModifier,
   getModifier,
   hasModifier,
-  setReusableModifiers
+  setReusableModifiers,
+  FunctionExpression
 
 } from "./ast";
 
@@ -776,7 +777,8 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseParameter(
-    tn: Tokenizer
+    tn: Tokenizer,
+    suppressErrors: bool = false
   ): Parameter | null {
 
     // before: '...'? Identifier '?'? (':' Type)? ('=' Expression)?
@@ -927,10 +929,8 @@ export class Parser extends DiagnosticEmitter {
 
     var isDeclare = hasModifier(ModifierKind.DECLARE, modifiers);
 
-    var statements: Statement[] | null = null;
+    var body: Statement | null = null;
     if (tn.skip(Token.OPENBRACE)) {
-      statements = new Array();
-
       if (isDeclare) {
         this.error(
           DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
@@ -938,12 +938,8 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
 
-      while (!tn.skip(Token.CLOSEBRACE)) {
-        var statement = this.parseStatement(tn);
-        if (!statement) return null;
-        statements.push(<Statement>statement);
-      }
-
+      body = this.parseBlockStatement(tn, false);
+      if (!body) return null;
     } else if (!isDeclare) {
       this.error(
         DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
@@ -956,13 +952,109 @@ export class Parser extends DiagnosticEmitter {
       typeParameters,
       <Parameter[]>parameters,
       returnType,
-      statements,
+      body,
       modifiers,
       decorators,
       tn.range(startPos, tn.pos)
     );
     tn.skip(Token.SEMICOLON);
     return ret;
+  }
+
+  parseFunctionExpression(tn: Tokenizer): FunctionExpression | null {
+    var startPos = tn.tokenPos;
+    var identifier: IdentifierExpression;
+    var isArrow = false;
+
+    // either at 'function':
+    //  Identifier?
+    //  '(' Parameters (':' Type)?
+    //  Statement
+
+    if (tn.token == Token.FUNCTION) {
+      isArrow = false;
+      if (tn.skip(Token.IDENTIFIER)) {
+        identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      } else { // empty name
+        identifier = Node.createIdentifierExpression("", tn.range(tn.pos, tn.pos));
+      }
+      if (!tn.skip(Token.OPENPAREN)) {
+        this.error(
+          DiagnosticCode._0_expected,
+          tn.range(tn.pos), "("
+        );
+        return null;
+      }
+
+    // or at '(' of arrow function:
+    //  Parameters (':' Type)?
+    //  Statement
+
+    } else {
+      isArrow = true;
+      assert(tn.token == Token.OPENPAREN);
+      identifier = Node.createIdentifierExpression("", tn.range(tn.tokenPos, tn.tokenPos));
+    }
+
+    // TODO: type parameters? doesn't seem worth it.
+
+    var parameters = this.parseParameters(tn);
+    if (!parameters) return null;
+
+    return this.parseFunctionExpressionCommon(tn, identifier, parameters, isArrow, startPos);
+  }
+
+  private parseFunctionExpressionCommon(
+    tn: Tokenizer,
+    identifier: IdentifierExpression,
+    parameters: Parameter[],
+    isArrow: bool,
+    startPos: i32 = -1
+  ): FunctionExpression | null {
+    if (startPos < 0) startPos = identifier.range.start;
+
+    var returnType: TypeNode | null = null;
+    if (tn.skip(Token.COLON)) {
+      returnType = this.parseType(tn);
+      if (!returnType) return null;
+    }
+
+    if (isArrow) {
+      if (!tn.skip(Token.EQUALS_GREATERTHAN)) {
+        this.error(
+          DiagnosticCode._0_expected,
+          tn.range(tn.pos), "=>"
+        );
+        return null;
+      }
+    }
+
+    var body: Statement | null;
+    if (isArrow) {
+      body = this.parseStatement(tn, false);
+    } else {
+      if (!tn.skip(Token.OPENBRACE)) {
+        this.error(
+          DiagnosticCode._0_expected,
+          tn.range(tn.pos), "{"
+        );
+        return null;
+      }
+      body = this.parseBlockStatement(tn, false);
+    }
+    if (!body) return null;
+
+    var declaration = Node.createFunctionDeclaration(
+      identifier,
+      [],
+      parameters,
+      returnType,
+      body,
+      null,
+      null,
+      tn.range(startPos, tn.pos)
+    );
+    return Node.createFunctionExpression(declaration, isArrow);
   }
 
   parseClass(
@@ -1184,7 +1276,7 @@ export class Parser extends DiagnosticEmitter {
           ); // recoverable
         }
 
-        var statements: Statement[] | null = null;
+        var body: Statement | null = null;
         if (tn.skip(Token.OPENBRACE)) {
           if (parentIsDeclare) {
             this.error(
@@ -1192,12 +1284,8 @@ export class Parser extends DiagnosticEmitter {
               tn.range()
             ); // recoverable
           }
-          statements = new Array();
-          while (!tn.skip(Token.CLOSEBRACE)) {
-            var statement = this.parseStatement(tn);
-            if (!statement) return null;
-            statements.push(<Statement>statement);
-          }
+          body = this.parseBlockStatement(tn, false);
+          if (!body) return null;
         } else if (!parentIsDeclare) {
           this.error(
             DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
@@ -1210,7 +1298,7 @@ export class Parser extends DiagnosticEmitter {
           typeParameters,
           parameters,
           returnType,
-          statements,
+          body,
           modifiers,
           decorators,
           tn.range(startPos, tn.pos)
@@ -2212,7 +2300,68 @@ export class Parser extends DiagnosticEmitter {
     switch (token) {
 
       // ParenthesizedExpression
+      // FunctionExpression
       case Token.OPENPAREN:
+
+        // determine whether this is a function expression
+        if (tn.skip(Token.CLOSEPAREN)) { // must be a function expression (fast route)
+          return this.parseFunctionExpressionCommon(
+            tn,
+            Node.createIdentifierExpression("", tn.range(startPos, startPos)),
+            [],
+            true
+          );
+        }
+        tn.mark();
+        var again = true;
+        do {
+          switch (tn.next(true)) {
+
+            // function expression
+            case Token.DOT_DOT_DOT:
+              tn.reset();
+              return this.parseFunctionExpression(tn);
+
+            // can be both
+            case Token.IDENTIFIER:
+              tn.readIdentifier();
+              switch (tn.next()) {
+
+                // if we got here, check for arrow
+                case Token.CLOSEPAREN:
+                  if (!tn.skip(Token.EQUALS_GREATERTHAN)) {
+                    again = false;
+                    break;
+                  }
+                  // fall-through
+
+                // function expression
+                case Token.QUESTION:   // optional parameter
+                case Token.COLON:      // type annotation
+                  tn.reset();
+                  return this.parseFunctionExpression(tn);
+
+                // can be both
+                case Token.COMMA:
+                  break; // continue
+
+                // parenthesized expression
+                // case Token.EQUALS:  // missing type annotation for simplicity
+                default:
+                  again = false;
+                  break;
+              }
+              break;
+
+            // parenthesized expression
+            default:
+              again = false;
+              break;
+          }
+        } while (again);
+        tn.reset();
+
+        // parse parenthesized
         expr = this.parseExpression(tn);
         if (!expr) return null;
         if (!tn.skip(Token.CLOSEPAREN)) {
@@ -2287,7 +2436,7 @@ export class Parser extends DiagnosticEmitter {
       case Token.INTEGERLITERAL:
         return Node.createIntegerLiteralExpression(tn.readInteger(), tn.range(startPos, tn.pos));
 
-        case Token.FLOATLITERAL:
+      case Token.FLOATLITERAL:
         return Node.createFloatLiteralExpression(tn.readFloat(), tn.range(startPos, tn.pos));
 
       // RegexpLiteralExpression
@@ -2306,6 +2455,9 @@ export class Parser extends DiagnosticEmitter {
           tn.readRegexpFlags(), // also reports
           tn.range(startPos, tn.pos)
         );
+
+      case Token.FUNCTION:
+        return this.parseFunctionExpression(tn);
 
       default:
         this.error(

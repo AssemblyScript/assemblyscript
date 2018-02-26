@@ -25,6 +25,7 @@ import {
   CallExpression,
   CommaExpression,
   ElementAccessExpression,
+  FunctionExpression,
   NewExpression,
   ParenthesizedExpression,
   PropertyAccessExpression,
@@ -122,6 +123,11 @@ export function serializeNode(node: Node, sb: string[]): void {
 
     case NodeKind.ELEMENTACCESS:
       serializeElementAccessExpression(<ElementAccessExpression>node, sb);
+      break;
+
+    case NodeKind.FUNCTION:
+    case NodeKind.FUNCTIONARROW:
+      serializeFunctionExpression(<FunctionExpression>node, sb);
       break;
 
     case NodeKind.LITERAL:
@@ -412,6 +418,21 @@ export function serializeElementAccessExpression(node: ElementAccessExpression, 
   sb.push("]");
 }
 
+export function serializeFunctionExpression(node: FunctionExpression, sb: string[]): void {
+  var declaration = node.declaration;
+  var isArrow = node.kind == NodeKind.FUNCTIONARROW;
+  if (!isArrow) {
+    if (declaration.name.text.length) {
+      sb.push("function ");
+    } else {
+      sb.push("function");
+    }
+  } else {
+    assert(declaration.name.text.length == 0);
+  }
+  serializeFunctionCommon(declaration, sb, isArrow);
+}
+
 export function serializeLiteralExpression(node: LiteralExpression, sb: string[]): void {
   switch (node.literalKind) {
 
@@ -608,15 +629,19 @@ export function serializeStatement(node: Statement, sb: string[]): void {
 
 function serializeTerminatedStatement(statement: Statement, sb: string[]): void {
   serializeStatement(statement, sb);
-  if (sb.length) { // i.e. leading EmptyStatement
+  if (
+    !sb.length ||                          // leading EmptyStatement
+    statement.kind == NodeKind.VARIABLE || // potentially assigns a FunctionExpression
+    statement.kind == NodeKind.EXPRESSION  // potentially assigns a FunctionExpression
+  ) {
+    sb.push(";\n");
+  } else {
     var last = sb[sb.length - 1];
     if (last.length && last.charCodeAt(last.length - 1) == CharCode.CLOSEBRACE) {
       sb.push("\n");
     } else {
       sb.push(";\n");
     }
-  } else {
-    sb.push(";\n");
   }
 }
 
@@ -840,11 +865,15 @@ export function serializeFunctionDeclaration(node: FunctionDeclaration, sb: stri
       sb.push(" ");
     }
   }
-  sb.push("function ");
+  if (node.name.text.length) {
+    sb.push("function ");
+  } else {
+    sb.push("function");
+  }
   serializeFunctionCommon(node, sb);
 }
 
-function serializeFunctionCommon(node: FunctionDeclaration, sb: string[]): void {
+function serializeFunctionCommon(node: FunctionDeclaration, sb: string[], isArrow: bool = false): void {
   var i: i32, k: i32;
   serializeIdentifierExpression(node.name, sb);
   if (k = node.typeParameters.length) {
@@ -864,18 +893,33 @@ function serializeFunctionCommon(node: FunctionDeclaration, sb: string[]): void 
       serializeParameter(node.parameters[i], sb);
     }
   }
-  if (node.returnType && !hasModifier(ModifierKind.SET, node.modifiers)) {
-    sb.push("): ");
-    serializeTypeNode(node.returnType, sb);
-  } else {
-    sb.push(")");
-  }
-  if (node.statements) {
-    sb.push(" {\n");
-    for (i = 0, k = node.statements.length; i < k; ++i) {
-      serializeTerminatedStatement(node.statements[i], sb);
+  if (isArrow) {
+    if (node.body) {
+      if (node.returnType) {
+        sb.push("): ");
+        serializeTypeNode(node.returnType, sb);
+      }
+      sb.push(" => ");
+      serializeStatement(<Statement>node.body, sb);
+    } else {
+      if (node.returnType) {
+        sb.push(" => ");
+        serializeTypeNode(node.returnType, sb);
+      } else {
+        sb.push(" => void");
+      }
     }
-    sb.push("}");
+  } else {
+    if (node.returnType && !hasModifier(ModifierKind.SET, node.modifiers)) {
+      sb.push("): ");
+      serializeTypeNode(node.returnType, sb);
+    } else {
+      sb.push(")");
+    }
+    if (node.body) {
+      sb.push(" ");
+      serializeStatement(node.body, sb);
+    }
   }
 }
 

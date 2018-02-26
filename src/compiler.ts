@@ -729,14 +729,14 @@ export class Compiler extends DiagnosticEmitter {
 
     var declaration = instance.prototype.declaration;
     if (instance.is(ElementFlags.DECLARED)) {
-      if (declaration.statements) {
+      if (declaration.body) {
         this.error(
           DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
           declaration.name.range
         );
         return false;
       }
-    } else if (!declaration.statements) {
+    } else if (!declaration.body) {
       this.error(
         DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
         declaration.name.range
@@ -748,12 +748,12 @@ export class Compiler extends DiagnosticEmitter {
     instance.set(ElementFlags.COMPILED);
 
     // compile statements
-    var stmts: ExpressionRef[] | null = null;
+    var stmt: ExpressionRef = 0;
     if (!instance.is(ElementFlags.DECLARED)) {
       var previousFunction = this.currentFunction;
       this.currentFunction = instance;
-      var statements = assert(declaration.statements, "implementation expected");
-      stmts = this.compileStatements(statements);
+      var body = assert(declaration.body, "implementation expected");
+      stmt = this.compileStatement(body);
       // make sure the top-level branch or all child branches return
       var allBranchesReturn = this.currentFunction.flow.finalize();
       if (instance.returnType != Type.void && !allBranchesReturn) {
@@ -810,7 +810,7 @@ export class Compiler extends DiagnosticEmitter {
         instance.internalName,
         typeRef,
         typesToNativeTypes(instance.additionalLocals),
-        this.module.createBlock(null, <ExpressionRef[]>stmts, NativeType.None)
+        assert(stmt)
       );
     }
 

@@ -34,6 +34,8 @@ export enum NodeKind {
   COMMA,
   ELEMENTACCESS,
   FALSE,
+  FUNCTION,
+  FUNCTIONARROW,
   LITERAL,
   NEW,
   NULL,
@@ -222,6 +224,18 @@ export abstract class Node {
     var expr = new FloatLiteralExpression();
     expr.range = range;
     expr.value = value;
+    return expr;
+  }
+
+  static createFunctionExpression(
+    declaration: FunctionDeclaration,
+    isArrow: bool = false
+  ): FunctionExpression {
+    var expr = isArrow
+      ? new FunctionArrowExpression()
+      : new FunctionExpression();
+    expr.range = declaration.range;
+    expr.declaration = declaration;
     return expr;
   }
 
@@ -710,7 +724,7 @@ export abstract class Node {
     typeParameters: TypeParameter[],
     parameters: Parameter[],
     returnType: TypeNode | null,
-    statements: Statement[] | null,
+    body: Statement | null,
     modifiers: Modifier[] | null,
     decorators: Decorator[] | null,
     range: Range
@@ -721,7 +735,7 @@ export abstract class Node {
     stmt.typeParameters = typeParameters; setParent(typeParameters, stmt);
     stmt.parameters = parameters; setParent(parameters, stmt);
     stmt.returnType = returnType; if (returnType) returnType.parent = stmt;
-    stmt.statements = statements; if (statements) setParent(statements, stmt);
+    stmt.body = body; if (body) body.parent = stmt;
     stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
@@ -732,7 +746,7 @@ export abstract class Node {
     typeParameters: TypeParameter[],
     parameters: Parameter[],
     returnType: TypeNode | null,
-    statements: Statement[] | null,
+    body: Statement | null,
     modifiers: Modifier[] | null,
     decorators: Decorator[] | null,
     range: Range
@@ -743,7 +757,7 @@ export abstract class Node {
     stmt.typeParameters = typeParameters; setParent(typeParameters, stmt);
     stmt.parameters = parameters; setParent(parameters, stmt);
     stmt.returnType = returnType; if (returnType) returnType.parent = stmt;
-    stmt.statements = statements; if (statements) setParent(statements, stmt);
+    stmt.body = body; if (body) body.parent = stmt;
     stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
@@ -1031,6 +1045,19 @@ export class FloatLiteralExpression extends LiteralExpression {
 
   /** Float value. */
   value: f64;
+}
+
+/** Represents a function expression using the 'function' keyword. */
+export class FunctionExpression extends Expression {
+  kind = NodeKind.FUNCTION;
+
+  /** Inline function declaration. */
+  declaration: FunctionDeclaration;
+}
+
+/** Represents an arrow function expression. */
+export class FunctionArrowExpression extends FunctionExpression {
+  kind = NodeKind.FUNCTIONARROW;
 }
 
 /** Represents an integer literal expression. */
@@ -1468,8 +1495,8 @@ export class FunctionDeclaration extends DeclarationStatement {
   parameters: Parameter[];
   /** Return type. */
   returnType: TypeNode | null;
-  /** Contained statements. */
-  statements: Statement[] | null;
+  /** Body statement. Usually a block. */
+  body: Statement | null;
 }
 
 /** Represents an `if` statement. */
