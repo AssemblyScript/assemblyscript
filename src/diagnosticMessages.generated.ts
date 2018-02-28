@@ -80,11 +80,13 @@ export enum DiagnosticCode {
   A_function_whose_declared_type_is_not_void_must_return_a_value = 2355,
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
+  Operator_0_cannot_be_applied_to_types_1_and_2 = 2365,
   _get_and_set_accessor_must_have_the_same_type = 2380,
   Constructor_implementation_is_missing = 2390,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Multiple_constructor_implementations_are_not_allowed = 2392,
   Duplicate_function_implementation = 2393,
+  The_0_operator_cannot_be_applied_to_type_1 = 2469,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
   Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
   The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
@@ -177,11 +179,13 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2355: return "A function whose declared type is not 'void' must return a value.";
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
+    case 2365: return "Operator '{0}' cannot be applied to types '{1}' and '{2}'.";
     case 2380: return "'get' and 'set' accessor must have the same type.";
     case 2390: return "Constructor implementation is missing.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2392: return "Multiple constructor implementations are not allowed.";
     case 2393: return "Duplicate function implementation.";
+    case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
     case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";
     case 2541: return "The target of an assignment must be a variable or a property access.";

@@ -62,11 +62,13 @@ export class DiagnosticMessage {
     code: DiagnosticCode,
     category: DiagnosticCategory,
     arg0: string | null = null,
-    arg1: string | null = null
+    arg1: string | null = null,
+    arg2: string | null = null
   ): DiagnosticMessage {
     var message = diagnosticCodeToString(code);
     if (arg0 != null) message = message.replace("{0}", arg0);
     if (arg1 != null) message = message.replace("{1}", arg1);
+    if (arg2 != null) message = message.replace("{2}", arg2);
     return new DiagnosticMessage(code, category, message);
   }
 
@@ -211,23 +213,42 @@ export abstract class DiagnosticEmitter {
     category: DiagnosticCategory,
     range: Range,
     arg0: string | null = null,
-    arg1: string | null = null
+    arg1: string | null = null,
+    arg2: string | null = null
   ) {
-    var message = DiagnosticMessage.create(code, category, arg0, arg1).withRange(range);
+    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2).withRange(range);
     this.diagnostics.push(message);
     // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
     // console.log(<string>new Error("stack").stack);
   }
 
-  error(code: DiagnosticCode, range: Range, arg0: string | null = null, arg1: string | null = null): void {
-    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, arg0, arg1);
+  error(
+    code: DiagnosticCode,
+    range: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, arg0, arg1, arg2);
   }
 
-  info(code: DiagnosticCode, range: Range, arg0: string | null = null, arg1: string | null = null): void {
-    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, arg0, arg1);
+  info(
+    code: DiagnosticCode,
+    range: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, arg0, arg1, arg2);
   }
 
-  warning(code: DiagnosticCode, range: Range, arg0: string | null = null, arg1: string | null = null): void {
-    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, arg0, arg1);
+  warning(
+    code: DiagnosticCode,
+    range: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, arg0, arg1, arg2);
   }
 }

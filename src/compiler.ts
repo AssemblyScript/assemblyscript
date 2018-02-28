@@ -132,6 +132,8 @@ export class Options {
   noAssert: bool = false;
   /** If true, does not set up a memory. */
   noMemory: bool = false;
+  /** If true, imports the memory provided by the embedder. */
+  importMemory: bool = false;
   /** Static memory start offset. */
   memoryBase: u32 = 0;
   /** Memory allocation implementation to use. */
@@ -297,6 +299,11 @@ export class Compiler extends DiagnosticEmitter {
         this.options.target,
         "memory"
       );
+    }
+
+    // import memory if requested
+    if (this.options.importMemory) {
+      this.module.addMemoryImport("memory", "env", "memory");
     }
 
     // set up function table
@@ -2030,6 +2037,16 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
+  /** Computes the common compatible type of two types. Returns `null` if incompatible. */
+  computeCommonType(leftType: Type, rightType: Type): Type | null {
+    if (leftType.isAssignableTo(rightType)) {
+      return rightType;
+    } else if (rightType.isAssignableTo(leftType)) {
+      return leftType;
+    }
+    return null;
+  }
+
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
     var toType = this.program.resolveType( // reports
       expression.toType,
@@ -2046,6 +2063,38 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var left: ExpressionRef;
     var right: ExpressionRef;
+
+    // TODO: Currently, the common type of any binary expression is the first operand's type. This
+    // differs from C and other languages where comparing an int to a long, in this order, upcasts
+    // left to a long before comparison, instead of failing when trying to downcast right to an int.
+    // NOTE that if we change the current behaviour, some examples, tests and wiki pages will have
+    // to be updated, while compound binary operations must retain the previous behavior.
+
+    // var left = this.compileExpression(
+    //   expression.left,
+    //   contextualType == Type.void
+    //     ? Type.i32
+    //     : contextualType,
+    //   ConversionKind.NONE
+    // );
+    // var leftType = this.currentType;
+    // var right = this.compileExpression(
+    //   expression.right,
+    //   leftType,
+    //   ConversionKind.NONE
+    // );
+    // var rightType = this.currentType;
+    // var commonType = this.computeCommonType(leftType, rightType);
+    // if (!commonType) {
+    //   this.error(
+    //     DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+    //     expression.range,
+    //     Token.operatorToString(expression.operator), leftType.toString(), rightType.toString()
+    //   );
+    //   this.currentType = contextualType;
+    //   return this.module.createUnreachable();
+    // }
+
     var condition: ExpressionRef;
     var expr: ExpressionRef;
 
@@ -3828,6 +3877,8 @@ export class Compiler extends DiagnosticEmitter {
     var instance = this.compileFunctionUsingTypeArguments(prototype, [], null, declaration);
     if (!instance) return this.module.createUnreachable();
     this.currentType = Type.u32.asFunction(instance);
+    // NOTE that, in order to make this work in every case, the function must be represented by a
+    // value, so we add it and rely on the optimizer to figure out where it can be called directly.
     var index = this.addFunctionTableEntry(instance);
     if (index < 0) return this.module.createUnreachable();
     return this.module.createI32(index);

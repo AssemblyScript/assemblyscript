@@ -92,6 +92,11 @@ export function setNoMemory(options: Options, noMemory: bool): void {
   options.noMemory = noMemory;
 }
 
+/** Sets the `importMemory` option. */
+export function setImportMemory(options: Options, importMemory: bool): void {
+  options.importMemory = importMemory;
+}
+
 /** Sets the `sourceMap` option. */
 export function setSourceMap(options: Options, sourceMap: bool): void {
   options.sourceMap = sourceMap;

@@ -89,6 +89,10 @@
     "desc": "Does not set up a memory. Useful for low-level WebAssembly.",
     "type": "boolean"
   },
+  "importMemory": {
+    "desc": "Imports the memory instance provided by the embedder.",
+    "type": "boolean"
+  },
   "memoryBase": {
     "desc": "Sets the start offset of compiler-generated static memory.",
     "type": "number"
