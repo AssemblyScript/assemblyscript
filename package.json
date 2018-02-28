@@ -11,6 +11,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
+    "binaryen": "44.0.0-nightly.20180224",
     "glob": "^7.1.2",
     "long": "^4.0.0",
     "minimist": "^1.2.0",
@@ -19,7 +20,6 @@
   "devDependencies": {
     "@types/node": "^9.4.6",
     "babel-minify-webpack-plugin": "^0.3.0",
-    "binaryen": "44.0.0-nightly.20180224",
     "browser-process-hrtime": "^0.1.2",
     "chalk": "^2.3.1",
     "diff": "^3.4.0",
