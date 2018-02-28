@@ -219,22 +219,19 @@
    (loop $continue|3
     (if
      (if (result i32)
-      (i32.ne
-       (tee_local $0
-        (block (result i32)
-         (set_local $0
-          (get_global $while/n)
-         )
-         (set_global $while/n
-          (i32.sub
-           (get_local $0)
-           (i32.const 1)
-          )
-         )
-         (get_local $0)
+      (tee_local $0
+       (block (result i32)
+        (set_local $0
+         (get_global $while/n)
         )
+        (set_global $while/n
+         (i32.sub
+          (get_local $0)
+          (i32.const 1)
+         )
+        )
+        (get_local $0)
        )
-       (i32.const 0)
       )
       (block (result i32)
        (set_global $while/m

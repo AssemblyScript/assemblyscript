@@ -474,12 +474,18 @@ export class Program extends DiagnosticEmitter {
     // check and possibly register string type
     if (
       prototype.is(ElementFlags.GLOBAL) &&
-      declaration.name.text === "String" &&
-      !this.types.has("string")
+      declaration.name.text == "String"
     ) {
-      var instance = prototype.resolve(null);
-      if (instance) {
-        this.types.set("string", instance.type);
+      if (!this.types.has("string")) {
+        var instance = prototype.resolve(null);
+        if (instance) {
+          this.types.set("string", instance.type);
+        }
+      } else {
+        this.error(
+          DiagnosticCode.Duplicate_identifier_0,
+          declaration.name.range, declaration.programLevelInternalName
+        );
       }
     }
   }
@@ -2116,7 +2122,7 @@ export class FunctionPrototype extends Element {
         }
       }
     }
-    if (this.declaration.typeParameters.length) {
+    if (this.declaration.isGeneric) {
       this.set(ElementFlags.GENERIC);
     }
     if (this.classPrototype = classPrototype) {
@@ -2163,7 +2169,7 @@ export class FunctionPrototype extends Element {
     // override call specific contextual type arguments
     var functionTypeParameters = declaration.typeParameters;
     if (functionTypeArguments && (k = functionTypeArguments.length)) {
-      if (k != functionTypeParameters.length) {
+      if (!functionTypeParameters || k != functionTypeParameters.length) {
         throw new Error("type argument count mismatch");
       }
       for (i = 0; i < k; ++i) {
@@ -2229,7 +2235,7 @@ export class FunctionPrototype extends Element {
     if (this.is(ElementFlags.GENERIC)) {
       assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
       resolvedTypeArguments = this.program.resolveTypeArguments(
-        this.declaration.typeParameters,
+        assert(this.declaration.typeParameters),
         typeArgumentNodes,
         contextualTypeArguments,
         reportNode
@@ -2288,6 +2294,10 @@ export class Function extends Element {
   flow: Flow;
   /** Remembered debug locations. */
   debugLocations: Range[] | null = null;
+  /** Function reference, if compiled. */
+  ref: FunctionRef = 0;
+  /** Function table index, if any. */
+  functionTableIndex: i32 = -1;
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
@@ -2444,6 +2454,7 @@ export class Function extends Element {
 
   /** Finalizes the function once compiled, releasing no longer needed resources. */
   finalize(module: Module, ref: FunctionRef): void {
+    this.ref = ref;
     assert(!this.breakStack || !this.breakStack.length); // internal error
     this.breakStack = null;
     this.breakContext = null;
@@ -2464,6 +2475,11 @@ export class Function extends Element {
       }
     }
     this.debugLocations = null;
+  }
+
+  /** Tests if a value of this function type is assignable to a target of the specified function type. */
+  isAssignableTo(target: Function): bool {
+    return this == target; // TODO
   }
 
   /** Returns the TypeScript representation of this function. */
@@ -2863,6 +2879,17 @@ export class Class extends Element {
         throw new Error("type argument count mismatch");
       }
     }
+  }
+
+  /** Tests if a value of this class type is assignable to a target of the specified class type. */
+  isAssignableTo(target: Class): bool {
+    var current: Class | null = this;
+    do {
+      if (current == target) {
+        return true;
+      }
+    } while (current = current.base);
+    return false;
   }
 
   toString(): string {

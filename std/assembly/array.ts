@@ -8,7 +8,7 @@ export class Array<T> {
     assert(newCapacity > this.__capacity);
     var newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
     if (this.__memory) {
-      move_memory(newMemory, this.__memory, this.__capacity * sizeof<T>());
+      move_memory(newMemory, this.__memory, <usize>this.__capacity * sizeof<T>());
       free_memory(this.__memory);
     }
     this.__memory = newMemory;
@@ -63,7 +63,7 @@ export class Array<T> {
       fromIndex = this.__length + fromIndex;
     }
     while (<u32>fromIndex < this.__length) {
-      if (load<T>(this.__memory + fromIndex * sizeof<T>()) == searchElement) {
+      if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) {
         return fromIndex;
       }
       ++fromIndex;
@@ -78,7 +78,7 @@ export class Array<T> {
       fromIndex = this.__length - 1;
     }
     while (fromIndex >= 0) {
-      if (load<T>(this.__memory + fromIndex * sizeof<T>()) == searchElement) {
+      if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) {
         return fromIndex;
       }
       --fromIndex;
@@ -90,7 +90,7 @@ export class Array<T> {
     if (this.__length == this.__capacity) {
       this.__grow(this.__capacity ? this.__capacity << 1 : 1);
     }
-    store<T>(this.__memory + this.__length * sizeof<T>(), element);
+    store<T>(this.__memory + <usize>this.__length * sizeof<T>(), element);
     return ++this.__length;
   }
 
@@ -98,7 +98,7 @@ export class Array<T> {
     if (this.__length < 1) {
       throw new RangeError("Array is empty"); // return changetype<T>(0) ?
     }
-    return load<T>(this.__memory + --this.__length * sizeof<T>());
+    return load<T>(this.__memory + <usize>--this.__length * sizeof<T>());
   }
 
   shift(): T {
@@ -109,10 +109,10 @@ export class Array<T> {
     move_memory(
       this.__memory,
       this.__memory + sizeof<T>(),
-      (this.__capacity - 1) * sizeof<T>()
+      <usize>(this.__capacity - 1) * sizeof<T>()
     );
     set_memory(
-      this.__memory + (this.__capacity - 1) * sizeof<T>(),
+      this.__memory + <usize>(this.__capacity - 1) * sizeof<T>(),
       0,
       sizeof<T>()
     );
@@ -131,7 +131,7 @@ export class Array<T> {
         move_memory(
           newMemory + sizeof<T>(),
           this.__memory,
-          oldCapacity * sizeof<T>()
+          <usize>oldCapacity * sizeof<T>()
         );
         free_memory(this.__memory);
       }
@@ -141,7 +141,7 @@ export class Array<T> {
       move_memory(
         this.__memory + sizeof<T>(),
         this.__memory,
-        oldCapacity * sizeof<T>()
+        <usize>oldCapacity * sizeof<T>()
       );
     }
     store<T>(this.__memory, element);
@@ -196,7 +196,7 @@ export class Array<T> {
     move_memory(
       this.__memory + <usize>start * sizeof<T>(),
       this.__memory + <usize>(start + deleteCount) * sizeof<T>(),
-      deleteCount * sizeof<T>()
+      <usize>deleteCount * sizeof<T>()
     );
     this.__length -= deleteCount;
   }

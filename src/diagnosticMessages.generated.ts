@@ -4,7 +4,7 @@
 export enum DiagnosticCode {
   Operation_not_supported = 100,
   Operation_is_unsafe = 101,
-  Conversion_from_type_0_to_1_possibly_loses_information_and_thus_requires_an_explicit_cast = 200,
+  Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
   Type_0_cannot_be_reinterpreted_as_type_1 = 203,
@@ -101,7 +101,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
     case 100: return "Operation not supported.";
     case 101: return "Operation is unsafe.";
-    case 200: return "Conversion from type '{0}' to '{1}' possibly loses information and thus requires an explicit cast.";
+    case 200: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
     case 203: return "Type '{0}' cannot be reinterpreted as type '{1}'.";

@@ -1,7 +1,7 @@
 {
   "Operation not supported.": 100,
   "Operation is unsafe.": 101,
-  "Conversion from type '{0}' to '{1}' possibly loses information and thus requires an explicit cast.": 200,
+  "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,
   "Type '{0}' cannot be changed to type '{1}'.": 202,
   "Type '{0}' cannot be reinterpreted as type '{1}'.": 203,

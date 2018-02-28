@@ -2303,7 +2303,7 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   var expr: ExpressionRef;
   var value: i32;
   if (compiler.options.isWasm64) {
-    expr = compiler.precomputeExpression(expression, Type.i64);
+    expr = compiler.precomputeExpression(expression, Type.usize64);
     if (
       _BinaryenExpressionGetId(expr) != ExpressionId.Const ||
       _BinaryenExpressionGetType(expr) != NativeType.I64 ||
@@ -2317,7 +2317,7 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
       value = -1;
     }
   } else {
-    expr = compiler.precomputeExpression(expression, Type.i32);
+    expr = compiler.precomputeExpression(expression, Type.usize32);
     if (
       _BinaryenExpressionGetId(expr) != ExpressionId.Const ||
       _BinaryenExpressionGetType(expr) != NativeType.I32 ||

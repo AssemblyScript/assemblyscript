@@ -133,10 +133,10 @@ declare function isize(value: void): isize;
 namespace isize {
   export const MIN_VALUE: isize = sizeof<i32>() == sizeof<isize>()
     ? -2147483648
-    : <usize>-9223372036854775808;
+    : <isize>-9223372036854775808;
   export const MAX_VALUE: isize = sizeof<i32>() == sizeof<isize>()
     ? 2147483647
-    : <usize>9223372036854775807;
+    : <isize>9223372036854775807;
 }
 export { isize };
 

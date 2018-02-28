@@ -721,7 +721,7 @@ export abstract class Node {
 
   static createFunctionDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameter[],
+    typeParameters: TypeParameter[] | null,
     parameters: Parameter[],
     returnType: TypeNode | null,
     body: Statement | null,
@@ -732,7 +732,7 @@ export abstract class Node {
     var stmt = new FunctionDeclaration();
     stmt.range = range;
     stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; setParent(typeParameters, stmt);
+    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
     stmt.parameters = parameters; setParent(parameters, stmt);
     stmt.returnType = returnType; if (returnType) returnType.parent = stmt;
     stmt.body = body; if (body) body.parent = stmt;
@@ -743,7 +743,7 @@ export abstract class Node {
 
   static createMethodDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameter[],
+    typeParameters: TypeParameter[] | null,
     parameters: Parameter[],
     returnType: TypeNode | null,
     body: Statement | null,
@@ -754,7 +754,7 @@ export abstract class Node {
     var stmt = new MethodDeclaration();
     stmt.range = range;
     stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; setParent(typeParameters, stmt);
+    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
     stmt.parameters = parameters; setParent(parameters, stmt);
     stmt.returnType = returnType; if (returnType) returnType.parent = stmt;
     stmt.body = body; if (body) body.parent = stmt;
@@ -1490,13 +1490,17 @@ export class FunctionDeclaration extends DeclarationStatement {
   kind = NodeKind.FUNCTIONDECLARATION;
 
   /** Accepted type parameters. */
-  typeParameters: TypeParameter[];
+  typeParameters: TypeParameter[] | null;
   /** Accepted parameters. */
   parameters: Parameter[];
   /** Return type. */
   returnType: TypeNode | null;
   /** Body statement. Usually a block. */
   body: Statement | null;
+
+  get isGeneric(): bool {
+    return this.typeParameters != null && this.typeParameters.length > 0;
+  }
 }
 
 /** Represents an `if` statement. */

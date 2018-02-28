@@ -88,6 +88,7 @@ import {
   CommaExpression,
   ElementAccessExpression,
   FloatLiteralExpression,
+  FunctionExpression,
   IdentifierExpression,
   IntegerLiteralExpression,
   LiteralExpression,
@@ -200,6 +201,9 @@ export class Compiler extends DiagnosticEmitter {
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
 
+  /** Function table being compiled. */
+  functionTable: Function[] = new Array();
+
   /** Already processed file names. */
   files: Set<string> = new Set();
 
@@ -294,6 +298,16 @@ export class Compiler extends DiagnosticEmitter {
         "memory"
       );
     }
+
+    // set up function table
+    if (k = this.functionTable.length) {
+      var entries = new Array<FunctionRef>(k);
+      for (i = 0; i < k; ++i) {
+        entries[i] = this.functionTable[i].ref;
+      }
+      this.module.setFunctionTable(entries);
+    }
+
     return this.module;
   }
 
@@ -376,7 +390,7 @@ export class Compiler extends DiagnosticEmitter {
               noTreeShaking ||
               (isEntry && hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>statement).modifiers))
             ) &&
-            !(<FunctionDeclaration>statement).typeParameters.length
+            !(<FunctionDeclaration>statement).isGeneric
           ) {
             this.compileFunctionDeclaration(<FunctionDeclaration>statement, []);
           }
@@ -868,7 +882,8 @@ export class Compiler extends DiagnosticEmitter {
             (
               noTreeShaking ||
               hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>member).modifiers)
-            ) && !(<FunctionDeclaration>member).typeParameters.length
+            ) &&
+            !(<FunctionDeclaration>member).isGeneric
           ) {
             this.compileFunctionDeclaration(<FunctionDeclaration>member, []);
           }
@@ -1068,13 +1083,27 @@ export class Compiler extends DiagnosticEmitter {
 
   // memory
 
-  /** Adds a static memory segment with the specified data.  */
+  /** Adds a static memory segment with the specified data. */
   addMemorySegment(buffer: Uint8Array, alignment: i32 = 8): MemorySegment {
     var memoryOffset = i64_align(this.memoryOffset, alignment);
     var segment = MemorySegment.create(buffer, memoryOffset);
     this.memorySegments.push(segment);
     this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
     return segment;
+  }
+
+  // function table
+
+  /** Adds a function table entry and returns the assigned index. */
+  addFunctionTableEntry(func: Function): i32 {
+    assert(func.is(ElementFlags.COMPILED));
+    if (func.functionTableIndex >= 0) {
+      return func.functionTableIndex;
+    }
+    var index = this.functionTable.length;
+    this.functionTable.push(func);
+    func.functionTableIndex = index;
+    return index;
   }
 
   // statements
@@ -1241,7 +1270,11 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFunction.flow.breakLabel = previousBreakLabel;
     this.currentFunction.flow.continueLabel = previousContinueLabel;
 
-    var condition = this.compileExpression(statement.condition, Type.i32);
+    var condition = makeIsTrueish(
+      this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
+      this.currentType,
+      this.module
+    );
 
     this.currentFunction.leaveBreakContext();
 
@@ -1319,7 +1352,11 @@ export class Compiler extends DiagnosticEmitter {
   compileIfStatement(statement: IfStatement): ExpressionRef {
 
     // The condition doesn't initiate a branch yet
-    var condition = this.compileExpression(statement.condition, Type.i32);
+    var condition = makeIsTrueish(
+      this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
+      this.currentType,
+      this.module
+    );
 
     // Each arm initiates a branch
     this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
@@ -1359,14 +1396,14 @@ export class Compiler extends DiagnosticEmitter {
     var context = this.currentFunction.enterBreakContext();
 
     // introduce a local for evaluating the condition (exactly once)
-    var tempLocal = this.currentFunction.getTempLocal(Type.i32);
+    var tempLocal = this.currentFunction.getTempLocal(Type.u32);
     var k = statement.cases.length;
 
     // Prepend initializer to inner block. Does not initiate a new branch, yet.
     var breaks = new Array<ExpressionRef>(1 + k);
     breaks[0] = this.module.createSetLocal( // initializer
       tempLocal.index,
-      this.compileExpression(statement.condition, Type.i32)
+      this.compileExpression(statement.condition, Type.u32)
     );
 
     // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
@@ -1577,7 +1614,11 @@ export class Compiler extends DiagnosticEmitter {
   compileWhileStatement(statement: WhileStatement): ExpressionRef {
 
     // The condition does not yet initialize a branch
-    var condition = this.compileExpression(statement.condition, Type.i32);
+    var condition = makeIsTrueish(
+      this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
+      this.currentType,
+      this.module
+    );
 
     // Statements initiate a new branch with its own break context
     var label = this.currentFunction.enterBreakContext();
@@ -1715,6 +1756,11 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.compileElementAccessExpression(<ElementAccessExpression>expression, contextualType);
         break;
 
+      case NodeKind.FUNCTION:
+      case NodeKind.FUNCTIONARROW:
+        expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType);
+        break;
+
       case NodeKind.IDENTIFIER:
       case NodeKind.FALSE:
       case NodeKind.NULL:
@@ -1815,6 +1861,13 @@ export class Compiler extends DiagnosticEmitter {
     // any to void
     if (toType.kind == TypeKind.VOID) {
       return this.module.createDrop(expr);
+    }
+
+    if (conversionKind == ConversionKind.IMPLICIT && !fromType.isAssignableTo(toType)) {
+      this.error(
+        DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
     }
 
     var mod = this.module;
@@ -1972,13 +2025,6 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // otherwise (smaller) i32/u32 to (same size) i32/u32
-    }
-
-    if (losesInformation && conversionKind == ConversionKind.IMPLICIT) {
-      this.error(
-        DiagnosticCode.Conversion_from_type_0_to_1_possibly_loses_information_and_thus_requires_an_explicit_cast,
-        reportNode.range, fromType.toString(), toType.toString()
-      );
     }
 
     return expr;
@@ -3768,6 +3814,25 @@ export class Compiler extends DiagnosticEmitter {
     ], expression);
   }
 
+  compileFunctionExpression(expression: FunctionExpression, contextualType: Type): ExpressionRef {
+    var declaration = expression.declaration;
+    var simpleName = (declaration.name.text.length
+      ? declaration.name.text
+      : "anonymous") + "|" + this.functionTable.length.toString(10);
+    var prototype = new FunctionPrototype(
+      this.program,
+      simpleName,
+      this.currentFunction.internalName + "~" + simpleName,
+      declaration
+    );
+    var instance = this.compileFunctionUsingTypeArguments(prototype, [], null, declaration);
+    if (!instance) return this.module.createUnreachable();
+    this.currentType = Type.u32.asFunction(instance);
+    var index = this.addFunctionTableEntry(instance);
+    if (index < 0) return this.module.createUnreachable();
+    return this.module.createI32(index);
+  }
+
   compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type): ExpressionRef {
     // check special keywords first
     switch (expression.kind) {
@@ -4045,7 +4110,8 @@ export class Compiler extends DiagnosticEmitter {
       this.stringSegments.set(stringValue, stringSegment);
     }
     var stringOffset = stringSegment.offset;
-    this.currentType = this.options.usizeType;
+    var stringType = this.program.types.get("string");
+    this.currentType = stringType ? stringType : this.options.usizeType;
     if (this.options.isWasm64) {
       return this.module.createI64(i64_low(stringOffset), i64_high(stringOffset));
     }
@@ -4244,7 +4310,8 @@ export class Compiler extends DiagnosticEmitter {
         assert((<Field>element).memoryOffset >= 0);
         targetExpr = this.compileExpression(
           <Expression>resolved.targetExpression,
-          this.options.usizeType
+          this.options.usizeType,
+          ConversionKind.NONE
         );
         this.currentType = (<Field>element).type;
         return this.module.createLoad(
@@ -4265,9 +4332,8 @@ export class Compiler extends DiagnosticEmitter {
         if (getterInstance.is(ElementFlags.INSTANCE)) {
           targetExpr = this.compileExpression(
             <Expression>resolved.targetExpression,
-            this.options.isWasm64
-              ? Type.usize64
-              : Type.usize32
+            this.options.usizeType,
+            ConversionKind.NONE
           );
           this.currentType = getterInstance.returnType;
           return this.makeCall(getterInstance, [ targetExpr ]);
@@ -4283,7 +4349,11 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {
-    var condition = this.compileExpression(expression.condition, Type.i32);
+    var condition = makeIsTrueish(
+      this.compileExpression(expression.condition, Type.u32, ConversionKind.NONE),
+      this.currentType,
+      this.module
+    );
     var ifThen = this.compileExpression(expression.ifThen, contextualType);
     var ifElse = this.compileExpression(expression.ifElse, contextualType);
     return this.module.createIf(condition, ifThen, ifElse);
@@ -4308,6 +4378,13 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.operator) {
 
       case Token.PLUS_PLUS:
+        if (this.currentType.isReference) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          return this.module.createUnreachable();
+        }
         switch (this.currentType.kind) {
 
           case TypeKind.I8:
@@ -4363,6 +4440,13 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.MINUS_MINUS:
+        if (this.currentType.isReference) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          return this.module.createUnreachable();
+        }
         switch (this.currentType.kind) {
 
           case TypeKind.I8:
@@ -4496,6 +4580,13 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.MINUS:
+        if (this.currentType.isReference) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          return this.module.createUnreachable();
+        }
         if (expression.operand.kind == NodeKind.LITERAL && (
           (<LiteralExpression>expression.operand).literalKind == LiteralKind.INTEGER ||
           (<LiteralExpression>expression.operand).literalKind == LiteralKind.FLOAT
@@ -4559,6 +4650,13 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.PLUS_PLUS:
+        if (this.currentType.isReference) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          return this.module.createUnreachable();
+        }
         compound = true;
         expr = this.compileExpression(
           expression.operand,
@@ -4616,6 +4714,13 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.MINUS_MINUS:
+        if (this.currentType.isReference) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          return this.module.createUnreachable();
+        }
         compound = true;
         expr = this.compileExpression(
           expression.operand,
@@ -4687,6 +4792,13 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.TILDE:
+        if (this.currentType.isReference) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          return this.module.createUnreachable();
+        }
         expr = this.compileExpression(
           expression.operand,
           contextualType == Type.void
@@ -4866,12 +4978,12 @@ export function makeIsFalseish(expr: ExpressionRef, type: Type, module: Module):
 }
 
 /** Creates a comparison whether an expression is 'true' in a broader sense. */
-export function makeIsTrueish(expr: ExpressionRef, type: Type, module: Module): ExpressionRef {
+export function makeIsTrueish(
+  expr: ExpressionRef,
+  type: Type,
+  module: Module
+): ExpressionRef {
   switch (type.kind) {
-
-    default: // any integer up to 32 bits
-      expr = module.createBinary(BinaryOp.NeI32, expr, module.createI32(0));
-      break;
 
     case TypeKind.I64:
     case TypeKind.U64:
@@ -4881,9 +4993,9 @@ export function makeIsTrueish(expr: ExpressionRef, type: Type, module: Module): 
     case TypeKind.USIZE:
       // TODO: strings
     case TypeKind.ISIZE:
-      expr = type.size == 64
-        ? module.createBinary(BinaryOp.NeI64, expr, module.createI64(0))
-        : module.createBinary(BinaryOp.NeI32, expr, module.createI32(0));
+      if (type.size == 64) {
+        expr = module.createBinary(BinaryOp.NeI64, expr, module.createI64(0));
+      }
       break;
 
     case TypeKind.F32:

@@ -56,6 +56,7 @@ import {
   ExportStatement,
   ExpressionStatement,
   ForStatement,
+  FunctionExpression,
   FunctionDeclaration,
   IfStatement,
   ImportDeclaration,
@@ -79,8 +80,7 @@ import {
   addModifier,
   getModifier,
   hasModifier,
-  setReusableModifiers,
-  FunctionExpression
+  setReusableModifiers
 
 } from "./ast";
 
@@ -874,8 +874,6 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.LESSTHAN)) {
       typeParameters = this.parseTypeParameters(tn);
       if (!typeParameters) return null;
-    } else {
-      typeParameters = [];
     }
 
     if (!tn.skip(Token.OPENPAREN)) {
@@ -1046,7 +1044,7 @@ export class Parser extends DiagnosticEmitter {
 
     var declaration = Node.createFunctionDeclaration(
       identifier,
-      [],
+      null,
       parameters,
       returnType,
       body,
@@ -1213,7 +1211,7 @@ export class Parser extends DiagnosticEmitter {
         ? Node.createConstructorExpression(tn.range())
         : Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
 
-      var typeParameters: TypeParameter[] | null;
+      var typeParameters: TypeParameter[] | null = null;
       if (tn.skip(Token.LESSTHAN)) {
         if (isConstructor) {
           this.error(
@@ -1223,8 +1221,6 @@ export class Parser extends DiagnosticEmitter {
         }
         typeParameters = this.parseTypeParameters(tn);
         if (!typeParameters) return null;
-      } else {
-        typeParameters = [];
       }
 
       // method: '(' Parameters (':' Type)? '{' Statement* '}' ';'?

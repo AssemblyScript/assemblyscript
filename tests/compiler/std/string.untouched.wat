@@ -114,10 +114,7 @@
    (loop $continue|0
     (if
      (if (result i32)
-      (i32.ne
-       (get_local $2)
-       (i32.const 0)
-      )
+      (get_local $2)
       (i32.eq
        (i32.load8_u
         (get_local $0)
@@ -635,14 +632,11 @@
    (if
     (i32.and
      (if (result i32)
-      (i32.ne
-       (tee_local $6
-        (i32.eq
-         (get_local $4)
-         (i32.const 48)
-        )
+      (tee_local $6
+       (i32.eq
+        (get_local $4)
+        (i32.const 48)
        )
-       (i32.const 0)
       )
       (i32.gt_s
        (get_local $2)
@@ -771,14 +765,11 @@
    (if
     (i32.and
      (if (result i32)
-      (i32.ne
-       (tee_local $6
-        (i32.lt_s
-         (get_local $1)
-         (i32.const 2)
-        )
+      (tee_local $6
+       (i32.lt_s
+        (get_local $1)
+        (i32.const 2)
        )
-       (i32.const 0)
       )
       (get_local $6)
       (i32.gt_s
@@ -821,14 +812,11 @@
        (if
         (i32.and
          (if (result i32)
-          (i32.ne
-           (tee_local $6
-            (i32.ge_s
-             (get_local $4)
-             (i32.const 48)
-            )
+          (tee_local $6
+           (i32.ge_s
+            (get_local $4)
+            (i32.const 48)
            )
-           (i32.const 0)
           )
           (i32.le_s
            (get_local $4)
@@ -847,14 +835,11 @@
         (if
          (i32.and
           (if (result i32)
-           (i32.ne
-            (tee_local $6
-             (i32.ge_s
-              (get_local $4)
-              (i32.const 65)
-             )
+           (tee_local $6
+            (i32.ge_s
+             (get_local $4)
+             (i32.const 65)
             )
-            (i32.const 0)
            )
            (i32.le_s
             (get_local $4)
@@ -876,14 +861,11 @@
          (if
           (i32.and
            (if (result i32)
-            (i32.ne
-             (tee_local $6
-              (i32.ge_s
-               (get_local $4)
-               (i32.const 97)
-              )
+            (tee_local $6
+             (i32.ge_s
+              (get_local $4)
+              (i32.const 97)
              )
-             (i32.const 0)
             )
             (i32.le_s
              (get_local $4)
@@ -1119,14 +1101,11 @@
               (if
                (i32.and
                 (if (result i32)
-                 (i32.ne
-                  (tee_local $6
-                   (i32.eq
-                    (get_local $3)
-                    (i32.const 69)
-                   )
+                 (tee_local $6
+                  (i32.eq
+                   (get_local $3)
+                   (i32.const 69)
                   )
-                  (i32.const 0)
                  )
                  (get_local $6)
                  (i32.eq

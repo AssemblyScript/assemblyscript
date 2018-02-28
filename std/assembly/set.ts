@@ -13,7 +13,7 @@ export class Set<T> {
   }
 
   get size(): i32 {
-    return this.__size;
+    return <i32>this.__size;
   }
 
   // FIXME: not a proper set implementation, just a filler
@@ -52,11 +52,11 @@ export class Set<T> {
 
     for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index) {
       if (load<T>(this.__memory + index * sizeof<T>()) == value) {
-        if (index + 1 < this.__size) {
+        if (index + 1 < limit) {
           move_memory(
             this.__memory + index * sizeof<T>(),
             this.__memory + (index + 1) * sizeof<T>(),
-            this.__size - index - 1
+            limit - index - 1
           );
         }
         --this.__size;

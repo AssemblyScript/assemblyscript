@@ -229,14 +229,11 @@
              (if
               (i32.and
                (if (result i32)
-                (i32.ne
-                 (tee_local $9
-                  (i32.lt_s
-                   (get_local $8)
-                   (i32.const 2)
-                  )
+                (tee_local $9
+                 (i32.lt_s
+                  (get_local $8)
+                  (i32.const 2)
                  )
-                 (i32.const 0)
                 )
                 (get_local $9)
                 (i32.gt_s

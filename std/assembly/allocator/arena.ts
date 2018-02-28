@@ -17,7 +17,7 @@ export function allocate_memory(size: usize): usize {
   var off = (ptr + size + ALIGN_MASK) & ~ALIGN_MASK;
   var avail = <usize>current_memory() << 16;
   if (off > avail && grow_memory(
-    max(
+    <i32>max(
       (((off + 0xffff) & ~0xffff) - avail) >> 16, // minimum required pages
       avail                                >> 16  // at least double memory
     )

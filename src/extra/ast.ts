@@ -876,14 +876,16 @@ export function serializeFunctionDeclaration(node: FunctionDeclaration, sb: stri
 function serializeFunctionCommon(node: FunctionDeclaration, sb: string[], isArrow: bool = false): void {
   var i: i32, k: i32;
   serializeIdentifierExpression(node.name, sb);
-  if (k = node.typeParameters.length) {
-    sb.push("<");
-    serializeTypeParameter(node.typeParameters[0], sb);
-    for (i = 1; i < k; ++i) {
-      sb.push(", ");
-      serializeTypeParameter(node.typeParameters[i], sb);
+  if (node.typeParameters) {
+    if (k = node.typeParameters.length) {
+      sb.push("<");
+      serializeTypeParameter(node.typeParameters[0], sb);
+      for (i = 1; i < k; ++i) {
+        sb.push(", ");
+        serializeTypeParameter(node.typeParameters[i], sb);
+      }
+      sb.push(">");
     }
-    sb.push(">");
   }
   sb.push("(");
   if (k = node.parameters.length) {

@@ -122,7 +122,7 @@ export class Type {
 
   /** Composes a function type from this type and a function. */
   asFunction(functionType: Function): Type {
-    assert(this.kind == TypeKind.USIZE && !this.isReference);
+    assert(this.kind == TypeKind.U32 && !this.isReference);
     var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
     ret.functionType = functionType;
     return ret;
@@ -138,6 +138,196 @@ export class Type {
       this.nullableType.functionType = this.functionType;
     }
     return this.nullableType;
+  }
+
+  /** Tests if a value of this type is assignable to a target of the specified type. */
+  isAssignableTo(target: Type): bool {
+    var currentClass: Class | null;
+    var targetClass: Class | null;
+    var currentFunction: Function | null;
+    var targetFunction: Function | null;
+    if (this.isReference) {
+      if (target.isReference) {
+        if (currentClass = this.classType) {
+          if (targetClass = target.classType) {
+            return currentClass.isAssignableTo(targetClass);
+          }
+        } else if (currentFunction = this.functionType) {
+          if (targetFunction = target.functionType) {
+            return currentFunction.isAssignableTo(targetFunction);
+          }
+        }
+      }
+    } else if (!target.isReference) {
+      switch (this.kind) {
+
+        case TypeKind.I8:
+          switch (target.kind) {
+            case TypeKind.I8:    // same
+            case TypeKind.I16:   // larger
+            case TypeKind.I32:   // larger
+            case TypeKind.I64:   // larger
+            case TypeKind.ISIZE: // larger
+            case TypeKind.U8:    // signed to unsigned
+            case TypeKind.U16:   // larger
+            case TypeKind.U32:   // larger
+            case TypeKind.U64:   // larger
+            case TypeKind.USIZE: // larger
+            case TypeKind.F32:   // safe
+            case TypeKind.F64:   // safe
+              return true;
+          }
+          break;
+
+        case TypeKind.I16:
+          switch (target.kind) {
+            case TypeKind.I16:   // same
+            case TypeKind.I32:   // larger
+            case TypeKind.I64:   // larger
+            case TypeKind.ISIZE: // larger
+            case TypeKind.U16:   // signed to unsigned
+            case TypeKind.U32:   // larger
+            case TypeKind.U64:   // larger
+            case TypeKind.USIZE: // larger
+            case TypeKind.F32:   // safe
+            case TypeKind.F64:   // safe
+              return true;
+          }
+          break;
+
+        case TypeKind.I32:
+          switch (target.kind) {
+            case TypeKind.I32:   // same
+            case TypeKind.I64:   // larger
+            case TypeKind.ISIZE: // same or larger
+            case TypeKind.U32:   // signed to unsigned
+            case TypeKind.U64:   // larger
+            case TypeKind.USIZE: // signed to unsigned or larger
+            case TypeKind.F64:   // safe
+              return true;
+          }
+          break;
+
+        case TypeKind.I64:
+          switch (target.kind) {
+            case TypeKind.I64:   // same
+            case TypeKind.U64:   // signed to unsigned
+              return true;
+            case TypeKind.ISIZE: // possibly same
+            case TypeKind.USIZE: // possibly signed to unsigned
+              return target.size == 64;
+          }
+          break;
+
+        case TypeKind.ISIZE:
+          switch (target.kind) {
+            case TypeKind.I32:   // possibly same
+            case TypeKind.U32:   // possibly signed to unsigned
+              return this.size == 32;
+            case TypeKind.I64:   // same or larger
+            case TypeKind.ISIZE: // same
+            case TypeKind.U64:   // signed to unsigned or larger
+            case TypeKind.USIZE: // signed to unsigned
+              return true;
+            case TypeKind.F64:   // possibly safe
+              return target.size == 32;
+          }
+          break;
+
+        case TypeKind.U8:
+          switch (target.kind) {
+            case TypeKind.I16:   // larger
+            case TypeKind.I32:   // larger
+            case TypeKind.I64:   // larger
+            case TypeKind.ISIZE: // larger
+            case TypeKind.U8:    // same
+            case TypeKind.U16:   // larger
+            case TypeKind.U32:   // larger
+            case TypeKind.U64:   // larger
+            case TypeKind.USIZE: // larger
+            case TypeKind.F32:   // safe
+            case TypeKind.F64:   // safe
+              return true;
+          }
+          break;
+
+        case TypeKind.U16:
+          switch (target.kind) {
+            case TypeKind.I32:   // larger
+            case TypeKind.I64:   // larger
+            case TypeKind.ISIZE: // larger
+            case TypeKind.U16:   // same
+            case TypeKind.U32:   // larger
+            case TypeKind.U64:   // larger
+            case TypeKind.USIZE: // larger
+            case TypeKind.F32:   // safe
+            case TypeKind.F64:   // safe
+              return true;
+          }
+          break;
+
+        case TypeKind.U32:
+          switch (target.kind) {
+            case TypeKind.I64:   // larger
+            case TypeKind.U32:   // same
+            case TypeKind.U64:   // larger
+            case TypeKind.USIZE: // same or larger
+            case TypeKind.F64:   // safe
+              return true;
+          }
+          break;
+
+        case TypeKind.U64:
+          switch (target.kind) {
+            case TypeKind.U64:   // same
+              return true;
+            case TypeKind.USIZE: // possibly same
+              return target.size == 64;
+          }
+          break;
+
+        case TypeKind.USIZE:
+          switch (target.kind) {
+            case TypeKind.U32:   // possibly same
+              return this.size == 32;
+            case TypeKind.U64:   // same or larger
+            case TypeKind.USIZE: // same
+              return true;
+            case TypeKind.F64:   // possibly safe
+              return target.size == 32;
+          }
+          break;
+
+        case TypeKind.BOOL:
+          switch (target.kind) {
+            case TypeKind.I8:    // larger
+            case TypeKind.I16:   // larger
+            case TypeKind.I32:   // larger
+            case TypeKind.I64:   // larger
+            case TypeKind.ISIZE: // larger
+            case TypeKind.U8:    // larger
+            case TypeKind.U16:   // larger
+            case TypeKind.U32:   // larger
+            case TypeKind.U64:   // larger
+            case TypeKind.USIZE: // larger
+            case TypeKind.BOOL:  // same
+              return true;
+          }
+          break;
+
+        case TypeKind.F32:
+          switch (target.kind) {
+            case TypeKind.F32:   // same
+            case TypeKind.F64:   // larger
+              return true;
+          }
+          break;
+
+        case TypeKind.F64:
+          return target.kind == TypeKind.F64;
+      }
+    }
+    return false;
   }
 
   /** Converts this type to its TypeScript representation. */

@@ -16,10 +16,7 @@
   (local $1 f64)
   (drop
    (if (result i32)
-    (i32.ne
-     (i32.const 0)
-     (i32.const 0)
-    )
+    (i32.const 0)
     (unreachable)
     (i32.const 0)
    )
@@ -36,10 +33,7 @@
   )
   (drop
    (if (result i32)
-    (i32.ne
-     (i32.const 1)
-     (i32.const 0)
-    )
+    (i32.const 1)
     (i32.const 1)
     (unreachable)
    )
@@ -56,18 +50,12 @@
   )
   (drop
    (if (result i32)
-    (i32.ne
-     (tee_local $0
-      (if (result i32)
-       (i32.ne
-        (i32.const 1)
-        (i32.const 0)
-       )
-       (i32.const 2)
-       (i32.const 1)
-      )
+    (tee_local $0
+     (if (result i32)
+      (i32.const 1)
+      (i32.const 2)
+      (i32.const 1)
      )
-     (i32.const 0)
     )
     (get_local $0)
     (unreachable)
@@ -94,10 +82,7 @@
   )
   (set_global $logical/i
    (if (result i32)
-    (i32.ne
-     (i32.const 1)
-     (i32.const 0)
-    )
+    (i32.const 1)
     (i32.const 2)
     (i32.const 1)
    )
@@ -121,10 +106,7 @@
   )
   (set_global $logical/i
    (if (result i32)
-    (i32.ne
-     (i32.const 0)
-     (i32.const 0)
-    )
+    (i32.const 0)
     (i32.const 0)
     (i32.const 1)
    )

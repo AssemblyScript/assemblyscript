@@ -1,4 +1,4 @@
-function test(a: i32, b: i32): void {
+function test(a: u32, b: u32): void {
 
   // signed
   assert(<i8>(a + b) == <i8>(<i8>a + <i8>b));

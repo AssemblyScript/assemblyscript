@@ -53,14 +53,11 @@
   (if
    (i32.and
     (if (result i32)
-     (i32.ne
-      (tee_local $4
-       (i32.gt_u
-        (get_local $2)
-        (get_local $3)
-       )
+     (tee_local $4
+      (i32.gt_u
+       (get_local $2)
+       (get_local $3)
       )
-      (i32.const 0)
      )
      (i32.lt_s
       (grow_memory
