@@ -4,6 +4,7 @@ const webpack = require("webpack");
 
 // Build the C-like library
 const lib = {
+  mode: "production",
   entry: [ "./src/glue/js", "./src/index.ts" ],
   module: {
     rules: [
@@ -24,20 +25,18 @@ const lib = {
     library: "assemblyscript",
     libraryTarget: "umd"
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      sourceMap: true
-    }),
-    new webpack.SourceMapDevToolPlugin({
-      filename: "assemblyscript.js.map"
-    })
-  ]
+  optimization: {
+    minimize: true
+  },
+  devtool: "source-map",
+  performance: {
+    hints : false
+  }
 };
 
 // Build asc for browser usage
-const BabelMinifyPlugin = require("babel-minify-webpack-plugin");
 const bin = {
+  mode: "production",
   context: path.join(__dirname, "bin"),
   entry: [ "./asc.js" ],
   externals: [{
@@ -64,6 +63,10 @@ const bin = {
     library: "asc",
     libraryTarget: "umd"
   },
+  optimization: {
+    minimize: true
+  },
+  devtool: "source-map",
   plugins: [
     new webpack.DefinePlugin({
       BUNDLE_VERSION: JSON.stringify(require("./package.json").version),
@@ -81,13 +84,6 @@ const bin = {
       __dirname: JSON.stringify(".")
     }),
     new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob|source\-map\-support)$/),
-    // Error: original.line and original.column are not numbers -- you probably meant to omit the
-    // original mapping entirely and only map the generated position. If so, pass null for the
-    // original mapping instead of an object with empty or null values.
-    new BabelMinifyPlugin(/* {}, { sourceMap: true } */),
-    // new webpack.SourceMapDevToolPlugin({
-    //   filename: "asc.js.map"
-    // }),
   ]
 };
 

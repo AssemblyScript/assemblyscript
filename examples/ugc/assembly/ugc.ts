@@ -214,18 +214,22 @@ class Control {
    * garbage for the next cycle.
    */
   collect(): void {
-    if (this.state == IDLE)
+    if (this.state == IDLE) {
       this.step();
-    while (this.state != IDLE)
+    }
+    while (this.state != IDLE) {
       this.step();
+    }
   }
 
   /** Informs the GC of a referred object during the mark phase. */
   visit(obj: ObjectHeader): void {
-    if (this.state == SWEEP)
+    if (this.state == SWEEP) {
       return;
-    if (obj.color == this.white)
+    }
+    if (obj.color == this.white) {
       this.makeGray(obj);
+    }
   }
 
   makeGray(obj: ObjectHeader): void {

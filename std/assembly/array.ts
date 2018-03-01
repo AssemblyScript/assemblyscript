@@ -41,7 +41,7 @@ export class Array<T> {
 
   @operator("[]")
   private __get(index: i32): T {
-    if (<u32>index >= this.__capacity) {
+    if (<u32>index >= <u32>this.__capacity) {
       throw new Error("Index out of bounds"); // return changetype<T>(0) ?
     }
     return load<T>(this.__memory + <usize>index * sizeof<T>());
@@ -62,7 +62,7 @@ export class Array<T> {
     if (fromIndex < 0) {
       fromIndex = this.__length + fromIndex;
     }
-    while (<u32>fromIndex < this.__length) {
+    while (<u32>fromIndex < <u32>this.__length) {
       if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) {
         return fromIndex;
       }

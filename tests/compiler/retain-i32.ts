@@ -56,7 +56,7 @@ test(u8.MAX_VALUE, -1);
 test(u8.MAX_VALUE, u8.MAX_VALUE);
 
 // various
-for (var i: i32 = i8.MIN_VALUE; i <= u8.MAX_VALUE; ++i) {
+for (var i: i32 = i8.MIN_VALUE; i <= <i32>u8.MAX_VALUE; ++i) {
   test(0, i);
   test(1, i);
   test(-1, i);

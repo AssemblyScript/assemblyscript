@@ -114,7 +114,7 @@ export class Type {
 
   /** Composes a class type from this type and a class. */
   asClass(classType: Class): Type {
-    assert(this.kind == TypeKind.USIZE);
+    assert(this.kind == TypeKind.USIZE && !this.classType);
     var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
     ret.classType = classType;
     return ret;
@@ -122,26 +122,26 @@ export class Type {
 
   /** Composes a function type from this type and a function. */
   asFunction(functionType: Function): Type {
-    assert(this.kind == TypeKind.U32 && !this.isReference);
+    assert(this.kind == TypeKind.U32 && !this.functionType);
     var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
     ret.functionType = functionType;
     return ret;
   }
 
   /** Composes the respective nullable type of this type. */
-  asNullable(): Type | null {
-    assert(this.kind == TypeKind.USIZE);
+  asNullable(): Type {
+    assert(this.isReference);
     if (!this.nullableType) {
-      assert(!this.is(TypeFlags.NULLABLE) && this.isReference);
+      assert(!this.is(TypeFlags.NULLABLE));
       this.nullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
-      this.nullableType.classType = this.classType;
-      this.nullableType.functionType = this.functionType;
+      this.nullableType.classType = this.classType;       // either a class reference
+      this.nullableType.functionType = this.functionType; // or a function reference
     }
     return this.nullableType;
   }
 
   /** Tests if a value of this type is assignable to a target of the specified type. */
-  isAssignableTo(target: Type): bool {
+  isAssignableTo(target: Type, signednessIsImportant: bool = false): bool {
     var currentClass: Class | null;
     var targetClass: Class | null;
     var currentFunction: Function | null;
@@ -159,175 +159,33 @@ export class Type {
         }
       }
     } else if (!target.isReference) {
-      switch (this.kind) {
-
-        case TypeKind.I8:
-          switch (target.kind) {
-            case TypeKind.I8:    // same
-            case TypeKind.I16:   // larger
-            case TypeKind.I32:   // larger
-            case TypeKind.I64:   // larger
-            case TypeKind.ISIZE: // larger
-            case TypeKind.U8:    // signed to unsigned
-            case TypeKind.U16:   // larger
-            case TypeKind.U32:   // larger
-            case TypeKind.U64:   // larger
-            case TypeKind.USIZE: // larger
-            case TypeKind.F32:   // safe
-            case TypeKind.F64:   // safe
-              return true;
+      if (this.is(TypeFlags.INTEGER)) {
+        if (target.is(TypeFlags.INTEGER)) {
+          if (!signednessIsImportant || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)) {
+            return this.size <= target.size;
           }
-          break;
-
-        case TypeKind.I16:
-          switch (target.kind) {
-            case TypeKind.I16:   // same
-            case TypeKind.I32:   // larger
-            case TypeKind.I64:   // larger
-            case TypeKind.ISIZE: // larger
-            case TypeKind.U16:   // signed to unsigned
-            case TypeKind.U32:   // larger
-            case TypeKind.U64:   // larger
-            case TypeKind.USIZE: // larger
-            case TypeKind.F32:   // safe
-            case TypeKind.F64:   // safe
-              return true;
-          }
-          break;
-
-        case TypeKind.I32:
-          switch (target.kind) {
-            case TypeKind.I32:   // same
-            case TypeKind.I64:   // larger
-            case TypeKind.ISIZE: // same or larger
-            case TypeKind.U32:   // signed to unsigned
-            case TypeKind.U64:   // larger
-            case TypeKind.USIZE: // signed to unsigned or larger
-            case TypeKind.F64:   // safe
-              return true;
-          }
-          break;
-
-        case TypeKind.I64:
-          switch (target.kind) {
-            case TypeKind.I64:   // same
-            case TypeKind.U64:   // signed to unsigned
-              return true;
-            case TypeKind.ISIZE: // possibly same
-            case TypeKind.USIZE: // possibly signed to unsigned
-              return target.size == 64;
-          }
-          break;
-
-        case TypeKind.ISIZE:
-          switch (target.kind) {
-            case TypeKind.I32:   // possibly same
-            case TypeKind.U32:   // possibly signed to unsigned
-              return this.size == 32;
-            case TypeKind.I64:   // same or larger
-            case TypeKind.ISIZE: // same
-            case TypeKind.U64:   // signed to unsigned or larger
-            case TypeKind.USIZE: // signed to unsigned
-              return true;
-            case TypeKind.F64:   // possibly safe
-              return target.size == 32;
-          }
-          break;
-
-        case TypeKind.U8:
-          switch (target.kind) {
-            case TypeKind.I16:   // larger
-            case TypeKind.I32:   // larger
-            case TypeKind.I64:   // larger
-            case TypeKind.ISIZE: // larger
-            case TypeKind.U8:    // same
-            case TypeKind.U16:   // larger
-            case TypeKind.U32:   // larger
-            case TypeKind.U64:   // larger
-            case TypeKind.USIZE: // larger
-            case TypeKind.F32:   // safe
-            case TypeKind.F64:   // safe
-              return true;
-          }
-          break;
-
-        case TypeKind.U16:
-          switch (target.kind) {
-            case TypeKind.I32:   // larger
-            case TypeKind.I64:   // larger
-            case TypeKind.ISIZE: // larger
-            case TypeKind.U16:   // same
-            case TypeKind.U32:   // larger
-            case TypeKind.U64:   // larger
-            case TypeKind.USIZE: // larger
-            case TypeKind.F32:   // safe
-            case TypeKind.F64:   // safe
-              return true;
-          }
-          break;
-
-        case TypeKind.U32:
-          switch (target.kind) {
-            case TypeKind.I64:   // larger
-            case TypeKind.U32:   // same
-            case TypeKind.U64:   // larger
-            case TypeKind.USIZE: // same or larger
-            case TypeKind.F64:   // safe
-              return true;
-          }
-          break;
-
-        case TypeKind.U64:
-          switch (target.kind) {
-            case TypeKind.U64:   // same
-              return true;
-            case TypeKind.USIZE: // possibly same
-              return target.size == 64;
-          }
-          break;
-
-        case TypeKind.USIZE:
-          switch (target.kind) {
-            case TypeKind.U32:   // possibly same
-              return this.size == 32;
-            case TypeKind.U64:   // same or larger
-            case TypeKind.USIZE: // same
-              return true;
-            case TypeKind.F64:   // possibly safe
-              return target.size == 32;
-          }
-          break;
-
-        case TypeKind.BOOL:
-          switch (target.kind) {
-            case TypeKind.I8:    // larger
-            case TypeKind.I16:   // larger
-            case TypeKind.I32:   // larger
-            case TypeKind.I64:   // larger
-            case TypeKind.ISIZE: // larger
-            case TypeKind.U8:    // larger
-            case TypeKind.U16:   // larger
-            case TypeKind.U32:   // larger
-            case TypeKind.U64:   // larger
-            case TypeKind.USIZE: // larger
-            case TypeKind.BOOL:  // same
-              return true;
-          }
-          break;
-
-        case TypeKind.F32:
-          switch (target.kind) {
-            case TypeKind.F32:   // same
-            case TypeKind.F64:   // larger
-              return true;
-          }
-          break;
-
-        case TypeKind.F64:
-          return target.kind == TypeKind.F64;
+        } else if (target.kind == TypeKind.F32) {
+          return this.size <= 23; // mantissa bits
+        } else if (target.kind == TypeKind.F64) {
+          return this.size <= 52; // ^
+        }
+      } else if (this.is(TypeFlags.FLOAT)) {
+        if (target.is(TypeFlags.FLOAT)) {
+          return this.size <= target.size;
+        }
       }
     }
     return false;
+  }
+
+  /** Determines the common compatible type of two types, if any. */
+  static commonCompatible(left: Type, right: Type, signednessIsImportant: bool): Type | null {
+    if (right.isAssignableTo(left, signednessIsImportant)) {
+      return left;
+    } else if (left.isAssignableTo(right, signednessIsImportant)) {
+      return right;
+    }
+    return null;
   }
 
   /** Converts this type to its TypeScript representation. */

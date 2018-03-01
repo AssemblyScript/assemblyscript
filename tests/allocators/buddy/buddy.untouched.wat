@@ -927,15 +927,12 @@
           ;;@ assembly/buddy.ts:400:10
           (i32.and
            (if (result i32)
-            (i32.ne
-             (tee_local $7
-              (i32.ne
-               (get_local $2)
-               ;;@ assembly/buddy.ts:400:20
-               (get_global $assembly/buddy/bucket_limit)
-              )
+            (tee_local $7
+             (i32.ne
+              (get_local $2)
+              ;;@ assembly/buddy.ts:400:20
+              (get_global $assembly/buddy/bucket_limit)
              )
-             (i32.const 0)
             )
             (get_local $7)
             ;;@ assembly/buddy.ts:400:36
@@ -1245,14 +1242,11 @@
        (if
         ;;@ assembly/buddy.ts:514:8
         (if (result i32)
-         (i32.ne
-          (tee_local $3
-           (call $assembly/buddy/parent_is_split
-            ;;@ assembly/buddy.ts:514:24
-            (get_local $2)
-           )
+         (tee_local $3
+          (call $assembly/buddy/parent_is_split
+           ;;@ assembly/buddy.ts:514:24
+           (get_local $2)
           )
-          (i32.const 0)
          )
          (get_local $3)
          ;;@ assembly/buddy.ts:514:30

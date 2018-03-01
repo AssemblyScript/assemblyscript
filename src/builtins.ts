@@ -1563,13 +1563,14 @@ export function compileCall(
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
       }
+      compiler.currentType = typeArguments[0];
       return module.createLoad(
         typeArguments[0].byteSize,
         typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER),
         arg0,
         typeArguments[0].is(TypeFlags.INTEGER) &&
         contextualType.is(TypeFlags.INTEGER) &&
-        contextualType.size >= typeArguments[0].size
+        contextualType.size > typeArguments[0].size
           ? (compiler.currentType = contextualType).toNativeType()
           : (compiler.currentType = typeArguments[0]).toNativeType(),
         offset
@@ -1896,7 +1897,7 @@ export function compileCall(
         }
         arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
+        arg0 = compiler.compileExpressionRetainType(operands[0], Type.i32);
       }
 
       type = compiler.currentType;

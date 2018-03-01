@@ -185,8 +185,8 @@ export { usize };
 @builtin
 declare function bool(value: void): bool;
 namespace bool {
-  export const MIN_VALUE: bool = 0;
-  export const MAX_VALUE: bool = 1;
+  export const MIN_VALUE: bool = false;
+  export const MAX_VALUE: bool = true;
 }
 export { bool };
 

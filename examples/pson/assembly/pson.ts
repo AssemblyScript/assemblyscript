@@ -40,8 +40,9 @@ var offset: usize = 0;
 
 export function decode(length: usize): void {
   offset = 0;
-  while (offset < length)
+  while (offset < length) {
     decodeValue();
+  }
   assert(offset == length);
 }
 
@@ -85,8 +86,9 @@ function decodeValue(): void {
 
     case Token.ARRAY:
       pson.onArray(size = readVarint32());
-      while (size--)
+      while (size--) {
         decodeValue();
+      }
       break;
 
     case Token.INTEGER:
@@ -126,8 +128,9 @@ function decodeValue(): void {
       break;
 
     default: // small integer?
-      if (token > Token.MAX)
+      if (token > <u32>Token.MAX) {
         throw new Error("unexpected token");
+      }
       pson.onInteger((token >> 1) ^ -(token & 1));
       break;
   }

@@ -13,13 +13,13 @@ function allocate(length: i32): String {
 
 export class String {
 
-  readonly length: i32;
+  readonly length: i32; // capped to [0, 0x7fffffff]
 
   @operator("[]")
   charAt(pos: i32): String {
     assert(this != null);
 
-    if (<u32>pos >= this.length) {
+    if (<u32>pos >= <u32>this.length) {
       return EMPTY;
     }
 
@@ -37,7 +37,7 @@ export class String {
 
   charCodeAt(pos: i32): i32 {
     assert(this != null);
-    if (<u32>pos >= this.length) {
+    if (<u32>pos >= <u32>this.length) {
       return -1; // (NaN)
     }
     return load<u16>(
@@ -48,7 +48,7 @@ export class String {
 
   codePointAt(pos: i32): i32 {
     assert(this != null);
-    if (<u32>pos >= this.length) {
+    if (<u32>pos >= <u32>this.length) {
       return -1; // (undefined)
     }
     var first = <i32>load<u16>(

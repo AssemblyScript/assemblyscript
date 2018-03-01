@@ -171,7 +171,7 @@ function update_max_ptr(new_value: usize): i32 {
     // if (brk(new_value)) {
     //   return 0;
     // }
-    var oldPages = current_memory();
+    var oldPages = <u32>current_memory();
     var newPages = <u32>(((new_value + 0xffff) & ~0xffff) >> 16);
     assert(newPages > oldPages);
     if (grow_memory(newPages - oldPages) < 0) {

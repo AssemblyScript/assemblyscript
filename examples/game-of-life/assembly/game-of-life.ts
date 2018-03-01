@@ -27,10 +27,12 @@ export function step(): void {
         load<u8>(yp1 * w + xm1) + load<u8>(yp1 * w + x) + load<u8>(yp1 * w + xp1)
       );
       if (load<u8>(y * w + x)) {
-        if (n < 2 || n > 3)
+        if (n < 2 || n > 3) {
           store<u8>(s + y * w + x, 0);
-      } else if (n == 3)
+        }
+      } else if (n == 3) {
         store<u8>(s + y * w + x, 1);
+      }
     }
   }
 }

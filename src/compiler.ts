@@ -529,7 +529,7 @@ export class Compiler extends DiagnosticEmitter {
     var initializeInStart = false;
 
     if (global.is(ElementFlags.INLINED)) {
-      initExpr = this.compileInlineConstant(global, global.type);
+      initExpr = this.compileInlineConstant(global, global.type, true);
     } else {
       if (declaration.initializer) {
         if (!initExpr) {
@@ -1662,11 +1662,20 @@ export class Compiler extends DiagnosticEmitter {
 
   // expressions
 
-  /** Compiles an inlined constant value of a variable-like element. */
-  compileInlineConstant(element: VariableLikeElement, contextualType: Type): ExpressionRef {
+  /**
+   * Compiles the value of an inlined constant element.
+   * @param retainType If true, the annotated type of the constant is retained. Otherwise, the value
+   *  is precomputed according to context.
+   */
+  compileInlineConstant(
+    element: VariableLikeElement,
+    contextualType: Type,
+    retainType: bool
+  ): ExpressionRef {
     assert(element.is(ElementFlags.INLINED));
 
     switch (
+      !retainType &&
       element.type.is(TypeFlags.INTEGER) &&
       contextualType.is(TypeFlags.INTEGER) &&
       element.type.size < contextualType.size
@@ -1773,7 +1782,11 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.NULL:
       case NodeKind.THIS:
       case NodeKind.TRUE:
-        expr = this.compileIdentifierExpression(<IdentifierExpression>expression, contextualType);
+        expr = this.compileIdentifierExpression(
+          <IdentifierExpression>expression,
+          contextualType,
+          conversionKind == ConversionKind.NONE // retain type of inlined constants
+        );
         break;
 
       case NodeKind.LITERAL:
@@ -1789,7 +1802,11 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case NodeKind.PROPERTYACCESS:
-        expr = this.compilePropertyAccessExpression(<PropertyAccessExpression>expression, contextualType);
+        expr = this.compilePropertyAccessExpression(
+          <PropertyAccessExpression>expression,
+          contextualType,
+          conversionKind == ConversionKind.NONE // retain type of inlined constants
+        );
         break;
 
       case NodeKind.TERNARY:
@@ -1815,6 +1832,17 @@ export class Compiler extends DiagnosticEmitter {
 
     this.addDebugLocation(expr, expression.range);
     return expr;
+  }
+
+  compileExpressionRetainType(expression: Expression, contextualType: Type, wrapSmallIntegers: bool = true) {
+    return this.compileExpression(
+      expression,
+      contextualType == Type.void
+        ? Type.i32
+        : contextualType,
+      ConversionKind.NONE,
+      wrapSmallIntegers
+    );
   }
 
   precomputeExpression(
@@ -1877,9 +1905,6 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
 
-    var mod = this.module;
-    var losesInformation = false;
-
     if (fromType.is(TypeFlags.FLOAT)) {
 
       // float to float
@@ -1888,39 +1913,37 @@ export class Compiler extends DiagnosticEmitter {
 
           // f32 to f64
           if (toType.kind == TypeKind.F64) {
-            expr = mod.createUnary(UnaryOp.PromoteF32, expr);
+            expr = this.module.createUnary(UnaryOp.PromoteF32, expr);
           }
 
           // otherwise f32 to f32
 
         // f64 to f32
         } else if (toType.kind == TypeKind.F32) {
-          losesInformation = true;
-          expr = mod.createUnary(UnaryOp.DemoteF64, expr);
+          expr = this.module.createUnary(UnaryOp.DemoteF64, expr);
         }
 
         // otherwise f64 to f64
 
       // float to int
       } else if (toType.is(TypeFlags.INTEGER)) {
-        losesInformation = true;
 
         // f32 to int
         if (fromType.kind == TypeKind.F32) {
           if (toType.is(TypeFlags.SIGNED)) {
             if (toType.is(TypeFlags.LONG)) {
-              expr = mod.createUnary(UnaryOp.TruncF32ToI64, expr);
+              expr = this.module.createUnary(UnaryOp.TruncF32ToI64, expr);
             } else {
-              expr = mod.createUnary(UnaryOp.TruncF32ToI32, expr);
+              expr = this.module.createUnary(UnaryOp.TruncF32ToI32, expr);
               if (toType.is(TypeFlags.SMALL)) {
                 expr = makeSmallIntegerWrap(expr, toType, this.module);
               }
             }
           } else {
             if (toType.is(TypeFlags.LONG)) {
-              expr = mod.createUnary(UnaryOp.TruncF32ToU64, expr);
+              expr = this.module.createUnary(UnaryOp.TruncF32ToU64, expr);
             } else {
-              expr = mod.createUnary(UnaryOp.TruncF32ToU32, expr);
+              expr = this.module.createUnary(UnaryOp.TruncF32ToU32, expr);
               if (toType.is(TypeFlags.SMALL)) {
                 expr = makeSmallIntegerWrap(expr, toType, this.module);
               }
@@ -1931,18 +1954,18 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           if (toType.is(TypeFlags.SIGNED)) {
             if (toType.is(TypeFlags.LONG)) {
-              expr = mod.createUnary(UnaryOp.TruncF64ToI64, expr);
+              expr = this.module.createUnary(UnaryOp.TruncF64ToI64, expr);
             } else {
-              expr = mod.createUnary(UnaryOp.TruncF64ToI32, expr);
+              expr = this.module.createUnary(UnaryOp.TruncF64ToI32, expr);
               if (toType.is(TypeFlags.SMALL)) {
                 expr = makeSmallIntegerWrap(expr, toType, this.module);
               }
             }
           } else {
             if (toType.is(TypeFlags.LONG)) {
-              expr = mod.createUnary(UnaryOp.TruncF64ToU64, expr);
+              expr = this.module.createUnary(UnaryOp.TruncF64ToU64, expr);
             } else {
-              expr = mod.createUnary(UnaryOp.TruncF64ToU32, expr);
+              expr = this.module.createUnary(UnaryOp.TruncF64ToU32, expr);
               if (toType.is(TypeFlags.SMALL)) {
                 expr = makeSmallIntegerWrap(expr, toType, this.module);
               }
@@ -1962,16 +1985,14 @@ export class Compiler extends DiagnosticEmitter {
       // int to f32
       if (toType.kind == TypeKind.F32) {
         if (fromType.is(TypeFlags.LONG)) {
-          losesInformation = true;
-          expr = mod.createUnary(
+          expr = this.module.createUnary(
             fromType.is(TypeFlags.SIGNED)
               ? UnaryOp.ConvertI64ToF32
               : UnaryOp.ConvertU64ToF32,
             expr
           );
         } else {
-          losesInformation = !fromType.is(TypeFlags.SMALL);
-          expr = mod.createUnary(
+          expr = this.module.createUnary(
             fromType.is(TypeFlags.SIGNED)
               ? UnaryOp.ConvertI32ToF32
               : UnaryOp.ConvertU32ToF32,
@@ -1982,15 +2003,14 @@ export class Compiler extends DiagnosticEmitter {
       // int to f64
       } else {
         if (fromType.is(TypeFlags.LONG)) {
-          losesInformation = true;
-          expr = mod.createUnary(
+          expr = this.module.createUnary(
             fromType.is(TypeFlags.SIGNED)
               ? UnaryOp.ConvertI64ToF64
               : UnaryOp.ConvertU64ToF64,
             expr
           );
         } else {
-          expr = mod.createUnary(
+          expr = this.module.createUnary(
             fromType.is(TypeFlags.SIGNED)
               ? UnaryOp.ConvertI32ToF64
               : UnaryOp.ConvertU32ToF64,
@@ -2005,8 +2025,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // i64 to i32
         if (!toType.is(TypeFlags.LONG)) {
-          losesInformation = true;
-          expr = mod.createUnary(UnaryOp.WrapI64, expr); // discards upper bits
+          expr = this.module.createUnary(UnaryOp.WrapI64, expr); // discards upper bits
           if (toType.is(TypeFlags.SMALL)) {
             expr = makeSmallIntegerWrap(expr, toType, this.module);
           }
@@ -2014,7 +2033,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // i32 to i64
       } else if (toType.is(TypeFlags.LONG)) {
-        expr = mod.createUnary(toType.is(TypeFlags.SIGNED) ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32, expr);
+        expr = this.module.createUnary(toType.is(TypeFlags.SIGNED) ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32, expr);
 
       // i32 or smaller to even smaller or same size int with change of sign
       } else if (
@@ -2027,24 +2046,14 @@ export class Compiler extends DiagnosticEmitter {
           )
         )
       ) {
-        losesInformation = true;
         expr = makeSmallIntegerWrap(expr, toType, this.module);
       }
 
       // otherwise (smaller) i32/u32 to (same size) i32/u32
     }
 
+    this.currentType = toType;
     return expr;
-  }
-
-  /** Computes the common compatible type of two types. Returns `null` if incompatible. */
-  computeCommonType(leftType: Type, rightType: Type): Type | null {
-    if (leftType.isAssignableTo(rightType)) {
-      return rightType;
-    } else if (rightType.isAssignableTo(leftType)) {
-      return leftType;
-    }
-    return null;
   }
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
@@ -2061,43 +2070,15 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     wrapSmallIntegers: bool = true
   ): ExpressionRef {
+
     var left: ExpressionRef;
+    var leftType: Type;
     var right: ExpressionRef;
-
-    // TODO: Currently, the common type of any binary expression is the first operand's type. This
-    // differs from C and other languages where comparing an int to a long, in this order, upcasts
-    // left to a long before comparison, instead of failing when trying to downcast right to an int.
-    // NOTE that if we change the current behaviour, some examples, tests and wiki pages will have
-    // to be updated, while compound binary operations must retain the previous behavior.
-
-    // var left = this.compileExpression(
-    //   expression.left,
-    //   contextualType == Type.void
-    //     ? Type.i32
-    //     : contextualType,
-    //   ConversionKind.NONE
-    // );
-    // var leftType = this.currentType;
-    // var right = this.compileExpression(
-    //   expression.right,
-    //   leftType,
-    //   ConversionKind.NONE
-    // );
-    // var rightType = this.currentType;
-    // var commonType = this.computeCommonType(leftType, rightType);
-    // if (!commonType) {
-    //   this.error(
-    //     DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-    //     expression.range,
-    //     Token.operatorToString(expression.operator), leftType.toString(), rightType.toString()
-    //   );
-    //   this.currentType = contextualType;
-    //   return this.module.createUnreachable();
-    // }
+    var rightType: Type;
+    var commonType: Type | null;
 
     var condition: ExpressionRef;
     var expr: ExpressionRef;
-
     var compound = false;
     var possiblyOverflows = false;
     var tempLocal: Local | null = null;
@@ -2105,16 +2086,23 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.operator) {
 
       case Token.LESSTHAN:
-        left = this.compileExpression(
-          expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE
-        );
-        right = this.compileExpression(expression.right, this.currentType);
+        left = this.compileExpressionRetainType(expression.left, contextualType);
+        leftType = this.currentType;
+        right = this.compileExpressionRetainType(expression.right, leftType);
+        rightType = this.currentType;
+        if (commonType = Type.commonCompatible(leftType, rightType, true)) {
+          left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+          right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+        } else {
+          this.error(
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range, "<", leftType.toString(), rightType.toString()
+          );
+          this.currentType = contextualType;
+          return this.module.createUnreachable();
+        }
 
-        switch (this.currentType.kind) {
+        switch (commonType.kind) {
 
           case TypeKind.I8:
           case TypeKind.I16:
@@ -2177,16 +2165,23 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.GREATERTHAN:
-        left = this.compileExpression(
-          expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE
-        );
-        right = this.compileExpression(expression.right, this.currentType);
+        left = this.compileExpressionRetainType(expression.left, contextualType);
+        leftType = this.currentType;
+        right = this.compileExpressionRetainType(expression.right, leftType);
+        rightType = this.currentType;
+        if (commonType = Type.commonCompatible(leftType, rightType, true)) {
+          left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+          right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+        } else {
+          this.error(
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range, ">", leftType.toString(), rightType.toString()
+          );
+          this.currentType = contextualType;
+          return this.module.createUnreachable();
+        }
 
-        switch (this.currentType.kind) {
+        switch (commonType.kind) {
 
           case TypeKind.I8:
           case TypeKind.I16:
@@ -2249,16 +2244,23 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.LESSTHAN_EQUALS:
-        left = this.compileExpression(
-          expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE
-        );
-        right = this.compileExpression(expression.right, this.currentType);
+        left = this.compileExpressionRetainType(expression.left, contextualType);
+        leftType = this.currentType;
+        right = this.compileExpressionRetainType(expression.right, leftType);
+        rightType = this.currentType;
+        if (commonType = Type.commonCompatible(leftType, rightType, true)) {
+          left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+          right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+        } else {
+          this.error(
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range, "<=", leftType.toString(), rightType.toString()
+          );
+          this.currentType = contextualType;
+          return this.module.createUnreachable();
+        }
 
-        switch (this.currentType.kind) {
+        switch (commonType.kind) {
 
           case TypeKind.I8:
           case TypeKind.I16:
@@ -2321,16 +2323,23 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.GREATERTHAN_EQUALS:
-        left = this.compileExpression(
-          expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE
-        );
-        right = this.compileExpression(expression.right, this.currentType);
+        left = this.compileExpressionRetainType(expression.left, contextualType);
+        leftType = this.currentType;
+        right = this.compileExpressionRetainType(expression.right, leftType);
+        rightType = this.currentType;
+        if (commonType = Type.commonCompatible(leftType, rightType, true)) {
+          left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+          right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+        } else {
+          this.error(
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range, ">=", leftType.toString(), rightType.toString()
+          );
+          this.currentType = contextualType;
+          return this.module.createUnreachable();
+        }
 
-        switch (this.currentType.kind) {
+        switch (commonType.kind) {
 
           case TypeKind.I8:
           case TypeKind.I16:
@@ -2400,16 +2409,23 @@ export class Compiler extends DiagnosticEmitter {
         // checking for a possible use of unary EQZ. while the most classic of all optimizations,
         // that's not what the source told us to do. for reference, `!left` emits unary EQZ.
 
-        left = this.compileExpression(
-          expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE
-        );
-        right = this.compileExpression(expression.right, this.currentType);
+        left = this.compileExpressionRetainType(expression.left, contextualType);
+        leftType = this.currentType;
+        right = this.compileExpressionRetainType(expression.right, leftType);
+        rightType = this.currentType;
+        if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+          right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+        } else {
+          this.error(
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range, Token.operatorToString(expression.operator), leftType.toString(), rightType.toString()
+          );
+          this.currentType = contextualType;
+          return this.module.createUnreachable();
+        }
 
-        switch (this.currentType.kind) {
+        switch (commonType.kind) {
 
           case TypeKind.I8:
           case TypeKind.I16:
@@ -2459,16 +2475,23 @@ export class Compiler extends DiagnosticEmitter {
       case Token.EXCLAMATION_EQUALS_EQUALS:
         // TODO?
       case Token.EXCLAMATION_EQUALS:
-        left = this.compileExpression(
-          expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE
-        );
-        right = this.compileExpression(expression.right, this.currentType);
+        left = this.compileExpressionRetainType(expression.left, contextualType);
+        leftType = this.currentType;
+        right = this.compileExpressionRetainType(expression.right, leftType);
+        rightType = this.currentType;
+        if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+          right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+        } else {
+          this.error(
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range, Token.operatorToString(expression.operator), leftType.toString(), rightType.toString()
+          );
+          this.currentType = contextualType;
+          return this.module.createUnreachable();
+        }
 
-        switch (this.currentType.kind) {
+        switch (commonType.kind) {
 
           case TypeKind.I8:
           case TypeKind.I16:
@@ -2521,20 +2544,38 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PLUS_EQUALS:
         compound = true;
       case Token.PLUS:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           false // retains low bits of small integers
         );
-        right = this.compileExpression(
-          expression.right,
-          this.currentType,
-          ConversionKind.IMPLICIT,
-          false // ^
-        );
+        if (compound) {
+          right = this.compileExpression(
+            expression.right,
+            this.currentType,
+            ConversionKind.IMPLICIT,
+            false // ^
+          );
+        } else {
+          leftType = this.currentType;
+          right = this.compileExpressionRetainType(
+            expression.right,
+            leftType,
+            false // ^
+          );
+          rightType = this.currentType;
+          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+            left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+            right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "+", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return this.module.createUnreachable();
+          }
+        }
 
         switch (this.currentType.kind) {
 
@@ -2582,20 +2623,38 @@ export class Compiler extends DiagnosticEmitter {
       case Token.MINUS_EQUALS:
         compound = true;
       case Token.MINUS:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           false // retains low bits of small integers
         );
-        right = this.compileExpression(
-          expression.right,
-          this.currentType,
-          ConversionKind.IMPLICIT,
-          false // ^
-        );
+        if (compound) {
+          right = this.compileExpression(
+            expression.right,
+            this.currentType,
+            ConversionKind.IMPLICIT,
+            false // ^
+          );
+        } else {
+          leftType = this.currentType;
+          right = this.compileExpressionRetainType(
+            expression.right,
+            leftType,
+            false // ^
+          );
+          rightType = this.currentType;
+          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+            left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+            right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "-", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return this.module.createUnreachable();
+          }
+        }
 
         switch (this.currentType.kind) {
 
@@ -2647,20 +2706,38 @@ export class Compiler extends DiagnosticEmitter {
       case Token.ASTERISK_EQUALS:
         compound = true;
       case Token.ASTERISK:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           false // retains low bits of small integers
         );
-        right = this.compileExpression(
-          expression.right,
-          this.currentType,
-          ConversionKind.IMPLICIT,
-          false // ^
-        );
+        if (compound) {
+          right = this.compileExpression(
+            expression.right,
+            this.currentType,
+            ConversionKind.IMPLICIT,
+            false // ^
+          );
+        } else {
+          leftType = this.currentType;
+          right = this.compileExpressionRetainType(
+            expression.right,
+            leftType,
+            false // ^
+          );
+          rightType = this.currentType;
+          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+            left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+            right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "*", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return this.module.createUnreachable();
+          }
+        }
 
         switch (this.currentType.kind) {
 
@@ -2713,20 +2790,38 @@ export class Compiler extends DiagnosticEmitter {
       case Token.SLASH_EQUALS:
         compound = true;
       case Token.SLASH:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           true // TODO: when can division remain unwrapped? does it overflow?
         );
-        right = this.compileExpression(
-          expression.right,
-          this.currentType,
-          ConversionKind.IMPLICIT,
-          true // ^
-        );
+        if (compound) {
+          right = this.compileExpression(
+            expression.right,
+            this.currentType,
+            ConversionKind.IMPLICIT,
+            false // ^
+          );
+        } else {
+          leftType = this.currentType;
+          right = this.compileExpressionRetainType(
+            expression.right,
+            leftType,
+            false // ^
+          );
+          rightType = this.currentType;
+          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+            left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+            right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "/", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return this.module.createUnreachable();
+          }
+        }
 
         switch (this.currentType.kind) {
 
@@ -2794,20 +2889,38 @@ export class Compiler extends DiagnosticEmitter {
       case Token.PERCENT_EQUALS:
         compound = true;
       case Token.PERCENT:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE,
-          true // TODO: when can remainder remain unwrapped? may it overflow?
+          contextualType,
+          true // TODO: when can remainder remain unwrapped? does it overflow?
         );
-        right = this.compileExpression(
-          expression.right,
-          this.currentType,
-          ConversionKind.IMPLICIT,
-          true // ^
-        );
+        if (compound) {
+          right = this.compileExpression(
+            expression.right,
+            this.currentType,
+            ConversionKind.IMPLICIT,
+            false // ^
+          );
+        } else {
+          leftType = this.currentType;
+          right = this.compileExpressionRetainType(
+            expression.right,
+            leftType,
+            false // ^
+          );
+          rightType = this.currentType;
+          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+            left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+            right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "%", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return this.module.createUnreachable();
+          }
+        }
 
         switch (this.currentType.kind) {
 
@@ -2875,14 +2988,9 @@ export class Compiler extends DiagnosticEmitter {
       case Token.LESSTHAN_LESSTHAN_EQUALS:
         compound = true;
       case Token.LESSTHAN_LESSTHAN:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType.is(TypeFlags.FLOAT)
-              ? Type.i64
-              : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           false // retains low bits of small integers
         );
         right = this.compileExpression(
@@ -2933,14 +3041,9 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_EQUALS:
         compound = true;
       case Token.GREATERTHAN_GREATERTHAN:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType.is(TypeFlags.FLOAT)
-              ? Type.i64
-              : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           true // must wrap small integers
         );
         right = this.compileExpression(
@@ -3006,14 +3109,9 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
         compound = true;
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType == Type.void
-              ? Type.u64
-              : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           true // modifies low bits of small integers if unsigned
         );
         right = this.compileExpression(
@@ -3063,22 +3161,38 @@ export class Compiler extends DiagnosticEmitter {
       case Token.AMPERSAND_EQUALS:
         compound = true;
       case Token.AMPERSAND:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType.is(TypeFlags.FLOAT)
-              ? Type.i64
-              : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           false // retains low bits of small integers
         );
-        right = this.compileExpression(
-          expression.right,
-          this.currentType,
-          ConversionKind.IMPLICIT,
-          false // ^
-        );
+        if (compound) {
+          right = this.compileExpression(
+            expression.right,
+            this.currentType,
+            ConversionKind.IMPLICIT,
+            false // ^
+          );
+        } else {
+          leftType = this.currentType;
+          right = this.compileExpressionRetainType(
+            expression.right,
+            leftType,
+            false // ^
+          );
+          rightType = this.currentType;
+          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+            left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+            right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "&", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return this.module.createUnreachable();
+          }
+        }
 
         switch (this.currentType.kind) {
 
@@ -3121,22 +3235,38 @@ export class Compiler extends DiagnosticEmitter {
       case Token.BAR_EQUALS:
         compound = true;
       case Token.BAR:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType.is(TypeFlags.FLOAT)
-              ? Type.i64
-              : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           false // retains low bits of small integers
         );
-        right = this.compileExpression(
-          expression.right,
-          this.currentType,
-          ConversionKind.IMPLICIT,
-          false // ^
-        );
+        if (compound) {
+          right = this.compileExpression(
+            expression.right,
+            this.currentType,
+            ConversionKind.IMPLICIT,
+            false // ^
+          );
+        } else {
+          leftType = this.currentType;
+          right = this.compileExpressionRetainType(
+            expression.right,
+            leftType,
+            false // ^
+          );
+          rightType = this.currentType;
+          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+            left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+            right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "|", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return this.module.createUnreachable();
+          }
+        }
 
         switch (this.currentType.kind) {
 
@@ -3179,22 +3309,38 @@ export class Compiler extends DiagnosticEmitter {
       case Token.CARET_EQUALS:
         compound = true;
       case Token.CARET:
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType.is(TypeFlags.FLOAT)
-              ? Type.i64
-              : contextualType,
-          ConversionKind.NONE,
+          contextualType,
           false // retains low bits of small integers
         );
-        right = this.compileExpression(
-          expression.right,
-          this.currentType,
-          ConversionKind.IMPLICIT,
-          false // ^
-        );
+        if (compound) {
+          right = this.compileExpression(
+            expression.right,
+            this.currentType,
+            ConversionKind.IMPLICIT,
+            false // ^
+          );
+        } else {
+          leftType = this.currentType;
+          right = this.compileExpressionRetainType(
+            expression.right,
+            leftType,
+            false // ^
+          );
+          rightType = this.currentType;
+          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+            left = this.convertExpression(left, leftType, commonType, ConversionKind.IMPLICIT, expression.left);
+            right = this.convertExpression(right, rightType, commonType, ConversionKind.IMPLICIT, expression.right);
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "^", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return this.module.createUnreachable();
+          }
+        }
 
         switch (this.currentType.kind) {
 
@@ -3237,12 +3383,9 @@ export class Compiler extends DiagnosticEmitter {
       // logical (no overloading)
 
       case Token.AMPERSAND_AMPERSAND: // left && right
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE
+          contextualType
         );
         right = this.compileExpression(
           expression.right,
@@ -3286,12 +3429,9 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case Token.BAR_BAR:  // left || right
-        left = this.compileExpression(
+        left = this.compileExpressionRetainType(
           expression.left,
-          contextualType == Type.void
-            ? Type.i32
-            : contextualType,
-          ConversionKind.NONE
+          contextualType
         );
         right = this.compileExpression(
           expression.right,
@@ -3884,7 +4024,16 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.createI32(index);
   }
 
-  compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type): ExpressionRef {
+  /**
+   * Compiles an identifier in the specified context.
+   * @param retainConstantType Retains the type of inlined constants if `true`, otherwise
+   *  precomputes them according to context.
+   */
+  compileIdentifierExpression(
+    expression: IdentifierExpression,
+    contextualType: Type,
+    retainConstantType: bool
+  ): ExpressionRef {
     // check special keywords first
     switch (expression.kind) {
 
@@ -3948,7 +4097,7 @@ export class Compiler extends DiagnosticEmitter {
 
       case ElementKind.LOCAL:
         if ((<Local>element).is(ElementFlags.INLINED)) {
-          return this.compileInlineConstant(<Local>element, contextualType);
+          return this.compileInlineConstant(<Local>element, contextualType, retainConstantType);
         }
         assert((<Local>element).index >= 0);
         this.currentType = (<Local>element).type;
@@ -3963,7 +4112,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         assert((<Global>element).type != Type.void);
         if ((<Global>element).is(ElementFlags.INLINED)) {
-          return this.compileInlineConstant(<Global>element, contextualType);
+          return this.compileInlineConstant(<Global>element, contextualType, retainConstantType);
         }
         this.currentType = (<Global>element).type;
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
@@ -4323,7 +4472,16 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileExpression(expression.expression, contextualType, ConversionKind.NONE);
   }
 
-  compilePropertyAccessExpression(propertyAccess: PropertyAccessExpression, contextualType: Type): ExpressionRef {
+  /**
+   * Compiles a property access in the specified context.
+   * @param retainConstantType Retains the type of inlined constants if `true`, otherwise
+   *  precomputes them according to context.
+   */
+  compilePropertyAccessExpression(
+    propertyAccess: PropertyAccessExpression,
+    contextualType: Type,
+    retainConstantType: bool
+  ): ExpressionRef {
     var resolved = this.program.resolvePropertyAccess(propertyAccess, this.currentFunction); // reports
     if (!resolved) return this.module.createUnreachable();
 
@@ -4340,7 +4498,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         assert((<Global>element).type != Type.void);
         if ((<Global>element).is(ElementFlags.INLINED)) {
-          return this.compileInlineConstant(<Global>element, contextualType);
+          return this.compileInlineConstant(<Global>element, contextualType, retainConstantType);
         }
         this.currentType = (<Global>element).type;
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());

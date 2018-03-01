@@ -320,31 +320,31 @@
            (i32.const 0)
           )
          )
-         ;;@ assembly/game-of-life.ts:32:13
+         ;;@ assembly/game-of-life.ts:33:13
          (if
-          ;;@ assembly/game-of-life.ts:32:17
+          ;;@ assembly/game-of-life.ts:33:17
           (i32.eq
            (get_local $2)
-           ;;@ assembly/game-of-life.ts:32:22
+           ;;@ assembly/game-of-life.ts:33:22
            (i32.const 3)
           )
-          ;;@ assembly/game-of-life.ts:33:8
+          ;;@ assembly/game-of-life.ts:34:8
           (i32.store8
-           ;;@ assembly/game-of-life.ts:33:18
+           ;;@ assembly/game-of-life.ts:34:18
            (i32.add
             (i32.add
              (get_global $assembly/game-of-life/s)
-             ;;@ assembly/game-of-life.ts:33:22
+             ;;@ assembly/game-of-life.ts:34:22
              (i32.mul
               (get_local $0)
-              ;;@ assembly/game-of-life.ts:33:26
+              ;;@ assembly/game-of-life.ts:34:26
               (get_global $assembly/game-of-life/w)
              )
             )
-            ;;@ assembly/game-of-life.ts:33:30
+            ;;@ assembly/game-of-life.ts:34:30
             (get_local $1)
            )
-           ;;@ assembly/game-of-life.ts:33:33
+           ;;@ assembly/game-of-life.ts:34:33
            (i32.const 1)
           )
          )
