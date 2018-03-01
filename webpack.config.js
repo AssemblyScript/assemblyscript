@@ -45,10 +45,6 @@ const bin = {
       commonjs2: "assemblyscript",
       amd: "assemblyscript",
       root: "_"
-    },
-    "./assemblyscript": {
-      commonjs: "./assemblyscript",
-      commonjs2: "./assemblyscript"
     }
   }],
   node: {
@@ -83,7 +79,7 @@ const bin = {
       },
       __dirname: JSON.stringify(".")
     }),
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob|source\-map\-support)$/),
+    new webpack.IgnorePlugin(/\.\/src|package\.json|^(\.\/assemblyscript|ts\-node|glob|source\-map\-support)$/),
   ]
 };
 

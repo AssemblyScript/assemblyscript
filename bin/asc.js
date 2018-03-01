@@ -19,7 +19,7 @@ try {
     assemblyscript = require("../src");
     isDev = true;
   } catch (e) {
-    // last resort: browser bundle under node (relative to 'dist/')
+    // last resort: same directory CommonJS
     assemblyscript = require("./assemblyscript");
     isDev = false;
   }
