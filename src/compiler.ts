@@ -303,7 +303,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // import memory if requested
     if (this.options.importMemory) {
-      this.module.addMemoryImport("memory", "env", "memory");
+      this.module.addMemoryImport("0", "env", "memory");
     }
 
     // set up function table
@@ -4266,7 +4266,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
 
           case TypeKind.VOID:
-            break;
+            break; // compiles to best fitting type below, being dropped
 
           default:
             assert(false);
@@ -4290,7 +4290,12 @@ export class Compiler extends DiagnosticEmitter {
       // case LiteralKind.OBJECT:
       // case LiteralKind.REGEXP:
     }
-    throw new Error("not implemented");
+    this.error(
+      DiagnosticCode.Operation_not_supported,
+      expression.range
+    );
+    this.currentType = contextualType;
+    return this.module.createUnreachable();
   }
 
   compileStaticString(stringValue: string): ExpressionRef {
