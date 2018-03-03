@@ -19,8 +19,8 @@ The API accepts the same options as the CLI but also lets you override stdout an
 const asc = require("assemblyscript/bin/asc.js");
 asc.main([
   "myModule.ts",
-  "-b", "myModule.wasm",
-  "-O",
+  "--binaryFile", "myModule.wasm",
+  "--optimize",
   "--sourceMap",
   "--measure"
 ], {

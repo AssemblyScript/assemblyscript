@@ -4,7 +4,6 @@ const webpack = require("webpack");
 
 // Build the C-like library
 const lib = {
-  mode: "production",
   entry: [ "./src/glue/js", "./src/index.ts" ],
   module: {
     rules: [
@@ -23,10 +22,8 @@ const lib = {
     filename: "assemblyscript.js",
     path: path.resolve(__dirname, "dist"),
     library: "assemblyscript",
-    libraryTarget: "umd"
-  },
-  optimization: {
-    minimize: true
+    libraryTarget: "umd",
+    globalObject: "typeof self !== 'undefined' ? self : this"
   },
   devtool: "source-map",
   performance: {
@@ -36,16 +33,10 @@ const lib = {
 
 // Build asc for browser usage
 const bin = {
-  mode: "production",
   context: path.join(__dirname, "bin"),
   entry: [ "./asc.js" ],
   externals: [{
-    "../dist/assemblyscript.js": {
-      commonjs: "assemblyscript",
-      commonjs2: "assemblyscript",
-      amd: "assemblyscript",
-      root: "_"
-    }
+    "../dist/assemblyscript.js": "assemblyscript"
   }],
   node: {
     "fs": "empty",
@@ -57,10 +48,8 @@ const bin = {
     filename: "asc.js",
     path: path.resolve(__dirname, "dist"),
     library: "asc",
-    libraryTarget: "umd"
-  },
-  optimization: {
-    minimize: true
+    libraryTarget: "umd",
+    globalObject: "typeof self !== 'undefined' ? self : this"
   },
   devtool: "source-map",
   plugins: [
@@ -79,7 +68,7 @@ const bin = {
       },
       __dirname: JSON.stringify(".")
     }),
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(\.\/assemblyscript|ts\-node|glob|source\-map\-support)$/),
+    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob|source\-map\-support)$/),
   ]
 };
 

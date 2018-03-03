@@ -294,7 +294,7 @@ export class Compiler extends DiagnosticEmitter {
       var pages = i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0));
       this.module.setMemory(
         i64_low(pages),
-        Module.MAX_MEMORY_WASM32 /* TODO: not WASM64 compatible yet */,
+        Module.MAX_MEMORY_WASM32, // TODO: not WASM64 compatible yet
         this.memorySegments,
         this.options.target,
         "memory"
@@ -323,6 +323,7 @@ export class Compiler extends DiagnosticEmitter {
   compileSourceByPath(normalizedPathWithoutExtension: string, reportNode: Node): void {
     var sources = this.program.sources;
 
+    // try file.ts
     var source: Source;
     var expected = normalizedPathWithoutExtension + ".ts";
     for (var i = 0, k = sources.length; i < k; ++i) {
@@ -333,6 +334,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    // try file/index.ts
     expected = normalizedPathWithoutExtension + "/index.ts";
     for (i = 0, k = sources.length; i < k; ++i) {
       source = sources[i];
@@ -342,6 +344,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    // try (lib)/file.ts
     expected = LIBRARY_PREFIX + normalizedPathWithoutExtension + ".ts";
     for (i = 0, k = sources.length; i < k; ++i) {
       source = sources[i];
@@ -362,6 +365,7 @@ export class Compiler extends DiagnosticEmitter {
     if (files.has(source.normalizedPath)) return;
     files.add(source.normalizedPath);
 
+    // compile top-level statements
     var noTreeShaking = this.options.noTreeShaking;
     var isEntry = source.isEntry;
     var startFunctionBody = this.startFunctionBody;
@@ -451,35 +455,36 @@ export class Compiler extends DiagnosticEmitter {
   // globals
 
   compileGlobalDeclaration(declaration: VariableDeclaration): Global | null {
+    // look up the initialized program element
     var element = this.program.elements.get(declaration.fileLevelInternalName);
-    if (!element || element.kind != ElementKind.GLOBAL) {
-      throw new Error("global expected");
-    }
-    if (!this.compileGlobal(<Global>element)) { // reports
-      return null;
-    }
+    if (!element || element.kind != ElementKind.GLOBAL) throw new Error("global expected");
+    if (!this.compileGlobal(<Global>element)) return null; // reports
     return <Global>element;
   }
 
   compileGlobal(global: Global): bool {
-    if (global.is(ElementFlags.COMPILED) || global.is(ElementFlags.BUILTIN)) {
-      return true;
-    }
+    if (global.is(ElementFlags.COMPILED) || global.is(ElementFlags.BUILTIN)) return true;
+    global.set(ElementFlags.COMPILED);   // ^ built-ins are compiled on use
 
     var declaration = global.declaration;
     var initExpr: ExpressionRef = 0;
-    if (global.type == Type.void) { // infer type
+
+    if (global.type == Type.void) { // type is void if not yet resolved or not annotated
+
+      // resolve now if annotated
       if (declaration.type) {
         var resolvedType = this.program.resolveType(declaration.type); // reports
         if (!resolvedType) return false;
         if (resolvedType == Type.void) {
           this.error(
-            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            declaration.type.range, "*", resolvedType.toString()
+            DiagnosticCode.Type_expected,
+            declaration.type.range
           );
           return false;
         }
         global.type = resolvedType;
+
+      // infer from initializer if not annotated
       } else if (declaration.initializer) { // infer type using void/NONE for literal inference
         initExpr = this.compileExpression( // reports
           declaration.initializer,
@@ -494,6 +499,8 @@ export class Compiler extends DiagnosticEmitter {
           return false;
         }
         global.type = this.currentType;
+
+      // must either be annotated or have an initializer
       } else {
         this.error(
           DiagnosticCode.Type_expected,
@@ -505,7 +512,10 @@ export class Compiler extends DiagnosticEmitter {
 
     var nativeType = global.type.toNativeType();
 
+    // handle imports
     if (global.is(ElementFlags.DECLARED)) {
+
+      // constant global
       if (global.is(ElementFlags.CONSTANT)) {
         this.module.addGlobalImport(
           global.internalName,
@@ -517,6 +527,8 @@ export class Compiler extends DiagnosticEmitter {
         );
         global.set(ElementFlags.COMPILED);
         return true;
+
+      // importing mutable globals is not supported in the MVP
       } else {
         this.error(
           DiagnosticCode.Operation_not_supported,
@@ -526,16 +538,26 @@ export class Compiler extends DiagnosticEmitter {
       return false;
     }
 
+    // the MVP does not yet support initializer expressions other than constant values (and
+    // get_globals), hence such initializations must be performed in the start function for now.
     var initializeInStart = false;
 
+    // inlined constant can be compiled as-is
     if (global.is(ElementFlags.INLINED)) {
       initExpr = this.compileInlineConstant(global, global.type, true);
+
     } else {
+
+      // evaluate initializer if present
       if (declaration.initializer) {
         if (!initExpr) {
           initExpr = this.compileExpression(declaration.initializer, global.type);
         }
+
+        // check if the initializer is constant
         if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+
+          // if a constant global, check if the initializer becomes constant after precompute
           if (global.is(ElementFlags.CONSTANT)) {
             initExpr = this.precomputeExpressionRef(initExpr);
             if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
@@ -549,17 +571,22 @@ export class Compiler extends DiagnosticEmitter {
             initializeInStart = true;
           }
         }
+
+      // initialize to zero if there's no initializer
       } else {
         initExpr = global.type.toNativeZero(this.module);
       }
     }
 
     var internalName = global.internalName;
-    if (initializeInStart) {
+
+    if (initializeInStart) { // initialize to mutable zero and set the actual value in start
       this.module.addGlobal(internalName, nativeType, true, global.type.toNativeZero(this.module));
       var setExpr = this.module.createSetGlobal(internalName, initExpr);
       this.startFunctionBody.push(setExpr);
-    } else {
+
+    } else { // compile as-is
+
       if (global.is(ElementFlags.CONSTANT)) {
         var exprType = _BinaryenExpressionGetType(initExpr);
         switch (exprType) {
@@ -590,18 +617,18 @@ export class Compiler extends DiagnosticEmitter {
           default:
             throw new Error("concrete type expected");
         }
-        global.set(ElementFlags.INLINED);
-        if (declaration.isTopLevel) { // might be re-exported
-          this.module.addGlobal(internalName, nativeType, !global.is(ElementFlags.CONSTANT), initExpr);
+        global.set(ElementFlags.INLINED); // inline the value from now on
+        if (declaration.isTopLevel) {     // but keep the element if it might be re-exported
+          this.module.addGlobal(internalName, nativeType, false, initExpr);
         }
         if (declaration.range.source.isEntry && declaration.isTopLevelExport) {
           this.module.addGlobalExport(global.internalName, declaration.programLevelInternalName);
         }
-      } else {
+
+      } else /* mutable */ {
         this.module.addGlobal(internalName, nativeType, !global.is(ElementFlags.CONSTANT), initExpr);
       }
     }
-    global.set(ElementFlags.COMPILED);
     return true;
   }
 
@@ -615,8 +642,6 @@ export class Compiler extends DiagnosticEmitter {
 
   compileEnum(element: Enum): bool {
     if (element.is(ElementFlags.COMPILED)) return true;
-
-    // members might reference each other, triggering another compile
     element.set(ElementFlags.COMPILED);
 
     this.currentEnum = element;
@@ -711,6 +736,7 @@ export class Compiler extends DiagnosticEmitter {
 
   // functions
 
+  /** Compiles a function given its declaration. */
   compileFunctionDeclaration(
     declaration: FunctionDeclaration,
     typeArguments: TypeNode[],
@@ -728,13 +754,14 @@ export class Compiler extends DiagnosticEmitter {
     );
   }
 
+  /** Resolves the specified type arguments prior to compiling the resulting function instance. */
   compileFunctionUsingTypeArguments(
     prototype: FunctionPrototype,
     typeArguments: TypeNode[],
     contextualTypeArguments: Map<string,Type> | null,
     reportNode: Node
   ): Function | null {
-    var instance = prototype.resolveInclTypeArguments( // reports
+    var instance = prototype.resolveUsingTypeArguments( // reports
       typeArguments,
       contextualTypeArguments,
       reportNode
@@ -743,6 +770,7 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileFunction(instance) ? instance : null;
   }
 
+  /** Compiles a readily resolved function instance. */
   compileFunction(instance: Function): bool {
     if (instance.is(ElementFlags.COMPILED)) return true;
 
@@ -1064,7 +1092,7 @@ export class Compiler extends DiagnosticEmitter {
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): void {
-    var instance = prototype.resolveInclTypeArguments( // reports
+    var instance = prototype.resolveUsingTypeArguments( // reports
       typeArguments,
       contextualTypeArguments,
       alternativeReportNode
@@ -3029,6 +3057,14 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
 
+          case TypeKind.F32:
+          case TypeKind.F64:
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, Token.operatorToString(expression.operator), this.currentType.toString()
+            );
+            return this.module.createUnreachable();
+
           case TypeKind.VOID:
             this.error(
               DiagnosticCode.Operation_not_supported,
@@ -3096,6 +3132,14 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
+
+          case TypeKind.F32:
+          case TypeKind.F64:
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, Token.operatorToString(expression.operator), this.currentType.toString()
+            );
+            return this.module.createUnreachable();
 
           case TypeKind.VOID:
             this.error(
@@ -3780,75 +3824,66 @@ export class Compiler extends DiagnosticEmitter {
     if (!resolved) return this.module.createUnreachable();
 
     var element = resolved.element;
-    if (element.kind != ElementKind.FUNCTION_PROTOTYPE) {
-      this.error(
-        DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-        expression.range, element.internalName
-      );
-      return this.module.createUnreachable();
-    }
+    var functionPrototype: FunctionPrototype;
+    var functionInstance: Function | null;
+    switch (element.kind) {
 
-    var functionPrototype = <FunctionPrototype>element;
-    var functionInstance: Function | null = null;
-
-    // TODO: generalize?
-    if (functionPrototype.is(ElementFlags.BUILTIN)) {
-      var resolvedTypeArguments: Type[] | null = null;
-      if (expression.typeArguments) {
-        var k = expression.typeArguments.length;
-        resolvedTypeArguments = new Array<Type>(k);
-        for (var i = 0; i < k; ++i) {
-          var resolvedType = this.program.resolveType( // reports
-            expression.typeArguments[i],
-            this.currentFunction.contextualTypeArguments,
-            true
+      // direct function call
+      case ElementKind.FUNCTION_PROTOTYPE:
+        functionPrototype = <FunctionPrototype>element;
+        if (functionPrototype.is(ElementFlags.BUILTIN)) {
+          let expr = compileBuiltinCall( // reports
+            this,
+            functionPrototype,
+            functionPrototype.resolveBuiltinTypeArguments(
+              expression.typeArguments,
+              this.currentFunction.contextualTypeArguments
+            ),
+            expression.arguments,
+            contextualType,
+            expression
           );
-          if (!resolvedType) return this.module.createUnreachable();
-          resolvedTypeArguments[i] = resolvedType;
+          if (!expr) {
+            this.error(
+              DiagnosticCode.Operation_not_supported,
+              expression.range
+            );
+            return this.module.createUnreachable();
+          }
+          return expr;
+        } else {
+          functionInstance = functionPrototype.resolveUsingTypeArguments( // reports
+            expression.typeArguments,
+            this.currentFunction.contextualTypeArguments,
+            expression
+          );
+          if (!functionInstance) return this.module.createUnreachable();
         }
-      }
-      var expr = compileBuiltinCall(
-        this,
-        functionPrototype,
-        resolvedTypeArguments,
-        expression.arguments,
-        contextualType,
-        expression
-      );
-      if (!expr) {
+        break;
+
+      // indirect function call
+      // TODO: currently these are bound to distinct functions, not types.
+      case ElementKind.LOCAL:
+      case ElementKind.GLOBAL:
+      case ElementKind.FIELD:
+        if ((<VariableLikeElement>element).type.isFunction) {
+          functionInstance = <Function>(<VariableLikeElement>element).type.functionType;
+        } else {
+          this.error(
+            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+            expression.range, (<VariableLikeElement>element).type.toString()
+          );
+          return this.module.createUnreachable();
+        }
+        break;
+
+      default:
         this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
+          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+          expression.range, element.internalName
         );
         return this.module.createUnreachable();
-      }
-      return expr;
     }
-
-    // TODO: infer type arguments from parameter types if omitted
-    functionInstance = functionPrototype.resolveInclTypeArguments( // reports
-      expression.typeArguments,
-      this.currentFunction.contextualTypeArguments,
-      expression
-    );
-    if (!functionInstance) return this.module.createUnreachable();
-
-    // TODO: generalize? (see above)
-    /* if (functionInstance.is(ElementFlags.BUILTIN)) {
-      var expr = compileBuiltinCall(
-        this,
-        functionPrototype,
-        functionInstance.typeArguments,
-        expression.arguments,
-        contextualType,
-        expression
-      );
-      if (!expr) {
-        this.error(DiagnosticCode.Operation_not_supported, expression.range);
-        return this.module.createUnreachable();
-      }
-      return expr;
-    } */
 
     var numArguments = expression.arguments.length;
     var numArgumentsInclThis = functionInstance.instanceMethodOf
@@ -3861,7 +3896,7 @@ export class Compiler extends DiagnosticEmitter {
       assert(resolved.targetExpression != null);
       args[argumentIndex++] = <Expression>resolved.targetExpression;
     }
-    for (i = 0; i < numArguments; ++i) {
+    for (var i = 0; i < numArguments; ++i) {
       args[argumentIndex++] = expression.arguments[i];
     }
     return this.compileCall(functionInstance, args, expression);
@@ -4413,7 +4448,7 @@ export class Compiler extends DiagnosticEmitter {
     if (resolved) {
       if (resolved.element.kind == ElementKind.CLASS_PROTOTYPE) {
         var prototype = <ClassPrototype>resolved.element;
-        var instance = prototype.resolveInclTypeArguments( // reports
+        var instance = prototype.resolveUsingTypeArguments( // reports
           expression.typeArguments,
           null,
           expression

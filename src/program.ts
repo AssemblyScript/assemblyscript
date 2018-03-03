@@ -1347,7 +1347,7 @@ export class Program extends DiagnosticEmitter {
     if ((element = this.elements.get(localName)) || (element = this.elements.get(globalName))) {
       switch (element.kind) {
         case ElementKind.CLASS_PROTOTYPE:
-          var instance = (<ClassPrototype>element).resolveInclTypeArguments(
+          var instance = (<ClassPrototype>element).resolveUsingTypeArguments(
             node.typeArguments,
             contextualTypeArguments,
             null
@@ -1402,7 +1402,7 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  /** Resolves an array of type parameters to concrete types. */
+  /** Resolves an array of type arguments to concrete types. */
   resolveTypeArguments(
     typeParameters: TypeParameter[],
     typeArgumentNodes: TypeNode[] | null,
@@ -1511,7 +1511,10 @@ export class Program extends DiagnosticEmitter {
   ): ResolvedElement | null {
     // start by resolving the lhs target (expression before the last dot)
     var targetExpression = propertyAccess.expression;
-    resolvedElement = this.resolveExpression(targetExpression, contextualFunction); // reports
+    resolvedElement = this.resolveExpression( // reports
+      targetExpression,
+      contextualFunction
+    );
     if (!resolvedElement) return null;
     var target = resolvedElement.element;
 
@@ -1592,10 +1595,16 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  resolveElementAccess(elementAccess: ElementAccessExpression, contextualFunction: Function): ResolvedElement | null {
+  resolveElementAccess(
+    elementAccess: ElementAccessExpression,
+    contextualFunction: Function
+  ): ResolvedElement | null {
     // start by resolving the lhs target (expression before the last dot)
     var targetExpression = elementAccess.expression;
-    resolvedElement = this.resolveExpression(targetExpression, contextualFunction);
+    resolvedElement = this.resolveExpression(
+      targetExpression,
+      contextualFunction
+    );
     if (!resolvedElement) return null;
     var target = resolvedElement.element;
     switch (target.kind) {
@@ -1625,7 +1634,10 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  resolveExpression(expression: Expression, contextualFunction: Function): ResolvedElement | null {
+  resolveExpression(
+    expression: Expression,
+    contextualFunction: Function
+  ): ResolvedElement | null {
     var classType: Class | null;
 
     while (expression.kind == NodeKind.PARENTHESIZED) {
@@ -1672,17 +1684,26 @@ export class Program extends DiagnosticEmitter {
         return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
 
       case NodeKind.PROPERTYACCESS:
-        return this.resolvePropertyAccess(<PropertyAccessExpression>expression, contextualFunction);
+        return this.resolvePropertyAccess(
+          <PropertyAccessExpression>expression,
+          contextualFunction
+        );
 
       case NodeKind.ELEMENTACCESS:
-        return this.resolveElementAccess(<ElementAccessExpression>expression, contextualFunction);
+        return this.resolveElementAccess(
+          <ElementAccessExpression>expression,
+          contextualFunction
+        );
 
       case NodeKind.CALL:
-        var resolved = this.resolveExpression((<CallExpression>expression).expression, contextualFunction);
+        var resolved = this.resolveExpression(
+          (<CallExpression>expression).expression,
+          contextualFunction
+        );
         if (resolved) {
           var element = resolved.element;
           if (element && element.kind == ElementKind.FUNCTION_PROTOTYPE) {
-            var instance = (<FunctionPrototype>element).resolveInclTypeArguments(
+            var instance = (<FunctionPrototype>element).resolveUsingTypeArguments(
               (<CallExpression>expression).typeArguments,
               null,
               expression
@@ -2130,6 +2151,7 @@ export class FunctionPrototype extends Element {
     }
   }
 
+  /** Resolves this prototype to an instance using the specified concrete type arguments. */
   resolve(
     functionTypeArguments: Type[] | null = null,
     contextualTypeArguments: Map<string,Type> | null = null
@@ -2226,7 +2248,28 @@ export class FunctionPrototype extends Element {
     return instance;
   }
 
-  resolveInclTypeArguments(
+  /** Resolves this prototype partially by applying the specified inherited class type arguments. */
+  resolvePartial(classTypeArguments: Type[] | null): FunctionPrototype | null {
+    if (!this.classPrototype) {
+      throw new Error("partially resolved instance method must reference its class prototype");
+    }
+    if (classTypeArguments && classTypeArguments.length) {
+      var partialPrototype = new FunctionPrototype(
+        this.program,
+        this.simpleName,
+        this.internalName,
+        this.declaration,
+        this.classPrototype
+      );
+      partialPrototype.flags = this.flags;
+      partialPrototype.classTypeArguments = classTypeArguments;
+      return partialPrototype;
+    }
+    return this; // no need to clone
+  }
+
+  /** Resolves the specified type arguments prior to resolving this prototype to an instance. */
+  resolveUsingTypeArguments(
     typeArgumentNodes: TypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null,
     reportNode: Node
@@ -2245,23 +2288,27 @@ export class FunctionPrototype extends Element {
     return this.resolve(resolvedTypeArguments, contextualTypeArguments);
   }
 
-  resolvePartial(classTypeArguments: Type[] | null): FunctionPrototype | null {
-    if (!this.classPrototype) {
-      throw new Error("partially resolved instance method must reference its class prototype");
+  /** Resolves the type arguments to use when compiling a built-in call. Must be a built-in. */
+  resolveBuiltinTypeArguments(
+    typeArgumentNodes: TypeNode[] | null,
+    contextualTypeArguments: Map<string,Type> | null
+  ): Type[] | null {
+    assert(this.is(ElementFlags.BUILTIN));
+    var resolvedTypeArguments: Type[] | null = null;
+    if (typeArgumentNodes) {
+      var k = typeArgumentNodes.length;
+      resolvedTypeArguments = new Array<Type>(k);
+      for (var i = 0; i < k; ++i) {
+        var resolvedType = this.program.resolveType( // reports
+          typeArgumentNodes[i],
+          contextualTypeArguments,
+          true
+        );
+        if (!resolvedType) return null;
+        resolvedTypeArguments[i] = resolvedType;
+      }
     }
-    if (classTypeArguments && classTypeArguments.length) {
-      var partialPrototype = new FunctionPrototype(
-        this.program,
-        this.simpleName,
-        this.internalName,
-        this.declaration,
-        this.classPrototype
-      );
-      partialPrototype.flags = this.flags;
-      partialPrototype.classTypeArguments = classTypeArguments;
-      return partialPrototype;
-    }
-    return this; // no need to clone
+    return resolvedTypeArguments;
   }
 
   toString(): string { return this.simpleName; }
@@ -2650,7 +2697,11 @@ export class ClassPrototype extends Element {
     }
   }
 
-  resolve(typeArguments: Type[] | null, contextualTypeArguments: Map<string,Type> | null = null): Class | null {
+  /** Resolves this prototype to an instance using the specified concrete type arguments. */
+  resolve(
+    typeArguments: Type[] | null,
+    contextualTypeArguments: Map<string,Type> | null = null
+  ): Class | null {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
     var instance = this.instances.get(instanceKey);
     if (instance) return instance;
@@ -2790,7 +2841,8 @@ export class ClassPrototype extends Element {
     return instance;
   }
 
-  resolveInclTypeArguments(
+  /** Resolves the specified type arguments prior to resolving this prototype to an instance. */
+  resolveUsingTypeArguments(
     typeArgumentNodes: TypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null,
     alternativeReportNode: Node | null

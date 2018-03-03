@@ -38,7 +38,7 @@
     "node": ">=8"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode production",
     "clean": "node scripts/clean",
     "lint": "npm run lint:compiler && npm run lint:library",
     "lint:compiler": "tslint -c tslint.json --project src --formatters-dir lib/tslint --format as",
