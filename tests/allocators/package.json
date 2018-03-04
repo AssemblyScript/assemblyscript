@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "node ./index",
+    "test:forever": "node ./forever"
+  }
+}

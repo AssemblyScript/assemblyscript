@@ -1,4 +1,7 @@
 function runner(allocator, runs, allocs) {
+  var hasReset = !!allocator.reset_memory;
+  var useSet = !!allocator.set_memory;
+  console.log("hasReset=" + hasReset  + ", useSet=" + useSet);
   var ptrs = [];
 
   function randomAlloc(maxSize) {
@@ -9,7 +12,7 @@ function runner(allocator, runs, allocs) {
     if (!ptr) throw Error();
     if ((ptr & 7) != 0) throw Error("invalid alignment: " + (ptr & 7) + " on " + ptr);
     if (ptrs.indexOf(ptr) >= 0) throw Error("duplicate pointer");
-    if (allocator.set_memory)
+    if (useSet)
       allocator.set_memory(ptr, 0xdc, size);
     ptrs.push(ptr);
     return ptr;
@@ -35,7 +38,11 @@ function runner(allocator, runs, allocs) {
   // remember the smallest possible memory address
   var base = allocator.allocate_memory(64);
   console.log("base: " + base);
-  allocator.free_memory(base);
+  if (hasReset) {
+    allocator.reset_memory();
+  } else {
+    allocator.free_memory(base);
+  }
   var currentMem = allocator.memory.buffer.byteLength;
   console.log("mem initial: " + currentMem);
 
@@ -65,16 +72,24 @@ function runner(allocator, runs, allocs) {
       // free the rest, randomly
       while (ptrs.length) randomFree();
 
-      // should now be possible to reuse the entire memory
-      // just try a large portion of the memory here, for example because of
-      // SL+1 for allocations in TLSF
-      var size = ((allocator.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
-      var ptr = allocator.allocate_memory(size);
-      if (allocator.set_memory)
-        allocator.set_memory(ptr, 0xac, size);
-      if (ptr !== base)
-        throw Error("expected " + base + " but got " + ptr);
-      allocator.free_memory(ptr);
+      if (hasReset) {
+        allocator.reset_memory();
+        var ptr = allocator.allocate_memory(64);
+        if (ptr !== base)
+          throw Error("expected " + base + " but got " + ptr);
+        allocator.reset_memory();
+      } else {
+        // should now be possible to reuse the entire memory
+        // just try a large portion of the memory here, for example because of
+        // SL+1 for allocations in TLSF
+        var size = ((allocator.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
+        var ptr = allocator.allocate_memory(size);
+        if (useSet)
+          allocator.set_memory(ptr, 0xac, size);
+        if (ptr !== base)
+          throw Error("expected " + base + " but got " + ptr);
+        allocator.free_memory(ptr);
+      }
       testMemChanged();
     }
   } finally {

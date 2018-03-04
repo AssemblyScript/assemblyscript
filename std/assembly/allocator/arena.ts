@@ -5,25 +5,28 @@
  * sure that there are no more references to cleared memory afterwards. Always aligns to 8 bytes.
  */
 
-const ALIGN_LOG2: usize = 3;
-const ALIGN_SIZE: usize = 1 << ALIGN_LOG2;
-const ALIGN_MASK: usize = ALIGN_SIZE - 1;
+const AL_BITS: usize = 3;
+const AL_SIZE: usize = 1 << AL_BITS;
+const AL_MASK: usize = AL_SIZE - 1;
 
-var HEAP_OFFSET: usize = HEAP_BASE;
+var OFFSET: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 
 @global
 export function allocate_memory(size: usize): usize {
   if (!size) return 0;
-  var ptr = HEAP_OFFSET;
-  var off = (ptr + size + ALIGN_MASK) & ~ALIGN_MASK;
-  var avail = <usize>current_memory() << 16;
-  if (off > avail && grow_memory(
-    <i32>max(
-      (((off + 0xffff) & ~0xffff) - avail) >> 16, // minimum required pages
-      avail                                >> 16  // at least double memory
-    )
-  ) < 0) unreachable(); // out of memory
-  HEAP_OFFSET = off;
+  var ptr = OFFSET;
+  var newPtr = (ptr + size + AL_MASK) & ~AL_MASK;
+  var pagesBefore = current_memory();
+  if (newPtr > <usize>pagesBefore << 16) {
+    var pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
+    var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+    if (grow_memory(pagesWanted) < 0) {
+      if (grow_memory(pagesNeeded) < 0) {
+        unreachable(); // out of memory
+      }
+    }
+  }
+  OFFSET = newPtr;
   return ptr;
 }
 
@@ -34,5 +37,5 @@ export function free_memory(ptr: usize): void {
 
 @global
 export function reset_memory(): void {
-  HEAP_OFFSET = HEAP_BASE;
+  OFFSET = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 }

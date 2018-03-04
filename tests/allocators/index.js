@@ -19,10 +19,16 @@ function test(file) {
     return String.fromCharCode.apply(String, str);
   }
 
-  require("../runner")(exports, 50, 20000); // picked so I/O isn't the bottleneck
+  require("./runner")(exports, 50, 20000);
+
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
 }
 
-test("tlsf.untouched.wasm");
-test("tlsf.optimized.wasm");
+if (process.argv.length > 2) {
+  test(process.argv[2] + "/untouched.wasm");
+  test(process.argv[2] + "/optimized.wasm");
+} else {
+  console.error("Usage: npm test <allocator>");
+  process.exit(1);
+}

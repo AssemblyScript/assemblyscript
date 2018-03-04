@@ -24,4 +24,4 @@ free_memory(ptr2);
 
 reset_memory();
 ptr1 = allocate_memory(size);
-assert(ptr1 == HEAP_BASE);
+assert(ptr1 == ((HEAP_BASE + 7) & ~7));
