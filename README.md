@@ -1,7 +1,9 @@
 ![](https://s.gravatar.com/avatar/f105de3decfafc734b8eabe9a960b25d?size=64) AssemblyScript
 =================
 
+[![npm](https://img.shields.io/npm/v/assemblyscript.svg)](https://www.npmjs.com/package/assemblyscript)
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
+[![Snap Status](https://build.snapcraft.io/badge/AssemblyScript/assemblyscript.svg)](https://build.snapcraft.io/user/AssemblyScript/assemblyscript)
 
 **AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates minimal WebAssembly modules while being just an `npm install` away.
 
