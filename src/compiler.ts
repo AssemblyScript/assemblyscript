@@ -79,6 +79,7 @@ import {
   TryStatement,
   VariableDeclaration,
   VariableStatement,
+  VoidStatement,
   WhileStatement,
 
   Expression,
@@ -1195,9 +1196,14 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.compileTryStatement(<TryStatement>statement);
         break;
 
-      case NodeKind.VARIABLE:
-        var variableInit = this.compileVariableStatement(<VariableStatement>statement);
-        expr = variableInit ? variableInit : this.module.createNop();
+      case NodeKind.VARIABLE: {
+        let initializer = this.compileVariableStatement(<VariableStatement>statement);
+        expr = initializer ? initializer : this.module.createNop();
+        break;
+      }
+
+      case NodeKind.VOID:
+        expr = this.compileVoidStatement(<VoidStatement>statement);
         break;
 
       case NodeKind.WHILE:
@@ -1646,6 +1652,10 @@ export class Compiler extends DiagnosticEmitter {
       : 0;
   }
 
+  compileVoidStatement(statement: VoidStatement): ExpressionRef {
+    return this.compileExpression(statement.expression, Type.void, ConversionKind.EXPLICIT, false);
+  }
+
   compileWhileStatement(statement: WhileStatement): ExpressionRef {
 
     // The condition does not yet initialize a branch
@@ -1826,7 +1836,11 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       case NodeKind.PARENTHESIZED:
-        expr = this.compileParenthesizedExpression(<ParenthesizedExpression>expression, contextualType);
+        expr = this.compileParenthesizedExpression(
+          <ParenthesizedExpression>expression,
+          contextualType,
+          wrapSmallIntegers
+        );
         break;
 
       case NodeKind.PROPERTYACCESS:
@@ -4507,9 +4521,18 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.createUnreachable();
   }
 
-  compileParenthesizedExpression(expression: ParenthesizedExpression, contextualType: Type): ExpressionRef {
+  compileParenthesizedExpression(
+    expression: ParenthesizedExpression,
+    contextualType: Type,
+    wrapSmallIntegers: bool = true
+  ): ExpressionRef {
     // does not change types, just order
-    return this.compileExpression(expression.expression, contextualType, ConversionKind.NONE);
+    return this.compileExpression(
+      expression.expression,
+      contextualType,
+      ConversionKind.NONE,
+      wrapSmallIntegers
+    );
   }
 
   /**

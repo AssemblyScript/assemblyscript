@@ -75,6 +75,7 @@ import {
   TypeParameter,
   VariableStatement,
   VariableDeclaration,
+  VoidStatement,
   WhileStatement,
 
   addModifier,
@@ -1724,6 +1725,9 @@ export class Parser extends DiagnosticEmitter {
       case Token.TYPE:
         return this.parseTypeDeclaration(tn, null);
 
+      case Token.VOID:
+        return this.parseVoidStatement(tn);
+
       case Token.WHILE:
         return this.parseWhileStatement(tn);
 
@@ -2196,6 +2200,20 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  parseVoidStatement(
+    tn: Tokenizer
+  ): VoidStatement | null {
+
+    // at 'void': Expression ';'?
+
+    var startPos = tn.tokenPos;
+    var expression = this.parseExpression(tn, Precedence.GROUPING);
+    if (!expression) return null;
+    var ret = Node.createVoidStatement(expression, tn.range(startPos, tn.pos));
+    tn.skip(Token.SEMICOLON);
+    return ret;
+  }
+
   parseWhileStatement(
     tn: Tokenizer
   ): WhileStatement | null {
@@ -2209,7 +2227,7 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.CLOSEPAREN)) {
         var statement = this.parseStatement(tn);
         if (!statement) return null;
-        var ret = Node.createWhileStatement(<Expression>expression, <Statement>statement, tn.range(startPos, tn.pos));
+        var ret = Node.createWhileStatement(expression, statement, tn.range(startPos, tn.pos));
         tn.skip(Token.SEMICOLON);
         return ret;
       } else {

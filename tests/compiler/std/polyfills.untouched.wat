@@ -75,40 +75,28 @@
      (i32.or
       (i32.or
        (i32.and
-        (i32.and
-         (i32.and
-          (i32.shl
-           (get_local $0)
-           (i32.const 8)
-          )
-          (i32.const 65535)
-         )
-         (i32.const 65280)
+        (i32.shl
+         (get_local $0)
+         (i32.const 8)
         )
-        (i32.const 65535)
+        (i32.const 65280)
        )
        (i32.and
-        (i32.and
-         (i32.shr_u
-          (get_local $0)
-          (i32.const 8)
-         )
-         (i32.const 255)
+        (i32.shr_u
+         (get_local $0)
+         (i32.const 8)
         )
-        (i32.const 65535)
+        (i32.const 255)
        )
       )
       (i32.and
+       (get_local $0)
        (i32.and
-        (get_local $0)
-        (i32.and
-         (i32.wrap/i64
-          (i64.const 4294901760)
-         )
-         (i32.const 65535)
+        (i32.wrap/i64
+         (i64.const 4294901760)
         )
+        (i32.const 65535)
        )
-       (i32.const 65535)
       )
      )
      (i32.const 65535)
@@ -352,62 +340,38 @@
      (i32.shl
       (i32.or
        (i32.or
-        (i32.shr_s
+        (i32.and
          (i32.shl
-          (i32.and
-           (i32.shr_s
-            (i32.shl
-             (i32.shl
-              (get_local $0)
-              (i32.const 8)
-             )
-             (i32.const 16)
-            )
-            (i32.const 16)
-           )
-           (i32.shr_s
-            (i32.shl
-             (i32.const 65280)
-             (i32.const 16)
-            )
-            (i32.const 16)
-           )
-          )
-          (i32.const 16)
-         )
-         (i32.const 16)
-        )
-        (i32.shr_s
-         (i32.shl
-          (i32.and
-           (i32.shr_s
-            (get_local $0)
-            (i32.const 8)
-           )
-           (i32.const 255)
-          )
-          (i32.const 16)
-         )
-         (i32.const 16)
-        )
-       )
-       (i32.shr_s
-        (i32.shl
-         (i32.and
           (get_local $0)
-          (i32.shr_s
-           (i32.shl
-            (i32.wrap/i64
-             (i64.const 4294901760)
-            )
-            (i32.const 16)
-           )
+          (i32.const 8)
+         )
+         (i32.shr_s
+          (i32.shl
+           (i32.const 65280)
            (i32.const 16)
           )
+          (i32.const 16)
+         )
+        )
+        (i32.and
+         (i32.shr_s
+          (get_local $0)
+          (i32.const 8)
+         )
+         (i32.const 255)
+        )
+       )
+       (i32.and
+        (get_local $0)
+        (i32.shr_s
+         (i32.shl
+          (i32.wrap/i64
+           (i64.const 4294901760)
+          )
+          (i32.const 16)
          )
          (i32.const 16)
         )
-        (i32.const 16)
        )
       )
       (i32.const 16)

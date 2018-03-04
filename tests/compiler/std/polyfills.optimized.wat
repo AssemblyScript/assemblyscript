@@ -153,21 +153,12 @@
     (i32.shr_s
      (i32.shl
       (i32.or
-       (i32.shr_s
+       (i32.and
         (i32.shl
-         (i32.and
-          (i32.shr_s
-           (i32.shl
-            (get_local $0)
-            (i32.const 24)
-           )
-           (i32.const 16)
-          )
-          (i32.const -256)
-         )
-         (i32.const 16)
+         (get_local $0)
+         (i32.const 8)
         )
-        (i32.const 16)
+        (i32.const -256)
        )
        (i32.and
         (i32.shr_s

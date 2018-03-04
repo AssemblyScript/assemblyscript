@@ -66,6 +66,7 @@ export enum NodeKind {
   THROW,
   TRY,
   VARIABLE,
+  VOID,
   WHILE,
 
   // declaration statements
@@ -897,6 +898,16 @@ export abstract class Node {
     return elem;
   }
 
+  static createVoidStatement(
+    expression: Expression,
+    range: Range
+  ): VoidStatement {
+    var stmt = new VoidStatement();
+    stmt.range = range;
+    stmt.expression = expression;
+    return stmt;
+  }
+
   static createWhileStatement(
     condition: Expression,
     statement: Statement,
@@ -1666,6 +1677,14 @@ export class VariableStatement extends Statement {
   decorators: Decorator[] | null;
   /** Array of member declarations. */
   declarations: VariableDeclaration[];
+}
+
+/** Represents a void statement dropping an expression's value. */
+export class VoidStatement extends Statement {
+  kind = NodeKind.VOID;
+
+  /** Expression being dropped. */
+  expression: Expression;
 }
 
 /** Represents a `while` statement. */
