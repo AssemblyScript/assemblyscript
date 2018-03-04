@@ -7,7 +7,8 @@ function runner(allocator, runs, allocs) {
     size = (size + 3) & ~3;
     var ptr = allocator.allocate_memory(size);
     if (!ptr) throw Error();
-    if (ptrs.indexOf(ptr) >= 0) throw Error();
+    if ((ptr & 7) != 0) throw Error("invalid alignment: " + (ptr & 7) + " on " + ptr);
+    if (ptrs.indexOf(ptr) >= 0) throw Error("duplicate pointer");
     if (allocator.set_memory)
       allocator.set_memory(ptr, 0xdc, size);
     ptrs.push(ptr);

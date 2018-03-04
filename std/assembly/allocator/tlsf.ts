@@ -1,4 +1,9 @@
-////////////// TLSF (Two-Level Segregate Fit) Memory Allocator ////////////////
+/**
+ * @file Two-Level Segregate Fit Memory Allocator
+ *
+ * A general purpose dynamic memory allocator specifically designed to meet real-time requirements.
+ * Always aligns to 8 bytes.
+ */
 
 // ╒══════════════ Block size interpretation (32-bit) ═════════════╕
 //    3                   2                   1
@@ -8,7 +13,7 @@
 // └───────────────────────────────────────────────┴─────────╨─────┘
 // FL: first level, SL: second level, AL: alignment, SB: small block
 
-const AL_BITS: u32 = sizeof<usize>() == sizeof<u32>() ? 2 : 3;
+const AL_BITS: u32 = 3; // always align to 8 bytes
 const AL_SIZE: usize = 1 << <usize>AL_BITS;
 const AL_MASK: usize = AL_SIZE - 1;
 
@@ -46,8 +51,6 @@ const LEFT_FREE: usize = 1 << 1;
 /** Mask to obtain all tags. */
 const TAGS: usize = FREE | LEFT_FREE;
 
-assert(AL_BITS >= 2); // alignment must be large enough to store all tags
-
 /** Block structure. */
 @unmanaged
 class Block {
@@ -56,7 +59,7 @@ class Block {
   info: usize;
 
   /** End offset of the {@link Block#info} field. User data starts here. */
-  static readonly INFO: usize = sizeof<usize>();
+  static readonly INFO: usize = (sizeof<usize>() + AL_MASK) & ~AL_MASK;
 
   /** Previous free block, if any. Only valid if free. */
   prev: Block | null;
@@ -64,7 +67,7 @@ class Block {
   next: Block | null;
 
   /** Minimum size of a block, excluding {@link Block#info}. */
-  static readonly MIN_SIZE: usize = 3 * sizeof<usize>(); // prev + next + jump
+  static readonly MIN_SIZE: usize = (3 * sizeof<usize>() + AL_MASK) & ~AL_MASK;// prev + next + jump
 
   /** Maximum size of a used block, excluding {@link Block#info}. */
   static readonly MAX_SIZE: usize = 1 << (FL_BITS + SB_BITS);
@@ -445,7 +448,7 @@ export function allocate_memory(size: usize): usize {
         root.setHead(fl, sl, null);
       }
     }
-    root.addMemory(rootOffset + Root.SIZE, current_memory() << 16);
+    root.addMemory((rootOffset + Root.SIZE + AL_MASK) & ~AL_MASK, current_memory() << 16);
   }
 
   // search for a suitable block

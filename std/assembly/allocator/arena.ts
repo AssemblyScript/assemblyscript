@@ -1,8 +1,9 @@
-/////////////// A simple yet effective Arena Memory Allocator /////////////////
-
-// Provides a `reset_memory` function to reset the heap to its initial state. A
-// user has to make sure that there are no more references to cleared memory
-// afterwards. Always aligns to 8 bytes.
+/**
+ * @file Arena Memory Allocator
+ *
+ * Provides a `reset_memory` function to reset the heap to its initial state. A user has to make
+ * sure that there are no more references to cleared memory afterwards. Always aligns to 8 bytes.
+ */
 
 const ALIGN_LOG2: usize = 3;
 const ALIGN_SIZE: usize = 1 << ALIGN_LOG2;

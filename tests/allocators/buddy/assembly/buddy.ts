@@ -1,3 +1,7 @@
+/**
+ * @file Buddy Memory Allocator
+ */
+
 /*
   Copyright 2018 Evan Wallace
 

@@ -1,7 +1,9 @@
-/////////////////////////// System Memory Allocator ////////////////////////////
-
-// Uses the environment's malloc and free implementations, i.e., when linking
-// with other C-like programs that already provide these.
+/**
+ * @file System Memory Allocator
+ *
+ * Uses the environment's malloc and free implementations, i.e., when linking with other C-like
+ * programs that already provide these.
+ */
 
 declare function malloc(size: usize): usize;
 declare function free(ptr: usize): void;

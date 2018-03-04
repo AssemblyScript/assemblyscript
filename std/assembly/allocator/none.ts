@@ -1,3 +1,7 @@
+/**
+ * @file Memory Allocator Stub
+ */
+
 export function allocate_memory(size: usize): usize {
   throw new Error("not supported");
 }
