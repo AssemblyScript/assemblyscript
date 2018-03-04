@@ -1,0 +1,18 @@
+name: assemblyscript
+version: git
+summary: A TypeScript to WebAssembly compiler.
+description: |
+  AssemblyScript compiles strictly typed TypeScript to WebAssembly using Binaryen.
+  It generates minimal WebAssembly modules.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+apps:
+  asc:
+    command: asc
+
+parts:
+  assemblyscript:
+    source: .
+    plugin: nodejs
