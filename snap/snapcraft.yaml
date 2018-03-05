@@ -1,8 +1,13 @@
 name: assemblyscript
 version: git
 summary: A TypeScript to WebAssembly compiler.
-description: AssemblyScript compiles strictly typed TypeScript to WebAssembly.
-grade: devel
+description: |
+  AssemblyScript compiles strictly typed TypeScript to WebAssembly using Binaryen. More precisely, it subsets TypeScript's syntax and semantics so programs written using this subset can be compiled to WebAssembly ahead of time.
+
+  See the AssemblyScript wiki for further documentation:
+  https://github.com/AssemblyScript/assemblyscript/wiki
+icon: media/icon.svg
+grade: stable
 confinement: strict
 apps:
   asc:
