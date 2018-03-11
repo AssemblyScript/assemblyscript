@@ -34,8 +34,7 @@ import {
   FunctionPrototype,
   Local,
   Class,
-  ElementKind,
-  ElementFlags
+  ElementKind
 } from "./program";
 
 /** Compiles a get of a built-in global. */

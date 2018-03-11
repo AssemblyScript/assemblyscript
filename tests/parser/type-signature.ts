@@ -1,2 +1,2 @@
-type foo = () => void;
-type foo = (() => void) | null;
+// type foo = () => void;
+// type foo = (() => void) | null;

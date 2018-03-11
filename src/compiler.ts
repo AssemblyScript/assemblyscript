@@ -31,7 +31,6 @@ import {
   Field,
   FunctionPrototype,
   Function,
-  Trampoline,
   Global,
   Local,
   Namespace,
@@ -4054,22 +4053,22 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Gets the trampoline for the specified function and actual number of operands, incl. `this`. */
-  ensureTrampoline(instance: Function, numOperands: i32): Function {
-    var trampolines = instance.trampolines;
+  ensureTrampoline(original: Function, numOperands: i32): Function {
+    var trampolines = original.trampolines;
     var trampoline: Function | null;
     if (trampolines) {
       if (trampoline = trampolines.get(numOperands)) return trampoline;
     } else {
-      instance.trampolines = trampolines = new Map();
+      original.trampolines = trampolines = new Map();
     }
 
-    var originalSignature = instance.signature;
-    var originalName = instance.internalName;
+    var originalSignature = original.signature;
+    var originalName = original.internalName;
     var originalParameterTypes = originalSignature.parameterTypes;
-    var originalParameterDeclarations = instance.prototype.declaration.signature.parameters;
-    var originalReturnType = originalSignature.returnType;
-    var originalThisType = originalSignature.thisType;
-    var isInstance = instance.is(ElementFlags.INSTANCE);
+    var originalParameterDeclarations = original.prototype.declaration.signature.parameters;
+    var commonReturnType = originalSignature.returnType;
+    var commonThisType = originalSignature.thisType;
+    var isInstance = original.is(ElementFlags.INSTANCE);
 
     // arguments excl. `this`, operands incl. `this`
     var minArguments = originalSignature.requiredParameters;
@@ -4085,7 +4084,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(numOperands >= minOperands && numOperands < maxOperands);
 
     var originalOperands = new Array<ExpressionRef>(maxOperands);
-    var trampolineArgumentTypes = new Array<Type>(numArguments);
+    var trampolineParameterTypes = new Array<Type>(numArguments);
     var operandIndex = 0;
 
     // forward `this`
@@ -4097,51 +4096,40 @@ export class Compiler extends DiagnosticEmitter {
     // forward arguments
     for (let i = 0; i < numArguments; ++i, ++operandIndex) {
       let parameterType = originalParameterTypes[i];
-      trampolineArgumentTypes[i] = parameterType;
+      trampolineParameterTypes[i] = parameterType;
       originalOperands[operandIndex] = this.module.createGetLocal(operandIndex, parameterType.toNativeType());
     }
     assert(operandIndex == numOperands);
 
     // create the trampoline element
-    var trampolineSignature = new Signature(trampolineArgumentTypes, originalReturnType, originalThisType);
-    var trampolineName = originalName + "@" + numOperands.toString();
+    var trampolineSignature = new Signature(trampolineParameterTypes, commonReturnType, commonThisType);
+    var trampolineName = originalName + "|trampoline." + numOperands.toString();
     trampolineSignature.requiredParameters = numArguments;
-    trampoline = new Function(instance.prototype, trampolineName, trampolineSignature, instance.instanceMethodOf);
-    trampoline.flags = instance.flags;
+    trampoline = new Function(original.prototype, trampolineName, trampolineSignature, original.instanceMethodOf);
+    trampoline.flags = original.flags | ElementFlags.COMPILED;
     trampolines.set(numOperands, trampoline);
 
     // compile initializers of omitted arguments in scope of the trampoline function
+    // this is necessary because initializers might need additional locals and a proper this context
     var previousFunction = this.currentFunction;
     this.currentFunction = trampoline;
-    var stmts = new Array<ExpressionRef>();
     for (let i = numArguments; i < maxArguments; ++i, ++operandIndex) {
       let parameterType = originalParameterTypes[i];
-      let local = trampoline.addLocal(parameterType, originalParameterDeclarations[i].name.text);
-      stmts.push(
-        this.module.createSetLocal(local.index,
-          this.compileExpression(
-            assert(originalParameterDeclarations[i].initializer),
-            originalParameterTypes[i]
-          )
-        )
+      originalOperands[operandIndex] = this.compileExpression(
+        assert(originalParameterDeclarations[i].initializer),
+        originalParameterTypes[i]
       );
-      originalOperands[operandIndex] = this.module.createGetLocal(local.index, parameterType.toNativeType());
     }
     this.currentFunction = previousFunction;
     assert(operandIndex == maxOperands);
 
-    // append the call to the original function
-    stmts.push(
+    var typeRef = this.ensureFunctionType(trampolineSignature);
+    var funcRef = this.module.addFunction(trampolineName, typeRef, typesToNativeTypes(trampoline.additionalLocals),
       this.module.createCall(
         originalName,
         originalOperands,
-        originalReturnType.toNativeType()
+        commonReturnType.toNativeType()
       )
-    );
-
-    var typeRef = this.ensureFunctionType(trampolineSignature);
-    var funcRef = this.module.addFunction(trampolineName, typeRef, typesToNativeTypes(trampoline.additionalLocals),
-      this.module.createBlock(null, stmts, originalReturnType.toNativeType())
     );
     trampoline.finalize(this.module, funcRef);
     return trampoline;

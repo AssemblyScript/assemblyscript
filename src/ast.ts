@@ -960,6 +960,8 @@ export class TypeNode extends Node {
   name: IdentifierExpression;
   /** Type argument references. */
   typeArguments: TypeNode[] | null;
+  /** Signature if a function type. */
+  signature: SignatureNode | null;
   /** Whether nullable or not. */
   isNullable: bool;
 }

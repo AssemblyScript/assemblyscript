@@ -2803,7 +2803,7 @@
   )
   (i32.const -1)
  )
- (func "$(lib)/array/Array#indexOf@2" (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/Array#indexOf|trampoline.2" (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (call "$(lib)/array/Array#indexOf"
    (get_local $0)
    (get_local $1)
@@ -3861,7 +3861,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array#indexOf@2"
+   (call "$(lib)/array/Array#indexOf|trampoline.2"
     (get_global $std/array/arr)
     (i32.const 44)
    )
@@ -3879,7 +3879,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array#indexOf@2"
+   (call "$(lib)/array/Array#indexOf|trampoline.2"
     (get_global $std/array/arr)
     (i32.const 42)
    )
@@ -3900,7 +3900,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array#indexOf@2"
+   (call "$(lib)/array/Array#indexOf|trampoline.2"
     (get_global $std/array/arr)
     (i32.const 45)
    )
