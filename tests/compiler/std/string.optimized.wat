@@ -1,7 +1,7 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $i (func (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
+ (type $i (func (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
  (type $iF (func (param i32) (result f64)))
@@ -217,7 +217,14 @@
    )
   )
  )
- (func "$(lib)/string/String#endsWith" (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func "$(lib)/string/String#startsWith@2" (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (call "$(lib)/string/String#startsWith"
+   (get_local $0)
+   (get_local $1)
+   (i32.const 0)
+  )
+ )
+ (func "$(lib)/string/String#endsWith" (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.eqz
@@ -302,7 +309,14 @@
    )
   )
  )
- (func "$(lib)/string/String#indexOf" (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func "$(lib)/string/String#endsWith@2" (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (call "$(lib)/string/String#endsWith"
+   (get_local $0)
+   (get_local $1)
+   (i32.const 2147483647)
+  )
+ )
+ (func "$(lib)/string/String#indexOf" (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -407,7 +421,7 @@
   )
   (i32.const -1)
  )
- (func "$(lib)/string/String#includes" (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func "$(lib)/string/String#includes" (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.ne
    (call "$(lib)/string/String#indexOf"
     (get_local $0)
@@ -417,10 +431,24 @@
    (i32.const -1)
   )
  )
- (func $std/string/getString (; 7 ;) (type $i) (result i32)
+ (func "$(lib)/string/String#includes@2" (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (call "$(lib)/string/String#includes"
+   (get_local $0)
+   (get_local $1)
+   (i32.const 0)
+  )
+ )
+ (func "$(lib)/string/String#indexOf@2" (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (call "$(lib)/string/String#indexOf"
+   (get_local $0)
+   (get_local $1)
+   (i32.const 0)
+  )
+ )
+ (func $std/string/getString (; 11 ;) (type $i) (result i32)
   (get_global $std/string/str)
  )
- (func "$(lib)/string/parse<f64>" (; 8 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func "$(lib)/string/parse<f64>" (; 12 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -785,13 +813,19 @@
    (get_local $5)
   )
  )
- (func "$(lib)/string/parseInt" (; 9 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func "$(lib)/string/parseInt" (; 13 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (call "$(lib)/string/parse<f64>"
    (get_local $0)
    (get_local $1)
   )
  )
- (func "$(lib)/string/parseFloat" (; 10 ;) (type $iF) (param $0 i32) (result f64)
+ (func "$(lib)/string/parseInt@1" (; 14 ;) (type $iF) (param $0 i32) (result f64)
+  (call "$(lib)/string/parseInt"
+   (get_local $0)
+   (i32.const 0)
+  )
+ )
+ (func "$(lib)/string/parseFloat" (; 15 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1043,7 +1077,7 @@
    (get_local $4)
   )
  )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 16 ;) (type $v)
   (if
    (i32.ne
     (get_global $std/string/str)
@@ -1096,10 +1130,9 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/string/String#startsWith"
+    (call "$(lib)/string/String#startsWith@2"
      (get_global $std/string/str)
      (i32.const 108)
-     (i32.const 0)
     )
    )
    (block
@@ -1114,10 +1147,9 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/string/String#endsWith"
+    (call "$(lib)/string/String#endsWith@2"
      (get_global $std/string/str)
      (i32.const 128)
-     (i32.const 2147483647)
     )
    )
    (block
@@ -1132,10 +1164,9 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/string/String#includes"
+    (call "$(lib)/string/String#includes@2"
      (get_global $std/string/str)
      (i32.const 144)
-     (i32.const 0)
     )
    )
    (block
@@ -1150,10 +1181,9 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/string/String#indexOf"
+    (call "$(lib)/string/String#indexOf@2"
      (get_global $std/string/str)
      (i32.const 156)
-     (i32.const 0)
     )
     (i32.const 2)
    )
@@ -1169,10 +1199,9 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/string/String#indexOf"
+    (call "$(lib)/string/String#indexOf@2"
      (get_global $std/string/str)
      (i32.const 164)
-     (i32.const 0)
     )
     (i32.const -1)
    )
@@ -1188,9 +1217,8 @@
   )
   (if
    (f64.ne
-    (call "$(lib)/string/parseInt"
+    (call "$(lib)/string/parseInt@1"
      (i32.const 172)
-     (i32.const 0)
     )
     (f64.const 0)
    )
@@ -1206,9 +1234,8 @@
   )
   (if
    (f64.ne
-    (call "$(lib)/string/parseInt"
+    (call "$(lib)/string/parseInt@1"
      (i32.const 180)
-     (i32.const 0)
     )
     (f64.const 1)
    )
@@ -1224,9 +1251,8 @@
   )
   (if
    (f64.ne
-    (call "$(lib)/string/parseInt"
+    (call "$(lib)/string/parseInt@1"
      (i32.const 188)
-     (i32.const 0)
     )
     (f64.const 5)
    )
@@ -1242,9 +1268,8 @@
   )
   (if
    (f64.ne
-    (call "$(lib)/string/parseInt"
+    (call "$(lib)/string/parseInt@1"
      (i32.const 204)
-     (i32.const 0)
     )
     (f64.const 455)
    )
@@ -1260,9 +1285,8 @@
   )
   (if
    (f64.ne
-    (call "$(lib)/string/parseInt"
+    (call "$(lib)/string/parseInt@1"
      (i32.const 220)
-     (i32.const 0)
     )
     (f64.const 3855)
    )
@@ -1278,9 +1302,8 @@
   )
   (if
    (f64.ne
-    (call "$(lib)/string/parseInt"
+    (call "$(lib)/string/parseInt@1"
      (i32.const 236)
-     (i32.const 0)
     )
     (f64.const 3855)
    )
@@ -1296,9 +1319,8 @@
   )
   (if
    (f64.ne
-    (call "$(lib)/string/parseInt"
+    (call "$(lib)/string/parseInt@1"
      (i32.const 252)
-     (i32.const 0)
     )
     (f64.const 11)
    )
@@ -1314,9 +1336,8 @@
   )
   (if
    (f64.ne
-    (call "$(lib)/string/parseInt"
+    (call "$(lib)/string/parseInt@1"
      (i32.const 264)
-     (i32.const 0)
     )
     (f64.const 1)
    )

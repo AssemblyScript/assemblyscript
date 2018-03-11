@@ -1844,12 +1844,14 @@ export function mangleInternalPath(path: string): string {
 
 // Helpers
 
+/** Sets the parent node on an array of nodes. */
 function setParent(nodes: Node[], parent: Node): void {
   for (var i = 0, k = nodes.length; i < k; ++i) {
     nodes[i].parent = parent;
   }
 }
 
+/** Sets the parent node on an array of nullable nodes. */
 function setParentOpt(nodes: (Node | null)[], parent: Node): void {
   for (var i = 0, k = nodes.length; i < k; ++i) {
     var node = nodes[i];

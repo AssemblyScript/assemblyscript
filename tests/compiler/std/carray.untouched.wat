@@ -51,6 +51,7 @@
  )
  (func $start (; 3 ;) (type $v)
   (local $0 i32)
+  (local $1 i32)
   (set_global $std/carray/arr
    (get_global $HEAP_BASE)
   )
@@ -231,13 +232,18 @@
     (i32.eq
      (block (result i32)
       (call "$(lib)/array/CArray#__set"
-       (get_global $std/carray/arr)
-       (i32.const 3)
        (tee_local $0
-        (i32.const 9000)
+        (get_global $std/carray/arr)
        )
+       (tee_local $1
+        (i32.const 3)
+       )
+       (i32.const 9000)
       )
-      (get_local $0)
+      (call "$(lib)/array/CArray#__get"
+       (get_local $0)
+       (get_local $1)
+      )
      )
      (i32.const 9000)
     )

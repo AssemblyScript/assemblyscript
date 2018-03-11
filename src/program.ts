@@ -2340,6 +2340,8 @@ export class Function extends Element {
   ref: FunctionRef = 0;
   /** Function table index, if any. */
   functionTableIndex: i32 = -1;
+  /** Trampoline functions for calling with omitted arguments. */
+  trampolines: Map<i32,Function> | null = null;
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
