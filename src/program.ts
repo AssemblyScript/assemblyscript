@@ -20,6 +20,7 @@ import {
   NodeKind,
   Source,
   Range,
+  CommonTypeNode,
   TypeNode,
   TypeParameterNode,
   // ParameterNode,
@@ -59,7 +60,8 @@ import {
 
   hasDecorator,
   hasModifier,
-  ParameterKind
+  ParameterKind,
+  SignatureNode
 } from "./ast";
 
 import {
@@ -116,7 +118,7 @@ export class Program extends DiagnosticEmitter {
   /** Types by internal name. */
   types: Map<string,Type> = noTypesYet;
   /** Declared type aliases. */
-  typeAliases: Map<string,TypeNode> = new Map();
+  typeAliases: Map<string,CommonTypeNode> = new Map();
   /** Exports of individual files by exported name. Not global exports. */
   exports: Map<string,Element> = new Map();
 
@@ -1308,14 +1310,27 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  /** Resolves a {@link TypeNode} to a concrete {@link Type}. */
-  resolveType(
-    node: TypeNode,
+  /** Resolves a {@link SignatureNode} to a concrete {@link Type}. */
+  resolveSignature(
+    node: SignatureNode,
     contextualTypeArguments: Map<string,Type> | null = null,
     reportNotFound: bool = true
   ): Type | null {
-    var globalName = node.name.text;
-    var localName = node.range.source.internalPath + PATH_DELIMITER + node.name.text;
+    throw new Error("not implemented");
+  }
+
+  /** Resolves a {@link CommonTypeNode} to a concrete {@link Type}. */
+  resolveType(
+    node: CommonTypeNode,
+    contextualTypeArguments: Map<string,Type> | null = null,
+    reportNotFound: bool = true
+  ): Type | null {
+    if (node.kind == NodeKind.SIGNATURE) {
+      return this.resolveSignature(<SignatureNode>node, contextualTypeArguments, reportNotFound);
+    }
+    var typeNode = <TypeNode>node;
+    var globalName = typeNode.name.text;
+    var localName = typeNode.range.source.internalPath + PATH_DELIMITER + typeNode.name.text;
 
     var element: Element | null;
 
@@ -1324,7 +1339,7 @@ export class Program extends DiagnosticEmitter {
       switch (element.kind) {
         case ElementKind.CLASS_PROTOTYPE:
           var instance = (<ClassPrototype>element).resolveUsingTypeArguments(
-            node.typeArguments,
+            typeNode.typeArguments,
             contextualTypeArguments,
             null
           ); // reports
@@ -1333,12 +1348,12 @@ export class Program extends DiagnosticEmitter {
     }
 
     // resolve parameters
-    if (node.typeArguments) {
-      var k = node.typeArguments.length;
+    if (typeNode.typeArguments) {
+      var k = typeNode.typeArguments.length;
       var paramTypes = new Array<Type>(k);
       for (var i = 0; i < k; ++i) {
         var paramType = this.resolveType( // reports
-          node.typeArguments[i],
+          typeNode.typeArguments[i],
           contextualTypeArguments,
           reportNotFound
         );
@@ -1374,7 +1389,7 @@ export class Program extends DiagnosticEmitter {
     if (reportNotFound) {
       this.error(
         DiagnosticCode.Cannot_find_name_0,
-        node.name.range, globalName
+        typeNode.name.range, globalName
       );
     }
     return null;
@@ -1383,7 +1398,7 @@ export class Program extends DiagnosticEmitter {
   /** Resolves an array of type arguments to concrete types. */
   resolveTypeArguments(
     typeParameters: TypeParameterNode[],
-    typeArgumentNodes: TypeNode[] | null,
+    typeArgumentNodes: CommonTypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): Type[] | null {
@@ -2181,7 +2196,7 @@ export class FunctionPrototype extends Element {
 
     // override with function specific type arguments
     var signatureNode = declaration.signature;
-    var functionTypeParameters = signatureNode.typeParameters;
+    var functionTypeParameters = declaration.typeParameters;
     var numFunctionTypeArguments: i32;
     if (functionTypeArguments && (numFunctionTypeArguments = functionTypeArguments.length)) {
       assert(functionTypeParameters && numFunctionTypeArguments == functionTypeParameters.length);
@@ -2208,7 +2223,7 @@ export class FunctionPrototype extends Element {
     }
 
     // resolve signature node
-    var signatureParameters = signatureNode.parameters;
+    var signatureParameters = signatureNode.parameterTypes;
     var signatureParameterCount = signatureParameters.length;
     var parameterTypes = new Array<Type>(signatureParameterCount);
     var parameterNames = new Array<string>(signatureParameterCount);
@@ -2269,7 +2284,7 @@ export class FunctionPrototype extends Element {
 
   /** Resolves the specified type arguments prior to resolving this prototype to an instance. */
   resolveUsingTypeArguments(
-    typeArgumentNodes: TypeNode[] | null,
+    typeArgumentNodes: CommonTypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null,
     reportNode: Node
   ): Function | null {
@@ -2277,7 +2292,7 @@ export class FunctionPrototype extends Element {
     if (this.is(ElementFlags.GENERIC)) {
       assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
       resolvedTypeArguments = this.program.resolveTypeArguments(
-        assert(this.declaration.signature.typeParameters),
+        assert(this.declaration.typeParameters),
         typeArgumentNodes,
         contextualTypeArguments,
         reportNode
@@ -2289,7 +2304,7 @@ export class FunctionPrototype extends Element {
 
   /** Resolves the type arguments to use when compiling a built-in call. Must be a built-in. */
   resolveBuiltinTypeArguments(
-    typeArgumentNodes: TypeNode[] | null,
+    typeArgumentNodes: CommonTypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null
   ): Type[] | null {
     assert(this.is(ElementFlags.BUILTIN));
@@ -2837,7 +2852,7 @@ export class ClassPrototype extends Element {
 
   /** Resolves the specified type arguments prior to resolving this prototype to an instance. */
   resolveUsingTypeArguments(
-    typeArgumentNodes: TypeNode[] | null,
+    typeArgumentNodes: CommonTypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null,
     alternativeReportNode: Node | null
   ): Class | null {

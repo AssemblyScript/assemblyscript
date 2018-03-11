@@ -4065,7 +4065,7 @@ export class Compiler extends DiagnosticEmitter {
     var originalSignature = original.signature;
     var originalName = original.internalName;
     var originalParameterTypes = originalSignature.parameterTypes;
-    var originalParameterDeclarations = original.prototype.declaration.signature.parameters;
+    var originalParameterDeclarations = original.prototype.declaration.signature.parameterTypes;
     var commonReturnType = originalSignature.returnType;
     var commonThisType = originalSignature.thisType;
     var isInstance = original.is(ElementFlags.INSTANCE);

@@ -33,6 +33,7 @@ import {
   NodeKind,
   Source,
   SourceKind,
+  CommonTypeNode,
   TypeNode,
   SignatureNode,
 
@@ -310,7 +311,7 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     acceptParenthesized: bool = true,
     suppressErrors: bool = false
-  ): TypeNode | null {
+  ): CommonTypeNode | null {
 
     // NOTE: this parses our limited subset
     var token = tn.next();
@@ -323,16 +324,41 @@ export class Parser extends DiagnosticEmitter {
       );
     }
 
-    var type: TypeNode;
+    var type: CommonTypeNode;
 
     // '(' ...
     if (token == Token.OPENPAREN) {
 
+      // '(' FunctionSignature ')' '|' 'null'?
+      let isNullableSignature = tn.skip(Token.OPENPAREN);
       // FunctionSignature?
       let signature = this.tryParseSignature(tn);
       if (signature) {
-        throw new Error("not implemented");
-      } else if (this.tryParseSignatureIsSignature) {
+        if (isNullableSignature) {
+          if (!tn.skip(Token.CLOSEPAREN)) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), ")"
+            );
+            return null;
+          }
+          if (!tn.skip(Token.BAR)) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "|"
+            );
+            return null;
+          }
+          if (!tn.skip(Token.NULL)) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "null"
+            );
+          }
+          signature.isNullable = true;
+        }
+        return signature;
+      } else if (isNullableSignature || this.tryParseSignatureIsSignature) {
         this.error(
           DiagnosticCode.Unexpected_token,
           tn.range()
@@ -485,6 +511,7 @@ export class Parser extends DiagnosticEmitter {
     var state = tn.mark();
     var startPos = tn.tokenPos;
     var parameters: ParameterNode[] | null = null;
+    var thisType: TypeNode | null = null;
     var isSignature: bool = false;
 
     if (tn.skip(Token.CLOSEPAREN)) {
@@ -501,7 +528,27 @@ export class Parser extends DiagnosticEmitter {
           tn.discard(state);
           kind = ParameterKind.REST;
         }
-        if (tn.skip(Token.IDENTIFIER)) {
+        if (tn.skip(Token.THIS)) {
+          if (tn.skip(Token.COLON)) {
+            isSignature = true;
+            tn.discard(state);
+            let t = this.parseType(tn, false);
+            if (!t) return null;
+            if (t.kind != NodeKind.TYPE) {
+              this.error(
+                DiagnosticCode.Operation_not_supported,
+                t.range
+              );
+              this.tryParseSignatureIsSignature = true;
+              return null;
+            }
+            thisType = <TypeNode>t;
+          } else {
+            tn.reset(state);
+            this.tryParseSignatureIsSignature = false;
+            return null;
+          }
+        } else if (tn.skip(Token.IDENTIFIER)) {
           var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(tn.tokenPos, tn.pos));
           if (tn.skip(Token.QUESTION)) {
             isSignature = true;
@@ -549,10 +596,18 @@ export class Parser extends DiagnosticEmitter {
           this.tryParseSignatureIsSignature = isSignature;
           return null;
         }
-      } while (!tn.skip(Token.CLOSEPAREN));
+      } while (tn.skip(Token.COMMA));
+      if (!tn.skip(Token.CLOSEPAREN)) {
+        this.error(
+          DiagnosticCode._0_expected,
+          tn.range(), ")"
+        );
+        this.tryParseSignatureIsSignature = isSignature;
+        return null;
+      }
     }
 
-    var returnType: TypeNode | null;
+    var returnType: CommonTypeNode | null;
     if (tn.skip(Token.EQUALS_GREATERTHAN)) {
       isSignature = true;
       tn.discard(state);
@@ -575,9 +630,10 @@ export class Parser extends DiagnosticEmitter {
     }
     this.tryParseSignatureIsSignature = true;
     return Node.createSignature(
-      null,
       parameters || [],
       returnType,
+      thisType,
+      false,
       tn.range(startPos, tn.pos)
     );
   }
@@ -668,7 +724,7 @@ export class Parser extends DiagnosticEmitter {
     }
     var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
 
-    var type: TypeNode | null = null;
+    var type: CommonTypeNode | null = null;
     if (tn.skip(Token.COLON)) {
       type = this.parseType(tn);
     }
@@ -846,7 +902,16 @@ export class Parser extends DiagnosticEmitter {
       );
       var extendsType: TypeNode | null = null;
       if (tn.skip(Token.EXTENDS)) {
-        if (!(extendsType = this.parseType(tn))) return null;
+        let t = this.parseType(tn);
+        if (!t) return null;
+        if (t.kind != NodeKind.TYPE) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            t.range
+          );
+          return null;
+        }
+        extendsType = <TypeNode>t;
       }
       return Node.createTypeParameter(
         identifier,
@@ -933,7 +998,7 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.IDENTIFIER)) {
       if (!isRest) startRange = tn.range();
       var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      var type: TypeNode | null = null;
+      var type: CommonTypeNode | null = null;
       if (isOptional = tn.skip(Token.QUESTION)) {
         if (isRest) {
           this.error(
@@ -1059,7 +1124,7 @@ export class Parser extends DiagnosticEmitter {
       ); // recoverable
     }
 
-    var returnType: TypeNode | null = null;
+    var returnType: CommonTypeNode | null = null;
     if (tn.skip(Token.COLON)) {
       returnType = this.parseType(tn, isSetter);
       if (!returnType) return null;
@@ -1078,9 +1143,10 @@ export class Parser extends DiagnosticEmitter {
     }
 
     var signature = Node.createSignature(
-      typeParameters,
       parameters,
       returnType,
+      null,
+      false,
       tn.range(signatureStart, tn.pos)
     );
 
@@ -1106,6 +1172,7 @@ export class Parser extends DiagnosticEmitter {
 
     var ret = Node.createFunctionDeclaration(
       name,
+      typeParameters,
       signature,
       body,
       modifiers,
@@ -1170,7 +1237,7 @@ export class Parser extends DiagnosticEmitter {
     if (startPos < 0) startPos = name.range.start;
     if (signatureStart < 0) signatureStart = startPos;
 
-    var returnType: TypeNode | null = null;
+    var returnType: CommonTypeNode | null = null;
     if (tn.skip(Token.COLON)) {
       returnType = this.parseType(tn);
       if (!returnType) return null;
@@ -1193,9 +1260,10 @@ export class Parser extends DiagnosticEmitter {
     }
 
     var signature = Node.createSignature(
-      null,
       parameters,
       returnType,
+      null,
+      false,
       tn.range(signatureStart, tn.pos)
     );
 
@@ -1216,6 +1284,7 @@ export class Parser extends DiagnosticEmitter {
 
     var declaration = Node.createFunctionDeclaration(
       name,
+      null,
       signature,
       body,
       null,
@@ -1261,8 +1330,16 @@ export class Parser extends DiagnosticEmitter {
 
       var extendsType: TypeNode | null = null;
       if (tn.skip(Token.EXTENDS)) {
-        extendsType = this.parseType(tn);
-        if (!extendsType) return null;
+        let t = this.parseType(tn);
+        if (!t) return null;
+        if (t.kind != NodeKind.TYPE) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            t.range
+          );
+          return null;
+        }
+        extendsType = <TypeNode>t;
       }
 
       var implementsTypes = new Array<TypeNode>();
@@ -1421,7 +1498,7 @@ export class Parser extends DiagnosticEmitter {
           }
         }
 
-        var returnType: TypeNode | null = null;
+        var returnType: CommonTypeNode | null = null;
         if (tn.skip(Token.COLON)) {
           if (name.kind == NodeKind.CONSTRUCTOR) {
             this.error(
@@ -1447,9 +1524,10 @@ export class Parser extends DiagnosticEmitter {
         }
 
         var signature = Node.createSignature(
-          typeParameters,
           parameters,
           returnType,
+          null,
+          false,
           tn.range(signatureStart, tn.pos)
         );
 
@@ -1472,6 +1550,7 @@ export class Parser extends DiagnosticEmitter {
 
         var retMethod = Node.createMethodDeclaration(
           name,
+          typeParameters,
           signature,
           body,
           modifiers,
@@ -1518,7 +1597,7 @@ export class Parser extends DiagnosticEmitter {
           ); // recoverable
         }
 
-        var type: TypeNode | null = null;
+        var type: CommonTypeNode | null = null;
         if (tn.skip(Token.COLON)) {
           type = this.parseType(tn);
           if (!type) return null;
@@ -2662,13 +2741,13 @@ export class Parser extends DiagnosticEmitter {
 
   tryParseTypeArgumentsBeforeArguments(
     tn: Tokenizer
-  ): TypeNode[] | null {
+  ): CommonTypeNode[] | null {
 
     // at '<': Type (',' Type)* '>' '('
 
     var state = tn.mark();
     if (!tn.skip(Token.LESSTHAN)) return null;
-    var typeArguments = new Array<TypeNode>();
+    var typeArguments = new Array<CommonTypeNode>();
     do {
       var type = this.parseType(tn, true, true);
       if (!type) {

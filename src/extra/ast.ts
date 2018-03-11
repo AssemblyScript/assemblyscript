@@ -7,8 +7,10 @@ import {
   NodeKind,
   Source,
 
+  CommonTypeNode,
   TypeNode,
-  TypeParameter,
+  TypeParameterNode,
+  SignatureNode,
 
   Expression,
   IdentifierExpression,
@@ -65,10 +67,10 @@ import {
   TypeDeclaration,
   VariableDeclaration,
 
-  Decorator,
-  Modifier,
+  DecoratorNode,
+  ModifierNode,
   ModifierKind,
-  Parameter,
+  ParameterNode,
   ParameterKind,
   ExportMember,
   SwitchCase,
@@ -95,7 +97,7 @@ export function serializeNode(node: Node, sb: string[]): void {
       break;
 
     case NodeKind.TYPEPARAMETER:
-      serializeTypeParameter(<TypeParameter>node, sb);
+      serializeTypeParameter(<TypeParameterNode>node, sb);
       break;
 
     // expressions
@@ -278,7 +280,7 @@ export function serializeNode(node: Node, sb: string[]): void {
     // other
 
     case NodeKind.DECORATOR:
-      serializeDecorator(<Decorator>node, sb);
+      serializeDecorator(<DecoratorNode>node, sb);
       break;
 
     case NodeKind.EXPORTMEMBER:
@@ -286,11 +288,11 @@ export function serializeNode(node: Node, sb: string[]): void {
       break;
 
     case NodeKind.MODIFIER:
-      serializeModifier(<Modifier>node, sb);
+      serializeModifier(<ModifierNode>node, sb);
       break;
 
     case NodeKind.PARAMETER:
-      serializeParameter(<Parameter>node, sb);
+      serializeParameter(<ParameterNode>node, sb);
       break;
 
     case NodeKind.SWITCHCASE:
@@ -311,16 +313,20 @@ export function serializeSource(source: Source, sb: string[]): void {
 
 // types
 
-export function serializeTypeNode(node: TypeNode, sb: string[]): void {
-  serializeIdentifierExpression(<IdentifierExpression>node.name, sb);
-  if (node.typeArguments) {
-    var k = node.typeArguments.length;
+export function serializeTypeNode(node: CommonTypeNode, sb: string[]): void {
+  if (node.kind == NodeKind.SIGNATURE) {
+    return serializeSignatureNode(<SignatureNode>node, sb);
+  }
+  var typeNode = <TypeNode>node;
+  serializeIdentifierExpression(<IdentifierExpression>typeNode.name, sb);
+  if (typeNode.typeArguments) {
+    var k = typeNode.typeArguments.length;
     if (k) {
       sb.push("<");
-      serializeTypeNode(node.typeArguments[0], sb);
+      serializeTypeNode(typeNode.typeArguments[0], sb);
       for (var i = 1; i < k; ++i) {
         sb.push(", ");
-        serializeTypeNode(node.typeArguments[i], sb);
+        serializeTypeNode(typeNode.typeArguments[i], sb);
       }
       sb.push(">");
     }
@@ -328,12 +334,41 @@ export function serializeTypeNode(node: TypeNode, sb: string[]): void {
   }
 }
 
-export function serializeTypeParameter(node: TypeParameter, sb: string[]): void {
+export function serializeTypeParameter(node: TypeParameterNode, sb: string[]): void {
   serializeIdentifierExpression(node.name, sb);
-  if (node.extendsType) {
+  var extendsType = node.extendsType;
+  if (extendsType) {
     sb.push(" extends ");
-    serializeTypeNode(node.extendsType, sb);
+    serializeTypeNode(extendsType, sb);
   }
+}
+
+export function serializeSignatureNode(node: SignatureNode, sb: string[]): void {
+  var isNullable = node.isNullable;
+  sb.push(isNullable ? "((" : "(");
+  var explicitThisType = node.explicitThisType;
+  if (explicitThisType) {
+    sb.push("this: ");
+    serializeTypeNode(explicitThisType, sb);
+  }
+  var parameters = node.parameterTypes;
+  var numParameters = parameters.length;
+  if (numParameters) {
+    if (explicitThisType) sb.push(", ");
+    serializeParameter(parameters[0], sb);
+    for (let i = 1; i < numParameters; ++i) {
+      sb.push(", ");
+      serializeParameter(parameters[i], sb);
+    }
+  }
+  var returnType = node.returnType;
+  if (returnType) {
+    sb.push(") => ");
+    serializeTypeNode(returnType, sb);
+  } else {
+    sb.push(") => void");
+  }
+  if (isNullable) sb.push(") | null");
 }
 
 // expressions
@@ -880,23 +915,23 @@ function serializeFunctionCommon(node: FunctionDeclaration, sb: string[], isArro
   var i: i32, k: i32;
   serializeIdentifierExpression(node.name, sb);
   var signature = node.signature;
-  if (signature.typeParameters) {
-    if (k = signature.typeParameters.length) {
+  if (node.typeParameters) {
+    if (k = node.typeParameters.length) {
       sb.push("<");
-      serializeTypeParameter(signature.typeParameters[0], sb);
+      serializeTypeParameter(node.typeParameters[0], sb);
       for (i = 1; i < k; ++i) {
         sb.push(", ");
-        serializeTypeParameter(signature.typeParameters[i], sb);
+        serializeTypeParameter(node.typeParameters[i], sb);
       }
       sb.push(">");
     }
   }
   sb.push("(");
-  if (k = signature.parameters.length) {
-    serializeParameter(signature.parameters[0], sb);
+  if (k = signature.parameterTypes.length) {
+    serializeParameter(signature.parameterTypes[0], sb);
     for (i = 1; i < k; ++i) {
       sb.push(", ");
-      serializeParameter(signature.parameters[i], sb);
+      serializeParameter(signature.parameterTypes[i], sb);
     }
   }
   if (isArrow) {
@@ -1208,7 +1243,7 @@ export function serializeWhileStatement(node: WhileStatement, sb: string[]): voi
 
 // other
 
-export function serializeDecorator(node: Decorator, sb: string[]): void {
+export function serializeDecorator(node: DecoratorNode, sb: string[]): void {
   sb.push("@");
   serializeExpression(node.name, sb);
   if (node.arguments) {
@@ -1225,11 +1260,11 @@ export function serializeDecorator(node: Decorator, sb: string[]): void {
   }
 }
 
-export function serializeModifier(node: Modifier, sb: string[]): void {
+export function serializeModifier(node: ModifierNode, sb: string[]): void {
   sb.push(modifierToString(node));
 }
 
-export function serializeParameter(node: Parameter, sb: string[]): void {
+export function serializeParameter(node: ParameterNode, sb: string[]): void {
   if (node.parameterKind == ParameterKind.REST) {
     sb.push("...");
   }
@@ -1250,7 +1285,7 @@ export function serializeParameter(node: Parameter, sb: string[]): void {
 
 // helpers
 
-export function modifierToString(node: Modifier): string {
+export function modifierToString(node: ModifierNode): string {
   switch (node.modifierKind) {
     case ModifierKind.ASYNC: return "async";
     case ModifierKind.CONST: return "const";
