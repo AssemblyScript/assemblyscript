@@ -231,7 +231,7 @@ export abstract class Node {
   ): ArrayLiteralExpression {
     var expr = new ArrayLiteralExpression();
     expr.range = range;
-    expr.elementExpressions = elements; setParentOpt(elements, expr);
+    expr.elementExpressions = elements; setParentIfNotNull(elements, expr);
     return expr;
   }
 
@@ -1473,6 +1473,11 @@ export class ClassDeclaration extends DeclarationStatement {
   implementsTypes: TypeNode[]; // can't be a function
   /** Class member declarations. */
   members: DeclarationStatement[];
+
+  get isGeneric(): bool {
+    var typeParameters = this.typeParameters;
+    return typeParameters != null && typeParameters.length > 0;
+  }
 }
 
 /** Represents a `continue` statement. */
@@ -1861,7 +1866,7 @@ function setParent(nodes: Node[], parent: Node): void {
 }
 
 /** Sets the parent node on an array of nullable nodes. */
-function setParentOpt(nodes: (Node | null)[], parent: Node): void {
+function setParentIfNotNull(nodes: (Node | null)[], parent: Node): void {
   for (var i = 0, k = nodes.length; i < k; ++i) {
     var node = nodes[i];
     if (node) node.parent = parent;

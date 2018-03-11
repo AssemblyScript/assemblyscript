@@ -1310,13 +1310,67 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  /** Resolves a {@link SignatureNode} to a concrete {@link Type}. */
+  /** Resolves a {@link SignatureNode} to a concrete {@link Signature}. */
   resolveSignature(
     node: SignatureNode,
     contextualTypeArguments: Map<string,Type> | null = null,
     reportNotFound: bool = true
-  ): Type | null {
-    throw new Error("not implemented");
+  ): Signature | null {
+    var explicitThisType = node.explicitThisType;
+    var thisType: Type | null = null;
+    if (explicitThisType) {
+      thisType = this.resolveType(
+        explicitThisType,
+        contextualTypeArguments,
+        reportNotFound
+      );
+      if (!thisType) return null;
+    }
+    var parameterTypeNodes = node.parameterTypes;
+    var numParameters = parameterTypeNodes.length;
+    var parameterTypes = new Array<Type>(numParameters);
+    var parameterNames = new Array<string>(numParameters);
+    var requiredParameters = 0;
+    var hasRest = false;
+    for (let i = 0; i < numParameters; ++i) {
+      let parameterTypeNode = parameterTypeNodes[i];
+      switch (parameterTypeNode.parameterKind) {
+        case ParameterKind.DEFAULT: {
+          requiredParameters = i + 1;
+          break;
+        }
+        case ParameterKind.REST: {
+          assert(i == numParameters);
+          hasRest = true;
+          break;
+        }
+      }
+      let parameterType = this.resolveType(
+        assert(parameterTypeNode.type),
+        contextualTypeArguments,
+        reportNotFound
+      );
+      if (!parameterType) return null;
+      parameterTypes[i] = parameterType;
+      parameterNames[i] = parameterTypeNode.name.text;
+    }
+    var returnTypeNode = node.returnType;
+    var returnType: Type | null;
+    if (returnTypeNode) {
+      returnType = this.resolveType(
+        returnTypeNode,
+        contextualTypeArguments,
+        reportNotFound
+      );
+      if (!returnType) return null;
+    } else {
+      returnType = Type.void;
+    }
+    var signature = new Signature(parameterTypes, returnType, thisType);
+    signature.parameterNames = parameterNames;
+    signature.requiredParameters = requiredParameters;
+    signature.hasRest = hasRest;
+    return signature;
   }
 
   /** Resolves a {@link CommonTypeNode} to a concrete {@link Type}. */
@@ -1326,7 +1380,9 @@ export class Program extends DiagnosticEmitter {
     reportNotFound: bool = true
   ): Type | null {
     if (node.kind == NodeKind.SIGNATURE) {
-      return this.resolveSignature(<SignatureNode>node, contextualTypeArguments, reportNotFound);
+      let signature = this.resolveSignature(<SignatureNode>node, contextualTypeArguments, reportNotFound);
+      if (!signature) return null;
+      return Type.u32.asFunction(signature);
     }
     var typeNode = <TypeNode>node;
     var globalName = typeNode.name.text;

@@ -96,7 +96,7 @@ export class Type {
 
   /** Computes the truncating mask in the target type. */
   computeSmallIntegerMask(targetType: Type): u32 {
-    return -1 >>> (targetType.size - this.size);
+    return ~0 >>> (targetType.size - this.size);
   }
 
   /** Tests if this type has the specified capabilities. */
@@ -197,20 +197,25 @@ export class Type {
       case TypeKind.ISIZE: return "isize";
       case TypeKind.U8: return "u8";
       case TypeKind.U16: return "u16";
-      case TypeKind.U32: return "u32";
+      case TypeKind.U32: {
+        return kindOnly || !this.functionType
+          ? "u32"
+          : this.functionType.toString(true);
+      }
       case TypeKind.U64: return "u64";
-      case TypeKind.USIZE:
-        if (kindOnly) return "usize";
-        return this.classType
-          ? this.classType.toString()
-          : this.functionType
-            ? this.functionType.toSignatureString()
-            : "usize";
+      case TypeKind.USIZE: {
+        return kindOnly || !this.classType
+          ? "usize"
+          : this.classType.toString();
+      }
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
       case TypeKind.VOID: return "void";
-      default: assert(false); return "";
+      default: {
+        assert(false);
+        return "";
+      }
     }
   }
 
@@ -533,7 +538,41 @@ export class Signature {
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
   isAssignableTo(target: Signature): bool {
-    return this == target; // TODO
+    // TODO: maybe cache results?
+
+    // check `this` type
+    var thisThisType = this.thisType;
+    var targetThisType = target.thisType;
+    if (thisThisType) {
+      if (!(targetThisType && thisThisType.isAssignableTo(targetThisType))) {
+        return false;
+      }
+    } else if (targetThisType) {
+      return false;
+    }
+
+    // check rest parameter
+    if (this.hasRest != target.hasRest) {
+      return false; // TODO
+    }
+
+    // check parameter types
+    var thisParameterTypes = this.parameterTypes;
+    var targetParameterTypes = target.parameterTypes;
+    var numParameters = thisParameterTypes.length;
+    if (numParameters != targetParameterTypes.length) {
+      return false;
+    }
+    for (let i = 0; i < numParameters; ++i) {
+      let thisParameterType = thisParameterTypes[i];
+      let targetParameterType = targetParameterTypes[i];
+      if (!thisParameterType.isAssignableTo(targetParameterType)) {
+        return false;
+      }
+    }
+
+    // check return type
+    return this.returnType.isAssignableTo(target.returnType);
   }
 
   /** Converts this signature to a function type string. */
@@ -543,9 +582,9 @@ export class Signature {
     if (thisType) {
       sb.push(thisType.toSignatureString());
     }
-    var types = this.parameterTypes;
-    for (let i = 0, k = types.length; i < k; ++i) {
-      sb.push(types[i].toSignatureString());
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      sb.push(parameterTypes[i].toSignatureString());
     }
     sb.push(this.returnType.toSignatureString());
     return sb.join("");
@@ -556,11 +595,13 @@ export class Signature {
     var sb = new Array<string>();
     sb.push("(");
     var index = 0;
-    if (includeThis) {
-      let thisType = assert(this.thisType);
-      sb.push("this: ");
-      sb.push(thisType.toString());
-      index = 1;
+    var thisType = this.thisType;
+    if (thisType) {
+      if (includeThis) {
+        sb.push("this: ");
+        sb.push(thisType.toString());
+        index = 1;
+      }
     }
     var parameters = this.parameterTypes;
     var numParameters = parameters.length;

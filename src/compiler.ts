@@ -223,21 +223,25 @@ export class Compiler extends DiagnosticEmitter {
   constructor(program: Program, options: Options | null = null) {
     super(program.diagnostics);
     this.program = program;
-    this.options = options ? options : new Options();
+    if (!options) options = new Options();
+    this.options = options;
     this.memoryOffset = i64_new(
-      max(this.options.memoryBase, this.options.usizeType.byteSize) // leave space for `null`
+      max(options.memoryBase, options.usizeType.byteSize) // leave space for `null`
     );
     this.module = Module.create();
   }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
   compile(): Module {
+    var options = this.options;
+    var module = this.module;
+    var program = this.program;
 
     // initialize lookup maps, built-ins, imports, exports, etc.
-    this.program.initialize(this.options);
+    program.initialize(options);
 
     // set up the start function wrapping top-level statements, of all files.
-    var startFunctionPrototype = assert(this.program.elements.get("start"));
+    var startFunctionPrototype = assert(program.elements.get("start"));
     assert(startFunctionPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
     var startFunctionInstance = new Function(
       <FunctionPrototype>startFunctionPrototype,
@@ -245,11 +249,11 @@ export class Compiler extends DiagnosticEmitter {
       new Signature([], Type.void)
     );
     startFunctionInstance.set(ElementFlags.START);
-    this.currentFunction = this.startFunction = startFunctionInstance;
-
-    var sources = this.program.sources;
+    this.startFunction = startFunctionInstance;
+    this.currentFunction = startFunctionInstance;
 
     // compile entry file(s) while traversing to reachable elements
+    var sources = program.sources;
     for (var i = 0, k = sources.length; i < k; ++i) {
       if (sources[i].isEntry) {
         this.compileSource(sources[i]);
@@ -257,67 +261,69 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile the start function if not empty
-    if (this.startFunctionBody.length) {
-      let typeRef = this.ensureFunctionType(this.startFunction.signature);
-      var ref: FunctionRef;
-      this.module.setStart(
-        ref = this.module.addFunction(
-          this.startFunction.prototype.internalName,
+    var startFunctionBody = this.startFunctionBody;
+    if (startFunctionBody.length) {
+      let typeRef = this.ensureFunctionType(startFunctionInstance.signature);
+      let funcRef: FunctionRef;
+      module.setStart(
+        funcRef = module.addFunction(
+          startFunctionInstance.internalName,
           typeRef,
-          typesToNativeTypes(this.startFunction.additionalLocals),
-          this.module.createBlock(null, this.startFunctionBody)
+          typesToNativeTypes(startFunctionInstance.additionalLocals),
+          module.createBlock(null, startFunctionBody)
         )
       );
-      this.startFunction.finalize(this.module, ref);
+      startFunctionInstance.finalize(module, funcRef);
     }
 
     // set up static memory segments and the heap base pointer
-    if (!this.options.noMemory) {
+    if (!options.noMemory) {
       var memoryOffset = this.memoryOffset;
-      memoryOffset = i64_align(memoryOffset, this.options.usizeType.byteSize);
+      memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
       this.memoryOffset = memoryOffset;
-      if (this.options.isWasm64) {
-        this.module.addGlobal(
+      if (options.isWasm64) {
+        module.addGlobal(
           "HEAP_BASE",
           NativeType.I64,
           false,
-          this.module.createI64(i64_low(memoryOffset), i64_high(memoryOffset))
+          module.createI64(i64_low(memoryOffset), i64_high(memoryOffset))
         );
       } else {
-        this.module.addGlobal(
+        module.addGlobal(
           "HEAP_BASE",
           NativeType.I32,
           false,
-          this.module.createI32(i64_low(memoryOffset))
+          module.createI32(i64_low(memoryOffset))
         );
       }
 
       // determine initial page size
       var pages = i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0));
-      this.module.setMemory(
+      module.setMemory(
         i64_low(pages),
         Module.MAX_MEMORY_WASM32, // TODO: not WASM64 compatible yet
         this.memorySegments,
-        this.options.target,
+        options.target,
         "memory"
       );
     }
 
     // import memory if requested
-    if (this.options.importMemory) {
-      this.module.addMemoryImport("0", "env", "memory");
+    if (options.importMemory) {
+      module.addMemoryImport("0", "env", "memory");
     }
 
     // set up function table
-    if (k = this.functionTable.length) {
+    var functionTable = this.functionTable;
+    if (k = functionTable.length) {
       var entries = new Array<FunctionRef>(k);
       for (i = 0; i < k; ++i) {
-        entries[i] = this.functionTable[i].ref;
+        entries[i] = functionTable[i].ref;
       }
-      this.module.setFunctionTable(entries);
+      module.setFunctionTable(entries);
     }
 
-    return this.module;
+    return module;
   }
 
   // sources
@@ -364,92 +370,97 @@ export class Compiler extends DiagnosticEmitter {
 
   compileSource(source: Source): void {
     var files = this.files;
-    if (files.has(source.normalizedPath)) return;
-    files.add(source.normalizedPath);
+    var normalizedPath = source.normalizedPath;
+    if (files.has(normalizedPath)) return;
+    files.add(normalizedPath);
 
     // compile top-level statements
     var noTreeShaking = this.options.noTreeShaking;
     var isEntry = source.isEntry;
     var startFunctionBody = this.startFunctionBody;
     var statements = source.statements;
-    for (var i = 0, k = statements.length; i < k; ++i) {
-      var statement = statements[i];
+    for (let i = 0, k = statements.length; i < k; ++i) {
+      let statement = statements[i];
       switch (statement.kind) {
-
-        case NodeKind.CLASSDECLARATION:
+        case NodeKind.CLASSDECLARATION: {
+          let classDeclaration = <ClassDeclaration>statement;
           if (
             (
               noTreeShaking ||
-              (isEntry && hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>statement).modifiers))
+              (isEntry && hasModifier(ModifierKind.EXPORT, classDeclaration.modifiers))
             ) &&
-            !(<ClassDeclaration>statement).typeParameters.length
+            !classDeclaration.isGeneric
           ) {
-            this.compileClassDeclaration(<ClassDeclaration>statement, []);
+            this.compileClassDeclaration(classDeclaration, []);
           }
           break;
-
-        case NodeKind.ENUMDECLARATION:
+        }
+        case NodeKind.ENUMDECLARATION: {
+          let enumDeclaration = <EnumDeclaration>statement;
           if (
             noTreeShaking ||
-            (isEntry && hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>statement).modifiers))
+            (isEntry && hasModifier(ModifierKind.EXPORT, enumDeclaration.modifiers))
           ) {
-            this.compileEnumDeclaration(<EnumDeclaration>statement);
+            this.compileEnumDeclaration(enumDeclaration);
           }
           break;
-
-        case NodeKind.FUNCTIONDECLARATION:
+        }
+        case NodeKind.FUNCTIONDECLARATION: {
+          let functionDeclaration = <FunctionDeclaration>statement;
           if (
             (
               noTreeShaking ||
-              (isEntry && hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>statement).modifiers))
+              (isEntry && hasModifier(ModifierKind.EXPORT, functionDeclaration.modifiers))
             ) &&
-            !(<FunctionDeclaration>statement).isGeneric
+            !functionDeclaration.isGeneric
           ) {
-            this.compileFunctionDeclaration(<FunctionDeclaration>statement, []);
+            this.compileFunctionDeclaration(functionDeclaration, []);
           }
           break;
-
-        case NodeKind.IMPORT:
+        }
+        case NodeKind.IMPORT: {
+          let importStatement = <ImportStatement>statement;
           this.compileSourceByPath(
-            (<ImportStatement>statement).normalizedPath,
-            (<ImportStatement>statement).path
+            importStatement.normalizedPath,
+            importStatement.path
           );
           break;
-
-        case NodeKind.NAMESPACEDECLARATION:
+        }
+        case NodeKind.NAMESPACEDECLARATION: {
+          let namespaceDeclaration = (<NamespaceDeclaration>statement);
           if (
             noTreeShaking ||
-            (isEntry && hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>statement).modifiers))
+            (isEntry && hasModifier(ModifierKind.EXPORT, namespaceDeclaration.modifiers))
           ) {
-            this.compileNamespaceDeclaration(<NamespaceDeclaration>statement);
+            this.compileNamespaceDeclaration(namespaceDeclaration);
           }
           break;
-
-        case NodeKind.VARIABLE: // global, always compiled as initializers might have side effects
-          var variableInit = this.compileVariableStatement(<VariableStatement>statement);
+        }
+        case NodeKind.VARIABLE: { // global, always compiled as initializers might have side effects
+          let variableInit = this.compileVariableStatement(<VariableStatement>statement);
           if (variableInit) startFunctionBody.push(variableInit);
           break;
-
-        case NodeKind.EXPORT:
-          if ((<ExportStatement>statement).normalizedPath != null) {
+        }
+        case NodeKind.EXPORT: {
+          let exportStatement = <ExportStatement>statement;
+          if (exportStatement.normalizedPath != null) {
             this.compileSourceByPath(
-              <string>(<ExportStatement>statement).normalizedPath,
-              <StringLiteralExpression>(<ExportStatement>statement).path
+              exportStatement.normalizedPath,
+              <StringLiteralExpression>exportStatement.path
             );
           }
           if (noTreeShaking || isEntry) {
-            this.compileExportStatement(<ExportStatement>statement);
+            this.compileExportStatement(exportStatement);
           }
           break;
-
-        // otherwise a top-level statement that is part of the start function's body
-        default:
-          var previousFunction = this.currentFunction;
+        }
+        default: { // otherwise a top-level statement that is part of the start function's body
+          let previousFunction = this.currentFunction;
           this.currentFunction = this.startFunction;
-          var expr = this.compileStatement(statement);
-          this.startFunctionBody.push(expr);
+          this.startFunctionBody.push(this.compileStatement(statement));
           this.currentFunction = previousFunction;
           break;
+        }
       }
     }
   }
@@ -475,7 +486,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // resolve now if annotated
       if (declaration.type) {
-        var resolvedType = this.program.resolveType(declaration.type); // reports
+        let resolvedType = this.program.resolveType(declaration.type); // reports
         if (!resolvedType) return false;
         if (resolvedType == Type.void) {
           this.error(
@@ -4246,7 +4257,12 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFunction.internalName + "~" + simpleName,
       declaration
     );
-    var instance = this.compileFunctionUsingTypeArguments(prototype, [], null, declaration);
+    var instance = this.compileFunctionUsingTypeArguments(
+      prototype,
+      [],
+      this.currentFunction.contextualTypeArguments,
+      declaration
+    );
     if (!instance) return this.module.createUnreachable();
     this.currentType = Type.u32.asFunction(instance.signature);
     // NOTE that, in order to make this work in every case, the function must be represented by a
