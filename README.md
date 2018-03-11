@@ -1,4 +1,4 @@
-![](https://s.gravatar.com/avatar/f105de3decfafc734b8eabe9a960b25d?size=64) AssemblyScript
+![](https://avatars1.githubusercontent.com/u/28916798?s=64) AssemblyScript
 =================
 
 [![npm](https://img.shields.io/npm/v/assemblyscript.svg)](https://www.npmjs.com/package/assemblyscript)

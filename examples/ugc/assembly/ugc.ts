@@ -21,7 +21,7 @@ class ObjectHeader {
   ///////////////////////////////// Fields ////////////////////////////////////
 
   // the next and prev pointer with tags in the least significant two bits that
-  // would otherwise be zero (blocks are guaranteed to be aligned to 4/8 bytes)
+  // would otherwise be zero (blocks are guaranteed to be aligned to 8 bytes)
   tagged_next: usize;
   tagged_prev: usize;
 

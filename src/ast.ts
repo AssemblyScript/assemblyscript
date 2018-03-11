@@ -25,6 +25,8 @@ export enum NodeKind {
   // types
   TYPE,
   TYPEPARAMETER,
+  PARAMETER,
+  SIGNATURE,
 
   // expressions
   IDENTIFIER,
@@ -82,11 +84,10 @@ export enum NodeKind {
   TYPEDECLARATION,
   VARIABLEDECLARATION,
 
-  // other
+  // special
   DECORATOR,
-  EXPORTMEMBER,
   MODIFIER,
-  PARAMETER,
+  EXPORTMEMBER,
   SWITCHCASE
 }
 
@@ -103,17 +104,102 @@ export abstract class Node {
   // types
 
   static createType(
-    identifier: IdentifierExpression,
-    typeArguments: TypeNode[],
+    name: IdentifierExpression,
+    typeArguments: TypeNode[] | null,
     isNullable: bool,
     range: Range
   ): TypeNode {
     var type = new TypeNode();
     type.range = range;
-    type.name = identifier;
-    type.typeArguments = typeArguments;
+    type.name = name; name.parent = type;
+    type.typeArguments = typeArguments; if (typeArguments) setParent(typeArguments, type);
     type.isNullable = isNullable;
     return type;
+  }
+
+  static createOmittedType(
+    range: Range
+  ) {
+    return Node.createType(
+      Node.createIdentifierExpression("", range),
+      null,
+      false,
+      range
+    );
+  }
+
+  static createTypeParameter(
+    name: IdentifierExpression,
+    extendsType: TypeNode | null,
+    range: Range
+  ): TypeParameterNode {
+    var elem = new TypeParameterNode();
+    elem.range = range;
+    elem.name = name; name.parent = elem;
+    elem.extendsType = extendsType; if (extendsType) extendsType.parent = elem;
+    return elem;
+  }
+
+  static createParameter(
+    name: IdentifierExpression,
+    type: TypeNode | null,
+    initializer: Expression | null,
+    kind: ParameterKind,
+    range: Range
+  ): ParameterNode {
+    var elem = new ParameterNode();
+    elem.range = range;
+    elem.name = name; name.parent = elem;
+    elem.type = type; if (type) type.parent = elem;
+    elem.initializer = initializer; if (initializer) initializer.parent = elem;
+    elem.parameterKind = kind;
+    return elem;
+  }
+
+  static createSignature(
+    typeParameters: TypeParameterNode[] | null,
+    parameters: ParameterNode[],
+    returnType: TypeNode,
+    range: Range
+  ): SignatureNode {
+    var sig = new SignatureNode();
+    sig.range = range;
+    sig.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, sig);
+    sig.parameters = parameters; setParent(parameters, sig);
+    sig.returnType = returnType; returnType.parent = sig;
+    return sig;
+  }
+
+  // special
+
+  static createDecorator(
+    expression: Expression,
+    args: Expression[] | null,
+    range: Range
+  ): DecoratorNode {
+    var stmt = new DecoratorNode();
+    stmt.range = range;
+    stmt.name = expression; expression.parent = stmt;
+    stmt.arguments = args; if (args) setParent(args, stmt);
+    if (expression.kind == NodeKind.IDENTIFIER) {
+      switch ((<IdentifierExpression>expression).text) {
+        case "global": stmt.decoratorKind = DecoratorKind.GLOBAL; break;
+        case "operator": stmt.decoratorKind = DecoratorKind.OPERATOR; break;
+        case "unmanaged": stmt.decoratorKind = DecoratorKind.UNMANAGED; break;
+        case "offset": stmt.decoratorKind = DecoratorKind.OFFSET; break;
+        default: stmt.decoratorKind = DecoratorKind.CUSTOM; break;
+      }
+    } else {
+      stmt.decoratorKind = DecoratorKind.CUSTOM;
+    }
+    return stmt;
+  }
+
+  static createModifier(kind: ModifierKind, range: Range): ModifierNode {
+    var elem = new ModifierNode();
+    elem.range = range;
+    elem.modifierKind = kind;
+    return elem;
   }
 
   // expressions
@@ -125,6 +211,15 @@ export abstract class Node {
     var expr = new IdentifierExpression();
     expr.range = range;
     expr.text = name;
+    return expr;
+  }
+
+  static createEmptyIdentifierExpression(
+    range: Range
+  ): IdentifierExpression {
+    var expr = new IdentifierExpression();
+    expr.range = range;
+    expr.text = "";
     return expr;
   }
 
@@ -402,12 +497,12 @@ export abstract class Node {
 
   static createClassDeclaration(
     identifier: IdentifierExpression,
-    typeParameters: TypeParameter[],
+    typeParameters: TypeParameterNode[],
     extendsType: TypeNode | null,
     implementsTypes: TypeNode[],
     members: DeclarationStatement[],
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): ClassDeclaration {
     var stmt = new ClassDeclaration();
@@ -429,29 +524,6 @@ export abstract class Node {
     var stmt = new ContinueStatement();
     stmt.range = range;
     stmt.label = label; if (label) label.parent = stmt;
-    return stmt;
-  }
-
-  static createDecorator(
-    expression: Expression,
-    args: Expression[] | null,
-    range: Range
-  ): Decorator {
-    var stmt = new Decorator();
-    stmt.range = range;
-    stmt.name = expression; expression.parent = stmt;
-    stmt.arguments = args; if (args) setParent(args, stmt);
-    if (expression.kind == NodeKind.IDENTIFIER) {
-      switch ((<IdentifierExpression>expression).text) {
-        case "global": stmt.decoratorKind = DecoratorKind.GLOBAL; break;
-        case "operator": stmt.decoratorKind = DecoratorKind.OPERATOR; break;
-        case "unmanaged": stmt.decoratorKind = DecoratorKind.UNMANAGED; break;
-        case "offset": stmt.decoratorKind = DecoratorKind.OFFSET; break;
-        default: stmt.decoratorKind = DecoratorKind.CUSTOM; break;
-      }
-    } else {
-      stmt.decoratorKind = DecoratorKind.CUSTOM;
-    }
     return stmt;
   }
 
@@ -478,8 +550,8 @@ export abstract class Node {
   static createEnumDeclaration(
     name: IdentifierExpression,
     members: EnumValueDeclaration[],
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): EnumDeclaration {
     var stmt = new EnumDeclaration();
@@ -506,7 +578,7 @@ export abstract class Node {
   static createExportStatement(
     members: ExportMember[],
     path: StringLiteralExpression | null,
-    modifiers: Modifier[] | null,
+    modifiers: ModifierNode[] | null,
     range: Range
   ): ExportStatement {
     var stmt = new ExportStatement();
@@ -646,7 +718,7 @@ export abstract class Node {
     name: IdentifierExpression,
     extendsType: TypeNode | null,
     members: DeclarationStatement[],
-    modifiers: Modifier[] | null,
+    modifiers: ModifierNode[] | null,
     range: Range
   ): InterfaceDeclaration {
     var stmt = new InterfaceDeclaration();
@@ -662,8 +734,8 @@ export abstract class Node {
     name: IdentifierExpression,
     type: TypeNode | null,
     initializer: Expression | null,
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): FieldDeclaration {
     var stmt = new FieldDeclaration();
@@ -692,50 +764,18 @@ export abstract class Node {
     return stmt;
   }
 
-  static createTypeParameter(
-    name: IdentifierExpression,
-    extendsType: TypeNode | null,
-    range: Range
-  ): TypeParameter {
-    var elem = new TypeParameter();
-    elem.range = range;
-    elem.name = name; name.parent = elem;
-    elem.extendsType = extendsType; if (extendsType) extendsType.parent = elem;
-    return elem;
-  }
-
-  static createParameter(
-    name: IdentifierExpression,
-    type: TypeNode | null,
-    initializer: Expression | null,
-    kind: ParameterKind,
-    range: Range
-  ): Parameter {
-    var elem = new Parameter();
-    elem.range = range;
-    elem.name = name; name.parent = elem;
-    elem.type = type; if (type) type.parent = elem;
-    elem.initializer = initializer; if (initializer) initializer.parent = elem;
-    elem.parameterKind = kind;
-    return elem;
-  }
-
   static createFunctionDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameter[] | null,
-    parameters: Parameter[],
-    returnType: TypeNode | null,
+    signature: SignatureNode,
     body: Statement | null,
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): FunctionDeclaration {
     var stmt = new FunctionDeclaration();
     stmt.range = range;
     stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.parameters = parameters; setParent(parameters, stmt);
-    stmt.returnType = returnType; if (returnType) returnType.parent = stmt;
+    stmt.signature = signature; signature.parent = stmt;
     stmt.body = body; if (body) body.parent = stmt;
     stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
@@ -744,38 +784,27 @@ export abstract class Node {
 
   static createMethodDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameter[] | null,
-    parameters: Parameter[],
-    returnType: TypeNode | null,
+    signature: SignatureNode,
     body: Statement | null,
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): MethodDeclaration {
     var stmt = new MethodDeclaration();
     stmt.range = range;
     stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.parameters = parameters; setParent(parameters, stmt);
-    stmt.returnType = returnType; if (returnType) returnType.parent = stmt;
+    stmt.signature = signature; signature.parent = stmt;
     stmt.body = body; if (body) body.parent = stmt;
     stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
 
-  static createModifier(kind: ModifierKind, range: Range): Modifier {
-    var elem = new Modifier();
-    elem.range = range;
-    elem.modifierKind = kind;
-    return elem;
-  }
-
   static createNamespaceDeclaration(
     name: IdentifierExpression,
     members: Statement[],
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): NamespaceDeclaration {
     var stmt = new NamespaceDeclaration();
@@ -853,8 +882,8 @@ export abstract class Node {
   static createTypeDeclaration(
     name: IdentifierExpression,
     alias: TypeNode,
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): TypeDeclaration {
     var stmt = new TypeDeclaration();
@@ -868,8 +897,8 @@ export abstract class Node {
 
   static createVariableStatement(
     declarations: VariableDeclaration[],
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): VariableStatement {
     var stmt = new VariableStatement();
@@ -884,8 +913,8 @@ export abstract class Node {
     name: IdentifierExpression,
     type: TypeNode | null,
     initializer: Expression | null,
-    modifiers: Modifier[] | null,
-    decorators: Decorator[] | null,
+    modifiers: ModifierNode[] | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): VariableDeclaration {
     var elem = new VariableDeclaration();
@@ -930,19 +959,109 @@ export class TypeNode extends Node {
   /** Identifier reference. */
   name: IdentifierExpression;
   /** Type argument references. */
-  typeArguments: TypeNode[];
+  typeArguments: TypeNode[] | null;
   /** Whether nullable or not. */
   isNullable: bool;
 }
 
 /** Represents a type parameter. */
-export class TypeParameter extends Node {
+export class TypeParameterNode extends Node {
   kind = NodeKind.TYPEPARAMETER;
 
   /** Identifier reference. */
   name: IdentifierExpression;
   /** Extended type reference, if any. */
   extendsType: TypeNode | null;
+}
+
+/** Represents the kind of a parameter. */
+export enum ParameterKind {
+  /** No specific flags. */
+  DEFAULT,
+  /** Is an optional parameter. */
+  OPTIONAL,
+  /** Is a rest parameter. */
+  REST
+}
+
+/** Represents a function parameter. */
+export class ParameterNode extends Node {
+  kind = NodeKind.PARAMETER;
+
+  /** Parameter kind. */
+  parameterKind: ParameterKind;
+  /** Parameter name. */
+  name: IdentifierExpression;
+  /** Parameter type. */
+  type: TypeNode | null;
+  /** Initializer expression, if present. */
+  initializer: Expression | null;
+}
+
+/** Represents a function signature. */
+export class SignatureNode extends Node {
+  kind = NodeKind.SIGNATURE;
+
+  /** Accepted type parameters. */
+  typeParameters: TypeParameterNode[] | null;
+  /** Accepted parameters. */
+  parameters: ParameterNode[];
+  /** Return type. */
+  returnType: TypeNode | null;
+
+  get isGeneric(): bool {
+    var typeParameters = this.typeParameters;
+    return typeParameters != null && typeParameters.length > 0;
+  }
+}
+
+// special
+
+/** Built-in decorator kinds. */
+export const enum DecoratorKind {
+  CUSTOM,
+  GLOBAL,
+  OPERATOR,
+  UNMANAGED,
+  OFFSET
+}
+
+/** Depresents a decorator. */
+export class DecoratorNode extends Node {
+  kind = NodeKind.DECORATOR;
+
+  /** Built-in kind, if applicable. */
+  decoratorKind: DecoratorKind;
+  /** Name expression. */
+  name: Expression;
+  /** Argument expressions. */
+  arguments: Expression[] | null;
+}
+
+/** Indicates the specific kind of a modifier. */
+export enum ModifierKind {
+  ASYNC,
+  CONST,
+  LET,
+  DECLARE,
+  EXPORT,
+  IMPORT,
+  STATIC,
+  ABSTRACT,
+  PUBLIC,
+  PRIVATE,
+  PROTECTED,
+  READONLY,
+  GET,
+  SET,
+}
+
+/** Represents a single modifier. */
+export class ModifierNode extends Node {
+  kind = NodeKind.MODIFIER;
+
+  /** Specific modifier kind. */
+  modifierKind: ModifierKind;
 }
 
 // expressions
@@ -1183,24 +1302,6 @@ export class UnaryPrefixExpression extends UnaryExpression {
 
 // statements
 
-/** Indicates the specific kind of a modifier. */
-export enum ModifierKind {
-  ASYNC,
-  CONST,
-  LET,
-  DECLARE,
-  EXPORT,
-  IMPORT,
-  STATIC,
-  ABSTRACT,
-  PUBLIC,
-  PRIVATE,
-  PROTECTED,
-  READONLY,
-  GET,
-  SET,
-}
-
 /** Base class of all statement nodes. */
 export abstract class Statement extends Node { }
 
@@ -1257,9 +1358,9 @@ export abstract class DeclarationStatement extends Statement {
   /** Simple name being declared. */
   name: IdentifierExpression;
   /** Array of modifiers. */
-  modifiers: Modifier[] | null;
+  modifiers: ModifierNode[] | null;
   /** Array of decorators. */
-  decorators: Decorator[] | null = null;
+  decorators: DecoratorNode[] | null = null;
 
   protected cachedProgramLevelInternalName: string | null = null;
   protected cachedFileLevelInternalName: string | null = null;
@@ -1359,7 +1460,7 @@ export class ClassDeclaration extends DeclarationStatement {
   kind = NodeKind.CLASSDECLARATION;
 
   /** Accepted type parameters. */
-  typeParameters: TypeParameter[];
+  typeParameters: TypeParameterNode[];
   /** Base class type being extended. */
   extendsType: TypeNode | null;
   /** Interface types being implemented. */
@@ -1374,27 +1475,6 @@ export class ContinueStatement extends Statement {
 
   /** Target label, if applicable. */
   label: IdentifierExpression | null;
-}
-
-/** Built-in decorator kinds. */
-export const enum DecoratorKind {
-  CUSTOM,
-  GLOBAL,
-  OPERATOR,
-  UNMANAGED,
-  OFFSET
-}
-
-/** Depresents a decorator. */
-export class Decorator extends Statement {
-  kind = NodeKind.DECORATOR;
-
-  /** Name expression. */
-  name: Expression;
-  /** Argument expressions. */
-  arguments: Expression[] | null;
-  /** Built-in kind, if applicable. */
-  decoratorKind: DecoratorKind;
 }
 
 /** Represents a `do` statement. */
@@ -1455,7 +1535,7 @@ export class ExportStatement extends Statement {
   kind = NodeKind.EXPORT;
 
   /** Array of modifiers. */
-  modifiers: Modifier[] | null;
+  modifiers: ModifierNode[] | null;
   /** Array of members. */
   members: ExportMember[];
   /** Path being exported from, if applicable. */
@@ -1500,17 +1580,13 @@ export class ForStatement extends Statement {
 export class FunctionDeclaration extends DeclarationStatement {
   kind = NodeKind.FUNCTIONDECLARATION;
 
-  /** Accepted type parameters. */
-  typeParameters: TypeParameter[] | null;
-  /** Accepted parameters. */
-  parameters: Parameter[];
-  /** Return type. */
-  returnType: TypeNode | null;
+  /** Function signature. */
+  signature: SignatureNode;
   /** Body statement. Usually a block. */
   body: Statement | null;
 
   get isGeneric(): bool {
-    return this.typeParameters != null && this.typeParameters.length > 0;
+    return this.signature.isGeneric;
   }
 }
 
@@ -1567,38 +1643,6 @@ export class NamespaceDeclaration extends DeclarationStatement {
 
   /** Array of namespace members. */
   members: Statement[];
-}
-
-/** Represents the kind of a parameter. */
-export enum ParameterKind {
-  /** No specific flags. */
-  DEFAULT,
-  /** Is an optional parameter. */
-  OPTIONAL,
-  /** Is a rest parameter. */
-  REST
-}
-
-/** Represents a function parameter. */
-export class Parameter extends Node {
-  kind = NodeKind.PARAMETER;
-
-  /** Parameter name. */
-  name: IdentifierExpression;
-  /** Parameter type. */
-  type: TypeNode | null;
-  /** Parameter kind. */
-  parameterKind: ParameterKind;
-  /** Initializer expression, if present. */
-  initializer: Expression | null;
-}
-
-/** Represents a single modifier. */
-export class Modifier extends Node {
-  kind = NodeKind.MODIFIER;
-
-  /** Specific modifier kind. */
-  modifierKind: ModifierKind;
 }
 
 /** Represents a `return` statement. */
@@ -1664,7 +1708,7 @@ export class VariableDeclaration extends VariableLikeDeclarationStatement {
   kind = NodeKind.VARIABLEDECLARATION;
 
   /** Array of modifiers. */
-  modifiers: Modifier[] | null;
+  modifiers: ModifierNode[] | null;
 }
 
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
@@ -1672,9 +1716,9 @@ export class VariableStatement extends Statement {
   kind = NodeKind.VARIABLE;
 
   /** Array of modifiers. */
-  modifiers: Modifier[] | null;
+  modifiers: ModifierNode[] | null;
   /** Array of decorators. */
-  decorators: Decorator[] | null;
+  decorators: DecoratorNode[] | null;
   /** Array of member declarations. */
   declarations: VariableDeclaration[];
 }
@@ -1698,15 +1742,15 @@ export class WhileStatement extends Statement {
 }
 
 /** Cached unused modifiers for reuse. */
-var reusableModifiers: Modifier[] | null = null;
+var reusableModifiers: ModifierNode[] | null = null;
 
-export function setReusableModifiers(modifiers: Modifier[]): void {
+export function setReusableModifiers(modifiers: ModifierNode[]): void {
   reusableModifiers = modifiers;
 }
 
 /** Creates a new modifiers array. */
-export function createModifiers(): Modifier[] {
-  var ret: Modifier[];
+export function createModifiers(): ModifierNode[] {
+  var ret: ModifierNode[];
   if (reusableModifiers != null) {
     ret = reusableModifiers;
     reusableModifiers = null;
@@ -1720,14 +1764,14 @@ export function createModifiers(): Modifier[] {
 // Utility
 
 /** Adds a modifier to a set of modifiers. Creates a new set if `null`. */
-export function addModifier(modifier: Modifier, modifiers: Modifier[] | null): Modifier[] {
+export function addModifier(modifier: ModifierNode, modifiers: ModifierNode[] | null): ModifierNode[] {
   if (modifiers == null) modifiers = createModifiers();
   modifiers.push(modifier);
   return modifiers;
 }
 
 /** Gets a specific modifier from the specified set of modifiers. */
-export function getModifier(kind: ModifierKind, modifiers: Modifier[] | null): Modifier | null {
+export function getModifier(kind: ModifierKind, modifiers: ModifierNode[] | null): ModifierNode | null {
   if (modifiers) {
     for (var i = 0, k = modifiers.length; i < k; ++i) {
       if (modifiers[i].modifierKind == kind) {
@@ -1739,12 +1783,12 @@ export function getModifier(kind: ModifierKind, modifiers: Modifier[] | null): M
 }
 
 /** Tests whether a modifier exists in the specified set of modifiers. */
-export function hasModifier(kind: ModifierKind, modifiers: Modifier[] | null): bool {
+export function hasModifier(kind: ModifierKind, modifiers: ModifierNode[] | null): bool {
   return getModifier(kind, modifiers) != null;
 }
 
 /** Gets the first decorator by name within at set of decorators, if present. */
-export function getFirstDecorator(name: string, decorators: Decorator[] | null): Decorator | null {
+export function getFirstDecorator(name: string, decorators: DecoratorNode[] | null): DecoratorNode | null {
   if (decorators) {
     for (var i = 0, k = decorators.length; i < k; ++i) {
       var decorator = decorators[i];
@@ -1758,7 +1802,7 @@ export function getFirstDecorator(name: string, decorators: Decorator[] | null):
 }
 
 /** Tests if a specific decorator is present within the specified decorators. */
-export function hasDecorator(name: string, decorators: Decorator[] | null): bool {
+export function hasDecorator(name: string, decorators: DecoratorNode[] | null): bool {
   return getFirstDecorator(name, decorators) != null;
 }
 

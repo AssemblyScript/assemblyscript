@@ -24,15 +24,19 @@
  )
  (func $start (; 3 ;) (type $v)
   (drop
-   (call $start~anonymous|0
+   (call_indirect (type $ii)
     (i32.const 1)
+    (get_global $function-expression/f1)
    )
   )
   (drop
-   (call $start~anonymous|1
+   (call_indirect (type $ii)
     (i32.const 2)
+    (get_global $function-expression/f2)
    )
   )
-  (call $start~someName|2)
+  (call_indirect (type $v)
+   (get_global $function-expression/f3)
+  )
  )
 )

@@ -1,6 +1,5 @@
 import {
-  Class,
-  Function
+  Class
 } from "./program";
 
 import {
@@ -74,7 +73,7 @@ export class Type {
   /** Underlying class type, if a class type. */
   classType: Class | null;
   /** Underlying function type, if a function type. */
-  functionType: Function | null;
+  functionType: Signature | null;
   /** Respective nullable type, if non-nullable. */
   nullableType: Type | null = null;
   /** Respective non-nullable type, if nullable. */
@@ -121,7 +120,7 @@ export class Type {
   }
 
   /** Composes a function type from this type and a function. */
-  asFunction(functionType: Function): Type {
+  asFunction(functionType: Signature): Type {
     assert(this.kind == TypeKind.U32 && !this.functionType);
     var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
     ret.functionType = functionType;
@@ -144,8 +143,8 @@ export class Type {
   isAssignableTo(target: Type, signednessIsImportant: bool = false): bool {
     var currentClass: Class | null;
     var targetClass: Class | null;
-    var currentFunction: Function | null;
-    var targetFunction: Function | null;
+    var currentFunction: Signature | null;
+    var targetFunction: Signature | null;
     if (this.isReference) {
       if (target.isReference) {
         if (currentClass = this.classType) {
@@ -205,7 +204,7 @@ export class Type {
         return this.classType
           ? this.classType.toString()
           : this.functionType
-            ? this.functionType.toTypeString()
+            ? this.functionType.toSignatureString()
             : "usize";
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
@@ -494,4 +493,114 @@ export function typesToString(types: Type[]): string {
     sb[i] = types[i].toString();
   }
   return sb.join(", ");
+}
+
+/** Represents a fully resolved function signature. */
+export class Signature {
+
+  /** Parameter types, if any, excluding `this`. */
+  parameterTypes: Type[];
+  /** Parameter names, if known, excluding `this`. */
+  parameterNames: string[] | null;
+  /** Number of required parameters. Other parameters are considered optional. */
+  requiredParameters: i32;
+  /** Return type. */
+  returnType: Type;
+  /** This type, if an instance signature. */
+  thisType: Type | null;
+  /** Whether the last parameter is a rest parameter. */
+  hasRest: bool;
+
+  constructor(
+    parameterTypes: Type[] | null = null,
+    returnType: Type | null = null,
+    thisType: Type | null = null
+  ) {
+    this.parameterTypes = parameterTypes ? parameterTypes : [];
+    this.parameterNames = null;
+    this.requiredParameters = 0;
+    this.returnType = returnType ? returnType : Type.void;
+    this.thisType = thisType;
+    this.hasRest = false;
+  }
+
+  /** Gets the known or, alternatively, generic parameter name at the specified index. */
+  getParameterName(index: i32): string {
+    return this.parameterNames && this.parameterNames.length > index
+      ? this.parameterNames[index]
+      : getGenericParameterName(index);
+  }
+
+  /** Tests if a value of this function type is assignable to a target of the specified function type. */
+  isAssignableTo(target: Signature): bool {
+    return this == target; // TODO
+  }
+
+  /** Converts this signature to a function type string. */
+  toSignatureString(): string {
+    var sb = [];
+    var thisType = this.thisType;
+    if (thisType) {
+      sb.push(thisType.toSignatureString());
+    }
+    var types = this.parameterTypes;
+    for (let i = 0, k = types.length; i < k; ++i) {
+      sb.push(types[i].toSignatureString());
+    }
+    sb.push(this.returnType.toSignatureString());
+    return sb.join("");
+  }
+
+  /** Converts this signature to a string. */
+  toString(includeThis: bool = false): string {
+    var sb = new Array<string>();
+    sb.push("(");
+    var index = 0;
+    if (includeThis) {
+      let thisType = assert(this.thisType);
+      sb.push("this: ");
+      sb.push(thisType.toString());
+      index = 1;
+    }
+    var parameters = this.parameterTypes;
+    var numParameters = parameters.length;
+    if (numParameters) {
+      let names = this.parameterNames;
+      let numNames = names ? names.length : 0;
+      let optionalStart = this.requiredParameters;
+      let restIndex = this.hasRest ? numParameters - 1 : -1;
+      for (let i = 0; i < numParameters; ++i, ++index) {
+        if (index) sb.push(", ");
+        if (i == restIndex) sb.push("...");
+        if (i < numNames) {
+          sb.push((<string[]>names)[i]);
+        } else {
+          sb.push(getGenericParameterName(i));
+        }
+        if (i >= optionalStart && i != restIndex) {
+          sb.push("?: ");
+        } else {
+          sb.push(": ");
+        }
+        sb.push(parameters[i].toString());
+      }
+    }
+    sb.push(") => ");
+    sb.push(this.returnType.toString());
+    return sb.join("");
+  }
+}
+
+// helpers
+
+// Cached generic parameter names used where names are unknown.
+var cachedGenericParameterNames: string[] | null = null;
+
+/** Gets the cached generic parameter name for the specified index. */
+export function getGenericParameterName(index: i32): string {
+  if (!cachedGenericParameterNames) cachedGenericParameterNames = [];
+  for (var i = cachedGenericParameterNames.length; i < index; ++i) {
+    cachedGenericParameterNames.push("arg$" + i.toString(10));
+  }
+  return cachedGenericParameterNames[index];
 }

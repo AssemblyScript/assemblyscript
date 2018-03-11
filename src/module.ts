@@ -265,12 +265,12 @@ export class Module {
   addFunctionType(
     name: string,
     result: NativeType,
-    paramTypes: NativeType[]
+    paramTypes: NativeType[] | null
   ): FunctionRef {
     var cStr = allocString(name);
     var cArr = allocI32Array(paramTypes);
     try {
-      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes.length);
+      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
     } finally {
       free_memory(cArr);
       free_memory(cStr);
@@ -279,11 +279,11 @@ export class Module {
 
   getFunctionTypeBySignature(
     result: NativeType,
-    paramTypes: NativeType[]
+    paramTypes: NativeType[] | null
   ): FunctionTypeRef {
     var cArr = allocI32Array(paramTypes);
     try {
-      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes.length);
+      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
     } finally {
       free_memory(cArr);
     }
@@ -594,6 +594,21 @@ export class Module {
     }
   }
 
+  createCallIndirect(
+    index: ExpressionRef,
+    operands: ExpressionRef[] | null,
+    typeName: string
+  ): ExpressionRef {
+    var cArr = allocI32Array(operands);
+    var cStr = allocString(typeName);
+    try {
+      return _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
+    } finally {
+      free_memory(cStr);
+      free_memory(cArr);
+    }
+  }
+
   createUnreachable(): ExpressionRef {
     return _BinaryenUnreachable(this.ref);
   }
@@ -617,13 +632,13 @@ export class Module {
   addFunction(
     name: string,
     type: FunctionTypeRef,
-    varTypes: NativeType[],
+    varTypes: NativeType[] | null,
     body: ExpressionRef
   ): FunctionRef {
     var cStr = allocString(name);
     var cArr = allocI32Array(varTypes);
     try {
-      return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes.length, body);
+      return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes ? varTypes.length : 0, body);
     } finally {
       free_memory(cArr);
       free_memory(cStr);

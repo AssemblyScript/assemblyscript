@@ -33,9 +33,9 @@ import {
   Global,
   FunctionPrototype,
   Local,
-  ElementFlags,
   Class,
-  ElementKind
+  ElementKind,
+  ElementFlags
 } from "./program";
 
 /** Compiles a get of a built-in global. */
@@ -2340,46 +2340,39 @@ export function compileAllocate(
   cls: Class,
   reportNode: Node
 ): ExpressionRef {
-  var program = cls.program;
-  var prototype = program.elements.get(compiler.options.allocateImpl);
-  if (prototype) {
-    if (prototype.kind == ElementKind.FUNCTION_PROTOTYPE) {
-      var instance = (<FunctionPrototype>prototype).resolve(); // reports
-      if (instance) {
-        if (
-          !instance.is(ElementFlags.GENERIC) &&
-          instance.returnType == compiler.options.usizeType &&
-          instance.parameters &&
-          instance.parameters.length == 1 &&
-          instance.parameters[0].type == compiler.options.usizeType
-        ) {
-          if (compiler.compileFunction(instance)) { // reports
-            return compiler.makeCall(instance, [
-              compiler.options.isWasm64
-                ? compiler.module.createI64(cls.currentMemoryOffset)
-                : compiler.module.createI32(cls.currentMemoryOffset)
-            ]);
-          }
-        } else {
-          program.error(
-            DiagnosticCode.Implementation_0_must_match_the_signature_1,
-            reportNode.range, compiler.options.allocateImpl, "(size: usize): usize"
-          );
-        }
-      }
-    } else {
-      program.error(
-        DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-        reportNode.range, prototype.internalName
-      );
-    }
-  } else {
+  var program = compiler.program;
+  assert(cls.program == program);
+  var module = compiler.module;
+  var options = compiler.options;
+
+  var prototype = program.elements.get(options.allocateImpl);
+  if (!prototype) {
     program.error(
       DiagnosticCode.Cannot_find_name_0,
-      reportNode.range, compiler.options.allocateImpl
+      reportNode.range, options.allocateImpl
     );
+    return module.createUnreachable();
   }
-  return compiler.module.createUnreachable();
+  if (prototype.kind != ElementKind.FUNCTION_PROTOTYPE) {
+    program.error(
+      DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+      reportNode.range, prototype.internalName
+    );
+    return module.createUnreachable();
+  }
+
+  var instance = (<FunctionPrototype>prototype).resolve(); // reports
+  if (!(instance && compiler.compileFunction(instance))) return module.createUnreachable();
+
+  compiler.currentType = cls.type;
+  return module.createCall(
+    instance.internalName, [
+      options.isWasm64
+        ? module.createI64(cls.currentMemoryOffset)
+        : module.createI32(cls.currentMemoryOffset)
+    ],
+    options.nativeSizeType
+  );
 }
 
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
@@ -2388,33 +2381,35 @@ export function compileAbort(
   message: Expression | null,
   reportNode: Node
 ): ExpressionRef {
+  var program = compiler.program;
   var module = compiler.module;
-  var abort: ExpressionRef = module.createUnreachable();
-  var abortPrototype = compiler.program.elements.get("abort");
-  var stringType = compiler.program.types.get("string");
-  if (
-    abortPrototype &&
-    abortPrototype.kind == ElementKind.FUNCTION_PROTOTYPE &&
-    stringType
-  ) {
-    var abortInstance = (<FunctionPrototype>abortPrototype).resolve(); // reports
-    if (
-      abortInstance &&
-      compiler.compileFunction(abortInstance) // reports
-    ) {
-      assert(abortInstance.parameters && abortInstance.parameters.length == 4); // to be sure
-      abort = module.createBlock(null, [
-        compiler.makeCall(abortInstance, [
-          message != null
-            ? compiler.compileExpression(message, stringType)
-            : compiler.options.usizeType.toNativeZero(module),
-          compiler.compileStaticString(reportNode.range.source.normalizedPath),
-          module.createI32(reportNode.range.line),
-          module.createI32(reportNode.range.column)
-        ]),
-        abort
-      ]);
-    }
-  }
-  return abort;
+
+  var stringType = program.types.get("string"); // might be intended
+  if (!stringType) return module.createUnreachable();
+
+  var abortPrototype = program.elements.get("abort"); // might be intended
+  if (!abortPrototype || abortPrototype.kind != ElementKind.FUNCTION_PROTOTYPE) return module.createUnreachable();
+
+  var abortInstance = (<FunctionPrototype>abortPrototype).resolve(); // reports
+  if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.createUnreachable();
+
+  var messageArg = message != null
+    ? compiler.compileExpression(message, stringType)
+    : stringType.toNativeZero(module);
+
+  var filenameArg = compiler.compileStaticString(reportNode.range.source.normalizedPath);
+
+  compiler.currentType = Type.void;
+  return module.createBlock(null, [
+    module.createCallImport(
+      abortInstance.internalName, [
+        messageArg,
+        filenameArg,
+        module.createI32(reportNode.range.line),
+        module.createI32(reportNode.range.column)
+      ],
+      NativeType.None
+    ),
+    module.createUnreachable()
+  ]);
 }

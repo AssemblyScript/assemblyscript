@@ -79,6 +79,7 @@ import {
 import {
   CharCode
 } from "../util/charcode";
+import { Signature } from "../types";
 
 export function serializeNode(node: Node, sb: string[]): void {
   switch (node.kind) {
@@ -312,17 +313,19 @@ export function serializeSource(source: Source, sb: string[]): void {
 
 export function serializeTypeNode(node: TypeNode, sb: string[]): void {
   serializeIdentifierExpression(<IdentifierExpression>node.name, sb);
-  var k = node.typeArguments.length;
-  if (k) {
-    sb.push("<");
-    serializeTypeNode(node.typeArguments[0], sb);
-    for (var i = 1; i < k; ++i) {
-      sb.push(", ");
-      serializeTypeNode(node.typeArguments[i], sb);
+  if (node.typeArguments) {
+    var k = node.typeArguments.length;
+    if (k) {
+      sb.push("<");
+      serializeTypeNode(node.typeArguments[0], sb);
+      for (var i = 1; i < k; ++i) {
+        sb.push(", ");
+        serializeTypeNode(node.typeArguments[i], sb);
+      }
+      sb.push(">");
     }
-    sb.push(">");
+    if (node.isNullable) sb.push(" | null");
   }
-  if (node.isNullable) sb.push(" | null");
 }
 
 export function serializeTypeParameter(node: TypeParameter, sb: string[]): void {
@@ -876,46 +879,48 @@ export function serializeFunctionDeclaration(node: FunctionDeclaration, sb: stri
 function serializeFunctionCommon(node: FunctionDeclaration, sb: string[], isArrow: bool = false): void {
   var i: i32, k: i32;
   serializeIdentifierExpression(node.name, sb);
-  if (node.typeParameters) {
-    if (k = node.typeParameters.length) {
+  var signature = node.signature;
+  if (signature.typeParameters) {
+    if (k = signature.typeParameters.length) {
       sb.push("<");
-      serializeTypeParameter(node.typeParameters[0], sb);
+      serializeTypeParameter(signature.typeParameters[0], sb);
       for (i = 1; i < k; ++i) {
         sb.push(", ");
-        serializeTypeParameter(node.typeParameters[i], sb);
+        serializeTypeParameter(signature.typeParameters[i], sb);
       }
       sb.push(">");
     }
   }
   sb.push("(");
-  if (k = node.parameters.length) {
-    serializeParameter(node.parameters[0], sb);
+  if (k = signature.parameters.length) {
+    serializeParameter(signature.parameters[0], sb);
     for (i = 1; i < k; ++i) {
       sb.push(", ");
-      serializeParameter(node.parameters[i], sb);
+      serializeParameter(signature.parameters[i], sb);
     }
   }
   if (isArrow) {
     if (node.body) {
-      if (node.returnType) {
+      if (signature.returnType) {
         sb.push("): ");
-        serializeTypeNode(node.returnType, sb);
+        serializeTypeNode(signature.returnType, sb);
       }
       sb.push(" => ");
-      serializeStatement(<Statement>node.body, sb);
+      serializeStatement(node.body, sb);
     } else {
-      if (node.returnType) {
+      if (signature.returnType) {
         sb.push(" => ");
-        serializeTypeNode(node.returnType, sb);
+        serializeTypeNode(signature.returnType, sb);
       } else {
         sb.push(" => void");
       }
     }
   } else {
-    if (node.returnType && !hasModifier(ModifierKind.SET, node.modifiers)) {
+    if (signature.returnType && !hasModifier(ModifierKind.SET, node.modifiers)) {
       sb.push("): ");
-      serializeTypeNode(node.returnType, sb);
+      serializeTypeNode(signature.returnType, sb);
     } else {
+      // TODO: constructor?
       sb.push(")");
     }
     if (node.body) {

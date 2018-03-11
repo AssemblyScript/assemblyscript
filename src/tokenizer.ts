@@ -394,10 +394,6 @@ export class Tokenizer extends DiagnosticEmitter {
   token: Token = -1;
   tokenPos: i32 = 0;
 
-  markedPos: i32 = 0;
-  markedToken: Token = -1;
-  markedTokenPos: i32 = 0;
-
   nextToken: Token = -1;
   nextTokenOnNewLine: bool = false;
 
@@ -884,17 +880,30 @@ export class Tokenizer extends DiagnosticEmitter {
   //   } while (true);
   // }
 
-  mark(): void {
-    this.markedPos = this.pos;
-    this.markedToken = this.token;
-    this.markedTokenPos = this.tokenPos;
+  mark(): State {
+    var state: State;
+    if (reusableState) {
+      state = reusableState;
+      reusableState = null;
+    } else {
+      state = new State();
+    }
+    state.pos = this.pos;
+    state.token = this.token;
+    state.tokenPos = this.tokenPos;
+    return state;
   }
 
-  reset(): void {
-    this.pos = this.markedPos;
-    this.token = this.markedToken;
-    this.tokenPos = this.markedTokenPos;
+  discard(state: State): void {
+    reusableState = state;
+  }
+
+  reset(state: State): void {
+    this.pos = state.pos;
+    this.token = state.token;
+    this.tokenPos = state.tokenPos;
     this.nextToken = -1;
+    reusableState = state;
   }
 
   range(start: i32 = -1, end: i32 = -1): Range {
@@ -1387,3 +1396,16 @@ export class Tokenizer extends DiagnosticEmitter {
   finish(): void {
   }
 }
+
+/** Tokenizer state as returned by {@link Tokenizer#mark} and consumed by {@link Tokenizer#reset}. */
+export class State {
+  /** Current position. */
+  pos: i32;
+  /** Current token. */
+  token: Token;
+  /** Current token's position. */
+  tokenPos: i32;
+}
+
+// Reusable state object to reduce allocations
+var reusableState: State | null = null;

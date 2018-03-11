@@ -1,4 +1,4 @@
-![](https://s.gravatar.com/avatar/f105de3decfafc734b8eabe9a960b25d?size=48) utils
+![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) utils
 =================
 
 Utilities for working with [AssemblyScript](http://assemblyscript.org) modules.

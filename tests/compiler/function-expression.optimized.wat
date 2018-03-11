@@ -1,6 +1,9 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
+ (global $function-expression/f1 (mut i32) (i32.const 0))
+ (global $function-expression/f2 (mut i32) (i32.const 1))
+ (global $function-expression/f3 (mut i32) (i32.const 2))
  (table 3 3 anyfunc)
  (elem (i32.const 0) $start~anonymous|0 $start~anonymous|0 $start~someName|2)
  (memory $0 1)
@@ -14,15 +17,19 @@
  )
  (func $start (; 2 ;) (type $v)
   (drop
-   (call $start~anonymous|0
+   (call_indirect (type $ii)
     (i32.const 1)
+    (get_global $function-expression/f1)
    )
   )
   (drop
-   (call $start~anonymous|0
+   (call_indirect (type $ii)
     (i32.const 2)
+    (get_global $function-expression/f2)
    )
   )
-  (call $start~someName|2)
+  (call_indirect (type $v)
+   (get_global $function-expression/f3)
+  )
  )
 )

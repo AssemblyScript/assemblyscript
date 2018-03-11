@@ -61,7 +61,7 @@ const MIN_ALLOC: usize = 1 << MIN_ALLOC_LOG2;
  * heaps will have multiple allocations, so the real maximum allocation limit
  * is at most 1gb.
  */
-const MAX_ALLOC_LOG2: usize = 31;
+const MAX_ALLOC_LOG2: usize = 30; // 31;
 const MAX_ALLOC: usize = 1 << MAX_ALLOC_LOG2;
 
 /*
@@ -538,4 +538,9 @@ function free_memory(ptr: usize): void {
    * for better memory locality.
    */
   list_push(buckets$get(bucket), changetype<List>(ptr_for_node(i, bucket)));
+}
+
+@global
+function reset_memory(): void {
+  unreachable();
 }

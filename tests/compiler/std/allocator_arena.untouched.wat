@@ -7,10 +7,10 @@
  (type $iv (func (param i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global "$(lib)/allocator/arena/AL_BITS" i32 (i32.const 3))
- (global "$(lib)/allocator/arena/AL_SIZE" i32 (i32.const 8))
- (global "$(lib)/allocator/arena/AL_MASK" i32 (i32.const 7))
- (global "$(lib)/allocator/arena/OFFSET" (mut i32) (i32.const 0))
+ (global "$(lib)/allocator/common/alignment/BITS" i32 (i32.const 3))
+ (global "$(lib)/allocator/common/alignment/SIZE" i32 (i32.const 8))
+ (global "$(lib)/allocator/common/alignment/MASK" i32 (i32.const 7))
+ (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global $std/allocator_arena/size i32 (i32.const 42))
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr2 (mut i32) (i32.const 0))
@@ -37,7 +37,7 @@
    )
   )
   (set_local $1
-   (get_global "$(lib)/allocator/arena/OFFSET")
+   (get_global "$(lib)/allocator/arena/offset")
   )
   (set_local $2
    (i32.and
@@ -117,7 +117,7 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/OFFSET"
+  (set_global "$(lib)/allocator/arena/offset"
    (get_local $2)
   )
   (return
@@ -2662,7 +2662,7 @@
  (func "$(lib)/allocator/arena/free_memory" (; 6 ;) (type $iv) (param $0 i32)
  )
  (func "$(lib)/allocator/arena/reset_memory" (; 7 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/OFFSET"
+  (set_global "$(lib)/allocator/arena/offset"
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -2676,7 +2676,7 @@
   )
  )
  (func $start (; 8 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/OFFSET"
+  (set_global "$(lib)/allocator/arena/offset"
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)

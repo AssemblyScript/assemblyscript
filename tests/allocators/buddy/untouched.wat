@@ -10,13 +10,13 @@
  (global "$(lib)/allocator/buddy/HEADER_SIZE" i32 (i32.const 8))
  (global "$(lib)/allocator/buddy/MIN_ALLOC_LOG2" i32 (i32.const 4))
  (global "$(lib)/allocator/buddy/MIN_ALLOC" i32 (i32.const 16))
- (global "$(lib)/allocator/buddy/MAX_ALLOC_LOG2" i32 (i32.const 31))
- (global "$(lib)/allocator/buddy/MAX_ALLOC" i32 (i32.const -2147483648))
- (global "$(lib)/allocator/buddy/BUCKET_COUNT" i32 (i32.const 28))
+ (global "$(lib)/allocator/buddy/MAX_ALLOC_LOG2" i32 (i32.const 30))
+ (global "$(lib)/allocator/buddy/MAX_ALLOC" i32 (i32.const 1073741824))
+ (global "$(lib)/allocator/buddy/BUCKET_COUNT" i32 (i32.const 27))
  (global "$(lib)/allocator/buddy/BUCKETS_START" (mut i32) (i32.const 0))
  (global "$(lib)/allocator/buddy/BUCKETS_END" (mut i32) (i32.const 0))
  (global "$(lib)/allocator/buddy/bucket_limit" (mut i32) (i32.const 0))
- (global "$(lib)/allocator/buddy/SPLIT_COUNT" i32 (i32.const 16777216))
+ (global "$(lib)/allocator/buddy/SPLIT_COUNT" i32 (i32.const 8388608))
  (global "$(lib)/allocator/buddy/NODE_IS_SPLIT_START" (mut i32) (i32.const 0))
  (global "$(lib)/allocator/buddy/NODE_IS_SPLIT_END" (mut i32) (i32.const 0))
  (global "$(lib)/allocator/buddy/base_ptr" (mut i32) (i32.const 0))
@@ -134,7 +134,7 @@
     (i32.lt_u
      (get_local $0)
      ;;@ (lib)/allocator/buddy.ts:100:17
-     (i32.const 28)
+     (i32.const 27)
     )
    )
    (block
@@ -217,7 +217,7 @@
   (set_local $1
    ;;@ (lib)/allocator/buddy.ts:278:15
    (i32.sub
-    (i32.const 28)
+    (i32.const 27)
     ;;@ (lib)/allocator/buddy.ts:278:30
     (i32.const 1)
    )
@@ -282,7 +282,7 @@
       ;;@ (lib)/allocator/buddy.ts:251:30
       (i32.sub
        ;;@ (lib)/allocator/buddy.ts:251:31
-       (i32.const 31)
+       (i32.const 30)
        ;;@ (lib)/allocator/buddy.ts:251:48
        (get_local $1)
       )
@@ -308,7 +308,7 @@
     (i32.lt_u
      (get_local $0)
      ;;@ (lib)/allocator/buddy.ts:146:17
-     (i32.const 16777216)
+     (i32.const 8388608)
     )
    )
    (block
@@ -433,7 +433,7 @@
      ;;@ (lib)/allocator/buddy.ts:242:52
      (i32.sub
       ;;@ (lib)/allocator/buddy.ts:242:53
-      (i32.const 31)
+      (i32.const 30)
       ;;@ (lib)/allocator/buddy.ts:242:70
       (get_local $1)
      )
@@ -449,7 +449,7 @@
     (i32.lt_u
      (get_local $0)
      ;;@ (lib)/allocator/buddy.ts:151:17
-     (i32.const 16777216)
+     (i32.const 8388608)
     )
    )
    (block
@@ -750,7 +750,7 @@
      (i32.const 8)
     )
     ;;@ (lib)/allocator/buddy.ts:349:30
-    (i32.const -2147483648)
+    (i32.const 1073741824)
    )
    ;;@ (lib)/allocator/buddy.ts:350:11
    (return
@@ -798,7 +798,7 @@
     (set_global "$(lib)/allocator/buddy/bucket_limit"
      ;;@ (lib)/allocator/buddy.ts:362:19
      (i32.sub
-      (i32.const 28)
+      (i32.const 27)
       ;;@ (lib)/allocator/buddy.ts:362:34
       (i32.const 1)
      )
@@ -828,7 +828,7 @@
      (call "$(lib)/allocator/buddy/buckets$get"
       ;;@ (lib)/allocator/buddy.ts:366:26
       (i32.sub
-       (i32.const 28)
+       (i32.const 27)
        ;;@ (lib)/allocator/buddy.ts:366:41
        (i32.const 1)
       )
@@ -840,7 +840,7 @@
      (call "$(lib)/allocator/buddy/buckets$get"
       ;;@ (lib)/allocator/buddy.ts:367:26
       (i32.sub
-       (i32.const 28)
+       (i32.const 27)
        ;;@ (lib)/allocator/buddy.ts:367:41
        (i32.const 1)
       )
@@ -997,7 +997,7 @@
          ;;@ (lib)/allocator/buddy.ts:426:16
          (i32.sub
           ;;@ (lib)/allocator/buddy.ts:426:17
-          (i32.const 31)
+          (i32.const 30)
           ;;@ (lib)/allocator/buddy.ts:426:34
           (get_local $2)
          )
@@ -1337,7 +1337,7 @@
     (get_global "$(lib)/allocator/buddy/BUCKETS_START")
     ;;@ (lib)/allocator/buddy.ts:97:41
     (i32.mul
-     (i32.const 28)
+     (i32.const 27)
      ;;@ (lib)/allocator/buddy.ts:97:56
      (i32.const 8)
     )
@@ -1353,7 +1353,7 @@
     (get_global "$(lib)/allocator/buddy/NODE_IS_SPLIT_START")
     ;;@ (lib)/allocator/buddy.ts:143:53
     (i32.mul
-     (i32.const 16777216)
+     (i32.const 8388608)
      ;;@ (lib)/allocator/buddy.ts:143:67
      (i32.const 1)
     )
