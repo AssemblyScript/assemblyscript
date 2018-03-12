@@ -338,7 +338,7 @@ function lower_bucket_limit(bucket: usize): u32 {
 }
 
 @global
-function allocate_memory(request: usize): usize {
+export function allocate_memory(request: usize): usize {
   var original_bucket: usize, bucket: usize;
 
   /*
@@ -475,7 +475,7 @@ function allocate_memory(request: usize): usize {
 }
 
 @global
-function free_memory(ptr: usize): void {
+export function free_memory(ptr: usize): void {
   var bucket: usize, i: usize;
 
   /*
@@ -541,6 +541,6 @@ function free_memory(ptr: usize): void {
 }
 
 @global
-function reset_memory(): void {
+export function reset_memory(): void {
   unreachable();
 }

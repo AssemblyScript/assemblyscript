@@ -498,6 +498,6 @@ export function free_memory(data: usize): void {
 }
 
 @global
-function reset_memory(): void {
+export function reset_memory(): void {
   unreachable();
 }

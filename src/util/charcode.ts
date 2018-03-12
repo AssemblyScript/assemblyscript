@@ -139,10 +139,12 @@ export function isLineBreak(c: CharCode): bool {
     case CharCode.LINEFEED:
     case CharCode.CARRIAGERETURN:
     case CharCode.LINESEPARATOR:
-    case CharCode.PARAGRAPHSEPARATOR:
+    case CharCode.PARAGRAPHSEPARATOR: {
       return true;
-    default:
+    }
+    default: {
       return false;
+    }
   }
 }
 
@@ -159,10 +161,12 @@ export function isWhiteSpace(c: i32): bool {
     case CharCode.NARROWNOBREAKSPACE:
     case CharCode.MATHEMATICALSPACE:
     case CharCode.IDEOGRAPHICSPACE:
-    case CharCode.BYTEORDERMARK:
+    case CharCode.BYTEORDERMARK: {
       return true;
-    default:
+    }
+    default: {
       return c >= CharCode.ENQUAD && c <= CharCode.ZEROWIDTHSPACE;
+    }
   }
 }
 

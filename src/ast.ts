@@ -185,11 +185,26 @@ export abstract class Node {
     stmt.arguments = args; if (args) setParent(args, stmt);
     if (expression.kind == NodeKind.IDENTIFIER) {
       switch ((<IdentifierExpression>expression).text) {
-        case "global": stmt.decoratorKind = DecoratorKind.GLOBAL; break;
-        case "operator": stmt.decoratorKind = DecoratorKind.OPERATOR; break;
-        case "unmanaged": stmt.decoratorKind = DecoratorKind.UNMANAGED; break;
-        case "offset": stmt.decoratorKind = DecoratorKind.OFFSET; break;
-        default: stmt.decoratorKind = DecoratorKind.CUSTOM; break;
+        case "global": {
+          stmt.decoratorKind = DecoratorKind.GLOBAL;
+          break;
+        }
+        case "operator": {
+          stmt.decoratorKind = DecoratorKind.OPERATOR;
+          break;
+        }
+        case "unmanaged": {
+          stmt.decoratorKind = DecoratorKind.UNMANAGED;
+          break;
+        }
+        case "offset": {
+          stmt.decoratorKind = DecoratorKind.OFFSET;
+          break;
+        }
+        default: {
+          stmt.decoratorKind = DecoratorKind.CUSTOM;
+          break;
+        }
       }
     } else {
       stmt.decoratorKind = DecoratorKind.CUSTOM;

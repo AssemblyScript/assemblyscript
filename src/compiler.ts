@@ -603,32 +603,32 @@ export class Compiler extends DiagnosticEmitter {
       if (global.is(ElementFlags.CONSTANT)) {
         var exprType = _BinaryenExpressionGetType(initExpr);
         switch (exprType) {
-
-          case NativeType.I32:
+          case NativeType.I32: {
             global.constantValueKind = ConstantValueKind.INTEGER;
             global.constantIntegerValue = i64_new(_BinaryenConstGetValueI32(initExpr), 0);
             break;
-
-          case NativeType.I64:
+          }
+          case NativeType.I64: {
             global.constantValueKind = ConstantValueKind.INTEGER;
             global.constantIntegerValue = i64_new(
               _BinaryenConstGetValueI64Low(initExpr),
               _BinaryenConstGetValueI64High(initExpr)
             );
             break;
-
-          case NativeType.F32:
+          }
+          case NativeType.F32: {
             global.constantValueKind = ConstantValueKind.FLOAT;
             global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
             break;
-
-          case NativeType.F64:
+          }
+          case NativeType.F64: {
             global.constantValueKind = ConstantValueKind.FLOAT;
             global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
             break;
-
-          default:
+          }
+          default: {
             throw new Error("concrete type expected");
+          }
         }
         global.set(ElementFlags.INLINED); // inline the value from now on
         if (declaration.isTopLevel) {     // but keep the element if it might be re-exported
@@ -893,8 +893,7 @@ export class Compiler extends DiagnosticEmitter {
     for (var i = 0, k = members.length; i < k; ++i) {
       var member = members[i];
       switch (member.kind) {
-
-        case NodeKind.CLASSDECLARATION:
+        case NodeKind.CLASSDECLARATION: {
           if (
             (
               noTreeShaking ||
@@ -904,8 +903,8 @@ export class Compiler extends DiagnosticEmitter {
             this.compileClassDeclaration(<ClassDeclaration>member, []);
           }
           break;
-
-        case NodeKind.INTERFACEDECLARATION:
+        }
+        case NodeKind.INTERFACEDECLARATION: {
           if (
             (
               noTreeShaking ||
@@ -915,8 +914,8 @@ export class Compiler extends DiagnosticEmitter {
             this.compileInterfaceDeclaration(<InterfaceDeclaration>member, []);
           }
           break;
-
-        case NodeKind.ENUMDECLARATION:
+        }
+        case NodeKind.ENUMDECLARATION: {
           if (
             noTreeShaking ||
             hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>member).modifiers)
@@ -924,8 +923,8 @@ export class Compiler extends DiagnosticEmitter {
             this.compileEnumDeclaration(<EnumDeclaration>member);
           }
           break;
-
-        case NodeKind.FUNCTIONDECLARATION:
+        }
+        case NodeKind.FUNCTIONDECLARATION: {
           if (
             (
               noTreeShaking ||
@@ -936,8 +935,8 @@ export class Compiler extends DiagnosticEmitter {
             this.compileFunctionDeclaration(<FunctionDeclaration>member, []);
           }
           break;
-
-        case NodeKind.NAMESPACEDECLARATION:
+        }
+        case NodeKind.NAMESPACEDECLARATION: {
           if (
             noTreeShaking ||
             hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>member).modifiers)
@@ -945,8 +944,8 @@ export class Compiler extends DiagnosticEmitter {
             this.compileNamespaceDeclaration(<NamespaceDeclaration>member);
           }
           break;
-
-        case NodeKind.VARIABLE:
+        }
+        case NodeKind.VARIABLE: {
           if (
             noTreeShaking ||
             hasModifier(ModifierKind.EXPORT, (<VariableStatement>member).modifiers)
@@ -955,9 +954,10 @@ export class Compiler extends DiagnosticEmitter {
             if (variableInit) this.startFunctionBody.push(variableInit);
           }
           break;
-
-        default:
+        }
+        default: {
           throw new Error("namespace member expected");
+        }
       }
     }
   }
@@ -968,8 +968,7 @@ export class Compiler extends DiagnosticEmitter {
     var noTreeShaking = this.options.noTreeShaking;
     for (var element of ns.members.values()) {
       switch (element.kind) {
-
-        case ElementKind.CLASS_PROTOTYPE:
+        case ElementKind.CLASS_PROTOTYPE: {
           if (
             (
               noTreeShaking ||
@@ -979,12 +978,12 @@ export class Compiler extends DiagnosticEmitter {
             this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
           }
           break;
-
-        case ElementKind.ENUM:
+        }
+        case ElementKind.ENUM: {
           this.compileEnum(<Enum>element);
           break;
-
-        case ElementKind.FUNCTION_PROTOTYPE:
+        }
+        case ElementKind.FUNCTION_PROTOTYPE: {
           if (
             (
               noTreeShaking || (<FunctionPrototype>element).is(ElementFlags.EXPORTED)
@@ -998,14 +997,15 @@ export class Compiler extends DiagnosticEmitter {
             );
           }
           break;
-
-        case ElementKind.GLOBAL:
+        }
+        case ElementKind.GLOBAL: {
           this.compileGlobal(<Global>element);
           break;
-
-        case ElementKind.NAMESPACE:
+        }
+        case ElementKind.NAMESPACE: {
           this.compileNamespace(<Namespace>element);
           break;
+        }
       }
     }
   }
@@ -1025,18 +1025,17 @@ export class Compiler extends DiagnosticEmitter {
       if (!element) continue; // reported in Program#initialize
 
       switch (element.kind) {
-
-        case ElementKind.CLASS_PROTOTYPE:
+        case ElementKind.CLASS_PROTOTYPE: {
           if (!(<ClassPrototype>element).is(ElementFlags.GENERIC)) {
             this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
           }
           break;
-
-        case ElementKind.ENUM:
+        }
+        case ElementKind.ENUM: {
           this.compileEnum(<Enum>element);
           break;
-
-        case ElementKind.FUNCTION_PROTOTYPE:
+        }
+        case ElementKind.FUNCTION_PROTOTYPE: {
           if (
             !(<FunctionPrototype>element).is(ElementFlags.GENERIC) &&
             statement.range.source.isEntry
@@ -1055,8 +1054,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           break;
-
-        case ElementKind.GLOBAL:
+        }
+        case ElementKind.GLOBAL: {
           if (this.compileGlobal(<Global>element) && statement.range.source.isEntry) {
             var globalDeclaration = (<Global>element).declaration;
             if (globalDeclaration && globalDeclaration.needsExplicitExport(member)) {
@@ -1071,10 +1070,11 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           break;
-
-        case ElementKind.NAMESPACE:
+        }
+        case ElementKind.NAMESPACE: {
           this.compileNamespace(<Namespace>element);
           break;
+        }
       }
     }
   }
@@ -1159,79 +1159,79 @@ export class Compiler extends DiagnosticEmitter {
   compileStatement(statement: Statement): ExpressionRef {
     var expr: ExpressionRef;
     switch (statement.kind) {
-
-      case NodeKind.BLOCK:
+      case NodeKind.BLOCK: {
         expr = this.compileBlockStatement(<BlockStatement>statement);
         break;
-
-      case NodeKind.BREAK:
+      }
+      case NodeKind.BREAK: {
         expr = this.compileBreakStatement(<BreakStatement>statement);
         break;
-
-      case NodeKind.CONTINUE:
+      }
+      case NodeKind.CONTINUE: {
         expr = this.compileContinueStatement(<ContinueStatement>statement);
         break;
-
-      case NodeKind.DO:
+      }
+      case NodeKind.DO: {
         expr = this.compileDoStatement(<DoStatement>statement);
         break;
-
-      case NodeKind.EMPTY:
+      }
+      case NodeKind.EMPTY: {
         expr = this.compileEmptyStatement(<EmptyStatement>statement);
         break;
-
-      case NodeKind.EXPRESSION:
+      }
+      case NodeKind.EXPRESSION: {
         expr = this.compileExpressionStatement(<ExpressionStatement>statement);
         break;
-
-      case NodeKind.FOR:
+      }
+      case NodeKind.FOR: {
         expr = this.compileForStatement(<ForStatement>statement);
         break;
-
-      case NodeKind.IF:
+      }
+      case NodeKind.IF: {
         expr = this.compileIfStatement(<IfStatement>statement);
         break;
-
-      case NodeKind.RETURN:
+      }
+      case NodeKind.RETURN: {
         expr = this.compileReturnStatement(<ReturnStatement>statement);
         break;
-
-      case NodeKind.SWITCH:
+      }
+      case NodeKind.SWITCH: {
         expr = this.compileSwitchStatement(<SwitchStatement>statement);
         break;
-
-      case NodeKind.THROW:
+      }
+      case NodeKind.THROW: {
         expr = this.compileThrowStatement(<ThrowStatement>statement);
         break;
-
-      case NodeKind.TRY:
+      }
+      case NodeKind.TRY: {
         expr = this.compileTryStatement(<TryStatement>statement);
         break;
-
+      }
       case NodeKind.VARIABLE: {
-        let initializer = this.compileVariableStatement(<VariableStatement>statement);
-        expr = initializer ? initializer : this.module.createNop();
+        expr = this.compileVariableStatement(<VariableStatement>statement);
+        if (!expr) expr = this.module.createNop();
         break;
       }
-
-      case NodeKind.VOID:
+      case NodeKind.VOID: {
         expr = this.compileVoidStatement(<VoidStatement>statement);
         break;
-
-      case NodeKind.WHILE:
+      }
+      case NodeKind.WHILE: {
         expr = this.compileWhileStatement(<WhileStatement>statement);
         break;
-
-      case NodeKind.TYPEDECLARATION:
+      }
+      case NodeKind.TYPEDECLARATION: {
+        // type declarations must be top-level because function bodies are evaluated when
+        // reachaable only.
         if (this.currentFunction == this.startFunction) {
           return this.module.createNop();
         }
-        // fall-through: must be top-level; function bodies are not guaranteed to be evaluated
-
-      default:
+        // otherwise fall-through
+      }
+      default: {
         throw new Error("statement expected");
+      }
     }
-
     this.addDebugLocation(expr, statement.range);
     return expr;
   }
@@ -1608,23 +1608,28 @@ export class Compiler extends DiagnosticEmitter {
           if (_BinaryenExpressionGetId(init) == ExpressionId.Const) {
             var local = new Local(this.program, name, -1, type);
             switch (_BinaryenExpressionGetType(init)) {
-              case NativeType.I32:
+              case NativeType.I32: {
                 local = local.withConstantIntegerValue(_BinaryenConstGetValueI32(init), 0);
                 break;
-              case NativeType.I64:
+              }
+              case NativeType.I64: {
                 local = local.withConstantIntegerValue(
                   _BinaryenConstGetValueI64Low(init),
                   _BinaryenConstGetValueI64High(init)
                 );
                 break;
-              case NativeType.F32:
+              }
+              case NativeType.F32: {
                 local = local.withConstantFloatValue(<f64>_BinaryenConstGetValueF32(init));
                 break;
-              case NativeType.F64:
+              }
+              case NativeType.F64: {
                 local = local.withConstantFloatValue(_BinaryenConstGetValueF64(init));
                 break;
-              default:
+              }
+              default: {
                 throw new Error("concrete type expected");
+              }
             }
             // Create a virtual local that doesn't actually exist in WebAssembly
             var scopedLocals = this.currentFunction.flow.scopedLocals;
@@ -1726,7 +1731,6 @@ export class Compiler extends DiagnosticEmitter {
     retainType: bool
   ): ExpressionRef {
     assert(element.is(ElementFlags.INLINED));
-
     switch (
       !retainType &&
       element.type.is(TypeFlags.INTEGER) &&
@@ -1735,36 +1739,35 @@ export class Compiler extends DiagnosticEmitter {
         ? (this.currentType = contextualType).kind // essentially precomputes a (sign-)extension
         : (this.currentType = element.type).kind
     ) {
-
       case TypeKind.I8:
-      case TypeKind.I16:
-        var shift = element.type.computeSmallIntegerShift(Type.i32);
+      case TypeKind.I16: {
+        let shift = element.type.computeSmallIntegerShift(Type.i32);
         return this.module.createI32(
           element.constantValueKind == ConstantValueKind.INTEGER
             ? i64_low(element.constantIntegerValue) << shift >> shift
             : 0
         );
-
+      }
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
-        var mask = element.type.computeSmallIntegerMask(Type.i32);
+      case TypeKind.BOOL: {
+        let mask = element.type.computeSmallIntegerMask(Type.i32);
         return this.module.createI32(
           element.constantValueKind == ConstantValueKind.INTEGER
             ? i64_low(element.constantIntegerValue) & mask
             : 0
         );
-
+      }
       case TypeKind.I32:
-      case TypeKind.U32:
+      case TypeKind.U32: {
         return this.module.createI32(
           element.constantValueKind == ConstantValueKind.INTEGER
             ? i64_low(element.constantIntegerValue)
             : 0
         );
-
+      }
       case TypeKind.ISIZE:
-      case TypeKind.USIZE:
+      case TypeKind.USIZE: {
         if (!element.program.options.isWasm64) {
           return this.module.createI32(
             element.constantValueKind == ConstantValueKind.INTEGER
@@ -1773,24 +1776,25 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
         // fall-through
-
+      }
       case TypeKind.I64:
-      case TypeKind.U64:
+      case TypeKind.U64: {
         return element.constantValueKind == ConstantValueKind.INTEGER
           ? this.module.createI64(
               i64_low(element.constantIntegerValue),
               i64_high(element.constantIntegerValue)
             )
           : this.module.createI64(0);
-
-      case TypeKind.F32:
+      }
+      case TypeKind.F32: {
         return this.module.createF32((<VariableLikeElement>element).constantFloatValue);
-
-      case TypeKind.F64:
+      }
+      case TypeKind.F64: {
         return this.module.createF64((<VariableLikeElement>element).constantFloatValue);
-
-      default:
+      }
+      default: {
         throw new Error("concrete type expected");
+      }
     }
   }
 
@@ -1804,82 +1808,82 @@ export class Compiler extends DiagnosticEmitter {
 
     var expr: ExpressionRef;
     switch (expression.kind) {
-
-      case NodeKind.ASSERTION:
+      case NodeKind.ASSERTION: {
         expr = this.compileAssertionExpression(<AssertionExpression>expression, contextualType);
         break;
-
-      case NodeKind.BINARY:
+      }
+      case NodeKind.BINARY: {
         expr = this.compileBinaryExpression(<BinaryExpression>expression, contextualType, wrapSmallIntegers);
         break;
-
-      case NodeKind.CALL:
+      }
+      case NodeKind.CALL: {
         expr = this.compileCallExpression(<CallExpression>expression, contextualType);
         break;
-
-      case NodeKind.COMMA:
+      }
+      case NodeKind.COMMA: {
         expr = this.compileCommaExpression(<CommaExpression>expression, contextualType);
         break;
-
-      case NodeKind.ELEMENTACCESS:
+      }
+      case NodeKind.ELEMENTACCESS: {
         expr = this.compileElementAccessExpression(<ElementAccessExpression>expression, contextualType);
         break;
-
+      }
       case NodeKind.FUNCTION:
-      case NodeKind.FUNCTIONARROW:
+      case NodeKind.FUNCTIONARROW: {
         expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType);
         break;
-
+      }
       case NodeKind.IDENTIFIER:
       case NodeKind.FALSE:
       case NodeKind.NULL:
       case NodeKind.THIS:
-      case NodeKind.TRUE:
+      case NodeKind.TRUE: {
         expr = this.compileIdentifierExpression(
           <IdentifierExpression>expression,
           contextualType,
           conversionKind == ConversionKind.NONE // retain type of inlined constants
         );
         break;
-
-      case NodeKind.LITERAL:
+      }
+      case NodeKind.LITERAL: {
         expr = this.compileLiteralExpression(<LiteralExpression>expression, contextualType);
         break;
-
-      case NodeKind.NEW:
+      }
+      case NodeKind.NEW: {
         expr = this.compileNewExpression(<NewExpression>expression, contextualType);
         break;
-
-      case NodeKind.PARENTHESIZED:
+      }
+      case NodeKind.PARENTHESIZED: {
         expr = this.compileParenthesizedExpression(
           <ParenthesizedExpression>expression,
           contextualType,
           wrapSmallIntegers
         );
         break;
-
-      case NodeKind.PROPERTYACCESS:
+      }
+      case NodeKind.PROPERTYACCESS: {
         expr = this.compilePropertyAccessExpression(
           <PropertyAccessExpression>expression,
           contextualType,
           conversionKind == ConversionKind.NONE // retain type of inlined constants
         );
         break;
-
-      case NodeKind.TERNARY:
+      }
+      case NodeKind.TERNARY: {
         expr = this.compileTernaryExpression(<TernaryExpression>expression, contextualType);
         break;
-
-      case NodeKind.UNARYPOSTFIX:
+      }
+      case NodeKind.UNARYPOSTFIX: {
         expr = this.compileUnaryPostfixExpression(<UnaryPostfixExpression>expression, contextualType);
         break;
-
-      case NodeKind.UNARYPREFIX:
+      }
+      case NodeKind.UNARYPREFIX: {
         expr = this.compileUnaryPrefixExpression(<UnaryPrefixExpression>expression, contextualType, wrapSmallIntegers);
         break;
-
-      default:
+      }
+      default: {
         throw new Error("expression expected");
+      }
     }
 
     if (conversionKind != ConversionKind.NONE && this.currentType != contextualType) {
@@ -2141,8 +2145,7 @@ export class Compiler extends DiagnosticEmitter {
     var tempLocal: Local | null = null;
 
     switch (expression.operator) {
-
-      case Token.LESSTHAN:
+      case Token.LESSTHAN: {
         left = this.compileExpressionRetainType(expression.left, contextualType);
         leftType = this.currentType;
         right = this.compileExpressionRetainType(expression.right, leftType);
@@ -2158,20 +2161,18 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return this.module.createUnreachable();
         }
-
         switch (commonType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
-          case TypeKind.I32:
+          case TypeKind.I32: {
             expr = this.module.createBinary(BinaryOp.LtI32, left, right);
             break;
-
-          case TypeKind.I64:
+          }
+          case TypeKind.I64: {
             expr = this.module.createBinary(BinaryOp.LtI64, left, right);
             break;
-
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.LtI64
@@ -2180,16 +2181,15 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.U32:
-          case TypeKind.BOOL:
+          case TypeKind.BOOL: {
             expr = this.module.createBinary(BinaryOp.LtU32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
+          }
+          case TypeKind.USIZE: { // TODO: check operator overload
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.LtU64
@@ -2198,30 +2198,31 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.U64:
+          }
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.LtU64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.LtF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.LtF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         this.currentType = Type.bool;
         break;
-
-      case Token.GREATERTHAN:
+      }
+      case Token.GREATERTHAN: {
         left = this.compileExpressionRetainType(expression.left, contextualType);
         leftType = this.currentType;
         right = this.compileExpressionRetainType(expression.right, leftType);
@@ -2237,16 +2238,14 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return this.module.createUnreachable();
         }
-
         switch (commonType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
-          case TypeKind.I32:
+          case TypeKind.I32: {
             expr = this.module.createBinary(BinaryOp.GtI32, left, right);
             break;
-
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GtI64
@@ -2255,20 +2254,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.I64:
+          }
+          case TypeKind.I64: {
             expr = this.module.createBinary(BinaryOp.GtI64, left, right);
             break;
-
+          }
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.U32:
-          case TypeKind.BOOL:
+          case TypeKind.BOOL: {
             expr = this.module.createBinary(BinaryOp.GtU32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
+          }
+          case TypeKind.USIZE: { // TODO: check operator overload
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GtU64
@@ -2277,30 +2275,31 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.U64:
+          }
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.GtU64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.GtF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.GtF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         this.currentType = Type.bool;
         break;
-
-      case Token.LESSTHAN_EQUALS:
+      }
+      case Token.LESSTHAN_EQUALS: {
         left = this.compileExpressionRetainType(expression.left, contextualType);
         leftType = this.currentType;
         right = this.compileExpressionRetainType(expression.right, leftType);
@@ -2316,16 +2315,14 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return this.module.createUnreachable();
         }
-
         switch (commonType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
-          case TypeKind.I32:
+          case TypeKind.I32: {
             expr = this.module.createBinary(BinaryOp.LeI32, left, right);
             break;
-
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.LeI64
@@ -2334,20 +2331,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.I64:
+          }
+          case TypeKind.I64: {
             expr = this.module.createBinary(BinaryOp.LeI64, left, right);
             break;
-
+          }
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.U32:
-          case TypeKind.BOOL:
+          case TypeKind.BOOL: {
             expr = this.module.createBinary(BinaryOp.LeU32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
+          }
+          case TypeKind.USIZE: { // TODO: check operator overload
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.LeU64
@@ -2356,30 +2352,31 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.U64:
+          }
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.LeU64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.LeF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.LeF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         this.currentType = Type.bool;
         break;
-
-      case Token.GREATERTHAN_EQUALS:
+      }
+      case Token.GREATERTHAN_EQUALS: {
         left = this.compileExpressionRetainType(expression.left, contextualType);
         leftType = this.currentType;
         right = this.compileExpressionRetainType(expression.right, leftType);
@@ -2395,16 +2392,14 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return this.module.createUnreachable();
         }
-
         switch (commonType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
-          case TypeKind.I32:
+          case TypeKind.I32: {
             expr = this.module.createBinary(BinaryOp.GeI32, left, right);
             break;
-
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GeI64
@@ -2413,20 +2408,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.I64:
+          }
+          case TypeKind.I64: {
             expr = this.module.createBinary(BinaryOp.GeI64, left, right);
             break;
-
+          }
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.U32:
-          case TypeKind.BOOL:
+          case TypeKind.BOOL: {
             expr = this.module.createBinary(BinaryOp.GeU32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
+          }
+          case TypeKind.USIZE: { // TODO: check operator overload
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GeU64
@@ -2435,32 +2429,34 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.U64:
+          }
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.GeU64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.GeF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.GeF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         this.currentType = Type.bool;
         break;
+      }
 
       case Token.EQUALS_EQUALS_EQUALS:
         // TODO?
-      case Token.EQUALS_EQUALS:
+      case Token.EQUALS_EQUALS: {
 
         // NOTE that this favors correctness, in terms of emitting a binary expression, over
         // checking for a possible use of unary EQZ. while the most classic of all optimizations,
@@ -2481,22 +2477,19 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return this.module.createUnreachable();
         }
-
         switch (commonType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.U32:
-          case TypeKind.BOOL:
+          case TypeKind.BOOL: {
             expr = this.module.createBinary(BinaryOp.EqI32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.EqI64
@@ -2505,33 +2498,34 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.EqI64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.EqF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.EqF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         this.currentType = Type.bool;
         break;
-
+      }
       case Token.EXCLAMATION_EQUALS_EQUALS:
         // TODO?
-      case Token.EXCLAMATION_EQUALS:
+      case Token.EXCLAMATION_EQUALS: {
         left = this.compileExpressionRetainType(expression.left, contextualType);
         leftType = this.currentType;
         right = this.compileExpressionRetainType(expression.right, leftType);
@@ -2547,22 +2541,19 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return this.module.createUnreachable();
         }
-
         switch (commonType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.U32:
-          case TypeKind.BOOL:
+          case TypeKind.BOOL: {
             expr = this.module.createBinary(BinaryOp.NeI32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.NeI64
@@ -2571,36 +2562,36 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.NeI64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.NeF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.NeF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         this.currentType = Type.bool;
         break;
-
-      case Token.EQUALS:
+      }
+      case Token.EQUALS: {
         return this.compileAssignment(expression.left, expression.right, contextualType);
-
-      case Token.PLUS_EQUALS:
-        compound = true;
-      case Token.PLUS:
+      }
+      case Token.PLUS_EQUALS: compound = true;
+      case Token.PLUS: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -2633,23 +2624,19 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true;
+          case TypeKind.BOOL: possiblyOverflows = true;
           case TypeKind.I32:
-          case TypeKind.U32:
+          case TypeKind.U32: {
             expr = this.module.createBinary(BinaryOp.AddI32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.AddI64
@@ -2658,28 +2645,28 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.AddI64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.AddF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.AddF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.MINUS_EQUALS:
-        compound = true;
-      case Token.MINUS:
+      }
+      case Token.MINUS_EQUALS: compound = true;
+      case Token.MINUS: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -2712,23 +2699,19 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true;
+          case TypeKind.BOOL: possiblyOverflows = true;
           case TypeKind.I32:
-          case TypeKind.U32:
+          case TypeKind.U32: {
             expr = this.module.createBinary(BinaryOp.SubI32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.SubI64
@@ -2737,32 +2720,32 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.SubI64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.SubF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.SubF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.ASTERISK_EQUALS:
-        compound = true;
-      case Token.ASTERISK:
+      }
+      case Token.ASTERISK_EQUALS: compound = true;
+      case Token.ASTERISK: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -2795,24 +2778,19 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true;
-            // fall-through
+          case TypeKind.BOOL: possiblyOverflows = true;
           case TypeKind.I32:
-          case TypeKind.U32:
+          case TypeKind.U32: {
             expr = this.module.createBinary(BinaryOp.MulI32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.MulI64
@@ -2821,32 +2799,32 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.MulI64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.MulF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.MulF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.SLASH_EQUALS:
-        compound = true;
-      case Token.SLASH:
+      }
+      case Token.SLASH_EQUALS: compound = true;
+      case Token.SLASH: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -2879,17 +2857,14 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
-          case TypeKind.I16:
-            possiblyOverflows = true;
-          case TypeKind.I32:
+          case TypeKind.I16: possiblyOverflows = true;
+          case TypeKind.I32: {
             expr = this.module.createBinary(BinaryOp.DivI32, left, right);
             break;
-
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.DivI64
@@ -2898,21 +2873,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.I64:
+          }
+          case TypeKind.I64: {
             expr = this.module.createBinary(BinaryOp.DivI64, left, right);
             break;
-
+          }
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true;
-          case TypeKind.U32:
+          case TypeKind.BOOL: possiblyOverflows = true;
+          case TypeKind.U32: {
             expr = this.module.createBinary(BinaryOp.DivU32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
+          }
+          case TypeKind.USIZE: { // TODO: check operator overload
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.DivU64
@@ -2921,31 +2894,31 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.U64:
+          }
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.DivU64, left, right);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.DivF32, left, right);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.DivF64, left, right);
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.PERCENT_EQUALS:
-        compound = true;
-      case Token.PERCENT:
+      }
+      case Token.PERCENT_EQUALS: compound = true;
+      case Token.PERCENT: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -2978,16 +2951,14 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
-          case TypeKind.I32:
+          case TypeKind.I32: {
             expr = this.module.createBinary(BinaryOp.RemI32, left, right);
             break;
-
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.RemI64
@@ -2996,20 +2967,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.I64:
+          }
+          case TypeKind.I64: {
             expr = this.module.createBinary(BinaryOp.RemI64, left, right);
             break;
-
+          }
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.U32:
-          case TypeKind.BOOL:
+          case TypeKind.BOOL: {
             expr = this.module.createBinary(BinaryOp.RemU32, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
+          }
+          case TypeKind.USIZE: { // TODO: check operator overload
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.RemU64
@@ -3018,13 +2988,13 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.U64:
+          }
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.RemU64, left, right);
             break;
-
+          }
           case TypeKind.F32:
-          case TypeKind.F64:
+          case TypeKind.F64: {
             // TODO: internal fmod, possibly simply imported from JS
             this.error(
               DiagnosticCode.Operation_not_supported,
@@ -3032,19 +3002,19 @@ export class Compiler extends DiagnosticEmitter {
             );
             expr = this.module.createUnreachable();
             break;
-
-          default:
+          }
+          default: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.LESSTHAN_LESSTHAN_EQUALS:
-        compound = true;
-      case Token.LESSTHAN_LESSTHAN:
+      }
+      case Token.LESSTHAN_LESSTHAN_EQUALS: compound = true;
+      case Token.LESSTHAN_LESSTHAN: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -3056,27 +3026,23 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.IMPLICIT,
           false // ^
         );
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true;
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true;
+          default: {
             expr = this.module.createBinary(BinaryOp.ShlI32, left, right);
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.ShlI64, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.ShlI64
@@ -3085,27 +3051,27 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.F32:
-          case TypeKind.F64:
+          case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
               expression.range, Token.operatorToString(expression.operator), this.currentType.toString()
             );
             return this.module.createUnreachable();
-
-          case TypeKind.VOID:
+          }
+          case TypeKind.VOID: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.GREATERTHAN_GREATERTHAN_EQUALS:
-        compound = true;
-      case Token.GREATERTHAN_GREATERTHAN:
+      }
+      case Token.GREATERTHAN_GREATERTHAN_EQUALS: compound = true;
+      case Token.GREATERTHAN_GREATERTHAN: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -3117,19 +3083,17 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.IMPLICIT,
           true // ^
         );
-
         switch (this.currentType.kind) {
-
-          default:
+          default: {
             // assumes signed shr on signed small integers does not overflow
             expr = this.module.createBinary(BinaryOp.ShrI32, left, right);
             break;
-
-          case TypeKind.I64:
+          }
+          case TypeKind.I64: {
             expr = this.module.createBinary(BinaryOp.ShrI64, left, right);
             break;
-
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.ShrI64
@@ -3138,21 +3102,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            // assumes unsigned shr on unsigned small integers does not overflow
-          case TypeKind.U32:
+          case TypeKind.BOOL: // assumes unsigned shr on unsigned small integers does not overflow
+          case TypeKind.U32: {
             expr = this.module.createBinary(BinaryOp.ShrU32, left, right);
             break;
-
-          case TypeKind.U64:
+          }
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.ShrU64, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
+          }
+          case TypeKind.USIZE: { // TODO: check operator overload
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.ShrU64
@@ -3161,27 +3123,27 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
+          }
           case TypeKind.F32:
-          case TypeKind.F64:
+          case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
               expression.range, Token.operatorToString(expression.operator), this.currentType.toString()
             );
             return this.module.createUnreachable();
-
-          case TypeKind.VOID:
+          }
+          case TypeKind.VOID: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
-        compound = true;
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
+      }
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: compound = true;
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -3193,26 +3155,21 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.IMPLICIT,
           true // ^
         );
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
-          case TypeKind.I16:
-            possiblyOverflows = true;
-            // fall-through
-          default:
+          case TypeKind.I16: possiblyOverflows = true;
+          default: {
             // assumes that unsigned shr on unsigned small integers does not overflow
             expr = this.module.createBinary(BinaryOp.ShrU32, left, right);
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.ShrU64, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.ShrU64
@@ -3221,19 +3178,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.VOID:
+          }
+          case TypeKind.VOID: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.AMPERSAND_EQUALS:
-        compound = true;
-      case Token.AMPERSAND:
+      }
+      case Token.AMPERSAND_EQUALS: compound = true;
+      case Token.AMPERSAND: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -3266,27 +3223,23 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true; // if left or right already did
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true; // if left or right already did
+          default: {
             expr = this.module.createBinary(BinaryOp.AndI32, left, right);
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.AndI64, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.AndI64
@@ -3295,19 +3248,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.VOID:
+          }
+          case TypeKind.VOID: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.BAR_EQUALS:
-        compound = true;
-      case Token.BAR:
+      }
+      case Token.BAR_EQUALS: compound = true;
+      case Token.BAR: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -3340,27 +3293,23 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true; // if left or right already did
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true; // if left or right already did
+          default: {
             expr = this.module.createBinary(BinaryOp.OrI32, left, right);
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.OrI64, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.OrI64
@@ -3369,19 +3318,19 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.VOID:
+          }
+          case TypeKind.VOID: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.CARET_EQUALS:
-        compound = true;
-      case Token.CARET:
+      }
+      case Token.CARET_EQUALS: compound = true;
+      case Token.CARET: {
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType,
@@ -3414,27 +3363,23 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true; // if left or right already did
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true; // if left or right already did
+          default: {
             expr = this.module.createBinary(BinaryOp.XorI32, left, right);
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.XorI64, left, right);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.XorI64
@@ -3443,19 +3388,21 @@ export class Compiler extends DiagnosticEmitter {
               right
             );
             break;
-
-          case TypeKind.VOID:
+          }
+          case TypeKind.VOID: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
+      }
 
       // logical (no overloading)
 
-      case Token.AMPERSAND_AMPERSAND: // left && right
+      case Token.AMPERSAND_AMPERSAND: { // left && right
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType
@@ -3500,8 +3447,8 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
         break;
-
-      case Token.BAR_BAR:  // left || right
+      }
+      case Token.BAR_BAR: { // left || right
         left = this.compileExpressionRetainType(
           expression.left,
           contextualType
@@ -3546,13 +3493,14 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
         break;
-
-      default:
+      }
+      default: {
         this.error(
           DiagnosticCode.Operation_not_supported,
           expression.range
         );
         throw new Error("not implemented");
+      }
     }
     if (possiblyOverflows && wrapSmallIntegers) {
       assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER), "small integer type expected");
@@ -3571,7 +3519,6 @@ export class Compiler extends DiagnosticEmitter {
     var element = resolved.element;
     var elementType: Type;
     switch (element.kind) {
-
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>element)) { // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
@@ -3648,7 +3595,6 @@ export class Compiler extends DiagnosticEmitter {
 
     var element = resolved.element;
     switch (element.kind) {
-
       case ElementKind.LOCAL: {
         this.currentType = tee ? (<Local>element).type : Type.void;
         if ((<Local>element).is(ElementFlags.CONSTANT)) {
@@ -4125,7 +4071,6 @@ export class Compiler extends DiagnosticEmitter {
     var previousFunction = this.currentFunction;
     this.currentFunction = trampoline;
     for (let i = numArguments; i < maxArguments; ++i, ++operandIndex) {
-      let parameterType = originalParameterTypes[i];
       originalOperands[operandIndex] = this.compileExpression(
         assert(originalParameterDeclarations[i].initializer),
         originalParameterTypes[i]
@@ -4557,25 +4502,25 @@ export class Compiler extends DiagnosticEmitter {
     var nativeType = elementType.toNativeType();
     var values: usize;
     switch (nativeType) {
-
-      case NativeType.I32:
+      case NativeType.I32: {
         values = changetype<usize>(new Int32Array(size));
         break;
-
-      case NativeType.I64:
+      }
+      case NativeType.I64: {
         values = changetype<usize>(new Array<I64>(size));
         break;
-
-      case NativeType.F32:
+      }
+      case NativeType.F32: {
         values = changetype<usize>(new Float32Array(size));
         break;
-
-      case NativeType.F64:
+      }
+      case NativeType.F64: {
         values = changetype<usize>(new Float64Array(size));
         break;
-
-      default:
+      }
+      default: {
         throw new Error("concrete type expected");
+      }
     }
 
     var exprs = new Array<ExpressionRef>(size);
@@ -4589,28 +4534,28 @@ export class Compiler extends DiagnosticEmitter {
         if (_BinaryenExpressionGetId(expr) == ExpressionId.Const) {
           assert(_BinaryenExpressionGetType(expr) == nativeType);
           switch (nativeType) {
-
-            case NativeType.I32:
+            case NativeType.I32: {
               changetype<i32[]>(values)[i] = _BinaryenConstGetValueI32(expr);
               break;
-
-            case NativeType.I64:
+            }
+            case NativeType.I64: {
               changetype<I64[]>(values)[i] = i64_new(
                 _BinaryenConstGetValueI64Low(expr),
                 _BinaryenConstGetValueI64High(expr)
               );
               break;
-
-            case NativeType.F32:
+            }
+            case NativeType.F32: {
               changetype<f32[]>(values)[i] = _BinaryenConstGetValueF32(expr);
               break;
-
-            case NativeType.F64:
+            }
+            case NativeType.F64: {
               changetype<f64[]>(values)[i] = _BinaryenConstGetValueF64(expr);
               break;
-
-            default:
+            }
+            default: {
               assert(false); // checked above
+            }
           }
         } else {
           // TODO: emit a warning if declared 'const'
@@ -4726,8 +4671,7 @@ export class Compiler extends DiagnosticEmitter {
     var element = resolved.element;
     var targetExpr: ExpressionRef;
     switch (element.kind) {
-
-      case ElementKind.GLOBAL: // static property
+      case ElementKind.GLOBAL: { // static property
         if (element.is(ElementFlags.BUILTIN)) {
           return compileBuiltinGetConstant(this, <Global>element, propertyAccess);
         }
@@ -4740,8 +4684,8 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.currentType = (<Global>element).type;
         return this.module.createGetGlobal((<Global>element).internalName, this.currentType.toNativeType());
-
-      case ElementKind.ENUMVALUE: // enum value
+      }
+      case ElementKind.ENUMVALUE: { // enum value
         if (!this.compileEnum((<EnumValue>element).enum)) {
           return this.module.createUnreachable();
         }
@@ -4750,8 +4694,8 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createI32((<EnumValue>element).constantValue);
         }
         return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
-
-      case ElementKind.FIELD: // instance field
+      }
+      case ElementKind.FIELD: { // instance field
         assert(resolved.isInstanceTarget);
         assert((<Field>element).memoryOffset >= 0);
         targetExpr = this.compileExpression(
@@ -4767,7 +4711,7 @@ export class Compiler extends DiagnosticEmitter {
           (<Field>element).type.toNativeType(),
           (<Field>element).memoryOffset
         );
-
+      }
       case ElementKind.PROPERTY: { // instance property (here: getter)
         var prototype = (<Property>element).getterPrototype;
         if (prototype) {
@@ -4837,8 +4781,7 @@ export class Compiler extends DiagnosticEmitter {
     var possiblyOverflows = false;
 
     switch (expression.operator) {
-
-      case Token.PLUS_PLUS:
+      case Token.PLUS_PLUS: {
         if (this.currentType.isReference) {
           this.error(
             DiagnosticCode.Operation_not_supported,
@@ -4847,22 +4790,19 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         }
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true;
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true;
+          default: {
             op = BinaryOp.AddI32;
             nativeType = NativeType.I32;
             nativeOne = this.module.createI32(1);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             op = this.options.isWasm64
               ? BinaryOp.AddI64
               : BinaryOp.AddI32;
@@ -4871,36 +4811,37 @@ export class Compiler extends DiagnosticEmitter {
               : NativeType.I32;
             nativeOne = this.currentType.toNativeOne(this.module);
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             op = BinaryOp.AddI64;
             nativeType = NativeType.I64;
             nativeOne = this.module.createI64(1);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             op = BinaryOp.AddF32;
             nativeType = NativeType.F32;
             nativeOne = this.module.createF32(1);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             op = BinaryOp.AddF64;
             nativeType = NativeType.F64;
             nativeOne = this.module.createF64(1);
             break;
-
-          case TypeKind.VOID:
+          }
+          case TypeKind.VOID: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      case Token.MINUS_MINUS:
+      }
+      case Token.MINUS_MINUS: {
         if (this.currentType.isReference) {
           this.error(
             DiagnosticCode.Operation_not_supported,
@@ -4909,22 +4850,19 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         }
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true;
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true;
+          default: {
             op = BinaryOp.SubI32;
             nativeType = NativeType.I32;
             nativeOne = this.module.createI32(1);
             break;
-
-          case TypeKind.USIZE:
-            // TODO: check operator overload
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.ISIZE: {
             op = this.options.isWasm64
               ? BinaryOp.SubI64
               : BinaryOp.SubI32;
@@ -4933,41 +4871,43 @@ export class Compiler extends DiagnosticEmitter {
               : NativeType.I32;
             nativeOne = this.currentType.toNativeOne(this.module);
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             op = BinaryOp.SubI64;
             nativeType = NativeType.I64;
             nativeOne = this.module.createI64(1);
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             op = BinaryOp.SubF32;
             nativeType = NativeType.F32;
             nativeOne = this.module.createF32(1);
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             op = BinaryOp.SubF64;
             nativeType = NativeType.F64;
             nativeOne = this.module.createF64(1);
             break;
-
-          case TypeKind.VOID:
+          }
+          case TypeKind.VOID: {
             this.error(
               DiagnosticCode.Operation_not_supported,
               expression.range
             );
             throw new Error("concrete type expected");
+          }
         }
         break;
-
-      default:
+      }
+      default: {
         this.error(
           DiagnosticCode.Operation_not_supported,
           expression.range
         );
         throw new Error("unary postfix operator expected");
+      }
     }
 
     var setValue: ExpressionRef;
@@ -5020,8 +4960,7 @@ export class Compiler extends DiagnosticEmitter {
     var expr: ExpressionRef;
 
     switch (expression.operator) {
-
-      case Token.PLUS:
+      case Token.PLUS: {
         if (this.currentType.isReference) {
           this.error(
             DiagnosticCode.Operation_not_supported,
@@ -5039,8 +4978,8 @@ export class Compiler extends DiagnosticEmitter {
         );
         possiblyOverflows = this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER); // if operand already did
         break;
-
-      case Token.MINUS:
+      }
+      case Token.MINUS: {
         if (this.currentType.isReference) {
           this.error(
             DiagnosticCode.Operation_not_supported,
@@ -5065,18 +5004,16 @@ export class Compiler extends DiagnosticEmitter {
             false // wrapped below
           );
           switch (this.currentType.kind) {
-
             case TypeKind.I8:
             case TypeKind.I16:
             case TypeKind.U8:
             case TypeKind.U16:
-            case TypeKind.BOOL:
-              possiblyOverflows = true; // or if operand already did
-            default:
+            case TypeKind.BOOL: possiblyOverflows = true; // or if operand already did
+            default: {
               expr = this.module.createBinary(BinaryOp.SubI32, this.module.createI32(0), expr);
               break;
-
-            case TypeKind.USIZE:
+            }
+            case TypeKind.USIZE: {
               if (this.currentType.isReference) {
                 this.error(
                   DiagnosticCode.Operation_not_supported,
@@ -5084,7 +5021,9 @@ export class Compiler extends DiagnosticEmitter {
                 );
                 return this.module.createUnreachable();
               }
-            case TypeKind.ISIZE:
+              // fall-through
+            }
+            case TypeKind.ISIZE: {
               expr = this.module.createBinary(
                 this.options.isWasm64
                   ? BinaryOp.SubI64
@@ -5093,24 +5032,25 @@ export class Compiler extends DiagnosticEmitter {
                 expr
               );
               break;
-
+            }
             case TypeKind.I64:
-            case TypeKind.U64:
+            case TypeKind.U64: {
               expr = this.module.createBinary(BinaryOp.SubI64, this.module.createI64(0), expr);
               break;
-
-            case TypeKind.F32:
+            }
+            case TypeKind.F32: {
               expr = this.module.createUnary(UnaryOp.NegF32, expr);
               break;
-
-            case TypeKind.F64:
+            }
+            case TypeKind.F64: {
               expr = this.module.createUnary(UnaryOp.NegF64, expr);
               break;
+            }
           }
         }
         break;
-
-      case Token.PLUS_PLUS:
+      }
+      case Token.PLUS_PLUS: {
         if (this.currentType.isReference) {
           this.error(
             DiagnosticCode.Operation_not_supported,
@@ -5127,20 +5067,17 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.NONE,
           false // wrapped below
         );
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true; // or if operand already did
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true; // or if operand already did
+          default: {
             expr = this.module.createBinary(BinaryOp.AddI32, expr, this.module.createI32(1));
             break;
-
-          case TypeKind.USIZE:
+          }
+          case TypeKind.USIZE: {
             if (this.currentType.isReference) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
@@ -5149,7 +5086,8 @@ export class Compiler extends DiagnosticEmitter {
               return this.module.createUnreachable();
             }
             // fall-through
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.AddI64
@@ -5158,23 +5096,24 @@ export class Compiler extends DiagnosticEmitter {
               this.currentType.toNativeOne(this.module)
             );
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.AddI64, expr, this.module.createI64(1));
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.AddF32, expr, this.module.createF32(1));
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.AddF64, expr, this.module.createF64(1));
             break;
+          }
         }
         break;
-
-      case Token.MINUS_MINUS:
+      }
+      case Token.MINUS_MINUS: {
         if (this.currentType.isReference) {
           this.error(
             DiagnosticCode.Operation_not_supported,
@@ -5191,21 +5130,17 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.NONE,
           false // wrapped below
         );
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true; // or if operand already did
-            // fall-through
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true; // or if operand already did
+          default: {
             expr = this.module.createBinary(BinaryOp.SubI32, expr, this.module.createI32(1));
             break;
-
-          case TypeKind.USIZE:
+          }
+          case TypeKind.USIZE: {
             if (this.currentType.isReference) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
@@ -5214,7 +5149,8 @@ export class Compiler extends DiagnosticEmitter {
               return this.module.createUnreachable();
             }
             // fall-through
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.SubI64
@@ -5223,23 +5159,24 @@ export class Compiler extends DiagnosticEmitter {
               this.currentType.toNativeOne(this.module)
             );
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.SubI64, expr, this.module.createI64(1));
             break;
-
-          case TypeKind.F32:
+          }
+          case TypeKind.F32: {
             expr = this.module.createBinary(BinaryOp.SubF32, expr, this.module.createF32(1));
             break;
-
-          case TypeKind.F64:
+          }
+          case TypeKind.F64: {
             expr = this.module.createBinary(BinaryOp.SubF64, expr, this.module.createF64(1));
             break;
+          }
         }
         break;
-
-      case Token.EXCLAMATION:
+      }
+      case Token.EXCLAMATION: {
         expr = this.compileExpression(
           expression.operand,
           contextualType == Type.void
@@ -5251,8 +5188,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = makeIsFalseish(expr, this.currentType, this.module);
         this.currentType = Type.bool;
         break;
-
-      case Token.TILDE:
+      }
+      case Token.TILDE: {
         if (this.currentType.isReference) {
           this.error(
             DiagnosticCode.Operation_not_supported,
@@ -5272,20 +5209,17 @@ export class Compiler extends DiagnosticEmitter {
             : ConversionKind.IMPLICIT,
           false // retains low bits of small integers
         );
-
         switch (this.currentType.kind) {
-
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL:
-            possiblyOverflows = true; // or if operand already did
-          default:
+          case TypeKind.BOOL: possiblyOverflows = true; // or if operand already did
+          default: {
             expr = this.module.createBinary(BinaryOp.XorI32, expr, this.module.createI32(-1));
             break;
-
-          case TypeKind.USIZE:
+          }
+          case TypeKind.USIZE: {
             if (this.currentType.isReference) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
@@ -5294,7 +5228,8 @@ export class Compiler extends DiagnosticEmitter {
               return this.module.createUnreachable();
             }
             // fall-through
-          case TypeKind.ISIZE:
+          }
+          case TypeKind.ISIZE: {
             expr = this.module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.XorI64
@@ -5303,15 +5238,16 @@ export class Compiler extends DiagnosticEmitter {
               this.currentType.toNativeNegOne(this.module)
             );
             break;
-
+          }
           case TypeKind.I64:
-          case TypeKind.U64:
+          case TypeKind.U64: {
             expr = this.module.createBinary(BinaryOp.XorI64, expr, this.module.createI64(-1, -1));
             break;
+          }
         }
         break;
-
-      case Token.TYPEOF:
+      }
+      case Token.TYPEOF: {
         // it might make sense to implement typeof in a way that a generic function can detect
         // whether its type argument is a class type or string. that could then be used, for
         // example, to generate hash codes for sets and maps, depending on the kind of type
@@ -5322,13 +5258,14 @@ export class Compiler extends DiagnosticEmitter {
           expression.range
         );
         throw new Error("not implemented");
-
-      default:
+      }
+      default: {
         this.error(
           DiagnosticCode.Operation_not_supported,
           expression.range
         );
         throw new Error("unary operator expected");
+      }
     }
     if (possiblyOverflows && wrapSmallIntegers) {
       assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
@@ -5445,8 +5382,7 @@ export function makeIsTrueish(expr: ExpressionRef, type: Type, module: Module): 
       expr = module.createBinary(BinaryOp.NeI64, expr, module.createI64(0));
       break;
     }
-    case TypeKind.USIZE:
-      // TODO: strings
+    case TypeKind.USIZE: // TODO: strings
     case TypeKind.ISIZE: {
       if (type.size == 64) {
         expr = module.createBinary(BinaryOp.NeI64, expr, module.createI64(0));

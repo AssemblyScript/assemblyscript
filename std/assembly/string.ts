@@ -319,19 +319,19 @@ export class String {
 
 function isWhiteSpaceOrLineTerminator(c: u16): bool {
   switch (c) {
-    case 10:    // <LF>
-    case 13:    // <CR>
-    case 8232:  // <LS>
-    case 8233:  // <PS>
-    case 9:     // <TAB>
-    case 11:    // <VT>
-    case 12:    // <FF>
-    case 32:    // <SP>
-    case 160:   // <NBSP>
-    case 65279: // <ZWNBSP>
+    case 10:      // <LF>
+    case 13:      // <CR>
+    case 8232:    // <LS>
+    case 8233:    // <PS>
+    case 9:       // <TAB>
+    case 11:      // <VT>
+    case 12:      // <FF>
+    case 32:      // <SP>
+    case 160:     // <NBSP>
+    case 65279: { // <ZWNBSP>
       return true;
-    default:
-      return false;
+    }
+    default: return false;
   }
 }
 
@@ -405,27 +405,27 @@ function parse<T>(str: String, radix: i32 = 0): T {
   if (!radix) {
     if (code == CharCode._0 && len > 2) {
       switch (<i32>load<u16>(ptr + 2, HEAD)) {
-
         case CharCode.B:
-        case CharCode.b:
+        case CharCode.b: {
           ptr += 4; len -= 2;
           radix = 2;
           break;
-
+        }
         case CharCode.O:
-        case CharCode.o:
+        case CharCode.o: {
           ptr += 4; len -= 2;
           radix = 8;
           break;
-
+        }
         case CharCode.X:
-        case CharCode.x:
+        case CharCode.x: {
           ptr += 4; len -= 2;
           radix = 16;
           break;
-
-        default:
+        }
+        default: {
           radix = 10;
+        }
       }
     } else radix = 10;
   } else if (radix < 2 || radix > 36) {

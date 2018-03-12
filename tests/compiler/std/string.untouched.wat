@@ -729,61 +729,69 @@
             (br $case6|0)
            )
           )
-          (set_local $3
-           (i32.add
-            (get_local $3)
-            (i32.const 4)
+          (block
+           (set_local $3
+            (i32.add
+             (get_local $3)
+             (i32.const 4)
+            )
            )
-          )
-          (set_local $2
-           (i32.sub
-            (get_local $2)
+           (set_local $2
+            (i32.sub
+             (get_local $2)
+             (i32.const 2)
+            )
+           )
+           (set_local $1
             (i32.const 2)
            )
+           (br $break|0)
           )
-          (set_local $1
+         )
+        )
+        (block
+         (set_local $3
+          (i32.add
+           (get_local $3)
+           (i32.const 4)
+          )
+         )
+         (set_local $2
+          (i32.sub
+           (get_local $2)
            (i32.const 2)
           )
-          (br $break|0)
          )
-        )
-        (set_local $3
-         (i32.add
-          (get_local $3)
-          (i32.const 4)
+         (set_local $1
+          (i32.const 8)
          )
+         (br $break|0)
         )
-        (set_local $2
-         (i32.sub
-          (get_local $2)
-          (i32.const 2)
-         )
-        )
-        (set_local $1
-         (i32.const 8)
-        )
-        (br $break|0)
        )
       )
-      (set_local $3
-       (i32.add
-        (get_local $3)
-        (i32.const 4)
+      (block
+       (set_local $3
+        (i32.add
+         (get_local $3)
+         (i32.const 4)
+        )
        )
-      )
-      (set_local $2
-       (i32.sub
-        (get_local $2)
-        (i32.const 2)
+       (set_local $2
+        (i32.sub
+         (get_local $2)
+         (i32.const 2)
+        )
        )
+       (set_local $1
+        (i32.const 16)
+       )
+       (br $break|0)
       )
-      (set_local $1
-       (i32.const 16)
-      )
-      (br $break|0)
      )
-     (set_local $1
-      (i32.const 10)
+     (block
+      (set_local $1
+       (i32.const 10)
+      )
      )
     )
     (set_local $1

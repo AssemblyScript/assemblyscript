@@ -179,8 +179,7 @@ export class Parser extends DiagnosticEmitter {
 
     // handle declarations
     switch (tn.peek()) {
-
-      case Token.CONST:
+      case Token.CONST: {
         tn.next();
         modifiers = addModifier(Node.createModifier(ModifierKind.CONST, tn.range()), modifiers);
         if (tn.skip(Token.ENUM)) {
@@ -191,30 +190,30 @@ export class Parser extends DiagnosticEmitter {
           decorators = null;
         }
         break;
-
-      case Token.LET:
+      }
+      case Token.LET: {
         modifiers = addModifier(Node.createModifier(ModifierKind.LET, tn.range()), modifiers);
         // fall-through
-
-      case Token.VAR:
+      }
+      case Token.VAR: {
         tn.next();
         statement = this.parseVariable(tn, modifiers, decorators);
         decorators = null;
         break;
-
-      case Token.ENUM:
+      }
+      case Token.ENUM: {
         tn.next();
         statement = this.parseEnum(tn, modifiers, decorators);
         decorators = null;
         break;
-
-      case Token.FUNCTION:
+      }
+      case Token.FUNCTION: {
         tn.next();
         statement = this.parseFunction(tn, modifiers, decorators);
         decorators = null;
         break;
-
-      case Token.ABSTRACT:
+      }
+      case Token.ABSTRACT: {
         tn.next();
         if (!tn.skip(Token.CLASS)) {
           this.error(
@@ -227,20 +226,20 @@ export class Parser extends DiagnosticEmitter {
           Node.createModifier(ModifierKind.ABSTRACT, tn.range()), modifiers
         );
         // fall through
-
-      case Token.CLASS:
+      }
+      case Token.CLASS: {
         tn.next();
         statement = this.parseClass(tn, modifiers, decorators);
         decorators = null;
         break;
-
-      case Token.NAMESPACE:
+      }
+      case Token.NAMESPACE: {
         tn.next();
         statement = this.parseNamespace(tn, modifiers, decorators);
         decorators = null;
         break;
-
-      case Token.IMPORT:
+      }
+      case Token.IMPORT: {
         tn.next();
         if (modifier = getModifier(ModifierKind.EXPORT, modifiers)) {
           statement = this.parseExportImport(tn, modifier.range);
@@ -249,14 +248,14 @@ export class Parser extends DiagnosticEmitter {
         }
         if (modifiers) setReusableModifiers(modifiers);
         break;
-
-      case Token.TYPE:
+      }
+      case Token.TYPE: {
         tn.next();
         statement = this.parseTypeDeclaration(tn, modifiers, decorators);
         decorators = null;
         break;
-
-      default:
+      }
+      default: {
 
         // handle plain exports
         if (hasModifier(ModifierKind.EXPORT, modifiers)) {
@@ -278,6 +277,7 @@ export class Parser extends DiagnosticEmitter {
           }
         }
         break;
+      }
     }
 
     // check for decorators that weren't consumed
@@ -950,8 +950,7 @@ export class Parser extends DiagnosticEmitter {
           reportedRest = true;
         }
         switch (param.parameterKind) {
-
-          default:
+          default: {
             if (seenOptional) {
               this.error(
                 DiagnosticCode.A_required_parameter_cannot_follow_an_optional_parameter,
@@ -959,14 +958,15 @@ export class Parser extends DiagnosticEmitter {
               );
             }
             break;
-
-          case ParameterKind.OPTIONAL:
+          }
+          case ParameterKind.OPTIONAL: {
             seenOptional = true;
             break;
-
-          case ParameterKind.REST:
+          }
+          case ParameterKind.REST: {
             seenRest = param;
             break;
+          }
         }
         parameters.push(param);
       } while (tn.skip(Token.COMMA));
@@ -1926,39 +1926,38 @@ export class Parser extends DiagnosticEmitter {
     var state = tn.mark();
     var token = tn.next();
     switch (token) {
-
-      case Token.BREAK:
+      case Token.BREAK: {
         return this.parseBreak(tn);
-
-      case Token.CONST:
+      }
+      case Token.CONST: {
         return this.parseVariable(tn, [
           Node.createModifier(ModifierKind.CONST, tn.range())
         ], null);
-
-      case Token.CONTINUE:
+      }
+      case Token.CONTINUE: {
         return this.parseContinue(tn);
-
-      case Token.DO:
+      }
+      case Token.DO: {
         return this.parseDoStatement(tn);
-
-      case Token.FOR:
+      }
+      case Token.FOR: {
         return this.parseForStatement(tn);
-
-      case Token.IF:
+      }
+      case Token.IF: {
         return this.parseIfStatement(tn);
-
-      case Token.LET:
+      }
+      case Token.LET: {
         return this.parseVariable(tn, [
           Node.createModifier(ModifierKind.LET, tn.range())
         ], null);
-
-      case Token.VAR:
+      }
+      case Token.VAR: {
         return this.parseVariable(tn, null, null);
-
-      case Token.OPENBRACE:
+      }
+      case Token.OPENBRACE: {
         return this.parseBlockStatement(tn, topLevel);
-
-      case Token.RETURN:
+      }
+      case Token.RETURN: {
         if (topLevel) {
           this.error(
             DiagnosticCode.A_return_statement_can_only_be_used_within_a_function_body,
@@ -1966,31 +1965,32 @@ export class Parser extends DiagnosticEmitter {
           ); // recoverable
         }
         return this.parseReturn(tn);
-
-      case Token.SEMICOLON:
+      }
+      case Token.SEMICOLON: {
         return Node.createEmptyStatement(tn.range(tn.tokenPos));
-
-      case Token.SWITCH:
+      }
+      case Token.SWITCH: {
         return this.parseSwitchStatement(tn);
-
-      case Token.THROW:
+      }
+      case Token.THROW: {
         return this.parseThrowStatement(tn);
-
-      case Token.TRY:
+      }
+      case Token.TRY: {
         return this.parseTryStatement(tn);
-
-      case Token.TYPE:
+      }
+      case Token.TYPE: {
         return this.parseTypeDeclaration(tn, null);
-
-      case Token.VOID:
+      }
+      case Token.VOID: {
         return this.parseVoidStatement(tn);
-
-      case Token.WHILE:
+      }
+      case Token.WHILE: {
         return this.parseWhileStatement(tn);
-
-      default:
+      }
+      default: {
         tn.reset(state);
         return this.parseExpressionStatement(tn);
+      }
     }
   }
 
@@ -2572,7 +2572,7 @@ export class Parser extends DiagnosticEmitter {
 
       // ParenthesizedExpression
       // FunctionExpression
-      case Token.OPENPAREN:
+      case Token.OPENPAREN: {
 
         // determine whether this is a function expression
         if (tn.skip(Token.CLOSEPAREN)) { // must be a function expression (fast route)
@@ -2589,45 +2589,47 @@ export class Parser extends DiagnosticEmitter {
           switch (tn.next(true)) {
 
             // function expression
-            case Token.DOT_DOT_DOT:
+            case Token.DOT_DOT_DOT: {
               tn.reset(state);
               return this.parseFunctionExpression(tn);
-
+            }
             // can be both
-            case Token.IDENTIFIER:
+            case Token.IDENTIFIER: {
               tn.readIdentifier();
               switch (tn.next()) {
 
                 // if we got here, check for arrow
-                case Token.CLOSEPAREN:
+                case Token.CLOSEPAREN: {
                   if (!tn.skip(Token.EQUALS_GREATERTHAN)) {
                     again = false;
                     break;
                   }
                   // fall-through
-
+                }
                 // function expression
                 case Token.QUESTION:   // optional parameter
-                case Token.COLON:      // type annotation
+                case Token.COLON: {    // type annotation
                   tn.reset(state);
                   return this.parseFunctionExpression(tn);
-
+                }
                 // can be both
-                case Token.COMMA:
+                case Token.COMMA: {
                   break; // continue
-
+                }
                 // parenthesized expression
                 // case Token.EQUALS:  // missing type annotation for simplicity
-                default:
+                default: {
                   again = false;
                   break;
+                }
               }
               break;
-
+            }
             // parenthesized expression
-            default:
+            default: {
               again = false;
               break;
+            }
           }
         } while (again);
         tn.reset(state);
@@ -2643,11 +2645,10 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
         return Node.createParenthesizedExpression(expr, tn.range(startPos, tn.pos));
-
+      }
       // ArrayLiteralExpression
-      case Token.OPENBRACKET:
+      case Token.OPENBRACKET: {
         var elementExpressions = new Array<Expression | null>();
-
         if (!tn.skip(Token.CLOSEBRACKET)) {
           do {
             if (tn.peek() == Token.COMMA) {
@@ -2668,9 +2669,9 @@ export class Parser extends DiagnosticEmitter {
           }
         }
         return Node.createArrayLiteralExpression(elementExpressions, tn.range(startPos, tn.pos));
-
+      }
       // AssertionExpression (unary prefix)
-      case Token.LESSTHAN:
+      case Token.LESSTHAN: {
         var toType = this.parseType(tn);
         if (!toType) return null;
         if (!tn.skip(Token.GREATERTHAN)) {
@@ -2688,31 +2689,31 @@ export class Parser extends DiagnosticEmitter {
           toType,
           tn.range(startPos, tn.pos)
         );
-
-      case Token.IDENTIFIER:
+      }
+      case Token.IDENTIFIER: {
         return Node.createIdentifierExpression(tn.readIdentifier(), tn.range(startPos, tn.pos));
-
-      case Token.THIS:
+      }
+      case Token.THIS: {
         return Node.createThisExpression(tn.range(startPos, tn.pos));
-
-      case Token.CONSTRUCTOR:
+      }
+      case Token.CONSTRUCTOR: {
         return Node.createConstructorExpression(tn.range(startPos, tn.pos));
-
-      case Token.SUPER:
+      }
+      case Token.SUPER: {
         return Node.createSuperExpression(tn.range(startPos, tn.pos));
-
-      case Token.STRINGLITERAL:
+      }
+      case Token.STRINGLITERAL: {
         return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
-
-      case Token.INTEGERLITERAL:
+      }
+      case Token.INTEGERLITERAL: {
         return Node.createIntegerLiteralExpression(tn.readInteger(), tn.range(startPos, tn.pos));
-
-      case Token.FLOATLITERAL:
+      }
+      case Token.FLOATLITERAL: {
         return Node.createFloatLiteralExpression(tn.readFloat(), tn.range(startPos, tn.pos));
-
+      }
       // RegexpLiteralExpression
       // note that this also continues on invalid ones so the surrounding AST remains intact
-      case Token.SLASH:
+      case Token.SLASH: {
         var regexpPattern = tn.readRegexpPattern(); // also reports
         if (!tn.skip(Token.SLASH)) {
           this.error(
@@ -2726,16 +2727,17 @@ export class Parser extends DiagnosticEmitter {
           tn.readRegexpFlags(), // also reports
           tn.range(startPos, tn.pos)
         );
-
-      case Token.FUNCTION:
+      }
+      case Token.FUNCTION: {
         return this.parseFunctionExpression(tn);
-
-      default:
+      }
+      default: {
         this.error(
           DiagnosticCode.Expression_expected,
           tn.range()
         );
         return null;
+      }
     }
   }
 
@@ -2812,11 +2814,9 @@ export class Parser extends DiagnosticEmitter {
       (nextPrecedence = determinePrecedence(token = tn.peek())) >= precedence
     ) { // precedence climbing
       tn.next();
-
       switch (token) {
-
         // AssertionExpression
-        case Token.AS:
+        case Token.AS: {
           var toType = this.parseType(tn);
           if (!toType) return null;
           expr = Node.createAssertionExpression(
@@ -2826,9 +2826,9 @@ export class Parser extends DiagnosticEmitter {
             tn.range(startPos, tn.pos)
           );
           break;
-
+        }
         // ElementAccessExpression
-        case Token.OPENBRACKET:
+        case Token.OPENBRACKET: {
           next = this.parseExpression(tn);
           if (!next) return null;
           if (!tn.skip(Token.CLOSEBRACKET)) {
@@ -2844,10 +2844,10 @@ export class Parser extends DiagnosticEmitter {
             tn.range(startPos, tn.pos)
           );
           break;
-
+        }
         // UnaryPostfixExpression
         case Token.PLUS_PLUS:
-        case Token.MINUS_MINUS:
+        case Token.MINUS_MINUS: {
           if (
             expr.kind != NodeKind.IDENTIFIER &&
             expr.kind != NodeKind.ELEMENTACCESS &&
@@ -2864,9 +2864,9 @@ export class Parser extends DiagnosticEmitter {
             tn.range(startPos, tn.pos)
           );
           break;
-
+        }
         // TernaryExpression
-        case Token.QUESTION:
+        case Token.QUESTION: {
           var ifThen = this.parseExpression(tn);
           if (!ifThen) return null;
           if (!tn.skip(Token.COLON)) {
@@ -2885,9 +2885,9 @@ export class Parser extends DiagnosticEmitter {
             tn.range(startPos, tn.pos)
           );
           break;
-
+        }
         // CommaExpression
-        case Token.COMMA:
+        case Token.COMMA: {
           var commaExprs: Expression[] = [ expr ];
           do {
             expr = this.parseExpression(tn, Precedence.COMMA + 1);
@@ -2896,8 +2896,8 @@ export class Parser extends DiagnosticEmitter {
           } while (tn.skip(Token.COMMA));
           expr = Node.createCommaExpression(commaExprs, tn.range(startPos, tn.pos));
           break;
-
-        default:
+        }
+        default: {
           next = this.parseExpression(tn,
             isRightAssociative(token)
               ? nextPrecedence
@@ -2942,6 +2942,7 @@ export class Parser extends DiagnosticEmitter {
             expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
           }
           break;
+        }
       }
     }
     return expr;
@@ -2977,13 +2978,8 @@ export const enum Precedence {
 /** Determines the precedence of a starting token. */
 function determinePrecedenceStart(kind: Token): i32 {
   switch (kind) {
-
-    case Token.DOT_DOT_DOT:
-      return Precedence.SPREAD;
-
-    case Token.YIELD:
-      return Precedence.YIELD;
-
+    case Token.DOT_DOT_DOT: return Precedence.SPREAD;
+    case Token.YIELD: return Precedence.YIELD;
     case Token.EXCLAMATION:
     case Token.TILDE:
     case Token.PLUS:
@@ -2992,24 +2988,16 @@ function determinePrecedenceStart(kind: Token): i32 {
     case Token.MINUS_MINUS:
     case Token.TYPEOF:
     case Token.VOID:
-    case Token.DELETE:
-      return Precedence.UNARY_PREFIX;
-
-    case Token.NEW:
-      return Precedence.MEMBERACCESS;
-
-    default:
-      return Precedence.INVALID;
+    case Token.DELETE: return Precedence.UNARY_PREFIX;
+    case Token.NEW: return Precedence.MEMBERACCESS;
+    default: return Precedence.INVALID;
   }
 }
 
 /** Determines the precende of a non-starting token. */
 function determinePrecedence(kind: Token): i32 {
   switch (kind) {
-
-    case Token.COMMA:
-      return Precedence.COMMA;
-
+    case Token.COMMA: return Precedence.COMMA;
     case Token.EQUALS:
     case Token.PLUS_EQUALS:
     case Token.MINUS_EQUALS:
@@ -3022,77 +3010,45 @@ function determinePrecedence(kind: Token): i32 {
     case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
     case Token.AMPERSAND_EQUALS:
     case Token.CARET_EQUALS:
-    case Token.BAR_EQUALS:
-      return Precedence.ASSIGNMENT;
-
-    case Token.QUESTION:
-      return Precedence.CONDITIONAL;
-
-    case Token.BAR_BAR:
-      return Precedence.LOGICAL_OR;
-
-    case Token.AMPERSAND_AMPERSAND:
-      return Precedence.LOGICAL_AND;
-
-    case Token.BAR:
-      return Precedence.BITWISE_OR;
-
-    case Token.CARET:
-      return Precedence.BITWISE_XOR;
-
-    case Token.AMPERSAND:
-      return Precedence.BITWISE_AND;
-
+    case Token.BAR_EQUALS: return Precedence.ASSIGNMENT;
+    case Token.QUESTION: return Precedence.CONDITIONAL;
+    case Token.BAR_BAR: return Precedence.LOGICAL_OR;
+    case Token.AMPERSAND_AMPERSAND: return Precedence.LOGICAL_AND;
+    case Token.BAR: return Precedence.BITWISE_OR;
+    case Token.CARET: return Precedence.BITWISE_XOR;
+    case Token.AMPERSAND: return Precedence.BITWISE_AND;
     case Token.EQUALS_EQUALS:
     case Token.EXCLAMATION_EQUALS:
     case Token.EQUALS_EQUALS_EQUALS:
-    case Token.EXCLAMATION_EQUALS_EQUALS:
-      return Precedence.EQUALITY;
-
+    case Token.EXCLAMATION_EQUALS_EQUALS: return Precedence.EQUALITY;
     case Token.AS:
     case Token.IN:
     case Token.INSTANCEOF:
     case Token.LESSTHAN:
     case Token.GREATERTHAN:
     case Token.LESSTHAN_EQUALS:
-    case Token.GREATERTHAN_EQUALS:
-      return Precedence.RELATIONAL;
-
+    case Token.GREATERTHAN_EQUALS: return Precedence.RELATIONAL;
     case Token.LESSTHAN_LESSTHAN:
     case Token.GREATERTHAN_GREATERTHAN:
-    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
-      return Precedence.SHIFT;
-
+    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: return Precedence.SHIFT;
     case Token.PLUS:
-    case Token.MINUS:
-      return Precedence.ADDITIVE;
-
+    case Token.MINUS: return Precedence.ADDITIVE;
     case Token.ASTERISK:
     case Token.SLASH:
-    case Token.PERCENT:
-      return Precedence.MULTIPLICATIVE;
-
-    case Token.ASTERISK_ASTERISK:
-      return Precedence.EXPONENTIATED;
-
+    case Token.PERCENT: return Precedence.MULTIPLICATIVE;
+    case Token.ASTERISK_ASTERISK: return Precedence.EXPONENTIATED;
     case Token.PLUS_PLUS:
-    case Token.MINUS_MINUS:
-      return Precedence.UNARY_POSTFIX;
-
+    case Token.MINUS_MINUS: return Precedence.UNARY_POSTFIX;
     case Token.DOT:
     case Token.NEW:
-    case Token.OPENBRACKET:
-      return Precedence.MEMBERACCESS;
-
-    default:
-      return Precedence.INVALID;
+    case Token.OPENBRACKET: return Precedence.MEMBERACCESS;
+    default: return Precedence.INVALID;
   }
 }
 
 /** Determines whether a non-starting token is right associative. */
 function isRightAssociative(kind: Token): bool {
   switch (kind) {
-
     case Token.EQUALS:
     case Token.PLUS_EQUALS:
     case Token.MINUS_EQUALS:
@@ -3107,10 +3063,7 @@ function isRightAssociative(kind: Token): bool {
     case Token.CARET_EQUALS:
     case Token.BAR_EQUALS:
     case Token.QUESTION:
-    case Token.ASTERISK_ASTERISK:
-      return true;
-
-    default:
-      return false;
+    case Token.ASTERISK_ASTERISK: return true;
+    default: return false;
   }
 }

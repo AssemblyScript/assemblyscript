@@ -43,7 +43,7 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
   if (n >= 32) {
     switch (dest & 3) {
       // known to be != 0
-      case 1:
+      case 1: {
         w = load<u32>(src);
         store<u8>(dest++, load<u8>(src++));
         store<u8>(dest++, load<u8>(src++));
@@ -61,7 +61,8 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
           src += 16; dest += 16; n -= 16;
         }
         break;
-      case 2:
+      }
+      case 2: {
         w = load<u32>(src);
         store<u8>(dest++, load<u8>(src++));
         store<u8>(dest++, load<u8>(src++));
@@ -78,7 +79,8 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
           src += 16; dest += 16; n -= 16;
         }
         break;
-      case 3:
+      }
+      case 3: {
         w = load<u32>(src);
         store<u8>(dest++, load<u8>(src++));
         n -= 1;
@@ -94,6 +96,7 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
           src += 16; dest += 16; n -= 16;
         }
         break;
+      }
     }
   }
 

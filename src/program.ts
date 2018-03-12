@@ -161,42 +161,42 @@ export class Program extends DiagnosticEmitter {
       for (let j = 0, l = statements.length; j < l; ++j) {
         let statement = statements[j];
         switch (statement.kind) {
-
-          case NodeKind.CLASSDECLARATION:
+          case NodeKind.CLASSDECLARATION: {
             this.initializeClass(<ClassDeclaration>statement, queuedDerivedClasses);
             break;
-
-          case NodeKind.ENUMDECLARATION:
+          }
+          case NodeKind.ENUMDECLARATION: {
             this.initializeEnum(<EnumDeclaration>statement);
             break;
-
-          case NodeKind.EXPORT:
+          }
+          case NodeKind.EXPORT: {
             this.initializeExports(<ExportStatement>statement, queuedExports);
             break;
-
-          case NodeKind.FUNCTIONDECLARATION:
+          }
+          case NodeKind.FUNCTIONDECLARATION: {
             this.initializeFunction(<FunctionDeclaration>statement);
             break;
-
-          case NodeKind.IMPORT:
+          }
+          case NodeKind.IMPORT: {
             this.initializeImports(<ImportStatement>statement, queuedExports, queuedImports);
             break;
-
-          case NodeKind.INTERFACEDECLARATION:
+          }
+          case NodeKind.INTERFACEDECLARATION: {
             this.initializeInterface(<InterfaceDeclaration>statement);
             break;
-
-          case NodeKind.NAMESPACEDECLARATION:
+          }
+          case NodeKind.NAMESPACEDECLARATION: {
             this.initializeNamespace(<NamespaceDeclaration>statement, queuedDerivedClasses);
             break;
-
-          case NodeKind.TYPEDECLARATION:
+          }
+          case NodeKind.TYPEDECLARATION: {
             this.initializeTypeAlias(<TypeDeclaration>statement);
             break;
-
-          case NodeKind.VARIABLE:
+          }
+          case NodeKind.VARIABLE: {
             this.initializeVariables(<VariableStatement>statement);
             break;
+          }
         }
       }
     }
@@ -419,12 +419,11 @@ export class Program extends DiagnosticEmitter {
     for (let i = 0, k = memberDeclarations.length; i < k; ++i) {
       let memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
-
-        case NodeKind.FIELDDECLARATION:
+        case NodeKind.FIELDDECLARATION: {
           this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
-
-        case NodeKind.METHODDECLARATION:
+        }
+        case NodeKind.METHODDECLARATION: {
           let isGetter = hasModifier(
             ModifierKind.GET,
             memberDeclaration.modifiers
@@ -445,9 +444,10 @@ export class Program extends DiagnosticEmitter {
             );
           }
           break;
-
-        default:
+        }
+        default: {
           throw new Error("class member expected");
+        }
       }
     }
 
@@ -630,28 +630,28 @@ export class Program extends DiagnosticEmitter {
               (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
             ) {
               switch ((<StringLiteralExpression>firstArg).value) {
-
-                case "[]":
+                case "[]": {
                   classPrototype.fnIndexedGet = prototype.simpleName;
                   break;
-
-                case "[]=":
+                }
+                case "[]=": {
                   classPrototype.fnIndexedSet = prototype.simpleName;
                   break;
-
-                case "+":
+                }
+                case "+": {
                   classPrototype.fnConcat = prototype.simpleName;
                   break;
-
-                case "==":
+                }
+                case "==": {
                   classPrototype.fnEquals = prototype.simpleName;
                   break;
-
-                default:
+                }
+                default: {
                   this.error(
                     DiagnosticCode.Operation_not_supported,
                     firstArg.range
                   );
+                }
               }
             } else {
               this.error(
@@ -1144,11 +1144,11 @@ export class Program extends DiagnosticEmitter {
       var memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
 
-        case NodeKind.FIELDDECLARATION:
+        case NodeKind.FIELDDECLARATION: {
           this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
-
-        case NodeKind.METHODDECLARATION:
+        }
+        case NodeKind.METHODDECLARATION: {
           var isGetter = hasModifier(ModifierKind.GET, memberDeclaration.modifiers);
           if (isGetter || hasModifier(ModifierKind.SET, memberDeclaration.modifiers)) {
             this.initializeAccessor(<MethodDeclaration>memberDeclaration, prototype, isGetter);
@@ -1156,9 +1156,10 @@ export class Program extends DiagnosticEmitter {
             this.initializeMethod(<MethodDeclaration>memberDeclaration, prototype);
           }
           break;
-
-        default:
+        }
+        default: {
           throw new Error("interface member expected");
+        }
       }
     }
   }
@@ -1205,28 +1206,27 @@ export class Program extends DiagnosticEmitter {
     var members = declaration.members;
     for (var i = 0, k = members.length; i < k; ++i) {
       switch (members[i].kind) {
-
-        case NodeKind.CLASSDECLARATION:
+        case NodeKind.CLASSDECLARATION: {
           this.initializeClass(<ClassDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
-
-        case NodeKind.ENUMDECLARATION:
+        }
+        case NodeKind.ENUMDECLARATION: {
           this.initializeEnum(<EnumDeclaration>members[i], namespace);
           break;
-
-        case NodeKind.FUNCTIONDECLARATION:
+        }
+        case NodeKind.FUNCTIONDECLARATION: {
           this.initializeFunction(<FunctionDeclaration>members[i], namespace);
           break;
-
-        case NodeKind.INTERFACEDECLARATION:
+        }
+        case NodeKind.INTERFACEDECLARATION: {
           this.initializeInterface(<InterfaceDeclaration>members[i], namespace);
           break;
-
-        case NodeKind.NAMESPACEDECLARATION:
+        }
+        case NodeKind.NAMESPACEDECLARATION: {
           this.initializeNamespace(<NamespaceDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
-
-        case NodeKind.TYPEDECLARATION:
+        }
+        case NodeKind.TYPEDECLARATION: {
           // this.initializeTypeAlias(<TypeDeclaration>members[i], namespace);
           // TODO: what about namespaced types?
           this.error(
@@ -1234,13 +1234,14 @@ export class Program extends DiagnosticEmitter {
             members[i].range
           );
           break;
-
-        case NodeKind.VARIABLE:
+        }
+        case NodeKind.VARIABLE: {
           this.initializeVariables(<VariableStatement>members[i], namespace);
           break;
-
-        default:
+        }
+        default: {
           throw new Error("namespace member expected");
+        }
       }
     }
   }
@@ -1393,13 +1394,14 @@ export class Program extends DiagnosticEmitter {
     // check file-global / program-global element
     if ((element = this.elements.get(localName)) || (element = this.elements.get(globalName))) {
       switch (element.kind) {
-        case ElementKind.CLASS_PROTOTYPE:
+        case ElementKind.CLASS_PROTOTYPE: {
           var instance = (<ClassPrototype>element).resolveUsingTypeArguments(
             typeNode.typeArguments,
             contextualTypeArguments,
             null
           ); // reports
           return instance ? instance.type : null;
+        }
       }
     }
 
@@ -1574,10 +1576,9 @@ export class Program extends DiagnosticEmitter {
 
     // Resolve variable-likes to their class type first
     switch (target.kind) {
-
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
-      case ElementKind.FIELD:
+      case ElementKind.FIELD: {
         if (!(targetType = (<VariableLikeElement>target).type).classType) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
@@ -1587,8 +1588,8 @@ export class Program extends DiagnosticEmitter {
         }
         target = <Class>targetType.classType;
         break;
-
-      case ElementKind.PROPERTY:
+      }
+      case ElementKind.PROPERTY: {
         var getter = assert((<Property>target).getterPrototype).resolve(); // reports
         if (!getter) return null;
         if (!(targetType = getter.signature.returnType).classType) {
@@ -1600,13 +1601,13 @@ export class Program extends DiagnosticEmitter {
         }
         target = <Class>targetType.classType;
         break;
+      }
     }
 
     // Look up the member within
     switch (target.kind) {
-
       case ElementKind.CLASS_PROTOTYPE:
-      case ElementKind.CLASS:
+      case ElementKind.CLASS: {
         do {
           if (target.members && (member = target.members.get(propertyName))) {
             return resolvedElement.set(member).withTarget(target, targetExpression);
@@ -1630,12 +1631,13 @@ export class Program extends DiagnosticEmitter {
           }
         } while (true);
         break;
-
-      default: // enums or other namespace-like elements
+      }
+      default: { // enums or other namespace-like elements
         if (target.members && (member = target.members.get(propertyName))) {
           return resolvedElement.set(member).withTarget(target, targetExpression);
         }
         break;
+      }
     }
     this.error(
       DiagnosticCode.Property_0_does_not_exist_on_type_1,
@@ -1657,10 +1659,9 @@ export class Program extends DiagnosticEmitter {
     if (!resolvedElement) return null;
     var target = resolvedElement.element;
     switch (target.kind) {
-
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
-      case ElementKind.FIELD:
+      case ElementKind.FIELD: {
         var type = (<VariableLikeElement>target).type;
         if (type.classType) {
           var indexedGetName = (target = type.classType).prototype.fnIndexedGet;
@@ -1675,6 +1676,7 @@ export class Program extends DiagnosticEmitter {
           }
         }
         break;
+      }
     }
     this.error(
       DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -1688,26 +1690,22 @@ export class Program extends DiagnosticEmitter {
     contextualFunction: Function
   ): ResolvedElement | null {
     var classType: Class | null;
-
     while (expression.kind == NodeKind.PARENTHESIZED) {
       expression = (<ParenthesizedExpression>expression).expression;
     }
-
     switch (expression.kind) {
-
-      case NodeKind.ASSERTION:
+      case NodeKind.ASSERTION: {
         var type = this.resolveType((<AssertionExpression>expression).toType); // reports
         if (type && (classType = type.classType)) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
           return resolvedElement.set(classType);
         }
         return null;
-
-      case NodeKind.BINARY:
-        // TODO: string concatenation, mostly
+      }
+      case NodeKind.BINARY: { // TODO: string concatenation, mostly
         throw new Error("not implemented");
-
-      case NodeKind.THIS: // -> Class
+      }
+      case NodeKind.THIS: { // -> Class
         if (classType = contextualFunction.instanceMethodOf) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
           return resolvedElement.set(classType);
@@ -1717,8 +1715,8 @@ export class Program extends DiagnosticEmitter {
           expression.range
         );
         return null;
-
-      case NodeKind.SUPER: // -> Class
+      }
+      case NodeKind.SUPER: { // -> Class
         if ((classType = contextualFunction.instanceMethodOf) && (classType = classType.base)) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
           return resolvedElement.set(classType);
@@ -1728,23 +1726,23 @@ export class Program extends DiagnosticEmitter {
           expression.range
         );
         return null;
-
-      case NodeKind.IDENTIFIER:
+      }
+      case NodeKind.IDENTIFIER: {
         return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
-
-      case NodeKind.PROPERTYACCESS:
+      }
+      case NodeKind.PROPERTYACCESS: {
         return this.resolvePropertyAccess(
           <PropertyAccessExpression>expression,
           contextualFunction
         );
-
-      case NodeKind.ELEMENTACCESS:
+      }
+      case NodeKind.ELEMENTACCESS: {
         return this.resolveElementAccess(
           <ElementAccessExpression>expression,
           contextualFunction
         );
-
-      case NodeKind.CALL:
+      }
+      case NodeKind.CALL: {
         var resolved = this.resolveExpression(
           (<CallExpression>expression).expression,
           contextualFunction
@@ -1764,6 +1762,7 @@ export class Program extends DiagnosticEmitter {
           }
         }
         break;
+      }
     }
     this.error(
       DiagnosticCode.Operation_not_supported,
@@ -1944,9 +1943,18 @@ export class Namespace extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+          case ModifierKind.IMPORT: {
+            this.set(ElementFlags.IMPORTED);
+            break;
+          }
+          case ModifierKind.EXPORT: {
+            this.set(ElementFlags.EXPORTED);
+            break;
+          }
+          case ModifierKind.DECLARE: {
+            this.set(ElementFlags.DECLARED);
+            break;
+          }
           default: throw new Error("unexpected modifier");
         }
       }
@@ -1974,10 +1982,22 @@ export class Enum extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
-          case ModifierKind.CONST: this.set(ElementFlags.CONSTANT); break;
+          case ModifierKind.EXPORT: {
+            this.set(ElementFlags.EXPORTED);
+            break;
+          }
+          case ModifierKind.IMPORT: {
+            this.set(ElementFlags.IMPORTED);
+            break;
+          }
+          case ModifierKind.DECLARE: {
+            this.set(ElementFlags.DECLARED);
+            break;
+          }
+          case ModifierKind.CONST: {
+            this.set(ElementFlags.CONSTANT);
+            break;
+          }
           default: throw new Error("unexpected modifier");
         }
       }
@@ -2063,42 +2083,38 @@ export class Global extends VariableLikeElement {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-
-          case ModifierKind.IMPORT:
+          case ModifierKind.IMPORT: {
             this.set(ElementFlags.IMPORTED);
             break;
-
-          case ModifierKind.EXPORT:
+          }
+          case ModifierKind.EXPORT: {
             this.set(ElementFlags.EXPORTED);
             break;
-
-          case ModifierKind.CONST:
+          }
+          case ModifierKind.CONST: {
             this.set(ElementFlags.CONSTANT);
             break;
-
-          case ModifierKind.LET:
+          }
+          case ModifierKind.LET: {
             this.set(ElementFlags.SCOPED);
             break;
-
-          case ModifierKind.DECLARE:
+          }
+          case ModifierKind.DECLARE: {
             this.set(ElementFlags.DECLARED);
             break;
-
-          case ModifierKind.READONLY:
+          }
+          case ModifierKind.READONLY: {
             this.set(this.declaration.initializer
               ? ElementFlags.CONSTANT | ElementFlags.READONLY
               : ElementFlags.READONLY
             );
             break;
-
+          }
           case ModifierKind.PUBLIC:
           case ModifierKind.PRIVATE:
           case ModifierKind.PROTECTED:
-          case ModifierKind.STATIC:
-            break; // static fields become globals
-
-          default:
-            throw new Error("unexpected modifier");
+          case ModifierKind.STATIC: break; // static fields become globals
+          default: throw new Error("unexpected modifier");
         }
       }
     }
@@ -2168,36 +2184,32 @@ export class FunctionPrototype extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-
-          case ModifierKind.IMPORT:
+          case ModifierKind.IMPORT: {
             this.set(ElementFlags.IMPORTED);
             break;
-
-          case ModifierKind.EXPORT:
+          }
+          case ModifierKind.EXPORT: {
             this.set(ElementFlags.EXPORTED);
             break;
-
-          case ModifierKind.DECLARE:
+          }
+          case ModifierKind.DECLARE: {
             this.set(ElementFlags.DECLARED);
             break;
-
-          case ModifierKind.GET:
+          }
+          case ModifierKind.GET: {
             this.set(ElementFlags.GETTER);
             break;
-
-          case ModifierKind.SET:
+          }
+          case ModifierKind.SET: {
             this.set(ElementFlags.SETTER);
             break;
-
+          }
           case ModifierKind.STATIC:
           case ModifierKind.ABSTRACT:
           case ModifierKind.PRIVATE:
           case ModifierKind.PROTECTED:
-          case ModifierKind.PUBLIC:
-            break; // already handled
-
-          default:
-            throw new Error("unexpected modifier");
+          case ModifierKind.PUBLIC: break; // already handled
+          default: throw new Error("unexpected modifier");
         }
       }
     }
@@ -2501,10 +2513,22 @@ export class Function extends Element {
   getTempLocal(type: Type): Local {
     var temps: Local[] | null;
     switch (type.toNativeType()) {
-      case NativeType.I32: temps = this.tempI32s; break;
-      case NativeType.I64: temps = this.tempI64s; break;
-      case NativeType.F32: temps = this.tempF32s; break;
-      case NativeType.F64: temps = this.tempF64s; break;
+      case NativeType.I32: {
+        temps = this.tempI32s;
+        break;
+      }
+      case NativeType.I64: {
+        temps = this.tempI64s;
+        break;
+      }
+      case NativeType.F32: {
+        temps = this.tempF32s;
+        break;
+      }
+      case NativeType.F64: {
+        temps = this.tempF64s;
+        break;
+      }
       default: throw new Error("concrete type expected");
     }
     if (temps && temps.length) {
@@ -2520,10 +2544,22 @@ export class Function extends Element {
     var temps: Local[];
     assert(local.type != null); // internal error
     switch ((<Type>local.type).toNativeType()) {
-      case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
-      case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
-      case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
-      case NativeType.F64: temps = this.tempF64s || (this.tempF64s = []); break;
+      case NativeType.I32: {
+        temps = this.tempI32s || (this.tempI32s = []);
+        break;
+      }
+      case NativeType.I64: {
+        temps = this.tempI64s || (this.tempI64s = []);
+        break;
+      }
+      case NativeType.F32: {
+        temps = this.tempF32s || (this.tempF32s = []);
+        break;
+      }
+      case NativeType.F64: {
+        temps = this.tempF64s || (this.tempF64s = []);
+        break;
+      }
       default: throw new Error("concrete type expected");
     }
     temps.push(local);
@@ -2533,10 +2569,22 @@ export class Function extends Element {
   getAndFreeTempLocal(type: Type): Local {
     var temps: Local[];
     switch (type.toNativeType()) {
-      case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
-      case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
-      case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
-      case NativeType.F64: temps = this.tempF64s || (this.tempF64s = []); break;
+      case NativeType.I32: {
+        temps = this.tempI32s || (this.tempI32s = []);
+        break;
+      }
+      case NativeType.I64: {
+        temps = this.tempI64s || (this.tempI64s = []);
+        break;
+      }
+      case NativeType.F32: {
+        temps = this.tempF32s || (this.tempF32s = []);
+        break;
+      }
+      case NativeType.F64: {
+        temps = this.tempF64s || (this.tempF64s = []);
+        break;
+      }
       default: throw new Error("concrete type expected");
     }
     if (temps.length > 0) {
@@ -2624,23 +2672,19 @@ export class FieldPrototype extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-
-          case ModifierKind.EXPORT:
+          case ModifierKind.EXPORT: {
             this.set(ElementFlags.EXPORTED);
             break;
-
-          case ModifierKind.READONLY:
+          }
+          case ModifierKind.READONLY: {
             this.set(ElementFlags.READONLY);
             break;
-
+          }
           case ModifierKind.PRIVATE:
           case ModifierKind.PROTECTED:
           case ModifierKind.PUBLIC:
-          case ModifierKind.STATIC:
-            break; // already handled
-
-          default:
-            throw new Error("unexpected modifier");
+          case ModifierKind.STATIC: break; // already handled
+          default: throw new Error("unexpected modifier");
         }
       }
     }
@@ -2738,9 +2782,18 @@ export class ClassPrototype extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+          case ModifierKind.IMPORT: {
+            this.set(ElementFlags.IMPORTED);
+            break;
+          }
+          case ModifierKind.EXPORT: {
+            this.set(ElementFlags.EXPORTED);
+            break;
+          }
+          case ModifierKind.DECLARE: {
+            this.set(ElementFlags.DECLARED);
+            break;
+          }
           default: throw new Error("unexpected modifier");
         }
       }
@@ -2844,8 +2897,7 @@ export class ClassPrototype extends Element {
     if (this.instanceMembers) {
       for (var member of this.instanceMembers.values()) {
         switch (member.kind) {
-
-          case ElementKind.FIELD_PROTOTYPE: // fields are layed out in advance
+          case ElementKind.FIELD_PROTOTYPE: { // fields are layed out in advance
             if (!instance.members) instance.members = new Map();
             var fieldDeclaration = (<FieldPrototype>member).declaration;
             if (!fieldDeclaration.type) {
@@ -2859,9 +2911,18 @@ export class ClassPrototype extends Element {
               var fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
               switch (fieldType.byteSize) { // align
                 case 1: break;
-                case 2: if (memoryOffset & 1) ++memoryOffset; break;
-                case 4: if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1; break;
-                case 8: if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1; break;
+                case 2: {
+                  if (memoryOffset & 1) ++memoryOffset;
+                  break;
+                }
+                case 4: {
+                  if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1;
+                  break;
+                }
+                case 8: {
+                  if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1;
+                  break;
+                }
                 default: assert(false);
               }
               fieldInstance.memoryOffset = memoryOffset;
@@ -2869,16 +2930,16 @@ export class ClassPrototype extends Element {
               instance.members.set(member.simpleName, fieldInstance);
             }
             break;
-
-          case ElementKind.FUNCTION_PROTOTYPE: // instance methods remain partially resolved prototypes until compiled
+          }
+          case ElementKind.FUNCTION_PROTOTYPE: { // instance methods remain partially resolved prototypes until compiled
             if (!instance.members) instance.members = new Map();
             var methodPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
             if (methodPrototype) {
               instance.members.set(member.simpleName, methodPrototype);
             }
             break;
-
-          case ElementKind.PROPERTY: // instance properties are cloned with partially resolved getters and setters
+          }
+          case ElementKind.PROPERTY: { // instance properties are cloned with partially resolved getters and setters
             if (!instance.members) instance.members = new Map();
             assert((<Property>member).getterPrototype);
             var instanceProperty = new Property(this.program, member.simpleName, member.internalName, this);
@@ -2896,9 +2957,8 @@ export class ClassPrototype extends Element {
             }
             instance.members.set(member.simpleName, instanceProperty);
             break;
-
-          default:
-            throw new Error("instance member expected");
+          }
+          default: throw new Error("instance member expected");
         }
       }
     }
