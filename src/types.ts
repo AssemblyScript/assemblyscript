@@ -1,5 +1,6 @@
 import {
-  Class
+  Class,
+  FunctionTarget
 } from "./program";
 
 import {
@@ -452,6 +453,8 @@ export class Signature {
   thisType: Type | null;
   /** Whether the last parameter is a rest parameter. */
   hasRest: bool;
+  /** Cached {@link FunctionTarget}. */
+  cachedFunctionTarget: FunctionTarget | null = null;
 
   constructor(
     parameterTypes: Type[] | null = null,

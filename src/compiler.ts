@@ -31,6 +31,7 @@ import {
   Field,
   FunctionPrototype,
   Function,
+  FunctionTarget,
   Global,
   Local,
   Namespace,
@@ -3876,8 +3877,9 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
       case ElementKind.FIELD: {
-        if (signature = (<Field>element).type.functionType) {
-          let targetExpr = this.compileExpression(assert(resolved.targetExpression), Type.u32);
+        let type = (<Field>element).type;
+        if (signature = type.functionType) {
+          let targetExpr = this.compileExpression(assert(resolved.targetExpression), type);
           indexArg = this.module.createLoad(
             4,
             false,
@@ -3894,9 +3896,12 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         }
       }
-      case ElementKind.PROPERTY: {
-        // TODO
+      case ElementKind.FUNCTION_TARGET: {
+        signature = (<FunctionTarget>element).signature;
+        indexArg = this.compileExpression(expression.expression, (<FunctionTarget>element).type);
+        break;
       }
+      case ElementKind.PROPERTY: // TODO
 
       // not supported
       default: {

@@ -12,5 +12,4 @@ i32Adder(1, 2);
 var i64Adder = makeAdder<i64>();
 i64Adder(1, 2);
 
-// TODO:
-// makeAdder<f64>()(1, 2);
+makeAdder<f64>()(1, 2);

@@ -1774,10 +1774,15 @@ export class Program extends DiagnosticEmitter {
                 if (!resolvedElement) resolvedElement = new ResolvedElement();
                 return resolvedElement.set(classType);
               } else {
-                let functionType = returnType.functionType;
-                if (functionType) {
-                  // TODO: Signatures aren't elements but probably should be
-                  throw new Error("not implemented");
+                let signature = returnType.functionType;
+                if (signature) {
+                  let functionTarget = signature.cachedFunctionTarget;
+                  if (!functionTarget) {
+                    functionTarget = new FunctionTarget(this, signature);
+                    signature.cachedFunctionTarget = functionTarget;
+                  }
+                  if (!resolvedElement) resolvedElement = new ResolvedElement();
+                  return resolvedElement.set(functionTarget);
                 }
               }
             }
@@ -1846,6 +1851,8 @@ export enum ElementKind {
   FUNCTION_PROTOTYPE,
   /** A {@link Function}. */
   FUNCTION,
+  /** A {@link FunctionTarget}. */
+  FUNCTION_TARGET,
   /** A {@link ClassPrototype}. */
   CLASS_PROTOTYPE,
   /** A {@link Class}. */
@@ -2669,6 +2676,27 @@ export class Function extends Element {
 
   /** Returns the TypeScript representation of this function. */
   toString(): string { return this.prototype.simpleName; }
+}
+
+/** A resolved function table entry, that is an function called by an index and signature. */
+export class FunctionTarget extends Element {
+
+  kind = ElementKind.FUNCTION_TARGET;
+
+  /** Underlying signature. */
+  signature: Signature;
+  /** Function type. */
+  type: Type;
+
+  /** Constructs a new function target. */
+  constructor(program: Program, signature: Signature) {
+    super(program, "", "");
+    var simpleName = signature.toSignatureString();
+    this.simpleName = simpleName;
+    this.internalName = simpleName;
+    this.signature = signature;
+    this.type = Type.u32.asFunction(signature);
+  }
 }
 
 /** A yet unresolved instance field prototype. */
