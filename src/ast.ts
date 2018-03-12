@@ -902,6 +902,7 @@ export abstract class Node {
 
   static createTypeDeclaration(
     name: IdentifierExpression,
+    typeParameters: TypeParameterNode[] | null,
     alias: CommonTypeNode,
     modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
@@ -910,7 +911,8 @@ export abstract class Node {
     var stmt = new TypeDeclaration();
     stmt.range = range;
     stmt.name = name; name.parent = stmt;
-    stmt.alias = alias; alias.parent = stmt;
+    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
+    stmt.type = alias; alias.parent = stmt;
     stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
@@ -1728,8 +1730,10 @@ export class TryStatement extends Statement {
 export class TypeDeclaration extends DeclarationStatement {
   kind = NodeKind.TYPEDECLARATION;
 
+  /** Type parameters, if any. */
+  typeParameters: TypeParameterNode[] | null;
   /** Type being aliased. */
-  alias: CommonTypeNode;
+  type: CommonTypeNode;
 }
 
 /** Represents a variable declaration part of a {@link VariableStatement}. */

@@ -1979,7 +1979,7 @@ export class Parser extends DiagnosticEmitter {
         return this.parseTryStatement(tn);
       }
       case Token.TYPE: {
-        return this.parseTypeDeclaration(tn, null);
+        return this.parseTypeDeclaration(tn);
       }
       case Token.VOID: {
         return this.parseVoidStatement(tn);
@@ -2429,17 +2429,29 @@ export class Parser extends DiagnosticEmitter {
     decorators: DecoratorNode[] | null = null
   ): TypeDeclaration | null {
 
-    // at 'type': Identifier '=' Type ';'?
+    // at 'type': Identifier ('<' TypeParameters '>')? '=' Type ';'?
 
     var startPos = decorators && decorators.length ? decorators[0].range.start
                  : modifiers && modifiers.length ? modifiers[0].range.start
                  : tn.tokenPos;
     if (tn.skip(Token.IDENTIFIER)) {
       var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      var typeParameters: TypeParameterNode[] | null = null;
+      if (tn.skip(Token.LESSTHAN)) {
+        typeParameters = this.parseTypeParameters(tn);
+        if (!typeParameters) return null;
+      }
       if (tn.skip(Token.EQUALS)) {
         var type = this.parseType(tn);
         if (!type) return null;
-        var ret = Node.createTypeDeclaration(name, type, modifiers, decorators, tn.range(startPos, tn.pos));
+        var ret = Node.createTypeDeclaration(
+          name,
+          typeParameters,
+          type,
+          modifiers,
+          decorators,
+          tn.range(startPos, tn.pos)
+        );
         tn.skip(Token.SEMICOLON);
         return ret;
       } else {

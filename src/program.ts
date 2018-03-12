@@ -102,6 +102,12 @@ class QueuedImport {
   declaration: ImportDeclaration;
 }
 
+/** Represents a type alias. */
+class TypeAlias {
+  typeParameters: TypeParameterNode[] | null;
+  type: CommonTypeNode;
+}
+
 const noTypesYet = new Map<string,Type>();
 
 /** Represents an AssemblyScript program. */
@@ -118,7 +124,7 @@ export class Program extends DiagnosticEmitter {
   /** Types by internal name. */
   types: Map<string,Type> = noTypesYet;
   /** Declared type aliases. */
-  typeAliases: Map<string,CommonTypeNode> = new Map();
+  typeAliases: Map<string,TypeAlias> = new Map();
   /** Exports of individual files by exported name. Not global exports. */
   exports: Map<string,Element> = new Map();
 
@@ -1257,7 +1263,10 @@ export class Program extends DiagnosticEmitter {
       );
       return;
     }
-    this.typeAliases.set(name, declaration.alias);
+    var alias = new TypeAlias();
+    alias.typeParameters = declaration.typeParameters;
+    alias.type = declaration.type;
+    this.typeAliases.set(name, alias);
   }
 
   private initializeVariables(statement: VariableStatement, namespace: Element | null = null): void {
@@ -1386,8 +1395,9 @@ export class Program extends DiagnosticEmitter {
       return Type.u32.asFunction(signature);
     }
     var typeNode = <TypeNode>node;
-    var globalName = typeNode.name.text;
-    var localName = typeNode.range.source.internalPath + PATH_DELIMITER + typeNode.name.text;
+    var simpleName = typeNode.name.text;
+    var globalName = simpleName;
+    var localName = typeNode.range.source.internalPath + PATH_DELIMITER + simpleName;
 
     var element: Element | null;
 
@@ -1404,6 +1414,10 @@ export class Program extends DiagnosticEmitter {
         }
       }
     }
+
+    // check (global) type alias
+    var alias = this.typeAliases.get(simpleName);
+    if (alias) return this.resolveType(alias.type, contextualTypeArguments, reportNotFound);
 
     // resolve parameters
     if (typeNode.typeArguments) {
@@ -1435,12 +1449,6 @@ export class Program extends DiagnosticEmitter {
 
     // check file-global / program-global type
     if ((type = this.types.get(localName)) || (type = this.types.get(globalName))) {
-      return type;
-    }
-
-    // check type alias
-    var alias = this.typeAliases.get(globalName);
-    if (alias && (type = this.resolveType(alias, null, reportNotFound))) {
       return type;
     }
 

@@ -81,24 +81,24 @@ import {
 import {
   CharCode
 } from "../util/charcode";
-import { Signature } from "../types";
 
 export function serializeNode(node: Node, sb: string[]): void {
   switch (node.kind) {
-
-    case NodeKind.SOURCE:
+    case NodeKind.SOURCE: {
       serializeSource(<Source>node, sb);
       break;
+    }
 
     // types
 
-    case NodeKind.TYPE:
+    case NodeKind.TYPE: {
       serializeTypeNode(<TypeNode>node, sb);
       break;
-
-    case NodeKind.TYPEPARAMETER:
+    }
+    case NodeKind.TYPEPARAMETER: {
       serializeTypeParameter(<TypeParameterNode>node, sb);
       break;
+    }
 
     // expressions
 
@@ -108,200 +108,204 @@ export function serializeNode(node: Node, sb: string[]): void {
     case NodeKind.THIS:
     case NodeKind.TRUE:
     case NodeKind.CONSTRUCTOR:
-    case NodeKind.IDENTIFIER:
+    case NodeKind.IDENTIFIER: {
       serializeIdentifierExpression(<IdentifierExpression>node, sb);
       break;
-
-    case NodeKind.ASSERTION:
+    }
+    case NodeKind.ASSERTION: {
       serializeAssertionExpression(<AssertionExpression>node, sb);
       break;
-
-    case NodeKind.BINARY:
+    }
+    case NodeKind.BINARY: {
       serializeBinaryExpression(<BinaryExpression>node, sb);
       break;
-
-    case NodeKind.CALL:
+    }
+    case NodeKind.CALL: {
       serializeCallExpression(<CallExpression>node, sb);
       break;
-
-    case NodeKind.ELEMENTACCESS:
+    }
+    case NodeKind.ELEMENTACCESS: {
       serializeElementAccessExpression(<ElementAccessExpression>node, sb);
       break;
-
+    }
     case NodeKind.FUNCTION:
-    case NodeKind.FUNCTIONARROW:
+    case NodeKind.FUNCTIONARROW: {
       serializeFunctionExpression(<FunctionExpression>node, sb);
       break;
-
-    case NodeKind.LITERAL:
+    }
+    case NodeKind.LITERAL: {
       serializeLiteralExpression(<LiteralExpression>node, sb);
       break;
-
-    case NodeKind.NEW:
+    }
+    case NodeKind.NEW: {
       serializeNewExpression(<NewExpression>node, sb);
       break;
-
-    case NodeKind.PARENTHESIZED:
+    }
+    case NodeKind.PARENTHESIZED: {
       serializeParenthesizedExpression(<ParenthesizedExpression>node, sb);
       break;
-
-    case NodeKind.PROPERTYACCESS:
+    }
+    case NodeKind.PROPERTYACCESS: {
       serializePropertyAccessExpression(<PropertyAccessExpression>node, sb);
       break;
-
-    case NodeKind.TERNARY:
+    }
+    case NodeKind.TERNARY: {
       serializeTernaryExpression(<TernaryExpression>node, sb);
       break;
-
-    case NodeKind.UNARYPOSTFIX:
+    }
+    case NodeKind.UNARYPOSTFIX: {
       serializeUnaryPostfixExpression(<UnaryPostfixExpression>node, sb);
       break;
-
-    case NodeKind.UNARYPREFIX:
+    }
+    case NodeKind.UNARYPREFIX: {
       serializeUnaryPrefixExpression(<UnaryPrefixExpression>node, sb);
       break;
+    }
 
     // statements
 
-    case NodeKind.BLOCK:
+    case NodeKind.BLOCK: {
       serializeBlockStatement(<BlockStatement>node, sb);
       break;
-
-    case NodeKind.BREAK:
+    }
+    case NodeKind.BREAK: {
       serializeBreakStatement(<BreakStatement>node, sb);
       break;
-
-    case NodeKind.CONTINUE:
+    }
+    case NodeKind.CONTINUE: {
       serializeContinueStatement(<ContinueStatement>node, sb);
       break;
-
-    case NodeKind.DO:
+    }
+    case NodeKind.DO: {
       serializeDoStatement(<DoStatement>node, sb);
       break;
-
-    case NodeKind.EMPTY:
+    }
+    case NodeKind.EMPTY: {
       serializeEmptyStatement(<EmptyStatement>node, sb);
       break;
-
-    case NodeKind.EXPORT:
+    }
+    case NodeKind.EXPORT: {
       serializeExportStatement(<ExportStatement>node, sb);
       break;
-
-    case NodeKind.EXPORTIMPORT:
+    }
+    case NodeKind.EXPORTIMPORT: {
       serializeExportImportStatement(<ExportImportStatement>node, sb);
       break;
-
-    case NodeKind.EXPRESSION:
+    }
+    case NodeKind.EXPRESSION: {
       serializeExpressionStatement(<ExpressionStatement>node, sb);
       break;
-
-    case NodeKind.FOR:
+    }
+    case NodeKind.FOR: {
       serializeForStatement(<ForStatement>node, sb);
       break;
-
-    case NodeKind.IF:
+    }
+    case NodeKind.IF: {
       serializeIfStatement(<IfStatement>node, sb);
       break;
-
-    case NodeKind.IMPORT:
+    }
+    case NodeKind.IMPORT: {
       serializeImportStatement(<ImportStatement>node, sb);
       break;
-
-    case NodeKind.RETURN:
+    }
+    case NodeKind.RETURN: {
       serializeReturnStatement(<ReturnStatement>node, sb);
       break;
-
-    case NodeKind.SWITCH:
+    }
+    case NodeKind.SWITCH: {
       serializeSwitchStatement(<SwitchStatement>node, sb);
       break;
-
-    case NodeKind.THROW:
+    }
+    case NodeKind.THROW: {
       serializeThrowStatement(<ThrowStatement>node, sb);
       break;
-
-    case NodeKind.TRY:
+    }
+    case NodeKind.TRY: {
       serializeTryStatement(<TryStatement>node, sb);
       break;
-
-    case NodeKind.VARIABLE:
+    }
+    case NodeKind.VARIABLE: {
       serializeVariableStatement(<VariableStatement>node, sb);
       break;
-
-    case NodeKind.WHILE:
+    }
+    case NodeKind.WHILE: {
       serializeWhileStatement(<WhileStatement>node, sb);
       break;
+    }
 
     // declaration statements
 
-    case NodeKind.CLASSDECLARATION:
+    case NodeKind.CLASSDECLARATION: {
       serializeClassDeclaration(<ClassDeclaration>node, sb);
       break;
-
-    case NodeKind.ENUMDECLARATION:
+    }
+    case NodeKind.ENUMDECLARATION: {
       serializeEnumDeclaration(<EnumDeclaration>node, sb);
       break;
-
-    case NodeKind.ENUMVALUEDECLARATION:
+    }
+    case NodeKind.ENUMVALUEDECLARATION: {
       serializeEnumValueDeclaration(<EnumValueDeclaration>node, sb);
       break;
-
-    case NodeKind.FIELDDECLARATION:
+    }
+    case NodeKind.FIELDDECLARATION: {
       serializeFieldDeclaration(<FieldDeclaration>node, sb);
       break;
-
-    case NodeKind.FUNCTIONDECLARATION:
+    }
+    case NodeKind.FUNCTIONDECLARATION: {
       serializeFunctionDeclaration(<FunctionDeclaration>node, sb);
       break;
-
-    case NodeKind.IMPORTDECLARATION:
+    }
+    case NodeKind.IMPORTDECLARATION: {
       serializeImportDeclaration(<ImportDeclaration>node, sb);
       break;
-
-    case NodeKind.INTERFACEDECLARATION:
+    }
+    case NodeKind.INTERFACEDECLARATION: {
       serializeInterfaceDeclaration(<InterfaceDeclaration>node, sb);
       break;
-
-    case NodeKind.METHODDECLARATION:
+    }
+    case NodeKind.METHODDECLARATION: {
       serializeMethodDeclaration(<MethodDeclaration>node, sb);
       break;
-
-    case NodeKind.NAMESPACEDECLARATION:
+    }
+    case NodeKind.NAMESPACEDECLARATION: {
       serializeNamespaceDeclaration(<NamespaceDeclaration>node, sb);
       break;
-
-    case NodeKind.TYPEDECLARATION:
+    }
+    case NodeKind.TYPEDECLARATION: {
       serializeTypeDeclaration(<TypeDeclaration>node, sb);
       break;
-
-    case NodeKind.VARIABLEDECLARATION:
+    }
+    case NodeKind.VARIABLEDECLARATION: {
       serializeVariableDeclaration(<VariableDeclaration>node, sb);
       break;
+    }
 
     // other
 
-    case NodeKind.DECORATOR:
+    case NodeKind.DECORATOR: {
       serializeDecorator(<DecoratorNode>node, sb);
       break;
-
-    case NodeKind.EXPORTMEMBER:
+    }
+    case NodeKind.EXPORTMEMBER: {
       serializeExportMember(<ExportMember>node, sb);
       break;
-
-    case NodeKind.MODIFIER:
+    }
+    case NodeKind.MODIFIER: {
       serializeModifier(<ModifierNode>node, sb);
       break;
-
-    case NodeKind.PARAMETER:
+    }
+    case NodeKind.PARAMETER: {
       serializeParameter(<ParameterNode>node, sb);
       break;
-
-    case NodeKind.SWITCHCASE:
+    }
+    case NodeKind.SWITCHCASE: {
       serializeSwitchCase(<SwitchCase>node, sb);
       break;
-
-    default:
+    }
+    default: {
       assert(false);
       break;
+    }
   }
 }
 
@@ -315,7 +319,8 @@ export function serializeSource(source: Source, sb: string[]): void {
 
 export function serializeTypeNode(node: CommonTypeNode, sb: string[]): void {
   if (node.kind == NodeKind.SIGNATURE) {
-    return serializeSignatureNode(<SignatureNode>node, sb);
+    serializeSignatureNode(<SignatureNode>node, sb);
+    return;
   }
   var typeNode = <TypeNode>node;
   serializeIdentifierExpression(<IdentifierExpression>typeNode.name, sb);
@@ -473,34 +478,34 @@ export function serializeFunctionExpression(node: FunctionExpression, sb: string
 
 export function serializeLiteralExpression(node: LiteralExpression, sb: string[]): void {
   switch (node.literalKind) {
-
-    case LiteralKind.FLOAT:
+    case LiteralKind.FLOAT: {
       serializeFloatLiteralExpression(<FloatLiteralExpression>node, sb);
       break;
-
-    case LiteralKind.INTEGER:
+    }
+    case LiteralKind.INTEGER: {
       serializeIntegerLiteralExpression(<IntegerLiteralExpression>node, sb);
       break;
-
-    case LiteralKind.STRING:
+    }
+    case LiteralKind.STRING: {
       serializeStringLiteralExpression(<StringLiteralExpression>node, sb);
       break;
-
-    case LiteralKind.REGEXP:
+    }
+    case LiteralKind.REGEXP: {
       serializeRegexpLiteralExpression(<RegexpLiteralExpression>node, sb);
       break;
-
-    case LiteralKind.ARRAY:
+    }
+    case LiteralKind.ARRAY: {
       serializeArrayLiteralExpression(<ArrayLiteralExpression>node, sb);
       break;
-
-    // case LiteralKind.OBJECT:
+    }
+    // case LiteralKind.OBJECT: {
     //   serializeObjectLiteralExpression(<ObjectLiteralExpression>node, sb);
     //   break;
-
-    default:
+    // }
+    default: {
       assert(false);
       break;
+    }
   }
 }
 
@@ -518,50 +523,49 @@ export function serializeStringLiteral(str: string, sb: string[], singleQuoted: 
   sb.push(quote);
   for (var i = 0, k = str.length; i < k;) {
     switch (str.charCodeAt(i)) {
-
-      case CharCode.NULL:
+      case CharCode.NULL: {
         if (i > off) sb.push(str.substring(off, off = i + 1));
         sb.push("\\0");
         off = ++i;
         break;
-
-      case CharCode.BACKSPACE:
+      }
+      case CharCode.BACKSPACE: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\b");
         break;
-
-      case CharCode.TAB:
+      }
+      case CharCode.TAB: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\t");
         break;
-
-      case CharCode.LINEFEED:
+      }
+      case CharCode.LINEFEED: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\n");
         break;
-
-      case CharCode.VERTICALTAB:
+      }
+      case CharCode.VERTICALTAB: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\v");
         break;
-
-      case CharCode.FORMFEED:
+      }
+      case CharCode.FORMFEED: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\f");
         break;
-
-      case CharCode.CARRIAGERETURN:
+      }
+      case CharCode.CARRIAGERETURN: {
         if (i > off) sb.push(str.substring(off, i));
         sb.push("\\r");
         off = ++i;
         break;
-
-      case CharCode.DOUBLEQUOTE:
+      }
+      case CharCode.DOUBLEQUOTE: {
         if (!singleQuoted) {
           if (i > off) sb.push(str.substring(off, i));
           sb.push("\\\"");
@@ -570,8 +574,8 @@ export function serializeStringLiteral(str: string, sb: string[], singleQuoted: 
           ++i;
         }
         break;
-
-      case CharCode.SINGLEQUOTE:
+      }
+      case CharCode.SINGLEQUOTE: {
         if (singleQuoted) {
           if (i > off) sb.push(str.substring(off, i));
           sb.push("\\'");
@@ -580,16 +584,17 @@ export function serializeStringLiteral(str: string, sb: string[], singleQuoted: 
           ++i;
         }
         break;
-
-      case CharCode.BACKSLASH:
+      }
+      case CharCode.BACKSLASH: {
         if (i > off) sb.push(str.substring(off, i));
         sb.push("\\\\");
         off = ++i;
         break;
-
-      default:
+      }
+      default: {
         ++i;
         break;
+      }
     }
   }
   if (i > off) sb.push(str.substring(off, i));
@@ -634,18 +639,15 @@ export function serializeTernaryExpression(node: TernaryExpression, sb: string[]
 
 export function serializeUnaryExpression(node: UnaryExpression, sb: string[]): void {
   switch (node.kind) {
-
-    case NodeKind.UNARYPOSTFIX:
+    case NodeKind.UNARYPOSTFIX: {
       serializeUnaryPostfixExpression(<UnaryPostfixExpression>node, sb);
       break;
-
-    case NodeKind.UNARYPREFIX:
+    }
+    case NodeKind.UNARYPREFIX: {
       serializeUnaryPrefixExpression(<UnaryPrefixExpression>node, sb);
       break;
-
-    default:
-      assert(false);
-      break;
+    }
+    default: assert(false);
   }
 }
 
@@ -1178,8 +1180,16 @@ export function serializeTypeDeclaration(node: TypeDeclaration, sb: string[]): v
   }
   sb.push("type ");
   serializeIdentifierExpression(node.name, sb);
+  var typeParameters = node.typeParameters;
+  if (typeParameters && (k = typeParameters.length)) {
+    sb.push("<");
+    for (i = 0; i < k; ++i) {
+      serializeTypeParameter(typeParameters[i], sb);
+    }
+    sb.push(">");
+  }
   sb.push(" = ");
-  serializeTypeNode(node.alias, sb);
+  serializeTypeNode(node.type, sb);
 }
 
 export function serializeVariableDeclaration(node: VariableDeclaration, sb: string[]): void {
@@ -1207,21 +1217,21 @@ export function serializeVariableStatement(node: VariableStatement, sb: string[]
     for (i = 0, k = node.modifiers.length; i < k; ++i) {
       var modifier = node.modifiers[i];
       switch (modifier.modifierKind) {
-
-        case ModifierKind.CONST:
+        case ModifierKind.CONST: {
           assert(!isLet);
           isConst = true;
           break;
-
-        case ModifierKind.LET:
+        }
+        case ModifierKind.LET: {
           assert(!isConst);
           isLet = true;
           break;
-
-        default:
+        }
+        default: {
           serializeModifier(modifier, sb);
           sb.push(" ");
           break;
+        }
       }
     }
   }
@@ -1301,6 +1311,9 @@ export function modifierToString(node: ModifierNode): string {
     case ModifierKind.READONLY: return "readonly";
     case ModifierKind.GET: return "get";
     case ModifierKind.SET: return "set";
-    default: assert(false); return "";
+    default: {
+      assert(false);
+      return "";
+    }
   }
 }
