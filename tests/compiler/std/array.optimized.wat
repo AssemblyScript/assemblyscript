@@ -6,6 +6,7 @@
  (type $iiiv (func (param i32 i32 i32)))
  (type $iv (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
@@ -2803,11 +2804,24 @@
   )
   (i32.const -1)
  )
- (func "$(lib)/array/Array#indexOf|trampoline.2" (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/Array#indexOf|trampoline" (; 15 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (block $N=1
+   (block $N=0
+    (block $N=invalid
+     (br_table $N=0 $N=1 $N=invalid
+      (get_local $3)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (i32.const 0)
+   )
+  )
   (call "$(lib)/array/Array#indexOf"
    (get_local $0)
    (get_local $1)
-   (i32.const 0)
+   (get_local $2)
   )
  )
  (func "$(lib)/array/Array#splice" (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -3861,9 +3875,11 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array#indexOf|trampoline.2"
+   (call "$(lib)/array/Array#indexOf|trampoline"
     (get_global $std/array/arr)
     (i32.const 44)
+    (i32.const 0)
+    (i32.const 0)
    )
   )
   (if
@@ -3879,9 +3895,11 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array#indexOf|trampoline.2"
+   (call "$(lib)/array/Array#indexOf|trampoline"
     (get_global $std/array/arr)
     (i32.const 42)
+    (i32.const 0)
+    (i32.const 0)
    )
   )
   (if
@@ -3900,9 +3918,11 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array#indexOf|trampoline.2"
+   (call "$(lib)/array/Array#indexOf|trampoline"
     (get_global $std/array/arr)
     (i32.const 45)
+    (i32.const 0)
+    (i32.const 0)
    )
   )
   (if

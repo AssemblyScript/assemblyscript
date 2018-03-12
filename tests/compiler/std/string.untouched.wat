@@ -3,7 +3,9 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $i (func (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
+ (type $iiiF (func (param i32 i32 i32) (result f64)))
  (type $iF (func (param i32) (result f64)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
@@ -274,11 +276,24 @@
    )
   )
  )
- (func "$(lib)/string/String#startsWith|trampoline.2" (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/string/String#startsWith|trampoline" (; 4 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (block $N=1
+   (block $N=0
+    (block $N=invalid
+     (br_table $N=0 $N=1 $N=invalid
+      (get_local $3)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (i32.const 0)
+   )
+  )
   (call "$(lib)/string/String#startsWith"
    (get_local $0)
    (get_local $1)
-   (i32.const 0)
+   (get_local $2)
   )
  )
  (func "$(lib)/string/String#endsWith" (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -385,11 +400,24 @@
    )
   )
  )
- (func "$(lib)/string/String#endsWith|trampoline.2" (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/string/String#endsWith|trampoline" (; 6 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (block $N=1
+   (block $N=0
+    (block $N=invalid
+     (br_table $N=0 $N=1 $N=invalid
+      (get_local $3)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (i32.const 2147483647)
+   )
+  )
   (call "$(lib)/string/String#endsWith"
    (get_local $0)
    (get_local $1)
-   (i32.const 2147483647)
+   (get_local $2)
   )
  )
  (func "$(lib)/string/String#indexOf" (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -534,18 +562,44 @@
    )
   )
  )
- (func "$(lib)/string/String#includes|trampoline.2" (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/string/String#includes|trampoline" (; 9 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (block $N=1
+   (block $N=0
+    (block $N=invalid
+     (br_table $N=0 $N=1 $N=invalid
+      (get_local $3)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (i32.const 0)
+   )
+  )
   (call "$(lib)/string/String#includes"
    (get_local $0)
    (get_local $1)
-   (i32.const 0)
+   (get_local $2)
   )
  )
- (func "$(lib)/string/String#indexOf|trampoline.2" (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/string/String#indexOf|trampoline" (; 10 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (block $N=1
+   (block $N=0
+    (block $N=invalid
+     (br_table $N=0 $N=1 $N=invalid
+      (get_local $3)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (i32.const 0)
+   )
+  )
   (call "$(lib)/string/String#indexOf"
    (get_local $0)
    (get_local $1)
-   (i32.const 0)
+   (get_local $2)
   )
  )
  (func $std/string/getString (; 11 ;) (type $i) (result i32)
@@ -971,10 +1025,23 @@
    )
   )
  )
- (func "$(lib)/string/parseInt|trampoline.1" (; 14 ;) (type $iF) (param $0 i32) (result f64)
+ (func "$(lib)/string/parseInt|trampoline" (; 14 ;) (type $iiiF) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
+  (block $N=1
+   (block $N=0
+    (block $N=invalid
+     (br_table $N=0 $N=1 $N=invalid
+      (get_local $2)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $1
+    (i32.const 0)
+   )
+  )
   (call "$(lib)/string/parseInt"
    (get_local $0)
-   (i32.const 0)
+   (get_local $1)
   )
  )
  (func "$(lib)/string/parseFloat" (; 15 ;) (type $iF) (param $0 i32) (result f64)
@@ -1319,9 +1386,11 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/string/String#startsWith|trampoline.2"
+    (call "$(lib)/string/String#startsWith|trampoline"
      (get_global $std/string/str)
      (i32.const 108)
+     (i32.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -1336,9 +1405,11 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/string/String#endsWith|trampoline.2"
+    (call "$(lib)/string/String#endsWith|trampoline"
      (get_global $std/string/str)
      (i32.const 128)
+     (i32.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -1353,9 +1424,11 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/string/String#includes|trampoline.2"
+    (call "$(lib)/string/String#includes|trampoline"
      (get_global $std/string/str)
      (i32.const 144)
+     (i32.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -1371,9 +1444,11 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/string/String#indexOf|trampoline.2"
+     (call "$(lib)/string/String#indexOf|trampoline"
       (get_global $std/string/str)
       (i32.const 156)
+      (i32.const 0)
+      (i32.const 0)
      )
      (i32.const 2)
     )
@@ -1391,9 +1466,11 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/string/String#indexOf|trampoline.2"
+     (call "$(lib)/string/String#indexOf|trampoline"
       (get_global $std/string/str)
       (i32.const 164)
+      (i32.const 0)
+      (i32.const 0)
      )
      (i32.const -1)
     )
@@ -1411,8 +1488,10 @@
   (if
    (i32.eqz
     (f64.eq
-     (call "$(lib)/string/parseInt|trampoline.1"
+     (call "$(lib)/string/parseInt|trampoline"
       (i32.const 172)
+      (i32.const 0)
+      (i32.const 0)
      )
      (f64.const 0)
     )
@@ -1430,8 +1509,10 @@
   (if
    (i32.eqz
     (f64.eq
-     (call "$(lib)/string/parseInt|trampoline.1"
+     (call "$(lib)/string/parseInt|trampoline"
       (i32.const 180)
+      (i32.const 0)
+      (i32.const 0)
      )
      (f64.const 1)
     )
@@ -1449,8 +1530,10 @@
   (if
    (i32.eqz
     (f64.eq
-     (call "$(lib)/string/parseInt|trampoline.1"
+     (call "$(lib)/string/parseInt|trampoline"
       (i32.const 188)
+      (i32.const 0)
+      (i32.const 0)
      )
      (f64.const 5)
     )
@@ -1468,8 +1551,10 @@
   (if
    (i32.eqz
     (f64.eq
-     (call "$(lib)/string/parseInt|trampoline.1"
+     (call "$(lib)/string/parseInt|trampoline"
       (i32.const 204)
+      (i32.const 0)
+      (i32.const 0)
      )
      (f64.const 455)
     )
@@ -1487,8 +1572,10 @@
   (if
    (i32.eqz
     (f64.eq
-     (call "$(lib)/string/parseInt|trampoline.1"
+     (call "$(lib)/string/parseInt|trampoline"
       (i32.const 220)
+      (i32.const 0)
+      (i32.const 0)
      )
      (f64.const 3855)
     )
@@ -1506,8 +1593,10 @@
   (if
    (i32.eqz
     (f64.eq
-     (call "$(lib)/string/parseInt|trampoline.1"
+     (call "$(lib)/string/parseInt|trampoline"
       (i32.const 236)
+      (i32.const 0)
+      (i32.const 0)
      )
      (f64.const 3855)
     )
@@ -1525,8 +1614,10 @@
   (if
    (i32.eqz
     (f64.eq
-     (call "$(lib)/string/parseInt|trampoline.1"
+     (call "$(lib)/string/parseInt|trampoline"
       (i32.const 252)
+      (i32.const 0)
+      (i32.const 0)
      )
      (f64.const 11)
     )
@@ -1544,8 +1635,10 @@
   (if
    (i32.eqz
     (f64.eq
-     (call "$(lib)/string/parseInt|trampoline.1"
+     (call "$(lib)/string/parseInt|trampoline"
       (i32.const 264)
+      (i32.const 0)
+      (i32.const 0)
      )
      (f64.const 1)
     )
