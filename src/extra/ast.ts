@@ -124,6 +124,10 @@ export function serializeNode(node: Node, sb: string[]): void {
       serializeCallExpression(<CallExpression>node, sb);
       break;
     }
+    case NodeKind.COMMA: {
+      serializeCommaExpression(<CommaExpression>node, sb);
+      break;
+    }
     case NodeKind.ELEMENTACCESS: {
       serializeElementAccessExpression(<ElementAccessExpression>node, sb);
       break;

@@ -1697,16 +1697,18 @@ export class Program extends DiagnosticEmitter {
     expression: Expression,
     contextualFunction: Function
   ): ResolvedElement | null {
-    var classType: Class | null;
     while (expression.kind == NodeKind.PARENTHESIZED) {
       expression = (<ParenthesizedExpression>expression).expression;
     }
     switch (expression.kind) {
       case NodeKind.ASSERTION: {
-        var type = this.resolveType((<AssertionExpression>expression).toType); // reports
-        if (type && (classType = type.classType)) {
-          if (!resolvedElement) resolvedElement = new ResolvedElement();
-          return resolvedElement.set(classType);
+        let type = this.resolveType((<AssertionExpression>expression).toType); // reports
+        if (type) {
+          let classType = type.classType;
+          if (classType) {
+            if (!resolvedElement) resolvedElement = new ResolvedElement();
+            return resolvedElement.set(classType);
+          }
         }
         return null;
       }
@@ -1714,7 +1716,8 @@ export class Program extends DiagnosticEmitter {
         throw new Error("not implemented");
       }
       case NodeKind.THIS: { // -> Class
-        if (classType = contextualFunction.instanceMethodOf) {
+        let classType = contextualFunction.instanceMethodOf;
+        if (classType) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
           return resolvedElement.set(classType);
         }
@@ -1725,7 +1728,8 @@ export class Program extends DiagnosticEmitter {
         return null;
       }
       case NodeKind.SUPER: { // -> Class
-        if ((classType = contextualFunction.instanceMethodOf) && (classType = classType.base)) {
+        let classType = contextualFunction.instanceMethodOf;
+        if (classType && (classType = classType.base)) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
           return resolvedElement.set(classType);
         }
@@ -1751,21 +1755,31 @@ export class Program extends DiagnosticEmitter {
         );
       }
       case NodeKind.CALL: {
-        var resolved = this.resolveExpression(
+        let resolved = this.resolveExpression(
           (<CallExpression>expression).expression,
           contextualFunction
         );
         if (resolved) {
-          var element = resolved.element;
+          let element = resolved.element;
           if (element && element.kind == ElementKind.FUNCTION_PROTOTYPE) {
-            var instance = (<FunctionPrototype>element).resolveUsingTypeArguments(
+            let instance = (<FunctionPrototype>element).resolveUsingTypeArguments(
               (<CallExpression>expression).typeArguments,
               null,
               expression
             );
-            if (instance && (classType = instance.signature.returnType.classType)) {
-              if (!resolvedElement) resolvedElement = new ResolvedElement();
-              return resolvedElement.set(classType);
+            if (instance) {
+              let returnType = instance.signature.returnType;
+              let classType = returnType.classType;
+              if (classType) {
+                if (!resolvedElement) resolvedElement = new ResolvedElement();
+                return resolvedElement.set(classType);
+              } else {
+                let functionType = returnType.functionType;
+                if (functionType) {
+                  // TODO: Signatures aren't elements but probably should be
+                  throw new Error("not implemented");
+                }
+              }
             }
           }
         }

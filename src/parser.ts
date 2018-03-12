@@ -2810,11 +2810,14 @@ export class Parser extends DiagnosticEmitter {
     if (!expr) return null;
     var startPos = expr.range.start;
 
-    // CallExpression
-    var typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn); // skips '(' on success
-    // there might be better ways to distinguish a LESSTHAN from a CALL with type arguments
-    if (typeArguments || tn.skip(Token.OPENPAREN)) {
-      var args = this.parseArguments(tn);
+    // CallExpression with type arguments
+    var typeArguments: CommonTypeNode[] | null;
+    while (
+      // there might be better ways to distinguish a LESSTHAN from a CALL with type arguments
+      (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) ||
+      tn.skip(Token.OPENPAREN)
+    ) {
+      let args = this.parseArguments(tn);
       if (!args) return null;
       expr = Node.createCallExpression(expr, typeArguments, args, tn.range(startPos, tn.pos));
     }
