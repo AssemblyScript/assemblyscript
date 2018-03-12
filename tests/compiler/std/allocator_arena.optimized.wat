@@ -6,7 +6,7 @@
  (type $iv (func (param i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global "$(lib)/allocator/arena/OFFSET" (mut i32) (i32.const 0))
+ (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr2 (mut i32) (i32.const 0))
  (global $std/allocator_arena/i (mut i32) (i32.const 0))
@@ -35,7 +35,7 @@
       (i32.add
        (i32.add
         (tee_local $1
-         (get_global "$(lib)/allocator/arena/OFFSET")
+         (get_global "$(lib)/allocator/arena/offset")
         )
         (get_local $0)
        )
@@ -92,7 +92,7 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/OFFSET"
+  (set_global "$(lib)/allocator/arena/offset"
    (get_local $2)
   )
   (get_local $1)
@@ -2360,7 +2360,7 @@
   (nop)
  )
  (func "$(lib)/allocator/arena/reset_memory" (; 7 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/OFFSET"
+  (set_global "$(lib)/allocator/arena/offset"
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -2371,7 +2371,7 @@
   )
  )
  (func $start (; 8 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/OFFSET"
+  (set_global "$(lib)/allocator/arena/offset"
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)

@@ -1,6 +1,5 @@
 import {
-  Class,
-  Function
+  Class
 } from "./program";
 
 import {
@@ -74,7 +73,7 @@ export class Type {
   /** Underlying class type, if a class type. */
   classType: Class | null;
   /** Underlying function type, if a function type. */
-  functionType: Function | null;
+  functionType: Signature | null;
   /** Respective nullable type, if non-nullable. */
   nullableType: Type | null = null;
   /** Respective non-nullable type, if nullable. */
@@ -97,7 +96,7 @@ export class Type {
 
   /** Computes the truncating mask in the target type. */
   computeSmallIntegerMask(targetType: Type): u32 {
-    return -1 >>> (targetType.size - this.size);
+    return ~0 >>> (targetType.size - this.size);
   }
 
   /** Tests if this type has the specified capabilities. */
@@ -121,7 +120,7 @@ export class Type {
   }
 
   /** Composes a function type from this type and a function. */
-  asFunction(functionType: Function): Type {
+  asFunction(functionType: Signature): Type {
     assert(this.kind == TypeKind.U32 && !this.functionType);
     var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
     ret.functionType = functionType;
@@ -144,8 +143,8 @@ export class Type {
   isAssignableTo(target: Type, signednessIsImportant: bool = false): bool {
     var currentClass: Class | null;
     var targetClass: Class | null;
-    var currentFunction: Function | null;
-    var targetFunction: Function | null;
+    var currentFunction: Signature | null;
+    var targetFunction: Signature | null;
     if (this.isReference) {
       if (target.isReference) {
         if (currentClass = this.classType) {
@@ -198,20 +197,25 @@ export class Type {
       case TypeKind.ISIZE: return "isize";
       case TypeKind.U8: return "u8";
       case TypeKind.U16: return "u16";
-      case TypeKind.U32: return "u32";
+      case TypeKind.U32: {
+        return kindOnly || !this.functionType
+          ? "u32"
+          : this.functionType.toString(true);
+      }
       case TypeKind.U64: return "u64";
-      case TypeKind.USIZE:
-        if (kindOnly) return "usize";
-        return this.classType
-          ? this.classType.toString()
-          : this.functionType
-            ? this.functionType.toTypeString()
-            : "usize";
+      case TypeKind.USIZE: {
+        return kindOnly || !this.classType
+          ? "usize"
+          : this.classType.toString();
+      }
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
       case TypeKind.VOID: return "void";
-      default: assert(false); return "";
+      default: {
+        assert(false);
+        return "";
+      }
     }
   }
 
@@ -220,133 +224,70 @@ export class Type {
   /** Converts this type to its respective native type. */
   toNativeType(): NativeType {
     switch (this.kind) {
-
-      default:
-        return NativeType.I32;
-
+      default: return NativeType.I32;
       case TypeKind.I64:
-      case TypeKind.U64:
-        return NativeType.I64;
-
+      case TypeKind.U64: return NativeType.I64;
       case TypeKind.ISIZE:
-      case TypeKind.USIZE:
-        return this.size == 64 ? NativeType.I64 : NativeType.I32;
-
-      case TypeKind.F32:
-        return NativeType.F32;
-
-      case TypeKind.F64:
-        return NativeType.F64;
-
-      case TypeKind.VOID:
-        return NativeType.None;
+      case TypeKind.USIZE: return this.size == 64 ? NativeType.I64 : NativeType.I32;
+      case TypeKind.F32: return NativeType.F32;
+      case TypeKind.F64: return NativeType.F64;
+      case TypeKind.VOID:  return NativeType.None;
     }
   }
 
   /** Converts this type to its native `0` value. */
   toNativeZero(module: Module): ExpressionRef {
     switch (this.kind) {
-
-      case TypeKind.VOID:
-        assert(false);
-
-      default:
-        return module.createI32(0);
-
+      case TypeKind.VOID: assert(false);
+      default: return module.createI32(0);
       case TypeKind.ISIZE:
-      case TypeKind.USIZE:
-        if (this.size != 64) return module.createI32(0);
-        // fall-through
-
+      case TypeKind.USIZE: if (this.size != 64) return module.createI32(0);
       case TypeKind.I64:
-      case TypeKind.U64:
-        return module.createI64(0);
-
-      case TypeKind.F32:
-        return module.createF32(0);
-
-      case TypeKind.F64:
-        return module.createF64(0);
+      case TypeKind.U64: return module.createI64(0);
+      case TypeKind.F32: return module.createF32(0);
+      case TypeKind.F64: return module.createF64(0);
     }
   }
 
   /** Converts this type to its native `1` value. */
   toNativeOne(module: Module): ExpressionRef {
     switch (this.kind) {
-
-      case TypeKind.VOID:
-        assert(false);
-
-      default:
-        return module.createI32(1);
-
+      case TypeKind.VOID: assert(false);
+      default: return module.createI32(1);
       case TypeKind.ISIZE:
-      case TypeKind.USIZE:
-        if (this.size != 64) return module.createI32(1);
-        // fall-through
-
+      case TypeKind.USIZE: if (this.size != 64) return module.createI32(1);
       case TypeKind.I64:
-      case TypeKind.U64:
-        return module.createI64(1);
-
-      case TypeKind.F32:
-        return module.createF32(1);
-
-      case TypeKind.F64:
-        return module.createF64(1);
+      case TypeKind.U64: return module.createI64(1);
+      case TypeKind.F32: return module.createF32(1);
+      case TypeKind.F64: return module.createF64(1);
     }
   }
 
   /** Converts this type to its native `-1` value. */
   toNativeNegOne(module: Module): ExpressionRef {
     switch (this.kind) {
-
-      case TypeKind.VOID:
-        assert(false);
-
-      default:
-        return module.createI32(-1);
-
+      case TypeKind.VOID: assert(false);
+      default: return module.createI32(-1);
       case TypeKind.ISIZE:
-      case TypeKind.USIZE:
-        if (this.size != 64) return module.createI32(-1);
-        // fall-through
-
+      case TypeKind.USIZE: if (this.size != 64) return module.createI32(-1);
       case TypeKind.I64:
-      case TypeKind.U64:
-        return module.createI64(-1, -1);
-
-      case TypeKind.F32:
-        return module.createF32(-1);
-
-      case TypeKind.F64:
-        return module.createF64(-1);
+      case TypeKind.U64: return module.createI64(-1, -1);
+      case TypeKind.F32: return module.createF32(-1);
+      case TypeKind.F64: return module.createF64(-1);
     }
   }
 
   /** Converts this type to its signature string. */
   toSignatureString(): string {
     switch (this.kind) {
-
-      default:
-        return "i";
-
+      default: return "i";
       case TypeKind.I64:
-      case TypeKind.U64:
-        return "I";
-
+      case TypeKind.U64: return "I";
       case TypeKind.ISIZE:
-      case TypeKind.USIZE:
-        return this.size == 64 ? "I" : "i";
-
-      case TypeKind.F32:
-        return "f";
-
-      case TypeKind.F64:
-        return "F";
-
-      case TypeKind.VOID:
-        return "v";
+      case TypeKind.USIZE: return this.size == 64 ? "I" : "i";
+      case TypeKind.F32: return "f";
+      case TypeKind.F64: return "F";
+      case TypeKind.VOID: return "v";
     }
   }
 
@@ -494,4 +435,150 @@ export function typesToString(types: Type[]): string {
     sb[i] = types[i].toString();
   }
   return sb.join(", ");
+}
+
+/** Represents a fully resolved function signature. */
+export class Signature {
+
+  /** Parameter types, if any, excluding `this`. */
+  parameterTypes: Type[];
+  /** Parameter names, if known, excluding `this`. */
+  parameterNames: string[] | null;
+  /** Number of required parameters. Other parameters are considered optional. */
+  requiredParameters: i32;
+  /** Return type. */
+  returnType: Type;
+  /** This type, if an instance signature. */
+  thisType: Type | null;
+  /** Whether the last parameter is a rest parameter. */
+  hasRest: bool;
+
+  constructor(
+    parameterTypes: Type[] | null = null,
+    returnType: Type | null = null,
+    thisType: Type | null = null
+  ) {
+    this.parameterTypes = parameterTypes ? parameterTypes : [];
+    this.parameterNames = null;
+    this.requiredParameters = 0;
+    this.returnType = returnType ? returnType : Type.void;
+    this.thisType = thisType;
+    this.hasRest = false;
+  }
+
+  /** Gets the known or, alternatively, generic parameter name at the specified index. */
+  getParameterName(index: i32): string {
+    return this.parameterNames && this.parameterNames.length > index
+      ? this.parameterNames[index]
+      : getGenericParameterName(index);
+  }
+
+  /** Tests if a value of this function type is assignable to a target of the specified function type. */
+  isAssignableTo(target: Signature): bool {
+    // TODO: maybe cache results?
+
+    // check `this` type
+    var thisThisType = this.thisType;
+    var targetThisType = target.thisType;
+    if (thisThisType) {
+      if (!(targetThisType && thisThisType.isAssignableTo(targetThisType))) {
+        return false;
+      }
+    } else if (targetThisType) {
+      return false;
+    }
+
+    // check rest parameter
+    if (this.hasRest != target.hasRest) {
+      return false; // TODO
+    }
+
+    // check parameter types
+    var thisParameterTypes = this.parameterTypes;
+    var targetParameterTypes = target.parameterTypes;
+    var numParameters = thisParameterTypes.length;
+    if (numParameters != targetParameterTypes.length) {
+      return false;
+    }
+    for (let i = 0; i < numParameters; ++i) {
+      let thisParameterType = thisParameterTypes[i];
+      let targetParameterType = targetParameterTypes[i];
+      if (!thisParameterType.isAssignableTo(targetParameterType)) {
+        return false;
+      }
+    }
+
+    // check return type
+    return this.returnType.isAssignableTo(target.returnType);
+  }
+
+  /** Converts this signature to a function type string. */
+  toSignatureString(): string {
+    var sb = [];
+    var thisType = this.thisType;
+    if (thisType) {
+      sb.push(thisType.toSignatureString());
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      sb.push(parameterTypes[i].toSignatureString());
+    }
+    sb.push(this.returnType.toSignatureString());
+    return sb.join("");
+  }
+
+  /** Converts this signature to a string. */
+  toString(includeThis: bool = false): string {
+    var sb = new Array<string>();
+    sb.push("(");
+    var index = 0;
+    var thisType = this.thisType;
+    if (thisType) {
+      if (includeThis) {
+        sb.push("this: ");
+        sb.push(thisType.toString());
+        index = 1;
+      }
+    }
+    var parameters = this.parameterTypes;
+    var numParameters = parameters.length;
+    if (numParameters) {
+      let names = this.parameterNames;
+      let numNames = names ? names.length : 0;
+      let optionalStart = this.requiredParameters;
+      let restIndex = this.hasRest ? numParameters - 1 : -1;
+      for (let i = 0; i < numParameters; ++i, ++index) {
+        if (index) sb.push(", ");
+        if (i == restIndex) sb.push("...");
+        if (i < numNames) {
+          sb.push((<string[]>names)[i]);
+        } else {
+          sb.push(getGenericParameterName(i));
+        }
+        if (i >= optionalStart && i != restIndex) {
+          sb.push("?: ");
+        } else {
+          sb.push(": ");
+        }
+        sb.push(parameters[i].toString());
+      }
+    }
+    sb.push(") => ");
+    sb.push(this.returnType.toString());
+    return sb.join("");
+  }
+}
+
+// helpers
+
+// Cached generic parameter names used where names are unknown.
+var cachedGenericParameterNames: string[] | null = null;
+
+/** Gets the cached generic parameter name for the specified index. */
+export function getGenericParameterName(index: i32): string {
+  if (!cachedGenericParameterNames) cachedGenericParameterNames = [];
+  for (var i = cachedGenericParameterNames.length; i < index; ++i) {
+    cachedGenericParameterNames.push("arg$" + i.toString(10));
+  }
+  return cachedGenericParameterNames[index];
 }

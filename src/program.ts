@@ -10,19 +10,25 @@ import {
 
 import {
   Type,
+  Signature,
+
   typesToString
 } from "./types";
 
 import {
-  ModifierKind,
   Node,
   NodeKind,
   Source,
   Range,
+  CommonTypeNode,
   TypeNode,
-  TypeParameter,
-  Decorator,
+  TypeParameterNode,
+  // ParameterNode,
+  // ParameterKind,
+  // SignatureNode,
+  DecoratorNode,
   DecoratorKind,
+  ModifierKind,
 
   Expression,
   AssertionExpression,
@@ -53,7 +59,9 @@ import {
   VariableStatement,
 
   hasDecorator,
-  hasModifier
+  hasModifier,
+  ParameterKind,
+  SignatureNode
 } from "./ast";
 
 import {
@@ -79,12 +87,14 @@ export const LIBRARY_SUBST = "(lib)";
 /** Library directory prefix. */
 export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
 
+/** Represents a yet unresolved export. */
 class QueuedExport {
   isReExport: bool;
   referencedName: string;
   member: ExportMember;
 }
 
+/** Represents a yet unresolved import. */
 class QueuedImport {
   internalName: string;
   referencedName: string;
@@ -108,7 +118,7 @@ export class Program extends DiagnosticEmitter {
   /** Types by internal name. */
   types: Map<string,Type> = noTypesYet;
   /** Declared type aliases. */
-  typeAliases: Map<string,TypeNode> = new Map();
+  typeAliases: Map<string,CommonTypeNode> = new Map();
   /** Exports of individual files by exported name. Not global exports. */
   exports: Map<string,Element> = new Map();
 
@@ -121,7 +131,6 @@ export class Program extends DiagnosticEmitter {
   /** Initializes the program and its elements prior to compilation. */
   initialize(options: Options): void {
     this.options = options;
-
     this.types = new Map([
       ["i8", Type.i8],
       ["i16", Type.i16],
@@ -146,84 +155,61 @@ export class Program extends DiagnosticEmitter {
     var queuedDerivedClasses = new Array<ClassPrototype>();
 
     // build initial lookup maps of internal names to declarations
-    for (var i = 0, k = this.sources.length; i < k; ++i) {
-      var source = this.sources[i];
-      var statements = source.statements;
-      for (var j = 0, l = statements.length; j < l; ++j) {
-        var statement = statements[j];
+    for (let i = 0, k = this.sources.length; i < k; ++i) {
+      let source = this.sources[i];
+      let statements = source.statements;
+      for (let j = 0, l = statements.length; j < l; ++j) {
+        let statement = statements[j];
         switch (statement.kind) {
-
-          case NodeKind.CLASSDECLARATION:
-            this.initializeClass(
-              <ClassDeclaration>statement,
-              queuedDerivedClasses
-            );
+          case NodeKind.CLASSDECLARATION: {
+            this.initializeClass(<ClassDeclaration>statement, queuedDerivedClasses);
             break;
-
-          case NodeKind.ENUMDECLARATION:
+          }
+          case NodeKind.ENUMDECLARATION: {
             this.initializeEnum(<EnumDeclaration>statement);
             break;
-
-          case NodeKind.EXPORT:
-            this.initializeExports(
-              <ExportStatement>statement,
-              queuedExports
-            );
+          }
+          case NodeKind.EXPORT: {
+            this.initializeExports(<ExportStatement>statement, queuedExports);
             break;
-
-          case NodeKind.FUNCTIONDECLARATION:
+          }
+          case NodeKind.FUNCTIONDECLARATION: {
             this.initializeFunction(<FunctionDeclaration>statement);
             break;
-
-          case NodeKind.IMPORT:
-            this.initializeImports(
-              <ImportStatement>statement,
-              queuedExports,
-              queuedImports
-            );
+          }
+          case NodeKind.IMPORT: {
+            this.initializeImports(<ImportStatement>statement, queuedExports, queuedImports);
             break;
-
-          case NodeKind.INTERFACEDECLARATION:
+          }
+          case NodeKind.INTERFACEDECLARATION: {
             this.initializeInterface(<InterfaceDeclaration>statement);
             break;
-
-          case NodeKind.NAMESPACEDECLARATION:
-            this.initializeNamespace(
-              <NamespaceDeclaration>statement,
-              queuedDerivedClasses
-            );
+          }
+          case NodeKind.NAMESPACEDECLARATION: {
+            this.initializeNamespace(<NamespaceDeclaration>statement, queuedDerivedClasses);
             break;
-
-          case NodeKind.TYPEDECLARATION:
+          }
+          case NodeKind.TYPEDECLARATION: {
             this.initializeTypeAlias(<TypeDeclaration>statement);
             break;
-
-          case NodeKind.VARIABLE:
+          }
+          case NodeKind.VARIABLE: {
             this.initializeVariables(<VariableStatement>statement);
             break;
+          }
         }
       }
     }
 
-    var element: Element | null;
-
-    // queued imports should be resolvable now through traversing exports and
-    // queued exports
-    for (i = 0; i < queuedImports.length;) {
-      var queuedImport = queuedImports[i];
-      element = this.tryResolveImport(
-        queuedImport.referencedName,
-        queuedExports
-      );
+    // queued imports should be resolvable now through traversing exports and queued exports
+    for (let i = 0; i < queuedImports.length;) {
+      let queuedImport = queuedImports[i];
+      let element = this.tryResolveImport(queuedImport.referencedName, queuedExports);
       if (element) {
         this.elements.set(queuedImport.internalName, element);
         queuedImports.splice(i, 1);
       } else {
-        element = this.tryResolveImport(
-          queuedImport.referencedNameAlt,
-          queuedExports
-        );
-        if (element) {
+        if (element = this.tryResolveImport(queuedImport.referencedNameAlt, queuedExports)) {
           this.elements.set(queuedImport.internalName, element);
           queuedImports.splice(i, 1);
         } else {
@@ -239,8 +225,9 @@ export class Program extends DiagnosticEmitter {
     }
 
     // queued exports should be resolvable now that imports are finalized
-    for (var [exportName, queuedExport] of queuedExports) {
-      var currentExport: QueuedExport | null = queuedExport; // nullable below
+    for (let [exportName, queuedExport] of queuedExports) {
+      let currentExport: QueuedExport | null = queuedExport; // nullable below
+      let element: Element | null;
       do {
         if (currentExport.isReExport) {
           if (element = this.exports.get(currentExport.referencedName)) {
@@ -256,9 +243,7 @@ export class Program extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
               queuedExport.member.externalName.range,
-              (<StringLiteralExpression>(
-                <ExportStatement>queuedExport.member.parent
-              ).path).value,
+              (<StringLiteralExpression>(<ExportStatement>queuedExport.member.parent).path).value,
               queuedExport.member.externalName.text
             );
           }
@@ -286,10 +271,10 @@ export class Program extends DiagnosticEmitter {
     }
 
     // resolve base prototypes of derived classes
-    for (i = 0, k = queuedDerivedClasses.length; i < k; ++i) {
-      var derivedDeclaration = queuedDerivedClasses[i].declaration;
-      var derivedType = assert(derivedDeclaration.extendsType);
-      var resolved = this.resolveIdentifier(derivedType.name, null);
+    for (let i = 0, k = queuedDerivedClasses.length; i < k; ++i) {
+      let derivedDeclaration = queuedDerivedClasses[i].declaration;
+      let derivedType = assert(derivedDeclaration.extendsType);
+      let resolved = this.resolveIdentifier(derivedType.name, null);
       if (resolved) {
         if (resolved.element.kind != ElementKind.CLASS_PROTOTYPE) {
           this.error(
@@ -312,9 +297,7 @@ export class Program extends DiagnosticEmitter {
   ): Element | null {
     var element: Element | null;
     do {
-      if (element = this.exports.get(referencedName)) {
-        return element;
-      }
+      if (element = this.exports.get(referencedName)) return element;
       var queuedExport = queuedExports.get(referencedName);
       if (!queuedExport) return null;
       if (queuedExport.isReExport) {
@@ -330,9 +313,7 @@ export class Program extends DiagnosticEmitter {
     declaration: DeclarationStatement
   ): void {
     var isBuiltin: bool = hasDecorator("builtin", declaration.decorators);
-    if (isBuiltin) {
-      element.set(ElementFlags.BUILTIN);
-    }
+    if (isBuiltin) element.set(ElementFlags.BUILTIN);
     if (
       hasDecorator("global", declaration.decorators) ||
       (
@@ -393,8 +374,7 @@ export class Program extends DiagnosticEmitter {
           DiagnosticCode.Structs_cannot_implement_interfaces,
           Range.join(
             declaration.name.range,
-            declaration.implementsTypes[declaration.implementsTypes.length - 1]
-              .range
+            declaration.implementsTypes[declaration.implementsTypes.length - 1].range
           )
         );
       }
@@ -436,16 +416,15 @@ export class Program extends DiagnosticEmitter {
 
     // initialize members
     var memberDeclarations = declaration.members;
-    for (var i = 0, k = memberDeclarations.length; i < k; ++i) {
-      var memberDeclaration = memberDeclarations[i];
+    for (let i = 0, k = memberDeclarations.length; i < k; ++i) {
+      let memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
-
-        case NodeKind.FIELDDECLARATION:
+        case NodeKind.FIELDDECLARATION: {
           this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
-
-        case NodeKind.METHODDECLARATION:
-          var isGetter = hasModifier(
+        }
+        case NodeKind.METHODDECLARATION: {
+          let isGetter = hasModifier(
             ModifierKind.GET,
             memberDeclaration.modifiers
           );
@@ -465,9 +444,10 @@ export class Program extends DiagnosticEmitter {
             );
           }
           break;
-
-        default:
+        }
+        default: {
           throw new Error("class member expected");
+        }
       }
     }
 
@@ -477,10 +457,8 @@ export class Program extends DiagnosticEmitter {
       declaration.name.text == "String"
     ) {
       if (!this.types.has("string")) {
-        var instance = prototype.resolve(null);
-        if (instance) {
-          this.types.set("string", instance.type);
-        }
+        let instance = prototype.resolve(null);
+        if (instance) this.types.set("string", instance.type);
       } else {
         this.error(
           DiagnosticCode.Duplicate_identifier_0,
@@ -625,7 +603,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private checkOperators(
-    decorators: Decorator[] | null,
+    decorators: DecoratorNode[] | null,
     prototype: FunctionPrototype,
     classPrototype: ClassPrototype
   ) {
@@ -652,28 +630,28 @@ export class Program extends DiagnosticEmitter {
               (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
             ) {
               switch ((<StringLiteralExpression>firstArg).value) {
-
-                case "[]":
+                case "[]": {
                   classPrototype.fnIndexedGet = prototype.simpleName;
                   break;
-
-                case "[]=":
+                }
+                case "[]=": {
                   classPrototype.fnIndexedSet = prototype.simpleName;
                   break;
-
-                case "+":
+                }
+                case "+": {
                   classPrototype.fnConcat = prototype.simpleName;
                   break;
-
-                case "==":
+                }
+                case "==": {
                   classPrototype.fnEquals = prototype.simpleName;
                   break;
-
-                default:
+                }
+                default: {
                   this.error(
                     DiagnosticCode.Operation_not_supported,
                     firstArg.range
                   );
+                }
               }
             } else {
               this.error(
@@ -1166,11 +1144,11 @@ export class Program extends DiagnosticEmitter {
       var memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
 
-        case NodeKind.FIELDDECLARATION:
+        case NodeKind.FIELDDECLARATION: {
           this.initializeField(<FieldDeclaration>memberDeclaration, prototype);
           break;
-
-        case NodeKind.METHODDECLARATION:
+        }
+        case NodeKind.METHODDECLARATION: {
           var isGetter = hasModifier(ModifierKind.GET, memberDeclaration.modifiers);
           if (isGetter || hasModifier(ModifierKind.SET, memberDeclaration.modifiers)) {
             this.initializeAccessor(<MethodDeclaration>memberDeclaration, prototype, isGetter);
@@ -1178,9 +1156,10 @@ export class Program extends DiagnosticEmitter {
             this.initializeMethod(<MethodDeclaration>memberDeclaration, prototype);
           }
           break;
-
-        default:
+        }
+        default: {
           throw new Error("interface member expected");
+        }
       }
     }
   }
@@ -1227,28 +1206,27 @@ export class Program extends DiagnosticEmitter {
     var members = declaration.members;
     for (var i = 0, k = members.length; i < k; ++i) {
       switch (members[i].kind) {
-
-        case NodeKind.CLASSDECLARATION:
+        case NodeKind.CLASSDECLARATION: {
           this.initializeClass(<ClassDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
-
-        case NodeKind.ENUMDECLARATION:
+        }
+        case NodeKind.ENUMDECLARATION: {
           this.initializeEnum(<EnumDeclaration>members[i], namespace);
           break;
-
-        case NodeKind.FUNCTIONDECLARATION:
+        }
+        case NodeKind.FUNCTIONDECLARATION: {
           this.initializeFunction(<FunctionDeclaration>members[i], namespace);
           break;
-
-        case NodeKind.INTERFACEDECLARATION:
+        }
+        case NodeKind.INTERFACEDECLARATION: {
           this.initializeInterface(<InterfaceDeclaration>members[i], namespace);
           break;
-
-        case NodeKind.NAMESPACEDECLARATION:
+        }
+        case NodeKind.NAMESPACEDECLARATION: {
           this.initializeNamespace(<NamespaceDeclaration>members[i], queuedExtendingClasses, namespace);
           break;
-
-        case NodeKind.TYPEDECLARATION:
+        }
+        case NodeKind.TYPEDECLARATION: {
           // this.initializeTypeAlias(<TypeDeclaration>members[i], namespace);
           // TODO: what about namespaced types?
           this.error(
@@ -1256,13 +1234,14 @@ export class Program extends DiagnosticEmitter {
             members[i].range
           );
           break;
-
-        case NodeKind.VARIABLE:
+        }
+        case NodeKind.VARIABLE: {
           this.initializeVariables(<VariableStatement>members[i], namespace);
           break;
-
-        default:
+        }
+        default: {
           throw new Error("namespace member expected");
+        }
       }
     }
   }
@@ -1332,52 +1311,124 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  /** Resolves a {@link TypeNode} to a concrete {@link Type}. */
+  /** Resolves a {@link SignatureNode} to a concrete {@link Signature}. */
+  resolveSignature(
+    node: SignatureNode,
+    contextualTypeArguments: Map<string,Type> | null = null,
+    reportNotFound: bool = true
+  ): Signature | null {
+    var explicitThisType = node.explicitThisType;
+    var thisType: Type | null = null;
+    if (explicitThisType) {
+      thisType = this.resolveType(
+        explicitThisType,
+        contextualTypeArguments,
+        reportNotFound
+      );
+      if (!thisType) return null;
+    }
+    var parameterTypeNodes = node.parameterTypes;
+    var numParameters = parameterTypeNodes.length;
+    var parameterTypes = new Array<Type>(numParameters);
+    var parameterNames = new Array<string>(numParameters);
+    var requiredParameters = 0;
+    var hasRest = false;
+    for (let i = 0; i < numParameters; ++i) {
+      let parameterTypeNode = parameterTypeNodes[i];
+      switch (parameterTypeNode.parameterKind) {
+        case ParameterKind.DEFAULT: {
+          requiredParameters = i + 1;
+          break;
+        }
+        case ParameterKind.REST: {
+          assert(i == numParameters);
+          hasRest = true;
+          break;
+        }
+      }
+      let parameterType = this.resolveType(
+        assert(parameterTypeNode.type),
+        contextualTypeArguments,
+        reportNotFound
+      );
+      if (!parameterType) return null;
+      parameterTypes[i] = parameterType;
+      parameterNames[i] = parameterTypeNode.name.text;
+    }
+    var returnTypeNode = node.returnType;
+    var returnType: Type | null;
+    if (returnTypeNode) {
+      returnType = this.resolveType(
+        returnTypeNode,
+        contextualTypeArguments,
+        reportNotFound
+      );
+      if (!returnType) return null;
+    } else {
+      returnType = Type.void;
+    }
+    var signature = new Signature(parameterTypes, returnType, thisType);
+    signature.parameterNames = parameterNames;
+    signature.requiredParameters = requiredParameters;
+    signature.hasRest = hasRest;
+    return signature;
+  }
+
+  /** Resolves a {@link CommonTypeNode} to a concrete {@link Type}. */
   resolveType(
-    node: TypeNode,
+    node: CommonTypeNode,
     contextualTypeArguments: Map<string,Type> | null = null,
     reportNotFound: bool = true
   ): Type | null {
-    var globalName = node.name.text;
-    var localName = node.range.source.internalPath + PATH_DELIMITER + node.name.text;
+    if (node.kind == NodeKind.SIGNATURE) {
+      let signature = this.resolveSignature(<SignatureNode>node, contextualTypeArguments, reportNotFound);
+      if (!signature) return null;
+      return Type.u32.asFunction(signature);
+    }
+    var typeNode = <TypeNode>node;
+    var globalName = typeNode.name.text;
+    var localName = typeNode.range.source.internalPath + PATH_DELIMITER + typeNode.name.text;
 
     var element: Element | null;
 
     // check file-global / program-global element
     if ((element = this.elements.get(localName)) || (element = this.elements.get(globalName))) {
       switch (element.kind) {
-        case ElementKind.CLASS_PROTOTYPE:
+        case ElementKind.CLASS_PROTOTYPE: {
           var instance = (<ClassPrototype>element).resolveUsingTypeArguments(
-            node.typeArguments,
+            typeNode.typeArguments,
             contextualTypeArguments,
             null
           ); // reports
           return instance ? instance.type : null;
+        }
       }
     }
 
     // resolve parameters
-    var k = node.typeArguments.length;
-    var paramTypes = new Array<Type>(k);
-    for (var i = 0; i < k; ++i) {
-      var paramType = this.resolveType( // reports
-        node.typeArguments[i],
-        contextualTypeArguments,
-        reportNotFound
-      );
-      if (!paramType) return null;
-      paramTypes[i] = paramType;
-    }
-
-    if (k) { // can't be a placeholder if it has parameters
-      var instanceKey = typesToString(paramTypes);
-      if (instanceKey.length) {
-        localName += "<" + instanceKey + ">";
-        globalName += "<" + instanceKey + ">";
+    if (typeNode.typeArguments) {
+      var k = typeNode.typeArguments.length;
+      var paramTypes = new Array<Type>(k);
+      for (var i = 0; i < k; ++i) {
+        var paramType = this.resolveType( // reports
+          typeNode.typeArguments[i],
+          contextualTypeArguments,
+          reportNotFound
+        );
+        if (!paramType) return null;
+        paramTypes[i] = paramType;
       }
-    } else if (contextualTypeArguments) {
-      var placeholderType = contextualTypeArguments.get(globalName);
-      if (placeholderType) return placeholderType;
+
+      if (k) { // can't be a placeholder if it has parameters
+        var instanceKey = typesToString(paramTypes);
+        if (instanceKey.length) {
+          localName += "<" + instanceKey + ">";
+          globalName += "<" + instanceKey + ">";
+        }
+      } else if (contextualTypeArguments) {
+        var placeholderType = contextualTypeArguments.get(globalName);
+        if (placeholderType) return placeholderType;
+      }
     }
 
     var type: Type | null;
@@ -1396,7 +1447,7 @@ export class Program extends DiagnosticEmitter {
     if (reportNotFound) {
       this.error(
         DiagnosticCode.Cannot_find_name_0,
-        node.name.range, globalName
+        typeNode.name.range, globalName
       );
     }
     return null;
@@ -1404,8 +1455,8 @@ export class Program extends DiagnosticEmitter {
 
   /** Resolves an array of type arguments to concrete types. */
   resolveTypeArguments(
-    typeParameters: TypeParameter[],
-    typeArgumentNodes: TypeNode[] | null,
+    typeParameters: TypeParameterNode[],
+    typeArgumentNodes: CommonTypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): Type[] | null {
@@ -1525,10 +1576,9 @@ export class Program extends DiagnosticEmitter {
 
     // Resolve variable-likes to their class type first
     switch (target.kind) {
-
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
-      case ElementKind.FIELD:
+      case ElementKind.FIELD: {
         if (!(targetType = (<VariableLikeElement>target).type).classType) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
@@ -1538,11 +1588,11 @@ export class Program extends DiagnosticEmitter {
         }
         target = <Class>targetType.classType;
         break;
-
-      case ElementKind.PROPERTY:
+      }
+      case ElementKind.PROPERTY: {
         var getter = assert((<Property>target).getterPrototype).resolve(); // reports
         if (!getter) return null;
-        if (!(targetType = getter.returnType).classType) {
+        if (!(targetType = getter.signature.returnType).classType) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
             propertyAccess.property.range, propertyName, targetType.toString()
@@ -1551,13 +1601,13 @@ export class Program extends DiagnosticEmitter {
         }
         target = <Class>targetType.classType;
         break;
+      }
     }
 
     // Look up the member within
     switch (target.kind) {
-
       case ElementKind.CLASS_PROTOTYPE:
-      case ElementKind.CLASS:
+      case ElementKind.CLASS: {
         do {
           if (target.members && (member = target.members.get(propertyName))) {
             return resolvedElement.set(member).withTarget(target, targetExpression);
@@ -1581,12 +1631,13 @@ export class Program extends DiagnosticEmitter {
           }
         } while (true);
         break;
-
-      default: // enums or other namespace-like elements
+      }
+      default: { // enums or other namespace-like elements
         if (target.members && (member = target.members.get(propertyName))) {
           return resolvedElement.set(member).withTarget(target, targetExpression);
         }
         break;
+      }
     }
     this.error(
       DiagnosticCode.Property_0_does_not_exist_on_type_1,
@@ -1608,10 +1659,9 @@ export class Program extends DiagnosticEmitter {
     if (!resolvedElement) return null;
     var target = resolvedElement.element;
     switch (target.kind) {
-
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
-      case ElementKind.FIELD:
+      case ElementKind.FIELD: {
         var type = (<VariableLikeElement>target).type;
         if (type.classType) {
           var indexedGetName = (target = type.classType).prototype.fnIndexedGet;
@@ -1626,6 +1676,7 @@ export class Program extends DiagnosticEmitter {
           }
         }
         break;
+      }
     }
     this.error(
       DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -1639,26 +1690,22 @@ export class Program extends DiagnosticEmitter {
     contextualFunction: Function
   ): ResolvedElement | null {
     var classType: Class | null;
-
     while (expression.kind == NodeKind.PARENTHESIZED) {
       expression = (<ParenthesizedExpression>expression).expression;
     }
-
     switch (expression.kind) {
-
-      case NodeKind.ASSERTION:
+      case NodeKind.ASSERTION: {
         var type = this.resolveType((<AssertionExpression>expression).toType); // reports
         if (type && (classType = type.classType)) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
           return resolvedElement.set(classType);
         }
         return null;
-
-      case NodeKind.BINARY:
-        // TODO: string concatenation, mostly
+      }
+      case NodeKind.BINARY: { // TODO: string concatenation, mostly
         throw new Error("not implemented");
-
-      case NodeKind.THIS: // -> Class
+      }
+      case NodeKind.THIS: { // -> Class
         if (classType = contextualFunction.instanceMethodOf) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
           return resolvedElement.set(classType);
@@ -1668,8 +1715,8 @@ export class Program extends DiagnosticEmitter {
           expression.range
         );
         return null;
-
-      case NodeKind.SUPER: // -> Class
+      }
+      case NodeKind.SUPER: { // -> Class
         if ((classType = contextualFunction.instanceMethodOf) && (classType = classType.base)) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
           return resolvedElement.set(classType);
@@ -1679,23 +1726,23 @@ export class Program extends DiagnosticEmitter {
           expression.range
         );
         return null;
-
-      case NodeKind.IDENTIFIER:
+      }
+      case NodeKind.IDENTIFIER: {
         return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
-
-      case NodeKind.PROPERTYACCESS:
+      }
+      case NodeKind.PROPERTYACCESS: {
         return this.resolvePropertyAccess(
           <PropertyAccessExpression>expression,
           contextualFunction
         );
-
-      case NodeKind.ELEMENTACCESS:
+      }
+      case NodeKind.ELEMENTACCESS: {
         return this.resolveElementAccess(
           <ElementAccessExpression>expression,
           contextualFunction
         );
-
-      case NodeKind.CALL:
+      }
+      case NodeKind.CALL: {
         var resolved = this.resolveExpression(
           (<CallExpression>expression).expression,
           contextualFunction
@@ -1708,13 +1755,14 @@ export class Program extends DiagnosticEmitter {
               null,
               expression
             );
-            if (instance && instance.returnType.classType) {
+            if (instance && (classType = instance.signature.returnType.classType)) {
               if (!resolvedElement) resolvedElement = new ResolvedElement();
-              return resolvedElement.set(instance.returnType.classType);
+              return resolvedElement.set(classType);
             }
           }
         }
         break;
+      }
     }
     this.error(
       DiagnosticCode.Operation_not_supported,
@@ -1747,6 +1795,15 @@ export class ResolvedElement {
     this.target = target;
     this.targetExpression = targetExpression;
     return this;
+  }
+
+  /** Tests if the target is a valid instance target. */
+  get isInstanceTarget(): bool {
+    return (
+      this.target != null &&
+      this.target.kind == ElementKind.CLASS &&
+      this.targetExpression != null
+    );
   }
 }
 
@@ -1886,9 +1943,18 @@ export class Namespace extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+          case ModifierKind.IMPORT: {
+            this.set(ElementFlags.IMPORTED);
+            break;
+          }
+          case ModifierKind.EXPORT: {
+            this.set(ElementFlags.EXPORTED);
+            break;
+          }
+          case ModifierKind.DECLARE: {
+            this.set(ElementFlags.DECLARED);
+            break;
+          }
           default: throw new Error("unexpected modifier");
         }
       }
@@ -1916,10 +1982,22 @@ export class Enum extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
-          case ModifierKind.CONST: this.set(ElementFlags.CONSTANT); break;
+          case ModifierKind.EXPORT: {
+            this.set(ElementFlags.EXPORTED);
+            break;
+          }
+          case ModifierKind.IMPORT: {
+            this.set(ElementFlags.IMPORTED);
+            break;
+          }
+          case ModifierKind.DECLARE: {
+            this.set(ElementFlags.DECLARED);
+            break;
+          }
+          case ModifierKind.CONST: {
+            this.set(ElementFlags.CONSTANT);
+            break;
+          }
           default: throw new Error("unexpected modifier");
         }
       }
@@ -2005,42 +2083,38 @@ export class Global extends VariableLikeElement {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-
-          case ModifierKind.IMPORT:
+          case ModifierKind.IMPORT: {
             this.set(ElementFlags.IMPORTED);
             break;
-
-          case ModifierKind.EXPORT:
+          }
+          case ModifierKind.EXPORT: {
             this.set(ElementFlags.EXPORTED);
             break;
-
-          case ModifierKind.CONST:
+          }
+          case ModifierKind.CONST: {
             this.set(ElementFlags.CONSTANT);
             break;
-
-          case ModifierKind.LET:
+          }
+          case ModifierKind.LET: {
             this.set(ElementFlags.SCOPED);
             break;
-
-          case ModifierKind.DECLARE:
+          }
+          case ModifierKind.DECLARE: {
             this.set(ElementFlags.DECLARED);
             break;
-
-          case ModifierKind.READONLY:
+          }
+          case ModifierKind.READONLY: {
             this.set(this.declaration.initializer
               ? ElementFlags.CONSTANT | ElementFlags.READONLY
               : ElementFlags.READONLY
             );
             break;
-
+          }
           case ModifierKind.PUBLIC:
           case ModifierKind.PRIVATE:
           case ModifierKind.PROTECTED:
-          case ModifierKind.STATIC:
-            break; // static fields become globals
-
-          default:
-            throw new Error("unexpected modifier");
+          case ModifierKind.STATIC: break; // static fields become globals
+          default: throw new Error("unexpected modifier");
         }
       }
     }
@@ -2094,7 +2168,7 @@ export class FunctionPrototype extends Element {
   classPrototype: ClassPrototype | null;
   /** Resolved instances. */
   instances: Map<string,Function> = new Map();
-  /** Class type arguments, if a partially resolved method of a generic class. */
+  /** Class type arguments, if a partially resolved method of a generic class. Not set otherwise. */
   classTypeArguments: Type[] | null = null;
 
   /** Constructs a new function prototype. */
@@ -2110,36 +2184,32 @@ export class FunctionPrototype extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-
-          case ModifierKind.IMPORT:
+          case ModifierKind.IMPORT: {
             this.set(ElementFlags.IMPORTED);
             break;
-
-          case ModifierKind.EXPORT:
+          }
+          case ModifierKind.EXPORT: {
             this.set(ElementFlags.EXPORTED);
             break;
-
-          case ModifierKind.DECLARE:
+          }
+          case ModifierKind.DECLARE: {
             this.set(ElementFlags.DECLARED);
             break;
-
-          case ModifierKind.GET:
+          }
+          case ModifierKind.GET: {
             this.set(ElementFlags.GETTER);
             break;
-
-          case ModifierKind.SET:
+          }
+          case ModifierKind.SET: {
             this.set(ElementFlags.SETTER);
             break;
-
+          }
           case ModifierKind.STATIC:
           case ModifierKind.ABSTRACT:
           case ModifierKind.PRIVATE:
           case ModifierKind.PROTECTED:
-          case ModifierKind.PUBLIC:
-            break; // already handled
-
-          default:
-            throw new Error("unexpected modifier");
+          case ModifierKind.PUBLIC: break; // already handled
+          default: throw new Error("unexpected modifier");
         }
       }
     }
@@ -2161,88 +2231,100 @@ export class FunctionPrototype extends Element {
     if (instance) return instance;
 
     var declaration = this.declaration;
+    var isInstance = this.is(ElementFlags.INSTANCE);
 
-    // inherit contextual type arguments
+    // inherit contextual type arguments as provided. might be be overridden.
     var inheritedTypeArguments = contextualTypeArguments;
     contextualTypeArguments = new Map();
     if (inheritedTypeArguments) {
-      for (var [inheritedName, inheritedType] of inheritedTypeArguments) {
-        contextualTypeArguments.set(inheritedName, inheritedType);
+      for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
+        contextualTypeArguments.set(
+          inheritedName,
+          inheritedType
+        );
       }
     }
 
-    var i: i32, k: i32;
-
-    // inherit class type arguments if a partially resolved instance method (classTypeArguments is set)
-    if (this.classTypeArguments) {
-      if (!this.classPrototype) {
-        throw new Error("partially resolved instance method must reference its class prototype");
+    // override with class type arguments if a partially resolved instance method
+    var classTypeArguments = this.classTypeArguments;
+    if (classTypeArguments) { // set only if partially resolved
+      let classDeclaration = (<ClassPrototype>assert(this.classPrototype)).declaration;
+      let classTypeParameters = classDeclaration.typeParameters;
+      let numClassTypeParameters = classTypeParameters.length;
+      assert(numClassTypeParameters == classTypeArguments.length);
+      for (let i = 0; i < numClassTypeParameters; ++i) {
+        contextualTypeArguments.set(
+          classTypeParameters[i].name.text,
+          classTypeArguments[i]
+        );
       }
-      var classDeclaration = (<ClassPrototype>this.classPrototype).declaration;
-      var classTypeParameters = classDeclaration.typeParameters;
-      if ((k = this.classTypeArguments.length) != classTypeParameters.length) {
-        throw new Error("type argument count mismatch");
-      }
-      for (i = 0; i < k; ++i) {
-        contextualTypeArguments.set(classTypeParameters[i].name.text, this.classTypeArguments[i]);
-      }
+    } else {
+      assert(!classTypeArguments);
     }
 
-    // override call specific contextual type arguments
+    // override with function specific type arguments
+    var signatureNode = declaration.signature;
     var functionTypeParameters = declaration.typeParameters;
-    if (functionTypeArguments && (k = functionTypeArguments.length)) {
-      if (!functionTypeParameters || k != functionTypeParameters.length) {
-        throw new Error("type argument count mismatch");
+    var numFunctionTypeArguments: i32;
+    if (functionTypeArguments && (numFunctionTypeArguments = functionTypeArguments.length)) {
+      assert(functionTypeParameters && numFunctionTypeArguments == functionTypeParameters.length);
+      for (let i = 0; i < numFunctionTypeArguments; ++i) {
+        contextualTypeArguments.set(
+          (<TypeParameterNode[]>functionTypeParameters)[i].name.text,
+          functionTypeArguments[i]
+        );
       }
-      for (i = 0; i < k; ++i) {
-        contextualTypeArguments.set(functionTypeParameters[i].name.text, functionTypeArguments[i]);
-      }
+    } else {
+      assert(!functionTypeParameters || functionTypeParameters.length == 0);
     }
 
-    // resolve parameters
-    // TODO: 'this' type
-    k = declaration.parameters.length;
-    var parameters = new Array<Parameter>(k);
-    var parameterTypes = new Array<Type>(k);
-    var typeNode: TypeNode | null;
-    for (i = 0; i < k; ++i) {
-      var parameterDeclaration = declaration.parameters[i];
-      typeNode = assert(parameterDeclaration.type);
-      var parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
-      if (parameterType) {
-        parameters[i] = new Parameter(parameterDeclaration.name.text, parameterType, parameterDeclaration.initializer);
-        parameterTypes[i] = parameterType;
-      } else {
-        return null;
-      }
-    }
-
-    var internalName = this.internalName;
-    if (instanceKey.length) {
-      internalName += "<" + instanceKey + ">";
-    }
+    // resolve class if an instance method
     var classInstance: Class | null = null;
-    if (this.classPrototype) {
-      classInstance = this.classPrototype.resolve(this.classTypeArguments, contextualTypeArguments); // reports
+    var thisType: Type | null = null;
+    if (isInstance) {
+      let classPrototype = assert(this.classPrototype);
+      classInstance = classPrototype.resolve(classTypeArguments, contextualTypeArguments); // reports
       if (!classInstance) return null;
+      thisType = classInstance.type;
+    } else {
+      assert(!this.classPrototype);
     }
 
-    // resolve return type
-    // TODO: 'this' type
+    // resolve signature node
+    var signatureParameters = signatureNode.parameterTypes;
+    var signatureParameterCount = signatureParameters.length;
+    var parameterTypes = new Array<Type>(signatureParameterCount);
+    var parameterNames = new Array<string>(signatureParameterCount);
+    var requiredParameters = 0;
+    for (let i = 0; i < signatureParameterCount; ++i) {
+      let parameterDeclaration = signatureParameters[i];
+      if (parameterDeclaration.parameterKind == ParameterKind.DEFAULT) {
+        requiredParameters = i + 1;
+      }
+      let typeNode = assert(parameterDeclaration.type);
+      let parameterType = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
+      if (!parameterType) return null;
+      parameterTypes[i] = parameterType;
+      parameterNames[i] = parameterDeclaration.name.text;
+    }
+
     var returnType: Type;
     if (this.is(ElementFlags.SETTER) || this.is(ElementFlags.CONSTRUCTOR)) {
       returnType = Type.void; // not annotated
     } else {
-      typeNode = assert(declaration.returnType);
-      var type = this.program.resolveType(<TypeNode>typeNode, contextualTypeArguments, true); // reports
-      if (type) {
-        returnType = type;
-      } else {
-        return null;
-      }
+      let typeNode = assert(signatureNode.returnType);
+      let type = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
+      if (!type) return null;
+      returnType = type;
     }
 
-    instance = new Function(this, internalName, functionTypeArguments, parameters, returnType, classInstance);
+    var signature = new Signature(parameterTypes, returnType, thisType);
+    signature.parameterNames = parameterNames;
+    signature.requiredParameters = requiredParameters;
+
+    var internalName = this.internalName;
+    if (instanceKey.length) internalName += "<" + instanceKey + ">";
+    instance = new Function(this, internalName, signature, classInstance);
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
     return instance;
@@ -2270,7 +2352,7 @@ export class FunctionPrototype extends Element {
 
   /** Resolves the specified type arguments prior to resolving this prototype to an instance. */
   resolveUsingTypeArguments(
-    typeArgumentNodes: TypeNode[] | null,
+    typeArgumentNodes: CommonTypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null,
     reportNode: Node
   ): Function | null {
@@ -2290,7 +2372,7 @@ export class FunctionPrototype extends Element {
 
   /** Resolves the type arguments to use when compiling a built-in call. Must be a built-in. */
   resolveBuiltinTypeArguments(
-    typeArgumentNodes: TypeNode[] | null,
+    typeArgumentNodes: CommonTypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null
   ): Type[] | null {
     assert(this.is(ElementFlags.BUILTIN));
@@ -2321,12 +2403,8 @@ export class Function extends Element {
 
   /** Prototype reference. */
   prototype: FunctionPrototype;
-  /** Concrete type arguments. */
-  typeArguments: Type[] | null;
-  /** Concrete function parameters. Excluding `this` if an instance method. */
-  parameters: Parameter[] | null;
-  /** Concrete return type. */
-  returnType: Type;
+  /** Function signature. */
+  signature: Signature;
   /** If an instance method, the concrete class it is a member of. */
   instanceMethodOf: Class | null;
   /** Map of locals by name. */
@@ -2345,6 +2423,8 @@ export class Function extends Element {
   ref: FunctionRef = 0;
   /** Function table index, if any. */
   functionTableIndex: i32 = -1;
+  /** Trampoline function for calling with omitted arguments. */
+  trampoline: Function | null = null;
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
@@ -2353,44 +2433,49 @@ export class Function extends Element {
   constructor(
     prototype: FunctionPrototype,
     internalName: string,
-    typeArguments: Type[] | null,
-    parameters: Parameter[] | null,
-    returnType: Type,
+    signature: Signature,
     instanceMethodOf: Class | null = null
   ) {
     super(prototype.program, prototype.simpleName, internalName);
     this.prototype = prototype;
-    this.typeArguments = typeArguments;
-    this.parameters = parameters || [];
-    this.returnType = returnType;
+    this.signature = signature;
     this.instanceMethodOf = instanceMethodOf;
     this.flags = prototype.flags;
     if (!(prototype.is(ElementFlags.BUILTIN) || prototype.is(ElementFlags.DECLARED))) {
-      var localIndex = 0;
+      let localIndex = 0;
       if (instanceMethodOf) {
-        assert(this.is(ElementFlags.INSTANCE)); // internal error
-        this.locals.set("this", new Local(prototype.program, "this", localIndex++, instanceMethodOf.type));
+        assert(this.is(ElementFlags.INSTANCE));
+        this.locals.set(
+          "this",
+          new Local(
+            prototype.program,
+            "this",
+            localIndex++,
+            assert(signature.thisType)
+          )
+        );
         if (instanceMethodOf.contextualTypeArguments) {
           if (!this.contextualTypeArguments) {
             this.contextualTypeArguments = new Map();
           }
-          for (var [inheritedName, inheritedType] of instanceMethodOf.contextualTypeArguments) {
+          for (let [inheritedName, inheritedType] of instanceMethodOf.contextualTypeArguments) {
             this.contextualTypeArguments.set(inheritedName, inheritedType);
           }
         }
       } else {
         assert(!this.is(ElementFlags.INSTANCE)); // internal error
       }
-      for (var i = 0, k = this.parameters.length; i < k; ++i) {
-        var parameter = this.parameters[i];
-        var parameterName = assert(parameter.name, "parameter must be named"); // not a builtin or declared
+      let parameterTypes = signature.parameterTypes;
+      for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+        let parameterType = parameterTypes[i];
+        let parameterName = signature.getParameterName(i);
         this.locals.set(
           parameterName,
           new Local(
             prototype.program,
             parameterName,
             localIndex++,
-            parameter.type
+            parameterType
           )
         );
       }
@@ -2401,8 +2486,8 @@ export class Function extends Element {
   /** Adds a local of the specified type, with an optional name. */
   addLocal(type: Type, name: string | null = null): Local {
     // if it has a name, check previously as this method will throw otherwise
-    var localIndex = (this.parameters ? this.parameters.length : 0) + this.additionalLocals.length;
-    if (this.is(ElementFlags.INSTANCE)) localIndex++; // plus 'this'
+    var localIndex = this.signature.parameterTypes.length + this.additionalLocals.length;
+    if (this.is(ElementFlags.INSTANCE)) ++localIndex;
     var local = new Local(
       this.prototype.program,
       name
@@ -2428,10 +2513,22 @@ export class Function extends Element {
   getTempLocal(type: Type): Local {
     var temps: Local[] | null;
     switch (type.toNativeType()) {
-      case NativeType.I32: temps = this.tempI32s; break;
-      case NativeType.I64: temps = this.tempI64s; break;
-      case NativeType.F32: temps = this.tempF32s; break;
-      case NativeType.F64: temps = this.tempF64s; break;
+      case NativeType.I32: {
+        temps = this.tempI32s;
+        break;
+      }
+      case NativeType.I64: {
+        temps = this.tempI64s;
+        break;
+      }
+      case NativeType.F32: {
+        temps = this.tempF32s;
+        break;
+      }
+      case NativeType.F64: {
+        temps = this.tempF64s;
+        break;
+      }
       default: throw new Error("concrete type expected");
     }
     if (temps && temps.length) {
@@ -2447,10 +2544,22 @@ export class Function extends Element {
     var temps: Local[];
     assert(local.type != null); // internal error
     switch ((<Type>local.type).toNativeType()) {
-      case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
-      case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
-      case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
-      case NativeType.F64: temps = this.tempF64s || (this.tempF64s = []); break;
+      case NativeType.I32: {
+        temps = this.tempI32s || (this.tempI32s = []);
+        break;
+      }
+      case NativeType.I64: {
+        temps = this.tempI64s || (this.tempI64s = []);
+        break;
+      }
+      case NativeType.F32: {
+        temps = this.tempF32s || (this.tempF32s = []);
+        break;
+      }
+      case NativeType.F64: {
+        temps = this.tempF64s || (this.tempF64s = []);
+        break;
+      }
       default: throw new Error("concrete type expected");
     }
     temps.push(local);
@@ -2460,10 +2569,22 @@ export class Function extends Element {
   getAndFreeTempLocal(type: Type): Local {
     var temps: Local[];
     switch (type.toNativeType()) {
-      case NativeType.I32: temps = this.tempI32s || (this.tempI32s = []); break;
-      case NativeType.I64: temps = this.tempI64s || (this.tempI64s = []); break;
-      case NativeType.F32: temps = this.tempF32s || (this.tempF32s = []); break;
-      case NativeType.F64: temps = this.tempF64s || (this.tempF64s = []); break;
+      case NativeType.I32: {
+        temps = this.tempI32s || (this.tempI32s = []);
+        break;
+      }
+      case NativeType.I64: {
+        temps = this.tempI64s || (this.tempI64s = []);
+        break;
+      }
+      case NativeType.F32: {
+        temps = this.tempF32s || (this.tempF32s = []);
+        break;
+      }
+      case NativeType.F64: {
+        temps = this.tempF64s || (this.tempF64s = []);
+        break;
+      }
       default: throw new Error("concrete type expected");
     }
     if (temps.length > 0) {
@@ -2524,16 +2645,8 @@ export class Function extends Element {
     this.debugLocations = null;
   }
 
-  /** Tests if a value of this function type is assignable to a target of the specified function type. */
-  isAssignableTo(target: Function): bool {
-    return this == target; // TODO
-  }
-
   /** Returns the TypeScript representation of this function. */
   toString(): string { return this.prototype.simpleName; }
-
-  /** Returns the function type TypeScript representation of this function.*/
-  toTypeString(): string { throw new Error("not implemented"); }
 }
 
 /** A yet unresolved instance field prototype. */
@@ -2559,23 +2672,19 @@ export class FieldPrototype extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-
-          case ModifierKind.EXPORT:
+          case ModifierKind.EXPORT: {
             this.set(ElementFlags.EXPORTED);
             break;
-
-          case ModifierKind.READONLY:
+          }
+          case ModifierKind.READONLY: {
             this.set(ElementFlags.READONLY);
             break;
-
+          }
           case ModifierKind.PRIVATE:
           case ModifierKind.PROTECTED:
           case ModifierKind.PUBLIC:
-          case ModifierKind.STATIC:
-            break; // already handled
-
-          default:
-            throw new Error("unexpected modifier");
+          case ModifierKind.STATIC: break; // already handled
+          default: throw new Error("unexpected modifier");
         }
       }
     }
@@ -2673,9 +2782,18 @@ export class ClassPrototype extends Element {
     if (this.declaration.modifiers) {
       for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
         switch (this.declaration.modifiers[i].modifierKind) {
-          case ModifierKind.IMPORT: this.set(ElementFlags.IMPORTED); break;
-          case ModifierKind.EXPORT: this.set(ElementFlags.EXPORTED); break;
-          case ModifierKind.DECLARE: this.set(ElementFlags.DECLARED); break;
+          case ModifierKind.IMPORT: {
+            this.set(ElementFlags.IMPORTED);
+            break;
+          }
+          case ModifierKind.EXPORT: {
+            this.set(ElementFlags.EXPORTED);
+            break;
+          }
+          case ModifierKind.DECLARE: {
+            this.set(ElementFlags.DECLARED);
+            break;
+          }
           default: throw new Error("unexpected modifier");
         }
       }
@@ -2779,8 +2897,7 @@ export class ClassPrototype extends Element {
     if (this.instanceMembers) {
       for (var member of this.instanceMembers.values()) {
         switch (member.kind) {
-
-          case ElementKind.FIELD_PROTOTYPE: // fields are layed out in advance
+          case ElementKind.FIELD_PROTOTYPE: { // fields are layed out in advance
             if (!instance.members) instance.members = new Map();
             var fieldDeclaration = (<FieldPrototype>member).declaration;
             if (!fieldDeclaration.type) {
@@ -2794,9 +2911,18 @@ export class ClassPrototype extends Element {
               var fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
               switch (fieldType.byteSize) { // align
                 case 1: break;
-                case 2: if (memoryOffset & 1) ++memoryOffset; break;
-                case 4: if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1; break;
-                case 8: if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1; break;
+                case 2: {
+                  if (memoryOffset & 1) ++memoryOffset;
+                  break;
+                }
+                case 4: {
+                  if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1;
+                  break;
+                }
+                case 8: {
+                  if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1;
+                  break;
+                }
                 default: assert(false);
               }
               fieldInstance.memoryOffset = memoryOffset;
@@ -2804,16 +2930,16 @@ export class ClassPrototype extends Element {
               instance.members.set(member.simpleName, fieldInstance);
             }
             break;
-
-          case ElementKind.FUNCTION_PROTOTYPE: // instance methods remain partially resolved prototypes until compiled
+          }
+          case ElementKind.FUNCTION_PROTOTYPE: { // instance methods remain partially resolved prototypes until compiled
             if (!instance.members) instance.members = new Map();
             var methodPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
             if (methodPrototype) {
               instance.members.set(member.simpleName, methodPrototype);
             }
             break;
-
-          case ElementKind.PROPERTY: // instance properties are cloned with partially resolved getters and setters
+          }
+          case ElementKind.PROPERTY: { // instance properties are cloned with partially resolved getters and setters
             if (!instance.members) instance.members = new Map();
             assert((<Property>member).getterPrototype);
             var instanceProperty = new Property(this.program, member.simpleName, member.internalName, this);
@@ -2831,9 +2957,8 @@ export class ClassPrototype extends Element {
             }
             instance.members.set(member.simpleName, instanceProperty);
             break;
-
-          default:
-            throw new Error("instance member expected");
+          }
+          default: throw new Error("instance member expected");
         }
       }
     }
@@ -2843,7 +2968,7 @@ export class ClassPrototype extends Element {
 
   /** Resolves the specified type arguments prior to resolving this prototype to an instance. */
   resolveUsingTypeArguments(
-    typeArgumentNodes: TypeNode[] | null,
+    typeArgumentNodes: CommonTypeNode[] | null,
     contextualTypeArguments: Map<string,Type> | null,
     alternativeReportNode: Node | null
   ): Class | null {

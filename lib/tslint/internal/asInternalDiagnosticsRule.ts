@@ -12,6 +12,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class DiagnosticsWalker extends Lint.RuleWalker {
+
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression) {
     if (node.expression.kind === ts.SyntaxKind.Identifier) {
       if (

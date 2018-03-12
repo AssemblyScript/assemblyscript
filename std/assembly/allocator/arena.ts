@@ -5,16 +5,14 @@
  * sure that there are no more references to cleared memory afterwards. Always aligns to 8 bytes.
  */
 
-const AL_BITS: usize = 3;
-const AL_SIZE: usize = 1 << AL_BITS;
-const AL_MASK: usize = AL_SIZE - 1;
+import { MASK as AL_MASK } from "./common/alignment";
 
-var OFFSET: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+var offset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 
 @global
 export function allocate_memory(size: usize): usize {
   if (!size) return 0;
-  var ptr = OFFSET;
+  var ptr = offset;
   var newPtr = (ptr + size + AL_MASK) & ~AL_MASK;
   var pagesBefore = current_memory();
   if (newPtr > <usize>pagesBefore << 16) {
@@ -26,7 +24,7 @@ export function allocate_memory(size: usize): usize {
       }
     }
   }
-  OFFSET = newPtr;
+  offset = newPtr;
   return ptr;
 }
 
@@ -37,5 +35,5 @@ export function free_memory(ptr: usize): void {
 
 @global
 export function reset_memory(): void {
-  OFFSET = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+  offset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 }

@@ -13,9 +13,11 @@
 // └───────────────────────────────────────────────┴─────────╨─────┘
 // FL: first level, SL: second level, AL: alignment, SB: small block
 
-const AL_BITS: u32 = 3; // always align to 8 bytes
-const AL_SIZE: usize = 1 << <usize>AL_BITS;
-const AL_MASK: usize = AL_SIZE - 1;
+import {
+  BITS as AL_BITS,
+  SIZE as AL_SIZE,
+  MASK as AL_MASK
+} from "./common/alignment";
 
 const SL_BITS: u32 = 5;
 const SL_SIZE: usize = 1 << <usize>SL_BITS;
@@ -32,7 +34,7 @@ const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
 // ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┼─┤
-// │                          size                             │L│F│ ◄─┐
+// │                          size                             │L│F│ ◄─┐ info
 // ╞═══════════════════════════════════════════════════════════╧═╧═╡   │      ┐
 // │                        if free: ◄ prev                        │ ◄─┤ usize
 // ├───────────────────────────────────────────────────────────────┤   │
@@ -495,4 +497,7 @@ export function free_memory(data: usize): void {
   }
 }
 
-export { reset_memory } from "./none";
+@global
+export function reset_memory(): void {
+  unreachable();
+}

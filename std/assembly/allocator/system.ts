@@ -19,4 +19,6 @@ export function free_memory(ptr: usize): void {
 }
 
 @global
-export { reset_memory } from "./none";
+export function reset_memory(): void {
+  unreachable();
+}

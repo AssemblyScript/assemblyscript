@@ -146,7 +146,7 @@
   ;;@ (lib)/allocator/buddy.ts:278:2
   (set_local $1
    ;;@ (lib)/allocator/buddy.ts:278:15
-   (i32.const 27)
+   (i32.const 26)
   )
   ;;@ (lib)/allocator/buddy.ts:279:2
   (set_local $2
@@ -199,7 +199,7 @@
      ;;@ (lib)/allocator/buddy.ts:251:30
      (i32.sub
       ;;@ (lib)/allocator/buddy.ts:251:31
-      (i32.const 31)
+      (i32.const 30)
       ;;@ (lib)/allocator/buddy.ts:251:48
       (get_local $1)
      )
@@ -316,7 +316,7 @@
     ;;@ (lib)/allocator/buddy.ts:242:52
     (i32.sub
      ;;@ (lib)/allocator/buddy.ts:242:53
-     (i32.const 31)
+     (i32.const 30)
      ;;@ (lib)/allocator/buddy.ts:242:70
      (get_local $1)
     )
@@ -579,7 +579,7 @@
      (i32.const 8)
     )
     ;;@ (lib)/allocator/buddy.ts:349:30
-    (i32.const -2147483648)
+    (i32.const 1073741824)
    )
    ;;@ (lib)/allocator/buddy.ts:350:11
    (return
@@ -619,7 +619,7 @@
     ;;@ (lib)/allocator/buddy.ts:362:4
     (set_global "$(lib)/allocator/buddy/bucket_limit"
      ;;@ (lib)/allocator/buddy.ts:362:19
-     (i32.const 27)
+     (i32.const 26)
     )
     ;;@ (lib)/allocator/buddy.ts:363:4
     (if
@@ -645,7 +645,7 @@
      ;;@ (lib)/allocator/buddy.ts:366:14
      (call "$(lib)/allocator/buddy/buckets$get"
       ;;@ (lib)/allocator/buddy.ts:366:26
-      (i32.const 27)
+      (i32.const 26)
      )
     )
     ;;@ (lib)/allocator/buddy.ts:367:4
@@ -653,7 +653,7 @@
      ;;@ (lib)/allocator/buddy.ts:367:14
      (call "$(lib)/allocator/buddy/buckets$get"
       ;;@ (lib)/allocator/buddy.ts:367:26
-      (i32.const 27)
+      (i32.const 26)
      )
      ;;@ (lib)/allocator/buddy.ts:367:45
      (get_global "$(lib)/allocator/buddy/base_ptr")
@@ -791,7 +791,7 @@
        ;;@ (lib)/allocator/buddy.ts:426:16
        (i32.sub
         ;;@ (lib)/allocator/buddy.ts:426:17
-        (i32.const 31)
+        (i32.const 30)
         ;;@ (lib)/allocator/buddy.ts:426:34
         (get_local $1)
        )
@@ -1091,7 +1091,7 @@
    ;;@ (lib)/allocator/buddy.ts:97:25
    (i32.add
     (get_global "$(lib)/allocator/buddy/BUCKETS_START")
-    (i32.const 224)
+    (i32.const 216)
    )
   )
   (set_global "$(lib)/allocator/buddy/NODE_IS_SPLIT_START"
@@ -1103,7 +1103,7 @@
    (i32.add
     (get_global "$(lib)/allocator/buddy/NODE_IS_SPLIT_START")
     ;;@ (lib)/allocator/buddy.ts:143:53
-    (i32.const 16777216)
+    (i32.const 8388608)
    )
   )
  )

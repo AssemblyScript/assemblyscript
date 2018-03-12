@@ -2,7 +2,7 @@
  (type $ii (func (param i32) (result i32)))
  (type $ifv (func (param i32 f32)))
  (type $v (func))
- (global "$(lib)/allocator/arena/OFFSET" (mut i32) (i32.const 0))
+ (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global $std/new/aClass (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
@@ -28,7 +28,7 @@
       (i32.add
        (i32.add
         (tee_local $1
-         (get_global "$(lib)/allocator/arena/OFFSET")
+         (get_global "$(lib)/allocator/arena/offset")
         )
         (get_local $0)
        )
@@ -85,7 +85,7 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/OFFSET"
+  (set_global "$(lib)/allocator/arena/offset"
    (get_local $2)
   )
   (get_local $1)
@@ -107,7 +107,7 @@
  )
  (func $start (; 2 ;) (type $v)
   (local $0 i32)
-  (set_global "$(lib)/allocator/arena/OFFSET"
+  (set_global "$(lib)/allocator/arena/offset"
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)

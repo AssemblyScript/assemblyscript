@@ -35,15 +35,18 @@ export class Formatter extends AbstractFormatter {
       } else {
         var message = this.lastSeverity ? "\n" : "";
         switch (this.lastSeverity = failure.getRuleSeverity()) {
-          case "warning":
+          case "warning": {
             message += colorYellow + "WARNING:" + colorReset;
             break;
-          case "error":
+          }
+          case "error": {
             message += colorRed + "ERROR:" + colorReset;
             break;
-          default:
+          }
+          default: {
             message += failure.getRuleSeverity();
             break;
+          }
         }
         this.lastFailure = failureString;
         return message + " " + failureString + " [" + ruleName + "]\n  in " + fileName + positionTuple;

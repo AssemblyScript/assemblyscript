@@ -1,9 +1,9 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ifff (func (param i32 f32 f32) (result f32)))
- (type $ii (func (param i32) (result i32)))
  (type $v (func))
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (memory $0 1)

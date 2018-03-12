@@ -1,6 +1,6 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiv (func (param i32 i32)))
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $retain-i32/si (mut i32) (i32.const 0))

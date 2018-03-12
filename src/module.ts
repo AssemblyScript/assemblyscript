@@ -265,12 +265,12 @@ export class Module {
   addFunctionType(
     name: string,
     result: NativeType,
-    paramTypes: NativeType[]
+    paramTypes: NativeType[] | null
   ): FunctionRef {
     var cStr = allocString(name);
     var cArr = allocI32Array(paramTypes);
     try {
-      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes.length);
+      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
     } finally {
       free_memory(cArr);
       free_memory(cStr);
@@ -279,11 +279,11 @@ export class Module {
 
   getFunctionTypeBySignature(
     result: NativeType,
-    paramTypes: NativeType[]
+    paramTypes: NativeType[] | null
   ): FunctionTypeRef {
     var cArr = allocI32Array(paramTypes);
     try {
-      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes.length);
+      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
     } finally {
       free_memory(cArr);
     }
@@ -594,6 +594,21 @@ export class Module {
     }
   }
 
+  createCallIndirect(
+    index: ExpressionRef,
+    operands: ExpressionRef[] | null,
+    typeName: string
+  ): ExpressionRef {
+    var cArr = allocI32Array(operands);
+    var cStr = allocString(typeName);
+    try {
+      return _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
+    } finally {
+      free_memory(cStr);
+      free_memory(cArr);
+    }
+  }
+
   createUnreachable(): ExpressionRef {
     return _BinaryenUnreachable(this.ref);
   }
@@ -617,13 +632,13 @@ export class Module {
   addFunction(
     name: string,
     type: FunctionTypeRef,
-    varTypes: NativeType[],
+    varTypes: NativeType[] | null,
     body: ExpressionRef
   ): FunctionRef {
     var cStr = allocString(name);
     var cArr = allocI32Array(varTypes);
     try {
-      return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes.length, body);
+      return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes ? varTypes.length : 0, body);
     } finally {
       free_memory(cArr);
       free_memory(cStr);
@@ -928,36 +943,40 @@ export class Module {
         nested2: ExpressionRef;
 
     switch (_BinaryenExpressionGetId(expr)) {
-
-      case ExpressionId.Const:
+      case ExpressionId.Const: {
         switch (_BinaryenExpressionGetType(expr)) {
-          case NativeType.I32:
+          case NativeType.I32: {
             return this.createI32(_BinaryenConstGetValueI32(expr));
-          case NativeType.I64:
+          }
+          case NativeType.I64: {
             return this.createI64(
               _BinaryenConstGetValueI64Low(expr),
               _BinaryenConstGetValueI64High(expr)
             );
-          case NativeType.F32:
+          }
+          case NativeType.F32: {
             return this.createF32(_BinaryenConstGetValueF32(expr));
-          case NativeType.F64:
+          }
+          case NativeType.F64: {
             return this.createF64(_BinaryenConstGetValueF64(expr));
-          default:
+          }
+          default: {
             throw new Error("concrete type expected");
+          }
         }
-
-      case ExpressionId.GetLocal:
+      }
+      case ExpressionId.GetLocal: {
         return _BinaryenGetLocal(this.ref,
           _BinaryenGetLocalGetIndex(expr),
           _BinaryenExpressionGetType(expr)
         );
-
-      case ExpressionId.GetGlobal:
+      }
+      case ExpressionId.GetGlobal: {
         var globalName = _BinaryenGetGlobalGetName(expr);
         if (!globalName) break;
         return _BinaryenGetGlobal(this.ref, globalName, _BinaryenExpressionGetType(expr));
-
-      case ExpressionId.Load:
+      }
+      case ExpressionId.Load: {
         if (!(nested1 = this.cloneExpression(_BinaryenLoadGetPtr(expr), noSideEffects, maxDepth))) {
           break;
         }
@@ -976,14 +995,14 @@ export class Module {
                _BinaryenExpressionGetType(expr),
                nested1
             );
-
-      case ExpressionId.Unary:
+      }
+      case ExpressionId.Unary: {
         if (!(nested1 = this.cloneExpression(_BinaryenUnaryGetValue(expr), noSideEffects, maxDepth))) {
           break;
         }
         return _BinaryenUnary(this.ref, _BinaryenUnaryGetOp(expr), nested1);
-
-      case ExpressionId.Binary:
+      }
+      case ExpressionId.Binary: {
         if (!(nested1 = this.cloneExpression(_BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth))) {
           break;
         }
@@ -991,6 +1010,7 @@ export class Module {
           break;
         }
         return _BinaryenBinary(this.ref, _BinaryenBinaryGetOp(expr), nested1, nested2);
+      }
     }
     return 0;
   }
