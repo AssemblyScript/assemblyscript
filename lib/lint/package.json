@@ -12,6 +12,7 @@
     "typescript": "^2.7.2"
   },
   "files": [
+    "base.json",
     "index.json",
     "package.json",
     "README.md",

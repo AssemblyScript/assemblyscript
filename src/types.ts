@@ -199,15 +199,17 @@ export class Type {
       case TypeKind.U8: return "u8";
       case TypeKind.U16: return "u16";
       case TypeKind.U32: {
-        return kindOnly || !this.functionType
+        let functionType = this.functionType;
+        return kindOnly || !functionType
           ? "u32"
-          : this.functionType.toString(true);
+          : functionType.toString(true);
       }
       case TypeKind.U64: return "u64";
       case TypeKind.USIZE: {
-        return kindOnly || !this.classType
+        let classType = this.classType;
+        return kindOnly || !classType
           ? "usize"
-          : this.classType.toString();
+          : classType.toString();
       }
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
@@ -471,8 +473,9 @@ export class Signature {
 
   /** Gets the known or, alternatively, generic parameter name at the specified index. */
   getParameterName(index: i32): string {
-    return this.parameterNames && this.parameterNames.length > index
-      ? this.parameterNames[index]
+    var parameterNames = this.parameterNames;
+    return parameterNames && parameterNames.length > index
+      ? parameterNames[index]
       : getGenericParameterName(index);
   }
 
@@ -580,8 +583,8 @@ var cachedGenericParameterNames: string[] | null = null;
 /** Gets the cached generic parameter name for the specified index. */
 export function getGenericParameterName(index: i32): string {
   if (!cachedGenericParameterNames) cachedGenericParameterNames = [];
-  for (let i = cachedGenericParameterNames.length; i < index; ++i) {
+  for (let i = cachedGenericParameterNames.length; i <= index; ++i) {
     cachedGenericParameterNames.push("arg$" + i.toString(10));
   }
-  return cachedGenericParameterNames[index];
+  return cachedGenericParameterNames[index - 1];
 }

@@ -21,7 +21,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   ;;@ (lib)/allocator/arena.ts:14:2
   (if
    ;;@ (lib)/allocator/arena.ts:14:6
@@ -108,7 +107,7 @@
      )
     )
     ;;@ (lib)/allocator/arena.ts:20:4
-    (set_local $7
+    (set_local $5
      ;;@ (lib)/allocator/arena.ts:20:22
      (select
       (tee_local $5
@@ -131,7 +130,7 @@
      (i32.lt_s
       (grow_memory
        ;;@ (lib)/allocator/arena.ts:21:20
-       (get_local $7)
+       (get_local $5)
       )
       ;;@ (lib)/allocator/arena.ts:21:35
       (i32.const 0)
