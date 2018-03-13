@@ -1892,7 +1892,11 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
-  compileExpressionRetainType(expression: Expression, contextualType: Type, wrapSmallIntegers: bool = true) {
+  compileExpressionRetainType(
+    expression: Expression,
+    contextualType: Type,
+    wrapSmallIntegers: bool = true
+  ): ExpressionRef {
     return this.compileExpression(
       expression,
       contextualType == Type.void

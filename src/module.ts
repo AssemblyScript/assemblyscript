@@ -223,7 +223,7 @@ export class MemorySegment {
   buffer: Uint8Array;
   offset: I64;
 
-  static create(buffer: Uint8Array, offset: I64) {
+  static create(buffer: Uint8Array, offset: I64): MemorySegment {
     var segment = new MemorySegment();
     segment.buffer = buffer;
     segment.offset = offset;

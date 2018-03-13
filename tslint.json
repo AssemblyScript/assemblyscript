@@ -1,67 +1,41 @@
 {
-  "rulesDirectory": [
-    "./lib/tslint",
-    "./lib/tslint/internal"
-  ],
+  "extends": "./lib/lint",
   "defaultSeverity": "warning",
   "rules": {
-    "as-types": { "severity": "error" },
-    "as-variables": true,
-
-    "as-internal-case": true,
-    "as-internal-diagnostics": true,
-
-    "adjacent-overload-signatures": true,
-    "ban-types": [ true, ["Object"], ["any"], ["undefined"], ["never"] ],
-    "curly": [true, "ignore-same-line"],
-    "deprecation": true,
-    "encoding": true,
-    "eofline": true,
-    "indent": [true, "spaces", 2],
-    "label-position": true,
-    "max-line-length": [ true, { "limit": 120, "ignore-pattern": " *DiagnosticCode\\.[^ ]+,$" } ],
-    "member-access": [ true, "no-public" ],
-    "new-parens": true,
-    "no-any": true,
-    "no-arg": true,
-    "no-consecutive-blank-lines": true,
-    "no-debugger": true,
-    "no-default-export": true,
-    "no-duplicate-imports": true,
-    "no-duplicate-super": true,
-    "no-duplicate-switch-case": true,
-    "no-duplicate-variable": true,
-    "no-eval": true,
-    "no-inferred-empty-object-type": true,
-    "no-internal-module": true,
-    "no-invalid-template-strings": true,
-    "no-invalid-this": true,
-    "no-irregular-whitespace": true,
-    "no-mergeable-namespace": true,
-    "no-misused-new": true,
-    "no-object-literal-type-assertion": true,
-    "no-parameter-properties": true,
-    "no-require-imports": true,
-    "no-shadowed-variable": true,
-    "no-sparse-arrays": true,
-    "no-string-literal": true,
-    "no-string-throw": true,
-    "no-trailing-whitespace": true,
-    "no-unbound-method": true,
-    "no-unsafe-any": true,
-    "no-unused-variable": [true, {"ignore-pattern": "^_"}],
-    "no-void-expression": true,
-    "object-literal-shorthand": [ true, "never" ],
-    "prefer-method-signature": true,
-    "quotemark": [true, "double"],
-    "radix": true,
-    "restrict-plus-operands": true,
-    "semicolon": [true, "always"]
+    "as-internal-case": {},
+    "as-internal-diagnostics": {},
+    "indent": {
+      "options": ["spaces", 2]
+    },
+    "max-line-length": {
+      "options": [{
+        "limit": 120,
+        "ignore-pattern": " *DiagnosticCode\\.[^ ]+,$"
+      }]
+    },
+    "member-access": {
+      "options": ["no-public"]
+    },
+    "quotemark": {
+      "options": ["double"]
+    },
+    "semicolon": {
+      "options": ["always"]
+    }
   },
   "jsRules": {
-    "quotemark": [true, "double"],
-    "radix": true,
-    "max-line-length": [ true, { "limit": 120, "ignore-pattern": " *DiagnosticCode\\.[^ ]+,$" } ],
-    "semicolon": [true, "always"]
+    "max-line-length": {
+      "options": [{
+        "limit": 120,
+        "ignore-pattern": " *DiagnosticCode\\.[^ ]+,$"
+      }]
+    },
+    "quotemark": {
+      "options": ["double"]
+    },
+    "radix": {},
+    "semicolon": {
+      "options": ["always"]
+    }
   }
 }

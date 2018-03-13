@@ -18,11 +18,11 @@ export class Rule extends Lint.Rules.AbstractRule {
   static BLOCK_LEVEL_LET = "Block-level variable should be 'let' (shared local).";
 
   apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-    return this.applyWithWalker(new DiagnosticsWalker(sourceFile, this.getOptions()));
+    return this.applyWithWalker(new VariablesWalker(sourceFile, this.getOptions()));
   }
 }
 
-class DiagnosticsWalker extends Lint.RuleWalker {
+class VariablesWalker extends Lint.RuleWalker {
 
   visitVariableDeclarationList(node: ts.VariableDeclarationList): void {
     if (isVariableStatement(node.parent)) {

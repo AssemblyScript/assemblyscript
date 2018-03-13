@@ -612,7 +612,7 @@ export class Program extends DiagnosticEmitter {
     decorators: DecoratorNode[] | null,
     prototype: FunctionPrototype,
     classPrototype: ClassPrototype
-  ) {
+  ): void {
     // handle operator annotations. operators are either instance methods taking
     // a second argument of the instance's type or static methods taking two
     // arguments of the instance's type. return values vary depending on the

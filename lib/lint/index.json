@@ -1,0 +1,11 @@
+{
+  "extends": "./base.json",
+  "rulesDirectory": ["./rules", "./rules/internal"],
+  "formattersDirectory": ["./formatters"],
+  "rules": {
+    "as-types": {
+      "severity": "error"
+    },
+    "as-variables": {}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@assemblyscript/lint",
+  "version": "1.0.0",
+  "main": "index.json",
+  "scripts": {
+    "build": "tsc --project ./src --outDir . --diagnostics"
+  },
+  "peerDependencies": {
+    "tslint": "^5.9.1"
+  },
+  "devDependencies": {
+    "typescript": "^2.7.2"
+  },
+  "files": [
+    "index.json",
+    "package.json",
+    "README.md",
+    "rules/",
+    "formatters/"
+  ]
+}

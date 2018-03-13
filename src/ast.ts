@@ -119,7 +119,7 @@ export abstract class Node {
 
   static createOmittedType(
     range: Range
-  ) {
+  ): TypeNode {
     return Node.createType(
       Node.createIdentifierExpression("", range),
       null,

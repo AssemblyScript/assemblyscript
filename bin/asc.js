@@ -534,7 +534,7 @@ exports.main = function main(argv, options, callback) {
 
   function readFileNode(filename) {
     try {
-      var text;
+      let text;
       stats.readCount++;
       stats.readTime += measure(() => {
         text = fs.readFileSync(filename, { encoding: "utf8" });

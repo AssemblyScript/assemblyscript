@@ -27,7 +27,7 @@ export class Decompiler {
   constructor() { }
 
   /** Decompiles a module to an AST that can then be serialized. */
-  decompile(module: Module) {
+  decompile(module: Module): void {
     throw new Error("not implemented");
   }
 

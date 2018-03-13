@@ -7,11 +7,11 @@ export class Rule extends Lint.Rules.AbstractRule {
   static NOT_BRACED = "Multi-line case clauses should be braced.";
 
   apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-    return this.applyWithWalker(new DiagnosticsWalker(sourceFile, this.getOptions()));
+    return this.applyWithWalker(new CaseWalker(sourceFile, this.getOptions()));
   }
 }
 
-class DiagnosticsWalker extends Lint.RuleWalker {
+class CaseWalker extends Lint.RuleWalker {
 
   visitDefaultClause(node: ts.DefaultClause) {
     this.checkDefaultOrCaseClause(node);
