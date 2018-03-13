@@ -56,7 +56,7 @@ export function normalize(path: string): string {
         path.charCodeAt(pos + 3) == separator
       ) {
         // find preceeding '/'
-        var ipos = pos;
+        let ipos = pos;
         while (--ipos >= 0) {
           if (path.charCodeAt(ipos) == separator) {
             if (pos - ipos != 3 ||

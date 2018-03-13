@@ -27,7 +27,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -84,7 +83,7 @@
       (i32.const 16)
      )
     )
-    (set_local $7
+    (set_local $5
      (select
       (tee_local $5
        (get_local $3)
@@ -101,7 +100,7 @@
     (if
      (i32.lt_s
       (grow_memory
-       (get_local $7)
+       (get_local $5)
       )
       (i32.const 0)
      )

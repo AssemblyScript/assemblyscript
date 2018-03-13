@@ -21,7 +21,7 @@ export class Set<T> {
   has(value: T): bool {
     assert(this != null);
 
-    for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index) {
+    for (let index: usize = 0, limit: usize = this.__size; index < limit; ++index) {
       if (load<T>(this.__memory + index * sizeof<T>()) == value) {
         return true;
       }
@@ -33,8 +33,8 @@ export class Set<T> {
     assert(this != null);
 
     if (this.__size >= this.__capacity) {
-      var newCapacity = max(this.__capacity << 1, 8);
-      var newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
+      let newCapacity = max(this.__capacity << 1, 8);
+      let newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
       if (this.__memory) {
         move_memory(newMemory, this.__memory, <usize>this.__capacity * sizeof<T>());
         free_memory(this.__memory);
@@ -50,7 +50,7 @@ export class Set<T> {
   delete(value: T): bool {
     assert(this != null);
 
-    for (var index: usize = 0, limit: usize = this.__size; index < limit; ++index) {
+    for (let index: usize = 0, limit: usize = this.__size; index < limit; ++index) {
       if (load<T>(this.__memory + index * sizeof<T>()) == value) {
         if (index + 1 < limit) {
           move_memory(

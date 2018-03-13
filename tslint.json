@@ -6,8 +6,11 @@
   "defaultSeverity": "warning",
   "rules": {
     "as-types": { "severity": "error" },
+    "as-variables": true,
+
     "as-internal-case": true,
     "as-internal-diagnostics": true,
+
     "adjacent-overload-signatures": true,
     "ban-types": [ true, ["Object"], ["any"], ["undefined"], ["never"] ],
     "curly": [true, "ignore-same-line"],

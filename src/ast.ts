@@ -603,7 +603,7 @@ export abstract class Node {
     stmt.members = members; setParent(members, stmt);
     stmt.path = path;
     if (path) {
-      var normalizedPath = normalizePath(path.value);
+      let normalizedPath = normalizePath(path.value);
       if (path.value.startsWith(".")) { // relative
         stmt.normalizedPath = resolvePath(
           normalizedPath,
@@ -1806,7 +1806,7 @@ export function addModifier(modifier: ModifierNode, modifiers: ModifierNode[] | 
 /** Gets a specific modifier from the specified set of modifiers. */
 export function getModifier(kind: ModifierKind, modifiers: ModifierNode[] | null): ModifierNode | null {
   if (modifiers) {
-    for (var i = 0, k = modifiers.length; i < k; ++i) {
+    for (let i = 0, k = modifiers.length; i < k; ++i) {
       if (modifiers[i].modifierKind == kind) {
         return modifiers[i];
       }
@@ -1823,9 +1823,9 @@ export function hasModifier(kind: ModifierKind, modifiers: ModifierNode[] | null
 /** Gets the first decorator by name within at set of decorators, if present. */
 export function getFirstDecorator(name: string, decorators: DecoratorNode[] | null): DecoratorNode | null {
   if (decorators) {
-    for (var i = 0, k = decorators.length; i < k; ++i) {
-      var decorator = decorators[i];
-      var expression = decorator.name;
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      let decorator = decorators[i];
+      let expression = decorator.name;
       if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).text == name) {
         return decorator;
       }
@@ -1879,15 +1879,15 @@ export function mangleInternalPath(path: string): string {
 
 /** Sets the parent node on an array of nodes. */
 function setParent(nodes: Node[], parent: Node): void {
-  for (var i = 0, k = nodes.length; i < k; ++i) {
+  for (let i = 0, k = nodes.length; i < k; ++i) {
     nodes[i].parent = parent;
   }
 }
 
 /** Sets the parent node on an array of nullable nodes. */
 function setParentIfNotNull(nodes: (Node | null)[], parent: Node): void {
-  for (var i = 0, k = nodes.length; i < k; ++i) {
-    var node = nodes[i];
+  for (let i = 0, k = nodes.length; i < k; ++i) {
+    let node = nodes[i];
     if (node) node.parent = parent;
   }
 }

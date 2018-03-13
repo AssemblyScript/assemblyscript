@@ -11,7 +11,7 @@ export class Map<K,V> {
 
   get(key: K): V | null {
     var keys = this.__keys;
-    for (var i = 0, k = keys.length; i < k; ++i) {
+    for (let i = 0, k = keys.length; i < k; ++i) {
       if (keys[i] == key) {
         return this.__values[i];
       }
@@ -21,7 +21,7 @@ export class Map<K,V> {
 
   has(key: K): bool {
     var keys = this.__keys;
-    for (var i = 0, k = keys.length; i < k; ++i) {
+    for (let i = 0, k = keys.length; i < k; ++i) {
       if (keys[i] == key) {
         return true;
       }

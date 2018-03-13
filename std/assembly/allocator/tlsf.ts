@@ -206,8 +206,8 @@ class Root {
 
     // merge with left block if also free
     if (blockInfo & LEFT_FREE) {
-      var left: Block = assert(block.left); // can't be null
-      var leftInfo = left.info;
+      let left: Block = assert(block.left); // can't be null
+      let leftInfo = left.info;
       assert(leftInfo & FREE); // must be free according to tags
       this.remove(left);
       left.info = (leftInfo += Block.INFO + (blockInfo & ~TAGS));
@@ -280,7 +280,7 @@ class Root {
 
       // clear second level map if head is empty now
       if (!next) {
-        var slMap = this.getSLMap(fl);
+        let slMap = this.getSLMap(fl);
         this.setSLMap(fl, slMap &= ~(1 << sl));
 
         // clear first level map if second level is empty now
@@ -313,7 +313,7 @@ class Root {
     var head: Block | null;
     if (!slMap) {
       // search next larger first level
-      var flMap = this.flMap & (~0 << (fl + 1));
+      let flMap = this.flMap & (~0 << (fl + 1));
       if (!flMap) {
         head = null;
       } else {
@@ -354,7 +354,7 @@ class Root {
     if (remaining >= Block.INFO + Block.MIN_SIZE) {
       block.info = size | (blockInfo & LEFT_FREE); // also discards FREE
 
-      var spare = changetype<Block>(
+      let spare = changetype<Block>(
         changetype<usize>(block) + Block.INFO + size
       );
       spare.info = (remaining - Block.INFO) | FREE; // not LEFT_FREE
@@ -363,7 +363,7 @@ class Root {
     // otherwise tag block as no longer FREE and right as no longer LEFT_FREE
     } else {
       block.info = blockInfo & ~FREE;
-      var right: Block = assert(block.right); // can't be null (tail)
+      let right: Block = assert(block.right); // can't be null (tail)
       right.info &= ~LEFT_FREE;
     }
 
@@ -440,13 +440,13 @@ export function allocate_memory(size: usize): usize {
   // initialize if necessary
   var root = ROOT;
   if (!root) {
-    var rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+    let rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
     ROOT = root = changetype<Root>(rootOffset);
     root.tailRef = 0;
     root.flMap = 0;
-    for (var fl: usize = 0; fl < FL_BITS; ++fl) {
+    for (let fl: usize = 0; fl < FL_BITS; ++fl) {
       root.setSLMap(fl, 0);
-      for (var sl: u32 = 0; sl < SL_SIZE; ++sl) {
+      for (let sl: u32 = 0; sl < SL_SIZE; ++sl) {
         root.setHead(fl, sl, null);
       }
     }
@@ -458,19 +458,19 @@ export function allocate_memory(size: usize): usize {
   if (size && size < Block.MAX_SIZE) {
     size = max<usize>((size + AL_MASK) & ~AL_MASK, Block.MIN_SIZE);
 
-    var block = root.search(size);
+    let block = root.search(size);
     if (!block) {
 
       // request more memory
-      var pagesBefore = current_memory();
-      var pagesNeeded = ((size + 0xffff) & ~0xffff) >>> 16;
-      var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+      let pagesBefore = current_memory();
+      let pagesNeeded = ((size + 0xffff) & ~0xffff) >>> 16;
+      let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
       if (grow_memory(pagesWanted) < 0) {
         if (grow_memory(pagesNeeded) < 0) {
           unreachable(); // out of memory
         }
       }
-      var pagesAfter = current_memory();
+      let pagesAfter = current_memory();
       root.addMemory(<usize>pagesBefore << 16, <usize>pagesAfter << 16);
       block = assert(root.search(size)); // must be found now
     }
@@ -486,10 +486,10 @@ export function allocate_memory(size: usize): usize {
 @global
 export function free_memory(data: usize): void {
   if (data) {
-    var root = ROOT;
+    let root = ROOT;
     if (root) {
-      var block = changetype<Block>(data - Block.INFO);
-      var blockInfo = block.info;
+      let block = changetype<Block>(data - Block.INFO);
+      let blockInfo = block.info;
       assert(!(blockInfo & FREE)); // must be used
       block.info = blockInfo | FREE;
       root.insert(changetype<Block>(data - Block.INFO));

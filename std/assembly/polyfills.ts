@@ -9,9 +9,9 @@ export function bswap<T>(value: T): T {
       rotr<u32>(<u32>value & 0x00FF00FF, 8)
     );
   } else if (sizeof<T>() == 8) {
-    var a: u64 = (<u64>value >> 8) & 0x00FF00FF00FF00FF;
-    var b: u64 = (<u64>value & 0x00FF00FF00FF00FF) << 8;
-    var v: u64 = a | b;
+    let a: u64 = (<u64>value >> 8) & 0x00FF00FF00FF00FF;
+    let b: u64 = (<u64>value & 0x00FF00FF00FF00FF) << 8;
+    let v: u64 = a | b;
 
     a = (v >> 16) & 0x0000FFFF0000FFFF;
     b = (v & 0x0000FFFF0000FFFF) << 16;

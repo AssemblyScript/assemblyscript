@@ -2002,7 +2002,7 @@
       (i32.shl
        (tee_local $3
         (select
-         (tee_local $2
+         (tee_local $3
           (i32.shl
            (i32.load offset=4
             (get_local $0)
@@ -2010,12 +2010,12 @@
            (i32.const 1)
           )
          )
-         (tee_local $3
+         (tee_local $2
           (i32.const 8)
          )
          (i32.gt_u
-          (get_local $2)
           (get_local $3)
+          (get_local $2)
          )
         )
        )

@@ -304,7 +304,7 @@ export class Program extends DiagnosticEmitter {
     var element: Element | null;
     do {
       if (element = this.exports.get(referencedName)) return element;
-      var queuedExport = queuedExports.get(referencedName);
+      let queuedExport = queuedExports.get(referencedName);
       if (!queuedExport) return null;
       if (queuedExport.isReExport) {
         referencedName = queuedExport.referencedName;
@@ -501,7 +501,7 @@ export class Program extends DiagnosticEmitter {
       } else {
         classPrototype.members = new Map();
       }
-      var staticField = new Global(
+      let staticField = new Global(
         this, name, internalName, declaration, Type.void
       );
       classPrototype.members.set(name, staticField);
@@ -520,7 +520,7 @@ export class Program extends DiagnosticEmitter {
       } else {
         classPrototype.instanceMembers = new Map();
       }
-      var instanceField = new FieldPrototype(
+      let instanceField = new FieldPrototype(
         classPrototype,
         name, internalName,
         declaration
@@ -618,8 +618,8 @@ export class Program extends DiagnosticEmitter {
     // arguments of the instance's type. return values vary depending on the
     // operation.
     if (decorators) {
-      for (var i = 0, k = decorators.length; i < k; ++i) {
-        var decorator = decorators[i];
+      for (let i = 0, k = decorators.length; i < k; ++i) {
+        let decorator = decorators[i];
         if (decorator.decoratorKind == DecoratorKind.OPERATOR) {
           if (!prototype) {
             this.error(
@@ -628,9 +628,9 @@ export class Program extends DiagnosticEmitter {
             );
             continue;
           }
-          var numArgs = decorator.arguments && decorator.arguments.length || 0;
+          let numArgs = decorator.arguments && decorator.arguments.length || 0;
           if (numArgs == 1) {
-            var firstArg = (<Expression[]>decorator.arguments)[0];
+            let firstArg = (<Expression[]>decorator.arguments)[0];
             if (
               firstArg.kind == NodeKind.LITERAL &&
               (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
@@ -717,7 +717,7 @@ export class Program extends DiagnosticEmitter {
 
     // static accessors become global functions
     if (hasModifier(ModifierKind.STATIC, declaration.modifiers)) {
-      var staticName = classPrototype.internalName + STATIC_DELIMITER + name;
+      let staticName = classPrototype.internalName + STATIC_DELIMITER + name;
       if (this.elements.has(staticName)) {
         this.error(
           DiagnosticCode.Duplicate_identifier_0,
@@ -725,7 +725,7 @@ export class Program extends DiagnosticEmitter {
         );
         return;
       }
-      var staticPrototype = new FunctionPrototype(
+      let staticPrototype = new FunctionPrototype(
         this,
         name, staticName,
         declaration,
@@ -744,7 +744,7 @@ export class Program extends DiagnosticEmitter {
 
     // instance accessors are remembered until resolved
     } else {
-      var instanceName = classPrototype.internalName + INSTANCE_DELIMITER + name;
+      let instanceName = classPrototype.internalName + INSTANCE_DELIMITER + name;
       if (classPrototype.instanceMembers) {
         if (classPrototype.instanceMembers.has(name)) {
           this.error(
@@ -756,7 +756,7 @@ export class Program extends DiagnosticEmitter {
       } else {
         classPrototype.instanceMembers = new Map();
       }
-      var instancePrototype = new FunctionPrototype(
+      let instancePrototype = new FunctionPrototype(
         this,
         name, instanceName,
         declaration,
@@ -815,7 +815,7 @@ export class Program extends DiagnosticEmitter {
     }
 
     var values = declaration.values;
-    for (var i = 0, k = values.length; i < k; ++i) {
+    for (let i = 0, k = values.length; i < k; ++i) {
       this.initializeEnumValue(values[i], enm);
     }
   }
@@ -846,7 +846,7 @@ export class Program extends DiagnosticEmitter {
     queuedExports: Map<string,QueuedExport>
   ): void {
     var members = statement.members;
-    for (var i = 0, k = members.length; i < k; ++i) {
+    for (let i = 0, k = members.length; i < k; ++i) {
       this.initializeExport(members[i], statement.internalPath, queuedExports);
     }
   }
@@ -931,7 +931,7 @@ export class Program extends DiagnosticEmitter {
       }
 
       // walk already known queued exports
-      var seen = new Set<QueuedExport>();
+      let seen = new Set<QueuedExport>();
       while (queuedExport = queuedExports.get(referencedName)) {
         if (queuedExport.isReExport) {
           referencedElement = this.exports.get(queuedExport.referencedName);
@@ -1031,7 +1031,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var declarations = statement.declarations;
     if (declarations) {
-      for (var i = 0, k = declarations.length; i < k; ++i) {
+      for (let i = 0, k = declarations.length; i < k; ++i) {
         this.initializeImport(
           declarations[i],
           statement.internalPath,
@@ -1039,7 +1039,7 @@ export class Program extends DiagnosticEmitter {
         );
       }
     } else if (statement.namespaceName) {
-      var internalName = (
+      let internalName = (
         statement.range.source.internalPath +
         PATH_DELIMITER +
         statement.namespaceName.text
@@ -1146,8 +1146,8 @@ export class Program extends DiagnosticEmitter {
     }
 
     var memberDeclarations = declaration.members;
-    for (var i = 0, k = memberDeclarations.length; i < k; ++i) {
-      var memberDeclaration = memberDeclarations[i];
+    for (let i = 0, k = memberDeclarations.length; i < k; ++i) {
+      let memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
 
         case NodeKind.FIELDDECLARATION: {
@@ -1155,7 +1155,7 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.METHODDECLARATION: {
-          var isGetter = hasModifier(ModifierKind.GET, memberDeclaration.modifiers);
+          let isGetter = hasModifier(ModifierKind.GET, memberDeclaration.modifiers);
           if (isGetter || hasModifier(ModifierKind.SET, memberDeclaration.modifiers)) {
             this.initializeAccessor(<MethodDeclaration>memberDeclaration, prototype, isGetter);
           } else {
@@ -1210,7 +1210,7 @@ export class Program extends DiagnosticEmitter {
     }
 
     var members = declaration.members;
-    for (var i = 0, k = members.length; i < k; ++i) {
+    for (let i = 0, k = members.length; i < k; ++i) {
       switch (members[i].kind) {
         case NodeKind.CLASSDECLARATION: {
           this.initializeClass(<ClassDeclaration>members[i], queuedExtendingClasses, namespace);
@@ -1271,9 +1271,9 @@ export class Program extends DiagnosticEmitter {
 
   private initializeVariables(statement: VariableStatement, namespace: Element | null = null): void {
     var declarations = statement.declarations;
-    for (var i = 0, k = declarations.length; i < k; ++i) {
-      var declaration = declarations[i];
-      var internalName = declaration.fileLevelInternalName;
+    for (let i = 0, k = declarations.length; i < k; ++i) {
+      let declaration = declarations[i];
+      let internalName = declaration.fileLevelInternalName;
       if (this.elements.has(internalName)) {
         this.error(
           DiagnosticCode.Duplicate_identifier_0,
@@ -1282,7 +1282,7 @@ export class Program extends DiagnosticEmitter {
         continue;
       }
 
-      var global = new Global(
+      let global = new Global(
         this,
         declaration.name.text,
         internalName,
@@ -1405,7 +1405,7 @@ export class Program extends DiagnosticEmitter {
     if ((element = this.elements.get(localName)) || (element = this.elements.get(globalName))) {
       switch (element.kind) {
         case ElementKind.CLASS_PROTOTYPE: {
-          var instance = (<ClassPrototype>element).resolveUsingTypeArguments(
+          let instance = (<ClassPrototype>element).resolveUsingTypeArguments(
             typeNode.typeArguments,
             contextualTypeArguments,
             null
@@ -1421,10 +1421,10 @@ export class Program extends DiagnosticEmitter {
 
     // resolve parameters
     if (typeNode.typeArguments) {
-      var k = typeNode.typeArguments.length;
-      var paramTypes = new Array<Type>(k);
-      for (var i = 0; i < k; ++i) {
-        var paramType = this.resolveType( // reports
+      let k = typeNode.typeArguments.length;
+      let paramTypes = new Array<Type>(k);
+      for (let i = 0; i < k; ++i) {
+        let paramType = this.resolveType( // reports
           typeNode.typeArguments[i],
           contextualTypeArguments,
           reportNotFound
@@ -1434,13 +1434,13 @@ export class Program extends DiagnosticEmitter {
       }
 
       if (k) { // can't be a placeholder if it has parameters
-        var instanceKey = typesToString(paramTypes);
+        let instanceKey = typesToString(paramTypes);
         if (instanceKey.length) {
           localName += "<" + instanceKey + ">";
           globalName += "<" + instanceKey + ">";
         }
       } else if (contextualTypeArguments) {
-        var placeholderType = contextualTypeArguments.get(globalName);
+        let placeholderType = contextualTypeArguments.get(globalName);
         if (placeholderType) return placeholderType;
       }
     }
@@ -1489,8 +1489,8 @@ export class Program extends DiagnosticEmitter {
       return null;
     }
     var typeArguments = new Array<Type>(parameterCount);
-    for (var i = 0; i < parameterCount; ++i) {
-      var type = this.resolveType( // reports
+    for (let i = 0; i < parameterCount; ++i) {
+      let type = this.resolveType( // reports
         (<TypeNode[]>typeArgumentNodes)[i],
         contextualTypeArguments,
         true
@@ -1598,7 +1598,7 @@ export class Program extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY: {
-        var getter = assert((<Property>target).getterPrototype).resolve(); // reports
+        let getter = assert((<Property>target).getterPrototype).resolve(); // reports
         if (!getter) return null;
         if (!(targetType = getter.signature.returnType).classType) {
           this.error(
@@ -1670,10 +1670,10 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
-        var type = (<VariableLikeElement>target).type;
+        let type = (<VariableLikeElement>target).type;
         if (type.classType) {
-          var indexedGetName = (target = type.classType).prototype.fnIndexedGet;
-          var indexedGet: Element | null;
+          let indexedGetName = (target = type.classType).prototype.fnIndexedGet;
+          let indexedGet: Element | null;
           if (
             indexedGetName != null &&
             target.members &&
@@ -1969,9 +1969,10 @@ export class Namespace extends Element {
   ) {
     super(program, simpleName, internalName);
     this.declaration = declaration;
-    if (this.declaration.modifiers) {
-      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-        switch (this.declaration.modifiers[i].modifierKind) {
+    var modifiers = declaration.modifiers;
+    if (modifiers) {
+      for (let i = 0, k = modifiers.length; i < k; ++i) {
+        switch (modifiers[i].modifierKind) {
           case ModifierKind.IMPORT: {
             this.set(ElementFlags.IMPORTED);
             break;
@@ -2008,9 +2009,10 @@ export class Enum extends Element {
   ) {
     super(program, simpleName, internalName);
     this.declaration = declaration;
-    if (this.declaration.modifiers) {
-      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-        switch (this.declaration.modifiers[i].modifierKind) {
+    var modifiers = declaration.modifiers;
+    if (modifiers) {
+      for (let i = 0, k = modifiers.length; i < k; ++i) {
+        switch (modifiers[i].modifierKind) {
           case ModifierKind.EXPORT: {
             this.set(ElementFlags.EXPORTED);
             break;
@@ -2109,9 +2111,10 @@ export class Global extends VariableLikeElement {
   ) {
     super(program, simpleName, internalName);
     this.declaration = declaration;
-    if (this.declaration.modifiers) {
-      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-        switch (this.declaration.modifiers[i].modifierKind) {
+    var modifiers = declaration.modifiers;
+    if (modifiers) {
+      for (let i = 0, k = modifiers.length; i < k; ++i) {
+        switch (modifiers[i].modifierKind) {
           case ModifierKind.IMPORT: {
             this.set(ElementFlags.IMPORTED);
             break;
@@ -2210,9 +2213,10 @@ export class FunctionPrototype extends Element {
   ) {
     super(program, simpleName, internalName);
     this.declaration = declaration;
-    if (this.declaration.modifiers) {
-      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-        switch (this.declaration.modifiers[i].modifierKind) {
+    var modifiers = declaration.modifiers;
+    if (modifiers) {
+      for (let i = 0, k = modifiers.length; i < k; ++i) {
+        switch (modifiers[i].modifierKind) {
           case ModifierKind.IMPORT: {
             this.set(ElementFlags.IMPORTED);
             break;
@@ -2365,7 +2369,7 @@ export class FunctionPrototype extends Element {
       throw new Error("partially resolved instance method must reference its class prototype");
     }
     if (classTypeArguments && classTypeArguments.length) {
-      var partialPrototype = new FunctionPrototype(
+      let partialPrototype = new FunctionPrototype(
         this.program,
         this.simpleName,
         this.internalName,
@@ -2407,10 +2411,10 @@ export class FunctionPrototype extends Element {
     assert(this.is(ElementFlags.BUILTIN));
     var resolvedTypeArguments: Type[] | null = null;
     if (typeArgumentNodes) {
-      var k = typeArgumentNodes.length;
+      let k = typeArgumentNodes.length;
       resolvedTypeArguments = new Array<Type>(k);
-      for (var i = 0; i < k; ++i) {
-        var resolvedType = this.program.resolveType( // reports
+      for (let i = 0; i < k; ++i) {
+        let resolvedType = this.program.resolveType( // reports
           typeArgumentNodes[i],
           contextualTypeArguments,
           true
@@ -2561,7 +2565,7 @@ export class Function extends Element {
       default: throw new Error("concrete type expected");
     }
     if (temps && temps.length) {
-      var ret = temps.pop();
+      let ret = temps.pop();
       ret.type = type;
       return ret;
     }
@@ -2657,10 +2661,10 @@ export class Function extends Element {
     this.breakContext = null;
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
     if (this.program.options.sourceMap) {
-      var debugLocations = this.debugLocations;
+      let debugLocations = this.debugLocations;
       if (debugLocations) {
-        for (var i = 0, k = debugLocations.length; i < k; ++i) {
-          var debugLocation = debugLocations[i];
+        for (let i = 0, k = debugLocations.length; i < k; ++i) {
+          let debugLocation = debugLocations[i];
           module.setDebugLocation(
             ref,
             debugLocation.debugInfoRef,
@@ -2678,7 +2682,7 @@ export class Function extends Element {
   toString(): string { return this.prototype.simpleName; }
 }
 
-/** A resolved function table entry, that is an function called by an index and signature. */
+/** A resolved function target, that is a function called indirectly by an index and signature. */
 export class FunctionTarget extends Element {
 
   kind = ElementKind.FUNCTION_TARGET;
@@ -2719,9 +2723,10 @@ export class FieldPrototype extends Element {
     super(classPrototype.program, simpleName, internalName);
     this.classPrototype = classPrototype;
     this.declaration = declaration;
-    if (this.declaration.modifiers) {
-      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-        switch (this.declaration.modifiers[i].modifierKind) {
+    var modifiers = declaration.modifiers;
+    if (modifiers) {
+      for (let i = 0, k = modifiers.length; i < k; ++i) {
+        switch (modifiers[i].modifierKind) {
           case ModifierKind.EXPORT: {
             this.set(ElementFlags.EXPORTED);
             break;
@@ -2829,9 +2834,10 @@ export class ClassPrototype extends Element {
   ) {
     super(program, simpleName, internalName);
     this.declaration = declaration;
-    if (this.declaration.modifiers) {
-      for (var i = 0, k = this.declaration.modifiers.length; i < k; ++i) {
-        switch (this.declaration.modifiers[i].modifierKind) {
+    var modifiers = declaration.modifiers;
+    if (modifiers) {
+      for (let i = 0, k = modifiers.length; i < k; ++i) {
+        switch (modifiers[i].modifierKind) {
           case ModifierKind.IMPORT: {
             this.set(ElementFlags.IMPORTED);
             break;
@@ -2848,7 +2854,7 @@ export class ClassPrototype extends Element {
         }
       }
     }
-    if (this.declaration.typeParameters.length) {
+    if (declaration.typeParameters.length) {
       this.set(ElementFlags.GENERIC);
     }
   }
@@ -2878,7 +2884,7 @@ export class ClassPrototype extends Element {
     var inheritedTypeArguments = contextualTypeArguments;
     contextualTypeArguments = new Map();
     if (inheritedTypeArguments) {
-      for (var [inheritedName, inheritedType] of inheritedTypeArguments) {
+      for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
         contextualTypeArguments.set(inheritedName, inheritedType);
       }
     }
@@ -2886,7 +2892,7 @@ export class ClassPrototype extends Element {
     var declaration = this.declaration;
     var baseClass: Class | null = null;
     if (declaration.extendsType) {
-      var baseClassType = this.program.resolveType(declaration.extendsType, null); // reports
+      let baseClassType = this.program.resolveType(declaration.extendsType, null); // reports
       if (!baseClassType) return null;
       if (!(baseClass = baseClassType.classType)) {
         this.program.error(
@@ -2930,14 +2936,14 @@ export class ClassPrototype extends Element {
       memoryOffset = baseClass.currentMemoryOffset;
       if (baseClass.members) {
         if (!instance.members) instance.members = new Map();
-        for (var inheritedMember of baseClass.members.values()) {
+        for (let inheritedMember of baseClass.members.values()) {
           instance.members.set(inheritedMember.simpleName, inheritedMember);
         }
       }
     }
 
     if (this.constructorPrototype) {
-      var partialConstructor = this.constructorPrototype.resolvePartial(typeArguments); // reports
+      let partialConstructor = this.constructorPrototype.resolvePartial(typeArguments); // reports
       if (partialConstructor) {
         instance.constructorInstance = partialConstructor.resolve(); // reports
       }
@@ -2945,20 +2951,20 @@ export class ClassPrototype extends Element {
     }
 
     if (this.instanceMembers) {
-      for (var member of this.instanceMembers.values()) {
+      for (let member of this.instanceMembers.values()) {
         switch (member.kind) {
           case ElementKind.FIELD_PROTOTYPE: { // fields are layed out in advance
             if (!instance.members) instance.members = new Map();
-            var fieldDeclaration = (<FieldPrototype>member).declaration;
+            let fieldDeclaration = (<FieldPrototype>member).declaration;
             if (!fieldDeclaration.type) {
               throw new Error("type expected"); // TODO: check if parent class defines a type
             }
-            var fieldType = this.program.resolveType( // reports
+            let fieldType = this.program.resolveType( // reports
               fieldDeclaration.type,
               instance.contextualTypeArguments
             );
             if (fieldType) {
-              var fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
+              let fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
               switch (fieldType.byteSize) { // align
                 case 1: break;
                 case 2: {
@@ -2983,7 +2989,7 @@ export class ClassPrototype extends Element {
           }
           case ElementKind.FUNCTION_PROTOTYPE: { // instance methods remain partially resolved prototypes until compiled
             if (!instance.members) instance.members = new Map();
-            var methodPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
+            let methodPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
             if (methodPrototype) {
               instance.members.set(member.simpleName, methodPrototype);
             }
@@ -2992,7 +2998,7 @@ export class ClassPrototype extends Element {
           case ElementKind.PROPERTY: { // instance properties are cloned with partially resolved getters and setters
             if (!instance.members) instance.members = new Map();
             assert((<Property>member).getterPrototype);
-            var instanceProperty = new Property(this.program, member.simpleName, member.internalName, this);
+            let instanceProperty = new Property(this.program, member.simpleName, member.internalName, this);
             instanceProperty.getterPrototype = (
               (<FunctionPrototype>(<Property>member).getterPrototype).resolvePartial(
                 typeArguments
@@ -3081,7 +3087,7 @@ export class Class extends Element {
     if (base) {
       if (base.contextualTypeArguments) {
         if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
-        for (var [baseName, baseType] of base.contextualTypeArguments) {
+        for (let [baseName, baseType] of base.contextualTypeArguments) {
           this.contextualTypeArguments.set(baseName, baseType);
         }
       }
@@ -3091,7 +3097,7 @@ export class Class extends Element {
     var declaration = this.prototype.declaration;
     var i: i32, k: i32;
     if (declaration) { // irrelevant for built-ins
-      var typeParameters = declaration.typeParameters;
+      let typeParameters = declaration.typeParameters;
       if (typeArguments) {
         if ((k = typeArguments.length) != typeParameters.length) {
           throw new Error("type argument count mismatch");
@@ -3230,7 +3236,7 @@ export class Flow {
 
     // Free block-scoped locals
     if (this.scopedLocals) {
-      for (var scopedLocal of this.scopedLocals.values()) {
+      for (let scopedLocal of this.scopedLocals.values()) {
         this.currentFunction.freeTempLocal(scopedLocal);
       }
       this.scopedLocals = null;

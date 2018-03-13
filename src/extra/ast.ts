@@ -314,7 +314,7 @@ export function serializeNode(node: Node, sb: string[]): void {
 }
 
 export function serializeSource(source: Source, sb: string[]): void {
-  for (var i = 0, k = source.statements.length; i < k; ++i) {
+  for (let i = 0, k = source.statements.length; i < k; ++i) {
     serializeTerminatedStatement(source.statements[i], sb);
   }
 }
@@ -329,11 +329,11 @@ export function serializeTypeNode(node: CommonTypeNode, sb: string[]): void {
   var typeNode = <TypeNode>node;
   serializeIdentifierExpression(<IdentifierExpression>typeNode.name, sb);
   if (typeNode.typeArguments) {
-    var k = typeNode.typeArguments.length;
-    if (k) {
+    let numTypeArguments = typeNode.typeArguments.length;
+    if (numTypeArguments) {
       sb.push("<");
       serializeTypeNode(typeNode.typeArguments[0], sb);
-      for (var i = 1; i < k; ++i) {
+      for (let i = 1; i < numTypeArguments; ++i) {
         sb.push(", ");
         serializeTypeNode(typeNode.typeArguments[i], sb);
       }
@@ -393,10 +393,10 @@ export function serializeIdentifierExpression(node: IdentifierExpression, sb: st
 export function serializeArrayLiteralExpression(node: ArrayLiteralExpression, sb: string[]): void {
   sb.push("[");
   var elements = node.elementExpressions;
-  var k = elements.length;
-  if (k) {
+  var numElements = elements.length;
+  if (numElements) {
     if (elements[0]) serializeExpression(<Expression>elements[0], sb);
-    for (var i = 1; i < k; ++i) {
+    for (let i = 1; i < numElements; ++i) {
       sb.push(", ");
       if (elements[i]) serializeExpression(<Expression>elements[i], sb);
     }
@@ -450,11 +450,12 @@ export function serializeCallExpression(node: CallExpression, sb: string[]): voi
 }
 
 export function serializeCommaExpression(node: CommaExpression, sb: string[]): void {
-  var k = assert(node.expressions.length);
-  serializeExpression(node.expressions[0], sb);
-  for (var i = 1; i < k; ++i) {
+  var expressions = node.expressions;
+  var numExpressions = assert(expressions.length);
+  serializeExpression(expressions[0], sb);
+  for (let i = 1; i < numExpressions; ++i) {
     sb.push(",");
-    serializeExpression(node.expressions[i], sb);
+    serializeExpression(expressions[i], sb);
   }
 }
 
@@ -525,7 +526,8 @@ export function serializeStringLiteral(str: string, sb: string[], singleQuoted: 
   var off = 0;
   var quote = singleQuoted ? "'" : "\"";
   sb.push(quote);
-  for (var i = 0, k = str.length; i < k;) {
+  var i = 0;
+  for (let k = str.length; i < k;) {
     switch (str.charCodeAt(i)) {
       case CharCode.NULL: {
         if (i > off) sb.push(str.substring(off, off = i + 1));
@@ -680,7 +682,7 @@ function serializeTerminatedStatement(statement: Statement, sb: string[]): void 
   ) {
     sb.push(";\n");
   } else {
-    var last = sb[sb.length - 1];
+    let last = sb[sb.length - 1];
     if (last.length && last.charCodeAt(last.length - 1) == CharCode.CLOSEBRACE) {
       sb.push("\n");
     } else {
@@ -690,71 +692,81 @@ function serializeTerminatedStatement(statement: Statement, sb: string[]): void 
 }
 
 export function serializeBlockStatement(node: BlockStatement, sb: string[]): void {
+  var statements = node.statements;
   sb.push("{\n");
-  for (var i = 0, k = node.statements.length; i < k; ++i) {
-    serializeTerminatedStatement(node.statements[i], sb);
+  for (let i = 0, k = statements.length; i < k; ++i) {
+    serializeTerminatedStatement(statements[i], sb);
   }
   sb.push("}");
 }
 
 export function serializeBreakStatement(node: BreakStatement, sb: string[]): void {
-  if (node.label) {
+  var label = node.label;
+  if (label) {
     sb.push("break ");
-    serializeIdentifierExpression(node.label, sb);
+    serializeIdentifierExpression(label, sb);
   } else {
     sb.push("break");
   }
 }
 
 export function serializeContinueStatement(node: ContinueStatement, sb: string[]): void {
-  if (node.label) {
+  var label = node.label;
+  if (label) {
     sb.push("continue ");
-    serializeIdentifierExpression(node.label, sb);
+    serializeIdentifierExpression(label, sb);
   } else {
     sb.push("continue");
   }
 }
 
 export function serializeClassDeclaration(node: ClassDeclaration, sb: string[]): void {
-  var i: i32, k: i32;
-  if (node.decorators) {
-    for (i = 0, k = node.decorators.length; i < k; ++i) {
-      serializeDecorator(node.decorators[i], sb);
+  var decorators = node.decorators;
+  if (decorators) {
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      serializeDecorator(decorators[i], sb);
       sb.push("\n");
     }
   }
-  if (node.modifiers) {
-    for (i = 0, k = node.modifiers.length; i < k; ++i) {
-      serializeModifier(node.modifiers[i], sb);
+  var modifiers = node.modifiers;
+  if (modifiers) {
+    for (let i = 0, k = modifiers.length; i < k; ++i) {
+      serializeModifier(modifiers[i], sb);
       sb.push(" ");
     }
   }
   sb.push("class ");
   serializeIdentifierExpression(node.name, sb);
-  if (k = node.typeParameters.length) {
+  var typeParameters = node.typeParameters;
+  var numTypeParameters = typeParameters.length;
+  if (numTypeParameters) {
     sb.push("<");
-    serializeTypeParameter(node.typeParameters[0], sb);
-    for (i = 1; i < k; ++i) {
+    serializeTypeParameter(typeParameters[0], sb);
+    for (let i = 1; i < numTypeParameters; ++i) {
       sb.push(", ");
       serializeTypeParameter(node.typeParameters[i], sb);
     }
     sb.push(">");
   }
-  if (node.extendsType) {
+  var extendsType = node.extendsType;
+  if (extendsType) {
     sb.push(" extends ");
-    serializeTypeNode(node.extendsType, sb);
+    serializeTypeNode(extendsType, sb);
   }
-  if (k = node.implementsTypes.length) {
+  var implementsTypes = node.implementsTypes;
+  var numImplementsTypes = implementsTypes.length;
+  if (numImplementsTypes) {
     sb.push(" implements ");
-    serializeTypeNode(node.implementsTypes[0], sb);
-    for (i = 1; i < k; ++i) {
+    serializeTypeNode(implementsTypes[0], sb);
+    for (let i = 1; i < numImplementsTypes; ++i) {
       sb.push(", ");
-      serializeTypeNode(node.implementsTypes[i], sb);
+      serializeTypeNode(implementsTypes[i], sb);
     }
   }
   sb.push(" {\n");
-  for (i = 0, k = node.members.length; i < k; ++i) {
-    serializeTerminatedStatement(node.members[i], sb);
+  var members = node.members;
+  for (let i = 0, k = members.length; i < k; ++i) {
+    serializeTerminatedStatement(members[i], sb);
   }
   sb.push("}");
 }
@@ -975,98 +987,110 @@ export function serializeIfStatement(node: IfStatement, sb: string[]): void {
   sb.push("if (");
   serializeExpression(node.condition, sb);
   sb.push(") ");
-  serializeStatement(node.ifTrue, sb);
-  if (node.ifTrue.kind != NodeKind.BLOCK) {
+  var ifTrue = node.ifTrue;
+  serializeStatement(ifTrue, sb);
+  if (ifTrue.kind != NodeKind.BLOCK) {
     sb.push(";\n");
   }
-  if (node.ifFalse) {
-    if (node.ifTrue.kind == NodeKind.BLOCK) {
+  var ifFalse = node.ifFalse;
+  if (ifFalse) {
+    if (ifTrue.kind == NodeKind.BLOCK) {
       sb.push(" else ");
     } else {
       sb.push("else ");
     }
-    serializeStatement(node.ifFalse, sb);
+    serializeStatement(ifFalse, sb);
   }
 }
 
 export function serializeImportDeclaration(node: ImportDeclaration, sb: string[]): void {
-  serializeIdentifierExpression(node.externalName, sb);
-  if (node.externalName.text != node.name.text) {
+  var externalName = node.externalName;
+  var name = node.name;
+  serializeIdentifierExpression(externalName, sb);
+  if (externalName.text != name.text) {
     sb.push(" as ");
-    serializeIdentifierExpression(node.name, sb);
+    serializeIdentifierExpression(name, sb);
   }
 }
 
 export function serializeImportStatement(node: ImportStatement, sb: string[]): void {
   sb.push("import ");
-  if (node.declarations) {
-    var k = node.declarations.length;
-    if (k) {
+  var declarations = node.declarations;
+  var namespaceName = node.namespaceName;
+  if (declarations) {
+    let numDeclarations = declarations.length;
+    if (numDeclarations) {
       sb.push("{\n");
-      serializeImportDeclaration(node.declarations[0], sb);
-      for (var i = 1; i < k; ++i) {
+      serializeImportDeclaration(declarations[0], sb);
+      for (let i = 1; i < numDeclarations; ++i) {
         sb.push(",\n");
-        serializeImportDeclaration(node.declarations[i], sb);
+        serializeImportDeclaration(declarations[i], sb);
       }
       sb.push("\n} from ");
     } else {
       sb.push("{} from ");
     }
-  } else if (node.namespaceName) {
+  } else if (namespaceName) {
     sb.push("* as ");
-    serializeIdentifierExpression(node.namespaceName, sb);
+    serializeIdentifierExpression(namespaceName, sb);
     sb.push(" from ");
   }
   serializeStringLiteralExpression(node.path, sb);
 }
 
 export function serializeInterfaceDeclaration(node: InterfaceDeclaration, sb: string[]): void {
-  var i: i32, k: i32;
-  if (node.decorators) {
-    for (i = 0, k = node.decorators.length; i < k; ++i) {
-      serializeDecorator(node.decorators[i], sb);
+  var decorators = node.decorators;
+  if (decorators) {
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      serializeDecorator(decorators[i], sb);
       sb.push("\n");
     }
   }
-  if (node.modifiers) {
-    for (i = 0, k = node.modifiers.length; i < k; ++i) {
-      serializeModifier(node.modifiers[i], sb);
+  var modifiers = node.modifiers;
+  if (modifiers) {
+    for (let i = 0, k = modifiers.length; i < k; ++i) {
+      serializeModifier(modifiers[i], sb);
       sb.push(" ");
     }
   }
   sb.push("interface ");
   serializeIdentifierExpression(node.name, sb);
-  if (k = node.typeParameters.length) {
+  var typeParameters = node.typeParameters;
+  var numTypeParameters = typeParameters.length;
+  if (numTypeParameters) {
     sb.push("<");
     serializeTypeParameter(node.typeParameters[0], sb);
-    for (i = 0; i < k; ++i) {
+    for (let i = 0; i < numTypeParameters; ++i) {
       sb.push(", ");
       serializeTypeParameter(node.typeParameters[i], sb);
     }
     sb.push(">");
   }
-  if (node.extendsType) {
+  var extendsType = node.extendsType;
+  if (extendsType) {
     sb.push(" extends ");
-    serializeTypeNode(node.extendsType, sb);
+    serializeTypeNode(extendsType, sb);
   }
   sb.push(" {\n");
-  for (i = 0, k = node.members.length; i < k; ++i) {
-    serializeTerminatedStatement(node.members[i], sb);
+  var members = node.members;
+  for (let i = 0, k = members.length; i < k; ++i) {
+    serializeTerminatedStatement(members[i], sb);
   }
   sb.push("}");
 }
 
 export function serializeMethodDeclaration(node: MethodDeclaration, sb: string[]): void {
-  var i: i32, k: i32;
-  if (node.decorators) {
-    for (i = 0, k = node.decorators.length; i < k; ++i) {
-      serializeDecorator(node.decorators[i], sb);
+  var decorators = node.decorators;
+  if (decorators) {
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      serializeDecorator(decorators[i], sb);
       sb.push("\n");
     }
   }
-  if (node.modifiers) {
-    for (i = 0, k = node.modifiers.length; i < k; ++i) {
-      serializeModifier(node.modifiers[i], sb);
+  var modifiers = node.modifiers;
+  if (modifiers) {
+    for (let i = 0, k = modifiers.length; i < k; ++i) {
+      serializeModifier(modifiers[i], sb);
       sb.push(" ");
     }
   }
@@ -1074,51 +1098,56 @@ export function serializeMethodDeclaration(node: MethodDeclaration, sb: string[]
 }
 
 export function serializeNamespaceDeclaration(node: NamespaceDeclaration, sb: string[]): void {
-  var i: i32, k: i32;
-  if (node.decorators) {
-    for (i = 0, k = node.decorators.length; i < k; ++i) {
-      serializeDecorator(node.decorators[i], sb);
+  var decorators = node.decorators;
+  if (decorators) {
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      serializeDecorator(decorators[i], sb);
       sb.push("\n");
     }
   }
-  if (node.modifiers) {
-    for (i = 0, k = node.modifiers.length; i < k; ++i) {
-      serializeModifier(node.modifiers[i], sb);
+  var modifiers = node.modifiers;
+  if (modifiers) {
+    for (let i = 0, k = modifiers.length; i < k; ++i) {
+      serializeModifier(modifiers[i], sb);
       sb.push(" ");
     }
   }
   sb.push("namespace ");
   serializeIdentifierExpression(node.name, sb);
   sb.push(" {\n");
-  for (i = 0, k = node.members.length; i < k; ++i) {
-    serializeTerminatedStatement(node.members[i], sb);
+  var members = node.members;
+  for (let i = 0, k = members.length; i < k; ++i) {
+    serializeTerminatedStatement(members[i], sb);
   }
   sb.push("}");
 }
 
 export function serializeReturnStatement(node: ReturnStatement, sb: string[]): void {
-  if (node.value) {
+  var value = node.value;
+  if (value) {
     sb.push("return ");
-    serializeExpression(node.value, sb);
+    serializeExpression(value, sb);
   } else {
     sb.push("return");
   }
 }
 
 export function serializeSwitchCase(node: SwitchCase, sb: string[]): void {
-  if (node.label) {
+  var label = node.label;
+  if (label) {
     sb.push("case ");
-    serializeExpression(node.label, sb);
+    serializeExpression(label, sb);
     sb.push(":\n");
   } else {
     sb.push("default:\n");
   }
-  var k = node.statements.length;
-  if (k) {
-    serializeTerminatedStatement(node.statements[0], sb);
-    for (var i = 1; i < k; ++i) {
+  var statements = node.statements;
+  var numStatements = statements.length;
+  if (numStatements) {
+    serializeTerminatedStatement(statements[0], sb);
+    for (let i = 1; i < numStatements; ++i) {
       sb.push("\n");
-      serializeTerminatedStatement(node.statements[i], sb);
+      serializeTerminatedStatement(statements[i], sb);
     }
   }
 }
@@ -1127,8 +1156,9 @@ export function serializeSwitchStatement(node: SwitchStatement, sb: string[]): v
   sb.push("switch (");
   serializeExpression(node.condition, sb);
   sb.push(") {\n");
-  for (var i = 0, k = node.cases.length; i < k; ++i) {
-    serializeSwitchCase(node.cases[i], sb);
+  var cases = node.cases;
+  for (let i = 0, k = cases.length; i < k; ++i) {
+    serializeSwitchCase(cases[i], sb);
     sb.push("\n");
   }
   sb.push("}");
@@ -1141,27 +1171,30 @@ export function serializeThrowStatement(node: ThrowStatement, sb: string[]): voi
 }
 
 export function serializeTryStatement(node: TryStatement, sb: string[]): void {
-  var i: i32, k: i32;
   sb.push("try {\n");
-  for (i = 0, k = node.statements.length; i < k; ++i) {
-    serializeStatement(node.statements[i], sb);
+  var statements = node.statements;
+  for (let i = 0, k = statements.length; i < k; ++i) {
+    serializeStatement(statements[i], sb);
     sb.push(";\n");
   }
-  if (node.catchVariable) {
+  var catchVariable = node.catchVariable;
+  if (catchVariable) {
     sb.push("} catch (");
-    serializeIdentifierExpression(node.catchVariable, sb);
+    serializeIdentifierExpression(catchVariable, sb);
     sb.push(") {\n");
-    if (node.catchStatements) {
-      for (i = 0, k = node.catchStatements.length; i < k; ++i) {
-        serializeStatement(node.catchStatements[i], sb);
+    let catchStatements = node.catchStatements;
+    if (catchStatements) {
+      for (let i = 0, k = catchStatements.length; i < k; ++i) {
+        serializeStatement(catchStatements[i], sb);
         sb.push(";\n");
       }
     }
   }
-  if (node.finallyStatements) {
+  var finallyStatements = node.finallyStatements;
+  if (finallyStatements) {
     sb.push("} finally {\n");
-    for (i = 0, k = node.finallyStatements.length; i < k; ++i) {
-      serializeStatement(node.finallyStatements[i], sb);
+    for (let i = 0, k = finallyStatements.length; i < k; ++i) {
+      serializeStatement(finallyStatements[i], sb);
       sb.push(";\n");
     }
   }
@@ -1169,28 +1202,32 @@ export function serializeTryStatement(node: TryStatement, sb: string[]): void {
 }
 
 export function serializeTypeDeclaration(node: TypeDeclaration, sb: string[]): void {
-  var i: i32, k: i32;
-  if (node.decorators) {
-    for (i = 0, k = node.decorators.length; i < k; ++i) {
-      serializeDecorator(node.decorators[i], sb);
+  var decorators = node.decorators;
+  if (decorators) {
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      serializeDecorator(decorators[i], sb);
       sb.push("\n");
     }
   }
-  if (node.modifiers) {
-    for (i = 0, k = node.modifiers.length; i < k; ++i) {
-      serializeModifier(node.modifiers[i], sb);
+  var modifiers = node.modifiers;
+  if (modifiers) {
+    for (let i = 0, k = modifiers.length; i < k; ++i) {
+      serializeModifier(modifiers[i], sb);
       sb.push(" ");
     }
   }
   sb.push("type ");
   serializeIdentifierExpression(node.name, sb);
   var typeParameters = node.typeParameters;
-  if (typeParameters && (k = typeParameters.length)) {
-    sb.push("<");
-    for (i = 0; i < k; ++i) {
-      serializeTypeParameter(typeParameters[i], sb);
+  if (typeParameters) {
+    let numTypeParameters = typeParameters.length;
+    if (numTypeParameters) {
+      sb.push("<");
+      for (let i = 0; i < numTypeParameters; ++i) {
+        serializeTypeParameter(typeParameters[i], sb);
+      }
+      sb.push(">");
     }
-    sb.push(">");
   }
   sb.push(" = ");
   serializeTypeNode(node.type, sb);
@@ -1198,28 +1235,31 @@ export function serializeTypeDeclaration(node: TypeDeclaration, sb: string[]): v
 
 export function serializeVariableDeclaration(node: VariableDeclaration, sb: string[]): void {
   serializeIdentifierExpression(node.name, sb);
-  if (node.type) {
+  var type = node.type;
+  if (type) {
     sb.push(": ");
-    serializeTypeNode(node.type, sb);
+    serializeTypeNode(type, sb);
   }
-  if (node.initializer) {
+  var initializer = node.initializer;
+  if (initializer) {
     sb.push(" = ");
-    serializeExpression(node.initializer, sb);
+    serializeExpression(initializer, sb);
   }
 }
 
 export function serializeVariableStatement(node: VariableStatement, sb: string[]): void {
-  var i: i32, k: i32;
-  if (node.decorators) {
-    for (i = 0, k = node.decorators.length; i < k; ++i) {
-      serializeDecorator(node.decorators[i], sb);
+  var decorators = node.decorators;
+  if (decorators) {
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      serializeDecorator(decorators[i], sb);
       sb.push("\n");
     }
   }
   var isConst = false, isLet = false;
-  if (node.modifiers) {
-    for (i = 0, k = node.modifiers.length; i < k; ++i) {
-      var modifier = node.modifiers[i];
+  var modifiers = node.modifiers;
+  if (modifiers) {
+    for (let i = 0, k = modifiers.length; i < k; ++i) {
+      let modifier = modifiers[i];
       switch (modifier.modifierKind) {
         case ModifierKind.CONST: {
           assert(!isLet);
@@ -1240,9 +1280,10 @@ export function serializeVariableStatement(node: VariableStatement, sb: string[]
     }
   }
   sb.push(isConst ? "const " : isLet ? "let " : "var ");
-  k = assert(node.declarations.length);
+  var declarations = node.declarations;
+  var numDeclarations = assert(declarations.length);
   serializeVariableDeclaration(node.declarations[0], sb);
-  for (i = 1; i < k; ++i) {
+  for (let i = 1; i < numDeclarations; ++i) {
     sb.push(", ");
     serializeVariableDeclaration(node.declarations[i], sb);
   }
@@ -1260,14 +1301,15 @@ export function serializeWhileStatement(node: WhileStatement, sb: string[]): voi
 export function serializeDecorator(node: DecoratorNode, sb: string[]): void {
   sb.push("@");
   serializeExpression(node.name, sb);
-  if (node.arguments) {
+  var args = node.arguments;
+  if (args) {
     sb.push("(");
-    var k = node.arguments.length;
-    if (k) {
-      serializeExpression(node.arguments[0], sb);
-      for (var i = 1; i < k; ++i) {
+    let numArgs = args.length;
+    if (numArgs) {
+      serializeExpression(args[0], sb);
+      for (let i = 1; i < numArgs; ++i) {
         sb.push(", ");
-        serializeExpression(node.arguments[i], sb);
+        serializeExpression(args[i], sb);
       }
     }
     sb.push(")");
@@ -1279,21 +1321,24 @@ export function serializeModifier(node: ModifierNode, sb: string[]): void {
 }
 
 export function serializeParameter(node: ParameterNode, sb: string[]): void {
-  if (node.parameterKind == ParameterKind.REST) {
+  var kind = node.parameterKind;
+  if (kind == ParameterKind.REST) {
     sb.push("...");
   }
   serializeIdentifierExpression(node.name, sb);
-  if (node.type) {
-    if (node.parameterKind == ParameterKind.OPTIONAL && !node.initializer) {
+  var type = node.type;
+  var initializer = node.initializer;
+  if (type) {
+    if (kind == ParameterKind.OPTIONAL && !initializer) {
       sb.push("?: ");
     } else {
       sb.push(": ");
     }
-    serializeTypeNode(node.type, sb);
+    serializeTypeNode(type, sb);
   }
-  if (node.initializer) {
+  if (initializer) {
     sb.push(" = ");
-    serializeExpression(node.initializer, sb);
+    serializeExpression(initializer, sb);
   }
 }
 

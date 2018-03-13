@@ -212,9 +212,6 @@ export class Compiler extends DiagnosticEmitter {
   /** Already processed file names. */
   files: Set<string> = new Set();
 
-  /** Trampolines used where functions are called with omitted parameters. */
-  trampolines: Map<Function,Map<i32,string>> = new Map();
-
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
     return new Compiler(program, options).compile();
@@ -255,7 +252,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile entry file(s) while traversing to reachable elements
     var sources = program.sources;
-    for (var i = 0, k = sources.length; i < k; ++i) {
+    for (let i = 0, k = sources.length; i < k; ++i) {
       if (sources[i].isEntry) {
         this.compileSource(sources[i]);
       }
@@ -279,7 +276,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up static memory segments and the heap base pointer
     if (!options.noMemory) {
-      var memoryOffset = this.memoryOffset;
+      let memoryOffset = this.memoryOffset;
       memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
       this.memoryOffset = memoryOffset;
       if (options.isWasm64) {
@@ -299,7 +296,7 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // determine initial page size
-      var pages = i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0));
+      let pages = i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0));
       module.setMemory(
         i64_low(pages),
         Module.MAX_MEMORY_WASM32, // TODO: not WASM64 compatible yet
@@ -316,9 +313,10 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up function table
     var functionTable = this.functionTable;
-    if (k = functionTable.length) {
-      var entries = new Array<FunctionRef>(k);
-      for (i = 0; i < k; ++i) {
+    var functionTableSize = functionTable.length;
+    if (functionTableSize) {
+      let entries = new Array<FunctionRef>(functionTableSize);
+      for (let i = 0; i < functionTableSize; ++i) {
         entries[i] = functionTable[i].ref;
       }
       module.setFunctionTable(entries);
@@ -335,7 +333,7 @@ export class Compiler extends DiagnosticEmitter {
     // try file.ts
     var source: Source;
     var expected = normalizedPathWithoutExtension + ".ts";
-    for (var i = 0, k = sources.length; i < k; ++i) {
+    for (let i = 0, k = sources.length; i < k; ++i) {
       source = sources[i];
       if (source.normalizedPath == expected) {
         this.compileSource(source);
@@ -345,7 +343,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // try file/index.ts
     expected = normalizedPathWithoutExtension + "/index.ts";
-    for (i = 0, k = sources.length; i < k; ++i) {
+    for (let i = 0, k = sources.length; i < k; ++i) {
       source = sources[i];
       if (source.normalizedPath == expected) {
         this.compileSource(source);
@@ -355,7 +353,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // try (lib)/file.ts
     expected = LIBRARY_PREFIX + normalizedPathWithoutExtension + ".ts";
-    for (i = 0, k = sources.length; i < k; ++i) {
+    for (let i = 0, k = sources.length; i < k; ++i) {
       source = sources[i];
       if (source.normalizedPath == expected) {
         this.compileSource(source);
@@ -470,8 +468,8 @@ export class Compiler extends DiagnosticEmitter {
 
   compileGlobalDeclaration(declaration: VariableDeclaration): Global | null {
     // look up the initialized program element
-    var element = this.program.elements.get(declaration.fileLevelInternalName);
-    if (!element || element.kind != ElementKind.GLOBAL) throw new Error("global expected");
+    var element = assert(this.program.elements.get(declaration.fileLevelInternalName));
+    assert(element.kind == ElementKind.GLOBAL);
     if (!this.compileGlobal(<Global>element)) return null; // reports
     return <Global>element;
   }
@@ -596,13 +594,12 @@ export class Compiler extends DiagnosticEmitter {
 
     if (initializeInStart) { // initialize to mutable zero and set the actual value in start
       this.module.addGlobal(internalName, nativeType, true, global.type.toNativeZero(this.module));
-      var setExpr = this.module.createSetGlobal(internalName, initExpr);
-      this.startFunctionBody.push(setExpr);
+      this.startFunctionBody.push(this.module.createSetGlobal(internalName, initExpr));
 
     } else { // compile as-is
 
       if (global.is(ElementFlags.CONSTANT)) {
-        var exprType = _BinaryenExpressionGetType(initExpr);
+        let exprType = _BinaryenExpressionGetType(initExpr);
         switch (exprType) {
           case NativeType.I32: {
             global.constantValueKind = ConstantValueKind.INTEGER;
@@ -649,9 +646,10 @@ export class Compiler extends DiagnosticEmitter {
   // enums
 
   compileEnumDeclaration(declaration: EnumDeclaration): Enum | null {
-    var element = this.program.elements.get(declaration.fileLevelInternalName);
-    if (!element || element.kind != ElementKind.ENUM) throw new Error("enum expected");
-    return this.compileEnum(<Enum>element) ? <Enum>element : null;
+    var element = assert(this.program.elements.get(declaration.fileLevelInternalName));
+    assert(element.kind == ElementKind.ENUM);
+    if (!this.compileEnum(<Enum>element)) return null;
+    return <Enum>element;
   }
 
   compileEnum(element: Enum): bool {
@@ -661,11 +659,11 @@ export class Compiler extends DiagnosticEmitter {
     this.currentEnum = element;
     var previousValue: EnumValue | null = null;
     if (element.members) {
-      for (var member of element.members.values()) {
+      for (let member of element.members.values()) {
         if (member.kind != ElementKind.ENUMVALUE) continue; // happens if an enum is also a namespace
-        var initInStart = false;
-        var val = <EnumValue>member;
-        var valueDeclaration = val.declaration;
+        let initInStart = false;
+        let val = <EnumValue>member;
+        let valueDeclaration = val.declaration;
         val.set(ElementFlags.COMPILED);
         if (val.is(ElementFlags.INLINED)) {
           if (element.declaration.isTopLevelExport) {
@@ -677,7 +675,7 @@ export class Compiler extends DiagnosticEmitter {
             );
           }
         } else {
-          var initExpr: ExpressionRef;
+          let initExpr: ExpressionRef;
           if (valueDeclaration.value) {
             initExpr = this.compileExpression(<Expression>valueDeclaration.value, Type.i32);
             if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
@@ -717,8 +715,7 @@ export class Compiler extends DiagnosticEmitter {
               true, // mutable
               this.module.createI32(0)
             );
-            var setExpr = this.module.createSetGlobal(val.internalName, initExpr);
-            this.startFunctionBody.push(setExpr);
+            this.startFunctionBody.push(this.module.createSetGlobal(val.internalName, initExpr));
           } else {
             this.module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
             if (_BinaryenExpressionGetType(initExpr) == NativeType.I32) {
@@ -756,10 +753,8 @@ export class Compiler extends DiagnosticEmitter {
     typeArguments: TypeNode[],
     contextualTypeArguments: Map<string,Type> | null = null
   ): Function | null {
-    var element = this.program.elements.get(declaration.fileLevelInternalName);
-    if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE) {
-      throw new Error("function expected");
-    }
+    var element = assert(this.program.elements.get(declaration.fileLevelInternalName));
+    assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
     return this.compileFunctionUsingTypeArguments( // reports
       <FunctionPrototype>element,
       typeArguments,
@@ -780,8 +775,8 @@ export class Compiler extends DiagnosticEmitter {
       contextualTypeArguments,
       reportNode
     );
-    if (!instance) return null;
-    return this.compileFunction(instance) ? instance : null;
+    if (!(instance && this.compileFunction(instance))) return null;
+    return instance;
   }
 
   /** Either reuses or creates the function type matching the specified signature. */
@@ -891,8 +886,8 @@ export class Compiler extends DiagnosticEmitter {
   compileNamespaceDeclaration(declaration: NamespaceDeclaration): void {
     var members = declaration.members;
     var noTreeShaking = this.options.noTreeShaking;
-    for (var i = 0, k = members.length; i < k; ++i) {
-      var member = members[i];
+    for (let i = 0, k = members.length; i < k; ++i) {
+      let member = members[i];
       switch (member.kind) {
         case NodeKind.CLASSDECLARATION: {
           if (
@@ -951,7 +946,7 @@ export class Compiler extends DiagnosticEmitter {
             noTreeShaking ||
             hasModifier(ModifierKind.EXPORT, (<VariableStatement>member).modifiers)
           ) {
-            var variableInit = this.compileVariableStatement(<VariableStatement>member, true);
+            let variableInit = this.compileVariableStatement(<VariableStatement>member, true);
             if (variableInit) this.startFunctionBody.push(variableInit);
           }
           break;
@@ -967,7 +962,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!ns.members) return;
 
     var noTreeShaking = this.options.noTreeShaking;
-    for (var element of ns.members.values()) {
+    for (let element of ns.members.values()) {
       switch (element.kind) {
         case ElementKind.CLASS_PROTOTYPE: {
           if (
@@ -1015,14 +1010,14 @@ export class Compiler extends DiagnosticEmitter {
 
   compileExportStatement(statement: ExportStatement): void {
     var members = statement.members;
-    for (var i = 0, k = members.length; i < k; ++i) {
-      var member = members[i];
-      var internalExportName = (
+    for (let i = 0, k = members.length; i < k; ++i) {
+      let member = members[i];
+      let internalExportName = (
         statement.range.source.internalPath +
         PATH_DELIMITER +
         member.externalName.text
       );
-      var element = this.program.exports.get(internalExportName);
+      let element = this.program.exports.get(internalExportName);
       if (!element) continue; // reported in Program#initialize
 
       switch (element.kind) {
@@ -1041,14 +1036,14 @@ export class Compiler extends DiagnosticEmitter {
             !(<FunctionPrototype>element).is(ElementFlags.GENERIC) &&
             statement.range.source.isEntry
           ) {
-            var functionInstance = this.compileFunctionUsingTypeArguments(
+            let functionInstance = this.compileFunctionUsingTypeArguments(
               <FunctionPrototype>element,
               [],
               null,
               (<FunctionPrototype>element).declaration.name
             );
             if (functionInstance) {
-              var functionDeclaration = functionInstance.prototype.declaration;
+              let functionDeclaration = functionInstance.prototype.declaration;
               if (functionDeclaration && functionDeclaration.needsExplicitExport(member)) {
                 this.module.addFunctionExport(functionInstance.internalName, member.externalName.text);
               }
@@ -1058,7 +1053,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         case ElementKind.GLOBAL: {
           if (this.compileGlobal(<Global>element) && statement.range.source.isEntry) {
-            var globalDeclaration = (<Global>element).declaration;
+            let globalDeclaration = (<Global>element).declaration;
             if (globalDeclaration && globalDeclaration.needsExplicitExport(member)) {
               if ((<Global>element).is(ElementFlags.INLINED)) {
                 this.module.addGlobalExport(element.internalName, member.externalName.text);
@@ -1238,9 +1233,9 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileStatements(statements: Statement[]): ExpressionRef[] {
-    var k = statements.length;
-    var stmts = new Array<ExpressionRef>(k);
-    for (var i = 0; i < k; ++i) {
+    var numStatements = statements.length;
+    var stmts = new Array<ExpressionRef>(numStatements);
+    for (let i = 0; i < numStatements; ++i) {
       stmts[i] = this.compileStatement(statements[i]);
     }
     return stmts; // array of 0-es in noEmit-mode
@@ -1454,10 +1449,10 @@ export class Compiler extends DiagnosticEmitter {
 
     // introduce a local for evaluating the condition (exactly once)
     var tempLocal = this.currentFunction.getTempLocal(Type.u32);
-    var k = statement.cases.length;
+    var numCases = statement.cases.length;
 
     // Prepend initializer to inner block. Does not initiate a new branch, yet.
-    var breaks = new Array<ExpressionRef>(1 + k);
+    var breaks = new Array<ExpressionRef>(1 + numCases);
     breaks[0] = this.module.createSetLocal( // initializer
       tempLocal.index,
       this.compileExpression(statement.condition, Type.u32)
@@ -1466,8 +1461,8 @@ export class Compiler extends DiagnosticEmitter {
     // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
     var breakIndex = 1;
     var defaultIndex = -1;
-    for (var i = 0; i < k; ++i) {
-      var case_ = statement.cases[i];
+    for (let i = 0; i < numCases; ++i) {
+      let case_ = statement.cases[i];
       if (case_.label) {
         breaks[breakIndex++] = this.module.createBreak("case" + i.toString(10) + "|" + context,
           this.module.createBinary(BinaryOp.EqI32,
@@ -1491,19 +1486,19 @@ export class Compiler extends DiagnosticEmitter {
     // nest blocks in order
     var currentBlock = this.module.createBlock("case0|" + context, breaks, NativeType.None);
     var alwaysReturns = true;
-    for (i = 0; i < k; ++i) {
-      case_ = statement.cases[i];
-      var l = case_.statements.length;
-      var body = new Array<ExpressionRef>(1 + l);
+    for (let i = 0; i < numCases; ++i) {
+      let case_ = statement.cases[i];
+      let l = case_.statements.length;
+      let body = new Array<ExpressionRef>(1 + l);
       body[0] = currentBlock;
 
       // Each switch case initiates a new branch
       this.currentFunction.flow = this.currentFunction.flow.enterBranchOrScope();
-      var breakLabel = this.currentFunction.flow.breakLabel = "break|" + context;
+      let breakLabel = this.currentFunction.flow.breakLabel = "break|" + context;
 
-      var fallsThrough = i != k - 1;
-      var nextLabel = !fallsThrough ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
-      for (var j = 0; j < l; ++j) {
+      let fallsThrough = i != numCases - 1;
+      let nextLabel = !fallsThrough ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
+      for (let j = 0; j < l; ++j) {
         body[j + 1] = this.compileStatement(case_.statements[j]);
       }
       if (!(fallsThrough || this.currentFunction.flow.is(FlowFlags.RETURNS))) {
@@ -1549,6 +1544,7 @@ export class Compiler extends DiagnosticEmitter {
    */
   compileVariableStatement(statement: VariableStatement, isKnownGlobal: bool = false): ExpressionRef {
     var declarations = statement.declarations;
+    var numDeclarations = declarations.length;
 
     // top-level variables and constants become globals
     if (isKnownGlobal || (
@@ -1560,7 +1556,7 @@ export class Compiler extends DiagnosticEmitter {
       // within any function declared in the same source, which is unknown at this point. the only
       // efficient way to deal with this would be to keep track of all occasions it is used and
       // replace these instructions afterwards, dynamically. (TOOD: what about a Binaryen pass?)
-      for (var i = 0, k = declarations.length; i < k; ++i) {
+      for (let i = 0; i < numDeclarations; ++i) {
         this.compileGlobalDeclaration(declarations[i]);
       }
       return 0;
@@ -1568,11 +1564,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // other variables become locals
     var initializers = new Array<ExpressionRef>();
-    for (i = 0, k = declarations.length; i < k; ++i) {
-      var declaration = declarations[i];
-      var name = declaration.name.text;
-      var type: Type | null = null;
-      var init: ExpressionRef = 0;
+    for (let i = 0; i < numDeclarations; ++i) {
+      let declaration = declarations[i];
+      let name = declaration.name.text;
+      let type: Type | null = null;
+      let init: ExpressionRef = 0;
       if (declaration.type) {
         type = this.program.resolveType( // reports
           declaration.type,
@@ -1607,7 +1603,7 @@ export class Compiler extends DiagnosticEmitter {
         if (init) {
           init = this.precomputeExpressionRef(init);
           if (_BinaryenExpressionGetId(init) == ExpressionId.Const) {
-            var local = new Local(this.program, name, -1, type);
+            let local = new Local(this.program, name, -1, type);
             switch (_BinaryenExpressionGetType(init)) {
               case NativeType.I32: {
                 local = local.withConstantIntegerValue(_BinaryenConstGetValueI32(init), 0);
@@ -1633,7 +1629,7 @@ export class Compiler extends DiagnosticEmitter {
               }
             }
             // Create a virtual local that doesn't actually exist in WebAssembly
-            var scopedLocals = this.currentFunction.flow.scopedLocals;
+            let scopedLocals = this.currentFunction.flow.scopedLocals;
             if (!scopedLocals) scopedLocals = this.currentFunction.flow.scopedLocals = new Map();
             else if (scopedLocals.has(name)) {
               this.error(
@@ -4204,12 +4200,12 @@ export class Compiler extends DiagnosticEmitter {
 
   compileCommaExpression(expression: CommaExpression, contextualType: Type): ExpressionRef {
     var expressions = expression.expressions;
-    var k = expressions.length;
-    var exprs = new Array<ExpressionRef>(k--);
-    for (var i = 0; i < k; ++i) {
+    var numExpressions = expressions.length;
+    var exprs = new Array<ExpressionRef>(numExpressions--);
+    for (let i = 0; i < numExpressions; ++i) {
       exprs[i] = this.compileExpression(expressions[i], Type.void);    // drop all
     }
-    exprs[i] = this.compileExpression(expressions[i], contextualType); // except last
+    exprs[numExpressions] = this.compileExpression(expressions[numExpressions], contextualType); // except last
     return this.module.createBlock(null, exprs, this.currentType.toNativeType());
   }
 
@@ -4381,7 +4377,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.literalKind) {
       case LiteralKind.ARRAY: {
         assert(!implicitNegate);
-        var classType = contextualType.classType;
+        let classType = contextualType.classType;
         if (
           classType &&
           classType == this.program.elements.get("Array") &&
@@ -4399,7 +4395,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createUnreachable();
       }
       case LiteralKind.FLOAT: {
-        var floatValue = (<FloatLiteralExpression>expression).value;
+        let floatValue = (<FloatLiteralExpression>expression).value;
         if (implicitNegate) {
           floatValue = -floatValue;
         }
@@ -4410,7 +4406,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createF64(floatValue);
       }
       case LiteralKind.INTEGER: {
-        var intValue = (<IntegerLiteralExpression>expression).value;
+        let intValue = (<IntegerLiteralExpression>expression).value;
         if (implicitNegate) {
           intValue = i64_sub(
             i64_new(0),
@@ -4512,13 +4508,13 @@ export class Compiler extends DiagnosticEmitter {
   compileStaticString(stringValue: string): ExpressionRef {
     var stringSegment: MemorySegment | null = this.stringSegments.get(stringValue);
     if (!stringSegment) {
-      var stringLength = stringValue.length;
-      var stringBuffer = new Uint8Array(4 + stringLength * 2);
+      let stringLength = stringValue.length;
+      let stringBuffer = new Uint8Array(4 + stringLength * 2);
       stringBuffer[0] =  stringLength         & 0xff;
       stringBuffer[1] = (stringLength >>>  8) & 0xff;
       stringBuffer[2] = (stringLength >>> 16) & 0xff;
       stringBuffer[3] = (stringLength >>> 24) & 0xff;
-      for (var i = 0; i < stringLength; ++i) {
+      for (let i = 0; i < stringLength; ++i) {
         stringBuffer[4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
         stringBuffer[5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
       }
@@ -4567,7 +4563,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var exprs = new Array<ExpressionRef>(size);
     var expr: BinaryenExpressionRef;
-    for (var i = 0; i < size; ++i) {
+    for (let i = 0; i < size; ++i) {
       exprs[i] = expressions[i]
         ? this.compileExpression(<Expression>expressions[i], elementType)
         : elementType.toNativeZero(this.module);
@@ -4623,26 +4619,26 @@ export class Compiler extends DiagnosticEmitter {
     );
     if (resolved) {
       if (resolved.element.kind == ElementKind.CLASS_PROTOTYPE) {
-        var prototype = <ClassPrototype>resolved.element;
-        var instance = prototype.resolveUsingTypeArguments( // reports
+        let prototype = <ClassPrototype>resolved.element;
+        let instance = prototype.resolveUsingTypeArguments( // reports
           expression.typeArguments,
           null,
           expression
         );
         if (instance) {
-          var thisExpr = compileBuiltinAllocate(this, instance, expression);
-          var initializers = new Array<ExpressionRef>();
+          let thisExpr = compileBuiltinAllocate(this, instance, expression);
+          let initializers = new Array<ExpressionRef>();
 
           // use a temp local for 'this'
-          var tempLocal = this.currentFunction.getTempLocal(this.options.usizeType);
+          let tempLocal = this.currentFunction.getTempLocal(this.options.usizeType);
           initializers.push(this.module.createSetLocal(tempLocal.index, thisExpr));
 
           // apply field initializers
           if (instance.members) {
-            for (var member of instance.members.values()) {
+            for (let member of instance.members.values()) {
               if (member.kind == ElementKind.FIELD) {
-                var field = <Field>member;
-                var fieldDeclaration = field.prototype.declaration;
+                let field = <Field>member;
+                let fieldDeclaration = field.prototype.declaration;
                 if (field.is(ElementFlags.CONSTANT)) {
                   assert(false); // there are no built-in fields currently
                 } else if (fieldDeclaration && fieldDeclaration.initializer) {
@@ -4658,7 +4654,7 @@ export class Compiler extends DiagnosticEmitter {
           }
 
           // apply constructor
-          var constructorInstance = instance.constructorInstance;
+          let constructorInstance = instance.constructorInstance;
           if (constructorInstance) {
             initializers.push(this.compileCallDirect(constructorInstance, expression.arguments, expression,
               this.module.createGetLocal(tempLocal.index, this.options.nativeSizeType)
@@ -4755,9 +4751,9 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       case ElementKind.PROPERTY: { // instance property (here: getter)
-        var prototype = (<Property>element).getterPrototype;
+        let prototype = (<Property>element).getterPrototype;
         if (prototype) {
-          var instance = prototype.resolve(null); // reports
+          let instance = prototype.resolve(null); // reports
           if (!instance) return this.module.createUnreachable();
           let signature = instance.signature;
           if (!this.checkCallSignature( // reports

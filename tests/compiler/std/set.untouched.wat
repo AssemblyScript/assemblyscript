@@ -25,7 +25,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -82,7 +81,7 @@
       (i32.const 16)
      )
     )
-    (set_local $7
+    (set_local $5
      (select
       (tee_local $5
        (get_local $3)
@@ -99,7 +98,7 @@
     (if
      (i32.lt_s
       (grow_memory
-       (get_local $7)
+       (get_local $5)
       )
       (i32.const 0)
      )
@@ -2260,8 +2259,6 @@
  (func "$(lib)/set/Set#add" (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -2289,7 +2286,7 @@
     )
    )
    (block
-    (set_local $4
+    (set_local $2
      (select
       (tee_local $2
        (i32.shl
@@ -2308,10 +2305,10 @@
       )
      )
     )
-    (set_local $5
+    (set_local $3
      (call "$(lib)/allocator/arena/allocate_memory"
       (i32.mul
-       (get_local $4)
+       (get_local $2)
        (i32.const 4)
       )
      )
@@ -2322,7 +2319,7 @@
      )
      (block
       (call "$(lib)/memory/move_memory"
-       (get_local $5)
+       (get_local $3)
        (i32.load
         (get_local $0)
        )
@@ -2342,11 +2339,11 @@
     )
     (i32.store offset=4
      (get_local $0)
-     (get_local $4)
+     (get_local $2)
     )
     (i32.store
      (get_local $0)
-     (get_local $5)
+     (get_local $3)
     )
    )
   )

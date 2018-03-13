@@ -150,7 +150,7 @@ export function formatDiagnosticMessage(
 
   // range information if available
   if (message.range) {
-    var range = message.range;
+    let range = message.range;
     if (showContext) {
       sb.push("\n");
       sb.push(context);

@@ -37,7 +37,7 @@ export class Decompiler {
     this.push("function ");
     this.push(name);
     this.push("(");
-     for (var i: Index = 0, k: Index = _BinaryenFunctionGetNumParams(func); i < k; ++i) {
+     for (let i: Index = 0, k: Index = _BinaryenFunctionGetNumParams(func); i < k; ++i) {
       if (i > 0) this.push(", ");
       this.push("$");
       this.push(i.toString(10));

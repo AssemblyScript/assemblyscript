@@ -1904,7 +1904,7 @@ export function compileCall(
         return arg0;
       }
 
-      var abort = compileAbort(compiler, operands.length == 2 ? operands[1] : null, reportNode);
+      let abort = compileAbort(compiler, operands.length == 2 ? operands[1] : null, reportNode);
 
       compiler.currentType = type.nonNullableType;
 

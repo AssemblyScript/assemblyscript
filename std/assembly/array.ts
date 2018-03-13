@@ -124,9 +124,9 @@ export class Array<T> {
     var oldCapacity = this.__capacity;
     if (this.__length == oldCapacity) {
       // inlined __grow (avoids moving twice)
-      var newCapacity: i32 = oldCapacity ? oldCapacity << 1 : 1;
+      let newCapacity: i32 = oldCapacity ? oldCapacity << 1 : 1;
       assert(newCapacity > this.__capacity);
-      var newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
+      let newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
       if (this.__memory) {
         move_memory(
           newMemory + sizeof<T>(),
@@ -202,8 +202,8 @@ export class Array<T> {
   }
 
   reverse(): Array<T> {
-    for (var front: usize = 0, back: usize = <usize>this.__length - 1; front < back; ++front, --back) {
-      var temp = load<T>(this.__memory + front * sizeof<T>());
+    for (let front: usize = 0, back: usize = <usize>this.__length - 1; front < back; ++front, --back) {
+      let temp = load<T>(this.__memory + front * sizeof<T>());
       store<T>(this.__memory + front * sizeof<T>(), load<T>(this.__memory + back * sizeof<T>()));
       store<T>(this.__memory + back * sizeof<T>(), temp);
     }

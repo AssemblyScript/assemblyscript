@@ -249,10 +249,10 @@ export class Module {
   static createFrom(buffer: Uint8Array): Module {
     var cArr = allocU8Array(buffer);
     try {
-      var module = new Module();
+      let module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
       module.out = allocate_memory(3 * 8); // LLVM C-ABI, max used is 3 * usize
-       return module;
+      return module;
     } finally {
       free_memory(changetype<usize>(cArr));
     }
@@ -549,18 +549,19 @@ export class Module {
     condition: ExpressionRef,
     value: ExpressionRef = 0
   ): ExpressionRef {
-    var strs = new Array<usize>(names.length);
-    for (var i = 0, k: i32 = names.length; i < k; ++i) {
+    var numNames = names.length;
+    var strs = new Array<usize>(numNames);
+    for (let i = 0; i < numNames; ++i) {
       strs[i] = allocString(names[i]);
     }
     var cArr = allocI32Array(strs);
     var cStr = allocString(defaultName);
     try {
-      return _BinaryenSwitch(this.ref, cArr, k, cStr, condition, value);
+      return _BinaryenSwitch(this.ref, cArr, numNames, cStr, condition, value);
     } finally {
       free_memory(cStr);
       free_memory(cArr);
-      for (i = k - 1; i >= 0; --i) free_memory(strs[i]);
+      for (let i = numNames - 1; i >= 0; --i) free_memory(strs[i]);
     }
   }
 
@@ -810,9 +811,9 @@ export class Module {
     var segs = new Array<usize>(k);
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
-    for (var i = 0; i < k; ++i) {
-      var buffer = segments[i].buffer;
-      var offset = segments[i].offset;
+    for (let i = 0; i < k; ++i) {
+      let buffer = segments[i].buffer;
+      let offset = segments[i].offset;
       segs[i] = allocU8Array(buffer);
       offs[i] = target == Target.WASM64
         ? this.createI64(i64_low(offset), i64_high(offset))
@@ -828,7 +829,7 @@ export class Module {
       free_memory(cArr3);
       free_memory(cArr2);
       free_memory(cArr1);
-      for (i = k - 1; i >= 0; --i) free_memory(segs[i]);
+      for (let i = k - 1; i >= 0; --i) free_memory(segs[i]);
       free_memory(cStr);
     }
   }
@@ -867,21 +868,23 @@ export class Module {
   }
 
   runPasses(passes: string[], func: FunctionRef = 0): void {
-    var k = passes.length;
-    var names = new Array<usize>(k);
-    for (var i = 0; i < k; ++i) {
+    var numNames = passes.length;
+    var names = new Array<usize>(numNames);
+    for (let i = 0; i < numNames; ++i) {
       names[i] = allocString(passes[i]);
     }
     var cArr = allocI32Array(names);
     try {
       if (func) {
-        _BinaryenFunctionRunPasses(func, this.ref, cArr, k);
+        _BinaryenFunctionRunPasses(func, this.ref, cArr, numNames);
       } else {
-        _BinaryenModuleRunPasses(this.ref, cArr, k);
+        _BinaryenModuleRunPasses(this.ref, cArr, numNames);
       }
     } finally {
       free_memory(cArr);
-      for (; i >= 0; --i) free_memory(names[i]);
+      for (let i = numNames; i >= 0; --i) {
+        free_memory(names[i]);
+      }
     }
   }
 
@@ -900,10 +903,10 @@ export class Module {
     var sourceMapPtr: usize = 0;
     try {
       _BinaryenModuleAllocateAndWrite(out, this.ref, cStr);
-      binaryPtr    = readInt(out);
-      var binaryBytes  = readInt(out + 4);
+      binaryPtr = readInt(out);
+      let binaryBytes = readInt(out + 4);
       sourceMapPtr = readInt(out + 4 * 2);
-      var ret = new Binary();
+      let ret = new Binary();
       ret.output = readBuffer(binaryPtr, binaryBytes);
       ret.sourceMap = readString(sourceMapPtr);
       return ret;
@@ -972,7 +975,7 @@ export class Module {
         );
       }
       case ExpressionId.GetGlobal: {
-        var globalName = _BinaryenGetGlobalGetName(expr);
+        let globalName = _BinaryenGetGlobalGetName(expr);
         if (!globalName) break;
         return _BinaryenGetGlobal(this.ref, globalName, _BinaryenExpressionGetType(expr));
       }
@@ -1093,9 +1096,10 @@ export class Relooper {
 
 function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
-  var ptr = allocate_memory(u8s.length);
+  var numValues = u8s.length;
+  var ptr = allocate_memory(numValues);
   var idx = ptr;
-  for (var i = 0, k = u8s.length; i < k; ++i) {
+  for (let i = 0; i < numValues; ++i) {
     store<u8>(idx++, u8s[i]);
   }
   return ptr;
@@ -1105,8 +1109,8 @@ function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
   var ptr = allocate_memory(i32s.length << 2);
   var idx = ptr;
-  for (var i = 0, k = i32s.length; i < k; ++i) {
-    var val = i32s[i];
+  for (let i = 0, k = i32s.length; i < k; ++i) {
+    let val = i32s[i];
     // store<i32>(idx, val) is not portable
     store<u8>(idx    , ( val         & 0xff) as u8);
     store<u8>(idx + 1, ((val >>   8) & 0xff) as u8);
@@ -1119,8 +1123,8 @@ function allocI32Array(i32s: i32[] | null): usize {
 
 function stringLengthUTF8(str: string): usize {
   var len = 0;
-  for (var i = 0, k = str.length; i < k; ++i) {
-    var u = str.charCodeAt(i);
+  for (let i = 0, k = str.length; i < k; ++i) {
+    let u = str.charCodeAt(i);
     if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
       u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
     }
@@ -1145,8 +1149,8 @@ function allocString(str: string | null): usize {
   if (str == null) return 0;
   var ptr = allocate_memory(stringLengthUTF8(str) + 1);
   var idx = ptr;
-  for (var i = 0, k = str.length; i < k; ++i) {
-    var u = str.charCodeAt(i);
+  for (let i = 0, k = str.length; i < k; ++i) {
+    let u = str.charCodeAt(i);
     if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
       u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
     }
@@ -1194,7 +1198,7 @@ export function readInt(ptr: usize): i32 {
 
 export function readBuffer(ptr: usize, length: usize): Uint8Array {
   var ret = new Uint8Array(length);
-  for (var i: usize = 0; i < length; ++i) {
+  for (let i: usize = 0; i < length; ++i) {
     ret[i] = load<u8>(ptr + i);
   }
   return ret;

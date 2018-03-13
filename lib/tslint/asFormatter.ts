@@ -25,15 +25,15 @@ export class Formatter extends AbstractFormatter {
 
   mapToMessages(failures: RuleFailure[]): string[] {
     return failures.map((failure: RuleFailure) => {
-      const fileName = failure.getFileName();
-      const failureString = failure.getFailure();
-      const ruleName = failure.getRuleName();
-      const lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
-      const positionTuple = `:${lineAndCharacter.line + 1}:${lineAndCharacter.character + 1}`;
+      var fileName = failure.getFileName();
+      var failureString = failure.getFailure();
+      var ruleName = failure.getRuleName();
+      var lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
+      var positionTuple = `:${lineAndCharacter.line + 1}:${lineAndCharacter.character + 1}`;
       if (this.lastSeverity == failure.getRuleSeverity() && this.lastFailure == failureString) {
         return "  in " + fileName + positionTuple;
       } else {
-        var message = this.lastSeverity ? "\n" : "";
+        let message = this.lastSeverity ? "\n" : "";
         switch (this.lastSeverity = failure.getRuleSeverity()) {
           case "warning": {
             message += colorYellow + "WARNING:" + colorReset;

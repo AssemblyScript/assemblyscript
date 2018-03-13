@@ -29,7 +29,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -86,7 +85,7 @@
       (i32.const 16)
      )
     )
-    (set_local $7
+    (set_local $5
      (select
       (tee_local $5
        (get_local $3)
@@ -103,7 +102,7 @@
     (if
      (i32.lt_s
       (grow_memory
-       (get_local $7)
+       (get_local $5)
       )
       (i32.const 0)
      )
@@ -2449,7 +2448,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   (set_local $2
    (i32.load offset=4
     (get_local $0)
@@ -2558,7 +2556,7 @@
   )
   (return
    (block (result i32)
-    (set_local $5
+    (set_local $4
      (i32.add
       (i32.load offset=8
        (get_local $0)
@@ -2568,9 +2566,9 @@
     )
     (i32.store offset=8
      (get_local $0)
-     (get_local $5)
+     (get_local $4)
     )
-    (get_local $5)
+    (get_local $4)
    )
   )
  )

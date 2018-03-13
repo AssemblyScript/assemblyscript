@@ -441,7 +441,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     while (this.pos < this.end) {
       this.tokenPos = this.pos;
-      var c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(this.pos);
       switch (c) {
         case CharCode.CARRIAGERETURN: {
           if (
@@ -603,7 +603,7 @@ export class Tokenizer extends DiagnosticEmitter {
               continue;
             }
             if (text.charCodeAt(this.pos) == CharCode.ASTERISK) { // multi-line
-              var closed = false;
+              let closed = false;
               while (++this.pos < this.end) {
                 c = text.charCodeAt(this.pos);
                 if (
@@ -784,7 +784,7 @@ export class Tokenizer extends DiagnosticEmitter {
         default: {
           if (isIdentifierStart(c)) {
             if (isKeywordCharacter(c)) {
-              var posBefore = this.pos;
+              let posBefore = this.pos;
               while (
                 ++this.pos < this.end &&
                 isIdentifierPart(c = text.charCodeAt(this.pos))
@@ -794,8 +794,8 @@ export class Tokenizer extends DiagnosticEmitter {
                   return Token.IDENTIFIER;
                 }
               }
-              var keywordText = text.substring(posBefore, this.pos);
-              var keywordToken = Token.fromKeyword(keywordText);
+              let keywordText = text.substring(posBefore, this.pos);
+              let keywordToken = Token.fromKeyword(keywordText);
               if (
                 keywordToken != Token.INVALID &&
                 !(preferIdentifier && Token.isAlsoIdentifier(keywordToken))
@@ -828,9 +828,9 @@ export class Tokenizer extends DiagnosticEmitter {
   ): Token {
     var text = this.source.text;
     if (this.nextToken < 0) {
-      var posBefore = this.pos;
-      var tokenBefore = this.token;
-      var tokenPosBefore = this.tokenPos;
+      let posBefore = this.pos;
+      let tokenBefore = this.token;
+      let tokenPosBefore = this.tokenPos;
       this.nextToken = this.unsafeNext(preferIdentifier, maxCompoundLength);
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
@@ -942,7 +942,7 @@ export class Tokenizer extends DiagnosticEmitter {
         );
         break;
       }
-      var c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(this.pos);
       if (c == quote) {
         result += text.substring(start, this.pos++);
         break;
@@ -1030,7 +1030,7 @@ export class Tokenizer extends DiagnosticEmitter {
         escaped = true;
         continue;
       }
-      var c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(this.pos);
       if (c == CharCode.SLASH && !escaped) break;
       if (isLineBreak(c)) {
         this.error(
@@ -1050,7 +1050,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var start = this.pos;
     var flags = 0;
     while (this.pos < this.end) {
-      var c: i32 = text.charCodeAt(this.pos);
+      let c: i32 = text.charCodeAt(this.pos);
       if (!isIdentifierPart(c)) break;
       ++this.pos;
 
@@ -1097,7 +1097,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     var pos = this.pos;
     while (pos < this.end) {
-      var c = text.charCodeAt(pos);
+      let c = text.charCodeAt(pos);
       if (c == CharCode.DOT || c == CharCode.E || c == CharCode.e) {
         return false;
       }
@@ -1128,9 +1128,9 @@ export class Tokenizer extends DiagnosticEmitter {
         }
       }
       if (isOctalDigit(text.charCodeAt(this.pos + 1))) {
-        var start = this.pos;
+        let start = this.pos;
         ++this.pos;
-        var value = this.readOctalInteger();
+        let value = this.readOctalInteger();
         this.error(
           DiagnosticCode.Octal_literals_are_not_allowed_in_strict_mode,
           this.range(start, this.pos)
@@ -1147,7 +1147,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0, 0);
     var i64_16 = i64_new(16, 0);
     while (this.pos < this.end) {
-      var c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 16 + c - CharCode._0;
         value = i64_add(
@@ -1186,7 +1186,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0, 0);
     var i64_10 = i64_new(10, 0);
     while (this.pos < this.end) {
-      var c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 10 + c - CharCode._0;
         value = i64_add(
@@ -1213,7 +1213,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0, 0);
     var i64_8 = i64_new(8, 0);
     while (this.pos < this.end) {
-      var c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(this.pos);
       if (c >= CharCode._0 && c <= CharCode._7) {
         // value = value * 8 + c - CharCode._0;
         value = i64_add(
@@ -1241,7 +1241,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var i64_2 = i64_new(2, 0);
     var i64_1 = i64_new(1, 0);
     while (this.pos < this.end) {
-      var c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(this.pos);
       if (c == CharCode._0) {
         // value = value * 2;
         value = i64_mul(
@@ -1281,7 +1281,7 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     if (this.pos < this.end) {
-      var c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(this.pos);
       if (c == CharCode.E || c == CharCode.e) {
         if (
           ++this.pos < this.end && (
@@ -1305,7 +1305,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = 0;
     var text = this.source.text;
     while (this.pos < this.end) {
-      var c = text.charCodeAt(this.pos++);
+      let c = text.charCodeAt(this.pos++);
       if (c >= CharCode._0 && c <= CharCode._9) {
         value = value * 16 + c - CharCode._0;
       } else if (c >= CharCode.A && c <= CharCode.F) {

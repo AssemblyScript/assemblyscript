@@ -152,7 +152,7 @@ export class String {
     var searchLen: isize = <isize>searchString.length;
 
     // TODO: two-way, multiple char codes
-    for (var k: usize = start; <isize>k + searchLen <= len; ++k) {
+    for (let k: usize = start; <isize>k + searchLen <= len; ++k) {
       if (!compare_memory(
         changetype<usize>(this) + HEAD + (k << 1),
         changetype<usize>(searchString) + HEAD,
@@ -486,7 +486,7 @@ export function parseFloat(str: String): f64 {
     code = <i32>load<u16>(ptr, HEAD);
     if (code == CharCode.DOT) {
       ptr += 2;
-      var fac: f64 = 0.1; // precision :(
+      let fac: f64 = 0.1; // precision :(
       while (len--) {
         code = <i32>load<u16>(ptr, HEAD);
         if (code == CharCode.E || code == CharCode.e) {

@@ -419,9 +419,9 @@ export class Type {
 
 /** Converts an array of types to an array of native types. */
 export function typesToNativeTypes(types: Type[]): NativeType[] {
-  var k = types.length;
-  var ret = new Array<NativeType>(k);
-  for (var i = 0; i < k; ++i) {
+  var numTypes = types.length;
+  var ret = new Array<NativeType>(numTypes);
+  for (let i = 0; i < numTypes; ++i) {
     ret[i] = types[i].toNativeType();
   }
   return ret;
@@ -429,10 +429,10 @@ export function typesToNativeTypes(types: Type[]): NativeType[] {
 
 /** Converts an array of types to its combined string representation. */
 export function typesToString(types: Type[]): string {
-  var k = types.length;
-  if (!k) return "";
-  var sb = new Array<string>(k);
-  for (var i = 0; i < k; ++i) {
+  var numTypes = types.length;
+  if (!numTypes) return "";
+  var sb = new Array<string>(numTypes);
+  for (let i = 0; i < numTypes; ++i) {
     sb[i] = types[i].toString();
   }
   return sb.join(", ");
@@ -580,7 +580,7 @@ var cachedGenericParameterNames: string[] | null = null;
 /** Gets the cached generic parameter name for the specified index. */
 export function getGenericParameterName(index: i32): string {
   if (!cachedGenericParameterNames) cachedGenericParameterNames = [];
-  for (var i = cachedGenericParameterNames.length; i < index; ++i) {
+  for (let i = cachedGenericParameterNames.length; i < index; ++i) {
     cachedGenericParameterNames.push("arg$" + i.toString(10));
   }
   return cachedGenericParameterNames[index];

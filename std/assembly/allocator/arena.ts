@@ -16,8 +16,8 @@ export function allocate_memory(size: usize): usize {
   var newPtr = (ptr + size + AL_MASK) & ~AL_MASK;
   var pagesBefore = current_memory();
   if (newPtr > <usize>pagesBefore << 16) {
-    var pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
-    var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+    let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
+    let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
     if (grow_memory(pagesWanted) < 0) {
       if (grow_memory(pagesNeeded) < 0) {
         unreachable(); // out of memory

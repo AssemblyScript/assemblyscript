@@ -109,11 +109,13 @@ export class Parser extends DiagnosticEmitter {
     path: string,
     isEntry: bool
   ): void {
+    var program = this.program;
 
     // check if already parsed
     var normalizedPath = normalizePath(path);
-    for (var i = 0, k = this.program.sources.length; i < k; ++i) {
-      if (this.program.sources[i].normalizedPath == normalizedPath) return;
+    var sources = program.sources;
+    for (let i = 0, k = sources.length; i < k; ++i) {
+      if (sources[i].normalizedPath == normalizedPath) return;
     }
     this.seenlog.add(normalizedPath);
 
@@ -127,13 +129,13 @@ export class Parser extends DiagnosticEmitter {
           ? SourceKind.LIBRARY
           : SourceKind.DEFAULT
     );
-    this.program.sources.push(source);
+    sources.push(source);
 
     // tokenize and parse
-    var tn = new Tokenizer(source, this.program.diagnostics);
+    var tn = new Tokenizer(source, program.diagnostics);
     source.tokenizer = tn;
     while (!tn.skip(Token.ENDOFFILE)) {
-      var statement = this.parseTopLevelStatement(tn);
+      let statement = this.parseTopLevelStatement(tn);
       if (statement) {
         statement.parent = source;
         source.statements.push(statement);
@@ -151,7 +153,7 @@ export class Parser extends DiagnosticEmitter {
     // check decorators
     var decorators: DecoratorNode[] | null = null;
     while (tn.skip(Token.AT)) {
-      var decorator = this.parseDecorator(tn);
+      let decorator = this.parseDecorator(tn);
       if (!decorator) break;
       if (!decorators) decorators = [];
       decorators.push(decorator);
@@ -282,7 +284,7 @@ export class Parser extends DiagnosticEmitter {
 
     // check for decorators that weren't consumed
     if (decorators) {
-      for (var i = 0, k = decorators.length; i < k; ++i) {
+      for (let i = 0, k = decorators.length; i < k; ++i) {
         this.error(
           DiagnosticCode.Decorators_are_not_valid_here,
           decorators[i].range
@@ -411,14 +413,14 @@ export class Parser extends DiagnosticEmitter {
 
     // Identifier
     } else if (token == Token.IDENTIFIER) {
-      var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      var parameters = new Array<TypeNode>();
-      var nullable = false;
+      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let parameters = new Array<TypeNode>();
+      let nullable = false;
 
       // Name<T>
       if (tn.skip(Token.LESSTHAN)) {
         do {
-          var parameter = this.parseType(tn, true, suppressErrors);
+          let parameter = this.parseType(tn, true, suppressErrors);
           if (!parameter) return null;
           parameters.push(<TypeNode>parameter);
         } while (tn.skip(Token.COMMA));
@@ -459,7 +461,7 @@ export class Parser extends DiagnosticEmitter {
     }
     // ... [][]
     while (tn.skip(Token.OPENBRACKET)) {
-      var bracketStart = tn.tokenPos;
+      let bracketStart = tn.tokenPos;
       if (!tn.skip(Token.CLOSEBRACKET)) {
         if (!suppressErrors) {
           this.error(
@@ -469,10 +471,10 @@ export class Parser extends DiagnosticEmitter {
         }
         return null;
       }
-      var bracketRange = tn.range(bracketStart, tn.pos);
+      let bracketRange = tn.range(bracketStart, tn.pos);
 
       // ...[] | null
-      nullable = false;
+      let nullable = false;
       if (tn.skip(Token.BAR)) {
         if (tn.skip(Token.NULL)) {
           nullable = true;
@@ -522,7 +524,7 @@ export class Parser extends DiagnosticEmitter {
     } else {
       isSignature = false; // not yet known
       do {
-        var kind = ParameterKind.DEFAULT;
+        let kind = ParameterKind.DEFAULT;
         if (tn.skip(Token.DOT_DOT_DOT)) {
           isSignature = true;
           tn.discard(state);
@@ -549,7 +551,7 @@ export class Parser extends DiagnosticEmitter {
             return null;
           }
         } else if (tn.skip(Token.IDENTIFIER)) {
-          var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(tn.tokenPos, tn.pos));
+          let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(tn.tokenPos, tn.pos));
           if (tn.skip(Token.QUESTION)) {
             isSignature = true;
             tn.discard(state);
@@ -565,12 +567,12 @@ export class Parser extends DiagnosticEmitter {
           if (tn.skip(Token.COLON)) {
             isSignature = true;
             tn.discard(state);
-            var type = this.parseType(tn); // not suppressing errors because known
+            let type = this.parseType(tn); // not suppressing errors because known
             if (!type) {
               this.tryParseSignatureIsSignature = isSignature;
               return null;
             }
-            var param = new ParameterNode();
+            let param = new ParameterNode();
             param.parameterKind = kind;
             param.name = name;
             param.type = type;
@@ -648,8 +650,8 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = tn.tokenPos;
     if (tn.skip(Token.IDENTIFIER)) {
-      var name = tn.readIdentifier();
-      var expression: Expression = Node.createIdentifierExpression(name, tn.range(startPos, tn.pos));
+      let name = tn.readIdentifier();
+      let expression: Expression = Node.createIdentifierExpression(name, tn.range(startPos, tn.pos));
       while (tn.skip(Token.DOT)) {
         if (tn.skip(Token.IDENTIFIER)) {
           name = tn.readIdentifier();
@@ -666,7 +668,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      var args: Expression[] | null;
+      let args: Expression[] | null;
       if (tn.skip(Token.OPENPAREN)) {
         args = this.parseArguments(tn);
         if (args) {
@@ -696,7 +698,7 @@ export class Parser extends DiagnosticEmitter {
     var members = new Array<VariableDeclaration>();
     var isDeclare = hasModifier(ModifierKind.DECLARE, modifiers);
     do {
-      var member = this.parseVariableDeclaration(tn, isDeclare, modifiers, decorators);
+      let member = this.parseVariableDeclaration(tn, isDeclare, modifiers, decorators);
       if (!member) return null;
       members.push(<VariableDeclaration>member);
     } while (tn.skip(Token.COMMA));
@@ -791,7 +793,7 @@ export class Parser extends DiagnosticEmitter {
     var members = new Array<EnumValueDeclaration>();
     if (!tn.skip(Token.CLOSEBRACE)) {
       do {
-        var member = this.parseEnumValue(tn);
+        let member = this.parseEnumValue(tn);
         if (!member) return null;
         members.push(<EnumValueDeclaration>member);
       } while (tn.skip(Token.COMMA));
@@ -869,7 +871,7 @@ export class Parser extends DiagnosticEmitter {
     var typeParameters = new Array<TypeParameterNode>();
     if (!tn.skip(Token.GREATERTHAN)) {
       do {
-        var typeParameter = this.parseTypeParameter(tn);
+        let typeParameter = this.parseTypeParameter(tn);
         if (!typeParameter) return null;
         typeParameters.push(<TypeParameterNode>typeParameter);
       } while (tn.skip(Token.COMMA));
@@ -896,11 +898,11 @@ export class Parser extends DiagnosticEmitter {
     // before: Identifier ('extends' Type)?
 
     if (tn.next() == Token.IDENTIFIER) {
-      var identifier = Node.createIdentifierExpression(
+      let identifier = Node.createIdentifierExpression(
         tn.readIdentifier(),
         tn.range()
       );
-      var extendsType: TypeNode | null = null;
+      let extendsType: TypeNode | null = null;
       if (tn.skip(Token.EXTENDS)) {
         let t = this.parseType(tn);
         if (!t) return null;
@@ -940,7 +942,7 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.peek() != Token.CLOSEPAREN) {
       do {
-        var param = this.parseParameter(tn);
+        let param = this.parseParameter(tn);
         if (!param) return null;
         if (seenRest && !reportedRest) {
           this.error(
@@ -997,8 +999,8 @@ export class Parser extends DiagnosticEmitter {
     }
     if (tn.skip(Token.IDENTIFIER)) {
       if (!isRest) startRange = tn.range();
-      var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      var type: CommonTypeNode | null = null;
+      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let type: CommonTypeNode | null = null;
       if (isOptional = tn.skip(Token.QUESTION)) {
         if (isRest) {
           this.error(
@@ -1011,7 +1013,7 @@ export class Parser extends DiagnosticEmitter {
         type = this.parseType(tn);
         if (!type) return null;
       }
-      var initializer: Expression | null = null;
+      let initializer: Expression | null = null;
       if (tn.skip(Token.EQUALS)) {
         if (isRest) {
           this.error(
@@ -1315,12 +1317,12 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.skip(Token.IDENTIFIER)) {
 
-      var identifier = Node.createIdentifierExpression(
+      let identifier = Node.createIdentifierExpression(
         tn.readIdentifier(),
         tn.range()
       );
 
-      var typeParameters: TypeParameterNode[] | null;
+      let typeParameters: TypeParameterNode[] | null;
       if (tn.skip(Token.LESSTHAN)) {
         typeParameters = this.parseTypeParameters(tn);
         if (!typeParameters) return null;
@@ -1328,7 +1330,7 @@ export class Parser extends DiagnosticEmitter {
         typeParameters = [];
       }
 
-      var extendsType: TypeNode | null = null;
+      let extendsType: TypeNode | null = null;
       if (tn.skip(Token.EXTENDS)) {
         let t = this.parseType(tn);
         if (!t) return null;
@@ -1342,10 +1344,10 @@ export class Parser extends DiagnosticEmitter {
         extendsType = <TypeNode>t;
       }
 
-      var implementsTypes = new Array<TypeNode>();
+      let implementsTypes = new Array<TypeNode>();
       if (tn.skip(Token.IMPLEMENTS)) {
         do {
-          var type = this.parseType(tn);
+          let type = this.parseType(tn);
           if (!type) return null;
           implementsTypes.push(<TypeNode>type);
         } while (tn.skip(Token.COMMA));
@@ -1353,11 +1355,11 @@ export class Parser extends DiagnosticEmitter {
 
       if (tn.skip(Token.OPENBRACE)) {
 
-        var members = new Array<DeclarationStatement>();
+        let members = new Array<DeclarationStatement>();
         if (!tn.skip(Token.CLOSEBRACE)) {
-          var isDeclare = hasModifier(ModifierKind.DECLARE, modifiers);
+          let isDeclare = hasModifier(ModifierKind.DECLARE, modifiers);
           do {
-            var member = this.parseClassMember(tn, isDeclare);
+            let member = this.parseClassMember(tn, isDeclare);
             if (!member) return null;
             members.push(<DeclarationStatement>member);
           } while (!tn.skip(Token.CLOSEBRACE));
@@ -1403,7 +1405,7 @@ export class Parser extends DiagnosticEmitter {
 
     var decorators = new Array<DecoratorNode>();
     while (tn.skip(Token.AT)) {
-      var decorator = this.parseDecorator(tn);
+      let decorator = this.parseDecorator(tn);
       if (!decorator) break;
       decorators.push(<DecoratorNode>decorator);
     }
@@ -1454,11 +1456,11 @@ export class Parser extends DiagnosticEmitter {
     var isConstructor = tn.skip(Token.CONSTRUCTOR);
     if (isConstructor || tn.skip(Token.IDENTIFIER)) {
 
-      var name = isConstructor
+      let name = isConstructor
         ? Node.createConstructorExpression(tn.range())
         : Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
 
-      var typeParameters: TypeParameterNode[] | null = null;
+        let typeParameters: TypeParameterNode[] | null = null;
       if (tn.skip(Token.LESSTHAN)) {
         if (isConstructor) {
           this.error(
@@ -1472,8 +1474,8 @@ export class Parser extends DiagnosticEmitter {
 
       // method: '(' Parameters (':' Type)? '{' Statement* '}' ';'?
       if (tn.skip(Token.OPENPAREN)) {
-        var signatureStart = tn.tokenPos;
-        var parameters = this.parseParameters(tn);
+        let signatureStart = tn.tokenPos;
+        let parameters = this.parseParameters(tn);
         if (!parameters) return null;
 
         if (isGetter && parameters.length) {
@@ -1498,7 +1500,7 @@ export class Parser extends DiagnosticEmitter {
           }
         }
 
-        var returnType: CommonTypeNode | null = null;
+        let returnType: CommonTypeNode | null = null;
         if (tn.skip(Token.COLON)) {
           if (name.kind == NodeKind.CONSTRUCTOR) {
             this.error(
@@ -1523,7 +1525,7 @@ export class Parser extends DiagnosticEmitter {
           }
         }
 
-        var signature = Node.createSignature(
+        let signature = Node.createSignature(
           parameters,
           returnType,
           null,
@@ -1531,7 +1533,7 @@ export class Parser extends DiagnosticEmitter {
           tn.range(signatureStart, tn.pos)
         );
 
-        var body: Statement | null = null;
+        let body: Statement | null = null;
         if (tn.skip(Token.OPENBRACE)) {
           if (parentIsDeclare) {
             this.error(
@@ -1548,7 +1550,7 @@ export class Parser extends DiagnosticEmitter {
           ); // recoverable
         }
 
-        var retMethod = Node.createMethodDeclaration(
+        let retMethod = Node.createMethodDeclaration(
           name,
           typeParameters,
           signature,
@@ -1574,7 +1576,7 @@ export class Parser extends DiagnosticEmitter {
 
       // field: (':' Type)? ('=' Expression)? ';'?
       } else {
-        var modifier: ModifierNode | null;
+        let modifier: ModifierNode | null;
 
         if (modifier = getModifier(ModifierKind.ABSTRACT, modifiers)) {
           this.error(
@@ -1597,7 +1599,7 @@ export class Parser extends DiagnosticEmitter {
           ); // recoverable
         }
 
-        var type: CommonTypeNode | null = null;
+        let type: CommonTypeNode | null = null;
         if (tn.skip(Token.COLON)) {
           type = this.parseType(tn);
           if (!type) return null;
@@ -1607,12 +1609,12 @@ export class Parser extends DiagnosticEmitter {
             tn.range()
           ); // recoverable
         }
-        var initializer: Expression | null = null;
+        let initializer: Expression | null = null;
         if (tn.skip(Token.EQUALS)) {
           initializer = this.parseExpression(tn);
           if (!initializer) return null;
         }
-        var retField = Node.createFieldDeclaration(
+        let retField = Node.createFieldDeclaration(
           name,
           type,
           initializer,
@@ -1642,15 +1644,15 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = modifiers && modifiers.length ? modifiers[0].range.start : tn.tokenPos;
     if (tn.skip(Token.IDENTIFIER)) {
-      var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       if (tn.skip(Token.OPENBRACE)) {
-        var members = new Array<Statement>();
+        let members = new Array<Statement>();
         while (!tn.skip(Token.CLOSEBRACE)) {
-          var member = this.parseTopLevelStatement(tn, true);
+          let member = this.parseTopLevelStatement(tn, true);
           if (!member) return null;
           members.push(member);
         }
-        var ret = Node.createNamespaceDeclaration(
+        let ret = Node.createNamespaceDeclaration(
           identifier,
           members,
           modifiers,
@@ -1684,10 +1686,10 @@ export class Parser extends DiagnosticEmitter {
     var startPos = modifiers && modifiers.length ? modifiers[0].range.start : tn.tokenPos;
 
     if (tn.skip(Token.OPENBRACE)) {
-      var members = new Array<ExportMember>();
+      let members = new Array<ExportMember>();
       if (!tn.skip(Token.CLOSEBRACE)) {
         do {
-          var member = this.parseExportMember(tn);
+          let member = this.parseExportMember(tn);
           if (!member) return null;
           members.push(member);
         } while (tn.skip(Token.COMMA));
@@ -1699,7 +1701,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      var path: StringLiteralExpression | null = null;
+      let path: StringLiteralExpression | null = null;
       if (tn.skip(Token.FROM)) {
         if (tn.skip(Token.STRINGLITERAL)) {
           path = Node.createStringLiteralExpression(tn.readString(), tn.range());
@@ -1711,7 +1713,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      var ret = Node.createExportStatement(members, path, modifiers, tn.range(startPos, tn.pos));
+      let ret = Node.createExportStatement(members, path, modifiers, tn.range(startPos, tn.pos));
       if (ret.normalizedPath && !this.seenlog.has(<string>ret.normalizedPath)) {
         this.backlog.push(<string>ret.normalizedPath);
         this.seenlog.add(<string>ret.normalizedPath);
@@ -1734,8 +1736,8 @@ export class Parser extends DiagnosticEmitter {
     // before: Identifier ('as' Identifier)?
 
     if (tn.skip(Token.IDENTIFIER)) {
-      var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      var asIdentifier: IdentifierExpression | null = null;
+      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let asIdentifier: IdentifierExpression | null = null;
       if (tn.skip(Token.AS)) {
         if (tn.skip(Token.IDENTIFIER)) {
           asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
@@ -1779,7 +1781,7 @@ export class Parser extends DiagnosticEmitter {
       members = new Array();
       if (!tn.skip(Token.CLOSEBRACE)) {
         do {
-          var member = this.parseImportDeclaration(tn);
+          let member = this.parseImportDeclaration(tn);
           if (!member) return null;
           members.push(member);
         } while (tn.skip(Token.COMMA));
@@ -1815,8 +1817,8 @@ export class Parser extends DiagnosticEmitter {
 
     if (skipFrom || tn.skip(Token.FROM)) {
       if (tn.skip(Token.STRINGLITERAL)) {
-        var path = Node.createStringLiteralExpression(tn.readString(), tn.range());
-        var ret: ImportStatement;
+        let path = Node.createStringLiteralExpression(tn.readString(), tn.range());
+        let ret: ImportStatement;
         if (namespaceName) {
           assert(!members);
           ret = Node.createImportStatementWithWildcard(namespaceName, path, tn.range(startPos, tn.pos));
@@ -1851,8 +1853,8 @@ export class Parser extends DiagnosticEmitter {
     // before: Identifier ('as' Identifier)?
 
     if (tn.skip(Token.IDENTIFIER)) {
-      var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      var asIdentifier: IdentifierExpression | null = null;
+      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let asIdentifier: IdentifierExpression | null = null;
       if (tn.skip(Token.AS)) {
         if (tn.skip(Token.IDENTIFIER)) {
           asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
@@ -1888,11 +1890,11 @@ export class Parser extends DiagnosticEmitter {
     // at 'export' 'import': Identifier ('=' Identifier)? ';'?
 
     if (tn.skip(Token.IDENTIFIER)) {
-      var asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       if (tn.skip(Token.EQUALS)) {
         if (tn.skip(Token.IDENTIFIER)) {
-          var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-          var ret = Node.createExportImportStatement(identifier, asIdentifier, Range.join(startRange, tn.range()));
+          let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+          let ret = Node.createExportImportStatement(identifier, asIdentifier, Range.join(startRange, tn.range()));
           tn.skip(Token.SEMICOLON);
           return ret;
         } else {
@@ -2004,7 +2006,7 @@ export class Parser extends DiagnosticEmitter {
     var startPos = tn.tokenPos;
     var statements = new Array<Statement>();
     while (!tn.skip(Token.CLOSEBRACE)) {
-      var statement = this.parseStatement(tn, topLevel);
+      let statement = this.parseStatement(tn, topLevel);
       if (!statement) return null;
       statements.push(statement);
     }
@@ -2058,11 +2060,11 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.WHILE)) {
 
       if (tn.skip(Token.OPENPAREN)) {
-        var condition = this.parseExpression(tn);
+        let condition = this.parseExpression(tn);
         if (!condition) return null;
 
         if (tn.skip(Token.CLOSEPAREN)) {
-          var ret = Node.createDoStatement(<Statement>statement, <Expression>condition, tn.range(startPos, tn.pos));
+          let ret = Node.createDoStatement(<Statement>statement, <Expression>condition, tn.range(startPos, tn.pos));
           tn.skip(Token.SEMICOLON);
           return ret;
         } else {
@@ -2110,7 +2112,7 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.skip(Token.OPENPAREN)) {
 
-      var initializer: Statement | null = null;
+      let initializer: Statement | null = null;
 
       if (tn.skip(Token.LET) || tn.skip(Token.CONST) || tn.skip(Token.VAR)) {
         initializer = this.parseVariable(tn, null, null);
@@ -2121,14 +2123,14 @@ export class Parser extends DiagnosticEmitter {
       }
 
       if (tn.token == Token.SEMICOLON) {
-        var condition: ExpressionStatement | null = null;
+        let condition: ExpressionStatement | null = null;
         if (!tn.skip(Token.SEMICOLON)) {
           condition = this.parseExpressionStatement(tn);
           if (!condition) return null;
         }
 
         if (tn.token == Token.SEMICOLON) {
-          var incrementor: Expression | null = null;
+          let incrementor: Expression | null = null;
           if (!tn.skip(Token.CLOSEPAREN)) {
             incrementor = this.parseExpression(tn);
             if (!incrementor) return null;
@@ -2142,7 +2144,7 @@ export class Parser extends DiagnosticEmitter {
             }
           }
 
-          var statement = this.parseStatement(tn);
+          let statement = this.parseStatement(tn);
           if (!statement) return null;
 
           return Node.createForStatement(
@@ -2184,12 +2186,12 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = tn.tokenPos;
     if (tn.skip(Token.OPENPAREN)) {
-      var condition = this.parseExpression(tn);
+      let condition = this.parseExpression(tn);
       if (!condition) return null;
       if (tn.skip(Token.CLOSEPAREN)) {
-        var statement = this.parseStatement(tn);
+        let statement = this.parseStatement(tn);
         if (!statement) return null;
-        var elseStatement: Statement | null = null;
+        let elseStatement: Statement | null = null;
         if (tn.skip(Token.ELSE)) {
           elseStatement = this.parseStatement(tn);
           if (!elseStatement) return null;
@@ -2223,17 +2225,17 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = tn.tokenPos;
     if (tn.skip(Token.OPENPAREN)) {
-      var condition = this.parseExpression(tn);
+      let condition = this.parseExpression(tn);
       if (!condition) return null;
       if (tn.skip(Token.CLOSEPAREN)) {
         if (tn.skip(Token.OPENBRACE)) {
-          var cases = new Array<SwitchCase>();
+          let cases = new Array<SwitchCase>();
           while (!tn.skip(Token.CLOSEBRACE)) {
-            var case_ = this.parseSwitchCase(tn);
+            let case_ = this.parseSwitchCase(tn);
             if (!case_) return null;
             cases.push(<SwitchCase>case_);
           }
-          var ret = Node.createSwitchStatement(condition, cases, tn.range(startPos, tn.pos));
+          let ret = Node.createSwitchStatement(condition, cases, tn.range(startPos, tn.pos));
           tn.skip(Token.SEMICOLON);
           return ret;
         } else {
@@ -2268,7 +2270,7 @@ export class Parser extends DiagnosticEmitter {
     // 'case' Expression ':' Statement*
 
     if (tn.skip(Token.CASE)) {
-      var label = this.parseExpression(tn);
+      let label = this.parseExpression(tn);
       if (!label) return null;
       if (tn.skip(Token.COLON)) {
         statements = new Array<Statement>();
@@ -2337,15 +2339,15 @@ export class Parser extends DiagnosticEmitter {
     var startPos = tn.tokenPos;
     var stmt: Statement | null;
     if (tn.skip(Token.OPENBRACE)) {
-      var statements = new Array<Statement>();
+      let statements = new Array<Statement>();
       while (!tn.skip(Token.CLOSEBRACE)) {
         stmt = this.parseStatement(tn);
         if (!stmt) return null;
         statements.push(<Statement>stmt);
       }
-      var catchVariable: IdentifierExpression | null = null;
-      var catchStatements: Statement[] | null = null;
-      var finallyStatements: Statement[] | null = null;
+      let catchVariable: IdentifierExpression | null = null;
+      let catchStatements: Statement[] | null = null;
+      let finallyStatements: Statement[] | null = null;
       if (tn.skip(Token.CATCH)) {
         if (!tn.skip(Token.OPENPAREN)) {
           this.error(
@@ -2405,7 +2407,7 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-      var ret = Node.createTryStatement(
+      let ret = Node.createTryStatement(
         statements,
         catchVariable,
         catchStatements,
@@ -2435,16 +2437,16 @@ export class Parser extends DiagnosticEmitter {
                  : modifiers && modifiers.length ? modifiers[0].range.start
                  : tn.tokenPos;
     if (tn.skip(Token.IDENTIFIER)) {
-      var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      var typeParameters: TypeParameterNode[] | null = null;
+      let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let typeParameters: TypeParameterNode[] | null = null;
       if (tn.skip(Token.LESSTHAN)) {
         typeParameters = this.parseTypeParameters(tn);
         if (!typeParameters) return null;
       }
       if (tn.skip(Token.EQUALS)) {
-        var type = this.parseType(tn);
+        let type = this.parseType(tn);
         if (!type) return null;
-        var ret = Node.createTypeDeclaration(
+        let ret = Node.createTypeDeclaration(
           name,
           typeParameters,
           type,
@@ -2491,12 +2493,12 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = tn.tokenPos;
     if (tn.skip(Token.OPENPAREN)) {
-      var expression = this.parseExpression(tn);
+      let expression = this.parseExpression(tn);
       if (!expression) return null;
       if (tn.skip(Token.CLOSEPAREN)) {
-        var statement = this.parseStatement(tn);
+        let statement = this.parseStatement(tn);
         if (!statement) return null;
-        var ret = Node.createWhileStatement(expression, statement, tn.range(startPos, tn.pos));
+        let ret = Node.createWhileStatement(expression, statement, tn.range(startPos, tn.pos));
         tn.skip(Token.SEMICOLON);
         return ret;
       } else {
@@ -2537,7 +2539,7 @@ export class Parser extends DiagnosticEmitter {
 
     var p = determinePrecedenceStart(token);
     if (p != Precedence.INVALID) {
-      var operand: Expression | null;
+      let operand: Expression | null;
 
       // TODO: SpreadExpression, YieldExpression (currently become unsupported UnaryPrefixExpressions)
 
@@ -2595,8 +2597,8 @@ export class Parser extends DiagnosticEmitter {
             true
           );
         }
-        var state = tn.mark();
-        var again = true;
+        let state = tn.mark();
+        let again = true;
         do {
           switch (tn.next(true)) {
 
@@ -2660,7 +2662,7 @@ export class Parser extends DiagnosticEmitter {
       }
       // ArrayLiteralExpression
       case Token.OPENBRACKET: {
-        var elementExpressions = new Array<Expression | null>();
+        let elementExpressions = new Array<Expression | null>();
         if (!tn.skip(Token.CLOSEBRACKET)) {
           do {
             if (tn.peek() == Token.COMMA) {
@@ -2684,7 +2686,7 @@ export class Parser extends DiagnosticEmitter {
       }
       // AssertionExpression (unary prefix)
       case Token.LESSTHAN: {
-        var toType = this.parseType(tn);
+        let toType = this.parseType(tn);
         if (!toType) return null;
         if (!tn.skip(Token.GREATERTHAN)) {
           this.error(
@@ -2726,7 +2728,7 @@ export class Parser extends DiagnosticEmitter {
       // RegexpLiteralExpression
       // note that this also continues on invalid ones so the surrounding AST remains intact
       case Token.SLASH: {
-        var regexpPattern = tn.readRegexpPattern(); // also reports
+        let regexpPattern = tn.readRegexpPattern(); // also reports
         if (!tn.skip(Token.SLASH)) {
           this.error(
             DiagnosticCode._0_expected,
@@ -2763,7 +2765,7 @@ export class Parser extends DiagnosticEmitter {
     if (!tn.skip(Token.LESSTHAN)) return null;
     var typeArguments = new Array<CommonTypeNode>();
     do {
-      var type = this.parseType(tn, true, true);
+      let type = this.parseType(tn, true, true);
       if (!type) {
         tn.reset(state);
         return null;
@@ -2786,7 +2788,7 @@ export class Parser extends DiagnosticEmitter {
     var args = new Array<Expression>();
     if (!tn.skip(Token.CLOSEPAREN)) {
       do {
-        var expr = this.parseExpression(tn, Precedence.COMMA + 1);
+        let expr = this.parseExpression(tn, Precedence.COMMA + 1);
         if (!expr) return null;
         args.push(expr);
       } while (tn.skip(Token.COMMA));
@@ -2832,7 +2834,7 @@ export class Parser extends DiagnosticEmitter {
       switch (token) {
         // AssertionExpression
         case Token.AS: {
-          var toType = this.parseType(tn);
+          let toType = this.parseType(tn);
           if (!toType) return null;
           expr = Node.createAssertionExpression(
             AssertionKind.AS,
@@ -2882,7 +2884,7 @@ export class Parser extends DiagnosticEmitter {
         }
         // TernaryExpression
         case Token.QUESTION: {
-          var ifThen = this.parseExpression(tn);
+          let ifThen = this.parseExpression(tn);
           if (!ifThen) return null;
           if (!tn.skip(Token.COLON)) {
             this.error(
@@ -2891,7 +2893,7 @@ export class Parser extends DiagnosticEmitter {
             );
             return null;
           }
-          var ifElse = this.parseExpression(tn);
+          let ifElse = this.parseExpression(tn);
           if (!ifElse) return null;
           expr = Node.createTernaryExpression(
             expr,
@@ -2903,7 +2905,7 @@ export class Parser extends DiagnosticEmitter {
         }
         // CommaExpression
         case Token.COMMA: {
-          var commaExprs: Expression[] = [ expr ];
+          let commaExprs: Expression[] = [ expr ];
           do {
             expr = this.parseExpression(tn, Precedence.COMMA + 1);
             if (!expr) return null;
@@ -2929,7 +2931,7 @@ export class Parser extends DiagnosticEmitter {
                 tn.range(startPos, tn.pos)
               );
             } else if (next.kind == NodeKind.CALL) { // join
-              var propertyCall = <CallExpression>next;
+              let propertyCall = <CallExpression>next;
               if (propertyCall.expression.kind == NodeKind.IDENTIFIER) {
                 propertyCall.expression = Node.createPropertyAccessExpression(
                   expr,

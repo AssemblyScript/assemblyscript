@@ -175,8 +175,8 @@ function update_max_ptr(new_value: usize): i32 {
     // if (brk(new_value)) {
     //   return 0;
     // }
-    var oldPages = <u32>current_memory();
-    var newPages = <u32>(((new_value + 0xffff) & ~0xffff) >> 16);
+    let oldPages = <u32>current_memory();
+    let newPages = <u32>(((new_value + 0xffff) & ~0xffff) >> 16);
     assert(newPages > oldPages);
     if (grow_memory(newPages - oldPages) < 0) {
       return 0;
@@ -293,8 +293,8 @@ function bucket_for_request(request: usize): usize {
  */
 function lower_bucket_limit(bucket: usize): u32 {
   while (bucket < bucket_limit) {
-    var root = node_for_ptr(base_ptr, bucket_limit);
-    var right_child: usize;
+    let root = node_for_ptr(base_ptr, bucket_limit);
+    let right_child: usize;
 
     /*
      * If the parent isn't SPLIT, that means the node at the current bucket
@@ -380,8 +380,8 @@ export function allocate_memory(request: usize): usize {
    * larger one to get a match.
    */
   while (bucket + 1 != 0) {
-    var size: usize, bytes_needed: usize, i: usize;
-    var ptr: usize;
+    let size: usize, bytes_needed: usize, i: usize;
+    let ptr: usize;
 
     /*
      * We may need to grow the tree to be able to fit an allocation of this
