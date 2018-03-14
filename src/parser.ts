@@ -1927,37 +1927,47 @@ export class Parser extends DiagnosticEmitter {
 
     var state = tn.mark();
     var token = tn.next();
+    var statement: Statement | null = null;
     switch (token) {
       case Token.BREAK: {
-        return this.parseBreak(tn);
+        statement = this.parseBreak(tn);
+        break;
       }
       case Token.CONST: {
-        return this.parseVariable(tn, [
+        statement = this.parseVariable(tn, [
           Node.createModifier(ModifierKind.CONST, tn.range())
         ], null);
+        break;
       }
       case Token.CONTINUE: {
-        return this.parseContinue(tn);
+        statement = this.parseContinue(tn);
+        break;
       }
       case Token.DO: {
-        return this.parseDoStatement(tn);
+        statement = this.parseDoStatement(tn);
+        break;
       }
       case Token.FOR: {
-        return this.parseForStatement(tn);
+        statement = this.parseForStatement(tn);
+        break;
       }
       case Token.IF: {
-        return this.parseIfStatement(tn);
+        statement = this.parseIfStatement(tn);
+        break;
       }
       case Token.LET: {
-        return this.parseVariable(tn, [
+        statement = this.parseVariable(tn, [
           Node.createModifier(ModifierKind.LET, tn.range())
         ], null);
+        break;
       }
       case Token.VAR: {
-        return this.parseVariable(tn, null, null);
+        statement = this.parseVariable(tn, null, null);
+        break;
       }
       case Token.OPENBRACE: {
-        return this.parseBlockStatement(tn, topLevel);
+        statement = this.parseBlockStatement(tn, topLevel);
+        break;
       }
       case Token.RETURN: {
         if (topLevel) {
@@ -1966,34 +1976,49 @@ export class Parser extends DiagnosticEmitter {
             tn.range()
           ); // recoverable
         }
-        return this.parseReturn(tn);
+        statement = this.parseReturn(tn);
+        break;
       }
       case Token.SEMICOLON: {
         return Node.createEmptyStatement(tn.range(tn.tokenPos));
       }
       case Token.SWITCH: {
-        return this.parseSwitchStatement(tn);
+        statement = this.parseSwitchStatement(tn);
+        break;
       }
       case Token.THROW: {
-        return this.parseThrowStatement(tn);
+        statement = this.parseThrowStatement(tn);
+        break;
       }
       case Token.TRY: {
-        return this.parseTryStatement(tn);
+        statement = this.parseTryStatement(tn);
+        break;
       }
       case Token.TYPE: {
-        return this.parseTypeDeclaration(tn);
+        statement = this.parseTypeDeclaration(tn);
+        break;
       }
       case Token.VOID: {
-        return this.parseVoidStatement(tn);
+        statement = this.parseVoidStatement(tn);
+        break;
       }
       case Token.WHILE: {
-        return this.parseWhileStatement(tn);
+        statement = this.parseWhileStatement(tn);
+        break;
       }
       default: {
         tn.reset(state);
-        return this.parseExpressionStatement(tn);
+        statement = this.parseExpressionStatement(tn);
+        break;
       }
     }
+    if (!statement) { // has been reported
+      tn.reset(state);
+      this.skipStatement(tn);
+    } else {
+      tn.discard(state);
+    }
+    return statement;
   }
 
   parseBlockStatement(
@@ -2006,9 +2031,15 @@ export class Parser extends DiagnosticEmitter {
     var startPos = tn.tokenPos;
     var statements = new Array<Statement>();
     while (!tn.skip(Token.CLOSEBRACE)) {
+      let state = tn.mark();
       let statement = this.parseStatement(tn, topLevel);
-      if (!statement) return null;
-      statements.push(statement);
+      if (!statement) {
+        tn.reset(state);
+        this.skipStatement(tn);
+      } else {
+        tn.discard(state);
+        statements.push(statement);
+      }
     }
     var ret = Node.createBlockStatement(statements, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
@@ -2964,6 +2995,59 @@ export class Parser extends DiagnosticEmitter {
     }
     return expr;
   }
+
+  /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
+  skipStatement(tn: Tokenizer): void {
+    tn.peek(true);
+    if (tn.nextTokenOnNewLine) tn.next(); // if reset() to the previous line
+    do {
+      let nextToken = tn.peek(true);
+      if (
+        nextToken == Token.ENDOFFILE ||   // next step should handle this
+        nextToken == Token.CLOSEBRACE     // current step should handle this
+      ) {
+        break;
+      }
+      if (nextToken == Token.SEMICOLON) { // end of the statement for sure
+        tn.next();
+        break;
+      }
+      if (tn.nextTokenOnNewLine) break;   // end of the statement maybe
+      switch (tn.next()) {
+        case Token.IDENTIFIER: {
+          tn.readIdentifier();
+          break;
+        }
+        case Token.STRINGLITERAL: {
+          tn.readString();
+          break;
+        }
+        case Token.INTEGERLITERAL: {
+          tn.readInteger();
+          break;
+        }
+        case Token.FLOATLITERAL: {
+          tn.readFloat();
+          break;
+        }
+      }
+    } while (true);
+  }
+
+  /** Skips over a block on errors in an attempt to reduce unnecessary diagnostic noise. */
+  // skipBlock(tn: Tokenizer): void {
+  //   var depth = 0;
+  //   var token: Token;
+  //   do {
+  //     token = tn.next();
+  //     if (token == Token.OPENBRACE) {
+  //       ++depth;
+  //     } else if (token == Token.CLOSEBRACE) {
+  //       if (depth) --depth;
+  //       if (!depth) break; // done
+  //     }
+  //   } while (token != Token.ENDOFFILE);
+  // }
 }
 
 /** Operator precedence from least to largest. */
