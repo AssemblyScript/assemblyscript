@@ -169,6 +169,7 @@ declare class Array<T> {
   [key: number]: T;
   length: i32;
   constructor(capacity?: i32);
+  includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   push(element: T): void;
