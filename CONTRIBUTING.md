@@ -1,7 +1,7 @@
 Contributing
 ============
 
-The following is a set of guidelines for contributing to AssemblyScript and its packagess, which are hosted in the [AsssemblyScript Organization](https://github.com/AssemblyScript) on GitHub. These are mostly guidelines, not rules. Use your best judgement, and feel free to proposse changes to this document in a pull request.
+The following is a set of guidelines for contributing to AssemblyScript and its packages, which are hosted in the [AsssemblyScript Organization](https://github.com/AssemblyScript) on GitHub. These are mostly guidelines, not rules. Use your best judgement, and feel free to proposse changes to this document in a pull request.
 
 Code of Conduct
 ---------------
@@ -15,7 +15,7 @@ Bugs and enhancement suggestions are tracked as GitHub issues.
 
 #### How Do I Submit A (Good) Bug Report?
 
-After you've determined which repository your bug is related to and that the issue is still present in the latest version of the masster branch, create an issue on that repository and provide the following information:
+After you've determined which repository your bug is related to and that the issue is still present in the latest version of the master branch, create an issue on that repository and provide the following information:
 
 * Use a **clear and descriptive title** for the issue to identify the problem.
 * Explain which **behavior you expected** to see instead and why.
@@ -45,4 +45,4 @@ Before submitting your pull request, please make sure that the following conditi
 * Your new code **adheres to the code style** through running `npm run lint`.
 * Your new code **passes all existing and new tests** through running `npm run test:pr`.
 * Your PR **excludes distribution files** in `dist/**`.
-* You added yourself to the **list of contributors** in the [NOTICE](./NOTICE) file.
+* You appended yourself to the **list of contributors** in the [NOTICE](./NOTICE) file.
