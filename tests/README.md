@@ -7,14 +7,14 @@ consists of:
 * A test file that is parsed or compiled (.ts)
 * One or multiple automatically generated fixtures generated from the source file
 
-Creating a test:
+### Creating a test:
 
 * Run `npm run clean` to make sure that the sources are tested instead of the distribution
 * Create a new test file (.ts) within the respective directory (see below) that contains your test code
 * Follow the instructions below to generate the first fixture(s)
 * Make sure the fixture(s) contain exactly what you'd expect
 
-Updating a test:
+### Updating a test:
 
 * Run `npm run clean` to make sure that the sources are tested instead of the distribution
 * Make changes to the respective test file (.ts)
@@ -54,11 +54,11 @@ Note that the parser suite currently can't recreate just a specific fixture.
 Compiler
 --------
 
-General directory: [tests/compiler](./compiler)
+General directory: [tests/compiler](./compiler)<br />
 Standard library directory: [tests/compiler/std](./compiler/std)
 
-The source file is parsed and compiled to a module, validated, interpreted and the resulting module
-converted to WebAsssembly text format.
+The source file is parsed and compiled to a module, validated and the resulting module converted to
+WebAsssembly text format.
 
 The text format output is compared to its fixture and the module interpreted in a WebAssembly VM. To
 assert for runtime conditions, the `assert` builtin can be used. Note that tree-shaking is enabled
@@ -94,5 +94,9 @@ $> npm run test:compiler -- testNameWithoutTs --create
 Other
 -----
 
-Tests in other directories are not run automatically and do not need to be updated. Most of them
-are legacy tests.
+Tests in other directories are not run automatically and do not need to be updated.
+
+* [tests/allocators](./allocators) contains the memory allocator test suite
+* [tests/binaryen](./binaryen) contains various triggers for earlier Binaryen issues
+* [tests/tokenizer](./tokenizer.js) is a visual test for the tokenizer tokenizing itself
+* [tests/util-path](./util-path.js) is a sanity test for the path utility
