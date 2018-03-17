@@ -84,6 +84,9 @@ assert(arr[0] == 44);
 assert(arr[1] == 43);
 assert(arr[2] == 42);
 
+arr.push(43);
+arr.push(44);
+
 i = arr.indexOf(44);
 
 assert(i == 0);
@@ -96,9 +99,77 @@ i = arr.indexOf(45);
 
 assert(i == - 1);
 
+i = arr.indexOf(43, 100);
+
+assert(i == - 1);
+
+i = arr.indexOf(43, -100);
+
+assert(i == 1);
+
+i = arr.indexOf(43, -2);
+
+assert(i == 3);
+
+i = arr.indexOf(43, -4);
+
+assert(i == 1);
+
+i = arr.indexOf(43, 0);
+
+assert(i == 1);
+
+i = arr.indexOf(43, 1);
+
+assert(i == 1);
+
+i = arr.indexOf(43, 2);
+
+assert(i == 3);
+
+var includes = arr.includes(44);
+
+assert(includes == true);
+
+includes = arr.includes(42);
+
+assert(includes == true);
+
+includes = arr.includes(45);
+
+assert(includes == false);
+
+includes = arr.includes(43, 100);
+
+assert(includes == false);
+
+includes = arr.includes(43, -100);
+
+assert(includes == true);
+
+includes = arr.includes(43, -2);
+
+assert(includes == true);
+
+includes = arr.includes(43, -4);
+
+assert(includes == true);
+
+includes = arr.includes(43, 0);
+
+assert(includes == true);
+
+includes = arr.includes(43, 1);
+
+assert(includes == true);
+
+includes = arr.includes(43, 2);
+
+assert(includes == true);
+
 arr.splice(1, 1);
 
-assert(arr.length == 2);
+assert(arr.length == 4);
 assert(arr.__capacity == 8);
 assert(arr[0] == 44);
 assert(arr[1] == 42);

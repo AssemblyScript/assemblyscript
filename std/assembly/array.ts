@@ -58,9 +58,34 @@ export class Array<T> {
     store<T>(this.__memory + <usize>index * sizeof<T>(), value);
   }
 
-  indexOf(searchElement: T, fromIndex: i32 = 0): i32 {
+  includes(searchElement: T, fromIndex: i32 = 0): bool {
+    if (this.__length == 0 || fromIndex >= this.__length) {
+      return false;
+    }
     if (fromIndex < 0) {
       fromIndex = this.__length + fromIndex;
+      if (fromIndex < 0) {
+        fromIndex = 0;
+      }
+    }
+    while (<u32>fromIndex < <u32>this.__length) {
+      if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) {
+        return true;
+      }
+      ++fromIndex;
+    }
+    return false;
+  }
+
+  indexOf(searchElement: T, fromIndex: i32 = 0): i32 {
+    if (this.__length == 0 || fromIndex >= this.__length) {
+      return -1;
+    }
+    if (fromIndex < 0) {
+      fromIndex = this.__length + fromIndex;
+      if (fromIndex < 0) {
+        fromIndex = 0;
+      }
     }
     while (<u32>fromIndex < <u32>this.__length) {
       if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) {
@@ -71,7 +96,10 @@ export class Array<T> {
     return -1;
   }
 
-  lastIndexOf(searchElement: T, fromIndex: i32 = 0): i32 {
+  lastIndexOf(searchElement: T, fromIndex: i32 = this.__length): i32 {
+    if (this.__length == 0) {
+      return -1;
+    }
     if (fromIndex < 0) {
       fromIndex = this.__length + fromIndex;
     } else if (fromIndex >= this.__length) {

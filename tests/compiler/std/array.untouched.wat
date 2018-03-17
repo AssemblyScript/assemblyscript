@@ -16,6 +16,7 @@
  (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
+ (global $std/array/includes (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 64))
  (memory $0 1)
  (data (i32.const 4) "\0c\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -2484,7 +2485,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 32)
-       (i32.const 128)
+       (i32.const 156)
        (i32.const 6)
       )
       (unreachable)
@@ -3088,17 +3089,54 @@
   )
  )
  (func "$(lib)/array/Array#indexOf" (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $3
+      (i32.eq
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 0)
+      )
+     )
+     (get_local $3)
+     (i32.ge_s
+      (get_local $2)
+      (i32.load offset=8
+       (get_local $0)
+      )
+     )
+    )
+    (i32.const 1)
+   )
+   (return
+    (i32.const -1)
+   )
+  )
   (if
    (i32.lt_s
     (get_local $2)
     (i32.const 0)
    )
-   (set_local $2
-    (i32.add
-     (i32.load offset=8
-      (get_local $0)
+   (block
+    (set_local $2
+     (i32.add
+      (i32.load offset=8
+       (get_local $0)
+      )
+      (get_local $2)
      )
-     (get_local $2)
+    )
+    (if
+     (i32.lt_s
+      (get_local $2)
+      (i32.const 0)
+     )
+     (set_local $2
+      (i32.const 0)
+     )
     )
    )
   )
@@ -3168,7 +3206,125 @@
    (get_local $2)
   )
  )
- (func "$(lib)/array/Array#splice" (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func "$(lib)/array/Array#includes" (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $3
+      (i32.eq
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 0)
+      )
+     )
+     (get_local $3)
+     (i32.ge_s
+      (get_local $2)
+      (i32.load offset=8
+       (get_local $0)
+      )
+     )
+    )
+    (i32.const 1)
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (block
+    (set_local $2
+     (i32.add
+      (i32.load offset=8
+       (get_local $0)
+      )
+      (get_local $2)
+     )
+    )
+    (if
+     (i32.lt_s
+      (get_local $2)
+      (i32.const 0)
+     )
+     (set_local $2
+      (i32.const 0)
+     )
+    )
+   )
+  )
+  (block $break|0
+   (loop $continue|0
+    (if
+     (i32.lt_u
+      (get_local $2)
+      (i32.load offset=8
+       (get_local $0)
+      )
+     )
+     (block
+      (block
+       (if
+        (i32.eq
+         (i32.load
+          (i32.add
+           (i32.load
+            (get_local $0)
+           )
+           (i32.mul
+            (get_local $2)
+            (i32.const 4)
+           )
+          )
+         )
+         (get_local $1)
+        )
+        (return
+         (i32.const 1)
+        )
+       )
+       (set_local $2
+        (i32.add
+         (get_local $2)
+         (i32.const 1)
+        )
+       )
+      )
+      (br $continue|0)
+     )
+    )
+   )
+  )
+  (return
+   (i32.const 0)
+  )
+ )
+ (func "$(lib)/array/Array#includes|trampoline" (; 17 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (block $N=1
+   (block $N=0
+    (block $N=invalid
+     (br_table $N=0 $N=1 $N=invalid
+      (get_local $3)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (i32.const 0)
+   )
+  )
+  (call "$(lib)/array/Array#includes"
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func "$(lib)/array/Array#splice" (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -3277,7 +3433,7 @@
    )
   )
  )
- (func $start (; 17 ;) (type $v)
+ (func $start (; 19 ;) (type $v)
   (set_global "$(lib)/allocator/arena/offset"
    (i32.and
     (i32.add
@@ -4346,6 +4502,18 @@
     (unreachable)
    )
   )
+  (drop
+   (call "$(lib)/array/Array#push"
+    (get_global $std/array/arr)
+    (i32.const 43)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array#push"
+    (get_global $std/array/arr)
+    (i32.const 44)
+   )
+  )
   (set_global $std/array/i
    (call "$(lib)/array/Array#indexOf|trampoline"
     (get_global $std/array/arr)
@@ -4365,7 +4533,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 89)
+     (i32.const 92)
      (i32.const 0)
     )
     (unreachable)
@@ -4390,7 +4558,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 93)
+     (i32.const 96)
      (i32.const 0)
     )
     (unreachable)
@@ -4415,7 +4583,418 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 97)
+     (i32.const 100)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array#indexOf"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const 100)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/i)
+     (i32.const -1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 104)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array#indexOf"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const -100)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/i)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 108)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array#indexOf"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const -2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/i)
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 112)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array#indexOf"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const -4)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/i)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 116)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array#indexOf"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/i)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 120)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array#indexOf"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const 1)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/i)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 124)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array#indexOf"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const 2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/i)
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 128)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes|trampoline"
+    (get_global $std/array/arr)
+    (i32.const 44)
+    (i32.const 0)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 132)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes|trampoline"
+    (get_global $std/array/arr)
+    (i32.const 42)
+    (i32.const 0)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 136)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes|trampoline"
+    (get_global $std/array/arr)
+    (i32.const 45)
+    (i32.const 0)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 140)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const 100)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 144)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const -100)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 148)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const -2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 152)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const -4)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 156)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 160)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const 1)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 164)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/includes
+   (call "$(lib)/array/Array#includes"
+    (get_global $std/array/arr)
+    (i32.const 43)
+    (i32.const 2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/array/includes)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 168)
      (i32.const 0)
     )
     (unreachable)
@@ -4432,14 +5011,14 @@
      (call "$(lib)/array/Array#get:length"
       (get_global $std/array/arr)
      )
-     (i32.const 2)
+     (i32.const 4)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 101)
+     (i32.const 172)
      (i32.const 0)
     )
     (unreachable)
@@ -4458,7 +5037,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 102)
+     (i32.const 173)
      (i32.const 0)
     )
     (unreachable)
@@ -4478,7 +5057,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 103)
+     (i32.const 174)
      (i32.const 0)
     )
     (unreachable)
@@ -4498,7 +5077,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 104)
+     (i32.const 175)
      (i32.const 0)
     )
     (unreachable)
