@@ -34,7 +34,8 @@ import {
   FunctionPrototype,
   Local,
   Class,
-  ElementKind
+  ElementKind,
+  ClassPrototype
 } from "./program";
 
 /** Compiles a get of a built-in global. */
@@ -99,6 +100,130 @@ export function compileCall(
   // search: createSelect
 
   switch (prototype.internalName) {
+
+    // types
+
+    case "isInteger": {
+      compiler.currentType = Type.bool;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        ); // recoverable
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+      type = compiler.currentType;
+      compiler.currentType = Type.bool;
+      return type.is(TypeFlags.INTEGER) && !type.is(TypeFlags.REFERENCE)
+        ? module.createI32(1)
+        : module.createI32(0);
+    }
+    case "isFloat": {
+      compiler.currentType = Type.bool;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        ); // recoverable
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+      type = compiler.currentType;
+      compiler.currentType = Type.bool;
+      return type.is(TypeFlags.FLOAT)
+        ? module.createI32(1)
+        : module.createI32(0);
+    }
+    case "isReference": {
+      compiler.currentType = Type.bool;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        ); // recoverable
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+      type = compiler.currentType;
+      compiler.currentType = Type.bool;
+      return type.is(TypeFlags.REFERENCE)
+        ? module.createI32(1)
+        : module.createI32(0);
+    }
+    case "isString": {
+      compiler.currentType = Type.bool;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        ); // recoverable
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+      type = compiler.currentType;
+      compiler.currentType = Type.bool;
+      let classType = type.classType;
+      if (classType) {
+        let stringPrototype = compiler.program.elementsLookup.get("String");
+        if (stringPrototype) {
+          assert(stringPrototype.kind == ElementKind.CLASS_PROTOTYPE);
+          let stringInstance = (<ClassPrototype>stringPrototype).resolve(null);
+          if (!stringInstance) return module.createUnreachable();
+          if (classType.isAssignableTo(stringInstance)) {
+            return module.createI32(1);
+          }
+        }
+      }
+      return module.createI32(0);
+    }
+    case "isArray": {
+      compiler.currentType = Type.bool;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        ); // recoverable
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+      type = compiler.currentType;
+      compiler.currentType = Type.bool;
+      let classType = type.classType;
+      return classType != null && classType.prototype.fnIndexedGet != null
+        ? module.createI32(1)
+        : module.createI32(0);
+    }
 
     // math
 

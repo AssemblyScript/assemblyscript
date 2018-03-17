@@ -1,5 +1,18 @@
 var b: bool;
 
+// types
+
+assert(isInteger(<i32>1));
+assert(!isInteger(<f32>1));
+assert(isFloat(<f32>1));
+assert(!isFloat(<i32>1));
+assert(isReference(changetype<String>(null)));
+assert(!isReference(changetype<usize>(null)));
+assert(isString("1"));
+assert(!isString(1));
+assert(isArray(changetype<i32[]>(null)));
+assert(!isArray(changetype<usize>(null)));
+
 // integers
 
 var i: i32;

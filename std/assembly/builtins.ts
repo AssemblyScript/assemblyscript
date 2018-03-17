@@ -1,3 +1,22 @@
+// types
+
+@builtin
+export declare function isInteger(value: void): bool;
+
+@builtin
+export declare function isFloat(value: void): bool;
+
+@builtin
+export declare function isReference(value: void): bool;
+
+@builtin
+export declare function isString(value: void): bool;
+
+@builtin
+export declare function isArray(value: void): bool;
+
+// math
+
 @builtin
 export declare const NaN: f64; // | f32
 

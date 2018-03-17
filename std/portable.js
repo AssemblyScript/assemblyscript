@@ -148,3 +148,19 @@ String["fromCharCodes"] = function fromCharCodes(arr) {
 String["fromCodePoints"] = function fromCodePoints(arr) {
   return String.fromCodePoint.apply(String, arr);
 };
+
+globalScope["isInteger"] = Number.isInteger;
+
+globalScope["isFloat"] = function isFloat(arg) {
+  return typeof arg === "number";
+};
+
+globalScope["isReference"] = function isClass(arg) {
+  return typeof arg === "object" || typeof arg === "string";
+};
+
+globalScope["isString"] = function isString(arg) {
+  return typeof arg === "string" || arg instanceof String;
+};
+
+globalScope["isArray"] = Array.isArray;

@@ -12,6 +12,7 @@
  (global $builtins/s (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 4) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
+ (data (i32.const 32) "\01\00\00\001")
  (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (start $start)
@@ -78,7 +79,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 21)
+     (i32.const 34)
      (i32.const 19)
     )
     (unreachable)
@@ -105,7 +106,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 22)
+     (i32.const 35)
      (i32.const 20)
     )
     (unreachable)
@@ -130,7 +131,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 23)
+     (i32.const 36)
      (i32.const 20)
     )
     (unreachable)
@@ -175,7 +176,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 39)
+     (i32.const 52)
      (i32.const 19)
     )
     (unreachable)
@@ -204,7 +205,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 40)
+     (i32.const 53)
      (i32.const 20)
     )
     (unreachable)
@@ -229,7 +230,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 41)
+     (i32.const 54)
      (i32.const 20)
     )
     (unreachable)
@@ -650,7 +651,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 222)
+     (i32.const 235)
      (i32.const 0)
     )
     (unreachable)
@@ -667,7 +668,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 223)
+     (i32.const 236)
      (i32.const 0)
     )
     (unreachable)
@@ -693,7 +694,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 224)
+     (i32.const 237)
      (i32.const 0)
     )
     (unreachable)
@@ -719,7 +720,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 225)
+     (i32.const 238)
      (i32.const 0)
     )
     (unreachable)
@@ -745,7 +746,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 226)
+     (i32.const 239)
      (i32.const 0)
     )
     (unreachable)
@@ -771,7 +772,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 227)
+     (i32.const 240)
      (i32.const 0)
     )
     (unreachable)
@@ -799,7 +800,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 228)
+     (i32.const 241)
      (i32.const 0)
     )
     (unreachable)
@@ -827,7 +828,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 229)
+     (i32.const 242)
      (i32.const 0)
     )
     (unreachable)

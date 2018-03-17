@@ -63,14 +63,14 @@
     "aliases": [ "a" ]
   },
   "idlFile": {
-    "desc": "Specifies the WebIDL output file (.idl).",
+    "desc": "Specifies the WebIDL output file (.webidl).",
     "type": "string",
     "aliases": [ "i" ]
   },
   "tsdFile": {
     "desc": "Specifies the TypeScript definition output file (.d.ts).",
     "type": "string",
-    "aliases": [ "d" ]
+    "aliases": [ "d", "dtsFile" ]
   },
   "sourceMap": {
     "desc": [
