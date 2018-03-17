@@ -1,3 +1,7 @@
+/**
+ * @file Abstract syntax tree representing a source file once parsed.
+ */
+
 import {
   CommonFlags,
   PATH_DELIMITER,

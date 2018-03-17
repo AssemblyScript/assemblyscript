@@ -1,3 +1,8 @@
+/**
+ * @file I64 implementation for JavaScript using long.js.
+ * @see https://github.com/dcodeIO/long.js
+ */
+
 const Long = global.Long || require("long");
 
 global.i64_new = function(lo, hi) {

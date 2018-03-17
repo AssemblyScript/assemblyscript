@@ -1,4 +1,6 @@
-// Definitions for the "AssemblyScript" subset.
+/**
+ * @file Environment definitions for compiling AssemblyScript to WebAssembly using asc.
+ */
 
 // Types
 

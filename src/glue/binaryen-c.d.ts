@@ -1,14 +1,7 @@
-/*
-
- Binaryen's C-API.
-
- The WebAssembly version of the compiler will be linked against Binaryen
- compiled to WebAssembly with these functions present in the binary while the
- JS version calls them on the global object.
-
- see: https://github.com/WebAssembly/binaryen/blob/master/src/binaryen-c.h
-
-*/
+/**
+ * @file TypeScript definitions for Binaryen's C-API.
+ * @see https://github.com/WebAssembly/binaryen/blob/master/src/binaryen-c.h
+ */
 
 declare function _malloc(size: usize): usize;
 declare function _free(ptr: usize): void;

@@ -1,3 +1,7 @@
+/**
+ * @file Shared diagnostic handling inherited by the parser and the compiler.
+ */
+
 import {
   Range
 } from "./ast";
@@ -16,48 +20,71 @@ export {
   diagnosticCodeToString
 } from "./diagnosticMessages.generated";
 
+/** Indicates the category of a {@link DiagnosticMessage}. */
 export enum DiagnosticCategory {
+  /** Informatory message. */
   INFO,
+  /** Warning message. */
   WARNING,
+  /** Error message. */
   ERROR
 }
 
+/** Returns the string representation of the specified diagnostic category. */
 export function diagnosticCategoryToString(category: DiagnosticCategory): string {
   switch (category) {
     case DiagnosticCategory.INFO: return "INFO";
     case DiagnosticCategory.WARNING: return "WARNING";
     case DiagnosticCategory.ERROR: return "ERROR";
-    default: return "";
+    default: {
+      assert(false);
+      return "";
+    }
   }
 }
 
-const colorBlue: string = "\u001b[93m";
-const colorYellow: string = "\u001b[93m";
-const colorRed: string = "\u001b[91m";
-const colorReset: string = "\u001b[0m";
+/** ANSI escape sequence for blue foreground. */
+export const COLOR_BLUE: string = "\u001b[93m";
+/** ANSI escape sequence for yellow foreground. */
+export const COLOR_YELLOW: string = "\u001b[93m";
+/** ANSI escape sequence for red foreground. */
+export const COLOR_RED: string = "\u001b[91m";
+/** ANSI escape sequence to reset the foreground color. */
+export const COLOR_RESET: string = "\u001b[0m";
 
+/** Returns the ANSI escape sequence for the specified category. */
 export function diagnosticCategoryToColor(category: DiagnosticCategory): string {
   switch (category) {
-    case DiagnosticCategory.INFO: return colorBlue;
-    case DiagnosticCategory.WARNING: return colorYellow;
-    case DiagnosticCategory.ERROR: return colorRed;
-    default: return "";
+    case DiagnosticCategory.INFO: return COLOR_BLUE;
+    case DiagnosticCategory.WARNING: return COLOR_YELLOW;
+    case DiagnosticCategory.ERROR: return COLOR_RED;
+    default: {
+      assert(false);
+      return "";
+    }
   }
 }
 
+/** Represents a diagnostic message. */
 export class DiagnosticMessage {
 
+  /** Message code. */
   code: i32;
+  /** Message category. */
   category: DiagnosticCategory;
+  /** Message text. */
   message: string;
+  /** Respective source range, if any. */
   range: Range | null = null;
 
-  constructor(code: i32, category: DiagnosticCategory, message: string) {
+  /** Constructs a new diagnostic message. */
+  private constructor(code: i32, category: DiagnosticCategory, message: string) {
     this.code = code;
     this.category = category;
     this.message = message;
   }
 
+  /** Creates a new diagnostic message of the specified category. */
   static create(
     code: DiagnosticCode,
     category: DiagnosticCategory,
@@ -72,6 +99,7 @@ export class DiagnosticMessage {
     return new DiagnosticMessage(code, category, message);
   }
 
+  /** Creates a new informatory diagnostic message. */
   static createInfo(
     code: DiagnosticCode,
     arg0: string | null = null,
@@ -80,6 +108,7 @@ export class DiagnosticMessage {
     return DiagnosticMessage.create(code, DiagnosticCategory.INFO, arg0, arg1);
   }
 
+  /** Creates a new warning diagnostic message. */
   static createWarning(
     code: DiagnosticCode,
     arg0: string | null = null,
@@ -88,6 +117,7 @@ export class DiagnosticMessage {
     return DiagnosticMessage.create(code, DiagnosticCategory.WARNING, arg0, arg1);
   }
 
+  /** Creates a new error diagnostic message. */
   static createError(
     code: DiagnosticCode,
     arg0: string | null = null,
@@ -96,11 +126,13 @@ export class DiagnosticMessage {
     return DiagnosticMessage.create(code, DiagnosticCategory.ERROR, arg0, arg1);
   }
 
+  /** Adds a source range to this message. */
   withRange(range: Range): this {
     this.range = range;
     return this;
   }
 
+  /** Converts this message to a string. */
   toString(): string {
     if (this.range) {
       return (
@@ -127,34 +159,33 @@ export class DiagnosticMessage {
   }
 }
 
+/** Formats a diagnostic message, optionally with terminal colors and source context. */
 export function formatDiagnosticMessage(
   message: DiagnosticMessage,
   useColors: bool = false,
   showContext: bool = false
 ): string {
-  // format context first (uses same string builder)
-  var context = "";
-  if (message.range && showContext) {
-    context = formatDiagnosticContext(message.range, useColors);
-  }
 
   // general information
   var sb: string[] = [];
   if (useColors) sb.push(diagnosticCategoryToColor(message.category));
   sb.push(diagnosticCategoryToString(message.category));
-  if (useColors) sb.push(colorReset);
+  if (useColors) sb.push(COLOR_RESET);
   sb.push(message.code < 1000 ? " AS" : " TS");
   sb.push(message.code.toString(10));
   sb.push(": ");
   sb.push(message.message);
 
-  // range information if available
+  // include range information if available
   if (message.range) {
+
+    // include context information if requested
     let range = message.range;
     if (showContext) {
       sb.push("\n");
-      sb.push(context);
+      sb.push(formatDiagnosticContext(message.range, useColors));
     }
+
     sb.push("\n");
     sb.push(" in ");
     sb.push(range.source.normalizedPath);
@@ -167,6 +198,7 @@ export function formatDiagnosticMessage(
   return sb.join("");
 }
 
+/** Formats the diagnostic context for the specified range, optionally with terminal colors. */
 export function formatDiagnosticContext(range: Range, useColors: bool = false): string {
   var text = range.source.text;
   var len = text.length;
@@ -187,7 +219,7 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
     sb.push(" ");
     start++;
   }
-  if (useColors) sb.push(colorRed);
+  if (useColors) sb.push(COLOR_RED);
   if (range.start == range.end) {
     sb.push("^");
   } else {
@@ -195,18 +227,22 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
       sb.push("~");
     }
   }
-  if (useColors) sb.push(colorReset);
+  if (useColors) sb.push(COLOR_RESET);
   return sb.join("");
 }
 
+/** Base class of all diagnostic emitters. */
 export abstract class DiagnosticEmitter {
 
+  /** Diagnostic messages emitted so far. */
   diagnostics: DiagnosticMessage[];
 
-  constructor(diagnostics: DiagnosticMessage[] | null = null) {
+  /** Initializes this diagnostic emitter. */
+  protected constructor(diagnostics: DiagnosticMessage[] | null = null) {
     this.diagnostics = diagnostics ? <DiagnosticMessage[]>diagnostics : new Array();
   }
 
+  /** Emits a diagnostic message of the specified category. */
   emitDiagnostic(
     code: DiagnosticCode,
     category: DiagnosticCategory,
@@ -221,16 +257,7 @@ export abstract class DiagnosticEmitter {
     // console.log(<string>new Error("stack").stack);
   }
 
-  error(
-    code: DiagnosticCode,
-    range: Range,
-    arg0: string | null = null,
-    arg1: string | null = null,
-    arg2: string | null = null
-  ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, arg0, arg1, arg2);
-  }
-
+  /** Emits an informatory diagnostic message. */
   info(
     code: DiagnosticCode,
     range: Range,
@@ -241,6 +268,7 @@ export abstract class DiagnosticEmitter {
     this.emitDiagnostic(code, DiagnosticCategory.INFO, range, arg0, arg1, arg2);
   }
 
+  /** Emits a warning diagnostic message. */
   warning(
     code: DiagnosticCode,
     range: Range,
@@ -249,5 +277,16 @@ export abstract class DiagnosticEmitter {
     arg2: string | null = null
   ): void {
     this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, arg0, arg1, arg2);
+  }
+
+  /** Emits an error diagnostic message. */
+  error(
+    code: DiagnosticCode,
+    range: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, arg0, arg1, arg2);
   }
 }

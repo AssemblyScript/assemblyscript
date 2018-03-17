@@ -1,3 +1,7 @@
+/**
+ * @file Common text utilities.
+ */
+
 const indentX1 = "  ";
 const indentX2 = "    ";
 const indentX4 = "        ";

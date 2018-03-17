@@ -1,3 +1,7 @@
+/**
+ * @file Minimalistic path utility for normalizing and resolving relative paths.
+ */
+
 import {
   CharCode
 } from "./charcode";

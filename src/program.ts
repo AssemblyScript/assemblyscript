@@ -1,3 +1,7 @@
+/**
+ * @file AssemblyScript's intermediate representation describing a program's elements.
+ */
+
 import {
   Options
 } from "./compiler";

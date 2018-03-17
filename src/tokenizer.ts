@@ -1,22 +1,9 @@
-/*
-
- This is a modified version of TypeScript's scanner that doesn't perform as much bookkeeping, simply
- skips over trivia and provides a more general mark/reset mechanism for the parser to utilize on
- ambiguous tokens.
-
- next()                 advances the token
- peek()                 peeks for the next token
- skip(token)            skips over a token if possible
- mark()                 marks at current token
- reset()                resets to marked state
- range()                gets the range of the current token
-
- readFloat()            on FLOATLITERAL
- readIdentifier()       on IDENTIFIER
- readInteger()          on INTEGERLITERAL
- readString()           on STRINGLITERAL
-
-*/
+/**
+ * @file A TypeScript tokenizer modified for AssemblyScript.
+ *
+ * Skips over trivia and provides a general mark/reset mechanism for the parser to utilize on
+ * ambiguous tokens.
+ */
 
 import {
   DiagnosticCode,
@@ -380,6 +367,10 @@ export class Range {
 
 declare function parseFloat(str: string): f64;
 
+/** Handler for intercepting comments while tokenizing. */
+export type CommentHandler = (kind: CommentKind, text: string, range: Range) => void;
+
+/** Tokenizes a source to individual {@link Token}s. */
 export class Tokenizer extends DiagnosticEmitter {
 
   source: Source;
@@ -393,8 +384,9 @@ export class Tokenizer extends DiagnosticEmitter {
   nextTokenPos: i32 = 0;
   nextTokenOnNewLine: bool = false;
 
-  onComment: ((kind: CommentKind, text: string, range: Range) => void) | null = null;
+  onComment: CommentHandler | null = null;
 
+  /** Constructs a new tokenizer. */
   constructor(source: Source, diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
     this.source = source;

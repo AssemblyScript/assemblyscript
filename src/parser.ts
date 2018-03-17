@@ -1,10 +1,6 @@
-/*
-
- This is a custom parser specifically written for the AssemblyScript subset. It accepts some of the
- most common TypeScript-only patterns that it knows an appropriate error message for but, though it
- uses TypeScript's codes for diagnostics, doesn't ultimately aim at full compatibility.
-
-*/
+/**
+ * @file A TypeScript parser for the AssemblyScript subset.
+ */
 
 import {
   Program,
@@ -16,7 +12,8 @@ import {
 import {
   Tokenizer,
   Token,
-  Range
+  Range,
+  CommentHandler
 } from "./tokenizer";
 
 import {
@@ -37,6 +34,7 @@ import {
   CommonTypeNode,
   TypeNode,
   SignatureNode,
+  CommentKind,
 
   Expression,
   AssertionKind,
@@ -93,6 +91,8 @@ export class Parser extends DiagnosticEmitter {
   currentDeclareStart: i32 = 0;
   currentDeclareEnd: i32 = 0;
 
+  onComment: CommentHandler | null = null;
+
   /** Constructs a new parser. */
   constructor() {
     super();
@@ -129,12 +129,14 @@ export class Parser extends DiagnosticEmitter {
 
     // tokenize and parse
     var tn = new Tokenizer(source, program.diagnostics);
+    tn.onComment = this.onComment;
     source.tokenizer = tn;
+    var statements = source.statements;
     while (!tn.skip(Token.ENDOFFILE)) {
       let statement = this.parseTopLevelStatement(tn);
       if (statement) {
         statement.parent = source;
-        source.statements.push(statement);
+        statements.push(statement);
       }
     }
     tn.finish();

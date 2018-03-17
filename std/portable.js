@@ -1,3 +1,7 @@
+/**
+ * @file Environment implementation for compiling AssemblyScript to JavaScript using tsc.
+ */
+
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
 Object.defineProperties(

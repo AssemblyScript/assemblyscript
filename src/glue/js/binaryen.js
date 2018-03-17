@@ -1,3 +1,7 @@
+/**
+ * @file Glue code for linking Binaryen with AssemblyScript.
+ */
+
 // Copy Binaryen exports to global scope
 
 const binaryen = global.Binaryen || require("binaryen");

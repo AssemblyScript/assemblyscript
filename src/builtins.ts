@@ -1,3 +1,7 @@
+/**
+ * @file Built-in elements providing otherwise hard-to-implement functionality.
+ */
+
 import {
   Compiler,
   ConversionKind,

@@ -1,3 +1,7 @@
+/**
+ * @file A decompiler that generates low-level AssemblyScript from WebAssembly binaries.
+ */
+
 import {
   Module,
   NativeType,

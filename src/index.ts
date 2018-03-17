@@ -1,4 +1,6 @@
-//////////////////////// Low-level C-Like Compiler API /////////////////////////
+/**
+ * @file Low-level C-like compiler API.
+ */
 
 import {
   Compiler,

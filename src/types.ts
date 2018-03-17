@@ -1,3 +1,7 @@
+/**
+ * @file Mappings from AssemblyScript types to WebAssembly types.
+ */
+
 import {
   Class,
   FunctionTarget

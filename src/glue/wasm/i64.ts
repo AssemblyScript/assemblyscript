@@ -1,3 +1,7 @@
+/**
+ * @file I64 wrapper for WebAssembly.
+ */
+
 type I64 = i64;
 
 @global

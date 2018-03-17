@@ -1,3 +1,7 @@
+/**
+ * @file The AssemblyScript compiler.
+ */
+
 import {
   compileCall as compileBuiltinCall,
   compileGetConstant as compileBuiltinGetConstant,

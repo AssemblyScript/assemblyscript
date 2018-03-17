@@ -1,3 +1,7 @@
+/**
+ * @file Character code utility.
+ */
+
 /** An enum of named character codes. */
 export const enum CharCode {
 
@@ -170,12 +174,12 @@ export function isWhiteSpace(c: i32): bool {
   }
 }
 
-/** Tests if the specified character code is a decimal digit. */
+/** Tests if the specified character code is a valid decimal digit. */
 export function isDecimalDigit(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._9;
 }
 
-/** Tests if the specified character code is an octal digit. */
+/** Tests if the specified character code is a valid octal digit. */
 export function isOctalDigit(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._7;
 }

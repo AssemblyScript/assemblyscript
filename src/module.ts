@@ -1,3 +1,7 @@
+/**
+ * @file A thin wrapper around Binaryen's C-API.
+ */
+
 import {
   Target
 } from "./compiler";

@@ -1,3 +1,7 @@
+/**
+ * @file I64 definitions for JavaScript.
+ */
+
 declare type I64 = { __Long__: true }; // opaque
 
 declare function i64_new(lo: i32, hi?: i32): I64;
