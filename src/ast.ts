@@ -1,4 +1,5 @@
 import {
+  CommonFlags,
   PATH_DELIMITER,
   STATIC_DELIMITER,
   INSTANCE_DELIMITER
@@ -37,7 +38,6 @@ export enum NodeKind {
   ELEMENTACCESS,
   FALSE,
   FUNCTION,
-  FUNCTIONARROW,
   LITERAL,
   NEW,
   NULL,
@@ -86,7 +86,6 @@ export enum NodeKind {
 
   // special
   DECORATOR,
-  MODIFIER,
   EXPORTMEMBER,
   SWITCHCASE
 }
@@ -100,6 +99,15 @@ export abstract class Node {
   range: Range;
   /** Parent node. */
   parent: Node | null = null;
+  /** Common flags indicating specific traits. */
+  flags: CommonFlags = CommonFlags.NONE;
+
+  /** Tests if this node has a specific flag or flags. */
+  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
+  /** Tests if this node has one of the specified flags. */
+  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
+  /** Sets a specific flag or flags. */
+  set(flag: CommonFlags): void { this.flags |= flag; }
 
   // types
 
@@ -210,13 +218,6 @@ export abstract class Node {
       stmt.decoratorKind = DecoratorKind.CUSTOM;
     }
     return stmt;
-  }
-
-  static createModifier(kind: ModifierKind, range: Range): ModifierNode {
-    var elem = new ModifierNode();
-    elem.range = range;
-    elem.modifierKind = kind;
-    return elem;
   }
 
   // expressions
@@ -341,12 +342,10 @@ export abstract class Node {
   }
 
   static createFunctionExpression(
-    declaration: FunctionDeclaration,
-    isArrow: bool = false
+    declaration: FunctionDeclaration
   ): FunctionExpression {
-    var expr = isArrow
-      ? new FunctionArrowExpression()
-      : new FunctionExpression();
+    var expr = new FunctionExpression();
+    expr.flags = declaration.flags & CommonFlags.ARROW;
     expr.range = declaration.range;
     expr.declaration = declaration;
     return expr;
@@ -518,18 +517,18 @@ export abstract class Node {
     extendsType: TypeNode | null, // can't be a function
     implementsTypes: TypeNode[], // can't be a function
     members: DeclarationStatement[],
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): ClassDeclaration {
     var stmt = new ClassDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = identifier; identifier.parent = stmt;
     stmt.typeParameters = typeParameters; setParent(typeParameters, stmt);
     stmt.extendsType = extendsType; if (extendsType) extendsType.parent = stmt;
     stmt.implementsTypes = implementsTypes; setParent(implementsTypes, stmt);
     stmt.members = members; setParent(members, stmt);
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
@@ -567,15 +566,15 @@ export abstract class Node {
   static createEnumDeclaration(
     name: IdentifierExpression,
     members: EnumValueDeclaration[],
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): EnumDeclaration {
     var stmt = new EnumDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
     stmt.values = members; setParent(members, stmt);
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
@@ -583,10 +582,12 @@ export abstract class Node {
   static createEnumValueDeclaration(
     name: IdentifierExpression,
     value: Expression | null,
+    flags: CommonFlags,
     range: Range
   ): EnumValueDeclaration {
     var stmt = new EnumValueDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
     stmt.value = value; if (value) value.parent = stmt;
     return stmt;
@@ -595,11 +596,12 @@ export abstract class Node {
   static createExportStatement(
     members: ExportMember[],
     path: StringLiteralExpression | null,
-    modifiers: ModifierNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): ExportStatement {
     var stmt = new ExportStatement();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.members = members; setParent(members, stmt);
     stmt.path = path;
     if (path) {
@@ -617,7 +619,6 @@ export abstract class Node {
       stmt.normalizedPath = null;
       stmt.internalPath = null;
     }
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     return stmt;
   }
 
@@ -735,15 +736,15 @@ export abstract class Node {
     name: IdentifierExpression,
     extendsType: TypeNode | null, // can't be a function
     members: DeclarationStatement[],
-    modifiers: ModifierNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): InterfaceDeclaration {
     var stmt = new InterfaceDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
     stmt.extendsType = extendsType; if (extendsType) extendsType.parent = stmt;
     stmt.members = members; setParent(members, stmt);
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     return stmt;
   }
 
@@ -751,16 +752,16 @@ export abstract class Node {
     name: IdentifierExpression,
     type: CommonTypeNode | null,
     initializer: Expression | null,
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): FieldDeclaration {
     var stmt = new FieldDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
     stmt.type = type; if (type) type.parent = stmt;
     stmt.initializer = initializer; if (initializer) initializer.parent = stmt;
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
@@ -786,17 +787,17 @@ export abstract class Node {
     typeParameters: TypeParameterNode[] | null,
     signature: SignatureNode,
     body: Statement | null,
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): FunctionDeclaration {
     var stmt = new FunctionDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
     stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
     stmt.signature = signature; signature.parent = stmt;
     stmt.body = body; if (body) body.parent = stmt;
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
@@ -806,17 +807,17 @@ export abstract class Node {
     typeParameters: TypeParameterNode[] | null,
     signature: SignatureNode,
     body: Statement | null,
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): MethodDeclaration {
     var stmt = new MethodDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
     stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
     stmt.signature = signature; signature.parent = stmt;
     stmt.body = body; if (body) body.parent = stmt;
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
@@ -824,15 +825,15 @@ export abstract class Node {
   static createNamespaceDeclaration(
     name: IdentifierExpression,
     members: Statement[],
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): NamespaceDeclaration {
     var stmt = new NamespaceDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
     stmt.members = members; setParent(members, stmt);
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
@@ -904,30 +905,30 @@ export abstract class Node {
     name: IdentifierExpression,
     typeParameters: TypeParameterNode[] | null,
     alias: CommonTypeNode,
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): TypeDeclaration {
     var stmt = new TypeDeclaration();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
     stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
     stmt.type = alias; alias.parent = stmt;
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
 
   static createVariableStatement(
     declarations: VariableDeclaration[],
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): VariableStatement {
     var stmt = new VariableStatement();
     stmt.range = range;
+    stmt.flags = flags;
     stmt.declarations = declarations; setParent(declarations, stmt);
-    stmt.modifiers = modifiers; if (modifiers) setParent(modifiers, stmt);
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
     return stmt;
   }
@@ -936,16 +937,16 @@ export abstract class Node {
     name: IdentifierExpression,
     type: CommonTypeNode | null,
     initializer: Expression | null,
-    modifiers: ModifierNode[] | null,
     decorators: DecoratorNode[] | null,
+    flags: CommonFlags,
     range: Range
   ): VariableDeclaration {
     var elem = new VariableDeclaration();
     elem.range = range;
+    elem.flags = flags;
     elem.name = name; name.parent = elem;
     elem.type = type; if (type) type.parent = elem;
     elem.initializer = initializer; if (initializer) initializer.parent = elem;
-    elem.modifiers = modifiers; // inherited from parent VariableStatement
     elem.decorators = decorators; // inherited
     return elem;
   }
@@ -1059,32 +1060,6 @@ export class DecoratorNode extends Node {
   name: Expression;
   /** Argument expressions. */
   arguments: Expression[] | null;
-}
-
-/** Indicates the specific kind of a modifier. */
-export enum ModifierKind {
-  ASYNC,
-  CONST,
-  LET,
-  DECLARE,
-  EXPORT,
-  IMPORT,
-  STATIC,
-  ABSTRACT,
-  PUBLIC,
-  PRIVATE,
-  PROTECTED,
-  READONLY,
-  GET,
-  SET,
-}
-
-/** Represents a single modifier. */
-export class ModifierNode extends Node {
-  kind = NodeKind.MODIFIER;
-
-  /** Specific modifier kind. */
-  modifierKind: ModifierKind;
 }
 
 // expressions
@@ -1206,11 +1181,6 @@ export class FunctionExpression extends Expression {
 
   /** Inline function declaration. */
   declaration: FunctionDeclaration;
-}
-
-/** Represents an arrow function expression. */
-export class FunctionArrowExpression extends FunctionExpression {
-  kind = NodeKind.FUNCTIONARROW;
 }
 
 /** Represents an integer literal expression. */
@@ -1380,8 +1350,6 @@ export abstract class DeclarationStatement extends Statement {
 
   /** Simple name being declared. */
   name: IdentifierExpression;
-  /** Array of modifiers. */
-  modifiers: ModifierNode[] | null;
   /** Array of decorators. */
   decorators: DecoratorNode[] | null = null;
 
@@ -1423,21 +1391,12 @@ export abstract class DeclarationStatement extends Statement {
       return false;
     }
     if (parent.kind == NodeKind.NAMESPACEDECLARATION) {
-      return (
-        hasModifier(ModifierKind.EXPORT, this.modifiers) &&
-        (<NamespaceDeclaration>parent).isTopLevelExport
-      );
+      return this.is(CommonFlags.EXPORT) && (<NamespaceDeclaration>parent).isTopLevelExport;
     }
     if (parent.kind == NodeKind.CLASSDECLARATION) {
-      return (
-        hasModifier(ModifierKind.STATIC, this.modifiers) &&
-        (<ClassDeclaration>parent).isTopLevelExport
-      );
+      return this.is(CommonFlags.STATIC) && (<ClassDeclaration>parent).isTopLevelExport;
     }
-    return (
-      parent.kind == NodeKind.SOURCE &&
-      hasModifier(ModifierKind.EXPORT, this.modifiers)
-    );
+    return parent.kind == NodeKind.SOURCE && this.is(CommonFlags.EXPORT);
   }
 
   /** Tests if this declaration needs an explicit export. */
@@ -1531,7 +1490,6 @@ export class EnumDeclaration extends DeclarationStatement {
 /** Represents a value of an `enum` declaration. */
 export class EnumValueDeclaration extends DeclarationStatement {
   kind = NodeKind.ENUMVALUEDECLARATION;
-  modifiers = null;
   // name is inherited
 
   /** Value expression. */
@@ -1562,8 +1520,6 @@ export class ExportMember extends Node {
 export class ExportStatement extends Statement {
   kind = NodeKind.EXPORT;
 
-  /** Array of modifiers. */
-  modifiers: ModifierNode[] | null;
   /** Array of members. */
   members: ExportMember[];
   /** Path being exported from, if applicable. */
@@ -1636,7 +1592,6 @@ export class IfStatement extends Statement {
 /** Represents an `import` declaration part of an {@link ImportStatement}. */
 export class ImportDeclaration extends DeclarationStatement {
   kind = NodeKind.IMPORTDECLARATION;
-  modifiers = null;
 
   /** Identifier being imported. */
   externalName: IdentifierExpression;
@@ -1739,17 +1694,12 @@ export class TypeDeclaration extends DeclarationStatement {
 /** Represents a variable declaration part of a {@link VariableStatement}. */
 export class VariableDeclaration extends VariableLikeDeclarationStatement {
   kind = NodeKind.VARIABLEDECLARATION;
-
-  /** Array of modifiers. */
-  modifiers: ModifierNode[] | null;
 }
 
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
 export class VariableStatement extends Statement {
   kind = NodeKind.VARIABLE;
 
-  /** Array of modifiers. */
-  modifiers: ModifierNode[] | null;
   /** Array of decorators. */
   decorators: DecoratorNode[] | null;
   /** Array of member declarations. */
@@ -1772,52 +1722,6 @@ export class WhileStatement extends Statement {
   condition: Expression;
   /** Statement being looped over. */
   statement: Statement;
-}
-
-/** Cached unused modifiers for reuse. */
-var reusableModifiers: ModifierNode[] | null = null;
-
-export function setReusableModifiers(modifiers: ModifierNode[]): void {
-  reusableModifiers = modifiers;
-}
-
-/** Creates a new modifiers array. */
-export function createModifiers(): ModifierNode[] {
-  var ret: ModifierNode[];
-  if (reusableModifiers != null) {
-    ret = reusableModifiers;
-    reusableModifiers = null;
-  } else {
-    ret = [];
-  }
-  ret.length = 0;
-  return ret;
-}
-
-// Utility
-
-/** Adds a modifier to a set of modifiers. Creates a new set if `null`. */
-export function addModifier(modifier: ModifierNode, modifiers: ModifierNode[] | null): ModifierNode[] {
-  if (modifiers == null) modifiers = createModifiers();
-  modifiers.push(modifier);
-  return modifiers;
-}
-
-/** Gets a specific modifier from the specified set of modifiers. */
-export function getModifier(kind: ModifierKind, modifiers: ModifierNode[] | null): ModifierNode | null {
-  if (modifiers) {
-    for (let i = 0, k = modifiers.length; i < k; ++i) {
-      if (modifiers[i].modifierKind == kind) {
-        return modifiers[i];
-      }
-    }
-  }
-  return null;
-}
-
-/** Tests whether a modifier exists in the specified set of modifiers. */
-export function hasModifier(kind: ModifierKind, modifiers: ModifierNode[] | null): bool {
-  return getModifier(kind, modifiers) != null;
 }
 
 /** Gets the first decorator by name within at set of decorators, if present. */
@@ -1852,7 +1756,7 @@ export function mangleInternalName(declaration: DeclarationStatement, asGlobal: 
   }
   if (parent.kind == NodeKind.CLASSDECLARATION) {
     return mangleInternalName(<ClassDeclaration>parent, asGlobal) + (
-      hasModifier(ModifierKind.STATIC, declaration.modifiers)
+      declaration.is(CommonFlags.STATIC)
         ? STATIC_DELIMITER
         : INSTANCE_DELIMITER
     ) + name;

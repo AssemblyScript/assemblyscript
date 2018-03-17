@@ -176,149 +176,146 @@ export enum Token {
   ENDOFFILE
 }
 
-export namespace Token {
-
-  export function fromKeyword(text: string): Token {
-    switch (text) {
-      case "abstract": return Token.ABSTRACT;
-      case "as": return Token.AS;
-      case "async": return Token.ASYNC;
-      case "await": return Token.AWAIT;
-      case "break": return Token.BREAK;
-      case "case": return Token.CASE;
-      case "catch": return Token.CATCH;
-      case "class": return Token.CLASS;
-      case "continue": return Token.CONTINUE;
-      case "const": return Token.CONST;
-      case "constructor": return Token.CONSTRUCTOR;
-      case "debugger": return Token.DEBUGGER;
-      case "declare": return Token.DECLARE;
-      case "default": return Token.DEFAULT;
-      case "delete": return Token.DELETE;
-      case "do": return Token.DO;
-      case "else": return Token.ELSE;
-      case "enum": return Token.ENUM;
-      case "export": return Token.EXPORT;
-      case "extends": return Token.EXTENDS;
-      case "false": return Token.FALSE;
-      case "finally": return Token.FINALLY;
-      case "for": return Token.FOR;
-      case "from": return Token.FROM;
-      case "function": return Token.FUNCTION;
-      case "get": return Token.GET;
-      case "if": return Token.IF;
-      case "implements": return Token.IMPLEMENTS;
-      case "import": return Token.IMPORT;
-      case "in": return Token.IN;
-      case "instanceof": return Token.INSTANCEOF;
-      case "interface": return Token.INTERFACE;
-      case "is": return Token.IS;
-      case "keyof": return Token.KEYOF;
-      case "let": return Token.LET;
-      case "module": return Token.MODULE;
-      case "namespace": return Token.NAMESPACE;
-      case "new": return Token.NEW;
-      case "null": return Token.NULL;
-      case "of": return Token.OF;
-      case "package": return Token.PACKAGE;
-      case "private": return Token.PRIVATE;
-      case "protected": return Token.PROTECTED;
-      case "public": return Token.PUBLIC;
-      case "readonly": return Token.READONLY;
-      case "return": return Token.RETURN;
-      case "set": return Token.SET;
-      case "static": return Token.STATIC;
-      case "super": return Token.SUPER;
-      case "switch": return Token.SWITCH;
-      case "this": return Token.THIS;
-      case "throw": return Token.THROW;
-      case "true": return Token.TRUE;
-      case "try": return Token.TRY;
-      case "type": return Token.TYPE;
-      case "typeof": return Token.TYPEOF;
-      case "var": return Token.VAR;
-      case "void": return Token.VOID;
-      case "while": return Token.WHILE;
-      case "with": return Token.WITH;
-      case "yield": return Token.YIELD;
-      default: return Token.INVALID;
-    }
+export function tokenFomKeyword(text: string): Token {
+  switch (text) {
+    case "abstract": return Token.ABSTRACT;
+    case "as": return Token.AS;
+    case "async": return Token.ASYNC;
+    case "await": return Token.AWAIT;
+    case "break": return Token.BREAK;
+    case "case": return Token.CASE;
+    case "catch": return Token.CATCH;
+    case "class": return Token.CLASS;
+    case "continue": return Token.CONTINUE;
+    case "const": return Token.CONST;
+    case "constructor": return Token.CONSTRUCTOR;
+    case "debugger": return Token.DEBUGGER;
+    case "declare": return Token.DECLARE;
+    case "default": return Token.DEFAULT;
+    case "delete": return Token.DELETE;
+    case "do": return Token.DO;
+    case "else": return Token.ELSE;
+    case "enum": return Token.ENUM;
+    case "export": return Token.EXPORT;
+    case "extends": return Token.EXTENDS;
+    case "false": return Token.FALSE;
+    case "finally": return Token.FINALLY;
+    case "for": return Token.FOR;
+    case "from": return Token.FROM;
+    case "function": return Token.FUNCTION;
+    case "get": return Token.GET;
+    case "if": return Token.IF;
+    case "implements": return Token.IMPLEMENTS;
+    case "import": return Token.IMPORT;
+    case "in": return Token.IN;
+    case "instanceof": return Token.INSTANCEOF;
+    case "interface": return Token.INTERFACE;
+    case "is": return Token.IS;
+    case "keyof": return Token.KEYOF;
+    case "let": return Token.LET;
+    case "module": return Token.MODULE;
+    case "namespace": return Token.NAMESPACE;
+    case "new": return Token.NEW;
+    case "null": return Token.NULL;
+    case "of": return Token.OF;
+    case "package": return Token.PACKAGE;
+    case "private": return Token.PRIVATE;
+    case "protected": return Token.PROTECTED;
+    case "public": return Token.PUBLIC;
+    case "readonly": return Token.READONLY;
+    case "return": return Token.RETURN;
+    case "set": return Token.SET;
+    case "static": return Token.STATIC;
+    case "super": return Token.SUPER;
+    case "switch": return Token.SWITCH;
+    case "this": return Token.THIS;
+    case "throw": return Token.THROW;
+    case "true": return Token.TRUE;
+    case "try": return Token.TRY;
+    case "type": return Token.TYPE;
+    case "typeof": return Token.TYPEOF;
+    case "var": return Token.VAR;
+    case "void": return Token.VOID;
+    case "while": return Token.WHILE;
+    case "with": return Token.WITH;
+    case "yield": return Token.YIELD;
+    default: return Token.INVALID;
   }
+}
 
-  export function isAlsoIdentifier(token: Token): bool {
-    switch (token) {
-      case Token.ABSTRACT:
-      case Token.AS:
-      case Token.CONSTRUCTOR:
-      case Token.DECLARE:
-      case Token.DELETE:
-      case Token.FROM:
-      case Token.GET:
-      case Token.IS:
-      case Token.KEYOF:
-      case Token.MODULE:
-      case Token.NAMESPACE:
-      case Token.READONLY:
-      case Token.SET:
-      case Token.TYPE: return true;
-      default: return false;
-    }
+export function tokenIsAlsoIdentifier(token: Token): bool {
+  switch (token) {
+    case Token.ABSTRACT:
+    case Token.AS:
+    case Token.CONSTRUCTOR:
+    case Token.DECLARE:
+    case Token.DELETE:
+    case Token.FROM:
+    case Token.GET:
+    case Token.IS:
+    case Token.KEYOF:
+    case Token.MODULE:
+    case Token.NAMESPACE:
+    case Token.READONLY:
+    case Token.SET:
+    case Token.TYPE: return true;
+    default: return false;
   }
+}
 
-  export function operatorToString(token: Token): string {
-    switch (token) {
-      case Token.DELETE: return "delete";
-      case Token.IN: return "in";
-      case Token.INSTANCEOF: return "instanceof";
-      case Token.NEW: return "new";
-      case Token.TYPEOF: return "typeof";
-      case Token.VOID: return "void";
-      case Token.YIELD: return "yield";
-      case Token.DOT_DOT_DOT: return "...";
-      case Token.COMMA: return ",";
-      case Token.LESSTHAN: return "<";
-      case Token.GREATERTHAN: return ">";
-      case Token.LESSTHAN_EQUALS: return "<=";
-      case Token.GREATERTHAN_EQUALS: return ">=";
-      case Token.EQUALS_EQUALS: return "==";
-      case Token.EXCLAMATION_EQUALS: return "!=";
-      case Token.EQUALS_EQUALS_EQUALS: return "===";
-      case Token.EXCLAMATION_EQUALS_EQUALS: return "!==";
-      case Token.PLUS: return "+";
-      case Token.MINUS: return "-";
-      case Token.ASTERISK_ASTERISK: return "**";
-      case Token.ASTERISK: return "*";
-      case Token.SLASH: return "/";
-      case Token.PERCENT: return "%";
-      case Token.PLUS_PLUS: return "++";
-      case Token.MINUS_MINUS: return "--";
-      case Token.LESSTHAN_LESSTHAN: return "<<";
-      case Token.GREATERTHAN_GREATERTHAN: return ">>";
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: return ">>>";
-      case Token.AMPERSAND: return "&";
-      case Token.BAR: return "|";
-      case Token.CARET: return "^";
-      case Token.EXCLAMATION: return "!";
-      case Token.TILDE: return "~";
-      case Token.AMPERSAND_AMPERSAND: return "&&";
-      case Token.BAR_BAR: return "||";
-      case Token.EQUALS: return "=";
-      case Token.PLUS_EQUALS: return "+=";
-      case Token.MINUS_EQUALS: return "-=";
-      case Token.ASTERISK_EQUALS: return "*=";
-      case Token.ASTERISK_ASTERISK_EQUALS: return "**=";
-      case Token.SLASH_EQUALS: return "/=";
-      case Token.PERCENT_EQUALS: return "%=";
-      case Token.LESSTHAN_LESSTHAN_EQUALS: return "<<=";
-      case Token.GREATERTHAN_GREATERTHAN_EQUALS: return ">>=";
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: return ">>>=";
-      case Token.AMPERSAND_EQUALS: return "&=";
-      case Token.BAR_EQUALS: return "|=";
-      case Token.CARET_EQUALS: return "^=";
-      default: {
-        assert(false);
-        return "";
-      }
+export function operatorTokenToString(token: Token): string {
+  switch (token) {
+    case Token.DELETE: return "delete";
+    case Token.IN: return "in";
+    case Token.INSTANCEOF: return "instanceof";
+    case Token.NEW: return "new";
+    case Token.TYPEOF: return "typeof";
+    case Token.VOID: return "void";
+    case Token.YIELD: return "yield";
+    case Token.DOT_DOT_DOT: return "...";
+    case Token.COMMA: return ",";
+    case Token.LESSTHAN: return "<";
+    case Token.GREATERTHAN: return ">";
+    case Token.LESSTHAN_EQUALS: return "<=";
+    case Token.GREATERTHAN_EQUALS: return ">=";
+    case Token.EQUALS_EQUALS: return "==";
+    case Token.EXCLAMATION_EQUALS: return "!=";
+    case Token.EQUALS_EQUALS_EQUALS: return "===";
+    case Token.EXCLAMATION_EQUALS_EQUALS: return "!==";
+    case Token.PLUS: return "+";
+    case Token.MINUS: return "-";
+    case Token.ASTERISK_ASTERISK: return "**";
+    case Token.ASTERISK: return "*";
+    case Token.SLASH: return "/";
+    case Token.PERCENT: return "%";
+    case Token.PLUS_PLUS: return "++";
+    case Token.MINUS_MINUS: return "--";
+    case Token.LESSTHAN_LESSTHAN: return "<<";
+    case Token.GREATERTHAN_GREATERTHAN: return ">>";
+    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: return ">>>";
+    case Token.AMPERSAND: return "&";
+    case Token.BAR: return "|";
+    case Token.CARET: return "^";
+    case Token.EXCLAMATION: return "!";
+    case Token.TILDE: return "~";
+    case Token.AMPERSAND_AMPERSAND: return "&&";
+    case Token.BAR_BAR: return "||";
+    case Token.EQUALS: return "=";
+    case Token.PLUS_EQUALS: return "+=";
+    case Token.MINUS_EQUALS: return "-=";
+    case Token.ASTERISK_EQUALS: return "*=";
+    case Token.ASTERISK_ASTERISK_EQUALS: return "**=";
+    case Token.SLASH_EQUALS: return "/=";
+    case Token.PERCENT_EQUALS: return "%=";
+    case Token.LESSTHAN_LESSTHAN_EQUALS: return "<<=";
+    case Token.GREATERTHAN_GREATERTHAN_EQUALS: return ">>=";
+    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: return ">>>=";
+    case Token.AMPERSAND_EQUALS: return "&=";
+    case Token.BAR_EQUALS: return "|=";
+    case Token.CARET_EQUALS: return "^=";
+    default: {
+      assert(false);
+      return "";
     }
   }
 }
@@ -356,23 +353,19 @@ export class Range {
 
   get line(): i32 {
     var text = this.source.text;
-    var pos = this.start;
     var line = 1;
-    while (pos-- > 0) {
-      if (text.charCodeAt(pos) == CharCode.LINEFEED) {
-        line++;
-      }
+    for (let pos = this.start; pos >= 0; --pos) {
+      if (text.charCodeAt(pos) == CharCode.LINEFEED) line++;
     }
     return line;
   }
 
   get column(): i32 {
     var text = this.source.text;
-    var pos = this.start;
     var column = 0;
-    while (pos-- > 0) {
+    for (let pos = this.start - 1; pos >= 0; --pos) {
       if (text.charCodeAt(pos) == CharCode.LINEFEED) break;
-      column++;
+      ++column;
     }
     return column;
   }
@@ -396,6 +389,7 @@ export class Tokenizer extends DiagnosticEmitter {
   tokenPos: i32 = 0;
 
   nextToken: Token = -1;
+  nextTokenPos: i32 = 0;
   nextTokenOnNewLine: bool = false;
 
   constructor(source: Source, diagnostics: DiagnosticMessage[] | null = null) {
@@ -598,9 +592,12 @@ export class Tokenizer extends DiagnosticEmitter {
               // ) {
               // }
               while (++this.pos < this.end) {
-                if (isLineBreak(text.charCodeAt(this.pos))) break;
+                if (isLineBreak(text.charCodeAt(this.pos))) {
+                  ++this.pos;
+                  break;
+                }
               }
-              continue;
+              break;
             }
             if (text.charCodeAt(this.pos) == CharCode.ASTERISK) { // multi-line
               let closed = false;
@@ -622,7 +619,7 @@ export class Tokenizer extends DiagnosticEmitter {
                   this.range(this.pos), "*/"
                 );
               }
-              continue;
+              break;
             }
             if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
               ++this.pos;
@@ -795,10 +792,10 @@ export class Tokenizer extends DiagnosticEmitter {
                 }
               }
               let keywordText = text.substring(posBefore, this.pos);
-              let keywordToken = Token.fromKeyword(keywordText);
+              let keywordToken = tokenFomKeyword(keywordText);
               if (
                 keywordToken != Token.INVALID &&
-                !(preferIdentifier && Token.isAlsoIdentifier(keywordToken))
+                !(preferIdentifier && tokenIsAlsoIdentifier(keywordToken))
               ) {
                 return keywordToken;
               }
@@ -832,6 +829,7 @@ export class Tokenizer extends DiagnosticEmitter {
       let tokenBefore = this.token;
       let tokenPosBefore = this.tokenPos;
       this.nextToken = this.unsafeNext(preferIdentifier, maxCompoundLength);
+      this.nextTokenPos = this.tokenPos;
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
         while (--this.tokenPos > posBefore) {

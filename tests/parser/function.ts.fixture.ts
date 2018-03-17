@@ -1,7 +1,4 @@
-function simple(): void {
-}
-function typeparams<T, V extends T>(a: V | null = null): void {
-}
+function simple(): void {}
+function typeparams<T, V extends T>(a: V | null = null): void {}
 @decorator()
-function withdecorator(): void {
-}
+function withdecorator(): void {}

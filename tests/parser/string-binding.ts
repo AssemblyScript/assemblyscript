@@ -1,5 +1,4 @@
 // a host-bindings syntax experiment
-
 @binding(BindingCall.NEW, [ BindingType.STRING ], BindingType.OBJECT_HANDLE)
 export class ExternalString {
 

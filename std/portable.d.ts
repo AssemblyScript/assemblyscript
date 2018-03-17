@@ -137,7 +137,7 @@ declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
 /** Traps if the specified value is not true-ish, otherwise returns the value. */
-declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
+declare function assert<T>(isTrueish: T | null, message?: string): T;
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
 /** Parses an integer string to a 32-bit integer. */

@@ -39,7 +39,7 @@ import {
   Property,
   VariableLikeElement,
   FlowFlags,
-  ElementFlags,
+  CommonFlags,
   ConstantValueKind,
 
   PATH_DELIMITER,
@@ -47,7 +47,8 @@ import {
 } from "./program";
 
 import {
-  Token
+  Token,
+  operatorTokenToString
 } from "./tokenizer";
 
 import {
@@ -72,7 +73,6 @@ import {
   IfStatement,
   ImportStatement,
   InterfaceDeclaration,
-  ModifierKind,
   NamespaceDeclaration,
   ReturnStatement,
   SwitchStatement,
@@ -102,9 +102,7 @@ import {
   ArrayLiteralExpression,
   StringLiteralExpression,
   UnaryPostfixExpression,
-  UnaryPrefixExpression,
-
-  hasModifier
+  UnaryPrefixExpression
 } from "./ast";
 
 import {
@@ -239,14 +237,13 @@ export class Compiler extends DiagnosticEmitter {
     program.initialize(options);
 
     // set up the start function wrapping top-level statements, of all files.
-    var startFunctionPrototype = assert(program.elements.get("start"));
+    var startFunctionPrototype = assert(program.elementsLookup.get("start"));
     assert(startFunctionPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
     var startFunctionInstance = new Function(
       <FunctionPrototype>startFunctionPrototype,
       startFunctionPrototype.internalName,
       new Signature([], Type.void)
     );
-    startFunctionInstance.set(ElementFlags.START);
     this.startFunction = startFunctionInstance;
     this.currentFunction = startFunctionInstance;
 
@@ -383,10 +380,7 @@ export class Compiler extends DiagnosticEmitter {
       switch (statement.kind) {
         case NodeKind.CLASSDECLARATION: {
           if (
-            (
-              noTreeShaking ||
-              (isEntry && hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>statement).modifiers))
-            ) &&
+            (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) &&
             !(<ClassDeclaration>statement).isGeneric
           ) {
             this.compileClassDeclaration(<ClassDeclaration>statement, []);
@@ -394,20 +388,14 @@ export class Compiler extends DiagnosticEmitter {
           break;
         }
         case NodeKind.ENUMDECLARATION: {
-          if (
-            noTreeShaking ||
-            (isEntry && hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>statement).modifiers))
-          ) {
+          if (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) {
             this.compileEnumDeclaration(<EnumDeclaration>statement);
           }
           break;
         }
         case NodeKind.FUNCTIONDECLARATION: {
           if (
-            (
-              noTreeShaking ||
-              (isEntry && hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>statement).modifiers))
-            ) &&
+            (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) &&
             !(<FunctionDeclaration>statement).isGeneric
           ) {
             this.compileFunctionDeclaration(<FunctionDeclaration>statement, []);
@@ -422,10 +410,7 @@ export class Compiler extends DiagnosticEmitter {
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          if (
-            noTreeShaking ||
-            (isEntry && hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>statement).modifiers))
-          ) {
+          if (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) {
             this.compileNamespaceDeclaration(<NamespaceDeclaration>statement);
           }
           break;
@@ -462,15 +447,15 @@ export class Compiler extends DiagnosticEmitter {
 
   compileGlobalDeclaration(declaration: VariableDeclaration): Global | null {
     // look up the initialized program element
-    var element = assert(this.program.elements.get(declaration.fileLevelInternalName));
+    var element = assert(this.program.elementsLookup.get(declaration.fileLevelInternalName));
     assert(element.kind == ElementKind.GLOBAL);
     if (!this.compileGlobal(<Global>element)) return null; // reports
     return <Global>element;
   }
 
   compileGlobal(global: Global): bool {
-    if (global.is(ElementFlags.COMPILED) || global.is(ElementFlags.BUILTIN)) return true;
-    global.set(ElementFlags.COMPILED);   // ^ built-ins are compiled on use
+    if (global.is(CommonFlags.COMPILED) || global.is(CommonFlags.BUILTIN)) return true;
+    global.set(CommonFlags.COMPILED);   // ^ built-ins are compiled on use
 
     var module = this.module;
     var declaration = global.declaration;
@@ -520,10 +505,11 @@ export class Compiler extends DiagnosticEmitter {
     var nativeType = global.type.toNativeType();
 
     // handle imports
-    if (global.is(ElementFlags.DECLARED)) {
+    if (global.is(CommonFlags.DECLARE)) {
 
       // constant global
-      if (global.is(ElementFlags.CONSTANT)) {
+      if (global.is(CommonFlags.CONST)) {
+        global.set(CommonFlags.MODULE_IMPORT);
         module.addGlobalImport(
           global.internalName,
           global.namespace
@@ -532,7 +518,7 @@ export class Compiler extends DiagnosticEmitter {
           global.simpleName,
           nativeType
         );
-        global.set(ElementFlags.COMPILED);
+        global.set(CommonFlags.COMPILED);
         return true;
 
       // importing mutable globals is not supported in the MVP
@@ -550,7 +536,7 @@ export class Compiler extends DiagnosticEmitter {
     var initializeInStart = false;
 
     // inlined constant can be compiled as-is
-    if (global.is(ElementFlags.INLINED)) {
+    if (global.is(CommonFlags.INLINED)) {
       initExpr = this.compileInlineConstant(global, global.type, true);
 
     } else {
@@ -565,7 +551,7 @@ export class Compiler extends DiagnosticEmitter {
         if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
 
           // if a constant global, check if the initializer becomes constant after precompute
-          if (global.is(ElementFlags.CONSTANT)) {
+          if (global.is(CommonFlags.CONST)) {
             initExpr = this.precomputeExpressionRef(initExpr);
             if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
               this.warning(
@@ -593,7 +579,7 @@ export class Compiler extends DiagnosticEmitter {
 
     } else { // compile as-is
 
-      if (global.is(ElementFlags.CONSTANT)) {
+      if (global.is(CommonFlags.CONST)) {
         let exprType = _BinaryenExpressionGetType(initExpr);
         switch (exprType) {
           case NativeType.I32: {
@@ -630,7 +616,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        global.set(ElementFlags.INLINED); // inline the value from now on
+        global.set(CommonFlags.INLINED); // inline the value from now on
         if (declaration.isTopLevel) {     // but keep the element if it might be re-exported
           module.addGlobal(internalName, nativeType, false, initExpr);
         }
@@ -639,7 +625,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
       } else /* mutable */ {
-        module.addGlobal(internalName, nativeType, !global.is(ElementFlags.CONSTANT), initExpr);
+        module.addGlobal(internalName, nativeType, !global.is(CommonFlags.CONST), initExpr);
       }
     }
     return true;
@@ -648,15 +634,15 @@ export class Compiler extends DiagnosticEmitter {
   // enums
 
   compileEnumDeclaration(declaration: EnumDeclaration): Enum | null {
-    var element = assert(this.program.elements.get(declaration.fileLevelInternalName));
+    var element = assert(this.program.elementsLookup.get(declaration.fileLevelInternalName));
     assert(element.kind == ElementKind.ENUM);
     if (!this.compileEnum(<Enum>element)) return null;
     return <Enum>element;
   }
 
   compileEnum(element: Enum): bool {
-    if (element.is(ElementFlags.COMPILED)) return true;
-    element.set(ElementFlags.COMPILED);
+    if (element.is(CommonFlags.COMPILED)) return true;
+    element.set(CommonFlags.COMPILED);
 
     var module = this.module;
     this.currentEnum = element;
@@ -668,8 +654,8 @@ export class Compiler extends DiagnosticEmitter {
         let initInStart = false;
         let val = <EnumValue>member;
         let valueDeclaration = val.declaration;
-        val.set(ElementFlags.COMPILED);
-        if (val.is(ElementFlags.INLINED)) {
+        val.set(CommonFlags.COMPILED);
+        if (val.is(CommonFlags.INLINED)) {
           if (element.declaration.isTopLevelExport) {
             module.addGlobal(
               val.internalName,
@@ -685,7 +671,7 @@ export class Compiler extends DiagnosticEmitter {
             if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
               initExpr = this.precomputeExpressionRef(initExpr);
               if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
-                if (element.is(ElementFlags.CONSTANT)) {
+                if (element.is(CommonFlags.CONST)) {
                   this.warning(
                     DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
                     valueDeclaration.range
@@ -696,7 +682,7 @@ export class Compiler extends DiagnosticEmitter {
             }
           } else if (previousValue == null) {
             initExpr = module.createI32(0);
-          } else if (previousValue.is(ElementFlags.INLINED)) {
+          } else if (previousValue.is(CommonFlags.INLINED)) {
             initExpr = module.createI32(previousValue.constantValue + 1);
           } else {
             // in TypeScript this errors with TS1061, but actually we can do:
@@ -704,7 +690,7 @@ export class Compiler extends DiagnosticEmitter {
               module.createGetGlobal(previousValue.internalName, NativeType.I32),
               module.createI32(1)
             );
-            if (element.is(ElementFlags.CONSTANT)) {
+            if (element.is(CommonFlags.CONST)) {
               this.warning(
                 DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
                 valueDeclaration.range
@@ -724,7 +710,7 @@ export class Compiler extends DiagnosticEmitter {
             module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
             if (_BinaryenExpressionGetType(initExpr) == NativeType.I32) {
               val.constantValue = _BinaryenConstGetValueI32(initExpr);
-              val.set(ElementFlags.INLINED);
+              val.set(CommonFlags.INLINED);
             } else {
               assert(false);
               this.error(
@@ -739,7 +725,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // export values if the enum is exported
         if (element.declaration.range.source.isEntry && element.declaration.isTopLevelExport) {
-          if (member.is(ElementFlags.INLINED)) {
+          if (member.is(CommonFlags.INLINED)) {
             module.addGlobalExport(member.internalName, member.internalName);
           } else if (valueDeclaration) {
             this.warning(
@@ -762,7 +748,7 @@ export class Compiler extends DiagnosticEmitter {
     typeArguments: TypeNode[],
     contextualTypeArguments: Map<string,Type> | null = null
   ): Function | null {
-    var element = assert(this.program.elements.get(declaration.fileLevelInternalName));
+    var element = assert(this.program.elementsLookup.get(declaration.fileLevelInternalName));
     assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
     return this.compileFunctionUsingTypeArguments( // reports
       <FunctionPrototype>element,
@@ -816,22 +802,22 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles a readily resolved function instance. */
   compileFunction(instance: Function): bool {
-    if (instance.is(ElementFlags.COMPILED)) return true;
-    assert(!instance.is(ElementFlags.BUILTIN) || instance.simpleName == "abort");
-    instance.set(ElementFlags.COMPILED);
+    if (instance.is(CommonFlags.COMPILED)) return true;
+    assert(!instance.is(CommonFlags.BUILTIN) || instance.simpleName == "abort");
+    instance.set(CommonFlags.COMPILED);
 
     // check that modifiers are matching but still compile as-is
     var declaration = instance.prototype.declaration;
     var body = declaration.body;
     if (body) {
-      if (instance.is(ElementFlags.DECLARED)) {
+      if (instance.is(CommonFlags.DECLARE)) {
         this.error(
           DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
           declaration.name.range
         );
       }
     } else {
-      if (!instance.is(ElementFlags.DECLARED)) {
+      if (!instance.is(CommonFlags.DECLARE)) {
         this.error(
           DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
           declaration.name.range
@@ -869,7 +855,7 @@ export class Compiler extends DiagnosticEmitter {
       );
 
     } else {
-      instance.set(ElementFlags.IMPORTED);
+      instance.set(CommonFlags.MODULE_IMPORT);
 
       // create the function import
       let namespace = instance.prototype.namespace;
@@ -902,10 +888,8 @@ export class Compiler extends DiagnosticEmitter {
       switch (member.kind) {
         case NodeKind.CLASSDECLARATION: {
           if (
-            (
-              noTreeShaking ||
-              hasModifier(ModifierKind.EXPORT, (<ClassDeclaration>member).modifiers)
-            ) && !(<ClassDeclaration>member).isGeneric
+            (noTreeShaking || member.is(CommonFlags.EXPORT)) &&
+            !(<ClassDeclaration>member).isGeneric
           ) {
             this.compileClassDeclaration(<ClassDeclaration>member, []);
           }
@@ -913,30 +897,22 @@ export class Compiler extends DiagnosticEmitter {
         }
         case NodeKind.INTERFACEDECLARATION: {
           if (
-            (
-              noTreeShaking ||
-              hasModifier(ModifierKind.EXPORT, (<InterfaceDeclaration>member).modifiers)
-            ) && !(<InterfaceDeclaration>member).isGeneric
+            (noTreeShaking || member.is(CommonFlags.EXPORT)) &&
+            !(<InterfaceDeclaration>member).isGeneric
           ) {
             this.compileInterfaceDeclaration(<InterfaceDeclaration>member, []);
           }
           break;
         }
         case NodeKind.ENUMDECLARATION: {
-          if (
-            noTreeShaking ||
-            hasModifier(ModifierKind.EXPORT, (<EnumDeclaration>member).modifiers)
-          ) {
+          if (noTreeShaking || member.is(CommonFlags.EXPORT)) {
             this.compileEnumDeclaration(<EnumDeclaration>member);
           }
           break;
         }
         case NodeKind.FUNCTIONDECLARATION: {
           if (
-            (
-              noTreeShaking ||
-              hasModifier(ModifierKind.EXPORT, (<FunctionDeclaration>member).modifiers)
-            ) &&
+            (noTreeShaking || member.is(CommonFlags.EXPORT)) &&
             !(<FunctionDeclaration>member).isGeneric
           ) {
             this.compileFunctionDeclaration(<FunctionDeclaration>member, []);
@@ -944,19 +920,13 @@ export class Compiler extends DiagnosticEmitter {
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          if (
-            noTreeShaking ||
-            hasModifier(ModifierKind.EXPORT, (<NamespaceDeclaration>member).modifiers)
-          ) {
+          if (noTreeShaking || member.is(CommonFlags.EXPORT)) {
             this.compileNamespaceDeclaration(<NamespaceDeclaration>member);
           }
           break;
         }
         case NodeKind.VARIABLE: {
-          if (
-            noTreeShaking ||
-            hasModifier(ModifierKind.EXPORT, (<VariableStatement>member).modifiers)
-          ) {
+          if (noTreeShaking || member.is(CommonFlags.EXPORT)) {
             let variableInit = this.compileVariableStatement(<VariableStatement>member, true);
             if (variableInit) this.startFunctionBody.push(variableInit);
           }
@@ -984,8 +954,8 @@ export class Compiler extends DiagnosticEmitter {
           if (
             (
               noTreeShaking ||
-              (<ClassPrototype>element).is(ElementFlags.EXPORTED)
-            ) && !(<ClassPrototype>element).is(ElementFlags.GENERIC)
+              (<ClassPrototype>element).is(CommonFlags.EXPORT)
+            ) && !(<ClassPrototype>element).is(CommonFlags.GENERIC)
           ) {
             this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
           }
@@ -998,8 +968,8 @@ export class Compiler extends DiagnosticEmitter {
         case ElementKind.FUNCTION_PROTOTYPE: {
           if (
             (
-              noTreeShaking || (<FunctionPrototype>element).is(ElementFlags.EXPORTED)
-            ) && !(<FunctionPrototype>element).is(ElementFlags.GENERIC)
+              noTreeShaking || (<FunctionPrototype>element).is(CommonFlags.EXPORT)
+            ) && !(<FunctionPrototype>element).is(CommonFlags.GENERIC)
           ) {
             this.compileFunctionUsingTypeArguments(
               <FunctionPrototype>element,
@@ -1026,7 +996,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileExportStatement(statement: ExportStatement): void {
     var module = this.module;
-    var exports = this.program.exports;
+    var exports = this.program.fileLevelExports;
     var members = statement.members;
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
@@ -1039,7 +1009,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!element) continue; // reported in Program#initialize
       switch (element.kind) {
         case ElementKind.CLASS_PROTOTYPE: {
-          if (!(<ClassPrototype>element).is(ElementFlags.GENERIC)) {
+          if (!(<ClassPrototype>element).is(CommonFlags.GENERIC)) {
             this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
           }
           break;
@@ -1050,7 +1020,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         case ElementKind.FUNCTION_PROTOTYPE: {
           if (
-            !(<FunctionPrototype>element).is(ElementFlags.GENERIC) &&
+            !(<FunctionPrototype>element).is(CommonFlags.GENERIC) &&
             statement.range.source.isEntry
           ) {
             let functionInstance = this.compileFunctionUsingTypeArguments(
@@ -1072,7 +1042,7 @@ export class Compiler extends DiagnosticEmitter {
           if (this.compileGlobal(<Global>element) && statement.range.source.isEntry) {
             let globalDeclaration = (<Global>element).declaration;
             if (globalDeclaration && globalDeclaration.needsExplicitExport(member)) {
-              if ((<Global>element).is(ElementFlags.INLINED)) {
+              if ((<Global>element).is(CommonFlags.INLINED)) {
                 module.addGlobalExport(element.internalName, member.externalName.text);
               } else {
                 this.warning(
@@ -1100,7 +1070,7 @@ export class Compiler extends DiagnosticEmitter {
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): void {
-    var element = assert(this.program.elements.get(declaration.fileLevelInternalName));
+    var element = assert(this.program.elementsLookup.get(declaration.fileLevelInternalName));
     assert(element.kind == ElementKind.CLASS_PROTOTYPE);
     this.compileClassUsingTypeArguments(
       <ClassPrototype>element,
@@ -1126,8 +1096,8 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileClass(instance: Class): bool {
-    if (instance.is(ElementFlags.COMPILED)) return true;
-    instance.set(ElementFlags.COMPILED);
+    if (instance.is(CommonFlags.COMPILED)) return true;
+    instance.set(CommonFlags.COMPILED);
     return true;
   }
 
@@ -1159,7 +1129,7 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Ensures that a table entry exists for the specified function and returns its index. */
   ensureFunctionTableEntry(func: Function): i32 {
-    assert(func.is(ElementFlags.COMPILED));
+    assert(func.is(CommonFlags.COMPILED));
     if (func.functionTableIndex >= 0) {
       return func.functionTableIndex;
     }
@@ -1671,7 +1641,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         continue;
       }
-      if (hasModifier(ModifierKind.CONST, declaration.modifiers)) {
+      if (declaration.is(CommonFlags.CONST)) {
         if (init) {
           init = this.precomputeExpressionRef(init);
           if (_BinaryenExpressionGetId(init) == ExpressionId.Const) {
@@ -1730,7 +1700,7 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
       }
-      if (hasModifier(ModifierKind.LET, declaration.modifiers)) { // here: not top-level
+      if (declaration.is(CommonFlags.LET)) { // here: not top-level
         currentFunction.flow.addScopedLocal(name, type, declaration.name); // reports
       } else {
         currentFunction.addLocal(type, name); // reports
@@ -1809,7 +1779,7 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     retainType: bool
   ): ExpressionRef {
-    assert(element.is(ElementFlags.INLINED));
+    assert(element.is(CommonFlags.INLINED));
     var type = element.type;
     switch (
       !retainType &&
@@ -1913,8 +1883,7 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.compileElementAccessExpression(<ElementAccessExpression>expression, contextualType);
         break;
       }
-      case NodeKind.FUNCTION:
-      case NodeKind.FUNCTIONARROW: {
+      case NodeKind.FUNCTION: {
         expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType);
         break;
       }
@@ -2582,7 +2551,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, Token.operatorToString(expression.operator), leftType.toString(), rightType.toString()
+            expression.range, operatorTokenToString(expression.operator), leftType.toString(), rightType.toString()
           );
           this.currentType = contextualType;
           return module.createUnreachable();
@@ -2648,7 +2617,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, Token.operatorToString(expression.operator), leftType.toString(), rightType.toString()
+            expression.range, operatorTokenToString(expression.operator), leftType.toString(), rightType.toString()
           );
           this.currentType = contextualType;
           return module.createUnreachable();
@@ -3183,7 +3152,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, Token.operatorToString(expression.operator), this.currentType.toString()
+              expression.range, operatorTokenToString(expression.operator), this.currentType.toString()
             );
             return module.createUnreachable();
           }
@@ -3257,7 +3226,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, Token.operatorToString(expression.operator), this.currentType.toString()
+              expression.range, operatorTokenToString(expression.operator), this.currentType.toString()
             );
             return module.createUnreachable();
           }
@@ -3739,7 +3708,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (element.kind) {
       case ElementKind.LOCAL: {
         this.currentType = tee ? (<Local>element).type : Type.void;
-        if ((<Local>element).is(ElementFlags.CONSTANT)) {
+        if ((<Local>element).is(CommonFlags.CONST)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             expression.range, (<Local>element).internalName
@@ -3755,7 +3724,7 @@ export class Compiler extends DiagnosticEmitter {
         let type = (<Global>element).type;
         assert(type != Type.void);
         this.currentType = tee ? type : Type.void;
-        if ((<Local>element).is(ElementFlags.CONSTANT)) {
+        if ((<Local>element).is(CommonFlags.CONST)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             expression.range,
@@ -3775,7 +3744,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
       case ElementKind.FIELD: {
-        if ((<Field>element).prototype.isReadonly) {
+        if ((<Field>element).is(CommonFlags.READONLY)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             expression.range, (<Field>element).internalName
@@ -3823,7 +3792,7 @@ export class Compiler extends DiagnosticEmitter {
 
           // call just the setter if the return value isn't of interest
           if (!tee) {
-            if (setterInstance.is(ElementFlags.INSTANCE)) {
+            if (setterInstance.is(CommonFlags.INSTANCE)) {
               assert(resolved.isInstanceTarget);
               let thisArg = this.compileExpression(
                 <Expression>resolved.targetExpression,
@@ -3842,7 +3811,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!getterInstance) return module.createUnreachable();
           let returnType = getterInstance.signature.returnType;
           let nativeReturnType = returnType.toNativeType();
-          if (setterInstance.is(ElementFlags.INSTANCE)) {
+          if (setterInstance.is(CommonFlags.INSTANCE)) {
             assert(resolved.isInstanceTarget);
             let thisArg = this.compileExpression(
               <Expression>resolved.targetExpression,
@@ -3956,7 +3925,7 @@ export class Compiler extends DiagnosticEmitter {
         let prototype = <FunctionPrototype>element;
 
         // builtins are compiled on the fly
-        if (prototype.is(ElementFlags.BUILTIN)) {
+        if (prototype.is(CommonFlags.BUILTIN)) {
           let expr = compileBuiltinCall( // reports
             this,
             prototype,
@@ -3986,7 +3955,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           if (!instance) return module.createUnreachable();
           let thisArg: ExpressionRef = 0;
-          if (instance.is(ElementFlags.INSTANCE)) {
+          if (instance.is(CommonFlags.INSTANCE)) {
             assert(resolved.isInstanceTarget);
             thisArg = this.compileExpression(
               <Expression>resolved.targetExpression,
@@ -4174,7 +4143,7 @@ export class Compiler extends DiagnosticEmitter {
     var originalParameterDeclarations = original.prototype.declaration.signature.parameterTypes;
     var commonReturnType = originalSignature.returnType;
     var commonThisType = originalSignature.thisType;
-    var isInstance = original.is(ElementFlags.INSTANCE);
+    var isInstance = original.is(CommonFlags.INSTANCE);
 
     // arguments excl. `this`, operands incl. `this`
     var minArguments = originalSignature.requiredParameters;
@@ -4216,7 +4185,8 @@ export class Compiler extends DiagnosticEmitter {
     var trampolineName = originalName + "|trampoline";
     trampolineSignature.requiredParameters = maxArguments + 1;
     trampoline = new Function(original.prototype, trampolineName, trampolineSignature, original.instanceMethodOf);
-    trampoline.flags = original.flags | ElementFlags.COMPILED;
+    trampoline.flags = original.flags;
+    trampoline.set(CommonFlags.COMPILED);
     original.trampoline = trampoline;
 
     // compile initializers of omitted arguments in scope of the trampoline function
@@ -4278,7 +4248,7 @@ export class Compiler extends DiagnosticEmitter {
     var minOperands = minArguments;
     var maxArguments = instance.signature.parameterTypes.length;
     var maxOperands = maxArguments;
-    if (instance.is(ElementFlags.INSTANCE)) {
+    if (instance.is(CommonFlags.INSTANCE)) {
       ++minOperands;
       ++maxOperands;
       --numArguments;
@@ -4300,7 +4270,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var returnType = instance.signature.returnType;
     this.currentType = returnType;
-    if (instance.is(ElementFlags.IMPORTED)) {
+    if (instance.is(CommonFlags.MODULE_IMPORT)) {
       return module.createCallImport(instance.internalName, operands, returnType.toNativeType());
     } else {
       return module.createCall(instance.internalName, operands, returnType.toNativeType());
@@ -4445,7 +4415,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.THIS: {
         let currentFunction = this.currentFunction;
-        if (currentFunction.is(ElementFlags.INSTANCE)) {
+        if (currentFunction.is(CommonFlags.INSTANCE)) {
           let thisType = assert(currentFunction.instanceMethodOf).type;
           this.currentType = thisType;
           return module.createGetLocal(0, thisType.toNativeType());
@@ -4459,7 +4429,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.SUPER: {
         let currentFunction = this.currentFunction;
-        if (currentFunction.is(ElementFlags.INSTANCE)) {
+        if (currentFunction.is(CommonFlags.INSTANCE)) {
           let base = assert(currentFunction.instanceMethodOf).base;
           if (base) {
             let superType = base.type;
@@ -4487,7 +4457,7 @@ export class Compiler extends DiagnosticEmitter {
     var element = resolved.element;
     switch (element.kind) {
       case ElementKind.LOCAL: {
-        if ((<Local>element).is(ElementFlags.INLINED)) {
+        if ((<Local>element).is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(<Local>element, contextualType, retainConstantType);
         }
         let localType = (<Local>element).type;
@@ -4497,7 +4467,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createGetLocal(localIndex, localType.toNativeType());
       }
       case ElementKind.GLOBAL: {
-        if (element.is(ElementFlags.BUILTIN)) {
+        if (element.is(CommonFlags.BUILTIN)) {
           return compileBuiltinGetConstant(this, <Global>element, expression);
         }
         if (!this.compileGlobal(<Global>element)) { // reports; not yet compiled if a static field
@@ -4505,14 +4475,14 @@ export class Compiler extends DiagnosticEmitter {
         }
         let globalType = (<Global>element).type;
         assert(globalType != Type.void);
-        if ((<Global>element).is(ElementFlags.INLINED)) {
+        if ((<Global>element).is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(<Global>element, contextualType, retainConstantType);
         }
         this.currentType = globalType;
         return this.module.createGetGlobal((<Global>element).internalName, globalType.toNativeType());
       }
       case ElementKind.ENUMVALUE: { // here: if referenced from within the same enum
-        if (!element.is(ElementFlags.COMPILED)) {
+        if (!element.is(CommonFlags.COMPILED)) {
           this.error(
             DiagnosticCode.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums,
             expression.range
@@ -4521,7 +4491,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         }
         this.currentType = Type.i32;
-        if ((<EnumValue>element).is(ElementFlags.INLINED)) {
+        if ((<EnumValue>element).is(CommonFlags.INLINED)) {
           return this.module.createI32((<EnumValue>element).constantValue);
         }
         return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
@@ -4547,7 +4517,7 @@ export class Compiler extends DiagnosticEmitter {
         let classType = contextualType.classType;
         if (
           classType &&
-          classType == this.program.elements.get("Array") &&
+          classType == this.program.elementsLookup.get("Array") &&
           classType.typeArguments && classType.typeArguments.length == 1
         ) {
           return this.compileStaticArray(
@@ -4698,7 +4668,7 @@ export class Compiler extends DiagnosticEmitter {
       stringSegments.set(stringValue, stringSegment);
     }
     var stringOffset = stringSegment.offset;
-    var stringType = this.program.types.get("string");
+    var stringType = this.program.typesLookup.get("string");
     this.currentType = stringType ? stringType : options.usizeType;
     if (options.isWasm64) {
       return module.createI64(i64_low(stringOffset), i64_high(stringOffset));
@@ -4825,7 +4795,7 @@ export class Compiler extends DiagnosticEmitter {
               if (member.kind == ElementKind.FIELD) {
                 let field = <Field>member;
                 let fieldDeclaration = field.prototype.declaration;
-                if (field.is(ElementFlags.CONSTANT)) {
+                if (field.is(CommonFlags.CONST)) {
                   assert(false); // there are no built-in fields currently
                 } else if (fieldDeclaration && fieldDeclaration.initializer) {
                   initializers.push(module.createStore(field.type.byteSize,
@@ -4899,7 +4869,7 @@ export class Compiler extends DiagnosticEmitter {
     var targetExpr: ExpressionRef;
     switch (element.kind) {
       case ElementKind.GLOBAL: { // static property
-        if (element.is(ElementFlags.BUILTIN)) {
+        if (element.is(CommonFlags.BUILTIN)) {
           return compileBuiltinGetConstant(this, <Global>element, propertyAccess);
         }
         if (!this.compileGlobal(<Global>element)) { // reports; not yet compiled if a static field
@@ -4907,7 +4877,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         let globalType = (<Global>element).type;
         assert(globalType != Type.void);
-        if ((<Global>element).is(ElementFlags.INLINED)) {
+        if ((<Global>element).is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(<Global>element, contextualType, retainConstantType);
         }
         this.currentType = globalType;
@@ -4918,7 +4888,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         }
         this.currentType = Type.i32;
-        if ((<EnumValue>element).is(ElementFlags.INLINED)) {
+        if ((<EnumValue>element).is(CommonFlags.INLINED)) {
           return module.createI32((<EnumValue>element).constantValue);
         }
         return module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
@@ -4949,7 +4919,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!this.checkCallSignature( // reports
             signature,
             0,
-            instance.is(ElementFlags.INSTANCE),
+            instance.is(CommonFlags.INSTANCE),
             propertyAccess
           )) {
             return module.createUnreachable();

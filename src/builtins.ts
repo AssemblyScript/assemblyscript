@@ -2338,7 +2338,7 @@ export function compileAllocate(
   var module = compiler.module;
   var options = compiler.options;
 
-  var prototype = program.elements.get(options.allocateImpl);
+  var prototype = program.elementsLookup.get(options.allocateImpl);
   if (!prototype) {
     program.error(
       DiagnosticCode.Cannot_find_name_0,
@@ -2377,10 +2377,10 @@ export function compileAbort(
   var program = compiler.program;
   var module = compiler.module;
 
-  var stringType = program.types.get("string"); // might be intended
+  var stringType = program.typesLookup.get("string"); // might be intended
   if (!stringType) return module.createUnreachable();
 
-  var abortPrototype = program.elements.get("abort"); // might be intended
+  var abortPrototype = program.elementsLookup.get("abort"); // might be intended
   if (!abortPrototype || abortPrototype.kind != ElementKind.FUNCTION_PROTOTYPE) return module.createUnreachable();
 
   var abortInstance = (<FunctionPrototype>abortPrototype).resolve(); // reports

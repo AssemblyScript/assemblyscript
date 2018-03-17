@@ -7,24 +7,27 @@ require("../src/glue/js");
 const { Tokenizer, Token } = require("../src/tokenizer");
 const { Source, SourceKind } = require("../src/ast");
 
-const text = fs.readFileSync(__dirname + "/../src/tokenizer.ts").toString();
+var file = process.argv.length > 2 ? process.argv[2] : path.join(__dirname, "..", "src", "tokenizer.ts");
+const text = fs.readFileSync(file).toString();
 const tn = new Tokenizer(new Source("compiler.ts", text, SourceKind.ENTRY));
 
 do {
   let token = tn.next();
+  let range = tn.range();
+  process.stdout.write(Token[token] + " @ " + range.line + ":" + range.column);
   if (token == Token.IDENTIFIER) {
-    console.log(Token[token] + " > " + tn.readIdentifier());
+    process.stdout.write(" > " + tn.readIdentifier());
   } else if (token == Token.INTEGERLITERAL) {
-    console.log(Token[token] + " > " + tn.readInteger());
+    process.stdout.write(" > " + tn.readInteger());
   } else if (token == Token.FLOATLITERAL) {
-    console.log(Token[token] + " > " + tn.readFloat());
+    process.stdout.write(" > " + tn.readFloat());
   } else if (token == Token.STRINGLITERAL) {
-    console.log(Token[token] + " > " + tn.readString());
+    process.stdout.write(" > " + tn.readString());
   } else if (token == Token.ENDOFFILE) {
-    console.log(Token[token]);
+    process.stdout.write("\n");
     break;
   } else {
-    let range = tn.range();
-    console.log(Token[token] + " > " + range.source.text.substring(range.start, range.end));
+    process.stdout.write(" > " + range.source.text.substring(range.start, range.end));
   }
+  process.stdout.write("\n");
 } while (true);

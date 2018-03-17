@@ -427,7 +427,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -493,14 +492,14 @@
    )
   )
   (block $break|0
-   (set_local $9
+   (set_local $5
     (get_local $7)
    )
    (loop $continue|0
     (if
      (i32.le_s
       (i32.add
-       (get_local $9)
+       (get_local $5)
        (get_local $8)
       )
       (get_local $4)
@@ -516,7 +515,7 @@
             (i32.const 4)
            )
            (i32.shl
-            (get_local $9)
+            (get_local $5)
             (i32.const 1)
            )
           )
@@ -531,13 +530,13 @@
          )
         )
         (return
-         (get_local $9)
+         (get_local $5)
         )
        )
       )
-      (set_local $9
+      (set_local $5
        (i32.add
-        (get_local $9)
+        (get_local $5)
         (i32.const 1)
        )
       )

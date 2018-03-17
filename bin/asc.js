@@ -286,6 +286,9 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
+  // Finish parsing
+  const program = assemblyscript.finishParsing(parser);
+
   // Begin compilation
   const compilerOptions = assemblyscript.createOptions();
   assemblyscript.setTarget(compilerOptions, 0);
@@ -301,7 +304,7 @@ exports.main = function main(argv, options, callback) {
   (() => {
     try {
       stats.compileTime += measure(() => {
-        module = assemblyscript.compile(parser, compilerOptions);
+        module = assemblyscript.compileProgram(program, compilerOptions);
       });
     } catch (e) {
       return callback(e);
@@ -434,23 +437,23 @@ exports.main = function main(argv, options, callback) {
           : path.basename(args.binaryFile) + ".map"
         : null;
 
-      let binary;
+      let wasm;
       stats.emitCount++;
       stats.emitTime += measure(() => {
-        binary = module.toBinary(sourceMapURL)
+        wasm = module.toBinary(sourceMapURL)
       });
 
       if (args.binaryFile.length) {
-        writeFile(path.join(baseDir, args.binaryFile), binary.output);
+        writeFile(path.join(baseDir, args.binaryFile), wasm.output);
       } else {
-        writeStdout(binary.output);
+        writeStdout(wasm.output);
         hasStdout = true;
       }
 
       // Post-process source map
-      if (binary.sourceMap != null) {
+      if (wasm.sourceMap != null) {
         if (args.binaryFile.length) {
-          let sourceMap = JSON.parse(binary.sourceMap);
+          let sourceMap = JSON.parse(wasm.sourceMap);
           sourceMap.sourceRoot = exports.sourceMapRoot;
           sourceMap.sources.forEach((name, index) => {
             let text = null;
@@ -482,30 +485,6 @@ exports.main = function main(argv, options, callback) {
       }
     }
 
-    // Write text
-    if (
-      args.textFile != null || (
-        args.binaryFile == null &&
-        args.asmjsFile == null
-      )
-    ) {
-      let text;
-      if (args.textFile && args.textFile.length) {
-        stats.emitCount++;
-        stats.emitTime += measure(() => {
-          text = module.toText();
-        });
-        writeFile(path.join(baseDir, args.textFile), text);
-      } else if (!hasStdout) {
-        stats.emitCount++;
-        stats.emitTime += measure(() => {
-          text = module.toText()
-        });
-        writeStdout(text);
-        hasStdout = true;
-      }
-    }
-
     // Write asm.js
     if (args.asmjsFile != null) {
       let asm;
@@ -522,6 +501,62 @@ exports.main = function main(argv, options, callback) {
         });
         writeStdout(asm);
         hasStdout = true;
+      }
+    }
+
+    // Write WebIDL
+    if (args.idlFile != null) {
+      let idl;
+      if (args.idlFile.length) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => {
+          idl = assemblyscript.buildIDL(program);
+        });
+        writeFile(path.join(baseDir, args.idlFile), idl);
+      } else if (!hasStdout) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => {
+          idl = assemblyscript.buildIDL(program);
+        });
+        writeStdout(idl);
+        hasStdout = true;
+      }
+    }
+
+    // Write TypeScript definition
+    if (args.tsdFile != null) {
+      let tsd;
+      if (args.tsdFile.length) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => {
+          tsd = assemblyscript.buildTSD(program);
+        });
+        writeFile(path.join(baseDir, args.tsdFile), tsd);
+      } else if (!hasStdout) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => {
+          tsd = assemblyscript.buildTSD(program);
+        });
+        writeStdout(tsd);
+        hasStdout = true;
+      }
+    }
+
+    // Write text (must be last)
+    if (args.textFile != null) {
+      let wat;
+      if (args.textFile && args.textFile.length) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => {
+          wat = module.toText();
+        });
+        writeFile(path.join(baseDir, args.textFile), wat);
+      } else if (!hasStdout) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => {
+          wat = module.toText()
+        });
+        writeStdout(wat);
       }
     }
   }

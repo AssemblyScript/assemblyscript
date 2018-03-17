@@ -1,30 +1,10 @@
-// with modifiers
-/(abc)\//ig;
-
-// without modifiers
-/(abc)\//;
-
-// can be assigned
-var re = /(abc)\//ig;
-
-// generally behaves like an expression
-var noRe = !/(abc)\//i;
-
-// inner line break is unterminated
+/(abc)\//ig; // with modifiers
+/(abc)\//; // without modifiers
+var re = /(abc)\//ig; // can be assigned
+var noRe = !/(abc)\//i; // generally behaves like an expression
 /a
-b/ig;
-
-// just a comment
+b/ig; // inner line break is unterminated
 //ig;
-
-// duplicate flags
-
-/(abc)\//iig;
-
-// invalid flags
-
-/(abc)\//iX;
-
-// surrounding AST remains intact
-
-false && /abc/gX.test(someString) || true;
+/(abc)\//iig; // duplicate flags
+/(abc)\//iX; // invalid flags
+false && /abc/gX.test(someString) || true; // surrounding AST remains intact

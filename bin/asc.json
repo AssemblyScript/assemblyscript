@@ -62,6 +62,16 @@
     "type": "string",
     "aliases": [ "a" ]
   },
+  "idlFile": {
+    "desc": "Specifies the WebIDL output file (.idl).",
+    "type": "string",
+    "aliases": [ "i" ]
+  },
+  "tsdFile": {
+    "desc": "Specifies the TypeScript definition output file (.d.ts).",
+    "type": "string",
+    "aliases": [ "d" ]
+  },
   "sourceMap": {
     "desc": [
       "Enables source map generation. Optionally takes the URL",

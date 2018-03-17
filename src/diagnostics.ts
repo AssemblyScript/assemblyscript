@@ -111,10 +111,10 @@ export class DiagnosticMessage {
         this.message +
         "\" in " +
         this.range.source.normalizedPath +
-        " @ " +
-        this.range.start.toString(10) +
-        "," +
-        this.range.end.toString(10)
+        ":" +
+        this.range.line.toString(10) +
+        ":" +
+        this.range.column.toString(10)
       );
     }
     return (

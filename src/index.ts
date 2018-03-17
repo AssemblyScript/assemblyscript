@@ -11,6 +11,11 @@ import {
 } from "./decompiler";
 
 import {
+  IDLBuilder,
+  TSDBuilder
+} from "./definitions";
+
+import {
   DiagnosticMessage,
   DiagnosticCategory,
   formatDiagnosticMessage
@@ -23,6 +28,11 @@ import {
 import {
   Parser
 } from "./parser";
+
+import {
+  Program,
+  LIBRARY_PREFIX
+} from "./program";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
@@ -107,19 +117,32 @@ export function setMemoryBase(options: Options, memoryBase: u32): void {
   options.memoryBase = memoryBase;
 }
 
+/** Finishes parsing. */
+export function finishParsing(parser: Parser): Program {
+  return parser.finish();
+}
+
 /** Compiles the sources computed by the parser to a module. */
-export function compile(parser: Parser, options: Options | null = null): Module {
-  var program = parser.finish();
-  var compiler = new Compiler(program, options);
-  return compiler.compile();
+export function compileProgram(program: Program, options: Options | null = null): Module {
+  return new Compiler(program, options).compile();
 }
 
 /** Decompiles a module to its (low level) source. */
-export function decompile(module: Module): string {
+export function decompileModule(module: Module): string {
   var decompiler = new Decompiler();
   decompiler.decompile(module);
   return decompiler.finish();
 }
 
+/** Builds WebIDL definitions for the specified program. */
+export function buildIDL(program: Program): string {
+  return IDLBuilder.build(program);
+}
+
+/** Builds TypeScript definitions for the specified program. */
+export function buildTSD(program: Program): string {
+  return TSDBuilder.build(program);
+}
+
 /** Prefix indicating a library file. */
-export { LIBRARY_PREFIX } from "./program";
+export { LIBRARY_PREFIX };

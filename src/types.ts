@@ -100,10 +100,10 @@ export class Type {
     return ~0 >>> (targetType.size - this.size);
   }
 
-  /** Tests if this type has the specified capabilities. */
-  is(flags: TypeFlags): bool {
-    return (this.flags & flags) == flags;
-  }
+  /** Tests if this type has the specified flags. */
+  is(flags: TypeFlags): bool { return (this.flags & flags) == flags; }
+  /** Tests if this type has any of the specified flags. */
+  isAny(flags: TypeFlags): bool { return (this.flags & flags) != 0; }
 
   /** Tests if this type is a class type. */
   get isClass(): bool { return this.classType != null; }

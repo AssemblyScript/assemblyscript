@@ -21,10 +21,10 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
 
   var failed = false;
   var parser = new Parser();
-  var sourceText = fs.readFileSync(__dirname + "/parser/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n").replace(/^\/\/.*\r?\n/mg, "");
+  var sourceText = fs.readFileSync(__dirname + "/parser/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n");
   parser.parseFile(sourceText, filename, true);
   var serializedSourceText = ASTBuilder.build(parser.program.sources[0]);
-  var actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic + "\n").join("");
+  var actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic +"\n").join("");
   var fixture = filename + ".fixture.ts";
 
   if (isCreate) {

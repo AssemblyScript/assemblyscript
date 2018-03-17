@@ -47,7 +47,8 @@
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
     "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path",
-    "test:pr": "npm run clean && npm test && npm run build && npm test && npm run clean"
+    "test:pr": "npm run clean && npm test && npm run build && npm test && npm run clean",
+    "all": "npm run lint && npm run clean && npm test && npm run build && npm test"
   },
   "files": [
     "bin/",

@@ -49,6 +49,7 @@
   "Unexpected end of text.": 1126,
   "Invalid character.": 1127,
   "'case' or 'default' expected.": 1130,
+  "A 'declare' modifier cannot be used in an already ambient context.": 1038,
   "Type argument expected.": 1140,
   "String literal expected.": 1141,
   "Line break not permitted here.": 1142,
