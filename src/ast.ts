@@ -87,7 +87,8 @@ export enum NodeKind {
   // special
   DECORATOR,
   EXPORTMEMBER,
-  SWITCHCASE
+  SWITCHCASE,
+  COMMENT
 }
 
 /** Base class of all nodes. */
@@ -218,6 +219,18 @@ export abstract class Node {
       stmt.decoratorKind = DecoratorKind.CUSTOM;
     }
     return stmt;
+  }
+
+  static createComment(
+    text: string,
+    kind: CommentKind,
+    range: Range
+  ): CommentNode {
+    var node = new CommentNode();
+    node.range = range;
+    node.commentKind = kind;
+    node.text = text;
+    return node;
   }
 
   // expressions
@@ -1042,7 +1055,7 @@ export class SignatureNode extends CommonTypeNode {
 // special
 
 /** Built-in decorator kinds. */
-export const enum DecoratorKind {
+export enum DecoratorKind {
   CUSTOM,
   GLOBAL,
   OPERATOR,
@@ -1050,7 +1063,7 @@ export const enum DecoratorKind {
   OFFSET
 }
 
-/** Depresents a decorator. */
+/** Represents a decorator. */
 export class DecoratorNode extends Node {
   kind = NodeKind.DECORATOR;
 
@@ -1060,6 +1073,26 @@ export class DecoratorNode extends Node {
   name: Expression;
   /** Argument expressions. */
   arguments: Expression[] | null;
+}
+
+/** Comment kinds. */
+export enum CommentKind {
+  /** Line comment. */
+  LINE,
+  /** Triple-slash comment. */
+  TRIPLE,
+  /** Block comment. */
+  BLOCK
+}
+
+/** Represents a comment. */
+export class CommentNode extends Node {
+  kind = NodeKind.COMMENT;
+
+  /** Comment kind. */
+  commentKind: CommentKind;
+  /** Comment text. */
+  text: string;
 }
 
 // expressions
@@ -1076,7 +1109,7 @@ export class IdentifierExpression extends Expression {
 }
 
 /** Indicates the kind of a literal. */
-export const enum LiteralKind {
+export enum LiteralKind {
   FLOAT,
   INTEGER,
   STRING,
@@ -1102,7 +1135,7 @@ export class ArrayLiteralExpression extends LiteralExpression {
 }
 
 /** Indicates the kind of an assertion. */
-export const enum AssertionKind {
+export enum AssertionKind {
   PREFIX,
   AS
 }

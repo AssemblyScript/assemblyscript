@@ -25,7 +25,8 @@ import {
 } from "./diagnostics";
 
 import {
-  Source
+  Source,
+  CommentKind
 } from "./ast";
 
 import {
@@ -392,6 +393,8 @@ export class Tokenizer extends DiagnosticEmitter {
   nextTokenPos: i32 = 0;
   nextTokenOnNewLine: bool = false;
 
+  onComment: ((kind: CommentKind, text: string, range: Range) => void) | null = null;
+
   constructor(source: Source, diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
     this.source = source;
@@ -582,20 +585,30 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.DOT;
         }
         case CharCode.SLASH: {
+          let commentStartPos = this.pos;
           ++this.pos;
           if (maxTokenLength > 1 && this.pos < this.end) {
             if (text.charCodeAt(this.pos) == CharCode.SLASH) { // single-line
-              // TODO: triple-slash?
-              // if (
-              //   this.pos + 1 < this.end &&
-              //   text.charCodeAt(this.pos + 1) == CharCode.SLASH
-              // ) {
-              // }
+              let commentKind = CommentKind.LINE;
+              if (
+                this.pos + 1 < this.end &&
+                text.charCodeAt(this.pos + 1) == CharCode.SLASH
+              ) {
+                ++this.pos;
+                commentKind = CommentKind.TRIPLE;
+              }
               while (++this.pos < this.end) {
-                if (isLineBreak(text.charCodeAt(this.pos))) {
+                if (text.charCodeAt(this.pos) == CharCode.LINEFEED) {
                   ++this.pos;
                   break;
                 }
+              }
+              if (this.onComment) {
+                this.onComment(
+                  commentKind,
+                  text.substring(commentStartPos, this.pos),
+                  this.range(commentStartPos, this.pos)
+                );
               }
               break;
             }
@@ -617,6 +630,12 @@ export class Tokenizer extends DiagnosticEmitter {
                 this.error(
                   DiagnosticCode._0_expected,
                   this.range(this.pos), "*/"
+                );
+              } else if (this.onComment) {
+                this.onComment(
+                  CommentKind.BLOCK,
+                  text.substring(commentStartPos, this.pos),
+                  this.range(commentStartPos, this.pos)
                 );
               }
               break;
