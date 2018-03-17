@@ -1459,12 +1459,17 @@ export class Parser extends DiagnosticEmitter {
       flags |= CommonFlags.STATIC;
       staticStart = tn.tokenPos;
       staticEnd = tn.pos;
-    } else if (tn.skip(Token.ABSTRACT)) {
-      flags |= (CommonFlags.ABSTRACT | CommonFlags.INSTANCE);
-      abstractStart = tn.tokenPos;
-      abstractEnd = tn.pos;
     } else {
-      flags |= CommonFlags.INSTANCE;
+      if (tn.skip(Token.ABSTRACT)) {
+        flags |= (CommonFlags.ABSTRACT | CommonFlags.INSTANCE);
+        abstractStart = tn.tokenPos;
+        abstractEnd = tn.pos;
+      } else {
+        flags |= CommonFlags.INSTANCE;
+      }
+      if (parentFlags & CommonFlags.GENERIC) {
+        flags |= CommonFlags.GENERIC_CONTEXT;
+      }
     }
 
     var readonlyStart: i32 = 0;
@@ -2737,12 +2742,12 @@ export class Parser extends DiagnosticEmitter {
                   // fall-through
                 }
                 // function expression
-                case Token.QUESTION:   // optional parameter
                 case Token.COLON: {    // type annotation
                   tn.reset(state);
                   return this.parseFunctionExpression(tn);
                 }
                 // can be both
+                case Token.QUESTION:   // optional parameter or ternary
                 case Token.COMMA: {
                   break; // continue
                 }

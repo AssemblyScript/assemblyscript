@@ -2036,25 +2036,27 @@ export enum CommonFlags {
   AMBIENT = 1 << 16,
   /** Is generic. */
   GENERIC = 1 << 17,
+  /** Is part of a generic context. */
+  GENERIC_CONTEXT = 1 << 18,
   /** Is an instance member. */
-  INSTANCE = 1 << 18,
+  INSTANCE = 1 << 19,
   /** Is a constructor. */
-  CONSTRUCTOR = 1 << 19,
+  CONSTRUCTOR = 1 << 20,
   /** Is an arrow function. */
-  ARROW = 1 << 20,
+  ARROW = 1 << 21,
   /** Is a module export. */
-  MODULE_EXPORT = 1 << 21,
+  MODULE_EXPORT = 1 << 22,
   /** Is a module import. */
-  MODULE_IMPORT = 1 << 22,
+  MODULE_IMPORT = 1 << 23,
 
   // Compilation states
 
   /** Is compiled. */
-  COMPILED = 1 << 23,
+  COMPILED = 1 << 24,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 24,
+  INLINED = 1 << 25,
   /** Is scoped. */
-  SCOPED = 1 << 25
+  SCOPED = 1 << 26
 }
 
 /** Base class of all program elements. */
@@ -2084,7 +2086,8 @@ export abstract class Element {
 
   /** Tests if this element has a specific flag or flags. */
   is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
-
+  /** Tests if this element has any of the specified flags. */
+  isAny(flags: CommonFlags): bool { return (this.flags & flags) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
 }

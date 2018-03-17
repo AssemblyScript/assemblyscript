@@ -217,73 +217,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap16<u32>" (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (if
-   (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.and
-        (i32.const 0)
-        (i32.const 1)
-       )
-      )
-      (get_local $1)
-      (i32.const 1)
-     )
-     (i32.const 1)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 25)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.and
-    (if (result i32)
-     (tee_local $1
-      (i32.const 0)
-     )
-     (get_local $1)
-     (i32.const 1)
-    )
-    (i32.const 1)
-   )
-   (return
-    (i32.or
-     (i32.or
-      (i32.and
-       (i32.shl
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 65280)
-      )
-      (i32.and
-       (i32.shr_u
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.and
-      (get_local $0)
-      (i32.const -65536)
-     )
-    )
-   )
-  )
-  (get_local $0)
- )
- (func "$(lib)/polyfills/bswap<u32>" (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func "$(lib)/polyfills/bswap<u32>" (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -337,73 +271,7 @@
    )
   )
  )
- (func "$(lib)/polyfills/bswap16<i32>" (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (if
-   (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.and
-        (i32.const 0)
-        (i32.const 1)
-       )
-      )
-      (get_local $1)
-      (i32.const 1)
-     )
-     (i32.const 1)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 25)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.and
-    (if (result i32)
-     (tee_local $1
-      (i32.const 0)
-     )
-     (get_local $1)
-     (i32.const 1)
-    )
-    (i32.const 1)
-   )
-   (return
-    (i32.or
-     (i32.or
-      (i32.and
-       (i32.shl
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 65280)
-      )
-      (i32.and
-       (i32.shr_s
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.and
-      (get_local $0)
-      (i32.const -65536)
-     )
-    )
-   )
-  )
-  (get_local $0)
- )
- (func "$(lib)/polyfills/bswap<u64>" (; 8 ;) (type $II) (param $0 i64) (result i64)
+ (func "$(lib)/polyfills/bswap<u64>" (; 6 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i32)
   (if
    (i32.eqz
@@ -476,6 +344,138 @@
    )
    (i64.const 32)
   )
+ )
+ (func "$(lib)/polyfills/bswap16<u32>" (; 7 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (i32.const 0)
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 1)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 25)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $1
+      (i32.const 0)
+     )
+     (get_local $1)
+     (i32.const 1)
+    )
+    (i32.const 1)
+   )
+   (return
+    (i32.or
+     (i32.or
+      (i32.and
+       (i32.shl
+        (get_local $0)
+        (i32.const 8)
+       )
+       (i32.const 65280)
+      )
+      (i32.and
+       (i32.shr_u
+        (get_local $0)
+        (i32.const 8)
+       )
+       (i32.const 255)
+      )
+     )
+     (i32.and
+      (get_local $0)
+      (i32.const -65536)
+     )
+    )
+   )
+  )
+  (get_local $0)
+ )
+ (func "$(lib)/polyfills/bswap16<i32>" (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.and
+        (i32.const 0)
+        (i32.const 1)
+       )
+      )
+      (get_local $1)
+      (i32.const 1)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 25)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $1
+      (i32.const 0)
+     )
+     (get_local $1)
+     (i32.const 1)
+    )
+    (i32.const 1)
+   )
+   (return
+    (i32.or
+     (i32.or
+      (i32.and
+       (i32.shl
+        (get_local $0)
+        (i32.const 8)
+       )
+       (i32.const 65280)
+      )
+      (i32.and
+       (i32.shr_s
+        (get_local $0)
+        (i32.const 8)
+       )
+       (i32.const 255)
+      )
+     )
+     (i32.and
+      (get_local $0)
+      (i32.const -65536)
+     )
+    )
+   )
+  )
+  (get_local $0)
  )
  (func $start (; 9 ;) (type $v)
   (if

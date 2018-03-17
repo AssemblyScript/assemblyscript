@@ -641,6 +641,12 @@
    (f64.const 25)
   )
   (if
+   (i32.eqz
+    (get_global $builtins/i)
+   )
+   (unreachable)
+  )
+  (if
    (f32.eq
     (tee_local $0
      (f32.const nan:0x400000)

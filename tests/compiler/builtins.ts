@@ -213,7 +213,7 @@ I = select<i64>(100, 200, false);
 f = select<f32>(1.25, 2.5, true);
 F = select<f64>(12.5, 25.0, false);
 
-if (0) unreachable();
+if (!i) unreachable();
 
 // AS specific
 

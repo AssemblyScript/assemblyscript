@@ -195,15 +195,15 @@ declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T = f32 | f64>(value: T): bool;
 /** Tests if the specified expression is of an integer type and not a reference. Compiles to a constant. */
-declare function isInteger(value: any): bool;
+declare function isInteger(value: any): value is number;
 /** Tests if the specified expression is of a float type. Compiles to a constant. */
-declare function isFloat(value: any): bool;
+declare function isFloat(value: any): value is number;
 /** Tests if the specified expression is of a reference type. Compiles to a constant. */
-declare function isReference(value: any): bool;
+declare function isReference(value: any): value is object | string;
 /** Tests if the specified expression can be used ass a string. Compiles to a constant. */
-declare function isString(value: any): bool;
+declare function isString(value: any): value is string | String;
 /** Tests if the specified expression can be used as an array. Compiles to a constant. */
-declare function isArray(value: any): bool;
+declare function isArray(value: any): value is Array<any>;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */

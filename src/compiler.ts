@@ -1331,11 +1331,13 @@ export class Compiler extends DiagnosticEmitter {
     flow.continueLabel = previousContinueLabel;
 
     var module = this.module;
-    var condition = makeIsTrueish(
+    var condExpr = makeIsTrueish(
       this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
       this.currentType,
       module
     );
+
+    // No need to eliminate the condition in generic contexts as the statement is executed anyway.
 
     this.currentFunction.leaveBreakContext();
 
@@ -1343,7 +1345,7 @@ export class Compiler extends DiagnosticEmitter {
       module.createLoop(continueLabel,
         module.createBlock(null, [
           body,
-          module.createBreak(continueLabel, condition)
+          module.createBreak(continueLabel, condExpr)
         ], NativeType.None))
     ], NativeType.None);
   }
@@ -1418,26 +1420,44 @@ export class Compiler extends DiagnosticEmitter {
 
   compileIfStatement(statement: IfStatement): ExpressionRef {
     var module = this.module;
+    var currentFunction = this.currentFunction;
+    var ifTrue = statement.ifTrue;
+    var ifFalse = statement.ifFalse;
 
     // The condition doesn't initiate a branch yet
-    var condition = makeIsTrueish(
+    var condExpr = makeIsTrueish(
       this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
       this.currentType,
       module
     );
 
+    // Eliminate unnecesssary branches in generic contexts if the condition is constant
+    if (
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
+      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
+      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+    ) {
+      let ret: ExpressionRef;
+      if (_BinaryenConstGetValueI32(condExpr)) {
+        ret = this.compileStatement(ifTrue);
+      } else if (ifFalse) {
+        ret = this.compileStatement(ifFalse);
+      } else {
+        ret = module.createNop();
+      }
+      return ret;
+    }
+
     // Each arm initiates a branch
-    var currentFunction = this.currentFunction;
     var flow = currentFunction.flow.enterBranchOrScope();
     currentFunction.flow = flow;
-    var ifTrueExpr = this.compileStatement(statement.ifTrue);
+    var ifTrueExpr = this.compileStatement(ifTrue);
     var ifTrueReturns = flow.is(FlowFlags.RETURNS);
     flow = flow.leaveBranchOrScope();
     currentFunction.flow = flow;
 
     var ifFalseExpr: ExpressionRef = 0;
     var ifFalseReturns = false;
-    var ifFalse = statement.ifFalse;
     if (ifFalse) {
       flow = flow.enterBranchOrScope();
       currentFunction.flow = flow;
@@ -1449,7 +1469,7 @@ export class Compiler extends DiagnosticEmitter {
     if (ifTrueReturns && ifFalseReturns) { // not necessary to append a hint
       flow.set(FlowFlags.RETURNS);
     }
-    return module.createIf(condition, ifTrueExpr, ifFalseExpr);
+    return module.createIf(condExpr, ifTrueExpr, ifFalseExpr);
   }
 
   compileReturnStatement(statement: ReturnStatement): ExpressionRef {
@@ -1724,11 +1744,22 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
 
     // The condition does not yet initialize a branch
-    var condition = makeIsTrueish(
+    var condExpr = makeIsTrueish(
       this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
       this.currentType,
       module
     );
+
+    // Eliminate unnecesssary loops in generic contexts if the condition is constant
+    if (
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
+      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
+      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+    ) {
+      if (!_BinaryenConstGetValueI32(condExpr)) {
+        return module.createNop();
+      }
+    }
 
     // Statements initiate a new branch with its own break context
     var currentFunction = this.currentFunction;
@@ -1750,7 +1781,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var expr = module.createBlock(breakLabel, [
       module.createLoop(continueLabel,
-        module.createIf(condition, module.createBlock(null, [
+        module.createIf(condExpr, module.createBlock(null, [
           body,
           module.createBreak(continueLabel)
         ], NativeType.None))
@@ -4952,14 +4983,29 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {
-    var condition = makeIsTrueish(
+    var ifThen = expression.ifThen;
+    var ifElse = expression.ifElse;
+
+    var condExpr = makeIsTrueish(
       this.compileExpression(expression.condition, Type.u32, ConversionKind.NONE),
       this.currentType,
       this.module
     );
-    var ifThen = this.compileExpression(expression.ifThen, contextualType);
-    var ifElse = this.compileExpression(expression.ifElse, contextualType);
-    return this.module.createIf(condition, ifThen, ifElse);
+
+    // Eliminate unnecesssary branches in generic contexts if the condition is constant
+    if (
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
+      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
+      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+    ) {
+      return _BinaryenConstGetValueI32(condExpr)
+        ? this.compileExpression(ifThen, contextualType)
+        : this.compileExpression(ifElse, contextualType);
+    }
+
+    var ifThenExpr = this.compileExpression(ifThen, contextualType);
+    var ifElseExpr = this.compileExpression(ifElse, contextualType);
+    return this.module.createIf(condExpr, ifThenExpr, ifElseExpr);
   }
 
   compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type): ExpressionRef {

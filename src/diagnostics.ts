@@ -202,7 +202,6 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
 export abstract class DiagnosticEmitter {
 
   diagnostics: DiagnosticMessage[];
-  // silentDiagnostics: bool = false;
 
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
     this.diagnostics = diagnostics ? <DiagnosticMessage[]>diagnostics : new Array();
