@@ -267,10 +267,10 @@ exports.main = function main(argv, options, callback) {
   for (let i = 0, k = libDirs.length; i < k; ++i) {
     if (i === 0 && hasBundledLibrary) continue;
     let libDir = libDirs[i];
-    let libFiles
-    if (libDir.endsWith('.ts')) {
-      libFiles = [path.basename(libDir)]
-      libDir = path.dirname(libDir)
+    let libFiles;
+    if (libDir.endsWith(".ts")) {
+      libFiles = [path.basename(libDir)];
+      libDir = path.dirname(libDir);
     } else {
       libFiles = listFiles(libDir);
     }
