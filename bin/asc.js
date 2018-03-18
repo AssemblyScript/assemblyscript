@@ -157,7 +157,7 @@ exports.main = function main(argv, options, callback) {
     if (typeof args.lib === "string") {
       args.lib = args.lib.split(",");
     }
-    Array.prototype.push.apply(libDirs, args.lib.map(trim));
+    Array.prototype.push.apply(libDirs, args.lib.map(lib => lib.trim()));
   }
 
   // Begin parsing
@@ -267,7 +267,13 @@ exports.main = function main(argv, options, callback) {
   for (let i = 0, k = libDirs.length; i < k; ++i) {
     if (i === 0 && hasBundledLibrary) continue;
     let libDir = libDirs[i];
-    let libFiles = listFiles(libDir);
+    let libFiles;
+    if (libDir.endsWith(".ts")) {
+      libFiles = [path.basename(libDir)];
+      libDir = path.dirname(libDir);
+    } else {
+      libFiles = listFiles(libDir);
+    }
     for (let j = 0, l = libFiles.length; j < l; ++j) {
       let libPath = libFiles[j];
       let libText = readFile(path.join(libDir, libPath));
