@@ -11,3 +11,6 @@ assert(f2(2) == 2);
 var f3 = function someName(): void {
 };
 f3();
+
+var f4 = (): i32 => 1;
+assert(f4() == 1);

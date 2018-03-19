@@ -836,20 +836,27 @@ export class Compiler extends DiagnosticEmitter {
     var typeRef = this.ensureFunctionType(instance.signature);
     var module = this.module;
     if (body) {
+      let returnType = instance.signature.returnType;
 
       // compile body
       let previousFunction = this.currentFunction;
       this.currentFunction = instance;
-      let stmt = this.compileStatement(body);
-
-      // make sure all branches return
-      let allBranchesReturn = instance.flow.finalize();
-      let returnType = instance.signature.returnType;
-      if (returnType != Type.void && !allBranchesReturn) {
-        this.error(
-          DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
-          assert(declaration.signature.returnType, "return type expected").range
-        );
+      let flow = instance.flow;
+      let stmt: ExpressionRef;
+      if (body.kind == NodeKind.EXPRESSION) { // () => expression
+        stmt = this.compileExpression((<ExpressionStatement>body).expression, returnType);
+        flow.set(FlowFlags.RETURNS);
+      } else {
+        assert(body.kind == NodeKind.BLOCK);
+        stmt = this.compileStatement(body);
+        // make sure all branches return
+        let allBranchesReturn = flow.finalize();
+        if (returnType != Type.void && !allBranchesReturn) {
+          this.error(
+            DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
+            assert(declaration.signature.returnType, "return type expected").range
+          );
+        }
       }
       this.currentFunction = previousFunction;
 
