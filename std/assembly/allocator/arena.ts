@@ -9,7 +9,8 @@
 
 import { MASK as AL_MASK } from "./common/alignment";
 
-var offset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+var offset: usize = startOffset;
 
 @global
 export function allocate_memory(size: usize): usize {
@@ -37,5 +38,5 @@ export function free_memory(ptr: usize): void {
 
 @global
 export function reset_memory(): void {
-  offset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+  offset = startOffset;
 }

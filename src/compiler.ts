@@ -510,12 +510,13 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var nativeType = global.type.toNativeType();
+    var isConstant = global.isAny(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
 
     // handle imports
     if (global.is(CommonFlags.DECLARE)) {
 
       // constant global
-      if (global.is(CommonFlags.CONST)) {
+      if (isConstant) {
         global.set(CommonFlags.MODULE_IMPORT);
         module.addGlobalImport(
           global.internalName,
@@ -558,7 +559,7 @@ export class Compiler extends DiagnosticEmitter {
         if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
 
           // if a constant global, check if the initializer becomes constant after precompute
-          if (global.is(CommonFlags.CONST)) {
+          if (isConstant) {
             initExpr = this.precomputeExpressionRef(initExpr);
             if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
               this.warning(
@@ -586,7 +587,7 @@ export class Compiler extends DiagnosticEmitter {
 
     } else { // compile as-is
 
-      if (global.is(CommonFlags.CONST)) {
+      if (isConstant) {
         let exprType = _BinaryenExpressionGetType(initExpr);
         switch (exprType) {
           case NativeType.I32: {
@@ -624,7 +625,7 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         global.set(CommonFlags.INLINED); // inline the value from now on
-        if (declaration.isTopLevel) {     // but keep the element if it might be re-exported
+        if (declaration.isTopLevel) {    // but keep the element as it might be re-exported
           module.addGlobal(internalName, nativeType, false, initExpr);
         }
         if (declaration.range.source.isEntry && declaration.isTopLevelExport) {
@@ -632,7 +633,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
       } else /* mutable */ {
-        module.addGlobal(internalName, nativeType, !global.is(CommonFlags.CONST), initExpr);
+        module.addGlobal(internalName, nativeType, !isConstant, initExpr);
       }
     }
     return true;
@@ -844,6 +845,7 @@ export class Compiler extends DiagnosticEmitter {
       let flow = instance.flow;
       let stmt: ExpressionRef;
       if (body.kind == NodeKind.EXPRESSION) { // () => expression
+        assert(instance.is(CommonFlags.ARROW));
         stmt = this.compileExpression((<ExpressionStatement>body).expression, returnType);
         flow.set(FlowFlags.RETURNS);
       } else {
@@ -854,7 +856,7 @@ export class Compiler extends DiagnosticEmitter {
         if (returnType != Type.void && !allBranchesReturn) {
           this.error(
             DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
-            assert(declaration.signature.returnType, "return type expected").range
+            declaration.signature.returnType.range
           );
         }
       }

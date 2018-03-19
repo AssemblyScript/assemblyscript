@@ -9,6 +9,7 @@
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
  (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
@@ -3068,7 +3069,7 @@
   )
  )
  (func $start (; 19 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/offset"
+  (set_global "$(lib)/allocator/arena/startOffset"
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -3076,6 +3077,9 @@
     )
     (i32.const -8)
    )
+  )
+  (set_global "$(lib)/allocator/arena/offset"
+   (get_global "$(lib)/allocator/arena/startOffset")
   )
   (set_global $std/array/arr
    (call "$(lib)/allocator/arena/allocate_memory"

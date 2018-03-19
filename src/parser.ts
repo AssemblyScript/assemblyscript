@@ -1032,6 +1032,8 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.COLON)) {
         type = this.parseType(tn);
         if (!type) return null;
+      } else {
+        type = Node.createOmittedType(tn.range(tn.pos));
       }
       let initializer: Expression | null = null;
       if (tn.skip(Token.EQUALS)) {

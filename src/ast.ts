@@ -156,7 +156,7 @@ export abstract class Node {
 
   static createParameter(
     name: IdentifierExpression,
-    type: CommonTypeNode | null,
+    type: CommonTypeNode,
     initializer: Expression | null,
     kind: ParameterKind,
     range: Range
@@ -1040,7 +1040,7 @@ export class ParameterNode extends Node {
   /** Parameter name. */
   name: IdentifierExpression;
   /** Parameter type. */
-  type: CommonTypeNode | null;
+  type: CommonTypeNode;
   /** Initializer expression, if present. */
   initializer: Expression | null;
 }
@@ -1052,7 +1052,7 @@ export class SignatureNode extends CommonTypeNode {
   /** Accepted parameters. */
   parameterTypes: ParameterNode[];
   /** Return type. */
-  returnType: CommonTypeNode | null;
+  returnType: CommonTypeNode;
   /** Explicitly provided this type, if any. */
   explicitThisType: TypeNode | null; // can't be a function
 }

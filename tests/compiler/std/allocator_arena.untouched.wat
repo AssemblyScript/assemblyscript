@@ -10,6 +10,7 @@
  (global "$(lib)/allocator/common/alignment/BITS" i32 (i32.const 3))
  (global "$(lib)/allocator/common/alignment/SIZE" i32 (i32.const 8))
  (global "$(lib)/allocator/common/alignment/MASK" i32 (i32.const 7))
+ (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
  (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global $std/allocator_arena/size i32 (i32.const 42))
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
@@ -2668,6 +2669,11 @@
  )
  (func "$(lib)/allocator/arena/reset_memory" (; 7 ;) (type $v)
   (set_global "$(lib)/allocator/arena/offset"
+   (get_global "$(lib)/allocator/arena/startOffset")
+  )
+ )
+ (func $start (; 8 ;) (type $v)
+  (set_global "$(lib)/allocator/arena/startOffset"
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -2679,19 +2685,8 @@
     )
    )
   )
- )
- (func $start (; 8 ;) (type $v)
   (set_global "$(lib)/allocator/arena/offset"
-   (i32.and
-    (i32.add
-     (get_global $HEAP_BASE)
-     (i32.const 7)
-    )
-    (i32.xor
-     (i32.const 7)
-     (i32.const -1)
-    )
-   )
+   (get_global "$(lib)/allocator/arena/startOffset")
   )
   (set_global $std/allocator_arena/ptr1
    (call "$(lib)/allocator/arena/allocate_memory"
