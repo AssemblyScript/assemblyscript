@@ -1,6 +1,4 @@
-/**
- * @file I64 definitions for JavaScript.
- */
+/** @module glue/js *//***/
 
 declare type I64 = { __Long__: true }; // opaque
 

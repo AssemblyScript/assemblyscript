@@ -1,9 +1,11 @@
 /**
- * @file Arena Memory Allocator
+ * Arena Memory Allocator
  *
  * Provides a `reset_memory` function to reset the heap to its initial state. A user has to make
  * sure that there are no more references to cleared memory afterwards. Always aligns to 8 bytes.
- */
+ *
+ * @module std/assembly/allocator/arena
+ *//***/
 
 import { MASK as AL_MASK } from "./common/alignment";
 

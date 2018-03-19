@@ -1,6 +1,4 @@
-/**
- * @file Character code utility.
- */
+/** @module util *//***/
 
 /** An enum of named character codes. */
 export const enum CharCode {

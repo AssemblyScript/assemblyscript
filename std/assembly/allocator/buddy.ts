@@ -1,6 +1,7 @@
 /**
- * @file Buddy Memory Allocator
- */
+ * Buddy Memory Allocator.
+ * @module stdd/assembly/allocator/buddy
+ *//***/
 
 /*
   Copyright 2018 Evan Wallace

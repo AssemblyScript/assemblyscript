@@ -1,5 +1,5 @@
 /**
- * @file Compiler frontend for node.js
+ * Compiler frontend for node.js
  *
  * Uses the low-level API exported from src/index.ts so it works with the compiler compiled to
  * JavaScript as well as the compiler compiled to WebAssembly (eventually). Runs the sources
@@ -7,6 +7,8 @@
  *
  * Can also be packaged as a bundle suitable for in-browser use with the standard library injected
  * in the build step. See dist/asc.js for the bundle and webpack.config.js for building details.
+ *
+ * @module asc
  */
 
 const fs = require("fs");

@@ -1,6 +1,4 @@
-/**
- * @file Definitions for linking Binaryen with AssemblyScript.
- */
+/** @module glue/js *//***/
 
 declare function allocate_memory(size: usize): usize;
 declare function free_memory(ptr: usize): void;

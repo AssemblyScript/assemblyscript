@@ -14,7 +14,6 @@
   },
   "files": [
     "./portable.d.ts",
-    "./portable.js",
-    "./portable/memory.js"
+    "./portable.js"
   ]
 }

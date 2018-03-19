@@ -25,6 +25,8 @@
     "source-map-support": "^0.5.3",
     "ts-loader": "^4.0.1",
     "tslint": "^5.9.1",
+    "typedoc": "^0.11.1",
+    "typedoc-plugin-external-module-name": "^1.1.1",
     "typescript": "^2.7.2",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.11"
@@ -48,7 +50,8 @@
     "test:compiler": "node tests/compiler",
     "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path",
     "test:pr": "npm run clean && npm test && npm run build && npm test && npm run clean",
-    "all": "npm run lint && npm run clean && npm test && npm run build && npm test"
+    "all": "npm run lint && npm run clean && npm test && npm run build && npm test",
+    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"
   },
   "files": [
     "bin/",

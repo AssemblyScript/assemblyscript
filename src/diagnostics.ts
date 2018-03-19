@@ -1,6 +1,8 @@
 /**
- * @file Shared diagnostic handling inherited by the parser and the compiler.
- */
+ * Shared diagnostic handling inherited by the parser and the compiler.
+ * @module diagnostics
+ * @preferred
+ *//***/
 
 import {
   Range
@@ -13,7 +15,7 @@ import {
 
 import {
   isLineBreak
-} from "./util/charcode";
+} from "./util";
 
 export {
   DiagnosticCode,

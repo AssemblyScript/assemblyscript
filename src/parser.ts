@@ -1,6 +1,7 @@
 /**
- * @file A TypeScript parser for the AssemblyScript subset.
- */
+ * A TypeScript parser for the AssemblyScript subset.
+ * @module parser
+ *//***/
 
 import {
   Program,
@@ -22,8 +23,8 @@ import {
 } from "./diagnostics";
 
 import {
-  normalize as normalizePath
-} from "./util/path";
+  normalizePath
+} from "./util";
 
 import {
 
@@ -34,7 +35,6 @@ import {
   CommonTypeNode,
   TypeNode,
   SignatureNode,
-  CommentKind,
 
   Expression,
   AssertionKind,

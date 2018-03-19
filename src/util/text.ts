@@ -1,6 +1,4 @@
-/**
- * @file Common text utilities.
- */
+/** @module util *//***/
 
 const indentX1 = "  ";
 const indentX2 = "    ";

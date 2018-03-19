@@ -1,6 +1,7 @@
 /**
- * @file Built-in elements providing otherwise hard-to-implement functionality.
- */
+ * Built-in elements providing WebAssembly core functionality.
+ * @module builtins
+ *//***/
 
 import {
   Compiler,

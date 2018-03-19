@@ -1,3 +1,8 @@
+/**
+ * Shared alignment constants.
+ * @module std/assembly/allocator/common/alignment
+ *//***/
+
 /** Number of alignment bits. */
 export const BITS: u32 = 3;
 

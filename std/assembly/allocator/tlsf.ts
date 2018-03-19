@@ -1,9 +1,11 @@
 /**
- * @file Two-Level Segregate Fit Memory Allocator
+ * Two-Level Segregate Fit Memory Allocator.
  *
  * A general purpose dynamic memory allocator specifically designed to meet real-time requirements.
  * Always aligns to 8 bytes.
- */
+ *
+ * @module std/assembly/allocator/tlsf
+ *//***/
 
 // ╒══════════════ Block size interpretation (32-bit) ═════════════╕
 //    3                   2                   1

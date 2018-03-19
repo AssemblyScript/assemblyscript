@@ -1,6 +1,4 @@
-/**
- * @file I64 wrapper for WebAssembly.
- */
+/** @module glue/wasm *//***/
 
 type I64 = i64;
 
@@ -151,7 +149,7 @@ function i64_to_f64(value: I64): f64 {
   return <f64>value;
 }
 
-import { CharCode } from "../../util/charcode";
+import { CharCode } from "../../util";
 
 @global
 function i64_to_string(value: I64): string {

@@ -1,6 +1,4 @@
-/**
- * @file Environment implementation for compiling AssemblyScript to JavaScript using tsc.
- */
+/** @module std/portable *//***/
 
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
@@ -168,3 +166,5 @@ globalScope["isString"] = function isString(arg) {
 };
 
 globalScope["isArray"] = Array.isArray;
+
+require("./portable/memory");

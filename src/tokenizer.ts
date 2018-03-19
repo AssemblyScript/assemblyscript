@@ -1,9 +1,11 @@
 /**
- * @file A TypeScript tokenizer modified for AssemblyScript.
+ * A TypeScript tokenizer modified for AssemblyScript.
  *
  * Skips over trivia and provides a general mark/reset mechanism for the parser to utilize on
  * ambiguous tokens.
- */
+ *
+ * @module tokenizer
+ *//***/
 
 import {
   DiagnosticCode,
@@ -25,7 +27,7 @@ import {
   isDecimalDigit,
   isOctalDigit,
   isKeywordCharacter
-} from "./util/charcode";
+} from "./util";
 
 /** Named token types. */
 export enum Token {

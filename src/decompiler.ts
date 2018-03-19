@@ -1,6 +1,7 @@
 /**
- * @file A decompiler that generates low-level AssemblyScript from WebAssembly binaries.
- */
+ * A decompiler that generates low-level AssemblyScript from WebAssembly binaries.
+ * @module decompiler
+ *//***/
 
 import {
   Module,

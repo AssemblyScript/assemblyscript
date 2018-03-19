@@ -1,6 +1,4 @@
-/**
- * @file Minimalistic path utility for normalizing and resolving relative paths.
- */
+/** @module util *//***/
 
 import {
   CharCode
@@ -12,7 +10,7 @@ const separator = CharCode.SLASH;
  * Normalizes the specified path, removing interior placeholders.
  * Expects a posix-compatible relative path (not Windows compatible).
  */
-export function normalize(path: string): string {
+export function normalizePath(path: string): string {
   var pos = 0;
   var len = path.length;
 
@@ -96,11 +94,11 @@ export function normalize(path: string): string {
 }
 
 /** Resolves the specified path relative to the specified origin. */
-export function resolve(normalizedPath: string, origin: string): string {
+export function resolvePath(normalizedPath: string, origin: string): string {
   if (normalizedPath.startsWith("std/")) {
     return normalizedPath;
   }
-  return normalize(
+  return normalizePath(
     dirname(origin) + String.fromCharCode(separator) + normalizedPath
   );
 }

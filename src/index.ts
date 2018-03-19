@@ -1,6 +1,7 @@
 /**
- * @file Low-level C-like compiler API.
- */
+ * Low-level C-like compiler API.
+ * @module index
+ *//***/
 
 import {
   Compiler,

@@ -1,6 +1,7 @@
 /**
- * @file Mappings from AssemblyScript types to WebAssembly types.
- */
+ * Mappings from AssemblyScript types to WebAssembly types.
+ * @module types
+ *//***/
 
 import {
   Class,
@@ -17,25 +18,43 @@ import {
 export const enum TypeKind {
 
   // signed integers
+
+  /** An 8-bit signed integer. */
   I8,
+  /** A 16-bit signed integer. */
   I16,
+  /** A 32-bit signed integer. */
   I32,
+  /** A 64-bit signed integer. */
   I64,
+  /** A 32-bit/64-bit signed integer, depending on the target. */
   ISIZE,
 
   // unsigned integers
+
+  /** An 8-bit unsigned integer. */
   U8,
+  /** A 16-bit unsigned integer. */
   U16,
+  /** A 32-bit unsigned integer. Also the base of function types. */
   U32,
+  /** A 64-bit unsigned integer. */
   U64,
+  /** A 32-bit/64-bit unsigned integer, depending on the target. Also the base of class types. */
   USIZE,
+  /** A 1-bit unsigned integer. */
   BOOL, // sic
 
   // floats
+
+  /** A 32-bit float. */
   F32,
+  /** A 64-bit double. */
   F64,
 
   // other
+
+  /** No return type. */
   VOID
 }
 
@@ -451,7 +470,7 @@ export class Signature {
   parameterTypes: Type[];
   /** Parameter names, if known, excluding `this`. */
   parameterNames: string[] | null;
-  /** Number of required parameters. Other parameters are considered optional. */
+  /** Number of required parameters excluding `this`. Other parameters are considered optional. */
   requiredParameters: i32;
   /** Return type. */
   returnType: Type;
@@ -462,6 +481,7 @@ export class Signature {
   /** Cached {@link FunctionTarget}. */
   cachedFunctionTarget: FunctionTarget | null = null;
 
+  /** Constructs a new signature. */
   constructor(
     parameterTypes: Type[] | null = null,
     returnType: Type | null = null,

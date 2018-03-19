@@ -1,6 +1,7 @@
 /**
- * @file Abstract syntax tree representing a source file once parsed.
- */
+ * Abstract syntax tree representing a source file once parsed.
+ * @module ast
+ *//***/
 
 import {
   CommonFlags,
@@ -16,9 +17,9 @@ import {
 } from "./tokenizer";
 
 import {
-  normalize as normalizePath,
-  resolve as resolvePath
-} from "./util/path";
+  normalizePath,
+  resolvePath
+} from "./util";
 
 export { Token, Range };
 

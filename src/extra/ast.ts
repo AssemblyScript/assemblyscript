@@ -1,8 +1,10 @@
 /**
- * @file Abstract Syntax Tree extras.
+ * Abstract Syntax Tree extras.
  *
  * Not needed in a standalone compiler but useful for testing the parser.
- */
+ *
+ * @module extra/ast
+ *//***/
 
 import {
   Node,
@@ -82,12 +84,9 @@ import {
 } from "../tokenizer";
 
 import {
-  CharCode
-} from "../util/charcode";
-
-import {
+  CharCode,
   indent
-} from "../util/text";
+} from "../util";
 
 import {
   CommonFlags

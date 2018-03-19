@@ -1,7 +1,10 @@
 /**
- * @file TypeScript definitions for Binaryen's C-API.
- * @see https://github.com/WebAssembly/binaryen/blob/master/src/binaryen-c.h
- */
+ * TypeScript definitions for Binaryen's C-API.
+ *
+ * See: https://github.com/WebAssembly/binaryen/blob/master/src/binaryen-c.h
+ *
+ * @module glue/binaryen
+ *//***/
 
 declare function _malloc(size: usize): usize;
 declare function _free(ptr: usize): void;

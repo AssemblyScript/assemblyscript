@@ -1,6 +1,11 @@
-// code below is generated from diagnosticsMessages.json by scripts/build-diagnostics
+/**
+ * Generated from diagnosticsMessages.json. Do not edit.
+ * @module diagnostics
+ *//***/
+
 /* tslint:disable:max-line-length */
 
+/** Enum of available diagnostic codes. */
 export enum DiagnosticCode {
   Operation_not_supported = 100,
   Operation_is_unsafe = 101,
@@ -100,6 +105,7 @@ export enum DiagnosticCode {
   File_0_not_found = 6054
 }
 
+/** Translates a diagnostic code to its respective string. */
 export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
     case 100: return "Operation not supported.";

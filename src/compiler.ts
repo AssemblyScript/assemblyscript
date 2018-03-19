@@ -1,6 +1,7 @@
 /**
- * @file The AssemblyScript compiler.
- */
+ * The AssemblyScript compiler.
+ * @module compiler
+ *//***/
 
 import {
   compileCall as compileBuiltinCall,
@@ -300,7 +301,9 @@ export class Compiler extends DiagnosticEmitter {
       let pages = i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0));
       module.setMemory(
         i64_low(pages),
-        Module.MAX_MEMORY_WASM32, // TODO: not WASM64 compatible yet
+        this.options.isWasm64
+          ? Module.MAX_MEMORY_WASM64
+          : Module.MAX_MEMORY_WASM32,
         this.memorySegments,
         options.target,
         "memory"

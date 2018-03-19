@@ -1,6 +1,7 @@
 /**
- * @file Definition builders for WebIDL and TypeScript.
- */
+ * Definition builders for WebIDL and TypeScript.
+ * @module definitions
+ *//***/
 
 import {
   Program,
@@ -26,7 +27,7 @@ import {
 
 import {
   indent
-} from "./util/text";
+} from "./util";
 
 /** Walker base class. */
 abstract class ExportsWalker {

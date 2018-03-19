@@ -1,6 +1,8 @@
 /**
- * @file JavaScript glue code.
- */
+ * JavaScript glue code.
+ * @module glue/js
+ * @preferred
+ *//***/
 
 import "../../../std/portable";
 import "./binaryen";

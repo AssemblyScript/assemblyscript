@@ -1,4 +1,5 @@
-node_modules/
 npm-debug.*
+docs/
+node_modules/
 out/
 raw/

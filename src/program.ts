@@ -1,6 +1,7 @@
 /**
- * @file AssemblyScript's intermediate representation describing a program's elements.
- */
+ * AssemblyScript's intermediate representation describing a program's elements.
+ * @module program
+ *//***/
 
 import {
   Options

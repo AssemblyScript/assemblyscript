@@ -1,6 +1,7 @@
 /**
- * @file A thin wrapper around Binaryen's C-API.
- */
+ * A thin wrapper around Binaryen's C-API.
+ * @module module
+ *//***/
 
 import {
   Target
@@ -240,8 +241,11 @@ export class Module {
   ref: ModuleRef;
   out: usize;
 
+  /** Maximum number of pages when targeting WASM32. */
   static readonly MAX_MEMORY_WASM32: Index = 0xffff;
-  // TODO: static readonly MAX_MEMORY_WASM64
+
+  /** Maximum number of pages when targeting WASM64. */
+  static readonly MAX_MEMORY_WASM64: Index = 0xffff; // TODO
 
   static create(): Module {
     var module = new Module();
@@ -900,7 +904,7 @@ export class Module {
     _BinaryenModuleInterpret(this.ref);
   }
 
-  toBinary(sourceMapUrl: string | null): Binary {
+  toBinary(sourceMapUrl: string | null): BinaryModule {
     var out = this.out;
     var cStr = allocString(sourceMapUrl);
     var binaryPtr: usize = 0;
@@ -910,7 +914,7 @@ export class Module {
       binaryPtr = readInt(out);
       let binaryBytes = readInt(out + 4);
       sourceMapPtr = readInt(out + 4 * 2);
-      let ret = new Binary();
+      let ret = new BinaryModule();
       ret.output = readBuffer(binaryPtr, binaryBytes);
       ret.sourceMap = readString(sourceMapPtr);
       return ret;
@@ -1191,7 +1195,7 @@ function allocString(str: string | null): usize {
   return ptr;
 }
 
-export function readInt(ptr: usize): i32 {
+function readInt(ptr: usize): i32 {
   return (
      load<u8>(ptr    )        |
     (load<u8>(ptr + 1) <<  8) |
@@ -1200,7 +1204,7 @@ export function readInt(ptr: usize): i32 {
   );
 }
 
-export function readBuffer(ptr: usize, length: usize): Uint8Array {
+function readBuffer(ptr: usize, length: usize): Uint8Array {
   var ret = new Uint8Array(length);
   for (let i: usize = 0; i < length; ++i) {
     ret[i] = load<u8>(ptr + i);
@@ -1254,7 +1258,7 @@ export function readString(ptr: usize): string | null {
 }
 
 /** Result structure of {@link Module#toBinary}. */
-class Binary {
+export class BinaryModule {
   /** WebAssembly binary. */
   output: Uint8Array;
   /** Source map, if generated. */
