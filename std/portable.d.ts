@@ -218,12 +218,16 @@ declare class Array<T> {
   [key: number]: T;
   length: i32;
   constructor(capacity?: i32);
+  every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
+  findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   push(element: T): void;
   pop(): T;
+  reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
   shift(): T;
+  some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
   slice(from: i32, to?: i32): T[];
   splice(start: i32, deleteCount?: i32): void;

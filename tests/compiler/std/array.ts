@@ -173,3 +173,153 @@ assert(arr.length == 4);
 assert(arr.__capacity == 8);
 assert(arr[0] == 44);
 assert(arr[1] == 42);
+
+
+arr[0] = 0;
+arr[1] = 1;
+arr[2] = 2;
+arr[3] = 3;
+/*=============================== findIndex ==========================*/
+i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => value == 0);
+assert(i == 0);
+
+i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => value == 1);
+assert(i == 1);
+
+i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => value == 100);
+assert(i == -1);
+
+// Test side effect push
+i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => {
+  array.push(100); //push side effect should not affect this method by spec
+  return value == 100;
+});
+// array should be changed, but this method result should be calculated for old array length
+assert(i == -1);
+assert(arr.length == 8);
+i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => value == 100);
+assert(i != -1);
+
+arr.pop();
+arr.pop();
+arr.pop();
+arr.pop();
+
+// Test side effect pop
+i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => {
+  array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
+  return value == 100;
+});
+// only 2 first items was looked up, since last 2 was removed by .pop()
+assert(i == -1);
+assert(arr.length == 2);
+
+arr.push(2);
+arr.push(3);
+/*=============================== every ==========================*/
+var every = arr.every((value: i32, index: i32, array: Array<i32>): bool => value >= 0);
+assert(every == true);
+
+every = arr.every((value: i32, index: i32, array: Array<i32>): bool => value <= 0);
+assert(every == false);
+
+// Test side effect push
+every = arr.every((value: i32, index: i32, array: Array<i32>): bool => {
+  array.push(100); //push side effect should not affect this method by spec
+  return value < 10;
+});
+// array should be changed, but this method result should be calculated for old array length
+assert(every == true);
+assert(arr.length == 8);
+every = arr.every((value: i32, index: i32, array: Array<i32>): bool => value < 10);
+assert(every == false);
+
+arr.pop();
+arr.pop();
+arr.pop();
+arr.pop();
+
+// Test side effect pop
+every = arr.every((value: i32, index: i32, array: Array<i32>): bool => {
+  array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
+  return value < 3;
+});
+// only 2 first items was looked up, since last 2 was removed by .pop()
+assert(every == true);
+assert(arr.length == 2);
+
+arr.push(2);
+arr.push(3);
+/*=============================== some ==========================*/
+var some = arr.some((value: i32, index: i32, array: Array<i32>): bool => value >= 3);
+assert(some == true);
+
+some = arr.some((value: i32, index: i32, array: Array<i32>): bool => value <= -1);
+assert(some == false);
+
+// Test side effect push
+some = arr.some((value: i32, index: i32, array: Array<i32>): bool => {
+  array.push(100); //push side effect should not affect this method by spec
+  return value > 10;
+});
+// array should be changed, but this method result should be calculated for old array length
+assert(some == false);
+assert(arr.length == 8);
+some = arr.some((value: i32, index: i32, array: Array<i32>): bool => value > 10);
+assert(some == true);
+
+arr.pop();
+arr.pop();
+arr.pop();
+arr.pop();
+
+// Test side effect pop
+some = arr.some((value: i32, index: i32, array: Array<i32>): bool => {
+  array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
+  return value > 3;
+});
+// only 2 first items was looked up, since last 2 was removed by .pop()
+assert(some == false);
+assert(arr.length == 2);
+
+arr.push(2);
+arr.push(3);
+/*=============================== reduce ==========================*/
+
+i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 0);
+assert(i == 6);
+
+// init value
+i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 4);
+assert(i == 10);
+
+var boolVal = arr.reduce<bool>(((prev: bool, current: i32, index: i32, array: Array<i32>): bool => prev || current > 2), false);
+assert(boolVal == true);
+
+boolVal = arr.reduce<bool>(((prev: bool, current: i32, index: i32, array: Array<i32>): bool => prev || current > 100), false);
+assert(boolVal == false);
+
+// Test side effect push
+i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => {
+  array.push(1); //push side effect should not affect this method by spec
+  return prev + current;
+}), 0);
+// array should be changed, but this method result should be calculated for old array length
+assert(i == 6);
+assert(arr.length == 8);
+i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 0);
+assert(i == 10);
+
+arr.pop();
+arr.pop();
+arr.pop();
+arr.pop();
+
+// Test side effect pop
+i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => {
+  array.pop(); //poped items shouldn't be reduced, and we shouldn't go out of bounds
+  return prev + current;
+}), 0);
+// only 2 first items was reduced, since last 2 was removed by .pop()
+assert(i == 1);
+assert(arr.length == 2);
