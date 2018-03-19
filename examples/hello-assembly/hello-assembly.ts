@@ -1,3 +1,12 @@
+// compile this file thus:
+// asc -v || npm install --save-dev AssemblyScript/assemblyscript
+// asc hello-assembly.ts -b test.wasm -t test.wast
+
+// run compiled wasm file in node.js:
+// node -i -e "log_char = c => process.stdout.write(String.fromCodePoint(c));\
+// 		new WebAssembly.Instance(new WebAssembly.Module(require('fs').readFileSync('test.wasm')),{console:{log_char}})"
+
+
 namespace console {
 
   // imported helper to print a char in node.js
