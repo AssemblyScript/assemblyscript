@@ -274,12 +274,3 @@ declare namespace console {
   /** @deprecated */
   function log(message: string): void;
 }
-
-/** @deprecated */
-declare namespace Math {
-  const LN2: number;
-  function round(value: number): number;
-  function floor(value: number): number;
-  function log(value: number): number;
-  function pow(value: number, exp: number): number;
-}
