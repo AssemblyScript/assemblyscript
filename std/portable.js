@@ -58,6 +58,7 @@ Object.defineProperties(
   "MAX_VALUE": { value: Math.fround(3.40282347e+38), writable: false },
   "MIN_SAFE_INTEGER": { value: -16777215, writable: false },
   "MAX_SAFE_INTEGER": { value: 16777215, writable: false },
+  "MIN_NORMAL_VALUE": { value: 1.175494351e-38 , writable: false },
   "EPSILON": { value: Math.fround(1.19209290e-07), writable: false }
 });
 
@@ -68,6 +69,7 @@ Object.defineProperties(
   "MAX_VALUE": { value: 1.7976931348623157e+308, writable: false },
   "MIN_SAFE_INTEGER": { value: -9007199254740991, writable: false },
   "MAX_SAFE_INTEGER": { value: 9007199254740991, writable: false },
+  "MIN_NORMAL_VALUE": { value: 2.2250738585072014e-308 , writable: false },
   "EPSILON": { value: 2.2204460492503131e-16, writable: false }
 });
 

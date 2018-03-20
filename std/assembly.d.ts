@@ -107,6 +107,8 @@ declare namespace f32 {
   export const MIN_SAFE_INTEGER: f32;
   /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f32;
+  /** Smallest normalized positive value */
+  export const MIN_NORMAL_VALUE: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
 }
@@ -119,6 +121,8 @@ declare namespace f64 {
   export const MIN_SAFE_INTEGER: f64;
   /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f64;
+  /** Smallest normalized positive value */
+  export const MIN_NORMAL_VALUE: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
 }

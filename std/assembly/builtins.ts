@@ -216,6 +216,7 @@ namespace f32 {
   export const MAX_VALUE: f32 = 3.40282347e+38;
   export const MIN_SAFE_INTEGER: f32 = -16777215;
   export const MAX_SAFE_INTEGER: f32 = 16777215;
+  export const MIN_NORMAL_VALUE: f32 = 1.175494351e-38;
   export const EPSILON: f32 = 1.19209290e-07;
 }
 export { f32 };
@@ -227,6 +228,7 @@ namespace f64 {
   export const MAX_VALUE: f64 = 1.7976931348623157e+308;
   export const MIN_SAFE_INTEGER: f64 = -9007199254740991;
   export const MAX_SAFE_INTEGER: f64 = 9007199254740991;
+  export const MIN_NORMAL_VALUE: f64 = 2.2250738585072014e-308;
   export const EPSILON: f64 = 2.2204460492503131e-16;
 }
 export{ f64 };
