@@ -3,8 +3,10 @@
 // asc hello-assembly.ts -b test.wasm -t test.wast
 
 // run compiled wasm file in node.js:
-// node -i -e "log_char = c => process.stdout.write(String.fromCodePoint(c));\
-// 		new WebAssembly.Instance(new WebAssembly.Module(require('fs').readFileSync('test.wasm')),{console:{log_char}})"
+// node -i -e "\
+//    log_char = c => process.stdout.write(String.fromCodePoint(c));\
+//    binary = require('fs').readFileSync('test.wasm')\
+// 		new WebAssembly.Instance(new WebAssembly.Module(binary),{console:{log_char}})"
 
 namespace console {
 
