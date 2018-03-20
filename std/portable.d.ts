@@ -85,12 +85,12 @@ declare function f32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bo
 declare namespace f32 {
   export const MIN_VALUE: f32;
   export const MAX_VALUE: f32;
+  /** Smallest normalized positive value */
+  export const MIN_POSITIVE_VALUE: f32;
   /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f32;
   /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f32;
-  /** Smallest normalized positive value */
-  export const MIN_NORMAL_VALUE: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
 }
@@ -99,12 +99,12 @@ declare function f64(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bo
 declare namespace f64 {
   export const MIN_VALUE: f64;
   export const MAX_VALUE: f64;
+  /** Smallest normalized positive value */
+  export const MIN_POSITIVE_VALUE: f64;
   /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f64;
   /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f64;
-  /** Smallest normalized positive value */
-  export const MIN_NORMAL_VALUE: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
 }
