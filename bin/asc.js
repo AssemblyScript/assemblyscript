@@ -66,6 +66,29 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : {};
 /** Bundled definition files, if any. */
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : {};
 
+
+/** Convenience function that parses and compiles a source string directly. */
+exports.compileString = function compileString(input, sourceMapUrl) {
+  const parser = assemblyscript.parseFile(input, "input", true);
+  Object.keys(exports.libraryFiles).forEach(libPath => {
+    if (libPath.lastIndexOf("/") >= exports.libraryPrefix.length) return;
+    assemblyscript.parseFile(
+      exports.libraryFiles[libPath],
+      libPath + ".ts",
+      false,
+      parser
+    );
+  });
+
+  const program = assemblyscript.finishParsing(parser);
+  const mod = assemblyscript.compileProgram(program);
+  mod.optimize();
+
+  const output = mod.toBinary(sourceMapUrl);
+  output.text = mod.toText();
+  return output;
+}
+
 /** Runs the command line utility using the specified arguments array. */
 exports.main = function main(argv, options, callback) {
   if (typeof options === "function") {

@@ -37,6 +37,7 @@ import {
   LIBRARY_PREFIX
 } from "./program";
 
+
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
   parser: Parser | null = null
