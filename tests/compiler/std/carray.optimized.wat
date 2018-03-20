@@ -10,7 +10,7 @@
  (data (i32.const 4) "\0d\00\00\00s\00t\00d\00/\00c\00a\00r\00r\00a\00y\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func "$(lib)/array/CArray#__get" (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/CArray<i32>#__get" (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.lt_s
     (get_local $1)
@@ -28,7 +28,7 @@
    )
   )
  )
- (func "$(lib)/array/CArray#__set" (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func "$(lib)/array/CArray<i32>#__set" (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (if
    (i32.lt_s
     (get_local $1)
@@ -85,7 +85,7 @@
    )
   )
   (if
-   (call "$(lib)/array/CArray#__get"
+   (call "$(lib)/array/CArray<i32>#__get"
     (get_global $std/carray/arr)
     (i32.const 0)
    )
@@ -100,7 +100,7 @@
    )
   )
   (if
-   (call "$(lib)/array/CArray#__get"
+   (call "$(lib)/array/CArray<i32>#__get"
     (get_global $std/carray/arr)
     (i32.const 1)
    )
@@ -114,12 +114,12 @@
     (unreachable)
    )
   )
-  (call "$(lib)/array/CArray#__set"
+  (call "$(lib)/array/CArray<i32>#__set"
    (get_global $std/carray/arr)
    (i32.const 0)
    (i32.const 42)
   )
-  (call "$(lib)/array/CArray#__set"
+  (call "$(lib)/array/CArray<i32>#__set"
    (get_global $std/carray/arr)
    (i32.const 1)
    (i32.const 24)
@@ -163,7 +163,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/CArray#__get"
+    (call "$(lib)/array/CArray<i32>#__get"
      (get_global $std/carray/arr)
      (i32.const 0)
     )
@@ -181,7 +181,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/CArray#__get"
+    (call "$(lib)/array/CArray<i32>#__get"
      (get_global $std/carray/arr)
      (i32.const 1)
     )
@@ -199,7 +199,7 @@
   )
   (if
    (block (result i32)
-    (call "$(lib)/array/CArray#__set"
+    (call "$(lib)/array/CArray<i32>#__set"
      (tee_local $0
       (get_global $std/carray/arr)
      )
@@ -209,7 +209,7 @@
      (i32.const 9000)
     )
     (i32.ne
-     (call "$(lib)/array/CArray#__get"
+     (call "$(lib)/array/CArray<i32>#__get"
       (get_local $0)
       (get_local $1)
      )
@@ -248,7 +248,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/CArray#__get"
+    (call "$(lib)/array/CArray<i32>#__get"
      (get_global $std/carray/arr)
      (i32.const 3)
     )

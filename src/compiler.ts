@@ -119,6 +119,13 @@ import {
   typesToNativeTypes
 } from "./types";
 
+import {
+  writeI32,
+  writeI64,
+  writeF32,
+  writeF64
+} from "./util";
+
 /** Compilation target. */
 export enum Target {
   /** WebAssembly with 32-bit pointers. */
@@ -4564,11 +4571,10 @@ export class Compiler extends DiagnosticEmitter {
         let classType = contextualType.classType;
         if (
           classType &&
-          classType == this.program.elementsLookup.get("Array") &&
-          classType.typeArguments && classType.typeArguments.length == 1
+          classType.prototype == this.program.elementsLookup.get("Array")
         ) {
           return this.compileStaticArray(
-            classType.typeArguments[0],
+            assert(classType.typeArguments)[0],
             (<ArrayLiteralExpression>expression).elementExpressions,
             expression
           );
@@ -4725,29 +4731,38 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileStaticArray(elementType: Type, expressions: (Expression | null)[], reportNode: Node): ExpressionRef {
-    // compile as static if all element expressions are precomputable, otherwise
-    // initialize in place.
     var isStatic = true;
-    var size = expressions.length;
-
     var module = this.module;
+
+    // obtain the array type
+    var arrayPrototype = assert(this.program.elementsLookup.get("Array"));
+    if (!arrayPrototype || arrayPrototype.kind != ElementKind.CLASS_PROTOTYPE) return module.createUnreachable();
+    var arrayType = (<ClassPrototype>arrayPrototype).resolve([ elementType ]);
+    if (!arrayType) return module.createUnreachable();
+
+    var elementSize = expressions.length;
     var nativeType = elementType.toNativeType();
     var values: usize;
+    var memorySize: usize;
     switch (nativeType) {
       case NativeType.I32: {
-        values = changetype<usize>(new Int32Array(size));
+        values = changetype<usize>(new Int32Array(elementSize));
+        memorySize = elementSize * 4;
         break;
       }
       case NativeType.I64: {
-        values = changetype<usize>(new Array<I64>(size));
+        values = changetype<usize>(new Array<I64>(elementSize));
+        memorySize = elementSize * 8;
         break;
       }
       case NativeType.F32: {
-        values = changetype<usize>(new Float32Array(size));
+        values = changetype<usize>(new Float32Array(elementSize));
+        memorySize = elementSize * 4;
         break;
       }
       case NativeType.F64: {
-        values = changetype<usize>(new Float64Array(size));
+        values = changetype<usize>(new Float64Array(elementSize));
+        memorySize = elementSize * 8;
         break;
       }
       default: {
@@ -4760,9 +4775,10 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    var exprs = new Array<ExpressionRef>(size);
+    // precompute value expressions
+    var exprs = new Array<ExpressionRef>(elementSize);
     var expr: BinaryenExpressionRef;
-    for (let i = 0; i < size; ++i) {
+    for (let i = 0; i < elementSize; ++i) {
       exprs[i] = expressions[i]
         ? this.compileExpression(<Expression>expressions[i], elementType)
         : elementType.toNativeZero(module);
@@ -4801,14 +4817,78 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    var usizeTypeSize = this.options.usizeType.byteSize;
+    var headerSize = usizeTypeSize + 4 + 4; // memory + capacity + length
+
     if (isStatic) {
-      // TODO: convert to Uint8Array and create the segment
+      let buffer = new Uint8Array(headerSize + memorySize);
+      let segment = this.addMemorySegment(buffer);
+
+      // make header
+      let offset = 0;
+      if (usizeTypeSize == 8) {
+        writeI64(i64_add(segment.offset, i64_new(headerSize)), buffer, 0); // memory
+      } else {
+        assert(i64_high(segment.offset) == 0);
+        writeI32(i64_low(segment.offset) + headerSize, buffer, 0); // memory
+      }
+      offset += usizeTypeSize;
+      writeI32(elementSize, buffer, offset); // capacity
+      offset += 4;
+      writeI32(elementSize, buffer, offset); // length
+      offset += 4;
+      assert(offset == headerSize);
+
+      // make memory
+      switch (nativeType) {
+        case NativeType.I32: {
+          for (let i = 0; i < elementSize; ++i) {
+            writeI32(changetype<i32[]>(values)[i], buffer, offset); offset += 4;
+          }
+          break;
+        }
+        case NativeType.I64: {
+          for (let i = 0; i < elementSize; ++i) {
+            writeI64(changetype<I64[]>(values)[i], buffer, offset); offset += 8;
+          }
+          break;
+        }
+        case NativeType.F32: {
+          for (let i = 0; i < elementSize; ++i) {
+            writeF32(changetype<f32[]>(values)[i], buffer, offset); offset += 4;
+          }
+          break;
+        }
+        case NativeType.F64: {
+          for (let i = 0; i < elementSize; ++i) {
+            writeF64(changetype<f64[]>(values)[i], buffer, offset); offset += 8;
+          }
+          break;
+        }
+        default: {
+          assert(false);
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      assert(offset == headerSize + memorySize);
+      this.currentType = arrayType.type;
+      return usizeTypeSize == 8
+        ? module.createI64(
+            i64_low(segment.offset),
+            i64_high(segment.offset)
+          )
+        : module.createI32(
+            i64_low(segment.offset)
+          );
     } else {
-      // TODO: initialize in place
+      // TODO: static elements *could* go into data segments while dynamic ones are initialized
+      // on top? any benefits?
+      throw new Error("not implemented");
     }
-    // TODO: alternatively, static elements could go into data segments while
-    // dynamic ones are initialized on top? any benefits? (doesn't seem so)
-    throw new Error("not implemented");
   }
 
   compileNewExpression(expression: NewExpression, contextualType: Type): ExpressionRef {

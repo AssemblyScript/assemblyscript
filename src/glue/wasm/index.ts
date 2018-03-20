@@ -5,3 +5,4 @@
  *//***/
 
 import "./i64";
+import "./float";

@@ -7,3 +7,4 @@
 export * from "./charcode";
 export * from "./path";
 export * from "./text";
+export * from "./binary";

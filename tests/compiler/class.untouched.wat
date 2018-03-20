@@ -38,7 +38,7 @@
    )
   )
  )
- (func $class/Animal#instanceAdd (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $class/Animal<f64>#instanceAdd (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (return
    (i32.add
     (i32.add
@@ -49,7 +49,7 @@
    )
   )
  )
- (func $class/Animal#instanceSub<f32> (; 4 ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
+ (func $class/Animal<f64>#instanceSub<f32> (; 4 ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
   (return
    (f32.add
     (f32.sub
@@ -66,14 +66,14 @@
   (local $1 i32)
   (local $2 i32)
   (drop
-   (call $class/Animal#instanceAdd
+   (call $class/Animal<f64>#instanceAdd
     (get_local $0)
     (i32.const 1)
     (i32.const 2)
    )
   )
   (drop
-   (call $class/Animal#instanceSub<f32>
+   (call $class/Animal<f64>#instanceSub<f32>
     (get_local $0)
     (f32.const 1)
     (f32.const 2)

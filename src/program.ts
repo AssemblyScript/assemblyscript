@@ -517,7 +517,11 @@ export class Program extends DiagnosticEmitter {
         classPrototype.members = new Map();
       }
       let staticField = new Global(
-        this, name, internalName, declaration, Type.void
+        this,
+        name,
+        internalName,
+        declaration,
+        Type.void
       );
       classPrototype.members.set(name, staticField);
       this.elementsLookup.set(internalName, staticField);
@@ -537,7 +541,8 @@ export class Program extends DiagnosticEmitter {
       }
       let instanceField = new FieldPrototype(
         classPrototype,
-        name, internalName,
+        name,
+        internalName,
         declaration
       );
       classPrototype.instanceMembers.set(name, instanceField);
@@ -2927,7 +2932,11 @@ export class ClassPrototype extends Element {
               instance.contextualTypeArguments
             );
             if (fieldType) {
-              let fieldInstance = new Field(<FieldPrototype>member, (<FieldPrototype>member).internalName, fieldType);
+              let fieldInstance = new Field(
+                <FieldPrototype>member,
+                internalName + INSTANCE_DELIMITER + (<FieldPrototype>member).simpleName,
+                fieldType
+              );
               switch (fieldType.byteSize) { // align
                 case 1: break;
                 case 2: {
@@ -2954,30 +2963,50 @@ export class ClassPrototype extends Element {
             if (!instance.members) instance.members = new Map();
             let methodPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
             if (methodPrototype) {
+              methodPrototype.internalName = internalName + INSTANCE_DELIMITER + methodPrototype.simpleName;
               instance.members.set(member.simpleName, methodPrototype);
             }
             break;
           }
           case ElementKind.PROPERTY: { // instance properties are cloned with partially resolved getters and setters
             if (!instance.members) instance.members = new Map();
-            assert((<Property>member).getterPrototype);
-            let instanceProperty = new Property(this.program, member.simpleName, member.internalName, this);
-            instanceProperty.getterPrototype = (
+            let getterPrototype = assert((<Property>member).getterPrototype);
+            let setterPrototype = (<Property>member).setterPrototype;
+            let instanceProperty = new Property(
+              this.program,
+              member.simpleName,
+              internalName + INSTANCE_DELIMITER + member.simpleName,
+              this
+            );
+            let partialGetterPrototype = (
               (<FunctionPrototype>(<Property>member).getterPrototype).resolvePartial(
                 typeArguments
               )
             );
-            if ((<Property>member).setterPrototype) {
-              instanceProperty.setterPrototype = (
+            if (!partialGetterPrototype) return null;
+            partialGetterPrototype.internalName = (
+              internalName + INSTANCE_DELIMITER + partialGetterPrototype.simpleName
+            );
+            instanceProperty.getterPrototype = partialGetterPrototype;
+            if (setterPrototype) {
+              let partialSetterPrototype = (
                 (<FunctionPrototype>(<Property>member).setterPrototype).resolvePartial(
                   typeArguments
                 )
               );
+              if (!partialSetterPrototype) return null;
+              partialSetterPrototype.internalName = (
+                internalName + INSTANCE_DELIMITER + partialSetterPrototype.simpleName
+              );
+              instanceProperty.setterPrototype = partialSetterPrototype;
             }
             instance.members.set(member.simpleName, instanceProperty);
             break;
           }
-          default: throw new Error("instance member expected");
+          default: {
+            assert(false);
+            break;
+          }
         }
       }
     }
