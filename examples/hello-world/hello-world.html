@@ -1,4 +1,4 @@
 <script type="text/javascript">
-	imports = { console: {log_int: i => alert(i) }}
+	imports = { console: {log_int: i => alert("wasm result="+i) }}
 	WebAssembly.instantiateStreaming(fetch('hello-world.wasm'),imports).catch(e=>alert(e))
 </script>
