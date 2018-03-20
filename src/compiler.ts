@@ -142,10 +142,6 @@ export class Options {
   importMemory: bool = false;
   /** Static memory start offset. */
   memoryBase: u32 = 0;
-  /** Memory allocation implementation to use. */
-  allocateImpl: string = "allocate_memory";
-  /** Memory freeing implementation to use. */
-  freeImpl: string = "free_memory";
   /** If true, generates information necessary for source maps. */
   sourceMap: bool = false;
 
@@ -513,7 +509,7 @@ export class Compiler extends DiagnosticEmitter {
     var isConstant = global.isAny(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
 
     // handle imports
-    if (global.is(CommonFlags.DECLARE)) {
+    if (global.is(CommonFlags.AMBIENT)) {
 
       // constant global
       if (isConstant) {
@@ -818,14 +814,14 @@ export class Compiler extends DiagnosticEmitter {
     var declaration = instance.prototype.declaration;
     var body = declaration.body;
     if (body) {
-      if (instance.is(CommonFlags.DECLARE)) {
+      if (instance.is(CommonFlags.AMBIENT)) {
         this.error(
           DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
           declaration.name.range
         );
       }
     } else {
-      if (!instance.is(CommonFlags.DECLARE)) {
+      if (!instance.is(CommonFlags.AMBIENT)) {
         this.error(
           DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
           declaration.name.range
@@ -4231,7 +4227,7 @@ export class Compiler extends DiagnosticEmitter {
     var trampolineSignature = new Signature(trampolineParameterTypes, commonReturnType, commonThisType);
     var trampolineName = originalName + "|trampoline";
     trampolineSignature.requiredParameters = maxArguments + 1;
-    trampoline = new Function(original.prototype, trampolineName, trampolineSignature, original.instanceMethodOf);
+    trampoline = new Function(original.prototype, trampolineName, trampolineSignature, original.memberOf);
     trampoline.flags = original.flags;
     trampoline.set(CommonFlags.COMPILED);
     original.trampoline = trampoline;
@@ -4463,7 +4459,9 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.THIS: {
         let currentFunction = this.currentFunction;
         if (currentFunction.is(CommonFlags.INSTANCE)) {
-          let thisType = assert(currentFunction.instanceMethodOf).type;
+          let parent = assert(currentFunction.memberOf);
+          assert(parent.kind == ElementKind.CLASS);
+          let thisType = (<Class>parent).type;
           this.currentType = thisType;
           return module.createGetLocal(0, thisType.toNativeType());
         }
@@ -4477,7 +4475,9 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.SUPER: {
         let currentFunction = this.currentFunction;
         if (currentFunction.is(CommonFlags.INSTANCE)) {
-          let base = assert(currentFunction.instanceMethodOf).base;
+          let parent = assert(currentFunction.memberOf);
+          assert(parent.kind == ElementKind.CLASS);
+          let base = (<Class>parent).base;
           if (base) {
             let superType = base.type;
             this.currentType = superType;
@@ -4971,10 +4971,12 @@ export class Compiler extends DiagnosticEmitter {
           )) {
             return module.createUnreachable();
           }
-          if (instance.instanceMethodOf) {
+          if (instance.is(CommonFlags.INSTANCE)) {
+            let parent = assert(instance.memberOf);
+            assert(parent.kind == ElementKind.CLASS);
             targetExpr = this.compileExpression(
               <Expression>resolved.targetExpression,
-              instance.instanceMethodOf.type
+              (<Class>parent).type
             );
             this.currentType = signature.returnType;
             return this.compileCallDirect(instance, [], propertyAccess, targetExpr);

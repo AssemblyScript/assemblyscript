@@ -87,10 +87,7 @@ export class Parser extends DiagnosticEmitter {
   backlog: string[] = new Array();
   /** Log of source file names already processed. */
   seenlog: Set<string> = new Set();
-
-  currentDeclareStart: i32 = 0;
-  currentDeclareEnd: i32 = 0;
-
+  /** Optional handler to intercept comments while tokenizing. */
   onComment: CommentHandler | null = null;
 
   /** Constructs a new parser. */
@@ -145,7 +142,7 @@ export class Parser extends DiagnosticEmitter {
   /** Parses a top-level statement. */
   parseTopLevelStatement(
     tn: Tokenizer,
-    isNamespaceMember: bool = false
+    namespace: Node | null = null
   ): Statement | null {
     var flags = CommonFlags.NONE;
     var startPos: i32 = -1;
@@ -188,11 +185,18 @@ export class Parser extends DiagnosticEmitter {
 
     var declareStart: i32 = 0;
     var declareEnd: i32 = 0;
+    var contextIsAmbient = namespace != null && namespace.is(CommonFlags.AMBIENT);
     if (tn.skip(Token.DECLARE)) {
       if (startPos < 0) startPos = tn.tokenPos;
-      flags |= CommonFlags.DECLARE;
-      this.currentDeclareStart = declareStart = tn.tokenPos;
-      this.currentDeclareEnd = declareEnd = tn.pos;
+      if (contextIsAmbient) {
+        this.error(
+          DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
+          tn.range()
+        ); // recoverable
+      }
+      flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
+    } else if (contextIsAmbient) {
+      flags |= CommonFlags.AMBIENT;
     }
 
     // parse the statement
@@ -293,9 +297,9 @@ export class Parser extends DiagnosticEmitter {
               tn.range(declareStart, declareEnd), "declare"
             ); // recoverable
           }
-          if (!isNamespaceMember) {
+          if (!namespace) {
             statement = this.parseStatement(tn, true);
-          }
+          } // TODO: else?
         }
         break;
       }
@@ -761,7 +765,7 @@ export class Parser extends DiagnosticEmitter {
       if (!initializer) return null;
     } else {
       if (flags & CommonFlags.CONST) {
-        if (!(flags & CommonFlags.DECLARE)) {
+        if (!(flags & CommonFlags.AMBIENT)) {
           this.error(
             DiagnosticCode._const_declarations_must_be_initialized,
             identifier.range
@@ -1173,17 +1177,6 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
 
-    if (flags & CommonFlags.DECLARE) {
-      if (flags & CommonFlags.AMBIENT) {
-        this.error(
-          DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
-          tn.range(this.currentDeclareStart, this.currentDeclareEnd)
-        ); // recoverable
-      } else {
-        flags |= CommonFlags.AMBIENT;
-      }
-    }
-
     var body: Statement | null = null;
     if (tn.skip(Token.OPENBRACE)) {
       if (flags & CommonFlags.AMBIENT) {
@@ -1391,17 +1384,6 @@ export class Parser extends DiagnosticEmitter {
         tn.range(), "{"
       );
       return null;
-    }
-
-    if (flags & CommonFlags.DECLARE) {
-      if (flags & CommonFlags.AMBIENT) {
-        this.error(
-          DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
-          tn.range(this.currentDeclareStart, this.currentDeclareEnd)
-        ); // recoverable
-      } else {
-        flags |= CommonFlags.AMBIENT;
-      }
     }
 
     var members = new Array<DeclarationStatement>();
@@ -1744,20 +1726,21 @@ export class Parser extends DiagnosticEmitter {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       if (tn.skip(Token.OPENBRACE)) {
         let members = new Array<Statement>();
-        while (!tn.skip(Token.CLOSEBRACE)) {
-          let member = this.parseTopLevelStatement(tn, true);
-          if (!member) return null;
-          members.push(member);
-        }
-        let ret = Node.createNamespaceDeclaration(
+        let ns = Node.createNamespaceDeclaration(
           identifier,
           members,
           decorators,
           flags,
           tn.range(startPos, tn.pos)
         );
+        while (!tn.skip(Token.CLOSEBRACE)) {
+          let member = this.parseTopLevelStatement(tn, ns);
+          if (!member) return null;
+          member.parent = ns;
+          members.push(member);
+        }
         tn.skip(Token.SEMICOLON);
-        return ret;
+        return ns;
       } else {
         this.error(
           DiagnosticCode._0_expected,

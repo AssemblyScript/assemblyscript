@@ -579,7 +579,7 @@ export class Program extends DiagnosticEmitter {
         simpleName,
         internalName,
         declaration,
-        null
+        classPrototype
       );
       classPrototype.members.set(simpleName, prototype);
       this.elementsLookup.set(internalName, prototype);
@@ -1748,7 +1748,7 @@ export class Program extends DiagnosticEmitter {
             } else {
               break;
             }
-          // or inherited instance members on the cbase class while target is a class instance
+          // or inherited instance members on the base class while target is a class instance
           } else if (target.kind == ElementKind.CLASS) {
             if ((<Class>target).base) {
               target = <Class>(<Class>target).base;
@@ -1836,11 +1836,11 @@ export class Program extends DiagnosticEmitter {
       case NodeKind.BINARY: { // TODO: string concatenation, mostly
         throw new Error("not implemented");
       }
-      case NodeKind.THIS: { // -> Class
-        let classType = contextualFunction.instanceMethodOf;
-        if (classType) {
+      case NodeKind.THIS: { // -> Class / ClassPrototype
+        let parent = contextualFunction.memberOf;
+        if (parent) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
-          return resolvedElement.set(classType);
+          return resolvedElement.set(parent);
         }
         this.error(
           DiagnosticCode._this_cannot_be_referenced_in_current_location,
@@ -1849,10 +1849,10 @@ export class Program extends DiagnosticEmitter {
         return null;
       }
       case NodeKind.SUPER: { // -> Class
-        let classType = contextualFunction.instanceMethodOf;
-        if (classType && (classType = classType.base)) {
+        let parent = contextualFunction.memberOf;
+        if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
           if (!resolvedElement) resolvedElement = new ResolvedElement();
-          return resolvedElement.set(classType);
+          return resolvedElement.set(parent);
         }
         this.error(
           DiagnosticCode._super_can_only_be_referenced_in_a_derived_class,
@@ -2294,6 +2294,7 @@ export class FunctionPrototype extends Element {
 
     var declaration = this.declaration;
     var isInstance = this.is(CommonFlags.INSTANCE);
+    var classPrototype = this.classPrototype;
 
     // inherit contextual type arguments as provided. might be be overridden.
     var inheritedTypeArguments = contextualTypeArguments;
@@ -2310,7 +2311,8 @@ export class FunctionPrototype extends Element {
     // override with class type arguments if a partially resolved instance method
     var classTypeArguments = this.classTypeArguments;
     if (classTypeArguments) { // set only if partially resolved
-      let classDeclaration = (<ClassPrototype>assert(this.classPrototype)).declaration;
+      assert(this.is(CommonFlags.INSTANCE));
+      let classDeclaration = assert(classPrototype).declaration;
       let classTypeParameters = classDeclaration.typeParameters;
       let numClassTypeParameters = classTypeParameters.length;
       assert(numClassTypeParameters == classTypeArguments.length);
@@ -2344,12 +2346,9 @@ export class FunctionPrototype extends Element {
     var classInstance: Class | null = null;
     var thisType: Type | null = null;
     if (isInstance) {
-      let classPrototype = assert(this.classPrototype);
-      classInstance = classPrototype.resolve(classTypeArguments, contextualTypeArguments); // reports
+      classInstance = assert(classPrototype).resolve(classTypeArguments, contextualTypeArguments); // reports
       if (!classInstance) return null;
       thisType = classInstance.type;
-    } else {
-      assert(!this.classPrototype);
     }
 
     // resolve signature node
@@ -2386,7 +2385,7 @@ export class FunctionPrototype extends Element {
 
     var internalName = this.internalName;
     if (instanceKey.length) internalName += "<" + instanceKey + ">";
-    instance = new Function(this, internalName, signature, classInstance);
+    instance = new Function(this, internalName, signature, classInstance ? classInstance : classPrototype);
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
     return instance;
@@ -2394,6 +2393,7 @@ export class FunctionPrototype extends Element {
 
   /** Resolves this prototype partially by applying the specified inherited class type arguments. */
   resolvePartial(classTypeArguments: Type[] | null): FunctionPrototype | null {
+    assert(this.is(CommonFlags.INSTANCE));
     assert(this.classPrototype);
     if (classTypeArguments && classTypeArguments.length) {
       let partialPrototype = new FunctionPrototype(
@@ -2465,8 +2465,8 @@ export class Function extends Element {
   prototype: FunctionPrototype;
   /** Function signature. */
   signature: Signature;
-  /** If an instance method, the concrete class it is a member of. */
-  instanceMethodOf: Class | null;
+  /** If a member of another namespace-like element, the concrete element it is a member of. */
+  memberOf: Element | null;
   /** Map of locals by name. */
   locals: Map<string,Local> = new Map();
   /** List of additional non-parameter locals. */
@@ -2494,16 +2494,16 @@ export class Function extends Element {
     prototype: FunctionPrototype,
     internalName: string,
     signature: Signature,
-    instanceMethodOf: Class | null = null
+    memberOf: Element | null = null
   ) {
     super(prototype.program, prototype.simpleName, internalName);
     this.prototype = prototype;
     this.signature = signature;
-    this.instanceMethodOf = instanceMethodOf;
+    this.memberOf = memberOf;
     this.flags = prototype.flags;
     if (!(prototype.is(CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
       let localIndex = 0;
-      if (instanceMethodOf) {
+      if (memberOf && memberOf.kind == ElementKind.CLASS) {
         assert(this.is(CommonFlags.INSTANCE));
         this.locals.set(
           "this",
@@ -2514,11 +2514,12 @@ export class Function extends Element {
             assert(signature.thisType)
           )
         );
-        if (instanceMethodOf.contextualTypeArguments) {
+        let contextualTypeArguments = (<Class>memberOf).contextualTypeArguments;
+        if (contextualTypeArguments) {
           if (!this.contextualTypeArguments) {
             this.contextualTypeArguments = new Map();
           }
-          for (let [inheritedName, inheritedType] of instanceMethodOf.contextualTypeArguments) {
+          for (let [inheritedName, inheritedType] of contextualTypeArguments) {
             this.contextualTypeArguments.set(inheritedName, inheritedType);
           }
         }

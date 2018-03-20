@@ -2457,6 +2457,8 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   return value;
 }
 
+const allocateInternalName = "allocate_memory";
+
 /** Compiles a memory allocation for an instance of the specified class. */
 export function compileAllocate(
   compiler: Compiler,
@@ -2468,11 +2470,11 @@ export function compileAllocate(
   var module = compiler.module;
   var options = compiler.options;
 
-  var prototype = program.elementsLookup.get(options.allocateImpl);
+  var prototype = program.elementsLookup.get(allocateInternalName);
   if (!prototype) {
     program.error(
       DiagnosticCode.Cannot_find_name_0,
-      reportNode.range, options.allocateImpl
+      reportNode.range, allocateInternalName
     );
     return module.createUnreachable();
   }
@@ -2498,6 +2500,8 @@ export function compileAllocate(
   );
 }
 
+const abortInternalName = "abort";
+
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(
   compiler: Compiler,
@@ -2510,7 +2514,7 @@ export function compileAbort(
   var stringType = program.typesLookup.get("string"); // might be intended
   if (!stringType) return module.createUnreachable();
 
-  var abortPrototype = program.elementsLookup.get("abort"); // might be intended
+  var abortPrototype = program.elementsLookup.get(abortInternalName); // might be intended
   if (!abortPrototype || abortPrototype.kind != ElementKind.FUNCTION_PROTOTYPE) return module.createUnreachable();
 
   var abortInstance = (<FunctionPrototype>abortPrototype).resolve(); // reports
