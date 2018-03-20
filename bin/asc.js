@@ -67,27 +67,58 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : {};
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : {};
 
 
-/** Convenience function that parses and compiles a source string directly. */
-exports.compileString = function compileString(input, sourceMapUrl) {
-  const parser = assemblyscript.parseFile(input, "input", true);
-  Object.keys(exports.libraryFiles).forEach(libPath => {
-    if (libPath.lastIndexOf("/") >= exports.libraryPrefix.length) return;
-    assemblyscript.parseFile(
-      exports.libraryFiles[libPath],
-      libPath + ".ts",
-      false,
-      parser
+/** Convenience function that parses and compiles source strings directly. */
+exports.compileString = (source, extraArgs={}) => new Promise((resolve, reject) => {
+  const sources = {};
+  const output = {};
+
+  if (typeof source === "string") {
+    sources["input.ts"] = source;
+  }
+  Object.keys(sources).forEach(k => {
+    sources[`/${k}`] = sources[k];
+    delete sources[k];
+  })
+  const options = {
+    stdout: createMemoryStream(),
+    stderr: createMemoryStream(),
+    readFile: name => sources[name],
+    writeFile: (name, contents) => output[name.replace(/^\//, "")] = contents,
+    listFiles: Function.prototype
+  };
+
+  // if not a bundle, include std lib since we override readFile
+  if (!exports.isBundle) {
+    const libDir = path.join(__dirname, "../std", "assembly");
+    const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
+    libFiles.forEach(file =>
+      exports.libraryFiles["(lib)/" + file.replace(/\.ts$/, "")] = readFileNode(path.join(libDir, file), { encoding: "utf8" })
     );
+  }
+
+  const args = [
+    "--baseDir=/",
+    "--binaryFile=wasm",
+    "--textFile=wast",
+    ...Object.keys(extraArgs).map(arg => `--${arg}=${extraArgs[arg]}`),
+    ...Object.keys(sources),
+  ];
+
+  exports.main(args, options, (err) => {
+    if (err) {
+      reject({
+        err,
+        stdout: options.stdout.toString(),
+        stderr: options.stderr.toString(),
+      })
+    } else {
+      resolve(Object.assign(output, {
+        stdout: options.stdout.toString(),
+        stderr: options.stderr.toString(),
+      }))
+    }
   });
-
-  const program = assemblyscript.finishParsing(parser);
-  const mod = assemblyscript.compileProgram(program);
-  mod.optimize();
-
-  const output = mod.toBinary(sourceMapUrl);
-  output.text = mod.toText();
-  return output;
-}
+});
 
 /** Runs the command line utility using the specified arguments array. */
 exports.main = function main(argv, options, callback) {
