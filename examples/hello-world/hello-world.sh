@@ -12,5 +12,9 @@ node -i -e "\
   instance= new WebAssembly.Instance(module,imports);\
   "
 
-# instead of printing 'Hello' char by char with the little glue function log_char,
-# we could also do new Buffer(instance.exports.memory.buffer).slice(8,50).toString('utf16le')
+# load and run the binary in the browser:
+# open "hello-world.html"
+
+# chrome needs 'proper' server for example:
+# open "http://localhost/hello-world.html"
+# sudo python -m SimpleHTTPServer 80
