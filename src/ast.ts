@@ -7,7 +7,8 @@ import {
   CommonFlags,
   PATH_DELIMITER,
   STATIC_DELIMITER,
-  INSTANCE_DELIMITER
+  INSTANCE_DELIMITER,
+  LIBRARY_PREFIX
 } from "./program";
 
 import {
@@ -703,12 +704,15 @@ export abstract class Node {
     stmt.namespaceName = null;
     stmt.path = path;
     var normalizedPath = normalizePath(path.value);
-    if (path.value.startsWith(".")) { // relative
+    if (path.value.startsWith(".")) { // relative in project
       stmt.normalizedPath = resolvePath(
         normalizedPath,
         range.source.normalizedPath
       );
-    } else { // absolute
+    } else { // absolute in library
+      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
+        normalizedPath = LIBRARY_PREFIX + normalizedPath;
+      }
       stmt.normalizedPath = normalizedPath;
     }
     stmt.internalPath = mangleInternalPath(stmt.normalizedPath);

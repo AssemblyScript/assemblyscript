@@ -347,7 +347,6 @@ export class Program extends DiagnosticEmitter {
       } else {
         element.set(CommonFlags.GLOBAL);
         this.elementsLookup.set(simpleName, element);
-        this.fileLevelExports.set(simpleName, element);
         if (element.is(CommonFlags.BUILTIN)) {
           element.internalName = simpleName;
         }
@@ -377,8 +376,6 @@ export class Program extends DiagnosticEmitter {
     );
     prototype.namespace = namespace;
     this.elementsLookup.set(internalName, prototype);
-
-    this.checkInternalDecorators(prototype, declaration);
 
     var implementsTypes = declaration.implementsTypes;
     var numImplementsTypes = implementsTypes.length;
@@ -471,6 +468,8 @@ export class Program extends DiagnosticEmitter {
         }
       }
     }
+
+    this.checkInternalDecorators(prototype, declaration);
 
     // check and possibly register string type
     if (
@@ -839,8 +838,6 @@ export class Program extends DiagnosticEmitter {
     element.namespace = namespace;
     this.elementsLookup.set(internalName, element);
 
-    this.checkInternalDecorators(element, declaration);
-
     if (namespace) {
       if (namespace.members) {
         if (namespace.members.has(simpleName)) {
@@ -883,6 +880,8 @@ export class Program extends DiagnosticEmitter {
     for (let i = 0, k = values.length; i < k; ++i) {
       this.initializeEnumValue(values[i], element);
     }
+
+    this.checkInternalDecorators(element, declaration);
   }
 
   private initializeEnumValue(
@@ -1068,8 +1067,6 @@ export class Program extends DiagnosticEmitter {
     prototype.namespace = namespace;
     this.elementsLookup.set(internalName, prototype);
 
-    this.checkInternalDecorators(prototype, declaration);
-
     if (namespace) {
       if (namespace.members) {
         if (namespace.members.has(simpleName)) {
@@ -1107,6 +1104,8 @@ export class Program extends DiagnosticEmitter {
         this.moduleLevelExports.set(internalName, prototype);
       }
     }
+
+    this.checkInternalDecorators(prototype, declaration);
   }
 
   private initializeImports(
@@ -1204,8 +1203,6 @@ export class Program extends DiagnosticEmitter {
     prototype.namespace = namespace;
     this.elementsLookup.set(internalName, prototype);
 
-    this.checkInternalDecorators(prototype, declaration);
-
     if (namespace) {
       if (namespace.members) {
         if (namespace.members.has(prototype.internalName)) {
@@ -1266,6 +1263,8 @@ export class Program extends DiagnosticEmitter {
         }
       }
     }
+
+    this.checkInternalDecorators(prototype, declaration);
   }
 
   private initializeNamespace(
@@ -1300,14 +1299,18 @@ export class Program extends DiagnosticEmitter {
         namespace.set(CommonFlags.MODULE_EXPORT);
       }
     } else if (namespace.is(CommonFlags.EXPORT)) { // no parent namespace
-      if (this.fileLevelExports.has(internalName)) {
-        this.error(
-          DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-          declaration.name.range, internalName
-        );
-        return;
+      let existingExport = this.fileLevelExports.get(internalName);
+      if (existingExport) {
+        if (!existingExport.is(CommonFlags.EXPORT)) {
+          this.error(
+            DiagnosticCode.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local,
+            declaration.name.range, namespace.internalName
+          ); // recoverable
+        }
+        namespace = existingExport; // join
+      } else {
+        this.fileLevelExports.set(internalName, namespace);
       }
-      this.fileLevelExports.set(internalName, namespace);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(internalName)) {
           this.error(
@@ -1404,8 +1407,6 @@ export class Program extends DiagnosticEmitter {
       global.namespace = namespace;
       this.elementsLookup.set(internalName, global);
 
-      this.checkInternalDecorators(global, declaration);
-
       if (namespace) {
         if (namespace.members) {
           if (namespace.members.has(simpleName)) {
@@ -1443,6 +1444,7 @@ export class Program extends DiagnosticEmitter {
           this.moduleLevelExports.set(internalName, global);
         }
       }
+      this.checkInternalDecorators(global, declaration);
     }
   }
 

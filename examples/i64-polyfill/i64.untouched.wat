@@ -6,9 +6,9 @@
  (global $assembly/i64/hi (mut i32) (i32.const 0))
  (export "getLo" (func $assembly/i64/getLo))
  (export "getHi" (func $assembly/i64/getHi))
- (export "clz" (func $assembly/i64/clz_))
- (export "ctz" (func $assembly/i64/ctz_))
- (export "popcnt" (func $assembly/i64/popcnt_))
+ (export "clz" (func $assembly/i64/clz))
+ (export "ctz" (func $assembly/i64/ctz))
+ (export "popcnt" (func $assembly/i64/popcnt))
  (export "eqz" (func $assembly/i64/eqz))
  (export "add" (func $assembly/i64/add))
  (export "sub" (func $assembly/i64/sub))
@@ -23,8 +23,8 @@
  (export "shl" (func $assembly/i64/shl))
  (export "shr_s" (func $assembly/i64/shr_s))
  (export "shr_u" (func $assembly/i64/shr_u))
- (export "rotl" (func $assembly/i64/rotl_))
- (export "rotr" (func $assembly/i64/rotr_))
+ (export "rotl" (func $assembly/i64/rotl))
+ (export "rotr" (func $assembly/i64/rotr))
  (export "eq" (func $assembly/i64/eq))
  (export "ne" (func $assembly/i64/ne))
  (export "lt_s" (func $assembly/i64/lt_s))
@@ -47,197 +47,197 @@
    (get_global $assembly/i64/hi)
   )
  )
- (func $assembly/i64/clz_ (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $assembly/i64/clz (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i64)
-  ;;@ assembly/i64.ts:13:2
-  (set_local $2
-   ;;@ assembly/i64.ts:13:12
-   (i64.clz
-    ;;@ assembly/i64.ts:13:21
-    (i64.or
-     (i64.extend_u/i32
-      (get_local $0)
-     )
-     ;;@ assembly/i64.ts:13:35
-     (i64.shl
-      (i64.extend_u/i32
-       (get_local $1)
-      )
-      ;;@ assembly/i64.ts:13:50
-      (i64.const 32)
-     )
-    )
-   )
-  )
-  ;;@ assembly/i64.ts:14:2
-  (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:14:7
-   (i32.wrap/i64
-    (get_local $2)
-   )
-  )
   ;;@ assembly/i64.ts:15:2
+  (set_local $2
+   ;;@ assembly/i64.ts:15:12
+   (i64.clz
+    ;;@ assembly/i64.ts:15:29
+    (i64.or
+     (i64.extend_u/i32
+      (get_local $0)
+     )
+     ;;@ assembly/i64.ts:15:43
+     (i64.shl
+      (i64.extend_u/i32
+       (get_local $1)
+      )
+      ;;@ assembly/i64.ts:15:58
+      (i64.const 32)
+     )
+    )
+   )
+  )
+  ;;@ assembly/i64.ts:16:2
+  (set_global $assembly/i64/lo
+   ;;@ assembly/i64.ts:16:7
+   (i32.wrap/i64
+    (get_local $2)
+   )
+  )
+  ;;@ assembly/i64.ts:17:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:15:7
+   ;;@ assembly/i64.ts:17:7
    (i32.const 0)
   )
  )
- (func $assembly/i64/ctz_ (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $assembly/i64/ctz (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i64)
-  ;;@ assembly/i64.ts:20:2
+  ;;@ assembly/i64.ts:23:2
   (set_local $2
-   ;;@ assembly/i64.ts:20:12
+   ;;@ assembly/i64.ts:23:12
    (i64.ctz
-    ;;@ assembly/i64.ts:20:21
+    ;;@ assembly/i64.ts:23:29
     (i64.or
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:20:35
+     ;;@ assembly/i64.ts:23:43
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:20:50
+      ;;@ assembly/i64.ts:23:58
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:21:2
+  ;;@ assembly/i64.ts:24:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:21:7
+   ;;@ assembly/i64.ts:24:7
    (i32.wrap/i64
     (get_local $2)
    )
   )
-  ;;@ assembly/i64.ts:22:2
+  ;;@ assembly/i64.ts:25:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:22:7
+   ;;@ assembly/i64.ts:25:7
    (i32.const 0)
   )
  )
- (func $assembly/i64/popcnt_ (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $assembly/i64/popcnt (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i64)
-  ;;@ assembly/i64.ts:27:2
+  ;;@ assembly/i64.ts:31:2
   (set_local $2
-   ;;@ assembly/i64.ts:27:12
+   ;;@ assembly/i64.ts:31:12
    (i64.popcnt
-    ;;@ assembly/i64.ts:27:24
+    ;;@ assembly/i64.ts:31:32
     (i64.or
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:27:38
+     ;;@ assembly/i64.ts:31:46
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:27:53
+      ;;@ assembly/i64.ts:31:61
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:28:2
+  ;;@ assembly/i64.ts:32:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:28:7
+   ;;@ assembly/i64.ts:32:7
    (i32.wrap/i64
     (get_local $2)
    )
   )
-  ;;@ assembly/i64.ts:29:2
+  ;;@ assembly/i64.ts:33:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:29:7
+   ;;@ assembly/i64.ts:33:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/eqz (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  ;;@ assembly/i64.ts:34:2
+  ;;@ assembly/i64.ts:37:2
   (set_local $2
-   ;;@ assembly/i64.ts:34:18
+   ;;@ assembly/i64.ts:37:18
    (i64.eqz
-    ;;@ assembly/i64.ts:34:19
+    ;;@ assembly/i64.ts:37:19
     (i64.or
-     ;;@ assembly/i64.ts:34:20
+     ;;@ assembly/i64.ts:37:20
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:34:34
+     ;;@ assembly/i64.ts:37:34
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:34:49
+      ;;@ assembly/i64.ts:37:49
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:35:2
+  ;;@ assembly/i64.ts:38:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:35:7
+   ;;@ assembly/i64.ts:38:7
    (get_local $2)
   )
-  ;;@ assembly/i64.ts:36:2
+  ;;@ assembly/i64.ts:39:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:36:7
+   ;;@ assembly/i64.ts:39:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/add (; 6 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:40:2
+  ;;@ assembly/i64.ts:43:2
   (set_local $4
-   ;;@ assembly/i64.ts:40:12
+   ;;@ assembly/i64.ts:43:12
    (i64.add
     (i64.or
-     ;;@ assembly/i64.ts:40:13
+     ;;@ assembly/i64.ts:43:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:40:27
+     ;;@ assembly/i64.ts:43:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:40:42
+      ;;@ assembly/i64.ts:43:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:40:48
+    ;;@ assembly/i64.ts:43:48
     (i64.or
-     ;;@ assembly/i64.ts:40:49
+     ;;@ assembly/i64.ts:43:49
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:40:64
+     ;;@ assembly/i64.ts:43:64
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:40:80
+      ;;@ assembly/i64.ts:43:80
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:41:2
+  ;;@ assembly/i64.ts:44:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:41:7
+   ;;@ assembly/i64.ts:44:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:42:2
+  ;;@ assembly/i64.ts:45:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:42:7
+   ;;@ assembly/i64.ts:45:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:42:13
+    ;;@ assembly/i64.ts:45:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:42:20
+     ;;@ assembly/i64.ts:45:20
      (i64.const 32)
     )
    )
@@ -245,56 +245,56 @@
  )
  (func $assembly/i64/sub (; 7 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:46:2
+  ;;@ assembly/i64.ts:49:2
   (set_local $4
-   ;;@ assembly/i64.ts:46:12
+   ;;@ assembly/i64.ts:49:12
    (i64.sub
     (i64.or
-     ;;@ assembly/i64.ts:46:13
+     ;;@ assembly/i64.ts:49:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:46:27
+     ;;@ assembly/i64.ts:49:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:46:42
+      ;;@ assembly/i64.ts:49:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:46:48
+    ;;@ assembly/i64.ts:49:48
     (i64.or
-     ;;@ assembly/i64.ts:46:49
+     ;;@ assembly/i64.ts:49:49
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:46:64
+     ;;@ assembly/i64.ts:49:64
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:46:80
+      ;;@ assembly/i64.ts:49:80
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:47:2
+  ;;@ assembly/i64.ts:50:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:47:7
+   ;;@ assembly/i64.ts:50:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:48:2
+  ;;@ assembly/i64.ts:51:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:48:7
+   ;;@ assembly/i64.ts:51:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:48:13
+    ;;@ assembly/i64.ts:51:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:48:20
+     ;;@ assembly/i64.ts:51:20
      (i64.const 32)
     )
    )
@@ -302,56 +302,56 @@
  )
  (func $assembly/i64/mul (; 8 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:52:2
+  ;;@ assembly/i64.ts:55:2
   (set_local $4
-   ;;@ assembly/i64.ts:52:12
+   ;;@ assembly/i64.ts:55:12
    (i64.mul
     (i64.or
-     ;;@ assembly/i64.ts:52:13
+     ;;@ assembly/i64.ts:55:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:52:27
+     ;;@ assembly/i64.ts:55:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:52:42
+      ;;@ assembly/i64.ts:55:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:52:48
+    ;;@ assembly/i64.ts:55:48
     (i64.or
-     ;;@ assembly/i64.ts:52:49
+     ;;@ assembly/i64.ts:55:49
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:52:64
+     ;;@ assembly/i64.ts:55:64
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:52:80
+      ;;@ assembly/i64.ts:55:80
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:53:2
+  ;;@ assembly/i64.ts:56:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:53:7
+   ;;@ assembly/i64.ts:56:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:54:2
+  ;;@ assembly/i64.ts:57:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:54:7
+   ;;@ assembly/i64.ts:57:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:54:13
+    ;;@ assembly/i64.ts:57:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:54:20
+     ;;@ assembly/i64.ts:57:20
      (i64.const 32)
     )
    )
@@ -359,57 +359,57 @@
  )
  (func $assembly/i64/div_s (; 9 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:58:2
+  ;;@ assembly/i64.ts:61:2
   (set_local $4
-   ;;@ assembly/i64.ts:58:12
+   ;;@ assembly/i64.ts:61:12
    (i64.div_s
-    ;;@ assembly/i64.ts:58:18
+    ;;@ assembly/i64.ts:61:18
     (i64.or
-     ;;@ assembly/i64.ts:58:24
+     ;;@ assembly/i64.ts:61:24
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:58:38
+     ;;@ assembly/i64.ts:61:38
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:58:53
+      ;;@ assembly/i64.ts:61:53
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:58:59
+    ;;@ assembly/i64.ts:61:59
     (i64.or
-     ;;@ assembly/i64.ts:58:65
+     ;;@ assembly/i64.ts:61:65
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:58:80
+     ;;@ assembly/i64.ts:61:80
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:58:96
+      ;;@ assembly/i64.ts:61:96
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:59:2
+  ;;@ assembly/i64.ts:62:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:59:7
+   ;;@ assembly/i64.ts:62:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:60:2
+  ;;@ assembly/i64.ts:63:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:60:7
+   ;;@ assembly/i64.ts:63:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:60:13
+    ;;@ assembly/i64.ts:63:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:60:20
+     ;;@ assembly/i64.ts:63:20
      (i64.const 32)
     )
    )
@@ -417,56 +417,56 @@
  )
  (func $assembly/i64/div_u (; 10 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:64:2
+  ;;@ assembly/i64.ts:67:2
   (set_local $4
-   ;;@ assembly/i64.ts:64:12
+   ;;@ assembly/i64.ts:67:12
    (i64.div_u
     (i64.or
-     ;;@ assembly/i64.ts:64:13
+     ;;@ assembly/i64.ts:67:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:64:27
+     ;;@ assembly/i64.ts:67:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:64:42
+      ;;@ assembly/i64.ts:67:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:64:48
+    ;;@ assembly/i64.ts:67:48
     (i64.or
-     ;;@ assembly/i64.ts:64:49
+     ;;@ assembly/i64.ts:67:49
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:64:64
+     ;;@ assembly/i64.ts:67:64
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:64:80
+      ;;@ assembly/i64.ts:67:80
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:65:2
+  ;;@ assembly/i64.ts:68:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:65:7
+   ;;@ assembly/i64.ts:68:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:66:2
+  ;;@ assembly/i64.ts:69:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:66:7
+   ;;@ assembly/i64.ts:69:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:66:13
+    ;;@ assembly/i64.ts:69:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:66:20
+     ;;@ assembly/i64.ts:69:20
      (i64.const 32)
     )
    )
@@ -474,57 +474,57 @@
  )
  (func $assembly/i64/rem_s (; 11 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:70:2
+  ;;@ assembly/i64.ts:73:2
   (set_local $4
-   ;;@ assembly/i64.ts:70:12
+   ;;@ assembly/i64.ts:73:12
    (i64.rem_s
-    ;;@ assembly/i64.ts:70:18
+    ;;@ assembly/i64.ts:73:18
     (i64.or
-     ;;@ assembly/i64.ts:70:24
+     ;;@ assembly/i64.ts:73:24
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:70:38
+     ;;@ assembly/i64.ts:73:38
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:70:53
+      ;;@ assembly/i64.ts:73:53
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:70:59
+    ;;@ assembly/i64.ts:73:59
     (i64.or
-     ;;@ assembly/i64.ts:70:65
+     ;;@ assembly/i64.ts:73:65
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:70:80
+     ;;@ assembly/i64.ts:73:80
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:70:96
+      ;;@ assembly/i64.ts:73:96
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:71:2
+  ;;@ assembly/i64.ts:74:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:71:7
+   ;;@ assembly/i64.ts:74:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:72:2
+  ;;@ assembly/i64.ts:75:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:72:7
+   ;;@ assembly/i64.ts:75:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:72:13
+    ;;@ assembly/i64.ts:75:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:72:20
+     ;;@ assembly/i64.ts:75:20
      (i64.const 32)
     )
    )
@@ -532,56 +532,56 @@
  )
  (func $assembly/i64/rem_u (; 12 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:76:2
+  ;;@ assembly/i64.ts:79:2
   (set_local $4
-   ;;@ assembly/i64.ts:76:12
+   ;;@ assembly/i64.ts:79:12
    (i64.rem_u
     (i64.or
-     ;;@ assembly/i64.ts:76:13
+     ;;@ assembly/i64.ts:79:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:76:27
+     ;;@ assembly/i64.ts:79:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:76:42
+      ;;@ assembly/i64.ts:79:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:76:48
+    ;;@ assembly/i64.ts:79:48
     (i64.or
-     ;;@ assembly/i64.ts:76:49
+     ;;@ assembly/i64.ts:79:49
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:76:64
+     ;;@ assembly/i64.ts:79:64
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:76:80
+      ;;@ assembly/i64.ts:79:80
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:77:2
+  ;;@ assembly/i64.ts:80:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:77:7
+   ;;@ assembly/i64.ts:80:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:78:2
+  ;;@ assembly/i64.ts:81:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:78:7
+   ;;@ assembly/i64.ts:81:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:78:13
+    ;;@ assembly/i64.ts:81:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:78:21
+     ;;@ assembly/i64.ts:81:21
      (i64.const 32)
     )
    )
@@ -589,56 +589,56 @@
  )
  (func $assembly/i64/and (; 13 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:82:2
+  ;;@ assembly/i64.ts:85:2
   (set_local $4
-   ;;@ assembly/i64.ts:82:12
+   ;;@ assembly/i64.ts:85:12
    (i64.and
     (i64.or
-     ;;@ assembly/i64.ts:82:13
+     ;;@ assembly/i64.ts:85:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:82:27
+     ;;@ assembly/i64.ts:85:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:82:42
+      ;;@ assembly/i64.ts:85:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:82:48
+    ;;@ assembly/i64.ts:85:48
     (i64.or
-     ;;@ assembly/i64.ts:82:49
+     ;;@ assembly/i64.ts:85:49
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:82:64
+     ;;@ assembly/i64.ts:85:64
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:82:80
+      ;;@ assembly/i64.ts:85:80
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:83:2
+  ;;@ assembly/i64.ts:86:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:83:7
+   ;;@ assembly/i64.ts:86:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:84:2
+  ;;@ assembly/i64.ts:87:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:84:7
+   ;;@ assembly/i64.ts:87:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:84:13
+    ;;@ assembly/i64.ts:87:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:84:21
+     ;;@ assembly/i64.ts:87:21
      (i64.const 32)
     )
    )
@@ -646,56 +646,56 @@
  )
  (func $assembly/i64/or (; 14 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:88:2
+  ;;@ assembly/i64.ts:91:2
   (set_local $4
-   ;;@ assembly/i64.ts:88:12
+   ;;@ assembly/i64.ts:91:12
    (i64.or
     (i64.or
-     ;;@ assembly/i64.ts:88:13
+     ;;@ assembly/i64.ts:91:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:88:27
+     ;;@ assembly/i64.ts:91:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:88:42
+      ;;@ assembly/i64.ts:91:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:88:48
+    ;;@ assembly/i64.ts:91:48
     (i64.or
-     ;;@ assembly/i64.ts:88:49
+     ;;@ assembly/i64.ts:91:49
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:88:64
+     ;;@ assembly/i64.ts:91:64
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:88:80
+      ;;@ assembly/i64.ts:91:80
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:89:2
+  ;;@ assembly/i64.ts:92:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:89:7
+   ;;@ assembly/i64.ts:92:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:90:2
+  ;;@ assembly/i64.ts:93:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:90:7
+   ;;@ assembly/i64.ts:93:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:90:13
+    ;;@ assembly/i64.ts:93:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:90:21
+     ;;@ assembly/i64.ts:93:21
      (i64.const 32)
     )
    )
@@ -703,56 +703,56 @@
  )
  (func $assembly/i64/xor (; 15 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:94:2
+  ;;@ assembly/i64.ts:97:2
   (set_local $4
-   ;;@ assembly/i64.ts:94:12
+   ;;@ assembly/i64.ts:97:12
    (i64.xor
     (i64.or
-     ;;@ assembly/i64.ts:94:13
+     ;;@ assembly/i64.ts:97:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:94:27
+     ;;@ assembly/i64.ts:97:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:94:42
+      ;;@ assembly/i64.ts:97:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:94:48
+    ;;@ assembly/i64.ts:97:48
     (i64.or
-     ;;@ assembly/i64.ts:94:49
+     ;;@ assembly/i64.ts:97:49
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:94:64
+     ;;@ assembly/i64.ts:97:64
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:94:80
+      ;;@ assembly/i64.ts:97:80
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:95:2
+  ;;@ assembly/i64.ts:98:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:95:7
+   ;;@ assembly/i64.ts:98:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:96:2
+  ;;@ assembly/i64.ts:99:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:96:7
+   ;;@ assembly/i64.ts:99:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:96:13
+    ;;@ assembly/i64.ts:99:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:96:21
+     ;;@ assembly/i64.ts:99:21
      (i64.const 32)
     )
    )
@@ -760,56 +760,56 @@
  )
  (func $assembly/i64/shl (; 16 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:100:2
+  ;;@ assembly/i64.ts:103:2
   (set_local $4
-   ;;@ assembly/i64.ts:100:12
+   ;;@ assembly/i64.ts:103:12
    (i64.shl
     (i64.or
-     ;;@ assembly/i64.ts:100:13
+     ;;@ assembly/i64.ts:103:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:100:27
+     ;;@ assembly/i64.ts:103:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:100:42
+      ;;@ assembly/i64.ts:103:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:100:49
+    ;;@ assembly/i64.ts:103:49
     (i64.or
-     ;;@ assembly/i64.ts:100:50
+     ;;@ assembly/i64.ts:103:50
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:100:65
+     ;;@ assembly/i64.ts:103:65
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:100:81
+      ;;@ assembly/i64.ts:103:81
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:101:2
+  ;;@ assembly/i64.ts:104:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:101:7
+   ;;@ assembly/i64.ts:104:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:102:2
+  ;;@ assembly/i64.ts:105:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:102:7
+   ;;@ assembly/i64.ts:105:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:102:13
+    ;;@ assembly/i64.ts:105:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:102:21
+     ;;@ assembly/i64.ts:105:21
      (i64.const 32)
     )
    )
@@ -817,57 +817,57 @@
  )
  (func $assembly/i64/shr_s (; 17 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:106:2
+  ;;@ assembly/i64.ts:109:2
   (set_local $4
-   ;;@ assembly/i64.ts:106:12
+   ;;@ assembly/i64.ts:109:12
    (i64.shr_s
-    ;;@ assembly/i64.ts:106:18
+    ;;@ assembly/i64.ts:109:18
     (i64.or
-     ;;@ assembly/i64.ts:106:24
+     ;;@ assembly/i64.ts:109:24
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:106:38
+     ;;@ assembly/i64.ts:109:38
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:106:53
+      ;;@ assembly/i64.ts:109:53
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:106:60
+    ;;@ assembly/i64.ts:109:60
     (i64.or
-     ;;@ assembly/i64.ts:106:66
+     ;;@ assembly/i64.ts:109:66
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:106:81
+     ;;@ assembly/i64.ts:109:81
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:106:97
+      ;;@ assembly/i64.ts:109:97
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:107:2
+  ;;@ assembly/i64.ts:110:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:107:7
+   ;;@ assembly/i64.ts:110:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:108:2
+  ;;@ assembly/i64.ts:111:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:108:7
+   ;;@ assembly/i64.ts:111:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:108:13
+    ;;@ assembly/i64.ts:111:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:108:21
+     ;;@ assembly/i64.ts:111:21
      (i64.const 32)
     )
    )
@@ -875,168 +875,168 @@
  )
  (func $assembly/i64/shr_u (; 18 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:112:2
+  ;;@ assembly/i64.ts:115:2
   (set_local $4
-   ;;@ assembly/i64.ts:112:12
+   ;;@ assembly/i64.ts:115:12
    (i64.shr_u
     (i64.or
-     ;;@ assembly/i64.ts:112:13
+     ;;@ assembly/i64.ts:115:13
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:112:27
+     ;;@ assembly/i64.ts:115:27
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:112:42
+      ;;@ assembly/i64.ts:115:42
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:112:49
+    ;;@ assembly/i64.ts:115:49
     (i64.or
-     ;;@ assembly/i64.ts:112:50
+     ;;@ assembly/i64.ts:115:50
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:112:65
+     ;;@ assembly/i64.ts:115:65
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:112:81
+      ;;@ assembly/i64.ts:115:81
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:113:2
+  ;;@ assembly/i64.ts:116:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:113:7
+   ;;@ assembly/i64.ts:116:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:114:2
+  ;;@ assembly/i64.ts:117:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:114:7
+   ;;@ assembly/i64.ts:117:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:114:13
+    ;;@ assembly/i64.ts:117:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:114:21
+     ;;@ assembly/i64.ts:117:21
      (i64.const 32)
     )
    )
   )
  )
- (func $assembly/i64/rotl_ (; 19 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $assembly/i64/rotl (; 19 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:118:2
+  ;;@ assembly/i64.ts:123:2
   (set_local $4
-   ;;@ assembly/i64.ts:118:12
+   ;;@ assembly/i64.ts:123:12
    (i64.rotl
-    ;;@ assembly/i64.ts:118:22
+    ;;@ assembly/i64.ts:123:30
     (i64.or
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:118:36
+     ;;@ assembly/i64.ts:123:44
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:118:51
+      ;;@ assembly/i64.ts:123:59
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:118:55
+    ;;@ assembly/i64.ts:123:63
     (i64.or
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:118:70
+     ;;@ assembly/i64.ts:123:78
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:118:86
+      ;;@ assembly/i64.ts:123:94
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:119:2
+  ;;@ assembly/i64.ts:124:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:119:7
+   ;;@ assembly/i64.ts:124:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:120:2
+  ;;@ assembly/i64.ts:125:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:120:7
+   ;;@ assembly/i64.ts:125:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:120:13
+    ;;@ assembly/i64.ts:125:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:120:21
+     ;;@ assembly/i64.ts:125:21
      (i64.const 32)
     )
    )
   )
  )
- (func $assembly/i64/rotr_ (; 20 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $assembly/i64/rotr (; 20 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
-  ;;@ assembly/i64.ts:125:2
+  ;;@ assembly/i64.ts:131:2
   (set_local $4
-   ;;@ assembly/i64.ts:125:12
+   ;;@ assembly/i64.ts:131:12
    (i64.rotr
-    ;;@ assembly/i64.ts:125:22
+    ;;@ assembly/i64.ts:131:30
     (i64.or
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:125:36
+     ;;@ assembly/i64.ts:131:44
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:125:51
+      ;;@ assembly/i64.ts:131:59
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:125:55
+    ;;@ assembly/i64.ts:131:63
     (i64.or
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:125:70
+     ;;@ assembly/i64.ts:131:78
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:125:86
+      ;;@ assembly/i64.ts:131:94
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:126:2
+  ;;@ assembly/i64.ts:132:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:126:7
+   ;;@ assembly/i64.ts:132:7
    (i32.wrap/i64
     (get_local $4)
    )
   )
-  ;;@ assembly/i64.ts:127:2
+  ;;@ assembly/i64.ts:133:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:127:7
+   ;;@ assembly/i64.ts:133:7
    (i32.wrap/i64
-    ;;@ assembly/i64.ts:127:13
+    ;;@ assembly/i64.ts:133:13
     (i64.shr_u
      (get_local $4)
-     ;;@ assembly/i64.ts:127:21
+     ;;@ assembly/i64.ts:133:21
      (i64.const 32)
     )
    )
@@ -1044,481 +1044,481 @@
  )
  (func $assembly/i64/eq (; 21 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:132:2
+  ;;@ assembly/i64.ts:137:2
   (set_local $4
-   ;;@ assembly/i64.ts:132:18
+   ;;@ assembly/i64.ts:137:18
    (i64.eq
     (i64.or
-     ;;@ assembly/i64.ts:132:19
+     ;;@ assembly/i64.ts:137:19
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:132:33
+     ;;@ assembly/i64.ts:137:33
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:132:48
+      ;;@ assembly/i64.ts:137:48
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:132:55
+    ;;@ assembly/i64.ts:137:55
     (i64.or
-     ;;@ assembly/i64.ts:132:56
+     ;;@ assembly/i64.ts:137:56
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:132:71
+     ;;@ assembly/i64.ts:137:71
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:132:87
+      ;;@ assembly/i64.ts:137:87
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:133:2
+  ;;@ assembly/i64.ts:138:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:133:7
+   ;;@ assembly/i64.ts:138:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:134:2
+  ;;@ assembly/i64.ts:139:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:134:7
+   ;;@ assembly/i64.ts:139:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/ne (; 22 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:138:2
+  ;;@ assembly/i64.ts:143:2
   (set_local $4
-   ;;@ assembly/i64.ts:138:18
+   ;;@ assembly/i64.ts:143:18
    (i64.ne
     (i64.or
-     ;;@ assembly/i64.ts:138:19
+     ;;@ assembly/i64.ts:143:19
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:138:33
+     ;;@ assembly/i64.ts:143:33
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:138:48
+      ;;@ assembly/i64.ts:143:48
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:138:55
+    ;;@ assembly/i64.ts:143:55
     (i64.or
-     ;;@ assembly/i64.ts:138:56
+     ;;@ assembly/i64.ts:143:56
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:138:71
+     ;;@ assembly/i64.ts:143:71
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:138:87
+      ;;@ assembly/i64.ts:143:87
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:139:2
+  ;;@ assembly/i64.ts:144:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:139:7
+   ;;@ assembly/i64.ts:144:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:140:2
+  ;;@ assembly/i64.ts:145:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:140:7
+   ;;@ assembly/i64.ts:145:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/lt_s (; 23 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:144:2
+  ;;@ assembly/i64.ts:149:2
   (set_local $4
-   ;;@ assembly/i64.ts:144:18
+   ;;@ assembly/i64.ts:149:18
    (i64.lt_s
     (i64.or
-     ;;@ assembly/i64.ts:144:24
+     ;;@ assembly/i64.ts:149:24
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:144:38
+     ;;@ assembly/i64.ts:149:38
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:144:53
+      ;;@ assembly/i64.ts:149:53
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:144:59
+    ;;@ assembly/i64.ts:149:59
     (i64.or
-     ;;@ assembly/i64.ts:144:65
+     ;;@ assembly/i64.ts:149:65
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:144:80
+     ;;@ assembly/i64.ts:149:80
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:144:96
+      ;;@ assembly/i64.ts:149:96
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:145:2
+  ;;@ assembly/i64.ts:150:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:145:7
+   ;;@ assembly/i64.ts:150:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:146:2
+  ;;@ assembly/i64.ts:151:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:146:7
+   ;;@ assembly/i64.ts:151:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/lt_u (; 24 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:150:2
+  ;;@ assembly/i64.ts:155:2
   (set_local $4
-   ;;@ assembly/i64.ts:150:18
+   ;;@ assembly/i64.ts:155:18
    (i64.lt_u
     (i64.or
-     ;;@ assembly/i64.ts:150:19
+     ;;@ assembly/i64.ts:155:19
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:150:33
+     ;;@ assembly/i64.ts:155:33
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:150:48
+      ;;@ assembly/i64.ts:155:48
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:150:54
+    ;;@ assembly/i64.ts:155:54
     (i64.or
-     ;;@ assembly/i64.ts:150:55
+     ;;@ assembly/i64.ts:155:55
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:150:70
+     ;;@ assembly/i64.ts:155:70
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:150:86
+      ;;@ assembly/i64.ts:155:86
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:151:2
+  ;;@ assembly/i64.ts:156:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:151:7
+   ;;@ assembly/i64.ts:156:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:152:2
+  ;;@ assembly/i64.ts:157:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:152:7
+   ;;@ assembly/i64.ts:157:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/le_s (; 25 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:156:2
+  ;;@ assembly/i64.ts:161:2
   (set_local $4
-   ;;@ assembly/i64.ts:156:18
+   ;;@ assembly/i64.ts:161:18
    (i64.le_s
     (i64.or
-     ;;@ assembly/i64.ts:156:24
+     ;;@ assembly/i64.ts:161:24
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:156:38
+     ;;@ assembly/i64.ts:161:38
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:156:53
+      ;;@ assembly/i64.ts:161:53
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:156:60
+    ;;@ assembly/i64.ts:161:60
     (i64.or
-     ;;@ assembly/i64.ts:156:66
+     ;;@ assembly/i64.ts:161:66
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:156:81
+     ;;@ assembly/i64.ts:161:81
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:156:97
+      ;;@ assembly/i64.ts:161:97
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:157:2
+  ;;@ assembly/i64.ts:162:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:157:7
+   ;;@ assembly/i64.ts:162:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:158:2
+  ;;@ assembly/i64.ts:163:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:158:7
+   ;;@ assembly/i64.ts:163:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/le_u (; 26 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:162:2
+  ;;@ assembly/i64.ts:167:2
   (set_local $4
-   ;;@ assembly/i64.ts:162:18
+   ;;@ assembly/i64.ts:167:18
    (i64.le_u
     (i64.or
-     ;;@ assembly/i64.ts:162:19
+     ;;@ assembly/i64.ts:167:19
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:162:33
+     ;;@ assembly/i64.ts:167:33
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:162:48
+      ;;@ assembly/i64.ts:167:48
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:162:55
+    ;;@ assembly/i64.ts:167:55
     (i64.or
-     ;;@ assembly/i64.ts:162:56
+     ;;@ assembly/i64.ts:167:56
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:162:71
+     ;;@ assembly/i64.ts:167:71
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:162:87
+      ;;@ assembly/i64.ts:167:87
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:163:2
+  ;;@ assembly/i64.ts:168:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:163:7
+   ;;@ assembly/i64.ts:168:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:164:2
+  ;;@ assembly/i64.ts:169:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:164:7
+   ;;@ assembly/i64.ts:169:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/gt_s (; 27 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:168:2
+  ;;@ assembly/i64.ts:173:2
   (set_local $4
-   ;;@ assembly/i64.ts:168:18
+   ;;@ assembly/i64.ts:173:18
    (i64.gt_s
     (i64.or
-     ;;@ assembly/i64.ts:168:24
+     ;;@ assembly/i64.ts:173:24
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:168:38
+     ;;@ assembly/i64.ts:173:38
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:168:53
+      ;;@ assembly/i64.ts:173:53
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:168:59
+    ;;@ assembly/i64.ts:173:59
     (i64.or
-     ;;@ assembly/i64.ts:168:65
+     ;;@ assembly/i64.ts:173:65
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:168:80
+     ;;@ assembly/i64.ts:173:80
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:168:96
+      ;;@ assembly/i64.ts:173:96
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:169:2
+  ;;@ assembly/i64.ts:174:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:169:7
+   ;;@ assembly/i64.ts:174:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:170:2
+  ;;@ assembly/i64.ts:175:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:170:7
+   ;;@ assembly/i64.ts:175:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/gt_u (; 28 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:174:2
+  ;;@ assembly/i64.ts:179:2
   (set_local $4
-   ;;@ assembly/i64.ts:174:18
+   ;;@ assembly/i64.ts:179:18
    (i64.gt_u
     (i64.or
-     ;;@ assembly/i64.ts:174:19
+     ;;@ assembly/i64.ts:179:19
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:174:33
+     ;;@ assembly/i64.ts:179:33
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:174:48
+      ;;@ assembly/i64.ts:179:48
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:174:54
+    ;;@ assembly/i64.ts:179:54
     (i64.or
-     ;;@ assembly/i64.ts:174:55
+     ;;@ assembly/i64.ts:179:55
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:174:70
+     ;;@ assembly/i64.ts:179:70
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:174:86
+      ;;@ assembly/i64.ts:179:86
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:175:2
+  ;;@ assembly/i64.ts:180:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:175:7
+   ;;@ assembly/i64.ts:180:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:176:2
+  ;;@ assembly/i64.ts:181:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:176:7
+   ;;@ assembly/i64.ts:181:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/ge_s (; 29 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:180:2
+  ;;@ assembly/i64.ts:185:2
   (set_local $4
-   ;;@ assembly/i64.ts:180:18
+   ;;@ assembly/i64.ts:185:18
    (i64.ge_s
     (i64.or
-     ;;@ assembly/i64.ts:180:24
+     ;;@ assembly/i64.ts:185:24
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:180:38
+     ;;@ assembly/i64.ts:185:38
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:180:53
+      ;;@ assembly/i64.ts:185:53
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:180:60
+    ;;@ assembly/i64.ts:185:60
     (i64.or
-     ;;@ assembly/i64.ts:180:66
+     ;;@ assembly/i64.ts:185:66
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:180:81
+     ;;@ assembly/i64.ts:185:81
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:180:97
+      ;;@ assembly/i64.ts:185:97
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:181:2
+  ;;@ assembly/i64.ts:186:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:181:7
+   ;;@ assembly/i64.ts:186:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:182:2
+  ;;@ assembly/i64.ts:187:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:182:7
+   ;;@ assembly/i64.ts:187:7
    (i32.const 0)
   )
  )
  (func $assembly/i64/ge_u (; 30 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
-  ;;@ assembly/i64.ts:186:2
+  ;;@ assembly/i64.ts:191:2
   (set_local $4
-   ;;@ assembly/i64.ts:186:18
+   ;;@ assembly/i64.ts:191:18
    (i64.ge_u
     (i64.or
-     ;;@ assembly/i64.ts:186:19
+     ;;@ assembly/i64.ts:191:19
      (i64.extend_u/i32
       (get_local $0)
      )
-     ;;@ assembly/i64.ts:186:33
+     ;;@ assembly/i64.ts:191:33
      (i64.shl
       (i64.extend_u/i32
        (get_local $1)
       )
-      ;;@ assembly/i64.ts:186:48
+      ;;@ assembly/i64.ts:191:48
       (i64.const 32)
      )
     )
-    ;;@ assembly/i64.ts:186:55
+    ;;@ assembly/i64.ts:191:55
     (i64.or
-     ;;@ assembly/i64.ts:186:56
+     ;;@ assembly/i64.ts:191:56
      (i64.extend_u/i32
       (get_local $2)
      )
-     ;;@ assembly/i64.ts:186:71
+     ;;@ assembly/i64.ts:191:71
      (i64.shl
       (i64.extend_u/i32
        (get_local $3)
       )
-      ;;@ assembly/i64.ts:186:87
+      ;;@ assembly/i64.ts:191:87
       (i64.const 32)
      )
     )
    )
   )
-  ;;@ assembly/i64.ts:187:2
+  ;;@ assembly/i64.ts:192:2
   (set_global $assembly/i64/lo
-   ;;@ assembly/i64.ts:187:7
+   ;;@ assembly/i64.ts:192:7
    (get_local $4)
   )
-  ;;@ assembly/i64.ts:188:2
+  ;;@ assembly/i64.ts:193:2
   (set_global $assembly/i64/hi
-   ;;@ assembly/i64.ts:188:7
+   ;;@ assembly/i64.ts:193:7
    (i32.const 0)
   )
  )

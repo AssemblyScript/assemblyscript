@@ -6413,6 +6413,14 @@
     (unreachable)
    )
   )
+  (drop
+   (f64.ne
+    (tee_local $3
+     (f64.const 1)
+    )
+    (get_local $3)
+   )
+  )
   (if
    (i32.eqz
     (i32.eq

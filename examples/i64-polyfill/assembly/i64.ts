@@ -9,26 +9,29 @@ export function getHi(): u32 {
   return hi;
 }
 
-function clz_(loLeft: u32, hiLeft: u32): void {
-  var ret = clz<u64>(<u64>loLeft | <u64>hiLeft << 32);
-  lo = <u32>ret;
-  hi = 0;
-}
-export { clz_ as clz };
+import { clz as builtin_clz } from "builtins";
 
-function ctz_(loLeft: u32, hiLeft: u32): void {
-  var ret = ctz<u64>(<u64>loLeft | <u64>hiLeft << 32);
+export function clz(loLeft: u32, hiLeft: u32): void {
+  var ret = builtin_clz<u64>(<u64>loLeft | <u64>hiLeft << 32);
   lo = <u32>ret;
   hi = 0;
 }
-export { ctz_ as ctz };
 
-function popcnt_(loLeft: u32, hiLeft: u32): void {
-  var ret = popcnt<u64>(<u64>loLeft | <u64>hiLeft << 32);
+import { ctz as builtin_ctz } from "builtins";
+
+export function ctz(loLeft: u32, hiLeft: u32): void {
+  var ret = builtin_ctz<u64>(<u64>loLeft | <u64>hiLeft << 32);
   lo = <u32>ret;
   hi = 0;
 }
-export { popcnt_ as popcnt };
+
+import { popcnt as builtin_popcnt } from "builtins";
+
+export function popcnt(loLeft: u32, hiLeft: u32): void {
+  var ret = builtin_popcnt<u64>(<u64>loLeft | <u64>hiLeft << 32);
+  lo = <u32>ret;
+  hi = 0;
+}
 
 export function eqz(loLeft: u32, hiLeft: u32): void {
   var ret: bool = !(<u64>loLeft | <u64>hiLeft << 32);
@@ -114,19 +117,21 @@ export function shr_u(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): voi
   hi = <u32>(ret >>> 32);
 }
 
-function rotl_(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
-  var ret = rotl<u64>(<u64>loLeft | <u64>hiLeft << 32, <u64>loRight | <u64>hiRight << 32);
-  lo = <u32>ret;
-  hi = <u32>(ret >>> 32);
-}
-export { rotl_ as rotl };
+import { rotl as builtin_rotl } from "builtins";
 
-function rotr_(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
-  var ret = rotr<u64>(<u64>loLeft | <u64>hiLeft << 32, <u64>loRight | <u64>hiRight << 32);
+export function rotl(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
+  var ret = builtin_rotl<u64>(<u64>loLeft | <u64>hiLeft << 32, <u64>loRight | <u64>hiRight << 32);
   lo = <u32>ret;
   hi = <u32>(ret >>> 32);
 }
-export { rotr_ as rotr };
+
+import { rotr as builtin_rotr } from "builtins";
+
+export function rotr(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
+  var ret = builtin_rotr<u64>(<u64>loLeft | <u64>hiLeft << 32, <u64>loRight | <u64>hiRight << 32);
+  lo = <u32>ret;
+  hi = <u32>(ret >>> 32);
+}
 
 export function eq(loLeft: u32, hiLeft: u32, loRight: u32, hiRight: u32): void {
   var ret: bool = (<u64>loLeft | <u64>hiLeft << 32) == (<u64>loRight | <u64>hiRight << 32);

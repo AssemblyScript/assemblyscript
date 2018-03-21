@@ -1395,10 +1395,6 @@ export class ASTBuilder {
       sb.push("@global\n");
       indent(sb, indentLevel);
     }
-    if (node.is(CommonFlags.BUILTIN)) {
-      sb.push("@builtin\n");
-      indent(sb, indentLevel);
-    }
     if (node.is(CommonFlags.UNMANAGED)) {
       sb.push("@unmanaged\n");
       indent(sb, indentLevel);

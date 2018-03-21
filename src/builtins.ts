@@ -26,8 +26,8 @@ import {
 } from "./types";
 
 import {
-  UnaryOp,
   BinaryOp,
+  UnaryOp,
   HostOp,
   NativeType,
   ExpressionRef,
@@ -35,11 +35,11 @@ import {
 } from "./module";
 
 import {
-  Global,
-  FunctionPrototype,
-  Local,
-  Class,
   ElementKind,
+  Global,
+  Local,
+  FunctionPrototype,
+  Class,
   ClassPrototype
 } from "./program";
 
@@ -2500,8 +2500,6 @@ export function compileAllocate(
   );
 }
 
-const abortInternalName = "abort";
-
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(
   compiler: Compiler,
@@ -2514,7 +2512,7 @@ export function compileAbort(
   var stringType = program.typesLookup.get("string"); // might be intended
   if (!stringType) return module.createUnreachable();
 
-  var abortPrototype = program.elementsLookup.get(abortInternalName); // might be intended
+  var abortPrototype = program.elementsLookup.get("abort"); // might be intended
   if (!abortPrototype || abortPrototype.kind != ElementKind.FUNCTION_PROTOTYPE) return module.createUnreachable();
 
   var abortInstance = (<FunctionPrototype>abortPrototype).resolve(); // reports

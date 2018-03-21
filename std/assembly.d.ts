@@ -346,6 +346,3 @@ declare function unmanaged(target: Function): any;
 
 /** Annotates a class field with an explicit offset. */
 declare function offset(offset: usize): any;
-
-/** Annotates an element as begin built-in. */
-declare function builtin(target: Function): any;

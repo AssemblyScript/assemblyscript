@@ -92,6 +92,7 @@ export enum DiagnosticCode {
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Multiple_constructor_implementations_are_not_allowed = 2392,
   Duplicate_function_implementation = 2393,
+  Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
   Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
@@ -193,6 +194,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2392: return "Multiple constructor implementations are not allowed.";
     case 2393: return "Duplicate function implementation.";
+    case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
     case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";

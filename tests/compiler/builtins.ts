@@ -282,3 +282,9 @@ assert(f64.MAX_VALUE == 1.7976931348623157e+308);
 assert(f64.MIN_SAFE_INTEGER == -9007199254740991);
 assert(f64.MAX_SAFE_INTEGER == 9007199254740991);
 assert(f64.EPSILON == 2.2204460492503131e-16);
+
+import {
+  isNaN as isItNaN
+} from "builtins";
+
+isItNaN(1);

@@ -7,9 +7,9 @@
  (memory $0 1)
  (export "getHi" (func $../../examples/i64-polyfill/assembly/i64/getHi))
  (export "getLo" (func $../../examples/i64-polyfill/assembly/i64/getLo))
- (export "clz" (func $../../examples/i64-polyfill/assembly/i64/clz_))
- (export "ctz" (func $../../examples/i64-polyfill/assembly/i64/ctz_))
- (export "popcnt" (func $../../examples/i64-polyfill/assembly/i64/popcnt_))
+ (export "clz" (func $../../examples/i64-polyfill/assembly/i64/clz))
+ (export "ctz" (func $../../examples/i64-polyfill/assembly/i64/ctz))
+ (export "popcnt" (func $../../examples/i64-polyfill/assembly/i64/popcnt))
  (export "eqz" (func $../../examples/i64-polyfill/assembly/i64/eqz))
  (export "add" (func $../../examples/i64-polyfill/assembly/i64/add))
  (export "sub" (func $../../examples/i64-polyfill/assembly/i64/sub))
@@ -24,8 +24,8 @@
  (export "shl" (func $../../examples/i64-polyfill/assembly/i64/shl))
  (export "shr_s" (func $../../examples/i64-polyfill/assembly/i64/shr_s))
  (export "shr_u" (func $../../examples/i64-polyfill/assembly/i64/shr_u))
- (export "rotl" (func $../../examples/i64-polyfill/assembly/i64/rotl_))
- (export "rotr" (func $../../examples/i64-polyfill/assembly/i64/rotr_))
+ (export "rotl" (func $../../examples/i64-polyfill/assembly/i64/rotl))
+ (export "rotr" (func $../../examples/i64-polyfill/assembly/i64/rotr))
  (export "eq" (func $../../examples/i64-polyfill/assembly/i64/eq))
  (export "ne" (func $../../examples/i64-polyfill/assembly/i64/ne))
  (export "lt_s" (func $../../examples/i64-polyfill/assembly/i64/lt_s))
@@ -43,7 +43,7 @@
  (func $../../examples/i64-polyfill/assembly/i64/getLo (; 1 ;) (type $i) (result i32)
   (get_global $../../examples/i64-polyfill/assembly/i64/lo)
  )
- (func $../../examples/i64-polyfill/assembly/i64/clz_ (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/clz (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
    (i32.wrap/i64
     (i64.clz
@@ -65,7 +65,7 @@
    (i32.const 0)
   )
  )
- (func $../../examples/i64-polyfill/assembly/i64/ctz_ (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/ctz (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
    (i32.wrap/i64
     (i64.ctz
@@ -87,7 +87,7 @@
    (i32.const 0)
   )
  )
- (func $../../examples/i64-polyfill/assembly/i64/popcnt_ (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/popcnt (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
    (i32.wrap/i64
     (i64.popcnt
@@ -662,7 +662,7 @@
    )
   )
  )
- (func $../../examples/i64-polyfill/assembly/i64/rotl_ (; 19 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/rotl (; 19 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
    (i32.wrap/i64
@@ -703,7 +703,7 @@
    )
   )
  )
- (func $../../examples/i64-polyfill/assembly/i64/rotr_ (; 20 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/rotr (; 20 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
    (i32.wrap/i64

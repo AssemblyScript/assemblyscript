@@ -464,7 +464,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileGlobal(global: Global): bool {
-    if (global.is(CommonFlags.COMPILED) || global.is(CommonFlags.BUILTIN)) return true;
+    if (global.is(CommonFlags.COMPILED) || global.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) return true;
     global.set(CommonFlags.COMPILED);   // ^ built-ins are compiled on use
 
     var module = this.module;
@@ -814,7 +814,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles a readily resolved function instance. */
   compileFunction(instance: Function): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
-    assert(!instance.is(CommonFlags.BUILTIN) || instance.simpleName == "abort");
+    assert(!instance.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || instance.simpleName == "abort");
     instance.set(CommonFlags.COMPILED);
 
     // check that modifiers are matching but still compile as-is
@@ -3975,7 +3975,7 @@ export class Compiler extends DiagnosticEmitter {
         let prototype = <FunctionPrototype>element;
 
         // builtins are compiled on the fly
-        if (prototype.is(CommonFlags.BUILTIN)) {
+        if (prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
           let expr = compileBuiltinCall( // reports
             this,
             prototype,
@@ -4521,7 +4521,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createGetLocal(localIndex, localType.toNativeType());
       }
       case ElementKind.GLOBAL: {
-        if (element.is(CommonFlags.BUILTIN)) {
+        if (element.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
           return compileBuiltinGetConstant(this, <Global>element, expression);
         }
         if (!this.compileGlobal(<Global>element)) { // reports; not yet compiled if a static field
@@ -4996,7 +4996,7 @@ export class Compiler extends DiagnosticEmitter {
     var targetExpr: ExpressionRef;
     switch (element.kind) {
       case ElementKind.GLOBAL: { // static property
-        if (element.is(CommonFlags.BUILTIN)) {
+        if (element.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
           return compileBuiltinGetConstant(this, <Global>element, propertyAccess);
         }
         if (!this.compileGlobal(<Global>element)) { // reports; not yet compiled if a static field

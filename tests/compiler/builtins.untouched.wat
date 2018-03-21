@@ -2020,5 +2020,13 @@
     (unreachable)
    )
   )
+  (drop
+   (f64.ne
+    (tee_local $5
+     (f64.const 1)
+    )
+    (get_local $5)
+   )
+  )
  )
 )
