@@ -4550,6 +4550,16 @@ export class Compiler extends DiagnosticEmitter {
         }
         return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
       }
+      case ElementKind.FUNCTION_PROTOTYPE: {
+        let instance = (<FunctionPrototype>element).resolve(
+          null,
+          this.currentFunction.contextualTypeArguments
+        );
+        if (!(instance && this.compileFunction(instance))) return module.createUnreachable();
+        let index = this.ensureFunctionTableEntry(instance);
+        this.currentType = Type.u32.asFunction(instance.signature);
+        return this.module.createI32(index);
+      }
     }
     this.error(
       DiagnosticCode.Operation_not_supported,

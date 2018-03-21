@@ -1892,7 +1892,7 @@ export class Program extends DiagnosticEmitter {
           if (element && element.kind == ElementKind.FUNCTION_PROTOTYPE) {
             let instance = (<FunctionPrototype>element).resolveUsingTypeArguments(
               (<CallExpression>expression).typeArguments,
-              null,
+              contextualFunction.contextualTypeArguments,
               expression
             );
             if (instance) {

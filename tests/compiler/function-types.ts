@@ -7,9 +7,29 @@ function makeAdder<T>(): Adder<T> {
 }
 
 var i32Adder = makeAdder<i32>();
-i32Adder(1, 2);
+
+assert(i32Adder(1, 2) == 3);
 
 var i64Adder = makeAdder<i64>();
-i64Adder(1, 2);
 
-makeAdder<f64>()(1, 2);
+assert(i64Adder(10, 20) == 30);
+
+assert(makeAdder<f64>()(1.5, 2.5) == 4.0);
+
+function doAddWithFn<T>(a: T, b: T, fn: (a: T, b: T) => T): T {
+  return fn(a, b);
+}
+
+assert(doAddWithFn<i32>(2, 3, i32Adder) == 5);
+
+function doAdd<T>(a: T, b: T): T {
+  return makeAdder<T>()(a, b);
+}
+
+assert(doAdd<i32>(3, 4) == 7);
+
+function addI32(a: i32, b: i32): i32 {
+  return a + b;
+}
+
+assert(doAddWithFn<i32>(4, 5, addI32) == 9);
