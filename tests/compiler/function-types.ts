@@ -33,3 +33,9 @@ function addI32(a: i32, b: i32): i32 {
 }
 
 assert(doAddWithFn<i32>(4, 5, addI32) == 9);
+
+function makeAndAdd<T>(a: T, b: T, adder: Adder<T> = makeAdder<T>()): T {
+  return adder(a, b);
+}
+
+assert(makeAndAdd<i32>(1, 2) == 3);

@@ -5,6 +5,7 @@
  (type $III (func (param i64 i64) (result i64)))
  (type $FFF (func (param f64 f64) (result f64)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
@@ -56,7 +57,27 @@
    (call $function-types/makeAdder<i32>)
   )
  )
- (func $start (; 9 ;) (type $v)
+ (func $function-types/makeAndAdd<i32>|trampoline (; 9 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (block $N=1
+   (block $N=0
+    (block $N=invalid
+     (br_table $N=0 $N=1 $N=invalid
+      (get_local $3)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (call $function-types/makeAdder<i32>)
+   )
+  )
+  (call $function-types/doAddWithFn<i32>
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $start (; 10 ;) (type $v)
   (set_global $function-types/i32Adder
    (call $function-types/makeAdder<i32>)
   )
@@ -171,6 +192,26 @@
      (i32.const 0)
      (i32.const 4)
      (i32.const 35)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $function-types/makeAndAdd<i32>|trampoline
+     (i32.const 1)
+     (i32.const 2)
+     (i32.const 0)
+     (i32.const 0)
+    )
+    (i32.const 3)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 41)
      (i32.const 0)
     )
     (unreachable)

@@ -4236,6 +4236,7 @@ export class Compiler extends DiagnosticEmitter {
     trampolineSignature.requiredParameters = maxArguments + 1;
     trampoline = new Function(original.prototype, trampolineName, trampolineSignature, original.memberOf);
     trampoline.flags = original.flags;
+    trampoline.contextualTypeArguments = original.contextualTypeArguments;
     trampoline.set(CommonFlags.COMPILED);
     original.trampoline = trampoline;
 
