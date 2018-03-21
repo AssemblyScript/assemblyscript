@@ -251,6 +251,7 @@ exports.main = function main(argv, options, callback) {
         for (let i = 0, k = libDirs.length; i < k; ++i) {
           if (exports.libraryFiles.hasOwnProperty(sourcePath)) {
             sourceText = exports.libraryFiles[sourcePath];
+            sourcePath += ".ts";
           } else {
             sourceText = readFile(path.join(
               libDirs[i],
@@ -266,32 +267,33 @@ exports.main = function main(argv, options, callback) {
       // Otherwise try nextFile.ts, nextFile/index.ts, (lib)/nextFile.ts
       } else {
         sourceText = readFile(path.join(baseDir, sourcePath + ".ts"));
-        if (sourceText === null) {
+        if (sourceText !== null) {
+          sourcePath += ".ts";
+        } else {
           sourceText = readFile(path.join(baseDir, sourcePath, "index.ts"));
-          if (sourceText === null) {
-            for (let i = 0, k = libDirs.length; i < k; ++i) {
-              const dir = libDirs[i];
-              const key = exports.libraryPrefix + sourcePath;
-              if (exports.libraryFiles.hasOwnProperty(key)) {
-                sourceText = exports.libraryFiles[key];
-              } else {
+          if (sourceText !== null) {
+            sourcePath += "/index.ts";
+          } else {
+            const key = exports.libraryPrefix + sourcePath;
+            if (exports.libraryFiles.hasOwnProperty(key)) {
+              sourceText = exports.libraryFiles[key];
+              sourcePath = key + ".ts";
+            } else {
+              for (let i = 0, k = libDirs.length; i < k; ++i) {
+                const dir = libDirs[i];
                 sourceText = readFile(path.join(dir, sourcePath + ".ts"));
                 if (sourceText !== null) {
                   sourcePath = exports.libraryPrefix + sourcePath + ".ts";
                   break;
                 }
               }
+              if (sourceText === null) {
+                return callback(
+                  Error("Import file '" + sourcePath + ".ts' not found.")
+                );
+              }
             }
-            if (sourceText === null) {
-              return callback(
-                Error("Import file '" + sourcePath + ".ts' not found.")
-              );
-            }
-          } else {
-            sourcePath += "/index.ts";
           }
-        } else {
-          sourcePath += ".ts";
         }
       }
       stats.parseCount++;

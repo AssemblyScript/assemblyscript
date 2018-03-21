@@ -109,7 +109,7 @@ export abstract class Node {
   /** Common flags indicating specific traits. */
   flags: CommonFlags = CommonFlags.NONE;
 
-  /** Tests if this node has a specific flag or flags. */
+  /** Tests if this node has the specified flag or flags. */
   is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
   /** Tests if this node has one of the specified flags. */
   isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }

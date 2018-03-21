@@ -94,10 +94,10 @@ export class Type {
   size: u32;
   /** Size in bytes. Ceiled to 8-bits. */
   byteSize: i32;
-  /** Underlying class type, if a class type. */
-  classType: Class | null;
-  /** Underlying function type, if a function type. */
-  functionType: Signature | null;
+  /** Underlying class reference, if a class type. */
+  classReference: Class | null;
+  /** Underlying function reference, if a function type. */
+  signatureReference: Signature | null;
   /** Respective nullable type, if non-nullable. */
   nullableType: Type | null = null;
   /** Respective non-nullable type, if nullable. */
@@ -109,7 +109,8 @@ export class Type {
     this.flags = flags;
     this.size = size;
     this.byteSize = <i32>ceil<f64>(<f64>size / 8);
-    this.classType = null;
+    this.classReference = null;
+    this.signatureReference = null;
     this.nonNullableType = this;
   }
 
@@ -128,37 +129,30 @@ export class Type {
   /** Tests if this type has any of the specified flags. */
   isAny(flags: TypeFlags): bool { return (this.flags & flags) != 0; }
 
-  /** Tests if this type is a class type. */
-  get isClass(): bool { return this.classType != null; }
-  /** Tests if this type is a function type. */
-  get isFunction(): bool { return this.functionType != null; }
-  /** Tests if this type is a reference type. */
-  get isReference(): bool { return this.classType != null || this.functionType != null; }
-
   /** Composes a class type from this type and a class. */
   asClass(classType: Class): Type {
-    assert(this.kind == TypeKind.USIZE && !this.classType);
+    assert(this.kind == TypeKind.USIZE && !this.classReference);
     var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
-    ret.classType = classType;
+    ret.classReference = classType;
     return ret;
   }
 
   /** Composes a function type from this type and a function. */
-  asFunction(functionType: Signature): Type {
-    assert(this.kind == TypeKind.U32 && !this.functionType);
+  asFunction(signature: Signature): Type {
+    assert(this.kind == TypeKind.U32 && !this.signatureReference);
     var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
-    ret.functionType = functionType;
+    ret.signatureReference = signature;
     return ret;
   }
 
   /** Composes the respective nullable type of this type. */
   asNullable(): Type {
-    assert(this.isReference);
+    assert(this.is(TypeFlags.REFERENCE));
     if (!this.nullableType) {
       assert(!this.is(TypeFlags.NULLABLE));
       this.nullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
-      this.nullableType.classType = this.classType;       // either a class reference
-      this.nullableType.functionType = this.functionType; // or a function reference
+      this.nullableType.classReference = this.classReference;       // either a class reference
+      this.nullableType.signatureReference = this.signatureReference; // or a function reference
     }
     return this.nullableType;
   }
@@ -169,19 +163,19 @@ export class Type {
     var targetClass: Class | null;
     var currentFunction: Signature | null;
     var targetFunction: Signature | null;
-    if (this.isReference) {
-      if (target.isReference) {
-        if (currentClass = this.classType) {
-          if (targetClass = target.classType) {
+    if (this.is(TypeFlags.REFERENCE)) {
+      if (target.is(TypeFlags.REFERENCE)) {
+        if (currentClass = this.classReference) {
+          if (targetClass = target.classReference) {
             return currentClass.isAssignableTo(targetClass);
           }
-        } else if (currentFunction = this.functionType) {
-          if (targetFunction = target.functionType) {
+        } else if (currentFunction = this.signatureReference) {
+          if (targetFunction = target.signatureReference) {
             return currentFunction.isAssignableTo(targetFunction);
           }
         }
       }
-    } else if (!target.isReference) {
+    } else if (!target.is(TypeFlags.REFERENCE)) {
       if (this.is(TypeFlags.INTEGER)) {
         if (target.is(TypeFlags.INTEGER)) {
           if (!signednessIsImportant || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)) {
@@ -222,14 +216,14 @@ export class Type {
       case TypeKind.U8: return "u8";
       case TypeKind.U16: return "u16";
       case TypeKind.U32: {
-        let functionType = this.functionType;
+        let functionType = this.signatureReference;
         return kindOnly || !functionType
           ? "u32"
           : functionType.toString(true);
       }
       case TypeKind.U64: return "u64";
       case TypeKind.USIZE: {
-        let classType = this.classType;
+        let classType = this.classReference;
         return kindOnly || !classType
           ? "usize"
           : classType.toString();
@@ -480,6 +474,8 @@ export class Signature {
   hasRest: bool;
   /** Cached {@link FunctionTarget}. */
   cachedFunctionTarget: FunctionTarget | null = null;
+  /** Respective function type. */
+  type: Type;
 
   /** Constructs a new signature. */
   constructor(
@@ -493,6 +489,7 @@ export class Signature {
     this.returnType = returnType ? returnType : Type.void;
     this.thisType = thisType;
     this.hasRest = false;
+    this.type = Type.u32.asFunction(this);
   }
 
   /** Gets the known or, alternatively, generic parameter name at the specified index. */

@@ -2064,6 +2064,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // void to any
     if (fromType.kind == TypeKind.VOID) {
+      assert(toType.kind != TypeKind.VOID); // convertExpression should not be called with void -> void
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         reportNode.range, fromType.toString(), toType.toString()
@@ -4021,7 +4022,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // indirect call: index argument with signature
       case ElementKind.LOCAL: {
-        if (signature = (<Local>element).type.functionType) {
+        if (signature = (<Local>element).type.signatureReference) {
           indexArg = module.createGetLocal((<Local>element).index, NativeType.I32);
           break;
         } else {
@@ -4033,7 +4034,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
       case ElementKind.GLOBAL: {
-        if (signature = (<Global>element).type.functionType) {
+        if (signature = (<Global>element).type.signatureReference) {
           indexArg = module.createGetGlobal((<Global>element).internalName, (<Global>element).type.toNativeType());
           break;
         } else {
@@ -4046,7 +4047,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FIELD: {
         let type = (<Field>element).type;
-        if (signature = type.functionType) {
+        if (signature = type.signatureReference) {
           let targetExpr = this.compileExpression(assert(resolved.targetExpression), type);
           indexArg = module.createLoad(
             4,
@@ -4425,7 +4426,7 @@ export class Compiler extends DiagnosticEmitter {
       declaration
     );
     if (!instance) return this.module.createUnreachable();
-    this.currentType = Type.u32.asFunction(instance.signature); // TODO: get cached type?
+    this.currentType = instance.signature.type; // TODO: get cached type?
     // NOTE that, in order to make this work in every case, the function must be represented by a
     // value, so we add it and rely on the optimizer to figure out where it can be called directly.
     var index = this.ensureFunctionTableEntry(instance); // reports
@@ -4449,7 +4450,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.kind) {
       case NodeKind.NULL: {
         let options = this.options;
-        if (!contextualType.classType) {
+        if (!contextualType.classReference) {
           this.currentType = options.usizeType;
         }
         return options.isWasm64
@@ -4558,7 +4559,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         if (!(instance && this.compileFunction(instance))) return module.createUnreachable();
         let index = this.ensureFunctionTableEntry(instance);
-        this.currentType = Type.u32.asFunction(instance.signature);
+        this.currentType = instance.signature.type;
         return this.module.createI32(index);
       }
     }
@@ -4579,7 +4580,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.literalKind) {
       case LiteralKind.ARRAY: {
         assert(!implicitNegate);
-        let classType = contextualType.classType;
+        let classType = contextualType.classReference;
         if (
           classType &&
           classType.prototype == this.program.elementsLookup.get("Array")
@@ -5139,7 +5140,7 @@ export class Compiler extends DiagnosticEmitter {
 
     switch (expression.operator) {
       case Token.PLUS_PLUS: {
-        if (currentType.isReference) {
+        if (currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -5199,7 +5200,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-        if (currentType.isReference) {
+        if (currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -5323,7 +5324,7 @@ export class Compiler extends DiagnosticEmitter {
 
     switch (expression.operator) {
       case Token.PLUS: {
-        if (currentType.isReference) {
+        if (currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -5343,7 +5344,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS: {
-        if (currentType.isReference) {
+        if (currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -5382,7 +5383,7 @@ export class Compiler extends DiagnosticEmitter {
               break;
             }
             case TypeKind.USIZE: {
-              if (currentType.isReference) {
+              if (currentType.is(TypeFlags.REFERENCE)) {
                 this.error(
                   DiagnosticCode.Operation_not_supported,
                   expression.range
@@ -5419,7 +5420,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.PLUS_PLUS: {
-        if (currentType.isReference) {
+        if (currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -5447,7 +5448,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (currentType.isReference) {
+            if (currentType.is(TypeFlags.REFERENCE)) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
                 expression.range
@@ -5483,7 +5484,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-        if (currentType.isReference) {
+        if (currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -5511,7 +5512,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (currentType.isReference) {
+            if (currentType.is(TypeFlags.REFERENCE)) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
                 expression.range
@@ -5560,7 +5561,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.TILDE: {
-        if (currentType.isReference) {
+        if (currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -5591,7 +5592,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (currentType.isReference) {
+            if (currentType.is(TypeFlags.REFERENCE)) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
                 expression.range

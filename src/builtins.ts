@@ -192,7 +192,7 @@ export function compileCall(
       compiler.compileExpressionRetainType(operands[0], Type.i32, false);
       type = compiler.currentType;
       compiler.currentType = Type.bool;
-      let classType = type.classType;
+      let classType = type.classReference;
       if (classType) {
         let stringPrototype = compiler.program.elementsLookup.get("String");
         if (stringPrototype) {
@@ -224,7 +224,7 @@ export function compileCall(
       compiler.compileExpressionRetainType(operands[0], Type.i32, false);
       type = compiler.currentType;
       compiler.currentType = Type.bool;
-      let classType = type.classType;
+      let classType = type.classReference;
       return classType != null && classType.prototype.fnIndexedGet != null
         ? module.createI32(1)
         : module.createI32(0);
@@ -407,7 +407,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -480,7 +480,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -553,7 +553,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -640,7 +640,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -726,7 +726,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -849,7 +849,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -1001,7 +1001,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -1155,7 +1155,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -1230,7 +1230,7 @@ export function compileCall(
       }
       switch (compiler.currentType.kind) {
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -1295,7 +1295,7 @@ export function compileCall(
       }
       switch (compiler.currentType.kind) {
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -1411,7 +1411,7 @@ export function compileCall(
       }
       switch (compiler.currentType.kind) {
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -1481,7 +1481,7 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (typeArguments[0].isReference) {
+          if (typeArguments[0].is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range
@@ -1612,7 +1612,7 @@ export function compileCall(
       }
       switch (compiler.currentType.kind) {
         case TypeKind.USIZE: {
-          if (compiler.currentType.isReference) {
+          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
               reportNode.range

@@ -1715,27 +1715,27 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
-        if (!(targetType = (<VariableLikeElement>target).type).classType) {
+        if (!(targetType = (<VariableLikeElement>target).type).classReference) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
             propertyAccess.property.range, propertyName, targetType.toString()
           );
           return null;
         }
-        target = <Class>targetType.classType;
+        target = <Class>targetType.classReference;
         break;
       }
       case ElementKind.PROPERTY: {
         let getter = assert((<Property>target).getterPrototype).resolve(); // reports
         if (!getter) return null;
-        if (!(targetType = getter.signature.returnType).classType) {
+        if (!(targetType = getter.signature.returnType).classReference) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
             propertyAccess.property.range, propertyName, targetType.toString()
           );
           return null;
         }
-        target = <Class>targetType.classType;
+        target = <Class>targetType.classReference;
         break;
       }
     }
@@ -1799,8 +1799,8 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
         let type = (<VariableLikeElement>target).type;
-        if (type.classType) {
-          let indexedGetName = (target = type.classType).prototype.fnIndexedGet;
+        if (type.classReference) {
+          let indexedGetName = (target = type.classReference).prototype.fnIndexedGet;
           let indexedGet: Element | null;
           if (
             indexedGetName != null &&
@@ -1808,7 +1808,7 @@ export class Program extends DiagnosticEmitter {
             (indexedGet = target.members.get(indexedGetName)) &&
             indexedGet.kind == ElementKind.FUNCTION_PROTOTYPE
           ) {
-            return resolvedElement.set(indexedGet).withTarget(type.classType, targetExpression);
+            return resolvedElement.set(indexedGet).withTarget(type.classReference, targetExpression);
           }
         }
         break;
@@ -1832,7 +1832,7 @@ export class Program extends DiagnosticEmitter {
       case NodeKind.ASSERTION: {
         let type = this.resolveType((<AssertionExpression>expression).toType); // reports
         if (type) {
-          let classType = type.classType;
+          let classType = type.classReference;
           if (classType) {
             if (!resolvedElement) resolvedElement = new ResolvedElement();
             return resolvedElement.set(classType);
@@ -1897,12 +1897,12 @@ export class Program extends DiagnosticEmitter {
             );
             if (instance) {
               let returnType = instance.signature.returnType;
-              let classType = returnType.classType;
+              let classType = returnType.classReference;
               if (classType) {
                 if (!resolvedElement) resolvedElement = new ResolvedElement();
                 return resolvedElement.set(classType);
               } else {
-                let signature = returnType.functionType;
+                let signature = returnType.signatureReference;
                 if (signature) {
                   let functionTarget = signature.cachedFunctionTarget;
                   if (!functionTarget) {
@@ -2864,7 +2864,7 @@ export class ClassPrototype extends Element {
     if (declaration.extendsType) {
       let baseClassType = this.program.resolveType(declaration.extendsType, null); // reports
       if (!baseClassType) return null;
-      if (!(baseClass = baseClassType.classType)) {
+      if (!(baseClass = baseClassType.classReference)) {
         this.program.error(
           DiagnosticCode.A_class_may_only_extend_another_class,
           declaration.extendsType.range
@@ -3198,7 +3198,6 @@ export class Flow {
 
   /** Tests if this flow has the specified flag or flags. */
   is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
-
   /** Sets the specified flag or flags. */
   set(flag: FlowFlags): void { this.flags |= flag; }
 

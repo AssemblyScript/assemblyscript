@@ -152,15 +152,15 @@ function i64_to_f64(value: I64): f64 {
 import { CharCode } from "../../util";
 
 @global
-function i64_to_string(value: I64): string {
+function i64_to_string(value: I64, unsigned: bool = false): string {
   var chars = new Array<u16>();
-  if (value < 0) {
+  if (!unsigned && value < 0) {
     chars.push(CharCode.MINUS);
     value = -value;
   }
   do {
-    chars.push(CharCode._0 + (value % 10));
-    value /= 10;
+    chars.push(CharCode._0 + (<u64>value % 10));
+    value = <u64>value / 10;
   } while (value);
   return String.fromCharCodes(chars);
 }
