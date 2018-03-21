@@ -1,6 +1,16 @@
 language: node_js
+notifications:
+  email: false
+stages:
+  - name: check-pr
+    if: type = pull_request
 jobs:
   include:
+
+  - stage: check-pr
+    node_js: lts/*
+    script: ./scripts/check-pr.sh
+    env: Checks contributing guidelines before testing pull requests
 
   - stage: lint
     node_js: node

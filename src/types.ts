@@ -541,7 +541,7 @@ export class Signature {
     // check return type
     var thisReturnType = this.returnType;
     var targetReturnType = target.returnType;
-    return thisReturnType == targetReturnType || this.returnType.isAssignableTo(target.returnType);
+    return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
   }
 
   /** Converts this signature to a function type string. */
