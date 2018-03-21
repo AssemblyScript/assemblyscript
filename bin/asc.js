@@ -482,6 +482,7 @@ exports.main = function main(argv, options, callback) {
   // Prepare output
   if (!args.noEmit) {
     let hasStdout = false;
+    let hasOutput = false;
 
     if (args.outFile != null) {
       if (/\.was?t$/.test(args.outFile) && args.textFile == null) {
@@ -513,6 +514,7 @@ exports.main = function main(argv, options, callback) {
         writeStdout(wasm.output);
         hasStdout = true;
       }
+      hasOutput = true;
 
       // Post-process source map
       if (wasm.sourceMap != null) {
@@ -566,6 +568,7 @@ exports.main = function main(argv, options, callback) {
         writeStdout(asm);
         hasStdout = true;
       }
+      hasOutput = true;
     }
 
     // Write WebIDL
@@ -585,6 +588,7 @@ exports.main = function main(argv, options, callback) {
         writeStdout(idl);
         hasStdout = true;
       }
+      hasOutput = true;
     }
 
     // Write TypeScript definition
@@ -604,10 +608,11 @@ exports.main = function main(argv, options, callback) {
         writeStdout(tsd);
         hasStdout = true;
       }
+      hasOutput = true;
     }
 
     // Write text (must be last)
-    if (args.textFile != null) {
+    if (args.textFile != null || !hasOutput) {
       let wat;
       if (args.textFile && args.textFile.length) {
         stats.emitCount++;
