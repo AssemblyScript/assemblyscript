@@ -1,3 +1,4 @@
 bin/asc text eol=lf
 dist/asc.js -diff
 dist/assemblyscript.js -diff
+scripts/check-pr.sh eol=lf
