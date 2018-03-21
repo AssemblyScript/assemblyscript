@@ -103,6 +103,8 @@ declare function f32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 
 declare namespace f32 {
   export const MIN_VALUE: f32;
   export const MAX_VALUE: f32;
+  /** Smallest normalized positive value */
+  export const MIN_POSITIVE_VALUE: f32;
   /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f32;
   /** Largest safely representable integer value. */
@@ -115,6 +117,8 @@ declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 
 declare namespace f64 {
   export const MIN_VALUE: f64;
   export const MAX_VALUE: f64;
+  /** Smallest normalized positive value */
+  export const MIN_POSITIVE_VALUE: f64;
   /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f64;
   /** Largest safely representable integer value. */
