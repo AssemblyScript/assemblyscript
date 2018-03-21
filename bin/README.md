@@ -39,3 +39,20 @@ Available command line options can also be obtained programmatically:
 const options = require("assemblyscript/bin/asc.json");
 ...
 ```
+
+You can also compile a source string directly, eg. in a browser environment:
+
+```js
+const asc = require('assemblyscript/dist/asc')
+
+const input = '...'
+const args = { optimize: 2 }
+
+asc.compileString(input, args)
+  .then(({ wasm, wast, stdout, stderr }) => {
+    // ...
+  })
+  .catch(({ err, stdout, stderr }) => {
+    // ...
+  })
+```

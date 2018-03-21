@@ -66,6 +66,60 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : {};
 /** Bundled definition files, if any. */
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : {};
 
+
+/** Convenience function that parses and compiles source strings directly. */
+exports.compileString = (source, extraArgs={}) => new Promise((resolve, reject) => {
+  const sources = {};
+  const output = {};
+
+  if (typeof source === "string") {
+    sources["input.ts"] = source;
+  }
+  Object.keys(sources).forEach(k => {
+    sources[`/${k}`] = sources[k];
+    delete sources[k];
+  })
+  const options = {
+    stdout: createMemoryStream(),
+    stderr: createMemoryStream(),
+    readFile: name => sources[name],
+    writeFile: (name, contents) => output[name.replace(/^\//, "")] = contents,
+    listFiles: Function.prototype
+  };
+
+  // if not a bundle, include std lib since we override readFile
+  if (!exports.isBundle) {
+    const libDir = path.join(__dirname, "../std", "assembly");
+    const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
+    libFiles.forEach(file =>
+      exports.libraryFiles["(lib)/" + file.replace(/\.ts$/, "")] = readFileNode(path.join(libDir, file), { encoding: "utf8" })
+    );
+  }
+
+  const args = [
+    "--baseDir=/",
+    "--binaryFile=wasm",
+    "--textFile=wast",
+    ...Object.keys(extraArgs).map(arg => `--${arg}=${extraArgs[arg]}`),
+    ...Object.keys(sources),
+  ];
+
+  exports.main(args, options, (err) => {
+    if (err) {
+      reject({
+        err,
+        stdout: options.stdout.toString(),
+        stderr: options.stderr.toString(),
+      })
+    } else {
+      resolve(Object.assign(output, {
+        stdout: options.stdout.toString(),
+        stderr: options.stderr.toString(),
+      }))
+    }
+  });
+});
+
 /** Runs the command line utility using the specified arguments array. */
 exports.main = function main(argv, options, callback) {
   if (typeof options === "function") {
