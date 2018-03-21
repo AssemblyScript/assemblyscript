@@ -2978,22 +2978,14 @@ export class ClassPrototype extends Element {
               internalName + INSTANCE_DELIMITER + member.simpleName,
               this
             );
-            let partialGetterPrototype = (
-              (<FunctionPrototype>(<Property>member).getterPrototype).resolvePartial(
-                typeArguments
-              )
-            );
+            let partialGetterPrototype = getterPrototype.resolvePartial(typeArguments);
             if (!partialGetterPrototype) return null;
             partialGetterPrototype.internalName = (
               internalName + INSTANCE_DELIMITER + partialGetterPrototype.simpleName
             );
             instanceProperty.getterPrototype = partialGetterPrototype;
             if (setterPrototype) {
-              let partialSetterPrototype = (
-                (<FunctionPrototype>(<Property>member).setterPrototype).resolvePartial(
-                  typeArguments
-                )
-              );
+              let partialSetterPrototype = setterPrototype.resolvePartial(typeArguments);
               if (!partialSetterPrototype) return null;
               partialSetterPrototype.internalName = (
                 internalName + INSTANCE_DELIMITER + partialSetterPrototype.simpleName
@@ -3003,10 +2995,7 @@ export class ClassPrototype extends Element {
             instance.members.set(member.simpleName, instanceProperty);
             break;
           }
-          default: {
-            assert(false);
-            break;
-          }
+          default: assert(false);
         }
       }
     }
