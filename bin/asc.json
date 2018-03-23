@@ -107,6 +107,10 @@
     "desc": "Sets the start offset of compiler-generated static memory.",
     "type": "number"
   },
+  "importTable": {
+    "desc": "Imports the function table instance provided by the embedder.",
+    "type": "boolean"
+  },
   "noLib": {
     "desc": "Does not include the shipped standard library.",
     "type": "boolean"

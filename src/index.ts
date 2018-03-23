@@ -110,6 +110,11 @@ export function setImportMemory(options: Options, importMemory: bool): void {
   options.importMemory = importMemory;
 }
 
+/** Sets the `importTable` option. */
+export function setImportTable(options: Options, importTable: bool): void {
+  options.importTable = importTable;
+}
+
 /** Sets the `sourceMap` option. */
 export function setSourceMap(options: Options, sourceMap: bool): void {
   options.sourceMap = sourceMap;

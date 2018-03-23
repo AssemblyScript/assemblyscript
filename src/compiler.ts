@@ -147,6 +147,8 @@ export class Options {
   noMemory: bool = false;
   /** If true, imports the memory provided by the embedder. */
   importMemory: bool = false;
+  /** If true, imports the function table provided by the embedder. */
+  importTable: bool = false;
   /** Static memory start offset. */
   memoryBase: u32 = 0;
   /** If true, generates information necessary for source maps. */
@@ -327,6 +329,13 @@ export class Compiler extends DiagnosticEmitter {
         entries[i] = functionTable[i].ref;
       }
       module.setFunctionTable(entries);
+      module.addTableExport("0", "table");
+    }
+
+    // import table if requested
+    if (options.importTable) {
+      module.addTableImport("0", "env", "table");
+      if (!functionTableSize) module.addTableExport("0", "table");
     }
 
     return module;

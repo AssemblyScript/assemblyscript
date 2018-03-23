@@ -360,6 +360,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setNoAssert(compilerOptions, !!args.noAssert);
   assemblyscript.setNoMemory(compilerOptions, !!args.noMemory);
   assemblyscript.setImportMemory(compilerOptions, !!args.importMemory);
+  assemblyscript.setImportTable(compilerOptions, !!args.importTable);
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
 

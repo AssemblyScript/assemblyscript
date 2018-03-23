@@ -16,6 +16,7 @@
  (memory $0 1)
  (data (i32.const 4) "\11\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s\00")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
