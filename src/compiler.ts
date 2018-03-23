@@ -4274,6 +4274,13 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Gets the trampoline for the specified function. */
   ensureTrampoline(original: Function): Function {
+    // A trampoline is a function that takes a fixed amount of operands with some of them possibly
+    // being zeroed. It takes one additional argument denoting the number of actual operands
+    // provided to the call, and takes appropriate steps to initialize zeroed operands to their
+    // default values using the optional parameter initializers of the original function. Doing so
+    // allows calls to functions with optional parameters to circumvent the trampoline when all
+    // parameters are provided as a fast route, respectively setting up omitted operands in a proper
+    // context otherwise.
     var trampoline = original.trampoline;
     if (trampoline) return trampoline;
 
@@ -4345,7 +4352,14 @@ export class Compiler extends DiagnosticEmitter {
     var body = module.createBlock(names[0], [
       module.createBlock("N=invalid", [
         module.createSwitch(names, "N=invalid",
-          module.createGetLocal(maxOperands, NativeType.I32)
+          // condition is number of provided optional operands, so subtract required operands
+          minOperands
+            ? module.createBinary(
+                BinaryOp.SubI32,
+                module.createGetLocal(maxOperands, NativeType.I32),
+                module.createI32(minOperands)
+              )
+            : module.createGetLocal(maxOperands, NativeType.I32)
         )
       ]),
       module.createUnreachable()
@@ -4407,7 +4421,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = numArguments; i < maxArguments; ++i) {
         operands.push(instance.signature.parameterTypes[i].toNativeZero(module));
       }
-      operands.push(module.createI32(numOperands - minOperands));
+      operands.push(module.createI32(numOperands)); // actual number of provided operands
     }
     var returnType = instance.signature.returnType;
     this.currentType = returnType;

@@ -23,7 +23,10 @@
     (block $N=0
      (block $N=invalid
       (br_table $N=0 $N=1 $N=2 $N=invalid
-       (get_local $3)
+       (i32.sub
+        (get_local $3)
+        (i32.const 1)
+       )
       )
      )
      (unreachable)
@@ -48,7 +51,7 @@
     (i32.const 3)
     (i32.const 0)
     (i32.const 0)
-    (i32.const 0)
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -66,7 +69,7 @@
      (i32.const 3)
      (i32.const 4)
      (i32.const 0)
-     (i32.const 1)
+     (i32.const 2)
     )
     (i32.const 5)
    )

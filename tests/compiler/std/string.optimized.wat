@@ -284,7 +284,10 @@
    (block $N=0
     (block $N=invalid
      (br_table $N=0 $N=1 $N=invalid
-      (get_local $3)
+      (i32.sub
+       (get_local $3)
+       (i32.const 2)
+      )
      )
     )
     (unreachable)
@@ -390,7 +393,10 @@
    (block $N=0
     (block $N=invalid
      (br_table $N=0 $N=1 $N=invalid
-      (get_local $3)
+      (i32.sub
+       (get_local $3)
+       (i32.const 2)
+      )
      )
     )
     (unreachable)
@@ -526,7 +532,10 @@
    (block $N=0
     (block $N=invalid
      (br_table $N=0 $N=1 $N=invalid
-      (get_local $3)
+      (i32.sub
+       (get_local $3)
+       (i32.const 2)
+      )
      )
     )
     (unreachable)
@@ -546,7 +555,10 @@
    (block $N=0
     (block $N=invalid
      (br_table $N=0 $N=1 $N=invalid
-      (get_local $3)
+      (i32.sub
+       (get_local $3)
+       (i32.const 2)
+      )
      )
     )
     (unreachable)
@@ -940,7 +952,10 @@
    (block $N=0
     (block $N=invalid
      (br_table $N=0 $N=1 $N=invalid
-      (get_local $2)
+      (i32.sub
+       (get_local $2)
+       (i32.const 1)
+      )
      )
     )
     (unreachable)
@@ -3358,7 +3373,7 @@
      (get_global $std/string/str)
      (i32.const 108)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -3377,7 +3392,7 @@
      (get_global $std/string/str)
      (i32.const 128)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -3396,7 +3411,7 @@
      (get_global $std/string/str)
      (i32.const 144)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -3415,7 +3430,7 @@
      (get_global $std/string/str)
      (i32.const 156)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
     (i32.const 2)
    )
@@ -3435,7 +3450,7 @@
      (get_global $std/string/str)
      (i32.const 164)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
     (i32.const -1)
    )
@@ -3454,7 +3469,7 @@
     (call "$(lib)/string/parseInt|trampoline"
      (i32.const 172)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 1)
     )
     (f64.const 0)
    )
@@ -3473,7 +3488,7 @@
     (call "$(lib)/string/parseInt|trampoline"
      (i32.const 180)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 1)
     )
     (f64.const 1)
    )
@@ -3492,7 +3507,7 @@
     (call "$(lib)/string/parseInt|trampoline"
      (i32.const 188)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 1)
     )
     (f64.const 5)
    )
@@ -3511,7 +3526,7 @@
     (call "$(lib)/string/parseInt|trampoline"
      (i32.const 204)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 1)
     )
     (f64.const 455)
    )
@@ -3530,7 +3545,7 @@
     (call "$(lib)/string/parseInt|trampoline"
      (i32.const 220)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 1)
     )
     (f64.const 3855)
    )
@@ -3549,7 +3564,7 @@
     (call "$(lib)/string/parseInt|trampoline"
      (i32.const 236)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 1)
     )
     (f64.const 3855)
    )
@@ -3568,7 +3583,7 @@
     (call "$(lib)/string/parseInt|trampoline"
      (i32.const 252)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 1)
     )
     (f64.const 11)
    )
@@ -3587,7 +3602,7 @@
     (call "$(lib)/string/parseInt|trampoline"
      (i32.const 264)
      (i32.const 0)
-     (i32.const 0)
+     (i32.const 1)
     )
     (f64.const 1)
    )
