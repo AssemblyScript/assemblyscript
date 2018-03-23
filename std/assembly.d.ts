@@ -248,7 +248,17 @@ declare function parseI64(str: string, radix?: i32): i64;
 /** Parses a string to a 64-bit float. */
 declare function parseFloat(str: string): f64;
 
-// Standard library (not yet implemented)
+// Standard library
+
+/** Class representing a generic, fixed-length raw binary data buffer. */
+declare class ArrayBuffer {
+  /** The size, in bytes, of the array. */
+  readonly byteLength: i32;
+  /** Constructs a new array buffer of the given length in bytes. */
+  constructor(length: i32);
+  /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
+  slice(begin?: i32, end?: i32): ArrayBuffer;
+}
 
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {

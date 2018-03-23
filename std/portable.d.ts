@@ -200,6 +200,16 @@ declare function parseFloat(str: string): f64;
 declare const NaN: f32 | f64;
 declare const Infinity: f32 | f64;
 
+/** Class representing a generic, fixed-length raw binary data buffer. */
+declare class ArrayBuffer {
+  /** The size, in bytes, of the array. */
+  readonly byteLength: i32;
+  /** Constructs a new array buffer of the given length in bytes. */
+  constructor(length: i32);
+  /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
+  slice(begin?: i32, end?: i32): ArrayBuffer;
+}
+
 declare class Array<T> {
   [key: number]: T;
   length: i32;

@@ -840,7 +840,8 @@ export class Compiler extends DiagnosticEmitter {
     var typeRef = this.ensureFunctionType(instance.signature);
     var module = this.module;
     if (body) {
-      let returnType = instance.signature.returnType;
+      let isConstructor = instance.is(CommonFlags.CONSTRUCTOR);
+      let returnType: Type = instance.signature.returnType;
 
       // compile body
       let previousFunction = this.currentFunction;
@@ -848,15 +849,43 @@ export class Compiler extends DiagnosticEmitter {
       let flow = instance.flow;
       let stmt: ExpressionRef;
       if (body.kind == NodeKind.EXPRESSION) { // () => expression
+        assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET));
         assert(instance.is(CommonFlags.ARROW));
         stmt = this.compileExpression((<ExpressionStatement>body).expression, returnType);
         flow.set(FlowFlags.RETURNS);
       } else {
         assert(body.kind == NodeKind.BLOCK);
         stmt = this.compileStatement(body);
+        flow.finalize();
+        if (isConstructor) {
+          let nativeSizeType = this.options.nativeSizeType;
+          assert(instance.is(CommonFlags.INSTANCE));
+
+          // implicitly return `this` if the constructor doesn't always return on its own
+          if (!flow.is(FlowFlags.RETURNS)) {
+
+            // if all branches are guaranteed to allocate, skip the final conditional allocation
+            if (flow.is(FlowFlags.ALLOCATES)) {
+              stmt = module.createBlock(null, [
+                stmt,
+                module.createGetLocal(0, nativeSizeType)
+              ], nativeSizeType);
+
+            // if not all branches are guaranteed to allocate, also append a conditional allocation
+            } else {
+              let parent = assert(instance.memberOf);
+              assert(parent.kind == ElementKind.CLASS);
+              stmt = module.createBlock(null, [
+                stmt,
+                module.createTeeLocal(0,
+                  makeConditionalAllocate(this, <Class>parent, declaration.name)
+                )
+              ], nativeSizeType);
+            }
+          }
+
         // make sure all branches return
-        let allBranchesReturn = flow.finalize();
-        if (returnType != Type.void && !allBranchesReturn) {
+        } else if (returnType != Type.void && !flow.is(FlowFlags.RETURNS)) {
           this.error(
             DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
             declaration.signature.returnType.range
@@ -1272,13 +1301,15 @@ export class Compiler extends DiagnosticEmitter {
 
     var stmt = this.module.createBlock(null, this.compileStatements(statements), NativeType.None);
     var stmtReturns = flow.is(FlowFlags.RETURNS);
+    var stmtThrows = flow.is(FlowFlags.THROWS);
+    var stmtAllocates = flow.is(FlowFlags.ALLOCATES);
 
     // Switch back to the parent flow
     flow = flow.leaveBranchOrScope();
     this.currentFunction.flow = flow;
-    if (stmtReturns) {
-      flow.set(FlowFlags.RETURNS);
-    }
+    if (stmtReturns) flow.set(FlowFlags.RETURNS);
+    if (stmtThrows) flow.set(FlowFlags.THROWS);
+    if (stmtAllocates) flow.set(FlowFlags.ALLOCATES);
     return stmt;
   }
 
@@ -1300,7 +1331,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.createUnreachable();
     }
-    flow.set(FlowFlags.POSSIBLY_BREAKS);
+    flow.set(FlowFlags.BREAKS);
     return module.createBreak(breakLabel);
   }
 
@@ -1324,7 +1355,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.createUnreachable();
     }
-    flow.set(FlowFlags.POSSIBLY_CONTINUES);
+    flow.set(FlowFlags.CONTINUES);
     return module.createBreak(continueLabel);
   }
 
@@ -1407,12 +1438,18 @@ export class Compiler extends DiagnosticEmitter {
       ? this.compileExpression(<Expression>statement.incrementor, Type.void)
       : module.createNop();
     var body = this.compileStatement(statement.statement);
+
     var alwaysReturns = !statement.condition && flow.is(FlowFlags.RETURNS);
+    var alwaysThrows = !statement.condition && flow.is(FlowFlags.THROWS);
+    var alwaysAllocates = !statement.condition && flow.is(FlowFlags.ALLOCATES);
     // TODO: check other always-true conditions as well, not just omitted
 
+    if (alwaysReturns) flow.set(FlowFlags.RETURNS);
+    if (alwaysThrows) flow.set(FlowFlags.THROWS);
+    if (alwaysAllocates) flow.set(FlowFlags.ALLOCATES);
+
     // Switch back to the parent flow
-    flow = flow.leaveBranchOrScope();
-    currentFunction.flow = flow;
+    currentFunction.flow = flow.leaveBranchOrScope();
     currentFunction.leaveBreakContext();
 
     var expr = module.createBlock(breakLabel, [
@@ -1426,9 +1463,8 @@ export class Compiler extends DiagnosticEmitter {
       ], NativeType.None))
     ], NativeType.None);
 
-    // If the loop is guaranteed to run and return, propagate that and append a hint
-    if (alwaysReturns) {
-      flow.set(FlowFlags.RETURNS);
+    // If the loop is guaranteed to run and return, append a hint
+    if (alwaysReturns || alwaysThrows) {
       expr = module.createBlock(null, [
         expr,
         module.createUnreachable()
@@ -1472,22 +1508,30 @@ export class Compiler extends DiagnosticEmitter {
     currentFunction.flow = flow;
     var ifTrueExpr = this.compileStatement(ifTrue);
     var ifTrueReturns = flow.is(FlowFlags.RETURNS);
+    var ifTrueThrows = flow.is(FlowFlags.THROWS);
+    var ifTrueAllocates = flow.is(FlowFlags.ALLOCATES);
     flow = flow.leaveBranchOrScope();
     currentFunction.flow = flow;
 
     var ifFalseExpr: ExpressionRef = 0;
     var ifFalseReturns = false;
+    var ifFalseThrows = false;
+    var ifFalseAllocates = false;
     if (ifFalse) {
       flow = flow.enterBranchOrScope();
       currentFunction.flow = flow;
       ifFalseExpr = this.compileStatement(ifFalse);
       ifFalseReturns = flow.is(FlowFlags.RETURNS);
+      ifFalseThrows = flow.is(FlowFlags.THROWS);
+      ifFalseAllocates = flow.is(FlowFlags.ALLOCATES);
       flow = flow.leaveBranchOrScope();
       currentFunction.flow = flow;
     }
-    if (ifTrueReturns && ifFalseReturns) { // not necessary to append a hint
-      flow.set(FlowFlags.RETURNS);
-    }
+
+    if (ifTrueReturns && ifFalseReturns) flow.set(FlowFlags.RETURNS);
+    if (ifTrueThrows && ifFalseThrows) flow.set(FlowFlags.THROWS);
+    if (ifTrueAllocates && ifFalseAllocates) flow.set(FlowFlags.ALLOCATES);
+
     return module.createIf(condExpr, ifTrueExpr, ifFalseExpr);
   }
 
@@ -1556,6 +1600,8 @@ export class Compiler extends DiagnosticEmitter {
     // nest blocks in order
     var currentBlock = module.createBlock("case0|" + context, breaks, NativeType.None);
     var alwaysReturns = true;
+    var alwaysThrows = true;
+    var alwaysAllocates = true;
     for (let i = 0; i < numCases; ++i) {
       let case_ = cases[i];
       let statements = case_.statements;
@@ -1577,6 +1623,12 @@ export class Compiler extends DiagnosticEmitter {
       if (!(fallsThrough || flow.is(FlowFlags.RETURNS))) {
         alwaysReturns = false; // ignore fall-throughs
       }
+      if (!(fallsThrough || flow.is(FlowFlags.THROWS))) {
+        alwaysThrows = false;
+      }
+      if (!(fallsThrough || flow.is(FlowFlags.ALLOCATES))) {
+        alwaysAllocates = false;
+      }
 
       // Switch back to the parent flow
       currentFunction.flow = flow.leaveBranchOrScope();
@@ -1586,9 +1638,11 @@ export class Compiler extends DiagnosticEmitter {
     currentFunction.leaveBreakContext();
 
     // If the switch has a default and always returns, propagate that
-    if (defaultIndex >= 0 && alwaysReturns) {
-      currentFunction.flow.set(FlowFlags.RETURNS);
-      // Binaryen understands that so we don't need a hint
+    if (defaultIndex >= 0) {
+      let flow = currentFunction.flow;
+      if (alwaysReturns) flow.set(FlowFlags.RETURNS);
+      if (alwaysThrows) flow.set(FlowFlags.THROWS);
+      if (alwaysAllocates) flow.set(FlowFlags.ALLOCATES);
     }
     return currentBlock;
   }
@@ -1596,8 +1650,8 @@ export class Compiler extends DiagnosticEmitter {
   compileThrowStatement(statement: ThrowStatement): ExpressionRef {
     var flow = this.currentFunction.flow;
 
-    // Remember that this branch possibly throws
-    flow.set(FlowFlags.POSSIBLY_THROWS);
+    // Remember that this branch throws
+    flow.set(FlowFlags.THROWS);
 
     // FIXME: without try-catch it is safe to assume RETURNS as well for now
     flow.set(FlowFlags.RETURNS);
@@ -1791,8 +1845,8 @@ export class Compiler extends DiagnosticEmitter {
     flow.continueLabel = continueLabel;
 
     var body = this.compileStatement(statement.statement);
-    var alwaysReturns = false && flow.is(FlowFlags.RETURNS);
-    // TODO: evaluate possible always-true conditions
+    var alwaysReturns = false; // CONDITION_IS_ALWAYS_TRUE && flow.is(FlowFlags.RETURNS);
+    // TODO: evaluate if condition is always true
 
     // Switch back to the parent flow
     currentFunction.flow = flow.leaveBranchOrScope();
@@ -4471,6 +4525,18 @@ export class Compiler extends DiagnosticEmitter {
           let parent = assert(currentFunction.memberOf);
           assert(parent.kind == ElementKind.CLASS);
           let thisType = (<Class>parent).type;
+          if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
+            let nativeSizeType = this.options.nativeSizeType;
+            let flow = currentFunction.flow;
+            if (!flow.is(FlowFlags.ALLOCATES)) {
+              flow.set(FlowFlags.ALLOCATES);
+              // must be conditional because `this` could have been provided by a derived class
+              this.currentType = thisType;
+              return module.createTeeLocal(0,
+                makeConditionalAllocate(this, <Class>parent, expression)
+              );
+            }
+          }
           this.currentType = thisType;
           return module.createGetLocal(0, thisType.toNativeType());
         }
@@ -4908,70 +4974,43 @@ export class Compiler extends DiagnosticEmitter {
     var options = this.options;
     var currentFunction = this.currentFunction;
 
+    // obtain the class being instantiated
     var resolved = this.program.resolveExpression( // reports
       expression.expression,
       currentFunction
     );
-    if (resolved) {
-      if (resolved.element.kind == ElementKind.CLASS_PROTOTYPE) {
-        let prototype = <ClassPrototype>resolved.element;
-        let instance = prototype.resolveUsingTypeArguments( // reports
-          expression.typeArguments,
-          null,
-          expression
-        );
-        if (instance) {
-          let thisExpr = compileBuiltinAllocate(this, instance, expression);
-          let initializers = new Array<ExpressionRef>();
-
-          // use a temp local for 'this'
-          let tempLocal = currentFunction.getTempLocal(options.usizeType);
-          initializers.push(module.createSetLocal(tempLocal.index, thisExpr));
-
-          // apply field initializers
-          if (instance.members) {
-            for (let member of instance.members.values()) {
-              if (member.kind == ElementKind.FIELD) {
-                let field = <Field>member;
-                let fieldDeclaration = field.prototype.declaration;
-                if (field.is(CommonFlags.CONST)) {
-                  assert(false); // there are no built-in fields currently
-                } else if (fieldDeclaration && fieldDeclaration.initializer) {
-                  initializers.push(module.createStore(field.type.byteSize,
-                    module.createGetLocal(tempLocal.index, options.nativeSizeType),
-                    this.compileExpression(fieldDeclaration.initializer, field.type),
-                    field.type.toNativeType(),
-                    field.memoryOffset
-                  ));
-                }
-              }
-            }
-          }
-
-          // apply constructor
-          let constructorInstance = instance.constructorInstance;
-          if (constructorInstance) {
-            initializers.push(this.compileCallDirect(constructorInstance, expression.arguments, expression,
-              module.createGetLocal(tempLocal.index, options.nativeSizeType)
-            ));
-          }
-
-          // return 'this'
-          initializers.push(module.createGetLocal(tempLocal.index, options.nativeSizeType));
-          currentFunction.freeTempLocal(tempLocal);
-          thisExpr = module.createBlock(null, initializers, options.nativeSizeType);
-
-          this.currentType = instance.type;
-          return thisExpr;
-        }
-      } else {
-        this.error(
-          DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature,
-          expression.expression.range
-        );
-      }
+    if (!resolved) return module.createUnreachable();
+    if (resolved.element.kind != ElementKind.CLASS_PROTOTYPE) {
+      this.error(
+        DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature,
+        expression.expression.range
+      );
+      return this.module.createUnreachable();
     }
-    return module.createUnreachable();
+    var classPrototype = <ClassPrototype>resolved.element;
+    var classInstance = classPrototype.resolveUsingTypeArguments( // reports
+      expression.typeArguments,
+      null,
+      expression
+    );
+    if (!classInstance) return module.createUnreachable();
+
+    var expr: ExpressionRef;
+    var constructorInstance = classInstance.constructorInstance;
+
+    // if a constructor is present, call it with a zero `this`
+    if (constructorInstance) {
+      expr = this.compileCallDirect(constructorInstance, expression.arguments, expression,
+        options.usizeType.toNativeZero(module)
+      );
+
+    // otherwise simply allocate a new instance and initialize its fields
+    } else {
+      expr = makeAllocate(this, classInstance, expression);
+    }
+
+    this.currentType = classInstance.type;
+    return expr;
   }
 
   compileParenthesizedExpression(
@@ -5763,4 +5802,79 @@ export function makeIsTrueish(expr: ExpressionRef, type: Type, module: Module): 
       return module.createI32(0);
     }
   }
+}
+
+/** Makes an allocation expression for an instance of the specified class. */
+export function makeAllocate(compiler: Compiler, classInstance: Class, reportNode: Node): ExpressionRef {
+  var module = compiler.module;
+  var currentFunction = compiler.currentFunction;
+  var nativeSizeType = compiler.options.nativeSizeType;
+
+  var tempLocal = currentFunction.getTempLocal(classInstance.type);
+
+  // allocate the necessary memory
+  var initializers = new Array<ExpressionRef>();
+  initializers.push(
+    module.createSetLocal(tempLocal.index,
+      compileBuiltinAllocate(compiler, classInstance, reportNode)
+    )
+  );
+
+  // apply field initializers
+  if (classInstance.members) {
+    for (let member of classInstance.members.values()) {
+      if (member.kind == ElementKind.FIELD) {
+        let field = <Field>member;
+        let fieldType = field.type;
+        let fieldDeclaration = field.prototype.declaration;
+        assert(!field.isAny(CommonFlags.CONST));
+        if (fieldDeclaration.initializer) { // use initializer
+          initializers.push(module.createStore(fieldType.byteSize,
+            module.createGetLocal(tempLocal.index, nativeSizeType),
+            compiler.compileExpression(fieldDeclaration.initializer, fieldType), // reports
+            fieldType.toNativeType(),
+            field.memoryOffset
+          ));
+        } else { // initialize with zero
+          // TODO: might be unnecessary if the ctor initializes the field
+          initializers.push(module.createStore(field.type.byteSize,
+            module.createGetLocal(tempLocal.index, nativeSizeType),
+            field.type.toNativeZero(module),
+            field.type.toNativeType(),
+            field.memoryOffset
+          ));
+        }
+      }
+    }
+  }
+
+  // return `this`
+  initializers.push(
+    module.createGetLocal(tempLocal.index, nativeSizeType)
+  );
+
+  currentFunction.freeTempLocal(tempLocal);
+  compiler.currentType = classInstance.type;
+  return module.createBlock(null, initializers, nativeSizeType);
+}
+
+/** Makes a conditional allocation expression inside of the constructor of the specified class. */
+export function makeConditionalAllocate(compiler: Compiler, classInstance: Class, reportNode: Node): ExpressionRef {
+  // requires that `this` is the first local
+  var module = compiler.module;
+  var nativeSizeType = compiler.options.nativeSizeType;
+  compiler.currentType = classInstance.type;
+  return module.createIf(
+    nativeSizeType == NativeType.I64
+      ? module.createBinary(
+          BinaryOp.NeI64,
+          module.createGetLocal(0, NativeType.I64),
+          module.createI64(0)
+        )
+      : module.createGetLocal(0, NativeType.I32),
+    module.createGetLocal(0, nativeSizeType),
+    module.createTeeLocal(0,
+      makeAllocate(compiler, classInstance, reportNode)
+    )
+  );
 }

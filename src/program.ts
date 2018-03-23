@@ -2377,8 +2377,10 @@ export class FunctionPrototype extends Element {
     }
 
     var returnType: Type;
-    if (this.is(CommonFlags.SET) || this.is(CommonFlags.CONSTRUCTOR)) {
+    if (this.is(CommonFlags.SET)) {
       returnType = Type.void; // not annotated
+    } else if (this.is(CommonFlags.CONSTRUCTOR)) {
+      returnType = assert(classInstance).type; // not annotated
     } else {
       let typeNode = assert(signatureNode.returnType);
       let type = this.program.resolveType(typeNode, contextualTypeArguments, true); // reports
@@ -3157,14 +3159,28 @@ export class Interface extends Class {
 export const enum FlowFlags {
   /** No specific conditions. */
   NONE = 0,
+
   /** This branch always returns. */
   RETURNS = 1 << 0,
-  /** This branch possibly throws. */
-  POSSIBLY_THROWS = 1 << 1,
-  /** This branch possible breaks. */
-  POSSIBLY_BREAKS = 1 << 2,
-  /** This branch possible continues. */
-  POSSIBLY_CONTINUES = 1 << 3
+  /** This branch always throws. */
+  THROWS = 1 << 1,
+  /** This branch always breaks. */
+  BREAKS = 1 << 2,
+  /** This branch always continues. */
+  CONTINUES = 1 << 3,
+  /** This branch always allocates. Constructors only. */
+  ALLOCATES = 1 << 4,
+
+  /** This branch conditionally returns in a child branch. */
+  CONDITIONALLY_RETURNS = 1 << 5,
+  /** This branch conditionally throws in a child branch. */
+  CONDITIONALLY_THROWS = 1 << 6,
+  /** This branch conditionally breaks in a child branch. */
+  CONDITIONALLY_BREAKS = 1 << 7,
+  /** This branch conditionally continues in a child branch. */
+  CONDITIONALLY_CONTINUES = 1 << 8,
+  /** This branch conditionally allocates in a child branch. Constructors only. */
+  CONDITIONALLY_ALLOCATES = 1 << 9
 }
 
 /** A control flow evaluator. */
@@ -3200,16 +3216,18 @@ export class Flow {
   is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
   /** Sets the specified flag or flags. */
   set(flag: FlowFlags): void { this.flags |= flag; }
+  /** Unsets the specified flag or flags. */
+  unset(flag: FlowFlags): void { this.flags &= ~flag; }
 
   /** Enters a new branch or scope and returns the new flow. */
   enterBranchOrScope(): Flow {
-    var branchFlow = new Flow();
-    branchFlow.parent = this;
-    branchFlow.flags = this.flags;
-    branchFlow.currentFunction = this.currentFunction;
-    branchFlow.continueLabel = this.continueLabel;
-    branchFlow.breakLabel = this.breakLabel;
-    return branchFlow;
+    var branch = new Flow();
+    branch.parent = this;
+    branch.flags = this.flags;
+    branch.currentFunction = this.currentFunction;
+    branch.continueLabel = this.continueLabel;
+    branch.breakLabel = this.breakLabel;
+    return branch;
   }
 
   /** Leaves the current branch or scope and returns the parent flow. */
@@ -3225,14 +3243,20 @@ export class Flow {
     }
 
     // Propagate flags to parent
-    if (this.is(FlowFlags.POSSIBLY_THROWS)) {
-      parent.set(FlowFlags.POSSIBLY_THROWS);
+    if (this.is(FlowFlags.RETURNS)) {
+      parent.set(FlowFlags.CONDITIONALLY_RETURNS);
     }
-    if (this.is(FlowFlags.POSSIBLY_BREAKS) && parent.breakLabel == this.breakLabel) {
-      parent.set(FlowFlags.POSSIBLY_BREAKS);
+    if (this.is(FlowFlags.THROWS)) {
+      parent.set(FlowFlags.CONDITIONALLY_THROWS);
     }
-    if (this.is(FlowFlags.POSSIBLY_CONTINUES) && parent.continueLabel == this.continueLabel) {
-      parent.set(FlowFlags.POSSIBLY_CONTINUES);
+    if (this.is(FlowFlags.BREAKS) && parent.breakLabel == this.breakLabel) {
+      parent.set(FlowFlags.CONDITIONALLY_BREAKS);
+    }
+    if (this.is(FlowFlags.CONTINUES) && parent.continueLabel == this.continueLabel) {
+      parent.set(FlowFlags.CONDITIONALLY_CONTINUES);
+    }
+    if (this.is(FlowFlags.ALLOCATES)) {
+      parent.set(FlowFlags.CONDITIONALLY_ALLOCATES);
     }
 
     return parent;
@@ -3265,10 +3289,9 @@ export class Flow {
   }
 
   /** Finalizes this flow. Must be the topmost parent flow of the function. */
-  finalize(): bool {
+  finalize(): void {
     assert(this.parent == null, "must be the topmost parent flow");
     this.continueLabel = null;
     this.breakLabel = null;
-    return this.is(FlowFlags.RETURNS);
   }
 }

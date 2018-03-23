@@ -2462,43 +2462,45 @@ const allocateInternalName = "allocate_memory";
 /** Compiles a memory allocation for an instance of the specified class. */
 export function compileAllocate(
   compiler: Compiler,
-  cls: Class,
+  classInstance: Class,
   reportNode: Node
 ): ExpressionRef {
   var program = compiler.program;
-  assert(cls.program == program);
+  assert(classInstance.program == program);
   var module = compiler.module;
   var options = compiler.options;
 
-  var prototype = program.elementsLookup.get(allocateInternalName);
-  if (!prototype) {
+  var allocatePrototype = program.elementsLookup.get(allocateInternalName);
+  if (!allocatePrototype) {
     program.error(
       DiagnosticCode.Cannot_find_name_0,
       reportNode.range, allocateInternalName
     );
     return module.createUnreachable();
   }
-  if (prototype.kind != ElementKind.FUNCTION_PROTOTYPE) {
+  if (allocatePrototype.kind != ElementKind.FUNCTION_PROTOTYPE) {
     program.error(
       DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-      reportNode.range, prototype.internalName
+      reportNode.range, allocatePrototype.internalName
     );
     return module.createUnreachable();
   }
 
-  var instance = (<FunctionPrototype>prototype).resolve(); // reports
-  if (!(instance && compiler.compileFunction(instance))) return module.createUnreachable();
+  var allocateInstance = (<FunctionPrototype>allocatePrototype).resolve(); // reports
+  if (!(allocateInstance && compiler.compileFunction(allocateInstance))) return module.createUnreachable();
 
-  compiler.currentType = cls.type;
+  compiler.currentType = classInstance.type;
   return module.createCall(
-    instance.internalName, [
+    allocateInstance.internalName, [
       options.isWasm64
-        ? module.createI64(cls.currentMemoryOffset)
-        : module.createI32(cls.currentMemoryOffset)
+        ? module.createI64(classInstance.currentMemoryOffset)
+        : module.createI32(classInstance.currentMemoryOffset)
     ],
     options.nativeSizeType
   );
 }
+
+const abortInternalName = "abort";
 
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(
@@ -2512,7 +2514,7 @@ export function compileAbort(
   var stringType = program.typesLookup.get("string"); // might be intended
   if (!stringType) return module.createUnreachable();
 
-  var abortPrototype = program.elementsLookup.get("abort"); // might be intended
+  var abortPrototype = program.elementsLookup.get(abortInternalName); // might be intended
   if (!abortPrototype || abortPrototype.kind != ElementKind.FUNCTION_PROTOTYPE) return module.createUnreachable();
 
   var abortInstance = (<FunctionPrototype>abortPrototype).resolve(); // reports

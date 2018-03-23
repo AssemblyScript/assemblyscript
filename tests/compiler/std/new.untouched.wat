@@ -1,7 +1,7 @@
 (module
  (type $i (func (result i32)))
+ (type $ifi (func (param i32 f32) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $ifv (func (param i32 f32)))
  (type $v (func))
  (global "$(lib)/allocator/common/alignment/BITS" i32 (i32.const 3))
  (global "$(lib)/allocator/common/alignment/SIZE" i32 (i32.const 8))
@@ -116,23 +116,49 @@
    (get_local $1)
   )
  )
- (func $std/new/AClass#constructor (; 1 ;) (type $ifv) (param $0 i32) (param $1 f32)
-  (i32.store
-   (get_local $0)
-   (i32.add
-    (i32.load
-     (get_local $0)
+ (func $std/new/AClass#constructor (; 1 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+  (local $2 i32)
+  (block
+   (i32.store
+    (get_local $0)
+    (i32.add
+     (i32.load
+      (tee_local $0
+       (if (result i32)
+        (get_local $0)
+        (get_local $0)
+        (tee_local $0
+         (block (result i32)
+          (set_local $2
+           (call "$(lib)/allocator/arena/allocate_memory"
+            (i32.const 8)
+           )
+          )
+          (i32.store
+           (get_local $2)
+           (i32.const 1)
+          )
+          (f32.store offset=4
+           (get_local $2)
+           (f32.const 2)
+          )
+          (get_local $2)
+         )
+        )
+       )
+      )
+     )
+     (i32.const 1)
     )
-    (i32.const 1)
+   )
+   (f32.store offset=4
+    (get_local $0)
+    (get_local $1)
    )
   )
-  (f32.store offset=4
-   (get_local $0)
-   (get_local $1)
-  )
+  (get_local $0)
  )
  (func $start (; 2 ;) (type $v)
-  (local $0 i32)
   (set_global "$(lib)/allocator/arena/startOffset"
    (i32.and
     (i32.add
@@ -149,25 +175,9 @@
    (get_global "$(lib)/allocator/arena/startOffset")
   )
   (set_global $std/new/aClass
-   (block (result i32)
-    (set_local $0
-     (call "$(lib)/allocator/arena/allocate_memory"
-      (i32.const 8)
-     )
-    )
-    (i32.store
-     (get_local $0)
-     (i32.const 1)
-    )
-    (f32.store offset=4
-     (get_local $0)
-     (f32.const 2)
-    )
-    (call $std/new/AClass#constructor
-     (get_local $0)
-     (f32.const 3)
-    )
-    (get_local $0)
+   (call $std/new/AClass#constructor
+    (i32.const 0)
+    (f32.const 3)
    )
   )
  )
