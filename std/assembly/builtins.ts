@@ -50,7 +50,9 @@ export declare function load<T>(offset: usize, constantOffset?: usize): T;
 
 export declare function store<T>(offset: usize, value: void, constantOffset?: usize): T;
 
-export declare function sizeof<T>(): usize;
+export declare function sizeof<T>(): usize; // | u32 / u64
+
+export declare function offsetof<T>(fieldName?: string): usize; // | u32 / u64
 
 export declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 

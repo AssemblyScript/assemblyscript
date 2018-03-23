@@ -16,7 +16,11 @@ import {
 
 import {
   Node,
-  Expression
+  NodeKind,
+  Expression,
+  LiteralKind,
+  LiteralExpression,
+  StringLiteralExpression
 } from "./ast";
 
 import {
@@ -37,10 +41,10 @@ import {
 import {
   ElementKind,
   Global,
-  Local,
   FunctionPrototype,
   Class,
-  ClassPrototype
+  ClassPrototype,
+  Field
 } from "./program";
 
 /** Compiles a get of a built-in global. */
@@ -94,12 +98,6 @@ export function compileCall(
       arg2: ExpressionRef,
       ret: ExpressionRef;
 
-  var tempLocal0: Local,
-      tempLocal1: Local;
-
-  var type: Type,
-      offset: i32;
-
   // NOTE that some implementations below make use of the select expression where straight-forward.
   // whether worth or not should probably be tested once/ it's known if/how embedders handle it.
   // search: createSelect
@@ -124,7 +122,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      type = compiler.currentType;
+      let type = compiler.currentType;
       compiler.currentType = Type.bool;
       return type.is(TypeFlags.INTEGER) && !type.is(TypeFlags.REFERENCE)
         ? module.createI32(1)
@@ -146,7 +144,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      type = compiler.currentType;
+      let type = compiler.currentType;
       compiler.currentType = Type.bool;
       return type.is(TypeFlags.FLOAT)
         ? module.createI32(1)
@@ -168,7 +166,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      type = compiler.currentType;
+      let type = compiler.currentType;
       compiler.currentType = Type.bool;
       return type.is(TypeFlags.REFERENCE)
         ? module.createI32(1)
@@ -190,7 +188,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      type = compiler.currentType;
+      let type = compiler.currentType;
       compiler.currentType = Type.bool;
       let classType = type.classReference;
       if (classType) {
@@ -222,7 +220,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      type = compiler.currentType;
+      let type = compiler.currentType;
       compiler.currentType = Type.bool;
       let classType = type.classReference;
       return classType != null && classType.prototype.fnIndexedGet != null
@@ -262,18 +260,18 @@ export function compileCall(
 
       switch (compiler.currentType.kind) {
         case TypeKind.F32: {
-          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
+          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
           ret = module.createBinary(BinaryOp.NeF32,
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createGetLocal(tempLocal0.index, NativeType.F32)
+            module.createTeeLocal(tempLocal.index, arg0),
+            module.createGetLocal(tempLocal.index, NativeType.F32)
           );
           break;
         }
         case TypeKind.F64: {
-          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
+          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
           ret = module.createBinary(BinaryOp.NeF64,
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createGetLocal(tempLocal0.index, NativeType.F64)
+            module.createTeeLocal(tempLocal.index, arg0),
+            module.createGetLocal(tempLocal.index, NativeType.F64)
           );
           break;
         }
@@ -322,35 +320,35 @@ export function compileCall(
       }
       switch (compiler.currentType.kind) {
         case TypeKind.F32: {
-          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
+          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
           ret = module.createSelect(
             module.createBinary(BinaryOp.NeF32,
               module.createUnary(UnaryOp.AbsF32,
-                module.createTeeLocal(tempLocal0.index, arg0)
+                module.createTeeLocal(tempLocal.index, arg0)
               ),
               module.createF32(Infinity)
             ),
             module.createI32(0),
             module.createBinary(BinaryOp.EqF32,
-              module.createGetLocal(tempLocal0.index, NativeType.F32),
-              module.createGetLocal(tempLocal0.index, NativeType.F32)
+              module.createGetLocal(tempLocal.index, NativeType.F32),
+              module.createGetLocal(tempLocal.index, NativeType.F32)
             )
           );
           break;
         }
         case TypeKind.F64: {
-          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
+          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
           ret = module.createSelect(
             module.createBinary(BinaryOp.NeF64,
               module.createUnary(UnaryOp.AbsF64,
-                module.createTeeLocal(tempLocal0.index, arg0)
+                module.createTeeLocal(tempLocal.index, arg0)
               ),
               module.createF64(Infinity)
             ),
             module.createI32(0),
             module.createBinary(BinaryOp.EqF64,
-              module.createGetLocal(tempLocal0.index, NativeType.F64),
-              module.createGetLocal(tempLocal0.index, NativeType.F64)
+              module.createGetLocal(tempLocal.index, NativeType.F64),
+              module.createGetLocal(tempLocal.index, NativeType.F64)
             )
           );
           break;
@@ -798,51 +796,51 @@ export function compileCall(
           // doesn't need sign-extension here because ifFalse below is either positive
           // or MIN_VALUE (-MIN_VALUE == MIN_VALUE) if selected
         case TypeKind.I32: {
-          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
+          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
           ret = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
+            module.createTeeLocal(tempLocal.index, arg0),
             module.createBinary(BinaryOp.SubI32, // ifFalse
               module.createI32(0),
-              module.createGetLocal(tempLocal0.index, NativeType.I32)
+              module.createGetLocal(tempLocal.index, NativeType.I32)
             ),
             module.createBinary(BinaryOp.GtI32,
-              module.createGetLocal(tempLocal0.index, NativeType.I32),
+              module.createGetLocal(tempLocal.index, NativeType.I32),
               module.createI32(0)
             )
           );
           break;
         }
         case TypeKind.ISIZE: {
-          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
+          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           ret = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
+            module.createTeeLocal(tempLocal.index, arg0),
             module.createBinary(
               compiler.options.isWasm64
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
               compiler.options.usizeType.toNativeZero(module),
-              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType)
+              module.createGetLocal(tempLocal.index, compiler.options.nativeSizeType)
             ),
             module.createBinary(
               compiler.options.isWasm64
                 ? BinaryOp.GtI64
                 : BinaryOp.GtI32,
-              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
+              module.createGetLocal(tempLocal.index, compiler.options.nativeSizeType),
               compiler.options.usizeType.toNativeZero(module)
             )
           );
           break;
         }
         case TypeKind.I64: {
-          tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
+          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
           ret = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
+            module.createTeeLocal(tempLocal.index, arg0),
             module.createBinary(BinaryOp.SubI64,
               module.createI64(0, 0),
-              module.createGetLocal(tempLocal0.index, NativeType.I64),
+              module.createGetLocal(tempLocal.index, NativeType.I64),
             ),
             module.createBinary(BinaryOp.GtI64,
-              module.createGetLocal(tempLocal0.index, NativeType.I64),
+              module.createGetLocal(tempLocal.index, NativeType.I64),
               module.createI64(0, 0)
             )
           );
@@ -925,8 +923,8 @@ export function compileCall(
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(Type.i32);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i32);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -942,8 +940,8 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.U32:
         case TypeKind.BOOL: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(Type.i32);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i32);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -956,8 +954,8 @@ export function compileCall(
           break;
         }
         case TypeKind.I64: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -970,8 +968,8 @@ export function compileCall(
           break;
         }
         case TypeKind.U64: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -984,8 +982,8 @@ export function compileCall(
           break;
         }
         case TypeKind.ISIZE: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -1009,8 +1007,8 @@ export function compileCall(
             ret = module.createUnreachable();
             break;
           }
-          tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -1079,8 +1077,8 @@ export function compileCall(
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(Type.i32);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i32);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -1096,8 +1094,8 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.U32:
         case TypeKind.BOOL: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(Type.i32);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i32);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -1110,8 +1108,8 @@ export function compileCall(
           break;
         }
         case TypeKind.I64: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -1124,8 +1122,8 @@ export function compileCall(
           break;
         }
         case TypeKind.U64: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -1138,8 +1136,8 @@ export function compileCall(
           break;
         }
         case TypeKind.ISIZE: {
-          tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -1163,8 +1161,8 @@ export function compileCall(
             ret = module.createUnreachable();
             break;
           }
-          tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
-          tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
+          let tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType);
+          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
           compiler.currentFunction.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
@@ -1679,7 +1677,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
-      offset = operands.length == 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
+      let offset = operands.length == 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
       }
@@ -1733,6 +1731,7 @@ export function compileCall(
           ? ConversionKind.NONE // wraps a larger integer type to a smaller one, i.e. i32.store8
           : ConversionKind.IMPLICIT
       );
+      let type: Type;
       if (
         compiler.currentType.is(TypeFlags.INTEGER) &&
         typeArguments[0].is(TypeFlags.INTEGER) &&
@@ -1748,7 +1747,7 @@ export function compileCall(
       } else {
         type = compiler.currentType;
       }
-      offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
+      let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
       }
@@ -1770,25 +1769,104 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        ret = compiler.options.isWasm64
-          ? module.createI64(typeArguments[0].byteSize, 0)
-          : module.createI32(typeArguments[0].byteSize);
-      } else {
+      if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", "0"
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+      }
+      let byteSize = (<Type[]>typeArguments)[0].byteSize;
+      if (compiler.options.isWasm64) {
+        // implicitly wrap if contextual type is a 32-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
+          compiler.currentType = Type.u32;
+          ret = module.createI32(byteSize);
+        } else {
+          ret = module.createI64(byteSize, 0);
+        }
+      } else {
+        // implicitly extend if contextual type is a 64-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
+          compiler.currentType = Type.u64;
+          ret = module.createI64(byteSize, 0);
+        } else {
+          ret = module.createI32(byteSize);
+        }
+      }
+      return ret;
+    }
+    case "offsetof": { // offsetof<T!>(fieldName?)
+      compiler.currentType = compiler.options.usizeType;
+      if (operands.length > 1) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
         );
         return module.createUnreachable();
       }
-      return ret;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      let classType = typeArguments[0].classReference;
+      if (!classType) {
+        compiler.error( // TODO: better error
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let offset: i32;
+      if (operands.length) {
+        if (
+          operands[0].kind != NodeKind.LITERAL ||
+          (<LiteralExpression>operands[0]).literalKind != LiteralKind.STRING
+        ) {
+          compiler.error(
+            DiagnosticCode.String_literal_expected,
+            operands[0].range
+          );
+          return module.createUnreachable();
+        }
+        let fieldName = (<StringLiteralExpression>operands[0]).value;
+        let field = classType.members ? classType.members.get(fieldName) : null;
+        if (!(field && field.kind == ElementKind.FIELD)) {
+          compiler.error(
+            DiagnosticCode.Type_0_has_no_property_1,
+            operands[0].range, classType.internalName, fieldName
+          );
+          return module.createUnreachable();
+        }
+        offset = (<Field>field).memoryOffset;
+      } else {
+        offset = classType.currentMemoryOffset;
+      }
+      if (compiler.options.isWasm64) {
+        // implicitly wrap if contextual type is a 32-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
+          compiler.currentType = Type.u32;
+          return module.createI32(offset);
+        } else {
+          return module.createI64(offset);
+        }
+      } else {
+        // implicitly extend if contextual type is a 64-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
+          compiler.currentType = Type.u64;
+          return module.createI64(offset);
+        } else {
+          return module.createI32(offset);
+        }
+      }
     }
 
     // control flow
@@ -1823,7 +1901,8 @@ export function compileCall(
       } else {
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
       }
-      arg1 = compiler.compileExpression(operands[1], type = compiler.currentType);
+      let type = compiler.currentType;
+      arg1 = compiler.compileExpression(operands[1], type);
       arg2 = compiler.compileExpression(operands[2], Type.bool);
       compiler.currentType = type;
       switch (compiler.currentType.kind) {
@@ -2022,7 +2101,7 @@ export function compileCall(
         arg0 = compiler.compileExpressionRetainType(operands[0], Type.i32);
       }
 
-      type = compiler.currentType;
+      let type = compiler.currentType;
       compiler.currentType = type.nonNullableType;
 
       // just return ifTrueish if assertions are disabled, or simplify if dropped anyway
@@ -2106,64 +2185,64 @@ export function compileCall(
       } else {
         switch (compiler.currentType.kind) {
           default: { // any integer up to 32-bits incl. bool
-            tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
+            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
             ret = module.createIf(
               module.createUnary(UnaryOp.EqzI32,
-                module.createTeeLocal(tempLocal0.index, arg0)
+                module.createTeeLocal(tempLocal.index, arg0)
               ),
               abort,
-              module.createGetLocal(tempLocal0.index, NativeType.I32)
+              module.createGetLocal(tempLocal.index, NativeType.I32)
             );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
+            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i64);
             ret = module.createIf(
               module.createUnary(UnaryOp.EqzI64,
-                module.createTeeLocal(tempLocal0.index, arg0)
+                module.createTeeLocal(tempLocal.index, arg0)
               ),
               abort,
-              module.createGetLocal(tempLocal0.index, NativeType.I64)
+              module.createGetLocal(tempLocal.index, NativeType.I64)
             );
             break;
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
+            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType);
             ret = module.createIf(
               module.createUnary(
                 compiler.options.isWasm64
                   ? UnaryOp.EqzI64
                   : UnaryOp.EqzI32,
-                module.createTeeLocal(tempLocal0.index, arg0)
+                module.createTeeLocal(tempLocal.index, arg0)
               ),
               abort,
-              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType)
+              module.createGetLocal(tempLocal.index, compiler.options.nativeSizeType)
             );
             break;
           }
           case TypeKind.F32: {
-            tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
+            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
             ret = module.createIf(
               module.createBinary(BinaryOp.EqF32,
-                module.createTeeLocal(tempLocal0.index, arg0),
+                module.createTeeLocal(tempLocal.index, arg0),
                 module.createF32(0)
               ),
               abort,
-              module.createGetLocal(tempLocal0.index, NativeType.F32)
+              module.createGetLocal(tempLocal.index, NativeType.F32)
             );
             break;
           }
           case TypeKind.F64: {
-            tempLocal0 = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
+            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
             ret = module.createIf(
               module.createBinary(BinaryOp.EqF64,
-                module.createTeeLocal(tempLocal0.index, arg0),
+                module.createTeeLocal(tempLocal.index, arg0),
                 module.createF64(0)
               ),
               abort,
-              module.createGetLocal(tempLocal0.index, NativeType.F64)
+              module.createGetLocal(tempLocal.index, NativeType.F64)
             );
             break;
           }

@@ -217,19 +217,28 @@ if (!i) unreachable();
 
 // AS specific
 
-sizeof<u8>();
-sizeof<u16>();
-sizeof<u32>();
-sizeof<u64>();
+assert(sizeof<u8>() == 1);
+assert(sizeof<u16>() == 2);
+assert(sizeof<u32>() == 4);
+assert(sizeof<u64>() == 8);
 sizeof<usize>();
-sizeof<bool>();
-sizeof<i8>();
-sizeof<i16>();
-sizeof<i32>();
-sizeof<i64>();
+assert(sizeof<bool>() == 1);
+assert(sizeof<i8>() == 1);
+assert(sizeof<i16>() == 2);
+assert(sizeof<i32>() == 4);
+assert(sizeof<i64>() == 8);
 sizeof<isize>();
-sizeof<f32>();
-sizeof<f64>();
+assert(sizeof<f32>() == 4);
+assert(sizeof<f64>() == 8);
+
+class Foo<T> { a: T; b: T; }
+assert(offsetof<Foo<i32>>("a") == 0);
+assert(offsetof<Foo<i32>>("b") == 4);
+assert(offsetof<Foo<i16>>("a") == 0);
+assert(offsetof<Foo<i16>>("b") == 2);
+class Bar extends Foo<i64> {}
+assert(offsetof<Bar>("a") == 0);
+assert(offsetof<Bar>("b") == 8);
 
 assert(NaN != NaN);
 assert(isNaN<f32>(NaN));

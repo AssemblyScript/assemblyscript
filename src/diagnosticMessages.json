@@ -88,6 +88,7 @@
   "Multiple constructor implementations are not allowed.": 2392,
   "Duplicate function implementation.": 2393,
   "Individual declarations in merged declaration '{0}' must be all exported or all local.": 2395,
+  "Type '{0}' has no property '{1}'.": 2460,
   "The '{0}' operator cannot be applied to type '{1}'.": 2469,
   "Export declaration conflicts with exported declaration of '{0}'.": 2484,
   "Cannot assign to '{0}' because it is a constant or a read-only property.": 2540,

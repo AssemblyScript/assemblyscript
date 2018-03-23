@@ -1192,6 +1192,10 @@ export class Compiler extends DiagnosticEmitter {
     }
     var functionTable = this.functionTable;
     var index = functionTable.length;
+    if (func.signature.requiredParameters < func.signature.parameterTypes.length) {
+      // insert the trampoline if the function has optional parameters
+      func = this.ensureTrampoline(func);
+    }
     functionTable.push(func);
     func.functionTableIndex = index;
     return index;

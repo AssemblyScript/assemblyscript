@@ -3012,7 +3012,7 @@ export class ClassPrototype extends Element {
         }
       }
     }
-    instance.currentMemoryOffset = memoryOffset; // sizeof<this>() is its byte size in memory
+    instance.currentMemoryOffset = memoryOffset; // offsetof<this>() is the class' byte size in memory
     return instance;
   }
 

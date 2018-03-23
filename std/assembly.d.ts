@@ -221,6 +221,8 @@ declare const Infinity: f32 | f64;
 declare const HEAP_BASE: usize;
 /** Determines the byte size of the specified core or class type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
+/** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
+declare function offsetof<T>(fieldName?: string): usize;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
