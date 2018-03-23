@@ -171,6 +171,10 @@ export class Parser extends DiagnosticEmitter {
           flags |= CommonFlags.UNMANAGED;
           continue;
         }
+        if (text == "sealed") {
+          flags |= CommonFlags.SEALED;
+          continue;
+        }
       }
       if (!decorators) decorators = [];
       decorators.push(decorator);

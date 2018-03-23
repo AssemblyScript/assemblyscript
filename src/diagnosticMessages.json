@@ -12,6 +12,7 @@
   "Structs cannot implement interfaces.": 208,
   "Invalid regular expression flags.": 209,
   "Implementation '{0}' must match the signature '{1}'.": 210,
+  "Class '{0}' is sealed and cannot be extended.": 211,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

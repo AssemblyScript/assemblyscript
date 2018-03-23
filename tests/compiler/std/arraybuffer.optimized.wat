@@ -10,6 +10,7 @@
  (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
  (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
+ (global "$(lib)/arraybuffer/ArrayBuffer.EMPTY" (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 44))
  (memory $0 1)
@@ -2028,82 +2029,105 @@
     )
    )
   )
-  (i32.store
-   (tee_local $3
-    (call "$(lib)/allocator/arena/allocate_memory"
-     (i32.add
-      (tee_local $2
-       (select
-        (tee_local $3
-         (i32.sub
-          (tee_local $2
-           (if (result i32)
-            (i32.lt_s
-             (get_local $2)
-             (i32.const 0)
-            )
-            (select
-             (tee_local $3
-              (i32.add
-               (get_local $5)
-               (get_local $2)
-              )
-             )
-             (tee_local $4
-              (i32.const 0)
-             )
-             (i32.gt_s
-              (get_local $3)
-              (get_local $4)
-             )
-            )
-            (select
-             (tee_local $3
-              (get_local $2)
-             )
-             (tee_local $4
-              (get_local $5)
-             )
-             (i32.lt_s
-              (get_local $3)
-              (get_local $4)
-             )
-            )
+  (if (result i32)
+   (tee_local $2
+    (select
+     (tee_local $3
+      (i32.sub
+       (tee_local $2
+        (if (result i32)
+         (i32.lt_s
+          (get_local $2)
+          (i32.const 0)
+         )
+         (select
+          (tee_local $3
+           (i32.add
+            (get_local $5)
+            (get_local $2)
            )
           )
-          (get_local $1)
+          (tee_local $4
+           (i32.const 0)
+          )
+          (i32.gt_s
+           (get_local $3)
+           (get_local $4)
+          )
+         )
+         (select
+          (tee_local $3
+           (get_local $2)
+          )
+          (tee_local $4
+           (get_local $5)
+          )
+          (i32.lt_s
+           (get_local $3)
+           (get_local $4)
+          )
          )
         )
-        (tee_local $4
-         (i32.const 0)
-        )
-        (i32.gt_s
-         (get_local $3)
-         (get_local $4)
-        )
        )
+       (get_local $1)
       )
-      (i32.const 4)
+     )
+     (tee_local $4
+      (i32.const 0)
+     )
+     (i32.gt_s
+      (get_local $3)
+      (get_local $4)
      )
     )
    )
-   (get_local $2)
-  )
-  (call "$(lib)/memory/move_memory"
-   (i32.add
-    (get_local $3)
-    (i32.const 4)
-   )
-   (i32.add
-    (i32.add
-     (get_local $0)
-     (i32.const 4)
+   (block (result i32)
+    (i32.store
+     (tee_local $3
+      (call "$(lib)/allocator/arena/allocate_memory"
+       (i32.add
+        (get_local $2)
+        (i32.const 4)
+       )
+      )
+     )
+     (get_local $2)
     )
-    (get_local $1)
+    (call "$(lib)/memory/move_memory"
+     (i32.add
+      (get_local $3)
+      (i32.const 4)
+     )
+     (i32.add
+      (i32.add
+       (get_local $0)
+       (i32.const 4)
+      )
+      (get_local $1)
+     )
+     (get_local $2)
+    )
+    (get_local $3)
    )
-   (get_local $2)
+   (if (result i32)
+    (get_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY")
+    (get_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY")
+    (block (result i32)
+     (i32.store
+      (tee_local $3
+       (call "$(lib)/allocator/arena/allocate_memory"
+        (i32.const 4)
+       )
+      )
+      (i32.const 0)
+     )
+     (set_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY"
+      (get_local $3)
+     )
+     (get_local $3)
+    )
+   )
   )
-  (get_local $3)
  )
  (func "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline" (; 6 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (block $N=2

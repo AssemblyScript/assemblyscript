@@ -2041,34 +2041,36 @@ export enum CommonFlags {
   BUILTIN = 1 << 14,
   /** Is unmanaged. */
   UNMANAGED = 1 << 15,
+  /** Is sealed. */
+  SEALED = 1 << 16,
 
   // Extended modifiers usually derived from basic modifiers or internal decorators
 
   /** Is ambient, that is either declared or nested in a declared element. */
-  AMBIENT = 1 << 16,
+  AMBIENT = 1 << 17,
   /** Is generic. */
-  GENERIC = 1 << 17,
+  GENERIC = 1 << 18,
   /** Is part of a generic context. */
-  GENERIC_CONTEXT = 1 << 18,
+  GENERIC_CONTEXT = 1 << 19,
   /** Is an instance member. */
-  INSTANCE = 1 << 19,
+  INSTANCE = 1 << 20,
   /** Is a constructor. */
-  CONSTRUCTOR = 1 << 20,
+  CONSTRUCTOR = 1 << 21,
   /** Is an arrow function. */
-  ARROW = 1 << 21,
+  ARROW = 1 << 22,
   /** Is a module export. */
-  MODULE_EXPORT = 1 << 22,
+  MODULE_EXPORT = 1 << 23,
   /** Is a module import. */
-  MODULE_IMPORT = 1 << 23,
+  MODULE_IMPORT = 1 << 24,
 
   // Compilation states
 
   /** Is compiled. */
-  COMPILED = 1 << 24,
+  COMPILED = 1 << 25,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 25,
+  INLINED = 1 << 26,
   /** Is scoped. */
-  SCOPED = 1 << 26
+  SCOPED = 1 << 27
 }
 
 /** Base class of all program elements. */
@@ -2870,6 +2872,13 @@ export class ClassPrototype extends Element {
         this.program.error(
           DiagnosticCode.A_class_may_only_extend_another_class,
           declaration.extendsType.range
+        );
+        return null;
+      }
+      if (baseClass.is(CommonFlags.SEALED)) {
+        this.program.error(
+          DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
+          declaration.extendsType.range, baseClass.internalName
         );
         return null;
       }

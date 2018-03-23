@@ -2672,7 +2672,18 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.EqI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnEquals;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                assert(this.currentType == Type.bool);
+                break;
+              }
+            }
+            // fall-through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -2822,7 +2833,17 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.AddI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnConcat;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3726,6 +3747,20 @@ export class Compiler extends DiagnosticEmitter {
       : expr;
   }
 
+  compileOperatorOverload(
+    classInstance: Class,
+    operatorName: string,
+    leftExpr: ExpressionRef,
+    rightExpr: ExpressionRef
+  ): ExpressionRef {
+    var classPrototype = classInstance.prototype;
+    var operatorPrototype = assert(assert(classPrototype.members).get(operatorName));
+    assert(operatorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+    var operatorInstance = (<FunctionPrototype>operatorPrototype).resolve();
+    if (!operatorInstance) return this.module.createUnreachable();
+    return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ]);
+  }
+
   compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef {
     var currentFunction = this.currentFunction;
     var resolved = this.program.resolveExpression(expression, currentFunction); // reports
@@ -4526,7 +4561,6 @@ export class Compiler extends DiagnosticEmitter {
           assert(parent.kind == ElementKind.CLASS);
           let thisType = (<Class>parent).type;
           if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
-            let nativeSizeType = this.options.nativeSizeType;
             let flow = currentFunction.flow;
             if (!flow.is(FlowFlags.ALLOCATES)) {
               flow.set(FlowFlags.ALLOCATES);
@@ -5152,8 +5186,36 @@ export class Compiler extends DiagnosticEmitter {
         : this.compileExpression(ifElse, contextualType);
     }
 
-    var ifThenExpr = this.compileExpression(ifThen, contextualType);
-    var ifElseExpr = this.compileExpression(ifElse, contextualType);
+    var currentFunction = this.currentFunction;
+    var ifThenExpr: ExpressionRef;
+    var ifElseExpr: ExpressionRef;
+
+    // if part of a constructor, keep track of memory allocations
+    if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
+      let flow = currentFunction.flow;
+
+      flow = flow.enterBranchOrScope();
+      currentFunction.flow = flow;
+      ifThenExpr = this.compileExpression(ifThen, contextualType);
+      let ifThenAllocates = flow.is(FlowFlags.ALLOCATES);
+      flow = flow.leaveBranchOrScope();
+      currentFunction.flow = flow;
+
+      flow = flow.enterBranchOrScope();
+      currentFunction.flow = flow;
+      ifElseExpr = this.compileExpression(ifElse, contextualType);
+      let ifElseAllocates = flow.is(FlowFlags.ALLOCATES);
+      flow = flow.leaveBranchOrScope();
+      currentFunction.flow = flow;
+
+      if (ifThenAllocates && ifElseAllocates) flow.set(FlowFlags.ALLOCATES);
+
+    // otherwise simplify
+    } else {
+      ifThenExpr = this.compileExpression(ifThen, contextualType);
+      ifElseExpr = this.compileExpression(ifElse, contextualType);
+    }
+
     return this.module.createIf(condExpr, ifThenExpr, ifElseExpr);
   }
 

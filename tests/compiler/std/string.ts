@@ -1,3 +1,5 @@
+import "allocator/arena";
+
 // preliminary
 
 var str: string = "hi, I'm a string";
@@ -31,3 +33,6 @@ assert(parseFloat("1") == 1);
 assert(parseFloat("0.1") == 0.1);
 assert(parseFloat(".25") == 0.25);
 assert(parseFloat(".1foobar") == 0.1);
+
+var c = "a" + "b";
+assert(c == "ab");

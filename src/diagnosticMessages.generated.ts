@@ -20,6 +20,7 @@ export enum DiagnosticCode {
   Structs_cannot_implement_interfaces = 208,
   Invalid_regular_expression_flags = 209,
   Implementation_0_must_match_the_signature_1 = 210,
+  Class_0_is_sealed_and_cannot_be_extended = 211,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -122,6 +123,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 208: return "Structs cannot implement interfaces.";
     case 209: return "Invalid regular expression flags.";
     case 210: return "Implementation '{0}' must match the signature '{1}'.";
+    case 211: return "Class '{0}' is sealed and cannot be extended.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

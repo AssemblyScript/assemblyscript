@@ -240,6 +240,7 @@ export class Array<T> {
 }
 
 @unmanaged
+@sealed
 export class CArray<T> {
 
   private constructor() {}

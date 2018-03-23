@@ -15,6 +15,7 @@
  (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global "$(lib)/arraybuffer/HEADER_SIZE" i32 (i32.const 4))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
+ (global "$(lib)/arraybuffer/ArrayBuffer.EMPTY" (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 44))
  (memory $0 1)
@@ -2280,7 +2281,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   (set_local $3
    (i32.load
     (get_local $0)
@@ -2377,34 +2377,62 @@
     )
    )
   )
-  (set_local $7
-   (call "$(lib)/allocator/arena/allocate_memory"
-    (i32.add
-     (i32.const 4)
+  (if
+   (get_local $6)
+   (block
+    (set_local $4
+     (call "$(lib)/allocator/arena/allocate_memory"
+      (i32.add
+       (i32.const 4)
+       (get_local $6)
+      )
+     )
+    )
+    (i32.store
+     (get_local $4)
      (get_local $6)
     )
-   )
-  )
-  (i32.store
-   (get_local $7)
-   (get_local $6)
-  )
-  (call "$(lib)/memory/move_memory"
-   (i32.add
-    (get_local $7)
-    (i32.const 4)
-   )
-   (i32.add
-    (i32.add
-     (get_local $0)
-     (i32.const 4)
+    (call "$(lib)/memory/move_memory"
+     (i32.add
+      (get_local $4)
+      (i32.const 4)
+     )
+     (i32.add
+      (i32.add
+       (get_local $0)
+       (i32.const 4)
+      )
+      (get_local $1)
+     )
+     (get_local $6)
     )
-    (get_local $1)
+    (return
+     (get_local $4)
+    )
    )
-   (get_local $6)
-  )
-  (return
-   (get_local $7)
+   (if
+    (get_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY")
+    (return
+     (get_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY")
+    )
+    (block
+     (set_local $4
+      (call "$(lib)/allocator/arena/allocate_memory"
+       (i32.const 4)
+      )
+     )
+     (i32.store
+      (get_local $4)
+      (i32.const 0)
+     )
+     (set_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY"
+      (get_local $4)
+     )
+     (return
+      (get_local $4)
+     )
+    )
+   )
   )
  )
  (func "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline" (; 6 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)

@@ -354,5 +354,8 @@ declare function operator(token: string): (target: any, propertyKey: string, des
 /** Annotates a class as being unmanaged with limited capabilities. */
 declare function unmanaged(target: Function): any;
 
+/** Annotates a class as being sealed / non-derivable. */
+declare function sealed(target: Function): any;
+
 /** Annotates a class field with an explicit offset. */
 declare function offset(offset: usize): any;

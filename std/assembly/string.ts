@@ -2,15 +2,16 @@
 const EMPTY: String = changetype<String>("");
 
 // number of bytes preceeding string data
-const HEAD: usize = 4;
+const HEADER_SIZE: usize = 4;
 
 function allocate(length: i32): String {
   assert(length > 0); // 0 -> EMPTY
-  var ptr = allocate_memory(HEAD + (<usize>length << 1));
+  var ptr = allocate_memory(HEADER_SIZE + (<usize>length << 1));
   store<i32>(ptr, length);
   return changetype<String>(ptr);
 }
 
+@sealed
 export class String {
 
   readonly length: i32; // capped to [0, 0x7fffffff]
@@ -28,9 +29,9 @@ export class String {
       changetype<usize>(out),
       load<u16>(
         changetype<usize>(this) + (<usize>pos << 1),
-        HEAD
+        HEADER_SIZE
       ),
-      HEAD
+      HEADER_SIZE
     );
     return out;
   }
@@ -42,7 +43,7 @@ export class String {
     }
     return load<u16>(
       changetype<usize>(this) + (<usize>pos << 1),
-      HEAD
+      HEADER_SIZE
     );
   }
 
@@ -53,14 +54,14 @@ export class String {
     }
     var first = <i32>load<u16>(
       changetype<usize>(this) + (<usize>pos << 1),
-      HEAD
+      HEADER_SIZE
     );
     if (first < 0xD800 || first > 0xDBFF || pos + 1 == this.length) {
       return first;
     }
     var second = <i32>load<u16>(
       changetype<usize>(this) + ((<usize>pos + 1) << 1),
-      HEAD
+      HEADER_SIZE
     );
     if (second < 0xDC00 || second > 0xDFFF) {
       return first;
@@ -70,32 +71,26 @@ export class String {
 
   @operator("+")
   private static __concat(left: String, right: String): String {
-    if (left == null) {
-      left = changetype<String>("null");
-    }
+    if (!changetype<usize>(left)) left = changetype<String>("null");
     return left.concat(right);
   }
 
   concat(other: String): String {
     assert(this != null);
-    if (other == null) {
-      other = changetype<String>("null");
-    }
+    if (other == null) other = changetype<String>("null");
     var thisLen: isize = this.length;
     var otherLen: isize = other.length;
     var outLen: usize = thisLen + otherLen;
-    if (outLen == 0) {
-      return EMPTY;
-    }
+    if (outLen == 0) return EMPTY;
     var out = allocate(outLen);
     move_memory(
-      changetype<usize>(out) + HEAD,
-      changetype<usize>(this) + HEAD,
+      changetype<usize>(out) + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE,
       thisLen << 1
     );
     move_memory(
-      changetype<usize>(out) + HEAD + (thisLen << 1),
-      changetype<usize>(other) + HEAD,
+      changetype<usize>(out) + HEADER_SIZE + (thisLen << 1),
+      changetype<usize>(other) + HEADER_SIZE,
       otherLen << 1
     );
     return out;
@@ -113,26 +108,21 @@ export class String {
       return false;
     }
     return !compare_memory(
-      changetype<usize>(this) + HEAD + (start << 1),
-      changetype<usize>(searchString) + HEAD,
+      changetype<usize>(this) + HEADER_SIZE + (start << 1),
+      changetype<usize>(searchString) + HEADER_SIZE,
       searchLength << 1
     );
   }
 
   @operator("==")
   private static __eq(left: String, right: String): bool {
-    if (left == null) {
-      return right == null;
-    } else if (right == null) {
-      return false;
-    }
+    if (!changetype<usize>(left)) return !changetype<usize>(right);
+    else if (!changetype<usize>(right)) return false;
     var leftLength = left.length;
-    if (leftLength != right.length) {
-      return false;
-    }
+    if (leftLength != right.length) return false;
     return !compare_memory(
-      changetype<usize>(left) + HEAD,
-      changetype<usize>(right) + HEAD,
+      changetype<usize>(left) + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
       (<usize>leftLength << 1)
     );
   }
@@ -154,8 +144,8 @@ export class String {
     // TODO: two-way, multiple char codes
     for (let k: usize = start; <isize>k + searchLen <= len; ++k) {
       if (!compare_memory(
-        changetype<usize>(this) + HEAD + (k << 1),
-        changetype<usize>(searchString) + HEAD,
+        changetype<usize>(this) + HEADER_SIZE + (k << 1),
+        changetype<usize>(searchString) + HEADER_SIZE,
         searchLen << 1)
       ) {
         return <i32>k;
@@ -177,8 +167,8 @@ export class String {
       return false;
     }
     return !compare_memory(
-      changetype<usize>(this) + HEAD + (start << 1),
-      changetype<usize>(searchString) + HEAD,
+      changetype<usize>(this) + HEADER_SIZE + (start << 1),
+      changetype<usize>(searchString) + HEADER_SIZE,
       searchLength << 1
     );
   }
@@ -197,8 +187,8 @@ export class String {
     }
     var out = allocate(resultLength);
     move_memory(
-      changetype<usize>(out) + HEAD,
-      changetype<usize>(this) + HEAD + (intStart << 1),
+      changetype<usize>(out) + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE + (intStart << 1),
       <usize>resultLength << 1
     );
     return out;
@@ -220,8 +210,8 @@ export class String {
     }
     var out = allocate(len);
     move_memory(
-      changetype<usize>(out) + HEAD,
-      changetype<usize>(this) + HEAD + (from << 1),
+      changetype<usize>(out) + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE + (from << 1),
       len << 1
     );
     return out;
@@ -233,7 +223,7 @@ export class String {
     while (
       length &&
       isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + (length << 1), HEAD)
+        load<u16>(changetype<usize>(this) + (length << 1), HEADER_SIZE)
       )
     ) {
       --length;
@@ -242,7 +232,7 @@ export class String {
     while (
       start < length &&
       isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + (start << 1), HEAD)
+        load<u16>(changetype<usize>(this) + (start << 1), HEADER_SIZE)
       )
     ) {
       ++start, --length;
@@ -255,8 +245,8 @@ export class String {
     }
     var out = allocate(length);
     move_memory(
-      changetype<usize>(out) + HEAD,
-      changetype<usize>(this) + HEAD + (start << 1),
+      changetype<usize>(out) + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE + (start << 1),
       length << 1
     );
     return out;
@@ -269,7 +259,7 @@ export class String {
     while (
       start < len &&
       isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + (start << 1), HEAD)
+        load<u16>(changetype<usize>(this) + (start << 1), HEADER_SIZE)
       )
     ) {
       ++start;
@@ -283,8 +273,8 @@ export class String {
     }
     var out = allocate(outLen);
     move_memory(
-      changetype<usize>(out) + HEAD,
-      changetype<usize>(this) + HEAD + (start << 1),
+      changetype<usize>(out) + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE + (start << 1),
       outLen << 1
     );
     return out;
@@ -296,7 +286,7 @@ export class String {
     while (
       len > 0 &&
       isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + (len << 1), HEAD)
+        load<u16>(changetype<usize>(this) + (len << 1), HEADER_SIZE)
       )
     ) {
       --len;
@@ -309,8 +299,8 @@ export class String {
     }
     var out = allocate(len);
     move_memory(
-      changetype<usize>(out) + HEAD,
-      changetype<usize>(this) + HEAD,
+      changetype<usize>(out) + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE,
       len << 1
     );
     return out;
@@ -381,7 +371,7 @@ function parse<T>(str: String, radix: i32 = 0): T {
     return <T>NaN;
   }
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
-  var code = <i32>load<u16>(ptr, HEAD);
+  var code = <i32>load<u16>(ptr, HEADER_SIZE);
 
   // determine sign
   var sign: T;
@@ -389,13 +379,13 @@ function parse<T>(str: String, radix: i32 = 0): T {
     if (!--len) {
       return <T>NaN;
     }
-    code = <i32>load<u16>(ptr += 2, HEAD);
+    code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
     sign = -1;
   } else if (code == CharCode.PLUS) {
     if (!--len) {
       return <T>NaN;
     }
-    code = <i32>load<u16>(ptr += 2, HEAD);
+    code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
     sign = 1;
   } else {
     sign = 1;
@@ -404,7 +394,7 @@ function parse<T>(str: String, radix: i32 = 0): T {
   // determine radix
   if (!radix) {
     if (code == CharCode._0 && len > 2) {
-      switch (<i32>load<u16>(ptr + 2, HEAD)) {
+      switch (<i32>load<u16>(ptr + 2, HEADER_SIZE)) {
         case CharCode.B:
         case CharCode.b: {
           ptr += 4; len -= 2;
@@ -435,7 +425,7 @@ function parse<T>(str: String, radix: i32 = 0): T {
   // calculate value
   var num: T = 0;
   while (len--) {
-    code = <i32>load<u16>(ptr, HEAD);
+    code = <i32>load<u16>(ptr, HEADER_SIZE);
     if (code >= CharCode._0 && code <= CharCode._9) {
       code -= CharCode._0;
     } else if (code >= CharCode.A && code <= CharCode.Z) {
@@ -460,7 +450,7 @@ export function parseFloat(str: String): f64 {
     return NaN;
   }
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
-  var code = <i32>load<u16>(ptr, HEAD);
+  var code = <i32>load<u16>(ptr, HEADER_SIZE);
 
   // determine sign
   var sign: f64;
@@ -468,13 +458,13 @@ export function parseFloat(str: String): f64 {
     if (!--len) {
       return NaN;
     }
-    code = <i32>load<u16>(ptr += 2, HEAD);
+    code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
     sign = -1;
   } else if (code == CharCode.PLUS) {
     if (!--len) {
       return NaN;
     }
-    code = <i32>load<u16>(ptr += 2, HEAD);
+    code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
     sign = 1;
   } else {
     sign = 1;
@@ -483,12 +473,12 @@ export function parseFloat(str: String): f64 {
   // calculate value
   var num: f64 = 0;
   while (len--) {
-    code = <i32>load<u16>(ptr, HEAD);
+    code = <i32>load<u16>(ptr, HEADER_SIZE);
     if (code == CharCode.DOT) {
       ptr += 2;
       let fac: f64 = 0.1; // precision :(
       while (len--) {
-        code = <i32>load<u16>(ptr, HEAD);
+        code = <i32>load<u16>(ptr, HEADER_SIZE);
         if (code == CharCode.E || code == CharCode.e) {
           assert(false); // TODO
         }
