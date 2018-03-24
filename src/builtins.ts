@@ -1795,7 +1795,7 @@ export function compileCall(
       }
       return ret;
     }
-    case "offsetof": { // offsetof<T!>(fieldName?)
+    case "offsetof": { // offsetof<T!>(fieldName?: string) -> usize
       compiler.currentType = compiler.options.usizeType;
       if (operands.length > 1) {
         if (!(typeArguments && typeArguments.length == 1)) {

@@ -120,7 +120,8 @@ tests.forEach(filename => {
           my: {
             externalFunction: function() { },
             externalConstant: 2
-          }
+          },
+          JSMath: Math
         });
         console.log("- " + chalk.green("instantiate OK"));
       } catch (e) {

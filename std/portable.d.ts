@@ -310,6 +310,52 @@ interface Iterable<T> {
 
 interface Iterator<T> {}
 
+declare namespace Math {
+  export const E: f64;
+  export const LN2: f64;
+  export const LN10: f64;
+  export const LOG2E: f64;
+  export const LOG10E: f64;
+  export const PI: f64;
+  export const SQRT1_2: f64;
+  export const SQRT2: f64;
+  export function abs(x: f64): f64;
+  export function acos(x: f64): f64;
+  export function acosh(x: f64): f64;
+  export function asin(x: f64): f64;
+  export function asinh(x: f64): f64;
+  export function atan(x: f64): f64;
+  export function atan2(y: f64, x: f64): f64;
+  export function atanh(x: f64): f64;
+  export function cbrt(x: f64): f64;
+  export function ceil(x: f64): f64;
+  export function clz32(x: f64): i32;
+  export function cos(x: f64): f64;
+  export function cosh(x: f64): f64;
+  export function exp(x: f64): f64;
+  export function expm1(x: f64): f64;
+  export function floor(x: f64): f64;
+  export function fround(x: f64): f32;
+  export function hypot(value1: f64, value2: f64): f64; // TODO: see std/math
+  export function imul(a: f64, b: f64): i32;
+  export function log(x: f64): f64;
+  export function log10(x: f64): f64;
+  export function log1p(x: f64): f64;
+  export function log2(x: f64): f64;
+  export function max(value1: f64, value2: f64): f64; // TODO: see std/math
+  export function min(value1: f64, value2: f64): f64; // TODO: see std/math
+  export function pow(base: f64, exponent: f64): f64;
+  export function random(): f64;
+  export function round(x: f64): f64;
+  export function sign(x: f64): f64;
+  export function sin(x: f64): f64;
+  export function sinh(x: f64): f64;
+  export function sqrt(x: f64): f64;
+  export function tan(x: f64): f64;
+  export function tanh(x: f64): f64;
+  export function trunc(x: f64): f64;
+}
+
 declare namespace console {
   /** @deprecated */
   function log(message: string): void;

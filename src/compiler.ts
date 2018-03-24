@@ -1745,6 +1745,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         continue;
       }
+      let isInlined = false;
       if (declaration.is(CommonFlags.CONST)) {
         if (init) {
           init = this.precomputeExpressionRef(init);
@@ -1787,10 +1788,10 @@ export class Compiler extends DiagnosticEmitter {
                 DiagnosticCode.Duplicate_identifier_0,
                 declaration.name.range, name
               );
-              return 0;
+              return this.module.createUnreachable();
             }
             scopedLocals.set(name, local);
-            return 0;
+            isInlined = true;
           } else {
             this.warning(
               DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
@@ -1804,13 +1805,15 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
       }
-      if (declaration.is(CommonFlags.LET)) { // here: not top-level
-        currentFunction.flow.addScopedLocal(name, type, declaration.name); // reports
-      } else {
-        currentFunction.addLocal(type, name); // reports
-      }
-      if (init) {
-        initializers.push(this.compileAssignmentWithValue(declaration.name, init));
+      if (!isInlined) {
+        if (declaration.isAny(CommonFlags.LET | CommonFlags.CONST)) { // here: not top-level
+          currentFunction.flow.addScopedLocal(name, type, declaration.name); // reports
+        } else {
+          currentFunction.addLocal(type, name); // reports
+        }
+        if (init) {
+          initializers.push(this.compileAssignmentWithValue(declaration.name, init));
+        }
       }
     }
     return initializers.length   // we can unwrap these here because the

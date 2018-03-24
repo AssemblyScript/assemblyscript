@@ -38,7 +38,7 @@ export declare function floor<T>(value: T): T;
 
 export declare function copysign<T>(left: T, right: T): T;
 
-export declare function nearest<T>(left: T, right: T): T;
+export declare function nearest<T>(value: T): T;
 
 export declare function reinterpret<T>(value: void): T;
 

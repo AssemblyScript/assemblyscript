@@ -75,7 +75,9 @@ import {
   VariableStatement,
   VariableDeclaration,
   VoidStatement,
-  WhileStatement
+  WhileStatement,
+
+  mangleInternalPath
 } from "./ast";
 
 const builtinsFile = LIBRARY_PREFIX + "builtins.ts";
@@ -108,11 +110,12 @@ export class Parser extends DiagnosticEmitter {
 
     // check if already parsed
     var normalizedPath = normalizePath(path);
+    var internalPath = mangleInternalPath(normalizedPath);
     var sources = program.sources;
     for (let i = 0, k = sources.length; i < k; ++i) {
-      if (sources[i].normalizedPath == normalizedPath) return;
+      if (sources[i].internalPath == internalPath) return;
     }
-    this.seenlog.add(normalizedPath);
+    this.seenlog.add(internalPath);
 
     // create the source element
     var source = new Source(
@@ -1803,9 +1806,10 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       let ret = Node.createExportStatement(members, path, flags, tn.range(startPos, tn.pos));
-      if (ret.normalizedPath && !this.seenlog.has(<string>ret.normalizedPath)) {
-        this.backlog.push(<string>ret.normalizedPath);
-        this.seenlog.add(<string>ret.normalizedPath);
+      let internalPath = ret.internalPath;
+      if (internalPath != null && !this.seenlog.has(internalPath)) {
+        this.backlog.push(internalPath);
+        this.seenlog.add(internalPath);
       }
       tn.skip(Token.SEMICOLON);
       return ret;
@@ -1914,9 +1918,10 @@ export class Parser extends DiagnosticEmitter {
         } else {
           ret = Node.createImportStatement(members, path, tn.range(startPos, tn.pos));
         }
-        if (!this.seenlog.has(ret.normalizedPath)) {
-          this.backlog.push(ret.normalizedPath);
-          this.seenlog.add(ret.normalizedPath);
+        let internalPath = ret.internalPath;
+        if (!this.seenlog.has(internalPath)) {
+          this.backlog.push(internalPath);
+          this.seenlog.add(internalPath);
         }
         tn.skip(Token.SEMICOLON);
         return ret;
