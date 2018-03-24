@@ -292,6 +292,19 @@ assert(f64.MIN_SAFE_INTEGER == -9007199254740991);
 assert(f64.MAX_SAFE_INTEGER == 9007199254740991);
 assert(f64.EPSILON == 2.2204460492503131e-16);
 
+assert(isNaN<f64>(fmod(1, NaN)));
+assert(fmod(1.5, 1.0) == 0.5); // exactly 0.5 (as in C)
+assert(fmod(9.2, 2.0) - 1.2 < f64.EPSILON); // not exactly 1.2 (as in C)
+assert(fmod(9.2, 3.7) - 1.8 < f64.EPSILON); // not exactly 1.8 (as in C)
+
+assert(isNaN<f32>(fmodf(1, NaN)));
+assert(fmodf(1.5, 1.0) == 0.5);
+assert(fmodf(9.2, 2.0) - 1.2 < f32.EPSILON);
+assert(fmodf(9.2, 3.7) - 1.8 < f32.EPSILON);
+
+assert(1.5 % 1.0 == 0.5); // should implicitly call fmod
+assert(<f32>1.5 % 1.0 == 0.5); // should implicitly call fmodf
+
 import {
   isNaN as isItNaN
 } from "builtins";

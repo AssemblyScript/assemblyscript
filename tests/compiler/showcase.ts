@@ -85,7 +85,6 @@ export function anExportedFunction(): void { }
 // be implemented already. Here are a few more sophisitcated examples of code that'll most likely
 // make it into the standard library eventually:
 import "./memcpy";            // until replaced by the proposed `move_memory` intrinsic (sic.)
-import "./fmod";              // for floating point modulus support, e.g., `1.5 % 1.0`
 
 // Speaking of classes: Some preliminary work has already been done, so while we can't properly
 // instantiate them yet, we can point them at some raw memory

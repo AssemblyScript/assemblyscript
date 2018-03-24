@@ -249,6 +249,10 @@ declare function parseI32(str: string, radix?: i32): i32;
 declare function parseI64(str: string, radix?: i32): i64;
 /** Parses a string to a 64-bit float. */
 declare function parseFloat(str: string): f64;
+/** Returns the 64-bit floating-point remainder of `x/y`. */
+declare function fmod(x: f64, y: f64): f64;
+/** Returns the 32-bit floating-point remainder of `x/y`. */
+declare function fmodf(x: f32, y: f32): f32;
 
 // Standard library
 

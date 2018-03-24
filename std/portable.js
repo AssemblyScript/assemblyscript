@@ -169,4 +169,13 @@ globalScope["isString"] = function isString(arg) {
 
 globalScope["isArray"] = Array.isArray;
 
-require("./portable/memory");
+globalScope["fmod"] = function fmod(x, y) {
+  return x % y;
+};
+
+globalScope["fmodf"] = function fmodf(x, y) {
+  return Math.fround(x % y);
+};
+
+require("./portable/math")(globalScope);
+require("./portable/memory")(globalScope);

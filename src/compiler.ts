@@ -821,7 +821,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles a readily resolved function instance. */
   compileFunction(instance: Function): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
-    assert(!instance.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || instance.simpleName == "abort");
+    assert(!instance.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || instance.internalName == "abort");
     instance.set(CommonFlags.COMPILED);
 
     // check that modifiers are matching but still compile as-is
@@ -3227,14 +3227,42 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.RemU64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.F32:
+          case TypeKind.F32: {
+            let fmodPrototype = this.program.elementsLookup.get("fmodf");
+            if (!fmodPrototype) {
+              this.error(
+                DiagnosticCode.Cannot_find_name_0,
+                expression.range, "fmod"
+              );
+              expr = module.createUnreachable();
+              break;
+            }
+            assert(fmodPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+            let fmodInstance = (<FunctionPrototype>fmodPrototype).resolve();
+            if (!(fmodInstance && this.compileFunction(fmodInstance))) {
+              expr = module.createUnreachable();
+            } else {
+              expr = this.makeCallDirect(fmodInstance, [ leftExpr, rightExpr ]);
+            }
+            break;
+          }
           case TypeKind.F64: {
-            // TODO: internal fmod, possibly simply imported from JS
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
-            expr = module.createUnreachable();
+            let fmodPrototype = this.program.elementsLookup.get("fmod");
+            if (!fmodPrototype) {
+              this.error(
+                DiagnosticCode.Cannot_find_name_0,
+                expression.range, "fmod"
+              );
+              expr = module.createUnreachable();
+              break;
+            }
+            assert(fmodPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+            let fmodInstance = (<FunctionPrototype>fmodPrototype).resolve();
+            if (!(fmodInstance && this.compileFunction(fmodInstance))) {
+              expr = module.createUnreachable();
+            } else {
+              expr = this.makeCallDirect(fmodInstance, [ leftExpr, rightExpr ]);
+            }
             break;
           }
           default: {

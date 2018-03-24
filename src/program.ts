@@ -2514,7 +2514,7 @@ export class Function extends Element {
     this.signature = signature;
     this.memberOf = memberOf;
     this.flags = prototype.flags;
-    if (!(prototype.is(CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
+    if (!(prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
       let localIndex = 0;
       if (memberOf && memberOf.kind == ElementKind.CLASS) {
         assert(this.is(CommonFlags.INSTANCE));
