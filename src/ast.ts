@@ -1047,6 +1047,8 @@ export class ParameterNode extends Node {
   type: CommonTypeNode;
   /** Initializer expression, if present. */
   initializer: Expression | null;
+  /** Implicit field declaration, if applicable. */
+  implicitFieldDeclaration: FieldDeclaration | null = null;
 }
 
 /** Represents a function signature. */
@@ -1583,6 +1585,9 @@ export class ExpressionStatement extends Statement {
 /** Represents a field declaration within a `class`. */
 export class FieldDeclaration extends VariableLikeDeclarationStatement {
   kind = NodeKind.FIELDDECLARATION;
+
+  /** Parameter index within the constructor, if applicable. */
+  parameterIndex: i32 = -1;
 }
 
 /** Represents a `for` statement. */

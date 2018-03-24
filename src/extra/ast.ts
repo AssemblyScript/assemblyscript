@@ -799,8 +799,11 @@ export class ASTBuilder {
       sb.push(" {\n");
       let indentLevel = ++this.indentLevel;
       for (let i = 0, k = members.length; i < k; ++i) {
-        indent(sb, indentLevel);
-        this.visitNodeAndTerminate(members[i]);
+        let member = members[i];
+        if (member.kind != NodeKind.FIELDDECLARATION || (<FieldDeclaration>member).parameterIndex < 0) {
+          indent(sb, indentLevel);
+          this.visitNodeAndTerminate(member);
+        }
       }
       indent(sb, --this.indentLevel);
       sb.push("}");
@@ -1368,6 +1371,10 @@ export class ASTBuilder {
   serializeParameter(node: ParameterNode): void {
     var sb = this.sb;
     var kind = node.parameterKind;
+    var implicitFieldDeclaration = node.implicitFieldDeclaration;
+    if (implicitFieldDeclaration) {
+      this.serializeAccessModifiers(implicitFieldDeclaration);
+    }
     if (kind == ParameterKind.REST) {
       sb.push("...");
     }

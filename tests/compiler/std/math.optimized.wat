@@ -258,10 +258,8 @@
        )
       )
       (f64.mul
-       (tee_local $0
-        (f64.convert_s/i32
-         (get_local $2)
-        )
+       (f64.convert_s/i32
+        (get_local $2)
        )
        (f64.const 1.9082149292705877e-10)
       )
@@ -271,7 +269,9 @@
     (get_local $4)
    )
    (f64.mul
-    (get_local $0)
+    (f64.convert_s/i32
+     (get_local $2)
+    )
     (f64.const 0.6931471803691238)
    )
   )

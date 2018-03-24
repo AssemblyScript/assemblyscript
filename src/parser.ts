@@ -967,7 +967,8 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseParameters(
-    tn: Tokenizer
+    tn: Tokenizer,
+    isConstructor: bool = false
   ): ParameterNode[] | null {
 
     // at '(': (Parameter (',' Parameter)*)? ')'
@@ -979,7 +980,7 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.peek() != Token.CLOSEPAREN) {
       do {
-        let param = this.parseParameter(tn);
+        let param = this.parseParameter(tn, isConstructor);
         if (!param) return null;
         if (seenRest && !reportedRest) {
           this.error(
@@ -1022,17 +1023,63 @@ export class Parser extends DiagnosticEmitter {
 
   parseParameter(
     tn: Tokenizer,
-    suppressErrors: bool = false
+    isConstructor: bool = false
   ): ParameterNode | null {
 
-    // before: '...'? Identifier '?'? (':' Type)? ('=' Expression)?
+    // before: ('public' | 'private' | 'protected' | '...')? Identifier '?'? (':' Type)? ('=' Expression)?
 
     var isRest = false;
     var isOptional = false;
     var startRange: Range | null = null;
-    if (tn.skip(Token.DOT_DOT_DOT)) {
-      isRest = true;
+    var accessFlags: CommonFlags = CommonFlags.NONE;
+    if (tn.skip(Token.PUBLIC)) {
       startRange = tn.range();
+      if (!isConstructor) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          startRange, "public"
+        );
+      }
+      accessFlags |= CommonFlags.PUBLIC;
+    } else if (tn.skip(Token.PROTECTED)) {
+      startRange = tn.range();
+      if (!isConstructor) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          startRange, "protected"
+        );
+      }
+      accessFlags |= CommonFlags.PROTECTED;
+    } else if (tn.skip(Token.PRIVATE)) {
+      startRange = tn.range();
+      if (!isConstructor) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          startRange, "private"
+        );
+      }
+      accessFlags |= CommonFlags.PRIVATE;
+    }
+    if (tn.skip(Token.READONLY)) {
+      if (!startRange) startRange = tn.range();
+      if (!isConstructor) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          startRange, "readonly"
+        );
+      }
+      accessFlags |= CommonFlags.READONLY;
+    }
+    if (tn.skip(Token.DOT_DOT_DOT)) {
+      if (accessFlags) {
+        this.error(
+          DiagnosticCode.A_parameter_property_cannot_be_declared_using_a_rest_parameter,
+          tn.range()
+        );
+      } else {
+        startRange = tn.range();
+      }
+      isRest = true;
     }
     if (tn.skip(Token.IDENTIFIER)) {
       if (!isRest) startRange = tn.range();
@@ -1071,7 +1118,7 @@ export class Parser extends DiagnosticEmitter {
         initializer = this.parseExpression(tn, Precedence.COMMA + 1);
         if (!initializer) return null;
       }
-      return Node.createParameter(
+      let param = Node.createParameter(
         identifier,
         type,
         initializer,
@@ -1082,6 +1129,8 @@ export class Parser extends DiagnosticEmitter {
             : ParameterKind.DEFAULT,
         Range.join(<Range>startRange, tn.range())
       );
+      param.flags |= accessFlags;
+      return param;
     } else {
       this.error(
         DiagnosticCode.Identifier_expected,
@@ -1400,14 +1449,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     var members = new Array<DeclarationStatement>();
-    if (!tn.skip(Token.CLOSEBRACE)) {
-      do {
-        let member = this.parseClassMember(tn, flags);
-        if (!member) return null;
-        members.push(<DeclarationStatement>member);
-      } while (!tn.skip(Token.CLOSEBRACE));
-    }
-    return Node.createClassDeclaration(
+    var declaration = Node.createClassDeclaration(
       identifier,
       typeParameters,
       extendsType,
@@ -1417,11 +1459,20 @@ export class Parser extends DiagnosticEmitter {
       flags,
       tn.range(startPos, tn.pos)
     );
+    if (!tn.skip(Token.CLOSEBRACE)) {
+      do {
+        let member = this.parseClassMember(tn, declaration);
+        if (!member) return null;
+        member.parent = declaration;
+        members.push(<DeclarationStatement>member);
+      } while (!tn.skip(Token.CLOSEBRACE));
+    }
+    return declaration;
   }
 
   parseClassMember(
     tn: Tokenizer,
-    parentFlags: CommonFlags
+    parent: ClassDeclaration
   ): DeclarationStatement | null {
 
     // before:
@@ -1440,7 +1491,7 @@ export class Parser extends DiagnosticEmitter {
       decorators.push(<DecoratorNode>decorator);
     }
 
-    var flags = parentFlags & CommonFlags.AMBIENT; // inherit
+    var flags = parent.flags & CommonFlags.AMBIENT; // inherit
 
     if (tn.skip(Token.PUBLIC)) {
       flags |= CommonFlags.PUBLIC;
@@ -1466,7 +1517,7 @@ export class Parser extends DiagnosticEmitter {
       } else {
         flags |= CommonFlags.INSTANCE;
       }
-      if (parentFlags & CommonFlags.GENERIC) {
+      if (parent.flags & CommonFlags.GENERIC) {
         flags |= CommonFlags.GENERIC_CONTEXT;
       }
     }
@@ -1575,10 +1626,32 @@ export class Parser extends DiagnosticEmitter {
     // method: '(' Parameters (':' Type)? '{' Statement* '}' ';'?
     if (tn.skip(Token.OPENPAREN)) {
       let signatureStart = tn.tokenPos;
-      let parameters = this.parseParameters(tn);
+      let parameters = this.parseParameters(tn, isConstructor);
       if (!parameters) return null;
-
-      if (isGetter) {
+      if (isConstructor) {
+        for (let i = 0, k = parameters.length; i < k; ++i) {
+          let parameter = parameters[i];
+          if (parameter.isAny(
+            CommonFlags.PUBLIC |
+            CommonFlags.PROTECTED |
+            CommonFlags.PRIVATE |
+            CommonFlags.READONLY
+          )) {
+            let implicitFieldDeclaration = Node.createFieldDeclaration(
+              parameter.name,
+              parameter.type,
+              null, // initialized via parameter
+              null,
+              parameter.flags | CommonFlags.INSTANCE,
+              parameter.range
+            );
+            implicitFieldDeclaration.parameterIndex = i;
+            implicitFieldDeclaration.parent = parent;
+            parameter.implicitFieldDeclaration = implicitFieldDeclaration;
+            parent.members.push(implicitFieldDeclaration);
+          }
+        }
+      } else if (isGetter) {
         if (parameters.length) {
           this.error(
             DiagnosticCode.A_get_accessor_cannot_have_parameters,

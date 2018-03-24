@@ -72,6 +72,7 @@ export enum DiagnosticCode {
   Decorators_are_not_valid_here = 1206,
   _abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration = 1242,
   A_class_may_only_extend_another_class = 1311,
+  A_parameter_property_cannot_be_declared_using_a_rest_parameter = 1317,
   Duplicate_identifier_0 = 2300,
   Cannot_find_name_0 = 2304,
   Module_0_has_no_exported_member_1 = 2305,
@@ -176,6 +177,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1206: return "Decorators are not valid here.";
     case 1242: return "'abstract' modifier can only appear on a class, method, or property declaration.";
     case 1311: return "A class may only extend another class.";
+    case 1317: return "A parameter property cannot be declared using a rest parameter.";
     case 2300: return "Duplicate identifier '{0}'.";
     case 2304: return "Cannot find name '{0}'.";
     case 2305: return "Module '{0}' has no exported member '{1}'.";

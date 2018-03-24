@@ -65,6 +65,7 @@
   "Decorators are not valid here.": 1206,
   "'abstract' modifier can only appear on a class, method, or property declaration.": 1242,
   "A class may only extend another class.": 1311,
+  "A parameter property cannot be declared using a rest parameter.": 1317,
 
   "Duplicate identifier '{0}'.": 2300,
   "Cannot find name '{0}'.": 2304,

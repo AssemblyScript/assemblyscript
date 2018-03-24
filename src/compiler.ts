@@ -108,7 +108,8 @@ import {
   ArrayLiteralExpression,
   StringLiteralExpression,
   UnaryPostfixExpression,
-  UnaryPrefixExpression
+  UnaryPrefixExpression,
+  FieldDeclaration
 } from "./ast";
 
 import {
@@ -5999,21 +6000,25 @@ export function makeAllocate(compiler: Compiler, classInstance: Class, reportNod
       if (member.kind == ElementKind.FIELD) {
         let field = <Field>member;
         let fieldType = field.type;
+        let nativeFieldType = fieldType.toNativeType();
         let fieldDeclaration = field.prototype.declaration;
         assert(!field.isAny(CommonFlags.CONST));
         if (fieldDeclaration.initializer) { // use initializer
           initializers.push(module.createStore(fieldType.byteSize,
             module.createGetLocal(tempLocal.index, nativeSizeType),
             compiler.compileExpression(fieldDeclaration.initializer, fieldType), // reports
-            fieldType.toNativeType(),
+            nativeFieldType,
             field.memoryOffset
           ));
         } else { // initialize with zero
           // TODO: might be unnecessary if the ctor initializes the field
-          initializers.push(module.createStore(field.type.byteSize,
+          let parameterIndex = (<FieldDeclaration>field.prototype.declaration).parameterIndex;
+          initializers.push(module.createStore(fieldType.byteSize,
             module.createGetLocal(tempLocal.index, nativeSizeType),
-            field.type.toNativeZero(module),
-            field.type.toNativeType(),
+            parameterIndex >= 0 // initialized via parameter
+              ? module.createGetLocal(1 + parameterIndex, nativeFieldType)
+              : fieldType.toNativeZero(module),
+              nativeFieldType,
             field.memoryOffset
           ));
         }

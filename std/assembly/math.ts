@@ -111,46 +111,37 @@ export namespace Math {
       Lg6 = 1.531383769920937332e-01,      // 3FC39A09 D078C69F
       Lg7 = 1.479819860511658591e-01;      // 3FC2F112 DF3E5244
 
-    var u = reinterpret<u64>(x);
-    var hfsq: f64, f: f64, s: f64, z: f64, R: f64, w: f64, t1: f64, t2: f64, dk: f64;
-
-    var hx = <u32>(u >> 32);
+    var Ux = reinterpret<u64>(x);
+    var hx = <u32>(Ux >> 32);
     var k = 0;
-    if (hx < 0x00100000 || <bool>(hx>>31)) {
-      if (u<<1 == 0) {
-        return -1/(x*x);  // log(+-0)=-inf
-      }
-      if (hx>>31) {
-        return (x-x)/0.0; // log(-#) = NaN
-      }
+    if (hx < 0x00100000 || <bool>(hx >> 31)) {
+      if (Ux << 1 == 0) return -1 / (x * x);  // log(+-0)=-inf
+      if (hx >> 31)     return (x - x) / 0.0; // log(-#) = NaN
       // subnormal number, scale x up
       k -= 54;
       x *= 1.8014398509481984e16; // 0x1p54
-      u = reinterpret<u64>(x);
-      hx = <u32>(u>>32);
-    } else if (hx >= 0x7ff00000) {
-      return x;
-    } else if (hx == 0x3ff00000 && u<<32 == 0) {
-      return 0;
-    }
+      Ux = reinterpret<u64>(x);
+      hx = <u32>(Ux >> 32);
+    } else if (hx >= 0x7ff00000) return x;
+      else if (hx == 0x3ff00000 && Ux << 32 == 0) return 0;
 
     // reduce x into [sqrt(2)/2, sqrt(2)]
     hx += 0x3ff00000 - 0x3fe6a09e;
-    k += (<i32>hx>>20) - 0x3ff;
-    hx = (hx&0x000fffff) + 0x3fe6a09e;
-    u = <u64>hx<<32 | (u&0xffffffff);
-    x = reinterpret<f64>(u);
+    k += (<i32>hx >> 20) - 0x3ff;
+    hx = (hx & 0x000fffff) + 0x3fe6a09e;
+    Ux = <u64>hx << 32 | (Ux & 0xffffffff);
+    x = reinterpret<f64>(Ux);
 
-    f = x - 1.0;
-    hfsq = 0.5*f*f;
-    s = f/(2.0+f);
-    z = s*s;
-    w = z*z;
-    t1 = w*(Lg2+w*(Lg4+w*Lg6));
-    t2 = z*(Lg1+w*(Lg3+w*(Lg5+w*Lg7)));
-    R = t2 + t1;
-    dk = k;
-    return s*(hfsq+R) + dk*ln2_lo - hfsq + f + dk*ln2_hi;
+    var f = x - 1.0;
+    var hfsq = 0.5 * f * f;
+    var s = f / (2.0 + f);
+    var z = s * s;
+    var w = z * z;
+    var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+    var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+    var R = t2 + t1;
+    var dk = k;
+    return s * (hfsq + R) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
   }
 
   // export function log2(x: f64): f64 {
@@ -225,52 +216,41 @@ export namespace Mathf {
     //   software is freely granted, provided that this notice
     //   is preserved.
     const
-      ln2_hi: f32 = 6.9313812256e-01, // 0x3f317180
-      ln2_lo: f32 = 9.0580006145e-06, // 0x3717f7d1
-      Lg1: f32 = 0.66666662693,       // 0xaaaaaa.0p-24
-      Lg2: f32 = 0.40000972152,       // 0xccce13.0p-25
-      Lg3: f32 = 0.28498786688,       // 0x91e9ee.0p-25
-      Lg4: f32 = 0.24279078841;       // 0xf89e26.0p-26
+      ln2_hi = <f32>6.9313812256e-01, // 0x3f317180
+      ln2_lo = <f32>9.0580006145e-06, // 0x3717f7d1
+      Lg1 = <f32>0.66666662693,       // 0xaaaaaa.0p-24
+      Lg2 = <f32>0.40000972152,       // 0xccce13.0p-25
+      Lg3 = <f32>0.28498786688,       // 0x91e9ee.0p-25
+      Lg4 = <f32>0.24279078841;       // 0xf89e26.0p-26
 
-    var u = reinterpret<u32>(x);
-    var hfsq: f32, f: f32, s: f32, z: f32, R: f32, w: f32, t1: f32, t2: f32, dk: f32;
-
-    var ix = u;
+    var ux = reinterpret<u32>(x);
     var k = 0;
-    if (ix < 0x00800000 || <bool>(ix>>31)) { // x < 2**-126
-      if (ix<<1 == 0) {
-        return -1/(x*x);     // log(+-0)=-inf
-      }
-      if (ix>>31) {
-        return (x-x)/<f32>0; // log(-#) = NaN
-      }
+    if (ux < 0x00800000 || <bool>(ux >> 31)) { // x < 2**-126
+      if (ux << 1 == 0) return -1 / (x * x);   // log(+-0)=-inf
+      if (ux >> 31)     return (x - x) / 0;    // log(-#) = NaN
       // subnormal number, scale up x
       k -= 25;
       x *= 3.3554432; // 0x1p25f;
-      u = reinterpret<u32>(x);
-      ix = u;
-    } else if (ix >= 0x7f800000) {
-      return x;
-    } else if (ix == 0x3f800000) {
-      return 0;
-    }
+      ux = reinterpret<u32>(x);
+    } else if (ux >= 0x7f800000) return x;
+      else if (ux == 0x3f800000) return 0;
 
     // reduce x into [sqrt(2)/2, sqrt(2)]
-    ix += 0x3f800000 - 0x3f3504f3;
-    k += <u32>(<i32>ix>>23) - 0x7f;
-    ix = (ix&0x007fffff) + 0x3f3504f3;
-    x = reinterpret<f32>(ix);
+    ux += 0x3f800000 - 0x3f3504f3;
+    k += <u32>(<i32>ux >> 23) - 0x7f;
+    ux = (ux & 0x007fffff) + 0x3f3504f3;
+    x = reinterpret<f32>(ux);
 
-    f = x - 1.0;
-    s = f/(2.0 + f);
-    z = s*s;
-    w = z*z;
-    t1= w*(Lg2+w*Lg4);
-    t2= z*(Lg1+w*Lg3);
-    R = t2 + t1;
-    hfsq = 0.5*f*f;
-    dk = <f32>k;
-    return s*(hfsq+R) + dk*ln2_lo - hfsq + f + dk*ln2_hi;
+    var f = x - 1.0;
+    var s = f / (2.0 + f);
+    var z = s * s;
+    var w = z * z;
+    var t1 = w * (Lg2 + w * Lg4);
+    var t2 = z * (Lg1 + w * Lg3);
+    var R = t2 + t1;
+    var hfsq = <f32>0.5 * f * f;
+    var dk = <f32>k;
+    return s * (hfsq + R) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
   }
 
   // export function log2(x: f32): f32 {

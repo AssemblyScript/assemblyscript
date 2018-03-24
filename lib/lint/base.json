@@ -80,9 +80,6 @@
     "no-object-literal-type-assertion": {
       "severity": "error"
     },
-    "no-parameter-properties": {
-      "severity": "error"
-    },
     "no-require-imports": {
       "severity": "error"
     },
