@@ -1,13 +1,17 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (global $argumentCount (mut i32) (i32.const 0))
+ (global $call-optional/optIndirect (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 40))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $call-optional/opt|trampoline)
  (memory $0 1)
  (data (i32.const 4) "\10\00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s\00")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $call-optional/opt (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (return
@@ -20,14 +24,14 @@
    )
   )
  )
- (func $call-optional/opt|trampoline (; 2 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (block $N=2
-   (block $N=1
-    (block $N=0
-     (block $N=invalid
-      (br_table $N=0 $N=1 $N=2 $N=invalid
+ (func $call-optional/opt|trampoline (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (block $2of2
+   (block $1of2
+    (block $0of2
+     (block $oob
+      (br_table $0of2 $1of2 $2of2 $oob
        (i32.sub
-        (get_local $3)
+        (get_global $argumentCount)
         (i32.const 1)
        )
       )
@@ -52,11 +56,15 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $call-optional/opt|trampoline
-      (i32.const 3)
-      (i32.const 0)
-      (i32.const 0)
-      (i32.const 1)
+     (block (result i32)
+      (set_global $argumentCount
+       (i32.const 1)
+      )
+      (call $call-optional/opt|trampoline
+       (i32.const 3)
+       (i32.const 0)
+       (i32.const 0)
+      )
      )
      (i32.const 0)
     )
@@ -74,11 +82,15 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $call-optional/opt|trampoline
-      (i32.const 3)
-      (i32.const 4)
-      (i32.const 0)
-      (i32.const 2)
+     (block (result i32)
+      (set_global $argumentCount
+       (i32.const 2)
+      )
+      (call $call-optional/opt|trampoline
+       (i32.const 3)
+       (i32.const 4)
+       (i32.const 0)
+      )
      )
      (i32.const 5)
     )
@@ -109,6 +121,87 @@
      (i32.const 0)
      (i32.const 4)
      (i32.const 6)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (block (result i32)
+      (set_global $argumentCount
+       (i32.const 1)
+      )
+      (call_indirect (type $iiii)
+       (i32.const 3)
+       (i32.const 0)
+       (i32.const 0)
+       (get_global $call-optional/optIndirect)
+      )
+     )
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 9)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (block (result i32)
+      (set_global $argumentCount
+       (i32.const 2)
+      )
+      (call_indirect (type $iiii)
+       (i32.const 3)
+       (i32.const 4)
+       (i32.const 0)
+       (get_global $call-optional/optIndirect)
+      )
+     )
+     (i32.const 5)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 10)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (block (result i32)
+      (set_global $argumentCount
+       (i32.const 3)
+      )
+      (call_indirect (type $iiii)
+       (i32.const 3)
+       (i32.const 4)
+       (i32.const 5)
+       (get_global $call-optional/optIndirect)
+      )
+     )
+     (i32.const 12)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 11)
      (i32.const 0)
     )
     (unreachable)

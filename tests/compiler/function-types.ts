@@ -39,3 +39,4 @@ function makeAndAdd<T>(a: T, b: T, adder: Adder<T> = makeAdder<T>()): T {
 }
 
 assert(makeAndAdd<i32>(1, 2) == 3);
+assert(makeAndAdd<i32>(1, 2, makeAdder<i32>()) == 3);

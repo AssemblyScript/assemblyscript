@@ -5,7 +5,6 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global "$(lib)/allocator/common/alignment/BITS" i32 (i32.const 3))
@@ -16,6 +15,7 @@
  (global "$(lib)/arraybuffer/HEADER_SIZE" i32 (i32.const 4))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
  (global "$(lib)/arraybuffer/ArrayBuffer.EMPTY" (mut i32) (i32.const 0))
+ (global $argumentCount (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 44))
  (memory $0 1)
@@ -2435,16 +2435,13 @@
    )
   )
  )
- (func "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline" (; 6 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (block $N=2
-   (block $N=1
-    (block $N=0
-     (block $N=invalid
-      (br_table $N=0 $N=1 $N=2 $N=invalid
-       (i32.sub
-        (get_local $3)
-        (i32.const 1)
-       )
+ (func "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline" (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (block $2of2
+   (block $1of2
+    (block $0of2
+     (block $oob
+      (br_table $0of2 $1of2 $2of2 $oob
+       (get_global $argumentCount)
       )
      )
      (unreachable)
@@ -2505,11 +2502,15 @@
    )
   )
   (set_global $std/arraybuffer/sliced
-   (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
-    (get_global $std/arraybuffer/buffer)
-    (i32.const 0)
-    (i32.const 0)
-    (i32.const 1)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 0)
+    )
+    (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
+     (get_global $std/arraybuffer/buffer)
+     (i32.const 0)
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -2549,11 +2550,15 @@
    )
   )
   (set_global $std/arraybuffer/sliced
-   (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
-    (get_global $std/arraybuffer/buffer)
-    (i32.const 1)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
+     (get_global $std/arraybuffer/buffer)
+     (i32.const 1)
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -2576,11 +2581,15 @@
    )
   )
   (set_global $std/arraybuffer/sliced
-   (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
-    (get_global $std/arraybuffer/buffer)
-    (i32.const -1)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
+     (get_global $std/arraybuffer/buffer)
+     (i32.const -1)
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -2707,11 +2716,15 @@
    )
   )
   (set_global $std/arraybuffer/sliced
-   (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
-    (get_global $std/arraybuffer/buffer)
-    (i32.const 42)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
+     (get_global $std/arraybuffer/buffer)
+     (i32.const 42)
+     (i32.const 0)
+    )
    )
   )
   (if

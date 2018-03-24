@@ -7,7 +7,6 @@
  (type $iiiv (func (param i32 i32 i32)))
  (type $iv (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global "$(lib)/allocator/common/alignment/BITS" i32 (i32.const 3))
@@ -17,6 +16,7 @@
  (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
+ (global $argumentCount (mut i32) (i32.const 0))
  (global $std/array/includes (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 64))
  (memory $0 1)
@@ -3187,14 +3187,14 @@
    (i32.const -1)
   )
  )
- (func "$(lib)/array/Array<i32>#indexOf|trampoline" (; 15 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (block $N=1
-   (block $N=0
-    (block $N=invalid
-     (br_table $N=0 $N=1 $N=invalid
+ (func "$(lib)/array/Array<i32>#indexOf|trampoline" (; 15 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (block $1of1
+   (block $0of1
+    (block $oob
+     (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_local $3)
-       (i32.const 2)
+       (get_global $argumentCount)
+       (i32.const 1)
       )
      )
     )
@@ -3308,14 +3308,14 @@
    (i32.const 0)
   )
  )
- (func "$(lib)/array/Array<i32>#includes|trampoline" (; 17 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (block $N=1
-   (block $N=0
-    (block $N=invalid
-     (br_table $N=0 $N=1 $N=invalid
+ (func "$(lib)/array/Array<i32>#includes|trampoline" (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (block $1of1
+   (block $0of1
+    (block $oob
+     (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_local $3)
-       (i32.const 2)
+       (get_global $argumentCount)
+       (i32.const 1)
       )
      )
     )
@@ -4525,11 +4525,15 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf|trampoline"
-    (get_global $std/array/arr)
-    (i32.const 44)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/array/Array<i32>#indexOf|trampoline"
+     (get_global $std/array/arr)
+     (i32.const 44)
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -4550,11 +4554,15 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf|trampoline"
-    (get_global $std/array/arr)
-    (i32.const 42)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/array/Array<i32>#indexOf|trampoline"
+     (get_global $std/array/arr)
+     (i32.const 42)
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -4575,11 +4583,15 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf|trampoline"
-    (get_global $std/array/arr)
-    (i32.const 45)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/array/Array<i32>#indexOf|trampoline"
+     (get_global $std/array/arr)
+     (i32.const 45)
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -4768,11 +4780,15 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes|trampoline"
-    (get_global $std/array/arr)
-    (i32.const 44)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/array/Array<i32>#includes|trampoline"
+     (get_global $std/array/arr)
+     (i32.const 44)
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -4793,11 +4809,15 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes|trampoline"
-    (get_global $std/array/arr)
-    (i32.const 42)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/array/Array<i32>#includes|trampoline"
+     (get_global $std/array/arr)
+     (i32.const 42)
+     (i32.const 0)
+    )
    )
   )
   (if
@@ -4818,11 +4838,15 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes|trampoline"
-    (get_global $std/array/arr)
-    (i32.const 45)
-    (i32.const 0)
-    (i32.const 2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
+    )
+    (call "$(lib)/array/Array<i32>#includes|trampoline"
+     (get_global $std/array/arr)
+     (i32.const 45)
+     (i32.const 0)
+    )
    )
   )
   (if

@@ -23,7 +23,8 @@ import {
   NativeType,
   FunctionRef,
   ExpressionId,
-  FunctionTypeRef
+  FunctionTypeRef,
+  GlobalRef
 } from "./module";
 
 import {
@@ -194,29 +195,26 @@ export class Compiler extends DiagnosticEmitter {
   options: Options;
   /** Module instance being compiled. */
   module: Module;
-
-  /** Start function being compiled. */
-  startFunction: Function;
-  /** Start function statements. */
-  startFunctionBody: ExpressionRef[] = [];
-
   /** Current function in compilation. */
   currentFunction: Function;
   /** Current enum in compilation. */
   currentEnum: Enum | null = null;
   /** Current type in compilation. */
   currentType: Type = Type.void;
-
+  /** Start function being compiled. */
+  startFunction: Function;
+  /** Start function statements. */
+  startFunctionBody: ExpressionRef[] = [];
   /** Counting memory offset. */
   memoryOffset: I64;
   /** Memory segments being compiled. */
   memorySegments: MemorySegment[] = new Array();
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
-
   /** Function table being compiled. */
   functionTable: Function[] = new Array();
-
+  /** Argument count helper global. */
+  argumentCountRef: GlobalRef = 0;
   /** Already processed file names. */
   files: Set<string> = new Set();
 
@@ -1192,7 +1190,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var functionTable = this.functionTable;
     var index = functionTable.length;
-    if (func.signature.requiredParameters < func.signature.parameterTypes.length) {
+    if (!func.is(CommonFlags.TRAMPOLINE) && func.signature.requiredParameters < func.signature.parameterTypes.length) {
       // insert the trampoline if the function has optional parameters
       func = this.ensureTrampoline(func);
     }
@@ -4314,8 +4312,7 @@ export class Compiler extends DiagnosticEmitter {
       ++minOperands;
       ++maxOperands;
     }
-    var numOptional = maxOperands - minOperands;
-    assert(numOptional);
+    var numOptional = assert(maxOperands - minOperands);
 
     var forwardedOperands = new Array<ExpressionRef>(minOperands);
     var operandIndex = 0;
@@ -4333,21 +4330,13 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(operandIndex == minOperands);
 
-    // append an additional parameter taking the number of optional arguments provided
-    var trampolineParameterTypes = new Array<Type>(maxArguments + 1);
-    for (let i = 0; i < maxArguments; ++i) {
-      trampolineParameterTypes[i] = originalParameterTypes[i];
-    }
-    trampolineParameterTypes[maxArguments] = Type.i32;
-
     // create the trampoline element
-    var trampolineSignature = new Signature(trampolineParameterTypes, commonReturnType, commonThisType);
+    var trampolineSignature = new Signature(originalParameterTypes, commonReturnType, commonThisType);
     var trampolineName = originalName + "|trampoline";
-    trampolineSignature.requiredParameters = maxArguments + 1;
+    trampolineSignature.requiredParameters = maxArguments;
     trampoline = new Function(original.prototype, trampolineName, trampolineSignature, original.memberOf);
-    trampoline.flags = original.flags;
+    trampoline.set(original.flags | CommonFlags.TRAMPOLINE | CommonFlags.COMPILED);
     trampoline.contextualTypeArguments = original.contextualTypeArguments;
-    trampoline.set(CommonFlags.COMPILED);
     original.trampoline = trampoline;
 
     // compile initializers of omitted arguments in scope of the trampoline function
@@ -4356,23 +4345,24 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFunction = trampoline;
 
     // create a br_table switching over the number of optional parameters provided
-    var numNames = numOptional + 1; // incl. 'with0'
+    var numNames = numOptional + 1; // incl. outer block
     var names = new Array<string>(numNames);
+    var ofN = "of" + numOptional.toString(10);
     for (let i = 0; i < numNames; ++i) {
-      let label = "N=" + i.toString();
+      let label = i.toString(10) + ofN;
       names[i] = label;
     }
     var body = module.createBlock(names[0], [
-      module.createBlock("N=invalid", [
-        module.createSwitch(names, "N=invalid",
-          // condition is number of provided optional operands, so subtract required operands
-          minOperands
+      module.createBlock("oob", [
+        module.createSwitch(names, "oob",
+          // condition is number of provided optional arguments, so subtract required arguments
+          minArguments
             ? module.createBinary(
                 BinaryOp.SubI32,
-                module.createGetLocal(maxOperands, NativeType.I32),
-                module.createI32(minOperands)
+                module.createGetGlobal("argumentCount", NativeType.I32),
+                module.createI32(minArguments)
               )
-            : module.createGetLocal(maxOperands, NativeType.I32)
+            : module.createGetGlobal("argumentCount", NativeType.I32)
         )
       ]),
       module.createUnreachable()
@@ -4409,7 +4399,10 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Creates a direct call to the specified function. */
-  makeCallDirect(instance: Function, operands: ExpressionRef[] | null = null): ExpressionRef {
+  makeCallDirect(
+    instance: Function,
+    operands: ExpressionRef[] | null = null
+  ): ExpressionRef {
     var numOperands = operands ? operands.length : 0;
     var numArguments = numOperands;
     var minArguments = instance.signature.requiredParameters;
@@ -4422,27 +4415,39 @@ export class Compiler extends DiagnosticEmitter {
       --numArguments;
     }
     assert(numOperands >= minOperands);
+
     var module = this.module;
     if (!this.compileFunction(instance)) return module.createUnreachable();
+    var returnType = instance.signature.returnType;
+    var isCallImport = instance.is(CommonFlags.MODULE_IMPORT);
+
+    // fill up omitted arguments with zeroes
     if (numOperands < maxOperands) {
-      instance = this.ensureTrampoline(instance);
-      if (!this.compileFunction(instance)) return module.createUnreachable();
       if (!operands) {
-        operands = new Array(maxOperands + 1);
+        operands = new Array(maxOperands);
         operands.length = 0;
       }
+      let parameterTypes = instance.signature.parameterTypes;
       for (let i = numArguments; i < maxArguments; ++i) {
-        operands.push(instance.signature.parameterTypes[i].toNativeZero(module));
+        operands.push(parameterTypes[i].toNativeZero(module));
       }
-      operands.push(module.createI32(numOperands)); // actual number of provided operands
+      if (!isCallImport) { // call the trampoline
+        instance = this.ensureTrampoline(instance);
+        if (!this.compileFunction(instance)) return module.createUnreachable();
+        let nativeReturnType = returnType.toNativeType();
+        this.currentType = returnType;
+        return module.createBlock(null, [
+          this.ensureArgumentCount(numArguments),
+          module.createCall(instance.internalName, operands, nativeReturnType)
+        ], nativeReturnType);
+      }
     }
-    var returnType = instance.signature.returnType;
+
+    // otherwise just call through
     this.currentType = returnType;
-    if (instance.is(CommonFlags.MODULE_IMPORT)) {
-      return module.createCallImport(instance.internalName, operands, returnType.toNativeType());
-    } else {
-      return module.createCall(instance.internalName, operands, returnType.toNativeType());
-    }
+    return isCallImport
+      ? module.createCallImport(instance.internalName, operands, returnType.toNativeType())
+      : module.createCall(instance.internalName, operands, returnType.toNativeType());
   }
 
   /** Compiles an indirect call using an index argument and a signature. */
@@ -4483,11 +4488,59 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Creates an indirect call to the function at `indexArg` in the function table. */
-  makeCallIndirect(signature: Signature, indexArg: ExpressionRef, operands: ExpressionRef[]): ExpressionRef {
+  makeCallIndirect(
+    signature: Signature,
+    indexArg: ExpressionRef,
+    operands: ExpressionRef[] | null = null
+  ): ExpressionRef {
+    var numOperands = operands ? operands.length : 0;
+    var numArguments = numOperands;
+    var minArguments = signature.requiredParameters;
+    var minOperands = minArguments;
+    var maxArguments = signature.parameterTypes.length;
+    var maxOperands = maxArguments;
+    if (signature.thisType) {
+      ++minOperands;
+      ++maxOperands;
+      --numArguments;
+    }
+    assert(numOperands >= minOperands);
+
+    this.ensureFunctionType(signature);
+    var module = this.module;
+
+    // fill up omitted arguments with zeroes
+    if (numOperands < maxOperands) {
+      if (!operands) {
+        operands = new Array(maxOperands);
+        operands.length = 0;
+      }
+      let parameterTypes = signature.parameterTypes;
+      for (let i = numArguments; i < maxArguments; ++i) {
+        operands.push(parameterTypes[i].toNativeZero(module));
+      }
+    }
+
     var returnType = signature.returnType;
     this.currentType = returnType;
-    this.ensureFunctionType(signature);
-    return this.module.createCallIndirect(indexArg, operands, signature.toSignatureString());
+    return module.createBlock(null, [
+      this.ensureArgumentCount(numArguments), // might still be calling a trampoline
+      module.createCallIndirect(indexArg, operands, signature.toSignatureString())
+    ], returnType.toNativeType());
+  }
+
+  /** Makes sure that the `argumentCount` helper global is present and returns an expression that sets it. */
+  private ensureArgumentCount(argumentCount: i32): ExpressionRef {
+    var module = this.module;
+    if (!this.argumentCountRef) {
+      this.argumentCountRef = module.addGlobal(
+        "argumentCount",
+        NativeType.I32,
+        true,
+        module.createI32(0)
+      );
+    }
+    return module.createSetGlobal("argumentCount", module.createI32(argumentCount));
   }
 
   compileCommaExpression(expression: CommaExpression, contextualType: Type): ExpressionRef {

@@ -2070,7 +2070,9 @@ export enum CommonFlags {
   /** Has a constant value and is therefore inlined. */
   INLINED = 1 << 26,
   /** Is scoped. */
-  SCOPED = 1 << 27
+  SCOPED = 1 << 27,
+  /** Is a trampoline. */
+  TRAMPOLINE = 1 << 28
 }
 
 /** Base class of all program elements. */

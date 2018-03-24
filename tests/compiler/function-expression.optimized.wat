@@ -5,6 +5,7 @@
  (type $i (func (result i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $function-expression/f1 (mut i32) (i32.const 0))
+ (global $argumentCount (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 1))
  (global $function-expression/f3 (mut i32) (i32.const 2))
  (global $function-expression/f4 (mut i32) (i32.const 3))
@@ -26,12 +27,17 @@
  )
  (func $start (; 4 ;) (type $v)
   (if
-   (i32.ne
-    (call_indirect (type $ii)
+   (block (result i32)
+    (set_global $argumentCount
      (i32.const 1)
-     (get_global $function-expression/f1)
     )
-    (i32.const 1)
+    (i32.ne
+     (call_indirect (type $ii)
+      (i32.const 1)
+      (get_global $function-expression/f1)
+     )
+     (i32.const 1)
+    )
    )
    (block
     (call $abort
@@ -44,12 +50,17 @@
    )
   )
   (if
-   (i32.ne
-    (call_indirect (type $ii)
-     (i32.const 2)
-     (get_global $function-expression/f2)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 1)
     )
-    (i32.const 2)
+    (i32.ne
+     (call_indirect (type $ii)
+      (i32.const 2)
+      (get_global $function-expression/f2)
+     )
+     (i32.const 2)
+    )
    )
    (block
     (call $abort
@@ -61,15 +72,23 @@
     (unreachable)
    )
   )
+  (set_global $argumentCount
+   (i32.const 0)
+  )
   (call_indirect (type $v)
    (get_global $function-expression/f3)
   )
   (if
-   (i32.ne
-    (call_indirect (type $i)
-     (get_global $function-expression/f4)
+   (block (result i32)
+    (set_global $argumentCount
+     (i32.const 0)
     )
-    (i32.const 1)
+    (i32.ne
+     (call_indirect (type $i)
+      (get_global $function-expression/f4)
+     )
+     (i32.const 1)
+    )
    )
    (block
     (call $abort
