@@ -411,6 +411,7 @@ declare namespace Math {
   export function abs(x: f64): f64;
   export function ceil(x: f64): f64;
   export function clz32(x: f64): i32;
+  export function exp(x: f64): f64;
   export function floor(x: f64): f64;
   export function fround(x: f64): f32;
   export function imul(a: f64, b: f64): i32;
@@ -433,6 +434,7 @@ declare namespace Mathf {
   export const SQRT1_2: f32;
   export const SQRT2: f32;
   export function abs(x: f32): f32;
+  export function exp(x: f32): f32;
   export function ceil(x: f32): f32;
   export function clz32(x: f32): i32;
   export function floor(x: f32): f32;

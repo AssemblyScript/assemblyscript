@@ -1269,6 +1269,20 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readFloat(): f64 {
+    // var text = this.source.text;
+    // if (text.charCodeAt(this.pos) == CharCode._0 && this.pos + 2 < this.end) {
+    //   switch (text.charCodeAt(this.pos + 1)) {
+    //     case CharCode.X:
+    //     case CharCode.x: {
+    //       this.pos += 2;
+    //       return this.readHexFloat();
+    //     }
+    //   }
+    // }
+    return this.readDecimalFloat();
+  }
+
+  readDecimalFloat(): f64 {
     var start = this.pos;
     var text = this.source.text;
     while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos))) {
@@ -1298,6 +1312,10 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     return parseFloat(text.substring(start, this.pos));
+  }
+
+  readHexFloat(): f64 {
+    throw new Error("not implemented"); // TBD
   }
 
   readUnicodeEscape(): string {

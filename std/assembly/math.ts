@@ -58,6 +58,13 @@ import {
   trunc as builtin_trunc
 } from "./builtins";
 
+// Math/Mathf.log/exp
+//   Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
+//   Developed at SunPro, a Sun Microsystems, Inc. business.
+//   Permission to use, copy, modify, and distribute this
+//   software is freely granted, provided that this notice
+//   is preserved.
+
 export namespace Math {
 
   export const E = 2.7182818284590452354;
@@ -81,6 +88,67 @@ export namespace Math {
     return builtin_clz(<i32>x);
   }
 
+  export function exp(x: f64): f64 {
+    // based on musl's implementation of exp:
+    const
+      half = <f64[]>[0.5,-0.5],
+      ln2hi = 6.93147180369123816490e-01,  // 0x3fe62e42, 0xfee00000
+      ln2lo = 1.90821492927058770002e-10,  // 0x3dea39ef, 0x35793c76
+      invln2 = 1.44269504088896338700e+00, // 0x3ff71547, 0x652b82fe
+      P1 =  1.66666666666666019037e-01,    // 0x3FC55555, 0x5555553E
+      P2 = -2.77777777770155933842e-03,    // 0xBF66C16C, 0x16BEBD93
+      P3 =  6.61375632143793436117e-05,    // 0x3F11566A, 0xAF25DE2C
+      P4 = -1.65339022054652515390e-06,    // 0xBEBBBD41, 0xC5D26BF1
+      P5 =  4.13813679705723846039e-08,    // 0x3E663769, 0x72BEA4D0
+      Ox1p1023 = 8.98846567431157954e+307;
+
+    var hx = <u32>(reinterpret<u64>(x) >> 32);
+    var sign_ = hx >> 31;
+    hx &= 0x7fffffff; // high word of |x|
+
+    // special cases
+    if (hx >= 0x4086232b) {  // if |x| >= 708.39...
+      if (isNaN(x)) return x;
+      if (x > 709.782712893383973096) {
+        // overflow if x!=inf
+        x *= Ox1p1023;
+        return x;
+      }
+      if (x < -708.39641853226410622) {
+        // underflow if x!=-inf
+        if (x < -745.13321910194110842) return 0;
+      }
+    }
+
+    // argument reduction
+    var hi: f64, lo: f64;
+    var k: i32;
+    if (hx > 0x3fd62e42) {  // if |x| > 0.5 ln2
+      if (hx >= 0x3ff0a2b2) { // if |x| >= 1.5 ln2
+        k = <i32>(invln2 * x + half[sign_]);
+      } else {
+        k = 1 - sign_ - sign_;
+      }
+      hi = x - k * ln2hi;  // k * ln2hi is exact here
+      lo = k * ln2lo;
+      x = hi - lo;
+    } else if (hx > 0x3e300000)  {  // if |x| > 2**-28
+      k = 0;
+      hi = x;
+      lo = 0;
+    } else {
+      // inexact if x != 0
+      return 1 + x;
+    }
+
+    // x is now in primary range
+    var xx = x * x;
+    var c = x - xx * (P1 + xx * (P2 + xx * (P3 + xx * (P4 + xx * P5))));
+    var y: f64 = 1 + (x * c / (2 - c) - lo + hi);
+    if (k == 0) return y;
+    return scalbn(y, k);
+  }
+
   export function floor(x: f64): f64 {
     return builtin_floor(x);
   }
@@ -93,13 +161,7 @@ export namespace Math {
     return <i32>x * <i32>y;
   }
 
-  export function log(x: f64): f64 {
-    // based on musl's implementation of log:
-    //   Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
-    //   Developed at SunPro, a Sun Microsystems, Inc. business.
-    //   Permission to use, copy, modify, and distribute this
-    //   software is freely granted, provided that this notice
-    //   is preserved.
+  export function log(x: f64): f64 { // based on musl's implementation of log
     const
       ln2_hi = 6.93147180369123816490e-01, // 3fe62e42 fee00000
       ln2_lo = 1.90821492927058770002e-10, // 3dea39ef 35793c76
@@ -109,7 +171,8 @@ export namespace Math {
       Lg4 = 2.222219843214978396e-01,      // 3FCC71C5 1D8E78AF
       Lg5 = 1.818357216161805012e-01,      // 3FC74664 96CB03DE
       Lg6 = 1.531383769920937332e-01,      // 3FC39A09 D078C69F
-      Lg7 = 1.479819860511658591e-01;      // 3FC2F112 DF3E5244
+      Lg7 = 1.479819860511658591e-01,      // 3FC2F112 DF3E5244
+      Ox1p54 = 18014398509481984.0;
 
     var Ux = reinterpret<u64>(x);
     var hx = <u32>(Ux >> 32);
@@ -119,7 +182,7 @@ export namespace Math {
       if (hx >> 31)     return (x - x) / 0.0; // log(-#) = NaN
       // subnormal number, scale x up
       k -= 54;
-      x *= 1.8014398509481984e16; // 0x1p54
+      x *= Ox1p54;
       Ux = reinterpret<u64>(x);
       hx = <u32>(Ux >> 32);
     } else if (hx >= 0x7ff00000) return x;
@@ -204,24 +267,79 @@ export namespace Mathf {
     return builtin_floor(x);
   }
 
+  export function exp(x: f32): f32 { // based on musl's implementation of expf
+    const
+      half = <f32[]>[0.5,-0.5],
+      ln2hi = <f32>6.9314575195e-1,  // 0x3f317200
+      ln2lo = <f32>1.4286067653e-6,  // 0x35bfbe8e
+      invln2 = <f32>1.4426950216e+0, // 0x3fb8aa3b
+      // Domain [-0.34568, 0.34568], range ~[-4.278e-9, 4.447e-9]:
+      // |x*(exp(x)+1)/(exp(x)-1) - p(x)| < 2**-27.74
+      P1 = <f32>1.6666625440e-1,     // 0xaaaa8f.0p-26
+      P2 = <f32>-2.7667332906e-3,    // -0xb55215.0p-32
+      Ox1p127f = <f32>1.701411835e+38;
+
+    var hx = reinterpret<u32>(x);
+    var sign_ = <i32>(hx >> 31); // sign bit of x
+    hx &= 0x7fffffff;            // high word of |x|
+
+    // special cases
+    if (hx >= 0x42aeac50) {  // if |x| >= -87.33655f or NaN
+      if (hx >= 0x42b17218 && !sign_) { // x >= 88.722839f
+        // overflow
+        x *= Ox1p127f;
+        return x;
+      }
+      if (sign_) {
+        // underflow
+        if (hx >= 0x42cff1b5) { // x <= -103.972084f */
+          return 0;
+        }
+      }
+    }
+
+    // argument reduction
+    var hi: f32, lo: f32;
+    var k: i32;
+    if (hx > 0x3eb17218) { // if |x| > 0.5 ln2
+      if (hx > 0x3f851592) { // if |x| > 1.5 ln2
+        k = <i32>(invln2 * x + half[sign_]);
+      } else {
+        k = 1 - sign_ - sign_;
+      }
+      hi = x - <f32>k * ln2hi;  // k * ln2hi is exact here
+      lo = <f32>k * ln2lo;
+      x = hi - lo;
+    } else if (hx > 0x39000000) {  // |x| > 2**-14
+      k = 0;
+      hi = x;
+      lo = 0;
+    } else {
+      // raise inexact
+      return 1 + x;
+    }
+
+    // x is now in primary range
+    var xx = x * x;
+    var c = x - xx * (P1 + xx * P2);
+    var y: f32 = 1 + (x * c / (2 - c) - lo + hi);
+    if (k == 0) return y;
+    return scalbnf(y, k);
+  }
+
   export function imul(x: f32, y: f32): i32 {
     return <i32>x * <i32>y;
   }
 
-  export function log(x: f32): f32 {
-    // based on musl's implementaion of logf:
-    //   Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
-    //   Developed at SunPro, a Sun Microsystems, Inc. business.
-    //   Permission to use, copy, modify, and distribute this
-    //   software is freely granted, provided that this notice
-    //   is preserved.
+  export function log(x: f32): f32 { // based on musl's implementaion of logf
     const
       ln2_hi = <f32>6.9313812256e-01, // 0x3f317180
       ln2_lo = <f32>9.0580006145e-06, // 0x3717f7d1
       Lg1 = <f32>0.66666662693,       // 0xaaaaaa.0p-24
       Lg2 = <f32>0.40000972152,       // 0xccce13.0p-25
       Lg3 = <f32>0.28498786688,       // 0x91e9ee.0p-25
-      Lg4 = <f32>0.24279078841;       // 0xf89e26.0p-26
+      Lg4 = <f32>0.24279078841,       // 0xf89e26.0p-26
+      Ox1p25f = <f32>33554432.0;
 
     var ux = reinterpret<u32>(x);
     var k = 0;
@@ -230,7 +348,7 @@ export namespace Mathf {
       if (ux >> 31)     return (x - x) / 0;    // log(-#) = NaN
       // subnormal number, scale up x
       k -= 25;
-      x *= 3.3554432; // 0x1p25f;
+      x *= Ox1p25f;
       ux = reinterpret<u32>(x);
     } else if (ux >= 0x7f800000) return x;
       else if (ux == 0x3f800000) return 0;
@@ -284,4 +402,56 @@ export namespace Mathf {
   export function trunc(x: f32): f32 {
     return builtin_trunc(x);
   }
+}
+
+function scalbn(x: f64, n: i32): f64 { // based on musl's implementation of scalbn
+  const
+    Ox1p1023 = 8.98846567431157954e+307,
+    Ox1p_1022 = 2.22507385850720138e-308;
+
+  var y = x;
+  if (n > 1023) {
+    y *= Ox1p1023;
+    n -= 1023;
+    if (n > 1023) {
+      y *= Ox1p1023;
+      n -= 1023;
+      if (n > 1023) n = 1023;
+    }
+  } else if (n < -1022) {
+    y *= Ox1p_1022;
+    n += 1022;
+    if (n < -1022) {
+      y *= Ox1p_1022;
+      n += 1022;
+      if (n < -1022) n = -1022;
+    }
+  }
+  return y * reinterpret<f64>(<u64>(0x3ff + n) << 52);
+}
+
+function scalbnf(x: f32, n: i32): f32 { // based on musl's implementation of scalbnf
+  const
+    Ox1p127f = <f32>1.701411835e+38,
+    Ox1p_126f = <f32>1.175494351e-38;
+
+  var y = x;
+  if (n > 127) {
+    y *= Ox1p127f;
+    n -= 127;
+    if (n > 127) {
+      y *= Ox1p127f;
+      n -= 127;
+      if (n > 127) n = 127;
+    }
+  } else if (n < -126) {
+    y *= Ox1p_126f;
+    n += 126;
+    if (n < -126) {
+      y *= Ox1p_126f;
+      n += 126;
+      if (n < -126) n = -126;
+    }
+  }
+  return y * reinterpret<f32>(<u32>(0x7f + n) << 23);
 }
