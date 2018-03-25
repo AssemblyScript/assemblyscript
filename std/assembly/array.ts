@@ -25,6 +25,30 @@ export class Array<T> {
     this.__capacity = this.__length = capacity;
   }
 
+  every(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
+    var toIndex: i32 = this.__length;
+    var i: i32 = 0;
+    while (i < toIndex && i < this.__length) {
+      if (!callbackfn(load<T>(this.__memory + <usize>i * sizeof<T>()), i, this)) {
+        return false;
+      }
+      i += 1;
+    }
+    return true;
+  }
+
+  findIndex(predicate: (element: T, index: i32, array: Array<T>) => bool): i32 {
+    var toIndex: i32 = this.__length;
+    var i: i32 = 0;
+    while (i < toIndex && i < this.__length) {
+      if (predicate(load<T>(this.__memory + <usize>i * sizeof<T>()), i, this)) {
+        return i;
+      }
+      i += 1;
+    }
+    return -1;
+  }
+
   get length(): i32 {
     return this.__length;
   }
@@ -129,6 +153,20 @@ export class Array<T> {
     return load<T>(this.__memory + <usize>--this.__length * sizeof<T>());
   }
 
+  reduce<U>(
+    callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
+    initialValue: U
+  ): U {
+    var accumulator: U = initialValue;
+    var toIndex: i32 = this.__length;
+    var i: i32 = 0;
+    while (i < toIndex && i < this.__length) {
+      accumulator = callbackfn(accumulator, load<T>(this.__memory + <usize>i * sizeof<T>()), i, this);
+      i += 1;
+    }
+    return accumulator;
+  }
+
   shift(): T {
     if (this.__length < 1) {
       throw new RangeError("Array is empty"); // return changetype<T>(0) ?
@@ -146,6 +184,18 @@ export class Array<T> {
     );
     --this.__length;
     return element;
+  }
+
+  some(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
+    var toIndex: i32 = this.__length;
+    var i: i32 = 0;
+    while (i < toIndex && i < this.__length) {
+      if (callbackfn(load<T>(this.__memory + <usize>i * sizeof<T>()), i, this)) {
+        return true;
+      }
+      i += 1;
+    }
+    return false;
   }
 
   unshift(element: T): i32 {

@@ -6,6 +6,7 @@
  (type $iiiv (func (param i32 i32 i32)))
  (type $iv (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
@@ -14,11 +15,17 @@
  (global $std/array/i (mut i32) (i32.const 0))
  (global $argumentCount (mut i32) (i32.const 0))
  (global $std/array/includes (mut i32) (i32.const 0))
+ (global $std/array/every (mut i32) (i32.const 0))
+ (global $std/array/some (mut i32) (i32.const 0))
+ (global $std/array/boolVal (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 64))
+ (table 23 23 anyfunc)
+ (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|2 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|16 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|16 $start~anonymous|22)
  (memory $0 1)
  (data (i32.const 4) "\0c\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 32) "\0e\00\00\00(\00l\00i\00b\00)\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func "$(lib)/allocator/arena/allocate_memory" (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -2184,7 +2191,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 32)
-       (i32.const 156)
+       (i32.const 206)
        (i32.const 6)
       )
       (unreachable)
@@ -3074,7 +3081,508 @@
    )
   )
  )
- (func $start (; 19 ;) (type $v)
+ (func "$(lib)/array/Array<i32>#__set" (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (if
+   (i32.lt_s
+    (get_local $1)
+    (i32.const 0)
+   )
+   (unreachable)
+  )
+  (if
+   (i32.ge_s
+    (get_local $1)
+    (i32.load offset=4
+     (get_local $0)
+    )
+   )
+   (call "$(lib)/array/Array<i32>#__grow"
+    (get_local $0)
+    (select
+     (tee_local $3
+      (i32.add
+       (get_local $1)
+       (i32.const 1)
+      )
+     )
+     (tee_local $4
+      (i32.shl
+       (i32.load offset=4
+        (get_local $0)
+       )
+       (i32.const 1)
+      )
+     )
+     (i32.gt_s
+      (get_local $3)
+      (get_local $4)
+     )
+    )
+   )
+  )
+  (i32.store
+   (i32.add
+    (i32.load
+     (get_local $0)
+    )
+    (i32.shl
+     (get_local $1)
+     (i32.const 2)
+    )
+   )
+   (get_local $2)
+  )
+ )
+ (func $start~anonymous|0 (; 20 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.eqz
+   (get_local $0)
+  )
+ )
+ (func "$(lib)/array/Array<i32>#findIndex" (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $3
+   (i32.load offset=8
+    (get_local $0)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.and
+     (if (result i32)
+      (tee_local $4
+       (i32.lt_s
+        (get_local $2)
+        (get_local $3)
+       )
+      )
+      (i32.lt_s
+       (get_local $2)
+       (i32.load offset=8
+        (get_local $0)
+       )
+      )
+      (get_local $4)
+     )
+     (i32.const 1)
+    )
+    (block
+     (if
+      (block (result i32)
+       (set_global $argumentCount
+        (i32.const 3)
+       )
+       (call_indirect (type $iiii)
+        (i32.load
+         (i32.add
+          (i32.load
+           (get_local $0)
+          )
+          (i32.shl
+           (get_local $2)
+           (i32.const 2)
+          )
+         )
+        )
+        (get_local $2)
+        (get_local $0)
+        (get_local $1)
+       )
+      )
+      (return
+       (get_local $2)
+      )
+     )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.const -1)
+ )
+ (func $start~anonymous|1 (; 22 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.eq
+   (get_local $0)
+   (i32.const 1)
+  )
+ )
+ (func $start~anonymous|2 (; 23 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.eq
+   (get_local $0)
+   (i32.const 100)
+  )
+ )
+ (func $start~anonymous|3 (; 24 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_local $2)
+    (i32.const 100)
+   )
+  )
+  (i32.eq
+   (get_local $0)
+   (i32.const 100)
+  )
+ )
+ (func $start~anonymous|5 (; 25 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_local $2)
+   )
+  )
+  (i32.eq
+   (get_local $0)
+   (i32.const 100)
+  )
+ )
+ (func $start~anonymous|6 (; 26 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.ge_s
+   (get_local $0)
+   (i32.const 0)
+  )
+ )
+ (func "$(lib)/array/Array<i32>#every" (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $3
+   (i32.load offset=8
+    (get_local $0)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.and
+     (if (result i32)
+      (tee_local $4
+       (i32.lt_s
+        (get_local $2)
+        (get_local $3)
+       )
+      )
+      (i32.lt_s
+       (get_local $2)
+       (i32.load offset=8
+        (get_local $0)
+       )
+      )
+      (get_local $4)
+     )
+     (i32.const 1)
+    )
+    (block
+     (if
+      (block (result i32)
+       (set_global $argumentCount
+        (i32.const 3)
+       )
+       (i32.eqz
+        (call_indirect (type $iiii)
+         (i32.load
+          (i32.add
+           (i32.load
+            (get_local $0)
+           )
+           (i32.shl
+            (get_local $2)
+            (i32.const 2)
+           )
+          )
+         )
+         (get_local $2)
+         (get_local $0)
+         (get_local $1)
+        )
+       )
+      )
+      (return
+       (i32.const 0)
+      )
+     )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.const 1)
+ )
+ (func $start~anonymous|7 (; 28 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.le_s
+   (get_local $0)
+   (i32.const 0)
+  )
+ )
+ (func $start~anonymous|8 (; 29 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_local $2)
+    (i32.const 100)
+   )
+  )
+  (i32.lt_s
+   (get_local $0)
+   (i32.const 10)
+  )
+ )
+ (func $start~anonymous|9 (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.lt_s
+   (get_local $0)
+   (i32.const 10)
+  )
+ )
+ (func $start~anonymous|10 (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_local $2)
+   )
+  )
+  (i32.lt_s
+   (get_local $0)
+   (i32.const 3)
+  )
+ )
+ (func $start~anonymous|11 (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.ge_s
+   (get_local $0)
+   (i32.const 3)
+  )
+ )
+ (func "$(lib)/array/Array<i32>#some" (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $3
+   (i32.load offset=8
+    (get_local $0)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.and
+     (if (result i32)
+      (tee_local $4
+       (i32.lt_s
+        (get_local $2)
+        (get_local $3)
+       )
+      )
+      (i32.lt_s
+       (get_local $2)
+       (i32.load offset=8
+        (get_local $0)
+       )
+      )
+      (get_local $4)
+     )
+     (i32.const 1)
+    )
+    (block
+     (if
+      (block (result i32)
+       (set_global $argumentCount
+        (i32.const 3)
+       )
+       (call_indirect (type $iiii)
+        (i32.load
+         (i32.add
+          (i32.load
+           (get_local $0)
+          )
+          (i32.shl
+           (get_local $2)
+           (i32.const 2)
+          )
+         )
+        )
+        (get_local $2)
+        (get_local $0)
+        (get_local $1)
+       )
+      )
+      (return
+       (i32.const 1)
+      )
+     )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.const 0)
+ )
+ (func $start~anonymous|12 (; 34 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.le_s
+   (get_local $0)
+   (i32.const -1)
+  )
+ )
+ (func $start~anonymous|13 (; 35 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_local $2)
+    (i32.const 100)
+   )
+  )
+  (i32.gt_s
+   (get_local $0)
+   (i32.const 10)
+  )
+ )
+ (func $start~anonymous|14 (; 36 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (i32.gt_s
+   (get_local $0)
+   (i32.const 10)
+  )
+ )
+ (func $start~anonymous|15 (; 37 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_local $2)
+   )
+  )
+  (i32.gt_s
+   (get_local $0)
+   (i32.const 3)
+  )
+ )
+ (func $start~anonymous|16 (; 38 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (i32.add
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func "$(lib)/array/Array<i32>#reduce<i32>" (; 39 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (set_local $4
+   (i32.load offset=8
+    (get_local $0)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.and
+     (if (result i32)
+      (tee_local $5
+       (i32.lt_s
+        (get_local $3)
+        (get_local $4)
+       )
+      )
+      (i32.lt_s
+       (get_local $3)
+       (i32.load offset=8
+        (get_local $0)
+       )
+      )
+      (get_local $5)
+     )
+     (i32.const 1)
+    )
+    (block
+     (set_global $argumentCount
+      (i32.const 4)
+     )
+     (set_local $2
+      (call_indirect (type $iiiii)
+       (get_local $2)
+       (i32.load
+        (i32.add
+         (i32.load
+          (get_local $0)
+         )
+         (i32.shl
+          (get_local $3)
+          (i32.const 2)
+         )
+        )
+       )
+       (get_local $3)
+       (get_local $0)
+       (get_local $1)
+      )
+     )
+     (set_local $3
+      (i32.add
+       (get_local $3)
+       (i32.const 1)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (get_local $2)
+ )
+ (func $start~anonymous|18 (; 40 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (i32.and
+   (select
+    (get_local $0)
+    (i32.gt_s
+     (get_local $1)
+     (i32.const 2)
+    )
+    (get_local $0)
+   )
+   (i32.const 1)
+  )
+ )
+ (func $start~anonymous|19 (; 41 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (i32.and
+   (select
+    (get_local $0)
+    (i32.gt_s
+     (get_local $1)
+     (i32.const 100)
+    )
+    (get_local $0)
+   )
+   (i32.const 1)
+  )
+ )
+ (func $start~anonymous|20 (; 42 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_local $3)
+    (i32.const 1)
+   )
+  )
+  (i32.add
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func $start~anonymous|22 (; 43 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_local $3)
+   )
+  )
+  (i32.add
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func $start (; 44 ;) (type $v)
   (set_global "$(lib)/allocator/arena/startOffset"
    (i32.and
     (i32.add
@@ -4569,6 +5077,747 @@
      (i32.const 0)
      (i32.const 4)
      (i32.const 175)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (call "$(lib)/array/Array<i32>#__set"
+   (get_global $std/array/arr)
+   (i32.const 0)
+   (i32.const 0)
+  )
+  (call "$(lib)/array/Array<i32>#__set"
+   (get_global $std/array/arr)
+   (i32.const 1)
+   (i32.const 1)
+  )
+  (call "$(lib)/array/Array<i32>#__set"
+   (get_global $std/array/arr)
+   (i32.const 2)
+   (i32.const 2)
+  )
+  (call "$(lib)/array/Array<i32>#__set"
+   (get_global $std/array/arr)
+   (i32.const 3)
+   (i32.const 3)
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#findIndex"
+    (get_global $std/array/arr)
+    (i32.const 0)
+   )
+  )
+  (if
+   (get_global $std/array/i)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 184)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#findIndex"
+    (get_global $std/array/arr)
+    (i32.const 1)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 187)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#findIndex"
+    (get_global $std/array/arr)
+    (i32.const 2)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const -1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 190)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#findIndex"
+    (get_global $std/array/arr)
+    (i32.const 3)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const -1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 198)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call "$(lib)/array/Array<i32>#get:length"
+     (get_global $std/array/arr)
+    )
+    (i32.const 8)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 199)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#findIndex"
+    (get_global $std/array/arr)
+    (i32.const 4)
+   )
+  )
+  (if
+   (i32.eq
+    (get_global $std/array/i)
+    (i32.const -1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 201)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#findIndex"
+    (get_global $std/array/arr)
+    (i32.const 5)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const -1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 214)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call "$(lib)/array/Array<i32>#get:length"
+     (get_global $std/array/arr)
+    )
+    (i32.const 2)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 215)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_global $std/array/arr)
+    (i32.const 2)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_global $std/array/arr)
+    (i32.const 3)
+   )
+  )
+  (set_global $std/array/every
+   (call "$(lib)/array/Array<i32>#every"
+    (get_global $std/array/arr)
+    (i32.const 6)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/every)
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 221)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/every
+   (call "$(lib)/array/Array<i32>#every"
+    (get_global $std/array/arr)
+    (i32.const 7)
+   )
+  )
+  (if
+   (get_global $std/array/every)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 224)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/every
+   (call "$(lib)/array/Array<i32>#every"
+    (get_global $std/array/arr)
+    (i32.const 8)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/every)
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 232)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call "$(lib)/array/Array<i32>#get:length"
+     (get_global $std/array/arr)
+    )
+    (i32.const 8)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 233)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/every
+   (call "$(lib)/array/Array<i32>#every"
+    (get_global $std/array/arr)
+    (i32.const 9)
+   )
+  )
+  (if
+   (get_global $std/array/every)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 235)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (set_global $std/array/every
+   (call "$(lib)/array/Array<i32>#every"
+    (get_global $std/array/arr)
+    (i32.const 10)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/every)
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 248)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call "$(lib)/array/Array<i32>#get:length"
+     (get_global $std/array/arr)
+    )
+    (i32.const 2)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 249)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_global $std/array/arr)
+    (i32.const 2)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_global $std/array/arr)
+    (i32.const 3)
+   )
+  )
+  (set_global $std/array/some
+   (call "$(lib)/array/Array<i32>#some"
+    (get_global $std/array/arr)
+    (i32.const 11)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/some)
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 255)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/some
+   (call "$(lib)/array/Array<i32>#some"
+    (get_global $std/array/arr)
+    (i32.const 12)
+   )
+  )
+  (if
+   (get_global $std/array/some)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 258)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/some
+   (call "$(lib)/array/Array<i32>#some"
+    (get_global $std/array/arr)
+    (i32.const 13)
+   )
+  )
+  (if
+   (get_global $std/array/some)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 266)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call "$(lib)/array/Array<i32>#get:length"
+     (get_global $std/array/arr)
+    )
+    (i32.const 8)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 267)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/some
+   (call "$(lib)/array/Array<i32>#some"
+    (get_global $std/array/arr)
+    (i32.const 14)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/some)
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 269)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (set_global $std/array/some
+   (call "$(lib)/array/Array<i32>#some"
+    (get_global $std/array/arr)
+    (i32.const 15)
+   )
+  )
+  (if
+   (get_global $std/array/some)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 282)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call "$(lib)/array/Array<i32>#get:length"
+     (get_global $std/array/arr)
+    )
+    (i32.const 2)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 283)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_global $std/array/arr)
+    (i32.const 2)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#push"
+    (get_global $std/array/arr)
+    (i32.const 3)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#reduce<i32>"
+    (get_global $std/array/arr)
+    (i32.const 16)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const 6)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 290)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#reduce<i32>"
+    (get_global $std/array/arr)
+    (i32.const 17)
+    (i32.const 4)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const 10)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 294)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/boolVal
+   (call "$(lib)/array/Array<i32>#reduce<i32>"
+    (get_global $std/array/arr)
+    (i32.const 18)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/boolVal)
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 297)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/boolVal
+   (call "$(lib)/array/Array<i32>#reduce<i32>"
+    (get_global $std/array/arr)
+    (i32.const 19)
+    (i32.const 0)
+   )
+  )
+  (if
+   (get_global $std/array/boolVal)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 300)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#reduce<i32>"
+    (get_global $std/array/arr)
+    (i32.const 20)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const 6)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 308)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call "$(lib)/array/Array<i32>#get:length"
+     (get_global $std/array/arr)
+    )
+    (i32.const 8)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 309)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#reduce<i32>"
+    (get_global $std/array/arr)
+    (i32.const 21)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const 10)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 311)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (drop
+   (call "$(lib)/array/Array<i32>#pop"
+    (get_global $std/array/arr)
+   )
+  )
+  (set_global $std/array/i
+   (call "$(lib)/array/Array<i32>#reduce<i32>"
+    (get_global $std/array/arr)
+    (i32.const 22)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/array/i)
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 324)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call "$(lib)/array/Array<i32>#get:length"
+     (get_global $std/array/arr)
+    )
+    (i32.const 2)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 325)
      (i32.const 0)
     )
     (unreachable)
