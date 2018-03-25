@@ -1,12 +1,7 @@
 import "allocator/arena";
 
 class Tester {
-  x: i32 = 0;
-  y: i32 = 0;
-
-  constructor(x: i32, y: i32) {
-    this.x = x;
-    this.y = y;
+  constructor(public x: i32, public y: i32) {
   }
 
   @operator('+')

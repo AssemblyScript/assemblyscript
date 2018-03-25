@@ -152,39 +152,31 @@
  (func $std/operator-overloading/Tester#constructor (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (block
-   (i32.store
+  )
+  (tee_local $0
+   (if (result i32)
+    (get_local $0)
+    (get_local $0)
     (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $3
-         (call "$(lib)/allocator/arena/allocate_memory"
-          (i32.const 8)
-         )
-        )
-        (i32.store
-         (get_local $3)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $3)
-         (i32.const 0)
-        )
-        (get_local $3)
+     (block (result i32)
+      (set_local $3
+       (call "$(lib)/allocator/arena/allocate_memory"
+        (i32.const 8)
        )
       )
+      (i32.store
+       (get_local $3)
+       (get_local $1)
+      )
+      (i32.store offset=4
+       (get_local $3)
+       (get_local $2)
+      )
+      (get_local $3)
      )
     )
-    (get_local $1)
-   )
-   (i32.store offset=4
-    (get_local $0)
-    (get_local $2)
    )
   )
-  (get_local $0)
  )
  (func $std/operator-overloading/Tester.add (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
@@ -463,7 +455,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 62)
+     (i32.const 57)
      (i32.const 0)
     )
     (unreachable)
@@ -516,7 +508,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 68)
+     (i32.const 63)
      (i32.const 0)
     )
     (unreachable)
@@ -569,7 +561,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 74)
+     (i32.const 69)
      (i32.const 0)
     )
     (unreachable)
@@ -622,7 +614,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 80)
+     (i32.const 75)
      (i32.const 0)
     )
     (unreachable)
@@ -675,7 +667,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 86)
+     (i32.const 81)
      (i32.const 0)
     )
     (unreachable)
@@ -728,7 +720,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 92)
+     (i32.const 87)
      (i32.const 0)
     )
     (unreachable)
@@ -781,7 +773,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 98)
+     (i32.const 93)
      (i32.const 0)
     )
     (unreachable)
@@ -834,7 +826,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 104)
+     (i32.const 99)
      (i32.const 0)
     )
     (unreachable)
@@ -871,7 +863,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 110)
+     (i32.const 105)
      (i32.const 0)
     )
     (unreachable)
@@ -908,7 +900,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 116)
+     (i32.const 111)
      (i32.const 0)
     )
     (unreachable)
