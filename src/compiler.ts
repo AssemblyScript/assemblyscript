@@ -2939,7 +2939,17 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.SubI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnSubtract;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3020,7 +3030,17 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.MulI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnMultiply;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3118,7 +3138,16 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.DivU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnDivide;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.DivU64
@@ -3214,7 +3243,16 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.RemU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnFractional;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.RemU64
@@ -3509,7 +3547,17 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.AndI64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnBitwiseAnd;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3581,7 +3629,17 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.OrI64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnBitwiseOr;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3653,7 +3711,17 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.XorI64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnBitwiseXor;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64

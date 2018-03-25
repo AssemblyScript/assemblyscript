@@ -675,6 +675,34 @@ export class Program extends DiagnosticEmitter {
                   classPrototype.fnConcat = prototype.simpleName;
                   break;
                 }
+                case "-": {
+                  classPrototype.fnSubtract = prototype.simpleName;
+                  break;
+                }
+                case "*": {
+                  classPrototype.fnMultiply = prototype.simpleName;
+                  break;
+                }
+                case "/": {
+                  classPrototype.fnDivide = prototype.simpleName;
+                  break;
+                }
+                case "%": {
+                  classPrototype.fnFractional = prototype.simpleName;
+                  break;
+                }
+                case "&": {
+                  classPrototype.fnBitwiseAnd = prototype.simpleName;
+                  break;
+                }
+                case "|": {
+                  classPrototype.fnBitwiseOr = prototype.simpleName;
+                  break;
+                }
+                case "^": {
+                  classPrototype.fnBitwiseXor = prototype.simpleName;
+                  break;
+                }
                 case "==": {
                   classPrototype.fnEquals = prototype.simpleName;
                   break;
@@ -2833,6 +2861,20 @@ export class ClassPrototype extends Element {
   fnIndexedSet: string | null = null;
   /** Overloaded concatenation method, if any. */
   fnConcat: string | null = null;
+  /** Overloaded subtraction method, if any. */
+  fnSubtract: string | null = null;
+  /** Overloaded multiply method, if any. */
+  fnMultiply: string | null = null;
+  /** Overloaded divide method, if any. */
+  fnDivide: string | null = null;
+  /** Overloaded fractional method, if any. */
+  fnFractional: string | null = null;
+  /** Overloaded bitwise and method, if any. */
+  fnBitwiseAnd: string | null = null;
+  /** Overloaded bitwise or method, if any. */
+  fnBitwiseOr: string | null = null;
+  /** Overloaded bitwise xor method, if any. */
+  fnBitwiseXor: string | null = null;
   /** Overloaded equality comparison method, if any. */
   fnEquals: string | null = null;
 

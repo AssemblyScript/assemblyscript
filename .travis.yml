@@ -22,6 +22,7 @@ jobs:
     script: npm run clean && node bin/asc -v && npm test
     env: Tests the sources on latest node.js LTS
   - node_js: node
+    script: npm run clean && node bin/asc -v && npm test
     env: Tests the sources on latest stable node.js
 
   - stage: build
@@ -29,4 +30,5 @@ jobs:
     script: npm run build && node bin/asc -v && npm test
     env: Builds and tests the bundle on latest node.js LTS
   - node_js: node
+    script: npm run build && node bin/asc -v && npm test
     env: Builds and tests the bundle on latest stable node.js
