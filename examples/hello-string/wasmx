@@ -1,81 +1,42 @@
 #!/usr/bin/env node
 
-file=arg=process.argv[2]
+// Load and execute wasm files
 
-binary = require('fs').readFileSync(file)
-module = new WebAssembly.Module(binary)
+let file=process.argv[2]
 
-memory = new WebAssembly.Memory({initial: 10, maximum: 65536}); 
-table = new WebAssembly.Table({initial: 256, element: "anyfunc"});
-buffer=new Buffer(memory.buffer) // node only!
-
-nop = x=>0
-log = x => console.log(x)
-
-if(typeof(TextDecoder)!='undefined'){// WEB
-	const encoder = new TextDecoder('utf-16le');
-	string =function toUTF16StringA(pointer, size) {
-    let arr = new Uint8Array(heap.subarray(pointer, pointer + size));
-    console.log(encoder.decode(arr));
-	}
-}else{ // NODE.js
-	string = function(pointer,length=-1, encoding=0){ 
-		if(length<=0)while(buffer[pointer+ ++length]); // auto determine length
-		if(encoding==16) encoding='utf16le'
-		else encoding='utf8' 
-		decoded = buffer.slice(pointer,pointer+length).toString(encoding)
-		return decoded
+function string(pointer,length=-1, encoding=0){ 
+	if(typeof(TextDecoder)!='undefined'){// WEB
+		const encoder = new TextDecoder('utf-16le');
+		let string =function toUTF16StringA(pointer, size) {
+	    let arr = new Uint8Array(heap.subarray(pointer, pointer + size));
+	    return encoder.decode(arr);
+		}
+	}else{ // NODE.js
+			if(length<=0)while(buffer[pointer+ ++length]); // auto determine length
+			if(encoding==16) encoding='utf16le'
+			else encoding='utf8' 
+			decoded = buffer.slice(pointer,pointer+length).toString(encoding)
+			return decoded
 	}
 }
 
-logs = function(pointer,len,encoding){ console.log(string(pointer,len,encoding)) }
-logc = x => process.stdout.write(x?String.fromCodePoint(x):"\n"),
 
-imports={
-	console:{log_char: c => process.stdout.write(String.fromCodePoint(c)),
-			logc, _logc:logc, logs, _logs:logs, logi: log, _logi:log, log, _log:log,
-		}, global:{NaN,Infinity},
-		env: {memory,table,abort:nop, nullFunc_X: log, abortStackOverflow:nop, 
-			DYNAMICTOP_PTR: 100, 
-			// STACKTOP:0,STACK_MAX:1000,enlargeMemory:log,getTotalMemory:log,abortOnCannotGrowMemory:log,
-			tempDoublePtr: 0, ABORT: 2, memoryBase: 0, tableBase: 0,
-			logc, _logc:logc, logs, _logs:logs, logi: log, _logi:log, log, _log:log,
-			logx: x => console.log(hex(x)),
-			 _raise:x=>{throw new Error(string(x))},
-			backtrace:x=>console.error(backtrace()),
-		},
-}
-try{
-	instance= new WebAssembly.Instance(module,imports)
-	args=process.argv.slice(3,process.argv.length) 
-	let main = instance.exports.main || instance.exports._main
-	if(instance.exports.memory)
-	buffer = new Buffer(instance.exports.memory.buffer) // node only
-	if (main) console.log(">>>", result=main(process.argc,args)||0)
-}catch(ex){console.error(trimStack(ex));}
-
-// console.log(Module.getValue(buffer+i*nByte, 'i32'));
-
-
-backtrace=function (print=1){
-	try{throw new Error()}catch(ex){if(print)console.error(trimStack(ex,1)); else return trimStack(ex)}
+let imports={
+	console:{
+			logs: function(pointer,len,encoding){ console.log(string(pointer,len,encoding)) }
+		}
 }
 
-demangle=function (line){ // todo: proper cpp demangle lol
-	return line
+function load_wasm(file, run_main=true){
+		binary = require('fs').readFileSync(file)
+		module = new WebAssembly.Module(binary)
+		instance= new WebAssembly.Instance(module,imports)
+		args=process.argv.slice(3,process.argv.length) 
+		let main = run_main && instance.exports.main 
+		if(instance.exports.memory)
+			buffer = new Buffer(instance.exports.memory.buffer) // node only
+		if (main) 
+			console.log(result=main(process.argc,args)||"")
 }
 
-trimStack=function (ex,more=0) {
-	let keep = true
-	let stack = ex.stack?ex.stack.split("\n"):(ex.message||"").split("\n")
-	let caller = trimStack.caller.name;
-	ex.stack = stack.filter(x => {
-		if(caller&&x.match(caller))return 0 
-		if (x.match("Object.<anonymous>")) keep = false
-		if (x.match("Module._compile")) keep = false
-		if (x.match("modulus.exports")) keep = false// todo
-		if(!keep && x.match("at "))more--
-		return keep||more>0
-	}).map(demangle).join("\n")//.replace(/at _/g,"at ")
-	return ex
-}
+load_wasm(file)

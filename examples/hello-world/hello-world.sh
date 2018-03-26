@@ -15,6 +15,6 @@ node -i -e "\
 # load and run the binary in the browser:
 # open "hello-world.html"
 
-# chrome needs 'proper' server for example:
-# open "http://localhost/hello-world.html"
+# chrome needs (local) server for example:
 # sudo python -m SimpleHTTPServer 80
+# open "http://localhost/hello-world.html"
