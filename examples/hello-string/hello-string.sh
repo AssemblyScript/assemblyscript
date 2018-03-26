@@ -5,7 +5,7 @@
 asc hello-string.ts -b hello-string.wasm -t hello-string.wast
 
 # load and run the binary in node.js
-wasmx hello-string.wasm
+./wasmx hello-string.wasm
 
 # in firefox:
 # firefox hello-string.html

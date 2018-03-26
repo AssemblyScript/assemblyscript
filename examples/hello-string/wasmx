@@ -2,40 +2,10 @@
 
 file=arg=process.argv[2]
 
-backtrace=function (print=1){
-	try{throw new Error()}catch(ex){if(print)console.error(trimStack(ex,1)); else return trimStack(ex)}
-}
-
-demangle=function (line){ // todo: proper cpp demangle lol
-	return line
-}
-
-trimStack=function (ex,more=0) {
-	// console.error(ex)
-	let keep = true
-	let stack = ex.stack?ex.stack.split("\n"):(ex.message||"").split("\n")
-	let caller = trimStack.caller.name;
-	ex.stack = stack.filter(x => {
-		if(caller&&x.match(caller))return 0 
-		if (x.match("Object.<anonymous>")) keep = false
-		if (x.match("Module._compile")) keep = false
-		if (x.match("modulus.exports")) keep = false// todo
-		if(!keep && x.match("at "))more--
-		return keep||more>0
-	}).map(demangle).join("\n")//.replace(/at _/g,"at ")
-	return ex
-}
-
-
-// console.log(file)
-// console.log()
 binary = require('fs').readFileSync(file)
 module = new WebAssembly.Module(binary)
 
-// memory = new WebAssembly.Memory({initial: 256, maximum: 256}); 
-// table = new WebAssembly.Table({initial: 10, maximum:10, element: "anyfunc"});
-
-memory = new WebAssembly.Memory({initial: 16384, maximum: 65536}); 
+memory = new WebAssembly.Memory({initial: 10, maximum: 65536}); 
 table = new WebAssembly.Table({initial: 256, element: "anyfunc"});
 buffer=new Buffer(memory.buffer) // node only!
 
@@ -51,14 +21,13 @@ if(typeof(TextDecoder)!='undefined'){// WEB
 }else{ // NODE.js
 	string = function(pointer,length=-1, encoding=0){ 
 		if(length<=0)while(buffer[pointer+ ++length]); // auto determine length
-		if(encoding) encoding='utf16le'
-		else encoding='utf8' // todo better
+		if(encoding==16) encoding='utf16le'
+		else encoding='utf8' 
 		decoded = buffer.slice(pointer,pointer+length).toString(encoding)
 		return decoded
 	}
 }
 
-// logs = (x,len) => console.log(string(x,len)) 
 logs = function(pointer,len,encoding){ console.log(string(pointer,len,encoding)) }
 logc = x => process.stdout.write(x?String.fromCodePoint(x):"\n"),
 
@@ -86,3 +55,27 @@ try{
 }catch(ex){console.error(trimStack(ex));}
 
 // console.log(Module.getValue(buffer+i*nByte, 'i32'));
+
+
+backtrace=function (print=1){
+	try{throw new Error()}catch(ex){if(print)console.error(trimStack(ex,1)); else return trimStack(ex)}
+}
+
+demangle=function (line){ // todo: proper cpp demangle lol
+	return line
+}
+
+trimStack=function (ex,more=0) {
+	let keep = true
+	let stack = ex.stack?ex.stack.split("\n"):(ex.message||"").split("\n")
+	let caller = trimStack.caller.name;
+	ex.stack = stack.filter(x => {
+		if(caller&&x.match(caller))return 0 
+		if (x.match("Object.<anonymous>")) keep = false
+		if (x.match("Module._compile")) keep = false
+		if (x.match("modulus.exports")) keep = false// todo
+		if(!keep && x.match("at "))more--
+		return keep||more>0
+	}).map(demangle).join("\n")//.replace(/at _/g,"at ")
+	return ex
+}
