@@ -354,54 +354,106 @@ declare class Set<T> {
 }
 
 interface IMath<T> {
+  /** The base of natural logarithms, e, approximately 2.718. */
   readonly E: T;
+  /** The natural logarithm of 2, approximately 0.693. */
   readonly LN2: T;
+  /** The natural logarithm of 10, approximately 2.302. */
   readonly LN10: T;
+  /** The base 2 logarithm of e, approximately 1.442. */
   readonly LOG2E: T;
+  /** The base 10 logarithm of e, approximately 0.434. */
   readonly LOG10E: T;
+  /** The ratio of the circumference of a circle to its diameter, approximately 3.14159. */
   readonly PI: T;
+  /** The square root of 1/2, approximately 0.707. */
   readonly SQRT1_2: T;
+  /** The square root of 2, approximately 1.414. */
   readonly SQRT2: T;
+  /** Returns the absolute value of `x`. */
   abs(x: T): T;
+  /** Returns the arccosine (in radians) of `x`. */
   acos(x: T): T;
+  /** Returns the hyperbolic arc-cosine of `x`. */
   acosh(x: T): T;
+  /** Returns the arcsine (in radians) of `x` */
   asin(x: T): T;
+  /** Returns the hyperbolic arcsine of `x`. */
   asinh(x: T): T;
+  /** Returns the arctangent (in radians) of `x`. */
   atan(x: T): T;
+  /** Returns the arctangent of the quotient of its arguments. */
   atan2(y: T, x: T): T;
+  /** Returns the hyperbolic arctangent of `x`. */
   atanh(x: T): T;
+  /** Returns the cube root of `x`. */
   cbrt(x: T): T;
+  /** Returns the smallest integer greater than or equal to `x`. */
   ceil(x: T): T;
+  /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. */
   clz32(x: T): i32;
+  /** Returns the cosine (in radians) of `x`. */
   cos(x: T): T;
+  /** Returns the hyperbolic cosine of `x`. */
   cosh(x: T): T;
+  /** Returns e to the power of `x`. */
   exp(x: T): T;
+  /** Returns e to the power of `x`, minus 1. */
   expm1(x: T): T;
+  /** Returns the largest integer less than or equal to `x`. */
   floor(x: T): T;
+  /** Returns the nearest 32-bit single precision float representation of `x`. */
   fround(x: T): f32;
+  /** Returns the square root of the sum of squares of its arguments. */
   hypot(value1: T, value2: T): T; // TODO: rest
+  /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
   imul(a: T, b: T): i32;
+  /** Returns the natural logarithm (base e) of `x`. */
   log(x: T): T;
+  /** Returns the base 10 logarithm of `x`. */
   log10(x: T): T;
+  /** Returns the natural logarithm (base e) of 1 + `x`. */
   log1p(x: T): T;
+  /** Returns the base 2 logarithm of `x`. */
   log2(x: T): T;
+  /** Returns the largest-valued number of its arguments. */
   max(value1: T, value2: T): T; // TODO: rest
+  /** Returns the lowest-valued number of its arguments. */
   min(value1: T, value2: T): T; // TODO: rest
+  /** Returns `base` to the power of `exponent`. */
   pow(base: T, exponent: T): T;
+  /** Returns a pseudo-random number in the range from 0.0 inclusive up to but not including 1.0. */
   random(): T;
+  /** Returns the value of `x` rounded to the nearest integer. */
   round(x: T): T;
+  /** Returns the sign of `x`, indicating whether the number is positive, negative or zero. */
   sign(x: T): T;
+  /** Returns the sine of `x`. */
   sin(x: T): T;
+  /** Returns the hyperbolic sine of `x`. */
   sinh(x: T): T;
+  /** Returns the square root of `x`. */
   sqrt(x: T): T;
+  /** Returns the tangent of `x`. */
   tan(x: T): T;
+  /** Returns the hyperbolic tangent of `x`. */
   tanh(x: T): T;
+  /** Returns the integer part of `x` by removing any fractional digits. */
   trunc(x: T): T;
 }
 
+interface ISeedRandom {
+  /** Seeds the random number generator. */
+  seedRandom(value: i64): void;
+}
+
+/** Double precision math imported from JavaScript. */
 declare const JSMath: IMath<f64>;
-declare const NativeMath: IMath<f64>;
+/** Double precision math implemented natively. */
+declare const NativeMath: IMath<f64> & ISeedRandom;
+/** Single precision math implemented natively. */
 declare const NativeMathf: IMath<f32>;
+/** Alias of {@link NativeMath} or {@link JSMath} respectively. Defaults to `NativeMath`. */
 declare const Math: IMath<f64>;
 
 // Internal decorators

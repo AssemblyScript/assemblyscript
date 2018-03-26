@@ -58,7 +58,7 @@ import {
   trunc as builtin_trunc
 } from "./builtins";
 
-// NativeMath/NativeMathf.log/exp/pow
+// NativeMath/NativeMathf.cbrt/exp/log/pow
 //   Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 //   Developed at SunPro, a Sun Microsystems, Inc. business.
 //   Permission to use, copy, modify, and distribute this
@@ -80,12 +80,126 @@ export namespace NativeMath {
     return builtin_abs(x);
   }
 
+  export function acos(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function acosh(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function asin(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function asinh(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function atan(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function atanh(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function atan2(y: f64, x: f64): f64 {
+    unreachable(); // TOOD
+    return 0;
+  }
+
+  export function cbrt(x: f64): f64 { // based on musl's implementation of cbrt
+    const
+      B1 = <u32>715094163, // B1 = (1023-1023/3-0.03306235651)*2**20
+      B2 = <u32>696219795, // B2 = (1023-1023/3-54/3-0.03306235651)*2**20
+      // |1/cbrt(x) - p(x)| < 2**-23.5 (~[-7.93e-8, 7.929e-8]).
+      P0 =  1.87595182427177009643,  // 0x3ffe03e6, 0x0f61e692
+      P1 = -1.88497979543377169875,  // 0xbffe28e0, 0x92f02420
+      P2 =  1.621429720105354466140, // 0x3ff9f160, 0x4a49d6c2
+      P3 = -0.758397934778766047437, // 0xbfe844cb, 0xbee751d9
+      P4 = 0.145996192886612446982,  // 0x3fc2b000, 0xd4e4edd7
+      Ox1p54 = 18014398509481984.0;
+
+    var __u = reinterpret<u64>(x);
+    var hx = <u32>(__u >> 32) & 0x7fffffff;
+    if (hx >= 0x7ff00000) return x + x; // cbrt(NaN,INF) is itself
+
+    // Rough cbrt to 5 bits:
+    //    cbrt(2**e*(1+m) ~= 2**(e/3)*(1+(e%3+m)/3)
+    // where e is integral and >= 0, m is real and in [0, 1), and "/" and
+    // "%" are integer division and modulus with rounding towards minus
+    // infinity.  The RHS is always >= the LHS and has a maximum relative
+    // error of about 1 in 16.  Adding a bias of -0.03306235651 to the
+    // (e%3+m)/3 term reduces the error to about 1 in 32. With the IEEE
+    // floating point representation, for finite positive normal values,
+    // ordinary integer divison of the value in bits magically gives
+    // almost exactly the RHS of the above provided we first subtract the
+    // exponent bias (1023 for doubles) and later add it back.  We do the
+    // subtraction virtually to keep e >= 0 so that ordinary integer
+    // division rounds towards minus infinity; this is also efficient.
+    if (hx < 0x00100000) { // zero or subnormal?
+      __u = reinterpret<u64>(x * Ox1p54);
+      hx = <u32>(__u >> 32) & 0x7fffffff;
+      if (hx == 0) return x; // cbrt(0) is itself
+      hx = hx / 3 + B2;
+    } else {
+      hx = hx / 3 + B1;
+    }
+    __u &= 1 << 63;
+    __u |= <u64>hx << 32;
+    var t = reinterpret<f64>(__u);
+
+    // New cbrt to 23 bits:
+    //    cbrt(x) = t*cbrt(x/t**3) ~= t*P(t**3/x)
+    // where P(r) is a polynomial of degree 4 that approximates 1/cbrt(r)
+    // to within 2**-23.5 when |r - 1| < 1/10.  The rough approximation
+    // has produced t such than |t/cbrt(x) - 1| ~< 1/32, and cubing this
+    // gives us bounds for r = t**3/x.
+    var r = (t * t) * (t / x);
+    t = t * ((P0 + r * (P1 + r * P2)) + ((r * r) * r) * (P3 + r * P4));
+
+    // Round t away from zero to 23 bits (sloppily except for ensuring that
+    // the result is larger in magnitude than cbrt(x) but not much more than
+    // 2 23-bit ulps larger).  With rounding towards zero, the error bound
+    // would be ~5/6 instead of ~4/6.  With a maximum error of 2 23-bit ulps
+    // in the rounded t, the infinite-precision error in the Newton
+    // approximation barely affects third digit in the final error
+    // 0.667; the error in the rounded t can be up to about 3 23-bit ulps
+    // before the final error is larger than 0.667 ulps.
+    t = reinterpret<f64>((reinterpret<u64>(t) + 0x80000000) & 0xffffffffc0000000);
+
+    // one step Newton iteration to 53 bits with error < 0.667 ulps
+    var s = t * t;         // t*t is exact
+    r = x / s;             // error <= 0.5 ulps; |r| < |t|
+    var w = t + t;         // t+t is exact
+    r = (r - t) / (w + r); // r-t is exact; w+r ~= 3*t
+    t = t + t * r;         // error <= 0.5 + 0.5/3 + epsilon
+    return t;
+  }
+
   export function ceil(x: f64): f64 {
     return builtin_ceil(x);
   }
 
   export function clz32(x: f64): i32 {
     return builtin_clz(<i32>x);
+  }
+
+  export function cos(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function cosh(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
   }
 
   export function exp(x: f64): f64 { // based on musl's implementation of exp
@@ -147,12 +261,22 @@ export namespace NativeMath {
     return scalbn(y, k);
   }
 
+  export function expm1(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
   export function floor(x: f64): f64 {
     return builtin_floor(x);
   }
 
   export function fround(x: f64): f32 {
     return <f32>x;
+  }
+
+  export function hypot(value1: f64, value2: f64): f64 { // TODO: rest
+    unreachable(); // TODO
+    return 0;
   }
 
   export function imul(x: f64, y: f64): i32 {
@@ -205,13 +329,22 @@ export namespace NativeMath {
     return s * (hfsq + R) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
   }
 
-  // export function log2(x: f64): f64 {
-  //   return log(x) / LN2;
-  // }
+  export function log10(x: f64): f64 {
+    // return log(x) / LN10;
+    unreachable(); // TODO
+    return 0;
+  }
 
-  // export function log10(x: f64): f64 {
-  //   return log(x) / LN10;
-  // }
+  export function log1p(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function log2(x: f64): f64 {
+    // return log(x) / LN2;
+    unreachable(); // TODO
+    return 0;
+  }
 
   export function max(value1: f64, value2: f64): f64 {
     return builtin_max(value1, value2);
@@ -451,6 +584,48 @@ export namespace NativeMath {
     return s * z;
   }
 
+  var random_seeded = false;
+  var random_state0: u64;
+  var random_state1: u64;
+
+  function murmurHash3(h: u64): u64 {
+    h ^= h >> 33;
+    h *= 0xFF51AFD7ED558CCD;
+    h ^= h >> 33;
+    h *= 0xC4CEB9FE1A85EC53;
+    h ^= h >> 33;
+    return h;
+  }
+
+  function xorShift128Plus(): u64 {
+    var s1 = random_state0;
+    var s0 = random_state1;
+    random_state0 = s0;
+    s1 ^= s1 << 23;
+    s1 ^= s1 >> 17;
+    s1 ^= s0;
+    s1 ^= s0 >> 26;
+    random_state1 = s1;
+    return s0 + s1;
+  }
+
+  export function seedRandom(value: i64): void {
+    assert(value);
+    random_seeded = true;
+    random_state0 = murmurHash3(value);
+    random_state1 = murmurHash3(random_state0);
+  }
+
+  export function random(): f64 { // based on V8's implementation
+    const
+      kExponentBits = <u64>0x3FF0000000000000,
+      kMantissaMask = <u64>0x000FFFFFFFFFFFFF;
+
+    if (!random_seeded) unreachable();
+    var r = (xorShift128Plus() & kMantissaMask) | kExponentBits;
+    return reinterpret<f64>(r) - 1;
+  }
+
   export function round(x: f64): f64 {
     return builtin_nearest(x);
   }
@@ -459,12 +634,58 @@ export namespace NativeMath {
     return x > 0 ? 1 : x < 0 ? -1 : x;
   }
 
+  export function sin(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function sinh(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
   export function sqrt(x: f64): f64 {
     return builtin_sqrt(x);
   }
 
+  export function tan(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function tanh(x: f64): f64 {
+    unreachable(); // TODO
+    return 0;
+  }
+
   export function trunc(x: f64): f64 {
     return builtin_trunc(x);
+  }
+
+  function scalbn(x: f64, n: i32): f64 { // based on musl's implementation of scalbn
+    const
+      Ox1p1023 = 8.98846567431157954e+307,
+      Ox1p_1022 = 2.22507385850720138e-308;
+
+    var y = x;
+    if (n > 1023) {
+      y *= Ox1p1023;
+      n -= 1023;
+      if (n > 1023) {
+        y *= Ox1p1023;
+        n -= 1023;
+        if (n > 1023) n = 1023;
+      }
+    } else if (n < -1022) {
+      y *= Ox1p_1022;
+      n += 1022;
+      if (n < -1022) {
+        y *= Ox1p_1022;
+        n += 1022;
+        if (n < -1022) n = -1022;
+      }
+    }
+    return y * reinterpret<f64>(<u64>(0x3ff + n) << 52);
   }
 }
 
@@ -483,12 +704,95 @@ export namespace NativeMathf {
     return builtin_abs(x);
   }
 
+  export function acos(x: f32): f32 {
+    unreachable(); // TOOD
+    return 0;
+  }
+
+  export function acosh(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function asin(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function asinh(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function atan(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function atanh(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function atan2(y: f32, x: f32): f32 {
+    unreachable(); // TOOD
+    return 0;
+  }
+
+  export function cbrt(x: f32): f32 { // based on musl's implementation of cbrtf
+    const
+      B1 = <u32>709958130, /* B1 = (127-127.0/3-0.03306235651)*2**23 */
+      B2 = <u32>642849266, /* B2 = (127-127.0/3-24/3-0.03306235651)*2**23 */
+      Ox1p24f = <f32>16777216.0;
+
+    var ux = reinterpret<u32>(x);
+    var hx = ux & 0x7fffffff;
+    if (hx >= 0x7f800000) return x + x; // cbrt(NaN,INF) is itself
+
+    // rough cbrt to 5 bits
+    if (hx < 0x00800000) { // zero or subnormal?
+      if (hx == 0) return x; // cbrt(+-0) is itself
+      ux = reinterpret<u32>(x * Ox1p24f);
+      hx = ux & 0x7fffffff;
+      hx = hx / 3 + B2;
+    } else {
+      hx = hx / 3 + B1;
+    }
+    ux &= 0x80000000;
+    ux |= hx;
+
+    // First step Newton iteration (solving t*t-x/t == 0) to 16 bits. In
+    // double precision so that its terms can be arranged for efficiency
+    // without causing overflow or underflow.
+    var T = <f64>reinterpret<f32>(ux);
+    var r = T * T * T;
+    T = T * (<f64>x + x + r) / (x + r + r);
+
+    // Second step Newton iteration to 47 bits. In double precision for
+    // efficiency and accuracy.
+    r = T * T * T;
+    T = T * (<f64>x + x + r) / (x + r + r);
+
+    // rounding to 24 bits is perfect in round-to-nearest mode
+    return <f32>T;
+  }
+
   export function ceil(x: f32): f32 {
     return builtin_ceil(x);
   }
 
   export function clz32(x: f32): i32 {
     return builtin_clz(<i32>x);
+  }
+
+  export function cos(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function cosh(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
   }
 
   export function floor(x: f32): f32 {
@@ -551,7 +855,21 @@ export namespace NativeMathf {
     var c = x - xx * (P1 + xx * P2);
     var y: f32 = 1 + (x * c / (2 - c) - lo + hi);
     if (k == 0) return y;
-    return scalbnf(y, k);
+    return scalbn(y, k);
+  }
+
+  export function expm1(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function fround(x: f32): f32 {
+    return x;
+  }
+
+  export function hypot(value1: f32, value2: f32): f32 { // TODO: rest
+    unreachable(); // TODO
+    return 0;
   }
 
   export function imul(x: f32, y: f32): i32 {
@@ -598,13 +916,22 @@ export namespace NativeMathf {
     return s * (hfsq + R) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
   }
 
-  // export function log2(x: f32): f32 {
-  //   return log(x) / LN2;
-  // }
+  export function log10(x: f32): f32 {
+    // return log(x) / LN10;
+    unreachable(); // TODO
+    return 0;
+  }
 
-  // export function log10(x: f32): f32 {
-  //   return log(x) / LN10;
-  // }
+  export function log1p(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function log2(x: f32): f32 {
+    // return log(x) / LN2;
+    unreachable(); // TODO
+    return 0;
+  }
 
   export function max(value1: f32, value2: f32): f32 {
     return builtin_max(value1, value2);
@@ -677,10 +1004,10 @@ export namespace NativeMathf {
     if (iy == 0x3f800000) return hy >= 0 ? x : 1.0 / x; // y is +-1
     if (hy == 0x40000000) return x * x; // y is 2
     if (hy == 0x3f000000) { // y is  0.5
-      if (hx >= 0) return builtin_sqrt<f32>(x); // x >= +0
+      if (hx >= 0) return builtin_sqrt(x); // x >= +0
     }
 
-    var ax = builtin_abs<f32>(x);
+    var ax = builtin_abs(x);
     // special value of x
     var z: f32;
     if (ix == 0x7f800000 || ix == 0 || ix == 0x3f800000) { // x is +-0,+-inf,+-1
@@ -822,9 +1149,13 @@ export namespace NativeMathf {
     z = 1.0 - (r - z);
     j = reinterpret<u32>(z); // GET_FLOAT_WORD(j, z)
     j += n << 23;
-    if ((j >> 23) <= 0) z = scalbnf(z, n); // subnormal output
+    if ((j >> 23) <= 0) z = scalbn(z, n); // subnormal output
     else z = reinterpret<f32>(j); // SET_FLOAT_WORD(z, j)
     return sn * z;
+  }
+
+  export function random(): f32 {
+    return <f32>NativeMath.random();
   }
 
   export function round(x: f32): f32 {
@@ -835,63 +1166,57 @@ export namespace NativeMathf {
     return x > 0 ? 1 : x < 0 ? -1 : x;
   }
 
+  export function sin(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function sinh(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
   export function sqrt(x: f32): f32 {
     return builtin_sqrt(x);
+  }
+
+  export function tan(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
+  }
+
+  export function tanh(x: f32): f32 {
+    unreachable(); // TODO
+    return 0;
   }
 
   export function trunc(x: f32): f32 {
     return builtin_trunc(x);
   }
-}
 
-function scalbn(x: f64, n: i32): f64 { // based on musl's implementation of scalbn
-  const
-    Ox1p1023 = 8.98846567431157954e+307,
-    Ox1p_1022 = 2.22507385850720138e-308;
+  function scalbn(x: f32, n: i32): f32 { // based on musl's implementation of scalbnf
+    const
+      Ox1p127f = <f32>1.701411835e+38,
+      Ox1p_126f = <f32>1.175494351e-38;
 
-  var y = x;
-  if (n > 1023) {
-    y *= Ox1p1023;
-    n -= 1023;
-    if (n > 1023) {
-      y *= Ox1p1023;
-      n -= 1023;
-      if (n > 1023) n = 1023;
-    }
-  } else if (n < -1022) {
-    y *= Ox1p_1022;
-    n += 1022;
-    if (n < -1022) {
-      y *= Ox1p_1022;
-      n += 1022;
-      if (n < -1022) n = -1022;
-    }
-  }
-  return y * reinterpret<f64>(<u64>(0x3ff + n) << 52);
-}
-
-function scalbnf(x: f32, n: i32): f32 { // based on musl's implementation of scalbnf
-  const
-    Ox1p127f = <f32>1.701411835e+38,
-    Ox1p_126f = <f32>1.175494351e-38;
-
-  var y = x;
-  if (n > 127) {
-    y *= Ox1p127f;
-    n -= 127;
+    var y = x;
     if (n > 127) {
       y *= Ox1p127f;
       n -= 127;
-      if (n > 127) n = 127;
-    }
-  } else if (n < -126) {
-    y *= Ox1p_126f;
-    n += 126;
-    if (n < -126) {
+      if (n > 127) {
+        y *= Ox1p127f;
+        n -= 127;
+        if (n > 127) n = 127;
+      }
+    } else if (n < -126) {
       y *= Ox1p_126f;
       n += 126;
-      if (n < -126) n = -126;
+      if (n < -126) {
+        y *= Ox1p_126f;
+        n += 126;
+        if (n < -126) n = -126;
+      }
     }
+    return y * reinterpret<f32>(<u32>(0x7f + n) << 23);
   }
-  return y * reinterpret<f32>(<u32>(0x7f + n) << 23);
 }

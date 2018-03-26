@@ -1,4 +1,5 @@
 (module
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $FFFFiv (func (param f64 f64 f64 f64 i32)))
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FFFiv (func (param f64 f64 f64 i32)))
@@ -6,17 +7,28 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $fffiv (func (param f32 f32 f32 i32)))
  (type $FF (func (param f64) (result f64)))
+ (type $F (func (result f64)))
  (type $ff (func (param f32) (result f32)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fif (func (param f32 i32) (result f32)))
+ (type $Iv (func (param i64)))
+ (type $II (func (param i64) (result i64)))
+ (type $I (func (result i64)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (import "JSMath" "log" (func $(lib)/math/JSMath.log (param f64) (result f64)))
  (import "JSMath" "exp" (func $(lib)/math/JSMath.exp (param f64) (result f64)))
+ (import "JSMath" "cbrt" (func $(lib)/math/JSMath.cbrt (param f64) (result f64)))
+ (import "JSMath" "random" (func $(lib)/math/JSMath.random (result f64)))
+ (global "$(lib)/math/NativeMath.random_seeded" (mut i32) (i32.const 0))
+ (global "$(lib)/math/NativeMath.random_state0" (mut i64) (i64.const 0))
+ (global "$(lib)/math/NativeMath.random_state1" (mut i64) (i64.const 0))
  (memory $0 1)
  (data (i32.const 4) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s")
+ (data (i32.const 32) "\0d\00\00\00(\00l\00i\00b\00)\00/\00m\00a\00t\00h\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $fmod (; 2 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $fmod (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i64)
@@ -388,7 +400,7 @@
    (get_local $0)
   )
  )
- (func $std/math/check<f64> (; 3 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
+ (func $std/math/check<f64> (; 6 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
   (local $4 f64)
   (if
    (f64.ne
@@ -442,7 +454,7 @@
    )
   )
  )
- (func $std/math/test_fmod (; 4 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
+ (func $std/math/test_fmod (; 7 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
   (call $std/math/check<f64>
    (call $fmod
     (get_local $0)
@@ -453,7 +465,7 @@
    (get_local $4)
   )
  )
- (func $fmodf (; 5 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $fmodf (; 8 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -805,7 +817,7 @@
    (get_local $0)
   )
  )
- (func $std/math/check<f32> (; 6 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
+ (func $std/math/check<f32> (; 9 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
   (local $4 f32)
   (if
    (f32.ne
@@ -859,7 +871,7 @@
    )
   )
  )
- (func $std/math/test_fmodf (; 7 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
+ (func $std/math/test_fmodf (; 10 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
   (call $std/math/check<f32>
    (call $fmodf
     (get_local $0)
@@ -870,7 +882,7 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/NativeMath.log" (; 8 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.log" (; 11 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i64)
@@ -1135,7 +1147,7 @@
    )
   )
  )
- (func $std/math/test_log (; 9 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
+ (func $std/math/test_log (; 12 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
   (call $std/math/check<f64>
    (call "$(lib)/math/NativeMath.log"
     (get_local $0)
@@ -1153,7 +1165,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMathf.log" (; 10 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.log" (; 13 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -1356,7 +1368,7 @@
    )
   )
  )
- (func $std/math/test_logf (; 11 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
+ (func $std/math/test_logf (; 14 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.log"
     (get_local $0)
@@ -1366,7 +1378,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/scalbn" (; 12 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func "$(lib)/math/NativeMath.scalbn" (; 15 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (set_local $2
    (get_local $0)
@@ -1480,7 +1492,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.exp" (; 13 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.exp" (; 16 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 f64)
@@ -1688,12 +1700,12 @@
     (get_local $0)
    )
   )
-  (call "$(lib)/math/scalbn"
+  (call "$(lib)/math/NativeMath.scalbn"
    (get_local $0)
    (get_local $1)
   )
  )
- (func $std/math/test_exp (; 14 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
+ (func $std/math/test_exp (; 17 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
   (call $std/math/check<f64>
    (call "$(lib)/math/NativeMath.exp"
     (get_local $0)
@@ -1711,7 +1723,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/scalbnf" (; 15 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func "$(lib)/math/NativeMathf.scalbn" (; 18 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (set_local $2
    (get_local $0)
@@ -1823,7 +1835,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMathf.exp" (; 16 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.exp" (; 19 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -2010,12 +2022,12 @@
     (get_local $0)
    )
   )
-  (call "$(lib)/math/scalbnf"
+  (call "$(lib)/math/NativeMathf.scalbn"
    (get_local $0)
    (get_local $1)
   )
  )
- (func $std/math/test_expf (; 17 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
+ (func $std/math/test_expf (; 20 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.exp"
     (get_local $0)
@@ -2025,12 +2037,12 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.sqrt" (; 18 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.sqrt" (; 21 ;) (type $FF) (param $0 f64) (result f64)
   (f64.sqrt
    (get_local $0)
   )
  )
- (func "$(lib)/math/NativeMath.pow" (; 19 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func "$(lib)/math/NativeMath.pow" (; 22 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -3406,7 +3418,7 @@
          )
          (i32.const 0)
         )
-        (call "$(lib)/math/scalbn"
+        (call "$(lib)/math/NativeMath.scalbn"
          (get_local $2)
          (get_local $4)
         )
@@ -3449,7 +3461,7 @@
    (f64.const 1.e+300)
   )
  )
- (func $std/math/test_pow (; 20 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
+ (func $std/math/test_pow (; 23 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
   (call $std/math/check<f64>
    (call "$(lib)/math/NativeMath.pow"
     (get_local $0)
@@ -3460,7 +3472,7 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/NativeMathf.pow" (; 21 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.pow" (; 24 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 f32)
   (local $3 f32)
   (local $4 i32)
@@ -4605,7 +4617,7 @@
          )
          (i32.const 0)
         )
-        (call "$(lib)/math/scalbnf"
+        (call "$(lib)/math/NativeMathf.scalbn"
          (get_local $2)
          (get_local $4)
         )
@@ -4635,7 +4647,7 @@
    (f32.const 1000000015047466219876688e6)
   )
  )
- (func $std/math/test_powf (; 22 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
+ (func $std/math/test_powf (; 25 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.pow"
     (get_local $0)
@@ -4646,7 +4658,497 @@
    (get_local $4)
   )
  )
- (func $start (; 23 ;) (type $v)
+ (func "$(lib)/math/NativeMath.cbrt" (; 26 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
+  (local $2 f64)
+  (local $3 i32)
+  (local $4 i64)
+  (if
+   (i32.ge_u
+    (tee_local $3
+     (i32.and
+      (i32.wrap/i64
+       (i64.shr_u
+        (tee_local $4
+         (i64.reinterpret/f64
+          (get_local $0)
+         )
+        )
+        (i64.const 32)
+       )
+      )
+      (i32.const 2147483647)
+     )
+    )
+    (i32.const 2146435072)
+   )
+   (return
+    (f64.add
+     (get_local $0)
+     (get_local $0)
+    )
+   )
+  )
+  (set_local $3
+   (if (result i32)
+    (i32.lt_u
+     (get_local $3)
+     (i32.const 1048576)
+    )
+    (block (result i32)
+     (if
+      (i32.eqz
+       (tee_local $3
+        (i32.and
+         (i32.wrap/i64
+          (i64.shr_u
+           (tee_local $4
+            (i64.reinterpret/f64
+             (f64.mul
+              (get_local $0)
+              (f64.const 18014398509481984)
+             )
+            )
+           )
+           (i64.const 32)
+          )
+         )
+         (i32.const 2147483647)
+        )
+       )
+      )
+      (return
+       (get_local $0)
+      )
+     )
+     (i32.add
+      (i32.div_u
+       (get_local $3)
+       (i32.const 3)
+      )
+      (i32.const 696219795)
+     )
+    )
+    (i32.add
+     (i32.div_u
+      (get_local $3)
+      (i32.const 3)
+     )
+     (i32.const 715094163)
+    )
+   )
+  )
+  (set_local $2
+   (f64.mul
+    (f64.mul
+     (tee_local $1
+      (f64.reinterpret/i64
+       (i64.or
+        (i64.and
+         (get_local $4)
+         (i64.const -9223372036854775808)
+        )
+        (i64.shl
+         (i64.extend_u/i32
+          (get_local $3)
+         )
+         (i64.const 32)
+        )
+       )
+      )
+     )
+     (get_local $1)
+    )
+    (f64.div
+     (get_local $1)
+     (get_local $0)
+    )
+   )
+  )
+  (set_local $2
+   (f64.div
+    (f64.sub
+     (tee_local $2
+      (f64.div
+       (get_local $0)
+       (f64.mul
+        (tee_local $1
+         (f64.reinterpret/i64
+          (i64.and
+           (i64.add
+            (i64.reinterpret/f64
+             (f64.mul
+              (get_local $1)
+              (f64.add
+               (f64.add
+                (f64.const 1.87595182427177)
+                (f64.mul
+                 (get_local $2)
+                 (f64.add
+                  (f64.const -1.8849797954337717)
+                  (f64.mul
+                   (get_local $2)
+                   (f64.const 1.6214297201053545)
+                  )
+                 )
+                )
+               )
+               (f64.mul
+                (f64.mul
+                 (f64.mul
+                  (get_local $2)
+                  (get_local $2)
+                 )
+                 (get_local $2)
+                )
+                (f64.add
+                 (f64.const -0.758397934778766)
+                 (f64.mul
+                  (get_local $2)
+                  (f64.const 0.14599619288661245)
+                 )
+                )
+               )
+              )
+             )
+            )
+            (i64.const 2147483648)
+           )
+           (i64.const -1073741824)
+          )
+         )
+        )
+        (get_local $1)
+       )
+      )
+     )
+     (get_local $1)
+    )
+    (f64.add
+     (f64.add
+      (get_local $1)
+      (get_local $1)
+     )
+     (get_local $2)
+    )
+   )
+  )
+  (f64.add
+   (get_local $1)
+   (f64.mul
+    (get_local $1)
+    (get_local $2)
+   )
+  )
+ )
+ (func $std/math/test_cbrt (; 27 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
+  (call $std/math/check<f64>
+   (call "$(lib)/math/NativeMath.cbrt"
+    (get_local $0)
+   )
+   (get_local $1)
+   (get_local $2)
+   (get_local $3)
+  )
+  (call $std/math/check<f64>
+   (call "$(lib)/math/JSMath.cbrt"
+    (get_local $0)
+   )
+   (get_local $1)
+   (get_local $2)
+   (get_local $3)
+  )
+ )
+ (func "$(lib)/math/NativeMathf.cbrt" (; 28 ;) (type $ff) (param $0 f32) (result f32)
+  (local $1 f64)
+  (local $2 f64)
+  (local $3 i32)
+  (local $4 i32)
+  (if
+   (i32.ge_u
+    (tee_local $3
+     (i32.and
+      (tee_local $4
+       (i32.reinterpret/f32
+        (get_local $0)
+       )
+      )
+      (i32.const 2147483647)
+     )
+    )
+    (i32.const 2139095040)
+   )
+   (return
+    (f32.add
+     (get_local $0)
+     (get_local $0)
+    )
+   )
+  )
+  (set_local $3
+   (if (result i32)
+    (i32.lt_u
+     (get_local $3)
+     (i32.const 8388608)
+    )
+    (block (result i32)
+     (if
+      (i32.eqz
+       (get_local $3)
+      )
+      (return
+       (get_local $0)
+      )
+     )
+     (i32.add
+      (i32.div_u
+       (i32.and
+        (tee_local $4
+         (i32.reinterpret/f32
+          (f32.mul
+           (get_local $0)
+           (f32.const 16777216)
+          )
+         )
+        )
+        (i32.const 2147483647)
+       )
+       (i32.const 3)
+      )
+      (i32.const 642849266)
+     )
+    )
+    (i32.add
+     (i32.div_u
+      (get_local $3)
+      (i32.const 3)
+     )
+     (i32.const 709958130)
+    )
+   )
+  )
+  (set_local $2
+   (f64.mul
+    (f64.mul
+     (tee_local $1
+      (f64.promote/f32
+       (f32.reinterpret/i32
+        (i32.or
+         (i32.and
+          (get_local $4)
+          (i32.const -2147483648)
+         )
+         (get_local $3)
+        )
+       )
+      )
+     )
+     (get_local $1)
+    )
+    (get_local $1)
+   )
+  )
+  (set_local $2
+   (f64.mul
+    (f64.mul
+     (tee_local $1
+      (f64.div
+       (f64.mul
+        (get_local $1)
+        (f64.add
+         (f64.add
+          (f64.promote/f32
+           (get_local $0)
+          )
+          (f64.promote/f32
+           (get_local $0)
+          )
+         )
+         (get_local $2)
+        )
+       )
+       (f64.add
+        (f64.add
+         (f64.promote/f32
+          (get_local $0)
+         )
+         (get_local $2)
+        )
+        (get_local $2)
+       )
+      )
+     )
+     (get_local $1)
+    )
+    (get_local $1)
+   )
+  )
+  (f32.demote/f64
+   (f64.div
+    (f64.mul
+     (get_local $1)
+     (f64.add
+      (f64.add
+       (f64.promote/f32
+        (get_local $0)
+       )
+       (f64.promote/f32
+        (get_local $0)
+       )
+      )
+      (get_local $2)
+     )
+    )
+    (f64.add
+     (f64.add
+      (f64.promote/f32
+       (get_local $0)
+      )
+      (get_local $2)
+     )
+     (get_local $2)
+    )
+   )
+  )
+ )
+ (func $std/math/test_cbrtf (; 29 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
+  (call $std/math/check<f32>
+   (call "$(lib)/math/NativeMathf.cbrt"
+    (get_local $0)
+   )
+   (get_local $1)
+   (get_local $2)
+   (get_local $3)
+  )
+ )
+ (func "$(lib)/math/NativeMath.murmurHash3" (; 30 ;) (type $II) (param $0 i64) (result i64)
+  (i64.xor
+   (tee_local $0
+    (i64.mul
+     (i64.xor
+      (tee_local $0
+       (i64.mul
+        (i64.xor
+         (get_local $0)
+         (i64.shr_u
+          (get_local $0)
+          (i64.const 33)
+         )
+        )
+        (i64.const -49064778989728563)
+       )
+      )
+      (i64.shr_u
+       (get_local $0)
+       (i64.const 33)
+      )
+     )
+     (i64.const -4265267296055464877)
+    )
+   )
+   (i64.shr_u
+    (get_local $0)
+    (i64.const 33)
+   )
+  )
+ )
+ (func "$(lib)/math/NativeMath.seedRandom" (; 31 ;) (type $Iv) (param $0 i64)
+  (if
+   (i64.eqz
+    (get_local $0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 613)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
+  )
+  (set_global "$(lib)/math/NativeMath.random_seeded"
+   (i32.const 1)
+  )
+  (set_global "$(lib)/math/NativeMath.random_state0"
+   (call "$(lib)/math/NativeMath.murmurHash3"
+    (get_local $0)
+   )
+  )
+  (set_global "$(lib)/math/NativeMath.random_state1"
+   (call "$(lib)/math/NativeMath.murmurHash3"
+    (get_global "$(lib)/math/NativeMath.random_state0")
+   )
+  )
+ )
+ (func "$(lib)/math/NativeMath.xorShift128Plus" (; 32 ;) (type $I) (result i64)
+  (local $0 i64)
+  (local $1 i64)
+  (set_local $0
+   (get_global "$(lib)/math/NativeMath.random_state0")
+  )
+  (set_global "$(lib)/math/NativeMath.random_state0"
+   (tee_local $1
+    (get_global "$(lib)/math/NativeMath.random_state1")
+   )
+  )
+  (set_global "$(lib)/math/NativeMath.random_state1"
+   (tee_local $0
+    (i64.xor
+     (i64.xor
+      (i64.xor
+       (tee_local $0
+        (i64.xor
+         (get_local $0)
+         (i64.shl
+          (get_local $0)
+          (i64.const 23)
+         )
+        )
+       )
+       (i64.shr_u
+        (get_local $0)
+        (i64.const 17)
+       )
+      )
+      (get_local $1)
+     )
+     (i64.shr_u
+      (get_local $1)
+      (i64.const 26)
+     )
+    )
+   )
+  )
+  (i64.add
+   (get_local $1)
+   (get_local $0)
+  )
+ )
+ (func "$(lib)/math/NativeMath.random" (; 33 ;) (type $F) (result f64)
+  (if
+   (i32.eqz
+    (get_global "$(lib)/math/NativeMath.random_seeded")
+   )
+   (unreachable)
+  )
+  (f64.sub
+   (f64.reinterpret/i64
+    (i64.or
+     (i64.and
+      (call "$(lib)/math/NativeMath.xorShift128Plus")
+      (i64.const 4503599627370495)
+     )
+     (i64.const 4607182418800017408)
+    )
+   )
+   (f64.const 1)
+  )
+ )
+ (func $start (; 34 ;) (type $v)
+  (local $0 i32)
+  (local $1 f64)
+  (local $2 i32)
   (call $std/math/test_fmod
    (f64.const -8.06684839057968)
    (f64.const 4.535662560676869)
@@ -7612,6 +8114,301 @@
    (f32.const -0.5)
    (f32.const 0)
    (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -8.06684839057968)
+   (f64.const -2.0055552545020245)
+   (f64.const 0.46667951345443726)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 4.345239849338305)
+   (f64.const 1.6318162410515635)
+   (f64.const -0.08160271495580673)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -8.38143342755525)
+   (f64.const -2.031293910673361)
+   (f64.const -0.048101816326379776)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -6.531673581913484)
+   (f64.const -1.8692820012204925)
+   (f64.const 0.08624018728733063)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 9.267056966972586)
+   (f64.const 2.100457720859702)
+   (f64.const -0.2722989022731781)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 0.6619858980995045)
+   (f64.const 0.8715311470455973)
+   (f64.const 0.4414918124675751)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -0.4066039223853553)
+   (f64.const -0.740839030300223)
+   (f64.const 0.016453813761472702)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 0.5617597462207241)
+   (f64.const 0.8251195400559286)
+   (f64.const 0.30680638551712036)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 0.7741522965913037)
+   (f64.const 0.9182102478959914)
+   (f64.const 0.06543998420238495)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -0.6787637026394024)
+   (f64.const -0.8788326906580094)
+   (f64.const -0.2016713172197342)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrt
+   (f64.const nan:0x8000000000000)
+   (f64.const nan:0x8000000000000)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const inf)
+   (f64.const inf)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -inf)
+   (f64.const -inf)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 0)
+   (f64.const 0)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -0)
+   (f64.const -0)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 9.313225746154785e-10)
+   (f64.const 0.0009765625)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -9.313225746154785e-10)
+   (f64.const -0.0009765625)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 1)
+   (f64.const 1)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const -1)
+   (f64.const -1)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrt
+   (f64.const 8)
+   (f64.const 2)
+   (f64.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -8.066848754882812)
+   (f32.const -2.0055553913116455)
+   (f32.const -0.44719240069389343)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 4.345239639282227)
+   (f32.const 1.6318162679672241)
+   (f32.const 0.44636252522468567)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -8.381433486938477)
+   (f32.const -2.0312938690185547)
+   (f32.const 0.19483426213264465)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -6.531673431396484)
+   (f32.const -1.8692820072174072)
+   (f32.const -0.17075514793395996)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 9.267057418823242)
+   (f32.const 2.1004576683044434)
+   (f32.const -0.36362043023109436)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 0.6619858741760254)
+   (f32.const 0.8715311288833618)
+   (f32.const -0.12857209146022797)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -0.40660393238067627)
+   (f32.const -0.7408390641212463)
+   (f32.const -0.4655757546424866)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 0.5617597699165344)
+   (f32.const 0.8251195549964905)
+   (f32.const 0.05601907894015312)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 0.7741522789001465)
+   (f32.const 0.9182102680206299)
+   (f32.const 0.45498204231262207)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -0.6787636876106262)
+   (f32.const -0.8788326978683472)
+   (f32.const -0.22978967428207397)
+   (i32.const 1)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const nan:0x400000)
+   (f32.const nan:0x400000)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const inf)
+   (f32.const inf)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -inf)
+   (f32.const -inf)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 0)
+   (f32.const 0)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -0)
+   (f32.const -0)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 9.313225746154785e-10)
+   (f32.const 0.0009765625)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -9.313225746154785e-10)
+   (f32.const -0.0009765625)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 1)
+   (f32.const 1)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const -1)
+   (f32.const -1)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call $std/math/test_cbrtf
+   (f32.const 8)
+   (f32.const 2)
+   (f32.const 0)
+   (i32.const 0)
+  )
+  (call "$(lib)/math/NativeMath.seedRandom"
+   (i64.reinterpret/f64
+    (call "$(lib)/math/JSMath.random")
+   )
+  )
+  (loop $continue|0
+   (if
+    (f64.lt
+     (f64.convert_s/i32
+      (get_local $0)
+     )
+     (f64.const 1e7)
+    )
+    (block
+     (if
+      (i32.eqz
+       (i32.and
+        (if (result i32)
+         (tee_local $2
+          (f64.ge
+           (tee_local $1
+            (call "$(lib)/math/NativeMath.random")
+           )
+           (f64.const 0)
+          )
+         )
+         (f64.lt
+          (get_local $1)
+          (f64.const 1)
+         )
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (block
+       (call $abort
+        (i32.const 0)
+        (i32.const 4)
+        (i32.const 601)
+        (i32.const 2)
+       )
+       (unreachable)
+      )
+     )
+     (set_local $0
+      (i32.add
+       (get_local $0)
+       (i32.const 1)
+      )
+     )
+     (br $continue|0)
+    )
+   )
   )
  )
 )
