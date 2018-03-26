@@ -7,29 +7,7 @@ backtrace=function (print=1){
 }
 
 demangle=function (line){ // todo: proper cpp demangle lol
-	// return line
-	if(!line.match("at "))return line
-	var [at,name,fun]=line.trim().split(' ')
-	if(!name)return line
-	type=name.match(/E(.*)/)
-	type=type||name.match(/PK(.*)/)
-	type=type?type[1]||"":""
-	name=name.replace(/plE/g,'E')// constructor
-	name=name.replace(/E.*?$/g,'')
-	name=name.replace(/PK.*?$/g,'')
-	name=name.replace(/_Z\d/,'')
-	name=name.replace(/_ZN\d/,'')
-	name=name.replace(/\d/g,'.')
-	name=name.replace("_","")
-	// if(!type)
-	// return "	at "+name
-	type=type.replace("v","")
-	type=type.replace("PK","*")
-	type=type.replace("i","int,")
-	type=type.replace("f","float,")
-	type=type.replace("c","char,")
-	type=type.replace(/,$/,'')
-	return file.replace(".wasm"," ")+name+"("+type+")"
+	return line
 }
 
 trimStack=function (ex,more=0) {
