@@ -5,19 +5,19 @@
   label { cursor: pointer; }
 </style>
 
-<script src="hexfloat.js"></script>
 <form onsubmit="convert(this); return false">
   <h1>Hexadecimal float to decimal float converter</h1>
   <p>
     <label for="f64"><input id="f64" name="precision" value="f64" type="radio" checked /> f64</label>
     <label for="f32"><input id="f32" name="precision" value="f32" type="radio" /> f32</label>
-    <input id="name" type="text" value="test(" />
+    <input id="name" type="text" value="test" />
     <button>Convert</button>
   </p>
   <p><textarea cols="120" rows="20" id="input"></textarea></p>
   <p><textarea cols="120" rows="20" id="output" readonly></textarea></p>
 </form>
 
+<script src="hexfloat.js"></script>
 <script>
 function convert(form) {
   var isF64 = document.getElementById("f64").checked;
@@ -29,8 +29,8 @@ function convert(form) {
       return val.toPrecision(isF64 ? 18 : 10);
     })
     .replace(/\bnan\b/g, "NaN")
-    .replace(/\inf\b/g, "Infinity")
-    .replace(/^T\(RN, */mg, name + "(")
+    .replace(/\binf\b/g, "Infinity")
+    .replace(/^T\(R\w, */mg, name + "(")
     .replace(/\)$/mg, ");")
     .replace(/ +/g, " ");
 }

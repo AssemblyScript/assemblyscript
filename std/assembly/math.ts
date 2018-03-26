@@ -58,7 +58,7 @@ import {
   trunc as builtin_trunc
 } from "./builtins";
 
-// Math/Mathf.log/exp
+// Math/Mathf.log/exp/pow
 //   Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 //   Developed at SunPro, a Sun Microsystems, Inc. business.
 //   Permission to use, copy, modify, and distribute this
@@ -88,10 +88,8 @@ export namespace Math {
     return builtin_clz(<i32>x);
   }
 
-  export function exp(x: f64): f64 {
-    // based on musl's implementation of exp:
+  export function exp(x: f64): f64 { // based on musl's implementation of exp
     const
-      half = <f64[]>[0.5,-0.5],
       ln2hi = 6.93147180369123816490e-01,  // 0x3fe62e42, 0xfee00000
       ln2lo = 1.90821492927058770002e-10,  // 0x3dea39ef, 0x35793c76
       invln2 = 1.44269504088896338700e+00, // 0x3ff71547, 0x652b82fe
@@ -103,7 +101,6 @@ export namespace Math {
       Ox1p1023 = 8.98846567431157954e+307;
 
     var hx = <u32>(reinterpret<u64>(x) >> 32);
-    var sign_ = hx >> 31;
     hx &= 0x7fffffff; // high word of |x|
 
     // special cases
@@ -125,8 +122,9 @@ export namespace Math {
     var k: i32;
     if (hx > 0x3fd62e42) {  // if |x| > 0.5 ln2
       if (hx >= 0x3ff0a2b2) { // if |x| >= 1.5 ln2
-        k = <i32>(invln2 * x + half[sign_]);
+        k = <i32>(invln2 * x + copysign<f64>(0.5, x)); // was: [0.5, -0.5][sign_])
       } else {
+        let sign_ = hx >> 31;
         k = 1 - sign_ - sign_;
       }
       hi = x - k * ln2hi;  // k * ln2hi is exact here
@@ -223,6 +221,236 @@ export namespace Math {
     return builtin_min(value1, value2);
   }
 
+  export function pow(x: f64, y: f64): f64 { // pased on musl's implementation of pow
+    const
+      two53 = 9007199254740992.0,           // 0x43400000, 0x00000000
+      huge = 1.0e+300,
+      tiny = 1.0e-300,
+      // poly coefs for (3/2)*(log(x)-2s-2/3*s**3
+      L1 = 5.99999999999994648725e-01,      // 0x3FE33333, 0x33333303
+      L2 = 4.28571428578550184252e-01,      // 0x3FDB6DB6, 0xDB6FABFF
+      L3 = 3.33333329818377432918e-01,      // 0x3FD55555, 0x518F264D
+      L4 = 2.72728123808534006489e-01,      // 0x3FD17460, 0xA91D4101
+      L5 = 2.30660745775561754067e-01,      // 0x3FCD864A, 0x93C9DB65
+      L6 = 2.06975017800338417784e-01,      // 0x3FCA7E28, 0x4A454EEF
+      P1 = 1.66666666666666019037e-01,      // 0x3FC55555, 0x5555553E
+      P2 = -2.77777777770155933842e-03,     // 0xBF66C16C, 0x16BEBD93
+      P3 = 6.61375632143793436117e-05,      // 0x3F11566A, 0xAF25DE2C
+      P4 = -1.65339022054652515390e-06,     // 0xBEBBBD41, 0xC5D26BF1
+      P5 = 4.13813679705723846039e-08,      // 0x3E663769, 0x72BEA4D0
+      lg2 = 6.93147180559945286227e-01,     // 0x3FE62E42, 0xFEFA39EF
+      lg2_h = 6.93147182464599609375e-01,   // 0x3FE62E43, 0x00000000
+      lg2_l = -1.90465429995776804525e-09,  // 0xBE205C61, 0x0CA86C39
+      ovt = 8.0085662595372944372e-017,     // -(1024-log2(ovfl+.5ulp))
+      cp = 9.61796693925975554329e-01,      // 0x3FEEC709, 0xDC3A03FD =2/(3ln2)
+      cp_h = 9.61796700954437255859e-01,    // 0x3FEEC709, 0xE0000000 =(float)cp
+      cp_l = -7.02846165095275826516e-09,   // 0xBE3E2FE0, 0x145B01F5 =tail of cp_h
+      ivln2 = 1.44269504088896338700e+00,   // 0x3FF71547, 0x652B82FE =1/ln2
+      ivln2_h = 1.44269502162933349609e+00, // 0x3FF71547, 0x60000000 =24b 1/ln2
+      ivln2_l = 1.92596299112661746887e-0;  // 0x3E54AE0B, 0xF85DDF44 =1/ln2 tail
+
+    var __u = reinterpret<u64>(x); // EXTRACT_WORDS(hx, lx, x)
+    var hx = <i32>(__u >> 32);
+    var lx = <u32>__u;
+
+    __u = reinterpret<u64>(y); // EXTRACT_WORDS(hy, ly, y)
+    var hy = <i32>(__u >> 32);
+    var ly = <u32>__u;
+
+    var ix = hx & 0x7fffffff;
+    var iy = hy & 0x7fffffff;
+
+    // x**0 = 1, even if x is NaN
+    if ((iy | ly) == 0) return 1.0;
+    // 1**y = 1, even if y is NaN
+    if (hx == 0x3ff00000 && lx == 0) return 1.0;
+    // NaN if either arg is NaN
+    if (
+      ix > 0x7ff00000 || (ix == 0x7ff00000 && lx != 0) ||
+      iy > 0x7ff00000 || (iy == 0x7ff00000 && ly != 0)
+    ) return x + y;
+
+    // determine if y is an odd int when x < 0
+    // yisint = 0       ... y is not an integer
+    // yisint = 1       ... y is an odd int
+    // yisint = 2       ... y is an even int
+    var yisint = 0, k: i32;
+    if (hx < 0) {
+      if (iy >= 0x43400000) yisint = 2; // even integer y
+      else if (iy >= 0x3ff00000) {
+        k = (iy >> 20) - 0x3ff;  // exponent
+        if (k > 20) {
+          let jj = ly >> (52 - k);
+          if ((jj << (52 - k)) == ly) yisint = 2 - (jj & 1);
+        } else if (ly == 0) {
+          let jj = iy >> (20 - k);
+          if ((jj << (20 - k)) == iy) yisint = 2 - (jj & 1);
+        }
+      }
+    }
+
+    // special value of y
+    if (ly == 0) {
+      if (iy == 0x7ff00000) { // y is +-inf
+        if (((ix - 0x3ff00000) | lx) == 0) return 1.0; // (-1)**+-inf is 1
+        else if (ix >= 0x3ff00000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
+        else return hy >= 0 ? 0.0 : -y;   // (|x|<1)**+-inf = 0,inf
+      }
+      if (iy == 0x3ff00000) { // y is +-1
+        if (hy >= 0) return x;
+        return 1 / x;
+      }
+      if (hy == 0x40000000) return x * x; // y is 2
+      if (hy == 0x3fe00000) {             // y is 0.5
+        if (hx >= 0) return sqrt(x);      // x >= +0
+      }
+    }
+
+    var ax = builtin_abs(x), z: f64;
+    // special value of x
+    if (lx == 0) {
+      if (ix == 0x7ff00000 || ix == 0 || ix == 0x3ff00000) { // x is +-0,+-inf,+-1
+        z = ax;
+        if (hy < 0) z = 1.0 / z; // z = (1/|x|)
+        if (hx < 0) {
+          if (((ix - 0x3ff00000) | yisint) == 0) z = (z - z) / (z - z); // (-1)**non-int is NaN
+          else if (yisint == 1) z = -z; // (x<0)**odd = -(|x|**odd)
+        }
+        return z;
+      }
+    }
+
+    var s = 1.0; // sign of result
+    if (hx < 0) {
+      if (yisint == 0) return (x - x) / (x - x); // (x<0)**(non-int) is NaN
+      if (yisint == 1) s = -1.0; // (x<0)**(odd int)
+    }
+
+    // |y| is huge
+    var t1: f64, t2: f64, p_h: f64, p_l: f64, r: f64, t: f64, u: f64, v: f64, w: f64;
+    var j: i32, n: i32;
+    if (iy > 0x41e00000) { // if |y| > 2**31
+      if (iy > 0x43f00000) {  // if |y| > 2**64, must o/uflow
+        if (ix <= 0x3fefffff) return hy < 0 ? huge * huge : tiny * tiny;
+        if (ix >= 0x3ff00000) return hy > 0 ? huge * huge : tiny * tiny;
+      }
+      // over/underflow if x is not close to one
+      if (ix < 0x3fefffff) return hy < 0 ? s * huge * huge : s * tiny * tiny;
+      if (ix > 0x3ff00000) return hy > 0 ? s * huge * huge : s * tiny * tiny;
+      // now |1-x| is tiny <= 2**-20, suffice to compute
+      // log(x) by x-x^2/2+x^3/3-x^4/4
+      t = ax - 1.0;       // t has 20 trailing zeros
+      w = (t * t) * (0.5 - t * (0.3333333333333333333333 - t * 0.25));
+      u = ivln2_h * t;    // ivln2_h has 21 sig. bits
+      v = t * ivln2_l - w * ivln2;
+      t1 = u + v;
+      t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xffffffff00000000); // SET_LOW_WORD(t1, 0)
+      t2 = v - (t1 - u);
+    } else {
+      let ss: f64, s2: f64, s_h: f64, s_l: f64, t_h: f64, t_l: f64;
+      n = 0;
+      // take care subnormal number
+      if (ix < 0x00100000) {
+        ax *= two53;
+        n -= 53;
+        ix = <u32>(reinterpret<u64>(ax) >> 32);
+      }
+      n += (ix >> 20) - 0x3ff;
+      j = ix & 0x000fffff;
+      // determine interval
+      ix = j | 0x3ff00000; // normalize ix
+      if (j <= 0x3988E) k = 0; // |x|<sqrt(3/2)
+      else if (j < 0xBB67A) k = 1; // |x|<sqrt(3)
+      else {
+        k = 0;
+        n += 1;
+        ix -= 0x00100000;
+      }
+      ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xffffffff | (<u64>ix << 32)); // SET_HIGH_WORD(ax, ix)
+
+      // compute ss = s_h+s_l = (x-1)/(x+1) or (x-1.5)/(x+1.5)
+      let bp = select<f64>(1.5, 1.0, k); // bp[k], bp[0]=1.0, bp[1]=1.5
+      u = ax - bp;
+      v = 1.0 / (ax + bp);
+      ss = u * v;
+      s_h = ss;
+      s_h = reinterpret<f64>(reinterpret<u64>(s_h) & 0xffffffff00000000); // SET_LOW_WORD(s_h, 0)
+      // t_h=ax+bp[k] High
+      t_h = reinterpret<f64>(<u64>(((ix >> 1) | 0x20000000) + 0x00080000 + (k << 18)) << 32); // SET_HIGH_WORD
+      t_l = ax - (t_h - bp);
+      s_l = v * ((u - s_h * t_h) - s_h * t_l);
+      // compute log(ax)
+      s2 = ss * ss;
+      r = s2 * s2 * (L1 + s2 * (L2 + s2 * (L3 + s2 * (L4 + s2 * (L5 + s2 * L6)))));
+      r += s_l * (s_h + ss);
+      s2 = s_h * s_h;
+      t_h = 3.0 + s2 + r;
+      t_h = reinterpret<f64>(reinterpret<u64>(t_h) & 0xffffffff00000000); // SET_LOW_WORD(t_h, 0)
+      t_l = r - ((t_h - 3.0) - s2);
+      // u+v = ss*(1+...)
+      u = s_h * t_h;
+      v = s_l * t_h + t_l * ss;
+      // 2/(3log2)*(ss+...)
+      p_h = u + v;
+      p_h = reinterpret<f64>(reinterpret<u64>(p_h) & 0xffffffff00000000); // SET_LOW_WORD(p_h, 0)
+      p_l = v - (p_h - u);
+      let z_h = cp_h * p_h; // cp_h+cp_l = 2/(3*log2)
+      let dp_l = select<f64>(1.35003920212974897128e-08, 0.0, k); // dp_l[k]
+      let z_l = cp_l * p_h + p_l * cp + dp_l;
+      // log2(ax) = (ss+..)*2/(3*log2) = n + dp_h + z_h + z_l
+      t = <f64>n;
+      let dp_h = select<f64>(5.84962487220764160156e-01, 0.0, k); // dp_h[k]
+      t1 = ((z_h + z_l) + dp_h) + t;
+      t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xffffffff00000000); // SET_LOW_WORD(t1, 0);
+      t2 = z_l - (((t1 - t) - dp_h) - z_h);
+    }
+
+    // split up y into y1+y2 and compute (y1+y2)*(t1+t2)
+    var y1 = y;
+    y1 = reinterpret<f64>(reinterpret<u64>(y1) & 0xffffffff00000000); // SET_LOW_WORD(y1, 0)
+    p_l = (y - y1) * t1 + y * t2;
+    p_h = y1 * t1;
+    z = p_l + p_h;
+    __u = reinterpret<u64>(z); // EXTRACT_WORDS(j, i, z) ...
+    j = <u32>(__u >> 32);
+    var i = <i32>__u;
+    if (j >= 0x40900000) {                                     // z >= 1024
+      if (((j - 0x40900000) | i) != 0) return s * huge * huge; // if z > 1024, overflow
+      if (p_l + ovt > z - p_h) return s * huge * huge;         // overflow
+    } else if ((j & 0x7fffffff) >= 0x4090cc00) {               // z <= -1075, FIXME: instead of abs(j) use unsigned j
+      if (((j - 0xc090cc00) | i) != 0) return s * tiny * tiny; // z < -1075, underflow
+      if (p_l <= z - p_h) return s * tiny * tiny;              // underflow
+    }
+    // compute 2**(p_h+p_l)
+    i = j & 0x7fffffff;
+    k = (i >> 20) - 0x3ff;
+    n = 0;
+    if (i > 0x3fe00000) { // if |z| > 0.5, set n = [z+0.5]
+      n = j + (0x00100000 >> (k + 1));
+      k = ((n & 0x7fffffff) >> 20) - 0x3ff; // new k for n
+      t = 0.0;
+      t = reinterpret<f64>(<u64>(n & ~(0x000fffff >> k)) << 32); // SET_HIGH_WORD(t, n & ~(0x000fffff>>k))
+      n = ((n & 0x000fffff) | 0x00100000) >> (20 - k);
+      if (j < 0) n = -n;
+      p_h -= t;
+    }
+    t = p_l + p_h;
+    t = reinterpret<f64>(reinterpret<u64>(t) & 0xffffffff00000000); // SET_LOW_WORD(t, 0)
+    u = t * lg2_h;
+    v = (p_l - (t - p_h)) * lg2 + t * lg2_l;
+    z = u + v;
+    w = v - (z - u);
+    t = z * z;
+    t1 = z - t * (P1 + t * (P2 + t * (P3 + t * (P4 + t * P5))));
+    r = (z * t1) / (t1 - 2.0) - (w + z * w);
+    z = 1.0 - (r - z);
+    j = <u32>(reinterpret<u64>(z) >> 32); // GET_HIGH_WORD(j, z)
+    j += n << 20;
+    if ((j >> 20) <= 0) z = scalbn(z, n); // subnormal output
+    else z = reinterpret<f64>(reinterpret<u64>(z) & 0xffffffff | (<u64>j << 32)); // SET_HIGH_WORD(z, j)
+    return s * z;
+  }
+
   export function round(x: f64): f64 {
     return builtin_nearest(x);
   }
@@ -269,7 +497,6 @@ export namespace Mathf {
 
   export function exp(x: f32): f32 { // based on musl's implementation of expf
     const
-      half = <f32[]>[0.5,-0.5],
       ln2hi = <f32>6.9314575195e-1,  // 0x3f317200
       ln2lo = <f32>1.4286067653e-6,  // 0x35bfbe8e
       invln2 = <f32>1.4426950216e+0, // 0x3fb8aa3b
@@ -292,7 +519,7 @@ export namespace Mathf {
       }
       if (sign_) {
         // underflow
-        if (hx >= 0x42cff1b5) { // x <= -103.972084f */
+        if (hx >= 0x42cff1b5) { // x <= -103.972084f
           return 0;
         }
       }
@@ -303,7 +530,7 @@ export namespace Mathf {
     var k: i32;
     if (hx > 0x3eb17218) { // if |x| > 0.5 ln2
       if (hx > 0x3f851592) { // if |x| > 1.5 ln2
-        k = <i32>(invln2 * x + half[sign_]);
+        k = <i32>(invln2 * x + copysign<f32>(0.5, x)); // was: [0.5, -0.5][sign_])
       } else {
         k = 1 - sign_ - sign_;
       }
@@ -385,6 +612,219 @@ export namespace Mathf {
 
   export function min(value1: f32, value2: f32): f32 {
     return builtin_min(value1, value2);
+  }
+
+  export function pow(x: f32, y: f32): f32 { // based on musl's implementation of powf
+    const
+      two24 = <f32>16777216.0,         // 0x4b800000
+      huge = <f32>1.0e30,
+      tiny = <f32>1.0e-30,
+      // poly coefs for (3/2)*(log(x)-2s-2/3*s**3
+      L1 = <f32>6.0000002384e-01,      // 0x3f19999a
+      L2 = <f32>4.2857143283e-01,      // 0x3edb6db7
+      L3 = <f32>3.3333334327e-01,      // 0x3eaaaaab
+      L4 = <f32>2.7272811532e-01,      // 0x3e8ba305
+      L5 = <f32>2.3066075146e-01,      // 0x3e6c3255
+      L6 = <f32>2.0697501302e-01,      // 0x3e53f142
+      P1 = <f32>1.6666667163e-01,      // 0x3e2aaaab
+      P2 = <f32>-2.7777778450e-03,     // 0xbb360b61
+      P3 = <f32>6.6137559770e-05,      // 0x388ab355
+      P4 = <f32>-1.6533901999e-06,     // 0xb5ddea0e
+      P5 = <f32>4.1381369442e-08,      // 0x3331bb4c
+      lg2 = <f32>6.9314718246e-01,     // 0x3f317218
+      lg2_h = <f32>6.93145752e-01,     // 0x3f317200
+      lg2_l = <f32>1.42860654e-06,     // 0x35bfbe8c
+      ovt = <f32>4.2995665694e-08,     // -(128-log2(ovfl+.5ulp))
+      cp = <f32>9.6179670095e-01,      // 0x3f76384f =2/(3ln2)
+      cp_h = <f32>9.6191406250e-01,    // 0x3f764000 =12b cp
+      cp_l = <f32>-1.1736857402e-04,   // 0xb8f623c6 =tail of cp_h
+      ivln2 = <f32>1.4426950216e+00,   // 0x3fb8aa3b =1/ln2
+      ivln2_h = <f32>1.4426879883e+00, // 0x3fb8aa00 =16b 1/ln2
+      ivln2_l = <f32>7.0526075433e-06; // 0x36eca570 =1/ln2 tail
+
+    var hx = reinterpret<i32>(x); // GET_FLOAT_WORD(hx, x)
+    var hy = reinterpret<i32>(y); // GET_FLOAT_WORD(hy, y)
+    var ix = hx & 0x7fffffff;
+    var iy = hy & 0x7fffffff;
+
+    // x**0 = 1, even if x is NaN
+    if (iy == 0) return 1.0;
+    // 1**y = 1, even if y is NaN
+    if (hx == 0x3f800000) return 1.0;
+    // NaN if either arg is NaN
+    if (ix > 0x7f800000 || iy > 0x7f800000) return x + y;
+
+    // determine if y is an odd int when x < 0
+    // yisint = 0       ... y is not an integer
+    // yisint = 1       ... y is an odd int
+    // yisint = 2       ... y is an even int
+    var yisint  = 0, j: i32, k: i32;
+    if (hx < 0) {
+      if (iy >= 0x4b800000) yisint = 2; // even integer y
+      else if (iy >= 0x3f800000) {
+        k = (iy >> 23) - 0x7f; // exponent
+        j = iy >> (23 - k);
+        if ((j << (23 - k)) == iy) yisint = 2 - (j & 1);
+      }
+    }
+
+    // special value of y
+    if (iy == 0x7f800000) {  // y is +-inf
+      if (ix == 0x3f800000) return 1.0; // (-1)**+-inf is 1
+      else if (ix > 0x3f800000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
+      else return hy >= 0 ? 0.0 : -y; // (|x|<1)**+-inf = 0,inf
+    }
+    if (iy == 0x3f800000) return hy >= 0 ? x : 1.0 / x; // y is +-1
+    if (hy == 0x40000000) return x * x; // y is 2
+    if (hy == 0x3f000000) { // y is  0.5
+      if (hx >= 0) return builtin_sqrt<f32>(x); // x >= +0
+    }
+
+    var ax = builtin_abs<f32>(x);
+    // special value of x
+    var z: f32;
+    if (ix == 0x7f800000 || ix == 0 || ix == 0x3f800000) { // x is +-0,+-inf,+-1
+      z = ax;
+      if (hy < 0) z = 1.0 / z; // z = (1/|x|)
+      if (hx < 0) {
+        if (((ix - 0x3f800000) | yisint) == 0) z = (z - z) / (z - z); // (-1)**non-int is NaN
+        else if (yisint == 1) z = -z; // (x<0)**odd = -(|x|**odd)
+      }
+      return z;
+    }
+
+    var sn = <f32>1.0; // sign of result
+    if (hx < 0) {
+      if (yisint == 0) return (x - x) / (x - x); // (x<0)**(non-int) is NaN
+      if (yisint == 1) sn = -1.0; // (x<0)**(odd int)
+    }
+
+    // |y| is huge
+    var t1: f32, t2: f32, r: f32, s: f32, t: f32, u: f32, v: f32, w: f32, p_h: f32, p_l: f32;
+    var n: i32, is: i32;
+    if (iy > 0x4d000000) { // if |y| > 2**27
+      // over/underflow if x is not close to one
+      if (ix < 0x3f7ffff8) return hy < 0 ? sn * huge * huge : sn * tiny * tiny;
+      if (ix > 0x3f800007) return hy > 0 ? sn * huge * huge : sn * tiny * tiny;
+      // now |1-x| is tiny <= 2**-20, suffice to compute
+      // log(x) by x-x^2/2+x^3/3-x^4/4
+      t = ax - 1; // t has 20 trailing zeros
+      w = (t * t) * (0.5 - t * (0.333333333333 - t * 0.25));
+      u = ivln2_h * t; // ivln2_h has 16 sig. bits
+      v = t * ivln2_l - w * ivln2;
+      t1 = u + v;
+      is = reinterpret<i32>(t1); // GET_FLOAT_WORD(is, t1)
+      t1 = reinterpret<f32>(is & 0xfffff000); // SET_FLOAT_WORD(t1, is & 0xfffff000)
+      t2 = v - (t1 - u);
+    } else {
+      let s2: f32, s_h: f32, s_l: f32, t_h: f32, t_l: f32;
+      n = 0;
+      // take care subnormal number
+      if (ix < 0x00800000) {
+        ax *= two24;
+        n -= 24;
+        ix = reinterpret<i32>(ax); // GET_FLOAT_WORD(ix, ax)
+      }
+      n += (ix >> 23) - 0x7f;
+      j = ix & 0x007fffff;
+      // determine interval
+      ix = j | 0x3f800000; // normalize ix
+      if (j <= 0x1cc471) k = 0; // |x|<sqrt(3/2)
+      else if (j < 0x5db3d7) k = 1; // |x|<sqrt(3)
+      else {
+        k = 0;
+        n += 1;
+        ix -= 0x00800000;
+      }
+      ax = reinterpret<f32>(ix); // SET_FLOAT_WORD(ax, ix)
+
+      // compute s = s_h+s_l = (x-1)/(x+1) or (x-1.5)/(x+1.5)
+      let bp = select<f32>(1.5, 1.0, k); // bp[k], [1.0, 1.5]
+      u = ax - bp;
+      v = 1.0 / (ax + bp);
+      s = u * v;
+      s_h = s;
+      is = reinterpret<u32>(s_h); // GET_FLOAT_WORD(is, s_h)
+      s_h = reinterpret<f32>(is & 0xfffff000); // SET_FLOAT_WORD(s_h, is & 0xfffff000)
+      // t_h=ax+bp[k] High
+      is = ((ix >> 1) & 0xfffff000) | 0x20000000;
+      t_h = reinterpret<f32>(is + 0x00400000 + (k << 21)); // SET_FLOAT_WORD(t_h, is + 0x00400000 + (k<<21))
+      t_l = ax - (t_h - bp);
+      s_l = v * ((u - s_h * t_h) - s_h * t_l);
+      // compute log(ax)
+      s2 = s * s;
+      r = s2 * s2 * (L1 + s2 * (L2 + s2 * (L3 + s2 * (L4 + s2 * (L5 + s2 * L6)))));
+      r += s_l * (s_h + s);
+      s2 = s_h * s_h;
+      t_h = 3.0 + s2 + r;
+      is = reinterpret<u32>(t_h); // GET_FLOAT_WORD(is, t_h)
+      t_h = reinterpret<f32>(is & 0xfffff000); // SET_FLOAT_WORD(t_h, is & 0xfffff000)
+      t_l = r - ((t_h - 3.0) - s2);
+      // u+v = s*(1+...)
+      u = s_h * t_h;
+      v = s_l * t_h + t_l * s;
+      // 2/(3log2)*(s+...)
+      p_h = u + v;
+      is = reinterpret<u32>(p_h); // GET_FLOAT_WORD(is, p_h)
+      p_h = reinterpret<f32>(is & 0xfffff000); // SET_FLOAT_WORD(p_h, is & 0xfffff000)
+      p_l = v - (p_h - u);
+      let z_h = cp_h * p_h;  // cp_h+cp_l = 2/(3*log2)
+      let dp_l = select<f32>(1.56322085e-06, 0.0, k); // dp_l[k], [0.0, 1.56322085e-06]
+      let z_l = cp_l * p_h + p_l * cp + dp_l;
+      // log2(ax) = (s+..)*2/(3*log2) = n + dp_h + z_h + z_l
+      t = <f32>n;
+      let dp_h = select<f32>(5.84960938e-01, 0.0, k); // dp_h[k], [0.0, 5.84960938e-01]
+      t1 = (((z_h + z_l) + dp_h) + t);
+      is = reinterpret<u32>(t1); // GET_FLOAT_WORD(is, t1)
+      t1 = reinterpret<f32>(is & 0xfffff000); // SET_FLOAT_WORD(t1, is & 0xfffff000)
+      t2 = z_l - (((t1 - t) - dp_h) - z_h);
+    }
+
+    // split up y into y1+y2 and compute (y1+y2)*(t1+t2)
+    is = reinterpret<u32>(y); // GET_FLOAT_WORD(is, y)
+    var y1 = reinterpret<f32>(is & 0xfffff000); // SET_FLOAT_WORD(y1, is & 0xfffff000)
+    p_l = (y - y1) * t1 + y * t2;
+    p_h = y1 * t1;
+    z = p_l + p_h;
+    j = reinterpret<u32>(z); // GET_FLOAT_WORD(j, z)
+    if (j > 0x43000000) { // if z > 128, overflow
+      return sn * huge * huge;
+    } else if (j == 0x43000000) { // if z == 128
+      if (p_l + ovt > z - p_h) return sn * huge * huge; // overflow
+    } else if ((j & 0x7fffffff) > 0x43160000) { // z < -150, FIXME: check should be  (uint32_t)j > 0xc3160000
+      return sn * tiny * tiny; // underflow
+    } else if (j == 0xc3160000) { // z == -150
+      if (p_l <= z - p_h) return sn * tiny * tiny; // underflow
+    }
+
+    // compute 2**(p_h+p_l)
+    var i = j & 0x7fffffff;
+    k = (i >> 23) - 0x7f;
+    n = 0;
+    if (i > 0x3f000000) { // if |z| > 0.5, set n = [z+0.5]
+      n = j + (0x00800000 >> (k + 1));
+      k = ((n & 0x7fffffff) >> 23) - 0x7f; // new k for n
+      t = reinterpret<f32>(n & ~(0x007fffff >> k)); // SET_FLOAT_WORD(t, n & ~(0x007fffff>>k))
+      n = ((n & 0x007fffff) | 0x00800000) >> (23 - k);
+      if (j < 0) n = -n;
+      p_h -= t;
+    }
+    t = p_l + p_h;
+    is = reinterpret<u32>(t); // GET_FLOAT_WORD(is, t)
+    t = reinterpret<f32>(is & 0xffff8000); // SET_FLOAT_WORD(t, is & 0xffff8000);
+    u = t * lg2_h;
+    v = (p_l - (t - p_h)) * lg2 + t * lg2_l;
+    z = u + v;
+    w = v - (z - u);
+    t = z * z;
+    t1 = z - t * (P1 + t * (P2 + t * (P3 + t * (P4 + t * P5))));
+    r = (z * t1) / (t1 - 2.0) - (w + z * w);
+    z = 1.0 - (r - z);
+    j = reinterpret<u32>(z); // GET_FLOAT_WORD(j, z)
+    j += n << 23;
+    if ((j >> 23) <= 0) z = scalbnf(z, n); // subnormal output
+    else z = reinterpret<f32>(j); // SET_FLOAT_WORD(z, j)
+    return sn * z;
   }
 
   export function round(x: f32): f32 {

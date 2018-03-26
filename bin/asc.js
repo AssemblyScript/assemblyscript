@@ -765,10 +765,16 @@ function measure(fn) {
 
 exports.measure = measure;
 
+function formatTime(time) {
+  return time ? (time / 1e6).toFixed(3) + " ms" : "N/A";
+}
+
+exports.formatTime = formatTime;
+
 /** Formats and prints out the contents of a set of stats. */
 function printStats(stats, output) {
   function format(time, count) {
-    return time ? (time / 1e6).toFixed(3) + " ms" : "N/A";
+    return formatTime(time);
   }
   (output || process.stdout).write([
     "I/O Read  : " + format(stats.readTime, stats.readCount),

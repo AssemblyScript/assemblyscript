@@ -418,6 +418,7 @@ declare namespace Math {
   export function log(x: f64): f64;
   export function max(value1: f64, value2: f64): f64; // TODO: see std/math
   export function min(value1: f64, value2: f64): f64; // TODO: see std/math
+  export function pow(x: f64, y: f64): f64;
   export function round(x: f64): f64;
   export function sign(x: f64): f64;
   export function sqrt(x: f64): f64;
@@ -442,6 +443,7 @@ declare namespace Mathf {
   export function log(x: f32): f32;
   export function max(value1: f32, value2: f32): f32; // TODO: see std/math
   export function min(value1: f32, value2: f32): f32; // TODO: see std/math
+  export function pow(x: f32, y: f32): f32;
   export function round(x: f32): f32;
   export function sign(x: f32): f32;
   export function sqrt(x: f32): f32;

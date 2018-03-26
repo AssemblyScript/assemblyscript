@@ -4904,24 +4904,21 @@ export class Compiler extends DiagnosticEmitter {
             if (i64_is_i8(intValue)) return module.createI32(i64_low(intValue));
             break;
           }
-          case TypeKind.I16: {
-            if (i64_is_i16(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
-          case TypeKind.I32: {
-            if (i64_is_i32(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
           case TypeKind.U8: {
             if (i64_is_u8(intValue)) return module.createI32(i64_low(intValue));
+            break;
+          }
+          case TypeKind.I16: {
+            if (i64_is_i16(intValue)) return module.createI32(i64_low(intValue));
             break;
           }
           case TypeKind.U16: {
             if (i64_is_u16(intValue)) return module.createI32(i64_low(intValue));
             break;
           }
+          case TypeKind.I32:
           case TypeKind.U32: {
-            if (i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
+            if (i64_is_i32(intValue) || i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
             break;
           }
           case TypeKind.BOOL: {
@@ -4930,14 +4927,14 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.ISIZE: {
             if (!this.options.isWasm64) {
-              if (i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
+              if (i64_is_i32(intValue) || i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
               break;
             }
             return module.createI64(i64_low(intValue), i64_high(intValue));
           }
           case TypeKind.USIZE: {
             if (!this.options.isWasm64) {
-              if (i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
+              if (i64_is_i32(intValue) || i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
               break;
             }
             return module.createI64(i64_low(intValue), i64_high(intValue));

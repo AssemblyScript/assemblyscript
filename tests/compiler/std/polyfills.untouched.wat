@@ -1040,9 +1040,7 @@
      )
      (i32.and
       (get_local $0)
-      (i32.wrap/i64
-       (i64.const 4294901760)
-      )
+      (i32.const -65536)
      )
     )
    )
@@ -1125,13 +1123,9 @@
    (i32.eqz
     (i32.eq
      (call "$(lib)/polyfills/bswap<i32>"
-      (i32.wrap/i64
-       (i64.const 2864434397)
-      )
+      (i32.const -1430532899)
      )
-     (i32.wrap/i64
-      (i64.const 3721182122)
-     )
+     (i32.const -573785174)
     )
    )
    (block
@@ -1293,13 +1287,9 @@
    (i32.eqz
     (i32.eq
      (call "$(lib)/polyfills/bswap16<i32>"
-      (i32.wrap/i64
-       (i64.const 4287146683)
-      )
+      (i32.const -7820613)
      )
-     (i32.wrap/i64
-      (i64.const 4287151018)
-     )
+     (i32.const -7816278)
     )
    )
    (block

@@ -1903,7 +1903,7 @@ export function compileCall(
       }
       let type = compiler.currentType;
       arg1 = compiler.compileExpression(operands[1], type);
-      arg2 = compiler.compileExpression(operands[2], Type.bool);
+      arg2 = compiler.compileExpression(operands[2], Type.i32);
       compiler.currentType = type;
       switch (compiler.currentType.kind) {
         default: { // any value type

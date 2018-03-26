@@ -109,21 +109,25 @@ tests.forEach(filename => {
 
       // Instantiate
       try {
-        let exports = new WebAssembly.Instance(new WebAssembly.Module(stdout.toBuffer()), {
-          env: {
-            abort: function(msg, file, line, column) {
-              // TODO
+        let runTime = asc.measure(() => {
+          let exports = new WebAssembly.Instance(new WebAssembly.Module(stdout.toBuffer()), {
+            env: {
+              abort: function(msg, file, line, column) {
+                // TODO
+              },
+              externalFunction: function() { },
+              externalConstant: 1,
+              logi: function(i) { console.log("logi: " + i); },
+              logf: function(f) { console.log("logf: " + f); }
             },
-            externalFunction: function() { },
-            externalConstant: 1
-          },
-          my: {
-            externalFunction: function() { },
-            externalConstant: 2
-          },
-          JSMath: Math
+            my: {
+              externalFunction: function() { },
+              externalConstant: 2
+            },
+            JSMath: Math
+          });
         });
-        console.log("- " + chalk.green("instantiate OK"));
+        console.log("- " + chalk.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
       } catch (e) {
         console.log("- " + chalk.red("instantiate ERROR: ") + e);
         failed = true;
