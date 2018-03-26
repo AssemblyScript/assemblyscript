@@ -5,11 +5,11 @@ asc -v || npm install --save-dev AssemblyScript/assemblyscript
 asc hello-world.ts -b hello-world.wasm -t hello-world.wast
 
 # load and run the binary in node.js
-node -i -e "\
-	binary = require('fs').readFileSync('hello-world.wasm');\
-	module = new WebAssembly.Module(binary);\
+node -i -e "
+	binary = require('fs').readFileSync('hello-world.wasm');
+	module = new WebAssembly.Module(binary);
 	imports = {console :{log_int : i => console.log(i) }}
-  instance= new WebAssembly.Instance(module,imports);\
+  instance= new WebAssembly.Instance(module,imports);
   "
 
 # load and run the binary in the browser:
