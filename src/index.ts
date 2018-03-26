@@ -125,6 +125,13 @@ export function setMemoryBase(options: Options, memoryBase: u32): void {
   options.memoryBase = memoryBase;
 }
 
+/** Sets a 'globalAliases' value. */
+export function setGlobalAlias(options: Options, name: string, alias: string): void {
+  var globalAliases = options.globalAliases;
+  if (!globalAliases) options.globalAliases = globalAliases = new Map();
+  globalAliases.set(name, alias);
+}
+
 /** Finishes parsing. */
 export function finishParsing(parser: Parser): Program {
   return parser.finish();

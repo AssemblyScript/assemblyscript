@@ -155,6 +155,8 @@ export class Options {
   memoryBase: u32 = 0;
   /** If true, generates information necessary for source maps. */
   sourceMap: bool = false;
+  /** Global aliases. */
+  globalAliases: Map<string,string> | null = null;
 
   /** Tests if the target is WASM64 or, otherwise, WASM32. */
   get isWasm64(): bool {

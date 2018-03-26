@@ -1,6 +1,8 @@
 // based on http://nsz.repo.hu/git/?p=libc-test
 // mostly generated from their tests using scripts/hexfloat.html
 
+assert(Math.E == NativeMath.E); // global alias should exist
+
 const INEXACT = 1 << 0;
 const INVALID = 1 << 1;
 const DIVBYZERO = 1 << 2;
@@ -190,7 +192,7 @@ test_fmodf(-1.750000000, -0.5000000000, -0.2500000000, 0.000000000, 0);
 // ================================ Math.log ================================
 
 function test_log(value: f64, expected: f64, error: f64, flags: i32): void {
-  check<f64>(Math.log(value), expected, error, flags);
+  check<f64>(NativeMath.log(value), expected, error, flags);
   check<f64>(JSMath.log(value), expected, error, flags);
 }
 
@@ -219,7 +221,7 @@ test_log(NaN, NaN, 0.00000000000000000, 0);
 // ================================ Mathf.log ================================
 
 function test_logf(value: f32, expected: f32, error: f32, flags: i32): void {
-  check<f32>(Mathf.log(value), expected, error, flags);
+  check<f32>(NativeMathf.log(value), expected, error, flags);
 }
 
 // sanity
@@ -245,7 +247,7 @@ test_logf(NaN, NaN, 0.000000000, 0);
 // ================================ Math.exp ================================
 
 function test_exp(value: f64, expected: f64, error: f64, flags: i32): void {
-  check<f64>(Math.exp(value), expected, error, flags);
+  check<f64>(NativeMath.exp(value), expected, error, flags);
   check<f64>(JSMath.exp(value), expected, error, flags);
 }
 
@@ -277,7 +279,7 @@ test_exp(1.03972148895263672, 2.82842915587641164, -0.226183772087097168, INEXAC
 // ================================ Mathf.exp ================================
 
 function test_expf(value: f32, expected: f32, error: f32, flags: i32): void {
-  check<f32>(Mathf.exp(value), expected, error, flags);
+  check<f32>(NativeMathf.exp(value), expected, error, flags);
 }
 
 // sanity
@@ -311,7 +313,7 @@ test_expf(0.3465736210, 1.414213657, 0.4321174324, INEXACT);
 // ================================ Math.pow ================================
 
 function test_pow(left: f64, right: f64, expected: f64, error: f64, flags: i32): void {
-  check<f64>(Math.pow(left, right), expected, error, flags);
+  check<f64>(NativeMath.pow(left, right), expected, error, flags);
 }
 
 // sanity
@@ -422,7 +424,7 @@ test_pow(-2.00000000000000000, -1.00000000000000000, -0.500000000000000000, 0.00
 // ================================ Mathf.pow ================================
 
 function test_powf(left: f32, right: f32, expected: f32, error: f32, flags: i32): void {
-  check<f32>(Mathf.pow(left, right), expected, error, flags);
+  check<f32>(NativeMathf.pow(left, right), expected, error, flags);
 }
 
 // sanity

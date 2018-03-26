@@ -1,4 +1,5 @@
 (module
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $FFFFiv (func (param f64 f64 f64 f64 i32)))
  (type $FFF (func (param f64 f64) (result f64)))
@@ -13,6 +14,7 @@
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fif (func (param f32 i32) (result f32)))
  (type $v (func))
+ (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (import "JSMath" "log" (func $(lib)/math/JSMath.log (param f64) (result f64)))
  (import "JSMath" "exp" (func $(lib)/math/JSMath.exp (param f64) (result f64)))
  (global $std/math/INEXACT i32 (i32.const 1))
@@ -20,11 +22,12 @@
  (global $std/math/DIVBYZERO i32 (i32.const 4))
  (global $std/math/UNDERFLOW i32 (i32.const 8))
  (global $std/math/OVERFLOW i32 (i32.const 16))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 32))
  (memory $0 1)
+ (data (i32.const 4) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func $fmod (; 2 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $fmod (; 3 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -479,7 +482,7 @@
    )
   )
  )
- (func $std/math/check<f64> (; 3 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
+ (func $std/math/check<f64> (; 4 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
   (local $4 f64)
   (local $5 i32)
   (if
@@ -536,7 +539,7 @@
    )
   )
  )
- (func $std/math/test_fmod (; 4 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
+ (func $std/math/test_fmod (; 5 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
   (call $std/math/check<f64>
    (call $fmod
     (get_local $0)
@@ -547,7 +550,7 @@
    (get_local $4)
   )
  )
- (func $fmodf (; 5 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $fmodf (; 6 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -983,7 +986,7 @@
    )
   )
  )
- (func $std/math/check<f32> (; 6 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
+ (func $std/math/check<f32> (; 7 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
   (local $4 f32)
   (local $5 i32)
   (if
@@ -1040,7 +1043,7 @@
    )
   )
  )
- (func $std/math/test_fmodf (; 7 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
+ (func $std/math/test_fmodf (; 8 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
   (call $std/math/check<f32>
    (call $fmodf
     (get_local $0)
@@ -1051,7 +1054,7 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/Math.log" (; 8 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.log" (; 9 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -1364,9 +1367,9 @@
    )
   )
  )
- (func $std/math/test_log (; 9 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
+ (func $std/math/test_log (; 10 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
   (call $std/math/check<f64>
-   (call "$(lib)/math/Math.log"
+   (call "$(lib)/math/NativeMath.log"
     (get_local $0)
    )
    (get_local $1)
@@ -1382,7 +1385,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/Mathf.log" (; 10 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.log" (; 11 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1629,9 +1632,9 @@
    )
   )
  )
- (func $std/math/test_logf (; 11 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
+ (func $std/math/test_logf (; 12 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
   (call $std/math/check<f32>
-   (call "$(lib)/math/Mathf.log"
+   (call "$(lib)/math/NativeMathf.log"
     (get_local $0)
    )
    (get_local $1)
@@ -1639,7 +1642,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/scalbn" (; 12 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func "$(lib)/math/scalbn" (; 13 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (nop)
   (set_local $2
@@ -1760,7 +1763,7 @@
    )
   )
  )
- (func "$(lib)/math/Math.exp" (; 13 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.exp" (; 14 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 f64)
@@ -2009,9 +2012,9 @@
    )
   )
  )
- (func $std/math/test_exp (; 14 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
+ (func $std/math/test_exp (; 15 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
   (call $std/math/check<f64>
-   (call "$(lib)/math/Math.exp"
+   (call "$(lib)/math/NativeMath.exp"
     (get_local $0)
    )
    (get_local $1)
@@ -2027,7 +2030,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/scalbnf" (; 15 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func "$(lib)/math/scalbnf" (; 16 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (nop)
   (set_local $2
@@ -2146,7 +2149,7 @@
    )
   )
  )
- (func "$(lib)/math/Mathf.exp" (; 16 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.exp" (; 17 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2367,9 +2370,9 @@
    )
   )
  )
- (func $std/math/test_expf (; 17 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
+ (func $std/math/test_expf (; 18 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
   (call $std/math/check<f32>
-   (call "$(lib)/math/Mathf.exp"
+   (call "$(lib)/math/NativeMathf.exp"
     (get_local $0)
    )
    (get_local $1)
@@ -2377,14 +2380,14 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/Math.sqrt" (; 18 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.sqrt" (; 19 ;) (type $FF) (param $0 f64) (result f64)
   (return
    (f64.sqrt
     (get_local $0)
    )
   )
  )
- (func "$(lib)/math/Math.pow" (; 19 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func "$(lib)/math/NativeMath.pow" (; 20 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -2782,7 +2785,7 @@
        (i32.const 0)
       )
       (return
-       (call "$(lib)/math/Math.sqrt"
+       (call "$(lib)/math/NativeMath.sqrt"
         (get_local $0)
        )
       )
@@ -3984,9 +3987,9 @@
    )
   )
  )
- (func $std/math/test_pow (; 20 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
+ (func $std/math/test_pow (; 21 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
   (call $std/math/check<f64>
-   (call "$(lib)/math/Math.pow"
+   (call "$(lib)/math/NativeMath.pow"
     (get_local $0)
     (get_local $1)
    )
@@ -3995,7 +3998,7 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/Mathf.pow" (; 21 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.pow" (; 22 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5335,9 +5338,9 @@
    )
   )
  )
- (func $std/math/test_powf (; 22 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
+ (func $std/math/test_powf (; 23 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
   (call $std/math/check<f32>
-   (call "$(lib)/math/Mathf.pow"
+   (call "$(lib)/math/NativeMathf.pow"
     (get_local $0)
     (get_local $1)
    )
@@ -5346,7 +5349,24 @@
    (get_local $4)
   )
  )
- (func $start (; 23 ;) (type $v)
+ (func $start (; 24 ;) (type $v)
+  (if
+   (i32.eqz
+    (f64.eq
+     (f64.const 2.718281828459045)
+     (f64.const 2.718281828459045)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 4)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
   (call $std/math/test_fmod
    (f64.const -8.06684839057968)
    (f64.const 4.535662560676869)

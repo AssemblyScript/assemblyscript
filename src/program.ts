@@ -298,6 +298,15 @@ export class Program extends DiagnosticEmitter {
         );
       }
     }
+
+    // set up global aliases
+    var globalAliases = options.globalAliases;
+    if (globalAliases) {
+      for (let [alias, name] of globalAliases) {
+        let element = this.elementsLookup.get(name); // TODO: error? has no source range
+        if (element) this.elementsLookup.set(alias, element);
+      }
+    }
   }
 
   /** Tries to resolve an import by traversing exports and queued exports. */
@@ -319,8 +328,8 @@ export class Program extends DiagnosticEmitter {
     } while (true);
   }
 
-  /** Processes internal decorators, if present. */
-  private checkInternalDecorators(
+  /** Processes global options, if present. */
+  private checkGlobalOptions(
     element: Element,
     declaration: DeclarationStatement
   ): void {
@@ -469,7 +478,7 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    this.checkInternalDecorators(prototype, declaration);
+    this.checkGlobalOptions(prototype, declaration);
 
     // check and possibly register string type
     if (
@@ -909,7 +918,7 @@ export class Program extends DiagnosticEmitter {
       this.initializeEnumValue(values[i], element);
     }
 
-    this.checkInternalDecorators(element, declaration);
+    this.checkGlobalOptions(element, declaration);
   }
 
   private initializeEnumValue(
@@ -1133,7 +1142,7 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    this.checkInternalDecorators(prototype, declaration);
+    this.checkGlobalOptions(prototype, declaration);
   }
 
   private initializeImports(
@@ -1292,7 +1301,7 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    this.checkInternalDecorators(prototype, declaration);
+    this.checkGlobalOptions(prototype, declaration);
   }
 
   private initializeNamespace(
@@ -1307,7 +1316,7 @@ export class Program extends DiagnosticEmitter {
       namespace = new Namespace(this, simpleName, internalName, declaration);
       namespace.namespace = parentNamespace;
       this.elementsLookup.set(internalName, namespace);
-      this.checkInternalDecorators(namespace, declaration);
+      this.checkGlobalOptions(namespace, declaration);
     }
 
     if (parentNamespace) {
@@ -1472,7 +1481,7 @@ export class Program extends DiagnosticEmitter {
           this.moduleLevelExports.set(internalName, global);
         }
       }
-      this.checkInternalDecorators(global, declaration);
+      this.checkGlobalOptions(global, declaration);
     }
   }
 

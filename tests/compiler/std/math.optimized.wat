@@ -13,6 +13,7 @@
  (import "JSMath" "log" (func $(lib)/math/JSMath.log (param f64) (result f64)))
  (import "JSMath" "exp" (func $(lib)/math/JSMath.exp (param f64) (result f64)))
  (memory $0 1)
+ (data (i32.const 4) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func $fmod (; 2 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -869,7 +870,7 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/Math.log" (; 8 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.log" (; 8 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i64)
@@ -1136,7 +1137,7 @@
  )
  (func $std/math/test_log (; 9 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
   (call $std/math/check<f64>
-   (call "$(lib)/math/Math.log"
+   (call "$(lib)/math/NativeMath.log"
     (get_local $0)
    )
    (get_local $1)
@@ -1152,7 +1153,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/Mathf.log" (; 10 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.log" (; 10 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -1357,7 +1358,7 @@
  )
  (func $std/math/test_logf (; 11 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
   (call $std/math/check<f32>
-   (call "$(lib)/math/Mathf.log"
+   (call "$(lib)/math/NativeMathf.log"
     (get_local $0)
    )
    (get_local $1)
@@ -1479,7 +1480,7 @@
    )
   )
  )
- (func "$(lib)/math/Math.exp" (; 13 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.exp" (; 13 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 f64)
@@ -1694,7 +1695,7 @@
  )
  (func $std/math/test_exp (; 14 ;) (type $FFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32)
   (call $std/math/check<f64>
-   (call "$(lib)/math/Math.exp"
+   (call "$(lib)/math/NativeMath.exp"
     (get_local $0)
    )
    (get_local $1)
@@ -1822,7 +1823,7 @@
    )
   )
  )
- (func "$(lib)/math/Mathf.exp" (; 16 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.exp" (; 16 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -2016,7 +2017,7 @@
  )
  (func $std/math/test_expf (; 17 ;) (type $fffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32)
   (call $std/math/check<f32>
-   (call "$(lib)/math/Mathf.exp"
+   (call "$(lib)/math/NativeMathf.exp"
     (get_local $0)
    )
    (get_local $1)
@@ -2024,12 +2025,12 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/Math.sqrt" (; 18 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.sqrt" (; 18 ;) (type $FF) (param $0 f64) (result f64)
   (f64.sqrt
    (get_local $0)
   )
  )
- (func "$(lib)/math/Math.pow" (; 19 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func "$(lib)/math/NativeMath.pow" (; 19 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -2385,7 +2386,7 @@
          (i32.const 0)
         )
         (return
-         (call "$(lib)/math/Math.sqrt"
+         (call "$(lib)/math/NativeMath.sqrt"
           (get_local $0)
          )
         )
@@ -3450,7 +3451,7 @@
  )
  (func $std/math/test_pow (; 20 ;) (type $FFFFiv) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32)
   (call $std/math/check<f64>
-   (call "$(lib)/math/Math.pow"
+   (call "$(lib)/math/NativeMath.pow"
     (get_local $0)
     (get_local $1)
    )
@@ -3459,7 +3460,7 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/Mathf.pow" (; 21 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.pow" (; 21 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 f32)
   (local $3 f32)
   (local $4 i32)
@@ -4636,7 +4637,7 @@
  )
  (func $std/math/test_powf (; 22 ;) (type $ffffiv) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32)
   (call $std/math/check<f32>
-   (call "$(lib)/math/Mathf.pow"
+   (call "$(lib)/math/NativeMathf.pow"
     (get_local $0)
     (get_local $1)
    )

@@ -58,14 +58,14 @@ import {
   trunc as builtin_trunc
 } from "./builtins";
 
-// Math/Mathf.log/exp/pow
+// NativeMath/NativeMathf.log/exp/pow
 //   Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 //   Developed at SunPro, a Sun Microsystems, Inc. business.
 //   Permission to use, copy, modify, and distribute this
 //   software is freely granted, provided that this notice
 //   is preserved.
 
-export namespace Math {
+export namespace NativeMath {
 
   export const E = 2.7182818284590452354;
   export const LN2 = 0.69314718055994530942;
@@ -468,16 +468,16 @@ export namespace Math {
   }
 }
 
-export namespace Mathf {
+export namespace NativeMathf {
 
-  export const E = <f32>Math.E;
-  export const LN2 = <f32>Math.LN2;
-  export const LN10 = <f32>Math.LN10;
-  export const LOG2E = <f32>Math.LOG2E;
-  export const LOG10E = <f32>Math.LOG10E;
-  export const PI = <f32>Math.PI;
-  export const SQRT1_2 = <f32>Math.SQRT1_2;
-  export const SQRT2 = <f32>Math.SQRT2;
+  export const E = <f32>NativeMath.E;
+  export const LN2 = <f32>NativeMath.LN2;
+  export const LN10 = <f32>NativeMath.LN10;
+  export const LOG2E = <f32>NativeMath.LOG2E;
+  export const LOG10E = <f32>NativeMath.LOG10E;
+  export const PI = <f32>NativeMath.PI;
+  export const SQRT1_2 = <f32>NativeMath.SQRT1_2;
+  export const SQRT2 = <f32>NativeMath.SQRT2;
 
   export function abs(x: f32): f32 {
     return builtin_abs(x);

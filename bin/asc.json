@@ -122,6 +122,14 @@
     ],
     "type": "string"
   },
+  "use": {
+    "desc": [
+      "Aliases a global object under another name, e.g., to switch",
+      "the default 'Math' implementation used: --use Math=JSMath"
+    ],
+    "type": "string",
+    "aliases": [ "u" ]
+  },
   "trapMode": {
     "desc": [
       "Sets the trap mode to use.",

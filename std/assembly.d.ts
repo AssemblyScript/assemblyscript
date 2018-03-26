@@ -353,102 +353,56 @@ declare class Set<T> {
   clear(): void;
 }
 
-declare namespace JSMath {
-  export const E: f64;
-  export const LN2: f64;
-  export const LN10: f64;
-  export const LOG2E: f64;
-  export const LOG10E: f64;
-  export const PI: f64;
-  export const SQRT1_2: f64;
-  export const SQRT2: f64;
-  export function abs(x: f64): f64;
-  export function acos(x: f64): f64;
-  export function acosh(x: f64): f64;
-  export function asin(x: f64): f64;
-  export function asinh(x: f64): f64;
-  export function atan(x: f64): f64;
-  export function atan2(y: f64, x: f64): f64;
-  export function atanh(x: f64): f64;
-  export function cbrt(x: f64): f64;
-  export function ceil(x: f64): f64;
-  export function clz32(x: f64): i32;
-  export function cos(x: f64): f64;
-  export function cosh(x: f64): f64;
-  export function exp(x: f64): f64;
-  export function expm1(x: f64): f64;
-  export function floor(x: f64): f64;
-  export function fround(x: f64): f32;
-  export function hypot(value1: f64, value2: f64): f64; // TODO: see std/math
-  export function imul(a: f64, b: f64): i32;
-  export function log(x: f64): f64;
-  export function log10(x: f64): f64;
-  export function log1p(x: f64): f64;
-  export function log2(x: f64): f64;
-  export function max(value1: f64, value2: f64): f64; // TODO: see std/math
-  export function min(value1: f64, value2: f64): f64; // TODO: see std/math
-  export function pow(base: f64, exponent: f64): f64;
-  export function random(): f64;
-  export function round(x: f64): f64;
-  export function sign(x: f64): f64;
-  export function sin(x: f64): f64;
-  export function sinh(x: f64): f64;
-  export function sqrt(x: f64): f64;
-  export function tan(x: f64): f64;
-  export function tanh(x: f64): f64;
-  export function trunc(x: f64): f64;
+interface IMath<T> {
+  readonly E: T;
+  readonly LN2: T;
+  readonly LN10: T;
+  readonly LOG2E: T;
+  readonly LOG10E: T;
+  readonly PI: T;
+  readonly SQRT1_2: T;
+  readonly SQRT2: T;
+  abs(x: T): T;
+  acos(x: T): T;
+  acosh(x: T): T;
+  asin(x: T): T;
+  asinh(x: T): T;
+  atan(x: T): T;
+  atan2(y: T, x: T): T;
+  atanh(x: T): T;
+  cbrt(x: T): T;
+  ceil(x: T): T;
+  clz32(x: T): i32;
+  cos(x: T): T;
+  cosh(x: T): T;
+  exp(x: T): T;
+  expm1(x: T): T;
+  floor(x: T): T;
+  fround(x: T): f32;
+  hypot(value1: T, value2: T): T; // TODO: rest
+  imul(a: T, b: T): i32;
+  log(x: T): T;
+  log10(x: T): T;
+  log1p(x: T): T;
+  log2(x: T): T;
+  max(value1: T, value2: T): T; // TODO: rest
+  min(value1: T, value2: T): T; // TODO: rest
+  pow(base: T, exponent: T): T;
+  random(): T;
+  round(x: T): T;
+  sign(x: T): T;
+  sin(x: T): T;
+  sinh(x: T): T;
+  sqrt(x: T): T;
+  tan(x: T): T;
+  tanh(x: T): T;
+  trunc(x: T): T;
 }
 
-declare namespace Math {
-  export const E: f64;
-  export const LN2: f64;
-  export const LN10: f64;
-  export const LOG2E: f64;
-  export const LOG10E: f64;
-  export const PI: f64;
-  export const SQRT1_2: f64;
-  export const SQRT2: f64;
-  export function abs(x: f64): f64;
-  export function ceil(x: f64): f64;
-  export function clz32(x: f64): i32;
-  export function exp(x: f64): f64;
-  export function floor(x: f64): f64;
-  export function fround(x: f64): f32;
-  export function imul(a: f64, b: f64): i32;
-  export function log(x: f64): f64;
-  export function max(value1: f64, value2: f64): f64; // TODO: see std/math
-  export function min(value1: f64, value2: f64): f64; // TODO: see std/math
-  export function pow(x: f64, y: f64): f64;
-  export function round(x: f64): f64;
-  export function sign(x: f64): f64;
-  export function sqrt(x: f64): f64;
-  export function trunc(x: f64): f64;
-}
-
-declare namespace Mathf {
-  export const E: f32;
-  export const LN2: f32;
-  export const LN10: f32;
-  export const LOG2E: f32;
-  export const LOG10E: f32;
-  export const PI: f32;
-  export const SQRT1_2: f32;
-  export const SQRT2: f32;
-  export function abs(x: f32): f32;
-  export function exp(x: f32): f32;
-  export function ceil(x: f32): f32;
-  export function clz32(x: f32): i32;
-  export function floor(x: f32): f32;
-  export function imul(a: f32, b: f32): i32;
-  export function log(x: f32): f32;
-  export function max(value1: f32, value2: f32): f32; // TODO: see std/math
-  export function min(value1: f32, value2: f32): f32; // TODO: see std/math
-  export function pow(x: f32, y: f32): f32;
-  export function round(x: f32): f32;
-  export function sign(x: f32): f32;
-  export function sqrt(x: f32): f32;
-  export function trunc(x: f32): f32;
-}
+declare const JSMath: IMath<f64>;
+declare const NativeMath: IMath<f64>;
+declare const NativeMathf: IMath<f32>;
+declare const Math: IMath<f64>;
 
 // Internal decorators
 
