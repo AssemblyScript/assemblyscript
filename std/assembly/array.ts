@@ -41,22 +41,22 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
   var i: i32, j: i32, y: i32, p: i32, a: T, b: T;
 
   if (len > 1) {
-    let blen = (len + 7) >>> 3;
+    let blen = (len + 7) >> 3;
     let bitset = new Array<i32>(blen);
 
     for (i = 0; i < blen; ++i) bitset[i] = 0;
 
     for (i = len - 1; i > 0; i--) {
       j = i;
-      while ((j & 1) === ((bitset[j >>> 4] >>> ((j >>> 1) & 7)) & 1)) {
-        j >>>= 1;
+      while ((j & 1) == ((bitset[j >> 4] >> ((j >> 1) & 7)) & 1)) {
+        j >>= 1;
       }
 
-      p = j >>> 1;
+      p = j >> 1;
       a = arr[p];
       b = arr[i];
       if (comparator(a, b) < 0) {
-        bitset[i >>> 3] ^= 1 << (i & 7);
+        bitset[i >> 3] ^= 1 << (i & 7);
         arr[i] = a;
         arr[p] = b;
       }
@@ -68,7 +68,7 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
       arr[i] = a;
 
       let x = 1;
-      while ((y = (x << 1) + ((bitset[x >>> 3] >>> (x & 7)) & 1)) < i) {
+      while ((y = (x << 1) + ((bitset[x >> 3] >> (x & 7)) & 1)) < i) {
         x = y;
       }
 
@@ -76,11 +76,11 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
         a = arr[0];
         b = arr[x];
         if (comparator(a, b) < 0) {
-          bitset[i >>> 3] ^= 1 << (x & 7);
+          bitset[i >> 3] ^= 1 << (x & 7);
           arr[x] = a;
           arr[0] = b;
         }
-        x >>>= 1;
+        x >>= 1;
       }
     }
 
