@@ -62,15 +62,15 @@ function ulperrf(got: f32, want: f32, dwant: f32): f32 {
 declare function logf(f: f64): void;
 
 function check<T>(actual: T, expected: T, dy: T, flags: i32): bool {
-  if (actual != expected) {
-    let d: T;
-    if (sizeof<T>() == 8) d = ulperr(actual, expected, dy);
-    else if (sizeof<T>() == 4) d = ulperrf(actual, expected, dy);
-    else return false;
-    if (abs<T>(d) >= 1.5) {
-      logf(abs<T>(d));
-      return false;
-    }
+  if (actual == expected) return true;
+  if (isNaN(expected)) return isNaN(actual);
+  var d: T;
+  if (sizeof<T>() == 8) d = ulperr(actual, expected, dy);
+  else if (sizeof<T>() == 4) d = ulperrf(actual, expected, dy);
+  else return false;
+  if (abs<T>(d) >= 1.5) {
+    logf(abs<T>(d));
+    return false;
   }
   return true;
 }
@@ -1365,9 +1365,8 @@ assert(test_log2f(NaN, NaN, 0.0, 0));
 // === Math.pow ================================
 
 function test_pow(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
-  return  check<f64>(NativeMath.pow(left, right), expected, error, flags);
-  // FIXME: JS (node 8) has different results in the tests marked below
-  // (!JS || check<f64>(    JSMath.pow(left, right), expected, error, flags));
+  return  check<f64>(NativeMath.pow(left, right), expected, error, flags) &&
+  (!JS || check<f64>(    JSMath.pow(left, right), expected, error, flags));
 }
 
 // sanity
@@ -1424,16 +1423,16 @@ assert(test_pow(1.0, -0.0, 1.0, 0.0, 0));
 assert(test_pow(-1.0, -0.0, 1.0, 0.0, 0));
 assert(test_pow(-0.5, -0.0, 1.0, 0.0, 0));
 assert(test_pow(-1.0, NaN, NaN, 0.0, 0));
-assert(test_pow(-1.0, Infinity, 1.0, 0.0, 0));  // JS: NaN
-assert(test_pow(-1.0, -Infinity, 1.0, 0.0, 0)); // JS: NaN
+assert(test_pow(-1.0, Infinity, NaN, 0.0, 0));  // C: 1.0, JS: NaN
+assert(test_pow(-1.0, -Infinity, NaN, 0.0, 0)); // C: 1.0, JS: NaN
 assert(test_pow(-1.0, 2.0, 1.0, 0.0, 0));
 assert(test_pow(-1.0, -1.0, -1.0, 0.0, 0));
 assert(test_pow(-1.0, -2.0, 1.0, 0.0, 0));
 assert(test_pow(-1.0, -3.0, -1.0, 0.0, 0));
 assert(test_pow(-1.0, 0.5, NaN, 0.0, INVALID));
-assert(test_pow(1.0, NaN, 1.0, 0.0, 0));        // JS: NaN
-assert(test_pow(1.0, Infinity, 1.0, 0.0, 0));   // JS: NaN
-assert(test_pow(1.0, -Infinity, 1.0, 0.0, 0));  // JS: NaN
+assert(test_pow(1.0, NaN, NaN, 0.0, 0));        // C: 1.0, JS: NaN
+assert(test_pow(1.0, Infinity, NaN, 0.0, 0));   // C: 1.0, JS: NaN
+assert(test_pow(1.0, -Infinity, NaN, 0.0, 0));  // C: 1.0, JS: NaN
 assert(test_pow(1.0, 3.0, 1.0, 0.0, 0));
 assert(test_pow(1.0, 0.5, 1.0, 0.0, 0));
 assert(test_pow(1.0, -0.5, 1.0, 0.0, 0));
@@ -1536,16 +1535,16 @@ assert(test_powf(1.0, -0.0, 1.0, 0.0, 0));
 assert(test_powf(-1.0, -0.0, 1.0, 0.0, 0));
 assert(test_powf(-0.5, -0.0, 1.0, 0.0, 0));
 assert(test_powf(-1.0, NaN, NaN, 0.0, 0));
-assert(test_powf(-1.0, Infinity, 1.0, 0.0, 0));
-assert(test_powf(-1.0, -Infinity, 1.0, 0.0, 0));
+assert(test_powf(-1.0, Infinity, NaN, 0.0, 0));  // C: 1.0, JS: NaN
+assert(test_powf(-1.0, -Infinity, NaN, 0.0, 0)); // C: 1.0, JS: NaN
 assert(test_powf(-1.0, 2.0, 1.0, 0.0, 0));
 assert(test_powf(-1.0, -1.0, -1.0, 0.0, 0));
 assert(test_powf(-1.0, -2.0, 1.0, 0.0, 0));
 assert(test_powf(-1.0, -3.0, -1.0, 0.0, 0));
 assert(test_powf(-1.0, 0.5, NaN, 0.0, INVALID));
-assert(test_powf(1.0, NaN, 1.0, 0.0, 0));
-assert(test_powf(1.0, Infinity, 1.0, 0.0, 0));
-assert(test_powf(1.0, -Infinity, 1.0, 0.0, 0));
+assert(test_powf(1.0, NaN, NaN, 0.0, 0));        // C: 1.0, JS: NaN
+assert(test_powf(1.0, Infinity, NaN, 0.0, 0));   // C: 1.0, JS: NaN
+assert(test_powf(1.0, -Infinity, NaN, 0.0, 0));  // C: 1.0, JS: NaN
 assert(test_powf(1.0, 3.0, 1.0, 0.0, 0));
 assert(test_powf(1.0, 0.5, 1.0, 0.0, 0));
 assert(test_powf(1.0, -0.5, 1.0, 0.0, 0));

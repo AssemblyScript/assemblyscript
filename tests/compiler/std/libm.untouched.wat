@@ -5163,27 +5163,6 @@
    (i32.and
     (if (result i32)
      (tee_local $9
-      (i32.eq
-       (get_local $3)
-       (i32.const 1072693248)
-      )
-     )
-     (i32.eq
-      (get_local $4)
-      (i32.const 0)
-     )
-     (get_local $9)
-    )
-    (i32.const 1)
-   )
-   (return
-    (f64.const 1)
-   )
-  )
-  (if
-   (i32.and
-    (if (result i32)
-     (tee_local $9
       (i32.and
        (if (result i32)
         (tee_local $9
@@ -5380,7 +5359,7 @@
        (i32.const 0)
       )
       (return
-       (f64.const 1)
+       (f64.const nan:0x8000000000000)
       )
       (if
        (i32.ge_s

@@ -865,9 +865,9 @@ export namespace NativeMath {
     var ly = <u32>u_;
     var ix = hx & 0x7FFFFFFF;
     var iy = hy & 0x7FFFFFFF;
-    if ((iy | ly) == 0) return 1.0;
-    if (hx == 0x3FF00000 && lx == 0) return 1.0;
-    if (
+    if ((iy | ly) == 0) return 1.0; // x**0 = 1, even if x is NaN
+    // if (hx == 0x3FF00000 && lx == 0) return 1.0; // C: 1**y = 1, even if y is NaN, JS: NaN
+    if ( // NaN if either arg is NaN
       ix > 0x7FF00000 || (ix == 0x7FF00000 && lx != 0) ||
       iy > 0x7FF00000 || (iy == 0x7FF00000 && ly != 0)
     ) return x + y;
@@ -886,10 +886,10 @@ export namespace NativeMath {
       }
     }
     if (ly == 0) {
-      if (iy == 0x7FF00000) {
-        if (((ix - 0x3FF00000) | lx) == 0) return 1.0;
-        else if (ix >= 0x3FF00000) return hy >= 0 ? y : 0.0;
-        else return hy >= 0 ? 0.0 : -y;
+      if (iy == 0x7FF00000) { // y is +-inf
+        if (((ix - 0x3FF00000) | lx) == 0) return NaN; // C: (-1)**+-inf is 1, JS: NaN
+        else if (ix >= 0x3FF00000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
+        else return hy >= 0 ? 0.0 : -y; // (|x|<1)**+-inf = 0,inf
       }
       if (iy == 0x3FF00000) {
         if (hy >= 0) return x;
@@ -1872,9 +1872,9 @@ export namespace NativeMathf {
     var hy = reinterpret<i32>(y);
     var ix = hx & 0x7FFFFFFF;
     var iy = hy & 0x7FFFFFFF;
-    if (iy == 0) return 1.0;
-    if (hx == 0x3F800000) return 1.0;
-    if (ix > 0x7F800000 || iy > 0x7F800000) return x + y;
+    if (iy == 0) return 1.0; // x**0 = 1, even if x is NaN
+    // if (hx == 0x3F800000) return 1.0; // C: 1**y = 1, even if y is NaN, JS: NaN
+    if (ix > 0x7F800000 || iy > 0x7F800000) return x + y; // NaN if either arg is NaN
     var yisint  = 0, j: i32, k: i32;
     if (hx < 0) {
       if (iy >= 0x4B800000) yisint = 2;
@@ -1884,10 +1884,10 @@ export namespace NativeMathf {
         if ((j << (23 - k)) == iy) yisint = 2 - (j & 1);
       }
     }
-    if (iy == 0x7F800000) {
-      if (ix == 0x3F800000) return 1.0;
-      else if (ix > 0x3F800000) return hy >= 0 ? y : 0.0;
-      else return hy >= 0 ? 0.0 : -y;
+    if (iy == 0x7F800000) { // y is +-inf
+      if (ix == 0x3F800000) return NaN; // C: (-1)**+-inf is 1, JS: NaN
+      else if (ix > 0x3F800000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
+      else return hy >= 0 ? 0.0 : -y; // (|x|<1)**+-inf = 0,inf
     }
     if (iy == 0x3F800000) return hy >= 0 ? x : 1.0 / x;
     if (hy == 0x40000000) return x * x;
