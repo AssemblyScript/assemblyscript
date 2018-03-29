@@ -31,8 +31,8 @@
  (global $std/array/unsorted1024 (mut i32) (i32.const 0))
  (global $std/array/unsorted65536 (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 148))
- (table 25 25 anyfunc)
- (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 "$(lib)/array/createDefaultComparator<i32>~anonymous|23" $std/array/createDefaultComparator<i32>~anonymous|24)
+ (table 24 24 anyfunc)
+ (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $std/array/createDefaultComparator<i32>~anonymous|23)
  (memory $0 1)
  (data (i32.const 4) "\0c\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 32) "\0e\00\00\00(\00l\00i\00b\00)\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -4234,7 +4234,24 @@
    (get_local $1)
   )
  )
- (func "$(lib)/array/conditionalSwap<i32>" (; 50 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/array/createDefaultComparator<i32>~anonymous|23 (; 50 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (i32.sub
+   (i32.gt_s
+    (get_local $0)
+    (get_local $1)
+   )
+   (i32.lt_s
+    (get_local $0)
+    (get_local $1)
+   )
+  )
+ )
+ (func $std/array/createDefaultComparator<i32> (; 51 ;) (type $i) (result i32)
+  (return
+   (i32.const 23)
+  )
+ )
+ (func "$(lib)/array/conditionalSwap<i32>" (; 52 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (set_local $4
@@ -4280,7 +4297,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/array/insertionSort<i32>" (; 51 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/insertionSort<i32>" (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4395,7 +4412,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/array/weakHeapSort<i32>" (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/weakHeapSort<i32>" (; 54 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4798,7 +4815,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/array/sort<i32>" (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/sort<i32>" (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call "$(lib)/array/Array<i32>#get:length"
@@ -4847,7 +4864,7 @@
    )
   )
  )
- (func "$(lib)/array/Array<i32>#sort" (; 54 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/Array<i32>#sort" (; 56 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (call "$(lib)/array/sort<i32>"
     (get_local $0)
@@ -4855,43 +4872,7 @@
    )
   )
  )
- (func "$(lib)/array/createDefaultComparator<i32>~anonymous|23" (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.sub
-   (i32.gt_s
-    (get_local $0)
-    (get_local $1)
-   )
-   (i32.lt_s
-    (get_local $0)
-    (get_local $1)
-   )
-  )
- )
- (func "$(lib)/array/createDefaultComparator<i32>" (; 56 ;) (type $i) (result i32)
-  (return
-   (i32.const 23)
-  )
- )
- (func "$(lib)/array/Array<i32>#sort|trampoline" (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (get_global $argumentCount)
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    (call "$(lib)/array/createDefaultComparator<i32>")
-   )
-  )
-  (call "$(lib)/array/Array<i32>#sort"
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $std/array/isSorted<i32> (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<i32> (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (block $break|0
@@ -4956,46 +4937,7 @@
    (i32.const 1)
   )
  )
- (func $std/array/createDefaultComparator<i32>~anonymous|24 (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.sub
-   (i32.gt_s
-    (get_local $0)
-    (get_local $1)
-   )
-   (i32.lt_s
-    (get_local $0)
-    (get_local $1)
-   )
-  )
- )
- (func $std/array/createDefaultComparator<i32> (; 60 ;) (type $i) (result i32)
-  (return
-   (i32.const 24)
-  )
- )
- (func $std/array/isSorted<i32>|trampoline (; 61 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (i32.sub
-       (get_global $argumentCount)
-       (i32.const 1)
-      )
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    (call $std/array/createDefaultComparator<i32>)
-   )
-  )
-  (call $std/array/isSorted<i32>
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $start (; 62 ;) (type $v)
+ (func $start (; 58 ;) (type $v)
   (set_global "$(lib)/allocator/arena/startOffset"
    (i32.and
     (i32.add
@@ -7521,22 +7463,12 @@
   )
   (if
    (i32.eqz
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 1)
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted0)
+      (call $std/array/createDefaultComparator<i32>)
      )
-     (call $std/array/isSorted<i32>|trampoline
-      (block (result i32)
-       (set_global $argumentCount
-        (i32.const 0)
-       )
-       (call "$(lib)/array/Array<i32>#sort|trampoline"
-        (get_global $std/array/unsorted0)
-        (i32.const 0)
-       )
-      )
-      (i32.const 0)
-     )
+     (call $std/array/createDefaultComparator<i32>)
     )
    )
    (block
@@ -7551,22 +7483,12 @@
   )
   (if
    (i32.eqz
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 1)
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted1)
+      (call $std/array/createDefaultComparator<i32>)
      )
-     (call $std/array/isSorted<i32>|trampoline
-      (block (result i32)
-       (set_global $argumentCount
-        (i32.const 0)
-       )
-       (call "$(lib)/array/Array<i32>#sort|trampoline"
-        (get_global $std/array/unsorted1)
-        (i32.const 0)
-       )
-      )
-      (i32.const 0)
-     )
+     (call $std/array/createDefaultComparator<i32>)
     )
    )
    (block
@@ -7581,22 +7503,12 @@
   )
   (if
    (i32.eqz
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 1)
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted2)
+      (call $std/array/createDefaultComparator<i32>)
      )
-     (call $std/array/isSorted<i32>|trampoline
-      (block (result i32)
-       (set_global $argumentCount
-        (i32.const 0)
-       )
-       (call "$(lib)/array/Array<i32>#sort|trampoline"
-        (get_global $std/array/unsorted2)
-        (i32.const 0)
-       )
-      )
-      (i32.const 0)
-     )
+     (call $std/array/createDefaultComparator<i32>)
     )
    )
    (block
@@ -7611,22 +7523,12 @@
   )
   (if
    (i32.eqz
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 1)
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted4)
+      (call $std/array/createDefaultComparator<i32>)
      )
-     (call $std/array/isSorted<i32>|trampoline
-      (block (result i32)
-       (set_global $argumentCount
-        (i32.const 0)
-       )
-       (call "$(lib)/array/Array<i32>#sort|trampoline"
-        (get_global $std/array/unsorted4)
-        (i32.const 0)
-       )
-      )
-      (i32.const 0)
-     )
+     (call $std/array/createDefaultComparator<i32>)
     )
    )
    (block
@@ -7641,22 +7543,12 @@
   )
   (if
    (i32.eqz
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 1)
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted64)
+      (call $std/array/createDefaultComparator<i32>)
      )
-     (call $std/array/isSorted<i32>|trampoline
-      (block (result i32)
-       (set_global $argumentCount
-        (i32.const 0)
-       )
-       (call "$(lib)/array/Array<i32>#sort|trampoline"
-        (get_global $std/array/unsorted64)
-        (i32.const 0)
-       )
-      )
-      (i32.const 0)
-     )
+     (call $std/array/createDefaultComparator<i32>)
     )
    )
    (block
@@ -7671,22 +7563,12 @@
   )
   (if
    (i32.eqz
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 1)
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted128)
+      (call $std/array/createDefaultComparator<i32>)
      )
-     (call $std/array/isSorted<i32>|trampoline
-      (block (result i32)
-       (set_global $argumentCount
-        (i32.const 0)
-       )
-       (call "$(lib)/array/Array<i32>#sort|trampoline"
-        (get_global $std/array/unsorted128)
-        (i32.const 0)
-       )
-      )
-      (i32.const 0)
-     )
+     (call $std/array/createDefaultComparator<i32>)
     )
    )
    (block
@@ -7694,66 +7576,6 @@
      (i32.const 0)
      (i32.const 4)
      (i32.const 370)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 1)
-     )
-     (call $std/array/isSorted<i32>|trampoline
-      (block (result i32)
-       (set_global $argumentCount
-        (i32.const 0)
-       )
-       (call "$(lib)/array/Array<i32>#sort|trampoline"
-        (get_global $std/array/unsorted1024)
-        (i32.const 0)
-       )
-      )
-      (i32.const 0)
-     )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 371)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 1)
-     )
-     (call $std/array/isSorted<i32>|trampoline
-      (block (result i32)
-       (set_global $argumentCount
-        (i32.const 0)
-       )
-       (call "$(lib)/array/Array<i32>#sort|trampoline"
-        (get_global $std/array/unsorted65536)
-        (i32.const 0)
-       )
-      )
-      (i32.const 0)
-     )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 372)
      (i32.const 0)
     )
     (unreachable)
