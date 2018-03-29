@@ -1,15 +1,14 @@
 import "allocator/arena";
-import { Comparator } from "../../../std/assembly/sort";
 
 // Default comparator
-function createDefaultComparator<T>(): Comparator<T> {
+function createDefaultComparator<T>(): (a: T, b: T) => i32 {
   return (a: T, b: T): i32 => (
     <i32>(a > b) - <i32>(a < b)
   );
 }
 
 // Check is array sorted
-function isSorted<T>(data: Array<T>, comparator: Comparator<T> = createDefaultComparator<T>()): bool {
+function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = createDefaultComparator<T>()): bool {
   for (let i: i32 = 1, len: i32 = data.length; i < len; i++) {
     if (comparator(data[i - 1], data[i]) > 0) {
       return false;

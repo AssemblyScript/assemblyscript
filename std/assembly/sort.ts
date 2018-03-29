@@ -2,9 +2,7 @@
   http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.21.1863&rep=rep1&type=pdf
 */
 
-export type Comparator<T> = (a: T, b: T) => i32;
-
-function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: Comparator<T>): Array<T> {
+function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: (a: T, b: T) => i32): Array<T> {
   var a = arr[i];
   var b = arr[j];
   if (comparator(a, b) < 0) {
@@ -14,7 +12,7 @@ function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: Comparato
   return arr;
 }
 
-function insertionSort<T>(arr: Array<T>, comparator: Comparator<T>): Array<T> {
+function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var a: T, b: T, j: i32;
   for (let i: i32 = 0, len: i32 = arr.length; i < len; i++) {
     a = arr[i];
@@ -33,7 +31,7 @@ function insertionSort<T>(arr: Array<T>, comparator: Comparator<T>): Array<T> {
   return arr;
 }
 
-function weakHeapSort<T>(arr: Array<T>, comparator: Comparator<T>): Array<T> {
+function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var len: i32 = arr.length;
   var i: i32, j: i32, y: i32, p: i32, a: T, b: T;
 
@@ -89,7 +87,7 @@ function weakHeapSort<T>(arr: Array<T>, comparator: Comparator<T>): Array<T> {
   return arr;
 }
 
-export function sort<T>(arr: Array<T>, comparator: Comparator<T>): Array<T> {
+export function sort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var len = arr.length;
 
   if (len <= 1)   return arr;

@@ -1,7 +1,7 @@
-import { sort, Comparator } from "./sort";
+import { sort } from "./sort";
 
 // TODO remove this wrapper when indirect table landed
-function createDefaultComparator<T>(): Comparator<T> {
+function createDefaultComparator<T>(): (a: T, b: T) => i32 {
   return (a: T, b: T): i32 => (
     <i32>(a > b) - <i32>(a < b)
   );
