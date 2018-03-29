@@ -19,11 +19,14 @@
  (global $std/array/every (mut i32) (i32.const 0))
  (global $std/array/some (mut i32) (i32.const 0))
  (global $std/array/boolVal (mut i32) (i32.const 0))
+ (global $std/array/unsorted0 (mut i32) (i32.const 64))
+ (global $std/array/unsorted1 (mut i32) (i32.const 80))
+ (global $std/array/unsorted2 (mut i32) (i32.const 96))
+ (global $std/array/unsorted4 (mut i32) (i32.const 120))
  (global $std/array/unsorted64 (mut i32) (i32.const 0))
  (global $std/array/unsorted128 (mut i32) (i32.const 0))
  (global $std/array/unsorted1024 (mut i32) (i32.const 0))
  (global $std/array/unsorted65536 (mut i32) (i32.const 0))
- (global $std/array/res (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 148))
  (table 24 24 anyfunc)
  (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|2 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|16 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|16 $start~anonymous|22 $std/array/createDefaultComparator<i32>~anonymous|23)
@@ -4143,14 +4146,14 @@
             (call "$(lib)/array/Array<i32>#__set"
              (get_local $5)
              (i32.shr_s
-              (get_local $3)
+              (get_local $2)
               (i32.const 3)
              )
              (i32.xor
               (call "$(lib)/array/Array<i32>#__get"
                (get_local $5)
                (i32.shr_s
-                (get_local $3)
+                (get_local $2)
                 (i32.const 3)
                )
               )
@@ -4270,7 +4273,64 @@
    (get_local $1)
   )
  )
- (func $start (; 53 ;) (type $v)
+ (func $std/array/isSorted<i32> (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (set_local $2
+   (i32.const 1)
+  )
+  (set_local $3
+   (call "$(lib)/array/Array<i32>#get:length"
+    (get_local $0)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.lt_s
+     (get_local $2)
+     (get_local $3)
+    )
+    (block
+     (if
+      (block (result i32)
+       (set_global $argumentCount
+        (i32.const 2)
+       )
+       (i32.gt_s
+        (call_indirect (type $iii)
+         (call "$(lib)/array/Array<i32>#__get"
+          (get_local $0)
+          (i32.sub
+           (get_local $2)
+           (i32.const 1)
+          )
+         )
+         (call "$(lib)/array/Array<i32>#__get"
+          (get_local $0)
+          (get_local $2)
+         )
+         (get_local $1)
+        )
+        (i32.const 0)
+       )
+      )
+      (return
+       (i32.const 0)
+      )
+     )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.const 1)
+ )
+ (func $start (; 54 ;) (type $v)
   (set_global "$(lib)/allocator/arena/startOffset"
    (i32.and
     (i32.add
@@ -6531,40 +6591,161 @@
     (i32.const 65536)
    )
   )
-  (set_global $std/array/res
-   (call "$(lib)/array/Array<i32>#sort"
-    (get_global $std/array/unsorted65536)
-    (call $std/array/createDefaultComparator<i32>)
-   )
-  )
   (if
-   (call "$(lib)/array/Array<i32>#__get"
-    (get_global $std/array/res)
-    (i32.const 0)
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted0)
+      (call $std/array/createDefaultComparator<i32>)
+     )
+     (call $std/array/createDefaultComparator<i32>)
+    )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 373)
+     (i32.const 364)
      (i32.const 0)
     )
     (unreachable)
    )
   )
   (if
-   (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
-     (get_global $std/array/res)
-     (i32.const 1)
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted1)
+      (call $std/array/createDefaultComparator<i32>)
+     )
+     (call $std/array/createDefaultComparator<i32>)
     )
-    (i32.const 1)
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 374)
+     (i32.const 365)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted2)
+      (call $std/array/createDefaultComparator<i32>)
+     )
+     (call $std/array/createDefaultComparator<i32>)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 366)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted4)
+      (call $std/array/createDefaultComparator<i32>)
+     )
+     (call $std/array/createDefaultComparator<i32>)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 367)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted64)
+      (call $std/array/createDefaultComparator<i32>)
+     )
+     (call $std/array/createDefaultComparator<i32>)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 369)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted128)
+      (call $std/array/createDefaultComparator<i32>)
+     )
+     (call $std/array/createDefaultComparator<i32>)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 370)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted1024)
+      (call $std/array/createDefaultComparator<i32>)
+     )
+     (call $std/array/createDefaultComparator<i32>)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 371)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call "$(lib)/array/Array<i32>#sort"
+      (get_global $std/array/unsorted65536)
+      (call $std/array/createDefaultComparator<i32>)
+     )
+     (call $std/array/createDefaultComparator<i32>)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 372)
      (i32.const 0)
     )
     (unreachable)

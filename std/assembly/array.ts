@@ -76,7 +76,7 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
         a = arr[0];
         b = arr[x];
         if (comparator(a, b) < 0) {
-          bitset[i >> 3] ^= 1 << (x & 7);
+          bitset[x >> 3] ^= 1 << (x & 7);
           arr[x] = a;
           arr[0] = b;
         }
