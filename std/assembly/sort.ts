@@ -1,4 +1,4 @@
-/* Weak Heap Sort implamentation based on paper:
+/* Weak Heap Sort implementation based on paper:
   http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.21.1863&rep=rep1&type=pdf
 */
 
