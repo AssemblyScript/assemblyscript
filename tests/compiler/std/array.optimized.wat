@@ -46,7 +46,7 @@
  (data (i32.const 96) "l")
  (data (i32.const 112) "|\00\00\00\01\00\00\00\01\00\00\00\01")
  (data (i32.const 128) "\8c\00\00\00\02\00\00\00\02\00\00\00\02\00\00\00\01")
- (data (i32.const 152) "\a4\00\00\00\04\00\00\00\04\00\00\00\04\00\00\00\01\00\00\00\02\00\00\00\03")
+ (data (i32.const 152) "\a4\00\00\00\04\00\00\00\04\00\00\00\04\00\00\00\03\00\00\00\02\00\00\00\01")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -2079,7 +2079,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 64)
-     (i32.const 112)
+     (i32.const 9)
      (i32.const 4)
     )
     (unreachable)
@@ -2274,7 +2274,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 64)
-       (i32.const 310)
+       (i32.const 207)
        (i32.const 6)
       )
       (unreachable)
