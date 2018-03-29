@@ -17,12 +17,12 @@ function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = createDef
   return true;
 }
 
-function createReverseOrderArray<T>(size: i32): Array<T> {
-  var array = new Array<T>(size);
-  for (let i = 0; i < array.length; i++) {
-    array[i] = unsorted128.length - 1 - i;
+function createReverseOrderArray(size: i32): Array<i32> {
+  var arr = new Array<i32>(size);
+  for (let i: i32 = 0; i < <i32>(arr.length); i++) {
+    arr[i] = <i32>arr.length - 1 - i;
   }
-  return array;
+  return arr;
 }
 
 var arr = changetype<i32[]>(allocate_memory(sizeof<usize>() + 2 * sizeof<i32>()));
@@ -351,15 +351,15 @@ assert(arr.length == 2);
 
 /*=============================== sort ==========================*/
 
-const unsorted0: Array<i32> = [];
-const unsorted1: Array<i32> = [1];
-const unsorted2: Array<i32> = [2, 1];
-const unsorted4: Array<i32> = [4, 1, 2, 3];
+var unsorted0: Array<i32> = [];
+var unsorted1: Array<i32> = [1];
+var unsorted2: Array<i32> = [2, 1];
+var unsorted4: Array<i32> = [4, 1, 2, 3];
 
-const unsorted64    = createReverseOrderArray(64);
-const unsorted128   = createReverseOrderArray(128);
-const unsorted1024  = createReverseOrderArray(1024);
-const unsorted65536 = createReverseOrderArray(1 << 16);
+var unsorted64    = createReverseOrderArray(64);
+var unsorted128   = createReverseOrderArray(128);
+var unsorted1024  = createReverseOrderArray(1024);
+var unsorted65536 = createReverseOrderArray(1 << 16);
 
 assert(isSorted<i32>(unsorted0.sort<i32>()));
 assert(isSorted<i32>(unsorted1.sort<i32>()));

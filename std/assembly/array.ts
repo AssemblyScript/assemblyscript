@@ -1,5 +1,12 @@
 // import { sort } from "./sort";
 
+// TODO remove this wrapper when indirect table landed
+function createDefaultComparator<T>(): (a: T, b: T) => i32 {
+  return (a: T, b: T): i32 => (
+    <i32>(a > b) - <i32>(a < b)
+  );
+}
+
 function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: (a: T, b: T) => i32): Array<T> {
   var a = arr[i];
   var b = arr[j];
@@ -93,13 +100,6 @@ function sort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   if (len <= 256) return insertionSort<T>(arr, comparator);
 
   return weakHeapSort<T>(arr, comparator);
-}
-
-// TODO remove this wrapper when indirect table landed
-function createDefaultComparator<T>(): (a: T, b: T) => i32 {
-  return (a: T, b: T): i32 => (
-    <i32>(a > b) - <i32>(a < b)
-  );
 }
 
 export class Array<T> {
