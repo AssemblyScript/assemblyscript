@@ -113,7 +113,7 @@ tests.forEach(filename => {
           let exports = new WebAssembly.Instance(new WebAssembly.Module(stdout.toBuffer()), {
             env: {
               abort: function(msg, file, line, column) {
-                // TODO
+                console.log("abort called at " + line + ":" + column);
               },
               externalFunction: function() { },
               externalConstant: 1,

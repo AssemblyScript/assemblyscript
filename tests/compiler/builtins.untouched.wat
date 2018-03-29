@@ -2,6 +2,8 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $v (func))
+ (type $f (func (result f32)))
+ (type $F (func (result f64)))
  (type $FFF (func (param f64 f64) (result f64)))
  (type $fff (func (param f32 f32) (result f32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))

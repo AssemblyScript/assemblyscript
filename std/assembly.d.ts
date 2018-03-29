@@ -391,7 +391,7 @@ interface IMath<T> {
   /** Returns the smallest integer greater than or equal to `x`. */
   ceil(x: T): T;
   /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. */
-  clz32(x: T): i32;
+  clz32(x: T): T;
   /** Returns the cosine (in radians) of `x`. */
   cos(x: T): T;
   /** Returns the hyperbolic cosine of `x`. */
@@ -407,7 +407,7 @@ interface IMath<T> {
   /** Returns the square root of the sum of squares of its arguments. */
   hypot(value1: T, value2: T): T; // TODO: rest
   /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
-  imul(a: T, b: T): i32;
+  imul(a: T, b: T): T;
   /** Returns the natural logarithm (base e) of `x`. */
   log(x: T): T;
   /** Returns the base 10 logarithm of `x`. */
