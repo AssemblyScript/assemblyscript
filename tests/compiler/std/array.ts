@@ -1,4 +1,30 @@
 import "allocator/arena";
+import { Comparator } from "../../../std/assembly/sort";
+
+// Default comparator
+function createDefaultComparator<T>(): Comparator<T> {
+  return (a: T, b: T): i32 => (
+    <i32>(a > b) - <i32>(a < b)
+  );
+}
+
+// Check is array sorted
+function isSorted<T>(data: Array<T>, comparator: Comparator<T> = createDefaultComparator<T>()): bool {
+  for (let i: i32 = 1, len: i32 = data.length; i < len; i++) {
+    if (comparator(data[i - 1], data[i]) > 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function createReverseOrderArray<T>(size: i32): Array<T> {
+  var array = new Array<T>(size);
+  for (let i = 0; i < array.length; i++) {
+    array[i] = unsorted128.length - 1 - i;
+  }
+  return array;
+}
 
 var arr = changetype<i32[]>(allocate_memory(sizeof<usize>() + 2 * sizeof<i32>()));
 
@@ -323,3 +349,25 @@ i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i
 // only 2 first items was reduced, since last 2 was removed by .pop()
 assert(i == 1);
 assert(arr.length == 2);
+
+/*=============================== sort ==========================*/
+
+const unsorted0: Array<i32> = [];
+const unsorted1: Array<i32> = [1];
+const unsorted2: Array<i32> = [2, 1];
+const unsorted4: Array<i32> = [4, 1, 2, 3];
+
+const unsorted64    = createReverseOrderArray(64);
+const unsorted128   = createReverseOrderArray(128);
+const unsorted1024  = createReverseOrderArray(1024);
+const unsorted65536 = createReverseOrderArray(1 << 16);
+
+assert(isSorted<i32>(unsorted0.sort<i32>()));
+assert(isSorted<i32>(unsorted1.sort<i32>()));
+assert(isSorted<i32>(unsorted2.sort<i32>()));
+assert(isSorted<i32>(unsorted4.sort<i32>()));
+
+assert(isSorted<i32>(unsorted64.sort<i32>()));
+assert(isSorted<i32>(unsorted128.sort<i32>()));
+assert(isSorted<i32>(unsorted1024.sort<i32>()));
+assert(isSorted<i32>(unsorted65536.sort<i32>()));

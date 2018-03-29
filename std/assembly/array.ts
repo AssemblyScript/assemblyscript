@@ -1,3 +1,12 @@
+import { sort, Comparator } from "./sort";
+
+// TODO remove this wrapper when indirect table landed
+function createDefaultComparator<T>(): Comparator<T> {
+  return (a: T, b: T): i32 => (
+    <i32>(a > b) - <i32>(a < b)
+  );
+}
+
 export class Array<T> {
 
   private __memory: usize;
@@ -286,6 +295,10 @@ export class Array<T> {
       store<T>(this.__memory + back * sizeof<T>(), temp);
     }
     return this;
+  }
+
+  sort(comparator: (a: T, b: T) => bool = createDefaultComparator<T>()): Array<T> {
+    return sort<T>(this, comparator);
   }
 }
 
