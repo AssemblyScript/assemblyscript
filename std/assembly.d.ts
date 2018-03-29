@@ -135,6 +135,10 @@ declare namespace f32 {
   export const MAX_SAFE_INTEGER: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
+  /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
+  export function mod(x: f32, y: f32): f32;
+  /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
+  export function rem(x: f32, y: f32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
@@ -442,17 +446,21 @@ interface IMath<T> {
   trunc(x: T): T;
 }
 
-interface ISeedRandom {
+interface INativeMath<T> extends IMath<T> {
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
+  /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
+  mod(x: T, y: T): T;
+  /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
+  rem(x: T, y: T): T;
 }
 
 /** Double precision math imported from JavaScript. */
 declare const JSMath: IMath<f64>;
 /** Double precision math implemented natively. */
-declare const NativeMath: IMath<f64> & ISeedRandom;
+declare const NativeMath: INativeMath<f64>;
 /** Single precision math implemented natively. */
-declare const NativeMathf: IMath<f32>;
+declare const NativeMathf: INativeMath<f32>;
 /** Alias of {@link NativeMath} or {@link JSMath} respectively. Defaults to `NativeMath`. */
 declare const Math: IMath<f64>;
 

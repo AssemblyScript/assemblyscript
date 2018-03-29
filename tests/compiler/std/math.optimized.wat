@@ -20,7 +20,6 @@
  (type $ff (func (param f32) (result f32)))
  (type $Iv (func (param i64)))
  (type $II (func (param i64) (result i64)))
- (type $I (func (result i64)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (import "JSMath" "E" (global $(lib)/math/JSMath.E f64))
@@ -31,6 +30,7 @@
  (import "JSMath" "PI" (global $(lib)/math/JSMath.PI f64))
  (import "JSMath" "SQRT1_2" (global $(lib)/math/JSMath.SQRT1_2 f64))
  (import "JSMath" "SQRT2" (global $(lib)/math/JSMath.SQRT2 f64))
+ (import "JSOp" "mod" (func $std/math/JSOp.mod (param f64 f64) (result f64)))
  (import "JSMath" "abs" (func $(lib)/math/JSMath.abs (param f64) (result f64)))
  (import "JSMath" "acos" (func $(lib)/math/JSMath.acos (param f64) (result f64)))
  (import "JSMath" "acosh" (func $(lib)/math/JSMath.acosh (param f64) (result f64)))
@@ -51,15 +51,15 @@
  (import "JSMath" "sinh" (func $(lib)/math/JSMath.sinh (param f64) (result f64)))
  (import "JSMath" "sqrt" (func $(lib)/math/JSMath.sqrt (param f64) (result f64)))
  (import "JSMath" "tanh" (func $(lib)/math/JSMath.tanh (param f64) (result f64)))
- (global "$(lib)/math/NativeMath.random_seeded" (mut i32) (i32.const 0))
- (global "$(lib)/math/NativeMath.random_state0" (mut i64) (i64.const 0))
- (global "$(lib)/math/NativeMath.random_state1" (mut i64) (i64.const 0))
+ (global "$(lib)/math/random_seeded" (mut i32) (i32.const 0))
+ (global "$(lib)/math/random_state0" (mut i64) (i64.const 0))
+ (global "$(lib)/math/random_state1" (mut i64) (i64.const 0))
  (memory $0 1)
  (data (i32.const 4) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s")
  (data (i32.const 32) "\0d\00\00\00(\00l\00i\00b\00)\00/\00m\00a\00t\00h\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $std/math/signbit (; 22 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $std/math/signbit (; 23 ;) (type $Fi) (param $0 f64) (result i32)
   (i32.wrap/i64
    (i64.shr_u
     (i64.reinterpret/f64
@@ -69,7 +69,7 @@
    )
   )
  )
- (func $std/math/eulp (; 23 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $std/math/eulp (; 24 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -99,7 +99,7 @@
    (i32.const -1075)
   )
  )
- (func "$(lib)/math/NativeMath.scalbn" (; 24 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func "$(lib)/math/NativeMath.scalbn" (; 25 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (set_local $2
    (get_local $0)
@@ -213,7 +213,7 @@
    )
   )
  )
- (func $std/math/ulperr (; 25 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
+ (func $std/math/ulperr (; 26 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
   (local $3 f64)
   (local $4 i32)
   (if
@@ -314,7 +314,7 @@
    (get_local $2)
   )
  )
- (func $std/math/check<f64> (; 26 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/check<f64> (; 27 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   (if
    (f64.eq
@@ -367,7 +367,7 @@
   )
   (i32.const 1)
  )
- (func $std/math/test_scalbn (; 27 ;) (type $FiFFii) (param $0 f64) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_scalbn (; 28 ;) (type $FiFFii) (param $0 f64) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (call $std/math/check<f64>
    (call "$(lib)/math/NativeMath.scalbn"
     (get_local $0)
@@ -378,7 +378,7 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/NativeMathf.scalbn" (; 28 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func "$(lib)/math/NativeMathf.scalbn" (; 29 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (set_local $2
    (get_local $0)
@@ -490,7 +490,7 @@
    )
   )
  )
- (func $std/math/signbitf (; 29 ;) (type $fi) (param $0 f32) (result i32)
+ (func $std/math/signbitf (; 30 ;) (type $fi) (param $0 f32) (result i32)
   (i32.shr_u
    (i32.reinterpret/f32
     (get_local $0)
@@ -498,7 +498,7 @@
    (i32.const 31)
   )
  )
- (func $std/math/eulpf (; 30 ;) (type $fi) (param $0 f32) (result i32)
+ (func $std/math/eulpf (; 31 ;) (type $fi) (param $0 f32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -526,7 +526,7 @@
    (i32.const -150)
   )
  )
- (func $std/math/ulperrf (; 31 ;) (type $ffff) (param $0 f32) (param $1 f32) (param $2 f32) (result f32)
+ (func $std/math/ulperrf (; 32 ;) (type $ffff) (param $0 f32) (param $1 f32) (param $2 f32) (result f32)
   (local $3 f32)
   (local $4 i32)
   (if
@@ -627,7 +627,7 @@
    (get_local $2)
   )
  )
- (func $std/math/check<f32> (; 32 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/check<f32> (; 33 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   (if
    (f32.eq
@@ -682,7 +682,7 @@
   )
   (i32.const 1)
  )
- (func $std/math/test_scalbnf (; 33 ;) (type $fiffii) (param $0 f32) (param $1 i32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_scalbnf (; 34 ;) (type $fiffii) (param $0 f32) (param $1 i32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.scalbn"
     (get_local $0)
@@ -693,7 +693,7 @@
    (get_local $4)
   )
  )
- (func $fmod (; 34 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func "$(lib)/math/NativeMath.mod" (; 35 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i64)
@@ -1065,18 +1065,42 @@
    (get_local $0)
   )
  )
- (func $std/math/test_fmod (; 35 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
-  (call $std/math/check<f64>
-   (call $fmod
-    (get_local $0)
-    (get_local $1)
+ (func $std/math/test_mod (; 36 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+  (local $5 i32)
+  (i32.and
+   (if (result i32)
+    (tee_local $5
+     (call $std/math/check<f64>
+      (call "$(lib)/math/NativeMath.mod"
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
+    )
+    (if (result i32)
+     (tee_local $5
+      (i32.const 0)
+     )
+     (get_local $5)
+     (call $std/math/check<f64>
+      (call $std/math/JSOp.mod
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
+    )
+    (get_local $5)
    )
-   (get_local $2)
-   (get_local $3)
-   (get_local $4)
+   (i32.const 1)
   )
  )
- (func $fmodf (; 36 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.mod" (; 37 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1428,9 +1452,9 @@
    (get_local $0)
   )
  )
- (func $std/math/test_fmodf (; 37 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_modf (; 38 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
-   (call $fmodf
+   (call "$(lib)/math/NativeMathf.mod"
     (get_local $0)
     (get_local $1)
    )
@@ -1439,12 +1463,981 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/NativeMath.abs" (; 38 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.rem" (; 39 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+  (local $2 i32)
+  (local $3 i64)
+  (local $4 i32)
+  (local $5 i64)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i64)
+  (local $9 i64)
+  (local $10 f64)
+  (local $11 i32)
+  (set_local $2
+   (i32.wrap/i64
+    (i64.and
+     (i64.shr_u
+      (tee_local $9
+       (i64.reinterpret/f64
+        (get_local $0)
+       )
+      )
+      (i64.const 52)
+     )
+     (i64.const 2047)
+    )
+   )
+  )
+  (set_local $6
+   (i32.wrap/i64
+    (i64.and
+     (i64.shr_u
+      (tee_local $8
+       (i64.reinterpret/f64
+        (get_local $1)
+       )
+      )
+      (i64.const 52)
+     )
+     (i64.const 2047)
+    )
+   )
+  )
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $4
+      (i32.and
+       (if (result i32)
+        (tee_local $4
+         (i64.eq
+          (i64.shl
+           (get_local $8)
+           (i64.const 1)
+          )
+          (i64.const 0)
+         )
+        )
+        (get_local $4)
+        (f64.ne
+         (tee_local $10
+          (get_local $1)
+         )
+         (get_local $10)
+        )
+       )
+       (i32.const 1)
+      )
+     )
+     (get_local $4)
+     (i32.eq
+      (get_local $2)
+      (i32.const 2047)
+     )
+    )
+    (i32.const 1)
+   )
+   (return
+    (f64.div
+     (f64.mul
+      (get_local $0)
+      (get_local $1)
+     )
+     (f64.mul
+      (get_local $0)
+      (get_local $1)
+     )
+    )
+   )
+  )
+  (if
+   (i64.eq
+    (i64.shl
+     (get_local $9)
+     (i64.const 1)
+    )
+    (i64.const 0)
+   )
+   (return
+    (get_local $0)
+   )
+  )
+  (set_local $3
+   (get_local $9)
+  )
+  (set_local $3
+   (if (result i64)
+    (get_local $2)
+    (i64.or
+     (i64.and
+      (get_local $3)
+      (i64.const 4503599627370495)
+     )
+     (i64.const 4503599627370496)
+    )
+    (block (result i64)
+     (set_local $5
+      (i64.shl
+       (get_local $3)
+       (i64.const 12)
+      )
+     )
+     (loop $continue|0
+      (if
+       (i64.eq
+        (i64.shr_u
+         (get_local $5)
+         (i64.const 63)
+        )
+        (i64.const 0)
+       )
+       (block
+        (set_local $2
+         (i32.sub
+          (get_local $2)
+          (i32.const 1)
+         )
+        )
+        (set_local $5
+         (i64.shl
+          (get_local $5)
+          (i64.const 1)
+         )
+        )
+        (br $continue|0)
+       )
+      )
+     )
+     (i64.shl
+      (get_local $3)
+      (i64.extend_u/i32
+       (i32.sub
+        (i32.const 1)
+        (get_local $2)
+       )
+      )
+     )
+    )
+   )
+  )
+  (set_local $4
+   (i32.wrap/i64
+    (i64.shr_u
+     (get_local $8)
+     (i64.const 63)
+    )
+   )
+  )
+  (set_local $8
+   (if (result i64)
+    (get_local $6)
+    (i64.or
+     (i64.and
+      (get_local $8)
+      (i64.const 4503599627370495)
+     )
+     (i64.const 4503599627370496)
+    )
+    (block (result i64)
+     (set_local $5
+      (i64.shl
+       (get_local $8)
+       (i64.const 12)
+      )
+     )
+     (loop $continue|1
+      (if
+       (i64.eq
+        (i64.shr_u
+         (get_local $5)
+         (i64.const 63)
+        )
+        (i64.const 0)
+       )
+       (block
+        (set_local $6
+         (i32.sub
+          (get_local $6)
+          (i32.const 1)
+         )
+        )
+        (set_local $5
+         (i64.shl
+          (get_local $5)
+          (i64.const 1)
+         )
+        )
+        (br $continue|1)
+       )
+      )
+     )
+     (i64.shl
+      (get_local $8)
+      (i64.extend_u/i32
+       (i32.sub
+        (i32.const 1)
+        (get_local $6)
+       )
+      )
+     )
+    )
+   )
+  )
+  (set_local $11
+   (i32.wrap/i64
+    (i64.shr_u
+     (get_local $9)
+     (i64.const 63)
+    )
+   )
+  )
+  (block $break|2
+   (loop $continue|2
+    (if
+     (i32.lt_s
+      (get_local $2)
+      (get_local $6)
+     )
+     (block
+      (br_if $break|2
+       (i32.eq
+        (i32.add
+         (get_local $2)
+         (i32.const 1)
+        )
+        (get_local $6)
+       )
+      )
+      (return
+       (get_local $0)
+      )
+     )
+    )
+    (loop $continue|3
+     (if
+      (i32.gt_s
+       (get_local $2)
+       (get_local $6)
+      )
+      (block
+       (if
+        (i64.eq
+         (i64.shr_u
+          (tee_local $5
+           (i64.sub
+            (get_local $3)
+            (get_local $8)
+           )
+          )
+          (i64.const 63)
+         )
+         (i64.const 0)
+        )
+        (block
+         (set_local $3
+          (get_local $5)
+         )
+         (set_local $7
+          (i32.add
+           (get_local $7)
+           (i32.const 1)
+          )
+         )
+        )
+       )
+       (set_local $3
+        (i64.shl
+         (get_local $3)
+         (i64.const 1)
+        )
+       )
+       (set_local $7
+        (i32.shl
+         (get_local $7)
+         (i32.const 1)
+        )
+       )
+       (set_local $2
+        (i32.sub
+         (get_local $2)
+         (i32.const 1)
+        )
+       )
+       (br $continue|3)
+      )
+     )
+    )
+    (if
+     (i64.eq
+      (i64.shr_u
+       (tee_local $5
+        (i64.sub
+         (get_local $3)
+         (get_local $8)
+        )
+       )
+       (i64.const 63)
+      )
+      (i64.const 0)
+     )
+     (block
+      (set_local $3
+       (get_local $5)
+      )
+      (set_local $7
+       (i32.add
+        (get_local $7)
+        (i32.const 1)
+       )
+      )
+     )
+    )
+    (if
+     (i64.eq
+      (get_local $3)
+      (i64.const 0)
+     )
+     (set_local $2
+      (i32.const -60)
+     )
+     (loop $continue|4
+      (if
+       (i64.eq
+        (i64.shr_u
+         (get_local $3)
+         (i64.const 52)
+        )
+        (i64.const 0)
+       )
+       (block
+        (set_local $3
+         (i64.shl
+          (get_local $3)
+          (i64.const 1)
+         )
+        )
+        (set_local $2
+         (i32.sub
+          (get_local $2)
+          (i32.const 1)
+         )
+        )
+        (br $continue|4)
+       )
+      )
+     )
+    )
+   )
+  )
+  (set_local $0
+   (f64.reinterpret/i64
+    (tee_local $3
+     (select
+      (i64.or
+       (i64.sub
+        (get_local $3)
+        (i64.const 4503599627370496)
+       )
+       (i64.shl
+        (i64.extend_u/i32
+         (get_local $2)
+        )
+        (i64.const 52)
+       )
+      )
+      (i64.shr_u
+       (get_local $3)
+       (i64.extend_u/i32
+        (i32.sub
+         (i32.const 1)
+         (get_local $2)
+        )
+       )
+      )
+      (i32.gt_s
+       (get_local $2)
+       (i32.const 0)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (get_local $4)
+   (set_local $1
+    (f64.neg
+     (get_local $1)
+    )
+   )
+  )
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $4
+      (i32.eq
+       (get_local $2)
+       (get_local $6)
+      )
+     )
+     (get_local $4)
+     (if (result i32)
+      (tee_local $4
+       (i32.eq
+        (i32.add
+         (get_local $2)
+         (i32.const 1)
+        )
+        (get_local $6)
+       )
+      )
+      (if (result i32)
+       (tee_local $4
+        (f64.gt
+         (f64.mul
+          (f64.const 2)
+          (get_local $0)
+         )
+         (get_local $1)
+        )
+       )
+       (get_local $4)
+       (if (result i32)
+        (tee_local $4
+         (f64.eq
+          (f64.mul
+           (f64.const 2)
+           (get_local $0)
+          )
+          (get_local $1)
+         )
+        )
+        (i32.and
+         (get_local $7)
+         (i32.const 1)
+        )
+        (get_local $4)
+       )
+      )
+      (get_local $4)
+     )
+    )
+    (i32.const 1)
+   )
+   (block
+    (set_local $0
+     (f64.sub
+      (get_local $0)
+      (get_local $1)
+     )
+    )
+    (set_local $7
+     (i32.add
+      (get_local $7)
+      (i32.const 1)
+     )
+    )
+   )
+  )
+  (select
+   (f64.neg
+    (get_local $0)
+   )
+   (get_local $0)
+   (get_local $11)
+  )
+ )
+ (func $std/math/test_rem (; 40 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+  (call $std/math/check<f64>
+   (call "$(lib)/math/NativeMath.rem"
+    (get_local $0)
+    (get_local $1)
+   )
+   (get_local $2)
+   (get_local $3)
+   (get_local $4)
+  )
+ )
+ (func "$(lib)/math/NativeMathf.rem" (; 41 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 f32)
+  (local $9 i32)
+  (local $10 i32)
+  (set_local $3
+   (i32.and
+    (i32.shr_u
+     (tee_local $5
+      (i32.reinterpret/f32
+       (get_local $0)
+      )
+     )
+     (i32.const 23)
+    )
+    (i32.const 255)
+   )
+  )
+  (set_local $6
+   (i32.and
+    (i32.shr_u
+     (tee_local $7
+      (i32.reinterpret/f32
+       (get_local $1)
+      )
+     )
+     (i32.const 23)
+    )
+    (i32.const 255)
+   )
+  )
+  (set_local $4
+   (get_local $5)
+  )
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.and
+       (if (result i32)
+        (tee_local $2
+         (i32.eqz
+          (i32.shl
+           (get_local $7)
+           (i32.const 1)
+          )
+         )
+        )
+        (get_local $2)
+        (f32.ne
+         (tee_local $8
+          (get_local $1)
+         )
+         (get_local $8)
+        )
+       )
+       (i32.const 1)
+      )
+     )
+     (get_local $2)
+     (i32.eq
+      (get_local $3)
+      (i32.const 255)
+     )
+    )
+    (i32.const 1)
+   )
+   (return
+    (f32.div
+     (f32.mul
+      (get_local $0)
+      (get_local $1)
+     )
+     (f32.mul
+      (get_local $0)
+      (get_local $1)
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.shl
+     (get_local $5)
+     (i32.const 1)
+    )
+   )
+   (return
+    (get_local $0)
+   )
+  )
+  (set_local $4
+   (if (result i32)
+    (get_local $3)
+    (i32.or
+     (i32.and
+      (get_local $4)
+      (i32.const 8388607)
+     )
+     (i32.const 8388608)
+    )
+    (block (result i32)
+     (set_local $2
+      (i32.shl
+       (get_local $4)
+       (i32.const 9)
+      )
+     )
+     (loop $continue|0
+      (if
+       (i32.eqz
+        (i32.shr_u
+         (get_local $2)
+         (i32.const 31)
+        )
+       )
+       (block
+        (set_local $3
+         (i32.sub
+          (get_local $3)
+          (i32.const 1)
+         )
+        )
+        (set_local $2
+         (i32.shl
+          (get_local $2)
+          (i32.const 1)
+         )
+        )
+        (br $continue|0)
+       )
+      )
+     )
+     (i32.shl
+      (get_local $4)
+      (i32.sub
+       (i32.const 1)
+       (get_local $3)
+      )
+     )
+    )
+   )
+  )
+  (set_local $9
+   (i32.shr_u
+    (get_local $7)
+    (i32.const 31)
+   )
+  )
+  (set_local $7
+   (if (result i32)
+    (get_local $6)
+    (i32.or
+     (i32.and
+      (get_local $7)
+      (i32.const 8388607)
+     )
+     (i32.const 8388608)
+    )
+    (block (result i32)
+     (set_local $2
+      (i32.shl
+       (get_local $7)
+       (i32.const 9)
+      )
+     )
+     (loop $continue|1
+      (if
+       (i32.eqz
+        (i32.shr_u
+         (get_local $2)
+         (i32.const 31)
+        )
+       )
+       (block
+        (set_local $6
+         (i32.sub
+          (get_local $6)
+          (i32.const 1)
+         )
+        )
+        (set_local $2
+         (i32.shl
+          (get_local $2)
+          (i32.const 1)
+         )
+        )
+        (br $continue|1)
+       )
+      )
+     )
+     (i32.shl
+      (get_local $7)
+      (i32.sub
+       (i32.const 1)
+       (get_local $6)
+      )
+     )
+    )
+   )
+  )
+  (set_local $10
+   (i32.shr_u
+    (get_local $5)
+    (i32.const 31)
+   )
+  )
+  (set_local $5
+   (i32.const 0)
+  )
+  (block $break|2
+   (loop $continue|2
+    (if
+     (i32.lt_s
+      (get_local $3)
+      (get_local $6)
+     )
+     (block
+      (br_if $break|2
+       (i32.eq
+        (i32.add
+         (get_local $3)
+         (i32.const 1)
+        )
+        (get_local $6)
+       )
+      )
+      (return
+       (get_local $0)
+      )
+     )
+    )
+    (loop $continue|3
+     (if
+      (i32.gt_s
+       (get_local $3)
+       (get_local $6)
+      )
+      (block
+       (if
+        (i32.eqz
+         (i32.shr_u
+          (tee_local $2
+           (i32.sub
+            (get_local $4)
+            (get_local $7)
+           )
+          )
+          (i32.const 31)
+         )
+        )
+        (block
+         (set_local $4
+          (get_local $2)
+         )
+         (set_local $5
+          (i32.add
+           (get_local $5)
+           (i32.const 1)
+          )
+         )
+        )
+       )
+       (set_local $4
+        (i32.shl
+         (get_local $4)
+         (i32.const 1)
+        )
+       )
+       (set_local $5
+        (i32.shl
+         (get_local $5)
+         (i32.const 1)
+        )
+       )
+       (set_local $3
+        (i32.sub
+         (get_local $3)
+         (i32.const 1)
+        )
+       )
+       (br $continue|3)
+      )
+     )
+    )
+    (if
+     (i32.eqz
+      (i32.shr_u
+       (tee_local $2
+        (i32.sub
+         (get_local $4)
+         (get_local $7)
+        )
+       )
+       (i32.const 31)
+      )
+     )
+     (block
+      (set_local $4
+       (get_local $2)
+      )
+      (set_local $5
+       (i32.add
+        (get_local $5)
+        (i32.const 1)
+       )
+      )
+     )
+    )
+    (if
+     (get_local $4)
+     (loop $continue|4
+      (if
+       (i32.eqz
+        (i32.shr_u
+         (get_local $4)
+         (i32.const 23)
+        )
+       )
+       (block
+        (set_local $4
+         (i32.shl
+          (get_local $4)
+          (i32.const 1)
+         )
+        )
+        (set_local $3
+         (i32.sub
+          (get_local $3)
+          (i32.const 1)
+         )
+        )
+        (br $continue|4)
+       )
+      )
+     )
+     (set_local $3
+      (i32.const -30)
+     )
+    )
+   )
+  )
+  (set_local $0
+   (f32.reinterpret/i32
+    (tee_local $4
+     (select
+      (i32.or
+       (i32.sub
+        (get_local $4)
+        (i32.const 8388608)
+       )
+       (i32.shl
+        (get_local $3)
+        (i32.const 23)
+       )
+      )
+      (i32.shr_u
+       (get_local $4)
+       (i32.sub
+        (i32.const 1)
+        (get_local $3)
+       )
+      )
+      (i32.gt_s
+       (get_local $3)
+       (i32.const 0)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (get_local $9)
+   (set_local $1
+    (f32.neg
+     (get_local $1)
+    )
+   )
+  )
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.eq
+       (get_local $3)
+       (get_local $6)
+      )
+     )
+     (get_local $2)
+     (if (result i32)
+      (tee_local $2
+       (i32.eq
+        (i32.add
+         (get_local $3)
+         (i32.const 1)
+        )
+        (get_local $6)
+       )
+      )
+      (if (result i32)
+       (tee_local $2
+        (f32.gt
+         (f32.mul
+          (f32.const 2)
+          (get_local $0)
+         )
+         (get_local $1)
+        )
+       )
+       (get_local $2)
+       (if (result i32)
+        (tee_local $2
+         (f32.eq
+          (f32.mul
+           (f32.const 2)
+           (get_local $0)
+          )
+          (get_local $1)
+         )
+        )
+        (i32.and
+         (i32.rem_s
+          (get_local $5)
+          (i32.const 2)
+         )
+         (i32.const 1)
+        )
+        (get_local $2)
+       )
+      )
+      (get_local $2)
+     )
+    )
+    (i32.const 1)
+   )
+   (block
+    (set_local $0
+     (f32.sub
+      (get_local $0)
+      (get_local $1)
+     )
+    )
+    (set_local $5
+     (i32.add
+      (get_local $5)
+      (i32.const 1)
+     )
+    )
+   )
+  )
+  (select
+   (f32.neg
+    (get_local $0)
+   )
+   (get_local $0)
+   (get_local $10)
+  )
+ )
+ (func $std/math/test_remf (; 42 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+  (call $std/math/check<f32>
+   (call "$(lib)/math/NativeMathf.rem"
+    (get_local $0)
+    (get_local $1)
+   )
+   (get_local $2)
+   (get_local $3)
+   (get_local $4)
+  )
+ )
+ (func "$(lib)/math/NativeMath.abs" (; 43 ;) (type $FF) (param $0 f64) (result f64)
   (f64.abs
    (get_local $0)
   )
  )
- (func $std/math/test_abs (; 39 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_abs (; 44 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -1477,12 +2470,12 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.abs" (; 40 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.abs" (; 45 ;) (type $ff) (param $0 f32) (result f32)
   (f32.abs
    (get_local $0)
   )
  )
- (func $std/math/test_absf (; 41 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_absf (; 46 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.abs"
     (get_local $0)
@@ -1492,7 +2485,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.__R" (; 42 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.__R" (; 47 ;) (type $FF) (param $0 f64) (result f64)
   (f64.div
    (f64.mul
     (get_local $0)
@@ -1555,7 +2548,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.acos" (; 43 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.acos" (; 48 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -1744,7 +2737,7 @@
    )
   )
  )
- (func $std/math/test_acos (; 44 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_acos (; 49 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -1777,7 +2770,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.__R" (; 45 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.__R" (; 50 ;) (type $ff) (param $0 f32) (result f32)
   (f32.div
    (f32.mul
     (get_local $0)
@@ -1804,7 +2797,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMathf.acos" (; 46 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.acos" (; 51 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 f32)
@@ -1979,7 +2972,7 @@
    )
   )
  )
- (func $std/math/test_acosf (; 47 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_acosf (; 52 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.acos"
     (get_local $0)
@@ -1989,7 +2982,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.log1p" (; 48 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.log1p" (; 53 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -2284,7 +3277,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.log" (; 49 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.log" (; 54 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i64)
@@ -2549,7 +3542,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.acosh" (; 50 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.acosh" (; 55 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (if
    (i64.lt_u
@@ -2636,7 +3629,7 @@
    (f64.const 0.6931471805599453)
   )
  )
- (func $std/math/test_acosh (; 51 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_acosh (; 56 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -2669,7 +3662,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.log1p" (; 52 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.log1p" (; 57 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 i32)
@@ -2920,7 +3913,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMathf.log" (; 53 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.log" (; 58 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -3123,7 +4116,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMathf.acosh" (; 54 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.acosh" (; 59 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (if
    (i32.lt_u
@@ -3207,7 +4200,7 @@
    (f32.const 0.6931471824645996)
   )
  )
- (func $std/math/test_acoshf (; 55 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_acoshf (; 60 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.acosh"
     (get_local $0)
@@ -3217,7 +4210,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.asin" (; 56 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.asin" (; 61 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -3426,7 +4419,7 @@
   )
   (get_local $0)
  )
- (func $std/math/test_asin (; 57 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_asin (; 62 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -3459,7 +4452,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.asin" (; 58 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.asin" (; 63 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -3597,7 +4590,7 @@
   )
   (get_local $0)
  )
- (func $std/math/test_asinf (; 59 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_asinf (; 64 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.asin"
     (get_local $0)
@@ -3607,7 +4600,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.asinh" (; 60 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.asinh" (; 65 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -3725,7 +4718,7 @@
    )
   )
  )
- (func $std/math/test_asinh (; 61 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_asinh (; 66 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -3758,7 +4751,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.asinh" (; 62 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.asinh" (; 67 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (set_local $1
@@ -3866,7 +4859,7 @@
    (get_local $2)
   )
  )
- (func $std/math/test_asinhf (; 63 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_asinhf (; 68 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.asinh"
     (get_local $0)
@@ -3876,7 +4869,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.atan" (; 64 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.atan" (; 69 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -4236,7 +5229,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_atan (; 65 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_atan (; 70 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -4269,7 +5262,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.atan" (; 66 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.atan" (; 71 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 f32)
@@ -4588,7 +5581,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_atanf (; 67 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_atanf (; 72 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.atan"
     (get_local $0)
@@ -4598,7 +5591,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.cbrt" (; 68 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.cbrt" (; 73 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -4781,7 +5774,7 @@
    )
   )
  )
- (func $std/math/test_cbrt (; 69 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cbrt (; 74 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -4814,7 +5807,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.cbrt" (; 70 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.cbrt" (; 75 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -4966,7 +5959,7 @@
    )
   )
  )
- (func $std/math/test_cbrtf (; 71 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_cbrtf (; 76 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.cbrt"
     (get_local $0)
@@ -4976,7 +5969,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.expm1" (; 72 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.expm1" (; 77 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -5419,7 +6412,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.exp" (; 73 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.exp" (; 78 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -5626,7 +6619,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.__expo2" (; 74 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.__expo2" (; 79 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (f64.mul
    (f64.mul
@@ -5643,7 +6636,7 @@
    (get_local $1)
   )
  )
- (func "$(lib)/math/NativeMath.cosh" (; 75 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.cosh" (; 80 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
   (set_local $0
@@ -5730,7 +6723,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_cosh (; 76 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cosh (; 81 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -5763,7 +6756,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.expm1" (; 77 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.expm1" (; 82 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 i32)
@@ -6176,7 +7169,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMathf.exp" (; 78 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.exp" (; 83 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -6369,7 +7362,7 @@
    (get_local $1)
   )
  )
- (func "$(lib)/math/NativeMathf.__expo2" (; 79 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.__expo2" (; 84 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (f32.mul
    (f32.mul
@@ -6386,7 +7379,7 @@
    (get_local $1)
   )
  )
- (func "$(lib)/math/NativeMathf.cosh" (; 80 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.cosh" (; 85 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (set_local $0
    (f32.reinterpret/i32
@@ -6465,7 +7458,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_coshf (; 81 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_coshf (; 86 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.cosh"
     (get_local $0)
@@ -6475,7 +7468,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_exp (; 82 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_exp (; 87 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -6508,7 +7501,7 @@
    (i32.const 1)
   )
  )
- (func $std/math/test_expf (; 83 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expf (; 88 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.exp"
     (get_local $0)
@@ -6518,7 +7511,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_expm1 (; 84 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_expm1 (; 89 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -6551,7 +7544,7 @@
    (i32.const 1)
   )
  )
- (func $std/math/test_expm1f (; 85 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expm1f (; 90 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.expm1"
     (get_local $0)
@@ -6561,7 +7554,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.hypot" (; 86 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func "$(lib)/math/NativeMath.hypot" (; 91 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i64)
@@ -6830,7 +7823,7 @@
    )
   )
  )
- (func $std/math/test_hypot (; 87 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_hypot (; 92 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (i32.and
    (if (result i32)
@@ -6865,7 +7858,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.hypot" (; 88 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.hypot" (; 93 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7033,7 +8026,7 @@
    )
   )
  )
- (func $std/math/test_hypotf (; 89 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_hypotf (; 94 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.hypot"
     (get_local $0)
@@ -7044,7 +8037,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_log (; 90 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log (; 95 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -7077,7 +8070,7 @@
    (i32.const 1)
   )
  )
- (func $std/math/test_logf (; 91 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_logf (; 96 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.log"
     (get_local $0)
@@ -7087,7 +8080,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.log10" (; 92 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.log10" (; 97 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -7405,7 +8398,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_log10 (; 93 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log10 (; 98 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -7438,7 +8431,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.log10" (; 94 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.log10" (; 99 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -7678,7 +8671,7 @@
    )
   )
  )
- (func $std/math/test_log10f (; 95 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log10f (; 100 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.log10"
     (get_local $0)
@@ -7688,7 +8681,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_log1p (; 96 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log1p (; 101 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -7721,7 +8714,7 @@
    (i32.const 1)
   )
  )
- (func $std/math/test_log1pf (; 97 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log1pf (; 102 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.log1p"
     (get_local $0)
@@ -7731,7 +8724,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.log2" (; 98 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.log2" (; 103 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -8037,7 +9030,7 @@
    (get_local $1)
   )
  )
- (func $std/math/test_log2 (; 99 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log2 (; 104 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -8070,7 +9063,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.log2" (; 100 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.log2" (; 105 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -8298,7 +9291,7 @@
    )
   )
  )
- (func $std/math/test_log2f (; 101 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log2f (; 106 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.log2"
     (get_local $0)
@@ -8308,7 +9301,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.pow" (; 102 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func "$(lib)/math/NativeMath.pow" (; 107 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -9707,7 +10700,7 @@
    (f64.const 1.e+300)
   )
  )
- (func $std/math/test_pow (; 103 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_pow (; 108 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (i32.and
    (if (result i32)
@@ -9742,7 +10735,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.pow" (; 104 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.pow" (; 109 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 f32)
   (local $3 f32)
   (local $4 i32)
@@ -10907,7 +11900,7 @@
    (f32.const 1000000015047466219876688e6)
   )
  )
- (func $std/math/test_powf (; 105 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_powf (; 110 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.pow"
     (get_local $0)
@@ -10918,7 +11911,7 @@
    (get_local $4)
   )
  )
- (func "$(lib)/math/NativeMath.__murmurHash3" (; 106 ;) (type $II) (param $0 i64) (result i64)
+ (func "$(lib)/math/murmurHash3" (; 111 ;) (type $II) (param $0 i64) (result i64)
   (i64.xor
    (tee_local $0
     (i64.mul
@@ -10949,7 +11942,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.seedRandom" (; 107 ;) (type $Iv) (param $0 i64)
+ (func "$(lib)/math/NativeMath.seedRandom" (; 112 ;) (type $Iv) (param $0 i64)
   (if
    (i64.eqz
     (get_local $0)
@@ -10958,38 +11951,44 @@
     (call $abort
      (i32.const 0)
      (i32.const 32)
-     (i32.const 1055)
+     (i32.const 1030)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  (set_global "$(lib)/math/NativeMath.random_seeded"
+  (set_global "$(lib)/math/random_seeded"
    (i32.const 1)
   )
-  (set_global "$(lib)/math/NativeMath.random_state0"
-   (call "$(lib)/math/NativeMath.__murmurHash3"
+  (set_global "$(lib)/math/random_state0"
+   (call "$(lib)/math/murmurHash3"
     (get_local $0)
    )
   )
-  (set_global "$(lib)/math/NativeMath.random_state1"
-   (call "$(lib)/math/NativeMath.__murmurHash3"
-    (get_global "$(lib)/math/NativeMath.random_state0")
+  (set_global "$(lib)/math/random_state1"
+   (call "$(lib)/math/murmurHash3"
+    (get_global "$(lib)/math/random_state0")
    )
   )
  )
- (func "$(lib)/math/NativeMath.__xorShift128Plus" (; 108 ;) (type $I) (result i64)
+ (func "$(lib)/math/NativeMath.random" (; 113 ;) (type $F) (result f64)
   (local $0 i64)
   (local $1 i64)
-  (set_local $0
-   (get_global "$(lib)/math/NativeMath.random_state0")
+  (if
+   (i32.eqz
+    (get_global "$(lib)/math/random_seeded")
+   )
+   (unreachable)
   )
-  (set_global "$(lib)/math/NativeMath.random_state0"
+  (set_local $0
+   (get_global "$(lib)/math/random_state0")
+  )
+  (set_global "$(lib)/math/random_state0"
    (tee_local $1
-    (get_global "$(lib)/math/NativeMath.random_state1")
+    (get_global "$(lib)/math/random_state1")
    )
   )
-  (set_global "$(lib)/math/NativeMath.random_state1"
+  (set_global "$(lib)/math/random_state1"
    (tee_local $0
     (i64.xor
      (i64.xor
@@ -11017,23 +12016,14 @@
     )
    )
   )
-  (i64.add
-   (get_local $1)
-   (get_local $0)
-  )
- )
- (func "$(lib)/math/NativeMath.random" (; 109 ;) (type $F) (result f64)
-  (if
-   (i32.eqz
-    (get_global "$(lib)/math/NativeMath.random_seeded")
-   )
-   (unreachable)
-  )
   (f64.sub
    (f64.reinterpret/i64
     (i64.or
      (i64.and
-      (call "$(lib)/math/NativeMath.__xorShift128Plus")
+      (i64.add
+       (get_local $1)
+       (get_local $0)
+      )
       (i64.const 4503599627370495)
      )
      (i64.const 4607182418800017408)
@@ -11042,7 +12032,7 @@
    (f64.const 1)
   )
  )
- (func "$(lib)/math/NativeMath.sinh" (; 110 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.sinh" (; 114 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 i64)
@@ -11161,7 +12151,7 @@
    )
   )
  )
- (func $std/math/test_sinh (; 111 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sinh (; 115 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -11194,7 +12184,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.sinh" (; 112 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.sinh" (; 116 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 f32)
   (local $3 i32)
@@ -11302,7 +12292,7 @@
    )
   )
  )
- (func $std/math/test_sinhf (; 113 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinhf (; 117 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.sinh"
     (get_local $0)
@@ -11312,12 +12302,12 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.sqrt" (; 114 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.sqrt" (; 118 ;) (type $FF) (param $0 f64) (result f64)
   (f64.sqrt
    (get_local $0)
   )
  )
- (func $std/math/test_sqrt (; 115 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sqrt (; 119 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -11350,12 +12340,12 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.sqrt" (; 116 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.sqrt" (; 120 ;) (type $ff) (param $0 f32) (result f32)
   (f32.sqrt
    (get_local $0)
   )
  )
- (func $std/math/test_sqrtf (; 117 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sqrtf (; 121 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.sqrt"
     (get_local $0)
@@ -11365,7 +12355,7 @@
    (get_local $3)
   )
  )
- (func "$(lib)/math/NativeMath.tanh" (; 118 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/NativeMath.tanh" (; 122 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -11488,7 +12478,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_tanh (; 119 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_tanh (; 123 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (i32.and
    (if (result i32)
@@ -11521,7 +12511,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.tanh" (; 120 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/NativeMathf.tanh" (; 124 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (set_local $2
@@ -11634,7 +12624,7 @@
    (get_local $2)
   )
  )
- (func $std/math/test_tanhf (; 121 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanhf (; 125 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call "$(lib)/math/NativeMathf.tanh"
     (get_local $0)
@@ -11644,7 +12634,7 @@
    (get_local $3)
   )
  )
- (func $start (; 122 ;) (type $v)
+ (func $start (; 126 ;) (type $v)
   (local $0 i32)
   (local $1 f64)
   (local $2 i32)
@@ -12943,110 +13933,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
      (f64.const -8.06684839057968)
      (f64.const 4.535662560676869)
      (f64.const -3.531185829902812)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 177)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 4.345239849338305)
-     (f64.const -8.88799136300345)
-     (f64.const 4.345239849338305)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 178)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -8.38143342755525)
-     (f64.const -2.763607337379588)
-     (f64.const -0.09061141541648476)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 179)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -6.531673581913484)
-     (f64.const 4.567535276842744)
-     (f64.const -1.9641383050707404)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 180)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 9.267056966972586)
-     (f64.const 4.811392084359796)
-     (f64.const 4.45566488261279)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 181)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -6.450045556060236)
-     (f64.const 0.6620717923376739)
-     (f64.const -0.4913994250211714)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13063,10 +13953,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 7.858890253041697)
-     (f64.const 0.05215452675006225)
-     (f64.const 0.035711240532359426)
+    (call $std/math/test_mod
+     (f64.const 4.345239849338305)
+     (f64.const -8.88799136300345)
+     (f64.const 4.345239849338305)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13083,10 +13973,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0.792054511984896)
-     (f64.const 7.67640268511754)
-     (f64.const -0.792054511984896)
+    (call $std/math/test_mod
+     (f64.const -8.38143342755525)
+     (f64.const -2.763607337379588)
+     (f64.const -0.09061141541648476)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13103,10 +13993,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 0.615702673197924)
-     (f64.const 2.0119025790324803)
-     (f64.const 0.615702673197924)
+    (call $std/math/test_mod
+     (f64.const -6.531673581913484)
+     (f64.const 4.567535276842744)
+     (f64.const -1.9641383050707404)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13123,10 +14013,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0.5587586823609152)
-     (f64.const 0.03223983060263804)
-     (f64.const -0.0106815621160685)
+    (call $std/math/test_mod
+     (f64.const 9.267056966972586)
+     (f64.const 4.811392084359796)
+     (f64.const 4.45566488261279)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13143,10 +14033,50 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
+     (f64.const -6.450045556060236)
+     (f64.const 0.6620717923376739)
+     (f64.const -0.4913994250211714)
      (f64.const 0)
-     (f64.const 1)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 187)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 7.858890253041697)
+     (f64.const 0.05215452675006225)
+     (f64.const 0.035711240532359426)
      (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 188)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0.792054511984896)
+     (f64.const 7.67640268511754)
+     (f64.const -0.792054511984896)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13163,10 +14093,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const 0.615702673197924)
+     (f64.const 2.0119025790324803)
+     (f64.const 0.615702673197924)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13183,10 +14113,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 0.5)
-     (f64.const 1)
-     (f64.const 0.5)
+    (call $std/math/test_mod
+     (f64.const -0.5587586823609152)
+     (f64.const 0.03223983060263804)
+     (f64.const -0.0106815621160685)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13203,50 +14133,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0.5)
-     (f64.const 1)
-     (f64.const -0.5)
+    (call $std/math/test_mod
      (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 192)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1)
      (f64.const 1)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 193)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1)
-     (f64.const 1)
-     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13263,10 +14153,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1.5)
+    (call $std/math/test_mod
+     (f64.const -0)
      (f64.const 1)
-     (f64.const 0.5)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13283,10 +14173,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1.5)
+    (call $std/math/test_mod
+     (f64.const 0.5)
      (f64.const 1)
-     (f64.const -0.5)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13303,10 +14193,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 2)
+    (call $std/math/test_mod
+     (f64.const -0.5)
      (f64.const 1)
-     (f64.const 0)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13323,10 +14213,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -2)
+    (call $std/math/test_mod
      (f64.const 1)
-     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13343,12 +14233,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const inf)
+    (call $std/math/test_mod
+     (f64.const -1)
      (f64.const 1)
-     (f64.const nan:0x8000000000000)
+     (f64.const -0)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -13363,12 +14253,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -inf)
+    (call $std/math/test_mod
+     (f64.const 1.5)
      (f64.const 1)
-     (f64.const nan:0x8000000000000)
+     (f64.const 0.5)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -13383,10 +14273,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_mod
+     (f64.const -1.5)
      (f64.const 1)
-     (f64.const nan:0x8000000000000)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13403,9 +14293,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 0)
-     (f64.const -1)
+    (call $std/math/test_mod
+     (f64.const 2)
+     (f64.const 1)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -13423,9 +14313,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0)
-     (f64.const -1)
+    (call $std/math/test_mod
+     (f64.const -2)
+     (f64.const 1)
      (f64.const -0)
      (f64.const 0)
      (i32.const 0)
@@ -13443,12 +14333,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 0.5)
-     (f64.const -1)
-     (f64.const 0.5)
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -13463,12 +14353,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0.5)
-     (f64.const -1)
-     (f64.const -0.5)
+    (call $std/math/test_mod
+     (f64.const -inf)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -13483,10 +14373,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
      (f64.const 1)
-     (f64.const -1)
-     (f64.const 0)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13503,10 +14393,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
+     (f64.const 0)
      (f64.const -1)
-     (f64.const -1)
-     (f64.const -0)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13523,10 +14413,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1.5)
+    (call $std/math/test_mod
+     (f64.const -0)
      (f64.const -1)
-     (f64.const 0.5)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13543,10 +14433,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1.5)
+    (call $std/math/test_mod
+     (f64.const 0.5)
      (f64.const -1)
-     (f64.const -0.5)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13563,10 +14453,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 2)
+    (call $std/math/test_mod
+     (f64.const -0.5)
      (f64.const -1)
-     (f64.const 0)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13583,10 +14473,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -2)
+    (call $std/math/test_mod
+     (f64.const 1)
      (f64.const -1)
-     (f64.const -0)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13603,12 +14493,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const inf)
+    (call $std/math/test_mod
      (f64.const -1)
-     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const -0)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -13623,12 +14513,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -inf)
+    (call $std/math/test_mod
+     (f64.const 1.5)
      (f64.const -1)
-     (f64.const nan:0x8000000000000)
+     (f64.const 0.5)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -13643,10 +14533,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_mod
+     (f64.const -1.5)
      (f64.const -1)
-     (f64.const nan:0x8000000000000)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13663,12 +14553,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
+     (f64.const 2)
+     (f64.const -1)
      (f64.const 0)
      (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -13683,12 +14573,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 0)
+    (call $std/math/test_mod
+     (f64.const -2)
+     (f64.const -1)
      (f64.const -0)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -13703,12 +14593,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 0)
+    (call $std/math/test_mod
      (f64.const inf)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -13723,12 +14613,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 0)
+    (call $std/math/test_mod
      (f64.const -inf)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -13743,9 +14633,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 0)
+    (call $std/math/test_mod
      (f64.const nan:0x8000000000000)
+     (f64.const -1)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
@@ -13763,8 +14653,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const 0)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -13783,8 +14673,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const 0)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -13803,10 +14693,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const 0)
      (f64.const inf)
-     (f64.const -0)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13823,10 +14713,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const 0)
      (f64.const -inf)
-     (f64.const -0)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -13843,8 +14733,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -13863,8 +14753,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1)
+    (call $std/math/test_mod
+     (f64.const -0)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -13883,9 +14773,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1)
-     (f64.const 0)
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -13903,12 +14793,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
+     (f64.const -0)
      (f64.const inf)
+     (f64.const -0)
      (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -13923,12 +14813,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
+     (f64.const -0)
      (f64.const -inf)
+     (f64.const -0)
      (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -13943,9 +14833,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
@@ -13963,9 +14853,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1)
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -13983,9 +14873,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const inf)
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -14003,9 +14893,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -inf)
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -14023,12 +14913,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const nan:0x8000000000000)
-     (f64.const -0)
+    (call $std/math/test_mod
+     (f64.const -inf)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14043,12 +14933,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const inf)
-     (f64.const 2)
+    (call $std/math/test_mod
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 2)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -14063,9 +14953,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const inf)
-     (f64.const -0.5)
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -14083,12 +14973,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
      (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14103,9 +14993,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
      (f64.const -inf)
-     (f64.const 2)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -14123,12 +15013,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -inf)
-     (f64.const -0.5)
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -14143,12 +15033,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -inf)
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const 2)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14163,12 +15053,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const -0.5)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14183,8 +15073,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1)
+    (call $std/math/test_mod
+     (f64.const inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -14203,12 +15093,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_mod
+     (f64.const -inf)
+     (f64.const 2)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14223,12 +15113,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1)
-     (f64.const inf)
-     (f64.const 1)
+    (call $std/math/test_mod
+     (f64.const -inf)
+     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14243,10 +15133,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const -1)
+    (call $std/math/test_mod
+     (f64.const -inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -14263,12 +15153,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const inf)
-     (f64.const inf)
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -14283,12 +15173,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -inf)
-     (f64.const inf)
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -14303,10 +15193,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1)
-     (f64.const -inf)
-     (f64.const 1)
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -14323,10 +15213,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1)
-     (f64.const -inf)
-     (f64.const -1)
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -14343,12 +15233,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
+    (call $std/math/test_mod
+     (f64.const -1)
      (f64.const inf)
-     (f64.const -inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const -1)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -14363,9 +15253,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -inf)
-     (f64.const -inf)
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const inf)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -14383,12 +15273,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1.75)
-     (f64.const 0.5)
-     (f64.const 0.25)
+    (call $std/math/test_mod
+     (f64.const -inf)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14403,10 +15293,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1.75)
-     (f64.const 0.5)
-     (f64.const -0.25)
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const -inf)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -14423,10 +15313,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const 1.75)
-     (f64.const -0.5)
-     (f64.const 0.25)
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const -inf)
+     (f64.const -1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -14443,12 +15333,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmod
-     (f64.const -1.75)
-     (f64.const -0.5)
-     (f64.const -0.25)
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const -inf)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14463,110 +15353,110 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_mod
+     (f64.const -inf)
+     (f64.const -inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 255)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1.75)
+     (f64.const 0.5)
+     (f64.const 0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 256)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1.75)
+     (f64.const 0.5)
+     (f64.const -0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 257)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1.75)
+     (f64.const -0.5)
+     (f64.const 0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 258)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1.75)
+     (f64.const -0.5)
+     (f64.const -0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 259)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
      (f32.const -8.066848754882812)
      (f32.const 4.535662651062012)
      (f32.const -3.531186103820801)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 263)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 4.345239639282227)
-     (f32.const -8.887990951538086)
-     (f32.const 4.345239639282227)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 264)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -8.381433486938477)
-     (f32.const -2.7636072635650635)
-     (f32.const -0.09061169624328613)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 265)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -6.531673431396484)
-     (f32.const 4.567535400390625)
-     (f32.const -1.9641380310058594)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 266)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 9.267057418823242)
-     (f32.const 4.811392307281494)
-     (f32.const 4.455665111541748)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 267)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -6.450045585632324)
-     (f32.const 0.6620717644691467)
-     (f32.const -0.49139970541000366)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14583,10 +15473,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 7.858890056610107)
-     (f32.const 0.052154526114463806)
-     (f32.const 0.0357111394405365)
+    (call $std/math/test_modf
+     (f32.const 4.345239639282227)
+     (f32.const -8.887990951538086)
+     (f32.const 4.345239639282227)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14603,10 +15493,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0.7920545339584351)
-     (f32.const 7.676402568817139)
-     (f32.const -0.7920545339584351)
+    (call $std/math/test_modf
+     (f32.const -8.381433486938477)
+     (f32.const -2.7636072635650635)
+     (f32.const -0.09061169624328613)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14623,10 +15513,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 0.6157026886940002)
-     (f32.const 2.0119025707244873)
-     (f32.const 0.6157026886940002)
+    (call $std/math/test_modf
+     (f32.const -6.531673431396484)
+     (f32.const 4.567535400390625)
+     (f32.const -1.9641380310058594)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14643,10 +15533,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0.5587586760520935)
-     (f32.const 0.03223983198404312)
-     (f32.const -0.010681532323360443)
+    (call $std/math/test_modf
+     (f32.const 9.267057418823242)
+     (f32.const 4.811392307281494)
+     (f32.const 4.455665111541748)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14663,10 +15553,50 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
+     (f32.const -6.450045585632324)
+     (f32.const 0.6620717644691467)
+     (f32.const -0.49139970541000366)
      (f32.const 0)
-     (f32.const 1)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 273)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 7.858890056610107)
+     (f32.const 0.052154526114463806)
+     (f32.const 0.0357111394405365)
      (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 274)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0.7920545339584351)
+     (f32.const 7.676402568817139)
+     (f32.const -0.7920545339584351)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14683,10 +15613,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const 0.6157026886940002)
+     (f32.const 2.0119025707244873)
+     (f32.const 0.6157026886940002)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14703,10 +15633,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 0.5)
-     (f32.const 1)
-     (f32.const 0.5)
+    (call $std/math/test_modf
+     (f32.const -0.5587586760520935)
+     (f32.const 0.03223983198404312)
+     (f32.const -0.010681532323360443)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14723,50 +15653,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0.5)
-     (f32.const 1)
-     (f32.const -0.5)
+    (call $std/math/test_modf
      (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 278)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1)
      (f32.const 1)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 279)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1)
-     (f32.const 1)
-     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14783,10 +15673,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1.5)
+    (call $std/math/test_modf
+     (f32.const -0)
      (f32.const 1)
-     (f32.const 0.5)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14803,10 +15693,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1.5)
+    (call $std/math/test_modf
+     (f32.const 0.5)
      (f32.const 1)
-     (f32.const -0.5)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14823,10 +15713,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 2)
+    (call $std/math/test_modf
+     (f32.const -0.5)
      (f32.const 1)
-     (f32.const 0)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14843,10 +15733,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -2)
+    (call $std/math/test_modf
      (f32.const 1)
-     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14863,12 +15753,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const inf)
+    (call $std/math/test_modf
+     (f32.const -1)
      (f32.const 1)
-     (f32.const nan:0x400000)
+     (f32.const -0)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -14883,12 +15773,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -inf)
+    (call $std/math/test_modf
+     (f32.const 1.5)
      (f32.const 1)
-     (f32.const nan:0x400000)
+     (f32.const 0.5)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -14903,10 +15793,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const nan:0x400000)
+    (call $std/math/test_modf
+     (f32.const -1.5)
      (f32.const 1)
-     (f32.const nan:0x400000)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -14923,9 +15813,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 0)
-     (f32.const -1)
+    (call $std/math/test_modf
+     (f32.const 2)
+     (f32.const 1)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -14943,9 +15833,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0)
-     (f32.const -1)
+    (call $std/math/test_modf
+     (f32.const -2)
+     (f32.const 1)
      (f32.const -0)
      (f32.const 0)
      (i32.const 0)
@@ -14963,12 +15853,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 0.5)
-     (f32.const -1)
-     (f32.const 0.5)
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -14983,12 +15873,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0.5)
-     (f32.const -1)
-     (f32.const -0.5)
+    (call $std/math/test_modf
+     (f32.const -inf)
+     (f32.const 1)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15003,10 +15893,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
      (f32.const 1)
-     (f32.const -1)
-     (f32.const 0)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15023,10 +15913,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
+     (f32.const 0)
      (f32.const -1)
-     (f32.const -1)
-     (f32.const -0)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15043,10 +15933,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1.5)
+    (call $std/math/test_modf
+     (f32.const -0)
      (f32.const -1)
-     (f32.const 0.5)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15063,10 +15953,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1.5)
+    (call $std/math/test_modf
+     (f32.const 0.5)
      (f32.const -1)
-     (f32.const -0.5)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15083,10 +15973,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 2)
+    (call $std/math/test_modf
+     (f32.const -0.5)
      (f32.const -1)
-     (f32.const 0)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15103,10 +15993,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -2)
+    (call $std/math/test_modf
+     (f32.const 1)
      (f32.const -1)
-     (f32.const -0)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15123,12 +16013,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const inf)
+    (call $std/math/test_modf
      (f32.const -1)
-     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const -0)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15143,12 +16033,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -inf)
+    (call $std/math/test_modf
+     (f32.const 1.5)
      (f32.const -1)
-     (f32.const nan:0x400000)
+     (f32.const 0.5)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15163,10 +16053,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const nan:0x400000)
+    (call $std/math/test_modf
+     (f32.const -1.5)
      (f32.const -1)
-     (f32.const nan:0x400000)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15183,12 +16073,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
+     (f32.const 2)
+     (f32.const -1)
      (f32.const 0)
      (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15203,12 +16093,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 0)
+    (call $std/math/test_modf
+     (f32.const -2)
+     (f32.const -1)
      (f32.const -0)
-     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15223,12 +16113,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 0)
+    (call $std/math/test_modf
      (f32.const inf)
+     (f32.const -1)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15243,12 +16133,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 0)
+    (call $std/math/test_modf
      (f32.const -inf)
+     (f32.const -1)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15263,9 +16153,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 0)
+    (call $std/math/test_modf
      (f32.const nan:0x400000)
+     (f32.const -1)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
@@ -15283,8 +16173,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const 0)
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -15303,8 +16193,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const 0)
      (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -15323,10 +16213,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const 0)
      (f32.const inf)
-     (f32.const -0)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15343,10 +16233,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const 0)
      (f32.const -inf)
-     (f32.const -0)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15363,8 +16253,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -15383,8 +16273,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1)
+    (call $std/math/test_modf
+     (f32.const -0)
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -15403,9 +16293,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1)
-     (f32.const 0)
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 2)
@@ -15423,12 +16313,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
+     (f32.const -0)
      (f32.const inf)
+     (f32.const -0)
      (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15443,12 +16333,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
+     (f32.const -0)
      (f32.const -inf)
+     (f32.const -0)
      (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15463,9 +16353,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
+     (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
@@ -15483,9 +16373,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1)
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 2)
@@ -15503,9 +16393,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const inf)
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 2)
@@ -15523,9 +16413,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -inf)
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 2)
@@ -15543,12 +16433,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const nan:0x400000)
-     (f32.const -0)
+    (call $std/math/test_modf
+     (f32.const -inf)
+     (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15563,12 +16453,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const inf)
-     (f32.const 2)
+    (call $std/math/test_modf
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 2)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -15583,9 +16473,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const inf)
-     (f32.const -0.5)
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 2)
@@ -15603,12 +16493,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
      (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15623,9 +16513,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
      (f32.const -inf)
-     (f32.const 2)
+     (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 2)
@@ -15643,12 +16533,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -inf)
-     (f32.const -0.5)
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15663,12 +16553,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -inf)
-     (f32.const nan:0x400000)
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const 2)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15683,12 +16573,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const -0.5)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15703,8 +16593,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1)
+    (call $std/math/test_modf
+     (f32.const inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -15723,12 +16613,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1)
-     (f32.const nan:0x400000)
+    (call $std/math/test_modf
+     (f32.const -inf)
+     (f32.const 2)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15743,12 +16633,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1)
-     (f32.const inf)
-     (f32.const 1)
+    (call $std/math/test_modf
+     (f32.const -inf)
+     (f32.const -0.5)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15763,10 +16653,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const -1)
+    (call $std/math/test_modf
+     (f32.const -inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15783,12 +16673,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const inf)
-     (f32.const inf)
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15803,12 +16693,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -inf)
-     (f32.const inf)
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15823,10 +16713,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1)
-     (f32.const -inf)
-     (f32.const 1)
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15843,10 +16733,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1)
-     (f32.const -inf)
-     (f32.const -1)
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15863,12 +16753,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
+    (call $std/math/test_modf
+     (f32.const -1)
      (f32.const inf)
-     (f32.const -inf)
-     (f32.const nan:0x400000)
+     (f32.const -1)
      (f32.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -15883,9 +16773,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -inf)
-     (f32.const -inf)
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const inf)
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 2)
@@ -15903,12 +16793,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1.75)
-     (f32.const 0.5)
-     (f32.const 0.25)
+    (call $std/math/test_modf
+     (f32.const -inf)
+     (f32.const inf)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15923,10 +16813,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1.75)
-     (f32.const 0.5)
-     (f32.const -0.25)
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const -inf)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15943,10 +16833,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const 1.75)
-     (f32.const -0.5)
-     (f32.const 0.25)
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const -inf)
+     (f32.const -1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15963,12 +16853,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_fmodf
-     (f32.const -1.75)
-     (f32.const -0.5)
-     (f32.const -0.25)
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const -inf)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -15983,85 +16873,110 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
+    (call $std/math/test_modf
+     (f32.const -inf)
+     (f32.const -inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 341)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1.75)
+     (f32.const 0.5)
+     (f32.const 0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 342)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1.75)
+     (f32.const 0.5)
+     (f32.const -0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 343)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1.75)
+     (f32.const -0.5)
+     (f32.const 0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 344)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1.75)
+     (f32.const -0.5)
+     (f32.const -0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 345)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
      (f64.const -8.06684839057968)
-     (f64.const 8.06684839057968)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 350)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_abs
-     (f64.const 4.345239849338305)
-     (f64.const 4.345239849338305)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 351)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_abs
-     (f64.const -8.38143342755525)
-     (f64.const 8.38143342755525)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 352)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_abs
-     (f64.const -6.531673581913484)
-     (f64.const 6.531673581913484)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 353)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_abs
-     (f64.const 9.267056966972586)
-     (f64.const 9.267056966972586)
+     (f64.const 4.535662560676869)
+     (f64.const 1.0044767307740567)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16078,9 +16993,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const 0.6619858980995045)
-     (f64.const 0.6619858980995045)
+    (call $std/math/test_rem
+     (f64.const 4.345239849338305)
+     (f64.const -8.88799136300345)
+     (f64.const 4.345239849338305)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16097,9 +17013,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const -0.4066039223853553)
-     (f64.const 0.4066039223853553)
+    (call $std/math/test_rem
+     (f64.const -8.38143342755525)
+     (f64.const -2.763607337379588)
+     (f64.const -0.09061141541648476)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16116,9 +17033,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const 0.5617597462207241)
-     (f64.const 0.5617597462207241)
+    (call $std/math/test_rem
+     (f64.const -6.531673581913484)
+     (f64.const 4.567535276842744)
+     (f64.const -1.9641383050707404)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16135,9 +17053,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const 0.7741522965913037)
-     (f64.const 0.7741522965913037)
+    (call $std/math/test_rem
+     (f64.const 9.267056966972586)
+     (f64.const 4.811392084359796)
+     (f64.const -0.35572720174700656)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16154,9 +17073,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const -0.6787637026394024)
-     (f64.const 0.6787637026394024)
+    (call $std/math/test_rem
+     (f64.const -6.450045556060236)
+     (f64.const 0.6620717923376739)
+     (f64.const 0.17067236731650248)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16173,9 +17093,50 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
+    (call $std/math/test_rem
+     (f64.const 7.858890253041697)
+     (f64.const 0.05215452675006225)
+     (f64.const -0.016443286217702822)
      (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 360)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0.792054511984896)
+     (f64.const 7.67640268511754)
+     (f64.const -0.792054511984896)
      (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 361)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0.615702673197924)
+     (f64.const 2.0119025790324803)
+     (f64.const 0.615702673197924)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16192,9 +17153,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const -0)
-     (f64.const 0)
+    (call $std/math/test_rem
+     (f64.const -0.5587586823609152)
+     (f64.const 0.03223983060263804)
+     (f64.const -0.0106815621160685)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16211,47 +17173,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const 1)
+    (call $std/math/test_rem
+     (f64.const 0)
      (f64.const 1)
      (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 364)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_abs
-     (f64.const -1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 365)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_abs
-     (f64.const inf)
-     (f64.const inf)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16268,9 +17193,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const -inf)
-     (f64.const inf)
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16287,9 +17213,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_abs
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_rem
+     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16306,11 +17233,172 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const -8.066848754882812)
-     (f32.const 8.066848754882812)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const -0.5)
+     (f64.const 1)
+     (f64.const -0.5)
+     (f64.const 0)
      (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 369)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 370)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 371)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1.5)
+     (f64.const 1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 372)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1.5)
+     (f64.const 1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 373)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 2)
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 374)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -2)
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 375)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 376)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -16325,10 +17413,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const 4.345239639282227)
-     (f32.const 4.345239639282227)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16344,10 +17433,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const -8.381433486938477)
-     (f32.const 8.381433486938477)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16363,10 +17453,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const -6.531673431396484)
-     (f32.const 6.531673431396484)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16382,10 +17473,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const 9.267057418823242)
-     (f32.const 9.267057418823242)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const 0.5)
+     (f64.const -1)
+     (f64.const 0.5)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16401,10 +17493,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const 0.6619858741760254)
-     (f32.const 0.6619858741760254)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const -0.5)
+     (f64.const -1)
+     (f64.const -0.5)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16420,10 +17513,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const -0.40660393238067627)
-     (f32.const 0.40660393238067627)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16439,10 +17533,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const 0.5617597699165344)
-     (f32.const 0.5617597699165344)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16458,10 +17553,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const 0.7741522789001465)
-     (f32.const 0.7741522789001465)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const 1.5)
+     (f64.const -1)
+     (f64.const -0.5)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16477,10 +17573,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const -0.6787636876106262)
-     (f32.const 0.6787636876106262)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const -1.5)
+     (f64.const -1)
+     (f64.const 0.5)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16496,11 +17593,52 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const 2)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
      (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 387)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -2)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 388)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -16515,11 +17653,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -16534,10 +17673,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16553,11 +17693,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const -1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -16572,11 +17713,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -16591,10 +17733,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const -inf)
-     (f32.const inf)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16610,10 +17753,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_absf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const -inf)
+     (f64.const 0)
+     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -16629,8 +17773,189 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const -8.06684839057968)
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 396)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 397)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 398)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 399)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const -inf)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 400)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 401)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 402)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 403)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 404)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -16648,11 +17973,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const 4.345239849338305)
+    (call $std/math/test_rem
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 2)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -16667,8 +17993,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const -8.38143342755525)
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -16686,8 +18013,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const -6.531673581913484)
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -16705,8 +18033,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const 9.267056966972586)
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 2)
@@ -16724,11 +18053,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const 0.6619858980995045)
-     (f64.const 0.8473310828433507)
-     (f64.const -0.41553276777267456)
-     (i32.const 1)
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -16743,11 +18073,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const -0.4066039223853553)
-     (f64.const 1.989530071088669)
-     (f64.const 0.4973946213722229)
-     (i32.const 1)
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const 2)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -16762,11 +18093,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const 0.5617597462207241)
-     (f64.const 0.9742849645674904)
-     (f64.const -0.4428897500038147)
-     (i32.const 1)
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -16781,11 +18113,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const 0.7741522965913037)
-     (f64.const 0.6854215158636222)
-     (f64.const -0.12589527666568756)
-     (i32.const 1)
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -16800,11 +18133,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const -0.6787637026394024)
-     (f64.const 2.316874138205964)
-     (f64.const -0.17284949123859406)
-     (i32.const 1)
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const 2)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
     )
    )
    (block
@@ -16819,11 +18153,52 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (f64.const 1.5707963267948966)
-     (f64.const -0.27576595544815063)
-     (i32.const 1)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 415)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 416)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -16838,11 +18213,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const -1)
-     (f64.const 3.141592653589793)
-     (f64.const -0.27576595544815063)
-     (i32.const 1)
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -16857,9 +18233,10 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const 1)
-     (f64.const 0)
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16876,11 +18253,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const 1.0000000000000002)
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const 1)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -16895,11 +18273,12 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
-     (f64.const -1.0000000000000002)
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const inf)
+     (f64.const -1)
      (f64.const 0)
-     (i32.const 2)
+     (i32.const 0)
     )
    )
    (block
@@ -16914,7 +18293,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_acos
+    (call $std/math/test_rem
+     (f64.const inf)
      (f64.const inf)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -16933,6 +18313,2696 @@
   )
   (if
    (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 423)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const -inf)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 424)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const -inf)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 425)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const -inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 426)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -inf)
+     (f64.const -inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 427)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1.75)
+     (f64.const 0.5)
+     (f64.const -0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 428)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1.75)
+     (f64.const 0.5)
+     (f64.const 0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 429)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1.75)
+     (f64.const -0.5)
+     (f64.const -0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 430)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1.75)
+     (f64.const -0.5)
+     (f64.const 0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 431)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 8e-323)
+     (f64.const inf)
+     (f64.const 8e-323)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 432)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -8.066848754882812)
+     (f32.const 4.535662651062012)
+     (f32.const 1.004476547241211)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 441)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 4.345239639282227)
+     (f32.const -8.887990951538086)
+     (f32.const 4.345239639282227)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 442)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -8.381433486938477)
+     (f32.const -2.7636072635650635)
+     (f32.const -0.09061169624328613)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 443)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -6.531673431396484)
+     (f32.const 4.567535400390625)
+     (f32.const -1.9641380310058594)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 444)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 9.267057418823242)
+     (f32.const 4.811392307281494)
+     (f32.const -0.3557271957397461)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 445)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -6.450045585632324)
+     (f32.const 0.6620717644691467)
+     (f32.const 0.17067205905914307)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 446)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 7.858890056610107)
+     (f32.const 0.052154526114463806)
+     (f32.const -0.016443386673927307)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 447)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0.7920545339584351)
+     (f32.const 7.676402568817139)
+     (f32.const -0.7920545339584351)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 448)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0.6157026886940002)
+     (f32.const 2.0119025707244873)
+     (f32.const 0.6157026886940002)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 449)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0.5587586760520935)
+     (f32.const 0.03223983198404312)
+     (f32.const -0.010681532323360443)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 450)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 453)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 454)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 455)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0.5)
+     (f32.const 1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 456)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 457)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 458)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1.5)
+     (f32.const 1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 459)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1.5)
+     (f32.const 1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 460)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 2)
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 461)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -2)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 462)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 463)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 464)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 465)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 466)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 467)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0.5)
+     (f32.const -1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 468)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0.5)
+     (f32.const -1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 469)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 470)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 471)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1.5)
+     (f32.const -1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 472)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1.5)
+     (f32.const -1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 473)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 2)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 474)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -2)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 475)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 476)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 477)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 478)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 479)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 480)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 481)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const -inf)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 482)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 483)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 484)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 485)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 486)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const -inf)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 487)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 488)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 489)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 490)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 491)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 492)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 493)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 494)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 495)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 496)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 497)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const 2)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 498)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 499)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 500)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const 2)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 501)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 502)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 503)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 504)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 505)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 506)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 507)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 508)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 509)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 510)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const -inf)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 511)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const -inf)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 512)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const -inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 513)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -inf)
+     (f32.const -inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 514)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1.75)
+     (f32.const 0.5)
+     (f32.const -0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 515)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1.75)
+     (f32.const 0.5)
+     (f32.const 0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 516)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1.75)
+     (f32.const -0.5)
+     (f32.const -0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 517)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1.75)
+     (f32.const -0.5)
+     (f32.const 0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 518)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 5.877471754111438e-39)
+     (f32.const inf)
+     (f32.const 5.877471754111438e-39)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 519)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const -8.06684839057968)
+     (f64.const 8.06684839057968)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 529)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const 4.345239849338305)
+     (f64.const 4.345239849338305)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 530)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const -8.38143342755525)
+     (f64.const 8.38143342755525)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 531)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const -6.531673581913484)
+     (f64.const 6.531673581913484)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 532)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const 9.267056966972586)
+     (f64.const 9.267056966972586)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 533)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const 0.6619858980995045)
+     (f64.const 0.6619858980995045)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 534)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const -0.4066039223853553)
+     (f64.const 0.4066039223853553)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 535)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const 0.5617597462207241)
+     (f64.const 0.5617597462207241)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 536)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const 0.7741522965913037)
+     (f64.const 0.7741522965913037)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 537)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const -0.6787637026394024)
+     (f64.const 0.6787637026394024)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 538)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 541)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const -0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 542)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 543)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const -1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 544)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 545)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const -inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 546)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_abs
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 547)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const -8.066848754882812)
+     (f32.const 8.066848754882812)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 556)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const 4.345239639282227)
+     (f32.const 4.345239639282227)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 557)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const -8.381433486938477)
+     (f32.const 8.381433486938477)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 558)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const -6.531673431396484)
+     (f32.const 6.531673431396484)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 559)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const 9.267057418823242)
+     (f32.const 9.267057418823242)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 560)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const 0.6619858741760254)
+     (f32.const 0.6619858741760254)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 561)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const -0.40660393238067627)
+     (f32.const 0.40660393238067627)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 562)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const 0.5617597699165344)
+     (f32.const 0.5617597699165344)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 563)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const 0.7741522789001465)
+     (f32.const 0.7741522789001465)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 564)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const -0.6787636876106262)
+     (f32.const 0.6787636876106262)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 565)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 568)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const -0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 569)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 570)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const -1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 571)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 572)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const -inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 573)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_absf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 574)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const -8.06684839057968)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 584)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const 4.345239849338305)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 585)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const -8.38143342755525)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 586)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const -6.531673581913484)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 587)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const 9.267056966972586)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 588)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const 0.6619858980995045)
+     (f64.const 0.8473310828433507)
+     (f64.const -0.41553276777267456)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 589)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const -0.4066039223853553)
+     (f64.const 1.989530071088669)
+     (f64.const 0.4973946213722229)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 590)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const 0.5617597462207241)
+     (f64.const 0.9742849645674904)
+     (f64.const -0.4428897500038147)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 591)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const 0.7741522965913037)
+     (f64.const 0.6854215158636222)
+     (f64.const -0.12589527666568756)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 592)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const -0.6787637026394024)
+     (f64.const 2.316874138205964)
+     (f64.const -0.17284949123859406)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 593)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const 0)
+     (f64.const 1.5707963267948966)
+     (f64.const -0.27576595544815063)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 596)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const -1)
+     (f64.const 3.141592653589793)
+     (f64.const -0.27576595544815063)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 597)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 598)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const 1.0000000000000002)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 599)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const -1.0000000000000002)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 600)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_acos
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 601)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $std/math/test_acos
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
@@ -16944,7 +21014,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 423)
+     (i32.const 602)
      (i32.const 0)
     )
     (unreachable)
@@ -16963,7 +21033,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 424)
+     (i32.const 603)
      (i32.const 0)
     )
     (unreachable)
@@ -16982,7 +21052,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 425)
+     (i32.const 604)
      (i32.const 0)
     )
     (unreachable)
@@ -17001,7 +21071,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 426)
+     (i32.const 605)
      (i32.const 0)
     )
     (unreachable)
@@ -17020,7 +21090,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 435)
+     (i32.const 614)
      (i32.const 0)
     )
     (unreachable)
@@ -17039,7 +21109,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 436)
+     (i32.const 615)
      (i32.const 0)
     )
     (unreachable)
@@ -17058,7 +21128,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 437)
+     (i32.const 616)
      (i32.const 0)
     )
     (unreachable)
@@ -17077,7 +21147,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 438)
+     (i32.const 617)
      (i32.const 0)
     )
     (unreachable)
@@ -17096,7 +21166,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 439)
+     (i32.const 618)
      (i32.const 0)
     )
     (unreachable)
@@ -17115,7 +21185,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 440)
+     (i32.const 619)
      (i32.const 0)
     )
     (unreachable)
@@ -17134,7 +21204,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 441)
+     (i32.const 620)
      (i32.const 0)
     )
     (unreachable)
@@ -17153,7 +21223,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 442)
+     (i32.const 621)
      (i32.const 0)
     )
     (unreachable)
@@ -17172,7 +21242,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 443)
+     (i32.const 622)
      (i32.const 0)
     )
     (unreachable)
@@ -17191,7 +21261,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 444)
+     (i32.const 623)
      (i32.const 0)
     )
     (unreachable)
@@ -17210,7 +21280,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 447)
+     (i32.const 626)
      (i32.const 0)
     )
     (unreachable)
@@ -17229,7 +21299,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 448)
+     (i32.const 627)
      (i32.const 0)
     )
     (unreachable)
@@ -17248,7 +21318,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 449)
+     (i32.const 628)
      (i32.const 0)
     )
     (unreachable)
@@ -17267,7 +21337,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 450)
+     (i32.const 629)
      (i32.const 0)
     )
     (unreachable)
@@ -17286,7 +21356,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 451)
+     (i32.const 630)
      (i32.const 0)
     )
     (unreachable)
@@ -17305,7 +21375,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 452)
+     (i32.const 631)
      (i32.const 0)
     )
     (unreachable)
@@ -17324,7 +21394,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 453)
+     (i32.const 632)
      (i32.const 0)
     )
     (unreachable)
@@ -17343,7 +21413,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 454)
+     (i32.const 633)
      (i32.const 0)
     )
     (unreachable)
@@ -17362,7 +21432,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 455)
+     (i32.const 634)
      (i32.const 0)
     )
     (unreachable)
@@ -17381,7 +21451,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 456)
+     (i32.const 635)
      (i32.const 0)
     )
     (unreachable)
@@ -17400,7 +21470,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 457)
+     (i32.const 636)
      (i32.const 0)
     )
     (unreachable)
@@ -17419,7 +21489,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 467)
+     (i32.const 646)
      (i32.const 0)
     )
     (unreachable)
@@ -17438,7 +21508,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 468)
+     (i32.const 647)
      (i32.const 0)
     )
     (unreachable)
@@ -17457,7 +21527,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 469)
+     (i32.const 648)
      (i32.const 0)
     )
     (unreachable)
@@ -17476,7 +21546,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 470)
+     (i32.const 649)
      (i32.const 0)
     )
     (unreachable)
@@ -17495,7 +21565,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 471)
+     (i32.const 650)
      (i32.const 0)
     )
     (unreachable)
@@ -17514,7 +21584,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 472)
+     (i32.const 651)
      (i32.const 0)
     )
     (unreachable)
@@ -17533,7 +21603,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 473)
+     (i32.const 652)
      (i32.const 0)
     )
     (unreachable)
@@ -17552,7 +21622,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 474)
+     (i32.const 653)
      (i32.const 0)
     )
     (unreachable)
@@ -17571,7 +21641,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 475)
+     (i32.const 654)
      (i32.const 0)
     )
     (unreachable)
@@ -17590,7 +21660,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 476)
+     (i32.const 655)
      (i32.const 0)
     )
     (unreachable)
@@ -17609,7 +21679,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 479)
+     (i32.const 658)
      (i32.const 0)
     )
     (unreachable)
@@ -17628,7 +21698,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 480)
+     (i32.const 659)
      (i32.const 0)
     )
     (unreachable)
@@ -17647,7 +21717,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 481)
+     (i32.const 660)
      (i32.const 0)
     )
     (unreachable)
@@ -17666,7 +21736,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 482)
+     (i32.const 661)
      (i32.const 0)
     )
     (unreachable)
@@ -17685,7 +21755,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 483)
+     (i32.const 662)
      (i32.const 0)
     )
     (unreachable)
@@ -17704,7 +21774,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 484)
+     (i32.const 663)
      (i32.const 0)
     )
     (unreachable)
@@ -17723,7 +21793,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 485)
+     (i32.const 664)
      (i32.const 0)
     )
     (unreachable)
@@ -17742,7 +21812,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 501)
+     (i32.const 680)
      (i32.const 0)
     )
     (unreachable)
@@ -17761,7 +21831,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 503)
+     (i32.const 682)
      (i32.const 0)
     )
     (unreachable)
@@ -17780,7 +21850,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 504)
+     (i32.const 683)
      (i32.const 0)
     )
     (unreachable)
@@ -17799,7 +21869,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 513)
+     (i32.const 692)
      (i32.const 0)
     )
     (unreachable)
@@ -17818,7 +21888,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 514)
+     (i32.const 693)
      (i32.const 0)
     )
     (unreachable)
@@ -17837,7 +21907,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 515)
+     (i32.const 694)
      (i32.const 0)
     )
     (unreachable)
@@ -17856,7 +21926,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 516)
+     (i32.const 695)
      (i32.const 0)
     )
     (unreachable)
@@ -17875,7 +21945,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 517)
+     (i32.const 696)
      (i32.const 0)
     )
     (unreachable)
@@ -17894,7 +21964,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 518)
+     (i32.const 697)
      (i32.const 0)
     )
     (unreachable)
@@ -17913,7 +21983,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 519)
+     (i32.const 698)
      (i32.const 0)
     )
     (unreachable)
@@ -17932,7 +22002,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 520)
+     (i32.const 699)
      (i32.const 0)
     )
     (unreachable)
@@ -17951,7 +22021,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 521)
+     (i32.const 700)
      (i32.const 0)
     )
     (unreachable)
@@ -17970,7 +22040,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 522)
+     (i32.const 701)
      (i32.const 0)
     )
     (unreachable)
@@ -17989,7 +22059,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 525)
+     (i32.const 704)
      (i32.const 0)
     )
     (unreachable)
@@ -18008,7 +22078,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 526)
+     (i32.const 705)
      (i32.const 0)
     )
     (unreachable)
@@ -18027,7 +22097,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 527)
+     (i32.const 706)
      (i32.const 0)
     )
     (unreachable)
@@ -18046,7 +22116,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 528)
+     (i32.const 707)
      (i32.const 0)
     )
     (unreachable)
@@ -18065,7 +22135,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 529)
+     (i32.const 708)
      (i32.const 0)
     )
     (unreachable)
@@ -18084,7 +22154,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 530)
+     (i32.const 709)
      (i32.const 0)
     )
     (unreachable)
@@ -18103,7 +22173,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 531)
+     (i32.const 710)
      (i32.const 0)
     )
     (unreachable)
@@ -18122,7 +22192,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 532)
+     (i32.const 711)
      (i32.const 0)
     )
     (unreachable)
@@ -18141,7 +22211,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 542)
+     (i32.const 721)
      (i32.const 0)
     )
     (unreachable)
@@ -18160,7 +22230,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 543)
+     (i32.const 722)
      (i32.const 0)
     )
     (unreachable)
@@ -18179,7 +22249,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 544)
+     (i32.const 723)
      (i32.const 0)
     )
     (unreachable)
@@ -18198,7 +22268,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 545)
+     (i32.const 724)
      (i32.const 0)
     )
     (unreachable)
@@ -18217,7 +22287,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 546)
+     (i32.const 725)
      (i32.const 0)
     )
     (unreachable)
@@ -18236,7 +22306,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 547)
+     (i32.const 726)
      (i32.const 0)
     )
     (unreachable)
@@ -18255,7 +22325,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 548)
+     (i32.const 727)
      (i32.const 0)
     )
     (unreachable)
@@ -18274,7 +22344,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 549)
+     (i32.const 728)
      (i32.const 0)
     )
     (unreachable)
@@ -18293,7 +22363,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 550)
+     (i32.const 729)
      (i32.const 0)
     )
     (unreachable)
@@ -18312,7 +22382,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 551)
+     (i32.const 730)
      (i32.const 0)
     )
     (unreachable)
@@ -18331,7 +22401,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 554)
+     (i32.const 733)
      (i32.const 0)
     )
     (unreachable)
@@ -18350,7 +22420,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 555)
+     (i32.const 734)
      (i32.const 0)
     )
     (unreachable)
@@ -18369,7 +22439,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 556)
+     (i32.const 735)
      (i32.const 0)
     )
     (unreachable)
@@ -18388,7 +22458,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 557)
+     (i32.const 736)
      (i32.const 0)
     )
     (unreachable)
@@ -18407,7 +22477,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 558)
+     (i32.const 737)
      (i32.const 0)
     )
     (unreachable)
@@ -18426,7 +22496,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 559)
+     (i32.const 738)
      (i32.const 0)
     )
     (unreachable)
@@ -18445,7 +22515,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 560)
+     (i32.const 739)
      (i32.const 0)
     )
     (unreachable)
@@ -18464,7 +22534,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 561)
+     (i32.const 740)
      (i32.const 0)
     )
     (unreachable)
@@ -18483,7 +22553,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 562)
+     (i32.const 741)
      (i32.const 0)
     )
     (unreachable)
@@ -18502,7 +22572,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 563)
+     (i32.const 742)
      (i32.const 0)
     )
     (unreachable)
@@ -18521,7 +22591,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 572)
+     (i32.const 751)
      (i32.const 0)
     )
     (unreachable)
@@ -18540,7 +22610,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 573)
+     (i32.const 752)
      (i32.const 0)
     )
     (unreachable)
@@ -18559,7 +22629,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 574)
+     (i32.const 753)
      (i32.const 0)
     )
     (unreachable)
@@ -18578,7 +22648,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 575)
+     (i32.const 754)
      (i32.const 0)
     )
     (unreachable)
@@ -18597,7 +22667,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 576)
+     (i32.const 755)
      (i32.const 0)
     )
     (unreachable)
@@ -18616,7 +22686,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 577)
+     (i32.const 756)
      (i32.const 0)
     )
     (unreachable)
@@ -18635,7 +22705,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 578)
+     (i32.const 757)
      (i32.const 0)
     )
     (unreachable)
@@ -18654,7 +22724,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 579)
+     (i32.const 758)
      (i32.const 0)
     )
     (unreachable)
@@ -18673,7 +22743,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 580)
+     (i32.const 759)
      (i32.const 0)
     )
     (unreachable)
@@ -18692,7 +22762,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 581)
+     (i32.const 760)
      (i32.const 0)
     )
     (unreachable)
@@ -18711,7 +22781,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 584)
+     (i32.const 763)
      (i32.const 0)
     )
     (unreachable)
@@ -18730,7 +22800,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 585)
+     (i32.const 764)
      (i32.const 0)
     )
     (unreachable)
@@ -18749,7 +22819,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 586)
+     (i32.const 765)
      (i32.const 0)
     )
     (unreachable)
@@ -18768,7 +22838,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 587)
+     (i32.const 766)
      (i32.const 0)
     )
     (unreachable)
@@ -18787,7 +22857,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 588)
+     (i32.const 767)
      (i32.const 0)
     )
     (unreachable)
@@ -18806,7 +22876,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 589)
+     (i32.const 768)
      (i32.const 0)
     )
     (unreachable)
@@ -18825,7 +22895,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 590)
+     (i32.const 769)
      (i32.const 0)
     )
     (unreachable)
@@ -18844,7 +22914,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 591)
+     (i32.const 770)
      (i32.const 0)
     )
     (unreachable)
@@ -18863,7 +22933,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 592)
+     (i32.const 771)
      (i32.const 0)
     )
     (unreachable)
@@ -18882,7 +22952,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 593)
+     (i32.const 772)
      (i32.const 0)
     )
     (unreachable)
@@ -18901,7 +22971,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 603)
+     (i32.const 782)
      (i32.const 0)
     )
     (unreachable)
@@ -18920,7 +22990,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 604)
+     (i32.const 783)
      (i32.const 0)
     )
     (unreachable)
@@ -18939,7 +23009,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 605)
+     (i32.const 784)
      (i32.const 0)
     )
     (unreachable)
@@ -18958,7 +23028,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 606)
+     (i32.const 785)
      (i32.const 0)
     )
     (unreachable)
@@ -18977,7 +23047,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 607)
+     (i32.const 786)
      (i32.const 0)
     )
     (unreachable)
@@ -18996,7 +23066,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 608)
+     (i32.const 787)
      (i32.const 0)
     )
     (unreachable)
@@ -19015,7 +23085,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 609)
+     (i32.const 788)
      (i32.const 0)
     )
     (unreachable)
@@ -19034,7 +23104,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 610)
+     (i32.const 789)
      (i32.const 0)
     )
     (unreachable)
@@ -19053,7 +23123,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 611)
+     (i32.const 790)
      (i32.const 0)
     )
     (unreachable)
@@ -19072,7 +23142,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 612)
+     (i32.const 791)
      (i32.const 0)
     )
     (unreachable)
@@ -19091,7 +23161,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 615)
+     (i32.const 794)
      (i32.const 0)
     )
     (unreachable)
@@ -19110,7 +23180,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 616)
+     (i32.const 795)
      (i32.const 0)
     )
     (unreachable)
@@ -19129,7 +23199,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 617)
+     (i32.const 796)
      (i32.const 0)
     )
     (unreachable)
@@ -19148,7 +23218,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 618)
+     (i32.const 797)
      (i32.const 0)
     )
     (unreachable)
@@ -19167,7 +23237,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 619)
+     (i32.const 798)
      (i32.const 0)
     )
     (unreachable)
@@ -19186,7 +23256,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 648)
+     (i32.const 827)
      (i32.const 0)
     )
     (unreachable)
@@ -19205,7 +23275,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 649)
+     (i32.const 828)
      (i32.const 0)
     )
     (unreachable)
@@ -19224,7 +23294,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 650)
+     (i32.const 829)
      (i32.const 0)
     )
     (unreachable)
@@ -19243,7 +23313,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 651)
+     (i32.const 830)
      (i32.const 0)
     )
     (unreachable)
@@ -19262,7 +23332,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 652)
+     (i32.const 831)
      (i32.const 0)
     )
     (unreachable)
@@ -19281,7 +23351,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 653)
+     (i32.const 832)
      (i32.const 0)
     )
     (unreachable)
@@ -19300,7 +23370,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 654)
+     (i32.const 833)
      (i32.const 0)
     )
     (unreachable)
@@ -19319,7 +23389,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 655)
+     (i32.const 834)
      (i32.const 0)
     )
     (unreachable)
@@ -19338,7 +23408,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 656)
+     (i32.const 835)
      (i32.const 0)
     )
     (unreachable)
@@ -19357,7 +23427,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 657)
+     (i32.const 836)
      (i32.const 0)
     )
     (unreachable)
@@ -19376,7 +23446,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 660)
+     (i32.const 839)
      (i32.const 0)
     )
     (unreachable)
@@ -19395,7 +23465,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 661)
+     (i32.const 840)
      (i32.const 0)
     )
     (unreachable)
@@ -19414,7 +23484,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 662)
+     (i32.const 841)
      (i32.const 0)
     )
     (unreachable)
@@ -19433,7 +23503,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 663)
+     (i32.const 842)
      (i32.const 0)
     )
     (unreachable)
@@ -19452,7 +23522,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 664)
+     (i32.const 843)
      (i32.const 0)
     )
     (unreachable)
@@ -19471,7 +23541,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 674)
+     (i32.const 853)
      (i32.const 0)
     )
     (unreachable)
@@ -19490,7 +23560,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 675)
+     (i32.const 854)
      (i32.const 0)
     )
     (unreachable)
@@ -19509,7 +23579,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 676)
+     (i32.const 855)
      (i32.const 0)
     )
     (unreachable)
@@ -19528,7 +23598,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 677)
+     (i32.const 856)
      (i32.const 0)
     )
     (unreachable)
@@ -19547,7 +23617,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 678)
+     (i32.const 857)
      (i32.const 0)
     )
     (unreachable)
@@ -19566,7 +23636,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 679)
+     (i32.const 858)
      (i32.const 0)
     )
     (unreachable)
@@ -19585,7 +23655,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 680)
+     (i32.const 859)
      (i32.const 0)
     )
     (unreachable)
@@ -19604,7 +23674,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 681)
+     (i32.const 860)
      (i32.const 0)
     )
     (unreachable)
@@ -19623,7 +23693,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 682)
+     (i32.const 861)
      (i32.const 0)
     )
     (unreachable)
@@ -19642,7 +23712,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 683)
+     (i32.const 862)
      (i32.const 0)
     )
     (unreachable)
@@ -19661,7 +23731,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 686)
+     (i32.const 865)
      (i32.const 0)
     )
     (unreachable)
@@ -19680,7 +23750,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 687)
+     (i32.const 866)
      (i32.const 0)
     )
     (unreachable)
@@ -19699,7 +23769,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 688)
+     (i32.const 867)
      (i32.const 0)
     )
     (unreachable)
@@ -19718,7 +23788,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 689)
+     (i32.const 868)
      (i32.const 0)
     )
     (unreachable)
@@ -19737,7 +23807,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 690)
+     (i32.const 869)
      (i32.const 0)
     )
     (unreachable)
@@ -19756,7 +23826,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 691)
+     (i32.const 870)
      (i32.const 0)
     )
     (unreachable)
@@ -19775,7 +23845,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 692)
+     (i32.const 871)
      (i32.const 0)
     )
     (unreachable)
@@ -19794,7 +23864,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 693)
+     (i32.const 872)
      (i32.const 0)
     )
     (unreachable)
@@ -19813,7 +23883,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 702)
+     (i32.const 881)
      (i32.const 0)
     )
     (unreachable)
@@ -19832,7 +23902,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 703)
+     (i32.const 882)
      (i32.const 0)
     )
     (unreachable)
@@ -19851,7 +23921,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 704)
+     (i32.const 883)
      (i32.const 0)
     )
     (unreachable)
@@ -19870,7 +23940,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 705)
+     (i32.const 884)
      (i32.const 0)
     )
     (unreachable)
@@ -19889,7 +23959,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 706)
+     (i32.const 885)
      (i32.const 0)
     )
     (unreachable)
@@ -19908,7 +23978,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 707)
+     (i32.const 886)
      (i32.const 0)
     )
     (unreachable)
@@ -19927,7 +23997,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 708)
+     (i32.const 887)
      (i32.const 0)
     )
     (unreachable)
@@ -19946,7 +24016,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 709)
+     (i32.const 888)
      (i32.const 0)
     )
     (unreachable)
@@ -19965,7 +24035,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 710)
+     (i32.const 889)
      (i32.const 0)
     )
     (unreachable)
@@ -19984,7 +24054,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 711)
+     (i32.const 890)
      (i32.const 0)
     )
     (unreachable)
@@ -20003,7 +24073,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 714)
+     (i32.const 893)
      (i32.const 0)
     )
     (unreachable)
@@ -20022,7 +24092,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 715)
+     (i32.const 894)
      (i32.const 0)
     )
     (unreachable)
@@ -20041,7 +24111,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 716)
+     (i32.const 895)
      (i32.const 0)
     )
     (unreachable)
@@ -20060,7 +24130,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 717)
+     (i32.const 896)
      (i32.const 0)
     )
     (unreachable)
@@ -20079,7 +24149,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 718)
+     (i32.const 897)
      (i32.const 0)
     )
     (unreachable)
@@ -20098,7 +24168,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 719)
+     (i32.const 898)
      (i32.const 0)
     )
     (unreachable)
@@ -20117,7 +24187,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 720)
+     (i32.const 899)
      (i32.const 0)
     )
     (unreachable)
@@ -20136,7 +24206,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 730)
+     (i32.const 909)
      (i32.const 0)
     )
     (unreachable)
@@ -20155,7 +24225,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 731)
+     (i32.const 910)
      (i32.const 0)
     )
     (unreachable)
@@ -20174,7 +24244,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 732)
+     (i32.const 911)
      (i32.const 0)
     )
     (unreachable)
@@ -20193,7 +24263,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 733)
+     (i32.const 912)
      (i32.const 0)
     )
     (unreachable)
@@ -20212,7 +24282,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 734)
+     (i32.const 913)
      (i32.const 0)
     )
     (unreachable)
@@ -20231,7 +24301,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 735)
+     (i32.const 914)
      (i32.const 0)
     )
     (unreachable)
@@ -20250,7 +24320,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 736)
+     (i32.const 915)
      (i32.const 0)
     )
     (unreachable)
@@ -20269,7 +24339,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 737)
+     (i32.const 916)
      (i32.const 0)
     )
     (unreachable)
@@ -20288,7 +24358,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 738)
+     (i32.const 917)
      (i32.const 0)
     )
     (unreachable)
@@ -20307,7 +24377,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 739)
+     (i32.const 918)
      (i32.const 0)
     )
     (unreachable)
@@ -20326,7 +24396,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 742)
+     (i32.const 921)
      (i32.const 0)
     )
     (unreachable)
@@ -20345,7 +24415,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 743)
+     (i32.const 922)
      (i32.const 0)
     )
     (unreachable)
@@ -20364,7 +24434,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 744)
+     (i32.const 923)
      (i32.const 0)
     )
     (unreachable)
@@ -20383,7 +24453,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 745)
+     (i32.const 924)
      (i32.const 0)
     )
     (unreachable)
@@ -20402,7 +24472,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 746)
+     (i32.const 925)
      (i32.const 0)
     )
     (unreachable)
@@ -20421,7 +24491,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 747)
+     (i32.const 926)
      (i32.const 0)
     )
     (unreachable)
@@ -20440,7 +24510,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 748)
+     (i32.const 927)
      (i32.const 0)
     )
     (unreachable)
@@ -20459,7 +24529,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 749)
+     (i32.const 928)
      (i32.const 0)
     )
     (unreachable)
@@ -20478,7 +24548,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 750)
+     (i32.const 929)
      (i32.const 0)
     )
     (unreachable)
@@ -20497,7 +24567,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 751)
+     (i32.const 930)
      (i32.const 0)
     )
     (unreachable)
@@ -20516,7 +24586,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 760)
+     (i32.const 939)
      (i32.const 0)
     )
     (unreachable)
@@ -20535,7 +24605,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 761)
+     (i32.const 940)
      (i32.const 0)
     )
     (unreachable)
@@ -20554,7 +24624,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 762)
+     (i32.const 941)
      (i32.const 0)
     )
     (unreachable)
@@ -20573,7 +24643,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 763)
+     (i32.const 942)
      (i32.const 0)
     )
     (unreachable)
@@ -20592,7 +24662,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 764)
+     (i32.const 943)
      (i32.const 0)
     )
     (unreachable)
@@ -20611,7 +24681,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 765)
+     (i32.const 944)
      (i32.const 0)
     )
     (unreachable)
@@ -20630,7 +24700,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 766)
+     (i32.const 945)
      (i32.const 0)
     )
     (unreachable)
@@ -20649,7 +24719,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 767)
+     (i32.const 946)
      (i32.const 0)
     )
     (unreachable)
@@ -20668,7 +24738,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 768)
+     (i32.const 947)
      (i32.const 0)
     )
     (unreachable)
@@ -20687,7 +24757,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 769)
+     (i32.const 948)
      (i32.const 0)
     )
     (unreachable)
@@ -20706,7 +24776,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 772)
+     (i32.const 951)
      (i32.const 0)
     )
     (unreachable)
@@ -20725,7 +24795,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 773)
+     (i32.const 952)
      (i32.const 0)
     )
     (unreachable)
@@ -20744,7 +24814,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 774)
+     (i32.const 953)
      (i32.const 0)
     )
     (unreachable)
@@ -20763,7 +24833,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 775)
+     (i32.const 954)
      (i32.const 0)
     )
     (unreachable)
@@ -20782,7 +24852,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 776)
+     (i32.const 955)
      (i32.const 0)
     )
     (unreachable)
@@ -20801,7 +24871,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 777)
+     (i32.const 956)
      (i32.const 0)
     )
     (unreachable)
@@ -20820,7 +24890,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 778)
+     (i32.const 957)
      (i32.const 0)
     )
     (unreachable)
@@ -20839,7 +24909,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 779)
+     (i32.const 958)
      (i32.const 0)
     )
     (unreachable)
@@ -20858,7 +24928,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 780)
+     (i32.const 959)
      (i32.const 0)
     )
     (unreachable)
@@ -20877,7 +24947,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 781)
+     (i32.const 960)
      (i32.const 0)
     )
     (unreachable)
@@ -20896,7 +24966,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 893)
+     (i32.const 1072)
      (i32.const 0)
     )
     (unreachable)
@@ -20915,7 +24985,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 894)
+     (i32.const 1073)
      (i32.const 0)
     )
     (unreachable)
@@ -20934,7 +25004,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 895)
+     (i32.const 1074)
      (i32.const 0)
     )
     (unreachable)
@@ -20953,7 +25023,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 896)
+     (i32.const 1075)
      (i32.const 0)
     )
     (unreachable)
@@ -20972,7 +25042,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 897)
+     (i32.const 1076)
      (i32.const 0)
     )
     (unreachable)
@@ -20991,7 +25061,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 898)
+     (i32.const 1077)
      (i32.const 0)
     )
     (unreachable)
@@ -21010,7 +25080,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 899)
+     (i32.const 1078)
      (i32.const 0)
     )
     (unreachable)
@@ -21029,7 +25099,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 900)
+     (i32.const 1079)
      (i32.const 0)
     )
     (unreachable)
@@ -21048,7 +25118,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 901)
+     (i32.const 1080)
      (i32.const 0)
     )
     (unreachable)
@@ -21067,7 +25137,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 902)
+     (i32.const 1081)
      (i32.const 0)
     )
     (unreachable)
@@ -21086,7 +25156,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 905)
+     (i32.const 1084)
      (i32.const 0)
     )
     (unreachable)
@@ -21105,7 +25175,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 906)
+     (i32.const 1085)
      (i32.const 0)
     )
     (unreachable)
@@ -21124,7 +25194,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 907)
+     (i32.const 1086)
      (i32.const 0)
     )
     (unreachable)
@@ -21143,7 +25213,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 908)
+     (i32.const 1087)
      (i32.const 0)
     )
     (unreachable)
@@ -21162,7 +25232,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 909)
+     (i32.const 1088)
      (i32.const 0)
     )
     (unreachable)
@@ -21181,7 +25251,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 918)
+     (i32.const 1097)
      (i32.const 0)
     )
     (unreachable)
@@ -21200,7 +25270,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 919)
+     (i32.const 1098)
      (i32.const 0)
     )
     (unreachable)
@@ -21219,7 +25289,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 920)
+     (i32.const 1099)
      (i32.const 0)
     )
     (unreachable)
@@ -21238,7 +25308,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 921)
+     (i32.const 1100)
      (i32.const 0)
     )
     (unreachable)
@@ -21257,7 +25327,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 922)
+     (i32.const 1101)
      (i32.const 0)
     )
     (unreachable)
@@ -21276,7 +25346,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 923)
+     (i32.const 1102)
      (i32.const 0)
     )
     (unreachable)
@@ -21295,7 +25365,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 924)
+     (i32.const 1103)
      (i32.const 0)
     )
     (unreachable)
@@ -21314,7 +25384,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 925)
+     (i32.const 1104)
      (i32.const 0)
     )
     (unreachable)
@@ -21333,7 +25403,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 926)
+     (i32.const 1105)
      (i32.const 0)
     )
     (unreachable)
@@ -21352,7 +25422,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 927)
+     (i32.const 1106)
      (i32.const 0)
     )
     (unreachable)
@@ -21371,7 +25441,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 930)
+     (i32.const 1109)
      (i32.const 0)
     )
     (unreachable)
@@ -21390,7 +25460,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 931)
+     (i32.const 1110)
      (i32.const 0)
     )
     (unreachable)
@@ -21409,7 +25479,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 932)
+     (i32.const 1111)
      (i32.const 0)
     )
     (unreachable)
@@ -21428,7 +25498,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 933)
+     (i32.const 1112)
      (i32.const 0)
     )
     (unreachable)
@@ -21447,7 +25517,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 934)
+     (i32.const 1113)
      (i32.const 0)
     )
     (unreachable)
@@ -21466,7 +25536,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 944)
+     (i32.const 1123)
      (i32.const 0)
     )
     (unreachable)
@@ -21485,7 +25555,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 945)
+     (i32.const 1124)
      (i32.const 0)
     )
     (unreachable)
@@ -21504,7 +25574,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 946)
+     (i32.const 1125)
      (i32.const 0)
     )
     (unreachable)
@@ -21523,7 +25593,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 947)
+     (i32.const 1126)
      (i32.const 0)
     )
     (unreachable)
@@ -21542,7 +25612,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 948)
+     (i32.const 1127)
      (i32.const 0)
     )
     (unreachable)
@@ -21561,7 +25631,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 949)
+     (i32.const 1128)
      (i32.const 0)
     )
     (unreachable)
@@ -21580,7 +25650,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 950)
+     (i32.const 1129)
      (i32.const 0)
     )
     (unreachable)
@@ -21599,7 +25669,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 951)
+     (i32.const 1130)
      (i32.const 0)
     )
     (unreachable)
@@ -21618,7 +25688,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 952)
+     (i32.const 1131)
      (i32.const 0)
     )
     (unreachable)
@@ -21637,7 +25707,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 953)
+     (i32.const 1132)
      (i32.const 0)
     )
     (unreachable)
@@ -21656,7 +25726,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 956)
+     (i32.const 1135)
      (i32.const 0)
     )
     (unreachable)
@@ -21675,7 +25745,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 957)
+     (i32.const 1136)
      (i32.const 0)
     )
     (unreachable)
@@ -21694,7 +25764,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 958)
+     (i32.const 1137)
      (i32.const 0)
     )
     (unreachable)
@@ -21713,7 +25783,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 959)
+     (i32.const 1138)
      (i32.const 0)
     )
     (unreachable)
@@ -21732,7 +25802,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 960)
+     (i32.const 1139)
      (i32.const 0)
     )
     (unreachable)
@@ -21751,7 +25821,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 961)
+     (i32.const 1140)
      (i32.const 0)
     )
     (unreachable)
@@ -21770,7 +25840,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 962)
+     (i32.const 1141)
      (i32.const 0)
     )
     (unreachable)
@@ -21789,7 +25859,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 963)
+     (i32.const 1142)
      (i32.const 0)
     )
     (unreachable)
@@ -21808,7 +25878,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 964)
+     (i32.const 1143)
      (i32.const 0)
     )
     (unreachable)
@@ -21827,7 +25897,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 965)
+     (i32.const 1144)
      (i32.const 0)
     )
     (unreachable)
@@ -21846,7 +25916,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 966)
+     (i32.const 1145)
      (i32.const 0)
     )
     (unreachable)
@@ -21865,7 +25935,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 975)
+     (i32.const 1154)
      (i32.const 0)
     )
     (unreachable)
@@ -21884,7 +25954,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 976)
+     (i32.const 1155)
      (i32.const 0)
     )
     (unreachable)
@@ -21903,7 +25973,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 977)
+     (i32.const 1156)
      (i32.const 0)
     )
     (unreachable)
@@ -21922,7 +25992,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 978)
+     (i32.const 1157)
      (i32.const 0)
     )
     (unreachable)
@@ -21941,7 +26011,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 979)
+     (i32.const 1158)
      (i32.const 0)
     )
     (unreachable)
@@ -21960,7 +26030,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 980)
+     (i32.const 1159)
      (i32.const 0)
     )
     (unreachable)
@@ -21979,7 +26049,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 981)
+     (i32.const 1160)
      (i32.const 0)
     )
     (unreachable)
@@ -21998,7 +26068,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 982)
+     (i32.const 1161)
      (i32.const 0)
     )
     (unreachable)
@@ -22017,7 +26087,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 983)
+     (i32.const 1162)
      (i32.const 0)
     )
     (unreachable)
@@ -22036,7 +26106,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 984)
+     (i32.const 1163)
      (i32.const 0)
     )
     (unreachable)
@@ -22055,7 +26125,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 987)
+     (i32.const 1166)
      (i32.const 0)
     )
     (unreachable)
@@ -22074,7 +26144,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 988)
+     (i32.const 1167)
      (i32.const 0)
     )
     (unreachable)
@@ -22093,7 +26163,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 989)
+     (i32.const 1168)
      (i32.const 0)
     )
     (unreachable)
@@ -22112,7 +26182,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 990)
+     (i32.const 1169)
      (i32.const 0)
     )
     (unreachable)
@@ -22131,7 +26201,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 991)
+     (i32.const 1170)
      (i32.const 0)
     )
     (unreachable)
@@ -22150,7 +26220,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 992)
+     (i32.const 1171)
      (i32.const 0)
     )
     (unreachable)
@@ -22169,7 +26239,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 993)
+     (i32.const 1172)
      (i32.const 0)
     )
     (unreachable)
@@ -22188,7 +26258,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 994)
+     (i32.const 1173)
      (i32.const 0)
     )
     (unreachable)
@@ -22207,7 +26277,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 995)
+     (i32.const 1174)
      (i32.const 0)
     )
     (unreachable)
@@ -22226,7 +26296,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 996)
+     (i32.const 1175)
      (i32.const 0)
     )
     (unreachable)
@@ -22245,7 +26315,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 997)
+     (i32.const 1176)
      (i32.const 0)
     )
     (unreachable)
@@ -22264,7 +26334,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 998)
+     (i32.const 1177)
      (i32.const 0)
     )
     (unreachable)
@@ -22283,7 +26353,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 999)
+     (i32.const 1178)
      (i32.const 0)
     )
     (unreachable)
@@ -22302,7 +26372,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1000)
+     (i32.const 1179)
      (i32.const 0)
     )
     (unreachable)
@@ -22321,7 +26391,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1010)
+     (i32.const 1189)
      (i32.const 0)
     )
     (unreachable)
@@ -22340,7 +26410,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1011)
+     (i32.const 1190)
      (i32.const 0)
     )
     (unreachable)
@@ -22359,7 +26429,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1012)
+     (i32.const 1191)
      (i32.const 0)
     )
     (unreachable)
@@ -22378,7 +26448,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1013)
+     (i32.const 1192)
      (i32.const 0)
     )
     (unreachable)
@@ -22397,7 +26467,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1014)
+     (i32.const 1193)
      (i32.const 0)
     )
     (unreachable)
@@ -22416,7 +26486,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1015)
+     (i32.const 1194)
      (i32.const 0)
     )
     (unreachable)
@@ -22435,7 +26505,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1016)
+     (i32.const 1195)
      (i32.const 0)
     )
     (unreachable)
@@ -22454,7 +26524,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1017)
+     (i32.const 1196)
      (i32.const 0)
     )
     (unreachable)
@@ -22473,7 +26543,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1018)
+     (i32.const 1197)
      (i32.const 0)
     )
     (unreachable)
@@ -22492,7 +26562,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1019)
+     (i32.const 1198)
      (i32.const 0)
     )
     (unreachable)
@@ -22511,7 +26581,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1022)
+     (i32.const 1201)
      (i32.const 0)
     )
     (unreachable)
@@ -22530,7 +26600,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1023)
+     (i32.const 1202)
      (i32.const 0)
     )
     (unreachable)
@@ -22549,7 +26619,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1024)
+     (i32.const 1203)
      (i32.const 0)
     )
     (unreachable)
@@ -22568,7 +26638,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1025)
+     (i32.const 1204)
      (i32.const 0)
     )
     (unreachable)
@@ -22587,7 +26657,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1026)
+     (i32.const 1205)
      (i32.const 0)
     )
     (unreachable)
@@ -22606,7 +26676,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1027)
+     (i32.const 1206)
      (i32.const 0)
     )
     (unreachable)
@@ -22625,7 +26695,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1028)
+     (i32.const 1207)
      (i32.const 0)
     )
     (unreachable)
@@ -22644,7 +26714,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1029)
+     (i32.const 1208)
      (i32.const 0)
     )
     (unreachable)
@@ -22663,7 +26733,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1030)
+     (i32.const 1209)
      (i32.const 0)
     )
     (unreachable)
@@ -22682,7 +26752,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1039)
+     (i32.const 1218)
      (i32.const 0)
     )
     (unreachable)
@@ -22701,7 +26771,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1040)
+     (i32.const 1219)
      (i32.const 0)
     )
     (unreachable)
@@ -22720,7 +26790,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1041)
+     (i32.const 1220)
      (i32.const 0)
     )
     (unreachable)
@@ -22739,7 +26809,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1042)
+     (i32.const 1221)
      (i32.const 0)
     )
     (unreachable)
@@ -22758,7 +26828,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1043)
+     (i32.const 1222)
      (i32.const 0)
     )
     (unreachable)
@@ -22777,7 +26847,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1044)
+     (i32.const 1223)
      (i32.const 0)
     )
     (unreachable)
@@ -22796,7 +26866,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1045)
+     (i32.const 1224)
      (i32.const 0)
     )
     (unreachable)
@@ -22815,7 +26885,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1046)
+     (i32.const 1225)
      (i32.const 0)
     )
     (unreachable)
@@ -22834,7 +26904,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1047)
+     (i32.const 1226)
      (i32.const 0)
     )
     (unreachable)
@@ -22853,7 +26923,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1048)
+     (i32.const 1227)
      (i32.const 0)
     )
     (unreachable)
@@ -22872,7 +26942,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1051)
+     (i32.const 1230)
      (i32.const 0)
     )
     (unreachable)
@@ -22891,7 +26961,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1052)
+     (i32.const 1231)
      (i32.const 0)
     )
     (unreachable)
@@ -22910,7 +26980,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1053)
+     (i32.const 1232)
      (i32.const 0)
     )
     (unreachable)
@@ -22929,7 +26999,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1054)
+     (i32.const 1233)
      (i32.const 0)
     )
     (unreachable)
@@ -22948,7 +27018,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1055)
+     (i32.const 1234)
      (i32.const 0)
     )
     (unreachable)
@@ -22967,7 +27037,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1056)
+     (i32.const 1235)
      (i32.const 0)
     )
     (unreachable)
@@ -22986,7 +27056,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1057)
+     (i32.const 1236)
      (i32.const 0)
     )
     (unreachable)
@@ -23006,7 +27076,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1067)
+     (i32.const 1246)
      (i32.const 0)
     )
     (unreachable)
@@ -23026,7 +27096,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1068)
+     (i32.const 1247)
      (i32.const 0)
     )
     (unreachable)
@@ -23046,7 +27116,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1069)
+     (i32.const 1248)
      (i32.const 0)
     )
     (unreachable)
@@ -23066,7 +27136,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1070)
+     (i32.const 1249)
      (i32.const 0)
     )
     (unreachable)
@@ -23086,7 +27156,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1071)
+     (i32.const 1250)
      (i32.const 0)
     )
     (unreachable)
@@ -23106,7 +27176,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1072)
+     (i32.const 1251)
      (i32.const 0)
     )
     (unreachable)
@@ -23126,7 +27196,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1073)
+     (i32.const 1252)
      (i32.const 0)
     )
     (unreachable)
@@ -23146,7 +27216,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1074)
+     (i32.const 1253)
      (i32.const 0)
     )
     (unreachable)
@@ -23166,7 +27236,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1075)
+     (i32.const 1254)
      (i32.const 0)
     )
     (unreachable)
@@ -23186,7 +27256,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1076)
+     (i32.const 1255)
      (i32.const 0)
     )
     (unreachable)
@@ -23206,7 +27276,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1079)
+     (i32.const 1258)
      (i32.const 0)
     )
     (unreachable)
@@ -23226,7 +27296,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1080)
+     (i32.const 1259)
      (i32.const 0)
     )
     (unreachable)
@@ -23246,7 +27316,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1081)
+     (i32.const 1260)
      (i32.const 0)
     )
     (unreachable)
@@ -23266,7 +27336,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1082)
+     (i32.const 1261)
      (i32.const 0)
     )
     (unreachable)
@@ -23286,7 +27356,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1083)
+     (i32.const 1262)
      (i32.const 0)
     )
     (unreachable)
@@ -23306,7 +27376,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1084)
+     (i32.const 1263)
      (i32.const 0)
     )
     (unreachable)
@@ -23326,7 +27396,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1085)
+     (i32.const 1264)
      (i32.const 0)
     )
     (unreachable)
@@ -23346,7 +27416,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1086)
+     (i32.const 1265)
      (i32.const 0)
     )
     (unreachable)
@@ -23366,7 +27436,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1087)
+     (i32.const 1266)
      (i32.const 0)
     )
     (unreachable)
@@ -23386,7 +27456,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1088)
+     (i32.const 1267)
      (i32.const 0)
     )
     (unreachable)
@@ -23406,7 +27476,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1089)
+     (i32.const 1268)
      (i32.const 0)
     )
     (unreachable)
@@ -23426,7 +27496,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1090)
+     (i32.const 1269)
      (i32.const 0)
     )
     (unreachable)
@@ -23446,7 +27516,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1091)
+     (i32.const 1270)
      (i32.const 0)
     )
     (unreachable)
@@ -23466,7 +27536,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1092)
+     (i32.const 1271)
      (i32.const 0)
     )
     (unreachable)
@@ -23486,7 +27556,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1093)
+     (i32.const 1272)
      (i32.const 0)
     )
     (unreachable)
@@ -23506,7 +27576,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1094)
+     (i32.const 1273)
      (i32.const 0)
     )
     (unreachable)
@@ -23526,7 +27596,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1095)
+     (i32.const 1274)
      (i32.const 0)
     )
     (unreachable)
@@ -23546,7 +27616,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1096)
+     (i32.const 1275)
      (i32.const 0)
     )
     (unreachable)
@@ -23566,7 +27636,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1097)
+     (i32.const 1276)
      (i32.const 0)
     )
     (unreachable)
@@ -23586,7 +27656,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1106)
+     (i32.const 1285)
      (i32.const 0)
     )
     (unreachable)
@@ -23606,7 +27676,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1107)
+     (i32.const 1286)
      (i32.const 0)
     )
     (unreachable)
@@ -23626,7 +27696,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1108)
+     (i32.const 1287)
      (i32.const 0)
     )
     (unreachable)
@@ -23646,7 +27716,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1109)
+     (i32.const 1288)
      (i32.const 0)
     )
     (unreachable)
@@ -23666,7 +27736,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1110)
+     (i32.const 1289)
      (i32.const 0)
     )
     (unreachable)
@@ -23686,7 +27756,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1111)
+     (i32.const 1290)
      (i32.const 0)
     )
     (unreachable)
@@ -23706,7 +27776,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1112)
+     (i32.const 1291)
      (i32.const 0)
     )
     (unreachable)
@@ -23726,7 +27796,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1113)
+     (i32.const 1292)
      (i32.const 0)
     )
     (unreachable)
@@ -23746,7 +27816,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1114)
+     (i32.const 1293)
      (i32.const 0)
     )
     (unreachable)
@@ -23766,7 +27836,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1115)
+     (i32.const 1294)
      (i32.const 0)
     )
     (unreachable)
@@ -23786,7 +27856,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1118)
+     (i32.const 1297)
      (i32.const 0)
     )
     (unreachable)
@@ -23806,7 +27876,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1119)
+     (i32.const 1298)
      (i32.const 0)
     )
     (unreachable)
@@ -23826,7 +27896,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1120)
+     (i32.const 1299)
      (i32.const 0)
     )
     (unreachable)
@@ -23846,7 +27916,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1121)
+     (i32.const 1300)
      (i32.const 0)
     )
     (unreachable)
@@ -23866,7 +27936,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1122)
+     (i32.const 1301)
      (i32.const 0)
     )
     (unreachable)
@@ -23886,7 +27956,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1123)
+     (i32.const 1302)
      (i32.const 0)
     )
     (unreachable)
@@ -23906,7 +27976,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1124)
+     (i32.const 1303)
      (i32.const 0)
     )
     (unreachable)
@@ -23926,7 +27996,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1125)
+     (i32.const 1304)
      (i32.const 0)
     )
     (unreachable)
@@ -23946,7 +28016,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1126)
+     (i32.const 1305)
      (i32.const 0)
     )
     (unreachable)
@@ -23966,7 +28036,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1127)
+     (i32.const 1306)
      (i32.const 0)
     )
     (unreachable)
@@ -23986,7 +28056,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1128)
+     (i32.const 1307)
      (i32.const 0)
     )
     (unreachable)
@@ -24006,7 +28076,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1129)
+     (i32.const 1308)
      (i32.const 0)
     )
     (unreachable)
@@ -24026,7 +28096,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1130)
+     (i32.const 1309)
      (i32.const 0)
     )
     (unreachable)
@@ -24046,7 +28116,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1131)
+     (i32.const 1310)
      (i32.const 0)
     )
     (unreachable)
@@ -24066,7 +28136,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1132)
+     (i32.const 1311)
      (i32.const 0)
     )
     (unreachable)
@@ -24086,7 +28156,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1133)
+     (i32.const 1312)
      (i32.const 0)
     )
     (unreachable)
@@ -24106,7 +28176,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1134)
+     (i32.const 1313)
      (i32.const 0)
     )
     (unreachable)
@@ -24126,7 +28196,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1135)
+     (i32.const 1314)
      (i32.const 0)
     )
     (unreachable)
@@ -24146,7 +28216,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1136)
+     (i32.const 1315)
      (i32.const 0)
     )
     (unreachable)
@@ -24165,7 +28235,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1146)
+     (i32.const 1325)
      (i32.const 0)
     )
     (unreachable)
@@ -24184,7 +28254,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1147)
+     (i32.const 1326)
      (i32.const 0)
     )
     (unreachable)
@@ -24203,7 +28273,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1148)
+     (i32.const 1327)
      (i32.const 0)
     )
     (unreachable)
@@ -24222,7 +28292,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1149)
+     (i32.const 1328)
      (i32.const 0)
     )
     (unreachable)
@@ -24241,7 +28311,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1150)
+     (i32.const 1329)
      (i32.const 0)
     )
     (unreachable)
@@ -24260,7 +28330,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1151)
+     (i32.const 1330)
      (i32.const 0)
     )
     (unreachable)
@@ -24279,7 +28349,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1152)
+     (i32.const 1331)
      (i32.const 0)
     )
     (unreachable)
@@ -24298,7 +28368,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1153)
+     (i32.const 1332)
      (i32.const 0)
     )
     (unreachable)
@@ -24317,7 +28387,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1154)
+     (i32.const 1333)
      (i32.const 0)
     )
     (unreachable)
@@ -24336,7 +28406,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1155)
+     (i32.const 1334)
      (i32.const 0)
     )
     (unreachable)
@@ -24355,7 +28425,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1158)
+     (i32.const 1337)
      (i32.const 0)
     )
     (unreachable)
@@ -24374,7 +28444,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1159)
+     (i32.const 1338)
      (i32.const 0)
     )
     (unreachable)
@@ -24393,7 +28463,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1160)
+     (i32.const 1339)
      (i32.const 0)
     )
     (unreachable)
@@ -24412,7 +28482,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1161)
+     (i32.const 1340)
      (i32.const 0)
     )
     (unreachable)
@@ -24431,7 +28501,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1162)
+     (i32.const 1341)
      (i32.const 0)
     )
     (unreachable)
@@ -24450,7 +28520,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1163)
+     (i32.const 1342)
      (i32.const 0)
     )
     (unreachable)
@@ -24469,7 +28539,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1164)
+     (i32.const 1343)
      (i32.const 0)
     )
     (unreachable)
@@ -24488,7 +28558,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1165)
+     (i32.const 1344)
      (i32.const 0)
     )
     (unreachable)
@@ -24507,7 +28577,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1174)
+     (i32.const 1353)
      (i32.const 0)
     )
     (unreachable)
@@ -24526,7 +28596,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1175)
+     (i32.const 1354)
      (i32.const 0)
     )
     (unreachable)
@@ -24545,7 +28615,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1176)
+     (i32.const 1355)
      (i32.const 0)
     )
     (unreachable)
@@ -24564,7 +28634,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1177)
+     (i32.const 1356)
      (i32.const 0)
     )
     (unreachable)
@@ -24583,7 +28653,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1178)
+     (i32.const 1357)
      (i32.const 0)
     )
     (unreachable)
@@ -24602,7 +28672,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1179)
+     (i32.const 1358)
      (i32.const 0)
     )
     (unreachable)
@@ -24621,7 +28691,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1180)
+     (i32.const 1359)
      (i32.const 0)
     )
     (unreachable)
@@ -24640,7 +28710,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1181)
+     (i32.const 1360)
      (i32.const 0)
     )
     (unreachable)
@@ -24659,7 +28729,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1184)
+     (i32.const 1363)
      (i32.const 0)
     )
     (unreachable)
@@ -24678,7 +28748,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1185)
+     (i32.const 1364)
      (i32.const 0)
     )
     (unreachable)
@@ -24697,7 +28767,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1186)
+     (i32.const 1365)
      (i32.const 0)
     )
     (unreachable)
@@ -24716,7 +28786,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1187)
+     (i32.const 1366)
      (i32.const 0)
     )
     (unreachable)
@@ -24735,7 +28805,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1188)
+     (i32.const 1367)
      (i32.const 0)
     )
     (unreachable)
@@ -24754,7 +28824,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1189)
+     (i32.const 1368)
      (i32.const 0)
     )
     (unreachable)
@@ -24773,7 +28843,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1190)
+     (i32.const 1369)
      (i32.const 0)
     )
     (unreachable)
@@ -24792,7 +28862,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1191)
+     (i32.const 1370)
      (i32.const 0)
     )
     (unreachable)
@@ -24811,7 +28881,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1201)
+     (i32.const 1380)
      (i32.const 0)
     )
     (unreachable)
@@ -24830,7 +28900,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1202)
+     (i32.const 1381)
      (i32.const 0)
     )
     (unreachable)
@@ -24849,7 +28919,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1203)
+     (i32.const 1382)
      (i32.const 0)
     )
     (unreachable)
@@ -24868,7 +28938,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1204)
+     (i32.const 1383)
      (i32.const 0)
     )
     (unreachable)
@@ -24887,7 +28957,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1205)
+     (i32.const 1384)
      (i32.const 0)
     )
     (unreachable)
@@ -24906,7 +28976,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1206)
+     (i32.const 1385)
      (i32.const 0)
     )
     (unreachable)
@@ -24925,7 +28995,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1207)
+     (i32.const 1386)
      (i32.const 0)
     )
     (unreachable)
@@ -24944,7 +29014,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1208)
+     (i32.const 1387)
      (i32.const 0)
     )
     (unreachable)
@@ -24963,7 +29033,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1209)
+     (i32.const 1388)
      (i32.const 0)
     )
     (unreachable)
@@ -24982,7 +29052,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1210)
+     (i32.const 1389)
      (i32.const 0)
     )
     (unreachable)
@@ -25001,7 +29071,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1213)
+     (i32.const 1392)
      (i32.const 0)
     )
     (unreachable)
@@ -25020,7 +29090,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1214)
+     (i32.const 1393)
      (i32.const 0)
     )
     (unreachable)
@@ -25039,7 +29109,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1215)
+     (i32.const 1394)
      (i32.const 0)
     )
     (unreachable)
@@ -25058,7 +29128,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1216)
+     (i32.const 1395)
      (i32.const 0)
     )
     (unreachable)
@@ -25077,7 +29147,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1217)
+     (i32.const 1396)
      (i32.const 0)
     )
     (unreachable)
@@ -25096,7 +29166,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1218)
+     (i32.const 1397)
      (i32.const 0)
     )
     (unreachable)
@@ -25115,7 +29185,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1219)
+     (i32.const 1398)
      (i32.const 0)
     )
     (unreachable)
@@ -25134,7 +29204,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1220)
+     (i32.const 1399)
      (i32.const 0)
     )
     (unreachable)
@@ -25153,7 +29223,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1229)
+     (i32.const 1408)
      (i32.const 0)
     )
     (unreachable)
@@ -25172,7 +29242,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1230)
+     (i32.const 1409)
      (i32.const 0)
     )
     (unreachable)
@@ -25191,7 +29261,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1231)
+     (i32.const 1410)
      (i32.const 0)
     )
     (unreachable)
@@ -25210,7 +29280,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1232)
+     (i32.const 1411)
      (i32.const 0)
     )
     (unreachable)
@@ -25229,7 +29299,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1233)
+     (i32.const 1412)
      (i32.const 0)
     )
     (unreachable)
@@ -25248,7 +29318,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1234)
+     (i32.const 1413)
      (i32.const 0)
     )
     (unreachable)
@@ -25267,7 +29337,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1235)
+     (i32.const 1414)
      (i32.const 0)
     )
     (unreachable)
@@ -25286,7 +29356,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1236)
+     (i32.const 1415)
      (i32.const 0)
     )
     (unreachable)
@@ -25305,7 +29375,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1237)
+     (i32.const 1416)
      (i32.const 0)
     )
     (unreachable)
@@ -25324,7 +29394,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1238)
+     (i32.const 1417)
      (i32.const 0)
     )
     (unreachable)
@@ -25343,7 +29413,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1241)
+     (i32.const 1420)
      (i32.const 0)
     )
     (unreachable)
@@ -25362,7 +29432,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1242)
+     (i32.const 1421)
      (i32.const 0)
     )
     (unreachable)
@@ -25381,7 +29451,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1243)
+     (i32.const 1422)
      (i32.const 0)
     )
     (unreachable)
@@ -25400,7 +29470,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1244)
+     (i32.const 1423)
      (i32.const 0)
     )
     (unreachable)
@@ -25419,7 +29489,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1245)
+     (i32.const 1424)
      (i32.const 0)
     )
     (unreachable)
@@ -25438,7 +29508,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1246)
+     (i32.const 1425)
      (i32.const 0)
     )
     (unreachable)
@@ -25457,7 +29527,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1247)
+     (i32.const 1426)
      (i32.const 0)
     )
     (unreachable)
@@ -25476,7 +29546,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1248)
+     (i32.const 1427)
      (i32.const 0)
     )
     (unreachable)
@@ -25495,7 +29565,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1258)
+     (i32.const 1437)
      (i32.const 0)
     )
     (unreachable)
@@ -25514,7 +29584,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1259)
+     (i32.const 1438)
      (i32.const 0)
     )
     (unreachable)
@@ -25533,7 +29603,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1260)
+     (i32.const 1439)
      (i32.const 0)
     )
     (unreachable)
@@ -25552,7 +29622,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1261)
+     (i32.const 1440)
      (i32.const 0)
     )
     (unreachable)
@@ -25571,7 +29641,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1262)
+     (i32.const 1441)
      (i32.const 0)
     )
     (unreachable)
@@ -25590,7 +29660,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1263)
+     (i32.const 1442)
      (i32.const 0)
     )
     (unreachable)
@@ -25609,7 +29679,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1264)
+     (i32.const 1443)
      (i32.const 0)
     )
     (unreachable)
@@ -25628,7 +29698,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1265)
+     (i32.const 1444)
      (i32.const 0)
     )
     (unreachable)
@@ -25647,7 +29717,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1266)
+     (i32.const 1445)
      (i32.const 0)
     )
     (unreachable)
@@ -25666,7 +29736,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1267)
+     (i32.const 1446)
      (i32.const 0)
     )
     (unreachable)
@@ -25685,7 +29755,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1270)
+     (i32.const 1449)
      (i32.const 0)
     )
     (unreachable)
@@ -25704,7 +29774,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1271)
+     (i32.const 1450)
      (i32.const 0)
     )
     (unreachable)
@@ -25723,7 +29793,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1272)
+     (i32.const 1451)
      (i32.const 0)
     )
     (unreachable)
@@ -25742,7 +29812,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1273)
+     (i32.const 1452)
      (i32.const 0)
     )
     (unreachable)
@@ -25761,7 +29831,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1274)
+     (i32.const 1453)
      (i32.const 0)
     )
     (unreachable)
@@ -25780,7 +29850,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1275)
+     (i32.const 1454)
      (i32.const 0)
     )
     (unreachable)
@@ -25799,7 +29869,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1276)
+     (i32.const 1455)
      (i32.const 0)
     )
     (unreachable)
@@ -25818,7 +29888,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1277)
+     (i32.const 1456)
      (i32.const 0)
     )
     (unreachable)
@@ -25837,7 +29907,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1286)
+     (i32.const 1465)
      (i32.const 0)
     )
     (unreachable)
@@ -25856,7 +29926,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1287)
+     (i32.const 1466)
      (i32.const 0)
     )
     (unreachable)
@@ -25875,7 +29945,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1288)
+     (i32.const 1467)
      (i32.const 0)
     )
     (unreachable)
@@ -25894,7 +29964,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1289)
+     (i32.const 1468)
      (i32.const 0)
     )
     (unreachable)
@@ -25913,7 +29983,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1290)
+     (i32.const 1469)
      (i32.const 0)
     )
     (unreachable)
@@ -25932,7 +30002,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1291)
+     (i32.const 1470)
      (i32.const 0)
     )
     (unreachable)
@@ -25951,7 +30021,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1292)
+     (i32.const 1471)
      (i32.const 0)
     )
     (unreachable)
@@ -25970,7 +30040,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1293)
+     (i32.const 1472)
      (i32.const 0)
     )
     (unreachable)
@@ -25989,7 +30059,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1294)
+     (i32.const 1473)
      (i32.const 0)
     )
     (unreachable)
@@ -26008,7 +30078,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1295)
+     (i32.const 1474)
      (i32.const 0)
     )
     (unreachable)
@@ -26027,7 +30097,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1298)
+     (i32.const 1477)
      (i32.const 0)
     )
     (unreachable)
@@ -26046,7 +30116,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1299)
+     (i32.const 1478)
      (i32.const 0)
     )
     (unreachable)
@@ -26065,7 +30135,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1300)
+     (i32.const 1479)
      (i32.const 0)
     )
     (unreachable)
@@ -26084,7 +30154,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1301)
+     (i32.const 1480)
      (i32.const 0)
     )
     (unreachable)
@@ -26103,7 +30173,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1302)
+     (i32.const 1481)
      (i32.const 0)
     )
     (unreachable)
@@ -26122,7 +30192,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1303)
+     (i32.const 1482)
      (i32.const 0)
     )
     (unreachable)
@@ -26141,7 +30211,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1304)
+     (i32.const 1483)
      (i32.const 0)
     )
     (unreachable)
@@ -26160,7 +30230,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1305)
+     (i32.const 1484)
      (i32.const 0)
     )
     (unreachable)
@@ -26179,7 +30249,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1306)
+     (i32.const 1485)
      (i32.const 0)
     )
     (unreachable)
@@ -26198,7 +30268,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1316)
+     (i32.const 1495)
      (i32.const 0)
     )
     (unreachable)
@@ -26217,7 +30287,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1317)
+     (i32.const 1496)
      (i32.const 0)
     )
     (unreachable)
@@ -26236,7 +30306,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1318)
+     (i32.const 1497)
      (i32.const 0)
     )
     (unreachable)
@@ -26255,7 +30325,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1319)
+     (i32.const 1498)
      (i32.const 0)
     )
     (unreachable)
@@ -26274,7 +30344,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1320)
+     (i32.const 1499)
      (i32.const 0)
     )
     (unreachable)
@@ -26293,7 +30363,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1321)
+     (i32.const 1500)
      (i32.const 0)
     )
     (unreachable)
@@ -26312,7 +30382,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1322)
+     (i32.const 1501)
      (i32.const 0)
     )
     (unreachable)
@@ -26331,7 +30401,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1323)
+     (i32.const 1502)
      (i32.const 0)
     )
     (unreachable)
@@ -26350,7 +30420,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1324)
+     (i32.const 1503)
      (i32.const 0)
     )
     (unreachable)
@@ -26369,7 +30439,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1325)
+     (i32.const 1504)
      (i32.const 0)
     )
     (unreachable)
@@ -26388,7 +30458,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1328)
+     (i32.const 1507)
      (i32.const 0)
     )
     (unreachable)
@@ -26407,7 +30477,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1329)
+     (i32.const 1508)
      (i32.const 0)
     )
     (unreachable)
@@ -26426,7 +30496,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1330)
+     (i32.const 1509)
      (i32.const 0)
     )
     (unreachable)
@@ -26445,7 +30515,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1331)
+     (i32.const 1510)
      (i32.const 0)
     )
     (unreachable)
@@ -26464,7 +30534,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1332)
+     (i32.const 1511)
      (i32.const 0)
     )
     (unreachable)
@@ -26483,7 +30553,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1333)
+     (i32.const 1512)
      (i32.const 0)
     )
     (unreachable)
@@ -26502,7 +30572,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1334)
+     (i32.const 1513)
      (i32.const 0)
     )
     (unreachable)
@@ -26521,7 +30591,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1335)
+     (i32.const 1514)
      (i32.const 0)
     )
     (unreachable)
@@ -26540,7 +30610,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1344)
+     (i32.const 1523)
      (i32.const 0)
     )
     (unreachable)
@@ -26559,7 +30629,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1345)
+     (i32.const 1524)
      (i32.const 0)
     )
     (unreachable)
@@ -26578,7 +30648,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1346)
+     (i32.const 1525)
      (i32.const 0)
     )
     (unreachable)
@@ -26597,7 +30667,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1347)
+     (i32.const 1526)
      (i32.const 0)
     )
     (unreachable)
@@ -26616,7 +30686,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1348)
+     (i32.const 1527)
      (i32.const 0)
     )
     (unreachable)
@@ -26635,7 +30705,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1349)
+     (i32.const 1528)
      (i32.const 0)
     )
     (unreachable)
@@ -26654,7 +30724,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1350)
+     (i32.const 1529)
      (i32.const 0)
     )
     (unreachable)
@@ -26673,7 +30743,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1351)
+     (i32.const 1530)
      (i32.const 0)
     )
     (unreachable)
@@ -26692,7 +30762,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1352)
+     (i32.const 1531)
      (i32.const 0)
     )
     (unreachable)
@@ -26711,7 +30781,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1353)
+     (i32.const 1532)
      (i32.const 0)
     )
     (unreachable)
@@ -26730,7 +30800,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1356)
+     (i32.const 1535)
      (i32.const 0)
     )
     (unreachable)
@@ -26749,7 +30819,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1357)
+     (i32.const 1536)
      (i32.const 0)
     )
     (unreachable)
@@ -26768,7 +30838,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1358)
+     (i32.const 1537)
      (i32.const 0)
     )
     (unreachable)
@@ -26787,7 +30857,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1359)
+     (i32.const 1538)
      (i32.const 0)
     )
     (unreachable)
@@ -26806,7 +30876,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1360)
+     (i32.const 1539)
      (i32.const 0)
     )
     (unreachable)
@@ -26825,7 +30895,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1361)
+     (i32.const 1540)
      (i32.const 0)
     )
     (unreachable)
@@ -26844,7 +30914,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1362)
+     (i32.const 1541)
      (i32.const 0)
     )
     (unreachable)
@@ -26863,7 +30933,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1363)
+     (i32.const 1542)
      (i32.const 0)
     )
     (unreachable)
@@ -26883,7 +30953,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1373)
+     (i32.const 1552)
      (i32.const 0)
     )
     (unreachable)
@@ -26903,7 +30973,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1374)
+     (i32.const 1553)
      (i32.const 0)
     )
     (unreachable)
@@ -26923,7 +30993,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1375)
+     (i32.const 1554)
      (i32.const 0)
     )
     (unreachable)
@@ -26943,7 +31013,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1376)
+     (i32.const 1555)
      (i32.const 0)
     )
     (unreachable)
@@ -26963,7 +31033,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1377)
+     (i32.const 1556)
      (i32.const 0)
     )
     (unreachable)
@@ -26983,7 +31053,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1378)
+     (i32.const 1557)
      (i32.const 0)
     )
     (unreachable)
@@ -27003,7 +31073,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1379)
+     (i32.const 1558)
      (i32.const 0)
     )
     (unreachable)
@@ -27023,7 +31093,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1380)
+     (i32.const 1559)
      (i32.const 0)
     )
     (unreachable)
@@ -27043,7 +31113,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1381)
+     (i32.const 1560)
      (i32.const 0)
     )
     (unreachable)
@@ -27063,7 +31133,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1382)
+     (i32.const 1561)
      (i32.const 0)
     )
     (unreachable)
@@ -27083,7 +31153,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1385)
+     (i32.const 1564)
      (i32.const 0)
     )
     (unreachable)
@@ -27103,7 +31173,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1386)
+     (i32.const 1565)
      (i32.const 0)
     )
     (unreachable)
@@ -27123,7 +31193,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1387)
+     (i32.const 1566)
      (i32.const 0)
     )
     (unreachable)
@@ -27143,7 +31213,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1388)
+     (i32.const 1567)
      (i32.const 0)
     )
     (unreachable)
@@ -27163,7 +31233,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1389)
+     (i32.const 1568)
      (i32.const 0)
     )
     (unreachable)
@@ -27183,7 +31253,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1390)
+     (i32.const 1569)
      (i32.const 0)
     )
     (unreachable)
@@ -27203,7 +31273,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1391)
+     (i32.const 1570)
      (i32.const 0)
     )
     (unreachable)
@@ -27223,7 +31293,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1392)
+     (i32.const 1571)
      (i32.const 0)
     )
     (unreachable)
@@ -27243,7 +31313,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1393)
+     (i32.const 1572)
      (i32.const 0)
     )
     (unreachable)
@@ -27263,7 +31333,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1394)
+     (i32.const 1573)
      (i32.const 0)
     )
     (unreachable)
@@ -27283,7 +31353,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1395)
+     (i32.const 1574)
      (i32.const 0)
     )
     (unreachable)
@@ -27303,7 +31373,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1396)
+     (i32.const 1575)
      (i32.const 0)
     )
     (unreachable)
@@ -27323,7 +31393,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1397)
+     (i32.const 1576)
      (i32.const 0)
     )
     (unreachable)
@@ -27343,7 +31413,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1398)
+     (i32.const 1577)
      (i32.const 0)
     )
     (unreachable)
@@ -27363,7 +31433,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1399)
+     (i32.const 1578)
      (i32.const 0)
     )
     (unreachable)
@@ -27383,7 +31453,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1400)
+     (i32.const 1579)
      (i32.const 0)
     )
     (unreachable)
@@ -27403,7 +31473,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1401)
+     (i32.const 1580)
      (i32.const 0)
     )
     (unreachable)
@@ -27423,7 +31493,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1402)
+     (i32.const 1581)
      (i32.const 0)
     )
     (unreachable)
@@ -27443,7 +31513,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1403)
+     (i32.const 1582)
      (i32.const 0)
     )
     (unreachable)
@@ -27463,7 +31533,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1404)
+     (i32.const 1583)
      (i32.const 0)
     )
     (unreachable)
@@ -27483,7 +31553,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1405)
+     (i32.const 1584)
      (i32.const 0)
     )
     (unreachable)
@@ -27503,7 +31573,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1406)
+     (i32.const 1585)
      (i32.const 0)
     )
     (unreachable)
@@ -27523,7 +31593,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1407)
+     (i32.const 1586)
      (i32.const 0)
     )
     (unreachable)
@@ -27543,7 +31613,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1408)
+     (i32.const 1587)
      (i32.const 0)
     )
     (unreachable)
@@ -27563,7 +31633,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1409)
+     (i32.const 1588)
      (i32.const 0)
     )
     (unreachable)
@@ -27583,7 +31653,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1410)
+     (i32.const 1589)
      (i32.const 0)
     )
     (unreachable)
@@ -27603,7 +31673,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1411)
+     (i32.const 1590)
      (i32.const 0)
     )
     (unreachable)
@@ -27623,7 +31693,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1412)
+     (i32.const 1591)
      (i32.const 0)
     )
     (unreachable)
@@ -27643,7 +31713,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1413)
+     (i32.const 1592)
      (i32.const 0)
     )
     (unreachable)
@@ -27663,7 +31733,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1414)
+     (i32.const 1593)
      (i32.const 0)
     )
     (unreachable)
@@ -27683,7 +31753,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1415)
+     (i32.const 1594)
      (i32.const 0)
     )
     (unreachable)
@@ -27703,7 +31773,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1416)
+     (i32.const 1595)
      (i32.const 0)
     )
     (unreachable)
@@ -27723,7 +31793,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1417)
+     (i32.const 1596)
      (i32.const 0)
     )
     (unreachable)
@@ -27743,7 +31813,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1418)
+     (i32.const 1597)
      (i32.const 0)
     )
     (unreachable)
@@ -27763,7 +31833,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1419)
+     (i32.const 1598)
      (i32.const 0)
     )
     (unreachable)
@@ -27783,7 +31853,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1420)
+     (i32.const 1599)
      (i32.const 0)
     )
     (unreachable)
@@ -27803,7 +31873,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1421)
+     (i32.const 1600)
      (i32.const 0)
     )
     (unreachable)
@@ -27823,7 +31893,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1422)
+     (i32.const 1601)
      (i32.const 0)
     )
     (unreachable)
@@ -27843,7 +31913,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1423)
+     (i32.const 1602)
      (i32.const 0)
     )
     (unreachable)
@@ -27863,7 +31933,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1424)
+     (i32.const 1603)
      (i32.const 0)
     )
     (unreachable)
@@ -27883,7 +31953,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1425)
+     (i32.const 1604)
      (i32.const 0)
     )
     (unreachable)
@@ -27903,7 +31973,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1426)
+     (i32.const 1605)
      (i32.const 0)
     )
     (unreachable)
@@ -27923,7 +31993,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1427)
+     (i32.const 1606)
      (i32.const 0)
     )
     (unreachable)
@@ -27943,7 +32013,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1428)
+     (i32.const 1607)
      (i32.const 0)
     )
     (unreachable)
@@ -27963,7 +32033,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1429)
+     (i32.const 1608)
      (i32.const 0)
     )
     (unreachable)
@@ -27983,7 +32053,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1430)
+     (i32.const 1609)
      (i32.const 0)
     )
     (unreachable)
@@ -28003,7 +32073,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1431)
+     (i32.const 1610)
      (i32.const 0)
     )
     (unreachable)
@@ -28023,7 +32093,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1432)
+     (i32.const 1611)
      (i32.const 0)
     )
     (unreachable)
@@ -28043,7 +32113,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1433)
+     (i32.const 1612)
      (i32.const 0)
     )
     (unreachable)
@@ -28063,7 +32133,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1434)
+     (i32.const 1613)
      (i32.const 0)
     )
     (unreachable)
@@ -28083,7 +32153,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1435)
+     (i32.const 1614)
      (i32.const 0)
     )
     (unreachable)
@@ -28103,7 +32173,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1436)
+     (i32.const 1615)
      (i32.const 0)
     )
     (unreachable)
@@ -28123,7 +32193,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1437)
+     (i32.const 1616)
      (i32.const 0)
     )
     (unreachable)
@@ -28143,7 +32213,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1438)
+     (i32.const 1617)
      (i32.const 0)
     )
     (unreachable)
@@ -28163,7 +32233,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1439)
+     (i32.const 1618)
      (i32.const 0)
     )
     (unreachable)
@@ -28183,7 +32253,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1440)
+     (i32.const 1619)
      (i32.const 0)
     )
     (unreachable)
@@ -28203,7 +32273,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1441)
+     (i32.const 1620)
      (i32.const 0)
     )
     (unreachable)
@@ -28223,7 +32293,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1442)
+     (i32.const 1621)
      (i32.const 0)
     )
     (unreachable)
@@ -28243,7 +32313,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1443)
+     (i32.const 1622)
      (i32.const 0)
     )
     (unreachable)
@@ -28263,7 +32333,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1444)
+     (i32.const 1623)
      (i32.const 0)
     )
     (unreachable)
@@ -28283,7 +32353,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1445)
+     (i32.const 1624)
      (i32.const 0)
     )
     (unreachable)
@@ -28303,7 +32373,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1446)
+     (i32.const 1625)
      (i32.const 0)
     )
     (unreachable)
@@ -28323,7 +32393,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1447)
+     (i32.const 1626)
      (i32.const 0)
     )
     (unreachable)
@@ -28343,7 +32413,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1448)
+     (i32.const 1627)
      (i32.const 0)
     )
     (unreachable)
@@ -28363,7 +32433,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1449)
+     (i32.const 1628)
      (i32.const 0)
     )
     (unreachable)
@@ -28383,7 +32453,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1450)
+     (i32.const 1629)
      (i32.const 0)
     )
     (unreachable)
@@ -28403,7 +32473,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1451)
+     (i32.const 1630)
      (i32.const 0)
     )
     (unreachable)
@@ -28423,7 +32493,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1452)
+     (i32.const 1631)
      (i32.const 0)
     )
     (unreachable)
@@ -28443,7 +32513,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1453)
+     (i32.const 1632)
      (i32.const 0)
     )
     (unreachable)
@@ -28463,7 +32533,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1454)
+     (i32.const 1633)
      (i32.const 0)
     )
     (unreachable)
@@ -28483,7 +32553,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1455)
+     (i32.const 1634)
      (i32.const 0)
     )
     (unreachable)
@@ -28503,7 +32573,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1456)
+     (i32.const 1635)
      (i32.const 0)
     )
     (unreachable)
@@ -28523,7 +32593,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1457)
+     (i32.const 1636)
      (i32.const 0)
     )
     (unreachable)
@@ -28543,7 +32613,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1458)
+     (i32.const 1637)
      (i32.const 0)
     )
     (unreachable)
@@ -28563,7 +32633,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1459)
+     (i32.const 1638)
      (i32.const 0)
     )
     (unreachable)
@@ -28583,7 +32653,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1460)
+     (i32.const 1639)
      (i32.const 0)
     )
     (unreachable)
@@ -28603,7 +32673,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1461)
+     (i32.const 1640)
      (i32.const 0)
     )
     (unreachable)
@@ -28623,7 +32693,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1462)
+     (i32.const 1641)
      (i32.const 0)
     )
     (unreachable)
@@ -28643,7 +32713,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1463)
+     (i32.const 1642)
      (i32.const 0)
     )
     (unreachable)
@@ -28663,7 +32733,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1464)
+     (i32.const 1643)
      (i32.const 0)
     )
     (unreachable)
@@ -28683,7 +32753,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1465)
+     (i32.const 1644)
      (i32.const 0)
     )
     (unreachable)
@@ -28703,7 +32773,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1466)
+     (i32.const 1645)
      (i32.const 0)
     )
     (unreachable)
@@ -28723,7 +32793,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1467)
+     (i32.const 1646)
      (i32.const 0)
     )
     (unreachable)
@@ -28743,7 +32813,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1468)
+     (i32.const 1647)
      (i32.const 0)
     )
     (unreachable)
@@ -28763,7 +32833,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1469)
+     (i32.const 1648)
      (i32.const 0)
     )
     (unreachable)
@@ -28783,7 +32853,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1470)
+     (i32.const 1649)
      (i32.const 0)
     )
     (unreachable)
@@ -28803,7 +32873,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1471)
+     (i32.const 1650)
      (i32.const 0)
     )
     (unreachable)
@@ -28823,7 +32893,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1472)
+     (i32.const 1651)
      (i32.const 0)
     )
     (unreachable)
@@ -28843,7 +32913,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1473)
+     (i32.const 1652)
      (i32.const 0)
     )
     (unreachable)
@@ -28863,7 +32933,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1474)
+     (i32.const 1653)
      (i32.const 0)
     )
     (unreachable)
@@ -28883,7 +32953,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1475)
+     (i32.const 1654)
      (i32.const 0)
     )
     (unreachable)
@@ -28903,7 +32973,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1476)
+     (i32.const 1655)
      (i32.const 0)
     )
     (unreachable)
@@ -28923,7 +32993,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1485)
+     (i32.const 1664)
      (i32.const 0)
     )
     (unreachable)
@@ -28943,7 +33013,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1486)
+     (i32.const 1665)
      (i32.const 0)
     )
     (unreachable)
@@ -28963,7 +33033,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1487)
+     (i32.const 1666)
      (i32.const 0)
     )
     (unreachable)
@@ -28983,7 +33053,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1488)
+     (i32.const 1667)
      (i32.const 0)
     )
     (unreachable)
@@ -29003,7 +33073,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1489)
+     (i32.const 1668)
      (i32.const 0)
     )
     (unreachable)
@@ -29023,7 +33093,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1490)
+     (i32.const 1669)
      (i32.const 0)
     )
     (unreachable)
@@ -29043,7 +33113,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1491)
+     (i32.const 1670)
      (i32.const 0)
     )
     (unreachable)
@@ -29063,7 +33133,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1492)
+     (i32.const 1671)
      (i32.const 0)
     )
     (unreachable)
@@ -29083,7 +33153,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1493)
+     (i32.const 1672)
      (i32.const 0)
     )
     (unreachable)
@@ -29103,7 +33173,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1494)
+     (i32.const 1673)
      (i32.const 0)
     )
     (unreachable)
@@ -29123,7 +33193,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1497)
+     (i32.const 1676)
      (i32.const 0)
     )
     (unreachable)
@@ -29143,7 +33213,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1498)
+     (i32.const 1677)
      (i32.const 0)
     )
     (unreachable)
@@ -29163,7 +33233,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1499)
+     (i32.const 1678)
      (i32.const 0)
     )
     (unreachable)
@@ -29183,7 +33253,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1500)
+     (i32.const 1679)
      (i32.const 0)
     )
     (unreachable)
@@ -29203,7 +33273,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1501)
+     (i32.const 1680)
      (i32.const 0)
     )
     (unreachable)
@@ -29223,7 +33293,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1502)
+     (i32.const 1681)
      (i32.const 0)
     )
     (unreachable)
@@ -29243,7 +33313,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1503)
+     (i32.const 1682)
      (i32.const 0)
     )
     (unreachable)
@@ -29263,7 +33333,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1504)
+     (i32.const 1683)
      (i32.const 0)
     )
     (unreachable)
@@ -29283,7 +33353,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1505)
+     (i32.const 1684)
      (i32.const 0)
     )
     (unreachable)
@@ -29303,7 +33373,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1506)
+     (i32.const 1685)
      (i32.const 0)
     )
     (unreachable)
@@ -29323,7 +33393,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1507)
+     (i32.const 1686)
      (i32.const 0)
     )
     (unreachable)
@@ -29343,7 +33413,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1508)
+     (i32.const 1687)
      (i32.const 0)
     )
     (unreachable)
@@ -29363,7 +33433,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1509)
+     (i32.const 1688)
      (i32.const 0)
     )
     (unreachable)
@@ -29383,7 +33453,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1510)
+     (i32.const 1689)
      (i32.const 0)
     )
     (unreachable)
@@ -29403,7 +33473,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1511)
+     (i32.const 1690)
      (i32.const 0)
     )
     (unreachable)
@@ -29423,7 +33493,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1512)
+     (i32.const 1691)
      (i32.const 0)
     )
     (unreachable)
@@ -29443,7 +33513,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1513)
+     (i32.const 1692)
      (i32.const 0)
     )
     (unreachable)
@@ -29463,7 +33533,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1514)
+     (i32.const 1693)
      (i32.const 0)
     )
     (unreachable)
@@ -29483,7 +33553,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1515)
+     (i32.const 1694)
      (i32.const 0)
     )
     (unreachable)
@@ -29503,7 +33573,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1516)
+     (i32.const 1695)
      (i32.const 0)
     )
     (unreachable)
@@ -29523,7 +33593,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1517)
+     (i32.const 1696)
      (i32.const 0)
     )
     (unreachable)
@@ -29543,7 +33613,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1518)
+     (i32.const 1697)
      (i32.const 0)
     )
     (unreachable)
@@ -29563,7 +33633,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1519)
+     (i32.const 1698)
      (i32.const 0)
     )
     (unreachable)
@@ -29583,7 +33653,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1520)
+     (i32.const 1699)
      (i32.const 0)
     )
     (unreachable)
@@ -29603,7 +33673,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1521)
+     (i32.const 1700)
      (i32.const 0)
     )
     (unreachable)
@@ -29623,7 +33693,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1522)
+     (i32.const 1701)
      (i32.const 0)
     )
     (unreachable)
@@ -29643,7 +33713,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1523)
+     (i32.const 1702)
      (i32.const 0)
     )
     (unreachable)
@@ -29663,7 +33733,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1524)
+     (i32.const 1703)
      (i32.const 0)
     )
     (unreachable)
@@ -29683,7 +33753,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1525)
+     (i32.const 1704)
      (i32.const 0)
     )
     (unreachable)
@@ -29703,7 +33773,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1526)
+     (i32.const 1705)
      (i32.const 0)
     )
     (unreachable)
@@ -29723,7 +33793,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1527)
+     (i32.const 1706)
      (i32.const 0)
     )
     (unreachable)
@@ -29743,7 +33813,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1528)
+     (i32.const 1707)
      (i32.const 0)
     )
     (unreachable)
@@ -29763,7 +33833,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1529)
+     (i32.const 1708)
      (i32.const 0)
     )
     (unreachable)
@@ -29783,7 +33853,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1530)
+     (i32.const 1709)
      (i32.const 0)
     )
     (unreachable)
@@ -29803,7 +33873,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1531)
+     (i32.const 1710)
      (i32.const 0)
     )
     (unreachable)
@@ -29823,7 +33893,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1532)
+     (i32.const 1711)
      (i32.const 0)
     )
     (unreachable)
@@ -29843,7 +33913,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1533)
+     (i32.const 1712)
      (i32.const 0)
     )
     (unreachable)
@@ -29863,7 +33933,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1534)
+     (i32.const 1713)
      (i32.const 0)
     )
     (unreachable)
@@ -29883,7 +33953,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1535)
+     (i32.const 1714)
      (i32.const 0)
     )
     (unreachable)
@@ -29903,7 +33973,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1536)
+     (i32.const 1715)
      (i32.const 0)
     )
     (unreachable)
@@ -29923,7 +33993,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1537)
+     (i32.const 1716)
      (i32.const 0)
     )
     (unreachable)
@@ -29943,7 +34013,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1538)
+     (i32.const 1717)
      (i32.const 0)
     )
     (unreachable)
@@ -29963,7 +34033,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1539)
+     (i32.const 1718)
      (i32.const 0)
     )
     (unreachable)
@@ -29983,7 +34053,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1540)
+     (i32.const 1719)
      (i32.const 0)
     )
     (unreachable)
@@ -30003,7 +34073,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1541)
+     (i32.const 1720)
      (i32.const 0)
     )
     (unreachable)
@@ -30023,7 +34093,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1542)
+     (i32.const 1721)
      (i32.const 0)
     )
     (unreachable)
@@ -30043,7 +34113,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1543)
+     (i32.const 1722)
      (i32.const 0)
     )
     (unreachable)
@@ -30063,7 +34133,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1544)
+     (i32.const 1723)
      (i32.const 0)
     )
     (unreachable)
@@ -30083,7 +34153,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1545)
+     (i32.const 1724)
      (i32.const 0)
     )
     (unreachable)
@@ -30103,7 +34173,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1546)
+     (i32.const 1725)
      (i32.const 0)
     )
     (unreachable)
@@ -30123,7 +34193,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1547)
+     (i32.const 1726)
      (i32.const 0)
     )
     (unreachable)
@@ -30143,7 +34213,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1548)
+     (i32.const 1727)
      (i32.const 0)
     )
     (unreachable)
@@ -30163,7 +34233,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1549)
+     (i32.const 1728)
      (i32.const 0)
     )
     (unreachable)
@@ -30183,7 +34253,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1550)
+     (i32.const 1729)
      (i32.const 0)
     )
     (unreachable)
@@ -30203,7 +34273,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1551)
+     (i32.const 1730)
      (i32.const 0)
     )
     (unreachable)
@@ -30223,7 +34293,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1552)
+     (i32.const 1731)
      (i32.const 0)
     )
     (unreachable)
@@ -30243,7 +34313,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1553)
+     (i32.const 1732)
      (i32.const 0)
     )
     (unreachable)
@@ -30263,7 +34333,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1554)
+     (i32.const 1733)
      (i32.const 0)
     )
     (unreachable)
@@ -30283,7 +34353,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1555)
+     (i32.const 1734)
      (i32.const 0)
     )
     (unreachable)
@@ -30303,7 +34373,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1556)
+     (i32.const 1735)
      (i32.const 0)
     )
     (unreachable)
@@ -30323,7 +34393,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1557)
+     (i32.const 1736)
      (i32.const 0)
     )
     (unreachable)
@@ -30343,7 +34413,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1558)
+     (i32.const 1737)
      (i32.const 0)
     )
     (unreachable)
@@ -30363,7 +34433,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1559)
+     (i32.const 1738)
      (i32.const 0)
     )
     (unreachable)
@@ -30383,7 +34453,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1560)
+     (i32.const 1739)
      (i32.const 0)
     )
     (unreachable)
@@ -30403,7 +34473,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1561)
+     (i32.const 1740)
      (i32.const 0)
     )
     (unreachable)
@@ -30423,7 +34493,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1562)
+     (i32.const 1741)
      (i32.const 0)
     )
     (unreachable)
@@ -30443,7 +34513,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1563)
+     (i32.const 1742)
      (i32.const 0)
     )
     (unreachable)
@@ -30463,7 +34533,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1564)
+     (i32.const 1743)
      (i32.const 0)
     )
     (unreachable)
@@ -30483,7 +34553,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1565)
+     (i32.const 1744)
      (i32.const 0)
     )
     (unreachable)
@@ -30503,7 +34573,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1566)
+     (i32.const 1745)
      (i32.const 0)
     )
     (unreachable)
@@ -30523,7 +34593,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1567)
+     (i32.const 1746)
      (i32.const 0)
     )
     (unreachable)
@@ -30543,7 +34613,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1568)
+     (i32.const 1747)
      (i32.const 0)
     )
     (unreachable)
@@ -30563,7 +34633,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1569)
+     (i32.const 1748)
      (i32.const 0)
     )
     (unreachable)
@@ -30583,7 +34653,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1570)
+     (i32.const 1749)
      (i32.const 0)
     )
     (unreachable)
@@ -30603,7 +34673,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1571)
+     (i32.const 1750)
      (i32.const 0)
     )
     (unreachable)
@@ -30623,7 +34693,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1572)
+     (i32.const 1751)
      (i32.const 0)
     )
     (unreachable)
@@ -30643,7 +34713,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1573)
+     (i32.const 1752)
      (i32.const 0)
     )
     (unreachable)
@@ -30663,7 +34733,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1574)
+     (i32.const 1753)
      (i32.const 0)
     )
     (unreachable)
@@ -30683,7 +34753,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1575)
+     (i32.const 1754)
      (i32.const 0)
     )
     (unreachable)
@@ -30703,7 +34773,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1576)
+     (i32.const 1755)
      (i32.const 0)
     )
     (unreachable)
@@ -30723,7 +34793,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1577)
+     (i32.const 1756)
      (i32.const 0)
     )
     (unreachable)
@@ -30743,7 +34813,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1578)
+     (i32.const 1757)
      (i32.const 0)
     )
     (unreachable)
@@ -30763,7 +34833,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1579)
+     (i32.const 1758)
      (i32.const 0)
     )
     (unreachable)
@@ -30783,7 +34853,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1580)
+     (i32.const 1759)
      (i32.const 0)
     )
     (unreachable)
@@ -30803,7 +34873,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1581)
+     (i32.const 1760)
      (i32.const 0)
     )
     (unreachable)
@@ -30823,7 +34893,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1582)
+     (i32.const 1761)
      (i32.const 0)
     )
     (unreachable)
@@ -30843,7 +34913,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1583)
+     (i32.const 1762)
      (i32.const 0)
     )
     (unreachable)
@@ -30863,7 +34933,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1584)
+     (i32.const 1763)
      (i32.const 0)
     )
     (unreachable)
@@ -30883,7 +34953,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1585)
+     (i32.const 1764)
      (i32.const 0)
     )
     (unreachable)
@@ -30903,7 +34973,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1586)
+     (i32.const 1765)
      (i32.const 0)
     )
     (unreachable)
@@ -30923,7 +34993,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1587)
+     (i32.const 1766)
      (i32.const 0)
     )
     (unreachable)
@@ -30943,7 +35013,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1588)
+     (i32.const 1767)
      (i32.const 0)
     )
     (unreachable)
@@ -30988,7 +35058,7 @@
        (call $abort
         (i32.const 0)
         (i32.const 4)
-        (i32.const 1595)
+        (i32.const 1774)
         (i32.const 2)
        )
        (unreachable)
@@ -31017,7 +35087,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1665)
+     (i32.const 1844)
      (i32.const 0)
     )
     (unreachable)
@@ -31036,7 +35106,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1666)
+     (i32.const 1845)
      (i32.const 0)
     )
     (unreachable)
@@ -31055,7 +35125,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1667)
+     (i32.const 1846)
      (i32.const 0)
     )
     (unreachable)
@@ -31074,7 +35144,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1668)
+     (i32.const 1847)
      (i32.const 0)
     )
     (unreachable)
@@ -31093,7 +35163,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1669)
+     (i32.const 1848)
      (i32.const 0)
     )
     (unreachable)
@@ -31112,7 +35182,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1670)
+     (i32.const 1849)
      (i32.const 0)
     )
     (unreachable)
@@ -31131,7 +35201,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1671)
+     (i32.const 1850)
      (i32.const 0)
     )
     (unreachable)
@@ -31150,7 +35220,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1672)
+     (i32.const 1851)
      (i32.const 0)
     )
     (unreachable)
@@ -31169,7 +35239,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1673)
+     (i32.const 1852)
      (i32.const 0)
     )
     (unreachable)
@@ -31188,7 +35258,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1674)
+     (i32.const 1853)
      (i32.const 0)
     )
     (unreachable)
@@ -31207,7 +35277,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1677)
+     (i32.const 1856)
      (i32.const 0)
     )
     (unreachable)
@@ -31226,7 +35296,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1678)
+     (i32.const 1857)
      (i32.const 0)
     )
     (unreachable)
@@ -31245,7 +35315,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1679)
+     (i32.const 1858)
      (i32.const 0)
     )
     (unreachable)
@@ -31264,7 +35334,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1680)
+     (i32.const 1859)
      (i32.const 0)
     )
     (unreachable)
@@ -31283,7 +35353,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1681)
+     (i32.const 1860)
      (i32.const 0)
     )
     (unreachable)
@@ -31302,7 +35372,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1690)
+     (i32.const 1869)
      (i32.const 0)
     )
     (unreachable)
@@ -31321,7 +35391,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1691)
+     (i32.const 1870)
      (i32.const 0)
     )
     (unreachable)
@@ -31340,7 +35410,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1692)
+     (i32.const 1871)
      (i32.const 0)
     )
     (unreachable)
@@ -31359,7 +35429,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1693)
+     (i32.const 1872)
      (i32.const 0)
     )
     (unreachable)
@@ -31378,7 +35448,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1694)
+     (i32.const 1873)
      (i32.const 0)
     )
     (unreachable)
@@ -31397,7 +35467,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1695)
+     (i32.const 1874)
      (i32.const 0)
     )
     (unreachable)
@@ -31416,7 +35486,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1696)
+     (i32.const 1875)
      (i32.const 0)
     )
     (unreachable)
@@ -31435,7 +35505,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1697)
+     (i32.const 1876)
      (i32.const 0)
     )
     (unreachable)
@@ -31454,7 +35524,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1698)
+     (i32.const 1877)
      (i32.const 0)
     )
     (unreachable)
@@ -31473,7 +35543,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1699)
+     (i32.const 1878)
      (i32.const 0)
     )
     (unreachable)
@@ -31492,7 +35562,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1702)
+     (i32.const 1881)
      (i32.const 0)
     )
     (unreachable)
@@ -31511,7 +35581,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1703)
+     (i32.const 1882)
      (i32.const 0)
     )
     (unreachable)
@@ -31530,7 +35600,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1704)
+     (i32.const 1883)
      (i32.const 0)
     )
     (unreachable)
@@ -31549,7 +35619,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1705)
+     (i32.const 1884)
      (i32.const 0)
     )
     (unreachable)
@@ -31568,7 +35638,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1706)
+     (i32.const 1885)
      (i32.const 0)
     )
     (unreachable)
@@ -31587,7 +35657,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1716)
+     (i32.const 1895)
      (i32.const 0)
     )
     (unreachable)
@@ -31606,7 +35676,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1717)
+     (i32.const 1896)
      (i32.const 0)
     )
     (unreachable)
@@ -31625,7 +35695,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1718)
+     (i32.const 1897)
      (i32.const 0)
     )
     (unreachable)
@@ -31644,7 +35714,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1719)
+     (i32.const 1898)
      (i32.const 0)
     )
     (unreachable)
@@ -31663,7 +35733,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1720)
+     (i32.const 1899)
      (i32.const 0)
     )
     (unreachable)
@@ -31682,7 +35752,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1721)
+     (i32.const 1900)
      (i32.const 0)
     )
     (unreachable)
@@ -31701,7 +35771,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1722)
+     (i32.const 1901)
      (i32.const 0)
     )
     (unreachable)
@@ -31720,7 +35790,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1723)
+     (i32.const 1902)
      (i32.const 0)
     )
     (unreachable)
@@ -31739,7 +35809,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1724)
+     (i32.const 1903)
      (i32.const 0)
     )
     (unreachable)
@@ -31758,7 +35828,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1725)
+     (i32.const 1904)
      (i32.const 0)
     )
     (unreachable)
@@ -31777,7 +35847,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1728)
+     (i32.const 1907)
      (i32.const 0)
     )
     (unreachable)
@@ -31796,7 +35866,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1729)
+     (i32.const 1908)
      (i32.const 0)
     )
     (unreachable)
@@ -31815,7 +35885,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1730)
+     (i32.const 1909)
      (i32.const 0)
     )
     (unreachable)
@@ -31834,7 +35904,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1731)
+     (i32.const 1910)
      (i32.const 0)
     )
     (unreachable)
@@ -31853,7 +35923,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1732)
+     (i32.const 1911)
      (i32.const 0)
     )
     (unreachable)
@@ -31872,7 +35942,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1733)
+     (i32.const 1912)
      (i32.const 0)
     )
     (unreachable)
@@ -31891,7 +35961,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1734)
+     (i32.const 1913)
      (i32.const 0)
     )
     (unreachable)
@@ -31910,7 +35980,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1735)
+     (i32.const 1914)
      (i32.const 0)
     )
     (unreachable)
@@ -31929,7 +35999,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1736)
+     (i32.const 1915)
      (i32.const 0)
     )
     (unreachable)
@@ -31948,7 +36018,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1737)
+     (i32.const 1916)
      (i32.const 0)
     )
     (unreachable)
@@ -31967,7 +36037,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1738)
+     (i32.const 1917)
      (i32.const 0)
     )
     (unreachable)
@@ -31986,7 +36056,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1739)
+     (i32.const 1918)
      (i32.const 0)
     )
     (unreachable)
@@ -32005,7 +36075,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1740)
+     (i32.const 1919)
      (i32.const 0)
     )
     (unreachable)
@@ -32024,7 +36094,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1741)
+     (i32.const 1920)
      (i32.const 0)
     )
     (unreachable)
@@ -32043,7 +36113,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1742)
+     (i32.const 1921)
      (i32.const 0)
     )
     (unreachable)
@@ -32062,7 +36132,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1743)
+     (i32.const 1922)
      (i32.const 0)
     )
     (unreachable)
@@ -32081,7 +36151,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1744)
+     (i32.const 1923)
      (i32.const 0)
     )
     (unreachable)
@@ -32100,7 +36170,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1745)
+     (i32.const 1924)
      (i32.const 0)
     )
     (unreachable)
@@ -32119,7 +36189,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1746)
+     (i32.const 1925)
      (i32.const 0)
     )
     (unreachable)
@@ -32138,7 +36208,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1747)
+     (i32.const 1926)
      (i32.const 0)
     )
     (unreachable)
@@ -32157,7 +36227,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1748)
+     (i32.const 1927)
      (i32.const 0)
     )
     (unreachable)
@@ -32176,7 +36246,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1749)
+     (i32.const 1928)
      (i32.const 0)
     )
     (unreachable)
@@ -32195,7 +36265,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1750)
+     (i32.const 1929)
      (i32.const 0)
     )
     (unreachable)
@@ -32214,7 +36284,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1751)
+     (i32.const 1930)
      (i32.const 0)
     )
     (unreachable)
@@ -32233,7 +36303,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1752)
+     (i32.const 1931)
      (i32.const 0)
     )
     (unreachable)
@@ -32252,7 +36322,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1753)
+     (i32.const 1932)
      (i32.const 0)
     )
     (unreachable)
@@ -32271,7 +36341,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1754)
+     (i32.const 1933)
      (i32.const 0)
     )
     (unreachable)
@@ -32290,7 +36360,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1755)
+     (i32.const 1934)
      (i32.const 0)
     )
     (unreachable)
@@ -32309,7 +36379,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1756)
+     (i32.const 1935)
      (i32.const 0)
     )
     (unreachable)
@@ -32328,7 +36398,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1757)
+     (i32.const 1936)
      (i32.const 0)
     )
     (unreachable)
@@ -32347,7 +36417,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1758)
+     (i32.const 1937)
      (i32.const 0)
     )
     (unreachable)
@@ -32366,7 +36436,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1759)
+     (i32.const 1938)
      (i32.const 0)
     )
     (unreachable)
@@ -32385,7 +36455,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1760)
+     (i32.const 1939)
      (i32.const 0)
     )
     (unreachable)
@@ -32404,7 +36474,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1761)
+     (i32.const 1940)
      (i32.const 0)
     )
     (unreachable)
@@ -32423,7 +36493,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1762)
+     (i32.const 1941)
      (i32.const 0)
     )
     (unreachable)
@@ -32442,7 +36512,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1763)
+     (i32.const 1942)
      (i32.const 0)
     )
     (unreachable)
@@ -32461,7 +36531,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1764)
+     (i32.const 1943)
      (i32.const 0)
     )
     (unreachable)
@@ -32480,7 +36550,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1765)
+     (i32.const 1944)
      (i32.const 0)
     )
     (unreachable)
@@ -32499,7 +36569,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1766)
+     (i32.const 1945)
      (i32.const 0)
     )
     (unreachable)
@@ -32518,7 +36588,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1767)
+     (i32.const 1946)
      (i32.const 0)
     )
     (unreachable)
@@ -32537,7 +36607,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1768)
+     (i32.const 1947)
      (i32.const 0)
     )
     (unreachable)
@@ -32556,7 +36626,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1769)
+     (i32.const 1948)
      (i32.const 0)
     )
     (unreachable)
@@ -32575,7 +36645,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1770)
+     (i32.const 1949)
      (i32.const 0)
     )
     (unreachable)
@@ -32594,7 +36664,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1771)
+     (i32.const 1950)
      (i32.const 0)
     )
     (unreachable)
@@ -32613,7 +36683,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1772)
+     (i32.const 1951)
      (i32.const 0)
     )
     (unreachable)
@@ -32632,7 +36702,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1773)
+     (i32.const 1952)
      (i32.const 0)
     )
     (unreachable)
@@ -32651,7 +36721,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1774)
+     (i32.const 1953)
      (i32.const 0)
     )
     (unreachable)
@@ -32670,7 +36740,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1775)
+     (i32.const 1954)
      (i32.const 0)
     )
     (unreachable)
@@ -32689,7 +36759,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1776)
+     (i32.const 1955)
      (i32.const 0)
     )
     (unreachable)
@@ -32708,7 +36778,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1777)
+     (i32.const 1956)
      (i32.const 0)
     )
     (unreachable)
@@ -32727,7 +36797,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1778)
+     (i32.const 1957)
      (i32.const 0)
     )
     (unreachable)
@@ -32746,7 +36816,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1779)
+     (i32.const 1958)
      (i32.const 0)
     )
     (unreachable)
@@ -32765,7 +36835,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1780)
+     (i32.const 1959)
      (i32.const 0)
     )
     (unreachable)
@@ -32784,7 +36854,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1781)
+     (i32.const 1960)
      (i32.const 0)
     )
     (unreachable)
@@ -32803,7 +36873,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1782)
+     (i32.const 1961)
      (i32.const 0)
     )
     (unreachable)
@@ -32822,7 +36892,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1783)
+     (i32.const 1962)
      (i32.const 0)
     )
     (unreachable)
@@ -32841,7 +36911,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1784)
+     (i32.const 1963)
      (i32.const 0)
     )
     (unreachable)
@@ -32860,7 +36930,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1785)
+     (i32.const 1964)
      (i32.const 0)
     )
     (unreachable)
@@ -32879,7 +36949,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1786)
+     (i32.const 1965)
      (i32.const 0)
     )
     (unreachable)
@@ -32898,7 +36968,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1787)
+     (i32.const 1966)
      (i32.const 0)
     )
     (unreachable)
@@ -32917,7 +36987,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1788)
+     (i32.const 1967)
      (i32.const 0)
     )
     (unreachable)
@@ -32936,7 +37006,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1789)
+     (i32.const 1968)
      (i32.const 0)
     )
     (unreachable)
@@ -32955,7 +37025,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1790)
+     (i32.const 1969)
      (i32.const 0)
     )
     (unreachable)
@@ -32974,7 +37044,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1791)
+     (i32.const 1970)
      (i32.const 0)
     )
     (unreachable)
@@ -32993,7 +37063,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1792)
+     (i32.const 1971)
      (i32.const 0)
     )
     (unreachable)
@@ -33012,7 +37082,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1793)
+     (i32.const 1972)
      (i32.const 0)
     )
     (unreachable)
@@ -33031,7 +37101,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1794)
+     (i32.const 1973)
      (i32.const 0)
     )
     (unreachable)
@@ -33050,7 +37120,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1795)
+     (i32.const 1974)
      (i32.const 0)
     )
     (unreachable)
@@ -33069,7 +37139,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1796)
+     (i32.const 1975)
      (i32.const 0)
     )
     (unreachable)
@@ -33088,7 +37158,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1797)
+     (i32.const 1976)
      (i32.const 0)
     )
     (unreachable)
@@ -33107,7 +37177,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1798)
+     (i32.const 1977)
      (i32.const 0)
     )
     (unreachable)
@@ -33126,7 +37196,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1799)
+     (i32.const 1978)
      (i32.const 0)
     )
     (unreachable)
@@ -33145,7 +37215,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1800)
+     (i32.const 1979)
      (i32.const 0)
     )
     (unreachable)
@@ -33164,7 +37234,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1801)
+     (i32.const 1980)
      (i32.const 0)
     )
     (unreachable)
@@ -33183,7 +37253,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1810)
+     (i32.const 1989)
      (i32.const 0)
     )
     (unreachable)
@@ -33202,7 +37272,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1811)
+     (i32.const 1990)
      (i32.const 0)
     )
     (unreachable)
@@ -33221,7 +37291,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1812)
+     (i32.const 1991)
      (i32.const 0)
     )
     (unreachable)
@@ -33240,7 +37310,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1813)
+     (i32.const 1992)
      (i32.const 0)
     )
     (unreachable)
@@ -33259,7 +37329,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1814)
+     (i32.const 1993)
      (i32.const 0)
     )
     (unreachable)
@@ -33278,7 +37348,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1815)
+     (i32.const 1994)
      (i32.const 0)
     )
     (unreachable)
@@ -33297,7 +37367,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1816)
+     (i32.const 1995)
      (i32.const 0)
     )
     (unreachable)
@@ -33316,7 +37386,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1817)
+     (i32.const 1996)
      (i32.const 0)
     )
     (unreachable)
@@ -33335,7 +37405,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1818)
+     (i32.const 1997)
      (i32.const 0)
     )
     (unreachable)
@@ -33354,7 +37424,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1819)
+     (i32.const 1998)
      (i32.const 0)
     )
     (unreachable)
@@ -33373,7 +37443,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1822)
+     (i32.const 2001)
      (i32.const 0)
     )
     (unreachable)
@@ -33392,7 +37462,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1823)
+     (i32.const 2002)
      (i32.const 0)
     )
     (unreachable)
@@ -33411,7 +37481,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1824)
+     (i32.const 2003)
      (i32.const 0)
     )
     (unreachable)
@@ -33430,7 +37500,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1825)
+     (i32.const 2004)
      (i32.const 0)
     )
     (unreachable)
@@ -33449,7 +37519,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1826)
+     (i32.const 2005)
      (i32.const 0)
     )
     (unreachable)
@@ -33468,7 +37538,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1827)
+     (i32.const 2006)
      (i32.const 0)
     )
     (unreachable)
@@ -33487,7 +37557,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1828)
+     (i32.const 2007)
      (i32.const 0)
     )
     (unreachable)
@@ -33506,7 +37576,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1829)
+     (i32.const 2008)
      (i32.const 0)
     )
     (unreachable)
@@ -33525,7 +37595,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1830)
+     (i32.const 2009)
      (i32.const 0)
     )
     (unreachable)
@@ -33544,7 +37614,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1831)
+     (i32.const 2010)
      (i32.const 0)
     )
     (unreachable)
@@ -33563,7 +37633,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1832)
+     (i32.const 2011)
      (i32.const 0)
     )
     (unreachable)
@@ -33582,7 +37652,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1833)
+     (i32.const 2012)
      (i32.const 0)
     )
     (unreachable)
@@ -33601,7 +37671,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1834)
+     (i32.const 2013)
      (i32.const 0)
     )
     (unreachable)
@@ -33620,7 +37690,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1835)
+     (i32.const 2014)
      (i32.const 0)
     )
     (unreachable)
@@ -33639,7 +37709,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1836)
+     (i32.const 2015)
      (i32.const 0)
     )
     (unreachable)
@@ -33658,7 +37728,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1837)
+     (i32.const 2016)
      (i32.const 0)
     )
     (unreachable)
@@ -33677,7 +37747,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1838)
+     (i32.const 2017)
      (i32.const 0)
     )
     (unreachable)
@@ -33696,7 +37766,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1839)
+     (i32.const 2018)
      (i32.const 0)
     )
     (unreachable)
@@ -33715,7 +37785,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1840)
+     (i32.const 2019)
      (i32.const 0)
     )
     (unreachable)
@@ -33734,7 +37804,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1841)
+     (i32.const 2020)
      (i32.const 0)
     )
     (unreachable)
@@ -33753,7 +37823,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1842)
+     (i32.const 2021)
      (i32.const 0)
     )
     (unreachable)
@@ -33772,7 +37842,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1843)
+     (i32.const 2022)
      (i32.const 0)
     )
     (unreachable)
@@ -33791,7 +37861,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1912)
+     (i32.const 2091)
      (i32.const 0)
     )
     (unreachable)
@@ -33810,7 +37880,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1913)
+     (i32.const 2092)
      (i32.const 0)
     )
     (unreachable)
@@ -33829,7 +37899,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1914)
+     (i32.const 2093)
      (i32.const 0)
     )
     (unreachable)
@@ -33848,7 +37918,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1915)
+     (i32.const 2094)
      (i32.const 0)
     )
     (unreachable)
@@ -33867,7 +37937,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1916)
+     (i32.const 2095)
      (i32.const 0)
     )
     (unreachable)
@@ -33886,7 +37956,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1917)
+     (i32.const 2096)
      (i32.const 0)
     )
     (unreachable)
@@ -33905,7 +37975,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1918)
+     (i32.const 2097)
      (i32.const 0)
     )
     (unreachable)
@@ -33924,7 +37994,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1919)
+     (i32.const 2098)
      (i32.const 0)
     )
     (unreachable)
@@ -33943,7 +38013,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1920)
+     (i32.const 2099)
      (i32.const 0)
     )
     (unreachable)
@@ -33962,7 +38032,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1921)
+     (i32.const 2100)
      (i32.const 0)
     )
     (unreachable)
@@ -33981,7 +38051,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1924)
+     (i32.const 2103)
      (i32.const 0)
     )
     (unreachable)
@@ -34000,7 +38070,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1925)
+     (i32.const 2104)
      (i32.const 0)
     )
     (unreachable)
@@ -34019,7 +38089,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1926)
+     (i32.const 2105)
      (i32.const 0)
     )
     (unreachable)
@@ -34038,7 +38108,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1927)
+     (i32.const 2106)
      (i32.const 0)
     )
     (unreachable)
@@ -34057,7 +38127,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1928)
+     (i32.const 2107)
      (i32.const 0)
     )
     (unreachable)
@@ -34076,7 +38146,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1937)
+     (i32.const 2116)
      (i32.const 0)
     )
     (unreachable)
@@ -34095,7 +38165,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1938)
+     (i32.const 2117)
      (i32.const 0)
     )
     (unreachable)
@@ -34114,7 +38184,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1939)
+     (i32.const 2118)
      (i32.const 0)
     )
     (unreachable)
@@ -34133,7 +38203,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1940)
+     (i32.const 2119)
      (i32.const 0)
     )
     (unreachable)
@@ -34152,7 +38222,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1941)
+     (i32.const 2120)
      (i32.const 0)
     )
     (unreachable)
@@ -34171,7 +38241,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1942)
+     (i32.const 2121)
      (i32.const 0)
     )
     (unreachable)
@@ -34190,7 +38260,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1943)
+     (i32.const 2122)
      (i32.const 0)
     )
     (unreachable)
@@ -34209,7 +38279,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1944)
+     (i32.const 2123)
      (i32.const 0)
     )
     (unreachable)
@@ -34228,7 +38298,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1945)
+     (i32.const 2124)
      (i32.const 0)
     )
     (unreachable)
@@ -34247,7 +38317,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1946)
+     (i32.const 2125)
      (i32.const 0)
     )
     (unreachable)
@@ -34266,7 +38336,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1949)
+     (i32.const 2128)
      (i32.const 0)
     )
     (unreachable)
@@ -34285,7 +38355,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1950)
+     (i32.const 2129)
      (i32.const 0)
     )
     (unreachable)
@@ -34304,7 +38374,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1951)
+     (i32.const 2130)
      (i32.const 0)
     )
     (unreachable)
@@ -34323,7 +38393,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1952)
+     (i32.const 2131)
      (i32.const 0)
     )
     (unreachable)
@@ -34342,7 +38412,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 1953)
+     (i32.const 2132)
      (i32.const 0)
     )
     (unreachable)

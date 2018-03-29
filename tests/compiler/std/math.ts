@@ -1,7 +1,7 @@
 // based on http://nsz.repo.hu/git/?p=libc-test
 // mostly generated from their tests using scripts/hexfloat.html
 
-const JS = true;
+const js = true;
 
 const INEXACT = 1 << 0;
 const INVALID = 1 << 1;
@@ -167,183 +167,362 @@ assert(test_scalbnf(1.000244141, -149, 1.401298464e-45, 0.0, INEXACT | UNDERFLOW
 assert(test_scalbnf(0.7499999404, -148, 1.401298464e-45, 0.0, INEXACT | UNDERFLOW));
 assert(test_scalbnf(0.5000006557, -128, 1.469369340e-39, 0.0, INEXACT | UNDERFLOW));
 
-// === built-in fmod ================================
+// === NativeMath.mod ================================
 
-function test_fmod(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
-  return check<f64>(left % right, expected, error, flags);
+declare namespace JSOp {
+  export function mod(x: f64, y: f64): f64;
+}
+
+function test_mod(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
+  return  check<f64>(NativeMath.mod(left, right), expected, error, flags) &&
+  (!js || check<f64>(      JSOp.mod(left, right), expected, error, flags));
 }
 
 // sanity
-assert(test_fmod(-8.06684839057968084, 4.53566256067686879, -3.53118582990281205, 0.0, 0));
-assert(test_fmod(4.34523984933830487, -8.88799136300345083, 4.34523984933830487, 0.0, 0));
-assert(test_fmod(-8.38143342755524934, -2.76360733737958819, -0.0906114154164847641, 0.0, 0));
-assert(test_fmod(-6.53167358191348413, 4.56753527684274374, -1.96413830507074039, 0.0, 0));
-assert(test_fmod(9.26705696697258574, 4.81139208435979615, 4.45566488261278959, 0.0, 0));
-assert(test_fmod(-6.45004555606023633, 0.662071792337673881, -0.491399425021171399, 0.0, 0));
-assert(test_fmod(7.85889025304169664, 0.0521545267500622481, 0.0357112405323594256, 0.0, 0));
-assert(test_fmod(-0.792054511984895959, 7.67640268511753998, -0.792054511984895959, 0.0, 0));
-assert(test_fmod(0.615702673197924044, 2.01190257903248026, 0.615702673197924044, 0.0, 0));
-assert(test_fmod(-0.558758682360915193, 0.0322398306026380407, -0.0106815621160685006, 0.0, 0));
+assert(test_mod(-8.06684839057968084, 4.53566256067686879, -3.53118582990281205, 0.0, 0));
+assert(test_mod(4.34523984933830487, -8.88799136300345083, 4.34523984933830487, 0.0, 0));
+assert(test_mod(-8.38143342755524934, -2.76360733737958819, -0.0906114154164847641, 0.0, 0));
+assert(test_mod(-6.53167358191348413, 4.56753527684274374, -1.96413830507074039, 0.0, 0));
+assert(test_mod(9.26705696697258574, 4.81139208435979615, 4.45566488261278959, 0.0, 0));
+assert(test_mod(-6.45004555606023633, 0.662071792337673881, -0.491399425021171399, 0.0, 0));
+assert(test_mod(7.85889025304169664, 0.0521545267500622481, 0.0357112405323594256, 0.0, 0));
+assert(test_mod(-0.792054511984895959, 7.67640268511753998, -0.792054511984895959, 0.0, 0));
+assert(test_mod(0.615702673197924044, 2.01190257903248026, 0.615702673197924044, 0.0, 0));
+assert(test_mod(-0.558758682360915193, 0.0322398306026380407, -0.0106815621160685006, 0.0, 0));
 
 // special
-assert(test_fmod(0.0, 1.0, 0.0, 0.0, 0));
-assert(test_fmod(-0.0, 1.0, -0.0, 0.0, 0));
-assert(test_fmod(0.5, 1.0, 0.5, 0.0, 0));
-assert(test_fmod(-0.5, 1.0, -0.5, 0.0, 0));
-assert(test_fmod(1.0, 1.0, 0.0, 0.0, 0));
-assert(test_fmod(-1.0, 1.0, -0.0, 0.0, 0));
-assert(test_fmod(1.5, 1.0, 0.5, 0.0, 0));
-assert(test_fmod(-1.5, 1.0, -0.5, 0.0, 0));
-assert(test_fmod(2.0, 1.0, 0.0, 0.0, 0));
-assert(test_fmod(-2.0, 1.0, -0.0, 0.0, 0));
-assert(test_fmod(Infinity, 1.0, NaN, 0.0, INVALID));
-assert(test_fmod(-Infinity, 1.0, NaN, 0.0, INVALID));
-assert(test_fmod(NaN, 1.0, NaN, 0.0, 0));
-assert(test_fmod(0.0, -1.0, 0.0, 0.0, 0));
-assert(test_fmod(-0.0, -1.0, -0.0, 0.0, 0));
-assert(test_fmod(0.5, -1.0, 0.5, 0.0, 0));
-assert(test_fmod(-0.5, -1.0, -0.5, 0.0, 0));
-assert(test_fmod(1.0, -1.0, 0.0, 0.0, 0));
-assert(test_fmod(-1.0, -1.0, -0.0, 0.0, 0));
-assert(test_fmod(1.5, -1.0, 0.5, 0.0, 0));
-assert(test_fmod(-1.5, -1.0, -0.5, 0.0, 0));
-assert(test_fmod(2.0, -1.0, 0.0, 0.0, 0));
-assert(test_fmod(-2.0, -1.0, -0.0, 0.0, 0));
-assert(test_fmod(Infinity, -1.0, NaN, 0.0, INVALID));
-assert(test_fmod(-Infinity, -1.0, NaN, 0.0, INVALID));
-assert(test_fmod(NaN, -1.0, NaN, 0.0, 0));
-assert(test_fmod(0.0, 0.0, NaN, 0.0, INVALID));
-assert(test_fmod(0.0, -0.0, NaN, 0.0, INVALID));
-assert(test_fmod(0.0, Infinity, 0.0, 0.0, 0));
-assert(test_fmod(0.0, -Infinity, 0.0, 0.0, 0));
-assert(test_fmod(0.0, NaN, NaN, 0.0, 0));
-assert(test_fmod(-0.0, 0.0, NaN, 0.0, INVALID));
-assert(test_fmod(-0.0, -0.0, NaN, 0.0, INVALID));
-assert(test_fmod(-0.0, Infinity, -0.0, 0.0, 0));
-assert(test_fmod(-0.0, -Infinity, -0.0, 0.0, 0));
-assert(test_fmod(-0.0, NaN, NaN, 0.0, 0));
-assert(test_fmod(1.0, 0.0, NaN, 0.0, INVALID));
-assert(test_fmod(-1.0, 0.0, NaN, 0.0, INVALID));
-assert(test_fmod(Infinity, 0.0, NaN, 0.0, INVALID));
-assert(test_fmod(-Infinity, 0.0, NaN, 0.0, INVALID));
-assert(test_fmod(NaN, 0.0, NaN, 0.0, 0));
-assert(test_fmod(-1.0, -0.0, NaN, 0.0, INVALID));
-assert(test_fmod(Infinity, -0.0, NaN, 0.0, INVALID));
-assert(test_fmod(-Infinity, -0.0, NaN, 0.0, INVALID));
-assert(test_fmod(NaN, -0.0, NaN, 0.0, 0));
-assert(test_fmod(Infinity, 2.0, NaN, 0.0, INVALID));
-assert(test_fmod(Infinity, -0.5, NaN, 0.0, INVALID));
-assert(test_fmod(Infinity, NaN, NaN, 0.0, 0));
-assert(test_fmod(-Infinity, 2.0, NaN, 0.0, INVALID));
-assert(test_fmod(-Infinity, -0.5, NaN, 0.0, INVALID));
-assert(test_fmod(-Infinity, NaN, NaN, 0.0, 0));
-assert(test_fmod(NaN, NaN, NaN, 0.0, 0));
-assert(test_fmod(1.0, NaN, NaN, 0.0, 0));
-assert(test_fmod(-1.0, NaN, NaN, 0.0, 0));
-assert(test_fmod(1.0, Infinity, 1.0, 0.0, 0));
-assert(test_fmod(-1.0, Infinity, -1.0, 0.0, 0));
-assert(test_fmod(Infinity, Infinity, NaN, 0.0, INVALID));
-assert(test_fmod(-Infinity, Infinity, NaN, 0.0, INVALID));
-assert(test_fmod(1.0, -Infinity, 1.0, 0.0, 0));
-assert(test_fmod(-1.0, -Infinity, -1.0, 0.0, 0));
-assert(test_fmod(Infinity, -Infinity, NaN, 0.0, INVALID));
-assert(test_fmod(-Infinity, -Infinity, NaN, 0.0, INVALID));
-assert(test_fmod(1.75, 0.5, 0.25, 0.0, 0));
-assert(test_fmod(-1.75, 0.5, -0.25, 0.0, 0));
-assert(test_fmod(1.75, -0.5, 0.25, 0.0, 0));
-assert(test_fmod(-1.75, -0.5, -0.25, 0.0, 0));
+assert(test_mod(0.0, 1.0, 0.0, 0.0, 0));
+assert(test_mod(-0.0, 1.0, -0.0, 0.0, 0));
+assert(test_mod(0.5, 1.0, 0.5, 0.0, 0));
+assert(test_mod(-0.5, 1.0, -0.5, 0.0, 0));
+assert(test_mod(1.0, 1.0, 0.0, 0.0, 0));
+assert(test_mod(-1.0, 1.0, -0.0, 0.0, 0));
+assert(test_mod(1.5, 1.0, 0.5, 0.0, 0));
+assert(test_mod(-1.5, 1.0, -0.5, 0.0, 0));
+assert(test_mod(2.0, 1.0, 0.0, 0.0, 0));
+assert(test_mod(-2.0, 1.0, -0.0, 0.0, 0));
+assert(test_mod(Infinity, 1.0, NaN, 0.0, INVALID));
+assert(test_mod(-Infinity, 1.0, NaN, 0.0, INVALID));
+assert(test_mod(NaN, 1.0, NaN, 0.0, 0));
+assert(test_mod(0.0, -1.0, 0.0, 0.0, 0));
+assert(test_mod(-0.0, -1.0, -0.0, 0.0, 0));
+assert(test_mod(0.5, -1.0, 0.5, 0.0, 0));
+assert(test_mod(-0.5, -1.0, -0.5, 0.0, 0));
+assert(test_mod(1.0, -1.0, 0.0, 0.0, 0));
+assert(test_mod(-1.0, -1.0, -0.0, 0.0, 0));
+assert(test_mod(1.5, -1.0, 0.5, 0.0, 0));
+assert(test_mod(-1.5, -1.0, -0.5, 0.0, 0));
+assert(test_mod(2.0, -1.0, 0.0, 0.0, 0));
+assert(test_mod(-2.0, -1.0, -0.0, 0.0, 0));
+assert(test_mod(Infinity, -1.0, NaN, 0.0, INVALID));
+assert(test_mod(-Infinity, -1.0, NaN, 0.0, INVALID));
+assert(test_mod(NaN, -1.0, NaN, 0.0, 0));
+assert(test_mod(0.0, 0.0, NaN, 0.0, INVALID));
+assert(test_mod(0.0, -0.0, NaN, 0.0, INVALID));
+assert(test_mod(0.0, Infinity, 0.0, 0.0, 0));
+assert(test_mod(0.0, -Infinity, 0.0, 0.0, 0));
+assert(test_mod(0.0, NaN, NaN, 0.0, 0));
+assert(test_mod(-0.0, 0.0, NaN, 0.0, INVALID));
+assert(test_mod(-0.0, -0.0, NaN, 0.0, INVALID));
+assert(test_mod(-0.0, Infinity, -0.0, 0.0, 0));
+assert(test_mod(-0.0, -Infinity, -0.0, 0.0, 0));
+assert(test_mod(-0.0, NaN, NaN, 0.0, 0));
+assert(test_mod(1.0, 0.0, NaN, 0.0, INVALID));
+assert(test_mod(-1.0, 0.0, NaN, 0.0, INVALID));
+assert(test_mod(Infinity, 0.0, NaN, 0.0, INVALID));
+assert(test_mod(-Infinity, 0.0, NaN, 0.0, INVALID));
+assert(test_mod(NaN, 0.0, NaN, 0.0, 0));
+assert(test_mod(-1.0, -0.0, NaN, 0.0, INVALID));
+assert(test_mod(Infinity, -0.0, NaN, 0.0, INVALID));
+assert(test_mod(-Infinity, -0.0, NaN, 0.0, INVALID));
+assert(test_mod(NaN, -0.0, NaN, 0.0, 0));
+assert(test_mod(Infinity, 2.0, NaN, 0.0, INVALID));
+assert(test_mod(Infinity, -0.5, NaN, 0.0, INVALID));
+assert(test_mod(Infinity, NaN, NaN, 0.0, 0));
+assert(test_mod(-Infinity, 2.0, NaN, 0.0, INVALID));
+assert(test_mod(-Infinity, -0.5, NaN, 0.0, INVALID));
+assert(test_mod(-Infinity, NaN, NaN, 0.0, 0));
+assert(test_mod(NaN, NaN, NaN, 0.0, 0));
+assert(test_mod(1.0, NaN, NaN, 0.0, 0));
+assert(test_mod(-1.0, NaN, NaN, 0.0, 0));
+assert(test_mod(1.0, Infinity, 1.0, 0.0, 0));
+assert(test_mod(-1.0, Infinity, -1.0, 0.0, 0));
+assert(test_mod(Infinity, Infinity, NaN, 0.0, INVALID));
+assert(test_mod(-Infinity, Infinity, NaN, 0.0, INVALID));
+assert(test_mod(1.0, -Infinity, 1.0, 0.0, 0));
+assert(test_mod(-1.0, -Infinity, -1.0, 0.0, 0));
+assert(test_mod(Infinity, -Infinity, NaN, 0.0, INVALID));
+assert(test_mod(-Infinity, -Infinity, NaN, 0.0, INVALID));
+assert(test_mod(1.75, 0.5, 0.25, 0.0, 0));
+assert(test_mod(-1.75, 0.5, -0.25, 0.0, 0));
+assert(test_mod(1.75, -0.5, 0.25, 0.0, 0));
+assert(test_mod(-1.75, -0.5, -0.25, 0.0, 0));
 
-// === built-in fmodf ================================
+// === NativeMathf.mod ================================
 
-function test_fmodf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
-  return check<f32>(left % right, expected, error, flags);
+function test_modf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
+  return check<f32>(NativeMathf.mod(left, right), expected, error, flags);
 }
 
 // sanity
-assert(test_fmodf(-8.066848755, 4.535662651, -3.531186104, 0.0, 0));
-assert(test_fmodf(4.345239639, -8.887990952, 4.345239639, 0.0, 0));
-assert(test_fmodf(-8.381433487, -2.763607264, -0.09061169624, 0.0, 0));
-assert(test_fmodf(-6.531673431, 4.5675354, -1.964138031, 0.0, 0));
-assert(test_fmodf(9.267057419, 4.811392307, 4.455665112, 0.0, 0));
-assert(test_fmodf(-6.450045586, 0.6620717645, -0.4913997054, 0.0, 0));
-assert(test_fmodf(7.858890057, 0.05215452611, 0.03571113944, 0.0, 0));
-assert(test_fmodf(-0.7920545340, 7.676402569, -0.7920545340, 0.0, 0));
-assert(test_fmodf(0.6157026887, 2.011902571, 0.6157026887, 0.0, 0));
-assert(test_fmodf(-0.5587586761, 0.03223983198, -0.01068153232, 0.0, 0));
+assert(test_modf(-8.066848755, 4.535662651, -3.531186104, 0.0, 0));
+assert(test_modf(4.345239639, -8.887990952, 4.345239639, 0.0, 0));
+assert(test_modf(-8.381433487, -2.763607264, -0.09061169624, 0.0, 0));
+assert(test_modf(-6.531673431, 4.5675354, -1.964138031, 0.0, 0));
+assert(test_modf(9.267057419, 4.811392307, 4.455665112, 0.0, 0));
+assert(test_modf(-6.450045586, 0.6620717645, -0.4913997054, 0.0, 0));
+assert(test_modf(7.858890057, 0.05215452611, 0.03571113944, 0.0, 0));
+assert(test_modf(-0.7920545340, 7.676402569, -0.7920545340, 0.0, 0));
+assert(test_modf(0.6157026887, 2.011902571, 0.6157026887, 0.0, 0));
+assert(test_modf(-0.5587586761, 0.03223983198, -0.01068153232, 0.0, 0));
 
 // special
-assert(test_fmodf(0.0, 1.0, 0.0, 0.0, 0));
-assert(test_fmodf(-0.0, 1.0, -0.0, 0.0, 0));
-assert(test_fmodf(0.5, 1.0, 0.5, 0.0, 0));
-assert(test_fmodf(-0.5, 1.0, -0.5, 0.0, 0));
-assert(test_fmodf(1.0, 1.0, 0.0, 0.0, 0));
-assert(test_fmodf(-1.0, 1.0, -0.0, 0.0, 0));
-assert(test_fmodf(1.5, 1.0, 0.5, 0.0, 0));
-assert(test_fmodf(-1.5, 1.0, -0.5, 0.0, 0));
-assert(test_fmodf(2.0, 1.0, 0.0, 0.0, 0));
-assert(test_fmodf(-2.0, 1.0, -0.0, 0.0, 0));
-assert(test_fmodf(Infinity, 1.0, NaN, 0.0, INVALID));
-assert(test_fmodf(-Infinity, 1.0, NaN, 0.0, INVALID));
-assert(test_fmodf(NaN, 1.0, NaN, 0.0, 0));
-assert(test_fmodf(0.0, -1.0, 0.0, 0.0, 0));
-assert(test_fmodf(-0.0, -1.0, -0.0, 0.0, 0));
-assert(test_fmodf(0.5, -1.0, 0.5, 0.0, 0));
-assert(test_fmodf(-0.5, -1.0, -0.5, 0.0, 0));
-assert(test_fmodf(1.0, -1.0, 0.0, 0.0, 0));
-assert(test_fmodf(-1.0, -1.0, -0.0, 0.0, 0));
-assert(test_fmodf(1.5, -1.0, 0.5, 0.0, 0));
-assert(test_fmodf(-1.5, -1.0, -0.5, 0.0, 0));
-assert(test_fmodf(2.0, -1.0, 0.0, 0.0, 0));
-assert(test_fmodf(-2.0, -1.0, -0.0, 0.0, 0));
-assert(test_fmodf(Infinity, -1.0, NaN, 0.0, INVALID));
-assert(test_fmodf(-Infinity, -1.0, NaN, 0.0, INVALID));
-assert(test_fmodf(NaN, -1.0, NaN, 0.0, 0));
-assert(test_fmodf(0.0, 0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(0.0, -0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(0.0, Infinity, 0.0, 0.0, 0));
-assert(test_fmodf(0.0, -Infinity, 0.0, 0.0, 0));
-assert(test_fmodf(0.0, NaN, NaN, 0.0, 0));
-assert(test_fmodf(-0.0, 0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(-0.0, -0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(-0.0, Infinity, -0.0, 0.0, 0));
-assert(test_fmodf(-0.0, -Infinity, -0.0, 0.0, 0));
-assert(test_fmodf(-0.0, NaN, NaN, 0.0, 0));
-assert(test_fmodf(1.0, 0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(-1.0, 0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(Infinity, 0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(-Infinity, 0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(NaN, 0.0, NaN, 0.0, 0));
-assert(test_fmodf(-1.0, -0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(Infinity, -0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(-Infinity, -0.0, NaN, 0.0, INVALID));
-assert(test_fmodf(NaN, -0.0, NaN, 0.0, 0));
-assert(test_fmodf(Infinity, 2.0, NaN, 0.0, INVALID));
-assert(test_fmodf(Infinity, -0.5, NaN, 0.0, INVALID));
-assert(test_fmodf(Infinity, NaN, NaN, 0.0, 0));
-assert(test_fmodf(-Infinity, 2.0, NaN, 0.0, INVALID));
-assert(test_fmodf(-Infinity, -0.5, NaN, 0.0, INVALID));
-assert(test_fmodf(-Infinity, NaN, NaN, 0.0, 0));
-assert(test_fmodf(NaN, NaN, NaN, 0.0, 0));
-assert(test_fmodf(1.0, NaN, NaN, 0.0, 0));
-assert(test_fmodf(-1.0, NaN, NaN, 0.0, 0));
-assert(test_fmodf(1.0, Infinity, 1.0, 0.0, 0));
-assert(test_fmodf(-1.0, Infinity, -1.0, 0.0, 0));
-assert(test_fmodf(Infinity, Infinity, NaN, 0.0, INVALID));
-assert(test_fmodf(-Infinity, Infinity, NaN, 0.0, INVALID));
-assert(test_fmodf(1.0, -Infinity, 1.0, 0.0, 0));
-assert(test_fmodf(-1.0, -Infinity, -1.0, 0.0, 0));
-assert(test_fmodf(Infinity, -Infinity, NaN, 0.0, INVALID));
-assert(test_fmodf(-Infinity, -Infinity, NaN, 0.0, INVALID));
-assert(test_fmodf(1.75, 0.5, 0.25, 0.0, 0));
-assert(test_fmodf(-1.75, 0.5, -0.25, 0.0, 0));
-assert(test_fmodf(1.75, -0.5, 0.25, 0.0, 0));
-assert(test_fmodf(-1.75, -0.5, -0.25, 0.0, 0));
+assert(test_modf(0.0, 1.0, 0.0, 0.0, 0));
+assert(test_modf(-0.0, 1.0, -0.0, 0.0, 0));
+assert(test_modf(0.5, 1.0, 0.5, 0.0, 0));
+assert(test_modf(-0.5, 1.0, -0.5, 0.0, 0));
+assert(test_modf(1.0, 1.0, 0.0, 0.0, 0));
+assert(test_modf(-1.0, 1.0, -0.0, 0.0, 0));
+assert(test_modf(1.5, 1.0, 0.5, 0.0, 0));
+assert(test_modf(-1.5, 1.0, -0.5, 0.0, 0));
+assert(test_modf(2.0, 1.0, 0.0, 0.0, 0));
+assert(test_modf(-2.0, 1.0, -0.0, 0.0, 0));
+assert(test_modf(Infinity, 1.0, NaN, 0.0, INVALID));
+assert(test_modf(-Infinity, 1.0, NaN, 0.0, INVALID));
+assert(test_modf(NaN, 1.0, NaN, 0.0, 0));
+assert(test_modf(0.0, -1.0, 0.0, 0.0, 0));
+assert(test_modf(-0.0, -1.0, -0.0, 0.0, 0));
+assert(test_modf(0.5, -1.0, 0.5, 0.0, 0));
+assert(test_modf(-0.5, -1.0, -0.5, 0.0, 0));
+assert(test_modf(1.0, -1.0, 0.0, 0.0, 0));
+assert(test_modf(-1.0, -1.0, -0.0, 0.0, 0));
+assert(test_modf(1.5, -1.0, 0.5, 0.0, 0));
+assert(test_modf(-1.5, -1.0, -0.5, 0.0, 0));
+assert(test_modf(2.0, -1.0, 0.0, 0.0, 0));
+assert(test_modf(-2.0, -1.0, -0.0, 0.0, 0));
+assert(test_modf(Infinity, -1.0, NaN, 0.0, INVALID));
+assert(test_modf(-Infinity, -1.0, NaN, 0.0, INVALID));
+assert(test_modf(NaN, -1.0, NaN, 0.0, 0));
+assert(test_modf(0.0, 0.0, NaN, 0.0, INVALID));
+assert(test_modf(0.0, -0.0, NaN, 0.0, INVALID));
+assert(test_modf(0.0, Infinity, 0.0, 0.0, 0));
+assert(test_modf(0.0, -Infinity, 0.0, 0.0, 0));
+assert(test_modf(0.0, NaN, NaN, 0.0, 0));
+assert(test_modf(-0.0, 0.0, NaN, 0.0, INVALID));
+assert(test_modf(-0.0, -0.0, NaN, 0.0, INVALID));
+assert(test_modf(-0.0, Infinity, -0.0, 0.0, 0));
+assert(test_modf(-0.0, -Infinity, -0.0, 0.0, 0));
+assert(test_modf(-0.0, NaN, NaN, 0.0, 0));
+assert(test_modf(1.0, 0.0, NaN, 0.0, INVALID));
+assert(test_modf(-1.0, 0.0, NaN, 0.0, INVALID));
+assert(test_modf(Infinity, 0.0, NaN, 0.0, INVALID));
+assert(test_modf(-Infinity, 0.0, NaN, 0.0, INVALID));
+assert(test_modf(NaN, 0.0, NaN, 0.0, 0));
+assert(test_modf(-1.0, -0.0, NaN, 0.0, INVALID));
+assert(test_modf(Infinity, -0.0, NaN, 0.0, INVALID));
+assert(test_modf(-Infinity, -0.0, NaN, 0.0, INVALID));
+assert(test_modf(NaN, -0.0, NaN, 0.0, 0));
+assert(test_modf(Infinity, 2.0, NaN, 0.0, INVALID));
+assert(test_modf(Infinity, -0.5, NaN, 0.0, INVALID));
+assert(test_modf(Infinity, NaN, NaN, 0.0, 0));
+assert(test_modf(-Infinity, 2.0, NaN, 0.0, INVALID));
+assert(test_modf(-Infinity, -0.5, NaN, 0.0, INVALID));
+assert(test_modf(-Infinity, NaN, NaN, 0.0, 0));
+assert(test_modf(NaN, NaN, NaN, 0.0, 0));
+assert(test_modf(1.0, NaN, NaN, 0.0, 0));
+assert(test_modf(-1.0, NaN, NaN, 0.0, 0));
+assert(test_modf(1.0, Infinity, 1.0, 0.0, 0));
+assert(test_modf(-1.0, Infinity, -1.0, 0.0, 0));
+assert(test_modf(Infinity, Infinity, NaN, 0.0, INVALID));
+assert(test_modf(-Infinity, Infinity, NaN, 0.0, INVALID));
+assert(test_modf(1.0, -Infinity, 1.0, 0.0, 0));
+assert(test_modf(-1.0, -Infinity, -1.0, 0.0, 0));
+assert(test_modf(Infinity, -Infinity, NaN, 0.0, INVALID));
+assert(test_modf(-Infinity, -Infinity, NaN, 0.0, INVALID));
+assert(test_modf(1.75, 0.5, 0.25, 0.0, 0));
+assert(test_modf(-1.75, 0.5, -0.25, 0.0, 0));
+assert(test_modf(1.75, -0.5, 0.25, 0.0, 0));
+assert(test_modf(-1.75, -0.5, -0.25, 0.0, 0));
+
+// === NativeMath.rem ================================
+
+function test_rem(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
+  return check<f64>(NativeMath.rem(left, right), expected, error, flags);
+}
+
+// sanity
+assert(test_rem(-8.06684839057968084, 4.53566256067686879, 1.00447673077405675, 0.0, 0));
+assert(test_rem(4.34523984933830487, -8.88799136300345083, 4.34523984933830487, 0.0, 0));
+assert(test_rem(-8.38143342755524934, -2.76360733737958819, -0.0906114154164847641, 0.0, 0));
+assert(test_rem(-6.53167358191348413, 4.56753527684274374, -1.96413830507074039, 0.0, 0));
+assert(test_rem(9.26705696697258574, 4.81139208435979615, -0.355727201747006561, 0.0, 0));
+assert(test_rem(-6.45004555606023633, 0.662071792337673881, 0.170672367316502482, 0.0, 0));
+assert(test_rem(7.85889025304169664, 0.0521545267500622481, -0.0164432862177028224, 0.0, 0));
+assert(test_rem(-0.792054511984895959, 7.67640268511753998, -0.792054511984895959, 0.0, 0));
+assert(test_rem(0.615702673197924044, 2.01190257903248026, 0.615702673197924044, 0.0, 0));
+assert(test_rem(-0.558758682360915193, 0.0322398306026380407, -0.0106815621160685006, 0.0, 0));
+
+// special
+assert(test_rem(0.0, 1.0, 0.0, 0.0, 0));
+assert(test_rem(-0.0, 1.0, -0.0, 0.0, 0));
+assert(test_rem(0.5, 1.0, 0.5, 0.0, 0));
+assert(test_rem(-0.5, 1.0, -0.5, 0.0, 0));
+assert(test_rem(1.0, 1.0, 0.0, 0.0, 0));
+assert(test_rem(-1.0, 1.0, -0.0, 0.0, 0));
+assert(test_rem(1.5, 1.0, -0.5, 0.0, 0));
+assert(test_rem(-1.5, 1.0, 0.5, 0.0, 0));
+assert(test_rem(2.0, 1.0, 0.0, 0.0, 0));
+assert(test_rem(-2.0, 1.0, -0.0, 0.0, 0));
+assert(test_rem(Infinity, 1.0, NaN, 0.0, INVALID));
+assert(test_rem(-Infinity, 1.0, NaN, 0.0, INVALID));
+assert(test_rem(NaN, 1.0, NaN, 0.0, 0));
+assert(test_rem(0.0, -1.0, 0.0, 0.0, 0));
+assert(test_rem(-0.0, -1.0, -0.0, 0.0, 0));
+assert(test_rem(0.5, -1.0, 0.5, 0.0, 0));
+assert(test_rem(-0.5, -1.0, -0.5, 0.0, 0));
+assert(test_rem(1.0, -1.0, 0.0, 0.0, 0));
+assert(test_rem(-1.0, -1.0, -0.0, 0.0, 0));
+assert(test_rem(1.5, -1.0, -0.5, 0.0, 0));
+assert(test_rem(-1.5, -1.0, 0.5, 0.0, 0));
+assert(test_rem(2.0, -1.0, 0.0, 0.0, 0));
+assert(test_rem(-2.0, -1.0, -0.0, 0.0, 0));
+assert(test_rem(Infinity, -1.0, NaN, 0.0, INVALID));
+assert(test_rem(-Infinity, -1.0, NaN, 0.0, INVALID));
+assert(test_rem(NaN, -1.0, NaN, 0.0, 0));
+assert(test_rem(0.0, 0.0, NaN, 0.0, INVALID));
+assert(test_rem(0.0, -0.0, NaN, 0.0, INVALID));
+assert(test_rem(0.0, Infinity, 0.0, 0.0, 0));
+assert(test_rem(0.0, -Infinity, 0.0, 0.0, 0));
+assert(test_rem(0.0, NaN, NaN, 0.0, 0));
+assert(test_rem(-0.0, 0.0, NaN, 0.0, INVALID));
+assert(test_rem(-0.0, -0.0, NaN, 0.0, INVALID));
+assert(test_rem(-0.0, Infinity, -0.0, 0.0, 0));
+assert(test_rem(-0.0, -Infinity, -0.0, 0.0, 0));
+assert(test_rem(-0.0, NaN, NaN, 0.0, 0));
+assert(test_rem(1.0, 0.0, NaN, 0.0, INVALID));
+assert(test_rem(-1.0, 0.0, NaN, 0.0, INVALID));
+assert(test_rem(Infinity, 0.0, NaN, 0.0, INVALID));
+assert(test_rem(-Infinity, 0.0, NaN, 0.0, INVALID));
+assert(test_rem(NaN, 0.0, NaN, 0.0, 0));
+assert(test_rem(-1.0, -0.0, NaN, 0.0, INVALID));
+assert(test_rem(Infinity, -0.0, NaN, 0.0, INVALID));
+assert(test_rem(-Infinity, -0.0, NaN, 0.0, INVALID));
+assert(test_rem(NaN, -0.0, NaN, 0.0, 0));
+assert(test_rem(Infinity, 2.0, NaN, 0.0, INVALID));
+assert(test_rem(Infinity, -0.5, NaN, 0.0, INVALID));
+assert(test_rem(Infinity, NaN, NaN, 0.0, 0));
+assert(test_rem(-Infinity, 2.0, NaN, 0.0, INVALID));
+assert(test_rem(-Infinity, -0.5, NaN, 0.0, INVALID));
+assert(test_rem(-Infinity, NaN, NaN, 0.0, 0));
+assert(test_rem(NaN, NaN, NaN, 0.0, 0));
+assert(test_rem(1.0, NaN, NaN, 0.0, 0));
+assert(test_rem(-1.0, NaN, NaN, 0.0, 0));
+assert(test_rem(1.0, Infinity, 1.0, 0.0, 0));
+assert(test_rem(-1.0, Infinity, -1.0, 0.0, 0));
+assert(test_rem(Infinity, Infinity, NaN, 0.0, INVALID));
+assert(test_rem(-Infinity, Infinity, NaN, 0.0, INVALID));
+assert(test_rem(1.0, -Infinity, 1.0, 0.0, 0));
+assert(test_rem(-1.0, -Infinity, -1.0, 0.0, 0));
+assert(test_rem(Infinity, -Infinity, NaN, 0.0, INVALID));
+assert(test_rem(-Infinity, -Infinity, NaN, 0.0, INVALID));
+assert(test_rem(1.75, 0.5, -0.25, 0.0, 0));
+assert(test_rem(-1.75, 0.5, 0.25, 0.0, 0));
+assert(test_rem(1.75, -0.5, -0.25, 0.0, 0));
+assert(test_rem(-1.75, -0.5, 0.25, 0.0, 0));
+assert(test_rem(7.90505033345994471e-323, Infinity, 7.90505033345994471e-323, 0.0, 0));
+
+// === NativeMathf.rem ================================
+
+function test_remf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
+  return check<f32>(NativeMathf.rem(left, right), expected, error, flags);
+}
+
+// sanity
+assert(test_remf(-8.066848755, 4.535662651, 1.004476547, 0.0, 0));
+assert(test_remf(4.345239639, -8.887990952, 4.345239639, 0.0, 0));
+assert(test_remf(-8.381433487, -2.763607264, -0.09061169624, 0.0, 0));
+assert(test_remf(-6.531673431, 4.567535400, -1.964138031, 0.0, 0));
+assert(test_remf(9.267057419, 4.811392307, -0.3557271957, 0.0, 0));
+assert(test_remf(-6.450045586, 0.6620717645, 0.1706720591, 0.0, 0));
+assert(test_remf(7.858890057, 0.05215452611, -0.01644338667, 0.0, 0));
+assert(test_remf(-0.7920545340, 7.676402569, -0.7920545340, 0.0, 0));
+assert(test_remf(0.6157026887, 2.011902571, 0.6157026887, 0.0, 0));
+assert(test_remf(-0.5587586761, 0.03223983198, -0.01068153232, 0.0, 0));
+
+// special
+assert(test_remf(0.0, 1.0, 0.0, 0.0, 0));
+assert(test_remf(-0.0, 1.0, -0.0, 0.0, 0));
+assert(test_remf(0.5, 1.0, 0.5, 0.0, 0));
+assert(test_remf(-0.5, 1.0, -0.5, 0.0, 0));
+assert(test_remf(1.0, 1.0, 0.0, 0.0, 0));
+assert(test_remf(-1.0, 1.0, -0.0, 0.0, 0));
+assert(test_remf(1.5, 1.0, -0.5, 0.0, 0));
+assert(test_remf(-1.5, 1.0, 0.5, 0.0, 0));
+assert(test_remf(2.0, 1.0, 0.0, 0.0, 0));
+assert(test_remf(-2.0, 1.0, -0.0, 0.0, 0));
+assert(test_remf(Infinity, 1.0, NaN, 0.0, INVALID));
+assert(test_remf(-Infinity, 1.0, NaN, 0.0, INVALID));
+assert(test_remf(NaN, 1.0, NaN, 0.0, 0));
+assert(test_remf(0.0, -1.0, 0.0, 0.0, 0));
+assert(test_remf(-0.0, -1.0, -0.0, 0.0, 0));
+assert(test_remf(0.5, -1.0, 0.5, 0.0, 0));
+assert(test_remf(-0.5, -1.0, -0.5, 0.0, 0));
+assert(test_remf(1.0, -1.0, 0.0, 0.0, 0));
+assert(test_remf(-1.0, -1.0, -0.0, 0.0, 0));
+assert(test_remf(1.5, -1.0, -0.5, 0.0, 0));
+assert(test_remf(-1.5, -1.0, 0.5, 0.0, 0));
+assert(test_remf(2.0, -1.0, 0.0, 0.0, 0));
+assert(test_remf(-2.0, -1.0, -0.0, 0.0, 0));
+assert(test_remf(Infinity, -1.0, NaN, 0.0, INVALID));
+assert(test_remf(-Infinity, -1.0, NaN, 0.0, INVALID));
+assert(test_remf(NaN, -1.0, NaN, 0.0, 0));
+assert(test_remf(0.0, 0.0, NaN, 0.0, INVALID));
+assert(test_remf(0.0, -0.0, NaN, 0.0, INVALID));
+assert(test_remf(0.0, Infinity, 0.0, 0.0, 0));
+assert(test_remf(0.0, -Infinity, 0.0, 0.0, 0));
+assert(test_remf(0.0, NaN, NaN, 0.0, 0));
+assert(test_remf(-0.0, 0.0, NaN, 0.0, INVALID));
+assert(test_remf(-0.0, -0.0, NaN, 0.0, INVALID));
+assert(test_remf(-0.0, Infinity, -0.0, 0.0, 0));
+assert(test_remf(-0.0, -Infinity, -0.0, 0.0, 0));
+assert(test_remf(-0.0, NaN, NaN, 0.0, 0));
+assert(test_remf(1.0, 0.0, NaN, 0.0, INVALID));
+assert(test_remf(-1.0, 0.0, NaN, 0.0, INVALID));
+assert(test_remf(Infinity, 0.0, NaN, 0.0, INVALID));
+assert(test_remf(-Infinity, 0.0, NaN, 0.0, INVALID));
+assert(test_remf(NaN, 0.0, NaN, 0.0, 0));
+assert(test_remf(-1.0, -0.0, NaN, 0.0, INVALID));
+assert(test_remf(Infinity, -0.0, NaN, 0.0, INVALID));
+assert(test_remf(-Infinity, -0.0, NaN, 0.0, INVALID));
+assert(test_remf(NaN, -0.0, NaN, 0.0, 0));
+assert(test_remf(Infinity, 2.0, NaN, 0.0, INVALID));
+assert(test_remf(Infinity, -0.5, NaN, 0.0, INVALID));
+assert(test_remf(Infinity, NaN, NaN, 0.0, 0));
+assert(test_remf(-Infinity, 2.0, NaN, 0.0, INVALID));
+assert(test_remf(-Infinity, -0.5, NaN, 0.0, INVALID));
+assert(test_remf(-Infinity, NaN, NaN, 0.0, 0));
+assert(test_remf(NaN, NaN, NaN, 0.0, 0));
+assert(test_remf(1.0, NaN, NaN, 0.0, 0));
+assert(test_remf(-1.0, NaN, NaN, 0.0, 0));
+assert(test_remf(1.0, Infinity, 1.0, 0.0, 0));
+assert(test_remf(-1.0, Infinity, -1.0, 0.0, 0));
+assert(test_remf(Infinity, Infinity, NaN, 0.0, INVALID));
+assert(test_remf(-Infinity, Infinity, NaN, 0.0, INVALID));
+assert(test_remf(1.0, -Infinity, 1.0, 0.0, 0));
+assert(test_remf(-1.0, -Infinity, -1.0, 0.0, 0));
+assert(test_remf(Infinity, -Infinity, NaN, 0.0, INVALID));
+assert(test_remf(-Infinity, -Infinity, NaN, 0.0, INVALID));
+assert(test_remf(1.750000000, 0.5, -0.25, 0.0, 0));
+assert(test_remf(-1.750000000, 0.5, 0.25, 0.0, 0));
+assert(test_remf(1.750000000, -0.5, -0.25, 0.0, 0));
+assert(test_remf(-1.750000000, -0.5, 0.25, 0.0, 0));
+assert(test_remf(5.877471754e-39, Infinity, 5.877471754e-39, 0.0, 0));
 
 // === Math.abs ================================
 
 function test_abs(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.abs(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.abs(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.abs(value), expected, error, flags));
 }
 
 // sanity
@@ -398,7 +577,7 @@ assert(test_absf(NaN, NaN, 0.0, 0));
 
 function test_acos(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.acos(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.acos(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.acos(value), expected, error, flags));
 }
 
 // sanity
@@ -460,7 +639,7 @@ assert(test_acosf(-0.5189794898, 2.116452932, -0.1460082680, INEXACT));
 
 function test_acosh(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.acosh(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.acosh(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.acosh(value), expected, error, flags));
 }
 
 // sanity
@@ -535,7 +714,7 @@ assert(test_acoshf(-1.125899907e+15, NaN, 0.0, INVALID));
 
 function test_asin(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.asin(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.asin(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.asin(value), expected, error, flags));
 }
 
 // sanity
@@ -596,7 +775,7 @@ assert(test_asinf(0.5004770160, 0.5241496563, -0.2942709923, INEXACT));
 
 function test_asinh(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.asinh(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.asinh(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.asinh(value), expected, error, flags));
 }
 
 // sanity
@@ -667,7 +846,7 @@ assert(test_asinhf(-0.0, -0.0, 0.0, 0));
 
 function test_atan(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.atan(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.atan(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.atan(value), expected, error, flags));
 }
 
 // sanity
@@ -723,7 +902,7 @@ assert(test_atanf(NaN, NaN, 0.0, 0));
 
 function test_cbrt(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.cbrt(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.cbrt(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.cbrt(value), expected, error, flags));
 }
 
 // sanity
@@ -784,7 +963,7 @@ assert(test_cbrtf(8.0, 2.0, 0.0, 0));
 
 function test_cos(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.cos(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.cos(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.cos(value), expected, error, flags));
 }
 
 /* TODO
@@ -887,7 +1066,7 @@ assert(test_cos(8.77084654266666419, -0.793698411740070497, 0.499968290328979492
 
 function test_cosh(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.cosh(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.cosh(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.cosh(value), expected, error, flags));
 }
 // sanity
 assert(test_cosh(-8.06684839057968084, 1593.52099388623287, -0.380988568067550659, INEXACT));
@@ -937,7 +1116,7 @@ assert(test_coshf(NaN, NaN, 0.0, 0));
 
 function test_exp(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.exp(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.exp(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.exp(value), expected, error, flags));
 }
 
 // sanity
@@ -1003,7 +1182,7 @@ assert(test_expf(0.3465736210, 1.414213657, 0.4321174324, INEXACT));
 
 function test_expm1(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.expm1(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.expm1(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.expm1(value), expected, error, flags));
 }
 
 // sanity
@@ -1060,7 +1239,7 @@ assert(test_expm1f(NaN, NaN, 0.0, 0));
 
 function test_hypot(value1: f64, value2: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.hypot(value1, value2), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.hypot(value1, value2), expected, error, flags));
+  (!js || check<f64>(    JSMath.hypot(value1, value2), expected, error, flags));
 }
 
 // sanity
@@ -1139,7 +1318,7 @@ assert(test_hypotf(1.0, NaN, NaN, 0.0, 0));
 
 function test_log(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.log(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.log(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.log(value), expected, error, flags));
 }
 
 // sanity
@@ -1194,7 +1373,7 @@ assert(test_logf(NaN, NaN, 0.0, 0));
 
 function test_log10(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.log10(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.log10(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.log10(value), expected, error, flags));
 }
 
 // sanity
@@ -1251,7 +1430,7 @@ assert(test_log10f(NaN, NaN, 0.0, 0));
 
 function test_log1p(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.log1p(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.log1p(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.log1p(value), expected, error, flags));
 }
 
 // sanity
@@ -1309,7 +1488,7 @@ assert(test_log1pf(-1.175494211e-38,-1.175494211e-38, 4.930380658e-32, INEXACT |
 
 function test_log2(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.log2(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.log2(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.log2(value), expected, error, flags));
 }
 
 // sanity
@@ -1366,7 +1545,7 @@ assert(test_log2f(NaN, NaN, 0.0, 0));
 
 function test_pow(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.pow(left, right), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.pow(left, right), expected, error, flags));
+  (!js || check<f64>(    JSMath.pow(left, right), expected, error, flags));
 }
 
 // sanity
@@ -1599,7 +1778,7 @@ for (let i = 0; i < 1e7; ++i) {
 
 function test_sin(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.sin(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.sin(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.sin(value), expected, error, flags));
 }
 
 /* TODO
@@ -1658,7 +1837,7 @@ assert(test_sinf(NaN, NaN, 0.0, 0));
 
 function test_sinh(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.sinh(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.sinh(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.sinh(value), expected, error, flags));
 }
 
 // sanity
@@ -1709,7 +1888,7 @@ assert(test_sinhf(NaN, NaN, 0.0, 0));
 
 function test_sqrt(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.sqrt(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.sqrt(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.sqrt(value), expected, error, flags));
 }
 
 // sanity
@@ -1846,7 +2025,7 @@ assert(test_sqrtf(2.000000477, 1.414213777, 0.3827550709, INEXACT));
 
 function test_tan(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.tan(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.tan(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.tan(value), expected, error, flags));
 }
 
 /* TODO
@@ -1905,7 +2084,7 @@ assert(test_tanf(NaN, NaN, 0.0, 0));
 
 function test_tanh(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.tanh(value), expected, error, flags) &&
-  (!JS || check<f64>(    JSMath.tanh(value), expected, error, flags));
+  (!js || check<f64>(    JSMath.tanh(value), expected, error, flags));
 }
 
 // sanity

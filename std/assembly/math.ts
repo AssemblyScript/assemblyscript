@@ -1026,20 +1026,15 @@ export namespace NativeMath {
     return s * z;
   }
 
-  var random_seeded = false;
-  var random_state0: u64;
-  var random_state1: u64;
-
-  function __murmurHash3(h: u64): u64 {
-    h ^= h >> 33;
-    h *= 0xFF51AFD7ED558CCD;
-    h ^= h >> 33;
-    h *= 0xC4CEB9FE1A85EC53;
-    h ^= h >> 33;
-    return h;
+  export function seedRandom(value: i64): void {
+    assert(value);
+    random_seeded = true;
+    random_state0 = murmurHash3(value);
+    random_state1 = murmurHash3(random_state0);
   }
 
-  function __xorShift128Plus(): u64 {
+  export function random(): f64 { // see: v8/src/base/random-number-generator.cc
+    if (!random_seeded) unreachable();
     var s1 = random_state0;
     var s0 = random_state1;
     random_state0 = s0;
@@ -1048,19 +1043,7 @@ export namespace NativeMath {
     s1 ^= s0;
     s1 ^= s0 >> 26;
     random_state1 = s1;
-    return s0 + s1;
-  }
-
-  export function seedRandom(value: i64): void {
-    assert(value);
-    random_seeded = true;
-    random_state0 = __murmurHash3(value);
-    random_state1 = __murmurHash3(random_state0);
-  }
-
-  export function random(): f64 { // based on V8's implementation
-    if (!random_seeded) unreachable();
-    var r = (__xorShift128Plus() & 0x000FFFFFFFFFFFFF) | 0x3FF0000000000000;
+    var r = ((s0 + s1) & 0x000FFFFFFFFFFFFF) | 0x3FF0000000000000;
     return reinterpret<f64>(r) - 1;
   }
 
@@ -1225,6 +1208,122 @@ export namespace NativeMath {
       }
     }
     return y * reinterpret<f64>(<u64>(0x3FF + n) << 52);
+  }
+
+  export function mod(x: f64, y: f64): f64 { // see: musl/src/math/fmod.c
+    var ux = reinterpret<u64>(x);
+    var uy = reinterpret<u64>(y);
+    var ex = <i32>(ux >> 52 & 0x7FF);
+    var ey = <i32>(uy >> 52 & 0x7FF);
+    var sx = <i32>(ux >> 63);
+    if (uy << 1 == 0 || isNaN<f64>(y) || ex == 0x7FF) return (x * y) / (x * y);
+    if (ux << 1 <= uy << 1) {
+      if (ux << 1 == uy << 1) return 0 * x;
+      return x;
+    }
+    var i: u64;
+    if (!ex) {
+      for (i = ux << 12; !(i >> 63); i <<= 1) --ex;
+      ux <<= -ex + 1;
+    } else {
+      ux &= <u64>-1 >> 12;
+      ux |= 1 << 52;
+    }
+    if (!ey) {
+      for (i = uy << 12; !(i >> 63); i <<= 1) --ey;
+      uy <<= -ey + 1;
+    } else {
+      uy &= <u64>-1 >> 12;
+      uy |= 1 << 52;
+    }
+    for (; ex > ey; ex--) {
+      i = ux - uy;
+      if (!(i >> 63)) {
+        if (!i) return 0 * x;
+        ux = i;
+      }
+      ux <<= 1;
+    }
+    i = ux - uy;
+    if (!(i >> 63)) {
+      if (!i) return 0 * x;
+      ux = i;
+    }
+    for (; !(ux >> 52); ux <<= 1) --ex;
+    if (ex > 0) {
+      ux -= 1 << 52;
+      ux |= <u64>ex << 52;
+    } else {
+      ux >>= -ex + 1;
+    }
+    ux |= <u64>sx << 63;
+    return reinterpret<f64>(ux);
+  }
+
+  export function rem(x: f64, y: f64): f64 { // see: musl/src/math/remquo.c
+    var ux = reinterpret<u64>(x);
+    var uy = reinterpret<u64>(y);
+    var ex = <i32>(ux >> 52 & 0x7FF);
+    var ey = <i32>(uy >> 52 & 0x7FF);
+    var sx = <i32>(ux >> 63);
+    var sy = <i32>(uy >> 63);
+    if (uy << 1 == 0 || isNaN(y) || ex == 0x7FF) return (x * y) / (x * y);
+    if (ux << 1 == 0) return x;
+    var uxi = ux;
+    var i: u64;
+    if (!ex) {
+      for (i = uxi << 12; i >> 63 == 0; ex--, i <<= 1) {}
+      uxi <<= -ex + 1;
+    } else {
+      uxi &= <u64>-1 >> 12;
+      uxi |= 1 << 52;
+    }
+    if (!ey) {
+      for (i = uy << 12; i >> 63 == 0; ey--, i <<= 1) {}
+      uy <<= -ey + 1;
+    } else {
+      uy &= <u64>-1 >> 12;
+      uy |= 1 << 52;
+    }
+    var q: u32 = 0;
+    do {
+      if (ex < ey) {
+        if (ex + 1 == ey) break; // goto end
+        return x;
+      }
+      for (; ex > ey; ex--) {
+        i = uxi - uy;
+        if (i >> 63 == 0) {
+          uxi = i;
+          ++q;
+        }
+        uxi <<= 1;
+        q <<= 1;
+      }
+      i = uxi - uy;
+      if (i >> 63 == 0) {
+        uxi = i;
+        ++q;
+      }
+      if (uxi == 0) ex = -60;
+      else for (; uxi >> 52 == 0; uxi <<= 1, ex--) {}
+      break;
+    } while (false);
+  // end:
+    if (ex > 0) {
+      uxi -= 1 << 52;
+      uxi |= <u64>ex << 52;
+    } else {
+      uxi >>= -ex + 1;
+    }
+    x = reinterpret<f64>(uxi);
+    if (sy) y = -y;
+    if (ex == ey || (ex + 1 == ey && (2.0 * x > y || (2.0 * x == y && <bool>(q % 2))))) {
+      x -= y;
+      ++q;
+    }
+    q &= 0x7FFFFFFF;
+    return sx ? -x : x;
   }
 }
 
@@ -2021,6 +2120,10 @@ export namespace NativeMathf {
     return sn * z;
   }
 
+  export function seedRandom(value: i64): void {
+    NativeMath.seedRandom(value);
+  }
+
   export function random(): f32 {
     return <f32>NativeMath.random();
   }
@@ -2125,4 +2228,133 @@ export namespace NativeMathf {
     }
     return y * reinterpret<f32>(<u32>(0x7F + n) << 23);
   }
+
+  export function mod(x: f32, y: f32): f32 { // see: musl/src/math/fmodf.c
+    var ux = reinterpret<u32>(x);
+    var uy = reinterpret<u32>(y);
+    var ex = <i32>(ux >> 23 & 0xFF);
+    var ey = <i32>(uy >> 23 & 0xFF);
+    var sx = ux & 0x80000000;
+    if (uy << 1 == 0 || isNaN<f32>(y) || ex == 0xFF) return (x * y) / (x * y);
+    if (ux << 1 <= uy << 1) {
+      if (ux << 1 == uy << 1) return 0 * x;
+      return x;
+    }
+    var i: u32;
+    if (!ex) {
+      for (i = ux << 9; !(i >> 31); i <<= 1) --ex;
+      ux <<= -ex + 1;
+    } else {
+      ux &= <u32>-1 >> 9;
+      ux |= 1 << 23;
+    }
+    if (!ey) {
+      for (i = uy << 9; !(i >> 31); i <<= 1) --ey;
+      uy <<= -ey + 1;
+    } else {
+      uy &= <u32>-1 >> 9;
+      uy |= 1 << 23;
+    }
+    for (; ex > ey; --ex) {
+      i = ux - uy;
+      if (!(i >> 31)) {
+        if (!i) return 0 * x;
+        ux = i;
+      }
+      ux <<= 1;
+    }
+    i = ux - uy;
+    if (!(i >> 31)) {
+      if (!i) return 0 * x;
+      ux = i;
+    }
+    for (; !(ux >> 23); ux <<= 1) --ex;
+    if (ex > 0) {
+      ux -= 1 << 23;
+      ux |= <u32>ex << 23;
+    } else {
+      ux >>= -ex + 1;
+    }
+    ux |= sx;
+    return reinterpret<f32>(ux);
+  }
+
+  export function rem(x: f32, y: f32): f32 { // see: musl/src/math/remquof.c
+    var ux = reinterpret<u32>(x);
+    var uy = reinterpret<u32>(y);
+    var ex = <i32>(ux >> 23 & 0xFF);
+    var ey = <i32>(uy >> 23 & 0xFF);
+    var sx = <i32>(ux >> 31);
+    var sy = <i32>(uy >> 31);
+    var i: u32;
+    var uxi = ux;
+    if (uy << 1 == 0 || isNaN(y) || ex == 0xFF) return (x * y) / (x * y);
+    if (ux << 1 == 0) return x;
+    if (!ex) {
+      for (i = uxi << 9; i >> 31 == 0; ex--, i <<= 1) {}
+      uxi <<= -ex + 1;
+    } else {
+      uxi &= <u32>-1 >> 9;
+      uxi |= 1 << 23;
+    }
+    if (!ey) {
+      for (i = uy << 9; i >> 31 == 0; ey--, i <<= 1) {}
+      uy <<= -ey + 1;
+    } else {
+      uy &= <u32>-1 >> 9;
+      uy |= 1 << 23;
+    }
+    var q = 0;
+    do {
+      if (ex < ey) {
+        if (ex + 1 == ey) break; // goto end
+        return x;
+      }
+      for (; ex > ey; ex--) {
+        i = uxi - uy;
+        if (i >> 31 == 0) {
+          uxi = i;
+          q++;
+        }
+        uxi <<= 1;
+        q <<= 1;
+      }
+      i = uxi - uy;
+      if (i >> 31 == 0) {
+        uxi = i;
+        q++;
+      }
+      if (uxi == 0) ex = -30;
+      else for (; uxi >> 23 == 0; uxi <<= 1, ex--) {}
+      break;
+    } while (false);
+  // end
+    if (ex > 0) {
+      uxi -= 1 << 23;
+      uxi |= <u32>ex << 23;
+    } else {
+      uxi >>= -ex + 1;
+    }
+    x = reinterpret<f32>(uxi);
+    if (sy) y = -y;
+    if (ex == ey || (ex + 1 == ey && (<f32>2 * x > y || (<f32>2 * x == y && <bool>(q % 2))))) {
+      x -= y;
+      q++;
+    }
+    q &= 0x7FFFFFFF;
+    return sx ? -x : x;
+  }
+}
+
+var random_seeded = false;
+var random_state0: u64;
+var random_state1: u64;
+
+function murmurHash3(h: u64): u64 {
+  h ^= h >> 33;
+  h *= 0xFF51AFD7ED558CCD;
+  h ^= h >> 33;
+  h *= 0xC4CEB9FE1A85EC53;
+  h ^= h >> 33;
+  return h;
 }

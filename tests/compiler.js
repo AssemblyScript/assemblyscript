@@ -124,6 +124,9 @@ tests.forEach(filename => {
               externalFunction: function() { },
               externalConstant: 2
             },
+            JSOp: {
+              mod: function(a, b) { return a % b; }
+            },
             JSMath: Math
           });
         });
