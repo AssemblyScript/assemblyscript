@@ -19,10 +19,25 @@ function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = createDef
 
 function createReverseOrderArray(size: i32): Array<i32> {
   var arr = new Array<i32>(size);
-  for (let i: i32 = 0; i < <i32>(arr.length); i++) {
+  for (let i: i32 = 0; i < arr.length; i++) {
     arr[i] = <i32>arr.length - 1 - i;
   }
   return arr;
+}
+
+NativeMath.seedRandom(reinterpret<u64>(JSMath.random()));
+
+function createRandomOrderArray(size: i32): Array<i32> {
+  var arr = new Array<i32>(size);
+  for (let i: i32 = 0; i < arr.length; i++) {
+    arr[i] = <i32>(NativeMath.random() * arr.length);
+  }
+  return arr;
+}
+
+function assertSortedDefault<T>(arr: Array<T>): void {
+  var defaultComparator = createDefaultComparator<T>();
+  assert(isSorted<T>(arr.sort<T>(defaultComparator), defaultComparator));
 }
 
 var arr = changetype<i32[]>(allocate_memory(sizeof<usize>() + 2 * sizeof<i32>()));
@@ -351,22 +366,26 @@ assert(arr.length == 2);
 
 /*=============================== sort ==========================*/
 
-var unsorted0: Array<i32> = [];
-var unsorted1: Array<i32> = [1];
-var unsorted2: Array<i32> = [2, 1];
-var unsorted4: Array<i32> = [4, 1, 2, 3];
+var revesed0: Array<i32> = [];
+var revesed1: Array<i32> = [1];
+var revesed2: Array<i32> = [2, 1];
+var revesed4: Array<i32> = [4, 1, 2, 3];
 
-var unsorted64    = createReverseOrderArray(64);
-var unsorted128   = createReverseOrderArray(128);
-var unsorted1024  = createReverseOrderArray(1024);
-var unsorted65536 = createReverseOrderArray(1 << 16);
+var revesed64    = createReverseOrderArray(64);
+var revesed128   = createReverseOrderArray(128);
+var revesed1024  = createReverseOrderArray(1024);
+var revesed10000 = createReverseOrderArray(10000);
 
-assert(isSorted<i32>(unsorted0.sort<i32>(createDefaultComparator<i32>()), createDefaultComparator<i32>()));
-assert(isSorted<i32>(unsorted1.sort<i32>(createDefaultComparator<i32>()), createDefaultComparator<i32>()));
-assert(isSorted<i32>(unsorted2.sort<i32>(createDefaultComparator<i32>()), createDefaultComparator<i32>()));
-assert(isSorted<i32>(unsorted4.sort<i32>(createDefaultComparator<i32>()), createDefaultComparator<i32>()));
+var randomized512 = createRandomOrderArray(512);
 
-assert(isSorted<i32>(unsorted64.sort<i32>(createDefaultComparator<i32>()), createDefaultComparator<i32>()));
-assert(isSorted<i32>(unsorted128.sort<i32>(createDefaultComparator<i32>()), createDefaultComparator<i32>()));
-assert(isSorted<i32>(unsorted1024.sort<i32>(createDefaultComparator<i32>()), createDefaultComparator<i32>()));
-assert(isSorted<i32>(unsorted65536.sort<i32>(createDefaultComparator<i32>()), createDefaultComparator<i32>()));
+assertSortedDefault<i32>(revesed0);
+assertSortedDefault<i32>(revesed1);
+assertSortedDefault<i32>(revesed2);
+assertSortedDefault<i32>(revesed4);
+
+assertSortedDefault<i32>(revesed64);
+assertSortedDefault<i32>(revesed128);
+assertSortedDefault<i32>(revesed1024);
+assertSortedDefault<i32>(revesed10000);
+
+assertSortedDefault<i32>(randomized512);
