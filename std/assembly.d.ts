@@ -287,6 +287,7 @@ declare class Array<T> {
   slice(from: i32, to?: i32): T[];
   splice(start: i32, deleteCount?: i32): void;
   reverse(): T[];
+  sort(comparator?: (a: T, b: T) => i32): T[];
 }
 
 /** Class representing a C-like array of values of type `T` with limited capabilities. */

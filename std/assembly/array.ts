@@ -392,7 +392,7 @@ export class Array<T> {
     return this;
   }
 
-  sort(comparator: (a: T, b: T) => bool = createDefaultComparator<T>()): Array<T> {
+  sort(comparator: (a: T, b: T) => i32 = createDefaultComparator<T>()): Array<T> {
     return sort<T>(this, comparator);
   }
 }
