@@ -17,7 +17,7 @@ function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = createDef
   return true;
 }
 
-function createReverseOrderArray(size: i32): Array<i32> {
+function createReverseOrderedArray(size: i32): Array<i32> {
   var arr = new Array<i32>(size);
   for (let i: i32 = 0; i < arr.length; i++) {
     arr[i] = <i32>arr.length - 1 - i;
@@ -27,7 +27,7 @@ function createReverseOrderArray(size: i32): Array<i32> {
 
 NativeMath.seedRandom(reinterpret<u64>(JSMath.random()));
 
-function createRandomOrderArray(size: i32): Array<i32> {
+function createRandomOrderedArray(size: i32): Array<i32> {
   var arr = new Array<i32>(size);
   for (let i: i32 = 0; i < arr.length; i++) {
     arr[i] = <i32>(NativeMath.random() * arr.length);
@@ -369,14 +369,14 @@ assert(arr.length == 2);
 var revesed0: Array<i32> = [];
 var revesed1: Array<i32> = [1];
 var revesed2: Array<i32> = [2, 1];
-var revesed4: Array<i32> = [4, 1, 2, 3];
+var revesed4: Array<i32> = [4, 3, 2, 1];
 
-var revesed64    = createReverseOrderArray(64);
-var revesed128   = createReverseOrderArray(128);
-var revesed1024  = createReverseOrderArray(1024);
-var revesed10000 = createReverseOrderArray(10000);
+var revesed64    = createReverseOrderedArray(64);
+var revesed128   = createReverseOrderedArray(128);
+var revesed1024  = createReverseOrderedArray(1024);
+var revesed10000 = createReverseOrderedArray(10000);
 
-var randomized512 = createRandomOrderArray(512);
+var randomized512 = createRandomOrderedArray(512);
 
 assertSortedDefault<i32>(revesed0);
 assertSortedDefault<i32>(revesed1);

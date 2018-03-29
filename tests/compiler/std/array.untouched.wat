@@ -4265,7 +4265,7 @@
   )
   (get_local $0)
  )
- (func $std/array/createReverseOrderArray (; 52 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedArray (; 52 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (set_local $1
@@ -4399,7 +4399,7 @@
    )
   )
  )
- (func $std/array/createRandomOrderArray (; 55 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomOrderedArray (; 55 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (set_local $1
@@ -7688,27 +7688,27 @@
    )
   )
   (set_global $std/array/revesed64
-   (call $std/array/createReverseOrderArray
+   (call $std/array/createReverseOrderedArray
     (i32.const 64)
    )
   )
   (set_global $std/array/revesed128
-   (call $std/array/createReverseOrderArray
+   (call $std/array/createReverseOrderedArray
     (i32.const 128)
    )
   )
   (set_global $std/array/revesed1024
-   (call $std/array/createReverseOrderArray
+   (call $std/array/createReverseOrderedArray
     (i32.const 1024)
    )
   )
   (set_global $std/array/revesed10000
-   (call $std/array/createReverseOrderArray
+   (call $std/array/createReverseOrderedArray
     (i32.const 10000)
    )
   )
   (set_global $std/array/randomized512
-   (call $std/array/createRandomOrderArray
+   (call $std/array/createRandomOrderedArray
     (i32.const 512)
    )
   )
