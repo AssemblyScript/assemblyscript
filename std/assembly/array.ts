@@ -317,7 +317,6 @@ export class CArray<T> {
   }
 }
 
-
 /*
  * Internal methods
  */
