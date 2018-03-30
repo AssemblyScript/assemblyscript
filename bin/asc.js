@@ -836,7 +836,8 @@ function createMemoryStream(fn) {
     return buffer;
   };
   stream.toString = function() {
-    return this.toBuffer().toString("utf8");
+    var buffer = this.toBuffer();
+    return utf8.read(buffer, 0, buffer.length);
   };
   return stream;
 }
