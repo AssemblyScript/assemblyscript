@@ -11,15 +11,14 @@
  (type $iv (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $I (func (result i64)))
  (type $v (func))
  (import "JSMath" "random" (func $(lib)/math/JSMath.random (result f64)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
  (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
- (global "$(lib)/math/NativeMath.random_seeded" (mut i32) (i32.const 0))
- (global "$(lib)/math/NativeMath.random_state0" (mut i64) (i64.const 0))
- (global "$(lib)/math/NativeMath.random_state1" (mut i64) (i64.const 0))
+ (global "$(lib)/math/random_seeded" (mut i32) (i32.const 0))
+ (global "$(lib)/math/random_state0" (mut i64) (i64.const 0))
+ (global "$(lib)/math/random_state1" (mut i64) (i64.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
  (global $argumentCount (mut i32) (i32.const 0))
@@ -50,7 +49,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func "$(lib)/math/NativeMath.murmurHash3" (; 2 ;) (type $II) (param $0 i64) (result i64)
+ (func "$(lib)/math/murmurHash3" (; 2 ;) (type $II) (param $0 i64) (result i64)
   (i64.xor
    (tee_local $0
     (i64.mul
@@ -90,23 +89,23 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 613)
+     (i32.const 980)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  (set_global "$(lib)/math/NativeMath.random_seeded"
+  (set_global "$(lib)/math/random_seeded"
    (i32.const 1)
   )
-  (set_global "$(lib)/math/NativeMath.random_state0"
-   (call "$(lib)/math/NativeMath.murmurHash3"
+  (set_global "$(lib)/math/random_state0"
+   (call "$(lib)/math/murmurHash3"
     (get_local $0)
    )
   )
-  (set_global "$(lib)/math/NativeMath.random_state1"
-   (call "$(lib)/math/NativeMath.murmurHash3"
-    (get_global "$(lib)/math/NativeMath.random_state0")
+  (set_global "$(lib)/math/random_state1"
+   (call "$(lib)/math/murmurHash3"
+    (get_global "$(lib)/math/random_state0")
    )
   )
  )
@@ -3768,18 +3767,24 @@
   )
   (get_local $1)
  )
- (func "$(lib)/math/NativeMath.xorShift128Plus" (; 49 ;) (type $I) (result i64)
+ (func "$(lib)/math/NativeMath.random" (; 49 ;) (type $F) (result f64)
   (local $0 i64)
   (local $1 i64)
-  (set_local $0
-   (get_global "$(lib)/math/NativeMath.random_state0")
+  (if
+   (i32.eqz
+    (get_global "$(lib)/math/random_seeded")
+   )
+   (unreachable)
   )
-  (set_global "$(lib)/math/NativeMath.random_state0"
+  (set_local $0
+   (get_global "$(lib)/math/random_state0")
+  )
+  (set_global "$(lib)/math/random_state0"
    (tee_local $1
-    (get_global "$(lib)/math/NativeMath.random_state1")
+    (get_global "$(lib)/math/random_state1")
    )
   )
-  (set_global "$(lib)/math/NativeMath.random_state1"
+  (set_global "$(lib)/math/random_state1"
    (tee_local $0
     (i64.xor
      (i64.xor
@@ -3807,23 +3812,14 @@
     )
    )
   )
-  (i64.add
-   (get_local $1)
-   (get_local $0)
-  )
- )
- (func "$(lib)/math/NativeMath.random" (; 50 ;) (type $F) (result f64)
-  (if
-   (i32.eqz
-    (get_global "$(lib)/math/NativeMath.random_seeded")
-   )
-   (unreachable)
-  )
   (f64.sub
    (f64.reinterpret/i64
     (i64.or
      (i64.and
-      (call "$(lib)/math/NativeMath.xorShift128Plus")
+      (i64.add
+       (get_local $1)
+       (get_local $0)
+      )
       (i64.const 4503599627370495)
      )
      (i64.const 4607182418800017408)
@@ -3832,7 +3828,7 @@
    (f64.const 1)
   )
  )
- (func $std/array/createRandomOrderedArray (; 51 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomOrderedArray (; 50 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $0
    (call "$(lib)/array/Array#constructor"
@@ -3875,7 +3871,7 @@
   )
   (get_local $0)
  )
- (func $std/array/createDefaultComparator<i32>~anonymous|23 (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/createDefaultComparator<i32>~anonymous|23 (; 51 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (i32.gt_s
     (get_local $0)
@@ -3887,10 +3883,10 @@
    )
   )
  )
- (func $std/array/createDefaultComparator<i32> (; 53 ;) (type $i) (result i32)
+ (func $std/array/createDefaultComparator<i32> (; 52 ;) (type $i) (result i32)
   (i32.const 23)
  )
- (func "$(lib)/array/conditionalSwap<i32>" (; 54 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func "$(lib)/array/conditionalSwap<i32>" (; 53 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (set_local $4
@@ -3962,7 +3958,7 @@
   )
   (get_local $0)
  )
- (func "$(lib)/array/insertionSort<i32>" (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/insertionSort<i32>" (; 54 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4079,7 +4075,7 @@
   )
   (get_local $0)
  )
- (func "$(lib)/array/weakHeapSort<i32>" (; 56 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/weakHeapSort<i32>" (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4537,7 +4533,7 @@
   )
   (get_local $0)
  )
- (func "$(lib)/array/sort<i32>" (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/sort<i32>" (; 56 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.le_s
@@ -4583,13 +4579,13 @@
    (get_local $1)
   )
  )
- (func "$(lib)/array/Array<i32>#sort" (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/Array<i32>#sort" (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (call "$(lib)/array/sort<i32>"
    (get_local $0)
    (get_local $1)
   )
  )
- (func $std/array/isSorted<i32> (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<i32> (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (set_local $2
@@ -4646,7 +4642,7 @@
   )
   (i32.const 1)
  )
- (func $std/array/assertSortedDefault<i32> (; 60 ;) (type $iv) (param $0 i32)
+ (func $std/array/assertSortedDefault<i32> (; 59 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -4671,7 +4667,7 @@
    )
   )
  )
- (func $start (; 61 ;) (type $v)
+ (func $start (; 60 ;) (type $v)
   (set_global "$(lib)/allocator/arena/startOffset"
    (i32.and
     (i32.add
