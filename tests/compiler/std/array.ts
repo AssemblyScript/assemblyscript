@@ -17,6 +17,21 @@ function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = createDef
   return true;
 }
 
+// Check is equality for arrays
+function isArraysEqual<T>(a: Array<T>, b: Array<T>, maxLen: i32 = 0): bool {
+  var len = maxLen;
+  if (!maxLen) {
+    if (a.length != b.length) {
+      return false;
+    }
+    len = <i32>a.length;
+  }
+  for (let i: i32 = 0; i < len; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
 function createReverseOrderedArray(size: i32): Array<i32> {
   var arr = new Array<i32>(size);
   for (let i: i32 = 0; i < arr.length; i++) {
@@ -35,9 +50,12 @@ function createRandomOrderedArray(size: i32): Array<i32> {
   return arr;
 }
 
+function assertSorted<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): void {
+  assert(isSorted<T>(arr.sort<T>(comparator), comparator));
+}
+
 function assertSortedDefault<T>(arr: Array<T>): void {
-  var defaultComparator = createDefaultComparator<T>();
-  assert(isSorted<T>(arr.sort<T>(defaultComparator), defaultComparator));
+  assertSorted<T>(arr, createDefaultComparator<T>());
 }
 
 var arr = changetype<i32[]>(allocate_memory(sizeof<usize>() + 2 * sizeof<i32>()));
@@ -369,7 +387,9 @@ assert(arr.length == 2);
 var revesed0: Array<i32> = [];
 var revesed1: Array<i32> = [1];
 var revesed2: Array<i32> = [2, 1];
-var revesed4: Array<i32> = [4, 3, 2, 1];
+var revesed4: Array<i32> = [3, 2, 1, 0];
+
+var expected4: Array<i32> = [0, 1, 2, 3];
 
 var revesed64    = createReverseOrderedArray(64);
 var revesed128   = createReverseOrderedArray(128);
@@ -378,14 +398,40 @@ var revesed10000 = createReverseOrderedArray(10000);
 
 var randomized512 = createRandomOrderedArray(512);
 
+// Standart comparator
+
 assertSortedDefault<i32>(revesed0);
+
 assertSortedDefault<i32>(revesed1);
+assert(isArraysEqual<i32>(revesed1, <i32[]>[1]));
+
 assertSortedDefault<i32>(revesed2);
+assert(isArraysEqual<i32>(revesed2, <i32[]>[1, 2]));
+
 assertSortedDefault<i32>(revesed4);
+assert(isArraysEqual<i32>(revesed4, expected4));
 
 assertSortedDefault<i32>(revesed64);
+assert(isArraysEqual<i32>(revesed64, expected4, 4));
+
 assertSortedDefault<i32>(revesed128);
+assert(isArraysEqual<i32>(revesed128, expected4, 4));
+
 assertSortedDefault<i32>(revesed1024);
+assert(isArraysEqual<i32>(revesed1024, expected4, 4));
+
 assertSortedDefault<i32>(revesed10000);
+assert(isArraysEqual<i32>(revesed10000, expected4, 4));
 
 assertSortedDefault<i32>(randomized512);
+
+// Custom comparator
+
+var randomized64  = createRandomOrderedArray(64);
+var randomized257 = createRandomOrderedArray(257);
+
+assertSorted<i32>(randomized64, (a: i32, b: i32): i32 => a - b);
+assertSorted<i32>(randomized64, (a: i32, b: i32): i32 => b - a);
+
+assertSorted<i32>(randomized257, (a: i32, b: i32): i32 => a - b);
+assertSorted<i32>(randomized257, (a: i32, b: i32): i32 => b - a);
