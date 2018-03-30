@@ -329,11 +329,11 @@ function createDefaultComparator<T>(): (a: T, b: T) => i32 {
 }
 
 function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: (a: T, b: T) => i32): Array<T> {
-  var a = <T>arr[i];
-  var b = <T>arr[j];
+  var a = load<T>(arr.__memory + i * sizeof<T>()); // var a = <T>arr[i];
+  var b = load<T>(arr.__memory + j * sizeof<T>()); // var b = <T>arr[j];
   if (comparator(a, b) < 0) {
-    arr[i] = b;
-    arr[j] = a;
+    store<T>(arr.__memory + i * sizeof<T>(), b); // arr[i] = b;
+    store<T>(arr.__memory + j * sizeof<T>(), a); // arr[j] = a;
   }
   return arr;
 }
@@ -341,12 +341,12 @@ function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: (a: T, b:
 function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var a: T, b: T, j: i32;
   for (let i: i32 = 0, len: i32 = arr.length; i < len; i++) {
-    a = <T>arr[i];
+    a = load<T>(arr.__memory + i * sizeof<T>()); // a = <T>arr[i];
     j = i - 1;
     while (j >= 0) {
-      b = <T>arr[j];
+      b = load<T>(arr.__memory + j * sizeof<T>());  // b = <T>arr[j];
       if (comparator(a, b) < 0) {
-        arr[j + 1] = b;
+        store<T>(arr.__memory + (j + 1) * sizeof<T>(), b); // arr[j + 1] = b;
         j--;
       } else break;
     }
@@ -364,54 +364,83 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
   var len: i32 = arr.length;
   var i: i32, j: i32, y: i32, p: i32, a: T, b: T;
 
-  if (len > 1) {
-    let blen = (len + 7) >> 3;
-    let bitset = new Array<i32>(blen);
+  let blen = (len + 7) >> 3;
+  let bitset = new Array<i32>(blen);
 
-    for (i = 0; i < blen; ++i) bitset[i] = 0;
+  // for (i = 0; i < blen; ++i) bitset[i] = 0;
+  set_memory(bitset.__memory, 0, blen * sizeof<i32>());
 
-    for (i = len - 1; i > 0; i--) {
-      j = i;
-      while ((j & 1) == ((<i32>bitset[j >> 4] >> ((j >> 1) & 7)) & 1)) {
-        j >>= 1;
-      }
-
-      p = j >> 1;
-      a = <T>arr[p];
-      b = <T>arr[i];
-      if (comparator(a, b) < 0) {
-        bitset[i >> 3] = <i32>bitset[i >> 3] ^ (1 << (i & 7));
-        arr[i] = a;
-        arr[p] = b;
-      }
+  for (i = len - 1; i > 0; i--) {
+    j = i;
+    while ((j & 1) == ((load<i32>(bitset.__memory + (j >> 4) * sizeof<i32>()) >> ((j >> 1) & 7)) & 1)) {
+      j >>= 1;
     }
 
-    for (i = len - 1; i >= 2; i--) {
-      a      = <T>arr[0];
-      arr[0] = <T>arr[i];
-      arr[i] = a;
-
-      let x = 1;
-      while ((y = (x << 1) + ((<i32>bitset[x >> 3] >> (x & 7)) & 1)) < i) {
-        x = y;
-      }
-
-      while (x > 0) {
-        a = <T>arr[0];
-        b = <T>arr[x];
-        if (comparator(a, b) < 0) {
-          bitset[x >> 3] = <i32>bitset[x >> 3] ^ (1 << (x & 7));
-          arr[x] = a;
-          arr[0] = b;
-        }
-        x >>= 1;
-      }
+    p = j >> 1;
+    // a = <T>arr[p];
+    // b = <T>arr[i];
+    a = load<T>(arr.__memory + p * sizeof<T>());
+    b = load<T>(arr.__memory + i * sizeof<T>());
+    if (comparator(a, b) < 0) {
+      // bitset[i >> 3] = <i32>bitset[i >> 3] ^ (1 << (i & 7));
+      store<i32>(
+        bitset.__memory + (i >> 3) * sizeof<i32>(),
+        load<i32>(bitset.__memory + (i >> 3) * sizeof<i32>()) ^ (1 << (i & 7))
+      );
+      // arr[i] = a;
+      // arr[p] = b;
+      store<T>(arr.__memory + i * sizeof<T>(), a);
+      store<T>(arr.__memory + p * sizeof<T>(), b);
     }
-
-    let t  = <T>arr[1];
-    arr[1] = <T>arr[0];
-    arr[0] = t;
   }
+
+  for (i = len - 1; i >= 2; i--) {
+    /*
+    a      = <T>arr[0];
+    arr[0] = <T>arr[i];
+    arr[i] = a;
+    */
+    a = load<T>(arr.__memory, 0);
+    store<T>(arr.__memory, load<T>(arr.__memory + i * sizeof<T>()), 0);
+    store<T>(arr.__memory + i * sizeof<T>(), a);
+
+    let x = 1;
+    // while ((y = (x << 1) + ((<i32>bitset[x >> 3] >> (x & 7)) & 1)) < i) {
+    while ((y = (x << 1) + ((load<i32>(bitset.__memory + (x >> 3) * sizeof<i32>()) >> (x & 7)) & 1)) < i) {
+      x = y;
+    }
+
+    while (x > 0) {
+      // a = <T>arr[0];
+      // b = <T>arr[x];
+      a = load<T>(arr.__memory, 0);
+      b = load<T>(arr.__memory + x * sizeof<T>());
+
+      if (comparator(a, b) < 0) {
+        // bitset[x >> 3] = <i32>bitset[x >> 3] ^ (1 << (x & 7));
+        store<i32>(
+          bitset.__memory + (x >> 3) * sizeof<i32>(),
+          load<i32>(bitset.__memory + (x >> 3) * sizeof<i32>()) ^ (1 << (x & 7))
+        );
+        // arr[x] = a;
+        // arr[0] = b;
+        store<T>(arr.__memory + x * sizeof<T>(), a);
+        store<T>(arr.__memory, b, 0);
+      }
+      x >>= 1;
+    }
+  }
+
+  free_memory(bitset.__memory);
+
+  /*
+  let t  = <T>arr[1];
+  arr[1] = <T>arr[0];
+  arr[0] = t;
+  */
+  let t = load<T>(arr.__memory, 1 * sizeof<T>());
+  store<T>(arr.__memory, load<T>(arr.__memory, 0), 1 * sizeof<T>());
+  store<T>(arr.__memory, t, 0);
 
   return arr;
 }
