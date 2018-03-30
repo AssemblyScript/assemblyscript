@@ -364,8 +364,8 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
   var len: i32 = arr.length;
   var i: i32, j: i32, y: i32, p: i32, a: T, b: T;
 
-  let blen = (len + 7) >> 3;
-  let bitset = new Array<i32>(blen);
+  var blen = (len + 7) >> 3;
+  var bitset = new Array<i32>(blen);
 
   // for (i = 0; i < blen; ++i) bitset[i] = 0;
   set_memory(bitset.__memory, 0, blen * sizeof<i32>());
@@ -438,7 +438,7 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
   arr[1] = <T>arr[0];
   arr[0] = t;
   */
-  let t = load<T>(arr.__memory, 1 * sizeof<T>());
+  var t = load<T>(arr.__memory, 1 * sizeof<T>());
   store<T>(arr.__memory, load<T>(arr.__memory, 0), 1 * sizeof<T>());
   store<T>(arr.__memory, t, 0);
 
