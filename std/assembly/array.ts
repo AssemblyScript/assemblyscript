@@ -329,8 +329,8 @@ function createDefaultComparator<T>(): (a: T, b: T) => i32 {
 }
 
 function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: (a: T, b: T) => i32): Array<T> {
-  var a = arr[i];
-  var b = arr[j];
+  var a = <T>arr[i];
+  var b = <T>arr[j];
   if (comparator(a, b) < 0) {
     arr[i] = b;
     arr[j] = a;
@@ -341,10 +341,10 @@ function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: (a: T, b:
 function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var a: T, b: T, j: i32;
   for (let i: i32 = 0, len: i32 = arr.length; i < len; i++) {
-    a = arr[i];
+    a = <T>arr[i];
     j = i - 1;
     while (j >= 0) {
-      b = arr[j];
+      b = <T>arr[j];
       if (comparator(a, b) < 0) {
         arr[j + 1] = b;
         j--;
@@ -372,35 +372,35 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
 
     for (i = len - 1; i > 0; i--) {
       j = i;
-      while ((j & 1) == ((bitset[j >> 4] >> ((j >> 1) & 7)) & 1)) {
+      while ((j & 1) == ((<i32>bitset[j >> 4] >> ((j >> 1) & 7)) & 1)) {
         j >>= 1;
       }
 
       p = j >> 1;
-      a = arr[p];
-      b = arr[i];
+      a = <T>arr[p];
+      b = <T>arr[i];
       if (comparator(a, b) < 0) {
-        bitset[i >> 3] ^= 1 << (i & 7);
+        bitset[i >> 3] = <i32>bitset[i >> 3] ^ (1 << (i & 7));
         arr[i] = a;
         arr[p] = b;
       }
     }
 
     for (i = len - 1; i >= 2; i--) {
-      a      = arr[0];
-      arr[0] = arr[i];
+      a      = <T>arr[0];
+      arr[0] = <T>arr[i];
       arr[i] = a;
 
       let x = 1;
-      while ((y = (x << 1) + ((bitset[x >> 3] >> (x & 7)) & 1)) < i) {
+      while ((y = (x << 1) + ((<i32>bitset[x >> 3] >> (x & 7)) & 1)) < i) {
         x = y;
       }
 
       while (x > 0) {
-        a = arr[0];
-        b = arr[x];
+        a = <T>arr[0];
+        b = <T>arr[x];
         if (comparator(a, b) < 0) {
-          bitset[x >> 3] ^= 1 << (x & 7);
+          bitset[x >> 3] = <i32>bitset[x >> 3] ^ (1 << (x & 7));
           arr[x] = a;
           arr[0] = b;
         }
@@ -408,8 +408,8 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
       }
     }
 
-    let t  = arr[1];
-    arr[1] = arr[0];
+    let t  = <T>arr[1];
+    arr[1] = <T>arr[0];
     arr[0] = t;
   }
 
