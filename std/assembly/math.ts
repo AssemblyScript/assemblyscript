@@ -1034,7 +1034,7 @@ export namespace NativeMath {
   }
 
   export function random(): f64 { // see: v8/src/base/random-number-generator.cc
-    if (!random_seeded) unreachable();
+    if (!random_seeded) throw new Error("PRNG must be seeded.");
     var s1 = random_state0;
     var s0 = random_state1;
     random_state0 = s0;
@@ -1047,8 +1047,20 @@ export namespace NativeMath {
     return reinterpret<f64>(r) - 1;
   }
 
-  export function round(x: f64): f64 {
-    return builtin_nearest<f64>(x);
+  export function round(x: f64): f64 { // see: musl/src/math/round.c
+    const toint = 1.0 / f64.EPSILON;
+    var ux = reinterpret<u64>(x);
+    var e = <i32>(ux >> 52 & 0x7ff);
+    var y: f64;
+    if (e >= 0x3FF + 52) return x;
+    if (ux >> 63) x = -x;
+    if (e < 0x3FF - 1) return 0 * reinterpret<f64>(ux);
+    y = x + toint - toint - x;
+    if (y > 0.5) y = y + x - 1;
+    else if (y <= -0.5) y = y + x + 1;
+    else y = y + x;
+    if (ux >> 63) y = -y;
+    return y;
   }
 
   export function sign(x: f64): f64 {
@@ -2128,8 +2140,20 @@ export namespace NativeMathf {
     return <f32>NativeMath.random();
   }
 
-  export function round(x: f32): f32 {
-    return builtin_nearest<f32>(x);
+  export function round(x: f32): f32 { // see: musl/src/math/roundf.c
+    const toint = <f32>1.0 / f32.EPSILON;
+    var ux = reinterpret<u32>(x);
+    var e = <i32>(ux >> 23 & 0xff);
+    var y: f32;
+    if (e >= 0x7F + 23) return x;
+    if (ux >> 31) x = -x;
+    if (e < 0x7F - 1) return 0 * reinterpret<f32>(ux);
+    y = x + toint - toint - x;
+    if (y > 0.5) y = y + x - 1;
+    else if (y <= -0.5) y = y + x + 1;
+    else y = y + x;
+    if (ux >> 31) y = -y;
+    return y;
   }
 
   export function sign(x: f32): f32 {
@@ -2358,3 +2382,5 @@ function murmurHash3(h: u64): u64 {
   h ^= h >> 33;
   return h;
 }
+
+declare function logf(f: f64): void;

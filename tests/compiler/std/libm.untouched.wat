@@ -6648,10 +6648,134 @@
   )
  )
  (func "$(lib)/math/NativeMath.round" (; 55 ;) (type $FF) (param $0 f64) (result f64)
-  (return
-   (f64.nearest
+  (local $1 i64)
+  (local $2 i32)
+  (local $3 f64)
+  (nop)
+  (set_local $1
+   (i64.reinterpret/f64
     (get_local $0)
    )
+  )
+  (set_local $2
+   (i32.wrap/i64
+    (i64.and
+     (i64.shr_u
+      (get_local $1)
+      (i64.const 52)
+     )
+     (i64.const 2047)
+    )
+   )
+  )
+  (nop)
+  (if
+   (i32.ge_s
+    (get_local $2)
+    (i32.add
+     (i32.const 1023)
+     (i32.const 52)
+    )
+   )
+   (return
+    (get_local $0)
+   )
+  )
+  (if
+   (i64.ne
+    (i64.shr_u
+     (get_local $1)
+     (i64.const 63)
+    )
+    (i64.const 0)
+   )
+   (set_local $0
+    (f64.neg
+     (get_local $0)
+    )
+   )
+  )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.sub
+     (i32.const 1023)
+     (i32.const 1)
+    )
+   )
+   (return
+    (f64.mul
+     (f64.const 0)
+     (f64.reinterpret/i64
+      (get_local $1)
+     )
+    )
+   )
+  )
+  (set_local $3
+   (f64.sub
+    (f64.sub
+     (f64.add
+      (get_local $0)
+      (f64.const 4503599627370496)
+     )
+     (f64.const 4503599627370496)
+    )
+    (get_local $0)
+   )
+  )
+  (if
+   (f64.gt
+    (get_local $3)
+    (f64.const 0.5)
+   )
+   (set_local $3
+    (f64.sub
+     (f64.add
+      (get_local $3)
+      (get_local $0)
+     )
+     (f64.const 1)
+    )
+   )
+   (if
+    (f64.le
+     (get_local $3)
+     (f64.const -0.5)
+    )
+    (set_local $3
+     (f64.add
+      (f64.add
+       (get_local $3)
+       (get_local $0)
+      )
+      (f64.const 1)
+     )
+    )
+    (set_local $3
+     (f64.add
+      (get_local $3)
+      (get_local $0)
+     )
+    )
+   )
+  )
+  (if
+   (i64.ne
+    (i64.shr_u
+     (get_local $1)
+     (i64.const 63)
+    )
+    (i64.const 0)
+   )
+   (set_local $3
+    (f64.neg
+     (get_local $3)
+    )
+   )
+  )
+  (return
+   (get_local $3)
   )
  )
  (func $std/libm/round (; 56 ;) (type $FF) (param $0 f64) (result f64)
