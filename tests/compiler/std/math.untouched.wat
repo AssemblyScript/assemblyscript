@@ -14353,7 +14353,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 32)
-     (i32.const 1030)
+     (i32.const 980)
      (i32.const 4)
     )
     (unreachable)
@@ -14482,7 +14482,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.ge_s
     (get_local $2)
@@ -14496,20 +14495,6 @@
    )
   )
   (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $0
-    (f64.neg
-     (get_local $0)
-    )
-   )
-  )
-  (if
    (i32.lt_s
     (get_local $2)
     (i32.sub
@@ -14520,60 +14505,11 @@
    (return
     (f64.mul
      (f64.const 0)
-     (f64.reinterpret/i64
-      (get_local $1)
-     )
+     (get_local $0)
     )
    )
   )
-  (set_local $3
-   (f64.sub
-    (f64.sub
-     (f64.add
-      (get_local $0)
-      (f64.const 4503599627370496)
-     )
-     (f64.const 4503599627370496)
-    )
-    (get_local $0)
-   )
-  )
-  (if
-   (f64.gt
-    (get_local $3)
-    (f64.const 0.5)
-   )
-   (set_local $3
-    (f64.sub
-     (f64.add
-      (get_local $3)
-      (get_local $0)
-     )
-     (f64.const 1)
-    )
-   )
-   (if
-    (f64.le
-     (get_local $3)
-     (f64.const -0.5)
-    )
-    (set_local $3
-     (f64.add
-      (f64.add
-       (get_local $3)
-       (get_local $0)
-      )
-      (f64.const 1)
-     )
-    )
-    (set_local $3
-     (f64.add
-      (get_local $3)
-      (get_local $0)
-     )
-    )
-   )
-  )
+  (nop)
   (if
    (i64.ne
     (i64.shr_u
@@ -14582,9 +14518,104 @@
     )
     (i64.const 0)
    )
-   (set_local $3
-    (f64.neg
-     (get_local $3)
+   (block
+    (set_local $3
+     (f64.add
+      (f64.sub
+       (f64.sub
+        (f64.const 4503599627370496)
+        (get_local $0)
+       )
+       (f64.const 4503599627370496)
+      )
+      (get_local $0)
+     )
+    )
+    (if
+     (f64.ge
+      (get_local $3)
+      (f64.const 0.5)
+     )
+     (set_local $3
+      (f64.add
+       (f64.sub
+        (get_local $0)
+        (get_local $3)
+       )
+       (f64.const 1)
+      )
+     )
+     (if
+      (f64.lt
+       (get_local $3)
+       (f64.const -0.5)
+      )
+      (set_local $3
+       (f64.sub
+        (f64.sub
+         (get_local $0)
+         (get_local $3)
+        )
+        (f64.const 1)
+       )
+      )
+      (set_local $3
+       (f64.sub
+        (get_local $0)
+        (get_local $3)
+       )
+      )
+     )
+    )
+   )
+   (block
+    (set_local $3
+     (f64.sub
+      (f64.sub
+       (f64.add
+        (get_local $0)
+        (f64.const 4503599627370496)
+       )
+       (f64.const 4503599627370496)
+      )
+      (get_local $0)
+     )
+    )
+    (if
+     (f64.gt
+      (get_local $3)
+      (f64.const 0.5)
+     )
+     (set_local $3
+      (f64.sub
+       (f64.add
+        (get_local $3)
+        (get_local $0)
+       )
+       (f64.const 1)
+      )
+     )
+     (if
+      (f64.le
+       (get_local $3)
+       (f64.const -0.5)
+      )
+      (set_local $3
+       (f64.add
+        (f64.add
+         (get_local $3)
+         (get_local $0)
+        )
+        (f64.const 1)
+       )
+      )
+      (set_local $3
+       (f64.add
+        (get_local $3)
+        (get_local $0)
+       )
+      )
+     )
     )
    )
   )
@@ -14623,7 +14654,6 @@
     (i32.const 255)
    )
   )
-  (nop)
   (if
    (i32.ge_s
     (get_local $2)
@@ -14637,17 +14667,6 @@
    )
   )
   (if
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
-   (set_local $0
-    (f32.neg
-     (get_local $0)
-    )
-   )
-  )
-  (if
    (i32.lt_s
     (get_local $2)
     (i32.sub
@@ -14658,68 +14677,114 @@
    (return
     (f32.mul
      (f32.const 0)
-     (f32.reinterpret/i32
-      (get_local $1)
-     )
+     (get_local $0)
     )
    )
   )
-  (set_local $3
-   (f32.sub
-    (f32.sub
-     (f32.add
-      (get_local $0)
-      (f32.const 8388608)
-     )
-     (f32.const 8388608)
-    )
-    (get_local $0)
-   )
-  )
-  (if
-   (f32.gt
-    (get_local $3)
-    (f32.const 0.5)
-   )
-   (set_local $3
-    (f32.sub
-     (f32.add
-      (get_local $3)
-      (get_local $0)
-     )
-     (f32.const 1)
-    )
-   )
-   (if
-    (f32.le
-     (get_local $3)
-     (f32.const -0.5)
-    )
-    (set_local $3
-     (f32.add
-      (f32.add
-       (get_local $3)
-       (get_local $0)
-      )
-      (f32.const 1)
-     )
-    )
-    (set_local $3
-     (f32.add
-      (get_local $3)
-      (get_local $0)
-     )
-    )
-   )
-  )
+  (nop)
   (if
    (i32.shr_u
     (get_local $1)
     (i32.const 31)
    )
-   (set_local $3
-    (f32.neg
-     (get_local $3)
+   (block
+    (set_local $3
+     (f32.add
+      (f32.sub
+       (f32.sub
+        (f32.const 8388608)
+        (get_local $0)
+       )
+       (f32.const 8388608)
+      )
+      (get_local $0)
+     )
+    )
+    (if
+     (f32.ge
+      (get_local $3)
+      (f32.const 0.5)
+     )
+     (set_local $3
+      (f32.add
+       (f32.sub
+        (get_local $0)
+        (get_local $3)
+       )
+       (f32.const 1)
+      )
+     )
+     (if
+      (f32.lt
+       (get_local $3)
+       (f32.const -0.5)
+      )
+      (set_local $3
+       (f32.sub
+        (f32.sub
+         (get_local $0)
+         (get_local $3)
+        )
+        (f32.const 1)
+       )
+      )
+      (set_local $3
+       (f32.sub
+        (get_local $0)
+        (get_local $3)
+       )
+      )
+     )
+    )
+   )
+   (block
+    (set_local $3
+     (f32.sub
+      (f32.sub
+       (f32.add
+        (get_local $0)
+        (f32.const 8388608)
+       )
+       (f32.const 8388608)
+      )
+      (get_local $0)
+     )
+    )
+    (if
+     (f32.gt
+      (get_local $3)
+      (f32.const 0.5)
+     )
+     (set_local $3
+      (f32.sub
+       (f32.add
+        (get_local $3)
+        (get_local $0)
+       )
+       (f32.const 1)
+      )
+     )
+     (if
+      (f32.le
+       (get_local $3)
+       (f32.const -0.5)
+      )
+      (set_local $3
+       (f32.add
+        (f32.add
+         (get_local $3)
+         (get_local $0)
+        )
+        (f32.const 1)
+       )
+      )
+      (set_local $3
+       (f32.add
+        (get_local $3)
+        (get_local $0)
+       )
+      )
+     )
     )
    )
   )
@@ -48295,7 +48360,7 @@
    (i32.eqz
     (call $std/math/test_round
      (f64.const -0.5)
-     (f64.const -1)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -48333,7 +48398,7 @@
    (i32.eqz
     (call $std/math/test_round
      (f64.const -1.5)
-     (f64.const -2)
+     (f64.const -1)
      (f64.const 0)
      (i32.const 1)
     )
@@ -48812,7 +48877,7 @@
    (i32.eqz
     (call $std/math/test_roundf
      (f32.const -0.5)
-     (f32.const -1)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -48850,7 +48915,7 @@
    (i32.eqz
     (call $std/math/test_round
      (f64.const -1.5)
-     (f64.const -2)
+     (f64.const -1)
      (f64.const 0)
      (i32.const 1)
     )

@@ -54,7 +54,6 @@ import {
   floor as builtin_floor,
   max as builtin_max,
   min as builtin_min,
-  nearest as builtin_nearest,
   sqrt as builtin_sqrt,
   trunc as builtin_trunc
 } from "./builtins";
@@ -67,6 +66,8 @@ import {
 // is freely granted, provided that this notice is preserved.
 //
 // Applies to all functions marked with a comment referring here.
+
+// TODO: sin, cos, tan
 
 export namespace NativeMath {
 
@@ -366,59 +367,8 @@ export namespace NativeMath {
     return <f64>builtin_clz<i32>(<i32>x);
   }
 
-  function __cos(x: f64, y: f64): f64 { // see: musl/src/math/__cos.c and SUN COPYRIGHT NOTICE above
-    const
-      C1 = reinterpret<f64>(0x3FA555555555554C), //  4.16666666666666019037e-02
-      C2 = reinterpret<f64>(0xBF56C16C16C15177), // -1.38888888888741095749e-03
-      C3 = reinterpret<f64>(0x3EFA01A019CB1590), //  2.48015872894767294178e-05
-      C4 = reinterpret<f64>(0xBE927E4F809C52AD), // -2.75573143513906633035e-07
-      C5 = reinterpret<f64>(0x3E21EE9EBDB4B1C4), //  2.08757232129817482790e-09
-      C6 = reinterpret<f64>(0xBDA8FAE9BE8838D4); // -1.13596475577881948265e-11
-    var z  = x * x;
-    var w  = z * z;
-    var r  = z * (C1 + z * (C2 + z * C3)) + w * w * (C4 + z * (C5 + z * C6));
-    var hz = 0.5 * z;
-    w  = 1.0 - hz;
-    return w + (((1.0 - w) - hz) + (z * r - x * y));
-  }
-
-  // function __rem_pio2(x: f64, y: f64): i32 { // see: musl/src/math/__rem_pio2.c and SUN COPYRIGHT NOTICE above
-  //   const
-  //     toint   = 1.5 / reinterpret<f64>(0x3CB0000000000000), // 1.5 / 0x1p-52
-  //     invpio2 = reinterpret<f64>(0x3FE45F306DC9C883), // 6.36619772367581382433e-01
-  //     pio2_1  = reinterpret<f64>(0x3FF921FB54400000), // 1.57079632673412561417e+00
-  //     pio2_1t = reinterpret<f64>(0x3DD0B4611A626331), // 6.07710050650619224932e-11
-  //     pio2_2  = reinterpret<f64>(0x3DD0B4611A600000), // 6.07710050630396597660e-11
-  //     pio2_2t = reinterpret<f64>(0x3BA3198A2E037073), // 2.02226624879595063154e-21
-  //     pio2_3  = reinterpret<f64>(0x3BA3198A2E000000), // 2.02226624871116645580e-21
-  //     pio2_3t = reinterpret<f64>(0x397B839A252049C1); // 8.47842766036889956997e-32
-  //   var u = reinterpret<f64>(x);
-  //   var z: f64, w: f64, t: f64, r: f64, fn: f64;
-  //   var n: i32, ex: i32, ey: i32, i: i32;
-
-  //   var ix = <u32>(u >> 32 & 0x7fffffff);
-  //   var sign = u >> 63;
-  // }
-
-  export function cos(x: f64): f64 { // see: musl/src/math/cos.c and SUN COPYRIGHT NOTICE above
-    // TODO: __rem_pio2 is quite large
-    // var y0: f64, y1: f64;
-    // var n: u32;
-    // var ix = <u32>(reinterpret<f64>(x) >> 32);
-    // ix &= 0x7FFFFFFF;
-    // if (ix <= 0x3FE921FB) {
-    //   if (ix < 0x3E46A09E) return 1.0;
-    //   return __cos(x, 0);
-    // }
-    // if (ix >= 0x7FF00000) return x-x;
-    // n = __rem_pio2(x, y);
-    // switch (n & 3) {
-    //   case 0: return __cos(y0, y1);
-    //   case 1: return -__sin(y0, y1, 1);
-    //   case 2: return -__cos(y0, y1);
-    //   default: return __sin(y0, y1, 1);
-    // }
-    unreachable(); // TODO
+  export function cos(x: f64): f64 { // TODO
+    unreachable();
     return 0;
   }
 
@@ -1051,15 +1001,22 @@ export namespace NativeMath {
     const toint = 1.0 / f64.EPSILON;
     var ux = reinterpret<u64>(x);
     var e = <i32>(ux >> 52 & 0x7ff);
-    var y: f64;
     if (e >= 0x3FF + 52) return x;
-    if (ux >> 63) x = -x;
-    if (e < 0x3FF - 1) return 0 * reinterpret<f64>(ux);
-    y = x + toint - toint - x;
-    if (y > 0.5) y = y + x - 1;
-    else if (y <= -0.5) y = y + x + 1;
-    else y = y + x;
-    if (ux >> 63) y = -y;
+    if (e < 0x3FF - 1) return 0 * x;
+    var y: f64;
+    if (ux >> 63) {
+      // FIXME: JS always rounds fractional 0.5 towards +Infinity
+      // and there certainly is a smarter way to do this.
+      y = toint - x - toint + x;
+      if (y >= 0.5) y = x - y + 1;
+      else if (y < -0.5) y = x - y - 1;
+      else y = x - y;
+    } else {
+      y = x + toint - toint - x;
+      if (y > 0.5) y = y + x - 1;
+      else if (y <= -0.5) y = y + x + 1;
+      else y = y + x;
+    }
     return y;
   }
 
@@ -1067,24 +1024,8 @@ export namespace NativeMath {
     return x > 0 ? 1 : x < 0 ? -1 : x;
   }
 
-  function __sin(x: f64, y: f64, iy: i32): f64 { // see: musl/src/math/__sin.c and SUN COPYRIGHT NOTICE above
-    const
-      S1 = reinterpret<f64>(0xBFC5555555555549), // -1.66666666666666324348e-01
-      S2 = reinterpret<f64>(0x3F8111111110F8A6), //  8.33333333332248946124e-03
-      S3 = reinterpret<f64>(0xBF2A01A019C161D5), // -1.98412698298579493134e-04
-      S4 = reinterpret<f64>(0x3EC71DE357B1FE7D), //  2.75573137070700676789e-06
-      S5 = reinterpret<f64>(0xBE5AE5E68A2B9CEB), // -2.50507602534068634195e-08
-      S6 = reinterpret<f64>(0x3DE5D93A5ACFD57C); //  1.58969099521155010221e-10
-    var z = x * x;
-    var w = z * z;
-    var r = S2 + z * (S3 + z * S4) + z * w * (S5 + z * S6);
-    var v = z * x;
-    if (iy == 0) return x + v * (S1 + z * r);
-    return x - ((z * (0.5 * y - v * r) - y) - v * S1);
-  }
-
-  export function sin(x: f64): f64 {
-    unreachable(); // TODO
+  export function sin(x: f64): f64 { // TODO
+    unreachable();
     return 0;
   }
 
@@ -1112,59 +1053,8 @@ export namespace NativeMath {
     return builtin_sqrt<f64>(x);
   }
 
-  function __tan(x: f64, y: f64, odd: i32): f64 { // see: musl/src/math/__tan.c and SUN COPYRIGHT NOTICE above
-    const
-      T0     = reinterpret<f64>(0x3FD5555555555563), //  3.33333333333334091986e-01
-      T1     = reinterpret<f64>(0x3FC111111110FE7A), //  1.33333333333201242699e-01
-      T2     = reinterpret<f64>(0x3FABA1BA1BB341FE), //  5.39682539762260521377e-02
-      T3     = reinterpret<f64>(0x3F9664F48406D637), //  2.18694882948595424599e-02
-      T4     = reinterpret<f64>(0x3F8226E3E96E8493), //  8.86323982359930005737e-03
-      T5     = reinterpret<f64>(0x3F6D6D22C9560328), //  3.59207910759131235356e-03
-      T6     = reinterpret<f64>(0x3F57DBC8FEE08315), //  1.45620945432529025516e-03
-      T7     = reinterpret<f64>(0x3F4344D8F2F26501), //  5.88041240820264096874e-04
-      T8     = reinterpret<f64>(0x3F3026F71A8D1068), //  2.46463134818469906812e-04
-      T9     = reinterpret<f64>(0x3F147E88A03792A6), //  7.81794442939557092300e-05
-      T10    = reinterpret<f64>(0x3F12B80F32F0A7E9), //  7.14072491382608190305e-05
-      T11    = reinterpret<f64>(0xBEF375CBDB605373), // -1.85586374855275456654e-05,
-      T12    = reinterpret<f64>(0x3EFB2A7074BF7AD4), //  2.59073051863633712884e-05
-      pio4   = reinterpret<f64>(0x3FE921FB54442D18), //  7.85398163397448278999e-01
-      pio4lo = reinterpret<f64>(0x3C81A62633145C07); //  3.06161699786838301793e-17
-    var hx = <u32>(reinterpret<u64>(x) >> 32);
-    var big = (hx & 0x7FFFFFFF) >= 0x3FE59428;
-    var sign_ = 0;
-    if (big) {
-      sign_ = hx >> 31;
-      if (sign_) {
-        x = -x;
-        y = -y;
-      }
-      x = (pio4 - x) + (pio4lo - y);
-      y = 0.0;
-    }
-    var z = x * x;
-    var w = z * z;
-    var r = T1 + w * (T3 + w * (T5 + w * (T7 + w * (T9 + w * T11))));
-    var v = z * (T2 + w * (T4 + w * (T6 + w * (T8 + w * (T10 + w * T12)))));
-    var s = z * x;
-    r = y + z * (s * (r + v) + y) + s * T0;
-    w = x + r;
-    if (big) {
-      s = 1 - 2 * odd;
-      v = s - 2.0 * (x + (r - w * w / (w + s)));
-      return sign_ ? -v : v;
-    }
-    if (!odd) return w;
-    var w0 = w;
-    w0 = reinterpret<f64>(reinterpret<u64>(w0) & 0xFFFFFFFF00000000);
-    v = r - (w0 - x);
-    var a = -1.0 / w;
-    var a0 = a;
-    a0 = reinterpret<f64>(reinterpret<u64>(a0) & 0xFFFFFFFF00000000);
-    return a0 + a * (1.0 + a0 * w0 + a0 * v);
-  }
-
-  export function tan(x: f64): f64 {
-    unreachable(); // TODO
+  export function tan(x: f64): f64 { // TODO
+    unreachable();
     return 0;
   }
 
@@ -1602,8 +1492,8 @@ export namespace NativeMathf {
     return <f32>builtin_clz<i32>(<i32>x);
   }
 
-  export function cos(x: f32): f32 {
-    unreachable(); // TODO
+  export function cos(x: f32): f32 { // TODO
+    unreachable();
     return 0;
   }
 
@@ -2144,15 +2034,22 @@ export namespace NativeMathf {
     const toint = <f32>1.0 / f32.EPSILON;
     var ux = reinterpret<u32>(x);
     var e = <i32>(ux >> 23 & 0xff);
-    var y: f32;
     if (e >= 0x7F + 23) return x;
-    if (ux >> 31) x = -x;
-    if (e < 0x7F - 1) return 0 * reinterpret<f32>(ux);
-    y = x + toint - toint - x;
-    if (y > 0.5) y = y + x - 1;
-    else if (y <= -0.5) y = y + x + 1;
-    else y = y + x;
-    if (ux >> 31) y = -y;
+    if (e < 0x7F - 1) return 0 * x;
+    var y: f32;
+    if (ux >> 31) {
+      // FIXME: JS always rounds fractional 0.5 towards +Infinity
+      // and there certainly is a smarter way to do this.
+      y = toint - x - toint + x;
+      if (y >= 0.5) y = x - y + 1;
+      else if (y < -0.5) y = x - y - 1;
+      else y = x - y;
+    } else {
+      y = x + toint - toint - x;
+      if (y > 0.5) y = y + x - 1;
+      else if (y <= -0.5) y = y + x + 1;
+      else y = y + x;
+    }
     return y;
   }
 
@@ -2160,8 +2057,8 @@ export namespace NativeMathf {
     return x > 0 ? 1 : x < 0 ? -1 : x;
   }
 
-  export function sin(x: f32): f32 {
-    unreachable(); // TODO
+  export function sin(x: f32): f32 { // TODO
+    unreachable();
     return 0;
   }
 
@@ -2196,8 +2093,8 @@ export namespace NativeMathf {
     return builtin_sqrt<f32>(x);
   }
 
-  export function tan(x: f32): f32 {
-    unreachable(); // TODO
+  export function tan(x: f32): f32 { // TODO
+    unreachable();
     return 0;
   }
 
@@ -2382,5 +2279,3 @@ function murmurHash3(h: u64): u64 {
   h ^= h >> 33;
   return h;
 }
-
-declare function logf(f: f64): void;

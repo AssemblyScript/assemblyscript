@@ -5643,20 +5643,6 @@
    )
   )
   (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $2)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $0
-    (f64.neg
-     (get_local $0)
-    )
-   )
-  )
-  (if
    (i32.lt_s
     (get_local $3)
     (i32.const 1022)
@@ -5664,70 +5650,103 @@
    (return
     (f64.mul
      (f64.const 0)
-     (f64.reinterpret/i64
-      (get_local $2)
-     )
+     (get_local $0)
     )
    )
   )
-  (set_local $1
+  (tee_local $1
    (if (result f64)
-    (f64.gt
-     (tee_local $1
-      (f64.sub
-       (f64.sub
-        (f64.add
-         (get_local $0)
+    (i64.ne
+     (i64.shr_u
+      (get_local $2)
+      (i64.const 63)
+     )
+     (i64.const 0)
+    )
+    (if (result f64)
+     (f64.ge
+      (tee_local $1
+       (f64.add
+        (f64.sub
+         (f64.sub
+          (f64.const 4503599627370496)
+          (get_local $0)
+         )
          (f64.const 4503599627370496)
         )
-        (f64.const 4503599627370496)
+        (get_local $0)
        )
+      )
+      (f64.const 0.5)
+     )
+     (f64.add
+      (f64.sub
        (get_local $0)
+       (get_local $1)
+      )
+      (f64.const 1)
+     )
+     (select
+      (f64.sub
+       (f64.sub
+        (get_local $0)
+        (get_local $1)
+       )
+       (f64.const 1)
+      )
+      (f64.sub
+       (get_local $0)
+       (get_local $1)
+      )
+      (f64.lt
+       (get_local $1)
+       (f64.const -0.5)
       )
      )
-     (f64.const 0.5)
     )
-    (f64.sub
-     (f64.add
-      (get_local $1)
-      (get_local $0)
+    (if (result f64)
+     (f64.gt
+      (tee_local $1
+       (f64.sub
+        (f64.sub
+         (f64.add
+          (get_local $0)
+          (f64.const 4503599627370496)
+         )
+         (f64.const 4503599627370496)
+        )
+        (get_local $0)
+       )
+      )
+      (f64.const 0.5)
      )
-     (f64.const 1)
-    )
-    (select
-     (f64.add
+     (f64.sub
       (f64.add
        (get_local $1)
        (get_local $0)
       )
       (f64.const 1)
      )
-     (f64.add
-      (get_local $1)
-      (get_local $0)
-     )
-     (f64.le
-      (get_local $1)
-      (f64.const -0.5)
+     (select
+      (f64.add
+       (f64.add
+        (get_local $1)
+        (get_local $0)
+       )
+       (f64.const 1)
+      )
+      (f64.add
+       (get_local $1)
+       (get_local $0)
+      )
+      (f64.le
+       (get_local $1)
+       (f64.const -0.5)
+      )
      )
     )
    )
   )
-  (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $2)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $1
-    (f64.neg
-     (get_local $1)
-    )
-   )
-  )
-  (get_local $1)
  )
  (func $std/libm/round (; 56 ;) (type $FF) (param $0 f64) (result f64)
   (call "$(lib)/math/NativeMath.round"

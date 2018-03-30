@@ -6668,7 +6668,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.ge_s
     (get_local $2)
@@ -6682,20 +6681,6 @@
    )
   )
   (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $0
-    (f64.neg
-     (get_local $0)
-    )
-   )
-  )
-  (if
    (i32.lt_s
     (get_local $2)
     (i32.sub
@@ -6706,60 +6691,11 @@
    (return
     (f64.mul
      (f64.const 0)
-     (f64.reinterpret/i64
-      (get_local $1)
-     )
+     (get_local $0)
     )
    )
   )
-  (set_local $3
-   (f64.sub
-    (f64.sub
-     (f64.add
-      (get_local $0)
-      (f64.const 4503599627370496)
-     )
-     (f64.const 4503599627370496)
-    )
-    (get_local $0)
-   )
-  )
-  (if
-   (f64.gt
-    (get_local $3)
-    (f64.const 0.5)
-   )
-   (set_local $3
-    (f64.sub
-     (f64.add
-      (get_local $3)
-      (get_local $0)
-     )
-     (f64.const 1)
-    )
-   )
-   (if
-    (f64.le
-     (get_local $3)
-     (f64.const -0.5)
-    )
-    (set_local $3
-     (f64.add
-      (f64.add
-       (get_local $3)
-       (get_local $0)
-      )
-      (f64.const 1)
-     )
-    )
-    (set_local $3
-     (f64.add
-      (get_local $3)
-      (get_local $0)
-     )
-    )
-   )
-  )
+  (nop)
   (if
    (i64.ne
     (i64.shr_u
@@ -6768,9 +6704,104 @@
     )
     (i64.const 0)
    )
-   (set_local $3
-    (f64.neg
-     (get_local $3)
+   (block
+    (set_local $3
+     (f64.add
+      (f64.sub
+       (f64.sub
+        (f64.const 4503599627370496)
+        (get_local $0)
+       )
+       (f64.const 4503599627370496)
+      )
+      (get_local $0)
+     )
+    )
+    (if
+     (f64.ge
+      (get_local $3)
+      (f64.const 0.5)
+     )
+     (set_local $3
+      (f64.add
+       (f64.sub
+        (get_local $0)
+        (get_local $3)
+       )
+       (f64.const 1)
+      )
+     )
+     (if
+      (f64.lt
+       (get_local $3)
+       (f64.const -0.5)
+      )
+      (set_local $3
+       (f64.sub
+        (f64.sub
+         (get_local $0)
+         (get_local $3)
+        )
+        (f64.const 1)
+       )
+      )
+      (set_local $3
+       (f64.sub
+        (get_local $0)
+        (get_local $3)
+       )
+      )
+     )
+    )
+   )
+   (block
+    (set_local $3
+     (f64.sub
+      (f64.sub
+       (f64.add
+        (get_local $0)
+        (f64.const 4503599627370496)
+       )
+       (f64.const 4503599627370496)
+      )
+      (get_local $0)
+     )
+    )
+    (if
+     (f64.gt
+      (get_local $3)
+      (f64.const 0.5)
+     )
+     (set_local $3
+      (f64.sub
+       (f64.add
+        (get_local $3)
+        (get_local $0)
+       )
+       (f64.const 1)
+      )
+     )
+     (if
+      (f64.le
+       (get_local $3)
+       (f64.const -0.5)
+      )
+      (set_local $3
+       (f64.add
+        (f64.add
+         (get_local $3)
+         (get_local $0)
+        )
+        (f64.const 1)
+       )
+      )
+      (set_local $3
+       (f64.add
+        (get_local $3)
+        (get_local $0)
+       )
+      )
+     )
     )
    )
   )

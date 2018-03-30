@@ -2439,9 +2439,9 @@ assert(test_round(-0.0, -0.0, 0.0, 0));
 assert(test_round(1.0, 1.0, 0.0, 0));
 assert(test_round(-1.0, -1.0, 0.0, 0));
 assert(test_round(0.5, 1.0, 0.0, INEXACT));
-assert(test_round(-0.5, -1.0, 0.0, INEXACT)); // C: -1.0, JS: -0.0
+assert(test_round(-0.5, -0.0, 0.0, INEXACT)); // C: -1.0, JS: -0.0
 assert(test_round(1.5, 2.0, 0.0, INEXACT));
-assert(test_round(-1.5, -2.0, 0.0, INEXACT)); // C: -2.0, JS: -1.0
+assert(test_round(-1.5, -1.0, 0.0, INEXACT)); // C: -2.0, JS: -1.0
 assert(test_round(1.00001525878906250, 1.0, 0.0, INEXACT));
 assert(test_round(-1.00001525878906250, -1.0, 0.0, INEXACT));
 assert(test_round(0.999992370605468750, 1.0, 0.0, INEXACT));
@@ -2476,9 +2476,9 @@ assert(test_roundf(-0.0, -0.0, 0.0, 0));
 assert(test_roundf(1.0, 1.0, 0.0, 0));
 assert(test_roundf(-1.0, -1.0, 0.0, 0));
 assert(test_roundf(0.5, 1.0, 0.0, INEXACT));
-assert(test_roundf(-0.5, -1.0, 0.0, INEXACT)); // C: -1.0, JS: -0.0
+assert(test_roundf(-0.5, -0.0, 0.0, INEXACT)); // C: -1.0, JS: -0.0
 assert(test_round(1.5, 2.0, 0.0, INEXACT));
-assert(test_round(-1.5, -2.0, 0.0, INEXACT)); // C: -2.0, JS: -1.0
+assert(test_round(-1.5, -1.0, 0.0, INEXACT)); // C: -2.0, JS: -1.0
 assert(test_roundf(1.000015259, 1.0, 0.0, INEXACT));
 assert(test_roundf(-1.000015259, -1.0, 0.0, INEXACT));
 assert(test_roundf(0.9999923706, 1.0, 0.0, INEXACT));
