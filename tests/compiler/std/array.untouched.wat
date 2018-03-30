@@ -4690,6 +4690,7 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (call "$(lib)/array/Array<i32>#get:length"
     (get_local $0)
@@ -5141,7 +5142,7 @@
     (get_local $10)
    )
   )
-  (set_local $11
+  (set_local $12
    (i32.load offset=4
     (i32.load
      (get_local $0)
@@ -5162,7 +5163,7 @@
    (i32.load
     (get_local $0)
    )
-   (get_local $11)
+   (get_local $12)
   )
   (return
    (get_local $0)
