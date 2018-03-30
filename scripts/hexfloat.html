@@ -10,7 +10,8 @@
   <p>
     <label for="f64"><input id="f64" name="precision" value="f64" type="radio" checked /> f64</label>
     <label for="f32"><input id="f32" name="precision" value="f32" type="radio" /> f32</label>
-    <input id="name" type="text" value="test" />
+    <input id="pre" type="text" value="test(" />
+    <input id="post" type="text" value=");" />
     <button>Convert</button>
   </p>
   <p><textarea cols="120" rows="20" id="input"></textarea></p>
@@ -21,17 +22,19 @@
 <script>
 function convert(form) {
   var isF64 = document.getElementById("f64").checked;
-  var name = document.getElementById("name").value;
+  var pre = document.getElementById("pre").value;
+  var post = document.getElementById("post").value;
   var input = document.getElementById("input").value;
   document.getElementById("output").value = input
     .replace(/\b(\-?0x[0-9a-fA-F]*(?:\.[0-9a-fA-F]+)?[pP][+-]?[0-9]+\b)/g, ($0, $1) => {
       var val = parse($1);
       return val.toPrecision(isF64 ? 18 : 10);
     })
+    .replace(/(\d\.[0-9])0+\b/g, "$1")
     .replace(/\bnan\b/g, "NaN")
     .replace(/\binf\b/g, "Infinity")
-    .replace(/^T\(R\w, */mg, name + "(")
-    .replace(/\)$/mg, ");")
+    .replace(/^T\(R\w, */mg, pre)
+    .replace(/\);?$/mg, post)
     .replace(/ +/g, " ");
 }
 </script>

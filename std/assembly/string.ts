@@ -444,6 +444,7 @@ function parse<T>(str: String, radix: i32 = 0): T {
   return sign * num;
 }
 
+// FIXME: naive implementation
 export function parseFloat(str: String): f64 {
   var len: i32 = str.length;
   if (!len) {

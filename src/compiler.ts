@@ -2316,6 +2316,11 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT);
   }
 
+  private f32ModInstance: Function | null = null;
+  private f64ModInstance: Function | null = null;
+  private f32PowInstance: Function | null = null;
+  private f64PowInstance: Function | null = null;
+
   compileBinaryExpression(
     expression: BinaryExpression,
     contextualType: Type,
@@ -3078,6 +3083,88 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
+      case Token.ASTERISK_ASTERISK_EQUALS: compound = true;
+      case Token.ASTERISK_ASTERISK: {
+        leftExpr = this.compileExpressionRetainType(
+          left,
+          contextualType,
+          true // must be wrapped
+        );
+        let instance: Function | null;
+
+        // Mathf.pow if lhs is f32 (result is f32)
+        if (this.currentType == Type.f32) {
+          rightExpr = this.compileExpression(
+            right,
+            this.currentType
+          );
+          if (!(instance = this.f32PowInstance)) {
+            let namespace = this.program.elementsLookup.get("Mathf");
+            if (!namespace) {
+              this.error(
+                DiagnosticCode.Cannot_find_name_0,
+                expression.range, "Mathf"
+              );
+              expr = module.createUnreachable();
+              break;
+            }
+            let prototype = namespace.members ? namespace.members.get("pow") : null;
+            if (!prototype) {
+              this.error(
+                DiagnosticCode.Cannot_find_name_0,
+                expression.range, "Mathf.pow"
+              );
+              expr = module.createUnreachable();
+              break;
+            }
+            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+            this.f32PowInstance = instance = (<FunctionPrototype>prototype).resolve();
+          }
+
+        // Math.pow otherwise (result is f64)
+        // TODO: should the result be converted back?
+        } else {
+          leftExpr = this.convertExpression(
+            leftExpr,
+            this.currentType,
+            Type.f64,
+            ConversionKind.IMPLICIT,
+            left
+          );
+          rightExpr = this.compileExpression(
+            right,
+            Type.f64
+          );
+          if (!(instance = this.f64PowInstance)) {
+            let namespace = this.program.elementsLookup.get("Math");
+            if (!namespace) {
+              this.error(
+                DiagnosticCode.Cannot_find_name_0,
+                expression.range, "Math"
+              );
+              expr = module.createUnreachable();
+              break;
+            }
+            let prototype = namespace.members ? namespace.members.get("pow") : null;
+            if (!prototype) {
+              this.error(
+                DiagnosticCode.Cannot_find_name_0,
+                expression.range, "Math.pow"
+              );
+              expr = module.createUnreachable();
+              break;
+            }
+            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+            this.f64PowInstance = instance = (<FunctionPrototype>prototype).resolve();
+          }
+        }
+        if (!(instance && this.compileFunction(instance))) {
+          expr = module.createUnreachable();
+        } else {
+          expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ]);
+        }
+        break;
+      }
       case Token.SLASH_EQUALS: compound = true;
       case Token.SLASH: {
         leftExpr = this.compileExpressionRetainType(
@@ -3269,40 +3356,64 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.F32: {
-            let fmodPrototype = this.program.elementsLookup.get("fmodf");
-            if (!fmodPrototype) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "fmod"
-              );
-              expr = module.createUnreachable();
-              break;
+            let instance = this.f32ModInstance;
+            if (!instance) {
+              let namespace = this.program.elementsLookup.get("Mathf");
+              if (!namespace) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Mathf"
+                );
+                expr = module.createUnreachable();
+                break;
+              }
+              let prototype = namespace.members ? namespace.members.get("mod") : null;
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Mathf.mod"
+                );
+                expr = module.createUnreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.f32ModInstance = instance = (<FunctionPrototype>prototype).resolve();
             }
-            assert(fmodPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            let fmodInstance = (<FunctionPrototype>fmodPrototype).resolve();
-            if (!(fmodInstance && this.compileFunction(fmodInstance))) {
+            if (!(instance && this.compileFunction(instance))) {
               expr = module.createUnreachable();
             } else {
-              expr = this.makeCallDirect(fmodInstance, [ leftExpr, rightExpr ]);
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ]);
             }
             break;
           }
           case TypeKind.F64: {
-            let fmodPrototype = this.program.elementsLookup.get("fmod");
-            if (!fmodPrototype) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "fmod"
-              );
-              expr = module.createUnreachable();
-              break;
+            let instance = this.f64ModInstance;
+            if (!instance) {
+              let namespace = this.program.elementsLookup.get("Math");
+              if (!namespace) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Math"
+                );
+                expr = module.createUnreachable();
+                break;
+              }
+              let prototype = namespace.members ? namespace.members.get("mod") : null;
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Math.mod"
+                );
+                expr = module.createUnreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.f64ModInstance = instance = (<FunctionPrototype>prototype).resolve();
             }
-            assert(fmodPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            let fmodInstance = (<FunctionPrototype>fmodPrototype).resolve();
-            if (!(fmodInstance && this.compileFunction(fmodInstance))) {
+            if (!(instance && this.compileFunction(instance))) {
               expr = module.createUnreachable();
             } else {
-              expr = this.makeCallDirect(fmodInstance, [ leftExpr, rightExpr ]);
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ]);
             }
             break;
           }

@@ -363,9 +363,12 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setImportTable(compilerOptions, !!args.importTable);
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
-  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
 
-  // Add or override global aliases if specified
+  // Initialize default aliases
+  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
+  assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
+
+  // Add or override aliases if specified
   var aliases = args.use;
   if (aliases != null) {
     if (typeof aliases === "string") aliases = aliases.split(",");

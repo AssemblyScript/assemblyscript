@@ -135,6 +135,10 @@ declare namespace f32 {
   export const MAX_SAFE_INTEGER: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
+  /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
+  export function mod(x: f32, y: f32): f32;
+  /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
+  export function rem(x: f32, y: f32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
@@ -392,7 +396,7 @@ interface IMath<T> {
   /** Returns the smallest integer greater than or equal to `x`. */
   ceil(x: T): T;
   /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. */
-  clz32(x: T): i32;
+  clz32(x: T): T;
   /** Returns the cosine (in radians) of `x`. */
   cos(x: T): T;
   /** Returns the hyperbolic cosine of `x`. */
@@ -408,7 +412,7 @@ interface IMath<T> {
   /** Returns the square root of the sum of squares of its arguments. */
   hypot(value1: T, value2: T): T; // TODO: rest
   /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
-  imul(a: T, b: T): i32;
+  imul(a: T, b: T): T;
   /** Returns the natural logarithm (base e) of `x`. */
   log(x: T): T;
   /** Returns the base 10 logarithm of `x`. */
@@ -443,17 +447,21 @@ interface IMath<T> {
   trunc(x: T): T;
 }
 
-interface ISeedRandom {
+interface INativeMath<T> extends IMath<T> {
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
+  /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
+  mod(x: T, y: T): T;
+  /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
+  rem(x: T, y: T): T;
 }
 
 /** Double precision math imported from JavaScript. */
 declare const JSMath: IMath<f64>;
 /** Double precision math implemented natively. */
-declare const NativeMath: IMath<f64> & ISeedRandom;
+declare const NativeMath: INativeMath<f64>;
 /** Single precision math implemented natively. */
-declare const NativeMathf: IMath<f32>;
+declare const NativeMathf: INativeMath<f32>;
 /** Alias of {@link NativeMath} or {@link JSMath} respectively. Defaults to `NativeMath`. */
 declare const Math: IMath<f64>;
 

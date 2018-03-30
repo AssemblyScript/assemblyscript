@@ -52,6 +52,9 @@ const bin = {
     globalObject: "typeof self !== 'undefined' ? self : this"
   },
   devtool: "source-map",
+  performance: {
+    hints : false
+  },
   plugins: [
     new webpack.DefinePlugin({
       BUNDLE_VERSION: JSON.stringify(require("./package.json").version),
