@@ -39,10 +39,12 @@ const bin = {
     "../dist/assemblyscript.js": "assemblyscript"
   }],
   node: {
+    "buffer": false,
     "fs": "empty",
     "global": true,
+    "os": false,
     "process": "mock",
-    "crypto": "empty"
+    "crypto": false
   },
   output: {
     filename: "asc.js",
