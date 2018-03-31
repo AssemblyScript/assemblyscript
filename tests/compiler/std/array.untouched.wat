@@ -4468,81 +4468,7 @@
    (i32.const 23)
   )
  )
- (func "$(lib)/array/conditionalSwap<i32>" (; 57 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  (local $5 i32)
-  (set_local $4
-   (i32.load
-    (i32.add
-     (i32.load
-      (get_local $0)
-     )
-     (i32.mul
-      (get_local $1)
-      (i32.const 4)
-     )
-    )
-   )
-  )
-  (set_local $5
-   (i32.load
-    (i32.add
-     (i32.load
-      (get_local $0)
-     )
-     (i32.mul
-      (get_local $2)
-      (i32.const 4)
-     )
-    )
-   )
-  )
-  (if
-   (i32.lt_s
-    (block (result i32)
-     (set_global $argumentCount
-      (i32.const 2)
-     )
-     (call_indirect (type $iii)
-      (get_local $4)
-      (get_local $5)
-      (get_local $3)
-     )
-    )
-    (i32.const 0)
-   )
-   (block
-    (i32.store
-     (i32.add
-      (i32.load
-       (get_local $0)
-      )
-      (i32.mul
-       (get_local $1)
-       (i32.const 4)
-      )
-     )
-     (get_local $5)
-    )
-    (i32.store
-     (i32.add
-      (i32.load
-       (get_local $0)
-      )
-      (i32.mul
-       (get_local $2)
-       (i32.const 4)
-      )
-     )
-     (get_local $4)
-    )
-   )
-  )
-  (return
-   (get_local $0)
-  )
- )
- (func "$(lib)/array/insertionSort<i32>" (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/insertionSort<i32>" (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4678,7 +4604,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/array/weakHeapSort<i32>" (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/weakHeapSort<i32>" (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5154,8 +5080,10 @@
    (get_local $0)
   )
  )
- (func "$(lib)/array/sort<i32>" (; 60 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/sort<i32>" (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   (set_local $2
    (call "$(lib)/array/Array<i32>#get:length"
     (get_local $0)
@@ -5175,12 +5103,52 @@
     (get_local $2)
     (i32.const 2)
    )
-   (return
-    (call "$(lib)/array/conditionalSwap<i32>"
+   (block
+    (set_local $3
+     (i32.load offset=4
+      (i32.load
+       (get_local $0)
+      )
+     )
+    )
+    (set_local $4
+     (i32.load
+      (i32.load
+       (get_local $0)
+      )
+     )
+    )
+    (if
+     (i32.lt_s
+      (block (result i32)
+       (set_global $argumentCount
+        (i32.const 2)
+       )
+       (call_indirect (type $iii)
+        (get_local $3)
+        (get_local $4)
+        (get_local $1)
+       )
+      )
+      (i32.const 0)
+     )
+     (block
+      (i32.store offset=4
+       (i32.load
+        (get_local $0)
+       )
+       (get_local $4)
+      )
+      (i32.store
+       (i32.load
+        (get_local $0)
+       )
+       (get_local $3)
+      )
+     )
+    )
+    (return
      (get_local $0)
-     (i32.const 1)
-     (i32.const 0)
-     (get_local $1)
     )
    )
   )
@@ -5203,7 +5171,7 @@
    )
   )
  )
- (func "$(lib)/array/Array<i32>#sort" (; 61 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func "$(lib)/array/Array<i32>#sort" (; 60 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (call "$(lib)/array/sort<i32>"
     (get_local $0)
@@ -5211,7 +5179,7 @@
    )
   )
  )
- (func $std/array/isSorted<i32> (; 62 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<i32> (; 61 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (block $break|0
@@ -5276,7 +5244,7 @@
    (i32.const 1)
   )
  )
- (func $std/array/assertSorted<i32> (; 63 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<i32> (; 62 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (if
    (i32.eqz
     (call $std/array/isSorted<i32>
@@ -5298,13 +5266,13 @@
    )
   )
  )
- (func $std/array/assertSortedDefault<i32> (; 64 ;) (type $iv) (param $0 i32)
+ (func $std/array/assertSortedDefault<i32> (; 63 ;) (type $iv) (param $0 i32)
   (call $std/array/assertSorted<i32>
    (get_local $0)
    (call $std/array/createDefaultComparator<i32>)
   )
  )
- (func $std/array/isArraysEqual<i32> (; 65 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<i32> (; 64 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -5378,7 +5346,7 @@
    (i32.const 1)
   )
  )
- (func $std/array/isArraysEqual<i32>|trampoline (; 66 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<i32>|trampoline (; 65 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -5401,31 +5369,31 @@
    (get_local $2)
   )
  )
- (func $start~anonymous|24 (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|24 (; 66 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $0)
    (get_local $1)
   )
  )
- (func $start~anonymous|25 (; 68 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|25 (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $1)
    (get_local $0)
   )
  )
- (func $start~anonymous|26 (; 69 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|26 (; 68 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $0)
    (get_local $1)
   )
  )
- (func $start~anonymous|27 (; 70 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|27 (; 69 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $1)
    (get_local $0)
   )
  )
- (func $start (; 71 ;) (type $v)
+ (func $start (; 70 ;) (type $v)
   (set_global "$(lib)/allocator/arena/startOffset"
    (i32.and
     (i32.add

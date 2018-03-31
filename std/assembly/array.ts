@@ -328,16 +328,6 @@ function createDefaultComparator<T>(): (a: T, b: T) => i32 {
   );
 }
 
-function conditionalSwap<T>(arr: Array<T>, i: i32, j: i32, comparator: (a: T, b: T) => i32): Array<T> {
-  var a = load<T>(arr.__memory + i * sizeof<T>()); // var a = <T>arr[i];
-  var b = load<T>(arr.__memory + j * sizeof<T>()); // var b = <T>arr[j];
-  if (comparator(a, b) < 0) {
-    store<T>(arr.__memory + i * sizeof<T>(), b); // arr[i] = b;
-    store<T>(arr.__memory + j * sizeof<T>(), a); // arr[j] = a;
-  }
-  return arr;
-}
-
 function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var a: T, b: T, j: i32;
   for (let i: i32 = 0, len: i32 = arr.length; i < len; i++) {
@@ -448,9 +438,21 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
 function sort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var len = arr.length;
 
-  if (len <= 1)   return arr;
-  if (len == 2)   return conditionalSwap<T>(arr, 1, 0, comparator);
-  if (len <= 256) return insertionSort<T>(arr, comparator);
+  if (len <= 1) return arr;
+
+  if (len == 2) {
+    var a = load<T>(arr.__memory, sizeof<T>()); // var a = <T>arr[1];
+    var b = load<T>(arr.__memory, 0);           // var b = <T>arr[0];
+    if (comparator(a, b) < 0) {
+      store<T>(arr.__memory, b, sizeof<T>()); // arr[1] = b;
+      store<T>(arr.__memory, a, 0);           // arr[0] = a;
+    }
+    return arr;
+  }
+
+  if (len <= 256) {
+    return insertionSort<T>(arr, comparator);
+  }
 
   return weakHeapSort<T>(arr, comparator);
 }
