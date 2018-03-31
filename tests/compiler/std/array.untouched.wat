@@ -4580,11 +4580,18 @@
          )
         )
        )
-       (call "$(lib)/array/Array<i32>#__set"
-        (get_local $0)
+       (i32.store
         (i32.add
-         (get_local $4)
-         (i32.const 1)
+         (i32.load
+          (get_local $0)
+         )
+         (i32.mul
+          (i32.add
+           (get_local $4)
+           (i32.const 1)
+          )
+          (i32.const 4)
+         )
         )
         (get_local $2)
        )

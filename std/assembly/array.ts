@@ -341,7 +341,7 @@ function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array
       } else break;
     }
 
-    arr[j + 1] = a;
+    store<T>(arr.__memory + (j + 1) * sizeof<T>(), a); // arr[j + 1] = a;
   }
 
   return arr;
