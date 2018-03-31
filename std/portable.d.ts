@@ -365,6 +365,7 @@ interface IMath {
 }
 
 declare const Math: IMath;
+declare const Mathf: IMath;
 declare const JSMath: IMath;
 
 declare namespace console {
