@@ -466,4 +466,4 @@ assertSorted<i32>(randomized257, (a: i32, b: i32): i32 => b - a);
 
 // Test sorting reference elements
 // var reversedElements512 = createReverseOrderedElementsArray(512);
-// assertSorted<Proxy<i32>[]>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i32 => a.x - b.x);
+// assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i32 => a.x - b.x);
