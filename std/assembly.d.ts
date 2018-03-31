@@ -463,6 +463,8 @@ declare const NativeMath: INativeMath<f64>;
 declare const NativeMathf: INativeMath<f32>;
 /** Alias of {@link NativeMath} or {@link JSMath} respectively. Defaults to `NativeMath`. */
 declare const Math: IMath<f64>;
+/** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
+declare const Mathf: IMath<f32>;
 
 // Internal decorators
 
