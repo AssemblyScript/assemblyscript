@@ -50,6 +50,29 @@ function createRandomOrderedArray(size: i32): Array<i32> {
   return arr;
 }
 
+/*
+function createReverseOrderedNestedArray(size: i32): Array<Array<i32>> {
+  var arr = new Array<Array<i32>>(size);
+  for (let i: i32 = 0; i < arr.length; i++) {
+    arr[i] = new Array<i32>(1);
+    arr[i][0] = arr.length - 1 - i;
+  }
+  return arr;
+}
+
+class Proxy<T> {
+  constructor(public x: T) {}
+}
+
+function createReverseOrderedElementsArray(size: i32): Proxy<i32>[] {
+  var arr = new Array<Proxy<i32>>(size);
+  for (let i: i32 = 0; i < arr.length; i++) {
+    arr[i] = new Proxy<i32>(arr.length - 1 - i);
+  }
+  return arr;
+}
+*/
+
 function assertSorted<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): void {
   assert(isSorted<T>(arr.sort<T>(comparator), comparator));
 }
@@ -398,7 +421,7 @@ var revesed10000 = createReverseOrderedArray(10000);
 
 var randomized512 = createRandomOrderedArray(512);
 
-// Standart comparator
+// Test sorting with with default comparator
 
 assertSortedDefault<i32>(revesed0);
 
@@ -425,7 +448,7 @@ assert(isArraysEqual<i32>(revesed10000, expected4, 4));
 
 assertSortedDefault<i32>(randomized512);
 
-// Custom comparator
+// Test sorting with custom comparator
 
 var randomized64  = createRandomOrderedArray(64);
 var randomized257 = createRandomOrderedArray(257);
@@ -435,3 +458,12 @@ assertSorted<i32>(randomized64, (a: i32, b: i32): i32 => b - a);
 
 assertSorted<i32>(randomized257, (a: i32, b: i32): i32 => a - b);
 assertSorted<i32>(randomized257, (a: i32, b: i32): i32 => b - a);
+
+// Test sorting complex objects
+
+// var reversedNested512 = createReverseOrderedNestedArray(512);
+// assertSorted<i32[]>(reversedNested512, (a: i32[], b: i32[]): i32 => a[0] - b[0]);
+
+// Test sorting reference elements
+// var reversedElements512 = createReverseOrderedElementsArray(512);
+// assertSorted<Proxy<i32>[]>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i32 => a.x - b.x);
