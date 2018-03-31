@@ -441,8 +441,8 @@ function sort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   if (len <= 1) return arr;
 
   if (len == 2) {
-    var a = load<T>(arr.__memory, sizeof<T>()); // var a = <T>arr[1];
-    var b = load<T>(arr.__memory, 0);           // var b = <T>arr[0];
+    let a = load<T>(arr.__memory, sizeof<T>()); // var a = <T>arr[1];
+    let b = load<T>(arr.__memory, 0);           // var b = <T>arr[0];
     if (comparator(a, b) < 0) {
       store<T>(arr.__memory, b, sizeof<T>()); // arr[1] = b;
       store<T>(arr.__memory, a, 0);           // arr[0] = a;
