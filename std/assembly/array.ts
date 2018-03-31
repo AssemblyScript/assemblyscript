@@ -365,14 +365,14 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
   var i: i32, j: i32, y: i32, p: i32, a: T, b: T;
 
   var blen = (len + 7) >> 3;
-  var bitset = new Array<i32>(blen);
+  var bitset = allocate_memory(blen * sizeof<i32>());
 
   // for (i = 0; i < blen; ++i) bitset[i] = 0;
-  set_memory(bitset.__memory, 0, blen * sizeof<i32>());
+  set_memory(bitset, 0, blen * sizeof<i32>());
 
   for (i = len - 1; i > 0; i--) {
     j = i;
-    while ((j & 1) == ((load<i32>(bitset.__memory + (j >> 4) * sizeof<i32>()) >> ((j >> 1) & 7)) & 1)) {
+    while ((j & 1) == ((load<i32>(bitset + (j >> 4) * sizeof<i32>()) >> ((j >> 1) & 7)) & 1)) {
       j >>= 1;
     }
 
@@ -384,8 +384,8 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
     if (comparator(a, b) < 0) {
       // bitset[i >> 3] = <i32>bitset[i >> 3] ^ (1 << (i & 7));
       store<i32>(
-        bitset.__memory + (i >> 3) * sizeof<i32>(),
-        load<i32>(bitset.__memory + (i >> 3) * sizeof<i32>()) ^ (1 << (i & 7))
+        bitset + (i >> 3) * sizeof<i32>(),
+        load<i32>(bitset + (i >> 3) * sizeof<i32>()) ^ (1 << (i & 7))
       );
       // arr[i] = a;
       // arr[p] = b;
@@ -406,7 +406,7 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
 
     let x = 1;
     // while ((y = (x << 1) + ((<i32>bitset[x >> 3] >> (x & 7)) & 1)) < i) {
-    while ((y = (x << 1) + ((load<i32>(bitset.__memory + (x >> 3) * sizeof<i32>()) >> (x & 7)) & 1)) < i) {
+    while ((y = (x << 1) + ((load<i32>(bitset + (x >> 3) * sizeof<i32>()) >> (x & 7)) & 1)) < i) {
       x = y;
     }
 
@@ -419,8 +419,8 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
       if (comparator(a, b) < 0) {
         // bitset[x >> 3] = <i32>bitset[x >> 3] ^ (1 << (x & 7));
         store<i32>(
-          bitset.__memory + (x >> 3) * sizeof<i32>(),
-          load<i32>(bitset.__memory + (x >> 3) * sizeof<i32>()) ^ (1 << (x & 7))
+          bitset + (x >> 3) * sizeof<i32>(),
+          load<i32>(bitset + (x >> 3) * sizeof<i32>()) ^ (1 << (x & 7))
         );
         // arr[x] = a;
         // arr[0] = b;
@@ -431,7 +431,7 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
     }
   }
 
-  free_memory(bitset.__memory);
+  free_memory(bitset);
 
   /*
   let t  = <T>arr[1];

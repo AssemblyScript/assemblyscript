@@ -4706,15 +4706,15 @@
    )
   )
   (set_local $10
-   (call "$(lib)/array/Array#constructor"
-    (i32.const 0)
-    (get_local $9)
+   (call "$(lib)/allocator/arena/allocate_memory"
+    (i32.mul
+     (get_local $9)
+     (i32.const 4)
+    )
    )
   )
   (call "$(lib)/memory/set_memory"
-   (i32.load
-    (get_local $10)
-   )
+   (get_local $10)
    (i32.const 0)
    (i32.mul
     (get_local $9)
@@ -4751,9 +4751,7 @@
             (i32.shr_s
              (i32.load
               (i32.add
-               (i32.load
-                (get_local $10)
-               )
+               (get_local $10)
                (i32.mul
                 (i32.shr_s
                  (get_local $4)
@@ -4837,9 +4835,7 @@
         (block
          (i32.store
           (i32.add
-           (i32.load
-            (get_local $10)
-           )
+           (get_local $10)
            (i32.mul
             (i32.shr_s
              (get_local $3)
@@ -4851,9 +4847,7 @@
           (i32.xor
            (i32.load
             (i32.add
-             (i32.load
-              (get_local $10)
-             )
+             (get_local $10)
              (i32.mul
               (i32.shr_s
                (get_local $3)
@@ -4977,9 +4971,7 @@
               (i32.shr_s
                (i32.load
                 (i32.add
-                 (i32.load
-                  (get_local $10)
-                 )
+                 (get_local $10)
                  (i32.mul
                   (i32.shr_s
                    (get_local $11)
@@ -5057,9 +5049,7 @@
              (block
               (i32.store
                (i32.add
-                (i32.load
-                 (get_local $10)
-                )
+                (get_local $10)
                 (i32.mul
                  (i32.shr_s
                   (get_local $11)
@@ -5071,9 +5061,7 @@
                (i32.xor
                 (i32.load
                  (i32.add
-                  (i32.load
-                   (get_local $10)
-                  )
+                  (get_local $10)
                   (i32.mul
                    (i32.shr_s
                     (get_local $11)
@@ -5137,9 +5125,7 @@
    )
   )
   (call "$(lib)/allocator/arena/free_memory"
-   (i32.load
-    (get_local $10)
-   )
+   (get_local $10)
   )
   (set_local $12
    (i32.load offset=4

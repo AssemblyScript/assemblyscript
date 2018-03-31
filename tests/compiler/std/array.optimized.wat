@@ -4089,10 +4089,9 @@
   (local $6 i32)
   (local $7 i32)
   (call "$(lib)/memory/set_memory"
-   (i32.load
-    (tee_local $5
-     (call "$(lib)/array/Array#constructor"
-      (i32.const 0)
+   (tee_local $5
+    (call "$(lib)/allocator/arena/allocate_memory"
+     (i32.shl
       (tee_local $2
        (i32.shr_s
         (i32.add
@@ -4106,6 +4105,7 @@
         (i32.const 3)
        )
       )
+      (i32.const 2)
      )
     )
    )
@@ -4142,9 +4142,7 @@
          (i32.shr_s
           (i32.load
            (i32.add
-            (i32.load
-             (get_local $5)
-            )
+            (get_local $5)
             (i32.shl
              (i32.shr_s
               (get_local $2)
@@ -4224,9 +4222,7 @@
       (block
        (i32.store
         (i32.add
-         (i32.load
-          (get_local $5)
-         )
+         (get_local $5)
          (i32.shl
           (i32.shr_s
            (get_local $3)
@@ -4238,9 +4234,7 @@
         (i32.xor
          (i32.load
           (i32.add
-           (i32.load
-            (get_local $5)
-           )
+           (get_local $5)
            (i32.shl
             (i32.shr_s
              (get_local $3)
@@ -4359,9 +4353,7 @@
            (i32.shr_s
             (i32.load
              (i32.add
-              (i32.load
-               (get_local $5)
-              )
+              (get_local $5)
               (i32.shl
                (i32.shr_s
                 (get_local $2)
@@ -4434,9 +4426,7 @@
          (block
           (i32.store
            (i32.add
-            (i32.load
-             (get_local $5)
-            )
+            (get_local $5)
             (i32.shl
              (i32.shr_s
               (get_local $2)
@@ -4448,9 +4438,7 @@
            (i32.xor
             (i32.load
              (i32.add
-              (i32.load
-               (get_local $5)
-              )
+              (get_local $5)
               (i32.shl
                (i32.shr_s
                 (get_local $2)
@@ -4510,9 +4498,7 @@
    )
   )
   (call "$(lib)/allocator/arena/free_memory"
-   (i32.load
-    (get_local $5)
-   )
+   (get_local $5)
   )
   (set_local $1
    (i32.load offset=4
