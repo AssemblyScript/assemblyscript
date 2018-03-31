@@ -357,7 +357,6 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
   var blen = (len + 7) >> 3;
   var bitset = allocate_memory(blen * sizeof<i32>());
 
-  // for (i = 0; i < blen; ++i) bitset[i] = 0;
   set_memory(bitset, 0, blen * sizeof<i32>());
 
   for (i = len - 1; i > 0; i--) {
@@ -367,20 +366,17 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
     }
 
     p = j >> 1;
-    // a = <T>arr[p];
-    // b = <T>arr[i];
-    a = load<T>(arr.__memory + p * sizeof<T>());
-    b = load<T>(arr.__memory + i * sizeof<T>());
+
+    a = load<T>(arr.__memory + p * sizeof<T>()); // a = <T>arr[p];
+    b = load<T>(arr.__memory + i * sizeof<T>()); // b = <T>arr[i];
+
     if (comparator(a, b) < 0) {
-      // bitset[i >> 3] = <i32>bitset[i >> 3] ^ (1 << (i & 7));
       store<i32>(
         bitset + (i >> 3) * sizeof<i32>(),
         load<i32>(bitset + (i >> 3) * sizeof<i32>()) ^ (1 << (i & 7))
       );
-      // arr[i] = a;
-      // arr[p] = b;
-      store<T>(arr.__memory + i * sizeof<T>(), a);
-      store<T>(arr.__memory + p * sizeof<T>(), b);
+      store<T>(arr.__memory + i * sizeof<T>(), a); // arr[i] = a;
+      store<T>(arr.__memory + p * sizeof<T>(), b); // arr[p] = b;
     }
   }
 
@@ -395,27 +391,22 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
     store<T>(arr.__memory + i * sizeof<T>(), a);
 
     let x = 1;
-    // while ((y = (x << 1) + ((<i32>bitset[x >> 3] >> (x & 7)) & 1)) < i) {
     while ((y = (x << 1) + ((load<i32>(bitset + (x >> 3) * sizeof<i32>()) >> (x & 7)) & 1)) < i) {
       x = y;
     }
 
     while (x > 0) {
-      // a = <T>arr[0];
-      // b = <T>arr[x];
-      a = load<T>(arr.__memory, 0);
-      b = load<T>(arr.__memory + x * sizeof<T>());
+      a = load<T>(arr.__memory, 0);                // a = <T>arr[0];
+      b = load<T>(arr.__memory + x * sizeof<T>()); // b = <T>arr[x];
 
       if (comparator(a, b) < 0) {
-        // bitset[x >> 3] = <i32>bitset[x >> 3] ^ (1 << (x & 7));
         store<i32>(
           bitset + (x >> 3) * sizeof<i32>(),
           load<i32>(bitset + (x >> 3) * sizeof<i32>()) ^ (1 << (x & 7))
         );
-        // arr[x] = a;
-        // arr[0] = b;
-        store<T>(arr.__memory + x * sizeof<T>(), a);
-        store<T>(arr.__memory, b, 0);
+
+        store<T>(arr.__memory + x * sizeof<T>(), a); // arr[x] = a;
+        store<T>(arr.__memory, b, 0);                // arr[0] = b;
       }
       x >>= 1;
     }
