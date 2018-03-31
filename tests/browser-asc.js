@@ -1,7 +1,15 @@
 const asc = require("../dist/asc.js");
 
-const stdout = asc.createMemoryStream();
-const stderr = asc.createMemoryStream();
+function log(arg) {
+  console.log(arg);
+}
+
+const stdout = asc.createMemoryStream(arg => {
+  console.log("out:", arg);
+});
+const stderr = asc.createMemoryStream(arg => {
+  console.log("err:", arg);
+});
 
 const files = {
   "/module.ts": `import "allocator/arena";`

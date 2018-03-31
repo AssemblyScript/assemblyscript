@@ -131,6 +131,10 @@ export class Program extends DiagnosticEmitter {
   fileLevelExports: Map<string,Element> = new Map();
   /** Module-level exports by exported name. */
   moduleLevelExports: Map<string,Element> = new Map();
+  /** Array prototype reference. */
+  arrayPrototype: ClassPrototype | null = null;
+  /** String instance reference. */
+  stringInstance: Class | null = null;
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
@@ -307,6 +311,32 @@ export class Program extends DiagnosticEmitter {
         if (element) this.elementsLookup.set(alias, element);
       }
     }
+
+    // register array
+    var arrayPrototype = this.elementsLookup.get("Array");
+    if (arrayPrototype) {
+      assert(arrayPrototype.kind == ElementKind.CLASS_PROTOTYPE);
+      this.arrayPrototype = <ClassPrototype>arrayPrototype;
+    }
+
+    // register string
+    var stringPrototype = this.elementsLookup.get("String");
+    if (stringPrototype) {
+      assert(stringPrototype.kind == ElementKind.CLASS_PROTOTYPE);
+      let stringInstance = (<ClassPrototype>stringPrototype).resolve(null); // reports
+      if (stringInstance) {
+        if (this.typesLookup.has("string")) {
+          let declaration = (<ClassPrototype>stringPrototype).declaration;
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range, declaration.programLevelInternalName
+          );
+        } else {
+          this.stringInstance = stringInstance;
+          this.typesLookup.set("string", stringInstance.type);
+        }
+      }
+    }
   }
 
   /** Tries to resolve an import by traversing exports and queued exports. */
@@ -479,22 +509,6 @@ export class Program extends DiagnosticEmitter {
     }
 
     this.checkGlobalOptions(prototype, declaration);
-
-    // check and possibly register string type
-    if (
-      prototype.is(CommonFlags.GLOBAL) &&
-      declaration.name.text == "String"
-    ) {
-      if (!this.typesLookup.has("string")) {
-        let instance = prototype.resolve(null);
-        if (instance) this.typesLookup.set("string", instance.type);
-      } else {
-        this.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          declaration.name.range, declaration.programLevelInternalName
-        );
-      }
-    }
   }
 
   private initializeField(
@@ -1823,7 +1837,7 @@ export class Program extends DiagnosticEmitter {
     elementAccess: ElementAccessExpression,
     contextualFunction: Function
   ): ResolvedElement | null {
-    // start by resolving the lhs target (expression before the last dot)
+    // start by resolving the lhs target
     var targetExpression = elementAccess.expression;
     resolvedElement = this.resolveExpression(
       targetExpression,
@@ -1850,6 +1864,7 @@ export class Program extends DiagnosticEmitter {
         }
         break;
       }
+      // FIXME: indexed access on indexed access
     }
     this.error(
       DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -2957,11 +2972,13 @@ export class ClassPrototype extends Element {
       throw new Error("type argument count mismatch");
     }
 
+    var simpleName = this.simpleName;
     var internalName = this.internalName;
     if (instanceKey.length) {
+      simpleName += "<" + instanceKey + ">";
       internalName += "<" + instanceKey + ">";
     }
-    instance = new Class(this, internalName, typeArguments, baseClass);
+    instance = new Class(this, simpleName, internalName, typeArguments, baseClass);
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
 
@@ -3119,11 +3136,12 @@ export class Class extends Element {
   /** Constructs a new class. */
   constructor(
     prototype: ClassPrototype,
+    simpleName: string,
     internalName: string,
     typeArguments: Type[] | null = null,
     base: Class | null = null
   ) {
-    super(prototype.program, prototype.simpleName, internalName);
+    super(prototype.program, simpleName, internalName);
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.typeArguments = typeArguments;
@@ -3173,7 +3191,7 @@ export class Class extends Element {
   }
 
   toString(): string {
-    return this.prototype.simpleName;
+    return this.simpleName;
   }
 }
 
@@ -3209,11 +3227,12 @@ export class Interface extends Class {
   /** Constructs a new interface. */
   constructor(
     prototype: InterfacePrototype,
+    simpleName: string,
     internalName: string,
     typeArguments: Type[] = [],
     base: Interface | null = null
   ) {
-    super(prototype, internalName, typeArguments, base);
+    super(prototype, simpleName, internalName, typeArguments, base);
   }
 }
 

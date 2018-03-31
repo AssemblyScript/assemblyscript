@@ -815,13 +815,13 @@ var Buf = typeof global !== "undefined" && global.Buffer || Uint8Array;
 function createMemoryStream(fn) {
   var stream = [];
   stream.write = function(chunk) {
+    if (fn) fn(chunk);
     if (typeof chunk === "string") {
       let buffer = new Buf(utf8.length(chunk));
       utf8.write(chunk, buffer, 0);
       chunk = buffer;
     }
     this.push(chunk);
-    if (fn) fn(chunk);
   };
   stream.toBuffer = function() {
     var offset = 0, i = 0, k = this.length;

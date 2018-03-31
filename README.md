@@ -52,11 +52,13 @@ $> asc myModule.ts -o myModule.wasm --optimize --validate --sourceMap
 Building
 --------
 
-To build an UMD bundle to `dist/assemblyscript.js` ([binaryen.js](https://github.com/AssemblyScript/binaryen.js) remains an external dependency):
+To build an UMD bundle to `dist/assemblyscript.js` (depends on [binaryen.js](https://github.com/AssemblyScript/binaryen.js)):
 
 ```
 $> npm run build
 ```
+
+This also builds a browser version of [asc](./bin) to `dist/asc.js` (depends on assemblyscript.js).
 
 Running the [tests](./tests):
 
@@ -64,4 +66,4 @@ Running the [tests](./tests):
 $> npm test
 ```
 
-**Note** that freshly cloned copies of the compiler will use ts-node to run [the sources](./src) directly, which is useful in development. Once built, `asc` will use the distribution files instead. This can also be checked by running `asc -v` (it is running the sources if it states `-dev`).
+**Note** that freshly cloned copies of the compiler will use the distribution files, but it can also run [the sources](./src) directly through ts-node after an `npm run clean`, which is useful in development. This condition can also be checked by running `asc -v` (it is running the sources if it states `-dev`).

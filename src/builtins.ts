@@ -192,14 +192,10 @@ export function compileCall(
       compiler.currentType = Type.bool;
       let classType = type.classReference;
       if (classType) {
-        let stringPrototype = compiler.program.elementsLookup.get("String");
-        if (stringPrototype) {
-          assert(stringPrototype.kind == ElementKind.CLASS_PROTOTYPE);
-          let stringInstance = (<ClassPrototype>stringPrototype).resolve(null);
-          if (!stringInstance) return module.createUnreachable();
-          if (classType.isAssignableTo(stringInstance)) {
-            return module.createI32(1);
-          }
+        let stringInstance = compiler.program.stringInstance;
+        if (!stringInstance) return module.createUnreachable();
+        if (classType.isAssignableTo(stringInstance)) {
+          return module.createI32(1);
         }
       }
       return module.createI32(0);
