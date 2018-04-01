@@ -13,7 +13,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const utf8 = require("./util/utf8");
+const utf8 = require("@protobufjs/utf8");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 
 // Use distribution files if present, otherwise run the sources directly

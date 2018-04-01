@@ -831,7 +831,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.__R" (; 47 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/R" (; 47 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (nop)
@@ -1018,7 +1018,7 @@
         (f64.const 6.123233995736766e-17)
         (f64.mul
          (get_local $0)
-         (call "$(lib)/math/NativeMath.__R"
+         (call "$(lib)/math/R"
           (f64.mul
            (get_local $0)
            (get_local $0)
@@ -1055,7 +1055,7 @@
     (set_local $5
      (f64.sub
       (f64.mul
-       (call "$(lib)/math/NativeMath.__R"
+       (call "$(lib)/math/R"
         (get_local $6)
        )
        (get_local $4)
@@ -1119,7 +1119,7 @@
   (set_local $5
    (f64.add
     (f64.mul
-     (call "$(lib)/math/NativeMath.__R"
+     (call "$(lib)/math/R"
       (get_local $6)
      )
      (get_local $4)
@@ -1174,7 +1174,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMathf.__R" (; 50 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/Rf" (; 50 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 f32)
   (nop)
@@ -1302,7 +1302,7 @@
         (f32.const 7.549789415861596e-08)
         (f32.mul
          (get_local $0)
-         (call "$(lib)/math/NativeMathf.__R"
+         (call "$(lib)/math/Rf"
           (f32.mul
            (get_local $0)
            (get_local $0)
@@ -1339,7 +1339,7 @@
     (set_local $4
      (f32.sub
       (f32.mul
-       (call "$(lib)/math/NativeMathf.__R"
+       (call "$(lib)/math/Rf"
         (get_local $3)
        )
        (get_local $5)
@@ -1406,7 +1406,7 @@
   (set_local $4
    (f32.add
     (f32.mul
-     (call "$(lib)/math/NativeMathf.__R"
+     (call "$(lib)/math/Rf"
       (get_local $3)
      )
      (get_local $5)
@@ -3024,7 +3024,7 @@
       (get_local $0)
       (f64.mul
        (get_local $0)
-       (call "$(lib)/math/NativeMath.__R"
+       (call "$(lib)/math/R"
         (f64.mul
          (get_local $0)
          (get_local $0)
@@ -3052,7 +3052,7 @@
    )
   )
   (set_local $6
-   (call "$(lib)/math/NativeMath.__R"
+   (call "$(lib)/math/R"
     (get_local $4)
    )
   )
@@ -3277,7 +3277,7 @@
       (get_local $0)
       (f32.mul
        (get_local $0)
-       (call "$(lib)/math/NativeMathf.__R"
+       (call "$(lib)/math/Rf"
         (f32.mul
          (get_local $0)
          (get_local $0)
@@ -3321,7 +3321,7 @@
        (f64.mul
         (get_local $5)
         (f64.promote/f32
-         (call "$(lib)/math/NativeMathf.__R"
+         (call "$(lib)/math/Rf"
           (get_local $4)
          )
         )
@@ -6995,7 +6995,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.__expo2" (; 91 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/expo2" (; 91 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (nop)
   (set_local $1
@@ -7133,7 +7133,7 @@
    )
   )
   (set_local $3
-   (call "$(lib)/math/NativeMath.__expo2"
+   (call "$(lib)/math/expo2"
     (get_local $0)
    )
   )
@@ -7861,7 +7861,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMathf.__expo2" (; 96 ;) (type $ff) (param $0 f32) (result f32)
+ (func "$(lib)/math/expo2f" (; 96 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (nop)
   (set_local $1
@@ -7984,7 +7984,7 @@
    )
   )
   (return
-   (call "$(lib)/math/NativeMathf.__expo2"
+   (call "$(lib)/math/expo2f"
     (get_local $0)
    )
   )
@@ -14353,7 +14353,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 32)
-     (i32.const 980)
+     (i32.const 993)
      (i32.const 4)
     )
     (unreachable)
@@ -15431,9 +15431,9 @@
          )
         )
         (i32.and
-         (i32.rem_u
+         (i32.and
           (get_local $12)
-          (i32.const 2)
+          (i32.const 1)
          )
          (i32.const 1)
         )
@@ -15458,12 +15458,6 @@
       (i32.const 1)
      )
     )
-   )
-  )
-  (set_local $12
-   (i32.and
-    (get_local $12)
-    (i32.const 2147483647)
    )
   )
   (return
@@ -16013,9 +16007,9 @@
          )
         )
         (i32.and
-         (i32.rem_s
+         (i32.and
           (get_local $12)
-          (i32.const 2)
+          (i32.const 1)
          )
          (i32.const 1)
         )
@@ -16040,12 +16034,6 @@
       (i32.const 1)
      )
     )
-   )
-  )
-  (set_local $12
-   (i32.and
-    (get_local $12)
-    (i32.const 2147483647)
    )
   )
   (return
@@ -16197,7 +16185,7 @@
      (f64.const 2)
      (get_local $2)
     )
-    (call "$(lib)/math/NativeMath.__expo2"
+    (call "$(lib)/math/expo2"
      (get_local $3)
     )
    )
@@ -16357,7 +16345,7 @@
      (f32.const 2)
      (get_local $2)
     )
-    (call "$(lib)/math/NativeMathf.__expo2"
+    (call "$(lib)/math/expo2f"
      (get_local $3)
     )
    )

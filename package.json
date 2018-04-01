@@ -11,6 +11,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
+    "@protobufjs/utf8": "^1.1.0",
     "binaryen": "45.0.0-nightly.20180330",
     "glob": "^7.1.2",
     "long": "^4.0.0",
@@ -34,7 +35,8 @@
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {
-    "asc": "bin/asc"
+    "asc": "bin/asc",
+    "asinit": "bin/asinit"
   },
   "engines": {
     "node": ">=8"

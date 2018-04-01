@@ -73,7 +73,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.__R" (; 2 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/R" (; 2 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (nop)
@@ -260,7 +260,7 @@
         (f64.const 6.123233995736766e-17)
         (f64.mul
          (get_local $0)
-         (call "$(lib)/math/NativeMath.__R"
+         (call "$(lib)/math/R"
           (f64.mul
            (get_local $0)
            (get_local $0)
@@ -297,7 +297,7 @@
     (set_local $5
      (f64.sub
       (f64.mul
-       (call "$(lib)/math/NativeMath.__R"
+       (call "$(lib)/math/R"
         (get_local $6)
        )
        (get_local $4)
@@ -361,7 +361,7 @@
   (set_local $5
    (f64.add
     (f64.mul
-     (call "$(lib)/math/NativeMath.__R"
+     (call "$(lib)/math/R"
       (get_local $6)
      )
      (get_local $4)
@@ -1270,7 +1270,7 @@
       (get_local $0)
       (f64.mul
        (get_local $0)
-       (call "$(lib)/math/NativeMath.__R"
+       (call "$(lib)/math/R"
         (f64.mul
          (get_local $0)
          (get_local $0)
@@ -1298,7 +1298,7 @@
    )
   )
   (set_local $6
-   (call "$(lib)/math/NativeMath.__R"
+   (call "$(lib)/math/R"
     (get_local $4)
    )
   )
@@ -3709,7 +3709,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.__expo2" (; 30 ;) (type $FF) (param $0 f64) (result f64)
+ (func "$(lib)/math/expo2" (; 30 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (nop)
   (set_local $1
@@ -3847,7 +3847,7 @@
    )
   )
   (set_local $3
-   (call "$(lib)/math/NativeMath.__expo2"
+   (call "$(lib)/math/expo2"
     (get_local $0)
    )
   )
@@ -6981,7 +6981,7 @@
      (f64.const 2)
      (get_local $2)
     )
-    (call "$(lib)/math/NativeMath.__expo2"
+    (call "$(lib)/math/expo2"
      (get_local $3)
     )
    )

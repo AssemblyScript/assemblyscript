@@ -1,0 +1,22 @@
+<script src="https://rawgit.com/AssemblyScript/binaryen.js/master/index.js"></script>
+<script>
+var libm;
+// fetch("../compiler/std/libm.optimized.wat") // doesn't work: too large?
+// .then(str => Binaryen.parseText(str))
+// .then(module => module.emitBinary())
+fetch("libm.wasm")
+.then(res => res.arrayBuffer())
+.then(buf => WebAssembly.instantiate(buf, {}))
+.then(module => {
+  libm = module.instance.exports;
+  Object.keys(libm).forEach(key => {
+    var val = libm[key];
+    if (typeof val === "function") {
+      console.log("libm." + key + "(...)");
+    } else {
+      console.log("libm." + key + " = " + val);
+    }
+  });
+})
+.catch(err => { throw err; });
+</script>

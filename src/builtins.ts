@@ -43,7 +43,6 @@ import {
   Global,
   FunctionPrototype,
   Class,
-  ClassPrototype,
   Field
 } from "./program";
 
