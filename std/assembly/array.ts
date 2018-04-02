@@ -330,18 +330,20 @@ function createDefaultComparator<T>(): (a: T, b: T) => i32 {
 
 function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var a: T, b: T, j: i32;
+  const typeShift = alignof<T>();
+
   for (let i: i32 = 0, len: i32 = arr.length; i < len; i++) {
-    a = load<T>(arr.__memory + i * sizeof<T>()); // a = <T>arr[i];
+    a = load<T>(arr.__memory + (i << typeShift)); // a = <T>arr[i];
     j = i - 1;
     while (j >= 0) {
-      b = load<T>(arr.__memory + j * sizeof<T>());  // b = <T>arr[j];
+      b = load<T>(arr.__memory + (j << typeShift));  // b = <T>arr[j];
       if (comparator(a, b) < 0) {
-        store<T>(arr.__memory + (j + 1) * sizeof<T>(), b); // arr[j + 1] = b;
+        store<T>(arr.__memory + ((j + 1) << typeShift), b); // arr[j + 1] = b;
         j--;
       } else break;
     }
 
-    store<T>(arr.__memory + (j + 1) * sizeof<T>(), a); // arr[j + 1] = a;
+    store<T>(arr.__memory + ((j + 1) << typeShift), a); // arr[j + 1] = a;
   }
 
   return arr;

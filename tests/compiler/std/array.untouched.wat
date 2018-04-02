@@ -4475,6 +4475,7 @@
   (local $5 i32)
   (local $6 i32)
   (nop)
+  (nop)
   (block $break|0
    (block
     (set_local $5
@@ -4500,9 +4501,9 @@
           (i32.load
            (get_local $0)
           )
-          (i32.mul
+          (i32.shl
            (get_local $5)
-           (i32.const 4)
+           (i32.const 2)
           )
          )
         )
@@ -4528,9 +4529,9 @@
                (i32.load
                 (get_local $0)
                )
-               (i32.mul
+               (i32.shl
                 (get_local $4)
-                (i32.const 4)
+                (i32.const 2)
                )
               )
              )
@@ -4555,12 +4556,12 @@
                 (i32.load
                  (get_local $0)
                 )
-                (i32.mul
+                (i32.shl
                  (i32.add
                   (get_local $4)
                   (i32.const 1)
                  )
-                 (i32.const 4)
+                 (i32.const 2)
                 )
                )
                (get_local $3)
@@ -4585,12 +4586,12 @@
          (i32.load
           (get_local $0)
          )
-         (i32.mul
+         (i32.shl
           (i32.add
            (get_local $4)
            (i32.const 1)
           )
-          (i32.const 4)
+          (i32.const 2)
          )
         )
         (get_local $2)
