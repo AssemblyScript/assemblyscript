@@ -35,6 +35,7 @@ const entryFile = path.join(assemblyDir, "index.ts");
 const buildDir = path.join(projectDir, "build");
 const gitignoreFile = path.join(buildDir, ".gitignore");
 const packageFile = path.join(projectDir, "package.json");
+const indexFile = path.join(projectDir, "index.js");
 
 console.log([
   "Version: " + version,
@@ -59,6 +60,9 @@ console.log([
   chalk.cyan("  ./build/.gitignore"),
   "  Git configuration that excludes compiled binaries from source control.",
   "",
+  chalk.cyan("  ./index.js"),
+  "  Main file loading the WebAssembly module and exporting its exports.",
+  "",
   chalk.cyan("  ./package.json"),
   "  Package info containing the necessary commands to compile to WebAssembly.",
   "",
@@ -80,6 +84,7 @@ rl.question(chalk.white.bold("Do you want to proceed?") + " [Y/n] ", answer => {
   ensureBuildDirectory();
   ensureGitignore();
   ensurePackageJson();
+  ensureIndexJs();
   console.log([
     chalk.green("Done!"),
     "",
@@ -192,6 +197,7 @@ function ensureGitignore() {
   if (!fs.existsSync(gitignoreFile)) {
     fs.writeFileSync(gitignoreFile, [
       "*.wasm",
+      "*.wasm.map",
       "*.asm.js"
     ].join("\n") + "\n");
     console.log(chalk.green("  Created: ") + gitignoreFile);
@@ -230,6 +236,24 @@ function ensurePackageJson() {
     } else {
       console.log(chalk.yellow("  Exists: ") + packageFile);
     }
+  }
+  console.log();
+}
+
+function ensureIndexJs() {
+  console.log("- Making sure that 'index.js' exists...");
+  if (!fs.existsSync(indexFile)) {
+    fs.writeFileSync(indexFile, [
+      "const fs = require(\"fs\");",
+      "const compiled = new WebAssembly.Module(fs.readFileSync(__dirname + \"/build/optimized.wasm\"));",
+      "const imports = {};",
+      "Object.defineProperty(module, \"exports\", {",
+      "  get: () => new WebAssembly.Instance(compiled, imports).exports",
+      "});",
+    ].join("\n") + "\n");
+    console.log(chalk.green("  Created: ") + indexFile);
+  } else {
+    console.log(chalk.yellow("  Exists: ") + indexFile);
   }
   console.log();
 }
