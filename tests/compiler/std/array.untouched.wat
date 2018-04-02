@@ -4629,6 +4629,8 @@
    )
   )
   (nop)
+  (nop)
+  (nop)
   (set_local $9
    (i32.shr_s
     (i32.add
@@ -4640,18 +4642,18 @@
   )
   (set_local $10
    (call $~lib/allocator/arena/allocate_memory
-    (i32.mul
+    (i32.shl
      (get_local $9)
-     (i32.const 4)
+     (i32.const 2)
     )
    )
   )
   (call $~lib/memory/set_memory
    (get_local $10)
    (i32.const 0)
-   (i32.mul
+   (i32.shl
     (get_local $9)
-    (i32.const 4)
+    (i32.const 2)
    )
   )
   (block $break|0
@@ -4685,12 +4687,12 @@
              (i32.load
               (i32.add
                (get_local $10)
-               (i32.mul
+               (i32.shl
                 (i32.shr_s
                  (get_local $4)
                  (i32.const 4)
                 )
-                (i32.const 4)
+                (i32.const 2)
                )
               )
              )
@@ -4731,9 +4733,9 @@
           (i32.load
            (get_local $0)
           )
-          (i32.mul
+          (i32.shl
            (get_local $6)
-           (i32.const 4)
+           (i32.const 2)
           )
          )
         )
@@ -4744,9 +4746,9 @@
           (i32.load
            (get_local $0)
           )
-          (i32.mul
+          (i32.shl
            (get_local $3)
-           (i32.const 4)
+           (i32.const 2)
           )
          )
         )
@@ -4769,24 +4771,24 @@
          (i32.store
           (i32.add
            (get_local $10)
-           (i32.mul
+           (i32.shl
             (i32.shr_s
              (get_local $3)
              (i32.const 3)
             )
-            (i32.const 4)
+            (i32.const 2)
            )
           )
           (i32.xor
            (i32.load
             (i32.add
              (get_local $10)
-             (i32.mul
+             (i32.shl
               (i32.shr_s
                (get_local $3)
                (i32.const 3)
               )
-              (i32.const 4)
+              (i32.const 2)
              )
             )
            )
@@ -4804,9 +4806,9 @@
            (i32.load
             (get_local $0)
            )
-           (i32.mul
+           (i32.shl
             (get_local $3)
-            (i32.const 4)
+            (i32.const 2)
            )
           )
           (get_local $7)
@@ -4816,9 +4818,9 @@
            (i32.load
             (get_local $0)
            )
-           (i32.mul
+           (i32.shl
             (get_local $6)
-            (i32.const 4)
+            (i32.const 2)
            )
           )
           (get_local $8)
@@ -4868,9 +4870,9 @@
           (i32.load
            (get_local $0)
           )
-          (i32.mul
+          (i32.shl
            (get_local $3)
-           (i32.const 4)
+           (i32.const 2)
           )
          )
         )
@@ -4880,9 +4882,9 @@
          (i32.load
           (get_local $0)
          )
-         (i32.mul
+         (i32.shl
           (get_local $3)
-          (i32.const 4)
+          (i32.const 2)
          )
         )
         (get_local $7)
@@ -4905,12 +4907,12 @@
                (i32.load
                 (i32.add
                  (get_local $10)
-                 (i32.mul
+                 (i32.shl
                   (i32.shr_s
                    (get_local $11)
                    (i32.const 3)
                   )
-                  (i32.const 4)
+                  (i32.const 2)
                  )
                 )
                )
@@ -4958,9 +4960,9 @@
                (i32.load
                 (get_local $0)
                )
-               (i32.mul
+               (i32.shl
                 (get_local $11)
-                (i32.const 4)
+                (i32.const 2)
                )
               )
              )
@@ -4983,24 +4985,24 @@
               (i32.store
                (i32.add
                 (get_local $10)
-                (i32.mul
+                (i32.shl
                  (i32.shr_s
                   (get_local $11)
                   (i32.const 3)
                  )
-                 (i32.const 4)
+                 (i32.const 2)
                 )
                )
                (i32.xor
                 (i32.load
                  (i32.add
                   (get_local $10)
-                  (i32.mul
+                  (i32.shl
                    (i32.shr_s
                     (get_local $11)
                     (i32.const 3)
                    )
-                   (i32.const 4)
+                   (i32.const 2)
                   )
                  )
                 )
@@ -5018,9 +5020,9 @@
                 (i32.load
                  (get_local $0)
                 )
-                (i32.mul
+                (i32.shl
                  (get_local $11)
-                 (i32.const 4)
+                 (i32.const 2)
                 )
                )
                (get_local $7)
