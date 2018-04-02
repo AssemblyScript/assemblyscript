@@ -7,11 +7,11 @@
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $HEAP_BASE i32 (i32.const 80))
  (memory $0 1)
- (data (i32.const 4) "\12\00\00\00(\00l\00i\00b\00)\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
+ (data (i32.const 4) "\11\00\00\00~\00l\00i\00b\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
  (data (i32.const 44) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func "$(lib)/polyfills/bswap16<u16>" (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u16> (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -102,7 +102,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap<u16>" (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -159,7 +159,7 @@
   )
   (block
    (return
-    (call "$(lib)/polyfills/bswap16<u16>"
+    (call $~lib/polyfills/bswap16<u16>
      (get_local $0)
     )
    )
@@ -168,7 +168,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap16<i16>" (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i16> (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -271,7 +271,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap<i16>" (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -328,7 +328,7 @@
   )
   (block
    (return
-    (call "$(lib)/polyfills/bswap16<i16>"
+    (call $~lib/polyfills/bswap16<i16>
      (get_local $0)
     )
    )
@@ -337,7 +337,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap<u32>" (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -416,7 +416,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap<i32>" (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -495,7 +495,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap<u64>" (; 7 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 7 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
@@ -610,7 +610,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap<i64>" (; 8 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<i64> (; 8 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
@@ -725,7 +725,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap<usize>" (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -804,7 +804,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap<isize>" (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -883,7 +883,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap16<u32>" (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u32> (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -966,7 +966,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/polyfills/bswap16<i32>" (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i32> (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -1053,7 +1053,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap<u16>"
+     (call $~lib/polyfills/bswap<u16>
       (i32.const 43707)
      )
      (i32.const 48042)
@@ -1072,7 +1072,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap<i16>"
+     (call $~lib/polyfills/bswap<i16>
       (i32.shr_s
        (i32.shl
         (i32.const 43707)
@@ -1103,7 +1103,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap<u32>"
+     (call $~lib/polyfills/bswap<u32>
       (i32.const -1430532899)
      )
      (i32.const -573785174)
@@ -1122,7 +1122,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap<i32>"
+     (call $~lib/polyfills/bswap<i32>
       (i32.const -1430532899)
      )
      (i32.const -573785174)
@@ -1141,7 +1141,7 @@
   (if
    (i32.eqz
     (i64.eq
-     (call "$(lib)/polyfills/bswap<u64>"
+     (call $~lib/polyfills/bswap<u64>
       (i64.const 4822679907192029)
      )
      (i64.const -2464388556401798912)
@@ -1160,7 +1160,7 @@
   (if
    (i32.eqz
     (i64.eq
-     (call "$(lib)/polyfills/bswap<i64>"
+     (call $~lib/polyfills/bswap<i64>
       (i64.const 4822679907192029)
      )
      (i64.const -2464388556401798912)
@@ -1179,7 +1179,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap<usize>"
+     (call $~lib/polyfills/bswap<usize>
       (i32.const -1430532899)
      )
      (i32.const -573785174)
@@ -1198,7 +1198,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap<isize>"
+     (call $~lib/polyfills/bswap<isize>
       (i32.const -1430532899)
      )
      (i32.const -573785174)
@@ -1217,7 +1217,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap16<u16>"
+     (call $~lib/polyfills/bswap16<u16>
       (i32.const 43707)
      )
      (i32.const 48042)
@@ -1236,7 +1236,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap16<i16>"
+     (call $~lib/polyfills/bswap16<i16>
       (i32.shr_s
        (i32.shl
         (i32.const 43707)
@@ -1267,7 +1267,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap16<u32>"
+     (call $~lib/polyfills/bswap16<u32>
       (i32.const -7820613)
      )
      (i32.const -7816278)
@@ -1286,7 +1286,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (call "$(lib)/polyfills/bswap16<i32>"
+     (call $~lib/polyfills/bswap16<i32>
       (i32.const -7820613)
      )
      (i32.const -7816278)

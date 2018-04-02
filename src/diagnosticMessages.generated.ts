@@ -64,6 +64,7 @@ export enum DiagnosticCode {
   Declaration_expected = 1146,
   _const_declarations_must_be_initialized = 1155,
   Unterminated_regular_expression_literal = 1161,
+  Interface_declaration_cannot_have_implements_clause = 1176,
   Binary_digit_expected = 1177,
   Octal_digit_expected = 1178,
   An_implementation_cannot_be_declared_in_ambient_contexts = 1183,
@@ -169,6 +170,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1146: return "Declaration expected.";
     case 1155: return "'const' declarations must be initialized.";
     case 1161: return "Unterminated regular expression literal.";
+    case 1176: return "Interface declaration cannot have 'implements' clause.";
     case 1177: return "Binary digit expected.";
     case 1178: return "Octal digit expected.";
     case 1183: return "An implementation cannot be declared in ambient contexts.";

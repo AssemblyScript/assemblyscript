@@ -3,17 +3,17 @@
  (type $ifi (func (param i32 f32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (global "$(lib)/allocator/common/alignment/BITS" i32 (i32.const 3))
- (global "$(lib)/allocator/common/alignment/SIZE" i32 (i32.const 8))
- (global "$(lib)/allocator/common/alignment/MASK" i32 (i32.const 7))
- (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
- (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
+ (global $~lib/allocator/common/alignment/BITS i32 (i32.const 3))
+ (global $~lib/allocator/common/alignment/SIZE i32 (i32.const 8))
+ (global $~lib/allocator/common/alignment/MASK i32 (i32.const 7))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/new/aClass (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func "$(lib)/allocator/arena/allocate_memory" (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/allocate_memory (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -29,7 +29,7 @@
    )
   )
   (set_local $1
-   (get_global "$(lib)/allocator/arena/offset")
+   (get_global $~lib/allocator/arena/offset)
   )
   (set_local $2
    (i32.and
@@ -109,7 +109,7 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
+  (set_global $~lib/allocator/arena/offset
    (get_local $2)
   )
   (return
@@ -130,7 +130,7 @@
         (tee_local $0
          (block (result i32)
           (set_local $2
-           (call "$(lib)/allocator/arena/allocate_memory"
+           (call $~lib/allocator/arena/allocate_memory
             (i32.const 8)
            )
           )
@@ -159,7 +159,7 @@
   (get_local $0)
  )
  (func $start (; 2 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/startOffset"
+  (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -171,8 +171,8 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
-   (get_global "$(lib)/allocator/arena/startOffset")
+  (set_global $~lib/allocator/arena/offset
+   (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/new/aClass
    (call $std/new/AClass#constructor

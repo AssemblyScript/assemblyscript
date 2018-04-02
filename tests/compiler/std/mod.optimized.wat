@@ -13,7 +13,7 @@
  (data (i32.const 4) "\n\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func "$(lib)/math/NativeMath.mod" (; 2 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 2 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i64)
@@ -432,7 +432,7 @@
    (if (result i32)
     (tee_local $3
      (call $std/mod/check<f64>
-      (call "$(lib)/math/NativeMath.mod"
+      (call $~lib/math/NativeMath.mod
        (get_local $0)
        (get_local $1)
       )
@@ -457,7 +457,7 @@
    (i32.const 1)
   )
  )
- (func "$(lib)/math/NativeMathf.mod" (; 5 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 5 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -852,7 +852,7 @@
  )
  (func $std/mod/test_fmodf (; 7 ;) (type $fffi) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   (call $std/mod/check<f32>
-   (call "$(lib)/math/NativeMathf.mod"
+   (call $~lib/math/NativeMathf.mod
     (get_local $0)
     (get_local $1)
    )

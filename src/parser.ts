@@ -262,9 +262,10 @@ export class Parser extends DiagnosticEmitter {
         }
         // fall through
       }
-      case Token.CLASS: {
+      case Token.CLASS:
+      case Token.INTERFACE: {
         tn.next();
-        statement = this.parseClass(tn, flags, decorators, startPos);
+        statement = this.parseClassOrInterface(tn, flags, decorators, startPos);
         decorators = null;
         break;
       }
@@ -1381,19 +1382,21 @@ export class Parser extends DiagnosticEmitter {
     return Node.createFunctionExpression(declaration);
   }
 
-  parseClass(
+  parseClassOrInterface(
     tn: Tokenizer,
     flags: CommonFlags,
     decorators: DecoratorNode[] | null,
     startPos: i32
   ): ClassDeclaration | null {
 
-    // at 'class':
+    // at ('class' | 'interface'):
     //   Identifier
     //   ('<' TypeParameters)?
     //   ('extends' Type)?
     //   ('implements' Type (',' Type)*)?
     //   '{' ClassMember* '}'
+
+    var isInterface = tn.token == Token.INTERFACE;
 
     if (!tn.skip(Token.IDENTIFIER)) {
       this.error(
@@ -1431,12 +1434,21 @@ export class Parser extends DiagnosticEmitter {
       extendsType = <TypeNode>t;
     }
 
-    var implementsTypes = new Array<TypeNode>();
+    var implementsTypes: TypeNode[] | null = null;
     if (tn.skip(Token.IMPLEMENTS)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode.Interface_declaration_cannot_have_implements_clause,
+          tn.range()
+        ); // recoverable
+      }
       do {
         let type = this.parseType(tn);
         if (!type) return null;
-        implementsTypes.push(<TypeNode>type);
+        if (!isInterface) {
+          if (!implementsTypes) implementsTypes = [];
+          implementsTypes.push(<TypeNode>type);
+        }
       } while (tn.skip(Token.COMMA));
     }
 
@@ -1449,16 +1461,30 @@ export class Parser extends DiagnosticEmitter {
     }
 
     var members = new Array<DeclarationStatement>();
-    var declaration = Node.createClassDeclaration(
-      identifier,
-      typeParameters,
-      extendsType,
-      implementsTypes,
-      members,
-      decorators,
-      flags,
-      tn.range(startPos, tn.pos)
-    );
+    var declaration: ClassDeclaration;
+    if (isInterface) {
+      assert(!implementsTypes);
+      declaration = Node.createInterfaceDeclaration(
+        identifier,
+        typeParameters,
+        extendsType,
+        members,
+        decorators,
+        flags,
+        tn.range(startPos, tn.pos)
+      );
+    } else {
+      declaration = Node.createClassDeclaration(
+        identifier,
+        typeParameters,
+        extendsType,
+        implementsTypes,
+        members,
+        decorators,
+        flags,
+        tn.range(startPos, tn.pos)
+      );
+    }
     if (!tn.skip(Token.CLOSEBRACE)) {
       do {
         let member = this.parseClassMember(tn, declaration);

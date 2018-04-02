@@ -39,10 +39,12 @@ const bin = {
     "../dist/assemblyscript.js": "assemblyscript"
   }],
   node: {
+    "buffer": false,
     "fs": "empty",
     "global": true,
+    "os": false,
     "process": "mock",
-    "crypto": "empty"
+    "crypto": false
   },
   output: {
     filename: "asc.js",
@@ -62,7 +64,7 @@ const bin = {
         const libDir = path.join(__dirname, "std", "assembly");
         const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
         const lib = {};
-        libFiles.forEach(file => lib["(lib)/" + file.replace(/\.ts$/, "")] = bundleFile(path.join(libDir, file)));
+        libFiles.forEach(file => lib["~lib/" + file.replace(/\.ts$/, "")] = bundleFile(path.join(libDir, file)));
         return lib;
       })(),
       BUNDLE_DEFINITIONS: {

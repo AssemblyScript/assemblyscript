@@ -367,7 +367,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // try (lib)/file.ts
+    // try ~lib/file.ts
     expected = LIBRARY_PREFIX + normalizedPathWithoutExtension + ".ts";
     for (let i = 0, k = sources.length; i < k; ++i) {
       let source = sources[i];
@@ -4976,7 +4976,7 @@ export class Compiler extends DiagnosticEmitter {
         let classType = contextualType.classReference;
         if (
           classType &&
-          classType.prototype == this.program.elementsLookup.get("Array")
+          classType.prototype == this.program.arrayPrototype
         ) {
           return this.compileStaticArray(
             assert(classType.typeArguments)[0],
@@ -5137,7 +5137,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
 
     // obtain the array type
-    var arrayPrototype = assert(this.program.elementsLookup.get("Array"));
+    var arrayPrototype = assert(this.program.arrayPrototype);
     if (!arrayPrototype || arrayPrototype.kind != ElementKind.CLASS_PROTOTYPE) return module.createUnreachable();
     var arrayType = (<ClassPrototype>arrayPrototype).resolve([ elementType ]);
     if (!arrayType) return module.createUnreachable();

@@ -11,36 +11,38 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "44.0.0-nightly.20180309",
+    "@protobufjs/utf8": "^1.1.0",
+    "binaryen": "45.0.0-nightly.20180330",
     "glob": "^7.1.2",
     "long": "^4.0.0",
     "minimist": "^1.2.0",
     "ts-node": "^5.0.1"
   },
   "devDependencies": {
-    "@types/node": "^9.4.7",
+    "@types/node": "^9.6.1",
     "browser-process-hrtime": "^0.1.2",
     "chalk": "^2.3.2",
     "diff": "^3.5.0",
-    "source-map-support": "^0.5.3",
-    "ts-loader": "^4.0.1",
+    "source-map-support": "^0.5.4",
+    "ts-loader": "^4.1.0",
     "tslint": "^5.9.1",
     "typedoc": "^0.11.1",
     "typedoc-plugin-external-module-name": "^1.1.1",
-    "typescript": "^2.7.2",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.11"
+    "typescript": "^2.8.1",
+    "webpack": "^4.4.1",
+    "webpack-cli": "^2.0.13"
   },
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {
-    "asc": "bin/asc"
+    "asc": "bin/asc",
+    "asinit": "bin/asinit"
   },
   "engines": {
     "node": ">=8"
   },
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "webpack --mode production --display-modules",
     "clean": "node scripts/clean",
     "lint": "npm run lint:compiler && npm run lint:library",
     "lint:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",

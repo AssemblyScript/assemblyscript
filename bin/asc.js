@@ -13,7 +13,8 @@
 
 const fs = require("fs");
 const path = require("path");
-const os = require("os");
+const utf8 = require("@protobufjs/utf8");
+const EOL = process.platform === "win32" ? "\r\n" : "\n";
 
 // Use distribution files if present, otherwise run the sources directly
 var assemblyscript, isDev;
@@ -92,7 +93,7 @@ exports.compileString = (source, extraArgs={}) => new Promise((resolve, reject) 
     const libDir = path.join(__dirname, "../std", "assembly");
     const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
     libFiles.forEach(file =>
-      exports.libraryFiles["(lib)/" + file.replace(/\.ts$/, "")] = readFileNode(path.join(libDir, file), { encoding: "utf8" })
+      exports.libraryFiles["~lib/" + file.replace(/\.ts$/, "")] = readFileNode(path.join(libDir, file), { encoding: "utf8" })
     );
   }
 
@@ -152,7 +153,7 @@ exports.main = function main(argv, options, callback) {
   if (!callback) callback = function defaultCallback(err) {
     var code = 0;
     if (err) {
-      stderr.write(err.stack + os.EOL);
+      stderr.write(err.stack + EOL);
       code = 1;
     }
     return code;
@@ -160,7 +161,7 @@ exports.main = function main(argv, options, callback) {
 
   // Just print the version if requested
   if (args.version) {
-    stdout.write("Version " + exports.version + (isDev ? "-dev" : "") + os.EOL);
+    stdout.write("Version " + exports.version + (isDev ? "-dev" : "") + EOL);
     return callback(null);
   }
   // Print the help message if requested or no source files are provided
@@ -181,7 +182,7 @@ exports.main = function main(argv, options, callback) {
           for (let i = 0; i < indent; ++i) {
             line = " " + line;
           }
-          return os.EOL + line;
+          return EOL + line;
         }).join(""));
       } else {
         opts.push(text + option.desc);
@@ -197,7 +198,7 @@ exports.main = function main(argv, options, callback) {
       "          asc hello1.ts hello2.ts -b -O > hello.wasm",
       "",
       "Options:"
-    ].concat(opts).join(os.EOL) + os.EOL);
+    ].concat(opts).join(EOL) + EOL);
     return callback(null);
   }
 
@@ -264,7 +265,7 @@ exports.main = function main(argv, options, callback) {
           }
         }
 
-      // Otherwise try nextFile.ts, nextFile/index.ts, (lib)/nextFile.ts
+      // Otherwise try nextFile.ts, nextFile/index.ts, ~lib/nextFile.ts
       } else {
         sourceText = readFile(path.join(baseDir, sourcePath + ".ts"));
         if (sourceText !== null) {
@@ -566,7 +567,7 @@ exports.main = function main(argv, options, callback) {
             path.basename(sourceMapURL)
           ), JSON.stringify(sourceMap));
         } else {
-          stderr.write("Skipped source map (stdout already occupied)" + os.EOL);
+          stderr.write("Skipped source map (stdout already occupied)" + EOL);
         }
       }
     }
@@ -741,7 +742,7 @@ function checkDiagnostics(emitter, stderr) {
   while ((diagnostic = assemblyscript.nextDiagnostic(emitter)) != null) {
     stderr.write(
       assemblyscript.formatDiagnostic(diagnostic, stderr.isTTY, true) +
-      os.EOL + os.EOL
+      EOL + EOL
     );
     if (assemblyscript.isError(diagnostic)) hasErrors = true;
   }
@@ -803,27 +804,40 @@ function printStats(stats, output) {
     "Emit      : " + format(stats.emitTime, stats.emitCount),
     "Validate  : " + format(stats.validateTime, stats.validateCount),
     "Optimize  : " + format(stats.optimizeTime, stats.optimizeCount)
-  ].join(os.EOL) + os.EOL);
+  ].join(EOL) + EOL);
 }
 
 exports.printStats = printStats;
+
+var Buf = typeof global !== "undefined" && global.Buffer || Uint8Array;
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
 function createMemoryStream(fn) {
   var stream = [];
   stream.write = function(chunk) {
-    if (typeof chunk === "string") {
-      this.push(Buffer.from(chunk, "utf8"));
-    } else {
-      this.push(chunk);
-    }
     if (fn) fn(chunk);
+    if (typeof chunk === "string") {
+      let buffer = new Buf(utf8.length(chunk));
+      utf8.write(chunk, buffer, 0);
+      chunk = buffer;
+    }
+    this.push(chunk);
   };
   stream.toBuffer = function() {
-    return Buffer.concat(this);
+    var offset = 0, i = 0, k = this.length;
+    while (i < k) offset += this[i++].length;
+    var buffer = new Buf(offset);
+    offset = i = 0;
+    while (i < k) {
+      buffer.set(this[i], offset);
+      offset += this[i].length;
+      ++i;
+    }
+    return buffer;
   };
   stream.toString = function() {
-    return this.toBuffer().toString("utf8");
+    var buffer = this.toBuffer();
+    return utf8.read(buffer, 0, buffer.length);
   };
   return stream;
 }

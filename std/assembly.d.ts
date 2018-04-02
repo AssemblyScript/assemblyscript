@@ -223,8 +223,10 @@ declare const NaN: f32 | f64;
 declare const Infinity: f32 | f64;
 /** Heap base offset. */
 declare const HEAP_BASE: usize;
-/** Determines the byte size of the specified core or class type. Compiles to a constant. */
+/** Determines the byte size of the specified underlying core type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
+/** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */
+declare function alignof<T>(): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
@@ -268,6 +270,17 @@ declare class ArrayBuffer {
   constructor(length: i32);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
   slice(begin?: i32, end?: i32): ArrayBuffer;
+}
+
+/** Interface for a typed view on an array buffer. */
+declare interface ArrayBufferView<T> {
+  [key: number]: T;
+  /** The {@link ArrayBuffer} referenced by this view. */
+  readonly buffer: ArrayBuffer;
+  /** The offset in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteOffset: i32;
+  /** The length in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteLength: i32;
 }
 
 /** Class representing a sequence of values of type `T`. */
@@ -464,6 +477,8 @@ declare const NativeMath: INativeMath<f64>;
 declare const NativeMathf: INativeMath<f32>;
 /** Alias of {@link NativeMath} or {@link JSMath} respectively. Defaults to `NativeMath`. */
 declare const Math: IMath<f64>;
+/** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
+declare const Mathf: IMath<f32>;
 
 // Internal decorators
 

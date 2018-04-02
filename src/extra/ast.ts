@@ -784,13 +784,15 @@ export class ASTBuilder {
       this.visitTypeNode(extendsType);
     }
     var implementsTypes = node.implementsTypes;
-    var numImplementsTypes = implementsTypes.length;
-    if (numImplementsTypes) {
-      sb.push(" implements ");
-      this.visitTypeNode(implementsTypes[0]);
-      for (let i = 1; i < numImplementsTypes; ++i) {
-        sb.push(", ");
-        this.visitTypeNode(implementsTypes[i]);
+    if (implementsTypes) {
+      let numImplementsTypes = implementsTypes.length;
+      if (numImplementsTypes) {
+        sb.push(" implements ");
+        this.visitTypeNode(implementsTypes[0]);
+        for (let i = 1; i < numImplementsTypes; ++i) {
+          sb.push(", ");
+          this.visitTypeNode(implementsTypes[i]);
+        }
       }
     }
     var members = node.members;
@@ -1123,6 +1125,7 @@ export class ASTBuilder {
       sb.push(" extends ");
       this.visitTypeNode(extendsType);
     }
+    // must not have implementsTypes
     sb.push(" {\n");
     var indentLevel = ++this.indentLevel;
     var members = node.members;
