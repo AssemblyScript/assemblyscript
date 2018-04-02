@@ -9,8 +9,8 @@
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
- (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
  (global $argumentCount (mut i32) (i32.const 0))
@@ -23,11 +23,11 @@
  (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|2 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|16 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|16 $start~anonymous|22)
  (memory $0 1)
  (data (i32.const 4) "\0c\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 32) "\0e\00\00\00(\00l\00i\00b\00)\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 32) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func "$(lib)/allocator/arena/allocate_memory" (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -47,7 +47,7 @@
       (i32.add
        (i32.add
         (tee_local $1
-         (get_global "$(lib)/allocator/arena/offset")
+         (get_global $~lib/allocator/arena/offset)
         )
         (get_local $0)
        )
@@ -104,17 +104,17 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
+  (set_global $~lib/allocator/arena/offset
    (get_local $2)
   )
   (get_local $1)
  )
- (func "$(lib)/array/Array<i32>#get:length" (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#get:length (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=8
    (get_local $0)
   )
  )
- (func "$(lib)/memory/copy_memory" (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/copy_memory (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (loop $continue|0
@@ -1690,7 +1690,7 @@
    )
   )
  )
- (func "$(lib)/memory/move_memory" (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/move_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -1723,7 +1723,7 @@
     (i32.const 1)
    )
    (block
-    (call "$(lib)/memory/copy_memory"
+    (call $~lib/memory/copy_memory
      (get_local $0)
      (get_local $1)
      (get_local $2)
@@ -1980,10 +1980,10 @@
    )
   )
  )
- (func "$(lib)/allocator/arena/free_memory" (; 5 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/free_memory (; 5 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func "$(lib)/array/Array<i32>#__grow" (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#__grow (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (if
    (i32.le_s
@@ -2003,7 +2003,7 @@
    )
   )
   (set_local $2
-   (call "$(lib)/allocator/arena/allocate_memory"
+   (call $~lib/allocator/arena/allocate_memory
     (i32.shl
      (get_local $1)
      (i32.const 2)
@@ -2015,7 +2015,7 @@
     (get_local $0)
    )
    (block
-    (call "$(lib)/memory/move_memory"
+    (call $~lib/memory/move_memory
      (get_local $2)
      (i32.load
       (get_local $0)
@@ -2027,7 +2027,7 @@
       (i32.const 2)
      )
     )
-    (call "$(lib)/allocator/arena/free_memory"
+    (call $~lib/allocator/arena/free_memory
      (i32.load
       (get_local $0)
      )
@@ -2043,7 +2043,7 @@
    (get_local $1)
   )
  )
- (func "$(lib)/array/Array<i32>#push" (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#push (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eq
@@ -2054,7 +2054,7 @@
      (get_local $0)
     )
    )
-   (call "$(lib)/array/Array<i32>#__grow"
+   (call $~lib/array/Array<i32>#__grow
     (get_local $0)
     (if (result i32)
      (i32.load offset=4
@@ -2097,7 +2097,7 @@
   )
   (get_local $2)
  )
- (func "$(lib)/array/Array<i32>#__get" (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.ge_u
     (get_local $1)
@@ -2119,7 +2119,7 @@
    )
   )
  )
- (func "$(lib)/array/Array<i32>#pop" (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#pop (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.lt_s
@@ -2155,7 +2155,7 @@
    )
   )
  )
- (func "$(lib)/array/Array<i32>#unshift" (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#unshift (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2198,7 +2198,7 @@
      )
     )
     (set_local $3
-     (call "$(lib)/allocator/arena/allocate_memory"
+     (call $~lib/allocator/arena/allocate_memory
       (i32.shl
        (get_local $4)
        (i32.const 2)
@@ -2210,7 +2210,7 @@
       (get_local $0)
      )
      (block
-      (call "$(lib)/memory/move_memory"
+      (call $~lib/memory/move_memory
        (i32.add
         (get_local $3)
         (i32.const 4)
@@ -2223,7 +2223,7 @@
         (i32.const 2)
        )
       )
-      (call "$(lib)/allocator/arena/free_memory"
+      (call $~lib/allocator/arena/free_memory
        (i32.load
         (get_local $0)
        )
@@ -2239,7 +2239,7 @@
      (get_local $4)
     )
    )
-   (call "$(lib)/memory/move_memory"
+   (call $~lib/memory/move_memory
     (i32.add
      (i32.load
       (get_local $0)
@@ -2274,7 +2274,7 @@
   )
   (get_local $3)
  )
- (func "$(lib)/memory/set_memory" (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/set_memory (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i64)
   (local $4 i32)
   (if
@@ -2607,7 +2607,7 @@
    )
   )
  )
- (func "$(lib)/array/Array<i32>#shift" (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#shift (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.lt_s
@@ -2625,7 +2625,7 @@
     )
    )
   )
-  (call "$(lib)/memory/move_memory"
+  (call $~lib/memory/move_memory
    (i32.load
     (get_local $0)
    )
@@ -2645,7 +2645,7 @@
     (i32.const 2)
    )
   )
-  (call "$(lib)/memory/set_memory"
+  (call $~lib/memory/set_memory
    (i32.add
     (i32.load
      (get_local $0)
@@ -2674,7 +2674,7 @@
   )
   (get_local $1)
  )
- (func "$(lib)/array/Array<i32>#reverse" (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#reverse (; 13 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2758,7 +2758,7 @@
   )
   (get_local $0)
  )
- (func "$(lib)/array/Array<i32>#indexOf" (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#indexOf (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.and
@@ -2846,7 +2846,7 @@
   )
   (i32.const -1)
  )
- (func "$(lib)/array/Array<i32>#indexOf|trampoline" (; 15 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#indexOf|trampoline (; 15 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -2863,13 +2863,13 @@
     (i32.const 0)
    )
   )
-  (call "$(lib)/array/Array<i32>#indexOf"
+  (call $~lib/array/Array<i32>#indexOf
    (get_local $0)
    (get_local $1)
    (get_local $2)
   )
  )
- (func "$(lib)/array/Array<i32>#includes" (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#includes (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.and
@@ -2957,7 +2957,7 @@
   )
   (i32.const 0)
  )
- (func "$(lib)/array/Array<i32>#includes|trampoline" (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#includes|trampoline (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -2974,13 +2974,13 @@
     (i32.const 0)
    )
   )
-  (call "$(lib)/array/Array<i32>#includes"
+  (call $~lib/array/Array<i32>#includes
    (get_local $0)
    (get_local $1)
    (get_local $2)
   )
  )
- (func "$(lib)/array/Array<i32>#splice" (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#splice (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (if
    (i32.lt_s
     (get_local $2)
@@ -3028,7 +3028,7 @@
     (return)
    )
   )
-  (call "$(lib)/memory/move_memory"
+  (call $~lib/memory/move_memory
    (i32.add
     (i32.load
      (get_local $0)
@@ -3081,7 +3081,7 @@
    )
   )
  )
- (func "$(lib)/array/Array<i32>#__set" (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -3098,7 +3098,7 @@
      (get_local $0)
     )
    )
-   (call "$(lib)/array/Array<i32>#__grow"
+   (call $~lib/array/Array<i32>#__grow
     (get_local $0)
     (select
      (tee_local $3
@@ -3140,7 +3140,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/array/Array<i32>#findIndex" (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#findIndex (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3222,7 +3222,7 @@
  )
  (func $start~anonymous|3 (; 24 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_local $2)
     (i32.const 100)
    )
@@ -3234,7 +3234,7 @@
  )
  (func $start~anonymous|5 (; 25 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_local $2)
    )
   )
@@ -3249,7 +3249,7 @@
    (i32.const 0)
   )
  )
- (func "$(lib)/array/Array<i32>#every" (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#every (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3327,7 +3327,7 @@
  )
  (func $start~anonymous|8 (; 29 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_local $2)
     (i32.const 100)
    )
@@ -3345,7 +3345,7 @@
  )
  (func $start~anonymous|10 (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_local $2)
    )
   )
@@ -3360,7 +3360,7 @@
    (i32.const 3)
   )
  )
- (func "$(lib)/array/Array<i32>#some" (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#some (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3436,7 +3436,7 @@
  )
  (func $start~anonymous|13 (; 35 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_local $2)
     (i32.const 100)
    )
@@ -3454,7 +3454,7 @@
  )
  (func $start~anonymous|15 (; 37 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_local $2)
    )
   )
@@ -3469,7 +3469,7 @@
    (get_local $1)
   )
  )
- (func "$(lib)/array/Array<i32>#reduce<i32>" (; 39 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<i32> (; 39 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3561,7 +3561,7 @@
  )
  (func $start~anonymous|20 (; 42 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_local $3)
     (i32.const 1)
    )
@@ -3573,7 +3573,7 @@
  )
  (func $start~anonymous|22 (; 43 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_local $3)
    )
   )
@@ -3583,7 +3583,7 @@
   )
  )
  (func $start (; 44 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/startOffset"
+  (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -3592,16 +3592,16 @@
     (i32.const -8)
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
-   (get_global "$(lib)/allocator/arena/startOffset")
+  (set_global $~lib/allocator/arena/offset
+   (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/array/arr
-   (call "$(lib)/allocator/arena/allocate_memory"
+   (call $~lib/allocator/arena/allocate_memory
     (i32.const 12)
    )
   )
   (if
-   (call "$(lib)/array/Array<i32>#get:length"
+   (call $~lib/array/Array<i32>#get:length
     (get_global $std/array/arr)
    )
    (block
@@ -3629,14 +3629,14 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 42)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -3654,7 +3654,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 1)
@@ -3687,7 +3687,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
@@ -3707,7 +3707,7 @@
    )
   )
   (if
-   (call "$(lib)/array/Array<i32>#get:length"
+   (call $~lib/array/Array<i32>#get:length
     (get_global $std/array/arr)
    )
    (block
@@ -3738,14 +3738,14 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 43)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 1)
@@ -3779,7 +3779,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -3796,14 +3796,14 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 44)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 2)
@@ -3837,7 +3837,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -3855,7 +3855,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 1)
     )
@@ -3872,14 +3872,14 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 45)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 3)
@@ -3913,7 +3913,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -3931,7 +3931,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 1)
     )
@@ -3949,7 +3949,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 2)
     )
@@ -3966,14 +3966,14 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#unshift"
+   (call $~lib/array/Array<i32>#unshift
     (get_global $std/array/arr)
     (i32.const 42)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 4)
@@ -4007,7 +4007,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -4025,7 +4025,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 1)
     )
@@ -4043,7 +4043,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 2)
     )
@@ -4061,7 +4061,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 3)
     )
@@ -4078,14 +4078,14 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#unshift"
+   (call $~lib/array/Array<i32>#unshift
     (get_global $std/array/arr)
     (i32.const 41)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 5)
@@ -4119,7 +4119,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -4137,7 +4137,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 1)
     )
@@ -4155,7 +4155,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 2)
     )
@@ -4173,7 +4173,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 3)
     )
@@ -4191,7 +4191,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 4)
     )
@@ -4208,7 +4208,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#shift"
+   (call $~lib/array/Array<i32>#shift
     (get_global $std/array/arr)
    )
   )
@@ -4229,7 +4229,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 4)
@@ -4263,7 +4263,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -4281,7 +4281,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 1)
     )
@@ -4299,7 +4299,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 2)
     )
@@ -4317,7 +4317,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 3)
     )
@@ -4334,7 +4334,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
@@ -4355,7 +4355,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 3)
@@ -4389,7 +4389,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -4407,7 +4407,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 1)
     )
@@ -4425,7 +4425,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 2)
     )
@@ -4442,13 +4442,13 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#reverse"
+   (call $~lib/array/Array<i32>#reverse
     (get_global $std/array/arr)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 3)
@@ -4482,7 +4482,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -4500,7 +4500,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 1)
     )
@@ -4518,7 +4518,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 2)
     )
@@ -4535,13 +4535,13 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 43)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 44)
    )
@@ -4551,7 +4551,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/array/Array<i32>#indexOf|trampoline"
+    (call $~lib/array/Array<i32>#indexOf|trampoline
      (get_global $std/array/arr)
      (i32.const 44)
      (i32.const 0)
@@ -4575,7 +4575,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/array/Array<i32>#indexOf|trampoline"
+    (call $~lib/array/Array<i32>#indexOf|trampoline
      (get_global $std/array/arr)
      (i32.const 42)
      (i32.const 0)
@@ -4602,7 +4602,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/array/Array<i32>#indexOf|trampoline"
+    (call $~lib/array/Array<i32>#indexOf|trampoline
      (get_global $std/array/arr)
      (i32.const 45)
      (i32.const 0)
@@ -4625,7 +4625,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf"
+   (call $~lib/array/Array<i32>#indexOf
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const 100)
@@ -4647,7 +4647,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf"
+   (call $~lib/array/Array<i32>#indexOf
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const -100)
@@ -4669,7 +4669,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf"
+   (call $~lib/array/Array<i32>#indexOf
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const -2)
@@ -4691,7 +4691,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf"
+   (call $~lib/array/Array<i32>#indexOf
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const -4)
@@ -4713,7 +4713,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf"
+   (call $~lib/array/Array<i32>#indexOf
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const 0)
@@ -4735,7 +4735,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf"
+   (call $~lib/array/Array<i32>#indexOf
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const 1)
@@ -4757,7 +4757,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#indexOf"
+   (call $~lib/array/Array<i32>#indexOf
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const 2)
@@ -4783,7 +4783,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/array/Array<i32>#includes|trampoline"
+    (call $~lib/array/Array<i32>#includes|trampoline
      (get_global $std/array/arr)
      (i32.const 44)
      (i32.const 0)
@@ -4810,7 +4810,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/array/Array<i32>#includes|trampoline"
+    (call $~lib/array/Array<i32>#includes|trampoline
      (get_global $std/array/arr)
      (i32.const 42)
      (i32.const 0)
@@ -4837,7 +4837,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/array/Array<i32>#includes|trampoline"
+    (call $~lib/array/Array<i32>#includes|trampoline
      (get_global $std/array/arr)
      (i32.const 45)
      (i32.const 0)
@@ -4857,7 +4857,7 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes"
+   (call $~lib/array/Array<i32>#includes
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const 100)
@@ -4876,7 +4876,7 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes"
+   (call $~lib/array/Array<i32>#includes
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const -100)
@@ -4898,7 +4898,7 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes"
+   (call $~lib/array/Array<i32>#includes
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const -2)
@@ -4920,7 +4920,7 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes"
+   (call $~lib/array/Array<i32>#includes
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const -4)
@@ -4942,7 +4942,7 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes"
+   (call $~lib/array/Array<i32>#includes
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const 0)
@@ -4964,7 +4964,7 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes"
+   (call $~lib/array/Array<i32>#includes
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const 1)
@@ -4986,7 +4986,7 @@
    )
   )
   (set_global $std/array/includes
-   (call "$(lib)/array/Array<i32>#includes"
+   (call $~lib/array/Array<i32>#includes
     (get_global $std/array/arr)
     (i32.const 43)
     (i32.const 2)
@@ -5007,14 +5007,14 @@
     (unreachable)
    )
   )
-  (call "$(lib)/array/Array<i32>#splice"
+  (call $~lib/array/Array<i32>#splice
    (get_global $std/array/arr)
    (i32.const 1)
    (i32.const 1)
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 4)
@@ -5048,7 +5048,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 0)
     )
@@ -5066,7 +5066,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#__get"
+    (call $~lib/array/Array<i32>#__get
      (get_global $std/array/arr)
      (i32.const 1)
     )
@@ -5082,28 +5082,28 @@
     (unreachable)
    )
   )
-  (call "$(lib)/array/Array<i32>#__set"
+  (call $~lib/array/Array<i32>#__set
    (get_global $std/array/arr)
    (i32.const 0)
    (i32.const 0)
   )
-  (call "$(lib)/array/Array<i32>#__set"
+  (call $~lib/array/Array<i32>#__set
    (get_global $std/array/arr)
    (i32.const 1)
    (i32.const 1)
   )
-  (call "$(lib)/array/Array<i32>#__set"
+  (call $~lib/array/Array<i32>#__set
    (get_global $std/array/arr)
    (i32.const 2)
    (i32.const 2)
   )
-  (call "$(lib)/array/Array<i32>#__set"
+  (call $~lib/array/Array<i32>#__set
    (get_global $std/array/arr)
    (i32.const 3)
    (i32.const 3)
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#findIndex"
+   (call $~lib/array/Array<i32>#findIndex
     (get_global $std/array/arr)
     (i32.const 0)
    )
@@ -5121,7 +5121,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#findIndex"
+   (call $~lib/array/Array<i32>#findIndex
     (get_global $std/array/arr)
     (i32.const 1)
    )
@@ -5142,7 +5142,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#findIndex"
+   (call $~lib/array/Array<i32>#findIndex
     (get_global $std/array/arr)
     (i32.const 2)
    )
@@ -5163,7 +5163,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#findIndex"
+   (call $~lib/array/Array<i32>#findIndex
     (get_global $std/array/arr)
     (i32.const 3)
    )
@@ -5185,7 +5185,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 8)
@@ -5201,7 +5201,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#findIndex"
+   (call $~lib/array/Array<i32>#findIndex
     (get_global $std/array/arr)
     (i32.const 4)
    )
@@ -5222,27 +5222,27 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#findIndex"
+   (call $~lib/array/Array<i32>#findIndex
     (get_global $std/array/arr)
     (i32.const 5)
    )
@@ -5264,7 +5264,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 2)
@@ -5280,19 +5280,19 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 2)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 3)
    )
   )
   (set_global $std/array/every
-   (call "$(lib)/array/Array<i32>#every"
+   (call $~lib/array/Array<i32>#every
     (get_global $std/array/arr)
     (i32.const 6)
    )
@@ -5313,7 +5313,7 @@
    )
   )
   (set_global $std/array/every
-   (call "$(lib)/array/Array<i32>#every"
+   (call $~lib/array/Array<i32>#every
     (get_global $std/array/arr)
     (i32.const 7)
    )
@@ -5331,7 +5331,7 @@
    )
   )
   (set_global $std/array/every
-   (call "$(lib)/array/Array<i32>#every"
+   (call $~lib/array/Array<i32>#every
     (get_global $std/array/arr)
     (i32.const 8)
    )
@@ -5353,7 +5353,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 8)
@@ -5369,7 +5369,7 @@
    )
   )
   (set_global $std/array/every
-   (call "$(lib)/array/Array<i32>#every"
+   (call $~lib/array/Array<i32>#every
     (get_global $std/array/arr)
     (i32.const 9)
    )
@@ -5387,27 +5387,27 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (set_global $std/array/every
-   (call "$(lib)/array/Array<i32>#every"
+   (call $~lib/array/Array<i32>#every
     (get_global $std/array/arr)
     (i32.const 10)
    )
@@ -5429,7 +5429,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 2)
@@ -5445,19 +5445,19 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 2)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 3)
    )
   )
   (set_global $std/array/some
-   (call "$(lib)/array/Array<i32>#some"
+   (call $~lib/array/Array<i32>#some
     (get_global $std/array/arr)
     (i32.const 11)
    )
@@ -5478,7 +5478,7 @@
    )
   )
   (set_global $std/array/some
-   (call "$(lib)/array/Array<i32>#some"
+   (call $~lib/array/Array<i32>#some
     (get_global $std/array/arr)
     (i32.const 12)
    )
@@ -5496,7 +5496,7 @@
    )
   )
   (set_global $std/array/some
-   (call "$(lib)/array/Array<i32>#some"
+   (call $~lib/array/Array<i32>#some
     (get_global $std/array/arr)
     (i32.const 13)
    )
@@ -5515,7 +5515,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 8)
@@ -5531,7 +5531,7 @@
    )
   )
   (set_global $std/array/some
-   (call "$(lib)/array/Array<i32>#some"
+   (call $~lib/array/Array<i32>#some
     (get_global $std/array/arr)
     (i32.const 14)
    )
@@ -5552,27 +5552,27 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (set_global $std/array/some
-   (call "$(lib)/array/Array<i32>#some"
+   (call $~lib/array/Array<i32>#some
     (get_global $std/array/arr)
     (i32.const 15)
    )
@@ -5591,7 +5591,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 2)
@@ -5607,19 +5607,19 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 2)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#push"
+   (call $~lib/array/Array<i32>#push
     (get_global $std/array/arr)
     (i32.const 3)
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#reduce<i32>"
+   (call $~lib/array/Array<i32>#reduce<i32>
     (get_global $std/array/arr)
     (i32.const 16)
     (i32.const 0)
@@ -5641,7 +5641,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#reduce<i32>"
+   (call $~lib/array/Array<i32>#reduce<i32>
     (get_global $std/array/arr)
     (i32.const 17)
     (i32.const 4)
@@ -5663,7 +5663,7 @@
    )
   )
   (set_global $std/array/boolVal
-   (call "$(lib)/array/Array<i32>#reduce<i32>"
+   (call $~lib/array/Array<i32>#reduce<i32>
     (get_global $std/array/arr)
     (i32.const 18)
     (i32.const 0)
@@ -5685,7 +5685,7 @@
    )
   )
   (set_global $std/array/boolVal
-   (call "$(lib)/array/Array<i32>#reduce<i32>"
+   (call $~lib/array/Array<i32>#reduce<i32>
     (get_global $std/array/arr)
     (i32.const 19)
     (i32.const 0)
@@ -5704,7 +5704,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#reduce<i32>"
+   (call $~lib/array/Array<i32>#reduce<i32>
     (get_global $std/array/arr)
     (i32.const 20)
     (i32.const 0)
@@ -5727,7 +5727,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 8)
@@ -5743,7 +5743,7 @@
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#reduce<i32>"
+   (call $~lib/array/Array<i32>#reduce<i32>
     (get_global $std/array/arr)
     (i32.const 21)
     (i32.const 0)
@@ -5765,27 +5765,27 @@
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (drop
-   (call "$(lib)/array/Array<i32>#pop"
+   (call $~lib/array/Array<i32>#pop
     (get_global $std/array/arr)
    )
   )
   (set_global $std/array/i
-   (call "$(lib)/array/Array<i32>#reduce<i32>"
+   (call $~lib/array/Array<i32>#reduce<i32>
     (get_global $std/array/arr)
     (i32.const 22)
     (i32.const 0)
@@ -5808,7 +5808,7 @@
   )
   (if
    (i32.ne
-    (call "$(lib)/array/Array<i32>#get:length"
+    (call $~lib/array/Array<i32>#get:length
      (get_global $std/array/arr)
     )
     (i32.const 2)

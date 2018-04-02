@@ -6,10 +6,9 @@
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
- (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
- (global "$(lib)/arraybuffer/ArrayBuffer.EMPTY" (mut i32) (i32.const 0))
  (global $argumentCount (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 44))
@@ -17,7 +16,7 @@
  (data (i32.const 4) "\12\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func "$(lib)/allocator/arena/allocate_memory" (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -37,7 +36,7 @@
       (i32.add
        (i32.add
         (tee_local $1
-         (get_global "$(lib)/allocator/arena/offset")
+         (get_global $~lib/allocator/arena/offset)
         )
         (get_local $0)
        )
@@ -94,12 +93,12 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
+  (set_global $~lib/allocator/arena/offset
    (get_local $2)
   )
   (get_local $1)
  )
- (func "$(lib)/arraybuffer/ArrayBuffer#constructor" (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -110,7 +109,7 @@
   )
   (i32.store
    (tee_local $2
-    (call "$(lib)/allocator/arena/allocate_memory"
+    (call $~lib/allocator/arena/allocate_memory
      (i32.add
       (get_local $1)
       (i32.const 4)
@@ -121,7 +120,7 @@
   )
   (get_local $2)
  )
- (func "$(lib)/memory/copy_memory" (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/copy_memory (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (loop $continue|0
@@ -1697,7 +1696,7 @@
    )
   )
  )
- (func "$(lib)/memory/move_memory" (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/move_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -1730,7 +1729,7 @@
     (i32.const 1)
    )
    (block
-    (call "$(lib)/memory/copy_memory"
+    (call $~lib/memory/copy_memory
      (get_local $0)
      (get_local $1)
      (get_local $2)
@@ -1987,7 +1986,7 @@
    )
   )
  )
- (func "$(lib)/arraybuffer/ArrayBuffer#slice" (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2029,107 +2028,84 @@
     )
    )
   )
-  (if (result i32)
-   (tee_local $2
-    (select
-     (tee_local $3
-      (i32.sub
-       (tee_local $2
-        (if (result i32)
-         (i32.lt_s
-          (get_local $2)
-          (i32.const 0)
-         )
-         (select
-          (tee_local $3
-           (i32.add
-            (get_local $5)
-            (get_local $2)
+  (i32.store
+   (tee_local $3
+    (call $~lib/allocator/arena/allocate_memory
+     (i32.add
+      (tee_local $2
+       (select
+        (tee_local $3
+         (i32.sub
+          (tee_local $2
+           (if (result i32)
+            (i32.lt_s
+             (get_local $2)
+             (i32.const 0)
+            )
+            (select
+             (tee_local $3
+              (i32.add
+               (get_local $5)
+               (get_local $2)
+              )
+             )
+             (tee_local $4
+              (i32.const 0)
+             )
+             (i32.gt_s
+              (get_local $3)
+              (get_local $4)
+             )
+            )
+            (select
+             (tee_local $3
+              (get_local $2)
+             )
+             (tee_local $4
+              (get_local $5)
+             )
+             (i32.lt_s
+              (get_local $3)
+              (get_local $4)
+             )
+            )
            )
           )
-          (tee_local $4
-           (i32.const 0)
-          )
-          (i32.gt_s
-           (get_local $3)
-           (get_local $4)
-          )
-         )
-         (select
-          (tee_local $3
-           (get_local $2)
-          )
-          (tee_local $4
-           (get_local $5)
-          )
-          (i32.lt_s
-           (get_local $3)
-           (get_local $4)
-          )
+          (get_local $1)
          )
         )
-       )
-       (get_local $1)
-      )
-     )
-     (tee_local $4
-      (i32.const 0)
-     )
-     (i32.gt_s
-      (get_local $3)
-      (get_local $4)
-     )
-    )
-   )
-   (block (result i32)
-    (i32.store
-     (tee_local $3
-      (call "$(lib)/allocator/arena/allocate_memory"
-       (i32.add
-        (get_local $2)
-        (i32.const 4)
+        (tee_local $4
+         (i32.const 0)
+        )
+        (i32.gt_s
+         (get_local $3)
+         (get_local $4)
+        )
        )
       )
-     )
-     (get_local $2)
-    )
-    (call "$(lib)/memory/move_memory"
-     (i32.add
-      (get_local $3)
       (i32.const 4)
      )
-     (i32.add
-      (i32.add
-       (get_local $0)
-       (i32.const 4)
-      )
-      (get_local $1)
-     )
-     (get_local $2)
-    )
-    (get_local $3)
-   )
-   (if (result i32)
-    (get_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY")
-    (get_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY")
-    (block (result i32)
-     (i32.store
-      (tee_local $3
-       (call "$(lib)/allocator/arena/allocate_memory"
-        (i32.const 4)
-       )
-      )
-      (i32.const 0)
-     )
-     (set_global "$(lib)/arraybuffer/ArrayBuffer.EMPTY"
-      (get_local $3)
-     )
-     (get_local $3)
     )
    )
+   (get_local $2)
   )
+  (call $~lib/memory/move_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 4)
+   )
+   (i32.add
+    (i32.add
+     (get_local $0)
+     (i32.const 4)
+    )
+    (get_local $1)
+   )
+   (get_local $2)
+  )
+  (get_local $3)
  )
- (func "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline" (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $2of2
    (block $1of2
     (block $0of2
@@ -2148,14 +2124,14 @@
     (i32.const 2147483647)
    )
   )
-  (call "$(lib)/arraybuffer/ArrayBuffer#slice"
+  (call $~lib/arraybuffer/ArrayBuffer#slice
    (get_local $0)
    (get_local $1)
    (get_local $2)
   )
  )
  (func $start (; 7 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/startOffset"
+  (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -2164,11 +2140,11 @@
     (i32.const -8)
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
-   (get_global "$(lib)/allocator/arena/startOffset")
+  (set_global $~lib/allocator/arena/offset
+   (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/arraybuffer/buffer
-   (call "$(lib)/arraybuffer/ArrayBuffer#constructor"
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.const 0)
     (i32.const 8)
    )
@@ -2195,7 +2171,7 @@
     (set_global $argumentCount
      (i32.const 0)
     )
-    (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
+    (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
      (get_global $std/arraybuffer/buffer)
      (i32.const 0)
      (i32.const 0)
@@ -2239,7 +2215,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
+    (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
      (get_global $std/arraybuffer/buffer)
      (i32.const 1)
      (i32.const 0)
@@ -2268,7 +2244,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
+    (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
      (get_global $std/arraybuffer/buffer)
      (i32.const -1)
      (i32.const 0)
@@ -2293,7 +2269,7 @@
    )
   )
   (set_global $std/arraybuffer/sliced
-   (call "$(lib)/arraybuffer/ArrayBuffer#slice"
+   (call $~lib/arraybuffer/ArrayBuffer#slice
     (get_global $std/arraybuffer/buffer)
     (i32.const 1)
     (i32.const 3)
@@ -2317,7 +2293,7 @@
    )
   )
   (set_global $std/arraybuffer/sliced
-   (call "$(lib)/arraybuffer/ArrayBuffer#slice"
+   (call $~lib/arraybuffer/ArrayBuffer#slice
     (get_global $std/arraybuffer/buffer)
     (i32.const 1)
     (i32.const -1)
@@ -2341,7 +2317,7 @@
    )
   )
   (set_global $std/arraybuffer/sliced
-   (call "$(lib)/arraybuffer/ArrayBuffer#slice"
+   (call $~lib/arraybuffer/ArrayBuffer#slice
     (get_global $std/arraybuffer/buffer)
     (i32.const -3)
     (i32.const -1)
@@ -2365,7 +2341,7 @@
    )
   )
   (set_global $std/arraybuffer/sliced
-   (call "$(lib)/arraybuffer/ArrayBuffer#slice"
+   (call $~lib/arraybuffer/ArrayBuffer#slice
     (get_global $std/arraybuffer/buffer)
     (i32.const -4)
     (i32.const 42)
@@ -2393,7 +2369,7 @@
     (set_global $argumentCount
      (i32.const 1)
     )
-    (call "$(lib)/arraybuffer/ArrayBuffer#slice|trampoline"
+    (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
      (get_global $std/arraybuffer/buffer)
      (i32.const 42)
      (i32.const 0)

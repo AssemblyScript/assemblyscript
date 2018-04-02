@@ -93,7 +93,7 @@ exports.compileString = (source, extraArgs={}) => new Promise((resolve, reject) 
     const libDir = path.join(__dirname, "../std", "assembly");
     const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
     libFiles.forEach(file =>
-      exports.libraryFiles["(lib)/" + file.replace(/\.ts$/, "")] = readFileNode(path.join(libDir, file), { encoding: "utf8" })
+      exports.libraryFiles["~lib/" + file.replace(/\.ts$/, "")] = readFileNode(path.join(libDir, file), { encoding: "utf8" })
     );
   }
 
@@ -265,7 +265,7 @@ exports.main = function main(argv, options, callback) {
           }
         }
 
-      // Otherwise try nextFile.ts, nextFile/index.ts, (lib)/nextFile.ts
+      // Otherwise try nextFile.ts, nextFile/index.ts, ~lib/nextFile.ts
       } else {
         sourceText = readFile(path.join(baseDir, sourcePath + ".ts"));
         if (sourceText !== null) {

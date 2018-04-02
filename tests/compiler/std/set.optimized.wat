@@ -6,16 +6,16 @@
  (type $iv (func (param i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
- (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/set/set (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 56))
  (memory $0 1)
  (data (i32.const 4) "\n\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
- (data (i32.const 28) "\0c\00\00\00(\00l\00i\00b\00)\00/\00s\00e\00t\00.\00t\00s")
+ (data (i32.const 28) "\0b\00\00\00~\00l\00i\00b\00/\00s\00e\00t\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func "$(lib)/allocator/arena/allocate_memory" (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -35,7 +35,7 @@
       (i32.add
        (i32.add
         (tee_local $1
-         (get_global "$(lib)/allocator/arena/offset")
+         (get_global $~lib/allocator/arena/offset)
         )
         (get_local $0)
        )
@@ -92,17 +92,17 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
+  (set_global $~lib/allocator/arena/offset
    (get_local $2)
   )
   (get_local $1)
  )
- (func "$(lib)/set/Set<i32>#get:size" (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i32>#get:size (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=8
    (get_local $0)
   )
  )
- (func "$(lib)/memory/copy_memory" (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/copy_memory (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (loop $continue|0
@@ -1678,7 +1678,7 @@
    )
   )
  )
- (func "$(lib)/memory/move_memory" (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/move_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -1711,7 +1711,7 @@
     (i32.const 1)
    )
    (block
-    (call "$(lib)/memory/copy_memory"
+    (call $~lib/memory/copy_memory
      (get_local $0)
      (get_local $1)
      (get_local $2)
@@ -1968,10 +1968,10 @@
    )
   )
  )
- (func "$(lib)/allocator/arena/free_memory" (; 5 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/free_memory (; 5 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func "$(lib)/set/Set<i32>#add" (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#add (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -1999,7 +1999,7 @@
    )
    (block
     (set_local $2
-     (call "$(lib)/allocator/arena/allocate_memory"
+     (call $~lib/allocator/arena/allocate_memory
       (i32.shl
        (tee_local $3
         (select
@@ -2029,7 +2029,7 @@
       (get_local $0)
      )
      (block
-      (call "$(lib)/memory/move_memory"
+      (call $~lib/memory/move_memory
        (get_local $2)
        (i32.load
         (get_local $0)
@@ -2041,7 +2041,7 @@
         (i32.const 2)
        )
       )
-      (call "$(lib)/allocator/arena/free_memory"
+      (call $~lib/allocator/arena/free_memory
        (i32.load
         (get_local $0)
        )
@@ -2083,7 +2083,7 @@
   )
   (get_local $0)
  )
- (func "$(lib)/set/Set<i32>#has" (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#has (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -2143,7 +2143,7 @@
   )
   (i32.const 0)
  )
- (func "$(lib)/set/Set<i32>#delete" (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#delete (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -2196,7 +2196,7 @@
          )
          (get_local $3)
         )
-        (call "$(lib)/memory/move_memory"
+        (call $~lib/memory/move_memory
          (i32.add
           (i32.load
            (get_local $0)
@@ -2253,7 +2253,7 @@
   )
   (i32.const 0)
  )
- (func "$(lib)/set/Set<i32>#clear" (; 9 ;) (type $iv) (param $0 i32)
+ (func $~lib/set/Set<i32>#clear (; 9 ;) (type $iv) (param $0 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -2274,7 +2274,7 @@
   )
  )
  (func $start (; 10 ;) (type $v)
-  (set_global "$(lib)/allocator/arena/startOffset"
+  (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -2283,16 +2283,16 @@
     (i32.const -8)
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
-   (get_global "$(lib)/allocator/arena/startOffset")
+  (set_global $~lib/allocator/arena/offset
+   (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/set/set
-   (call "$(lib)/allocator/arena/allocate_memory"
+   (call $~lib/allocator/arena/allocate_memory
     (i32.const 12)
    )
   )
   (if
-   (call "$(lib)/set/Set<i32>#get:size"
+   (call $~lib/set/Set<i32>#get:size
     (get_global $std/set/set)
    )
    (block
@@ -2306,26 +2306,26 @@
    )
   )
   (drop
-   (call "$(lib)/set/Set<i32>#add"
+   (call $~lib/set/Set<i32>#add
     (get_global $std/set/set)
     (i32.const 1)
    )
   )
   (drop
-   (call "$(lib)/set/Set<i32>#add"
+   (call $~lib/set/Set<i32>#add
     (get_global $std/set/set)
     (i32.const 0)
    )
   )
   (drop
-   (call "$(lib)/set/Set<i32>#add"
+   (call $~lib/set/Set<i32>#add
     (get_global $std/set/set)
     (i32.const 2)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/set/Set<i32>#get:size"
+    (call $~lib/set/Set<i32>#get:size
      (get_global $std/set/set)
     )
     (i32.const 3)
@@ -2342,7 +2342,7 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/set/Set<i32>#has"
+    (call $~lib/set/Set<i32>#has
      (get_global $std/set/set)
      (i32.const 1)
     )
@@ -2359,7 +2359,7 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/set/Set<i32>#has"
+    (call $~lib/set/Set<i32>#has
      (get_global $std/set/set)
      (i32.const 0)
     )
@@ -2376,7 +2376,7 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/set/Set<i32>#has"
+    (call $~lib/set/Set<i32>#has
      (get_global $std/set/set)
      (i32.const 2)
     )
@@ -2392,7 +2392,7 @@
    )
   )
   (if
-   (call "$(lib)/set/Set<i32>#has"
+   (call $~lib/set/Set<i32>#has
     (get_global $std/set/set)
     (i32.const 3)
    )
@@ -2407,14 +2407,14 @@
    )
   )
   (drop
-   (call "$(lib)/set/Set<i32>#delete"
+   (call $~lib/set/Set<i32>#delete
     (get_global $std/set/set)
     (i32.const 0)
    )
   )
   (if
    (i32.ne
-    (call "$(lib)/set/Set<i32>#get:size"
+    (call $~lib/set/Set<i32>#get:size
      (get_global $std/set/set)
     )
     (i32.const 2)
@@ -2431,7 +2431,7 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/set/Set<i32>#has"
+    (call $~lib/set/Set<i32>#has
      (get_global $std/set/set)
      (i32.const 1)
     )
@@ -2447,7 +2447,7 @@
    )
   )
   (if
-   (call "$(lib)/set/Set<i32>#has"
+   (call $~lib/set/Set<i32>#has
     (get_global $std/set/set)
     (i32.const 0)
    )
@@ -2463,7 +2463,7 @@
   )
   (if
    (i32.eqz
-    (call "$(lib)/set/Set<i32>#has"
+    (call $~lib/set/Set<i32>#has
      (get_global $std/set/set)
      (i32.const 2)
     )
@@ -2478,11 +2478,11 @@
     (unreachable)
    )
   )
-  (call "$(lib)/set/Set<i32>#clear"
+  (call $~lib/set/Set<i32>#clear
    (get_global $std/set/set)
   )
   (if
-   (call "$(lib)/set/Set<i32>#get:size"
+   (call $~lib/set/Set<i32>#get:size
     (get_global $std/set/set)
    )
    (block
@@ -2496,7 +2496,7 @@
    )
   )
   (if
-   (call "$(lib)/set/Set<i32>#has"
+   (call $~lib/set/Set<i32>#has
     (get_global $std/set/set)
     (i32.const 1)
    )

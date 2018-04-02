@@ -52,6 +52,8 @@ export declare function store<T>(offset: usize, value: void, constantOffset?: us
 
 export declare function sizeof<T>(): usize; // | u32 / u64
 
+export declare function alignof<T>(): usize; // | u32 / u64
+
 export declare function offsetof<T>(fieldName?: string): usize; // | u32 / u64
 
 export declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;

@@ -12,7 +12,7 @@
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
- (func "$(lib)/math/NativeMath.scalbn" (; 0 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 0 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (set_local $2
    (get_local $0)
@@ -126,7 +126,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMath.pow" (; 1 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 1 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -1482,7 +1482,7 @@
          )
          (i32.const 0)
         )
-        (call "$(lib)/math/NativeMath.scalbn"
+        (call $~lib/math/NativeMath.scalbn
          (get_local $2)
          (get_local $4)
         )
@@ -1525,7 +1525,7 @@
    (f64.const 1.e+300)
   )
  )
- (func "$(lib)/math/NativeMathf.mod" (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1877,7 +1877,7 @@
    (get_local $0)
   )
  )
- (func "$(lib)/math/NativeMathf.scalbn" (; 3 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 3 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (set_local $2
    (get_local $0)
@@ -1989,7 +1989,7 @@
    )
   )
  )
- (func "$(lib)/math/NativeMathf.pow" (; 4 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 4 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 f32)
   (local $3 f32)
   (local $4 i32)
@@ -3124,7 +3124,7 @@
          )
          (i32.const 0)
         )
-        (call "$(lib)/math/NativeMathf.scalbn"
+        (call $~lib/math/NativeMathf.scalbn
          (get_local $2)
          (get_local $4)
         )
@@ -3154,7 +3154,7 @@
    (f32.const 1000000015047466219876688e6)
   )
  )
- (func "$(lib)/math/NativeMath.mod" (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i64)
@@ -3540,7 +3540,7 @@
    )
   )
   (drop
-   (call "$(lib)/math/NativeMath.pow"
+   (call $~lib/math/NativeMath.pow
     (f64.convert_s/i32
      (get_global $binary/i)
     )
@@ -3609,7 +3609,7 @@
   )
   (set_global $binary/i
    (i32.trunc_s/f64
-    (call "$(lib)/math/NativeMath.pow"
+    (call $~lib/math/NativeMath.pow
      (f64.convert_s/i32
       (get_global $binary/i)
      )
@@ -3720,7 +3720,7 @@
    )
   )
   (drop
-   (call "$(lib)/math/NativeMath.pow"
+   (call $~lib/math/NativeMath.pow
     (f64.convert_s/i64
      (get_global $binary/I)
     )
@@ -3795,7 +3795,7 @@
   )
   (set_global $binary/I
    (i64.trunc_s/f64
-    (call "$(lib)/math/NativeMath.pow"
+    (call $~lib/math/NativeMath.pow
      (f64.convert_s/i64
       (get_global $binary/I)
      )
@@ -3900,13 +3900,13 @@
    )
   )
   (drop
-   (call "$(lib)/math/NativeMathf.mod"
+   (call $~lib/math/NativeMathf.mod
     (get_global $binary/f)
     (f32.const 1)
    )
   )
   (drop
-   (call "$(lib)/math/NativeMathf.pow"
+   (call $~lib/math/NativeMathf.pow
     (get_global $binary/f)
     (f32.const 1)
    )
@@ -3972,13 +3972,13 @@
    )
   )
   (set_global $binary/f
-   (call "$(lib)/math/NativeMathf.mod"
+   (call $~lib/math/NativeMathf.mod
     (get_global $binary/f)
     (f32.const 1)
    )
   )
   (set_global $binary/f
-   (call "$(lib)/math/NativeMathf.pow"
+   (call $~lib/math/NativeMathf.pow
     (get_global $binary/f)
     (f32.const 1)
    )
@@ -4002,25 +4002,25 @@
    )
   )
   (set_global $binary/f
-   (call "$(lib)/math/NativeMathf.mod"
+   (call $~lib/math/NativeMathf.mod
     (get_global $binary/f)
     (f32.const 1)
    )
   )
   (set_global $binary/f
-   (call "$(lib)/math/NativeMathf.pow"
+   (call $~lib/math/NativeMathf.pow
     (get_global $binary/f)
     (f32.const 1)
    )
   )
   (drop
-   (call "$(lib)/math/NativeMath.mod"
+   (call $~lib/math/NativeMath.mod
     (get_global $binary/F)
     (f64.const 1)
    )
   )
   (drop
-   (call "$(lib)/math/NativeMath.pow"
+   (call $~lib/math/NativeMath.pow
     (get_global $binary/F)
     (f64.const 1)
    )
@@ -4086,13 +4086,13 @@
    )
   )
   (set_global $binary/F
-   (call "$(lib)/math/NativeMath.mod"
+   (call $~lib/math/NativeMath.mod
     (get_global $binary/F)
     (f64.const 1)
    )
   )
   (set_global $binary/F
-   (call "$(lib)/math/NativeMath.pow"
+   (call $~lib/math/NativeMath.pow
     (get_global $binary/F)
     (f64.const 1)
    )
@@ -4116,13 +4116,13 @@
    )
   )
   (set_global $binary/F
-   (call "$(lib)/math/NativeMath.mod"
+   (call $~lib/math/NativeMath.mod
     (get_global $binary/F)
     (f64.const 1)
    )
   )
   (set_global $binary/F
-   (call "$(lib)/math/NativeMath.pow"
+   (call $~lib/math/NativeMath.pow
     (get_global $binary/F)
     (f64.const 1)
    )

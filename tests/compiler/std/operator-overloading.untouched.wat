@@ -6,11 +6,11 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global "$(lib)/allocator/common/alignment/BITS" i32 (i32.const 3))
- (global "$(lib)/allocator/common/alignment/SIZE" i32 (i32.const 8))
- (global "$(lib)/allocator/common/alignment/MASK" i32 (i32.const 7))
- (global "$(lib)/allocator/arena/startOffset" (mut i32) (i32.const 0))
- (global "$(lib)/allocator/arena/offset" (mut i32) (i32.const 0))
+ (global $~lib/allocator/common/alignment/BITS i32 (i32.const 3))
+ (global $~lib/allocator/common/alignment/SIZE i32 (i32.const 8))
+ (global $~lib/allocator/common/alignment/MASK i32 (i32.const 7))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/operator-overloading/a1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/a2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/a (mut i32) (i32.const 0))
@@ -46,7 +46,7 @@
  (data (i32.const 4) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func "$(lib)/allocator/arena/allocate_memory" (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -62,7 +62,7 @@
    )
   )
   (set_local $1
-   (get_global "$(lib)/allocator/arena/offset")
+   (get_global $~lib/allocator/arena/offset)
   )
   (set_local $2
    (i32.and
@@ -142,7 +142,7 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
+  (set_global $~lib/allocator/arena/offset
    (get_local $2)
   )
   (return
@@ -160,7 +160,7 @@
     (tee_local $0
      (block (result i32)
       (set_local $3
-       (call "$(lib)/allocator/arena/allocate_memory"
+       (call $~lib/allocator/arena/allocate_memory
         (i32.const 8)
        )
       )
@@ -393,7 +393,7 @@
  )
  (func $start (; 12 ;) (type $v)
   (local $0 i32)
-  (set_global "$(lib)/allocator/arena/startOffset"
+  (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
@@ -405,8 +405,8 @@
     )
    )
   )
-  (set_global "$(lib)/allocator/arena/offset"
-   (get_global "$(lib)/allocator/arena/startOffset")
+  (set_global $~lib/allocator/arena/offset
+   (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/operator-overloading/a1
    (call $std/operator-overloading/Tester#constructor

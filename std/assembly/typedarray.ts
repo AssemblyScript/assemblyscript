@@ -1,29 +1,18 @@
-class TypedArray<T> {
+/** @internal */
+abstract class TypedArray<T> /* implements ArrayBufferView<T> */ {
 
   readonly buffer: ArrayBuffer;
   readonly byteOffset: i32;
   readonly byteLength: i32;
-  get length(): i32 { return this.byteLength / sizeof<T>(); }
+  get length(): i32 { return this.byteLength >> alignof<T>(); }
 
   constructor(length: i32) {
-    var byteLength = length * sizeof<T>();
+    const maxLength = <u32>0x7fffffff >> alignof<T>();
+    if (<u32>length > maxLength) throw new RangeError("Invalid typed array length");
+    var byteLength = length << alignof<T>();
     this.buffer = new ArrayBuffer(byteLength);
     this.byteOffset = 0;
     this.byteLength = byteLength;
-  }
-
-  @operator("[]")
-  private __get(index: i32): T {
-    var offset = this.byteOffset;
-    assert(<u32>index < <u32>this.byteLength / sizeof<T>());
-    return load<T>(changetype<usize>(this.buffer) + (offset + index) * sizeof<T>(), 4);
-  }
-
-  @operator("[]=")
-  private __set(index: i32, value: T): void {
-    var offset = this.byteOffset;
-    assert(<u32>index < <u32>(this.byteLength / sizeof<T>()));
-    store<T>(changetype<usize>(this.buffer) + (offset + index) * sizeof<T>(), value, 4);
   }
 }
 

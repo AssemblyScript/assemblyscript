@@ -85,7 +85,7 @@ export const INSTANCE_DELIMITER = "#";
 /** Delimiter used between class and namespace names and static members. */
 export const STATIC_DELIMITER = ".";
 /** Substitution used to indicate a library directory. */
-export const LIBRARY_SUBST = "(lib)";
+export const LIBRARY_SUBST = "~lib";
 /** Library directory prefix. */
 export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
 
@@ -417,23 +417,25 @@ export class Program extends DiagnosticEmitter {
     this.elementsLookup.set(internalName, prototype);
 
     var implementsTypes = declaration.implementsTypes;
-    var numImplementsTypes = implementsTypes.length;
-    if (prototype.is(CommonFlags.UNMANAGED)) {
-      if (implementsTypes && numImplementsTypes) {
-        this.error(
-          DiagnosticCode.Structs_cannot_implement_interfaces,
-          Range.join(
-            declaration.name.range,
-            implementsTypes[numImplementsTypes - 1].range
-          )
-        );
-      }
-    } else if (numImplementsTypes) {
-      for (let i = 0; i < numImplementsTypes; ++i) {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          implementsTypes[i].range
-        );
+    if (implementsTypes) {
+      let numImplementsTypes = implementsTypes.length;
+      if (prototype.is(CommonFlags.UNMANAGED)) {
+        if (implementsTypes && numImplementsTypes) {
+          this.error(
+            DiagnosticCode.Structs_cannot_implement_interfaces,
+            Range.join(
+              declaration.name.range,
+              implementsTypes[numImplementsTypes - 1].range
+            )
+          );
+        }
+      } else if (numImplementsTypes) {
+        for (let i = 0; i < numImplementsTypes; ++i) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            implementsTypes[i].range
+          );
+        }
       }
     }
 

@@ -1790,6 +1790,55 @@ export function compileCall(
       }
       return ret;
     }
+    case "alignof": { // alignof<T!>() -> usize
+      compiler.currentType = compiler.options.usizeType;
+      if (operands.length != 0) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "0", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+      }
+      let byteSize = (<Type[]>typeArguments)[0].byteSize;
+      let alignLog2: i32;
+      switch (byteSize) {
+        case 1: { alignLog2 = 0; break; }
+        case 2: { alignLog2 = 1; break; }
+        case 4: { alignLog2 = 2; break; }
+        case 8: { alignLog2 = 3; break; }
+        default: { assert(false); return module.createUnreachable(); }
+      }
+      if (compiler.options.isWasm64) {
+        // implicitly wrap if contextual type is a 32-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
+          compiler.currentType = Type.u32;
+          ret = module.createI32(alignLog2);
+        } else {
+          ret = module.createI64(alignLog2, 0);
+        }
+      } else {
+        // implicitly extend if contextual type is a 64-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
+          compiler.currentType = Type.u64;
+          ret = module.createI64(alignLog2, 0);
+        } else {
+          ret = module.createI32(alignLog2);
+        }
+      }
+      return ret;
+    }
     case "offsetof": { // offsetof<T!>(fieldName?: string) -> usize
       compiler.currentType = compiler.options.usizeType;
       if (operands.length > 1) {

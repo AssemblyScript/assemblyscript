@@ -367,7 +367,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // try (lib)/file.ts
+    // try ~lib/file.ts
     expected = LIBRARY_PREFIX + normalizedPathWithoutExtension + ".ts";
     for (let i = 0, k = sources.length; i < k; ++i) {
       let source = sources[i];
