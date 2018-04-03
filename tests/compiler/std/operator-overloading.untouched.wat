@@ -41,6 +41,18 @@
  (global $std/operator-overloading/eq3 (mut i32) (i32.const 0))
  (global $std/operator-overloading/eq4 (mut i32) (i32.const 0))
  (global $std/operator-overloading/eqf (mut i32) (i32.const 0))
+ (global $std/operator-overloading/gt1 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/gt2 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/gt (mut i32) (i32.const 0))
+ (global $std/operator-overloading/gte1 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/gte2 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/gte (mut i32) (i32.const 0))
+ (global $std/operator-overloading/le1 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/le2 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/le (mut i32) (i32.const 0))
+ (global $std/operator-overloading/leq1 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/leq2 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/leq (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 64))
  (memory $0 1)
  (data (i32.const 4) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
@@ -362,7 +374,7 @@
    )
   )
  )
- (func $std/operator-overloading/Tester.equal (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (return
    (i32.and
@@ -391,7 +403,152 @@
    )
   )
  )
- (func $start (; 12 ;) (type $v)
+ (func $std/operator-overloading/Tester.notEquals (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (return
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.ne
+       (i32.load
+        (get_local $0)
+       )
+       (i32.load
+        (get_local $1)
+       )
+      )
+     )
+     (i32.ne
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.load offset=4
+       (get_local $1)
+      )
+     )
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+ )
+ (func $std/operator-overloading/Tester.greater (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (return
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.gt_s
+       (i32.load
+        (get_local $0)
+       )
+       (i32.load
+        (get_local $1)
+       )
+      )
+     )
+     (i32.gt_s
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.load offset=4
+       (get_local $1)
+      )
+     )
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+ )
+ (func $std/operator-overloading/Tester.greaterEquals (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (return
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.ge_s
+       (i32.load
+        (get_local $0)
+       )
+       (i32.load
+        (get_local $1)
+       )
+      )
+     )
+     (i32.ge_s
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.load offset=4
+       (get_local $1)
+      )
+     )
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+ )
+ (func $std/operator-overloading/Tester.less (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (return
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.lt_s
+       (i32.load
+        (get_local $0)
+       )
+       (i32.load
+        (get_local $1)
+       )
+      )
+     )
+     (i32.lt_s
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.load offset=4
+       (get_local $1)
+      )
+     )
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+ )
+ (func $std/operator-overloading/Tester.lessEquals (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (return
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.le_s
+       (i32.load
+        (get_local $0)
+       )
+       (i32.load
+        (get_local $1)
+       )
+      )
+     )
+     (i32.le_s
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.load offset=4
+       (get_local $1)
+      )
+     )
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+ )
+ (func $start (; 17 ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
@@ -455,7 +612,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 57)
+     (i32.const 82)
      (i32.const 0)
     )
     (unreachable)
@@ -508,7 +665,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 63)
+     (i32.const 88)
      (i32.const 0)
     )
     (unreachable)
@@ -561,7 +718,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 69)
+     (i32.const 94)
      (i32.const 0)
     )
     (unreachable)
@@ -614,7 +771,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 75)
+     (i32.const 100)
      (i32.const 0)
     )
     (unreachable)
@@ -667,7 +824,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 81)
+     (i32.const 106)
      (i32.const 0)
     )
     (unreachable)
@@ -720,7 +877,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 87)
+     (i32.const 112)
      (i32.const 0)
     )
     (unreachable)
@@ -773,7 +930,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 93)
+     (i32.const 118)
      (i32.const 0)
     )
     (unreachable)
@@ -826,7 +983,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 99)
+     (i32.const 124)
      (i32.const 0)
     )
     (unreachable)
@@ -847,7 +1004,7 @@
    )
   )
   (set_global $std/operator-overloading/eq
-   (call $std/operator-overloading/Tester.equal
+   (call $std/operator-overloading/Tester.equals
     (get_global $std/operator-overloading/eq1)
     (get_global $std/operator-overloading/eq2)
    )
@@ -863,7 +1020,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 105)
+     (i32.const 130)
      (i32.const 0)
     )
     (unreachable)
@@ -884,7 +1041,7 @@
    )
   )
   (set_global $std/operator-overloading/eqf
-   (call $std/operator-overloading/Tester.equal
+   (call $std/operator-overloading/Tester.equals
     (get_global $std/operator-overloading/eq3)
     (get_global $std/operator-overloading/eq4)
    )
@@ -900,7 +1057,201 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 111)
+     (i32.const 136)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/eq
+   (call $std/operator-overloading/Tester.notEquals
+    (get_global $std/operator-overloading/eq1)
+    (get_global $std/operator-overloading/eq2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/operator-overloading/eq)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 140)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/eqf
+   (call $std/operator-overloading/Tester.notEquals
+    (get_global $std/operator-overloading/eq3)
+    (get_global $std/operator-overloading/eq4)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/operator-overloading/eqf)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 144)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/gt1
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 2)
+    (i32.const 2147483647)
+   )
+  )
+  (set_global $std/operator-overloading/gt2
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 1)
+    (i32.const 0)
+   )
+  )
+  (set_global $std/operator-overloading/gt
+   (call $std/operator-overloading/Tester.greater
+    (get_global $std/operator-overloading/gt1)
+    (get_global $std/operator-overloading/gt2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/operator-overloading/gt)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 150)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/gte1
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 2)
+    (i32.const 2)
+   )
+  )
+  (set_global $std/operator-overloading/gte2
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 2)
+    (i32.const 2)
+   )
+  )
+  (set_global $std/operator-overloading/gte
+   (call $std/operator-overloading/Tester.greaterEquals
+    (get_global $std/operator-overloading/gte1)
+    (get_global $std/operator-overloading/gte2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/operator-overloading/gte)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 156)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/le1
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 5)
+    (i32.const -1)
+   )
+  )
+  (set_global $std/operator-overloading/le2
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 6)
+    (i32.const 6)
+   )
+  )
+  (set_global $std/operator-overloading/le
+   (call $std/operator-overloading/Tester.less
+    (get_global $std/operator-overloading/le1)
+    (get_global $std/operator-overloading/le2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/operator-overloading/le)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 162)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/leq1
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 4)
+    (i32.const 3)
+   )
+  )
+  (set_global $std/operator-overloading/leq2
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 4)
+    (i32.const 3)
+   )
+  )
+  (set_global $std/operator-overloading/leq
+   (call $std/operator-overloading/Tester.lessEquals
+    (get_global $std/operator-overloading/leq1)
+    (get_global $std/operator-overloading/leq2)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/operator-overloading/leq)
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 168)
      (i32.const 0)
     )
     (unreachable)

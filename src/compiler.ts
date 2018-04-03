@@ -2387,7 +2387,16 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.LtU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnLessThan;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.LtU64
@@ -2466,7 +2475,16 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.GtU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnGreaterThan;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GtU64
@@ -2545,7 +2563,16 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.LeU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnLessThanEquals;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.LeU64
@@ -2624,7 +2651,16 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.GeU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // TODO: check operator overload
+          case TypeKind.USIZE: { // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnGreaterThanEquals;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GeU64
@@ -2771,7 +2807,17 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.NeI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: {// check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classInstance = assert(this.currentType.classReference);
+              let operatorName = classInstance.prototype.fnNotEquals;
+              if (operatorName != null) {
+                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+                break;
+              }
+            }
+            // fall-through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
