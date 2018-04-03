@@ -7,28 +7,31 @@
  * @module std/assembly/allocator/arena
  *//***/
 
-import { MASK as AL_MASK } from "./common/alignment";
+import { AL_MASK } from "./common";
 
 var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;
 
 @global
 export function allocate_memory(size: usize): usize {
-  if (!size) return 0;
-  var ptr = offset;
-  var newPtr = (ptr + size + AL_MASK) & ~AL_MASK;
-  var pagesBefore = current_memory();
-  if (newPtr > <usize>pagesBefore << 16) {
-    let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
-    let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-    if (grow_memory(pagesWanted) < 0) {
-      if (grow_memory(pagesNeeded) < 0) {
-        unreachable(); // out of memory
+  const MAX_SIZE: usize = 1 << 30;
+  if (size && size < MAX_SIZE) {
+    let ptr = offset;
+    let newPtr = (ptr + size + AL_MASK) & ~AL_MASK;
+    let pagesBefore = current_memory();
+    if (newPtr > <usize>pagesBefore << 16) {
+      let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
+      let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+      if (grow_memory(pagesWanted) < 0) {
+        if (grow_memory(pagesNeeded) < 0) {
+          unreachable(); // out of memory
+        }
       }
     }
+    offset = newPtr;
+    return ptr;
   }
-  offset = newPtr;
-  return ptr;
+  return 0;
 }
 
 @global

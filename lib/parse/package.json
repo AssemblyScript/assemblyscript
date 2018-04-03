@@ -1,0 +1,30 @@
+{
+  "name": "@assemblyscript/parse",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build:as": "asc assembly/index.ts -O3 -b build/index.wasm --noMemory --importMemory --sourceMap --noDebug --validate",
+    "build": "npm run build:as && webpack --mode production --display-modules",
+    "test": "ts-node tests/"
+  },
+  "files": [
+    "package.json",
+    "index.d.ts",
+    "index.js",
+    "index.js.map",
+    "src/",
+    "README.md"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@types/webassembly-js-api": "0.0.1",
+    "assemblyscript": "AssemblyScript/assemblyscript",
+    "ts-loader": "^4.1.0",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.8.1",
+    "webpack": "^4.4.1",
+    "webpack-cli": "^2.0.13"
+  }
+}

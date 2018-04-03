@@ -49,7 +49,8 @@ import {
   ConstantValueKind,
 
   PATH_DELIMITER,
-  LIBRARY_PREFIX
+  LIBRARY_PREFIX,
+  Flow
 } from "./program";
 
 import {
@@ -200,6 +201,8 @@ export class Compiler extends DiagnosticEmitter {
   module: Module;
   /** Current function in compilation. */
   currentFunction: Function;
+  /** Outer function in compilation, if compiling a function expression. */
+  outerFunction: Function | null = null;
   /** Current enum in compilation. */
   currentEnum: Enum | null = null;
   /** Current type in compilation. */
@@ -482,43 +485,47 @@ export class Compiler extends DiagnosticEmitter {
     var initExpr: ExpressionRef = 0;
 
     if (global.type == Type.void) { // type is void if not yet resolved or not annotated
+      if (declaration) {
 
-      // resolve now if annotated
-      if (declaration.type) {
-        let resolvedType = this.program.resolveType(declaration.type); // reports
-        if (!resolvedType) return false;
-        if (resolvedType == Type.void) {
+        // resolve now if annotated
+        if (declaration.type) {
+          let resolvedType = this.program.resolveType(declaration.type); // reports
+          if (!resolvedType) return false;
+          if (resolvedType == Type.void) {
+            this.error(
+              DiagnosticCode.Type_expected,
+              declaration.type.range
+            );
+            return false;
+          }
+          global.type = resolvedType;
+
+        // infer from initializer if not annotated
+        } else if (declaration.initializer) { // infer type using void/NONE for literal inference
+          initExpr = this.compileExpression( // reports
+            declaration.initializer,
+            Type.void,
+            ConversionKind.NONE
+          );
+          if (this.currentType == Type.void) {
+            this.error(
+              DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+              declaration.initializer.range, this.currentType.toString(), "<auto>"
+            );
+            return false;
+          }
+          global.type = this.currentType;
+
+        // must either be annotated or have an initializer
+        } else {
           this.error(
             DiagnosticCode.Type_expected,
-            declaration.type.range
+            declaration.name.range.atEnd
           );
           return false;
         }
-        global.type = resolvedType;
-
-      // infer from initializer if not annotated
-      } else if (declaration.initializer) { // infer type using void/NONE for literal inference
-        initExpr = this.compileExpression( // reports
-          declaration.initializer,
-          Type.void,
-          ConversionKind.NONE
-        );
-        if (this.currentType == Type.void) {
-          this.error(
-            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            declaration.initializer.range, this.currentType.toString(), "<auto>"
-          );
-          return false;
-        }
-        global.type = this.currentType;
-
-      // must either be annotated or have an initializer
       } else {
-        this.error(
-          DiagnosticCode.Type_expected,
-          declaration.name.range.atEnd
-        );
-        return false;
+        assert(false); // must have a declaration if 'void' (and thus resolved later on)
       }
     }
 
@@ -546,7 +553,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         this.error(
           DiagnosticCode.Operation_not_supported,
-          declaration.range
+          assert(declaration).range
         );
       }
       return false;
@@ -563,7 +570,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
 
       // evaluate initializer if present
-      if (declaration.initializer) {
+      if (declaration && declaration.initializer) {
         if (!initExpr) {
           initExpr = this.compileExpression(declaration.initializer, global.type);
         }
@@ -630,7 +637,7 @@ export class Compiler extends DiagnosticEmitter {
             assert(false);
             this.error(
               DiagnosticCode.Operation_not_supported,
-              global.declaration.range
+              assert(global.declaration).range
             );
             global.constantValueKind = ConstantValueKind.INTEGER;
             global.constantIntegerValue = i64_new(0);
@@ -638,11 +645,15 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         global.set(CommonFlags.INLINED); // inline the value from now on
-        if (declaration.isTopLevel) {    // but keep the element as it might be re-exported
-          module.addGlobal(internalName, nativeType, false, initExpr);
-        }
-        if (declaration.range.source.isEntry && declaration.isTopLevelExport) {
-          module.addGlobalExport(global.internalName, declaration.programLevelInternalName);
+        if (declaration) {
+          if (declaration.isTopLevel) {    // but keep the element as it might be re-exported
+            module.addGlobal(internalName, nativeType, false, initExpr);
+          }
+          if (declaration.range.source.isEntry && declaration.isTopLevelExport) {
+            module.addGlobalExport(global.internalName, declaration.programLevelInternalName);
+          }
+        } else {
+          assert(false); // must have a declaration if constant
         }
 
       } else /* mutable */ {
@@ -763,7 +774,7 @@ export class Compiler extends DiagnosticEmitter {
 
   // functions
 
-  /** Compiles a function given its declaration. */
+  /** Compiles a top-level function given its declaration. */
   compileFunctionDeclaration(
     declaration: FunctionDeclaration,
     typeArguments: TypeNode[],
@@ -775,6 +786,7 @@ export class Compiler extends DiagnosticEmitter {
       <FunctionPrototype>element,
       typeArguments,
       contextualTypeArguments,
+      null, // no outer scope (is top level)
       (<FunctionPrototype>element).declaration.name
     );
   }
@@ -784,6 +796,7 @@ export class Compiler extends DiagnosticEmitter {
     prototype: FunctionPrototype,
     typeArguments: TypeNode[],
     contextualTypeArguments: Map<string,Type> | null,
+    outerScope: Flow | null,
     reportNode: Node
   ): Function | null {
     var instance = prototype.resolveUsingTypeArguments( // reports
@@ -791,7 +804,9 @@ export class Compiler extends DiagnosticEmitter {
       contextualTypeArguments,
       reportNode
     );
-    if (!(instance && this.compileFunction(instance))) return null;
+    if (!instance) return null;
+    instance.outerScope = outerScope;
+    if (!this.compileFunction(instance)) return null;
     return instance;
   }
 
@@ -1032,7 +1047,8 @@ export class Compiler extends DiagnosticEmitter {
             this.compileFunctionUsingTypeArguments(
               <FunctionPrototype>element,
               [],
-              null,
+              null, // no contextual type arguments
+              null, // no outer scope
               (<FunctionPrototype>element).declaration.name
             );
           }
@@ -1084,7 +1100,8 @@ export class Compiler extends DiagnosticEmitter {
             let functionInstance = this.compileFunctionUsingTypeArguments(
               <FunctionPrototype>element,
               [],
-              null,
+              null, // no contextual type arguments
+              null, // no outer scope
               (<FunctionPrototype>element).declaration.name
             );
             if (functionInstance) {
@@ -1810,9 +1827,9 @@ export class Compiler extends DiagnosticEmitter {
       }
       if (!isInlined) {
         if (declaration.isAny(CommonFlags.LET | CommonFlags.CONST)) { // here: not top-level
-          currentFunction.flow.addScopedLocal(name, type, declaration.name); // reports
+          currentFunction.flow.addScopedLocal(type, name, declaration); // reports
         } else {
-          currentFunction.addLocal(type, name); // reports
+          currentFunction.addLocal(type, name, declaration); // reports
         }
         if (init) {
           initializers.push(this.compileAssignmentWithValue(declaration.name, init));
@@ -1965,10 +1982,6 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         assert(false);
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          element.declaration.range
-        );
         return this.module.createUnreachable();
       }
     }
@@ -4805,6 +4818,7 @@ export class Compiler extends DiagnosticEmitter {
       prototype,
       [],
       currentFunction.contextualTypeArguments,
+      currentFunction.flow,
       declaration
     );
     if (!instance) return this.module.createUnreachable();
@@ -5514,7 +5528,7 @@ export class Compiler extends DiagnosticEmitter {
     var currentFunction = this.currentFunction;
 
     // make a getter for the expression (also obtains the type)
-    var getValue = this.compileExpression(
+    var getValue = this.compileExpression( // reports
       expression.operand,
       contextualType == Type.void
         ? Type.i32
@@ -5522,6 +5536,10 @@ export class Compiler extends DiagnosticEmitter {
       ConversionKind.NONE,
       false // wrapped below
     );
+    if (_BinaryenExpressionGetId(getValue) == ExpressionId.Unreachable) {
+      // shortcut if compiling the getter already failed
+      return getValue;
+    }
     var currentType = this.currentType;
 
     var op: BinaryOp;

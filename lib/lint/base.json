@@ -12,10 +12,6 @@
         ["boolean", "Use `bool` instead."]
       ]
     },
-    "object-literal-shorthand": {
-      "severity": "error",
-      "options": ["never"]
-    },
     "restrict-plus-operands": {
       "severity": "error"
     },

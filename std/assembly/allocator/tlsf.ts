@@ -16,10 +16,11 @@
 // FL: first level, SL: second level, AL: alignment, SB: small block
 
 import {
-  BITS as AL_BITS,
-  SIZE as AL_SIZE,
-  MASK as AL_MASK
-} from "./common/alignment";
+  AL_BITS,
+  AL_SIZE,
+  AL_MASK,
+  MAX_SIZE_32
+} from "./common";
 
 const SL_BITS: u32 = 5;
 const SL_SIZE: usize = 1 << <usize>SL_BITS;
@@ -31,6 +32,8 @@ const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
   ? 30 // ^= up to 1GB per block
   : 32 // ^= up to 4GB per block
 ) - SB_BITS;
+
+// assert(1 << (FL_BITS + SB_BITS) == MAX_SIZE_32);
 
 // ╒════════════════ Block structure layout (32-bit) ══════════════╕
 //    3                   2                   1
@@ -457,7 +460,8 @@ export function allocate_memory(size: usize): usize {
 
   // search for a suitable block
   var data: usize = 0;
-  if (size && size < Block.MAX_SIZE) {
+  if (size && size <= Block.MAX_SIZE) {
+    // 32-bit MAX_SIZE is 1 << 30 and itself aligned, hence the following can't overflow MAX_SIZE
     size = max<usize>((size + AL_MASK) & ~AL_MASK, Block.MIN_SIZE);
 
     let block = root.search(size);

@@ -23,6 +23,9 @@ A few early examples to get an idea:
 * **[PSON decoder](./examples/pson)**<br />
   A simple decoder for the PSON binary format.
 
+* **[WASM parser](./lib/parse)**<br />
+  A WebAssembly binary parser in WebAssembly.
+
 Or browse the [compiler tests](./tests/compiler) for a more in-depth overview of what's supported already. One of them is a [showcase](./tests/compiler/showcase.ts).
 
 Installation

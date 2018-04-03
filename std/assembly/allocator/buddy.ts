@@ -347,7 +347,7 @@ export function allocate_memory(request: usize): usize {
    * a hard-coded limit on the maximum allocation size because of the way this
    * allocator works.
    */
-  if (request + HEADER_SIZE > MAX_ALLOC) {
+  if (request > MAX_ALLOC - HEADER_SIZE) {
     return 0;
   }
 

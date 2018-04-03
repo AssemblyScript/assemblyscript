@@ -3,9 +3,10 @@
  (type $ifi (func (param i32 f32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (global $~lib/allocator/common/alignment/BITS i32 (i32.const 3))
- (global $~lib/allocator/common/alignment/SIZE i32 (i32.const 8))
- (global $~lib/allocator/common/alignment/MASK i32 (i32.const 7))
+ (global $~lib/allocator/common/index/AL_BITS i32 (i32.const 3))
+ (global $~lib/allocator/common/index/AL_SIZE i32 (i32.const 8))
+ (global $~lib/allocator/common/index/AL_MASK i32 (i32.const 7))
+ (global $~lib/allocator/common/index/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/new/aClass (mut i32) (i32.const 0))
@@ -20,100 +21,108 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (nop)
   (if
-   (i32.eqz
+   (if (result i32)
+    (get_local $0)
+    (i32.lt_u
+     (get_local $0)
+     (i32.const 1073741824)
+    )
     (get_local $0)
    )
-   (return
-    (i32.const 0)
-   )
-  )
-  (set_local $1
-   (get_global $~lib/allocator/arena/offset)
-  )
-  (set_local $2
-   (i32.and
-    (i32.add
-     (i32.add
-      (get_local $1)
-      (get_local $0)
-     )
-     (i32.const 7)
-    )
-    (i32.xor
-     (i32.const 7)
-     (i32.const -1)
-    )
-   )
-  )
-  (set_local $3
-   (current_memory)
-  )
-  (if
-   (i32.gt_u
-    (get_local $2)
-    (i32.shl
-     (get_local $3)
-     (i32.const 16)
-    )
-   )
    (block
-    (set_local $4
-     (i32.shr_u
-      (i32.and
+    (set_local $1
+     (get_global $~lib/allocator/arena/offset)
+    )
+    (set_local $2
+     (i32.and
+      (i32.add
        (i32.add
-        (i32.sub
-         (get_local $2)
-         (get_local $1)
-        )
-        (i32.const 65535)
+        (get_local $1)
+        (get_local $0)
        )
-       (i32.xor
-        (i32.const 65535)
-        (i32.const -1)
-       )
+       (i32.const 7)
       )
-      (i32.const 16)
+      (i32.xor
+       (i32.const 7)
+       (i32.const -1)
+      )
      )
     )
-    (set_local $5
-     (select
-      (tee_local $5
-       (get_local $3)
-      )
-      (tee_local $6
-       (get_local $4)
-      )
-      (i32.gt_s
-       (get_local $5)
-       (get_local $6)
-      )
-     )
+    (set_local $3
+     (current_memory)
     )
     (if
-     (i32.lt_s
-      (grow_memory
-       (get_local $5)
+     (i32.gt_u
+      (get_local $2)
+      (i32.shl
+       (get_local $3)
+       (i32.const 16)
       )
-      (i32.const 0)
      )
-     (if
-      (i32.lt_s
-       (grow_memory
-        (get_local $4)
+     (block
+      (set_local $4
+       (i32.shr_u
+        (i32.and
+         (i32.add
+          (i32.sub
+           (get_local $2)
+           (get_local $1)
+          )
+          (i32.const 65535)
+         )
+         (i32.xor
+          (i32.const 65535)
+          (i32.const -1)
+         )
+        )
+        (i32.const 16)
        )
-       (i32.const 0)
       )
-      (unreachable)
+      (set_local $5
+       (select
+        (tee_local $5
+         (get_local $3)
+        )
+        (tee_local $6
+         (get_local $4)
+        )
+        (i32.gt_s
+         (get_local $5)
+         (get_local $6)
+        )
+       )
+      )
+      (if
+       (i32.lt_s
+        (grow_memory
+         (get_local $5)
+        )
+        (i32.const 0)
+       )
+       (if
+        (i32.lt_s
+         (grow_memory
+          (get_local $4)
+         )
+         (i32.const 0)
+        )
+        (unreachable)
+       )
+      )
      )
+    )
+    (set_global $~lib/allocator/arena/offset
+     (get_local $2)
+    )
+    (return
+     (get_local $1)
     )
    )
   )
-  (set_global $~lib/allocator/arena/offset
-   (get_local $2)
-  )
   (return
-   (get_local $1)
+   (i32.const 0)
   )
  )
  (func $std/new/AClass#constructor (; 1 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)

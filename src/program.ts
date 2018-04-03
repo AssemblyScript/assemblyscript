@@ -63,7 +63,8 @@ import {
   VariableStatement,
 
   ParameterKind,
-  SignatureNode
+  SignatureNode,
+  VariableDeclaration
 } from "./ast";
 
 import {
@@ -420,7 +421,7 @@ export class Program extends DiagnosticEmitter {
     if (implementsTypes) {
       let numImplementsTypes = implementsTypes.length;
       if (prototype.is(CommonFlags.UNMANAGED)) {
-        if (implementsTypes && numImplementsTypes) {
+        if (numImplementsTypes) {
           this.error(
             DiagnosticCode.Structs_cannot_implement_interfaces,
             Range.join(
@@ -544,8 +545,8 @@ export class Program extends DiagnosticEmitter {
         this,
         name,
         internalName,
-        declaration,
-        Type.void
+        Type.void, // resolved later on
+        declaration
       );
       classPrototype.members.set(name, staticField);
       this.elementsLookup.set(internalName, staticField);
@@ -1454,8 +1455,8 @@ export class Program extends DiagnosticEmitter {
         this,
         simpleName,
         internalName,
-        declaration,
-        Type.void // resolved later on
+        Type.void, // resolved later on
+        declaration
       );
       global.namespace = namespace;
       this.elementsLookup.set(internalName, global);
@@ -1713,6 +1714,19 @@ export class Program extends DiagnosticEmitter {
         if (!resolvedElement) resolvedElement = new ResolvedElement();
         return resolvedElement.set(element);
       }
+
+      // check outer scope locals
+      // let outerScope = contextualFunction.outerScope;
+      // while (outerScope) {
+      //   if (element = outerScope.getScopedLocal(name)) {
+      //     let scopedLocal = <Local>element;
+      //     let scopedGlobal = scopedLocal.scopedGlobal;
+      //     if (!scopedGlobal) scopedGlobal = outerScope.addScopedGlobal(scopedLocal);
+      //     if (!resolvedElement) resolvedElement = new ResolvedElement();
+      //     return resolvedElement.set(scopedGlobal);
+      //   }
+      //   outerScope = outerScope.currentFunction.outerScope;
+      // }
 
       // search contextual parent namespaces if applicable
       if (namespace = contextualFunction.prototype.namespace) {
@@ -2241,7 +2255,7 @@ export class VariableLikeElement extends Element {
   // kind varies
 
   /** Declaration reference. */
-  declaration: VariableLikeDeclarationStatement;
+  declaration: VariableLikeDeclarationStatement | null;
   /** Variable type. Is {@link Type.void} for type-inferred {@link Global}s before compilation. */
   type: Type;
   /** Constant value kind. */
@@ -2250,6 +2264,18 @@ export class VariableLikeElement extends Element {
   constantIntegerValue: I64;
   /** Constant float value, if applicable. */
   constantFloatValue: f64;
+
+  protected constructor(
+    program: Program,
+    simpleName: string,
+    internalName: string,
+    type: Type,
+    declaration: VariableLikeDeclarationStatement | null
+  ) {
+    super(program, simpleName, internalName);
+    this.type = type;
+    this.declaration = declaration;
+  }
 
   withConstantIntegerValue(lo: i32, hi: i32): this {
     this.constantValueKind = ConstantValueKind.INTEGER;
@@ -2275,12 +2301,11 @@ export class Global extends VariableLikeElement {
     program: Program,
     simpleName: string,
     internalName: string,
-    declaration: VariableLikeDeclarationStatement,
-    type: Type
+    type: Type,
+    declaration: VariableLikeDeclarationStatement | null
   ) {
-    super(program, simpleName, internalName);
-    this.declaration = declaration;
-    this.flags = declaration.flags;
+    super(program, simpleName, internalName, type, declaration);
+    this.flags = declaration ? declaration.flags : CommonFlags.NONE;
     this.type = type; // resolved later if `void`
   }
 }
@@ -2312,11 +2337,18 @@ export class Local extends VariableLikeElement {
 
   /** Local index. */
   index: i32;
+  /** Respective scoped global, if any. */
+  scopedGlobal: Global | null = null;
 
-  constructor(program: Program, simpleName: string, index: i32, type: Type) {
-    super(program, simpleName, simpleName);
+  constructor(
+    program: Program,
+    simpleName: string,
+    index: i32,
+    type: Type,
+    declaration: VariableLikeDeclarationStatement | null = null
+  ) {
+    super(program, simpleName, simpleName, type, declaration);
     this.index = index;
-    this.type = type;
   }
 }
 
@@ -2552,6 +2584,8 @@ export class Function extends Element {
   functionTableIndex: i32 = -1;
   /** Trampoline function for calling with omitted arguments. */
   trampoline: Function | null = null;
+  /** The outer scope, if a function expression. */
+  outerScope: Flow | null = null;
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
@@ -2604,6 +2638,7 @@ export class Function extends Element {
             parameterName,
             localIndex++,
             parameterType
+            // FIXME: declaration?
           )
         );
       }
@@ -2612,7 +2647,7 @@ export class Function extends Element {
   }
 
   /** Adds a local of the specified type, with an optional name. */
-  addLocal(type: Type, name: string | null = null): Local {
+  addLocal(type: Type, name: string | null = null, declaration: VariableDeclaration | null = null): Local {
     // if it has a name, check previously as this method will throw otherwise
     var localIndex = this.signature.parameterTypes.length + this.additionalLocals.length;
     if (this.is(CommonFlags.INSTANCE)) ++localIndex;
@@ -2622,7 +2657,8 @@ export class Function extends Element {
         ? name
         : "var$" + localIndex.toString(10),
       localIndex,
-      type
+      type,
+      declaration
     );
     if (name) {
       if (this.locals.has(name)) throw new Error("duplicate local name");
@@ -2833,8 +2869,13 @@ export class Field extends VariableLikeElement {
   memoryOffset: i32 = -1;
 
   /** Constructs a new field. */
-  constructor(prototype: FieldPrototype, internalName: string, type: Type) {
-    super(prototype.program, prototype.simpleName, internalName);
+  constructor(
+    prototype: FieldPrototype,
+    internalName: string,
+    type: Type,
+    declaration: FieldDeclaration
+  ) {
+    super(prototype.program, prototype.simpleName, internalName, type, declaration);
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.type = type;
@@ -3020,7 +3061,8 @@ export class ClassPrototype extends Element {
               let fieldInstance = new Field(
                 <FieldPrototype>member,
                 internalName + INSTANCE_DELIMITER + (<FieldPrototype>member).simpleName,
-                fieldType
+                fieldType,
+                fieldDeclaration
               );
               switch (fieldType.byteSize) { // align
                 case 1: break;
@@ -3281,6 +3323,8 @@ export class Flow {
   breakLabel: string | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
+  /** Scoped global variables. */
+  // scopedGlobals: Map<Local,Global> | null = null;
 
   /** Creates the parent flow of the specified function. */
   static create(currentFunction: Function): Flow {
@@ -3346,13 +3390,13 @@ export class Flow {
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(name: string, type: Type, reportNode: Node): void {
+  addScopedLocal(type: Type, name: string, declaration: VariableDeclaration): void {
     var scopedLocal = this.currentFunction.getTempLocal(type);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else if (this.scopedLocals.has(name)) {
       this.currentFunction.program.error(
         DiagnosticCode.Duplicate_identifier_0,
-        reportNode.range
+        declaration.name.range
       );
       return;
     }
@@ -3370,6 +3414,27 @@ export class Flow {
     } while (current = current.parent);
     return this.currentFunction.locals.get(name);
   }
+
+  /** Adds a scoped global for an outer scoped local. */
+  // addScopedGlobal(scopedLocal: Local): Global {
+  //   var scopedGlobals = this.scopedGlobals;
+  //   var scopedGlobal: Global | null;
+  //   if (!scopedGlobals) {
+  //     this.scopedGlobals = scopedGlobals = new Map();
+  //   } else {
+  //     scopedGlobal = scopedGlobals.get(scopedLocal);
+  //     if (scopedGlobal) return scopedGlobal;
+  //   }
+  //   scopedGlobal = new Global(
+  //     scopedLocal.program,
+  //     scopedLocal.simpleName,
+  //     this.currentFunction.internalName + "~" + scopedLocal.internalName,
+  //     scopedLocal.type,
+  //     assert(scopedLocal.declaration)
+  //   );
+  //   scopedGlobals.set(scopedLocal, scopedGlobal);
+  //   return scopedGlobal;
+  // }
 
   /** Finalizes this flow. Must be the topmost parent flow of the function. */
   finalize(): void {

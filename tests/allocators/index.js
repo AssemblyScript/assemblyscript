@@ -1,4 +1,5 @@
 const fs = require("fs");
+const COMMON_MAX = 1 << 30;
 
 function test(file) {
   console.log("Testing '" + file + "' ...\n");
@@ -23,6 +24,13 @@ function test(file) {
 
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
+
+  if (exports.allocate_memory(COMMON_MAX + 1) != 0) {
+    throw Error("allocation is allowed to overflow MAX_SIZE");
+  }
+  if (exports.allocate_memory(0xffffffff) != 0) {
+    throw Error("allocation is allowed to overflow INT_MAX");
+  }
 }
 
 if (process.argv.length > 2) {
