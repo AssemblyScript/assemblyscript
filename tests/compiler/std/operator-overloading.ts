@@ -45,8 +45,33 @@ class Tester {
   }
 
   @operator('==')
-  static equal(a: Tester, b: Tester): bool {
+  static equals(a: Tester, b: Tester): bool {
     return a.x == b.x && a.y == b.y;
+  }
+
+  @operator('!=')
+  static notEquals(a: Tester, b: Tester): bool {
+    return a.x != b.x && a.y != b.y;
+  }
+
+  @operator('>')
+  static greater(a: Tester, b: Tester): bool {
+    return a.x > b.x && a.y > b.y;
+  }
+
+  @operator('>=')
+  static greaterEquals(a: Tester, b: Tester): bool {
+    return a.x >= b.x && a.y >= b.y;
+  }
+
+  @operator('<')
+  static less(a: Tester, b: Tester): bool {
+    return a.x < b.x && a.y < b.y;
+  }
+
+  @operator('<=')
+  static lessEquals(a: Tester, b: Tester): bool {
+    return a.x <= b.x && a.y <= b.y;
   }
 }
 
@@ -109,3 +134,35 @@ var eq3 = new Tester(1, 0);
 var eq4 = new Tester(0, 1);
 var eqf = eq3 == eq4;
 assert(eqf == false);
+
+// check falsely non-equal
+eq = eq1 != eq2;
+assert(eq == false);
+
+// check truthfully non-equal
+eqf = eq3 != eq4;
+assert(eqf == true);
+
+// check greater
+var gt1 = new Tester(2, i32.MAX_VALUE);
+var gt2 = new Tester(1, 0);
+var gt  = gt1 > gt2;
+assert(gt == true);
+
+// check greater or equal
+var gte1 = new Tester(2, 2);
+var gte2 = new Tester(2, 2);
+var gte  = gte1 >= gte2;
+assert(gte == true);
+
+// check less
+var le1 = new Tester(5,-1);
+var le2 = new Tester(6, 6);
+var le  = le1 < le2;
+assert(le == true);
+
+// check less or equal
+var leq1 = new Tester(4, 3);
+var leq2 = new Tester(4, 3);
+var leq  = leq1 <= leq2;
+assert(leq == true);

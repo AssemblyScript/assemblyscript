@@ -733,6 +733,26 @@ export class Program extends DiagnosticEmitter {
                   classPrototype.fnEquals = prototype.simpleName;
                   break;
                 }
+                case "!=": {
+                  classPrototype.fnNotEquals = prototype.simpleName;
+                  break;
+                }
+                case ">": {
+                  classPrototype.fnGreaterThan = prototype.simpleName;
+                  break;
+                }
+                case ">=": {
+                  classPrototype.fnGreaterThanEquals = prototype.simpleName;
+                  break;
+                }
+                case "<": {
+                  classPrototype.fnLessThan = prototype.simpleName;
+                  break;
+                }
+                case "<=": {
+                  classPrototype.fnLessThanEquals = prototype.simpleName;
+                  break;
+                }
                 default: {
                   this.error(
                     DiagnosticCode.Operation_not_supported,
@@ -2944,6 +2964,16 @@ export class ClassPrototype extends Element {
   fnBitwiseXor: string | null = null;
   /** Overloaded equality comparison method, if any. */
   fnEquals: string | null = null;
+  /** Overloaded non-equality comparison method, if any. */
+  fnNotEquals: string | null = null;
+  /** Overloaded greater comparison method, if any. */
+  fnGreaterThan: string | null = null;
+  /** Overloaded greater or equal comparison method, if any. */
+  fnGreaterThanEquals: string | null = null;
+  /** Overloaded less comparison method, if any. */
+  fnLessThan: string | null = null;
+  /** Overloaded less or equal comparison method, if any. */
+  fnLessThanEquals: string | null = null;
 
   constructor(
     program: Program,
