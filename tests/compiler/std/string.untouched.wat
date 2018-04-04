@@ -268,7 +268,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 235)
+     (i32.const 231)
      (i32.const 4)
     )
     (unreachable)
@@ -526,7 +526,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 212)
+     (i32.const 208)
      (i32.const 4)
     )
     (unreachable)
@@ -1328,7 +1328,7 @@
                  (call $abort
                   (i32.const 0)
                   (i32.const 72)
-                  (i32.const 561)
+                  (i32.const 557)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -4122,24 +4122,6 @@
     (i32.lt_s
      (get_local $2)
      (get_local $3)
-    )
-   )
-  )
-  (if
-   (i32.eq
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.le_s
-     (call $~lib/string/String#charCodeAt
-      (get_local $0)
-      (i32.const 0)
-     )
-     (call $~lib/string/String#charCodeAt
-      (get_local $1)
-      (i32.const 0)
-     )
     )
    )
   )
