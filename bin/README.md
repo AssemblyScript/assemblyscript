@@ -16,7 +16,7 @@ API
 The API accepts the same options as the CLI but also lets you override stdout and stderr and/or provide a callback. Example:
 
 ```js
-const asc = require("assemblyscript/bin/asc.js");
+const asc = require("assemblyscript/bin/asc");
 asc.main([
   "myModule.ts",
   "--binaryFile", "myModule.wasm",
@@ -40,19 +40,9 @@ const options = require("assemblyscript/bin/asc.json");
 ...
 ```
 
-You can also compile a source string directly, eg. in a browser environment:
+You can also compile a source string directly, for example in a browser environment:
 
 ```js
-const asc = require('assemblyscript/dist/asc')
-
-const input = '...'
-const args = { optimize: 2 }
-
-asc.compileString(input, args)
-  .then(({ wasm, wast, stdout, stderr }) => {
-    // ...
-  })
-  .catch(({ err, stdout, stderr }) => {
-    // ...
-  })
+const { binary, text, stdout, stderr } = asc.compileString(`...`, { optimize: 2 });
+...
 ```

@@ -61,65 +61,47 @@ exports.defaultOptimizeLevel = 2;
 /** Default Binaryen shrink level. */
 exports.defaultShrinkLevel = 1;
 
-/** Bundled library files, if any. */
-exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : {};
+/** Bundled library files. */
+exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if not a bundle
+  const libDir = path.join(__dirname, "..", "std", "assembly");
+  const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
+  const bundled = {};
+  libFiles.forEach(file => bundled[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
+  return bundled;
+})();
 
-/** Bundled definition files, if any. */
-exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : {};
-
+/** Bundled definition files. */
+exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // set up if not a bundle
+  const stdDir = path.join(__dirname, "..", "std");
+  return {
+    "assembly": fs.readFileSync(path.join(stdDir, "assembly.d.ts"), "utf8"),
+    "portable": fs.readFileSync(path.join(stdDir, "portable.d.ts"), "utf8")
+  };
+})();
 
 /** Convenience function that parses and compiles source strings directly. */
-exports.compileString = (source, extraArgs={}) => new Promise((resolve, reject) => {
-  const sources = {};
-  const output = {};
-
-  if (typeof source === "string") {
-    sources["input.ts"] = source;
-  }
-  Object.keys(sources).forEach(k => {
-    sources[`/${k}`] = sources[k];
-    delete sources[k];
-  })
-  const options = {
+exports.compileString = (sources, options) => {
+  if (typeof sources === "string") sources = { "input.ts": sources };
+  const output = Object.create({
     stdout: createMemoryStream(),
     stderr: createMemoryStream(),
-    readFile: name => sources[name],
-    writeFile: (name, contents) => output[name.replace(/^\//, "")] = contents,
-    listFiles: Function.prototype
-  };
-
-  // if not a bundle, include std lib since we override readFile
-  if (!exports.isBundle) {
-    const libDir = path.join(__dirname, "../std", "assembly");
-    const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
-    libFiles.forEach(file =>
-      exports.libraryFiles[file.replace(/\.ts$/, "")] = readFileNode(path.join(libDir, file), { encoding: "utf8" })
-    );
-  }
-
-  const args = [
-    "--baseDir=/",
-    "--binaryFile=wasm",
-    "--textFile=wast",
-    ...Object.keys(extraArgs).map(arg => `--${arg}=${extraArgs[arg]}`),
-    ...Object.keys(sources),
-  ];
-
-  exports.main(args, options, (err) => {
-    if (err) {
-      reject({
-        err,
-        stdout: options.stdout.toString(),
-        stderr: options.stderr.toString(),
-      })
-    } else {
-      resolve(Object.assign(output, {
-        stdout: options.stdout.toString(),
-        stderr: options.stderr.toString(),
-      }))
-    }
+    binary: null,
+    text: null
   });
-});
+  exports.main([
+    "--binaryFile", "binary",
+    "--textFile", "text",
+    ...Object.keys(options || {}).map(arg => `--${arg}=${options[arg]}`),
+    ...Object.keys(sources),
+  ], {
+    stdout: output.stdout,
+    stderr: output.stderr,
+    readFile: name => sources.hasOwnProperty(name) ? sources[name] : null,
+    writeFile: (name, contents) => output[name] = contents,
+    listFiles: () => []
+  });
+  return output;
+}
 
 /** Runs the command line utility using the specified arguments array. */
 exports.main = function main(argv, options, callback) {
@@ -203,18 +185,13 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Set up base directory
-  const baseDir = args.baseDir ? path.resolve(args.baseDir) : process.cwd();
-
-  // Include standard library if --noLib isn't set
-  const stdLibDir = path.join(__dirname, "..", "std", "assembly");
-  const libDirs = args.noLib ? [] : [ stdLibDir ];
+  const baseDir = args.baseDir ? path.resolve(args.baseDir) : ".";
 
   // Include custom library components (with or without stdlib)
+  const customLibDirs = [];
   if (args.lib) {
-    if (typeof args.lib === "string") {
-      args.lib = args.lib.split(",");
-    }
-    Array.prototype.push.apply(libDirs, args.lib.map(lib => lib.trim()));
+    if (typeof args.lib === "string") args.lib = args.lib.split(",");
+    Array.prototype.push.apply(customLibDirs, args.lib.map(lib => lib.trim()));
   }
 
   // Begin parsing
@@ -258,8 +235,8 @@ exports.main = function main(argv, options, callback) {
           sourceText = exports.libraryFiles[indexName];
           sourcePath = exports.libraryPrefix + indexName + ".ts";
         } else {
-          for (let i = 0, k = libDirs.length; i < k; ++i) {
-            const dir = libDirs[i];
+          for (let i = 0, k = customLibDirs.length; i < k; ++i) {
+            const dir = customLibDirs[i];
             sourceText = readFile(path.join(dir, plainName + ".ts"));
             if (sourceText !== null) {
               sourcePath = exports.libraryPrefix + plainName + ".ts";
@@ -293,8 +270,8 @@ exports.main = function main(argv, options, callback) {
               sourceText = exports.libraryFiles[indexName];
               sourcePath = exports.libraryPrefix + indexName + ".ts";
             } else {
-              for (let i = 0, k = libDirs.length; i < k; ++i) {
-                const dir = libDirs[i];
+              for (let i = 0, k = customLibDirs.length; i < k; ++i) {
+                const dir = customLibDirs[i];
                 sourceText = readFile(path.join(dir, plainName + ".ts"));
                 if (sourceText !== null) {
                   sourcePath = exports.libraryPrefix + plainName + ".ts";
@@ -312,7 +289,7 @@ exports.main = function main(argv, options, callback) {
         }
       }
       if (sourceText == null) {
-        return callback(Error("Import file '" + plainName + ".ts' not found."));
+        return callback(Error("Import file '" + sourcePath + ".ts' not found."));
       }
       stats.parseCount++;
       stats.parseTime += measure(() => {
@@ -325,27 +302,24 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Include (other) library components
-  var hasBundledLibrary = false;
-  if (!args.noLib)
+  if (!args.noLib) // bundled
     Object.keys(exports.libraryFiles).forEach(libPath => {
-      if (libPath.lastIndexOf("/") >= exports.libraryPrefix.length) return;
+      if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
       stats.parseCount++;
       stats.parseTime += measure(() => {
         parser = assemblyscript.parseFile(
           exports.libraryFiles[libPath],
-          libPath + ".ts",
+          exports.libraryPrefix + libPath + ".ts",
           false,
           parser
         );
       });
-      hasBundledLibrary = true;
     });
-  for (let i = 0, k = libDirs.length; i < k; ++i) {
-    if (i === 0 && hasBundledLibrary) continue;
-    let libDir = libDirs[i];
+  for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
+    let libDir = customLibDirs[i];
     let libFiles;
     if (libDir.endsWith(".ts")) {
-      libFiles = [path.basename(libDir)];
+      libFiles = [ path.basename(libDir) ];
       libDir = path.dirname(libDir);
     } else {
       libFiles = listFiles(libDir);
@@ -353,9 +327,7 @@ exports.main = function main(argv, options, callback) {
     for (let j = 0, l = libFiles.length; j < l; ++j) {
       let libPath = libFiles[j];
       let libText = readFile(path.join(libDir, libPath));
-      if (libText === null) {
-        return callback(Error("Library file '" + libPath + "' not found."));
-      }
+      if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
       stats.parseCount++;
       stats.parseTime += measure(() => {
         parser = assemblyscript.parseFile(
@@ -562,9 +534,9 @@ exports.main = function main(argv, options, callback) {
           sourceMap.sources.forEach((name, index) => {
             let text = null;
             if (name.startsWith(exports.libraryPrefix)) {
-              for (let i = 0, k = libDirs.length; i < k; ++i) {
+              for (let i = 0, k = customLibDirs.length; i < k; ++i) {
                 text = readFile(path.join(
-                  libDirs[i],
+                  customLibDirs[i],
                   name.substring(exports.libraryPrefix.length))
                 );
                 if (text !== null) break;

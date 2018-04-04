@@ -18,8 +18,7 @@
 import {
   AL_BITS,
   AL_SIZE,
-  AL_MASK,
-  MAX_SIZE_32
+  AL_MASK
 } from "./common";
 
 const SL_BITS: u32 = 5;
@@ -32,8 +31,6 @@ const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
   ? 30 // ^= up to 1GB per block
   : 32 // ^= up to 4GB per block
 ) - SB_BITS;
-
-// assert(1 << (FL_BITS + SB_BITS) == MAX_SIZE_32);
 
 // ╒════════════════ Block structure layout (32-bit) ══════════════╕
 //    3                   2                   1

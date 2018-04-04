@@ -76,6 +76,34 @@ function readVarint64(): i64 {
   return select<u64>(val | (~0 << shl), val, shl < 64 && (byt & 0x40) != 0);
 }
 
+function skipInitExpr(): void {
+  var op = readUint<u8>();
+  switch (op) {
+    case Opcode.i32_const: {
+      readVarint(32);
+      break;
+    }
+    case Opcode.i64_const: {
+      readVarint64();
+      break;
+    }
+    case Opcode.f32_const: {
+      readUint<u32>();
+      break;
+    }
+    case Opcode.f64_const: {
+      readUint64();
+      break;
+    }
+    case Opcode.get_global: {
+      readVaruint(32);
+      break;
+    }
+    default: unreachable(); // MVP
+  }
+  if (readUint<u8>() != Opcode.end) unreachable();
+}
+
 // Imported callbacks
 declare function onSection(id: u32, offset: u32, length: u32, nameOffset: u32, nameLength: u32): bool;
 declare function onType(index: u32, form: u32): void;
@@ -257,32 +285,7 @@ export function parse(begin: usize, end: usize): void {
           for (let i: u32 = 0; i < count; ++i) {
             let type = readVarint(7) & 0x7f;
             let mutability = readVaruint(1);
-            let op = readUint<u8>();
-            switch (op) {
-              case Opcode.i32_const: {
-                readVarint(32);
-                break;
-              }
-              case Opcode.i64_const: {
-                readVarint64();
-                break;
-              }
-              case Opcode.f32_const: {
-                readUint<u32>();
-                break;
-              }
-              case Opcode.f64_const: {
-                readUint64();
-                break;
-              }
-              case Opcode.get_global: {
-                readVaruint(32);
-                break;
-              }
-              default: unreachable();
-            }
-            op = readUint<u8>();
-            if (op != Opcode.end) unreachable();
+            skipInitExpr();
             onGlobal(
               glo_space_index++,
               type,
@@ -389,7 +392,9 @@ export function parse(begin: usize, end: usize): void {
           off = payload_off + payload_len; // ignore errors
           break;
         }
-        case SectionId.Code: { // skip
+        case SectionId.Element:
+        case SectionId.Code:
+        case SectionId.Data: { // skip
           off += payload_len;
           break;
         }
