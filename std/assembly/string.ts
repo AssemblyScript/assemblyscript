@@ -138,10 +138,13 @@ export class String {
       return false;
     }
 
-    if (!left.length)  return false;
-    if (!right.length) return true;
+    var leftLength  = left.length;
+    var rightLength = right.length;
 
-    var length = <usize>min<i32>(left.length, right.length);
+    if (!leftLength)  return false;
+    if (!rightLength) return true;
+
+    var length = <usize>min<i32>(leftLength, rightLength);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
@@ -155,10 +158,13 @@ export class String {
       return false;
     }
 
-    if (!left.length)  return !right.length;
-    if (!right.length) return true;
+    var leftLength  = left.length;
+    var rightLength = right.length;
 
-    var length = <usize>min<i32>(left.length, right.length);
+    if (!leftLength)  return !rightLength;
+    if (!rightLength) return true;
+
+    var length = <usize>min<i32>(leftLength, rightLength);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
@@ -172,10 +178,13 @@ export class String {
       return false;
     }
 
-    if (!right.length) return false;
-    if (!left.length)  return true;
+    var leftLength  = left.length;
+    var rightLength = right.length;
 
-    var length = <usize>min<i32>(left.length, right.length);
+    if (!rightLength) return false;
+    if (!leftLength)  return true;
+
+    var length = <usize>min<i32>(leftLength, rightLength);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
@@ -189,10 +198,13 @@ export class String {
       return false;
     }
 
-    if (!right.length) return !left.length;
-    if (!left.length)  return true;
+    var leftLength  = left.length;
+    var rightLength = right.length;
 
-    var length = <usize>min<i32>(left.length, right.length);
+    if (!rightLength) return !leftLength;
+    if (!leftLength)  return true;
+
+    var length = <usize>min<i32>(leftLength, rightLength);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
