@@ -4295,9 +4295,11 @@
    )
   )
   (if
-   (call $~lib/string/String.__lt
-    (i32.const 360)
-    (i32.const 332)
+   (i32.eqz
+    (call $~lib/string/String.__gte
+     (i32.const 360)
+     (i32.const 332)
+    )
    )
    (block
     (call $abort
@@ -4310,9 +4312,11 @@
    )
   )
   (if
-   (call $~lib/string/String.__gt
-    (i32.const 332)
-    (i32.const 360)
+   (i32.eqz
+    (call $~lib/string/String.__lte
+     (i32.const 332)
+     (i32.const 360)
+    )
    )
    (block
     (call $abort
@@ -4326,7 +4330,7 @@
   )
   (if
    (call $~lib/string/String.__lt
-    (i32.const 332)
+    (i32.const 360)
     (i32.const 332)
    )
    (block
@@ -4342,13 +4346,43 @@
   (if
    (call $~lib/string/String.__gt
     (i32.const 332)
-    (i32.const 332)
+    (i32.const 360)
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 40)
      (i32.const 57)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $~lib/string/String.__lt
+    (i32.const 332)
+    (i32.const 332)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 58)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $~lib/string/String.__gt
+    (i32.const 332)
+    (i32.const 332)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 59)
      (i32.const 0)
     )
     (unreachable)
@@ -4365,7 +4399,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 58)
+     (i32.const 60)
      (i32.const 0)
     )
     (unreachable)
@@ -4382,7 +4416,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 59)
+     (i32.const 61)
      (i32.const 0)
     )
     (unreachable)

@@ -51,6 +51,8 @@ assert(!(nullStr < "b"));
 
 assert("abc" > "");
 assert("" < "abc");
+assert("abc" >= "");
+assert("" <= "abc");
 assert(!("abc" < ""));
 assert(!("" > "abc"));
 assert(!("" < ""));
