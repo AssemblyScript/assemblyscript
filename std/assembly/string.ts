@@ -127,6 +127,67 @@ export class String {
     );
   }
 
+  @operator("!=")
+  private static __neq(left: String, right: String): bool {
+    return !this.__eq(left, right);
+  }
+
+  @operator(">")
+  private static __gt(left: String, right: String): bool {
+    if (!changetype<usize>(left) || !changetype<usize>(right)) {
+      return false;
+    }
+
+    var length = min<isize>(left.length, right.length);
+    return compare_memory(
+      changetype<usize>(left)  + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
+      (<usize>length << 1)
+    ) > 0;
+  }
+
+  @operator(">=")
+  private static __gte(left: String, right: String): bool {
+    if (!changetype<usize>(left) || !changetype<usize>(right)) {
+      return false;
+    }
+
+    var length = min<isize>(left.length, right.length);
+    return compare_memory(
+      changetype<usize>(left)  + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
+      (<usize>length << 1)
+    ) >= 0;
+  }
+
+  @operator("<")
+  private static __lt(left: String, right: String): bool {
+    if (!changetype<usize>(left) || !changetype<usize>(right)) {
+      return false;
+    }
+
+    var length = min<isize>(left.length, right.length);
+    return compare_memory(
+      changetype<usize>(left)  + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
+      (<usize>length << 1)
+    ) < 0;
+  }
+
+  @operator("<=")
+  private static __lte(left: String, right: String): bool {
+    if (!changetype<usize>(left) || !changetype<usize>(right)) {
+      return false;
+    }
+
+    var length = min<isize>(left.length, right.length);
+    return compare_memory(
+      changetype<usize>(left)  + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
+      (<usize>length << 1)
+    ) <= 0;
+  }
+
   includes(searchString: String, position: i32 = 0): bool {
     return this.indexOf(searchString, position) != -1;
   }
