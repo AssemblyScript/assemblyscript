@@ -3339,7 +3339,6 @@
  )
  (func $~lib/string/String.__gt (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   (if
    (i32.and
     (if (result i32)
@@ -3361,36 +3360,22 @@
   )
   (if
    (i32.eqz
-    (tee_local $2
-     (select
-      (tee_local $2
-       (i32.load
-        (get_local $0)
-       )
-      )
-      (tee_local $3
-       (i32.load
-        (get_local $1)
-       )
-      )
-      (i32.lt_s
-       (get_local $2)
-       (get_local $3)
-      )
-     )
+    (i32.load
+     (get_local $0)
     )
    )
    (return
-    (i32.gt_s
-     (call $~lib/string/String#charCodeAt
-      (get_local $0)
-      (i32.const 0)
-     )
-     (call $~lib/string/String#charCodeAt
-      (get_local $1)
-      (i32.const 0)
-     )
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.load
+     (get_local $1)
     )
+   )
+   (return
+    (i32.const 1)
    )
   )
   (i32.gt_s
@@ -3404,7 +3389,22 @@
      (i32.const 4)
     )
     (i32.shl
-     (get_local $2)
+     (select
+      (tee_local $2
+       (i32.load
+        (get_local $0)
+       )
+      )
+      (tee_local $0
+       (i32.load
+        (get_local $1)
+       )
+      )
+      (i32.lt_s
+       (get_local $2)
+       (get_local $0)
+      )
+     )
      (i32.const 1)
     )
    )
@@ -3413,7 +3413,6 @@
  )
  (func $~lib/string/String.__gte (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   (if
    (i32.and
     (if (result i32)
@@ -3435,36 +3434,26 @@
   )
   (if
    (i32.eqz
-    (tee_local $2
-     (select
-      (tee_local $2
-       (i32.load
-        (get_local $0)
-       )
-      )
-      (tee_local $3
-       (i32.load
-        (get_local $1)
-       )
-      )
-      (i32.lt_s
-       (get_local $2)
-       (get_local $3)
-      )
-     )
+    (i32.load
+     (get_local $0)
     )
    )
    (return
-    (i32.ge_s
-     (call $~lib/string/String#charCodeAt
-      (get_local $0)
-      (i32.const 0)
-     )
-     (call $~lib/string/String#charCodeAt
+    (i32.eqz
+     (i32.load
       (get_local $1)
-      (i32.const 0)
      )
     )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (return
+    (i32.const 1)
    )
   )
   (i32.ge_s
@@ -3478,7 +3467,22 @@
      (i32.const 4)
     )
     (i32.shl
-     (get_local $2)
+     (select
+      (tee_local $2
+       (i32.load
+        (get_local $0)
+       )
+      )
+      (tee_local $0
+       (i32.load
+        (get_local $1)
+       )
+      )
+      (i32.lt_s
+       (get_local $2)
+       (get_local $0)
+      )
+     )
      (i32.const 1)
     )
    )
@@ -3486,6 +3490,80 @@
   )
  )
  (func $~lib/string/String.__lt (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (if
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.eqz
+       (get_local $0)
+      )
+     )
+     (get_local $2)
+     (i32.eqz
+      (get_local $1)
+     )
+    )
+    (i32.const 1)
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.load
+     (get_local $0)
+    )
+   )
+   (return
+    (i32.const 1)
+   )
+  )
+  (i32.lt_s
+   (call $~lib/memory/compare_memory
+    (i32.add
+     (get_local $0)
+     (i32.const 4)
+    )
+    (i32.add
+     (get_local $1)
+     (i32.const 4)
+    )
+    (i32.shl
+     (select
+      (tee_local $2
+       (i32.load
+        (get_local $0)
+       )
+      )
+      (tee_local $0
+       (i32.load
+        (get_local $1)
+       )
+      )
+      (i32.lt_s
+       (get_local $2)
+       (get_local $0)
+      )
+     )
+     (i32.const 1)
+    )
+   )
+   (i32.const 0)
+  )
+ )
+ (func $~lib/string/String.__lte (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -3505,6 +3583,30 @@
    )
    (return
     (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (return
+    (i32.eqz
+     (i32.load
+      (get_local $0)
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.load
+     (get_local $0)
+    )
+   )
+   (return
+    (i32.const 1)
    )
   )
   (if
@@ -3529,7 +3631,7 @@
     )
    )
    (return
-    (i32.lt_s
+    (i32.le_s
      (call $~lib/string/String#charCodeAt
       (get_local $0)
       (i32.const 0)
@@ -3541,7 +3643,7 @@
     )
    )
   )
-  (i32.lt_s
+  (i32.le_s
    (call $~lib/memory/compare_memory
     (i32.add
      (get_local $0)
@@ -3559,7 +3661,7 @@
    (i32.const 0)
   )
  )
- (func $start (; 27 ;) (type $v)
+ (func $start (; 28 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -4197,6 +4299,83 @@
   )
   (if
    (i32.eqz
+    (call $~lib/string/String.__lt
+     (i32.const 332)
+     (i32.const 360)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 53)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $~lib/string/String.__lt
+    (i32.const 360)
+    (i32.const 332)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 54)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $~lib/string/String.__gt
+    (i32.const 332)
+    (i32.const 360)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 55)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $~lib/string/String.__lt
+    (i32.const 332)
+    (i32.const 332)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 56)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $~lib/string/String.__gt
+    (i32.const 332)
+    (i32.const 332)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 57)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $~lib/string/String.__gte
      (i32.const 332)
      (i32.const 332)
@@ -4206,7 +4385,24 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 53)
+     (i32.const 58)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__lte
+     (i32.const 332)
+     (i32.const 332)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 59)
      (i32.const 0)
     )
     (unreachable)

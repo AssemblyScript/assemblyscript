@@ -50,4 +50,10 @@ assert(!("b" < nullStr));
 assert(!(nullStr < "b"));
 
 assert("abc" > "");
+assert("" < "abc");
+assert(!("abc" < ""));
+assert(!("" > "abc"));
+assert(!("" < ""));
+assert(!("" > ""));
 assert("" >= "");
+assert("" <= "");

@@ -138,11 +138,10 @@ export class String {
       return false;
     }
 
-    var length = <usize>min<i32>(left.length, right.length);
-    if (length == 0) {
-      return left.charCodeAt(0) > right.charCodeAt(0);
-    }
+    if (!left.length)  return false;
+    if (!right.length) return true;
 
+    var length = <usize>min<i32>(left.length, right.length);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
@@ -156,11 +155,10 @@ export class String {
       return false;
     }
 
-    var length = <usize>min<i32>(left.length, right.length);
-    if (length == 0) {
-      return left.charCodeAt(0) >= right.charCodeAt(0);
-    }
+    if (!left.length)  return !right.length;
+    if (!right.length) return true;
 
+    var length = <usize>min<i32>(left.length, right.length);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
@@ -174,11 +172,10 @@ export class String {
       return false;
     }
 
-    var length = <usize>min<i32>(left.length, right.length);
-    if (length == 0) {
-      return left.charCodeAt(0) < right.charCodeAt(0);
-    }
+    if (!right.length) return false;
+    if (!left.length)  return true;
 
+    var length = <usize>min<i32>(left.length, right.length);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
@@ -191,6 +188,9 @@ export class String {
     if (!changetype<usize>(left) || !changetype<usize>(right)) {
       return false;
     }
+
+    if (!right.length) return !left.length;
+    if (!left.length)  return true;
 
     var length = <usize>min<i32>(left.length, right.length);
     if (length == 0) {
