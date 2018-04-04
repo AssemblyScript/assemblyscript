@@ -127,6 +127,91 @@ export class String {
     );
   }
 
+  @operator("!=")
+  private static __ne(left: String, right: String): bool {
+    return !this.__eq(left, right);
+  }
+
+  @operator(">")
+  private static __gt(left: String, right: String): bool {
+    if (!changetype<usize>(left) || !changetype<usize>(right)) {
+      return false;
+    }
+
+    var leftLength  = left.length;
+    var rightLength = right.length;
+
+    if (!leftLength)  return false;
+    if (!rightLength) return true;
+
+    var length = <usize>min<i32>(leftLength, rightLength);
+    return compare_memory(
+      changetype<usize>(left)  + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
+      length << 1
+    ) > 0;
+  }
+
+  @operator(">=")
+  private static __gte(left: String, right: String): bool {
+    if (!changetype<usize>(left) || !changetype<usize>(right)) {
+      return false;
+    }
+
+    var leftLength  = left.length;
+    var rightLength = right.length;
+
+    if (!leftLength)  return !rightLength;
+    if (!rightLength) return true;
+
+    var length = <usize>min<i32>(leftLength, rightLength);
+    return compare_memory(
+      changetype<usize>(left)  + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
+      length << 1
+    ) >= 0;
+  }
+
+  @operator("<")
+  private static __lt(left: String, right: String): bool {
+    if (!changetype<usize>(left) || !changetype<usize>(right)) {
+      return false;
+    }
+
+    var leftLength  = left.length;
+    var rightLength = right.length;
+
+    if (!rightLength) return false;
+    if (!leftLength)  return true;
+
+    var length = <usize>min<i32>(leftLength, rightLength);
+    return compare_memory(
+      changetype<usize>(left)  + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
+      length << 1
+    ) < 0;
+  }
+
+  @operator("<=")
+  private static __lte(left: String, right: String): bool {
+    if (!changetype<usize>(left) || !changetype<usize>(right)) {
+      return false;
+    }
+
+    var leftLength  = left.length;
+    var rightLength = right.length;
+
+    if (!rightLength) return !leftLength;
+    if (!leftLength)  return true;
+
+    var length = <usize>min<i32>(leftLength, rightLength);
+    return compare_memory(
+      changetype<usize>(left)  + HEADER_SIZE,
+      changetype<usize>(right) + HEADER_SIZE,
+      length << 1
+    ) <= 0;
+  }
+
   includes(searchString: String, position: i32 = 0): bool {
     return this.indexOf(searchString, position) != -1;
   }
