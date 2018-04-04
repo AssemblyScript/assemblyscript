@@ -5,6 +5,7 @@ import {
   Type,
   SectionId,
   ExternalKind,
+  NameType,
   MAX_PAGES,
   MAX_TABLES,
   Opcode
@@ -90,14 +91,22 @@ declare function onFunction(index: u32, typeIndex: u32): void;
 declare function onGlobal(index: u32, type: u32, mutability: u32): void;
 declare function onExport(index: u32, kind: u32, kindIndex: u32, nameOffset: u32, nameLength: u32): void;
 declare function onStart(index: u32): void;
+declare function onSourceMappingURL(offset: u32, length: u32): void;
+declare function onModuleName(offset: u32, length: u32): void;
+declare function onFunctionName(index: u32, offset: u32, length: u32): void;
+declare function onLocalName(funcIndex: u32, index: u32, offset: u32, length: u32): void;
 
 /** Starts parsing the module that has been placed in memory. */
-function parse(): void {
+export function parse(begin: usize, end: usize): void {
+  off = begin;
   var magic = readUint<u32>();
   if (magic != 0x6D736100) unreachable();
   var version = readUint<u32>();
   if (version != 1) unreachable();
-  var end: usize = current_memory() << 16;
+  var fun_space_index: u32 = 0;
+  var glo_space_index: u32 = 0;
+  var mem_space_index: u32 = 0;
+  var tbl_space_index: u32 = 0;
   while (off < end) {
     let section_off = off;
     let id = readVaruint(7);
@@ -105,13 +114,11 @@ function parse(): void {
     let name_off = 0;
     let name_len = 0;
     if (!id) {
+      let before = off;
       name_len = readVaruint(32);
-      if (!name_len) {
-        off = section_off;
-        break;
-      }
       name_off = off;
       off += name_len;
+      payload_len -= off - before;
     } else if (id > <u32>SectionId.Data) unreachable();
     let payload_off = off;
     if (onSection(
@@ -126,16 +133,27 @@ function parse(): void {
           let count = readVaruint(32);
           for (let index: u32 = 0; index < count; ++index) {
             let form = readVarint(7) & 0x7f;
-            onType(index, form);
+            onType(
+              index,
+              form
+            );
             let paramCount = readVaruint(32);
             for (let paramIndex: u32 = 0; paramIndex < paramCount; ++paramIndex) {
               let paramType = readVarint(7) & 0x7f;
-              onTypeParam(index, paramIndex, paramType);
+              onTypeParam(
+                index,
+                paramIndex,
+                paramType
+              );
             }
             let returnCount = readVaruint(1); // MVP
             for (let returnIndex: u32 = 0; returnIndex < returnCount; ++returnIndex) {
               let returnType = readVarint(7) & 0x7f;
-              onTypeReturn(index, returnIndex, returnType);
+              onTypeReturn(
+                index,
+                returnIndex,
+                returnType
+              );
             }
           }
           break;
@@ -145,10 +163,10 @@ function parse(): void {
           for (let index: u32 = 0; index < count; ++index) {
             let module_len = readVaruint(32);
             let module_off = off;
-            off += module_off;
+            off += module_len;
             let field_len = readVaruint(32);
             let field_off = off;
-            off += field_off;
+            off += field_len;
             let kind = readUint<u8>();
             onImport(
               index,
@@ -161,7 +179,10 @@ function parse(): void {
             switch (kind) {
               case ExternalKind.Function: {
                 let type = readVaruint(32);
-                onFunctionImport(index, type);
+                onFunctionImport(
+                  fun_space_index++,
+                  type
+                );
                 break;
               }
               case ExternalKind.Table: {
@@ -169,20 +190,35 @@ function parse(): void {
                 let flags = readVaruint(1);
                 let initial = readVaruint(32);
                 let maximum: u32 = flags & 1 ? readVaruint(32) : MAX_TABLES;
-                onTableImport(index, type, initial, maximum, flags);
+                onTableImport(
+                  tbl_space_index++,
+                  type,
+                  initial,
+                  maximum,
+                  flags
+                );
                 break;
               }
               case ExternalKind.Memory: {
                 let flags = readVaruint(1);
                 let initial = readVaruint(32);
                 let maximum: u32 = flags & 1 ? readVaruint(32) : MAX_PAGES;
-                onMemoryImport(index, initial, maximum, flags);
+                onMemoryImport(
+                  mem_space_index++,
+                  initial,
+                  maximum,
+                  flags
+                );
                 break;
               }
               case ExternalKind.Global: {
                 let type = readVarint(7) & 0x7f;
                 let mutability = readVaruint(1);
-                onGlobalImport(index, type, mutability);
+                onGlobalImport(
+                  glo_space_index++,
+                  type,
+                  mutability
+                );
                 break;
               }
               default: unreachable();
@@ -192,9 +228,12 @@ function parse(): void {
         }
         case SectionId.Function: {
           let count = readVaruint(32);
-          for (let index: u32 = 0; index < count; ++index) {
+          for (let i: u32 = 0; i < count; ++i) {
             let typeIndex = readVaruint(32);
-            onFunction(index, typeIndex);
+            onFunction(
+              fun_space_index++,
+              typeIndex
+            );
           }
           break;
         }
@@ -204,13 +243,18 @@ function parse(): void {
             let flags = readVaruint(1);
             let initial = readVaruint(32);
             let maximum: u32 = flags ? readVaruint(32) : MAX_PAGES;
-            onMemory(index, initial, maximum, flags);
+            onMemory(
+              mem_space_index++,
+              initial,
+              maximum,
+              flags
+            );
           }
           break;
         }
         case SectionId.Global: {
           let count = readVaruint(32);
-          for (let index: u32 = 0; index < count; ++index) {
+          for (let i: u32 = 0; i < count; ++i) {
             let type = readVarint(7) & 0x7f;
             let mutability = readVaruint(1);
             let op = readUint<u8>();
@@ -239,7 +283,11 @@ function parse(): void {
             }
             op = readUint<u8>();
             if (op != Opcode.end) unreachable();
-            onGlobal(index, type, mutability);
+            onGlobal(
+              glo_space_index++,
+              type,
+              mutability
+            );
           }
           break;
         }
@@ -268,8 +316,80 @@ function parse(): void {
           );
           break;
         }
-        case SectionId.Custom:
-        case SectionId.Code: { // TODO
+        case SectionId.Custom: {
+          if (
+            name_len == 4 &&
+            load<u32>(name_off) == 0x656D616E // "name"
+          ) {
+            let name_type = readVaruint(7);
+            let name_payload_len = readVaruint(32);
+            let name_payload_off = off;
+            switch (name_type) {
+              case NameType.Module: {
+                let module_name_len = readVaruint(32);
+                let module_name_off = off;
+                onModuleName(
+                  module_name_off,
+                  module_name_len
+                );
+                break;
+              }
+              case NameType.Function: {
+                let count = readVaruint(32);
+                for (let i: u32 = 0; i < count; ++i) {
+                  let fn_index = readVaruint(32);
+                  let fn_name_len = readVaruint(32);
+                  let fn_name_off = off;
+                  off += fn_name_len;
+                  onFunctionName(
+                    fn_index,
+                    fn_name_off,
+                    fn_name_len
+                  );
+                }
+                break;
+              }
+              case NameType.Local: {
+                let count = readVaruint(32);
+                for (let i: u32 = 0; i < count; ++i) {
+                  let fn_index = readVaruint(32);
+                  let lc_count = readVaruint(32);
+                  for (let j: u32 = 0; j < lc_count; ++j) {
+                    let lc_index = readVaruint(32);
+                    let lc_name_len = readVaruint(32);
+                    let lc_name_off = off;
+                    off += lc_name_len;
+                    onLocalName(
+                      fn_index,
+                      lc_index,
+                      lc_name_off,
+                      lc_name_len
+                    );
+                  }
+                }
+                break;
+              }
+              default: unreachable();
+            }
+            off = name_payload_off + name_payload_len; // ignore errors
+            break;
+          } else if (
+            name_len == 16 &&
+            load<u64>(name_off    ) == 0x614D656372756F73 &&  // "sourceMa"
+            load<u64>(name_off + 8) == 0x4C5255676E697070     // "ppingURL"
+          ) {
+            let url_len = readVaruint(32);
+            let url_off = off;
+            off += url_len;
+            onSourceMappingURL(
+              url_off,
+              url_len
+            );
+          }
+          off = payload_off + payload_len; // ignore errors
+          break;
+        }
+        case SectionId.Code: { // skip
           off += payload_len;
           break;
         }
@@ -279,7 +399,5 @@ function parse(): void {
       off += payload_len;
     }
   }
+  if (off != end) unreachable();
 }
-
-// Start parsing immediately
-parse();

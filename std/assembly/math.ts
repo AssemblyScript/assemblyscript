@@ -2047,7 +2047,9 @@ export namespace NativeMathf {
   }
 
   export function random(): f32 {
-    return <f32>NativeMath.random();
+    var f: f32; // FIXME: demoting from f64 to f32 might yield 1.0f
+    do f = <f32>NativeMath.random(); while (f == 1.0);
+    return f;
   }
 
   export function round(x: f32): f32 { // see: musl/src/math/roundf.c

@@ -1,6 +1,6 @@
 # ![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) parse
 
-A WebAssembly binary parser in WebAssembly.
+A WebAssembly binary parser in WebAssembly. Super small, super fast, with TypeScript support.
 
 API
 ---
@@ -52,6 +52,18 @@ API
 
   * **onExport**?(index: `number`, kind: `ExternalKind`, kindIndex: `number`, nameOff: `number`, nameLen: `number`): `void`<br />
     Called with each export if the export section is evaluated.
+
+  * **onSourceMappingURL**?(offset: `number`, length: `number`): `void`<br />
+    Called with the source map URL if the 'sourceMappingURL' section is evaluated.
+
+  * **onModuleName**?(offset: `number`, length: `number`): `void`<br />
+    Called with the module name if present and the 'name' section is evaluated.
+
+  * **onFunctionName**?(index: `number`, offset: `number`, length: `number`): `void`<br />
+    Called with each function name if present and the 'name' section is evaluated.
+
+  * **onLocalName**?(funcIndex: `number`, index: `number`, offset: `number`, length: `number`): `void`<br />
+    Called with each local name if present and the 'name' section is evaluated.
 
 * **Type**<br />
   A value or element type, depending on context.

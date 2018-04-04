@@ -14455,10 +14455,25 @@
   )
  )
  (func $~lib/math/NativeMathf.random (; 143 ;) (type $f) (result f32)
-  (return
-   (f32.demote/f64
-    (call $~lib/math/NativeMath.random)
+  (local $0 f32)
+  (nop)
+  (block $break|0
+   (loop $continue|0
+    (set_local $0
+     (f32.demote/f64
+      (call $~lib/math/NativeMath.random)
+     )
+    )
+    (br_if $continue|0
+     (f32.eq
+      (get_local $0)
+      (f32.const 1)
+     )
+    )
    )
+  )
+  (return
+   (get_local $0)
   )
  )
  (func $~lib/math/NativeMath.round (; 144 ;) (type $FF) (param $0 f64) (result f64)

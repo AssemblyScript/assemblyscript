@@ -6,58 +6,56 @@ import {
   parse
 } from "..";
 
-const testBinary = fs.readFileSync(__dirname + "/libm.wasm");
-
 function onSection(id: SectionId, offset: number, length: number, nameOffset: number, nameLength: number): boolean {
-  var name = id == 0 ? parse.readString(nameOffset, nameLength) : SectionId[id];
+  var name = id == 0 ? "'" + parse.readString(nameOffset, nameLength) + "'" : SectionId[id];
   console.log(name + " section at " + offset + ".." + (offset + length));
   return true;
 }
 
 function onType(index: number, form: Type): void {
-  console.log("- FunctionType[" + index + "] is " + Type[form]);
+  console.log("- FunctionType[" + index + "]: " + Type[form]);
 }
 
 function onTypeParam(index: number, paramIndex: number, paramType: Type): void {
-  console.log("  > param[" + paramIndex + "] = " + Type[paramType]);
+  console.log("  > param[" + paramIndex + "] -> " + Type[paramType]);
 }
 
 function onTypeReturn(index: number, returnIndex: number, returnType: Type): void {
-  console.log("  > return[" + returnIndex + "] = " + Type[returnType]);
+  console.log("  > return[" + returnIndex + "] -> " + Type[returnType]);
 }
 
 function onImport(index: number, kind: ExternalKind, moduleOff: number, moduleLen: number, fieldOff: number, fieldLen: number): void {
   var moduleName = parse.readString(moduleOff, moduleLen);
   var fieldName = parse.readString(fieldOff, fieldLen);
-  console.log("- Import[" + index + "] is '" + moduleName + "." + fieldName + "'");
+  console.log("- Import[" + index + "]: '" + moduleName + "." + fieldName + "'");
 }
 
-function onFunctionImport(index: number, type: number): void {
-  console.log("  > FunctionType[" + type + "]");
+function onFunctionImport(funIndex: number, type: number): void {
+  console.log("  - Function[" + funIndex + "] -> FunctionType[" + type + "]");
 }
 
-function onTableImport(index: number, type: Type, initial: number, maximum: number, flags: number): void {
-  console.log("  > " + Type[type] + ", initial=" + initial + ", maximum=" + maximum);
+function onTableImport(tblIndex: number, type: Type, initial: number, maximum: number, flags: number): void {
+  console.log("  - Table[" + tblIndex + "] -> " + Type[type] + ": initial=" + initial + ", maximum=" + maximum);
 }
 
-function onMemoryImport(index: number, initial: number, maximum: number, flags: number): void {
-  console.log("  > initial=" + initial + ", maximum=" + maximum);
+function onMemoryImport(memIndex: number, initial: number, maximum: number, flags: number): void {
+  console.log("  - Memory[" + memIndex + "]: initial=" + initial + ", maximum=" + maximum);
 }
 
-function onGlobalImport(index: number, type: Type, mutability: number): void {
-  console.log("  > " + (mutability & 1 ? "mutable " : "const ") + Type[type]);
+function onGlobalImport(gloIndex: number, type: Type, mutability: number): void {
+  console.log("  - Global[" + gloIndex + "]: " + (mutability & 1 ? "mutable " : "const ") + Type[type]);
 }
 
-function onMemory(index: number, initial: number, maximum: number, flags: number): void {
-  console.log("- Memory[" + index + "]: initial=" + initial + ", maximum=" + maximum);
+function onMemory(memIndex: number, initial: number, maximum: number, flags: number): void {
+  console.log("- Memory[" + memIndex + "]: initial=" + initial + ", maximum=" + maximum);
 }
 
-function onFunction(index: number, typeIndex: number): void {
-  console.log("- Function[" + index + "]: FunctionType[" + typeIndex + "]");
+function onFunction(funIndex: number, typeIndex: number): void {
+  console.log("- Function[" + funIndex + "] -> FunctionType[" + typeIndex + "]");
 }
 
-function onGlobal(index: number, type: Type, mutability: number): void {
-  console.log("- Global[" + index + "]: " + (mutability & 1 ? "mutable " : "const ") + Type[type]);
+function onGlobal(gloIndex: number, type: Type, mutability: number): void {
+  console.log("- Global[" + gloIndex + "]: " + (mutability & 1 ? "mutable " : "const ") + Type[type]);
 }
 
 function onStart(index: number): void {
@@ -66,22 +64,53 @@ function onStart(index: number): void {
 
 function onExport(index: number, kind: ExternalKind, kindIndex: number, fieldOffset: number, fieldLength: number): void {
   var field = parse.readString(fieldOffset, fieldLength);
-  console.log("- Export[" + index + "]: '" + field + "' -> " + ExternalKind[kind] + "[" + kindIndex + "]");
+  console.log("- Export[" + index + "], '" + field + "' -> " + ExternalKind[kind] + "[" + kindIndex + "]");
 }
 
-const result = parse(testBinary, {
-  onSection,
-  onType,
-  onTypeParam,
-  onTypeReturn,
-  onImport,
-  onFunctionImport,
-  onTableImport,
-  onMemoryImport,
-  onGlobalImport,
-  onMemory,
-  onFunction,
-  onGlobal,
-  onStart,
-  onExport
+function onSourceMappingURL(offset: number, length: number): void {
+  var url = parse.readString(offset, length);
+  console.log("- sourceMap: " + url);
+}
+
+function onModuleName(offset: number, length: number): void {
+  var name = parse.readString(offset, length);
+  console.log("- moduleName: " + name);
+}
+
+function onFunctionName(index: number, offset: number, length: number): void {
+  var name = parse.readString(offset, length);
+  console.log(" - Function[" + index + "] name: " + name);
+}
+
+function onLocalName(funcIndex: number, index: number, offset: number, length: number): void {
+  var name = parse.readString(offset, length);
+  console.log("  - Function[" + funcIndex + "].local[" + index + "] name: " + name);
+}
+
+[ "../build/index.wasm",
+  "libm.wasm"
+].forEach((filename: string): void => {
+  const binary: Uint8Array = fs.readFileSync(__dirname + "/" + filename);
+  console.log("Testing '" + filename + "' ...");
+  parse(binary, {
+    onSection,
+    onType,
+    onTypeParam,
+    onTypeReturn,
+    onImport,
+    onFunctionImport,
+    onTableImport,
+    onMemoryImport,
+    onGlobalImport,
+    onMemory,
+    onFunction,
+    onGlobal,
+    onStart,
+    onExport,
+    onSourceMappingURL,
+    onModuleName,
+    onFunctionName,
+    onLocalName
+  });
+  console.log();
 });

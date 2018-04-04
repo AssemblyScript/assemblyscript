@@ -36,7 +36,15 @@ export interface ParseOptions {
   /** Called with the start function index if the start section is evaluated. */
   onStart?(index: number): void;
   /** Called with each export if the export section is evaluated. */
-  onExport?(index: number, kind: ExternalKind, kindIndex: number, nameOff: number, nameLen: number);
+  onExport?(index: number, kind: ExternalKind, kindIndex: number, nameOff: number, nameLen: number): void;
+  /** Called with the source map URL if the 'sourceMappingURL' section is evaluated. */
+  onSourceMappingURL?(offset: number, length: number): void;
+  /** Called with the module name if present and the 'name' section is evaluated. */
+  onModuleName?(offset: number, length: number): void;
+  /** Called with each function name if present and the 'name' section is evaluated. */
+  onFunctionName?(index: number, offset: number, length: number): void;
+  /** Called with each local name if present and the 'name' section is evaluated. */
+  onLocalName?(funcIndex: number, index: number, offset: number, length: number): void;
 }
 
 /** Parses the contents of a WebAssembly binary according to the specified options. */
@@ -47,9 +55,9 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   if (!compiled) compiled = new WebAssembly.Module(base64_decode(WASM_DATA));
 
   // use the binary as the parser's memory
-  var bytes = binary.length + 5; // leave space for u8 + u32 zero terminator
-  var pages = ((bytes + 0xffff) & ~0xffff) >> 16;
-  var memory = new WebAssembly.Memory({ initial: pages });
+  var nBytes = binary.length;
+  var nPages = ((nBytes + 0xffff) & ~0xffff) >> 16;
+  var memory = new WebAssembly.Memory({ initial: nPages });
   var buffer = new Uint8Array(memory.buffer);
   buffer.set(binary);
 
@@ -58,13 +66,8 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
 
   // instantiate the parser and return its exports
   function nop(): void {}
-  var imports = {
-    env: {
-      memory: memory
-    }
-  };
-  [
-    "onSection",
+  var imports = { env: { memory } };
+  [ "onSection",
     "onType",
     "onTypeParam",
     "onTypeReturn",
@@ -77,10 +80,14 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     "onFunction",
     "onGlobal",
     "onExport",
-    "onStart"
+    "onStart",
+    "onSourceMappingURL",
+    "onModuleName",
+    "onFunctionName",
+    "onLocalName"
   ].forEach((name: string): void => imports.env[name] = options[name] || nop);
   var instance = new WebAssembly.Instance(compiled, imports);
-  return instance.exports;
+  instance.exports.parse(0, nBytes);
 }
 
 export declare namespace parse {

@@ -35,6 +35,13 @@ export enum ExternalKind {
   Global = 3
 }
 
+/** Name section types. */
+export enum NameType {
+  Module = 0,
+  Function = 1,
+  Local = 2
+}
+
 /** Maximum number of pages. */
 export const MAX_PAGES = 0xffff;
 
