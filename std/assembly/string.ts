@@ -138,11 +138,11 @@ export class String {
       return false;
     }
 
-    var length = min<isize>(left.length, right.length);
+    var length = <usize>min<i32>(left.length, right.length);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
-      (<usize>length << 1)
+      length << 1
     ) > 0;
   }
 
@@ -152,11 +152,11 @@ export class String {
       return false;
     }
 
-    var length = min<isize>(left.length, right.length);
+    var length = <usize>min<i32>(left.length, right.length);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
-      (<usize>length << 1)
+      length << 1
     ) >= 0;
   }
 
@@ -166,11 +166,11 @@ export class String {
       return false;
     }
 
-    var length = min<isize>(left.length, right.length);
+    var length = <usize>min<i32>(left.length, right.length);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
-      (<usize>length << 1)
+      length << 1
     ) < 0;
   }
 
@@ -180,11 +180,11 @@ export class String {
       return false;
     }
 
-    var length = min<isize>(left.length, right.length);
+    var length = <usize>min<i32>(left.length, right.length);
     return compare_memory(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
-      (<usize>length << 1)
+      length << 1
     ) <= 0;
   }
 
