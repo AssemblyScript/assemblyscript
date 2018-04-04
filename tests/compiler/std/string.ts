@@ -42,6 +42,8 @@ assert(c != "a");
 assert("b" > "a");
 assert("ba" > "a");
 assert("ba" >= "aa");
+assert("ba" > "ab");
+assert(!("ba" < "ab"));
 
 assert(!("b" < nullStr));
 assert(!(nullStr < "b"));
