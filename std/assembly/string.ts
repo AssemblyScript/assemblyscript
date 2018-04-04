@@ -128,7 +128,7 @@ export class String {
   }
 
   @operator("!=")
-  private static __neq(left: String, right: String): bool {
+  private static __ne(left: String, right: String): bool {
     return !this.__eq(left, right);
   }
 
