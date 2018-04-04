@@ -38,6 +38,7 @@ assert(parseFloat(".1foobar") == 0.1);
 var c = "a" + "b";
 assert(c == "ab");
 assert(c != "a");
+assert("" == "");
 
 assert("b" > "a");
 assert("ba" > "a");
@@ -47,3 +48,6 @@ assert(!("ba" < "ab"));
 
 assert(!("b" < nullStr));
 assert(!(nullStr < "b"));
+
+assert("abc" > "");
+assert("" >= "");

@@ -46,7 +46,7 @@
  (global $~lib/string/CharCode.z i32 (i32.const 122))
  (global $~lib/string/EMPTY i32 (i32.const 332))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 360))
+ (global $HEAP_BASE i32 (i32.const 372))
  (memory $0 1)
  (data (i32.const 4) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 40) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
@@ -74,6 +74,7 @@
  (data (i32.const 336) "\02\00\00\00a\00b\00")
  (data (i32.const 344) "\02\00\00\00b\00a\00")
  (data (i32.const 352) "\02\00\00\00a\00a\00")
+ (data (i32.const 360) "\03\00\00\00a\00b\00c\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -267,7 +268,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 219)
+     (i32.const 235)
      (i32.const 4)
     )
     (unreachable)
@@ -525,7 +526,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 196)
+     (i32.const 212)
      (i32.const 4)
     )
     (unreachable)
@@ -1327,7 +1328,7 @@
                  (call $abort
                   (i32.const 0)
                   (i32.const 72)
-                  (i32.const 545)
+                  (i32.const 561)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -3853,6 +3854,24 @@
     )
    )
   )
+  (if
+   (i32.eq
+    (get_local $4)
+    (i32.const 0)
+   )
+   (return
+    (i32.gt_s
+     (call $~lib/string/String#charCodeAt
+      (get_local $0)
+      (i32.const 0)
+     )
+     (call $~lib/string/String#charCodeAt
+      (get_local $1)
+      (i32.const 0)
+     )
+    )
+   )
+  )
   (return
    (i32.gt_s
     (call $~lib/memory/compare_memory
@@ -3914,6 +3933,24 @@
     )
    )
   )
+  (if
+   (i32.eq
+    (get_local $4)
+    (i32.const 0)
+   )
+   (return
+    (i32.ge_s
+     (call $~lib/string/String#charCodeAt
+      (get_local $0)
+      (i32.const 0)
+     )
+     (call $~lib/string/String#charCodeAt
+      (get_local $1)
+      (i32.const 0)
+     )
+    )
+   )
+  )
   (return
    (i32.ge_s
     (call $~lib/memory/compare_memory
@@ -3972,6 +4009,24 @@
     (i32.lt_s
      (get_local $2)
      (get_local $3)
+    )
+   )
+  )
+  (if
+   (i32.eq
+    (get_local $4)
+    (i32.const 0)
+   )
+   (return
+    (i32.lt_s
+     (call $~lib/string/String#charCodeAt
+      (get_local $0)
+      (i32.const 0)
+     )
+     (call $~lib/string/String#charCodeAt
+      (get_local $1)
+      (i32.const 0)
+     )
     )
    )
   )
@@ -4525,6 +4580,23 @@
   )
   (if
    (i32.eqz
+    (call $~lib/string/String.__eq
+     (i32.const 332)
+     (i32.const 332)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 41)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $~lib/string/String.__gt
      (i32.const 324)
      (i32.const 316)
@@ -4534,7 +4606,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 42)
+     (i32.const 43)
      (i32.const 0)
     )
     (unreachable)
@@ -4551,7 +4623,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 43)
+     (i32.const 44)
      (i32.const 0)
     )
     (unreachable)
@@ -4568,7 +4640,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 44)
+     (i32.const 45)
      (i32.const 0)
     )
     (unreachable)
@@ -4585,7 +4657,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 45)
+     (i32.const 46)
      (i32.const 0)
     )
     (unreachable)
@@ -4604,7 +4676,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 46)
+     (i32.const 47)
      (i32.const 0)
     )
     (unreachable)
@@ -4616,25 +4688,6 @@
      (call $~lib/string/String.__lt
       (i32.const 324)
       (get_global $std/string/nullStr)
-     )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 40)
-     (i32.const 48)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eqz
-     (call $~lib/string/String.__lt
-      (get_global $std/string/nullStr)
-      (i32.const 324)
      )
     )
    )
@@ -4643,6 +4696,59 @@
      (i32.const 0)
      (i32.const 40)
      (i32.const 49)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eqz
+     (call $~lib/string/String.__lt
+      (get_global $std/string/nullStr)
+      (i32.const 324)
+     )
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 50)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__gt
+     (i32.const 360)
+     (i32.const 332)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 52)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__gte
+     (i32.const 332)
+     (i32.const 332)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 53)
      (i32.const 0)
     )
     (unreachable)
