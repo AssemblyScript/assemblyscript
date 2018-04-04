@@ -39,6 +39,7 @@ var c = "a" + "b";
 assert(c == "ab");
 assert(c != "a");
 assert("" == "");
+assert("" != nullStr);
 
 assert("b" > "a");
 assert("ba" > "a");

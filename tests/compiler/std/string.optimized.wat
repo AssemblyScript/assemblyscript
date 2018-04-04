@@ -4149,6 +4149,23 @@
   )
   (if
    (i32.eqz
+    (call $~lib/string/String.__ne
+     (i32.const 332)
+     (get_global $std/string/nullStr)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 42)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $~lib/string/String.__gt
      (i32.const 324)
      (i32.const 316)
@@ -4158,7 +4175,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 43)
+     (i32.const 44)
      (i32.const 0)
     )
     (unreachable)
@@ -4175,7 +4192,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 44)
+     (i32.const 45)
      (i32.const 0)
     )
     (unreachable)
@@ -4192,7 +4209,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 45)
+     (i32.const 46)
      (i32.const 0)
     )
     (unreachable)
@@ -4209,7 +4226,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 46)
+     (i32.const 47)
      (i32.const 0)
     )
     (unreachable)
@@ -4224,7 +4241,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 47)
+     (i32.const 48)
      (i32.const 0)
     )
     (unreachable)
@@ -4234,27 +4251,27 @@
    (call $~lib/string/String.__lt
     (i32.const 324)
     (get_global $std/string/nullStr)
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 40)
-     (i32.const 49)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/string/String.__lt
-    (get_global $std/string/nullStr)
-    (i32.const 324)
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 40)
      (i32.const 50)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $~lib/string/String.__lt
+    (get_global $std/string/nullStr)
+    (i32.const 324)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 51)
      (i32.const 0)
     )
     (unreachable)
@@ -4271,7 +4288,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 52)
+     (i32.const 53)
      (i32.const 0)
     )
     (unreachable)
@@ -4288,7 +4305,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 53)
+     (i32.const 54)
      (i32.const 0)
     )
     (unreachable)
@@ -4305,7 +4322,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 54)
+     (i32.const 55)
      (i32.const 0)
     )
     (unreachable)
@@ -4322,7 +4339,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 55)
+     (i32.const 56)
      (i32.const 0)
     )
     (unreachable)
@@ -4332,21 +4349,6 @@
    (call $~lib/string/String.__lt
     (i32.const 360)
     (i32.const 332)
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 40)
-     (i32.const 56)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/string/String.__gt
-    (i32.const 332)
-    (i32.const 360)
    )
    (block
     (call $abort
@@ -4359,9 +4361,9 @@
    )
   )
   (if
-   (call $~lib/string/String.__lt
+   (call $~lib/string/String.__gt
     (i32.const 332)
-    (i32.const 332)
+    (i32.const 360)
    )
    (block
     (call $abort
@@ -4374,7 +4376,7 @@
    )
   )
   (if
-   (call $~lib/string/String.__gt
+   (call $~lib/string/String.__lt
     (i32.const 332)
     (i32.const 332)
    )
@@ -4389,6 +4391,21 @@
    )
   )
   (if
+   (call $~lib/string/String.__gt
+    (i32.const 332)
+    (i32.const 332)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 60)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
    (i32.eqz
     (call $~lib/string/String.__gte
      (i32.const 332)
@@ -4399,7 +4416,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 60)
+     (i32.const 61)
      (i32.const 0)
     )
     (unreachable)
@@ -4416,7 +4433,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 61)
+     (i32.const 62)
      (i32.const 0)
     )
     (unreachable)
