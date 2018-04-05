@@ -31,7 +31,6 @@ import {
   Program,
   ClassPrototype,
   Class,
-  Element,
   ElementKind,
   Enum,
   Field,
@@ -4045,58 +4044,55 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef {
+    var program = this.program;
     var currentFunction = this.currentFunction;
-    var resolved = this.program.resolveExpression(expression, currentFunction); // reports
-    if (!resolved) return this.module.createUnreachable();
+    var target = program.resolveExpression(expression, currentFunction); // reports
+    if (!target) return this.module.createUnreachable();
 
     // to compile just the value, we need to know the target's type
-    var element = resolved.element;
     var elementType: Type;
-    switch (element.kind) {
+    switch (target.kind) {
       case ElementKind.GLOBAL: {
-        if (!this.compileGlobal(<Global>element)) { // reports; not yet compiled if a static field compiled as a global
+        if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field compiled as a global
           return this.module.createUnreachable();
         }
-        assert((<Global>element).type != Type.void, "concrete type expected");
+        assert((<Global>target).type != Type.void); // compileGlobal must guarantee this
         // fall-through
       }
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
-        elementType = (<VariableLikeElement>element).type;
+        elementType = (<VariableLikeElement>target).type;
         break;
       }
       case ElementKind.PROPERTY: {
-        let prototype = (<Property>element).setterPrototype;
+        let prototype = (<Property>target).setterPrototype;
         if (prototype) {
           let instance = prototype.resolve(); // reports
           if (!instance) return this.module.createUnreachable();
-          assert(instance.signature.parameterTypes.length == 1);
+          assert(instance.signature.parameterTypes.length == 1); // parser must guarantee this
           elementType = instance.signature.parameterTypes[0];
           break;
         }
         this.error(
           DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-          expression.range, (<Property>element).internalName
+          expression.range, (<Property>target).internalName
         );
         return this.module.createUnreachable();
       }
-      case ElementKind.FUNCTION_PROTOTYPE: {
-        if (expression.kind == NodeKind.ELEMENTACCESS) { // @operator("[]")
-          if (resolved.target && resolved.target.kind == ElementKind.CLASS) {
-            if (element.simpleName == (<Class>resolved.target).prototype.fnIndexedGet) {
-              let resolvedIndexedSet = (<FunctionPrototype>element).resolve(null); // reports
-              if (resolvedIndexedSet) {
-                elementType = resolvedIndexedSet.signature.returnType;
-                break;
-              }
-            } else {
-              this.error(
-                DiagnosticCode.Index_signature_is_missing_in_type_0,
-                expression.range, (<Class>resolved.target).toString()
-              );
-              return this.module.createUnreachable();
-            }
+      case ElementKind.CLASS: {
+        if (program.resolvedElementExpression) { // indexed access
+          let indexedGetPrototype = (<Class>target).getIndexedGet();
+          if (indexedGetPrototype) {
+            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
+            if (!indexedGetInstance) return this.module.createUnreachable();
+            elementType = indexedGetInstance.signature.returnType;
+            break;
           }
+          this.error(
+            DiagnosticCode.Index_signature_is_missing_in_type_0,
+            expression.range, (<Class>target).toString()
+          );
+          return this.module.createUnreachable();
         }
         // fall-through
       }
@@ -4124,62 +4120,61 @@ export class Compiler extends DiagnosticEmitter {
     tee: bool = false
   ): ExpressionRef {
     var module = this.module;
-    var resolved = this.program.resolveExpression(expression, this.currentFunction); // reports
-    if (!resolved) return module.createUnreachable();
+    var target = this.program.resolveExpression(expression, this.currentFunction); // reports
+    if (!target) return module.createUnreachable();
 
-    var element = resolved.element;
-    switch (element.kind) {
+    switch (target.kind) {
       case ElementKind.LOCAL: {
-        this.currentType = tee ? (<Local>element).type : Type.void;
-        if ((<Local>element).is(CommonFlags.CONST)) {
+        this.currentType = tee ? (<Local>target).type : Type.void;
+        if ((<Local>target).is(CommonFlags.CONST)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-            expression.range, (<Local>element).internalName
+            expression.range, target.internalName
           );
           return module.createUnreachable();
         }
         return tee
-          ? module.createTeeLocal((<Local>element).index, valueWithCorrectType)
-          : module.createSetLocal((<Local>element).index, valueWithCorrectType);
+          ? module.createTeeLocal((<Local>target).index, valueWithCorrectType)
+          : module.createSetLocal((<Local>target).index, valueWithCorrectType);
       }
       case ElementKind.GLOBAL: {
-        if (!this.compileGlobal(<Global>element)) return module.createUnreachable();
-        let type = (<Global>element).type;
+        if (!this.compileGlobal(<Global>target)) return module.createUnreachable();
+        let type = (<Global>target).type;
         assert(type != Type.void);
         this.currentType = tee ? type : Type.void;
-        if ((<Local>element).is(CommonFlags.CONST)) {
+        if ((<Local>target).is(CommonFlags.CONST)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             expression.range,
-            (<Local>element).internalName
+            target.internalName
           );
           return module.createUnreachable();
         }
         if (tee) {
           let nativeType = type.toNativeType();
-          let internalName = (<Global>element).internalName;
+          let internalName = target.internalName;
           return module.createBlock(null, [ // emulated teeGlobal
             module.createSetGlobal(internalName, valueWithCorrectType),
             module.createGetGlobal(internalName, nativeType)
           ], nativeType);
         } else {
-          return module.createSetGlobal((<Global>element).internalName, valueWithCorrectType);
+          return module.createSetGlobal(target.internalName, valueWithCorrectType);
         }
       }
       case ElementKind.FIELD: {
-        if ((<Field>element).is(CommonFlags.READONLY)) {
+        if ((<Field>target).is(CommonFlags.READONLY)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-            expression.range, (<Field>element).internalName
+            expression.range, (<Field>target).internalName
           );
           return module.createUnreachable();
         }
-        assert(resolved.isInstanceTarget);
-        let targetExpr = this.compileExpression(
-          <Expression>resolved.targetExpression,
-          (<Class>resolved.target).type
+        let thisExpression = assert(this.program.resolvedThisExpression);
+        let thisExpr = this.compileExpressionRetainType(
+          thisExpression,
+          this.options.usizeType
         );
-        let type = (<Field>element).type;
+        let type = (<Field>target).type;
         this.currentType = tee ? type : Type.void;
         let nativeType = type.toNativeType();
         if (tee) {
@@ -4190,25 +4185,25 @@ export class Compiler extends DiagnosticEmitter {
             module.createSetLocal(tempLocalIndex, valueWithCorrectType),
             module.createStore(
               type.size >> 3,
-              targetExpr,
+              thisExpr,
               module.createGetLocal(tempLocalIndex, nativeType),
               nativeType,
-              (<Field>element).memoryOffset
+              (<Field>target).memoryOffset
             ),
             module.createGetLocal(tempLocalIndex, nativeType)
           ], nativeType);
         } else {
           return module.createStore(
             type.size >> 3,
-            targetExpr,
+            thisExpr,
             valueWithCorrectType,
             nativeType,
-            (<Field>element).memoryOffset
+            (<Field>target).memoryOffset
           );
         }
       }
       case ElementKind.PROPERTY: {
-        let setterPrototype = (<Property>element).setterPrototype;
+        let setterPrototype = (<Property>target).setterPrototype;
         if (setterPrototype) {
           let setterInstance = setterPrototype.resolve(); // reports
           if (!setterInstance) return module.createUnreachable();
@@ -4216,35 +4211,35 @@ export class Compiler extends DiagnosticEmitter {
           // call just the setter if the return value isn't of interest
           if (!tee) {
             if (setterInstance.is(CommonFlags.INSTANCE)) {
-              assert(resolved.isInstanceTarget);
-              let thisArg = this.compileExpression(
-                <Expression>resolved.targetExpression,
-                (<Class>resolved.target).type
+              let thisExpression = assert(this.program.resolvedThisExpression);
+              let thisExpr = this.compileExpressionRetainType(
+                thisExpression,
+                this.options.usizeType
               );
-              return this.makeCallDirect(setterInstance, [ thisArg, valueWithCorrectType ]);
+              return this.makeCallDirect(setterInstance, [ thisExpr, valueWithCorrectType ]);
             } else {
               return this.makeCallDirect(setterInstance, [ valueWithCorrectType ]);
             }
           }
 
           // otherwise call the setter first, then the getter
-          let getterPrototype = (<Property>element).getterPrototype;
+          let getterPrototype = (<Property>target).getterPrototype;
           assert(getterPrototype != null); // must have one if there is a setter
           let getterInstance = (<FunctionPrototype>getterPrototype).resolve(); // reports
           if (!getterInstance) return module.createUnreachable();
           let returnType = getterInstance.signature.returnType;
           let nativeReturnType = returnType.toNativeType();
           if (setterInstance.is(CommonFlags.INSTANCE)) {
-            assert(resolved.isInstanceTarget);
-            let thisArg = this.compileExpression(
-              <Expression>resolved.targetExpression,
-              (<Class>resolved.target).type
+            let thisExpression = assert(this.program.resolvedThisExpression);
+            let thisExpr = this.compileExpressionRetainType(
+              thisExpression,
+              this.options.usizeType
             );
             let tempLocal = this.currentFunction.getAndFreeTempLocal(returnType);
             let tempLocalIndex = tempLocal.index;
             return module.createBlock(null, [
               this.makeCallDirect(setterInstance, [ // set and remember the target
-                module.createTeeLocal(tempLocalIndex, thisArg),
+                module.createTeeLocal(tempLocalIndex, thisExpr),
                 valueWithCorrectType
               ]),
               this.makeCallDirect(getterInstance, [ // get from remembered target
@@ -4261,63 +4256,66 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-            expression.range, (<Property>element).internalName
+            expression.range, target.internalName
           );
         }
         return module.createUnreachable();
       }
-      case ElementKind.FUNCTION_PROTOTYPE: { // @operator("[]") ?
-        if (expression.kind == NodeKind.ELEMENTACCESS) {
-          assert(resolved.isInstanceTarget);
-          let getterInstance = (<FunctionPrototype>element).resolve(); // reports
-          if (!getterInstance) return module.createUnreachable();
-          // obtain @operator("[]=")
-          let setElementName = (<Class>resolved.target).prototype.fnIndexedSet;
-          let setElement: Element | null;
-          if (
-            setElementName != null &&
-            (<Class>resolved.target).members &&
-            (setElement = (<Map<string,Element>>(<Class>resolved.target).members).get(setElementName)) &&
-            setElement.kind == ElementKind.FUNCTION_PROTOTYPE
-          ) {
-            let setterInstance = (<FunctionPrototype>setElement).resolve(); // reports
-            if (!setterInstance) return module.createUnreachable();
-            let targetType = (<Class>resolved.target).type;
-            let targetExpr = this.compileExpression(
-              <Expression>resolved.targetExpression,
-              targetType
+      case ElementKind.CLASS: {
+        let elementExpression = this.program.resolvedElementExpression;
+        if (elementExpression) {
+          let indexedGetPrototype = (<Class>target).getIndexedGet();
+          if (indexedGetPrototype) {
+            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
+            if (!indexedGetInstance) return module.createUnreachable();
+            let indexedSetPrototype = (<Class>target).getIndexedSet();
+            if (!indexedSetPrototype) {
+              this.error(
+                DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+                expression.range, target.internalName
+              );
+              this.currentType = tee ? indexedGetInstance.signature.returnType : Type.void;
+              return module.createUnreachable();
+            }
+            let indexedSetInstance = indexedSetPrototype.resolve(); // reports
+            if (!indexedSetInstance) return module.createUnreachable();
+            let targetType = (<Class>target).type;
+            let thisExpression = assert(this.program.resolvedThisExpression);
+            let thisExpr = this.compileExpressionRetainType(
+              thisExpression,
+              this.options.usizeType
             );
             let elementExpr = this.compileExpression(
-              (<ElementAccessExpression>expression).elementExpression,
+              elementExpression,
               Type.i32
             );
             if (tee) {
               let tempLocalTarget = this.currentFunction.getTempLocal(targetType);
               let tempLocalElement = this.currentFunction.getAndFreeTempLocal(this.currentType);
-              let returnType = getterInstance.signature.returnType;
+              let returnType = indexedGetInstance.signature.returnType;
               this.currentFunction.freeTempLocal(tempLocalTarget);
               return module.createBlock(null, [
-                this.makeCallDirect(setterInstance, [
-                  module.createTeeLocal(tempLocalTarget.index, targetExpr),
+                this.makeCallDirect(indexedSetInstance, [
+                  module.createTeeLocal(tempLocalTarget.index, thisExpr),
                   module.createTeeLocal(tempLocalElement.index, elementExpr),
                   valueWithCorrectType
                 ]),
-                this.makeCallDirect(getterInstance, [
+                this.makeCallDirect(indexedGetInstance, [
                   module.createGetLocal(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
                   module.createGetLocal(tempLocalElement.index, tempLocalElement.type.toNativeType())
                 ])
               ], returnType.toNativeType());
             } else {
-              return this.makeCallDirect(setterInstance, [
-                targetExpr,
+              return this.makeCallDirect(indexedSetInstance, [
+                thisExpr,
                 elementExpr,
                 valueWithCorrectType
               ]);
             }
           } else {
             this.error(
-              DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-              expression.range, (<Class>resolved.target).internalName
+              DiagnosticCode.Index_signature_is_missing_in_type_0,
+              expression.range, target.internalName
             );
             return module.createUnreachable();
           }
@@ -4335,17 +4333,16 @@ export class Compiler extends DiagnosticEmitter {
   compileCallExpression(expression: CallExpression, contextualType: Type): ExpressionRef {
     var module = this.module;
     var currentFunction = this.currentFunction;
-    var resolved = this.program.resolveExpression(expression.expression, currentFunction); // reports
-    if (!resolved) return module.createUnreachable();
+    var target = this.program.resolveExpression(expression.expression, currentFunction); // reports
+    if (!target) return module.createUnreachable();
 
-    var element = resolved.element;
     var signature: Signature | null;
     var indexArg: ExpressionRef;
-    switch (element.kind) {
+    switch (target.kind) {
 
       // direct call: concrete function
       case ElementKind.FUNCTION_PROTOTYPE: {
-        let prototype = <FunctionPrototype>element;
+        let prototype = <FunctionPrototype>target;
 
         // builtins are compiled on the fly
         if (prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
@@ -4377,69 +4374,72 @@ export class Compiler extends DiagnosticEmitter {
             expression
           );
           if (!instance) return module.createUnreachable();
-          let thisArg: ExpressionRef = 0;
           if (instance.is(CommonFlags.INSTANCE)) {
-            assert(resolved.isInstanceTarget);
-            thisArg = this.compileExpression(
-              <Expression>resolved.targetExpression,
-              (<Class>resolved.target).type
+            let thisExpression = assert(this.program.resolvedThisExpression);
+            let thisExpr = this.compileExpressionRetainType(
+              thisExpression,
+              this.options.usizeType
             );
-            if (!thisArg) return module.createUnreachable();
+            return this.compileCallDirect(instance, expression.arguments, expression, thisExpr);
           } else {
-            assert(!resolved.isInstanceTarget);
+            // if static, resolvedThisExpression is the ClassPrototype
+            return this.compileCallDirect(instance, expression.arguments, expression);
           }
-          return this.compileCallDirect(instance, expression.arguments, expression, thisArg);
         }
       }
 
       // indirect call: index argument with signature
       case ElementKind.LOCAL: {
-        if (signature = (<Local>element).type.signatureReference) {
-          indexArg = module.createGetLocal((<Local>element).index, NativeType.I32);
+        if (signature = (<Local>target).type.signatureReference) {
+          indexArg = module.createGetLocal((<Local>target).index, NativeType.I32);
           break;
         } else {
           this.error(
             DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Local>element).type.toString()
+            expression.range, (<Local>target).type.toString()
           );
           return module.createUnreachable();
         }
       }
       case ElementKind.GLOBAL: {
-        if (signature = (<Global>element).type.signatureReference) {
-          indexArg = module.createGetGlobal((<Global>element).internalName, (<Global>element).type.toNativeType());
+        if (signature = (<Global>target).type.signatureReference) {
+          indexArg = module.createGetGlobal((<Global>target).internalName, (<Global>target).type.toNativeType());
           break;
         } else {
           this.error(
             DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Global>element).type.toString()
+            expression.range, (<Global>target).type.toString()
           );
           return module.createUnreachable();
         }
       }
       case ElementKind.FIELD: {
-        let type = (<Field>element).type;
+        let type = (<Field>target).type;
         if (signature = type.signatureReference) {
-          let targetExpr = this.compileExpression(assert(resolved.targetExpression), type);
+          let thisExpression = assert(this.program.resolvedThisExpression);
+          let thisExpr = this.compileExpressionRetainType(
+            thisExpression,
+            this.options.usizeType
+          );
           indexArg = module.createLoad(
             4,
             false,
-            targetExpr,
+            thisExpr,
             NativeType.I32,
-            (<Field>element).memoryOffset
+            (<Field>target).memoryOffset
           );
           break;
         } else {
           this.error(
             DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Field>element).type.toString()
+            expression.range, (<Field>target).type.toString()
           );
           return module.createUnreachable();
         }
       }
       case ElementKind.FUNCTION_TARGET: {
-        signature = (<FunctionTarget>element).signature;
-        indexArg = this.compileExpression(expression.expression, (<FunctionTarget>element).type);
+        signature = (<FunctionTarget>target).signature;
+        indexArg = this.compileExpression(expression.expression, (<FunctionTarget>target).type);
         break;
       }
       case ElementKind.PROPERTY: // TODO
@@ -4827,24 +4827,31 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type): ExpressionRef {
-    var resolved = this.program.resolveElementAccess(expression, this.currentFunction); // reports
-    if (!resolved) return this.module.createUnreachable();
-
-    assert( // should be guaranteed by resolveElementAccess
-      resolved.element.kind == ElementKind.FUNCTION_PROTOTYPE &&
-      resolved.target &&
-      resolved.target.kind == ElementKind.CLASS
+    var target = this.program.resolveElementAccess(expression, this.currentFunction); // reports
+    if (!target) return this.module.createUnreachable();
+    switch (target.kind) {
+      case ElementKind.CLASS: {
+        let indexedGetPrototype = (<Class>target).getIndexedGet();
+        if (!indexedGetPrototype) {
+          this.error(
+            DiagnosticCode.Index_signature_is_missing_in_type_0,
+            expression.expression.range, (<Class>target).internalName
+          );
+          return this.module.createUnreachable();
+        }
+        let indexedGetInstance = indexedGetPrototype.resolve(); // reports
+        if (!indexedGetInstance) return this.module.createUnreachable();
+        let thisArg = this.compileExpression(expression.expression, (<Class>target).type);
+        return this.compileCallDirect(indexedGetInstance, [
+          expression.elementExpression
+        ], expression, thisArg);
+      }
+    }
+    this.error(
+      DiagnosticCode.Operation_not_supported,
+      expression.range
     );
-    var target = <Class>resolved.target;
-    var instance = (<FunctionPrototype>resolved.element).resolve( // reports
-      null,
-      target.contextualTypeArguments
-    );
-    if (!instance) return this.module.createUnreachable();
-    var thisArg = this.compileExpression(expression.expression, target.type);
-    return this.compileCallDirect(instance, [
-      expression.elementExpression
-    ], expression, thisArg);
+    return this.module.createUnreachable();
   }
 
   compileFunctionExpression(expression: FunctionExpression, contextualType: Type): ExpressionRef {
@@ -4956,42 +4963,41 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise resolve
-    var resolved = this.program.resolveIdentifier( // reports
+    var target = this.program.resolveIdentifier( // reports
       expression,
       this.currentFunction,
       this.currentEnum
     );
-    if (!resolved) return module.createUnreachable();
+    if (!target) return module.createUnreachable();
 
-    var element = resolved.element;
-    switch (element.kind) {
+    switch (target.kind) {
       case ElementKind.LOCAL: {
-        if ((<Local>element).is(CommonFlags.INLINED)) {
-          return this.compileInlineConstant(<Local>element, contextualType, retainConstantType);
+        if ((<Local>target).is(CommonFlags.INLINED)) {
+          return this.compileInlineConstant(<Local>target, contextualType, retainConstantType);
         }
-        let localType = (<Local>element).type;
-        let localIndex = (<Local>element).index;
+        let localType = (<Local>target).type;
+        let localIndex = (<Local>target).index;
         assert(localIndex >= 0);
         this.currentType = localType;
         return this.module.createGetLocal(localIndex, localType.toNativeType());
       }
       case ElementKind.GLOBAL: {
-        if (element.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
-          return compileBuiltinGetConstant(this, <Global>element, expression);
+        if (target.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
+          return compileBuiltinGetConstant(this, <Global>target, expression);
         }
-        if (!this.compileGlobal(<Global>element)) { // reports; not yet compiled if a static field
+        if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
           return this.module.createUnreachable();
         }
-        let globalType = (<Global>element).type;
+        let globalType = (<Global>target).type;
         assert(globalType != Type.void);
-        if ((<Global>element).is(CommonFlags.INLINED)) {
-          return this.compileInlineConstant(<Global>element, contextualType, retainConstantType);
+        if ((<Global>target).is(CommonFlags.INLINED)) {
+          return this.compileInlineConstant(<Global>target, contextualType, retainConstantType);
         }
         this.currentType = globalType;
-        return this.module.createGetGlobal((<Global>element).internalName, globalType.toNativeType());
+        return this.module.createGetGlobal((<Global>target).internalName, globalType.toNativeType());
       }
       case ElementKind.ENUMVALUE: { // here: if referenced from within the same enum
-        if (!element.is(CommonFlags.COMPILED)) {
+        if (!target.is(CommonFlags.COMPILED)) {
           this.error(
             DiagnosticCode.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums,
             expression.range
@@ -5000,13 +5006,13 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.createUnreachable();
         }
         this.currentType = Type.i32;
-        if ((<EnumValue>element).is(CommonFlags.INLINED)) {
-          return this.module.createI32((<EnumValue>element).constantValue);
+        if ((<EnumValue>target).is(CommonFlags.INLINED)) {
+          return this.module.createI32((<EnumValue>target).constantValue);
         }
-        return this.module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
+        return this.module.createGetGlobal((<EnumValue>target).internalName, NativeType.I32);
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
-        let instance = (<FunctionPrototype>element).resolve(
+        let instance = (<FunctionPrototype>target).resolve(
           null,
           this.currentFunction.contextualTypeArguments
         );
@@ -5359,19 +5365,19 @@ export class Compiler extends DiagnosticEmitter {
     var currentFunction = this.currentFunction;
 
     // obtain the class being instantiated
-    var resolved = this.program.resolveExpression( // reports
+    var target = this.program.resolveExpression( // reports
       expression.expression,
       currentFunction
     );
-    if (!resolved) return module.createUnreachable();
-    if (resolved.element.kind != ElementKind.CLASS_PROTOTYPE) {
+    if (!target) return module.createUnreachable();
+    if (target.kind != ElementKind.CLASS_PROTOTYPE) {
       this.error(
         DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature,
         expression.expression.range
       );
       return this.module.createUnreachable();
     }
-    var classPrototype = <ClassPrototype>resolved.element;
+    var classPrototype = <ClassPrototype>target;
     var classInstance = classPrototype.resolveUsingTypeArguments( // reports
       expression.typeArguments,
       null,
@@ -5424,56 +5430,53 @@ export class Compiler extends DiagnosticEmitter {
     var program = this.program;
     var module = this.module;
 
-    var resolved = program.resolvePropertyAccess(propertyAccess, this.currentFunction); // reports
-    if (!resolved) return module.createUnreachable();
+    var target = program.resolvePropertyAccess(propertyAccess, this.currentFunction); // reports
+    if (!target) return module.createUnreachable();
 
-    var element = resolved.element;
-    var targetExpr: ExpressionRef;
-    switch (element.kind) {
+    switch (target.kind) {
       case ElementKind.GLOBAL: { // static property
-        if (element.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
-          return compileBuiltinGetConstant(this, <Global>element, propertyAccess);
+        if (target.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
+          return compileBuiltinGetConstant(this, <Global>target, propertyAccess);
         }
-        if (!this.compileGlobal(<Global>element)) { // reports; not yet compiled if a static field
+        if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
           return module.createUnreachable();
         }
-        let globalType = (<Global>element).type;
+        let globalType = (<Global>target).type;
         assert(globalType != Type.void);
-        if ((<Global>element).is(CommonFlags.INLINED)) {
-          return this.compileInlineConstant(<Global>element, contextualType, retainConstantType);
+        if ((<Global>target).is(CommonFlags.INLINED)) {
+          return this.compileInlineConstant(<Global>target, contextualType, retainConstantType);
         }
         this.currentType = globalType;
-        return module.createGetGlobal((<Global>element).internalName, globalType.toNativeType());
+        return module.createGetGlobal((<Global>target).internalName, globalType.toNativeType());
       }
       case ElementKind.ENUMVALUE: { // enum value
-        if (!this.compileEnum((<EnumValue>element).enum)) {
+        if (!this.compileEnum((<EnumValue>target).enum)) {
           return this.module.createUnreachable();
         }
         this.currentType = Type.i32;
-        if ((<EnumValue>element).is(CommonFlags.INLINED)) {
-          return module.createI32((<EnumValue>element).constantValue);
+        if ((<EnumValue>target).is(CommonFlags.INLINED)) {
+          return module.createI32((<EnumValue>target).constantValue);
         }
-        return module.createGetGlobal((<EnumValue>element).internalName, NativeType.I32);
+        return module.createGetGlobal((<EnumValue>target).internalName, NativeType.I32);
       }
       case ElementKind.FIELD: { // instance field
-        assert(resolved.isInstanceTarget);
-        assert((<Field>element).memoryOffset >= 0);
-        targetExpr = this.compileExpression(
-          <Expression>resolved.targetExpression,
-          this.options.usizeType,
-          ConversionKind.NONE
+        let thisExpression = assert(program.resolvedThisExpression);
+        assert((<Field>target).memoryOffset >= 0);
+        let thisExpr = this.compileExpressionRetainType(
+          thisExpression,
+          this.options.usizeType
         );
-        this.currentType = (<Field>element).type;
+        this.currentType = (<Field>target).type;
         return module.createLoad(
-          (<Field>element).type.size >> 3,
-          (<Field>element).type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
-          targetExpr,
-          (<Field>element).type.toNativeType(),
-          (<Field>element).memoryOffset
+          (<Field>target).type.size >> 3,
+          (<Field>target).type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
+          thisExpr,
+          (<Field>target).type.toNativeType(),
+          (<Field>target).memoryOffset
         );
       }
       case ElementKind.PROPERTY: { // instance property (here: getter)
-        let prototype = (<Property>element).getterPrototype;
+        let prototype = (<Property>target).getterPrototype;
         if (prototype) {
           let instance = prototype.resolve(null); // reports
           if (!instance) return module.createUnreachable();
@@ -5489,12 +5492,13 @@ export class Compiler extends DiagnosticEmitter {
           if (instance.is(CommonFlags.INSTANCE)) {
             let parent = assert(instance.memberOf);
             assert(parent.kind == ElementKind.CLASS);
-            targetExpr = this.compileExpression(
-              <Expression>resolved.targetExpression,
-              (<Class>parent).type
+            let thisExpression = assert(program.resolvedThisExpression);
+            let thisExpr = this.compileExpressionRetainType(
+              thisExpression,
+              this.options.usizeType
             );
             this.currentType = signature.returnType;
-            return this.compileCallDirect(instance, [], propertyAccess, targetExpr);
+            return this.compileCallDirect(instance, [], propertyAccess, thisExpr);
           } else {
             this.currentType = signature.returnType;
             return this.compileCallDirect(instance, [], propertyAccess);
@@ -5502,7 +5506,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.range, (<Property>element).simpleName, (<Property>element).parent.toString()
+            propertyAccess.range, (<Property>target).simpleName, (<Property>target).parent.toString()
           );
           return module.createUnreachable();
         }

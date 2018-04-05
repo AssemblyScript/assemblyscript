@@ -137,6 +137,11 @@ export class Program extends DiagnosticEmitter {
   /** String instance reference. */
   stringInstance: Class | null = null;
 
+  /** Target expression of the previously resolved property or element access. */
+  resolvedThisExpression: Expression | null = null;
+  /** Element expression of the previously resolved element access. */
+  resolvedElementExpression : Expression | null = null;
+
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
@@ -289,17 +294,14 @@ export class Program extends DiagnosticEmitter {
     for (let i = 0, k = queuedDerivedClasses.length; i < k; ++i) {
       let derivedDeclaration = queuedDerivedClasses[i].declaration;
       let derivedType = assert(derivedDeclaration.extendsType);
-      let resolved = this.resolveIdentifier(derivedType.name, null);
-      if (resolved) {
-        if (resolved.element.kind != ElementKind.CLASS_PROTOTYPE) {
-          this.error(
-            DiagnosticCode.A_class_may_only_extend_another_class,
-            derivedType.range
-          );
-          continue;
-        }
-        queuedDerivedClasses[i].basePrototype = (
-          <ClassPrototype>resolved.element
+      let derived = this.resolveIdentifier(derivedType.name, null); // reports
+      if (!derived) continue;
+      if (derived.kind == ElementKind.CLASS_PROTOTYPE) {
+        queuedDerivedClasses[i].basePrototype = <ClassPrototype>derived;
+      } else {
+        this.error(
+          DiagnosticCode.A_class_may_only_extend_another_class,
+          derivedType.range
         );
       }
     }
@@ -1709,7 +1711,7 @@ export class Program extends DiagnosticEmitter {
     identifier: IdentifierExpression,
     contextualFunction: Function | null,
     contextualEnum: Enum | null = null
-  ): ResolvedElement | null {
+  ): Element | null {
     var name = identifier.text;
 
     var element: Element | null;
@@ -1723,16 +1725,18 @@ export class Program extends DiagnosticEmitter {
         (element = contextualEnum.members.get(name)) &&
         element.kind == ElementKind.ENUMVALUE
       ) {
-        if (!resolvedElement) resolvedElement = new ResolvedElement();
-        return resolvedElement.set(element);
+        this.resolvedThisExpression = null;
+        this.resolvedElementExpression = null;
+        return element; // ENUMVALUE
       }
 
     } else if (contextualFunction) {
 
       // check locals
       if (element = contextualFunction.flow.getScopedLocal(name)) {
-        if (!resolvedElement) resolvedElement = new ResolvedElement();
-        return resolvedElement.set(element);
+        this.resolvedThisExpression = null;
+        this.resolvedElementExpression = null;
+        return element; // LOCAL
       }
 
       // check outer scope locals
@@ -1752,8 +1756,9 @@ export class Program extends DiagnosticEmitter {
       if (namespace = contextualFunction.prototype.namespace) {
         do {
           if (element = this.elementsLookup.get(namespace.internalName + STATIC_DELIMITER + name)) {
-            if (!resolvedElement) resolvedElement = new ResolvedElement();
-            return resolvedElement.set(element);
+            this.resolvedThisExpression = null;
+            this.resolvedElementExpression = null;
+            return element; // LOCAL
           }
         } while (namespace = namespace.namespace);
       }
@@ -1761,14 +1766,16 @@ export class Program extends DiagnosticEmitter {
 
     // search current file
     if (element = this.elementsLookup.get(identifier.range.source.internalPath + PATH_DELIMITER + name)) {
-      if (!resolvedElement) resolvedElement = new ResolvedElement();
-      return resolvedElement.set(element);
+      this.resolvedThisExpression = null;
+      this.resolvedElementExpression = null;
+      return element; // GLOBAL, FUNCTION_PROTOTYPE, CLASS_PROTOTYPE
     }
 
     // search global scope
     if (element = this.elementsLookup.get(name)) {
-      if (!resolvedElement) resolvedElement = new ResolvedElement();
-      return resolvedElement.set(element);
+      this.resolvedThisExpression = null;
+      this.resolvedElementExpression = null;
+      return element; // GLOBAL, FUNCTION_PROTOTYPE, CLASS_PROTOTYPE
     }
 
     this.error(
@@ -1782,47 +1789,63 @@ export class Program extends DiagnosticEmitter {
   resolvePropertyAccess(
     propertyAccess: PropertyAccessExpression,
     contextualFunction: Function
-  ): ResolvedElement | null {
+  ): Element | null {
     // start by resolving the lhs target (expression before the last dot)
     var targetExpression = propertyAccess.expression;
-    resolvedElement = this.resolveExpression( // reports
-      targetExpression,
-      contextualFunction
-    );
-    if (!resolvedElement) return null;
-    var target = resolvedElement.element;
+    var target = this.resolveExpression(targetExpression, contextualFunction); // reports
+    if (!target) return null;
 
     // at this point we know exactly what the target is, so look up the element within
     var propertyName = propertyAccess.property.text;
-    var targetType: Type;
-    var member: Element | null;
 
-    // Resolve variable-likes to their class type first
+    // Resolve variable-likes to the class type they reference first
     switch (target.kind) {
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
-        if (!(targetType = (<VariableLikeElement>target).type).classReference) {
+        let classReference = (<VariableLikeElement>target).type.classReference;
+        if (!classReference) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.property.range, propertyName, targetType.toString()
+            propertyAccess.property.range, propertyName, (<VariableLikeElement>target).type.toString()
           );
           return null;
         }
-        target = <Class>targetType.classReference;
+        target = classReference;
         break;
       }
       case ElementKind.PROPERTY: {
         let getter = assert((<Property>target).getterPrototype).resolve(); // reports
         if (!getter) return null;
-        if (!(targetType = getter.signature.returnType).classReference) {
+        let classReference = getter.signature.returnType.classReference;
+        if (!classReference) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.property.range, propertyName, targetType.toString()
+            propertyAccess.property.range, propertyName, getter.signature.returnType.toString()
           );
           return null;
         }
-        target = <Class>targetType.classReference;
+        target = classReference;
+        break;
+      }
+      case ElementKind.CLASS: {
+        let elementExpression = this.resolvedElementExpression;
+        if (elementExpression) {
+          let indexedGetPrototype = (<Class>target).getIndexedGet();
+          if (indexedGetPrototype) {
+            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
+            if (!indexedGetInstance) return null;
+            let classReference = indexedGetInstance.signature.returnType.classReference;
+            if (!classReference) {
+              this.error(
+                DiagnosticCode.Property_0_does_not_exist_on_type_1,
+                propertyAccess.property.range, propertyName, (<VariableLikeElement>target).type.toString()
+              );
+              return null;
+            }
+            target = classReference;
+          }
+        }
         break;
       }
     }
@@ -1832,17 +1855,21 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.CLASS_PROTOTYPE:
       case ElementKind.CLASS: {
         do {
-          if (target.members && (member = target.members.get(propertyName))) {
-            return resolvedElement.set(member).withTarget(target, targetExpression);
+          let members = target.members;
+          let member: Element | null;
+          if (members && (member = members.get(propertyName))) {
+            this.resolvedThisExpression = targetExpression;
+            this.resolvedElementExpression = null;
+            return member; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
           }
-          // check inherited static members on the base prototype while target is a class prototype
+          // traverse inherited static members on the base prototype if target is a class prototype
           if (target.kind == ElementKind.CLASS_PROTOTYPE) {
             if ((<ClassPrototype>target).basePrototype) {
               target = <ClassPrototype>(<ClassPrototype>target).basePrototype;
             } else {
               break;
             }
-          // or inherited instance members on the base class while target is a class instance
+          // traverse inherited instance members on the base class if target is a class instance
           } else if (target.kind == ElementKind.CLASS) {
             if ((<Class>target).base) {
               target = <Class>(<Class>target).base;
@@ -1856,8 +1883,12 @@ export class Program extends DiagnosticEmitter {
         break;
       }
       default: { // enums or other namespace-like elements
-        if (target.members && (member = target.members.get(propertyName))) {
-          return resolvedElement.set(member).withTarget(target, targetExpression);
+        let members = target.members;
+        let member: Element | null;
+        if (members && (member = members.get(propertyName))) {
+          this.resolvedThisExpression = targetExpression;
+          this.resolvedElementExpression = null;
+          return member; // static ENUMVALUE, static GLOBAL, static FUNCTION_PROTOTYPE...
         }
         break;
       }
@@ -1872,39 +1903,41 @@ export class Program extends DiagnosticEmitter {
   resolveElementAccess(
     elementAccess: ElementAccessExpression,
     contextualFunction: Function
-  ): ResolvedElement | null {
-    // start by resolving the lhs target
+  ): Element | null {
     var targetExpression = elementAccess.expression;
-    resolvedElement = this.resolveExpression(
-      targetExpression,
-      contextualFunction
-    );
-    if (!resolvedElement) return null;
-    var target = resolvedElement.element;
+    var target = this.resolveExpression(targetExpression, contextualFunction);
+    if (!target) return null;
     switch (target.kind) {
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
+        assert(!this.resolvedThisExpression && !this.resolvedElementExpression);
         let type = (<VariableLikeElement>target).type;
-        if (type.classReference) {
-          let indexedGetName = (target = type.classReference).prototype.fnIndexedGet;
-          let indexedGet: Element | null;
-          if (
-            indexedGetName != null &&
-            target.members &&
-            (indexedGet = target.members.get(indexedGetName)) &&
-            indexedGet.kind == ElementKind.FUNCTION_PROTOTYPE
-          ) {
-            return resolvedElement.set(indexedGet).withTarget(type.classReference, targetExpression);
+        if (target = type.classReference) {
+          this.resolvedThisExpression = targetExpression;
+          this.resolvedElementExpression = elementAccess.elementExpression;
+          return target;
+        }
+        break;
+      }
+      case ElementKind.CLASS: { // element access on element access
+        let indexedGetPrototype = (<Class>target).getIndexedGet();
+        if (indexedGetPrototype) {
+          let indexedGetInstance = indexedGetPrototype.resolve(); // reports
+          if (!indexedGetInstance) return null;
+          let returnType = indexedGetInstance.signature.returnType;
+          if (target = returnType.classReference) {
+            this.resolvedThisExpression = targetExpression;
+            this.resolvedElementExpression = elementAccess.elementExpression;
+            return target;
           }
         }
         break;
       }
-      // FIXME: indexed access on indexed access
     }
     this.error(
-      DiagnosticCode.Index_signature_is_missing_in_type_0,
-      targetExpression.range, target.internalName
+      DiagnosticCode.Operation_not_supported,
+      targetExpression.range
     );
     return null;
   }
@@ -1912,7 +1945,7 @@ export class Program extends DiagnosticEmitter {
   resolveExpression(
     expression: Expression,
     contextualFunction: Function
-  ): ResolvedElement | null {
+  ): Element | null {
     while (expression.kind == NodeKind.PARENTHESIZED) {
       expression = (<ParenthesizedExpression>expression).expression;
     }
@@ -1922,8 +1955,9 @@ export class Program extends DiagnosticEmitter {
         if (type) {
           let classType = type.classReference;
           if (classType) {
-            if (!resolvedElement) resolvedElement = new ResolvedElement();
-            return resolvedElement.set(classType);
+            this.resolvedThisExpression = null;
+            this.resolvedElementExpression = null;
+            return classType;
           }
         }
         return null;
@@ -1934,8 +1968,9 @@ export class Program extends DiagnosticEmitter {
       case NodeKind.THIS: { // -> Class / ClassPrototype
         let parent = contextualFunction.memberOf;
         if (parent) {
-          if (!resolvedElement) resolvedElement = new ResolvedElement();
-          return resolvedElement.set(parent);
+          this.resolvedThisExpression = null;
+          this.resolvedElementExpression = null;
+          return parent;
         }
         this.error(
           DiagnosticCode._this_cannot_be_referenced_in_current_location,
@@ -1946,8 +1981,9 @@ export class Program extends DiagnosticEmitter {
       case NodeKind.SUPER: { // -> Class
         let parent = contextualFunction.memberOf;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
-          if (!resolvedElement) resolvedElement = new ResolvedElement();
-          return resolvedElement.set(parent);
+          this.resolvedThisExpression = null;
+          this.resolvedElementExpression = null;
+          return parent;
         }
         this.error(
           DiagnosticCode._super_can_only_be_referenced_in_a_derived_class,
@@ -1971,38 +2007,40 @@ export class Program extends DiagnosticEmitter {
         );
       }
       case NodeKind.CALL: {
-        let resolved = this.resolveExpression(
-          (<CallExpression>expression).expression,
-          contextualFunction
-        );
-        if (resolved) {
-          let element = resolved.element;
-          if (element && element.kind == ElementKind.FUNCTION_PROTOTYPE) {
-            let instance = (<FunctionPrototype>element).resolveUsingTypeArguments(
-              (<CallExpression>expression).typeArguments,
-              contextualFunction.contextualTypeArguments,
-              expression
-            );
-            if (instance) {
-              let returnType = instance.signature.returnType;
-              let classType = returnType.classReference;
-              if (classType) {
-                if (!resolvedElement) resolvedElement = new ResolvedElement();
-                return resolvedElement.set(classType);
-              } else {
-                let signature = returnType.signatureReference;
-                if (signature) {
-                  let functionTarget = signature.cachedFunctionTarget;
-                  if (!functionTarget) {
-                    functionTarget = new FunctionTarget(this, signature);
-                    signature.cachedFunctionTarget = functionTarget;
-                  }
-                  if (!resolvedElement) resolvedElement = new ResolvedElement();
-                  return resolvedElement.set(functionTarget);
-                }
+        let targetExpression = (<CallExpression>expression).expression;
+        let target = this.resolveExpression(targetExpression, contextualFunction); // reports
+        if (!target) return null;
+        if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
+          let instance = (<FunctionPrototype>target).resolveUsingTypeArguments( // reports
+            (<CallExpression>expression).typeArguments,
+            contextualFunction.contextualTypeArguments,
+            expression
+          );
+          if (!instance) return null;
+          let returnType = instance.signature.returnType;
+          let classType = returnType.classReference;
+          if (classType) {
+            // reuse resolvedThisExpression (might be property access)
+            // reuse resolvedElementExpression (might be element access)
+            return classType;
+          } else {
+            let signature = returnType.signatureReference;
+            if (signature) {
+              let functionTarget = signature.cachedFunctionTarget;
+              if (!functionTarget) {
+                functionTarget = new FunctionTarget(this, signature);
+                signature.cachedFunctionTarget = functionTarget;
               }
+              // reuse resolvedThisExpression (might be property access)
+              // reuse resolvedElementExpression (might be element access)
+              return functionTarget;
             }
           }
+          this.error(
+            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+            targetExpression.range, target.internalName
+          );
+          return null;
         }
         break;
       }
@@ -2014,44 +2052,6 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 }
-
-/** Common result structure returned when calling any of the resolve functions on a {@link Program}. */
-export class ResolvedElement {
-
-  /** The target element, if a property or element access */
-  target: Element | null;
-  /** The target element's expression, if a property or element access. */
-  targetExpression: Expression | null;
-  /** The element being accessed. */
-  element: Element;
-
-  /** Clears the target and sets the resolved element. */
-  set(element: Element): this {
-    this.target = null;
-    this.targetExpression = null;
-    this.element = element;
-    return this;
-  }
-
-  /** Sets the resolved target in addition to the previously set element. */
-  withTarget(target: Element, targetExpression: Expression): this {
-    this.target = target;
-    this.targetExpression = targetExpression;
-    return this;
-  }
-
-  /** Tests if the target is a valid instance target. */
-  get isInstanceTarget(): bool {
-    return (
-      this.target != null &&
-      this.target.kind == ElementKind.CLASS &&
-      this.targetExpression != null
-    );
-  }
-}
-
-// Cached result structure instance
-var resolvedElement: ResolvedElement | null;
 
 /** Indicates the specific kind of an {@link Element}. */
 export enum ElementKind {
@@ -3262,6 +3262,24 @@ export class Class extends Element {
       }
     } while (current = current.base);
     return false;
+  }
+
+  getIndexedGet(): FunctionPrototype | null {
+    var members = this.members;
+    var name = this.prototype.fnIndexedGet;
+    if (!members || name == null) return null;
+    var element = members.get(name);
+    if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
+    return <FunctionPrototype>element;
+  }
+
+  getIndexedSet(): FunctionPrototype | null {
+    var members = this.members;
+    var name = this.prototype.fnIndexedSet;
+    if (!members || name == null) return null;
+    var element = members.get(name);
+    if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
+    return <FunctionPrototype>element;
   }
 
   toString(): string {
