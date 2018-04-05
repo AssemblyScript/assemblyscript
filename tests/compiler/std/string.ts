@@ -69,3 +69,6 @@ assert("a".repeat(1) == "a");
 assert("a".repeat(2) == "aa");
 assert("a".repeat(3) == "aaa");
 assert("ab".repeat(4) == "abababab");
+assert("a".repeat(5) == "aaaaa");
+assert("a".repeat(6) == "aaaaaa");
+assert("a".repeat(7) == "aaaaaaa");

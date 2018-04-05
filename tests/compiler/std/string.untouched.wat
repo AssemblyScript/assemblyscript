@@ -46,7 +46,7 @@
  (global $~lib/string/CharCode.z i32 (i32.const 122))
  (global $~lib/string/EMPTY i32 (i32.const 332))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 416))
+ (global $HEAP_BASE i32 (i32.const 468))
  (memory $0 1)
  (data (i32.const 4) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 40) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
@@ -78,6 +78,9 @@
  (data (i32.const 372) "\03\00\00\001\002\003\00")
  (data (i32.const 384) "\03\00\00\00a\00a\00a\00")
  (data (i32.const 396) "\08\00\00\00a\00b\00a\00b\00a\00b\00a\00b\00")
+ (data (i32.const 416) "\05\00\00\00a\00a\00a\00a\00a\00")
+ (data (i32.const 432) "\06\00\00\00a\00a\00a\00a\00a\00a\00")
+ (data (i32.const 448) "\07\00\00\00a\00a\00a\00a\00a\00a\00a\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -5391,6 +5394,66 @@
      (i32.const 0)
      (i32.const 40)
      (i32.const 71)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 5)
+     )
+     (i32.const 416)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 72)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 6)
+     )
+     (i32.const 432)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 73)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 7)
+     )
+     (i32.const 448)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 74)
      (i32.const 0)
     )
     (unreachable)
