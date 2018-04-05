@@ -63,9 +63,7 @@ export class String {
       changetype<usize>(this) + ((<usize>pos + 1) << 1),
       HEADER_SIZE
     );
-    if (second < 0xDC00 || second > 0xDFFF) {
-      return first;
-    }
+    if (second < 0xDC00 || second > 0xDFFF) return first;
     return ((first - 0xD800) << 10) + (second - 0xDC00) + 0x10000;
   }
 
@@ -83,16 +81,19 @@ export class String {
     var outLen: usize = thisLen + otherLen;
     if (outLen == 0) return EMPTY;
     var out = allocate(outLen);
+
     move_memory(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE,
       thisLen << 1
     );
+
     move_memory(
       changetype<usize>(out) + HEADER_SIZE + (thisLen << 1),
       changetype<usize>(other) + HEADER_SIZE,
       otherLen << 1
     );
+
     return out;
   }
 
@@ -102,9 +103,7 @@ export class String {
     var end: isize = <isize>min(max(endPosition, 0), this.length);
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
-    if (start < 0) {
-      return false;
-    }
+    if (start < 0) return false;
     return !compare_memory(
       changetype<usize>(this) + HEADER_SIZE + (start << 1),
       changetype<usize>(searchString) + HEADER_SIZE,
@@ -116,8 +115,10 @@ export class String {
   private static __eq(left: String, right: String): bool {
     if (left === null) return right === null;
     else if (right === null) return false;
+
     var leftLength = left.length;
     if (leftLength != right.length) return false;
+
     return !compare_memory(
       changetype<usize>(left) + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
@@ -132,9 +133,7 @@ export class String {
 
   @operator(">")
   private static __gt(left: String, right: String): bool {
-    if (!changetype<usize>(left) || !changetype<usize>(right)) {
-      return false;
-    }
+    if (left === null || right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -152,9 +151,8 @@ export class String {
 
   @operator(">=")
   private static __gte(left: String, right: String): bool {
-    if (!changetype<usize>(left) || !changetype<usize>(right)) {
-      return false;
-    }
+    if (left === null) return right === null;
+    else if (right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -172,9 +170,7 @@ export class String {
 
   @operator("<")
   private static __lt(left: String, right: String): bool {
-    if (!changetype<usize>(left) || !changetype<usize>(right)) {
-      return false;
-    }
+    if (left === null || right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -192,9 +188,8 @@ export class String {
 
   @operator("<=")
   private static __lte(left: String, right: String): bool {
-    if (!changetype<usize>(left) || !changetype<usize>(right)) {
-      return false;
-    }
+    if (left === null) return right === null;
+    else if (right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
