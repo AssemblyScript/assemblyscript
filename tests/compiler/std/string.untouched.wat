@@ -203,7 +203,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 239)
+     (i32.const 234)
      (i32.const 4)
     )
     (unreachable)
@@ -333,7 +333,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 100)
+     (i32.const 101)
      (i32.const 4)
     )
     (unreachable)
@@ -461,7 +461,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 218)
+     (i32.const 213)
      (i32.const 4)
     )
     (unreachable)
@@ -1263,7 +1263,7 @@
                  (call $abort
                   (i32.const 0)
                   (i32.const 72)
-                  (i32.const 563)
+                  (i32.const 558)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -3649,7 +3649,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 79)
+     (i32.const 77)
      (i32.const 4)
     )
     (unreachable)
@@ -3826,13 +3826,15 @@
    (i32.and
     (if (result i32)
      (tee_local $2
-      (i32.eqz
+      (i32.eq
        (get_local $0)
+       (i32.const 0)
       )
      )
      (get_local $2)
-     (i32.eqz
+     (i32.eq
       (get_local $1)
+      (i32.const 0)
      )
     )
     (i32.const 1)
@@ -3908,32 +3910,44 @@
   (local $5 i32)
   (local $6 i32)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $2
-      (i32.eqz
-       (get_local $0)
-      )
-     )
-     (get_local $2)
-     (i32.eqz
-      (get_local $1)
-     )
-    )
-    (i32.const 1)
-   )
-   (return
+   (i32.eq
+    (get_local $0)
     (i32.const 0)
    )
+   (return
+    (i32.eq
+     (get_local $1)
+     (i32.const 0)
+    )
+   )
+   (if
+    (i32.eq
+     (get_local $1)
+     (i32.const 0)
+    )
+    (return
+     (i32.const 0)
+    )
+   )
   )
-  (set_local $3
+  (set_local $2
    (i32.load
     (get_local $0)
    )
   )
-  (set_local $4
+  (set_local $3
    (i32.load
     (get_local $1)
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (i32.eqz
+     (get_local $3)
+    )
    )
   )
   (if
@@ -3941,29 +3955,19 @@
     (get_local $3)
    )
    (return
-    (i32.eqz
-     (get_local $4)
-    )
-   )
-  )
-  (if
-   (i32.eqz
-    (get_local $4)
-   )
-   (return
     (i32.const 1)
    )
   )
   (set_local $6
    (select
-    (tee_local $2
-     (get_local $3)
+    (tee_local $4
+     (get_local $2)
     )
     (tee_local $5
-     (get_local $4)
+     (get_local $3)
     )
     (i32.lt_s
-     (get_local $2)
+     (get_local $4)
      (get_local $5)
     )
    )
@@ -3998,13 +4002,15 @@
    (i32.and
     (if (result i32)
      (tee_local $2
-      (i32.eqz
+      (i32.eq
        (get_local $0)
+       (i32.const 0)
       )
      )
      (get_local $2)
-     (i32.eqz
+     (i32.eq
       (get_local $1)
+      (i32.const 0)
      )
     )
     (i32.const 1)
@@ -4080,42 +4086,34 @@
   (local $5 i32)
   (local $6 i32)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $2
-      (i32.eqz
-       (get_local $0)
-      )
-     )
-     (get_local $2)
-     (i32.eqz
-      (get_local $1)
-     )
-    )
-    (i32.const 1)
-   )
-   (return
+   (i32.eq
+    (get_local $0)
     (i32.const 0)
    )
+   (return
+    (i32.eq
+     (get_local $1)
+     (i32.const 0)
+    )
+   )
+   (if
+    (i32.eq
+     (get_local $1)
+     (i32.const 0)
+    )
+    (return
+     (i32.const 0)
+    )
+   )
   )
-  (set_local $3
+  (set_local $2
    (i32.load
     (get_local $0)
    )
   )
-  (set_local $4
+  (set_local $3
    (i32.load
     (get_local $1)
-   )
-  )
-  (if
-   (i32.eqz
-    (get_local $4)
-   )
-   (return
-    (i32.eqz
-     (get_local $3)
-    )
    )
   )
   (if
@@ -4123,19 +4121,29 @@
     (get_local $3)
    )
    (return
+    (i32.eqz
+     (get_local $2)
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
     (i32.const 1)
    )
   )
   (set_local $6
    (select
-    (tee_local $2
-     (get_local $3)
+    (tee_local $4
+     (get_local $2)
     )
     (tee_local $5
-     (get_local $4)
+     (get_local $3)
     )
     (i32.lt_s
-     (get_local $2)
+     (get_local $4)
      (get_local $5)
     )
    )
