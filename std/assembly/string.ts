@@ -379,6 +379,31 @@ export class String {
     );
     return out;
   }
+
+  repeat(count: i32 = 0): String {
+    assert(this !== null);
+    assert(count >= 0);
+    // Most browsers can't handle strings 1 << 28 chars or longer
+    assert(this.length * count <= (1 << 28));
+
+    if (count === 0 || !this.length) return EMPTY;
+    if (count === 1) return this;
+
+    var str    = changetype<String>(this);
+    var result = EMPTY;
+
+    while (count) {
+      if (count & 1) result = result.concat(str);
+      if (count > 1) str    = str.concat(str);
+      count >>= 1;
+    }
+
+    return result;
+  }
+
+  toString(): String {
+    return this;
+  }
 }
 
 function isWhiteSpaceOrLineTerminator(c: u16): bool {

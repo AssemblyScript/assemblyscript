@@ -335,6 +335,8 @@ declare class String {
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
+  repeat(count?: i32): string;
+  toString(): string;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
