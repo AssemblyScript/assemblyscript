@@ -177,72 +177,7 @@
    )
   )
  )
- (func $~lib/string/String.__eq (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (return
-    (i32.eqz
-     (get_local $1)
-    )
-   )
-   (if
-    (i32.eqz
-     (get_local $1)
-    )
-    (return
-     (i32.const 0)
-    )
-   )
-  )
-  (set_local $2
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (if
-   (i32.ne
-    (get_local $2)
-    (i32.load
-     (get_local $1)
-    )
-   )
-   (return
-    (i32.const 0)
-   )
-  )
-  (return
-   (i32.eqz
-    (call $~lib/memory/compare_memory
-     (i32.add
-      (get_local $0)
-      (i32.const 4)
-     )
-     (i32.add
-      (get_local $1)
-      (i32.const 4)
-     )
-     (i32.shl
-      (get_local $2)
-      (i32.const 1)
-     )
-    )
-   )
-  )
- )
- (func $~lib/string/String.__ne (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (get_local $0)
-     (get_local $1)
-    )
-   )
-  )
- )
- (func $~lib/string/String#startsWith (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -251,7 +186,7 @@
   (local $8 i32)
   (if
    (i32.eqz
-    (call $~lib/string/String.__ne
+    (i32.ne
      (get_local $0)
      (i32.const 0)
     )
@@ -260,14 +195,14 @@
     (call $abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 243)
+     (i32.const 239)
      (i32.const 4)
     )
     (unreachable)
    )
   )
   (if
-   (call $~lib/string/String.__eq
+   (i32.eq
     (get_local $1)
     (i32.const 0)
    )
@@ -350,7 +285,7 @@
    )
   )
  )
- (func $~lib/string/String#startsWith|trampoline (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#startsWith|trampoline (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -373,7 +308,7 @@
    (get_local $2)
   )
  )
- (func $std/array-access/stringArrayMethodCall (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayMethodCall (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (block (result i32)
     (set_global $argumentCount
@@ -390,7 +325,7 @@
    )
   )
  )
- (func $~lib/array/Array<Array<String>>#__get (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<String>>#__get (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.ge_u
     (get_local $1)
@@ -414,7 +349,7 @@
    )
   )
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayPropertyAccess (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (i32.load
     (call $~lib/array/Array<String>#__get
@@ -427,7 +362,7 @@
    )
   )
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayMethodCall (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (block (result i32)
     (set_global $argumentCount

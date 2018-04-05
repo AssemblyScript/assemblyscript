@@ -2354,7 +2354,8 @@ export class Compiler extends DiagnosticEmitter {
     var possiblyOverflows = false;
     var tempLocal: Local | null = null;
 
-    switch (expression.operator) {
+    var operator = expression.operator;
+    switch (operator) {
       case Token.LESSTHAN: {
         leftExpr = this.compileExpressionRetainType(left, contextualType);
         leftType = this.currentType;
@@ -2709,7 +2710,6 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       case Token.EQUALS_EQUALS_EQUALS:
-        // TODO?
       case Token.EQUALS_EQUALS: {
 
         // NOTE that this favors correctness, in terms of emitting a binary expression, over
@@ -2742,8 +2742,8 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.EqI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
+          case TypeKind.USIZE: { // check operator overload if operator is "=="
+            if (operator == Token.EQUALS_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
               let classInstance = assert(this.currentType.classReference);
               let operatorName = classInstance.prototype.fnEquals;
               if (operatorName != null) {
@@ -2791,7 +2791,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.EXCLAMATION_EQUALS_EQUALS:
-        // TODO?
       case Token.EXCLAMATION_EQUALS: {
         leftExpr = this.compileExpressionRetainType(left, contextualType);
         leftType = this.currentType;
@@ -2819,8 +2818,8 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.NeI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: {// check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
+          case TypeKind.USIZE: {// check operator overload if operator is "!="
+            if (operator == Token.EXCLAMATION_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
               let classInstance = assert(this.currentType.classReference);
               let operatorName = classInstance.prototype.fnNotEquals;
               if (operatorName != null) {
