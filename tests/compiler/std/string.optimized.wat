@@ -1088,7 +1088,7 @@
               (call $abort
                (i32.const 0)
                (i32.const 72)
-               (i32.const 593)
+               (i32.const 590)
                (i32.const 10)
               )
               (unreachable)
@@ -3664,7 +3664,6 @@
  )
  (func $~lib/string/String#repeat (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -3745,25 +3744,34 @@
    )
   )
   (set_local $2
-   (get_local $0)
-  )
-  (set_local $3
-   (i32.and
-    (get_local $1)
-    (i32.const 1)
-   )
+   (i32.const 332)
   )
   (loop $continue|0
    (if
-    (i32.gt_s
-     (get_local $1)
-     (i32.const 1)
-    )
+    (get_local $1)
     (block
-     (set_local $2
-      (call $~lib/string/String#concat
-       (get_local $2)
-       (get_local $2)
+     (if
+      (i32.and
+       (get_local $1)
+       (i32.const 1)
+      )
+      (set_local $2
+       (call $~lib/string/String#concat
+        (get_local $2)
+        (get_local $0)
+       )
+      )
+     )
+     (if
+      (i32.gt_s
+       (get_local $1)
+       (i32.const 1)
+      )
+      (set_local $0
+       (call $~lib/string/String#concat
+        (get_local $0)
+        (get_local $0)
+       )
       )
      )
      (set_local $1
@@ -3773,15 +3781,6 @@
       )
      )
      (br $continue|0)
-    )
-   )
-  )
-  (if
-   (get_local $3)
-   (return
-    (call $~lib/string/String#concat
-     (get_local $2)
-     (get_local $0)
     )
    )
   )

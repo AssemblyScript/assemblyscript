@@ -1266,7 +1266,7 @@
                  (call $abort
                   (i32.const 0)
                   (i32.const 72)
-                  (i32.const 593)
+                  (i32.const 590)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -4320,24 +4320,36 @@
    (get_local $0)
   )
   (set_local $4
-   (i32.and
-    (get_local $1)
-    (i32.const 1)
-   )
+   (i32.const 332)
   )
   (block $break|0
    (loop $continue|0
     (if
-     (i32.gt_s
-      (get_local $1)
-      (i32.const 1)
-     )
+     (get_local $1)
      (block
       (block
-       (set_local $3
-        (call $~lib/string/String#concat
-         (get_local $3)
-         (get_local $3)
+       (if
+        (i32.and
+         (get_local $1)
+         (i32.const 1)
+        )
+        (set_local $4
+         (call $~lib/string/String#concat
+          (get_local $4)
+          (get_local $3)
+         )
+        )
+       )
+       (if
+        (i32.gt_s
+         (get_local $1)
+         (i32.const 1)
+        )
+        (set_local $3
+         (call $~lib/string/String#concat
+          (get_local $3)
+          (get_local $3)
+         )
         )
        )
        (set_local $1
@@ -4352,17 +4364,8 @@
     )
    )
   )
-  (if
-   (get_local $4)
-   (return
-    (call $~lib/string/String#concat
-     (get_local $3)
-     (get_local $0)
-    )
-   )
-  )
   (return
-   (get_local $3)
+   (get_local $4)
   )
  )
  (func $~lib/string/String#repeat|trampoline (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
