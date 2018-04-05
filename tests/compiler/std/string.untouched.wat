@@ -46,7 +46,7 @@
  (global $~lib/string/CharCode.z i32 (i32.const 122))
  (global $~lib/string/EMPTY i32 (i32.const 332))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 372))
+ (global $HEAP_BASE i32 (i32.const 384))
  (memory $0 1)
  (data (i32.const 4) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 40) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
@@ -75,6 +75,7 @@
  (data (i32.const 344) "\02\00\00\00b\00a\00")
  (data (i32.const 352) "\02\00\00\00a\00a\00")
  (data (i32.const 360) "\03\00\00\00a\00b\00c\00")
+ (data (i32.const 372) "\03\00\00\001\002\003\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -203,7 +204,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 234)
+     (i32.const 235)
      (i32.const 4)
     )
     (unreachable)
@@ -461,7 +462,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 213)
+     (i32.const 214)
      (i32.const 4)
     )
     (unreachable)
@@ -1263,7 +1264,7 @@
                  (call $abort
                   (i32.const 0)
                   (i32.const 72)
-                  (i32.const 558)
+                  (i32.const 559)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -3753,6 +3754,15 @@
   (if
    (i32.eq
     (get_local $0)
+    (get_local $1)
+   )
+   (return
+    (i32.const 1)
+   )
+  )
+  (if
+   (i32.eq
+    (get_local $0)
     (i32.const 0)
    )
    (return
@@ -3761,14 +3771,14 @@
      (i32.const 0)
     )
    )
-   (if
-    (i32.eq
-     (get_local $1)
-     (i32.const 0)
-    )
-    (return
-     (i32.const 0)
-    )
+  )
+  (if
+   (i32.eq
+    (get_local $1)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 0)
    )
   )
   (set_local $2
@@ -5028,6 +5038,25 @@
      (i32.const 0)
      (i32.const 40)
      (i32.const 62)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.load
+      (i32.const 372)
+     )
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 64)
      (i32.const 0)
     )
     (unreachable)

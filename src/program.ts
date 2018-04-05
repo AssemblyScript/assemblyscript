@@ -1994,6 +1994,17 @@ export class Program extends DiagnosticEmitter {
       case NodeKind.IDENTIFIER: {
         return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
       }
+      case NodeKind.LITERAL: {
+        switch ((<LiteralExpression>expression).literalKind) {
+          case LiteralKind.STRING: {
+            this.resolvedThisExpression = expression;
+            this.resolvedElementExpression = null;
+            return this.stringInstance;
+          }
+          // case LiteralKind.ARRAY: // TODO
+        }
+        break;
+      }
       case NodeKind.PROPERTYACCESS: {
         return this.resolvePropertyAccess(
           <PropertyAccessExpression>expression,

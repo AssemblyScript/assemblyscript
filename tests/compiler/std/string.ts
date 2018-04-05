@@ -60,3 +60,5 @@ assert(!("" < ""));
 assert(!("" > ""));
 assert("" >= "");
 assert("" <= "");
+
+assert("123".length == 3);
