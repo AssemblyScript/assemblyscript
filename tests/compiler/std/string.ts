@@ -3,9 +3,6 @@ import "allocator/arena";
 // preliminary
 
 var str: string = "hi, I'm a string";
-var strA: string = "a";
-var strAB: string = "ab";
-var strEmpty: string = "";
 var nullStr: string;
 
 // exactly once in static memory
@@ -64,9 +61,11 @@ assert(!("" > ""));
 assert("" >= "");
 assert("" <= "");
 
-assert(strEmpty.repeat(100) == "");
-assert(strA.repeat() == "");
-assert(strA.repeat(1) == "a");
-assert(strA.repeat(2) == "aa");
-assert(strA.repeat(3) == "aaa");
-assert(strAB.repeat(4) == "abababab");
+assert("123".length == 3);
+
+assert("".repeat(100) == "");
+assert("a".repeat() == "");
+assert("a".repeat(1) == "a");
+assert("a".repeat(2) == "aa");
+assert("a".repeat(3) == "aaa");
+assert("ab".repeat(4) == "abababab");
