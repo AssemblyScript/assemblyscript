@@ -206,7 +206,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 235)
+     (i32.const 241)
      (i32.const 4)
     )
     (unreachable)
@@ -464,7 +464,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 214)
+     (i32.const 220)
      (i32.const 4)
     )
     (unreachable)
@@ -1266,7 +1266,7 @@
                  (call $abort
                   (i32.const 0)
                   (i32.const 72)
-                  (i32.const 584)
+                  (i32.const 590)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -3838,9 +3838,21 @@
    (i32.and
     (if (result i32)
      (tee_local $2
-      (i32.eq
-       (get_local $0)
-       (i32.const 0)
+      (i32.and
+       (if (result i32)
+        (tee_local $2
+         (i32.eq
+          (get_local $0)
+          (get_local $1)
+         )
+        )
+        (get_local $2)
+        (i32.eq
+         (get_local $0)
+         (i32.const 0)
+        )
+       )
+       (i32.const 1)
       )
      )
      (get_local $2)
@@ -3924,6 +3936,15 @@
   (if
    (i32.eq
     (get_local $0)
+    (get_local $1)
+   )
+   (return
+    (i32.const 1)
+   )
+  )
+  (if
+   (i32.eq
+    (get_local $0)
     (i32.const 0)
    )
    (return
@@ -3932,14 +3953,14 @@
      (i32.const 0)
     )
    )
-   (if
-    (i32.eq
-     (get_local $1)
-     (i32.const 0)
-    )
-    (return
-     (i32.const 0)
-    )
+  )
+  (if
+   (i32.eq
+    (get_local $1)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 0)
    )
   )
   (set_local $2
@@ -4014,9 +4035,21 @@
    (i32.and
     (if (result i32)
      (tee_local $2
-      (i32.eq
-       (get_local $0)
-       (i32.const 0)
+      (i32.and
+       (if (result i32)
+        (tee_local $2
+         (i32.eq
+          (get_local $0)
+          (get_local $1)
+         )
+        )
+        (get_local $2)
+        (i32.eq
+         (get_local $0)
+         (i32.const 0)
+        )
+       )
+       (i32.const 1)
       )
      )
      (get_local $2)
@@ -4097,6 +4130,15 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (if
+   (i32.eq
+    (get_local $0)
+    (get_local $1)
+   )
+   (return
+    (i32.const 1)
+   )
+  )
   (if
    (i32.eq
     (get_local $0)
@@ -4195,7 +4237,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 385)
+     (i32.const 391)
      (i32.const 4)
     )
     (unreachable)
@@ -4212,7 +4254,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 386)
+     (i32.const 392)
      (i32.const 4)
     )
     (unreachable)
@@ -4237,7 +4279,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 388)
+     (i32.const 394)
      (i32.const 4)
     )
     (unreachable)
