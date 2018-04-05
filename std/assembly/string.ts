@@ -396,13 +396,16 @@ export class String {
     if (count === 0 || !this.length) return EMPTY;
     if (count === 1) return this;
 
-    var str    = changetype<String>(this);
-    var result = EMPTY;
+    var result = changetype<String>(this);
+    var isOdd  = count & 1;
 
-    while (count) {
-      if (count & 1) result = result.concat(str);
-      if (count > 1) str    = str.concat(str);
+    while (count > 1) {
+      result = result.concat(result);
       count >>= 1;
+    }
+
+    if (isOdd) {
+      return result.concat(this);
     }
 
     return result;
