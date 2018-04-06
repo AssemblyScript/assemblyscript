@@ -1091,7 +1091,7 @@
               (call $abort
                (i32.const 0)
                (i32.const 72)
-               (i32.const 595)
+               (i32.const 599)
                (i32.const 10)
               )
               (unreachable)
