@@ -389,20 +389,25 @@ export class String {
 
   repeat(count: i32 = 0): String {
     assert(this !== null);
-    assert(count >= 0);
-    // Most browsers can't handle strings 1 << 28 chars or longer
-    assert(this.length * count <= (1 << 28));
+    var length = this.length;
 
-    if (count === 0 || !this.length) return EMPTY;
+    // Most browsers can't handle strings 1 << 28 chars or longer
+    if (count < 0 || length * count > (1 << 28)) {
+      throw new RangeError("Invalid count value");
+    }
+
+    if (count === 0 || !length) return EMPTY;
     if (count === 1) return this;
 
-    var str    = changetype<String>(this);
-    var result = EMPTY;
+    var result = allocate(length * count);
+    var outLen = length << 1;
 
-    while (count) {
-      if (count & 1) result = result.concat(str);
-      if (count > 1) str    = str.concat(str);
-      count >>= 1;
+    for (let i = 0; i < count; i++) {
+      move_memory(
+        changetype<usize>(result) + HEADER_SIZE + outLen * i,
+        changetype<usize>(this)   + HEADER_SIZE,
+        outLen
+      );
     }
 
     return result;
