@@ -402,9 +402,9 @@ export class String {
     var result = allocate(length * count);
     var strLen = length << 1;
 
-    for (let i = 0, len = strLen * count; i < len; i += strLen) {
+    for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
       move_memory(
-        changetype<usize>(result) + HEADER_SIZE + i,
+        changetype<usize>(result) + HEADER_SIZE + offset,
         changetype<usize>(this)   + HEADER_SIZE,
         strLen
       );
