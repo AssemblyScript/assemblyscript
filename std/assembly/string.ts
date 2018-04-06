@@ -402,6 +402,8 @@ export class String {
     var result = allocate(length * count);
     var strLen = length << 1;
 
+    // TODO possible improvments: reuse existing result for exponentially concats like:
+    // 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
     for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
       move_memory(
         changetype<usize>(result) + HEADER_SIZE + offset,
