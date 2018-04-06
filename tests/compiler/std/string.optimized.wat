@@ -3746,14 +3746,19 @@
     )
    )
   )
-  (set_local $3
-   (i32.shl
-    (get_local $3)
-    (i32.const 1)
-   )
-  )
   (set_local $2
    (i32.const 0)
+  )
+  (set_local $1
+   (i32.mul
+    (tee_local $3
+     (i32.shl
+      (get_local $3)
+      (i32.const 1)
+     )
+    )
+    (get_local $1)
+   )
   )
   (loop $continue|0
    (if
@@ -3768,10 +3773,7 @@
         (get_local $4)
         (i32.const 4)
        )
-       (i32.mul
-        (get_local $3)
-        (get_local $2)
-       )
+       (get_local $2)
       )
       (i32.add
        (get_local $0)
@@ -3782,7 +3784,7 @@
      (set_local $2
       (i32.add
        (get_local $2)
-       (i32.const 1)
+       (get_local $3)
       )
      )
      (br $continue|0)

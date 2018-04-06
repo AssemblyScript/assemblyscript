@@ -400,13 +400,13 @@ export class String {
     if (count === 1) return this;
 
     var result = allocate(length * count);
-    var outLen = length << 1;
+    var strLen = length << 1;
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0, len = strLen * count; i < len; i += strLen) {
       move_memory(
-        changetype<usize>(result) + HEADER_SIZE + outLen * i,
+        changetype<usize>(result) + HEADER_SIZE + i,
         changetype<usize>(this)   + HEADER_SIZE,
-        outLen
+        strLen
       );
     }
 

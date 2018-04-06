@@ -4230,6 +4230,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -4321,14 +4322,22 @@
    )
   )
   (block $break|0
-   (set_local $3
-    (i32.const 0)
+   (block
+    (set_local $3
+     (i32.const 0)
+    )
+    (set_local $6
+     (i32.mul
+      (get_local $5)
+      (get_local $1)
+     )
+    )
    )
    (loop $continue|0
     (if
      (i32.lt_s
       (get_local $3)
-      (get_local $1)
+      (get_local $6)
      )
      (block
       (block
@@ -4338,10 +4347,7 @@
           (get_local $4)
           (i32.const 4)
          )
-         (i32.mul
-          (get_local $5)
-          (get_local $3)
-         )
+         (get_local $3)
         )
         (i32.add
          (get_local $0)
@@ -4353,7 +4359,7 @@
       (set_local $3
        (i32.add
         (get_local $3)
-        (i32.const 1)
+        (get_local $5)
        )
       )
       (br $continue|0)
