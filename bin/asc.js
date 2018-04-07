@@ -187,15 +187,53 @@ exports.main = function main(argv, options, callback) {
   // Set up base directory
   const baseDir = args.baseDir ? path.resolve(args.baseDir) : ".";
 
-  // Include custom library components (with or without stdlib)
-  const customLibDirs = [];
-  if (args.lib) {
-    if (typeof args.lib === "string") args.lib = args.lib.split(",");
-    Array.prototype.push.apply(customLibDirs, args.lib.map(lib => lib.trim()));
-  }
-
   // Begin parsing
   var parser = null;
+
+  // Include library files
+  if (!args.noLib) { // bundled
+    Object.keys(exports.libraryFiles).forEach(libPath => {
+      if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
+      stats.parseCount++;
+      stats.parseTime += measure(() => {
+        parser = assemblyscript.parseFile(
+          exports.libraryFiles[libPath],
+          exports.libraryPrefix + libPath + ".ts",
+          false,
+          parser
+        );
+      });
+    });
+  }
+  if (args.lib) {
+    const customLibDirs = [];
+    if (typeof args.lib === "string") args.lib = args.lib.split(",");
+    Array.prototype.push.apply(customLibDirs, args.lib.map(lib => lib.trim()));
+    for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
+      let libDir = customLibDirs[i];
+      let libFiles;
+      if (libDir.endsWith(".ts")) {
+        libFiles = [ path.basename(libDir) ];
+        libDir = path.dirname(libDir);
+      } else {
+        libFiles = listFiles(libDir);
+      }
+      for (let j = 0, l = libFiles.length; j < l; ++j) {
+        let libPath = libFiles[j];
+        let libText = readFile(path.join(libDir, libPath));
+        if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
+        stats.parseCount++;
+        stats.parseTime += measure(() => {
+          parser = assemblyscript.parseFile(
+            libText,
+            exports.libraryPrefix + libPath,
+            false,
+            parser
+          );
+        });
+      }
+    }
+  }
 
   // Include entry files
   for (let i = 0, k = args._.length; i < k; ++i) {
@@ -221,6 +259,7 @@ exports.main = function main(argv, options, callback) {
       parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
     });
 
+    // Process backlog
     while ((sourcePath = parser.nextFile()) != null) {
       let found = false;
 
@@ -240,12 +279,10 @@ exports.main = function main(argv, options, callback) {
             sourceText = readFile(path.join(dir, plainName + ".ts"));
             if (sourceText !== null) {
               sourcePath = exports.libraryPrefix + plainName + ".ts";
-              break;
             } else {
               sourceText = readFile(path.join(dir, indexName + ".ts"));
               if (sourceText !== null) {
                 sourcePath = exports.libraryPrefix + indexName + ".ts";
-                break;
               }
             }
           }
@@ -275,12 +312,10 @@ exports.main = function main(argv, options, callback) {
                 sourceText = readFile(path.join(dir, plainName + ".ts"));
                 if (sourceText !== null) {
                   sourcePath = exports.libraryPrefix + plainName + ".ts";
-                  break;
                 } else {
                   sourceText = readFile(path.join(dir, indexName + ".ts"));
                   if (sourceText !== null) {
                     sourcePath = exports.libraryPrefix + indexName + ".ts";
-                    break;
                   }
                 }
               }
@@ -298,45 +333,6 @@ exports.main = function main(argv, options, callback) {
     }
     if (checkDiagnostics(parser, stderr)) {
       return callback(Error("Parse error"));
-    }
-  }
-
-  // Include (other) library components
-  if (!args.noLib) // bundled
-    Object.keys(exports.libraryFiles).forEach(libPath => {
-      if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
-      stats.parseCount++;
-      stats.parseTime += measure(() => {
-        parser = assemblyscript.parseFile(
-          exports.libraryFiles[libPath],
-          exports.libraryPrefix + libPath + ".ts",
-          false,
-          parser
-        );
-      });
-    });
-  for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
-    let libDir = customLibDirs[i];
-    let libFiles;
-    if (libDir.endsWith(".ts")) {
-      libFiles = [ path.basename(libDir) ];
-      libDir = path.dirname(libDir);
-    } else {
-      libFiles = listFiles(libDir);
-    }
-    for (let j = 0, l = libFiles.length; j < l; ++j) {
-      let libPath = libFiles[j];
-      let libText = readFile(path.join(libDir, libPath));
-      if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
-      stats.parseCount++;
-      stats.parseTime += measure(() => {
-        parser = assemblyscript.parseFile(
-          libText,
-          exports.libraryPrefix + libPath,
-          false,
-          parser
-        );
-      });
     }
   }
 

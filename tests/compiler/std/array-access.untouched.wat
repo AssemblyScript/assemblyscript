@@ -5,7 +5,7 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $~lib/string/HEADER_SIZE i32 (i32.const 4))
+ (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $argumentCount (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 52))
  (memory $0 1)
@@ -195,7 +195,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 241)
+     (i32.const 238)
      (i32.const 4)
     )
     (unreachable)

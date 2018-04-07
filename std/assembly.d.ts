@@ -273,7 +273,7 @@ declare class ArrayBuffer {
 }
 
 /** Interface for a typed view on an array buffer. */
-declare interface ArrayBufferView<T> {
+interface ArrayBufferView<T> {
   [key: number]: T;
   /** The {@link ArrayBuffer} referenced by this view. */
   readonly buffer: ArrayBuffer;
@@ -282,6 +282,44 @@ declare interface ArrayBufferView<T> {
   /** The length in bytes from the start of the referenced {@link ArrayBuffer}. */
   readonly byteLength: i32;
 }
+
+/* @internal */
+declare abstract class TypedArray<T> implements ArrayBufferView<T> {
+  [key: number]: T;
+  /** Number of bytes per element. */
+  static readonly BYTES_PER_ELEMENT: usize;
+  /** Constructs a new typed array. */
+  constructor(length: i32);
+  /** The {@link ArrayBuffer} referenced by this view. */
+  readonly buffer: ArrayBuffer;
+  /** The offset in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteOffset: i32;
+  /** The length in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteLength: i32;
+  /** The length (in elements). */
+  readonly length: i32;
+}
+
+/** An array of twos-complement 8-bit signed integers. */
+declare class Int8Array extends TypedArray<i8> {}
+/** An array of 8-bit unsigned integers. */
+declare class Uint8Array extends TypedArray<u8> {}
+/** An array of twos-complement 16-bit signed integers. */
+declare class Int16Array extends TypedArray<i16> {}
+/** An array of 16-bit unsigned integers. */
+declare class Uint16Array extends TypedArray<u16> {}
+/** An array of twos-complement 32-bit signed integers. */
+declare class Int32Array extends TypedArray<i32> {}
+/** An array of 32-bit unsigned integers. */
+declare class Uint32Array extends TypedArray<u32> {}
+/** An array of twos-complement 64-bit signed integers. */
+declare class Int64Array extends TypedArray<i64> {}
+/** An array of 64-bit unsigned integers. */
+declare class Uint64Array extends TypedArray<u64> {}
+/** An array of 32-bit floating point numbers. */
+declare class Float32Array extends TypedArray<f32> {}
+/** An array of 64-bit floating point numbers. */
+declare class Float64Array extends TypedArray<f64> {}
 
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {

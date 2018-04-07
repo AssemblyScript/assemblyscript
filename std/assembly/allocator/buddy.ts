@@ -1,6 +1,6 @@
 /**
  * Buddy Memory Allocator.
- * @module stdd/assembly/allocator/buddy
+ * @module std/assembly/allocator/buddy
  *//***/
 
 /*

@@ -1,6 +1,5 @@
 export class Error {
 
-  name: string = "Error";
   message: string;
   stack: string = ""; // TODO
 
@@ -9,10 +8,5 @@ export class Error {
   }
 }
 
-export class RangeError extends Error {
-  name: string = "RangeError";
-}
-
-export class TypeError extends Error {
-  name: string = "TypeError";
-}
+export class RangeError extends Error {}
+export class TypeError extends Error {}
