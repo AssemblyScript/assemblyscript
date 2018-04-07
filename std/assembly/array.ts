@@ -1,29 +1,35 @@
+import {
+  defaultComparator,
+  insertionSort,
+  weakHeapSort
+} from "./internal/array";
 
 export class Array<T> {
 
-  private __memory: usize;
-  private __capacity: i32;  // capped to [0, 0x7fffffff]
-  private __length: i32;    // capped to [0, __capacity]
+  __memory: usize;
+  __capacity: i32;  // capped to [0, 0x7fffffff]
+  __length: i32;    // capped to [0, __capacity]
 
   private __grow(newCapacity: i32): void {
-    assert(newCapacity > this.__capacity);
+    var oldMemory = this.__memory;
+    var oldCapacity = this.__capacity;
+    assert(newCapacity > oldCapacity);
     var newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
-    if (this.__memory) {
-      move_memory(newMemory, this.__memory, <usize>this.__capacity * sizeof<T>());
-      free_memory(this.__memory);
+    if (oldMemory) {
+      move_memory(newMemory, oldMemory, <usize>oldCapacity * sizeof<T>());
+      free_memory(oldMemory);
     }
     this.__memory = newMemory;
     this.__capacity = newCapacity;
   }
 
   constructor(capacity: i32 = 0) {
-    if (capacity < 0) {
-      throw new RangeError("Invalid array length");
-    }
+    if (capacity < 0) throw new RangeError("Invalid array length");
     this.__memory = capacity
       ? allocate_memory(<usize>capacity * sizeof<T>())
       : 0;
-    this.__capacity = this.__length = capacity;
+    this.__capacity = capacity;
+    this.__length = capacity;
   }
 
   every(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
@@ -55,103 +61,93 @@ export class Array<T> {
   }
 
   set length(length: i32) {
-    if (length < 0) {
-      throw new RangeError("Invalid array length");
-    }
-    if (length > this.__capacity) {
-      this.__grow(max(length, this.__capacity << 1));
-    }
+    if (length < 0) throw new RangeError("Invalid array length");
+    if (length > this.__capacity) this.__grow(max(length, this.__capacity << 1));
     this.__length = length;
   }
 
   @operator("[]")
   private __get(index: i32): T {
-    if (<u32>index >= <u32>this.__capacity) {
-      throw new Error("Index out of bounds"); // return changetype<T>(0) ?
-    }
+    if (<u32>index >= <u32>this.__capacity) throw new Error("Index out of bounds");
     return load<T>(this.__memory + <usize>index * sizeof<T>());
   }
 
   @operator("[]=")
   private __set(index: i32, value: T): void {
-    if (index < 0) {
-      throw new Error("Index out of bounds");
-    }
-    if (index >= this.__capacity) {
-      this.__grow(max(index + 1, this.__capacity << 1));
-    }
+    if (index < 0) throw new Error("Index out of bounds");
+    var capacity = this.__capacity;
+    if (index >= capacity) this.__grow(max(index + 1, capacity << 1));
     store<T>(this.__memory + <usize>index * sizeof<T>(), value);
   }
 
   includes(searchElement: T, fromIndex: i32 = 0): bool {
-    if (this.__length == 0 || fromIndex >= this.__length) {
-      return false;
-    }
+    var length = this.__length;
+    if (length == 0 || fromIndex >= length) return false;
     if (fromIndex < 0) {
-      fromIndex = this.__length + fromIndex;
+      fromIndex = length + fromIndex;
       if (fromIndex < 0) {
         fromIndex = 0;
       }
     }
-    while (<u32>fromIndex < <u32>this.__length) {
-      if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) {
-        return true;
-      }
+    while (fromIndex < length) {
+      if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) return true;
       ++fromIndex;
     }
     return false;
   }
 
   indexOf(searchElement: T, fromIndex: i32 = 0): i32 {
-    if (this.__length == 0 || fromIndex >= this.__length) {
+    var length = this.__length;
+    if (length == 0 || fromIndex >= length) {
       return -1;
     }
     if (fromIndex < 0) {
-      fromIndex = this.__length + fromIndex;
+      fromIndex = length + fromIndex;
       if (fromIndex < 0) {
         fromIndex = 0;
       }
     }
-    while (<u32>fromIndex < <u32>this.__length) {
-      if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) {
-        return fromIndex;
-      }
+    var memory = this.__memory;
+    while (fromIndex < length) {
+      if (load<T>(memory + <usize>fromIndex * sizeof<T>()) == searchElement) return fromIndex;
       ++fromIndex;
     }
     return -1;
   }
 
   lastIndexOf(searchElement: T, fromIndex: i32 = this.__length): i32 {
-    if (this.__length == 0) {
-      return -1;
-    }
+    var length = this.__length;
+    if (length == 0) return -1;
     if (fromIndex < 0) {
-      fromIndex = this.__length + fromIndex;
-    } else if (fromIndex >= this.__length) {
-      fromIndex = this.__length - 1;
+      fromIndex = length + fromIndex;
+    } else if (fromIndex >= length) {
+      fromIndex = length - 1;
     }
+    var memory = this.__memory;
     while (fromIndex >= 0) {
-      if (load<T>(this.__memory + <usize>fromIndex * sizeof<T>()) == searchElement) {
-        return fromIndex;
-      }
+      if (load<T>(memory + <usize>fromIndex * sizeof<T>()) == searchElement) return fromIndex;
       --fromIndex;
     }
     return -1;
   }
 
   push(element: T): i32 {
-    if (this.__length == this.__capacity) {
-      this.__grow(this.__capacity ? this.__capacity << 1 : 1);
+    var capacity = this.__capacity;
+    var length = this.__length;
+    if (length == capacity) {
+      this.__grow(capacity ? capacity << 1 : 1);
     }
-    store<T>(this.__memory + <usize>this.__length * sizeof<T>(), element);
-    return ++this.__length;
+    store<T>(this.__memory + <usize>length * sizeof<T>(), element);
+    this.__length = ++length;
+    return length;
   }
 
   pop(): T {
-    if (this.__length < 1) {
-      throw new RangeError("Array is empty"); // return changetype<T>(0) ?
-    }
-    return load<T>(this.__memory + <usize>--this.__length * sizeof<T>());
+    var length = this.__length;
+    if (length < 1) throw new RangeError("Array is empty");
+    var element = load<T>(this.__memory + <usize>--length * sizeof<T>());
+    this.__length = length;
+    return element;
   }
 
   reduce<U>(
@@ -161,7 +157,7 @@ export class Array<T> {
     var accumulator: U = initialValue;
     var toIndex: i32 = this.__length;
     var i: i32 = 0;
-    while (i < toIndex && i < this.__length) {
+    while (i < toIndex && i < /* might change */ this.__length) {
       accumulator = callbackfn(accumulator, load<T>(this.__memory + <usize>i * sizeof<T>()), i, this);
       i += 1;
     }
@@ -169,77 +165,81 @@ export class Array<T> {
   }
 
   shift(): T {
-    if (this.__length < 1) {
-      throw new RangeError("Array is empty"); // return changetype<T>(0) ?
-    }
-    var element = load<T>(this.__memory);
+    var length = this.__length;
+    if (length < 1) throw new RangeError("Array is empty");
+    var memory = this.__memory;
+    var capacity = this.__capacity;
+    var element = load<T>(memory);
     move_memory(
-      this.__memory,
-      this.__memory + sizeof<T>(),
-      <usize>(this.__capacity - 1) * sizeof<T>()
+      memory,
+      memory + sizeof<T>(),
+      <usize>(capacity - 1) * sizeof<T>()
     );
     set_memory(
-      this.__memory + <usize>(this.__capacity - 1) * sizeof<T>(),
+      memory + <usize>(capacity - 1) * sizeof<T>(),
       0,
       sizeof<T>()
     );
-    --this.__length;
+    this.__length = length - 1;
     return element;
   }
 
   some(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
     var toIndex: i32 = this.__length;
     var i: i32 = 0;
-    while (i < toIndex && i < this.__length) {
-      if (callbackfn(load<T>(this.__memory + <usize>i * sizeof<T>()), i, this)) {
-        return true;
-      }
+    while (i < toIndex && i < /* might change */ this.__length) {
+      if (callbackfn(load<T>(this.__memory + <usize>i * sizeof<T>()), i, this)) return true;
       i += 1;
     }
     return false;
   }
 
   unshift(element: T): i32 {
-    var oldCapacity = this.__capacity;
-    if (this.__length == oldCapacity) {
+    var memory = this.__memory;
+    var capacity = this.__capacity;
+    var length = this.__length;
+    if (this.__length == capacity) {
       // inlined __grow (avoids moving twice)
-      let newCapacity: i32 = oldCapacity ? oldCapacity << 1 : 1;
-      assert(newCapacity > this.__capacity);
+      let newCapacity: i32 = capacity ? capacity << 1 : 1;
+      assert(newCapacity > capacity);
       let newMemory = allocate_memory(<usize>newCapacity * sizeof<T>());
-      if (this.__memory) {
+      if (memory) {
         move_memory(
           newMemory + sizeof<T>(),
-          this.__memory,
-          <usize>oldCapacity * sizeof<T>()
+          memory,
+          <usize>capacity * sizeof<T>()
         );
-        free_memory(this.__memory);
+        free_memory(memory);
       }
       this.__memory = newMemory;
       this.__capacity = newCapacity;
+      memory = newMemory;
     } else {
       move_memory(
-        this.__memory + sizeof<T>(),
-        this.__memory,
-        <usize>oldCapacity * sizeof<T>()
+        memory + sizeof<T>(),
+        memory,
+        <usize>capacity * sizeof<T>()
       );
     }
-    store<T>(this.__memory, element);
-    return ++this.__length;
+    store<T>(memory, element);
+    this.__length = ++length;
+    return length;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
+    var length = this.__length;
     if (begin < 0) {
-      begin = this.__length + begin;
+      begin = length + begin;
       if (begin < 0) {
         begin = 0;
       }
-    } else if (begin > this.__length) {
-      begin = this.__length;
+    } else if (begin > length) {
+      begin = length;
     }
     if (end < 0) {
-      end = this.__length + end;
-    } else if (end > this.__length) {
-      end = this.__length;
+      end = length + end;
+    } else if (end > length) {
+      end = length;
     }
     if (end < begin) {
       end = begin;
@@ -261,194 +261,52 @@ export class Array<T> {
     if (deleteCount < 1) {
       return;
     }
+    var length = this.__length;
     if (start < 0) {
-      start = this.__length + start;
+      start = length + start;
       if (start < 0) {
         start = 0;
-      } else if (start >= this.__length) {
+      } else if (start >= length) {
         return;
       }
-    } else if (start >= this.__length) {
+    } else if (start >= length) {
       return;
     }
-    deleteCount = min(deleteCount, this.__length - start);
+    deleteCount = min(deleteCount, length - start);
+    var memory = this.__memory;
     move_memory(
-      this.__memory + <usize>start * sizeof<T>(),
-      this.__memory + <usize>(start + deleteCount) * sizeof<T>(),
+      memory + <usize>start * sizeof<T>(),
+      memory + <usize>(start + deleteCount) * sizeof<T>(),
       <usize>deleteCount * sizeof<T>()
     );
-    this.__length -= deleteCount;
+    this.__length = length - deleteCount;
   }
 
   reverse(): Array<T> {
+    var memory = this.__memory;
     for (let front: usize = 0, back: usize = <usize>this.__length - 1; front < back; ++front, --back) {
-      let temp = load<T>(this.__memory + front * sizeof<T>());
-      store<T>(this.__memory + front * sizeof<T>(), load<T>(this.__memory + back * sizeof<T>()));
-      store<T>(this.__memory + back * sizeof<T>(), temp);
+      let temp = load<T>(memory + front * sizeof<T>());
+      store<T>(memory + front * sizeof<T>(), load<T>(memory + back * sizeof<T>()));
+      store<T>(memory + back * sizeof<T>(), temp);
     }
     return this;
   }
 
-  sort(comparator: (a: T, b: T) => i32 = createDefaultComparator<T>()): Array<T> {
-    return sort<T>(this, comparator);
-  }
-}
-
-@unmanaged
-@sealed
-export class CArray<T> {
-
-  private constructor() {}
-
-  @operator("[]")
-  private __get(index: i32): T {
-    if (index < 0) {
-      throw new RangeError("Index out of range");
-    }
-    return load<T>(changetype<usize>(this) + <usize>index * sizeof<T>());
-  }
-
-  @operator("[]=")
-  private __set(index: i32, value: T): void {
-    if (index < 0) {
-      throw new RangeError("Index out of range");
-    }
-    store<T>(changetype<usize>(this) + <usize>index * sizeof<T>(), value);
-  }
-}
-
-/*
- * Internal methods
- */
-
-// TODO remove this wrapper when indirect table landed
-function createDefaultComparator<T>(): (a: T, b: T) => i32 {
-  return (a: T, b: T): i32 => (
-    <i32>(a > b) - <i32>(a < b)
-  );
-}
-
-function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
-  var a: T, b: T, j: i32;
-  const typeShift = alignof<T>();
-
-  for (let i: i32 = 0, len: i32 = arr.length; i < len; i++) {
-    a = load<T>(arr.__memory + (i << typeShift)); // a = <T>arr[i];
-    j = i - 1;
-    while (j >= 0) {
-      b = load<T>(arr.__memory + (j << typeShift));  // b = <T>arr[j];
+  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): Array<T> {
+    var len = this.length;
+    if (len <= 1) return this;
+    if (len == 2) {
+      let memory = this.__memory;
+      let a = load<T>(memory, sizeof<T>()); // var a = <T>arr[1];
+      let b = load<T>(memory, 0);           // var b = <T>arr[0];
       if (comparator(a, b) < 0) {
-        store<T>(arr.__memory + ((j + 1) << typeShift), b); // arr[j + 1] = b;
-        j--;
-      } else break;
-    }
-
-    store<T>(arr.__memory + ((j + 1) << typeShift), a); // arr[j + 1] = a;
-  }
-
-  return arr;
-}
-
-/* Weak Heap Sort implementation based on paper:
-  http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.21.1863&rep=rep1&type=pdf
-*/
-function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
-  var len: i32 = arr.length;
-  var i: i32, j: i32, y: i32, p: i32, a: T, b: T;
-
-  const typeShift = alignof<T>();
-  const intShift  = alignof<i32>();
-
-  var blen = (len + 31) >> 5;
-  var bitset = allocate_memory(blen << intShift);
-
-  set_memory(bitset, 0, blen << intShift);
-
-  for (i = len - 1; i > 0; i--) {
-    j = i;
-    while ((j & 1) == ((load<i32>(bitset + ((j >> 6) << intShift)) >> ((j >> 1) & 31)) & 1)) {
-      j >>= 1;
-    }
-
-    p = j >> 1;
-
-    a = load<T>(arr.__memory + (p << typeShift)); // a = <T>arr[p];
-    b = load<T>(arr.__memory + (i << typeShift)); // b = <T>arr[i];
-
-    if (comparator(a, b) < 0) {
-      store<i32>(
-        bitset + ((i >> 5) << intShift),
-        load<i32>(bitset + ((i >> 5) << intShift)) ^ (1 << (i & 31))
-      );
-      store<T>(arr.__memory + (i << typeShift), a); // arr[i] = a;
-      store<T>(arr.__memory + (p << typeShift), b); // arr[p] = b;
-    }
-  }
-
-  for (i = len - 1; i >= 2; i--) {
-    /*
-    a      = <T>arr[0];
-    arr[0] = <T>arr[i];
-    arr[i] = a;
-    */
-    a = load<T>(arr.__memory, 0);
-    store<T>(arr.__memory, load<T>(arr.__memory + (i << typeShift)), 0);
-    store<T>(arr.__memory + (i << typeShift), a);
-
-    let x = 1;
-    while ((y = (x << 1) + ((load<i32>(bitset + ((x >> 5) << intShift)) >> (x & 31)) & 1)) < i) {
-      x = y;
-    }
-
-    while (x > 0) {
-      a = load<T>(arr.__memory, 0);                // a = <T>arr[0];
-      b = load<T>(arr.__memory + (x << typeShift)); // b = <T>arr[x];
-
-      if (comparator(a, b) < 0) {
-        store<i32>(
-          bitset + ((x >> 5) << intShift),
-          load<i32>(bitset + ((x >> 5) << intShift)) ^ (1 << (x & 31))
-        );
-
-        store<T>(arr.__memory + (x << typeShift), a); // arr[x] = a;
-        store<T>(arr.__memory, b, 0);                // arr[0] = b;
+        store<T>(memory, b, sizeof<T>()); // arr[1] = b;
+        store<T>(memory, a, 0);           // arr[0] = a;
       }
-      x >>= 1;
+      return this;
     }
+    return len <= 256
+      ? insertionSort<T>(this, comparator)
+      : weakHeapSort<T>(this, comparator);
   }
-
-  free_memory(bitset);
-
-  /*
-  let t  = <T>arr[1];
-  arr[1] = <T>arr[0];
-  arr[0] = t;
-  */
-  var t = load<T>(arr.__memory, sizeof<T>());
-  store<T>(arr.__memory, load<T>(arr.__memory, 0), sizeof<T>());
-  store<T>(arr.__memory, t, 0);
-
-  return arr;
-}
-
-function sort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
-  var len = arr.length;
-
-  if (len <= 1) return arr;
-
-  if (len == 2) {
-    let a = load<T>(arr.__memory, sizeof<T>()); // var a = <T>arr[1];
-    let b = load<T>(arr.__memory, 0);           // var b = <T>arr[0];
-    if (comparator(a, b) < 0) {
-      store<T>(arr.__memory, b, sizeof<T>()); // arr[1] = b;
-      store<T>(arr.__memory, a, 0);           // arr[0] = a;
-    }
-    return arr;
-  }
-
-  if (len <= 256) {
-    return insertionSort<T>(arr, comparator);
-  }
-
-  return weakHeapSort<T>(arr, comparator);
 }

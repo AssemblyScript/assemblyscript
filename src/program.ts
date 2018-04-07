@@ -85,6 +85,8 @@ export const SETTER_PREFIX = "set:";
 export const INSTANCE_DELIMITER = "#";
 /** Delimiter used between class and namespace names and static members. */
 export const STATIC_DELIMITER = ".";
+/** Delimiter used between a function and its inner elements. */
+export const INNER_DELIMITER = "~";
 /** Substitution used to indicate a library directory. */
 export const LIBRARY_SUBST = "~lib";
 /** Library directory prefix. */
@@ -146,6 +148,26 @@ export class Program extends DiagnosticEmitter {
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
     this.sources = [];
+  }
+
+  /** Gets a source by its exact path. */
+  getSource(normalizedPath: string): Source | null {
+    var sources = this.sources;
+    for (let i = 0, k = sources.length; i < k; ++i) {
+      let source = sources[i];
+      if (source.normalizedPath == normalizedPath) return source;
+    }
+    return null;
+  }
+
+  /** Looks up the source for the specified possibly ambiguous path. */
+  lookupSourceByPath(normalizedPathWithoutExtension: string): Source | null {
+    return (
+      this.getSource(normalizedPathWithoutExtension + ".ts") ||
+      this.getSource(normalizedPathWithoutExtension + "/index.ts") ||
+      this.getSource(LIBRARY_PREFIX + normalizedPathWithoutExtension + ".ts") ||
+      this.getSource(LIBRARY_PREFIX + normalizedPathWithoutExtension + "/index.ts")
+    );
   }
 
   /** Initializes the program and its elements prior to compilation. */
@@ -2524,20 +2546,22 @@ export class FunctionPrototype extends Element {
   /** Resolves this prototype partially by applying the specified inherited class type arguments. */
   resolvePartial(classTypeArguments: Type[] | null): FunctionPrototype | null {
     assert(this.is(CommonFlags.INSTANCE));
-    assert(this.classPrototype);
-    if (classTypeArguments && classTypeArguments.length) {
-      let partialPrototype = new FunctionPrototype(
-        this.program,
-        this.simpleName,
-        this.internalName,
-        this.declaration,
-        this.classPrototype
-      );
-      partialPrototype.flags = this.flags;
-      partialPrototype.classTypeArguments = classTypeArguments;
-      return partialPrototype;
-    }
-    return this; // no need to clone
+    var classPrototype = assert(this.classPrototype);
+
+    if (!(classTypeArguments && classTypeArguments.length)) return this; // no need to clone
+
+    var simpleName = this.simpleName;
+    var partialKey = typesToString(classTypeArguments);
+    var partialPrototype = new FunctionPrototype(
+      this.program,
+      simpleName,
+      classPrototype.internalName + "<" + partialKey + ">" + INSTANCE_DELIMITER + simpleName,
+      this.declaration,
+      classPrototype
+    );
+    partialPrototype.flags = this.flags;
+    partialPrototype.classTypeArguments = classTypeArguments;
+    return partialPrototype;
   }
 
   /** Resolves the specified type arguments prior to resolving this prototype to an instance. */
@@ -3079,10 +3103,7 @@ export class ClassPrototype extends Element {
 
     if (this.constructorPrototype) {
       let partialConstructor = this.constructorPrototype.resolvePartial(typeArguments); // reports
-      if (partialConstructor) {
-        instance.constructorInstance = partialConstructor.resolve(); // reports
-      }
-      // TODO: ^ doesn't know the return type, hence returns null
+      if (partialConstructor) instance.constructorInstance = partialConstructor.resolve(); // reports
     }
 
     if (this.instanceMembers) {
@@ -3487,7 +3508,7 @@ export class Flow {
   //   scopedGlobal = new Global(
   //     scopedLocal.program,
   //     scopedLocal.simpleName,
-  //     this.currentFunction.internalName + "~" + scopedLocal.internalName,
+  //     this.currentFunction.internalName + INNER_DELIMITER + scopedLocal.internalName,
   //     scopedLocal.type,
   //     assert(scopedLocal.declaration)
   //   );

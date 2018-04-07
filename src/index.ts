@@ -41,10 +41,7 @@ import {
 export function parseFile(text: string, path: string, isEntry: bool = false,
   parser: Parser | null = null
 ): Parser {
-  if (!parser) {
-    parser = new Parser();
-    isEntry = true;
-  }
+  if (!parser) parser = new Parser();
   parser.parseFile(text, path, isEntry);
   return parser;
 }

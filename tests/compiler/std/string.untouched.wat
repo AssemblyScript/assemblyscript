@@ -9,44 +9,45 @@
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $~lib/allocator/common/index/AL_BITS i32 (i32.const 3))
- (global $~lib/allocator/common/index/AL_SIZE i32 (i32.const 8))
- (global $~lib/allocator/common/index/AL_MASK i32 (i32.const 7))
- (global $~lib/allocator/common/index/MAX_SIZE_32 i32 (i32.const 1073741824))
+ (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
+ (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
+ (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
+ (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/string/str (mut i32) (i32.const 4))
  (global $std/string/nullStr (mut i32) (i32.const 0))
- (global $~lib/string/HEADER_SIZE i32 (i32.const 4))
+ (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $argumentCount (mut i32) (i32.const 0))
- (global $~lib/string/CharCode.PLUS i32 (i32.const 43))
- (global $~lib/string/CharCode.MINUS i32 (i32.const 45))
- (global $~lib/string/CharCode.DOT i32 (i32.const 46))
- (global $~lib/string/CharCode._0 i32 (i32.const 48))
- (global $~lib/string/CharCode._1 i32 (i32.const 49))
- (global $~lib/string/CharCode._2 i32 (i32.const 50))
- (global $~lib/string/CharCode._3 i32 (i32.const 51))
- (global $~lib/string/CharCode._4 i32 (i32.const 52))
- (global $~lib/string/CharCode._5 i32 (i32.const 53))
- (global $~lib/string/CharCode._6 i32 (i32.const 54))
- (global $~lib/string/CharCode._7 i32 (i32.const 55))
- (global $~lib/string/CharCode._8 i32 (i32.const 56))
- (global $~lib/string/CharCode._9 i32 (i32.const 57))
- (global $~lib/string/CharCode.A i32 (i32.const 65))
- (global $~lib/string/CharCode.B i32 (i32.const 66))
- (global $~lib/string/CharCode.E i32 (i32.const 69))
- (global $~lib/string/CharCode.O i32 (i32.const 79))
- (global $~lib/string/CharCode.X i32 (i32.const 88))
- (global $~lib/string/CharCode.Z i32 (i32.const 90))
- (global $~lib/string/CharCode.a i32 (i32.const 97))
- (global $~lib/string/CharCode.b i32 (i32.const 98))
- (global $~lib/string/CharCode.e i32 (i32.const 101))
- (global $~lib/string/CharCode.o i32 (i32.const 111))
- (global $~lib/string/CharCode.x i32 (i32.const 120))
- (global $~lib/string/CharCode.z i32 (i32.const 122))
- (global $~lib/string/EMPTY i32 (i32.const 332))
+ (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
+ (global $~lib/internal/string/CharCode.PLUS i32 (i32.const 43))
+ (global $~lib/internal/string/CharCode.MINUS i32 (i32.const 45))
+ (global $~lib/internal/string/CharCode.DOT i32 (i32.const 46))
+ (global $~lib/internal/string/CharCode._0 i32 (i32.const 48))
+ (global $~lib/internal/string/CharCode._1 i32 (i32.const 49))
+ (global $~lib/internal/string/CharCode._2 i32 (i32.const 50))
+ (global $~lib/internal/string/CharCode._3 i32 (i32.const 51))
+ (global $~lib/internal/string/CharCode._4 i32 (i32.const 52))
+ (global $~lib/internal/string/CharCode._5 i32 (i32.const 53))
+ (global $~lib/internal/string/CharCode._6 i32 (i32.const 54))
+ (global $~lib/internal/string/CharCode._7 i32 (i32.const 55))
+ (global $~lib/internal/string/CharCode._8 i32 (i32.const 56))
+ (global $~lib/internal/string/CharCode._9 i32 (i32.const 57))
+ (global $~lib/internal/string/CharCode.A i32 (i32.const 65))
+ (global $~lib/internal/string/CharCode.B i32 (i32.const 66))
+ (global $~lib/internal/string/CharCode.E i32 (i32.const 69))
+ (global $~lib/internal/string/CharCode.O i32 (i32.const 79))
+ (global $~lib/internal/string/CharCode.X i32 (i32.const 88))
+ (global $~lib/internal/string/CharCode.Z i32 (i32.const 90))
+ (global $~lib/internal/string/CharCode.a i32 (i32.const 97))
+ (global $~lib/internal/string/CharCode.b i32 (i32.const 98))
+ (global $~lib/internal/string/CharCode.e i32 (i32.const 101))
+ (global $~lib/internal/string/CharCode.o i32 (i32.const 111))
+ (global $~lib/internal/string/CharCode.x i32 (i32.const 120))
+ (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
+ (global $~lib/internal/string/EMPTY i32 (i32.const 332))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 384))
+ (global $HEAP_BASE i32 (i32.const 436))
  (memory $0 1)
  (data (i32.const 4) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 40) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
@@ -71,11 +72,12 @@
  (data (i32.const 316) "\01\00\00\00a\00")
  (data (i32.const 324) "\01\00\00\00b\00")
  (data (i32.const 332) "\00\00\00\00")
- (data (i32.const 336) "\02\00\00\00a\00b\00")
- (data (i32.const 344) "\02\00\00\00b\00a\00")
- (data (i32.const 352) "\02\00\00\00a\00a\00")
- (data (i32.const 360) "\03\00\00\00a\00b\00c\00")
- (data (i32.const 372) "\03\00\00\001\002\003\00")
+ (data (i32.const 336) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 388) "\02\00\00\00a\00b\00")
+ (data (i32.const 396) "\02\00\00\00b\00a\00")
+ (data (i32.const 404) "\02\00\00\00a\00a\00")
+ (data (i32.const 412) "\03\00\00\00a\00b\00c\00")
+ (data (i32.const 424) "\03\00\00\001\002\003\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -91,7 +93,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 40)
+     (i32.const 37)
      (i32.const 4)
     )
     (unreachable)
@@ -204,7 +206,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 235)
+     (i32.const 232)
      (i32.const 4)
     )
     (unreachable)
@@ -334,7 +336,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 101)
+     (i32.const 98)
      (i32.const 4)
     )
     (unreachable)
@@ -435,7 +437,7 @@
     (unreachable)
    )
    (set_local $2
-    (i32.const 2147483647)
+    (i32.const 536870910)
    )
   )
   (call $~lib/string/String#endsWith
@@ -462,7 +464,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 214)
+     (i32.const 211)
      (i32.const 4)
     )
     (unreachable)
@@ -636,7 +638,7 @@
    (get_global $std/string/str)
   )
  )
- (func $~lib/string/parse<f64> (; 12 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/internal/string/parse<f64> (; 12 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1048,7 +1050,7 @@
  )
  (func $~lib/string/parseInt (; 13 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (return
-   (call $~lib/string/parse<f64>
+   (call $~lib/internal/string/parse<f64>
     (get_local $0)
     (get_local $1)
    )
@@ -1264,7 +1266,7 @@
                  (call $abort
                   (i32.const 0)
                   (i32.const 72)
-                  (i32.const 559)
+                  (i32.const 431)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -1470,26 +1472,39 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/allocate (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocate (; 17 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   (if
    (i32.eqz
-    (i32.gt_s
-     (get_local $0)
-     (i32.const 0)
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.gt_s
+        (get_local $0)
+        (i32.const 0)
+       )
+      )
+      (i32.le_s
+       (get_local $0)
+       (i32.const 536870910)
+      )
+      (get_local $1)
+     )
+     (i32.const 1)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 72)
-     (i32.const 8)
+     (i32.const 336)
+     (i32.const 20)
      (i32.const 2)
     )
     (unreachable)
    )
   )
-  (set_local $1
+  (set_local $2
    (call $~lib/allocator/arena/allocate_memory
     (i32.add
      (i32.const 4)
@@ -1501,11 +1516,11 @@
    )
   )
   (i32.store
-   (get_local $1)
+   (get_local $2)
    (get_local $0)
   )
   (return
-   (get_local $1)
+   (get_local $2)
   )
  )
  (func $~lib/memory/copy_memory (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -3650,7 +3665,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 72)
-     (i32.const 77)
+     (i32.const 74)
      (i32.const 4)
     )
     (unreachable)
@@ -3691,7 +3706,7 @@
    )
   )
   (set_local $5
-   (call $~lib/string/allocate
+   (call $~lib/internal/string/allocate
     (get_local $4)
    )
   )
@@ -4676,7 +4691,7 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (get_global $std/string/c)
-     (i32.const 336)
+     (i32.const 388)
     )
    )
    (block
@@ -4760,7 +4775,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gt
-     (i32.const 344)
+     (i32.const 396)
      (i32.const 316)
     )
    )
@@ -4777,8 +4792,8 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gte
-     (i32.const 344)
-     (i32.const 352)
+     (i32.const 396)
+     (i32.const 404)
     )
    )
    (block
@@ -4794,8 +4809,8 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gt
-     (i32.const 344)
-     (i32.const 336)
+     (i32.const 396)
+     (i32.const 388)
     )
    )
    (block
@@ -4812,8 +4827,8 @@
    (i32.eqz
     (i32.eqz
      (call $~lib/string/String.__lt
-      (i32.const 344)
-      (i32.const 336)
+      (i32.const 396)
+      (i32.const 388)
      )
     )
    )
@@ -4868,7 +4883,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gt
-     (i32.const 360)
+     (i32.const 412)
      (i32.const 332)
     )
    )
@@ -4886,7 +4901,7 @@
    (i32.eqz
     (call $~lib/string/String.__lt
      (i32.const 332)
-     (i32.const 360)
+     (i32.const 412)
     )
    )
    (block
@@ -4902,7 +4917,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gte
-     (i32.const 360)
+     (i32.const 412)
      (i32.const 332)
     )
    )
@@ -4920,7 +4935,7 @@
    (i32.eqz
     (call $~lib/string/String.__lte
      (i32.const 332)
-     (i32.const 360)
+     (i32.const 412)
     )
    )
    (block
@@ -4937,7 +4952,7 @@
    (i32.eqz
     (i32.eqz
      (call $~lib/string/String.__lt
-      (i32.const 360)
+      (i32.const 412)
       (i32.const 332)
      )
     )
@@ -4957,7 +4972,7 @@
     (i32.eqz
      (call $~lib/string/String.__gt
       (i32.const 332)
-      (i32.const 360)
+      (i32.const 412)
      )
     )
    )
@@ -5047,7 +5062,7 @@
    (i32.eqz
     (i32.eq
      (i32.load
-      (i32.const 372)
+      (i32.const 424)
      )
      (i32.const 3)
     )

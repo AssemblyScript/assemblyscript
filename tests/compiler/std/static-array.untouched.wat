@@ -17,10 +17,10 @@
  (type $iiFv (func (param i32 i32 f64)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $~lib/allocator/common/index/AL_BITS i32 (i32.const 3))
- (global $~lib/allocator/common/index/AL_SIZE i32 (i32.const 8))
- (global $~lib/allocator/common/index/AL_MASK i32 (i32.const 7))
- (global $~lib/allocator/common/index/MAX_SIZE_32 i32 (i32.const 1073741824))
+ (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
+ (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
+ (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
+ (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/static-array/i i32 (i32.const 8))
@@ -2309,26 +2309,36 @@
  )
  (func $~lib/array/Array<i32>#__grow (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $2
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
   (if
    (i32.eqz
     (i32.gt_s
      (get_local $1)
-     (i32.load offset=4
-      (get_local $0)
-     )
+     (get_local $3)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 160)
-     (i32.const 9)
+     (i32.const 16)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  (set_local $2
+  (set_local $4
    (call $~lib/allocator/arena/allocate_memory
     (i32.mul
      (get_local $1)
@@ -2337,32 +2347,24 @@
    )
   )
   (if
-   (i32.load
-    (get_local $0)
-   )
+   (get_local $2)
    (block
     (call $~lib/memory/move_memory
+     (get_local $4)
      (get_local $2)
-     (i32.load
-      (get_local $0)
-     )
      (i32.mul
-      (i32.load offset=4
-       (get_local $0)
-      )
+      (get_local $3)
       (i32.const 4)
      )
     )
     (call $~lib/allocator/arena/free_memory
-     (i32.load
-      (get_local $0)
-     )
+     (get_local $2)
     )
    )
   )
   (i32.store
    (get_local $0)
-   (get_local $2)
+   (get_local $4)
   )
   (i32.store offset=4
    (get_local $0)
@@ -2372,6 +2374,7 @@
  (func $~lib/array/Array<i32>#__set (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   (if
    (i32.lt_s
     (get_local $1)
@@ -2379,33 +2382,34 @@
    )
    (unreachable)
   )
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
   (if
    (i32.ge_s
     (get_local $1)
-    (i32.load offset=4
-     (get_local $0)
-    )
+    (get_local $3)
    )
    (call $~lib/array/Array<i32>#__grow
     (get_local $0)
     (select
-     (tee_local $3
+     (tee_local $4
       (i32.add
        (get_local $1)
        (i32.const 1)
       )
      )
-     (tee_local $4
+     (tee_local $5
       (i32.shl
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $3)
        (i32.const 1)
       )
      )
      (i32.gt_s
-      (get_local $3)
       (get_local $4)
+      (get_local $5)
      )
     )
    )
@@ -2456,26 +2460,36 @@
  )
  (func $~lib/array/Array<i64>#__grow (; 11 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $2
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
   (if
    (i32.eqz
     (i32.gt_s
      (get_local $1)
-     (i32.load offset=4
-      (get_local $0)
-     )
+     (get_local $3)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 160)
-     (i32.const 9)
+     (i32.const 16)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  (set_local $2
+  (set_local $4
    (call $~lib/allocator/arena/allocate_memory
     (i32.mul
      (get_local $1)
@@ -2484,32 +2498,24 @@
    )
   )
   (if
-   (i32.load
-    (get_local $0)
-   )
+   (get_local $2)
    (block
     (call $~lib/memory/move_memory
+     (get_local $4)
      (get_local $2)
-     (i32.load
-      (get_local $0)
-     )
      (i32.mul
-      (i32.load offset=4
-       (get_local $0)
-      )
+      (get_local $3)
       (i32.const 8)
      )
     )
     (call $~lib/allocator/arena/free_memory
-     (i32.load
-      (get_local $0)
-     )
+     (get_local $2)
     )
    )
   )
   (i32.store
    (get_local $0)
-   (get_local $2)
+   (get_local $4)
   )
   (i32.store offset=4
    (get_local $0)
@@ -2519,6 +2525,7 @@
  (func $~lib/array/Array<i64>#__set (; 12 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   (if
    (i32.lt_s
     (get_local $1)
@@ -2526,33 +2533,34 @@
    )
    (unreachable)
   )
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
   (if
    (i32.ge_s
     (get_local $1)
-    (i32.load offset=4
-     (get_local $0)
-    )
+    (get_local $3)
    )
    (call $~lib/array/Array<i64>#__grow
     (get_local $0)
     (select
-     (tee_local $3
+     (tee_local $4
       (i32.add
        (get_local $1)
        (i32.const 1)
       )
      )
-     (tee_local $4
+     (tee_local $5
       (i32.shl
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $3)
        (i32.const 1)
       )
      )
      (i32.gt_s
-      (get_local $3)
       (get_local $4)
+      (get_local $5)
      )
     )
    )
@@ -2603,26 +2611,36 @@
  )
  (func $~lib/array/Array<f32>#__grow (; 15 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $2
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
   (if
    (i32.eqz
     (i32.gt_s
      (get_local $1)
-     (i32.load offset=4
-      (get_local $0)
-     )
+     (get_local $3)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 160)
-     (i32.const 9)
+     (i32.const 16)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  (set_local $2
+  (set_local $4
    (call $~lib/allocator/arena/allocate_memory
     (i32.mul
      (get_local $1)
@@ -2631,32 +2649,24 @@
    )
   )
   (if
-   (i32.load
-    (get_local $0)
-   )
+   (get_local $2)
    (block
     (call $~lib/memory/move_memory
+     (get_local $4)
      (get_local $2)
-     (i32.load
-      (get_local $0)
-     )
      (i32.mul
-      (i32.load offset=4
-       (get_local $0)
-      )
+      (get_local $3)
       (i32.const 4)
      )
     )
     (call $~lib/allocator/arena/free_memory
-     (i32.load
-      (get_local $0)
-     )
+     (get_local $2)
     )
    )
   )
   (i32.store
    (get_local $0)
-   (get_local $2)
+   (get_local $4)
   )
   (i32.store offset=4
    (get_local $0)
@@ -2666,6 +2676,7 @@
  (func $~lib/array/Array<f32>#__set (; 16 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   (if
    (i32.lt_s
     (get_local $1)
@@ -2673,33 +2684,34 @@
    )
    (unreachable)
   )
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
   (if
    (i32.ge_s
     (get_local $1)
-    (i32.load offset=4
-     (get_local $0)
-    )
+    (get_local $3)
    )
    (call $~lib/array/Array<f32>#__grow
     (get_local $0)
     (select
-     (tee_local $3
+     (tee_local $4
       (i32.add
        (get_local $1)
        (i32.const 1)
       )
      )
-     (tee_local $4
+     (tee_local $5
       (i32.shl
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $3)
        (i32.const 1)
       )
      )
      (i32.gt_s
-      (get_local $3)
       (get_local $4)
+      (get_local $5)
      )
     )
    )
@@ -2750,26 +2762,36 @@
  )
  (func $~lib/array/Array<f64>#__grow (; 19 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $2
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
   (if
    (i32.eqz
     (i32.gt_s
      (get_local $1)
-     (i32.load offset=4
-      (get_local $0)
-     )
+     (get_local $3)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 160)
-     (i32.const 9)
+     (i32.const 16)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  (set_local $2
+  (set_local $4
    (call $~lib/allocator/arena/allocate_memory
     (i32.mul
      (get_local $1)
@@ -2778,32 +2800,24 @@
    )
   )
   (if
-   (i32.load
-    (get_local $0)
-   )
+   (get_local $2)
    (block
     (call $~lib/memory/move_memory
+     (get_local $4)
      (get_local $2)
-     (i32.load
-      (get_local $0)
-     )
      (i32.mul
-      (i32.load offset=4
-       (get_local $0)
-      )
+      (get_local $3)
       (i32.const 8)
      )
     )
     (call $~lib/allocator/arena/free_memory
-     (i32.load
-      (get_local $0)
-     )
+     (get_local $2)
     )
    )
   )
   (i32.store
    (get_local $0)
-   (get_local $2)
+   (get_local $4)
   )
   (i32.store offset=4
    (get_local $0)
@@ -2813,6 +2827,7 @@
  (func $~lib/array/Array<f64>#__set (; 20 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   (if
    (i32.lt_s
     (get_local $1)
@@ -2820,33 +2835,34 @@
    )
    (unreachable)
   )
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
   (if
    (i32.ge_s
     (get_local $1)
-    (i32.load offset=4
-     (get_local $0)
-    )
+    (get_local $3)
    )
    (call $~lib/array/Array<f64>#__grow
     (get_local $0)
     (select
-     (tee_local $3
+     (tee_local $4
       (i32.add
        (get_local $1)
        (i32.const 1)
       )
      )
-     (tee_local $4
+     (tee_local $5
       (i32.shl
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $3)
        (i32.const 1)
       )
      )
      (i32.gt_s
-      (get_local $3)
       (get_local $4)
+      (get_local $5)
      )
     )
    )
