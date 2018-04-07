@@ -25,12 +25,14 @@ function test(file) {
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
 
-  if (exports.allocate_memory(COMMON_MAX + 1) != 0) {
+  try {
+    exports.allocate_memory(COMMON_MAX + 1); // unreachable
     throw Error("allocation is allowed to overflow MAX_SIZE");
-  }
-  if (exports.allocate_memory(0xffffffff) != 0) {
+  } catch (e) {}
+  try {
+    exports.allocate_memory(0xffffffff); // unreachable
     throw Error("allocation is allowed to overflow INT_MAX");
-  }
+  } catch (e) {}
 }
 
 if (process.argv.length > 2) {

@@ -24,7 +24,7 @@ if (args.help) {
 }
 
 var successes = 0;
-var failures = 0;
+var failedTests = [];
 
 const basedir = path.join(__dirname, "compiler");
 
@@ -136,15 +136,15 @@ tests.forEach(filename => {
         failed = true;
       }
 
-      if (failed) ++failures;
+      if (failed) failedTests.push(basename);
       else ++successes;
       console.log();
     });
   });
 });
 
-if (failures) {
+if (failedTests.length) {
   process.exitCode = 1;
-  console.log(chalk.red("ERROR: ") + failures + " compiler tests failed");
+  console.log(chalk.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
 } else
   console.log("[ " + chalk.whiteBright("SUCCESS") + " ]");

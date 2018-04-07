@@ -347,9 +347,7 @@ export function allocate_memory(request: usize): usize {
    * a hard-coded limit on the maximum allocation size because of the way this
    * allocator works.
    */
-  if (request > MAX_ALLOC - HEADER_SIZE) {
-    return 0;
-  }
+  if (request > MAX_ALLOC - HEADER_SIZE) unreachable();
 
   /*
    * Initialize our global state if this is the first call to "malloc". At the

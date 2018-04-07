@@ -2,8 +2,8 @@ language: node_js
 notifications:
   email: false
 stages:
-  - name: check-pr
-    if: type = pull_request
+- name: check-pr
+  if: type = pull_request
 jobs:
   include:
 
@@ -24,6 +24,13 @@ jobs:
   - node_js: node
     script: npm run clean && node bin/asc -v && npm test
     env: Tests the sources on latest stable node.js
+  - node_js: lts/*
+    script:
+    - npm run clean
+    - cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test arena
+    - cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy
+    - cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf
+    env: Tests the allocators on latest node.js LTS
 
   - stage: build
     node_js: lts/*

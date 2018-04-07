@@ -7,15 +7,15 @@
  * @module std/assembly/allocator/arena
  *//***/
 
-import { AL_MASK } from "../internal/allocator";
+import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
 
 var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;
 
 @global
 export function allocate_memory(size: usize): usize {
-  const MAX_SIZE: usize = 1 << 30;
-  if (size && size < MAX_SIZE) {
+  if (size) {
+    if (size > MAX_SIZE_32) unreachable();
     let ptr = offset;
     let newPtr = (ptr + size + AL_MASK) & ~AL_MASK;
     let pagesBefore = current_memory();

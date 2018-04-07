@@ -457,7 +457,8 @@ export function allocate_memory(size: usize): usize {
 
   // search for a suitable block
   var data: usize = 0;
-  if (size && size <= Block.MAX_SIZE) {
+  if (size) {
+    if (size > Block.MAX_SIZE) unreachable();
     // 32-bit MAX_SIZE is 1 << 30 and itself aligned, hence the following can't overflow MAX_SIZE
     size = max<usize>((size + AL_MASK) & ~AL_MASK, Block.MIN_SIZE);
 

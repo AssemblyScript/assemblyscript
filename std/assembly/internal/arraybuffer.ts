@@ -17,12 +17,42 @@ export function computeSize(byteLength: i32): usize {
   return <usize>1 << <usize>(<u32>32 - clz<u32>(byteLength + HEADER_SIZE - 1));
 }
 
-/** Allocates a raw ArrayBuffer with uninitialized contents. */
-export function allocate(byteLength: i32): ArrayBuffer {
+/** Allocates a raw ArrayBuffer. Contents remain uninitialized. */
+export function allocUnsafe(byteLength: i32): ArrayBuffer {
   assert(<u32>byteLength <= <u32>MAX_BLENGTH);
   var buffer = allocate_memory(computeSize(byteLength));
   store<i32>(buffer, byteLength, offsetof<ArrayBuffer>("byteLength"));
   return changetype<ArrayBuffer>(buffer);
+}
+
+/** Reallocates an ArrayBuffer, resizing it as requested. Tries to modify the buffer in place. */
+export function reallocUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
+  var oldByteLength = buffer.byteLength;
+  if (newByteLength > oldByteLength) {
+    assert(newByteLength <= MAX_BLENGTH);
+    let oldSize = computeSize(oldByteLength);
+    if (<i32>(oldSize - HEADER_SIZE) <= newByteLength) { // fast path: zero out additional space
+      store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
+      set_memory(
+        changetype<usize>(buffer) + HEADER_SIZE + oldByteLength,
+        0,
+        <usize>(newByteLength - oldByteLength)
+      );
+    } else { // slow path: copy to new buffer
+      let newBuffer = allocUnsafe(newByteLength);
+      move_memory(
+        changetype<usize>(newBuffer) + HEADER_SIZE,
+        changetype<usize>(buffer) + HEADER_SIZE,
+        <usize>newByteLength
+      );
+      return newBuffer;
+    }
+  } else if (newByteLength < oldByteLength) { // fast path: override size
+    // TBD: worth to copy and release if size is significantly less than before?
+    assert(newByteLength >= 0);
+    store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
+  }
+  return buffer;
 }
 
 /** Common typed array interface. Not a global object. */

@@ -577,95 +577,93 @@
     ;;@ ~lib/allocator/buddy.ts:350:16
     (i32.const 1073741816)
    )
-   ;;@ ~lib/allocator/buddy.ts:351:11
-   (return
-    (i32.const 0)
-   )
+   ;;@ ~lib/allocator/buddy.ts:350:41
+   (unreachable)
   )
-  ;;@ ~lib/allocator/buddy.ts:359:2
+  ;;@ ~lib/allocator/buddy.ts:357:2
   (if
    (i32.eqz
-    ;;@ ~lib/allocator/buddy.ts:359:6
+    ;;@ ~lib/allocator/buddy.ts:357:6
     (get_global $~lib/allocator/buddy/base_ptr)
    )
-   ;;@ ~lib/allocator/buddy.ts:359:21
+   ;;@ ~lib/allocator/buddy.ts:357:21
    (block
-    ;;@ ~lib/allocator/buddy.ts:361:4
+    ;;@ ~lib/allocator/buddy.ts:359:4
     (set_global $~lib/allocator/buddy/base_ptr
-     ;;@ ~lib/allocator/buddy.ts:361:15
+     ;;@ ~lib/allocator/buddy.ts:359:15
      (i32.and
       (i32.add
-       ;;@ ~lib/allocator/buddy.ts:361:16
+       ;;@ ~lib/allocator/buddy.ts:359:16
        (get_global $~lib/allocator/buddy/NODE_IS_SPLIT_END)
-       ;;@ ~lib/allocator/buddy.ts:361:36
+       ;;@ ~lib/allocator/buddy.ts:359:36
        (i32.const 7)
       )
       (i32.const -8)
      )
     )
-    ;;@ ~lib/allocator/buddy.ts:362:4
+    ;;@ ~lib/allocator/buddy.ts:360:4
     (set_global $~lib/allocator/buddy/max_ptr
-     ;;@ ~lib/allocator/buddy.ts:362:14
+     ;;@ ~lib/allocator/buddy.ts:360:14
      (i32.shl
       (current_memory)
-      ;;@ ~lib/allocator/buddy.ts:362:41
+      ;;@ ~lib/allocator/buddy.ts:360:41
       (i32.const 16)
      )
     )
-    ;;@ ~lib/allocator/buddy.ts:363:4
+    ;;@ ~lib/allocator/buddy.ts:361:4
     (set_global $~lib/allocator/buddy/bucket_limit
-     ;;@ ~lib/allocator/buddy.ts:363:19
+     ;;@ ~lib/allocator/buddy.ts:361:19
      (i32.const 26)
     )
-    ;;@ ~lib/allocator/buddy.ts:364:4
+    ;;@ ~lib/allocator/buddy.ts:362:4
     (if
-     ;;@ ~lib/allocator/buddy.ts:364:8
+     ;;@ ~lib/allocator/buddy.ts:362:8
      (i32.eqz
-      ;;@ ~lib/allocator/buddy.ts:364:9
+      ;;@ ~lib/allocator/buddy.ts:362:9
       (call $~lib/allocator/buddy/update_max_ptr
-       ;;@ ~lib/allocator/buddy.ts:364:24
+       ;;@ ~lib/allocator/buddy.ts:362:24
        (i32.add
         (get_global $~lib/allocator/buddy/base_ptr)
-        ;;@ ~lib/allocator/buddy.ts:364:35
+        ;;@ ~lib/allocator/buddy.ts:362:35
         (i32.const 8)
        )
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:365:13
+     ;;@ ~lib/allocator/buddy.ts:363:13
      (return
       (i32.const 0)
      )
     )
-    ;;@ ~lib/allocator/buddy.ts:367:4
+    ;;@ ~lib/allocator/buddy.ts:365:4
     (call $~lib/allocator/buddy/list_init
-     ;;@ ~lib/allocator/buddy.ts:367:14
+     ;;@ ~lib/allocator/buddy.ts:365:14
      (call $~lib/allocator/buddy/buckets$get
-      ;;@ ~lib/allocator/buddy.ts:367:26
+      ;;@ ~lib/allocator/buddy.ts:365:26
       (i32.const 26)
      )
     )
-    ;;@ ~lib/allocator/buddy.ts:368:4
+    ;;@ ~lib/allocator/buddy.ts:366:4
     (call $~lib/allocator/buddy/list_push
-     ;;@ ~lib/allocator/buddy.ts:368:14
+     ;;@ ~lib/allocator/buddy.ts:366:14
      (call $~lib/allocator/buddy/buckets$get
-      ;;@ ~lib/allocator/buddy.ts:368:26
+      ;;@ ~lib/allocator/buddy.ts:366:26
       (i32.const 26)
      )
-     ;;@ ~lib/allocator/buddy.ts:368:45
+     ;;@ ~lib/allocator/buddy.ts:366:45
      (get_global $~lib/allocator/buddy/base_ptr)
     )
    )
   )
-  ;;@ ~lib/allocator/buddy.ts:376:2
+  ;;@ ~lib/allocator/buddy.ts:374:2
   (set_local $4
-   ;;@ ~lib/allocator/buddy.ts:375:2
+   ;;@ ~lib/allocator/buddy.ts:373:2
    (tee_local $1
-    ;;@ ~lib/allocator/buddy.ts:375:11
+    ;;@ ~lib/allocator/buddy.ts:373:11
     (call $~lib/allocator/buddy/bucket_for_request
-     ;;@ ~lib/allocator/buddy.ts:375:30
+     ;;@ ~lib/allocator/buddy.ts:373:30
      (i32.add
       (get_local $0)
-      ;;@ ~lib/allocator/buddy.ts:375:40
+      ;;@ ~lib/allocator/buddy.ts:373:40
       (i32.const 8)
      )
     )
@@ -673,224 +671,224 @@
   )
   (loop $continue|0
    (if
-    ;;@ ~lib/allocator/buddy.ts:383:9
+    ;;@ ~lib/allocator/buddy.ts:381:9
     (i32.add
      (get_local $1)
-     ;;@ ~lib/allocator/buddy.ts:383:18
+     ;;@ ~lib/allocator/buddy.ts:381:18
      (i32.const 1)
     )
-    ;;@ ~lib/allocator/buddy.ts:383:26
+    ;;@ ~lib/allocator/buddy.ts:381:26
     (block
-     ;;@ ~lib/allocator/buddy.ts:391:4
+     ;;@ ~lib/allocator/buddy.ts:389:4
      (if
-      ;;@ ~lib/allocator/buddy.ts:391:8
+      ;;@ ~lib/allocator/buddy.ts:389:8
       (i32.eqz
-       ;;@ ~lib/allocator/buddy.ts:391:9
+       ;;@ ~lib/allocator/buddy.ts:389:9
        (call $~lib/allocator/buddy/lower_bucket_limit
-        ;;@ ~lib/allocator/buddy.ts:391:28
+        ;;@ ~lib/allocator/buddy.ts:389:28
         (get_local $1)
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:392:13
+      ;;@ ~lib/allocator/buddy.ts:390:13
       (return
        (i32.const 0)
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:400:4
+     ;;@ ~lib/allocator/buddy.ts:398:4
      (if
-      ;;@ ~lib/allocator/buddy.ts:400:8
+      ;;@ ~lib/allocator/buddy.ts:398:8
       (i32.eqz
-       ;;@ ~lib/allocator/buddy.ts:399:4
+       ;;@ ~lib/allocator/buddy.ts:397:4
        (tee_local $2
-        ;;@ ~lib/allocator/buddy.ts:399:10
+        ;;@ ~lib/allocator/buddy.ts:397:10
         (call $~lib/allocator/buddy/list_pop
-         ;;@ ~lib/allocator/buddy.ts:399:37
+         ;;@ ~lib/allocator/buddy.ts:397:37
          (call $~lib/allocator/buddy/buckets$get
-          ;;@ ~lib/allocator/buddy.ts:399:49
+          ;;@ ~lib/allocator/buddy.ts:397:49
           (get_local $1)
          )
         )
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:400:14
+      ;;@ ~lib/allocator/buddy.ts:398:14
       (block
-       ;;@ ~lib/allocator/buddy.ts:405:6
+       ;;@ ~lib/allocator/buddy.ts:403:6
        (if
-        ;;@ ~lib/allocator/buddy.ts:405:10
+        ;;@ ~lib/allocator/buddy.ts:403:10
         (i32.and
          (if (result i32)
           (tee_local $2
            (i32.ne
             (get_local $1)
-            ;;@ ~lib/allocator/buddy.ts:405:20
+            ;;@ ~lib/allocator/buddy.ts:403:20
             (get_global $~lib/allocator/buddy/bucket_limit)
            )
           )
           (get_local $2)
           (i32.eqz
-           ;;@ ~lib/allocator/buddy.ts:405:36
+           ;;@ ~lib/allocator/buddy.ts:403:36
            (get_local $1)
           )
          )
          (i32.const 1)
         )
-        ;;@ ~lib/allocator/buddy.ts:405:49
+        ;;@ ~lib/allocator/buddy.ts:403:49
         (block
-         ;;@ ~lib/allocator/buddy.ts:406:8
+         ;;@ ~lib/allocator/buddy.ts:404:8
          (set_local $1
           (i32.sub
            (get_local $1)
            (i32.const 1)
           )
          )
-         ;;@ ~lib/allocator/buddy.ts:407:8
+         ;;@ ~lib/allocator/buddy.ts:405:8
          (br $continue|0)
         )
        )
-       ;;@ ~lib/allocator/buddy.ts:417:6
+       ;;@ ~lib/allocator/buddy.ts:415:6
        (if
-        ;;@ ~lib/allocator/buddy.ts:417:10
+        ;;@ ~lib/allocator/buddy.ts:415:10
         (i32.eqz
-         ;;@ ~lib/allocator/buddy.ts:417:11
+         ;;@ ~lib/allocator/buddy.ts:415:11
          (call $~lib/allocator/buddy/lower_bucket_limit
-          ;;@ ~lib/allocator/buddy.ts:417:30
+          ;;@ ~lib/allocator/buddy.ts:415:30
           (i32.sub
            (get_local $1)
-           ;;@ ~lib/allocator/buddy.ts:417:39
+           ;;@ ~lib/allocator/buddy.ts:415:39
            (i32.const 1)
           )
          )
         )
-        ;;@ ~lib/allocator/buddy.ts:418:15
+        ;;@ ~lib/allocator/buddy.ts:416:15
         (return
          (i32.const 0)
         )
        )
-       ;;@ ~lib/allocator/buddy.ts:420:6
+       ;;@ ~lib/allocator/buddy.ts:418:6
        (set_local $2
-        ;;@ ~lib/allocator/buddy.ts:420:12
+        ;;@ ~lib/allocator/buddy.ts:418:12
         (call $~lib/allocator/buddy/list_pop
-         ;;@ ~lib/allocator/buddy.ts:420:39
+         ;;@ ~lib/allocator/buddy.ts:418:39
          (call $~lib/allocator/buddy/buckets$get
-          ;;@ ~lib/allocator/buddy.ts:420:51
+          ;;@ ~lib/allocator/buddy.ts:418:51
           (get_local $1)
          )
         )
        )
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:427:4
+     ;;@ ~lib/allocator/buddy.ts:425:4
      (set_local $3
-      ;;@ ~lib/allocator/buddy.ts:427:11
+      ;;@ ~lib/allocator/buddy.ts:425:11
       (i32.shl
        (i32.const 1)
-       ;;@ ~lib/allocator/buddy.ts:427:16
+       ;;@ ~lib/allocator/buddy.ts:425:16
        (i32.sub
-        ;;@ ~lib/allocator/buddy.ts:427:17
+        ;;@ ~lib/allocator/buddy.ts:425:17
         (i32.const 30)
-        ;;@ ~lib/allocator/buddy.ts:427:34
+        ;;@ ~lib/allocator/buddy.ts:425:34
         (get_local $1)
        )
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:429:4
+     ;;@ ~lib/allocator/buddy.ts:427:4
      (if
-      ;;@ ~lib/allocator/buddy.ts:429:8
+      ;;@ ~lib/allocator/buddy.ts:427:8
       (i32.eqz
-       ;;@ ~lib/allocator/buddy.ts:429:9
+       ;;@ ~lib/allocator/buddy.ts:427:9
        (call $~lib/allocator/buddy/update_max_ptr
-        ;;@ ~lib/allocator/buddy.ts:429:24
+        ;;@ ~lib/allocator/buddy.ts:427:24
         (i32.add
          (get_local $2)
-         ;;@ ~lib/allocator/buddy.ts:428:19
+         ;;@ ~lib/allocator/buddy.ts:426:19
          (if (result i32)
           (i32.lt_u
            (get_local $1)
-           ;;@ ~lib/allocator/buddy.ts:428:28
+           ;;@ ~lib/allocator/buddy.ts:426:28
            (get_local $4)
           )
-          ;;@ ~lib/allocator/buddy.ts:428:46
+          ;;@ ~lib/allocator/buddy.ts:426:46
           (i32.add
            (i32.div_u
             (get_local $3)
-            ;;@ ~lib/allocator/buddy.ts:428:53
+            ;;@ ~lib/allocator/buddy.ts:426:53
             (i32.const 2)
            )
-           ;;@ ~lib/allocator/buddy.ts:428:57
+           ;;@ ~lib/allocator/buddy.ts:426:57
            (i32.const 8)
           )
-          ;;@ ~lib/allocator/buddy.ts:428:69
+          ;;@ ~lib/allocator/buddy.ts:426:69
           (get_local $3)
          )
         )
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:429:45
+      ;;@ ~lib/allocator/buddy.ts:427:45
       (block
-       ;;@ ~lib/allocator/buddy.ts:430:6
+       ;;@ ~lib/allocator/buddy.ts:428:6
        (call $~lib/allocator/buddy/list_push
-        ;;@ ~lib/allocator/buddy.ts:430:16
+        ;;@ ~lib/allocator/buddy.ts:428:16
         (call $~lib/allocator/buddy/buckets$get
-         ;;@ ~lib/allocator/buddy.ts:430:28
+         ;;@ ~lib/allocator/buddy.ts:428:28
          (get_local $1)
         )
-        ;;@ ~lib/allocator/buddy.ts:430:37
+        ;;@ ~lib/allocator/buddy.ts:428:37
         (get_local $2)
        )
-       ;;@ ~lib/allocator/buddy.ts:431:13
+       ;;@ ~lib/allocator/buddy.ts:429:13
        (return
         (i32.const 0)
        )
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:446:4
+     ;;@ ~lib/allocator/buddy.ts:444:4
      (if
-      ;;@ ~lib/allocator/buddy.ts:445:4
+      ;;@ ~lib/allocator/buddy.ts:443:4
       (tee_local $3
-       ;;@ ~lib/allocator/buddy.ts:445:8
+       ;;@ ~lib/allocator/buddy.ts:443:8
        (call $~lib/allocator/buddy/node_for_ptr
-        ;;@ ~lib/allocator/buddy.ts:445:21
+        ;;@ ~lib/allocator/buddy.ts:443:21
         (get_local $2)
-        ;;@ ~lib/allocator/buddy.ts:445:26
+        ;;@ ~lib/allocator/buddy.ts:443:26
         (get_local $1)
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:447:6
+      ;;@ ~lib/allocator/buddy.ts:445:6
       (call $~lib/allocator/buddy/flip_parent_is_split
-       ;;@ ~lib/allocator/buddy.ts:447:27
+       ;;@ ~lib/allocator/buddy.ts:445:27
        (get_local $3)
       )
      )
      (loop $continue|1
       (if
-       ;;@ ~lib/allocator/buddy.ts:457:11
+       ;;@ ~lib/allocator/buddy.ts:455:11
        (i32.lt_u
         (get_local $1)
-        ;;@ ~lib/allocator/buddy.ts:457:20
+        ;;@ ~lib/allocator/buddy.ts:455:20
         (get_local $4)
        )
        (block
-        ;;@ ~lib/allocator/buddy.ts:460:6
+        ;;@ ~lib/allocator/buddy.ts:458:6
         (call $~lib/allocator/buddy/flip_parent_is_split
-         ;;@ ~lib/allocator/buddy.ts:458:6
+         ;;@ ~lib/allocator/buddy.ts:456:6
          (tee_local $3
-          ;;@ ~lib/allocator/buddy.ts:458:10
+          ;;@ ~lib/allocator/buddy.ts:456:10
           (i32.add
            (i32.shl
             (get_local $3)
-            ;;@ ~lib/allocator/buddy.ts:458:14
+            ;;@ ~lib/allocator/buddy.ts:456:14
             (i32.const 1)
            )
-           ;;@ ~lib/allocator/buddy.ts:458:18
+           ;;@ ~lib/allocator/buddy.ts:456:18
            (i32.const 1)
           )
          )
         )
-        ;;@ ~lib/allocator/buddy.ts:461:6
+        ;;@ ~lib/allocator/buddy.ts:459:6
         (call $~lib/allocator/buddy/list_push
-         ;;@ ~lib/allocator/buddy.ts:462:8
+         ;;@ ~lib/allocator/buddy.ts:460:8
          (call $~lib/allocator/buddy/buckets$get
-          ;;@ ~lib/allocator/buddy.ts:459:6
+          ;;@ ~lib/allocator/buddy.ts:457:6
           (tee_local $1
            (i32.add
             (get_local $1)
@@ -898,15 +896,15 @@
            )
           )
          )
-         ;;@ ~lib/allocator/buddy.ts:463:8
+         ;;@ ~lib/allocator/buddy.ts:461:8
          (call $~lib/allocator/buddy/ptr_for_node
-          ;;@ ~lib/allocator/buddy.ts:463:38
+          ;;@ ~lib/allocator/buddy.ts:461:38
           (i32.add
            (get_local $3)
-           ;;@ ~lib/allocator/buddy.ts:463:42
+           ;;@ ~lib/allocator/buddy.ts:461:42
            (i32.const 1)
           )
-          ;;@ ~lib/allocator/buddy.ts:463:45
+          ;;@ ~lib/allocator/buddy.ts:461:45
           (get_local $1)
          )
         )
@@ -914,143 +912,143 @@
        )
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:471:4
+     ;;@ ~lib/allocator/buddy.ts:469:4
      (i32.store
-      ;;@ ~lib/allocator/buddy.ts:471:17
+      ;;@ ~lib/allocator/buddy.ts:469:17
       (get_local $2)
-      ;;@ ~lib/allocator/buddy.ts:471:22
+      ;;@ ~lib/allocator/buddy.ts:469:22
       (get_local $0)
      )
-     ;;@ ~lib/allocator/buddy.ts:472:17
+     ;;@ ~lib/allocator/buddy.ts:470:17
      (return
-      ;;@ ~lib/allocator/buddy.ts:472:11
+      ;;@ ~lib/allocator/buddy.ts:470:11
       (i32.add
        (get_local $2)
-       ;;@ ~lib/allocator/buddy.ts:472:17
+       ;;@ ~lib/allocator/buddy.ts:470:17
        (i32.const 8)
       )
      )
     )
    )
   )
-  ;;@ ~lib/allocator/buddy.ts:475:9
+  ;;@ ~lib/allocator/buddy.ts:473:9
   (i32.const 0)
  )
  (func $~lib/allocator/buddy/free_memory (; 14 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  ;;@ ~lib/allocator/buddy.ts:485:2
+  ;;@ ~lib/allocator/buddy.ts:483:2
   (if
-   ;;@ ~lib/allocator/buddy.ts:485:6
+   ;;@ ~lib/allocator/buddy.ts:483:6
    (i32.eqz
-    ;;@ ~lib/allocator/buddy.ts:485:7
+    ;;@ ~lib/allocator/buddy.ts:483:7
     (get_local $0)
    )
-   ;;@ ~lib/allocator/buddy.ts:486:4
+   ;;@ ~lib/allocator/buddy.ts:484:4
    (return)
   )
-  ;;@ ~lib/allocator/buddy.ts:495:2
+  ;;@ ~lib/allocator/buddy.ts:493:2
   (set_local $1
-   ;;@ ~lib/allocator/buddy.ts:495:11
+   ;;@ ~lib/allocator/buddy.ts:493:11
    (call $~lib/allocator/buddy/bucket_for_request
-    ;;@ ~lib/allocator/buddy.ts:495:30
+    ;;@ ~lib/allocator/buddy.ts:493:30
     (i32.add
      (i32.load
-      ;;@ ~lib/allocator/buddy.ts:494:2
+      ;;@ ~lib/allocator/buddy.ts:492:2
       (tee_local $0
-       ;;@ ~lib/allocator/buddy.ts:494:8
+       ;;@ ~lib/allocator/buddy.ts:492:8
        (i32.sub
         (get_local $0)
-        ;;@ ~lib/allocator/buddy.ts:494:14
+        ;;@ ~lib/allocator/buddy.ts:492:14
         (i32.const 8)
        )
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:495:49
+     ;;@ ~lib/allocator/buddy.ts:493:49
      (i32.const 8)
     )
    )
   )
-  ;;@ ~lib/allocator/buddy.ts:496:2
+  ;;@ ~lib/allocator/buddy.ts:494:2
   (set_local $0
-   ;;@ ~lib/allocator/buddy.ts:496:6
+   ;;@ ~lib/allocator/buddy.ts:494:6
    (call $~lib/allocator/buddy/node_for_ptr
-    ;;@ ~lib/allocator/buddy.ts:496:19
+    ;;@ ~lib/allocator/buddy.ts:494:19
     (get_local $0)
-    ;;@ ~lib/allocator/buddy.ts:496:24
+    ;;@ ~lib/allocator/buddy.ts:494:24
     (get_local $1)
    )
   )
-  ;;@ ~lib/allocator/buddy.ts:502:2
+  ;;@ ~lib/allocator/buddy.ts:500:2
   (block $break|0
    (loop $continue|0
     (if
-     ;;@ ~lib/allocator/buddy.ts:502:9
+     ;;@ ~lib/allocator/buddy.ts:500:9
      (get_local $0)
      (block
-      ;;@ ~lib/allocator/buddy.ts:509:4
+      ;;@ ~lib/allocator/buddy.ts:507:4
       (call $~lib/allocator/buddy/flip_parent_is_split
-       ;;@ ~lib/allocator/buddy.ts:509:25
+       ;;@ ~lib/allocator/buddy.ts:507:25
        (get_local $0)
       )
-      ;;@ ~lib/allocator/buddy.ts:520:6
+      ;;@ ~lib/allocator/buddy.ts:518:6
       (br_if $break|0
-       ;;@ ~lib/allocator/buddy.ts:519:8
+       ;;@ ~lib/allocator/buddy.ts:517:8
        (if (result i32)
         (tee_local $2
          (call $~lib/allocator/buddy/parent_is_split
-          ;;@ ~lib/allocator/buddy.ts:519:24
+          ;;@ ~lib/allocator/buddy.ts:517:24
           (get_local $0)
          )
         )
         (get_local $2)
-        ;;@ ~lib/allocator/buddy.ts:519:30
+        ;;@ ~lib/allocator/buddy.ts:517:30
         (i32.eq
          (get_local $1)
-         ;;@ ~lib/allocator/buddy.ts:519:40
+         ;;@ ~lib/allocator/buddy.ts:517:40
          (get_global $~lib/allocator/buddy/bucket_limit)
         )
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:530:4
+      ;;@ ~lib/allocator/buddy.ts:528:4
       (call $~lib/allocator/buddy/list_remove
-       ;;@ ~lib/allocator/buddy.ts:530:16
+       ;;@ ~lib/allocator/buddy.ts:528:16
        (call $~lib/allocator/buddy/ptr_for_node
-        ;;@ ~lib/allocator/buddy.ts:530:46
+        ;;@ ~lib/allocator/buddy.ts:528:46
         (i32.add
          (i32.xor
-          ;;@ ~lib/allocator/buddy.ts:530:47
+          ;;@ ~lib/allocator/buddy.ts:528:47
           (i32.sub
-           ;;@ ~lib/allocator/buddy.ts:530:48
+           ;;@ ~lib/allocator/buddy.ts:528:48
            (get_local $0)
-           ;;@ ~lib/allocator/buddy.ts:530:52
+           ;;@ ~lib/allocator/buddy.ts:528:52
            (i32.const 1)
           )
-          ;;@ ~lib/allocator/buddy.ts:530:57
+          ;;@ ~lib/allocator/buddy.ts:528:57
           (i32.const 1)
          )
-         ;;@ ~lib/allocator/buddy.ts:530:62
+         ;;@ ~lib/allocator/buddy.ts:528:62
          (i32.const 1)
         )
-        ;;@ ~lib/allocator/buddy.ts:530:65
+        ;;@ ~lib/allocator/buddy.ts:528:65
         (get_local $1)
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:531:4
+      ;;@ ~lib/allocator/buddy.ts:529:4
       (set_local $0
-       ;;@ ~lib/allocator/buddy.ts:531:8
+       ;;@ ~lib/allocator/buddy.ts:529:8
        (i32.div_u
         (i32.sub
-         ;;@ ~lib/allocator/buddy.ts:531:9
+         ;;@ ~lib/allocator/buddy.ts:529:9
          (get_local $0)
-         ;;@ ~lib/allocator/buddy.ts:531:13
+         ;;@ ~lib/allocator/buddy.ts:529:13
          (i32.const 1)
         )
-        ;;@ ~lib/allocator/buddy.ts:531:18
+        ;;@ ~lib/allocator/buddy.ts:529:18
         (i32.const 2)
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:532:4
+      ;;@ ~lib/allocator/buddy.ts:530:4
       (set_local $1
        (i32.sub
         (get_local $1)
@@ -1062,18 +1060,18 @@
     )
    )
   )
-  ;;@ ~lib/allocator/buddy.ts:541:2
+  ;;@ ~lib/allocator/buddy.ts:539:2
   (call $~lib/allocator/buddy/list_push
-   ;;@ ~lib/allocator/buddy.ts:541:12
+   ;;@ ~lib/allocator/buddy.ts:539:12
    (call $~lib/allocator/buddy/buckets$get
-    ;;@ ~lib/allocator/buddy.ts:541:24
+    ;;@ ~lib/allocator/buddy.ts:539:24
     (get_local $1)
    )
-   ;;@ ~lib/allocator/buddy.ts:541:33
+   ;;@ ~lib/allocator/buddy.ts:539:33
    (call $~lib/allocator/buddy/ptr_for_node
-    ;;@ ~lib/allocator/buddy.ts:541:63
+    ;;@ ~lib/allocator/buddy.ts:539:63
     (get_local $0)
-    ;;@ ~lib/allocator/buddy.ts:541:66
+    ;;@ ~lib/allocator/buddy.ts:539:66
     (get_local $1)
    )
   )

@@ -3,10 +3,10 @@
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $v (func))
- (global $~lib/allocator/common/index/AL_BITS i32 (i32.const 3))
- (global $~lib/allocator/common/index/AL_SIZE i32 (i32.const 8))
- (global $~lib/allocator/common/index/AL_MASK i32 (i32.const 7))
- (global $~lib/allocator/common/index/MAX_SIZE_32 i32 (i32.const 1073741824))
+ (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
+ (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
+ (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
+ (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 4))
@@ -24,22 +24,22 @@
   (local $5 i32)
   (local $6 i32)
   ;;@ ~lib/allocator/arena.ts:17:2
-  (nop)
-  ;;@ ~lib/allocator/arena.ts:18:2
   (if
-   ;;@ ~lib/allocator/arena.ts:18:6
-   (if (result i32)
-    (get_local $0)
-    ;;@ ~lib/allocator/arena.ts:18:14
-    (i32.lt_u
-     (get_local $0)
-     ;;@ ~lib/allocator/arena.ts:18:21
-     (i32.const 1073741824)
-    )
-    (get_local $0)
-   )
-   ;;@ ~lib/allocator/arena.ts:18:31
+   ;;@ ~lib/allocator/arena.ts:17:6
+   (get_local $0)
+   ;;@ ~lib/allocator/arena.ts:17:12
    (block
+    ;;@ ~lib/allocator/arena.ts:18:4
+    (if
+     ;;@ ~lib/allocator/arena.ts:18:8
+     (i32.gt_u
+      (get_local $0)
+      ;;@ ~lib/allocator/arena.ts:18:15
+      (i32.const 1073741824)
+     )
+     ;;@ ~lib/allocator/arena.ts:18:28
+     (unreachable)
+    )
     ;;@ ~lib/allocator/arena.ts:19:4
     (set_local $1
      ;;@ ~lib/allocator/arena.ts:19:14

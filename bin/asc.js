@@ -279,10 +279,12 @@ exports.main = function main(argv, options, callback) {
             sourceText = readFile(path.join(dir, plainName + ".ts"));
             if (sourceText !== null) {
               sourcePath = exports.libraryPrefix + plainName + ".ts";
+              break;
             } else {
               sourceText = readFile(path.join(dir, indexName + ".ts"));
               if (sourceText !== null) {
                 sourcePath = exports.libraryPrefix + indexName + ".ts";
+                break;
               }
             }
           }
@@ -312,10 +314,12 @@ exports.main = function main(argv, options, callback) {
                 sourceText = readFile(path.join(dir, plainName + ".ts"));
                 if (sourceText !== null) {
                   sourcePath = exports.libraryPrefix + plainName + ".ts";
+                  break;
                 } else {
                   sourceText = readFile(path.join(dir, indexName + ".ts"));
                   if (sourceText !== null) {
                     sourcePath = exports.libraryPrefix + indexName + ".ts";
+                    break;
                   }
                 }
               }
@@ -530,12 +534,17 @@ exports.main = function main(argv, options, callback) {
           sourceMap.sources.forEach((name, index) => {
             let text = null;
             if (name.startsWith(exports.libraryPrefix)) {
-              for (let i = 0, k = customLibDirs.length; i < k; ++i) {
-                text = readFile(path.join(
-                  customLibDirs[i],
-                  name.substring(exports.libraryPrefix.length))
-                );
-                if (text !== null) break;
+              let stdName = name.substring(exports.libraryPrefix.length).replace(/\.ts$/, "");
+              if (exports.libraryFiles.hasOwnProperty(stdName)) {
+                text = exports.libraryFiles[stdName];
+              } else {
+                for (let i = 0, k = customLibDirs.length; i < k; ++i) {
+                  text = readFile(path.join(
+                    customLibDirs[i],
+                    name.substring(exports.libraryPrefix.length))
+                  );
+                  if (text !== null) break;
+                }
               }
             } else {
               text = readFile(path.join(baseDir, name));

@@ -50,17 +50,16 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (nop)
   (if
-   (if (result i32)
-    (get_local $0)
-    (i32.lt_u
-     (get_local $0)
-     (i32.const 1073741824)
-    )
-    (get_local $0)
-   )
+   (get_local $0)
    (block
+    (if
+     (i32.gt_u
+      (get_local $0)
+      (i32.const 1073741824)
+     )
+     (unreachable)
+    )
     (set_local $1
      (get_global $~lib/allocator/arena/offset)
     )
@@ -154,7 +153,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/internal/arraybuffer/allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -547,7 +546,7 @@
    (unreachable)
   )
   (set_local $2
-   (call $~lib/internal/arraybuffer/allocate
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $1)
    )
   )
@@ -2792,7 +2791,7 @@
    )
   )
   (set_local $7
-   (call $~lib/internal/arraybuffer/allocate
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $6)
    )
   )

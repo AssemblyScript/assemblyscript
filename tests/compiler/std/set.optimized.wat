@@ -21,15 +21,15 @@
   (local $3 i32)
   (local $4 i32)
   (if
-   (select
-    (i32.lt_u
-     (get_local $0)
-     (i32.const 1073741824)
-    )
-    (get_local $0)
-    (get_local $0)
-   )
+   (get_local $0)
    (block
+    (if
+     (i32.gt_u
+      (get_local $0)
+      (i32.const 1073741824)
+     )
+     (unreachable)
+    )
     (if
      (i32.gt_u
       (tee_local $2

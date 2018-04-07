@@ -37,15 +37,15 @@
   (local $3 i32)
   (local $4 i32)
   (if
-   (select
-    (i32.lt_u
-     (get_local $0)
-     (i32.const 1073741824)
-    )
-    (get_local $0)
-    (get_local $0)
-   )
+   (get_local $0)
    (block
+    (if
+     (i32.gt_u
+      (get_local $0)
+      (i32.const 1073741824)
+     )
+     (unreachable)
+    )
     (if
      (i32.gt_u
       (tee_local $2
@@ -120,7 +120,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/internal/arraybuffer/allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.gt_u
@@ -494,7 +494,7 @@
   (call $~lib/memory/set_memory
    (i32.add
     (tee_local $2
-     (call $~lib/internal/arraybuffer/allocate
+     (call $~lib/internal/arraybuffer/allocUnsafe
       (get_local $1)
      )
     )
@@ -2416,7 +2416,7 @@
   (call $~lib/memory/move_memory
    (i32.add
     (tee_local $3
-     (call $~lib/internal/arraybuffer/allocate
+     (call $~lib/internal/arraybuffer/allocUnsafe
       (tee_local $2
        (select
         (tee_local $3

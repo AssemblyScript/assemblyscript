@@ -16,21 +16,23 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  ;;@ ~lib/allocator/arena.ts:18:2
+  ;;@ ~lib/allocator/arena.ts:17:2
   (if
-   (select
-    ;;@ ~lib/allocator/arena.ts:18:14
-    (i32.lt_u
-     (get_local $0)
-     ;;@ ~lib/allocator/arena.ts:18:21
-     (i32.const 1073741824)
-    )
-    (get_local $0)
-    ;;@ ~lib/allocator/arena.ts:18:6
-    (get_local $0)
-   )
-   ;;@ ~lib/allocator/arena.ts:18:31
+   ;;@ ~lib/allocator/arena.ts:17:6
+   (get_local $0)
+   ;;@ ~lib/allocator/arena.ts:17:12
    (block
+    ;;@ ~lib/allocator/arena.ts:18:4
+    (if
+     ;;@ ~lib/allocator/arena.ts:18:8
+     (i32.gt_u
+      (get_local $0)
+      ;;@ ~lib/allocator/arena.ts:18:15
+      (i32.const 1073741824)
+     )
+     ;;@ ~lib/allocator/arena.ts:18:28
+     (unreachable)
+    )
     ;;@ ~lib/allocator/arena.ts:22:4
     (if
      ;;@ ~lib/allocator/arena.ts:22:8

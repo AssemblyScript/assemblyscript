@@ -75,17 +75,16 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (nop)
   (if
-   (if (result i32)
-    (get_local $0)
-    (i32.lt_u
-     (get_local $0)
-     (i32.const 1073741824)
-    )
-    (get_local $0)
-   )
+   (get_local $0)
    (block
+    (if
+     (i32.gt_u
+      (get_local $0)
+      (i32.const 1073741824)
+     )
+     (unreachable)
+    )
     (set_local $1
      (get_global $~lib/allocator/arena/offset)
     )

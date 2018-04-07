@@ -1,6 +1,7 @@
 import {
+  HEADER_SIZE,
   MAX_BLENGTH,
-  allocate
+  allocUnsafe
   // ArrayBufferView
 } from "./arraybuffer";
 
@@ -15,7 +16,9 @@ export abstract class TypedArray<T> /* implements ArrayBufferView<T> */ {
     const MAX_LENGTH = <u32>MAX_BLENGTH / sizeof<T>();
     if (<u32>length > MAX_LENGTH) throw new RangeError("Invalid typed array length");
     var byteLength = length << alignof<T>();
-    this.buffer = allocate(byteLength);
+    var buffer = allocUnsafe(byteLength);
+    set_memory(changetype<usize>(buffer) + HEADER_SIZE, 0, <usize>byteLength);
+    this.buffer = buffer;
     this.byteOffset = 0;
     this.byteLength = byteLength;
   }
