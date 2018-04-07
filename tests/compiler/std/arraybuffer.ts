@@ -7,7 +7,7 @@ assert(buffer.byteLength == 8);
 var sliced = buffer.slice();
 
 assert(sliced.byteLength == 8);
-assert(sliced != buffer);
+assert(sliced !== buffer);
 
 sliced = buffer.slice(1);
 

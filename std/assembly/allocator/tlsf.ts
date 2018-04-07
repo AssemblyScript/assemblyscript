@@ -19,7 +19,7 @@ import {
   AL_BITS,
   AL_SIZE,
   AL_MASK
-} from "./common";
+} from "../internal/allocator";
 
 const SL_BITS: u32 = 5;
 const SL_SIZE: usize = 1 << <usize>SL_BITS;
