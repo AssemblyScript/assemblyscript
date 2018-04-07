@@ -359,14 +359,14 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
   const typeShift = alignof<T>();
   const intShift  = alignof<i32>();
 
-  var blen = (len + 7) >> 3;
+  var blen = (len + 31) >> 5;
   var bitset = allocate_memory(blen << intShift);
 
   set_memory(bitset, 0, blen << intShift);
 
   for (i = len - 1; i > 0; i--) {
     j = i;
-    while ((j & 1) == ((load<i32>(bitset + ((j >> 4) << intShift)) >> ((j >> 1) & 7)) & 1)) {
+    while ((j & 1) == ((load<i32>(bitset + ((j >> 6) << intShift)) >> ((j >> 1) & 31)) & 1)) {
       j >>= 1;
     }
 
@@ -377,8 +377,8 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
 
     if (comparator(a, b) < 0) {
       store<i32>(
-        bitset + ((i >> 3) << intShift),
-        load<i32>(bitset + ((i >> 3) << intShift)) ^ (1 << (i & 7))
+        bitset + ((i >> 5) << intShift),
+        load<i32>(bitset + ((i >> 5) << intShift)) ^ (1 << (i & 31))
       );
       store<T>(arr.__memory + (i << typeShift), a); // arr[i] = a;
       store<T>(arr.__memory + (p << typeShift), b); // arr[p] = b;
@@ -396,7 +396,7 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
     store<T>(arr.__memory + (i << typeShift), a);
 
     let x = 1;
-    while ((y = (x << 1) + ((load<i32>(bitset + ((x >> 3) << intShift)) >> (x & 7)) & 1)) < i) {
+    while ((y = (x << 1) + ((load<i32>(bitset + ((x >> 5) << intShift)) >> (x & 31)) & 1)) < i) {
       x = y;
     }
 
@@ -406,8 +406,8 @@ function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<
 
       if (comparator(a, b) < 0) {
         store<i32>(
-          bitset + ((x >> 3) << intShift),
-          load<i32>(bitset + ((x >> 3) << intShift)) ^ (1 << (x & 7))
+          bitset + ((x >> 5) << intShift),
+          load<i32>(bitset + ((x >> 5) << intShift)) ^ (1 << (x & 31))
         );
 
         store<T>(arr.__memory + (x << typeShift), a); // arr[x] = a;
