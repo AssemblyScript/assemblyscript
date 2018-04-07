@@ -233,6 +233,7 @@ export class String {
   startsWith(searchString: String, position: i32 = 0): bool {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
+
     var pos: isize = position;
     var len: isize = this.length;
     var start: isize = min<isize>(max<isize>(pos, 0), len);
@@ -294,6 +295,7 @@ export class String {
   trim(): String {
     assert(this !== null);
     var length: usize = this.length;
+
     while (
       length &&
       isWhiteSpaceOrLineTerminator(
