@@ -193,7 +193,7 @@ export class String {
   private static __lte(left: String, right: String): bool {
     if (left === right) return true;
     if (left === null) return right === null;
-    else if (right === null) return false;
+    if (right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;

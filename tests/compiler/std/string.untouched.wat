@@ -4168,14 +4168,14 @@
      (i32.const 0)
     )
    )
-   (if
-    (i32.eq
-     (get_local $1)
-     (i32.const 0)
-    )
-    (return
-     (i32.const 0)
-    )
+  )
+  (if
+   (i32.eq
+    (get_local $1)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 0)
    )
   )
   (set_local $2

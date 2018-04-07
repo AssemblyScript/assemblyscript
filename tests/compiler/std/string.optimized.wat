@@ -3613,19 +3613,21 @@
    )
   )
   (if
-   (get_local $0)
-   (if
-    (i32.eqz
-     (get_local $1)
-    )
-    (return
-     (i32.const 0)
-    )
+   (i32.eqz
+    (get_local $0)
    )
    (return
     (i32.eqz
      (get_local $1)
     )
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $1)
+   )
+   (return
+    (i32.const 0)
    )
   )
   (set_local $2
