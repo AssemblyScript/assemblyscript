@@ -1,12 +1,12 @@
-export declare function isInteger(value: void): bool;
+export declare function isInteger<T>(value?: T): bool;
 
-export declare function isFloat(value: void): bool;
+export declare function isFloat<T>(value?: T): bool;
 
-export declare function isReference(value: void): bool;
+export declare function isReference<T>(value?: T): bool;
 
-export declare function isString(value: void): bool;
+export declare function isString<T>(value?: T): bool;
 
-export declare function isArray(value: void): bool;
+export declare function isArray<T>(value?: T): bool;
 
 export declare const NaN: f64; // | f32
 

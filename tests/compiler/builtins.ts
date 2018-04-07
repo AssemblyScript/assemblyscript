@@ -1,12 +1,21 @@
 var b: bool;
 
-// types
+// type checks
+
+assert(isInteger<i32>());
+assert(!isInteger<f32>());
+assert(isFloat<f32>());
+assert(!isFloat<i32>());
+assert(isReference<string>());
+assert(!isReference<usize>());
+assert(isArray<i32[]>());
+assert(!isArray<usize>());
 
 assert(isInteger(<i32>1));
 assert(!isInteger(<f32>1));
 assert(isFloat(<f32>1));
 assert(!isFloat(<i32>1));
-assert(isReference(changetype<String>(null)));
+assert(isReference(changetype<string>(null)));
 assert(!isReference(changetype<usize>(null)));
 assert(isString("1"));
 assert(!isString(1));

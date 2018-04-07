@@ -105,118 +105,46 @@ export function compileCall(
 
     // types
 
-    case "isInteger": {
+    case "isInteger": { // isInteger<T!>() / isInteger<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        ); // recoverable
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      let type = compiler.currentType;
-      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
       return type.is(TypeFlags.INTEGER) && !type.is(TypeFlags.REFERENCE)
         ? module.createI32(1)
         : module.createI32(0);
     }
-    case "isFloat": {
+    case "isFloat": { // isFloat<T!>() / isFloat<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        ); // recoverable
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      let type = compiler.currentType;
-      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
       return type.is(TypeFlags.FLOAT)
         ? module.createI32(1)
         : module.createI32(0);
     }
-    case "isReference": {
+    case "isReference": { // isReference<T!>() / isReference<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        ); // recoverable
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      let type = compiler.currentType;
+      if (!type) return module.createUnreachable();
       compiler.currentType = Type.bool;
       return type.is(TypeFlags.REFERENCE)
         ? module.createI32(1)
         : module.createI32(0);
     }
-    case "isString": {
+    case "isString": { // isString<T!>() / isString<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        ); // recoverable
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      let type = compiler.currentType;
-      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
       let classType = type.classReference;
       if (classType) {
         let stringInstance = compiler.program.stringInstance;
-        if (!stringInstance) return module.createUnreachable();
-        if (classType.isAssignableTo(stringInstance)) {
-          return module.createI32(1);
-        }
+        if (stringInstance && classType.isAssignableTo(stringInstance)) return module.createI32(1);
       }
       return module.createI32(0);
     }
-    case "isArray": {
+    case "isArray": { // isArray<T!>() / isArray<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        ); // recoverable
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
-      let type = compiler.currentType;
-      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
       let classType = type.classReference;
       return classType != null && classType.prototype.fnIndexedGet != null
         ? module.createI32(1)
@@ -2544,6 +2472,54 @@ export function compileCall(
     reportNode.range
   );
   return module.createUnreachable();
+}
+
+function evaluateConstantType(
+  compiler: Compiler,
+  typeArguments: Type[] | null,
+  operands: Expression[],
+  reportNode: Node
+): Type | null {
+  if (operands.length == 0) { // requires type argument
+    if (!typeArguments || typeArguments.length != 1) {
+      compiler.error(
+        DiagnosticCode.Expected_0_type_arguments_but_got_1,
+        reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+      );
+      return null;
+    }
+    return typeArguments[0];
+  }
+  if (operands.length == 1) { // optional type argument
+    if (typeArguments) {
+      if (typeArguments.length == 1) {
+        compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, false);
+      } else {
+        if (typeArguments.length) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments.length.toString(10)
+          );
+          return null;
+        }
+        compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+      }
+    } else {
+      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+    }
+    return compiler.currentType;
+  }
+  if (typeArguments && typeArguments.length > 1) {
+    compiler.error(
+      DiagnosticCode.Expected_0_type_arguments_but_got_1,
+      reportNode.range, "1", typeArguments.length.toString(10)
+    );
+  }
+  compiler.error(
+    DiagnosticCode.Expected_0_arguments_but_got_1,
+    reportNode.range, "1", operands.length.toString(10)
+  );
+  return null;
 }
 
 function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32 {
