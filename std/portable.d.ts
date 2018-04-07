@@ -247,12 +247,16 @@ declare class Float32Array extends Array<f32> {}
 declare class Float64Array extends Array<f64> {}
 
 declare class String {
+
   static fromCharCode(ls: i32, hs?: i32): string;
   static fromCharCodes(arr: u16[]): string;
   static fromCodePoint(cp: i32): string;
   static fromCodePoints(arr: i32[]): string;
+
   readonly length: i32;
+
   private constructor();
+
   indexOf(subject: string, position?: i32): i32;
   includes(other: string): bool;
   lastIndexOf(subject: string, position?: i32): i32;
@@ -262,6 +266,7 @@ declare class String {
   startsWith(subject: string): bool;
   endsWith(subject: string): bool;
   replace(search: string, replacement: string): string;
+  repeat(count?: i32): string;
   toString(): string;
 }
 

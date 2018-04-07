@@ -111,7 +111,7 @@ export class String {
   @operator("==")
   private static __eq(left: String, right: String): bool {
     if (left === right) return true;
-    if (left === null) return right === null;
+    if (left === null)  return right === null;
     if (right === null) return false;
 
     var leftLength = left.length;
@@ -131,7 +131,7 @@ export class String {
 
   @operator(">")
   private static __gt(left: String, right: String): bool {
-    if (left === null || right === null) return false;
+    if (left === right || left === null || right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -149,8 +149,9 @@ export class String {
 
   @operator(">=")
   private static __gte(left: String, right: String): bool {
-    if (left === null) return right === null;
-    else if (right === null) return false;
+    if (left === right) return true;
+    if (left === null)  return right === null;
+    if (right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -168,7 +169,7 @@ export class String {
 
   @operator("<")
   private static __lt(left: String, right: String): bool {
-    if (left === null || right === null) return false;
+    if (left === right || left === null || right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -186,8 +187,9 @@ export class String {
 
   @operator("<=")
   private static __lte(left: String, right: String): bool {
-    if (left === null) return right === null;
-    else if (right === null) return false;
+    if (left === right) return true;
+    if (left === null)  return right === null;
+    if (right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -231,6 +233,7 @@ export class String {
   startsWith(searchString: String, position: i32 = 0): bool {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
+
     var pos: isize = position;
     var len: isize = this.length;
     var start: isize = min<isize>(max<isize>(pos, 0), len);
@@ -292,6 +295,7 @@ export class String {
   trim(): String {
     assert(this !== null);
     var length: usize = this.length;
+
     while (
       length &&
       isWhiteSpaceOrLineTerminator(
@@ -376,6 +380,40 @@ export class String {
       len << 1
     );
     return out;
+  }
+
+  repeat(count: i32 = 0): String {
+    assert(this !== null);
+    var length = this.length;
+
+    // Most browsers can't handle strings 1 << 28 chars or longer
+    if (count < 0 || length * count > (1 << 28)) {
+      throw new RangeError("Invalid count value");
+    }
+
+    if (count === 0 || !length) return EMPTY;
+    if (count === 1) return this;
+
+    var result = allocate(length * count);
+    var strLen = length << 1;
+
+    /*
+     * TODO possible improvments: reuse existing result for exponentially concats like:
+     * 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
+     */
+    for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
+      move_memory(
+        changetype<usize>(result) + HEADER_SIZE + offset,
+        changetype<usize>(this)   + HEADER_SIZE,
+        strLen
+      );
+    }
+
+    return result;
+  }
+
+  toString(): String {
+    return this;
   }
 }
 
