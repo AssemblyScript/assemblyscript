@@ -1933,7 +1933,6 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
-        assert(!this.resolvedThisExpression && !this.resolvedElementExpression);
         let type = (<VariableLikeElement>target).type;
         if (target = type.classReference) {
           this.resolvedThisExpression = targetExpression;
