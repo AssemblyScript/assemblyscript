@@ -6,6 +6,9 @@
     "build": "npm run build:untouched && npm run build:optimized",
     "build:untouched": "asc assembly/game-of-life.ts -b game-of-life.untouched.wasm -t game-of-life.untouched.wat --validate --sourceMap --measure",
     "build:optimized": "asc -O assembly/game-of-life.ts -b game-of-life.optimized.wasm -t game-of-life.optimized.wat --validate --sourceMap --measure",
-    "browser": "game-of-life.html"
+    "browser": "node index.js"
+  },
+  "dependencies": {
+    "opn": "^5.3.0"
   }
 }

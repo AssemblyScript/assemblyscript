@@ -6,6 +6,12 @@ An [AssemblyScript](http://assemblyscript.org) example. Continuously updates the
 Instructions
 ------------
 
+You have to install the 'opn' package to be able to run the `npm browser` command
+
+```
+$> npm install
+```
+
 To build [assembly/game-of-life.ts](./assembly/game-of-life.ts) to an untouched and an optimized `.wasm` including their respective `.wat` representations, run:
 
 ```
