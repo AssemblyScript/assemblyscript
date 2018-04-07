@@ -205,8 +205,8 @@ exports.main = function main(argv, options, callback) {
       });
     });
   }
+  const customLibDirs = [];
   if (args.lib) {
-    const customLibDirs = [];
     if (typeof args.lib === "string") args.lib = args.lib.split(",");
     Array.prototype.push.apply(customLibDirs, args.lib.map(lib => lib.trim()));
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
