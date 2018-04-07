@@ -111,7 +111,7 @@ export class String {
   @operator("==")
   private static __eq(left: String, right: String): bool {
     if (left === right) return true;
-    if (left === null) return right === null;
+    if (left === null)  return right === null;
     if (right === null) return false;
 
     var leftLength = left.length;
@@ -131,9 +131,7 @@ export class String {
 
   @operator(">")
   private static __gt(left: String, right: String): bool {
-    if (left === right || left === null || right === null) {
-      return false;
-    }
+    if (left === right || left === null || right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -152,7 +150,7 @@ export class String {
   @operator(">=")
   private static __gte(left: String, right: String): bool {
     if (left === right) return true;
-    if (left === null) return right === null;
+    if (left === null)  return right === null;
     if (right === null) return false;
 
     var leftLength  = left.length;
@@ -171,9 +169,7 @@ export class String {
 
   @operator("<")
   private static __lt(left: String, right: String): bool {
-    if (left === right || left === null || right === null) {
-      return false;
-    }
+    if (left === right || left === null || right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -192,7 +188,7 @@ export class String {
   @operator("<=")
   private static __lte(left: String, right: String): bool {
     if (left === right) return true;
-    if (left === null) return right === null;
+    if (left === null)  return right === null;
     if (right === null) return false;
 
     var leftLength  = left.length;
