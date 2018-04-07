@@ -4635,9 +4635,9 @@
    (i32.shr_s
     (i32.add
      (get_local $2)
-     (i32.const 7)
+     (i32.const 31)
     )
-    (i32.const 3)
+    (i32.const 5)
    )
   )
   (set_local $10
@@ -4690,7 +4690,7 @@
                (i32.shl
                 (i32.shr_s
                  (get_local $4)
-                 (i32.const 4)
+                 (i32.const 6)
                 )
                 (i32.const 2)
                )
@@ -4701,7 +4701,7 @@
                (get_local $4)
                (i32.const 1)
               )
-              (i32.const 7)
+              (i32.const 31)
              )
             )
             (i32.const 1)
@@ -4774,7 +4774,7 @@
            (i32.shl
             (i32.shr_s
              (get_local $3)
-             (i32.const 3)
+             (i32.const 5)
             )
             (i32.const 2)
            )
@@ -4786,7 +4786,7 @@
              (i32.shl
               (i32.shr_s
                (get_local $3)
-               (i32.const 3)
+               (i32.const 5)
               )
               (i32.const 2)
              )
@@ -4796,7 +4796,7 @@
             (i32.const 1)
             (i32.and
              (get_local $3)
-             (i32.const 7)
+             (i32.const 31)
             )
            )
           )
@@ -4910,7 +4910,7 @@
                  (i32.shl
                   (i32.shr_s
                    (get_local $11)
-                   (i32.const 3)
+                   (i32.const 5)
                   )
                   (i32.const 2)
                  )
@@ -4918,7 +4918,7 @@
                )
                (i32.and
                 (get_local $11)
-                (i32.const 7)
+                (i32.const 31)
                )
               )
               (i32.const 1)
@@ -4988,7 +4988,7 @@
                 (i32.shl
                  (i32.shr_s
                   (get_local $11)
-                  (i32.const 3)
+                  (i32.const 5)
                  )
                  (i32.const 2)
                 )
@@ -5000,7 +5000,7 @@
                   (i32.shl
                    (i32.shr_s
                     (get_local $11)
-                    (i32.const 3)
+                    (i32.const 5)
                    )
                    (i32.const 2)
                   )
@@ -5010,7 +5010,7 @@
                  (i32.const 1)
                  (i32.and
                   (get_local $11)
-                  (i32.const 7)
+                  (i32.const 31)
                  )
                 )
                )
