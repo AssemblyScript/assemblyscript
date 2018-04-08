@@ -3725,7 +3725,15 @@
     )
     (i32.const 1)
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 72)
+     (i32.const 391)
+     (i32.const 6)
+    )
+    (unreachable)
+   )
   )
   (if
    (i32.and

@@ -33,7 +33,15 @@
    (return
     (i32.const 1)
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 37)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
   )
  )
  (func $start (; 4 ;) (type $v)

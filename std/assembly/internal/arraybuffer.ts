@@ -30,11 +30,10 @@ export function reallocUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuf
   var oldByteLength = buffer.byteLength;
   if (newByteLength > oldByteLength) {
     assert(newByteLength <= MAX_BLENGTH);
-    let oldSize = computeSize(oldByteLength);
-    if (<i32>(oldSize - HEADER_SIZE) <= newByteLength) { // fast path: zero out additional space
+    if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE)) { // fast path: zero out additional space
       store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
       set_memory(
-        changetype<usize>(buffer) + HEADER_SIZE + oldByteLength,
+        changetype<usize>(buffer) + HEADER_SIZE + <usize>oldByteLength,
         0,
         <usize>(newByteLength - oldByteLength)
       );
@@ -43,7 +42,12 @@ export function reallocUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuf
       move_memory(
         changetype<usize>(newBuffer) + HEADER_SIZE,
         changetype<usize>(buffer) + HEADER_SIZE,
-        <usize>newByteLength
+        <usize>oldByteLength
+      );
+      set_memory(
+        changetype<usize>(newBuffer) + HEADER_SIZE + <usize>oldByteLength,
+        0,
+        <usize>(newByteLength - oldByteLength)
       );
       return newBuffer;
     }
@@ -62,3 +66,11 @@ export function reallocUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuf
 //   readonly byteLength: i32;
 //   readonly length: i32;
 // }
+
+export function loadUnsafe<T>(buffer: ArrayBuffer, index: i32): T {
+  return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
+}
+
+export function storeUnsafe<T>(buffer: ArrayBuffer, index: i32, value: T): void {
+  store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE);
+}

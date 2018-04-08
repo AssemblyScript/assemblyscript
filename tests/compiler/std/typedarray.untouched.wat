@@ -16,10 +16,11 @@
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $std/typedarray/MAX_F64LENGTH i32 (i32.const 134217727))
- (global $HEAP_BASE i32 (i32.const 104))
+ (global $HEAP_BASE i32 (i32.const 164))
  (memory $0 1)
  (data (i32.const 4) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 44) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 44) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 104) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -163,7 +164,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 44)
+     (i32.const 104)
      (i32.const 22)
      (i32.const 2)
     )
@@ -545,7 +546,15 @@
      (get_local $1)
      (i32.const 1073741816)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -629,7 +638,15 @@
      (get_local $1)
      (i32.const 1073741816)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -713,7 +730,15 @@
      (get_local $1)
      (i32.const 536870908)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -797,7 +822,15 @@
      (get_local $1)
      (i32.const 536870908)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -881,7 +914,15 @@
      (get_local $1)
      (i32.const 268435454)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -965,7 +1006,15 @@
      (get_local $1)
      (i32.const 268435454)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -1049,7 +1098,15 @@
      (get_local $1)
      (i32.const 134217727)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -1133,7 +1190,15 @@
      (get_local $1)
      (i32.const 134217727)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -1217,7 +1282,15 @@
      (get_local $1)
      (i32.const 268435454)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl
@@ -1301,7 +1374,15 @@
      (get_local $1)
      (i32.const 134217727)
     )
-    (unreachable)
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 44)
+      (i32.const 17)
+      (i32.const 34)
+     )
+     (unreachable)
+    )
    )
    (set_local $2
     (i32.shl

@@ -6,7 +6,8 @@
 import {
   compileCall as compileBuiltinCall,
   compileGetConstant as compileBuiltinGetConstant,
-  compileAllocate as compileBuiltinAllocate
+  compileAllocate as compileBuiltinAllocate,
+  compileAbort
 } from "./builtins";
 
 import {
@@ -1654,7 +1655,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.set(FlowFlags.RETURNS);
 
     // TODO: requires exception-handling spec.
-    return this.module.createUnreachable();
+    return compileAbort(this, null, statement);
   }
 
   compileTryStatement(statement: TryStatement): ExpressionRef {
@@ -5182,29 +5183,29 @@ export class Compiler extends DiagnosticEmitter {
     var arrayType = (<ClassPrototype>arrayPrototype).resolve([ elementType ]);
     if (!arrayType) return module.createUnreachable();
 
-    var elementSize = expressions.length;
+    var elementCount = expressions.length;
     var nativeType = elementType.toNativeType();
     var values: usize;
-    var memorySize: usize;
+    var byteLength: usize;
     switch (nativeType) {
       case NativeType.I32: {
-        values = changetype<usize>(new Int32Array(elementSize));
-        memorySize = elementSize * 4;
+        values = changetype<usize>(new Int32Array(elementCount));
+        byteLength = elementCount * 4;
         break;
       }
       case NativeType.I64: {
-        values = changetype<usize>(new Array<I64>(elementSize));
-        memorySize = elementSize * 8;
+        values = changetype<usize>(new Array<I64>(elementCount));
+        byteLength = elementCount * 8;
         break;
       }
       case NativeType.F32: {
-        values = changetype<usize>(new Float32Array(elementSize));
-        memorySize = elementSize * 4;
+        values = changetype<usize>(new Float32Array(elementCount));
+        byteLength = elementCount * 4;
         break;
       }
       case NativeType.F64: {
-        values = changetype<usize>(new Float64Array(elementSize));
-        memorySize = elementSize * 8;
+        values = changetype<usize>(new Float64Array(elementCount));
+        byteLength = elementCount * 8;
         break;
       }
       default: {
@@ -5218,9 +5219,9 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // precompute value expressions
-    var exprs = new Array<ExpressionRef>(elementSize);
+    var exprs = new Array<ExpressionRef>(elementCount);
     var expr: BinaryenExpressionRef;
-    for (let i = 0; i < elementSize; ++i) {
+    for (let i = 0; i < elementCount; ++i) {
       exprs[i] = expressions[i]
         ? this.compileExpression(<Expression>expressions[i], elementType)
         : elementType.toNativeZero(module);
@@ -5260,50 +5261,58 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var usizeTypeSize = this.options.usizeType.byteSize;
-    var headerSize = usizeTypeSize + 4 + 4; // memory + capacity + length
 
     if (isStatic) {
-      let buffer = new Uint8Array(headerSize + memorySize);
-      let segment = this.addMemorySegment(buffer);
+      // Create a combined static memory segment composed of:
+      // Array struct + ArrayBuffer struct + aligned ArrayBuffer data
 
-      // make header
+      let arraySize = usizeTypeSize + 4; // buffer_ & length_
+      let bufferHeaderSize = (4 + 7) & ~7; // aligned byteLength (8)
+      let bufferTotalSize = 1 << (32 - clz(byteLength + bufferHeaderSize - 1)); // see internals
+      let data = new Uint8Array(arraySize + bufferTotalSize);
+      let segment = this.addMemorySegment(data);
       let offset = 0;
+
+      // write Array struct
       if (usizeTypeSize == 8) {
-        writeI64(i64_add(segment.offset, i64_new(headerSize)), buffer, 0); // memory
+        writeI64(i64_add(segment.offset, i64_new(arraySize)), data, offset); // buffer_ @ segment[arSize]
+        offset += 8;
       } else {
         assert(i64_high(segment.offset) == 0);
-        writeI32(i64_low(segment.offset) + headerSize, buffer, 0); // memory
+        writeI32(i64_low(segment.offset) + arraySize, data, offset); // buffer_ @ segment[arSize]
+        offset += 4;
       }
-      offset += usizeTypeSize;
-      writeI32(elementSize, buffer, offset); // capacity
+      writeI32(elementCount, data, offset); // length_
       offset += 4;
-      writeI32(elementSize, buffer, offset); // length
-      offset += 4;
-      assert(offset == headerSize);
+      assert(offset == arraySize);
 
-      // make memory
+      // write ArrayBuffer struct
+      writeI32(byteLength, data, offset);
+      offset += bufferHeaderSize; // incl. alignment
+
+      // write ArrayBuffer data
       switch (nativeType) {
         case NativeType.I32: {
-          for (let i = 0; i < elementSize; ++i) {
-            writeI32(changetype<i32[]>(values)[i], buffer, offset); offset += 4;
+          for (let i = 0; i < elementCount; ++i) {
+            writeI32(changetype<i32[]>(values)[i], data, offset); offset += 4;
           }
           break;
         }
         case NativeType.I64: {
-          for (let i = 0; i < elementSize; ++i) {
-            writeI64(changetype<I64[]>(values)[i], buffer, offset); offset += 8;
+          for (let i = 0; i < elementCount; ++i) {
+            writeI64(changetype<I64[]>(values)[i], data, offset); offset += 8;
           }
           break;
         }
         case NativeType.F32: {
-          for (let i = 0; i < elementSize; ++i) {
-            writeF32(changetype<f32[]>(values)[i], buffer, offset); offset += 4;
+          for (let i = 0; i < elementCount; ++i) {
+            writeF32(changetype<f32[]>(values)[i], data, offset); offset += 4;
           }
           break;
         }
         case NativeType.F64: {
-          for (let i = 0; i < elementSize; ++i) {
-            writeF64(changetype<f64[]>(values)[i], buffer, offset); offset += 8;
+          for (let i = 0; i < elementCount; ++i) {
+            writeF64(changetype<f64[]>(values)[i], data, offset); offset += 8;
           }
           break;
         }
@@ -5316,7 +5325,8 @@ export class Compiler extends DiagnosticEmitter {
           return module.createUnreachable();
         }
       }
-      assert(offset == headerSize + memorySize);
+      assert(offset <= arraySize + bufferTotalSize);
+
       this.currentType = arrayType.type;
       return usizeTypeSize == 8
         ? module.createI64(

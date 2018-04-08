@@ -8,10 +8,11 @@
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 104))
+ (global $HEAP_BASE i32 (i32.const 164))
  (memory $0 1)
  (data (i32.const 4) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 44) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 44) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 104) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -127,7 +128,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 44)
+     (i32.const 104)
      (i32.const 22)
      (i32.const 2)
     )
@@ -486,7 +487,15 @@
     (get_local $1)
     (i32.const 1073741816)
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 17)
+     (i32.const 34)
+    )
+    (unreachable)
+   )
   )
   (call $~lib/memory/set_memory
    (i32.add
@@ -548,7 +557,15 @@
     (get_local $1)
     (i32.const 536870908)
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 17)
+     (i32.const 34)
+    )
+    (unreachable)
+   )
   )
   (call $~lib/memory/set_memory
    (i32.add
@@ -618,7 +635,15 @@
     (get_local $1)
     (i32.const 268435454)
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 17)
+     (i32.const 34)
+    )
+    (unreachable)
+   )
   )
   (call $~lib/memory/set_memory
    (i32.add
@@ -688,7 +713,15 @@
     (get_local $1)
     (i32.const 134217727)
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 17)
+     (i32.const 34)
+    )
+    (unreachable)
+   )
   )
   (call $~lib/memory/set_memory
    (i32.add
