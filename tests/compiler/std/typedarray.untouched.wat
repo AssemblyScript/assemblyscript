@@ -552,7 +552,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -644,7 +644,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -736,7 +736,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -828,7 +828,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -920,7 +920,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -1012,7 +1012,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -1104,7 +1104,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -1196,7 +1196,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -1288,7 +1288,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -1380,7 +1380,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 19)
+      (i32.const 22)
       (i32.const 34)
      )
      (unreachable)
@@ -2172,7 +2172,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 44)
-     (i32.const 44)
+     (i32.const 47)
      (i32.const 42)
     )
     (unreachable)
@@ -2231,7 +2231,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 44)
-     (i32.const 36)
+     (i32.const 39)
      (i32.const 42)
     )
     (unreachable)

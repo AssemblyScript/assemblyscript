@@ -534,5 +534,8 @@ declare function unmanaged(target: Function): any;
 /** Annotates a class as being sealed / non-derivable. */
 declare function sealed(target: Function): any;
 
-/** Annotates a class field with an explicit offset. */
-declare function offset(offset: usize): any;
+/** Annotates a method or function as always inlined. */
+declare function inline(target: any, propertyKey: any, descriptor: any): any;
+
+/** Annotates a function to be always precomputed. */
+declare function precompute(target: any, propertyKey: any, descriptor: any): any;

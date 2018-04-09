@@ -59,14 +59,6 @@ export function reallocUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuf
   return buffer;
 }
 
-/** Common typed array interface. Not a global object. */
-// export declare interface ArrayBufferView<T> {
-//   readonly buffer: ArrayBuffer;
-//   readonly byteOffset: i32;
-//   readonly byteLength: i32;
-//   readonly length: i32;
-// }
-
 export function loadUnsafe<T>(buffer: ArrayBuffer, index: i32): T {
   return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
 }

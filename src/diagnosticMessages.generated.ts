@@ -16,11 +16,13 @@ export enum DiagnosticCode {
   Basic_type_0_cannot_be_nullable = 204,
   Cannot_export_a_mutable_global = 205,
   Compiling_constant_with_non_constant_initializer_as_mutable = 206,
-  Structs_cannot_extend_classes_and_vice_versa = 207,
-  Structs_cannot_implement_interfaces = 208,
+  Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa = 207,
+  Unmanaged_classes_cannot_implement_interfaces = 208,
   Invalid_regular_expression_flags = 209,
   Implementation_0_must_match_the_signature_1 = 210,
   Class_0_is_sealed_and_cannot_be_extended = 211,
+  Decorator_0_is_not_valid_here = 212,
+  Duplicate_decorator = 213,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -122,11 +124,13 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 204: return "Basic type '{0}' cannot be nullable.";
     case 205: return "Cannot export a mutable global.";
     case 206: return "Compiling constant with non-constant initializer as mutable.";
-    case 207: return "Structs cannot extend classes and vice-versa.";
-    case 208: return "Structs cannot implement interfaces.";
+    case 207: return "Unmanaged classes cannot extend managed classes and vice-versa.";
+    case 208: return "Unmanaged classes cannot implement interfaces.";
     case 209: return "Invalid regular expression flags.";
     case 210: return "Implementation '{0}' must match the signature '{1}'.";
     case 211: return "Class '{0}' is sealed and cannot be extended.";
+    case 212: return "Decorator '{0}' is not valid here.";
+    case 213: return "Duplicate decorator.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

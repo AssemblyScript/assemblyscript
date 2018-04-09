@@ -206,12 +206,8 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
   var len = text.length;
   var start = range.start;
   var end = range.end;
-  while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) {
-    start--;
-  }
-  while (end < len && !isLineBreak(text.charCodeAt(end))) {
-    end++;
-  }
+  while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) start--;
+  while (end < len && !isLineBreak(text.charCodeAt(end))) end++;
   var sb: string[] = [
     "\n ",
     text.substring(start, end),
@@ -225,9 +221,7 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
   if (range.start == range.end) {
     sb.push("^");
   } else {
-    while (start++ < range.end) {
-      sb.push("~");
-    }
+    while (start++ < range.end) sb.push("~");
   }
   if (useColors) sb.push(COLOR_RESET);
   return sb.join("");

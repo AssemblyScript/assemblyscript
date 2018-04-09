@@ -49,6 +49,7 @@ import {
   ConstantValueKind,
   Flow,
   OperatorKind,
+  DecoratorFlags,
 
   PATH_DELIMITER,
   INNER_DELIMITER
@@ -378,6 +379,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           break;
         }
+        case NodeKind.INTERFACEDECLARATION: break;
         case NodeKind.ENUMDECLARATION: {
           if (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) {
             this.compileEnumDeclaration(<EnumDeclaration>statement);
@@ -3105,6 +3107,18 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           true // must be wrapped
         );
+
+        // check operator overload beforehand using the actual rhs type of the overload
+        let classReference = this.currentType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.POW);
+          if (overload) {
+            rightExpr = this.compileExpression(right, overload.signature.parameterTypes[1]);
+            expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
+            break;
+          }
+        }
+
         let instance: Function | null;
 
         // Mathf.pow if lhs is f32 (result is f32)
@@ -4810,7 +4824,9 @@ export class Compiler extends DiagnosticEmitter {
       this.program,
       simpleName,
       currentFunction.internalName + INNER_DELIMITER + simpleName,
-      declaration
+      declaration,
+      null,
+      DecoratorFlags.NONE
     );
     var instance = this.compileFunctionUsingTypeArguments(
       prototype,

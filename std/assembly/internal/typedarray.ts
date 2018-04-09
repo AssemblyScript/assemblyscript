@@ -4,11 +4,14 @@ import {
   allocUnsafe,
   loadUnsafeWithOffset,
   storeUnsafeWithOffset
-  // ArrayBufferView
 } from "./arraybuffer";
 
+import {
+  ArrayBufferView
+} from "../arraybuffer";
+
 /** Typed array base class. Not a global object. */
-export abstract class TypedArray<T> /* implements ArrayBufferView<T> */ {
+export abstract class TypedArray<T> implements ArrayBufferView<T> {
 
   readonly buffer: ArrayBuffer;
   readonly byteOffset: i32;
@@ -29,7 +32,7 @@ export abstract class TypedArray<T> /* implements ArrayBufferView<T> */ {
     return this.byteLength >> alignof<T>();
   }
 
-  @operator("[]")
+  @inline @precompute @operator("[]")
   private __get(index: i32): T {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
@@ -37,7 +40,7 @@ export abstract class TypedArray<T> /* implements ArrayBufferView<T> */ {
     return loadUnsafeWithOffset<T>(this.buffer, index, byteOffset);
   }
 
-  @operator("[]=")
+  @inline @precompute @operator("[]=")
   private __set(index: i32, value: T): void {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();

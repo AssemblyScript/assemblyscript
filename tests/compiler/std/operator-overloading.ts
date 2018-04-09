@@ -29,6 +29,11 @@ class Tester {
     return new Tester(a.x % b.x, a.y % b.y);
   }
 
+  @operator('**')
+  static pow(a: Tester, b: Tester): Tester {
+    return new Tester(<i32>(a.x ** b.x), <i32>(a.y ** b.y));
+  }
+
   @operator('|')
   static or(a: Tester, b: Tester): Tester {
     return new Tester(a.x | b.x, a.y | b.y);
@@ -99,11 +104,17 @@ var d2 = new Tester(3, 10);
 var d  = d1 / d2;
 assert(d.x == 2 && d.y == 5);
 
-// check fractional
+// check remainder
 var f1 = new Tester(10, 10);
 var f2 = new Tester(6, 10);
 var f  = f1 % f2;
 assert(f.x == 4 && f.y == 0);
+
+// check power
+var p1 = new Tester(2, 3);
+var p2 = new Tester(4, 5);
+var p  = p1 ** p2;
+assert(p.x == 16 && p.y == 243);
 
 // check bitwise and
 var n1 = new Tester(0xFF, 0x0F);
