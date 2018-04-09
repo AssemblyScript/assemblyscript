@@ -20,7 +20,7 @@ function test(file) {
     return String.fromCharCode.apply(String, str);
   }
 
-  require("./runner")(exports, 50, 20000);
+  require("./runner")(exports, 20, 20000);
 
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();

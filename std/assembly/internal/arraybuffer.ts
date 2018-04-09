@@ -74,3 +74,11 @@ export function loadUnsafe<T>(buffer: ArrayBuffer, index: i32): T {
 export function storeUnsafe<T>(buffer: ArrayBuffer, index: i32, value: T): void {
   store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE);
 }
+
+export function loadUnsafeWithOffset<T>(buffer: ArrayBuffer, index: i32, byteOffset: i32): T {
+  return load<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), HEADER_SIZE);
+}
+
+export function storeUnsafeWithOffset<T>(buffer: ArrayBuffer, index: i32, value: T, byteOffset: i32): void {
+  store<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), value, HEADER_SIZE);
+}

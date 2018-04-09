@@ -5,6 +5,7 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
@@ -15,6 +16,7 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
+ (global $std/typedarray/arr (mut i32) (i32.const 0))
  (global $std/typedarray/MAX_F64LENGTH i32 (i32.const 134217727))
  (global $HEAP_BASE i32 (i32.const 164))
  (memory $0 1)
@@ -550,7 +552,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -642,7 +644,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -734,7 +736,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -826,7 +828,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -918,7 +920,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -1010,7 +1012,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -1102,7 +1104,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -1194,7 +1196,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -1286,7 +1288,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -1378,7 +1380,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 44)
-      (i32.const 17)
+      (i32.const 19)
       (i32.const 34)
      )
      (unreachable)
@@ -2127,7 +2129,125 @@
    )
   )
  )
- (func $start (; 26 ;) (type $v)
+ (func $~lib/internal/arraybuffer/storeUnsafeWithOffset<i32> (; 26 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  (i32.store offset=8
+   (i32.add
+    (i32.add
+     (get_local $0)
+     (get_local $3)
+    )
+    (i32.shl
+     (get_local $1)
+     (i32.const 2)
+    )
+   )
+   (get_local $2)
+  )
+ )
+ (func $~lib/internal/typedarray/TypedArray<i32>#__set (; 27 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $3
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
+  (set_local $4
+   (i32.shr_u
+    (i32.sub
+     (i32.load offset=8
+      (get_local $0)
+     )
+     (get_local $3)
+    )
+    (i32.const 2)
+   )
+  )
+  (if
+   (i32.ge_u
+    (get_local $1)
+    (get_local $4)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 44)
+     (i32.const 42)
+    )
+    (unreachable)
+   )
+  )
+  (call $~lib/internal/arraybuffer/storeUnsafeWithOffset<i32>
+   (i32.load
+    (get_local $0)
+   )
+   (get_local $1)
+   (get_local $2)
+   (get_local $3)
+  )
+ )
+ (func $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32> (; 28 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (return
+   (i32.load offset=8
+    (i32.add
+     (i32.add
+      (get_local $0)
+      (get_local $2)
+     )
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
+    )
+   )
+  )
+ )
+ (func $~lib/internal/typedarray/TypedArray<i32>#__get (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (set_local $2
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
+  (set_local $3
+   (i32.shr_u
+    (i32.sub
+     (i32.load offset=8
+      (get_local $0)
+     )
+     (get_local $2)
+    )
+    (i32.const 2)
+   )
+  )
+  (if
+   (i32.ge_u
+    (get_local $1)
+    (get_local $3)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 36)
+     (i32.const 42)
+    )
+    (unreachable)
+   )
+  )
+  (return
+   (call $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32>
+    (i32.load
+     (get_local $0)
+    )
+    (get_local $1)
+    (get_local $2)
+   )
+  )
+ )
+ (func $start (; 30 ;) (type $v)
   (if
    (i32.eqz
     (i32.eq
@@ -2318,6 +2438,147 @@
   )
   (call $std/typedarray/testInstantiate
    (i32.const 5)
+  )
+  (set_global $std/typedarray/arr
+   (call $~lib/internal/typedarray/TypedArray<i32>#constructor
+    (i32.const 0)
+    (i32.const 3)
+   )
+  )
+  (call $~lib/internal/typedarray/TypedArray<i32>#__set
+   (get_global $std/typedarray/arr)
+   (i32.const 0)
+   (i32.const 1)
+  )
+  (call $~lib/internal/typedarray/TypedArray<i32>#__set
+   (get_global $std/typedarray/arr)
+   (i32.const 1)
+   (i32.const 2)
+  )
+  (call $~lib/internal/typedarray/TypedArray<i32>#__set
+   (get_global $std/typedarray/arr)
+   (i32.const 2)
+   (i32.const 3)
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $~lib/internal/typedarray/TypedArray<i32>#get:length
+      (get_global $std/typedarray/arr)
+     )
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 74)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.load offset=4
+      (get_global $std/typedarray/arr)
+     )
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 75)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.load offset=8
+      (get_global $std/typedarray/arr)
+     )
+     (i32.mul
+      (i32.const 3)
+      (i32.const 4)
+     )
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 76)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $~lib/internal/typedarray/TypedArray<i32>#__get
+      (get_global $std/typedarray/arr)
+      (i32.const 0)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 77)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $~lib/internal/typedarray/TypedArray<i32>#__get
+      (get_global $std/typedarray/arr)
+      (i32.const 1)
+     )
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 78)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (call $~lib/internal/typedarray/TypedArray<i32>#__get
+      (get_global $std/typedarray/arr)
+      (i32.const 2)
+     )
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 79)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   (drop
    (call $~lib/internal/typedarray/TypedArray<f64>#constructor

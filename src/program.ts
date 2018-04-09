@@ -113,6 +113,49 @@ class TypeAlias {
   type: CommonTypeNode;
 }
 
+/** Represents the kind of an operator overload. */
+export enum OperatorKind {
+  INVALID,
+  INDEXED_GET,
+  INDEXED_SET,
+  ADD,
+  SUB,
+  MUL,
+  DIV,
+  REM,
+  AND,
+  OR,
+  XOR,
+  EQ,
+  NE,
+  GT,
+  GE,
+  LT,
+  LE
+}
+
+function operatorKindFromString(str: string): OperatorKind {
+  switch (str) {
+    case "[]" : return OperatorKind.INDEXED_GET;
+    case "[]=": return OperatorKind.INDEXED_SET;
+    case "+"  : return OperatorKind.ADD;
+    case "-"  : return OperatorKind.SUB;
+    case "*"  : return OperatorKind.MUL;
+    case "/"  : return OperatorKind.DIV;
+    case "%"  : return OperatorKind.REM;
+    case "&"  : return OperatorKind.AND;
+    case "|"  : return OperatorKind.OR;
+    case "^"  : return OperatorKind.XOR;
+    case "==" : return OperatorKind.EQ;
+    case "!=" : return OperatorKind.NE;
+    case ">"  : return OperatorKind.GT;
+    case ">=" : return OperatorKind.GE;
+    case "<"  : return OperatorKind.LT;
+    case "<=" : return OperatorKind.LE;
+  }
+  return OperatorKind.INVALID;
+}
+
 const noTypesYet = new Map<string,Type>();
 
 /** Represents an AssemblyScript program. */
@@ -314,12 +357,14 @@ export class Program extends DiagnosticEmitter {
 
     // resolve base prototypes of derived classes
     for (let i = 0, k = queuedDerivedClasses.length; i < k; ++i) {
-      let derivedDeclaration = queuedDerivedClasses[i].declaration;
+      let derivedPrototype = queuedDerivedClasses[i];
+      let derivedDeclaration = derivedPrototype.declaration;
       let derivedType = assert(derivedDeclaration.extendsType);
-      let derived = this.resolveIdentifier(derivedType.name, null); // reports
-      if (!derived) continue;
-      if (derived.kind == ElementKind.CLASS_PROTOTYPE) {
-        queuedDerivedClasses[i].basePrototype = <ClassPrototype>derived;
+      let baseElement = this.resolveIdentifier(derivedType.name, null); // reports
+      if (!baseElement) continue;
+      if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
+        let basePrototype = <ClassPrototype>baseElement;
+        derivedPrototype.basePrototype = basePrototype;
       } else {
         this.error(
           DiagnosticCode.A_class_may_only_extend_another_class,
@@ -682,10 +727,10 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    this.checkOperators(declaration.decorators, prototype, classPrototype);
+    this.checkOperatorOverloads(declaration.decorators, prototype, classPrototype);
   }
 
-  private checkOperators(
+  private checkOperatorOverloads(
     decorators: DecoratorNode[] | null,
     prototype: FunctionPrototype,
     classPrototype: ClassPrototype
@@ -712,76 +757,22 @@ export class Program extends DiagnosticEmitter {
               firstArg.kind == NodeKind.LITERAL &&
               (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
             ) {
-              switch ((<StringLiteralExpression>firstArg).value) {
-                case "[]": {
-                  classPrototype.fnIndexedGet = prototype.simpleName;
-                  break;
-                }
-                case "[]=": {
-                  classPrototype.fnIndexedSet = prototype.simpleName;
-                  break;
-                }
-                case "+": {
-                  classPrototype.fnConcat = prototype.simpleName;
-                  break;
-                }
-                case "-": {
-                  classPrototype.fnSubtract = prototype.simpleName;
-                  break;
-                }
-                case "*": {
-                  classPrototype.fnMultiply = prototype.simpleName;
-                  break;
-                }
-                case "/": {
-                  classPrototype.fnDivide = prototype.simpleName;
-                  break;
-                }
-                case "%": {
-                  classPrototype.fnFractional = prototype.simpleName;
-                  break;
-                }
-                case "&": {
-                  classPrototype.fnBitwiseAnd = prototype.simpleName;
-                  break;
-                }
-                case "|": {
-                  classPrototype.fnBitwiseOr = prototype.simpleName;
-                  break;
-                }
-                case "^": {
-                  classPrototype.fnBitwiseXor = prototype.simpleName;
-                  break;
-                }
-                case "==": {
-                  classPrototype.fnEquals = prototype.simpleName;
-                  break;
-                }
-                case "!=": {
-                  classPrototype.fnNotEquals = prototype.simpleName;
-                  break;
-                }
-                case ">": {
-                  classPrototype.fnGreaterThan = prototype.simpleName;
-                  break;
-                }
-                case ">=": {
-                  classPrototype.fnGreaterThanEquals = prototype.simpleName;
-                  break;
-                }
-                case "<": {
-                  classPrototype.fnLessThan = prototype.simpleName;
-                  break;
-                }
-                case "<=": {
-                  classPrototype.fnLessThanEquals = prototype.simpleName;
-                  break;
-                }
-                default: {
+              let kind = operatorKindFromString((<StringLiteralExpression>firstArg).value);
+              if (kind == OperatorKind.INVALID) {
+                this.error(
+                  DiagnosticCode.Operation_not_supported,
+                  firstArg.range
+                );
+              } else {
+                let overloads = classPrototype.overloadPrototypes;
+                if (overloads.has(kind)) {
                   this.error(
-                    DiagnosticCode.Operation_not_supported,
+                    DiagnosticCode.Duplicate_function_implementation,
                     firstArg.range
                   );
+                } else {
+                  prototype.operatorKind = kind;
+                  overloads.set(kind, prototype);
                 }
               }
             } else {
@@ -1853,19 +1844,21 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = this.resolvedElementExpression;
         if (elementExpression) {
-          let indexedGetPrototype = (<Class>target).getIndexedGet();
-          if (indexedGetPrototype) {
-            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-            if (!indexedGetInstance) return null;
-            let classReference = indexedGetInstance.signature.returnType.classReference;
-            if (!classReference) {
-              this.error(
-                DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                propertyAccess.property.range, propertyName, (<VariableLikeElement>target).type.toString()
-              );
-              return null;
-            }
-            target = classReference;
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          if (!indexedGet) {
+            this.error(
+              DiagnosticCode.Index_signature_is_missing_in_type_0,
+              elementExpression.range, (<Class>target).internalName
+            );
+            return null;
+          }
+          let returnType = indexedGet.signature.returnType;
+          if (!(target = returnType.classReference)) {
+            this.error(
+              DiagnosticCode.Property_0_does_not_exist_on_type_1,
+              propertyAccess.property.range, propertyName, returnType.toString()
+            );
+            return null;
           }
         }
         break;
@@ -1942,16 +1935,19 @@ export class Program extends DiagnosticEmitter {
         break;
       }
       case ElementKind.CLASS: { // element access on element access
-        let indexedGetPrototype = (<Class>target).getIndexedGet();
-        if (indexedGetPrototype) {
-          let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-          if (!indexedGetInstance) return null;
-          let returnType = indexedGetInstance.signature.returnType;
-          if (target = returnType.classReference) {
-            this.resolvedThisExpression = targetExpression;
-            this.resolvedElementExpression = elementAccess.elementExpression;
-            return target;
-          }
+        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+        if (!indexedGet) {
+          this.error(
+            DiagnosticCode.Index_signature_is_missing_in_type_0,
+            elementAccess.range, (<Class>target).internalName
+          );
+          return null;
+        }
+        let returnType = indexedGet.signature.returnType;
+        if (target = returnType.classReference) {
+          this.resolvedThisExpression = targetExpression;
+          this.resolvedElementExpression = elementAccess.elementExpression;
+          return target;
         }
         break;
       }
@@ -2417,6 +2413,8 @@ export class FunctionPrototype extends Element {
   instances: Map<string,Function> = new Map();
   /** Class type arguments, if a partially resolved method of a generic class. Not set otherwise. */
   classTypeArguments: Type[] | null = null;
+  /** Operator kind, if an overload. */
+  operatorKind: OperatorKind = OperatorKind.INVALID;
 
   /** Constructs a new function prototype. */
   constructor(
@@ -2445,7 +2443,7 @@ export class FunctionPrototype extends Element {
     var isInstance = this.is(CommonFlags.INSTANCE);
     var classPrototype = this.classPrototype;
 
-    // inherit contextual type arguments as provided. might be be overridden.
+    // inherit contextual type arguments as provided. might be overridden.
     var inheritedTypeArguments = contextualTypeArguments;
     contextualTypeArguments = new Map();
     if (inheritedTypeArguments) {
@@ -2498,6 +2496,7 @@ export class FunctionPrototype extends Element {
       classInstance = assert(classPrototype).resolve(classTypeArguments, contextualTypeArguments); // reports
       if (!classInstance) return null;
       thisType = classInstance.type;
+      contextualTypeArguments.set("this", thisType);
     }
 
     // resolve signature node
@@ -2559,6 +2558,7 @@ export class FunctionPrototype extends Element {
       classPrototype
     );
     partialPrototype.flags = this.flags;
+    partialPrototype.operatorKind = this.operatorKind;
     partialPrototype.classTypeArguments = classTypeArguments;
     return partialPrototype;
   }
@@ -2975,39 +2975,8 @@ export class ClassPrototype extends Element {
   basePrototype: ClassPrototype | null = null; // set in Program#initialize
   /** Constructor prototype. */
   constructorPrototype: FunctionPrototype | null = null;
-
-  /** Overloaded indexed get method, if any. */
-  fnIndexedGet: string | null = null;
-  /** Overloaded indexed set method, if any. */
-  fnIndexedSet: string | null = null;
-  /** Overloaded concatenation method, if any. */
-  fnConcat: string | null = null;
-  /** Overloaded subtraction method, if any. */
-  fnSubtract: string | null = null;
-  /** Overloaded multiply method, if any. */
-  fnMultiply: string | null = null;
-  /** Overloaded divide method, if any. */
-  fnDivide: string | null = null;
-  /** Overloaded fractional method, if any. */
-  fnFractional: string | null = null;
-  /** Overloaded bitwise and method, if any. */
-  fnBitwiseAnd: string | null = null;
-  /** Overloaded bitwise or method, if any. */
-  fnBitwiseOr: string | null = null;
-  /** Overloaded bitwise xor method, if any. */
-  fnBitwiseXor: string | null = null;
-  /** Overloaded equality comparison method, if any. */
-  fnEquals: string | null = null;
-  /** Overloaded non-equality comparison method, if any. */
-  fnNotEquals: string | null = null;
-  /** Overloaded greater comparison method, if any. */
-  fnGreaterThan: string | null = null;
-  /** Overloaded greater or equal comparison method, if any. */
-  fnGreaterThanEquals: string | null = null;
-  /** Overloaded less comparison method, if any. */
-  fnLessThan: string | null = null;
-  /** Overloaded less or equal comparison method, if any. */
-  fnLessThanEquals: string | null = null;
+  /** Operator overload prototypes. */
+  overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
 
   constructor(
     program: Program,
@@ -3100,15 +3069,19 @@ export class ClassPrototype extends Element {
       }
     }
 
+    // Resolve constructor
     if (this.constructorPrototype) {
       let partialConstructor = this.constructorPrototype.resolvePartial(typeArguments); // reports
       if (partialConstructor) instance.constructorInstance = partialConstructor.resolve(); // reports
     }
 
+    // Resolve instance members
     if (this.instanceMembers) {
       for (let member of this.instanceMembers.values()) {
         switch (member.kind) {
-          case ElementKind.FIELD_PROTOTYPE: { // fields are layed out in advance
+
+          // Lay out fields in advance
+          case ElementKind.FIELD_PROTOTYPE: {
             if (!instance.members) instance.members = new Map();
             let fieldDeclaration = (<FieldPrototype>member).declaration;
             if (!fieldDeclaration.type) {
@@ -3147,16 +3120,20 @@ export class ClassPrototype extends Element {
             }
             break;
           }
-          case ElementKind.FUNCTION_PROTOTYPE: { // instance methods remain partially resolved prototypes until compiled
+
+          // Partially resolve methods as these might have type arguments on their own
+          case ElementKind.FUNCTION_PROTOTYPE: {
             if (!instance.members) instance.members = new Map();
-            let methodPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
-            if (methodPrototype) {
-              methodPrototype.internalName = internalName + INSTANCE_DELIMITER + methodPrototype.simpleName;
-              instance.members.set(member.simpleName, methodPrototype);
+            let partialPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
+            if (partialPrototype) {
+              partialPrototype.internalName = internalName + INSTANCE_DELIMITER + partialPrototype.simpleName;
+              instance.members.set(member.simpleName, partialPrototype);
             }
             break;
           }
-          case ElementKind.PROPERTY: { // instance properties are cloned with partially resolved getters and setters
+
+          // Clone properties and partially resolve the wrapped accessors for consistence with other methods
+          case ElementKind.PROPERTY: {
             if (!instance.members) instance.members = new Map();
             let getterPrototype = assert((<Property>member).getterPrototype);
             let setterPrototype = (<Property>member).setterPrototype;
@@ -3187,6 +3164,24 @@ export class ClassPrototype extends Element {
         }
       }
     }
+
+    // Fully resolve operator overloads (don't have type parameters on their own)
+    for (let [kind, prototype] of this.overloadPrototypes) {
+      assert(kind != OperatorKind.INVALID);
+      let operatorInstance: Function | null;
+      if (prototype.is(CommonFlags.INSTANCE)) {
+        let operatorPartial = prototype.resolvePartial(typeArguments); // reports
+        if (!operatorPartial) continue;
+        operatorInstance = operatorPartial.resolve(); // reports
+      } else {
+        operatorInstance = prototype.resolve(); // reports
+      }
+      if (!operatorInstance) continue;
+      let overloads = instance.overloads;
+      if (!overloads) instance.overloads = overloads = new Map();
+      overloads.set(kind, operatorInstance);
+    }
+
     instance.currentMemoryOffset = memoryOffset; // offsetof<this>() is the class' byte size in memory
     return instance;
   }
@@ -3237,6 +3232,8 @@ export class Class extends Element {
   currentMemoryOffset: u32 = 0;
   /** Constructor instance. */
   constructorInstance: Function | null = null;
+  /** Operator overloads. */
+  overloads: Map<OperatorKind,Function> | null = null;
 
   /** Constructs a new class. */
   constructor(
@@ -3287,30 +3284,22 @@ export class Class extends Element {
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
-    do {
-      if (current == target) {
-        return true;
-      }
-    } while (current = current.base);
+    do if (current == target) return true;
+    while (current = current.base);
     return false;
   }
 
-  getIndexedGet(): FunctionPrototype | null {
-    var members = this.members;
-    var name = this.prototype.fnIndexedGet;
-    if (!members || name == null) return null;
-    var element = members.get(name);
-    if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
-    return <FunctionPrototype>element;
-  }
-
-  getIndexedSet(): FunctionPrototype | null {
-    var members = this.members;
-    var name = this.prototype.fnIndexedSet;
-    if (!members || name == null) return null;
-    var element = members.get(name);
-    if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
-    return <FunctionPrototype>element;
+  /** Looks up the operator overload of the specified kind. */
+  lookupOverload(kind: OperatorKind): Function | null {
+    var instance: Class | null = this;
+    do {
+      let overloads = instance.overloads;
+      if (overloads) {
+        let overload = overloads.get(kind);
+        if (overload) return overload;
+      }
+    } while (instance = instance.base);
+    return null;
   }
 
   toString(): string {

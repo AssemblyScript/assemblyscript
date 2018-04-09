@@ -1,7 +1,6 @@
 import {
   MAX_BLENGTH,
   HEADER_SIZE as HEADER_SIZE_AB,
-  computeSize,
   allocUnsafe,
   reallocUnsafe,
   loadUnsafe,
@@ -164,7 +163,7 @@ export class Array<T> {
       changetype<usize>(buffer) + HEADER_SIZE_AB + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
     );
-    storeUnsafe<T>(buffer, lastIndex, <T>0);
+    storeUnsafe<T>(buffer, lastIndex, isReference<T>() ? null : <T>0);
     this.length_ = lastIndex;
     return element;
   }

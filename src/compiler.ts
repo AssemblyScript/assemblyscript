@@ -48,6 +48,7 @@ import {
   CommonFlags,
   ConstantValueKind,
   Flow,
+  OperatorKind,
 
   PATH_DELIMITER,
   INNER_DELIMITER
@@ -2370,10 +2371,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnLessThan;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.LT);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -2458,14 +2458,12 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnGreaterThan;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.GT);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
-            // fall-through
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GtU64
@@ -2546,10 +2544,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnLessThanEquals;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.LE);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -2634,10 +2631,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnGreaterThanEquals;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.GE);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -2712,11 +2708,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload if operator is "=="
             if (operator == Token.EQUALS_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnEquals;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                assert(this.currentType == Type.bool);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.EQ);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -2788,10 +2782,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: {// check operator overload if operator is "!="
             if (operator == Token.EXCLAMATION_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnNotEquals;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.NE);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -2882,10 +2875,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnConcat;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.ADD);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -2973,10 +2965,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnSubtract;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.SUB);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -3064,10 +3055,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnMultiply;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.MUL);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -3254,10 +3244,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnDivide;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.DIV);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -3359,10 +3348,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnFractional;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.REM);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -3687,10 +3675,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnBitwiseAnd;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.AND);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -3769,10 +3756,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnBitwiseOr;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.OR);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -3851,10 +3837,9 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: { // check operator overload
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnBitwiseXor;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
+              let overload = assert(this.currentType.classReference).lookupOverload(OperatorKind.XOR);
+              if (overload) {
+                expr = this.compileOperatorOverload(overload, leftExpr, rightExpr);
                 break;
               }
             }
@@ -3997,16 +3982,10 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileOperatorOverload(
-    classInstance: Class,
-    operatorName: string,
+    operatorInstance: Function,
     leftExpr: ExpressionRef,
     rightExpr: ExpressionRef
   ): ExpressionRef {
-    var classPrototype = classInstance.prototype;
-    var operatorPrototype = assert(assert(classPrototype.members).get(operatorName));
-    assert(operatorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-    var operatorInstance = (<FunctionPrototype>operatorPrototype).resolve();
-    if (!operatorInstance) return this.module.createUnreachable();
     return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ]);
   }
 
@@ -4048,18 +4027,16 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.CLASS: {
         if (program.resolvedElementExpression) { // indexed access
-          let indexedGetPrototype = (<Class>target).getIndexedGet();
-          if (indexedGetPrototype) {
-            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-            if (!indexedGetInstance) return this.module.createUnreachable();
-            elementType = indexedGetInstance.signature.returnType;
-            break;
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          if (!indexedGet) {
+            this.error(
+              DiagnosticCode.Index_signature_is_missing_in_type_0,
+              expression.range, (<Class>target).internalName
+            );
+            return this.module.createUnreachable();
           }
-          this.error(
-            DiagnosticCode.Index_signature_is_missing_in_type_0,
-            expression.range, (<Class>target).toString()
-          );
-          return this.module.createUnreachable();
+          elementType = indexedGet.signature.returnType;
+          break;
         }
         // fall-through
       }
@@ -4239,60 +4216,55 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = this.program.resolvedElementExpression;
         if (elementExpression) {
-          let indexedGetPrototype = (<Class>target).getIndexedGet();
-          if (indexedGetPrototype) {
-            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-            if (!indexedGetInstance) return module.createUnreachable();
-            let indexedSetPrototype = (<Class>target).getIndexedSet();
-            if (!indexedSetPrototype) {
-              this.error(
-                DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-                expression.range, target.internalName
-              );
-              this.currentType = tee ? indexedGetInstance.signature.returnType : Type.void;
-              return module.createUnreachable();
-            }
-            let indexedSetInstance = indexedSetPrototype.resolve(); // reports
-            if (!indexedSetInstance) return module.createUnreachable();
-            let targetType = (<Class>target).type;
-            let thisExpression = assert(this.program.resolvedThisExpression);
-            let thisExpr = this.compileExpressionRetainType(
-              thisExpression,
-              this.options.usizeType
-            );
-            let elementExpr = this.compileExpression(
-              elementExpression,
-              Type.i32
-            );
-            if (tee) {
-              let tempLocalTarget = this.currentFunction.getTempLocal(targetType);
-              let tempLocalElement = this.currentFunction.getAndFreeTempLocal(this.currentType);
-              let returnType = indexedGetInstance.signature.returnType;
-              this.currentFunction.freeTempLocal(tempLocalTarget);
-              return module.createBlock(null, [
-                this.makeCallDirect(indexedSetInstance, [
-                  module.createTeeLocal(tempLocalTarget.index, thisExpr),
-                  module.createTeeLocal(tempLocalElement.index, elementExpr),
-                  valueWithCorrectType
-                ]),
-                this.makeCallDirect(indexedGetInstance, [
-                  module.createGetLocal(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
-                  module.createGetLocal(tempLocalElement.index, tempLocalElement.type.toNativeType())
-                ])
-              ], returnType.toNativeType());
-            } else {
-              return this.makeCallDirect(indexedSetInstance, [
-                thisExpr,
-                elementExpr,
-                valueWithCorrectType
-              ]);
-            }
-          } else {
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          if (!indexedGet) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
               expression.range, target.internalName
             );
             return module.createUnreachable();
+          }
+          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET);
+          if (!indexedSet) {
+            this.error(
+              DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+              expression.range, target.internalName
+            );
+            this.currentType = tee ? indexedGet.signature.returnType : Type.void;
+            return module.createUnreachable();
+          }
+          let targetType = (<Class>target).type;
+          let thisExpression = assert(this.program.resolvedThisExpression);
+          let thisExpr = this.compileExpressionRetainType(
+            thisExpression,
+            this.options.usizeType
+          );
+          let elementExpr = this.compileExpression(
+            elementExpression,
+            Type.i32
+          );
+          if (tee) {
+            let tempLocalTarget = this.currentFunction.getTempLocal(targetType);
+            let tempLocalElement = this.currentFunction.getAndFreeTempLocal(this.currentType);
+            let returnType = indexedGet.signature.returnType;
+            this.currentFunction.freeTempLocal(tempLocalTarget);
+            return module.createBlock(null, [
+              this.makeCallDirect(indexedSet, [
+                module.createTeeLocal(tempLocalTarget.index, thisExpr),
+                module.createTeeLocal(tempLocalElement.index, elementExpr),
+                valueWithCorrectType
+              ]),
+              this.makeCallDirect(indexedGet, [
+                module.createGetLocal(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
+                module.createGetLocal(tempLocalElement.index, tempLocalElement.type.toNativeType())
+              ])
+            ], returnType.toNativeType());
+          } else {
+            return this.makeCallDirect(indexedSet, [
+              thisExpr,
+              elementExpr,
+              valueWithCorrectType
+            ]);
           }
         }
         // fall-through
@@ -4806,18 +4778,16 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.createUnreachable();
     switch (target.kind) {
       case ElementKind.CLASS: {
-        let indexedGetPrototype = (<Class>target).getIndexedGet();
-        if (!indexedGetPrototype) {
+        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+        if (!indexedGet) {
           this.error(
             DiagnosticCode.Index_signature_is_missing_in_type_0,
             expression.expression.range, (<Class>target).internalName
           );
           return this.module.createUnreachable();
         }
-        let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-        if (!indexedGetInstance) return this.module.createUnreachable();
         let thisArg = this.compileExpression(expression.expression, (<Class>target).type);
-        return this.compileCallDirect(indexedGetInstance, [
+        return this.compileCallDirect(indexedGet, [
           expression.elementExpression
         ], expression, thisArg);
       }
