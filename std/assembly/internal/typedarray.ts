@@ -32,7 +32,7 @@ export abstract class TypedArray<T> implements ArrayBufferView<T> {
     return this.byteLength >> alignof<T>();
   }
 
-  @inline @precompute @operator("[]")
+  @operator("[]")
   private __get(index: i32): T {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
@@ -40,7 +40,7 @@ export abstract class TypedArray<T> implements ArrayBufferView<T> {
     return loadUnsafeWithOffset<T>(this.buffer, index, byteOffset);
   }
 
-  @inline @precompute @operator("[]=")
+  @operator("[]=")
   private __set(index: i32, value: T): void {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();

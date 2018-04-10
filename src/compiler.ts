@@ -1537,19 +1537,34 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileReturnStatement(statement: ReturnStatement): ExpressionRef {
+    var module = this.module;
     var currentFunction = this.currentFunction;
     var expression: ExpressionRef = 0;
+    var flow = currentFunction.flow;
+
+    // Remember that this flow returns
+    flow.set(FlowFlags.RETURNS);
+
+    // When inlining, break to the end of the inlined function's block
+    var returnLabel = flow.returnLabel;
+    if (returnLabel != null) {
+      if (statement.value) {
+        expression = this.compileExpression(
+          statement.value,
+          assert(flow.returnType)
+        );
+      }
+      return module.createBreak(returnLabel, 0, expression);
+    }
+
+    // Otherwise return as usual
     if (statement.value) {
       expression = this.compileExpression(
         statement.value,
         currentFunction.signature.returnType
       );
     }
-
-    // Remember that this flow returns
-    currentFunction.flow.set(FlowFlags.RETURNS);
-
-    return this.module.createReturn(expression);
+    return module.createReturn(expression);
   }
 
   compileSwitchStatement(statement: SwitchStatement): ExpressionRef {
@@ -4327,6 +4342,25 @@ export class Compiler extends DiagnosticEmitter {
           }
           return expr;
 
+        // inline if explicitly requested
+        } else if (prototype.hasDecorator(DecoratorFlags.INLINE)) {
+          let instance = prototype.resolveUsingTypeArguments( // reports
+            expression.typeArguments,
+            currentFunction.contextualTypeArguments,
+            expression
+          );
+          if (!instance) return module.createUnreachable();
+          if (instance.is(CommonFlags.INSTANCE)) {
+            let thisExpression = assert(this.program.resolvedThisExpression);
+            let thisExpr = this.compileExpressionRetainType(
+              thisExpression,
+              this.options.usizeType
+            );
+            return this.compileCallInline(instance, contextualType, expression.arguments, expression, thisExpr);
+          } else {
+            return this.compileCallInline(instance, contextualType, expression.arguments, expression);
+          }
+
         // otherwise compile to a call
         } else {
           let instance = prototype.resolveUsingTypeArguments( // reports
@@ -4477,6 +4511,85 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     return true;
+  }
+
+  /** Compiles a call to a concrete function as an inlined block. */
+  compileCallInline(
+    instance: Function,
+    contextualType: Type,
+    argumentExpressions: Expression[],
+    reportNode: Node,
+    thisArg: ExpressionRef = 0
+  ): ExpressionRef {
+    var numArguments = argumentExpressions.length;
+    var signature = instance.signature;
+
+    if (!this.checkCallSignature( // reports
+      signature,
+      numArguments,
+      thisArg != 0,
+      reportNode
+    )) {
+      return this.module.createUnreachable();
+    }
+
+    var currentFunction = this.currentFunction;
+    var module = this.module;
+
+    // Create an empty child flow with its own scope and mark it for inlining
+    var previousFlow = currentFunction.flow;
+    var returnLabel = instance.internalName + "|inlined." + (instance.nextInlineId++).toString(10);
+    var returnType = instance.signature.returnType;
+    var flow = Flow.create(currentFunction);
+    flow.returnLabel = returnLabel;
+    flow.returnType = returnType;
+
+    // Convert call arguments to temporary locals
+    var body = [];
+    if (thisArg) {
+      let classElement = assert(instance.memberOf);
+      assert(classElement.kind == ElementKind.CLASS);
+      let thisLocal = flow.addScopedLocal((<Class>classElement).type, "this"); // mmmh
+      body.push(
+        module.createSetLocal(thisLocal.index, thisArg)
+      );
+    }
+    var parameterTypes = signature.parameterTypes;
+    for (let i = 0; i < numArguments; ++i) {
+      let expr = this.compileExpression(
+        argumentExpressions[i],
+        parameterTypes[i]
+      );
+      let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
+      body.push(
+        module.createSetLocal(argumentLocal.index, expr)
+      );
+    }
+
+    // Compile the called function's body using the child flow
+    currentFunction.flow = flow;
+    var bodyStatement = assert(instance.prototype.declaration.body);
+    if (bodyStatement.kind == NodeKind.BLOCK) { // it's ok to unwrap the block here
+      let statements = (<BlockStatement>bodyStatement).statements;
+      for (let i = 0, k = statements.length; i < k; ++i) {
+        body.push(this.compileStatement(statements[i]));
+      }
+    } else {
+      body.push(this.compileStatement(bodyStatement));
+    }
+    flow.finalize();
+    this.currentFunction.flow = previousFlow;
+    this.currentType = returnType;
+
+    // Check that all branches return as usual
+    if (returnType != Type.void && !flow.is(FlowFlags.RETURNS)) {
+      this.error(
+        DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
+        instance.prototype.declaration.signature.returnType.range
+      );
+      return module.createUnreachable();
+    }
+    return module.createBlock(returnLabel, body, returnType.toNativeType());
   }
 
   /** Compiles a direct call to a concrete function. */

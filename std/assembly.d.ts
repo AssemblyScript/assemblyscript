@@ -536,6 +536,3 @@ declare function sealed(target: Function): any;
 
 /** Annotates a method or function as always inlined. */
 declare function inline(target: any, propertyKey: any, descriptor: any): any;
-
-/** Annotates a function to be always precomputed. */
-declare function precompute(target: any, propertyKey: any, descriptor: any): any;

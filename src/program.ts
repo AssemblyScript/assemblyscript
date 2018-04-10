@@ -476,7 +476,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var parentNode = declaration.parent;
     if (
-      (element.decoratorFlags & DecoratorFlags.GLOBAL) ||
+      (element.hasDecorator(DecoratorFlags.GLOBAL)) ||
       (
         declaration.range.source.isLibrary &&
         element.is(CommonFlags.EXPORT) &&
@@ -539,7 +539,7 @@ export class Program extends DiagnosticEmitter {
     var implementsTypes = declaration.implementsTypes;
     if (implementsTypes) {
       let numImplementsTypes = implementsTypes.length;
-      if (prototype.decoratorFlags & DecoratorFlags.UNMANAGED) {
+      if (prototype.hasDecorator(DecoratorFlags.UNMANAGED)) {
         if (numImplementsTypes) {
           this.error(
             DiagnosticCode.Unmanaged_classes_cannot_implement_interfaces,
@@ -700,8 +700,7 @@ export class Program extends DiagnosticEmitter {
     var decoratorFlags = DecoratorFlags.NONE;
     if (decorators) {
       decoratorFlags = this.filterDecorators(decorators,
-        DecoratorFlags.INLINE |
-        DecoratorFlags.PRECOMPUTE
+        DecoratorFlags.INLINE
       );
     }
 
@@ -878,8 +877,7 @@ export class Program extends DiagnosticEmitter {
     var decoratorFlags = DecoratorFlags.NONE;
     if (decorators) {
       decoratorFlags = this.filterDecorators(decorators,
-        DecoratorFlags.INLINE |
-        DecoratorFlags.PRECOMPUTE
+        DecoratorFlags.INLINE
       );
     }
 
@@ -1210,8 +1208,7 @@ export class Program extends DiagnosticEmitter {
       decorators
         ? this.filterDecorators(decorators,
             DecoratorFlags.GLOBAL |
-            DecoratorFlags.INLINE |
-            DecoratorFlags.PRECOMPUTE
+            DecoratorFlags.INLINE
           )
         : DecoratorFlags.NONE
     );
@@ -2265,9 +2262,7 @@ export enum DecoratorFlags {
   /** Is a sealed class. */
   SEALED = 1 << 3,
   /** Is always inlined. */
-  INLINE = 1 << 4,
-  /** Is always precomputed. */
-  PRECOMPUTE = 1 << 5
+  INLINE = 1 << 4
 }
 
 export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
@@ -2276,7 +2271,6 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
     case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
     case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
-    case DecoratorKind.PRECOMPUTE: return DecoratorFlags.PRECOMPUTE;
     default: return DecoratorFlags.NONE;
   }
 }
@@ -2314,6 +2308,8 @@ export abstract class Element {
   isAny(flags: CommonFlags): bool { return (this.flags & flags) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
+  /** Tests if this element has a specific decorator flag or flags. */
+  hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
 }
 
 /** A namespace. */
@@ -2738,6 +2734,7 @@ export class Function extends Element {
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
+  nextInlineId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
@@ -2854,6 +2851,8 @@ export class Function extends Element {
 
   /** Frees the temporary local for reuse. */
   freeTempLocal(local: Local): void {
+    if (local.is(CommonFlags.INLINED)) return;
+    assert(local.index >= 0);
     var temps: Local[];
     assert(local.type != null); // internal error
     switch ((<Type>local.type).toNativeType()) {
@@ -2875,6 +2874,7 @@ export class Function extends Element {
       }
       default: throw new Error("concrete type expected");
     }
+    assert(local.index >= 0);
     temps.push(local);
   }
 
@@ -3116,16 +3116,14 @@ export class ClassPrototype extends Element {
         );
         return null;
       }
-      if (baseClass.decoratorFlags & DecoratorFlags.SEALED) {
+      if (baseClass.hasDecorator(DecoratorFlags.SEALED)) {
         this.program.error(
           DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
           declaration.extendsType.range, baseClass.internalName
         );
         return null;
       }
-      let baseIsUnmanaged = (baseClass.prototype.decoratorFlags & DecoratorFlags.UNMANAGED) != 0;
-      let thisIsUnmanaged = (this.decoratorFlags & DecoratorFlags.UNMANAGED) != 0;
-      if (baseIsUnmanaged != thisIsUnmanaged) {
+      if (baseClass.hasDecorator(DecoratorFlags.UNMANAGED) != this.hasDecorator(DecoratorFlags.UNMANAGED)) {
         this.program.error(
           DiagnosticCode.Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa,
           Range.join(declaration.name.range, declaration.extendsType.range)
@@ -3490,6 +3488,10 @@ export class Flow {
   continueLabel: string | null;
   /** The label we break to when encountering a break statement. */
   breakLabel: string | null;
+  /** The label we break to when encountering a return statement, when inlining. */
+  returnLabel: string | null;
+  /** The return type of the inlined function, when inlining. */
+  returnType: Type | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
   /** Scoped global variables. */
@@ -3503,6 +3505,8 @@ export class Flow {
     parentFlow.currentFunction = currentFunction;
     parentFlow.continueLabel = null;
     parentFlow.breakLabel = null;
+    parentFlow.returnLabel = null;
+    parentFlow.returnType = null;
     return parentFlow;
   }
 
@@ -3523,6 +3527,8 @@ export class Flow {
     branch.currentFunction = this.currentFunction;
     branch.continueLabel = this.continueLabel;
     branch.breakLabel = this.breakLabel;
+    branch.returnLabel = this.returnLabel;
+    branch.returnType = this.returnType;
     return branch;
   }
 
@@ -3559,17 +3565,23 @@ export class Flow {
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(type: Type, name: string, declaration: VariableDeclaration): void {
+  addScopedLocal(type: Type, name: string, declaration?: VariableDeclaration): Local {
     var scopedLocal = this.currentFunction.getTempLocal(type);
     if (!this.scopedLocals) this.scopedLocals = new Map();
-    else if (this.scopedLocals.has(name)) {
-      this.currentFunction.program.error(
-        DiagnosticCode.Duplicate_identifier_0,
-        declaration.name.range
-      );
-      return;
+    else {
+      let existingLocal = this.scopedLocals.get(name);
+      if (existingLocal) {
+        if (declaration) {
+          this.currentFunction.program.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range
+          );
+        } else assert(false);
+        return existingLocal;
+      }
     }
     this.scopedLocals.set(name, scopedLocal);
+    return scopedLocal;
   }
 
   /** Gets the local of the specified name in the current scope. */
@@ -3610,5 +3622,7 @@ export class Flow {
     assert(this.parent == null, "must be the topmost parent flow");
     this.continueLabel = null;
     this.breakLabel = null;
+    this.returnLabel = null;
+    this.returnType = null;
   }
 }
