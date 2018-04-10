@@ -2053,6 +2053,14 @@ export class Program extends DiagnosticEmitter {
         throw new Error("not implemented");
       }
       case NodeKind.THIS: { // -> Class / ClassPrototype
+        if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
+          let explicitLocal = contextualFunction.flow.getScopedLocal("this");
+          if (explicitLocal) {
+            this.resolvedThisExpression = null;
+            this.resolvedElementExpression = null;
+            return explicitLocal;
+          }
+        }
         let parent = contextualFunction.memberOf;
         if (parent) {
           this.resolvedThisExpression = null;
@@ -2066,6 +2074,14 @@ export class Program extends DiagnosticEmitter {
         return null;
       }
       case NodeKind.SUPER: { // -> Class
+        if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
+          let explicitLocal = contextualFunction.flow.getScopedLocal("super");
+          if (explicitLocal) {
+            this.resolvedThisExpression = null;
+            this.resolvedElementExpression = null;
+            return explicitLocal;
+          }
+        }
         let parent = contextualFunction.memberOf;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
           this.resolvedThisExpression = null;
@@ -2748,6 +2764,7 @@ export class Function extends Element {
     this.signature = signature;
     this.memberOf = memberOf;
     this.flags = prototype.flags;
+    this.decoratorFlags = prototype.decoratorFlags;
     if (!(prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
       let localIndex = 0;
       if (memberOf && memberOf.kind == ElementKind.CLASS) {
@@ -3472,7 +3489,10 @@ export const enum FlowFlags {
   /** This branch conditionally continues in a child branch. */
   CONDITIONALLY_CONTINUES = 1 << 8,
   /** This branch conditionally allocates in a child branch. Constructors only. */
-  CONDITIONALLY_ALLOCATES = 1 << 9
+  CONDITIONALLY_ALLOCATES = 1 << 9,
+
+  /** This branch is part of inlining a function. */
+  INLINE_CONTEXT = 1 << 10
 }
 
 /** A control flow evaluator. */
@@ -3619,7 +3639,7 @@ export class Flow {
 
   /** Finalizes this flow. Must be the topmost parent flow of the function. */
   finalize(): void {
-    assert(this.parent == null, "must be the topmost parent flow");
+    assert(this.parent == null); // must be the topmost parent flow
     this.continueLabel = null;
     this.breakLabel = null;
     this.returnLabel = null;

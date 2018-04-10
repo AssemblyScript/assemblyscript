@@ -3,7 +3,6 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $inlining/foo (mut i32) (i32.const 123))
  (memory $0 1)
  (data (i32.const 4) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
  (export "test" (func $inlining/test))
@@ -12,23 +11,8 @@
  (func $inlining/test (; 1 ;) (type $i) (result i32)
   (i32.const 3)
  )
- (func $start (; 2 ;) (type $v)
+ (func $inlining/test_funcs (; 2 ;) (type $v)
   (local $0 i32)
-  (if
-   (i32.ne
-    (call $inlining/test)
-    (i32.const 3)
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 10)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
   (if
    (i32.ne
     (block $inlining/func_ii|inlined.0 (result i32)
@@ -58,8 +42,8 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 20)
-     (i32.const 0)
+     (i32.const 50)
+     (i32.const 2)
     )
     (unreachable)
    )
@@ -93,8 +77,8 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 21)
-     (i32.const 0)
+     (i32.const 51)
+     (i32.const 2)
     )
     (unreachable)
    )
@@ -128,26 +112,73 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 22)
-     (i32.const 0)
+     (i32.const 52)
+     (i32.const 2)
     )
     (unreachable)
    )
   )
   (if
    (i32.ne
-    (get_global $inlining/foo)
-    (i32.const 123)
+    (tee_local $0
+     (i32.add
+      (tee_local $0
+       (i32.const 2)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.const 3)
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 46)
+     (i32.const 55)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (tee_local $0
+     (i32.add
+      (tee_local $0
+       (i32.const 3)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.const 4)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 56)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $start (; 3 ;) (type $v)
+  (if
+   (i32.ne
+    (call $inlining/test)
+    (i32.const 3)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 10)
      (i32.const 0)
     )
     (unreachable)
    )
   )
+  (call $inlining/test_funcs)
  )
 )

@@ -60,6 +60,12 @@
  (global $std/operator-overloading/leq1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/leq2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/leq (mut i32) (i32.const 0))
+ (global $std/operator-overloading/ais1 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/ais2 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/ais (mut i32) (i32.const 0))
+ (global $std/operator-overloading/aii1 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
+ (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 64))
  (memory $0 1)
  (data (i32.const 4) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
@@ -2297,8 +2303,67 @@
    )
   )
  )
- (func $start (; 20 ;) (type $v)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 20 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (block
+  )
+  (tee_local $0
+   (if (result i32)
+    (get_local $0)
+    (get_local $0)
+    (tee_local $0
+     (block (result i32)
+      (set_local $3
+       (call $~lib/allocator/arena/allocate_memory
+        (i32.const 8)
+       )
+      )
+      (i32.store
+       (get_local $3)
+       (get_local $1)
+      )
+      (i32.store offset=4
+       (get_local $3)
+       (get_local $2)
+      )
+      (get_local $3)
+     )
+    )
+   )
+  )
+ )
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (block
+  )
+  (tee_local $0
+   (if (result i32)
+    (get_local $0)
+    (get_local $0)
+    (tee_local $0
+     (block (result i32)
+      (set_local $3
+       (call $~lib/allocator/arena/allocate_memory
+        (i32.const 8)
+       )
+      )
+      (i32.store
+       (get_local $3)
+       (get_local $1)
+      )
+      (i32.store offset=4
+       (get_local $3)
+       (get_local $2)
+      )
+      (get_local $3)
+     )
+    )
+   )
+  )
+ )
+ (func $start (; 22 ;) (type $v)
   (local $0 i32)
+  (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -3054,6 +3119,162 @@
      (i32.const 0)
      (i32.const 4)
      (i32.const 179)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/ais1
+   (call $std/operator-overloading/TesterInlineStatic#constructor
+    (i32.const 0)
+    (i32.const 1)
+    (i32.const 2)
+   )
+  )
+  (set_global $std/operator-overloading/ais2
+   (call $std/operator-overloading/TesterInlineStatic#constructor
+    (i32.const 0)
+    (i32.const 2)
+    (i32.const 3)
+   )
+  )
+  (set_global $std/operator-overloading/ais
+   (block $std/operator-overloading/TesterInlineStatic.add|inlined.0 (result i32)
+    (set_local $0
+     (get_global $std/operator-overloading/ais1)
+    )
+    (set_local $1
+     (get_global $std/operator-overloading/ais2)
+    )
+    (br $std/operator-overloading/TesterInlineStatic.add|inlined.0
+     (call $std/operator-overloading/TesterInlineStatic#constructor
+      (i32.const 0)
+      (i32.add
+       (i32.load
+        (get_local $0)
+       )
+       (i32.load
+        (get_local $1)
+       )
+      )
+      (i32.add
+       (i32.load offset=4
+        (get_local $0)
+       )
+       (i32.load offset=4
+        (get_local $1)
+       )
+      )
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $1
+       (i32.eq
+        (i32.load
+         (get_global $std/operator-overloading/ais)
+        )
+        (i32.const 3)
+       )
+      )
+      (i32.eq
+       (i32.load offset=4
+        (get_global $std/operator-overloading/ais)
+       )
+       (i32.const 5)
+      )
+      (get_local $1)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 193)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/aii1
+   (call $std/operator-overloading/TesterInlineInstance#constructor
+    (i32.const 0)
+    (i32.const 1)
+    (i32.const 2)
+   )
+  )
+  (set_global $std/operator-overloading/aii2
+   (call $std/operator-overloading/TesterInlineInstance#constructor
+    (i32.const 0)
+    (i32.const 2)
+    (i32.const 3)
+   )
+  )
+  (set_global $std/operator-overloading/aii
+   (block $std/operator-overloading/TesterInlineInstance#add|inlined.0 (result i32)
+    (set_local $1
+     (get_global $std/operator-overloading/aii1)
+    )
+    (set_local $0
+     (get_global $std/operator-overloading/aii2)
+    )
+    (br $std/operator-overloading/TesterInlineInstance#add|inlined.0
+     (call $std/operator-overloading/TesterInlineInstance#constructor
+      (i32.const 0)
+      (i32.add
+       (i32.load
+        (get_local $1)
+       )
+       (i32.load
+        (get_local $0)
+       )
+      )
+      (i32.add
+       (i32.load offset=4
+        (get_local $1)
+       )
+       (i32.load offset=4
+        (get_local $0)
+       )
+      )
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.and
+     (if (result i32)
+      (tee_local $0
+       (i32.eq
+        (i32.load
+         (get_global $std/operator-overloading/aii)
+        )
+        (i32.const 3)
+       )
+      )
+      (i32.eq
+       (i32.load offset=4
+        (get_global $std/operator-overloading/aii)
+       )
+       (i32.const 5)
+      )
+      (get_local $0)
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 207)
      (i32.const 0)
     )
     (unreachable)

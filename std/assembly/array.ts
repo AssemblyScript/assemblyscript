@@ -62,6 +62,7 @@ export class Array<T> {
     var buffer = this.buffer_;
     var capacity = buffer.byteLength >>> alignof<T>();
     if (<u32>index >= <u32>capacity) throw new Error("Index out of bounds");
+    // return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB);
     return loadUnsafe<T>(buffer, index);
   }
 
@@ -76,6 +77,7 @@ export class Array<T> {
       this.buffer_ = buffer;
       this.length_ = index + 1;
     }
+    // store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE_AB);
     storeUnsafe<T>(buffer, index, value);
   }
 
