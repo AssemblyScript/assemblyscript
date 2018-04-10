@@ -4535,6 +4535,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var currentFunction = this.currentFunction;
     var module = this.module;
+    var declaration = instance.prototype.declaration;
 
     // Create an empty child flow with its own scope and mark it for inlining
     var previousFlow = currentFunction.flow;
@@ -4544,31 +4545,46 @@ export class Compiler extends DiagnosticEmitter {
     flow.returnLabel = returnLabel;
     flow.returnType = returnType;
 
-    // Convert call arguments to temporary locals
+    // Convert provided call arguments to temporary locals
     var body = [];
     if (thisArg) {
       let classElement = assert(instance.memberOf);
       assert(classElement.kind == ElementKind.CLASS);
-      let thisLocal = flow.addScopedLocal((<Class>classElement).type, "this"); // mmmh
+      let thisLocal = flow.addScopedLocal((<Class>classElement).type, "this");
       body.push(
         module.createSetLocal(thisLocal.index, thisArg)
       );
     }
     var parameterTypes = signature.parameterTypes;
     for (let i = 0; i < numArguments; ++i) {
-      let expr = this.compileExpression(
-        argumentExpressions[i],
-        parameterTypes[i]
-      );
       let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
       body.push(
-        module.createSetLocal(argumentLocal.index, expr)
+        module.createSetLocal(argumentLocal.index,
+          this.compileExpression(
+            argumentExpressions[i],
+            parameterTypes[i]
+          )
+        )
       );
     }
 
-    // Compile the called function's body using the child flow
+    // Compile optional parameter initializers in the scope of the inlined flow
     currentFunction.flow = flow;
-    var bodyStatement = assert(instance.prototype.declaration.body);
+    var numParameters = signature.parameterTypes.length;
+    for (let i = numArguments; i < numParameters; ++i) {
+      let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
+      body.push(
+        module.createSetLocal(argumentLocal.index,
+          this.compileExpression(
+            assert(declaration.signature.parameterTypes[i].initializer),
+            parameterTypes[i]
+          )
+        )
+      );
+    }
+
+    // Compile the called function's body in the scope of the inlined flow
+    var bodyStatement = assert(declaration.body);
     if (bodyStatement.kind == NodeKind.BLOCK) { // it's ok to unwrap the block here
       let statements = (<BlockStatement>bodyStatement).statements;
       for (let i = 0, k = statements.length; i < k; ++i) {
@@ -4578,6 +4594,8 @@ export class Compiler extends DiagnosticEmitter {
       body.push(this.compileStatement(bodyStatement));
     }
     flow.finalize();
+
+    // Reset to the original flow
     this.currentFunction.flow = previousFlow;
     this.currentType = returnType;
 
@@ -4585,7 +4603,7 @@ export class Compiler extends DiagnosticEmitter {
     if (returnType != Type.void && !flow.is(FlowFlags.RETURNS)) {
       this.error(
         DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
-        instance.prototype.declaration.signature.returnType.range
+        declaration.signature.returnType.range
       );
       return module.createUnreachable();
     }
@@ -4990,12 +5008,19 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.THIS: {
         let currentFunction = this.currentFunction;
+        let flow = currentFunction.flow;
+        if (flow.returnLabel !== null) { // when inlining
+          let scopedThis = flow.getScopedLocal("this");
+          if (scopedThis) {
+            this.currentType = scopedThis.type;
+            return module.createGetLocal(scopedThis.index, scopedThis.type.toNativeType());
+          }
+        }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
           let parent = assert(currentFunction.memberOf);
           assert(parent.kind == ElementKind.CLASS);
           let thisType = (<Class>parent).type;
           if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
-            let flow = currentFunction.flow;
             if (!flow.is(FlowFlags.ALLOCATES)) {
               flow.set(FlowFlags.ALLOCATES);
               // must be conditional because `this` could have been provided by a derived class
@@ -5017,6 +5042,17 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.SUPER: {
         let currentFunction = this.currentFunction;
+        let flow = currentFunction.flow;
+        if (flow.returnLabel !== null) { // when inlining
+          let scopedThis = flow.getScopedLocal("this");
+          if (scopedThis) {
+            let base = assert(scopedThis.type.classReference).base;
+            if (base) {
+              this.currentType = base.type;
+              return module.createGetLocal(scopedThis.index, base.type.toNativeType());
+            }
+          }
+        }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
           let parent = assert(currentFunction.memberOf);
           assert(parent.kind == ElementKind.CLASS);

@@ -4,6 +4,7 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $inlining/constantGlobal i32 (i32.const 1))
+ (global $inlining/foo (mut i32) (i32.const 123))
  (global $HEAP_BASE i32 (i32.const 32))
  (memory $0 1)
  (data (i32.const 4) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
@@ -23,6 +24,10 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   (if
    (i32.eqz
     (i32.eq
@@ -34,7 +39,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 8)
+     (i32.const 10)
      (i32.const 0)
     )
     (unreachable)
@@ -43,7 +48,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (block $inlining/foo|inlined.0 (result i32)
+     (block $inlining/func_ii|inlined.0 (result i32)
       (set_local $0
        (i32.const 42)
       )
@@ -52,11 +57,11 @@
         (get_local $0)
         (i32.const 42)
        )
-       (br $inlining/foo|inlined.0
+       (br $inlining/func_ii|inlined.0
         (i32.const 1)
        )
       )
-      (br $inlining/foo|inlined.0
+      (br $inlining/func_ii|inlined.0
        (if (result i32)
         (i32.lt_s
          (get_local $0)
@@ -74,7 +79,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 16)
+     (i32.const 20)
      (i32.const 0)
     )
     (unreachable)
@@ -83,7 +88,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (block $inlining/foo|inlined.1 (result i32)
+     (block $inlining/func_ii|inlined.1 (result i32)
       (set_local $1
        (i32.const 41)
       )
@@ -92,11 +97,11 @@
         (get_local $1)
         (i32.const 42)
        )
-       (br $inlining/foo|inlined.1
+       (br $inlining/func_ii|inlined.1
         (i32.const 1)
        )
       )
-      (br $inlining/foo|inlined.1
+      (br $inlining/func_ii|inlined.1
        (if (result i32)
         (i32.lt_s
          (get_local $1)
@@ -114,7 +119,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 17)
+     (i32.const 21)
      (i32.const 0)
     )
     (unreachable)
@@ -123,7 +128,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (block $inlining/foo|inlined.2 (result i32)
+     (block $inlining/func_ii|inlined.2 (result i32)
       (set_local $2
        (i32.const 43)
       )
@@ -132,11 +137,11 @@
         (get_local $2)
         (i32.const 42)
        )
-       (br $inlining/foo|inlined.2
+       (br $inlining/func_ii|inlined.2
         (i32.const 1)
        )
       )
-      (br $inlining/foo|inlined.2
+      (br $inlining/func_ii|inlined.2
        (if (result i32)
         (i32.lt_s
          (get_local $2)
@@ -154,7 +159,84 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 18)
+     (i32.const 22)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (block $inlining/func_ii_opt|inlined.0 (result i32)
+      (set_local $3
+       (i32.const 0)
+      )
+      (br $inlining/func_ii_opt|inlined.0
+       (get_local $3)
+      )
+     )
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 29)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (block $inlining/func_ii_opt|inlined.1 (result i32)
+      (set_local $4
+       (i32.const 1)
+      )
+      (br $inlining/func_ii_opt|inlined.1
+       (get_local $4)
+      )
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 30)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (block $inlining/func_iv|inlined.0
+   (set_local $5
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (block $inlining/Foo#method_this|inlined.0 (result i32)
+      (set_local $6
+       (get_global $inlining/foo)
+      )
+      (br $inlining/Foo#method_this|inlined.0
+       (get_local $6)
+      )
+     )
+     (i32.const 123)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 46)
      (i32.const 0)
     )
     (unreachable)

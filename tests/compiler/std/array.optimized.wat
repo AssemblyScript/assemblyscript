@@ -4237,7 +4237,7 @@
   (local $7 i32)
   (local $8 i32)
   (call $~lib/memory/set_memory
-   (tee_local $5
+   (tee_local $6
     (call $~lib/allocator/arena/allocate_memory
      (tee_local $3
       (i32.shl
@@ -4292,7 +4292,7 @@
          (i32.shr_s
           (i32.load
            (i32.add
-            (get_local $5)
+            (get_local $6)
             (i32.shl
              (i32.shr_s
               (get_local $2)
@@ -4324,12 +4324,12 @@
        )
       )
      )
-     (set_local $6
+     (set_local $7
       (i32.load offset=8
        (i32.add
         (get_local $3)
         (i32.shl
-         (tee_local $7
+         (tee_local $5
           (i32.shr_s
            (get_local $2)
            (i32.const 1)
@@ -4358,7 +4358,7 @@
        )
        (i32.lt_s
         (call_indirect (type $iii)
-         (get_local $6)
+         (get_local $7)
          (get_local $2)
          (get_local $1)
         )
@@ -4368,7 +4368,7 @@
       (block
        (i32.store
         (i32.add
-         (get_local $5)
+         (get_local $6)
          (i32.shl
           (i32.shr_s
            (get_local $4)
@@ -4380,7 +4380,7 @@
         (i32.xor
          (i32.load
           (i32.add
-           (get_local $5)
+           (get_local $6)
            (i32.shl
             (i32.shr_s
              (get_local $4)
@@ -4407,13 +4407,13 @@
           (i32.const 2)
          )
         )
-        (get_local $6)
+        (get_local $7)
        )
        (i32.store offset=8
         (i32.add
          (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $5)
           (i32.const 2)
          )
         )
@@ -4444,7 +4444,7 @@
      (i32.const 2)
     )
     (block
-     (set_local $7
+     (set_local $5
       (i32.load offset=8
        (i32.add
         (get_local $3)
@@ -4475,7 +4475,7 @@
         (i32.const 2)
        )
       )
-      (get_local $7)
+      (get_local $5)
      )
      (set_local $2
       (i32.const 1)
@@ -4483,7 +4483,7 @@
      (loop $continue|3
       (if
        (i32.lt_s
-        (tee_local $6
+        (tee_local $5
          (i32.add
           (i32.shl
            (get_local $2)
@@ -4493,7 +4493,7 @@
            (i32.shr_s
             (i32.load
              (i32.add
-              (get_local $5)
+              (get_local $6)
               (i32.shl
                (i32.shr_s
                 (get_local $2)
@@ -4516,7 +4516,7 @@
        )
        (block
         (set_local $2
-         (get_local $6)
+         (get_local $5)
         )
         (br $continue|3)
        )
@@ -4529,7 +4529,7 @@
         (i32.const 0)
        )
        (block
-        (set_local $7
+        (set_local $5
          (i32.load offset=8
           (i32.add
            (get_local $3)
@@ -4537,7 +4537,7 @@
           )
          )
         )
-        (set_local $6
+        (set_local $7
          (i32.load offset=8
           (i32.add
            (get_local $3)
@@ -4555,8 +4555,8 @@
           )
           (i32.lt_s
            (call_indirect (type $iii)
+            (get_local $5)
             (get_local $7)
-            (get_local $6)
             (get_local $1)
            )
            (i32.const 0)
@@ -4565,7 +4565,7 @@
          (block
           (i32.store
            (i32.add
-            (get_local $5)
+            (get_local $6)
             (i32.shl
              (i32.shr_s
               (get_local $2)
@@ -4577,7 +4577,7 @@
            (i32.xor
             (i32.load
              (i32.add
-              (get_local $5)
+              (get_local $6)
               (i32.shl
                (i32.shr_s
                 (get_local $2)
@@ -4604,14 +4604,14 @@
              (i32.const 2)
             )
            )
-           (get_local $7)
+           (get_local $5)
           )
           (i32.store offset=8
            (i32.add
             (get_local $3)
             (i32.const 0)
            )
-           (get_local $6)
+           (get_local $7)
           )
          )
         )
@@ -4636,7 +4636,7 @@
    )
   )
   (call $~lib/allocator/arena/free_memory
-   (get_local $5)
+   (get_local $6)
   )
   (set_local $1
    (i32.load offset=8
