@@ -78,12 +78,11 @@ assert(arr[0] == 1);
 assert(arr[1] == 2);
 assert(arr[2] == 3);
 
-// TODO: proper 'this' type
-// arr = arr.subarray(1, 2);
-// assert(arr.length == 1);
-// assert(arr.byteOffset == 1 * sizeof<i32>());
-// assert(arr.byteLength == 1 * sizeof<i32>());
-// assert(arr[0] == 2);
+arr = arr.subarray(1, 2);
+assert(arr.length == 1);
+assert(arr.byteOffset == 1 * sizeof<i32>());
+assert(arr.byteLength == 2 * sizeof<i32>());
+assert(arr[0] == 2);
 
 import { MAX_BLENGTH } from "internal/arraybuffer";
 

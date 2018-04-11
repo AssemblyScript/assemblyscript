@@ -29,7 +29,7 @@ export abstract class TypedArray<T> implements ArrayBufferView<T> {
   }
 
   get length(): i32 {
-    return this.byteLength >> alignof<T>();
+    return (this.byteLength - this.byteOffset) >> alignof<T>();
   }
 
   @operator("[]")
@@ -50,7 +50,8 @@ export abstract class TypedArray<T> implements ArrayBufferView<T> {
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 
-  subarray(begin: i32 = 0, end: i32 = this.length): this {
+  @inline
+  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): TypedArray<T> {
     var length = this.length;
     if (begin < 0) begin = max(length + begin, 0);
     else begin = min(begin, length);
@@ -58,8 +59,8 @@ export abstract class TypedArray<T> implements ArrayBufferView<T> {
     else end = max(min(end, length), begin);
     var slice = allocate_memory(offsetof<this>());
     store<usize>(slice, this.buffer, offsetof<this>("buffer"));
-    store<i32>(slice, begin, offsetof<this>("byteOffset"));
-    store<i32>(slice, end, offsetof<this>("byteLength"));
+    store<i32>(slice, begin << alignof<T>(), offsetof<this>("byteOffset"));
+    store<i32>(slice, end << alignof<T>(), offsetof<this>("byteLength"));
     return changetype<this>(slice);
   }
 }

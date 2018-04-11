@@ -298,6 +298,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   readonly byteLength: i32;
   /** The length (in elements). */
   readonly length: i32;
+  /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
+  subarray(begin?: i32, end?: i32): this;
 }
 
 /** An array of twos-complement 8-bit signed integers. */

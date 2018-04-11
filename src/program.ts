@@ -2127,7 +2127,7 @@ export class Program extends DiagnosticEmitter {
         if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
           let instance = (<FunctionPrototype>target).resolveUsingTypeArguments( // reports
             (<CallExpression>expression).typeArguments,
-            contextualFunction.contextualTypeArguments,
+            contextualFunction.flow.contextualTypeArguments,
             expression
           );
           if (!instance) return null;
@@ -2601,7 +2601,7 @@ export class FunctionPrototype extends Element {
     if (isInstance) {
       classInstance = assert(classPrototype).resolve(classTypeArguments, contextualTypeArguments); // reports
       if (!classInstance) return null;
-      thisType = classInstance.type;
+      thisType = classInstance.type.asThis();
       contextualTypeArguments.set("this", thisType);
     }
 
@@ -2641,8 +2641,15 @@ export class FunctionPrototype extends Element {
 
     var internalName = this.internalName;
     if (instanceKey.length) internalName += "<" + instanceKey + ">";
-    instance = new Function(this, internalName, signature, classInstance ? classInstance : classPrototype);
-    instance.contextualTypeArguments = contextualTypeArguments;
+    instance = new Function(
+      this,
+      internalName,
+      signature,
+      classInstance
+        ? classInstance
+        : classPrototype,
+      contextualTypeArguments
+    );
     this.instances.set(instanceKey, instance);
     return instance;
   }
@@ -2757,7 +2764,8 @@ export class Function extends Element {
     prototype: FunctionPrototype,
     internalName: string,
     signature: Signature,
-    memberOf: Element | null = null
+    memberOf: Element | null = null,
+    contextualTypeArguments: Map<string,Type> | null = null
   ) {
     super(prototype.program, prototype.simpleName, internalName);
     this.prototype = prototype;
@@ -2765,6 +2773,7 @@ export class Function extends Element {
     this.memberOf = memberOf;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
+    this.contextualTypeArguments = contextualTypeArguments;
     if (!(prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
       let localIndex = 0;
       if (memberOf && memberOf.kind == ElementKind.CLASS) {
@@ -2778,13 +2787,13 @@ export class Function extends Element {
             assert(signature.thisType)
           )
         );
-        let contextualTypeArguments = (<Class>memberOf).contextualTypeArguments;
-        if (contextualTypeArguments) {
-          if (!this.contextualTypeArguments) {
-            this.contextualTypeArguments = new Map();
-          }
-          for (let [inheritedName, inheritedType] of contextualTypeArguments) {
-            this.contextualTypeArguments.set(inheritedName, inheritedType);
+        let inheritedTypeArguments = (<Class>memberOf).contextualTypeArguments;
+        if (inheritedTypeArguments) {
+          if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
+          for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
+            if (!this.contextualTypeArguments.has(inheritedName)) {
+              this.contextualTypeArguments.set(inheritedName, inheritedType);
+            }
           }
         }
       } else {
@@ -3367,9 +3376,10 @@ export class Class extends Element {
 
     // inherit static members and contextual type arguments from base class
     if (base) {
-      if (base.contextualTypeArguments) {
+      let inheritedTypeArguments = base.contextualTypeArguments;
+      if (inheritedTypeArguments) {
         if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
-        for (let [baseName, baseType] of base.contextualTypeArguments) {
+        for (let [baseName, baseType] of inheritedTypeArguments) {
           this.contextualTypeArguments.set(baseName, baseType);
         }
       }
@@ -3510,8 +3520,10 @@ export class Flow {
   breakLabel: string | null;
   /** The label we break to when encountering a return statement, when inlining. */
   returnLabel: string | null;
-  /** The return type of the inlined function, when inlining. */
-  returnType: Type | null;
+  /** The current return type. */
+  returnType: Type;
+  /** The current contextual type arguments. */
+  contextualTypeArguments: Map<string,Type> | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
   /** Scoped global variables. */
@@ -3526,7 +3538,8 @@ export class Flow {
     parentFlow.continueLabel = null;
     parentFlow.breakLabel = null;
     parentFlow.returnLabel = null;
-    parentFlow.returnType = null;
+    parentFlow.returnType = currentFunction.signature.returnType;
+    parentFlow.contextualTypeArguments = currentFunction.contextualTypeArguments;
     return parentFlow;
   }
 
@@ -3549,6 +3562,7 @@ export class Flow {
     branch.breakLabel = this.breakLabel;
     branch.returnLabel = this.returnLabel;
     branch.returnType = this.returnType;
+    branch.contextualTypeArguments = this.contextualTypeArguments;
     return branch;
   }
 
@@ -3643,6 +3657,6 @@ export class Flow {
     this.continueLabel = null;
     this.breakLabel = null;
     this.returnLabel = null;
-    this.returnType = null;
+    this.contextualTypeArguments = null;
   }
 }

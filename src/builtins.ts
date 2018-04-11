@@ -1739,6 +1739,7 @@ export function compileCall(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
           reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
         );
+        return module.createUnreachable();
       }
       let byteSize = (<Type[]>typeArguments)[0].byteSize;
       let alignLog2: i32;

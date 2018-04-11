@@ -1560,7 +1560,7 @@ export class Compiler extends DiagnosticEmitter {
     if (statement.value) {
       expression = this.compileExpression(
         statement.value,
-        currentFunction.signature.returnType
+        flow.returnType
       );
     }
     return module.createReturn(expression);
@@ -1714,6 +1714,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // other variables become locals
     var initializers = new Array<ExpressionRef>();
+    var flow = this.currentFunction.flow;
     for (let i = 0; i < numDeclarations; ++i) {
       let declaration = declarations[i];
       let name = declaration.name.text;
@@ -1722,7 +1723,7 @@ export class Compiler extends DiagnosticEmitter {
       if (declaration.type) {
         type = program.resolveType( // reports
           declaration.type,
-          currentFunction.contextualTypeArguments
+          flow.contextualTypeArguments
         );
         if (!type) continue;
         if (declaration.initializer) {
@@ -2013,6 +2014,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.FALSE:
       case NodeKind.NULL:
       case NodeKind.THIS:
+      case NodeKind.SUPER:
       case NodeKind.TRUE: {
         expr = this.compileIdentifierExpression(
           <IdentifierExpression>expression,
@@ -2311,7 +2313,7 @@ export class Compiler extends DiagnosticEmitter {
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
     var toType = this.program.resolveType( // reports
       expression.toType,
-      this.currentFunction.contextualTypeArguments
+      this.currentFunction.flow.contextualTypeArguments
     );
     if (!toType) return this.module.createUnreachable();
     return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT);
@@ -4410,7 +4412,7 @@ export class Compiler extends DiagnosticEmitter {
             prototype,
             prototype.resolveBuiltinTypeArguments(
               expression.typeArguments,
-              currentFunction.contextualTypeArguments
+              currentFunction.flow.contextualTypeArguments
             ),
             expression.arguments,
             contextualType,
@@ -4429,7 +4431,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           let instance = prototype.resolveUsingTypeArguments( // reports
             expression.typeArguments,
-            currentFunction.contextualTypeArguments,
+            currentFunction.flow.contextualTypeArguments,
             expression
           );
           if (!instance) return module.createUnreachable();
@@ -4646,6 +4648,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.set(FlowFlags.INLINE_CONTEXT);
     flow.returnLabel = returnLabel;
     flow.returnType = returnType;
+    flow.contextualTypeArguments = instance.contextualTypeArguments;
 
     // Convert provided call arguments to temporary locals. It is important that these are compiled
     // here, with their respective locals being blocked. There is no 'makeCallInline'.
@@ -4771,9 +4774,14 @@ export class Compiler extends DiagnosticEmitter {
     var trampolineSignature = new Signature(originalParameterTypes, commonReturnType, commonThisType);
     var trampolineName = originalName + "|trampoline";
     trampolineSignature.requiredParameters = maxArguments;
-    trampoline = new Function(original.prototype, trampolineName, trampolineSignature, original.memberOf);
+    trampoline = new Function(
+      original.prototype,
+      trampolineName,
+      trampolineSignature,
+      original.memberOf,
+      original.contextualTypeArguments
+    );
     trampoline.set(original.flags | CommonFlags.TRAMPOLINE | CommonFlags.COMPILED);
-    trampoline.contextualTypeArguments = original.contextualTypeArguments;
     original.trampoline = trampoline;
 
     // compile initializers of omitted arguments in scope of the trampoline function
@@ -5032,11 +5040,12 @@ export class Compiler extends DiagnosticEmitter {
       null,
       DecoratorFlags.NONE
     );
+    var flow = currentFunction.flow;
     var instance = this.compileFunctionUsingTypeArguments(
       prototype,
       [],
-      currentFunction.contextualTypeArguments,
-      currentFunction.flow,
+      flow.contextualTypeArguments,
+      flow,
       declaration
     );
     if (!instance) return this.module.createUnreachable();
@@ -5197,7 +5206,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FUNCTION_PROTOTYPE: {
         let instance = (<FunctionPrototype>target).resolve(
           null,
-          this.currentFunction.contextualTypeArguments
+          this.currentFunction.flow.contextualTypeArguments
         );
         if (!(instance && this.compileFunction(instance))) return module.createUnreachable();
         let index = this.ensureFunctionTableEntry(instance);
