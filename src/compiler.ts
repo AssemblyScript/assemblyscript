@@ -5128,7 +5128,8 @@ export class Compiler extends DiagnosticEmitter {
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
           let scopedThis = flow.getScopedLocal("this");
           if (scopedThis) {
-            let base = assert(scopedThis.type.classReference).base;
+            let scopedThisClass = assert(scopedThis.type.classReference);
+            let base = scopedThisClass.base;
             if (base) {
               this.currentType = base.type;
               return module.createGetLocal(scopedThis.index, base.type.toNativeType());

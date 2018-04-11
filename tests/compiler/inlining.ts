@@ -38,6 +38,12 @@ function func_ii_loc(a: i32): i32 {
 function func_iv(a: i32): void {
 }
 
+@inline
+function func_fe(): (a: i32) => i32 {
+   return (a: i32): i32 => a;
+}
+
+
 class Foo {
   @inline
   static method_static(a: i32, b: i32 = 2): i32 {
@@ -59,6 +65,7 @@ function test_funcs(): void {
   assert(func_ii_loc(2) == 3);
   assert(func_ii_loc(3) == 4);
   func_iv(0);
+  assert(func_fe()(2) == 2);
   assert(Foo.method_static(42) == 44);
   var foo = changetype<Foo>(123);
   assert(changetype<usize>(foo.method_this(43)) == 123);
