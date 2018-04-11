@@ -166,7 +166,7 @@ export enum Token {
   ENDOFFILE
 }
 
-export function tokenFomKeyword(text: string): Token {
+export function tokenFromKeyword(text: string): Token {
   switch (text) {
     case "abstract": return Token.ABSTRACT;
     case "as": return Token.AS;
@@ -805,7 +805,7 @@ export class Tokenizer extends DiagnosticEmitter {
                 }
               }
               let keywordText = text.substring(posBefore, this.pos);
-              let keywordToken = tokenFomKeyword(keywordText);
+              let keywordToken = tokenFromKeyword(keywordText);
               if (
                 keywordToken != Token.INVALID &&
                 !(preferIdentifier && tokenIsAlsoIdentifier(keywordToken))

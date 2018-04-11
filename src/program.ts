@@ -64,7 +64,8 @@ import {
 
   ParameterKind,
   SignatureNode,
-  VariableDeclaration
+  VariableDeclaration,
+  stringToDecoratorKind
 } from "./ast";
 
 import {
@@ -113,6 +114,51 @@ class TypeAlias {
   type: CommonTypeNode;
 }
 
+/** Represents the kind of an operator overload. */
+export enum OperatorKind {
+  INVALID,
+  INDEXED_GET,
+  INDEXED_SET,
+  ADD,
+  SUB,
+  MUL,
+  DIV,
+  REM,
+  POW,
+  AND,
+  OR,
+  XOR,
+  EQ,
+  NE,
+  GT,
+  GE,
+  LT,
+  LE
+}
+
+function operatorKindFromString(str: string): OperatorKind {
+  switch (str) {
+    case "[]" : return OperatorKind.INDEXED_GET;
+    case "[]=": return OperatorKind.INDEXED_SET;
+    case "+"  : return OperatorKind.ADD;
+    case "-"  : return OperatorKind.SUB;
+    case "*"  : return OperatorKind.MUL;
+    case "/"  : return OperatorKind.DIV;
+    case "%"  : return OperatorKind.REM;
+    case "**" : return OperatorKind.POW;
+    case "&"  : return OperatorKind.AND;
+    case "|"  : return OperatorKind.OR;
+    case "^"  : return OperatorKind.XOR;
+    case "==" : return OperatorKind.EQ;
+    case "!=" : return OperatorKind.NE;
+    case ">"  : return OperatorKind.GT;
+    case ">=" : return OperatorKind.GE;
+    case "<"  : return OperatorKind.LT;
+    case "<=" : return OperatorKind.LE;
+  }
+  return OperatorKind.INVALID;
+}
+
 const noTypesYet = new Map<string,Type>();
 
 /** Represents an AssemblyScript program. */
@@ -136,6 +182,8 @@ export class Program extends DiagnosticEmitter {
   moduleLevelExports: Map<string,Element> = new Map();
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype | null = null;
+  /** ArrayBufferView prototype reference. */
+  arrayBufferViewPrototype: InterfacePrototype | null = null;
   /** String instance reference. */
   stringInstance: Class | null = null;
 
@@ -194,7 +242,8 @@ export class Program extends DiagnosticEmitter {
 
     var queuedExports = new Map<string,QueuedExport>();
     var queuedImports = new Array<QueuedImport>();
-    var queuedDerivedClasses = new Array<ClassPrototype>();
+    var queuedExtends = new Array<ClassPrototype>();
+    var queuedImplements = new Array<ClassPrototype>();
 
     // build initial lookup maps of internal names to declarations
     for (let i = 0, k = this.sources.length; i < k; ++i) {
@@ -204,7 +253,7 @@ export class Program extends DiagnosticEmitter {
         let statement = statements[j];
         switch (statement.kind) {
           case NodeKind.CLASSDECLARATION: {
-            this.initializeClass(<ClassDeclaration>statement, queuedDerivedClasses);
+            this.initializeClass(<ClassDeclaration>statement, queuedExtends, queuedImplements);
             break;
           }
           case NodeKind.ENUMDECLARATION: {
@@ -228,7 +277,7 @@ export class Program extends DiagnosticEmitter {
             break;
           }
           case NodeKind.NAMESPACEDECLARATION: {
-            this.initializeNamespace(<NamespaceDeclaration>statement, queuedDerivedClasses);
+            this.initializeNamespace(<NamespaceDeclaration>statement, queuedExtends, queuedImplements);
             break;
           }
           case NodeKind.TYPEDECLARATION: {
@@ -313,13 +362,15 @@ export class Program extends DiagnosticEmitter {
     }
 
     // resolve base prototypes of derived classes
-    for (let i = 0, k = queuedDerivedClasses.length; i < k; ++i) {
-      let derivedDeclaration = queuedDerivedClasses[i].declaration;
+    for (let i = 0, k = queuedExtends.length; i < k; ++i) {
+      let derivedPrototype = queuedExtends[i];
+      let derivedDeclaration = derivedPrototype.declaration;
       let derivedType = assert(derivedDeclaration.extendsType);
-      let derived = this.resolveIdentifier(derivedType.name, null); // reports
-      if (!derived) continue;
-      if (derived.kind == ElementKind.CLASS_PROTOTYPE) {
-        queuedDerivedClasses[i].basePrototype = <ClassPrototype>derived;
+      let baseElement = this.resolveIdentifier(derivedType.name, null); // reports
+      if (!baseElement) continue;
+      if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
+        let basePrototype = <ClassPrototype>baseElement;
+        derivedPrototype.basePrototype = basePrototype;
       } else {
         this.error(
           DiagnosticCode.A_class_may_only_extend_another_class,
@@ -337,14 +388,21 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // register array
+    // register 'Array'
     var arrayPrototype = this.elementsLookup.get("Array");
     if (arrayPrototype) {
       assert(arrayPrototype.kind == ElementKind.CLASS_PROTOTYPE);
       this.arrayPrototype = <ClassPrototype>arrayPrototype;
     }
 
-    // register string
+    // register 'ArrayBufferView'
+    var arrayBufferViewPrototype = this.elementsLookup.get("ArrayBufferView");
+    if (arrayBufferViewPrototype) {
+      assert(arrayBufferViewPrototype.kind == ElementKind.INTERFACE_PROTOTYPE);
+      this.arrayBufferViewPrototype = <InterfacePrototype>arrayBufferViewPrototype;
+    }
+
+    // register 'String'
     var stringPrototype = this.elementsLookup.get("String");
     if (stringPrototype) {
       assert(stringPrototype.kind == ElementKind.CLASS_PROTOTYPE);
@@ -383,6 +441,34 @@ export class Program extends DiagnosticEmitter {
     } while (true);
   }
 
+  private filterDecorators(decorators: DecoratorNode[], acceptedFlags: DecoratorFlags): DecoratorFlags {
+    var presentFlags = DecoratorFlags.NONE;
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      let decorator = decorators[i];
+      if (decorator.name.kind == NodeKind.IDENTIFIER) {
+        let name = (<IdentifierExpression>decorator.name).text;
+        let kind = stringToDecoratorKind(name);
+        let flag = decoratorKindToFlag(kind);
+        if (flag) {
+          if (!(acceptedFlags & flag)) {
+            this.error(
+              DiagnosticCode.Decorator_0_is_not_valid_here,
+              decorator.range, name
+            );
+          } else if (presentFlags & flag) {
+            this.error(
+              DiagnosticCode.Duplicate_decorator,
+              decorator.range, name
+            );
+          } else {
+            presentFlags |= flag;
+          }
+        }
+      }
+    }
+    return presentFlags;
+  }
+
   /** Processes global options, if present. */
   private checkGlobalOptions(
     element: Element,
@@ -390,7 +476,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var parentNode = declaration.parent;
     if (
-      element.is(CommonFlags.GLOBAL) ||
+      (element.hasDecorator(DecoratorFlags.GLOBAL)) ||
       (
         declaration.range.source.isLibrary &&
         element.is(CommonFlags.EXPORT) &&
@@ -409,7 +495,6 @@ export class Program extends DiagnosticEmitter {
           declaration.name.range, element.internalName
         );
       } else {
-        element.set(CommonFlags.GLOBAL);
         this.elementsLookup.set(simpleName, element);
         if (element.is(CommonFlags.BUILTIN)) {
           element.internalName = simpleName;
@@ -420,7 +505,8 @@ export class Program extends DiagnosticEmitter {
 
   private initializeClass(
     declaration: ClassDeclaration,
-    queuedDerivedClasses: ClassPrototype[],
+    queuedExtends: ClassPrototype[],
+    queuedImplements: ClassPrototype[],
     namespace: Element | null = null
   ): void {
     var internalName = declaration.fileLevelInternalName;
@@ -431,12 +517,21 @@ export class Program extends DiagnosticEmitter {
       );
       return;
     }
+
+    var decorators = declaration.decorators;
     var simpleName = declaration.name.text;
     var prototype = new ClassPrototype(
       this,
       simpleName,
       internalName,
-      declaration
+      declaration,
+      decorators
+        ? this.filterDecorators(decorators,
+            DecoratorFlags.GLOBAL |
+            DecoratorFlags.SEALED |
+            DecoratorFlags.UNMANAGED
+          )
+        : DecoratorFlags.NONE
     );
     prototype.namespace = namespace;
     this.elementsLookup.set(internalName, prototype);
@@ -444,30 +539,25 @@ export class Program extends DiagnosticEmitter {
     var implementsTypes = declaration.implementsTypes;
     if (implementsTypes) {
       let numImplementsTypes = implementsTypes.length;
-      if (prototype.is(CommonFlags.UNMANAGED)) {
+      if (prototype.hasDecorator(DecoratorFlags.UNMANAGED)) {
         if (numImplementsTypes) {
           this.error(
-            DiagnosticCode.Structs_cannot_implement_interfaces,
+            DiagnosticCode.Unmanaged_classes_cannot_implement_interfaces,
             Range.join(
               declaration.name.range,
               implementsTypes[numImplementsTypes - 1].range
             )
           );
         }
+
+      // remember classes that implement interfaces
       } else if (numImplementsTypes) {
-        for (let i = 0; i < numImplementsTypes; ++i) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            implementsTypes[i].range
-          );
-        }
+        queuedImplements.push(prototype);
       }
     }
 
     // remember classes that extend another one
-    if (declaration.extendsType) {
-      queuedDerivedClasses.push(prototype);
-    }
+    if (declaration.extendsType) queuedExtends.push(prototype);
 
     // add as namespace member if applicable
     if (namespace) {
@@ -606,6 +696,14 @@ export class Program extends DiagnosticEmitter {
     var internalName = declaration.fileLevelInternalName;
     var prototype: FunctionPrototype | null = null;
 
+    var decorators = declaration.decorators;
+    var decoratorFlags = DecoratorFlags.NONE;
+    if (decorators) {
+      decoratorFlags = this.filterDecorators(decorators,
+        DecoratorFlags.INLINE
+      );
+    }
+
     // static methods become global functions
     if (declaration.is(CommonFlags.STATIC)) {
       assert(declaration.name.kind != NodeKind.CONSTRUCTOR);
@@ -633,7 +731,8 @@ export class Program extends DiagnosticEmitter {
         simpleName,
         internalName,
         declaration,
-        classPrototype
+        classPrototype,
+        decoratorFlags
       );
       classPrototype.members.set(simpleName, prototype);
       this.elementsLookup.set(internalName, prototype);
@@ -659,7 +758,8 @@ export class Program extends DiagnosticEmitter {
         simpleName,
         internalName,
         declaration,
-        classPrototype
+        classPrototype,
+        decoratorFlags
       );
       // if (classPrototype.isUnmanaged && instancePrototype.isAbstract) {
       //   this.error( Unmanaged classes cannot declare abstract methods. );
@@ -682,10 +782,10 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    this.checkOperators(declaration.decorators, prototype, classPrototype);
+    this.checkOperatorOverloads(declaration.decorators, prototype, classPrototype);
   }
 
-  private checkOperators(
+  private checkOperatorOverloads(
     decorators: DecoratorNode[] | null,
     prototype: FunctionPrototype,
     classPrototype: ClassPrototype
@@ -698,13 +798,6 @@ export class Program extends DiagnosticEmitter {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         let decorator = decorators[i];
         if (decorator.decoratorKind == DecoratorKind.OPERATOR) {
-          if (!prototype) {
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              decorator.range
-            );
-            continue;
-          }
           let numArgs = decorator.arguments && decorator.arguments.length || 0;
           if (numArgs == 1) {
             let firstArg = (<Expression[]>decorator.arguments)[0];
@@ -712,76 +805,22 @@ export class Program extends DiagnosticEmitter {
               firstArg.kind == NodeKind.LITERAL &&
               (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
             ) {
-              switch ((<StringLiteralExpression>firstArg).value) {
-                case "[]": {
-                  classPrototype.fnIndexedGet = prototype.simpleName;
-                  break;
-                }
-                case "[]=": {
-                  classPrototype.fnIndexedSet = prototype.simpleName;
-                  break;
-                }
-                case "+": {
-                  classPrototype.fnConcat = prototype.simpleName;
-                  break;
-                }
-                case "-": {
-                  classPrototype.fnSubtract = prototype.simpleName;
-                  break;
-                }
-                case "*": {
-                  classPrototype.fnMultiply = prototype.simpleName;
-                  break;
-                }
-                case "/": {
-                  classPrototype.fnDivide = prototype.simpleName;
-                  break;
-                }
-                case "%": {
-                  classPrototype.fnFractional = prototype.simpleName;
-                  break;
-                }
-                case "&": {
-                  classPrototype.fnBitwiseAnd = prototype.simpleName;
-                  break;
-                }
-                case "|": {
-                  classPrototype.fnBitwiseOr = prototype.simpleName;
-                  break;
-                }
-                case "^": {
-                  classPrototype.fnBitwiseXor = prototype.simpleName;
-                  break;
-                }
-                case "==": {
-                  classPrototype.fnEquals = prototype.simpleName;
-                  break;
-                }
-                case "!=": {
-                  classPrototype.fnNotEquals = prototype.simpleName;
-                  break;
-                }
-                case ">": {
-                  classPrototype.fnGreaterThan = prototype.simpleName;
-                  break;
-                }
-                case ">=": {
-                  classPrototype.fnGreaterThanEquals = prototype.simpleName;
-                  break;
-                }
-                case "<": {
-                  classPrototype.fnLessThan = prototype.simpleName;
-                  break;
-                }
-                case "<=": {
-                  classPrototype.fnLessThanEquals = prototype.simpleName;
-                  break;
-                }
-                default: {
+              let kind = operatorKindFromString((<StringLiteralExpression>firstArg).value);
+              if (kind == OperatorKind.INVALID) {
+                this.error(
+                  DiagnosticCode.Operation_not_supported,
+                  firstArg.range
+                );
+              } else {
+                let overloads = classPrototype.overloadPrototypes;
+                if (overloads.has(kind)) {
                   this.error(
-                    DiagnosticCode.Operation_not_supported,
+                    DiagnosticCode.Duplicate_function_implementation,
                     firstArg.range
                   );
+                } else {
+                  prototype.operatorKind = kind;
+                  overloads.set(kind, prototype);
                 }
               }
             } else {
@@ -796,12 +835,6 @@ export class Program extends DiagnosticEmitter {
               decorator.range, "1", numArgs.toString(0)
             );
           }
-        } else if (decorator.decoratorKind != DecoratorKind.CUSTOM) {
-          // methods support built-in @operator only
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            decorator.range
-          );
         }
       }
     }
@@ -840,6 +873,14 @@ export class Program extends DiagnosticEmitter {
       isNew = true;
     }
 
+    var decorators = declaration.decorators;
+    var decoratorFlags = DecoratorFlags.NONE;
+    if (decorators) {
+      decoratorFlags = this.filterDecorators(decorators,
+        DecoratorFlags.INLINE
+      );
+    }
+
     var baseName = (isGetter ? GETTER_PREFIX : SETTER_PREFIX) + simpleName;
 
     // static accessors become global functions
@@ -857,7 +898,8 @@ export class Program extends DiagnosticEmitter {
         baseName,
         staticName,
         declaration,
-        null
+        null,
+        decoratorFlags
       );
       if (isGetter) {
         (<Property>propertyElement).getterPrototype = staticPrototype;
@@ -904,7 +946,8 @@ export class Program extends DiagnosticEmitter {
         baseName,
         instanceName,
         declaration,
-        classPrototype
+        classPrototype,
+        decoratorFlags
       );
       if (isGetter) {
         (<Property>propertyElement).getterPrototype = instancePrototype;
@@ -1155,12 +1198,19 @@ export class Program extends DiagnosticEmitter {
       return;
     }
     var simpleName = declaration.name.text;
+    var decorators = declaration.decorators;
     var prototype = new FunctionPrototype(
       this,
       simpleName,
       internalName,
       declaration,
-      null
+      null,
+      decorators
+        ? this.filterDecorators(decorators,
+            DecoratorFlags.GLOBAL |
+            DecoratorFlags.INLINE
+          )
+        : DecoratorFlags.NONE
     );
     prototype.namespace = namespace;
     this.elementsLookup.set(internalName, prototype);
@@ -1297,7 +1347,17 @@ export class Program extends DiagnosticEmitter {
       );
       return;
     }
-    var prototype = new InterfacePrototype(this, declaration.name.text, internalName, declaration);
+
+    var decorators = declaration.decorators;
+    var prototype = new InterfacePrototype(
+      this,
+      declaration.name.text,
+      internalName,
+      declaration,
+      decorators
+        ? this.filterDecorators(decorators, DecoratorFlags.GLOBAL)
+        : DecoratorFlags.NONE
+    );
     prototype.namespace = namespace;
     this.elementsLookup.set(internalName, prototype);
 
@@ -1367,7 +1427,8 @@ export class Program extends DiagnosticEmitter {
 
   private initializeNamespace(
     declaration: NamespaceDeclaration,
-    queuedExtendingClasses: ClassPrototype[],
+    queuedExtends: ClassPrototype[],
+    queuedImplements: ClassPrototype[],
     parentNamespace: Element | null = null
   ): void {
     var internalName = declaration.fileLevelInternalName;
@@ -1426,7 +1487,7 @@ export class Program extends DiagnosticEmitter {
     for (let i = 0, k = members.length; i < k; ++i) {
       switch (members[i].kind) {
         case NodeKind.CLASSDECLARATION: {
-          this.initializeClass(<ClassDeclaration>members[i], queuedExtendingClasses, namespace);
+          this.initializeClass(<ClassDeclaration>members[i], queuedExtends, queuedImplements, namespace);
           break;
         }
         case NodeKind.ENUMDECLARATION: {
@@ -1442,7 +1503,7 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          this.initializeNamespace(<NamespaceDeclaration>members[i], queuedExtendingClasses, namespace);
+          this.initializeNamespace(<NamespaceDeclaration>members[i], queuedExtends, queuedImplements, namespace);
           break;
         }
         case NodeKind.TYPEDECLARATION: {
@@ -1853,19 +1914,21 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = this.resolvedElementExpression;
         if (elementExpression) {
-          let indexedGetPrototype = (<Class>target).getIndexedGet();
-          if (indexedGetPrototype) {
-            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-            if (!indexedGetInstance) return null;
-            let classReference = indexedGetInstance.signature.returnType.classReference;
-            if (!classReference) {
-              this.error(
-                DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                propertyAccess.property.range, propertyName, (<VariableLikeElement>target).type.toString()
-              );
-              return null;
-            }
-            target = classReference;
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          if (!indexedGet) {
+            this.error(
+              DiagnosticCode.Index_signature_is_missing_in_type_0,
+              elementExpression.range, (<Class>target).internalName
+            );
+            return null;
+          }
+          let returnType = indexedGet.signature.returnType;
+          if (!(target = returnType.classReference)) {
+            this.error(
+              DiagnosticCode.Property_0_does_not_exist_on_type_1,
+              propertyAccess.property.range, propertyName, returnType.toString()
+            );
+            return null;
           }
         }
         break;
@@ -1942,16 +2005,19 @@ export class Program extends DiagnosticEmitter {
         break;
       }
       case ElementKind.CLASS: { // element access on element access
-        let indexedGetPrototype = (<Class>target).getIndexedGet();
-        if (indexedGetPrototype) {
-          let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-          if (!indexedGetInstance) return null;
-          let returnType = indexedGetInstance.signature.returnType;
-          if (target = returnType.classReference) {
-            this.resolvedThisExpression = targetExpression;
-            this.resolvedElementExpression = elementAccess.elementExpression;
-            return target;
-          }
+        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+        if (!indexedGet) {
+          this.error(
+            DiagnosticCode.Index_signature_is_missing_in_type_0,
+            elementAccess.range, (<Class>target).internalName
+          );
+          return null;
+        }
+        let returnType = indexedGet.signature.returnType;
+        if (target = returnType.classReference) {
+          this.resolvedThisExpression = targetExpression;
+          this.resolvedElementExpression = elementAccess.elementExpression;
+          return target;
         }
         break;
       }
@@ -1987,6 +2053,14 @@ export class Program extends DiagnosticEmitter {
         throw new Error("not implemented");
       }
       case NodeKind.THIS: { // -> Class / ClassPrototype
+        if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
+          let explicitLocal = contextualFunction.flow.getScopedLocal("this");
+          if (explicitLocal) {
+            this.resolvedThisExpression = null;
+            this.resolvedElementExpression = null;
+            return explicitLocal;
+          }
+        }
         let parent = contextualFunction.memberOf;
         if (parent) {
           this.resolvedThisExpression = null;
@@ -2000,6 +2074,14 @@ export class Program extends DiagnosticEmitter {
         return null;
       }
       case NodeKind.SUPER: { // -> Class
+        if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
+          let explicitLocal = contextualFunction.flow.getScopedLocal("super");
+          if (explicitLocal) {
+            this.resolvedThisExpression = null;
+            this.resolvedElementExpression = null;
+            return explicitLocal;
+          }
+        }
         let parent = contextualFunction.memberOf;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
           this.resolvedThisExpression = null;
@@ -2045,7 +2127,7 @@ export class Program extends DiagnosticEmitter {
         if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
           let instance = (<FunctionPrototype>target).resolveUsingTypeArguments( // reports
             (<CallExpression>expression).typeArguments,
-            contextualFunction.contextualTypeArguments,
+            contextualFunction.flow.contextualTypeArguments,
             expression
           );
           if (!instance) return null;
@@ -2153,46 +2235,60 @@ export enum CommonFlags {
   /** Has a `set` modifier. */
   SET = 1 << 12,
 
-  // Internal decorators
-
-  /** Is global. */
-  GLOBAL = 1 << 13,
-  /** Is built-in. */
-  BUILTIN = 1 << 14,
-  /** Is unmanaged. */
-  UNMANAGED = 1 << 15,
-  /** Is sealed. */
-  SEALED = 1 << 16,
-
-  // Extended modifiers usually derived from basic modifiers or internal decorators
+  // Extended modifiers usually derived from basic modifiers
 
   /** Is ambient, that is either declared or nested in a declared element. */
-  AMBIENT = 1 << 17,
+  AMBIENT = 1 << 13,
   /** Is generic. */
-  GENERIC = 1 << 18,
+  GENERIC = 1 << 14,
   /** Is part of a generic context. */
-  GENERIC_CONTEXT = 1 << 19,
+  GENERIC_CONTEXT = 1 << 15,
   /** Is an instance member. */
-  INSTANCE = 1 << 20,
+  INSTANCE = 1 << 16,
   /** Is a constructor. */
-  CONSTRUCTOR = 1 << 21,
+  CONSTRUCTOR = 1 << 17,
   /** Is an arrow function. */
-  ARROW = 1 << 22,
+  ARROW = 1 << 18,
   /** Is a module export. */
-  MODULE_EXPORT = 1 << 23,
+  MODULE_EXPORT = 1 << 19,
   /** Is a module import. */
-  MODULE_IMPORT = 1 << 24,
+  MODULE_IMPORT = 1 << 20,
 
   // Compilation states
 
+  /** Is a builtin. */
+  BUILTIN = 1 << 21,
   /** Is compiled. */
-  COMPILED = 1 << 25,
+  COMPILED = 1 << 22,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 26,
+  INLINED = 1 << 23,
   /** Is scoped. */
-  SCOPED = 1 << 27,
+  SCOPED = 1 << 24,
   /** Is a trampoline. */
-  TRAMPOLINE = 1 << 28
+  TRAMPOLINE = 1 << 25
+}
+
+export enum DecoratorFlags {
+  /** No flags set. */
+  NONE = 0,
+  /** Is a program global. */
+  GLOBAL = 1 << 0,
+  /** Is an unmanaged class. */
+  UNMANAGED = 1 << 2,
+  /** Is a sealed class. */
+  SEALED = 1 << 3,
+  /** Is always inlined. */
+  INLINE = 1 << 4
+}
+
+export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
+  switch (kind) {
+    case DecoratorKind.GLOBAL: return DecoratorFlags.GLOBAL;
+    case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
+    case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
+    case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
+    default: return DecoratorFlags.NONE;
+  }
 }
 
 /** Base class of all program elements. */
@@ -2208,6 +2304,8 @@ export abstract class Element {
   internalName: string;
   /** Common flags indicating specific traits. */
   flags: CommonFlags = CommonFlags.NONE;
+  /** Decorator flags indicating annotated traits. */
+  decoratorFlags: DecoratorFlags = DecoratorFlags.NONE;
   /** Namespaced member elements. */
   members: Map<string,Element> | null = null;
   /** Parent namespace, if applicable. */
@@ -2226,6 +2324,8 @@ export abstract class Element {
   isAny(flags: CommonFlags): bool { return (this.flags & flags) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
+  /** Tests if this element has a specific decorator flag or flags. */
+  hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
 }
 
 /** A namespace. */
@@ -2417,6 +2517,8 @@ export class FunctionPrototype extends Element {
   instances: Map<string,Function> = new Map();
   /** Class type arguments, if a partially resolved method of a generic class. Not set otherwise. */
   classTypeArguments: Type[] | null = null;
+  /** Operator kind, if an overload. */
+  operatorKind: OperatorKind = OperatorKind.INVALID;
 
   /** Constructs a new function prototype. */
   constructor(
@@ -2424,12 +2526,14 @@ export class FunctionPrototype extends Element {
     simpleName: string,
     internalName: string,
     declaration: FunctionDeclaration,
-    classPrototype: ClassPrototype | null = null
+    classPrototype: ClassPrototype | null = null,
+    decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
     super(program, simpleName, internalName);
     this.declaration = declaration;
     this.flags = declaration.flags;
     this.classPrototype = classPrototype;
+    this.decoratorFlags = decoratorFlags;
   }
 
   /** Resolves this prototype to an instance using the specified concrete type arguments. */
@@ -2445,7 +2549,7 @@ export class FunctionPrototype extends Element {
     var isInstance = this.is(CommonFlags.INSTANCE);
     var classPrototype = this.classPrototype;
 
-    // inherit contextual type arguments as provided. might be be overridden.
+    // inherit contextual type arguments as provided. might be overridden.
     var inheritedTypeArguments = contextualTypeArguments;
     contextualTypeArguments = new Map();
     if (inheritedTypeArguments) {
@@ -2497,7 +2601,8 @@ export class FunctionPrototype extends Element {
     if (isInstance) {
       classInstance = assert(classPrototype).resolve(classTypeArguments, contextualTypeArguments); // reports
       if (!classInstance) return null;
-      thisType = classInstance.type;
+      thisType = classInstance.type.asThis();
+      contextualTypeArguments.set("this", thisType);
     }
 
     // resolve signature node
@@ -2536,8 +2641,15 @@ export class FunctionPrototype extends Element {
 
     var internalName = this.internalName;
     if (instanceKey.length) internalName += "<" + instanceKey + ">";
-    instance = new Function(this, internalName, signature, classInstance ? classInstance : classPrototype);
-    instance.contextualTypeArguments = contextualTypeArguments;
+    instance = new Function(
+      this,
+      internalName,
+      signature,
+      classInstance
+        ? classInstance
+        : classPrototype,
+      contextualTypeArguments
+    );
     this.instances.set(instanceKey, instance);
     return instance;
   }
@@ -2556,9 +2668,11 @@ export class FunctionPrototype extends Element {
       simpleName,
       classPrototype.internalName + "<" + partialKey + ">" + INSTANCE_DELIMITER + simpleName,
       this.declaration,
-      classPrototype
+      classPrototype,
+      this.decoratorFlags
     );
     partialPrototype.flags = this.flags;
+    partialPrototype.operatorKind = this.operatorKind;
     partialPrototype.classTypeArguments = classTypeArguments;
     return partialPrototype;
   }
@@ -2643,19 +2757,23 @@ export class Function extends Element {
 
   private nextBreakId: i32 = 0;
   private breakStack: i32[] | null = null;
+  nextInlineId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
     prototype: FunctionPrototype,
     internalName: string,
     signature: Signature,
-    memberOf: Element | null = null
+    memberOf: Element | null = null,
+    contextualTypeArguments: Map<string,Type> | null = null
   ) {
     super(prototype.program, prototype.simpleName, internalName);
     this.prototype = prototype;
     this.signature = signature;
     this.memberOf = memberOf;
     this.flags = prototype.flags;
+    this.decoratorFlags = prototype.decoratorFlags;
+    this.contextualTypeArguments = contextualTypeArguments;
     if (!(prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
       let localIndex = 0;
       if (memberOf && memberOf.kind == ElementKind.CLASS) {
@@ -2669,13 +2787,13 @@ export class Function extends Element {
             assert(signature.thisType)
           )
         );
-        let contextualTypeArguments = (<Class>memberOf).contextualTypeArguments;
-        if (contextualTypeArguments) {
-          if (!this.contextualTypeArguments) {
-            this.contextualTypeArguments = new Map();
-          }
-          for (let [inheritedName, inheritedType] of contextualTypeArguments) {
-            this.contextualTypeArguments.set(inheritedName, inheritedType);
+        let inheritedTypeArguments = (<Class>memberOf).contextualTypeArguments;
+        if (inheritedTypeArguments) {
+          if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
+          for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
+            if (!this.contextualTypeArguments.has(inheritedName)) {
+              this.contextualTypeArguments.set(inheritedName, inheritedType);
+            }
           }
         }
       } else {
@@ -2759,6 +2877,8 @@ export class Function extends Element {
 
   /** Frees the temporary local for reuse. */
   freeTempLocal(local: Local): void {
+    if (local.is(CommonFlags.INLINED)) return;
+    assert(local.index >= 0);
     var temps: Local[];
     assert(local.type != null); // internal error
     switch ((<Type>local.type).toNativeType()) {
@@ -2780,6 +2900,7 @@ export class Function extends Element {
       }
       default: throw new Error("concrete type expected");
     }
+    assert(local.index >= 0);
     temps.push(local);
   }
 
@@ -2975,49 +3096,20 @@ export class ClassPrototype extends Element {
   basePrototype: ClassPrototype | null = null; // set in Program#initialize
   /** Constructor prototype. */
   constructorPrototype: FunctionPrototype | null = null;
-
-  /** Overloaded indexed get method, if any. */
-  fnIndexedGet: string | null = null;
-  /** Overloaded indexed set method, if any. */
-  fnIndexedSet: string | null = null;
-  /** Overloaded concatenation method, if any. */
-  fnConcat: string | null = null;
-  /** Overloaded subtraction method, if any. */
-  fnSubtract: string | null = null;
-  /** Overloaded multiply method, if any. */
-  fnMultiply: string | null = null;
-  /** Overloaded divide method, if any. */
-  fnDivide: string | null = null;
-  /** Overloaded fractional method, if any. */
-  fnFractional: string | null = null;
-  /** Overloaded bitwise and method, if any. */
-  fnBitwiseAnd: string | null = null;
-  /** Overloaded bitwise or method, if any. */
-  fnBitwiseOr: string | null = null;
-  /** Overloaded bitwise xor method, if any. */
-  fnBitwiseXor: string | null = null;
-  /** Overloaded equality comparison method, if any. */
-  fnEquals: string | null = null;
-  /** Overloaded non-equality comparison method, if any. */
-  fnNotEquals: string | null = null;
-  /** Overloaded greater comparison method, if any. */
-  fnGreaterThan: string | null = null;
-  /** Overloaded greater or equal comparison method, if any. */
-  fnGreaterThanEquals: string | null = null;
-  /** Overloaded less comparison method, if any. */
-  fnLessThan: string | null = null;
-  /** Overloaded less or equal comparison method, if any. */
-  fnLessThanEquals: string | null = null;
+  /** Operator overload prototypes. */
+  overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
 
   constructor(
     program: Program,
     simpleName: string,
     internalName: string,
-    declaration: ClassDeclaration
+    declaration: ClassDeclaration,
+    decoratorFlags: DecoratorFlags
   ) {
     super(program, simpleName, internalName);
     this.declaration = declaration;
     this.flags = declaration.flags;
+    this.decoratorFlags = decoratorFlags;
   }
 
   /** Resolves this prototype to an instance using the specified concrete type arguments. */
@@ -3050,16 +3142,16 @@ export class ClassPrototype extends Element {
         );
         return null;
       }
-      if (baseClass.is(CommonFlags.SEALED)) {
+      if (baseClass.hasDecorator(DecoratorFlags.SEALED)) {
         this.program.error(
           DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
           declaration.extendsType.range, baseClass.internalName
         );
         return null;
       }
-      if (baseClass.prototype.is(CommonFlags.UNMANAGED) != this.is(CommonFlags.UNMANAGED)) {
+      if (baseClass.hasDecorator(DecoratorFlags.UNMANAGED) != this.hasDecorator(DecoratorFlags.UNMANAGED)) {
         this.program.error(
-          DiagnosticCode.Structs_cannot_extend_classes_and_vice_versa,
+          DiagnosticCode.Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa,
           Range.join(declaration.name.range, declaration.extendsType.range)
         );
         return null;
@@ -3100,15 +3192,19 @@ export class ClassPrototype extends Element {
       }
     }
 
+    // Resolve constructor
     if (this.constructorPrototype) {
       let partialConstructor = this.constructorPrototype.resolvePartial(typeArguments); // reports
       if (partialConstructor) instance.constructorInstance = partialConstructor.resolve(); // reports
     }
 
+    // Resolve instance members
     if (this.instanceMembers) {
       for (let member of this.instanceMembers.values()) {
         switch (member.kind) {
-          case ElementKind.FIELD_PROTOTYPE: { // fields are layed out in advance
+
+          // Lay out fields in advance
+          case ElementKind.FIELD_PROTOTYPE: {
             if (!instance.members) instance.members = new Map();
             let fieldDeclaration = (<FieldPrototype>member).declaration;
             if (!fieldDeclaration.type) {
@@ -3147,16 +3243,20 @@ export class ClassPrototype extends Element {
             }
             break;
           }
-          case ElementKind.FUNCTION_PROTOTYPE: { // instance methods remain partially resolved prototypes until compiled
+
+          // Partially resolve methods as these might have type arguments on their own
+          case ElementKind.FUNCTION_PROTOTYPE: {
             if (!instance.members) instance.members = new Map();
-            let methodPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
-            if (methodPrototype) {
-              methodPrototype.internalName = internalName + INSTANCE_DELIMITER + methodPrototype.simpleName;
-              instance.members.set(member.simpleName, methodPrototype);
+            let partialPrototype = (<FunctionPrototype>member).resolvePartial(typeArguments); // reports
+            if (partialPrototype) {
+              partialPrototype.internalName = internalName + INSTANCE_DELIMITER + partialPrototype.simpleName;
+              instance.members.set(member.simpleName, partialPrototype);
             }
             break;
           }
-          case ElementKind.PROPERTY: { // instance properties are cloned with partially resolved getters and setters
+
+          // Clone properties and partially resolve the wrapped accessors for consistence with other methods
+          case ElementKind.PROPERTY: {
             if (!instance.members) instance.members = new Map();
             let getterPrototype = assert((<Property>member).getterPrototype);
             let setterPrototype = (<Property>member).setterPrototype;
@@ -3187,6 +3287,24 @@ export class ClassPrototype extends Element {
         }
       }
     }
+
+    // Fully resolve operator overloads (don't have type parameters on their own)
+    for (let [kind, prototype] of this.overloadPrototypes) {
+      assert(kind != OperatorKind.INVALID);
+      let operatorInstance: Function | null;
+      if (prototype.is(CommonFlags.INSTANCE)) {
+        let operatorPartial = prototype.resolvePartial(typeArguments); // reports
+        if (!operatorPartial) continue;
+        operatorInstance = operatorPartial.resolve(); // reports
+      } else {
+        operatorInstance = prototype.resolve(); // reports
+      }
+      if (!operatorInstance) continue;
+      let overloads = instance.overloads;
+      if (!overloads) instance.overloads = overloads = new Map();
+      overloads.set(kind, operatorInstance);
+    }
+
     instance.currentMemoryOffset = memoryOffset; // offsetof<this>() is the class' byte size in memory
     return instance;
   }
@@ -3237,6 +3355,8 @@ export class Class extends Element {
   currentMemoryOffset: u32 = 0;
   /** Constructor instance. */
   constructorInstance: Function | null = null;
+  /** Operator overloads. */
+  overloads: Map<OperatorKind,Function> | null = null;
 
   /** Constructs a new class. */
   constructor(
@@ -3249,15 +3369,17 @@ export class Class extends Element {
     super(prototype.program, simpleName, internalName);
     this.prototype = prototype;
     this.flags = prototype.flags;
+    this.decoratorFlags = prototype.decoratorFlags;
     this.typeArguments = typeArguments;
     this.type = prototype.program.options.usizeType.asClass(this);
     this.base = base;
 
     // inherit static members and contextual type arguments from base class
     if (base) {
-      if (base.contextualTypeArguments) {
+      let inheritedTypeArguments = base.contextualTypeArguments;
+      if (inheritedTypeArguments) {
         if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
-        for (let [baseName, baseType] of base.contextualTypeArguments) {
+        for (let [baseName, baseType] of inheritedTypeArguments) {
           this.contextualTypeArguments.set(baseName, baseType);
         }
       }
@@ -3287,30 +3409,22 @@ export class Class extends Element {
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
-    do {
-      if (current == target) {
-        return true;
-      }
-    } while (current = current.base);
+    do if (current == target) return true;
+    while (current = current.base);
     return false;
   }
 
-  getIndexedGet(): FunctionPrototype | null {
-    var members = this.members;
-    var name = this.prototype.fnIndexedGet;
-    if (!members || name == null) return null;
-    var element = members.get(name);
-    if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
-    return <FunctionPrototype>element;
-  }
-
-  getIndexedSet(): FunctionPrototype | null {
-    var members = this.members;
-    var name = this.prototype.fnIndexedSet;
-    if (!members || name == null) return null;
-    var element = members.get(name);
-    if (!element || element.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
-    return <FunctionPrototype>element;
+  /** Looks up the operator overload of the specified kind. */
+  lookupOverload(kind: OperatorKind): Function | null {
+    var instance: Class | null = this;
+    do {
+      let overloads = instance.overloads;
+      if (overloads) {
+        let overload = overloads.get(kind);
+        if (overload) return overload;
+      }
+    } while (instance = instance.base);
+    return null;
   }
 
   toString(): string {
@@ -3331,9 +3445,10 @@ export class InterfacePrototype extends ClassPrototype {
     program: Program,
     simpleName: string,
     internalName: string,
-    declaration: InterfaceDeclaration
+    declaration: InterfaceDeclaration,
+    decoratorFlags: DecoratorFlags
   ) {
-    super(program, simpleName, internalName, declaration);
+    super(program, simpleName, internalName, declaration, decoratorFlags);
   }
 }
 
@@ -3384,7 +3499,10 @@ export const enum FlowFlags {
   /** This branch conditionally continues in a child branch. */
   CONDITIONALLY_CONTINUES = 1 << 8,
   /** This branch conditionally allocates in a child branch. Constructors only. */
-  CONDITIONALLY_ALLOCATES = 1 << 9
+  CONDITIONALLY_ALLOCATES = 1 << 9,
+
+  /** This branch is part of inlining a function. */
+  INLINE_CONTEXT = 1 << 10
 }
 
 /** A control flow evaluator. */
@@ -3400,6 +3518,12 @@ export class Flow {
   continueLabel: string | null;
   /** The label we break to when encountering a break statement. */
   breakLabel: string | null;
+  /** The label we break to when encountering a return statement, when inlining. */
+  returnLabel: string | null;
+  /** The current return type. */
+  returnType: Type;
+  /** The current contextual type arguments. */
+  contextualTypeArguments: Map<string,Type> | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
   /** Scoped global variables. */
@@ -3413,6 +3537,9 @@ export class Flow {
     parentFlow.currentFunction = currentFunction;
     parentFlow.continueLabel = null;
     parentFlow.breakLabel = null;
+    parentFlow.returnLabel = null;
+    parentFlow.returnType = currentFunction.signature.returnType;
+    parentFlow.contextualTypeArguments = currentFunction.contextualTypeArguments;
     return parentFlow;
   }
 
@@ -3433,6 +3560,9 @@ export class Flow {
     branch.currentFunction = this.currentFunction;
     branch.continueLabel = this.continueLabel;
     branch.breakLabel = this.breakLabel;
+    branch.returnLabel = this.returnLabel;
+    branch.returnType = this.returnType;
+    branch.contextualTypeArguments = this.contextualTypeArguments;
     return branch;
   }
 
@@ -3469,17 +3599,23 @@ export class Flow {
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(type: Type, name: string, declaration: VariableDeclaration): void {
+  addScopedLocal(type: Type, name: string, declaration?: VariableDeclaration): Local {
     var scopedLocal = this.currentFunction.getTempLocal(type);
     if (!this.scopedLocals) this.scopedLocals = new Map();
-    else if (this.scopedLocals.has(name)) {
-      this.currentFunction.program.error(
-        DiagnosticCode.Duplicate_identifier_0,
-        declaration.name.range
-      );
-      return;
+    else {
+      let existingLocal = this.scopedLocals.get(name);
+      if (existingLocal) {
+        if (declaration) {
+          this.currentFunction.program.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range
+          );
+        } else assert(false);
+        return existingLocal;
+      }
     }
     this.scopedLocals.set(name, scopedLocal);
+    return scopedLocal;
   }
 
   /** Gets the local of the specified name in the current scope. */
@@ -3517,8 +3653,10 @@ export class Flow {
 
   /** Finalizes this flow. Must be the topmost parent flow of the function. */
   finalize(): void {
-    assert(this.parent == null, "must be the topmost parent flow");
+    assert(this.parent == null); // must be the topmost parent flow
     this.continueLabel = null;
     this.breakLabel = null;
+    this.returnLabel = null;
+    this.contextualTypeArguments = null;
   }
 }

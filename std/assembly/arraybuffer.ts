@@ -28,3 +28,12 @@ export class ArrayBuffer {
     return buffer;
   }
 }
+
+export declare interface FastArray<T> {}
+
+export declare interface ArrayBufferView<T> {
+  readonly buffer: ArrayBuffer;
+  readonly byteOffset: i32;
+  readonly byteLength: i32;
+  readonly length: i32;
+}

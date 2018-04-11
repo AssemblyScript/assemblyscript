@@ -1,13 +1,14 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $argumentCount (mut i32) (i32.const 0))
  (memory $0 1)
- (data (i32.const 8) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 40) "\04\00\00\00n\00u\00l\00l")
+ (data (i32.const 4) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 40) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 72) "\04\00\00\00n\00u\00l\00l")
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $std/array-access/stringArrayPropertyAccess))
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
@@ -15,20 +16,34 @@
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
  (export "memory" (memory $0))
  (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (if
    (i32.ge_u
     (get_local $1)
-    (i32.load offset=4
-     (get_local $0)
+    (i32.shr_u
+     (i32.load
+      (tee_local $2
+       (i32.load
+        (get_local $0)
+       )
+      )
+     )
+     (i32.const 2)
     )
    )
-   (unreachable)
-  )
-  (i32.load
-   (i32.add
-    (i32.load
-     (get_local $0)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 64)
+     (i32.const 37)
     )
+    (unreachable)
+   )
+  )
+  (i32.load offset=8
+   (i32.add
+    (get_local $2)
     (i32.shl
      (get_local $1)
      (i32.const 2)
@@ -124,7 +139,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 40)
      (i32.const 234)
      (i32.const 4)
     )
@@ -136,7 +151,7 @@
     (get_local $1)
    )
    (set_local $1
-    (i32.const 40)
+    (i32.const 72)
    )
   )
   (if
@@ -234,7 +249,7 @@
     (get_local $0)
     (i32.const 0)
    )
-   (i32.const 4)
+   (i32.const 36)
    (i32.const 0)
   )
  )
@@ -261,7 +276,7 @@
     )
     (i32.const 1)
    )
-   (i32.const 4)
+   (i32.const 36)
    (i32.const 0)
   )
  )

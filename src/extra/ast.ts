@@ -75,7 +75,8 @@ import {
   ParameterNode,
   ParameterKind,
   ExportMember,
-  SwitchCase
+  SwitchCase,
+  DeclarationStatement
 } from "../ast";
 
 import {
@@ -912,7 +913,6 @@ export class ASTBuilder {
   }
 
   visitFieldDeclaration(node: FieldDeclaration): void {
-    this.serializeBuiltinDecorators(node);
     var decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -961,7 +961,6 @@ export class ASTBuilder {
 
   visitFunctionDeclaration(node: FunctionDeclaration): void {
     var sb = this.sb;
-    this.serializeBuiltinDecorators(node);
     var decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -1098,7 +1097,6 @@ export class ASTBuilder {
   }
 
   visitInterfaceDeclaration(node: InterfaceDeclaration): void {
-    this.serializeBuiltinDecorators(node);
     var decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -1138,7 +1136,6 @@ export class ASTBuilder {
   }
 
   visitMethodDeclaration(node: MethodDeclaration): void {
-    this.serializeBuiltinDecorators(node);
     var decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -1155,7 +1152,6 @@ export class ASTBuilder {
   }
 
   visitNamespaceDeclaration(node: NamespaceDeclaration): void {
-    this.serializeBuiltinDecorators(node);
     var decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -1315,7 +1311,6 @@ export class ASTBuilder {
   }
 
   visitVariableStatement(node: VariableStatement): void {
-    this.serializeBuiltinDecorators(node);
     var decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -1395,19 +1390,6 @@ export class ASTBuilder {
     if (initializer) {
       sb.push(" = ");
       this.visitNode(initializer);
-    }
-  }
-
-  serializeBuiltinDecorators(node: Node): void {
-    var sb = this.sb;
-    var indentLevel = this.indentLevel;
-    if (node.is(CommonFlags.GLOBAL)) {
-      sb.push("@global\n");
-      indent(sb, indentLevel);
-    }
-    if (node.is(CommonFlags.UNMANAGED)) {
-      sb.push("@unmanaged\n");
-      indent(sb, indentLevel);
     }
   }
 

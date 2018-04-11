@@ -298,6 +298,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   readonly byteLength: i32;
   /** The length (in elements). */
   readonly length: i32;
+  /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
+  subarray(begin?: i32, end?: i32): this;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
@@ -534,5 +536,5 @@ declare function unmanaged(target: Function): any;
 /** Annotates a class as being sealed / non-derivable. */
 declare function sealed(target: Function): any;
 
-/** Annotates a class field with an explicit offset. */
-declare function offset(offset: usize): any;
+/** Annotates a method or function as always inlined. */
+declare function inline(target: any, propertyKey: any, descriptor: any): any;

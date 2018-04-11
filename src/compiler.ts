@@ -6,7 +6,8 @@
 import {
   compileCall as compileBuiltinCall,
   compileGetConstant as compileBuiltinGetConstant,
-  compileAllocate as compileBuiltinAllocate
+  compileAllocate as compileBuiltinAllocate,
+  compileAbort
 } from "./builtins";
 
 import {
@@ -47,6 +48,8 @@ import {
   CommonFlags,
   ConstantValueKind,
   Flow,
+  OperatorKind,
+  DecoratorFlags,
 
   PATH_DELIMITER,
   INNER_DELIMITER
@@ -376,6 +379,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           break;
         }
+        case NodeKind.INTERFACEDECLARATION: break;
         case NodeKind.ENUMDECLARATION: {
           if (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) {
             this.compileEnumDeclaration(<EnumDeclaration>statement);
@@ -1533,19 +1537,33 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileReturnStatement(statement: ReturnStatement): ExpressionRef {
+    var module = this.module;
     var currentFunction = this.currentFunction;
     var expression: ExpressionRef = 0;
+    var flow = currentFunction.flow;
+
+    // Remember that this flow returns
+    flow.set(FlowFlags.RETURNS);
+
+    // When inlining, break to the end of the inlined function's block
+    if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+      if (statement.value) {
+        expression = this.compileExpression(
+          statement.value,
+          assert(flow.returnType)
+        );
+      }
+      return module.createBreak(assert(flow.returnLabel), 0, expression);
+    }
+
+    // Otherwise return as usual
     if (statement.value) {
       expression = this.compileExpression(
         statement.value,
-        currentFunction.signature.returnType
+        flow.returnType
       );
     }
-
-    // Remember that this flow returns
-    currentFunction.flow.set(FlowFlags.RETURNS);
-
-    return this.module.createReturn(expression);
+    return module.createReturn(expression);
   }
 
   compileSwitchStatement(statement: SwitchStatement): ExpressionRef {
@@ -1654,7 +1672,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.set(FlowFlags.RETURNS);
 
     // TODO: requires exception-handling spec.
-    return this.module.createUnreachable();
+    return compileAbort(this, null, statement);
   }
 
   compileTryStatement(statement: TryStatement): ExpressionRef {
@@ -1696,6 +1714,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // other variables become locals
     var initializers = new Array<ExpressionRef>();
+    var flow = this.currentFunction.flow;
     for (let i = 0; i < numDeclarations; ++i) {
       let declaration = declarations[i];
       let name = declaration.name.text;
@@ -1704,7 +1723,7 @@ export class Compiler extends DiagnosticEmitter {
       if (declaration.type) {
         type = program.resolveType( // reports
           declaration.type,
-          currentFunction.contextualTypeArguments
+          flow.contextualTypeArguments
         );
         if (!type) continue;
         if (declaration.initializer) {
@@ -1792,8 +1811,12 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
       if (!isInlined) {
-        if (declaration.isAny(CommonFlags.LET | CommonFlags.CONST)) { // here: not top-level
-          currentFunction.flow.addScopedLocal(type, name, declaration); // reports
+        let flow = currentFunction.flow;
+        if (
+          declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
+          flow.is(FlowFlags.INLINE_CONTEXT)
+        ) { // here: not top-level
+          flow.addScopedLocal(type, name, declaration); // reports
         } else {
           currentFunction.addLocal(type, name, declaration); // reports
         }
@@ -1991,6 +2014,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.FALSE:
       case NodeKind.NULL:
       case NodeKind.THIS:
+      case NodeKind.SUPER:
       case NodeKind.TRUE: {
         expr = this.compileIdentifierExpression(
           <IdentifierExpression>expression,
@@ -2289,7 +2313,7 @@ export class Compiler extends DiagnosticEmitter {
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
     var toType = this.program.resolveType( // reports
       expression.toType,
-      this.currentFunction.contextualTypeArguments
+      this.currentFunction.flow.contextualTypeArguments
     );
     if (!toType) return this.module.createUnreachable();
     return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT);
@@ -2326,6 +2350,17 @@ export class Compiler extends DiagnosticEmitter {
       case Token.LESSTHAN: {
         leftExpr = this.compileExpressionRetainType(left, contextualType);
         leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.LT);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         rightExpr = this.compileExpressionRetainType(right, leftType);
         rightType = this.currentType;
         if (commonType = Type.commonCompatible(leftType, rightType, true)) {
@@ -2367,16 +2402,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.LtU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnLessThan;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
+          case TypeKind.USIZE: {
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.LtU64
@@ -2414,6 +2440,17 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN: {
         leftExpr = this.compileExpressionRetainType(left, contextualType);
         leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.GT);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         rightExpr = this.compileExpressionRetainType(right, leftType);
         rightType = this.currentType;
         if (commonType = Type.commonCompatible(leftType, rightType, true)) {
@@ -2455,16 +2492,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.GtU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnGreaterThan;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
+          case TypeKind.USIZE: {
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GtU64
@@ -2502,6 +2530,17 @@ export class Compiler extends DiagnosticEmitter {
       case Token.LESSTHAN_EQUALS: {
         leftExpr = this.compileExpressionRetainType(left, contextualType);
         leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.LE);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         rightExpr = this.compileExpressionRetainType(right, leftType);
         rightType = this.currentType;
         if (commonType = Type.commonCompatible(leftType, rightType, true)) {
@@ -2543,16 +2582,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.LeU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnLessThanEquals;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
+          case TypeKind.USIZE: {
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.LeU64
@@ -2590,6 +2620,17 @@ export class Compiler extends DiagnosticEmitter {
       case Token.GREATERTHAN_EQUALS: {
         leftExpr = this.compileExpressionRetainType(left, contextualType);
         leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.GE);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         rightExpr = this.compileExpressionRetainType(right, leftType);
         rightType = this.currentType;
         if (commonType = Type.commonCompatible(leftType, rightType, true)) {
@@ -2631,16 +2672,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.GeU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnGreaterThanEquals;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
+          case TypeKind.USIZE: {
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.GeU64
@@ -2685,6 +2717,18 @@ export class Compiler extends DiagnosticEmitter {
 
         leftExpr = this.compileExpressionRetainType(left, contextualType);
         leftType = this.currentType;
+
+        if (operator == Token.EQUALS_EQUALS) { // check operator overload
+          let classReference = leftType.classReference;
+          if (classReference) {
+            let overload = classReference.lookupOverload(OperatorKind.EQ);
+            if (overload) {
+              expr = this.compileBinaryOverload(overload, left, right, expression);
+              break;
+            }
+          }
+        }
+
         rightExpr = this.compileExpressionRetainType(right, leftType);
         rightType = this.currentType;
         if (commonType = Type.commonCompatible(leftType, rightType, false)) {
@@ -2709,18 +2753,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.EqI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload if operator is "=="
-            if (operator == Token.EQUALS_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnEquals;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                assert(this.currentType == Type.bool);
-                break;
-              }
-            }
-            // fall-through
-          }
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -2761,6 +2794,18 @@ export class Compiler extends DiagnosticEmitter {
       case Token.EXCLAMATION_EQUALS: {
         leftExpr = this.compileExpressionRetainType(left, contextualType);
         leftType = this.currentType;
+
+        if (operator == Token.EXCLAMATION_EQUALS) { // check operator overload
+          let classReference = leftType.classReference;
+          if (classReference) {
+            let overload = classReference.lookupOverload(OperatorKind.NE);
+            if (overload) {
+              expr = this.compileBinaryOverload(overload, left, right, expression);
+              break;
+            }
+          }
+        }
+
         rightExpr = this.compileExpressionRetainType(right, leftType);
         rightType = this.currentType;
         if (commonType = Type.commonCompatible(leftType, rightType, false)) {
@@ -2785,17 +2830,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.NeI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: {// check operator overload if operator is "!="
-            if (operator == Token.EXCLAMATION_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnNotEquals;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
-          }
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -2841,15 +2876,26 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           false // retains low bits of small integers
         );
+        leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.ADD);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         if (compound) {
           rightExpr = this.compileExpression(
             right,
-            this.currentType,
+            leftType,
             ConversionKind.IMPLICIT,
             false // ^
           );
         } else {
-          leftType = this.currentType;
           rightExpr = this.compileExpressionRetainType(
             right,
             leftType,
@@ -2879,17 +2925,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.AddI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnConcat;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
-          }
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -2932,15 +2968,26 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           false // retains low bits of small integers
         );
+        leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.SUB);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         if (compound) {
           rightExpr = this.compileExpression(
             right,
-            this.currentType,
+            leftType,
             ConversionKind.IMPLICIT,
             false // ^
           );
         } else {
-          leftType = this.currentType;
           rightExpr = this.compileExpressionRetainType(
             right,
             leftType,
@@ -2970,17 +3017,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.SubI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnSubtract;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
-          }
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3023,15 +3060,26 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           false // retains low bits of small integers
         );
+        leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.MUL);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         if (compound) {
           rightExpr = this.compileExpression(
             right,
-            this.currentType,
+            leftType,
             ConversionKind.IMPLICIT,
             false // ^
           );
         } else {
-          leftType = this.currentType;
           rightExpr = this.compileExpressionRetainType(
             right,
             leftType,
@@ -3061,17 +3109,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.MulI32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnMultiply;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
-          }
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3114,6 +3152,18 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           true // must be wrapped
         );
+        leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.POW);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         let instance: Function | null;
 
         // Mathf.pow if lhs is f32 (result is f32)
@@ -3196,15 +3246,26 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           true // TODO: when can division remain unwrapped? does it overflow?
         );
+        leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.DIV);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         if (compound) {
           rightExpr = this.compileExpression(
             right,
-            this.currentType,
+            leftType,
             ConversionKind.IMPLICIT,
             false // ^
           );
         } else {
-          leftType = this.currentType;
           rightExpr = this.compileExpressionRetainType(
             right,
             leftType,
@@ -3251,16 +3312,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.DivU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnDivide;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
+          case TypeKind.USIZE: {
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.DivU64
@@ -3301,15 +3353,26 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           true // TODO: when can remainder remain unwrapped? does it overflow?
         );
+        leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.REM);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         if (compound) {
           rightExpr = this.compileExpression(
             right,
-            this.currentType,
+            leftType,
             ConversionKind.IMPLICIT,
             false // ^
           );
         } else {
-          leftType = this.currentType;
           rightExpr = this.compileExpressionRetainType(
             right,
             leftType,
@@ -3356,16 +3419,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.RemU32, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnFractional;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
+          case TypeKind.USIZE: {
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.RemU64
@@ -3642,15 +3696,26 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           false // retains low bits of small integers
         );
+        leftType = this.currentType;
+
+        // check operator overloadd
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.AND);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         if (compound) {
           rightExpr = this.compileExpression(
             right,
-            this.currentType,
+            leftType,
             ConversionKind.IMPLICIT,
             false // ^
           );
         } else {
-          leftType = this.currentType;
           rightExpr = this.compileExpressionRetainType(
             right,
             leftType,
@@ -3684,17 +3749,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.AndI64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnBitwiseAnd;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
-          }
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3724,15 +3779,26 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           false // retains low bits of small integers
         );
+        leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.OR);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         if (compound) {
           rightExpr = this.compileExpression(
             right,
-            this.currentType,
+            leftType,
             ConversionKind.IMPLICIT,
             false // ^
           );
         } else {
-          leftType = this.currentType;
           rightExpr = this.compileExpressionRetainType(
             right,
             leftType,
@@ -3766,17 +3832,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.OrI64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnBitwiseOr;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
-          }
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3806,15 +3862,26 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           false // retains low bits of small integers
         );
+        leftType = this.currentType;
+
+        // check operator overload
+        let classReference = leftType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.XOR);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, right, expression);
+            break;
+          }
+        }
+
         if (compound) {
           rightExpr = this.compileExpression(
             right,
-            this.currentType,
+            leftType,
             ConversionKind.IMPLICIT,
             false // ^
           );
         } else {
-          leftType = this.currentType;
           rightExpr = this.compileExpressionRetainType(
             right,
             leftType,
@@ -3848,17 +3915,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.XorI64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classInstance = assert(this.currentType.classReference);
-              let operatorName = classInstance.prototype.fnBitwiseXor;
-              if (operatorName != null) {
-                expr = this.compileOperatorOverload(classInstance, operatorName, leftExpr, rightExpr);
-                break;
-              }
-            }
-            // fall-through
-          }
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3995,18 +4052,55 @@ export class Compiler extends DiagnosticEmitter {
       : expr;
   }
 
-  compileOperatorOverload(
-    classInstance: Class,
-    operatorName: string,
-    leftExpr: ExpressionRef,
-    rightExpr: ExpressionRef
+  compileUnaryOverload(
+    operatorInstance: Function,
+    value: Expression,
+    reportNode: Node
   ): ExpressionRef {
-    var classPrototype = classInstance.prototype;
-    var operatorPrototype = assert(assert(classPrototype.members).get(operatorName));
-    assert(operatorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-    var operatorInstance = (<FunctionPrototype>operatorPrototype).resolve();
-    if (!operatorInstance) return this.module.createUnreachable();
-    return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ]);
+      // checks and recompiles the argument according to its actual annotated type
+      var argumentExpressions: Expression[];
+      var thisArg: ExpressionRef = 0;
+      if (operatorInstance.is(CommonFlags.INSTANCE)) {
+        let classElement = assert(operatorInstance.memberOf);
+        assert(classElement.kind == ElementKind.CLASS);
+        thisArg = this.compileExpression(value, (<Class>classElement).type);
+        argumentExpressions = [];
+      } else {
+        argumentExpressions = [ value ];
+      }
+      return this.compileCallDirect(
+        operatorInstance,
+        argumentExpressions,
+        reportNode,
+        thisArg,
+        operatorInstance.hasDecorator(DecoratorFlags.INLINE)
+      );
+  }
+
+  compileBinaryOverload(
+    operatorInstance: Function,
+    left: Expression,
+    right: Expression,
+    reportNode: Node
+  ): ExpressionRef {
+    // checks and recompiles the arguments according to their actual annotated types
+    var argumentExpressions: Expression[];
+    var thisArg: ExpressionRef = 0;
+    if (operatorInstance.is(CommonFlags.INSTANCE)) {
+      let classElement = assert(operatorInstance.memberOf);
+      assert(classElement.kind == ElementKind.CLASS);
+      thisArg = this.compileExpression(left, (<Class>classElement).type);
+      argumentExpressions = [ right ];
+    } else {
+      argumentExpressions = [ left, right ];
+    }
+    return this.compileCallDirect(
+      operatorInstance,
+      argumentExpressions,
+      reportNode,
+      thisArg,
+      operatorInstance.hasDecorator(DecoratorFlags.INLINE)
+    );
   }
 
   compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef {
@@ -4047,18 +4141,16 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.CLASS: {
         if (program.resolvedElementExpression) { // indexed access
-          let indexedGetPrototype = (<Class>target).getIndexedGet();
-          if (indexedGetPrototype) {
-            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-            if (!indexedGetInstance) return this.module.createUnreachable();
-            elementType = indexedGetInstance.signature.returnType;
-            break;
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          if (!indexedGet) {
+            this.error(
+              DiagnosticCode.Index_signature_is_missing_in_type_0,
+              expression.range, (<Class>target).internalName
+            );
+            return this.module.createUnreachable();
           }
-          this.error(
-            DiagnosticCode.Index_signature_is_missing_in_type_0,
-            expression.range, (<Class>target).toString()
-          );
-          return this.module.createUnreachable();
+          elementType = indexedGet.signature.returnType;
+          break;
         }
         // fall-through
       }
@@ -4238,60 +4330,55 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = this.program.resolvedElementExpression;
         if (elementExpression) {
-          let indexedGetPrototype = (<Class>target).getIndexedGet();
-          if (indexedGetPrototype) {
-            let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-            if (!indexedGetInstance) return module.createUnreachable();
-            let indexedSetPrototype = (<Class>target).getIndexedSet();
-            if (!indexedSetPrototype) {
-              this.error(
-                DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-                expression.range, target.internalName
-              );
-              this.currentType = tee ? indexedGetInstance.signature.returnType : Type.void;
-              return module.createUnreachable();
-            }
-            let indexedSetInstance = indexedSetPrototype.resolve(); // reports
-            if (!indexedSetInstance) return module.createUnreachable();
-            let targetType = (<Class>target).type;
-            let thisExpression = assert(this.program.resolvedThisExpression);
-            let thisExpr = this.compileExpressionRetainType(
-              thisExpression,
-              this.options.usizeType
-            );
-            let elementExpr = this.compileExpression(
-              elementExpression,
-              Type.i32
-            );
-            if (tee) {
-              let tempLocalTarget = this.currentFunction.getTempLocal(targetType);
-              let tempLocalElement = this.currentFunction.getAndFreeTempLocal(this.currentType);
-              let returnType = indexedGetInstance.signature.returnType;
-              this.currentFunction.freeTempLocal(tempLocalTarget);
-              return module.createBlock(null, [
-                this.makeCallDirect(indexedSetInstance, [
-                  module.createTeeLocal(tempLocalTarget.index, thisExpr),
-                  module.createTeeLocal(tempLocalElement.index, elementExpr),
-                  valueWithCorrectType
-                ]),
-                this.makeCallDirect(indexedGetInstance, [
-                  module.createGetLocal(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
-                  module.createGetLocal(tempLocalElement.index, tempLocalElement.type.toNativeType())
-                ])
-              ], returnType.toNativeType());
-            } else {
-              return this.makeCallDirect(indexedSetInstance, [
-                thisExpr,
-                elementExpr,
-                valueWithCorrectType
-              ]);
-            }
-          } else {
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          if (!indexedGet) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
               expression.range, target.internalName
             );
             return module.createUnreachable();
+          }
+          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET);
+          if (!indexedSet) {
+            this.error(
+              DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+              expression.range, target.internalName
+            );
+            this.currentType = tee ? indexedGet.signature.returnType : Type.void;
+            return module.createUnreachable();
+          }
+          let targetType = (<Class>target).type;
+          let thisExpression = assert(this.program.resolvedThisExpression);
+          let thisExpr = this.compileExpressionRetainType(
+            thisExpression,
+            this.options.usizeType
+          );
+          let elementExpr = this.compileExpression(
+            elementExpression,
+            Type.i32
+          );
+          if (tee) {
+            let tempLocalTarget = this.currentFunction.getTempLocal(targetType);
+            let tempLocalElement = this.currentFunction.getAndFreeTempLocal(this.currentType);
+            let returnType = indexedGet.signature.returnType;
+            this.currentFunction.freeTempLocal(tempLocalTarget);
+            return module.createBlock(null, [
+              this.makeCallDirect(indexedSet, [
+                module.createTeeLocal(tempLocalTarget.index, thisExpr),
+                module.createTeeLocal(tempLocalElement.index, elementExpr),
+                valueWithCorrectType
+              ]),
+              this.makeCallDirect(indexedGet, [
+                module.createGetLocal(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
+                module.createGetLocal(tempLocalElement.index, tempLocalElement.type.toNativeType())
+              ])
+            ], returnType.toNativeType());
+          } else {
+            return this.makeCallDirect(indexedSet, [
+              thisExpr,
+              elementExpr,
+              valueWithCorrectType
+            ]);
           }
         }
         // fall-through
@@ -4325,7 +4412,7 @@ export class Compiler extends DiagnosticEmitter {
             prototype,
             prototype.resolveBuiltinTypeArguments(
               expression.typeArguments,
-              currentFunction.contextualTypeArguments
+              currentFunction.flow.contextualTypeArguments
             ),
             expression.arguments,
             contextualType,
@@ -4340,25 +4427,28 @@ export class Compiler extends DiagnosticEmitter {
           }
           return expr;
 
-        // otherwise compile to a call
+        // otherwise compile to a call (and maybe inline)
         } else {
           let instance = prototype.resolveUsingTypeArguments( // reports
             expression.typeArguments,
-            currentFunction.contextualTypeArguments,
+            currentFunction.flow.contextualTypeArguments,
             expression
           );
           if (!instance) return module.createUnreachable();
+          let thisExpr: ExpressionRef = 0;
           if (instance.is(CommonFlags.INSTANCE)) {
-            let thisExpression = assert(this.program.resolvedThisExpression);
-            let thisExpr = this.compileExpressionRetainType(
-              thisExpression,
+            thisExpr = this.compileExpressionRetainType(
+              assert(this.program.resolvedThisExpression),
               this.options.usizeType
             );
-            return this.compileCallDirect(instance, expression.arguments, expression, thisExpr);
-          } else {
-            // if static, resolvedThisExpression is the ClassPrototype
-            return this.compileCallDirect(instance, expression.arguments, expression);
           }
+          return this.compileCallDirect(
+            instance,
+            expression.arguments,
+            expression,
+            thisExpr,
+            instance.hasDecorator(DecoratorFlags.INLINE)
+          );
         }
       }
 
@@ -4497,7 +4587,8 @@ export class Compiler extends DiagnosticEmitter {
     instance: Function,
     argumentExpressions: Expression[],
     reportNode: Node,
-    thisArg: ExpressionRef = 0
+    thisArg: ExpressionRef = 0,
+    inline: bool = false
   ): ExpressionRef {
     var numArguments = argumentExpressions.length;
     var signature = instance.signature;
@@ -4511,6 +4602,13 @@ export class Compiler extends DiagnosticEmitter {
       return this.module.createUnreachable();
     }
 
+    // Inline if explicitly requested
+    if (inline) {
+      assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
+      return this.compileCallInlineUnchecked(instance, argumentExpressions, reportNode, thisArg);
+    }
+
+    // Otherwise compile to just a call
     var numArgumentsInclThis = thisArg ? numArguments + 1 : numArguments;
     var operands = new Array<ExpressionRef>(numArgumentsInclThis);
     var index = 0;
@@ -4527,6 +4625,102 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(index == numArgumentsInclThis);
     return this.makeCallDirect(instance, operands);
+  }
+
+  // Depends on being pre-checked in compileCallDirect
+  private compileCallInlineUnchecked(
+    instance: Function,
+    argumentExpressions: Expression[],
+    reportNode: Node,
+    thisArg: ExpressionRef = 0
+  ): ExpressionRef {
+    var numArguments = argumentExpressions.length;
+    var signature = instance.signature;
+    var currentFunction = this.currentFunction;
+    var module = this.module;
+    var declaration = instance.prototype.declaration;
+
+    // Create an empty child flow with its own scope and mark it for inlining
+    var previousFlow = currentFunction.flow;
+    var returnLabel = instance.internalName + "|inlined." + (instance.nextInlineId++).toString(10);
+    var returnType = instance.signature.returnType;
+    var flow = Flow.create(currentFunction);
+    flow.set(FlowFlags.INLINE_CONTEXT);
+    flow.returnLabel = returnLabel;
+    flow.returnType = returnType;
+    flow.contextualTypeArguments = instance.contextualTypeArguments;
+
+    // Convert provided call arguments to temporary locals. It is important that these are compiled
+    // here, with their respective locals being blocked. There is no 'makeCallInline'.
+    var body = [];
+    if (thisArg) {
+      let classElement = assert(instance.memberOf);
+      assert(classElement.kind == ElementKind.CLASS);
+      let thisLocal = flow.addScopedLocal((<Class>classElement).type, "this");
+      body.push(
+        module.createSetLocal(thisLocal.index, thisArg)
+      );
+    }
+    var parameterTypes = signature.parameterTypes;
+    for (let i = 0; i < numArguments; ++i) {
+      let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
+      body.push(
+        module.createSetLocal(argumentLocal.index,
+          this.compileExpression(
+            argumentExpressions[i],
+            parameterTypes[i]
+          )
+        )
+      );
+    }
+
+    // Compile optional parameter initializers in the scope of the inlined flow
+    currentFunction.flow = flow;
+    var numParameters = signature.parameterTypes.length;
+    for (let i = numArguments; i < numParameters; ++i) {
+      let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
+      body.push(
+        module.createSetLocal(argumentLocal.index,
+          this.compileExpression(
+            assert(declaration.signature.parameterTypes[i].initializer),
+            parameterTypes[i]
+          )
+        )
+      );
+    }
+
+    // Compile the called function's body in the scope of the inlined flow
+    var bodyStatement = assert(declaration.body);
+    if (bodyStatement.kind == NodeKind.BLOCK) { // it's ok to unwrap the block here
+      let statements = (<BlockStatement>bodyStatement).statements;
+      for (let i = 0, k = statements.length; i < k; ++i) {
+        body.push(this.compileStatement(statements[i]));
+      }
+    } else {
+      body.push(this.compileStatement(bodyStatement));
+    }
+
+    // Free any new scoped locals and reset to the original flow
+    var scopedLocals = flow.scopedLocals;
+    if (scopedLocals) {
+      for (let scopedLocal of scopedLocals.values()) {
+        currentFunction.freeTempLocal(scopedLocal);
+      }
+      flow.scopedLocals = null;
+    }
+    flow.finalize();
+    this.currentFunction.flow = previousFlow;
+    this.currentType = returnType;
+
+    // Check that all branches return
+    if (returnType != Type.void && !flow.is(FlowFlags.RETURNS)) {
+      this.error(
+        DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
+        declaration.signature.returnType.range
+      );
+      return module.createUnreachable();
+    }
+    return module.createBlock(returnLabel, body, returnType.toNativeType());
   }
 
   /** Gets the trampoline for the specified function. */
@@ -4580,9 +4774,14 @@ export class Compiler extends DiagnosticEmitter {
     var trampolineSignature = new Signature(originalParameterTypes, commonReturnType, commonThisType);
     var trampolineName = originalName + "|trampoline";
     trampolineSignature.requiredParameters = maxArguments;
-    trampoline = new Function(original.prototype, trampolineName, trampolineSignature, original.memberOf);
+    trampoline = new Function(
+      original.prototype,
+      trampolineName,
+      trampolineSignature,
+      original.memberOf,
+      original.contextualTypeArguments
+    );
     trampoline.set(original.flags | CommonFlags.TRAMPOLINE | CommonFlags.COMPILED);
-    trampoline.contextualTypeArguments = original.contextualTypeArguments;
     original.trampoline = trampoline;
 
     // compile initializers of omitted arguments in scope of the trampoline function
@@ -4805,18 +5004,16 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.createUnreachable();
     switch (target.kind) {
       case ElementKind.CLASS: {
-        let indexedGetPrototype = (<Class>target).getIndexedGet();
-        if (!indexedGetPrototype) {
+        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+        if (!indexedGet) {
           this.error(
             DiagnosticCode.Index_signature_is_missing_in_type_0,
             expression.expression.range, (<Class>target).internalName
           );
           return this.module.createUnreachable();
         }
-        let indexedGetInstance = indexedGetPrototype.resolve(); // reports
-        if (!indexedGetInstance) return this.module.createUnreachable();
         let thisArg = this.compileExpression(expression.expression, (<Class>target).type);
-        return this.compileCallDirect(indexedGetInstance, [
+        return this.compileCallDirect(indexedGet, [
           expression.elementExpression
         ], expression, thisArg);
       }
@@ -4839,13 +5036,16 @@ export class Compiler extends DiagnosticEmitter {
       this.program,
       simpleName,
       currentFunction.internalName + INNER_DELIMITER + simpleName,
-      declaration
+      declaration,
+      null,
+      DecoratorFlags.NONE
     );
+    var flow = currentFunction.flow;
     var instance = this.compileFunctionUsingTypeArguments(
       prototype,
       [],
-      currentFunction.contextualTypeArguments,
-      currentFunction.flow,
+      flow.contextualTypeArguments,
+      flow,
       declaration
     );
     if (!instance) return this.module.createUnreachable();
@@ -4890,12 +5090,19 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.THIS: {
         let currentFunction = this.currentFunction;
+        let flow = currentFunction.flow;
+        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+          let scopedThis = flow.getScopedLocal("this");
+          if (scopedThis) {
+            this.currentType = scopedThis.type;
+            return module.createGetLocal(scopedThis.index, scopedThis.type.toNativeType());
+          }
+        }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
           let parent = assert(currentFunction.memberOf);
           assert(parent.kind == ElementKind.CLASS);
           let thisType = (<Class>parent).type;
           if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
-            let flow = currentFunction.flow;
             if (!flow.is(FlowFlags.ALLOCATES)) {
               flow.set(FlowFlags.ALLOCATES);
               // must be conditional because `this` could have been provided by a derived class
@@ -4917,6 +5124,18 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.SUPER: {
         let currentFunction = this.currentFunction;
+        let flow = currentFunction.flow;
+        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+          let scopedThis = flow.getScopedLocal("this");
+          if (scopedThis) {
+            let scopedThisClass = assert(scopedThis.type.classReference);
+            let base = scopedThisClass.base;
+            if (base) {
+              this.currentType = base.type;
+              return module.createGetLocal(scopedThis.index, base.type.toNativeType());
+            }
+          }
+        }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
           let parent = assert(currentFunction.memberOf);
           assert(parent.kind == ElementKind.CLASS);
@@ -4988,7 +5207,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FUNCTION_PROTOTYPE: {
         let instance = (<FunctionPrototype>target).resolve(
           null,
-          this.currentFunction.contextualTypeArguments
+          this.currentFunction.flow.contextualTypeArguments
         );
         if (!(instance && this.compileFunction(instance))) return module.createUnreachable();
         let index = this.ensureFunctionTableEntry(instance);
@@ -5182,29 +5401,29 @@ export class Compiler extends DiagnosticEmitter {
     var arrayType = (<ClassPrototype>arrayPrototype).resolve([ elementType ]);
     if (!arrayType) return module.createUnreachable();
 
-    var elementSize = expressions.length;
+    var elementCount = expressions.length;
     var nativeType = elementType.toNativeType();
     var values: usize;
-    var memorySize: usize;
+    var byteLength: usize;
     switch (nativeType) {
       case NativeType.I32: {
-        values = changetype<usize>(new Int32Array(elementSize));
-        memorySize = elementSize * 4;
+        values = changetype<usize>(new Int32Array(elementCount));
+        byteLength = elementCount * 4;
         break;
       }
       case NativeType.I64: {
-        values = changetype<usize>(new Array<I64>(elementSize));
-        memorySize = elementSize * 8;
+        values = changetype<usize>(new Array<I64>(elementCount));
+        byteLength = elementCount * 8;
         break;
       }
       case NativeType.F32: {
-        values = changetype<usize>(new Float32Array(elementSize));
-        memorySize = elementSize * 4;
+        values = changetype<usize>(new Float32Array(elementCount));
+        byteLength = elementCount * 4;
         break;
       }
       case NativeType.F64: {
-        values = changetype<usize>(new Float64Array(elementSize));
-        memorySize = elementSize * 8;
+        values = changetype<usize>(new Float64Array(elementCount));
+        byteLength = elementCount * 8;
         break;
       }
       default: {
@@ -5218,9 +5437,9 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // precompute value expressions
-    var exprs = new Array<ExpressionRef>(elementSize);
+    var exprs = new Array<ExpressionRef>(elementCount);
     var expr: BinaryenExpressionRef;
-    for (let i = 0; i < elementSize; ++i) {
+    for (let i = 0; i < elementCount; ++i) {
       exprs[i] = expressions[i]
         ? this.compileExpression(<Expression>expressions[i], elementType)
         : elementType.toNativeZero(module);
@@ -5260,50 +5479,58 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var usizeTypeSize = this.options.usizeType.byteSize;
-    var headerSize = usizeTypeSize + 4 + 4; // memory + capacity + length
 
     if (isStatic) {
-      let buffer = new Uint8Array(headerSize + memorySize);
-      let segment = this.addMemorySegment(buffer);
+      // Create a combined static memory segment composed of:
+      // Array struct + ArrayBuffer struct + aligned ArrayBuffer data
 
-      // make header
+      let arraySize = usizeTypeSize + 4; // buffer_ & length_
+      let bufferHeaderSize = (4 + 7) & ~7; // aligned byteLength (8)
+      let bufferTotalSize = 1 << (32 - clz(byteLength + bufferHeaderSize - 1)); // see internals
+      let data = new Uint8Array(arraySize + bufferTotalSize);
+      let segment = this.addMemorySegment(data);
       let offset = 0;
+
+      // write Array struct
       if (usizeTypeSize == 8) {
-        writeI64(i64_add(segment.offset, i64_new(headerSize)), buffer, 0); // memory
+        writeI64(i64_add(segment.offset, i64_new(arraySize)), data, offset); // buffer_ @ segment[arSize]
+        offset += 8;
       } else {
         assert(i64_high(segment.offset) == 0);
-        writeI32(i64_low(segment.offset) + headerSize, buffer, 0); // memory
+        writeI32(i64_low(segment.offset) + arraySize, data, offset); // buffer_ @ segment[arSize]
+        offset += 4;
       }
-      offset += usizeTypeSize;
-      writeI32(elementSize, buffer, offset); // capacity
+      writeI32(elementCount, data, offset); // length_
       offset += 4;
-      writeI32(elementSize, buffer, offset); // length
-      offset += 4;
-      assert(offset == headerSize);
+      assert(offset == arraySize);
 
-      // make memory
+      // write ArrayBuffer struct
+      writeI32(byteLength, data, offset);
+      offset += bufferHeaderSize; // incl. alignment
+
+      // write ArrayBuffer data
       switch (nativeType) {
         case NativeType.I32: {
-          for (let i = 0; i < elementSize; ++i) {
-            writeI32(changetype<i32[]>(values)[i], buffer, offset); offset += 4;
+          for (let i = 0; i < elementCount; ++i) {
+            writeI32(changetype<i32[]>(values)[i], data, offset); offset += 4;
           }
           break;
         }
         case NativeType.I64: {
-          for (let i = 0; i < elementSize; ++i) {
-            writeI64(changetype<I64[]>(values)[i], buffer, offset); offset += 8;
+          for (let i = 0; i < elementCount; ++i) {
+            writeI64(changetype<I64[]>(values)[i], data, offset); offset += 8;
           }
           break;
         }
         case NativeType.F32: {
-          for (let i = 0; i < elementSize; ++i) {
-            writeF32(changetype<f32[]>(values)[i], buffer, offset); offset += 4;
+          for (let i = 0; i < elementCount; ++i) {
+            writeF32(changetype<f32[]>(values)[i], data, offset); offset += 4;
           }
           break;
         }
         case NativeType.F64: {
-          for (let i = 0; i < elementSize; ++i) {
-            writeF64(changetype<f64[]>(values)[i], buffer, offset); offset += 8;
+          for (let i = 0; i < elementCount; ++i) {
+            writeF64(changetype<f64[]>(values)[i], data, offset); offset += 8;
           }
           break;
         }
@@ -5316,7 +5543,8 @@ export class Compiler extends DiagnosticEmitter {
           return module.createUnreachable();
         }
       }
-      assert(offset == headerSize + memorySize);
+      assert(offset <= arraySize + bufferTotalSize);
+
       this.currentType = arrayType.type;
       return usizeTypeSize == 8
         ? module.createI64(

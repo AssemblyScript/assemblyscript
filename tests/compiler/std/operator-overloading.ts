@@ -29,6 +29,11 @@ class Tester {
     return new Tester(a.x % b.x, a.y % b.y);
   }
 
+  @operator('**')
+  static pow(a: Tester, b: Tester): Tester {
+    return new Tester(<i32>(a.x ** b.x), <i32>(a.y ** b.y));
+  }
+
   @operator('|')
   static or(a: Tester, b: Tester): Tester {
     return new Tester(a.x | b.x, a.y | b.y);
@@ -99,11 +104,17 @@ var d2 = new Tester(3, 10);
 var d  = d1 / d2;
 assert(d.x == 2 && d.y == 5);
 
-// check fractional
+// check remainder
 var f1 = new Tester(10, 10);
 var f2 = new Tester(6, 10);
 var f  = f1 % f2;
 assert(f.x == 4 && f.y == 0);
+
+// check power
+var p1 = new Tester(2, 3);
+var p2 = new Tester(4, 5);
+var p  = p1 ** p2;
+assert(p.x == 16 && p.y == 243);
 
 // check bitwise and
 var n1 = new Tester(0xFF, 0x0F);
@@ -166,3 +177,31 @@ var leq1 = new Tester(4, 3);
 var leq2 = new Tester(4, 3);
 var leq  = leq1 <= leq2;
 assert(leq == true);
+
+// check inlined static
+class TesterInlineStatic {
+  constructor(public x: i32, public y: i32) {
+  }
+  @inline @operator('+')
+  static add(a: TesterInlineStatic, b: TesterInlineStatic): TesterInlineStatic {
+    return new TesterInlineStatic(a.x + b.x, a.y + b.y);
+  }
+}
+var ais1 = new TesterInlineStatic(1, 2);
+var ais2 = new TesterInlineStatic(2, 3);
+var ais  = ais1 + ais2;
+assert(ais.x == 3 && ais.y == 5);
+
+// check inlined instance
+class TesterInlineInstance {
+  constructor(public x: i32, public y: i32) {
+  }
+  @inline @operator('+')
+  add(b: TesterInlineInstance): TesterInlineInstance {
+    return new TesterInlineInstance(this.x + b.x, this.y + b.y);
+  }
+}
+var aii1 = new TesterInlineInstance(1, 2);
+var aii2 = new TesterInlineInstance(2, 3);
+var aii  = aii1 + aii2;
+assert(aii.x == 3 && aii.y == 5);

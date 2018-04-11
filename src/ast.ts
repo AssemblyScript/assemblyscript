@@ -198,32 +198,9 @@ export abstract class Node {
     stmt.range = range;
     stmt.name = expression; expression.parent = stmt;
     stmt.arguments = args; if (args) setParent(args, stmt);
-    if (expression.kind == NodeKind.IDENTIFIER) {
-      switch ((<IdentifierExpression>expression).text) {
-        case "global": {
-          stmt.decoratorKind = DecoratorKind.GLOBAL;
-          break;
-        }
-        case "operator": {
-          stmt.decoratorKind = DecoratorKind.OPERATOR;
-          break;
-        }
-        case "unmanaged": {
-          stmt.decoratorKind = DecoratorKind.UNMANAGED;
-          break;
-        }
-        case "offset": {
-          stmt.decoratorKind = DecoratorKind.OFFSET;
-          break;
-        }
-        default: {
-          stmt.decoratorKind = DecoratorKind.CUSTOM;
-          break;
-        }
-      }
-    } else {
-      stmt.decoratorKind = DecoratorKind.CUSTOM;
-    }
+    stmt.decoratorKind = expression.kind == NodeKind.IDENTIFIER
+      ? stringToDecoratorKind((<IdentifierExpression>expression).text)
+      : DecoratorKind.CUSTOM;
     return stmt;
   }
 
@@ -1075,7 +1052,22 @@ export enum DecoratorKind {
   GLOBAL,
   OPERATOR,
   UNMANAGED,
-  OFFSET
+  SEALED,
+  INLINE,
+  PRECOMPUTE
+}
+
+/** Returns the decorator kind represented by the specified string. */
+export function stringToDecoratorKind(str: string): DecoratorKind {
+  switch (str) {
+    case "global": return DecoratorKind.GLOBAL;
+    case "operator": return DecoratorKind.OPERATOR;
+    case "unmanaged": return DecoratorKind.UNMANAGED;
+    case "sealed": return DecoratorKind.SEALED;
+    case "inline": return DecoratorKind.INLINE;
+    case "precompute": return DecoratorKind.PRECOMPUTE;
+    default: return DecoratorKind.CUSTOM;
+  }
 }
 
 /** Represents a decorator. */

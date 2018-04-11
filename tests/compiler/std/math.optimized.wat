@@ -12161,7 +12161,15 @@
    (i32.eqz
     (get_global $~lib/math/random_seeded)
    )
-   (unreachable)
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 1000)
+     (i32.const 24)
+    )
+    (unreachable)
+   )
   )
   (set_local $0
    (get_global $~lib/math/random_state0)

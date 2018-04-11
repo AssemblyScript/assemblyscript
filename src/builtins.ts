@@ -43,7 +43,8 @@ import {
   Global,
   FunctionPrototype,
   Class,
-  Field
+  Field,
+  OperatorKind
 } from "./program";
 
 /** Compiles a get of a built-in global. */
@@ -146,7 +147,7 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      return classType != null && classType.prototype.fnIndexedGet != null
+      return classType != null && classType.lookupOverload(OperatorKind.INDEXED_GET) != null
         ? module.createI32(1)
         : module.createI32(0);
     }
@@ -1738,6 +1739,7 @@ export function compileCall(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
           reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
         );
+        return module.createUnreachable();
       }
       let byteSize = (<Type[]>typeArguments)[0].byteSize;
       let alignLog2: i32;

@@ -67,6 +67,23 @@ function testInstantiate(len: i32): void {
 testInstantiate(0);
 testInstantiate(5);
 
+var arr = new Int32Array(3);
+arr[0] = 1;
+arr[1] = 2;
+arr[2] = 3;
+assert(arr.length == 3);
+assert(arr.byteOffset == 0);
+assert(arr.byteLength == 3 * sizeof<i32>());
+assert(arr[0] == 1);
+assert(arr[1] == 2);
+assert(arr[2] == 3);
+
+arr = arr.subarray(1, 2);
+assert(arr.length == 1);
+assert(arr.byteOffset == 1 * sizeof<i32>());
+assert(arr.byteLength == 2 * sizeof<i32>());
+assert(arr[0] == 2);
+
 import { MAX_BLENGTH } from "internal/arraybuffer";
 
 const MAX_F64LENGTH = <u32>MAX_BLENGTH >> alignof<f64>();

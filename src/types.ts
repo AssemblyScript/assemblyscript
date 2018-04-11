@@ -80,7 +80,9 @@ export const enum TypeFlags {
   /** Is a reference type. */
   REFERENCE = 1 << 8,
   /** Is a nullable type. */
-  NULLABLE = 1 << 9
+  NULLABLE = 1 << 9,
+  /** Is the special 'this' type. */
+  THIS = 1 << 10
 }
 
 /** Represents a resolved type. */
@@ -102,6 +104,8 @@ export class Type {
   nullableType: Type | null = null;
   /** Respective non-nullable type, if nullable. */
   nonNullableType: Type;
+  /** Respective special 'this' type. */
+  thisType: Type | null = null;
 
   /** Constructs a new resolved type. */
   constructor(kind: TypeKind, flags: TypeFlags, size: i32) {
@@ -155,6 +159,18 @@ export class Type {
       this.nullableType.signatureReference = this.signatureReference; // or a function reference
     }
     return this.nullableType;
+  }
+
+  /** Composes the respective 'this' type of this type. */
+  asThis(): Type {
+    var thisType = this.thisType;
+    if (thisType) return thisType;
+    thisType = new Type(this.kind, this.flags | TypeFlags.THIS, this.size);
+    thisType.classReference = this.classReference;
+    thisType.nullableType = this.nullableType;
+    thisType.nonNullableType = this.nonNullableType;
+    this.thisType = thisType;
+    return thisType;
   }
 
   /** Tests if a value of this type is assignable to a target of the specified type. */

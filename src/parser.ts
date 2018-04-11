@@ -27,7 +27,6 @@ import {
 } from "./util";
 
 import {
-
   Node,
   NodeKind,
   Source,
@@ -162,22 +161,9 @@ export class Parser extends DiagnosticEmitter {
     while (tn.skip(Token.AT)) {
       if (startPos < 0) startPos = tn.tokenPos;
       let decorator = this.parseDecorator(tn);
-      if (!decorator) break;
-      let name = decorator.name;
-      if (name.kind == NodeKind.IDENTIFIER) {
-        let text = (<IdentifierExpression>name).text;
-        if (text == "global") {
-          flags |= CommonFlags.GLOBAL;
-          continue;
-        }
-        if (text == "unmananged") {
-          flags |= CommonFlags.UNMANAGED;
-          continue;
-        }
-        if (text == "sealed") {
-          flags |= CommonFlags.SEALED;
-          continue;
-        }
+      if (!decorator) {
+        this.skipStatement(tn);
+        continue;
       }
       if (!decorators) decorators = [];
       decorators.push(decorator);
