@@ -40,7 +40,11 @@ function func_iv(a: i32): void {
 
 class Foo {
   @inline
-  method_this(): Foo {
+  static method_static(a: i32, b: i32 = 2): i32 {
+    return a + b;
+  }
+  @inline
+  method_this(a: i32, b: i32 = 3): Foo {
     return this;
   }
 }
@@ -55,8 +59,9 @@ function test_funcs(): void {
   assert(func_ii_loc(2) == 3);
   assert(func_ii_loc(3) == 4);
   func_iv(0);
+  assert(Foo.method_static(42) == 44);
   var foo = changetype<Foo>(123);
-  assert(changetype<usize>(foo.method_this()) == 123);
+  assert(changetype<usize>(foo.method_this(43)) == 123);
 }
 
 test_funcs();
