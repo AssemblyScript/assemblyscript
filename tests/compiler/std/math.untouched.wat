@@ -14859,18 +14859,16 @@
         (br $~lib/math/NativeMath.sign|inlined.0
          (if (result f64)
           (f64.gt
-           (get_local $4)
+           (f64.abs
+            (get_local $4)
+           )
            (f64.const 0)
           )
-          (f64.const 1)
-          (if (result f64)
-           (f64.lt
-            (get_local $4)
-            (f64.const 0)
-           )
-           (f64.const -1)
+          (f64.copysign
+           (f64.const 1)
            (get_local $4)
           )
+          (get_local $4)
          )
         )
        )
@@ -14912,18 +14910,16 @@
      (br $~lib/math/NativeMathf.sign|inlined.0
       (if (result f32)
        (f32.gt
-        (get_local $4)
+        (f32.abs
+         (get_local $4)
+        )
         (f32.const 0)
        )
-       (f32.const 1)
-       (if (result f32)
-        (f32.lt
-         (get_local $4)
-         (f32.const 0)
-        )
-        (f32.const -1)
+       (f32.copysign
+        (f32.const 1)
         (get_local $4)
        )
+       (get_local $4)
       )
      )
     )
