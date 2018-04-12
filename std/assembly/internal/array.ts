@@ -8,6 +8,7 @@ import {
 } from "../array";
 
 /** Obtains the default comparator for the specified type. */
+@inline
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
   return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b)); // compiles to a constant table index
 }

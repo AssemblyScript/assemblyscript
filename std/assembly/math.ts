@@ -118,6 +118,7 @@ export namespace NativeMath {
   export const SQRT1_2 = reinterpret<f64>(0x3FE6A09E667F3BCD); // 0.70710678118654752440
   export const SQRT2   = reinterpret<f64>(0x3FF6A09E667F3BCD); // 1.41421356237309504880
 
+  @inline
   export function abs(x: f64): f64 {
     return builtin_abs<f64>(x);
   }
@@ -380,10 +381,12 @@ export namespace NativeMath {
     return t;
   }
 
+  @inline
   export function ceil(x: f64): f64 {
     return builtin_ceil<f64>(x);
   }
 
+  @inline
   export function clz32(x: f64): f64 {
     return <f64>builtin_clz<i32>(<i32>x);
   }
@@ -530,10 +533,12 @@ export namespace NativeMath {
     return y;
   }
 
+  @inline
   export function floor(x: f64): f64 {
     return builtin_floor<f64>(x);
   }
 
+  @inline
   export function fround(x: f64): f32 {
     return <f32>x;
   }
@@ -784,10 +789,12 @@ export namespace NativeMath {
     return val_lo + val_hi;
   }
 
+  @inline
   export function max(value1: f64, value2: f64): f64 {
     return builtin_max<f64>(value1, value2);
   }
 
+  @inline
   export function min(value1: f64, value2: f64): f64 {
     return builtin_min<f64>(value1, value2);
   }
@@ -1033,6 +1040,7 @@ export namespace NativeMath {
     return y;
   }
 
+  @inline
   export function sign(x: f64): f64 {
     return x > 0 ? 1 : x < 0 ? -1 : x;
   }
@@ -1062,6 +1070,7 @@ export namespace NativeMath {
     return t;
   }
 
+  @inline
   export function sqrt(x: f64): f64 {
     return builtin_sqrt<f64>(x);
   }
@@ -1095,6 +1104,7 @@ export namespace NativeMath {
     return sign_ ? -t : t;
   }
 
+  @inline
   export function trunc(x: f64): f64 {
     return builtin_trunc<f64>(x);
   }
@@ -1271,6 +1281,7 @@ export namespace NativeMathf {
   export const SQRT1_2 = <f32>NativeMath.SQRT1_2;
   export const SQRT2   = <f32>NativeMath.SQRT2;
 
+  @inline
   export function abs(x: f32): f32 {
     return builtin_abs<f32>(x);
   }
@@ -1504,10 +1515,12 @@ export namespace NativeMathf {
     return <f32>T;
   }
 
+  @inline
   export function ceil(x: f32): f32 {
     return builtin_ceil<f32>(x);
   }
 
+  @inline
   export function clz32(x: f32): f32 {
     return <f32>builtin_clz<i32>(<i32>x);
   }
@@ -1533,6 +1546,7 @@ export namespace NativeMathf {
     return expo2f(x);
   }
 
+  @inline
   export function floor(x: f32): f32 {
     return builtin_floor<f32>(x);
   }
@@ -1652,6 +1666,7 @@ export namespace NativeMathf {
     return y;
   }
 
+  @inline
   export function fround(x: f32): f32 {
     return x;
   }
@@ -1686,6 +1701,7 @@ export namespace NativeMathf {
     return z * builtin_sqrt<f32>(<f32>(<f64>x * x + <f64>y * y));
   }
 
+  @inline
   export function imul(x: f32, y: f32): f32 {
     return <f32>(<i32>x * <i32>y);
   }
@@ -1853,10 +1869,12 @@ export namespace NativeMathf {
     return (lo + hi) * ivln2lo + lo * ivln2hi + hi * ivln2hi + dk;
   }
 
+  @inline
   export function max(value1: f32, value2: f32): f32 {
     return builtin_max<f32>(value1, value2);
   }
 
+  @inline
   export function min(value1: f32, value2: f32): f32 {
     return builtin_min<f32>(value1, value2);
   }
@@ -2042,6 +2060,7 @@ export namespace NativeMathf {
     return sn * z;
   }
 
+  @inline
   export function seedRandom(value: i64): void {
     NativeMath.seedRandom(value);
   }
@@ -2075,6 +2094,7 @@ export namespace NativeMathf {
     return y;
   }
 
+  @inline
   export function sign(x: f32): f32 {
     return x > 0 ? 1 : x < 0 ? -1 : x;
   }
@@ -2103,6 +2123,7 @@ export namespace NativeMathf {
     return t;
   }
 
+  @inline
   export function sqrt(x: f32): f32 {
     return builtin_sqrt<f32>(x);
   }
@@ -2134,6 +2155,7 @@ export namespace NativeMathf {
     return sig ? -t : t;
   }
 
+  @inline
   export function trunc(x: f32): f32 {
     return builtin_trunc<f32>(x);
   }
