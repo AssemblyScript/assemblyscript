@@ -2686,7 +2686,7 @@ export class FunctionPrototype extends Element {
     var resolvedTypeArguments: Type[] | null = null;
     if (this.is(CommonFlags.GENERIC)) {
       assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
-      resolvedTypeArguments = this.program.resolveTypeArguments(
+      resolvedTypeArguments = this.program.resolveTypeArguments( // reports
         assert(this.declaration.typeParameters),
         typeArgumentNodes,
         contextualTypeArguments,

@@ -20,7 +20,6 @@
   (local $5 i64)
   (local $6 i32)
   (local $7 i32)
-  (local $8 f64)
   (block $folding-inner0
    (set_local $3
     (i32.wrap/i64
@@ -68,11 +67,14 @@
           )
          )
          (get_local $7)
-         (f64.ne
-          (tee_local $8
-           (get_local $1)
+         (i64.gt_u
+          (i64.and
+           (i64.reinterpret/f64
+            (get_local $1)
+           )
+           (i64.const 9223372036854775807)
           )
-          (get_local $8)
+          (i64.const 9218868437227405312)
          )
         )
         (i32.const 1)
@@ -386,20 +388,25 @@
   )
  )
  (func $std/mod/check<f64> (; 3 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
-  (local $2 f64)
   (if
-   (f64.ne
-    (tee_local $2
-     (get_local $1)
+   (i64.gt_u
+    (i64.and
+     (i64.reinterpret/f64
+      (get_local $1)
+     )
+     (i64.const 9223372036854775807)
     )
-    (get_local $2)
+    (i64.const 9218868437227405312)
    )
    (return
-    (f64.ne
-     (tee_local $2
-      (get_local $0)
+    (i64.gt_u
+     (i64.and
+      (i64.reinterpret/f64
+       (get_local $0)
+      )
+      (i64.const 9223372036854775807)
      )
-     (get_local $2)
+     (i64.const 9218868437227405312)
     )
    )
   )
@@ -463,8 +470,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f32)
-  (local $8 i32)
+  (local $7 i32)
   (block $folding-inner0
    (set_local $4
     (i32.and
@@ -507,11 +513,14 @@
           )
          )
          (get_local $3)
-         (f32.ne
-          (tee_local $7
-           (get_local $1)
+         (i32.gt_u
+          (i32.and
+           (i32.reinterpret/f32
+            (get_local $1)
+           )
+           (i32.const 2147483647)
           )
-          (get_local $7)
+          (i32.const 2139095040)
          )
         )
         (i32.const 1)
@@ -567,7 +576,7 @@
      )
     )
    )
-   (set_local $8
+   (set_local $7
     (i32.and
      (get_local $2)
      (i32.const -2147483648)
@@ -799,7 +808,7 @@
         )
        )
       )
-      (get_local $8)
+      (get_local $7)
      )
     )
    )
@@ -810,20 +819,25 @@
   )
  )
  (func $std/mod/check<f32> (; 6 ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
-  (local $2 f32)
   (if
-   (f32.ne
-    (tee_local $2
-     (get_local $1)
+   (i32.gt_u
+    (i32.and
+     (i32.reinterpret/f32
+      (get_local $1)
+     )
+     (i32.const 2147483647)
     )
-    (get_local $2)
+    (i32.const 2139095040)
    )
    (return
-    (f32.ne
-     (tee_local $2
-      (get_local $0)
+    (i32.gt_u
+     (i32.and
+      (i32.reinterpret/f32
+       (get_local $0)
+      )
+      (i32.const 2147483647)
      )
-     (get_local $2)
+     (i32.const 2139095040)
     )
    )
   )

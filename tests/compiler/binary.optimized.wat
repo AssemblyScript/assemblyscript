@@ -1531,8 +1531,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f32)
-  (local $8 i32)
+  (local $7 i32)
   (block $folding-inner0
    (set_local $4
     (i32.and
@@ -1575,11 +1574,14 @@
           )
          )
          (get_local $3)
-         (f32.ne
-          (tee_local $7
-           (get_local $1)
+         (i32.gt_u
+          (i32.and
+           (i32.reinterpret/f32
+            (get_local $1)
+           )
+           (i32.const 2147483647)
           )
-          (get_local $7)
+          (i32.const 2139095040)
          )
         )
         (i32.const 1)
@@ -1635,7 +1637,7 @@
      )
     )
    )
-   (set_local $8
+   (set_local $7
     (i32.and
      (get_local $2)
      (i32.const -2147483648)
@@ -1867,7 +1869,7 @@
         )
        )
       )
-      (get_local $8)
+      (get_local $7)
      )
     )
    )
@@ -3161,7 +3163,6 @@
   (local $5 i64)
   (local $6 i32)
   (local $7 i32)
-  (local $8 f64)
   (block $folding-inner0
    (set_local $3
     (i32.wrap/i64
@@ -3209,11 +3210,14 @@
           )
          )
          (get_local $7)
-         (f64.ne
-          (tee_local $8
-           (get_local $1)
+         (i64.gt_u
+          (i64.and
+           (i64.reinterpret/f64
+            (get_local $1)
+           )
+           (i64.const 9223372036854775807)
           )
-          (get_local $8)
+          (i64.const 9218868437227405312)
          )
         )
         (i32.const 1)

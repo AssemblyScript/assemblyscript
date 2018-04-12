@@ -184,18 +184,26 @@ export function compileCall(
 
       switch (compiler.currentType.kind) {
         case TypeKind.F32: {
-          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
-          ret = module.createBinary(BinaryOp.NeF32,
-            module.createTeeLocal(tempLocal.index, arg0),
-            module.createGetLocal(tempLocal.index, NativeType.F32)
+          ret = module.createBinary(
+            BinaryOp.GtU32,
+            module.createBinary(
+              BinaryOp.AndI32,
+              module.createUnary(UnaryOp.ReinterpretF32, arg0),
+              module.createI32(0x7FFFFFFF)
+            ),
+            module.createI32(0x7F800000)
           );
           break;
         }
         case TypeKind.F64: {
-          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
-          ret = module.createBinary(BinaryOp.NeF64,
-            module.createTeeLocal(tempLocal.index, arg0),
-            module.createGetLocal(tempLocal.index, NativeType.F64)
+          ret = module.createBinary(
+            BinaryOp.GtU64,
+            module.createBinary(
+              BinaryOp.AndI64,
+              module.createUnary(UnaryOp.ReinterpretF64, arg0),
+              module.createI64(0xFFFFFFFF, 0x7FFFFFFF)
+            ),
+            module.createI64(0, 0x7FF00000)
           );
           break;
         }
@@ -244,36 +252,26 @@ export function compileCall(
       }
       switch (compiler.currentType.kind) {
         case TypeKind.F32: {
-          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f32);
-          ret = module.createSelect(
-            module.createBinary(BinaryOp.NeF32,
-              module.createUnary(UnaryOp.AbsF32,
-                module.createTeeLocal(tempLocal.index, arg0)
-              ),
-              module.createF32(Infinity)
+          ret = module.createBinary(
+            BinaryOp.LtU32,
+            module.createBinary(
+              BinaryOp.AndI32,
+              module.createUnary(UnaryOp.ReinterpretF32, arg0),
+              module.createI32(0x7FFFFFFF)
             ),
-            module.createI32(0),
-            module.createBinary(BinaryOp.EqF32,
-              module.createGetLocal(tempLocal.index, NativeType.F32),
-              module.createGetLocal(tempLocal.index, NativeType.F32)
-            )
+            module.createI32(0x7F800000)
           );
           break;
         }
         case TypeKind.F64: {
-          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f64);
-          ret = module.createSelect(
-            module.createBinary(BinaryOp.NeF64,
-              module.createUnary(UnaryOp.AbsF64,
-                module.createTeeLocal(tempLocal.index, arg0)
-              ),
-              module.createF64(Infinity)
+          ret = module.createBinary(
+            BinaryOp.LtU64,
+            module.createBinary(
+              BinaryOp.AndI64,
+              module.createUnary(UnaryOp.ReinterpretF64, arg0),
+              module.createI64(0xFFFFFFFF, 0x7FFFFFFF)
             ),
-            module.createI32(0),
-            module.createBinary(BinaryOp.EqF64,
-              module.createGetLocal(tempLocal.index, NativeType.F64),
-              module.createGetLocal(tempLocal.index, NativeType.F64)
-            )
+            module.createI64(0, 0x7FF00000)
           );
           break;
         }
