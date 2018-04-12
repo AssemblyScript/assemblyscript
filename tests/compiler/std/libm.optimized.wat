@@ -5719,19 +5719,17 @@
  (func $std/libm/sign (; 50 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (select
-   (f64.const 1)
-   (select
-    (f64.const -1)
+   (f64.copysign
+    (f64.const 1)
     (tee_local $1
      (get_local $0)
     )
-    (f64.lt
-     (get_local $1)
-     (f64.const 0)
-    )
    )
+   (get_local $1)
    (f64.gt
-    (get_local $1)
+    (f64.abs
+     (get_local $1)
+    )
     (f64.const 0)
    )
   )

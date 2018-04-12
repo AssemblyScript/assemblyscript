@@ -1042,7 +1042,8 @@ export namespace NativeMath {
 
   @inline
   export function sign(x: f64): f64 {
-    return x > 0 ? 1 : x < 0 ? -1 : x;
+    // return x > 0 ? 1 : x < 0 ? -1 : x;
+    return builtin_abs<f64>(x) > 0 ? builtin_copysign<f64>(1, x) : x;
   }
 
   export function sin(x: f64): f64 { // TODO
@@ -2096,7 +2097,8 @@ export namespace NativeMathf {
 
   @inline
   export function sign(x: f32): f32 {
-    return x > 0 ? 1 : x < 0 ? -1 : x;
+    // return x > 0 ? 1 : x < 0 ? -1 : x;
+    return builtin_abs<f32>(x) > 0 ? builtin_copysign<f32>(1, x) : x;
   }
 
   export function sin(x: f32): f32 { // TODO

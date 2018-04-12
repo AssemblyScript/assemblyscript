@@ -12474,19 +12474,17 @@
     (tee_local $4
      (call $std/math/check<f64>
       (select
-       (f64.const 1)
-       (select
-        (f64.const -1)
+       (f64.copysign
+        (f64.const 1)
         (tee_local $5
          (get_local $0)
         )
-        (f64.lt
-         (get_local $5)
-         (f64.const 0)
-        )
        )
+       (get_local $5)
        (f64.gt
-        (get_local $5)
+        (f64.abs
+         (get_local $5)
+        )
         (f64.const 0)
        )
       )
@@ -12518,19 +12516,17 @@
   (local $4 f32)
   (call $std/math/check<f32>
    (select
-    (f32.const 1)
-    (select
-     (f32.const -1)
+    (f32.copysign
+     (f32.const 1)
      (tee_local $4
       (get_local $0)
      )
-     (f32.lt
-      (get_local $4)
-      (f32.const 0)
-     )
     )
+    (get_local $4)
     (f32.gt
-     (get_local $4)
+     (f32.abs
+      (get_local $4)
+     )
      (f32.const 0)
     )
    )
