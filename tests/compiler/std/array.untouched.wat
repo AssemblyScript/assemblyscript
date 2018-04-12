@@ -46,7 +46,7 @@
  (global $std/array/randomized257 (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 344))
  (table 28 28 anyfunc)
- (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $~lib/internal/array/defaultComparator<i32>~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27)
+ (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $std/array/assertSortedDefault<i32>~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27)
  (memory $0 1)
  (data (i32.const 4) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 36) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
@@ -4723,7 +4723,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 124)
-     (i32.const 993)
+     (i32.const 1000)
      (i32.const 4)
     )
     (unreachable)
@@ -4807,7 +4807,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 124)
-     (i32.const 1000)
+     (i32.const 1007)
      (i32.const 24)
     )
     (unreachable)
@@ -4932,7 +4932,7 @@
    (get_local $1)
   )
  )
- (func $~lib/internal/array/defaultComparator<i32>~anonymous|23 (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/assertSortedDefault<i32>~anonymous|23 (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (i32.gt_s
     (get_local $0)
@@ -4944,12 +4944,7 @@
    )
   )
  )
- (func $~lib/internal/array/defaultComparator<i32> (; 59 ;) (type $i) (result i32)
-  (return
-   (i32.const 23)
-  )
- )
- (func $~lib/internal/array/insertionSort<i32> (; 60 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/insertionSort<i32> (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5137,9 +5132,9 @@
    (get_local $0)
   )
  )
- (func $~lib/allocator/arena/free_memory (; 61 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/free_memory (; 60 ;) (type $iv) (param $0 i32)
  )
- (func $~lib/internal/array/weakHeapSort<i32> (; 62 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/weakHeapSort<i32> (; 61 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5799,7 +5794,7 @@
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#sort (; 63 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort (; 62 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5955,7 +5950,7 @@
    )
   )
  )
- (func $std/array/isSorted<i32> (; 64 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<i32> (; 63 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (block $break|0
@@ -6020,7 +6015,7 @@
    (i32.const 1)
   )
  )
- (func $std/array/assertSorted<i32> (; 65 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<i32> (; 64 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (if
    (i32.eqz
     (call $std/array/isSorted<i32>
@@ -6042,13 +6037,17 @@
    )
   )
  )
- (func $std/array/assertSortedDefault<i32> (; 66 ;) (type $iv) (param $0 i32)
+ (func $std/array/assertSortedDefault<i32> (; 65 ;) (type $iv) (param $0 i32)
   (call $std/array/assertSorted<i32>
    (get_local $0)
-   (call $~lib/internal/array/defaultComparator<i32>)
+   (block $~lib/internal/array/defaultComparator<i32>|inlined.0 (result i32)
+    (br $~lib/internal/array/defaultComparator<i32>|inlined.0
+     (i32.const 23)
+    )
+   )
   )
  )
- (func $std/array/isArraysEqual<i32> (; 67 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<i32> (; 66 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.eqz
@@ -6118,7 +6117,7 @@
    (i32.const 1)
   )
  )
- (func $std/array/isArraysEqual<i32>|trampoline (; 68 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<i32>|trampoline (; 67 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -6141,31 +6140,31 @@
    (get_local $2)
   )
  )
- (func $start~anonymous|24 (; 69 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|24 (; 68 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $0)
    (get_local $1)
   )
  )
- (func $start~anonymous|25 (; 70 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|25 (; 69 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $1)
    (get_local $0)
   )
  )
- (func $start~anonymous|26 (; 71 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|26 (; 70 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $0)
    (get_local $1)
   )
  )
- (func $start~anonymous|27 (; 72 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|27 (; 71 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $1)
    (get_local $0)
   )
  )
- (func $start (; 73 ;) (type $v)
+ (func $start (; 72 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
