@@ -311,4 +311,4 @@ assert(f64.EPSILON == 2.2204460492503131e-16);
 
 // should be importable
 import { isNaN as isItNaN } from "builtins";
-isItNaN(1);
+isItNaN<f64>(1);

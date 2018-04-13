@@ -470,7 +470,7 @@ export function typesToString(types: Type[]): string {
   for (let i = 0; i < numTypes; ++i) {
     sb[i] = types[i].toString();
   }
-  return sb.join(", ");
+  return sb.join(",");
 }
 
 /** Represents a fully resolved function signature. */

@@ -13,8 +13,22 @@ export declare const NaN: f64; // | f32
 export declare const Infinity: f64; // | f32
 
 export declare function isNaN<T>(value: T): bool;
+// export function isNaN<T>(value: T): bool {
+//   return isFloat(value)
+//     ? sizeof<T>() == 32
+//       ? (reinterpret<u32>(value) & -1 >>> 1) > 0xFF << 23
+//       : (reinterpret<u64>(value) & -1 >>> 1) > 0x7FF << 52
+//     : false;
+// }
 
 export declare function isFinite<T>(value: T): bool;
+// export function isFinite<T>(value: T): bool {
+//   return isFloat(value)
+//     ? sizeof<T>() == 32
+//       ? (reinterpret<u32>(value) & -1 >>> 1) < 0xFF << 23
+//       : (reinterpret<u64>(value) & -1 >>> 1) < 0x7FF << 52
+//     : true;
+// }
 
 export declare function clz<T>(value: T): T;
 

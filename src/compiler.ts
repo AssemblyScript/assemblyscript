@@ -1811,7 +1811,6 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
       if (!isInlined) {
-        let flow = currentFunction.flow;
         if (
           declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
           flow.is(FlowFlags.INLINE_CONTEXT)
@@ -4404,55 +4403,131 @@ export class Compiler extends DiagnosticEmitter {
       // direct call: concrete function
       case ElementKind.FUNCTION_PROTOTYPE: {
         let prototype = <FunctionPrototype>target;
+        let typeArguments = expression.typeArguments;
 
-        // builtins are compiled on the fly
+        // builtins handle present respectively omitted type arguments on their own
         if (prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
-          let expr = compileBuiltinCall( // reports
-            this,
-            prototype,
-            prototype.resolveBuiltinTypeArguments(
-              expression.typeArguments,
-              currentFunction.flow.contextualTypeArguments
-            ),
-            expression.arguments,
-            contextualType,
-            expression
-          );
-          if (!expr) {
+          return this.compileCallExpressionBuiltin(prototype, expression, contextualType);
+        }
+
+        let instance: Function | null = null;
+
+        // resolve generic call if type arguments have been provided
+        if (typeArguments) {
+          if (!prototype.is(CommonFlags.GENERIC)) {
             this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
+              DiagnosticCode.Type_0_is_not_generic,
+              expression.expression.range, prototype.internalName
             );
             return module.createUnreachable();
           }
-          return expr;
-
-        // otherwise compile to a call (and maybe inline)
-        } else {
-          let instance = prototype.resolveUsingTypeArguments( // reports
-            expression.typeArguments,
-            currentFunction.flow.contextualTypeArguments,
+          instance = prototype.resolveUsingTypeArguments( // reports
+            typeArguments,
+            this.currentFunction.flow.contextualTypeArguments,
             expression
           );
-          if (!instance) return module.createUnreachable();
-          let thisExpr: ExpressionRef = 0;
-          if (instance.is(CommonFlags.INSTANCE)) {
-            thisExpr = this.compileExpressionRetainType(
-              assert(this.program.resolvedThisExpression),
-              this.options.usizeType
-            );
+
+        // infer generic call if type arguments have been omitted
+        } else if (prototype.is(CommonFlags.GENERIC)) {
+          let inferredTypes = new Map<string,Type | null>();
+          let typeParameters = assert(prototype.declaration.typeParameters);
+          let numTypeParameters = typeParameters.length;
+          for (let i = 0; i < numTypeParameters; ++i) {
+            inferredTypes.set(typeParameters[i].name.text, null);
           }
-          return this.compileCallDirect(
-            instance,
-            expression.arguments,
-            expression,
-            thisExpr,
-            instance.hasDecorator(DecoratorFlags.INLINE)
+          // let numInferred = 0;
+          let parameterTypes = prototype.declaration.signature.parameterTypes;
+          let numParameterTypes = parameterTypes.length;
+          let argumentExpressions = expression.arguments;
+          let numArguments = argumentExpressions.length;
+          let argumentExprs = new Array<ExpressionRef>(numArguments);
+          for (let i = 0; i < numParameterTypes; ++i) {
+            let typeNode = parameterTypes[i].type;
+            let name = typeNode.kind == NodeKind.TYPE ? (<TypeNode>typeNode).name.text : null;
+            let argumentExpression = i < numArguments
+              ? argumentExpressions[i]
+              : prototype.declaration.signature.parameterTypes[i].initializer;
+            if (!argumentExpression) { // missing initializer -> too few arguments
+              this.error(
+                DiagnosticCode.Expected_0_arguments_but_got_1,
+                expression.range, numParameterTypes.toString(10), numArguments.toString(10)
+              );
+              return module.createUnreachable();
+            }
+            if (name !== null && inferredTypes.has(name)) {
+              let inferredType = inferredTypes.get(name);
+              if (inferredType) {
+                argumentExprs[i] = this.compileExpressionRetainType(argumentExpression, inferredType);
+                let commonType: Type | null;
+                if (!(commonType = Type.commonCompatible(inferredType, this.currentType, true))) {
+                  if (!(commonType = Type.commonCompatible(inferredType, this.currentType, false))) {
+                    this.error(
+                      DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+                      parameterTypes[i].type.range, this.currentType.toString(), inferredType.toString()
+                    );
+                    return module.createUnreachable();
+                  }
+                }
+                inferredType = commonType;
+              } else {
+                argumentExprs[i] = this.compileExpressionRetainType(argumentExpression, Type.i32);
+                inferredType = this.currentType;
+                // ++numInferred;
+              }
+              inferredTypes.set(name, inferredType);
+            } else {
+              let concreteType = this.program.resolveType(
+                parameterTypes[i].type,
+                this.currentFunction.flow.contextualTypeArguments,
+                true
+              );
+              if (!concreteType) return module.createUnreachable();
+              argumentExprs[i] = this.compileExpression(argumentExpression, concreteType);
+            }
+          }
+          let resolvedTypeArguments = new Array<Type>(numTypeParameters);
+          for (let i = 0; i < numTypeParameters; ++i) {
+            let inferredType = assert(inferredTypes.get(typeParameters[i].name.text)); // TODO
+            resolvedTypeArguments[i] = inferredType;
+          }
+          instance = prototype.resolve(
+            resolvedTypeArguments,
+            this.currentFunction.flow.contextualTypeArguments
+          );
+          if (!instance) return this.module.createUnreachable();
+          return this.makeCallDirect(instance, argumentExprs);
+          // TODO: this skips inlining because inlining requires compiling its temporary locals in
+          // the scope of the inlined flow. might need another mechanism to lock temp. locals early,
+          // so inlining can be performed in `makeCallDirect` instead?
+
+        // otherwise resolve the non-generic call as usual
+        } else {
+          instance = prototype.resolve(
+            null,
+            this.currentFunction.flow.contextualTypeArguments
           );
         }
+        if (!instance) return this.module.createUnreachable();
+
+        // compile 'this' expression if an instance method
+        let thisExpr: ExpressionRef = 0;
+        if (instance.is(CommonFlags.INSTANCE)) {
+          thisExpr = this.compileExpressionRetainType(
+            assert(this.program.resolvedThisExpression),
+            this.options.usizeType
+          );
+        }
+
+        return this.compileCallDirect(
+          instance,
+          expression.arguments,
+          expression,
+          thisExpr,
+          instance.hasDecorator(DecoratorFlags.INLINE)
+        );
       }
 
-      // indirect call: index argument with signature
+      // indirect call: index argument with signature (non-generic, can't be inlined)
       case ElementKind.LOCAL: {
         if (signature = (<Local>target).type.signatureReference) {
           indexArg = module.createGetLocal((<Local>target).index, NativeType.I32);
@@ -4523,6 +4598,32 @@ export class Compiler extends DiagnosticEmitter {
       expression.arguments,
       expression
     );
+  }
+
+  private compileCallExpressionBuiltin(
+    prototype: FunctionPrototype,
+    expression: CallExpression,
+    contextualType: Type
+  ): ExpressionRef {
+    var expr = compileBuiltinCall( // reports
+      this,
+      prototype,
+      prototype.resolveBuiltinTypeArguments(
+        expression.typeArguments,
+        this.currentFunction.flow.contextualTypeArguments
+      ),
+      expression.arguments,
+      contextualType,
+      expression
+    );
+    if (!expr) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        expression.range
+      );
+      return this.module.createUnreachable();
+    }
+    return expr;
   }
 
   /**
