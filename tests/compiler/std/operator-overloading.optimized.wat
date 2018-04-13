@@ -1113,9 +1113,9 @@
             )
            )
            (set_local $5
-            (i32.sub
+            (i32.add
              (get_local $5)
-             (i32.const 1048576)
+             (i32.const -1048576)
             )
            )
            (i32.const 0)

@@ -893,9 +893,9 @@
             )
            )
            (set_local $5
-            (i32.sub
+            (i32.add
              (get_local $5)
-             (i32.const 1048576)
+             (i32.const -1048576)
             )
            )
            (i32.const 0)
@@ -5595,12 +5595,6 @@
    )
   )
   (drop
-   (i32.div_s
-    (get_global $binary/i)
-    (i32.const 1)
-   )
-  )
-  (drop
    (i32.rem_s
     (get_global $binary/i)
     (i32.const 1)
@@ -5658,12 +5652,6 @@
   )
   (set_global $binary/i
    (i32.sub
-    (get_global $binary/i)
-    (i32.const 1)
-   )
-  )
-  (set_global $binary/i
-   (i32.div_s
     (get_global $binary/i)
     (i32.const 1)
    )
@@ -5775,12 +5763,6 @@
    )
   )
   (drop
-   (i64.div_s
-    (get_global $binary/I)
-    (i64.const 1)
-   )
-  )
-  (drop
    (i64.rem_s
     (get_global $binary/I)
     (i64.const 1)
@@ -5838,18 +5820,6 @@
   )
   (set_global $binary/I
    (i64.sub
-    (get_global $binary/I)
-    (i64.const 1)
-   )
-  )
-  (set_global $binary/I
-   (i64.mul
-    (get_global $binary/I)
-    (i64.const 1)
-   )
-  )
-  (set_global $binary/I
-   (i64.div_s
     (get_global $binary/I)
     (i64.const 1)
    )
@@ -5914,12 +5884,6 @@
   )
   (set_global $binary/I
    (i64.sub
-    (get_global $binary/I)
-    (i64.const 1)
-   )
-  )
-  (set_global $binary/I
-   (i64.mul
     (get_global $binary/I)
     (i64.const 1)
    )
@@ -6027,18 +5991,6 @@
    )
   )
   (set_global $binary/f
-   (f32.mul
-    (get_global $binary/f)
-    (f32.const 1)
-   )
-  )
-  (set_global $binary/f
-   (f32.div
-    (get_global $binary/f)
-    (f32.const 1)
-   )
-  )
-  (set_global $binary/f
    (call $~lib/math/NativeMathf.mod
     (get_global $binary/f)
     (f32.const 1)
@@ -6058,12 +6010,6 @@
   )
   (set_global $binary/f
    (f32.sub
-    (get_global $binary/f)
-    (f32.const 1)
-   )
-  )
-  (set_global $binary/f
-   (f32.mul
     (get_global $binary/f)
     (f32.const 1)
    )
@@ -6141,18 +6087,6 @@
    )
   )
   (set_global $binary/F
-   (f64.mul
-    (get_global $binary/F)
-    (f64.const 1)
-   )
-  )
-  (set_global $binary/F
-   (f64.div
-    (get_global $binary/F)
-    (f64.const 1)
-   )
-  )
-  (set_global $binary/F
    (call $~lib/math/NativeMath.mod
     (get_global $binary/F)
     (f64.const 1)
@@ -6172,12 +6106,6 @@
   )
   (set_global $binary/F
    (f64.sub
-    (get_global $binary/F)
-    (f64.const 1)
-   )
-  )
-  (set_global $binary/F
-   (f64.mul
     (get_global $binary/F)
     (f64.const 1)
    )
