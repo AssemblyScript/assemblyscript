@@ -504,7 +504,7 @@ assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i3
 // Test sorting strings
 
 var randomStringsActual:   string[] = ['a', 'b', 'a', 'ab', 'ba', '', null];
-var randomStringsExpected: string[] = [ '', 'a', 'a', 'ab', 'b', 'ba', null];
+var randomStringsExpected: string[] = ['', 'a', 'a', 'ab', 'b', 'ba', null];
 assertSorted<string>(randomStringsActual, (a: string, b: string): i32 => <i32>(a > b) - <i32>(a < b));
 assert(isArraysEqual<string>(randomStringsActual, randomStringsExpected));
 
