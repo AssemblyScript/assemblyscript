@@ -392,7 +392,6 @@ function createRandomOrderedArray(size: i32): Array<i32> {
   return arr;
 }
 
-/*
 function createReverseOrderedNestedArray(size: i32): Array<Array<i32>> {
   var arr = new Array<Array<i32>>(size);
   for (let i: i32 = 0; i < arr.length; i++) {
@@ -413,7 +412,25 @@ function createReverseOrderedElementsArray(size: i32): Proxy<i32>[] {
   }
   return arr;
 }
-*/
+
+const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-,.+/\\[]{}()<>*&$%^@#!?";
+
+function createRandomString(len: i32): string {
+  var result = "";
+
+  for (let i = 0; i < len; i++) {
+    result += charset.charAt(<i32>(NativeMath.floor(NativeMath.random() * charset.length)));
+  }
+  return result;
+}
+
+function createRandomStringArray(size: i32): string[] {
+  var arr = new Array<string>(size);
+  for (let i: i32 = 0; i < arr.length; i++) {
+    arr[i] = createRandomString(<i32>(NativeMath.random() * 32));
+  }
+  return arr;
+}
 
 function assertSorted<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): void {
   assert(isSorted<T>(arr.sort(comparator), comparator));
@@ -477,9 +494,19 @@ assertSorted<i32>(randomized257, (a: i32, b: i32): i32 => b - a);
 
 // Test sorting complex objects
 
-// var reversedNested512 = createReverseOrderedNestedArray(512);
-// assertSorted<i32[]>(reversedNested512, (a: i32[], b: i32[]): i32 => a[0] - b[0]);
+var reversedNested512 = createReverseOrderedNestedArray(512);
+assertSorted<i32[]>(reversedNested512, (a: i32[], b: i32[]): i32 => a[0] - b[0]);
 
 // Test sorting reference elements
-// var reversedElements512 = createReverseOrderedElementsArray(512);
-// assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i32 => a.x - b.x);
+var reversedElements512 = createReverseOrderedElementsArray(512);
+assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i32 => a.x - b.x);
+
+// Test sorting strings
+
+var randomStringsActual:   string[] = ['a', 'b', 'a', 'ab', 'ba', '', null];
+var randomStringsExpected: string[] = ['', 'a', 'a', 'ab', 'b', 'ba', null];
+assertSorted<string>(randomStringsActual, (a: string, b: string): i32 => <i32>(a > b) - <i32>(a < b));
+assert(isArraysEqual<string>(randomStringsActual, randomStringsExpected));
+
+var randomStrings400 = createRandomStringArray(400);
+assertSorted<string>(randomStrings400, (a: string, b: string): i32 => <i32>(a > b) - <i32>(a < b));
