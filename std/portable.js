@@ -81,8 +81,8 @@ globalScope["ctz"] = function ctz(value) {
 };
 
 globalScope["popcnt"] = function popcnt(value) {
-  value -= ((value >>> 1) & 0x55555555);
-  value = (value & 0x33333333) + ((value >>> 2) & 0x33333333);
+  value -= value >>> 1 & 0x55555555;
+  value = (value & 0x33333333) + (value >>> 2 & 0x33333333);
   return (((value + (value >>> 4)) & 0x0F0F0F0F) * 0x01010101) >>> 24;
 };
 
@@ -106,7 +106,13 @@ globalScope["ceil"] = Math.ceil;
 
 globalScope["floor"] = Math.floor;
 
-globalScope["nearest"] = Math.round;
+// Adopt code from https://github.com/rfk/wasm-polyfill
+globalScope["nearest"] = function nearest(value) {
+  if (Math.abs(value - Math.trunc(value)) === 0.5) {
+    return 2.0 * Math.round(value * 0.5);
+  }
+  return Math.round(value);
+};
 
 globalScope["select"] = function select(ifTrue, ifFalse, condition) {
   return condition ? ifTrue : ifFalse;
