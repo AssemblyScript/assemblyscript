@@ -135,13 +135,13 @@ declare namespace f64 {
 
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T = i32>(value: T): T;
-/** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
+/** Performs the sign-agnostic count tailing zero bits operation on a 32-bit integer. All zero bits are considered trailing if the value is zero. */
 declare function ctz<T = i32>(value: T): T;
-/** Performs the sign-agnostic count number of one bits operation on a 32-bit or 64-bit integer. */
+/** Performs the sign-agnostic count number of one bits operation on a 32-bit integer. */
 declare function popcnt<T = i32>(value: T): T;
-/** Performs the sign-agnostic rotate left operation on a 32-bit or 64-bit integer. */
+/** Performs the sign-agnostic rotate left operation on a 32-bit integer. */
 declare function rotl<T = i32>(value: T, shift: T): T;
-/** Performs the sign-agnostic rotate right operation on a 32-bit or 64-bit integer. */
+/** Performs the sign-agnostic rotate right operation on a 32-bit integer. */
 declare function rotr<T = i32>(value: T, shift: T): T;
 /** Computes the absolute value of an integer or float. */
 declare function abs<T = i32 | f32 | f64>(value: T): T;
