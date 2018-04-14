@@ -11,13 +11,15 @@ import {
   Global,
   Enum,
   EnumValue,
+  Field,
   Function,
-  Class,
-  Namespace,
   FunctionPrototype,
+  Class,
   ClassPrototype,
+  Namespace,
   ConstantValueKind,
-  Interface
+  Interface,
+  Property
 } from "./program";
 
 import {
@@ -41,51 +43,56 @@ abstract class ExportsWalker {
   }
 
   walk(): void {
-    for (let element of this.program.moduleLevelExports.values()) {
-      this.visitElement(element);
-    }
+    for (let element of this.program.moduleLevelExports.values()) this.visitElement(element);
   }
 
   visitElement(element: Element): void {
     switch (element.kind) {
       case ElementKind.GLOBAL: {
-        if (element.is(CommonFlags.COMPILED)) {
-          this.visitGlobal(<Global>element);
-        }
+        if (element.is(CommonFlags.COMPILED)) this.visitGlobal(<Global>element);
         break;
       }
       case ElementKind.ENUM: {
-        if (element.is(CommonFlags.COMPILED)) {
-          this.visitEnum(<Enum>element);
-        }
+        if (element.is(CommonFlags.COMPILED)) this.visitEnum(<Enum>element);
         break;
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
-        for (let instance of (<FunctionPrototype>element).instances.values()) {
-          if (instance.is(CommonFlags.COMPILED)) {
-            this.visitFunction(<Function>instance);
-          }
-        }
+        this.visitCompiledFunctions(<FunctionPrototype>element);
         break;
       }
       case ElementKind.CLASS_PROTOTYPE: {
-        for (let instance of (<ClassPrototype>element).instances.values()) {
-          if (instance.is(CommonFlags.COMPILED)) {
-            this.visitClass(<Class>instance);
-          }
-        }
+        this.visitCompiledClasses(<ClassPrototype>element);
+        break;
+      }
+      case ElementKind.FIELD: {
+        if ((<Field>element).is(CommonFlags.COMPILED)) this.visitField(<Field>element);
+        break;
+      }
+      case ElementKind.PROPERTY: {
+        let prop = <Property>element;
+        let getter = prop.getterPrototype;
+        if (getter) this.visitCompiledFunctions(getter);
+        let setter = prop.setterPrototype;
+        if (setter) this.visitCompiledFunctions(setter);
         break;
       }
       case ElementKind.NAMESPACE: {
-        if ((<Namespace>element).is(CommonFlags.COMPILED)) {
-          this.visitNamespace(<Namespace>element);
-        }
+        if (hasCompiledMember(<Namespace>element)) this.visitNamespace(<Namespace>element);
         break;
       }
-      default: {
-        assert(false);
-        break;
-      }
+      default: assert(false);
+    }
+  }
+
+  visitCompiledFunctions(element: FunctionPrototype): void {
+    for (let instance of element.instances.values()) {
+      if (instance.is(CommonFlags.COMPILED)) this.visitFunction(<Function>instance);
+    }
+  }
+
+  visitCompiledClasses(element: ClassPrototype): void {
+    for (let instance of element.instances.values()) {
+      if (instance.is(CommonFlags.COMPILED)) this.visitClass(<Class>instance);
     }
   }
 
@@ -94,6 +101,7 @@ abstract class ExportsWalker {
   abstract visitFunction(element: Function): void;
   abstract visitClass(element: Class): void;
   abstract visitInterface(element: Interface): void;
+  abstract visitField(element: Field): void;
   abstract visitNamespace(element: Element): void;
 }
 
@@ -120,9 +128,7 @@ export class IDLBuilder extends ExportsWalker {
     var sb = this.sb;
     var isConst = element.is(CommonFlags.INLINED);
     indent(sb, this.indentLevel);
-    if (isConst) {
-      sb.push("const ");
-    }
+    if (isConst) sb.push("const ");
     sb.push(this.typeToString(element.type));
     sb.push(" ");
     sb.push(element.simpleName);
@@ -158,11 +164,8 @@ export class IDLBuilder extends ExportsWalker {
         if (member.kind == ElementKind.ENUMVALUE) {
           let isConst = (<EnumValue>member).is(CommonFlags.INLINED);
           indent(sb, this.indentLevel);
-          if (isConst) {
-            sb.push("const ");
-          } else {
-            sb.push("readonly ");
-          }
+          if (isConst) sb.push("const ");
+          else sb.push("readonly ");
           sb.push("unsigned long ");
           sb.push(name);
           if (isConst) {
@@ -173,9 +176,7 @@ export class IDLBuilder extends ExportsWalker {
         }
       }
       for (let member of members.values()) {
-        if (member.kind != ElementKind.ENUMVALUE) {
-          this.visitElement(member);
-        }
+        if (member.kind != ElementKind.ENUMVALUE) this.visitElement(member);
       }
     }
     indent(sb, --this.indentLevel);
@@ -209,9 +210,7 @@ export class IDLBuilder extends ExportsWalker {
       sb.push("interface ");
       sb.push(element.simpleName);
       sb.push(" {\n");
-      for (let member of members.values()) {
-        this.visitElement(member);
-      }
+      for (let member of members.values()) this.visitElement(member);
       indent(sb, --this.indentLevel);
       sb.push("}\n");
     }
@@ -234,6 +233,10 @@ export class IDLBuilder extends ExportsWalker {
     this.visitClass(element);
   }
 
+  visitField(element: Field): void {
+    // TODO
+  }
+
   visitNamespace(element: Namespace): void {
     if (this.seen.has(element)) return;
     this.seen.add(element);
@@ -244,9 +247,7 @@ export class IDLBuilder extends ExportsWalker {
     sb.push(" {\n");
     var members = element.members;
     if (members) {
-      for (let member of members.values()) {
-        this.visitElement(member);
-      }
+      for (let member of members.values()) this.visitElement(member);
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
@@ -311,8 +312,12 @@ export class TSDBuilder extends ExportsWalker {
     var sb = this.sb;
     var isConst = element.is(CommonFlags.INLINED);
     indent(sb, this.indentLevel);
-    if (isConst) {
-      sb.push("const ");
+    if (element.is(CommonFlags.STATIC)) {
+      if (isConst) sb.push("static readonly ");
+      else assert(false);
+    } else {
+      if (isConst) sb.push("const ");
+      else sb.push("var ");
     }
     sb.push(element.simpleName);
     sb.push(": ");
@@ -345,9 +350,7 @@ export class TSDBuilder extends ExportsWalker {
           --numMembers;
         }
       }
-      if (numMembers) {
-        this.visitNamespace(element);
-      }
+      if (numMembers) this.visitNamespace(element);
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
@@ -356,11 +359,22 @@ export class TSDBuilder extends ExportsWalker {
   visitFunction(element: Function): void {
     if (this.seen.has(element)) return;
     this.seen.add(element);
+    if (element.is(CommonFlags.PRIVATE)) return;
     var sb = this.sb;
     var signature = element.signature;
     indent(sb, this.indentLevel);
-    sb.push("function ");
-    sb.push(element.simpleName);
+    if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
+    if (element.is(CommonFlags.STATIC)) sb.push("static ");
+    if (element.is(CommonFlags.GET)) {
+      sb.push("get ");
+      sb.push(element.prototype.declaration.name.text); // 'get:funcName' internally
+    } else if (element.is(CommonFlags.SET)) {
+      sb.push("set ");
+      sb.push(element.prototype.declaration.name.text);
+    } else {
+      if (!element.is(CommonFlags.INSTANCE)) sb.push("function ");
+      sb.push(element.simpleName);
+    }
     sb.push("(");
     var parameters = signature.parameterTypes;
     var numParameters = parameters.length;
@@ -372,8 +386,12 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(": ");
       sb.push(this.typeToString(parameters[i]));
     }
-    sb.push("): ");
-    sb.push(this.typeToString(signature.returnType));
+    if (element.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.SET)) {
+      sb.push(")");
+    } else {
+      sb.push("): ");
+      sb.push(this.typeToString(signature.returnType));
+    }
     sb.push(";\n");
     this.visitNamespace(element);
   }
@@ -394,18 +412,22 @@ export class TSDBuilder extends ExportsWalker {
     }
     sb.push(element.simpleName);
     var base = element.base;
-    if (base) {
+    if (base && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
       sb.push(" extends ");
       sb.push(base.simpleName); // TODO: fqn
     }
     sb.push(" {\n");
     var members = element.prototype.members; // static
     if (members) {
-      // TODO
+      for (let member of members.values()) {
+        this.visitElement(member);
+      }
     }
+    var ctor = element.constructorInstance;
+    if (ctor) this.visitFunction(ctor);
     members = element.members; // instance
     if (members) {
-      // TODO
+      for (let member of members.values()) this.visitElement(member);
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
@@ -413,6 +435,40 @@ export class TSDBuilder extends ExportsWalker {
 
   visitInterface(element: Interface): void {
     this.visitClass(element);
+  }
+
+  visitField(element: Field): void {
+    if (element.is(CommonFlags.PRIVATE)) return;
+    var sb = this.sb;
+    indent(sb, this.indentLevel);
+    if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
+    if (element.is(CommonFlags.STATIC)) sb.push("static ");
+    if (element.is(CommonFlags.READONLY)) sb.push("readonly ");
+    sb.push(element.simpleName);
+    sb.push(": ");
+    sb.push(this.typeToString(element.type));
+    sb.push(";\n");
+    /* TBD: the compiler implicitly generates setters if the class is exported
+    indent(sb, this.indentLevel);
+    sb.push("get ");
+    sb.push(element.simpleName);
+    sb.push("(): ");
+    sb.push(this.typeToString(element.type));
+    sb.push(";\n");
+    if (!element.is(CommonFlags.READONLY)) {
+      indent(sb, this.indentLevel);
+      if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
+      if (element.is(CommonFlags.STATIC)) sb.push("static ");
+      if (element.is(CommonFlags.READONLY)) sb.push("readonly ");
+      sb.push("set ");
+      sb.push(element.simpleName);
+      sb.push("(");
+      sb.push(element.simpleName);
+      sb.push(": ");
+      sb.push(this.typeToString(element.type));
+      sb.push(");\n");
+    }
+    */
   }
 
   visitNamespace(element: Element): void {
@@ -423,9 +479,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("namespace ");
       sb.push(element.simpleName);
       sb.push(" {\n");
-      for (let member of members.values()) {
-        this.visitElement(member);
-      }
+      for (let member of members.values()) this.visitElement(member);
       indent(sb, --this.indentLevel);
       sb.push("}\n");
     }
@@ -477,3 +531,33 @@ export class TSDBuilder extends ExportsWalker {
 }
 
 // TODO: C bindings? or is this sufficiently covered by WebIDL and using a 3rd-party tool?
+
+// helpers
+
+/** Tests if a namespace-like element has at least one compiled member. */
+function hasCompiledMember(element: Element): bool {
+  var members = element.members;
+  if (members) {
+    for (let member of members.values()) {
+      switch (member.kind) {
+        case ElementKind.FUNCTION_PROTOTYPE: {
+          for (let instance of (<FunctionPrototype>member).instances.values()) {
+            if (instance.is(CommonFlags.COMPILED)) return true;
+          }
+          break;
+        }
+        case ElementKind.CLASS_PROTOTYPE: {
+          for (let instance of (<ClassPrototype>member).instances.values()) {
+            if (instance.is(CommonFlags.COMPILED)) return true;
+          }
+          break;
+        }
+        default: {
+          if (member.is(CommonFlags.COMPILED) || hasCompiledMember(member)) return true;
+          break;
+        }
+      }
+    }
+  }
+  return false;
+}

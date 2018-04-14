@@ -557,19 +557,22 @@ export class Signature {
     return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
   }
 
+  /** Converts a signature to a function type string. */
+  static makeSignatureString(parameterTypes: Type[] | null, returnType: Type, thisType: Type | null = null): string {
+    var sb = [];
+    if (thisType) sb.push(thisType.toSignatureString());
+    if (parameterTypes) {
+      for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+        sb.push(parameterTypes[i].toSignatureString());
+      }
+    }
+    sb.push(returnType.toSignatureString());
+    return sb.join("");
+  }
+
   /** Converts this signature to a function type string. */
   toSignatureString(): string {
-    var sb = [];
-    var thisType = this.thisType;
-    if (thisType) {
-      sb.push(thisType.toSignatureString());
-    }
-    var parameterTypes = this.parameterTypes;
-    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-      sb.push(parameterTypes[i].toSignatureString());
-    }
-    sb.push(this.returnType.toSignatureString());
-    return sb.join("");
+    return Signature.makeSignatureString(this.parameterTypes, this.returnType, this.thisType);
   }
 
   /** Converts this signature to a string. */

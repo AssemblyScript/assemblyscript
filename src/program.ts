@@ -28,9 +28,8 @@ import {
   CommonTypeNode,
   TypeNode,
   TypeParameterNode,
-  // ParameterNode,
-  // ParameterKind,
-  // SignatureNode,
+  ParameterKind,
+  SignatureNode,
   DecoratorNode,
   DecoratorKind,
 
@@ -59,12 +58,10 @@ import {
   MethodDeclaration,
   NamespaceDeclaration,
   TypeDeclaration,
+  VariableDeclaration,
   VariableLikeDeclarationStatement,
   VariableStatement,
 
-  ParameterKind,
-  SignatureNode,
-  VariableDeclaration,
   stringToDecoratorKind
 } from "./ast";
 
@@ -533,7 +530,7 @@ export class Program extends DiagnosticEmitter {
           )
         : DecoratorFlags.NONE
     );
-    prototype.namespace = namespace;
+    prototype.parent = namespace;
     this.elementsLookup.set(internalName, prototype);
 
     var implementsTypes = declaration.implementsTypes;
@@ -573,10 +570,8 @@ export class Program extends DiagnosticEmitter {
         namespace.members = new Map();
       }
       namespace.members.set(simpleName, prototype);
-      if (namespace.is(CommonFlags.MODULE_EXPORT)) {
-        if (prototype.is(CommonFlags.EXPORT)) {
-          prototype.set(CommonFlags.MODULE_EXPORT);
-        }
+      if (namespace.is(CommonFlags.MODULE_EXPORT) && prototype.is(CommonFlags.EXPORT)) {
+        prototype.set(CommonFlags.MODULE_EXPORT);
       }
 
     // otherwise add to file-level exports if exported
@@ -662,8 +657,12 @@ export class Program extends DiagnosticEmitter {
         Type.void, // resolved later on
         declaration
       );
+      staticField.parent = classPrototype;
       classPrototype.members.set(name, staticField);
       this.elementsLookup.set(internalName, staticField);
+      if (classPrototype.is(CommonFlags.MODULE_EXPORT)) {
+        staticField.set(CommonFlags.MODULE_EXPORT);
+      }
 
     // instance fields are remembered until resolved
     } else {
@@ -685,6 +684,7 @@ export class Program extends DiagnosticEmitter {
         declaration
       );
       classPrototype.instanceMembers.set(name, instanceField);
+      // TBD: no need to mark as MODULE_EXPORT
     }
   }
 
@@ -958,6 +958,7 @@ export class Program extends DiagnosticEmitter {
       this.elementsLookup.set(internalPropertyName, propertyElement);
       if (classPrototype.is(CommonFlags.MODULE_EXPORT)) {
         propertyElement.set(CommonFlags.MODULE_EXPORT);
+        instancePrototype.set(CommonFlags.MODULE_EXPORT);
       }
     }
   }
@@ -976,7 +977,7 @@ export class Program extends DiagnosticEmitter {
     }
     var simpleName = declaration.name.text;
     var element = new Enum(this, simpleName, internalName, declaration);
-    element.namespace = namespace;
+    element.parent = namespace;
     this.elementsLookup.set(internalName, element);
 
     if (namespace) {
@@ -992,7 +993,7 @@ export class Program extends DiagnosticEmitter {
         namespace.members = new Map();
       }
       namespace.members.set(simpleName, element);
-      if (namespace.is(CommonFlags.MODULE_EXPORT)) {
+      if (namespace.is(CommonFlags.MODULE_EXPORT) && element.is(CommonFlags.EXPORT)) {
         element.set(CommonFlags.MODULE_EXPORT);
       }
     } else if (element.is(CommonFlags.EXPORT)) { // no namespace
@@ -1031,7 +1032,6 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var internalName = declaration.fileLevelInternalName;
-    var isModuleExport = enm.is(CommonFlags.MODULE_EXPORT);
     if (enm.members) {
       if (enm.members.has(name)) {
         this.error(
@@ -1045,7 +1045,7 @@ export class Program extends DiagnosticEmitter {
     }
     var value = new EnumValue(enm, this, name, internalName, declaration);
     enm.members.set(name, value);
-    if (isModuleExport) {
+    if (enm.is(CommonFlags.MODULE_EXPORT)) {
       value.set(CommonFlags.MODULE_EXPORT);
     }
   }
@@ -1212,7 +1212,7 @@ export class Program extends DiagnosticEmitter {
           )
         : DecoratorFlags.NONE
     );
-    prototype.namespace = namespace;
+    prototype.parent = namespace;
     this.elementsLookup.set(internalName, prototype);
 
     if (namespace) {
@@ -1229,6 +1229,7 @@ export class Program extends DiagnosticEmitter {
       }
       namespace.members.set(simpleName, prototype);
       if (namespace.is(CommonFlags.MODULE_EXPORT) && prototype.is(CommonFlags.EXPORT)) {
+        prototype.parent = namespace;
         prototype.set(CommonFlags.MODULE_EXPORT);
       }
     } else if (prototype.is(CommonFlags.EXPORT)) { // no namespace
@@ -1358,7 +1359,7 @@ export class Program extends DiagnosticEmitter {
         ? this.filterDecorators(decorators, DecoratorFlags.GLOBAL)
         : DecoratorFlags.NONE
     );
-    prototype.namespace = namespace;
+    prototype.parent = namespace;
     this.elementsLookup.set(internalName, prototype);
 
     if (namespace) {
@@ -1436,7 +1437,7 @@ export class Program extends DiagnosticEmitter {
     var namespace = this.elementsLookup.get(internalName);
     if (!namespace) {
       namespace = new Namespace(this, simpleName, internalName, declaration);
-      namespace.namespace = parentNamespace;
+      namespace.parent = parentNamespace;
       this.elementsLookup.set(internalName, namespace);
       this.checkGlobalOptions(namespace, declaration);
     }
@@ -1563,7 +1564,7 @@ export class Program extends DiagnosticEmitter {
         Type.void, // resolved later on
         declaration
       );
-      global.namespace = namespace;
+      global.parent = namespace;
       this.elementsLookup.set(internalName, global);
 
       if (namespace) {
@@ -1836,14 +1837,14 @@ export class Program extends DiagnosticEmitter {
       // }
 
       // search contextual parent namespaces if applicable
-      if (namespace = contextualFunction.prototype.namespace) {
+      if (namespace = contextualFunction.prototype.parent) {
         do {
           if (element = this.elementsLookup.get(namespace.internalName + STATIC_DELIMITER + name)) {
             this.resolvedThisExpression = null;
             this.resolvedElementExpression = null;
             return element; // LOCAL
           }
-        } while (namespace = namespace.namespace);
+        } while (namespace = namespace.parent);
       }
     }
 
@@ -2061,7 +2062,7 @@ export class Program extends DiagnosticEmitter {
             return explicitLocal;
           }
         }
-        let parent = contextualFunction.memberOf;
+        let parent = contextualFunction.parent;
         if (parent) {
           this.resolvedThisExpression = null;
           this.resolvedElementExpression = null;
@@ -2082,7 +2083,7 @@ export class Program extends DiagnosticEmitter {
             return explicitLocal;
           }
         }
-        let parent = contextualFunction.memberOf;
+        let parent = contextualFunction.parent;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
           this.resolvedThisExpression = null;
           this.resolvedElementExpression = null;
@@ -2308,8 +2309,8 @@ export abstract class Element {
   decoratorFlags: DecoratorFlags = DecoratorFlags.NONE;
   /** Namespaced member elements. */
   members: Map<string,Element> | null = null;
-  /** Parent namespace, if applicable. */
-  namespace: Element | null = null;
+  /** Parent element, if applicable. */
+  parent: Element | null = null;
 
   /** Constructs a new element, linking it to its containing {@link Program}. */
   protected constructor(program: Program, simpleName: string, internalName: string) {
@@ -2378,8 +2379,6 @@ export class EnumValue extends Element {
 
   /** Declaration reference. */
   declaration: EnumValueDeclaration;
-  /** Parent enum. */
-  enum: Enum;
   /** Constant value, if applicable. */
   constantValue: i32 = 0;
 
@@ -2391,7 +2390,7 @@ export class EnumValue extends Element {
     declaration: EnumValueDeclaration
   ) {
     super(program, simpleName, internalName);
-    this.enum = enm;
+    this.parent = enm;
     this.declaration = declaration;
   }
 }
@@ -2732,8 +2731,6 @@ export class Function extends Element {
   prototype: FunctionPrototype;
   /** Function signature. */
   signature: Signature;
-  /** If a member of another namespace-like element, the concrete element it is a member of. */
-  memberOf: Element | null;
   /** Map of locals by name. */
   locals: Map<string,Local> = new Map();
   /** List of additional non-parameter locals. */
@@ -2764,19 +2761,19 @@ export class Function extends Element {
     prototype: FunctionPrototype,
     internalName: string,
     signature: Signature,
-    memberOf: Element | null = null,
+    parent: Element | null = null,
     contextualTypeArguments: Map<string,Type> | null = null
   ) {
     super(prototype.program, prototype.simpleName, internalName);
     this.prototype = prototype;
     this.signature = signature;
-    this.memberOf = memberOf;
+    this.parent = parent;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
     if (!(prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
       let localIndex = 0;
-      if (memberOf && memberOf.kind == ElementKind.CLASS) {
+      if (parent && parent.kind == ElementKind.CLASS) {
         assert(this.is(CommonFlags.INSTANCE));
         this.locals.set(
           "this",
@@ -2787,7 +2784,7 @@ export class Function extends Element {
             assert(signature.thisType)
           )
         );
-        let inheritedTypeArguments = (<Class>memberOf).contextualTypeArguments;
+        let inheritedTypeArguments = (<Class>parent).contextualTypeArguments;
         if (inheritedTypeArguments) {
           if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
           for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
@@ -3048,12 +3045,14 @@ export class Field extends VariableLikeElement {
     prototype: FieldPrototype,
     internalName: string,
     type: Type,
-    declaration: FieldDeclaration
+    declaration: FieldDeclaration,
+    parent: Class
   ) {
     super(prototype.program, prototype.simpleName, internalName, type, declaration);
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.type = type;
+    this.parent = parent;
   }
 }
 
@@ -3219,7 +3218,8 @@ export class ClassPrototype extends Element {
                 <FieldPrototype>member,
                 internalName + INSTANCE_DELIMITER + (<FieldPrototype>member).simpleName,
                 fieldType,
-                fieldDeclaration
+                fieldDeclaration,
+                instance
               );
               switch (fieldType.byteSize) { // align
                 case 1: break;

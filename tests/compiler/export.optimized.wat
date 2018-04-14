@@ -11,7 +11,7 @@
  (export "a" (global $export/a))
  (export "b" (global $export/b))
  (export "renamed_c" (global $export/c))
- (export "two" (func $export/ns.two))
+ (export "ns.two" (func $export/ns.two))
  (export "memory" (memory $0))
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.add
