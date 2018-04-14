@@ -135,16 +135,28 @@ declare namespace f64 {
 
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T = i32>(value: T): T;
+/** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
+declare function ctz<T = i32>(value: T): T;
+/** Performs the sign-agnostic count number of one bits operation on a 32-bit or 64-bit integer. */
+declare function popcnt<T = i32>(value: T): T;
+/** Performs the sign-agnostic rotate left operation on a 32-bit or 64-bit integer. */
+declare function rotl<T = i32>(value: T, shift: T): T;
+/** Performs the sign-agnostic rotate right operation on a 32-bit or 64-bit integer. */
+declare function rotr<T = i32>(value: T, shift: T): T;
 /** Computes the absolute value of an integer or float. */
 declare function abs<T = i32 | f32 | f64>(value: T): T;
 /** Determines the maximum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
 declare function max<T = i32 | f32 | f64>(left: T, right: T): T;
 /** Determines the minimum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
 declare function min<T = i32 | f32 | f64>(left: T, right: T): T;
+/** Composes a 32-bit or 64-bit float from the magnitude of `x` and the sign of `y`. */
+declare function copysign<T = f32 | f64>(x: T, y: T): T;
 /** Performs the ceiling operation on a 32-bit or 64-bit float. */
 declare function ceil<T = f32 | f64>(value: T): T;
 /** Performs the floor operation on a 32-bit or 64-bit float. */
 declare function floor<T = f32 | f64>(value: T): T;
+/** Rounds to the nearest integer tied to even of a 32-bit or 64-bit float. */
+declare function nearest<T = f32 | f64>(value: T): T;
 /** Selects one of two pre-evaluated values depending on the condition. */
 declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 /** Calculates the square root of a 32-bit or 64-bit float. */

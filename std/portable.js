@@ -75,6 +75,31 @@ Object.defineProperties(
 
 globalScope["clz"] = Math.clz32;
 
+globalScope["ctz"] = function ctz(value) {
+  var c = Math.clz32(value & -value);
+  return value ? 31 - c : c;
+};
+
+globalScope["popcnt"] = function popcnt(value) {
+  value &= (1 << 31) - 1;
+  value -= value >>> 1 & 0x55555555;
+  value = (value & 0x33333333) + (value >>> 2 & 0x33333333);
+  value = value + (value >> 4) & 0x0F0F0F0F;
+  value += value >>> 8;
+  value += value >>> 16;
+  return value & 0x7F;
+};
+
+globalScope["rotl"] = function rotl(value, shift) {
+  shift &= 31;
+  return (value << shift) | (value >>> (32 - shift));
+};
+
+globalScope["rotr"] = function rotr(value, shift) {
+  shift &= 31;
+  return (value >>> shift) | (value << (32 - shift));
+};
+
 globalScope["abs"] = Math.abs;
 
 globalScope["max"] = Math.max;
@@ -85,6 +110,8 @@ globalScope["ceil"] = Math.ceil;
 
 globalScope["floor"] = Math.floor;
 
+globalScope["nearest"] = Math.round;
+
 globalScope["select"] = function select(ifTrue, ifFalse, condition) {
   return condition ? ifTrue : ifFalse;
 };
@@ -92,6 +119,10 @@ globalScope["select"] = function select(ifTrue, ifFalse, condition) {
 globalScope["sqrt"] = Math.sqrt;
 
 globalScope["trunc"] = Math.trunc;
+
+globalScope["copysign"] = function copysign(x, y) {
+  return Math.abs(x) * Math.sign(y);
+};
 
 globalScope["bswap"] = function bswap(value) {
   var a = value >> 8 & 0x00FF00FF;
