@@ -111,7 +111,7 @@ export class String {
   @operator("==")
   private static __eq(left: String, right: String): bool {
     if (left === right) return true;
-    if (left === null || right === null)  return false;
+    if (left === null || right === null) return false;
 
     var leftLength = left.length;
     if (leftLength != right.length) return false;
@@ -186,7 +186,7 @@ export class String {
   @operator("<=")
   private static __lte(left: String, right: String): bool {
     if (left === right) return true;
-    if (left === null || right === null)  return false;
+    if (left === null || right === null) return false;
 
     var leftLength  = left.length;
     var rightLength = right.length;
