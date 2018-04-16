@@ -10378,6 +10378,7 @@
  )
  (func $~lib/string/String.__eq (; 106 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   (if
    (i32.eq
     (get_local $0)
@@ -10388,34 +10389,34 @@
    )
   )
   (if
-   (i32.eq
-    (get_local $0)
-    (i32.const 0)
-   )
-   (return
-    (i32.eq
-     (get_local $1)
-     (i32.const 0)
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.eq
+       (get_local $0)
+       (i32.const 0)
+      )
+     )
+     (get_local $2)
+     (i32.eq
+      (get_local $1)
+      (i32.const 0)
+     )
     )
-   )
-  )
-  (if
-   (i32.eq
-    (get_local $1)
-    (i32.const 0)
+    (i32.const 1)
    )
    (return
     (i32.const 0)
    )
   )
-  (set_local $2
+  (set_local $3
    (i32.load
     (get_local $0)
    )
   )
   (if
    (i32.ne
-    (get_local $2)
+    (get_local $3)
     (i32.load
      (get_local $1)
     )
@@ -10436,7 +10437,7 @@
       (i32.const 4)
      )
      (i32.shl
-      (get_local $2)
+      (get_local $3)
       (i32.const 1)
      )
     )

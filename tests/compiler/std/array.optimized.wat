@@ -5320,18 +5320,19 @@
    )
   )
   (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (return
-    (i32.eqz
-     (get_local $1)
+   (i32.and
+    (if (result i32)
+     (tee_local $2
+      (i32.eqz
+       (get_local $0)
+      )
+     )
+     (get_local $2)
+     (i32.eqz
+      (get_local $1)
+     )
     )
-   )
-  )
-  (if
-   (i32.eqz
-    (get_local $1)
+    (i32.const 1)
    )
    (return
     (i32.const 0)
