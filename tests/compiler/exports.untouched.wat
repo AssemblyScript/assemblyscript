@@ -1,9 +1,10 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
+ (type $iv (func (param i32)))
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiv (func (param i32 i32)))
- (type $iv (func (param i32)))
+ (global $~argc (mut i32) (i32.const 0))
  (global $exports/Animal.CAT i32 (i32.const 0))
  (global $exports/Animal.DOG i32 (i32.const 1))
  (global $exports/animals.Animal.CAT i32 (i32.const 0))
@@ -14,6 +15,8 @@
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "add" (func $exports/add))
+ (export "_setargc" (func $~setargc))
+ (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/math.sub))
  (export "Animal.CAT" (global $exports/Animal.CAT))
  (export "Animal.DOG" (global $exports/Animal.DOG))
@@ -43,7 +46,7 @@
    )
   )
  )
- (func $exports/math.sub (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (i32.sub
     (get_local $0)
@@ -51,66 +54,101 @@
    )
   )
  )
- (func $exports/Car.getNumTires (; 2 ;) (type $i) (result i32)
+ (func $exports/subOpt|trampoline (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (block $1of1
+   (block $0of1
+    (block $oob
+     (br_table $0of1 $1of1 $oob
+      (i32.sub
+       (get_global $~argc)
+       (i32.const 1)
+      )
+     )
+    )
+    (unreachable)
+   )
+   (set_local $1
+    (i32.const 0)
+   )
+  )
+  (call $exports/subOpt
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func $~setargc (; 3 ;) (type $iv) (param $0 i32)
+  (set_global $~argc
+   (get_local $0)
+  )
+ )
+ (func $exports/math.sub (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (return
+   (i32.sub
+    (get_local $0)
+    (get_local $1)
+   )
+  )
+ )
+ (func $exports/Car.getNumTires (; 5 ;) (type $i) (result i32)
   (return
    (i32.const 4)
   )
  )
- (func $Car#get:doors (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Car#get:doors (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (get_local $0)
   )
  )
- (func $Car#set:doors (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Car#set:doors (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $exports/Car#get:numDoors (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (; 8 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (i32.load
     (get_local $0)
    )
   )
  )
- (func $exports/Car#set:numDoors (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $exports/Car#openDoors (; 7 ;) (type $iv) (param $0 i32)
+ (func $exports/Car#openDoors (; 10 ;) (type $iv) (param $0 i32)
  )
- (func $exports/vehicles.Car.getNumTires (; 8 ;) (type $i) (result i32)
+ (func $exports/vehicles.Car.getNumTires (; 11 ;) (type $i) (result i32)
   (return
    (i32.const 4)
   )
  )
- (func $vehicles.Car#get:doors (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $vehicles.Car#get:doors (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (get_local $0)
   )
  )
- (func $vehicles.Car#set:doors (; 10 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $vehicles.Car#set:doors (; 13 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $exports/vehicles.Car#get:numDoors (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $exports/vehicles.Car#get:numDoors (; 14 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (i32.load
     (get_local $0)
    )
   )
  )
- (func $exports/vehicles.Car#set:numDoors (; 12 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/vehicles.Car#set:numDoors (; 15 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $exports/vehicles.Car#openDoors (; 13 ;) (type $iv) (param $0 i32)
+ (func $exports/vehicles.Car#openDoors (; 16 ;) (type $iv) (param $0 i32)
  )
 )

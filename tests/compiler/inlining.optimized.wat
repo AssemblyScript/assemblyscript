@@ -4,7 +4,7 @@
  (type $v (func))
  (type $ii (func (param i32) (result i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (table 1 1 anyfunc)
  (elem (i32.const 0) $inlining/test_funcs~anonymous|0)
  (memory $0 1)
@@ -172,7 +172,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (i32.ne

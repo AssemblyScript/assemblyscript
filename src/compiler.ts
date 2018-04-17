@@ -227,7 +227,9 @@ export class Compiler extends DiagnosticEmitter {
   /** Function table being compiled. */
   functionTable: Function[] = new Array();
   /** Argument count helper global. */
-  argumentCountRef: GlobalRef = 0;
+  argcVar: GlobalRef = 0;
+  /** Argument count helper setter. */
+  argcSet: FunctionRef = 0;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -923,6 +925,22 @@ export class Compiler extends DiagnosticEmitter {
 
     // check module-level export
     if (instance.is(CommonFlags.MODULE_EXPORT)) {
+      if (signature.requiredParameters < signature.parameterTypes.length) {
+        // export the trampoline if the function takes optional parameters
+        instance = this.ensureTrampoline(instance);
+        if (!this.argcSet) {
+          this.ensureArgumentCount(0);
+          this.argcSet = module.addFunction("~setargc",
+            this.ensureFunctionType([ Type.u32 ], Type.void),
+            null,
+            module.createSetGlobal("~argc",
+              module.createGetLocal(0, NativeType.I32)
+            )
+          );
+          // export a helper to set argc prior to calling it
+          module.addFunctionExport("~setargc", "_setargc");
+        }
+      }
       module.addFunctionExport(instance.internalName, mangleExportName(instance));
     }
 
@@ -5035,10 +5053,10 @@ export class Compiler extends DiagnosticEmitter {
           minArguments
             ? module.createBinary(
                 BinaryOp.SubI32,
-                module.createGetGlobal("argumentCount", NativeType.I32),
+                module.createGetGlobal("~argc", NativeType.I32),
                 module.createI32(minArguments)
               )
-            : module.createGetGlobal("argumentCount", NativeType.I32)
+            : module.createGetGlobal("~argc", NativeType.I32)
         )
       ]),
       module.createUnreachable()
@@ -5211,18 +5229,18 @@ export class Compiler extends DiagnosticEmitter {
     ], returnType.toNativeType());
   }
 
-  /** Makes sure that the `argumentCount` helper global is present and returns an expression that sets it. */
+  /** Makes sure that the argument count helper global is present and returns an expression that sets it. */
   private ensureArgumentCount(argumentCount: i32): ExpressionRef {
     var module = this.module;
-    if (!this.argumentCountRef) {
-      this.argumentCountRef = module.addGlobal(
-        "argumentCount",
+    if (!this.argcVar) {
+      this.argcVar = module.addGlobal(
+        "~argc",
         NativeType.I32,
         true,
         module.createI32(0)
       );
     }
-    return module.createSetGlobal("argumentCount", module.createI32(argumentCount));
+    return module.createSetGlobal("~argc", module.createI32(argumentCount));
   }
 
   compileCommaExpression(expression: CommaExpression, contextualType: Type): ExpressionRef {

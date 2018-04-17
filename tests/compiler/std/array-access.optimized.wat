@@ -4,7 +4,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 4) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 40) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
@@ -223,7 +223,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -241,7 +241,7 @@
   )
  )
  (func $std/array-access/stringArrayMethodCall (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  (set_global $argumentCount
+  (set_global $~argc
    (i32.const 1)
   )
   (call $~lib/string/String#startsWith|trampoline
@@ -265,7 +265,7 @@
   )
  )
  (func $std/array-access/stringArrayArrayMethodCall (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  (set_global $argumentCount
+  (set_global $~argc
    (i32.const 1)
   )
   (call $~lib/string/String#startsWith|trampoline

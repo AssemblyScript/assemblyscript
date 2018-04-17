@@ -3,7 +3,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 40))
  (table 1 1 anyfunc)
@@ -31,7 +31,7 @@
      (block $oob
       (br_table $0of2 $1of2 $2of2 $oob
        (i32.sub
-        (get_global $argumentCount)
+        (get_global $~argc)
         (i32.const 1)
        )
       )
@@ -57,7 +57,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $call-optional/opt|trampoline
@@ -83,7 +83,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 2)
       )
       (call $call-optional/opt|trampoline
@@ -130,7 +130,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call_indirect (type $iiii)
@@ -157,7 +157,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 2)
       )
       (call_indirect (type $iiii)
@@ -184,7 +184,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 3)
       )
       (call_indirect (type $iiii)

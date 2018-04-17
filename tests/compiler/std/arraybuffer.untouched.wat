@@ -16,7 +16,7 @@
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 148))
  (memory $0 1)
@@ -2828,7 +2828,7 @@
     (block $0of2
      (block $oob
       (br_table $0of2 $1of2 $2of2 $oob
-       (get_global $argumentCount)
+       (get_global $~argc)
       )
      )
      (unreachable)
@@ -2890,7 +2890,7 @@
   )
   (set_global $std/arraybuffer/sliced
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 0)
     )
     (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -2938,7 +2938,7 @@
   )
   (set_global $std/arraybuffer/sliced
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -2969,7 +2969,7 @@
   )
   (set_global $std/arraybuffer/sliced
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -3104,7 +3104,7 @@
   )
   (set_global $std/arraybuffer/sliced
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline

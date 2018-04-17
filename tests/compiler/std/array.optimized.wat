@@ -15,7 +15,7 @@
  (import "JSMath" "random" (func $~lib/math/JSMath.random (result f64)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
  (global $std/array/includes (mut i32) (i32.const 0))
@@ -260,7 +260,7 @@
    (block $0of1
     (block $oob
      (br_table $0of1 $1of1 $oob
-      (get_global $argumentCount)
+      (get_global $~argc)
      )
     )
     (unreachable)
@@ -3110,7 +3110,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -3224,7 +3224,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -3453,7 +3453,7 @@
     (block
      (if
       (block (result i32)
-       (set_global $argumentCount
+       (set_global $~argc
         (i32.const 3)
        )
        (call_indirect (type $iiii)
@@ -3566,7 +3566,7 @@
     (block
      (if
       (block (result i32)
-       (set_global $argumentCount
+       (set_global $~argc
         (i32.const 3)
        )
        (i32.eqz
@@ -3681,7 +3681,7 @@
     (block
      (if
       (block (result i32)
-       (set_global $argumentCount
+       (set_global $~argc
         (i32.const 3)
        )
        (call_indirect (type $iiii)
@@ -3795,7 +3795,7 @@
      (i32.const 1)
     )
     (block
-     (set_global $argumentCount
+     (set_global $~argc
       (i32.const 4)
      )
      (set_local $4
@@ -4166,7 +4166,7 @@
            )
           )
          )
-         (set_global $argumentCount
+         (set_global $~argc
           (i32.const 2)
          )
          (br_if $break|1
@@ -4358,7 +4358,7 @@
      )
      (if
       (block (result i32)
-       (set_global $argumentCount
+       (set_global $~argc
         (i32.const 2)
        )
        (i32.lt_s
@@ -4546,7 +4546,7 @@
         )
         (if
          (block (result i32)
-          (set_global $argumentCount
+          (set_global $~argc
            (i32.const 2)
           )
           (i32.lt_s
@@ -4697,7 +4697,7 @@
     )
     (if
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 2)
       )
       (i32.lt_s
@@ -4763,7 +4763,7 @@
     (block
      (if
       (block (result i32)
-       (set_global $argumentCount
+       (set_global $~argc
         (i32.const 2)
        )
        (i32.gt_s
@@ -4895,7 +4895,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 2)
       )
      )
@@ -5445,7 +5445,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 2)
       )
      )
@@ -5759,7 +5759,7 @@
   )
   (set_global $std/array/arr
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 0)
     )
     (call $~lib/array/Array<i32>#constructor|trampoline
@@ -6716,7 +6716,7 @@
   )
   (set_global $std/array/i
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/array/Array<i32>#indexOf|trampoline
@@ -6740,7 +6740,7 @@
   )
   (set_global $std/array/i
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/array/Array<i32>#indexOf|trampoline
@@ -6767,7 +6767,7 @@
   )
   (set_global $std/array/i
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/array/Array<i32>#indexOf|trampoline
@@ -6948,7 +6948,7 @@
   )
   (set_global $std/array/includes
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/array/Array<i32>#includes|trampoline
@@ -6975,7 +6975,7 @@
   )
   (set_global $std/array/includes
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/array/Array<i32>#includes|trampoline
@@ -7002,7 +7002,7 @@
   )
   (set_global $std/array/includes
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/array/Array<i32>#includes|trampoline
@@ -8029,7 +8029,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (i32.eqz
@@ -8055,7 +8055,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (i32.eqz
@@ -8081,7 +8081,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (i32.eqz
@@ -8239,7 +8239,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (i32.eqz

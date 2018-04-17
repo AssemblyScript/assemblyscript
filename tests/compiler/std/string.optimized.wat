@@ -13,7 +13,7 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/string/str (mut i32) (i32.const 4))
  (global $std/string/nullStr (mut i32) (i32.const 0))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $std/string/c (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 520))
  (memory $0 1)
@@ -244,7 +244,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -352,7 +352,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -490,7 +490,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -513,7 +513,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -910,7 +910,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -3826,7 +3826,7 @@
    (block $0of1
     (block $oob
      (br_table $0of1 $1of1 $oob
-      (get_global $argumentCount)
+      (get_global $~argc)
      )
     )
     (unreachable)
@@ -3905,7 +3905,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (i32.eqz
@@ -3928,7 +3928,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (i32.eqz
@@ -3951,7 +3951,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (i32.eqz
@@ -3974,7 +3974,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (i32.ne
@@ -3998,7 +3998,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (i32.ne
@@ -4022,7 +4022,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (f64.ne
@@ -4045,7 +4045,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (f64.ne
@@ -4068,7 +4068,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (f64.ne
@@ -4091,7 +4091,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (f64.ne
@@ -4114,7 +4114,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (f64.ne
@@ -4137,7 +4137,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (f64.ne
@@ -4160,7 +4160,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (f64.ne
@@ -4183,7 +4183,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (f64.ne
@@ -4679,7 +4679,7 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 0)
       )
       (call $~lib/string/String#repeat|trampoline

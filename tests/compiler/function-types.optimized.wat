@@ -8,7 +8,7 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
  (table 4 4 anyfunc)
  (elem (i32.const 0) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|1 $function-types/makeAdder<f64>~anonymous|2 $function-types/makeAdder<i32>~anonymous|0)
@@ -45,7 +45,7 @@
   (i32.const 2)
  )
  (func $function-types/doAddWithFn<i32> (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (set_global $argumentCount
+  (set_global $~argc
    (i32.const 2)
   )
   (call_indirect (type $iii)
@@ -55,7 +55,7 @@
   )
  )
  (func $function-types/doAdd<i32> (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (set_global $argumentCount
+  (set_global $~argc
    (i32.const 2)
   )
   (call_indirect (type $iii)
@@ -70,7 +70,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 2)
       )
      )
@@ -93,7 +93,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (i32.ne
@@ -120,7 +120,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (i64.ne
@@ -144,7 +144,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (f64.ne
@@ -224,7 +224,7 @@
   )
   (if
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (i32.ne

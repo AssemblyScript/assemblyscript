@@ -5,7 +5,7 @@
  (type $ii (func (param i32) (result i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $inlining/constantGlobal i32 (i32.const 1))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 32))
  (table 1 1 anyfunc)
  (elem (i32.const 0) $inlining/test_funcs~anonymous|0)
@@ -311,7 +311,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call_indirect (type $ii)

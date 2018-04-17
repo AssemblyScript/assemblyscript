@@ -19,7 +19,7 @@
  (global $std/string/str (mut i32) (i32.const 4))
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/internal/string/CharCode.PLUS i32 (i32.const 43))
@@ -309,7 +309,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -436,7 +436,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -600,7 +600,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -623,7 +623,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -1069,7 +1069,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 1)
       )
      )
@@ -4401,7 +4401,7 @@
    (block $0of1
     (block $oob
      (br_table $0of1 $1of1 $oob
-      (get_global $argumentCount)
+      (get_global $~argc)
      )
     )
     (unreachable)
@@ -4490,7 +4490,7 @@
   (if
    (i32.eqz
     (block (result i32)
-     (set_global $argumentCount
+     (set_global $~argc
       (i32.const 1)
      )
      (call $~lib/string/String#startsWith|trampoline
@@ -4513,7 +4513,7 @@
   (if
    (i32.eqz
     (block (result i32)
-     (set_global $argumentCount
+     (set_global $~argc
       (i32.const 1)
      )
      (call $~lib/string/String#endsWith|trampoline
@@ -4536,7 +4536,7 @@
   (if
    (i32.eqz
     (block (result i32)
-     (set_global $argumentCount
+     (set_global $~argc
       (i32.const 1)
      )
      (call $~lib/string/String#includes|trampoline
@@ -4560,7 +4560,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/String#indexOf|trampoline
@@ -4586,7 +4586,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/String#indexOf|trampoline
@@ -4612,7 +4612,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/parseInt|trampoline
@@ -4637,7 +4637,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/parseInt|trampoline
@@ -4662,7 +4662,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/parseInt|trampoline
@@ -4687,7 +4687,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/parseInt|trampoline
@@ -4712,7 +4712,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/parseInt|trampoline
@@ -4737,7 +4737,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/parseInt|trampoline
@@ -4762,7 +4762,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/parseInt|trampoline
@@ -4787,7 +4787,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 1)
       )
       (call $~lib/string/parseInt|trampoline
@@ -5323,7 +5323,7 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 0)
       )
       (call $~lib/string/String#repeat|trampoline

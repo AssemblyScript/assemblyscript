@@ -8,7 +8,7 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 44))
  (table 4 4 anyfunc)
@@ -60,7 +60,7 @@
  (func $function-types/doAddWithFn<i32> (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (return
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (call_indirect (type $iii)
@@ -74,7 +74,7 @@
  (func $function-types/doAdd<i32> (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (call_indirect (type $iii)
@@ -96,7 +96,7 @@
  (func $function-types/makeAndAdd<i32> (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (return
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 2)
     )
     (call_indirect (type $iii)
@@ -113,7 +113,7 @@
     (block $oob
      (br_table $0of1 $1of1 $oob
       (i32.sub
-       (get_global $argumentCount)
+       (get_global $~argc)
        (i32.const 2)
       )
      )
@@ -139,7 +139,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 2)
       )
       (call_indirect (type $iii)
@@ -168,7 +168,7 @@
    (i32.eqz
     (i64.eq
      (block (result i64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 2)
       )
       (call_indirect (type $III)
@@ -194,7 +194,7 @@
    (i32.eqz
     (f64.eq
      (block (result f64)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 2)
       )
       (call_indirect (type $FFF)
@@ -282,7 +282,7 @@
    (i32.eqz
     (i32.eq
      (block (result i32)
-      (set_global $argumentCount
+      (set_global $~argc
        (i32.const 2)
       )
       (call $function-types/makeAndAdd<i32>|trampoline

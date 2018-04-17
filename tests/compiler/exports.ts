@@ -3,6 +3,10 @@ export function add(a: i32, b: i32): i32 {
   return a + b;
 }
 
+export function subOpt(a: i32, b: i32 = 0): i32 {
+  return a - b;
+}
+
 // namespaced function
 export namespace math {
   export function sub(a: i32, b: i32): i32 {

@@ -9,7 +9,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
- (global $argumentCount (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 148))
  (memory $0 1)
@@ -2498,7 +2498,7 @@
     (block $0of2
      (block $oob
       (br_table $0of2 $1of2 $2of2 $oob
-       (get_global $argumentCount)
+       (get_global $~argc)
       )
      )
      (unreachable)
@@ -2555,7 +2555,7 @@
   )
   (set_global $std/arraybuffer/sliced
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 0)
     )
     (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -2599,7 +2599,7 @@
   )
   (set_global $std/arraybuffer/sliced
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -2628,7 +2628,7 @@
   )
   (set_global $std/arraybuffer/sliced
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -2753,7 +2753,7 @@
   )
   (set_global $std/arraybuffer/sliced
    (block (result i32)
-    (set_global $argumentCount
+    (set_global $~argc
      (i32.const 1)
     )
     (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
