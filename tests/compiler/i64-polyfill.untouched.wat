@@ -1,9 +1,12 @@
 (module
+ (type $F (func (result f64)))
  (type $i (func (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (global $../../examples/i64-polyfill/assembly/i64/lo (mut i32) (i32.const 0))
  (global $../../examples/i64-polyfill/assembly/i64/hi (mut i32) (i32.const 0))
+ (global $NaN f64 (f64.const nan:0x8000000000000))
+ (global $Infinity f64 (f64.const inf))
  (global $HEAP_BASE i32 (i32.const 4))
  (memory $0 1)
  (export "getHi" (func $../../examples/i64-polyfill/assembly/i64/getHi))

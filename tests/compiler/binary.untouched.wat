@@ -3,11 +3,15 @@
  (type $F (func (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fff (func (param f32 f32) (result f32)))
+ (type $fi (func (param f32) (result i32)))
+ (type $i (func (result i32)))
  (type $f (func (result f32)))
  (type $fif (func (param f32 i32) (result f32)))
+ (type $Fi (func (param f64) (result i32)))
  (type $v (func))
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
+ (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
@@ -1715,7 +1719,28 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.mod (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $isNaN<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
+  (return
+   (i64.gt_u
+    (i64.and
+     (i64.reinterpret/f64
+      (f64.promote/f32
+       (get_local $0)
+      )
+     )
+     (i64.shr_u
+      (i64.const -1)
+      (i64.const 1)
+     )
+    )
+    (i64.shl
+     (i64.const 2047)
+     (i64.const 52)
+    )
+   )
+  )
+ )
+ (func $~lib/math/NativeMathf.mod (; 3 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1773,14 +1798,8 @@
          )
         )
         (get_local $7)
-        (i32.gt_u
-         (i32.and
-          (i32.reinterpret/f32
-           (get_local $1)
-          )
-          (i32.const 2147483647)
-         )
-         (i32.const 2139095040)
+        (call $isNaN<f32>
+         (get_local $1)
         )
        )
        (i32.const 1)
@@ -2153,7 +2172,7 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.scalbn (; 3 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 4 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (nop)
   (set_local $2
@@ -2272,7 +2291,7 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.pow (; 4 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 5 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3603,7 +3622,26 @@
    )
   )
  )
- (func $~lib/math/NativeMath.mod (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $isNaN<f64> (; 6 ;) (type $Fi) (param $0 f64) (result i32)
+  (return
+   (i64.gt_u
+    (i64.and
+     (i64.reinterpret/f64
+      (get_local $0)
+     )
+     (i64.shr_u
+      (i64.const -1)
+      (i64.const 1)
+     )
+    )
+    (i64.shl
+     (i64.const 2047)
+     (i64.const 52)
+    )
+   )
+  )
+ )
+ (func $~lib/math/NativeMath.mod (; 7 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -3667,14 +3705,8 @@
          )
         )
         (get_local $7)
-        (i64.gt_u
-         (i64.and
-          (i64.reinterpret/f64
-           (get_local $1)
-          )
-          (i64.const 9223372036854775807)
-         )
-         (i64.const 9218868437227405312)
+        (call $isNaN<f64>
+         (get_local $1)
         )
        )
        (i32.const 1)
@@ -4060,7 +4092,7 @@
    )
   )
  )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 8 ;) (type $v)
   (drop
    (i32.lt_s
     (get_global $binary/i)

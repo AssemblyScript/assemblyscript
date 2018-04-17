@@ -266,12 +266,10 @@ export class Compiler extends DiagnosticEmitter {
     this.startFunction = startFunctionInstance;
     this.currentFunction = startFunctionInstance;
 
-    // compile entry file(s) while traversing to reachable elements
+    // compile entry file(s) while traversing reachable elements
     var sources = program.sources;
     for (let i = 0, k = sources.length; i < k; ++i) {
-      if (sources[i].isEntry) {
-        this.compileSource(sources[i]);
-      }
+      if (sources[i].isEntry) this.compileSource(sources[i]);
     }
 
     // compile the start function if not empty
@@ -326,7 +324,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
 
-    // import memory if requested
+    // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) module.addMemoryImport("0", "env", "memory");
 
     // set up function table
@@ -343,7 +341,7 @@ export class Compiler extends DiagnosticEmitter {
       functionTableExported = true;
     }
 
-    // import table if requested
+    // import table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
       module.addTableImport("0", "env", "table");
       if (!functionTableExported) module.addTableExport("0", "table");
@@ -354,6 +352,7 @@ export class Compiler extends DiagnosticEmitter {
 
   // sources
 
+  /** Compiles a source by looking it up by path first. */
   compileSourceByPath(normalizedPathWithoutExtension: string, reportNode: Node): void {
     var source = this.program.lookupSourceByPath(normalizedPathWithoutExtension);
     if (!source) {
@@ -366,8 +365,9 @@ export class Compiler extends DiagnosticEmitter {
     this.compileSource(source);
   }
 
+  /** Compiles a source. */
   compileSource(source: Source): void {
-     if (source.is(CommonFlags.COMPILED)) return;
+    if (source.is(CommonFlags.COMPILED)) return;
     source.set(CommonFlags.COMPILED);
 
     // compile top-level statements
@@ -2098,11 +2098,15 @@ export class Compiler extends DiagnosticEmitter {
             )
           : this.module.createI64(0);
       }
+      case TypeKind.F64: {
+        if (!(element.is(CommonFlags.BUILTIN) && contextualType == Type.f32)) {
+          return this.module.createF64((<VariableLikeElement>element).constantFloatValue);
+        }
+        // otherwise fall-through: basically precomputes f32.demote/f64 of NaN / Infinity
+        this.currentType = Type.f32;
+      }
       case TypeKind.F32: {
         return this.module.createF32((<VariableLikeElement>element).constantFloatValue);
-      }
-      case TypeKind.F64: {
-        return this.module.createF64((<VariableLikeElement>element).constantFloatValue);
       }
       default: {
         assert(false);
@@ -2324,18 +2328,14 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.createUnary(UnaryOp.TruncF32ToI64, expr);
             } else {
               expr = module.createUnary(UnaryOp.TruncF32ToI32, expr);
-              if (toType.is(TypeFlags.SMALL)) {
-                expr = makeSmallIntegerWrap(expr, toType, module);
-              }
+              if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
             }
           } else {
             if (toType.is(TypeFlags.LONG)) {
               expr = module.createUnary(UnaryOp.TruncF32ToU64, expr);
             } else {
               expr = module.createUnary(UnaryOp.TruncF32ToU32, expr);
-              if (toType.is(TypeFlags.SMALL)) {
-                expr = makeSmallIntegerWrap(expr, toType, module);
-              }
+              if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
             }
           }
 
@@ -2346,18 +2346,14 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.createUnary(UnaryOp.TruncF64ToI64, expr);
             } else {
               expr = module.createUnary(UnaryOp.TruncF64ToI32, expr);
-              if (toType.is(TypeFlags.SMALL)) {
-                expr = makeSmallIntegerWrap(expr, toType, module);
-              }
+              if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
             }
           } else {
             if (toType.is(TypeFlags.LONG)) {
               expr = module.createUnary(UnaryOp.TruncF64ToU64, expr);
             } else {
               expr = module.createUnary(UnaryOp.TruncF64ToU32, expr);
-              if (toType.is(TypeFlags.SMALL)) {
-                expr = makeSmallIntegerWrap(expr, toType, module);
-              }
+              if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
             }
           }
         }
@@ -2415,9 +2411,7 @@ export class Compiler extends DiagnosticEmitter {
         // i64 to i32
         if (!toType.is(TypeFlags.LONG)) {
           expr = module.createUnary(UnaryOp.WrapI64, expr); // discards upper bits
-          if (toType.is(TypeFlags.SMALL)) {
-            expr = makeSmallIntegerWrap(expr, toType, module);
-          }
+          if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
         }
 
       // i32 to i64
@@ -2426,7 +2420,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // i32 or smaller to even smaller or same size int with change of sign
       } else if (
-        toType.is(TypeFlags.SMALL) &&
+        toType.is(TypeFlags.SHORT) &&
         (
           fromType.size > toType.size ||
           (
@@ -4097,7 +4091,7 @@ export class Compiler extends DiagnosticEmitter {
           leftExpr = module.createTeeLocal(tempLocal.index, leftExpr);
         }
 
-        possiblyOverflows = this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER);
+        possiblyOverflows = this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER);
         condExpr = makeIsTrueish(leftExpr, this.currentType, module);
 
         // simplify when cloning left without side effects was successful
@@ -4143,7 +4137,7 @@ export class Compiler extends DiagnosticEmitter {
           leftExpr = module.createTeeLocal(tempLocal.index, leftExpr);
         }
 
-        possiblyOverflows = this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER); // if right did
+        possiblyOverflows = this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER); // if right did
         condExpr = makeIsTrueish(leftExpr, this.currentType, module);
 
         // simplify when cloning left without side effects was successful
@@ -4179,7 +4173,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     if (possiblyOverflows && wrapSmallIntegers) {
-      assert(this.currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER)); // must be a small int
+      assert(this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER)); // must be a small int
       expr = makeSmallIntegerWrap(expr, this.currentType, module);
     }
     return compound
@@ -6201,7 +6195,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (possiblyOverflows) {
-      assert(currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
+      assert(currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER));
       setValue = makeSmallIntegerWrap(setValue, currentType, module);
     }
 
@@ -6252,7 +6246,7 @@ export class Compiler extends DiagnosticEmitter {
           false // wrapped below
         );
         currentType = this.currentType;
-        possiblyOverflows = currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER); // if operand already did
+        possiblyOverflows = currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER); // if operand already did
         break;
       }
       case Token.MINUS: {
@@ -6553,7 +6547,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     if (possiblyOverflows && wrapSmallIntegers) {
-      assert(currentType.is(TypeFlags.SMALL | TypeFlags.INTEGER));
+      assert(currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER));
       expr = makeSmallIntegerWrap(expr, currentType, module);
     }
     return compound

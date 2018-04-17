@@ -69,20 +69,18 @@ export const enum TypeFlags {
   INTEGER = 1 << 2,
   /** Is a floating point type. */
   FLOAT = 1 << 3,
-  /** Is a sized integer type with a target specific bit size. */
-  SIZE = 1 << 4,
-  /** Is a small type that is emulated in a larger type. */
-  SMALL = 1 << 5,
-  /** Is a long type larger than 32-bits. */
+  /** Is a pointer type. */
+  POINTER = 1 << 4,
+  /** Is smaller than 32-bits. */
+  SHORT = 1 << 5,
+  /** Is larger than 32-bits. */
   LONG = 1 << 6,
   /** Is a value type. */
   VALUE = 1 << 7,
   /** Is a reference type. */
   REFERENCE = 1 << 8,
   /** Is a nullable type. */
-  NULLABLE = 1 << 9,
-  /** Is the special 'this' type. */
-  THIS = 1 << 10
+  NULLABLE = 1 << 9
 }
 
 /** Represents a resolved type. */
@@ -94,21 +92,19 @@ export class Type {
   flags: TypeFlags;
   /** Size in bits. */
   size: u32;
-  /** Size in bytes. Ceiled to 8-bits. */
+  /** Size in bytes. */
   byteSize: i32;
   /** Underlying class reference, if a class type. */
   classReference: Class | null;
-  /** Underlying function reference, if a function type. */
+  /** Underlying signature reference, if a function type. */
   signatureReference: Signature | null;
-  /** Respective nullable type, if non-nullable. */
-  nullableType: Type | null = null;
   /** Respective non-nullable type, if nullable. */
   nonNullableType: Type;
-  /** Respective special 'this' type. */
-  thisType: Type | null = null;
+  /** Cached nullable type, if non-nullable. */
+  private cachedNullableType: Type | null = null;
 
   /** Constructs a new resolved type. */
-  constructor(kind: TypeKind, flags: TypeFlags, size: i32) {
+  constructor(kind: TypeKind, flags: TypeFlags, size: u32) {
     this.kind = kind;
     this.flags = flags;
     this.size = size;
@@ -128,7 +124,7 @@ export class Type {
     return ~0 >>> (targetType.size - this.size);
   }
 
-  /** Tests if this type has the specified flags. */
+  /** Tests if this type has (all of) the specified flags. */
   is(flags: TypeFlags): bool { return (this.flags & flags) == flags; }
   /** Tests if this type has any of the specified flags. */
   isAny(flags: TypeFlags): bool { return (this.flags & flags) != 0; }
@@ -152,25 +148,13 @@ export class Type {
   /** Composes the respective nullable type of this type. */
   asNullable(): Type {
     assert(this.is(TypeFlags.REFERENCE));
-    if (!this.nullableType) {
+    if (!this.cachedNullableType) {
       assert(!this.is(TypeFlags.NULLABLE));
-      this.nullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
-      this.nullableType.classReference = this.classReference;       // either a class reference
-      this.nullableType.signatureReference = this.signatureReference; // or a function reference
+      this.cachedNullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
+      this.cachedNullableType.classReference = this.classReference;       // either a class reference
+      this.cachedNullableType.signatureReference = this.signatureReference; // or a function reference
     }
-    return this.nullableType;
-  }
-
-  /** Composes the respective 'this' type of this type. */
-  asThis(): Type {
-    var thisType = this.thisType;
-    if (thisType) return thisType;
-    thisType = new Type(this.kind, this.flags | TypeFlags.THIS, this.size);
-    thisType.classReference = this.classReference;
-    thisType.nullableType = this.nullableType;
-    thisType.nonNullableType = this.nonNullableType;
-    this.thisType = thisType;
-    return thisType;
+    return this.cachedNullableType;
   }
 
   /** Tests if a value of this type is assignable to a target of the specified type. */
@@ -213,11 +197,8 @@ export class Type {
 
   /** Determines the common compatible type of two types, if any. */
   static commonCompatible(left: Type, right: Type, signednessIsImportant: bool): Type | null {
-    if (right.isAssignableTo(left, signednessIsImportant)) {
-      return left;
-    } else if (left.isAssignableTo(right, signednessIsImportant)) {
-      return right;
-    }
+    if (right.isAssignableTo(left, signednessIsImportant)) return left;
+    else if (left.isAssignableTo(right, signednessIsImportant)) return right;
     return null;
   }
 
@@ -233,16 +214,12 @@ export class Type {
       case TypeKind.U16: return "u16";
       case TypeKind.U32: {
         let functionType = this.signatureReference;
-        return kindOnly || !functionType
-          ? "u32"
-          : functionType.toString(true);
+        return kindOnly || !functionType ? "u32" : functionType.toString(true);
       }
       case TypeKind.U64: return "u64";
       case TypeKind.USIZE: {
         let classType = this.classReference;
-        return kindOnly || !classType
-          ? "usize"
-          : classType.toString();
+        return kindOnly || !classType ? "usize" : classType.toString();
       }
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
@@ -332,7 +309,7 @@ export class Type {
   /** An 8-bit signed integer. */
   static readonly i8: Type  = new Type(TypeKind.I8,
     TypeFlags.SIGNED   |
-    TypeFlags.SMALL    |
+    TypeFlags.SHORT    |
     TypeFlags.INTEGER  |
     TypeFlags.VALUE,   8
   );
@@ -340,7 +317,7 @@ export class Type {
   /** A 16-bit signed integer. */
   static readonly i16: Type = new Type(TypeKind.I16,
     TypeFlags.SIGNED   |
-    TypeFlags.SMALL    |
+    TypeFlags.SHORT    |
     TypeFlags.INTEGER  |
     TypeFlags.VALUE,  16
   );
@@ -363,8 +340,8 @@ export class Type {
   /** A 32-bit signed size. WASM32 only. */
   static readonly isize32: Type = new Type(TypeKind.ISIZE,
     TypeFlags.SIGNED   |
-    TypeFlags.SIZE     |
     TypeFlags.INTEGER  |
+    TypeFlags.POINTER  |
     TypeFlags.VALUE,  32
   );
 
@@ -372,15 +349,15 @@ export class Type {
   static readonly isize64: Type = new Type(TypeKind.ISIZE,
     TypeFlags.SIGNED   |
     TypeFlags.LONG     |
-    TypeFlags.SIZE     |
     TypeFlags.INTEGER  |
+    TypeFlags.POINTER  |
     TypeFlags.VALUE,  64
   );
 
   /** An 8-bit unsigned integer. */
   static readonly u8: Type = new Type(TypeKind.U8,
     TypeFlags.UNSIGNED |
-    TypeFlags.SMALL    |
+    TypeFlags.SHORT    |
     TypeFlags.INTEGER  |
     TypeFlags.VALUE,   8
   );
@@ -388,7 +365,7 @@ export class Type {
   /** A 16-bit unsigned integer. */
   static readonly u16: Type = new Type(TypeKind.U16,
     TypeFlags.UNSIGNED |
-    TypeFlags.SMALL    |
+    TypeFlags.SHORT    |
     TypeFlags.INTEGER  |
     TypeFlags.VALUE,  16
   );
@@ -411,8 +388,8 @@ export class Type {
   /** A 32-bit unsigned size. WASM32 only. */
   static readonly usize32: Type = new Type(TypeKind.USIZE,
     TypeFlags.UNSIGNED |
-    TypeFlags.SIZE     |
     TypeFlags.INTEGER  |
+    TypeFlags.POINTER  |
     TypeFlags.VALUE,  32
   );
 
@@ -420,15 +397,15 @@ export class Type {
   static readonly usize64: Type = new Type(TypeKind.USIZE,
     TypeFlags.UNSIGNED |
     TypeFlags.LONG     |
-    TypeFlags.SIZE     |
     TypeFlags.INTEGER  |
+    TypeFlags.POINTER  |
     TypeFlags.VALUE,  64
   );
 
   /** A 1-bit unsigned integer. */
   static readonly bool: Type = new Type(TypeKind.BOOL,
     TypeFlags.UNSIGNED |
-    TypeFlags.SMALL    |
+    TypeFlags.SHORT    |
     TypeFlags.INTEGER  |
     TypeFlags.VALUE,   1
   );
@@ -456,9 +433,7 @@ export class Type {
 export function typesToNativeTypes(types: Type[]): NativeType[] {
   var numTypes = types.length;
   var ret = new Array<NativeType>(numTypes);
-  for (let i = 0; i < numTypes; ++i) {
-    ret[i] = types[i].toNativeType();
-  }
+  for (let i = 0; i < numTypes; ++i) ret[i] = types[i].toNativeType();
   return ret;
 }
 
@@ -467,9 +442,7 @@ export function typesToString(types: Type[]): string {
   var numTypes = types.length;
   if (!numTypes) return "";
   var sb = new Array<string>(numTypes);
-  for (let i = 0; i < numTypes; ++i) {
-    sb[i] = types[i].toString();
-  }
+  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString();
   return sb.join(",");
 }
 
@@ -524,31 +497,23 @@ export class Signature {
     var thisThisType = this.thisType;
     var targetThisType = target.thisType;
     if (thisThisType) {
-      if (!(targetThisType && thisThisType.isAssignableTo(targetThisType))) {
-        return false;
-      }
+      if (!(targetThisType && thisThisType.isAssignableTo(targetThisType))) return false;
     } else if (targetThisType) {
       return false;
     }
 
     // check rest parameter
-    if (this.hasRest != target.hasRest) {
-      return false; // TODO
-    }
+    if (this.hasRest != target.hasRest) return false; // TODO
 
     // check parameter types
     var thisParameterTypes = this.parameterTypes;
     var targetParameterTypes = target.parameterTypes;
     var numParameters = thisParameterTypes.length;
-    if (numParameters != targetParameterTypes.length) {
-      return false;
-    }
+    if (numParameters != targetParameterTypes.length) return false;
     for (let i = 0; i < numParameters; ++i) {
       let thisParameterType = thisParameterTypes[i];
       let targetParameterType = targetParameterTypes[i];
-      if (!thisParameterType.isAssignableTo(targetParameterType)) {
-        return false;
-      }
+      if (!thisParameterType.isAssignableTo(targetParameterType)) return false;
     }
 
     // check return type
@@ -562,9 +527,7 @@ export class Signature {
     var sb = [];
     if (thisType) sb.push(thisType.toSignatureString());
     if (parameterTypes) {
-      for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-        sb.push(parameterTypes[i].toSignatureString());
-      }
+      for (let i = 0, k = parameterTypes.length; i < k; ++i) sb.push(parameterTypes[i].toSignatureString());
     }
     sb.push(returnType.toSignatureString());
     return sb.join("");
@@ -598,16 +561,10 @@ export class Signature {
       for (let i = 0; i < numParameters; ++i, ++index) {
         if (index) sb.push(", ");
         if (i == restIndex) sb.push("...");
-        if (i < numNames) {
-          sb.push((<string[]>names)[i]);
-        } else {
-          sb.push(getGenericParameterName(i));
-        }
-        if (i >= optionalStart && i != restIndex) {
-          sb.push("?: ");
-        } else {
-          sb.push(": ");
-        }
+        if (i < numNames) sb.push((<string[]>names)[i]);
+        else sb.push(getGenericParameterName(i));
+        if (i >= optionalStart && i != restIndex) sb.push("?: ");
+        else sb.push(": ");
         sb.push(parameters[i].toString());
       }
     }

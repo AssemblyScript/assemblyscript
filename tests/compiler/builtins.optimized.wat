@@ -1,5 +1,7 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $fi (func (param f32) (result i32)))
+ (type $Fi (func (param f64) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $builtins/b (mut i32) (i32.const 0))
@@ -16,10 +18,58 @@
  (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (start $start)
- (func $builtins/test (; 1 ;) (type $v)
+ (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
+  (i64.gt_u
+   (i64.and
+    (i64.reinterpret/f64
+     (f64.promote/f32
+      (get_local $0)
+     )
+    )
+    (i64.const 9223372036854775807)
+   )
+   (i64.const 9218868437227405312)
+  )
+ )
+ (func $isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
+  (i64.lt_u
+   (i64.and
+    (i64.reinterpret/f64
+     (f64.promote/f32
+      (get_local $0)
+     )
+    )
+    (i64.const 9223372036854775807)
+   )
+   (i64.const 9218868437227405312)
+  )
+ )
+ (func $isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
+  (i64.gt_u
+   (i64.and
+    (i64.reinterpret/f64
+     (get_local $0)
+    )
+    (i64.const 9223372036854775807)
+   )
+   (i64.const 9218868437227405312)
+  )
+ )
+ (func $isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
+  (i64.lt_u
+   (i64.and
+    (i64.reinterpret/f64
+     (get_local $0)
+    )
+    (i64.const 9223372036854775807)
+   )
+   (i64.const 9218868437227405312)
+  )
+ )
+ (func $builtins/test (; 5 ;) (type $v)
   (nop)
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 6 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -234,6 +284,96 @@
     (unreachable)
    )
   )
+  (if
+   (call $isNaN<f32>
+    (f32.const 1.25)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 80)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $isNaN<f32>
+     (f32.const nan:0x400000)
+    )
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 81)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $isFinite<f32>
+     (f32.const 1.25)
+    )
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 82)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f32>
+    (f32.const inf)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 83)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f32>
+    (f32.const -inf)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 84)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f32>
+    (f32.const nan:0x400000)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 85)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
   (set_global $builtins/f
    (f32.const nan:0x400000)
   )
@@ -268,10 +408,104 @@
    (f32.const 1)
   )
   (set_global $builtins/b
-   (i32.const 0)
+   (call $isNaN<f32>
+    (f32.const 1.25)
+   )
   )
   (set_global $builtins/b
-   (i32.const 1)
+   (call $isFinite<f32>
+    (f32.const 1.25)
+   )
+  )
+  (if
+   (call $isNaN<f64>
+    (f64.const 1.25)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 116)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $isNaN<f64>
+     (f64.const nan:0x8000000000000)
+    )
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 117)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $isFinite<f64>
+     (f64.const 1.25)
+    )
+    (i32.const 1)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 118)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f64>
+    (f64.const inf)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 119)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f64>
+    (f64.const -inf)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 120)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f64>
+    (f64.const nan:0x8000000000000)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 121)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
   (set_global $builtins/F
    (f64.const nan:0x8000000000000)
@@ -307,10 +541,14 @@
    (f64.const 1)
   )
   (set_global $builtins/b
-   (i32.const 0)
+   (call $isNaN<f64>
+    (f64.const 1.25)
+   )
   )
   (set_global $builtins/b
-   (i32.const 1)
+   (call $isFinite<f64>
+    (f64.const 1.25)
+   )
   )
   (set_global $builtins/i
    (i32.load
@@ -609,6 +847,131 @@
     (get_global $builtins/i)
    )
    (unreachable)
+  )
+  (if
+   (i32.eqz
+    (call $isNaN<f32>
+     (f32.const nan:0x400000)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 261)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $isNaN<f64>
+     (f64.const nan:0x8000000000000)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 262)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f32>
+    (f32.const nan:0x400000)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 263)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f32>
+    (f32.const inf)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 264)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f64>
+    (f64.const nan:0x8000000000000)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 265)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (call $isFinite<f64>
+    (f64.const inf)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 266)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $isFinite<f32>
+     (f32.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 267)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $isFinite<f64>
+     (f64.const 0)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 268)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call $isNaN<f64>
+    (f64.const 1)
+   )
   )
  )
 )

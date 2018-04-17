@@ -32,6 +32,7 @@
  (global $std/operator-overloading/f (mut i32) (i32.const 0))
  (global $std/operator-overloading/p1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/p2 (mut i32) (i32.const 0))
+ (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $std/operator-overloading/p (mut i32) (i32.const 0))
  (global $std/operator-overloading/n1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/n2 (mut i32) (i32.const 0))

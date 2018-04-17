@@ -1767,23 +1767,17 @@ export class WhileStatement extends Statement {
   statement: Statement;
 }
 
-/** Gets the first decorator by name within at set of decorators, if present. */
-export function getFirstDecorator(name: string, decorators: DecoratorNode[] | null): DecoratorNode | null {
+/** Tests if a specific decorator is present within the specified decorators. */
+export function hasDecorator(name: string, decorators: DecoratorNode[] | null): bool {
   if (decorators) {
     for (let i = 0, k = decorators.length; i < k; ++i) {
-      let decorator = decorators[i];
-      let expression = decorator.name;
+      let expression = decorators[i].name;
       if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).text == name) {
-        return decorator;
+        return true;
       }
     }
   }
-  return null;
-}
-
-/** Tests if a specific decorator is present within the specified decorators. */
-export function hasDecorator(name: string, decorators: DecoratorNode[] | null): bool {
-  return getFirstDecorator(name, decorators) != null;
+  return false;
 }
 
 /** Mangles a declaration's name to an internal name. */

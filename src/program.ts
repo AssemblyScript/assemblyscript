@@ -2600,7 +2600,7 @@ export class FunctionPrototype extends Element {
     if (isInstance) {
       classInstance = assert(classPrototype).resolve(classTypeArguments, contextualTypeArguments); // reports
       if (!classInstance) return null;
-      thisType = classInstance.type.asThis();
+      thisType = classInstance.type;
       contextualTypeArguments.set("this", thisType);
     }
 

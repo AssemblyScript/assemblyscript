@@ -36,17 +36,27 @@ abstract class ExportsWalker {
 
   /** Program reference. */
   program: Program;
+  /** Whether to include private members */
+  private includePrivate: bool;
+  /** Already seen elements. */
+  private seen: Set<Element> = new Set();
 
   /** Constructs a new Element walker. */
-  constructor(program: Program) {
+  constructor(program: Program, includePrivate: bool = false) {
     this.program = program;
+    this.includePrivate;
   }
 
+  /** Walks all exports and calls the respective handlers. */
   walk(): void {
     for (let element of this.program.moduleLevelExports.values()) this.visitElement(element);
   }
 
+  /** Visits an element.*/
   visitElement(element: Element): void {
+    if (element.is(CommonFlags.PRIVATE) && !this.includePrivate) return;
+    if (this.seen.has(element)) return;
+    this.seen.add(element);
     switch (element.kind) {
       case ElementKind.GLOBAL: {
         if (element.is(CommonFlags.COMPILED)) this.visitGlobal(<Global>element);
@@ -57,11 +67,11 @@ abstract class ExportsWalker {
         break;
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
-        this.visitCompiledFunctions(<FunctionPrototype>element);
+        this.visitFunctionInstances(<FunctionPrototype>element);
         break;
       }
       case ElementKind.CLASS_PROTOTYPE: {
-        this.visitCompiledClasses(<ClassPrototype>element);
+        this.visitClassInstances(<ClassPrototype>element);
         break;
       }
       case ElementKind.FIELD: {
@@ -71,26 +81,26 @@ abstract class ExportsWalker {
       case ElementKind.PROPERTY: {
         let prop = <Property>element;
         let getter = prop.getterPrototype;
-        if (getter) this.visitCompiledFunctions(getter);
+        if (getter) this.visitFunctionInstances(getter);
         let setter = prop.setterPrototype;
-        if (setter) this.visitCompiledFunctions(setter);
+        if (setter) this.visitFunctionInstances(setter);
         break;
       }
       case ElementKind.NAMESPACE: {
-        if (hasCompiledMember(<Namespace>element)) this.visitNamespace(<Namespace>element);
+        if (hasCompiledMember(element)) this.visitNamespace(element);
         break;
       }
       default: assert(false);
     }
   }
 
-  visitCompiledFunctions(element: FunctionPrototype): void {
+  private visitFunctionInstances(element: FunctionPrototype): void {
     for (let instance of element.instances.values()) {
       if (instance.is(CommonFlags.COMPILED)) this.visitFunction(<Function>instance);
     }
   }
 
-  visitCompiledClasses(element: ClassPrototype): void {
+  private visitClassInstances(element: ClassPrototype): void {
     for (let instance of element.instances.values()) {
       if (instance.is(CommonFlags.COMPILED)) this.visitClass(<Class>instance);
     }
@@ -114,17 +124,14 @@ export class IDLBuilder extends ExportsWalker {
   }
 
   private sb: string[] = [];
-  private seen: Set<Element> = new Set();
   private indentLevel: i32 = 0;
 
   /** Constructs a new WebIDL builder. */
-  constructor(program: Program) {
-    super(program);
+  constructor(program: Program, includePrivate: bool = false) {
+    super(program, includePrivate);
   }
 
   visitGlobal(element: Global): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     var sb = this.sb;
     var isConst = element.is(CommonFlags.INLINED);
     indent(sb, this.indentLevel);
@@ -151,8 +158,6 @@ export class IDLBuilder extends ExportsWalker {
   }
 
   visitEnum(element: Enum): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
@@ -184,8 +189,6 @@ export class IDLBuilder extends ExportsWalker {
   }
 
   visitFunction(element: Function): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     var sb = this.sb;
     var signature = element.signature;
     indent(sb, this.indentLevel);
@@ -217,8 +220,6 @@ export class IDLBuilder extends ExportsWalker {
   }
 
   visitClass(element: Class): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
@@ -238,8 +239,6 @@ export class IDLBuilder extends ExportsWalker {
   }
 
   visitNamespace(element: Namespace): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
@@ -298,17 +297,14 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   private sb: string[] = [];
-  private seen: Set<Element> = new Set();
   private indentLevel: i32 = 0;
 
   /** Constructs a new WebIDL builder. */
-  constructor(program: Program) {
-    super(program);
+  constructor(program: Program, includePrivate: bool = false) {
+    super(program, includePrivate);
   }
 
   visitGlobal(element: Global): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     var sb = this.sb;
     var isConst = element.is(CommonFlags.INLINED);
     indent(sb, this.indentLevel);
@@ -327,8 +323,6 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitEnum(element: Enum): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("enum ");
@@ -339,7 +333,6 @@ export class TSDBuilder extends ExportsWalker {
       let numMembers = members.size;
       for (let [name, member] of members) {
         if (member.kind == ElementKind.ENUMVALUE) {
-          this.seen.add(member);
           indent(sb, this.indentLevel);
           sb.push(name);
           if (member.is(CommonFlags.INLINED)) {
@@ -357,8 +350,6 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitFunction(element: Function): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     if (element.is(CommonFlags.PRIVATE)) return;
     var sb = this.sb;
     var signature = element.signature;
@@ -397,8 +388,6 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitClass(element: Class): void {
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
     var sb = this.sb;
     var isInterface = element.kind == ElementKind.INTERFACE;
     indent(sb, this.indentLevel++);
@@ -529,8 +518,6 @@ export class TSDBuilder extends ExportsWalker {
     return this.sb.join("");
   }
 }
-
-// TODO: C bindings? or is this sufficiently covered by WebIDL and using a 3rd-party tool?
 
 // helpers
 

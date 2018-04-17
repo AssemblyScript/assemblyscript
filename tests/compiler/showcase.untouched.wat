@@ -3,10 +3,12 @@
  (type $F (func (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fff (func (param f32 f32) (result f32)))
+ (type $fi (func (param f32) (result i32)))
+ (type $i (func (result i32)))
  (type $f (func (result f32)))
  (type $fif (func (param f32 i32) (result f32)))
+ (type $Fi (func (param f64) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
@@ -27,6 +29,7 @@
  (global $unary/F (mut f64) (f64.const 0))
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
+ (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
@@ -38,6 +41,7 @@
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
+ (global $Infinity f64 (f64.const inf))
  (global $builtins/F (mut f64) (f64.const 0))
  (global $builtins/constantOffset i32 (i32.const 8))
  (global $builtins/u (mut i32) (i32.const 0))
@@ -1771,7 +1775,28 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.mod (; 3 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $isNaN<f32> (; 3 ;) (type $fi) (param $0 f32) (result i32)
+  (return
+   (i64.gt_u
+    (i64.and
+     (i64.reinterpret/f64
+      (f64.promote/f32
+       (get_local $0)
+      )
+     )
+     (i64.shr_u
+      (i64.const -1)
+      (i64.const 1)
+     )
+    )
+    (i64.shl
+     (i64.const 2047)
+     (i64.const 52)
+    )
+   )
+  )
+ )
+ (func $~lib/math/NativeMathf.mod (; 4 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1829,14 +1854,8 @@
          )
         )
         (get_local $7)
-        (i32.gt_u
-         (i32.and
-          (i32.reinterpret/f32
-           (get_local $1)
-          )
-          (i32.const 2147483647)
-         )
-         (i32.const 2139095040)
+        (call $isNaN<f32>
+         (get_local $1)
         )
        )
        (i32.const 1)
@@ -2209,7 +2228,7 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.scalbn (; 4 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 5 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (nop)
   (set_local $2
@@ -2328,7 +2347,7 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.pow (; 5 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 6 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3659,7 +3678,26 @@
    )
   )
  )
- (func $~lib/math/NativeMath.mod (; 6 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $isNaN<f64> (; 7 ;) (type $Fi) (param $0 f64) (result i32)
+  (return
+   (i64.gt_u
+    (i64.and
+     (i64.reinterpret/f64
+      (get_local $0)
+     )
+     (i64.shr_u
+      (i64.const -1)
+      (i64.const 1)
+     )
+    )
+    (i64.shl
+     (i64.const 2047)
+     (i64.const 52)
+    )
+   )
+  )
+ )
+ (func $~lib/math/NativeMath.mod (; 8 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -3723,14 +3761,8 @@
          )
         )
         (get_local $7)
-        (i64.gt_u
-         (i64.and
-          (i64.reinterpret/f64
-           (get_local $1)
-          )
-          (i64.const 9223372036854775807)
-         )
-         (i64.const 9218868437227405312)
+        (call $isNaN<f64>
+         (get_local $1)
         )
        )
        (i32.const 1)
@@ -4116,12 +4148,52 @@
    )
   )
  )
- (func $showcase/ANamespace.aNamespacedFunction (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $isFinite<f32> (; 9 ;) (type $fi) (param $0 f32) (result i32)
+  (return
+   (i64.lt_u
+    (i64.and
+     (i64.reinterpret/f64
+      (f64.promote/f32
+       (get_local $0)
+      )
+     )
+     (i64.shr_u
+      (i64.const -1)
+      (i64.const 1)
+     )
+    )
+    (i64.shl
+     (i64.const 2047)
+     (i64.const 52)
+    )
+   )
+  )
+ )
+ (func $isFinite<f64> (; 10 ;) (type $Fi) (param $0 f64) (result i32)
+  (return
+   (i64.lt_u
+    (i64.and
+     (i64.reinterpret/f64
+      (get_local $0)
+     )
+     (i64.shr_u
+      (i64.const -1)
+      (i64.const 1)
+     )
+    )
+    (i64.shl
+     (i64.const 2047)
+     (i64.const 52)
+    )
+   )
+  )
+ )
+ (func $showcase/ANamespace.aNamespacedFunction (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (get_local $0)
   )
  )
- (func $showcase/addGeneric<i32> (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $showcase/addGeneric<i32> (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (i32.add
     (get_local $0)
@@ -4129,7 +4201,7 @@
    )
   )
  )
- (func $showcase/addGeneric<f32> (; 9 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $showcase/addGeneric<f32> (; 13 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (return
    (f32.add
     (get_local $0)
@@ -4137,7 +4209,7 @@
    )
   )
  )
- (func $showcase/addGeneric<f64> (; 10 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $showcase/addGeneric<f64> (; 14 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (return
    (f64.add
     (get_local $0)
@@ -4145,9 +4217,9 @@
    )
   )
  )
- (func $showcase/anExportedFunction (; 11 ;) (type $v)
+ (func $showcase/anExportedFunction (; 15 ;) (type $v)
  )
- (func $memcpy/memcpy (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memcpy/memcpy (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5953,20 +6025,20 @@
    (get_local $3)
   )
  )
- (func $showcase/ADerivedClass#set:aWildAccessorAppears (; 13 ;) (type $ifv) (param $0 i32) (param $1 f32)
+ (func $showcase/ADerivedClass#set:aWildAccessorAppears (; 17 ;) (type $ifv) (param $0 i32) (param $1 f32)
   (f32.store offset=4
    (get_local $0)
    (get_local $1)
   )
  )
- (func $showcase/ADerivedClass#get:aWildAccessorAppears (; 14 ;) (type $if) (param $0 i32) (result f32)
+ (func $showcase/ADerivedClass#get:aWildAccessorAppears (; 18 ;) (type $if) (param $0 i32) (result f32)
   (return
    (f32.load offset=4
     (get_local $0)
    )
   )
  )
- (func $start (; 15 ;) (type $v)
+ (func $start (; 19 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   (local $2 f32)
@@ -8369,14 +8441,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.gt_u
-      (i32.and
-       (i32.reinterpret/f32
-        (f32.const 1.25)
-       )
-       (i32.const 2147483647)
-      )
-      (i32.const 2139095040)
+     (call $isNaN<f32>
+      (f32.const 1.25)
      )
      (i32.const 0)
     )
@@ -8394,14 +8460,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.gt_u
-      (i32.and
-       (i32.reinterpret/f32
-        (f32.const nan:0x400000)
-       )
-       (i32.const 2147483647)
-      )
-      (i32.const 2139095040)
+     (call $isNaN<f32>
+      (f32.const nan:0x400000)
      )
      (i32.const 1)
     )
@@ -8419,14 +8479,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.lt_u
-      (i32.and
-       (i32.reinterpret/f32
-        (f32.const 1.25)
-       )
-       (i32.const 2147483647)
-      )
-      (i32.const 2139095040)
+     (call $isFinite<f32>
+      (f32.const 1.25)
      )
      (i32.const 1)
     )
@@ -8444,14 +8498,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.lt_u
-      (i32.and
-       (i32.reinterpret/f32
-        (f32.const inf)
-       )
-       (i32.const 2147483647)
-      )
-      (i32.const 2139095040)
+     (call $isFinite<f32>
+      (f32.const inf)
      )
      (i32.const 0)
     )
@@ -8469,16 +8517,10 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.lt_u
-      (i32.and
-       (i32.reinterpret/f32
-        (f32.neg
-         (f32.const inf)
-        )
-       )
-       (i32.const 2147483647)
+     (call $isFinite<f32>
+      (f32.neg
+       (f32.const inf)
       )
-      (i32.const 2139095040)
      )
      (i32.const 0)
     )
@@ -8496,14 +8538,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.lt_u
-      (i32.and
-       (i32.reinterpret/f32
-        (f32.const nan:0x400000)
-       )
-       (i32.const 2147483647)
-      )
-      (i32.const 2139095040)
+     (call $isFinite<f32>
+      (f32.const nan:0x400000)
      )
      (i32.const 0)
     )
@@ -8573,25 +8609,13 @@
    )
   )
   (set_global $builtins/b
-   (i32.gt_u
-    (i32.and
-     (i32.reinterpret/f32
-      (f32.const 1.25)
-     )
-     (i32.const 2147483647)
-    )
-    (i32.const 2139095040)
+   (call $isNaN<f32>
+    (f32.const 1.25)
    )
   )
   (set_global $builtins/b
-   (i32.lt_u
-    (i32.and
-     (i32.reinterpret/f32
-      (f32.const 1.25)
-     )
-     (i32.const 2147483647)
-    )
-    (i32.const 2139095040)
+   (call $isFinite<f32>
+    (f32.const 1.25)
    )
   )
   (drop
@@ -8657,14 +8681,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i64.gt_u
-      (i64.and
-       (i64.reinterpret/f64
-        (f64.const 1.25)
-       )
-       (i64.const 9223372036854775807)
-      )
-      (i64.const 9218868437227405312)
+     (call $isNaN<f64>
+      (f64.const 1.25)
      )
      (i32.const 0)
     )
@@ -8682,14 +8700,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i64.gt_u
-      (i64.and
-       (i64.reinterpret/f64
-        (f64.const nan:0x8000000000000)
-       )
-       (i64.const 9223372036854775807)
-      )
-      (i64.const 9218868437227405312)
+     (call $isNaN<f64>
+      (f64.const nan:0x8000000000000)
      )
      (i32.const 1)
     )
@@ -8707,14 +8719,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i64.lt_u
-      (i64.and
-       (i64.reinterpret/f64
-        (f64.const 1.25)
-       )
-       (i64.const 9223372036854775807)
-      )
-      (i64.const 9218868437227405312)
+     (call $isFinite<f64>
+      (f64.const 1.25)
      )
      (i32.const 1)
     )
@@ -8732,14 +8738,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i64.lt_u
-      (i64.and
-       (i64.reinterpret/f64
-        (f64.const inf)
-       )
-       (i64.const 9223372036854775807)
-      )
-      (i64.const 9218868437227405312)
+     (call $isFinite<f64>
+      (f64.const inf)
      )
      (i32.const 0)
     )
@@ -8757,16 +8757,10 @@
   (if
    (i32.eqz
     (i32.eq
-     (i64.lt_u
-      (i64.and
-       (i64.reinterpret/f64
-        (f64.neg
-         (f64.const inf)
-        )
-       )
-       (i64.const 9223372036854775807)
+     (call $isFinite<f64>
+      (f64.neg
+       (f64.const inf)
       )
-      (i64.const 9218868437227405312)
      )
      (i32.const 0)
     )
@@ -8784,14 +8778,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i64.lt_u
-      (i64.and
-       (i64.reinterpret/f64
-        (f64.const nan:0x8000000000000)
-       )
-       (i64.const 9223372036854775807)
-      )
-      (i64.const 9218868437227405312)
+     (call $isFinite<f64>
+      (f64.const nan:0x8000000000000)
      )
      (i32.const 0)
     )
@@ -8861,25 +8849,13 @@
    )
   )
   (set_global $builtins/b
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.const 1.25)
-     )
-     (i64.const 9223372036854775807)
-    )
-    (i64.const 9218868437227405312)
+   (call $isNaN<f64>
+    (f64.const 1.25)
    )
   )
   (set_global $builtins/b
-   (i64.lt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.const 1.25)
-     )
-     (i64.const 9223372036854775807)
-    )
-    (i64.const 9218868437227405312)
+   (call $isFinite<f64>
+    (f64.const 1.25)
    )
   )
   (set_global $builtins/i
@@ -9568,14 +9544,8 @@
   )
   (if
    (i32.eqz
-    (i32.gt_u
-     (i32.and
-      (i32.reinterpret/f32
-       (f32.const nan:0x400000)
-      )
-      (i32.const 2147483647)
-     )
-     (i32.const 2139095040)
+    (call $isNaN<f32>
+     (f32.const nan:0x400000)
     )
    )
    (block
@@ -9590,14 +9560,8 @@
   )
   (if
    (i32.eqz
-    (i64.gt_u
-     (i64.and
-      (i64.reinterpret/f64
-       (f64.const nan:0x8000000000000)
-      )
-      (i64.const 9223372036854775807)
-     )
-     (i64.const 9218868437227405312)
+    (call $isNaN<f64>
+     (f64.const nan:0x8000000000000)
     )
    )
    (block
@@ -9613,14 +9577,8 @@
   (if
    (i32.eqz
     (i32.eqz
-     (i32.lt_u
-      (i32.and
-       (i32.reinterpret/f32
-        (f32.const nan:0x400000)
-       )
-       (i32.const 2147483647)
-      )
-      (i32.const 2139095040)
+     (call $isFinite<f32>
+      (f32.const nan:0x400000)
      )
     )
    )
@@ -9637,14 +9595,8 @@
   (if
    (i32.eqz
     (i32.eqz
-     (i32.lt_u
-      (i32.and
-       (i32.reinterpret/f32
-        (f32.const inf)
-       )
-       (i32.const 2147483647)
-      )
-      (i32.const 2139095040)
+     (call $isFinite<f32>
+      (f32.const inf)
      )
     )
    )
@@ -9661,14 +9613,8 @@
   (if
    (i32.eqz
     (i32.eqz
-     (i64.lt_u
-      (i64.and
-       (i64.reinterpret/f64
-        (f64.const nan:0x8000000000000)
-       )
-       (i64.const 9223372036854775807)
-      )
-      (i64.const 9218868437227405312)
+     (call $isFinite<f64>
+      (f64.const nan:0x8000000000000)
      )
     )
    )
@@ -9685,14 +9631,8 @@
   (if
    (i32.eqz
     (i32.eqz
-     (i64.lt_u
-      (i64.and
-       (i64.reinterpret/f64
-        (f64.const inf)
-       )
-       (i64.const 9223372036854775807)
-      )
-      (i64.const 9218868437227405312)
+     (call $isFinite<f64>
+      (f64.const inf)
      )
     )
    )
@@ -9708,14 +9648,8 @@
   )
   (if
    (i32.eqz
-    (i32.lt_u
-     (i32.and
-      (i32.reinterpret/f32
-       (f32.const 0)
-      )
-      (i32.const 2147483647)
-     )
-     (i32.const 2139095040)
+    (call $isFinite<f32>
+     (f32.const 0)
     )
    )
    (block
@@ -9730,14 +9664,8 @@
   )
   (if
    (i32.eqz
-    (i64.lt_u
-     (i64.and
-      (i64.reinterpret/f64
-       (f64.const 0)
-      )
-      (i64.const 9223372036854775807)
-     )
-     (i64.const 9218868437227405312)
+    (call $isFinite<f64>
+     (f64.const 0)
     )
    )
    (block
@@ -10273,14 +10201,8 @@
    )
   )
   (drop
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.const 1)
-     )
-     (i64.const 9223372036854775807)
-    )
-    (i64.const 9218868437227405312)
+   (call $isNaN<f64>
+    (f64.const 1)
    )
   )
   (if
