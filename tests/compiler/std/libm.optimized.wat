@@ -1308,14 +1308,9 @@
   )
  )
  (func $isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
-  (i64.gt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (get_local $0)
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
+  (f64.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $~lib/math/NativeMath.atan (; 13 ;) (type $FF) (param $0 f64) (result f64)

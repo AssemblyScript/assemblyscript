@@ -1,7 +1,5 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $fi (func (param f32) (result i32)))
- (type $Fi (func (param f64) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $builtins/b (mut i32) (i32.const 0))
@@ -18,73 +16,27 @@
  (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (start $start)
- (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
-  (i64.gt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (f64.promote/f32
-      (get_local $0)
-     )
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
-  )
- )
- (func $isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
-  (i64.lt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (f64.promote/f32
-      (get_local $0)
-     )
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
-  )
- )
- (func $isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
-  (i64.gt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (get_local $0)
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
-  )
- )
- (func $isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
-  (i64.lt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (get_local $0)
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
-  )
- )
- (func $builtins/test (; 5 ;) (type $v)
+ (func $builtins/test (; 1 ;) (type $v)
   (nop)
  )
- (func $start (; 6 ;) (type $v)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i64)
-  (local $3 i64)
+ (func $start (; 2 ;) (type $v)
+  (local $0 f32)
+  (local $1 f64)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i64)
+  (local $5 i64)
   (drop
    (select
-    (tee_local $0
+    (tee_local $2
      (i32.const 1)
     )
-    (tee_local $1
+    (tee_local $3
      (i32.const 2)
     )
     (i32.gt_s
-     (get_local $0)
-     (get_local $1)
+     (get_local $2)
+     (get_local $3)
     )
    )
   )
@@ -105,15 +57,15 @@
   )
   (set_global $builtins/i
    (select
-    (tee_local $0
+    (tee_local $2
      (i32.const -42)
     )
     (i32.sub
      (i32.const 0)
-     (get_local $0)
+     (get_local $2)
     )
     (i32.gt_s
-     (get_local $0)
+     (get_local $2)
      (i32.const 0)
     )
    )
@@ -135,13 +87,13 @@
   )
   (set_global $builtins/i
    (select
-    (tee_local $0
+    (tee_local $2
      (i32.const 1)
     )
     (i32.const 2)
     (i32.gt_s
-     (get_local $0)
-     (get_local $1)
+     (get_local $2)
+     (get_local $3)
     )
    )
   )
@@ -165,8 +117,8 @@
     (i32.const 1)
     (i32.const 2)
     (i32.lt_s
-     (get_local $0)
-     (get_local $1)
+     (get_local $2)
+     (get_local $3)
     )
    )
   )
@@ -202,15 +154,15 @@
   )
   (set_global $builtins/I
    (select
-    (tee_local $2
+    (tee_local $4
      (i64.const -42)
     )
     (i64.sub
      (i64.const 0)
-     (get_local $2)
+     (get_local $4)
     )
     (i64.gt_s
-     (get_local $2)
+     (get_local $4)
      (i64.const 0)
     )
    )
@@ -232,15 +184,15 @@
   )
   (set_global $builtins/I
    (select
-    (tee_local $2
+    (tee_local $4
      (i64.const 1)
     )
-    (tee_local $3
+    (tee_local $5
      (i64.const 2)
     )
     (i64.gt_s
-     (get_local $2)
-     (get_local $3)
+     (get_local $4)
+     (get_local $5)
     )
    )
   )
@@ -264,8 +216,8 @@
     (i64.const 1)
     (i64.const 2)
     (i64.lt_s
-     (get_local $2)
-     (get_local $3)
+     (get_local $4)
+     (get_local $5)
     )
    )
   )
@@ -285,8 +237,11 @@
    )
   )
   (if
-   (call $isNaN<f32>
-    (f32.const 1.25)
+   (f32.ne
+    (tee_local $0
+     (f32.const 1.25)
+    )
+    (get_local $0)
    )
    (block
     (call $abort
@@ -300,8 +255,11 @@
   )
   (if
    (i32.ne
-    (call $isNaN<f32>
-     (f32.const nan:0x400000)
+    (f32.ne
+     (tee_local $0
+      (f32.const nan:0x400000)
+     )
+     (get_local $0)
     )
     (i32.const 1)
    )
@@ -317,8 +275,14 @@
   )
   (if
    (i32.ne
-    (call $isFinite<f32>
-     (f32.const 1.25)
+    (f32.eq
+     (f32.sub
+      (tee_local $0
+       (f32.const 1.25)
+      )
+      (get_local $0)
+     )
+     (f32.const 0)
     )
     (i32.const 1)
    )
@@ -333,8 +297,14 @@
    )
   )
   (if
-   (call $isFinite<f32>
-    (f32.const inf)
+   (f32.eq
+    (f32.sub
+     (tee_local $0
+      (f32.const inf)
+     )
+     (get_local $0)
+    )
+    (f32.const 0)
    )
    (block
     (call $abort
@@ -347,8 +317,14 @@
    )
   )
   (if
-   (call $isFinite<f32>
-    (f32.const -inf)
+   (f32.eq
+    (f32.sub
+     (tee_local $0
+      (f32.const -inf)
+     )
+     (get_local $0)
+    )
+    (f32.const 0)
    )
    (block
     (call $abort
@@ -361,8 +337,14 @@
    )
   )
   (if
-   (call $isFinite<f32>
-    (f32.const nan:0x400000)
+   (f32.eq
+    (f32.sub
+     (tee_local $0
+      (f32.const nan:0x400000)
+     )
+     (get_local $0)
+    )
+    (f32.const 0)
    )
    (block
     (call $abort
@@ -408,18 +390,28 @@
    (f32.const 1)
   )
   (set_global $builtins/b
-   (call $isNaN<f32>
-    (f32.const 1.25)
+   (f32.ne
+    (tee_local $0
+     (f32.const 1.25)
+    )
+    (get_local $0)
    )
   )
   (set_global $builtins/b
-   (call $isFinite<f32>
-    (f32.const 1.25)
+   (f32.eq
+    (f32.sub
+     (f32.const 1.25)
+     (get_local $0)
+    )
+    (f32.const 0)
    )
   )
   (if
-   (call $isNaN<f64>
-    (f64.const 1.25)
+   (f64.ne
+    (tee_local $1
+     (f64.const 1.25)
+    )
+    (get_local $1)
    )
    (block
     (call $abort
@@ -433,8 +425,11 @@
   )
   (if
    (i32.ne
-    (call $isNaN<f64>
-     (f64.const nan:0x8000000000000)
+    (f64.ne
+     (tee_local $1
+      (f64.const nan:0x8000000000000)
+     )
+     (get_local $1)
     )
     (i32.const 1)
    )
@@ -450,8 +445,14 @@
   )
   (if
    (i32.ne
-    (call $isFinite<f64>
-     (f64.const 1.25)
+    (f64.eq
+     (f64.sub
+      (tee_local $1
+       (f64.const 1.25)
+      )
+      (get_local $1)
+     )
+     (f64.const 0)
     )
     (i32.const 1)
    )
@@ -466,8 +467,14 @@
    )
   )
   (if
-   (call $isFinite<f64>
-    (f64.const inf)
+   (f64.eq
+    (f64.sub
+     (tee_local $1
+      (f64.const inf)
+     )
+     (get_local $1)
+    )
+    (f64.const 0)
    )
    (block
     (call $abort
@@ -480,8 +487,14 @@
    )
   )
   (if
-   (call $isFinite<f64>
-    (f64.const -inf)
+   (f64.eq
+    (f64.sub
+     (tee_local $1
+      (f64.const -inf)
+     )
+     (get_local $1)
+    )
+    (f64.const 0)
    )
    (block
     (call $abort
@@ -494,8 +507,14 @@
    )
   )
   (if
-   (call $isFinite<f64>
-    (f64.const nan:0x8000000000000)
+   (f64.eq
+    (f64.sub
+     (tee_local $1
+      (f64.const nan:0x8000000000000)
+     )
+     (get_local $1)
+    )
+    (f64.const 0)
    )
    (block
     (call $abort
@@ -541,13 +560,20 @@
    (f64.const 1)
   )
   (set_global $builtins/b
-   (call $isNaN<f64>
-    (f64.const 1.25)
+   (f64.ne
+    (tee_local $1
+     (f64.const 1.25)
+    )
+    (get_local $1)
    )
   )
   (set_global $builtins/b
-   (call $isFinite<f64>
-    (f64.const 1.25)
+   (f64.eq
+    (f64.sub
+     (f64.const 1.25)
+     (get_local $1)
+    )
+    (f64.const 0)
    )
   )
   (set_global $builtins/i
@@ -849,10 +875,11 @@
    (unreachable)
   )
   (if
-   (i32.eqz
-    (call $isNaN<f32>
+   (f32.eq
+    (tee_local $0
      (f32.const nan:0x400000)
     )
+    (get_local $0)
    )
    (block
     (call $abort
@@ -865,10 +892,11 @@
    )
   )
   (if
-   (i32.eqz
-    (call $isNaN<f64>
+   (f64.eq
+    (tee_local $1
      (f64.const nan:0x8000000000000)
     )
+    (get_local $1)
    )
    (block
     (call $abort
@@ -881,8 +909,14 @@
    )
   )
   (if
-   (call $isFinite<f32>
-    (f32.const nan:0x400000)
+   (f32.eq
+    (f32.sub
+     (tee_local $0
+      (f32.const nan:0x400000)
+     )
+     (get_local $0)
+    )
+    (f32.const 0)
    )
    (block
     (call $abort
@@ -895,8 +929,14 @@
    )
   )
   (if
-   (call $isFinite<f32>
-    (f32.const inf)
+   (f32.eq
+    (f32.sub
+     (tee_local $0
+      (f32.const inf)
+     )
+     (get_local $0)
+    )
+    (f32.const 0)
    )
    (block
     (call $abort
@@ -909,8 +949,14 @@
    )
   )
   (if
-   (call $isFinite<f64>
-    (f64.const nan:0x8000000000000)
+   (f64.eq
+    (f64.sub
+     (tee_local $1
+      (f64.const nan:0x8000000000000)
+     )
+     (get_local $1)
+    )
+    (f64.const 0)
    )
    (block
     (call $abort
@@ -923,8 +969,14 @@
    )
   )
   (if
-   (call $isFinite<f64>
-    (f64.const inf)
+   (f64.eq
+    (f64.sub
+     (tee_local $1
+      (f64.const inf)
+     )
+     (get_local $1)
+    )
+    (f64.const 0)
    )
    (block
     (call $abort
@@ -937,10 +989,14 @@
    )
   )
   (if
-   (i32.eqz
-    (call $isFinite<f32>
-     (f32.const 0)
+   (f32.ne
+    (f32.sub
+     (tee_local $0
+      (f32.const 0)
+     )
+     (get_local $0)
     )
+    (f32.const 0)
    )
    (block
     (call $abort
@@ -953,10 +1009,14 @@
    )
   )
   (if
-   (i32.eqz
-    (call $isFinite<f64>
-     (f64.const 0)
+   (f64.ne
+    (f64.sub
+     (tee_local $1
+      (f64.const 0)
+     )
+     (get_local $1)
     )
+    (f64.const 0)
    )
    (block
     (call $abort
@@ -966,11 +1026,6 @@
      (i32.const 0)
     )
     (unreachable)
-   )
-  )
-  (drop
-   (call $isNaN<f64>
-    (f64.const 1)
    )
   )
  )

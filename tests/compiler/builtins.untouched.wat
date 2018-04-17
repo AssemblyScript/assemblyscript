@@ -1,9 +1,7 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
- (type $fi (func (param f32) (result i32)))
  (type $i (func (result i32)))
- (type $Fi (func (param f64) (result i32)))
  (type $v (func))
  (type $f (func (result f32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
@@ -25,93 +23,15 @@
  (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (start $start)
- (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
-  (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.promote/f32
-       (get_local $0)
-      )
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
-   )
-  )
+ (func $builtins/test (; 1 ;) (type $v)
  )
- (func $isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
-  (return
-   (i64.lt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.promote/f32
-       (get_local $0)
-      )
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
-   )
-  )
- )
- (func $isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
-  (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (get_local $0)
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
-   )
-  )
- )
- (func $isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
-  (return
-   (i64.lt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (get_local $0)
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
-   )
-  )
- )
- (func $builtins/test (; 5 ;) (type $v)
- )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
+  (local $4 f32)
+  (local $5 f64)
   (if
    (i32.eqz
     (i32.const 1)
@@ -793,8 +713,16 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isNaN<f32>
-      (f32.const 1.25)
+     (block $isNaN<f32>|inlined.0 (result i32)
+      (set_local $4
+       (f32.const 1.25)
+      )
+      (br $isNaN<f32>|inlined.0
+       (f32.ne
+        (get_local $4)
+        (get_local $4)
+       )
+      )
      )
      (i32.const 0)
     )
@@ -812,8 +740,16 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isNaN<f32>
-      (f32.const nan:0x400000)
+     (block $isNaN<f32>|inlined.1 (result i32)
+      (set_local $4
+       (f32.const nan:0x400000)
+      )
+      (br $isNaN<f32>|inlined.1
+       (f32.ne
+        (get_local $4)
+        (get_local $4)
+       )
+      )
      )
      (i32.const 1)
     )
@@ -831,8 +767,19 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isFinite<f32>
-      (f32.const 1.25)
+     (block $isFinite<f32>|inlined.0 (result i32)
+      (set_local $4
+       (f32.const 1.25)
+      )
+      (br $isFinite<f32>|inlined.0
+       (f32.eq
+        (f32.sub
+         (get_local $4)
+         (get_local $4)
+        )
+        (f32.const 0)
+       )
+      )
      )
      (i32.const 1)
     )
@@ -850,8 +797,19 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isFinite<f32>
-      (f32.const inf)
+     (block $isFinite<f32>|inlined.1 (result i32)
+      (set_local $4
+       (f32.const inf)
+      )
+      (br $isFinite<f32>|inlined.1
+       (f32.eq
+        (f32.sub
+         (get_local $4)
+         (get_local $4)
+        )
+        (f32.const 0)
+       )
+      )
      )
      (i32.const 0)
     )
@@ -869,9 +827,20 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isFinite<f32>
-      (f32.neg
-       (f32.const inf)
+     (block $isFinite<f32>|inlined.2 (result i32)
+      (set_local $4
+       (f32.neg
+        (f32.const inf)
+       )
+      )
+      (br $isFinite<f32>|inlined.2
+       (f32.eq
+        (f32.sub
+         (get_local $4)
+         (get_local $4)
+        )
+        (f32.const 0)
+       )
       )
      )
      (i32.const 0)
@@ -890,8 +859,19 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isFinite<f32>
-      (f32.const nan:0x400000)
+     (block $isFinite<f32>|inlined.3 (result i32)
+      (set_local $4
+       (f32.const nan:0x400000)
+      )
+      (br $isFinite<f32>|inlined.3
+       (f32.eq
+        (f32.sub
+         (get_local $4)
+         (get_local $4)
+        )
+        (f32.const 0)
+       )
+      )
      )
      (i32.const 0)
     )
@@ -961,13 +941,32 @@
    )
   )
   (set_global $builtins/b
-   (call $isNaN<f32>
-    (f32.const 1.25)
+   (block $isNaN<f32>|inlined.2 (result i32)
+    (set_local $4
+     (f32.const 1.25)
+    )
+    (br $isNaN<f32>|inlined.2
+     (f32.ne
+      (get_local $4)
+      (get_local $4)
+     )
+    )
    )
   )
   (set_global $builtins/b
-   (call $isFinite<f32>
-    (f32.const 1.25)
+   (block $isFinite<f32>|inlined.4 (result i32)
+    (set_local $4
+     (f32.const 1.25)
+    )
+    (br $isFinite<f32>|inlined.4
+     (f32.eq
+      (f32.sub
+       (get_local $4)
+       (get_local $4)
+      )
+      (f32.const 0)
+     )
+    )
    )
   )
   (drop
@@ -1033,8 +1032,16 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isNaN<f64>
-      (f64.const 1.25)
+     (block $isNaN<f64>|inlined.0 (result i32)
+      (set_local $5
+       (f64.const 1.25)
+      )
+      (br $isNaN<f64>|inlined.0
+       (f64.ne
+        (get_local $5)
+        (get_local $5)
+       )
+      )
      )
      (i32.const 0)
     )
@@ -1052,8 +1059,16 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isNaN<f64>
-      (f64.const nan:0x8000000000000)
+     (block $isNaN<f64>|inlined.1 (result i32)
+      (set_local $5
+       (f64.const nan:0x8000000000000)
+      )
+      (br $isNaN<f64>|inlined.1
+       (f64.ne
+        (get_local $5)
+        (get_local $5)
+       )
+      )
      )
      (i32.const 1)
     )
@@ -1071,8 +1086,19 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isFinite<f64>
-      (f64.const 1.25)
+     (block $isFinite<f64>|inlined.0 (result i32)
+      (set_local $5
+       (f64.const 1.25)
+      )
+      (br $isFinite<f64>|inlined.0
+       (f64.eq
+        (f64.sub
+         (get_local $5)
+         (get_local $5)
+        )
+        (f64.const 0)
+       )
+      )
      )
      (i32.const 1)
     )
@@ -1090,8 +1116,19 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isFinite<f64>
-      (f64.const inf)
+     (block $isFinite<f64>|inlined.1 (result i32)
+      (set_local $5
+       (f64.const inf)
+      )
+      (br $isFinite<f64>|inlined.1
+       (f64.eq
+        (f64.sub
+         (get_local $5)
+         (get_local $5)
+        )
+        (f64.const 0)
+       )
+      )
      )
      (i32.const 0)
     )
@@ -1109,9 +1146,20 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isFinite<f64>
-      (f64.neg
-       (f64.const inf)
+     (block $isFinite<f64>|inlined.2 (result i32)
+      (set_local $5
+       (f64.neg
+        (f64.const inf)
+       )
+      )
+      (br $isFinite<f64>|inlined.2
+       (f64.eq
+        (f64.sub
+         (get_local $5)
+         (get_local $5)
+        )
+        (f64.const 0)
+       )
       )
      )
      (i32.const 0)
@@ -1130,8 +1178,19 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $isFinite<f64>
-      (f64.const nan:0x8000000000000)
+     (block $isFinite<f64>|inlined.3 (result i32)
+      (set_local $5
+       (f64.const nan:0x8000000000000)
+      )
+      (br $isFinite<f64>|inlined.3
+       (f64.eq
+        (f64.sub
+         (get_local $5)
+         (get_local $5)
+        )
+        (f64.const 0)
+       )
+      )
      )
      (i32.const 0)
     )
@@ -1201,13 +1260,32 @@
    )
   )
   (set_global $builtins/b
-   (call $isNaN<f64>
-    (f64.const 1.25)
+   (block $isNaN<f64>|inlined.2 (result i32)
+    (set_local $5
+     (f64.const 1.25)
+    )
+    (br $isNaN<f64>|inlined.2
+     (f64.ne
+      (get_local $5)
+      (get_local $5)
+     )
+    )
    )
   )
   (set_global $builtins/b
-   (call $isFinite<f64>
-    (f64.const 1.25)
+   (block $isFinite<f64>|inlined.4 (result i32)
+    (set_local $5
+     (f64.const 1.25)
+    )
+    (br $isFinite<f64>|inlined.4
+     (f64.eq
+      (f64.sub
+       (get_local $5)
+       (get_local $5)
+      )
+      (f64.const 0)
+     )
+    )
    )
   )
   (set_global $builtins/i
@@ -1896,8 +1974,16 @@
   )
   (if
    (i32.eqz
-    (call $isNaN<f32>
-     (f32.const nan:0x400000)
+    (block $isNaN<f32>|inlined.3 (result i32)
+     (set_local $4
+      (f32.const nan:0x400000)
+     )
+     (br $isNaN<f32>|inlined.3
+      (f32.ne
+       (get_local $4)
+       (get_local $4)
+      )
+     )
     )
    )
    (block
@@ -1912,8 +1998,16 @@
   )
   (if
    (i32.eqz
-    (call $isNaN<f64>
-     (f64.const nan:0x8000000000000)
+    (block $isNaN<f64>|inlined.3 (result i32)
+     (set_local $5
+      (f64.const nan:0x8000000000000)
+     )
+     (br $isNaN<f64>|inlined.3
+      (f64.ne
+       (get_local $5)
+       (get_local $5)
+      )
+     )
     )
    )
    (block
@@ -1929,8 +2023,19 @@
   (if
    (i32.eqz
     (i32.eqz
-     (call $isFinite<f32>
-      (f32.const nan:0x400000)
+     (block $isFinite<f32>|inlined.5 (result i32)
+      (set_local $4
+       (f32.const nan:0x400000)
+      )
+      (br $isFinite<f32>|inlined.5
+       (f32.eq
+        (f32.sub
+         (get_local $4)
+         (get_local $4)
+        )
+        (f32.const 0)
+       )
+      )
      )
     )
    )
@@ -1947,8 +2052,19 @@
   (if
    (i32.eqz
     (i32.eqz
-     (call $isFinite<f32>
-      (f32.const inf)
+     (block $isFinite<f32>|inlined.6 (result i32)
+      (set_local $4
+       (f32.const inf)
+      )
+      (br $isFinite<f32>|inlined.6
+       (f32.eq
+        (f32.sub
+         (get_local $4)
+         (get_local $4)
+        )
+        (f32.const 0)
+       )
+      )
      )
     )
    )
@@ -1965,8 +2081,19 @@
   (if
    (i32.eqz
     (i32.eqz
-     (call $isFinite<f64>
-      (f64.const nan:0x8000000000000)
+     (block $isFinite<f64>|inlined.5 (result i32)
+      (set_local $5
+       (f64.const nan:0x8000000000000)
+      )
+      (br $isFinite<f64>|inlined.5
+       (f64.eq
+        (f64.sub
+         (get_local $5)
+         (get_local $5)
+        )
+        (f64.const 0)
+       )
+      )
      )
     )
    )
@@ -1983,8 +2110,19 @@
   (if
    (i32.eqz
     (i32.eqz
-     (call $isFinite<f64>
-      (f64.const inf)
+     (block $isFinite<f64>|inlined.6 (result i32)
+      (set_local $5
+       (f64.const inf)
+      )
+      (br $isFinite<f64>|inlined.6
+       (f64.eq
+        (f64.sub
+         (get_local $5)
+         (get_local $5)
+        )
+        (f64.const 0)
+       )
+      )
      )
     )
    )
@@ -2000,8 +2138,19 @@
   )
   (if
    (i32.eqz
-    (call $isFinite<f32>
-     (f32.const 0)
+    (block $isFinite<f32>|inlined.7 (result i32)
+     (set_local $4
+      (f32.const 0)
+     )
+     (br $isFinite<f32>|inlined.7
+      (f32.eq
+       (f32.sub
+        (get_local $4)
+        (get_local $4)
+       )
+       (f32.const 0)
+      )
+     )
     )
    )
    (block
@@ -2016,8 +2165,19 @@
   )
   (if
    (i32.eqz
-    (call $isFinite<f64>
-     (f64.const 0)
+    (block $isFinite<f64>|inlined.7 (result i32)
+     (set_local $5
+      (f64.const 0)
+     )
+     (br $isFinite<f64>|inlined.7
+      (f64.eq
+       (f64.sub
+        (get_local $5)
+        (get_local $5)
+       )
+       (f64.const 0)
+      )
+     )
     )
    )
    (block
@@ -2553,8 +2713,16 @@
    )
   )
   (drop
-   (call $isNaN<f64>
-    (f64.const 1)
+   (block $isNaN<f64>|inlined.4 (result i32)
+    (set_local $5
+     (f64.const 1)
+    )
+    (br $isNaN<f64>|inlined.4
+     (f64.ne
+      (get_local $5)
+      (get_local $5)
+     )
+    )
    )
   )
  )
