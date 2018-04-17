@@ -19,7 +19,7 @@ export function isNaN<T>(value: T): bool {
 
 @inline
 export function isFinite<T>(value: T): bool {
-  return (value - value) == 0;
+  return value - value == 0;
 }
 
 export declare function clz<T>(value: T): T;
