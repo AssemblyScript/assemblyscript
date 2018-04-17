@@ -12,12 +12,10 @@ export const NaN: f64 = 0 / 0;
 
 export const Infinity: f64 = 1 / 0;
 
-@inline
 export function isNaN<T>(value: T): bool {
   return value != value;
 }
 
-@inline
 export function isFinite<T>(value: T): bool {
   return value - value == 0;
 }

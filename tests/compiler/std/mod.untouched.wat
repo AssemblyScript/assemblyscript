@@ -1,15 +1,15 @@
 (module
  (type $FFFi (func (param f64 f64 f64) (result i32)))
  (type $FFF (func (param f64 f64) (result f64)))
- (type $FFi (func (param f64 f64) (result i32)))
  (type $Fi (func (param f64) (result i32)))
+ (type $FFi (func (param f64 f64) (result i32)))
  (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
  (type $fffi (func (param f32 f32 f32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
- (type $ffi (func (param f32 f32) (result i32)))
  (type $fi (func (param f32) (result i32)))
+ (type $ffi (func (param f32 f32) (result i32)))
  (type $v (func))
  (import "JSOp" "mod" (func $std/mod/JSOp.mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
@@ -21,15 +21,22 @@
  (data (i32.const 4) "\n\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/math/NativeMath.mod (; 2 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $isNaN<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
+  (return
+   (f64.ne
+    (get_local $0)
+    (get_local $0)
+   )
+  )
+ )
+ (func $~lib/math/NativeMath.mod (; 3 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f64)
-  (local $8 i32)
-  (local $9 i64)
+  (local $7 i32)
+  (local $8 i64)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -73,10 +80,10 @@
   (if
    (i32.and
     (if (result i32)
-     (tee_local $8
+     (tee_local $7
       (i32.and
        (if (result i32)
-        (tee_local $8
+        (tee_local $7
          (i64.eq
           (i64.shl
            (get_local $3)
@@ -85,23 +92,15 @@
           (i64.const 0)
          )
         )
-        (get_local $8)
-        (block $isNaN<f64>|inlined.0 (result i32)
-         (set_local $7
-          (get_local $1)
-         )
-         (br $isNaN<f64>|inlined.0
-          (f64.ne
-           (get_local $7)
-           (get_local $7)
-          )
-         )
+        (get_local $7)
+        (call $isNaN<f64>
+         (get_local $1)
         )
        )
        (i32.const 1)
       )
      )
-     (get_local $8)
+     (get_local $7)
      (i32.eq
       (get_local $4)
       (i32.const 2047)
@@ -164,7 +163,7 @@
    )
    (block
     (block $break|0
-     (set_local $9
+     (set_local $8
       (i64.shl
        (get_local $2)
        (i64.const 12)
@@ -174,7 +173,7 @@
       (if
        (i64.eqz
         (i64.shr_u
-         (get_local $9)
+         (get_local $8)
          (i64.const 63)
         )
        )
@@ -185,9 +184,9 @@
           (i32.const 1)
          )
         )
-        (set_local $9
+        (set_local $8
          (i64.shl
-          (get_local $9)
+          (get_local $8)
           (i64.const 1)
          )
         )
@@ -238,7 +237,7 @@
    )
    (block
     (block $break|1
-     (set_local $9
+     (set_local $8
       (i64.shl
        (get_local $3)
        (i64.const 12)
@@ -248,7 +247,7 @@
       (if
        (i64.eqz
         (i64.shr_u
-         (get_local $9)
+         (get_local $8)
          (i64.const 63)
         )
        )
@@ -259,9 +258,9 @@
           (i32.const 1)
          )
         )
-        (set_local $9
+        (set_local $8
          (i64.shl
-          (get_local $9)
+          (get_local $8)
           (i64.const 1)
          )
         )
@@ -316,7 +315,7 @@
      )
      (block
       (block
-       (set_local $9
+       (set_local $8
         (i64.sub
          (get_local $2)
          (get_local $3)
@@ -325,14 +324,14 @@
        (if
         (i64.eqz
          (i64.shr_u
-          (get_local $9)
+          (get_local $8)
           (i64.const 63)
          )
         )
         (block
          (if
           (i64.eqz
-           (get_local $9)
+           (get_local $8)
           )
           (return
            (f64.mul
@@ -342,7 +341,7 @@
           )
          )
          (set_local $2
-          (get_local $9)
+          (get_local $8)
          )
         )
        )
@@ -364,7 +363,7 @@
     )
    )
   )
-  (set_local $9
+  (set_local $8
    (i64.sub
     (get_local $2)
     (get_local $3)
@@ -373,14 +372,14 @@
   (if
    (i64.eqz
     (i64.shr_u
-     (get_local $9)
+     (get_local $8)
      (i64.const 63)
     )
    )
    (block
     (if
      (i64.eqz
-      (get_local $9)
+      (get_local $8)
      )
      (return
       (f64.mul
@@ -390,7 +389,7 @@
      )
     )
     (set_local $2
-     (get_local $9)
+     (get_local $8)
     )
    )
   )
@@ -481,14 +480,6 @@
    )
   )
  )
- (func $isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
-  (return
-   (f64.ne
-    (get_local $0)
-    (get_local $0)
-   )
-  )
- )
  (func $std/mod/check<f64> (; 4 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (if
    (call $isNaN<f64>
@@ -562,15 +553,22 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.mod (; 6 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $isNaN<f32> (; 6 ;) (type $fi) (param $0 f32) (result i32)
+  (return
+   (f32.ne
+    (get_local $0)
+    (get_local $0)
+   )
+  )
+ )
+ (func $~lib/math/NativeMathf.mod (; 7 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   (set_local $2
    (i32.reinterpret/f32
     (get_local $0)
@@ -608,10 +606,10 @@
   (if
    (i32.and
     (if (result i32)
-     (tee_local $8
+     (tee_local $7
       (i32.and
        (if (result i32)
-        (tee_local $8
+        (tee_local $7
          (i32.eq
           (i32.shl
            (get_local $3)
@@ -620,23 +618,15 @@
           (i32.const 0)
          )
         )
-        (get_local $8)
-        (block $isNaN<f32>|inlined.0 (result i32)
-         (set_local $7
-          (get_local $1)
-         )
-         (br $isNaN<f32>|inlined.0
-          (f32.ne
-           (get_local $7)
-           (get_local $7)
-          )
-         )
+        (get_local $7)
+        (call $isNaN<f32>
+         (get_local $1)
         )
        )
        (i32.const 1)
       )
      )
-     (get_local $8)
+     (get_local $7)
      (i32.eq
       (get_local $4)
       (i32.const 255)
@@ -699,7 +689,7 @@
    )
    (block
     (block $break|0
-     (set_local $9
+     (set_local $8
       (i32.shl
        (get_local $2)
        (i32.const 9)
@@ -709,7 +699,7 @@
       (if
        (i32.eqz
         (i32.shr_u
-         (get_local $9)
+         (get_local $8)
          (i32.const 31)
         )
        )
@@ -720,9 +710,9 @@
           (i32.const 1)
          )
         )
-        (set_local $9
+        (set_local $8
          (i32.shl
-          (get_local $9)
+          (get_local $8)
           (i32.const 1)
          )
         )
@@ -771,7 +761,7 @@
    )
    (block
     (block $break|1
-     (set_local $9
+     (set_local $8
       (i32.shl
        (get_local $3)
        (i32.const 9)
@@ -781,7 +771,7 @@
       (if
        (i32.eqz
         (i32.shr_u
-         (get_local $9)
+         (get_local $8)
          (i32.const 31)
         )
        )
@@ -792,9 +782,9 @@
           (i32.const 1)
          )
         )
-        (set_local $9
+        (set_local $8
          (i32.shl
-          (get_local $9)
+          (get_local $8)
           (i32.const 1)
          )
         )
@@ -847,7 +837,7 @@
      )
      (block
       (block
-       (set_local $9
+       (set_local $8
         (i32.sub
          (get_local $2)
          (get_local $3)
@@ -856,14 +846,14 @@
        (if
         (i32.eqz
          (i32.shr_u
-          (get_local $9)
+          (get_local $8)
           (i32.const 31)
          )
         )
         (block
          (if
           (i32.eqz
-           (get_local $9)
+           (get_local $8)
           )
           (return
            (f32.mul
@@ -873,7 +863,7 @@
           )
          )
          (set_local $2
-          (get_local $9)
+          (get_local $8)
          )
         )
        )
@@ -895,7 +885,7 @@
     )
    )
   )
-  (set_local $9
+  (set_local $8
    (i32.sub
     (get_local $2)
     (get_local $3)
@@ -904,14 +894,14 @@
   (if
    (i32.eqz
     (i32.shr_u
-     (get_local $9)
+     (get_local $8)
      (i32.const 31)
     )
    )
    (block
     (if
      (i32.eqz
-      (get_local $9)
+      (get_local $8)
      )
      (return
       (f32.mul
@@ -921,7 +911,7 @@
      )
     )
     (set_local $2
-     (get_local $9)
+     (get_local $8)
     )
    )
   )
@@ -1000,14 +990,6 @@
   (return
    (f32.reinterpret/i32
     (get_local $2)
-   )
-  )
- )
- (func $isNaN<f32> (; 7 ;) (type $fi) (param $0 f32) (result i32)
-  (return
-   (f32.ne
-    (get_local $0)
-    (get_local $0)
    )
   )
  )

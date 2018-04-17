@@ -8621,7 +8621,6 @@
   (local $5 i64)
   (local $6 i32)
   (local $7 i32)
-  (local $8 f64)
   (block $folding-inner0
    (set_local $3
     (i32.wrap/i64
@@ -8669,11 +8668,8 @@
           )
          )
          (get_local $7)
-         (f64.ne
-          (tee_local $8
-           (get_local $1)
-          )
-          (get_local $8)
+         (call $isNaN<f64>
+          (get_local $1)
          )
         )
         (i32.const 1)
@@ -9027,8 +9023,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f32)
-  (local $8 i32)
+  (local $7 i32)
   (block $folding-inner0
    (set_local $4
     (i32.and
@@ -9071,11 +9066,8 @@
           )
          )
          (get_local $3)
-         (f32.ne
-          (tee_local $7
-           (get_local $1)
-          )
-          (get_local $7)
+         (call $isNaN<f32>
+          (get_local $1)
          )
         )
         (i32.const 1)
@@ -9131,7 +9123,7 @@
      )
     )
    )
-   (set_local $8
+   (set_local $7
     (i32.and
      (get_local $2)
      (i32.const -2147483648)
@@ -9363,7 +9355,7 @@
         )
        )
       )
-      (get_local $8)
+      (get_local $7)
      )
     )
    )
