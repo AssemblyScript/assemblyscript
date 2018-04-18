@@ -16,14 +16,9 @@
  (export "memory" (memory $0))
  (start $start)
  (func $isNaN<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
-  (i64.gt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (get_local $0)
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
+  (f64.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $~lib/math/NativeMath.mod (; 3 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -460,16 +455,9 @@
   )
  )
  (func $isNaN<f32> (; 6 ;) (type $fi) (param $0 f32) (result i32)
-  (i64.gt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (f64.promote/f32
-      (get_local $0)
-     )
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
+  (f32.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $~lib/math/NativeMathf.mod (; 7 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)

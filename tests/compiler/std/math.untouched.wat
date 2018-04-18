@@ -80,20 +80,9 @@
  (start $start)
  (func $isNaN<f64> (; 31 ;) (type $Fi) (param $0 f64) (result i32)
   (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (get_local $0)
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+   (f64.ne
+    (get_local $0)
+    (get_local $0)
    )
   )
  )
@@ -111,20 +100,12 @@
  )
  (func $isFinite<f64> (; 33 ;) (type $Fi) (param $0 f64) (result i32)
   (return
-   (i64.lt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (get_local $0)
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
+   (f64.eq
+    (f64.sub
+     (get_local $0)
+     (get_local $0)
     )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+    (f64.const 0)
    )
   )
  )
@@ -427,22 +408,9 @@
  )
  (func $isNaN<f32> (; 38 ;) (type $fi) (param $0 f32) (result i32)
   (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.promote/f32
-       (get_local $0)
-      )
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+   (f32.ne
+    (get_local $0)
+    (get_local $0)
    )
   )
  )
@@ -458,22 +426,12 @@
  )
  (func $isFinite<f32> (; 40 ;) (type $fi) (param $0 f32) (result i32)
   (return
-   (i64.lt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.promote/f32
-       (get_local $0)
-      )
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
+   (f32.eq
+    (f32.sub
+     (get_local $0)
+     (get_local $0)
     )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+    (f32.const 0)
    )
   )
  )

@@ -2,8 +2,8 @@
  (type $FFFi (func (param f64 f64 f64) (result i32)))
  (type $FFF (func (param f64 f64) (result f64)))
  (type $Fi (func (param f64) (result i32)))
- (type $i (func (result i32)))
  (type $FFi (func (param f64 f64) (result i32)))
+ (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
  (type $fffi (func (param f32 f32 f32) (result i32)))
@@ -23,20 +23,9 @@
  (start $start)
  (func $isNaN<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
   (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (get_local $0)
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+   (f64.ne
+    (get_local $0)
+    (get_local $0)
    )
   )
  )
@@ -566,22 +555,9 @@
  )
  (func $isNaN<f32> (; 6 ;) (type $fi) (param $0 f32) (result i32)
   (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.promote/f32
-       (get_local $0)
-      )
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+   (f32.ne
+    (get_local $0)
+    (get_local $0)
    )
   )
  )

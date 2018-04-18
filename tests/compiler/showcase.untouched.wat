@@ -4,11 +4,11 @@
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $fi (func (param f32) (result i32)))
- (type $i (func (result i32)))
  (type $f (func (result f32)))
  (type $fif (func (param f32 i32) (result f32)))
  (type $Fi (func (param f64) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
@@ -1777,22 +1777,9 @@
  )
  (func $isNaN<f32> (; 3 ;) (type $fi) (param $0 f32) (result i32)
   (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.promote/f32
-       (get_local $0)
-      )
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+   (f32.ne
+    (get_local $0)
+    (get_local $0)
    )
   )
  )
@@ -3680,20 +3667,9 @@
  )
  (func $isNaN<f64> (; 7 ;) (type $Fi) (param $0 f64) (result i32)
   (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (get_local $0)
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+   (f64.ne
+    (get_local $0)
+    (get_local $0)
    )
   )
  )
@@ -4150,41 +4126,23 @@
  )
  (func $isFinite<f32> (; 9 ;) (type $fi) (param $0 f32) (result i32)
   (return
-   (i64.lt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (f64.promote/f32
-       (get_local $0)
-      )
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
+   (f32.eq
+    (f32.sub
+     (get_local $0)
+     (get_local $0)
     )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+    (f32.const 0)
    )
   )
  )
  (func $isFinite<f64> (; 10 ;) (type $Fi) (param $0 f64) (result i32)
   (return
-   (i64.lt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (get_local $0)
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
+   (f64.eq
+    (f64.sub
+     (get_local $0)
+     (get_local $0)
     )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+    (f64.const 0)
    )
   )
  )

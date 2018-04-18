@@ -19,51 +19,33 @@
  (export "memory" (memory $0))
  (start $start)
  (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
-  (i64.gt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (f64.promote/f32
-      (get_local $0)
-     )
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
+  (f32.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
-  (i64.lt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (f64.promote/f32
-      (get_local $0)
-     )
-    )
-    (i64.const 9223372036854775807)
+  (f32.eq
+   (f32.sub
+    (get_local $0)
+    (get_local $0)
    )
-   (i64.const 9218868437227405312)
+   (f32.const 0)
   )
  )
  (func $isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
-  (i64.gt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (get_local $0)
-    )
-    (i64.const 9223372036854775807)
-   )
-   (i64.const 9218868437227405312)
+  (f64.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
-  (i64.lt_u
-   (i64.and
-    (i64.reinterpret/f64
-     (get_local $0)
-    )
-    (i64.const 9223372036854775807)
+  (f64.eq
+   (f64.sub
+    (get_local $0)
+    (get_local $0)
    )
-   (i64.const 9218868437227405312)
+   (f64.const 0)
   )
  )
  (func $builtins/test (; 5 ;) (type $v)

@@ -3,8 +3,8 @@
  (type $FF (func (param f64) (result f64)))
  (type $f (func (result f32)))
  (type $Fi (func (param f64) (result i32)))
- (type $i (func (result i32)))
  (type $FFF (func (param f64 f64) (result f64)))
+ (type $i (func (result i32)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $Ff (func (param f64) (result f32)))
  (global $std/libm/E f64 (f64.const 2.718281828459045))
@@ -1557,20 +1557,9 @@
  )
  (func $isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
   (return
-   (i64.gt_u
-    (i64.and
-     (i64.reinterpret/f64
-      (get_local $0)
-     )
-     (i64.shr_u
-      (i64.const -1)
-      (i64.const 1)
-     )
-    )
-    (i64.shl
-     (i64.const 2047)
-     (i64.const 52)
-    )
+   (f64.ne
+    (get_local $0)
+    (get_local $0)
    )
   )
  )
