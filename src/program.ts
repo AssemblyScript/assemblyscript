@@ -1828,7 +1828,8 @@ export class Program extends DiagnosticEmitter {
   resolveIdentifier(
     identifier: IdentifierExpression,
     contextualFunction: Function | null,
-    contextualEnum: Enum | null = null
+    contextualEnum: Enum | null = null,
+    reportNotFound: bool = true
   ): Element | null {
     var name = identifier.text;
 
@@ -1896,21 +1897,28 @@ export class Program extends DiagnosticEmitter {
       return element; // GLOBAL, FUNCTION_PROTOTYPE, CLASS_PROTOTYPE
     }
 
-    this.error(
-      DiagnosticCode.Cannot_find_name_0,
-      identifier.range, name
-    );
+    if (reportNotFound) {
+      this.error(
+        DiagnosticCode.Cannot_find_name_0,
+        identifier.range, name
+      );
+    }
     return null;
   }
 
   /** Resolves a property access to the element it refers to. */
   resolvePropertyAccess(
     propertyAccess: PropertyAccessExpression,
-    contextualFunction: Function
+    contextualFunction: Function,
+    reportNotFound: bool = true
   ): Element | null {
     // start by resolving the lhs target (expression before the last dot)
     var targetExpression = propertyAccess.expression;
-    var target = this.resolveExpression(targetExpression, contextualFunction); // reports
+    var target = this.resolveExpression(
+      targetExpression,
+      contextualFunction,
+      reportNotFound
+    );
     if (!target) return null;
 
     // at this point we know exactly what the target is, so look up the element within
@@ -1923,10 +1931,12 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.FIELD: {
         let classReference = (<VariableLikeElement>target).type.classReference;
         if (!classReference) {
-          this.error(
-            DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.property.range, propertyName, (<VariableLikeElement>target).type.toString()
-          );
+          if (reportNotFound) {
+            this.error(
+              DiagnosticCode.Property_0_does_not_exist_on_type_1,
+              propertyAccess.property.range, propertyName, (<VariableLikeElement>target).type.toString()
+            );
+          }
           return null;
         }
         target = classReference;
@@ -1937,10 +1947,12 @@ export class Program extends DiagnosticEmitter {
         if (!getter) return null;
         let classReference = getter.signature.returnType.classReference;
         if (!classReference) {
-          this.error(
-            DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.property.range, propertyName, getter.signature.returnType.toString()
-          );
+          if (reportNotFound) {
+            this.error(
+              DiagnosticCode.Property_0_does_not_exist_on_type_1,
+              propertyAccess.property.range, propertyName, getter.signature.returnType.toString()
+            );
+          }
           return null;
         }
         target = classReference;
@@ -1959,10 +1971,12 @@ export class Program extends DiagnosticEmitter {
           }
           let returnType = indexedGet.signature.returnType;
           if (!(target = returnType.classReference)) {
-            this.error(
-              DiagnosticCode.Property_0_does_not_exist_on_type_1,
-              propertyAccess.property.range, propertyName, returnType.toString()
-            );
+            if (reportNotFound) {
+              this.error(
+                DiagnosticCode.Property_0_does_not_exist_on_type_1,
+                propertyAccess.property.range, propertyName, returnType.toString()
+              );
+            }
             return null;
           }
         }
@@ -2013,19 +2027,22 @@ export class Program extends DiagnosticEmitter {
         break;
       }
     }
-    this.error(
-      DiagnosticCode.Property_0_does_not_exist_on_type_1,
-      propertyAccess.property.range, propertyName, target.internalName
-    );
+    if (reportNotFound) {
+      this.error(
+        DiagnosticCode.Property_0_does_not_exist_on_type_1,
+        propertyAccess.property.range, propertyName, target.internalName
+      );
+    }
     return null;
   }
 
   resolveElementAccess(
     elementAccess: ElementAccessExpression,
-    contextualFunction: Function
+    contextualFunction: Function,
+    reportNotFound: bool = true
   ): Element | null {
     var targetExpression = elementAccess.expression;
-    var target = this.resolveExpression(targetExpression, contextualFunction);
+    var target = this.resolveExpression(targetExpression, contextualFunction, reportNotFound);
     if (!target) return null;
     switch (target.kind) {
       case ElementKind.GLOBAL:
@@ -2066,14 +2083,19 @@ export class Program extends DiagnosticEmitter {
 
   resolveExpression(
     expression: Expression,
-    contextualFunction: Function
+    contextualFunction: Function,
+    reportNotFound: bool = true
   ): Element | null {
     while (expression.kind == NodeKind.PARENTHESIZED) {
       expression = (<ParenthesizedExpression>expression).expression;
     }
     switch (expression.kind) {
       case NodeKind.ASSERTION: {
-        let type = this.resolveType((<AssertionExpression>expression).toType); // reports
+        let type = this.resolveType(
+          (<AssertionExpression>expression).toType,
+          contextualFunction.flow.contextualTypeArguments,
+          reportNotFound
+        );
         if (type) {
           let classType = type.classReference;
           if (classType) {
@@ -2130,7 +2152,12 @@ export class Program extends DiagnosticEmitter {
         return null;
       }
       case NodeKind.IDENTIFIER: {
-        return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction);
+        return this.resolveIdentifier(
+          <IdentifierExpression>expression,
+          contextualFunction,
+          null,
+          reportNotFound
+        );
       }
       case NodeKind.LITERAL: {
         switch ((<LiteralExpression>expression).literalKind) {
@@ -2146,18 +2173,24 @@ export class Program extends DiagnosticEmitter {
       case NodeKind.PROPERTYACCESS: {
         return this.resolvePropertyAccess(
           <PropertyAccessExpression>expression,
-          contextualFunction
+          contextualFunction,
+          reportNotFound
         );
       }
       case NodeKind.ELEMENTACCESS: {
         return this.resolveElementAccess(
           <ElementAccessExpression>expression,
-          contextualFunction
+          contextualFunction,
+          reportNotFound
         );
       }
       case NodeKind.CALL: {
         let targetExpression = (<CallExpression>expression).expression;
-        let target = this.resolveExpression(targetExpression, contextualFunction); // reports
+        let target = this.resolveExpression(
+          targetExpression,
+          contextualFunction,
+          reportNotFound
+        );
         if (!target) return null;
         if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
           let instance = (<FunctionPrototype>target).resolveUsingTypeArguments( // reports

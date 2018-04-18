@@ -115,6 +115,20 @@ export function compileCall(
         ? module.createI32(1)
         : module.createI32(0);
     }
+    case "isDefined": { // isDefined(expr: *) -> bool
+      compiler.currentType = Type.bool;
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let resolved = compiler.program.resolveExpression(operands[0], compiler.currentFunction, false);
+      return resolved
+        ? module.createI32(1)
+        : module.createI32(0);
+    }
 
     // math
 

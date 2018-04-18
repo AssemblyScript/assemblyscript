@@ -22,6 +22,13 @@ assert(!isString(1));
 assert(isArray(changetype<i32[]>(null)));
 assert(!isArray(changetype<usize>(null)));
 
+assert(isDefined(NaN));
+assert(isDefined(Infinity));
+assert(isDefined(i32));
+assert(isDefined(i32.MAX_VALUE));
+assert(isDefined(String));
+assert(!isDefined(notDefined));
+
 // integers
 
 var i: i32;
