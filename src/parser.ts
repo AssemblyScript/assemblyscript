@@ -3101,7 +3101,7 @@ export class Parser extends DiagnosticEmitter {
             );
             return null;
           }
-          let ifElse = this.parseExpression(tn);
+          let ifElse = this.parseExpression(tn, precedence > Precedence.COMMA ? Precedence.COMMA + 1 : 0);
           if (!ifElse) return null;
           expr = Node.createTernaryExpression(
             expr,

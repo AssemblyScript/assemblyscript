@@ -47,25 +47,6 @@ import {
   OperatorKind
 } from "./program";
 
-/** Compiles a get of a built-in global. */
-export function compileGetConstant(
-  compiler: Compiler,
-  global: Global,
-  reportNode: Node
-): ExpressionRef {
-  switch (global.internalName) {
-    case "HEAP_BASE": { // never inlined for linking purposes
-      compiler.currentType = compiler.options.usizeType;
-      return compiler.module.createGetGlobal("HEAP_BASE", compiler.currentType.toNativeType());
-    }
-  }
-  compiler.error(
-    DiagnosticCode.Operation_not_supported,
-    reportNode.range
-  );
-  return compiler.module.createUnreachable();
-}
-
 /** Compiles a call to a built-in function. */
 export function compileCall(
   compiler: Compiler,

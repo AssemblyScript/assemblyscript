@@ -5,7 +5,6 @@
 
 import {
   compileCall as compileBuiltinCall,
-  compileGetConstant as compileBuiltinGetConstant,
   compileAllocate as compileBuiltinAllocate,
   compileAbort as compileBuiltinAbort
 } from "./builtins";
@@ -458,8 +457,8 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileGlobal(global: Global): bool {
-    if (global.is(CommonFlags.COMPILED) || global.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) return true;
-    global.set(CommonFlags.COMPILED);   // ^ built-ins are compiled on use
+    if (global.is(CommonFlags.COMPILED)) return true;
+    global.set(CommonFlags.COMPILED);
 
     var module = this.module;
     var declaration = global.declaration;
@@ -509,6 +508,9 @@ export class Compiler extends DiagnosticEmitter {
         assert(false); // must have a declaration if 'void' (and thus resolved later on)
       }
     }
+
+    // ambient builtins like 'HEAP_BASE' need to be resolved but are added explicitly
+    if (global.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) return true;
 
     var nativeType = global.type.toNativeType();
     var isConstant = global.isAny(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
@@ -928,18 +930,7 @@ export class Compiler extends DiagnosticEmitter {
       if (signature.requiredParameters < signature.parameterTypes.length) {
         // export the trampoline if the function takes optional parameters
         instance = this.ensureTrampoline(instance);
-        if (!this.argcSet) {
-          this.ensureArgumentCount(0);
-          this.argcSet = module.addFunction("~setargc",
-            this.ensureFunctionType([ Type.u32 ], Type.void),
-            null,
-            module.createSetGlobal("~argc",
-              module.createGetLocal(0, NativeType.I32)
-            )
-          );
-          // export a helper to set argc prior to calling it
-          module.addFunctionExport("~setargc", "_setargc");
-        }
+        this.ensureArgcSet();
       }
       module.addFunctionExport(instance.internalName, mangleExportName(instance));
     }
@@ -5098,6 +5089,38 @@ export class Compiler extends DiagnosticEmitter {
     return trampoline;
   }
 
+  /** Makes sure that the argument count helper global is present and returns its name. */
+  private ensureArgcVar(): string {
+    var internalName = "~argc";
+    if (!this.argcVar) {
+      let module = this.module;
+      this.argcVar = module.addGlobal(
+        internalName,
+        NativeType.I32,
+        true,
+        module.createI32(0)
+      );
+    }
+    return internalName;
+  }
+
+  /** Makes sure that the argument count helper setter is present and returns its name. */
+  private ensureArgcSet(): string {
+    var internalName = "~setargc";
+    if (!this.argcSet) {
+      let module = this.module;
+      this.argcSet = module.addFunction(internalName,
+        this.ensureFunctionType([ Type.u32 ], Type.void),
+        null,
+        module.createSetGlobal(this.ensureArgcVar(),
+          module.createGetLocal(0, NativeType.I32)
+        )
+      );
+      module.addFunctionExport(internalName, "_setargc");
+    }
+    return internalName;
+  }
+
   /** Creates a direct call to the specified function. */
   makeCallDirect(
     instance: Function,
@@ -5137,7 +5160,7 @@ export class Compiler extends DiagnosticEmitter {
         let nativeReturnType = returnType.toNativeType();
         this.currentType = returnType;
         return module.createBlock(null, [
-          this.ensureArgumentCount(numArguments),
+          module.createSetGlobal(this.ensureArgcVar(), module.createI32(numArguments)),
           module.createCall(instance.internalName, operands, nativeReturnType)
         ], nativeReturnType);
       }
@@ -5224,23 +5247,11 @@ export class Compiler extends DiagnosticEmitter {
     var returnType = signature.returnType;
     this.currentType = returnType;
     return module.createBlock(null, [
-      this.ensureArgumentCount(numArguments), // might still be calling a trampoline
+      module.createSetGlobal(this.ensureArgcVar(), // might still be calling a trampoline
+        module.createI32(numArguments)
+      ),
       module.createCallIndirect(indexArg, operands, signature.toSignatureString())
     ], returnType.toNativeType());
-  }
-
-  /** Makes sure that the argument count helper global is present and returns an expression that sets it. */
-  private ensureArgumentCount(argumentCount: i32): ExpressionRef {
-    var module = this.module;
-    if (!this.argcVar) {
-      this.argcVar = module.addGlobal(
-        "~argc",
-        NativeType.I32,
-        true,
-        module.createI32(0)
-      );
-    }
-    return module.createSetGlobal("~argc", module.createI32(argumentCount));
   }
 
   compileCommaExpression(expression: CommaExpression, contextualType: Type): ExpressionRef {
@@ -5430,9 +5441,6 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createGetLocal(localIndex, localType.toNativeType());
       }
       case ElementKind.GLOBAL: {
-        if (target.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
-          return compileBuiltinGetConstant(this, <Global>target, expression);
-        }
         if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
           return this.module.createUnreachable();
         }
@@ -5898,9 +5906,6 @@ export class Compiler extends DiagnosticEmitter {
 
     switch (target.kind) {
       case ElementKind.GLOBAL: { // static property
-        if (target.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
-          return compileBuiltinGetConstant(this, <Global>target, propertyAccess);
-        }
         if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
           return module.createUnreachable();
         }
@@ -6008,6 +6013,8 @@ export class Compiler extends DiagnosticEmitter {
     var currentFunction = this.currentFunction;
     var ifThenExpr: ExpressionRef;
     var ifElseExpr: ExpressionRef;
+    var ifThenType: Type;
+    var ifElseType: Type;
 
     // if part of a constructor, keep track of memory allocations
     if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -6015,14 +6022,16 @@ export class Compiler extends DiagnosticEmitter {
 
       flow = flow.enterBranchOrScope();
       currentFunction.flow = flow;
-      ifThenExpr = this.compileExpression(ifThen, contextualType);
+      ifThenExpr = this.compileExpressionRetainType(ifThen, contextualType);
+      ifThenType = this.currentType;
       let ifThenAllocates = flow.is(FlowFlags.ALLOCATES);
       flow = flow.leaveBranchOrScope();
       currentFunction.flow = flow;
 
       flow = flow.enterBranchOrScope();
       currentFunction.flow = flow;
-      ifElseExpr = this.compileExpression(ifElse, contextualType);
+      ifElseExpr = this.compileExpressionRetainType(ifElse, contextualType);
+      ifElseType = this.currentType;
       let ifElseAllocates = flow.is(FlowFlags.ALLOCATES);
       flow = flow.leaveBranchOrScope();
       currentFunction.flow = flow;
@@ -6031,10 +6040,23 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise simplify
     } else {
-      ifThenExpr = this.compileExpression(ifThen, contextualType);
-      ifElseExpr = this.compileExpression(ifElse, contextualType);
+      ifThenExpr = this.compileExpressionRetainType(ifThen, contextualType);
+      ifThenType = this.currentType;
+      ifElseExpr = this.compileExpressionRetainType(ifElse, contextualType);
+      ifElseType = this.currentType;
     }
-
+    var commonType = Type.commonCompatible(ifThenType, ifElseType, false);
+    if (!commonType) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        expression.range, ifThenType.toString(), ifElseType.toString()
+      );
+      this.currentType = contextualType;
+      return this.module.createUnreachable();
+    }
+    ifThenExpr = this.convertExpression(ifThenExpr, ifThenType, commonType, ConversionKind.IMPLICIT, ifThen);
+    ifElseExpr = this.convertExpression(ifElseExpr, ifElseType, commonType, ConversionKind.IMPLICIT, ifElse);
+    this.currentType = commonType;
     return this.module.createIf(condExpr, ifThenExpr, ifElseExpr);
   }
 
