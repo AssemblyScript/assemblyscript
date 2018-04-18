@@ -40,7 +40,6 @@ import {
 
 import {
   ElementKind,
-  Global,
   FunctionPrototype,
   Class,
   Field,

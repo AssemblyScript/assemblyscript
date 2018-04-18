@@ -2,8 +2,5 @@
   "extends": "../assembly.json",
   "include": [
     "./**/*.ts"
-  ],
-  "exclude": [
-    "./collector/*.ts"
   ]
 }

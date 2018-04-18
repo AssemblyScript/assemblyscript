@@ -26,7 +26,7 @@ declare type u64 = number;
 /** A 32-bit unsigned integer when targeting 32-bit WebAssembly or a 64-bit unsigned integer when targeting 64-bit WebAssembly. */
 declare type usize = number;
 /** A 1-bit unsigned integer. */
-declare type bool = any; // sic
+declare type bool = boolean | number;
 /** A 32-bit float. */
 declare type f32 = number;
 /** A 64-bit float. */

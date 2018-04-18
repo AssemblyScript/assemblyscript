@@ -5,17 +5,15 @@
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
 [![Snap Status](https://build.snapcraft.io/badge/AssemblyScript/assemblyscript.svg)](https://build.snapcraft.io/user/AssemblyScript/assemblyscript)
 
-**AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
+**AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
-See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for further instructions and documentation. You can also try it out in [WebAssembly Studio](https://webassembly.studio)!
+See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for instructions and documentation. You can also try it out in [WebAssembly Studio](https://webassembly.studio)!
 
 Examples
 --------
 
-A few early examples to get an idea:
-
 * **[Conway's Game of Life](./examples/game-of-life)**<br />
-  Continuously updates the cellular automaton and visualizes its state on a canvas.
+  Continuously updates the cellular automaton and visualizes its state on a canvas. There's also [this WebAssembly Studio fiddle](https://webassembly.studio/?f=gvuw4enb3qk) of it.
 
 * **[i64 polyfill](./examples/i64-polyfill)**<br />
   Exposes WebAssembly's i64 operations to JavaScript using 32-bit integers (low and high bits).
