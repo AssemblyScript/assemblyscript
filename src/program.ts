@@ -183,6 +183,14 @@ export class Program extends DiagnosticEmitter {
   arrayBufferViewPrototype: InterfacePrototype | null = null;
   /** String instance reference. */
   stringInstance: Class | null = null;
+  /** Function allocating GC managed objects. */
+  gcAlloc: Function | null = null;
+  /** Function iterating GC managed roots. */
+  gcRoots: Function | null = null;
+  /** Function visiting GC managed objects. */
+  gcVisit: Function | null = null;
+  /** Function introducing GC managed references. */
+  gcRefer: Function | null = null;
 
   /** Target expression of the previously resolved property or element access. */
   resolvedThisExpression: Expression | null = null;
@@ -415,6 +423,32 @@ export class Program extends DiagnosticEmitter {
           this.stringInstance = stringInstance;
           this.typesLookup.set("string", stringInstance.type);
         }
+      }
+    }
+
+    // register GC hooks, if present
+    var gcAllocPrototype = this.elementsLookup.get("gc_alloc");
+    if (gcAllocPrototype) {
+      assert(gcAllocPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let gcRootsPrototype = assert(this.elementsLookup.get("gc_roots"));
+      assert(gcRootsPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let gcVisitPrototype = assert(this.elementsLookup.get("gc_visit"));
+      assert(gcVisitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let gcReferPrototype = assert(this.elementsLookup.get("gc_refer"));
+      assert(gcReferPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let gcAllocInstance = (<FunctionPrototype>gcAllocPrototype).resolve(); // reports
+      let gcRootsInstance = (<FunctionPrototype>gcRootsPrototype).resolve(); // ^
+      let gcVisitInstance = (<FunctionPrototype>gcVisitPrototype).resolve(); // ^
+      let gcReferInstance = (<FunctionPrototype>gcReferPrototype).resolve(); // ^
+      if (gcAllocInstance && gcRootsInstance && gcVisitInstance && gcReferInstance) {
+        gcAllocInstance.internalName = "~alloc";
+        this.gcAlloc = gcAllocInstance;
+        gcRootsInstance.internalName = "~roots";
+        this.gcRoots = gcRootsInstance;
+        gcVisitInstance.internalName = "~visit";
+        this.gcVisit = gcVisitInstance;
+        gcReferInstance.internalName = "~refer";
+        this.gcRefer = gcReferInstance;
       }
     }
   }
