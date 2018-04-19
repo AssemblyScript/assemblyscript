@@ -12,10 +12,10 @@ See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/w
 Examples
 --------
 
-* **[Conway's Game of Life](./examples/game-of-life)**<br />
-  Continuously updates the cellular automaton and visualizes its state on a canvas. There's also [this WebAssembly Studio fiddle](https://webassembly.studio/?f=gvuw4enb3qk) of it.
+* **[Conway's Game of Life](./examples/game-of-life)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/game-of-life/index.html) | [fiddle](https://webassembly.studio/?f=gvuw4enb3qk) ]<br />
+  Continuously updates the cellular automaton and visualizes its state on a canvas.
 
-* **[Mandelbrot Set](./examples/mandelbrot)**<br />
+* **[Mandelbrot Set](./examples/mandelbrot)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/mandelbrot/index.html) ]<br />
   Renders the Mandelbrot set to a canvas.
 
 * **[i64 polyfill](./examples/i64-polyfill)**<br />
