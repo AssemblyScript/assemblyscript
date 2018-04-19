@@ -1,0 +1,14 @@
+{
+  "name": "@assemblyscript/mandelbrot-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --validate --measure",
+    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat -O3 --sourceMap --validate --noDebug --measure",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "server": "http-server . -o -c-1"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "extends": "../../../std/assembly.d.ts",
+  "include": [
+    "./**/*.ts"
+  ]
+}

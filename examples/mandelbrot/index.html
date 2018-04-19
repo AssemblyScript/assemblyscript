@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mandelbrot Set - AssemblyScript</title>
+<style>
+html, body { height: 100%; margin: 0; overflow: hidden; color: #111; background: #fff; font-family: sans-serif; }
+h1 { padding: 20px; font-size: 12pt; }
+a { color: #111; text-decoration: none; }
+a:hover { color: #0074C1; text-decoration: underline; }
+canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); height: calc(100% - 80px); background: #eee; }
+</style>
+</head>
+<body>
+<h1>
+  <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a> in
+  <a href="http://assemblyscript.org">AssemblyScript</a>
+</h1>
+<canvas></canvas>
+<script>
+
+// Set up a 2D rendering context
+var cnv = document.getElementsByTagName("canvas")[0];
+var ctx = cnv.getContext("2d");
+var bcr = cnv.getBoundingClientRect();
+cnv.width = bcr.width | 0;
+cnv.height = bcr.height | 0;
+
+// Fetch and instantiate the module
+fetch("build/optimized.wasm")
+.then(response => response.arrayBuffer())
+.then(buffer => WebAssembly.instantiate(buffer))
+.then(module => {
+  var exports = module.instance.exports;
+  var memory = exports.memory;
+
+  // Compute required memory size and grow if necessary
+  var width = cnv.width | 0;
+  var height = cnv.height | 0;
+  var byteSize = width * height;
+  if (memory.buffer.byteLength < byteSize) {
+    let pages = ((byteSize - memory.buffer.byteLength + 0xffff) & ~0xffff) >>> 16;
+    memory.grow(pages);
+  }
+
+  // Update
+  exports.update(width, height, 100);
+
+  // Render
+  var mem = new Uint8Array(memory.buffer);
+  var imageData = ctx.createImageData(width, height);
+  var argb = new Uint32Array(imageData.data.buffer);
+  for (let y = 0; y < height; ++y) {
+    let yx = y * width;
+    for (let x = 0; x < width; ++x) argb[yx + x] = colors[mem[yx + x]];
+  }
+  ctx.putImageData(imageData, 0, 0);
+});
+
+// Compute a nice set of colors using a gradient
+var colors = (() => {
+  var cnv = document.createElement("canvas");
+  cnv.width = 256;
+  cnv.height = 1;
+  var ctx = cnv.getContext("2d");
+  var grd = ctx.createLinearGradient(0, 0, 256, 0);
+  grd.addColorStop(0, "#000764");
+  grd.addColorStop(0.16, "#2068CB");
+  grd.addColorStop(0.42, "#EDFFFF");
+  grd.addColorStop(0.6425, "#FFAA00");
+  grd.addColorStop(0.8575, "#000200");
+  grd.addColorStop(1.0, "#000764");
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, 256, 1);
+  return new Uint32Array(ctx.getImageData(0, 0, 256, 1).data.buffer);
+})();
+</script>
+</body>
+</html>

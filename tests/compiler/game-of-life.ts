@@ -1,1 +1,1 @@
-export { init, step } from "../../examples/game-of-life/assembly/game-of-life";
+export { init, step } from "../../examples/game-of-life/assembly/index";

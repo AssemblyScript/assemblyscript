@@ -15,6 +15,9 @@ Examples
 * **[Conway's Game of Life](./examples/game-of-life)**<br />
   Continuously updates the cellular automaton and visualizes its state on a canvas. There's also [this WebAssembly Studio fiddle](https://webassembly.studio/?f=gvuw4enb3qk) of it.
 
+* **[Mandelbrot Set](./examples/mandelbrot)**<br />
+  Renders the Mandelbrot set to a canvas.
+
 * **[i64 polyfill](./examples/i64-polyfill)**<br />
   Exposes WebAssembly's i64 operations to JavaScript using 32-bit integers (low and high bits).
 
