@@ -1203,6 +1203,8 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     }
+    var ctorInstance = instance.constructorInstance;
+    if (ctorInstance) this.compileFunction(ctorInstance);
     var instanceMembers = instance.members;
     if (instanceMembers) {
       for (let element of instanceMembers.values()) {
