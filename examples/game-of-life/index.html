@@ -6,8 +6,8 @@
 html, body { height: 100%; margin: 0; overflow: hidden; color: #111; background: #fff; font-family: sans-serif; }
 h1 { padding: 20px; font-size: 12pt; margin: 0; }
 a { color: #111; text-decoration: none; }
-a:hover { color: #851ba7; text-decoration: underline; }
-canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); height: calc(100% - 80px); background: #eee; }
+a:hover { color: #bc18d4; text-decoration: underline; }
+canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); height: calc(100% - 80px); background: #100707; }
 </style>
 </head>
 <body>
@@ -17,7 +17,7 @@ canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); he
   ( <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/game-of-life/assembly/index.ts">source</a> )
 </h1>
 <canvas></canvas>
-<script>
+<script>"use strict";
 
 // Set up the canvas with a 2D rendering context
 var cnv = document.getElementsByTagName("canvas")[0];
@@ -28,11 +28,11 @@ var bcr = cnv.getBoundingClientRect();
 var width = bcr.width >>> 1;
 var height = bcr.height >>> 1;
 var size = width * height;
-var byteSize = size + size; // input & output
+var byteSize = (size + size) << 2; // input & output (here: 4b per cell)
 
 cnv.width = width;
 cnv.height = height;
-cnv.style = style = `
+cnv.style = `
   image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
@@ -49,43 +49,36 @@ var memory = new WebAssembly.Memory({ initial: ((byteSize + 0xffff) & ~0xffff) >
 fetch("build/optimized.wasm")
 .then(response => response.arrayBuffer())
 .then(buffer => WebAssembly.instantiate(buffer, {
-  env: { memory: memory }
+  env: { memory: memory, abort: function() {} },
+  JSMath: Math
 }))
 .then(module => {
   var exports = module.instance.exports;
 
-  // Tell the module about the universe's width and height
-  exports.init(width, height);
+  // Initialize the module with the universe's width and height
+  exports.init(width, height, Math.random());
 
-  // Fill input at [0, s-1] with random live cells
-  var mem = new Uint8Array(memory.buffer);
-  for (var y = 0; y < height; ++y)
-    for (var x = 0; x < width; ++x)
-      mem[y * width + x] = Math.random() > 0.1 ? 0 : 1;
+  var mem = new Uint32Array(memory.buffer);
 
   // Update about 30 times a second
   (function update() {
     setTimeout(update, 1000 / 30);
-    exports.step();
-    mem.copyWithin(0, size, byteSize); // copy output to input
+    mem.copyWithin(0, size, size + size);      // copy output to input
+    exports.step();                            // perform the next step
   })();
 
-  // Keep rendering the output at [s, S]
+  // Keep rendering the output at [size, 2*size]
+  var imageData = ctx.createImageData(width, height);
+  var argb = new Uint32Array(imageData.data.buffer);
   (function render() {
     requestAnimationFrame(render);
-    var imageData = ctx.createImageData(width, height);
-    var colors = new Uint32Array(imageData.data.buffer);
-    for (let y = 0; y < height; ++y) {
-      for (let x = 0; x < width; ++x) {
-        if (mem[size + y * width + x]) colors[y * width + x] = 0xff851ba7;
-      }
-    }
-    ctx.putImageData(imageData, 0, 0);
+    argb.set(mem.subarray(size, size + size)); // copy output to image buffer
+    ctx.putImageData(imageData, 0, 0);         // apply image buffer
   })();
 
 }).catch(err => {
   alert("Failed to load WASM: " + err.message + " (ad blocker, maybe?)");
-  throw err;
+  console.log(err.stack);
 });
 </script>
 </body>
