@@ -67,7 +67,7 @@ export class Array<T> {
   }
 
   @operator("[]=")
-  private __set(index: i32, value: T): void {
+  private __set(index: i32, element: T): void {
     var buffer = this.buffer_;
     var capacity = buffer.byteLength >>> alignof<T>();
     if (<u32>index >= <u32>capacity) {
@@ -77,8 +77,7 @@ export class Array<T> {
       this.buffer_ = buffer;
       this.length_ = index + 1;
     }
-    // store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE_AB);
-    storeUnsafe<T>(buffer, index, value);
+    storeUnsafe<T>(buffer, index, element);
   }
 
   includes(searchElement: T, fromIndex: i32 = 0): bool {
@@ -130,6 +129,7 @@ export class Array<T> {
       this.buffer_ = buffer;
     }
     this.length_ = newLength;
+    if (isDefined(gc_refer) && isReference<T>()) gc_refer(changetype<usize>(this), changetype<usize>(element));
     storeUnsafe<T>(buffer, length, element);
     return newLength;
   }
@@ -195,6 +195,7 @@ export class Array<T> {
       changetype<usize>(buffer) + HEADER_SIZE_AB,
       <usize>(capacity - 1) << alignof<T>()
     );
+    if (isDefined(gc_refer) && isReference<T>()) gc_refer(changetype<usize>(this), changetype<usize>(element));
     storeUnsafe<T>(buffer, 0, element);
     this.length_ = newLength;
     return newLength;

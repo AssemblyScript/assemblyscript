@@ -4410,38 +4410,16 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.createUnreachable();
         }
-        let thisExpression = assert(this.program.resolvedThisExpression);
-        let thisExpr = this.compileExpressionRetainType(
-          thisExpression,
-          this.options.usizeType
+        return makeFieldAssignment(
+          this,
+          <Field>target,
+          valueWithCorrectType,
+          this.compileExpressionRetainType(
+            assert(this.program.resolvedThisExpression),
+            this.options.usizeType
+          ),
+          tee
         );
-        let type = (<Field>target).type;
-        this.currentType = tee ? type : Type.void;
-        let nativeType = type.toNativeType();
-        if (tee) {
-          let tempLocal = this.currentFunction.getAndFreeTempLocal(type);
-          let tempLocalIndex = tempLocal.index;
-          // TODO: simplify if valueWithCorrectType has no side effects
-          return module.createBlock(null, [
-            module.createSetLocal(tempLocalIndex, valueWithCorrectType),
-            module.createStore(
-              type.size >> 3,
-              thisExpr,
-              module.createGetLocal(tempLocalIndex, nativeType),
-              nativeType,
-              (<Field>target).memoryOffset
-            ),
-            module.createGetLocal(tempLocalIndex, nativeType)
-          ], nativeType);
-        } else {
-          return module.createStore(
-            type.size >> 3,
-            thisExpr,
-            valueWithCorrectType,
-            nativeType,
-            (<Field>target).memoryOffset
-          );
-        }
       }
       case ElementKind.PROPERTY: {
         let setterPrototype = (<Property>target).setterPrototype;
@@ -6869,4 +6847,42 @@ export function makeConditionalAllocate(compiler: Compiler, classInstance: Class
       makeAllocate(compiler, classInstance, reportNode)
     )
   );
+}
+
+export function makeFieldAssignment(
+  compiler: Compiler,
+  field: Field,
+  valueExpr: ExpressionRef,
+  thisExpr: ExpressionRef,
+  tee: bool = false
+): ExpressionRef {
+  assert(field.parent !== null && field.parent.kind == ElementKind.CLASS);
+  var module = compiler.module;
+  var type = field.type;
+  compiler.currentType = tee ? type : Type.void;
+  var nativeType = type.toNativeType();
+  if (tee) {
+    let tempLocal = compiler.currentFunction.getAndFreeTempLocal(type);
+    let tempLocalIndex = tempLocal.index;
+    // TODO: simplify if valueExpr has no side effects
+    return module.createBlock(null, [
+      module.createSetLocal(tempLocalIndex, valueExpr),
+      module.createStore(
+        type.byteSize,
+        thisExpr,
+        module.createGetLocal(tempLocalIndex, nativeType),
+        nativeType,
+        field.memoryOffset
+      ),
+      module.createGetLocal(tempLocalIndex, nativeType)
+    ], nativeType);
+  } else {
+    return module.createStore(
+      type.byteSize,
+      thisExpr,
+      valueExpr,
+      nativeType,
+      field.memoryOffset
+    );
+  }
 }

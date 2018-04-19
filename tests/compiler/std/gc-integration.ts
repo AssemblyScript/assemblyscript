@@ -11,7 +11,7 @@ function gc_alloc(size: usize): usize {
 
 @global
 function gc_visit(obj: usize): void {
-  // gc-provided: called each time a managed object is marked, in turn traversing its children
+  // gc-provided: called by compiler-generated visitor functions to mark them as reachable
 }
 
 @global
