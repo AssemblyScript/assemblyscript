@@ -125,9 +125,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       let resolved = compiler.program.resolveExpression(operands[0], compiler.currentFunction, false);
-      return resolved
-        ? module.createI32(1)
-        : module.createI32(0);
+      return module.createI32(resolved !== null ? 1 : 0);
     }
 
     // math

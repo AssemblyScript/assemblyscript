@@ -27,6 +27,7 @@ export function test(animal: Animal<f64>): Animal<f64> {
   animal.one = 0 + 1;
   animal.two = 1 + 1; // checks overflow
   animal.three = 1 + 1 + 1; // checks overflow (once)
+  (animal.one = 2) + 1; // tees
 
   var ptr = changetype<usize>(animal);
   var cls = changetype<Animal<f64>>(ptr);

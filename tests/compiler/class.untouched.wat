@@ -65,6 +65,7 @@
  (func $class/test (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   (drop
    (call $class/Animal<f64>#instanceAdd
     (get_local $0)
@@ -130,14 +131,26 @@
     (i32.const 24)
    )
   )
-  (set_local $1
-   (get_local $0)
+  (drop
+   (i32.add
+    (block (result i32)
+     (i32.store
+      (get_local $0)
+      (i32.const 2)
+     )
+     (i32.const 2)
+    )
+    (i32.const 1)
+   )
   )
   (set_local $2
-   (get_local $1)
+   (get_local $0)
+  )
+  (set_local $3
+   (get_local $2)
   )
   (return
-   (get_local $2)
+   (get_local $3)
   )
  )
  (func $start (; 6 ;) (type $v)

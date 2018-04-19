@@ -229,8 +229,8 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
-  /** Globals that are GC roots. */
-  globalRoots: Global[] = [];
+  /** Globals that store class references. */
+  gcGlobals: Global[] = [];
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -361,22 +361,25 @@ export class Compiler extends DiagnosticEmitter {
         this.compileFunction(gcVisit) && // ^
         this.compileFunction(gcRefer)    // ^
       ) {
-        let globalRoots = this.globalRoots;
-        let gcRootsBody = [];
-        for (let i = 0, k = globalRoots.length; i < k; ++i) {
-          let globalRoot = globalRoots[i];
-          gcRootsBody.push(
-            module.createCall(gcVisit.internalName, [
-              module.createGetGlobal(globalRoot.internalName, globalRoot.type.toNativeType())
-            ], NativeType.None)
-          );
+        let gcGlobals = this.gcGlobals;
+        let numGcGlobals = gcGlobals.length;
+        let gcRootsBody = new Array<ExpressionRef>(numGcGlobals);
+        for (let i = 0; i < numGcGlobals; ++i) {
+          let gcGlobal = gcGlobals[i];
+          gcRootsBody[i] = module.createCall(gcVisit.internalName, [
+            module.createGetGlobal(gcGlobal.internalName, gcGlobal.type.toNativeType())
+          ], NativeType.None);
         }
         assert(!gcRoots.is(CommonFlags.COMPILED));
         gcRoots.set(CommonFlags.COMPILED);
         module.addFunction(gcRoots.internalName,
           this.ensureFunctionType(null, Type.void),
           null,
-          module.createBlock(null, gcRootsBody)
+          numGcGlobals == 0
+            ? module.createNop()
+            : numGcGlobals == 1
+              ? gcRootsBody[0]
+              : module.createBlock(null, gcRootsBody)
         );
       }
     }
@@ -672,7 +675,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // remember as GC root if type is a class reference
-    if (type.classReference) this.globalRoots.push(global);
+    if (type.classReference) this.gcGlobals.push(global);
 
     return true;
   }
@@ -4174,7 +4177,7 @@ export class Compiler extends DiagnosticEmitter {
           false
         );
 
-        // clone left if free of side effects
+        // clone left if cheap and free of side effects
         expr = this.module.cloneExpression(leftExpr, true, 0);
 
         // if not possible, tee left to a temp. local
@@ -6861,21 +6864,43 @@ export function makeFieldAssignment(
   var type = field.type;
   compiler.currentType = tee ? type : Type.void;
   var nativeType = type.toNativeType();
+
+  if (type.classReference) {
+    // TODO: gc_refer(parent, valueExpr)
+  }
+
   if (tee) {
     let tempLocal = compiler.currentFunction.getAndFreeTempLocal(type);
     let tempLocalIndex = tempLocal.index;
-    // TODO: simplify if valueExpr has no side effects
-    return module.createBlock(null, [
-      module.createSetLocal(tempLocalIndex, valueExpr),
-      module.createStore(
-        type.byteSize,
-        thisExpr,
-        module.createGetLocal(tempLocalIndex, nativeType),
-        nativeType,
-        field.memoryOffset
-      ),
-      module.createGetLocal(tempLocalIndex, nativeType)
-    ], nativeType);
+
+    // simplify if cloning valueExpr is cheap and has no side effects
+    let clonedValueExpr = module.cloneExpression(valueExpr, true, 0);
+    if (clonedValueExpr) {
+      return module.createBlock(null, [
+        module.createStore(
+          type.byteSize,
+          thisExpr,
+          valueExpr,
+          nativeType,
+          field.memoryOffset
+        ),
+        clonedValueExpr
+      ], nativeType);
+
+    // otherwise use a temporary local
+    } else {
+      return module.createBlock(null, [
+        module.createStore(
+          type.byteSize,
+          thisExpr,
+          module.createTeeLocal(tempLocalIndex, valueExpr),
+          nativeType,
+          field.memoryOffset
+        ),
+        module.createGetLocal(tempLocalIndex, nativeType)
+      ], nativeType);
+    }
+
   } else {
     return module.createStore(
       type.byteSize,
