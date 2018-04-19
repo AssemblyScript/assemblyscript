@@ -14,6 +14,7 @@ canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); he
 <h1>
   <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a> in
   <a href="http://assemblyscript.org">AssemblyScript</a>
+  ( <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/mandelbrot/assembly/index.ts">source</a> )
 </h1>
 <canvas></canvas>
 <script>
@@ -42,10 +43,10 @@ fetch("build/optimized.wasm")
     memory.grow(pages);
   }
 
-  // Update
-  exports.update(width, height, 100);
+  // Compute number of iterations
+  exports.compute(width, height, 100);
 
-  // Render
+  // Render to the canvas
   var mem = new Uint8Array(memory.buffer);
   var imageData = ctx.createImageData(width, height);
   var argb = new Uint32Array(imageData.data.buffer);
@@ -56,7 +57,7 @@ fetch("build/optimized.wasm")
   ctx.putImageData(imageData, 0, 0);
 }).catch(err => {
   alert("Failed to load WASM: " + err.message + " (ad blocker, maybe?)");
-  throw err;
+  console.log(err.stack);
 });
 
 // Compute a nice set of colors using a gradient

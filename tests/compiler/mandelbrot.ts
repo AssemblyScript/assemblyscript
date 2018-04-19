@@ -1,1 +1,1 @@
-export { update } from "../../examples/mandelbrot/assembly/index";
+export { compute } from "../../examples/mandelbrot/assembly/index";

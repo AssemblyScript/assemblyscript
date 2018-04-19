@@ -1,6 +1,4 @@
-// The Game of Life, also known simply as Life, is a cellular automaton devised by the British
-// mathematician John Horton Conway in 1970.
-// see: https://en.wikipedia.org/wiki/Conway's_Game_of_Life
+// see: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
 var w: i32, h: i32, s: i32;
 
@@ -55,4 +53,4 @@ export function step(): void {
 }
 
 // Performing a step uses bytes [0, s-1] as the input and writes the output to [s, 2*s-1].
-// Note that the code above wastes a lot of space by using one byte per cell.
+// Note that the code above wastes a lot of memory by using one byte per cell.
