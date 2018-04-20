@@ -25,7 +25,7 @@ function set_fade(x: u32, y: u32, v: u32): void {
 }
 
 /** Initializes width and height. Called once from JS. */
-export function init(width: i32, height: i32, seed: f64): void {
+export function init(width: i32, height: i32): void {
   w = width;
   h = height;
   s = width * height;
@@ -46,7 +46,6 @@ export function step(): void {
   // The universe of the Game of Life is an infinite two-dimensional orthogonal grid of square
   // "cells", each of which is in one of two possible states, alive or dead.
   for (let y = 0; y < h; ++y) {
-
     let ym1 = y == 0 ? hm1 : y - 1,
         yp1 = y == hm1 ? 0 : y + 1;
     for (let x = 0; x < w; ++x) {
@@ -74,15 +73,14 @@ export function step(): void {
 
       let alive = mm & 1;
       if (alive) {
-        // A live cell with fewer than 2 live neighbors dies, as if caused by underpopulation.
-        // A live cell with more than 3 live neighbors dies, as if by overpopulation.
-        if (aliveNeighbors < 2 || aliveNeighbors > 3) set(x, y, RGB_DEAD | 0xff000000);
         // A live cell with 2 or 3 live neighbors lives on to the next generation.
-        else set_fade(x, y, mm);
+        if ((aliveNeighbors & 0b1110) == 0b0010) set_fade(x, y, mm);
+        // A live cell with fewer than 2 or more than 3 live neighbors dies.
+        else set(x, y, RGB_DEAD | 0xff000000);
       } else {
-        // A dead cell with exactly 3 live neighbors becomes a live cell, as if by reproduction.
+        // A dead cell with exactly 3 live neighbors becomes a live cell.
         if (aliveNeighbors == 3) set(x, y, RGB_ALIVE | 0xff000000);
-        // Otherwise the dead cell remains dead.
+        // A dead cell with fewer or more than 3 live neighbors remains dead.
         else set_fade(x, y, mm);
       }
     }

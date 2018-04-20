@@ -29,30 +29,30 @@ cnv.height = bcr.height | 0;
 // Fetch and instantiate the module
 fetch("build/optimized.wasm")
 .then(response => response.arrayBuffer())
-.then(buffer => WebAssembly.instantiate(buffer))
+.then(buffer => WebAssembly.instantiate(buffer, { JSMath: Math }))
 .then(module => {
   var exports = module.instance.exports;
   var memory = exports.memory;
 
-  // Compute required memory size and grow if necessary
+  // Determine required memory size and grow if necessary
   var width = cnv.width | 0;
   var height = cnv.height | 0;
-  var byteSize = width * height;
+  var byteSize = 2 * width * height; // 2b per pixel (0..2041)
   if (memory.buffer.byteLength < byteSize) {
     let pages = ((byteSize - memory.buffer.byteLength + 0xffff) & ~0xffff) >>> 16;
     memory.grow(pages);
   }
 
-  // Compute number of iterations
-  exports.compute(width, height, 100);
-
-  // Render to the canvas
-  var mem = new Uint8Array(memory.buffer);
+  // Compute and render to the canvas
+  exports.compute(width, height, 40);
+  var mem = new Uint16Array(memory.buffer);
   var imageData = ctx.createImageData(width, height);
   var argb = new Uint32Array(imageData.data.buffer);
   for (let y = 0; y < height; ++y) {
     let yx = y * width;
-    for (let x = 0; x < width; ++x) argb[yx + x] = colors[mem[yx + x]];
+    for (let x = 0; x < width; ++x) {
+      argb[yx + x] = colors[mem[yx + x]];
+    }
   }
   ctx.putImageData(imageData, 0, 0);
 }).catch(err => {
@@ -63,19 +63,18 @@ fetch("build/optimized.wasm")
 // Compute a nice set of colors using a gradient
 var colors = (() => {
   var cnv = document.createElement("canvas");
-  cnv.width = 256;
+  cnv.width = 2048;
   cnv.height = 1;
   var ctx = cnv.getContext("2d");
-  var grd = ctx.createLinearGradient(0, 0, 256, 0);
+  var grd = ctx.createLinearGradient(0, 0, 2048, 0);
   grd.addColorStop(0, "#000764");
-  grd.addColorStop(0.16, "#2068CB");
-  grd.addColorStop(0.42, "#EDFFFF");
-  grd.addColorStop(0.6425, "#FFAA00");
-  grd.addColorStop(0.8575, "#000200");
-  grd.addColorStop(1.0, "#000764");
+  grd.addColorStop(0.25, "#2068CB");
+  grd.addColorStop(0.50, "#EDFFFF");
+  grd.addColorStop(0.65, "#FFAA00");
+  grd.addColorStop(0.85, "#000200");
   ctx.fillStyle = grd;
-  ctx.fillRect(0, 0, 256, 1);
-  return new Uint32Array(ctx.getImageData(0, 0, 256, 1).data.buffer);
+  ctx.fillRect(0, 0, 2048, 1);
+  return new Uint32Array(ctx.getImageData(0, 0, 2048, 1).data.buffer);
 })();
 </script>
 </body>

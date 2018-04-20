@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Conway's Game Of Life - AssemblyScript</title>
+<title>Conway's Game of Life - AssemblyScript</title>
 <style>
 html, body { height: 100%; margin: 0; overflow: hidden; color: #111; background: #fff; font-family: sans-serif; }
 h1 { padding: 20px; font-size: 12pt; margin: 0; }
@@ -12,7 +12,7 @@ canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); he
 </head>
 <body>
 <h1>
-  <a href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life">Conway's Game Of Life</a> in
+  <a href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life">Conway's Game of Life</a> in
   <a href="http://assemblyscript.org">AssemblyScript</a>
   ( <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/game-of-life/assembly/index.ts">source</a> )
 </h1>
@@ -56,7 +56,7 @@ fetch("build/optimized.wasm")
   var exports = module.instance.exports;
 
   // Initialize the module with the universe's width and height
-  exports.init(width, height, Math.random());
+  exports.init(width, height);
 
   var mem = new Uint32Array(memory.buffer);
 

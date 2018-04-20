@@ -1,5 +1,5 @@
 (module
- (type $iiFv (func (param i32 i32 f64)))
+ (type $iiv (func (param i32 i32)))
  (type $F (func (result f64)))
  (type $v (func))
  (import "JSMath" "random" (func $~lib/math/JSMath.random (result f64)))
@@ -10,10 +10,10 @@
  (export "init" (func $../../examples/game-of-life/assembly/index/init))
  (export "step" (func $../../examples/game-of-life/assembly/index/step))
  (export "memory" (memory $0))
- (func $../../examples/game-of-life/assembly/index/init (; 1 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $../../examples/game-of-life/assembly/index/init (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   (set_global $../../examples/game-of-life/assembly/index/w
    (get_local $0)
   )
@@ -46,13 +46,13 @@
         (get_global $../../examples/game-of-life/assembly/index/w)
        )
        (block
-        (set_local $3
+        (set_local $2
          (get_local $1)
         )
-        (set_local $4
+        (set_local $3
          (get_local $0)
         )
-        (set_local $5
+        (set_local $4
          (if (result i32)
           (f64.gt
            (call $~lib/math/JSMath.random)
@@ -68,15 +68,15 @@
            (i32.add
             (get_global $../../examples/game-of-life/assembly/index/s)
             (i32.mul
-             (get_local $4)
+             (get_local $3)
              (get_global $../../examples/game-of-life/assembly/index/w)
             )
            )
-           (get_local $3)
+           (get_local $2)
           )
           (i32.const 2)
          )
-         (get_local $5)
+         (get_local $4)
         )
         (set_local $1
          (i32.add
@@ -337,37 +337,12 @@
           (i32.const 1)
          )
          (if
-          (i32.and
-           (if (result i32)
-            (tee_local $3
-             (i32.lt_u
-              (get_local $2)
-              (i32.const 2)
-             )
-            )
-            (get_local $3)
-            (i32.gt_u
-             (get_local $2)
-             (i32.const 3)
-            )
+          (i32.eq
+           (i32.and
+            (get_local $2)
+            (i32.const 14)
            )
-           (i32.const 1)
-          )
-          (i32.store
-           (i32.shl
-            (i32.add
-             (i32.add
-              (get_global $../../examples/game-of-life/assembly/index/s)
-              (i32.mul
-               (get_local $0)
-               (get_global $../../examples/game-of-life/assembly/index/w)
-              )
-             )
-             (get_local $1)
-            )
-            (i32.const 2)
-           )
-           (i32.const -8053850)
+           (i32.const 2)
           )
           (i32.store
            (i32.shl
@@ -390,7 +365,7 @@
                (tee_local $4
                 (i32.sub
                  (i32.shr_u
-                  (tee_local $3
+                  (tee_local $2
                    (get_local $4)
                   )
                   (i32.const 24)
@@ -398,22 +373,38 @@
                  (i32.const 7)
                 )
                )
-               (tee_local $2
+               (tee_local $3
                 (i32.const 0)
                )
                (i32.gt_s
                 (get_local $4)
-                (get_local $2)
+                (get_local $3)
                )
               )
              )
              (i32.const 24)
             )
             (i32.and
-             (get_local $3)
+             (get_local $2)
              (i32.const 16777215)
             )
            )
+          )
+          (i32.store
+           (i32.shl
+            (i32.add
+             (i32.add
+              (get_global $../../examples/game-of-life/assembly/index/s)
+              (i32.mul
+               (get_local $0)
+               (get_global $../../examples/game-of-life/assembly/index/w)
+              )
+             )
+             (get_local $1)
+            )
+            (i32.const 2)
+           )
+           (i32.const -8053850)
           )
          )
          (if
