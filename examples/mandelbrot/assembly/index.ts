@@ -13,30 +13,31 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
     let real = (x - translateX) * scale;
 
     // Iterate until either the escape radius or iteration limit is exceeded
-    let ix = 0.0, iy = 0.0, ixsq: f64, iysq: f64;
+    let ix = 0.0, iy = 0.0, ixSq: f64, iySq: f64;
     let iteration: u32 = 0;
-    while ((ixsq = ix * ix) + (iysq = iy * iy) <= 4.0) {
-      let ix_new = ixsq - iysq + real;
+    while ((ixSq = ix * ix) + (iySq = iy * iy) <= 4.0) {
+      let ixNew = ixSq - iySq + real;
       iy = 2.0 * ix * iy + imaginary;
-      ix = ix_new;
+      ix = ixNew;
       if (iteration >= limit) break;
       ++iteration;
     }
 
-    // Do a few extra iterations to reduce error margin
-    for (let i = 0; i < 5 && iteration < limit; ++i, ++iteration) {
-      let ix_new = ix * ix - iy * iy + real;
+    // Do a few extra iterations for quick escapes to reduce error margin
+    for (let minIterations = min(8, limit); iteration < minIterations; ++iteration) {
+      let ixNew = ix * ix - iy * iy + real;
       iy = 2.0 * ix * iy + imaginary;
-      ix = ix_new;
+      ix = ixNew;
     }
 
-    // Renormalize, see: http://linas.org/art-gallery/escape/escape.html
-    let frac: f64 = JSMath.log(JSMath.log(sqrt(ix * ix + iy * iy))) / JSMath.LN2;
-    store<u16>((y * width + x) << 1,
-      isFinite(frac)
-        ? <u32>((NUM_COLORS - 1) * clamp((iteration + 1 - frac) / limit, 0.0, 1.0))
-        : (NUM_COLORS - 1) * iteration / limit
-    );
+    // Iteration count is a discrete value in the range [0, limit] here, but we'd like it to be
+    // normalized in the range [0, 2047] so it maps to the gradient computed in JS.
+    // see also: http://linas.org/art-gallery/escape/escape.html
+    let frac = Math.log(Math.log(Math.sqrt(ix * ix + iy * iy))) / Math.LN2;
+    let icol = isFinite(frac)
+      ? <u32>((NUM_COLORS - 1) * clamp((iteration + 1 - frac) / limit, 0.0, 1.0))
+      : NUM_COLORS - 1;
+    store<u16>((y * width + x) << 1, icol);
   }
 }
 

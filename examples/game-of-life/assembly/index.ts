@@ -1,7 +1,8 @@
 // see: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
-const RGB_ALIVE = 0xE692D3;
-const RGB_DEAD  = 0x851BA6;
+const RGB_ALIVE = 0xE692D3; // LSB must be set
+const RGB_DEAD  = 0x851BA6; // LSB must not be set
+const BIT_ROT   = 10;       // It's everywhere
 
 var w: i32, h: i32, s: i32;
 
@@ -19,8 +20,8 @@ function set(x: u32, y: u32, v: u32): void {
 
 /** Sets an output pixel in the range [s, 2*s] while fading it out. */
 @inline
-function set_fade(x: u32, y: u32, v: u32): void {
-  var a = max<i32>((v >>> 24) - 7, 0);
+function rot(x: u32, y: u32, v: u32): void {
+  var a = max<i32>((v >>> 24) - BIT_ROT, 0);
   set(x, y, (a << 24) | (v & 0x00ffffff));
 }
 
@@ -33,7 +34,7 @@ export function init(width: i32, height: i32): void {
   // Start by filling output with random live cells.
   for (let y = 0; y < h; ++y) {
     for (let x = 0; x < w; ++x) {
-      set(x, y, JSMath.random() > 0.15 ? RGB_DEAD & 0x00ffffff : RGB_ALIVE | 0xff000000);
+      set(x, y, Math.random() > 0.1 ? RGB_DEAD & 0x00ffffff : RGB_ALIVE | 0xff000000);
     }
   }
 }
@@ -53,35 +54,24 @@ export function step(): void {
           xp1 = x == wm1 ? 0 : x + 1;
 
       // Every cell interacts with its eight neighbours, which are the cells that are horizontally,
-      // vertically, or diagonally adjacent:
-      let tl = get(xm1, ym1);
-      let tm = get(x  , ym1);
-      let tr = get(xp1, ym1);
-      let ml = get(xm1, y  );
-      let mm = get(x  , y  );
-      let mr = get(xp1, y  );
-      let bl = get(xm1, yp1);
-      let bm = get(x  , yp1);
-      let br = get(xp1, yp1);
-
-      // Least significant bit indicates alive or dead, others are ARGB.
+      // vertically, or diagonally adjacent. Least significant bit indicates alive or dead.
       let aliveNeighbors = (
-        (tl & 1) + (tm & 1) + (tr & 1) +
-        (ml & 1)            + (mr & 1) +
-        (bl & 1) + (bm & 1) + (br & 1)
+        (get(xm1, ym1) & 1) + (get(x  , ym1) & 1) + (get(xp1, ym1) & 1) +
+        (get(xm1, y  ) & 1)                       + (get(xp1, y  ) & 1) +
+        (get(xm1, yp1) & 1) + (get(x  , yp1) & 1) + (get(xp1, yp1) & 1)
       );
 
-      let alive = mm & 1;
-      if (alive) {
-        // A live cell with 2 or 3 live neighbors lives on to the next generation.
-        if ((aliveNeighbors & 0b1110) == 0b0010) set_fade(x, y, mm);
+      let self = get(x, y);
+      if (self & 1) {
+        // A live cell with 2 or 3 live neighbors rots on to the next generation.
+        if ((aliveNeighbors & 0b1110) == 0b0010) rot(x, y, self);
         // A live cell with fewer than 2 or more than 3 live neighbors dies.
         else set(x, y, RGB_DEAD | 0xff000000);
       } else {
         // A dead cell with exactly 3 live neighbors becomes a live cell.
         if (aliveNeighbors == 3) set(x, y, RGB_ALIVE | 0xff000000);
-        // A dead cell with fewer or more than 3 live neighbors remains dead.
-        else set_fade(x, y, mm);
+        // A dead cell with fewer or more than 3 live neighbors just rots.
+        else rot(x, y, self);
       }
     }
   }
