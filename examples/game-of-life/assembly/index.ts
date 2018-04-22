@@ -1,8 +1,9 @@
 // see: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
-const RGB_ALIVE = 0xE692D3; // LSB must be set
-const RGB_DEAD  = 0x851BA6; // LSB must not be set
-const BIT_ROT   = 10;       // It's everywhere
+// Configuration imported from JS.
+declare const RGB_ALIVE: u32;
+declare const RGB_DEAD: u32;
+declare const BIT_ROT: u32;
 
 var w: i32, h: i32, s: i32;
 
@@ -74,5 +75,15 @@ export function step(): void {
         else rot(x, y, self);
       }
     }
+  }
+}
+
+/** Fills the row and column indicated by `x` and `y` with random live cells. */
+export function fill(x: u32, y: u32, p: f64): void {
+  for (let ix = 0; ix < w; ++ix) {
+    if (Math.random() < p) set(ix, y, RGB_ALIVE | 0xff000000);
+  }
+  for (let iy = 0; iy < h; ++iy) {
+    if (Math.random() < p) set(x, iy, RGB_ALIVE | 0xff000000);
   }
 }

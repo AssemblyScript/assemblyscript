@@ -2,13 +2,16 @@
 <html>
 <head>
 <title>Conway's Game of Life - AssemblyScript</title>
+<link rel="icon" href="http://assemblyscript.org/favicon.ico" type="image/x-icon" />
+<meta name="viewport" content="user-scalable=0" />
 <style>
 html, body { height: 100%; margin: 0; overflow: hidden; color: #111; background: #fff; font-family: sans-serif; }
 body { border-top: 2px solid #bc18d4; }
 h1 { padding: 18px 20px 20px; font-size: 12pt; margin: 0; }
 a { color: #111; text-decoration: none; }
 a:hover { color: #bc18d4; text-decoration: underline; }
-canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); height: calc(100% - 80px); background: #100707; }
+canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); height: calc(100% - 80px); background: #100707; cursor: cell; user-select: none; }
+#edge { position: absolute; bottom: 40px; right: 40px; color: #fff; display: none; text-shadow: 0 1px 2px #000; -ms-user-select: none; user-select: none; }
 </style>
 </head>
 <body>
@@ -18,7 +21,13 @@ canvas { position: absolute; top: 60px; left: 20px; width: calc(100% - 40px); he
   ( <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/game-of-life/assembly/index.ts">source</a> )
 </h1>
 <canvas></canvas>
+<div id="edge">Might be blurry because MS Edge does not support 'image-rendering: crisp-edges' (yet) :-(</div>
 <script>"use strict";
+
+// Configuration
+const RGB_ALIVE = 0xD392E6;
+const RGB_DEAD  = 0xA61B85;
+const BIT_ROT   = 10;
 
 // Set up the canvas with a 2D rendering context
 var cnv = document.getElementsByTagName("canvas")[0];
@@ -38,6 +47,8 @@ cnv.style = `
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -o-crisp-edges;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
   image-rendering: pixelated;
   -ms-interpolation-mode: nearest-neighbor;
 `;
@@ -50,7 +61,13 @@ var memory = new WebAssembly.Memory({ initial: ((byteSize + 0xffff) & ~0xffff) >
 fetch("build/optimized.wasm")
 .then(response => response.arrayBuffer())
 .then(buffer => WebAssembly.instantiate(buffer, {
-  env: { memory: memory, abort: function() {} },
+  env: {
+    RGB_ALIVE : rgb2le(RGB_ALIVE) | 1, // little endian, LSB must be set
+    RGB_DEAD  : rgb2le(RGB_DEAD) & ~1, // little endian, LSB must not be set
+    BIT_ROT,
+    memory,
+    abort: function() {}
+  },
   JSMath: Math
 }))
 .then(module => {
@@ -77,10 +94,40 @@ fetch("build/optimized.wasm")
     ctx.putImageData(imageData, 0, 0);         // apply image buffer
   })();
 
+  // When clicked or dragged, fill the current row and column with random live cells
+  var down = false;
+  [ [cnv, "mousedown"],
+    [cnv, "touchstart"]
+  ].forEach(eh => eh[0].addEventListener(eh[1], e => down = true));
+  [ [document, "mouseup"],
+    [document, "touchend"]
+  ].forEach(eh => eh[0].addEventListener(eh[1], e => down = false));
+  [ [cnv, "mousemove"],
+    [cnv, "touchmove"],
+    [cnv, "mousedown"]
+  ].forEach(eh => eh[0].addEventListener(eh[1], e => {
+    if (!down) return;
+    var loc;
+    if (e.touches) {
+      if (e.touches.length > 1) return;
+      loc = e.touches[0];
+    } else {
+      loc = e;
+    }
+    var bcr = cnv.getBoundingClientRect();
+    exports.fill((loc.clientX - bcr.left) >>> 1, (loc.clientY - bcr.top) >>> 1, 0.5);
+  }));
+
+  // :-(
+  if (navigator.userAgent.indexOf(" Edge/") >= 0) document.getElementById("edge").style.display = "block";
 }).catch(err => {
   alert("Failed to load WASM: " + err.message + " (ad blocker, maybe?)");
   console.log(err.stack);
 });
+
+function rgb2le(rgb) {
+  return ((rgb >>> 16) & 0xff) | (rgb & 0xff00) | (rgb & 0xff) << 16;
+}
 </script>
 </body>
 </html>
