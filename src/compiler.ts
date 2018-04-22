@@ -5847,7 +5847,7 @@ export class Compiler extends DiagnosticEmitter {
     var classPrototype = <ClassPrototype>target;
     var classInstance = classPrototype.resolveUsingTypeArguments( // reports
       expression.typeArguments,
-      null,
+      currentFunction.flow.contextualTypeArguments,
       expression
     );
     if (!classInstance) return module.createUnreachable();

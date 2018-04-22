@@ -1195,6 +1195,7 @@ function stringLengthUTF8(str: string): usize {
 function allocString(str: string | null): usize {
   if (str == null) return 0;
   var ptr = allocate_memory(stringLengthUTF8(str) + 1);
+  // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
   for (let i = 0, k = str.length; i < k; ++i) {
     let u = str.charCodeAt(i);
@@ -1284,6 +1285,7 @@ export function readString(ptr: usize): string | null {
         }
       }
     }
+    arr.push(cp);
     // if (cp < 0x10000) {
     //   arr.push(cp);
     // } else {
