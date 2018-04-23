@@ -181,13 +181,13 @@ class NBodySystem {
 var system: NBodySystem;
 
 export function init(): void {
-  var bodies = new Array<Body>();
-  bodies.push(Sun());
-  bodies.push(Jupiter());
-  bodies.push(Saturn());
-  bodies.push(Uranus());
-  bodies.push(Neptune());
-  system = new NBodySystem(bodies);
+  system = new NBodySystem([
+    Sun(),
+    Jupiter(),
+    Saturn(),
+    Uranus(),
+    Neptune()
+  ]);
 }
 
 export function getBody(index: i32): Body | null {

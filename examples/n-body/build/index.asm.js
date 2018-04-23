@@ -18,7 +18,6 @@ function asmFunc(global, env, buffer) {
  var $lib_allocator_arena_startOffset = 0;
  var $lib_allocator_arena_offset = 0;
  var assembly_index_system = 0;
- var $argc = 0;
  var HEAP_BASE = 36;
  var i64toi32_i32$HIGH_BITS = 0;
  function $lib_allocator_arena_allocate_memory($0) {
@@ -38,6 +37,30 @@ function asmFunc(global, env, buffer) {
    return $1 | 0;
   }
   return 0 | 0;
+ }
+ 
+ function assembly_index_Body_constructor($0, $1, $2, $3, $4, $5, $6, $7) {
+  $0 = $0 | 0;
+  $1 = +$1;
+  $2 = +$2;
+  $3 = +$3;
+  $4 = +$4;
+  $5 = +$5;
+  $6 = +$6;
+  $7 = +$7;
+  var $8 = 0, $9 = 0;
+  if ($0) $9 = $0; else {
+   $8 = $lib_allocator_arena_allocate_memory(56 | 0) | 0;
+   HEAPF64[$8 >> 3] = $1;
+   HEAPF64[($8 + 8 | 0) >> 3] = $2;
+   HEAPF64[($8 + 16 | 0) >> 3] = $3;
+   HEAPF64[($8 + 24 | 0) >> 3] = $4;
+   HEAPF64[($8 + 32 | 0) >> 3] = $5;
+   HEAPF64[($8 + 40 | 0) >> 3] = $6;
+   HEAPF64[($8 + 48 | 0) >> 3] = $7;
+   $9 = $8;
+  }
+  return $9 | 0;
  }
  
  function $lib_internal_arraybuffer_allocUnsafe($0) {
@@ -67,30 +90,6 @@ function asmFunc(global, env, buffer) {
   HEAP32[$3 >> 2] = $lib_internal_arraybuffer_allocUnsafe($1 << 2 | 0 | 0) | 0;
   HEAP32[($0 + 4 | 0) >> 2] = $1;
   return $0 | 0;
- }
- 
- function assembly_index_Body_constructor($0, $1, $2, $3, $4, $5, $6, $7) {
-  $0 = $0 | 0;
-  $1 = +$1;
-  $2 = +$2;
-  $3 = +$3;
-  $4 = +$4;
-  $5 = +$5;
-  $6 = +$6;
-  $7 = +$7;
-  var $8 = 0, $9 = 0;
-  if ($0) $9 = $0; else {
-   $8 = $lib_allocator_arena_allocate_memory(56 | 0) | 0;
-   HEAPF64[$8 >> 3] = $1;
-   HEAPF64[($8 + 8 | 0) >> 3] = $2;
-   HEAPF64[($8 + 16 | 0) >> 3] = $3;
-   HEAPF64[($8 + 24 | 0) >> 3] = $4;
-   HEAPF64[($8 + 32 | 0) >> 3] = $5;
-   HEAPF64[($8 + 40 | 0) >> 3] = $6;
-   HEAPF64[($8 + 48 | 0) >> 3] = $7;
-   $9 = $8;
-  }
-  return $9 | 0;
  }
  
  function $lib_memory_set_memory($0, $1, $2) {
@@ -659,24 +658,22 @@ function asmFunc(global, env, buffer) {
   return $0 | 0;
  }
  
- function $lib_array_Array_Body__push($0, $1) {
+ function $lib_array_Array_Body____set($0, $1, $2) {
   $0 = $0 | 0;
   $1 = $1 | 0;
-  var $4 = 0, $2 = 0, $3 = 0;
-  $2 = HEAP32[($0 + 4 | 0) >> 2] | 0;
-  $3 = $2 + 1 | 0;
-  $4 = HEAPU32[$0 >> 2] | 0;
-  if ($2 >>> 0 >= ((HEAP32[$4 >> 2] | 0) >>> 2 | 0) >>> 0) {
-   if ($2 >>> 0 >= 268435454 >>> 0) {
-    abort(0 | 0, 4 | 0, 128 | 0, 42 | 0);
+  $2 = $2 | 0;
+  var $3 = 0;
+  $3 = HEAPU32[$0 >> 2] | 0;
+  if ($1 >>> 0 >= ((HEAP32[$3 >> 2] | 0) >>> 2 | 0) >>> 0) {
+   if ($1 >>> 0 >= 268435454 >>> 0) {
+    abort(0 | 0, 4 | 0, 75 | 0, 41 | 0);
     abort();
    }
-   $4 = $lib_internal_arraybuffer_reallocUnsafe($4 | 0, $3 << 2 | 0 | 0) | 0;
-   HEAP32[$0 >> 2] = $4;
+   $3 = $lib_internal_arraybuffer_reallocUnsafe($3 | 0, ($1 + 1 | 0) << 2 | 0 | 0) | 0;
+   HEAP32[$0 >> 2] = $3;
+   HEAP32[($0 + 4 | 0) >> 2] = $1 + 1 | 0;
   }
-  HEAP32[($0 + 4 | 0) >> 2] = $3;
-  HEAP32[(($4 + ($2 << 2 | 0) | 0) + 8 | 0) >> 2] = $1;
-  return $3 | 0;
+  HEAP32[(($3 + ($1 << 2 | 0) | 0) + 8 | 0) >> 2] = $2;
  }
  
  function $lib_array_Array_Body____get($0, $1) {
@@ -725,28 +722,12 @@ function asmFunc(global, env, buffer) {
  
  function assembly_index_init() {
   var $0 = 0;
-  $argc = 0;
-  $1of1 : {
-   $0of1 : {
-    oob : {
-     switch ($argc | 0) {
-     case 0:
-      break $0of1;
-     case 1:
-      break $1of1;
-     default:
-      break oob;
-     };
-    };
-    abort();
-   };
-  };
-  $0 = $lib_array_Array_Body__constructor(0 | 0, 0 | 0) | 0;
-  $lib_array_Array_Body__push($0 | 0, assembly_index_Body_constructor(0 | 0, +(0.0), +(0.0), +(0.0), +(0.0), +(0.0), +(0.0), +(39.47841760435743)) | 0 | 0) | 0;
-  $lib_array_Array_Body__push($0 | 0, assembly_index_Body_constructor(0 | 0, +(4.841431442464721), +(-1.1603200440274284), +(-.10362204447112311), +(.606326392995832), +(2.81198684491626), +(-.02521836165988763), +(.03769367487038949)) | 0 | 0) | 0;
-  $lib_array_Array_Body__push($0 | 0, assembly_index_Body_constructor(0 | 0, +(8.34336671824458), +(4.124798564124305), +(-.4035234171143214), +(-1.0107743461787924), +(1.8256623712304119), +(.008415761376584154), +(.011286326131968767)) | 0 | 0) | 0;
-  $lib_array_Array_Body__push($0 | 0, assembly_index_Body_constructor(0 | 0, +(12.894369562139131), +(-15.111151401698631), +(-.22330757889265573), +(1.0827910064415354), +(.8687130181696082), +(-.010832637401363636), +(1.7237240570597112e-03)) | 0 | 0) | 0;
-  $lib_array_Array_Body__push($0 | 0, assembly_index_Body_constructor(0 | 0, +(15.379697114850917), +(-25.919314609987964), +(.17925877295037118), +(.979090732243898), +(.5946989986476762), +(-.034755955504078104), +(2.0336868699246304e-03)) | 0 | 0) | 0;
+  $0 = $lib_array_Array_Body__constructor(0 | 0, 5 | 0) | 0;
+  $lib_array_Array_Body____set($0 | 0, 0 | 0, assembly_index_Body_constructor(0 | 0, +(0.0), +(0.0), +(0.0), +(0.0), +(0.0), +(0.0), +(39.47841760435743)) | 0 | 0);
+  $lib_array_Array_Body____set($0 | 0, 1 | 0, assembly_index_Body_constructor(0 | 0, +(4.841431442464721), +(-1.1603200440274284), +(-.10362204447112311), +(.606326392995832), +(2.81198684491626), +(-.02521836165988763), +(.03769367487038949)) | 0 | 0);
+  $lib_array_Array_Body____set($0 | 0, 2 | 0, assembly_index_Body_constructor(0 | 0, +(8.34336671824458), +(4.124798564124305), +(-.4035234171143214), +(-1.0107743461787924), +(1.8256623712304119), +(.008415761376584154), +(.011286326131968767)) | 0 | 0);
+  $lib_array_Array_Body____set($0 | 0, 3 | 0, assembly_index_Body_constructor(0 | 0, +(12.894369562139131), +(-15.111151401698631), +(-.22330757889265573), +(1.0827910064415354), +(.8687130181696082), +(-.010832637401363636), +(1.7237240570597112e-03)) | 0 | 0);
+  $lib_array_Array_Body____set($0 | 0, 4 | 0, assembly_index_Body_constructor(0 | 0, +(15.379697114850917), +(-25.919314609987964), +(.17925877295037118), +(.979090732243898), +(.5946989986476762), +(-.034755955504078104), +(2.0336868699246304e-03)) | 0 | 0);
   assembly_index_system = assembly_index_NBodySystem_constructor(0 | 0, $0 | 0) | 0;
  }
  

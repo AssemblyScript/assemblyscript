@@ -2,10 +2,10 @@
  (type $i (func (result i32)))
  (type $F (func (result f64)))
  (type $v (func))
+ (type $iFFFFFFFi (func (param i32 f64 f64 f64 f64 f64 f64 f64) (result i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $ii (func (param i32) (result i32)))
- (type $iFFFFFFFi (func (param i32 f64 f64 f64 f64 f64 f64 f64) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iFFFi (func (param i32 f64 f64 f64) (result i32)))
  (type $iFv (func (param i32 f64)))
@@ -23,7 +23,6 @@
  (global $assembly/index/system (mut i32) (i32.const 0))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
- (global $~argc (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 96))
  (memory $0 1)
  (data (i32.const 4) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -34,34 +33,7 @@
  (export "bench" (func $assembly/index/bench))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ ~lib/internal/arraybuffer.ts:17:77
-  (return
-   ;;@ ~lib/internal/arraybuffer.ts:17:9
-   (i32.shl
-    (i32.const 1)
-    ;;@ ~lib/internal/arraybuffer.ts:17:21
-    (i32.sub
-     ;;@ ~lib/internal/arraybuffer.ts:17:29
-     (i32.const 32)
-     ;;@ ~lib/internal/arraybuffer.ts:17:39
-     (i32.clz
-      ;;@ ~lib/internal/arraybuffer.ts:17:48
-      (i32.sub
-       (i32.add
-        (get_local $0)
-        ;;@ ~lib/internal/arraybuffer.ts:17:61
-        (i32.const 8)
-       )
-       ;;@ ~lib/internal/arraybuffer.ts:17:75
-       (i32.const 1)
-      )
-     )
-    )
-   )
-  )
- )
- (func $~lib/allocator/arena/allocate_memory (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -220,7 +192,263 @@
    (i32.const 0)
   )
  )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/Body#constructor (; 2 ;) (type $iFFFFFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
+  (local $8 i32)
+  ;;@ assembly/index.ts:16:4
+  (block
+  )
+  (tee_local $0
+   (if (result i32)
+    (get_local $0)
+    (get_local $0)
+    (tee_local $0
+     (block (result i32)
+      (set_local $8
+       (call $~lib/allocator/arena/allocate_memory
+        (i32.const 56)
+       )
+      )
+      (f64.store
+       (get_local $8)
+       (get_local $1)
+      )
+      (f64.store offset=8
+       (get_local $8)
+       (get_local $2)
+      )
+      (f64.store offset=16
+       (get_local $8)
+       (get_local $3)
+      )
+      (f64.store offset=24
+       (get_local $8)
+       (get_local $4)
+      )
+      (f64.store offset=32
+       (get_local $8)
+       (get_local $5)
+      )
+      (f64.store offset=40
+       (get_local $8)
+       (get_local $6)
+      )
+      (f64.store offset=48
+       (get_local $8)
+       (get_local $7)
+      )
+      (get_local $8)
+     )
+    )
+   )
+  )
+ )
+ (func $assembly/index/Sun (; 3 ;) (type $i) (result i32)
+  ;;@ assembly/index.ts:29:2
+  (return
+   ;;@ assembly/index.ts:27:9
+   (call $assembly/index/Body#constructor
+    (i32.const 0)
+    ;;@ assembly/index.ts:28:4
+    (f64.const 0)
+    ;;@ assembly/index.ts:28:9
+    (f64.const 0)
+    ;;@ assembly/index.ts:28:14
+    (f64.const 0)
+    ;;@ assembly/index.ts:28:19
+    (f64.const 0)
+    ;;@ assembly/index.ts:28:24
+    (f64.const 0)
+    ;;@ assembly/index.ts:28:29
+    (f64.const 0)
+    ;;@ assembly/index.ts:28:34
+    (f64.const 39.47841760435743)
+   )
+  )
+ )
+ (func $assembly/index/Jupiter (; 4 ;) (type $i) (result i32)
+  ;;@ assembly/index.ts:41:2
+  (return
+   ;;@ assembly/index.ts:33:9
+   (call $assembly/index/Body#constructor
+    (i32.const 0)
+    ;;@ assembly/index.ts:34:4
+    (f64.const 4.841431442464721)
+    ;;@ assembly/index.ts:35:4
+    (f64.const -1.1603200440274284)
+    ;;@ assembly/index.ts:36:4
+    (f64.const -0.10362204447112311)
+    ;;@ assembly/index.ts:37:4
+    (f64.mul
+     (f64.const 0.001660076642744037)
+     ;;@ assembly/index.ts:37:30
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:38:4
+    (f64.mul
+     (f64.const 0.007699011184197404)
+     ;;@ assembly/index.ts:38:30
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:39:4
+    (f64.mul
+     (f64.const -6.90460016972063e-05)
+     ;;@ assembly/index.ts:39:31
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:40:4
+    (f64.mul
+     (f64.const 9.547919384243266e-04)
+     ;;@ assembly/index.ts:40:30
+     (f64.const 39.47841760435743)
+    )
+   )
+  )
+ )
+ (func $assembly/index/Saturn (; 5 ;) (type $i) (result i32)
+  ;;@ assembly/index.ts:53:2
+  (return
+   ;;@ assembly/index.ts:45:9
+   (call $assembly/index/Body#constructor
+    (i32.const 0)
+    ;;@ assembly/index.ts:46:4
+    (f64.const 8.34336671824458)
+    ;;@ assembly/index.ts:47:4
+    (f64.const 4.124798564124305)
+    ;;@ assembly/index.ts:48:4
+    (f64.const -0.4035234171143214)
+    ;;@ assembly/index.ts:49:4
+    (f64.mul
+     (f64.const -0.002767425107268624)
+     ;;@ assembly/index.ts:49:31
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:50:4
+    (f64.mul
+     (f64.const 0.004998528012349172)
+     ;;@ assembly/index.ts:50:30
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:51:4
+    (f64.mul
+     (f64.const 2.3041729757376393e-05)
+     ;;@ assembly/index.ts:51:30
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:52:4
+    (f64.mul
+     (f64.const 2.858859806661308e-04)
+     ;;@ assembly/index.ts:52:30
+     (f64.const 39.47841760435743)
+    )
+   )
+  )
+ )
+ (func $assembly/index/Uranus (; 6 ;) (type $i) (result i32)
+  ;;@ assembly/index.ts:65:2
+  (return
+   ;;@ assembly/index.ts:57:9
+   (call $assembly/index/Body#constructor
+    (i32.const 0)
+    ;;@ assembly/index.ts:58:4
+    (f64.const 12.894369562139131)
+    ;;@ assembly/index.ts:59:4
+    (f64.const -15.111151401698631)
+    ;;@ assembly/index.ts:60:4
+    (f64.const -0.22330757889265573)
+    ;;@ assembly/index.ts:61:4
+    (f64.mul
+     (f64.const 0.002964601375647616)
+     ;;@ assembly/index.ts:61:30
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:62:4
+    (f64.mul
+     (f64.const 2.3784717395948095e-03)
+     ;;@ assembly/index.ts:62:30
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:63:4
+    (f64.mul
+     (f64.const -2.9658956854023756e-05)
+     ;;@ assembly/index.ts:63:31
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:64:4
+    (f64.mul
+     (f64.const 4.366244043351563e-05)
+     ;;@ assembly/index.ts:64:30
+     (f64.const 39.47841760435743)
+    )
+   )
+  )
+ )
+ (func $assembly/index/Neptune (; 7 ;) (type $i) (result i32)
+  ;;@ assembly/index.ts:77:2
+  (return
+   ;;@ assembly/index.ts:69:9
+   (call $assembly/index/Body#constructor
+    (i32.const 0)
+    ;;@ assembly/index.ts:70:4
+    (f64.const 15.379697114850917)
+    ;;@ assembly/index.ts:71:4
+    (f64.const -25.919314609987964)
+    ;;@ assembly/index.ts:72:4
+    (f64.const 0.17925877295037118)
+    ;;@ assembly/index.ts:73:4
+    (f64.mul
+     (f64.const 2.6806777249038932e-03)
+     ;;@ assembly/index.ts:73:30
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:74:4
+    (f64.mul
+     (f64.const 0.001628241700382423)
+     ;;@ assembly/index.ts:74:30
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:75:4
+    (f64.mul
+     (f64.const -9.515922545197159e-05)
+     ;;@ assembly/index.ts:75:31
+     (f64.const 365.24)
+    )
+    ;;@ assembly/index.ts:76:4
+    (f64.mul
+     (f64.const 5.1513890204661145e-05)
+     ;;@ assembly/index.ts:76:30
+     (f64.const 39.47841760435743)
+    )
+   )
+  )
+ )
+ (func $~lib/internal/arraybuffer/computeSize (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ ~lib/internal/arraybuffer.ts:17:77
+  (return
+   ;;@ ~lib/internal/arraybuffer.ts:17:9
+   (i32.shl
+    (i32.const 1)
+    ;;@ ~lib/internal/arraybuffer.ts:17:21
+    (i32.sub
+     ;;@ ~lib/internal/arraybuffer.ts:17:29
+     (i32.const 32)
+     ;;@ ~lib/internal/arraybuffer.ts:17:39
+     (i32.clz
+      ;;@ ~lib/internal/arraybuffer.ts:17:48
+      (i32.sub
+       (i32.add
+        (get_local $0)
+        ;;@ ~lib/internal/arraybuffer.ts:17:61
+        (i32.const 8)
+       )
+       ;;@ ~lib/internal/arraybuffer.ts:17:75
+       (i32.const 1)
+      )
+     )
+    )
+   )
+  )
+ )
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   ;;@ ~lib/internal/arraybuffer.ts:22:2
   (if
@@ -266,7 +494,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<Body>#constructor (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Body>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   ;;@ ~lib/array.ts:21:31
   (block
@@ -336,100 +564,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<Body>#constructor|trampoline (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (get_global $~argc)
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    ;;@ ~lib/array.ts:21:28
-    (i32.const 0)
-   )
-  )
-  (call $~lib/array/Array<Body>#constructor
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $assembly/index/Body#constructor (; 6 ;) (type $iFFFFFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
-  (local $8 i32)
-  ;;@ assembly/index.ts:16:4
-  (block
-  )
-  (tee_local $0
-   (if (result i32)
-    (get_local $0)
-    (get_local $0)
-    (tee_local $0
-     (block (result i32)
-      (set_local $8
-       (call $~lib/allocator/arena/allocate_memory
-        (i32.const 56)
-       )
-      )
-      (f64.store
-       (get_local $8)
-       (get_local $1)
-      )
-      (f64.store offset=8
-       (get_local $8)
-       (get_local $2)
-      )
-      (f64.store offset=16
-       (get_local $8)
-       (get_local $3)
-      )
-      (f64.store offset=24
-       (get_local $8)
-       (get_local $4)
-      )
-      (f64.store offset=32
-       (get_local $8)
-       (get_local $5)
-      )
-      (f64.store offset=40
-       (get_local $8)
-       (get_local $6)
-      )
-      (f64.store offset=48
-       (get_local $8)
-       (get_local $7)
-      )
-      (get_local $8)
-     )
-    )
-   )
-  )
- )
- (func $assembly/index/Sun (; 7 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:29:2
-  (return
-   ;;@ assembly/index.ts:27:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:28:4
-    (f64.const 0)
-    ;;@ assembly/index.ts:28:9
-    (f64.const 0)
-    ;;@ assembly/index.ts:28:14
-    (f64.const 0)
-    ;;@ assembly/index.ts:28:19
-    (f64.const 0)
-    ;;@ assembly/index.ts:28:24
-    (f64.const 0)
-    ;;@ assembly/index.ts:28:29
-    (f64.const 0)
-    ;;@ assembly/index.ts:28:34
-    (f64.const 39.47841760435743)
-   )
-  )
- )
- (func $~lib/memory/set_memory (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/set_memory (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -949,7 +1084,7 @@
    )
   )
  )
- (func $~lib/memory/copy_memory (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/copy_memory (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3202,7 +3337,7 @@
    )
   )
  )
- (func $~lib/memory/move_memory (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/move_memory (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   ;;@ ~lib/memory.ts:151:2
   (if
@@ -3631,7 +3766,7 @@
    )
   )
  )
- (func $~lib/internal/arraybuffer/reallocUnsafe (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocUnsafe (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   ;;@ ~lib/internal/arraybuffer.ts:30:2
@@ -3820,300 +3955,131 @@
    (get_local $0)
   )
  )
- (func $~lib/array/Array<Body>#push (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/array/Array<Body>#__set (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  ;;@ ~lib/array.ts:122:4
-  (set_local $2
-   ;;@ ~lib/array.ts:122:17
-   (i32.load offset=4
-    (get_local $0)
-   )
-  )
-  ;;@ ~lib/array.ts:123:4
+  ;;@ ~lib/array.ts:71:4
   (set_local $3
-   ;;@ ~lib/array.ts:123:17
+   ;;@ ~lib/array.ts:71:17
    (i32.load
     (get_local $0)
    )
   )
-  ;;@ ~lib/array.ts:124:4
+  ;;@ ~lib/array.ts:72:4
   (set_local $4
-   ;;@ ~lib/array.ts:124:19
+   ;;@ ~lib/array.ts:72:19
    (i32.shr_u
     (i32.load
      (get_local $3)
     )
-    ;;@ ~lib/array.ts:124:41
+    ;;@ ~lib/array.ts:72:41
     (i32.const 2)
    )
   )
-  ;;@ ~lib/array.ts:125:4
-  (set_local $5
-   ;;@ ~lib/array.ts:125:20
-   (i32.add
-    (get_local $2)
-    ;;@ ~lib/array.ts:125:29
-    (i32.const 1)
-   )
-  )
-  ;;@ ~lib/array.ts:126:4
+  ;;@ ~lib/array.ts:73:4
   (if
-   ;;@ ~lib/array.ts:126:8
+   ;;@ ~lib/array.ts:73:8
    (i32.ge_u
-    (get_local $2)
-    ;;@ ~lib/array.ts:126:23
+    (get_local $1)
+    ;;@ ~lib/array.ts:73:22
     (get_local $4)
    )
-   ;;@ ~lib/array.ts:126:38
+   ;;@ ~lib/array.ts:73:37
    (block
-    ;;@ ~lib/array.ts:127:6
+    ;;@ ~lib/array.ts:74:6
     (nop)
-    ;;@ ~lib/array.ts:128:6
+    ;;@ ~lib/array.ts:75:6
     (if
-     ;;@ ~lib/array.ts:128:10
+     ;;@ ~lib/array.ts:75:10
      (i32.ge_u
-      (get_local $2)
-      ;;@ ~lib/array.ts:128:25
+      (get_local $1)
+      ;;@ ~lib/array.ts:75:24
       (i32.const 268435454)
      )
-     ;;@ ~lib/array.ts:128:42
+     ;;@ ~lib/array.ts:75:41
      (block
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 128)
-       (i32.const 42)
+       (i32.const 75)
+       (i32.const 41)
       )
       (unreachable)
      )
     )
-    ;;@ ~lib/array.ts:129:6
+    ;;@ ~lib/array.ts:76:6
     (set_local $3
-     ;;@ ~lib/array.ts:129:15
+     ;;@ ~lib/array.ts:76:15
      (call $~lib/internal/arraybuffer/reallocUnsafe
-      ;;@ ~lib/array.ts:129:29
+      ;;@ ~lib/array.ts:76:29
       (get_local $3)
-      ;;@ ~lib/array.ts:129:37
+      ;;@ ~lib/array.ts:76:37
       (i32.shl
-       (get_local $5)
-       ;;@ ~lib/array.ts:129:50
+       (i32.add
+        ;;@ ~lib/array.ts:76:38
+        (get_local $1)
+        ;;@ ~lib/array.ts:76:46
+        (i32.const 1)
+       )
+       ;;@ ~lib/array.ts:76:52
        (i32.const 2)
       )
      )
     )
-    ;;@ ~lib/array.ts:130:6
+    ;;@ ~lib/array.ts:77:6
     (i32.store
      (get_local $0)
-     ;;@ ~lib/array.ts:130:21
+     ;;@ ~lib/array.ts:77:21
      (get_local $3)
+    )
+    ;;@ ~lib/array.ts:78:6
+    (i32.store offset=4
+     (get_local $0)
+     ;;@ ~lib/array.ts:78:21
+     (i32.add
+      (get_local $1)
+      ;;@ ~lib/array.ts:78:29
+      (i32.const 1)
+     )
     )
    )
   )
-  ;;@ ~lib/array.ts:132:4
-  (i32.store offset=4
-   (get_local $0)
-   ;;@ ~lib/array.ts:132:19
-   (get_local $5)
-  )
-  ;;@ ~lib/array.ts:133:4
+  ;;@ ~lib/array.ts:81:4
   (block $~lib/internal/arraybuffer/storeUnsafe<Body>|inlined.0
-   (set_local $6
-    ;;@ ~lib/array.ts:133:19
+   (set_local $5
+    ;;@ ~lib/array.ts:81:19
     (get_local $3)
    )
-   (set_local $7
-    ;;@ ~lib/array.ts:133:27
-    (get_local $2)
-   )
-   (set_local $8
-    ;;@ ~lib/array.ts:133:35
+   (set_local $6
+    ;;@ ~lib/array.ts:81:27
     (get_local $1)
+   )
+   (set_local $7
+    ;;@ ~lib/array.ts:81:34
+    (get_local $2)
    )
    ;;@ ~lib/internal/arraybuffer.ts:69:2
    (i32.store offset=8
     ;;@ ~lib/internal/arraybuffer.ts:69:11
     (i32.add
-     (get_local $6)
+     (get_local $5)
      ;;@ ~lib/internal/arraybuffer.ts:69:39
      (i32.shl
       ;;@ ~lib/internal/arraybuffer.ts:69:40
-      (get_local $7)
+      (get_local $6)
       ;;@ ~lib/internal/arraybuffer.ts:69:56
       (i32.const 2)
      )
     )
     ;;@ ~lib/internal/arraybuffer.ts:69:71
-    (get_local $8)
-   )
-  )
-  ;;@ ~lib/array.ts:134:11
-  (return
-   (get_local $5)
-  )
- )
- (func $assembly/index/Jupiter (; 13 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:41:2
-  (return
-   ;;@ assembly/index.ts:33:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:34:4
-    (f64.const 4.841431442464721)
-    ;;@ assembly/index.ts:35:4
-    (f64.const -1.1603200440274284)
-    ;;@ assembly/index.ts:36:4
-    (f64.const -0.10362204447112311)
-    ;;@ assembly/index.ts:37:4
-    (f64.mul
-     (f64.const 0.001660076642744037)
-     ;;@ assembly/index.ts:37:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:38:4
-    (f64.mul
-     (f64.const 0.007699011184197404)
-     ;;@ assembly/index.ts:38:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:39:4
-    (f64.mul
-     (f64.const -6.90460016972063e-05)
-     ;;@ assembly/index.ts:39:31
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:40:4
-    (f64.mul
-     (f64.const 9.547919384243266e-04)
-     ;;@ assembly/index.ts:40:30
-     (f64.const 39.47841760435743)
-    )
+    (get_local $7)
    )
   )
  )
- (func $assembly/index/Saturn (; 14 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:53:2
-  (return
-   ;;@ assembly/index.ts:45:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:46:4
-    (f64.const 8.34336671824458)
-    ;;@ assembly/index.ts:47:4
-    (f64.const 4.124798564124305)
-    ;;@ assembly/index.ts:48:4
-    (f64.const -0.4035234171143214)
-    ;;@ assembly/index.ts:49:4
-    (f64.mul
-     (f64.const -0.002767425107268624)
-     ;;@ assembly/index.ts:49:31
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:50:4
-    (f64.mul
-     (f64.const 0.004998528012349172)
-     ;;@ assembly/index.ts:50:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:51:4
-    (f64.mul
-     (f64.const 2.3041729757376393e-05)
-     ;;@ assembly/index.ts:51:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:52:4
-    (f64.mul
-     (f64.const 2.858859806661308e-04)
-     ;;@ assembly/index.ts:52:30
-     (f64.const 39.47841760435743)
-    )
-   )
-  )
- )
- (func $assembly/index/Uranus (; 15 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:65:2
-  (return
-   ;;@ assembly/index.ts:57:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:58:4
-    (f64.const 12.894369562139131)
-    ;;@ assembly/index.ts:59:4
-    (f64.const -15.111151401698631)
-    ;;@ assembly/index.ts:60:4
-    (f64.const -0.22330757889265573)
-    ;;@ assembly/index.ts:61:4
-    (f64.mul
-     (f64.const 0.002964601375647616)
-     ;;@ assembly/index.ts:61:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:62:4
-    (f64.mul
-     (f64.const 2.3784717395948095e-03)
-     ;;@ assembly/index.ts:62:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:63:4
-    (f64.mul
-     (f64.const -2.9658956854023756e-05)
-     ;;@ assembly/index.ts:63:31
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:64:4
-    (f64.mul
-     (f64.const 4.366244043351563e-05)
-     ;;@ assembly/index.ts:64:30
-     (f64.const 39.47841760435743)
-    )
-   )
-  )
- )
- (func $assembly/index/Neptune (; 16 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:77:2
-  (return
-   ;;@ assembly/index.ts:69:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:70:4
-    (f64.const 15.379697114850917)
-    ;;@ assembly/index.ts:71:4
-    (f64.const -25.919314609987964)
-    ;;@ assembly/index.ts:72:4
-    (f64.const 0.17925877295037118)
-    ;;@ assembly/index.ts:73:4
-    (f64.mul
-     (f64.const 2.6806777249038932e-03)
-     ;;@ assembly/index.ts:73:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:74:4
-    (f64.mul
-     (f64.const 0.001628241700382423)
-     ;;@ assembly/index.ts:74:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:75:4
-    (f64.mul
-     (f64.const -9.515922545197159e-05)
-     ;;@ assembly/index.ts:75:31
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:76:4
-    (f64.mul
-     (f64.const 5.1513890204661145e-05)
-     ;;@ assembly/index.ts:76:30
-     (f64.const 39.47841760435743)
-    )
-   )
-  )
- )
- (func $~lib/array/Array<Body>#get:length (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Body>#get:length (; 16 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/array.ts:29:16
   (return
    ;;@ ~lib/array.ts:29:11
@@ -4122,7 +4088,7 @@
    )
   )
  )
- (func $~lib/array/Array<Body>#__get (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Body>#__get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4196,7 +4162,7 @@
    )
   )
  )
- (func $assembly/index/Body#offsetMomentum (; 19 ;) (type $iFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
+ (func $assembly/index/Body#offsetMomentum (; 18 ;) (type $iFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
   ;;@ assembly/index.ts:19:4
   (f64.store offset=24
    (get_local $0)
@@ -4241,7 +4207,7 @@
    (get_local $0)
   )
  )
- (func $assembly/index/NBodySystem#constructor (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/NBodySystem#constructor (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 f64)
   (local $3 f64)
   (local $4 f64)
@@ -4408,77 +4374,57 @@
   )
   (get_local $0)
  )
- (func $assembly/index/init (; 21 ;) (type $v)
+ (func $assembly/index/init (; 20 ;) (type $v)
   (local $0 i32)
   ;;@ assembly/index.ts:184:2
-  (set_local $0
-   ;;@ assembly/index.ts:184:15
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 0)
-    )
-    (call $~lib/array/Array<Body>#constructor|trampoline
-     (i32.const 0)
-     (i32.const 0)
-    )
-   )
-  )
-  ;;@ assembly/index.ts:185:9
-  (drop
-   (call $~lib/array/Array<Body>#push
-    ;;@ assembly/index.ts:185:2
-    (get_local $0)
-    ;;@ assembly/index.ts:185:14
-    (call $assembly/index/Sun)
-   )
-  )
-  ;;@ assembly/index.ts:186:9
-  (drop
-   (call $~lib/array/Array<Body>#push
-    ;;@ assembly/index.ts:186:2
-    (get_local $0)
-    ;;@ assembly/index.ts:186:14
-    (call $assembly/index/Jupiter)
-   )
-  )
-  ;;@ assembly/index.ts:187:9
-  (drop
-   (call $~lib/array/Array<Body>#push
-    ;;@ assembly/index.ts:187:2
-    (get_local $0)
-    ;;@ assembly/index.ts:187:14
-    (call $assembly/index/Saturn)
-   )
-  )
-  ;;@ assembly/index.ts:188:9
-  (drop
-   (call $~lib/array/Array<Body>#push
-    ;;@ assembly/index.ts:188:2
-    (get_local $0)
-    ;;@ assembly/index.ts:188:14
-    (call $assembly/index/Uranus)
-   )
-  )
-  ;;@ assembly/index.ts:189:9
-  (drop
-   (call $~lib/array/Array<Body>#push
-    ;;@ assembly/index.ts:189:2
-    (get_local $0)
-    ;;@ assembly/index.ts:189:14
-    (call $assembly/index/Neptune)
-   )
-  )
-  ;;@ assembly/index.ts:190:2
   (set_global $assembly/index/system
-   ;;@ assembly/index.ts:190:11
+   ;;@ assembly/index.ts:184:11
    (call $assembly/index/NBodySystem#constructor
     (i32.const 0)
-    ;;@ assembly/index.ts:190:27
-    (get_local $0)
+    ;;@ assembly/index.ts:184:27
+    (block (result i32)
+     (set_local $0
+      (call $~lib/array/Array<Body>#constructor
+       (i32.const 0)
+       (i32.const 5)
+      )
+     )
+     (call $~lib/array/Array<Body>#__set
+      (get_local $0)
+      (i32.const 0)
+      ;;@ assembly/index.ts:185:4
+      (call $assembly/index/Sun)
+     )
+     (call $~lib/array/Array<Body>#__set
+      (get_local $0)
+      (i32.const 1)
+      ;;@ assembly/index.ts:186:4
+      (call $assembly/index/Jupiter)
+     )
+     (call $~lib/array/Array<Body>#__set
+      (get_local $0)
+      (i32.const 2)
+      ;;@ assembly/index.ts:187:4
+      (call $assembly/index/Saturn)
+     )
+     (call $~lib/array/Array<Body>#__set
+      (get_local $0)
+      (i32.const 3)
+      ;;@ assembly/index.ts:188:4
+      (call $assembly/index/Uranus)
+     )
+     (call $~lib/array/Array<Body>#__set
+      (get_local $0)
+      (i32.const 4)
+      ;;@ assembly/index.ts:189:4
+      (call $assembly/index/Neptune)
+     )
+     (get_local $0)
+    )
    )
   )
  )
- (func $assembly/index/getBody (; 22 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 21 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   ;;@ assembly/index.ts:194:2
   (set_local $1
@@ -4510,7 +4456,7 @@
    )
   )
  )
- (func $assembly/index/NBodySystem#advance (; 23 ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $assembly/index/NBodySystem#advance (; 22 ;) (type $iFv) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4934,7 +4880,7 @@
    )
   )
  )
- (func $assembly/index/NBodySystem#energy (; 24 ;) (type $iF) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 23 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -5236,7 +5182,7 @@
    (get_local $1)
   )
  )
- (func $assembly/index/step (; 25 ;) (type $F) (result f64)
+ (func $assembly/index/step (; 24 ;) (type $F) (result f64)
   ;;@ assembly/index.ts:199:9
   (call $assembly/index/NBodySystem#advance
    ;;@ assembly/index.ts:199:2
@@ -5253,7 +5199,7 @@
    )
   )
  )
- (func $assembly/index/bench (; 26 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/bench (; 25 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   ;;@ assembly/index.ts:204:2
   (block $break|0
@@ -5291,7 +5237,7 @@
    )
   )
  )
- (func $start (; 27 ;) (type $v)
+ (func $start (; 26 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    ;;@ ~lib/allocator/arena.ts:12:25
    (i32.and
