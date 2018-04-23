@@ -1627,7 +1627,114 @@
   )
   (get_local $2)
  )
- (func $start (; 17 ;) (type $v)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (if
+   (i32.ge_u
+    (get_local $1)
+    (i32.sub
+     (i32.load offset=8
+      (get_local $0)
+     )
+     (tee_local $3
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 47)
+     (i32.const 42)
+    )
+    (unreachable)
+   )
+  )
+  (i32.store8 offset=8
+   (i32.add
+    (i32.add
+     (i32.load
+      (get_local $0)
+     )
+     (get_local $3)
+    )
+    (get_local $1)
+   )
+   (get_local $2)
+  )
+ )
+ (func $~lib/typedarray/Uint8ClampedArray#__set (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (call $~lib/internal/typedarray/TypedArray<u8>#__set
+   (get_local $0)
+   (get_local $1)
+   (i32.and
+    (select
+     (tee_local $2
+      (select
+       (get_local $2)
+       (tee_local $0
+        (i32.const 255)
+       )
+       (i32.gt_s
+        (get_local $2)
+        (get_local $0)
+       )
+      )
+     )
+     (tee_local $0
+      (i32.const 0)
+     )
+     (i32.lt_s
+      (get_local $2)
+      (get_local $0)
+     )
+    )
+    (i32.const 255)
+   )
+  )
+ )
+ (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (if
+   (i32.ge_u
+    (get_local $1)
+    (i32.sub
+     (i32.load offset=8
+      (get_local $0)
+     )
+     (tee_local $2
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 39)
+     (i32.const 42)
+    )
+    (unreachable)
+   )
+  )
+  (i32.load8_u offset=8
+   (i32.add
+    (i32.add
+     (i32.load
+      (get_local $0)
+     )
+     (get_local $2)
+    )
+    (get_local $1)
+   )
+  )
+ )
+ (func $start (; 20 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -1851,24 +1958,24 @@
     (i32.const 3)
    )
   )
-  (call $~lib/internal/typedarray/TypedArray<i32>#__set
-   (get_global $std/typedarray/arr)
+  (call $~lib/typedarray/Uint8ClampedArray#__set
+   (get_global $std/typedarray/clampedArr)
    (i32.const 0)
    (i32.const -32)
   )
-  (call $~lib/internal/typedarray/TypedArray<i32>#__set
-   (get_global $std/typedarray/arr)
+  (call $~lib/typedarray/Uint8ClampedArray#__set
+   (get_global $std/typedarray/clampedArr)
    (i32.const 1)
    (i32.const 2)
   )
-  (call $~lib/internal/typedarray/TypedArray<i32>#__set
-   (get_global $std/typedarray/arr)
+  (call $~lib/typedarray/Uint8ClampedArray#__set
+   (get_global $std/typedarray/clampedArr)
    (i32.const 2)
    (i32.const 256)
   )
   (if
-   (call $~lib/internal/typedarray/TypedArray<i32>#__get
-    (get_global $std/typedarray/arr)
+   (call $~lib/internal/typedarray/TypedArray<u8>#__get
+    (get_global $std/typedarray/clampedArr)
     (i32.const 0)
    )
    (block
@@ -1883,8 +1990,8 @@
   )
   (if
    (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<i32>#__get
-     (get_global $std/typedarray/arr)
+    (call $~lib/internal/typedarray/TypedArray<u8>#__get
+     (get_global $std/typedarray/clampedArr)
      (i32.const 1)
     )
     (i32.const 2)
@@ -1901,8 +2008,8 @@
   )
   (if
    (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<i32>#__get
-     (get_global $std/typedarray/arr)
+    (call $~lib/internal/typedarray/TypedArray<u8>#__get
+     (get_global $std/typedarray/clampedArr)
      (i32.const 2)
     )
     (i32.const 255)
