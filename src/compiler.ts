@@ -4281,15 +4281,24 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.CLASS: {
         if (program.resolvedElementExpression) { // indexed access
-          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
-          if (!indexedGet) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              expression.range, (<Class>target).internalName
-            );
+          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET);
+          if (!indexedSet) {
+            let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+            if (!indexedGet) {
+              this.error(
+                DiagnosticCode.Index_signature_is_missing_in_type_0,
+                expression.range, (<Class>target).internalName
+              );
+            } else {
+              this.error(
+                DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+                expression.range, (<Class>target).internalName
+              );
+            }
             return this.module.createUnreachable();
           }
-          elementType = indexedGet.signature.returnType;
+          assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
+          elementType = indexedSet.signature.parameterTypes[1];    // 2nd parameter is the element
           break;
         }
         // fall-through

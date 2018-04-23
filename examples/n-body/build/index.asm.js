@@ -39,7 +39,7 @@ function asmFunc(global, env, buffer) {
   }
   return 0 | 0;
  }
-
+ 
  function $lib_internal_arraybuffer_allocUnsafe($0) {
   $0 = $0 | 0;
   var $1 = 0;
@@ -48,7 +48,7 @@ function asmFunc(global, env, buffer) {
   HEAP32[$1 >> 2] = $0;
   return $1 | 0;
  }
-
+ 
  function $lib_array_Array_Body__constructor($0, $1) {
   $0 = $0 | 0;
   $1 = $1 | 0;
@@ -68,7 +68,7 @@ function asmFunc(global, env, buffer) {
   HEAP32[($0 + 4 | 0) >> 2] = $1;
   return $0 | 0;
  }
-
+ 
  function assembly_index_Body_constructor($0, $1, $2, $3, $4, $5, $6, $7) {
   $0 = $0 | 0;
   $1 = +$1;
@@ -92,7 +92,7 @@ function asmFunc(global, env, buffer) {
   }
   return $9 | 0;
  }
-
+ 
  function $lib_memory_set_memory($0, $1, $2) {
   $0 = $0 | 0;
   $1 = $1 | 0;
@@ -176,7 +176,7 @@ function asmFunc(global, env, buffer) {
    break continue_0;
   } while (1);
  }
-
+ 
  function $lib_memory_copy_memory($0, $1, $2) {
   $0 = $0 | 0;
   $1 = $1 | 0;
@@ -545,7 +545,7 @@ function asmFunc(global, env, buffer) {
    HEAP8[$44 >> 0] = HEAPU8[$3 >> 0] | 0;
   }
  }
-
+ 
  function $lib_memory_move_memory($0, $1, $2) {
   $0 = $0 | 0;
   $1 = $1 | 0;
@@ -638,7 +638,7 @@ function asmFunc(global, env, buffer) {
    } while (1);
   }
  }
-
+ 
  function $lib_internal_arraybuffer_reallocUnsafe($0, $1) {
   $0 = $0 | 0;
   $1 = $1 | 0;
@@ -658,7 +658,7 @@ function asmFunc(global, env, buffer) {
   } else if (($1 | 0) < ($2 | 0)) HEAP32[$0 >> 2] = $1;;
   return $0 | 0;
  }
-
+ 
  function $lib_array_Array_Body__push($0, $1) {
   $0 = $0 | 0;
   $1 = $1 | 0;
@@ -678,7 +678,7 @@ function asmFunc(global, env, buffer) {
   HEAP32[(($4 + ($2 << 2 | 0) | 0) + 8 | 0) >> 2] = $1;
   return $3 | 0;
  }
-
+ 
  function $lib_array_Array_Body____get($0, $1) {
   $0 = $0 | 0;
   $1 = $1 | 0;
@@ -690,7 +690,7 @@ function asmFunc(global, env, buffer) {
   }
   return HEAPU32[(($2 + ($1 << 2 | 0) | 0) + 8 | 0) >> 2] | 0 | 0;
  }
-
+ 
  function assembly_index_NBodySystem_constructor($0, $1) {
   $0 = $0 | 0;
   $1 = $1 | 0;
@@ -722,7 +722,7 @@ function asmFunc(global, env, buffer) {
   HEAPF64[($1 + 40 | 0) >> 3] = -$7 / 39.47841760435743;
   return $0 | 0;
  }
-
+ 
  function assembly_index_init() {
   var $0 = 0;
   $argc = 0;
@@ -749,7 +749,7 @@ function asmFunc(global, env, buffer) {
   $lib_array_Array_Body__push($0 | 0, assembly_index_Body_constructor(0 | 0, +(15.379697114850917), +(-25.919314609987964), +(.17925877295037118), +(.979090732243898), +(.5946989986476762), +(-.034755955504078104), +(2.0336868699246304e-03)) | 0 | 0) | 0;
   assembly_index_system = assembly_index_NBodySystem_constructor(0 | 0, $0 | 0) | 0;
  }
-
+ 
  function assembly_index_getBody($0) {
   $0 = $0 | 0;
   var $1 = 0, $2 = 0;
@@ -757,7 +757,7 @@ function asmFunc(global, env, buffer) {
   if ($0 >>> 0 < (HEAP32[($1 + 4 | 0) >> 2] | 0) >>> 0) $2 = $lib_array_Array_Body____get($1 | 0, $0 | 0) | 0; else $2 = 0;
   return $2 | 0;
  }
-
+ 
  function assembly_index_NBodySystem_advance($0, $1) {
   $0 = $0 | 0;
   $1 = +$1;
@@ -810,7 +810,7 @@ function asmFunc(global, env, buffer) {
    break continue_0;
   } while (1);
  }
-
+ 
  function assembly_index_NBodySystem_energy($0) {
   $0 = $0 | 0;
   var $1 = 0.0, $2 = 0, $3 = 0, $4 = 0, $5 = 0, $10 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0.0, $9 = 0.0, $11 = 0.0, $12 = 0.0, $13 = 0.0, $14 = 0.0, $15 = 0.0;
@@ -853,12 +853,12 @@ function asmFunc(global, env, buffer) {
   } while (1);
   return +$1;
  }
-
+ 
  function assembly_index_step() {
   assembly_index_NBodySystem_advance(assembly_index_system | 0, +(.01));
   return +(+assembly_index_NBodySystem_energy(assembly_index_system | 0));
  }
-
+ 
  function assembly_index_bench($0) {
   $0 = $0 | 0;
   var $1 = 0;
@@ -871,19 +871,19 @@ function asmFunc(global, env, buffer) {
    break continue_0;
   } while (1);
  }
-
+ 
  function start() {
   $lib_allocator_arena_startOffset = (HEAP_BASE + 7 | 0) & 4294967288 | 0;
   $lib_allocator_arena_offset = $lib_allocator_arena_startOffset;
  }
-
+ 
  function __wasm_ctz_i32(x) {
   x = x | 0;
   var $1 = 0;
   if ((x | 0) == (0 | 0)) $1 = 32; else $1 = 31 - Math_clz32(x ^ (x - 1 | 0) | 0) | 0;
   return $1 | 0;
  }
-
+ 
  function __wasm_popcnt_i32(x) {
   x = x | 0;
   var count = 0, $2 = 0;
@@ -900,19 +900,19 @@ function asmFunc(global, env, buffer) {
   };
   return $2 | 0;
  }
-
+ 
  function __wasm_rotl_i32(x, k) {
   x = x | 0;
   k = k | 0;
   return ((4294967295 >>> (k & 31 | 0) | 0) & x | 0) << (k & 31 | 0) | 0 | (((4294967295 << (32 - (k & 31 | 0) | 0) | 0) & x | 0) >>> (32 - (k & 31 | 0) | 0) | 0) | 0 | 0;
  }
-
+ 
  function __wasm_rotr_i32(x, k) {
   x = x | 0;
   k = k | 0;
   return ((4294967295 << (k & 31 | 0) | 0) & x | 0) >>> (k & 31 | 0) | 0 | (((4294967295 >>> (32 - (k & 31 | 0) | 0) | 0) & x | 0) << (32 - (k & 31 | 0) | 0) | 0) | 0 | 0;
  }
-
+ 
  function __wasm_grow_memory(pagesToAdd) {
   pagesToAdd = pagesToAdd | 0;
   var oldPages = __wasm_current_memory() | 0;
@@ -933,25 +933,25 @@ function asmFunc(global, env, buffer) {
   }
   return oldPages;
  }
-
+ 
  function __wasm_current_memory() {
   return buffer.byteLength / 65536 | 0;
  }
-
+ 
  return {
-  init: assembly_index_init,
-  getBody: assembly_index_getBody,
-  step: assembly_index_step,
-  bench: assembly_index_bench,
+  init: assembly_index_init, 
+  getBody: assembly_index_getBody, 
+  step: assembly_index_step, 
+  bench: assembly_index_bench, 
   memory: Object.create(Object.prototype, {
    grow: {
     value: __wasm_grow_memory
-   },
+   }, 
    buffer: {
     get: function () {
      return buffer;
     }
-
+    
    }
   })
  };

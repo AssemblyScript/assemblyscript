@@ -4,7 +4,7 @@ const fs = require("fs");
 const nbodyWASM = require("../index.js");
 
 // Load ASMJS version
-src = fs.readFileSync(__dirname + "/../build/optimized.asm.js", "utf8");
+src = fs.readFileSync(__dirname + "/../build/index.asm.js", "utf8");
 if (src.indexOf("var Math_sqrt =") < 0) { // currently missing in asm.js output
   let p = src.indexOf(" var abort = env.abort;");
   src = src.substring(0, p) + " var Math_sqrt = global.Math.sqrt;\n " + src.substring(p);
