@@ -1,5 +1,6 @@
 assert(Int8Array.BYTES_PER_ELEMENT == 1);
 assert(Uint8Array.BYTES_PER_ELEMENT == 1);
+assert(Uint8ClampedArray.BYTES_PER_ELEMENT == 1);
 assert(Int16Array.BYTES_PER_ELEMENT == 2);
 assert(Uint16Array.BYTES_PER_ELEMENT == 2);
 assert(Int32Array.BYTES_PER_ELEMENT == 4);
@@ -22,6 +23,11 @@ function testInstantiate(len: i32): void {
   assert(u8a.byteOffset == 0);
   assert(u8a.byteLength == len * Uint8Array.BYTES_PER_ELEMENT);
   assert(u8a.length == len);
+
+  var c8a = new Uint8ClampedArray(len);
+  assert(c8a.byteOffset == 0);
+  assert(c8a.byteLength == len * Uint8Array.BYTES_PER_ELEMENT);
+  assert(c8a.length == len);
 
   var i16a = new Int16Array(len);
   assert(i16a.byteOffset == 0);
@@ -83,6 +89,15 @@ assert(arr.length == 1);
 assert(arr.byteOffset == 1 * sizeof<i32>());
 assert(arr.byteLength == 2 * sizeof<i32>());
 assert(arr[0] == 2);
+
+var clampedArr = new Uint8ClampedArray(3);
+arr[0] = -32;
+arr[1] = 2;
+arr[2] = 256;
+
+assert(arr[0] == 0);
+assert(arr[1] == 2);
+assert(arr[2] == 255);
 
 import { MAX_BLENGTH } from "internal/arraybuffer";
 

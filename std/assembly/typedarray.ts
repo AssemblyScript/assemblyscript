@@ -18,6 +18,23 @@ export class Uint8Array extends TypedArray<u8> {
   }
 }
 
+export class Uint8ClampedArray extends TypedArray<u8> {
+  static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
+
+  @operator("[]=")
+  private __set(index: i32, value: i32): void {
+    var byteOffset = this.byteOffset;
+    var elementLength = (this.byteLength - byteOffset) >>> alignof<u8>();
+    if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");
+    var clampedValue = <u8>max(0, min(0xFF, value));
+    storeUnsafeWithOffset<u8>(this.buffer, index, clampedValue, byteOffset);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = this.length): Uint8ClampedArray {
+    return changetype<Uint8ClampedArray>(super.subarray(begin, end));
+  }
+}
+
 export class Int16Array extends TypedArray<i16> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
 

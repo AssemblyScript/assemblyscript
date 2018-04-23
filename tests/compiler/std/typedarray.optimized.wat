@@ -10,6 +10,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/typedarray/arr (mut i32) (i32.const 0))
+ (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 164))
  (memory $0 1)
  (data (i32.const 4) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
@@ -821,7 +822,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 17)
+     (i32.const 18)
      (i32.const 2)
     )
     (unreachable)
@@ -838,7 +839,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 18)
+     (i32.const 19)
      (i32.const 2)
     )
     (unreachable)
@@ -855,7 +856,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 19)
+     (i32.const 20)
      (i32.const 2)
     )
     (unreachable)
@@ -874,7 +875,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 22)
+     (i32.const 23)
      (i32.const 2)
     )
     (unreachable)
@@ -891,7 +892,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 23)
+     (i32.const 24)
      (i32.const 2)
     )
     (unreachable)
@@ -908,7 +909,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 24)
+     (i32.const 25)
      (i32.const 2)
     )
     (unreachable)
@@ -917,30 +918,10 @@
   (if
    (i32.load offset=4
     (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i16>#constructor
+     (call $~lib/internal/typedarray/TypedArray<i8>#constructor
       (i32.const 0)
       (get_local $0)
      )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 27)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.shl
-     (get_local $0)
-     (i32.const 1)
     )
    )
    (block
@@ -955,7 +936,7 @@
   )
   (if
    (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<i16>#get:length
+    (i32.load offset=8
      (get_local $1)
     )
     (get_local $0)
@@ -971,6 +952,23 @@
    )
   )
   (if
+   (i32.ne
+    (call $~lib/internal/typedarray/TypedArray<i8>#get:length
+     (get_local $1)
+    )
+    (get_local $0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 30)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
    (i32.load offset=4
     (tee_local $1
      (call $~lib/internal/typedarray/TypedArray<i16>#constructor
@@ -983,7 +981,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 32)
+     (i32.const 33)
      (i32.const 2)
     )
     (unreachable)
@@ -1003,7 +1001,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 33)
+     (i32.const 34)
      (i32.const 2)
     )
     (unreachable)
@@ -1020,7 +1018,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 34)
+     (i32.const 35)
      (i32.const 2)
     )
     (unreachable)
@@ -1029,30 +1027,10 @@
   (if
    (i32.load offset=4
     (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i32>#constructor
+     (call $~lib/internal/typedarray/TypedArray<i16>#constructor
       (i32.const 0)
       (get_local $0)
      )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 37)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.shl
-     (get_local $0)
-     (i32.const 2)
     )
    )
    (block
@@ -1067,10 +1045,13 @@
   )
   (if
    (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<i32>#get:length
+    (i32.load offset=8
      (get_local $1)
     )
-    (get_local $0)
+    (i32.shl
+     (get_local $0)
+     (i32.const 1)
+    )
    )
    (block
     (call $abort
@@ -1083,32 +1064,29 @@
    )
   )
   (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i32>#constructor
-      (i32.const 0)
-      (get_local $0)
-     )
+   (i32.ne
+    (call $~lib/internal/typedarray/TypedArray<i16>#get:length
+     (get_local $1)
     )
+    (get_local $0)
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 42)
+     (i32.const 40)
      (i32.const 2)
     )
     (unreachable)
    )
   )
   (if
-   (i32.ne
-    (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.shl
-     (get_local $0)
-     (i32.const 2)
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i32>#constructor
+      (i32.const 0)
+      (get_local $0)
+     )
     )
    )
    (block
@@ -1123,10 +1101,13 @@
   )
   (if
    (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<i32>#get:length
+    (i32.load offset=8
      (get_local $1)
     )
-    (get_local $0)
+    (i32.shl
+     (get_local $0)
+     (i32.const 2)
+    )
    )
    (block
     (call $abort
@@ -1139,47 +1120,8 @@
    )
   )
   (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i64>#constructor
-      (i32.const 0)
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 47)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.ne
-    (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.shl
-     (get_local $0)
-     (i32.const 3)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 48)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<i64>#get:length
+    (call $~lib/internal/typedarray/TypedArray<i32>#get:length
      (get_local $1)
     )
     (get_local $0)
@@ -1188,63 +1130,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 49)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i64>#constructor
-      (i32.const 0)
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 52)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.shl
-     (get_local $0)
-     (i32.const 3)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 53)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<i64>#get:length
-     (get_local $1)
-    )
-    (get_local $0)
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 54)
+     (i32.const 45)
      (i32.const 2)
     )
     (unreachable)
@@ -1263,7 +1149,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 57)
+     (i32.const 48)
      (i32.const 2)
     )
     (unreachable)
@@ -1283,7 +1169,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 58)
+     (i32.const 49)
      (i32.const 2)
     )
     (unreachable)
@@ -1300,7 +1186,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 59)
+     (i32.const 50)
      (i32.const 2)
     )
     (unreachable)
@@ -1319,7 +1205,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 62)
+     (i32.const 53)
      (i32.const 2)
     )
     (unreachable)
@@ -1339,7 +1225,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 63)
+     (i32.const 54)
      (i32.const 2)
     )
     (unreachable)
@@ -1356,7 +1242,175 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
+     (i32.const 55)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i64>#constructor
+      (i32.const 0)
+      (get_local $0)
+     )
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 58)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.load offset=8
+     (get_local $1)
+    )
+    (i32.shl
+     (get_local $0)
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 59)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/internal/typedarray/TypedArray<i64>#get:length
+     (get_local $1)
+    )
+    (get_local $0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 60)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i32>#constructor
+      (i32.const 0)
+      (get_local $0)
+     )
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 63)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.load offset=8
+     (get_local $1)
+    )
+    (i32.shl
+     (get_local $0)
+     (i32.const 2)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
      (i32.const 64)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/internal/typedarray/TypedArray<i32>#get:length
+     (get_local $1)
+    )
+    (get_local $0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 65)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i64>#constructor
+      (i32.const 0)
+      (get_local $0)
+     )
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 68)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.load offset=8
+     (get_local $1)
+    )
+    (i32.shl
+     (get_local $0)
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 69)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/internal/typedarray/TypedArray<i64>#get:length
+     (get_local $1)
+    )
+    (get_local $0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 70)
      (i32.const 2)
     )
     (unreachable)
@@ -1624,7 +1678,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 74)
+     (i32.const 80)
      (i32.const 0)
     )
     (unreachable)
@@ -1638,7 +1692,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 75)
+     (i32.const 81)
      (i32.const 0)
     )
     (unreachable)
@@ -1655,7 +1709,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 76)
+     (i32.const 82)
      (i32.const 0)
     )
     (unreachable)
@@ -1673,7 +1727,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 77)
+     (i32.const 83)
      (i32.const 0)
     )
     (unreachable)
@@ -1691,7 +1745,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 78)
+     (i32.const 84)
      (i32.const 0)
     )
     (unreachable)
@@ -1709,7 +1763,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 79)
+     (i32.const 85)
      (i32.const 0)
     )
     (unreachable)
@@ -1733,7 +1787,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 82)
+     (i32.const 88)
      (i32.const 0)
     )
     (unreachable)
@@ -1750,7 +1804,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 83)
+     (i32.const 89)
      (i32.const 0)
     )
     (unreachable)
@@ -1767,7 +1821,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 84)
+     (i32.const 90)
      (i32.const 0)
     )
     (unreachable)
@@ -1785,7 +1839,79 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 85)
+     (i32.const 91)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/typedarray/clampedArr
+   (call $~lib/internal/typedarray/TypedArray<i8>#constructor
+    (i32.const 0)
+    (i32.const 3)
+   )
+  )
+  (call $~lib/internal/typedarray/TypedArray<i32>#__set
+   (get_global $std/typedarray/arr)
+   (i32.const 0)
+   (i32.const -32)
+  )
+  (call $~lib/internal/typedarray/TypedArray<i32>#__set
+   (get_global $std/typedarray/arr)
+   (i32.const 1)
+   (i32.const 2)
+  )
+  (call $~lib/internal/typedarray/TypedArray<i32>#__set
+   (get_global $std/typedarray/arr)
+   (i32.const 2)
+   (i32.const 256)
+  )
+  (if
+   (call $~lib/internal/typedarray/TypedArray<i32>#__get
+    (get_global $std/typedarray/arr)
+    (i32.const 0)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 98)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/internal/typedarray/TypedArray<i32>#__get
+     (get_global $std/typedarray/arr)
+     (i32.const 1)
+    )
+    (i32.const 2)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 99)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/internal/typedarray/TypedArray<i32>#__get
+     (get_global $std/typedarray/arr)
+     (i32.const 2)
+    )
+    (i32.const 255)
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 100)
      (i32.const 0)
     )
     (unreachable)
