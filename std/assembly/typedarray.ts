@@ -2,6 +2,10 @@ import {
   TypedArray
 } from "./internal/typedarray";
 
+import {
+  storeUnsafeWithOffset
+} from "./internal/arraybuffer";
+
 export class Int8Array extends TypedArray<i8> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
@@ -22,7 +26,7 @@ export class Uint8ClampedArray extends TypedArray<u8> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   @operator("[]=")
-  private __set(index: i32, value: i32): void {
+  protected __set(index: i32, value: i32): void {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<u8>();
     if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");

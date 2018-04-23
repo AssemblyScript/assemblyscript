@@ -91,13 +91,13 @@ assert(arr.byteLength == 2 * sizeof<i32>());
 assert(arr[0] == 2);
 
 var clampedArr = new Uint8ClampedArray(3);
-arr[0] = -32;
-arr[1] = 2;
-arr[2] = 256;
+clampedArr[0] = -32;
+clampedArr[1] = 2;
+clampedArr[2] = 256;
 
-assert(arr[0] == 0);
-assert(arr[1] == 2);
-assert(arr[2] == 255);
+assert(clampedArr[0] == 0);
+assert(clampedArr[1] == 2);
+assert(clampedArr[2] == 255);
 
 import { MAX_BLENGTH } from "internal/arraybuffer";
 
