@@ -2653,7 +2653,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 128)
+       (i32.const 134)
        (i32.const 42)
       )
       (unreachable)
@@ -2691,8 +2691,8 @@
  )
  (func $~lib/array/Array<i32>#__get (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (if
-   (i32.ge_u
+  (if (result i32)
+   (i32.lt_u
     (get_local $1)
     (i32.shr_u
      (i32.load
@@ -2705,24 +2705,16 @@
      (i32.const 2)
     )
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 64)
-     (i32.const 37)
-    )
-    (unreachable)
-   )
-  )
-  (i32.load offset=8
-   (i32.add
-    (get_local $2)
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+   (i32.load offset=8
+    (i32.add
+     (get_local $2)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
     )
    )
+   (unreachable)
   )
  )
  (func $~lib/array/Array<i32>#pop (; 15 ;) (type $ii) (param $0 i32) (result i32)
@@ -2741,7 +2733,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 139)
+     (i32.const 145)
      (i32.const 20)
     )
     (unreachable)
@@ -2812,7 +2804,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 229)
+       (i32.const 235)
        (i32.const 42)
       )
       (unreachable)
@@ -2884,7 +2876,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 200)
+     (i32.const 206)
      (i32.const 20)
     )
     (unreachable)
@@ -3372,7 +3364,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 75)
+       (i32.const 81)
        (i32.const 41)
       )
       (unreachable)
@@ -3944,8 +3936,8 @@
  )
  (func $~lib/array/Array<f32>#__get (; 49 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
-  (if
-   (i32.ge_u
+  (if (result f32)
+   (i32.lt_u
     (get_local $1)
     (i32.shr_u
      (i32.load
@@ -3958,24 +3950,16 @@
      (i32.const 2)
     )
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 64)
-     (i32.const 37)
-    )
-    (unreachable)
-   )
-  )
-  (f32.load offset=8
-   (i32.add
-    (get_local $2)
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+   (f32.load offset=8
+    (i32.add
+     (get_local $2)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
     )
    )
+   (unreachable)
   )
  )
  (func $start~anonymous|21 (; 50 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)

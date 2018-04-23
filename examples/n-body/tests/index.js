@@ -34,7 +34,7 @@ function test(nbody, steps) {
   return process.hrtime(start);
 }
 
-var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 10000000;
+var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 20000000;
 
 console.log("Warming up ...");
 test(nbodyWASM, 100000);

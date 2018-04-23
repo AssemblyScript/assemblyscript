@@ -60,10 +60,16 @@ export class Array<T> {
   @operator("[]")
   private __get(index: i32): T {
     var buffer = this.buffer_;
-    var capacity = buffer.byteLength >>> alignof<T>();
-    if (<u32>index >= <u32>capacity) throw new Error("Index out of bounds");
-    // return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB);
-    return loadUnsafe<T>(buffer, index);
+    return <u32>index < <u32>(buffer.byteLength >>> alignof<T>())
+      ? load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB)
+        // ^= loadUnsafe<T>(buffer, index)
+      : <T>unreachable();
+    // FIXME: using a plain if-else here (as below) results in n-body being about 25% slower?
+    // if (<u32>index < <u32>(buffer.byteLength >>> alignof<T>())) {
+    //   return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB);
+    // } else {
+    //   throw new Error("Index out of bounds");
+    // }
   }
 
   @operator("[]=")
@@ -77,8 +83,8 @@ export class Array<T> {
       this.buffer_ = buffer;
       this.length_ = index + 1;
     }
-    // store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE_AB);
-    storeUnsafe<T>(buffer, index, value);
+    store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE_AB);
+    // ^= storeUnsafe<T>(buffer, index, value)
   }
 
   includes(searchElement: T, fromIndex: i32 = 0): bool {
