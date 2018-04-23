@@ -19,11 +19,12 @@
  (global $std/typedarray/arr (mut i32) (i32.const 0))
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
  (global $std/typedarray/MAX_F64LENGTH i32 (i32.const 134217727))
- (global $HEAP_BASE i32 (i32.const 164))
+ (global $HEAP_BASE i32 (i32.const 204))
  (memory $0 1)
  (data (i32.const 4) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 44) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 104) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 164) "\12\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -2521,13 +2522,14 @@
    )
   )
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#__set (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   (set_local $3
    (i32.load offset=4
     (get_local $0)
@@ -2552,78 +2554,60 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 44)
-     (i32.const 47)
+     (i32.const 164)
+     (i32.const 32)
      (i32.const 42)
     )
     (unreachable)
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafeWithOffset<u8>|inlined.0
-   (set_local $5
-    (i32.load
-     (get_local $0)
-    )
-   )
-   (set_local $6
-    (get_local $1)
-   )
-   (set_local $7
-    (get_local $2)
-   )
-   (set_local $8
-    (get_local $3)
-   )
-   (i32.store8 offset=8
-    (i32.add
-     (i32.add
-      (get_local $5)
-      (get_local $8)
-     )
-     (i32.shl
-      (get_local $6)
-      (i32.const 0)
-     )
-    )
-    (get_local $7)
-   )
-  )
- )
- (func $~lib/typedarray/Uint8ClampedArray#__set (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (call $~lib/internal/typedarray/TypedArray<u8>#__set
-   (get_local $0)
-   (get_local $1)
+  (set_local $5
    (i32.and
-    (select
-     (tee_local $3
-      (select
-       (tee_local $3
+    (i32.trunc_u/f64
+     (f64.max
+      (f64.const 0)
+      (f64.min
+       (f64.const 255)
+       (f64.convert_s/i32
         (get_local $2)
        )
-       (tee_local $4
-        (i32.const 255)
-       )
-       (i32.gt_s
-        (get_local $3)
-        (get_local $4)
-       )
       )
-     )
-     (tee_local $4
-      (i32.const 0)
-     )
-     (i32.lt_s
-      (get_local $3)
-      (get_local $4)
      )
     )
     (i32.const 255)
    )
   )
+  (block $~lib/internal/arraybuffer/storeUnsafeWithOffset<u8>|inlined.0
+   (set_local $6
+    (i32.load
+     (get_local $0)
+    )
+   )
+   (set_local $7
+    (get_local $1)
+   )
+   (set_local $8
+    (get_local $5)
+   )
+   (set_local $9
+    (get_local $3)
+   )
+   (i32.store8 offset=8
+    (i32.add
+     (i32.add
+      (get_local $6)
+      (get_local $9)
+     )
+     (i32.shl
+      (get_local $7)
+      (i32.const 0)
+     )
+    )
+    (get_local $8)
+   )
+  )
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2690,7 +2674,7 @@
    )
   )
  )
- (func $start (; 32 ;) (type $v)
+ (func $start (; 31 ;) (type $v)
   (if
    (i32.eqz
     (i32.eq
