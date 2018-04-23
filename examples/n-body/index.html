@@ -45,6 +45,8 @@ fetch("build/optimized.wasm")
   var exports = module.instance.exports;
   var mem = new Float64Array(exports.memory.buffer);
 
+  exports.init();
+
   // Update about 30 times a second
   (function update() {
     setTimeout(update, 1000 / 30);

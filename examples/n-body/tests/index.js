@@ -1,10 +1,59 @@
-var nbody = require("..");
+const fs = require("fs");
 
-var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 1000000;
-console.log("Performing " + steps + " steps ...");
+// Load WASM version
+const nbodyWASM = require("../index.js");
 
-var start = process.hrtime();
-var energy = nbody.bench(steps);
-var time = process.hrtime(start);
+// Load ASMJS version
+src = fs.readFileSync(__dirname + "/../build/index.asm.js", "utf8");
+if (src.indexOf("var Math_sqrt =") < 0) { // currently missing in asm.js output
+  let p = src.indexOf(" var abort = env.abort;");
+  src = src.substring(0, p) + " var Math_sqrt = global.Math.sqrt;\n " + src.substring(p);
+}
+var nbodyASMJS = eval("0," + src)({
+  Int8Array,
+  Int16Array,
+  Int32Array,
+  Uint8Array,
+  Uint16Array,
+  Uint32Array,
+  Float32Array,
+  Float64Array,
+  Math
+}, {
+  abort: function() { throw Error(); }
+}, new ArrayBuffer(0x10000));
 
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms (energy=" + energy + ")");
+// Load JS version
+var src = fs.readFileSync(__dirname + "/../build/index.js", "utf8");
+var nbodyJS = (new Function("require", "exports", src + " return exports;"))(function() {}, {});
+
+function test(nbody, steps) {
+  nbody.init();
+  var start = process.hrtime();
+  nbody.bench(steps);
+  return process.hrtime(start);
+}
+
+var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 10000000;
+
+console.log("Warming up ...");
+test(nbodyWASM, 100000);
+test(nbodyASMJS, 100000);
+test(nbodyJS, 100000);
+
+setTimeout(() => {
+  var time;
+
+  console.log("Performing " + steps + " steps (WASM) ...");
+  time = test(nbodyWASM, steps);
+  console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+
+  console.log("Performing " + steps + " steps (ASMJS) ...");
+  time = test(nbodyASMJS, steps);
+  console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+
+  console.log("Performing " + steps + " steps (JS) ...");
+  time = test(nbodyJS, steps);
+  console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+
+}, 1000);
