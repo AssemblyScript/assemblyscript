@@ -120,7 +120,7 @@ class NBodySystem {
         let dz = iz - bodyj.z;
 
         let distanceSq = dx * dx + dy * dy + dz * dz;
-        let distance = sqrt(distanceSq);
+        let distance = Math.sqrt(distanceSq);
         let mag = dt / (distanceSq * distance);
 
         let bim = bodyim * mag;
@@ -170,7 +170,7 @@ class NBodySystem {
         let dx = ix - bodyj.x;
         let dy = iy - bodyj.y;
         let dz = iz - bodyj.z;
-        let distance = sqrt(dx * dx + dy * dy + dz * dz);
+        let distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
         e -= bim * bodyj.mass / distance;
       }
     }
@@ -178,17 +178,21 @@ class NBodySystem {
   }
 }
 
-var bodies = new Array<Body>();
-bodies.push(Sun());
-bodies.push(Jupiter());
-bodies.push(Saturn());
-bodies.push(Uranus());
-bodies.push(Neptune());
+var system: NBodySystem;
 
-var system = new NBodySystem(bodies);
+export function init(): void {
+  var bodies = new Array<Body>();
+  bodies.push(Sun());
+  bodies.push(Jupiter());
+  bodies.push(Saturn());
+  bodies.push(Uranus());
+  bodies.push(Neptune());
+  system = new NBodySystem(bodies);
+}
 
 export function getBody(index: i32): Body | null {
-  return index < bodies.length ? bodies[index] : null;
+  var bodies = system.bodies;
+  return <u32>index < <u32>bodies.length ? bodies[index] : null;
 }
 
 export function step(): f64 {
@@ -196,7 +200,6 @@ export function step(): f64 {
   return system.energy();
 }
 
-export function bench(steps: i32): f64 {
-  for (let i = 0; i < steps; i++) system.advance(0.01);
-  return system.energy();
+export function bench(steps: u32): void {
+  for (let i: u32 = 0; i < steps; i++) system.advance(0.01);
 }
