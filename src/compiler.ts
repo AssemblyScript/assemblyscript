@@ -1243,6 +1243,8 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     }
+    var ctorInstance = instance.constructorInstance;
+    if (ctorInstance) this.compileFunction(ctorInstance);
     var instanceMembers = instance.members;
     if (instanceMembers) {
       for (let element of instanceMembers.values()) {
@@ -1672,21 +1674,30 @@ export class Compiler extends DiagnosticEmitter {
       module
     );
 
-    // Eliminate unnecesssary branches in generic contexts if the condition is constant
     if (
-      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
-      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
-      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+      !this.options.noTreeShaking ||
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
     ) {
-      let ret: ExpressionRef;
-      if (_BinaryenConstGetValueI32(condExpr)) {
-        ret = this.compileStatement(ifTrue);
-      } else if (ifFalse) {
-        ret = this.compileStatement(ifFalse);
-      } else {
-        ret = module.createNop();
+      // Try to eliminate unnecesssary branches if the condition is constant
+      let condExprPrecomp = this.precomputeExpressionRef(condExpr);
+      if (
+        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
+        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+      ) {
+        return _BinaryenConstGetValueI32(condExprPrecomp)
+          ? this.compileStatement(ifTrue)
+          : ifFalse
+            ? this.compileStatement(ifFalse)
+            : module.createNop();
+
+      // Otherwise recompile to the original and let the optimizer decide
+      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+        condExpr = makeIsTrueish(
+          this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
+          this.currentType,
+          module
+        );
       }
-      return ret;
     }
 
     // Each arm initiates a branch
@@ -2030,14 +2041,25 @@ export class Compiler extends DiagnosticEmitter {
       module
     );
 
-    // Eliminate unnecesssary loops in generic contexts if the condition is constant
     if (
-      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
-      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
-      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+      !this.options.noTreeShaking ||
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
     ) {
-      if (!_BinaryenConstGetValueI32(condExpr)) {
-        return module.createNop();
+      // Try to eliminate unnecesssary loops if the condition is constant
+      let condExprPrecomp = this.precomputeExpressionRef(condExpr);
+      if (
+        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
+        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+      ) {
+        if (!_BinaryenConstGetValueI32(condExprPrecomp)) return module.createNop();
+
+      // Otherwise recompile to the original and let the optimizer decide
+      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+        condExpr = makeIsTrueish(
+          this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
+          this.currentType,
+          module
+        );
       }
     }
 
@@ -4319,15 +4341,24 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.CLASS: {
         if (program.resolvedElementExpression) { // indexed access
-          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
-          if (!indexedGet) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              expression.range, (<Class>target).internalName
-            );
+          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET);
+          if (!indexedSet) {
+            let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+            if (!indexedGet) {
+              this.error(
+                DiagnosticCode.Index_signature_is_missing_in_type_0,
+                expression.range, (<Class>target).internalName
+              );
+            } else {
+              this.error(
+                DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+                expression.range, (<Class>target).internalName
+              );
+            }
             return this.module.createUnreachable();
           }
-          elementType = indexedGet.signature.returnType;
+          assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
+          elementType = indexedSet.signature.parameterTypes[1];    // 2nd parameter is the element
           break;
         }
         // fall-through
@@ -5518,7 +5549,7 @@ export class Compiler extends DiagnosticEmitter {
           classType &&
           classType.prototype == this.program.arrayPrototype
         ) {
-          return this.compileStaticArray(
+          return this.compileArrayLiteral(
             assert(classType.typeArguments)[0],
             (<ArrayLiteralExpression>expression).elementExpressions,
             expression
@@ -5672,147 +5703,41 @@ export class Compiler extends DiagnosticEmitter {
     return module.createI32(i64_low(stringOffset));
   }
 
-  compileStaticArray(elementType: Type, expressions: (Expression | null)[], reportNode: Node): ExpressionRef {
+  compileArrayLiteral(elementType: Type, expressions: (Expression | null)[], reportNode: Node): ExpressionRef {
     var isStatic = true;
     var module = this.module;
 
     // obtain the array type
     var arrayPrototype = assert(this.program.arrayPrototype);
     if (!arrayPrototype || arrayPrototype.kind != ElementKind.CLASS_PROTOTYPE) return module.createUnreachable();
-    var arrayType = (<ClassPrototype>arrayPrototype).resolve([ elementType ]);
-    if (!arrayType) return module.createUnreachable();
+    var arrayInstance = (<ClassPrototype>arrayPrototype).resolve([ elementType ]);
+    if (!arrayInstance) return module.createUnreachable();
+    var arrayType = arrayInstance.type;
 
     var elementCount = expressions.length;
-    var nativeType = elementType.toNativeType();
-    var values: usize;
-    var byteLength: usize;
-    switch (nativeType) {
-      case NativeType.I32: {
-        values = changetype<usize>(new Int32Array(elementCount));
-        byteLength = elementCount * 4;
-        break;
-      }
-      case NativeType.I64: {
-        values = changetype<usize>(new Array<I64>(elementCount));
-        byteLength = elementCount * 8;
-        break;
-      }
-      case NativeType.F32: {
-        values = changetype<usize>(new Float32Array(elementCount));
-        byteLength = elementCount * 4;
-        break;
-      }
-      case NativeType.F64: {
-        values = changetype<usize>(new Float64Array(elementCount));
-        byteLength = elementCount * 8;
-        break;
-      }
-      default: {
-        assert(false);
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-    }
-
-    // precompute value expressions
-    var exprs = new Array<ExpressionRef>(elementCount);
-    var expr: BinaryenExpressionRef;
-    for (let i = 0; i < elementCount; ++i) {
-      exprs[i] = expressions[i]
-        ? this.compileExpression(<Expression>expressions[i], elementType)
-        : elementType.toNativeZero(module);
-      if (isStatic) {
-        expr = this.precomputeExpressionRef(exprs[i]);
-        if (_BinaryenExpressionGetId(expr) == ExpressionId.Const) {
-          assert(_BinaryenExpressionGetType(expr) == nativeType);
-          switch (nativeType) {
-            case NativeType.I32: {
-              changetype<i32[]>(values)[i] = _BinaryenConstGetValueI32(expr);
-              break;
-            }
-            case NativeType.I64: {
-              changetype<I64[]>(values)[i] = i64_new(
-                _BinaryenConstGetValueI64Low(expr),
-                _BinaryenConstGetValueI64High(expr)
-              );
-              break;
-            }
-            case NativeType.F32: {
-              changetype<f32[]>(values)[i] = _BinaryenConstGetValueF32(expr);
-              break;
-            }
-            case NativeType.F64: {
-              changetype<f64[]>(values)[i] = _BinaryenConstGetValueF64(expr);
-              break;
-            }
-            default: {
-              assert(false); // checked above
-            }
-          }
-        } else {
-          // TODO: emit a warning if declared 'const'
-          isStatic = false;
-        }
-      }
-    }
-
-    var usizeTypeSize = this.options.usizeType.byteSize;
-
-    if (isStatic) {
-      // Create a combined static memory segment composed of:
-      // Array struct + ArrayBuffer struct + aligned ArrayBuffer data
-
-      let arraySize = usizeTypeSize + 4; // buffer_ & length_
-      let bufferHeaderSize = (4 + 7) & ~7; // aligned byteLength (8)
-      let bufferTotalSize = 1 << (32 - clz(byteLength + bufferHeaderSize - 1)); // see internals
-      let data = new Uint8Array(arraySize + bufferTotalSize);
-      let segment = this.addMemorySegment(data);
-      let offset = 0;
-
-      // write Array struct
-      if (usizeTypeSize == 8) {
-        writeI64(i64_add(segment.offset, i64_new(arraySize)), data, offset); // buffer_ @ segment[arSize]
-        offset += 8;
-      } else {
-        assert(i64_high(segment.offset) == 0);
-        writeI32(i64_low(segment.offset) + arraySize, data, offset); // buffer_ @ segment[arSize]
-        offset += 4;
-      }
-      writeI32(elementCount, data, offset); // length_
-      offset += 4;
-      assert(offset == arraySize);
-
-      // write ArrayBuffer struct
-      writeI32(byteLength, data, offset);
-      offset += bufferHeaderSize; // incl. alignment
-
-      // write ArrayBuffer data
-      switch (nativeType) {
+    if (elementCount) { // non-empty static or dynamic
+      let nativeElementType = elementType.toNativeType();
+      let values: usize;
+      let byteLength: usize;
+      switch (nativeElementType) {
         case NativeType.I32: {
-          for (let i = 0; i < elementCount; ++i) {
-            writeI32(changetype<i32[]>(values)[i], data, offset); offset += 4;
-          }
+          values = changetype<usize>(new Int32Array(elementCount));
+          byteLength = elementCount * 4;
           break;
         }
         case NativeType.I64: {
-          for (let i = 0; i < elementCount; ++i) {
-            writeI64(changetype<I64[]>(values)[i], data, offset); offset += 8;
-          }
+          values = changetype<usize>(new Array<I64>(elementCount));
+          byteLength = elementCount * 8;
           break;
         }
         case NativeType.F32: {
-          for (let i = 0; i < elementCount; ++i) {
-            writeF32(changetype<f32[]>(values)[i], data, offset); offset += 4;
-          }
+          values = changetype<usize>(new Float32Array(elementCount));
+          byteLength = elementCount * 4;
           break;
         }
         case NativeType.F64: {
-          for (let i = 0; i < elementCount; ++i) {
-            writeF64(changetype<f64[]>(values)[i], data, offset); offset += 8;
-          }
+          values = changetype<usize>(new Float64Array(elementCount));
+          byteLength = elementCount * 8;
           break;
         }
         default: {
@@ -5824,21 +5749,174 @@ export class Compiler extends DiagnosticEmitter {
           return module.createUnreachable();
         }
       }
-      assert(offset <= arraySize + bufferTotalSize);
 
-      this.currentType = arrayType.type;
-      return usizeTypeSize == 8
-        ? module.createI64(
-            i64_low(segment.offset),
-            i64_high(segment.offset)
-          )
-        : module.createI32(
-            i64_low(segment.offset)
+      // precompute value expressions
+      let exprs = new Array<ExpressionRef>(elementCount);
+      let expr: BinaryenExpressionRef;
+      for (let i = 0; i < elementCount; ++i) {
+        exprs[i] = expressions[i]
+          ? this.compileExpression(<Expression>expressions[i], elementType)
+          : elementType.toNativeZero(module);
+        if (isStatic) {
+          expr = this.precomputeExpressionRef(exprs[i]);
+          if (_BinaryenExpressionGetId(expr) == ExpressionId.Const) {
+            assert(_BinaryenExpressionGetType(expr) == nativeElementType);
+            switch (nativeElementType) {
+              case NativeType.I32: {
+                changetype<i32[]>(values)[i] = _BinaryenConstGetValueI32(expr);
+                break;
+              }
+              case NativeType.I64: {
+                changetype<I64[]>(values)[i] = i64_new(
+                  _BinaryenConstGetValueI64Low(expr),
+                  _BinaryenConstGetValueI64High(expr)
+                );
+                break;
+              }
+              case NativeType.F32: {
+                changetype<f32[]>(values)[i] = _BinaryenConstGetValueF32(expr);
+                break;
+              }
+              case NativeType.F64: {
+                changetype<f64[]>(values)[i] = _BinaryenConstGetValueF64(expr);
+                break;
+              }
+              default: {
+                assert(false); // checked above
+              }
+            }
+          } else {
+            // TODO: emit a warning if declared 'const'
+            // if (isConst) {
+            //   this.warn(
+            //     DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
+            //     reportNode.range
+            //   );
+            // }
+            isStatic = false;
+          }
+        }
+      }
+
+      let usizeTypeSize = this.options.usizeType.byteSize;
+      if (isStatic) { // non-empty, all elements can be precomputed
+
+        // Create a combined static memory segment composed of:
+        // Array struct + ArrayBuffer struct + aligned ArrayBuffer data
+
+        let arraySize = usizeTypeSize + 4; // buffer_ & length_
+        let bufferHeaderSize = (4 + 7) & ~7; // aligned byteLength (8)
+        let bufferTotalSize = 1 << (32 - clz(byteLength + bufferHeaderSize - 1)); // see internals
+        let data = new Uint8Array(arraySize + bufferTotalSize);
+        let segment = this.addMemorySegment(data);
+        let offset = 0;
+
+        // write Array struct
+        if (usizeTypeSize == 8) {
+          writeI64(i64_add(segment.offset, i64_new(arraySize)), data, offset); // buffer_ @ segment[arSize]
+          offset += 8;
+        } else {
+          assert(i64_high(segment.offset) == 0);
+          writeI32(i64_low(segment.offset) + arraySize, data, offset); // buffer_ @ segment[arSize]
+          offset += 4;
+        }
+        writeI32(elementCount, data, offset); // length_
+        offset += 4;
+        assert(offset == arraySize);
+
+        // write ArrayBuffer struct
+        writeI32(byteLength, data, offset);
+        offset += bufferHeaderSize; // incl. alignment
+
+        // write ArrayBuffer data
+        switch (nativeElementType) {
+          case NativeType.I32: {
+            for (let i = 0; i < elementCount; ++i) {
+              writeI32(changetype<i32[]>(values)[i], data, offset); offset += 4;
+            }
+            break;
+          }
+          case NativeType.I64: {
+            for (let i = 0; i < elementCount; ++i) {
+              writeI64(changetype<I64[]>(values)[i], data, offset); offset += 8;
+            }
+            break;
+          }
+          case NativeType.F32: {
+            for (let i = 0; i < elementCount; ++i) {
+              writeF32(changetype<f32[]>(values)[i], data, offset); offset += 4;
+            }
+            break;
+          }
+          case NativeType.F64: {
+            for (let i = 0; i < elementCount; ++i) {
+              writeF64(changetype<f64[]>(values)[i], data, offset); offset += 8;
+            }
+            break;
+          }
+          default: {
+            assert(false);
+            this.error(
+              DiagnosticCode.Operation_not_supported,
+              reportNode.range
+            );
+            return module.createUnreachable();
+          }
+        }
+        assert(offset <= arraySize + bufferTotalSize);
+
+        this.currentType = arrayType;
+        return usizeTypeSize == 8
+          ? module.createI64(
+              i64_low(segment.offset),
+              i64_high(segment.offset)
+            )
+          : module.createI32(
+              i64_low(segment.offset)
+            );
+
+      } else { // non-empty, some elements can't be precomputed
+
+        this.currentType = arrayType;
+        let setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET);
+        if (!setter) {
+          this.error(
+            DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+            reportNode.range, arrayInstance.internalName
           );
-    } else {
-      // TODO: static elements *could* go into data segments while dynamic ones are initialized
-      // on top? any benefits?
-      throw new Error("not implemented");
+          return module.createUnreachable();
+        }
+        let nativeArrayType = arrayType.toNativeType();
+        let currentFunction = this.currentFunction;
+        let tempLocal = currentFunction.getTempLocal(arrayType);
+        let stmts = new Array<ExpressionRef>(2 + elementCount);
+        let index = 0;
+        stmts[index++] = module.createSetLocal(tempLocal.index,
+          this.makeCallDirect(assert(arrayInstance.constructorInstance), [
+            module.createI32(0), // this
+            module.createI32(elementCount)
+          ])
+        );
+        for (let i = 0; i < elementCount; ++i) {
+          stmts[index++] = this.makeCallDirect(setter, [
+            module.createGetLocal(tempLocal.index, nativeArrayType), // this
+            module.createI32(i),
+            exprs[i]
+          ]);
+        }
+        assert(index + 1 == stmts.length);
+        stmts[index] = module.createGetLocal(tempLocal.index, nativeArrayType);
+        currentFunction.freeTempLocal(tempLocal);
+        this.currentType = arrayType;
+        return module.createBlock(null, stmts, nativeArrayType);
+      }
+
+    } else { // empty, TBD: cache this somehow?
+      this.currentType = arrayType;
+      return this.makeCallDirect(assert(arrayInstance.constructorInstance), [
+        module.createI32(0), // this
+        module.createI32(0)
+      ]);
     }
   }
 
@@ -5863,7 +5941,7 @@ export class Compiler extends DiagnosticEmitter {
     var classPrototype = <ClassPrototype>target;
     var classInstance = classPrototype.resolveUsingTypeArguments( // reports
       expression.typeArguments,
-      null,
+      currentFunction.flow.contextualTypeArguments,
       expression
     );
     if (!classInstance) return module.createUnreachable();
@@ -6010,6 +6088,7 @@ export class Compiler extends DiagnosticEmitter {
   compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {
     var ifThen = expression.ifThen;
     var ifElse = expression.ifElse;
+    var currentFunction = this.currentFunction;
 
     var condExpr = makeIsTrueish(
       this.compileExpression(expression.condition, Type.u32, ConversionKind.NONE),
@@ -6017,18 +6096,30 @@ export class Compiler extends DiagnosticEmitter {
       this.module
     );
 
-    // Eliminate unnecesssary branches in generic contexts if the condition is constant
     if (
-      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
-      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
-      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+      !this.options.noTreeShaking ||
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
     ) {
-      return _BinaryenConstGetValueI32(condExpr)
-        ? this.compileExpression(ifThen, contextualType)
-        : this.compileExpression(ifElse, contextualType);
+      // Try to eliminate unnecesssary branches if the condition is constant
+      let condExprPrecomp = this.precomputeExpressionRef(condExpr);
+      if (
+        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
+        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+      ) {
+        return _BinaryenConstGetValueI32(condExprPrecomp)
+          ? this.compileExpression(ifThen, contextualType)
+          : this.compileExpression(ifElse, contextualType);
+
+      // Otherwise recompile to the original and let the optimizer decide
+      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+        condExpr = makeIsTrueish(
+          this.compileExpression(expression.condition, Type.u32, ConversionKind.NONE),
+          this.currentType,
+          this.module
+        );
+      }
     }
 
-    var currentFunction = this.currentFunction;
     var ifThenExpr: ExpressionRef;
     var ifElseExpr: ExpressionRef;
     var ifThenType: Type;
@@ -6910,4 +7001,9 @@ export function makeFieldAssignment(
       field.memoryOffset
     );
   }
+}
+
+export function isI32Const(expr: ExpressionRef): bool {
+  return _BinaryenExpressionGetId(expr) == ExpressionId.Const
+      && _BinaryenExpressionGetType(expr) == NativeType.I32;
 }

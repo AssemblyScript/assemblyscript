@@ -176,6 +176,12 @@ export class Parser extends DiagnosticEmitter {
     var exportStart: i32 = 0;
     var exportEnd: i32 = 0;
     if (tn.skip(Token.EXPORT)) {
+      if (tn.skip(Token.DEFAULT)) {
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          tn.range()
+        );
+      }
       if (startPos < 0) startPos = tn.tokenPos;
       flags |= CommonFlags.EXPORT;
       exportStart = tn.tokenPos;
@@ -3181,11 +3187,8 @@ export class Parser extends DiagnosticEmitter {
       let nextToken = tn.peek(true);
       if (
         nextToken == Token.ENDOFFILE ||   // next step should handle this
-        nextToken == Token.CLOSEBRACE     // current step should handle this
+        nextToken == Token.SEMICOLON      // end of the statement for sure
       ) {
-        break;
-      }
-      if (nextToken == Token.SEMICOLON) { // end of the statement for sure
         tn.next();
         break;
       }

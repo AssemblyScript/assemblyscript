@@ -9,11 +9,25 @@
 
 See [the AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) for instructions and documentation. You can also try it out in [WebAssembly Studio](https://webassembly.studio)!
 
+Motivation
+----------
+
+> Being able to write C-performance code in TypeScript feels so good – Ari on [Slack](https://assemblyscript.slack.com) (Apr 19, 2018)
+
+> Perhaps the fundamental issue [to get a small .wasm file] is that JavaScript is the only language for which the Web runtime is a perfect fit. Close relatives that were designed to compile to it, like TypeScript, can be very efficient as well. But languages like C, C++, Rust, and so forth were not originally designed for that purpose. – Alon Zakai, [Small WebAssembly Binaries with Rust + Emscripten](https://kripken.github.io/blog/binaryen/2018/04/18/rust-emscripten.html) (Apr 18, 2018)
+
+> JavaScript's heyday as the only browser language is over, but most web developers are used to writing JavaScript, and learning a new syntax just to get access to WebAssembly is not (always) ideal. If only there was something in to bridge the gap… – Jani Tarvainen, [TypeScript is the bridge between JavaScript and WebAssembly](https://malloc.fi/typescript-bridge-javascript-webassembly) (Feb 20, 2018)
+
+> I do think [compiling TypeScript into WASM] is tremendously useful. It allows JavaScript developers to create WASM modules without having to learn C. – Colin Eberhardt, [Exploring different approaches to building WebAssembly modules](http://blog.scottlogic.com/2017/10/17/wasm-mandelbrot.html) (Oct 17, 2017)
+
 Examples
 --------
 
-* **[Conway's Game of Life](./examples/game-of-life)**<br />
-  Continuously updates the cellular automaton and visualizes its state on a canvas. There's also [this WebAssembly Studio fiddle](https://webassembly.studio/?f=gvuw4enb3qk) of it.
+* **[Conway's Game of Life](./examples/game-of-life)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/game-of-life/index.html) | [fiddle](https://webassembly.studio/?f=gvuw4enb3qk) ]<br />
+  Continuously updates the cellular automaton and visualizes its state on a canvas.
+
+* **[Mandelbrot Set](./examples/mandelbrot)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/mandelbrot/index.html) ]<br />
+  Renders the Mandelbrot set to a canvas.
 
 * **[i64 polyfill](./examples/i64-polyfill)**<br />
   Exposes WebAssembly's i64 operations to JavaScript using 32-bit integers (low and high bits).

@@ -1053,8 +1053,7 @@ export enum DecoratorKind {
   OPERATOR,
   UNMANAGED,
   SEALED,
-  INLINE,
-  PRECOMPUTE
+  INLINE
 }
 
 /** Returns the decorator kind represented by the specified string. */
@@ -1065,7 +1064,6 @@ export function stringToDecoratorKind(str: string): DecoratorKind {
     case "unmanaged": return DecoratorKind.UNMANAGED;
     case "sealed": return DecoratorKind.SEALED;
     case "inline": return DecoratorKind.INLINE;
-    case "precompute": return DecoratorKind.PRECOMPUTE;
     default: return DecoratorKind.CUSTOM;
   }
 }

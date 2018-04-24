@@ -60,10 +60,16 @@ export class Array<T> {
   @operator("[]")
   private __get(index: i32): T {
     var buffer = this.buffer_;
-    var capacity = buffer.byteLength >>> alignof<T>();
-    if (<u32>index >= <u32>capacity) throw new Error("Index out of bounds");
-    // return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB);
-    return loadUnsafe<T>(buffer, index);
+    return <u32>index < <u32>(buffer.byteLength >>> alignof<T>())
+      ? load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB)
+        // ^= loadUnsafe<T>(buffer, index)
+      : <T>unreachable();
+    // FIXME: using a plain if-else here (as below) results in n-body being about 25% slower?
+    // if (<u32>index < <u32>(buffer.byteLength >>> alignof<T>())) {
+    //   return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB);
+    // } else {
+    //   throw new Error("Index out of bounds");
+    // }
   }
 
   @operator("[]=")
@@ -77,7 +83,8 @@ export class Array<T> {
       this.buffer_ = buffer;
       this.length_ = index + 1;
     }
-    storeUnsafe<T>(buffer, index, element);
+    store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), element, HEADER_SIZE_AB);
+    // ^= storeUnsafe<T>(buffer, index, value)
   }
 
   includes(searchElement: T, fromIndex: i32 = 0): bool {
@@ -142,6 +149,35 @@ export class Array<T> {
     return element;
   }
 
+  forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void {
+    var buffer = this.buffer_;
+    for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
+      callbackfn(loadUnsafe<T>(buffer, index), index, this);
+    }
+  }
+
+  map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
+    var buffer = this.buffer_;
+    var length = this.length_;
+    var result = new Array<U>(length);
+    var resultBuffer = result.buffer_;
+    for (let index = 0; index < length && index < this.length_; ++index) {
+      storeUnsafe<U>(resultBuffer, index, callbackfn(loadUnsafe<T>(buffer, index), index, this));
+    }
+    return result;
+  }
+
+  filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
+    var buffer = this.buffer_;
+    var length = this.length_;
+    var result = new Array<T>();
+    for (let index = 0; index < length && index < this.length_; ++index) {
+      let value = loadUnsafe<T>(buffer, index);
+      if (callbackfn(value, index, this)) result.push(value);
+    }
+    return result;
+  }
+
   reduce<U>(
     callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
     initialValue: U
@@ -149,6 +185,18 @@ export class Array<T> {
     var accum = initialValue;
     var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
+      accum = callbackfn(accum, loadUnsafe<T>(buffer, index), index, this);
+    }
+    return accum;
+  }
+
+  reduceRight<U>(
+    callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
+    initialValue: U
+  ): U {
+    var accum = initialValue;
+    var buffer = this.buffer_;
+    for (let index: i32 = this.length_ - 1; index >= 0; --index) {
       accum = callbackfn(accum, loadUnsafe<T>(buffer, index), index, this);
     }
     return accum;
@@ -246,7 +294,7 @@ export class Array<T> {
     return this;
   }
 
-  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): Array<T> {
+  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
     var length = this.length_;
     if (length <= 1) return this;
     var buffer = this.buffer_;
@@ -259,8 +307,9 @@ export class Array<T> {
       }
       return this;
     }
-    return length < 256
+    return changetype<this>(length < 256
       ? insertionSort<T>(this, comparator)
-      : weakHeapSort<T>(this, comparator);
+      : weakHeapSort<T>(this, comparator)
+    );
   }
 }

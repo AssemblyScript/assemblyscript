@@ -127,50 +127,6 @@
    )
   )
   (if
-   (i32.ne
-    (tee_local $0
-     (i32.add
-      (tee_local $0
-       (i32.const 2)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.const 3)
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 65)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (tee_local $0
-     (i32.add
-      (tee_local $0
-       (i32.const 3)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.const 4)
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 66)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (block (result i32)
     (set_global $~argc
      (i32.const 1)
