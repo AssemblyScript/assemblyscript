@@ -229,6 +229,8 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
+  /** Globals that store class references. */
+  gcGlobals: Global[] = [];
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -348,6 +350,40 @@ export class Compiler extends DiagnosticEmitter {
       if (!functionTableExported) module.addTableExport("0", "table");
     }
 
+    // set up GC integration hooks if present
+    var gcAlloc = program.gcAlloc;
+    if (gcAlloc) {
+      let gcRoots = assert(program.gcRoots);
+      let gcVisit = assert(program.gcVisit);
+      let gcRefer = assert(program.gcRefer);
+      if (
+        this.compileFunction(gcAlloc) && // reports
+        this.compileFunction(gcVisit) && // ^
+        this.compileFunction(gcRefer)    // ^
+      ) {
+        let gcGlobals = this.gcGlobals;
+        let numGcGlobals = gcGlobals.length;
+        let gcRootsBody = new Array<ExpressionRef>(numGcGlobals);
+        for (let i = 0; i < numGcGlobals; ++i) {
+          let gcGlobal = gcGlobals[i];
+          gcRootsBody[i] = module.createCall(gcVisit.internalName, [
+            module.createGetGlobal(gcGlobal.internalName, gcGlobal.type.toNativeType())
+          ], NativeType.None);
+        }
+        assert(!gcRoots.is(CommonFlags.COMPILED));
+        gcRoots.set(CommonFlags.COMPILED);
+        module.addFunction(gcRoots.internalName,
+          this.ensureFunctionType(null, Type.void),
+          null,
+          numGcGlobals == 0
+            ? module.createNop()
+            : numGcGlobals == 1
+              ? gcRootsBody[0]
+              : module.createBlock(null, gcRootsBody)
+        );
+      }
+    }
+
     return module;
   }
 
@@ -463,8 +499,9 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var declaration = global.declaration;
     var initExpr: ExpressionRef = 0;
+    var type = global.type;
 
-    if (global.type == Type.void) { // type is void if not yet resolved or not annotated
+    if (type == Type.void) { // type is void if not yet resolved or not annotated
       if (declaration) {
 
         // resolve now if annotated
@@ -478,7 +515,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             return false;
           }
-          global.type = resolvedType;
+          global.type = type = resolvedType;
 
         // infer from initializer if not annotated
         } else if (declaration.initializer) { // infer type using void/NONE for literal inference
@@ -494,7 +531,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             return false;
           }
-          global.type = this.currentType;
+          global.type = type = this.currentType;
 
         // must either be annotated or have an initializer
         } else {
@@ -512,7 +549,7 @@ export class Compiler extends DiagnosticEmitter {
     // ambient builtins like 'HEAP_BASE' need to be resolved but are added explicitly
     if (global.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) return true;
 
-    var nativeType = global.type.toNativeType();
+    var nativeType = type.toNativeType();
     var isConstant = global.isAny(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
 
     // handle imports
@@ -548,14 +585,13 @@ export class Compiler extends DiagnosticEmitter {
 
     // inlined constant can be compiled as-is
     if (global.is(CommonFlags.INLINED)) {
-      initExpr = this.compileInlineConstant(global, global.type, true);
-
+      initExpr = this.compileInlineConstant(global, type, true);
     } else {
 
       // evaluate initializer if present
       if (declaration && declaration.initializer) {
         if (!initExpr) {
-          initExpr = this.compileExpression(declaration.initializer, global.type);
+          initExpr = this.compileExpression(declaration.initializer, type);
         }
 
         // check if the initializer is constant
@@ -578,14 +614,14 @@ export class Compiler extends DiagnosticEmitter {
 
       // initialize to zero if there's no initializer
       } else {
-        initExpr = global.type.toNativeZero(module);
+        initExpr = type.toNativeZero(module);
       }
     }
 
     var internalName = global.internalName;
 
     if (initializeInStart) { // initialize to mutable zero and set the actual value in start
-      module.addGlobal(internalName, nativeType, true, global.type.toNativeZero(module));
+      module.addGlobal(internalName, nativeType, true, type.toNativeZero(module));
       this.startFunctionBody.push(module.createSetGlobal(internalName, initExpr));
 
     } else { // compile as-is
@@ -637,6 +673,10 @@ export class Compiler extends DiagnosticEmitter {
         module.addGlobal(internalName, nativeType, !isConstant, initExpr);
       }
     }
+
+    // remember as GC root if type is a class reference
+    if (type.classReference) this.gcGlobals.push(global);
+
     return true;
   }
 
@@ -4159,7 +4199,7 @@ export class Compiler extends DiagnosticEmitter {
           false
         );
 
-        // clone left if free of side effects
+        // clone left if cheap and free of side effects
         expr = this.module.cloneExpression(leftExpr, true, 0);
 
         // if not possible, tee left to a temp. local
@@ -4404,38 +4444,16 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.createUnreachable();
         }
-        let thisExpression = assert(this.program.resolvedThisExpression);
-        let thisExpr = this.compileExpressionRetainType(
-          thisExpression,
-          this.options.usizeType
+        return makeFieldAssignment(
+          this,
+          <Field>target,
+          valueWithCorrectType,
+          this.compileExpressionRetainType(
+            assert(this.program.resolvedThisExpression),
+            this.options.usizeType
+          ),
+          tee
         );
-        let type = (<Field>target).type;
-        this.currentType = tee ? type : Type.void;
-        let nativeType = type.toNativeType();
-        if (tee) {
-          let tempLocal = this.currentFunction.getAndFreeTempLocal(type);
-          let tempLocalIndex = tempLocal.index;
-          // TODO: simplify if valueWithCorrectType has no side effects
-          return module.createBlock(null, [
-            module.createSetLocal(tempLocalIndex, valueWithCorrectType),
-            module.createStore(
-              type.size >> 3,
-              thisExpr,
-              module.createGetLocal(tempLocalIndex, nativeType),
-              nativeType,
-              (<Field>target).memoryOffset
-            ),
-            module.createGetLocal(tempLocalIndex, nativeType)
-          ], nativeType);
-        } else {
-          return module.createStore(
-            type.size >> 3,
-            thisExpr,
-            valueWithCorrectType,
-            nativeType,
-            (<Field>target).memoryOffset
-          );
-        }
       }
       case ElementKind.PROPERTY: {
         let setterPrototype = (<Property>target).setterPrototype;
@@ -6923,6 +6941,66 @@ export function makeConditionalAllocate(compiler: Compiler, classInstance: Class
       makeAllocate(compiler, classInstance, reportNode)
     )
   );
+}
+
+export function makeFieldAssignment(
+  compiler: Compiler,
+  field: Field,
+  valueExpr: ExpressionRef,
+  thisExpr: ExpressionRef,
+  tee: bool = false
+): ExpressionRef {
+  assert(field.parent !== null && field.parent.kind == ElementKind.CLASS);
+  var module = compiler.module;
+  var type = field.type;
+  compiler.currentType = tee ? type : Type.void;
+  var nativeType = type.toNativeType();
+
+  if (type.classReference) {
+    // TODO: gc_refer(parent, valueExpr)
+  }
+
+  if (tee) {
+    let tempLocal = compiler.currentFunction.getAndFreeTempLocal(type);
+    let tempLocalIndex = tempLocal.index;
+
+    // simplify if cloning valueExpr is cheap and has no side effects
+    let clonedValueExpr = module.cloneExpression(valueExpr, true, 0);
+    if (clonedValueExpr) {
+      return module.createBlock(null, [
+        module.createStore(
+          type.byteSize,
+          thisExpr,
+          valueExpr,
+          nativeType,
+          field.memoryOffset
+        ),
+        clonedValueExpr
+      ], nativeType);
+
+    // otherwise use a temporary local
+    } else {
+      return module.createBlock(null, [
+        module.createStore(
+          type.byteSize,
+          thisExpr,
+          module.createTeeLocal(tempLocalIndex, valueExpr),
+          nativeType,
+          field.memoryOffset
+        ),
+        module.createGetLocal(tempLocalIndex, nativeType)
+      ], nativeType);
+    }
+
+  } else {
+    return module.createStore(
+      type.byteSize,
+      thisExpr,
+      valueExpr,
+      nativeType,
+      field.memoryOffset
+    );
+  }
 }
 
 export function isI32Const(expr: ExpressionRef): bool {

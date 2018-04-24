@@ -42,6 +42,7 @@ export class Set<T> {
       this.__capacity = newCapacity;
       this.__memory = newMemory;
     }
+    if (isDefined(gc_refer) && isReference<T>()) gc_refer(changetype<usize>(this), changetype<usize>(value));
     store<T>(this.__memory + <usize>this.__size * sizeof<T>(), value);
     ++this.__size;
     return this;

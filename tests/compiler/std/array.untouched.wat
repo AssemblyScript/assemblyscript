@@ -3028,6 +3028,7 @@
    (get_local $0)
    (get_local $5)
   )
+  (nop)
   (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.0
    (set_local $6
     (get_local $3)
@@ -3103,7 +3104,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 145)
+     (i32.const 146)
      (i32.const 20)
     )
     (unreachable)
@@ -3193,7 +3194,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 235)
+       (i32.const 236)
        (i32.const 42)
       )
       (unreachable)
@@ -3242,6 +3243,7 @@
     (i32.const 2)
    )
   )
+  (nop)
   (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.1
    (set_local $6
     (get_local $2)
@@ -3293,7 +3295,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 206)
+     (i32.const 207)
      (i32.const 20)
     )
     (unreachable)

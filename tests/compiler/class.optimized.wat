@@ -93,6 +93,10 @@
    (get_local $0)
    (i32.const 3)
   )
+  (i32.store
+   (get_local $0)
+   (i32.const 2)
+  )
   (get_local $0)
  )
  (func $start (; 5 ;) (type $v)

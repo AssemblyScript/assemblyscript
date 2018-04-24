@@ -2356,6 +2356,7 @@
     )
    )
   )
+  (nop)
   (i32.store
    (i32.add
     (i32.load
@@ -2471,7 +2472,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 28)
-     (i32.const 51)
+     (i32.const 52)
      (i32.const 4)
     )
     (unreachable)
@@ -2593,7 +2594,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 28)
-     (i32.const 70)
+     (i32.const 71)
      (i32.const 4)
     )
     (unreachable)

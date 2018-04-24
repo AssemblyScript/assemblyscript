@@ -8,6 +8,8 @@ export declare function isString<T>(value?: T): bool;
 
 export declare function isArray<T>(value?: T): bool;
 
+export declare function isDefined(expr: void): bool;
+
 export const NaN: f64 = 0 / 0;
 
 export const Infinity: f64 = 1 / 0;
