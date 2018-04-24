@@ -672,10 +672,10 @@
   (loop $continue|0
    (if
     ;;@ ~lib/allocator/buddy.ts:381:9
-    (i32.add
+    (i32.ne
      (get_local $1)
-     ;;@ ~lib/allocator/buddy.ts:381:18
-     (i32.const 1)
+     ;;@ ~lib/allocator/buddy.ts:381:23
+     (i32.const -1)
     )
     ;;@ ~lib/allocator/buddy.ts:381:26
     (block

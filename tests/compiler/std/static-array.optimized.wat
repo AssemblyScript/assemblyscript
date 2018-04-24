@@ -33,8 +33,8 @@
  )
  (func $~lib/array/Array<i32>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (if
-   (i32.ge_u
+  (if (result i32)
+   (i32.lt_u
     (get_local $1)
     (i32.shr_u
      (i32.load
@@ -47,24 +47,16 @@
      (i32.const 2)
     )
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 180)
-     (i32.const 64)
-     (i32.const 37)
-    )
-    (unreachable)
-   )
-  )
-  (i32.load offset=8
-   (i32.add
-    (get_local $2)
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+   (i32.load offset=8
+    (i32.add
+     (get_local $2)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
     )
    )
+   (unreachable)
   )
  )
  (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (type $ii) (param $0 i32) (result i32)
@@ -2548,7 +2540,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 180)
-       (i32.const 75)
+       (i32.const 81)
        (i32.const 41)
       )
       (unreachable)
@@ -2591,8 +2583,8 @@
  )
  (func $~lib/array/Array<i64>#__get (; 11 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
-  (if
-   (i32.ge_u
+  (if (result i64)
+   (i32.lt_u
     (get_local $1)
     (i32.shr_u
      (i32.load
@@ -2605,24 +2597,16 @@
      (i32.const 3)
     )
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 180)
-     (i32.const 64)
-     (i32.const 37)
-    )
-    (unreachable)
-   )
-  )
-  (i64.load offset=8
-   (i32.add
-    (get_local $2)
-    (i32.shl
-     (get_local $1)
-     (i32.const 3)
+   (i64.load offset=8
+    (i32.add
+     (get_local $2)
+     (i32.shl
+      (get_local $1)
+      (i32.const 3)
+     )
     )
    )
+   (unreachable)
   )
  )
  (func $~lib/array/Array<i64>#__set (; 12 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
@@ -2651,7 +2635,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 180)
-       (i32.const 75)
+       (i32.const 81)
        (i32.const 41)
       )
       (unreachable)
@@ -2694,8 +2678,8 @@
  )
  (func $~lib/array/Array<f32>#__get (; 13 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
-  (if
-   (i32.ge_u
+  (if (result f32)
+   (i32.lt_u
     (get_local $1)
     (i32.shr_u
      (i32.load
@@ -2708,24 +2692,16 @@
      (i32.const 2)
     )
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 180)
-     (i32.const 64)
-     (i32.const 37)
-    )
-    (unreachable)
-   )
-  )
-  (f32.load offset=8
-   (i32.add
-    (get_local $2)
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+   (f32.load offset=8
+    (i32.add
+     (get_local $2)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
     )
    )
+   (unreachable)
   )
  )
  (func $~lib/array/Array<f32>#__set (; 14 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
@@ -2754,7 +2730,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 180)
-       (i32.const 75)
+       (i32.const 81)
        (i32.const 41)
       )
       (unreachable)
@@ -2797,8 +2773,8 @@
  )
  (func $~lib/array/Array<f64>#__get (; 15 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
-  (if
-   (i32.ge_u
+  (if (result f64)
+   (i32.lt_u
     (get_local $1)
     (i32.shr_u
      (i32.load
@@ -2811,24 +2787,16 @@
      (i32.const 3)
     )
    )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 180)
-     (i32.const 64)
-     (i32.const 37)
-    )
-    (unreachable)
-   )
-  )
-  (f64.load offset=8
-   (i32.add
-    (get_local $2)
-    (i32.shl
-     (get_local $1)
-     (i32.const 3)
+   (f64.load offset=8
+    (i32.add
+     (get_local $2)
+     (i32.shl
+      (get_local $1)
+      (i32.const 3)
+     )
     )
    )
+   (unreachable)
   )
  )
  (func $~lib/array/Array<f64>#__set (; 16 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
@@ -2857,7 +2825,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 180)
-       (i32.const 75)
+       (i32.const 81)
        (i32.const 41)
       )
       (unreachable)

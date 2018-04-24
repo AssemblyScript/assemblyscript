@@ -33,7 +33,7 @@ export abstract class TypedArray<T> implements ArrayBufferView<T> {
   }
 
   @operator("[]")
-  private __get(index: i32): T {
+  protected __get(index: i32): T {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
     if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");
@@ -41,7 +41,7 @@ export abstract class TypedArray<T> implements ArrayBufferView<T> {
   }
 
   @operator("[]=")
-  private __set(index: i32, value: T): void {
+  protected __set(index: i32, value: T): void {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
     if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");

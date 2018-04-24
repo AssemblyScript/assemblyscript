@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm run build:untouched && npm run build:optimized",
-    "build:untouched": "asc assembly/game-of-life.ts -b game-of-life.untouched.wasm -t game-of-life.untouched.wat --importMemory --validate --sourceMap --measure",
-    "build:optimized": "asc -O3 assembly/game-of-life.ts -b game-of-life.optimized.wasm -t game-of-life.optimized.wat --importMemory --validate --sourceMap --noDebug --measure"
+    "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --use Math=JSMath --importMemory --sourceMap --validate --measure",
+    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --use Math=JSMath -O3 --importMemory --sourceMap --validate --noDebug --measure",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "server": "http-server . -o -c-1"
   },
   "devDependencies": {
-    "opn": "^5.3.0"
+    "http-server": "^0.11.1"
   }
 }

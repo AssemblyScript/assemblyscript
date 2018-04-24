@@ -339,14 +339,18 @@ declare class Array<T> {
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   push(element: T): void;
   pop(): T;
+  forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void;
+  map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U>;
+  filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T>;
   reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
+  reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
   shift(): T;
   some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
   slice(from: i32, to?: i32): T[];
   splice(start: i32, deleteCount?: i32): void;
   reverse(): T[];
-  sort(comparator?: (a: T, b: T) => i32): T[];
+  sort(comparator?: (a: T, b: T) => i32): this;
 }
 
 /** Class representing a C-like array of values of type `T` with limited capabilities. */
@@ -529,7 +533,7 @@ declare const Mathf: IMath<f32>;
 /** Annotates an element as a program global. */
 declare function global(target: Function, propertyKey: string, descriptor: any): void;
 
-/** Annotates a method as an operator overload. */
+/** Annotates a method as an operator overload for the specified `token`. */
 declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
 
 /** Annotates a class as being unmanaged with limited capabilities. */

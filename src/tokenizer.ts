@@ -905,7 +905,6 @@ export class Tokenizer extends DiagnosticEmitter {
     this.token = state.token;
     this.tokenPos = state.tokenPos;
     this.nextToken = -1;
-    reusableState = state;
   }
 
   range(start: i32 = -1, end: i32 = -1): Range {

@@ -16,6 +16,7 @@
  (type $fiffii (func (param f32 i32 f32 f32 i32) (result i32)))
  (type $FF (func (param f64) (result f64)))
  (type $ff (func (param f32) (result f32)))
+ (type $I (func (result i64)))
  (type $FFFFii (func (param f64 f64 f64 f64 i32) (result i32)))
  (type $FFF (func (param f64 f64) (result f64)))
  (type $ffffii (func (param f32 f32 f32 f32 i32) (result i32)))

@@ -223,20 +223,17 @@
        (get_local $2)
       )
       (nop)
-      (if
-       (i32.const 1)
-       (block
-        (set_local $5
-         (get_local $3)
-        )
-        (set_local $6
-         (get_local $5)
-        )
-        (set_local $4
-         (i32.add
-          (get_local $6)
-          (i32.const 1)
-         )
+      (block
+       (set_local $5
+        (get_local $3)
+       )
+       (set_local $6
+        (get_local $5)
+       )
+       (set_local $4
+        (i32.add
+         (get_local $6)
+         (i32.const 1)
         )
        )
       )
@@ -268,20 +265,17 @@
        (get_local $4)
       )
       (nop)
-      (if
-       (i32.const 1)
-       (block
-        (set_local $6
-         (get_local $3)
-        )
-        (set_local $5
-         (get_local $6)
-        )
-        (set_local $2
-         (i32.add
-          (get_local $5)
-          (i32.const 1)
-         )
+      (block
+       (set_local $6
+        (get_local $3)
+       )
+       (set_local $5
+        (get_local $6)
+       )
+       (set_local $2
+        (i32.add
+         (get_local $5)
+         (i32.const 1)
         )
        )
       )

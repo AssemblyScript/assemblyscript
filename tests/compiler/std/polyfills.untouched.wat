@@ -58,10 +58,16 @@
    (i32.and
     (if (result i32)
      (tee_local $1
-      (i32.const 1)
+      (i32.eq
+       (i32.const 2)
+       (i32.const 2)
+      )
      )
      (get_local $1)
-     (i32.const 0)
+     (i32.eq
+      (i32.const 2)
+      (i32.const 4)
+     )
     )
     (i32.const 1)
    )
@@ -215,10 +221,16 @@
    (i32.and
     (if (result i32)
      (tee_local $1
-      (i32.const 1)
+      (i32.eq
+       (i32.const 2)
+       (i32.const 2)
+      )
      )
      (get_local $1)
-     (i32.const 0)
+     (i32.eq
+      (i32.const 2)
+      (i32.const 4)
+     )
     )
     (i32.const 1)
    )
@@ -930,10 +942,16 @@
    (i32.and
     (if (result i32)
      (tee_local $1
-      (i32.const 0)
+      (i32.eq
+       (i32.const 4)
+       (i32.const 2)
+      )
      )
      (get_local $1)
-     (i32.const 1)
+     (i32.eq
+      (i32.const 4)
+      (i32.const 4)
+     )
     )
     (i32.const 1)
    )
@@ -1013,10 +1031,16 @@
    (i32.and
     (if (result i32)
      (tee_local $1
-      (i32.const 0)
+      (i32.eq
+       (i32.const 4)
+       (i32.const 2)
+      )
      )
      (get_local $1)
-     (i32.const 1)
+     (i32.eq
+      (i32.const 4)
+      (i32.const 4)
+     )
     )
     (i32.const 1)
    )
