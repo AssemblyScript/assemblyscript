@@ -629,6 +629,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var internalName = declaration.fileLevelInternalName;
+    var decorators = declaration.decorators;
 
     // static fields become global variables
     if (declaration.is(CommonFlags.STATIC)) {
@@ -655,7 +656,10 @@ export class Program extends DiagnosticEmitter {
         name,
         internalName,
         Type.void, // resolved later on
-        declaration
+        declaration,
+        decorators
+          ? this.filterDecorators(decorators, DecoratorFlags.NONE)
+          : DecoratorFlags.NONE
       );
       staticField.parent = classPrototype;
       classPrototype.members.set(name, staticField);
@@ -683,6 +687,7 @@ export class Program extends DiagnosticEmitter {
         internalName,
         declaration
       );
+      if (decorators) this.filterDecorators(decorators, DecoratorFlags.NONE);
       classPrototype.instanceMembers.set(name, instanceField);
       // TBD: no need to mark as MODULE_EXPORT
     }
@@ -700,6 +705,7 @@ export class Program extends DiagnosticEmitter {
     var decoratorFlags = DecoratorFlags.NONE;
     if (decorators) {
       decoratorFlags = this.filterDecorators(decorators,
+        DecoratorFlags.OPERATOR |
         DecoratorFlags.INLINE
       );
     }
@@ -1548,6 +1554,7 @@ export class Program extends DiagnosticEmitter {
     var declarations = statement.declarations;
     for (let i = 0, k = declarations.length; i < k; ++i) {
       let declaration = declarations[i];
+      let decorators = declaration.decorators;
       let internalName = declaration.fileLevelInternalName;
       if (this.elementsLookup.has(internalName)) {
         this.error(
@@ -1562,7 +1569,12 @@ export class Program extends DiagnosticEmitter {
         simpleName,
         internalName,
         Type.void, // resolved later on
-        declaration
+        declaration,
+        decorators
+          ? this.filterDecorators(decorators,
+              DecoratorFlags.GLOBAL
+            )
+          : DecoratorFlags.NONE
       );
       global.parent = namespace;
       this.elementsLookup.set(internalName, global);
@@ -2274,6 +2286,8 @@ export enum DecoratorFlags {
   NONE = 0,
   /** Is a program global. */
   GLOBAL = 1 << 0,
+  /** Is an operator overload. */
+  OPERATOR = 1 << 1,
   /** Is an unmanaged class. */
   UNMANAGED = 1 << 2,
   /** Is a sealed class. */
@@ -2285,6 +2299,7 @@ export enum DecoratorFlags {
 export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
   switch (kind) {
     case DecoratorKind.GLOBAL: return DecoratorFlags.GLOBAL;
+    case DecoratorKind.OPERATOR: return DecoratorFlags.OPERATOR;
     case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
     case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
     case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
@@ -2453,10 +2468,12 @@ export class Global extends VariableLikeElement {
     simpleName: string,
     internalName: string,
     type: Type,
-    declaration: VariableLikeDeclarationStatement | null
+    declaration: VariableLikeDeclarationStatement | null,
+    decoratorFlags: DecoratorFlags
   ) {
     super(program, simpleName, internalName, type, declaration);
     this.flags = declaration ? declaration.flags : CommonFlags.NONE;
+    this.decoratorFlags = decoratorFlags;
     this.type = type; // resolved later if `void`
   }
 }

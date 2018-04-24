@@ -1634,21 +1634,30 @@ export class Compiler extends DiagnosticEmitter {
       module
     );
 
-    // Eliminate unnecesssary branches in generic contexts if the condition is constant
     if (
-      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
-      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
-      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+      !this.options.noTreeShaking ||
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
     ) {
-      let ret: ExpressionRef;
-      if (_BinaryenConstGetValueI32(condExpr)) {
-        ret = this.compileStatement(ifTrue);
-      } else if (ifFalse) {
-        ret = this.compileStatement(ifFalse);
-      } else {
-        ret = module.createNop();
+      // Try to eliminate unnecesssary branches if the condition is constant
+      let condExprPrecomp = this.precomputeExpressionRef(condExpr);
+      if (
+        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
+        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+      ) {
+        return _BinaryenConstGetValueI32(condExprPrecomp)
+          ? this.compileStatement(ifTrue)
+          : ifFalse
+            ? this.compileStatement(ifFalse)
+            : module.createNop();
+
+      // Otherwise recompile to the original and let the optimizer decide
+      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+        condExpr = makeIsTrueish(
+          this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
+          this.currentType,
+          module
+        );
       }
-      return ret;
     }
 
     // Each arm initiates a branch
@@ -1992,14 +2001,25 @@ export class Compiler extends DiagnosticEmitter {
       module
     );
 
-    // Eliminate unnecesssary loops in generic contexts if the condition is constant
     if (
-      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
-      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
-      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+      !this.options.noTreeShaking ||
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
     ) {
-      if (!_BinaryenConstGetValueI32(condExpr)) {
-        return module.createNop();
+      // Try to eliminate unnecesssary loops if the condition is constant
+      let condExprPrecomp = this.precomputeExpressionRef(condExpr);
+      if (
+        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
+        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+      ) {
+        if (!_BinaryenConstGetValueI32(condExprPrecomp)) return module.createNop();
+
+      // Otherwise recompile to the original and let the optimizer decide
+      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+        condExpr = makeIsTrueish(
+          this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
+          this.currentType,
+          module
+        );
       }
     }
 
@@ -6050,6 +6070,7 @@ export class Compiler extends DiagnosticEmitter {
   compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {
     var ifThen = expression.ifThen;
     var ifElse = expression.ifElse;
+    var currentFunction = this.currentFunction;
 
     var condExpr = makeIsTrueish(
       this.compileExpression(expression.condition, Type.u32, ConversionKind.NONE),
@@ -6057,18 +6078,30 @@ export class Compiler extends DiagnosticEmitter {
       this.module
     );
 
-    // Eliminate unnecesssary branches in generic contexts if the condition is constant
     if (
-      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT) &&
-      _BinaryenExpressionGetId(condExpr = this.precomputeExpressionRef(condExpr)) == ExpressionId.Const &&
-      _BinaryenExpressionGetType(condExpr) == NativeType.I32
+      !this.options.noTreeShaking ||
+      this.currentFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
     ) {
-      return _BinaryenConstGetValueI32(condExpr)
-        ? this.compileExpression(ifThen, contextualType)
-        : this.compileExpression(ifElse, contextualType);
+      // Try to eliminate unnecesssary branches if the condition is constant
+      let condExprPrecomp = this.precomputeExpressionRef(condExpr);
+      if (
+        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
+        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+      ) {
+        return _BinaryenConstGetValueI32(condExprPrecomp)
+          ? this.compileExpression(ifThen, contextualType)
+          : this.compileExpression(ifElse, contextualType);
+
+      // Otherwise recompile to the original and let the optimizer decide
+      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+        condExpr = makeIsTrueish(
+          this.compileExpression(expression.condition, Type.u32, ConversionKind.NONE),
+          this.currentType,
+          this.module
+        );
+      }
     }
 
-    var currentFunction = this.currentFunction;
     var ifThenExpr: ExpressionRef;
     var ifElseExpr: ExpressionRef;
     var ifThenType: Type;
@@ -6890,4 +6923,9 @@ export function makeConditionalAllocate(compiler: Compiler, classInstance: Class
       makeAllocate(compiler, classInstance, reportNode)
     )
   );
+}
+
+export function isI32Const(expr: ExpressionRef): bool {
+  return _BinaryenExpressionGetId(expr) == ExpressionId.Const
+      && _BinaryenExpressionGetType(expr) == NativeType.I32;
 }

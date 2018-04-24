@@ -531,7 +531,7 @@ declare const Mathf: IMath<f32>;
 /** Annotates an element as a program global. */
 declare function global(target: Function, propertyKey: string, descriptor: any): void;
 
-/** Annotates a method as an operator overload. */
+/** Annotates a method as an operator overload for the specified `token`. */
 declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
 
 /** Annotates a class as being unmanaged with limited capabilities. */

@@ -116,13 +116,13 @@ class NBodySystem {
 }
 var system;
 function init() {
-    var bodies = new Array();
-    bodies.push(Sun());
-    bodies.push(Jupiter());
-    bodies.push(Saturn());
-    bodies.push(Uranus());
-    bodies.push(Neptune());
-    system = new NBodySystem(bodies);
+    system = new NBodySystem([
+        Sun(),
+        Jupiter(),
+        Saturn(),
+        Uranus(),
+        Neptune()
+    ]);
 }
 exports.init = init;
 function getBody(index) {

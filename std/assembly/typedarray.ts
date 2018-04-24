@@ -2,10 +2,6 @@ import {
   TypedArray
 } from "./internal/typedarray";
 
-import {
-  storeUnsafeWithOffset
-} from "./internal/arraybuffer";
-
 export class Int8Array extends TypedArray<i8> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 

@@ -1,6 +1,7 @@
 (module
  (type $FFF (func (param f64 f64) (result f64)))
  (type $F (func (result f64)))
+ (type $i (func (result i32)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $fi (func (param f32) (result i32)))

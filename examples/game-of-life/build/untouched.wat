@@ -1,6 +1,7 @@
 (module
  (type $iiv (func (param i32 i32)))
  (type $F (func (result f64)))
+ (type $i (func (result i32)))
  (type $v (func))
  (type $iiFv (func (param i32 i32 f64)))
  (import "env" "RGB_ALIVE" (global $assembly/index/RGB_ALIVE i32))
