@@ -1,8 +1,10 @@
 // see: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
-// Configuration imported from JS.
-declare const RGB_ALIVE: u32;
-declare const RGB_DEAD: u32;
+// Configuration imported from JS. On the WASM side, colors are handled in ABGR order (alpha, blue,
+// green, red) because WASM is little endian. Doing so makes it possible to just copy the entire
+// ABGR memory in little endian byte order to the RGBA image buffer in big endian byte order.
+declare const BGR_ALIVE: u32;
+declare const BGR_DEAD: u32;
 declare const BIT_ROT: u32;
 
 var w: i32, h: i32, s: i32;
@@ -35,7 +37,7 @@ export function init(width: i32, height: i32): void {
   // Start by filling output with random live cells.
   for (let y = 0; y < h; ++y) {
     for (let x = 0; x < w; ++x) {
-      set(x, y, Math.random() > 0.1 ? RGB_DEAD & 0x00ffffff : RGB_ALIVE | 0xff000000);
+      set(x, y, Math.random() > 0.1 ? BGR_DEAD & 0x00ffffff : BGR_ALIVE | 0xff000000);
     }
   }
 }
@@ -67,10 +69,10 @@ export function step(): void {
         // A live cell with 2 or 3 live neighbors rots on to the next generation.
         if ((aliveNeighbors & 0b1110) == 0b0010) rot(x, y, self);
         // A live cell with fewer than 2 or more than 3 live neighbors dies.
-        else set(x, y, RGB_DEAD | 0xff000000);
+        else set(x, y, BGR_DEAD | 0xff000000);
       } else {
         // A dead cell with exactly 3 live neighbors becomes a live cell.
-        if (aliveNeighbors == 3) set(x, y, RGB_ALIVE | 0xff000000);
+        if (aliveNeighbors == 3) set(x, y, BGR_ALIVE | 0xff000000);
         // A dead cell with fewer or more than 3 live neighbors just rots.
         else rot(x, y, self);
       }
@@ -81,9 +83,9 @@ export function step(): void {
 /** Fills the row and column indicated by `x` and `y` with random live cells. */
 export function fill(x: u32, y: u32, p: f64): void {
   for (let ix = 0; ix < w; ++ix) {
-    if (Math.random() < p) set(ix, y, RGB_ALIVE | 0xff000000);
+    if (Math.random() < p) set(ix, y, BGR_ALIVE | 0xff000000);
   }
   for (let iy = 0; iy < h; ++iy) {
-    if (Math.random() < p) set(x, iy, RGB_ALIVE | 0xff000000);
+    if (Math.random() < p) set(x, iy, BGR_ALIVE | 0xff000000);
   }
 }
