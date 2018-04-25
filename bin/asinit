@@ -30,7 +30,7 @@ const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
 const tsconfigFile = path.join(assemblyDir, "tsconfig.json");
-const definitionsFile = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.d.ts"));
+const tsconfigBase = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.json"));
 const entryFile = path.join(assemblyDir, "index.ts");
 const buildDir = path.join(projectDir, "build");
 const gitignoreFile = path.join(buildDir, ".gitignore");
@@ -145,10 +145,10 @@ function ensureAssemblyDirectory() {
 
 function ensureTsconfigJson() {
   console.log("- Making sure that 'assembly/tsconfig.json' is set up...");
-  const definitionsPath = definitionsFile.replace(/\\/g, "/");
+  const base = tsconfigBase.replace(/\\/g, "/");
   if (!fs.existsSync(tsconfigFile)) {
     fs.writeFileSync(tsconfigFile, JSON.stringify({
-      "extends": definitionsPath,
+      "extends": base,
       "include": [
         "./**/*.ts"
       ]
@@ -157,7 +157,7 @@ function ensureTsconfigJson() {
 
   } else {
     let tsconfig = JSON.parse(fs.readFileSync(tsconfigFile, "utf8"));
-    tsconfig["extends"] = definitionsPath;
+    tsconfig["extends"] = base;
     fs.writeFileSync(tsconfigFile, JSON.stringify(tsconfig, null, 2));
     console.log(chalk.green("  Updated: ") + tsconfigFile);
   }
