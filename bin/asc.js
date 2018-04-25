@@ -803,7 +803,12 @@ function printStats(stats, output) {
 
 exports.printStats = printStats;
 
-var Buf = typeof global !== "undefined" && global.Buffer || Uint8Array;
+var allocBuffer = null;
+if (typeof global !== "undefined" && global.Buffer) {
+  allocBuffer = function (len) { return Buffer.allocUnsafe(len) };
+} else {
+  allocBuffer = function (len) { return new Uint8Array(len) };
+}
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
 function createMemoryStream(fn) {
@@ -811,7 +816,7 @@ function createMemoryStream(fn) {
   stream.write = function(chunk) {
     if (fn) fn(chunk);
     if (typeof chunk === "string") {
-      let buffer = new Buf(utf8.length(chunk));
+      let buffer = allocBuffer(utf8.length(chunk));
       utf8.write(chunk, buffer, 0);
       chunk = buffer;
     }
@@ -820,7 +825,7 @@ function createMemoryStream(fn) {
   stream.toBuffer = function() {
     var offset = 0, i = 0, k = this.length;
     while (i < k) offset += this[i++].length;
-    var buffer = new Buf(offset);
+    var buffer = allocBuffer(offset);
     offset = i = 0;
     while (i < k) {
       buffer.set(this[i], offset);
