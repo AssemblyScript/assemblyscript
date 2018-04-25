@@ -60,21 +60,21 @@ export function reallocUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuf
 }
 
 @inline
-export function loadUnsafe<T>(buffer: ArrayBuffer, index: i32): T {
-  return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
+export function loadUnsafe<T,V>(buffer: ArrayBuffer, index: i32): V {
+  return <V>load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
 }
 
 @inline
-export function storeUnsafe<T>(buffer: ArrayBuffer, index: i32, value: T): void {
+export function storeUnsafe<T,V>(buffer: ArrayBuffer, index: i32, value: V): void {
   store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE);
 }
 
 @inline
-export function loadUnsafeWithOffset<T>(buffer: ArrayBuffer, index: i32, byteOffset: i32): T {
-  return load<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), HEADER_SIZE);
+export function loadUnsafeWithOffset<T,V>(buffer: ArrayBuffer, index: i32, byteOffset: i32): V {
+  return <V>load<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), HEADER_SIZE);
 }
 
 @inline
-export function storeUnsafeWithOffset<T>(buffer: ArrayBuffer, index: i32, value: T, byteOffset: i32): void {
+export function storeUnsafeWithOffset<T,V>(buffer: ArrayBuffer, index: i32, value: V, byteOffset: i32): void {
   store<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), value, HEADER_SIZE);
 }

@@ -40,12 +40,16 @@
       (i32.const 2)
      )
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.0 (result i32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.0
+      (i32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )
@@ -71,12 +75,16 @@
       (i32.const 2)
      )
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.0 (result i32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.0
+      (i32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )
@@ -113,12 +121,16 @@
       (i32.const 2)
      )
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0 (result i32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0
+      (i32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )
@@ -368,12 +380,16 @@
       (i32.const 2)
      )
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<Array<String>,Array<String>>|inlined.0 (result i32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<Array<String>,Array<String>>|inlined.0
+      (i32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )

@@ -231,6 +231,8 @@ declare function alignof<T>(): usize;
 declare function offsetof<T>(fieldName?: string): usize;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
+/** Explicitly requests no bounds checks on the provided expression. */
+declare function unchecked<T>(value: T): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */

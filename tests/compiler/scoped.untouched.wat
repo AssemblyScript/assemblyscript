@@ -10,6 +10,7 @@
  (start $start)
  (func $scoped/fn (; 0 ;) (type $iv) (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
   (block
    (set_local $1
     (i32.const 0)
@@ -17,7 +18,7 @@
   )
   (block
    (nop)
-   (set_local $1
+   (set_local $2
     (get_local $0)
    )
   )

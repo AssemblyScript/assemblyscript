@@ -43,7 +43,8 @@ import {
   FunctionPrototype,
   Class,
   Field,
-  OperatorKind
+  OperatorKind,
+  FlowFlags
 } from "./program";
 
 /** Compiles a call to a built-in function. */
@@ -2055,6 +2056,26 @@ export function compileCall(
           }
         }
       }
+      return ret;
+    }
+    case "unchecked": {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let flow = compiler.currentFunction.flow;
+      flow.set(FlowFlags.UNCHECKED_CONTEXT);
+      ret = compiler.compileExpressionRetainType(operands[0], contextualType, false);
+      flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return ret;
     }
 

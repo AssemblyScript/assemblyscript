@@ -4301,9 +4301,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.CLASS: {
         if (program.resolvedElementExpression) { // indexed access
-          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET);
+          let isUnchecked = currentFunction.flow.is(FlowFlags.UNCHECKED_CONTEXT);
+          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
           if (!indexedSet) {
-            let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+            let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
             if (!indexedGet) {
               this.error(
                 DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -4499,7 +4500,8 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = this.program.resolvedElementExpression;
         if (elementExpression) {
-          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          let isUnchecked = this.currentFunction.flow.is(FlowFlags.UNCHECKED_CONTEXT);
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
           if (!indexedGet) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -4507,7 +4509,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.createUnreachable();
           }
-          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET);
+          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
           if (!indexedSet) {
             this.error(
               DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
@@ -4927,22 +4929,37 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let parent = assert(instance.parent);
       assert(parent.kind == ElementKind.CLASS);
-      let thisLocal = flow.addScopedLocal((<Class>parent).type, "this");
-      body.push(
-        module.createSetLocal(thisLocal.index, thisArg)
-      );
+      if (_BinaryenExpressionGetId(thisArg) == ExpressionId.GetLocal) {
+        flow.addScopedLocalAlias(
+          _BinaryenGetLocalGetIndex(thisArg),
+          (<Class>parent).type,
+          "this"
+        );
+      } else {
+        let thisLocal = flow.addScopedLocal((<Class>parent).type, "this");
+        body.push(
+          module.createSetLocal(thisLocal.index, thisArg)
+        );
+      }
     }
     var parameterTypes = signature.parameterTypes;
     for (let i = 0; i < numArguments; ++i) {
-      let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
-      body.push(
-        module.createSetLocal(argumentLocal.index,
-          this.compileExpression(
-            argumentExpressions[i],
-            parameterTypes[i]
-          )
-        )
+      let paramExpr = this.compileExpression(
+        argumentExpressions[i],
+        parameterTypes[i]
       );
+      if (_BinaryenExpressionGetId(paramExpr) == ExpressionId.GetLocal) {
+        flow.addScopedLocalAlias(
+          _BinaryenGetLocalGetIndex(paramExpr),
+          parameterTypes[i],
+          signature.getParameterName(i)
+        );
+      } else {
+        let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
+        body.push(
+          module.createSetLocal(argumentLocal.index, paramExpr)
+        );
+      }
     }
 
     // Compile optional parameter initializers in the scope of the inlined flow
@@ -4975,7 +4992,9 @@ export class Compiler extends DiagnosticEmitter {
     var scopedLocals = flow.scopedLocals;
     if (scopedLocals) {
       for (let scopedLocal of scopedLocals.values()) {
-        currentFunction.freeTempLocal(scopedLocal);
+        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
+          currentFunction.freeTempLocal(scopedLocal);
+        }
       }
       flow.scopedLocals = null;
     }
@@ -5301,7 +5320,8 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.createUnreachable();
     switch (target.kind) {
       case ElementKind.CLASS: {
-        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+        let isUnchecked = this.currentFunction.flow.is(FlowFlags.UNCHECKED_CONTEXT);
+        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (!indexedGet) {
           this.error(
             DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -5860,7 +5880,7 @@ export class Compiler extends DiagnosticEmitter {
       } else { // non-empty, some elements can't be precomputed
 
         this.currentType = arrayType;
-        let setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET);
+        let setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
         if (!setter) {
           this.error(
             DiagnosticCode.Index_signature_in_type_0_only_permits_reading,

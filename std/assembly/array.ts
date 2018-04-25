@@ -21,8 +21,15 @@ export class Array<T> {
   constructor(length: i32 = 0) {
     const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
     if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
-    this.buffer_ = allocUnsafe(length << alignof<T>());
+    var byteLength = length << alignof<T>();
+    var buffer = allocUnsafe(byteLength);
+    this.buffer_ = buffer;
     this.length_ = length;
+    set_memory(
+      changetype<usize>(buffer) + HEADER_SIZE_AB,
+      0,
+      <usize>byteLength
+    );
   }
 
   get length(): i32 {
@@ -44,7 +51,7 @@ export class Array<T> {
   every(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
     var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
-      if (!callbackfn(loadUnsafe<T>(buffer, index), index, this)) return false;
+      if (!callbackfn(loadUnsafe<T,T>(buffer, index), index, this)) return false;
     }
     return true;
   }
@@ -52,7 +59,7 @@ export class Array<T> {
   findIndex(predicate: (element: T, index: i32, array: Array<T>) => bool): i32 {
     var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
-      if (predicate(loadUnsafe<T>(buffer, index), index, this)) return index;
+      if (predicate(loadUnsafe<T,T>(buffer, index), index, this)) return index;
     }
     return -1;
   }
@@ -61,15 +68,13 @@ export class Array<T> {
   private __get(index: i32): T {
     var buffer = this.buffer_;
     return <u32>index < <u32>(buffer.byteLength >>> alignof<T>())
-      ? load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB)
-        // ^= loadUnsafe<T>(buffer, index)
+      ? loadUnsafe<T,T>(buffer, index)
       : <T>unreachable();
-    // FIXME: using a plain if-else here (as below) results in n-body being about 25% slower?
-    // if (<u32>index < <u32>(buffer.byteLength >>> alignof<T>())) {
-    //   return load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE_AB);
-    // } else {
-    //   throw new Error("Index out of bounds");
-    // }
+  }
+
+  @operator("{}")
+  private __unchecked_get(index: i32): T {
+    return loadUnsafe<T,T>(this.buffer_, index);
   }
 
   @operator("[]=")
@@ -83,8 +88,12 @@ export class Array<T> {
       this.buffer_ = buffer;
       this.length_ = index + 1;
     }
-    store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE_AB);
-    // ^= storeUnsafe<T>(buffer, index, value)
+    storeUnsafe<T,T>(buffer, index, value);
+  }
+
+  @operator("{}=")
+  private __unchecked_set(index: i32, value: T): void {
+    storeUnsafe<T,T>(this.buffer_, index, value);
   }
 
   includes(searchElement: T, fromIndex: i32 = 0): bool {
@@ -93,7 +102,7 @@ export class Array<T> {
     if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
     var buffer = this.buffer_;
     while (fromIndex < length) {
-      if (loadUnsafe<T>(buffer, fromIndex) == searchElement) return true;
+      if (loadUnsafe<T,T>(buffer, fromIndex) == searchElement) return true;
       ++fromIndex;
     }
     return false;
@@ -105,7 +114,7 @@ export class Array<T> {
     if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
     var buffer = this.buffer_;
     while (fromIndex < length) {
-      if (loadUnsafe<T>(buffer, fromIndex) == searchElement) return fromIndex;
+      if (loadUnsafe<T,T>(buffer, fromIndex) == searchElement) return fromIndex;
       ++fromIndex;
     }
     return -1;
@@ -118,7 +127,7 @@ export class Array<T> {
     else if (fromIndex >= length) fromIndex = length - 1;
     var buffer = this.buffer_;
     while (fromIndex >= 0) {                           // ^
-      if (loadUnsafe<T>(buffer, fromIndex) == searchElement) return fromIndex;
+      if (loadUnsafe<T,T>(buffer, fromIndex) == searchElement) return fromIndex;
       --fromIndex;
     }
     return -1;
@@ -136,14 +145,14 @@ export class Array<T> {
       this.buffer_ = buffer;
     }
     this.length_ = newLength;
-    storeUnsafe<T>(buffer, length, element);
+    storeUnsafe<T,T>(buffer, length, element);
     return newLength;
   }
 
   pop(): T {
     var length = this.length_;
     if (length < 1) throw new RangeError("Array is empty");
-    var element = loadUnsafe<T>(this.buffer_, --length);
+    var element = loadUnsafe<T,T>(this.buffer_, --length);
     this.length_ = length;
     return element;
   }
@@ -151,7 +160,7 @@ export class Array<T> {
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void {
     var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
-      callbackfn(loadUnsafe<T>(buffer, index), index, this);
+      callbackfn(loadUnsafe<T,T>(buffer, index), index, this);
     }
   }
 
@@ -161,7 +170,7 @@ export class Array<T> {
     var result = new Array<U>(length);
     var resultBuffer = result.buffer_;
     for (let index = 0; index < length && index < this.length_; ++index) {
-      storeUnsafe<U>(resultBuffer, index, callbackfn(loadUnsafe<T>(buffer, index), index, this));
+      storeUnsafe<U,U>(resultBuffer, index, callbackfn(loadUnsafe<T,T>(buffer, index), index, this));
     }
     return result;
   }
@@ -171,7 +180,7 @@ export class Array<T> {
     var length = this.length_;
     var result = new Array<T>();
     for (let index = 0; index < length && index < this.length_; ++index) {
-      let value = loadUnsafe<T>(buffer, index);
+      let value = loadUnsafe<T,T>(buffer, index);
       if (callbackfn(value, index, this)) result.push(value);
     }
     return result;
@@ -184,7 +193,7 @@ export class Array<T> {
     var accum = initialValue;
     var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
-      accum = callbackfn(accum, loadUnsafe<T>(buffer, index), index, this);
+      accum = callbackfn(accum, loadUnsafe<T,T>(buffer, index), index, this);
     }
     return accum;
   }
@@ -196,7 +205,7 @@ export class Array<T> {
     var accum = initialValue;
     var buffer = this.buffer_;
     for (let index: i32 = this.length_ - 1; index >= 0; --index) {
-      accum = callbackfn(accum, loadUnsafe<T>(buffer, index), index, this);
+      accum = callbackfn(accum, loadUnsafe<T,T>(buffer, index), index, this);
     }
     return accum;
   }
@@ -205,14 +214,14 @@ export class Array<T> {
     var length = this.length_;
     if (length < 1) throw new RangeError("Array is empty");
     var buffer = this.buffer_;
-    var element = loadUnsafe<T>(buffer, 0);
+    var element = loadUnsafe<T,T>(buffer, 0);
     var lastIndex = length - 1;
     move_memory(
       changetype<usize>(buffer) + HEADER_SIZE_AB,
       changetype<usize>(buffer) + HEADER_SIZE_AB + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
     );
-    storeUnsafe<T>(buffer, lastIndex, isReference<T>() ? null : <T>0);
+    storeUnsafe<T,T>(buffer, lastIndex, <T>null);
     this.length_ = lastIndex;
     return element;
   }
@@ -220,7 +229,7 @@ export class Array<T> {
   some(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
     var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
-      if (callbackfn(loadUnsafe<T>(buffer, index), index, this)) return true;
+      if (callbackfn(loadUnsafe<T,T>(buffer, index), index, this)) return true;
     }
     return false;
   }
@@ -242,7 +251,7 @@ export class Array<T> {
       changetype<usize>(buffer) + HEADER_SIZE_AB,
       <usize>(capacity - 1) << alignof<T>()
     );
-    storeUnsafe<T>(buffer, 0, element);
+    storeUnsafe<T,T>(buffer, 0, element);
     this.length_ = newLength;
     return newLength;
   }
@@ -285,9 +294,9 @@ export class Array<T> {
   reverse(): Array<T> {
     var buffer = this.buffer_;
     for (let front = 0, back = this.length_ - 1; front < back; ++front, --back) {
-      let temp = loadUnsafe<T>(buffer, front);
-      storeUnsafe<T>(buffer, front, loadUnsafe<T>(buffer, back));
-      storeUnsafe<T>(buffer, back, temp);
+      let temp = loadUnsafe<T,T>(buffer, front);
+      storeUnsafe<T,T>(buffer, front, loadUnsafe<T,T>(buffer, back));
+      storeUnsafe<T,T>(buffer, back, temp);
     }
     return this;
   }
@@ -297,16 +306,17 @@ export class Array<T> {
     if (length <= 1) return this;
     var buffer = this.buffer_;
     if (length == 2) {
-      let a = loadUnsafe<T>(buffer, 1); // a = arr[1]
-      let b = loadUnsafe<T>(buffer, 0); // b = arr[0]
+      let a = loadUnsafe<T,T>(buffer, 1); // a = arr[1]
+      let b = loadUnsafe<T,T>(buffer, 0); // b = arr[0]
       if (comparator(a, b) < 0) {
-        storeUnsafe<T>(buffer, 1, b);   // arr[1] = b;
-        storeUnsafe<T>(buffer, 0, a);   // arr[0] = a;
+        storeUnsafe<T,T>(buffer, 1, b);   // arr[1] = b;
+        storeUnsafe<T,T>(buffer, 0, a);   // arr[0] = a;
       }
       return this;
     }
-    return length < 256
-      ? insertionSort<T>(this, comparator)
-      : weakHeapSort<T>(this, comparator);
+    return changetype<this>(length < 256
+      ? insertionSort<T,T>(this, comparator)
+      : weakHeapSort<T,T>(this, comparator)
+    );
   }
 }

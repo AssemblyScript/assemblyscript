@@ -116,6 +116,8 @@ export enum OperatorKind {
   INVALID,
   INDEXED_GET,
   INDEXED_SET,
+  UNCHECKED_INDEXED_GET,
+  UNCHECKED_INDEXED_SET,
   ADD,
   SUB,
   MUL,
@@ -137,6 +139,8 @@ function operatorKindFromString(str: string): OperatorKind {
   switch (str) {
     case "[]" : return OperatorKind.INDEXED_GET;
     case "[]=": return OperatorKind.INDEXED_SET;
+    case "{}" : return OperatorKind.UNCHECKED_INDEXED_GET;
+    case "{}=": return OperatorKind.UNCHECKED_INDEXED_SET;
     case "+"  : return OperatorKind.ADD;
     case "-"  : return OperatorKind.SUB;
     case "*"  : return OperatorKind.MUL;
@@ -2749,7 +2753,9 @@ export class Function extends Element {
   /** Function signature. */
   signature: Signature;
   /** Map of locals by name. */
-  locals: Map<string,Local> = new Map();
+  localsByName: Map<string,Local> = new Map();
+  /** Array of locals by index. */
+  localsByIndex: Local[] = [];
   /** List of additional non-parameter locals. */
   additionalLocals: Type[] = [];
   /** Current break context label. */
@@ -2792,15 +2798,14 @@ export class Function extends Element {
       let localIndex = 0;
       if (parent && parent.kind == ElementKind.CLASS) {
         assert(this.is(CommonFlags.INSTANCE));
-        this.locals.set(
+        let local = new Local(
+          prototype.program,
           "this",
-          new Local(
-            prototype.program,
-            "this",
-            localIndex++,
-            assert(signature.thisType)
-          )
+          localIndex++,
+          assert(signature.thisType)
         );
+        this.localsByName.set("this", local);
+        this.localsByIndex[local.index] = local;
         let inheritedTypeArguments = (<Class>parent).contextualTypeArguments;
         if (inheritedTypeArguments) {
           if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
@@ -2817,16 +2822,15 @@ export class Function extends Element {
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         let parameterType = parameterTypes[i];
         let parameterName = signature.getParameterName(i);
-        this.locals.set(
+        let local = new Local(
+          prototype.program,
           parameterName,
-          new Local(
-            prototype.program,
-            parameterName,
-            localIndex++,
-            parameterType
-            // FIXME: declaration?
-          )
+          localIndex++,
+          parameterType
+          // FIXME: declaration?
         );
+        this.localsByName.set(parameterName, local);
+        this.localsByIndex[local.index] = local;
       }
     }
     this.flow = Flow.create(this);
@@ -2847,9 +2851,10 @@ export class Function extends Element {
       declaration
     );
     if (name) {
-      if (this.locals.has(name)) throw new Error("duplicate local name");
-      this.locals.set(name, local);
+      if (this.localsByName.has(name)) throw new Error("duplicate local name");
+      this.localsByName.set(name, local);
     }
+    this.localsByIndex[local.index] = local;
     this.additionalLocals.push(type);
     return local;
   }
@@ -3432,7 +3437,22 @@ export class Class extends Element {
   }
 
   /** Looks up the operator overload of the specified kind. */
-  lookupOverload(kind: OperatorKind): Function | null {
+  lookupOverload(kind: OperatorKind, unchecked: bool = false): Function | null {
+    if (unchecked) {
+      switch (kind) {
+        case OperatorKind.INDEXED_GET: {
+          let uncheckedOverload = this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET);
+          if (uncheckedOverload) return uncheckedOverload;
+          break;
+        }
+        case OperatorKind.INDEXED_SET: {
+          let uncheckedOverload = this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_SET);
+          if (uncheckedOverload) return uncheckedOverload;
+          break;
+        }
+        default: assert(false);
+      }
+    }
     var instance: Class | null = this;
     do {
       let overloads = instance.overloads;
@@ -3519,7 +3539,9 @@ export const enum FlowFlags {
   CONDITIONALLY_ALLOCATES = 1 << 9,
 
   /** This branch is part of inlining a function. */
-  INLINE_CONTEXT = 1 << 10
+  INLINE_CONTEXT = 1 << 10,
+  /** This branch explicitly requests no bounds checking. */
+  UNCHECKED_CONTEXT = 1 << 11
 }
 
 /** A control flow evaluator. */
@@ -3590,7 +3612,9 @@ export class Flow {
     // Free block-scoped locals
     if (this.scopedLocals) {
       for (let scopedLocal of this.scopedLocals.values()) {
-        this.currentFunction.freeTempLocal(scopedLocal);
+        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
+          this.currentFunction.freeTempLocal(scopedLocal);
+        }
       }
       this.scopedLocals = null;
     }
@@ -3635,6 +3659,34 @@ export class Flow {
     return scopedLocal;
   }
 
+  /** Adds a new scoped alias for the specified local. */
+  addScopedLocalAlias(index: i32, type: Type, name: string): Local {
+    if (!this.scopedLocals) this.scopedLocals = new Map();
+    else {
+      let existingLocal = this.scopedLocals.get(name);
+      if (existingLocal) {
+        let declaration = existingLocal.declaration;
+        if (declaration) {
+          this.currentFunction.program.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range
+          );
+        } else assert(false);
+        return existingLocal;
+      }
+    }
+    assert(index < this.currentFunction.localsByIndex.length);
+    var scopedAlias = new Local( // not SCOPED as an indicator that it isn't automatically free'd
+      this.currentFunction.program,
+      name,
+      index,
+      type,
+      null
+    );
+    this.scopedLocals.set(name, scopedAlias);
+    return scopedAlias;
+  }
+
   /** Gets the local of the specified name in the current scope. */
   getScopedLocal(name: string): Local | null {
     var local: Local | null;
@@ -3644,7 +3696,7 @@ export class Flow {
         return local;
       }
     } while (current = current.parent);
-    return this.currentFunction.locals.get(name);
+    return this.currentFunction.localsByName.get(name);
   }
 
   /** Adds a scoped global for an outer scoped local. */

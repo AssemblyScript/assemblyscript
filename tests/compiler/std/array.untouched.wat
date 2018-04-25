@@ -248,107 +248,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#constructor (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (block
-   (nop)
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 268435454)
-    )
-    (block
-     (call $abort
-      (i32.const 0)
-      (i32.const 4)
-      (i32.const 23)
-      (i32.const 39)
-     )
-     (unreachable)
-    )
-   )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $2
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 8)
-         )
-        )
-        (i32.store
-         (get_local $2)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $2)
-         (i32.const 0)
-        )
-        (get_local $2)
-       )
-      )
-     )
-    )
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (i32.shl
-      (get_local $1)
-      (i32.const 2)
-     )
-    )
-   )
-   (i32.store offset=4
-    (get_local $0)
-    (get_local $1)
-   )
-  )
-  (get_local $0)
- )
- (func $~lib/array/Array<i32>#constructor|trampoline (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (get_global $~argc)
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    (i32.const 0)
-   )
-  )
-  (call $~lib/array/Array<i32>#constructor
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $~lib/array/Array<i32>#get:length (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=4
-    (get_local $0)
-   )
-  )
- )
- (func $std/array/internalCapacity<i32> (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (set_local $1
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (return
-   (i32.shr_s
-    (i32.load
-     (get_local $1)
-    )
-    (i32.const 2)
-   )
-  )
- )
- (func $~lib/memory/set_memory (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/set_memory (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -694,6 +594,122 @@
       (br $continue|0)
      )
     )
+   )
+  )
+ )
+ (func $~lib/array/Array<i32>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (block
+   (nop)
+   (if
+    (i32.gt_u
+     (get_local $1)
+     (i32.const 268435454)
+    )
+    (block
+     (call $abort
+      (i32.const 0)
+      (i32.const 4)
+      (i32.const 23)
+      (i32.const 39)
+     )
+     (unreachable)
+    )
+   )
+   (set_local $2
+    (i32.shl
+     (get_local $1)
+     (i32.const 2)
+    )
+   )
+   (set_local $3
+    (call $~lib/internal/arraybuffer/allocUnsafe
+     (get_local $2)
+    )
+   )
+   (i32.store
+    (tee_local $0
+     (if (result i32)
+      (get_local $0)
+      (get_local $0)
+      (tee_local $0
+       (block (result i32)
+        (set_local $4
+         (call $~lib/allocator/arena/allocate_memory
+          (i32.const 8)
+         )
+        )
+        (i32.store
+         (get_local $4)
+         (i32.const 0)
+        )
+        (i32.store offset=4
+         (get_local $4)
+         (i32.const 0)
+        )
+        (get_local $4)
+       )
+      )
+     )
+    )
+    (get_local $3)
+   )
+   (i32.store offset=4
+    (get_local $0)
+    (get_local $1)
+   )
+   (call $~lib/memory/set_memory
+    (i32.add
+     (get_local $3)
+     (i32.const 8)
+    )
+    (i32.const 0)
+    (get_local $2)
+   )
+  )
+  (get_local $0)
+ )
+ (func $~lib/array/Array<i32>#constructor|trampoline (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (block $1of1
+   (block $0of1
+    (block $oob
+     (br_table $0of1 $1of1 $oob
+      (get_global $~argc)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $1
+    (i32.const 0)
+   )
+  )
+  (call $~lib/array/Array<i32>#constructor
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func $~lib/array/Array<i32>#get:length (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  (return
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
+ )
+ (func $std/array/internalCapacity<i32> (; 9 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (set_local $1
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (return
+   (i32.shr_s
+    (i32.load
+     (get_local $1)
+    )
+    (i32.const 2)
    )
   )
  )
@@ -2960,9 +2976,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
   (set_local $2
    (i32.load offset=4
     (get_local $0)
@@ -3003,7 +3016,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 134)
+       (i32.const 143)
        (i32.const 42)
       )
       (unreachable)
@@ -3028,25 +3041,16 @@
    (get_local $0)
    (get_local $5)
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.0
-   (set_local $6
-    (get_local $3)
-   )
-   (set_local $7
-    (get_local $2)
-   )
-   (set_local $8
-    (get_local $1)
-   )
+  (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.0
    (i32.store offset=8
     (i32.add
-     (get_local $6)
+     (get_local $3)
      (i32.shl
-      (get_local $7)
+      (get_local $2)
       (i32.const 2)
      )
     )
-    (get_local $8)
+    (get_local $1)
    )
   )
   (return
@@ -3071,12 +3075,16 @@
       (i32.const 2)
      )
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.0 (result i32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.0
+      (i32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )
@@ -3103,14 +3111,14 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 145)
+     (i32.const 154)
      (i32.const 20)
     )
     (unreachable)
    )
   )
   (set_local $4
-   (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.0 (result i32)
+   (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.1 (result i32)
     (set_local $2
      (i32.load
       (get_local $0)
@@ -3124,7 +3132,7 @@
       )
      )
     )
-    (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.0
+    (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.1
      (i32.load offset=8
       (i32.add
        (get_local $2)
@@ -3151,8 +3159,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -3193,7 +3199,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 235)
+       (i32.const 244)
        (i32.const 42)
       )
       (unreachable)
@@ -3242,25 +3248,19 @@
     (i32.const 2)
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.1
+  (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.1
    (set_local $6
-    (get_local $2)
-   )
-   (set_local $7
     (i32.const 0)
-   )
-   (set_local $8
-    (get_local $1)
    )
    (i32.store offset=8
     (i32.add
-     (get_local $6)
+     (get_local $2)
      (i32.shl
-      (get_local $7)
+      (get_local $6)
       (i32.const 2)
      )
     )
-    (get_local $8)
+    (get_local $1)
    )
   )
   (i32.store offset=4
@@ -3278,7 +3278,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   (set_local $1
    (i32.load offset=4
     (get_local $0)
@@ -3293,7 +3292,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 206)
+     (i32.const 215)
      (i32.const 20)
     )
     (unreachable)
@@ -3304,20 +3303,17 @@
     (get_local $0)
    )
   )
-  (set_local $5
-   (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.1 (result i32)
+  (set_local $4
+   (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.2 (result i32)
     (set_local $3
-     (get_local $2)
-    )
-    (set_local $4
      (i32.const 0)
     )
-    (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.1
+    (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.2
      (i32.load offset=8
       (i32.add
-       (get_local $3)
+       (get_local $2)
        (i32.shl
-        (get_local $4)
+        (get_local $3)
         (i32.const 2)
        )
       )
@@ -3325,7 +3321,7 @@
     )
    )
   )
-  (set_local $6
+  (set_local $5
    (i32.sub
     (get_local $1)
     (i32.const 1)
@@ -3344,37 +3340,31 @@
     (i32.const 4)
    )
    (i32.shl
-    (get_local $6)
+    (get_local $5)
     (i32.const 2)
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.2
-   (set_local $4
-    (get_local $2)
-   )
-   (set_local $3
-    (get_local $6)
-   )
-   (set_local $7
+  (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.2
+   (set_local $6
     (i32.const 0)
    )
    (i32.store offset=8
     (i32.add
-     (get_local $4)
+     (get_local $2)
      (i32.shl
-      (get_local $3)
+      (get_local $5)
       (i32.const 2)
      )
     )
-    (get_local $7)
+    (get_local $6)
    )
   )
   (i32.store offset=4
    (get_local $0)
-   (get_local $6)
+   (get_local $5)
   )
   (return
-   (get_local $5)
+   (get_local $4)
   )
  )
  (func $~lib/array/Array<i32>#reverse (; 18 ;) (type $ii) (param $0 i32) (result i32)
@@ -3383,10 +3373,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
   (set_local $1
    (i32.load
     (get_local $0)
@@ -3414,20 +3400,14 @@
      )
      (block
       (block
-       (set_local $5
-        (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.2 (result i32)
-         (set_local $4
-          (get_local $1)
-         )
-         (set_local $5
-          (get_local $2)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.2
+       (set_local $4
+        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.3 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.3
           (i32.load offset=8
            (i32.add
-            (get_local $4)
+            (get_local $1)
             (i32.shl
-             (get_local $5)
+             (get_local $2)
              (i32.const 2)
             )
            )
@@ -3435,27 +3415,15 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.3
-        (set_local $4
-         (get_local $1)
-        )
-        (set_local $6
-         (get_local $2)
-        )
-        (set_local $7
-         (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.3 (result i32)
-          (set_local $8
-           (get_local $1)
-          )
-          (set_local $9
-           (get_local $3)
-          )
-          (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.3
+       (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.3
+        (set_local $5
+         (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.4 (result i32)
+          (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.4
            (i32.load offset=8
             (i32.add
-             (get_local $8)
+             (get_local $1)
              (i32.shl
-              (get_local $9)
+              (get_local $3)
               (i32.const 2)
              )
             )
@@ -3465,30 +3433,21 @@
         )
         (i32.store offset=8
          (i32.add
-          (get_local $4)
+          (get_local $1)
           (i32.shl
-           (get_local $6)
+           (get_local $2)
            (i32.const 2)
           )
          )
-         (get_local $7)
-        )
-       )
-       (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.4
-        (set_local $7
-         (get_local $1)
-        )
-        (set_local $6
-         (get_local $3)
-        )
-        (set_local $4
          (get_local $5)
         )
+       )
+       (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.4
         (i32.store offset=8
          (i32.add
-          (get_local $7)
+          (get_local $1)
           (i32.shl
-           (get_local $6)
+           (get_local $3)
            (i32.const 2)
           )
          )
@@ -3589,19 +3548,13 @@
       (block
        (if
         (i32.eq
-         (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.5 (result i32)
-          (set_local $5
-           (get_local $6)
-          )
-          (set_local $4
-           (get_local $2)
-          )
-          (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.5
+         (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.6 (result i32)
+          (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.6
            (i32.load offset=8
             (i32.add
-             (get_local $5)
+             (get_local $6)
              (i32.shl
-              (get_local $4)
+              (get_local $2)
               (i32.const 2)
              )
             )
@@ -3723,19 +3676,13 @@
       (block
        (if
         (i32.eq
-         (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.7 (result i32)
-          (set_local $5
-           (get_local $6)
-          )
-          (set_local $4
-           (get_local $2)
-          )
-          (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.7
+         (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.8 (result i32)
+          (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.8
            (i32.load offset=8
             (i32.add
-             (get_local $5)
+             (get_local $6)
              (i32.shl
-              (get_local $4)
+              (get_local $2)
               (i32.const 2)
              )
             )
@@ -3925,7 +3872,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 81)
+       (i32.const 86)
        (i32.const 41)
       )
       (unreachable)
@@ -3956,15 +3903,17 @@
     )
    )
   )
-  (i32.store offset=8
-   (i32.add
-    (get_local $3)
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+  (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.5
+   (i32.store offset=8
+    (i32.add
+     (get_local $3)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
     )
+    (get_local $2)
    )
-   (get_local $2)
   )
  )
  (func $start~anonymous|0 (; 25 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -3978,7 +3927,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -4023,19 +3971,13 @@
           (i32.const 3)
          )
          (call_indirect (type $iiii)
-          (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.9 (result i32)
-           (set_local $6
-            (get_local $2)
-           )
-           (set_local $5
-            (get_local $3)
-           )
-           (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.9
+          (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.10 (result i32)
+           (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.10
             (i32.load offset=8
              (i32.add
-              (get_local $6)
+              (get_local $2)
               (i32.shl
-               (get_local $5)
+               (get_local $3)
                (i32.const 2)
               )
              )
@@ -4123,7 +4065,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -4169,19 +4110,13 @@
            (i32.const 3)
           )
           (call_indirect (type $iiii)
-           (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.11 (result i32)
-            (set_local $6
-             (get_local $2)
-            )
-            (set_local $5
-             (get_local $3)
-            )
-            (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.11
+           (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.12 (result i32)
+            (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.12
              (i32.load offset=8
               (i32.add
-               (get_local $6)
+               (get_local $2)
                (i32.shl
-                (get_local $5)
+                (get_local $3)
                 (i32.const 2)
                )
               )
@@ -4264,7 +4199,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -4309,19 +4243,13 @@
           (i32.const 3)
          )
          (call_indirect (type $iiii)
-          (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.13 (result i32)
-           (set_local $6
-            (get_local $2)
-           )
-           (set_local $5
-            (get_local $3)
-           )
-           (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.13
+          (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.14 (result i32)
+           (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.14
             (i32.load offset=8
              (i32.add
-              (get_local $6)
+              (get_local $2)
               (i32.shl
-               (get_local $5)
+               (get_local $3)
                (i32.const 2)
               )
              )
@@ -4405,7 +4333,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -4449,19 +4376,13 @@
          (i32.const 3)
         )
         (call_indirect (type $iiiv)
-         (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.14 (result i32)
-          (set_local $5
-           (get_local $2)
-          )
-          (set_local $6
-           (get_local $3)
-          )
-          (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.14
+         (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.15 (result i32)
+          (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.15
            (i32.load offset=8
             (i32.add
-             (get_local $5)
+             (get_local $2)
              (i32.shl
-              (get_local $6)
+              (get_local $3)
               (i32.const 2)
              )
             )
@@ -4528,6 +4449,8 @@
  )
  (func $~lib/array/Array<f32>#constructor (; 50 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   (block
    (nop)
    (if
@@ -4545,6 +4468,17 @@
      (unreachable)
     )
    )
+   (set_local $2
+    (i32.shl
+     (get_local $1)
+     (i32.const 2)
+    )
+   )
+   (set_local $3
+    (call $~lib/internal/arraybuffer/allocUnsafe
+     (get_local $2)
+    )
+   )
    (i32.store
     (tee_local $0
      (if (result i32)
@@ -4552,34 +4486,37 @@
       (get_local $0)
       (tee_local $0
        (block (result i32)
-        (set_local $2
+        (set_local $4
          (call $~lib/allocator/arena/allocate_memory
           (i32.const 8)
          )
         )
         (i32.store
-         (get_local $2)
+         (get_local $4)
          (i32.const 0)
         )
         (i32.store offset=4
-         (get_local $2)
+         (get_local $4)
          (i32.const 0)
         )
-        (get_local $2)
+        (get_local $4)
        )
       )
      )
     )
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (i32.shl
-      (get_local $1)
-      (i32.const 2)
-     )
-    )
+    (get_local $3)
    )
    (i32.store offset=4
     (get_local $0)
     (get_local $1)
+   )
+   (call $~lib/memory/set_memory
+    (i32.add
+     (get_local $3)
+     (i32.const 8)
+    )
+    (i32.const 0)
+    (get_local $2)
    )
   )
   (get_local $0)
@@ -4591,10 +4528,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 f32)
-  (local $10 i32)
-  (local $11 i32)
+  (local $8 f32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -4642,32 +4576,20 @@
      )
      (block
       (block
-       (block $~lib/internal/arraybuffer/storeUnsafe<f32>|inlined.0
-        (set_local $7
-         (get_local $5)
-        )
+       (block $~lib/internal/arraybuffer/storeUnsafe<f32,f32>|inlined.0
         (set_local $8
-         (get_local $6)
-        )
-        (set_local $9
          (block (result f32)
           (set_global $~argc
            (i32.const 3)
           )
           (call_indirect (type $iiif)
-           (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.15 (result i32)
-            (set_local $10
-             (get_local $2)
-            )
-            (set_local $11
-             (get_local $6)
-            )
-            (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.15
+           (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.16 (result i32)
+            (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.16
              (i32.load offset=8
               (i32.add
-               (get_local $10)
+               (get_local $2)
                (i32.shl
-                (get_local $11)
+                (get_local $6)
                 (i32.const 2)
                )
               )
@@ -4682,13 +4604,13 @@
         )
         (f32.store offset=8
          (i32.add
-          (get_local $7)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $6)
            (i32.const 2)
           )
          )
-         (get_local $9)
+         (get_local $8)
         )
        )
       )
@@ -4732,12 +4654,16 @@
       (i32.const 2)
      )
     )
-    (f32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<f32,f32>|inlined.0 (result f32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<f32,f32>|inlined.0
+      (f32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )
@@ -4769,10 +4695,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -4820,32 +4742,20 @@
      )
      (block
       (block
-       (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.5
+       (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.6
         (set_local $7
-         (get_local $5)
-        )
-        (set_local $8
-         (get_local $6)
-        )
-        (set_local $9
          (block (result i32)
           (set_global $~argc
            (i32.const 3)
           )
           (call_indirect (type $iiii)
-           (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.16 (result i32)
-            (set_local $10
-             (get_local $2)
-            )
-            (set_local $11
-             (get_local $6)
-            )
-            (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.16
+           (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.17 (result i32)
+            (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.17
              (i32.load offset=8
               (i32.add
-               (get_local $10)
+               (get_local $2)
                (i32.shl
-                (get_local $11)
+                (get_local $6)
                 (i32.const 2)
                )
               )
@@ -4860,13 +4770,13 @@
         )
         (i32.store offset=8
          (i32.add
-          (get_local $7)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $6)
            (i32.const 2)
           )
          )
-         (get_local $9)
+         (get_local $7)
         )
        )
       )
@@ -4924,7 +4834,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -4972,20 +4881,14 @@
      )
      (block
       (block
-       (set_local $7
-        (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.17 (result i32)
-         (set_local $6
-          (get_local $2)
-         )
-         (set_local $7
-          (get_local $5)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.17
+       (set_local $6
+        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.18 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.18
           (i32.load offset=8
            (i32.add
-            (get_local $6)
+            (get_local $2)
             (i32.shl
-             (get_local $7)
+             (get_local $5)
              (i32.const 2)
             )
            )
@@ -4999,7 +4902,7 @@
           (i32.const 3)
          )
          (call_indirect (type $iiii)
-          (get_local $7)
+          (get_local $6)
           (get_local $5)
           (get_local $0)
           (get_local $1)
@@ -5008,7 +4911,7 @@
         (drop
          (call $~lib/array/Array<i32>#push
           (get_local $4)
-          (get_local $7)
+          (get_local $6)
          )
         )
        )
@@ -5093,7 +4996,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (set_local $3
    (get_local $2)
   )
@@ -5142,19 +5044,13 @@
          )
          (call_indirect (type $iiiii)
           (get_local $3)
-          (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.18 (result i32)
-           (set_local $7
-            (get_local $4)
-           )
-           (set_local $8
-            (get_local $5)
-           )
-           (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.18
+          (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.19 (result i32)
+           (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.19
             (i32.load offset=8
              (i32.add
-              (get_local $7)
+              (get_local $4)
               (i32.shl
-               (get_local $8)
+               (get_local $5)
                (i32.const 2)
               )
              )
@@ -5208,7 +5104,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (set_local $3
    (get_local $2)
   )
@@ -5257,19 +5152,13 @@
          )
          (call_indirect (type $iiiii)
           (get_local $3)
-          (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.19 (result i32)
-           (set_local $7
-            (get_local $4)
-           )
-           (set_local $8
-            (get_local $5)
-           )
-           (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.19
+          (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.20 (result i32)
+           (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.20
             (i32.load offset=8
              (i32.add
-              (get_local $7)
+              (get_local $4)
               (i32.shl
-               (get_local $8)
+               (get_local $5)
                (i32.const 2)
               )
              )
@@ -5354,8 +5243,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   (set_local $3
    (get_local $2)
   )
@@ -5388,19 +5275,13 @@
          )
          (call_indirect (type $iiiii)
           (get_local $3)
-          (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.20 (result i32)
-           (set_local $6
-            (get_local $4)
-           )
-           (set_local $7
-            (get_local $5)
-           )
-           (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.20
+          (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.21 (result i32)
+           (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.21
             (i32.load offset=8
              (i32.add
-              (get_local $6)
+              (get_local $4)
               (i32.shl
-               (get_local $7)
+               (get_local $5)
                (i32.const 2)
               )
              )
@@ -5452,8 +5333,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   (set_local $3
    (get_local $2)
   )
@@ -5486,19 +5365,13 @@
          )
          (call_indirect (type $iiiii)
           (get_local $3)
-          (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.21 (result i32)
-           (set_local $6
-            (get_local $4)
-           )
-           (set_local $7
-            (get_local $5)
-           )
-           (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.21
+          (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.22 (result i32)
+           (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.22
             (i32.load offset=8
              (i32.add
-              (get_local $6)
+              (get_local $4)
               (i32.shl
-               (get_local $7)
+               (get_local $5)
                (i32.const 2)
               )
              )
@@ -5847,7 +5720,7 @@
    )
   )
  )
- (func $~lib/internal/array/insertionSort<i32> (; 87 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/insertionSort<i32,i32> (; 87 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5856,7 +5729,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -5881,20 +5753,14 @@
      )
      (block
       (block
-       (set_local $6
-        (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.24 (result i32)
-         (set_local $5
-          (get_local $2)
-         )
-         (set_local $6
-          (get_local $3)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.24
+       (set_local $5
+        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25
           (i32.load offset=8
            (i32.add
-            (get_local $5)
+            (get_local $2)
             (i32.shl
-             (get_local $6)
+             (get_local $3)
              (i32.const 2)
             )
            )
@@ -5902,7 +5768,7 @@
          )
         )
        )
-       (set_local $5
+       (set_local $6
         (i32.sub
          (get_local $3)
          (i32.const 1)
@@ -5912,25 +5778,19 @@
         (loop $continue|1
          (if
           (i32.ge_s
-           (get_local $5)
+           (get_local $6)
            (i32.const 0)
           )
           (block
            (block
-            (set_local $8
-             (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.25 (result i32)
-              (set_local $7
-               (get_local $2)
-              )
-              (set_local $8
-               (get_local $5)
-              )
-              (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.25
+            (set_local $7
+             (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.26 (result i32)
+              (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.26
                (i32.load offset=8
                 (i32.add
-                 (get_local $7)
+                 (get_local $2)
                  (i32.shl
-                  (get_local $8)
+                  (get_local $6)
                   (i32.const 2)
                  )
                 )
@@ -5945,46 +5805,40 @@
                 (i32.const 2)
                )
                (call_indirect (type $iii)
-                (get_local $6)
-                (get_local $8)
+                (get_local $5)
+                (get_local $7)
                 (get_local $1)
                )
               )
               (i32.const 0)
              )
-             (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.8
-              (set_local $7
-               (get_local $2)
-              )
-              (set_local $9
+             (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.9
+              (set_local $8
                (i32.add
                 (block (result i32)
-                 (set_local $10
-                  (get_local $5)
+                 (set_local $8
+                  (get_local $6)
                  )
-                 (set_local $5
+                 (set_local $6
                   (i32.sub
-                   (get_local $10)
+                   (get_local $8)
                    (i32.const 1)
                   )
                  )
-                 (get_local $10)
+                 (get_local $8)
                 )
                 (i32.const 1)
                )
               )
-              (set_local $10
-               (get_local $8)
-              )
               (i32.store offset=8
                (i32.add
-                (get_local $7)
+                (get_local $2)
                 (i32.shl
-                 (get_local $9)
+                 (get_local $8)
                  (i32.const 2)
                 )
                )
-               (get_local $10)
+               (get_local $7)
               )
              )
              (br $break|1)
@@ -5995,28 +5849,22 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.9
-        (set_local $8
-         (get_local $2)
-        )
-        (set_local $10
+       (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.10
+        (set_local $9
          (i32.add
-          (get_local $5)
+          (get_local $6)
           (i32.const 1)
          )
         )
-        (set_local $9
-         (get_local $6)
-        )
         (i32.store offset=8
          (i32.add
-          (get_local $8)
+          (get_local $2)
           (i32.shl
-           (get_local $10)
+           (get_local $9)
            (i32.const 2)
           )
          )
-         (get_local $9)
+         (get_local $5)
         )
        )
       )
@@ -6037,7 +5885,7 @@
  )
  (func $~lib/allocator/arena/free_memory (; 88 ;) (type $iv) (param $0 i32)
  )
- (func $~lib/internal/array/weakHeapSort<i32> (; 89 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/weakHeapSort<i32,i32> (; 89 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6051,6 +5899,18 @@
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
+  (local $22 i32)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 i32)
+  (local $26 i32)
   (nop)
   (set_local $2
    (call $~lib/array/Array<i32>#get:length
@@ -6153,20 +6013,14 @@
          (i32.const 1)
         )
        )
-       (set_local $10
-        (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.26 (result i32)
-         (set_local $9
-          (get_local $5)
-         )
-         (set_local $10
-          (get_local $8)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.26
+       (set_local $9
+        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.27 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.27
           (i32.load offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $10)
+             (get_local $8)
              (i32.const 2)
             )
            )
@@ -6174,20 +6028,14 @@
          )
         )
        )
-       (set_local $11
-        (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.27 (result i32)
-         (set_local $9
-          (get_local $5)
-         )
-         (set_local $11
-          (get_local $6)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.27
+       (set_local $10
+        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.28 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.28
           (i32.load offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $11)
+             (get_local $6)
              (i32.const 2)
             )
            )
@@ -6202,8 +6050,8 @@
            (i32.const 2)
           )
           (call_indirect (type $iii)
+           (get_local $9)
            (get_local $10)
-           (get_local $11)
            (get_local $1)
           )
          )
@@ -6243,46 +6091,28 @@
            )
           )
          )
-         (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.10
-          (set_local $9
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $6)
-          )
-          (set_local $13
-           (get_local $10)
-          )
+         (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.11
           (i32.store offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $12)
-             (i32.const 2)
-            )
-           )
-           (get_local $13)
-          )
-         )
-         (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.11
-          (set_local $13
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $8)
-          )
-          (set_local $9
-           (get_local $11)
-          )
-          (i32.store offset=8
-           (i32.add
-            (get_local $13)
-            (i32.shl
-             (get_local $12)
+             (get_local $6)
              (i32.const 2)
             )
            )
            (get_local $9)
+          )
+         )
+         (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.12
+          (i32.store offset=8
+           (i32.add
+            (get_local $5)
+            (i32.shl
+             (get_local $8)
+             (i32.const 2)
+            )
+           )
+           (get_local $10)
           )
          )
         )
@@ -6300,7 +6130,7 @@
    )
   )
   (block $break|2
-   (set_local $6
+   (set_local $11
     (i32.sub
      (get_local $2)
      (i32.const 1)
@@ -6309,25 +6139,22 @@
    (loop $continue|2
     (if
      (i32.ge_s
-      (get_local $6)
+      (get_local $11)
       (i32.const 2)
      )
      (block
       (block
-       (set_local $10
-        (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.28 (result i32)
-         (set_local $11
-          (get_local $5)
-         )
-         (set_local $10
+       (set_local $13
+        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.29 (result i32)
+         (set_local $12
           (i32.const 0)
          )
-         (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.28
+         (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.29
           (i32.load offset=8
            (i32.add
-            (get_local $11)
+            (get_local $5)
             (i32.shl
-             (get_local $10)
+             (get_local $12)
              (i32.const 2)
             )
            )
@@ -6335,27 +6162,18 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.12
-        (set_local $11
-         (get_local $5)
-        )
-        (set_local $8
+       (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.13
+        (set_local $14
          (i32.const 0)
         )
-        (set_local $7
-         (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.29 (result i32)
-          (set_local $9
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $6)
-          )
-          (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.29
+        (set_local $15
+         (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.30 (result i32)
+          (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.30
            (i32.load offset=8
             (i32.add
-             (get_local $9)
+             (get_local $5)
              (i32.shl
-              (get_local $12)
+              (get_local $11)
               (i32.const 2)
              )
             )
@@ -6365,47 +6183,38 @@
         )
         (i32.store offset=8
          (i32.add
-          (get_local $11)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $14)
            (i32.const 2)
           )
          )
-         (get_local $7)
+         (get_local $15)
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.13
-        (set_local $7
-         (get_local $5)
-        )
-        (set_local $8
-         (get_local $6)
-        )
-        (set_local $11
-         (get_local $10)
-        )
+       (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.14
         (i32.store offset=8
          (i32.add
-          (get_local $7)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $11)
            (i32.const 2)
           )
          )
-         (get_local $11)
+         (get_local $13)
         )
        )
-       (set_local $11
+       (set_local $16
         (i32.const 1)
        )
        (block $break|3
         (loop $continue|3
          (if
           (i32.lt_s
-           (tee_local $8
+           (tee_local $17
             (i32.add
              (i32.shl
-              (get_local $11)
+              (get_local $16)
               (i32.const 1)
              )
              (i32.and
@@ -6415,7 +6224,7 @@
                  (get_local $4)
                  (i32.shl
                   (i32.shr_s
-                   (get_local $11)
+                   (get_local $16)
                    (i32.const 5)
                   )
                   (i32.const 2)
@@ -6423,7 +6232,7 @@
                 )
                )
                (i32.and
-                (get_local $11)
+                (get_local $16)
                 (i32.const 31)
                )
               )
@@ -6431,11 +6240,11 @@
              )
             )
            )
-           (get_local $6)
+           (get_local $11)
           )
           (block
-           (set_local $11
-            (get_local $8)
+           (set_local $16
+            (get_local $17)
            )
            (br $continue|3)
           )
@@ -6446,25 +6255,22 @@
         (loop $continue|4
          (if
           (i32.gt_s
-           (get_local $11)
+           (get_local $16)
            (i32.const 0)
           )
           (block
            (block
-            (set_local $10
-             (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.30 (result i32)
-              (set_local $7
-               (get_local $5)
-              )
-              (set_local $12
+            (set_local $13
+             (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.31 (result i32)
+              (set_local $18
                (i32.const 0)
               )
-              (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.30
+              (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.31
                (i32.load offset=8
                 (i32.add
-                 (get_local $7)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $12)
+                  (get_local $18)
                   (i32.const 2)
                  )
                 )
@@ -6472,20 +6278,14 @@
               )
              )
             )
-            (set_local $7
-             (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.31 (result i32)
-              (set_local $12
-               (get_local $5)
-              )
-              (set_local $7
-               (get_local $11)
-              )
-              (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.31
+            (set_local $19
+             (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.32 (result i32)
+              (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.32
                (i32.load offset=8
                 (i32.add
-                 (get_local $12)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $7)
+                  (get_local $16)
                   (i32.const 2)
                  )
                 )
@@ -6500,8 +6300,8 @@
                 (i32.const 2)
                )
                (call_indirect (type $iii)
-                (get_local $10)
-                (get_local $7)
+                (get_local $13)
+                (get_local $19)
                 (get_local $1)
                )
               )
@@ -6513,7 +6313,7 @@
                 (get_local $4)
                 (i32.shl
                  (i32.shr_s
-                  (get_local $11)
+                  (get_local $16)
                   (i32.const 5)
                  )
                  (i32.const 2)
@@ -6525,7 +6325,7 @@
                   (get_local $4)
                   (i32.shl
                    (i32.shr_s
-                    (get_local $11)
+                    (get_local $16)
                     (i32.const 5)
                    )
                    (i32.const 2)
@@ -6535,59 +6335,44 @@
                 (i32.shl
                  (i32.const 1)
                  (i32.and
-                  (get_local $11)
+                  (get_local $16)
                   (i32.const 31)
                  )
                 )
                )
               )
-              (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.14
-               (set_local $12
-                (get_local $5)
-               )
-               (set_local $9
-                (get_local $11)
-               )
-               (set_local $13
-                (get_local $10)
-               )
+              (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.15
                (i32.store offset=8
                 (i32.add
-                 (get_local $12)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $9)
+                  (get_local $16)
                   (i32.const 2)
                  )
                 )
                 (get_local $13)
                )
               )
-              (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.15
-               (set_local $13
-                (get_local $5)
-               )
-               (set_local $9
+              (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.16
+               (set_local $20
                 (i32.const 0)
-               )
-               (set_local $12
-                (get_local $7)
                )
                (i32.store offset=8
                 (i32.add
-                 (get_local $13)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $9)
+                  (get_local $20)
                   (i32.const 2)
                  )
                 )
-                (get_local $12)
+                (get_local $19)
                )
               )
              )
             )
-            (set_local $11
+            (set_local $16
              (i32.shr_s
-              (get_local $11)
+              (get_local $16)
               (i32.const 1)
              )
             )
@@ -6598,9 +6383,9 @@
         )
        )
       )
-      (set_local $6
+      (set_local $11
        (i32.sub
-        (get_local $6)
+        (get_local $11)
         (i32.const 1)
        )
       )
@@ -6612,20 +6397,17 @@
   (call $~lib/allocator/arena/free_memory
    (get_local $4)
   )
-  (set_local $14
-   (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.32 (result i32)
-    (set_local $6
-     (get_local $5)
-    )
-    (set_local $8
+  (set_local $22
+   (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.33 (result i32)
+    (set_local $21
      (i32.const 1)
     )
-    (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.32
+    (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.33
      (i32.load offset=8
       (i32.add
-       (get_local $6)
+       (get_local $5)
        (i32.shl
-        (get_local $8)
+        (get_local $21)
         (i32.const 2)
        )
       )
@@ -6633,27 +6415,21 @@
     )
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.16
-   (set_local $8
-    (get_local $5)
-   )
-   (set_local $6
+  (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.17
+   (set_local $23
     (i32.const 1)
    )
-   (set_local $11
-    (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.33 (result i32)
-     (set_local $10
-      (get_local $5)
-     )
-     (set_local $7
+   (set_local $25
+    (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.34 (result i32)
+     (set_local $24
       (i32.const 0)
      )
-     (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.33
+     (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.34
       (i32.load offset=8
        (i32.add
-        (get_local $10)
+        (get_local $5)
         (i32.shl
-         (get_local $7)
+         (get_local $24)
          (i32.const 2)
         )
        )
@@ -6663,34 +6439,28 @@
    )
    (i32.store offset=8
     (i32.add
-     (get_local $8)
+     (get_local $5)
      (i32.shl
-      (get_local $6)
+      (get_local $23)
       (i32.const 2)
      )
     )
-    (get_local $11)
+    (get_local $25)
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.17
-   (set_local $11
-    (get_local $5)
-   )
-   (set_local $6
+  (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.18
+   (set_local $26
     (i32.const 0)
-   )
-   (set_local $8
-    (get_local $14)
    )
    (i32.store offset=8
     (i32.add
-     (get_local $11)
+     (get_local $5)
      (i32.shl
-      (get_local $6)
+      (get_local $26)
       (i32.const 2)
      )
     )
-    (get_local $8)
+    (get_local $22)
    )
   )
   (return
@@ -6705,6 +6475,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   (set_local $2
    (i32.load offset=4
     (get_local $0)
@@ -6731,19 +6502,16 @@
    )
    (block
     (set_local $5
-     (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.22 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.23 (result i32)
       (set_local $4
-       (get_local $3)
-      )
-      (set_local $5
        (i32.const 1)
       )
-      (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.22
+      (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.23
        (i32.load offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
-          (get_local $5)
+          (get_local $4)
           (i32.const 2)
          )
         )
@@ -6751,18 +6519,15 @@
       )
      )
     )
-    (set_local $6
-     (block $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.23 (result i32)
-      (set_local $4
-       (get_local $3)
-      )
+    (set_local $7
+     (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.24 (result i32)
       (set_local $6
        (i32.const 0)
       )
-      (br $~lib/internal/arraybuffer/loadUnsafe<i32>|inlined.23
+      (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.24
        (i32.load offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
           (get_local $6)
           (i32.const 2)
@@ -6780,53 +6545,41 @@
        )
        (call_indirect (type $iii)
         (get_local $5)
-        (get_local $6)
+        (get_local $7)
         (get_local $1)
        )
       )
       (i32.const 0)
      )
      (block
-      (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.6
-       (set_local $4
-        (get_local $3)
-       )
-       (set_local $7
+      (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.7
+       (set_local $8
         (i32.const 1)
        )
-       (set_local $8
-        (get_local $6)
-       )
        (i32.store offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $8)
           (i32.const 2)
          )
         )
-        (get_local $8)
+        (get_local $7)
        )
       )
-      (block $~lib/internal/arraybuffer/storeUnsafe<i32>|inlined.7
-       (set_local $8
-        (get_local $3)
-       )
-       (set_local $7
+      (block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.8
+       (set_local $9
         (i32.const 0)
-       )
-       (set_local $4
-        (get_local $5)
        )
        (i32.store offset=8
         (i32.add
-         (get_local $8)
+         (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $9)
           (i32.const 2)
          )
         )
-        (get_local $4)
+        (get_local $5)
        )
       )
      )
@@ -6842,11 +6595,11 @@
      (get_local $2)
      (i32.const 256)
     )
-    (call $~lib/internal/array/insertionSort<i32>
+    (call $~lib/internal/array/insertionSort<i32,i32>
      (get_local $0)
      (get_local $1)
     )
-    (call $~lib/internal/array/weakHeapSort<i32>
+    (call $~lib/internal/array/weakHeapSort<i32,i32>
      (get_local $0)
      (get_local $1)
     )
@@ -7069,6 +6822,8 @@
  )
  (func $~lib/array/Array<Array<i32>>#constructor (; 100 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   (block
    (nop)
    (if
@@ -7086,6 +6841,17 @@
      (unreachable)
     )
    )
+   (set_local $2
+    (i32.shl
+     (get_local $1)
+     (i32.const 2)
+    )
+   )
+   (set_local $3
+    (call $~lib/internal/arraybuffer/allocUnsafe
+     (get_local $2)
+    )
+   )
    (i32.store
     (tee_local $0
      (if (result i32)
@@ -7093,34 +6859,37 @@
       (get_local $0)
       (tee_local $0
        (block (result i32)
-        (set_local $2
+        (set_local $4
          (call $~lib/allocator/arena/allocate_memory
           (i32.const 8)
          )
         )
         (i32.store
-         (get_local $2)
+         (get_local $4)
          (i32.const 0)
         )
         (i32.store offset=4
-         (get_local $2)
+         (get_local $4)
          (i32.const 0)
         )
-        (get_local $2)
+        (get_local $4)
        )
       )
      )
     )
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (i32.shl
-      (get_local $1)
-      (i32.const 2)
-     )
-    )
+    (get_local $3)
    )
    (i32.store offset=4
     (get_local $0)
     (get_local $1)
+   )
+   (call $~lib/memory/set_memory
+    (i32.add
+     (get_local $3)
+     (i32.const 8)
+    )
+    (i32.const 0)
+    (get_local $2)
    )
   )
   (get_local $0)
@@ -7164,7 +6933,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 81)
+       (i32.const 86)
        (i32.const 41)
       )
       (unreachable)
@@ -7195,15 +6964,17 @@
     )
    )
   )
-  (i32.store offset=8
-   (i32.add
-    (get_local $3)
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+  (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.0
+   (i32.store offset=8
+    (i32.add
+     (get_local $3)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
     )
+    (get_local $2)
    )
-   (get_local $2)
   )
  )
  (func $~lib/array/Array<Array<i32>>#__get (; 103 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -7224,12 +6995,16 @@
       (i32.const 2)
      )
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.0 (result i32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.0
+      (i32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )
@@ -7312,7 +7087,7 @@
    )
   )
  )
- (func $~lib/internal/array/insertionSort<Array<i32>> (; 106 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/insertionSort<Array<i32>,Array<i32>> (; 106 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7321,7 +7096,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -7346,20 +7120,14 @@
      )
      (block
       (block
-       (set_local $6
-        (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.2 (result i32)
-         (set_local $5
-          (get_local $2)
-         )
-         (set_local $6
-          (get_local $3)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.2
+       (set_local $5
+        (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.3 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.3
           (i32.load offset=8
            (i32.add
-            (get_local $5)
+            (get_local $2)
             (i32.shl
-             (get_local $6)
+             (get_local $3)
              (i32.const 2)
             )
            )
@@ -7367,7 +7135,7 @@
          )
         )
        )
-       (set_local $5
+       (set_local $6
         (i32.sub
          (get_local $3)
          (i32.const 1)
@@ -7377,25 +7145,19 @@
         (loop $continue|1
          (if
           (i32.ge_s
-           (get_local $5)
+           (get_local $6)
            (i32.const 0)
           )
           (block
            (block
-            (set_local $8
-             (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.3 (result i32)
-              (set_local $7
-               (get_local $2)
-              )
-              (set_local $8
-               (get_local $5)
-              )
-              (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.3
+            (set_local $7
+             (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.4 (result i32)
+              (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.4
                (i32.load offset=8
                 (i32.add
-                 (get_local $7)
+                 (get_local $2)
                  (i32.shl
-                  (get_local $8)
+                  (get_local $6)
                   (i32.const 2)
                  )
                 )
@@ -7410,46 +7172,40 @@
                 (i32.const 2)
                )
                (call_indirect (type $iii)
-                (get_local $6)
-                (get_local $8)
+                (get_local $5)
+                (get_local $7)
                 (get_local $1)
                )
               )
               (i32.const 0)
              )
-             (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.2
-              (set_local $7
-               (get_local $2)
-              )
-              (set_local $9
+             (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.3
+              (set_local $8
                (i32.add
                 (block (result i32)
-                 (set_local $10
-                  (get_local $5)
+                 (set_local $8
+                  (get_local $6)
                  )
-                 (set_local $5
+                 (set_local $6
                   (i32.sub
-                   (get_local $10)
+                   (get_local $8)
                    (i32.const 1)
                   )
                  )
-                 (get_local $10)
+                 (get_local $8)
                 )
                 (i32.const 1)
                )
               )
-              (set_local $10
-               (get_local $8)
-              )
               (i32.store offset=8
                (i32.add
-                (get_local $7)
+                (get_local $2)
                 (i32.shl
-                 (get_local $9)
+                 (get_local $8)
                  (i32.const 2)
                 )
                )
-               (get_local $10)
+               (get_local $7)
               )
              )
              (br $break|1)
@@ -7460,28 +7216,22 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.3
-        (set_local $8
-         (get_local $2)
-        )
-        (set_local $10
+       (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.4
+        (set_local $9
          (i32.add
-          (get_local $5)
+          (get_local $6)
           (i32.const 1)
          )
         )
-        (set_local $9
-         (get_local $6)
-        )
         (i32.store offset=8
          (i32.add
-          (get_local $8)
+          (get_local $2)
           (i32.shl
-           (get_local $10)
+           (get_local $9)
            (i32.const 2)
           )
          )
-         (get_local $9)
+         (get_local $5)
         )
        )
       )
@@ -7500,7 +7250,7 @@
    (get_local $0)
   )
  )
- (func $~lib/internal/array/weakHeapSort<Array<i32>> (; 107 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/weakHeapSort<Array<i32>,Array<i32>> (; 107 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7514,6 +7264,18 @@
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
+  (local $22 i32)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 i32)
+  (local $26 i32)
   (nop)
   (set_local $2
    (call $~lib/array/Array<Array<i32>>#get:length
@@ -7616,20 +7378,14 @@
          (i32.const 1)
         )
        )
-       (set_local $10
-        (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.4 (result i32)
-         (set_local $9
-          (get_local $5)
-         )
-         (set_local $10
-          (get_local $8)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.4
+       (set_local $9
+        (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.5 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.5
           (i32.load offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $10)
+             (get_local $8)
              (i32.const 2)
             )
            )
@@ -7637,20 +7393,14 @@
          )
         )
        )
-       (set_local $11
-        (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.5 (result i32)
-         (set_local $9
-          (get_local $5)
-         )
-         (set_local $11
-          (get_local $6)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.5
+       (set_local $10
+        (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.6 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.6
           (i32.load offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $11)
+             (get_local $6)
              (i32.const 2)
             )
            )
@@ -7665,8 +7415,8 @@
            (i32.const 2)
           )
           (call_indirect (type $iii)
+           (get_local $9)
            (get_local $10)
-           (get_local $11)
            (get_local $1)
           )
          )
@@ -7706,46 +7456,28 @@
            )
           )
          )
-         (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.4
-          (set_local $9
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $6)
-          )
-          (set_local $13
-           (get_local $10)
-          )
+         (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.5
           (i32.store offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $12)
-             (i32.const 2)
-            )
-           )
-           (get_local $13)
-          )
-         )
-         (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.5
-          (set_local $13
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $8)
-          )
-          (set_local $9
-           (get_local $11)
-          )
-          (i32.store offset=8
-           (i32.add
-            (get_local $13)
-            (i32.shl
-             (get_local $12)
+             (get_local $6)
              (i32.const 2)
             )
            )
            (get_local $9)
+          )
+         )
+         (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.6
+          (i32.store offset=8
+           (i32.add
+            (get_local $5)
+            (i32.shl
+             (get_local $8)
+             (i32.const 2)
+            )
+           )
+           (get_local $10)
           )
          )
         )
@@ -7763,7 +7495,7 @@
    )
   )
   (block $break|2
-   (set_local $6
+   (set_local $11
     (i32.sub
      (get_local $2)
      (i32.const 1)
@@ -7772,25 +7504,22 @@
    (loop $continue|2
     (if
      (i32.ge_s
-      (get_local $6)
+      (get_local $11)
       (i32.const 2)
      )
      (block
       (block
-       (set_local $10
-        (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.6 (result i32)
-         (set_local $11
-          (get_local $5)
-         )
-         (set_local $10
+       (set_local $13
+        (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.7 (result i32)
+         (set_local $12
           (i32.const 0)
          )
-         (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.6
+         (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.7
           (i32.load offset=8
            (i32.add
-            (get_local $11)
+            (get_local $5)
             (i32.shl
-             (get_local $10)
+             (get_local $12)
              (i32.const 2)
             )
            )
@@ -7798,27 +7527,18 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.6
-        (set_local $11
-         (get_local $5)
-        )
-        (set_local $8
+       (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.7
+        (set_local $14
          (i32.const 0)
         )
-        (set_local $7
-         (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.7 (result i32)
-          (set_local $9
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $6)
-          )
-          (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.7
+        (set_local $15
+         (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.8 (result i32)
+          (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.8
            (i32.load offset=8
             (i32.add
-             (get_local $9)
+             (get_local $5)
              (i32.shl
-              (get_local $12)
+              (get_local $11)
               (i32.const 2)
              )
             )
@@ -7828,47 +7548,38 @@
         )
         (i32.store offset=8
          (i32.add
-          (get_local $11)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $14)
            (i32.const 2)
           )
          )
-         (get_local $7)
+         (get_local $15)
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.7
-        (set_local $7
-         (get_local $5)
-        )
-        (set_local $8
-         (get_local $6)
-        )
-        (set_local $11
-         (get_local $10)
-        )
+       (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.8
         (i32.store offset=8
          (i32.add
-          (get_local $7)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $11)
            (i32.const 2)
           )
          )
-         (get_local $11)
+         (get_local $13)
         )
        )
-       (set_local $11
+       (set_local $16
         (i32.const 1)
        )
        (block $break|3
         (loop $continue|3
          (if
           (i32.lt_s
-           (tee_local $8
+           (tee_local $17
             (i32.add
              (i32.shl
-              (get_local $11)
+              (get_local $16)
               (i32.const 1)
              )
              (i32.and
@@ -7878,7 +7589,7 @@
                  (get_local $4)
                  (i32.shl
                   (i32.shr_s
-                   (get_local $11)
+                   (get_local $16)
                    (i32.const 5)
                   )
                   (i32.const 2)
@@ -7886,7 +7597,7 @@
                 )
                )
                (i32.and
-                (get_local $11)
+                (get_local $16)
                 (i32.const 31)
                )
               )
@@ -7894,11 +7605,11 @@
              )
             )
            )
-           (get_local $6)
+           (get_local $11)
           )
           (block
-           (set_local $11
-            (get_local $8)
+           (set_local $16
+            (get_local $17)
            )
            (br $continue|3)
           )
@@ -7909,25 +7620,22 @@
         (loop $continue|4
          (if
           (i32.gt_s
-           (get_local $11)
+           (get_local $16)
            (i32.const 0)
           )
           (block
            (block
-            (set_local $10
-             (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.8 (result i32)
-              (set_local $7
-               (get_local $5)
-              )
-              (set_local $12
+            (set_local $13
+             (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.9 (result i32)
+              (set_local $18
                (i32.const 0)
               )
-              (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.8
+              (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.9
                (i32.load offset=8
                 (i32.add
-                 (get_local $7)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $12)
+                  (get_local $18)
                   (i32.const 2)
                  )
                 )
@@ -7935,20 +7643,14 @@
               )
              )
             )
-            (set_local $7
-             (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.9 (result i32)
-              (set_local $12
-               (get_local $5)
-              )
-              (set_local $7
-               (get_local $11)
-              )
-              (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.9
+            (set_local $19
+             (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.10 (result i32)
+              (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.10
                (i32.load offset=8
                 (i32.add
-                 (get_local $12)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $7)
+                  (get_local $16)
                   (i32.const 2)
                  )
                 )
@@ -7963,8 +7665,8 @@
                 (i32.const 2)
                )
                (call_indirect (type $iii)
-                (get_local $10)
-                (get_local $7)
+                (get_local $13)
+                (get_local $19)
                 (get_local $1)
                )
               )
@@ -7976,7 +7678,7 @@
                 (get_local $4)
                 (i32.shl
                  (i32.shr_s
-                  (get_local $11)
+                  (get_local $16)
                   (i32.const 5)
                  )
                  (i32.const 2)
@@ -7988,7 +7690,7 @@
                   (get_local $4)
                   (i32.shl
                    (i32.shr_s
-                    (get_local $11)
+                    (get_local $16)
                     (i32.const 5)
                    )
                    (i32.const 2)
@@ -7998,59 +7700,44 @@
                 (i32.shl
                  (i32.const 1)
                  (i32.and
-                  (get_local $11)
+                  (get_local $16)
                   (i32.const 31)
                  )
                 )
                )
               )
-              (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.8
-               (set_local $12
-                (get_local $5)
-               )
-               (set_local $9
-                (get_local $11)
-               )
-               (set_local $13
-                (get_local $10)
-               )
+              (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.9
                (i32.store offset=8
                 (i32.add
-                 (get_local $12)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $9)
+                  (get_local $16)
                   (i32.const 2)
                  )
                 )
                 (get_local $13)
                )
               )
-              (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.9
-               (set_local $13
-                (get_local $5)
-               )
-               (set_local $9
+              (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.10
+               (set_local $20
                 (i32.const 0)
-               )
-               (set_local $12
-                (get_local $7)
                )
                (i32.store offset=8
                 (i32.add
-                 (get_local $13)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $9)
+                  (get_local $20)
                   (i32.const 2)
                  )
                 )
-                (get_local $12)
+                (get_local $19)
                )
               )
              )
             )
-            (set_local $11
+            (set_local $16
              (i32.shr_s
-              (get_local $11)
+              (get_local $16)
               (i32.const 1)
              )
             )
@@ -8061,9 +7748,9 @@
         )
        )
       )
-      (set_local $6
+      (set_local $11
        (i32.sub
-        (get_local $6)
+        (get_local $11)
         (i32.const 1)
        )
       )
@@ -8075,20 +7762,17 @@
   (call $~lib/allocator/arena/free_memory
    (get_local $4)
   )
-  (set_local $14
-   (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.10 (result i32)
-    (set_local $6
-     (get_local $5)
-    )
-    (set_local $8
+  (set_local $22
+   (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.11 (result i32)
+    (set_local $21
      (i32.const 1)
     )
-    (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.10
+    (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.11
      (i32.load offset=8
       (i32.add
-       (get_local $6)
+       (get_local $5)
        (i32.shl
-        (get_local $8)
+        (get_local $21)
         (i32.const 2)
        )
       )
@@ -8096,27 +7780,21 @@
     )
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.10
-   (set_local $8
-    (get_local $5)
-   )
-   (set_local $6
+  (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.11
+   (set_local $23
     (i32.const 1)
    )
-   (set_local $11
-    (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.11 (result i32)
-     (set_local $10
-      (get_local $5)
-     )
-     (set_local $7
+   (set_local $25
+    (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.12 (result i32)
+     (set_local $24
       (i32.const 0)
      )
-     (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.11
+     (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.12
       (i32.load offset=8
        (i32.add
-        (get_local $10)
+        (get_local $5)
         (i32.shl
-         (get_local $7)
+         (get_local $24)
          (i32.const 2)
         )
        )
@@ -8126,34 +7804,28 @@
    )
    (i32.store offset=8
     (i32.add
-     (get_local $8)
+     (get_local $5)
      (i32.shl
-      (get_local $6)
+      (get_local $23)
       (i32.const 2)
      )
     )
-    (get_local $11)
+    (get_local $25)
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.11
-   (set_local $11
-    (get_local $5)
-   )
-   (set_local $6
+  (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.12
+   (set_local $26
     (i32.const 0)
-   )
-   (set_local $8
-    (get_local $14)
    )
    (i32.store offset=8
     (i32.add
-     (get_local $11)
+     (get_local $5)
      (i32.shl
-      (get_local $6)
+      (get_local $26)
       (i32.const 2)
      )
     )
-    (get_local $8)
+    (get_local $22)
    )
   )
   (return
@@ -8168,6 +7840,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   (set_local $2
    (i32.load offset=4
     (get_local $0)
@@ -8194,19 +7867,16 @@
    )
    (block
     (set_local $5
-     (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.0 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.1 (result i32)
       (set_local $4
-       (get_local $3)
-      )
-      (set_local $5
        (i32.const 1)
       )
-      (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.0
+      (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.1
        (i32.load offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
-          (get_local $5)
+          (get_local $4)
           (i32.const 2)
          )
         )
@@ -8214,18 +7884,15 @@
       )
      )
     )
-    (set_local $6
-     (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.1 (result i32)
-      (set_local $4
-       (get_local $3)
-      )
+    (set_local $7
+     (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.2 (result i32)
       (set_local $6
        (i32.const 0)
       )
-      (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>>|inlined.1
+      (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.2
        (i32.load offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
           (get_local $6)
           (i32.const 2)
@@ -8243,53 +7910,41 @@
        )
        (call_indirect (type $iii)
         (get_local $5)
-        (get_local $6)
+        (get_local $7)
         (get_local $1)
        )
       )
       (i32.const 0)
      )
      (block
-      (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.0
-       (set_local $4
-        (get_local $3)
-       )
-       (set_local $7
+      (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.1
+       (set_local $8
         (i32.const 1)
        )
-       (set_local $8
-        (get_local $6)
-       )
        (i32.store offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $8)
           (i32.const 2)
          )
         )
-        (get_local $8)
+        (get_local $7)
        )
       )
-      (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>>|inlined.1
-       (set_local $8
-        (get_local $3)
-       )
-       (set_local $7
+      (block $~lib/internal/arraybuffer/storeUnsafe<Array<i32>,Array<i32>>|inlined.2
+       (set_local $9
         (i32.const 0)
-       )
-       (set_local $4
-        (get_local $5)
        )
        (i32.store offset=8
         (i32.add
-         (get_local $8)
+         (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $9)
           (i32.const 2)
          )
         )
-        (get_local $4)
+        (get_local $5)
        )
       )
      )
@@ -8305,11 +7960,11 @@
      (get_local $2)
      (i32.const 256)
     )
-    (call $~lib/internal/array/insertionSort<Array<i32>>
+    (call $~lib/internal/array/insertionSort<Array<i32>,Array<i32>>
      (get_local $0)
      (get_local $1)
     )
-    (call $~lib/internal/array/weakHeapSort<Array<i32>>
+    (call $~lib/internal/array/weakHeapSort<Array<i32>,Array<i32>>
      (get_local $0)
      (get_local $1)
     )
@@ -8405,6 +8060,8 @@
  )
  (func $~lib/array/Array<Proxy<i32>>#constructor (; 111 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   (block
    (nop)
    (if
@@ -8422,6 +8079,17 @@
      (unreachable)
     )
    )
+   (set_local $2
+    (i32.shl
+     (get_local $1)
+     (i32.const 2)
+    )
+   )
+   (set_local $3
+    (call $~lib/internal/arraybuffer/allocUnsafe
+     (get_local $2)
+    )
+   )
    (i32.store
     (tee_local $0
      (if (result i32)
@@ -8429,34 +8097,37 @@
       (get_local $0)
       (tee_local $0
        (block (result i32)
-        (set_local $2
+        (set_local $4
          (call $~lib/allocator/arena/allocate_memory
           (i32.const 8)
          )
         )
         (i32.store
-         (get_local $2)
+         (get_local $4)
          (i32.const 0)
         )
         (i32.store offset=4
-         (get_local $2)
+         (get_local $4)
          (i32.const 0)
         )
-        (get_local $2)
+        (get_local $4)
        )
       )
      )
     )
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (i32.shl
-      (get_local $1)
-      (i32.const 2)
-     )
-    )
+    (get_local $3)
    )
    (i32.store offset=4
     (get_local $0)
     (get_local $1)
+   )
+   (call $~lib/memory/set_memory
+    (i32.add
+     (get_local $3)
+     (i32.const 8)
+    )
+    (i32.const 0)
+    (get_local $2)
    )
   )
   (get_local $0)
@@ -8525,7 +8196,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 81)
+       (i32.const 86)
        (i32.const 41)
       )
       (unreachable)
@@ -8556,15 +8227,17 @@
     )
    )
   )
-  (i32.store offset=8
-   (i32.add
-    (get_local $3)
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+  (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.0
+   (i32.store offset=8
+    (i32.add
+     (get_local $3)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
     )
+    (get_local $2)
    )
-   (get_local $2)
   )
  )
  (func $std/array/createReverseOrderedElementsArray (; 115 ;) (type $ii) (param $0 i32) (result i32)
@@ -8632,7 +8305,7 @@
    )
   )
  )
- (func $~lib/internal/array/insertionSort<Proxy<i32>> (; 117 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/insertionSort<Proxy<i32>,Proxy<i32>> (; 117 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8641,7 +8314,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -8666,20 +8338,14 @@
      )
      (block
       (block
-       (set_local $6
-        (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.2 (result i32)
-         (set_local $5
-          (get_local $2)
-         )
-         (set_local $6
-          (get_local $3)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.2
+       (set_local $5
+        (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.2 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.2
           (i32.load offset=8
            (i32.add
-            (get_local $5)
+            (get_local $2)
             (i32.shl
-             (get_local $6)
+             (get_local $3)
              (i32.const 2)
             )
            )
@@ -8687,7 +8353,7 @@
          )
         )
        )
-       (set_local $5
+       (set_local $6
         (i32.sub
          (get_local $3)
          (i32.const 1)
@@ -8697,25 +8363,19 @@
         (loop $continue|1
          (if
           (i32.ge_s
-           (get_local $5)
+           (get_local $6)
            (i32.const 0)
           )
           (block
            (block
-            (set_local $8
-             (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.3 (result i32)
-              (set_local $7
-               (get_local $2)
-              )
-              (set_local $8
-               (get_local $5)
-              )
-              (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.3
+            (set_local $7
+             (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.3 (result i32)
+              (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.3
                (i32.load offset=8
                 (i32.add
-                 (get_local $7)
+                 (get_local $2)
                  (i32.shl
-                  (get_local $8)
+                  (get_local $6)
                   (i32.const 2)
                  )
                 )
@@ -8730,46 +8390,40 @@
                 (i32.const 2)
                )
                (call_indirect (type $iii)
-                (get_local $6)
-                (get_local $8)
+                (get_local $5)
+                (get_local $7)
                 (get_local $1)
                )
               )
               (i32.const 0)
              )
-             (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.2
-              (set_local $7
-               (get_local $2)
-              )
-              (set_local $9
+             (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.3
+              (set_local $8
                (i32.add
                 (block (result i32)
-                 (set_local $10
-                  (get_local $5)
+                 (set_local $8
+                  (get_local $6)
                  )
-                 (set_local $5
+                 (set_local $6
                   (i32.sub
-                   (get_local $10)
+                   (get_local $8)
                    (i32.const 1)
                   )
                  )
-                 (get_local $10)
+                 (get_local $8)
                 )
                 (i32.const 1)
                )
               )
-              (set_local $10
-               (get_local $8)
-              )
               (i32.store offset=8
                (i32.add
-                (get_local $7)
+                (get_local $2)
                 (i32.shl
-                 (get_local $9)
+                 (get_local $8)
                  (i32.const 2)
                 )
                )
-               (get_local $10)
+               (get_local $7)
               )
              )
              (br $break|1)
@@ -8780,28 +8434,22 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.3
-        (set_local $8
-         (get_local $2)
-        )
-        (set_local $10
+       (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.4
+        (set_local $9
          (i32.add
-          (get_local $5)
+          (get_local $6)
           (i32.const 1)
          )
         )
-        (set_local $9
-         (get_local $6)
-        )
         (i32.store offset=8
          (i32.add
-          (get_local $8)
+          (get_local $2)
           (i32.shl
-           (get_local $10)
+           (get_local $9)
            (i32.const 2)
           )
          )
-         (get_local $9)
+         (get_local $5)
         )
        )
       )
@@ -8820,7 +8468,7 @@
    (get_local $0)
   )
  )
- (func $~lib/internal/array/weakHeapSort<Proxy<i32>> (; 118 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/weakHeapSort<Proxy<i32>,Proxy<i32>> (; 118 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8834,6 +8482,18 @@
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
+  (local $22 i32)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 i32)
+  (local $26 i32)
   (nop)
   (set_local $2
    (call $~lib/array/Array<Proxy<i32>>#get:length
@@ -8936,20 +8596,14 @@
          (i32.const 1)
         )
        )
-       (set_local $10
-        (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.4 (result i32)
-         (set_local $9
-          (get_local $5)
-         )
-         (set_local $10
-          (get_local $8)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.4
+       (set_local $9
+        (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.4 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.4
           (i32.load offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $10)
+             (get_local $8)
              (i32.const 2)
             )
            )
@@ -8957,20 +8611,14 @@
          )
         )
        )
-       (set_local $11
-        (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.5 (result i32)
-         (set_local $9
-          (get_local $5)
-         )
-         (set_local $11
-          (get_local $6)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.5
+       (set_local $10
+        (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.5 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.5
           (i32.load offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $11)
+             (get_local $6)
              (i32.const 2)
             )
            )
@@ -8985,8 +8633,8 @@
            (i32.const 2)
           )
           (call_indirect (type $iii)
+           (get_local $9)
            (get_local $10)
-           (get_local $11)
            (get_local $1)
           )
          )
@@ -9026,46 +8674,28 @@
            )
           )
          )
-         (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.4
-          (set_local $9
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $6)
-          )
-          (set_local $13
-           (get_local $10)
-          )
+         (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.5
           (i32.store offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $12)
-             (i32.const 2)
-            )
-           )
-           (get_local $13)
-          )
-         )
-         (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.5
-          (set_local $13
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $8)
-          )
-          (set_local $9
-           (get_local $11)
-          )
-          (i32.store offset=8
-           (i32.add
-            (get_local $13)
-            (i32.shl
-             (get_local $12)
+             (get_local $6)
              (i32.const 2)
             )
            )
            (get_local $9)
+          )
+         )
+         (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.6
+          (i32.store offset=8
+           (i32.add
+            (get_local $5)
+            (i32.shl
+             (get_local $8)
+             (i32.const 2)
+            )
+           )
+           (get_local $10)
           )
          )
         )
@@ -9083,7 +8713,7 @@
    )
   )
   (block $break|2
-   (set_local $6
+   (set_local $11
     (i32.sub
      (get_local $2)
      (i32.const 1)
@@ -9092,25 +8722,22 @@
    (loop $continue|2
     (if
      (i32.ge_s
-      (get_local $6)
+      (get_local $11)
       (i32.const 2)
      )
      (block
       (block
-       (set_local $10
-        (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.6 (result i32)
-         (set_local $11
-          (get_local $5)
-         )
-         (set_local $10
+       (set_local $13
+        (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.6 (result i32)
+         (set_local $12
           (i32.const 0)
          )
-         (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.6
+         (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.6
           (i32.load offset=8
            (i32.add
-            (get_local $11)
+            (get_local $5)
             (i32.shl
-             (get_local $10)
+             (get_local $12)
              (i32.const 2)
             )
            )
@@ -9118,27 +8745,18 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.6
-        (set_local $11
-         (get_local $5)
-        )
-        (set_local $8
+       (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.7
+        (set_local $14
          (i32.const 0)
         )
-        (set_local $7
-         (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.7 (result i32)
-          (set_local $9
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $6)
-          )
-          (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.7
+        (set_local $15
+         (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.7 (result i32)
+          (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.7
            (i32.load offset=8
             (i32.add
-             (get_local $9)
+             (get_local $5)
              (i32.shl
-              (get_local $12)
+              (get_local $11)
               (i32.const 2)
              )
             )
@@ -9148,47 +8766,38 @@
         )
         (i32.store offset=8
          (i32.add
-          (get_local $11)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $14)
            (i32.const 2)
           )
          )
-         (get_local $7)
+         (get_local $15)
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.7
-        (set_local $7
-         (get_local $5)
-        )
-        (set_local $8
-         (get_local $6)
-        )
-        (set_local $11
-         (get_local $10)
-        )
+       (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.8
         (i32.store offset=8
          (i32.add
-          (get_local $7)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $11)
            (i32.const 2)
           )
          )
-         (get_local $11)
+         (get_local $13)
         )
        )
-       (set_local $11
+       (set_local $16
         (i32.const 1)
        )
        (block $break|3
         (loop $continue|3
          (if
           (i32.lt_s
-           (tee_local $8
+           (tee_local $17
             (i32.add
              (i32.shl
-              (get_local $11)
+              (get_local $16)
               (i32.const 1)
              )
              (i32.and
@@ -9198,7 +8807,7 @@
                  (get_local $4)
                  (i32.shl
                   (i32.shr_s
-                   (get_local $11)
+                   (get_local $16)
                    (i32.const 5)
                   )
                   (i32.const 2)
@@ -9206,7 +8815,7 @@
                 )
                )
                (i32.and
-                (get_local $11)
+                (get_local $16)
                 (i32.const 31)
                )
               )
@@ -9214,11 +8823,11 @@
              )
             )
            )
-           (get_local $6)
+           (get_local $11)
           )
           (block
-           (set_local $11
-            (get_local $8)
+           (set_local $16
+            (get_local $17)
            )
            (br $continue|3)
           )
@@ -9229,25 +8838,22 @@
         (loop $continue|4
          (if
           (i32.gt_s
-           (get_local $11)
+           (get_local $16)
            (i32.const 0)
           )
           (block
            (block
-            (set_local $10
-             (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.8 (result i32)
-              (set_local $7
-               (get_local $5)
-              )
-              (set_local $12
+            (set_local $13
+             (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.8 (result i32)
+              (set_local $18
                (i32.const 0)
               )
-              (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.8
+              (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.8
                (i32.load offset=8
                 (i32.add
-                 (get_local $7)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $12)
+                  (get_local $18)
                   (i32.const 2)
                  )
                 )
@@ -9255,20 +8861,14 @@
               )
              )
             )
-            (set_local $7
-             (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.9 (result i32)
-              (set_local $12
-               (get_local $5)
-              )
-              (set_local $7
-               (get_local $11)
-              )
-              (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.9
+            (set_local $19
+             (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.9 (result i32)
+              (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.9
                (i32.load offset=8
                 (i32.add
-                 (get_local $12)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $7)
+                  (get_local $16)
                   (i32.const 2)
                  )
                 )
@@ -9283,8 +8883,8 @@
                 (i32.const 2)
                )
                (call_indirect (type $iii)
-                (get_local $10)
-                (get_local $7)
+                (get_local $13)
+                (get_local $19)
                 (get_local $1)
                )
               )
@@ -9296,7 +8896,7 @@
                 (get_local $4)
                 (i32.shl
                  (i32.shr_s
-                  (get_local $11)
+                  (get_local $16)
                   (i32.const 5)
                  )
                  (i32.const 2)
@@ -9308,7 +8908,7 @@
                   (get_local $4)
                   (i32.shl
                    (i32.shr_s
-                    (get_local $11)
+                    (get_local $16)
                     (i32.const 5)
                    )
                    (i32.const 2)
@@ -9318,59 +8918,44 @@
                 (i32.shl
                  (i32.const 1)
                  (i32.and
-                  (get_local $11)
+                  (get_local $16)
                   (i32.const 31)
                  )
                 )
                )
               )
-              (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.8
-               (set_local $12
-                (get_local $5)
-               )
-               (set_local $9
-                (get_local $11)
-               )
-               (set_local $13
-                (get_local $10)
-               )
+              (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.9
                (i32.store offset=8
                 (i32.add
-                 (get_local $12)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $9)
+                  (get_local $16)
                   (i32.const 2)
                  )
                 )
                 (get_local $13)
                )
               )
-              (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.9
-               (set_local $13
-                (get_local $5)
-               )
-               (set_local $9
+              (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.10
+               (set_local $20
                 (i32.const 0)
-               )
-               (set_local $12
-                (get_local $7)
                )
                (i32.store offset=8
                 (i32.add
-                 (get_local $13)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $9)
+                  (get_local $20)
                   (i32.const 2)
                  )
                 )
-                (get_local $12)
+                (get_local $19)
                )
               )
              )
             )
-            (set_local $11
+            (set_local $16
              (i32.shr_s
-              (get_local $11)
+              (get_local $16)
               (i32.const 1)
              )
             )
@@ -9381,9 +8966,9 @@
         )
        )
       )
-      (set_local $6
+      (set_local $11
        (i32.sub
-        (get_local $6)
+        (get_local $11)
         (i32.const 1)
        )
       )
@@ -9395,20 +8980,17 @@
   (call $~lib/allocator/arena/free_memory
    (get_local $4)
   )
-  (set_local $14
-   (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.10 (result i32)
-    (set_local $6
-     (get_local $5)
-    )
-    (set_local $8
+  (set_local $22
+   (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.10 (result i32)
+    (set_local $21
      (i32.const 1)
     )
-    (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.10
+    (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.10
      (i32.load offset=8
       (i32.add
-       (get_local $6)
+       (get_local $5)
        (i32.shl
-        (get_local $8)
+        (get_local $21)
         (i32.const 2)
        )
       )
@@ -9416,27 +8998,21 @@
     )
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.10
-   (set_local $8
-    (get_local $5)
-   )
-   (set_local $6
+  (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.11
+   (set_local $23
     (i32.const 1)
    )
-   (set_local $11
-    (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.11 (result i32)
-     (set_local $10
-      (get_local $5)
-     )
-     (set_local $7
+   (set_local $25
+    (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.11 (result i32)
+     (set_local $24
       (i32.const 0)
      )
-     (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.11
+     (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.11
       (i32.load offset=8
        (i32.add
-        (get_local $10)
+        (get_local $5)
         (i32.shl
-         (get_local $7)
+         (get_local $24)
          (i32.const 2)
         )
        )
@@ -9446,34 +9022,28 @@
    )
    (i32.store offset=8
     (i32.add
-     (get_local $8)
+     (get_local $5)
      (i32.shl
-      (get_local $6)
+      (get_local $23)
       (i32.const 2)
      )
     )
-    (get_local $11)
+    (get_local $25)
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.11
-   (set_local $11
-    (get_local $5)
-   )
-   (set_local $6
+  (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.12
+   (set_local $26
     (i32.const 0)
-   )
-   (set_local $8
-    (get_local $14)
    )
    (i32.store offset=8
     (i32.add
-     (get_local $11)
+     (get_local $5)
      (i32.shl
-      (get_local $6)
+      (get_local $26)
       (i32.const 2)
      )
     )
-    (get_local $8)
+    (get_local $22)
    )
   )
   (return
@@ -9488,6 +9058,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   (set_local $2
    (i32.load offset=4
     (get_local $0)
@@ -9514,19 +9085,16 @@
    )
    (block
     (set_local $5
-     (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.0 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.0 (result i32)
       (set_local $4
-       (get_local $3)
-      )
-      (set_local $5
        (i32.const 1)
       )
-      (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.0
+      (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.0
        (i32.load offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
-          (get_local $5)
+          (get_local $4)
           (i32.const 2)
          )
         )
@@ -9534,18 +9102,15 @@
       )
      )
     )
-    (set_local $6
-     (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.1 (result i32)
-      (set_local $4
-       (get_local $3)
-      )
+    (set_local $7
+     (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.1 (result i32)
       (set_local $6
        (i32.const 0)
       )
-      (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>>|inlined.1
+      (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.1
        (i32.load offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
           (get_local $6)
           (i32.const 2)
@@ -9563,53 +9128,41 @@
        )
        (call_indirect (type $iii)
         (get_local $5)
-        (get_local $6)
+        (get_local $7)
         (get_local $1)
        )
       )
       (i32.const 0)
      )
      (block
-      (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.0
-       (set_local $4
-        (get_local $3)
-       )
-       (set_local $7
+      (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.1
+       (set_local $8
         (i32.const 1)
        )
-       (set_local $8
-        (get_local $6)
-       )
        (i32.store offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $8)
           (i32.const 2)
          )
         )
-        (get_local $8)
+        (get_local $7)
        )
       )
-      (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>>|inlined.1
-       (set_local $8
-        (get_local $3)
-       )
-       (set_local $7
+      (block $~lib/internal/arraybuffer/storeUnsafe<Proxy<i32>,Proxy<i32>>|inlined.2
+       (set_local $9
         (i32.const 0)
-       )
-       (set_local $4
-        (get_local $5)
        )
        (i32.store offset=8
         (i32.add
-         (get_local $8)
+         (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $9)
           (i32.const 2)
          )
         )
-        (get_local $4)
+        (get_local $5)
        )
       )
      )
@@ -9625,11 +9178,11 @@
      (get_local $2)
      (i32.const 256)
     )
-    (call $~lib/internal/array/insertionSort<Proxy<i32>>
+    (call $~lib/internal/array/insertionSort<Proxy<i32>,Proxy<i32>>
      (get_local $0)
      (get_local $1)
     )
-    (call $~lib/internal/array/weakHeapSort<Proxy<i32>>
+    (call $~lib/internal/array/weakHeapSort<Proxy<i32>,Proxy<i32>>
      (get_local $0)
      (get_local $1)
     )
@@ -9654,12 +9207,16 @@
       (i32.const 2)
      )
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.12 (result i32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.12
+      (i32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )
@@ -10037,7 +9594,7 @@
    )
   )
  )
- (func $~lib/internal/array/insertionSort<String> (; 128 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/insertionSort<String,String> (; 128 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10046,7 +9603,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   (set_local $2
    (i32.load
     (get_local $0)
@@ -10071,20 +9627,14 @@
      )
      (block
       (block
-       (set_local $6
-        (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.2 (result i32)
-         (set_local $5
-          (get_local $2)
-         )
-         (set_local $6
-          (get_local $3)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.2
+       (set_local $5
+        (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.2 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.2
           (i32.load offset=8
            (i32.add
-            (get_local $5)
+            (get_local $2)
             (i32.shl
-             (get_local $6)
+             (get_local $3)
              (i32.const 2)
             )
            )
@@ -10092,7 +9642,7 @@
          )
         )
        )
-       (set_local $5
+       (set_local $6
         (i32.sub
          (get_local $3)
          (i32.const 1)
@@ -10102,25 +9652,19 @@
         (loop $continue|1
          (if
           (i32.ge_s
-           (get_local $5)
+           (get_local $6)
            (i32.const 0)
           )
           (block
            (block
-            (set_local $8
-             (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.3 (result i32)
-              (set_local $7
-               (get_local $2)
-              )
-              (set_local $8
-               (get_local $5)
-              )
-              (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.3
+            (set_local $7
+             (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.3 (result i32)
+              (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.3
                (i32.load offset=8
                 (i32.add
-                 (get_local $7)
+                 (get_local $2)
                  (i32.shl
-                  (get_local $8)
+                  (get_local $6)
                   (i32.const 2)
                  )
                 )
@@ -10135,46 +9679,40 @@
                 (i32.const 2)
                )
                (call_indirect (type $iii)
-                (get_local $6)
-                (get_local $8)
+                (get_local $5)
+                (get_local $7)
                 (get_local $1)
                )
               )
               (i32.const 0)
              )
-             (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.2
-              (set_local $7
-               (get_local $2)
-              )
-              (set_local $9
+             (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.2
+              (set_local $8
                (i32.add
                 (block (result i32)
-                 (set_local $10
-                  (get_local $5)
+                 (set_local $8
+                  (get_local $6)
                  )
-                 (set_local $5
+                 (set_local $6
                   (i32.sub
-                   (get_local $10)
+                   (get_local $8)
                    (i32.const 1)
                   )
                  )
-                 (get_local $10)
+                 (get_local $8)
                 )
                 (i32.const 1)
                )
               )
-              (set_local $10
-               (get_local $8)
-              )
               (i32.store offset=8
                (i32.add
-                (get_local $7)
+                (get_local $2)
                 (i32.shl
-                 (get_local $9)
+                 (get_local $8)
                  (i32.const 2)
                 )
                )
-               (get_local $10)
+               (get_local $7)
               )
              )
              (br $break|1)
@@ -10185,28 +9723,22 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.3
-        (set_local $8
-         (get_local $2)
-        )
-        (set_local $10
+       (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.3
+        (set_local $9
          (i32.add
-          (get_local $5)
+          (get_local $6)
           (i32.const 1)
          )
         )
-        (set_local $9
-         (get_local $6)
-        )
         (i32.store offset=8
          (i32.add
-          (get_local $8)
+          (get_local $2)
           (i32.shl
-           (get_local $10)
+           (get_local $9)
            (i32.const 2)
           )
          )
-         (get_local $9)
+         (get_local $5)
         )
        )
       )
@@ -10225,7 +9757,7 @@
    (get_local $0)
   )
  )
- (func $~lib/internal/array/weakHeapSort<String> (; 129 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/array/weakHeapSort<String,String> (; 129 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10239,6 +9771,18 @@
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
+  (local $22 i32)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 i32)
+  (local $26 i32)
   (nop)
   (set_local $2
    (call $~lib/array/Array<String>#get:length
@@ -10341,20 +9885,14 @@
          (i32.const 1)
         )
        )
-       (set_local $10
-        (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.4 (result i32)
-         (set_local $9
-          (get_local $5)
-         )
-         (set_local $10
-          (get_local $8)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.4
+       (set_local $9
+        (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.4 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.4
           (i32.load offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $10)
+             (get_local $8)
              (i32.const 2)
             )
            )
@@ -10362,20 +9900,14 @@
          )
         )
        )
-       (set_local $11
-        (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.5 (result i32)
-         (set_local $9
-          (get_local $5)
-         )
-         (set_local $11
-          (get_local $6)
-         )
-         (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.5
+       (set_local $10
+        (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.5 (result i32)
+         (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.5
           (i32.load offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $11)
+             (get_local $6)
              (i32.const 2)
             )
            )
@@ -10390,8 +9922,8 @@
            (i32.const 2)
           )
           (call_indirect (type $iii)
+           (get_local $9)
            (get_local $10)
-           (get_local $11)
            (get_local $1)
           )
          )
@@ -10431,46 +9963,28 @@
            )
           )
          )
-         (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.4
-          (set_local $9
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $6)
-          )
-          (set_local $13
-           (get_local $10)
-          )
+         (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.4
           (i32.store offset=8
            (i32.add
-            (get_local $9)
+            (get_local $5)
             (i32.shl
-             (get_local $12)
-             (i32.const 2)
-            )
-           )
-           (get_local $13)
-          )
-         )
-         (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.5
-          (set_local $13
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $8)
-          )
-          (set_local $9
-           (get_local $11)
-          )
-          (i32.store offset=8
-           (i32.add
-            (get_local $13)
-            (i32.shl
-             (get_local $12)
+             (get_local $6)
              (i32.const 2)
             )
            )
            (get_local $9)
+          )
+         )
+         (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.5
+          (i32.store offset=8
+           (i32.add
+            (get_local $5)
+            (i32.shl
+             (get_local $8)
+             (i32.const 2)
+            )
+           )
+           (get_local $10)
           )
          )
         )
@@ -10488,7 +10002,7 @@
    )
   )
   (block $break|2
-   (set_local $6
+   (set_local $11
     (i32.sub
      (get_local $2)
      (i32.const 1)
@@ -10497,25 +10011,22 @@
    (loop $continue|2
     (if
      (i32.ge_s
-      (get_local $6)
+      (get_local $11)
       (i32.const 2)
      )
      (block
       (block
-       (set_local $10
-        (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.6 (result i32)
-         (set_local $11
-          (get_local $5)
-         )
-         (set_local $10
+       (set_local $13
+        (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.6 (result i32)
+         (set_local $12
           (i32.const 0)
          )
-         (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.6
+         (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.6
           (i32.load offset=8
            (i32.add
-            (get_local $11)
+            (get_local $5)
             (i32.shl
-             (get_local $10)
+             (get_local $12)
              (i32.const 2)
             )
            )
@@ -10523,27 +10034,18 @@
          )
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.6
-        (set_local $11
-         (get_local $5)
-        )
-        (set_local $8
+       (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.6
+        (set_local $14
          (i32.const 0)
         )
-        (set_local $7
-         (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.7 (result i32)
-          (set_local $9
-           (get_local $5)
-          )
-          (set_local $12
-           (get_local $6)
-          )
-          (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.7
+        (set_local $15
+         (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.7 (result i32)
+          (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.7
            (i32.load offset=8
             (i32.add
-             (get_local $9)
+             (get_local $5)
              (i32.shl
-              (get_local $12)
+              (get_local $11)
               (i32.const 2)
              )
             )
@@ -10553,47 +10055,38 @@
         )
         (i32.store offset=8
          (i32.add
-          (get_local $11)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $14)
            (i32.const 2)
           )
          )
-         (get_local $7)
+         (get_local $15)
         )
        )
-       (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.7
-        (set_local $7
-         (get_local $5)
-        )
-        (set_local $8
-         (get_local $6)
-        )
-        (set_local $11
-         (get_local $10)
-        )
+       (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.7
         (i32.store offset=8
          (i32.add
-          (get_local $7)
+          (get_local $5)
           (i32.shl
-           (get_local $8)
+           (get_local $11)
            (i32.const 2)
           )
          )
-         (get_local $11)
+         (get_local $13)
         )
        )
-       (set_local $11
+       (set_local $16
         (i32.const 1)
        )
        (block $break|3
         (loop $continue|3
          (if
           (i32.lt_s
-           (tee_local $8
+           (tee_local $17
             (i32.add
              (i32.shl
-              (get_local $11)
+              (get_local $16)
               (i32.const 1)
              )
              (i32.and
@@ -10603,7 +10096,7 @@
                  (get_local $4)
                  (i32.shl
                   (i32.shr_s
-                   (get_local $11)
+                   (get_local $16)
                    (i32.const 5)
                   )
                   (i32.const 2)
@@ -10611,7 +10104,7 @@
                 )
                )
                (i32.and
-                (get_local $11)
+                (get_local $16)
                 (i32.const 31)
                )
               )
@@ -10619,11 +10112,11 @@
              )
             )
            )
-           (get_local $6)
+           (get_local $11)
           )
           (block
-           (set_local $11
-            (get_local $8)
+           (set_local $16
+            (get_local $17)
            )
            (br $continue|3)
           )
@@ -10634,25 +10127,22 @@
         (loop $continue|4
          (if
           (i32.gt_s
-           (get_local $11)
+           (get_local $16)
            (i32.const 0)
           )
           (block
            (block
-            (set_local $10
-             (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.8 (result i32)
-              (set_local $7
-               (get_local $5)
-              )
-              (set_local $12
+            (set_local $13
+             (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.8 (result i32)
+              (set_local $18
                (i32.const 0)
               )
-              (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.8
+              (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.8
                (i32.load offset=8
                 (i32.add
-                 (get_local $7)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $12)
+                  (get_local $18)
                   (i32.const 2)
                  )
                 )
@@ -10660,20 +10150,14 @@
               )
              )
             )
-            (set_local $7
-             (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.9 (result i32)
-              (set_local $12
-               (get_local $5)
-              )
-              (set_local $7
-               (get_local $11)
-              )
-              (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.9
+            (set_local $19
+             (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.9 (result i32)
+              (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.9
                (i32.load offset=8
                 (i32.add
-                 (get_local $12)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $7)
+                  (get_local $16)
                   (i32.const 2)
                  )
                 )
@@ -10688,8 +10172,8 @@
                 (i32.const 2)
                )
                (call_indirect (type $iii)
-                (get_local $10)
-                (get_local $7)
+                (get_local $13)
+                (get_local $19)
                 (get_local $1)
                )
               )
@@ -10701,7 +10185,7 @@
                 (get_local $4)
                 (i32.shl
                  (i32.shr_s
-                  (get_local $11)
+                  (get_local $16)
                   (i32.const 5)
                  )
                  (i32.const 2)
@@ -10713,7 +10197,7 @@
                   (get_local $4)
                   (i32.shl
                    (i32.shr_s
-                    (get_local $11)
+                    (get_local $16)
                     (i32.const 5)
                    )
                    (i32.const 2)
@@ -10723,59 +10207,44 @@
                 (i32.shl
                  (i32.const 1)
                  (i32.and
-                  (get_local $11)
+                  (get_local $16)
                   (i32.const 31)
                  )
                 )
                )
               )
-              (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.8
-               (set_local $12
-                (get_local $5)
-               )
-               (set_local $9
-                (get_local $11)
-               )
-               (set_local $13
-                (get_local $10)
-               )
+              (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.8
                (i32.store offset=8
                 (i32.add
-                 (get_local $12)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $9)
+                  (get_local $16)
                   (i32.const 2)
                  )
                 )
                 (get_local $13)
                )
               )
-              (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.9
-               (set_local $13
-                (get_local $5)
-               )
-               (set_local $9
+              (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.9
+               (set_local $20
                 (i32.const 0)
-               )
-               (set_local $12
-                (get_local $7)
                )
                (i32.store offset=8
                 (i32.add
-                 (get_local $13)
+                 (get_local $5)
                  (i32.shl
-                  (get_local $9)
+                  (get_local $20)
                   (i32.const 2)
                  )
                 )
-                (get_local $12)
+                (get_local $19)
                )
               )
              )
             )
-            (set_local $11
+            (set_local $16
              (i32.shr_s
-              (get_local $11)
+              (get_local $16)
               (i32.const 1)
              )
             )
@@ -10786,9 +10255,9 @@
         )
        )
       )
-      (set_local $6
+      (set_local $11
        (i32.sub
-        (get_local $6)
+        (get_local $11)
         (i32.const 1)
        )
       )
@@ -10800,20 +10269,17 @@
   (call $~lib/allocator/arena/free_memory
    (get_local $4)
   )
-  (set_local $14
-   (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.10 (result i32)
-    (set_local $6
-     (get_local $5)
-    )
-    (set_local $8
+  (set_local $22
+   (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.10 (result i32)
+    (set_local $21
      (i32.const 1)
     )
-    (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.10
+    (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.10
      (i32.load offset=8
       (i32.add
-       (get_local $6)
+       (get_local $5)
        (i32.shl
-        (get_local $8)
+        (get_local $21)
         (i32.const 2)
        )
       )
@@ -10821,27 +10287,21 @@
     )
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.10
-   (set_local $8
-    (get_local $5)
-   )
-   (set_local $6
+  (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.10
+   (set_local $23
     (i32.const 1)
    )
-   (set_local $11
-    (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.11 (result i32)
-     (set_local $10
-      (get_local $5)
-     )
-     (set_local $7
+   (set_local $25
+    (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.11 (result i32)
+     (set_local $24
       (i32.const 0)
      )
-     (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.11
+     (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.11
       (i32.load offset=8
        (i32.add
-        (get_local $10)
+        (get_local $5)
         (i32.shl
-         (get_local $7)
+         (get_local $24)
          (i32.const 2)
         )
        )
@@ -10851,34 +10311,28 @@
    )
    (i32.store offset=8
     (i32.add
-     (get_local $8)
+     (get_local $5)
      (i32.shl
-      (get_local $6)
+      (get_local $23)
       (i32.const 2)
      )
     )
-    (get_local $11)
+    (get_local $25)
    )
   )
-  (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.11
-   (set_local $11
-    (get_local $5)
-   )
-   (set_local $6
+  (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.11
+   (set_local $26
     (i32.const 0)
-   )
-   (set_local $8
-    (get_local $14)
    )
    (i32.store offset=8
     (i32.add
-     (get_local $11)
+     (get_local $5)
      (i32.shl
-      (get_local $6)
+      (get_local $26)
       (i32.const 2)
      )
     )
-    (get_local $8)
+    (get_local $22)
    )
   )
   (return
@@ -10893,6 +10347,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   (set_local $2
    (i32.load offset=4
     (get_local $0)
@@ -10919,19 +10374,16 @@
    )
    (block
     (set_local $5
-     (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.0 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0 (result i32)
       (set_local $4
-       (get_local $3)
-      )
-      (set_local $5
        (i32.const 1)
       )
-      (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.0
+      (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0
        (i32.load offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
-          (get_local $5)
+          (get_local $4)
           (i32.const 2)
          )
         )
@@ -10939,18 +10391,15 @@
       )
      )
     )
-    (set_local $6
-     (block $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.1 (result i32)
-      (set_local $4
-       (get_local $3)
-      )
+    (set_local $7
+     (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.1 (result i32)
       (set_local $6
        (i32.const 0)
       )
-      (br $~lib/internal/arraybuffer/loadUnsafe<String>|inlined.1
+      (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.1
        (i32.load offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
           (get_local $6)
           (i32.const 2)
@@ -10968,53 +10417,41 @@
        )
        (call_indirect (type $iii)
         (get_local $5)
-        (get_local $6)
+        (get_local $7)
         (get_local $1)
        )
       )
       (i32.const 0)
      )
      (block
-      (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.0
-       (set_local $4
-        (get_local $3)
-       )
-       (set_local $7
+      (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.0
+       (set_local $8
         (i32.const 1)
        )
-       (set_local $8
-        (get_local $6)
-       )
        (i32.store offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $8)
           (i32.const 2)
          )
         )
-        (get_local $8)
+        (get_local $7)
        )
       )
-      (block $~lib/internal/arraybuffer/storeUnsafe<String>|inlined.1
-       (set_local $8
-        (get_local $3)
-       )
-       (set_local $7
+      (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.1
+       (set_local $9
         (i32.const 0)
-       )
-       (set_local $4
-        (get_local $5)
        )
        (i32.store offset=8
         (i32.add
-         (get_local $8)
+         (get_local $3)
          (i32.shl
-          (get_local $7)
+          (get_local $9)
           (i32.const 2)
          )
         )
-        (get_local $4)
+        (get_local $5)
        )
       )
      )
@@ -11030,11 +10467,11 @@
      (get_local $2)
      (i32.const 256)
     )
-    (call $~lib/internal/array/insertionSort<String>
+    (call $~lib/internal/array/insertionSort<String,String>
      (get_local $0)
      (get_local $1)
     )
-    (call $~lib/internal/array/weakHeapSort<String>
+    (call $~lib/internal/array/weakHeapSort<String,String>
      (get_local $0)
      (get_local $1)
     )
@@ -11059,12 +10496,16 @@
       (i32.const 2)
      )
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
+    (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.12 (result i32)
+     (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.12
+      (i32.load offset=8
+       (i32.add
+        (get_local $2)
+        (i32.shl
+         (get_local $1)
+         (i32.const 2)
+        )
+       )
       )
      )
     )
@@ -11332,6 +10773,8 @@
  )
  (func $~lib/array/Array<String>#constructor (; 138 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   (block
    (nop)
    (if
@@ -11349,6 +10792,17 @@
      (unreachable)
     )
    )
+   (set_local $2
+    (i32.shl
+     (get_local $1)
+     (i32.const 2)
+    )
+   )
+   (set_local $3
+    (call $~lib/internal/arraybuffer/allocUnsafe
+     (get_local $2)
+    )
+   )
    (i32.store
     (tee_local $0
      (if (result i32)
@@ -11356,34 +10810,37 @@
       (get_local $0)
       (tee_local $0
        (block (result i32)
-        (set_local $2
+        (set_local $4
          (call $~lib/allocator/arena/allocate_memory
           (i32.const 8)
          )
         )
         (i32.store
-         (get_local $2)
+         (get_local $4)
          (i32.const 0)
         )
         (i32.store offset=4
-         (get_local $2)
+         (get_local $4)
          (i32.const 0)
         )
-        (get_local $2)
+        (get_local $4)
        )
       )
      )
     )
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (i32.shl
-      (get_local $1)
-      (i32.const 2)
-     )
-    )
+    (get_local $3)
    )
    (i32.store offset=4
     (get_local $0)
     (get_local $1)
+   )
+   (call $~lib/memory/set_memory
+    (i32.add
+     (get_local $3)
+     (i32.const 8)
+    )
+    (i32.const 0)
+    (get_local $2)
    )
   )
   (get_local $0)
@@ -11699,7 +11156,7 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 81)
+       (i32.const 86)
        (i32.const 41)
       )
       (unreachable)
@@ -11730,15 +11187,17 @@
     )
    )
   )
-  (i32.store offset=8
-   (i32.add
-    (get_local $3)
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+  (block $~lib/internal/arraybuffer/storeUnsafe<String,String>|inlined.12
+   (i32.store offset=8
+    (i32.add
+     (get_local $3)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
     )
+    (get_local $2)
    )
-   (get_local $2)
   )
  )
  (func $std/array/createRandomStringArray (; 145 ;) (type $ii) (param $0 i32) (result i32)

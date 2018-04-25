@@ -35,25 +35,30 @@ function test(nbody, steps) {
 }
 
 var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 20000000;
+var time;
 
-console.log("Warming up ...");
-test(nbodyWASM, 100000);
-test(nbodyASMJS, 100000);
-test(nbodyJS, 100000);
+console.log("Performing " + steps + " steps (WASM) ...");
+time = test(nbodyWASM, steps);
+console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
-setTimeout(() => {
-  var time;
+console.log("Performing " + steps + " steps (ASMJS) ...");
+time = test(nbodyASMJS, steps);
+console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
-  console.log("Performing " + steps + " steps (WASM) ...");
-  time = test(nbodyWASM, steps);
-  console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+console.log("Performing " + steps + " steps (JS) ...");
+time = test(nbodyJS, steps);
+console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
-  console.log("Performing " + steps + " steps (ASMJS) ...");
-  time = test(nbodyASMJS, steps);
-  console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+console.log("\nWARMED UP:\n");
 
-  console.log("Performing " + steps + " steps (JS) ...");
-  time = test(nbodyJS, steps);
-  console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+console.log("Performing " + steps + " steps (WASM) ...");
+time = test(nbodyWASM, steps);
+console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
-}, 1000);
+console.log("Performing " + steps + " steps (ASMJS) ...");
+time = test(nbodyASMJS, steps);
+console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+
+console.log("Performing " + steps + " steps (JS) ...");
+time = test(nbodyJS, steps);
+console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");

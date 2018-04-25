@@ -2,7 +2,7 @@ import {
   TypedArray
 } from "./internal/typedarray";
 
-export class Int8Array extends TypedArray<i8> {
+export class Int8Array extends TypedArray<i8,i32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int8Array {
@@ -10,7 +10,7 @@ export class Int8Array extends TypedArray<i8> {
   }
 }
 
-export class Uint8Array extends TypedArray<u8> {
+export class Uint8Array extends TypedArray<u8,u32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint8Array {
@@ -18,12 +18,17 @@ export class Uint8Array extends TypedArray<u8> {
   }
 }
 
-export class Uint8ClampedArray extends TypedArray<u8> {
+export class Uint8ClampedArray extends TypedArray<u8,u32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   @operator("[]=")
   protected __set(index: i32, value: i32): void {
-    super.__set(index, <u8>max(0, min(0xFF, value)));
+    super.__set(index, max(min(value, 255), 0));
+  }
+
+  @operator("{}=")
+  protected __unchecked_set(index: i32, value: i32): void {
+    super.__unchecked_set(index, max(min(value, 255), 0));
   }
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint8ClampedArray {
@@ -31,7 +36,7 @@ export class Uint8ClampedArray extends TypedArray<u8> {
   }
 }
 
-export class Int16Array extends TypedArray<i16> {
+export class Int16Array extends TypedArray<i16,i32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int16Array {
@@ -39,7 +44,7 @@ export class Int16Array extends TypedArray<i16> {
   }
 }
 
-export class Uint16Array extends TypedArray<u16> {
+export class Uint16Array extends TypedArray<u16,u32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint16Array {
@@ -47,7 +52,7 @@ export class Uint16Array extends TypedArray<u16> {
   }
 }
 
-export class Int32Array extends TypedArray<i32> {
+export class Int32Array extends TypedArray<i32,i32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int32Array {
@@ -55,7 +60,7 @@ export class Int32Array extends TypedArray<i32> {
   }
 }
 
-export class Uint32Array extends TypedArray<u32> {
+export class Uint32Array extends TypedArray<u32,u32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint32Array {
@@ -63,7 +68,7 @@ export class Uint32Array extends TypedArray<u32> {
   }
 }
 
-export class Int64Array extends TypedArray<i64> {
+export class Int64Array extends TypedArray<i64,i64> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int64Array {
@@ -71,7 +76,7 @@ export class Int64Array extends TypedArray<i64> {
   }
 }
 
-export class Uint64Array extends TypedArray<u64> {
+export class Uint64Array extends TypedArray<u64,u64> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint64Array {
@@ -79,7 +84,7 @@ export class Uint64Array extends TypedArray<u64> {
   }
 }
 
-export class Float32Array extends TypedArray<f32> {
+export class Float32Array extends TypedArray<f32,f32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Float32Array {
@@ -87,7 +92,7 @@ export class Float32Array extends TypedArray<f32> {
   }
 }
 
-export class Float64Array extends TypedArray<f64> {
+export class Float64Array extends TypedArray<f64,f64> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Float64Array {

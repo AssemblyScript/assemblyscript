@@ -6,12 +6,8 @@ import {
   storeUnsafeWithOffset
 } from "./arraybuffer";
 
-import {
-  ArrayBufferView
-} from "../arraybuffer";
-
 /** Typed array base class. Not a global object. */
-export abstract class TypedArray<T> implements ArrayBufferView<T> {
+export abstract class TypedArray<T,V> {
 
   readonly buffer: ArrayBuffer;
   readonly byteOffset: i32;
@@ -37,21 +33,31 @@ export abstract class TypedArray<T> implements ArrayBufferView<T> {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
     if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");
-    return loadUnsafeWithOffset<T>(this.buffer, index, byteOffset);
+    return loadUnsafeWithOffset<T,T>(this.buffer, index, byteOffset);
+  }
+
+  @operator("{}")
+  protected __unchecked_get(index: i32): T {
+    return loadUnsafeWithOffset<T,T>(this.buffer, index, this.byteOffset);
   }
 
   @operator("[]=")
-  protected __set(index: i32, value: T): void {
+  protected __set(index: i32, value: V): void {
     var byteOffset = this.byteOffset;
     var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
     if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");
-    storeUnsafeWithOffset<T>(this.buffer, index, value, byteOffset);
+    storeUnsafeWithOffset<T,V>(this.buffer, index, value, byteOffset);
+  }
+
+  @operator("{}=")
+  protected __unchecked_set(index: i32, value: V): void {
+    storeUnsafeWithOffset<T,V>(this.buffer, index, value, this.byteOffset);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 
   @inline
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): TypedArray<T> {
+  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): TypedArray<T,V> {
     var length = this.length;
     if (begin < 0) begin = max(length + begin, 0);
     else begin = min(begin, length);
