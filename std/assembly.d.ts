@@ -55,6 +55,22 @@ declare namespace i32 {
   export const MIN_VALUE: i32;
   /** Largest representable value. */
   export const MAX_VALUE: i32;
+  /** Loads an 8-bit signed integer from memory and returns it as a 32-bit integer. */
+  export function load8_s(offset: usize, constantOffset?: usize): i32;
+  /** Loads an 8-bit unsigned integer from memory and returns it as a 32-bit integer. */
+  export function load8_u(offset: usize, constantOffset?: usize): i32;
+  /** Loads a 16-bit signed integer from memory and returns it as a 32-bit integer. */
+  export function load16_s(offset: usize, constantOffset?: usize): i32;
+  /** Loads a 16-bit unsigned integer from memory and returns it as a 32-bit integer. */
+  export function load16_u(offset: usize, constantOffset?: usize): i32;
+  /** Loads a 32-bit integer from memory. */
+  export function load(offset: usize, constantOffset?: usize): i32;
+  /** Stores a 32-bit integer to memory as an 8-bit integer. */
+  export function store8(offset: usize, value: i32, constantOffset?: usize): void;
+  /** Stores a 32-bit integer to memory as a 16-bit integer. */
+  export function store16(offset: usize, value: i32, constantOffset?: usize): void;
+  /** Stores a 32-bit integer to memory. */
+  export function store(offset: usize, value: i32, constantOffset?: usize): void;
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
 declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -63,15 +79,31 @@ declare namespace i64 {
   export const MIN_VALUE: i64;
   /** Largest representable value. */
   export const MAX_VALUE: i64;
+  /** Loads an 8-bit signed integer from memory and returns it as a 64-bit signed integer. */
+  export function load8_s(offset: usize, constantOffset?: usize): i64;
+  /** Loads an 8-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
+  export function load8_u(offset: usize, constantOffset?: usize): u64;
+  /** Loads a 16-bit signed integer from memory and returns it as a 64-bit signed integer. */
+  export function load16_s(offset: usize, constantOffset?: usize): i64;
+  /** Loads a 16-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
+  export function load16_u(offset: usize, constantOffset?: usize): u64;
+  /** Loads a 32-bit signed integer from memory and returns it as a 64-bit signed integer. */
+  export function load32_s(offset: usize, constantOffset?: usize): i64;
+  /** Loads a 32-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
+  export function load32_u(offset: usize, constantOffset?: usize): u64;
+  /** Loads a 64-bit unsigned integer from memory. */
+  export function load(offset: usize, constantOffset?: usize): i64;
+  /** Stores a 64-bit integer to memory as an 8-bit integer. */
+  export function store8(offset: usize, value: i64, constantOffset?: usize): void;
+  /** Stores a 64-bit integer to memory as a 16-bit integer. */
+  export function store16(offset: usize, value: i64, constantOffset?: usize): void;
+  /** Stores a 64-bit integer to memory as a 32-bit integer. */
+  export function store32(offset: usize, value: i64, constantOffset?: usize): void;
+  /** Stores a 64-bit integer to memory. */
+  export function store(offset: usize, value: i64, constantOffset?: usize): void;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
-declare function isize(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): isize;
-declare namespace isize {
-  /** Smallest representable value. */
-  export const MIN_VALUE: isize;
-  /** Largest representable value. */
-  export const MAX_VALUE: isize;
-}
+declare var isize: i32 | i64;
 /** Converts any other numeric value to an 8-bit unsigned integer. */
 declare function u8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
 declare namespace u8 {
@@ -105,13 +137,7 @@ declare namespace u64 {
   export const MAX_VALUE: u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
-declare function usize(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): isize;
-declare namespace usize {
-  /** Smallest representable value. */
-  export const MIN_VALUE: usize;
-  /** Largesst representable value. */
-  export const MAX_VALUE: usize;
-}
+declare var usize: u32 | u64;
 /** Converts any other numeric value to a 1-bit unsigned integer. */
 declare function bool(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): bool;
 declare namespace bool {
@@ -139,6 +165,10 @@ declare namespace f32 {
   export function mod(x: f32, y: f32): f32;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
   export function rem(x: f32, y: f32): f32;
+  /** Loads a 32-bit float from memory. */
+  export function load(offset: usize, constantOffset?: usize): f32;
+  /** Stores a 32-bit float to memory. */
+  export function store(offset: usize, value: f32, constantOffset?: usize): void;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
@@ -155,6 +185,10 @@ declare namespace f64 {
   export const MAX_SAFE_INTEGER: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
+  /** Loads a 64-bit float from memory. */
+  export function load(offset: usize, constantOffset?: usize): f64;
+  /** Stores a 64-bit float to memory. */
+  export function store(offset: usize, value: f64, constantOffset?: usize): void;
 }
 
 // Built-ins
@@ -241,6 +275,8 @@ declare function isFinite<T = f32 | f64>(value: T): bool;
 declare function isInteger<T>(value?: any): value is number;
 /** Tests if the specified expression is of a float type. Compiles to a constant. */
 declare function isFloat<T>(value?: any): value is number;
+/** Tests if the specified expression can represent negative numbers. Compiles to a constant. */
+declare function isSigned<T>(value?: any): value is number;
 /** Tests if the specified expression is of a reference type. Compiles to a constant. */
 declare function isReference<T>(value?: any): value is object | string;
 /** Tests if the specified expression can be used ass a string. Compiles to a constant. */

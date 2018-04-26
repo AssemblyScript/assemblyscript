@@ -196,6 +196,33 @@ store<i64>(8, <i64>1);
 
 store<i64>(8, <i32>1); // must extend
 
+// explicit load and store
+
+i32.load8_s(8);
+i32.load8_u(8);
+i32.load16_s(8);
+i32.load16_u(8);
+i32.load(8);
+i64.load8_s(8);
+i64.load8_s(8);
+i64.load16_s(8);
+i64.load16_u(8);
+i64.load32_s(8);
+i64.load32_u(8);
+i64.load(8);
+f32.load(8);
+f64.load(8);
+
+i32.store8(8, 1);
+i32.store16(8, 1);
+i32.store(8, 1);
+i64.store8(8, 1);
+i64.store16(8, 1);
+i64.store32(8, 1);
+i64.store(8, 1);
+f32.store(8, 1);
+f64.store(8, 1);
+
 // reinterpretation
 
 reinterpret<i32>(1.25);

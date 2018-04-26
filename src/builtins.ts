@@ -87,6 +87,14 @@ export function compileCall(
         ? module.createI32(1)
         : module.createI32(0);
     }
+    case "isSigned": { // isSigned<T!>() / isSigned<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      return type.is(TypeFlags.SIGNED)
+        ? module.createI32(1)
+        : module.createI32(0);
+    }
     case "isReference": { // isReference<T!>() / isReference<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
@@ -1668,6 +1676,29 @@ export function compileCall(
         }
       }
     }
+    case "i32.load8_s": return compileLoadInstruction(compiler, Type.i8, operands, Type.i32, reportNode);
+    case "i32.load8_u": return compileLoadInstruction(compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.load16_s": return compileLoadInstruction(compiler, Type.i16, operands, Type.i32, reportNode);
+    case "i32.load16_u": return compileLoadInstruction(compiler, Type.u16, operands, Type.u32, reportNode);
+    case "i32.load": return compileLoadInstruction(compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.load8_s": return compileLoadInstruction(compiler, Type.i8, operands, Type.i64, reportNode);
+    case "i64.load8_u": return compileLoadInstruction(compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.load16_s": return compileLoadInstruction(compiler, Type.i16, operands, Type.i64, reportNode);
+    case "i64.load16_u": return compileLoadInstruction(compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.load32_s": return compileLoadInstruction(compiler, Type.i32, operands, Type.i64, reportNode);
+    case "i64.load32_u": return compileLoadInstruction(compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.load": return compileLoadInstruction(compiler, Type.i64, operands, Type.i64, reportNode);
+    case "f32.load": return compileLoadInstruction(compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.load": return compileLoadInstruction(compiler, Type.f64, operands, Type.f64, reportNode);
+    case "i32.store8": return compileStoreInstruction(compiler, Type.i8, operands, Type.i32, reportNode);
+    case "i32.store16": return compileStoreInstruction(compiler, Type.i16, operands, Type.i32, reportNode);
+    case "i32.store": return compileStoreInstruction(compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.store8": return compileStoreInstruction(compiler, Type.i8, operands, Type.i64, reportNode);
+    case "i64.store16": return compileStoreInstruction(compiler, Type.i16, operands, Type.i64, reportNode);
+    case "i64.store32": return compileStoreInstruction(compiler, Type.i32, operands, Type.i64, reportNode);
+    case "i64.store": return compileStoreInstruction(compiler, Type.i64, operands, Type.i64, reportNode);
+    case "f32.store": return compileStoreInstruction(compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.store": return compileStoreInstruction(compiler, Type.f64, operands, Type.f64, reportNode);
 
     // control flow
 
@@ -2486,4 +2517,30 @@ export function compileAbort(
     ),
     module.createUnreachable()
   ]);
+}
+
+/** Explicitly compiles a specific load instruction. */
+export function compileLoadInstruction(
+  compiler: Compiler,
+  loadType: Type,
+  loadOperands: Expression[],
+  valueType: Type,
+  reportNode: Node
+): ExpressionRef { // transform to a `<valueType>load<loadType>(offset)` call
+  var loadPrototype = assert(compiler.program.elementsLookup.get("load"));
+  assert(loadPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+  return compileCall(compiler, <FunctionPrototype>loadPrototype, [ loadType ], loadOperands, valueType, reportNode);
+}
+
+/** Explicitly compiles a specific store instruction. */
+export function compileStoreInstruction(
+  compiler: Compiler,
+  storeType: Type,
+  storeOperands: Expression[],
+  valueType: Type,
+  reportNode: Node
+): ExpressionRef { // transform to a `store<storeType>(offset, <valueType>value)` call
+  var storePrototype = assert(compiler.program.elementsLookup.get("store"));
+  assert(storePrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+  return compileCall(compiler, <FunctionPrototype>storePrototype, [ storeType ], storeOperands, valueType, reportNode);
 }

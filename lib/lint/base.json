@@ -79,7 +79,6 @@
     "no-require-imports": {
       "severity": "error"
     },
-    "no-shadowed-variable": {},
     "no-sparse-arrays": {},
     "no-string-literal": {
       "severity": "error"

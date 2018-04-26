@@ -803,12 +803,9 @@ function printStats(stats, output) {
 
 exports.printStats = printStats;
 
-var allocBuffer = null;
-if (typeof global !== "undefined" && global.Buffer) {
-  allocBuffer = function (len) { return Buffer.allocUnsafe(len) };
-} else {
-  allocBuffer = function (len) { return new Uint8Array(len) };
-}
+var allocBuffer = typeof global !== "undefined" && global.Buffer
+  ? global.Buffer.allocUnsafe || function(len) { return new global.Buffer(len); }
+  : function(len) { return new Uint8Array(len) };
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
 function createMemoryStream(fn) {

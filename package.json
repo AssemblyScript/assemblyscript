@@ -19,18 +19,18 @@
     "ts-node": "^5.0.1"
   },
   "devDependencies": {
-    "@types/node": "^9.6.4",
+    "@types/node": "^9.6.6",
     "browser-process-hrtime": "^0.1.2",
-    "chalk": "^2.3.2",
+    "chalk": "^2.4.1",
     "diff": "^3.5.0",
-    "source-map-support": "^0.5.4",
+    "source-map-support": "^0.5.5",
     "ts-loader": "^4.2.0",
     "tslint": "^5.9.1",
     "typedoc": "^0.11.1",
     "typedoc-plugin-external-module-name": "^1.1.1",
-    "typescript": "^2.8.1",
-    "webpack": "^4.5.0",
-    "webpack-cli": "^2.0.14"
+    "typescript": "^2.8.3",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15"
   },
   "main": "index.js",
   "types": "index.d.ts",

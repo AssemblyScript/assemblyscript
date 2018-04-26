@@ -2,6 +2,8 @@ export declare function isInteger<T>(value?: T): bool;
 
 export declare function isFloat<T>(value?: T): bool;
 
+export declare function isSigned<T>(value?: T): bool;
+
 export declare function isReference<T>(value?: T): bool;
 
 export declare function isString<T>(value?: T): bool;
@@ -52,7 +54,7 @@ export declare function trunc<T>(value: T): T;
 
 export declare function load<T>(offset: usize, constantOffset?: usize): T;
 
-export declare function store<T>(offset: usize, value: void, constantOffset?: usize): T;
+export declare function store<T>(offset: usize, value: void, constantOffset?: usize): void;
 
 export declare function sizeof<T>(): usize; // | u32 / u64
 
@@ -101,12 +103,31 @@ export declare function i32(value: void): i32;
 export namespace i32 {
   export const MIN_VALUE: i32 = -2147483648;
   export const MAX_VALUE: i32 =  2147483647;
+  export declare function load8_s(offset: usize, constantOffset?: usize): i32;
+  export declare function load8_u(offset: usize, constantOffset?: usize): i32;
+  export declare function load16_s(offset: usize, constantOffset?: usize): i32;
+  export declare function load16_u(offset: usize, constantOffset?: usize): i32;
+  export declare function load(offset: usize, constantOffset?: usize): i32;
+  export declare function store8(offset: usize, value: i32, constantOffset?: usize): void;
+  export declare function store16(offset: usize, value: i32, constantOffset?: usize): void;
+  export declare function store(offset: usize, value: i32, constantOffset?: usize): void;
 }
 
 export declare function i64(value: void): i64;
 export namespace i64 {
   export const MIN_VALUE: i64 = -9223372036854775808;
   export const MAX_VALUE: i64 =  9223372036854775807;
+  export declare function load8_s(offset: usize, constantOffset?: usize): i64;
+  export declare function load8_u(offset: usize, constantOffset?: usize): u64;
+  export declare function load16_s(offset: usize, constantOffset?: usize): i64;
+  export declare function load16_u(offset: usize, constantOffset?: usize): u64;
+  export declare function load32_s(offset: usize, constantOffset?: usize): i64;
+  export declare function load32_u(offset: usize, constantOffset?: usize): u64;
+  export declare function load(offset: usize, constantOffset?: usize): i64;
+  export declare function store8(offset: usize, value: i64, constantOffset?: usize): void;
+  export declare function store16(offset: usize, value: i64, constantOffset?: usize): void;
+  export declare function store32(offset: usize, value: i64, constantOffset?: usize): void;
+  export declare function store(offset: usize, value: i64, constantOffset?: usize): void;
 }
 
 export declare function isize(value: void): isize;
@@ -165,6 +186,8 @@ export namespace f32 {
   export const MIN_SAFE_INTEGER: f32 = -16777215;
   export const MAX_SAFE_INTEGER: f32 =  16777215;
   export const EPSILON = reinterpret<f32>(0x34000000); // 0x1p-23f
+  export declare function load(offset: usize, constantOffset?: usize): f32;
+  export declare function store(offset: usize, value: f32, constantOffset?: usize): void;
 }
 
 export declare function f64(value: void): f64;
@@ -175,6 +198,8 @@ export namespace f64 {
   export const MIN_SAFE_INTEGER: f64 = -9007199254740991;
   export const MAX_SAFE_INTEGER: f64 =  9007199254740991;
   export const EPSILON = reinterpret<f64>(0x3CB0000000000000); // 0x1p-52
+  export declare function load(offset: usize, constantOffset?: usize): f64;
+  export declare function store(offset: usize, value: f64, constantOffset?: usize): void;
 }
 
 export declare const HEAP_BASE: usize;

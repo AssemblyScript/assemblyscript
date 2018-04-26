@@ -478,6 +478,7 @@ export class Program extends DiagnosticEmitter {
     var parentNode = declaration.parent;
     if (
       (element.hasDecorator(DecoratorFlags.GLOBAL)) ||
+      (declaration.range.source.is(CommonFlags.BUILTIN)) ||
       (
         declaration.range.source.isLibrary &&
         element.is(CommonFlags.EXPORT) &&
@@ -489,17 +490,15 @@ export class Program extends DiagnosticEmitter {
           )
         )
     ) {
-      let simpleName = declaration.name.text;
-      if (this.elementsLookup.has(simpleName)) {
+      let globalName = declaration.programLevelInternalName;
+      if (this.elementsLookup.has(globalName)) {
         this.error(
           DiagnosticCode.Duplicate_identifier_0,
           declaration.name.range, element.internalName
         );
       } else {
-        this.elementsLookup.set(simpleName, element);
-        if (element.is(CommonFlags.BUILTIN)) {
-          element.internalName = simpleName;
-        }
+        this.elementsLookup.set(globalName, element);
+        if (element.is(CommonFlags.BUILTIN)) element.internalName = globalName;
       }
     }
   }
@@ -1281,11 +1280,12 @@ export class Program extends DiagnosticEmitter {
           queuedExports, queuedImports
         );
       }
-    } else if (statement.namespaceName) {
+    } else if (statement.namespaceName) { // import * as simpleName from "file"
+      let simpleName = statement.namespaceName.text;
       let internalName = (
         statement.range.source.internalPath +
         PATH_DELIMITER +
-        statement.namespaceName.text
+        simpleName
       );
       if (this.elementsLookup.has(internalName)) {
         this.error(
@@ -1327,7 +1327,7 @@ export class Program extends DiagnosticEmitter {
     }
 
     // otherwise queue it
-    var indexPart = PATH_DELIMITER + "index";
+    const indexPart = PATH_DELIMITER + "index";
     var queuedImport = new QueuedImport();
     queuedImport.internalName = internalName;
     if (internalPath.endsWith(indexPart)) {
