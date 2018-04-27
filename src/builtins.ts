@@ -1676,29 +1676,6 @@ export function compileCall(
         }
       }
     }
-    case "i32.load8_s": return compileLoadInstruction(compiler, Type.i8, operands, Type.i32, reportNode);
-    case "i32.load8_u": return compileLoadInstruction(compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.load16_s": return compileLoadInstruction(compiler, Type.i16, operands, Type.i32, reportNode);
-    case "i32.load16_u": return compileLoadInstruction(compiler, Type.u16, operands, Type.u32, reportNode);
-    case "i32.load": return compileLoadInstruction(compiler, Type.i32, operands, Type.i32, reportNode);
-    case "i64.load8_s": return compileLoadInstruction(compiler, Type.i8, operands, Type.i64, reportNode);
-    case "i64.load8_u": return compileLoadInstruction(compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.load16_s": return compileLoadInstruction(compiler, Type.i16, operands, Type.i64, reportNode);
-    case "i64.load16_u": return compileLoadInstruction(compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.load32_s": return compileLoadInstruction(compiler, Type.i32, operands, Type.i64, reportNode);
-    case "i64.load32_u": return compileLoadInstruction(compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.load": return compileLoadInstruction(compiler, Type.i64, operands, Type.i64, reportNode);
-    case "f32.load": return compileLoadInstruction(compiler, Type.f32, operands, Type.f32, reportNode);
-    case "f64.load": return compileLoadInstruction(compiler, Type.f64, operands, Type.f64, reportNode);
-    case "i32.store8": return compileStoreInstruction(compiler, Type.i8, operands, Type.i32, reportNode);
-    case "i32.store16": return compileStoreInstruction(compiler, Type.i16, operands, Type.i32, reportNode);
-    case "i32.store": return compileStoreInstruction(compiler, Type.i32, operands, Type.i32, reportNode);
-    case "i64.store8": return compileStoreInstruction(compiler, Type.i8, operands, Type.i64, reportNode);
-    case "i64.store16": return compileStoreInstruction(compiler, Type.i16, operands, Type.i64, reportNode);
-    case "i64.store32": return compileStoreInstruction(compiler, Type.i32, operands, Type.i64, reportNode);
-    case "i64.store": return compileStoreInstruction(compiler, Type.i64, operands, Type.i64, reportNode);
-    case "f32.store": return compileStoreInstruction(compiler, Type.f32, operands, Type.f32, reportNode);
-    case "f64.store": return compileStoreInstruction(compiler, Type.f64, operands, Type.f64, reportNode);
 
     // control flow
 
@@ -2346,6 +2323,16 @@ export function compileCall(
       return compiler.compileExpression(operands[0], Type.f64, ConversionKind.EXPLICIT);
     }
   }
+  var expr = deferASMCall(compiler, prototype, operands, contextualType, reportNode);
+  if (expr) {
+    if (typeArguments && typeArguments.length) {
+      compiler.error(
+        DiagnosticCode.Type_0_is_not_generic,
+        reportNode.range, prototype.internalName
+      );
+    }
+    return expr;
+  }
   compiler.error(
     DiagnosticCode.Operation_not_supported,
     reportNode.range
@@ -2353,6 +2340,111 @@ export function compileCall(
   return module.createUnreachable();
 }
 
+/** Defers an inline-assembler-like call to a built-in function. */
+function deferASMCall(
+  compiler: Compiler,
+  prototype: FunctionPrototype,
+  operands: Expression[],
+  contextualType: Type,
+  reportNode: Node
+): ExpressionRef {
+  switch (prototype.internalName) {
+
+    // TODO: Operators can't be just deferred (don't have a corresponding generic built-in)
+    //   add, sub, mul, div_s, div_u, rem_s, rem_u
+    //   and, or, xor, shl, shr_u, shr_s
+    //   eq, eqz, ne, lt_s, lt_u, le_s, le_u, gt_s, gt_u, ge_s, ge_u
+
+    case "i32.clz": return deferASM("clz", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.clz": return deferASM("clz", compiler, Type.i64, operands, Type.i64, reportNode);
+
+    case "i32.ctz": return deferASM("ctz", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.ctz": return deferASM("ctz", compiler, Type.i64, operands, Type.i64, reportNode);
+
+    case "i32.popcnt": return deferASM("popcnt", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.popcnt": return deferASM("popcnt", compiler, Type.i64, operands, Type.i64, reportNode);
+
+    case "i32.rotl": return deferASM("rotl", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.rotl": return deferASM("rotl", compiler, Type.i64, operands, Type.i64, reportNode);
+
+    case "i32.rotr": return deferASM("rotr", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.rotr": return deferASM("rotr", compiler, Type.i64, operands, Type.i64, reportNode);
+
+    case "f32.abs": return deferASM("abs", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.abs": return deferASM("abs", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "f32.max": return deferASM("max", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.max": return deferASM("max", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "f32.min": return deferASM("min", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.min": return deferASM("min", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "f32.ceil": return deferASM("ceil", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.ceil": return deferASM("ceil", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "f32.floor": return deferASM("floor", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.floor": return deferASM("floor", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "f32.copysign": return deferASM("copysign", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.copysign": return deferASM("copysign", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "f32.nearest": return deferASM("nearest", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.nearest": return deferASM("nearest", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "i32.reinterpret_f32": return deferASM("reinterpret", compiler, Type.i32, operands, Type.f32, reportNode);
+    case "i64.reinterpret_f64": return deferASM("reinterpret", compiler, Type.i64, operands, Type.f64, reportNode);
+    case "f32.reinterpret_i32": return deferASM("reinterpret", compiler, Type.f32, operands, Type.i32, reportNode);
+    case "f64.reinterpret_i64": return deferASM("reinterpret", compiler, Type.f64, operands, Type.i64, reportNode);
+
+    case "f32.sqrt": return deferASM("sqrt", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.sqrt": return deferASM("sqrt", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "f32.trunc": return deferASM("trunc", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.trunc": return deferASM("trunc", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "i32.load8_s": return deferASM("load", compiler, Type.i8, operands, Type.i32, reportNode);
+    case "i32.load8_u": return deferASM("load", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.load16_s": return deferASM("load", compiler, Type.i16, operands, Type.i32, reportNode);
+    case "i32.load16_u": return deferASM("load", compiler, Type.u16, operands, Type.u32, reportNode);
+    case "i32.load": return deferASM("load", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.load8_s": return deferASM("load", compiler, Type.i8, operands, Type.i64, reportNode);
+    case "i64.load8_u": return deferASM("load", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.load16_s": return deferASM("load", compiler, Type.i16, operands, Type.i64, reportNode);
+    case "i64.load16_u": return deferASM("load", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.load32_s": return deferASM("load", compiler, Type.i32, operands, Type.i64, reportNode);
+    case "i64.load32_u": return deferASM("load", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.load": return deferASM("load", compiler, Type.i64, operands, Type.i64, reportNode);
+    case "f32.load": return deferASM("load", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.load": return deferASM("load", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "i32.store8": return deferASM("store", compiler, Type.i8, operands, Type.i32, reportNode);
+    case "i32.store16": return deferASM("store", compiler, Type.i16, operands, Type.i32, reportNode);
+    case "i32.store": return deferASM("store", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.store8": return deferASM("store", compiler, Type.i8, operands, Type.i64, reportNode);
+    case "i64.store16": return deferASM("store", compiler, Type.i16, operands, Type.i64, reportNode);
+    case "i64.store32": return deferASM("store", compiler, Type.i32, operands, Type.i64, reportNode);
+    case "i64.store": return deferASM("store", compiler, Type.i64, operands, Type.i64, reportNode);
+    case "f32.store": return deferASM("store", compiler, Type.f32, operands, Type.f32, reportNode);
+    case "f64.store": return deferASM("store", compiler, Type.f64, operands, Type.f64, reportNode);
+  }
+  return 0;
+}
+
+/** A helper for deferring inline-assembler-like calls to built-in functions. */
+function deferASM(
+  name: string,
+  compiler: Compiler,
+  typeArgument: Type,
+  operands: Expression[],
+  valueType: Type,
+  reportNode: Node
+): ExpressionRef {
+  var prototype = assert(compiler.program.elementsLookup.get(name));
+  assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+  return compileCall(compiler, <FunctionPrototype>prototype, [ typeArgument ], operands, valueType, reportNode);
+}
+
+/** Evaluates the constant type of a type argument *or* expression. */
 function evaluateConstantType(
   compiler: Compiler,
   typeArguments: Type[] | null,
@@ -2401,6 +2493,7 @@ function evaluateConstantType(
   return null;
 }
 
+/** Evaluates a `constantOffset` argument.*/
 function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32 {
   var expr: ExpressionRef;
   var value: i32;
@@ -2517,30 +2610,4 @@ export function compileAbort(
     ),
     module.createUnreachable()
   ]);
-}
-
-/** Explicitly compiles a specific load instruction. */
-export function compileLoadInstruction(
-  compiler: Compiler,
-  loadType: Type,
-  loadOperands: Expression[],
-  valueType: Type,
-  reportNode: Node
-): ExpressionRef { // transform to a `<valueType>load<loadType>(offset)` call
-  var loadPrototype = assert(compiler.program.elementsLookup.get("load"));
-  assert(loadPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-  return compileCall(compiler, <FunctionPrototype>loadPrototype, [ loadType ], loadOperands, valueType, reportNode);
-}
-
-/** Explicitly compiles a specific store instruction. */
-export function compileStoreInstruction(
-  compiler: Compiler,
-  storeType: Type,
-  storeOperands: Expression[],
-  valueType: Type,
-  reportNode: Node
-): ExpressionRef { // transform to a `store<storeType>(offset, <valueType>value)` call
-  var storePrototype = assert(compiler.program.elementsLookup.get("store"));
-  assert(storePrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-  return compileCall(compiler, <FunctionPrototype>storePrototype, [ storeType ], storeOperands, valueType, reportNode);
 }

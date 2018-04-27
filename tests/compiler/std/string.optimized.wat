@@ -589,36 +589,37 @@
      )
      (f64.const -1)
     )
-    (if (result f64)
-     (i32.eq
-      (get_local $2)
-      (i32.const 43)
-     )
-     (block (result f64)
-      (if
-       (i32.eqz
-        (tee_local $4
-         (i32.sub
-          (get_local $4)
-          (i32.const 1)
+    (block (result f64)
+     (if
+      (i32.eq
+       (get_local $2)
+       (i32.const 43)
+      )
+      (block
+       (if
+        (i32.eqz
+         (tee_local $4
+          (i32.sub
+           (get_local $4)
+           (i32.const 1)
+          )
+         )
+        )
+        (return
+         (f64.const nan:0x8000000000000)
+        )
+       )
+       (set_local $2
+        (i32.load16_u offset=4
+         (tee_local $3
+          (i32.add
+           (get_local $3)
+           (i32.const 2)
+          )
          )
         )
        )
-       (return
-        (f64.const nan:0x8000000000000)
-       )
       )
-      (set_local $2
-       (i32.load16_u offset=4
-        (tee_local $3
-         (i32.add
-          (get_local $3)
-          (i32.const 2)
-         )
-        )
-       )
-      )
-      (f64.const 1)
      )
      (f64.const 1)
     )
@@ -983,36 +984,37 @@
      )
      (f64.const -1)
     )
-    (if (result f64)
-     (i32.eq
-      (get_local $2)
-      (i32.const 43)
-     )
-     (block (result f64)
-      (if
-       (i32.eqz
-        (tee_local $3
-         (i32.sub
-          (get_local $3)
-          (i32.const 1)
+    (block (result f64)
+     (if
+      (i32.eq
+       (get_local $2)
+       (i32.const 43)
+      )
+      (block
+       (if
+        (i32.eqz
+         (tee_local $3
+          (i32.sub
+           (get_local $3)
+           (i32.const 1)
+          )
+         )
+        )
+        (return
+         (f64.const nan:0x8000000000000)
+        )
+       )
+       (drop
+        (i32.load16_u offset=4
+         (tee_local $1
+          (i32.add
+           (get_local $1)
+           (i32.const 2)
+          )
          )
         )
        )
-       (return
-        (f64.const nan:0x8000000000000)
-       )
       )
-      (drop
-       (i32.load16_u offset=4
-        (tee_local $1
-         (i32.add
-          (get_local $1)
-          (i32.const 2)
-         )
-        )
-       )
-      )
-      (f64.const 1)
      )
      (f64.const 1)
     )

@@ -196,33 +196,6 @@ store<i64>(8, <i64>1);
 
 store<i64>(8, <i32>1); // must extend
 
-// explicit load and store
-
-i32.load8_s(8);
-i32.load8_u(8);
-i32.load16_s(8);
-i32.load16_u(8);
-i32.load(8);
-i64.load8_s(8);
-i64.load8_s(8);
-i64.load16_s(8);
-i64.load16_u(8);
-i64.load32_s(8);
-i64.load32_u(8);
-i64.load(8);
-f32.load(8);
-f64.load(8);
-
-i32.store8(8, 1);
-i32.store16(8, 1);
-i32.store(8, 1);
-i64.store8(8, 1);
-i64.store16(8, 1);
-i64.store32(8, 1);
-i64.store(8, 1);
-f32.store(8, 1);
-f64.store(8, 1);
-
 // reinterpretation
 
 reinterpret<i32>(1.25);
@@ -335,6 +308,80 @@ assert(f64.MAX_VALUE == 1.7976931348623157e+308);
 assert(f64.MIN_SAFE_INTEGER == -9007199254740991);
 assert(f64.MAX_SAFE_INTEGER == 9007199254740991);
 assert(f64.EPSILON == 2.2204460492503131e-16);
+
+// inline-assembler
+
+f32.abs(1.0);
+f64.abs(1.0);
+
+f32.ceil(1.0);
+f64.ceil(1.0);
+
+i32.clz(1);
+i64.clz(1);
+
+f32.copysign(1.0, 2.0);
+f64.copysign(1.0, 2.0);
+
+i32.ctz(1);
+i64.ctz(1);
+
+f32.floor(1.0);
+f64.floor(1.0);
+
+f32.nearest(1.0);
+f64.nearest(1.0);
+
+i32.popcnt(1);
+i64.popcnt(1);
+
+i32.load8_s(8);
+i32.load8_u(8);
+i32.load16_s(8);
+i32.load16_u(8);
+i32.load(8);
+i64.load8_s(8);
+i64.load8_u(8);
+i64.load16_s(8);
+i64.load16_u(8);
+i64.load32_s(8);
+i64.load32_u(8);
+i64.load(8);
+f32.load(8);
+f64.load(8);
+
+f32.max(1.0, 2.0);
+f64.max(1.0, 2.0);
+
+f32.min(1.0, 2.0);
+f64.min(1.0, 2.0);
+
+i32.reinterpret_f32(1.0);
+i64.reinterpret_f64(1.0);
+f32.reinterpret_i32(1);
+f64.reinterpret_i64(1);
+
+i32.rotl(1, 2);
+i64.rotl(1, 2);
+
+i32.rotr(1, 2);
+i64.rotr(1, 2);
+
+f32.sqrt(1.0);
+f64.sqrt(1.0);
+
+i32.store8(8, 1);
+i32.store16(8, 1);
+i32.store(8, 1);
+i64.store8(8, 1);
+i64.store16(8, 1);
+i64.store32(8, 1);
+i64.store(8, 1);
+f32.store(8, 1.0);
+f64.store(8, 1.0);
+
+f32.trunc(1.0);
+f64.trunc(1.0);
 
 // should be importable
 import { isNaN as isItNaN } from "builtins";

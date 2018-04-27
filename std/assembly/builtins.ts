@@ -103,6 +103,12 @@ export declare function i32(value: void): i32;
 export namespace i32 {
   export const MIN_VALUE: i32 = -2147483648;
   export const MAX_VALUE: i32 =  2147483647;
+  export declare function clz(value: i32): i32;
+  export declare function ctz(value: i32): i32;
+  export declare function popcnt(value: i32): i32;
+  export declare function rotl(value: i32, shift: i32): i32;
+  export declare function rotr(value: i32, shift: i32): i32;
+  export declare function reinterpret_f32(value: f32): i32;
   export declare function load8_s(offset: usize, constantOffset?: usize): i32;
   export declare function load8_u(offset: usize, constantOffset?: usize): i32;
   export declare function load16_s(offset: usize, constantOffset?: usize): i32;
@@ -117,6 +123,8 @@ export declare function i64(value: void): i64;
 export namespace i64 {
   export const MIN_VALUE: i64 = -9223372036854775808;
   export const MAX_VALUE: i64 =  9223372036854775807;
+  export declare function clz(value: i64): i64;
+  export declare function ctz(value: i64): i64;
   export declare function load8_s(offset: usize, constantOffset?: usize): i64;
   export declare function load8_u(offset: usize, constantOffset?: usize): u64;
   export declare function load16_s(offset: usize, constantOffset?: usize): i64;
@@ -124,6 +132,10 @@ export namespace i64 {
   export declare function load32_s(offset: usize, constantOffset?: usize): i64;
   export declare function load32_u(offset: usize, constantOffset?: usize): u64;
   export declare function load(offset: usize, constantOffset?: usize): i64;
+  export declare function popcnt(value: i64): i64;
+  export declare function rotl(value: i64, shift: i64): i64;
+  export declare function rotr(value: i64, shift: i64): i64;
+  export declare function reinterpret_f64(value: f64): i64;
   export declare function store8(offset: usize, value: i64, constantOffset?: usize): void;
   export declare function store16(offset: usize, value: i64, constantOffset?: usize): void;
   export declare function store32(offset: usize, value: i64, constantOffset?: usize): void;
@@ -186,8 +198,18 @@ export namespace f32 {
   export const MIN_SAFE_INTEGER: f32 = -16777215;
   export const MAX_SAFE_INTEGER: f32 =  16777215;
   export const EPSILON = reinterpret<f32>(0x34000000); // 0x1p-23f
+  export declare function abs(value: f32): f32;
+  export declare function ceil(value: f32): f32;
+  export declare function copysign(x: f32, y: f32): f32;
+  export declare function floor(value: f32): f32;
   export declare function load(offset: usize, constantOffset?: usize): f32;
+  export declare function max(left: f32, right: f32): f32;
+  export declare function min(left: f32, right: f32): f32;
+  export declare function nearest(value: f32): f32;
+  export declare function reinterpret_i32(value: i32): f32;
+  export declare function sqrt(value: f32): f32;
   export declare function store(offset: usize, value: f32, constantOffset?: usize): void;
+  export declare function trunc(value: f32): f32;
 }
 
 export declare function f64(value: void): f64;
@@ -198,8 +220,18 @@ export namespace f64 {
   export const MIN_SAFE_INTEGER: f64 = -9007199254740991;
   export const MAX_SAFE_INTEGER: f64 =  9007199254740991;
   export const EPSILON = reinterpret<f64>(0x3CB0000000000000); // 0x1p-52
+  export declare function abs(value: f64): f64;
+  export declare function ceil(value: f64): f64;
+  export declare function copysign(x: f64, y: f64): f64;
+  export declare function floor(value: f64): f64;
   export declare function load(offset: usize, constantOffset?: usize): f64;
+  export declare function max(left: f64, right: f64): f64;
+  export declare function min(left: f64, right: f64): f64;
+  export declare function nearest(value: f64): f64;
+  export declare function reinterpret_i64(value: i64): f64;
+  export declare function sqrt(value: f64): f64;
   export declare function store(offset: usize, value: f64, constantOffset?: usize): void;
+  export declare function trunc(value: f64): f64;
 }
 
 export declare const HEAP_BASE: usize;
