@@ -183,6 +183,8 @@ declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
 
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
+/** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
+declare function unchecked<T>(value: T): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */

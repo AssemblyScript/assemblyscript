@@ -174,6 +174,10 @@ globalScope["changetype"] = function changetype(value) {
   return value;
 };
 
+globalScope["unchecked"] = function unchecked(value) {
+  return value;
+};
+
 globalScope["parseI32"] = function parseI32(str, radix) {
   return parseInt(str, undefined) | 0;
 };
