@@ -886,7 +886,7 @@ export class Compiler extends DiagnosticEmitter {
               stmt = module.createBlock(null, [
                 stmt,
                 module.createTeeLocal(0,
-                  makeConditionalAllocate(this, <Class>parent, declaration.name)
+                  this.makeConditionalAllocate(<Class>parent, declaration.name)
                 )
               ], nativeSizeType);
             }
@@ -1421,9 +1421,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
     }
-    if (this.options.sourceMap) {
-      addDebugLocation(expr, statement.range, module, this.currentFunction);
-    }
+    if (this.options.sourceMap) this.addDebugLocation(expr, statement.range);
     return expr;
   }
 
@@ -1529,10 +1527,9 @@ export class Compiler extends DiagnosticEmitter {
     flow.continueLabel = previousContinueLabel;
 
     var module = this.module;
-    var condExpr = makeIsTrueish(
+    var condExpr = this.makeIsTrueish(
       this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
-      this.currentType,
-      module
+      this.currentType
     );
 
     // No need to eliminate the condition in generic contexts as the statement is executed anyway.
@@ -1628,10 +1625,9 @@ export class Compiler extends DiagnosticEmitter {
     var ifFalse = statement.ifFalse;
 
     // The condition doesn't initiate a branch yet
-    var condExpr = makeIsTrueish(
+    var condExpr = this.makeIsTrueish(
       this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
-      this.currentType,
-      module
+      this.currentType
     );
 
     if (
@@ -1652,10 +1648,9 @@ export class Compiler extends DiagnosticEmitter {
 
       // Otherwise recompile to the original and let the optimizer decide
       } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
-        condExpr = makeIsTrueish(
+        condExpr = this.makeIsTrueish(
           this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
-          this.currentType,
-          module
+          this.currentType
         );
       }
     }
@@ -1995,10 +1990,9 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
 
     // The condition does not yet initialize a branch
-    var condExpr = makeIsTrueish(
+    var condExpr = this.makeIsTrueish(
       this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
-      this.currentType,
-      module
+      this.currentType
     );
 
     if (
@@ -2015,10 +2009,9 @@ export class Compiler extends DiagnosticEmitter {
 
       // Otherwise recompile to the original and let the optimizer decide
       } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
-        condExpr = makeIsTrueish(
+        condExpr = this.makeIsTrueish(
           this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE),
-          this.currentType,
-          module
+          this.currentType
         );
       }
     }
@@ -2246,9 +2239,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = contextualType;
     }
 
-    if (this.options.sourceMap) {
-      addDebugLocation(expr, expression.range, this.module, this.currentFunction);
-    }
+    if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
     return expr;
   }
 
@@ -2359,14 +2350,14 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.createUnary(UnaryOp.TruncF32ToI64, expr);
             } else {
               expr = module.createUnary(UnaryOp.TruncF32ToI32, expr);
-              if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
+              if (toType.is(TypeFlags.SHORT)) expr = this.makeSmallIntegerWrap(expr, toType);
             }
           } else {
             if (toType.is(TypeFlags.LONG)) {
               expr = module.createUnary(UnaryOp.TruncF32ToU64, expr);
             } else {
               expr = module.createUnary(UnaryOp.TruncF32ToU32, expr);
-              if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
+              if (toType.is(TypeFlags.SHORT)) expr = this.makeSmallIntegerWrap(expr, toType);
             }
           }
 
@@ -2377,14 +2368,14 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.createUnary(UnaryOp.TruncF64ToI64, expr);
             } else {
               expr = module.createUnary(UnaryOp.TruncF64ToI32, expr);
-              if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
+              if (toType.is(TypeFlags.SHORT)) expr = this.makeSmallIntegerWrap(expr, toType);
             }
           } else {
             if (toType.is(TypeFlags.LONG)) {
               expr = module.createUnary(UnaryOp.TruncF64ToU64, expr);
             } else {
               expr = module.createUnary(UnaryOp.TruncF64ToU32, expr);
-              if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
+              if (toType.is(TypeFlags.SHORT)) expr = this.makeSmallIntegerWrap(expr, toType);
             }
           }
         }
@@ -2442,7 +2433,7 @@ export class Compiler extends DiagnosticEmitter {
         // i64 to i32
         if (!toType.is(TypeFlags.LONG)) {
           expr = module.createUnary(UnaryOp.WrapI64, expr); // discards upper bits
-          if (toType.is(TypeFlags.SHORT)) expr = makeSmallIntegerWrap(expr, toType, module);
+          if (toType.is(TypeFlags.SHORT)) expr = this.makeSmallIntegerWrap(expr, toType);
         }
 
       // i32 to i64
@@ -2460,7 +2451,7 @@ export class Compiler extends DiagnosticEmitter {
           )
         )
       ) {
-        expr = makeSmallIntegerWrap(expr, toType, module);
+        expr = this.makeSmallIntegerWrap(expr, toType);
       }
 
       // otherwise (smaller) i32/u32 to (same size) i32/u32
@@ -4123,7 +4114,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         possiblyOverflows = this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER);
-        condExpr = makeIsTrueish(leftExpr, this.currentType, module);
+        condExpr = this.makeIsTrueish(leftExpr, this.currentType);
 
         // simplify when cloning left without side effects was successful
         if (expr) {
@@ -4169,7 +4160,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         possiblyOverflows = this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER); // if right did
-        condExpr = makeIsTrueish(leftExpr, this.currentType, module);
+        condExpr = this.makeIsTrueish(leftExpr, this.currentType);
 
         // simplify when cloning left without side effects was successful
         if (expr) {
@@ -4205,7 +4196,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (possiblyOverflows && wrapSmallIntegers) {
       assert(this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER)); // must be a small int
-      expr = makeSmallIntegerWrap(expr, this.currentType, module);
+      expr = this.makeSmallIntegerWrap(expr, this.currentType);
     }
     return compound
       ? this.compileAssignmentWithValue(left, expr, contextualType != Type.void)
@@ -5425,7 +5416,7 @@ export class Compiler extends DiagnosticEmitter {
               // must be conditional because `this` could have been provided by a derived class
               this.currentType = thisType;
               return module.createTeeLocal(0,
-                makeConditionalAllocate(this, <Class>parent, expression)
+                this.makeConditionalAllocate(<Class>parent, expression)
               );
             }
           }
@@ -5965,7 +5956,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise simply allocate a new instance and initialize its fields
     } else {
-      expr = makeAllocate(this, classInstance, expression);
+      expr = this.makeAllocate(classInstance, expression);
     }
 
     this.currentType = classInstance.type;
@@ -6092,10 +6083,9 @@ export class Compiler extends DiagnosticEmitter {
     var ifElse = expression.ifElse;
     var currentFunction = this.currentFunction;
 
-    var condExpr = makeIsTrueish(
+    var condExpr = this.makeIsTrueish(
       this.compileExpression(expression.condition, Type.u32, ConversionKind.NONE),
-      this.currentType,
-      this.module
+      this.currentType
     );
 
     if (
@@ -6114,10 +6104,9 @@ export class Compiler extends DiagnosticEmitter {
 
       // Otherwise recompile to the original and let the optimizer decide
       } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
-        condExpr = makeIsTrueish(
+        condExpr = this.makeIsTrueish(
           this.compileExpression(expression.condition, Type.u32, ConversionKind.NONE),
-          this.currentType,
-          this.module
+          this.currentType
         );
       }
     }
@@ -6347,7 +6336,7 @@ export class Compiler extends DiagnosticEmitter {
 
     if (possiblyOverflows) {
       assert(currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER));
-      setValue = makeSmallIntegerWrap(setValue, currentType, module);
+      setValue = this.makeSmallIntegerWrap(setValue, currentType);
     }
 
     setValue = this.compileAssignmentWithValue(expression.operand, setValue, false);
@@ -6373,15 +6362,13 @@ export class Compiler extends DiagnosticEmitter {
     wrapSmallIntegers: bool = true
   ): ExpressionRef {
     var module = this.module;
-    var currentType = this.currentType;
-
     var possiblyOverflows = false;
     var compound = false;
     var expr: ExpressionRef;
 
     switch (expression.operator) {
       case Token.PLUS: {
-        if (currentType.is(TypeFlags.REFERENCE)) {
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -6396,12 +6383,11 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.NONE,
           false // wrapped below
         );
-        currentType = this.currentType;
-        possiblyOverflows = currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER); // if operand already did
+        possiblyOverflows = this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER); // if operand already did
         break;
       }
       case Token.MINUS: {
-        if (currentType.is(TypeFlags.REFERENCE)) {
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -6414,11 +6400,8 @@ export class Compiler extends DiagnosticEmitter {
         )) {
           // implicitly negate integer and float literals. also enables proper checking of literal ranges.
           expr = this.compileLiteralExpression(<LiteralExpression>expression.operand, contextualType, true);
-          if (this.options.sourceMap) {
-            // compileExpression normally does this
-            addDebugLocation(expr, expression.range, module, this.currentFunction);
-          }
-          currentType = this.currentType;
+          // compileExpression normally does this:
+          if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
         } else {
           expr = this.compileExpression(
             expression.operand,
@@ -6428,8 +6411,7 @@ export class Compiler extends DiagnosticEmitter {
             ConversionKind.NONE,
             false // wrapped below
           );
-          currentType = this.currentType;
-          switch (currentType.kind) {
+          switch (this.currentType.kind) {
             case TypeKind.I8:
             case TypeKind.I16:
             case TypeKind.U8:
@@ -6440,7 +6422,7 @@ export class Compiler extends DiagnosticEmitter {
               break;
             }
             case TypeKind.USIZE: {
-              if (currentType.is(TypeFlags.REFERENCE)) {
+              if (this.currentType.is(TypeFlags.REFERENCE)) {
                 this.error(
                   DiagnosticCode.Operation_not_supported,
                   expression.range
@@ -6454,7 +6436,7 @@ export class Compiler extends DiagnosticEmitter {
                 this.options.isWasm64
                   ? BinaryOp.SubI64
                   : BinaryOp.SubI32,
-                currentType.toNativeZero(module),
+                this.currentType.toNativeZero(module),
                 expr
               );
               break;
@@ -6477,7 +6459,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.PLUS_PLUS: {
-        if (currentType.is(TypeFlags.REFERENCE)) {
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -6493,8 +6475,7 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.NONE,
           false // wrapped below
         );
-        currentType = this.currentType;
-        switch (currentType.kind) {
+        switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
@@ -6505,7 +6486,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (currentType.is(TypeFlags.REFERENCE)) {
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
                 expression.range
@@ -6520,7 +6501,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.AddI64
                 : BinaryOp.AddI32,
               expr,
-              currentType.toNativeOne(module)
+              this.currentType.toNativeOne(module)
             );
             break;
           }
@@ -6541,7 +6522,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-        if (currentType.is(TypeFlags.REFERENCE)) {
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -6557,8 +6538,7 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.NONE,
           false // wrapped below
         );
-        currentType = this.currentType;
-        switch (currentType.kind) {
+        switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
@@ -6569,7 +6549,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (currentType.is(TypeFlags.REFERENCE)) {
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
                 expression.range
@@ -6584,7 +6564,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
               expr,
-              currentType.toNativeOne(module)
+              this.currentType.toNativeOne(module)
             );
             break;
           }
@@ -6613,12 +6593,12 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.NONE,
           true // must wrap small integers
         );
-        expr = makeIsFalseish(expr, this.currentType, module);
+        expr = this.makeIsFalseish(expr, this.currentType);
         this.currentType = Type.bool;
         break;
       }
       case Token.TILDE: {
-        if (currentType.is(TypeFlags.REFERENCE)) {
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -6637,8 +6617,7 @@ export class Compiler extends DiagnosticEmitter {
             : ConversionKind.IMPLICIT,
           false // retains low bits of small integers
         );
-        currentType = this.currentType;
-        switch (currentType.kind) {
+        switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.U8:
@@ -6649,7 +6628,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (currentType.is(TypeFlags.REFERENCE)) {
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
               this.error(
                 DiagnosticCode.Operation_not_supported,
                 expression.range
@@ -6664,7 +6643,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.XorI64
                 : BinaryOp.XorI32,
               expr,
-              currentType.toNativeNegOne(module)
+              this.currentType.toNativeNegOne(module)
             );
             break;
           }
@@ -6698,12 +6677,207 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     if (possiblyOverflows && wrapSmallIntegers) {
-      assert(currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER));
-      expr = makeSmallIntegerWrap(expr, currentType, module);
+      assert(this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER));
+      expr = this.makeSmallIntegerWrap(expr, this.currentType);
     }
     return compound
       ? this.compileAssignmentWithValue(expression.operand, expr, contextualType != Type.void)
       : expr;
+  }
+
+  /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
+  makeSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef {
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8: { // TODO: Use 'i32.extend8_s' once sign-extension-ops lands
+        expr = module.createBinary(BinaryOp.ShrI32,
+          module.createBinary(BinaryOp.ShlI32,
+            expr,
+            module.createI32(24)
+          ),
+          module.createI32(24)
+        );
+        break;
+      }
+      case TypeKind.I16: { // TODO: Use 'i32.extend16_s' once sign-extension-ops lands
+        expr = module.createBinary(BinaryOp.ShrI32,
+          module.createBinary(BinaryOp.ShlI32,
+            expr,
+            module.createI32(16)
+          ),
+          module.createI32(16)
+        );
+        break;
+      }
+      case TypeKind.U8: {
+        expr = module.createBinary(BinaryOp.AndI32,
+          expr,
+          module.createI32(0xff)
+        );
+        break;
+      }
+      case TypeKind.U16: {
+        expr = module.createBinary(BinaryOp.AndI32,
+          expr,
+          module.createI32(0xffff)
+        );
+        break;
+      }
+      case TypeKind.BOOL: {
+        expr = module.createBinary(BinaryOp.AndI32,
+          expr,
+          module.createI32(0x1)
+        );
+        break;
+      }
+    }
+    return expr;
+  }
+
+  /** Creates a comparison whether an expression is 'false' in a broader sense. */
+  makeIsFalseish(expr: ExpressionRef, type: Type): ExpressionRef {
+    var module = this.module;
+    switch (type.kind) {
+      default: { // any native i32
+        return module.createUnary(UnaryOp.EqzI32, expr);
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.createUnary(UnaryOp.EqzI64, expr);
+      }
+      case TypeKind.USIZE: // TODO: strings?
+      case TypeKind.ISIZE: {
+        return module.createUnary(type.size == 64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32, expr);
+      }
+      case TypeKind.F32: {
+        return module.createBinary(BinaryOp.EqF32, expr, module.createF32(0));
+      }
+      case TypeKind.F64: {
+        return module.createBinary(BinaryOp.EqF64, expr, module.createF64(0));
+      }
+      case TypeKind.VOID: {
+        assert(false);
+        return module.createI32(1);
+      }
+    }
+  }
+
+  /** Creates a comparison whether an expression is 'true' in a broader sense. */
+  makeIsTrueish(expr: ExpressionRef, type: Type): ExpressionRef {
+    var module = this.module;
+    switch (type.kind) {
+      default: { // any native i32
+        return expr;
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.createBinary(BinaryOp.NeI64, expr, module.createI64(0));
+      }
+      case TypeKind.USIZE: // TODO: strings?
+      case TypeKind.ISIZE: {
+        return type.size == 64
+          ? module.createBinary(BinaryOp.NeI64, expr, module.createI64(0))
+          : expr;
+      }
+      case TypeKind.F32: {
+        return module.createBinary(BinaryOp.NeF32, expr, module.createF32(0));
+      }
+      case TypeKind.F64: {
+        return module.createBinary(BinaryOp.NeF64, expr, module.createF64(0));
+      }
+      case TypeKind.VOID: {
+        assert(false);
+        return module.createI32(0);
+      }
+    }
+  }
+
+  /** Makes an allocation expression for an instance of the specified class. */
+  makeAllocate(classInstance: Class, reportNode: Node): ExpressionRef {
+    var module = this.module;
+    var currentFunction = this.currentFunction;
+    var nativeSizeType = this.options.nativeSizeType;
+
+    // allocate the necessary memory and tee the pointer to a temp. local for reuse
+    var tempLocal = currentFunction.getTempLocal(classInstance.type);
+    var initializers = new Array<ExpressionRef>();
+    initializers.push(
+      module.createSetLocal(tempLocal.index,
+        compileBuiltinAllocate(this, classInstance, reportNode)
+      )
+    );
+
+    // apply field initializers
+    if (classInstance.members) {
+      for (let member of classInstance.members.values()) {
+        if (member.kind == ElementKind.FIELD) {
+          let field = <Field>member;
+          let fieldType = field.type;
+          let nativeFieldType = fieldType.toNativeType();
+          let fieldDeclaration = field.prototype.declaration;
+          assert(!field.isAny(CommonFlags.CONST));
+          if (fieldDeclaration.initializer) { // use initializer
+            initializers.push(module.createStore(fieldType.byteSize,
+              module.createGetLocal(tempLocal.index, nativeSizeType),
+              this.compileExpression(fieldDeclaration.initializer, fieldType), // reports
+              nativeFieldType,
+              field.memoryOffset
+            ));
+          } else { // initialize with zero
+            // TODO: might be unnecessary if the ctor initializes the field
+            let parameterIndex = (<FieldDeclaration>field.prototype.declaration).parameterIndex;
+            initializers.push(module.createStore(fieldType.byteSize,
+              module.createGetLocal(tempLocal.index, nativeSizeType),
+              parameterIndex >= 0 // initialized via parameter
+                ? module.createGetLocal(1 + parameterIndex, nativeFieldType)
+                : fieldType.toNativeZero(module),
+                nativeFieldType,
+              field.memoryOffset
+            ));
+          }
+        }
+      }
+    }
+
+    // return `this`
+    initializers.push(
+      module.createGetLocal(tempLocal.index, nativeSizeType)
+    );
+
+    currentFunction.freeTempLocal(tempLocal);
+    this.currentType = classInstance.type;
+    return module.createBlock(null, initializers, nativeSizeType);
+  }
+
+  /** Makes a conditional allocation expression inside of the constructor of the specified class. */
+  makeConditionalAllocate(classInstance: Class, reportNode: Node): ExpressionRef {
+    // requires that `this` is the first local
+    var module = this.module;
+    var nativeSizeType = this.options.nativeSizeType;
+    this.currentType = classInstance.type;
+    return module.createIf(
+      nativeSizeType == NativeType.I64
+        ? module.createBinary(
+            BinaryOp.NeI64,
+            module.createGetLocal(0, NativeType.I64),
+            module.createI64(0)
+          )
+        : module.createGetLocal(0, NativeType.I32),
+      module.createGetLocal(0, nativeSizeType),
+      module.createTeeLocal(0,
+        this.makeAllocate(classInstance, reportNode)
+      )
+    );
+  }
+
+  /** Adds the debug location of the specified expression at the specified range to the source map. */
+  addDebugLocation(expr: ExpressionRef, range: Range): void {
+    var currentFunction = this.currentFunction;
+    var source = range.source;
+    if (source.debugInfoIndex < 0) source.debugInfoIndex = this.module.addDebugInfoFile(source.normalizedPath);
+    range.debugInfoRef = expr;
+    if (!currentFunction.debugLocations) currentFunction.debugLocations = [];
+    currentFunction.debugLocations.push(range);
   }
 }
 
@@ -6751,201 +6925,4 @@ function mangleExportName(element: Element, explicitSimpleName: string | null = 
         : simpleName;
     }
   }
-}
-
-/** Adds the debug location of the specified expression at the specified range to the source map. */
-function addDebugLocation(expr: ExpressionRef, range: Range, module: Module, currentFunction: Function): void {
-  var source = range.source;
-  if (source.debugInfoIndex < 0) {
-    source.debugInfoIndex = module.addDebugInfoFile(source.normalizedPath);
-  }
-  range.debugInfoRef = expr;
-  if (!currentFunction.debugLocations) currentFunction.debugLocations = [];
-  currentFunction.debugLocations.push(range);
-}
-
-/** Wraps a 32-bit integer expression so it evaluates to a valid value of the specified type. */
-export function makeSmallIntegerWrap(expr: ExpressionRef, type: Type, module: Module): ExpressionRef {
-  switch (type.kind) {
-    case TypeKind.I8: {
-      return module.createBinary(BinaryOp.ShrI32,
-        module.createBinary(BinaryOp.ShlI32,
-          expr,
-          module.createI32(24)
-        ),
-        module.createI32(24)
-      );
-    }
-    case TypeKind.I16: {
-      return module.createBinary(BinaryOp.ShrI32,
-        module.createBinary(BinaryOp.ShlI32,
-          expr,
-          module.createI32(16)
-        ),
-        module.createI32(16)
-      );
-    }
-    case TypeKind.U8: {
-      return module.createBinary(BinaryOp.AndI32,
-        expr,
-        module.createI32(0xff)
-      );
-    }
-    case TypeKind.U16: {
-      return module.createBinary(BinaryOp.AndI32,
-        expr,
-        module.createI32(0xffff)
-      );
-    }
-    case TypeKind.BOOL: {
-      return module.createBinary(BinaryOp.AndI32,
-        expr,
-        module.createI32(0x1)
-      );
-    }
-    default: {
-      assert(false);
-      return expr;
-    }
-  }
-}
-
-/** Creates a comparison whether an expression is not 'true' in a broader sense. */
-export function makeIsFalseish(expr: ExpressionRef, type: Type, module: Module): ExpressionRef {
-  switch (type.kind) {
-    default: { // any native i32
-      return module.createUnary(UnaryOp.EqzI32, expr);
-    }
-    case TypeKind.I64:
-    case TypeKind.U64: {
-      return module.createUnary(UnaryOp.EqzI64, expr);
-    }
-    case TypeKind.USIZE: // TODO: strings?
-    case TypeKind.ISIZE: {
-      return module.createUnary(type.size == 64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32, expr);
-    }
-    case TypeKind.F32: {
-      return module.createBinary(BinaryOp.EqF32, expr, module.createF32(0));
-    }
-    case TypeKind.F64: {
-      return module.createBinary(BinaryOp.EqF64, expr, module.createF64(0));
-    }
-    case TypeKind.VOID: {
-      assert(false);
-      return module.createI32(1);
-    }
-  }
-}
-
-/** Creates a comparison whether an expression is 'true' in a broader sense. */
-export function makeIsTrueish(expr: ExpressionRef, type: Type, module: Module): ExpressionRef {
-  switch (type.kind) {
-    default: { // any native i32
-      return expr;
-    }
-    case TypeKind.I64:
-    case TypeKind.U64: {
-      return module.createBinary(BinaryOp.NeI64, expr, module.createI64(0));
-    }
-    case TypeKind.USIZE: // TODO: strings?
-    case TypeKind.ISIZE: {
-      return type.size == 64
-        ? module.createBinary(BinaryOp.NeI64, expr, module.createI64(0))
-        : expr;
-    }
-    case TypeKind.F32: {
-      return module.createBinary(BinaryOp.NeF32, expr, module.createF32(0));
-    }
-    case TypeKind.F64: {
-      return module.createBinary(BinaryOp.NeF64, expr, module.createF64(0));
-    }
-    case TypeKind.VOID: {
-      assert(false);
-      return module.createI32(0);
-    }
-  }
-}
-
-/** Makes an allocation expression for an instance of the specified class. */
-export function makeAllocate(compiler: Compiler, classInstance: Class, reportNode: Node): ExpressionRef {
-  var module = compiler.module;
-  var currentFunction = compiler.currentFunction;
-  var nativeSizeType = compiler.options.nativeSizeType;
-
-  var tempLocal = currentFunction.getTempLocal(classInstance.type);
-
-  // allocate the necessary memory
-  var initializers = new Array<ExpressionRef>();
-  initializers.push(
-    module.createSetLocal(tempLocal.index,
-      compileBuiltinAllocate(compiler, classInstance, reportNode)
-    )
-  );
-
-  // apply field initializers
-  if (classInstance.members) {
-    for (let member of classInstance.members.values()) {
-      if (member.kind == ElementKind.FIELD) {
-        let field = <Field>member;
-        let fieldType = field.type;
-        let nativeFieldType = fieldType.toNativeType();
-        let fieldDeclaration = field.prototype.declaration;
-        assert(!field.isAny(CommonFlags.CONST));
-        if (fieldDeclaration.initializer) { // use initializer
-          initializers.push(module.createStore(fieldType.byteSize,
-            module.createGetLocal(tempLocal.index, nativeSizeType),
-            compiler.compileExpression(fieldDeclaration.initializer, fieldType), // reports
-            nativeFieldType,
-            field.memoryOffset
-          ));
-        } else { // initialize with zero
-          // TODO: might be unnecessary if the ctor initializes the field
-          let parameterIndex = (<FieldDeclaration>field.prototype.declaration).parameterIndex;
-          initializers.push(module.createStore(fieldType.byteSize,
-            module.createGetLocal(tempLocal.index, nativeSizeType),
-            parameterIndex >= 0 // initialized via parameter
-              ? module.createGetLocal(1 + parameterIndex, nativeFieldType)
-              : fieldType.toNativeZero(module),
-              nativeFieldType,
-            field.memoryOffset
-          ));
-        }
-      }
-    }
-  }
-
-  // return `this`
-  initializers.push(
-    module.createGetLocal(tempLocal.index, nativeSizeType)
-  );
-
-  currentFunction.freeTempLocal(tempLocal);
-  compiler.currentType = classInstance.type;
-  return module.createBlock(null, initializers, nativeSizeType);
-}
-
-/** Makes a conditional allocation expression inside of the constructor of the specified class. */
-export function makeConditionalAllocate(compiler: Compiler, classInstance: Class, reportNode: Node): ExpressionRef {
-  // requires that `this` is the first local
-  var module = compiler.module;
-  var nativeSizeType = compiler.options.nativeSizeType;
-  compiler.currentType = classInstance.type;
-  return module.createIf(
-    nativeSizeType == NativeType.I64
-      ? module.createBinary(
-          BinaryOp.NeI64,
-          module.createGetLocal(0, NativeType.I64),
-          module.createI64(0)
-        )
-      : module.createGetLocal(0, NativeType.I32),
-    module.createGetLocal(0, nativeSizeType),
-    module.createTeeLocal(0,
-      makeAllocate(compiler, classInstance, reportNode)
-    )
-  );
-}
-
-export function isI32Const(expr: ExpressionRef): bool {
-  return _BinaryenExpressionGetId(expr) == ExpressionId.Const
-      && _BinaryenExpressionGetType(expr) == NativeType.I32;
 }

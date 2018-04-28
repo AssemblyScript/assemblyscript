@@ -5,9 +5,7 @@
 
  import {
   Compiler,
-  ConversionKind,
-
-  makeSmallIntegerWrap
+  ConversionKind
 } from "./compiler";
 
 import {
@@ -383,10 +381,9 @@ export function compileCall(
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.BOOL: {
-          ret = makeSmallIntegerWrap(
+          ret = compiler.makeSmallIntegerWrap(
             module.createBinary(BinaryOp.RotlI32, arg0, arg1),
-            compiler.currentType,
-            module
+            compiler.currentType
           );
           // fall-through
         }
@@ -469,10 +466,9 @@ export function compileCall(
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.BOOL: {
-          ret = makeSmallIntegerWrap(
+          ret = compiler.makeSmallIntegerWrap(
             module.createBinary(BinaryOp.RotrI32, arg0, arg1),
-            compiler.currentType,
-            module
+            compiler.currentType
           );
           break;
         }

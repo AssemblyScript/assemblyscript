@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("allocator/arena");
+// From The Computer Language Benchmarks Game
+// http://benchmarksgame.alioth.debian.org
 const SOLAR_MASS = 4.0 * Math.PI * Math.PI;
 const DAYS_PER_YEAR = 365.24;
 class Body {
@@ -37,25 +39,27 @@ function Neptune() {
 }
 class NBodySystem {
     constructor(bodies) {
+        this.bodies = bodies;
         var px = 0.0;
         var py = 0.0;
         var pz = 0.0;
         var size = bodies.length;
         for (let i = 0; i < size; i++) {
-            let b = bodies[i];
+            let b = unchecked(bodies[i]);
             let m = b.mass;
             px += b.vx * m;
             py += b.vy * m;
             pz += b.vz * m;
         }
-        this.bodies = bodies;
-        this.bodies[0].offsetMomentum(px, py, pz);
+        bodies[0].offsetMomentum(px, py, pz);
     }
     advance(dt) {
         var bodies = this.bodies;
         var size = bodies.length;
+        // var buffer = changetype<usize>(bodies.buffer_);
         for (let i = 0; i < size; ++i) {
-            let bodyi = bodies[i];
+            let bodyi = unchecked(bodies[i]);
+            // let bodyi = load<Body>(buffer + i * sizeof<Body>(), 8);
             let ix = bodyi.x;
             let iy = bodyi.y;
             let iz = bodyi.z;
@@ -64,7 +68,8 @@ class NBodySystem {
             let bivz = bodyi.vz;
             let bodyim = bodyi.mass;
             for (let j = i + 1; j < size; ++j) {
-                let bodyj = bodies[j];
+                let bodyj = unchecked(bodies[j]);
+                // let bodyj = load<Body>(buffer + j * sizeof<Body>(), 8);
                 let dx = ix - bodyj.x;
                 let dy = iy - bodyj.y;
                 let dz = iz - bodyj.z;
@@ -91,9 +96,8 @@ class NBodySystem {
     energy() {
         var e = 0.0;
         var bodies = this.bodies;
-        var size = bodies.length;
-        for (let i = 0; i < size; ++i) {
-            let bodyi = bodies[i];
+        for (let i = 0, size = bodies.length; i < size; ++i) {
+            let bodyi = unchecked(bodies[i]);
             let ix = bodyi.x;
             let iy = bodyi.y;
             let iz = bodyi.z;

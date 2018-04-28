@@ -25,7 +25,12 @@ var nbodyASMJS = eval("0," + src)({
 
 // Load JS version
 var src = fs.readFileSync(__dirname + "/../build/index.js", "utf8");
-var nbodyJS = (new Function("require", "exports", src + " return exports;"))(function() {}, {});
+var scopeJS = {
+  require: function() {},
+  exports: {},
+  unchecked: function(expr) { return expr }
+};
+var nbodyJS = new Function(...Object.keys(scopeJS).concat(src + "\nreturn exports"))(...Object.values(scopeJS));
 
 function test(nbody, steps) {
   nbody.init();

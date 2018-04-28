@@ -706,21 +706,20 @@
     (f64.const 39.47841760435743)
    )
   )
-  (if (result i32)
-   (get_local $0)
-   (get_local $0)
-   (block (result i32)
-    (i32.store
-     (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
-       (i32.const 4)
-      )
-     )
-     (get_local $1)
-    )
+  (if
+   (i32.eqz
     (get_local $0)
    )
+   (i32.store
+    (tee_local $0
+     (call $~lib/allocator/arena/allocate_memory
+      (i32.const 4)
+     )
+    )
+    (get_local $1)
+   )
   )
+  (get_local $0)
  )
  (func $assembly/index/init (; 6 ;) (type $v)
   (local $0 i32)

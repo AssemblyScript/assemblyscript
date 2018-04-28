@@ -175,7 +175,7 @@ function asmFunc(global, env, buffer) {
  function assembly_index_NBodySystem_constructor($0, $1) {
   $0 = $0 | 0;
   $1 = $1 | 0;
-  var $2 = 0, $3 = 0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0, $8 = 0, $10 = 0;
+  var $2 = 0, $3 = 0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0, $9 = 0;
   $2 = $1;
   $8 = HEAP32[($2 + 4 | 0) >> 2] | 0;
   continue_0 : do {
@@ -193,17 +193,16 @@ function asmFunc(global, env, buffer) {
   } while (1);
   $2 = $1;
   $2 = HEAPU32[$2 >> 2] | 0;
-  if (0 >>> 0 < ((HEAP32[$2 >> 2] | 0) >>> 2 | 0) >>> 0) $10 = HEAPU32[(($2 + 0 | 0) + 8 | 0) >> 2] | 0; else abort();
-  $2 = $10;
+  if (0 >>> 0 < ((HEAP32[$2 >> 2] | 0) >>> 2 | 0) >>> 0) $9 = HEAPU32[(($2 + 0 | 0) + 8 | 0) >> 2] | 0; else abort();
+  $2 = $9;
   HEAPF64[($2 + 24 | 0) >> 3] = -$5 / 39.47841760435743;
   HEAPF64[($2 + 32 | 0) >> 3] = -$6 / 39.47841760435743;
   HEAPF64[($2 + 40 | 0) >> 3] = -$7 / 39.47841760435743;
-  if ($0) $8 = $0; else {
+  if (($0 | 0) == (0 | 0)) {
    $0 = $lib_allocator_arena_allocate_memory(4 | 0) | 0;
    HEAP32[$0 >> 2] = $1;
-   $8 = $0;
   }
-  return $8 | 0;
+  return $0 | 0;
  }
  
  function assembly_index_init() {

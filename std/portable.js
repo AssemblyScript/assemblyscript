@@ -202,6 +202,10 @@ globalScope["isString"] = function isString(arg) {
 
 globalScope["isArray"] = Array.isArray;
 
+globalScope["unchecked"] = function(expr) {
+  return expr;
+};
+
 globalScope["fmod"] = function fmod(x, y) {
   return x % y;
 };
