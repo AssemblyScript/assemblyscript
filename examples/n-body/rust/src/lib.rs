@@ -157,8 +157,6 @@ fn offset_momentum(bodies: &mut [Planet; N_BODIES]) {
   sun.vz = -pz / SOLAR_MASS;
 }
 
-// static mut bodies: [Planet; N_BODIES] = BODIES;
-
 #[no_mangle]
 pub unsafe extern "C" fn init() {
   offset_momentum(&mut BODIES);
