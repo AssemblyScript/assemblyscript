@@ -1,3 +1,5 @@
+// Code adopted from https://benchmarksgame-team.pages.debian.net/benchmarksgame/program/nbody-rust-1.html
+
 #![feature(core_intrinsics, lang_items)]
 #![no_std]
 
