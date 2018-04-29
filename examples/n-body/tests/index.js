@@ -1,7 +1,8 @@
 const fs = require("fs");
 
 // Load WASM version
-const nbodyWASM = require("../index.js");
+const nbodyWASM = require("../as-wasm.js");
+const nbodyRustWASM = require("../rust-wasm.js");
 
 // Load ASMJS version
 src = fs.readFileSync(__dirname + "/../build/index.asm.js", "utf8");
@@ -42,28 +43,36 @@ function test(nbody, steps) {
 var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 20000000;
 var time;
 
-console.log("Performing " + steps + " steps (WASM) ...");
+console.log("Performing " + steps + " steps (AssemblyScript WASM) ...");
 time = test(nbodyWASM, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
-console.log("Performing " + steps + " steps (ASMJS) ...");
+console.log("Performing " + steps + " steps (AssemblyScript ASMJS) ...");
 time = test(nbodyASMJS, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("Performing " + steps + " steps (JS) ...");
 time = test(nbodyJS, steps);
+console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+
+console.log("Performing " + steps + " steps (Rust WASM) ...");
+time = test(nbodyRustWASM, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("\nWARMED UP:\n");
 
-console.log("Performing " + steps + " steps (WASM) ...");
+console.log("Performing " + steps + " steps (AssemblyScript WASM) ...");
 time = test(nbodyWASM, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
-console.log("Performing " + steps + " steps (ASMJS) ...");
+console.log("Performing " + steps + " steps (AssemblyScript ASMJS) ...");
 time = test(nbodyASMJS, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("Performing " + steps + " steps (JS) ...");
 time = test(nbodyJS, steps);
+console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+
+console.log("Performing " + steps + " steps (Rust WASM) ...");
+time = test(nbodyRustWASM, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");

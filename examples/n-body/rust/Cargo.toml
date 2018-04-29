@@ -1,0 +1,8 @@
+[package]
+name = "rust_nbody"
+version = "0.1.0"
+authors = ["MaxGraey <maxgraey@gmail.com>"]
+
+[lib]
+path       = "src/lib.rs"
+crate-type = ["cdylib"]
