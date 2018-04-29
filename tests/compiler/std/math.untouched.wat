@@ -5068,18 +5068,15 @@
       (i32.const 2)
      )
     )
-    (i32.and
-     (i32.lt_u
-      (i32.add
-       (get_local $6)
-       (i32.shl
-        (i32.const 64)
-        (i32.const 20)
-       )
+    (i32.lt_u
+     (i32.add
+      (get_local $6)
+      (i32.shl
+       (i32.const 64)
+       (i32.const 20)
       )
-      (get_local $4)
      )
-     (i32.const 1)
+     (get_local $4)
     )
     (get_local $2)
    )
@@ -5540,18 +5537,15 @@
       (i32.const 2)
      )
     )
-    (i32.and
-     (i32.lt_u
-      (i32.add
-       (get_local $4)
-       (i32.shl
-        (i32.const 26)
-        (i32.const 23)
-       )
+    (i32.lt_u
+     (i32.add
+      (get_local $4)
+      (i32.shl
+       (i32.const 26)
+       (i32.const 23)
       )
-      (get_local $3)
      )
-     (i32.const 1)
+     (get_local $3)
     )
     (get_local $2)
    )
@@ -7566,12 +7560,9 @@
     (if
      (if (result i32)
       (get_local $2)
-      (i32.and
-       (i32.ge_u
-        (get_local $1)
-        (i32.const 1120924085)
-       )
-       (i32.const 1)
+      (i32.ge_u
+       (get_local $1)
+       (i32.const 1120924085)
       )
       (get_local $2)
      )

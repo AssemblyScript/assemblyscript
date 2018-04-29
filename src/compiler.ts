@@ -6856,56 +6856,56 @@ export class Compiler extends DiagnosticEmitter {
   /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
   makeSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef {
     var module = this.module;
-    var isI32 = (
-      _BinaryenExpressionGetId(expr) == ExpressionId.Const &&
-      _BinaryenExpressionGetType(expr) == NativeType.I32
-    );
-    var i32Value = isI32 ? _BinaryenConstGetValueI32(expr) : 0;
     switch (type.kind) {
       case TypeKind.I8: { // TODO: Use 'i32.extend8_s' once sign-extension-ops lands
-        if (isI32 && i32Value >= i8.MIN_VALUE && i32Value <= i8.MAX_VALUE) break;
-        expr = module.createBinary(BinaryOp.ShrI32,
-          module.createBinary(BinaryOp.ShlI32,
-            expr,
+        if (mightOverflow(expr, type)) {
+          expr = module.createBinary(BinaryOp.ShrI32,
+            module.createBinary(BinaryOp.ShlI32,
+              expr,
+              module.createI32(24)
+            ),
             module.createI32(24)
-          ),
-          module.createI32(24)
-        );
+          );
+        }
         break;
       }
       case TypeKind.I16: { // TODO: Use 'i32.extend16_s' once sign-extension-ops lands
-        if (isI32 && i32Value >= i16.MIN_VALUE && i32Value <= i16.MAX_VALUE) break;
-        expr = module.createBinary(BinaryOp.ShrI32,
-          module.createBinary(BinaryOp.ShlI32,
-            expr,
+        if (mightOverflow(expr, type)) {
+          expr = module.createBinary(BinaryOp.ShrI32,
+            module.createBinary(BinaryOp.ShlI32,
+              expr,
+              module.createI32(16)
+            ),
             module.createI32(16)
-          ),
-          module.createI32(16)
-        );
+          );
+        }
         break;
       }
       case TypeKind.U8: {
-        if (isI32 && i32Value >= u8.MIN_VALUE && i32Value <= u8.MAX_VALUE) break;
-        expr = module.createBinary(BinaryOp.AndI32,
-          expr,
-          module.createI32(0xff)
-        );
+        if (mightOverflow(expr, type)) {
+          expr = module.createBinary(BinaryOp.AndI32,
+            expr,
+            module.createI32(0xff)
+          );
+        }
         break;
       }
       case TypeKind.U16: {
-        if (isI32 && i32Value >= u16.MIN_VALUE && i32Value <= u16.MAX_VALUE) break;
-        expr = module.createBinary(BinaryOp.AndI32,
-          expr,
-          module.createI32(0xffff)
-        );
+        if (mightOverflow(expr, type)) {
+          expr = module.createBinary(BinaryOp.AndI32,
+            expr,
+            module.createI32(0xffff)
+          );
+        }
         break;
       }
       case TypeKind.BOOL: {
-        if (isI32 && !(i32Value & ~1)) break;
-        expr = module.createBinary(BinaryOp.AndI32,
-          expr,
-          module.createI32(0x1)
-        );
+        if (mightOverflow(expr, type)) {
+          expr = module.createBinary(BinaryOp.AndI32,
+            expr,
+            module.createI32(0x1)
+          );
+        }
         break;
       }
     }
@@ -7108,4 +7108,72 @@ function mangleExportName(element: Element, explicitSimpleName: string | null = 
         : simpleName;
     }
   }
+}
+
+/** Tests if an expression might overflow, in a general sense. */
+function mightOverflow(expr: ExpressionRef, type: Type): bool {
+  assert(type.is(TypeFlags.INTEGER));
+  assert(_BinaryenExpressionGetType(expr) == NativeType.I32);
+  switch (_BinaryenExpressionGetId(expr)) {
+    case ExpressionId.Binary: {
+      switch (_BinaryenBinaryGetOp(expr)) {
+        case BinaryOp.EqI32:
+        case BinaryOp.EqI64:
+        case BinaryOp.EqF32:
+        case BinaryOp.EqF64:
+        case BinaryOp.LtI32:
+        case BinaryOp.LtU32:
+        case BinaryOp.LtI64:
+        case BinaryOp.LtU64:
+        case BinaryOp.LtF32:
+        case BinaryOp.LtF64:
+        case BinaryOp.LeI32:
+        case BinaryOp.LeU32:
+        case BinaryOp.LeI64:
+        case BinaryOp.LeU64:
+        case BinaryOp.LeF32:
+        case BinaryOp.LeF64:
+        case BinaryOp.GtI32:
+        case BinaryOp.GtU32:
+        case BinaryOp.GtI64:
+        case BinaryOp.GtU64:
+        case BinaryOp.GtF32:
+        case BinaryOp.GtF64:
+        case BinaryOp.GeI32:
+        case BinaryOp.GeU32:
+        case BinaryOp.GeI64:
+        case BinaryOp.GeU64:
+        case BinaryOp.GeF32:
+        case BinaryOp.GeF64: return false;
+        case BinaryOp.AndI32: return mightOverflow(_BinaryenBinaryGetRight(expr), type);
+      }
+      break;
+    }
+    case ExpressionId.Unary: {
+      switch (_BinaryenUnaryGetOp(expr)) {
+        case UnaryOp.EqzI32:
+        case UnaryOp.EqzI64: return false;
+        case UnaryOp.ClzI32:
+        case UnaryOp.CtzI32: return type.size < 7; // max value is 32 (100000b)
+      }
+      break;
+    }
+    case ExpressionId.Const: {
+      if (_BinaryenExpressionGetType(expr) == NativeType.I32) {
+        let value = _BinaryenConstGetValueI32(expr);
+        switch (type.kind) {
+          case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
+          case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
+          case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
+          case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
+        }
+      }
+      return false;
+    }
+    case ExpressionId.Load: {
+      return type.byteSize < _BinaryenLoadGetBytes(expr)
+          || type.is(TypeFlags.SIGNED) != _BinaryenLoadIsSigned(expr);
+    }
+  }
+  return true;
 }

@@ -2457,18 +2457,15 @@
       (i32.const 2)
      )
     )
-    (i32.and
-     (i32.lt_u
-      (i32.add
-       (get_local $6)
-       (i32.shl
-        (i32.const 64)
-        (i32.const 20)
-       )
+    (i32.lt_u
+     (i32.add
+      (get_local $6)
+      (i32.shl
+       (i32.const 64)
+       (i32.const 20)
       )
-      (get_local $4)
      )
-     (i32.const 1)
+     (get_local $4)
     )
     (get_local $2)
    )
