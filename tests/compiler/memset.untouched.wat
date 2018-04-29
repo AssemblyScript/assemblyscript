@@ -151,7 +151,10 @@
      (i32.const -1)
      (i32.const 255)
     )
-    (get_local $1)
+    (i32.and
+     (get_local $1)
+     (i32.const 255)
+    )
    )
   )
   (i32.store
@@ -392,8 +395,11 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.load8_u
-      (get_global $memset/dest)
+     (i32.and
+      (i32.load8_u
+       (get_global $memset/dest)
+      )
+      (i32.const 255)
      )
      (i32.const 1)
     )
@@ -411,11 +417,14 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.load8_u
-      (i32.add
-       (get_global $memset/dest)
-       (i32.const 15)
+     (i32.and
+      (i32.load8_u
+       (i32.add
+        (get_global $memset/dest)
+        (i32.const 15)
+       )
       )
+      (i32.const 255)
      )
      (i32.const 1)
     )
@@ -443,8 +452,11 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.load8_u
-      (get_global $memset/dest)
+     (i32.and
+      (i32.load8_u
+       (get_global $memset/dest)
+      )
+      (i32.const 255)
      )
      (i32.const 1)
     )
@@ -462,11 +474,14 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.load8_u
-      (i32.add
-       (get_global $memset/dest)
-       (i32.const 1)
+     (i32.and
+      (i32.load8_u
+       (i32.add
+        (get_global $memset/dest)
+        (i32.const 1)
+       )
       )
+      (i32.const 255)
      )
      (i32.const 2)
     )
@@ -484,11 +499,14 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.load8_u
-      (i32.add
-       (get_global $memset/dest)
-       (i32.const 14)
+     (i32.and
+      (i32.load8_u
+       (i32.add
+        (get_global $memset/dest)
+        (i32.const 14)
+       )
       )
+      (i32.const 255)
      )
      (i32.const 2)
     )
@@ -506,11 +524,14 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.load8_u
-      (i32.add
-       (get_global $memset/dest)
-       (i32.const 15)
+     (i32.and
+      (i32.load8_u
+       (i32.add
+        (get_global $memset/dest)
+        (i32.const 15)
+       )
       )
+      (i32.const 255)
      )
      (i32.const 1)
     )

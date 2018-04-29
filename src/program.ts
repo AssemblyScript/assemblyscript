@@ -3565,8 +3565,6 @@ export class Flow {
   contextualTypeArguments: Map<string,Type> | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
-  /** Scoped global variables. */
-  // scopedGlobals: Map<Local,Global> | null = null;
 
   /** Creates the parent flow of the specified function. */
   static create(currentFunction: Function): Flow {
@@ -3698,27 +3696,6 @@ export class Flow {
     } while (current = current.parent);
     return this.currentFunction.localsByName.get(name);
   }
-
-  /** Adds a scoped global for an outer scoped local. */
-  // addScopedGlobal(scopedLocal: Local): Global {
-  //   var scopedGlobals = this.scopedGlobals;
-  //   var scopedGlobal: Global | null;
-  //   if (!scopedGlobals) {
-  //     this.scopedGlobals = scopedGlobals = new Map();
-  //   } else {
-  //     scopedGlobal = scopedGlobals.get(scopedLocal);
-  //     if (scopedGlobal) return scopedGlobal;
-  //   }
-  //   scopedGlobal = new Global(
-  //     scopedLocal.program,
-  //     scopedLocal.simpleName,
-  //     this.currentFunction.internalName + INNER_DELIMITER + scopedLocal.internalName,
-  //     scopedLocal.type,
-  //     assert(scopedLocal.declaration)
-  //   );
-  //   scopedGlobals.set(scopedLocal, scopedGlobal);
-  //   return scopedGlobal;
-  // }
 
   /** Finalizes this flow. Must be the topmost parent flow of the function. */
   finalize(): void {

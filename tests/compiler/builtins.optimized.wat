@@ -267,8 +267,11 @@
    )
   )
   (if
-   (call $isNaN<f32>
-    (f32.const 1.25)
+   (i32.and
+    (call $isNaN<f32>
+     (f32.const 1.25)
+    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -282,8 +285,11 @@
   )
   (if
    (i32.ne
-    (call $isNaN<f32>
-     (f32.const nan:0x400000)
+    (i32.and
+     (call $isNaN<f32>
+      (f32.const nan:0x400000)
+     )
+     (i32.const 1)
     )
     (i32.const 1)
    )
@@ -299,8 +305,11 @@
   )
   (if
    (i32.ne
-    (call $isFinite<f32>
-     (f32.const 1.25)
+    (i32.and
+     (call $isFinite<f32>
+      (f32.const 1.25)
+     )
+     (i32.const 1)
     )
     (i32.const 1)
    )
@@ -315,8 +324,11 @@
    )
   )
   (if
-   (call $isFinite<f32>
-    (f32.const inf)
+   (i32.and
+    (call $isFinite<f32>
+     (f32.const inf)
+    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -329,8 +341,11 @@
    )
   )
   (if
-   (call $isFinite<f32>
-    (f32.const -inf)
+   (i32.and
+    (call $isFinite<f32>
+     (f32.const -inf)
+    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -343,8 +358,11 @@
    )
   )
   (if
-   (call $isFinite<f32>
-    (f32.const nan:0x400000)
+   (i32.and
+    (call $isFinite<f32>
+     (f32.const nan:0x400000)
+    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -400,8 +418,11 @@
    )
   )
   (if
-   (call $isNaN<f64>
-    (f64.const 1.25)
+   (i32.and
+    (call $isNaN<f64>
+     (f64.const 1.25)
+    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -415,8 +436,11 @@
   )
   (if
    (i32.ne
-    (call $isNaN<f64>
-     (f64.const nan:0x8000000000000)
+    (i32.and
+     (call $isNaN<f64>
+      (f64.const nan:0x8000000000000)
+     )
+     (i32.const 1)
     )
     (i32.const 1)
    )
@@ -432,8 +456,11 @@
   )
   (if
    (i32.ne
-    (call $isFinite<f64>
-     (f64.const 1.25)
+    (i32.and
+     (call $isFinite<f64>
+      (f64.const 1.25)
+     )
+     (i32.const 1)
     )
     (i32.const 1)
    )
@@ -448,8 +475,11 @@
    )
   )
   (if
-   (call $isFinite<f64>
-    (f64.const inf)
+   (i32.and
+    (call $isFinite<f64>
+     (f64.const inf)
+    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -462,8 +492,11 @@
    )
   )
   (if
-   (call $isFinite<f64>
-    (f64.const -inf)
+   (i32.and
+    (call $isFinite<f64>
+     (f64.const -inf)
+    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -476,8 +509,11 @@
    )
   )
   (if
-   (call $isFinite<f64>
-    (f64.const nan:0x8000000000000)
+   (i32.and
+    (call $isFinite<f64>
+     (f64.const nan:0x8000000000000)
+    )
+    (i32.const 1)
    )
    (block
     (call $abort

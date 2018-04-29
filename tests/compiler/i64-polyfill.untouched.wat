@@ -147,7 +147,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $2)
+   (i32.and
+    (get_local $2)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -812,7 +815,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -847,7 +853,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -882,7 +891,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -917,7 +929,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -952,7 +967,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -987,7 +1005,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -1022,7 +1043,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -1057,7 +1081,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -1092,7 +1119,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
@@ -1127,7 +1157,10 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (get_local $4)
+   (i32.and
+    (get_local $4)
+    (i32.const 1)
+   )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)

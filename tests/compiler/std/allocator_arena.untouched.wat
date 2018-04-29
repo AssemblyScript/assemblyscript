@@ -261,7 +261,10 @@
      (i32.const -1)
      (i32.const 255)
     )
-    (get_local $1)
+    (i32.and
+     (get_local $1)
+     (i32.const 255)
+    )
    )
   )
   (i32.store
@@ -2294,27 +2297,24 @@
    (return)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (i32.le_u
-       (i32.add
-        (get_local $1)
-        (get_local $2)
-       )
-       (get_local $0)
-      )
-     )
-     (get_local $3)
+   (if (result i32)
+    (tee_local $3
      (i32.le_u
       (i32.add
-       (get_local $0)
+       (get_local $1)
        (get_local $2)
       )
-      (get_local $1)
+      (get_local $0)
      )
     )
-    (i32.const 1)
+    (get_local $3)
+    (i32.le_u
+     (i32.add
+      (get_local $0)
+      (get_local $2)
+     )
+     (get_local $1)
+    )
    )
    (block
     (call $~lib/memory/copy_memory
@@ -2622,13 +2622,16 @@
     (if
      (if (result i32)
       (get_local $2)
-      (i32.eq
-       (i32.load8_u
-        (get_local $0)
+      (i32.and
+       (i32.eq
+        (i32.load8_u
+         (get_local $0)
+        )
+        (i32.load8_u
+         (get_local $1)
+        )
        )
-       (i32.load8_u
-        (get_local $1)
-       )
+       (i32.const 1)
       )
       (get_local $2)
      )
@@ -2742,11 +2745,14 @@
       (if
        (i32.eqz
         (i32.eq
-         (i32.load8_u
-          (i32.add
-           (get_global $std/allocator_arena/ptr1)
-           (get_global $std/allocator_arena/i)
+         (i32.and
+          (i32.load8_u
+           (i32.add
+            (get_global $std/allocator_arena/ptr1)
+            (get_global $std/allocator_arena/i)
+           )
           )
+          (i32.const 255)
          )
          (i32.const 18)
         )
@@ -2791,11 +2797,14 @@
       (if
        (i32.eqz
         (i32.eq
-         (i32.load8_u
-          (i32.add
-           (get_global $std/allocator_arena/ptr2)
-           (get_global $std/allocator_arena/i)
+         (i32.and
+          (i32.load8_u
+           (i32.add
+            (get_global $std/allocator_arena/ptr2)
+            (get_global $std/allocator_arena/i)
+           )
           )
+          (i32.const 255)
          )
          (i32.const 18)
         )

@@ -5,7 +5,8 @@
 
  import {
   Compiler,
-  ConversionKind
+  ConversionKind,
+  WrapMode
 } from "./compiler";
 
 import {
@@ -151,9 +152,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
         default: { // any integer up to 32-bits incl. bool
@@ -224,9 +225,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.NONE, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
         default: { // any integer up to 32-bits incl. bool
@@ -297,9 +298,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
         default: { // any integer up to 32-bits incl. bool
@@ -370,11 +371,11 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType);
+      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
@@ -455,11 +456,11 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType);
+      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
@@ -540,9 +541,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
@@ -668,11 +669,11 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
       }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType);
+      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.WRAP);
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
@@ -822,11 +823,11 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
       }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType);
+      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.WRAP);
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
@@ -976,9 +977,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
       }
       switch (compiler.currentType.kind) {
         case TypeKind.USIZE: {
@@ -1041,9 +1042,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
       }
       switch (compiler.currentType.kind) {
         case TypeKind.USIZE: {
@@ -1106,11 +1107,11 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
       }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType);
+      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
       switch (compiler.currentType.kind) { // TODO: does an integer version make sense?
         case TypeKind.F32: {
           ret = module.createBinary(BinaryOp.CopysignF32, arg0, arg1);
@@ -1157,9 +1158,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
       }
       switch (compiler.currentType.kind) {
         case TypeKind.USIZE: {
@@ -1222,13 +1223,13 @@ export function compileCall(
       switch (typeArguments[0].kind) {
         case TypeKind.I32:
         case TypeKind.U32: {
-          arg0 = compiler.compileExpression(operands[0], Type.f32);
+          arg0 = compiler.compileExpression(operands[0], Type.f32, ConversionKind.IMPLICIT, WrapMode.NONE);
           ret = module.createUnary(UnaryOp.ReinterpretF32, arg0);
           break;
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          arg0 = compiler.compileExpression(operands[0], Type.f64);
+          arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.IMPLICIT, WrapMode.NONE);
           ret = module.createUnary(UnaryOp.ReinterpretF64, arg0);
           break;
         }
@@ -1248,8 +1249,10 @@ export function compileCall(
             operands[0],
             compiler.options.isWasm64
               ? Type.f64
-              : Type.f32
-            );
+              : Type.f32,
+            ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          );
           ret = module.createUnary(
             compiler.options.isWasm64
               ? UnaryOp.ReinterpretF64
@@ -1259,12 +1262,12 @@ export function compileCall(
           break;
         }
         case TypeKind.F32: {
-          arg0 = compiler.compileExpression(operands[0], Type.u32);
+          arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
           ret = module.createUnary(UnaryOp.ReinterpretI32, arg0);
           break;
         }
         case TypeKind.F64: {
-          arg0 = compiler.compileExpression(operands[0], Type.u64);
+          arg0 = compiler.compileExpression(operands[0], Type.i64, ConversionKind.IMPLICIT, WrapMode.NONE);
           ret = module.createUnary(UnaryOp.ReinterpretI64, arg0);
           break;
         }
@@ -1306,9 +1309,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
       }
       switch (compiler.currentType.kind) { // TODO: integer versions (that return f64 or convert)?
         case TypeKind.F32: {
@@ -1358,9 +1361,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE);
+        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
       }
       switch (compiler.currentType.kind) {
         case TypeKind.USIZE: {
@@ -1430,7 +1433,12 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
       let offset = operands.length == 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
@@ -1477,13 +1485,19 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
       arg1 = compiler.compileExpression(
         operands[1],
         typeArguments[0],
         typeArguments[0].is(TypeFlags.INTEGER)
           ? ConversionKind.NONE // wraps a larger integer type to a smaller one, i.e. i32.store8
-          : ConversionKind.IMPLICIT
+          : ConversionKind.IMPLICIT,
+        WrapMode.NONE
       );
       let type: Type;
       if (
@@ -1495,6 +1509,7 @@ export function compileCall(
           arg1,
           compiler.currentType, typeArguments[0],
           ConversionKind.IMPLICIT,
+          WrapMode.NONE,
           operands[1]
         );
         type = typeArguments[0];
@@ -1701,13 +1716,16 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE);
+        arg0 = compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
       }
       let type = compiler.currentType;
-      arg1 = compiler.compileExpression(operands[1], type);
-      arg2 = compiler.compileExpression(operands[2], Type.i32);
+      arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg2 = compiler.makeIsTrueish(
+        compiler.compileExpressionRetainType(operands[2], Type.bool, WrapMode.NONE),
+        compiler.currentType
+      );
       compiler.currentType = type;
       switch (compiler.currentType.kind) {
         default: { // any value type
@@ -1768,7 +1786,7 @@ export function compileCall(
         );
         arg0 = module.createUnreachable();
       } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32);
+        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
       }
       if (typeArguments) {
         compiler.error(
@@ -1794,9 +1812,24 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
-      arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType);
-      arg2 = compiler.compileExpression(operands[2], compiler.options.usizeType);
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg2 = compiler.compileExpression(
+        operands[2],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
       compiler.currentType = Type.void;
       throw new Error("not implemented");
       // return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
@@ -1816,9 +1849,24 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType);
-      arg1 = compiler.compileExpression(operands[1], Type.u32);
-      arg2 = compiler.compileExpression(operands[2], compiler.options.usizeType);
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        Type.u32,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg2 = compiler.compileExpression(
+        operands[2],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
       compiler.currentType = Type.void;
       throw new Error("not implemented");
       // return module.createHost(HostOp.SetMemory, null, [ arg0, arg1, arg2 ]);
@@ -1850,10 +1898,10 @@ export function compileCall(
         compiler.currentType = typeArguments[0];
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(
+      arg0 = compiler.compileExpressionRetainType(
         operands[0],
         compiler.options.usizeType,
-        ConversionKind.NONE
+        WrapMode.NONE
       );
       compiler.currentType = typeArguments[0];
       if (compiler.currentType.kind != TypeKind.USIZE) {
@@ -1900,9 +1948,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0]);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
-        arg0 = compiler.compileExpressionRetainType(operands[0], Type.i32);
+        arg0 = compiler.compileExpressionRetainType(operands[0], Type.bool, WrapMode.NONE);
       }
 
       let type = compiler.currentType;
@@ -2078,7 +2126,7 @@ export function compileCall(
       }
       let flow = compiler.currentFunction.flow;
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
-      ret = compiler.compileExpressionRetainType(operands[0], contextualType, false);
+      ret = compiler.compileExpressionRetainType(operands[0], contextualType, WrapMode.NONE);
       flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return ret;
     }
@@ -2100,7 +2148,12 @@ export function compileCall(
         compiler.currentType = Type.i8;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.i8, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.i8,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "i16": {
       if (typeArguments) {
@@ -2117,7 +2170,12 @@ export function compileCall(
         compiler.currentType = Type.i16;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.i16, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.i16,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "i32": {
       if (typeArguments) {
@@ -2134,7 +2192,12 @@ export function compileCall(
         compiler.currentType = Type.i32;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.i32, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.i32,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "i64": {
       if (typeArguments) {
@@ -2151,7 +2214,12 @@ export function compileCall(
         compiler.currentType = Type.i64;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.i64, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.i64,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "isize": {
       if (typeArguments) {
@@ -2175,7 +2243,8 @@ export function compileCall(
         compiler.options.isWasm64
           ? Type.isize64
           : Type.isize32,
-        ConversionKind.EXPLICIT
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
       );
     }
     case "u8": {
@@ -2193,7 +2262,12 @@ export function compileCall(
         compiler.currentType = Type.u8;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.u8, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.u8,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "u16": {
       if (typeArguments) {
@@ -2210,7 +2284,12 @@ export function compileCall(
         compiler.currentType = Type.u16;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.u16, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.u16,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "u32": {
       if (typeArguments) {
@@ -2227,7 +2306,12 @@ export function compileCall(
         compiler.currentType = Type.u32;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.u32, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.u32,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "u64": {
       if (typeArguments) {
@@ -2244,7 +2328,12 @@ export function compileCall(
         compiler.currentType = Type.u64;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.u64, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.u64,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "usize": {
       if (typeArguments) {
@@ -2264,7 +2353,8 @@ export function compileCall(
       return compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
-        ConversionKind.EXPLICIT
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
       );
     }
     case "bool": {
@@ -2282,7 +2372,12 @@ export function compileCall(
         compiler.currentType = Type.bool;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.bool, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.bool,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "f32": {
       if (typeArguments) {
@@ -2299,7 +2394,12 @@ export function compileCall(
         compiler.currentType = Type.f32;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.f32, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.f32,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
     case "f64": {
       if (typeArguments) {
@@ -2316,7 +2416,12 @@ export function compileCall(
         compiler.currentType = Type.f64;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(operands[0], Type.f64, ConversionKind.EXPLICIT);
+      return compiler.compileExpression(
+        operands[0],
+        Type.f64,
+        ConversionKind.EXPLICIT,
+        WrapMode.NONE
+      );
     }
   }
   var expr = deferASMCall(compiler, prototype, operands, contextualType, reportNode);
@@ -2460,7 +2565,7 @@ function evaluateConstantType(
   if (operands.length == 1) { // optional type argument
     if (typeArguments) {
       if (typeArguments.length == 1) {
-        compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, false);
+        compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
       } else {
         if (typeArguments.length) {
           compiler.error(
@@ -2469,10 +2574,10 @@ function evaluateConstantType(
           );
           return null;
         }
-        compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+        compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
       }
     } else {
-      compiler.compileExpressionRetainType(operands[0], Type.i32, false);
+      compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
     }
     return compiler.currentType;
   }
@@ -2494,7 +2599,7 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   var expr: ExpressionRef;
   var value: i32;
   if (compiler.options.isWasm64) {
-    expr = compiler.precomputeExpression(expression, Type.usize64);
+    expr = compiler.precomputeExpression(expression, Type.usize64, ConversionKind.IMPLICIT, WrapMode.NONE);
     if (
       _BinaryenExpressionGetId(expr) != ExpressionId.Const ||
       _BinaryenExpressionGetType(expr) != NativeType.I64 ||
@@ -2508,7 +2613,7 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
       value = -1;
     }
   } else {
-    expr = compiler.precomputeExpression(expression, Type.usize32);
+    expr = compiler.precomputeExpression(expression, Type.usize32, ConversionKind.IMPLICIT, WrapMode.NONE);
     if (
       _BinaryenExpressionGetId(expr) != ExpressionId.Const ||
       _BinaryenExpressionGetType(expr) != NativeType.I32 ||
@@ -2588,7 +2693,7 @@ export function compileAbort(
   if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.createUnreachable();
 
   var messageArg = message != null
-    ? compiler.compileExpression(message, stringType)
+    ? compiler.compileExpression(message, stringType, ConversionKind.IMPLICIT, WrapMode.NONE)
     : stringType.toNativeZero(module);
 
   var filenameArg = compiler.compileStaticString(reportNode.range.source.normalizedPath);

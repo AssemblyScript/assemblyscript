@@ -13,84 +13,6 @@
   (if
    (i32.ne
     (i32.and
-     (i32.add
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.add
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.shr_s
-       (i32.shl
-        (get_local $1)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 4)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.sub
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.sub
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.shr_s
-       (i32.shl
-        (get_local $1)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 5)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
      (i32.mul
       (get_local $0)
       (get_local $1)
@@ -130,228 +52,6 @@
   (if
    (i32.ne
     (i32.and
-     (i32.and
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.and
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.shr_s
-       (i32.shl
-        (get_local $1)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 7)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.or
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.or
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.shr_s
-       (i32.shl
-        (get_local $1)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 8)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.xor
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.xor
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.shr_s
-       (i32.shl
-        (get_local $1)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 9)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.shl
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.shl
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.shr_s
-       (i32.shl
-        (get_local $1)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 10)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.add
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.add
-      (i32.and
-       (get_local $0)
-       (i32.const 255)
-      )
-      (i32.and
-       (get_local $1)
-       (i32.const 255)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 13)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.sub
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.sub
-      (i32.and
-       (get_local $0)
-       (i32.const 255)
-      )
-      (i32.and
-       (get_local $1)
-       (i32.const 255)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 14)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
      (i32.mul
       (get_local $0)
       (get_local $1)
@@ -377,129 +77,6 @@
      (i32.const 0)
      (i32.const 4)
      (i32.const 15)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.and
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.and
-      (get_local $0)
-      (i32.const 255)
-     )
-     (i32.and
-      (get_local $1)
-      (i32.const 255)
-     )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 16)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.or
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.or
-     (i32.and
-      (get_local $0)
-      (i32.const 255)
-     )
-     (i32.and
-      (get_local $1)
-      (i32.const 255)
-     )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 17)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.xor
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.xor
-     (i32.and
-      (get_local $0)
-      (i32.const 255)
-     )
-     (i32.and
-      (get_local $1)
-      (i32.const 255)
-     )
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 18)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.shl
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.shl
-      (i32.and
-       (get_local $0)
-       (i32.const 255)
-      )
-      (i32.and
-       (get_local $1)
-       (i32.const 255)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 19)
      (i32.const 2)
     )
     (unreachable)
@@ -669,12 +246,15 @@
    )
   )
   (set_global $retain-i32/si
-   (i32.const -1)
+   (i32.const 255)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
-    (i32.const -1)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
+    (i32.const 255)
    )
    (block
     (call $abort
@@ -691,8 +271,11 @@
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
-    (i32.const -1)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
+    (i32.const 255)
    )
    (block
     (call $abort
@@ -705,12 +288,15 @@
    )
   )
   (set_global $retain-i32/si
-   (i32.const -2)
+   (i32.const 254)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
-    (i32.const -2)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
+    (i32.const 254)
    )
    (block
     (call $abort
@@ -723,12 +309,15 @@
    )
   )
   (set_global $retain-i32/si
-   (i32.const -128)
+   (i32.const 128)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
-    (i32.const -128)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
+    (i32.const 128)
    )
    (block
     (call $abort
@@ -741,12 +330,15 @@
    )
   )
   (set_global $retain-i32/si
-   (i32.const -128)
+   (i32.const 128)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
-    (i32.const -128)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
+    (i32.const 128)
    )
    (block
     (call $abort
@@ -763,8 +355,11 @@
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
-    (i32.const -127)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
+    (i32.const 129)
    )
    (block
     (call $abort
@@ -777,12 +372,15 @@
    )
   )
   (set_global $retain-i32/si
-   (i32.const -128)
+   (i32.const 128)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
-    (i32.const -128)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
+    (i32.const 128)
    )
    (block
     (call $abort
@@ -799,7 +397,10 @@
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
     (i32.const 1)
    )
    (block
@@ -817,7 +418,10 @@
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
     (i32.const 1)
    )
    (block
@@ -834,7 +438,10 @@
    (i32.const 0)
   )
   (if
-   (get_global $retain-i32/si)
+   (i32.and
+    (get_global $retain-i32/si)
+    (i32.const 255)
+   )
    (block
     (call $abort
      (i32.const 0)
@@ -850,7 +457,10 @@
   )
   (if
    (i32.ne
-    (get_global $retain-i32/si)
+    (i32.and
+     (get_global $retain-i32/si)
+     (i32.const 255)
+    )
     (i32.const 1)
    )
    (block
@@ -864,11 +474,14 @@
    )
   )
   (set_global $retain-i32/ui
-   (i32.const 255)
+   (i32.const 511)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/ui)
+    (i32.and
+     (get_global $retain-i32/ui)
+     (i32.const 255)
+    )
     (i32.const 255)
    )
    (block
@@ -882,11 +495,14 @@
    )
   )
   (set_global $retain-i32/ui
-   (i32.const 255)
+   (i32.const -1)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/ui)
+    (i32.and
+     (get_global $retain-i32/ui)
+     (i32.const 255)
+    )
     (i32.const 255)
    )
    (block
@@ -900,11 +516,14 @@
    )
   )
   (set_global $retain-i32/ui
-   (i32.const 254)
+   (i32.const 510)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/ui)
+    (i32.and
+     (get_global $retain-i32/ui)
+     (i32.const 255)
+    )
     (i32.const 254)
    )
    (block
@@ -918,11 +537,14 @@
    )
   )
   (set_global $retain-i32/ui
-   (i32.const 1)
+   (i32.const 65025)
   )
   (if
    (i32.ne
-    (get_global $retain-i32/ui)
+    (i32.and
+     (get_global $retain-i32/ui)
+     (i32.const 255)
+    )
     (i32.const 1)
    )
    (block
@@ -940,7 +562,10 @@
   )
   (if
    (i32.ne
-    (get_global $retain-i32/ui)
+    (i32.and
+     (get_global $retain-i32/ui)
+     (i32.const 255)
+    )
     (i32.const 1)
    )
    (block
@@ -958,7 +583,10 @@
   )
   (if
    (i32.ne
-    (get_global $retain-i32/ui)
+    (i32.and
+     (get_global $retain-i32/ui)
+     (i32.const 255)
+    )
     (i32.const 1)
    )
    (block
@@ -975,7 +603,10 @@
    (i32.const 0)
   )
   (if
-   (get_global $retain-i32/ui)
+   (i32.and
+    (get_global $retain-i32/ui)
+    (i32.const 255)
+   )
    (block
     (call $abort
      (i32.const 0)

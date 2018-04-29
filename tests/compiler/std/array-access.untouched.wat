@@ -163,13 +163,16 @@
     (if
      (if (result i32)
       (get_local $2)
-      (i32.eq
-       (i32.load8_u
-        (get_local $0)
+      (i32.and
+       (i32.eq
+        (i32.load8_u
+         (get_local $0)
+        )
+        (i32.load8_u
+         (get_local $1)
+        )
        )
-       (i32.load8_u
-        (get_local $1)
-       )
+       (i32.const 1)
       )
       (get_local $2)
      )
@@ -347,18 +350,21 @@
  )
  (func $std/array-access/stringArrayMethodCall (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (return
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
-    )
-    (call $~lib/string/String#startsWith|trampoline
-     (call $~lib/array/Array<String>#__get
-      (get_local $0)
+   (i32.and
+    (block (result i32)
+     (set_global $~argc
+      (i32.const 1)
+     )
+     (call $~lib/string/String#startsWith|trampoline
+      (call $~lib/array/Array<String>#__get
+       (get_local $0)
+       (i32.const 0)
+      )
+      (i32.const 4)
       (i32.const 0)
      )
-     (i32.const 4)
-     (i32.const 0)
     )
+    (i32.const 1)
    )
   )
  )
@@ -412,21 +418,24 @@
  )
  (func $std/array-access/stringArrayArrayMethodCall (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (return
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
-    )
-    (call $~lib/string/String#startsWith|trampoline
-     (call $~lib/array/Array<String>#__get
-      (call $~lib/array/Array<Array<String>>#__get
-       (get_local $0)
-       (i32.const 0)
-      )
+   (i32.and
+    (block (result i32)
+     (set_global $~argc
       (i32.const 1)
      )
-     (i32.const 4)
-     (i32.const 0)
+     (call $~lib/string/String#startsWith|trampoline
+      (call $~lib/array/Array<String>#__get
+       (call $~lib/array/Array<Array<String>>#__get
+        (get_local $0)
+        (i32.const 0)
+       )
+       (i32.const 1)
+      )
+      (i32.const 4)
+      (i32.const 0)
+     )
     )
+    (i32.const 1)
    )
   )
  )

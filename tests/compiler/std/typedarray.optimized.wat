@@ -262,7 +262,10 @@
    )
    (tee_local $1
     (i32.mul
-     (get_local $1)
+     (i32.and
+      (get_local $1)
+      (i32.const 255)
+     )
      (i32.const 16843009)
     )
    )
@@ -1964,9 +1967,12 @@
    (i32.const 256)
   )
   (if
-   (call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
-    (get_global $std/typedarray/clampedArr)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
+     (get_global $std/typedarray/clampedArr)
+     (i32.const 0)
+    )
+    (i32.const 255)
    )
    (block
     (call $abort
@@ -1980,9 +1986,12 @@
   )
   (if
    (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
-     (get_global $std/typedarray/clampedArr)
-     (i32.const 1)
+    (i32.and
+     (call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
+      (get_global $std/typedarray/clampedArr)
+      (i32.const 1)
+     )
+     (i32.const 255)
     )
     (i32.const 2)
    )
@@ -1998,9 +2007,12 @@
   )
   (if
    (i32.ne
-    (call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
-     (get_global $std/typedarray/clampedArr)
-     (i32.const 2)
+    (i32.and
+     (call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
+      (get_global $std/typedarray/clampedArr)
+      (i32.const 2)
+     )
+     (i32.const 255)
     )
     (i32.const 255)
    )

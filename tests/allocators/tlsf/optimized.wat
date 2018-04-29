@@ -1062,7 +1062,7 @@
     ;;@ ~lib/allocator/tlsf.ts:369:6
     (i32.store
      ;;@ ~lib/allocator/tlsf.ts:368:6
-     (tee_local $2
+     (tee_local $0
       ;;@ ~lib/allocator/tlsf.ts:368:25
       (call $~lib/allocator/tlsf/Block#get:right
        ;;@ ~lib/allocator/tlsf.ts:368:32
@@ -1072,7 +1072,7 @@
      (i32.and
       ;;@ ~lib/allocator/tlsf.ts:369:6
       (i32.load
-       (get_local $2)
+       (get_local $0)
       )
       (i32.const -3)
      )
@@ -1109,7 +1109,7 @@
      ;;@ ~lib/allocator/tlsf.ts:446:11
      (tee_local $2
       ;;@ ~lib/allocator/tlsf.ts:445:4
-      (tee_local $3
+      (tee_local $4
        ;;@ ~lib/allocator/tlsf.ts:445:21
        (i32.and
         (i32.add
@@ -1154,7 +1154,7 @@
         (i32.const 0)
        )
        ;;@ ~lib/allocator/tlsf.ts:451:11
-       (set_local $4
+       (set_local $3
         ;;@ ~lib/allocator/tlsf.ts:451:25
         (i32.const 0)
        )
@@ -1162,7 +1162,7 @@
         (if
          ;;@ ~lib/allocator/tlsf.ts:451:28
          (i32.lt_u
-          (get_local $4)
+          (get_local $3)
           ;;@ ~lib/allocator/tlsf.ts:451:33
           (i32.const 32)
          )
@@ -1174,15 +1174,15 @@
            ;;@ ~lib/allocator/tlsf.ts:452:21
            (get_local $1)
            ;;@ ~lib/allocator/tlsf.ts:452:25
-           (get_local $4)
+           (get_local $3)
            ;;@ ~lib/allocator/tlsf.ts:452:29
            (i32.const 0)
           )
           ;;@ ~lib/allocator/tlsf.ts:451:42
-          (set_local $4
+          (set_local $3
            (i32.add
             ;;@ ~lib/allocator/tlsf.ts:451:44
-            (get_local $4)
+            (get_local $3)
             (i32.const 1)
            )
           )
@@ -1211,7 +1211,7 @@
       (i32.and
        (i32.add
         ;;@ ~lib/allocator/tlsf.ts:455:20
-        (get_local $3)
+        (get_local $4)
         (i32.const 2923)
        )
        (i32.const -8)
@@ -1253,7 +1253,7 @@
      ;;@ ~lib/allocator/tlsf.ts:466:8
      (i32.eqz
       ;;@ ~lib/allocator/tlsf.ts:465:4
-      (tee_local $3
+      (tee_local $1
        ;;@ ~lib/allocator/tlsf.ts:465:21
        (call $~lib/allocator/tlsf/Root#search
         ;;@ ~lib/allocator/tlsf.ts:465:16
@@ -1262,7 +1262,7 @@
         (tee_local $0
          ;;@ ~lib/allocator/tlsf.ts:463:11
          (select
-          (tee_local $3
+          (tee_local $1
            ;;@ ~lib/allocator/tlsf.ts:463:22
            (i32.and
             (i32.add
@@ -1274,13 +1274,13 @@
             (i32.const -8)
            )
           )
-          (tee_local $1
+          (tee_local $3
            ;;@ ~lib/allocator/tlsf.ts:463:51
            (i32.const 16)
           )
           (i32.gt_u
-           (get_local $3)
            (get_local $1)
+           (get_local $3)
           )
          )
         )
@@ -1296,16 +1296,16 @@
         (grow_memory
          ;;@ ~lib/allocator/tlsf.ts:471:24
          (select
-          (tee_local $3
+          (tee_local $1
            ;;@ ~lib/allocator/tlsf.ts:469:6
-           (tee_local $1
+           (tee_local $3
             ;;@ ~lib/allocator/tlsf.ts:469:24
             (current_memory)
            )
           )
-          (tee_local $5
+          (tee_local $4
            ;;@ ~lib/allocator/tlsf.ts:470:6
-           (tee_local $4
+           (tee_local $5
             ;;@ ~lib/allocator/tlsf.ts:470:24
             (i32.shr_u
              (i32.and
@@ -1324,8 +1324,8 @@
            )
           )
           (i32.gt_s
-           (get_local $3)
-           (get_local $5)
+           (get_local $1)
+           (get_local $4)
           )
          )
         )
@@ -1338,7 +1338,7 @@
         (i32.lt_s
          (grow_memory
           ;;@ ~lib/allocator/tlsf.ts:473:24
-          (get_local $4)
+          (get_local $5)
          )
          ;;@ ~lib/allocator/tlsf.ts:473:39
          (i32.const 0)
@@ -1354,7 +1354,7 @@
         (get_local $2)
         ;;@ ~lib/allocator/tlsf.ts:478:21
         (i32.shl
-         (get_local $1)
+         (get_local $3)
          ;;@ ~lib/allocator/tlsf.ts:478:43
          (i32.const 16)
         )
@@ -1368,7 +1368,7 @@
        )
       )
       ;;@ ~lib/allocator/tlsf.ts:479:6
-      (set_local $3
+      (set_local $1
        ;;@ ~lib/allocator/tlsf.ts:479:14
        (call $~lib/allocator/tlsf/Root#search
         ;;@ ~lib/allocator/tlsf.ts:479:21
@@ -1386,7 +1386,7 @@
       ;;@ ~lib/allocator/tlsf.ts:483:11
       (get_local $2)
       ;;@ ~lib/allocator/tlsf.ts:483:20
-      (get_local $3)
+      (get_local $1)
       ;;@ ~lib/allocator/tlsf.ts:483:27
       (get_local $0)
      )

@@ -13,18 +13,12 @@
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.and
-        (i32.const 1)
-        (i32.const 1)
-       )
-      )
-      (get_local $1)
-      (i32.const 0)
+    (if (result i32)
+     (tee_local $1
+      (i32.const 1)
      )
-     (i32.const 1)
+     (get_local $1)
+     (i32.const 0)
     )
    )
    (block
@@ -38,31 +32,34 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $1
-      (i32.const 1)
-     )
-     (get_local $1)
-     (i32.const 0)
+   (if (result i32)
+    (tee_local $1
+     (i32.const 1)
     )
-    (i32.const 1)
+    (get_local $1)
+    (i32.const 0)
    )
    (return
     (i32.or
-     (i32.and
-      (i32.shl
-       (get_local $0)
+     (i32.or
+      (i32.and
+       (i32.shl
+        (get_local $0)
+        (i32.const 8)
+       )
+       (i32.const 65280)
+      )
+      (i32.shr_u
+       (i32.and
+        (get_local $0)
+        (i32.const 65535)
+       )
        (i32.const 8)
       )
-      (i32.const 65280)
      )
      (i32.and
-      (i32.shr_u
-       (get_local $0)
-       (i32.const 8)
-      )
-      (i32.const 255)
+      (get_local $0)
+      (i32.const -65536)
      )
     )
    )
@@ -73,27 +70,18 @@
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
+    (if (result i32)
      (if (result i32)
       (tee_local $1
-       (i32.and
-        (if (result i32)
-         (tee_local $1
-          (i32.and
-           (i32.const 1)
-           (i32.const 1)
-          )
-         )
-         (get_local $1)
-         (i32.const 0)
-        )
-        (i32.const 1)
-       )
+       (i32.const 1)
       )
       (get_local $1)
-      (i32.const 0)
+      (tee_local $1
+       (i32.const 0)
+      )
      )
-     (i32.const 1)
+     (get_local $1)
+     (i32.const 0)
     )
    )
    (block
@@ -114,18 +102,12 @@
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.and
-        (i32.const 1)
-        (i32.const 1)
-       )
-      )
-      (get_local $1)
-      (i32.const 0)
+    (if (result i32)
+     (tee_local $1
+      (i32.const 1)
      )
-     (i32.const 1)
+     (get_local $1)
+     (i32.const 0)
     )
    )
    (block
@@ -139,38 +121,38 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $1
-      (i32.const 1)
-     )
-     (get_local $1)
-     (i32.const 0)
+   (if (result i32)
+    (tee_local $1
+     (i32.const 1)
     )
-    (i32.const 1)
+    (get_local $1)
+    (i32.const 0)
    )
    (return
-    (i32.shr_s
-     (i32.shl
-      (i32.or
-       (i32.and
+    (i32.or
+     (i32.or
+      (i32.and
+       (i32.shl
+        (get_local $0)
+        (i32.const 8)
+       )
+       (i32.const 65280)
+      )
+      (i32.and
+       (i32.shr_s
         (i32.shl
          (get_local $0)
-         (i32.const 8)
+         (i32.const 16)
         )
-        (i32.const -256)
+        (i32.const 24)
        )
-       (i32.and
-        (i32.shr_s
-         (get_local $0)
-         (i32.const 8)
-        )
-        (i32.const 255)
-       )
+       (i32.const 255)
       )
-      (i32.const 16)
      )
-     (i32.const 16)
+     (i32.and
+      (get_local $0)
+      (i32.const -65536)
+     )
     )
    )
   )
@@ -180,27 +162,18 @@
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
+    (if (result i32)
      (if (result i32)
       (tee_local $1
-       (i32.and
-        (if (result i32)
-         (tee_local $1
-          (i32.and
-           (i32.const 1)
-           (i32.const 1)
-          )
-         )
-         (get_local $1)
-         (i32.const 0)
-        )
-        (i32.const 1)
-       )
+       (i32.const 1)
       )
       (get_local $1)
-      (i32.const 0)
+      (tee_local $1
+       (i32.const 0)
+      )
      )
-     (i32.const 1)
+     (get_local $1)
+     (i32.const 0)
     )
    )
    (block
@@ -221,27 +194,12 @@
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.and
-        (if (result i32)
-         (tee_local $1
-          (i32.and
-           (i32.const 0)
-           (i32.const 1)
-          )
-         )
-         (get_local $1)
-         (i32.const 1)
-        )
-        (i32.const 1)
-       )
-      )
-      (get_local $1)
-      (i32.const 0)
+    (if (result i32)
+     (tee_local $1
+      (i32.const 1)
      )
-     (i32.const 1)
+     (get_local $1)
+     (i32.const 0)
     )
    )
    (block
@@ -275,28 +233,7 @@
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.and
-        (if (result i32)
-         (tee_local $1
-          (i32.and
-           (i32.const 0)
-           (i32.const 1)
-          )
-         )
-         (get_local $1)
-         (i32.const 0)
-        )
-        (i32.const 1)
-       )
-      )
-      (get_local $1)
-      (i32.const 1)
-     )
-     (i32.const 1)
-    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -349,19 +286,7 @@
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.and
-        (i32.const 0)
-        (i32.const 1)
-       )
-      )
-      (get_local $1)
-      (i32.const 1)
-     )
-     (i32.const 1)
-    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -373,61 +298,36 @@
     (unreachable)
    )
   )
-  (if
-   (i32.and
-    (if (result i32)
-     (tee_local $1
-      (i32.const 0)
-     )
-     (get_local $1)
-     (i32.const 1)
-    )
-    (i32.const 1)
-   )
-   (return
+  (return
+   (i32.or
     (i32.or
-     (i32.or
-      (i32.and
-       (i32.shl
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 65280)
+     (i32.and
+      (i32.shl
+       (get_local $0)
+       (i32.const 8)
       )
-      (i32.and
-       (i32.shr_u
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 255)
-      )
+      (i32.const 65280)
      )
      (i32.and
-      (get_local $0)
-      (i32.const -65536)
+      (i32.shr_u
+       (get_local $0)
+       (i32.const 8)
+      )
+      (i32.const 255)
      )
+    )
+    (i32.and
+     (get_local $0)
+     (i32.const -65536)
     )
    )
   )
-  (get_local $0)
  )
  (func $~lib/polyfills/bswap16<i32> (; 8 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.and
-        (i32.const 0)
-        (i32.const 1)
-       )
-      )
-      (get_local $1)
-      (i32.const 1)
-     )
-     (i32.const 1)
-    )
+    (i32.const 1)
    )
    (block
     (call $abort
@@ -439,49 +339,39 @@
     (unreachable)
    )
   )
-  (if
-   (i32.and
-    (if (result i32)
-     (tee_local $1
-      (i32.const 0)
-     )
-     (get_local $1)
-     (i32.const 1)
-    )
-    (i32.const 1)
-   )
-   (return
+  (return
+   (i32.or
     (i32.or
-     (i32.or
-      (i32.and
-       (i32.shl
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 65280)
+     (i32.and
+      (i32.shl
+       (get_local $0)
+       (i32.const 8)
       )
-      (i32.and
-       (i32.shr_s
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 255)
-      )
+      (i32.const 65280)
      )
      (i32.and
-      (get_local $0)
-      (i32.const -65536)
+      (i32.shr_s
+       (get_local $0)
+       (i32.const 8)
+      )
+      (i32.const 255)
      )
+    )
+    (i32.and
+     (get_local $0)
+     (i32.const -65536)
     )
    )
   )
-  (get_local $0)
  )
  (func $start (; 9 ;) (type $v)
   (if
    (i32.ne
-    (call $~lib/polyfills/bswap<u16>
-     (i32.const 43707)
+    (i32.and
+     (call $~lib/polyfills/bswap<u16>
+      (i32.const 43707)
+     )
+     (i32.const 65535)
     )
     (i32.const 48042)
    )
@@ -497,10 +387,13 @@
   )
   (if
    (i32.ne
-    (call $~lib/polyfills/bswap<i16>
-     (i32.const -21829)
+    (i32.and
+     (call $~lib/polyfills/bswap<i16>
+      (i32.const 43707)
+     )
+     (i32.const 65535)
     )
-    (i32.const -17494)
+    (i32.const 48042)
    )
    (block
     (call $abort
@@ -616,8 +509,11 @@
   )
   (if
    (i32.ne
-    (call $~lib/polyfills/bswap16<u16>
-     (i32.const 43707)
+    (i32.and
+     (call $~lib/polyfills/bswap16<u16>
+      (i32.const 43707)
+     )
+     (i32.const 65535)
     )
     (i32.const 48042)
    )
@@ -633,10 +529,13 @@
   )
   (if
    (i32.ne
-    (call $~lib/polyfills/bswap16<i16>
-     (i32.const -21829)
+    (i32.and
+     (call $~lib/polyfills/bswap16<i16>
+      (i32.const 43707)
+     )
+     (i32.const 65535)
     )
-    (i32.const -17494)
+    (i32.const 48042)
    )
    (block
     (call $abort
