@@ -3454,19 +3454,22 @@
        (set_global $~argc
         (i32.const 3)
        )
-       (call_indirect (type $iiii)
-        (i32.load offset=8
-         (i32.add
-          (get_local $3)
-          (i32.shl
-           (get_local $2)
-           (i32.const 2)
+       (i32.and
+        (call_indirect (type $iiii)
+         (i32.load offset=8
+          (i32.add
+           (get_local $3)
+           (i32.shl
+            (get_local $2)
+            (i32.const 2)
+           )
           )
          )
+         (get_local $2)
+         (get_local $0)
+         (get_local $1)
         )
-        (get_local $2)
-        (get_local $0)
-        (get_local $1)
+        (i32.const 1)
        )
       )
       (return
@@ -3565,19 +3568,22 @@
         (i32.const 3)
        )
        (i32.eqz
-        (call_indirect (type $iiii)
-         (i32.load offset=8
-          (i32.add
-           (get_local $3)
-           (i32.shl
-            (get_local $2)
-            (i32.const 2)
+        (i32.and
+         (call_indirect (type $iiii)
+          (i32.load offset=8
+           (i32.add
+            (get_local $3)
+            (i32.shl
+             (get_local $2)
+             (i32.const 2)
+            )
            )
           )
+          (get_local $2)
+          (get_local $0)
+          (get_local $1)
          )
-         (get_local $2)
-         (get_local $0)
-         (get_local $1)
+         (i32.const 1)
         )
        )
       )
@@ -3676,19 +3682,22 @@
        (set_global $~argc
         (i32.const 3)
        )
-       (call_indirect (type $iiii)
-        (i32.load offset=8
-         (i32.add
-          (get_local $3)
-          (i32.shl
-           (get_local $2)
-           (i32.const 2)
+       (i32.and
+        (call_indirect (type $iiii)
+         (i32.load offset=8
+          (i32.add
+           (get_local $3)
+           (i32.shl
+            (get_local $2)
+            (i32.const 2)
+           )
           )
          )
+         (get_local $2)
+         (get_local $0)
+         (get_local $1)
         )
-        (get_local $2)
-        (get_local $0)
-        (get_local $1)
+        (i32.const 1)
        )
       )
       (return
@@ -4138,11 +4147,14 @@
        (set_global $~argc
         (i32.const 3)
        )
-       (call_indirect (type $iiii)
-        (get_local $3)
-        (get_local $2)
-        (get_local $0)
-        (get_local $1)
+       (i32.and
+        (call_indirect (type $iiii)
+         (get_local $3)
+         (get_local $2)
+         (get_local $0)
+         (get_local $1)
+        )
+        (i32.const 1)
        )
       )
       (drop
@@ -4289,7 +4301,10 @@
     (get_local $1)
     (i32.const 2)
    )
-   (get_local $0)
+   (i32.and
+    (get_local $0)
+    (i32.const 1)
+   )
   )
  )
  (func $start~anonymous|31 (; 62 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
@@ -4299,7 +4314,10 @@
     (get_local $1)
     (i32.const 100)
    )
-   (get_local $0)
+   (i32.and
+    (get_local $0)
+    (i32.const 1)
+   )
   )
  )
  (func $start~anonymous|32 (; 63 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
@@ -5790,19 +5808,13 @@
  )
  (func $start~anonymous|49 (; 91 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
-   (i32.and
-    (call $~lib/string/String.__gt
-     (get_local $0)
-     (get_local $1)
-    )
-    (i32.const 1)
+   (call $~lib/string/String.__gt
+    (get_local $0)
+    (get_local $1)
    )
-   (i32.and
-    (call $~lib/string/String.__lt
-     (get_local $0)
-     (get_local $1)
-    )
-    (i32.const 1)
+   (call $~lib/string/String.__lt
+    (get_local $0)
+    (get_local $1)
    )
   )
  )
@@ -5867,9 +5879,12 @@
  )
  (func $~lib/string/String.__ne (; 93 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.eqz
-   (call $~lib/string/String.__eq
-    (get_local $0)
-    (get_local $1)
+   (i32.and
+    (call $~lib/string/String.__eq
+     (get_local $0)
+     (get_local $1)
+    )
+    (i32.const 1)
    )
   )
  )
@@ -5908,15 +5923,18 @@
     )
     (block
      (if
-      (call $~lib/string/String.__ne
-       (call $~lib/array/Array<i32>#__get
-        (get_local $0)
-        (get_local $3)
+      (i32.and
+       (call $~lib/string/String.__ne
+        (call $~lib/array/Array<i32>#__get
+         (get_local $0)
+         (get_local $3)
+        )
+        (call $~lib/array/Array<i32>#__get
+         (get_local $1)
+         (get_local $3)
+        )
        )
-       (call $~lib/array/Array<i32>#__get
-        (get_local $1)
-        (get_local $3)
-       )
+       (i32.const 1)
       )
       (return
        (i32.const 0)
@@ -7452,10 +7470,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/includes)
-     (i32.const 1)
-    )
+    (get_global $std/array/includes)
     (i32.const 1)
    )
    (block
@@ -7482,10 +7497,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/includes)
-     (i32.const 1)
-    )
+    (get_global $std/array/includes)
     (i32.const 1)
    )
    (block
@@ -7511,10 +7523,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/includes)
-    (i32.const 1)
-   )
+   (get_global $std/array/includes)
    (block
     (call $abort
      (i32.const 0)
@@ -7533,10 +7542,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/includes)
-    (i32.const 1)
-   )
+   (get_global $std/array/includes)
    (block
     (call $abort
      (i32.const 0)
@@ -7556,10 +7562,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/includes)
-     (i32.const 1)
-    )
+    (get_global $std/array/includes)
     (i32.const 1)
    )
    (block
@@ -7581,10 +7584,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/includes)
-     (i32.const 1)
-    )
+    (get_global $std/array/includes)
     (i32.const 1)
    )
    (block
@@ -7606,10 +7606,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/includes)
-     (i32.const 1)
-    )
+    (get_global $std/array/includes)
     (i32.const 1)
    )
    (block
@@ -7631,10 +7628,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/includes)
-     (i32.const 1)
-    )
+    (get_global $std/array/includes)
     (i32.const 1)
    )
    (block
@@ -7656,10 +7650,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/includes)
-     (i32.const 1)
-    )
+    (get_global $std/array/includes)
     (i32.const 1)
    )
    (block
@@ -7681,10 +7672,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/includes)
-     (i32.const 1)
-    )
+    (get_global $std/array/includes)
     (i32.const 1)
    )
    (block
@@ -7989,10 +7977,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/every)
-     (i32.const 1)
-    )
+    (get_global $std/array/every)
     (i32.const 1)
    )
    (block
@@ -8012,10 +7997,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/every)
-    (i32.const 1)
-   )
+   (get_global $std/array/every)
    (block
     (call $abort
      (i32.const 0)
@@ -8034,10 +8016,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/every)
-     (i32.const 1)
-    )
+    (get_global $std/array/every)
     (i32.const 1)
    )
    (block
@@ -8074,10 +8053,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/every)
-    (i32.const 1)
-   )
+   (get_global $std/array/every)
    (block
     (call $abort
      (i32.const 0)
@@ -8116,10 +8092,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/every)
-     (i32.const 1)
-    )
+    (get_global $std/array/every)
     (i32.const 1)
    )
    (block
@@ -8169,10 +8142,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/some)
-     (i32.const 1)
-    )
+    (get_global $std/array/some)
     (i32.const 1)
    )
    (block
@@ -8192,10 +8162,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/some)
-    (i32.const 1)
-   )
+   (get_global $std/array/some)
    (block
     (call $abort
      (i32.const 0)
@@ -8213,10 +8180,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/some)
-    (i32.const 1)
-   )
+   (get_global $std/array/some)
    (block
     (call $abort
      (i32.const 0)
@@ -8252,10 +8216,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/some)
-     (i32.const 1)
-    )
+    (get_global $std/array/some)
     (i32.const 1)
    )
    (block
@@ -8295,10 +8256,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/some)
-    (i32.const 1)
-   )
+   (get_global $std/array/some)
    (block
     (call $abort
      (i32.const 0)
@@ -8882,18 +8840,18 @@
    )
   )
   (set_global $std/array/boolVal
-   (call $~lib/array/Array<i32>#reduce<i32>
-    (get_global $std/array/arr)
-    (i32.const 30)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/array/Array<i32>#reduce<i32>
+     (get_global $std/array/arr)
+     (i32.const 30)
+     (i32.const 0)
+    )
+    (i32.const 1)
    )
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/boolVal)
-     (i32.const 1)
-    )
+    (get_global $std/array/boolVal)
     (i32.const 1)
    )
    (block
@@ -8907,17 +8865,17 @@
    )
   )
   (set_global $std/array/boolVal
-   (call $~lib/array/Array<i32>#reduce<i32>
-    (get_global $std/array/arr)
-    (i32.const 31)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/array/Array<i32>#reduce<i32>
+     (get_global $std/array/arr)
+     (i32.const 31)
+     (i32.const 0)
+    )
+    (i32.const 1)
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/boolVal)
-    (i32.const 1)
-   )
+   (get_global $std/array/boolVal)
    (block
     (call $abort
      (i32.const 0)
@@ -9105,18 +9063,18 @@
    )
   )
   (set_global $std/array/boolVal
-   (call $~lib/array/Array<i32>#reduceRight<i32>
-    (get_global $std/array/arr)
-    (i32.const 37)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/array/Array<i32>#reduceRight<i32>
+     (get_global $std/array/arr)
+     (i32.const 37)
+     (i32.const 0)
+    )
+    (i32.const 1)
    )
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/array/boolVal)
-     (i32.const 1)
-    )
+    (get_global $std/array/boolVal)
     (i32.const 1)
    )
    (block
@@ -9130,17 +9088,17 @@
    )
   )
   (set_global $std/array/boolVal
-   (call $~lib/array/Array<i32>#reduceRight<i32>
-    (get_global $std/array/arr)
-    (i32.const 38)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/array/Array<i32>#reduceRight<i32>
+     (get_global $std/array/arr)
+     (i32.const 38)
+     (i32.const 0)
+    )
+    (i32.const 1)
    )
   )
   (if
-   (i32.and
-    (get_global $std/array/boolVal)
-    (i32.const 1)
-   )
+   (get_global $std/array/boolVal)
    (block
     (call $abort
      (i32.const 0)

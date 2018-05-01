@@ -68,7 +68,7 @@ import {
 import {
   Module,
   NativeType,
-  FunctionRef,
+  FunctionRef
 } from "./module";
 
 /** Path delimiter inserted between file system levels. */
@@ -3541,7 +3541,9 @@ export const enum FlowFlags {
   /** This branch is part of inlining a function. */
   INLINE_CONTEXT = 1 << 10,
   /** This branch explicitly requests no bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 11
+  UNCHECKED_CONTEXT = 1 << 11,
+  /** This branch returns a properly wrapped value. */
+  RETURNS_WRAPPED = 1 << 12
 }
 
 /** A control flow evaluator. */

@@ -235,16 +235,13 @@
   (set_global $~argc
    (i32.const 1)
   )
-  (i32.and
-   (call $~lib/string/String#startsWith|trampoline
-    (call $~lib/array/Array<Array<i32>>#__get
-     (get_local $0)
-     (i32.const 0)
-    )
-    (i32.const 4)
+  (call $~lib/string/String#startsWith|trampoline
+   (call $~lib/array/Array<Array<i32>>#__get
+    (get_local $0)
     (i32.const 0)
    )
-   (i32.const 1)
+   (i32.const 4)
+   (i32.const 0)
   )
  )
  (func $std/array-access/stringArrayArrayPropertyAccess (; 8 ;) (type $ii) (param $0 i32) (result i32)
@@ -262,19 +259,16 @@
   (set_global $~argc
    (i32.const 1)
   )
-  (i32.and
-   (call $~lib/string/String#startsWith|trampoline
+  (call $~lib/string/String#startsWith|trampoline
+   (call $~lib/array/Array<Array<i32>>#__get
     (call $~lib/array/Array<Array<i32>>#__get
-     (call $~lib/array/Array<Array<i32>>#__get
-      (get_local $0)
-      (i32.const 0)
-     )
-     (i32.const 1)
+     (get_local $0)
+     (i32.const 0)
     )
-    (i32.const 4)
-    (i32.const 0)
+    (i32.const 1)
    )
-   (i32.const 1)
+   (i32.const 4)
+   (i32.const 0)
   )
  )
 )

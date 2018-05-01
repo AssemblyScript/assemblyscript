@@ -2501,10 +2501,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/operator-overloading/eq)
-     (i32.const 1)
-    )
+    (get_global $std/operator-overloading/eq)
     (i32.const 1)
    )
    (block
@@ -2538,10 +2535,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/operator-overloading/eqf)
-    (i32.const 1)
-   )
+   (get_global $std/operator-overloading/eqf)
    (block
     (call $abort
      (i32.const 0)
@@ -2559,10 +2553,7 @@
    )
   )
   (if
-   (i32.and
-    (get_global $std/operator-overloading/eq)
-    (i32.const 1)
-   )
+   (get_global $std/operator-overloading/eq)
    (block
     (call $abort
      (i32.const 0)
@@ -2581,10 +2572,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/operator-overloading/eqf)
-     (i32.const 1)
-    )
+    (get_global $std/operator-overloading/eqf)
     (i32.const 1)
    )
    (block
@@ -2619,10 +2607,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/operator-overloading/gt)
-     (i32.const 1)
-    )
+    (get_global $std/operator-overloading/gt)
     (i32.const 1)
    )
    (block
@@ -2657,10 +2642,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/operator-overloading/gte)
-     (i32.const 1)
-    )
+    (get_global $std/operator-overloading/gte)
     (i32.const 1)
    )
    (block
@@ -2695,10 +2677,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/operator-overloading/le)
-     (i32.const 1)
-    )
+    (get_global $std/operator-overloading/le)
     (i32.const 1)
    )
    (block
@@ -2733,10 +2712,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (get_global $std/operator-overloading/leq)
-     (i32.const 1)
-    )
+    (get_global $std/operator-overloading/leq)
     (i32.const 1)
    )
    (block

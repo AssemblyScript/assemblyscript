@@ -34,7 +34,8 @@ import {
   HostOp,
   NativeType,
   ExpressionRef,
-  ExpressionId
+  ExpressionId,
+  TAGS
 } from "./module";
 
 import {
@@ -382,7 +383,7 @@ export function compileCall(
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.BOOL: {
-          ret = compiler.makeSmallIntegerWrap(
+          ret = compiler.ensureSmallIntegerWrap(
             module.createBinary(BinaryOp.RotlI32, arg0, arg1),
             compiler.currentType
           );
@@ -467,7 +468,7 @@ export function compileCall(
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.BOOL: {
-          ret = compiler.makeSmallIntegerWrap(
+          ret = compiler.ensureSmallIntegerWrap(
             module.createBinary(BinaryOp.RotrI32, arg0, arg1),
             compiler.currentType
           );
@@ -562,7 +563,7 @@ export function compileCall(
               module.createGetLocal(tempLocal.index, NativeType.I32),
               module.createI32(0)
             )
-          );
+          ) | TAGS(arg0);
           break;
         }
         case TypeKind.ISIZE: {
@@ -688,7 +689,7 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          );
+          ) | (TAGS(arg0) & TAGS(arg1)); // remains wrapped if both values are
           break;
         }
         case TypeKind.U8:
@@ -705,7 +706,7 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          );
+          ) | (TAGS(arg0) & TAGS(arg1)); // remains wrapped if both values are
           break;
         }
         case TypeKind.I64: {
@@ -842,7 +843,7 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          );
+          ) | (TAGS(arg0) & TAGS(arg1)); // remains wrapped if both values are
           break;
         }
         case TypeKind.U8:
@@ -859,7 +860,7 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          );
+          ) | (TAGS(arg0) & TAGS(arg1)); // remains wrapped if both values are
           break;
         }
         case TypeKind.I64: {
@@ -1948,9 +1949,9 @@ export function compileCall(
           );
           return module.createUnreachable();
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
+        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
       } else {
-        arg0 = compiler.compileExpressionRetainType(operands[0], Type.bool, WrapMode.NONE);
+        arg0 = compiler.compileExpressionRetainType(operands[0], Type.bool, WrapMode.WRAP);
       }
 
       let type = compiler.currentType;
@@ -2044,7 +2045,7 @@ export function compileCall(
               ),
               abort,
               module.createGetLocal(tempLocal.index, NativeType.I32)
-            );
+            ) | TAGS(arg0);
             break;
           }
           case TypeKind.I64:

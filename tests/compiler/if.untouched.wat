@@ -73,11 +73,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $if/ifThenElse
-       (i32.const 0)
-      )
-      (i32.const 1)
+     (call $if/ifThenElse
+      (i32.const 0)
      )
      (i32.const 0)
     )
@@ -95,10 +92,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $if/ifThenElse
-       (i32.const 1)
-      )
+     (call $if/ifThenElse
       (i32.const 1)
      )
      (i32.const 1)
@@ -117,11 +111,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $if/ifThen
-       (i32.const 0)
-      )
-      (i32.const 1)
+     (call $if/ifThen
+      (i32.const 0)
      )
      (i32.const 0)
     )
@@ -139,10 +130,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $if/ifThen
-       (i32.const 1)
-      )
+     (call $if/ifThen
       (i32.const 1)
      )
      (i32.const 1)
@@ -161,11 +149,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $if/ifThenElseBlock
-       (i32.const 0)
-      )
-      (i32.const 1)
+     (call $if/ifThenElseBlock
+      (i32.const 0)
      )
      (i32.const 0)
     )
@@ -183,10 +168,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $if/ifThenElseBlock
-       (i32.const 1)
-      )
+     (call $if/ifThenElseBlock
       (i32.const 1)
      )
      (i32.const 1)

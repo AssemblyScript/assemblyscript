@@ -42,18 +42,21 @@
    (i32.const 0)
   )
   (if
-   (if (result i32)
-    (tee_local $4
-     (i32.lt_u
+   (i32.and
+    (if (result i32)
+     (tee_local $4
+      (i32.lt_u
+       (get_local $2)
+       (i32.const 1048576)
+      )
+     )
+     (get_local $4)
+     (i32.shr_u
       (get_local $2)
-      (i32.const 1048576)
+      (i32.const 31)
      )
     )
-    (get_local $4)
-    (i32.shr_u
-     (get_local $2)
-     (i32.const 31)
-    )
+    (i32.const 1)
    )
    (block
     (if

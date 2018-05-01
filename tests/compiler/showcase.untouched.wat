@@ -8365,11 +8365,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isNaN<f32>
-       (f32.const 1.25)
-      )
-      (i32.const 1)
+     (call $isNaN<f32>
+      (f32.const 1.25)
      )
      (i32.const 0)
     )
@@ -8387,11 +8384,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isNaN<f32>
-       (f32.const nan:0x400000)
-      )
-      (i32.const 1)
+     (call $isNaN<f32>
+      (f32.const nan:0x400000)
      )
      (i32.const 1)
     )
@@ -8409,11 +8403,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isFinite<f32>
-       (f32.const 1.25)
-      )
-      (i32.const 1)
+     (call $isFinite<f32>
+      (f32.const 1.25)
      )
      (i32.const 1)
     )
@@ -8431,11 +8422,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isFinite<f32>
-       (f32.const inf)
-      )
-      (i32.const 1)
+     (call $isFinite<f32>
+      (f32.const inf)
      )
      (i32.const 0)
     )
@@ -8453,13 +8441,10 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isFinite<f32>
-       (f32.neg
-        (f32.const inf)
-       )
+     (call $isFinite<f32>
+      (f32.neg
+       (f32.const inf)
       )
-      (i32.const 1)
      )
      (i32.const 0)
     )
@@ -8477,11 +8462,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isFinite<f32>
-       (f32.const nan:0x400000)
-      )
-      (i32.const 1)
+     (call $isFinite<f32>
+      (f32.const nan:0x400000)
      )
      (i32.const 0)
     )
@@ -8623,11 +8605,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isNaN<f64>
-       (f64.const 1.25)
-      )
-      (i32.const 1)
+     (call $isNaN<f64>
+      (f64.const 1.25)
      )
      (i32.const 0)
     )
@@ -8645,11 +8624,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isNaN<f64>
-       (f64.const nan:0x8000000000000)
-      )
-      (i32.const 1)
+     (call $isNaN<f64>
+      (f64.const nan:0x8000000000000)
      )
      (i32.const 1)
     )
@@ -8667,11 +8643,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isFinite<f64>
-       (f64.const 1.25)
-      )
-      (i32.const 1)
+     (call $isFinite<f64>
+      (f64.const 1.25)
      )
      (i32.const 1)
     )
@@ -8689,11 +8662,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isFinite<f64>
-       (f64.const inf)
-      )
-      (i32.const 1)
+     (call $isFinite<f64>
+      (f64.const inf)
      )
      (i32.const 0)
     )
@@ -8711,13 +8681,10 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isFinite<f64>
-       (f64.neg
-        (f64.const inf)
-       )
+     (call $isFinite<f64>
+      (f64.neg
+       (f64.const inf)
       )
-      (i32.const 1)
      )
      (i32.const 0)
     )
@@ -8735,11 +8702,8 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.and
-      (call $isFinite<f64>
-       (f64.const nan:0x8000000000000)
-      )
-      (i32.const 1)
+     (call $isFinite<f64>
+      (f64.const nan:0x8000000000000)
      )
      (i32.const 0)
     )

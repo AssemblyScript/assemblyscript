@@ -24,7 +24,9 @@ import {
   FunctionRef,
   ExpressionId,
   FunctionTypeRef,
-  GlobalRef
+  GlobalRef,
+  ExpressionTag,
+  TAGS
 } from "./module";
 
 import {
@@ -494,7 +496,7 @@ export class Compiler extends DiagnosticEmitter {
             declaration.initializer,
             Type.void,
             ConversionKind.NONE,
-            WrapMode.NONE
+            WrapMode.WRAP
           );
           if (this.currentType == Type.void) {
             this.error(
@@ -568,7 +570,7 @@ export class Compiler extends DiagnosticEmitter {
             declaration.initializer,
             global.type,
             ConversionKind.IMPLICIT,
-            WrapMode.NONE
+            WrapMode.WRAP
           );
         }
 
@@ -632,10 +634,6 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              assert(global.declaration).range
-            );
             return false;
           }
         }
@@ -741,10 +739,6 @@ export class Compiler extends DiagnosticEmitter {
               val.set(CommonFlags.INLINED);
             } else {
               assert(false);
-              this.error(
-                DiagnosticCode.Operation_not_supported,
-                valueDeclaration.range
-              );
               val.constantValue = 0;
             }
           }
@@ -885,6 +879,7 @@ export class Compiler extends DiagnosticEmitter {
           WrapMode.NONE
         );
         flow.set(FlowFlags.RETURNS);
+        if (stmt & ExpressionTag.WRAPPED) flow.set(FlowFlags.RETURNS_WRAPPED);
       } else {
         assert(body.kind == NodeKind.BLOCK);
         stmt = this.compileStatement(body);
@@ -1017,14 +1012,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           break;
         }
-        default: {
-          assert(false);
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            member.range
-          );
-          break;
-        }
+        default: assert(false);
       }
     }
   }
@@ -1436,13 +1424,8 @@ export class Compiler extends DiagnosticEmitter {
         // otherwise fall-through
       }
       default: {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          statement.range
-        );
         assert(false);
         expr = module.createUnreachable();
-        break;
       }
     }
     if (this.options.sourceMap) this.addDebugLocation(expr, statement.range);
@@ -1471,6 +1454,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var stmt = this.module.createBlock(null, this.compileStatements(statements), NativeType.None);
     var stmtReturns = flow.is(FlowFlags.RETURNS);
+    var stmtReturnsWrapped = flow.is(FlowFlags.RETURNS_WRAPPED);
     var stmtThrows = flow.is(FlowFlags.THROWS);
     var stmtAllocates = flow.is(FlowFlags.ALLOCATES);
 
@@ -1478,6 +1462,7 @@ export class Compiler extends DiagnosticEmitter {
     flow = flow.leaveBranchOrScope();
     this.currentFunction.flow = flow;
     if (stmtReturns) flow.set(FlowFlags.RETURNS);
+    if (stmtReturnsWrapped) flow.set(FlowFlags.RETURNS_WRAPPED);
     if (stmtThrows) flow.set(FlowFlags.THROWS);
     if (stmtAllocates) flow.set(FlowFlags.ALLOCATES);
     return stmt;
@@ -1612,11 +1597,13 @@ export class Compiler extends DiagnosticEmitter {
     var body = this.compileStatement(statement.statement);
 
     var alwaysReturns = !statement.condition && flow.is(FlowFlags.RETURNS);
+    var alwaysReturnsWrapped = !statement.condition && flow.is(FlowFlags.RETURNS_WRAPPED);
     var alwaysThrows = !statement.condition && flow.is(FlowFlags.THROWS);
     var alwaysAllocates = !statement.condition && flow.is(FlowFlags.ALLOCATES);
     // TODO: check other always-true conditions as well, not just omitted
 
     if (alwaysReturns) flow.set(FlowFlags.RETURNS);
+    if (alwaysReturnsWrapped) flow.set(FlowFlags.RETURNS_WRAPPED);
     if (alwaysThrows) flow.set(FlowFlags.THROWS);
     if (alwaysAllocates) flow.set(FlowFlags.ALLOCATES);
 
@@ -1687,6 +1674,7 @@ export class Compiler extends DiagnosticEmitter {
     currentFunction.flow = flow;
     var ifTrueExpr = this.compileStatement(ifTrue);
     var ifTrueReturns = flow.is(FlowFlags.RETURNS);
+    var ifTrueReturnsWrapped = flow.is(FlowFlags.RETURNS_WRAPPED);
     var ifTrueThrows = flow.is(FlowFlags.THROWS);
     var ifTrueAllocates = flow.is(FlowFlags.ALLOCATES);
     flow = flow.leaveBranchOrScope();
@@ -1694,6 +1682,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var ifFalseExpr: ExpressionRef = 0;
     var ifFalseReturns = false;
+    var ifFalseReturnsWrapped = false;
     var ifFalseThrows = false;
     var ifFalseAllocates = false;
     if (ifFalse) {
@@ -1701,6 +1690,7 @@ export class Compiler extends DiagnosticEmitter {
       currentFunction.flow = flow;
       ifFalseExpr = this.compileStatement(ifFalse);
       ifFalseReturns = flow.is(FlowFlags.RETURNS);
+      ifFalseReturnsWrapped = flow.is(FlowFlags.RETURNS_WRAPPED);
       ifFalseThrows = flow.is(FlowFlags.THROWS);
       ifFalseAllocates = flow.is(FlowFlags.ALLOCATES);
       flow = flow.leaveBranchOrScope();
@@ -1708,6 +1698,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (ifTrueReturns && ifFalseReturns) flow.set(FlowFlags.RETURNS);
+    if (ifTrueReturnsWrapped && ifFalseReturnsWrapped) flow.set(FlowFlags.RETURNS_WRAPPED);
     if (ifTrueThrows && ifFalseThrows) flow.set(FlowFlags.THROWS);
     if (ifTrueAllocates && ifFalseAllocates) flow.set(FlowFlags.ALLOCATES);
 
@@ -1732,6 +1723,9 @@ export class Compiler extends DiagnosticEmitter {
           ? WrapMode.WRAP
           : WrapMode.NONE
       );
+
+      // Remember whether returning a properly wrapped value
+      if (expr & ExpressionTag.WRAPPED) flow.set(FlowFlags.RETURNS_WRAPPED);
     }
 
     // When inlining, break to the end of the inlined function's block (no need to wrap)
@@ -1789,6 +1783,7 @@ export class Compiler extends DiagnosticEmitter {
     // nest blocks in order
     var currentBlock = module.createBlock("case0|" + context, breaks, NativeType.None);
     var alwaysReturns = true;
+    var alwaysReturnsWrapped = true;
     var alwaysThrows = true;
     var alwaysAllocates = true;
     for (let i = 0; i < numCases; ++i) {
@@ -1809,15 +1804,10 @@ export class Compiler extends DiagnosticEmitter {
       for (let j = 0; j < numStatements; ++j) {
         body[j + 1] = this.compileStatement(statements[j]);
       }
-      if (!(fallsThrough || flow.is(FlowFlags.RETURNS))) {
-        alwaysReturns = false; // ignore fall-throughs
-      }
-      if (!(fallsThrough || flow.is(FlowFlags.THROWS))) {
-        alwaysThrows = false;
-      }
-      if (!(fallsThrough || flow.is(FlowFlags.ALLOCATES))) {
-        alwaysAllocates = false;
-      }
+      if (!(fallsThrough || flow.is(FlowFlags.RETURNS))) alwaysReturns = false; // ignore fall-throughs
+      if (!(fallsThrough || flow.is(FlowFlags.RETURNS))) alwaysReturnsWrapped = false; // ignore fall-throughs
+      if (!(fallsThrough || flow.is(FlowFlags.THROWS))) alwaysThrows = false;
+      if (!(fallsThrough || flow.is(FlowFlags.ALLOCATES))) alwaysAllocates = false;
 
       // Switch back to the parent flow
       currentFunction.flow = flow.leaveBranchOrScope();
@@ -1830,6 +1820,7 @@ export class Compiler extends DiagnosticEmitter {
     if (defaultIndex >= 0) {
       let flow = currentFunction.flow;
       if (alwaysReturns) flow.set(FlowFlags.RETURNS);
+      if (alwaysReturnsWrapped) flow.set(FlowFlags.RETURNS_WRAPPED);
       if (alwaysThrows) flow.set(FlowFlags.THROWS);
       if (alwaysAllocates) flow.set(FlowFlags.ALLOCATES);
     }
@@ -1958,10 +1949,6 @@ export class Compiler extends DiagnosticEmitter {
               }
               default: {
                 assert(false);
-                this.error(
-                  DiagnosticCode.Operation_not_supported,
-                  declaration.range
-                );
                 return this.module.createUnreachable();
               }
             }
@@ -2111,7 +2098,7 @@ export class Compiler extends DiagnosticEmitter {
           element.constantValueKind == ConstantValueKind.INTEGER
             ? i64_low(element.constantIntegerValue) << shift >> shift
             : 0
-        );
+        ) | ExpressionTag.WRAPPED;
       }
       case TypeKind.U8:
       case TypeKind.U16:
@@ -2121,7 +2108,7 @@ export class Compiler extends DiagnosticEmitter {
           element.constantValueKind == ConstantValueKind.INTEGER
             ? i64_low(element.constantIntegerValue) & mask
             : 0
-        );
+        )  | ExpressionTag.WRAPPED;
       }
       case TypeKind.I32:
       case TypeKind.U32: {
@@ -2249,12 +2236,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         assert(false);
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
-        );
         expr = this.module.createUnreachable();
-        break;
       }
     }
 
@@ -2263,7 +2245,7 @@ export class Compiler extends DiagnosticEmitter {
       expr = this.convertExpression(expr, currentType, contextualType, conversionKind, wrapMode, expression);
       this.currentType = contextualType;
     } else if (wrapMode == WrapMode.WRAP) {
-      expr = this.makeSmallIntegerWrap(expr, currentType);
+      expr = this.ensureSmallIntegerWrap(expr, currentType);
     }
 
     if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
@@ -2308,7 +2290,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var funcRef = module.addFunction("__precompute", typeRef, null, expr);
     module.runPasses([ "precompute" ], funcRef);
-    var ret = _BinaryenFunctionGetBody(funcRef);
+    var ret = _BinaryenFunctionGetBody(funcRef) | TAGS(expr); // retain tags
     module.removeFunction("__precompute");
     if (typeRefAdded) {
       // TODO: also remove the function type somehow if no longer used or make the C-API accept
@@ -2467,19 +2449,32 @@ export class Compiler extends DiagnosticEmitter {
       } else if (toType.is(TypeFlags.LONG)) {
         expr = module.createUnary(toType.is(TypeFlags.SIGNED) ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32, expr);
 
-      // small i32 to larger i32
-      } else if (
-        fromType.is(TypeFlags.SHORT) &&
-        fromType.size < toType.size
-      ) {
-        expr = this.makeSmallIntegerWrap(expr, fromType); // clear garbage bits
-        wrapMode = WrapMode.NONE; // no need to wrap twice
+      // i32 to i32
+      } else {
+        // small i32 to ...
+        if (fromType.is(TypeFlags.SHORT)) {
+
+          // small i32 to larger i32
+          if (fromType.size < toType.size) {
+            expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
+
+          // small i32 to smaller or same size with change of sign i32
+          } else if (
+            fromType.size > toType.size ||
+            (
+              fromType.size == toType.size &&
+              fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED)
+            )
+          ) {
+            expr & ~ExpressionTag.WRAPPED; // possibly overflows
+          }
+        }
       }
     }
 
     this.currentType = toType;
     return wrapMode == WrapMode.WRAP
-      ? this.makeSmallIntegerWrap(expr, toType)
+      ? this.ensureSmallIntegerWrap(expr, toType)
       : expr;
   }
 
@@ -2514,7 +2509,6 @@ export class Compiler extends DiagnosticEmitter {
     var condExpr: ExpressionRef;
     var expr: ExpressionRef;
     var compound = false;
-    var possiblyOverflows = false;
     var tempLocal: Local | null = null;
 
     var operator = expression.operator;
@@ -2612,14 +2606,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
+        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
         this.currentType = Type.bool;
         break;
       }
@@ -2716,14 +2706,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
+        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
         this.currentType = Type.bool;
         break;
       }
@@ -2820,14 +2806,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
+        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
         this.currentType = Type.bool;
         break;
       }
@@ -2924,14 +2906,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
+        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
         this.currentType = Type.bool;
         break;
       }
@@ -3021,14 +2999,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
+        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
         this.currentType = Type.bool;
         break;
       }
@@ -3112,13 +3086,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
           }
         }
+        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
         this.currentType = Type.bool;
         break;
       }
@@ -3176,10 +3147,10 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true;
+          case TypeKind.BOOL:
           case TypeKind.I32:
           case TypeKind.U32: {
-            expr = module.createBinary(BinaryOp.AddI32, leftExpr, rightExpr);
+            expr = module.createBinary(BinaryOp.AddI32, leftExpr, rightExpr) ;
             break;
           }
           case TypeKind.USIZE:
@@ -3208,12 +3179,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -3270,7 +3236,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true;
+          case TypeKind.BOOL:
           case TypeKind.I32:
           case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.SubI32, leftExpr, rightExpr);
@@ -3302,12 +3268,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -3328,7 +3289,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         if (compound) {
-          leftExpr = this.makeSmallIntegerWrap(leftExpr, leftType);
+          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
           rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.WRAP);
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
@@ -3364,7 +3325,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true;
+          case TypeKind.BOOL:
           case TypeKind.I32:
           case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.MulI32, leftExpr, rightExpr);
@@ -3396,12 +3357,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -3515,7 +3471,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         if (compound) {
-          leftExpr = this.makeSmallIntegerWrap(leftExpr, leftType);
+          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
           rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.WRAP);
           rightType = this.currentType;
         } else {
@@ -3548,8 +3504,8 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16: possiblyOverflows = true;
+          case TypeKind.I8:  // signed div on signed small integers might overflow, e.g. -128/-1
+          case TypeKind.I16: // ^
           case TypeKind.I32: {
             expr = module.createBinary(BinaryOp.DivI32, leftExpr, rightExpr);
             break;
@@ -3570,7 +3526,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true;
+          case TypeKind.BOOL: { // assumes unsigned div on unsigned small integers does not overflow
+            expr = module.createBinary(BinaryOp.DivU32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            break;
+          }
           case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.DivU32, leftExpr, rightExpr);
             break;
@@ -3599,12 +3558,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -3625,7 +3579,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         if (compound) {
-          leftExpr = this.makeSmallIntegerWrap(leftExpr, leftType);
+          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
           rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.WRAP);
           rightType = this.currentType;
         } else {
@@ -3659,7 +3613,10 @@ export class Compiler extends DiagnosticEmitter {
         }
         switch (this.currentType.kind) {
           case TypeKind.I8:
-          case TypeKind.I16:
+          case TypeKind.I16: { // assumes signed rem on signed small integers does not overflow
+            expr = module.createBinary(BinaryOp.RemI32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            break;
+          }
           case TypeKind.I32: {
             expr = module.createBinary(BinaryOp.RemI32, leftExpr, rightExpr);
             break;
@@ -3680,8 +3637,11 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.BOOL: { // assumes unsigned rem on unsigned small integers does not overflow
+            expr = module.createBinary(BinaryOp.RemU32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            break;
+          }
+          case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.RemU32, leftExpr, rightExpr);
             break;
           }
@@ -3763,12 +3723,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -3784,8 +3739,9 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true;
-          default: {
+          case TypeKind.BOOL:
+          case TypeKind.I32:
+          case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.ShlI32, leftExpr, rightExpr);
             break;
           }
@@ -3813,14 +3769,9 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.createUnreachable();
           }
-          case TypeKind.VOID: {
+          default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -3832,8 +3783,12 @@ export class Compiler extends DiagnosticEmitter {
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
         rightType = this.currentType;
         switch (this.currentType.kind) {
-          default: {
-            // assumes signed shr on signed small integers does not overflow
+          case TypeKind.I8:
+          case TypeKind.I16: { // assumes signed shr on signed small integers does not overflow
+            expr = module.createBinary(BinaryOp.ShrI32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            break;
+          }
+          case TypeKind.I32: {
             expr = module.createBinary(BinaryOp.ShrI32, leftExpr, rightExpr);
             break;
           }
@@ -3853,7 +3808,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: // assumes unsigned shr on unsigned small integers does not overflow
+          case TypeKind.BOOL: { // assumes unsigned shr on unsigned small integers does not overflow
+            expr = module.createBinary(BinaryOp.ShrU32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            break;
+          }
           case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.ShrU32, leftExpr, rightExpr);
             break;
@@ -3880,14 +3838,9 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.createUnreachable();
           }
-          case TypeKind.VOID: {
+          default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -3899,10 +3852,15 @@ export class Compiler extends DiagnosticEmitter {
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
         rightType = this.currentType;
         switch (this.currentType.kind) {
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.BOOL: { // assumes that unsigned shr on unsigned small integers does not overflow
+            expr = module.createBinary(BinaryOp.ShrU32, leftExpr, rightExpr);
+          }
           case TypeKind.I8:
-          case TypeKind.I16: possiblyOverflows = true;
-          default: {
-            // assumes that unsigned shr on unsigned small integers does not overflow
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.ShrU32, leftExpr, rightExpr);
             break;
           }
@@ -3930,14 +3888,9 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.createUnreachable();
           }
-          case TypeKind.VOID: {
+          default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -3992,11 +3945,13 @@ export class Compiler extends DiagnosticEmitter {
         switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
+          case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true; // if left or right already did
-          default: {
-            expr = module.createBinary(BinaryOp.AndI32, leftExpr, rightExpr);
+          case TypeKind.BOOL:
+          case TypeKind.U32: {
+            expr = module.createBinary(BinaryOp.AndI32, leftExpr, rightExpr)
+                 | (leftExpr & rightExpr & ExpressionTag.WRAPPED); // remains wrapped if both sides are
             break;
           }
           case TypeKind.I64:
@@ -4023,14 +3978,9 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.createUnreachable();
           }
-          case TypeKind.VOID: {
+          default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -4087,8 +4037,13 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true; // if left or right already did
-          default: {
+          case TypeKind.BOOL: {
+            expr = module.createBinary(BinaryOp.OrI32, leftExpr, rightExpr)
+                 | (leftExpr & rightExpr & ExpressionTag.WRAPPED); // remains wrapped if both sides are
+            break;
+          }
+          case TypeKind.I32:
+          case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.OrI32, leftExpr, rightExpr);
             break;
           }
@@ -4116,14 +4071,9 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.createUnreachable();
           }
-          case TypeKind.VOID: {
+          default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -4180,8 +4130,13 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I16:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true; // if left or right already did
-          default: {
+          case TypeKind.BOOL: {
+            expr = module.createBinary(BinaryOp.XorI32, leftExpr, rightExpr)
+                 | (leftExpr & rightExpr & ExpressionTag.WRAPPED); // remains wrapped if both sides are
+            break;
+          }
+          case TypeKind.I32:
+          case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.XorI32, leftExpr, rightExpr);
             break;
           }
@@ -4209,14 +4164,9 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.createUnreachable();
           }
-          case TypeKind.VOID: {
+          default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             expr = module.createUnreachable();
-            break;
           }
         }
         break;
@@ -4230,16 +4180,15 @@ export class Compiler extends DiagnosticEmitter {
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
         rightType = this.currentType;
 
-        // clone left if free of side effects
+        // clone left if free of side effects (e.g. a constant)
         expr = module.cloneExpression(leftExpr, true, 0);
 
-        // if not possible, tee left to a temp. local
+        // if not possible, tee left to a temp. local (retain tags)
         if (!expr) {
           tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
-          leftExpr = module.createTeeLocal(tempLocal.index, leftExpr);
+          leftExpr = module.createTeeLocal(tempLocal.index, leftExpr) | TAGS(leftExpr);
         }
 
-        possiblyOverflows = this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER);
         condExpr = this.makeIsTrueish(leftExpr, this.currentType);
 
         // simplify when cloning left without side effects was successful
@@ -4248,7 +4197,7 @@ export class Compiler extends DiagnosticEmitter {
             condExpr,  // left
             rightExpr, //   ? right
             expr       //   : cloned left
-          );
+          ) | (TAGS(rightExpr) & TAGS(expr)); // remains wrapped if both sides are
         }
 
         // otherwise make use of the temp. local
@@ -4260,7 +4209,7 @@ export class Compiler extends DiagnosticEmitter {
               assert(tempLocal).index, // to be sure
               this.currentType.toNativeType()
             )
-          );
+          ) | (TAGS(rightExpr) & TAGS(leftExpr)); // remains wrapped if both sides are
         }
         break;
       }
@@ -4276,19 +4225,18 @@ export class Compiler extends DiagnosticEmitter {
         // if not possible, tee left to a temp. local
         if (!expr) {
           tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
-          leftExpr = module.createTeeLocal(tempLocal.index, leftExpr);
+          leftExpr = module.createTeeLocal(tempLocal.index, leftExpr) | TAGS(leftExpr);
         }
 
-        possiblyOverflows = this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER); // if right did
         condExpr = this.makeIsTrueish(leftExpr, this.currentType);
 
         // simplify when cloning left without side effects was successful
         if (expr) {
           expr = this.module.createIf(
             condExpr, // left
-            expr,      //   ? cloned left
-            rightExpr      //   : right
-          );
+            expr,     //   ? cloned left
+            rightExpr //   : right
+          ) | (TAGS(expr) & TAGS(rightExpr)); // remains wrapped if both sides are
         }
 
         // otherwise make use of the temp. local
@@ -4300,24 +4248,15 @@ export class Compiler extends DiagnosticEmitter {
               this.currentType.toNativeType()
             ),
             rightExpr
-          );
+          ) | (TAGS(leftExpr) & TAGS(rightExpr)); // remains wrapped if both sides are
         }
         break;
       }
       default: {
         assert(false);
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
-        );
         expr = this.module.createUnreachable();
-        break;
       }
     }
-    // if (possiblyOverflows && wrapSmallIntegers) {
-    //   assert(this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER)); // must be a small int
-    //   expr = this.makeSmallIntegerWrap(expr, this.currentType);
-    // }
     return compound
       ? this.compileAssignmentWithValue(left, expr, contextualType != Type.void)
       : expr;
@@ -4365,13 +4304,15 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       argumentExpressions = [ left, right ];
     }
-    return this.compileCallDirect(
+    var ret = this.compileCallDirect(
       operatorInstance,
       argumentExpressions,
       reportNode,
       thisArg,
       operatorInstance.hasDecorator(DecoratorFlags.INLINE)
     );
+    if (operatorInstance.flow.is(FlowFlags.RETURNS_WRAPPED)) ret |= ExpressionTag.WRAPPED;
+    return ret;
   }
 
   compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef {
@@ -4473,7 +4414,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.createUnreachable();
         }
         return tee
-          ? module.createTeeLocal((<Local>target).index, valueWithCorrectType)
+          ? module.createTeeLocal((<Local>target).index, valueWithCorrectType) | TAGS(valueWithCorrectType)
           : module.createSetLocal((<Local>target).index, valueWithCorrectType);
       }
       case ElementKind.GLOBAL: {
@@ -4489,13 +4430,14 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.createUnreachable();
         }
+        valueWithCorrectType = this.ensureSmallIntegerWrap(valueWithCorrectType, type); // guaranteed
         if (tee) {
           let nativeType = type.toNativeType();
           let internalName = target.internalName;
           return module.createBlock(null, [ // emulated teeGlobal
             module.createSetGlobal(internalName, valueWithCorrectType),
             module.createGetGlobal(internalName, nativeType)
-          ], nativeType);
+          ], nativeType) | TAGS(valueWithCorrectType);
         } else {
           return module.createSetGlobal(target.internalName, valueWithCorrectType);
         }
@@ -4525,6 +4467,10 @@ export class Compiler extends DiagnosticEmitter {
         let type = (<Field>target).type;
         this.currentType = tee ? type : Type.void;
         let nativeType = type.toNativeType();
+        if (type.kind == TypeKind.BOOL) {
+          // make sure bools are wrapped (usually are) when storing as 8 bits
+          valueWithCorrectType = this.ensureSmallIntegerWrap(valueWithCorrectType, type);
+        }
         if (tee) {
           let tempLocal = this.currentFunction.getAndFreeTempLocal(type);
           let tempLocalIndex = tempLocal.index;
@@ -4539,7 +4485,7 @@ export class Compiler extends DiagnosticEmitter {
               (<Field>target).memoryOffset
             ),
             module.createGetLocal(tempLocalIndex, nativeType)
-          ], nativeType);
+          ], nativeType) | TAGS(valueWithCorrectType);
         } else {
           return module.createStore(
             type.size >> 3,
@@ -5349,15 +5295,18 @@ export class Compiler extends DiagnosticEmitter {
         return module.createBlock(null, [
           module.createSetGlobal(this.ensureArgcVar(), module.createI32(numArguments)),
           module.createCall(instance.internalName, operands, nativeReturnType)
-        ], nativeReturnType);
+        ], nativeReturnType) | ExpressionTag.WRAPPED;
       }
     }
 
     // otherwise just call through
     this.currentType = returnType;
-    return isCallImport
-      ? module.createCallImport(instance.internalName, operands, returnType.toNativeType())
-      : module.createCall(instance.internalName, operands, returnType.toNativeType());
+    return (
+      isCallImport
+        ? module.createCallImport(instance.internalName, operands, returnType.toNativeType())
+        : module.createCall(instance.internalName, operands, returnType.toNativeType())
+          | (instance.flow.is(FlowFlags.RETURNS_WRAPPED) ? ExpressionTag.WRAPPED : 0)
+    );
   }
 
   /** Compiles an indirect call using an index argument and a signature. */
@@ -5440,7 +5389,7 @@ export class Compiler extends DiagnosticEmitter {
         module.createI32(numArguments)
       ),
       module.createCallIndirect(indexArg, operands, signature.toSignatureString())
-    ], returnType.toNativeType());
+    ], returnType.toNativeType()); // not necessarily wrapped
   }
 
   compileCommaExpression(expression: CommaExpression, contextualType: Type): ExpressionRef {
@@ -5547,17 +5496,18 @@ export class Compiler extends DiagnosticEmitter {
         if (!contextualType.classReference) {
           this.currentType = options.usizeType;
         }
-        return options.isWasm64
+        return (options.isWasm64
           ? module.createI64(0)
-          : module.createI32(0);
+          : module.createI32(0)
+        ) | ExpressionTag.WRAPPED;
       }
       case NodeKind.TRUE: {
         this.currentType = Type.bool;
-        return module.createI32(1);
+        return module.createI32(1) | ExpressionTag.WRAPPED;
       }
       case NodeKind.FALSE: {
         this.currentType = Type.bool;
-        return module.createI32(0);
+        return module.createI32(0) | ExpressionTag.WRAPPED;
       }
       case NodeKind.THIS: {
         let currentFunction = this.currentFunction;
@@ -5655,7 +5605,8 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(<Global>target, contextualType, retainConstantType);
         }
         this.currentType = globalType;
-        return this.module.createGetGlobal((<Global>target).internalName, globalType.toNativeType());
+        return this.module.createGetGlobal((<Global>target).internalName, globalType.toNativeType())
+             | ExpressionTag.WRAPPED;
       }
       case ElementKind.ENUMVALUE: { // here: if referenced from within the same enum
         if (!target.is(CommonFlags.COMPILED)) {
@@ -5741,19 +5692,19 @@ export class Compiler extends DiagnosticEmitter {
           // compile to contextualType if matching
 
           case TypeKind.I8: {
-            if (i64_is_i8(intValue)) return module.createI32(i64_low(intValue));
+            if (i64_is_i8(intValue)) return module.createI32(i64_low(intValue)) | ExpressionTag.WRAPPED;
             break;
           }
           case TypeKind.U8: {
-            if (i64_is_u8(intValue)) return module.createI32(i64_low(intValue));
+            if (i64_is_u8(intValue)) return module.createI32(i64_low(intValue)) | ExpressionTag.WRAPPED;
             break;
           }
           case TypeKind.I16: {
-            if (i64_is_i16(intValue)) return module.createI32(i64_low(intValue));
+            if (i64_is_i16(intValue)) return module.createI32(i64_low(intValue)) | ExpressionTag.WRAPPED;
             break;
           }
           case TypeKind.U16: {
-            if (i64_is_u16(intValue)) return module.createI32(i64_low(intValue));
+            if (i64_is_u16(intValue)) return module.createI32(i64_low(intValue)) | ExpressionTag.WRAPPED;
             break;
           }
           case TypeKind.I32:
@@ -5762,7 +5713,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.BOOL: {
-            if (i64_is_bool(intValue)) return module.createI32(i64_low(intValue));
+            if (i64_is_bool(intValue)) return module.createI32(i64_low(intValue)) | ExpressionTag.WRAPPED;
             break;
           }
           case TypeKind.ISIZE: {
@@ -5796,10 +5747,6 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             return module.createUnreachable();
           }
         }
@@ -5898,10 +5845,6 @@ export class Compiler extends DiagnosticEmitter {
         }
         default: {
           assert(false);
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
           return module.createUnreachable();
         }
       }
@@ -5937,9 +5880,7 @@ export class Compiler extends DiagnosticEmitter {
                 changetype<f64[]>(values)[i] = _BinaryenConstGetValueF64(expr);
                 break;
               }
-              default: {
-                assert(false); // checked above
-              }
+              default: assert(false); // checked above
             }
           } else {
             // TODO: emit a warning if declared 'const'
@@ -6012,10 +5953,6 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
             return module.createUnreachable();
           }
         }
@@ -6166,7 +6103,8 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(<Global>target, contextualType, retainConstantType);
         }
         this.currentType = globalType;
-        return module.createGetGlobal((<Global>target).internalName, globalType.toNativeType());
+        return module.createGetGlobal((<Global>target).internalName, globalType.toNativeType())
+             | ExpressionTag.WRAPPED; // globals are guaranteed to be wrapped
       }
       case ElementKind.ENUMVALUE: { // enum value
         let parent = (<EnumValue>target).parent;
@@ -6195,7 +6133,7 @@ export class Compiler extends DiagnosticEmitter {
           thisExpr,
           (<Field>target).type.toNativeType(),
           (<Field>target).memoryOffset
-        );
+        ) | ExpressionTag.WRAPPED;
       }
       case ElementKind.PROPERTY: { // instance property (here: getter)
         let prototype = (<Property>target).getterPrototype;
@@ -6360,7 +6298,6 @@ export class Compiler extends DiagnosticEmitter {
     var op: BinaryOp;
     var nativeType: NativeType;
     var nativeOne: ExpressionRef;
-    var possiblyOverflows = false;
 
     switch (expression.operator) {
       case Token.PLUS_PLUS: {
@@ -6374,10 +6311,11 @@ export class Compiler extends DiagnosticEmitter {
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
+          case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true;
-          default: {
+          case TypeKind.U32:
+          case TypeKind.BOOL: {
             op = BinaryOp.AddI32;
             nativeType = NativeType.I32;
             nativeOne = module.createI32(1);
@@ -6412,12 +6350,8 @@ export class Compiler extends DiagnosticEmitter {
             nativeOne = module.createF64(1);
             break;
           }
-          case TypeKind.VOID: {
+          default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             return module.createUnreachable();
           }
         }
@@ -6434,10 +6368,11 @@ export class Compiler extends DiagnosticEmitter {
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
+          case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true;
-          default: {
+          case TypeKind.U32:
+          case TypeKind.BOOL: {
             op = BinaryOp.SubI32;
             nativeType = NativeType.I32;
             nativeOne = module.createI32(1);
@@ -6472,12 +6407,8 @@ export class Compiler extends DiagnosticEmitter {
             nativeOne = module.createF64(1);
             break;
           }
-          case TypeKind.VOID: {
+          default: {
             assert(false);
-            this.error(
-              DiagnosticCode.Operation_not_supported,
-              expression.range
-            );
             return module.createUnreachable();
           }
         }
@@ -6485,10 +6416,6 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         assert(false);
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
-        );
         return module.createUnreachable();
       }
     }
@@ -6534,7 +6461,6 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type
   ): ExpressionRef {
     var module = this.module;
-    var possiblyOverflows = false;
     var compound = false;
     var expr: ExpressionRef;
 
@@ -6555,7 +6481,6 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.NONE,
           WrapMode.NONE
         );
-        possiblyOverflows = this.currentType.is(TypeFlags.SHORT | TypeFlags.INTEGER); // if operand already did
         break;
       }
       case Token.MINUS: {
@@ -6586,10 +6511,11 @@ export class Compiler extends DiagnosticEmitter {
           switch (this.currentType.kind) {
             case TypeKind.I8:
             case TypeKind.I16:
+            case TypeKind.I32:
             case TypeKind.U8:
             case TypeKind.U16:
-            case TypeKind.BOOL: possiblyOverflows = true; // or if operand already did
-            default: {
+            case TypeKind.U32:
+            case TypeKind.BOOL: {
               expr = module.createBinary(BinaryOp.SubI32, module.createI32(0), expr);
               break;
             }
@@ -6626,6 +6552,10 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.createUnary(UnaryOp.NegF64, expr);
               break;
             }
+            default: {
+              assert(false);
+              expr = module.createUnreachable();
+            }
           }
         }
         break;
@@ -6650,10 +6580,11 @@ export class Compiler extends DiagnosticEmitter {
         switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
+          case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true; // or if operand already did
-          default: {
+          case TypeKind.U32:
+          case TypeKind.BOOL: {
             expr = module.createBinary(BinaryOp.AddI32, expr, this.module.createI32(1));
             break;
           }
@@ -6690,6 +6621,10 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.AddF64, expr, module.createF64(1));
             break;
           }
+          default: {
+            assert(false);
+            expr = module.createUnreachable();
+          }
         }
         break;
       }
@@ -6713,10 +6648,11 @@ export class Compiler extends DiagnosticEmitter {
         switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
+          case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true; // or if operand already did
-          default: {
+          case TypeKind.U32:
+          case TypeKind.BOOL: {
             expr = module.createBinary(BinaryOp.SubI32, expr, module.createI32(1));
             break;
           }
@@ -6752,6 +6688,10 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             expr = module.createBinary(BinaryOp.SubF64, expr, module.createF64(1));
             break;
+          }
+          default: {
+            assert(false);
+            expr = module.createUnreachable();
           }
         }
         break;
@@ -6792,10 +6732,11 @@ export class Compiler extends DiagnosticEmitter {
         switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
+          case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: possiblyOverflows = true; // or if operand already did
-          default: {
+          case TypeKind.U32:
+          case TypeKind.BOOL: {
             expr = module.createBinary(BinaryOp.XorI32, expr, module.createI32(-1));
             break;
           }
@@ -6824,6 +6765,10 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.XorI64, expr, module.createI64(-1, -1));
             break;
           }
+          default: {
+            assert(false);
+            expr = module.createUnreachable();
+          }
         }
         break;
       }
@@ -6841,10 +6786,6 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         assert(false);
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
-        );
         return module.createUnreachable();
       }
     }
@@ -6854,7 +6795,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
-  makeSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef {
+  ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef {
     var module = this.module;
     switch (type.kind) {
       case TypeKind.I8: { // TODO: Use 'i32.extend8_s' once sign-extension-ops lands
@@ -6865,7 +6806,7 @@ export class Compiler extends DiagnosticEmitter {
               module.createI32(24)
             ),
             module.createI32(24)
-          );
+          ) | ExpressionTag.WRAPPED;
         }
         break;
       }
@@ -6877,7 +6818,7 @@ export class Compiler extends DiagnosticEmitter {
               module.createI32(16)
             ),
             module.createI32(16)
-          );
+          ) | ExpressionTag.WRAPPED;
         }
         break;
       }
@@ -6886,7 +6827,7 @@ export class Compiler extends DiagnosticEmitter {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0xff)
-          );
+          ) | ExpressionTag.WRAPPED;
         }
         break;
       }
@@ -6895,7 +6836,7 @@ export class Compiler extends DiagnosticEmitter {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0xffff)
-          );
+          ) | ExpressionTag.WRAPPED;
         }
         break;
       }
@@ -6904,7 +6845,7 @@ export class Compiler extends DiagnosticEmitter {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0x1)
-          );
+          ) | ExpressionTag.WRAPPED;
         }
         break;
       }
@@ -6916,7 +6857,16 @@ export class Compiler extends DiagnosticEmitter {
   makeIsFalseish(expr: ExpressionRef, type: Type): ExpressionRef {
     var module = this.module;
     switch (type.kind) {
-      default: { // any native i32
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        expr = this.ensureSmallIntegerWrap(expr, type);
+        // fall-through
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
         return module.createUnary(UnaryOp.EqzI32, expr);
       }
       case TypeKind.I64:
@@ -6933,7 +6883,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         return module.createBinary(BinaryOp.EqF64, expr, module.createF64(0));
       }
-      case TypeKind.VOID: {
+      default: {
         assert(false);
         return module.createI32(1);
       }
@@ -6944,7 +6894,16 @@ export class Compiler extends DiagnosticEmitter {
   makeIsTrueish(expr: ExpressionRef, type: Type): ExpressionRef {
     var module = this.module;
     switch (type.kind) {
-      default: { // any native i32
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        expr = this.ensureSmallIntegerWrap(expr, type);
+        // fall-through
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
         return expr;
       }
       case TypeKind.I64:
@@ -6963,7 +6922,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         return module.createBinary(BinaryOp.NeF64, expr, module.createF64(0));
       }
-      case TypeKind.VOID: {
+      default: {
         assert(false);
         return module.createI32(0);
       }
@@ -7110,10 +7069,11 @@ function mangleExportName(element: Element, explicitSimpleName: string | null = 
   }
 }
 
-/** Tests if an expression might overflow, in a general sense. */
+/** Tests if an expression might technically overflow and is not explicitly tagged as being wrapped. */
 function mightOverflow(expr: ExpressionRef, type: Type): bool {
   assert(type.is(TypeFlags.INTEGER));
   assert(_BinaryenExpressionGetType(expr) == NativeType.I32);
+  if (expr & ExpressionTag.WRAPPED) return false; // explicitly tagged
   switch (_BinaryenExpressionGetId(expr)) {
     case ExpressionId.Binary: {
       switch (_BinaryenBinaryGetOp(expr)) {
@@ -7145,7 +7105,7 @@ function mightOverflow(expr: ExpressionRef, type: Type): bool {
         case BinaryOp.GeU64:
         case BinaryOp.GeF32:
         case BinaryOp.GeF64: return false;
-        case BinaryOp.AndI32: return mightOverflow(_BinaryenBinaryGetRight(expr), type);
+        // and, or, xor depend on left and right being wrapped according to the target type
       }
       break;
     }
@@ -7166,6 +7126,7 @@ function mightOverflow(expr: ExpressionRef, type: Type): bool {
           case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
           case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
           case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
+          case TypeKind.BOOL: return (value & ~1) != 0;
         }
       }
       return false;

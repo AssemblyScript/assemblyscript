@@ -46,11 +46,8 @@
  )
  (func $start (; 4 ;) (type $v)
   (if
-   (i32.and
-    (call $if/ifThenElse
-     (i32.const 0)
-    )
-    (i32.const 1)
+   (call $if/ifThenElse
+    (i32.const 0)
    )
    (block
     (call $abort
@@ -64,10 +61,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (call $if/ifThenElse
-      (i32.const 1)
-     )
+    (call $if/ifThenElse
      (i32.const 1)
     )
     (i32.const 1)
@@ -83,11 +77,8 @@
    )
   )
   (if
-   (i32.and
-    (call $if/ifThen
-     (i32.const 0)
-    )
-    (i32.const 1)
+   (call $if/ifThen
+    (i32.const 0)
    )
    (block
     (call $abort
@@ -101,10 +92,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (call $if/ifThen
-      (i32.const 1)
-     )
+    (call $if/ifThen
      (i32.const 1)
     )
     (i32.const 1)
@@ -120,11 +108,8 @@
    )
   )
   (if
-   (i32.and
-    (call $if/ifThenElse
-     (i32.const 0)
-    )
-    (i32.const 1)
+   (call $if/ifThenElse
+    (i32.const 0)
    )
    (block
     (call $abort
@@ -138,10 +123,7 @@
   )
   (if
    (i32.ne
-    (i32.and
-     (call $if/ifThenElse
-      (i32.const 1)
-     )
+    (call $if/ifThenElse
      (i32.const 1)
     )
     (i32.const 1)
