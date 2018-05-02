@@ -671,7 +671,8 @@ var reversedElements512 = createReverseOrderedElementsArray(512);
 assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i32 => a.x - b.x);
 
 // Test sorting strings
-// Temprary disable. Reason: weakHeapSort not works properly with strings
+// Temprary disable. Reason: weakHeapSort don't work properly with strings
+
 /*
 var randomStringsActual:   string[] = ["a", "b", "a", "ab", "ba", "", null];
 var randomStringsExpected: string[] = ["", "a", "a", "ab", "b", "ba", null];
