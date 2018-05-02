@@ -315,8 +315,8 @@ export class Array<T> {
       return this;
     }
     return changetype<this>(length < 256
-      ? insertionSort<T,T>(this, comparator)
-      : weakHeapSort<T,T>(this, comparator)
+      ? insertionSort<T>(this, comparator)
+      : weakHeapSort<T>(this, comparator)
     );
   }
 }
