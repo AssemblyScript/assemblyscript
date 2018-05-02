@@ -11092,8 +11092,11 @@
              (f64.mul
               (call $~lib/math/NativeMath.random)
               (f64.convert_s/i32
-               (i32.load
-                (i32.const 152)
+               (i32.sub
+                (i32.load
+                 (i32.const 152)
+                )
+                (i32.const 1)
                )
               )
              )

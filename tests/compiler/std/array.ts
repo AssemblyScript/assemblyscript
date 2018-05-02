@@ -588,7 +588,7 @@ function createRandomString(len: i32): string {
   var result = "";
 
   for (let i = 0; i < len; i++) {
-    result += charset.charAt(<i32>(NativeMath.floor(NativeMath.random() * charset.length)));
+    result += charset.charAt(<i32>(NativeMath.floor(NativeMath.random() * (charset.length - 1))));
   }
   return result;
 }
