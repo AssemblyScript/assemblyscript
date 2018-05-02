@@ -1,8 +1,8 @@
 const fs = require("fs");
 
 // Load WASM version
-const nbodyAsmScriptWASM = require("../assembly/index.js");
-const nbodyRustWASM = require("../rust/index.js");
+const nbodyASWasm = require("../assembly/index.js");
+const nbodyRSWasm = require("../rust/index.js");
 
 // Load ASMJS version
 var src = fs.readFileSync(__dirname + "/../build/index.asm.js", "utf8");
@@ -11,7 +11,7 @@ if (src.indexOf("var Math_sqrt =") < 0) { // currently missing in asm.js output
   src = src.substring(0, p) + " var Math_sqrt = global.Math.sqrt;\n " + src.substring(p);
 }
 
-const nbodyASMJS = eval("0," + src)({
+const nbodyAsmJS = eval("0," + src)({
   Int8Array,
   Int16Array,
   Int32Array,
@@ -48,11 +48,11 @@ var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 20000000;
 var time;
 
 console.log("Performing " + steps + " steps (AssemblyScript WASM) ...");
-time = test(nbodyAsmScriptWASM, steps);
+time = test(nbodyASWasm, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("Performing " + steps + " steps (AssemblyScript ASMJS) ...");
-time = test(nbodyASMJS, steps);
+time = test(nbodyAsmJS, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("Performing " + steps + " steps (JS) ...");
@@ -60,17 +60,17 @@ time = test(nbodyJS, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("Performing " + steps + " steps (Rust WASM) ...");
-time = test(nbodyRustWASM, steps);
+time = test(nbodyRSWasm, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("\nWARMED UP:\n");
 
 console.log("Performing " + steps + " steps (AssemblyScript WASM) ...");
-time = test(nbodyAsmScriptWASM, steps);
+time = test(nbodyASWasm, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("Performing " + steps + " steps (AssemblyScript ASMJS) ...");
-time = test(nbodyASMJS, steps);
+time = test(nbodyAsmJS, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("Performing " + steps + " steps (JS) ...");
@@ -78,5 +78,5 @@ time = test(nbodyJS, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 
 console.log("Performing " + steps + " steps (Rust WASM) ...");
-time = test(nbodyRustWASM, steps);
+time = test(nbodyRSWasm, steps);
 console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
