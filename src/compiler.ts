@@ -39,7 +39,9 @@ import {
   getBinaryOp,
   getUnaryOp,
   getLoadBytes,
-  isLoadSigned
+  isLoadSigned,
+  getBinaryLeft,
+  getBinaryRight
 } from "./module";
 
 import {
@@ -1728,9 +1730,10 @@ export class Compiler extends DiagnosticEmitter {
     flow.set(FlowFlags.RETURNS);
 
     if (statement.value) {
+      let returnType = flow.returnType;
       expr = this.compileExpression(
         statement.value,
-        flow.returnType,
+        returnType,
         ConversionKind.IMPLICIT,
         currentFunction.is(CommonFlags.MODULE_EXPORT)
           ? WrapMode.WRAP
@@ -1738,7 +1741,7 @@ export class Compiler extends DiagnosticEmitter {
       );
 
       // Remember whether returning a properly wrapped value
-      if (expr & ExpressionTag.WRAPPED) flow.set(FlowFlags.RETURNS_WRAPPED);
+      if (!canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
     }
 
     // When inlining, break to the end of the inlined function's block (no need to wrap)
@@ -6476,7 +6479,7 @@ export class Compiler extends DiagnosticEmitter {
       module.createSetLocal(localIndex, getValue),
       setValue,
       module.createGetLocal(localIndex, nativeType)
-    ], nativeType);
+    ], nativeType); // result of 'x++' / 'x--' might overflow
   }
 
   compileUnaryPrefixExpression(
@@ -6822,54 +6825,59 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     switch (type.kind) {
       case TypeKind.I8: { // TODO: Use 'i32.extend8_s' once sign-extension-ops lands
-        if (mightOverflow(expr, type)) {
+        if (canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.ShrI32,
             module.createBinary(BinaryOp.ShlI32,
               expr,
               module.createI32(24)
             ),
             module.createI32(24)
-          ) | ExpressionTag.WRAPPED;
+          );
         }
+        expr |= ExpressionTag.WRAPPED;
         break;
       }
       case TypeKind.I16: { // TODO: Use 'i32.extend16_s' once sign-extension-ops lands
-        if (mightOverflow(expr, type)) {
+        if (canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.ShrI32,
             module.createBinary(BinaryOp.ShlI32,
               expr,
               module.createI32(16)
             ),
             module.createI32(16)
-          ) | ExpressionTag.WRAPPED;
+          );
         }
+        expr |= ExpressionTag.WRAPPED;
         break;
       }
       case TypeKind.U8: {
-        if (mightOverflow(expr, type)) {
+        if (canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0xff)
-          ) | ExpressionTag.WRAPPED;
+          );
         }
+        expr |= ExpressionTag.WRAPPED;
         break;
       }
       case TypeKind.U16: {
-        if (mightOverflow(expr, type)) {
+        if (canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0xffff)
-          ) | ExpressionTag.WRAPPED;
+          );
         }
+        expr |= ExpressionTag.WRAPPED;
         break;
       }
       case TypeKind.BOOL: {
-        if (mightOverflow(expr, type)) {
+        if (canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0x1)
-          ) | ExpressionTag.WRAPPED;
+          );
         }
+        expr |= ExpressionTag.WRAPPED;
         break;
       }
     }
@@ -7092,11 +7100,12 @@ function mangleExportName(element: Element, explicitSimpleName: string | null = 
   }
 }
 
-/** Tests if an expression might technically overflow and is not explicitly tagged as being wrapped. */
-function mightOverflow(expr: ExpressionRef, type: Type): bool {
-  assert(type.is(TypeFlags.INTEGER));
-  assert(getExpressionType(expr) == NativeType.I32);
-  if (expr & ExpressionTag.WRAPPED) return false; // explicitly tagged
+/** Tests if an expression can technically overflow and is not explicitly tagged as being wrapped. */
+function canOverflow(expr: ExpressionRef, type: Type): bool {
+  if (
+    !type.is(TypeFlags.SHORT | TypeFlags.INTEGER) || // not a small integer
+    (expr & ExpressionTag.WRAPPED) != 0              // explicitly marked as wrapped
+  ) return false;
   switch (getExpressionId(expr)) {
     case ExpressionId.Binary: {
       switch (getBinaryOp(expr)) {
@@ -7128,7 +7137,20 @@ function mightOverflow(expr: ExpressionRef, type: Type): bool {
         case BinaryOp.GeU64:
         case BinaryOp.GeF32:
         case BinaryOp.GeF64: return false;
-        // and, or, xor depend on left and right being wrapped according to the target type
+        case BinaryOp.AndI32: {
+          if (type.is(TypeFlags.UNSIGNED)) {
+            // result won't overflow if one side is a constant less than this type's mask
+            let operand: ExpressionRef;
+            if (
+              getExpressionId(operand = getBinaryLeft(expr)) == ExpressionId.Const &&
+              getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.u32)
+              ||
+              getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+              getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.u32)
+            ) return false;
+          }
+          break;
+        }
       }
       break;
     }
@@ -7137,7 +7159,8 @@ function mightOverflow(expr: ExpressionRef, type: Type): bool {
         case UnaryOp.EqzI32:
         case UnaryOp.EqzI64: return false;
         case UnaryOp.ClzI32:
-        case UnaryOp.CtzI32: return type.size < 7; // max value is 32 (100000b)
+        case UnaryOp.CtzI32:
+        case UnaryOp.PopcntI32: return type.size < 7; // max value is 32 (100000b)
       }
       break;
     }

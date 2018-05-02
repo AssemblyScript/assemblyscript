@@ -10635,12 +10635,9 @@
  (func $~lib/string/String.__ne (; 135 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 1)
+    (call $~lib/string/String.__eq
+     (get_local $0)
+     (get_local $1)
     )
    )
   )
@@ -10685,18 +10682,15 @@
      (block
       (block
        (if
-        (i32.and
-         (call $~lib/string/String.__ne
-          (call $~lib/array/Array<String>#__get
-           (get_local $0)
-           (get_local $3)
-          )
-          (call $~lib/array/Array<String>#__get
-           (get_local $1)
-           (get_local $3)
-          )
+        (call $~lib/string/String.__ne
+         (call $~lib/array/Array<String>#__get
+          (get_local $0)
+          (get_local $3)
          )
-         (i32.const 1)
+         (call $~lib/array/Array<String>#__get
+          (get_local $1)
+          (get_local $3)
+         )
         )
         (return
          (i32.const 0)

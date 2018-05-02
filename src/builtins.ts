@@ -40,7 +40,8 @@ import {
   getExpressionType,
   getConstValueI64High,
   getConstValueI64Low,
-  getConstValueI32
+  getConstValueI32,
+  ExpressionTag
 } from "./module";
 
 import {
@@ -1460,7 +1461,7 @@ export function compileCall(
           ? (compiler.currentType = contextualType).toNativeType()
           : (compiler.currentType = typeArguments[0]).toNativeType(),
         offset
-      );
+      ) | ExpressionTag.WRAPPED;
     }
     case "store": { // store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
       compiler.currentType = Type.void;
@@ -1501,21 +1502,23 @@ export function compileCall(
         operands[1],
         typeArguments[0],
         typeArguments[0].is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // wraps a larger integer type to a smaller one, i.e. i32.store8
+          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       let type: Type;
       if (
-        compiler.currentType.is(TypeFlags.INTEGER) &&
         typeArguments[0].is(TypeFlags.INTEGER) &&
-        typeArguments[0].size > compiler.currentType.size
+        (
+          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
+          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+        )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
           compiler.currentType, typeArguments[0],
           ConversionKind.IMPLICIT,
-          WrapMode.NONE,
+          WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
         type = typeArguments[0];
@@ -1840,7 +1843,7 @@ export function compileCall(
       throw new Error("not implemented");
       // return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
     }
-    case "set_memory": { // set_memory(dest: usize, value: u32, n: usize) -> void
+    case "set_memory": { // set_memory(dest: usize, value: u8, n: usize) -> void
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,

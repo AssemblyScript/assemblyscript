@@ -3814,12 +3814,9 @@
  (func $~lib/string/String.__ne (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 1)
+    (call $~lib/string/String.__eq
+     (get_local $0)
+     (get_local $1)
     )
    )
   )
@@ -4866,12 +4863,9 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (get_global $std/string/c)
-      (i32.const 388)
-     )
-     (i32.const 1)
+    (call $~lib/string/String.__eq
+     (get_global $std/string/c)
+     (i32.const 388)
     )
    )
    (block
@@ -4886,12 +4880,9 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__ne
-      (get_global $std/string/c)
-      (i32.const 316)
-     )
-     (i32.const 1)
+    (call $~lib/string/String.__ne
+     (get_global $std/string/c)
+     (i32.const 316)
     )
    )
    (block
@@ -4906,12 +4897,9 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (i32.const 332)
-      (i32.const 332)
-     )
-     (i32.const 1)
+    (call $~lib/string/String.__eq
+     (i32.const 332)
+     (i32.const 332)
     )
    )
    (block
@@ -4926,12 +4914,9 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__ne
-      (i32.const 332)
-      (get_global $std/string/nullStr)
-     )
-     (i32.const 1)
+    (call $~lib/string/String.__ne
+     (i32.const 332)
+     (get_global $std/string/nullStr)
     )
    )
    (block
@@ -5268,15 +5253,12 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (call $~lib/string/String#repeat
-       (i32.const 332)
-       (i32.const 100)
-      )
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
       (i32.const 332)
+      (i32.const 100)
      )
-     (i32.const 1)
+     (i32.const 332)
     )
    )
    (block
@@ -5291,20 +5273,17 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (block (result i32)
-       (set_global $~argc
-        (i32.const 0)
-       )
-       (call $~lib/string/String#repeat|trampoline
-        (i32.const 316)
-        (i32.const 0)
-       )
+    (call $~lib/string/String.__eq
+     (block (result i32)
+      (set_global $~argc
+       (i32.const 0)
       )
-      (i32.const 332)
+      (call $~lib/string/String#repeat|trampoline
+       (i32.const 316)
+       (i32.const 0)
+      )
      )
-     (i32.const 1)
+     (i32.const 332)
     )
    )
    (block
@@ -5319,15 +5298,12 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (call $~lib/string/String#repeat
-       (i32.const 316)
-       (i32.const 1)
-      )
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
       (i32.const 316)
+      (i32.const 1)
      )
-     (i32.const 1)
+     (i32.const 316)
     )
    )
    (block
@@ -5342,15 +5318,12 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (call $~lib/string/String#repeat
-       (i32.const 316)
-       (i32.const 2)
-      )
-      (i32.const 404)
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 2)
      )
-     (i32.const 1)
+     (i32.const 404)
     )
    )
    (block
@@ -5365,15 +5338,12 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (call $~lib/string/String#repeat
-       (i32.const 316)
-       (i32.const 3)
-      )
-      (i32.const 436)
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 3)
      )
-     (i32.const 1)
+     (i32.const 436)
     )
    )
    (block
@@ -5388,15 +5358,12 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (call $~lib/string/String#repeat
-       (i32.const 388)
-       (i32.const 4)
-      )
-      (i32.const 448)
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 388)
+      (i32.const 4)
      )
-     (i32.const 1)
+     (i32.const 448)
     )
    )
    (block
@@ -5411,15 +5378,12 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (call $~lib/string/String#repeat
-       (i32.const 316)
-       (i32.const 5)
-      )
-      (i32.const 468)
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 5)
      )
-     (i32.const 1)
+     (i32.const 468)
     )
    )
    (block
@@ -5434,15 +5398,12 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (call $~lib/string/String#repeat
-       (i32.const 316)
-       (i32.const 6)
-      )
-      (i32.const 484)
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 6)
      )
-     (i32.const 1)
+     (i32.const 484)
     )
    )
    (block
@@ -5457,15 +5418,12 @@
   )
   (if
    (i32.eqz
-    (i32.and
-     (call $~lib/string/String.__eq
-      (call $~lib/string/String#repeat
-       (i32.const 316)
-       (i32.const 7)
-      )
-      (i32.const 500)
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 7)
      )
-     (i32.const 1)
+     (i32.const 500)
     )
    )
    (block

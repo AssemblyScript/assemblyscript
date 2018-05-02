@@ -13,16 +13,16 @@
  (export "computeLine" (func $assembly/index/computeLine))
  (export "memory" (memory $0))
  (func $isFinite<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
-  ;;@ ~lib/builtins.ts:20:26
+  ;;@ ~lib/builtins.ts:22:26
   (return
-   ;;@ ~lib/builtins.ts:20:9
+   ;;@ ~lib/builtins.ts:22:9
    (f64.eq
     (f64.sub
      (get_local $0)
-     ;;@ ~lib/builtins.ts:20:17
+     ;;@ ~lib/builtins.ts:22:17
      (get_local $0)
     )
-    ;;@ ~lib/builtins.ts:20:26
+    ;;@ ~lib/builtins.ts:22:26
     (f64.const 0)
    )
   )
@@ -58,7 +58,9 @@
   (local $14 i32)
   (local $15 f64)
   (local $16 f64)
-  (local $17 i32)
+  (local $17 f64)
+  (local $18 f64)
+  (local $19 i32)
   ;;@ assembly/index.ts:8:2
   (set_local $4
    ;;@ assembly/index.ts:8:19
@@ -265,7 +267,7 @@
        ;;@ assembly/index.ts:27:4
        (block $break|2
         ;;@ assembly/index.ts:27:9
-        (set_local $15
+        (set_local $16
          ;;@ assembly/index.ts:27:29
          (f64.min
           ;;@ assembly/index.ts:27:33
@@ -284,12 +286,12 @@
             (get_local $14)
            )
            ;;@ assembly/index.ts:27:56
-           (get_local $15)
+           (get_local $16)
           )
           (block
            (block
             ;;@ assembly/index.ts:28:6
-            (set_local $16
+            (set_local $17
              ;;@ assembly/index.ts:28:18
              (f64.add
               (f64.sub
@@ -329,7 +331,7 @@
             ;;@ assembly/index.ts:30:6
             (set_local $10
              ;;@ assembly/index.ts:30:11
-             (get_local $16)
+             (get_local $17)
             )
            )
            ;;@ assembly/index.ts:27:71
@@ -346,7 +348,7 @@
         )
        )
        ;;@ assembly/index.ts:36:4
-       (set_local $15
+       (set_local $18
         ;;@ assembly/index.ts:36:15
         (f64.div
          ;;@ assembly/index.ts:36:20
@@ -377,12 +379,12 @@
         )
        )
        ;;@ assembly/index.ts:37:4
-       (set_local $17
+       (set_local $19
         ;;@ assembly/index.ts:37:15
         (if (result i32)
          (call $isFinite<f64>
           ;;@ assembly/index.ts:37:24
-          (get_local $15)
+          (get_local $18)
          )
          ;;@ assembly/index.ts:38:8
          (i32.trunc_u/f64
@@ -410,7 +412,7 @@
                )
               )
               ;;@ assembly/index.ts:38:56
-              (get_local $15)
+              (get_local $18)
              )
              (f64.convert_u/i32
               ;;@ assembly/index.ts:38:64
@@ -450,7 +452,7 @@
          (i32.const 1)
         )
         ;;@ assembly/index.ts:40:37
-        (get_local $17)
+        (get_local $19)
        )
       )
       ;;@ assembly/index.ts:12:34
