@@ -26,7 +26,20 @@ import {
   FunctionTypeRef,
   GlobalRef,
   ExpressionTag,
-  TAGS
+  getTags,
+  getExpressionId,
+  getExpressionType,
+  getConstValueI32,
+  getConstValueI64Low,
+  getConstValueI64High,
+  getConstValueF32,
+  getConstValueF64,
+  getFunctionBody,
+  getGetLocalIndex,
+  getBinaryOp,
+  getUnaryOp,
+  getLoadBytes,
+  isLoadSigned
 } from "./module";
 
 import {
@@ -575,12 +588,12 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         // check if the initializer is constant
-        if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+        if (getExpressionId(initExpr) != ExpressionId.Const) {
 
           // if a constant global, check if the initializer becomes constant after precompute
           if (isConstant) {
             initExpr = this.precomputeExpressionRef(initExpr);
-            if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+            if (getExpressionId(initExpr) != ExpressionId.Const) {
               this.warning(
                 DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
                 declaration.range
@@ -607,29 +620,29 @@ export class Compiler extends DiagnosticEmitter {
     } else { // compile as-is
 
       if (isConstant) {
-        let exprType = _BinaryenExpressionGetType(initExpr);
+        let exprType = getExpressionType(initExpr);
         switch (exprType) {
           case NativeType.I32: {
             global.constantValueKind = ConstantValueKind.INTEGER;
-            global.constantIntegerValue = i64_new(_BinaryenConstGetValueI32(initExpr), 0);
+            global.constantIntegerValue = i64_new(getConstValueI32(initExpr), 0);
             break;
           }
           case NativeType.I64: {
             global.constantValueKind = ConstantValueKind.INTEGER;
             global.constantIntegerValue = i64_new(
-              _BinaryenConstGetValueI64Low(initExpr),
-              _BinaryenConstGetValueI64High(initExpr)
+              getConstValueI64Low(initExpr),
+              getConstValueI64High(initExpr)
             );
             break;
           }
           case NativeType.F32: {
             global.constantValueKind = ConstantValueKind.FLOAT;
-            global.constantFloatValue = _BinaryenConstGetValueF32(initExpr);
+            global.constantFloatValue = getConstValueF32(initExpr);
             break;
           }
           case NativeType.F64: {
             global.constantValueKind = ConstantValueKind.FLOAT;
-            global.constantFloatValue = _BinaryenConstGetValueF64(initExpr);
+            global.constantFloatValue = getConstValueF64(initExpr);
             break;
           }
           default: {
@@ -694,9 +707,9 @@ export class Compiler extends DiagnosticEmitter {
               ConversionKind.IMPLICIT,
               WrapMode.NONE
             );
-            if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+            if (getExpressionId(initExpr) != ExpressionId.Const) {
               initExpr = this.precomputeExpressionRef(initExpr);
-              if (_BinaryenExpressionGetId(initExpr) != ExpressionId.Const) {
+              if (getExpressionId(initExpr) != ExpressionId.Const) {
                 if (element.is(CommonFlags.CONST)) {
                   this.warning(
                     DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
@@ -734,8 +747,8 @@ export class Compiler extends DiagnosticEmitter {
             this.startFunctionBody.push(module.createSetGlobal(val.internalName, initExpr));
           } else {
             module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
-            if (_BinaryenExpressionGetType(initExpr) == NativeType.I32) {
-              val.constantValue = _BinaryenConstGetValueI32(initExpr);
+            if (getExpressionType(initExpr) == NativeType.I32) {
+              val.constantValue = getConstValueI32(initExpr);
               val.set(CommonFlags.INLINED);
             } else {
               assert(false);
@@ -1651,10 +1664,10 @@ export class Compiler extends DiagnosticEmitter {
       // Try to eliminate unnecesssary branches if the condition is constant
       let condExprPrecomp = this.precomputeExpressionRef(condExpr);
       if (
-        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
-        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+        getExpressionId(condExprPrecomp) == ExpressionId.Const &&
+        getExpressionType(condExprPrecomp) == NativeType.I32
       ) {
-        return _BinaryenConstGetValueI32(condExprPrecomp)
+        return getConstValueI32(condExprPrecomp)
           ? this.compileStatement(ifTrue)
           : ifFalse
             ? this.compileStatement(ifFalse)
@@ -1884,7 +1897,7 @@ export class Compiler extends DiagnosticEmitter {
       let declaration = declarations[i];
       let name = declaration.name.text;
       let type: Type | null = null;
-      let init: ExpressionRef = 0;
+      let initExpr: ExpressionRef = 0;
       if (declaration.type) {
         type = program.resolveType( // reports
           declaration.type,
@@ -1892,7 +1905,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         if (!type) continue;
         if (declaration.initializer) {
-          init = this.compileExpression( // reports
+          initExpr = this.compileExpression( // reports
             declaration.initializer,
             type,
             ConversionKind.IMPLICIT,
@@ -1900,7 +1913,7 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
       } else if (declaration.initializer) { // infer type using void/NONE for proper literal inference
-        init = this.compileExpression( // reports
+        initExpr = this.compileExpression( // reports
           declaration.initializer,
           Type.void,
           ConversionKind.NONE,
@@ -1923,28 +1936,28 @@ export class Compiler extends DiagnosticEmitter {
       }
       let isInlined = false;
       if (declaration.is(CommonFlags.CONST)) {
-        if (init) {
-          init = this.precomputeExpressionRef(init);
-          if (_BinaryenExpressionGetId(init) == ExpressionId.Const) {
+        if (initExpr) {
+          initExpr = this.precomputeExpressionRef(initExpr);
+          if (getExpressionId(initExpr) == ExpressionId.Const) {
             let local = new Local(program, name, -1, type);
-            switch (_BinaryenExpressionGetType(init)) {
+            switch (getExpressionType(initExpr)) {
               case NativeType.I32: {
-                local = local.withConstantIntegerValue(_BinaryenConstGetValueI32(init), 0);
+                local = local.withConstantIntegerValue(getConstValueI32(initExpr), 0);
                 break;
               }
               case NativeType.I64: {
                 local = local.withConstantIntegerValue(
-                  _BinaryenConstGetValueI64Low(init),
-                  _BinaryenConstGetValueI64High(init)
+                  getConstValueI64Low(initExpr),
+                  getConstValueI64High(initExpr)
                 );
                 break;
               }
               case NativeType.F32: {
-                local = local.withConstantFloatValue(<f64>_BinaryenConstGetValueF32(init));
+                local = local.withConstantFloatValue(<f64>getConstValueF32(initExpr));
                 break;
               }
               case NativeType.F64: {
-                local = local.withConstantFloatValue(_BinaryenConstGetValueF64(init));
+                local = local.withConstantFloatValue(getConstValueF64(initExpr));
                 break;
               }
               default: {
@@ -1978,16 +1991,20 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
       if (!isInlined) {
+        let local: Local;
         if (
           declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
           flow.is(FlowFlags.INLINE_CONTEXT)
         ) { // here: not top-level
-          flow.addScopedLocal(type, name, declaration); // reports
+          local = flow.addScopedLocal(type, name, declaration); // reports
         } else {
-          currentFunction.addLocal(type, name, declaration); // reports
+          local = currentFunction.addLocal(type, name, declaration); // reports
         }
-        if (init) {
-          initializers.push(this.compileAssignmentWithValue(declaration.name, init));
+        if (initExpr) {
+          initializers.push(this.compileAssignmentWithValue(declaration.name, initExpr));
+          flow.setLocalWrapped(local.index, (initExpr & ExpressionTag.WRAPPED) != 0);
+        } else {
+          flow.setLocalWrapped(local.index, true); // zero
         }
       }
     }
@@ -2018,10 +2035,10 @@ export class Compiler extends DiagnosticEmitter {
       // Try to eliminate unnecesssary loops if the condition is constant
       let condExprPrecomp = this.precomputeExpressionRef(condExpr);
       if (
-        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
-        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+        getExpressionId(condExprPrecomp) == ExpressionId.Const &&
+        getExpressionType(condExprPrecomp) == NativeType.I32
       ) {
-        if (!_BinaryenConstGetValueI32(condExprPrecomp)) return module.createNop();
+        if (!getConstValueI32(condExprPrecomp)) return module.createNop();
 
       // Otherwise recompile to the original and let the optimizer decide
       } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
@@ -2290,7 +2307,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var funcRef = module.addFunction("__precompute", typeRef, null, expr);
     module.runPasses([ "precompute" ], funcRef);
-    var ret = _BinaryenFunctionGetBody(funcRef) | TAGS(expr); // retain tags
+    var ret = getFunctionBody(funcRef) | getTags(expr); // retain tags
     module.removeFunction("__precompute");
     if (typeRefAdded) {
       // TODO: also remove the function type somehow if no longer used or make the C-API accept
@@ -2909,7 +2926,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createUnreachable();
           }
         }
-        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
+        expr |= ExpressionTag.WRAPPED; // comparisons never overflow
         this.currentType = Type.bool;
         break;
       }
@@ -3002,7 +3019,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createUnreachable();
           }
         }
-        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
+        expr |= ExpressionTag.WRAPPED; // comparisons never overflow
         this.currentType = Type.bool;
         break;
       }
@@ -3089,7 +3106,7 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createUnreachable();
           }
         }
-        expr |= ExpressionTag.WRAPPED; // guaranteed to be 0 or 1
+        expr |= ExpressionTag.WRAPPED; // comparisons never overflow
         this.currentType = Type.bool;
         break;
       }
@@ -3143,14 +3160,14 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL:
+          case TypeKind.I8:   // addition might overflow
+          case TypeKind.I16:  // ^
+          case TypeKind.U8:   // ^
+          case TypeKind.U16:  // ^
+          case TypeKind.BOOL: // ^
           case TypeKind.I32:
           case TypeKind.U32: {
-            expr = module.createBinary(BinaryOp.AddI32, leftExpr, rightExpr) ;
+            expr = module.createBinary(BinaryOp.AddI32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.USIZE:
@@ -3232,11 +3249,11 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL:
+          case TypeKind.I8:   // subtraction might overflow
+          case TypeKind.I16:  // ^
+          case TypeKind.U8:   // ^
+          case TypeKind.U16:  // ^
+          case TypeKind.BOOL: // ^
           case TypeKind.I32:
           case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.SubI32, leftExpr, rightExpr);
@@ -3321,11 +3338,11 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL:
+          case TypeKind.I8:   // multiplicate might overflow
+          case TypeKind.I16:  // ^
+          case TypeKind.U8:   // ^
+          case TypeKind.U16:  // ^
+          case TypeKind.BOOL: // ^
           case TypeKind.I32:
           case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.MulI32, leftExpr, rightExpr);
@@ -4186,7 +4203,7 @@ export class Compiler extends DiagnosticEmitter {
         // if not possible, tee left to a temp. local (retain tags)
         if (!expr) {
           tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
-          leftExpr = module.createTeeLocal(tempLocal.index, leftExpr) | TAGS(leftExpr);
+          leftExpr = module.createTeeLocal(tempLocal.index, leftExpr) | getTags(leftExpr);
         }
 
         condExpr = this.makeIsTrueish(leftExpr, this.currentType);
@@ -4197,7 +4214,7 @@ export class Compiler extends DiagnosticEmitter {
             condExpr,  // left
             rightExpr, //   ? right
             expr       //   : cloned left
-          ) | (TAGS(rightExpr) & TAGS(expr)); // remains wrapped if both sides are
+          ) | (getTags(rightExpr) & getTags(expr)); // remains wrapped if both sides are
         }
 
         // otherwise make use of the temp. local
@@ -4209,7 +4226,7 @@ export class Compiler extends DiagnosticEmitter {
               assert(tempLocal).index, // to be sure
               this.currentType.toNativeType()
             )
-          ) | (TAGS(rightExpr) & TAGS(leftExpr)); // remains wrapped if both sides are
+          ) | (getTags(rightExpr) & getTags(leftExpr)); // remains wrapped if both sides are
         }
         break;
       }
@@ -4225,7 +4242,7 @@ export class Compiler extends DiagnosticEmitter {
         // if not possible, tee left to a temp. local
         if (!expr) {
           tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
-          leftExpr = module.createTeeLocal(tempLocal.index, leftExpr) | TAGS(leftExpr);
+          leftExpr = module.createTeeLocal(tempLocal.index, leftExpr) | getTags(leftExpr);
         }
 
         condExpr = this.makeIsTrueish(leftExpr, this.currentType);
@@ -4236,7 +4253,7 @@ export class Compiler extends DiagnosticEmitter {
             condExpr, // left
             expr,     //   ? cloned left
             rightExpr //   : right
-          ) | (TAGS(expr) & TAGS(rightExpr)); // remains wrapped if both sides are
+          ) | (getTags(expr) & getTags(rightExpr)); // remains wrapped if both sides are
         }
 
         // otherwise make use of the temp. local
@@ -4248,7 +4265,7 @@ export class Compiler extends DiagnosticEmitter {
               this.currentType.toNativeType()
             ),
             rightExpr
-          ) | (TAGS(leftExpr) & TAGS(rightExpr)); // remains wrapped if both sides are
+          ) | (getTags(leftExpr) & getTags(rightExpr)); // remains wrapped if both sides are
         }
         break;
       }
@@ -4413,8 +4430,10 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.createUnreachable();
         }
+        let flow = this.currentFunction.flow;
+        flow.setLocalWrapped((<Local>target).index, (valueWithCorrectType & ExpressionTag.WRAPPED) != 0);
         return tee
-          ? module.createTeeLocal((<Local>target).index, valueWithCorrectType) | TAGS(valueWithCorrectType)
+          ? module.createTeeLocal((<Local>target).index, valueWithCorrectType) | getTags(valueWithCorrectType)
           : module.createSetLocal((<Local>target).index, valueWithCorrectType);
       }
       case ElementKind.GLOBAL: {
@@ -4437,7 +4456,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.createBlock(null, [ // emulated teeGlobal
             module.createSetGlobal(internalName, valueWithCorrectType),
             module.createGetGlobal(internalName, nativeType)
-          ], nativeType) | TAGS(valueWithCorrectType);
+          ], nativeType) | getTags(valueWithCorrectType);
         } else {
           return module.createSetGlobal(target.internalName, valueWithCorrectType);
         }
@@ -4485,7 +4504,7 @@ export class Compiler extends DiagnosticEmitter {
               (<Field>target).memoryOffset
             ),
             module.createGetLocal(tempLocalIndex, nativeType)
-          ], nativeType) | TAGS(valueWithCorrectType);
+          ], nativeType) | getTags(valueWithCorrectType);
         } else {
           return module.createStore(
             type.size >> 3,
@@ -5006,9 +5025,9 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let parent = assert(instance.parent);
       assert(parent.kind == ElementKind.CLASS);
-      if (_BinaryenExpressionGetId(thisArg) == ExpressionId.GetLocal) {
+      if (getExpressionId(thisArg) == ExpressionId.GetLocal) {
         flow.addScopedLocalAlias(
-          _BinaryenGetLocalGetIndex(thisArg),
+          getGetLocalIndex(thisArg),
           (<Class>parent).type,
           "this"
         );
@@ -5027,14 +5046,16 @@ export class Compiler extends DiagnosticEmitter {
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      if (_BinaryenExpressionGetId(paramExpr) == ExpressionId.GetLocal) {
+      if (getExpressionId(paramExpr) == ExpressionId.GetLocal) {
         flow.addScopedLocalAlias(
-          _BinaryenGetLocalGetIndex(paramExpr),
+          getGetLocalIndex(paramExpr),
           parameterTypes[i],
           signature.getParameterName(i)
         );
+        // inherits wrap status
       } else {
         let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
+        flow.setLocalWrapped(argumentLocal.index, (paramExpr & ExpressionTag.WRAPPED) != 0);
         body.push(
           module.createSetLocal(argumentLocal.index, paramExpr)
         );
@@ -5046,16 +5067,16 @@ export class Compiler extends DiagnosticEmitter {
     var numParameters = signature.parameterTypes.length;
     for (let i = numArguments; i < numParameters; ++i) {
       let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
-      body.push(
-        module.createSetLocal(argumentLocal.index,
-          this.compileExpression(
-            assert(declaration.signature.parameterTypes[i].initializer),
-            parameterTypes[i],
-            ConversionKind.IMPLICIT,
-            WrapMode.NONE
-          )
-        )
+      let initExpr = this.compileExpression(
+        assert(declaration.signature.parameterTypes[i].initializer),
+        parameterTypes[i],
+        ConversionKind.IMPLICIT,
+        WrapMode.WRAP
       );
+      body.push(
+        module.createSetLocal(argumentLocal.index, initExpr)
+      );
+      flow.setLocalWrapped(argumentLocal.index, (initExpr & ExpressionTag.WRAPPED) != 0);
     }
 
     // Compile the called function's body in the scope of the inlined flow
@@ -5192,7 +5213,7 @@ export class Compiler extends DiagnosticEmitter {
             assert(originalParameterDeclarations[minArguments + i].initializer),
             type,
             ConversionKind.IMPLICIT,
-            WrapMode.NONE
+            WrapMode.WRAP
           )
         )
       ]);
@@ -5489,6 +5510,8 @@ export class Compiler extends DiagnosticEmitter {
     retainConstantType: bool
   ): ExpressionRef {
     var module = this.module;
+    var currentFunction = this.currentFunction;
+
     // check special keywords first
     switch (expression.kind) {
       case NodeKind.NULL: {
@@ -5510,7 +5533,6 @@ export class Compiler extends DiagnosticEmitter {
         return module.createI32(0) | ExpressionTag.WRAPPED;
       }
       case NodeKind.THIS: {
-        let currentFunction = this.currentFunction;
         let flow = currentFunction.flow;
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
           let scopedThis = flow.getScopedLocal("this");
@@ -5544,7 +5566,6 @@ export class Compiler extends DiagnosticEmitter {
         return module.createUnreachable();
       }
       case NodeKind.SUPER: {
-        let currentFunction = this.currentFunction;
         let flow = currentFunction.flow;
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
           let scopedThis = flow.getScopedLocal("this");
@@ -5579,7 +5600,7 @@ export class Compiler extends DiagnosticEmitter {
     // otherwise resolve
     var target = this.program.resolveIdentifier( // reports
       expression,
-      this.currentFunction,
+      currentFunction,
       this.currentEnum
     );
     if (!target) return module.createUnreachable();
@@ -5593,7 +5614,9 @@ export class Compiler extends DiagnosticEmitter {
         let localIndex = (<Local>target).index;
         assert(localIndex >= 0);
         this.currentType = localType;
-        return this.module.createGetLocal(localIndex, localType.toNativeType());
+        let ret = this.module.createGetLocal(localIndex, localType.toNativeType());
+        if (currentFunction.flow.isLocalWrapped(localIndex)) ret |= ExpressionTag.WRAPPED;
+        return ret;
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
@@ -5606,7 +5629,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.currentType = globalType;
         return this.module.createGetGlobal((<Global>target).internalName, globalType.toNativeType())
-             | ExpressionTag.WRAPPED;
+             | ExpressionTag.WRAPPED; // globals are always wrapped
       }
       case ElementKind.ENUMVALUE: { // here: if referenced from within the same enum
         if (!target.is(CommonFlags.COMPILED)) {
@@ -5626,7 +5649,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FUNCTION_PROTOTYPE: {
         let instance = (<FunctionPrototype>target).resolve(
           null,
-          this.currentFunction.flow.contextualTypeArguments
+          currentFunction.flow.contextualTypeArguments
         );
         if (!(instance && this.compileFunction(instance))) return module.createUnreachable();
         let index = this.ensureFunctionTableEntry(instance);
@@ -5858,26 +5881,26 @@ export class Compiler extends DiagnosticEmitter {
           : elementType.toNativeZero(module);
         if (isStatic) {
           expr = this.precomputeExpressionRef(exprs[i]);
-          if (_BinaryenExpressionGetId(expr) == ExpressionId.Const) {
-            assert(_BinaryenExpressionGetType(expr) == nativeElementType);
+          if (getExpressionId(expr) == ExpressionId.Const) {
+            assert(getExpressionType(expr) == nativeElementType);
             switch (nativeElementType) {
               case NativeType.I32: {
-                changetype<i32[]>(values)[i] = _BinaryenConstGetValueI32(expr);
+                changetype<i32[]>(values)[i] = getConstValueI32(expr);
                 break;
               }
               case NativeType.I64: {
                 changetype<I64[]>(values)[i] = i64_new(
-                  _BinaryenConstGetValueI64Low(expr),
-                  _BinaryenConstGetValueI64High(expr)
+                  getConstValueI64Low(expr),
+                  getConstValueI64High(expr)
                 );
                 break;
               }
               case NativeType.F32: {
-                changetype<f32[]>(values)[i] = _BinaryenConstGetValueF32(expr);
+                changetype<f32[]>(values)[i] = getConstValueF32(expr);
                 break;
               }
               case NativeType.F64: {
-                changetype<f64[]>(values)[i] = _BinaryenConstGetValueF64(expr);
+                changetype<f64[]>(values)[i] = getConstValueF64(expr);
                 break;
               }
               default: assert(false); // checked above
@@ -6197,10 +6220,10 @@ export class Compiler extends DiagnosticEmitter {
       // Try to eliminate unnecesssary branches if the condition is constant
       let condExprPrecomp = this.precomputeExpressionRef(condExpr);
       if (
-        _BinaryenExpressionGetId(condExprPrecomp) == ExpressionId.Const &&
-        _BinaryenExpressionGetType(condExprPrecomp) == NativeType.I32
+        getExpressionId(condExprPrecomp) == ExpressionId.Const &&
+        getExpressionType(condExprPrecomp) == NativeType.I32
       ) {
-        return _BinaryenConstGetValueI32(condExprPrecomp)
+        return getConstValueI32(condExprPrecomp)
           ? this.compileExpression(ifThen, contextualType, ConversionKind.IMPLICIT, WrapMode.NONE)
           : this.compileExpression(ifElse, contextualType, ConversionKind.IMPLICIT, WrapMode.NONE);
 
@@ -6289,7 +6312,7 @@ export class Compiler extends DiagnosticEmitter {
       ConversionKind.NONE,
       WrapMode.NONE
     );
-    if (_BinaryenExpressionGetId(getValue) == ExpressionId.Unreachable) {
+    if (getExpressionId(getValue) == ExpressionId.Unreachable) {
       // shortcut if compiling the getter already failed
       return getValue;
     }
@@ -7072,11 +7095,11 @@ function mangleExportName(element: Element, explicitSimpleName: string | null = 
 /** Tests if an expression might technically overflow and is not explicitly tagged as being wrapped. */
 function mightOverflow(expr: ExpressionRef, type: Type): bool {
   assert(type.is(TypeFlags.INTEGER));
-  assert(_BinaryenExpressionGetType(expr) == NativeType.I32);
+  assert(getExpressionType(expr) == NativeType.I32);
   if (expr & ExpressionTag.WRAPPED) return false; // explicitly tagged
-  switch (_BinaryenExpressionGetId(expr)) {
+  switch (getExpressionId(expr)) {
     case ExpressionId.Binary: {
-      switch (_BinaryenBinaryGetOp(expr)) {
+      switch (getBinaryOp(expr)) {
         case BinaryOp.EqI32:
         case BinaryOp.EqI64:
         case BinaryOp.EqF32:
@@ -7110,7 +7133,7 @@ function mightOverflow(expr: ExpressionRef, type: Type): bool {
       break;
     }
     case ExpressionId.Unary: {
-      switch (_BinaryenUnaryGetOp(expr)) {
+      switch (getUnaryOp(expr)) {
         case UnaryOp.EqzI32:
         case UnaryOp.EqzI64: return false;
         case UnaryOp.ClzI32:
@@ -7119,8 +7142,8 @@ function mightOverflow(expr: ExpressionRef, type: Type): bool {
       break;
     }
     case ExpressionId.Const: {
-      if (_BinaryenExpressionGetType(expr) == NativeType.I32) {
-        let value = _BinaryenConstGetValueI32(expr);
+      if (getExpressionType(expr) == NativeType.I32) {
+        let value = getConstValueI32(expr);
         switch (type.kind) {
           case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
           case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
@@ -7132,8 +7155,8 @@ function mightOverflow(expr: ExpressionRef, type: Type): bool {
       return false;
     }
     case ExpressionId.Load: {
-      return type.byteSize < _BinaryenLoadGetBytes(expr)
-          || type.is(TypeFlags.SIGNED) != _BinaryenLoadIsSigned(expr);
+      return type.byteSize < getLoadBytes(expr)
+          || type.is(TypeFlags.SIGNED) != isLoadSigned(expr);
     }
   }
   return true;

@@ -35,7 +35,12 @@ import {
   NativeType,
   ExpressionRef,
   ExpressionId,
-  TAGS
+  getTags,
+  getExpressionId,
+  getExpressionType,
+  getConstValueI64High,
+  getConstValueI64Low,
+  getConstValueI32
 } from "./module";
 
 import {
@@ -563,7 +568,7 @@ export function compileCall(
               module.createGetLocal(tempLocal.index, NativeType.I32),
               module.createI32(0)
             )
-          ) | TAGS(arg0);
+          ) | getTags(arg0);
           break;
         }
         case TypeKind.ISIZE: {
@@ -689,7 +694,7 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          ) | (TAGS(arg0) & TAGS(arg1)); // remains wrapped if both values are
+          ) | (getTags(arg0) & getTags(arg1)); // remains wrapped if both values are
           break;
         }
         case TypeKind.U8:
@@ -706,7 +711,7 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          ) | (TAGS(arg0) & TAGS(arg1)); // remains wrapped if both values are
+          ) | (getTags(arg0) & getTags(arg1)); // remains wrapped if both values are
           break;
         }
         case TypeKind.I64: {
@@ -843,7 +848,7 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          ) | (TAGS(arg0) & TAGS(arg1)); // remains wrapped if both values are
+          ) | (getTags(arg0) & getTags(arg1)); // remains wrapped if both values are
           break;
         }
         case TypeKind.U8:
@@ -860,7 +865,7 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          ) | (TAGS(arg0) & TAGS(arg1)); // remains wrapped if both values are
+          ) | (getTags(arg0) & getTags(arg1)); // remains wrapped if both values are
           break;
         }
         case TypeKind.I64: {
@@ -2045,7 +2050,7 @@ export function compileCall(
               ),
               abort,
               module.createGetLocal(tempLocal.index, NativeType.I32)
-            ) | TAGS(arg0);
+            ) | getTags(arg0);
             break;
           }
           case TypeKind.I64:
@@ -2602,10 +2607,10 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   if (compiler.options.isWasm64) {
     expr = compiler.precomputeExpression(expression, Type.usize64, ConversionKind.IMPLICIT, WrapMode.NONE);
     if (
-      _BinaryenExpressionGetId(expr) != ExpressionId.Const ||
-      _BinaryenExpressionGetType(expr) != NativeType.I64 ||
-      _BinaryenConstGetValueI64High(expr) != 0 ||
-      (value = _BinaryenConstGetValueI64Low(expr)) < 0
+      getExpressionId(expr) != ExpressionId.Const ||
+      getExpressionType(expr) != NativeType.I64 ||
+      getConstValueI64High(expr) != 0 ||
+      (value = getConstValueI64Low(expr)) < 0
     ) {
       compiler.error(
         DiagnosticCode.Operation_not_supported,
@@ -2616,9 +2621,9 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   } else {
     expr = compiler.precomputeExpression(expression, Type.usize32, ConversionKind.IMPLICIT, WrapMode.NONE);
     if (
-      _BinaryenExpressionGetId(expr) != ExpressionId.Const ||
-      _BinaryenExpressionGetType(expr) != NativeType.I32 ||
-      (value = _BinaryenConstGetValueI32(expr)) < 0
+      getExpressionId(expr) != ExpressionId.Const ||
+      getExpressionType(expr) != NativeType.I32 ||
+      (value = getConstValueI32(expr)) < 0
     ) {
       compiler.error(
         DiagnosticCode.Operation_not_supported,

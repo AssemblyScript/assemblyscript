@@ -3567,6 +3567,10 @@ export class Flow {
   contextualTypeArguments: Map<string,Type> | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
+  /** Local variable wrap states for the first 64 locals. */
+  wrappedLocals: I64;
+  /** Local variable wrap states for locals with index >= 64. */
+  wrappedLocalsExt: I64[] | null;
 
   /** Creates the parent flow of the specified function. */
   static create(currentFunction: Function): Flow {
@@ -3579,6 +3583,8 @@ export class Flow {
     parentFlow.returnLabel = null;
     parentFlow.returnType = currentFunction.signature.returnType;
     parentFlow.contextualTypeArguments = currentFunction.contextualTypeArguments;
+    parentFlow.wrappedLocals = i64_new(0);
+    parentFlow.wrappedLocalsExt = null;
     return parentFlow;
   }
 
@@ -3602,6 +3608,8 @@ export class Flow {
     branch.returnLabel = this.returnLabel;
     branch.returnType = this.returnType;
     branch.contextualTypeArguments = this.contextualTypeArguments;
+    branch.wrappedLocals = this.wrappedLocals;
+    branch.wrappedLocalsExt = this.wrappedLocalsExt;
     return branch;
   }
 
@@ -3697,6 +3705,69 @@ export class Flow {
       }
     } while (current = current.parent);
     return this.currentFunction.localsByName.get(name);
+  }
+
+  /** Tests if the local with the specified index is considered wrapped. */
+  isLocalWrapped(index: i32): bool {
+    var map: I64;
+    var ext: I64[] | null;
+    if (index < 64) {
+      if (index < 0) return true; // inlined constant
+      map = this.wrappedLocals;
+    } else if (ext = this.wrappedLocalsExt) {
+      let i = ((index - 64) / 64) | 0;
+      if (i >= ext.length) return false;
+      map = ext[i];
+      index -= (i + 1) * 64;
+    } else {
+      return false;
+    }
+    return i64_ne(
+      i64_and(
+        map,
+        i64_shl(
+          i64_one,
+          i64_new(index)
+        )
+      ),
+      i64_zero
+    );
+  }
+
+  /** Sets if the local with the specified index is considered wrapped. */
+  setLocalWrapped(index: i32, wrapped: bool): void {
+    var map: I64;
+    var i: i32 = -1;
+    if (index < 64) {
+      if (index < 0) return; // inlined constant
+      map = this.wrappedLocals;
+    } else {
+      let ext = this.wrappedLocalsExt;
+      i = ((index - 64) / 64) | 0;
+      if (!ext) ext = new Array(i + 1);
+      else while (ext.length <= i) ext.push(i64_new(0));
+      map = ext[i];
+      index -= (i + 1) * 64;
+    }
+    map = wrapped
+      ? i64_or(
+          map,
+          i64_shl(
+            i64_one,
+            i64_new(index)
+          )
+        )
+      : i64_and(
+          map,
+          i64_not(
+            i64_shl(
+              i64_one,
+              i64_new(index)
+            )
+          )
+        );
+    if (i >= 0) (<I64[]>this.wrappedLocalsExt)[i] = map;
+    else this.wrappedLocals = map;
   }
 
   /** Finalizes this flow. Must be the topmost parent flow of the function. */

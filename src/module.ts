@@ -245,12 +245,12 @@ export enum ExpressionTag {
 }
 
 /** Helper converting a possibly tagged pointer to a bare pointer. */
-export function PTR(exprWithTags: ExpressionRef): ExpressionRef {
+export function getPtr(exprWithTags: ExpressionRef): ExpressionRef {
   return exprWithTags & ~3; // Not used currently
 }
 
 /** Helpers extracting possibly present tags from a tagged pointer. */
-export function TAGS(exprWithTags: ExpressionRef): usize {
+export function getTags(exprWithTags: ExpressionRef): usize {
   return exprWithTags & 3; // Not used currently
 }
 
@@ -347,7 +347,7 @@ export class Module {
     op: UnaryOp,
     expr: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenUnary(this.ref, op, PTR(expr));
+    return _BinaryenUnary(this.ref, op, getPtr(expr));
   }
 
   createBinary(
@@ -355,7 +355,7 @@ export class Module {
     left: ExpressionRef,
     right: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenBinary(this.ref, op, PTR(left), PTR(right));
+    return _BinaryenBinary(this.ref, op, getPtr(left), getPtr(right));
   }
 
   createHost(
@@ -384,7 +384,7 @@ export class Module {
     index: i32,
     value: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenTeeLocal(this.ref, index, PTR(value));
+    return _BinaryenTeeLocal(this.ref, index, getPtr(value));
   }
 
   createGetGlobal(
@@ -406,7 +406,7 @@ export class Module {
     type: NativeType,
     offset: Index = 0
   ): ExpressionRef {
-    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, /* always aligned */ bytes, type, PTR(ptr));
+    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, /* always aligned */ bytes, type, getPtr(ptr));
   }
 
   createStore(
@@ -416,7 +416,7 @@ export class Module {
     type: NativeType,
     offset: Index = 0
   ): ExpressionRef {
-    return _BinaryenStore(this.ref, bytes, offset, /* always aligned */ bytes, PTR(ptr), PTR(value), type);
+    return _BinaryenStore(this.ref, bytes, offset, /* always aligned */ bytes, getPtr(ptr), getPtr(value), type);
   }
 
   createAtomicLoad(
@@ -425,7 +425,7 @@ export class Module {
     type: NativeType,
     offset: Index = 0
   ): ExpressionRef {
-    return _BinaryenAtomicLoad(this.ref, bytes, offset, type, PTR(ptr));
+    return _BinaryenAtomicLoad(this.ref, bytes, offset, type, getPtr(ptr));
   }
 
   createAtomicStore(
@@ -435,7 +435,7 @@ export class Module {
     type: NativeType,
     offset: Index = 0
   ): ExpressionRef {
-    return _BinaryenAtomicStore(this.ref, bytes, offset, PTR(ptr), PTR(value), type);
+    return _BinaryenAtomicStore(this.ref, bytes, offset, getPtr(ptr), getPtr(value), type);
   }
 
   createAtomicRMW(
@@ -446,7 +446,7 @@ export class Module {
     value: ExpressionRef,
     type: NativeType
   ): ExpressionRef {
-    return _BinaryenAtomicRMW(this.ref, op, bytes, offset, PTR(ptr), PTR(value), type);
+    return _BinaryenAtomicRMW(this.ref, op, bytes, offset, getPtr(ptr), getPtr(value), type);
   }
 
   createAtomicCmpxchg(
@@ -457,7 +457,7 @@ export class Module {
     replacement: ExpressionRef,
     type: NativeType
   ): ExpressionRef {
-    return _BinaryenAtomicCmpxchg(this.ref, bytes, offset, PTR(ptr), PTR(expected), PTR(replacement), type);
+    return _BinaryenAtomicCmpxchg(this.ref, bytes, offset, getPtr(ptr), getPtr(expected), getPtr(replacement), type);
   }
 
   createAtomicWait(
@@ -466,14 +466,14 @@ export class Module {
     timeout: ExpressionRef,
     expectedType: NativeType
   ): ExpressionRef {
-    return _BinaryenAtomicWait(this.ref, PTR(ptr), PTR(expected), PTR(timeout), expectedType);
+    return _BinaryenAtomicWait(this.ref, getPtr(ptr), getPtr(expected), getPtr(timeout), expectedType);
   }
 
   createAtomicWake(
     ptr: ExpressionRef,
     wakeCount: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenAtomicWake(this.ref, PTR(ptr), PTR(wakeCount));
+    return _BinaryenAtomicWake(this.ref, getPtr(ptr), getPtr(wakeCount));
   }
 
   // statements
@@ -482,7 +482,7 @@ export class Module {
     index: Index,
     value: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenSetLocal(this.ref, index, PTR(value));
+    return _BinaryenSetLocal(this.ref, index, getPtr(value));
   }
 
   createSetGlobal(
@@ -491,7 +491,7 @@ export class Module {
   ): ExpressionRef {
     var cStr = allocString(name);
     try {
-      return _BinaryenSetGlobal(this.ref, cStr, PTR(value));
+      return _BinaryenSetGlobal(this.ref, cStr, getPtr(value));
     } finally {
       free_memory(cStr);
     }
@@ -519,7 +519,7 @@ export class Module {
   ): ExpressionRef {
     var cStr = allocString(label);
     try {
-      return _BinaryenBreak(this.ref, cStr, PTR(condition), PTR(value));
+      return _BinaryenBreak(this.ref, cStr, getPtr(condition), getPtr(value));
     } finally {
       free_memory(cStr);
     }
@@ -528,7 +528,7 @@ export class Module {
   createDrop(
     expression: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenDrop(this.ref, PTR(expression));
+    return _BinaryenDrop(this.ref, getPtr(expression));
   }
 
   createLoop(
@@ -537,7 +537,7 @@ export class Module {
   ): ExpressionRef {
     var cStr = allocString(label);
     try {
-      return _BinaryenLoop(this.ref, cStr, PTR(body));
+      return _BinaryenLoop(this.ref, cStr, getPtr(body));
     } finally {
       free_memory(cStr);
     }
@@ -548,7 +548,7 @@ export class Module {
     ifTrue: ExpressionRef,
     ifFalse: ExpressionRef = 0
   ): ExpressionRef {
-    return _BinaryenIf(this.ref, PTR(condition), PTR(ifTrue), PTR(ifFalse));
+    return _BinaryenIf(this.ref, getPtr(condition), getPtr(ifTrue), getPtr(ifFalse));
   }
 
   createNop(): ExpressionRef {
@@ -558,7 +558,7 @@ export class Module {
   createReturn(
     expression: ExpressionRef = 0
   ): ExpressionRef {
-    return _BinaryenReturn(this.ref, PTR(expression));
+    return _BinaryenReturn(this.ref, getPtr(expression));
   }
 
   createSelect(
@@ -566,7 +566,7 @@ export class Module {
     ifFalse: ExpressionRef,
     condition: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenSelect(this.ref, PTR(condition), PTR(ifTrue), PTR(ifFalse));
+    return _BinaryenSelect(this.ref, getPtr(condition), getPtr(ifTrue), getPtr(ifFalse));
   }
 
   createSwitch(
@@ -583,7 +583,7 @@ export class Module {
     var cArr = allocI32Array(strs);
     var cStr = allocString(defaultName);
     try {
-      return _BinaryenSwitch(this.ref, cArr, numNames, cStr, PTR(condition), PTR(value));
+      return _BinaryenSwitch(this.ref, cArr, numNames, cStr, getPtr(condition), getPtr(value));
     } finally {
       free_memory(cStr);
       free_memory(cArr);
@@ -629,7 +629,7 @@ export class Module {
     var cArr = allocPtrArray(operands);
     var cStr = allocString(typeName);
     try {
-      return _BinaryenCallIndirect(this.ref, PTR(index), cArr, operands && operands.length || 0, cStr);
+      return _BinaryenCallIndirect(this.ref, getPtr(index), cArr, operands && operands.length || 0, cStr);
     } finally {
       free_memory(cStr);
       free_memory(cArr);
@@ -650,7 +650,7 @@ export class Module {
   ): GlobalRef {
     var cStr = allocString(name);
     try {
-      return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, PTR(initializer));
+      return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, getPtr(initializer));
     } finally {
       free_memory(cStr);
     }
@@ -665,7 +665,7 @@ export class Module {
     var cStr = allocString(name);
     var cArr = allocI32Array(varTypes);
     try {
-      return _BinaryenAddFunction(this.ref, cStr, PTR(type), cArr, varTypes ? varTypes.length : 0, PTR(body));
+      return _BinaryenAddFunction(this.ref, cStr, getPtr(type), cArr, varTypes ? varTypes.length : 0, getPtr(body));
     } finally {
       free_memory(cArr);
       free_memory(cStr);
@@ -756,7 +756,7 @@ export class Module {
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
     try {
-      return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, PTR(functionType));
+      return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, getPtr(functionType));
     } finally {
       free_memory(cStr3);
       free_memory(cStr2);
@@ -870,7 +870,7 @@ export class Module {
   }
 
   setStart(func: FunctionRef): void {
-    _BinaryenSetStart(this.ref, PTR(func));
+    _BinaryenSetStart(this.ref, getPtr(func));
   }
 
   setOptimizeLevel(level: i32 = 2): void {
@@ -887,7 +887,7 @@ export class Module {
 
   optimize(func: FunctionRef = 0): void {
     if (func) {
-      _BinaryenFunctionOptimize(PTR(func), this.ref);
+      _BinaryenFunctionOptimize(getPtr(func), this.ref);
     } else {
       _BinaryenModuleOptimize(this.ref);
     }
@@ -901,7 +901,7 @@ export class Module {
     }
     var cArr = allocI32Array(names);
     try {
-      if (func = PTR(func)) {
+      if (func = getPtr(func)) {
         _BinaryenFunctionRunPasses(func, this.ref, cArr, numNames);
       } else {
         _BinaryenModuleRunPasses(this.ref, cArr, numNames);
@@ -973,8 +973,8 @@ export class Module {
         nested2: ExpressionRef;
 
     // Split expression into pointer and tags and re-apply tags after cloning below
-    var tags = TAGS(expr);
-        expr = PTR(expr);
+    var tags = getTags(expr);
+        expr = getPtr(expr);
 
     switch (_BinaryenExpressionGetId(expr)) {
       case ExpressionId.Const: {
@@ -1020,7 +1020,7 @@ export class Module {
                 _BinaryenLoadGetBytes(expr),
                 _BinaryenLoadGetOffset(expr),
                 _BinaryenExpressionGetType(expr),
-                PTR(nested1)
+                getPtr(nested1)
               )
             : _BinaryenLoad(this.ref,
                 _BinaryenLoadGetBytes(expr),
@@ -1028,7 +1028,7 @@ export class Module {
                 _BinaryenLoadGetOffset(expr),
                 _BinaryenLoadGetAlign(expr),
                 _BinaryenExpressionGetType(expr),
-                PTR(nested1)
+                getPtr(nested1)
               )
         ) | tags;
       }
@@ -1036,7 +1036,7 @@ export class Module {
         if (!(nested1 = this.cloneExpression(_BinaryenUnaryGetValue(expr), noSideEffects, maxDepth))) {
           break;
         }
-        return _BinaryenUnary(this.ref, _BinaryenUnaryGetOp(expr), PTR(nested1)) | tags;
+        return _BinaryenUnary(this.ref, _BinaryenUnaryGetOp(expr), getPtr(nested1)) | tags;
       }
       case ExpressionId.Binary: {
         if (!(nested1 = this.cloneExpression(_BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth))) {
@@ -1045,7 +1045,7 @@ export class Module {
         if (!(nested2 = this.cloneExpression(_BinaryenBinaryGetRight(expr), noSideEffects, maxDepth))) {
           break;
         }
-        return _BinaryenBinary(this.ref, _BinaryenBinaryGetOp(expr), PTR(nested1), PTR(nested2)) | tags;
+        return _BinaryenBinary(this.ref, _BinaryenBinaryGetOp(expr), getPtr(nested1), getPtr(nested2)) | tags;
       }
     }
     return 0;
@@ -1073,8 +1073,200 @@ export class Module {
     lineNumber: Index,
     columnNumber: Index
   ): void {
-    _BinaryenFunctionSetDebugLocation(PTR(func), PTR(expr), fileIndex, lineNumber, columnNumber);
+    _BinaryenFunctionSetDebugLocation(getPtr(func), getPtr(expr), fileIndex, lineNumber, columnNumber);
   }
+}
+
+// expressions
+
+export function getExpressionId(expr: ExpressionRef): ExpressionId {
+  return _BinaryenExpressionGetId(getPtr(expr));
+}
+
+export function getExpressionType(expr: ExpressionRef): NativeType {
+  return _BinaryenExpressionGetType(getPtr(expr));
+}
+
+export function getConstValueI32(expr: ExpressionRef): i32 {
+  return _BinaryenConstGetValueI32(getPtr(expr));
+}
+
+export function getConstValueI64Low(expr: ExpressionRef): i32 {
+  return _BinaryenConstGetValueI64Low(getPtr(expr));
+}
+
+export function getConstValueI64High(expr: ExpressionRef): i32 {
+  return _BinaryenConstGetValueI64High(getPtr(expr));
+}
+
+export function getConstValueF32(expr: ExpressionRef): f32 {
+  return _BinaryenConstGetValueF32(getPtr(expr));
+}
+
+export function getConstValueF64(expr: ExpressionRef): f32 {
+  return _BinaryenConstGetValueF64(getPtr(expr));
+}
+
+export function getGetLocalIndex(expr: ExpressionRef): Index {
+  return _BinaryenGetLocalGetIndex(getPtr(expr));
+}
+
+export function getSetLocalIndex(expr: ExpressionRef): Index {
+  return _BinaryenSetLocalGetIndex(getPtr(expr));
+}
+
+export function getSetLocalValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenSetLocalGetValue(getPtr(expr));
+}
+
+export function getBinaryOp(expr: ExpressionRef): BinaryOp {
+  return _BinaryenBinaryGetOp(getPtr(expr));
+}
+
+export function getBinaryLeft(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenBinaryGetLeft(getPtr(expr));
+}
+
+export function getBinaryRight(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenBinaryGetRight(getPtr(expr));
+}
+
+export function getUnaryOp(expr: ExpressionRef): UnaryOp {
+  return _BinaryenUnaryGetOp(getPtr(expr));
+}
+
+export function getUnaryValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenUnaryGetValue(getPtr(expr));
+}
+
+export function getLoadBytes(expr: ExpressionRef): u32 {
+  return _BinaryenLoadGetBytes(getPtr(expr));
+}
+
+export function getLoadOffset(expr: ExpressionRef): u32 {
+  return _BinaryenLoadGetOffset(getPtr(expr));
+}
+
+export function getLoadPtr(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenLoadGetPtr(getPtr(expr));
+}
+
+export function isLoadSigned(expr: ExpressionRef): bool {
+  return _BinaryenLoadIsSigned(getPtr(expr));
+}
+
+export function getStoreBytes(expr: ExpressionRef): u32 {
+  return _BinaryenStoreGetBytes(getPtr(expr));
+}
+
+export function getStoreOffset(expr: ExpressionRef): u32 {
+  return _BinaryenStoreGetOffset(getPtr(expr));
+}
+
+export function getStorePtr(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenStoreGetPtr(getPtr(expr));
+}
+
+export function getStoreValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenStoreGetValue(getPtr(expr));
+}
+
+export function getBlockName(expr: ExpressionRef): string | null {
+  return readString(_BinaryenBlockGetName(getPtr(expr)));
+}
+
+export function getBlockChildCount(expr: ExpressionRef): Index {
+  return _BinaryenBlockGetNumChildren(getPtr(expr));
+}
+
+export function getBlockChild(expr: ExpressionRef, index: Index): ExpressionRef {
+  return _BinaryenBlockGetChild(getPtr(expr), index);
+}
+
+export function getIfCondition(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenIfGetCondition(getPtr(expr));
+}
+
+export function getIfTrue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenIfGetIfTrue(getPtr(expr));
+}
+
+export function getIfFalse(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenIfGetIfFalse(getPtr(expr));
+}
+
+export function getLoopName(expr: ExpressionRef): string | null {
+  return readString(_BinaryenLoopGetName(getPtr(expr)));
+}
+
+export function getLoopBody(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenLoopGetBody(getPtr(expr));
+}
+
+export function getBreakName(expr: ExpressionRef): string | null {
+  return readString(_BinaryenBreakGetName(getPtr(expr)));
+}
+
+export function getBreakCondition(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenBreakGetCondition(getPtr(expr));
+}
+
+export function getSelectThen(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenSelectGetIfTrue(getPtr(expr));
+}
+
+export function getSelectElse(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenSelectGetIfFalse(getPtr(expr));
+}
+
+export function getSelectCondition(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenSelectGetCondition(getPtr(expr));
+}
+
+export function getDropValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenDropGetValue(getPtr(expr));
+}
+
+export function getReturnValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenReturnGetValue(getPtr(expr));
+}
+
+export function getHostOp(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenHostGetOp(getPtr(expr));
+}
+
+export function getHostOperandCount(expr: ExpressionRef): Index {
+  return _BinaryenHostGetNumOperands(getPtr(expr));
+}
+
+export function getHostOperand(expr: ExpressionRef, index: Index): ExpressionRef {
+  return _BinaryenHostGetOperand(getPtr(expr), index);
+}
+
+export function getHostName(expr: ExpressionRef): string | null {
+  return readString(_BinaryenHostGetNameOperand(getPtr(expr)));
+}
+
+// functions
+
+export function getFunctionBody(func: FunctionRef): ExpressionRef {
+  return _BinaryenFunctionGetBody(getPtr(func));
+}
+
+export function getFunctionName(func: FunctionRef): string | null {
+  return readString(_BinaryenFunctionGetName(getPtr(func)));
+}
+
+export function getFunctionParamCount(func: FunctionRef): Index {
+  return _BinaryenFunctionGetNumParams(getPtr(func));
+}
+
+export function getFunctionParamType(func: FunctionRef, index: Index): NativeType {
+  return _BinaryenFunctionGetParam(getPtr(func), index);
+}
+
+export function getFunctionResultType(func: FunctionRef): NativeType {
+  return _BinaryenFunctionGetResult(getPtr(func));
 }
 
 export class Relooper {
@@ -1099,33 +1291,33 @@ export class Relooper {
   private constructor() {}
 
   addBlock(code: ExpressionRef): RelooperBlockRef {
-    return _RelooperAddBlock(this.ref, PTR(code));
+    return _RelooperAddBlock(this.ref, getPtr(code));
   }
 
   addBranch(from: RelooperBlockRef, to: RelooperBlockRef, condition: ExpressionRef = 0, code: ExpressionRef = 0): void {
-    _RelooperAddBranch(PTR(from), PTR(to), PTR(condition), PTR(code));
+    _RelooperAddBranch(getPtr(from), getPtr(to), getPtr(condition), getPtr(code));
   }
 
   addBlockWithSwitch(code: ExpressionRef, condition: ExpressionRef): RelooperBlockRef {
-    return _RelooperAddBlockWithSwitch(this.ref, PTR(code), PTR(condition));
+    return _RelooperAddBlockWithSwitch(this.ref, getPtr(code), getPtr(condition));
   }
 
   addBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: i32[], code: ExpressionRef = 0): void {
     var cArr = allocI32Array(indexes);
     try {
-      _RelooperAddBranchForSwitch(PTR(from), PTR(to), cArr, indexes.length, PTR(code));
+      _RelooperAddBranchForSwitch(getPtr(from), getPtr(to), cArr, indexes.length, getPtr(code));
     } finally {
       free_memory(cArr);
     }
   }
 
   renderAndDispose(entry: RelooperBlockRef, labelHelper: Index): ExpressionRef {
-    return _RelooperRenderAndDispose(this.ref, PTR(entry), labelHelper, this.module.ref);
+    return _RelooperRenderAndDispose(this.ref, getPtr(entry), labelHelper, this.module.ref);
   }
 }
 
 // export function hasSideEffects(expr: ExpressionRef): bool {
-//   switch (_BinaryenExpressionGetId(expr)) {
+//   switch (_BinaryenExpressionGetId(expr = getPtr(expr))) {
 //     case ExpressionId.GetLocal:
 //     case ExpressionId.GetGlobal:
 //     case ExpressionId.Const:
@@ -1198,7 +1390,7 @@ function allocPtrArray(ptrs: usize[] | null): usize {
   var ptr = allocate_memory(ptrs.length << 2);
   var idx = ptr;
   for (let i = 0, k = ptrs.length; i < k; ++i) {
-    let ptr = PTR(ptrs[i]);
+    let ptr = getPtr(ptrs[i]);
     // store<i32>(idx, val) is not portable
     store<u8>(idx    , ( ptr         & 0xff) as u8);
     store<u8>(idx + 1, ((ptr >>   8) & 0xff) as u8);
