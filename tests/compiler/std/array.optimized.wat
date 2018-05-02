@@ -5532,7 +5532,108 @@
    )
   )
  )
- (func $std/array/Proxy<i32>#constructor (; 85 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#sort (; 85 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (if
+   (i32.le_s
+    (tee_local $2
+     (i32.load offset=4
+      (get_local $0)
+     )
+    )
+    (i32.const 1)
+   )
+   (return
+    (get_local $0)
+   )
+  )
+  (set_local $3
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (if
+   (i32.eq
+    (get_local $2)
+    (i32.const 2)
+   )
+   (block
+    (set_local $2
+     (i32.load offset=8
+      (i32.add
+       (get_local $3)
+       (i32.const 4)
+      )
+     )
+    )
+    (set_local $4
+     (i32.load offset=8
+      (get_local $3)
+     )
+    )
+    (if
+     (block (result i32)
+      (set_global $~argc
+       (i32.const 2)
+      )
+      (i32.lt_s
+       (call_indirect (type $iii)
+        (get_local $2)
+        (get_local $4)
+        (get_local $1)
+       )
+       (i32.const 0)
+      )
+     )
+     (block
+      (i32.store offset=8
+       (i32.add
+        (get_local $3)
+        (i32.const 4)
+       )
+       (get_local $4)
+      )
+      (i32.store offset=8
+       (get_local $3)
+       (get_local $2)
+      )
+     )
+    )
+    (return
+     (get_local $0)
+    )
+   )
+  )
+  (call $~lib/internal/array/insertionSort<i32>
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func $std/array/assertSorted<Array<i32>> (; 86 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (if
+   (i32.eqz
+    (call $std/array/isSorted<i32>
+     (call $~lib/array/Array<Array<i32>>#sort
+      (get_local $0)
+      (get_local $1)
+     )
+     (get_local $1)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 96)
+     (i32.const 605)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $std/array/Proxy<i32>#constructor (; 87 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if (result i32)
    (get_local $0)
@@ -5550,7 +5651,7 @@
    )
   )
  )
- (func $std/array/createReverseOrderedElementsArray (; 86 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedElementsArray (; 88 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
    (call $~lib/array/Array<i32>#constructor
@@ -5598,7 +5699,7 @@
   )
   (get_local $1)
  )
- (func $start~anonymous|48 (; 87 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|48 (; 89 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (i32.load
     (get_local $0)
@@ -5608,7 +5709,7 @@
    )
   )
  )
- (func $~lib/memory/compare_memory (; 88 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/compare_memory (; 90 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (if
    (i32.eq
     (get_local $0)
@@ -5668,7 +5769,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String.__gt (; 89 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gt (; 91 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -5752,7 +5853,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String.__lt (; 90 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 92 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -5836,7 +5937,7 @@
    (i32.const 0)
   )
  )
- (func $start~anonymous|49 (; 91 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|49 (; 93 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (call $~lib/string/String.__gt
     (get_local $0)
@@ -5845,107 +5946,6 @@
    (call $~lib/string/String.__lt
     (get_local $0)
     (get_local $1)
-   )
-  )
- )
- (func $~lib/array/Array<String>#sort (; 92 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (if
-   (i32.le_s
-    (tee_local $2
-     (i32.load offset=4
-      (get_local $0)
-     )
-    )
-    (i32.const 1)
-   )
-   (return
-    (get_local $0)
-   )
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (if
-   (i32.eq
-    (get_local $2)
-    (i32.const 2)
-   )
-   (block
-    (set_local $2
-     (i32.load offset=8
-      (i32.add
-       (get_local $3)
-       (i32.const 4)
-      )
-     )
-    )
-    (set_local $4
-     (i32.load offset=8
-      (get_local $3)
-     )
-    )
-    (if
-     (block (result i32)
-      (set_global $~argc
-       (i32.const 2)
-      )
-      (i32.lt_s
-       (call_indirect (type $iii)
-        (get_local $2)
-        (get_local $4)
-        (get_local $1)
-       )
-       (i32.const 0)
-      )
-     )
-     (block
-      (i32.store offset=8
-       (i32.add
-        (get_local $3)
-        (i32.const 4)
-       )
-       (get_local $4)
-      )
-      (i32.store offset=8
-       (get_local $3)
-       (get_local $2)
-      )
-     )
-    )
-    (return
-     (get_local $0)
-    )
-   )
-  )
-  (call $~lib/internal/array/insertionSort<i32>
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $std/array/assertSorted<String> (; 93 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (if
-   (i32.eqz
-    (call $std/array/isSorted<i32>
-     (call $~lib/array/Array<String>#sort
-      (get_local $0)
-      (get_local $1)
-     )
-     (get_local $1)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 96)
-     (i32.const 605)
-     (i32.const 2)
-    )
-    (unreachable)
    )
   )
  )
@@ -9604,7 +9604,7 @@
     (i32.const 512)
    )
   )
-  (call $std/array/assertSorted<i32>
+  (call $std/array/assertSorted<Array<i32>>
    (get_global $std/array/reversedNested512)
    (i32.const 47)
   )
@@ -9613,11 +9613,11 @@
     (i32.const 512)
    )
   )
-  (call $std/array/assertSorted<i32>
+  (call $std/array/assertSorted<Array<i32>>
    (get_global $std/array/reversedElements512)
    (i32.const 48)
   )
-  (call $std/array/assertSorted<String>
+  (call $std/array/assertSorted<Array<i32>>
    (get_global $std/array/randomStringsActual)
    (i32.const 49)
   )
@@ -9649,7 +9649,7 @@
     (i32.const 400)
    )
   )
-  (call $std/array/assertSorted<String>
+  (call $std/array/assertSorted<Array<i32>>
    (get_global $std/array/randomStrings400)
    (i32.const 50)
   )
