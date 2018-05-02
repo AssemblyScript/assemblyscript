@@ -316,7 +316,7 @@ export class Array<T> {
     }
 
     // TODO replace this to stable sort when it implemented
-    if (isString<T>()) return changetype<this>(insertionSort<T>(this, comparator));
+    if (isReference<T>()) return changetype<this>(insertionSort<T>(this, comparator));
 
     return changetype<this>(length < 256
       ? insertionSort<T>(this, comparator)
