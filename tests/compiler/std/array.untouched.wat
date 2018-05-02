@@ -14843,7 +14843,10 @@
   )
   (set_global $std/array/randomStrings400
    (call $std/array/createRandomStringArray
-    (i32.const 400)
+    (i32.mul
+     (i32.const 400)
+     (i32.const 100)
+    )
    )
   )
   (call $std/array/assertSorted<String>
