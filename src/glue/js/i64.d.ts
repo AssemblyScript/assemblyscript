@@ -1,6 +1,6 @@
 /** @module glue/js *//***/
 
-declare type I64 = { __Long__: boolean, toString: Function }; // opaque
+declare type I64 = { __Long__: true }; // opaque
 
 declare function i64_new(lo: i32, hi?: i32): I64;
 declare function i64_low(value: I64): i32;

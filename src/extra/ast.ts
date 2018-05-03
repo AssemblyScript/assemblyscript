@@ -545,7 +545,7 @@ export class ASTBuilder {
   }
 
   visitIntegerLiteralExpression(node: IntegerLiteralExpression): void {
-    this.sb.push(node.value.toString());
+    this.sb.push(i64_to_string(node.value));
   }
 
   visitStringLiteral(str: string, singleQuoted: bool = false): void {
