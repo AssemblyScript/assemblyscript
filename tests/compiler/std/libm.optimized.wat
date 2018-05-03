@@ -2999,18 +2999,18 @@
      )
     )
    )
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 1043333120)
-    )
-    (set_local $5
+   (set_local $5
+    (if (result f64)
+     (i32.gt_u
+      (get_local $1)
+      (i32.const 1043333120)
+     )
      (get_local $0)
-    )
-    (return
-     (f64.add
-      (f64.const 1)
-      (get_local $0)
+     (return
+      (f64.add
+       (f64.const 1)
+       (get_local $0)
+      )
      )
     )
    )
