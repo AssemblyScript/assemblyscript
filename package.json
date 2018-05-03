@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "46.0.0-nightly.20180427",
+    "binaryen": "47.0.0-nightly.20180503",
     "glob": "^7.1.2",
     "long": "^4.0.0",
     "minimist": "^1.2.0",
-    "ts-node": "^5.0.1"
+    "ts-node": "^6.0.2"
   },
   "devDependencies": {
     "@types/node": "^9.6.6",
@@ -30,7 +30,7 @@
     "typedoc-plugin-external-module-name": "^1.1.1",
     "typescript": "^2.8.3",
     "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.15"
+    "webpack-cli": "^2.1.2"
   },
   "main": "index.js",
   "types": "index.d.ts",

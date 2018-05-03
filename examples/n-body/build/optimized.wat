@@ -534,26 +534,27 @@
   (set_local $2
    (get_local $4)
   )
-  (i32.store
-   (if (result i32)
+  (if
+   (i32.eqz
     (get_local $0)
-    (get_local $0)
-    (block (result i32)
-     (i32.store
-      (tee_local $0
-       (call $~lib/allocator/arena/allocate_memory
-        (i32.const 8)
-       )
+   )
+   (block
+    (i32.store
+     (tee_local $0
+      (call $~lib/allocator/arena/allocate_memory
+       (i32.const 8)
       )
-      (i32.const 0)
      )
-     (i32.store offset=4
-      (get_local $0)
-      (i32.const 0)
-     )
+     (i32.const 0)
+    )
+    (i32.store offset=4
      (get_local $0)
+     (i32.const 0)
     )
    )
+  )
+  (i32.store
+   (get_local $0)
    (get_local $2)
   )
   (i32.store offset=4
@@ -580,30 +581,26 @@
   (local $8 i32)
   (set_local $8
    (i32.load offset=4
-    (tee_local $2
-     (get_local $1)
-    )
+    (get_local $1)
    )
   )
   (loop $continue|0
    (if
     (i32.lt_s
-     (get_local $3)
+     (get_local $2)
      (get_local $8)
     )
     (block
      (set_local $4
       (f64.load offset=48
-       (tee_local $2
+       (tee_local $3
         (i32.load offset=8
          (i32.add
           (i32.load
            (get_local $1)
           )
           (i32.shl
-           (tee_local $2
-            (get_local $3)
-           )
+           (get_local $2)
            (i32.const 2)
           )
          )
@@ -616,7 +613,7 @@
        (get_local $5)
        (f64.mul
         (f64.load offset=24
-         (get_local $2)
+         (get_local $3)
         )
         (get_local $4)
        )
@@ -627,7 +624,7 @@
        (get_local $6)
        (f64.mul
         (f64.load offset=32
-         (get_local $2)
+         (get_local $3)
         )
         (get_local $4)
        )
@@ -638,15 +635,15 @@
        (get_local $7)
        (f64.mul
         (f64.load offset=40
-         (get_local $2)
+         (get_local $3)
         )
         (get_local $4)
        )
       )
      )
-     (set_local $3
+     (set_local $2
       (i32.add
-       (get_local $3)
+       (get_local $2)
        (i32.const 1)
       )
      )
@@ -663,9 +660,7 @@
        (i32.load
         (tee_local $2
          (i32.load
-          (tee_local $2
-           (get_local $1)
-          )
+          (get_local $1)
          )
         )
        )
@@ -673,10 +668,7 @@
       )
      )
      (i32.load offset=8
-      (i32.add
-       (get_local $2)
-       (i32.const 0)
-      )
+      (get_local $2)
      )
      (unreachable)
     )
@@ -729,7 +721,7 @@
    (call $assembly/index/NBodySystem#constructor
     (i32.const 0)
     (block (result i32)
-     (set_local $2
+     (set_local $0
       (tee_local $1
        (call $~lib/array/Array<Body>#constructor
         (i32.const 0)
@@ -737,7 +729,7 @@
        )
       )
      )
-     (set_local $0
+     (set_local $2
       (call $assembly/index/Body#constructor
        (i32.const 0)
        (f64.const 0)
@@ -750,13 +742,10 @@
       )
      )
      (i32.store offset=8
-      (i32.add
-       (i32.load
-        (get_local $2)
-       )
-       (i32.const 0)
+      (i32.load
+       (get_local $0)
       )
-      (get_local $0)
+      (get_local $2)
      )
      (set_local $0
       (call $assembly/index/Body#constructor
@@ -773,9 +762,7 @@
      (i32.store offset=8
       (i32.add
        (i32.load
-        (tee_local $2
-         (get_local $1)
-        )
+        (get_local $1)
        )
        (i32.const 4)
       )
@@ -796,9 +783,7 @@
      (i32.store offset=8
       (i32.add
        (i32.load
-        (tee_local $2
-         (get_local $1)
-        )
+        (get_local $1)
        )
        (i32.const 8)
       )
@@ -819,9 +804,7 @@
      (i32.store offset=8
       (i32.add
        (i32.load
-        (tee_local $2
-         (get_local $1)
-        )
+        (get_local $1)
        )
        (i32.const 12)
       )
@@ -842,9 +825,7 @@
      (i32.store offset=8
       (i32.add
        (i32.load
-        (tee_local $2
-         (get_local $1)
-        )
+        (get_local $1)
        )
        (i32.const 16)
       )
@@ -898,12 +879,12 @@
  )
  (func $assembly/index/NBodySystem#advance (; 8 ;) (type $iFv) (param $0 i32) (param $1 f64)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 f64)
-  (local $5 i32)
+  (local $3 f64)
+  (local $4 i32)
+  (local $5 f64)
   (local $6 f64)
   (local $7 f64)
-  (local $8 f64)
+  (local $8 i32)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
@@ -916,11 +897,9 @@
   (local $18 f64)
   (set_local $14
    (i32.load offset=4
-    (tee_local $0
-     (tee_local $13
-      (i32.load
-       (get_local $0)
-      )
+    (tee_local $13
+     (i32.load
+      (get_local $0)
      )
     )
    )
@@ -928,7 +907,7 @@
   (loop $continue|0
    (if
     (i32.lt_u
-     (get_local $5)
+     (get_local $4)
      (get_local $14)
     )
     (block
@@ -938,14 +917,10 @@
         (i32.load offset=8
          (i32.add
           (i32.load
-           (tee_local $0
-            (get_local $13)
-           )
+           (get_local $13)
           )
           (i32.shl
-           (tee_local $3
-            (get_local $5)
-           )
+           (get_local $4)
            (i32.const 2)
           )
          )
@@ -963,17 +938,17 @@
        (get_local $0)
       )
      )
-     (set_local $6
+     (set_local $5
       (f64.load offset=24
        (get_local $0)
       )
      )
-     (set_local $7
+     (set_local $6
       (f64.load offset=32
        (get_local $0)
       )
      )
-     (set_local $8
+     (set_local $7
       (f64.load offset=40
        (get_local $0)
       )
@@ -983,27 +958,27 @@
        (get_local $0)
       )
      )
-     (set_local $3
+     (set_local $8
       (i32.add
-       (get_local $5)
+       (get_local $4)
        (i32.const 1)
       )
      )
      (loop $continue|1
       (if
        (i32.lt_u
-        (get_local $3)
+        (get_local $8)
         (get_local $14)
        )
        (block
-        (set_local $4
+        (set_local $3
          (f64.mul
           (get_local $18)
           (tee_local $9
            (f64.div
             (get_local $1)
             (f64.mul
-             (tee_local $4
+             (tee_local $3
               (f64.add
                (f64.add
                 (f64.mul
@@ -1015,12 +990,10 @@
                      (i32.load offset=8
                       (i32.add
                        (i32.load
-                        (tee_local $2
-                         (get_local $13)
-                        )
+                        (get_local $13)
                        )
                        (i32.shl
-                        (get_local $3)
+                        (get_local $8)
                         (i32.const 2)
                        )
                       )
@@ -1057,16 +1030,16 @@
               )
              )
              (f64.sqrt
-              (get_local $4)
+              (get_local $3)
              )
             )
            )
           )
          )
         )
-        (set_local $6
+        (set_local $5
          (f64.sub
-          (get_local $6)
+          (get_local $5)
           (f64.mul
            (get_local $10)
            (tee_local $9
@@ -1080,18 +1053,18 @@
           )
          )
         )
-        (set_local $7
+        (set_local $6
          (f64.sub
-          (get_local $7)
+          (get_local $6)
           (f64.mul
            (get_local $11)
            (get_local $9)
           )
          )
         )
-        (set_local $8
+        (set_local $7
          (f64.sub
-          (get_local $8)
+          (get_local $7)
           (f64.mul
            (get_local $12)
            (get_local $9)
@@ -1106,7 +1079,7 @@
           )
           (f64.mul
            (get_local $10)
-           (get_local $4)
+           (get_local $3)
           )
          )
         )
@@ -1118,7 +1091,7 @@
           )
           (f64.mul
            (get_local $11)
-           (get_local $4)
+           (get_local $3)
           )
          )
         )
@@ -1130,13 +1103,13 @@
           )
           (f64.mul
            (get_local $12)
-           (get_local $4)
+           (get_local $3)
           )
          )
         )
-        (set_local $3
+        (set_local $8
          (i32.add
-          (get_local $3)
+          (get_local $8)
           (i32.const 1)
          )
         )
@@ -1146,15 +1119,15 @@
      )
      (f64.store offset=24
       (get_local $0)
-      (get_local $6)
+      (get_local $5)
      )
      (f64.store offset=32
       (get_local $0)
-      (get_local $7)
+      (get_local $6)
      )
      (f64.store offset=40
       (get_local $0)
-      (get_local $8)
+      (get_local $7)
      )
      (f64.store
       (get_local $0)
@@ -1164,7 +1137,7 @@
        )
        (f64.mul
         (get_local $1)
-        (get_local $6)
+        (get_local $5)
        )
       )
      )
@@ -1176,7 +1149,7 @@
        )
        (f64.mul
         (get_local $1)
-        (get_local $7)
+        (get_local $6)
        )
       )
      )
@@ -1188,13 +1161,13 @@
        )
        (f64.mul
         (get_local $1)
-        (get_local $8)
+        (get_local $7)
        )
       )
      )
-     (set_local $5
+     (set_local $4
       (i32.add
-       (get_local $5)
+       (get_local $4)
        (i32.const 1)
       )
      )
@@ -1214,14 +1187,11 @@
   (local $8 f64)
   (local $9 f64)
   (local $10 f64)
-  (local $11 i32)
   (set_local $5
    (i32.load offset=4
-    (tee_local $0
-     (tee_local $4
-      (i32.load
-       (get_local $0)
-      )
+    (tee_local $4
+     (i32.load
+      (get_local $0)
      )
     )
    )
@@ -1239,14 +1209,10 @@
         (i32.load offset=8
          (i32.add
           (i32.load
-           (tee_local $0
-            (get_local $4)
-           )
+           (get_local $4)
           )
           (i32.shl
-           (tee_local $2
-            (get_local $3)
-           )
+           (get_local $3)
            (i32.const 2)
           )
          )
@@ -1327,16 +1293,12 @@
            (tee_local $2
             (if (result i32)
              (i32.lt_u
-              (tee_local $11
-               (get_local $0)
-              )
+              (get_local $0)
               (i32.shr_u
                (i32.load
                 (tee_local $2
                  (i32.load
-                  (tee_local $2
-                   (get_local $4)
-                  )
+                  (get_local $4)
                  )
                 )
                )
@@ -1347,7 +1309,7 @@
               (i32.add
                (get_local $2)
                (i32.shl
-                (get_local $11)
+                (get_local $0)
                 (i32.const 2)
                )
               )
