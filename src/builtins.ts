@@ -6,7 +6,9 @@
  import {
   Compiler,
   ConversionKind,
-  WrapMode
+  WrapMode,
+  canOverflow,
+  canOverflow2
 } from "./compiler";
 
 import {
@@ -35,7 +37,6 @@ import {
   NativeType,
   ExpressionRef,
   ExpressionId,
-  getTags,
   getExpressionId,
   getExpressionType,
   getConstValueI64High,
@@ -164,7 +165,16 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        default: { // any integer up to 32-bits incl. bool
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.U8:
+        case TypeKind.U16: {
+          ret = module.createUnary(UnaryOp.ClzI32, arg0);
+          break;
+        }
+        case TypeKind.BOOL: // usually overflows
+        case TypeKind.I32:
+        case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.ClzI32, arg0);
           break;
         }
@@ -193,9 +203,7 @@ export function compileCall(
           ret = module.createUnary(UnaryOp.ClzI64, arg0);
           break;
         }
-        case TypeKind.F32:
-        case TypeKind.F64:
-        case TypeKind.VOID: {
+        default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
             reportNode.range
@@ -237,7 +245,16 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        default: { // any integer up to 32-bits incl. bool
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.U8:
+        case TypeKind.U16: {
+          ret = module.createUnary(UnaryOp.CtzI32, arg0);
+          break;
+        }
+        case TypeKind.BOOL: // usually overflows
+        case TypeKind.I32:
+        case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.CtzI32, arg0);
           break;
         }
@@ -266,9 +283,7 @@ export function compileCall(
           ret = module.createUnary(UnaryOp.CtzI64, arg0);
           break;
         }
-        case TypeKind.F32:
-        case TypeKind.F64:
-        case TypeKind.VOID: {
+        default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
             reportNode.range
@@ -310,7 +325,16 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        default: { // any integer up to 32-bits incl. bool
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.U8:
+        case TypeKind.U16: {
+          ret = module.createUnary(UnaryOp.PopcntI32, arg0);
+          break;
+        }
+        case TypeKind.BOOL: // usually overflows
+        case TypeKind.I32:
+        case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.PopcntI32, arg0);
           break;
         }
@@ -339,9 +363,7 @@ export function compileCall(
           ret = module.createUnary(UnaryOp.PopcntI64, arg0);
           break;
         }
-        case TypeKind.F32:
-        case TypeKind.F64:
-        case TypeKind.VOID: {
+        default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
             reportNode.range
@@ -435,7 +457,7 @@ export function compileCall(
           break;
         }
       }
-      return ret;
+      return ret; // possibly overflows
     }
     case "rotr": { // rotr<T?>(value: T, shift: T) -> T
       if (operands.length != 2) {
@@ -520,7 +542,7 @@ export function compileCall(
           break;
         }
       }
-      return ret;
+      return ret; // possibly overflowws
     }
     case "abs": { // abs<T?>(value: T) -> T
       if (operands.length != 1) {
@@ -555,11 +577,9 @@ export function compileCall(
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
-          // doesn't need sign-extension here because ifFalse below is either positive
-          // or MIN_VALUE (-MIN_VALUE == MIN_VALUE) if selected
         case TypeKind.I32: {
           let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i32);
-          ret = module.createSelect(
+          ret = module.createSelect( // x > 0 ? x : 0-x
             module.createTeeLocal(tempLocal.index, arg0),
             module.createBinary(BinaryOp.SubI32, // ifFalse
               module.createI32(0),
@@ -569,7 +589,7 @@ export function compileCall(
               module.createGetLocal(tempLocal.index, NativeType.I32),
               module.createI32(0)
             )
-          ) | getTags(arg0);
+          ); // possibly overflows, e.g. abs<i8>(-128) == 128
           break;
         }
         case TypeKind.ISIZE: {
@@ -695,7 +715,8 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          ) | (getTags(arg0) & getTags(arg1)); // remains wrapped if both values are
+          );
+          if (!canOverflow2(arg0, arg1, compiler.currentType)) ret |= ExpressionTag.WRAPPED;
           break;
         }
         case TypeKind.U8:
@@ -712,7 +733,8 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          ) | (getTags(arg0) & getTags(arg1)); // remains wrapped if both values are
+          );
+          if (!canOverflow2(arg0, arg1, compiler.currentType)) ret |= ExpressionTag.WRAPPED;
           break;
         }
         case TypeKind.I64: {
@@ -849,7 +871,8 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          ) | (getTags(arg0) & getTags(arg1)); // remains wrapped if both values are
+          );
+          if (!canOverflow2(arg0, arg1, compiler.currentType)) ret |= ExpressionTag.WRAPPED;
           break;
         }
         case TypeKind.U8:
@@ -866,7 +889,8 @@ export function compileCall(
               module.createGetLocal(tempLocal0.index, NativeType.I32),
               module.createGetLocal(tempLocal1.index, NativeType.I32)
             )
-          ) | (getTags(arg0) & getTags(arg1)); // remains wrapped if both values are
+          );
+          if (!canOverflow2(arg0, arg1, compiler.currentType)) ret |= ExpressionTag.WRAPPED;
           break;
         }
         case TypeKind.I64: {
@@ -1461,7 +1485,7 @@ export function compileCall(
           ? (compiler.currentType = contextualType).toNativeType()
           : (compiler.currentType = typeArguments[0]).toNativeType(),
         offset
-      ) | ExpressionTag.WRAPPED;
+      );
     }
     case "store": { // store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
       compiler.currentType = Type.void;
@@ -1737,7 +1761,16 @@ export function compileCall(
       );
       compiler.currentType = type;
       switch (compiler.currentType.kind) {
-        default: { // any value type
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.BOOL: {
+          ret = module.createSelect(arg0, arg1, arg2);
+          if (!canOverflow2(arg0, arg1, type)) ret |= ExpressionTag.WRAPPED;
+          break;
+        }
+        default: { // any other value type
           ret = module.createSelect(arg0, arg1, arg2);
           break;
         }
@@ -2053,7 +2086,8 @@ export function compileCall(
               ),
               abort,
               module.createGetLocal(tempLocal.index, NativeType.I32)
-            ) | getTags(arg0);
+            );
+            if (!canOverflow(arg0, compiler.currentType)) ret |= ExpressionTag.WRAPPED;
             break;
           }
           case TypeKind.I64:

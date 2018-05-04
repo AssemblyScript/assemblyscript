@@ -4256,20 +4256,17 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (i32.eq
-       (get_local $1)
-       (i32.const 0)
-      )
-     )
-     (get_local $3)
-     (i32.eqz
-      (get_local $2)
+   (if (result i32)
+    (tee_local $3
+     (i32.eq
+      (get_local $1)
+      (i32.const 0)
      )
     )
-    (i32.const 1)
+    (get_local $3)
+    (i32.eqz
+     (get_local $2)
+    )
    )
    (return
     (i32.const 332)

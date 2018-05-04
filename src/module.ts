@@ -637,7 +637,7 @@ export class Module {
   }
 
   createUnreachable(): ExpressionRef {
-    return _BinaryenUnreachable(this.ref) | ExpressionTag.WRAPPED;
+    return _BinaryenUnreachable(this.ref);
   }
 
   // meta

@@ -3609,7 +3609,7 @@ export class Flow {
     branch.returnType = this.returnType;
     branch.contextualTypeArguments = this.contextualTypeArguments;
     branch.wrappedLocals = this.wrappedLocals;
-    branch.wrappedLocalsExt = this.wrappedLocalsExt;
+    branch.wrappedLocalsExt = this.wrappedLocalsExt ? this.wrappedLocalsExt.slice() : null;
     return branch;
   }
 
@@ -3627,7 +3627,7 @@ export class Flow {
       this.scopedLocals = null;
     }
 
-    // Propagate flags to parent
+    // Propagate conditionaal flags to parent
     if (this.is(FlowFlags.RETURNS)) {
       parent.set(FlowFlags.CONDITIONALLY_RETURNS);
     }
@@ -3768,6 +3768,54 @@ export class Flow {
         );
     if (i >= 0) (<I64[]>this.wrappedLocalsExt)[i] = map;
     else this.wrappedLocals = map;
+  }
+
+  /** Inherits flags and local wrap states from the specified flow (e.g. inner block). */
+  inherit(other: Flow): void {
+    this.flags |= other.flags & (
+      FlowFlags.RETURNS |
+      FlowFlags.RETURNS_WRAPPED |
+      FlowFlags.THROWS |
+      FlowFlags.BREAKS |
+      FlowFlags.CONTINUES |
+      FlowFlags.ALLOCATES
+    );
+    this.wrappedLocals = other.wrappedLocals;
+    this.wrappedLocalsExt = other.wrappedLocalsExt; // no need to slice because other flow is finished
+  }
+
+  /** Inherits mutual flags and local wrap states from the specified flows (e.g. then/else branches). */
+  inheritMutual(left: Flow, right: Flow): void {
+    // flags set in both arms
+    this.flags |= left.flags & right.flags & (
+      FlowFlags.RETURNS |
+      FlowFlags.RETURNS_WRAPPED |
+      FlowFlags.THROWS |
+      FlowFlags.BREAKS |
+      FlowFlags.CONTINUES |
+      FlowFlags.ALLOCATES
+    );
+    // locals wrapped in both arms
+    this.wrappedLocals = i64_and(
+      left.wrappedLocals,
+      right.wrappedLocals
+    );
+    var leftExt = left.wrappedLocalsExt;
+    var rightExt = right.wrappedLocalsExt;
+    if (leftExt != null && rightExt != null) {
+      let thisExt = this.wrappedLocalsExt;
+      let k = min(leftExt.length, rightExt.length);
+      if (k) {
+        if (!thisExt) thisExt = new Array(k);
+        else while (thisExt.length < k) thisExt.push(i64_new(0));
+        for (let i = 0; i < k; ++i) {
+          thisExt[i] = i64_and(
+            leftExt[i],
+            rightExt[i]
+          );
+        }
+      }
+    }
   }
 
   /** Finalizes this flow. Must be the topmost parent flow of the function. */

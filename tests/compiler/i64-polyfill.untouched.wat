@@ -147,10 +147,7 @@
    )
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/lo
-   (i32.and
-    (get_local $2)
-    (i32.const 1)
-   )
+   (get_local $2)
   )
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
