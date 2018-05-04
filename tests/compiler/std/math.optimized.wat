@@ -5650,18 +5650,18 @@
      )
     )
    )
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 1043333120)
-    )
-    (set_local $5
+   (set_local $5
+    (if (result f64)
+     (i32.gt_u
+      (get_local $1)
+      (i32.const 1043333120)
+     )
      (get_local $0)
-    )
-    (return
-     (f64.add
-      (f64.const 1)
-      (get_local $0)
+     (return
+      (f64.add
+       (f64.const 1)
+       (get_local $0)
+      )
      )
     )
    )
@@ -6020,15 +6020,15 @@
      )
     )
    )
-   (if
-    (i32.lt_u
-     (get_local $2)
-     (i32.const 855638016)
-    )
-    (return
-     (get_local $0)
-    )
-    (set_local $2
+   (set_local $2
+    (if (result i32)
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 855638016)
+     )
+     (return
+      (get_local $0)
+     )
      (i32.const 0)
     )
    )
@@ -6397,23 +6397,23 @@
      )
     )
    )
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 956301312)
-    )
-    (block
-     (set_local $1
-      (i32.const 0)
+   (set_local $3
+    (if (result f32)
+     (i32.gt_u
+      (get_local $1)
+      (i32.const 956301312)
      )
-     (set_local $3
+     (block (result f32)
+      (set_local $1
+       (i32.const 0)
+      )
       (get_local $0)
      )
-    )
-    (return
-     (f32.add
-      (f32.const 1)
-      (get_local $0)
+     (return
+      (f32.add
+       (f32.const 1)
+       (get_local $0)
+      )
      )
     )
    )

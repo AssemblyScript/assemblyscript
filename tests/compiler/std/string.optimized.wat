@@ -781,77 +781,72 @@
       (get_local $0)
      )
      (block
-      (if
-       (if (result i32)
-        (tee_local $0
-         (i32.ge_s
-          (tee_local $2
-           (i32.load16_u offset=4
-            (get_local $3)
-           )
-          )
-          (i32.const 48)
-         )
-        )
-        (i32.le_s
-         (get_local $2)
-         (i32.const 57)
-        )
-        (get_local $0)
-       )
-       (set_local $2
-        (i32.sub
-         (get_local $2)
-         (i32.const 48)
-        )
-       )
-       (if
-        (if (result i32)
-         (tee_local $0
-          (i32.ge_s
-           (get_local $2)
-           (i32.const 65)
-          )
-         )
-         (i32.le_s
-          (get_local $2)
-          (i32.const 90)
-         )
-         (get_local $0)
-        )
-        (set_local $2
-         (i32.sub
-          (get_local $2)
-          (i32.const 55)
-         )
-        )
-        (if
-         (if (result i32)
-          (tee_local $0
-           (i32.ge_s
-            (get_local $2)
-            (i32.const 97)
-           )
-          )
-          (i32.le_s
-           (get_local $2)
-           (i32.const 122)
-          )
-          (get_local $0)
-         )
-         (set_local $2
-          (i32.sub
-           (get_local $2)
-           (i32.const 87)
-          )
-         )
-         (br $break|1)
-        )
-       )
-      )
       (br_if $break|1
        (i32.ge_s
-        (get_local $2)
+        (tee_local $2
+         (if (result i32)
+          (if (result i32)
+           (tee_local $0
+            (i32.ge_s
+             (tee_local $2
+              (i32.load16_u offset=4
+               (get_local $3)
+              )
+             )
+             (i32.const 48)
+            )
+           )
+           (i32.le_s
+            (get_local $2)
+            (i32.const 57)
+           )
+           (get_local $0)
+          )
+          (i32.sub
+           (get_local $2)
+           (i32.const 48)
+          )
+          (if (result i32)
+           (if (result i32)
+            (tee_local $0
+             (i32.ge_s
+              (get_local $2)
+              (i32.const 65)
+             )
+            )
+            (i32.le_s
+             (get_local $2)
+             (i32.const 90)
+            )
+            (get_local $0)
+           )
+           (i32.sub
+            (get_local $2)
+            (i32.const 55)
+           )
+           (if (result i32)
+            (if (result i32)
+             (tee_local $0
+              (i32.ge_s
+               (get_local $2)
+               (i32.const 97)
+              )
+             )
+             (i32.le_s
+              (get_local $2)
+              (i32.const 122)
+             )
+             (get_local $0)
+            )
+            (i32.sub
+             (get_local $2)
+             (i32.const 87)
+            )
+            (br $break|1)
+           )
+          )
+         )
+        )
         (get_local $1)
        )
       )
