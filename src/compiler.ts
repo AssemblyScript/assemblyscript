@@ -4411,7 +4411,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.createBlock(null, [
             module.createSetLocal(tempLocalIndex, valueWithCorrectType),
             module.createStore(
-              type.size >> 3,
+              type.byteSize,
               thisExpr,
               module.createGetLocal(tempLocalIndex, nativeType),
               nativeType,
@@ -4421,7 +4421,7 @@ export class Compiler extends DiagnosticEmitter {
           ], nativeType);
         } else {
           return module.createStore(
-            type.size >> 3,
+            type.byteSize,
             thisExpr,
             valueWithCorrectType,
             nativeType,
