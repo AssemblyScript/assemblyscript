@@ -15,6 +15,8 @@ import {
 
 import {
   Type,
+  TypeKind,
+  TypeFlags,
   Signature,
 
   typesToString
@@ -68,7 +70,32 @@ import {
 import {
   Module,
   NativeType,
-  FunctionRef
+  FunctionRef,
+  ExpressionRef,
+  ExpressionId,
+  BinaryOp,
+  UnaryOp,
+
+  getExpressionId,
+  getGetLocalIndex,
+  isTeeLocal,
+  getSetLocalValue,
+  getBinaryOp,
+  getConstValueI32,
+  getBinaryLeft,
+  getBinaryRight,
+  getUnaryOp,
+  getExpressionType,
+  getLoadBytes,
+  isLoadSigned,
+  getIfTrue,
+  getIfFalse,
+  getSelectThen,
+  getSelectElse,
+  getCallTarget,
+  getBlockChildCount,
+  getBlockChild,
+  getBlockName
 } from "./module";
 
 /** Path delimiter inserted between file system levels. */
@@ -173,6 +200,8 @@ export class Program extends DiagnosticEmitter {
   options: Options;
   /** Elements by internal name. */
   elementsLookup: Map<string,Element> = new Map();
+  /** Class and function instances by internal name. */
+  instancesLookup: Map<string,Element> = new Map();
   /** Types by internal name. */
   typesLookup: Map<string,Type> = noTypesYet;
   /** Declared type aliases. */
@@ -2671,6 +2700,7 @@ export class FunctionPrototype extends Element {
       contextualTypeArguments
     );
     this.instances.set(instanceKey, instance);
+    this.program.instancesLookup.set(internalName, instance);
     return instance;
   }
 
@@ -2865,7 +2895,7 @@ export class Function extends Element {
   private tempF64s: Local[] | null = null;
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type): Local {
+  getTempLocal(type: Type, wrapped: bool): Local {
     var temps: Local[] | null;
     switch (type.toNativeType()) {
       case NativeType.I32: {
@@ -2886,12 +2916,15 @@ export class Function extends Element {
       }
       default: throw new Error("concrete type expected");
     }
+    var local: Local;
     if (temps && temps.length) {
-      let ret = temps.pop();
-      ret.type = type;
-      return ret;
+      local = temps.pop();
+      local.type = type;
+    } else {
+      local = this.addLocal(type);
     }
-    return this.addLocal(type);
+    this.flow.setLocalWrapped(local.index, wrapped);
+    return local;
   }
 
   /** Frees the temporary local for reuse. */
@@ -2924,7 +2957,7 @@ export class Function extends Element {
   }
 
   /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type): Local {
+  getAndFreeTempLocal(type: Type, wrapped: bool): Local {
     var temps: Local[];
     switch (type.toNativeType()) {
       case NativeType.I32: {
@@ -2945,11 +2978,15 @@ export class Function extends Element {
       }
       default: throw new Error("concrete type expected");
     }
-    if (temps.length > 0) {
-      return temps[temps.length - 1];
+    var local: Local;
+    if (temps.length) {
+      local = temps[temps.length - 1];
+      local.type = type;
+    } else {
+      local = this.addLocal(type);
+      temps.push(local);
     }
-    var local: Local = this.addLocal(type);
-    temps.push(local);
+    this.flow.setLocalWrapped(local.index, wrapped);
     return local;
   }
 
@@ -3201,6 +3238,7 @@ export class ClassPrototype extends Element {
     instance = new Class(this, simpleName, internalName, typeArguments, baseClass);
     instance.contextualTypeArguments = contextualTypeArguments;
     this.instances.set(instanceKey, instance);
+    this.program.instancesLookup.set(internalName, instance);
 
     var memoryOffset: u32 = 0;
     if (baseClass) {
@@ -3648,8 +3686,8 @@ export class Flow {
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(type: Type, name: string, declaration?: VariableDeclaration): Local {
-    var scopedLocal = this.currentFunction.getTempLocal(type);
+  addScopedLocal(type: Type, name: string, wrapped: bool, declaration?: VariableDeclaration): Local {
+    var scopedLocal = this.currentFunction.getTempLocal(type, false);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
@@ -3664,6 +3702,7 @@ export class Flow {
       }
     }
     this.scopedLocals.set(name, scopedLocal);
+    this.setLocalWrapped(scopedLocal.index, wrapped);
     return scopedLocal;
   }
 
@@ -3770,7 +3809,7 @@ export class Flow {
     else this.wrappedLocals = map;
   }
 
-  /** Inherits flags and local wrap states from the specified flow (e.g. inner block). */
+  /** Inherits flags and local wrap states from the specified flow (e.g. on inner block). */
   inherit(other: Flow): void {
     this.flags |= other.flags & (
       FlowFlags.RETURNS |
@@ -3784,7 +3823,7 @@ export class Flow {
     this.wrappedLocalsExt = other.wrappedLocalsExt; // no need to slice because other flow is finished
   }
 
-  /** Inherits mutual flags and local wrap states from the specified flows (e.g. then/else branches). */
+  /** Inherits mutual flags and local wrap states from the specified flows (e.g. on then/else branches). */
   inheritMutual(left: Flow, right: Flow): void {
     // flags set in both arms
     this.flags |= left.flags & right.flags & (
@@ -3804,11 +3843,11 @@ export class Flow {
     var rightExt = right.wrappedLocalsExt;
     if (leftExt != null && rightExt != null) {
       let thisExt = this.wrappedLocalsExt;
-      let k = min(leftExt.length, rightExt.length);
-      if (k) {
-        if (!thisExt) thisExt = new Array(k);
-        else while (thisExt.length < k) thisExt.push(i64_new(0));
-        for (let i = 0; i < k; ++i) {
+      let minLength = min(leftExt.length, rightExt.length);
+      if (minLength) {
+        if (!thisExt) thisExt = new Array(minLength);
+        else while (thisExt.length < minLength) thisExt.push(i64_new(0));
+        for (let i = 0; i < minLength; ++i) {
           thisExt[i] = i64_and(
             leftExt[i],
             rightExt[i]
@@ -3816,6 +3855,222 @@ export class Flow {
         }
       }
     }
+  }
+
+  /**
+   * Tests if an expression can possibly overflow in the context of this flow. Assumes that the
+   * expression might already have overflown and returns `false` only if the operation neglects
+   * any possibly combination of garbage bits being present.
+   */
+  canOverflow(expr: ExpressionRef, type: Type): bool {
+    assert(type != Type.void);
+
+    // types other than i8, u8, i16, u16 and bool do not overflow
+    if (!type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) return false;
+
+    switch (getExpressionId(expr)) {
+
+      // overflows if the local isn't wrapped or the conversion does
+      case ExpressionId.GetLocal: {
+        let currentFunction = this.currentFunction;
+        let local = currentFunction.localsByIndex[getGetLocalIndex(expr)];
+        return !currentFunction.flow.isLocalWrapped(local.index)
+            || canConversionOverflow(local.type, type);
+      }
+
+      // overflows if the value does
+      case ExpressionId.SetLocal: {
+        assert(isTeeLocal(expr));
+        return this.canOverflow(getSetLocalValue(expr), type);
+      }
+
+      // never overflows because globals are wrapped on set
+      case ExpressionId.GetGlobal: return false;
+
+      case ExpressionId.Binary: {
+        switch (getBinaryOp(expr)) {
+
+          // comparisons do not overflow (result is 0 or 1)
+          case BinaryOp.EqI32:
+          case BinaryOp.EqI64:
+          case BinaryOp.EqF32:
+          case BinaryOp.EqF64:
+          case BinaryOp.NeI32:
+          case BinaryOp.NeI64:
+          case BinaryOp.NeF32:
+          case BinaryOp.NeF64:
+          case BinaryOp.LtI32:
+          case BinaryOp.LtU32:
+          case BinaryOp.LtI64:
+          case BinaryOp.LtU64:
+          case BinaryOp.LtF32:
+          case BinaryOp.LtF64:
+          case BinaryOp.LeI32:
+          case BinaryOp.LeU32:
+          case BinaryOp.LeI64:
+          case BinaryOp.LeU64:
+          case BinaryOp.LeF32:
+          case BinaryOp.LeF64:
+          case BinaryOp.GtI32:
+          case BinaryOp.GtU32:
+          case BinaryOp.GtI64:
+          case BinaryOp.GtU64:
+          case BinaryOp.GtF32:
+          case BinaryOp.GtF64:
+          case BinaryOp.GeI32:
+          case BinaryOp.GeU32:
+          case BinaryOp.GeI64:
+          case BinaryOp.GeU64:
+          case BinaryOp.GeF32:
+          case BinaryOp.GeF64: return false;
+
+          // result won't overflow if one side is a constant less than this type's mask.
+          case BinaryOp.AndI32: {
+            let operand: ExpressionRef;
+            // note that computeSmallIntegerMask returns the mask minus the MSB for signed types
+            // because signed value garbage bits must be guaranteed to be equal to the MSB.
+            if (
+              getExpressionId(operand = getBinaryLeft(expr)) == ExpressionId.Const &&
+              getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
+              ||
+              getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+              getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
+            ) return false;
+            break;
+          }
+
+          // overflows if the shift doesn't clear potential garbage bits
+          case BinaryOp.ShlI32: {
+            let operand: ExpressionRef;
+            let shift = 32 - type.size;
+            return getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const
+                || getConstValueI32(operand) < shift;
+          }
+
+          // overflows if the value does and the shift doesn't clear potential garbage bits
+          case BinaryOp.ShrI32: {
+            let operand: ExpressionRef;
+            let shift = 32 - type.size;
+            return this.canOverflow(getBinaryLeft(expr), type) && (
+              getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const ||
+              getConstValueI32(operand) < shift
+            );
+          }
+
+          // overflows if
+          // - the value is signed and the shift does not clear potential garbage bits
+          // - the value is unsigned and the shift does not clear potential garbage bits if it
+          //   can overflow
+          case BinaryOp.ShrU32: {
+            let operand: ExpressionRef;
+            let shift = 32 - type.size;
+            return type.is(TypeFlags.SIGNED)
+              ? getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const ||
+                getConstValueI32(operand) <= shift
+              : this.canOverflow(getBinaryLeft(expr), type) && (
+                  getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const ||
+                  getConstValueI32(operand) < shift
+                );
+          }
+
+          // overflows if any side does
+          case BinaryOp.DivU32:
+          case BinaryOp.RemI32:
+          case BinaryOp.RemU32: {
+            return this.canOverflow(getBinaryLeft(expr), type)
+                || this.canOverflow(getBinaryRight(expr), type);
+          }
+        }
+        break;
+      }
+
+      case ExpressionId.Unary: {
+        switch (getUnaryOp(expr)) {
+
+          // comparisons do not overflow (result is 0 or 1)
+          case UnaryOp.EqzI32:
+          case UnaryOp.EqzI64: return false;
+
+          // overflow if the maximum result (32) cannot be represented in the target type
+          case UnaryOp.ClzI32:
+          case UnaryOp.CtzI32:
+          case UnaryOp.PopcntI32: return type.size < 7;
+        }
+        break;
+      }
+
+      // overflows if the value cannot be represented in the target type
+      case ExpressionId.Const: {
+        switch (getExpressionType(expr)) {
+          case NativeType.I32: {
+            let value = getConstValueI32(expr);
+            switch (type.kind) {
+              case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
+              case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
+              case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
+              case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
+              case TypeKind.BOOL: return (value & ~1) != 0;
+            }
+          }
+          // TODO: can also check native type conversions from i64s and floats
+          // similarly, built-ins like trunc etc. could be checked as well
+          case NativeType.I64:
+          case NativeType.F32:
+          case NativeType.F64:
+        }
+        break;
+      }
+
+      // overflows if the conversion does
+      case ExpressionId.Load: {
+        let fromType: Type;
+        switch (getLoadBytes(expr)) {
+          case 1:  { fromType = isLoadSigned(expr) ? Type.i8 : Type.u8; break; }
+          case 2:  { fromType = isLoadSigned(expr) ? Type.i16 : Type.u16; break; }
+          default: { fromType = isLoadSigned(expr) ? Type.i32 : Type.u32; break; }
+        }
+        return canConversionOverflow(fromType, type);
+      }
+
+      // overflows if the result does, which is either
+      // - the last expression of the block, by contract, if the block doesn't have a label
+      // - the last expression or the value of an inner br if the block has a label (TODO)
+      case ExpressionId.Block: {
+        if (!getBlockName(expr)) {
+          let size = assert(getBlockChildCount(expr));
+          let last = getBlockChild(expr, size - 1);
+          return this.canOverflow(last, type);
+        }
+        // actually, brs with a value that'd be handled here is not emitted atm
+        break;
+      }
+
+      // overflows if either side does
+      case ExpressionId.If: {
+        return this.canOverflow(getIfTrue(expr), type)
+            || this.canOverflow(assert(getIfFalse(expr)), type);
+      }
+
+      // overflows if either side does
+      case ExpressionId.Select: {
+        return this.canOverflow(getSelectThen(expr), type)
+            || this.canOverflow(getSelectElse(expr), type);
+      }
+
+      // overflows if the call does not return a wrapped value or the conversion does
+      case ExpressionId.Call: {
+        let program = this.currentFunction.program;
+        let instance = assert(program.instancesLookup.get(assert(getCallTarget(expr))));
+        assert(instance.kind == ElementKind.FUNCTION);
+        let returnType = (<Function>instance).signature.returnType;
+        return !(<Function>instance).flow.is(FlowFlags.RETURNS_WRAPPED)
+            || canConversionOverflow(returnType, type);
+      }
+
+      // doesn't technically overflow
+      case ExpressionId.Unreachable: return false;
+    }
+    return true;
   }
 
   /** Finalizes this flow. Must be the topmost parent flow of the function. */
@@ -3826,4 +4081,13 @@ export class Flow {
     this.returnLabel = null;
     this.contextualTypeArguments = null;
   }
+}
+
+/** Tests if a conversion from one type to another can technically overflow. */
+function canConversionOverflow(fromType: Type, toType: Type): bool {
+  var fromSize = fromType.byteSize;
+  var toSize = toType.byteSize;
+  return !fromType.is(TypeFlags.INTEGER) // non-i32 locals or returns
+      || fromSize > toSize
+      || fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED);
 }

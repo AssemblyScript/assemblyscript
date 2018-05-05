@@ -341,25 +341,23 @@
          (f64.const 2047)
          (f64.min
           (f64.max
-           (tee_local $7
-            ;;@ assembly/index.ts:38:39
-            (f64.div
-             (f64.sub
-              (f64.convert_u/i32
-               ;;@ assembly/index.ts:38:40
-               (i32.add
-                (get_local $6)
-                ;;@ assembly/index.ts:38:52
-                (i32.const 1)
-               )
-              )
-              ;;@ assembly/index.ts:38:56
-              (get_local $7)
-             )
+           ;;@ assembly/index.ts:38:39
+           (f64.div
+            (f64.sub
              (f64.convert_u/i32
-              ;;@ assembly/index.ts:38:64
-              (get_local $3)
+              ;;@ assembly/index.ts:38:40
+              (i32.add
+               (get_local $6)
+               ;;@ assembly/index.ts:38:52
+               (i32.const 1)
+              )
              )
+             ;;@ assembly/index.ts:38:56
+             (get_local $7)
+            )
+            (f64.convert_u/i32
+             ;;@ assembly/index.ts:38:64
+             (get_local $3)
             )
            )
            (f64.const 0)

@@ -134,8 +134,7 @@ export class Type {
 
   /** Computes the sign-extending shift in the target type. */
   computeSmallIntegerShift(targetType: Type): u32 {
-    var size = this.is(TypeFlags.SIGNED) ? this.size : this.size + 1;
-    return targetType.size - size;
+    return targetType.size - this.size;
   }
 
   /** Computes the truncating mask in the target type. */

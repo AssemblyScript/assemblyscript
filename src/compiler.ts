@@ -25,8 +25,6 @@ import {
   ExpressionId,
   FunctionTypeRef,
   GlobalRef,
-  ExpressionTag,
-  getTags,
   getExpressionId,
   getExpressionType,
   getConstValueI32,
@@ -35,13 +33,7 @@ import {
   getConstValueF32,
   getConstValueF64,
   getFunctionBody,
-  getGetLocalIndex,
-  getBinaryOp,
-  getUnaryOp,
-  getLoadBytes,
-  isLoadSigned,
-  getBinaryLeft,
-  getBinaryRight
+  getGetLocalIndex
 } from "./module";
 
 import {
@@ -894,7 +886,7 @@ export class Compiler extends DiagnosticEmitter {
           WrapMode.NONE
         );
         flow.set(FlowFlags.RETURNS);
-        if (!canOverflow(stmt, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+        if (!flow.canOverflow(stmt, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
       } else {
         assert(body.kind == NodeKind.BLOCK);
         stmt = this.compileStatement(body);
@@ -1717,7 +1709,7 @@ export class Compiler extends DiagnosticEmitter {
       );
 
       // Remember whether returning a properly wrapped value
-      if (!canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+      if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
     }
 
     // When inlining, break to the end of the inlined function's block (no need to wrap)
@@ -1734,7 +1726,7 @@ export class Compiler extends DiagnosticEmitter {
     var context = currentFunction.enterBreakContext();
 
     // introduce a local for evaluating the condition (exactly once)
-    var tempLocal = currentFunction.getTempLocal(Type.u32);
+    var tempLocal = currentFunction.getTempLocal(Type.u32, false);
     var tempLocalIndex = tempLocal.index;
     var cases = statement.cases;
     var numCases = cases.length;
@@ -1797,7 +1789,7 @@ export class Compiler extends DiagnosticEmitter {
         body[j + 1] = this.compileStatement(statements[j]);
       }
       if (!(fallsThrough || flow.is(FlowFlags.RETURNS))) alwaysReturns = false; // ignore fall-throughs
-      if (!(fallsThrough || flow.is(FlowFlags.RETURNS))) alwaysReturnsWrapped = false; // ignore fall-throughs
+      if (!(fallsThrough || flow.is(FlowFlags.RETURNS_WRAPPED))) alwaysReturnsWrapped = false; // ignore fall-throughs
       if (!(fallsThrough || flow.is(FlowFlags.THROWS))) alwaysThrows = false;
       if (!(fallsThrough || flow.is(FlowFlags.ALLOCATES))) alwaysAllocates = false;
 
@@ -1975,13 +1967,13 @@ export class Compiler extends DiagnosticEmitter {
           declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
           flow.is(FlowFlags.INLINE_CONTEXT)
         ) { // here: not top-level
-          local = flow.addScopedLocal(type, name, declaration); // reports
+          local = flow.addScopedLocal(type, name, false, declaration); // reports
         } else {
           local = currentFunction.addLocal(type, name, declaration); // reports
         }
         if (initExpr) {
           initializers.push(this.compileAssignmentWithValue(declaration.name, initExpr));
-          flow.setLocalWrapped(local.index, !canOverflow(initExpr, type));
+          flow.setLocalWrapped(local.index, !flow.canOverflow(initExpr, type));
         } else {
           flow.setLocalWrapped(local.index, true); // zero
         }
@@ -2286,7 +2278,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var funcRef = module.addFunction("__precompute", typeRef, null, expr);
     module.runPasses([ "precompute" ], funcRef);
-    var ret = getFunctionBody(funcRef) | getTags(expr); // retain tags
+    var ret = getFunctionBody(funcRef);
     module.removeFunction("__precompute");
     if (typeRefAdded) {
       // TODO: also remove the function type somehow if no longer used or make the C-API accept
@@ -2454,24 +2446,11 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         // small i32 to ...
         if (fromType.is(TypeFlags.SHORT)) {
-
           // small i32 to larger i32
           if (fromType.size < toType.size) {
             expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
             wrapMode = WrapMode.NONE;
-
-          // small i32 to smaller or same size with change of sign i32
-          } else if (
-            fromType.size > toType.size ||
-            (
-              fromType.size == toType.size &&
-              fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED)
-            )
-          ) {
-            expr &= ~ExpressionTag.WRAPPED; // now possibly overflows
           }
-
-          // otherwise same size, same sign
         }
       }
     }
@@ -2510,10 +2489,8 @@ export class Compiler extends DiagnosticEmitter {
     var rightType: Type;
     var commonType: Type | null;
 
-    var condExpr: ExpressionRef;
     var expr: ExpressionRef;
     var compound = false;
-    var tempLocal: Local | null = null;
 
     var operator = expression.operator;
     switch (operator) {
@@ -3525,9 +3502,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.BOOL: {
-            // assumes unsigned div on unsigned small integers does not overflow if both operands
-            // have been wrapped (see above)
-            expr = module.createBinary(BinaryOp.DivU32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            expr = module.createBinary(BinaryOp.DivU32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.U32: {
@@ -3614,9 +3589,7 @@ export class Compiler extends DiagnosticEmitter {
         switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16: {
-            // assumes signed rem on signed small integers does not overflow if both operands have
-            // been wrapped (see above)
-            expr = module.createBinary(BinaryOp.RemI32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            expr = module.createBinary(BinaryOp.RemI32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.I32: {
@@ -3640,9 +3613,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.BOOL: {
-            // assumes unsigned rem on unsigned small integers does not overflow if both operands
-            // have been wrapped
-            expr = module.createBinary(BinaryOp.RemU32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            expr = module.createBinary(BinaryOp.RemU32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.U32: {
@@ -3789,8 +3760,7 @@ export class Compiler extends DiagnosticEmitter {
         switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16: {
-            // assumes signed shr on signed small integers does not overflow
-            expr = module.createBinary(BinaryOp.ShrI32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            expr = module.createBinary(BinaryOp.ShrI32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.I32: {
@@ -3814,8 +3784,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.BOOL: {
-            // assumes unsigned shr on unsigned small integers does not overflow
-            expr = module.createBinary(BinaryOp.ShrU32, leftExpr, rightExpr) | ExpressionTag.WRAPPED;
+            expr = module.createBinary(BinaryOp.ShrU32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.U32: {
@@ -3956,8 +3925,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.BOOL:
           case TypeKind.U32: {
-            expr = module.createBinary(BinaryOp.AndI32, leftExpr, rightExpr)
-                 | (getTags(leftExpr) & getTags(rightExpr));
+            expr = module.createBinary(BinaryOp.AndI32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.I64:
@@ -4044,8 +4012,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.BOOL: {
-            expr = module.createBinary(BinaryOp.OrI32, leftExpr, rightExpr)
-                 | (getTags(leftExpr) & getTags(rightExpr));
+            expr = module.createBinary(BinaryOp.OrI32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.I32:
@@ -4137,8 +4104,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.BOOL: {
-            expr = module.createBinary(BinaryOp.XorI32, leftExpr, rightExpr)
-                 | (getTags(leftExpr) & getTags(rightExpr));
+            expr = module.createBinary(BinaryOp.XorI32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.I32:
@@ -4188,21 +4154,23 @@ export class Compiler extends DiagnosticEmitter {
 
         // simplify if cloning left without side effects is possible
         if (expr = module.cloneExpression(leftExpr, true, 0)) {
-          condExpr = this.makeIsTrueish(leftExpr, this.currentType);
+          this.makeIsTrueish(leftExpr, this.currentType);
           expr = module.createIf(
             this.makeIsTrueish(leftExpr, this.currentType),
             rightExpr,
             expr
           );
 
-        // if not possible, tee left to a temp. local (retain tags)
+        // if not possible, tee left to a temp. local
         } else {
-          tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
+          let flow = this.currentFunction.flow;
+          let tempLocal = this.currentFunction.getAndFreeTempLocal(
+            this.currentType,
+            !flow.canOverflow(leftExpr, this.currentType)
+          );
           expr = module.createIf(
             this.makeIsTrueish(
-              module.createTeeLocal(tempLocal.index, leftExpr) | (
-                canOverflow(leftExpr, this.currentType) ? 0 : ExpressionTag.WRAPPED
-              ),
+              module.createTeeLocal(tempLocal.index, leftExpr),
               this.currentType
             ),
             rightExpr,
@@ -4212,7 +4180,6 @@ export class Compiler extends DiagnosticEmitter {
             )
           );
         }
-        if (!canOverflow2(leftExpr, rightExpr, this.currentType)) expr |= ExpressionTag.WRAPPED;
         break;
       }
       case Token.BAR_BAR: { // left || right
@@ -4224,19 +4191,21 @@ export class Compiler extends DiagnosticEmitter {
         // simplify if cloning left without side effects is possible
         if (expr = this.module.cloneExpression(leftExpr, true, 0)) {
           expr = this.module.createIf(
-            condExpr = this.makeIsTrueish(leftExpr, this.currentType),
+            this.makeIsTrueish(leftExpr, this.currentType),
             expr,
             rightExpr
           );
 
         // if not possible, tee left to a temp. local
         } else {
-          tempLocal = this.currentFunction.getAndFreeTempLocal(this.currentType);
+          let flow = this.currentFunction.flow;
+          let tempLocal = this.currentFunction.getAndFreeTempLocal(
+            this.currentType,
+            !flow.canOverflow(leftExpr, this.currentType)
+          );
           expr = module.createIf(
             this.makeIsTrueish(
-              module.createTeeLocal(tempLocal.index, leftExpr) | (
-                canOverflow(leftExpr, this.currentType) ? 0 : ExpressionTag.WRAPPED
-              ),
+              module.createTeeLocal(tempLocal.index, leftExpr),
               this.currentType
             ),
             module.createGetLocal(
@@ -4246,8 +4215,6 @@ export class Compiler extends DiagnosticEmitter {
             rightExpr
           );
         }
-
-        if (!canOverflow2(leftExpr, rightExpr, this.currentType)) expr |= ExpressionTag.WRAPPED;
         break;
       }
       default: {
@@ -4309,7 +4276,6 @@ export class Compiler extends DiagnosticEmitter {
       thisArg,
       operatorInstance.hasDecorator(DecoratorFlags.INLINE)
     );
-    if (operatorInstance.flow.is(FlowFlags.RETURNS_WRAPPED)) ret |= ExpressionTag.WRAPPED;
     return ret;
   }
 
@@ -4413,9 +4379,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.createUnreachable();
         }
         let flow = this.currentFunction.flow;
-        flow.setLocalWrapped((<Local>target).index, !canOverflow(valueWithCorrectType, type));
+        flow.setLocalWrapped((<Local>target).index, !flow.canOverflow(valueWithCorrectType, type));
         return tee
-          ? module.createTeeLocal((<Local>target).index, valueWithCorrectType) | getTags(valueWithCorrectType)
+          ? module.createTeeLocal((<Local>target).index, valueWithCorrectType)
           : module.createSetLocal((<Local>target).index, valueWithCorrectType);
       }
       case ElementKind.GLOBAL: {
@@ -4438,7 +4404,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.createBlock(null, [ // emulated teeGlobal
             module.createSetGlobal(internalName, valueWithCorrectType),
             module.createGetGlobal(internalName, nativeType)
-          ], nativeType) | getTags(valueWithCorrectType);
+          ], nativeType);
         } else {
           return module.createSetGlobal(target.internalName, valueWithCorrectType);
         }
@@ -4473,7 +4439,12 @@ export class Compiler extends DiagnosticEmitter {
           valueWithCorrectType = this.ensureSmallIntegerWrap(valueWithCorrectType, type);
         }
         if (tee) {
-          let tempLocal = this.currentFunction.getAndFreeTempLocal(type);
+          let currentFunction = this.currentFunction;
+          let flow = currentFunction.flow;
+          let tempLocal = currentFunction.getAndFreeTempLocal(
+            type,
+            !flow.canOverflow(valueWithCorrectType, type)
+          );
           let tempLocalIndex = tempLocal.index;
           // TODO: simplify if valueWithCorrectType has no side effects
           return module.createBlock(null, [
@@ -4486,7 +4457,7 @@ export class Compiler extends DiagnosticEmitter {
               (<Field>target).memoryOffset
             ),
             module.createGetLocal(tempLocalIndex, nativeType)
-          ], nativeType) | getTags(valueWithCorrectType);
+          ], nativeType);
         } else {
           return module.createStore(
             type.size >> 3,
@@ -4532,7 +4503,7 @@ export class Compiler extends DiagnosticEmitter {
               this.options.usizeType,
               WrapMode.NONE
             );
-            let tempLocal = this.currentFunction.getAndFreeTempLocal(returnType);
+            let tempLocal = this.currentFunction.getAndFreeTempLocal(returnType, false);
             let tempLocalIndex = tempLocal.index;
             return module.createBlock(null, [
               this.makeCallDirect(setterInstance, [ // set and remember the target
@@ -4593,8 +4564,9 @@ export class Compiler extends DiagnosticEmitter {
             WrapMode.NONE
           );
           if (tee) {
-            let tempLocalTarget = this.currentFunction.getTempLocal(targetType);
-            let tempLocalElement = this.currentFunction.getAndFreeTempLocal(this.currentType);
+            let currentFunction = this.currentFunction;
+            let tempLocalTarget = currentFunction.getTempLocal(targetType, false);
+            let tempLocalElement = currentFunction.getAndFreeTempLocal(this.currentType, false);
             let returnType = indexedGet.signature.returnType;
             this.currentFunction.freeTempLocal(tempLocalTarget);
             return module.createBlock(null, [
@@ -5014,7 +4986,7 @@ export class Compiler extends DiagnosticEmitter {
           "this"
         );
       } else {
-        let thisLocal = flow.addScopedLocal((<Class>parent).type, "this");
+        let thisLocal = flow.addScopedLocal((<Class>parent).type, "this", false);
         body.push(
           module.createSetLocal(thisLocal.index, thisArg)
         );
@@ -5036,8 +5008,11 @@ export class Compiler extends DiagnosticEmitter {
         );
         // inherits wrap status
       } else {
-        let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
-        flow.setLocalWrapped(argumentLocal.index, !canOverflow(paramExpr, parameterTypes[i]));
+        let argumentLocal = flow.addScopedLocal(
+          parameterTypes[i],
+          signature.getParameterName(i),
+          !flow.canOverflow(paramExpr, parameterTypes[i])
+        );
         body.push(
           module.createSetLocal(argumentLocal.index, paramExpr)
         );
@@ -5048,17 +5023,20 @@ export class Compiler extends DiagnosticEmitter {
     currentFunction.flow = flow;
     var numParameters = signature.parameterTypes.length;
     for (let i = numArguments; i < numParameters; ++i) {
-      let argumentLocal = flow.addScopedLocal(parameterTypes[i], signature.getParameterName(i));
       let initExpr = this.compileExpression(
         assert(declaration.signature.parameterTypes[i].initializer),
         parameterTypes[i],
         ConversionKind.IMPLICIT,
         WrapMode.WRAP
       );
+      let argumentLocal = flow.addScopedLocal(
+        parameterTypes[i],
+        signature.getParameterName(i),
+        !flow.canOverflow(initExpr, parameterTypes[i])
+      );
       body.push(
         module.createSetLocal(argumentLocal.index, initExpr)
       );
-      flow.setLocalWrapped(argumentLocal.index, !canOverflow(initExpr, parameterTypes[i]));
     }
 
     // Compile the called function's body in the scope of the inlined flow
@@ -5293,16 +5271,15 @@ export class Compiler extends DiagnosticEmitter {
       if (!isCallImport) { // call the trampoline
         let original = instance;
         instance = this.ensureTrampoline(instance);
-
         if (!this.compileFunction(instance)) return module.createUnreachable();
+        instance.flow.flags = original.flow.flags;
+        this.program.instancesLookup.set(instance.internalName, instance); // so canOverflow can find it
         let nativeReturnType = returnType.toNativeType();
         this.currentType = returnType;
-        let ret = module.createBlock(null, [
+        return module.createBlock(null, [
           module.createSetGlobal(this.ensureArgcVar(), module.createI32(numArguments)),
           module.createCall(instance.internalName, operands, nativeReturnType)
         ], nativeReturnType);
-        if (original.flow.is(FlowFlags.RETURNS_WRAPPED)) ret |= ExpressionTag.WRAPPED;
-        return ret;
       }
     }
 
@@ -5310,7 +5287,6 @@ export class Compiler extends DiagnosticEmitter {
     this.currentType = returnType;
     if (isCallImport) return module.createCallImport(instance.internalName, operands, returnType.toNativeType());
     var ret = module.createCall(instance.internalName, operands, returnType.toNativeType());
-    if (instance.flow.is(FlowFlags.RETURNS_WRAPPED)) ret |= ExpressionTag.WRAPPED;
     return ret;
   }
 
@@ -5597,9 +5573,7 @@ export class Compiler extends DiagnosticEmitter {
         let localIndex = (<Local>target).index;
         assert(localIndex >= 0);
         this.currentType = localType;
-        let ret = this.module.createGetLocal(localIndex, localType.toNativeType());
-        if (currentFunction.flow.isLocalWrapped(localIndex)) ret |= ExpressionTag.WRAPPED;
-        return ret;
+        return this.module.createGetLocal(localIndex, localType.toNativeType());
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
@@ -5986,7 +5960,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         let nativeArrayType = arrayType.toNativeType();
         let currentFunction = this.currentFunction;
-        let tempLocal = currentFunction.getTempLocal(arrayType);
+        let tempLocal = currentFunction.getTempLocal(arrayType, false);
         let stmts = new Array<ExpressionRef>(2 + elementCount);
         let index = 0;
         stmts[index++] = module.createSetLocal(tempLocal.index,
@@ -6424,34 +6398,29 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    var setValue: ExpressionRef;
-    var tempLocal: Local | null = null;
-
     // simplify if dropped anyway
     if (contextualType == Type.void) {
-      setValue = module.createBinary(op,
-        getValue,
-        nativeOne
+      return this.compileAssignmentWithValue(expression.operand,
+        module.createBinary(op,
+          getValue,
+          nativeOne
+        ),
+        false
       );
+    }
 
-    // otherwise use a temp local for the intermediate value
-    } else {
-      tempLocal = currentFunction.getTempLocal(currentType);
-      setValue = module.createBinary(op,
+    // otherwise use a temp local for the intermediate value (always possibly overflows)
+    var tempLocal = currentFunction.getTempLocal(currentType, false);
+    var setValue = this.compileAssignmentWithValue(expression.operand,
+      module.createBinary(op,
         this.module.createGetLocal(tempLocal.index, nativeType),
         nativeOne
-      );
-    }
-
-    setValue = this.compileAssignmentWithValue(expression.operand, setValue, false);
-    // ^ sets currentType = void
-    if (contextualType == Type.void) {
-      assert(!tempLocal);
-      return setValue;
-    }
-
+      ),
+      false
+    );
     this.currentType = assert(tempLocal).type;
     currentFunction.freeTempLocal(<Local>tempLocal);
+
     var localIndex = (<Local>tempLocal).index;
     return module.createBlock(null, [
       module.createSetLocal(localIndex, getValue),
@@ -6801,9 +6770,10 @@ export class Compiler extends DiagnosticEmitter {
   /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
   ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef {
     var module = this.module;
+    var flow = this.currentFunction.flow;
     switch (type.kind) {
       case TypeKind.I8: { // TODO: Use 'i32.extend8_s' once sign-extension-ops lands
-        if (canOverflow(expr, type)) {
+        if (flow.canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.ShrI32,
             module.createBinary(BinaryOp.ShlI32,
               expr,
@@ -6815,7 +6785,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case TypeKind.I16: { // TODO: Use 'i32.extend16_s' once sign-extension-ops lands
-        if (canOverflow(expr, type)) {
+        if (flow.canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.ShrI32,
             module.createBinary(BinaryOp.ShlI32,
               expr,
@@ -6827,7 +6797,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case TypeKind.U8: {
-        if (canOverflow(expr, type)) {
+        if (flow.canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0xff)
@@ -6836,7 +6806,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case TypeKind.U16: {
-        if (canOverflow(expr, type)) {
+        if (flow.canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0xffff)
@@ -6845,7 +6815,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case TypeKind.BOOL: {
-        if (canOverflow(expr, type)) {
+        if (flow.canOverflow(expr, type)) {
           expr = module.createBinary(BinaryOp.AndI32,
             expr,
             module.createI32(0x1)
@@ -6940,7 +6910,7 @@ export class Compiler extends DiagnosticEmitter {
     var nativeSizeType = this.options.nativeSizeType;
 
     // allocate the necessary memory and tee the pointer to a temp. local for reuse
-    var tempLocal = currentFunction.getTempLocal(classInstance.type);
+    var tempLocal = currentFunction.getTempLocal(classInstance.type, false);
     var initializers = new Array<ExpressionRef>();
     initializers.push(
       module.createSetLocal(tempLocal.index,
@@ -7071,110 +7041,4 @@ function mangleExportName(element: Element, explicitSimpleName: string | null = 
         : simpleName;
     }
   }
-}
-
-/** Tests if an expression can technically overflow and is not explicitly tagged as being wrapped. */
-export function canOverflow(expr: ExpressionRef, type: Type): bool {
-  assert(type != Type.void);
-  if (
-    !type.is(TypeFlags.SHORT | TypeFlags.INTEGER) || // not a small integer
-    (expr & ExpressionTag.WRAPPED) != 0              // explicitly marked as wrapped
-  ) return false;
-  switch (getExpressionId(expr)) {
-    case ExpressionId.GetGlobal: return false; // always wrapped
-    case ExpressionId.Binary: {
-      switch (getBinaryOp(expr)) {
-        case BinaryOp.EqI32:
-        case BinaryOp.EqI64:
-        case BinaryOp.EqF32:
-        case BinaryOp.EqF64:
-        case BinaryOp.NeI32:
-        case BinaryOp.NeI64:
-        case BinaryOp.NeF32:
-        case BinaryOp.NeF64:
-        case BinaryOp.LtI32:
-        case BinaryOp.LtU32:
-        case BinaryOp.LtI64:
-        case BinaryOp.LtU64:
-        case BinaryOp.LtF32:
-        case BinaryOp.LtF64:
-        case BinaryOp.LeI32:
-        case BinaryOp.LeU32:
-        case BinaryOp.LeI64:
-        case BinaryOp.LeU64:
-        case BinaryOp.LeF32:
-        case BinaryOp.LeF64:
-        case BinaryOp.GtI32:
-        case BinaryOp.GtU32:
-        case BinaryOp.GtI64:
-        case BinaryOp.GtU64:
-        case BinaryOp.GtF32:
-        case BinaryOp.GtF64:
-        case BinaryOp.GeI32:
-        case BinaryOp.GeU32:
-        case BinaryOp.GeI64:
-        case BinaryOp.GeU64:
-        case BinaryOp.GeF32:
-        case BinaryOp.GeF64: return false;
-        case BinaryOp.AndI32: {
-          // result won't overflow if one side is a constant less than this type's mask.
-          // note that computeSmallIntegerMask returns the mask minus the MSB for signed types.
-          let operand: ExpressionRef;
-          if (
-            getExpressionId(operand = getBinaryLeft(expr)) == ExpressionId.Const &&
-            getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
-            ||
-            getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
-            getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
-          ) return false;
-          break;
-        }
-        case BinaryOp.ShrI32: {
-          // result won't overflow if the shift is a constant larger than or equal this type's shift.
-          // note that computeSmallIntegerShift returns the shift plus 1 for unsigned types.
-          let operand: ExpressionRef;
-          if (
-            getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
-            getConstValueI32(operand) >= type.computeSmallIntegerShift(Type.i32)
-          ) return false;
-          break;
-        }
-      }
-      break;
-    }
-    case ExpressionId.Unary: {
-      switch (getUnaryOp(expr)) {
-        case UnaryOp.EqzI32:
-        case UnaryOp.EqzI64: return false;
-        case UnaryOp.ClzI32:
-        case UnaryOp.CtzI32:
-        case UnaryOp.PopcntI32: return type.size < 7; // max value is 32 (100000b)
-      }
-      break;
-    }
-    case ExpressionId.Const: {
-      if (getExpressionType(expr) == NativeType.I32) {
-        let value = getConstValueI32(expr);
-        switch (type.kind) {
-          case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
-          case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
-          case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
-          case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
-          case TypeKind.BOOL: return (value & ~1) != 0;
-        }
-      }
-      return false;
-    }
-    case ExpressionId.Load: {
-      return type.byteSize < getLoadBytes(expr)
-          || type.is(TypeFlags.SIGNED) != isLoadSigned(expr);
-    }
-    case ExpressionId.Unreachable: return false;
-  }
-  return true;
-}
-
-/** Tests if any of the expressions can technically overflow. */
-export function canOverflow2(left: ExpressionRef, right: ExpressionRef, type: Type): bool {
-  return canOverflow(left, type) || canOverflow(right, type);
 }
