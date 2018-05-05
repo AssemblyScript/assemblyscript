@@ -39,7 +39,7 @@ var pson = {
     console.log("double: " + value);
   },
   onString: function(offset, length) {
-    console.log("string(length=" + length + "): " + new Buffer(mem.slice(offset, offset + length)).toString());
+    console.log("string(length=" + length + "): " + Buffer.from(mem.slice(offset, offset + length)).toString());
   },
   onBinary: function(offset, length) {
     console.log("binary(length=" + length + "): " + mem.slice(offset, offset + length));
@@ -47,7 +47,7 @@ var pson = {
 };
 
 // Instantiate the module
-var mod = new WebAssembly.Module(fs.readFileSync(__dirname + "/pson.optimized.wasm"));
+var mod = new WebAssembly.Module(fs.readFileSync(__dirname + "/build/optimized.wasm"));
 var ins = new WebAssembly.Instance(mod, { pson: pson });
 var mem = new Uint8Array(ins.exports.memory.buffer);
 

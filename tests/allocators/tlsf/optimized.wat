@@ -439,6 +439,7 @@
       (tee_local $1
        (i32.load
         (i32.sub
+         ;;@ ~lib/allocator/tlsf.ts:211:31
          (get_local $1)
          (i32.const 4)
         )
@@ -494,13 +495,12 @@
   )
   (i32.store
    (i32.sub
+    ;;@ ~lib/allocator/tlsf.ts:222:24
     (get_local $4)
     (i32.const 4)
    )
-   (tee_local $3
-    ;;@ ~lib/allocator/tlsf.ts:222:17
-    (get_local $1)
-   )
+   ;;@ ~lib/allocator/tlsf.ts:222:17
+   (get_local $1)
   )
   ;;@ ~lib/allocator/tlsf.ts:240:4
   (set_local $4
@@ -901,6 +901,7 @@
     ;;@ ~lib/allocator/tlsf.ts:327:26
     (get_local $2)
     (i32.ctz
+     ;;@ ~lib/allocator/tlsf.ts:327:39
      (get_local $1)
     )
    )
@@ -937,6 +938,7 @@
        ;;@ ~lib/allocator/tlsf.ts:322:8
        (tee_local $2
         (i32.ctz
+         ;;@ ~lib/allocator/tlsf.ts:322:24
          (get_local $1)
         )
        )
@@ -949,6 +951,7 @@
       ;;@ ~lib/allocator/tlsf.ts:324:28
       (get_local $2)
       (i32.ctz
+       ;;@ ~lib/allocator/tlsf.ts:324:41
        (get_local $1)
       )
      )

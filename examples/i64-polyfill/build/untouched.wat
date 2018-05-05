@@ -181,10 +181,7 @@
   ;;@ assembly/i64.ts:38:2
   (set_global $assembly/i64/lo
    ;;@ assembly/i64.ts:38:7
-   (i32.and
-    (get_local $2)
-    (i32.const 1)
-   )
+   (get_local $2)
   )
   ;;@ assembly/i64.ts:39:2
   (set_global $assembly/i64/hi

@@ -38,3 +38,5 @@ assertUnary(i64.eqz, 1, 0, 0, 0);
 assertUnary(i64.eqz, 1, 1, 0, 0);
 
 // TODO...
+
+console.log("ok");

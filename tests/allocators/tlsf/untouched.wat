@@ -1907,17 +1907,16 @@
       (set_local $5
        ;;@ ~lib/allocator/tlsf.ts:323:16
        (if (result i32)
-        (i32.eqz
-         (tee_local $7
-          ;;@ ~lib/allocator/tlsf.ts:323:28
-          (call $~lib/allocator/tlsf/Root#getSLMap
-           ;;@ ~lib/allocator/tlsf.ts:323:23
-           (get_local $0)
-           ;;@ ~lib/allocator/tlsf.ts:323:37
-           (get_local $3)
-          )
+        (tee_local $7
+         ;;@ ~lib/allocator/tlsf.ts:323:28
+         (call $~lib/allocator/tlsf/Root#getSLMap
+          ;;@ ~lib/allocator/tlsf.ts:323:23
+          (get_local $0)
+          ;;@ ~lib/allocator/tlsf.ts:323:37
+          (get_local $3)
          )
         )
+        (get_local $7)
         (block
          (call $abort
           (i32.const 0)
@@ -1927,7 +1926,6 @@
          )
          (unreachable)
         )
-        (get_local $7)
        )
       )
       ;;@ ~lib/allocator/tlsf.ts:324:8
