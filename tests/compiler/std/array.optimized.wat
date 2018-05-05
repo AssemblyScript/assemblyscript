@@ -318,7 +318,10 @@
    )
    (tee_local $1
     (i32.mul
-     (get_local $1)
+     (i32.and
+      (get_local $1)
+      (i32.const 255)
+     )
      (i32.const 16843009)
     )
    )
@@ -2223,27 +2226,24 @@
    (return)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (i32.le_u
-       (i32.add
-        (get_local $1)
-        (get_local $2)
-       )
-       (get_local $0)
-      )
-     )
-     (get_local $3)
+   (if (result i32)
+    (tee_local $3
      (i32.le_u
       (i32.add
-       (get_local $0)
+       (get_local $1)
        (get_local $2)
       )
-      (get_local $1)
+      (get_local $0)
      )
     )
-    (i32.const 1)
+    (get_local $3)
+    (i32.le_u
+     (i32.add
+      (get_local $0)
+      (get_local $2)
+     )
+     (get_local $1)
+    )
    )
    (block
     (call $~lib/memory/copy_memory
@@ -3024,24 +3024,21 @@
   (local $3 i32)
   (local $4 i32)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (i32.eqz
-       (tee_local $3
-        (i32.load offset=4
-         (get_local $0)
-        )
+   (if (result i32)
+    (tee_local $4
+     (i32.eqz
+      (tee_local $3
+       (i32.load offset=4
+        (get_local $0)
        )
       )
      )
-     (get_local $4)
-     (i32.ge_s
-      (get_local $2)
-      (get_local $3)
-     )
     )
-    (i32.const 1)
+    (get_local $4)
+    (i32.ge_s
+     (get_local $2)
+     (get_local $3)
+    )
    )
    (return
     (i32.const -1)
@@ -3138,24 +3135,21 @@
   (local $3 i32)
   (local $4 i32)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (i32.eqz
-       (tee_local $3
-        (i32.load offset=4
-         (get_local $0)
-        )
+   (if (result i32)
+    (tee_local $4
+     (i32.eqz
+      (tee_local $3
+       (i32.load offset=4
+        (get_local $0)
        )
       )
      )
-     (get_local $4)
-     (i32.ge_s
-      (get_local $2)
-      (get_local $3)
-     )
     )
-    (i32.const 1)
+    (get_local $4)
+    (i32.ge_s
+     (get_local $2)
+     (get_local $3)
+    )
    )
    (return
     (i32.const 0)
@@ -3439,23 +3433,20 @@
   )
   (loop $continue|0
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $5
-       (i32.lt_s
-        (get_local $2)
-        (get_local $4)
-       )
-      )
+    (if (result i32)
+     (tee_local $5
       (i32.lt_s
        (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $4)
       )
-      (get_local $5)
      )
-     (i32.const 1)
+     (i32.lt_s
+      (get_local $2)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (get_local $5)
     )
     (block
      (if
@@ -3463,19 +3454,22 @@
        (set_global $~argc
         (i32.const 3)
        )
-       (call_indirect (type $iiii)
-        (i32.load offset=8
-         (i32.add
-          (get_local $3)
-          (i32.shl
-           (get_local $2)
-           (i32.const 2)
+       (i32.and
+        (call_indirect (type $iiii)
+         (i32.load offset=8
+          (i32.add
+           (get_local $3)
+           (i32.shl
+            (get_local $2)
+            (i32.const 2)
+           )
           )
          )
+         (get_local $2)
+         (get_local $0)
+         (get_local $1)
         )
-        (get_local $2)
-        (get_local $0)
-        (get_local $1)
+        (i32.const 1)
        )
       )
       (return
@@ -3552,23 +3546,20 @@
   )
   (loop $continue|0
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $5
-       (i32.lt_s
-        (get_local $2)
-        (get_local $4)
-       )
-      )
+    (if (result i32)
+     (tee_local $5
       (i32.lt_s
        (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $4)
       )
-      (get_local $5)
      )
-     (i32.const 1)
+     (i32.lt_s
+      (get_local $2)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (get_local $5)
     )
     (block
      (if
@@ -3577,19 +3568,22 @@
         (i32.const 3)
        )
        (i32.eqz
-        (call_indirect (type $iiii)
-         (i32.load offset=8
-          (i32.add
-           (get_local $3)
-           (i32.shl
-            (get_local $2)
-            (i32.const 2)
+        (i32.and
+         (call_indirect (type $iiii)
+          (i32.load offset=8
+           (i32.add
+            (get_local $3)
+            (i32.shl
+             (get_local $2)
+             (i32.const 2)
+            )
            )
           )
+          (get_local $2)
+          (get_local $0)
+          (get_local $1)
          )
-         (get_local $2)
-         (get_local $0)
-         (get_local $1)
+         (i32.const 1)
         )
        )
       )
@@ -3667,23 +3661,20 @@
   )
   (loop $continue|0
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $5
-       (i32.lt_s
-        (get_local $2)
-        (get_local $4)
-       )
-      )
+    (if (result i32)
+     (tee_local $5
       (i32.lt_s
        (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $4)
       )
-      (get_local $5)
      )
-     (i32.const 1)
+     (i32.lt_s
+      (get_local $2)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (get_local $5)
     )
     (block
      (if
@@ -3691,19 +3682,22 @@
        (set_global $~argc
         (i32.const 3)
        )
-       (call_indirect (type $iiii)
-        (i32.load offset=8
-         (i32.add
-          (get_local $3)
-          (i32.shl
-           (get_local $2)
-           (i32.const 2)
+       (i32.and
+        (call_indirect (type $iiii)
+         (i32.load offset=8
+          (i32.add
+           (get_local $3)
+           (i32.shl
+            (get_local $2)
+            (i32.const 2)
+           )
           )
          )
+         (get_local $2)
+         (get_local $0)
+         (get_local $1)
         )
-        (get_local $2)
-        (get_local $0)
-        (get_local $1)
+        (i32.const 1)
        )
       )
       (return
@@ -3782,23 +3776,20 @@
   )
   (loop $continue|0
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $5
-       (i32.lt_s
-        (get_local $2)
-        (get_local $4)
-       )
-      )
+    (if (result i32)
+     (tee_local $5
       (i32.lt_s
        (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $4)
       )
-      (get_local $5)
      )
-     (i32.const 1)
+     (i32.lt_s
+      (get_local $2)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (get_local $5)
     )
     (block
      (set_global $~argc
@@ -3889,23 +3880,20 @@
   )
   (loop $continue|0
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $7
-       (i32.lt_s
-        (get_local $2)
-        (get_local $4)
-       )
-      )
+    (if (result i32)
+     (tee_local $7
       (i32.lt_s
        (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $4)
       )
-      (get_local $7)
      )
-     (i32.const 1)
+     (i32.lt_s
+      (get_local $2)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (get_local $7)
     )
     (block
      (set_global $~argc
@@ -4017,23 +4005,20 @@
   )
   (loop $continue|0
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $7
-       (i32.lt_s
-        (get_local $2)
-        (get_local $4)
-       )
-      )
+    (if (result i32)
+     (tee_local $7
       (i32.lt_s
        (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $4)
       )
-      (get_local $7)
      )
-     (i32.const 1)
+     (i32.lt_s
+      (get_local $2)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (get_local $7)
     )
     (block
      (set_global $~argc
@@ -4130,23 +4115,20 @@
   )
   (loop $continue|0
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $3
-       (i32.lt_s
-        (get_local $2)
-        (get_local $6)
-       )
-      )
+    (if (result i32)
+     (tee_local $3
       (i32.lt_s
        (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $6)
       )
-      (get_local $3)
      )
-     (i32.const 1)
+     (i32.lt_s
+      (get_local $2)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (get_local $3)
     )
     (block
      (set_local $3
@@ -4165,11 +4147,14 @@
        (set_global $~argc
         (i32.const 3)
        )
-       (call_indirect (type $iiii)
-        (get_local $3)
-        (get_local $2)
-        (get_local $0)
-        (get_local $1)
+       (i32.and
+        (call_indirect (type $iiii)
+         (get_local $3)
+         (get_local $2)
+         (get_local $0)
+         (get_local $1)
+        )
+        (i32.const 1)
        )
       )
       (drop
@@ -4261,23 +4246,20 @@
   )
   (loop $continue|0
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $6
-       (i32.lt_s
-        (get_local $3)
-        (get_local $5)
-       )
-      )
+    (if (result i32)
+     (tee_local $6
       (i32.lt_s
        (get_local $3)
-       (i32.load offset=4
-        (get_local $0)
-       )
+       (get_local $5)
       )
-      (get_local $6)
      )
-     (i32.const 1)
+     (i32.lt_s
+      (get_local $3)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (get_local $6)
     )
     (block
      (set_global $~argc
@@ -4313,29 +4295,29 @@
   (get_local $2)
  )
  (func $start~anonymous|30 (; 61 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (i32.and
-   (select
-    (get_local $0)
-    (i32.gt_s
-     (get_local $1)
-     (i32.const 2)
-    )
-    (get_local $0)
+  (select
+   (get_local $0)
+   (i32.gt_s
+    (get_local $1)
+    (i32.const 2)
    )
-   (i32.const 1)
+   (i32.and
+    (get_local $0)
+    (i32.const 1)
+   )
   )
  )
  (func $start~anonymous|31 (; 62 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (i32.and
-   (select
-    (get_local $0)
-    (i32.gt_s
-     (get_local $1)
-     (i32.const 100)
-    )
-    (get_local $0)
+  (select
+   (get_local $0)
+   (i32.gt_s
+    (get_local $1)
+    (i32.const 100)
    )
-   (i32.const 1)
+   (i32.and
+    (get_local $0)
+    (i32.const 1)
+   )
   )
  )
  (func $start~anonymous|32 (; 63 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
@@ -5773,31 +5755,25 @@
   (local $2 i32)
   (local $3 i32)
   (if
-   (i32.and
+   (if (result i32)
     (if (result i32)
      (tee_local $2
-      (i32.and
-       (if (result i32)
-        (tee_local $2
-         (i32.eq
-          (get_local $0)
-          (get_local $1)
-         )
-        )
-        (get_local $2)
-        (i32.eqz
-         (get_local $0)
-        )
-       )
-       (i32.const 1)
+      (i32.eq
+       (get_local $0)
+       (get_local $1)
       )
      )
      (get_local $2)
-     (i32.eqz
-      (get_local $1)
+     (tee_local $2
+      (i32.eqz
+       (get_local $0)
+      )
      )
     )
-    (i32.const 1)
+    (get_local $2)
+    (i32.eqz
+     (get_local $1)
+    )
    )
    (return
     (i32.const 0)
@@ -5857,31 +5833,25 @@
   (local $2 i32)
   (local $3 i32)
   (if
-   (i32.and
+   (if (result i32)
     (if (result i32)
      (tee_local $2
-      (i32.and
-       (if (result i32)
-        (tee_local $2
-         (i32.eq
-          (get_local $0)
-          (get_local $1)
-         )
-        )
-        (get_local $2)
-        (i32.eqz
-         (get_local $0)
-        )
-       )
-       (i32.const 1)
+      (i32.eq
+       (get_local $0)
+       (get_local $1)
       )
      )
      (get_local $2)
-     (i32.eqz
-      (get_local $1)
+     (tee_local $2
+      (i32.eqz
+       (get_local $0)
+      )
      )
     )
-    (i32.const 1)
+    (get_local $2)
+    (i32.eqz
+     (get_local $1)
+    )
    )
    (return
     (i32.const 0)
@@ -5961,19 +5931,16 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $2
-      (i32.eqz
-       (get_local $0)
-      )
-     )
-     (get_local $2)
+   (if (result i32)
+    (tee_local $2
      (i32.eqz
-      (get_local $1)
+      (get_local $0)
      )
     )
-    (i32.const 1)
+    (get_local $2)
+    (i32.eqz
+     (get_local $1)
+    )
    )
    (return
     (i32.const 0)
@@ -6107,21 +6074,18 @@
   (local $1 i32)
   (if
    (i32.eqz
-    (i32.and
-     (if (result i32)
-      (tee_local $1
-       (i32.gt_s
-        (get_local $0)
-        (i32.const 0)
-       )
-      )
-      (i32.le_s
+    (if (result i32)
+     (tee_local $1
+      (i32.gt_s
        (get_local $0)
-       (i32.const 536870910)
+       (i32.const 0)
       )
-      (get_local $1)
      )
-     (i32.const 1)
+     (i32.le_s
+      (get_local $0)
+      (i32.const 536870910)
+     )
+     (get_local $1)
     )
    )
    (block
@@ -8971,10 +8935,13 @@
    )
   )
   (set_global $std/array/boolVal
-   (call $~lib/array/Array<i32>#reduce<i32>
-    (get_global $std/array/arr)
-    (i32.const 30)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/array/Array<i32>#reduce<i32>
+     (get_global $std/array/arr)
+     (i32.const 30)
+     (i32.const 0)
+    )
+    (i32.const 1)
    )
   )
   (if
@@ -8993,10 +8960,13 @@
    )
   )
   (set_global $std/array/boolVal
-   (call $~lib/array/Array<i32>#reduce<i32>
-    (get_global $std/array/arr)
-    (i32.const 31)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/array/Array<i32>#reduce<i32>
+     (get_global $std/array/arr)
+     (i32.const 31)
+     (i32.const 0)
+    )
+    (i32.const 1)
    )
   )
   (if
@@ -9188,10 +9158,13 @@
    )
   )
   (set_global $std/array/boolVal
-   (call $~lib/array/Array<i32>#reduceRight<i32>
-    (get_global $std/array/arr)
-    (i32.const 37)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/array/Array<i32>#reduceRight<i32>
+     (get_global $std/array/arr)
+     (i32.const 37)
+     (i32.const 0)
+    )
+    (i32.const 1)
    )
   )
   (if
@@ -9210,10 +9183,13 @@
    )
   )
   (set_global $std/array/boolVal
-   (call $~lib/array/Array<i32>#reduceRight<i32>
-    (get_global $std/array/arr)
-    (i32.const 38)
-    (i32.const 0)
+   (i32.and
+    (call $~lib/array/Array<i32>#reduceRight<i32>
+     (get_global $std/array/arr)
+     (i32.const 38)
+     (i32.const 0)
+    )
+    (i32.const 1)
    )
   )
   (if

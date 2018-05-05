@@ -4,7 +4,7 @@ const COMMON_MAX = 1 << 30;
 function test(file) {
   console.log("Testing '" + file + "' ...\n");
 
-  const exports = new WebAssembly.Instance(WebAssembly.Module(fs.readFileSync(__dirname + "/" + file)), {
+  const exports = new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(__dirname + "/" + file)), {
     env: {
       abort: function(msg, file, line, column) {
         throw Error("Assertion failed: " + (msg ? "'" + getString(msg) + "' " : "") + "at " + getString(file) + ":" + line + ":" + column);

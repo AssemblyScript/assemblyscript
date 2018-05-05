@@ -247,7 +247,7 @@ declare class Array<T> {
   shift(): T;
   some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): T[];
+  slice(from?: i32, to?: i32): T[];
   splice(start: i32, deleteCount?: i32): void;
   reverse(): T[];
   sort(comparator?: (a: T, b: T) => i32): this;

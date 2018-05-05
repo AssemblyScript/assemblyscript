@@ -1,9 +1,12 @@
 (module
  (type $i (func (result i32)))
+ (type $F (func (result f64)))
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (global $assembly/i64/lo (mut i32) (i32.const 0))
  (global $assembly/i64/hi (mut i32) (i32.const 0))
+ (global $NaN f64 (f64.const nan:0x8000000000000))
+ (global $Infinity f64 (f64.const inf))
  (export "getLo" (func $assembly/i64/getLo))
  (export "getHi" (func $assembly/i64/getHi))
  (export "clz" (func $assembly/i64/clz))
@@ -178,7 +181,10 @@
   ;;@ assembly/i64.ts:38:2
   (set_global $assembly/i64/lo
    ;;@ assembly/i64.ts:38:7
-   (get_local $2)
+   (i32.and
+    (get_local $2)
+    (i32.const 1)
+   )
   )
   ;;@ assembly/i64.ts:39:2
   (set_global $assembly/i64/hi

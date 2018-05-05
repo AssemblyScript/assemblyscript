@@ -687,8 +687,11 @@
      ;;@ ~lib/memory.ts:216:27
      (i32.const 255)
     )
-    ;;@ ~lib/memory.ts:216:33
-    (get_local $1)
+    (i32.and
+     ;;@ ~lib/memory.ts:216:33
+     (get_local $1)
+     (i32.const 255)
+    )
    )
   )
   ;;@ ~lib/memory.ts:219:2

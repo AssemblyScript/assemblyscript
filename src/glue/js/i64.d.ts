@@ -2,6 +2,9 @@
 
 declare type I64 = { __Long__: true }; // opaque
 
+declare const i64_zero: I64;
+declare const i64_one: I64;
+
 declare function i64_new(lo: i32, hi?: i32): I64;
 declare function i64_low(value: I64): i32;
 declare function i64_high(value: I64): i32;
@@ -20,6 +23,9 @@ declare function i64_shl(left: I64, right: I64): I64;
 declare function i64_shr(left: I64, right: I64): I64;
 declare function i64_shr_u(left: I64, right: I64): I64;
 declare function i64_not(value: I64): I64;
+
+declare function i64_eq(left: I64, right: I64): bool;
+declare function i64_ne(left: I64, right: I64): bool;
 
 declare function i64_align(value: I64, alignment: i32): I64;
 

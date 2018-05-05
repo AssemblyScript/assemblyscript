@@ -1,5 +1,9 @@
 const Long = global.Long || require("long");
 
+global.i64_zero = Long.ZERO;
+
+global.i64_one = Long.ONE;
+
 global.i64_new = function(lo, hi) {
   return Long.fromBits(lo, hi);
 };
@@ -66,6 +70,14 @@ global.i64_shr_u = function(left, right) {
 
 global.i64_not = function(value) {
   return value.not();
+};
+
+global.i64_eq = function(left, right) {
+  return left.eq(right);
+};
+
+global.i64_ne = function(left, right) {
+  return left.ne(right);
 };
 
 global.i64_align = function(value, alignment) {

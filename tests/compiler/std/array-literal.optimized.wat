@@ -296,7 +296,10 @@
    )
    (tee_local $1
     (i32.mul
-     (get_local $1)
+     (i32.and
+      (get_local $1)
+      (i32.const 255)
+     )
      (i32.const 16843009)
     )
    )

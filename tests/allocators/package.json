@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "test": "node ./index",
-    "test:forever": "node ./forever"
+    "test:forever": "node ./forever",
+    "test:all": "npm run test tlsf && npm run test buddy && npm run test arena"
   }
 }

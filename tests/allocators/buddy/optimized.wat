@@ -229,39 +229,44 @@
  )
  (func $~lib/allocator/buddy/parent_is_split (; 7 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/allocator/buddy.ts:260:9
-  (i32.and
-   (i32.shr_u
+  (i32.eq
+   (i32.and
     ;;@ ~lib/allocator/buddy.ts:260:10
-    (call $~lib/allocator/buddy/node_is_split$get
-     ;;@ ~lib/allocator/buddy.ts:260:28
-     (i32.div_u
-      ;;@ ~lib/allocator/buddy.ts:259:2
-      (tee_local $0
-       ;;@ ~lib/allocator/buddy.ts:259:10
-       (i32.div_u
-        (i32.sub
-         ;;@ ~lib/allocator/buddy.ts:259:11
-         (get_local $0)
-         ;;@ ~lib/allocator/buddy.ts:259:19
-         (i32.const 1)
+    (i32.shr_u
+     ;;@ ~lib/allocator/buddy.ts:260:11
+     (call $~lib/allocator/buddy/node_is_split$get
+      ;;@ ~lib/allocator/buddy.ts:260:29
+      (i32.div_u
+       ;;@ ~lib/allocator/buddy.ts:259:2
+       (tee_local $0
+        ;;@ ~lib/allocator/buddy.ts:259:10
+        (i32.div_u
+         (i32.sub
+          ;;@ ~lib/allocator/buddy.ts:259:11
+          (get_local $0)
+          ;;@ ~lib/allocator/buddy.ts:259:19
+          (i32.const 1)
+         )
+         ;;@ ~lib/allocator/buddy.ts:259:24
+         (i32.const 2)
         )
-        ;;@ ~lib/allocator/buddy.ts:259:24
-        (i32.const 2)
        )
+       ;;@ ~lib/allocator/buddy.ts:260:37
+       (i32.const 8)
       )
-      ;;@ ~lib/allocator/buddy.ts:260:36
-      (i32.const 8)
+     )
+     ;;@ ~lib/allocator/buddy.ts:260:44
+     (i32.and
+      ;;@ ~lib/allocator/buddy.ts:260:50
+      (get_local $0)
+      ;;@ ~lib/allocator/buddy.ts:260:58
+      (i32.const 7)
      )
     )
-    ;;@ ~lib/allocator/buddy.ts:260:43
-    (i32.and
-     ;;@ ~lib/allocator/buddy.ts:260:49
-     (get_local $0)
-     ;;@ ~lib/allocator/buddy.ts:260:57
-     (i32.const 7)
-    )
+    ;;@ ~lib/allocator/buddy.ts:260:64
+    (i32.const 1)
    )
-   ;;@ ~lib/allocator/buddy.ts:260:63
+   ;;@ ~lib/allocator/buddy.ts:260:70
    (i32.const 1)
   )
  )
@@ -715,22 +720,19 @@
        ;;@ ~lib/allocator/buddy.ts:403:6
        (if
         ;;@ ~lib/allocator/buddy.ts:403:10
-        (i32.and
-         (if (result i32)
-          (tee_local $2
-           (i32.ne
-            (get_local $1)
-            ;;@ ~lib/allocator/buddy.ts:403:20
-            (get_global $~lib/allocator/buddy/bucket_limit)
-           )
-          )
-          (get_local $2)
-          (i32.eqz
-           ;;@ ~lib/allocator/buddy.ts:403:36
+        (if (result i32)
+         (tee_local $2
+          (i32.ne
            (get_local $1)
+           ;;@ ~lib/allocator/buddy.ts:403:20
+           (get_global $~lib/allocator/buddy/bucket_limit)
           )
          )
-         (i32.const 1)
+         (get_local $2)
+         (i32.eqz
+          ;;@ ~lib/allocator/buddy.ts:403:36
+          (get_local $1)
+         )
         )
         ;;@ ~lib/allocator/buddy.ts:403:49
         (block

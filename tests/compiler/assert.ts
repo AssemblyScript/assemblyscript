@@ -7,5 +7,4 @@ assert(0x100000000);
 assert(0x100000000 > 1);
 
 // can be used as an expression
-if (!assert(true, "must be true"))
-  unreachable();
+if (!assert(true, "must be true")) unreachable();

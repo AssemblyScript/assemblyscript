@@ -3,6 +3,12 @@
 type I64 = i64;
 
 @global
+const i64_zero: I64 = 0;
+
+@global
+const i64_one: I64 = 1;
+
+@global
 function i64_new(lo: i32, hi: i32 = 0): I64 {
   return lo | (hi << 32);
 }
@@ -85,6 +91,16 @@ function i64_shr_u(left: I64, right: I64): I64 {
 @global
 function i64_not(value: I64): I64 {
   return ~value;
+}
+
+@global
+function i64_eq(left: I64, right: I64): bool {
+  return left == right;
+}
+
+@global
+function i64_ne(left: I64, right: I64): bool {
+  return left != right;
 }
 
 @global

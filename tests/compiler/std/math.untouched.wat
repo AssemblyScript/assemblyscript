@@ -275,19 +275,16 @@
   (local $3 i32)
   (nop)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (call $isNaN<f64>
-       (get_local $0)
-      )
-     )
+   (if (result i32)
+    (tee_local $3
      (call $isNaN<f64>
-      (get_local $1)
+      (get_local $0)
      )
-     (get_local $3)
     )
-    (i32.const 1)
+    (call $isNaN<f64>
+     (get_local $1)
+    )
+    (get_local $3)
    )
    (return
     (f64.const 0)
@@ -597,19 +594,16 @@
   (local $3 i32)
   (nop)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (call $isNaN<f32>
-       (get_local $0)
-      )
-     )
+   (if (result i32)
+    (tee_local $3
      (call $isNaN<f32>
-      (get_local $1)
+      (get_local $0)
      )
-     (get_local $3)
     )
-    (i32.const 1)
+    (call $isNaN<f32>
+     (get_local $1)
+    )
+    (get_local $3)
    )
    (return
     (f32.const 0)
@@ -760,41 +754,38 @@
  (func $std/math/test_abs (; 47 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (call $std/math/check<f64>
-       (block $~lib/math/NativeMath.abs|inlined.0 (result f64)
-        (br $~lib/math/NativeMath.abs|inlined.0
-         (f64.abs
-          (get_local $0)
-         )
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (block $~lib/math/NativeMath.abs|inlined.0 (result f64)
+       (br $~lib/math/NativeMath.abs|inlined.0
+        (f64.abs
+         (get_local $0)
         )
        )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
       )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
      )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.abs
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+    )
+    (if (result i32)
+     (tee_local $4
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.abs
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -1123,37 +1114,34 @@
  (func $std/math/test_acos (; 51 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.acos
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.acos
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.acos
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.acos
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -1461,24 +1449,18 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $6
-      (i32.lt_u
-       (get_local $2)
-       (i32.const 1071284858)
-      )
-     )
-     (get_local $6)
-     (i32.and
-      (i32.shr_u
-       (get_local $2)
-       (i32.const 31)
-      )
-      (i32.const 1)
+   (if (result i32)
+    (tee_local $6
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 1071284858)
      )
     )
-    (i32.const 1)
+    (get_local $6)
+    (i32.shr_u
+     (get_local $2)
+     (i32.const 31)
+    )
    )
    (block
     (if
@@ -1813,24 +1795,18 @@
    (i32.const 0)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (i32.lt_u
-       (get_local $2)
-       (i32.const 1048576)
-      )
-     )
-     (get_local $4)
-     (i32.and
-      (i32.shr_u
-       (get_local $2)
-       (i32.const 31)
-      )
-      (i32.const 1)
+   (if (result i32)
+    (tee_local $4
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 1048576)
      )
     )
-    (i32.const 1)
+    (get_local $4)
+    (i32.shr_u
+     (get_local $2)
+     (i32.const 31)
+    )
    )
    (block
     (if
@@ -1901,24 +1877,21 @@
      (get_local $0)
     )
     (if
-     (i32.and
-      (if (result i32)
-       (tee_local $4
-        (i32.eq
-         (get_local $2)
-         (i32.const 1072693248)
-        )
+     (if (result i32)
+      (tee_local $4
+       (i32.eq
+        (get_local $2)
+        (i32.const 1072693248)
        )
-       (i64.eq
-        (i64.shl
-         (get_local $1)
-         (i64.const 32)
-        )
-        (i64.const 0)
-       )
-       (get_local $4)
       )
-      (i32.const 1)
+      (i64.eq
+       (i64.shl
+        (get_local $1)
+        (i64.const 32)
+       )
+       (i64.const 0)
+      )
+      (get_local $4)
      )
      (return
       (f64.const 0)
@@ -2194,37 +2167,34 @@
  (func $std/math/test_acosh (; 58 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.acosh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.acosh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.acosh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.acosh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -2261,24 +2231,18 @@
    (i32.const 1)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $5
-      (i32.lt_u
-       (get_local $1)
-       (i32.const 1054086096)
-      )
-     )
-     (get_local $5)
-     (i32.and
-      (i32.shr_u
-       (get_local $1)
-       (i32.const 31)
-      )
-      (i32.const 1)
+   (if (result i32)
+    (tee_local $5
+     (i32.lt_u
+      (get_local $1)
+      (i32.const 1054086096)
      )
     )
-    (i32.const 1)
+    (get_local $5)
+    (i32.shr_u
+     (get_local $1)
+     (i32.const 31)
+    )
    )
    (block
     (if
@@ -2562,24 +2526,18 @@
    (i32.const 0)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (i32.lt_u
-       (get_local $1)
-       (i32.const 8388608)
-      )
-     )
-     (get_local $3)
-     (i32.and
-      (i32.shr_u
-       (get_local $1)
-       (i32.const 31)
-      )
-      (i32.const 1)
+   (if (result i32)
+    (tee_local $3
+     (i32.lt_u
+      (get_local $1)
+      (i32.const 8388608)
      )
     )
-    (i32.const 1)
+    (get_local $3)
+    (i32.shr_u
+     (get_local $1)
+     (i32.const 31)
+    )
    )
    (block
     (if
@@ -2983,21 +2941,18 @@
    )
    (block
     (if
-     (i32.and
-      (if (result i32)
-       (tee_local $4
-        (i32.lt_u
-         (get_local $2)
-         (i32.const 1045430272)
-        )
-       )
-       (i32.ge_u
+     (if (result i32)
+      (tee_local $4
+       (i32.lt_u
         (get_local $2)
-        (i32.const 1048576)
+        (i32.const 1045430272)
        )
-       (get_local $4)
       )
-      (i32.const 1)
+      (i32.ge_u
+       (get_local $2)
+       (i32.const 1048576)
+      )
+      (get_local $4)
      )
      (return
       (get_local $0)
@@ -3145,37 +3100,34 @@
  (func $std/math/test_asin (; 64 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.asin
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.asin
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.asin
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.asin
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -3236,21 +3188,18 @@
    )
    (block
     (if
-     (i32.and
-      (if (result i32)
-       (tee_local $3
-        (i32.lt_u
-         (get_local $2)
-         (i32.const 964689920)
-        )
-       )
-       (i32.ge_u
+     (if (result i32)
+      (tee_local $3
+       (i32.lt_u
         (get_local $2)
-        (i32.const 8388608)
+        (i32.const 964689920)
        )
-       (get_local $3)
       )
-      (i32.const 1)
+      (i32.ge_u
+       (get_local $2)
+       (i32.const 8388608)
+      )
+      (get_local $3)
      )
      (return
       (get_local $0)
@@ -3479,37 +3428,34 @@
  (func $std/math/test_asinh (; 68 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.asinh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.asinh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.asinh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.asinh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -4073,37 +4019,34 @@
  (func $std/math/test_atan (; 72 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.atan
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.atan
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.atan
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.atan
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -4600,37 +4543,34 @@
  (func $std/math/test_atanh (; 76 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.atanh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.atanh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.atanh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.atanh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -4760,19 +4700,16 @@
   (local $9 f64)
   (nop)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $2
-      (call $isNaN<f64>
-       (get_local $1)
-      )
-     )
-     (get_local $2)
+   (if (result i32)
+    (tee_local $2
      (call $isNaN<f64>
-      (get_local $0)
+      (get_local $1)
      )
     )
-    (i32.const 1)
+    (get_local $2)
+    (call $isNaN<f64>
+     (get_local $0)
+    )
    )
    (return
     (f64.add
@@ -5085,27 +5022,24 @@
   )
   (nop)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $2
-      (i32.lt_u
-       (i32.add
-        (get_local $4)
-        (i32.shl
-         (i32.const 64)
-         (i32.const 20)
-        )
+   (if (result i32)
+    (tee_local $2
+     (i32.lt_u
+      (i32.add
+       (get_local $4)
+       (i32.shl
+        (i32.const 64)
+        (i32.const 20)
        )
-       (get_local $6)
       )
-     )
-     (get_local $2)
-     (i32.eq
       (get_local $6)
-      (i32.const 2146435072)
      )
     )
-    (i32.const 1)
+    (get_local $2)
+    (i32.eq
+     (get_local $6)
+     (i32.const 2146435072)
+    )
    )
    (return
     (if (result f64)
@@ -5232,39 +5166,36 @@
  (func $std/math/test_atan2 (; 80 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $5
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.atan2
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
+    )
     (if (result i32)
      (tee_local $5
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.atan2
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
-      )
-     )
-     (if (result i32)
-      (tee_local $5
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $5)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.atan2
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $5)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.atan2
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
     )
-    (i32.const 1)
+    (get_local $5)
    )
   )
  )
@@ -5276,19 +5207,16 @@
   (local $6 f32)
   (nop)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $2
-      (call $isNaN<f32>
-       (get_local $1)
-      )
-     )
-     (get_local $2)
+   (if (result i32)
+    (tee_local $2
      (call $isNaN<f32>
-      (get_local $0)
+      (get_local $1)
      )
     )
-    (i32.const 1)
+    (get_local $2)
+    (call $isNaN<f32>
+     (get_local $0)
+    )
    )
    (return
     (f32.add
@@ -5562,27 +5490,24 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $2
-      (i32.lt_u
-       (i32.add
-        (get_local $3)
-        (i32.shl
-         (i32.const 26)
-         (i32.const 23)
-        )
+   (if (result i32)
+    (tee_local $2
+     (i32.lt_u
+      (i32.add
+       (get_local $3)
+       (i32.shl
+        (i32.const 26)
+        (i32.const 23)
        )
-       (get_local $4)
       )
-     )
-     (get_local $2)
-     (i32.eq
       (get_local $4)
-      (i32.const 2139095040)
      )
     )
-    (i32.const 1)
+    (get_local $2)
+    (i32.eq
+     (get_local $4)
+     (i32.const 2139095040)
+    )
    )
    (return
     (if (result f32)
@@ -5942,37 +5867,34 @@
  (func $std/math/test_cbrt (; 84 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.cbrt
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.cbrt
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.cbrt
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.cbrt
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -6166,41 +6088,38 @@
  (func $std/math/test_ceil (; 87 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (call $std/math/check<f64>
-       (block $~lib/math/NativeMath.ceil|inlined.0 (result f64)
-        (br $~lib/math/NativeMath.ceil|inlined.0
-         (f64.ceil
-          (get_local $0)
-         )
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (block $~lib/math/NativeMath.ceil|inlined.0 (result f64)
+       (br $~lib/math/NativeMath.ceil|inlined.0
+        (f64.ceil
+         (get_local $0)
         )
        )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
       )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
      )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.ceil
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+    )
+    (if (result i32)
+     (tee_local $4
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.ceil
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -6601,21 +6520,18 @@
   )
   (nop)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $15
-      (i32.lt_s
-       (get_local $3)
-       (i32.const 0)
-      )
-     )
-     (get_local $15)
-     (i32.gt_s
+   (if (result i32)
+    (tee_local $15
+     (i32.lt_s
       (get_local $3)
-      (i32.const 56)
+      (i32.const 0)
      )
     )
-    (i32.const 1)
+    (get_local $15)
+    (i32.gt_s
+     (get_local $3)
+     (i32.const 56)
+    )
    )
    (block
     (set_local $14
@@ -7093,37 +7009,34 @@
  (func $std/math/test_cosh (; 93 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.cosh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.cosh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.cosh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.cosh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -7480,21 +7393,18 @@
   )
   (nop)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $15
-      (i32.lt_s
-       (get_local $6)
-       (i32.const 0)
-      )
-     )
-     (get_local $15)
-     (i32.gt_s
+   (if (result i32)
+    (tee_local $15
+     (i32.lt_s
       (get_local $6)
-      (i32.const 56)
+      (i32.const 0)
      )
     )
-    (i32.const 1)
+    (get_local $15)
+    (i32.gt_s
+     (get_local $6)
+     (i32.const 56)
+    )
    )
    (block
     (set_local $14
@@ -7623,20 +7533,17 @@
    )
    (block
     (if
-     (i32.and
-      (if (result i32)
-       (tee_local $3
-        (i32.ge_u
-         (get_local $1)
-         (i32.const 1118925336)
-        )
+     (if (result i32)
+      (tee_local $3
+       (i32.ge_u
+        (get_local $1)
+        (i32.const 1118925336)
        )
-       (i32.eqz
-        (get_local $2)
-       )
-       (get_local $3)
       )
-      (i32.const 1)
+      (i32.eqz
+       (get_local $2)
+      )
+      (get_local $3)
      )
      (block
       (set_local $0
@@ -7954,37 +7861,34 @@
  (func $std/math/test_exp (; 99 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.exp
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.exp
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.exp
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.exp
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -8003,37 +7907,34 @@
  (func $std/math/test_expm1 (; 101 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.expm1
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.expm1
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.expm1
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.expm1
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -8052,41 +7953,38 @@
  (func $std/math/test_floor (; 103 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (call $std/math/check<f64>
-       (block $~lib/math/NativeMath.floor|inlined.0 (result f64)
-        (br $~lib/math/NativeMath.floor|inlined.0
-         (f64.floor
-          (get_local $0)
-         )
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (block $~lib/math/NativeMath.floor|inlined.0 (result f64)
+       (br $~lib/math/NativeMath.floor|inlined.0
+        (f64.floor
+         (get_local $0)
         )
        )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
       )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
      )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.floor
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+    )
+    (if (result i32)
+     (tee_local $4
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.floor
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -8197,21 +8095,18 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $7
-      (i32.eq
-       (get_local $5)
-       (i32.const 2047)
-      )
-     )
-     (get_local $7)
-     (i64.eq
-      (get_local $3)
-      (i64.const 0)
+   (if (result i32)
+    (tee_local $7
+     (i32.eq
+      (get_local $5)
+      (i32.const 2047)
      )
     )
-    (i32.const 1)
+    (get_local $7)
+    (i64.eq
+     (get_local $3)
+     (i64.const 0)
+    )
    )
    (return
     (get_local $0)
@@ -8410,39 +8305,36 @@
  (func $std/math/test_hypot (; 106 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $5
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.hypot
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
+    )
     (if (result i32)
      (tee_local $5
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.hypot
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
-      )
-     )
-     (if (result i32)
-      (tee_local $5
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $5)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.hypot
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $5)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.hypot
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
     )
-    (i32.const 1)
+    (get_local $5)
    )
   )
  )
@@ -8515,42 +8407,36 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $5
-      (i32.and
-       (if (result i32)
-        (tee_local $5
-         (i32.ge_u
-          (get_local $2)
-          (i32.shl
-           (i32.const 255)
-           (i32.const 23)
-          )
-         )
-        )
-        (get_local $5)
-        (i32.eq
-         (get_local $3)
-         (i32.const 0)
+   (if (result i32)
+    (tee_local $5
+     (if (result i32)
+      (tee_local $5
+       (i32.ge_u
+        (get_local $2)
+        (i32.shl
+         (i32.const 255)
+         (i32.const 23)
         )
        )
-       (i32.const 1)
       )
-     )
-     (get_local $5)
-     (i32.ge_u
-      (i32.sub
-       (get_local $2)
+      (get_local $5)
+      (i32.eq
        (get_local $3)
-      )
-      (i32.shl
-       (i32.const 25)
-       (i32.const 23)
+       (i32.const 0)
       )
      )
     )
-    (i32.const 1)
+    (get_local $5)
+    (i32.ge_u
+     (i32.sub
+      (get_local $2)
+      (get_local $3)
+     )
+     (i32.shl
+      (i32.const 25)
+      (i32.const 23)
+     )
+    )
    )
    (return
     (f32.add
@@ -8664,37 +8550,34 @@
  (func $std/math/test_log (; 109 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.log
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.log
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.log
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.log
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -8747,24 +8630,18 @@
    (i32.const 0)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (i32.lt_u
-       (get_local $2)
-       (i32.const 1048576)
-      )
-     )
-     (get_local $4)
-     (i32.and
-      (i32.shr_u
-       (get_local $2)
-       (i32.const 31)
-      )
-      (i32.const 1)
+   (if (result i32)
+    (tee_local $4
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 1048576)
      )
     )
-    (i32.const 1)
+    (get_local $4)
+    (i32.shr_u
+     (get_local $2)
+     (i32.const 31)
+    )
    )
    (block
     (if
@@ -8835,24 +8712,21 @@
      (get_local $0)
     )
     (if
-     (i32.and
-      (if (result i32)
-       (tee_local $4
-        (i32.eq
-         (get_local $2)
-         (i32.const 1072693248)
-        )
+     (if (result i32)
+      (tee_local $4
+       (i32.eq
+        (get_local $2)
+        (i32.const 1072693248)
        )
-       (i64.eq
-        (i64.shl
-         (get_local $1)
-         (i64.const 32)
-        )
-        (i64.const 0)
-       )
-       (get_local $4)
       )
-      (i32.const 1)
+      (i64.eq
+       (i64.shl
+        (get_local $1)
+        (i64.const 32)
+       )
+       (i64.const 0)
+      )
+      (get_local $4)
      )
      (return
       (f64.const 0)
@@ -9102,37 +8976,34 @@
  (func $std/math/test_log10 (; 112 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.log10
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.log10
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.log10
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.log10
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -9161,24 +9032,18 @@
    (i32.const 0)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (i32.lt_u
-       (get_local $1)
-       (i32.const 8388608)
-      )
-     )
-     (get_local $3)
-     (i32.and
-      (i32.shr_u
-       (get_local $1)
-       (i32.const 31)
-      )
-      (i32.const 1)
+   (if (result i32)
+    (tee_local $3
+     (i32.lt_u
+      (get_local $1)
+      (i32.const 8388608)
      )
     )
-    (i32.const 1)
+    (get_local $3)
+    (i32.shr_u
+     (get_local $1)
+     (i32.const 31)
+    )
    )
    (block
     (if
@@ -9446,37 +9311,34 @@
  (func $std/math/test_log1p (; 115 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.log1p
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.log1p
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.log1p
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.log1p
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -9528,24 +9390,18 @@
    (i32.const 0)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (i32.lt_u
-       (get_local $2)
-       (i32.const 1048576)
-      )
-     )
-     (get_local $4)
-     (i32.and
-      (i32.shr_u
-       (get_local $2)
-       (i32.const 31)
-      )
-      (i32.const 1)
+   (if (result i32)
+    (tee_local $4
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 1048576)
      )
     )
-    (i32.const 1)
+    (get_local $4)
+    (i32.shr_u
+     (get_local $2)
+     (i32.const 31)
+    )
    )
    (block
     (if
@@ -9616,24 +9472,21 @@
      (get_local $0)
     )
     (if
-     (i32.and
-      (if (result i32)
-       (tee_local $4
-        (i32.eq
-         (get_local $2)
-         (i32.const 1072693248)
-        )
+     (if (result i32)
+      (tee_local $4
+       (i32.eq
+        (get_local $2)
+        (i32.const 1072693248)
        )
-       (i64.eq
-        (i64.shl
-         (get_local $1)
-         (i64.const 32)
-        )
-        (i64.const 0)
-       )
-       (get_local $4)
       )
-      (i32.const 1)
+      (i64.eq
+       (i64.shl
+        (get_local $1)
+        (i64.const 32)
+       )
+       (i64.const 0)
+      )
+      (get_local $4)
      )
      (return
       (f64.const 0)
@@ -9871,37 +9724,34 @@
  (func $std/math/test_log2 (; 118 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.log2
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.log2
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.log2
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.log2
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -9931,24 +9781,18 @@
    (i32.const 0)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (i32.lt_u
-       (get_local $1)
-       (i32.const 8388608)
-      )
-     )
-     (get_local $3)
-     (i32.and
-      (i32.shr_u
-       (get_local $1)
-       (i32.const 31)
-      )
-      (i32.const 1)
+   (if (result i32)
+    (tee_local $3
+     (i32.lt_u
+      (get_local $1)
+      (i32.const 8388608)
      )
     )
-    (i32.const 1)
+    (get_local $3)
+    (i32.shr_u
+     (get_local $1)
+     (i32.const 31)
+    )
    )
    (block
     (if
@@ -10207,43 +10051,40 @@
  (func $std/math/test_max (; 121 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (return
-   (i32.and
-    (if (result i32)
-     (tee_local $5
-      (call $std/math/check<f64>
-       (block $~lib/math/NativeMath.max|inlined.0 (result f64)
-        (br $~lib/math/NativeMath.max|inlined.0
-         (f64.max
-          (get_local $0)
-          (get_local $1)
-         )
+   (if (result i32)
+    (tee_local $5
+     (call $std/math/check<f64>
+      (block $~lib/math/NativeMath.max|inlined.0 (result f64)
+       (br $~lib/math/NativeMath.max|inlined.0
+        (f64.max
+         (get_local $0)
+         (get_local $1)
         )
        )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
       )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
      )
-     (if (result i32)
-      (tee_local $5
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $5)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.max
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
+    )
+    (if (result i32)
+     (tee_local $5
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $5)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.max
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
     )
-    (i32.const 1)
+    (get_local $5)
    )
   )
  )
@@ -10267,43 +10108,40 @@
  (func $std/math/test_min (; 123 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (return
-   (i32.and
-    (if (result i32)
-     (tee_local $5
-      (call $std/math/check<f64>
-       (block $~lib/math/NativeMath.min|inlined.0 (result f64)
-        (br $~lib/math/NativeMath.min|inlined.0
-         (f64.min
-          (get_local $0)
-          (get_local $1)
-         )
+   (if (result i32)
+    (tee_local $5
+     (call $std/math/check<f64>
+      (block $~lib/math/NativeMath.min|inlined.0 (result f64)
+       (br $~lib/math/NativeMath.min|inlined.0
+        (f64.min
+         (get_local $0)
+         (get_local $1)
         )
        )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
       )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
      )
-     (if (result i32)
-      (tee_local $5
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $5)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.min
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
+    )
+    (if (result i32)
+     (tee_local $5
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $5)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.min
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
     )
-    (i32.const 1)
+    (get_local $5)
    )
   )
  )
@@ -10373,35 +10211,29 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $7
-      (i32.and
-       (if (result i32)
-        (tee_local $7
-         (i64.eq
-          (i64.shl
-           (get_local $3)
-           (i64.const 1)
-          )
-          (i64.const 0)
-         )
+   (if (result i32)
+    (tee_local $7
+     (if (result i32)
+      (tee_local $7
+       (i64.eq
+        (i64.shl
+         (get_local $3)
+         (i64.const 1)
         )
-        (get_local $7)
-        (call $isNaN<f64>
-         (get_local $1)
-        )
+        (i64.const 0)
        )
-       (i32.const 1)
+      )
+      (get_local $7)
+      (call $isNaN<f64>
+       (get_local $1)
       )
      )
-     (get_local $7)
-     (i32.eq
-      (get_local $4)
-      (i32.const 2047)
-     )
     )
-    (i32.const 1)
+    (get_local $7)
+    (i32.eq
+     (get_local $4)
+     (i32.const 2047)
+    )
    )
    (return
     (f64.div
@@ -10778,39 +10610,36 @@
  (func $std/math/test_mod (; 126 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $5
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.mod
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
+    )
     (if (result i32)
      (tee_local $5
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.mod
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
-      )
-     )
-     (if (result i32)
-      (tee_local $5
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $5)
-      (call $std/math/check<f64>
-       (call $std/math/JSOp.mod
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $5)
+     (call $std/math/check<f64>
+      (call $std/math/JSOp.mod
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
     )
-    (i32.const 1)
+    (get_local $5)
    )
   )
  )
@@ -10857,35 +10686,29 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $7
-      (i32.and
-       (if (result i32)
-        (tee_local $7
-         (i32.eq
-          (i32.shl
-           (get_local $3)
-           (i32.const 1)
-          )
-          (i32.const 0)
-         )
+   (if (result i32)
+    (tee_local $7
+     (if (result i32)
+      (tee_local $7
+       (i32.eq
+        (i32.shl
+         (get_local $3)
+         (i32.const 1)
         )
-        (get_local $7)
-        (call $isNaN<f32>
-         (get_local $1)
-        )
+        (i32.const 0)
        )
-       (i32.const 1)
+      )
+      (get_local $7)
+      (call $isNaN<f32>
+       (get_local $1)
       )
      )
-     (get_local $7)
-     (i32.eq
-      (get_local $4)
-      (i32.const 255)
-     )
     )
-    (i32.const 1)
+    (get_local $7)
+    (i32.eq
+     (get_local $4)
+     (i32.const 255)
+    )
    )
    (return
     (f32.div
@@ -11361,63 +11184,54 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $9
-      (i32.and
+   (if (result i32)
+    (tee_local $9
+     (if (result i32)
+      (tee_local $9
        (if (result i32)
         (tee_local $9
-         (i32.and
-          (if (result i32)
-           (tee_local $9
-            (i32.gt_s
-             (get_local $7)
-             (i32.const 2146435072)
-            )
-           )
-           (get_local $9)
-           (if (result i32)
-            (tee_local $9
-             (i32.eq
-              (get_local $7)
-              (i32.const 2146435072)
-             )
-            )
-            (i32.ne
-             (get_local $4)
-             (i32.const 0)
-            )
-            (get_local $9)
-           )
-          )
-          (i32.const 1)
+         (i32.gt_s
+          (get_local $7)
+          (i32.const 2146435072)
          )
         )
         (get_local $9)
-        (i32.gt_s
-         (get_local $8)
-         (i32.const 2146435072)
+        (if (result i32)
+         (tee_local $9
+          (i32.eq
+           (get_local $7)
+           (i32.const 2146435072)
+          )
+         )
+         (i32.ne
+          (get_local $4)
+          (i32.const 0)
+         )
+         (get_local $9)
         )
        )
-       (i32.const 1)
-      )
-     )
-     (get_local $9)
-     (if (result i32)
-      (tee_local $9
-       (i32.eq
-        (get_local $8)
-        (i32.const 2146435072)
-       )
-      )
-      (i32.ne
-       (get_local $6)
-       (i32.const 0)
       )
       (get_local $9)
+      (i32.gt_s
+       (get_local $8)
+       (i32.const 2146435072)
+      )
      )
     )
-    (i32.const 1)
+    (get_local $9)
+    (if (result i32)
+     (tee_local $9
+      (i32.eq
+       (get_local $8)
+       (i32.const 2146435072)
+      )
+     )
+     (i32.ne
+      (get_local $6)
+      (i32.const 0)
+     )
+     (get_local $9)
+    )
    )
    (return
     (f64.add
@@ -11657,33 +11471,27 @@
     (i32.const 0)
    )
    (if
-    (i32.and
-     (if (result i32)
-      (tee_local $15
-       (i32.and
-        (if (result i32)
-         (tee_local $15
-          (i32.eq
-           (get_local $7)
-           (i32.const 2146435072)
-          )
-         )
-         (get_local $15)
-         (i32.eq
-          (get_local $7)
-          (i32.const 0)
-         )
+    (if (result i32)
+     (tee_local $15
+      (if (result i32)
+       (tee_local $15
+        (i32.eq
+         (get_local $7)
+         (i32.const 2146435072)
         )
-        (i32.const 1)
+       )
+       (get_local $15)
+       (i32.eq
+        (get_local $7)
+        (i32.const 0)
        )
       )
-      (get_local $15)
-      (i32.eq
-       (get_local $7)
-       (i32.const 1072693248)
-      )
      )
-     (i32.const 1)
+     (get_local $15)
+     (i32.eq
+      (get_local $7)
+      (i32.const 1072693248)
+     )
     )
     (block
      (set_local $14
@@ -12843,39 +12651,36 @@
  (func $std/math/test_pow (; 130 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $5
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.pow
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
+    )
     (if (result i32)
      (tee_local $5
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.pow
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
-      )
-     )
-     (if (result i32)
-      (tee_local $5
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $5)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.pow
-        (get_local $0)
-        (get_local $1)
-       )
-       (get_local $2)
-       (get_local $3)
-       (get_local $4)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $5)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.pow
+       (get_local $0)
+       (get_local $1)
+      )
+      (get_local $2)
+      (get_local $3)
+      (get_local $4)
+     )
     )
-    (i32.const 1)
+    (get_local $5)
    )
   )
  )
@@ -12948,21 +12753,18 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $6
-      (i32.gt_s
-       (get_local $4)
-       (i32.const 2139095040)
-      )
-     )
-     (get_local $6)
+   (if (result i32)
+    (tee_local $6
      (i32.gt_s
-      (get_local $5)
+      (get_local $4)
       (i32.const 2139095040)
      )
     )
-    (i32.const 1)
+    (get_local $6)
+    (i32.gt_s
+     (get_local $5)
+     (i32.const 2139095040)
+    )
    )
    (return
     (f32.add
@@ -13134,33 +12936,27 @@
   )
   (nop)
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $6
-      (i32.and
-       (if (result i32)
-        (tee_local $6
-         (i32.eq
-          (get_local $4)
-          (i32.const 2139095040)
-         )
-        )
-        (get_local $6)
-        (i32.eq
-         (get_local $4)
-         (i32.const 0)
-        )
+   (if (result i32)
+    (tee_local $6
+     (if (result i32)
+      (tee_local $6
+       (i32.eq
+        (get_local $4)
+        (i32.const 2139095040)
        )
-       (i32.const 1)
+      )
+      (get_local $6)
+      (i32.eq
+       (get_local $4)
+       (i32.const 0)
       )
      )
-     (get_local $6)
-     (i32.eq
-      (get_local $4)
-      (i32.const 1065353216)
-     )
     )
-    (i32.const 1)
+    (get_local $6)
+    (i32.eq
+     (get_local $4)
+     (i32.const 1065353216)
+    )
    )
    (block
     (set_local $11
@@ -14748,51 +14544,48 @@
  (func $std/math/test_sign (; 141 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (call $std/math/check<f64>
-       (block $~lib/math/NativeMath.sign|inlined.0 (result f64)
-        (br $~lib/math/NativeMath.sign|inlined.0
-         (if (result f64)
-          (f64.gt
-           (f64.abs
-            (get_local $0)
-           )
-           (f64.const 0)
-          )
-          (f64.copysign
-           (f64.const 1)
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (block $~lib/math/NativeMath.sign|inlined.0 (result f64)
+       (br $~lib/math/NativeMath.sign|inlined.0
+        (if (result f64)
+         (f64.gt
+          (f64.abs
            (get_local $0)
           )
+          (f64.const 0)
+         )
+         (f64.copysign
+          (f64.const 1)
           (get_local $0)
          )
+         (get_local $0)
         )
        )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
       )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
      )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.sign
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+    )
+    (if (result i32)
+     (tee_local $4
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.sign
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -14882,35 +14675,29 @@
    )
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $8
-      (i32.and
-       (if (result i32)
-        (tee_local $8
-         (i64.eq
-          (i64.shl
-           (get_local $3)
-           (i64.const 1)
-          )
-          (i64.const 0)
-         )
+   (if (result i32)
+    (tee_local $8
+     (if (result i32)
+      (tee_local $8
+       (i64.eq
+        (i64.shl
+         (get_local $3)
+         (i64.const 1)
         )
-        (get_local $8)
-        (call $isNaN<f64>
-         (get_local $1)
-        )
+        (i64.const 0)
        )
-       (i32.const 1)
+      )
+      (get_local $8)
+      (call $isNaN<f64>
+       (get_local $1)
       )
      )
-     (get_local $8)
-     (i32.eq
-      (get_local $4)
-      (i32.const 2047)
-     )
     )
-    (i32.const 1)
+    (get_local $8)
+    (i32.eq
+     (get_local $4)
+     (i32.const 2047)
+    )
    )
    (return
     (f64.div
@@ -15317,28 +15104,38 @@
    )
   )
   (if
-   (i32.and
+   (if (result i32)
+    (tee_local $8
+     (i32.eq
+      (get_local $4)
+      (get_local $5)
+     )
+    )
+    (get_local $8)
     (if (result i32)
      (tee_local $8
       (i32.eq
-       (get_local $4)
+       (i32.add
+        (get_local $4)
+        (i32.const 1)
+       )
        (get_local $5)
       )
      )
-     (get_local $8)
      (if (result i32)
       (tee_local $8
-       (i32.eq
-        (i32.add
-         (get_local $4)
-         (i32.const 1)
+       (f64.gt
+        (f64.mul
+         (f64.const 2)
+         (get_local $0)
         )
-        (get_local $5)
+        (get_local $1)
        )
       )
+      (get_local $8)
       (if (result i32)
        (tee_local $8
-        (f64.gt
+        (f64.eq
          (f64.mul
           (f64.const 2)
           (get_local $0)
@@ -15346,31 +15143,15 @@
          (get_local $1)
         )
        )
-       (get_local $8)
-       (if (result i32)
-        (tee_local $8
-         (f64.eq
-          (f64.mul
-           (f64.const 2)
-           (get_local $0)
-          )
-          (get_local $1)
-         )
-        )
-        (i32.and
-         (i32.and
-          (get_local $11)
-          (i32.const 1)
-         )
-         (i32.const 1)
-        )
-        (get_local $8)
+       (i32.and
+        (get_local $11)
+        (i32.const 1)
        )
+       (get_local $8)
       )
-      (get_local $8)
      )
+     (get_local $8)
     )
-    (i32.const 1)
    )
    (block
     (set_local $0
@@ -15466,35 +15247,29 @@
    (get_local $2)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $10
-      (i32.and
-       (if (result i32)
-        (tee_local $10
-         (i32.eq
-          (i32.shl
-           (get_local $3)
-           (i32.const 1)
-          )
-          (i32.const 0)
-         )
+   (if (result i32)
+    (tee_local $10
+     (if (result i32)
+      (tee_local $10
+       (i32.eq
+        (i32.shl
+         (get_local $3)
+         (i32.const 1)
         )
-        (get_local $10)
-        (call $isNaN<f32>
-         (get_local $1)
-        )
+        (i32.const 0)
        )
-       (i32.const 1)
+      )
+      (get_local $10)
+      (call $isNaN<f32>
+       (get_local $1)
       )
      )
-     (get_local $10)
-     (i32.eq
-      (get_local $4)
-      (i32.const 255)
-     )
     )
-    (i32.const 1)
+    (get_local $10)
+    (i32.eq
+     (get_local $4)
+     (i32.const 255)
+    )
    )
    (return
     (f32.div
@@ -15889,28 +15664,38 @@
    )
   )
   (if
-   (i32.and
+   (if (result i32)
+    (tee_local $10
+     (i32.eq
+      (get_local $4)
+      (get_local $5)
+     )
+    )
+    (get_local $10)
     (if (result i32)
      (tee_local $10
       (i32.eq
-       (get_local $4)
+       (i32.add
+        (get_local $4)
+        (i32.const 1)
+       )
        (get_local $5)
       )
      )
-     (get_local $10)
      (if (result i32)
       (tee_local $10
-       (i32.eq
-        (i32.add
-         (get_local $4)
-         (i32.const 1)
+       (f32.gt
+        (f32.mul
+         (f32.const 2)
+         (get_local $0)
         )
-        (get_local $5)
+        (get_local $1)
        )
       )
+      (get_local $10)
       (if (result i32)
        (tee_local $10
-        (f32.gt
+        (f32.eq
          (f32.mul
           (f32.const 2)
           (get_local $0)
@@ -15918,31 +15703,15 @@
          (get_local $1)
         )
        )
-       (get_local $10)
-       (if (result i32)
-        (tee_local $10
-         (f32.eq
-          (f32.mul
-           (f32.const 2)
-           (get_local $0)
-          )
-          (get_local $1)
-         )
-        )
-        (i32.and
-         (i32.and
-          (get_local $11)
-          (i32.const 1)
-         )
-         (i32.const 1)
-        )
-        (get_local $10)
+       (i32.and
+        (get_local $11)
+        (i32.const 1)
        )
+       (get_local $10)
       )
-      (get_local $10)
      )
+     (get_local $10)
     )
-    (i32.const 1)
    )
    (block
     (set_local $0
@@ -16120,37 +15889,34 @@
  (func $std/math/test_sinh (; 148 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.sinh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.sinh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.sinh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.sinh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -16292,41 +16058,38 @@
  (func $std/math/test_sqrt (; 151 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (call $std/math/check<f64>
-       (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
-        (br $~lib/math/NativeMath.sqrt|inlined.0
-         (f64.sqrt
-          (get_local $0)
-         )
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
+       (br $~lib/math/NativeMath.sqrt|inlined.0
+        (f64.sqrt
+         (get_local $0)
         )
        )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
       )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
      )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.sqrt
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+    )
+    (if (result i32)
+     (tee_local $4
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.sqrt
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -16495,37 +16258,34 @@
  (func $std/math/test_tanh (; 154 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (call $~lib/math/NativeMath.tanh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
     (if (result i32)
      (tee_local $4
-      (call $std/math/check<f64>
-       (call $~lib/math/NativeMath.tanh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.tanh
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.tanh
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -16679,41 +16439,38 @@
  (func $std/math/test_trunc (; 157 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (return
-   (i32.and
-    (if (result i32)
-     (tee_local $4
-      (call $std/math/check<f64>
-       (block $~lib/math/NativeMath.trunc|inlined.0 (result f64)
-        (br $~lib/math/NativeMath.trunc|inlined.0
-         (f64.trunc
-          (get_local $0)
-         )
+   (if (result i32)
+    (tee_local $4
+     (call $std/math/check<f64>
+      (block $~lib/math/NativeMath.trunc|inlined.0 (result f64)
+       (br $~lib/math/NativeMath.trunc|inlined.0
+        (f64.trunc
+         (get_local $0)
         )
        )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
       )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
      )
-     (if (result i32)
-      (tee_local $4
-       (i32.eqz
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
-      (call $std/math/check<f64>
-       (call $~lib/math/JSMath.trunc
-        (get_local $0)
-       )
-       (get_local $1)
-       (get_local $2)
-       (get_local $3)
+    )
+    (if (result i32)
+     (tee_local $4
+      (i32.eqz
+       (i32.const 1)
       )
      )
      (get_local $4)
+     (call $std/math/check<f64>
+      (call $~lib/math/JSMath.trunc
+       (get_local $0)
+      )
+      (get_local $1)
+      (get_local $2)
+      (get_local $3)
+     )
     )
-    (i32.const 1)
+    (get_local $4)
    )
   )
  )
@@ -47809,21 +47566,18 @@
        )
        (if
         (i32.eqz
-         (i32.and
-          (if (result i32)
-           (tee_local $2
-            (f64.ge
-             (get_local $1)
-             (f64.const 0)
-            )
-           )
-           (f64.lt
+         (if (result i32)
+          (tee_local $2
+           (f64.ge
             (get_local $1)
-            (f64.const 1)
+            (f64.const 0)
            )
-           (get_local $2)
           )
-          (i32.const 1)
+          (f64.lt
+           (get_local $1)
+           (f64.const 1)
+          )
+          (get_local $2)
          )
         )
         (block
@@ -47877,21 +47631,18 @@
        )
        (if
         (i32.eqz
-         (i32.and
-          (if (result i32)
-           (tee_local $5
-            (f32.ge
-             (get_local $4)
-             (f32.const 0)
-            )
-           )
-           (f32.lt
+         (if (result i32)
+          (tee_local $5
+           (f32.ge
             (get_local $4)
-            (f32.const 1)
+            (f32.const 0)
            )
-           (get_local $5)
           )
-          (i32.const 1)
+          (f32.lt
+           (get_local $4)
+           (f32.const 1)
+          )
+          (get_local $5)
          )
         )
         (block

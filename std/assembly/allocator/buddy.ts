@@ -255,9 +255,9 @@ function node_for_ptr(ptr: usize, bucket: usize): usize {
 /*
  * Given the index of a node, this returns the "is split" flag of the parent.
  */
-function parent_is_split(index: usize): i32 {
+function parent_is_split(index: usize): bool {
   index = (index - 1) / 2;
-  return (node_is_split$get(index / 8) >>> <i32>(index % 8)) & 1;
+  return ((node_is_split$get(index / 8) >>> <i32>(index % 8)) & 1) == 1;
 }
 
 /*

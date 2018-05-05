@@ -114,6 +114,24 @@ export class Type {
     this.nonNullableType = this;
   }
 
+  /** Returns the int type of this type. Defaults to `Type.i32` if this is not an int type. */
+  get intType(): Type {
+    switch (this.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.I64:
+      case TypeKind.ISIZE:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.U64:
+      case TypeKind.USIZE: return this;
+      case TypeKind.BOOL:
+      default: return Type.i32;
+    }
+  }
+
   /** Computes the sign-extending shift in the target type. */
   computeSmallIntegerShift(targetType: Type): u32 {
     return targetType.size - this.size;
@@ -121,7 +139,8 @@ export class Type {
 
   /** Computes the truncating mask in the target type. */
   computeSmallIntegerMask(targetType: Type): u32 {
-    return ~0 >>> (targetType.size - this.size);
+    var size = this.is(TypeFlags.UNSIGNED) ? this.size : this.size - 1;
+    return ~0 >>> (targetType.size - size);
   }
 
   /** Tests if this type has (all of) the specified flags. */

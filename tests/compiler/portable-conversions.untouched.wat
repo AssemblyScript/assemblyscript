@@ -10,87 +10,39 @@
  (start $start)
  (func $start (; 0 ;) (type $v)
   (drop
-   (i32.shr_s
-    (i32.shl
-     (get_global $portable-conversions/i)
-     (i32.const 24)
-    )
-    (i32.const 24)
+   (get_global $portable-conversions/i)
+  )
+  (drop
+   (i32.wrap/i64
+    (get_global $portable-conversions/I)
    )
   )
   (drop
-   (i32.shr_s
-    (i32.shl
-     (i32.wrap/i64
-      (get_global $portable-conversions/I)
-     )
-     (i32.const 24)
-    )
-    (i32.const 24)
+   (i32.trunc_s/f32
+    (get_global $portable-conversions/f)
    )
   )
   (drop
-   (i32.shr_s
-    (i32.shl
-     (i32.trunc_s/f32
-      (get_global $portable-conversions/f)
-     )
-     (i32.const 24)
-    )
-    (i32.const 24)
+   (i32.trunc_s/f64
+    (get_global $portable-conversions/F)
    )
   )
   (drop
-   (i32.shr_s
-    (i32.shl
-     (i32.trunc_s/f64
-      (get_global $portable-conversions/F)
-     )
-     (i32.const 24)
-    )
-    (i32.const 24)
+   (get_global $portable-conversions/i)
+  )
+  (drop
+   (i32.wrap/i64
+    (get_global $portable-conversions/I)
    )
   )
   (drop
-   (i32.shr_s
-    (i32.shl
-     (get_global $portable-conversions/i)
-     (i32.const 16)
-    )
-    (i32.const 16)
+   (i32.trunc_s/f32
+    (get_global $portable-conversions/f)
    )
   )
   (drop
-   (i32.shr_s
-    (i32.shl
-     (i32.wrap/i64
-      (get_global $portable-conversions/I)
-     )
-     (i32.const 16)
-    )
-    (i32.const 16)
-   )
-  )
-  (drop
-   (i32.shr_s
-    (i32.shl
-     (i32.trunc_s/f32
-      (get_global $portable-conversions/f)
-     )
-     (i32.const 16)
-    )
-    (i32.const 16)
-   )
-  )
-  (drop
-   (i32.shr_s
-    (i32.shl
-     (i32.trunc_s/f64
-      (get_global $portable-conversions/F)
-     )
-     (i32.const 16)
-    )
-    (i32.const 16)
+   (i32.trunc_s/f64
+    (get_global $portable-conversions/F)
    )
   )
   (drop
@@ -148,63 +100,39 @@
    )
   )
   (drop
-   (i32.and
-    (get_global $portable-conversions/i)
-    (i32.const 255)
+   (get_global $portable-conversions/i)
+  )
+  (drop
+   (i32.wrap/i64
+    (get_global $portable-conversions/I)
    )
   )
   (drop
-   (i32.and
-    (i32.wrap/i64
-     (get_global $portable-conversions/I)
-    )
-    (i32.const 255)
+   (i32.trunc_u/f32
+    (get_global $portable-conversions/f)
    )
   )
   (drop
-   (i32.and
-    (i32.trunc_u/f32
-     (get_global $portable-conversions/f)
-    )
-    (i32.const 255)
+   (i32.trunc_u/f64
+    (get_global $portable-conversions/F)
    )
   )
   (drop
-   (i32.and
-    (i32.trunc_u/f64
-     (get_global $portable-conversions/F)
-    )
-    (i32.const 255)
+   (get_global $portable-conversions/i)
+  )
+  (drop
+   (i32.wrap/i64
+    (get_global $portable-conversions/I)
    )
   )
   (drop
-   (i32.and
-    (get_global $portable-conversions/i)
-    (i32.const 65535)
+   (i32.trunc_u/f32
+    (get_global $portable-conversions/f)
    )
   )
   (drop
-   (i32.and
-    (i32.wrap/i64
-     (get_global $portable-conversions/I)
-    )
-    (i32.const 65535)
-   )
-  )
-  (drop
-   (i32.and
-    (i32.trunc_u/f32
-     (get_global $portable-conversions/f)
-    )
-    (i32.const 65535)
-   )
-  )
-  (drop
-   (i32.and
-    (i32.trunc_u/f64
-     (get_global $portable-conversions/F)
-    )
-    (i32.const 65535)
+   (i32.trunc_u/f64
+    (get_global $portable-conversions/F)
    )
   )
   (drop
@@ -262,33 +190,21 @@
    )
   )
   (drop
-   (i32.and
-    (get_global $portable-conversions/i)
-    (i32.const 1)
+   (get_global $portable-conversions/i)
+  )
+  (drop
+   (i32.wrap/i64
+    (get_global $portable-conversions/I)
    )
   )
   (drop
-   (i32.and
-    (i32.wrap/i64
-     (get_global $portable-conversions/I)
-    )
-    (i32.const 1)
+   (i32.trunc_u/f32
+    (get_global $portable-conversions/f)
    )
   )
   (drop
-   (i32.and
-    (i32.trunc_u/f32
-     (get_global $portable-conversions/f)
-    )
-    (i32.const 1)
-   )
-  )
-  (drop
-   (i32.and
-    (i32.trunc_u/f64
-     (get_global $portable-conversions/F)
-    )
-    (i32.const 1)
+   (i32.trunc_u/f64
+    (get_global $portable-conversions/F)
    )
   )
   (drop

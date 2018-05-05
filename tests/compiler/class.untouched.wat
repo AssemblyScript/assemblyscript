@@ -103,31 +103,19 @@
   )
   (i32.store16 offset=4
    (get_local $0)
-   (i32.shr_s
-    (i32.shl
-     (i32.add
-      (i32.const 1)
-      (i32.const 1)
-     )
-     (i32.const 16)
-    )
-    (i32.const 16)
+   (i32.add
+    (i32.const 1)
+    (i32.const 1)
    )
   )
   (i32.store8 offset=6
    (get_local $0)
-   (i32.shr_s
-    (i32.shl
-     (i32.add
-      (i32.add
-       (i32.const 1)
-       (i32.const 1)
-      )
-      (i32.const 1)
-     )
-     (i32.const 24)
+   (i32.add
+    (i32.add
+     (i32.const 1)
+     (i32.const 1)
     )
-    (i32.const 24)
+    (i32.const 1)
    )
   )
   (set_local $1

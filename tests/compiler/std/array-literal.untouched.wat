@@ -360,7 +360,10 @@
      (i32.const -1)
      (i32.const 255)
     )
-    (get_local $1)
+    (i32.and
+     (get_local $1)
+     (i32.const 255)
+    )
    )
   )
   (i32.store

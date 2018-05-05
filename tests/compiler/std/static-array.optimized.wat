@@ -185,7 +185,10 @@
    )
    (tee_local $1
     (i32.mul
-     (get_local $1)
+     (i32.and
+      (get_local $1)
+      (i32.const 255)
+     )
      (i32.const 16843009)
     )
    )
@@ -2110,27 +2113,24 @@
    (return)
   )
   (if
-   (i32.and
-    (if (result i32)
-     (tee_local $3
-      (i32.le_u
-       (i32.add
-        (get_local $1)
-        (get_local $2)
-       )
-       (get_local $0)
-      )
-     )
-     (get_local $3)
+   (if (result i32)
+    (tee_local $3
      (i32.le_u
       (i32.add
-       (get_local $0)
+       (get_local $1)
        (get_local $2)
       )
-      (get_local $1)
+      (get_local $0)
      )
     )
-    (i32.const 1)
+    (get_local $3)
+    (i32.le_u
+     (i32.add
+      (get_local $0)
+      (get_local $2)
+     )
+     (get_local $1)
+    )
    )
    (block
     (call $~lib/memory/copy_memory
