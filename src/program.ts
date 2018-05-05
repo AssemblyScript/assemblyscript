@@ -95,7 +95,10 @@ import {
   getCallTarget,
   getBlockChildCount,
   getBlockChild,
-  getBlockName
+  getBlockName,
+  getConstValueF32,
+  getConstValueF64,
+  getConstValueI64Low
 } from "./module";
 
 /** Path delimiter inserted between file system levels. */
@@ -3863,11 +3866,14 @@ export class Flow {
    * any possibly combination of garbage bits being present.
    */
   canOverflow(expr: ExpressionRef, type: Type): bool {
+    // TODO: the following catches most common and a few uncommon cases, but there are additional
+    // opportunities here, obviously.
     assert(type != Type.void);
 
     // types other than i8, u8, i16, u16 and bool do not overflow
     if (!type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) return false;
 
+    var operand: ExpressionRef;
     switch (getExpressionId(expr)) {
 
       // overflows if the local isn't wrapped or the conversion does
@@ -3924,24 +3930,53 @@ export class Flow {
           case BinaryOp.GeF32:
           case BinaryOp.GeF64: return false;
 
-          // result won't overflow if one side is a constant less than this type's mask.
+          // result won't overflow if one side is 0 or if one side is 1 and the other wrapped
+          case BinaryOp.MulI32: {
+            return !(
+              (
+                getExpressionId(operand = getBinaryLeft(expr)) == ExpressionId.Const &&
+                (
+                  getConstValueI32(operand) == 0 ||
+                  (
+                    getConstValueI32(operand) == 1 &&
+                    !this.canOverflow(getBinaryRight(expr), type)
+                  )
+                )
+              ) || (
+                getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+                (
+                  getConstValueI32(operand) == 0 ||
+                  (
+                    getConstValueI32(operand) == 1 &&
+                    !this.canOverflow(getBinaryLeft(expr), type)
+                  )
+                )
+              )
+            );
+          }
+
+          // result won't overflow if one side is a constant less than this type's mask or one side
+          // is wrapped
           case BinaryOp.AndI32: {
-            let operand: ExpressionRef;
             // note that computeSmallIntegerMask returns the mask minus the MSB for signed types
             // because signed value garbage bits must be guaranteed to be equal to the MSB.
-            if (
-              getExpressionId(operand = getBinaryLeft(expr)) == ExpressionId.Const &&
-              getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
-              ||
-              getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
-              getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
-            ) return false;
-            break;
+            return !(
+              (
+                (
+                  getExpressionId(operand = getBinaryLeft(expr)) == ExpressionId.Const &&
+                  getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
+                ) || !this.canOverflow(operand, type)
+              ) || (
+                (
+                  getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+                  getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
+                ) || !this.canOverflow(operand, type)
+              )
+            );
           }
 
           // overflows if the shift doesn't clear potential garbage bits
           case BinaryOp.ShlI32: {
-            let operand: ExpressionRef;
             let shift = 32 - type.size;
             return getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const
                 || getConstValueI32(operand) < shift;
@@ -3949,7 +3984,6 @@ export class Flow {
 
           // overflows if the value does and the shift doesn't clear potential garbage bits
           case BinaryOp.ShrI32: {
-            let operand: ExpressionRef;
             let shift = 32 - type.size;
             return this.canOverflow(getBinaryLeft(expr), type) && (
               getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const ||
@@ -3957,19 +3991,18 @@ export class Flow {
             );
           }
 
-          // overflows if
-          // - the value is signed and the shift does not clear potential garbage bits
-          // - the value is unsigned and the shift does not clear potential garbage bits if it
-          //   can overflow
+          // overflows if the shift does not clear potential garbage bits. if an unsigned value is
+          // wrapped, it can't overflow.
           case BinaryOp.ShrU32: {
-            let operand: ExpressionRef;
             let shift = 32 - type.size;
             return type.is(TypeFlags.SIGNED)
-              ? getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const ||
-                getConstValueI32(operand) <= shift
-              : this.canOverflow(getBinaryLeft(expr), type) && (
-                  getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const ||
-                  getConstValueI32(operand) < shift
+              ? !(
+                  getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+                  getConstValueI32(operand) > shift // must clear MSB
+                )
+              : this.canOverflow(getBinaryLeft(expr), type) && !(
+                  getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+                  getConstValueI32(operand) >= shift // can leave MSB
                 );
           }
 
@@ -4001,22 +4034,20 @@ export class Flow {
 
       // overflows if the value cannot be represented in the target type
       case ExpressionId.Const: {
+        let value: i32 = 0;
         switch (getExpressionType(expr)) {
-          case NativeType.I32: {
-            let value = getConstValueI32(expr);
-            switch (type.kind) {
-              case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
-              case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
-              case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
-              case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
-              case TypeKind.BOOL: return (value & ~1) != 0;
-            }
-          }
-          // TODO: can also check native type conversions from i64s and floats
-          // similarly, built-ins like trunc etc. could be checked as well
-          case NativeType.I64:
-          case NativeType.F32:
-          case NativeType.F64:
+          case NativeType.I32: { value = getConstValueI32(expr); break; }
+          case NativeType.I64: { value = getConstValueI64Low(expr); break; } // discards upper bits
+          case NativeType.F32: { value = i32(getConstValueF32(expr)); break; }
+          case NativeType.F64: { value = i32(getConstValueF64(expr)); break; }
+          default: assert(false);
+        }
+        switch (type.kind) {
+          case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
+          case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
+          case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
+          case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
+          case TypeKind.BOOL: return (value & ~1) != 0;
         }
         break;
       }

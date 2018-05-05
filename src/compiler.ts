@@ -3275,7 +3275,7 @@ export class Compiler extends DiagnosticEmitter {
               leftType,
               leftType = commonType,
               ConversionKind.IMPLICIT,
-              WrapMode.WRAP,
+              WrapMode.NONE,
               left
             );
             rightExpr = this.convertExpression(
@@ -3283,7 +3283,7 @@ export class Compiler extends DiagnosticEmitter {
               rightType,
               rightType = commonType,
               ConversionKind.IMPLICIT,
-              WrapMode.WRAP,
+              WrapMode.NONE,
               right
             );
           } else {
@@ -3296,11 +3296,11 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         switch (this.currentType.kind) {
-          case TypeKind.I8:   // multiplicate might overflow
-          case TypeKind.I16:  // ^
-          case TypeKind.U8:   // ^
-          case TypeKind.U16:  // ^
-          case TypeKind.BOOL: // ^
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.BOOL:
           case TypeKind.I32:
           case TypeKind.U32: {
             expr = module.createBinary(BinaryOp.MulI32, leftExpr, rightExpr);

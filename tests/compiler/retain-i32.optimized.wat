@@ -10,78 +10,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $retain-i32/test (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (if
-   (i32.ne
-    (i32.and
-     (i32.mul
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.mul
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.shr_s
-       (i32.shl
-        (get_local $1)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 6)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.and
-     (i32.mul
-      (get_local $0)
-      (get_local $1)
-     )
-     (i32.const 255)
-    )
-    (i32.and
-     (i32.mul
-      (i32.and
-       (get_local $0)
-       (i32.const 255)
-      )
-      (i32.and
-       (get_local $1)
-       (i32.const 255)
-      )
-     )
-     (i32.const 255)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 15)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
+  (nop)
  )
  (func $start (; 2 ;) (type $v)
   (local $0 i32)

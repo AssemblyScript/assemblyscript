@@ -97,20 +97,8 @@
      (i32.shr_s
       (i32.shl
        (i32.mul
-        (i32.shr_s
-         (i32.shl
-          (get_local $0)
-          (i32.const 24)
-         )
-         (i32.const 24)
-        )
-        (i32.shr_s
-         (i32.shl
-          (get_local $1)
-          (i32.const 24)
-         )
-         (i32.const 24)
-        )
+        (get_local $0)
+        (get_local $1)
        )
        (i32.const 24)
       )
@@ -338,14 +326,8 @@
      )
      (i32.and
       (i32.mul
-       (i32.and
-        (get_local $0)
-        (i32.const 255)
-       )
-       (i32.and
-        (get_local $1)
-        (i32.const 255)
-       )
+       (get_local $0)
+       (get_local $1)
       )
       (i32.const 255)
      )

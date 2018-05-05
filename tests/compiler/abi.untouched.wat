@@ -107,7 +107,7 @@
      )
     )
     (set_local $1
-     (i32.mul
+     (i32.div_s
       (i32.shr_s
        (i32.shl
         (get_local $1)

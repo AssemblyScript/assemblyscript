@@ -40,7 +40,7 @@ var condition = !0;
   if (condition) {
     x = x / 2; // should sign-extend x on input
   } else {
-    x = x * 2; // ^
+    x = x / 2; // ^
   }
   assert(!x); // should wrap x
 }
