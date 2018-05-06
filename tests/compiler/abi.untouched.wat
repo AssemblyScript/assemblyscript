@@ -60,7 +60,6 @@
    )
   )
   (block
-   (nop)
    (set_local $0
     (i32.const 256)
    )
@@ -88,7 +87,6 @@
    )
   )
   (block
-   (nop)
    (set_local $1
     (i32.const 256)
    )
@@ -143,7 +141,6 @@
    )
   )
   (block
-   (nop)
    (set_local $2
     (i32.const 256)
    )
@@ -213,7 +210,6 @@
    )
   )
   (block
-   (nop)
    (set_local $3
     (i32.ctz
      (i32.const 2)
@@ -258,7 +254,6 @@
      (unreachable)
     )
    )
-   (nop)
    (set_local $4
     (i32.ctz
      (i32.const 2)

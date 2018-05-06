@@ -42,7 +42,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 25)
+     (i32.const 27)
      (i32.const 2)
     )
     (unreachable)
@@ -142,15 +142,10 @@
     (unreachable)
    )
   )
-  (block
-   (return
-    (call $~lib/polyfills/bswap16<u16>
-     (get_local $0)
-    )
-   )
-  )
   (return
-   (get_local $0)
+   (call $~lib/polyfills/bswap16<u16>
+    (get_local $0)
+   )
   )
  )
  (func $~lib/polyfills/bswap16<i16> (; 3 ;) (type $ii) (param $0 i32) (result i32)
@@ -184,7 +179,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 25)
+     (i32.const 27)
      (i32.const 2)
     )
     (unreachable)
@@ -287,15 +282,10 @@
     (unreachable)
    )
   )
-  (block
-   (return
-    (call $~lib/polyfills/bswap16<i16>
-     (get_local $0)
-    )
-   )
-  )
   (return
-   (get_local $0)
+   (call $~lib/polyfills/bswap16<i16>
+    (get_local $0)
+   )
   )
  )
  (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $ii) (param $0 i32) (result i32)
@@ -344,28 +334,23 @@
     (unreachable)
    )
   )
-  (block
-   (return
-    (i32.or
-     (i32.rotl
-      (i32.and
-       (get_local $0)
-       (i32.const -16711936)
-      )
-      (i32.const 8)
+  (return
+   (i32.or
+    (i32.rotl
+     (i32.and
+      (get_local $0)
+      (i32.const -16711936)
      )
-     (i32.rotr
-      (i32.and
-       (get_local $0)
-       (i32.const 16711935)
-      )
-      (i32.const 8)
+     (i32.const 8)
+    )
+    (i32.rotr
+     (i32.and
+      (get_local $0)
+      (i32.const 16711935)
      )
+     (i32.const 8)
     )
    )
-  )
-  (return
-   (get_local $0)
   )
  )
  (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
@@ -414,28 +399,23 @@
     (unreachable)
    )
   )
-  (block
-   (return
-    (i32.or
-     (i32.rotl
-      (i32.and
-       (get_local $0)
-       (i32.const -16711936)
-      )
-      (i32.const 8)
+  (return
+   (i32.or
+    (i32.rotl
+     (i32.and
+      (get_local $0)
+      (i32.const -16711936)
      )
-     (i32.rotr
-      (i32.and
-       (get_local $0)
-       (i32.const 16711935)
-      )
-      (i32.const 8)
+     (i32.const 8)
+    )
+    (i32.rotr
+     (i32.and
+      (get_local $0)
+      (i32.const 16711935)
      )
+     (i32.const 8)
     )
    )
-  )
-  (return
-   (get_local $0)
   )
  )
  (func $~lib/polyfills/bswap<u64> (; 7 ;) (type $II) (param $0 i64) (result i64)
@@ -540,9 +520,6 @@
     )
    )
   )
-  (return
-   (get_local $0)
-  )
  )
  (func $~lib/polyfills/bswap<i64> (; 8 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i32)
@@ -646,9 +623,6 @@
     )
    )
   )
-  (return
-   (get_local $0)
-  )
  )
  (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -696,28 +670,23 @@
     (unreachable)
    )
   )
-  (block
-   (return
-    (i32.or
-     (i32.rotl
-      (i32.and
-       (get_local $0)
-       (i32.const -16711936)
-      )
-      (i32.const 8)
+  (return
+   (i32.or
+    (i32.rotl
+     (i32.and
+      (get_local $0)
+      (i32.const -16711936)
      )
-     (i32.rotr
-      (i32.and
-       (get_local $0)
-       (i32.const 16711935)
-      )
-      (i32.const 8)
+     (i32.const 8)
+    )
+    (i32.rotr
+     (i32.and
+      (get_local $0)
+      (i32.const 16711935)
      )
+     (i32.const 8)
     )
    )
-  )
-  (return
-   (get_local $0)
   )
  )
  (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $ii) (param $0 i32) (result i32)
@@ -766,28 +735,23 @@
     (unreachable)
    )
   )
-  (block
-   (return
-    (i32.or
-     (i32.rotl
-      (i32.and
-       (get_local $0)
-       (i32.const -16711936)
-      )
-      (i32.const 8)
+  (return
+   (i32.or
+    (i32.rotl
+     (i32.and
+      (get_local $0)
+      (i32.const -16711936)
      )
-     (i32.rotr
-      (i32.and
-       (get_local $0)
-       (i32.const 16711935)
-      )
-      (i32.const 8)
+     (i32.const 8)
+    )
+    (i32.rotr
+     (i32.and
+      (get_local $0)
+      (i32.const 16711935)
      )
+     (i32.const 8)
     )
    )
-  )
-  (return
-   (get_local $0)
   )
  )
  (func $~lib/polyfills/bswap16<u32> (; 11 ;) (type $ii) (param $0 i32) (result i32)
@@ -821,7 +785,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 25)
+     (i32.const 27)
      (i32.const 2)
     )
     (unreachable)
@@ -901,7 +865,7 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 25)
+     (i32.const 27)
      (i32.const 2)
     )
     (unreachable)

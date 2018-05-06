@@ -43,6 +43,7 @@
   )
  )
  (func $export/ns.two (; 3 ;) (type $v)
+  (nop)
  )
  (func $start (; 4 ;) (type $v)
   (drop

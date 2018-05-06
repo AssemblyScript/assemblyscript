@@ -216,30 +216,28 @@
  )
  (func $exports/Car#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (block
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $2
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 4)
-         )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $2
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 4)
         )
-        (i32.store
-         (get_local $2)
-         (get_local $1)
-        )
-        (get_local $2)
        )
+       (i32.store
+        (get_local $2)
+        (get_local $1)
+       )
+       (get_local $2)
       )
      )
     )
-    (get_local $1)
    )
+   (get_local $1)
   )
   (get_local $0)
  )
@@ -287,6 +285,7 @@
   )
  )
  (func $exports/Car#openDoors (; 13 ;) (type $iv) (param $0 i32)
+  (nop)
  )
  (func $exports/vehicles.Car.getNumTires (; 14 ;) (type $i) (result i32)
   (return
@@ -295,30 +294,28 @@
  )
  (func $exports/vehicles.Car#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (block
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $2
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 4)
-         )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $2
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 4)
         )
-        (i32.store
-         (get_local $2)
-         (get_local $1)
-        )
-        (get_local $2)
        )
+       (i32.store
+        (get_local $2)
+        (get_local $1)
+       )
+       (get_local $2)
       )
      )
     )
-    (get_local $1)
    )
+   (get_local $1)
   )
   (get_local $0)
  )
@@ -366,6 +363,7 @@
   )
  )
  (func $exports/vehicles.Car#openDoors (; 21 ;) (type $iv) (param $0 i32)
+  (nop)
  )
  (func $start (; 22 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset

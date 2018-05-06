@@ -2798,7 +2798,7 @@ export class Function extends Element {
   /** Current control flow. */
   flow: Flow;
   /** Remembered debug locations. */
-  debugLocations: Range[] | null = null;
+  debugLocations: Range[] = [];
   /** Function reference, if compiled. */
   ref: FunctionRef = 0;
   /** Function table index, if any. */
@@ -2996,11 +2996,8 @@ export class Function extends Element {
   /** Enters a(nother) break context. */
   enterBreakContext(): string {
     var id = this.nextBreakId++;
-    if (!this.breakStack) {
-      this.breakStack = [ id ];
-    } else {
-      this.breakStack.push(id);
-    }
+    if (!this.breakStack) this.breakStack = [ id ];
+    else this.breakStack.push(id);
     return this.breakContext = id.toString(10);
   }
 
@@ -3027,20 +3024,17 @@ export class Function extends Element {
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
     if (this.program.options.sourceMap) {
       let debugLocations = this.debugLocations;
-      if (debugLocations) {
-        for (let i = 0, k = debugLocations.length; i < k; ++i) {
-          let debugLocation = debugLocations[i];
-          module.setDebugLocation(
-            ref,
-            debugLocation.debugInfoRef,
-            debugLocation.source.debugInfoIndex,
-            debugLocation.line,
-            debugLocation.column
-          );
-        }
+      for (let i = 0, k = debugLocations.length; i < k; ++i) {
+        let debugLocation = debugLocations[i];
+        module.setDebugLocation(
+          ref,
+          debugLocation.debugInfoRef,
+          debugLocation.source.debugInfoIndex,
+          debugLocation.line,
+          debugLocation.column
+        );
       }
     }
-    this.debugLocations = null;
   }
 
   /** Returns the TypeScript representation of this function. */
@@ -3633,6 +3627,8 @@ export class Flow {
 
   /** Tests if this flow has the specified flag or flags. */
   is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
+  /** Tests if this flow has one of the specified flags. */
+  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
   /** Sets the specified flag or flags. */
   set(flag: FlowFlags): void { this.flags |= flag; }
   /** Unsets the specified flag or flags. */

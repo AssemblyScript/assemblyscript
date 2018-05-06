@@ -19,6 +19,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $function/v (; 0 ;) (type $v)
+  (nop)
  )
  (func $function/i (; 1 ;) (type $i) (result i32)
   (return
@@ -41,6 +42,7 @@
   )
  )
  (func $function/iv (; 5 ;) (type $iv) (param $0 i32)
+  (nop)
  )
  (func $function/ii (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (return
@@ -63,6 +65,7 @@
   )
  )
  (func $function/iiv (; 10 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (nop)
  )
  (func $function/iii (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return

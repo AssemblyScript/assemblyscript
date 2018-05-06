@@ -135,8 +135,7 @@
  )
  (func $std/constructor/EmptyCtor#constructor (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (block
-  )
+  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -156,8 +155,7 @@
  )
  (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (block
-  )
+  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -181,8 +179,7 @@
  )
  (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (block
-  )
+  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -213,13 +210,11 @@
  )
  (func $std/constructor/CtorConditionallyReturns#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (block
-   (if
-    (get_global $std/constructor/b)
-    (return
-     (call $~lib/allocator/arena/allocate_memory
-      (i32.const 0)
-     )
+  (if
+   (get_global $std/constructor/b)
+   (return
+    (call $~lib/allocator/arena/allocate_memory
+     (i32.const 0)
     )
    )
   )
@@ -242,7 +237,30 @@
  )
  (func $std/constructor/CtorAllocates#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (block
+  (drop
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $1
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 0)
+        )
+       )
+       (get_local $1)
+      )
+     )
+    )
+   )
+  )
+  (get_local $0)
+ )
+ (func $std/constructor/CtorConditionallyAllocates#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (if
+   (get_global $std/constructor/b)
    (drop
     (tee_local $0
      (if (result i32)
@@ -256,33 +274,6 @@
          )
         )
         (get_local $1)
-       )
-      )
-     )
-    )
-   )
-  )
-  (get_local $0)
- )
- (func $std/constructor/CtorConditionallyAllocates#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (block
-   (if
-    (get_global $std/constructor/b)
-    (drop
-     (tee_local $0
-      (if (result i32)
-       (get_local $0)
-       (get_local $0)
-       (tee_local $0
-        (block (result i32)
-         (set_local $1
-          (call $~lib/allocator/arena/allocate_memory
-           (i32.const 0)
-          )
-         )
-         (get_local $1)
-        )
        )
       )
      )

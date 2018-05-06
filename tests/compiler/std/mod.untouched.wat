@@ -150,7 +150,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.eqz
     (get_local $4)
@@ -667,7 +666,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.eqz
     (get_local $4)

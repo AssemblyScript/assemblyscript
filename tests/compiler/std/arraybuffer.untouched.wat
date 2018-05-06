@@ -578,7 +578,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (nop)
   (block $break|0
    (loop $continue|0
     (if
@@ -2670,22 +2669,20 @@
       (if
        (get_local $2)
        (block
-        (block
-         (i32.store8
-          (i32.add
-           (get_local $0)
-           (tee_local $2
-            (i32.sub
-             (get_local $2)
-             (i32.const 1)
-            )
+        (i32.store8
+         (i32.add
+          (get_local $0)
+          (tee_local $2
+           (i32.sub
+            (get_local $2)
+            (i32.const 1)
            )
           )
-          (i32.load8_u
-           (i32.add
-            (get_local $1)
-            (get_local $2)
-           )
+         )
+         (i32.load8_u
+          (i32.add
+           (get_local $1)
+           (get_local $2)
           )
          )
         )

@@ -28,6 +28,7 @@
   )
  )
  (func $start~someName|2 (; 3 ;) (type $v)
+  (nop)
  )
  (func $start~anonymous|3 (; 4 ;) (type $i) (result i32)
   (i32.const 1)

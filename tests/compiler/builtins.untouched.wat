@@ -64,6 +64,7 @@
   )
  )
  (func $builtins/test (; 5 ;) (type $v)
+  (nop)
  )
  (func $start (; 6 ;) (type $v)
   (local $0 i32)

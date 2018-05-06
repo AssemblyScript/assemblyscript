@@ -6,7 +6,6 @@
  (export "memory" (memory $0))
  (func $class-with-boolean-field/test (; 0 ;) (type $i) (result i32)
   (local $0 i32)
-  (nop)
   (i32.store8
    (get_local $0)
    (i32.const 1)

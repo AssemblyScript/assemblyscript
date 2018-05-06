@@ -24,7 +24,6 @@
   (local $11 f64)
   (local $12 f64)
   (local $13 i32)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)

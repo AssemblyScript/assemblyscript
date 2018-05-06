@@ -76,7 +76,6 @@
  (func $~lib/math/R (; 1 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
-  (nop)
   (set_local $1
    (f64.mul
     (get_local $0)
@@ -156,7 +155,6 @@
   (local $6 f64)
   (local $7 f64)
   (local $8 f64)
-  (nop)
   (set_local $1
    (i32.wrap/i64
     (i64.shr_u
@@ -273,7 +271,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.shr_u
     (get_local $1)
@@ -402,7 +399,6 @@
   (local $13 f64)
   (local $14 f64)
   (local $15 f64)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -756,7 +752,6 @@
   (local $11 f64)
   (local $12 f64)
   (local $13 i32)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -1048,7 +1043,6 @@
  )
  (func $~lib/math/NativeMath.acosh (; 6 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
-  (nop)
   (set_local $1
    (i64.and
     (i64.shr_u
@@ -1160,7 +1154,6 @@
   (local $7 f64)
   (local $8 f64)
   (local $9 f64)
-  (nop)
   (set_local $1
    (i32.wrap/i64
     (i64.shr_u
@@ -1398,7 +1391,6 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -1552,7 +1544,6 @@
   (local $6 f64)
   (local $7 f64)
   (local $8 i32)
-  (nop)
   (set_local $1
    (i32.wrap/i64
     (i64.shr_u
@@ -1575,7 +1566,6 @@
     (i32.const 2147483647)
    )
   )
-  (nop)
   (if
    (i32.ge_u
     (get_local $1)
@@ -1609,7 +1599,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.lt_u
     (get_local $1)
@@ -2087,7 +2076,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 f64)
-  (nop)
   (if
    (if (result i32)
     (tee_local $2
@@ -2409,7 +2397,6 @@
     )
    )
   )
-  (nop)
   (if
    (if (result i32)
     (tee_local $2
@@ -2567,7 +2554,6 @@
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -2841,7 +2827,6 @@
   (local $13 f64)
   (local $14 f64)
   (local $15 i32)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -2919,7 +2904,6 @@
     (i32.const 1071001154)
    )
    (block
-    (nop)
     (if
      (i32.lt_u
       (get_local $2)
@@ -3204,7 +3188,6 @@
     (get_local $1)
    )
   )
-  (nop)
   (if
    (if (result i32)
     (tee_local $15
@@ -3315,7 +3298,6 @@
  )
  (func $~lib/math/NativeMath.scalbn (; 26 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
-  (nop)
   (set_local $2
    (get_local $0)
   )
@@ -3443,7 +3425,6 @@
   (local $6 f64)
   (local $7 f64)
   (local $8 f64)
-  (nop)
   (set_local $1
    (i32.wrap/i64
     (i64.shr_u
@@ -3669,7 +3650,6 @@
  )
  (func $~lib/math/expo2 (; 28 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
-  (nop)
   (set_local $1
    (f64.reinterpret/i64
     (i64.shl
@@ -3732,7 +3712,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.lt_u
     (get_local $2)
@@ -3871,7 +3850,6 @@
   (local $13 f64)
   (local $14 f64)
   (local $15 f64)
-  (nop)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -4210,7 +4188,6 @@
   (local $16 f64)
   (local $17 f64)
   (local $18 f64)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -4603,7 +4580,6 @@
   (local $15 f64)
   (local $16 f64)
   (local $17 f64)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -5023,7 +4999,6 @@
   (local $38 f64)
   (local $39 f64)
   (local $40 i32)
-  (nop)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -5495,8 +5470,6 @@
     )
    )
   )
-  (nop)
-  (nop)
   (if
    (i32.gt_s
     (get_local $8)
@@ -5683,7 +5656,6 @@
     )
    )
    (block
-    (nop)
     (set_local $27
      (i32.const 0)
     )
@@ -6561,7 +6533,6 @@
   (local $1 i64)
   (local $2 i32)
   (local $3 f64)
-  (nop)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -6605,7 +6576,6 @@
     )
    )
   )
-  (nop)
   (if
    (i64.ne
     (i64.shr_u
@@ -6807,7 +6777,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.lt_u
     (get_local $4)
@@ -6963,7 +6932,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.gt_u
     (get_local $3)

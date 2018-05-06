@@ -1,6 +1,6 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $for/i (mut i32) (i32.const 0))
@@ -22,9 +22,7 @@
       (i32.const 10)
      )
      (block
-      (block
-       (nop)
-      )
+      (nop)
       (set_global $for/i
        (i32.add
         (get_global $for/i)
@@ -64,9 +62,7 @@
       (i32.const 10)
      )
      (block
-      (block
-       (nop)
-      )
+      (nop)
       (set_local $0
        (i32.add
         (get_local $0)

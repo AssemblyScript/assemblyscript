@@ -39,5 +39,6 @@
   )
  )
  (func $export/ns.two (; 3 ;) (type $v)
+  (nop)
  )
 )

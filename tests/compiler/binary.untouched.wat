@@ -21,7 +21,6 @@
  (start $start)
  (func $~lib/math/NativeMath.scalbn (; 0 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
-  (nop)
   (set_local $2
    (get_local $0)
   )
@@ -180,7 +179,6 @@
   (local $38 f64)
   (local $39 f64)
   (local $40 i32)
-  (nop)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -652,8 +650,6 @@
     )
    )
   )
-  (nop)
-  (nop)
   (if
    (i32.gt_s
     (get_local $8)
@@ -840,7 +836,6 @@
     )
    )
    (block
-    (nop)
     (set_local $27
      (i32.const 0)
     )
@@ -1829,7 +1824,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.eqz
     (get_local $4)
@@ -2142,7 +2136,6 @@
  )
  (func $~lib/math/NativeMathf.scalbn (; 4 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
-  (nop)
   (set_local $2
    (get_local $0)
   )
@@ -2295,7 +2288,6 @@
   (local $34 f32)
   (local $35 f32)
   (local $36 i32)
-  (nop)
   (set_local $2
    (i32.reinterpret/f32
     (get_local $0)
@@ -2509,7 +2501,6 @@
     (get_local $0)
    )
   )
-  (nop)
   (if
    (if (result i32)
     (tee_local $6
@@ -2633,8 +2624,6 @@
     )
    )
   )
-  (nop)
-  (nop)
   (if
    (i32.gt_s
     (get_local $5)
@@ -2772,7 +2761,6 @@
     )
    )
    (block
-    (nop)
     (set_local $23
      (i32.const 0)
     )
@@ -3710,7 +3698,6 @@
     )
    )
   )
-  (nop)
   (if
    (i32.eqz
     (get_local $4)

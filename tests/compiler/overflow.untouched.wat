@@ -21,7 +21,6 @@
    (set_local $0
     (i32.const 127)
    )
-   (nop)
    (set_local $0
     (i32.add
      (get_local $0)
@@ -305,7 +304,6 @@
    (set_local $2
     (i32.const 32767)
    )
-   (nop)
    (set_local $2
     (i32.add
      (get_local $2)
@@ -589,7 +587,6 @@
    (set_local $4
     (i32.const 0)
    )
-   (nop)
    (set_local $4
     (i32.sub
      (get_local $4)
@@ -846,7 +843,6 @@
    (set_local $6
     (i32.const 0)
    )
-   (nop)
    (set_local $6
     (i32.sub
      (get_local $6)

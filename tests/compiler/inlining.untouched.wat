@@ -16,7 +16,6 @@
  (export "table" (table $0))
  (start $start)
  (func $inlining/test (; 1 ;) (type $i) (result i32)
-  (nop)
   (return
    (i32.add
     (i32.const 1)

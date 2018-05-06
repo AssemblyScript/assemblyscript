@@ -20,7 +20,6 @@
   (set_local $3
    (get_local $0)
   )
-  (nop)
   (block $break|0
    (loop $continue|0
     (if

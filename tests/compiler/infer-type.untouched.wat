@@ -114,9 +114,7 @@
       (get_local $1)
      )
      (block
-      (block
-       (nop)
-      )
+      (nop)
       (set_local $0
        (i32.add
         (get_local $0)

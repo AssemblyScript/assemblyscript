@@ -1,4 +1,5 @@
 (module
+ (type $i (func (result i32)))
  (type $iv (func (param i32)))
  (type $v (func))
  (global $scoped/aGlobal (mut i32) (i32.const 1))
@@ -11,16 +12,11 @@
  (func $scoped/fn (; 0 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (block
-   (set_local $1
-    (i32.const 0)
-   )
+  (set_local $1
+   (i32.const 0)
   )
-  (block
-   (nop)
-   (set_local $2
-    (get_local $0)
-   )
+  (set_local $2
+   (get_local $0)
   )
  )
  (func $start (; 1 ;) (type $v)
@@ -80,10 +76,8 @@
    (set_local $2
     (i64.const 5)
    )
-   (block
-    (set_local $3
-     (f32.const 10)
-    )
+   (set_local $3
+    (f32.const 10)
    )
   )
   (call $scoped/fn

@@ -38,17 +38,11 @@
  (func $if/ifThenElseBlock (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (if
    (get_local $0)
-   (block
-    (nop)
-    (return
-     (i32.const 1)
-    )
+   (return
+    (i32.const 1)
    )
-   (block
-    (nop)
-    (return
-     (i32.const 0)
-    )
+   (return
+    (i32.const 0)
    )
   )
  )

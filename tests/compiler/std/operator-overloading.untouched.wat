@@ -184,8 +184,7 @@
  )
  (func $std/operator-overloading/Tester#constructor (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (block
-  )
+  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -328,7 +327,6 @@
  )
  (func $~lib/math/NativeMath.scalbn (; 8 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
-  (nop)
   (set_local $2
    (get_local $0)
   )
@@ -487,7 +485,6 @@
   (local $38 f64)
   (local $39 f64)
   (local $40 i32)
-  (nop)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -959,8 +956,6 @@
     )
    )
   )
-  (nop)
-  (nop)
   (if
    (i32.gt_s
     (get_local $8)
@@ -1147,7 +1142,6 @@
     )
    )
    (block
-    (nop)
     (set_local $27
      (i32.const 0)
     )
@@ -2275,8 +2269,7 @@
  )
  (func $std/operator-overloading/TesterInlineStatic#constructor (; 20 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (block
-  )
+  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -2304,8 +2297,7 @@
  )
  (func $std/operator-overloading/TesterInlineInstance#constructor (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (block
-  )
+  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)

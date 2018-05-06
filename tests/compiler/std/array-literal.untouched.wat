@@ -588,7 +588,6 @@
   (local $3 i32)
   (local $4 i32)
   (block
-   (nop)
    (if
     (i32.gt_u
      (get_local $1)

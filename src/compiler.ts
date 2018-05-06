@@ -373,14 +373,13 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles a source by looking it up by path first. */
   compileSourceByPath(normalizedPathWithoutExtension: string, reportNode: Node): void {
     var source = this.program.lookupSourceByPath(normalizedPathWithoutExtension);
-    if (!source) {
+    if (source) this.compileSource(source);
+    else {
       this.error(
         DiagnosticCode.File_0_not_found,
         reportNode.range, normalizedPathWithoutExtension
       );
-      return;
     }
-    this.compileSource(source);
   }
 
   /** Compiles a source. */
@@ -1359,67 +1358,67 @@ export class Compiler extends DiagnosticEmitter {
 
   compileStatement(statement: Statement): ExpressionRef {
     var module = this.module;
-    var expr: ExpressionRef;
+    var stmt: ExpressionRef;
     switch (statement.kind) {
       case NodeKind.BLOCK: {
-        expr = this.compileBlockStatement(<BlockStatement>statement);
+        stmt = this.compileBlockStatement(<BlockStatement>statement);
         break;
       }
       case NodeKind.BREAK: {
-        expr = this.compileBreakStatement(<BreakStatement>statement);
+        stmt = this.compileBreakStatement(<BreakStatement>statement);
         break;
       }
       case NodeKind.CONTINUE: {
-        expr = this.compileContinueStatement(<ContinueStatement>statement);
+        stmt = this.compileContinueStatement(<ContinueStatement>statement);
         break;
       }
       case NodeKind.DO: {
-        expr = this.compileDoStatement(<DoStatement>statement);
+        stmt = this.compileDoStatement(<DoStatement>statement);
         break;
       }
       case NodeKind.EMPTY: {
-        expr = this.compileEmptyStatement(<EmptyStatement>statement);
+        stmt = this.compileEmptyStatement(<EmptyStatement>statement);
         break;
       }
       case NodeKind.EXPRESSION: {
-        expr = this.compileExpressionStatement(<ExpressionStatement>statement);
+        stmt = this.compileExpressionStatement(<ExpressionStatement>statement);
         break;
       }
       case NodeKind.FOR: {
-        expr = this.compileForStatement(<ForStatement>statement);
+        stmt = this.compileForStatement(<ForStatement>statement);
         break;
       }
       case NodeKind.IF: {
-        expr = this.compileIfStatement(<IfStatement>statement);
+        stmt = this.compileIfStatement(<IfStatement>statement);
         break;
       }
       case NodeKind.RETURN: {
-        expr = this.compileReturnStatement(<ReturnStatement>statement);
+        stmt = this.compileReturnStatement(<ReturnStatement>statement);
         break;
       }
       case NodeKind.SWITCH: {
-        expr = this.compileSwitchStatement(<SwitchStatement>statement);
+        stmt = this.compileSwitchStatement(<SwitchStatement>statement);
         break;
       }
       case NodeKind.THROW: {
-        expr = this.compileThrowStatement(<ThrowStatement>statement);
+        stmt = this.compileThrowStatement(<ThrowStatement>statement);
         break;
       }
       case NodeKind.TRY: {
-        expr = this.compileTryStatement(<TryStatement>statement);
+        stmt = this.compileTryStatement(<TryStatement>statement);
         break;
       }
       case NodeKind.VARIABLE: {
-        expr = this.compileVariableStatement(<VariableStatement>statement);
-        if (!expr) expr = module.createNop();
+        stmt = this.compileVariableStatement(<VariableStatement>statement);
+        if (!stmt) stmt = module.createNop();
         break;
       }
       case NodeKind.VOID: {
-        expr = this.compileVoidStatement(<VoidStatement>statement);
+        stmt = this.compileVoidStatement(<VoidStatement>statement);
         break;
       }
       case NodeKind.WHILE: {
-        expr = this.compileWhileStatement(<WhileStatement>statement);
+        stmt = this.compileWhileStatement(<WhileStatement>statement);
         break;
       }
       case NodeKind.TYPEDECLARATION: {
@@ -1432,34 +1431,42 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         assert(false);
-        expr = module.createUnreachable();
+        stmt = module.createUnreachable();
       }
     }
-    if (this.options.sourceMap) this.addDebugLocation(expr, statement.range);
-    return expr;
+    if (this.options.sourceMap) this.addDebugLocation(stmt, statement.range);
+    return stmt;
   }
 
   compileStatements(statements: Statement[]): ExpressionRef[] {
     var numStatements = statements.length;
     var stmts = new Array<ExpressionRef>(numStatements);
+    var count = 0;
+    var flow = this.currentFunction.flow;
     for (let i = 0; i < numStatements; ++i) {
-      stmts[i] = this.compileStatement(statements[i]);
+      let stmt = this.compileStatement(statements[i]);
+      if (getExpressionId(stmt) != ExpressionId.Nop) {
+        stmts[count++] = stmt;
+        if (flow.isAny(FlowFlags.BREAKS | FlowFlags.CONTINUES | FlowFlags.RETURNS)) break;
+      }
     }
-    return stmts; // array of 0-es in noEmit-mode
+    stmts.length = count;
+    return stmts;
   }
 
   compileBlockStatement(statement: BlockStatement): ExpressionRef {
     var statements = statement.statements;
 
-    // NOTE that we could optimize this to a NOP if empty or unwrap a single
-    // statement, but that's not what the source told us to do and left to the
-    // optimizer.
-
     // Not actually a branch, but can contain its own scoped variables.
     var blockFlow = this.currentFunction.flow.enterBranchOrScope();
     this.currentFunction.flow = blockFlow;
 
-    var stmt = this.module.createBlock(null, this.compileStatements(statements), NativeType.None);
+    var stmts = this.compileStatements(statements);
+    var stmt = stmts.length == 0
+      ? this.module.createNop()
+      : stmts.length == 1
+        ? stmts[0]
+        : this.module.createBlock(null, stmts, NativeType.None);
 
     // Switch back to the parent flow
     var parentFlow = blockFlow.leaveBranchOrScope();
@@ -1515,42 +1522,37 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileDoStatement(statement: DoStatement): ExpressionRef {
-
-    // A do statement does not initiate a new branch because it is executed at
-    // least once, but has its own break and continue labels.
     var currentFunction = this.currentFunction;
-    var label = currentFunction.enterBreakContext();
-    var flow = currentFunction.flow;
-    var previousBreakLabel = flow.breakLabel;
-    var previousContinueLabel = flow.continueLabel;
+    var module = this.module;
 
+    var label = currentFunction.enterBreakContext();
+    var flow = currentFunction.flow.enterBranchOrScope();
+    currentFunction.flow = flow;
     var breakLabel = "break|" + label;
     flow.breakLabel = breakLabel;
     var continueLabel = "continue|" + label;
     flow.continueLabel = continueLabel;
 
     var body = this.compileStatement(statement.statement);
-
-    // Reset to the previous break and continue labels, if any.
-    flow.breakLabel = previousBreakLabel;
-    flow.continueLabel = previousContinueLabel;
-
-    var module = this.module;
     var condExpr = this.makeIsTrueish(
       this.compileExpression(statement.condition, Type.i32, ConversionKind.NONE, WrapMode.NONE),
       this.currentType
     );
+    // TODO: check if condition is always false and if so, omit it?
 
-    // No need to eliminate the condition in generic contexts as the statement is executed anyway.
-
-    this.currentFunction.leaveBreakContext();
+    // Switch back to the parent flow
+    currentFunction.flow = flow.leaveBranchOrScope();
+    currentFunction.leaveBreakContext();
 
     return module.createBlock(breakLabel, [
       module.createLoop(continueLabel,
-        module.createBlock(null, [
-          body,
-          module.createBreak(continueLabel, condExpr)
-        ], NativeType.None))
+        flow.isAny(FlowFlags.BREAKS | FlowFlags.CONTINUES | FlowFlags.RETURNS)
+          ? body // skip trailing continue if unnecessary
+          : module.createBlock(null, [
+              body,
+              module.createBreak(continueLabel, condExpr)
+            ], NativeType.None)
+      )
     ], NativeType.None);
   }
 
@@ -1568,62 +1570,71 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileForStatement(statement: ForStatement): ExpressionRef {
-
     // A for statement initiates a new branch with its own scoped variables
     // possibly declared in its initializer, and break context.
     var currentFunction = this.currentFunction;
-    var context = currentFunction.enterBreakContext();
+    var label = currentFunction.enterBreakContext();
     var flow = currentFunction.flow.enterBranchOrScope();
     currentFunction.flow = flow;
-    var breakLabel = flow.breakLabel = "break|" + context;
+    var breakLabel = flow.breakLabel = "break|" + label;
     flow.breakLabel = breakLabel;
-    var continueLabel = "continue|" + context;
+    var continueLabel = "continue|" + label;
     flow.continueLabel = continueLabel;
 
     // Compile in correct order
     var module = this.module;
-    var initializer = statement.initializer
+    var initExpr = statement.initializer
       ? this.compileStatement(<Statement>statement.initializer)
       : module.createNop();
-    var condition = statement.condition
-      ? this.makeIsTrueish(
-          this.compileExpressionRetainType(<Expression>statement.condition, Type.bool, WrapMode.NONE),
-          this.currentType
-        )
-      : module.createI32(1);
-    var incrementor = statement.incrementor
+    var condExpr: ExpressionRef = 0;
+    var alwaysTrue = true;
+    if (statement.condition) {
+      condExpr = this.makeIsTrueish(
+        this.compileExpressionRetainType(<Expression>statement.condition, Type.bool, WrapMode.NONE),
+        this.currentType
+      );
+      // check if the condition is always true
+      let condPre = this.precomputeExpressionRef(condExpr);
+      if (getExpressionId(condPre) == ExpressionId.Const) {
+        assert(getExpressionType(condPre) == NativeType.I32);
+        if (getConstValueI32(condPre) != 0) alwaysTrue = true;
+        // TODO: could skip compilation if the condition is always false here, but beware that the
+        // initializer could still declare new 'var's that are used later on.
+      }
+      // recompile to original
+      condExpr = this.makeIsTrueish(
+        this.compileExpressionRetainType(<Expression>statement.condition, Type.bool, WrapMode.NONE),
+        this.currentType
+      );
+    } else {
+      // omitted condition is always true
+      condExpr = module.createI32(1);
+      alwaysTrue = true;
+    }
+    var incrExpr = statement.incrementor
       ? this.compileExpression(<Expression>statement.incrementor, Type.void, ConversionKind.IMPLICIT, WrapMode.NONE)
       : module.createNop();
-    var body = this.compileStatement(statement.statement);
-
-    var alwaysReturns = !statement.condition && flow.is(FlowFlags.RETURNS);
-    var alwaysReturnsWrapped = !statement.condition && flow.is(FlowFlags.RETURNS_WRAPPED);
-    var alwaysThrows = !statement.condition && flow.is(FlowFlags.THROWS);
-    var alwaysAllocates = !statement.condition && flow.is(FlowFlags.ALLOCATES);
-    // TODO: check other always-true conditions as well, not just omitted
-
-    if (alwaysReturns) flow.set(FlowFlags.RETURNS);
-    if (alwaysReturnsWrapped) flow.set(FlowFlags.RETURNS_WRAPPED);
-    if (alwaysThrows) flow.set(FlowFlags.THROWS);
-    if (alwaysAllocates) flow.set(FlowFlags.ALLOCATES);
+    var bodyExpr = this.compileStatement(statement.statement);
 
     // Switch back to the parent flow
-    currentFunction.flow = flow.leaveBranchOrScope();
+    var parentFlow = flow.leaveBranchOrScope();
+    if (alwaysTrue) parentFlow.inherit(flow);
+    currentFunction.flow = parentFlow;
     currentFunction.leaveBreakContext();
 
     var expr = module.createBlock(breakLabel, [
-      initializer,
+      initExpr,
       module.createLoop(continueLabel, module.createBlock(null, [
-        module.createIf(condition, module.createBlock(null, [
-          body,
-          incrementor,
+        module.createIf(condExpr, module.createBlock(null, [
+          bodyExpr,
+          incrExpr,
           module.createBreak(continueLabel)
         ], NativeType.None))
       ], NativeType.None))
     ], NativeType.None);
 
-    // If the loop is guaranteed to run and return, append a hint
-    if (alwaysReturns || alwaysThrows) {
+    // If the loop is guaranteed to run and return, append a hint for Binaryen
+    if (flow.isAny(FlowFlags.RETURNS | FlowFlags.THROWS)) {
       expr = module.createBlock(null, [
         expr,
         module.createUnreachable()
@@ -1774,8 +1785,6 @@ export class Compiler extends DiagnosticEmitter {
       let case_ = cases[i];
       let statements = case_.statements;
       let numStatements = statements.length;
-      let body = new Array<ExpressionRef>(1 + numStatements);
-      body[0] = currentBlock;
 
       // Each switch case initiates a new branch
       let flow = currentFunction.flow.enterBranchOrScope();
@@ -1785,9 +1794,17 @@ export class Compiler extends DiagnosticEmitter {
 
       let fallsThrough = i != numCases - 1;
       let nextLabel = !fallsThrough ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
+      let stmts = new Array<ExpressionRef>(1 + numStatements);
+      stmts[0] = currentBlock;
+      let count = 1;
       for (let j = 0; j < numStatements; ++j) {
-        body[j + 1] = this.compileStatement(statements[j]);
+        let stmt = this.compileStatement(statements[j]);
+        if (getExpressionId(stmt) != ExpressionId.Nop) {
+          stmts[count++] = stmt;
+          if (flow.is(FlowFlags.BREAKS | FlowFlags.CONTINUES | FlowFlags.RETURNS)) break;
+        }
       }
+      stmts.length = count;
       if (!(fallsThrough || flow.is(FlowFlags.RETURNS))) alwaysReturns = false; // ignore fall-throughs
       if (!(fallsThrough || flow.is(FlowFlags.RETURNS_WRAPPED))) alwaysReturnsWrapped = false; // ignore fall-throughs
       if (!(fallsThrough || flow.is(FlowFlags.THROWS))) alwaysThrows = false;
@@ -1795,8 +1812,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // Switch back to the parent flow
       currentFunction.flow = flow.leaveBranchOrScope();
-
-      currentBlock = module.createBlock(nextLabel, body, NativeType.None);
+      currentBlock = module.createBlock(nextLabel, stmts, NativeType.None); // must be a labeled block
     }
     currentFunction.leaveBreakContext();
 
@@ -2040,10 +2056,14 @@ export class Compiler extends DiagnosticEmitter {
 
     var expr = module.createBlock(breakLabel, [
       module.createLoop(continueLabel,
-        module.createIf(condExpr, module.createBlock(null, [
-          body,
-          module.createBreak(continueLabel)
-        ], NativeType.None))
+        module.createIf(condExpr,
+          flow.isAny(FlowFlags.CONTINUES | FlowFlags.BREAKS | FlowFlags.RETURNS)
+            ? body // skip trailing continue if unnecessary
+            : module.createBlock(null, [
+                body,
+                module.createBreak(continueLabel)
+              ], NativeType.None)
+        )
       )
     ], NativeType.None);
 
@@ -6992,17 +7012,13 @@ export class Compiler extends DiagnosticEmitter {
     var source = range.source;
     if (source.debugInfoIndex < 0) source.debugInfoIndex = this.module.addDebugInfoFile(source.normalizedPath);
     range.debugInfoRef = expr;
-    if (!currentFunction.debugLocations) currentFunction.debugLocations = [];
     currentFunction.debugLocations.push(range);
   }
 }
 
 // helpers
 
-function mangleExportName(element: Element, explicitSimpleName: string | null = null): string {
-  var simpleName = explicitSimpleName != null
-    ? explicitSimpleName
-    : element.simpleName;
+function mangleExportName(element: Element, simpleName: string = element.simpleName): string {
   switch (element.kind) {
     case ElementKind.FUNCTION: {
       let parent = (<Function>element).parent || (<Function>element).prototype.parent;
