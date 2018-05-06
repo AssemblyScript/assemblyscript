@@ -901,24 +901,23 @@ export class Parser extends DiagnosticEmitter {
     // at '<': TypeParameter (',' TypeParameter)* '>'
 
     var typeParameters = new Array<TypeParameterNode>();
-    if (!tn.skip(Token.GREATERTHAN)) {
-      while (!tn.skip(Token.GREATERTHAN)) {
-        let typeParameter = this.parseTypeParameter(tn);
-        if (!typeParameter) return null;
-        typeParameters.push(<TypeParameterNode>typeParameter);
-        if (!tn.skip(Token.COMMA)) {
-          if (tn.skip(Token.GREATERTHAN)) {
-            break;
-          } else {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), ">"
-            );
-            return null;
-          }
+    while (!tn.skip(Token.GREATERTHAN)) {
+      let typeParameter = this.parseTypeParameter(tn);
+      if (!typeParameter) return null;
+      typeParameters.push(<TypeParameterNode>typeParameter);
+      if (!tn.skip(Token.COMMA)) {
+        if (tn.skip(Token.GREATERTHAN)) {
+          break;
+        } else {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ">"
+          );
+          return null;
         }
       }
-    } else {
+    }
+    if (typeParameters.length === 0) {
       this.error(
         DiagnosticCode.Type_parameter_list_cannot_be_empty,
         tn.range()
