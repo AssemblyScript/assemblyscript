@@ -819,18 +819,20 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     var members = new Array<EnumValueDeclaration>();
-    if (!tn.skip(Token.CLOSEBRACE)) {
-      do {
-        let member = this.parseEnumValue(tn, CommonFlags.NONE);
-        if (!member) return null;
-        members.push(<EnumValueDeclaration>member);
-      } while (tn.skip(Token.COMMA));
-      if (!tn.skip(Token.CLOSEBRACE)) {
-        this.error(
-          DiagnosticCode._0_expected,
-          tn.range(), "}"
-        );
-        return null;
+    while (!tn.skip(Token.CLOSEBRACE)) {
+      let member = this.parseEnumValue(tn, CommonFlags.NONE);
+      if (!member) return null;
+      members.push(<EnumValueDeclaration>member);
+      if (!tn.skip(Token.COMMA)) {
+        if (tn.skip(Token.CLOSEBRACE)) {
+          break;
+        } else {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), "}"
+          );
+          return null;
+        }
       }
     }
     var ret = Node.createEnumDeclaration(
@@ -899,20 +901,23 @@ export class Parser extends DiagnosticEmitter {
     // at '<': TypeParameter (',' TypeParameter)* '>'
 
     var typeParameters = new Array<TypeParameterNode>();
-    if (!tn.skip(Token.GREATERTHAN)) {
-      do {
-        let typeParameter = this.parseTypeParameter(tn);
-        if (!typeParameter) return null;
-        typeParameters.push(<TypeParameterNode>typeParameter);
-      } while (tn.skip(Token.COMMA));
-      if (!tn.skip(Token.GREATERTHAN)) {
-        this.error(
-          DiagnosticCode._0_expected,
-          tn.range(), ">"
-        );
-        return null;
+    while (!tn.skip(Token.GREATERTHAN)) {
+      let typeParameter = this.parseTypeParameter(tn);
+      if (!typeParameter) return null;
+      typeParameters.push(<TypeParameterNode>typeParameter);
+      if (!tn.skip(Token.COMMA)) {
+        if (tn.skip(Token.GREATERTHAN)) {
+          break;
+        } else {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ">"
+          );
+          return null;
+        }
       }
-    } else {
+    }
+    if (typeParameters.length === 0) {
       this.error(
         DiagnosticCode.Type_parameter_list_cannot_be_empty,
         tn.range()
@@ -971,45 +976,47 @@ export class Parser extends DiagnosticEmitter {
     var seenOptional = false;
     var reportedRest = false;
 
-    if (tn.peek() != Token.CLOSEPAREN) {
-      do {
-        let param = this.parseParameter(tn, isConstructor);
-        if (!param) return null;
-        if (seenRest && !reportedRest) {
+    while (!tn.skip(Token.CLOSEPAREN)) {
+      let param = this.parseParameter(tn, isConstructor);
+      if (!param) return null;
+      if (seenRest && !reportedRest) {
+        this.error(
+          DiagnosticCode.A_rest_parameter_must_be_last_in_a_parameter_list,
+          seenRest.name.range
+        );
+        reportedRest = true;
+      }
+      switch (param.parameterKind) {
+        default: {
+          if (seenOptional) {
+            this.error(
+              DiagnosticCode.A_required_parameter_cannot_follow_an_optional_parameter,
+              param.name.range
+            );
+          }
+          break;
+        }
+        case ParameterKind.OPTIONAL: {
+          seenOptional = true;
+          break;
+        }
+        case ParameterKind.REST: {
+          seenRest = param;
+          break;
+        }
+      }
+      parameters.push(param);
+      if (!tn.skip(Token.COMMA)) {
+        if (tn.skip(Token.CLOSEPAREN)) {
+          break;
+        } else {
           this.error(
-            DiagnosticCode.A_rest_parameter_must_be_last_in_a_parameter_list,
-            seenRest.name.range
+            DiagnosticCode._0_expected,
+            tn.range(), ")"
           );
-          reportedRest = true;
+          return null;
         }
-        switch (param.parameterKind) {
-          default: {
-            if (seenOptional) {
-              this.error(
-                DiagnosticCode.A_required_parameter_cannot_follow_an_optional_parameter,
-                param.name.range
-              );
-            }
-            break;
-          }
-          case ParameterKind.OPTIONAL: {
-            seenOptional = true;
-            break;
-          }
-          case ParameterKind.REST: {
-            seenRest = param;
-            break;
-          }
-        }
-        parameters.push(param);
-      } while (tn.skip(Token.COMMA));
-    }
-    if (!tn.skip(Token.CLOSEPAREN)) {
-      this.error(
-        DiagnosticCode._0_expected,
-        tn.range(), ")"
-      );
-      return null;
+      }
     }
     return parameters;
   }
@@ -2877,23 +2884,24 @@ export class Parser extends DiagnosticEmitter {
       // ArrayLiteralExpression
       case Token.OPENBRACKET: {
         let elementExpressions = new Array<Expression | null>();
-        if (!tn.skip(Token.CLOSEBRACKET)) {
-          do {
-            if (tn.peek() == Token.COMMA) {
-              expr = null; // omitted
+        while (!tn.skip(Token.CLOSEBRACKET)) {
+          if (tn.peek() == Token.COMMA) {
+            expr = null; // omitted
+          } else {
+            expr = this.parseExpression(tn, Precedence.COMMA + 1);
+            if (!expr) return null;
+          }
+          elementExpressions.push(expr);
+          if (!tn.skip(Token.COMMA)) {
+            if (tn.skip(Token.CLOSEBRACKET)) {
+              break;
             } else {
-              expr = this.parseExpression(tn, Precedence.COMMA + 1);
-              if (!expr) return null;
+              this.error(
+                DiagnosticCode._0_expected,
+                tn.range(), "]"
+              );
+              return null;
             }
-            elementExpressions.push(expr);
-            if (tn.peek() == Token.CLOSEBRACKET) break;
-          } while (tn.skip(Token.COMMA));
-          if (!tn.skip(Token.CLOSEBRACKET)) {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), "]"
-            );
-            return null;
           }
         }
         return Node.createArrayLiteralExpression(elementExpressions, tn.range(startPos, tn.pos));
@@ -2979,6 +2987,9 @@ export class Parser extends DiagnosticEmitter {
     if (!tn.skip(Token.LESSTHAN)) return null;
     var typeArguments = new Array<CommonTypeNode>();
     do {
+      if (tn.peek() === Token.GREATERTHAN) {
+        break;
+      }
       let type = this.parseType(tn, true, true);
       if (!type) {
         tn.reset(state);
@@ -3000,18 +3011,20 @@ export class Parser extends DiagnosticEmitter {
     // at '(': (Expression (',' Expression)*)? ')'
 
     var args = new Array<Expression>();
-    if (!tn.skip(Token.CLOSEPAREN)) {
-      do {
-        let expr = this.parseExpression(tn, Precedence.COMMA + 1);
-        if (!expr) return null;
-        args.push(expr);
-      } while (tn.skip(Token.COMMA));
-      if (!tn.skip(Token.CLOSEPAREN)) {
-        this.error(
-          DiagnosticCode._0_expected,
-          tn.range(), ")"
-        );
-        return null;
+    while (!tn.skip(Token.CLOSEPAREN)) {
+      let expr = this.parseExpression(tn, Precedence.COMMA + 1);
+      if (!expr) return null;
+      args.push(expr);
+      if (!tn.skip(Token.COMMA)) {
+        if (tn.skip(Token.CLOSEPAREN)) {
+          break;
+        } else {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ")"
+          );
+          return null;
+        }
       }
     }
     return args;

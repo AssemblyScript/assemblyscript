@@ -967,6 +967,7 @@ export class ASTBuilder {
         this.serializeDecorator(decorators[i]);
       }
     }
+    this.serializeExternalModifiers(node);
     this.serializeAccessModifiers(node);
     if (node.name.text.length) {
       sb.push("function ");
