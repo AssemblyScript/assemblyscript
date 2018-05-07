@@ -173,6 +173,8 @@ export class Options {
   sourceMap: bool = false;
   /** Global aliases. */
   globalAliases: Map<string,string> | null = null;
+  /** Additional features to activate. */
+  features: Feature = Feature.NONE;
 
   /** Tests if the target is WASM64 or, otherwise, WASM32. */
   get isWasm64(): bool {
@@ -193,6 +195,19 @@ export class Options {
   get nativeSizeType(): NativeType {
     return this.target == Target.WASM64 ? NativeType.I64 : NativeType.I32;
   }
+
+  /** Tests if a specific feature is activated. */
+  hasFeature(feature: Feature): bool {
+    return (this.features & feature) != 0;
+  }
+}
+
+/** Indicates specific features to activate. */
+export const enum Feature {
+  /** No additional features. */
+  NONE = 0,
+  /** Sign extension operations. */
+  SIGNEXT = 1 << 0 // see: https://github.com/WebAssembly/sign-extension-ops
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -237,11 +252,11 @@ export class Compiler extends DiagnosticEmitter {
   /** Counting memory offset. */
   memoryOffset: I64;
   /** Memory segments being compiled. */
-  memorySegments: MemorySegment[] = new Array();
+  memorySegments: MemorySegment[] = [];
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
   /** Function table being compiled. */
-  functionTable: Function[] = new Array();
+  functionTable: Function[] = [];
   /** Argument count helper global. */
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
@@ -802,7 +817,7 @@ export class Compiler extends DiagnosticEmitter {
     );
     if (!instance) return null;
     instance.outerScope = outerScope;
-    if (!this.compileFunction(instance)) return null;
+    if (!this.compileFunction(instance)) return null; // reports
     return instance;
   }
 
@@ -868,7 +883,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     if (body) {
       let isConstructor = instance.is(CommonFlags.CONSTRUCTOR);
-      let returnType: Type = instance.signature.returnType;
+      let returnType = instance.signature.returnType;
 
       // compile body
       let previousFunction = this.currentFunction;
@@ -886,6 +901,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         flow.set(FlowFlags.RETURNS);
         if (!flow.canOverflow(stmt, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+        flow.finalize();
       } else {
         assert(body.kind == NodeKind.BLOCK);
         stmt = this.compileStatement(body);
@@ -1179,6 +1195,7 @@ export class Compiler extends DiagnosticEmitter {
   compileClass(instance: Class): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
     instance.set(CommonFlags.COMPILED);
+
     var staticMembers = instance.prototype.members;
     if (staticMembers) {
       for (let element of staticMembers.values()) {
@@ -6792,27 +6809,31 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var flow = this.currentFunction.flow;
     switch (type.kind) {
-      case TypeKind.I8: { // TODO: Use 'i32.extend8_s' once sign-extension-ops lands
+      case TypeKind.I8: {
         if (flow.canOverflow(expr, type)) {
-          expr = module.createBinary(BinaryOp.ShrI32,
-            module.createBinary(BinaryOp.ShlI32,
-              expr,
-              module.createI32(24)
-            ),
-            module.createI32(24)
-          );
+          expr = this.options.hasFeature(Feature.SIGNEXT)
+            ? module.createUnary(UnaryOp.ExtendI8ToI32, expr)
+            : module.createBinary(BinaryOp.ShrI32,
+                module.createBinary(BinaryOp.ShlI32,
+                  expr,
+                  module.createI32(24)
+                ),
+                module.createI32(24)
+              );
         }
         break;
       }
-      case TypeKind.I16: { // TODO: Use 'i32.extend16_s' once sign-extension-ops lands
+      case TypeKind.I16: {
         if (flow.canOverflow(expr, type)) {
-          expr = module.createBinary(BinaryOp.ShrI32,
-            module.createBinary(BinaryOp.ShlI32,
-              expr,
-              module.createI32(16)
-            ),
-            module.createI32(16)
-          );
+          expr = this.options.hasFeature(Feature.SIGNEXT)
+            ? module.createUnary(UnaryOp.ExtendI16ToI32, expr)
+            : module.createBinary(BinaryOp.ShrI32,
+                module.createBinary(BinaryOp.ShlI32,
+                  expr,
+                  module.createI32(16)
+                ),
+                module.createI32(16)
+              );
         }
         break;
       }

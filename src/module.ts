@@ -104,14 +104,14 @@ export enum UnaryOp {
   PromoteF32 = _BinaryenPromoteFloat32(),
   DemoteF64 = _BinaryenDemoteFloat64(),
   ReinterpretI32 = _BinaryenReinterpretInt32(),
-  ReinterpretI64 = _BinaryenReinterpretInt64()
+  ReinterpretI64 = _BinaryenReinterpretInt64(),
 
-  // see: https://github.com/WebAssembly/threads/blob/master/proposals/threads/Overview.md#new-sign-extending-operators
-  // ExtendI8ToI32 =_BinaryenExtendS8Int32()
-  // ExtendI16ToI32 = _BinaryenExtendS16Int32()
-  // ExtendI8ToI64 = _BinaryenExtendS8Int64() // operand is I64
-  // ExtendI16ToI64 = _BinaryenExtendS16Int64()
-  // ExtendI32ToI64 = _BinaryenExtendS32Int64()
+  // see: https://github.com/WebAssembly/sign-extension-ops
+  ExtendI8ToI32 = _BinaryenExtendS8Int32(),
+  ExtendI16ToI32 = _BinaryenExtendS16Int32(),
+  ExtendI8ToI64 = _BinaryenExtendS8Int64(),
+  ExtendI16ToI64 = _BinaryenExtendS16Int64(),
+  ExtendI32ToI64 = _BinaryenExtendS32Int64()
 
   // see: https://github.com/WebAssembly/nontrapping-float-to-int-conversions
   // TruncF32ToI32Sat

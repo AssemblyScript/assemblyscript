@@ -6,7 +6,8 @@
 import {
   Compiler,
   Options,
-  Target
+  Target,
+  Feature
 } from "./compiler";
 
 import {
@@ -127,6 +128,14 @@ export function setGlobalAlias(options: Options, name: string, alias: string): v
   var globalAliases = options.globalAliases;
   if (!globalAliases) options.globalAliases = globalAliases = new Map();
   globalAliases.set(name, alias);
+}
+
+/** Sign extension operations. */
+export const FEATURE_SIGNEXT = Feature.SIGNEXT;
+
+/** Enables a specific feature. */
+export function enableFeature(options: Options, feature: Feature): void {
+  options.features |= feature;
 }
 
 /** Finishes parsing. */

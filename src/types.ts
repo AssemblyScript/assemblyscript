@@ -505,7 +505,7 @@ export class Signature {
     var parameterNames = this.parameterNames;
     return parameterNames && parameterNames.length > index
       ? parameterNames[index]
-      : getGenericParameterName(index);
+      : getDefaultParameterName(index);
   }
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
@@ -581,7 +581,7 @@ export class Signature {
         if (index) sb.push(", ");
         if (i == restIndex) sb.push("...");
         if (i < numNames) sb.push((<string[]>names)[i]);
-        else sb.push(getGenericParameterName(i));
+        else sb.push(getDefaultParameterName(i));
         if (i >= optionalStart && i != restIndex) sb.push("?: ");
         else sb.push(": ");
         sb.push(parameters[i].toString());
@@ -595,14 +595,14 @@ export class Signature {
 
 // helpers
 
-// Cached generic parameter names used where names are unknown.
-var cachedGenericParameterNames: string[] | null = null;
+// Cached default parameter names used where names are unknown.
+var cachedDefaultParameterNames: string[] | null = null;
 
-/** Gets the cached generic parameter name for the specified index. */
-export function getGenericParameterName(index: i32): string {
-  if (!cachedGenericParameterNames) cachedGenericParameterNames = [];
-  for (let i = cachedGenericParameterNames.length; i <= index; ++i) {
-    cachedGenericParameterNames.push("arg$" + i.toString(10));
+/** Gets the cached default parameter name for the specified index. */
+export function getDefaultParameterName(index: i32): string {
+  if (!cachedDefaultParameterNames) cachedDefaultParameterNames = [];
+  for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
+    cachedDefaultParameterNames.push("arg$" + i.toString(10));
   }
-  return cachedGenericParameterNames[index - 1];
+  return cachedDefaultParameterNames[index - 1];
 }

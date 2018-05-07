@@ -373,6 +373,18 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
+  // Enable additional features if specified
+  var features = args.feature;
+  if (features != null) {
+    if (typeof features === "string") features = features.split(",");
+    for (let i = 0, k = features.length; i < k; ++i) {
+      let name = features[i].trim();
+      let flag = assemblyscript["FEATURE_" + name.toUpperCase()];
+      if (!flag) return callback(Error("Feature '" + name + "' is invalid."));
+      assemblyscript.enableFeature(compilerOptions, flag);
+    }
+  }
+
   var module;
   stats.compileCount++;
   (() => {
