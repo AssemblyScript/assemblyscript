@@ -374,7 +374,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Enable additional features if specified
-  var features = args.feature;
+  var features = args.enable;
   if (features != null) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
