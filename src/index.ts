@@ -131,7 +131,9 @@ export function setGlobalAlias(options: Options, name: string, alias: string): v
 }
 
 /** Sign extension operations. */
-export const FEATURE_SIGNEXT = Feature.SIGNEXT;
+export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
+/** Mutable global imports and exports. */
+export const FEATURE_MUTABLE_GLOBAL = Feature.MUTABLE_GLOBAL;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

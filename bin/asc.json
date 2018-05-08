@@ -150,7 +150,13 @@
     "type": "string"
   },
   "feature": {
-    "desc": "Enables additional (experimental) WebAssembly features.",
+    "desc": [
+      "Enables additional (experimental) WebAssembly features.",
+      "",
+      " sign-extension  Enables sign-extension operations",
+      " mutable-global  Enables mutable global imports and exports",
+      ""
+    ],
     "type": "string"
   },
   "measure": {

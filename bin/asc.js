@@ -379,8 +379,8 @@ exports.main = function main(argv, options, callback) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
-      let flag = assemblyscript["FEATURE_" + name.toUpperCase()];
-      if (!flag) return callback(Error("Feature '" + name + "' is invalid."));
+      let flag = assemblyscript["FEATURE_" + name.replace(/\-/g, "_").toUpperCase()];
+      if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
       assemblyscript.enableFeature(compilerOptions, flag);
     }
   }

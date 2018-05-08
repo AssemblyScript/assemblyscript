@@ -207,7 +207,9 @@ export const enum Feature {
   /** No additional features. */
   NONE = 0,
   /** Sign extension operations. */
-  SIGNEXT = 1 << 0 // see: https://github.com/WebAssembly/sign-extension-ops
+  SIGN_EXTENSION = 1 << 0, // see: https://github.com/WebAssembly/sign-extension-ops
+  /** Mutable global imports and exports. */
+  MUTABLE_GLOBAL = 1 << 1  // see: https://github.com/WebAssembly/mutable-global
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -551,7 +553,7 @@ export class Compiler extends DiagnosticEmitter {
     if (global.is(CommonFlags.AMBIENT)) {
 
       // constant global
-      if (isConstant) {
+      if (isConstant || this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
         global.set(CommonFlags.MODULE_IMPORT);
         module.addGlobalImport(
           global.internalName,
@@ -768,7 +770,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // export values if the enum is exported
         if (element.is(CommonFlags.MODULE_EXPORT)) {
-          if (member.is(CommonFlags.INLINED)) {
+          if (member.is(CommonFlags.INLINED) || this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
             module.addGlobalExport(member.internalName, mangleExportName(member));
           } else if (valueDeclaration) {
             this.warning(
@@ -6811,7 +6813,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (type.kind) {
       case TypeKind.I8: {
         if (flow.canOverflow(expr, type)) {
-          expr = this.options.hasFeature(Feature.SIGNEXT)
+          expr = this.options.hasFeature(Feature.SIGN_EXTENSION)
             ? module.createUnary(UnaryOp.ExtendI8ToI32, expr)
             : module.createBinary(BinaryOp.ShrI32,
                 module.createBinary(BinaryOp.ShlI32,
@@ -6825,7 +6827,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.I16: {
         if (flow.canOverflow(expr, type)) {
-          expr = this.options.hasFeature(Feature.SIGNEXT)
+          expr = this.options.hasFeature(Feature.SIGN_EXTENSION)
             ? module.createUnary(UnaryOp.ExtendI16ToI32, expr)
             : module.createBinary(BinaryOp.ShrI32,
                 module.createBinary(BinaryOp.ShlI32,
