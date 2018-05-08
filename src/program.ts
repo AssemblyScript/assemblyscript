@@ -2898,7 +2898,7 @@ export class Function extends Element {
   private tempF64s: Local[] | null = null;
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, wrapped: bool): Local {
+  getTempLocal(type: Type, wrapped: bool = false): Local {
     var temps: Local[] | null;
     switch (type.toNativeType()) {
       case NativeType.I32: {
@@ -2926,7 +2926,9 @@ export class Function extends Element {
     } else {
       local = this.addLocal(type);
     }
-    this.flow.setLocalWrapped(local.index, wrapped);
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      this.flow.setLocalWrapped(local.index, wrapped);
+    }
     return local;
   }
 
@@ -2989,7 +2991,9 @@ export class Function extends Element {
       local = this.addLocal(type);
       temps.push(local);
     }
-    this.flow.setLocalWrapped(local.index, wrapped);
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      this.flow.setLocalWrapped(local.index, wrapped);
+    }
     return local;
   }
 
@@ -3701,7 +3705,9 @@ export class Flow {
       }
     }
     this.scopedLocals.set(name, scopedLocal);
-    this.setLocalWrapped(scopedLocal.index, wrapped);
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      this.setLocalWrapped(scopedLocal.index, wrapped);
+    }
     return scopedLocal;
   }
 
@@ -3775,17 +3781,20 @@ export class Flow {
   /** Sets if the local with the specified index is considered wrapped. */
   setLocalWrapped(index: i32, wrapped: bool): void {
     var map: I64;
-    var i: i32 = -1;
+    var off: i32 = -1;
     if (index < 64) {
       if (index < 0) return; // inlined constant
       map = this.wrappedLocals;
     } else {
       let ext = this.wrappedLocalsExt;
-      i = ((index - 64) / 64) | 0;
-      if (!ext) ext = new Array(i + 1);
-      else while (ext.length <= i) ext.push(i64_new(0));
-      map = ext[i];
-      index -= (i + 1) * 64;
+      off = ((index - 64) / 64) | 0;
+      if (!ext) {
+        this.wrappedLocalsExt = ext = new Array(off + 1);
+        ext.length = 0;
+      }
+      while (ext.length <= off) ext.push(i64_new(0));
+      map = ext[off];
+      index -= (off + 1) * 64;
     }
     map = wrapped
       ? i64_or(
@@ -3804,7 +3813,7 @@ export class Flow {
             )
           )
         );
-    if (i >= 0) (<I64[]>this.wrappedLocalsExt)[i] = map;
+    if (off >= 0) (<I64[]>this.wrappedLocalsExt)[off] = map;
     else this.wrappedLocals = map;
   }
 

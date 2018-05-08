@@ -2008,8 +2008,10 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (initExpr) {
           initializers.push(this.compileAssignmentWithValue(declaration.name, initExpr));
-          flow.setLocalWrapped(local.index, !flow.canOverflow(initExpr, type));
-        } else {
+          if (local.type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+            flow.setLocalWrapped(local.index, !flow.canOverflow(initExpr, type));
+          }
+        } else if (local.type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
           flow.setLocalWrapped(local.index, true); // zero
         }
       }
@@ -4418,7 +4420,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.createUnreachable();
         }
         let flow = this.currentFunction.flow;
-        flow.setLocalWrapped((<Local>target).index, !flow.canOverflow(valueWithCorrectType, type));
+        if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+          flow.setLocalWrapped((<Local>target).index, !flow.canOverflow(valueWithCorrectType, type));
+        }
         return tee
           ? module.createTeeLocal((<Local>target).index, valueWithCorrectType)
           : module.createSetLocal((<Local>target).index, valueWithCorrectType);
