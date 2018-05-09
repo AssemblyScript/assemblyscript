@@ -9,7 +9,7 @@ Instructions
 To build [assembly/ugc.ts](./assembly/ugc.ts) to an untouched and an optimized `.wasm` including their respective `.wat` representations, run:
 
 ```
-$> npm run build
+$> npm run asbuild
 ```
 
 Afterwards, to run the included [test](./tests/index.js):

@@ -1,44 +1,45 @@
 (module
  (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiv (func (param i32 i32)))
- (type $iv (func (param i32)))
  (type $ii (func (param i32) (result i32)))
+ (type $iv (func (param i32)))
+ (type $iiv (func (param i32 i32)))
+ (type $v (func))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global "$(lib)/allocator/tlsf/AL_BITS" i32 (i32.const 2))
- (global "$(lib)/allocator/tlsf/AL_SIZE" i32 (i32.const 4))
- (global "$(lib)/allocator/tlsf/AL_MASK" i32 (i32.const 3))
- (global "$(lib)/allocator/tlsf/SL_BITS" i32 (i32.const 5))
- (global "$(lib)/allocator/tlsf/SL_SIZE" i32 (i32.const 32))
- (global "$(lib)/allocator/tlsf/SB_BITS" i32 (i32.const 7))
- (global "$(lib)/allocator/tlsf/SB_SIZE" i32 (i32.const 128))
- (global "$(lib)/allocator/tlsf/SB_MASK" i32 (i32.const 127))
- (global "$(lib)/allocator/tlsf/FL_BITS" i32 (i32.const 23))
- (global "$(lib)/allocator/tlsf/FREE" i32 (i32.const 1))
- (global "$(lib)/allocator/tlsf/LEFT_FREE" i32 (i32.const 2))
- (global "$(lib)/allocator/tlsf/TAGS" i32 (i32.const 3))
- (global "$(lib)/allocator/tlsf/ROOT" (mut i32) (i32.const 0))
+ (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
+ (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
+ (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
+ (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
+ (global $~lib/allocator/tlsf/SL_BITS i32 (i32.const 5))
+ (global $~lib/allocator/tlsf/SL_SIZE i32 (i32.const 32))
+ (global $~lib/allocator/tlsf/SB_BITS i32 (i32.const 8))
+ (global $~lib/allocator/tlsf/SB_SIZE i32 (i32.const 256))
+ (global $~lib/allocator/tlsf/FL_BITS i32 (i32.const 22))
+ (global $~lib/allocator/tlsf/FREE i32 (i32.const 1))
+ (global $~lib/allocator/tlsf/LEFT_FREE i32 (i32.const 2))
+ (global $~lib/allocator/tlsf/TAGS i32 (i32.const 3))
+ (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
  (global $assembly/ugc/IDLE i32 (i32.const 0))
  (global $assembly/ugc/MARK i32 (i32.const 1))
  (global $assembly/ugc/SWEEP i32 (i32.const 2))
  (global $assembly/ugc/GRAY i32 (i32.const 2))
  (global $assembly/ugc/GC (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 92))
+ (global $HEAP_BASE i32 (i32.const 88))
  (memory $0 1)
- (data (i32.const 4) "\17\00\00\00(\00l\00i\00b\00)\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
- (data (i32.const 56) "\0f\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00u\00g\00c\00.\00t\00s\00")
+ (data (i32.const 4) "\16\00\00\00~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
+ (data (i32.const 52) "\0f\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00u\00g\00c\00.\00t\00s\00")
  (export "gc_collect" (func $assembly/ugc/gc_collect))
  (export "gc_pause" (func $assembly/ugc/gc_pause))
  (export "gc_resume" (func $assembly/ugc/gc_resume))
  (export "memory" (memory $0))
  (start $start)
  (func $assembly/ugc/ObjectHeader#set:next (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  ;;@ assembly/ugc.ts:33:4
+  ;;@ assembly/ugc.ts:32:32
   (i32.store
+   ;;@ assembly/ugc.ts:33:4
    (get_local $0)
    ;;@ assembly/ugc.ts:33:23
    (i32.or
@@ -56,8 +57,9 @@
   )
  )
  (func $assembly/ugc/ObjectHeader#set:prev (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  ;;@ assembly/ugc.ts:41:4
+  ;;@ assembly/ugc.ts:40:32
   (i32.store offset=4
+   ;;@ assembly/ugc.ts:41:4
    (get_local $0)
    ;;@ assembly/ugc.ts:41:23
    (i32.or
@@ -164,20 +166,17 @@
   )
  )
  (func $assembly/ugc/Control#get:paused (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ assembly/ugc.ts:99:67
+  ;;@ assembly/ugc.ts:99:21
   (return
    ;;@ assembly/ugc.ts:99:30
    (i32.ne
     (i32.and
-     (i32.and
-      ;;@ assembly/ugc.ts:99:31
-      (i32.load8_u offset=28
-       (get_local $0)
-      )
-      ;;@ assembly/ugc.ts:99:44
-      (i32.const 128)
+     ;;@ assembly/ugc.ts:99:31
+     (i32.load8_u offset=28
+      (get_local $0)
      )
-     (i32.const 255)
+     ;;@ assembly/ugc.ts:99:44
+     (i32.const 128)
     )
     ;;@ assembly/ugc.ts:99:67
     (i32.const 0)
@@ -186,24 +185,25 @@
  )
  (func $assembly/ugc/Control#set:paused (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  ;;@ assembly/ugc.ts:102:4
+  ;;@ assembly/ugc.ts:101:27
   (i32.store8 offset=28
+   ;;@ assembly/ugc.ts:102:4
    (get_local $0)
    ;;@ assembly/ugc.ts:102:17
    (if (result i32)
-    (get_local $1)
+    (i32.and
+     (get_local $1)
+     (i32.const 1)
+    )
     ;;@ assembly/ugc.ts:103:8
     (block (result i32)
      (set_local $2
-      (i32.and
-       (i32.or
-        (i32.load8_u offset=28
-         (get_local $0)
-        )
-        ;;@ assembly/ugc.ts:103:22
-        (i32.const 128)
+      (i32.or
+       (i32.load8_u offset=28
+        (get_local $0)
        )
-       (i32.const 255)
+       ;;@ assembly/ugc.ts:103:22
+       (i32.const 128)
       )
      )
      (i32.store8 offset=28
@@ -217,18 +217,15 @@
     (block (result i32)
      (set_local $2
       (i32.and
-       (i32.and
-        (i32.load8_u offset=28
-         (get_local $0)
-        )
-        ;;@ assembly/ugc.ts:104:22
-        (i32.xor
-         ;;@ assembly/ugc.ts:104:23
-         (i32.const 128)
-         (i32.const -1)
-        )
+       (i32.load8_u offset=28
+        (get_local $0)
        )
-       (i32.const 255)
+       ;;@ assembly/ugc.ts:104:22
+       (i32.xor
+        ;;@ assembly/ugc.ts:104:23
+        (i32.const 128)
+        (i32.const -1)
+       )
       )
      )
      (i32.store8 offset=28
@@ -243,28 +240,27 @@
  )
  (func $assembly/ugc/gc_scan_fn (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  ;;@ assembly/ugc.ts:271:2
+  ;;@ assembly/ugc.ts:274:73
   (if
-   ;;@ assembly/ugc.ts:271:6
+   ;;@ assembly/ugc.ts:275:6
    (i32.eqz
-    ;;@ assembly/ugc.ts:271:7
+    ;;@ assembly/ugc.ts:275:7
     (get_local $1)
    )
-   ;;@ assembly/ugc.ts:271:15
-   (block
-   )
-   ;;@ assembly/ugc.ts:276:4
+   ;;@ assembly/ugc.ts:275:15
+   (nop)
+   ;;@ assembly/ugc.ts:277:9
    (set_local $2
-    ;;@ assembly/ugc.ts:276:18
+    ;;@ assembly/ugc.ts:280:18
     (i32.load offset=8
-     ;;@ assembly/ugc.ts:276:28
+     ;;@ assembly/ugc.ts:280:28
      (get_local $1)
     )
    )
   )
  )
  (func $assembly/ugc/ObjectHeader#get:next (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ assembly/ugc.ts:29:57
+  ;;@ assembly/ugc.ts:28:27
   (return
    ;;@ assembly/ugc.ts:29:11
    (i32.and
@@ -295,7 +291,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 56)
+     (i32.const 52)
      (i32.const 49)
      (i32.const 4)
     )
@@ -315,19 +311,19 @@
    )
   )
  )
- (func "$(lib)/allocator/tlsf/Block#get:right" (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:right (; 10 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  ;;@ (lib)/allocator/tlsf.ts:83:4
+  ;;@ ~lib/allocator/tlsf.ts:89:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:83:11
+    ;;@ ~lib/allocator/tlsf.ts:89:11
     (i32.and
      (i32.load
       (get_local $0)
      )
-     ;;@ (lib)/allocator/tlsf.ts:83:23
+     ;;@ ~lib/allocator/tlsf.ts:89:23
      (i32.xor
-      ;;@ (lib)/allocator/tlsf.ts:83:24
+      ;;@ ~lib/allocator/tlsf.ts:89:24
       (i32.const 3)
       (i32.const -1)
      )
@@ -337,35 +333,35 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 83)
+     (i32.const 89)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:88:4
+  ;;@ ~lib/allocator/tlsf.ts:94:4
   (return
-   ;;@ (lib)/allocator/tlsf.ts:84:11
+   ;;@ ~lib/allocator/tlsf.ts:90:11
    (if (result i32)
     (i32.eqz
      (tee_local $1
-      ;;@ (lib)/allocator/tlsf.ts:85:6
+      ;;@ ~lib/allocator/tlsf.ts:91:6
       (i32.add
-       ;;@ (lib)/allocator/tlsf.ts:86:8
+       ;;@ ~lib/allocator/tlsf.ts:92:8
        (i32.add
         (get_local $0)
-        ;;@ (lib)/allocator/tlsf.ts:86:34
-        (i32.const 4)
+        ;;@ ~lib/allocator/tlsf.ts:92:34
+        (i32.const 8)
        )
-       ;;@ (lib)/allocator/tlsf.ts:86:47
+       ;;@ ~lib/allocator/tlsf.ts:92:47
        (i32.and
-        ;;@ (lib)/allocator/tlsf.ts:86:48
+        ;;@ ~lib/allocator/tlsf.ts:92:48
         (i32.load
          (get_local $0)
         )
-        ;;@ (lib)/allocator/tlsf.ts:86:60
+        ;;@ ~lib/allocator/tlsf.ts:92:60
         (i32.xor
-         ;;@ (lib)/allocator/tlsf.ts:86:61
+         ;;@ ~lib/allocator/tlsf.ts:92:61
          (i32.const 3)
          (i32.const -1)
         )
@@ -377,7 +373,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 4)
-      (i32.const 84)
+      (i32.const 90)
       (i32.const 11)
      )
      (unreachable)
@@ -386,14 +382,14 @@
    )
   )
  )
- (func "$(lib)/allocator/tlsf/fls<usize>" (; 11 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ (lib)/allocator/tlsf.ts:423:2
+ (func $~lib/allocator/tlsf/fls<usize> (; 11 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ ~lib/allocator/tlsf.ts:428:2
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:423:9
+    ;;@ ~lib/allocator/tlsf.ts:428:9
     (i32.ne
      (get_local $0)
-     ;;@ (lib)/allocator/tlsf.ts:423:17
+     ;;@ ~lib/allocator/tlsf.ts:428:17
      (i32.const 0)
     )
    )
@@ -401,55 +397,53 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 423)
+     (i32.const 428)
      (i32.const 2)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:424:2
-  (nop)
-  ;;@ (lib)/allocator/tlsf.ts:425:26
+  ;;@ ~lib/allocator/tlsf.ts:430:26
   (return
-   ;;@ (lib)/allocator/tlsf.ts:425:9
+   ;;@ ~lib/allocator/tlsf.ts:430:9
    (i32.sub
     (i32.const 31)
-    ;;@ (lib)/allocator/tlsf.ts:425:15
+    ;;@ ~lib/allocator/tlsf.ts:430:15
     (i32.clz
-     ;;@ (lib)/allocator/tlsf.ts:425:22
+     ;;@ ~lib/allocator/tlsf.ts:430:22
      (get_local $0)
     )
    )
   )
  )
- (func "$(lib)/allocator/tlsf/Root#getHead" (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  ;;@ (lib)/allocator/tlsf.ts:152:4
+ (func $~lib/allocator/tlsf/Root#getHead (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  ;;@ ~lib/allocator/tlsf.ts:158:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:152:11
+    ;;@ ~lib/allocator/tlsf.ts:158:11
     (i32.lt_u
      (get_local $1)
-     ;;@ (lib)/allocator/tlsf.ts:152:16
-     (i32.const 23)
+     ;;@ ~lib/allocator/tlsf.ts:158:16
+     (i32.const 22)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 152)
+     (i32.const 158)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:153:4
+  ;;@ ~lib/allocator/tlsf.ts:159:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:153:11
+    ;;@ ~lib/allocator/tlsf.ts:159:11
     (i32.lt_u
      (get_local $2)
-     ;;@ (lib)/allocator/tlsf.ts:153:16
+     ;;@ ~lib/allocator/tlsf.ts:159:16
      (i32.const 32)
     )
    )
@@ -457,66 +451,66 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 153)
+     (i32.const 159)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:156:20
+  ;;@ ~lib/allocator/tlsf.ts:162:20
   (return
-   ;;@ (lib)/allocator/tlsf.ts:154:11
+   ;;@ ~lib/allocator/tlsf.ts:160:11
    (i32.load offset=96
-    ;;@ (lib)/allocator/tlsf.ts:155:6
+    ;;@ ~lib/allocator/tlsf.ts:161:6
     (i32.add
      (get_local $0)
-     ;;@ (lib)/allocator/tlsf.ts:155:32
+     ;;@ ~lib/allocator/tlsf.ts:161:32
      (i32.mul
       (i32.add
-       ;;@ (lib)/allocator/tlsf.ts:155:33
+       ;;@ ~lib/allocator/tlsf.ts:161:33
        (i32.mul
         (get_local $1)
-        ;;@ (lib)/allocator/tlsf.ts:155:38
+        ;;@ ~lib/allocator/tlsf.ts:161:38
         (i32.const 32)
        )
-       ;;@ (lib)/allocator/tlsf.ts:155:48
+       ;;@ ~lib/allocator/tlsf.ts:161:48
        (get_local $2)
       )
-      ;;@ (lib)/allocator/tlsf.ts:155:61
+      ;;@ ~lib/allocator/tlsf.ts:161:61
       (i32.const 4)
      )
     )
    )
   )
  )
- (func "$(lib)/allocator/tlsf/Root#setHead" (; 13 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
-  ;;@ (lib)/allocator/tlsf.ts:161:4
+ (func $~lib/allocator/tlsf/Root#setHead (; 13 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  ;;@ ~lib/allocator/tlsf.ts:167:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:161:11
+    ;;@ ~lib/allocator/tlsf.ts:167:11
     (i32.lt_u
      (get_local $1)
-     ;;@ (lib)/allocator/tlsf.ts:161:16
-     (i32.const 23)
+     ;;@ ~lib/allocator/tlsf.ts:167:16
+     (i32.const 22)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 161)
+     (i32.const 167)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:162:4
+  ;;@ ~lib/allocator/tlsf.ts:168:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:162:11
+    ;;@ ~lib/allocator/tlsf.ts:168:11
     (i32.lt_u
      (get_local $2)
-     ;;@ (lib)/allocator/tlsf.ts:162:16
+     ;;@ ~lib/allocator/tlsf.ts:168:16
      (i32.const 32)
     )
    )
@@ -524,84 +518,46 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 162)
+     (i32.const 168)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:163:4
+  ;;@ ~lib/allocator/tlsf.ts:169:4
   (i32.store offset=96
-   ;;@ (lib)/allocator/tlsf.ts:164:6
+   ;;@ ~lib/allocator/tlsf.ts:170:6
    (i32.add
     (get_local $0)
-    ;;@ (lib)/allocator/tlsf.ts:164:32
+    ;;@ ~lib/allocator/tlsf.ts:170:32
     (i32.mul
      (i32.add
-      ;;@ (lib)/allocator/tlsf.ts:164:33
+      ;;@ ~lib/allocator/tlsf.ts:170:33
       (i32.mul
        (get_local $1)
-       ;;@ (lib)/allocator/tlsf.ts:164:38
+       ;;@ ~lib/allocator/tlsf.ts:170:38
        (i32.const 32)
       )
-      ;;@ (lib)/allocator/tlsf.ts:164:48
+      ;;@ ~lib/allocator/tlsf.ts:170:48
       (get_local $2)
      )
-     ;;@ (lib)/allocator/tlsf.ts:164:61
+     ;;@ ~lib/allocator/tlsf.ts:170:61
      (i32.const 4)
     )
    )
-   ;;@ (lib)/allocator/tlsf.ts:165:6
+   ;;@ ~lib/allocator/tlsf.ts:171:6
    (get_local $3)
   )
  )
- (func "$(lib)/allocator/tlsf/Root#getSLMap" (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ (lib)/allocator/tlsf.ts:132:4
+ (func $~lib/allocator/tlsf/Root#getSLMap (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  ;;@ ~lib/allocator/tlsf.ts:138:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:132:11
+    ;;@ ~lib/allocator/tlsf.ts:138:11
     (i32.lt_u
      (get_local $1)
-     ;;@ (lib)/allocator/tlsf.ts:132:16
-     (i32.const 23)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 132)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  ;;@ (lib)/allocator/tlsf.ts:133:68
-  (return
-   ;;@ (lib)/allocator/tlsf.ts:133:11
-   (i32.load offset=4
-    ;;@ (lib)/allocator/tlsf.ts:133:21
-    (i32.add
-     (get_local $0)
-     ;;@ (lib)/allocator/tlsf.ts:133:47
-     (i32.mul
-      (get_local $1)
-      ;;@ (lib)/allocator/tlsf.ts:133:52
-      (i32.const 4)
-     )
-    )
-   )
-  )
- )
- (func "$(lib)/allocator/tlsf/Root#setSLMap" (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  ;;@ (lib)/allocator/tlsf.ts:138:4
-  (if
-   (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:138:11
-    (i32.lt_u
-     (get_local $1)
-     ;;@ (lib)/allocator/tlsf.ts:138:16
-     (i32.const 23)
+     ;;@ ~lib/allocator/tlsf.ts:138:16
+     (i32.const 22)
     )
    )
    (block
@@ -614,23 +570,61 @@
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:139:4
+  ;;@ ~lib/allocator/tlsf.ts:139:68
+  (return
+   ;;@ ~lib/allocator/tlsf.ts:139:11
+   (i32.load offset=4
+    ;;@ ~lib/allocator/tlsf.ts:139:21
+    (i32.add
+     (get_local $0)
+     ;;@ ~lib/allocator/tlsf.ts:139:47
+     (i32.mul
+      (get_local $1)
+      ;;@ ~lib/allocator/tlsf.ts:139:52
+      (i32.const 4)
+     )
+    )
+   )
+  )
+ )
+ (func $~lib/allocator/tlsf/Root#setSLMap (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  ;;@ ~lib/allocator/tlsf.ts:144:4
+  (if
+   (i32.eqz
+    ;;@ ~lib/allocator/tlsf.ts:144:11
+    (i32.lt_u
+     (get_local $1)
+     ;;@ ~lib/allocator/tlsf.ts:144:16
+     (i32.const 22)
+    )
+   )
+   (block
+    (call $abort
+     (i32.const 0)
+     (i32.const 4)
+     (i32.const 144)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ ~lib/allocator/tlsf.ts:145:4
   (i32.store offset=4
-   ;;@ (lib)/allocator/tlsf.ts:139:15
+   ;;@ ~lib/allocator/tlsf.ts:145:15
    (i32.add
     (get_local $0)
-    ;;@ (lib)/allocator/tlsf.ts:139:41
+    ;;@ ~lib/allocator/tlsf.ts:145:41
     (i32.mul
      (get_local $1)
-     ;;@ (lib)/allocator/tlsf.ts:139:46
+     ;;@ ~lib/allocator/tlsf.ts:145:46
      (i32.const 4)
     )
    )
-   ;;@ (lib)/allocator/tlsf.ts:139:49
+   ;;@ ~lib/allocator/tlsf.ts:145:49
    (get_local $2)
   )
  )
- (func "$(lib)/allocator/tlsf/Root#remove" (; 16 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#remove (; 16 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -638,21 +632,20 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  ;;@ (lib)/allocator/tlsf.ts:251:4
+  ;;@ ~lib/allocator/tlsf.ts:257:4
   (set_local $2
-   ;;@ (lib)/allocator/tlsf.ts:251:20
+   ;;@ ~lib/allocator/tlsf.ts:257:20
    (i32.load
     (get_local $1)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:252:4
+  ;;@ ~lib/allocator/tlsf.ts:258:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:252:11
+    ;;@ ~lib/allocator/tlsf.ts:258:11
     (i32.and
      (get_local $2)
-     ;;@ (lib)/allocator/tlsf.ts:252:23
+     ;;@ ~lib/allocator/tlsf.ts:258:23
      (i32.const 1)
     )
    )
@@ -660,239 +653,231 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 252)
+     (i32.const 258)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:253:4
+  ;;@ ~lib/allocator/tlsf.ts:259:4
   (set_local $3
-   ;;@ (lib)/allocator/tlsf.ts:253:15
+   ;;@ ~lib/allocator/tlsf.ts:259:15
    (i32.and
     (get_local $2)
-    ;;@ (lib)/allocator/tlsf.ts:253:27
+    ;;@ ~lib/allocator/tlsf.ts:259:27
     (i32.xor
-     ;;@ (lib)/allocator/tlsf.ts:253:28
+     ;;@ ~lib/allocator/tlsf.ts:259:28
      (i32.const 3)
      (i32.const -1)
     )
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:254:4
+  ;;@ ~lib/allocator/tlsf.ts:260:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:254:11
-    (i32.and
-     (if (result i32)
-      (i32.ne
-       (tee_local $4
-        (i32.ge_u
-         (get_local $3)
-         ;;@ (lib)/allocator/tlsf.ts:254:19
-         (i32.const 12)
-        )
-       )
-       (i32.const 0)
-      )
-      ;;@ (lib)/allocator/tlsf.ts:254:37
-      (i32.lt_u
+    ;;@ ~lib/allocator/tlsf.ts:260:11
+    (if (result i32)
+     (tee_local $4
+      (i32.ge_u
        (get_local $3)
-       ;;@ (lib)/allocator/tlsf.ts:254:44
-       (i32.const 1073741824)
+       ;;@ ~lib/allocator/tlsf.ts:260:19
+       (i32.const 16)
       )
-      (get_local $4)
      )
-     (i32.const 1)
+     ;;@ ~lib/allocator/tlsf.ts:260:37
+     (i32.lt_u
+      (get_local $3)
+      ;;@ ~lib/allocator/tlsf.ts:260:44
+      (i32.const 1073741824)
+     )
+     (get_local $4)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 254)
+     (i32.const 260)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:257:4
-  (nop)
-  ;;@ (lib)/allocator/tlsf.ts:258:4
+  ;;@ ~lib/allocator/tlsf.ts:264:4
   (if
-   ;;@ (lib)/allocator/tlsf.ts:258:8
+   ;;@ ~lib/allocator/tlsf.ts:264:8
    (i32.lt_u
     (get_local $3)
-    ;;@ (lib)/allocator/tlsf.ts:258:15
-    (i32.const 128)
+    ;;@ ~lib/allocator/tlsf.ts:264:15
+    (i32.const 256)
    )
-   ;;@ (lib)/allocator/tlsf.ts:258:24
+   ;;@ ~lib/allocator/tlsf.ts:264:24
    (block
-    ;;@ (lib)/allocator/tlsf.ts:259:6
+    ;;@ ~lib/allocator/tlsf.ts:265:6
     (set_local $5
-     ;;@ (lib)/allocator/tlsf.ts:259:11
+     ;;@ ~lib/allocator/tlsf.ts:265:11
      (i32.const 0)
     )
-    ;;@ (lib)/allocator/tlsf.ts:260:6
+    ;;@ ~lib/allocator/tlsf.ts:266:6
     (set_local $6
-     ;;@ (lib)/allocator/tlsf.ts:260:11
+     ;;@ ~lib/allocator/tlsf.ts:266:11
      (i32.div_u
-      ;;@ (lib)/allocator/tlsf.ts:260:17
+      ;;@ ~lib/allocator/tlsf.ts:266:17
       (get_local $3)
-      ;;@ (lib)/allocator/tlsf.ts:260:24
-      (i32.const 4)
+      ;;@ ~lib/allocator/tlsf.ts:266:24
+      (i32.const 8)
      )
     )
    )
-   ;;@ (lib)/allocator/tlsf.ts:261:11
+   ;;@ ~lib/allocator/tlsf.ts:267:11
    (block
-    ;;@ (lib)/allocator/tlsf.ts:262:6
+    ;;@ ~lib/allocator/tlsf.ts:268:6
     (set_local $5
-     ;;@ (lib)/allocator/tlsf.ts:262:11
-     (call "$(lib)/allocator/tlsf/fls<usize>"
-      ;;@ (lib)/allocator/tlsf.ts:262:22
+     ;;@ ~lib/allocator/tlsf.ts:268:11
+     (call $~lib/allocator/tlsf/fls<usize>
+      ;;@ ~lib/allocator/tlsf.ts:268:22
       (get_local $3)
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:263:6
+    ;;@ ~lib/allocator/tlsf.ts:269:6
     (set_local $6
-     ;;@ (lib)/allocator/tlsf.ts:263:11
+     ;;@ ~lib/allocator/tlsf.ts:269:11
      (i32.xor
-      ;;@ (lib)/allocator/tlsf.ts:263:17
+      ;;@ ~lib/allocator/tlsf.ts:269:17
       (i32.shr_u
-       ;;@ (lib)/allocator/tlsf.ts:263:18
+       ;;@ ~lib/allocator/tlsf.ts:269:18
        (get_local $3)
-       ;;@ (lib)/allocator/tlsf.ts:263:26
+       ;;@ ~lib/allocator/tlsf.ts:269:26
        (i32.sub
-        ;;@ (lib)/allocator/tlsf.ts:263:27
+        ;;@ ~lib/allocator/tlsf.ts:269:27
         (get_local $5)
-        ;;@ (lib)/allocator/tlsf.ts:263:32
+        ;;@ ~lib/allocator/tlsf.ts:269:32
         (i32.const 5)
        )
       )
-      ;;@ (lib)/allocator/tlsf.ts:263:44
+      ;;@ ~lib/allocator/tlsf.ts:269:44
       (i32.shl
-       ;;@ (lib)/allocator/tlsf.ts:263:45
+       ;;@ ~lib/allocator/tlsf.ts:269:45
        (i32.const 1)
-       ;;@ (lib)/allocator/tlsf.ts:263:50
+       ;;@ ~lib/allocator/tlsf.ts:269:50
        (i32.const 5)
       )
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:264:6
+    ;;@ ~lib/allocator/tlsf.ts:270:6
     (set_local $5
      (i32.sub
       (get_local $5)
-      ;;@ (lib)/allocator/tlsf.ts:264:12
+      ;;@ ~lib/allocator/tlsf.ts:270:12
       (i32.sub
-       (i32.const 7)
-       ;;@ (lib)/allocator/tlsf.ts:264:22
+       (i32.const 8)
+       ;;@ ~lib/allocator/tlsf.ts:270:22
        (i32.const 1)
       )
      )
     )
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:268:4
+  ;;@ ~lib/allocator/tlsf.ts:274:4
   (set_local $7
-   ;;@ (lib)/allocator/tlsf.ts:268:15
+   ;;@ ~lib/allocator/tlsf.ts:274:15
    (i32.load offset=4
     (get_local $1)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:269:4
+  ;;@ ~lib/allocator/tlsf.ts:275:4
   (set_local $8
-   ;;@ (lib)/allocator/tlsf.ts:269:15
+   ;;@ ~lib/allocator/tlsf.ts:275:15
    (i32.load offset=8
     (get_local $1)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:270:4
+  ;;@ ~lib/allocator/tlsf.ts:276:4
   (if
-   ;;@ (lib)/allocator/tlsf.ts:270:8
+   ;;@ ~lib/allocator/tlsf.ts:276:8
    (get_local $7)
-   ;;@ (lib)/allocator/tlsf.ts:271:6
+   ;;@ ~lib/allocator/tlsf.ts:276:14
    (i32.store offset=8
     (get_local $7)
-    ;;@ (lib)/allocator/tlsf.ts:271:18
+    ;;@ ~lib/allocator/tlsf.ts:276:26
     (get_local $8)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:272:4
+  ;;@ ~lib/allocator/tlsf.ts:277:4
   (if
-   ;;@ (lib)/allocator/tlsf.ts:272:8
+   ;;@ ~lib/allocator/tlsf.ts:277:8
    (get_local $8)
-   ;;@ (lib)/allocator/tlsf.ts:273:6
+   ;;@ ~lib/allocator/tlsf.ts:277:14
    (i32.store offset=4
     (get_local $8)
-    ;;@ (lib)/allocator/tlsf.ts:273:18
+    ;;@ ~lib/allocator/tlsf.ts:277:26
     (get_local $7)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:276:4
+  ;;@ ~lib/allocator/tlsf.ts:280:4
   (if
-   ;;@ (lib)/allocator/tlsf.ts:276:8
+   ;;@ ~lib/allocator/tlsf.ts:280:8
    (i32.eq
     (get_local $1)
-    ;;@ (lib)/allocator/tlsf.ts:276:22
-    (call "$(lib)/allocator/tlsf/Root#getHead"
-     ;;@ (lib)/allocator/tlsf.ts:276:17
+    ;;@ ~lib/allocator/tlsf.ts:280:22
+    (call $~lib/allocator/tlsf/Root#getHead
+     ;;@ ~lib/allocator/tlsf.ts:280:17
      (get_local $0)
-     ;;@ (lib)/allocator/tlsf.ts:276:30
+     ;;@ ~lib/allocator/tlsf.ts:280:30
      (get_local $5)
-     ;;@ (lib)/allocator/tlsf.ts:276:34
+     ;;@ ~lib/allocator/tlsf.ts:280:34
      (get_local $6)
     )
    )
-   ;;@ (lib)/allocator/tlsf.ts:276:39
+   ;;@ ~lib/allocator/tlsf.ts:280:39
    (block
-    ;;@ (lib)/allocator/tlsf.ts:277:11
-    (call "$(lib)/allocator/tlsf/Root#setHead"
-     ;;@ (lib)/allocator/tlsf.ts:277:6
+    ;;@ ~lib/allocator/tlsf.ts:281:11
+    (call $~lib/allocator/tlsf/Root#setHead
+     ;;@ ~lib/allocator/tlsf.ts:281:6
      (get_local $0)
-     ;;@ (lib)/allocator/tlsf.ts:277:19
+     ;;@ ~lib/allocator/tlsf.ts:281:19
      (get_local $5)
-     ;;@ (lib)/allocator/tlsf.ts:277:23
+     ;;@ ~lib/allocator/tlsf.ts:281:23
      (get_local $6)
-     ;;@ (lib)/allocator/tlsf.ts:277:27
+     ;;@ ~lib/allocator/tlsf.ts:281:27
      (get_local $8)
     )
-    ;;@ (lib)/allocator/tlsf.ts:280:6
+    ;;@ ~lib/allocator/tlsf.ts:284:6
     (if
-     ;;@ (lib)/allocator/tlsf.ts:280:10
+     ;;@ ~lib/allocator/tlsf.ts:284:10
      (i32.eqz
-      ;;@ (lib)/allocator/tlsf.ts:280:11
+      ;;@ ~lib/allocator/tlsf.ts:284:11
       (get_local $8)
      )
-     ;;@ (lib)/allocator/tlsf.ts:280:17
+     ;;@ ~lib/allocator/tlsf.ts:284:17
      (block
-      ;;@ (lib)/allocator/tlsf.ts:281:8
-      (set_local $9
-       ;;@ (lib)/allocator/tlsf.ts:281:25
-       (call "$(lib)/allocator/tlsf/Root#getSLMap"
-        ;;@ (lib)/allocator/tlsf.ts:281:20
+      ;;@ ~lib/allocator/tlsf.ts:285:8
+      (set_local $4
+       ;;@ ~lib/allocator/tlsf.ts:285:25
+       (call $~lib/allocator/tlsf/Root#getSLMap
+        ;;@ ~lib/allocator/tlsf.ts:285:20
         (get_local $0)
-        ;;@ (lib)/allocator/tlsf.ts:281:34
+        ;;@ ~lib/allocator/tlsf.ts:285:34
         (get_local $5)
        )
       )
-      ;;@ (lib)/allocator/tlsf.ts:282:13
-      (call "$(lib)/allocator/tlsf/Root#setSLMap"
-       ;;@ (lib)/allocator/tlsf.ts:282:8
+      ;;@ ~lib/allocator/tlsf.ts:286:13
+      (call $~lib/allocator/tlsf/Root#setSLMap
+       ;;@ ~lib/allocator/tlsf.ts:286:8
        (get_local $0)
-       ;;@ (lib)/allocator/tlsf.ts:282:22
+       ;;@ ~lib/allocator/tlsf.ts:286:22
        (get_local $5)
-       ;;@ (lib)/allocator/tlsf.ts:282:26
-       (tee_local $9
+       ;;@ ~lib/allocator/tlsf.ts:286:26
+       (tee_local $4
         (i32.and
-         (get_local $9)
-         ;;@ (lib)/allocator/tlsf.ts:282:35
+         (get_local $4)
+         ;;@ ~lib/allocator/tlsf.ts:286:35
          (i32.xor
-          ;;@ (lib)/allocator/tlsf.ts:282:36
+          ;;@ ~lib/allocator/tlsf.ts:286:36
           (i32.shl
-           ;;@ (lib)/allocator/tlsf.ts:282:37
+           ;;@ ~lib/allocator/tlsf.ts:286:37
            (i32.const 1)
-           ;;@ (lib)/allocator/tlsf.ts:282:42
+           ;;@ ~lib/allocator/tlsf.ts:286:42
            (get_local $6)
           )
           (i32.const -1)
@@ -900,27 +885,27 @@
         )
        )
       )
-      ;;@ (lib)/allocator/tlsf.ts:285:8
+      ;;@ ~lib/allocator/tlsf.ts:289:8
       (if
-       ;;@ (lib)/allocator/tlsf.ts:285:12
+       ;;@ ~lib/allocator/tlsf.ts:289:12
        (i32.eqz
-        ;;@ (lib)/allocator/tlsf.ts:285:13
-        (get_local $9)
+        ;;@ ~lib/allocator/tlsf.ts:289:13
+        (get_local $4)
        )
-       ;;@ (lib)/allocator/tlsf.ts:286:10
+       ;;@ ~lib/allocator/tlsf.ts:289:20
        (i32.store
         (get_local $0)
         (i32.and
          (i32.load
           (get_local $0)
          )
-         ;;@ (lib)/allocator/tlsf.ts:286:24
+         ;;@ ~lib/allocator/tlsf.ts:289:34
          (i32.xor
-          ;;@ (lib)/allocator/tlsf.ts:286:25
+          ;;@ ~lib/allocator/tlsf.ts:289:35
           (i32.shl
-           ;;@ (lib)/allocator/tlsf.ts:286:26
+           ;;@ ~lib/allocator/tlsf.ts:289:36
            (i32.const 1)
-           ;;@ (lib)/allocator/tlsf.ts:286:31
+           ;;@ ~lib/allocator/tlsf.ts:289:41
            (get_local $5)
           )
           (i32.const -1)
@@ -933,17 +918,17 @@
    )
   )
  )
- (func "$(lib)/allocator/tlsf/Block#get:left" (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:left (; 17 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  ;;@ (lib)/allocator/tlsf.ts:75:4
+  ;;@ ~lib/allocator/tlsf.ts:81:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:75:11
+    ;;@ ~lib/allocator/tlsf.ts:81:11
     (i32.and
      (i32.load
       (get_local $0)
      )
-     ;;@ (lib)/allocator/tlsf.ts:75:23
+     ;;@ ~lib/allocator/tlsf.ts:81:23
      (i32.const 2)
     )
    )
@@ -951,24 +936,24 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 75)
+     (i32.const 81)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:78:4
+  ;;@ ~lib/allocator/tlsf.ts:84:4
   (return
-   ;;@ (lib)/allocator/tlsf.ts:76:11
+   ;;@ ~lib/allocator/tlsf.ts:82:11
    (if (result i32)
     (i32.eqz
      (tee_local $1
-      ;;@ (lib)/allocator/tlsf.ts:77:6
+      ;;@ ~lib/allocator/tlsf.ts:83:6
       (i32.load
-       ;;@ (lib)/allocator/tlsf.ts:77:18
+       ;;@ ~lib/allocator/tlsf.ts:83:18
        (i32.sub
         (get_local $0)
-        ;;@ (lib)/allocator/tlsf.ts:77:44
+        ;;@ ~lib/allocator/tlsf.ts:83:44
         (i32.const 4)
        )
       )
@@ -978,7 +963,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 4)
-      (i32.const 76)
+      (i32.const 82)
       (i32.const 11)
      )
      (unreachable)
@@ -987,16 +972,16 @@
    )
   )
  )
- (func "$(lib)/allocator/tlsf/Root#setJump" (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  ;;@ (lib)/allocator/tlsf.ts:331:4
+ (func $~lib/allocator/tlsf/Root#setJump (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  ;;@ ~lib/allocator/tlsf.ts:334:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:331:11
+    ;;@ ~lib/allocator/tlsf.ts:334:11
     (i32.and
      (i32.load
       (get_local $1)
      )
-     ;;@ (lib)/allocator/tlsf.ts:331:23
+     ;;@ ~lib/allocator/tlsf.ts:334:23
      (i32.const 1)
     )
    )
@@ -1004,21 +989,21 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 331)
+     (i32.const 334)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:332:4
+  ;;@ ~lib/allocator/tlsf.ts:335:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:332:11
+    ;;@ ~lib/allocator/tlsf.ts:335:11
     (i32.eq
-     (call "$(lib)/allocator/tlsf/Block#get:right"
+     (call $~lib/allocator/tlsf/Block#get:right
       (get_local $1)
      )
-     ;;@ (lib)/allocator/tlsf.ts:332:25
+     ;;@ ~lib/allocator/tlsf.ts:335:25
      (get_local $2)
     )
    )
@@ -1026,21 +1011,21 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 332)
+     (i32.const 335)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:333:4
+  ;;@ ~lib/allocator/tlsf.ts:336:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:333:11
+    ;;@ ~lib/allocator/tlsf.ts:336:11
     (i32.and
      (i32.load
       (get_local $2)
      )
-     ;;@ (lib)/allocator/tlsf.ts:333:24
+     ;;@ ~lib/allocator/tlsf.ts:336:24
      (i32.const 2)
     )
    )
@@ -1048,25 +1033,25 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 333)
+     (i32.const 336)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:334:4
+  ;;@ ~lib/allocator/tlsf.ts:337:4
   (i32.store
-   ;;@ (lib)/allocator/tlsf.ts:335:6
+   ;;@ ~lib/allocator/tlsf.ts:338:6
    (i32.sub
     (get_local $2)
-    ;;@ (lib)/allocator/tlsf.ts:335:33
+    ;;@ ~lib/allocator/tlsf.ts:338:33
     (i32.const 4)
    )
-   ;;@ (lib)/allocator/tlsf.ts:336:6
+   ;;@ ~lib/allocator/tlsf.ts:339:6
    (get_local $1)
   )
  )
- (func "$(lib)/allocator/tlsf/Root#insert" (; 19 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#insert (; 19 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1077,36 +1062,36 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  ;;@ (lib)/allocator/tlsf.ts:183:4
+  ;;@ ~lib/allocator/tlsf.ts:189:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:183:11
+    ;;@ ~lib/allocator/tlsf.ts:189:11
     (get_local $1)
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 183)
+     (i32.const 189)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:184:4
+  ;;@ ~lib/allocator/tlsf.ts:190:4
   (set_local $2
-   ;;@ (lib)/allocator/tlsf.ts:184:20
+   ;;@ ~lib/allocator/tlsf.ts:190:20
    (i32.load
     (get_local $1)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:185:4
+  ;;@ ~lib/allocator/tlsf.ts:191:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:185:11
+    ;;@ ~lib/allocator/tlsf.ts:191:11
     (i32.and
      (get_local $2)
-     ;;@ (lib)/allocator/tlsf.ts:185:23
+     ;;@ ~lib/allocator/tlsf.ts:191:23
      (i32.const 1)
     )
    )
@@ -1114,72 +1099,64 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 185)
+     (i32.const 191)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:186:4
-  (nop)
-  ;;@ (lib)/allocator/tlsf.ts:187:4
+  ;;@ ~lib/allocator/tlsf.ts:193:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:188:6
-    (i32.and
-     (if (result i32)
-      (i32.ne
-       (tee_local $4
-        (i32.ge_u
-         (tee_local $3
-          ;;@ (lib)/allocator/tlsf.ts:188:14
-          (i32.and
-           (i32.load
-            (get_local $1)
-           )
-           ;;@ (lib)/allocator/tlsf.ts:188:27
-           (i32.xor
-            ;;@ (lib)/allocator/tlsf.ts:188:28
-            (i32.const 3)
-            (i32.const -1)
-           )
-          )
+    ;;@ ~lib/allocator/tlsf.ts:194:6
+    (if (result i32)
+     (tee_local $4
+      (i32.ge_u
+       (tee_local $3
+        ;;@ ~lib/allocator/tlsf.ts:194:14
+        (i32.and
+         (i32.load
+          (get_local $1)
          )
-         ;;@ (lib)/allocator/tlsf.ts:188:37
-         (i32.const 12)
+         ;;@ ~lib/allocator/tlsf.ts:194:27
+         (i32.xor
+          ;;@ ~lib/allocator/tlsf.ts:194:28
+          (i32.const 3)
+          (i32.const -1)
+         )
         )
        )
-       (i32.const 0)
+       ;;@ ~lib/allocator/tlsf.ts:194:37
+       (i32.const 16)
       )
-      ;;@ (lib)/allocator/tlsf.ts:188:55
-      (i32.lt_u
-       (get_local $3)
-       ;;@ (lib)/allocator/tlsf.ts:188:62
-       (i32.const 1073741824)
-      )
-      (get_local $4)
      )
-     (i32.const 1)
+     ;;@ ~lib/allocator/tlsf.ts:194:55
+     (i32.lt_u
+      (get_local $3)
+      ;;@ ~lib/allocator/tlsf.ts:194:62
+      (i32.const 1073741824)
+     )
+     (get_local $4)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 187)
+     (i32.const 193)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:191:4
+  ;;@ ~lib/allocator/tlsf.ts:197:4
   (set_local $5
-   ;;@ (lib)/allocator/tlsf.ts:191:23
+   ;;@ ~lib/allocator/tlsf.ts:197:23
    (if (result i32)
     (i32.eqz
      (tee_local $4
-      ;;@ (lib)/allocator/tlsf.ts:191:30
-      (call "$(lib)/allocator/tlsf/Block#get:right"
+      ;;@ ~lib/allocator/tlsf.ts:197:30
+      (call $~lib/allocator/tlsf/Block#get:right
        (get_local $1)
       )
      )
@@ -1188,7 +1165,7 @@
      (call $abort
       (i32.const 0)
       (i32.const 4)
-      (i32.const 191)
+      (i32.const 197)
       (i32.const 23)
      )
      (unreachable)
@@ -1196,48 +1173,48 @@
     (get_local $4)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:192:4
+  ;;@ ~lib/allocator/tlsf.ts:198:4
   (set_local $6
-   ;;@ (lib)/allocator/tlsf.ts:192:20
+   ;;@ ~lib/allocator/tlsf.ts:198:20
    (i32.load
     (get_local $5)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:195:4
+  ;;@ ~lib/allocator/tlsf.ts:201:4
   (if
-   ;;@ (lib)/allocator/tlsf.ts:195:8
+   ;;@ ~lib/allocator/tlsf.ts:201:8
    (i32.and
     (get_local $6)
-    ;;@ (lib)/allocator/tlsf.ts:195:20
+    ;;@ ~lib/allocator/tlsf.ts:201:20
     (i32.const 1)
    )
-   ;;@ (lib)/allocator/tlsf.ts:195:26
+   ;;@ ~lib/allocator/tlsf.ts:201:26
    (block
-    ;;@ (lib)/allocator/tlsf.ts:196:11
-    (call "$(lib)/allocator/tlsf/Root#remove"
-     ;;@ (lib)/allocator/tlsf.ts:196:6
+    ;;@ ~lib/allocator/tlsf.ts:202:11
+    (call $~lib/allocator/tlsf/Root#remove
+     ;;@ ~lib/allocator/tlsf.ts:202:6
      (get_local $0)
-     ;;@ (lib)/allocator/tlsf.ts:196:18
+     ;;@ ~lib/allocator/tlsf.ts:202:18
      (get_local $5)
     )
-    ;;@ (lib)/allocator/tlsf.ts:197:6
+    ;;@ ~lib/allocator/tlsf.ts:203:6
     (i32.store
      (get_local $1)
-     ;;@ (lib)/allocator/tlsf.ts:197:19
+     ;;@ ~lib/allocator/tlsf.ts:203:19
      (tee_local $2
       (i32.add
-       ;;@ (lib)/allocator/tlsf.ts:197:20
+       ;;@ ~lib/allocator/tlsf.ts:203:20
        (get_local $2)
-       ;;@ (lib)/allocator/tlsf.ts:197:33
+       ;;@ ~lib/allocator/tlsf.ts:203:33
        (i32.add
-        (i32.const 4)
-        ;;@ (lib)/allocator/tlsf.ts:197:46
+        (i32.const 8)
+        ;;@ ~lib/allocator/tlsf.ts:203:46
         (i32.and
-         ;;@ (lib)/allocator/tlsf.ts:197:47
+         ;;@ ~lib/allocator/tlsf.ts:203:47
          (get_local $6)
-         ;;@ (lib)/allocator/tlsf.ts:197:59
+         ;;@ ~lib/allocator/tlsf.ts:203:59
          (i32.xor
-          ;;@ (lib)/allocator/tlsf.ts:197:60
+          ;;@ ~lib/allocator/tlsf.ts:203:60
           (i32.const 3)
           (i32.const -1)
          )
@@ -1246,40 +1223,40 @@
       )
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:198:6
+    ;;@ ~lib/allocator/tlsf.ts:204:6
     (set_local $5
-     ;;@ (lib)/allocator/tlsf.ts:198:14
-     (call "$(lib)/allocator/tlsf/Block#get:right"
+     ;;@ ~lib/allocator/tlsf.ts:204:14
+     (call $~lib/allocator/tlsf/Block#get:right
       (get_local $1)
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:199:6
+    ;;@ ~lib/allocator/tlsf.ts:205:6
     (set_local $6
-     ;;@ (lib)/allocator/tlsf.ts:199:18
+     ;;@ ~lib/allocator/tlsf.ts:205:18
      (i32.load
       (get_local $5)
      )
     )
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:204:4
+  ;;@ ~lib/allocator/tlsf.ts:210:4
   (if
-   ;;@ (lib)/allocator/tlsf.ts:204:8
+   ;;@ ~lib/allocator/tlsf.ts:210:8
    (i32.and
     (get_local $2)
-    ;;@ (lib)/allocator/tlsf.ts:204:20
+    ;;@ ~lib/allocator/tlsf.ts:210:20
     (i32.const 2)
    )
-   ;;@ (lib)/allocator/tlsf.ts:204:31
+   ;;@ ~lib/allocator/tlsf.ts:210:31
    (block
-    ;;@ (lib)/allocator/tlsf.ts:205:6
-    (set_local $7
-     ;;@ (lib)/allocator/tlsf.ts:205:24
+    ;;@ ~lib/allocator/tlsf.ts:211:6
+    (set_local $4
+     ;;@ ~lib/allocator/tlsf.ts:211:24
      (if (result i32)
       (i32.eqz
        (tee_local $4
-        ;;@ (lib)/allocator/tlsf.ts:205:31
-        (call "$(lib)/allocator/tlsf/Block#get:left"
+        ;;@ ~lib/allocator/tlsf.ts:211:31
+        (call $~lib/allocator/tlsf/Block#get:left
          (get_local $1)
         )
        )
@@ -1288,7 +1265,7 @@
        (call $abort
         (i32.const 0)
         (i32.const 4)
-        (i32.const 205)
+        (i32.const 211)
         (i32.const 24)
        )
        (unreachable)
@@ -1296,20 +1273,20 @@
       (get_local $4)
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:206:6
-    (set_local $8
-     ;;@ (lib)/allocator/tlsf.ts:206:21
+    ;;@ ~lib/allocator/tlsf.ts:212:6
+    (set_local $7
+     ;;@ ~lib/allocator/tlsf.ts:212:21
      (i32.load
-      (get_local $7)
+      (get_local $4)
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:207:6
+    ;;@ ~lib/allocator/tlsf.ts:213:6
     (if
      (i32.eqz
-      ;;@ (lib)/allocator/tlsf.ts:207:13
+      ;;@ ~lib/allocator/tlsf.ts:213:13
       (i32.and
-       (get_local $8)
-       ;;@ (lib)/allocator/tlsf.ts:207:24
+       (get_local $7)
+       ;;@ ~lib/allocator/tlsf.ts:213:24
        (i32.const 1)
       )
      )
@@ -1317,37 +1294,37 @@
       (call $abort
        (i32.const 0)
        (i32.const 4)
-       (i32.const 207)
+       (i32.const 213)
        (i32.const 6)
       )
       (unreachable)
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:208:11
-    (call "$(lib)/allocator/tlsf/Root#remove"
-     ;;@ (lib)/allocator/tlsf.ts:208:6
+    ;;@ ~lib/allocator/tlsf.ts:214:11
+    (call $~lib/allocator/tlsf/Root#remove
+     ;;@ ~lib/allocator/tlsf.ts:214:6
      (get_local $0)
-     ;;@ (lib)/allocator/tlsf.ts:208:18
-     (get_local $7)
+     ;;@ ~lib/allocator/tlsf.ts:214:18
+     (get_local $4)
     )
-    ;;@ (lib)/allocator/tlsf.ts:209:6
+    ;;@ ~lib/allocator/tlsf.ts:215:6
     (i32.store
-     (get_local $7)
-     ;;@ (lib)/allocator/tlsf.ts:209:18
-     (tee_local $8
+     (get_local $4)
+     ;;@ ~lib/allocator/tlsf.ts:215:18
+     (tee_local $7
       (i32.add
-       ;;@ (lib)/allocator/tlsf.ts:209:19
-       (get_local $8)
-       ;;@ (lib)/allocator/tlsf.ts:209:31
+       ;;@ ~lib/allocator/tlsf.ts:215:19
+       (get_local $7)
+       ;;@ ~lib/allocator/tlsf.ts:215:31
        (i32.add
-        (i32.const 4)
-        ;;@ (lib)/allocator/tlsf.ts:209:44
+        (i32.const 8)
+        ;;@ ~lib/allocator/tlsf.ts:215:44
         (i32.and
-         ;;@ (lib)/allocator/tlsf.ts:209:45
+         ;;@ ~lib/allocator/tlsf.ts:215:45
          (get_local $2)
-         ;;@ (lib)/allocator/tlsf.ts:209:57
+         ;;@ ~lib/allocator/tlsf.ts:215:57
          (i32.xor
-          ;;@ (lib)/allocator/tlsf.ts:209:58
+          ;;@ ~lib/allocator/tlsf.ts:215:58
           (i32.const 3)
           (i32.const -1)
          )
@@ -1356,299 +1333,291 @@
       )
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:210:6
+    ;;@ ~lib/allocator/tlsf.ts:216:6
     (set_local $1
-     ;;@ (lib)/allocator/tlsf.ts:210:14
-     (get_local $7)
+     ;;@ ~lib/allocator/tlsf.ts:216:14
+     (get_local $4)
     )
-    ;;@ (lib)/allocator/tlsf.ts:211:6
+    ;;@ ~lib/allocator/tlsf.ts:217:6
     (set_local $2
-     ;;@ (lib)/allocator/tlsf.ts:211:18
-     (get_local $8)
+     ;;@ ~lib/allocator/tlsf.ts:217:18
+     (get_local $7)
     )
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:215:4
+  ;;@ ~lib/allocator/tlsf.ts:221:4
   (i32.store
    (get_local $5)
-   ;;@ (lib)/allocator/tlsf.ts:215:17
+   ;;@ ~lib/allocator/tlsf.ts:221:17
    (i32.or
     (get_local $6)
-    ;;@ (lib)/allocator/tlsf.ts:215:29
+    ;;@ ~lib/allocator/tlsf.ts:221:29
     (i32.const 2)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:216:9
-  (call "$(lib)/allocator/tlsf/Root#setJump"
-   ;;@ (lib)/allocator/tlsf.ts:216:4
+  ;;@ ~lib/allocator/tlsf.ts:222:9
+  (call $~lib/allocator/tlsf/Root#setJump
+   ;;@ ~lib/allocator/tlsf.ts:222:4
    (get_local $0)
-   ;;@ (lib)/allocator/tlsf.ts:216:17
+   ;;@ ~lib/allocator/tlsf.ts:222:17
    (get_local $1)
-   ;;@ (lib)/allocator/tlsf.ts:216:24
+   ;;@ ~lib/allocator/tlsf.ts:222:24
    (get_local $5)
   )
-  ;;@ (lib)/allocator/tlsf.ts:219:4
+  ;;@ ~lib/allocator/tlsf.ts:225:4
   (set_local $3
-   ;;@ (lib)/allocator/tlsf.ts:219:11
+   ;;@ ~lib/allocator/tlsf.ts:225:11
    (i32.and
     (get_local $2)
-    ;;@ (lib)/allocator/tlsf.ts:219:23
+    ;;@ ~lib/allocator/tlsf.ts:225:23
     (i32.xor
-     ;;@ (lib)/allocator/tlsf.ts:219:24
+     ;;@ ~lib/allocator/tlsf.ts:225:24
      (i32.const 3)
      (i32.const -1)
     )
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:220:4
+  ;;@ ~lib/allocator/tlsf.ts:226:4
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:220:11
-    (i32.and
-     (if (result i32)
-      (i32.ne
-       (tee_local $4
-        (i32.ge_u
-         (get_local $3)
-         ;;@ (lib)/allocator/tlsf.ts:220:19
-         (i32.const 12)
-        )
-       )
-       (i32.const 0)
-      )
-      ;;@ (lib)/allocator/tlsf.ts:220:37
-      (i32.lt_u
+    ;;@ ~lib/allocator/tlsf.ts:226:11
+    (if (result i32)
+     (tee_local $8
+      (i32.ge_u
        (get_local $3)
-       ;;@ (lib)/allocator/tlsf.ts:220:44
-       (i32.const 1073741824)
+       ;;@ ~lib/allocator/tlsf.ts:226:19
+       (i32.const 16)
       )
-      (get_local $4)
      )
-     (i32.const 1)
+     ;;@ ~lib/allocator/tlsf.ts:226:37
+     (i32.lt_u
+      (get_local $3)
+      ;;@ ~lib/allocator/tlsf.ts:226:44
+      (i32.const 1073741824)
+     )
+     (get_local $8)
     )
    )
    (block
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 220)
+     (i32.const 226)
      (i32.const 4)
     )
     (unreachable)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:223:4
-  (nop)
-  ;;@ (lib)/allocator/tlsf.ts:224:4
+  ;;@ ~lib/allocator/tlsf.ts:230:4
   (if
-   ;;@ (lib)/allocator/tlsf.ts:224:8
+   ;;@ ~lib/allocator/tlsf.ts:230:8
    (i32.lt_u
     (get_local $3)
-    ;;@ (lib)/allocator/tlsf.ts:224:15
-    (i32.const 128)
+    ;;@ ~lib/allocator/tlsf.ts:230:15
+    (i32.const 256)
    )
-   ;;@ (lib)/allocator/tlsf.ts:224:24
+   ;;@ ~lib/allocator/tlsf.ts:230:24
    (block
-    ;;@ (lib)/allocator/tlsf.ts:225:6
+    ;;@ ~lib/allocator/tlsf.ts:231:6
     (set_local $9
-     ;;@ (lib)/allocator/tlsf.ts:225:11
+     ;;@ ~lib/allocator/tlsf.ts:231:11
      (i32.const 0)
     )
-    ;;@ (lib)/allocator/tlsf.ts:226:6
+    ;;@ ~lib/allocator/tlsf.ts:232:6
     (set_local $10
-     ;;@ (lib)/allocator/tlsf.ts:226:11
+     ;;@ ~lib/allocator/tlsf.ts:232:11
      (i32.div_u
-      ;;@ (lib)/allocator/tlsf.ts:226:17
+      ;;@ ~lib/allocator/tlsf.ts:232:17
       (get_local $3)
-      ;;@ (lib)/allocator/tlsf.ts:226:24
-      (i32.const 4)
+      ;;@ ~lib/allocator/tlsf.ts:232:24
+      (i32.const 8)
      )
     )
    )
-   ;;@ (lib)/allocator/tlsf.ts:227:11
+   ;;@ ~lib/allocator/tlsf.ts:233:11
    (block
-    ;;@ (lib)/allocator/tlsf.ts:228:6
+    ;;@ ~lib/allocator/tlsf.ts:234:6
     (set_local $9
-     ;;@ (lib)/allocator/tlsf.ts:228:11
-     (call "$(lib)/allocator/tlsf/fls<usize>"
-      ;;@ (lib)/allocator/tlsf.ts:228:22
+     ;;@ ~lib/allocator/tlsf.ts:234:11
+     (call $~lib/allocator/tlsf/fls<usize>
+      ;;@ ~lib/allocator/tlsf.ts:234:22
       (get_local $3)
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:229:6
+    ;;@ ~lib/allocator/tlsf.ts:235:6
     (set_local $10
-     ;;@ (lib)/allocator/tlsf.ts:229:11
+     ;;@ ~lib/allocator/tlsf.ts:235:11
      (i32.xor
-      ;;@ (lib)/allocator/tlsf.ts:229:17
+      ;;@ ~lib/allocator/tlsf.ts:235:17
       (i32.shr_u
-       ;;@ (lib)/allocator/tlsf.ts:229:18
+       ;;@ ~lib/allocator/tlsf.ts:235:18
        (get_local $3)
-       ;;@ (lib)/allocator/tlsf.ts:229:26
+       ;;@ ~lib/allocator/tlsf.ts:235:26
        (i32.sub
-        ;;@ (lib)/allocator/tlsf.ts:229:27
+        ;;@ ~lib/allocator/tlsf.ts:235:27
         (get_local $9)
-        ;;@ (lib)/allocator/tlsf.ts:229:32
+        ;;@ ~lib/allocator/tlsf.ts:235:32
         (i32.const 5)
        )
       )
-      ;;@ (lib)/allocator/tlsf.ts:229:44
+      ;;@ ~lib/allocator/tlsf.ts:235:44
       (i32.shl
-       ;;@ (lib)/allocator/tlsf.ts:229:45
+       ;;@ ~lib/allocator/tlsf.ts:235:45
        (i32.const 1)
-       ;;@ (lib)/allocator/tlsf.ts:229:50
+       ;;@ ~lib/allocator/tlsf.ts:235:50
        (i32.const 5)
       )
      )
     )
-    ;;@ (lib)/allocator/tlsf.ts:230:6
+    ;;@ ~lib/allocator/tlsf.ts:236:6
     (set_local $9
      (i32.sub
       (get_local $9)
-      ;;@ (lib)/allocator/tlsf.ts:230:12
+      ;;@ ~lib/allocator/tlsf.ts:236:12
       (i32.sub
-       (i32.const 7)
-       ;;@ (lib)/allocator/tlsf.ts:230:22
+       (i32.const 8)
+       ;;@ ~lib/allocator/tlsf.ts:236:22
        (i32.const 1)
       )
      )
     )
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:234:4
+  ;;@ ~lib/allocator/tlsf.ts:240:4
   (set_local $11
-   ;;@ (lib)/allocator/tlsf.ts:234:20
-   (call "$(lib)/allocator/tlsf/Root#getHead"
-    ;;@ (lib)/allocator/tlsf.ts:234:15
+   ;;@ ~lib/allocator/tlsf.ts:240:20
+   (call $~lib/allocator/tlsf/Root#getHead
+    ;;@ ~lib/allocator/tlsf.ts:240:15
     (get_local $0)
-    ;;@ (lib)/allocator/tlsf.ts:234:28
+    ;;@ ~lib/allocator/tlsf.ts:240:28
     (get_local $9)
-    ;;@ (lib)/allocator/tlsf.ts:234:32
+    ;;@ ~lib/allocator/tlsf.ts:240:32
     (get_local $10)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:235:4
+  ;;@ ~lib/allocator/tlsf.ts:241:4
   (i32.store offset=4
    (get_local $1)
-   ;;@ (lib)/allocator/tlsf.ts:235:17
+   ;;@ ~lib/allocator/tlsf.ts:241:17
    (i32.const 0)
   )
-  ;;@ (lib)/allocator/tlsf.ts:236:4
+  ;;@ ~lib/allocator/tlsf.ts:242:4
   (i32.store offset=8
    (get_local $1)
-   ;;@ (lib)/allocator/tlsf.ts:236:17
+   ;;@ ~lib/allocator/tlsf.ts:242:17
    (get_local $11)
   )
-  ;;@ (lib)/allocator/tlsf.ts:237:4
+  ;;@ ~lib/allocator/tlsf.ts:243:4
   (if
-   ;;@ (lib)/allocator/tlsf.ts:237:8
+   ;;@ ~lib/allocator/tlsf.ts:243:8
    (get_local $11)
-   ;;@ (lib)/allocator/tlsf.ts:237:14
+   ;;@ ~lib/allocator/tlsf.ts:243:14
    (i32.store offset=4
     (get_local $11)
-    ;;@ (lib)/allocator/tlsf.ts:237:26
+    ;;@ ~lib/allocator/tlsf.ts:243:26
     (get_local $1)
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:238:9
-  (call "$(lib)/allocator/tlsf/Root#setHead"
-   ;;@ (lib)/allocator/tlsf.ts:238:4
+  ;;@ ~lib/allocator/tlsf.ts:244:9
+  (call $~lib/allocator/tlsf/Root#setHead
+   ;;@ ~lib/allocator/tlsf.ts:244:4
    (get_local $0)
-   ;;@ (lib)/allocator/tlsf.ts:238:17
+   ;;@ ~lib/allocator/tlsf.ts:244:17
    (get_local $9)
-   ;;@ (lib)/allocator/tlsf.ts:238:21
+   ;;@ ~lib/allocator/tlsf.ts:244:21
    (get_local $10)
-   ;;@ (lib)/allocator/tlsf.ts:238:25
+   ;;@ ~lib/allocator/tlsf.ts:244:25
    (get_local $1)
   )
-  ;;@ (lib)/allocator/tlsf.ts:241:4
+  ;;@ ~lib/allocator/tlsf.ts:247:4
   (i32.store
    (get_local $0)
    (i32.or
     (i32.load
      (get_local $0)
     )
-    ;;@ (lib)/allocator/tlsf.ts:241:18
+    ;;@ ~lib/allocator/tlsf.ts:247:18
     (i32.shl
-     ;;@ (lib)/allocator/tlsf.ts:241:19
+     ;;@ ~lib/allocator/tlsf.ts:247:19
      (i32.const 1)
-     ;;@ (lib)/allocator/tlsf.ts:241:24
+     ;;@ ~lib/allocator/tlsf.ts:247:24
      (get_local $9)
     )
    )
   )
-  ;;@ (lib)/allocator/tlsf.ts:242:9
-  (call "$(lib)/allocator/tlsf/Root#setSLMap"
-   ;;@ (lib)/allocator/tlsf.ts:242:4
+  ;;@ ~lib/allocator/tlsf.ts:248:9
+  (call $~lib/allocator/tlsf/Root#setSLMap
+   ;;@ ~lib/allocator/tlsf.ts:248:4
    (get_local $0)
-   ;;@ (lib)/allocator/tlsf.ts:242:18
+   ;;@ ~lib/allocator/tlsf.ts:248:18
    (get_local $9)
-   ;;@ (lib)/allocator/tlsf.ts:242:22
+   ;;@ ~lib/allocator/tlsf.ts:248:22
    (i32.or
-    ;;@ (lib)/allocator/tlsf.ts:242:27
-    (call "$(lib)/allocator/tlsf/Root#getSLMap"
-     ;;@ (lib)/allocator/tlsf.ts:242:22
+    ;;@ ~lib/allocator/tlsf.ts:248:27
+    (call $~lib/allocator/tlsf/Root#getSLMap
+     ;;@ ~lib/allocator/tlsf.ts:248:22
      (get_local $0)
-     ;;@ (lib)/allocator/tlsf.ts:242:36
+     ;;@ ~lib/allocator/tlsf.ts:248:36
      (get_local $9)
     )
-    ;;@ (lib)/allocator/tlsf.ts:242:42
+    ;;@ ~lib/allocator/tlsf.ts:248:42
     (i32.shl
-     ;;@ (lib)/allocator/tlsf.ts:242:43
+     ;;@ ~lib/allocator/tlsf.ts:248:43
      (i32.const 1)
-     ;;@ (lib)/allocator/tlsf.ts:242:48
+     ;;@ ~lib/allocator/tlsf.ts:248:48
      (get_local $10)
     )
    )
   )
  )
- (func "$(lib)/allocator/tlsf/free_memory" (; 20 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/tlsf/free_memory (; 20 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  ;;@ (lib)/allocator/tlsf.ts:480:2
+  ;;@ ~lib/allocator/tlsf.ts:491:47
   (if
-   ;;@ (lib)/allocator/tlsf.ts:480:6
+   ;;@ ~lib/allocator/tlsf.ts:492:6
    (get_local $0)
-   ;;@ (lib)/allocator/tlsf.ts:480:12
+   ;;@ ~lib/allocator/tlsf.ts:492:12
    (block
-    ;;@ (lib)/allocator/tlsf.ts:481:4
+    ;;@ ~lib/allocator/tlsf.ts:493:4
     (set_local $1
-     ;;@ (lib)/allocator/tlsf.ts:481:15
-     (get_global "$(lib)/allocator/tlsf/ROOT")
+     ;;@ ~lib/allocator/tlsf.ts:493:15
+     (get_global $~lib/allocator/tlsf/ROOT)
     )
-    ;;@ (lib)/allocator/tlsf.ts:482:4
+    ;;@ ~lib/allocator/tlsf.ts:494:4
     (if
-     ;;@ (lib)/allocator/tlsf.ts:482:8
+     ;;@ ~lib/allocator/tlsf.ts:494:8
      (get_local $1)
-     ;;@ (lib)/allocator/tlsf.ts:482:14
+     ;;@ ~lib/allocator/tlsf.ts:494:14
      (block
-      ;;@ (lib)/allocator/tlsf.ts:483:6
+      ;;@ ~lib/allocator/tlsf.ts:495:6
       (set_local $2
-       ;;@ (lib)/allocator/tlsf.ts:483:18
+       ;;@ ~lib/allocator/tlsf.ts:495:18
        (i32.sub
-        ;;@ (lib)/allocator/tlsf.ts:483:36
+        ;;@ ~lib/allocator/tlsf.ts:495:36
         (get_local $0)
-        ;;@ (lib)/allocator/tlsf.ts:483:43
-        (i32.const 4)
+        ;;@ ~lib/allocator/tlsf.ts:495:43
+        (i32.const 8)
        )
       )
-      ;;@ (lib)/allocator/tlsf.ts:484:6
+      ;;@ ~lib/allocator/tlsf.ts:496:6
       (set_local $3
-       ;;@ (lib)/allocator/tlsf.ts:484:22
+       ;;@ ~lib/allocator/tlsf.ts:496:22
        (i32.load
         (get_local $2)
        )
       )
-      ;;@ (lib)/allocator/tlsf.ts:485:6
+      ;;@ ~lib/allocator/tlsf.ts:497:6
       (if
        (i32.eqz
-        ;;@ (lib)/allocator/tlsf.ts:485:13
+        ;;@ ~lib/allocator/tlsf.ts:497:13
         (i32.eqz
-         ;;@ (lib)/allocator/tlsf.ts:485:14
+         ;;@ ~lib/allocator/tlsf.ts:497:14
          (i32.and
-          ;;@ (lib)/allocator/tlsf.ts:485:15
+          ;;@ ~lib/allocator/tlsf.ts:497:15
           (get_local $3)
-          ;;@ (lib)/allocator/tlsf.ts:485:27
+          ;;@ ~lib/allocator/tlsf.ts:497:27
           (i32.const 1)
          )
         )
@@ -1657,32 +1626,32 @@
         (call $abort
          (i32.const 0)
          (i32.const 4)
-         (i32.const 485)
+         (i32.const 497)
          (i32.const 6)
         )
         (unreachable)
        )
       )
-      ;;@ (lib)/allocator/tlsf.ts:486:6
+      ;;@ ~lib/allocator/tlsf.ts:498:6
       (i32.store
        (get_local $2)
-       ;;@ (lib)/allocator/tlsf.ts:486:19
+       ;;@ ~lib/allocator/tlsf.ts:498:19
        (i32.or
         (get_local $3)
-        ;;@ (lib)/allocator/tlsf.ts:486:31
+        ;;@ ~lib/allocator/tlsf.ts:498:31
         (i32.const 1)
        )
       )
-      ;;@ (lib)/allocator/tlsf.ts:487:11
-      (call "$(lib)/allocator/tlsf/Root#insert"
-       ;;@ (lib)/allocator/tlsf.ts:487:6
+      ;;@ ~lib/allocator/tlsf.ts:499:11
+      (call $~lib/allocator/tlsf/Root#insert
+       ;;@ ~lib/allocator/tlsf.ts:499:6
        (get_local $1)
-       ;;@ (lib)/allocator/tlsf.ts:487:18
+       ;;@ ~lib/allocator/tlsf.ts:499:18
        (i32.sub
-        ;;@ (lib)/allocator/tlsf.ts:487:36
+        ;;@ ~lib/allocator/tlsf.ts:499:36
         (get_local $0)
-        ;;@ (lib)/allocator/tlsf.ts:487:43
-        (i32.const 4)
+        ;;@ ~lib/allocator/tlsf.ts:499:43
+        (i32.const 8)
        )
       )
      )
@@ -1692,21 +1661,21 @@
  )
  (func $assembly/ugc/gc_free_fn (; 21 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  ;;@ assembly/ugc.ts:287:2
+  ;;@ assembly/ugc.ts:291:2
   (set_local $2
-   ;;@ assembly/ugc.ts:287:16
+   ;;@ assembly/ugc.ts:291:16
    (i32.load
-    ;;@ assembly/ugc.ts:287:26
+    ;;@ assembly/ugc.ts:291:26
     (i32.add
      (get_local $1)
-     ;;@ assembly/ugc.ts:287:54
+     ;;@ assembly/ugc.ts:291:54
      (i32.const 8)
     )
    )
   )
-  ;;@ assembly/ugc.ts:292:2
-  (call "$(lib)/allocator/tlsf/free_memory"
-   ;;@ assembly/ugc.ts:292:14
+  ;;@ assembly/ugc.ts:296:2
+  (call $~lib/allocator/tlsf/free_memory
+   ;;@ assembly/ugc.ts:296:14
    (get_local $1)
   )
  )
@@ -1715,9 +1684,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  ;;@ assembly/ugc.ts:164:4
-  (nop)
-  ;;@ assembly/ugc.ts:165:4
+  ;;@ assembly/ugc.ts:163:15
   (block $break|0
    (block $case2|0
     (block $case1|0
@@ -1877,13 +1844,10 @@
         (i32.store8 offset=29
          (get_local $0)
          ;;@ assembly/ugc.ts:187:25
-         (i32.and
-          (i32.xor
-           (get_local $3)
-           ;;@ assembly/ugc.ts:187:33
-           (i32.const 1)
-          )
-          (i32.const 255)
+         (i32.xor
+          (get_local $3)
+          ;;@ assembly/ugc.ts:187:33
+          (i32.const 1)
          )
         )
         ;;@ assembly/ugc.ts:188:12
@@ -1975,28 +1939,28 @@
     ;;@ assembly/ugc.ts:217:22
     (i32.const 0)
    )
-   ;;@ assembly/ugc.ts:218:11
+   ;;@ assembly/ugc.ts:217:28
    (call $assembly/ugc/Control#step
     ;;@ assembly/ugc.ts:218:6
     (get_local $0)
    )
   )
-  ;;@ assembly/ugc.ts:219:4
+  ;;@ assembly/ugc.ts:220:4
   (block $break|0
    (loop $continue|0
     (if
-     ;;@ assembly/ugc.ts:219:11
+     ;;@ assembly/ugc.ts:220:11
      (i32.ne
       (i32.load8_u offset=28
        (get_local $0)
       )
-      ;;@ assembly/ugc.ts:219:25
+      ;;@ assembly/ugc.ts:220:25
       (i32.const 0)
      )
      (block
-      ;;@ assembly/ugc.ts:220:11
+      ;;@ assembly/ugc.ts:220:31
       (call $assembly/ugc/Control#step
-       ;;@ assembly/ugc.ts:220:6
+       ;;@ assembly/ugc.ts:221:6
        (get_local $0)
       )
       (br $continue|0)
@@ -2007,80 +1971,62 @@
  )
  (func $assembly/ugc/gc_collect (; 24 ;) (type $v)
   (local $0 i32)
-  ;;@ assembly/ugc.ts:261:2
+  ;;@ assembly/ugc.ts:265:2
   (set_local $0
-   ;;@ assembly/ugc.ts:261:15
+   ;;@ assembly/ugc.ts:265:15
    (call $assembly/ugc/Control#get:paused
     (get_global $assembly/ugc/GC)
    )
   )
-  ;;@ assembly/ugc.ts:262:2
+  ;;@ assembly/ugc.ts:266:2
   (call $assembly/ugc/Control#set:paused
    (get_global $assembly/ugc/GC)
-   ;;@ assembly/ugc.ts:262:14
+   ;;@ assembly/ugc.ts:266:14
    (i32.const 0)
   )
-  ;;@ assembly/ugc.ts:263:5
+  ;;@ assembly/ugc.ts:267:5
   (call $assembly/ugc/Control#collect
-   ;;@ assembly/ugc.ts:263:2
+   ;;@ assembly/ugc.ts:267:2
    (get_global $assembly/ugc/GC)
   )
-  ;;@ assembly/ugc.ts:264:2
+  ;;@ assembly/ugc.ts:268:2
   (call $assembly/ugc/Control#set:paused
    (get_global $assembly/ugc/GC)
-   ;;@ assembly/ugc.ts:264:14
+   ;;@ assembly/ugc.ts:268:14
    (get_local $0)
   )
  )
  (func $assembly/ugc/gc_pause (; 25 ;) (type $v)
-  ;;@ assembly/ugc.ts:251:2
+  ;;@ assembly/ugc.ts:254:33
   (call $assembly/ugc/Control#set:paused
+   ;;@ assembly/ugc.ts:255:2
    (get_global $assembly/ugc/GC)
-   ;;@ assembly/ugc.ts:251:14
+   ;;@ assembly/ugc.ts:255:14
    (i32.const 1)
   )
  )
  (func $assembly/ugc/gc_resume (; 26 ;) (type $v)
-  ;;@ assembly/ugc.ts:256:2
+  ;;@ assembly/ugc.ts:259:34
   (call $assembly/ugc/Control#set:paused
+   ;;@ assembly/ugc.ts:260:2
    (get_global $assembly/ugc/GC)
-   ;;@ assembly/ugc.ts:256:14
+   ;;@ assembly/ugc.ts:260:14
    (i32.const 0)
   )
  )
  (func $start (; 27 ;) (type $v)
-  ;;@ (lib)/allocator/tlsf.ts:50:0
+  ;;@ ~lib/allocator/tlsf.ts:122:0
   (if
    (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:50:7
-    (i32.ge_u
-     (i32.const 2)
-     ;;@ (lib)/allocator/tlsf.ts:50:18
-     (i32.const 2)
-    )
-   )
-   (block
-    (call $abort
-     (i32.const 0)
-     (i32.const 4)
-     (i32.const 50)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  ;;@ (lib)/allocator/tlsf.ts:116:0
-  (if
-   (i32.eqz
-    ;;@ (lib)/allocator/tlsf.ts:116:7
+    ;;@ ~lib/allocator/tlsf.ts:122:7
     (i32.le_s
      (i32.shl
-      ;;@ (lib)/allocator/tlsf.ts:116:8
+      ;;@ ~lib/allocator/tlsf.ts:122:8
       (i32.const 1)
-      ;;@ (lib)/allocator/tlsf.ts:116:13
+      ;;@ ~lib/allocator/tlsf.ts:122:13
       (i32.const 5)
      )
-     ;;@ (lib)/allocator/tlsf.ts:116:25
+     ;;@ ~lib/allocator/tlsf.ts:122:25
      (i32.const 32)
     )
    )
@@ -2088,16 +2034,16 @@
     (call $abort
      (i32.const 0)
      (i32.const 4)
-     (i32.const 116)
+     (i32.const 122)
      (i32.const 0)
     )
     (unreachable)
    )
   )
   (set_global $assembly/ugc/GC
-   ;;@ assembly/ugc.ts:243:17
+   ;;@ assembly/ugc.ts:247:17
    (call $assembly/ugc/Control.create
-    ;;@ assembly/ugc.ts:243:24
+    ;;@ assembly/ugc.ts:247:24
     (get_global $HEAP_BASE)
    )
   )

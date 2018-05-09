@@ -2,7 +2,11 @@ var fs = require("fs");
 
 // NOTE that this doesn't do anything useful, yet
 
-var ugc = new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(__dirname + "/../ugc.untouched.wasm"))).exports;
+var ugc = new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(__dirname + "/../build/untouched.wasm")), {
+  env: { abort: function(msg, file, line, column) {
+    console.log("abort called at " + line + ":" + column);
+  } }
+}).exports;
 
 function mem(memory, offset, count) {
   if (!offset) offset = 0;
