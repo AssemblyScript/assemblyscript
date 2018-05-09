@@ -1,7 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $i (func (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))

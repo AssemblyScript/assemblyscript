@@ -1,5 +1,4 @@
 (module
- (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))

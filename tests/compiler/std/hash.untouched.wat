@@ -1,9 +1,7 @@
 (module
- (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $fi (func (param f32) (result i32)))
- (type $F (func (result f64)))
  (type $Fi (func (param f64) (result i32)))
  (type $v (func))
  (import "env" "logi" (func $std/hash/logi (param i32)))

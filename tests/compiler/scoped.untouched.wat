@@ -1,5 +1,4 @@
 (module
- (type $i (func (result i32)))
  (type $iv (func (param i32)))
  (type $v (func))
  (global $scoped/aGlobal (mut i32) (i32.const 1))

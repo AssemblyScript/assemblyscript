@@ -1,11 +1,9 @@
 (module
- (type $i (func (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $FFF (func (param f64 f64) (result f64)))
- (type $F (func (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))

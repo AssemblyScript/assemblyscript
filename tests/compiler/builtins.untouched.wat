@@ -1,11 +1,8 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $F (func (result f64)))
  (type $fi (func (param f32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
- (type $i (func (result i32)))
  (type $v (func))
- (type $f (func (result f32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))

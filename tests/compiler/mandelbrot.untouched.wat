@@ -1,8 +1,6 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $i (func (result i32)))
  (type $FF (func (param f64) (result f64)))
- (type $F (func (result f64)))
  (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
  (global $../../examples/mandelbrot/assembly/index/NUM_COLORS i32 (i32.const 2048))

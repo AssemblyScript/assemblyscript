@@ -1,5 +1,4 @@
 (module
- (type $F (func (result f64)))
  (type $i (func (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))

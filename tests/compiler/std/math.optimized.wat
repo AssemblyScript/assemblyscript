@@ -1,7 +1,5 @@
 (module
- (type $F (func (result f64)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $f (func (result f32)))
  (type $FFFii (func (param f64 f64 f64 i32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
@@ -19,8 +17,10 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $ffffii (func (param f32 f32 f32 f32 i32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
+ (type $F (func (result f64)))
  (type $Iv (func (param i64)))
  (type $II (func (param i64) (result i64)))
+ (type $f (func (result f32)))
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (import "JSMath" "E" (global $~lib/math/JSMath.E f64))

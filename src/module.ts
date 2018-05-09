@@ -297,6 +297,15 @@ export class Module {
     }
   }
 
+  removeFunctionType(name: string): void {
+    var cStr = allocString(name);
+    try {
+      _BinaryenRemoveFunctionType(this.ref, cStr);
+    } finally {
+      free_memory(cStr);
+    }
+  }
+
   // constants
 
   createI32(value: i32): ExpressionRef {
@@ -661,6 +670,28 @@ export class Module {
     } finally {
       free_memory(cStr);
     }
+  }
+
+  private tempName: usize = 0;
+  private hasTempFunc: bool = false;
+
+  addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef {
+    this.hasTempFunc = assert(!this.hasTempFunc);
+    if (!this.tempName) this.tempName = allocString(""); // works because strings are interned
+    var cArr = allocI32Array(paramTypes);
+    try {
+      let typeRef = _BinaryenAddFunctionType(this.ref, this.tempName, result, cArr, paramTypes ? paramTypes.length : 0);
+      return _BinaryenAddFunction(this.ref, this.tempName, typeRef, 0, 0, body);
+    } finally {
+      free_memory(cArr);
+    }
+  }
+
+  removeTemporaryFunction(): void {
+    this.hasTempFunc = !assert(this.hasTempFunc);
+    var tempName = assert(this.tempName);
+    _BinaryenRemoveFunction(this.ref, tempName);
+    _BinaryenRemoveFunctionType(this.ref, tempName);
   }
 
   addFunctionExport(

@@ -358,6 +358,7 @@ declare type BinaryenFunctionTypeRef = usize;
 
 declare function _BinaryenAddFunctionType(module: BinaryenModuleRef, name: usize, result: BinaryenType, paramTypes: usize, numParams: BinaryenIndex): BinaryenFunctionTypeRef;
 declare function _BinaryenGetFunctionTypeBySignature(module: BinaryenModuleRef, result: BinaryenType, paramTypes: usize, numParams: BinaryenIndex): BinaryenFunctionTypeRef;
+declare function _BinaryenRemoveFunctionType(module: BinaryenModuleRef, name: usize): void;
 
 declare function _BinaryenFunctionTypeGetName(ftype: BinaryenFunctionTypeRef): usize;
 declare function _BinaryenFunctionTypeGetNumParams(ftype: BinaryenFunctionTypeRef): BinaryenIndex;

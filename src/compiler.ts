@@ -2311,21 +2311,10 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var type = this.currentType;
     var nativeType = type.toNativeType();
-    var typeRef = module.getFunctionTypeBySignature(nativeType, null);
-    var typeRefAdded = false;
-    if (!typeRef) {
-      typeRef = module.addFunctionType(type.toSignatureString(), nativeType, null);
-      typeRefAdded = true;
-    }
-    var funcRef = module.addFunction("__precompute", typeRef, null, expr);
+    var funcRef = module.addTemporaryFunction(nativeType, null, expr);
     module.runPasses([ "precompute" ], funcRef);
     var ret = getFunctionBody(funcRef);
-    module.removeFunction("__precompute");
-    if (typeRefAdded) {
-      // TODO: also remove the function type somehow if no longer used or make the C-API accept
-      // a `null` typeRef, using an implicit type.
-      // module.removeFunctionType(typeRef);
-    }
+    module.removeTemporaryFunction();
     return ret;
   }
 

@@ -1,5 +1,4 @@
 (module
- (type $i (func (result i32)))
  (type $v (func))
  (global $ternary/a (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 4))
