@@ -4047,7 +4047,7 @@
      (get_local $6)
     )
    )
-   (set_local $4
+   (set_local $5
     (i32.wrap/i64
      (i64.shr_u
       (tee_local $6
@@ -4075,10 +4075,10 @@
      )
     )
    )
-   (set_local $5
+   (set_local $4
     (i32.or
      (i32.shr_u
-      (get_local $4)
+      (get_local $5)
       (i32.const 31)
      )
      (i32.and
@@ -4099,9 +4099,9 @@
    (if
     (i32.eqz
      (i32.or
-      (tee_local $4
+      (tee_local $5
        (i32.and
-        (get_local $4)
+        (get_local $5)
         (i32.const 2147483647)
        )
       )
@@ -4118,11 +4118,11 @@
          (i32.or
           (i32.eqz
            (tee_local $2
-            (get_local $5)
+            (get_local $4)
            )
           )
           (i32.eq
-           (get_local $2)
+           (get_local $4)
            (i32.const 1)
           )
          )
@@ -4171,7 +4171,7 @@
     )
     (if
      (i32.eq
-      (get_local $4)
+      (get_local $5)
       (i32.const 2146435072)
      )
      (block $break|1
@@ -4181,7 +4181,7 @@
          (block $case0|1
           (block $tablify|0
            (br_table $case0|1 $case1|1 $case2|1 $case3|1 $tablify|0
-            (get_local $5)
+            (get_local $4)
            )
           )
           (br $break|1)
@@ -4209,7 +4209,7 @@
          (block $case0|2
           (block $tablify|00
            (br_table $case0|2 $case1|2 $case2|2 $case3|2 $tablify|00
-            (get_local $5)
+            (get_local $4)
            )
           )
           (br $break|2)
@@ -4240,12 +4240,12 @@
         (get_local $3)
         (i32.const 67108864)
        )
-       (get_local $4)
+       (get_local $5)
       )
      )
      (get_local $2)
      (i32.eq
-      (get_local $4)
+      (get_local $5)
       (i32.const 2146435072)
      )
     )
@@ -4255,13 +4255,13 @@
      (if (result i32)
       (tee_local $2
        (i32.and
-        (get_local $5)
+        (get_local $4)
         (i32.const 2)
        )
       )
       (i32.lt_u
        (i32.add
-        (get_local $4)
+        (get_local $5)
         (i32.const 67108864)
        )
        (get_local $3)
@@ -4286,7 +4286,7 @@
        (block $case0|3
         (block $tablify|01
          (br_table $case0|3 $case1|3 $case2|3 $case3|3 $tablify|01
-          (get_local $5)
+          (get_local $4)
          )
         )
         (br $break|3)
@@ -4327,7 +4327,7 @@
    (f64.const -1.5707963267948966)
    (f64.const 1.5707963267948966)
    (i32.and
-    (get_local $5)
+    (get_local $4)
     (i32.const 1)
    )
   )
@@ -4389,14 +4389,14 @@
      )
     )
    )
-   (set_local $3
+   (set_local $4
     (i32.reinterpret/f32
      (get_local $0)
     )
    )
    (if
     (i32.eq
-     (tee_local $4
+     (tee_local $5
       (i32.reinterpret/f32
        (get_local $1)
       )
@@ -4409,32 +4409,32 @@
      )
     )
    )
-   (set_local $5
+   (set_local $3
     (i32.or
      (i32.shr_u
-      (get_local $3)
+      (get_local $4)
       (i32.const 31)
      )
      (i32.and
       (i32.shr_u
-       (get_local $4)
+       (get_local $5)
        (i32.const 30)
       )
       (i32.const 2)
      )
     )
    )
-   (set_local $4
+   (set_local $5
     (i32.and
-     (get_local $4)
+     (get_local $5)
      (i32.const 2147483647)
     )
    )
    (if
     (i32.eqz
-     (tee_local $3
+     (tee_local $4
       (i32.and
-       (get_local $3)
+       (get_local $4)
        (i32.const 2147483647)
       )
      )
@@ -4447,11 +4447,11 @@
          (i32.or
           (i32.eqz
            (tee_local $2
-            (get_local $5)
+            (get_local $3)
            )
           )
           (i32.eq
-           (get_local $2)
+           (get_local $3)
            (i32.const 1)
           )
          )
@@ -4487,17 +4487,17 @@
    )
    (br_if $folding-inner0
     (i32.eqz
-     (get_local $4)
+     (get_local $5)
     )
    )
    (if
     (i32.eq
-     (get_local $4)
+     (get_local $5)
      (i32.const 2139095040)
     )
     (if
      (i32.eq
-      (get_local $3)
+      (get_local $4)
       (i32.const 2139095040)
      )
      (block $break|1
@@ -4507,7 +4507,7 @@
          (block $case0|1
           (block $tablify|0
            (br_table $case0|1 $case1|1 $case2|1 $case3|1 $tablify|0
-            (get_local $5)
+            (get_local $3)
            )
           )
           (br $break|1)
@@ -4535,7 +4535,7 @@
          (block $case0|2
           (block $tablify|00
            (br_table $case0|2 $case1|2 $case2|2 $case3|2 $tablify|00
-            (get_local $5)
+            (get_local $3)
            )
           )
           (br $break|2)
@@ -4563,15 +4563,15 @@
      (tee_local $2
       (i32.lt_u
        (i32.add
-        (get_local $4)
+        (get_local $5)
         (i32.const 218103808)
        )
-       (get_local $3)
+       (get_local $4)
       )
      )
      (get_local $2)
      (i32.eq
-      (get_local $3)
+      (get_local $4)
       (i32.const 2139095040)
      )
     )
@@ -4581,16 +4581,16 @@
      (if (result i32)
       (tee_local $2
        (i32.and
-        (get_local $5)
+        (get_local $3)
         (i32.const 2)
        )
       )
       (i32.lt_u
        (i32.add
-        (get_local $3)
+        (get_local $4)
         (i32.const 218103808)
        )
-       (get_local $4)
+       (get_local $5)
       )
       (get_local $2)
      )
@@ -4612,7 +4612,7 @@
        (block $case0|3
         (block $tablify|01
          (br_table $case0|3 $case1|3 $case2|3 $case3|3 $tablify|01
-          (get_local $5)
+          (get_local $3)
          )
         )
         (br $break|3)
@@ -4653,7 +4653,7 @@
    (f32.const -1.5707963705062866)
    (f32.const 1.5707963705062866)
    (i32.and
-    (get_local $5)
+    (get_local $3)
     (i32.const 1)
    )
   )
