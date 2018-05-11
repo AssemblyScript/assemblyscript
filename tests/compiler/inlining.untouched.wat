@@ -35,21 +35,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
-  (local $15 i32)
-  (local $16 i32)
-  (local $17 i32)
-  (local $18 i32)
-  (local $19 i32)
-  (local $20 i32)
-  (local $21 i32)
-  (local $22 i32)
   (block
    (set_local $0
     (f32.const -1)
@@ -102,12 +87,12 @@
    (i32.eqz
     (i32.eq
      (block $inlining/func_ii|inlined.1 (result i32)
-      (set_local $3
+      (set_local $2
        (i32.const 41)
       )
       (if
        (i32.eq
-        (get_local $3)
+        (get_local $2)
         (i32.const 42)
        )
        (br $inlining/func_ii|inlined.1
@@ -117,7 +102,7 @@
       (br $inlining/func_ii|inlined.1
        (if (result i32)
         (i32.lt_s
-         (get_local $3)
+         (get_local $2)
          (i32.const 42)
         )
         (i32.const 2)
@@ -142,12 +127,12 @@
    (i32.eqz
     (i32.eq
      (block $inlining/func_ii|inlined.2 (result i32)
-      (set_local $4
+      (set_local $2
        (i32.const 43)
       )
       (if
        (i32.eq
-        (get_local $4)
+        (get_local $2)
         (i32.const 42)
        )
        (br $inlining/func_ii|inlined.2
@@ -157,7 +142,7 @@
       (br $inlining/func_ii|inlined.2
        (if (result i32)
         (i32.lt_s
-         (get_local $4)
+         (get_local $2)
          (i32.const 42)
         )
         (i32.const 2)
@@ -182,11 +167,11 @@
    (i32.eqz
     (i32.eq
      (block $inlining/func_ii_opt|inlined.0 (result i32)
-      (set_local $5
+      (set_local $2
        (i32.const 0)
       )
       (br $inlining/func_ii_opt|inlined.0
-       (get_local $5)
+       (get_local $2)
       )
      )
      (i32.const 0)
@@ -206,11 +191,11 @@
    (i32.eqz
     (i32.eq
      (block $inlining/func_ii_opt|inlined.1 (result i32)
-      (set_local $6
+      (set_local $2
        (i32.const 1)
       )
       (br $inlining/func_ii_opt|inlined.1
-       (get_local $6)
+       (get_local $2)
       )
      )
      (i32.const 1)
@@ -230,29 +215,28 @@
    (i32.eqz
     (i32.eq
      (block $inlining/func_ii_loc|inlined.0 (result i32)
-      (set_local $7
+      (set_local $2
        (i32.const 2)
       )
-      (set_local $8
-       (get_local $7)
+      (set_local $3
+       (get_local $2)
       )
-      (nop)
       (block
-       (set_local $10
-        (get_local $8)
+       (set_local $5
+        (get_local $3)
        )
-       (set_local $11
-        (get_local $10)
+       (set_local $6
+        (get_local $5)
        )
-       (set_local $9
+       (set_local $4
         (i32.add
-         (get_local $11)
+         (get_local $6)
          (i32.const 1)
         )
        )
       )
       (br $inlining/func_ii_loc|inlined.0
-       (get_local $9)
+       (get_local $4)
       )
      )
      (i32.const 3)
@@ -272,29 +256,28 @@
    (i32.eqz
     (i32.eq
      (block $inlining/func_ii_loc|inlined.1 (result i32)
-      (set_local $12
+      (set_local $4
        (i32.const 3)
       )
-      (set_local $13
-       (get_local $12)
+      (set_local $3
+       (get_local $4)
       )
-      (nop)
       (block
-       (set_local $15
-        (get_local $13)
+       (set_local $6
+        (get_local $3)
        )
-       (set_local $16
-        (get_local $15)
+       (set_local $5
+        (get_local $6)
        )
-       (set_local $14
+       (set_local $2
         (i32.add
-         (get_local $16)
+         (get_local $5)
          (i32.const 1)
         )
        )
       )
       (br $inlining/func_ii_loc|inlined.1
-       (get_local $14)
+       (get_local $2)
       )
      )
      (i32.const 4)
@@ -311,7 +294,7 @@
    )
   )
   (block $inlining/func_iv|inlined.0
-   (set_local $17
+   (set_local $2
     (i32.const 0)
    )
   )
@@ -348,16 +331,16 @@
    (i32.eqz
     (i32.eq
      (block $inlining/Foo.method_static|inlined.0 (result i32)
-      (set_local $18
+      (set_local $2
        (i32.const 42)
       )
-      (set_local $19
+      (set_local $3
        (i32.const 2)
       )
       (br $inlining/Foo.method_static|inlined.0
        (i32.add
-        (get_local $18)
-        (get_local $19)
+        (get_local $2)
+        (get_local $3)
        )
       )
      )
@@ -374,21 +357,21 @@
     (unreachable)
    )
   )
-  (set_local $20
+  (set_local $7
    (i32.const 123)
   )
   (if
    (i32.eqz
     (i32.eq
      (block $inlining/Foo#method_this|inlined.0 (result i32)
-      (set_local $21
+      (set_local $3
        (i32.const 43)
       )
-      (set_local $22
+      (set_local $2
        (i32.const 3)
       )
       (br $inlining/Foo#method_this|inlined.0
-       (get_local $20)
+       (get_local $7)
       )
      )
      (i32.const 123)

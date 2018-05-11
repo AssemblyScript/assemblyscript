@@ -2923,6 +2923,7 @@ export class Function extends Element {
     if (temps && temps.length) {
       local = temps.pop();
       local.type = type;
+      local.flags = CommonFlags.NONE;
     } else {
       local = this.addLocal(type);
     }
@@ -3704,6 +3705,7 @@ export class Flow {
         return existingLocal;
       }
     }
+    scopedLocal.set(CommonFlags.SCOPED);
     this.scopedLocals.set(name, scopedLocal);
     if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
       this.setLocalWrapped(scopedLocal.index, wrapped);

@@ -238,30 +238,7 @@
    )
   )
  )
- (func $~lib/string/String#startsWith|trampoline (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (i32.sub
-       (get_global $~argc)
-       (i32.const 1)
-      )
-     )
-    )
-    (unreachable)
-   )
-   (set_local $2
-    (i32.const 0)
-   )
-  )
-  (call $~lib/string/String#startsWith
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $~lib/string/String#endsWith (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#endsWith (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.eqz
@@ -346,7 +323,7 @@
    )
   )
  )
- (func $~lib/string/String#endsWith|trampoline (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#endsWith|trampoline (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -369,7 +346,7 @@
    (get_local $2)
   )
  )
- (func $~lib/string/String#indexOf (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#indexOf (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -474,7 +451,7 @@
   )
   (i32.const -1)
  )
- (func $~lib/string/String#includes (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#includes (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.ne
    (call $~lib/string/String#indexOf
     (get_local $0)
@@ -484,56 +461,10 @@
    (i32.const -1)
   )
  )
- (func $~lib/string/String#includes|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (i32.sub
-       (get_global $~argc)
-       (i32.const 1)
-      )
-     )
-    )
-    (unreachable)
-   )
-   (set_local $2
-    (i32.const 0)
-   )
-  )
-  (call $~lib/string/String#includes
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $~lib/string/String#indexOf|trampoline (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (i32.sub
-       (get_global $~argc)
-       (i32.const 1)
-      )
-     )
-    )
-    (unreachable)
-   )
-   (set_local $2
-    (i32.const 0)
-   )
-  )
-  (call $~lib/string/String#indexOf
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $std/string/getString (; 11 ;) (type $i) (result i32)
+ (func $std/string/getString (; 8 ;) (type $i) (result i32)
   (get_global $std/string/str)
  )
- (func $~lib/internal/string/parse<f64> (; 12 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/internal/string/parse<f64> (; 9 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -879,35 +810,13 @@
    (get_local $5)
   )
  )
- (func $~lib/string/parseInt (; 13 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/string/parseInt (; 10 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (call $~lib/internal/string/parse<f64>
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/string/parseInt|trampoline (; 14 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (i32.sub
-       (get_global $~argc)
-       (i32.const 1)
-      )
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    (i32.const 0)
-   )
-  )
-  (call $~lib/string/parseInt
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $~lib/string/parseFloat (; 15 ;) (type $iF) (param $0 i32) (result f64)
+ (func $~lib/string/parseFloat (; 11 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1157,7 +1066,7 @@
    (get_local $4)
   )
  )
- (func $~lib/allocator/arena/allocate_memory (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/allocate_memory (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1246,7 +1155,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/internal/string/allocate (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocate (; 13 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -1290,7 +1199,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/copy_memory (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/copy_memory (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (loop $continue|0
@@ -2866,7 +2775,7 @@
    )
   )
  )
- (func $~lib/memory/move_memory (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/move_memory (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -3153,7 +3062,7 @@
    )
   )
  )
- (func $~lib/string/String#concat (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3240,7 +3149,7 @@
   )
   (get_local $2)
  )
- (func $~lib/string/String.__concat (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -3254,7 +3163,7 @@
    (get_local $1)
   )
  )
- (func $~lib/string/String.__eq (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eq
@@ -3313,7 +3222,7 @@
    )
   )
  )
- (func $~lib/string/String.__ne (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.eqz
    (call $~lib/string/String.__eq
     (get_local $0)
@@ -3321,7 +3230,7 @@
    )
   )
  )
- (func $~lib/string/String.__gt (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gt (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -3399,7 +3308,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String.__gte (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gte (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -3479,7 +3388,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String.__lt (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -3557,7 +3466,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String.__lte (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lte (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -3637,7 +3546,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String#repeat (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#repeat (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3767,26 +3676,7 @@
   )
   (get_local $4)
  )
- (func $~lib/string/String#repeat|trampoline (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (get_global $~argc)
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    (i32.const 0)
-   )
-  )
-  (call $~lib/string/String#repeat
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $start (; 30 ;) (type $v)
+ (func $start (; 25 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -3850,16 +3740,11 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
-    )
-    (i32.eqz
-     (call $~lib/string/String#startsWith|trampoline
-      (get_global $std/string/str)
-      (i32.const 104)
-      (i32.const 0)
-     )
+   (i32.eqz
+    (call $~lib/string/String#startsWith
+     (get_global $std/string/str)
+     (i32.const 104)
+     (i32.const 0)
     )
    )
    (block
@@ -3896,16 +3781,11 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
-    )
-    (i32.eqz
-     (call $~lib/string/String#includes|trampoline
-      (get_global $std/string/str)
-      (i32.const 140)
-      (i32.const 0)
-     )
+   (i32.eqz
+    (call $~lib/string/String#includes
+     (get_global $std/string/str)
+     (i32.const 140)
+     (i32.const 0)
     )
    )
    (block
@@ -3919,18 +3799,13 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (i32.ne
+    (call $~lib/string/String#indexOf
+     (get_global $std/string/str)
+     (i32.const 152)
+     (i32.const 0)
     )
-    (i32.ne
-     (call $~lib/string/String#indexOf|trampoline
-      (get_global $std/string/str)
-      (i32.const 152)
-      (i32.const 0)
-     )
-     (i32.const 2)
-    )
+    (i32.const 2)
    )
    (block
     (call $abort
@@ -3943,18 +3818,13 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (i32.ne
+    (call $~lib/string/String#indexOf
+     (get_global $std/string/str)
+     (i32.const 160)
+     (i32.const 0)
     )
-    (i32.ne
-     (call $~lib/string/String#indexOf|trampoline
-      (get_global $std/string/str)
-      (i32.const 160)
-      (i32.const 0)
-     )
-     (i32.const -1)
-    )
+    (i32.const -1)
    )
    (block
     (call $abort
@@ -3967,17 +3837,12 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (f64.ne
+    (call $~lib/string/parseInt
+     (i32.const 168)
+     (i32.const 0)
     )
-    (f64.ne
-     (call $~lib/string/parseInt|trampoline
-      (i32.const 168)
-      (i32.const 0)
-     )
-     (f64.const 0)
-    )
+    (f64.const 0)
    )
    (block
     (call $abort
@@ -3990,17 +3855,12 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (f64.ne
+    (call $~lib/string/parseInt
+     (i32.const 176)
+     (i32.const 0)
     )
-    (f64.ne
-     (call $~lib/string/parseInt|trampoline
-      (i32.const 176)
-      (i32.const 0)
-     )
-     (f64.const 1)
-    )
+    (f64.const 1)
    )
    (block
     (call $abort
@@ -4013,17 +3873,12 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (f64.ne
+    (call $~lib/string/parseInt
+     (i32.const 184)
+     (i32.const 0)
     )
-    (f64.ne
-     (call $~lib/string/parseInt|trampoline
-      (i32.const 184)
-      (i32.const 0)
-     )
-     (f64.const 5)
-    )
+    (f64.const 5)
    )
    (block
     (call $abort
@@ -4036,17 +3891,12 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (f64.ne
+    (call $~lib/string/parseInt
+     (i32.const 200)
+     (i32.const 0)
     )
-    (f64.ne
-     (call $~lib/string/parseInt|trampoline
-      (i32.const 200)
-      (i32.const 0)
-     )
-     (f64.const 455)
-    )
+    (f64.const 455)
    )
    (block
     (call $abort
@@ -4059,17 +3909,12 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (f64.ne
+    (call $~lib/string/parseInt
+     (i32.const 216)
+     (i32.const 0)
     )
-    (f64.ne
-     (call $~lib/string/parseInt|trampoline
-      (i32.const 216)
-      (i32.const 0)
-     )
-     (f64.const 3855)
-    )
+    (f64.const 3855)
    )
    (block
     (call $abort
@@ -4082,17 +3927,12 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (f64.ne
+    (call $~lib/string/parseInt
+     (i32.const 232)
+     (i32.const 0)
     )
-    (f64.ne
-     (call $~lib/string/parseInt|trampoline
-      (i32.const 232)
-      (i32.const 0)
-     )
-     (f64.const 3855)
-    )
+    (f64.const 3855)
    )
    (block
     (call $abort
@@ -4105,17 +3945,12 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (f64.ne
+    (call $~lib/string/parseInt
+     (i32.const 248)
+     (i32.const 0)
     )
-    (f64.ne
-     (call $~lib/string/parseInt|trampoline
-      (i32.const 248)
-      (i32.const 0)
-     )
-     (f64.const 11)
-    )
+    (f64.const 11)
    )
    (block
     (call $abort
@@ -4128,17 +3963,12 @@
    )
   )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
+   (f64.ne
+    (call $~lib/string/parseInt
+     (i32.const 260)
+     (i32.const 0)
     )
-    (f64.ne
-     (call $~lib/string/parseInt|trampoline
-      (i32.const 260)
-      (i32.const 0)
-     )
-     (f64.const 1)
-    )
+    (f64.const 1)
    )
    (block
     (call $abort
@@ -4624,14 +4454,9 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (block (result i32)
-      (set_global $~argc
-       (i32.const 0)
-      )
-      (call $~lib/string/String#repeat|trampoline
-       (i32.const 316)
-       (i32.const 0)
-      )
+     (call $~lib/string/String#repeat
+      (i32.const 316)
+      (i32.const 0)
      )
      (i32.const 332)
     )

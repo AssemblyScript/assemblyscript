@@ -347,10 +347,7 @@
   (local $14 i32)
   (local $15 f64)
   (local $16 f64)
-  (local $17 f64)
-  (local $18 f64)
-  (local $19 f64)
-  (local $20 i32)
+  (local $17 i32)
   (set_local $4
    (f64.div
     (f64.convert_u/i32
@@ -497,7 +494,7 @@
         )
        )
        (block $break|2
-        (set_local $16
+        (set_local $15
          (f64.min
           (f64.const 8)
           (f64.convert_u/i32
@@ -511,11 +508,11 @@
            (f64.convert_u/i32
             (get_local $14)
            )
-           (get_local $16)
+           (get_local $15)
           )
           (block
            (block
-            (set_local $17
+            (set_local $16
              (f64.add
               (f64.sub
                (f64.mul
@@ -543,7 +540,7 @@
              )
             )
             (set_local $10
-             (get_local $17)
+             (get_local $16)
             )
            )
            (set_local $14
@@ -557,12 +554,12 @@
          )
         )
        )
-       (set_local $19
+       (set_local $15
         (f64.div
          (call $~lib/math/NativeMath.log
           (call $~lib/math/NativeMath.log
            (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
-            (set_local $18
+            (set_local $15
              (f64.add
               (f64.mul
                (get_local $10)
@@ -576,7 +573,7 @@
             )
             (br $~lib/math/NativeMath.sqrt|inlined.0
              (f64.sqrt
-              (get_local $18)
+              (get_local $15)
              )
             )
            )
@@ -585,10 +582,10 @@
          (f64.const 0.6931471805599453)
         )
        )
-       (set_local $20
+       (set_local $17
         (if (result i32)
          (call $isFinite<f64>
-          (get_local $19)
+          (get_local $15)
          )
          (i32.trunc_u/f64
           (f64.mul
@@ -607,7 +604,7 @@
                 (i32.const 1)
                )
               )
-              (get_local $19)
+              (get_local $15)
              )
              (f64.convert_u/i32
               (get_local $3)
@@ -635,7 +632,7 @@
          )
          (i32.const 1)
         )
-        (get_local $20)
+        (get_local $17)
        )
       )
       (set_local $8

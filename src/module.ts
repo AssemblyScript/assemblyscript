@@ -239,7 +239,8 @@ export class MemorySegment {
 export class Module {
 
   ref: ModuleRef;
-  out: usize;
+
+  private cachedByValue: usize;
 
   /** Maximum number of pages when targeting WASM32. */
   static readonly MAX_MEMORY_WASM32: Index = 0xffff;
@@ -250,7 +251,7 @@ export class Module {
   static create(): Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
-    module.out = allocate_memory(16);
+    module.cachedByValue = allocate_memory(16);
     return module;
   }
 
@@ -259,7 +260,7 @@ export class Module {
     try {
       let module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
-      module.out = allocate_memory(3 * 8); // LLVM C-ABI, max used is 3 * usize
+      module.cachedByValue = allocate_memory(3 * 8); // LLVM C-ABI, max used is 3 * usize
       return module;
     } finally {
       free_memory(changetype<usize>(cArr));
@@ -309,25 +310,25 @@ export class Module {
   // constants
 
   createI32(value: i32): ExpressionRef {
-    var out = this.out;
+    var out = this.cachedByValue;
     _BinaryenLiteralInt32(out, value);
     return _BinaryenConst(this.ref, out);
   }
 
   createI64(valueLow: i32, valueHigh: i32 = 0): ExpressionRef {
-    var out = this.out;
+    var out = this.cachedByValue;
     _BinaryenLiteralInt64(out, valueLow, valueHigh);
     return _BinaryenConst(this.ref, out);
   }
 
   createF32(value: f32): ExpressionRef {
-    var out = this.out;
+    var out = this.cachedByValue;
     _BinaryenLiteralFloat32(out, value);
     return _BinaryenConst(this.ref, out);
   }
 
   createF64(value: f64): ExpressionRef {
-    var out = this.out;
+    var out = this.cachedByValue;
     _BinaryenLiteralFloat64(out, value);
     return _BinaryenConst(this.ref, out);
   }
@@ -672,24 +673,25 @@ export class Module {
     }
   }
 
-  private tempName: usize = 0;
-  private hasTempFunc: bool = false;
+  private cachedTemporaryName: usize = 0;
+  private hasTemporaryFunction: bool = false;
 
   addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef {
-    this.hasTempFunc = assert(!this.hasTempFunc);
-    if (!this.tempName) this.tempName = allocString(""); // works because strings are interned
+    this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
+    var tempName = this.cachedTemporaryName;
+    if (!tempName) this.cachedTemporaryName = tempName = allocString(""); // works because strings are interned
     var cArr = allocI32Array(paramTypes);
     try {
-      let typeRef = _BinaryenAddFunctionType(this.ref, this.tempName, result, cArr, paramTypes ? paramTypes.length : 0);
-      return _BinaryenAddFunction(this.ref, this.tempName, typeRef, 0, 0, body);
+      let typeRef = _BinaryenAddFunctionType(this.ref, tempName, result, cArr, paramTypes ? paramTypes.length : 0);
+      return _BinaryenAddFunction(this.ref, tempName, typeRef, 0, 0, body);
     } finally {
       free_memory(cArr);
     }
   }
 
   removeTemporaryFunction(): void {
-    this.hasTempFunc = !assert(this.hasTempFunc);
-    var tempName = assert(this.tempName);
+    this.hasTemporaryFunction = !assert(this.hasTemporaryFunction);
+    var tempName = assert(this.cachedTemporaryName);
     _BinaryenRemoveFunction(this.ref, tempName);
     _BinaryenRemoveFunctionType(this.ref, tempName);
   }
@@ -927,6 +929,19 @@ export class Module {
     }
   }
 
+  private cachedPrecomputeName: usize = 0;
+  private cachedPrecomputeNames: usize = 0;
+
+  precomputeFunction(func: FunctionRef): void {
+    var names = this.cachedPrecomputeNames;
+    if (!names) {
+      let name = allocString("precompute");
+      this.cachedPrecomputeName = name;
+      this.cachedPrecomputeNames = names = allocI32Array([ name ]);
+    }
+    _BinaryenFunctionRunPasses(func, this.ref, names, 1);
+  }
+
   validate(): bool {
     return _BinaryenModuleValidate(this.ref) == 1;
   }
@@ -936,7 +951,7 @@ export class Module {
   }
 
   toBinary(sourceMapUrl: string | null): BinaryModule {
-    var out = this.out;
+    var out = this.cachedByValue;
     var cStr = allocString(sourceMapUrl);
     var binaryPtr: usize = 0;
     var sourceMapPtr: usize = 0;
@@ -965,9 +980,13 @@ export class Module {
   }
 
   dispose(): void {
-    if (!this.ref) return; // sic
+    assert(this.ref);
+    free_memory(this.cachedByValue);
+    free_memory(this.cachedTemporaryName);
+    free_memory(this.cachedPrecomputeName);
+    free_memory(this.cachedPrecomputeNames);
     _BinaryenModuleDispose(this.ref);
-    free_memory(this.out);
+    this.ref = 0;
   }
 
   createRelooper(): Relooper {
@@ -1295,13 +1314,6 @@ export class Relooper {
     var relooper = new Relooper();
     relooper.module = module;
     relooper.ref = _RelooperCreate();
-      return relooper;
-  }
-
-  static createStub(module: Module): Relooper {
-    var relooper = new Relooper();
-    relooper.module = module;
-    relooper.ref = 0;
     return relooper;
   }
 

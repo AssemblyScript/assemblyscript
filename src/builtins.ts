@@ -1945,13 +1945,6 @@ export function compileCall(
           reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
         );
         return module.createUnreachable();
-      } else if (typeArguments[0].kind != TypeKind.USIZE) { // any usize
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        compiler.currentType = typeArguments[0];
-        return module.createUnreachable();
       }
       if (operands.length != 1) {
         compiler.error(
@@ -1963,11 +1956,11 @@ export function compileCall(
       }
       arg0 = compiler.compileExpressionRetainType(
         operands[0],
-        compiler.options.usizeType,
+        typeArguments[0],
         WrapMode.NONE
       );
       compiler.currentType = typeArguments[0];
-      if (compiler.currentType.kind != TypeKind.USIZE) {
+      if (compiler.currentType.size != typeArguments[0].size) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.range

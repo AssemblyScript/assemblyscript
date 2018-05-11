@@ -2767,7 +2767,7 @@
   (if
    (i32.eqz
     (if (result i32)
-     (tee_local $0
+     (tee_local $1
       (i32.eq
        (i32.load
         (get_global $std/operator-overloading/ais)
@@ -2781,7 +2781,7 @@
       )
       (i32.const 5)
      )
-     (get_local $0)
+     (get_local $1)
     )
    )
    (block
@@ -2813,22 +2813,22 @@
     (i32.const 0)
     (i32.add
      (i32.load
-      (tee_local $0
+      (tee_local $1
        (get_global $std/operator-overloading/aii1)
       )
      )
      (i32.load
-      (tee_local $1
+      (tee_local $0
        (get_global $std/operator-overloading/aii2)
       )
      )
     )
     (i32.add
      (i32.load offset=4
-      (get_local $0)
+      (get_local $1)
      )
      (i32.load offset=4
-      (get_local $1)
+      (get_local $0)
      )
     )
    )

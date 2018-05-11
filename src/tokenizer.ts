@@ -167,70 +167,170 @@ export enum Token {
 }
 
 export function tokenFromKeyword(text: string): Token {
-  switch (text) {
-    case "abstract": return Token.ABSTRACT;
-    case "as": return Token.AS;
-    case "async": return Token.ASYNC;
-    case "await": return Token.AWAIT;
-    case "break": return Token.BREAK;
-    case "case": return Token.CASE;
-    case "catch": return Token.CATCH;
-    case "class": return Token.CLASS;
-    case "continue": return Token.CONTINUE;
-    case "const": return Token.CONST;
-    case "constructor": return Token.CONSTRUCTOR;
-    case "debugger": return Token.DEBUGGER;
-    case "declare": return Token.DECLARE;
-    case "default": return Token.DEFAULT;
-    case "delete": return Token.DELETE;
-    case "do": return Token.DO;
-    case "else": return Token.ELSE;
-    case "enum": return Token.ENUM;
-    case "export": return Token.EXPORT;
-    case "extends": return Token.EXTENDS;
-    case "false": return Token.FALSE;
-    case "finally": return Token.FINALLY;
-    case "for": return Token.FOR;
-    case "from": return Token.FROM;
-    case "function": return Token.FUNCTION;
-    case "get": return Token.GET;
-    case "if": return Token.IF;
-    case "implements": return Token.IMPLEMENTS;
-    case "import": return Token.IMPORT;
-    case "in": return Token.IN;
-    case "instanceof": return Token.INSTANCEOF;
-    case "interface": return Token.INTERFACE;
-    case "is": return Token.IS;
-    case "keyof": return Token.KEYOF;
-    case "let": return Token.LET;
-    case "module": return Token.MODULE;
-    case "namespace": return Token.NAMESPACE;
-    case "new": return Token.NEW;
-    case "null": return Token.NULL;
-    case "of": return Token.OF;
-    case "package": return Token.PACKAGE;
-    case "private": return Token.PRIVATE;
-    case "protected": return Token.PROTECTED;
-    case "public": return Token.PUBLIC;
-    case "readonly": return Token.READONLY;
-    case "return": return Token.RETURN;
-    case "set": return Token.SET;
-    case "static": return Token.STATIC;
-    case "super": return Token.SUPER;
-    case "switch": return Token.SWITCH;
-    case "this": return Token.THIS;
-    case "throw": return Token.THROW;
-    case "true": return Token.TRUE;
-    case "try": return Token.TRY;
-    case "type": return Token.TYPE;
-    case "typeof": return Token.TYPEOF;
-    case "var": return Token.VAR;
-    case "void": return Token.VOID;
-    case "while": return Token.WHILE;
-    case "with": return Token.WITH;
-    case "yield": return Token.YIELD;
-    default: return Token.INVALID;
+  switch (text.length && text.charCodeAt(0)) {
+    case CharCode.a: {
+      switch (text) {
+        case "abstract": return Token.ABSTRACT;
+        case "as": return Token.AS;
+        case "async": return Token.ASYNC;
+        case "await": return Token.AWAIT;
+      }
+      break;
+    }
+    case CharCode.b: {
+      switch (text) {
+        case "break": return Token.BREAK;
+      }
+      break;
+    }
+    case CharCode.c: {
+      switch (text) {
+        case "case": return Token.CASE;
+        case "catch": return Token.CATCH;
+        case "class": return Token.CLASS;
+        case "continue": return Token.CONTINUE;
+        case "const": return Token.CONST;
+        case "constructor": return Token.CONSTRUCTOR;
+      }
+      break;
+    }
+    case CharCode.d: {
+      switch (text) {
+        case "debugger": return Token.DEBUGGER;
+        case "declare": return Token.DECLARE;
+        case "default": return Token.DEFAULT;
+        case "delete": return Token.DELETE;
+        case "do": return Token.DO;
+      }
+      break;
+    }
+    case CharCode.e: {
+      switch (text) {
+        case "else": return Token.ELSE;
+        case "enum": return Token.ENUM;
+        case "export": return Token.EXPORT;
+        case "extends": return Token.EXTENDS;
+      }
+      break;
+    }
+    case CharCode.f: {
+      switch (text) {
+        case "false": return Token.FALSE;
+        case "finally": return Token.FINALLY;
+        case "for": return Token.FOR;
+        case "from": return Token.FROM;
+        case "function": return Token.FUNCTION;
+      }
+      break;
+    }
+    case CharCode.g: {
+      switch (text) {
+        case "get": return Token.GET;
+      }
+      break;
+    }
+    case CharCode.i: {
+      switch (text) {
+        case "if": return Token.IF;
+        case "implements": return Token.IMPLEMENTS;
+        case "import": return Token.IMPORT;
+        case "in": return Token.IN;
+        case "instanceof": return Token.INSTANCEOF;
+        case "interface": return Token.INTERFACE;
+        case "is": return Token.IS;
+      }
+      break;
+    }
+    case CharCode.k: {
+      switch (text) {
+        case "keyof": return Token.KEYOF;
+      }
+      break;
+    }
+    case CharCode.l: {
+      switch (text) {
+        case "let": return Token.LET;
+      }
+      break;
+    }
+    case CharCode.m: {
+      switch (text) {
+        case "module": return Token.MODULE;
+      }
+      break;
+    }
+    case CharCode.n: {
+      switch (text) {
+        case "namespace": return Token.NAMESPACE;
+        case "new": return Token.NEW;
+        case "null": return Token.NULL;
+      }
+      break;
+    }
+    case CharCode.o: {
+      switch (text) {
+        case "of": return Token.OF;
+      }
+      break;
+    }
+    case CharCode.p: {
+      switch (text) {
+        case "package": return Token.PACKAGE;
+        case "private": return Token.PRIVATE;
+        case "protected": return Token.PROTECTED;
+        case "public": return Token.PUBLIC;
+      }
+      break;
+    }
+    case CharCode.r: {
+      switch (text) {
+        case "readonly": return Token.READONLY;
+        case "return": return Token.RETURN;
+      }
+      break;
+    }
+    case CharCode.s: {
+      switch (text) {
+        case "set": return Token.SET;
+        case "static": return Token.STATIC;
+        case "super": return Token.SUPER;
+        case "switch": return Token.SWITCH;
+      }
+      break;
+    }
+    case CharCode.t: {
+      switch (text) {
+        case "this": return Token.THIS;
+        case "throw": return Token.THROW;
+        case "true": return Token.TRUE;
+        case "try": return Token.TRY;
+        case "type": return Token.TYPE;
+        case "typeof": return Token.TYPEOF;
+      }
+      break;
+    }
+    case CharCode.v: {
+      switch (text) {
+        case "var": return Token.VAR;
+        case "void": return Token.VOID;
+      }
+      break;
+    }
+    case CharCode.w: {
+      switch (text) {
+        case "while": return Token.WHILE;
+        case "with": return Token.WITH;
+      }
+      break;
+    }
+    case CharCode.y: {
+      switch (text) {
+        case "yield": return Token.YIELD;
+      }
+      break;
+    }
   }
+  return Token.INVALID;
 }
 
 export function tokenIsAlsoIdentifier(token: Token): bool {

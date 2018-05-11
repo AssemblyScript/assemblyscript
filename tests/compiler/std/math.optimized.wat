@@ -44295,14 +44295,14 @@
     (call $~lib/math/JSMath.random)
    )
   )
-  (set_local $1
+  (set_local $0
    (i32.const 0)
   )
   (loop $continue|1
    (if
     (f64.lt
      (f64.convert_s/i32
-      (get_local $1)
+      (get_local $0)
      )
      (f64.const 1e6)
     )
@@ -44310,7 +44310,7 @@
      (if
       (i32.eqz
        (if (result i32)
-        (tee_local $0
+        (tee_local $1
          (f32.ge
           (tee_local $3
            (call $~lib/math/NativeMathf.random)
@@ -44322,7 +44322,7 @@
          (get_local $3)
          (f32.const 1)
         )
-        (get_local $0)
+        (get_local $1)
        )
       )
       (block
@@ -44335,9 +44335,9 @@
        (unreachable)
       )
      )
-     (set_local $1
+     (set_local $0
       (i32.add
-       (get_local $1)
+       (get_local $0)
        (i32.const 1)
       )
      )

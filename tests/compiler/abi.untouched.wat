@@ -48,9 +48,6 @@
  (func $start (; 5 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
   (drop
    (call $abi/internal)
   )
@@ -87,16 +84,16 @@
    )
   )
   (block
-   (set_local $1
+   (set_local $0
     (i32.const 256)
    )
    (if
     (get_global $abi/condition)
-    (set_local $1
+    (set_local $0
      (i32.div_s
       (i32.shr_s
        (i32.shl
-        (get_local $1)
+        (get_local $0)
         (i32.const 24)
        )
        (i32.const 24)
@@ -104,11 +101,11 @@
       (i32.const 2)
      )
     )
-    (set_local $1
+    (set_local $0
      (i32.div_s
       (i32.shr_s
        (i32.shl
-        (get_local $1)
+        (get_local $0)
         (i32.const 24)
        )
        (i32.const 24)
@@ -122,7 +119,7 @@
      (i32.eqz
       (i32.shr_s
        (i32.shl
-        (get_local $1)
+        (get_local $0)
         (i32.const 24)
        )
        (i32.const 24)
@@ -141,16 +138,16 @@
    )
   )
   (block
-   (set_local $2
+   (set_local $0
     (i32.const 256)
    )
    (if
     (get_global $abi/condition)
-    (set_local $2
+    (set_local $0
      (i32.shr_s
       (i32.shr_s
        (i32.shl
-        (get_local $2)
+        (get_local $0)
         (i32.const 24)
        )
        (i32.const 24)
@@ -158,9 +155,9 @@
       (i32.const 24)
      )
     )
-    (set_local $2
+    (set_local $0
      (i32.and
-      (get_local $2)
+      (get_local $0)
       (i32.const 127)
      )
     )
@@ -168,7 +165,7 @@
    (if
     (i32.eqz
      (i32.eqz
-      (get_local $2)
+      (get_local $0)
      )
     )
     (block
@@ -210,7 +207,7 @@
    )
   )
   (block
-   (set_local $3
+   (set_local $0
     (i32.ctz
      (i32.const 2)
     )
@@ -218,7 +215,7 @@
    (if
     (i32.eqz
      (i32.and
-      (get_local $3)
+      (get_local $0)
       (i32.const 1)
      )
     )
@@ -232,7 +229,7 @@
      (unreachable)
     )
    )
-   (set_local $3
+   (set_local $0
     (i32.clz
      (i32.const 1)
     )
@@ -240,7 +237,7 @@
    (if
     (i32.eqz
      (i32.and
-      (get_local $3)
+      (get_local $0)
       (i32.const 1)
      )
     )
@@ -254,14 +251,14 @@
      (unreachable)
     )
    )
-   (set_local $4
+   (set_local $1
     (i32.ctz
      (i32.const 2)
     )
    )
    (if
     (i32.eqz
-     (get_local $4)
+     (get_local $1)
     )
     (block
      (call $abort
@@ -273,14 +270,14 @@
      (unreachable)
     )
    )
-   (set_local $4
+   (set_local $1
     (i32.clz
      (i32.const 1)
     )
    )
    (if
     (i32.eqz
-     (get_local $4)
+     (get_local $1)
     )
     (block
      (call $abort

@@ -37,9 +37,11 @@ abstract class ExportsWalker {
   /** Program reference. */
   program: Program;
   /** Whether to include private members */
-  private includePrivate: bool;
+  includePrivate: bool;
+  /** Elements still to do. */
+  todo: Element[] = [];
   /** Already seen elements. */
-  private seen: Set<Element> = new Set();
+  seen: Set<Element> = new Set();
 
   /** Constructs a new Element walker. */
   constructor(program: Program, includePrivate: bool = false) {
@@ -50,6 +52,8 @@ abstract class ExportsWalker {
   /** Walks all exports and calls the respective handlers. */
   walk(): void {
     for (let element of this.program.moduleLevelExports.values()) this.visitElement(element);
+    var todo = this.todo;
+    for (let i = 0; i < todo.length; ) this.visitElement(todo[i]);
   }
 
   /** Visits an element.*/

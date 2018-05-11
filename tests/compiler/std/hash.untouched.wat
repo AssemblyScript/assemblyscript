@@ -1,8 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
- (type $fi (func (param f32) (result i32)))
- (type $Fi (func (param f64) (result i32)))
+ (type $Ii (func (param i64) (result i32)))
  (type $v (func))
  (import "env" "logi" (func $std/hash/logi (param i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
@@ -24,76 +23,7 @@
  (data (i32.const 24) "\03\00\00\00a\00b\00c\00")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/internal/hash/hash<usize> (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (set_local $1
-   (i32.const -2128831035)
-  )
-  (block
-   (set_local $2
-    (get_local $0)
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (get_local $2)
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (i32.shr_u
-        (get_local $2)
-        (i32.const 8)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (i32.shr_u
-        (get_local $2)
-        (i32.const 16)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.shr_u
-       (get_local $2)
-       (i32.const 24)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-  )
-  (return
-   (get_local $1)
-  )
- )
- (func $~lib/internal/hash/hash<String> (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hashStr (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -150,301 +80,431 @@
    (get_local $1)
   )
  )
- (func $~lib/internal/hash/hash<f32> (; 3 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (set_local $1
+   (i32.const -2128831035)
+  )
+  (set_local $1
+   (i32.mul
+    (i32.xor
+     (get_local $1)
+     (i32.and
+      (get_local $0)
+      (i32.const 255)
+     )
+    )
+    (i32.const 16777619)
+   )
+  )
+  (set_local $1
+   (i32.mul
+    (i32.xor
+     (get_local $1)
+     (i32.and
+      (i32.shr_u
+       (get_local $0)
+       (i32.const 8)
+      )
+      (i32.const 255)
+     )
+    )
+    (i32.const 16777619)
+   )
+  )
+  (set_local $1
+   (i32.mul
+    (i32.xor
+     (get_local $1)
+     (i32.and
+      (i32.shr_u
+       (get_local $0)
+       (i32.const 16)
+      )
+      (i32.const 255)
+     )
+    )
+    (i32.const 16777619)
+   )
+  )
+  (set_local $1
+   (i32.mul
+    (i32.xor
+     (get_local $1)
+     (i32.shr_u
+      (get_local $0)
+      (i32.const 24)
+     )
+    )
+    (i32.const 16777619)
+   )
+  )
+  (return
+   (get_local $1)
+  )
+ )
+ (func $~lib/internal/hash/hash64 (; 3 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (set_local $1
-   (i32.const -2128831035)
-  )
-  (block
-   (set_local $2
-    (i32.reinterpret/f32
-     (get_local $0)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (get_local $2)
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (i32.shr_u
-        (get_local $2)
-        (i32.const 8)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (i32.shr_u
-        (get_local $2)
-        (i32.const 16)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.shr_u
-       (get_local $2)
-       (i32.const 24)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-  )
-  (return
-   (get_local $1)
-  )
- )
- (func $~lib/internal/hash/hash<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
-  (local $1 i32)
-  (local $2 i64)
   (local $3 i32)
-  (local $4 i32)
   (set_local $1
+   (i32.wrap/i64
+    (get_local $0)
+   )
+  )
+  (set_local $2
+   (i32.wrap/i64
+    (i64.shr_u
+     (get_local $0)
+     (i64.const 32)
+    )
+   )
+  )
+  (set_local $3
    (i32.const -2128831035)
   )
-  (block
-   (set_local $2
-    (i64.reinterpret/f64
-     (get_local $0)
+  (set_local $3
+   (i32.mul
+    (i32.xor
+     (get_local $3)
+     (i32.and
+      (get_local $1)
+      (i32.const 255)
+     )
     )
+    (i32.const 16777619)
    )
-   (set_local $3
-    (i32.wrap/i64
-     (get_local $2)
+  )
+  (set_local $3
+   (i32.mul
+    (i32.xor
+     (get_local $3)
+     (i32.and
+      (i32.shr_u
+       (get_local $1)
+       (i32.const 8)
+      )
+      (i32.const 255)
+     )
     )
+    (i32.const 16777619)
    )
-   (set_local $4
-    (i32.wrap/i64
-     (i64.shr_u
+  )
+  (set_local $3
+   (i32.mul
+    (i32.xor
+     (get_local $3)
+     (i32.and
+      (i32.shr_u
+       (get_local $1)
+       (i32.const 16)
+      )
+      (i32.const 255)
+     )
+    )
+    (i32.const 16777619)
+   )
+  )
+  (set_local $3
+   (i32.mul
+    (i32.xor
+     (get_local $3)
+     (i32.shr_u
+      (get_local $1)
+      (i32.const 24)
+     )
+    )
+    (i32.const 16777619)
+   )
+  )
+  (set_local $3
+   (i32.mul
+    (i32.xor
+     (get_local $3)
+     (i32.and
       (get_local $2)
-      (i64.const 32)
+      (i32.const 255)
      )
     )
+    (i32.const 16777619)
    )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (get_local $3)
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (i32.shr_u
-        (get_local $3)
-        (i32.const 8)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (i32.shr_u
-        (get_local $3)
-        (i32.const 16)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
+  )
+  (set_local $3
+   (i32.mul
+    (i32.xor
+     (get_local $3)
+     (i32.and
       (i32.shr_u
-       (get_local $3)
-       (i32.const 24)
+       (get_local $2)
+       (i32.const 8)
       )
+      (i32.const 255)
      )
-     (i32.const 16777619)
     )
+    (i32.const 16777619)
    )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (get_local $4)
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (i32.shr_u
-        (get_local $4)
-        (i32.const 8)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
-      (i32.and
-       (i32.shr_u
-        (get_local $4)
-        (i32.const 16)
-       )
-       (i32.const 255)
-      )
-     )
-     (i32.const 16777619)
-    )
-   )
-   (set_local $1
-    (i32.mul
-     (i32.xor
-      (get_local $1)
+  )
+  (set_local $3
+   (i32.mul
+    (i32.xor
+     (get_local $3)
+     (i32.and
       (i32.shr_u
-       (get_local $4)
-       (i32.const 24)
+       (get_local $2)
+       (i32.const 16)
       )
+      (i32.const 255)
      )
-     (i32.const 16777619)
     )
+    (i32.const 16777619)
+   )
+  )
+  (set_local $3
+   (i32.mul
+    (i32.xor
+     (get_local $3)
+     (i32.shr_u
+      (get_local $2)
+      (i32.const 24)
+     )
+    )
+    (i32.const 16777619)
    )
   )
   (return
-   (get_local $1)
+   (get_local $3)
   )
  )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 4 ;) (type $v)
+  (local $0 i32)
+  (local $1 f32)
+  (local $2 f64)
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<usize>
-    (i32.const 0)
+   (block $~lib/internal/hash/hash<String>|inlined.0 (result i32)
+    (set_local $0
+     (i32.const 0)
+    )
+    (br $~lib/internal/hash/hash<String>|inlined.0
+     (call $~lib/internal/hash/hashStr
+      (get_local $0)
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<String>
-    (i32.const 4)
+   (block $~lib/internal/hash/hash<String>|inlined.1 (result i32)
+    (set_local $0
+     (i32.const 4)
+    )
+    (br $~lib/internal/hash/hash<String>|inlined.1
+     (call $~lib/internal/hash/hashStr
+      (get_local $0)
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<String>
-    (i32.const 8)
+   (block $~lib/internal/hash/hash<String>|inlined.2 (result i32)
+    (set_local $0
+     (i32.const 8)
+    )
+    (br $~lib/internal/hash/hash<String>|inlined.2
+     (call $~lib/internal/hash/hashStr
+      (get_local $0)
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<String>
-    (i32.const 16)
+   (block $~lib/internal/hash/hash<String>|inlined.3 (result i32)
+    (set_local $0
+     (i32.const 16)
+    )
+    (br $~lib/internal/hash/hash<String>|inlined.3
+     (call $~lib/internal/hash/hashStr
+      (get_local $0)
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<String>
-    (i32.const 24)
+   (block $~lib/internal/hash/hash<String>|inlined.4 (result i32)
+    (set_local $0
+     (i32.const 24)
+    )
+    (br $~lib/internal/hash/hash<String>|inlined.4
+     (call $~lib/internal/hash/hashStr
+      (get_local $0)
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f32>
-    (f32.const 0)
+   (block $~lib/internal/hash/hash<f32>|inlined.0 (result i32)
+    (set_local $1
+     (f32.const 0)
+    )
+    (br $~lib/internal/hash/hash<f32>|inlined.0
+     (call $~lib/internal/hash/hash32
+      (i32.reinterpret/f32
+       (get_local $1)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f32>
-    (f32.const 1)
+   (block $~lib/internal/hash/hash<f32>|inlined.1 (result i32)
+    (set_local $1
+     (f32.const 1)
+    )
+    (br $~lib/internal/hash/hash<f32>|inlined.1
+     (call $~lib/internal/hash/hash32
+      (i32.reinterpret/f32
+       (get_local $1)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f32>
-    (f32.const 1.100000023841858)
+   (block $~lib/internal/hash/hash<f32>|inlined.2 (result i32)
+    (set_local $1
+     (f32.const 1.100000023841858)
+    )
+    (br $~lib/internal/hash/hash<f32>|inlined.2
+     (call $~lib/internal/hash/hash32
+      (i32.reinterpret/f32
+       (get_local $1)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f32>
-    (f32.const 0)
+   (block $~lib/internal/hash/hash<f32>|inlined.3 (result i32)
+    (set_local $1
+     (f32.const 0)
+    )
+    (br $~lib/internal/hash/hash<f32>|inlined.3
+     (call $~lib/internal/hash/hash32
+      (i32.reinterpret/f32
+       (get_local $1)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f32>
-    (f32.const inf)
+   (block $~lib/internal/hash/hash<f32>|inlined.4 (result i32)
+    (set_local $1
+     (f32.const inf)
+    )
+    (br $~lib/internal/hash/hash<f32>|inlined.4
+     (call $~lib/internal/hash/hash32
+      (i32.reinterpret/f32
+       (get_local $1)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f32>
-    (f32.const nan:0x400000)
+   (block $~lib/internal/hash/hash<f32>|inlined.5 (result i32)
+    (set_local $1
+     (f32.const nan:0x400000)
+    )
+    (br $~lib/internal/hash/hash<f32>|inlined.5
+     (call $~lib/internal/hash/hash32
+      (i32.reinterpret/f32
+       (get_local $1)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f64>
-    (f64.const 0)
+   (block $~lib/internal/hash/hash<f64>|inlined.0 (result i32)
+    (set_local $2
+     (f64.const 0)
+    )
+    (br $~lib/internal/hash/hash<f64>|inlined.0
+     (call $~lib/internal/hash/hash64
+      (i64.reinterpret/f64
+       (get_local $2)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f64>
-    (f64.const 1)
+   (block $~lib/internal/hash/hash<f64>|inlined.1 (result i32)
+    (set_local $2
+     (f64.const 1)
+    )
+    (br $~lib/internal/hash/hash<f64>|inlined.1
+     (call $~lib/internal/hash/hash64
+      (i64.reinterpret/f64
+       (get_local $2)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f64>
-    (f64.const 1.1)
+   (block $~lib/internal/hash/hash<f64>|inlined.2 (result i32)
+    (set_local $2
+     (f64.const 1.1)
+    )
+    (br $~lib/internal/hash/hash<f64>|inlined.2
+     (call $~lib/internal/hash/hash64
+      (i64.reinterpret/f64
+       (get_local $2)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f64>
-    (f64.const 0)
+   (block $~lib/internal/hash/hash<f64>|inlined.3 (result i32)
+    (set_local $2
+     (f64.const 0)
+    )
+    (br $~lib/internal/hash/hash<f64>|inlined.3
+     (call $~lib/internal/hash/hash64
+      (i64.reinterpret/f64
+       (get_local $2)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f64>
-    (f64.const inf)
+   (block $~lib/internal/hash/hash<f64>|inlined.4 (result i32)
+    (set_local $2
+     (f64.const inf)
+    )
+    (br $~lib/internal/hash/hash<f64>|inlined.4
+     (call $~lib/internal/hash/hash64
+      (i64.reinterpret/f64
+       (get_local $2)
+      )
+     )
+    )
    )
   )
   (call $std/hash/logi
-   (call $~lib/internal/hash/hash<f64>
-    (f64.const nan:0x8000000000000)
+   (block $~lib/internal/hash/hash<f64>|inlined.5 (result i32)
+    (set_local $2
+     (f64.const nan:0x8000000000000)
+    )
+    (br $~lib/internal/hash/hash<f64>|inlined.5
+     (call $~lib/internal/hash/hash64
+      (i64.reinterpret/f64
+       (get_local $2)
+      )
+     )
+    )
    )
   )
  )

@@ -8,6 +8,7 @@
  (start $start)
  (func $start (; 1 ;) (type $v)
   (local $0 i32)
+  (local $1 i32)
   (if
    (i32.ne
     (tee_local $0
@@ -48,15 +49,18 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (i32.add
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
   (if
    (i32.ne
     (i32.and
-     (tee_local $0
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (i32.const 255)
     )
     (i32.const 128)
@@ -71,15 +75,18 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (i32.sub
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
   (if
    (i32.ne
     (i32.and
-     (tee_local $0
-      (i32.sub
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (i32.const 255)
     )
     (i32.const 127)
@@ -247,15 +254,18 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (i32.add
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
   (if
    (i32.ne
     (i32.and
-     (tee_local $0
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (i32.const 65535)
     )
     (i32.const 32768)
@@ -270,15 +280,18 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (i32.sub
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
   (if
    (i32.ne
     (i32.and
-     (tee_local $0
-      (i32.sub
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (i32.const 65535)
     )
     (i32.const 32767)
@@ -446,15 +459,18 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (i32.sub
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
   (if
    (i32.ne
     (i32.and
-     (tee_local $0
-      (i32.sub
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (i32.const 255)
     )
     (i32.const 255)
@@ -469,14 +485,17 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (i32.add
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
   (if
    (i32.and
-    (tee_local $0
-     (i32.add
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
+    (get_local $0)
     (i32.const 255)
    )
    (block
@@ -636,15 +655,18 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (i32.sub
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
   (if
    (i32.ne
     (i32.and
-     (tee_local $0
-      (i32.sub
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (i32.const 65535)
     )
     (i32.const 65535)
@@ -659,14 +681,17 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (i32.add
+    (tee_local $1
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
   (if
    (i32.and
-    (tee_local $0
-     (i32.add
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
+    (get_local $0)
     (i32.const 65535)
    )
    (block

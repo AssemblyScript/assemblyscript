@@ -4,7 +4,6 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
- (global $~argc (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
  (data (i32.const 40) "\04\00\00\00n\00u\00l\00l")
@@ -208,34 +207,8 @@
    )
   )
  )
- (func $~lib/string/String#startsWith|trampoline (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (i32.sub
-       (get_global $~argc)
-       (i32.const 1)
-      )
-     )
-    )
-    (unreachable)
-   )
-   (set_local $2
-    (i32.const 0)
-   )
-  )
+ (func $std/array-access/stringArrayMethodCall (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/string/String#startsWith
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $std/array-access/stringArrayMethodCall (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  (set_global $~argc
-   (i32.const 1)
-  )
-  (call $~lib/string/String#startsWith|trampoline
    (call $~lib/array/Array<Array<i32>>#__get
     (get_local $0)
     (i32.const 0)
@@ -244,7 +217,7 @@
    (i32.const 0)
   )
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayPropertyAccess (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (call $~lib/array/Array<Array<i32>>#__get
     (call $~lib/array/Array<Array<i32>>#__get
@@ -255,11 +228,8 @@
    )
   )
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  (set_global $~argc
-   (i32.const 1)
-  )
-  (call $~lib/string/String#startsWith|trampoline
+ (func $std/array-access/stringArrayArrayMethodCall (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  (call $~lib/string/String#startsWith
    (call $~lib/array/Array<Array<i32>>#__get
     (call $~lib/array/Array<Array<i32>>#__get
      (get_local $0)

@@ -5073,10 +5073,14 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile the called function's body in the scope of the inlined flow
     var bodyStatement = assert(declaration.body);
-    if (bodyStatement.kind == NodeKind.BLOCK) { // it's ok to unwrap the block here
+    if (bodyStatement.kind == NodeKind.BLOCK) {
       let statements = (<BlockStatement>bodyStatement).statements;
       for (let i = 0, k = statements.length; i < k; ++i) {
-        body.push(this.compileStatement(statements[i]));
+        let stmt = this.compileStatement(statements[i]);
+        if (getExpressionId(stmt) != ExpressionId.Nop) {
+          body.push(stmt);
+          if (flow.isAny(FlowFlags.BREAKS | FlowFlags.CONTINUES | FlowFlags.RETURNS)) break;
+        }
       }
     } else {
       body.push(this.compileStatement(bodyStatement));
@@ -5290,28 +5294,51 @@ export class Compiler extends DiagnosticEmitter {
     var returnType = instance.signature.returnType;
     var isCallImport = instance.is(CommonFlags.MODULE_IMPORT);
 
-    // fill up omitted arguments with zeroes
+    // fill up omitted arguments with their initializers, if constant, otherwise with zeroes.
     if (numOperands < maxOperands) {
       if (!operands) {
         operands = new Array(maxOperands);
         operands.length = 0;
       }
       let parameterTypes = instance.signature.parameterTypes;
+      let parameterNodes = instance.prototype.declaration.signature.parameterTypes;
+      let allOptionalsAreConstant = true;
       for (let i = numArguments; i < maxArguments; ++i) {
-        operands.push(parameterTypes[i].toNativeZero(module));
+        let initializer = assert(parameterNodes[i].initializer);
+        if (initializer.kind != NodeKind.LITERAL) {
+          // TODO: other kinds might be constant as well
+          allOptionalsAreConstant = false;
+          break;
+        }
       }
-      if (!isCallImport) { // call the trampoline
-        let original = instance;
-        instance = this.ensureTrampoline(instance);
-        if (!this.compileFunction(instance)) return module.createUnreachable();
-        instance.flow.flags = original.flow.flags;
-        this.program.instancesLookup.set(instance.internalName, instance); // so canOverflow can find it
-        let nativeReturnType = returnType.toNativeType();
-        this.currentType = returnType;
-        return module.createBlock(null, [
-          module.createSetGlobal(this.ensureArgcVar(), module.createI32(numArguments)),
-          module.createCall(instance.internalName, operands, nativeReturnType)
-        ], nativeReturnType);
+      if (allOptionalsAreConstant) { // inline into the call
+        for (let i = numArguments; i < maxArguments; ++i) {
+          operands.push(
+            this.compileExpression(
+              <Expression>parameterNodes[i].initializer,
+              parameterTypes[i],
+              ConversionKind.IMPLICIT,
+              WrapMode.NONE
+            )
+          );
+        }
+      } else { // otherwise fill up with zeroes and call the trampoline
+        for (let i = numArguments; i < maxArguments; ++i) {
+          operands.push(parameterTypes[i].toNativeZero(module));
+        }
+        if (!isCallImport) {
+          let original = instance;
+          instance = this.ensureTrampoline(instance);
+          if (!this.compileFunction(instance)) return module.createUnreachable();
+          instance.flow.flags = original.flow.flags;
+          this.program.instancesLookup.set(instance.internalName, instance); // so canOverflow can find it
+          let nativeReturnType = returnType.toNativeType();
+          this.currentType = returnType;
+          return module.createBlock(null, [
+            module.createSetGlobal(this.ensureArgcVar(), module.createI32(numArguments)),
+            module.createCall(instance.internalName, operands, nativeReturnType)
+          ], nativeReturnType);
+        }
       }
     }
 
@@ -6211,8 +6238,8 @@ export class Compiler extends DiagnosticEmitter {
         getExpressionType(condExprPrecomp) == NativeType.I32
       ) {
         return getConstValueI32(condExprPrecomp)
-          ? this.compileExpression(ifThen, contextualType, ConversionKind.IMPLICIT, WrapMode.NONE)
-          : this.compileExpression(ifElse, contextualType, ConversionKind.IMPLICIT, WrapMode.NONE);
+          ? this.compileExpressionRetainType(ifThen, contextualType, WrapMode.NONE)
+          : this.compileExpressionRetainType(ifElse, contextualType, WrapMode.NONE);
 
       // Otherwise recompile to the original and let the optimizer decide
       } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {

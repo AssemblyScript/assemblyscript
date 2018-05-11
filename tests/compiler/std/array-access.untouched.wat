@@ -9,7 +9,6 @@
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
- (global $~argc (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 52))
  (memory $0 1)
  (data (i32.const 4) "\00\00\00\00")
@@ -321,47 +320,19 @@
    )
   )
  )
- (func $~lib/string/String#startsWith|trampoline (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (i32.sub
-       (get_global $~argc)
-       (i32.const 1)
-      )
-     )
+ (func $std/array-access/stringArrayMethodCall (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  (return
+   (call $~lib/string/String#startsWith
+    (call $~lib/array/Array<String>#__get
+     (get_local $0)
+     (i32.const 0)
     )
-    (unreachable)
-   )
-   (set_local $2
+    (i32.const 4)
     (i32.const 0)
    )
   )
-  (call $~lib/string/String#startsWith
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
  )
- (func $std/array-access/stringArrayMethodCall (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
-    )
-    (call $~lib/string/String#startsWith|trampoline
-     (call $~lib/array/Array<String>#__get
-      (get_local $0)
-      (i32.const 0)
-     )
-     (i32.const 4)
-     (i32.const 0)
-    )
-   )
-  )
- )
- (func $~lib/array/Array<Array<String>>#__get (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<String>>#__get (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -396,7 +367,7 @@
    )
   )
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayPropertyAccess (; 10 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (i32.load
     (call $~lib/array/Array<String>#__get
@@ -409,23 +380,18 @@
    )
   )
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayMethodCall (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (return
-   (block (result i32)
-    (set_global $~argc
+   (call $~lib/string/String#startsWith
+    (call $~lib/array/Array<String>#__get
+     (call $~lib/array/Array<Array<String>>#__get
+      (get_local $0)
+      (i32.const 0)
+     )
      (i32.const 1)
     )
-    (call $~lib/string/String#startsWith|trampoline
-     (call $~lib/array/Array<String>#__get
-      (call $~lib/array/Array<Array<String>>#__get
-       (get_local $0)
-       (i32.const 0)
-      )
-      (i32.const 1)
-     )
-     (i32.const 4)
-     (i32.const 0)
-    )
+    (i32.const 4)
+    (i32.const 0)
    )
   )
  )
