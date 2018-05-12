@@ -1930,7 +1930,7 @@ export class Parser extends DiagnosticEmitter {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let asIdentifier: IdentifierExpression | null = null;
       if (tn.skip(Token.AS)) {
-        if (tn.skip(Token.IDENTIFIER)) {
+        if (tn.skipIdentifierName()) {
           asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
         } else {
           this.error(
@@ -2044,7 +2044,7 @@ export class Parser extends DiagnosticEmitter {
 
     // before: Identifier ('as' Identifier)?
 
-    if (tn.skip(Token.IDENTIFIER)) {
+    if (tn.skipIdentifierName()) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let asIdentifier: IdentifierExpression | null = null;
       if (tn.skip(Token.AS)) {

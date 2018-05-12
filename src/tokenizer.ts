@@ -528,7 +528,11 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.token = this.unsafeNext(preferIdentifier);
   }
 
-  private unsafeNext(preferIdentifier: bool = false, maxTokenLength: i32 = i32.MAX_VALUE): Token {
+  private unsafeNext(
+    preferIdentifier: bool = false,
+    forceIdentifier: bool = false,
+    maxTokenLength: i32 = i32.MAX_VALUE
+  ): Token {
     var text = this.source.text;
     while (this.pos < this.end) {
       this.tokenPos = this.pos;
@@ -908,6 +912,7 @@ export class Tokenizer extends DiagnosticEmitter {
               let keywordToken = tokenFromKeyword(keywordText);
               if (
                 keywordToken != Token.INVALID &&
+                !forceIdentifier &&
                 !(preferIdentifier && tokenIsAlsoIdentifier(keywordToken))
               ) {
                 return keywordToken;
@@ -941,7 +946,7 @@ export class Tokenizer extends DiagnosticEmitter {
       let posBefore = this.pos;
       let tokenBefore = this.token;
       let tokenPosBefore = this.tokenPos;
-      this.nextToken = this.unsafeNext(preferIdentifier, maxCompoundLength);
+      this.nextToken = this.unsafeNext(preferIdentifier, false, maxCompoundLength);
       this.nextTokenPos = this.tokenPos;
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
@@ -970,8 +975,28 @@ export class Tokenizer extends DiagnosticEmitter {
         break;
       }
     }
-    this.token = this.unsafeNext(token == Token.IDENTIFIER, maxCompoundLength);
+    this.token = this.unsafeNext(token == Token.IDENTIFIER, false, maxCompoundLength);
     if (this.token == token) {
+      this.nextToken = -1;
+      return true;
+    } else {
+      this.pos = posBefore;
+      this.token = tokenBefore;
+      this.tokenPos = tokenPosBefore;
+      return false;
+    }
+  }
+
+  /**
+   * Skip any name token, whether or not it is a keyword.
+   */
+  skipIdentifierName(): bool {
+    var posBefore = this.pos;
+    var tokenBefore = this.token;
+    var tokenPosBefore = this.tokenPos;
+    var maxCompoundLength = i32.MAX_VALUE;
+    this.token = this.unsafeNext(true, true, maxCompoundLength);
+    if (this.token == Token.IDENTIFIER) {
       this.nextToken = -1;
       return true;
     } else {
