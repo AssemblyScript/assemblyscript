@@ -166,6 +166,12 @@ export enum Token {
   ENDOFFILE
 }
 
+export enum IdentifierHandling {
+  DEFAULT,
+  PREFER,
+  ALWAYS
+}
+
 export function tokenFromKeyword(text: string): Token {
   switch (text.length && text.charCodeAt(0)) {
     case CharCode.a: {
@@ -523,14 +529,13 @@ export class Tokenizer extends DiagnosticEmitter {
     }
   }
 
-  next(preferIdentifier: bool = false): Token {
+  next(identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): Token {
     this.nextToken = -1;
-    return this.token = this.unsafeNext(preferIdentifier);
+    return this.token = this.unsafeNext(identifierHandling);
   }
 
   private unsafeNext(
-    preferIdentifier: bool = false,
-    forceIdentifier: bool = false,
+    identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT,
     maxTokenLength: i32 = i32.MAX_VALUE
   ): Token {
     var text = this.source.text;
@@ -912,8 +917,11 @@ export class Tokenizer extends DiagnosticEmitter {
               let keywordToken = tokenFromKeyword(keywordText);
               if (
                 keywordToken != Token.INVALID &&
-                !forceIdentifier &&
-                !(preferIdentifier && tokenIsAlsoIdentifier(keywordToken))
+                identifierHandling !== IdentifierHandling.ALWAYS &&
+                !(
+                  identifierHandling === IdentifierHandling.PREFER &&
+                  tokenIsAlsoIdentifier(keywordToken)
+                )
               ) {
                 return keywordToken;
               }
@@ -938,7 +946,7 @@ export class Tokenizer extends DiagnosticEmitter {
 
   peek(
     checkOnNewLine: bool = false,
-    preferIdentifier: bool = false,
+    identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT,
     maxCompoundLength: i32 = i32.MAX_VALUE
   ): Token {
     var text = this.source.text;
@@ -946,7 +954,7 @@ export class Tokenizer extends DiagnosticEmitter {
       let posBefore = this.pos;
       let tokenBefore = this.token;
       let tokenPosBefore = this.tokenPos;
-      this.nextToken = this.unsafeNext(preferIdentifier, false, maxCompoundLength);
+      this.nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
       this.nextTokenPos = this.tokenPos;
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
@@ -975,7 +983,10 @@ export class Tokenizer extends DiagnosticEmitter {
         break;
       }
     }
-    this.token = this.unsafeNext(token == Token.IDENTIFIER, false, maxCompoundLength);
+    this.token = this.unsafeNext(
+      token == Token.IDENTIFIER ? IdentifierHandling.PREFER : IdentifierHandling.DEFAULT,
+      maxCompoundLength
+    );
     if (this.token == token) {
       this.nextToken = -1;
       return true;
@@ -995,7 +1006,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var tokenBefore = this.token;
     var tokenPosBefore = this.tokenPos;
     var maxCompoundLength = i32.MAX_VALUE;
-    this.token = this.unsafeNext(true, true, maxCompoundLength);
+    this.token = this.unsafeNext(IdentifierHandling.ALWAYS, maxCompoundLength);
     if (this.token == Token.IDENTIFIER) {
       this.nextToken = -1;
       return true;

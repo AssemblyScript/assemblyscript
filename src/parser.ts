@@ -14,7 +14,8 @@ import {
   Tokenizer,
   Token,
   Range,
-  CommentHandler
+  CommentHandler,
+  IdentifierHandling
 } from "./tokenizer";
 
 import {
@@ -1565,7 +1566,7 @@ export class Parser extends DiagnosticEmitter {
     var setStart: i32 = 0;
     var setEnd: i32 = 0;
     if (tn.skip(Token.GET)) {
-      if (tn.peek(true, true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+      if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
         flags |= CommonFlags.GET;
         isGetter = true;
         setStart = tn.tokenPos;
@@ -1580,7 +1581,7 @@ export class Parser extends DiagnosticEmitter {
         tn.reset(state);
       }
     } else if (tn.skip(Token.SET)) {
-      if (tn.peek(true, true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+      if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
         flags |= CommonFlags.SET | CommonFlags.SET;
         isSetter = true;
         setStart = tn.tokenPos;
@@ -2242,7 +2243,7 @@ export class Parser extends DiagnosticEmitter {
 
     var identifier: IdentifierExpression | null = null;
     if (tn.peek(true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-      tn.next(true);
+      tn.next(IdentifierHandling.PREFER);
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
     var ret = Node.createBreakStatement(identifier, tn.range());
@@ -2258,7 +2259,7 @@ export class Parser extends DiagnosticEmitter {
 
     var identifier: IdentifierExpression | null = null;
     if (tn.peek(true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-      tn.next(true);
+      tn.next(IdentifierHandling.PREFER);
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
     var ret = Node.createContinueStatement(identifier, tn.range());
@@ -2744,7 +2745,7 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer
   ): Expression | null {
 
-    var token = tn.next(true);
+    var token = tn.next(IdentifierHandling.PREFER);
     var startPos = tn.tokenPos;
     var expr: Expression | null = null;
 
@@ -2821,7 +2822,7 @@ export class Parser extends DiagnosticEmitter {
         let state = tn.mark();
         let again = true;
         do {
-          switch (tn.next(true)) {
+          switch (tn.next(IdentifierHandling.PREFER)) {
 
             // function expression
             case Token.DOT_DOT_DOT: {
