@@ -972,7 +972,15 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.nextToken;
   }
 
-  skip(token: Token): bool {
+  skipIdentifier(): bool {
+    return this.skip(Token.IDENTIFIER, IdentifierHandling.PREFER);
+  }
+
+  skipIdentifierName(): bool {
+    return this.skip(Token.IDENTIFIER, IdentifierHandling.ALWAYS);
+  }
+
+  skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): bool {
     var posBefore = this.pos;
     var tokenBefore = this.token;
     var tokenPosBefore = this.tokenPos;
@@ -983,31 +991,8 @@ export class Tokenizer extends DiagnosticEmitter {
         break;
       }
     }
-    this.token = this.unsafeNext(
-      token == Token.IDENTIFIER ? IdentifierHandling.PREFER : IdentifierHandling.DEFAULT,
-      maxCompoundLength
-    );
+    this.token = this.unsafeNext(identifierHandling, maxCompoundLength);
     if (this.token == token) {
-      this.nextToken = -1;
-      return true;
-    } else {
-      this.pos = posBefore;
-      this.token = tokenBefore;
-      this.tokenPos = tokenPosBefore;
-      return false;
-    }
-  }
-
-  /**
-   * Skip any name token, whether or not it is a keyword.
-   */
-  skipIdentifierName(): bool {
-    var posBefore = this.pos;
-    var tokenBefore = this.token;
-    var tokenPosBefore = this.tokenPos;
-    var maxCompoundLength = i32.MAX_VALUE;
-    this.token = this.unsafeNext(IdentifierHandling.ALWAYS, maxCompoundLength);
-    if (this.token == Token.IDENTIFIER) {
       this.nextToken = -1;
       return true;
     } else {
