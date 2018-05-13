@@ -49,7 +49,7 @@
     )
     (if
      (i32.gt_u
-      (tee_local $2
+      (tee_local $0
        (i32.and
         (i32.add
          (i32.add
@@ -64,7 +64,7 @@
        )
       )
       (i32.shl
-       (tee_local $0
+       (tee_local $2
         (current_memory)
        )
        (i32.const 16)
@@ -74,14 +74,14 @@
       (i32.lt_s
        (grow_memory
         (select
-         (get_local $0)
+         (get_local $2)
          (tee_local $4
           (tee_local $3
            (i32.shr_u
             (i32.and
              (i32.add
               (i32.sub
-               (get_local $2)
+               (get_local $0)
                (get_local $1)
               )
               (i32.const 65535)
@@ -93,7 +93,7 @@
           )
          )
          (i32.gt_s
-          (get_local $0)
+          (get_local $2)
           (get_local $4)
          )
         )
@@ -112,7 +112,7 @@
      )
     )
     (set_global $~lib/allocator/arena/offset
-     (get_local $2)
+     (get_local $0)
     )
     (return
      (get_local $1)
@@ -488,6 +488,7 @@
  )
  (func $~lib/internal/typedarray/TypedArray<i8,i32>#constructor (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   (if
    (i32.gt_u
     (get_local $1)
@@ -505,9 +506,11 @@
   )
   (call $~lib/memory/set_memory
    (i32.add
-    (tee_local $2
+    (tee_local $3
      (call $~lib/internal/arraybuffer/allocUnsafe
-      (get_local $1)
+      (tee_local $2
+       (get_local $1)
+      )
      )
     )
     (i32.const 8)
@@ -539,7 +542,7 @@
      (get_local $0)
     )
    )
-   (get_local $2)
+   (get_local $3)
   )
   (i32.store offset=4
    (get_local $0)
@@ -547,7 +550,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $1)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -1512,8 +1515,7 @@
  (func $~lib/typedarray/Int32Array#subarray (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (set_local $5
+  (set_local $4
    (call $~lib/internal/typedarray/TypedArray<i32,i32>#get:length
     (get_local $0)
    )
@@ -1527,26 +1529,28 @@
     (select
      (tee_local $3
       (i32.add
-       (get_local $5)
+       (get_local $4)
        (get_local $1)
       )
      )
-     (i32.const 0)
+     (tee_local $1
+      (i32.const 0)
+     )
      (i32.gt_s
       (get_local $3)
-      (get_local $4)
+      (get_local $1)
      )
     )
     (select
      (tee_local $3
       (get_local $1)
      )
-     (tee_local $4
-      (get_local $5)
+     (tee_local $1
+      (get_local $4)
      )
      (i32.lt_s
       (get_local $3)
-      (get_local $4)
+      (get_local $1)
      )
     )
    )
@@ -1560,16 +1564,14 @@
     (select
      (tee_local $3
       (i32.add
-       (get_local $5)
+       (get_local $4)
        (get_local $2)
       )
      )
-     (tee_local $4
-      (get_local $1)
-     )
+     (get_local $1)
      (i32.gt_s
       (get_local $3)
-      (get_local $4)
+      (get_local $1)
      )
     )
     (select
@@ -1578,21 +1580,17 @@
        (tee_local $3
         (get_local $2)
        )
-       (tee_local $4
-        (get_local $5)
-       )
+       (get_local $4)
        (i32.lt_s
         (get_local $3)
         (get_local $4)
        )
       )
      )
-     (tee_local $4
-      (get_local $1)
-     )
+     (get_local $1)
      (i32.gt_s
       (get_local $3)
-      (get_local $4)
+      (get_local $1)
      )
     )
    )
