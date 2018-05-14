@@ -14,13 +14,18 @@
 
 // Portable types
 
+// TODO temprary stub until this issue not resolved: https://github.com/Microsoft/TypeScript/issues/15096
+declare type BigInt = number;
+
 declare type i8 = number;
 declare type i16 = number;
 declare type i32 = number;
+declare type i64 = BigInt;
 declare type isize = number;
 declare type u8 = number;
 declare type u16 = number;
 declare type u32 = number;
+declare type u64 = BigInt;
 declare type bool = boolean;
 declare type usize = number;
 declare type f32 = number;
@@ -263,6 +268,8 @@ declare class Int16Array extends Array<i16> {}
 declare class Int32Array extends Array<i32> {}
 declare class Float32Array extends Array<f32> {}
 declare class Float64Array extends Array<f64> {}
+declare class BigInt64Array extends Array<i64> {}
+declare class BigUint64Array extends Array<u64> {}
 
 declare class String {
 
