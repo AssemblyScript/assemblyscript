@@ -3,4 +3,3 @@ docs/
 node_modules/
 out/
 raw/
-examples/n-body/rust/target/
