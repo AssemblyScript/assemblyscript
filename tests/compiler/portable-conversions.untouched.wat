@@ -4,7 +4,7 @@
  (global $portable-conversions/I (mut i64) (i64.const 0))
  (global $portable-conversions/f (mut f32) (f32.const 0))
  (global $portable-conversions/F (mut f64) (f64.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)

@@ -11,9 +11,9 @@
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr2 (mut i32) (i32.const 0))
  (global $std/allocator_arena/i (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 52))
+ (global $HEAP_BASE i32 (i32.const 56))
  (memory $0 1)
- (data (i32.const 4) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s")
+ (data (i32.const 8) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -33,7 +33,7 @@
     )
     (if
      (i32.gt_u
-      (tee_local $2
+      (tee_local $0
        (i32.and
         (i32.add
          (i32.add
@@ -48,7 +48,7 @@
        )
       )
       (i32.shl
-       (tee_local $0
+       (tee_local $2
         (current_memory)
        )
        (i32.const 16)
@@ -58,14 +58,14 @@
       (i32.lt_s
        (grow_memory
         (select
-         (get_local $0)
+         (get_local $2)
          (tee_local $4
           (tee_local $3
            (i32.shr_u
             (i32.and
              (i32.add
               (i32.sub
-               (get_local $2)
+               (get_local $0)
                (get_local $1)
               )
               (i32.const 65535)
@@ -77,7 +77,7 @@
           )
          )
          (i32.gt_s
-          (get_local $0)
+          (get_local $2)
           (get_local $4)
          )
         )
@@ -96,7 +96,7 @@
      )
     )
     (set_global $~lib/allocator/arena/offset
-     (get_local $2)
+     (get_local $0)
     )
     (return
      (get_local $1)
@@ -2403,7 +2403,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 7)
      (i32.const 0)
     )
@@ -2438,7 +2438,7 @@
       (block
        (call $abort
         (i32.const 0)
-        (i32.const 4)
+        (i32.const 8)
         (i32.const 13)
         (i32.const 2)
        )
@@ -2483,7 +2483,7 @@
       (block
        (call $abort
         (i32.const 0)
-        (i32.const 4)
+        (i32.const 8)
         (i32.const 18)
         (i32.const 2)
        )
@@ -2509,7 +2509,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 20)
      (i32.const 0)
     )
@@ -2542,7 +2542,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 27)
      (i32.const 0)
     )

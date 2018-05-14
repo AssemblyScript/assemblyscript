@@ -3,7 +3,7 @@
  (type $v (func))
  (global $void/u8Val1 (mut i32) (i32.const 1))
  (global $void/u8Val2 (mut i32) (i32.const 255))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)

@@ -12,7 +12,7 @@
  (table 4 4 anyfunc)
  (elem (i32.const 0) $start~anonymous|0 $start~anonymous|0 $start~someName|2 $start~anonymous|3)
  (memory $0 1)
- (data (i32.const 4) "\16\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
+ (data (i32.const 8) "\16\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -42,7 +42,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 4)
      (i32.const 0)
     )
@@ -65,7 +65,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 9)
      (i32.const 0)
     )
@@ -93,7 +93,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 16)
      (i32.const 0)
     )

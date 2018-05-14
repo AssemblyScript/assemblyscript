@@ -5,9 +5,9 @@
  (type $v (func))
  (import "env" "logi" (func $std/hash/logi (param i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00a")
- (data (i32.const 16) "\02\00\00\00a\00b")
- (data (i32.const 24) "\03\00\00\00a\00b\00c")
+ (data (i32.const 12) "\01\00\00\00a")
+ (data (i32.const 20) "\02\00\00\00a\00b")
+ (data (i32.const 28) "\03\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/internal/hash/hashStr (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -210,22 +210,22 @@
   )
   (call $std/hash/logi
    (call $~lib/internal/hash/hashStr
-    (i32.const 4)
-   )
-  )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hashStr
     (i32.const 8)
    )
   )
   (call $std/hash/logi
    (call $~lib/internal/hash/hashStr
-    (i32.const 16)
+    (i32.const 12)
    )
   )
   (call $std/hash/logi
    (call $~lib/internal/hash/hashStr
-    (i32.const 24)
+    (i32.const 20)
+   )
+  )
+  (call $std/hash/logi
+   (call $~lib/internal/hash/hashStr
+    (i32.const 28)
    )
   )
   (call $std/hash/logi

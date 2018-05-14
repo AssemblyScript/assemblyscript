@@ -6,7 +6,7 @@
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
  (memory $0 1)
- (data (i32.const 4) "\10\00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s")
+ (data (i32.const 8) "\10\00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func $getter-setter/Foo.get:bar (; 1 ;) (type $i) (result i32)
@@ -23,7 +23,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 13)
      (i32.const 0)
     )
@@ -41,7 +41,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 15)
      (i32.const 0)
     )
@@ -61,7 +61,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 16)
      (i32.const 0)
     )

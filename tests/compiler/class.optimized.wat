@@ -7,7 +7,7 @@
  (type $v (func))
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (memory $0 1)
- (data (i32.const 4) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
+ (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
  (export "test" (func $class/test))
  (export "memory" (memory $0))
  (start $start)

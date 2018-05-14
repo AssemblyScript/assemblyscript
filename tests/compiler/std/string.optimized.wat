@@ -11,45 +11,45 @@
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $std/string/str (mut i32) (i32.const 4))
+ (global $std/string/str (mut i32) (i32.const 8))
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 520))
+ (global $HEAP_BASE i32 (i32.const 524))
  (memory $0 1)
- (data (i32.const 4) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g")
- (data (i32.const 40) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 72) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 104) "\02\00\00\00h\00i")
- (data (i32.const 112) "\04\00\00\00n\00u\00l\00l")
- (data (i32.const 124) "\06\00\00\00s\00t\00r\00i\00n\00g")
- (data (i32.const 140) "\03\00\00\00I\00\'\00m")
- (data (i32.const 152) "\01\00\00\00,")
- (data (i32.const 160) "\01\00\00\00x")
- (data (i32.const 168) "\01\00\00\000")
- (data (i32.const 176) "\01\00\00\001")
- (data (i32.const 184) "\05\00\00\000\00b\001\000\001")
- (data (i32.const 200) "\05\00\00\000\00o\007\000\007")
- (data (i32.const 216) "\05\00\00\000\00x\00f\000\00f")
- (data (i32.const 232) "\05\00\00\000\00x\00F\000\00F")
- (data (i32.const 248) "\03\00\00\000\001\001")
- (data (i32.const 260) "\04\00\00\000\00x\001\00g")
- (data (i32.const 272) "\03\00\00\000\00.\001")
- (data (i32.const 284) "\03\00\00\00.\002\005")
- (data (i32.const 296) "\08\00\00\00.\001\00f\00o\00o\00b\00a\00r")
- (data (i32.const 316) "\01\00\00\00a")
- (data (i32.const 324) "\01\00\00\00b")
- (data (i32.const 336) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 388) "\02\00\00\00a\00b")
- (data (i32.const 396) "\02\00\00\00b\00a")
- (data (i32.const 404) "\02\00\00\00a\00a")
- (data (i32.const 412) "\03\00\00\00a\00b\00c")
- (data (i32.const 424) "\03\00\00\001\002\003")
- (data (i32.const 436) "\03\00\00\00a\00a\00a")
- (data (i32.const 448) "\08\00\00\00a\00b\00a\00b\00a\00b\00a\00b")
- (data (i32.const 468) "\05\00\00\00a\00a\00a\00a\00a")
- (data (i32.const 484) "\06\00\00\00a\00a\00a\00a\00a\00a")
- (data (i32.const 500) "\07\00\00\00a\00a\00a\00a\00a\00a\00a")
+ (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g")
+ (data (i32.const 44) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 76) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 108) "\02\00\00\00h\00i")
+ (data (i32.const 116) "\04\00\00\00n\00u\00l\00l")
+ (data (i32.const 128) "\06\00\00\00s\00t\00r\00i\00n\00g")
+ (data (i32.const 144) "\03\00\00\00I\00\'\00m")
+ (data (i32.const 156) "\01\00\00\00,")
+ (data (i32.const 164) "\01\00\00\00x")
+ (data (i32.const 172) "\01\00\00\000")
+ (data (i32.const 180) "\01\00\00\001")
+ (data (i32.const 188) "\05\00\00\000\00b\001\000\001")
+ (data (i32.const 204) "\05\00\00\000\00o\007\000\007")
+ (data (i32.const 220) "\05\00\00\000\00x\00f\000\00f")
+ (data (i32.const 236) "\05\00\00\000\00x\00F\000\00F")
+ (data (i32.const 252) "\03\00\00\000\001\001")
+ (data (i32.const 264) "\04\00\00\000\00x\001\00g")
+ (data (i32.const 276) "\03\00\00\000\00.\001")
+ (data (i32.const 288) "\03\00\00\00.\002\005")
+ (data (i32.const 300) "\08\00\00\00.\001\00f\00o\00o\00b\00a\00r")
+ (data (i32.const 320) "\01\00\00\00a")
+ (data (i32.const 328) "\01\00\00\00b")
+ (data (i32.const 340) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 392) "\02\00\00\00a\00b")
+ (data (i32.const 400) "\02\00\00\00b\00a")
+ (data (i32.const 408) "\02\00\00\00a\00a")
+ (data (i32.const 416) "\03\00\00\00a\00b\00c")
+ (data (i32.const 428) "\03\00\00\001\002\003")
+ (data (i32.const 440) "\03\00\00\00a\00a\00a")
+ (data (i32.const 452) "\08\00\00\00a\00b\00a\00b\00a\00b\00a\00b")
+ (data (i32.const 472) "\05\00\00\00a\00a\00a\00a\00a")
+ (data (i32.const 488) "\06\00\00\00a\00a\00a\00a\00a\00a")
+ (data (i32.const 504) "\07\00\00\00a\00a\00a\00a\00a\00a\00a")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -61,7 +61,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 72)
+     (i32.const 76)
      (i32.const 37)
      (i32.const 4)
     )
@@ -160,7 +160,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 72)
+     (i32.const 76)
      (i32.const 231)
      (i32.const 4)
     )
@@ -172,7 +172,7 @@
     (get_local $1)
    )
    (set_local $1
-    (i32.const 112)
+    (i32.const 116)
    )
   )
   (if
@@ -247,7 +247,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 72)
+     (i32.const 76)
      (i32.const 98)
      (i32.const 4)
     )
@@ -357,7 +357,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 72)
+     (i32.const 76)
      (i32.const 210)
      (i32.const 4)
     )
@@ -369,7 +369,7 @@
     (get_local $1)
    )
    (set_local $1
-    (i32.const 112)
+    (i32.const 116)
    )
   )
   (set_local $4
@@ -979,7 +979,7 @@
              (block
               (call $abort
                (i32.const 0)
-               (i32.const 72)
+               (i32.const 76)
                (i32.const 466)
                (i32.const 10)
               )
@@ -1083,7 +1083,7 @@
     )
     (if
      (i32.gt_u
-      (tee_local $2
+      (tee_local $0
        (i32.and
         (i32.add
          (i32.add
@@ -1098,7 +1098,7 @@
        )
       )
       (i32.shl
-       (tee_local $0
+       (tee_local $2
         (current_memory)
        )
        (i32.const 16)
@@ -1108,14 +1108,14 @@
       (i32.lt_s
        (grow_memory
         (select
-         (get_local $0)
+         (get_local $2)
          (tee_local $4
           (tee_local $3
            (i32.shr_u
             (i32.and
              (i32.add
               (i32.sub
-               (get_local $2)
+               (get_local $0)
                (get_local $1)
               )
               (i32.const 65535)
@@ -1127,7 +1127,7 @@
           )
          )
          (i32.gt_s
-          (get_local $0)
+          (get_local $2)
           (get_local $4)
          )
         )
@@ -1146,7 +1146,7 @@
      )
     )
     (set_global $~lib/allocator/arena/offset
-     (get_local $2)
+     (get_local $0)
     )
     (return
      (get_local $1)
@@ -1176,7 +1176,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 336)
+     (i32.const 340)
      (i32.const 20)
      (i32.const 2)
     )
@@ -3073,7 +3073,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 72)
+     (i32.const 76)
      (i32.const 74)
      (i32.const 4)
     )
@@ -3085,7 +3085,7 @@
     (get_local $1)
    )
    (set_local $1
-    (i32.const 112)
+    (i32.const 116)
    )
   )
   (if
@@ -3106,7 +3106,7 @@
     )
    )
    (return
-    (i32.const 332)
+    (i32.const 336)
    )
   )
   (call $~lib/memory/move_memory
@@ -3155,7 +3155,7 @@
     (get_local $0)
    )
    (set_local $0
-    (i32.const 112)
+    (i32.const 116)
    )
   )
   (call $~lib/string/String#concat
@@ -3557,7 +3557,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 72)
+     (i32.const 76)
      (i32.const 383)
      (i32.const 4)
     )
@@ -3589,7 +3589,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 72)
+     (i32.const 76)
      (i32.const 388)
      (i32.const 6)
     )
@@ -3609,7 +3609,7 @@
     )
    )
    (return
-    (i32.const 332)
+    (i32.const 336)
    )
   )
   (if
@@ -3692,12 +3692,12 @@
   (if
    (i32.ne
     (get_global $std/string/str)
-    (i32.const 4)
+    (i32.const 8)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 9)
      (i32.const 0)
     )
@@ -3714,7 +3714,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 11)
      (i32.const 0)
     )
@@ -3732,7 +3732,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 12)
      (i32.const 0)
     )
@@ -3743,14 +3743,14 @@
    (i32.eqz
     (call $~lib/string/String#startsWith
      (get_global $std/string/str)
-     (i32.const 104)
+     (i32.const 108)
      (i32.const 0)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 13)
      (i32.const 0)
     )
@@ -3765,7 +3765,7 @@
     (i32.eqz
      (call $~lib/string/String#endsWith|trampoline
       (get_global $std/string/str)
-      (i32.const 124)
+      (i32.const 128)
       (i32.const 0)
      )
     )
@@ -3773,7 +3773,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 14)
      (i32.const 0)
     )
@@ -3784,14 +3784,14 @@
    (i32.eqz
     (call $~lib/string/String#includes
      (get_global $std/string/str)
-     (i32.const 140)
+     (i32.const 144)
      (i32.const 0)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 15)
      (i32.const 0)
     )
@@ -3802,7 +3802,7 @@
    (i32.ne
     (call $~lib/string/String#indexOf
      (get_global $std/string/str)
-     (i32.const 152)
+     (i32.const 156)
      (i32.const 0)
     )
     (i32.const 2)
@@ -3810,7 +3810,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 16)
      (i32.const 0)
     )
@@ -3821,7 +3821,7 @@
    (i32.ne
     (call $~lib/string/String#indexOf
      (get_global $std/string/str)
-     (i32.const 160)
+     (i32.const 164)
      (i32.const 0)
     )
     (i32.const -1)
@@ -3829,7 +3829,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 17)
      (i32.const 0)
     )
@@ -3839,7 +3839,7 @@
   (if
    (f64.ne
     (call $~lib/string/parseInt
-     (i32.const 168)
+     (i32.const 172)
      (i32.const 0)
     )
     (f64.const 0)
@@ -3847,7 +3847,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 23)
      (i32.const 0)
     )
@@ -3857,7 +3857,7 @@
   (if
    (f64.ne
     (call $~lib/string/parseInt
-     (i32.const 176)
+     (i32.const 180)
      (i32.const 0)
     )
     (f64.const 1)
@@ -3865,7 +3865,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 24)
      (i32.const 0)
     )
@@ -3875,7 +3875,7 @@
   (if
    (f64.ne
     (call $~lib/string/parseInt
-     (i32.const 184)
+     (i32.const 188)
      (i32.const 0)
     )
     (f64.const 5)
@@ -3883,7 +3883,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 25)
      (i32.const 0)
     )
@@ -3893,7 +3893,7 @@
   (if
    (f64.ne
     (call $~lib/string/parseInt
-     (i32.const 200)
+     (i32.const 204)
      (i32.const 0)
     )
     (f64.const 455)
@@ -3901,7 +3901,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 26)
      (i32.const 0)
     )
@@ -3911,7 +3911,7 @@
   (if
    (f64.ne
     (call $~lib/string/parseInt
-     (i32.const 216)
+     (i32.const 220)
      (i32.const 0)
     )
     (f64.const 3855)
@@ -3919,7 +3919,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 27)
      (i32.const 0)
     )
@@ -3929,7 +3929,7 @@
   (if
    (f64.ne
     (call $~lib/string/parseInt
-     (i32.const 232)
+     (i32.const 236)
      (i32.const 0)
     )
     (f64.const 3855)
@@ -3937,7 +3937,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 28)
      (i32.const 0)
     )
@@ -3947,7 +3947,7 @@
   (if
    (f64.ne
     (call $~lib/string/parseInt
-     (i32.const 248)
+     (i32.const 252)
      (i32.const 0)
     )
     (f64.const 11)
@@ -3955,7 +3955,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 29)
      (i32.const 0)
     )
@@ -3965,7 +3965,7 @@
   (if
    (f64.ne
     (call $~lib/string/parseInt
-     (i32.const 260)
+     (i32.const 264)
      (i32.const 0)
     )
     (f64.const 1)
@@ -3973,7 +3973,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 30)
      (i32.const 0)
     )
@@ -3983,14 +3983,14 @@
   (if
    (f64.ne
     (call $~lib/string/parseFloat
-     (i32.const 168)
+     (i32.const 172)
     )
     (f64.const 0)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 32)
      (i32.const 0)
     )
@@ -4000,14 +4000,14 @@
   (if
    (f64.ne
     (call $~lib/string/parseFloat
-     (i32.const 176)
+     (i32.const 180)
     )
     (f64.const 1)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 33)
      (i32.const 0)
     )
@@ -4017,14 +4017,14 @@
   (if
    (f64.ne
     (call $~lib/string/parseFloat
-     (i32.const 272)
+     (i32.const 276)
     )
     (f64.const 0.1)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 34)
      (i32.const 0)
     )
@@ -4034,14 +4034,14 @@
   (if
    (f64.ne
     (call $~lib/string/parseFloat
-     (i32.const 284)
+     (i32.const 288)
     )
     (f64.const 0.25)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 35)
      (i32.const 0)
     )
@@ -4051,14 +4051,14 @@
   (if
    (f64.ne
     (call $~lib/string/parseFloat
-     (i32.const 296)
+     (i32.const 300)
     )
     (f64.const 0.1)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 36)
      (i32.const 0)
     )
@@ -4067,21 +4067,21 @@
   )
   (set_global $std/string/c
    (call $~lib/string/String.__concat
-    (i32.const 316)
-    (i32.const 324)
+    (i32.const 320)
+    (i32.const 328)
    )
   )
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
      (get_global $std/string/c)
-     (i32.const 388)
+     (i32.const 392)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 39)
      (i32.const 0)
     )
@@ -4092,13 +4092,13 @@
    (i32.eqz
     (call $~lib/string/String.__ne
      (get_global $std/string/c)
-     (i32.const 316)
+     (i32.const 320)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 40)
      (i32.const 0)
     )
@@ -4108,14 +4108,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (i32.const 332)
-     (i32.const 332)
+     (i32.const 336)
+     (i32.const 336)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 41)
      (i32.const 0)
     )
@@ -4125,14 +4125,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__ne
-     (i32.const 332)
+     (i32.const 336)
      (get_global $std/string/nullStr)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 42)
      (i32.const 0)
     )
@@ -4142,14 +4142,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gt
-     (i32.const 324)
-     (i32.const 316)
+     (i32.const 328)
+     (i32.const 320)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 44)
      (i32.const 0)
     )
@@ -4159,14 +4159,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gt
-     (i32.const 396)
-     (i32.const 316)
+     (i32.const 400)
+     (i32.const 320)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 45)
      (i32.const 0)
     )
@@ -4176,14 +4176,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gte
-     (i32.const 396)
-     (i32.const 404)
+     (i32.const 400)
+     (i32.const 408)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 46)
      (i32.const 0)
     )
@@ -4193,14 +4193,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gt
-     (i32.const 396)
-     (i32.const 388)
+     (i32.const 400)
+     (i32.const 392)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 47)
      (i32.const 0)
     )
@@ -4209,13 +4209,13 @@
   )
   (if
    (call $~lib/string/String.__lt
-    (i32.const 396)
-    (i32.const 388)
+    (i32.const 400)
+    (i32.const 392)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 48)
      (i32.const 0)
     )
@@ -4224,13 +4224,13 @@
   )
   (if
    (call $~lib/string/String.__lt
-    (i32.const 324)
+    (i32.const 328)
     (get_global $std/string/nullStr)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 50)
      (i32.const 0)
     )
@@ -4240,12 +4240,12 @@
   (if
    (call $~lib/string/String.__lt
     (get_global $std/string/nullStr)
-    (i32.const 324)
+    (i32.const 328)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 51)
      (i32.const 0)
     )
@@ -4255,14 +4255,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gt
-     (i32.const 412)
-     (i32.const 332)
+     (i32.const 416)
+     (i32.const 336)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 53)
      (i32.const 0)
     )
@@ -4272,14 +4272,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__lt
-     (i32.const 332)
-     (i32.const 412)
+     (i32.const 336)
+     (i32.const 416)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 54)
      (i32.const 0)
     )
@@ -4289,14 +4289,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gte
-     (i32.const 412)
-     (i32.const 332)
+     (i32.const 416)
+     (i32.const 336)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 55)
      (i32.const 0)
     )
@@ -4306,14 +4306,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__lte
-     (i32.const 332)
-     (i32.const 412)
+     (i32.const 336)
+     (i32.const 416)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 56)
      (i32.const 0)
     )
@@ -4322,13 +4322,13 @@
   )
   (if
    (call $~lib/string/String.__lt
-    (i32.const 412)
-    (i32.const 332)
+    (i32.const 416)
+    (i32.const 336)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 57)
      (i32.const 0)
     )
@@ -4337,13 +4337,13 @@
   )
   (if
    (call $~lib/string/String.__gt
-    (i32.const 332)
-    (i32.const 412)
+    (i32.const 336)
+    (i32.const 416)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 58)
      (i32.const 0)
     )
@@ -4352,13 +4352,13 @@
   )
   (if
    (call $~lib/string/String.__lt
-    (i32.const 332)
-    (i32.const 332)
+    (i32.const 336)
+    (i32.const 336)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 59)
      (i32.const 0)
     )
@@ -4367,13 +4367,13 @@
   )
   (if
    (call $~lib/string/String.__gt
-    (i32.const 332)
-    (i32.const 332)
+    (i32.const 336)
+    (i32.const 336)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 60)
      (i32.const 0)
     )
@@ -4383,14 +4383,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__gte
-     (i32.const 332)
-     (i32.const 332)
+     (i32.const 336)
+     (i32.const 336)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 61)
      (i32.const 0)
     )
@@ -4400,14 +4400,14 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__lte
-     (i32.const 332)
-     (i32.const 332)
+     (i32.const 336)
+     (i32.const 336)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 62)
      (i32.const 0)
     )
@@ -4417,14 +4417,14 @@
   (if
    (i32.ne
     (i32.load
-     (i32.const 424)
+     (i32.const 428)
     )
     (i32.const 3)
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 64)
      (i32.const 0)
     )
@@ -4435,16 +4435,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 332)
+      (i32.const 336)
       (i32.const 100)
      )
-     (i32.const 332)
+     (i32.const 336)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 66)
      (i32.const 0)
     )
@@ -4455,16 +4455,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 316)
+      (i32.const 320)
       (i32.const 0)
      )
-     (i32.const 332)
+     (i32.const 336)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 67)
      (i32.const 0)
     )
@@ -4475,16 +4475,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 316)
+      (i32.const 320)
       (i32.const 1)
      )
-     (i32.const 316)
+     (i32.const 320)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 68)
      (i32.const 0)
     )
@@ -4495,16 +4495,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 316)
+      (i32.const 320)
       (i32.const 2)
      )
-     (i32.const 404)
+     (i32.const 408)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 69)
      (i32.const 0)
     )
@@ -4515,16 +4515,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 316)
+      (i32.const 320)
       (i32.const 3)
      )
-     (i32.const 436)
+     (i32.const 440)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 70)
      (i32.const 0)
     )
@@ -4535,16 +4535,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 388)
+      (i32.const 392)
       (i32.const 4)
      )
-     (i32.const 448)
+     (i32.const 452)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 71)
      (i32.const 0)
     )
@@ -4555,16 +4555,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 316)
+      (i32.const 320)
       (i32.const 5)
      )
-     (i32.const 468)
+     (i32.const 472)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 72)
      (i32.const 0)
     )
@@ -4575,16 +4575,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 316)
+      (i32.const 320)
       (i32.const 6)
      )
-     (i32.const 484)
+     (i32.const 488)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 73)
      (i32.const 0)
     )
@@ -4595,16 +4595,16 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#repeat
-      (i32.const 316)
+      (i32.const 320)
       (i32.const 7)
      )
-     (i32.const 500)
+     (i32.const 504)
     )
    )
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 40)
+     (i32.const 44)
      (i32.const 74)
      (i32.const 0)
     )

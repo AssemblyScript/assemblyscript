@@ -13,7 +13,7 @@
  (global $std/libm/SQRT1_2 f64 (f64.const 0.7071067811865476))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
  (global $NaN f64 (f64.const nan:0x8000000000000))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "E" (global $std/libm/E))
  (export "LN10" (global $std/libm/LN10))

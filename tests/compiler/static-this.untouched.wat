@@ -4,9 +4,9 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $static-this/Foo.bar (mut i32) (i32.const 42))
- (global $HEAP_BASE i32 (i32.const 36))
+ (global $HEAP_BASE i32 (i32.const 40))
  (memory $0 1)
- (data (i32.const 4) "\0e\00\00\00s\00t\00a\00t\00i\00c\00-\00t\00h\00i\00s\00.\00t\00s\00")
+ (data (i32.const 8) "\0e\00\00\00s\00t\00a\00t\00i\00c\00-\00t\00h\00i\00s\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $static-this/Foo.getBar (; 1 ;) (type $i) (result i32)
@@ -25,7 +25,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 8)
      (i32.const 0)
     )

@@ -4,9 +4,9 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 28))
+ (global $HEAP_BASE i32 (i32.const 32))
  (memory $0 1)
- (data (i32.const 4) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
+ (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func $memset/memset (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -370,7 +370,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 72)
      (i32.const 0)
     )
@@ -390,7 +390,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 73)
      (i32.const 0)
     )
@@ -417,7 +417,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 77)
      (i32.const 0)
     )
@@ -437,7 +437,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 78)
      (i32.const 0)
     )
@@ -457,7 +457,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 79)
      (i32.const 0)
     )
@@ -477,7 +477,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 80)
      (i32.const 0)
     )

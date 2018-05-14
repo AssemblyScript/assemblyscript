@@ -14,7 +14,7 @@
  (type $IiI (func (param i64 i32) (result i64)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $FFF (func (param f64 f64) (result f64)))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)

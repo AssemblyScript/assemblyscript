@@ -1,7 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "alias" (func $typealias/alias))
  (export "memory" (memory $0))

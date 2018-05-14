@@ -276,7 +276,9 @@ export class Compiler extends DiagnosticEmitter {
     if (!options) options = new Options();
     this.options = options;
     this.memoryOffset = i64_new(
-      max(options.memoryBase, options.usizeType.byteSize) // leave space for `null`
+      // leave space for `null`. also functions as a sentinel for erroneous stores at offset 0.
+      // note that Binaryen's asm.js output utilizes the first 8 bytes for reinterpretations (#1547)
+      max(options.memoryBase, 8)
     );
     this.module = Module.create();
   }
@@ -5079,7 +5081,7 @@ export class Compiler extends DiagnosticEmitter {
         let stmt = this.compileStatement(statements[i]);
         if (getExpressionId(stmt) != ExpressionId.Nop) {
           body.push(stmt);
-          if (flow.isAny(FlowFlags.BREAKS | FlowFlags.CONTINUES | FlowFlags.RETURNS)) break;
+          if (flow.is(FlowFlags.RETURNS)) break;
         }
       }
     } else {

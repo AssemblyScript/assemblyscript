@@ -4,7 +4,7 @@
  (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
  (global $../../examples/mandelbrot/assembly/index/NUM_COLORS i32 (i32.const 2048))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
  (export "memory" (memory $0))

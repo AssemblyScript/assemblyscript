@@ -3,9 +3,9 @@
  (type $v (func))
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $for/i (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 20))
+ (global $HEAP_BASE i32 (i32.const 24))
  (memory $0 1)
- (data (i32.const 4) "\06\00\00\00f\00o\00r\00.\00t\00s\00")
+ (data (i32.const 8) "\06\00\00\00f\00o\00r\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 1 ;) (type $v)
@@ -43,7 +43,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 5)
      (i32.const 0)
     )
@@ -104,7 +104,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 12)
      (i32.const 0)
     )

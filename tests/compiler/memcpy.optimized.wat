@@ -5,7 +5,7 @@
  (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
  (global $memcpy/dest (mut i32) (i32.const 0))
  (memory $0 1)
- (data (i32.const 4) "\t\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s")
+ (data (i32.const 8) "\t\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s")
  (export "memcpy" (func $memcpy/memcpy))
  (export "memory" (memory $0))
  (start $start)
@@ -1624,7 +1624,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 151)
      (i32.const 0)
     )
@@ -1641,7 +1641,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 152)
      (i32.const 0)
     )
@@ -1663,7 +1663,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 155)
      (i32.const 0)
     )
@@ -1680,7 +1680,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 156)
      (i32.const 0)
     )
@@ -1697,7 +1697,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 157)
      (i32.const 0)
     )
@@ -1714,7 +1714,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 158)
      (i32.const 0)
     )
@@ -1731,7 +1731,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 159)
      (i32.const 0)
     )
@@ -1755,7 +1755,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 162)
      (i32.const 0)
     )
@@ -1779,7 +1779,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 165)
      (i32.const 0)
     )
@@ -1796,7 +1796,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 166)
      (i32.const 0)
     )
@@ -1813,7 +1813,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 167)
      (i32.const 0)
     )
@@ -1830,7 +1830,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 168)
      (i32.const 0)
     )

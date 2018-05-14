@@ -1,6 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "fib" (func $recursive/fib))
  (export "memory" (memory $0))

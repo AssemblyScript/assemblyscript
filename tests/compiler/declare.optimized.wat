@@ -7,7 +7,7 @@
  (import "my" "externalFunction" (func $declare/my.externalFunction))
  (import "my" "externalConstant" (global $declare/my.externalConstant i32))
  (memory $0 1)
- (data (i32.const 4) "\n\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
+ (data (i32.const 8) "\n\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 3 ;) (type $v)
@@ -20,7 +20,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 5)
      (i32.const 0)
     )
@@ -36,7 +36,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 4)
+     (i32.const 8)
      (i32.const 13)
      (i32.const 0)
     )

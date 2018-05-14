@@ -1,6 +1,6 @@
 (module
  (type $i (func (result i32)))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "default" (func $named-export-default/get3))
  (export "memory" (memory $0))

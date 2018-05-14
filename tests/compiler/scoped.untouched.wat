@@ -4,7 +4,7 @@
  (global $scoped/aGlobal (mut i32) (i32.const 1))
  (global $scoped/aConstant i32 (i32.const 3))
  (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)

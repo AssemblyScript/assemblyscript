@@ -5,7 +5,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/new/aClass (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "memory" (memory $0))
  (start $start)
@@ -26,7 +26,7 @@
     )
     (if
      (i32.gt_u
-      (tee_local $2
+      (tee_local $0
        (i32.and
         (i32.add
          (i32.add
@@ -41,7 +41,7 @@
        )
       )
       (i32.shl
-       (tee_local $0
+       (tee_local $2
         (current_memory)
        )
        (i32.const 16)
@@ -51,14 +51,14 @@
       (i32.lt_s
        (grow_memory
         (select
-         (get_local $0)
+         (get_local $2)
          (tee_local $4
           (tee_local $3
            (i32.shr_u
             (i32.and
              (i32.add
               (i32.sub
-               (get_local $2)
+               (get_local $0)
                (get_local $1)
               )
               (i32.const 65535)
@@ -70,7 +70,7 @@
           )
          )
          (i32.gt_s
-          (get_local $0)
+          (get_local $2)
           (get_local $4)
          )
         )
@@ -89,7 +89,7 @@
      )
     )
     (set_global $~lib/allocator/arena/offset
-     (get_local $2)
+     (get_local $0)
     )
     (return
      (get_local $1)
