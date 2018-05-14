@@ -1,6 +1,5 @@
 *.wasm
 *.wasm.map
 node_modules/
-n-body/rust/target/
 npm-debug.log
 package-lock.json
