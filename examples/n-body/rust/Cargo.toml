@@ -6,3 +6,7 @@ authors = ["MaxGraey <maxgraey@gmail.com>"]
 [lib]
 path       = "src/lib.rs"
 crate-type = ["cdylib"]
+
+[profile.release]
+lto = true
+opt-level = 's'
