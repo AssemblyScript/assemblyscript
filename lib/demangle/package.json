@@ -1,0 +1,13 @@
+{
+  "name": "@assemblyscript/demangle",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests"
+  },
+  "files": [
+    "index.js",
+    "package.json",
+    "README.md"
+  ]
+}
