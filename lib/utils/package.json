@@ -1,6 +1,0 @@
-{
-  "name": "@assemblyscript/utils",
-  "version": "0.5.0",
-  "description": "Utilities for working with AssemblyScript modules.",
-  "license": "Apache-2.0"
-}

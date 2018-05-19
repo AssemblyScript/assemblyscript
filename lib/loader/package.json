@@ -1,13 +1,18 @@
 {
-  "name": "@assemblyscript/demangle",
+  "name": "@assemblyscript/loader",
   "version": "1.0.0",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "node tests"
   },
   "files": [
+    "index.d.ts",
     "index.js",
     "package.json",
     "README.md"
-  ]
+  ],
+  "dependencies": {
+    "@types/webassembly-js-api": "0.0.1"
+  }
 }
