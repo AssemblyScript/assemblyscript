@@ -2718,7 +2718,11 @@ export function compileAllocate(
   var allocatePrototype = program.elementsLookup.get(allocateInternalName);
   if (!allocatePrototype) {
     program.error(
-      DiagnosticCode.Cannot_allocate_memory_unless_an_allocator_is_defined_Please_define_an_allocator_e_g_by_importing_allocator_arena_or_allocator_tlsf,
+      DiagnosticCode.Cannot_find_name_0,
+      reportNode.range, allocateInternalName
+    );
+    program.info(
+      DiagnosticCode.An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf,
       reportNode.range
     );
     return module.createUnreachable();
