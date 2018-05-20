@@ -1,3 +1,8 @@
+import {
+  a,
+  b,
+} from "c";
+
 enum Foo {
   A,
   B,
@@ -31,3 +36,8 @@ export function compute(): i32 {
     2,
   );
 }
+
+export {
+  a,
+  b,
+};

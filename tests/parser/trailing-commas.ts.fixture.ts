@@ -1,3 +1,7 @@
+import {
+  a,
+  b
+} from "c";
 enum Foo {
   A,
   B
@@ -11,3 +15,7 @@ export function compute(): i32 {
   parameterized<i8, i32>(0, 0);
   return add(1, 2);
 }
+export {
+  a,
+  b
+};

@@ -710,7 +710,10 @@ export class ASTBuilder {
       sb.push(";\n");
     } else {
       let last = sb[sb.length - 1];
-      if (last.length && last.charCodeAt(last.length - 1) == CharCode.CLOSEBRACE) {
+      if (last.length && (
+          last.charCodeAt(last.length - 1) == CharCode.CLOSEBRACE ||
+          last.charCodeAt(last.length - 1) == CharCode.SEMICOLON)
+      ) {
         sb.push("\n");
       } else {
         sb.push(";\n");
@@ -892,11 +895,15 @@ export class ASTBuilder {
     var numMembers = members.length;
     if (numMembers) {
       sb.push("export {\n");
+      let indentLevel = ++this.indentLevel;
+      indent(sb, indentLevel);
       this.visitExportMember(node.members[0]);
       for (let i = 1; i < numMembers; ++i) {
         sb.push(",\n");
+        indent(sb, indentLevel);
         this.visitExportMember(node.members[i]);
       }
+      --this.indentLevel;
       sb.push("\n}");
     } else {
       sb.push("export {}");
@@ -906,6 +913,7 @@ export class ASTBuilder {
       sb.push(" from ");
       this.visitStringLiteralExpression(path);
     }
+    sb.push(";");
   }
 
   visitExpressionStatement(node: ExpressionStatement): void {
