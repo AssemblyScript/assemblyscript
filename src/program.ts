@@ -416,8 +416,10 @@ export class Program extends DiagnosticEmitter {
     var globalAliases = options.globalAliases;
     if (globalAliases) {
       for (let [alias, name] of globalAliases) {
-        let element = this.elementsLookup.get(name); // TODO: error? has no source range
+        if (!alias.length) continue; // explicitly disabled
+        let element = this.elementsLookup.get(name);
         if (element) this.elementsLookup.set(alias, element);
+        else throw new Error("element not found: " + name);
       }
     }
 

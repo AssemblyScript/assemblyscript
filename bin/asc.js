@@ -357,6 +357,7 @@ exports.main = function main(argv, options, callback) {
   // Initialize default aliases
   assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
   assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
+  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/env/abort");
 
   // Add or override aliases if specified
   var aliases = args.use;

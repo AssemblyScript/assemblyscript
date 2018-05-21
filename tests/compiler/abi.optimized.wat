@@ -2,7 +2,7 @@
  (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
  (memory $0 1)
@@ -62,7 +62,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 58)
@@ -77,7 +77,7 @@
   (if
    (get_global $abi/y)
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 65)

@@ -78,13 +78,6 @@ export declare function changetype<T>(value: void): T;
 
 export declare function assert<T>(isTrueish: T, message?: string): T;
 
-export declare function abort(
-  message?: string | null,
-  fileName?: string | null,
-  lineNumber?: u32,
-  columnNumber?: u32
-): void;
-
 export declare function unchecked<T>(expr: T): T;
 
 export declare function i8(value: void): i8;

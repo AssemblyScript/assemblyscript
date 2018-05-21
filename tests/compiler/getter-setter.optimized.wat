@@ -3,7 +3,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iv (func (param i32)))
  (type $v (func))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s")
@@ -21,7 +21,7 @@
   (if
    (call $getter-setter/Foo.get:bar)
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 13)
@@ -39,7 +39,7 @@
     (i32.const 1)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 15)
@@ -59,7 +59,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 16)

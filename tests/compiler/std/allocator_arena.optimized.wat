@@ -5,7 +5,7 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iv (func (param i32)))
  (type $v (func))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
@@ -2401,7 +2401,7 @@
     (get_global $std/allocator_arena/ptr2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 7)
@@ -2436,7 +2436,7 @@
        (i32.const 18)
       )
       (block
-       (call $abort
+       (call $~lib/env/abort
         (i32.const 0)
         (i32.const 8)
         (i32.const 13)
@@ -2481,7 +2481,7 @@
        (i32.const 18)
       )
       (block
-       (call $abort
+       (call $~lib/env/abort
         (i32.const 0)
         (i32.const 8)
         (i32.const 18)
@@ -2507,7 +2507,7 @@
     (i32.const 42)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 20)
@@ -2540,7 +2540,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 27)

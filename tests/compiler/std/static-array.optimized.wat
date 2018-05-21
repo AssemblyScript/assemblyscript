@@ -10,7 +10,7 @@
  (type $iiF (func (param i32 i32) (result f64)))
  (type $iiFv (func (param i32 i32 f64)))
  (type $v (func))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 272))
@@ -506,7 +506,7 @@
     (i32.const 1073741816)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 212)
      (i32.const 22)
@@ -2409,7 +2409,7 @@
       (i32.const 1073741816)
      )
      (block
-      (call $abort
+      (call $~lib/env/abort
        (i32.const 0)
        (i32.const 212)
        (i32.const 32)
@@ -2496,7 +2496,7 @@
        (i32.const 0)
       )
       (block
-       (call $abort
+       (call $~lib/env/abort
         (i32.const 0)
         (i32.const 212)
         (i32.const 56)
@@ -2537,7 +2537,7 @@
       (i32.const 268435454)
      )
      (block
-      (call $abort
+      (call $~lib/env/abort
        (i32.const 0)
        (i32.const 180)
        (i32.const 86)
@@ -2632,7 +2632,7 @@
       (i32.const 134217727)
      )
      (block
-      (call $abort
+      (call $~lib/env/abort
        (i32.const 0)
        (i32.const 180)
        (i32.const 86)
@@ -2727,7 +2727,7 @@
       (i32.const 268435454)
      )
      (block
-      (call $abort
+      (call $~lib/env/abort
        (i32.const 0)
        (i32.const 180)
        (i32.const 86)
@@ -2822,7 +2822,7 @@
       (i32.const 134217727)
      )
      (block
-      (call $abort
+      (call $~lib/env/abort
        (i32.const 0)
        (i32.const 180)
        (i32.const 86)
@@ -2887,7 +2887,7 @@
     (i32.const 2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 8)
@@ -2905,7 +2905,7 @@
     (i32.const 1)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 9)
@@ -2923,7 +2923,7 @@
     (i32.const 2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 10)
@@ -2946,7 +2946,7 @@
     (i32.const 2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 12)
@@ -2963,7 +2963,7 @@
     (i32.const 2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 14)
@@ -2981,7 +2981,7 @@
     (i64.const 3)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 15)
@@ -2999,7 +2999,7 @@
     (i64.const 4)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 16)
@@ -3022,7 +3022,7 @@
     (i64.const 4)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 18)
@@ -3039,7 +3039,7 @@
     (i32.const 2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 20)
@@ -3057,7 +3057,7 @@
     (f32.const 1.5)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 21)
@@ -3075,7 +3075,7 @@
     (f32.const 2.5)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 22)
@@ -3098,7 +3098,7 @@
     (f32.const 2.5)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 24)
@@ -3115,7 +3115,7 @@
     (i32.const 2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 26)
@@ -3133,7 +3133,7 @@
     (f64.const 1.25)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 27)
@@ -3151,7 +3151,7 @@
     (f64.const 2.25)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 28)
@@ -3174,7 +3174,7 @@
     (f64.const 2.25)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
      (i32.const 30)

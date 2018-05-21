@@ -6,7 +6,7 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
@@ -106,7 +106,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 11)
@@ -133,7 +133,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 15)
@@ -157,7 +157,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 17)
@@ -176,7 +176,7 @@
     (i32.const 5)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 23)
@@ -194,7 +194,7 @@
     (i32.const 7)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 29)
@@ -213,7 +213,7 @@
     (i32.const 9)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 35)
@@ -237,7 +237,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 41)
@@ -256,7 +256,7 @@
     (i32.const 3)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 42)

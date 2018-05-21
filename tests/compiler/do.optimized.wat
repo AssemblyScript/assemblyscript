@@ -1,7 +1,7 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $do/n (mut i32) (i32.const 10))
  (global $do/m (mut i32) (i32.const 0))
  (global $do/o (mut i32) (i32.const 0))
@@ -31,7 +31,7 @@
   (if
    (get_global $do/n)
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 7)
@@ -46,7 +46,7 @@
     (i32.const 10)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 8)
@@ -77,7 +77,7 @@
     (i32.const -1)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 12)
@@ -125,7 +125,7 @@
    (if
     (get_global $do/n)
     (block
-     (call $abort
+     (call $~lib/env/abort
       (i32.const 0)
       (i32.const 8)
       (i32.const 24)
@@ -140,7 +140,7 @@
      (i32.const 9)
     )
     (block
-     (call $abort
+     (call $~lib/env/abort
       (i32.const 0)
       (i32.const 8)
       (i32.const 25)
@@ -156,7 +156,7 @@
   (if
    (get_global $do/n)
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 27)
@@ -171,7 +171,7 @@
     (i32.const 1)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 28)
@@ -186,7 +186,7 @@
     (i32.const 9)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 29)

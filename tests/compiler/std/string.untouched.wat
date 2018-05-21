@@ -8,7 +8,7 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -96,7 +96,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
      (i32.const 37)
@@ -209,7 +209,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
      (i32.const 231)
@@ -316,7 +316,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
      (i32.const 98)
@@ -444,7 +444,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
      (i32.const 210)
@@ -1154,7 +1154,7 @@
                  (i32.const 0)
                 )
                 (block
-                 (call $abort
+                 (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 76)
                   (i32.const 466)
@@ -1382,7 +1382,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 340)
      (i32.const 20)
@@ -3543,7 +3543,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
      (i32.const 74)
@@ -4110,7 +4110,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
      (i32.const 383)
@@ -4145,7 +4145,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
      (i32.const 388)
@@ -4266,7 +4266,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 9)
@@ -4285,7 +4285,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 11)
@@ -4305,7 +4305,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 12)
@@ -4323,7 +4323,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 13)
@@ -4346,7 +4346,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 14)
@@ -4364,7 +4364,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 15)
@@ -4385,7 +4385,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 16)
@@ -4406,7 +4406,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 17)
@@ -4426,7 +4426,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 23)
@@ -4446,7 +4446,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 24)
@@ -4466,7 +4466,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 25)
@@ -4486,7 +4486,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 26)
@@ -4506,7 +4506,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 27)
@@ -4526,7 +4526,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 28)
@@ -4546,7 +4546,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 29)
@@ -4566,7 +4566,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 30)
@@ -4585,7 +4585,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 32)
@@ -4604,7 +4604,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 33)
@@ -4623,7 +4623,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 34)
@@ -4642,7 +4642,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 35)
@@ -4661,7 +4661,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 36)
@@ -4684,7 +4684,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 39)
@@ -4701,7 +4701,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 40)
@@ -4718,7 +4718,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 41)
@@ -4735,7 +4735,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 42)
@@ -4752,7 +4752,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 44)
@@ -4769,7 +4769,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 45)
@@ -4786,7 +4786,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 46)
@@ -4803,7 +4803,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 47)
@@ -4822,7 +4822,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 48)
@@ -4841,7 +4841,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 50)
@@ -4860,7 +4860,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 51)
@@ -4877,7 +4877,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 53)
@@ -4894,7 +4894,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 54)
@@ -4911,7 +4911,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 55)
@@ -4928,7 +4928,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 56)
@@ -4947,7 +4947,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 57)
@@ -4966,7 +4966,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 58)
@@ -4985,7 +4985,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 59)
@@ -5004,7 +5004,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 60)
@@ -5021,7 +5021,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 61)
@@ -5038,7 +5038,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 62)
@@ -5057,7 +5057,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 64)
@@ -5077,7 +5077,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 66)
@@ -5097,7 +5097,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 67)
@@ -5117,7 +5117,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 68)
@@ -5137,7 +5137,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 69)
@@ -5157,7 +5157,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 70)
@@ -5177,7 +5177,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 71)
@@ -5197,7 +5197,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 72)
@@ -5217,7 +5217,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 73)
@@ -5237,7 +5237,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
      (i32.const 74)

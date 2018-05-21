@@ -3,7 +3,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (type $i (func (result i32)))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $function-expression/f1 (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 1))
@@ -40,7 +40,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 4)
@@ -63,7 +63,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 9)
@@ -91,7 +91,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 16)

@@ -3,7 +3,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (import "env" "externalConstant" (global $declare/externalConstant i32))
  (import "env" "externalFunction" (func $declare/externalFunction))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "my" "externalFunction" (func $declare/my.externalFunction))
  (import "my" "externalConstant" (global $declare/my.externalConstant i32))
  (global $HEAP_BASE i32 (i32.const 32))
@@ -21,7 +21,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 5)
@@ -39,7 +39,7 @@
     )
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
      (i32.const 13)

@@ -4,7 +4,7 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
- (import "env" "abort" (func $abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/array-literal/emptyArray (mut i32) (i32.const 0))
@@ -163,7 +163,7 @@
     (i32.const 1073741816)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 124)
      (i32.const 22)
@@ -529,7 +529,7 @@
     (i32.const 268435454)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 92)
      (i32.const 23)
@@ -620,7 +620,7 @@
     (i32.const 3)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 4)
@@ -635,7 +635,7 @@
     (i32.const 0)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 5)
@@ -653,7 +653,7 @@
     (i32.const 1)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 6)
@@ -671,7 +671,7 @@
     (i32.const 2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 7)
@@ -691,7 +691,7 @@
     (get_global $std/array-literal/emptyArray)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 10)
@@ -749,7 +749,7 @@
     (i32.const 3)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 14)
@@ -764,7 +764,7 @@
     (i32.const 0)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 15)
@@ -782,7 +782,7 @@
     (i32.const 1)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 16)
@@ -800,7 +800,7 @@
     (i32.const 2)
    )
    (block
-    (call $abort
+    (call $~lib/env/abort
      (i32.const 0)
      (i32.const 48)
      (i32.const 17)
