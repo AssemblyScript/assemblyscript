@@ -1,13 +1,13 @@
 (module
- (type $i (func (result i32)))
- (type $F (func (result f64)))
  (type $v (func))
+ (type $i (func (result i32)))
  (type $iFFFFFFFi (func (param i32 f64 f64 f64 f64 f64 f64 f64) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iFFFi (func (param i32 f64 f64 f64) (result i32)))
+ (type $F (func (result f64)))
  (type $iFv (func (param i32 f64)))
  (type $iF (func (param i32) (result f64)))
  (type $iv (func (param i32)))
@@ -23,10 +23,10 @@
  (global $assembly/index/system (mut i32) (i32.const 0))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
- (global $HEAP_BASE i32 (i32.const 96))
+ (global $HEAP_BASE i32 (i32.const 100))
  (memory $0 1)
- (data (i32.const 4) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 36) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 40) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (export "init" (func $assembly/index/init))
  (export "getBody" (func $assembly/index/getBody))
  (export "step" (func $assembly/index/step))
@@ -159,7 +159,7 @@
         ;;@ ~lib/allocator/arena.ts:25:37
         (i32.const 0)
        )
-       ;;@ ~lib/allocator/arena.ts:26:8
+       ;;@ ~lib/allocator/arena.ts:25:40
        (if
         ;;@ ~lib/allocator/arena.ts:26:12
         (i32.lt_s
@@ -170,7 +170,7 @@
          ;;@ ~lib/allocator/arena.ts:26:39
          (i32.const 0)
         )
-        ;;@ ~lib/allocator/arena.ts:27:10
+        ;;@ ~lib/allocator/arena.ts:26:42
         (unreachable)
        )
       )
@@ -195,8 +195,7 @@
  (func $assembly/index/Body#constructor (; 2 ;) (type $iFFFFFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
   (local $8 i32)
   ;;@ assembly/index.ts:19:4
-  (block
-  )
+  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -243,7 +242,7 @@
   )
  )
  (func $assembly/index/Sun (; 3 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:32:2
+  ;;@ assembly/index.ts:29:21
   (return
    ;;@ assembly/index.ts:30:9
    (call $assembly/index/Body#constructor
@@ -266,7 +265,7 @@
   )
  )
  (func $assembly/index/Jupiter (; 4 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:44:2
+  ;;@ assembly/index.ts:35:25
   (return
    ;;@ assembly/index.ts:36:9
    (call $assembly/index/Body#constructor
@@ -305,7 +304,7 @@
   )
  )
  (func $assembly/index/Saturn (; 5 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:56:2
+  ;;@ assembly/index.ts:47:24
   (return
    ;;@ assembly/index.ts:48:9
    (call $assembly/index/Body#constructor
@@ -344,7 +343,7 @@
   )
  )
  (func $assembly/index/Uranus (; 6 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:68:2
+  ;;@ assembly/index.ts:59:24
   (return
    ;;@ assembly/index.ts:60:9
    (call $assembly/index/Body#constructor
@@ -383,7 +382,7 @@
   )
  )
  (func $assembly/index/Neptune (; 7 ;) (type $i) (result i32)
-  ;;@ assembly/index.ts:80:2
+  ;;@ assembly/index.ts:71:25
   (return
    ;;@ assembly/index.ts:72:9
    (call $assembly/index/Body#constructor
@@ -422,7 +421,7 @@
   )
  )
  (func $~lib/internal/arraybuffer/computeSize (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ ~lib/internal/arraybuffer.ts:17:77
+  ;;@ ~lib/internal/arraybuffer.ts:10:52
   (return
    ;;@ ~lib/internal/arraybuffer.ts:17:9
    (i32.shl
@@ -463,7 +462,7 @@
    (block
     (call $abort
      (i32.const 0)
-     (i32.const 36)
+     (i32.const 40)
      (i32.const 22)
      (i32.const 2)
     )
@@ -1023,8 +1022,6 @@
   (local $4 i32)
   ;;@ ~lib/array.ts:21:31
   (block
-   ;;@ ~lib/array.ts:22:4
-   (nop)
    ;;@ ~lib/array.ts:23:4
    (if
     ;;@ ~lib/array.ts:23:8
@@ -1037,7 +1034,7 @@
     (block
      (call $abort
       (i32.const 0)
-      (i32.const 4)
+      (i32.const 8)
       (i32.const 23)
       (i32.const 39)
      )
@@ -1114,7 +1111,7 @@
  )
  (func $~lib/array/Array<Body>#__unchecked_set (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
-  ;;@ ~lib/array.ts:96:4
+  ;;@ ~lib/array.ts:95:54
   (block $~lib/internal/arraybuffer/storeUnsafe<Body,Body>|inlined.0
    (set_local $3
     ;;@ ~lib/array.ts:96:21
@@ -1141,7 +1138,7 @@
   )
  )
  (func $~lib/array/Array<Body>#get:length (; 13 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ ~lib/array.ts:36:16
+  ;;@ ~lib/array.ts:35:20
   (return
    ;;@ ~lib/array.ts:36:11
    (i32.load offset=4
@@ -1151,7 +1148,7 @@
  )
  (func $~lib/array/Array<Body>#__unchecked_get (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  ;;@ ~lib/array.ts:77:46
+  ;;@ ~lib/array.ts:76:41
   (return
    ;;@ ~lib/array.ts:77:11
    (block $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.0 (result i32)
@@ -1284,7 +1281,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 f64)
-  (local $9 i32)
   ;;@ assembly/index.ts:87:4
   (block
    ;;@ assembly/index.ts:88:4
@@ -1422,16 +1418,16 @@
     (get_local $0)
     (tee_local $0
      (block (result i32)
-      (set_local $9
+      (set_local $6
        (call $~lib/allocator/arena/allocate_memory
         (i32.const 4)
        )
       )
       (i32.store
-       (get_local $9)
+       (get_local $6)
        (get_local $1)
       )
-      (get_local $9)
+      (get_local $6)
      )
     )
    )
@@ -1439,7 +1435,7 @@
  )
  (func $assembly/index/init (; 18 ;) (type $v)
   (local $0 i32)
-  ;;@ assembly/index.ts:189:2
+  ;;@ assembly/index.ts:188:29
   (set_global $assembly/index/system
    ;;@ assembly/index.ts:189:11
    (call $assembly/index/NBodySystem#constructor
@@ -1960,7 +1956,6 @@
   (local $16 f64)
   (local $17 f64)
   (local $18 f64)
-  (local $19 f64)
   ;;@ assembly/index.ts:155:4
   (set_local $1
    ;;@ assembly/index.ts:155:12
@@ -2157,7 +2152,7 @@
              )
             )
             ;;@ assembly/index.ts:178:8
-            (set_local $19
+            (set_local $18
              ;;@ assembly/index.ts:178:28
              (block $~lib/math/NativeMath.sqrt|inlined.1 (result f64)
               (set_local $18
@@ -2208,7 +2203,7 @@
                 )
                )
                ;;@ assembly/index.ts:179:32
-               (get_local $19)
+               (get_local $18)
               )
              )
             )
@@ -2264,7 +2259,7 @@
  )
  (func $assembly/index/bench (; 23 ;) (type $iv) (param $0 i32)
   (local $1 i32)
-  ;;@ assembly/index.ts:209:2
+  ;;@ assembly/index.ts:208:40
   (block $break|0
    ;;@ assembly/index.ts:209:7
    (set_local $1

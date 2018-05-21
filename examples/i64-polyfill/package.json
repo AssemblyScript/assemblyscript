@@ -18,7 +18,7 @@
   "scripts": {
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "asbuild:untouched": "asc assembly/i64.ts -t build/untouched.wat -b build/untouched.wasm --noMemory --validate --sourceMap --measure",
-    "asbuild:optimized": "asc -O assembly/i64.ts -b build/optimized.wasm -t build/optimized.wat --noMemory --validate --sourceMap --measure",
+    "asbuild:optimized": "asc -O assembly/i64.ts -b build/optimized.wasm -t build/optimized.wat -d build/optimized.d.ts --noMemory --validate --sourceMap --measure",
     "test": "node tests"
   },
   "files": [

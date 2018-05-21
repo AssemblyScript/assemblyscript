@@ -14,26 +14,28 @@ function asmFunc(global, env, buffer) {
  var Math_clz32 = global.Math.clz32;
  var Math_min = global.Math.min;
  var Math_max = global.Math.max;
+ var Math_floor = global.Math.floor;
+ var Math_ceil = global.Math.ceil;
+ var Math_sqrt = global.Math.sqrt;
  var abort = env.abort;
  var $lib_allocator_arena_startOffset = 0;
  var $lib_allocator_arena_offset = 0;
  var assembly_index_system = 0;
- var HEAP_BASE = 36;
+ var HEAP_BASE = 40;
  var i64toi32_i32$HIGH_BITS = 0;
  function $lib_allocator_arena_allocate_memory($0) {
   $0 = $0 | 0;
-  var $1 = 0, $2 = 0, $3 = 0, $4 = 0, wasm2asm_i32$0 = 0, wasm2asm_i32$1 = 0, wasm2asm_i32$2 = 0;
+  var $3 = 0, $1 = 0, $2 = 0, wasm2asm_i32$0 = 0, wasm2asm_i32$1 = 0, wasm2asm_i32$2 = 0;
   if ($0) {
    if ($0 >>> 0 > 1073741824 >>> 0) abort();
    $1 = $lib_allocator_arena_offset;
-   $2 = (($1 + $0 | 0) + 7 | 0) & 4294967288 | 0;
-   $0 = __wasm_current_memory();
-   if ($2 >>> 0 > ($0 << 16 | 0) >>> 0) {
-    $3 = ((($2 - $1 | 0) + 65535 | 0) & 4294901760 | 0) >>> 16 | 0;
-    $4 = $3;
-    if ((__wasm_grow_memory((wasm2asm_i32$2 = ($0 | 0) > ($4 | 0), wasm2asm_i32$0 = $0, wasm2asm_i32$1 = $4, wasm2asm_i32$2 ? wasm2asm_i32$0 : wasm2asm_i32$1) | 0) | 0) < (0 | 0)) if ((__wasm_grow_memory($3 | 0) | 0) < (0 | 0)) abort();;
+   $0 = (($1 + $0 | 0) + 7 | 0) & 4294967288 | 0;
+   $2 = __wasm_current_memory();
+   if ($0 >>> 0 > ($2 << 16 | 0) >>> 0) {
+    $3 = ((($0 - $1 | 0) + 65535 | 0) & 4294901760 | 0) >>> 16 | 0;
+    if ((__wasm_grow_memory((wasm2asm_i32$2 = ($2 | 0) > ($3 | 0), wasm2asm_i32$0 = $2, wasm2asm_i32$1 = $3, wasm2asm_i32$2 ? wasm2asm_i32$0 : wasm2asm_i32$1) | 0) | 0) < (0 | 0)) if ((__wasm_grow_memory($3 | 0) | 0) < (0 | 0)) abort();;
    }
-   $lib_allocator_arena_offset = $2;
+   $lib_allocator_arena_offset = $0;
    return $1 | 0;
   }
   return 0 | 0;
@@ -48,8 +50,8 @@ function asmFunc(global, env, buffer) {
   $5 = +$5;
   $6 = +$6;
   $7 = +$7;
-  var $8 = 0, $9 = 0;
-  if ($0) $9 = $0; else {
+  var $8 = 0, $29 = 0;
+  if ($0) $29 = $0; else {
    $8 = $lib_allocator_arena_allocate_memory(56 | 0) | 0;
    HEAPF64[$8 >> 3] = $1;
    HEAPF64[($8 + 8 | 0) >> 3] = $2;
@@ -58,16 +60,16 @@ function asmFunc(global, env, buffer) {
    HEAPF64[($8 + 32 | 0) >> 3] = $5;
    HEAPF64[($8 + 40 | 0) >> 3] = $6;
    HEAPF64[($8 + 48 | 0) >> 3] = $7;
-   $9 = $8;
+   $29 = $8;
   }
-  return $9 | 0;
+  return $29 | 0;
  }
  
  function $lib_memory_set_memory($0, $1, $2) {
   $0 = $0 | 0;
   $1 = $1 | 0;
   $2 = $2 | 0;
-  var i64toi32_i32$3 = 0, i64toi32_i32$2 = 0, $4 = 0, i64toi32_i32$5 = 0, $3 = 0, $3$hi = 0, i64toi32_i32$1 = 0, i64toi32_i32$4 = 0, $11 = 0, i64toi32_i32$0 = 0, wasm2asm_i32$0 = 0, wasm2asm_i32$1 = 0;
+  var i64toi32_i32$2 = 0, i64toi32_i32$0 = 0, $4 = 0, i64toi32_i32$1 = 0, i64toi32_i32$4 = 0, i64toi32_i32$3 = 0, $3 = 0, $14 = 0, $126 = 0, $126$hi = 0, $129$hi = 0, $3$hi = 0, wasm2asm_i32$0 = 0, wasm2asm_i32$1 = 0;
   if (($2 | 0) == (0 | 0)) return;
   HEAP8[$0 >> 0] = $1;
   HEAP8[(($0 + $2 | 0) - 1 | 0) >> 0] = $1;
@@ -104,41 +106,52 @@ function asmFunc(global, env, buffer) {
   $0 = $0 + $4 | 0;
   $2 = $2 - $4 | 0;
   i64toi32_i32$0 = 0;
-  i64toi32_i32$3 = $1;
+  $126 = $1;
+  $126$hi = i64toi32_i32$0;
+  i64toi32_i32$0 = 0;
+  i64toi32_i32$0 = i64toi32_i32$0;
+  i64toi32_i32$2 = $1;
   i64toi32_i32$1 = 0;
-  i64toi32_i32$3 = $1;
-  i64toi32_i32$2 = 0;
-  i64toi32_i32$4 = 32;
-  i64toi32_i32$5 = i64toi32_i32$4 & 31 | 0;
-  if (32 >>> 0 <= (i64toi32_i32$4 & 63 | 0) >>> 0) {
-   i64toi32_i32$2 = i64toi32_i32$3 << i64toi32_i32$5 | 0;
-   $11 = 0;
+  i64toi32_i32$3 = 32;
+  i64toi32_i32$4 = i64toi32_i32$3 & 31 | 0;
+  if (32 >>> 0 <= (i64toi32_i32$3 & 63 | 0) >>> 0) {
+   i64toi32_i32$1 = i64toi32_i32$2 << i64toi32_i32$4 | 0;
+   $14 = 0;
   } else {
-   i64toi32_i32$2 = ((1 << i64toi32_i32$5 | 0) - 1 | 0) & (i64toi32_i32$3 >>> (32 - i64toi32_i32$5 | 0) | 0) | 0 | (i64toi32_i32$1 << i64toi32_i32$5 | 0) | 0;
-   $11 = i64toi32_i32$3 << i64toi32_i32$5 | 0;
+   i64toi32_i32$1 = ((1 << i64toi32_i32$4 | 0) - 1 | 0) & (i64toi32_i32$2 >>> (32 - i64toi32_i32$4 | 0) | 0) | 0 | (i64toi32_i32$0 << i64toi32_i32$4 | 0) | 0;
+   $14 = i64toi32_i32$2 << i64toi32_i32$4 | 0;
   }
-  i64toi32_i32$1 = $11;
-  i64toi32_i32$2 = i64toi32_i32$0 | i64toi32_i32$2 | 0;
-  $3 = i64toi32_i32$3 | i64toi32_i32$1 | 0;
+  $129$hi = i64toi32_i32$1;
+  i64toi32_i32$1 = $126$hi;
+  i64toi32_i32$0 = $126;
+  i64toi32_i32$2 = $129$hi;
+  i64toi32_i32$3 = $14;
+  i64toi32_i32$2 = i64toi32_i32$1 | i64toi32_i32$2 | 0;
+  i64toi32_i32$2 = i64toi32_i32$2;
+  $3 = i64toi32_i32$0 | i64toi32_i32$3 | 0;
   $3$hi = i64toi32_i32$2;
   continue_0 : do {
    if ($2 >>> 0 >= 32 >>> 0) {
-    i64toi32_i32$3 = $0;
     i64toi32_i32$2 = $3$hi;
-    HEAP32[i64toi32_i32$3 >> 2] = $3;
-    (wasm2asm_i32$0 = i64toi32_i32$3, wasm2asm_i32$1 = i64toi32_i32$2), ((HEAP8[(wasm2asm_i32$0 + 4 | 0) >> 0] = wasm2asm_i32$1 & 255 | 0, HEAP8[(wasm2asm_i32$0 + 5 | 0) >> 0] = (wasm2asm_i32$1 >>> 8 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 6 | 0) >> 0] = (wasm2asm_i32$1 >>> 16 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 7 | 0) >> 0] = (wasm2asm_i32$1 >>> 24 | 0) & 255 | 0;
-    i64toi32_i32$3 = $0 + 8 | 0;
-    i64toi32_i32$2 = $3$hi;
-    HEAP32[i64toi32_i32$3 >> 2] = $3;
-    (wasm2asm_i32$0 = i64toi32_i32$3, wasm2asm_i32$1 = i64toi32_i32$2), ((HEAP8[(wasm2asm_i32$0 + 4 | 0) >> 0] = wasm2asm_i32$1 & 255 | 0, HEAP8[(wasm2asm_i32$0 + 5 | 0) >> 0] = (wasm2asm_i32$1 >>> 8 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 6 | 0) >> 0] = (wasm2asm_i32$1 >>> 16 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 7 | 0) >> 0] = (wasm2asm_i32$1 >>> 24 | 0) & 255 | 0;
-    i64toi32_i32$3 = $0 + 16 | 0;
-    i64toi32_i32$2 = $3$hi;
-    HEAP32[i64toi32_i32$3 >> 2] = $3;
-    (wasm2asm_i32$0 = i64toi32_i32$3, wasm2asm_i32$1 = i64toi32_i32$2), ((HEAP8[(wasm2asm_i32$0 + 4 | 0) >> 0] = wasm2asm_i32$1 & 255 | 0, HEAP8[(wasm2asm_i32$0 + 5 | 0) >> 0] = (wasm2asm_i32$1 >>> 8 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 6 | 0) >> 0] = (wasm2asm_i32$1 >>> 16 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 7 | 0) >> 0] = (wasm2asm_i32$1 >>> 24 | 0) & 255 | 0;
-    i64toi32_i32$3 = $0 + 24 | 0;
-    i64toi32_i32$2 = $3$hi;
-    HEAP32[i64toi32_i32$3 >> 2] = $3;
-    (wasm2asm_i32$0 = i64toi32_i32$3, wasm2asm_i32$1 = i64toi32_i32$2), ((HEAP8[(wasm2asm_i32$0 + 4 | 0) >> 0] = wasm2asm_i32$1 & 255 | 0, HEAP8[(wasm2asm_i32$0 + 5 | 0) >> 0] = (wasm2asm_i32$1 >>> 8 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 6 | 0) >> 0] = (wasm2asm_i32$1 >>> 16 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 7 | 0) >> 0] = (wasm2asm_i32$1 >>> 24 | 0) & 255 | 0;
+    i64toi32_i32$0 = $0;
+    i64toi32_i32$2 = i64toi32_i32$2;
+    HEAP32[$0 >> 2] = $3;
+    (wasm2asm_i32$0 = $0, wasm2asm_i32$1 = i64toi32_i32$2), ((HEAP8[(wasm2asm_i32$0 + 4 | 0) >> 0] = wasm2asm_i32$1 & 255 | 0, HEAP8[(wasm2asm_i32$0 + 5 | 0) >> 0] = (wasm2asm_i32$1 >>> 8 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 6 | 0) >> 0] = (wasm2asm_i32$1 >>> 16 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 7 | 0) >> 0] = (wasm2asm_i32$1 >>> 24 | 0) & 255 | 0;
+    i64toi32_i32$2 = i64toi32_i32$2;
+    i64toi32_i32$0 = $0 + 8 | 0;
+    i64toi32_i32$2 = i64toi32_i32$2;
+    HEAP32[i64toi32_i32$0 >> 2] = $3;
+    (wasm2asm_i32$0 = i64toi32_i32$0, wasm2asm_i32$1 = i64toi32_i32$2), ((HEAP8[(wasm2asm_i32$0 + 4 | 0) >> 0] = wasm2asm_i32$1 & 255 | 0, HEAP8[(wasm2asm_i32$0 + 5 | 0) >> 0] = (wasm2asm_i32$1 >>> 8 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 6 | 0) >> 0] = (wasm2asm_i32$1 >>> 16 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 7 | 0) >> 0] = (wasm2asm_i32$1 >>> 24 | 0) & 255 | 0;
+    i64toi32_i32$2 = i64toi32_i32$2;
+    i64toi32_i32$0 = $0 + 16 | 0;
+    i64toi32_i32$2 = i64toi32_i32$2;
+    HEAP32[i64toi32_i32$0 >> 2] = $3;
+    (wasm2asm_i32$0 = i64toi32_i32$0, wasm2asm_i32$1 = i64toi32_i32$2), ((HEAP8[(wasm2asm_i32$0 + 4 | 0) >> 0] = wasm2asm_i32$1 & 255 | 0, HEAP8[(wasm2asm_i32$0 + 5 | 0) >> 0] = (wasm2asm_i32$1 >>> 8 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 6 | 0) >> 0] = (wasm2asm_i32$1 >>> 16 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 7 | 0) >> 0] = (wasm2asm_i32$1 >>> 24 | 0) & 255 | 0;
+    i64toi32_i32$2 = i64toi32_i32$2;
+    i64toi32_i32$0 = $0 + 24 | 0;
+    i64toi32_i32$2 = i64toi32_i32$2;
+    HEAP32[i64toi32_i32$0 >> 2] = $3;
+    (wasm2asm_i32$0 = i64toi32_i32$0, wasm2asm_i32$1 = i64toi32_i32$2), ((HEAP8[(wasm2asm_i32$0 + 4 | 0) >> 0] = wasm2asm_i32$1 & 255 | 0, HEAP8[(wasm2asm_i32$0 + 5 | 0) >> 0] = (wasm2asm_i32$1 >>> 8 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 6 | 0) >> 0] = (wasm2asm_i32$1 >>> 16 | 0) & 255 | 0), HEAP8[(wasm2asm_i32$0 + 7 | 0) >> 0] = (wasm2asm_i32$1 >>> 24 | 0) & 255 | 0;
     $2 = $2 - 32 | 0;
     $0 = $0 + 32 | 0;
     continue continue_0;
@@ -152,7 +165,7 @@ function asmFunc(global, env, buffer) {
   $1 = $1 | 0;
   var $2 = 0, $3 = 0, $4 = 0;
   if ($1 >>> 0 > 268435454 >>> 0) {
-   abort(0 | 0, 4 | 0, 23 | 0, 39 | 0);
+   abort(0 | 0, 8 | 0, 23 | 0, 39 | 0);
    abort();
   }
   $3 = $1 << 2 | 0;
@@ -174,7 +187,7 @@ function asmFunc(global, env, buffer) {
  function assembly_index_NBodySystem_constructor($0, $1) {
   $0 = $0 | 0;
   $1 = $1 | 0;
-  var $2 = 0, $3 = 0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0, $9 = 0;
+  var $2 = 0, $3 = 0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0.0, $72 = 0, $8 = 0, $50 = 0;
   $8 = HEAP32[($1 + 4 | 0) >> 2] | 0;
   continue_0 : do {
    if (($2 | 0) < ($8 | 0)) {
@@ -189,16 +202,17 @@ function asmFunc(global, env, buffer) {
    break continue_0;
   } while (1);
   $2 = HEAPU32[$1 >> 2] | 0;
-  if (0 >>> 0 < ((HEAP32[$2 >> 2] | 0) >>> 2 | 0) >>> 0) $9 = HEAPU32[($2 + 8 | 0) >> 2] | 0; else abort();
-  $2 = $9;
+  if (0 >>> 0 < ((HEAP32[$2 >> 2] | 0) >>> 2 | 0) >>> 0) $50 = HEAPU32[($2 + 8 | 0) >> 2] | 0; else abort();
+  $2 = $50;
   HEAPF64[($2 + 24 | 0) >> 3] = -$5 / 39.47841760435743;
   HEAPF64[($2 + 32 | 0) >> 3] = -$6 / 39.47841760435743;
   HEAPF64[($2 + 40 | 0) >> 3] = -$7 / 39.47841760435743;
-  if (($0 | 0) == (0 | 0)) {
-   $0 = $lib_allocator_arena_allocate_memory(4 | 0) | 0;
-   HEAP32[$0 >> 2] = $1;
+  if ($0) $72 = $0; else {
+   $2 = $lib_allocator_arena_allocate_memory(4 | 0) | 0;
+   HEAP32[$2 >> 2] = $1;
+   $72 = $2;
   }
-  return $0 | 0;
+  return $72 | 0;
  }
  
  function assembly_index_init() {
@@ -206,7 +220,7 @@ function asmFunc(global, env, buffer) {
   $1 = $lib_array_Array_Body__constructor(0 | 0, 5 | 0) | 0;
   $0 = $1;
   $2 = assembly_index_Body_constructor(0 | 0, +(0.0), +(0.0), +(0.0), +(0.0), +(0.0), +(0.0), +(39.47841760435743)) | 0;
-  HEAP32[((HEAPU32[$0 >> 2] | 0) + 8 | 0) >> 2] = $2;
+  HEAP32[((HEAPU32[$1 >> 2] | 0) + 8 | 0) >> 2] = $2;
   $0 = assembly_index_Body_constructor(0 | 0, +(4.841431442464721), +(-1.1603200440274284), +(-.10362204447112311), +(.606326392995832), +(2.81198684491626), +(-.02521836165988763), +(.03769367487038949)) | 0;
   HEAP32[(((HEAPU32[$1 >> 2] | 0) + 4 | 0) + 8 | 0) >> 2] = $0;
   $0 = assembly_index_Body_constructor(0 | 0, +(8.34336671824458), +(4.124798564124305), +(-.4035234171143214), +(-1.0107743461787924), +(1.8256623712304119), +(.008415761376584154), +(.011286326131968767)) | 0;
@@ -220,14 +234,14 @@ function asmFunc(global, env, buffer) {
  
  function assembly_index_getBody($0) {
   $0 = $0 | 0;
-  var $1 = 0, $2 = 0, $3 = 0;
+  var $1 = 0, $22 = 0, $20 = 0;
   $1 = HEAPU32[assembly_index_system >> 2] | 0;
   if ($0 >>> 0 < (HEAP32[($1 + 4 | 0) >> 2] | 0) >>> 0) {
    $1 = HEAPU32[$1 >> 2] | 0;
-   if ($0 >>> 0 < ((HEAP32[$1 >> 2] | 0) >>> 2 | 0) >>> 0) $3 = HEAPU32[(($1 + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0; else abort();
-   $2 = $3;
-  } else $2 = 0;
-  return $2 | 0;
+   if ($0 >>> 0 < ((HEAP32[$1 >> 2] | 0) >>> 2 | 0) >>> 0) $20 = HEAPU32[(($1 + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0; else abort();
+   $22 = $20;
+  } else $22 = 0;
+  return $22 | 0;
  }
  
  function assembly_index_NBodySystem_advance($0, $1) {
@@ -283,7 +297,7 @@ function asmFunc(global, env, buffer) {
  
  function assembly_index_NBodySystem_energy($0) {
   $0 = $0 | 0;
-  var $1 = 0.0, $2 = 0, $3 = 0, $4 = 0, $5 = 0, $10 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0.0, $9 = 0.0, $11 = 0.0, $12 = 0.0, $13 = 0.0, $14 = 0.0, $15 = 0, $16 = 0.0, $17 = 0.0;
+  var $1 = 0.0, $2 = 0, $3 = 0, $4 = 0, $5 = 0, $10 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0.0, $9 = 0.0, $30 = 0.0, $39 = 0.0, $45 = 0.0, $59 = 0.0, $72 = 0, $77 = 0.0, $92 = 0.0;
   $4 = HEAPU32[$0 >> 2] | 0;
   $5 = HEAP32[($4 + 4 | 0) >> 2] | 0;
   continue_0 : do {
@@ -292,27 +306,27 @@ function asmFunc(global, env, buffer) {
     $7 = +HEAPF64[$0 >> 3];
     $8 = +HEAPF64[($0 + 8 | 0) >> 3];
     $9 = +HEAPF64[($0 + 16 | 0) >> 3];
-    $11 = $1;
+    $30 = $1;
     $10 = +HEAPF64[($0 + 48 | 0) >> 3];
     $1 = +HEAPF64[($0 + 24 | 0) >> 3];
-    $12 = $1 * $1;
+    $39 = $1 * $1;
     $1 = +HEAPF64[($0 + 32 | 0) >> 3];
-    $13 = $12 + $1 * $1;
+    $45 = $39 + $1 * $1;
     $1 = +HEAPF64[($0 + 40 | 0) >> 3];
-    $1 = $11 + .5 * $10 * ($13 + $1 * $1);
+    $1 = $30 + .5 * $10 * ($45 + $1 * $1);
     $0 = $3 + 1 | 0;
     continue_1 : do {
      if ($0 >>> 0 < $5 >>> 0) {
-      $14 = $7;
+      $59 = $7;
       $2 = HEAPU32[$4 >> 2] | 0;
-      if ($0 >>> 0 < ((HEAP32[$2 >> 2] | 0) >>> 2 | 0) >>> 0) $15 = HEAPU32[(($2 + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0; else abort();
-      $2 = $15;
-      $6 = $14 - +HEAPF64[$2 >> 3];
-      $16 = $1;
+      if ($0 >>> 0 < ((HEAP32[$2 >> 2] | 0) >>> 2 | 0) >>> 0) $72 = HEAPU32[(($2 + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0; else abort();
+      $2 = $72;
+      $6 = $59 - +HEAPF64[$2 >> 3];
+      $77 = $1;
       $1 = $8 - +HEAPF64[($2 + 8 | 0) >> 3];
-      $17 = $6 * $6 + $1 * $1;
+      $92 = $6 * $6 + $1 * $1;
       $1 = $9 - +HEAPF64[($2 + 16 | 0) >> 3];
-      $1 = $16 - $10 * +HEAPF64[($2 + 48 | 0) >> 3] / Math_sqrt($17 + $1 * $1);
+      $1 = $77 - $10 * +HEAPF64[($2 + 48 | 0) >> 3] / Math_sqrt($92 + $1 * $1);
       $0 = $0 + 1 | 0;
       continue continue_1;
      }
@@ -347,42 +361,6 @@ function asmFunc(global, env, buffer) {
  function start() {
   $lib_allocator_arena_startOffset = (HEAP_BASE + 7 | 0) & 4294967288 | 0;
   $lib_allocator_arena_offset = $lib_allocator_arena_startOffset;
- }
- 
- function __wasm_ctz_i32(x) {
-  x = x | 0;
-  var $1 = 0;
-  if ((x | 0) == (0 | 0)) $1 = 32; else $1 = 31 - Math_clz32(x ^ (x - 1 | 0) | 0) | 0;
-  return $1 | 0;
- }
- 
- function __wasm_popcnt_i32(x) {
-  x = x | 0;
-  var count = 0, $2 = 0;
-  count = 0;
-  b : {
-   l : do {
-    $2 = count;
-    if ((x | 0) == (0 | 0)) break b;
-    x = x & (x - 1 | 0) | 0;
-    count = count + 1 | 0;
-    continue l;
-    break l;
-   } while (1);
-  };
-  return $2 | 0;
- }
- 
- function __wasm_rotl_i32(x, k) {
-  x = x | 0;
-  k = k | 0;
-  return ((4294967295 >>> (k & 31 | 0) | 0) & x | 0) << (k & 31 | 0) | 0 | (((4294967295 << (32 - (k & 31 | 0) | 0) | 0) & x | 0) >>> (32 - (k & 31 | 0) | 0) | 0) | 0 | 0;
- }
- 
- function __wasm_rotr_i32(x, k) {
-  x = x | 0;
-  k = k | 0;
-  return ((4294967295 << (k & 31 | 0) | 0) & x | 0) >>> (k & 31 | 0) | 0 | (((4294967295 >>> (32 - (k & 31 | 0) | 0) | 0) & x | 0) << (32 - (k & 31 | 0) | 0) | 0) | 0 | 0;
  }
  
  function __wasm_grow_memory(pagesToAdd) {

@@ -1,7 +1,6 @@
 (module
  (type $iiv (func (param i32 i32)))
  (type $F (func (result f64)))
- (type $i (func (result i32)))
  (type $v (func))
  (type $iiFv (func (param i32 i32 f64)))
  (import "env" "BGR_ALIVE" (global $assembly/index/BGR_ALIVE i32))
@@ -12,7 +11,7 @@
  (global $assembly/index/w (mut i32) (i32.const 0))
  (global $assembly/index/h (mut i32) (i32.const 0))
  (global $assembly/index/s (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "fill" (func $assembly/index/fill))
@@ -56,83 +55,79 @@
       (get_global $assembly/index/h)
      )
      (block
-      (block
-       (block $break|1
-        ;;@ assembly/index.ts:39:9
-        (set_local $3
-         ;;@ assembly/index.ts:39:17
-         (i32.const 0)
-        )
-        (loop $continue|1
-         (if
-          ;;@ assembly/index.ts:39:20
-          (i32.lt_s
-           (get_local $3)
-           ;;@ assembly/index.ts:39:24
-           (get_global $assembly/index/w)
-          )
-          (block
-           (block
-            (block $assembly/index/set|inlined.0
-             (set_local $4
-              ;;@ assembly/index.ts:40:16
-              (if (result i32)
-               (f64.gt
-                ;;@ assembly/index.ts:40:21
-                (call $~lib/math/JSMath.random)
-                ;;@ assembly/index.ts:40:32
-                (f64.const 0.1)
-               )
-               ;;@ assembly/index.ts:40:38
-               (i32.and
-                (get_global $assembly/index/BGR_DEAD)
-                ;;@ assembly/index.ts:40:49
-                (i32.const 16777215)
-               )
-               ;;@ assembly/index.ts:40:62
-               (i32.or
-                (get_global $assembly/index/BGR_ALIVE)
-                ;;@ assembly/index.ts:40:74
-                (i32.const -16777216)
-               )
-              )
+      (block $break|1
+       ;;@ assembly/index.ts:39:9
+       (set_local $3
+        ;;@ assembly/index.ts:39:17
+        (i32.const 0)
+       )
+       (loop $continue|1
+        (if
+         ;;@ assembly/index.ts:39:20
+         (i32.lt_s
+          (get_local $3)
+          ;;@ assembly/index.ts:39:24
+          (get_global $assembly/index/w)
+         )
+         (block
+          (block $assembly/index/set|inlined.0
+           (set_local $4
+            ;;@ assembly/index.ts:40:16
+            (if (result i32)
+             (f64.gt
+              ;;@ assembly/index.ts:40:21
+              (call $~lib/math/JSMath.random)
+              ;;@ assembly/index.ts:40:32
+              (f64.const 0.1)
              )
-             ;;@ assembly/index.ts:21:2
-             (i32.store
-              ;;@ assembly/index.ts:21:13
-              (i32.shl
-               (i32.add
-                ;;@ assembly/index.ts:21:14
-                (i32.add
-                 (get_global $assembly/index/s)
-                 ;;@ assembly/index.ts:21:18
-                 (i32.mul
-                  (get_local $2)
-                  ;;@ assembly/index.ts:21:22
-                  (get_global $assembly/index/w)
-                 )
-                )
-                ;;@ assembly/index.ts:21:26
-                (get_local $3)
-               )
-               ;;@ assembly/index.ts:21:32
-               (i32.const 2)
-              )
-              ;;@ assembly/index.ts:21:35
-              (get_local $4)
+             ;;@ assembly/index.ts:40:38
+             (i32.and
+              (get_global $assembly/index/BGR_DEAD)
+              ;;@ assembly/index.ts:40:49
+              (i32.const 16777215)
+             )
+             ;;@ assembly/index.ts:40:62
+             (i32.or
+              (get_global $assembly/index/BGR_ALIVE)
+              ;;@ assembly/index.ts:40:74
+              (i32.const -16777216)
              )
             )
            )
-           ;;@ assembly/index.ts:39:27
-           (set_local $3
-            (i32.add
-             ;;@ assembly/index.ts:39:29
-             (get_local $3)
-             (i32.const 1)
+           ;;@ assembly/index.ts:21:2
+           (i32.store
+            ;;@ assembly/index.ts:21:13
+            (i32.shl
+             (i32.add
+              ;;@ assembly/index.ts:21:14
+              (i32.add
+               (get_global $assembly/index/s)
+               ;;@ assembly/index.ts:21:18
+               (i32.mul
+                (get_local $2)
+                ;;@ assembly/index.ts:21:22
+                (get_global $assembly/index/w)
+               )
+              )
+              ;;@ assembly/index.ts:21:26
+              (get_local $3)
+             )
+             ;;@ assembly/index.ts:21:32
+             (i32.const 2)
             )
+            ;;@ assembly/index.ts:21:35
+            (get_local $4)
            )
-           (br $continue|1)
           )
+          ;;@ assembly/index.ts:39:27
+          (set_local $3
+           (i32.add
+            ;;@ assembly/index.ts:39:29
+            (get_local $3)
+            (i32.const 1)
+           )
+          )
+          (br $continue|1)
          )
         )
        )
@@ -164,10 +159,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
-  (local $15 i32)
   ;;@ assembly/index.ts:47:2
   (block
    (set_local $0
@@ -526,7 +517,7 @@
               ;;@ assembly/index.ts:68:17
               (i32.const 1)
              )
-             ;;@ assembly/index.ts:70:8
+             ;;@ assembly/index.ts:68:20
              (if
               ;;@ assembly/index.ts:70:12
               (i32.eq
@@ -594,7 +585,7 @@
               )
               ;;@ assembly/index.ts:72:13
               (block $assembly/index/set|inlined.2
-               (set_local $12
+               (set_local $10
                 ;;@ assembly/index.ts:72:23
                 (i32.or
                  (get_global $assembly/index/BGR_DEAD)
@@ -616,11 +607,11 @@
                  )
                  (i32.const 2)
                 )
-                (get_local $12)
+                (get_local $10)
                )
               )
              )
-             ;;@ assembly/index.ts:75:8
+             ;;@ assembly/index.ts:73:13
              (if
               ;;@ assembly/index.ts:75:12
               (i32.eq
@@ -630,7 +621,7 @@
               )
               ;;@ assembly/index.ts:75:33
               (block $assembly/index/set|inlined.3
-               (set_local $13
+               (set_local $10
                 ;;@ assembly/index.ts:75:43
                 (i32.or
                  (get_global $assembly/index/BGR_ALIVE)
@@ -652,16 +643,16 @@
                  )
                  (i32.const 2)
                 )
-                (get_local $13)
+                (get_local $10)
                )
               )
               ;;@ assembly/index.ts:77:13
               (block $assembly/index/rot|inlined.1
                ;;@ assembly/index.ts:27:2
-               (set_local $14
+               (set_local $10
                 ;;@ assembly/index.ts:27:10
                 (select
-                 (tee_local $14
+                 (tee_local $10
                   ;;@ assembly/index.ts:27:19
                   (i32.sub
                    (i32.shr_u
@@ -674,24 +665,24 @@
                    (get_global $assembly/index/BIT_ROT)
                   )
                  )
-                 (tee_local $15
+                 (tee_local $11
                   ;;@ assembly/index.ts:27:41
                   (i32.const 0)
                  )
                  (i32.gt_s
-                  (get_local $14)
-                  (get_local $15)
+                  (get_local $10)
+                  (get_local $11)
                  )
                 )
                )
                ;;@ assembly/index.ts:28:2
                (block $assembly/index/set|inlined.4
-                (set_local $15
+                (set_local $11
                  ;;@ assembly/index.ts:28:12
                  (i32.or
                   (i32.shl
                    ;;@ assembly/index.ts:28:13
-                   (get_local $14)
+                   (get_local $10)
                    ;;@ assembly/index.ts:28:18
                    (i32.const 24)
                   )
@@ -726,7 +717,7 @@
                   (i32.const 2)
                  )
                  ;;@ assembly/index.ts:21:35
-                 (get_local $15)
+                 (get_local $11)
                 )
                )
               )
@@ -764,8 +755,6 @@
  (func $assembly/index/fill (; 3 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   ;;@ assembly/index.ts:85:2
   (block $break|0
    ;;@ assembly/index.ts:85:7
@@ -782,42 +771,40 @@
       (get_global $assembly/index/w)
      )
      (block
-      (block
-       ;;@ assembly/index.ts:86:4
-       (if
-        ;;@ assembly/index.ts:86:8
-        (f64.lt
-         ;;@ assembly/index.ts:86:13
-         (call $~lib/math/JSMath.random)
-         ;;@ assembly/index.ts:86:24
-         (get_local $2)
+      ;;@ assembly/index.ts:85:33
+      (if
+       ;;@ assembly/index.ts:86:8
+       (f64.lt
+        ;;@ assembly/index.ts:86:13
+        (call $~lib/math/JSMath.random)
+        ;;@ assembly/index.ts:86:24
+        (get_local $2)
+       )
+       ;;@ assembly/index.ts:86:27
+       (block $assembly/index/set|inlined.5
+        (set_local $4
+         ;;@ assembly/index.ts:86:38
+         (i32.or
+          (get_global $assembly/index/BGR_ALIVE)
+          ;;@ assembly/index.ts:86:50
+          (i32.const -16777216)
+         )
         )
-        ;;@ assembly/index.ts:86:27
-        (block $assembly/index/set|inlined.5
-         (set_local $4
-          ;;@ assembly/index.ts:86:38
-          (i32.or
-           (get_global $assembly/index/BGR_ALIVE)
-           ;;@ assembly/index.ts:86:50
-           (i32.const -16777216)
-          )
-         )
-         (i32.store
-          (i32.shl
+        (i32.store
+         (i32.shl
+          (i32.add
            (i32.add
-            (i32.add
-             (get_global $assembly/index/s)
-             (i32.mul
-              (get_local $1)
-              (get_global $assembly/index/w)
-             )
+            (get_global $assembly/index/s)
+            (i32.mul
+             (get_local $1)
+             (get_global $assembly/index/w)
             )
-            (get_local $3)
            )
-           (i32.const 2)
+           (get_local $3)
           )
-          (get_local $4)
+          (i32.const 2)
          )
+         (get_local $4)
         )
        )
       )
@@ -837,7 +824,7 @@
   ;;@ assembly/index.ts:88:2
   (block $break|1
    ;;@ assembly/index.ts:88:7
-   (set_local $5
+   (set_local $3
     ;;@ assembly/index.ts:88:16
     (i32.const 0)
    )
@@ -845,63 +832,61 @@
     (if
      ;;@ assembly/index.ts:88:19
      (i32.lt_s
-      (get_local $5)
+      (get_local $3)
       ;;@ assembly/index.ts:88:24
       (get_global $assembly/index/h)
      )
      (block
-      (block
-       ;;@ assembly/index.ts:89:4
-       (if
-        ;;@ assembly/index.ts:89:8
-        (f64.lt
-         ;;@ assembly/index.ts:89:13
-         (call $~lib/math/JSMath.random)
-         ;;@ assembly/index.ts:89:24
-         (get_local $2)
+      ;;@ assembly/index.ts:88:33
+      (if
+       ;;@ assembly/index.ts:89:8
+       (f64.lt
+        ;;@ assembly/index.ts:89:13
+        (call $~lib/math/JSMath.random)
+        ;;@ assembly/index.ts:89:24
+        (get_local $2)
+       )
+       ;;@ assembly/index.ts:89:27
+       (block $assembly/index/set|inlined.6
+        (set_local $4
+         ;;@ assembly/index.ts:89:38
+         (i32.or
+          (get_global $assembly/index/BGR_ALIVE)
+          ;;@ assembly/index.ts:89:50
+          (i32.const -16777216)
+         )
         )
-        ;;@ assembly/index.ts:89:27
-        (block $assembly/index/set|inlined.6
-         (set_local $6
-          ;;@ assembly/index.ts:89:38
-          (i32.or
-           (get_global $assembly/index/BGR_ALIVE)
-           ;;@ assembly/index.ts:89:50
-           (i32.const -16777216)
-          )
-         )
-         ;;@ assembly/index.ts:21:2
-         (i32.store
-          ;;@ assembly/index.ts:21:13
-          (i32.shl
+        ;;@ assembly/index.ts:21:2
+        (i32.store
+         ;;@ assembly/index.ts:21:13
+         (i32.shl
+          (i32.add
+           ;;@ assembly/index.ts:21:14
            (i32.add
-            ;;@ assembly/index.ts:21:14
-            (i32.add
-             (get_global $assembly/index/s)
-             ;;@ assembly/index.ts:21:18
-             (i32.mul
-              (get_local $5)
-              ;;@ assembly/index.ts:21:22
-              (get_global $assembly/index/w)
-             )
+            (get_global $assembly/index/s)
+            ;;@ assembly/index.ts:21:18
+            (i32.mul
+             (get_local $3)
+             ;;@ assembly/index.ts:21:22
+             (get_global $assembly/index/w)
             )
-            ;;@ assembly/index.ts:21:26
-            (get_local $0)
            )
-           ;;@ assembly/index.ts:21:32
-           (i32.const 2)
+           ;;@ assembly/index.ts:21:26
+           (get_local $0)
           )
-          ;;@ assembly/index.ts:21:35
-          (get_local $6)
+          ;;@ assembly/index.ts:21:32
+          (i32.const 2)
          )
+         ;;@ assembly/index.ts:21:35
+         (get_local $4)
         )
        )
       )
       ;;@ assembly/index.ts:88:27
-      (set_local $5
+      (set_local $3
        (i32.add
         ;;@ assembly/index.ts:88:29
-        (get_local $5)
+        (get_local $3)
         (i32.const 1)
        )
       )

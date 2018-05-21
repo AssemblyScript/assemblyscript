@@ -1,6 +1,5 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $i (func (result i32)))
  (type $FF (func (param f64) (result f64)))
  (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
@@ -9,11 +8,11 @@
  (import "JSMath" "LN2" (global $~lib/math/JSMath.LN2 f64))
  (import "env" "memory" (memory $0 1))
  (global $assembly/index/NUM_COLORS i32 (i32.const 2048))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (export "computeLine" (func $assembly/index/computeLine))
  (export "memory" (memory $0))
  (func $isFinite<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
-  ;;@ ~lib/builtins.ts:22:26
+  ;;@ ~lib/builtins.ts:21:44
   (return
    ;;@ ~lib/builtins.ts:22:9
    (f64.eq
@@ -28,7 +27,7 @@
   )
  )
  (func $assembly/index/clamp<f64> (; 3 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
-  ;;@ assembly/index.ts:47:43
+  ;;@ assembly/index.ts:46:57
   (return
    ;;@ assembly/index.ts:47:9
    (f64.min
@@ -58,9 +57,7 @@
   (local $14 i32)
   (local $15 f64)
   (local $16 f64)
-  (local $17 f64)
-  (local $18 f64)
-  (local $19 i32)
+  (local $17 i32)
   ;;@ assembly/index.ts:8:2
   (set_local $4
    ;;@ assembly/index.ts:8:19
@@ -267,7 +264,7 @@
        ;;@ assembly/index.ts:27:4
        (block $break|2
         ;;@ assembly/index.ts:27:9
-        (set_local $16
+        (set_local $15
          ;;@ assembly/index.ts:27:29
          (f64.min
           ;;@ assembly/index.ts:27:33
@@ -286,12 +283,12 @@
             (get_local $14)
            )
            ;;@ assembly/index.ts:27:56
-           (get_local $16)
+           (get_local $15)
           )
           (block
            (block
             ;;@ assembly/index.ts:28:6
-            (set_local $17
+            (set_local $16
              ;;@ assembly/index.ts:28:18
              (f64.add
               (f64.sub
@@ -331,7 +328,7 @@
             ;;@ assembly/index.ts:30:6
             (set_local $10
              ;;@ assembly/index.ts:30:11
-             (get_local $17)
+             (get_local $16)
             )
            )
            ;;@ assembly/index.ts:27:71
@@ -348,7 +345,7 @@
         )
        )
        ;;@ assembly/index.ts:36:4
-       (set_local $18
+       (set_local $15
         ;;@ assembly/index.ts:36:15
         (f64.div
          ;;@ assembly/index.ts:36:20
@@ -379,12 +376,12 @@
         )
        )
        ;;@ assembly/index.ts:37:4
-       (set_local $19
+       (set_local $17
         ;;@ assembly/index.ts:37:15
         (if (result i32)
          (call $isFinite<f64>
           ;;@ assembly/index.ts:37:24
-          (get_local $18)
+          (get_local $15)
          )
          ;;@ assembly/index.ts:38:8
          (i32.trunc_u/f64
@@ -412,7 +409,7 @@
                )
               )
               ;;@ assembly/index.ts:38:56
-              (get_local $18)
+              (get_local $15)
              )
              (f64.convert_u/i32
               ;;@ assembly/index.ts:38:64
@@ -452,7 +449,7 @@
          (i32.const 1)
         )
         ;;@ assembly/index.ts:40:37
-        (get_local $19)
+        (get_local $17)
        )
       )
       ;;@ assembly/index.ts:12:34

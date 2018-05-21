@@ -124,7 +124,7 @@
         ;;@ assembly/index.ts:18:11
         (f64.le
          (f64.add
-          (tee_local $8
+          (tee_local $7
            ;;@ assembly/index.ts:18:19
            (f64.mul
             (get_local $4)
@@ -133,7 +133,7 @@
            )
           )
           ;;@ assembly/index.ts:18:30
-          (tee_local $7
+          (tee_local $8
            ;;@ assembly/index.ts:18:38
            (f64.mul
             (get_local $5)
@@ -168,9 +168,9 @@
           ;;@ assembly/index.ts:19:18
           (f64.add
            (f64.sub
-            (get_local $8)
-            ;;@ assembly/index.ts:19:25
             (get_local $7)
+            ;;@ assembly/index.ts:19:25
+            (get_local $8)
            )
            ;;@ assembly/index.ts:19:32
            (get_local $10)
@@ -199,7 +199,7 @@
       )
      )
      ;;@ assembly/index.ts:27:9
-     (set_local $8
+     (set_local $7
       ;;@ assembly/index.ts:27:29
       (f64.min
        ;;@ assembly/index.ts:27:33
@@ -218,11 +218,11 @@
          (get_local $6)
         )
         ;;@ assembly/index.ts:27:56
-        (get_local $8)
+        (get_local $7)
        )
        (block
         ;;@ assembly/index.ts:28:6
-        (set_local $7
+        (set_local $8
          ;;@ assembly/index.ts:28:18
          (f64.add
           (f64.sub
@@ -262,7 +262,7 @@
         ;;@ assembly/index.ts:30:6
         (set_local $4
          ;;@ assembly/index.ts:30:11
-         (get_local $7)
+         (get_local $8)
         )
         ;;@ assembly/index.ts:27:71
         (set_local $6
@@ -297,7 +297,7 @@
       (if (result i32)
        (f64.eq
         (f64.sub
-         (tee_local $4
+         (tee_local $8
           ;;@ assembly/index.ts:36:4
           (tee_local $7
            ;;@ assembly/index.ts:36:15
@@ -330,7 +330,7 @@
            )
           )
          )
-         (get_local $4)
+         (get_local $8)
         )
         (f64.const 0)
        )

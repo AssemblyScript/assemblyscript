@@ -314,7 +314,7 @@ export class TSDBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     if (element.is(CommonFlags.STATIC)) {
       if (isConst) sb.push("static readonly ");
-      else assert(false);
+      else sb.push("static ");
     } else {
       if (isConst) sb.push("const ");
       else sb.push("var ");
@@ -354,20 +354,20 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitFunction(element: Function): void {
-    if (element.is(CommonFlags.PRIVATE)) return;
+    if (element.isAny(CommonFlags.PRIVATE | CommonFlags.SET)) return;
     var sb = this.sb;
     var signature = element.signature;
     indent(sb, this.indentLevel);
     if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
     if (element.is(CommonFlags.STATIC)) sb.push("static ");
     if (element.is(CommonFlags.GET)) {
-      sb.push("get ");
       sb.push(element.prototype.declaration.name.text); // 'get:funcName' internally
-    } else if (element.is(CommonFlags.SET)) {
-      sb.push("set ");
-      sb.push(element.prototype.declaration.name.text);
+      sb.push(": ");
+      sb.push(this.typeToString(signature.returnType));
+      sb.push(";\n");
+      return;
     } else {
-      if (!element.is(CommonFlags.INSTANCE)) sb.push("function ");
+      if (!element.isAny(CommonFlags.STATIC | CommonFlags.INSTANCE)) sb.push("function ");
       sb.push(element.simpleName);
     }
     sb.push("(");
@@ -398,9 +398,7 @@ export class TSDBuilder extends ExportsWalker {
     if (isInterface) {
       sb.push("interface ");
     } else {
-      if (element.is(CommonFlags.ABSTRACT)) {
-        sb.push("abstract ");
-      }
+      if (element.is(CommonFlags.ABSTRACT)) sb.push("abstract ");
       sb.push("class ");
     }
     sb.push(element.simpleName);
@@ -441,27 +439,6 @@ export class TSDBuilder extends ExportsWalker {
     sb.push(": ");
     sb.push(this.typeToString(element.type));
     sb.push(";\n");
-    /* TBD: the compiler implicitly generates setters if the class is exported
-    indent(sb, this.indentLevel);
-    sb.push("get ");
-    sb.push(element.simpleName);
-    sb.push("(): ");
-    sb.push(this.typeToString(element.type));
-    sb.push(";\n");
-    if (!element.is(CommonFlags.READONLY)) {
-      indent(sb, this.indentLevel);
-      if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
-      if (element.is(CommonFlags.STATIC)) sb.push("static ");
-      if (element.is(CommonFlags.READONLY)) sb.push("readonly ");
-      sb.push("set ");
-      sb.push(element.simpleName);
-      sb.push("(");
-      sb.push(element.simpleName);
-      sb.push(": ");
-      sb.push(this.typeToString(element.type));
-      sb.push(");\n");
-    }
-    */
   }
 
   visitNamespace(element: Element): void {
@@ -519,6 +496,7 @@ export class TSDBuilder extends ExportsWalker {
     this.walk();
     --this.indentLevel;
     sb.push("}\n");
+    sb.push("export default ASModule;\n");
     return this.sb.join("");
   }
 }

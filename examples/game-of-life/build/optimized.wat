@@ -171,7 +171,7 @@
      (get_global $assembly/index/h)
     )
     (block
-     (set_local $4
+     (set_local $5
       ;;@ assembly/index.ts:53:14
       (if (result i32)
        (get_local $0)
@@ -185,7 +185,7 @@
        (get_local $7)
       )
      )
-     (set_local $5
+     (set_local $6
       ;;@ assembly/index.ts:54:14
       (if (result i32)
        (i32.eq
@@ -233,10 +233,10 @@
                   (i32.shl
                    (i32.add
                     (i32.mul
-                     (get_local $4)
+                     (get_local $5)
                      (get_global $assembly/index/w)
                     )
-                    (tee_local $3
+                    (tee_local $2
                      ;;@ assembly/index.ts:56:16
                      (if (result i32)
                       (get_local $1)
@@ -263,7 +263,7 @@
                   (i32.shl
                    (i32.add
                     (i32.mul
-                     (get_local $4)
+                     (get_local $5)
                      (get_global $assembly/index/w)
                     )
                     (get_local $1)
@@ -281,10 +281,10 @@
                  (i32.shl
                   (i32.add
                    (i32.mul
-                    (get_local $4)
+                    (get_local $5)
                     (get_global $assembly/index/w)
                    )
-                   (tee_local $2
+                   (tee_local $3
                     ;;@ assembly/index.ts:57:16
                     (if (result i32)
                      (i32.eq
@@ -319,7 +319,7 @@
                    (get_local $0)
                    (get_global $assembly/index/w)
                   )
-                  (get_local $3)
+                  (get_local $2)
                  )
                  (i32.const 2)
                 )
@@ -337,7 +337,7 @@
                   (get_local $0)
                   (get_global $assembly/index/w)
                  )
-                 (get_local $2)
+                 (get_local $3)
                 )
                 (i32.const 2)
                )
@@ -352,10 +352,10 @@
               (i32.shl
                (i32.add
                 (i32.mul
-                 (get_local $5)
+                 (get_local $6)
                  (get_global $assembly/index/w)
                 )
-                (get_local $3)
+                (get_local $2)
                )
                (i32.const 2)
               )
@@ -370,7 +370,7 @@
              (i32.shl
               (i32.add
                (i32.mul
-                (get_local $5)
+                (get_local $6)
                 (get_global $assembly/index/w)
                )
                (get_local $1)
@@ -388,10 +388,10 @@
             (i32.shl
              (i32.add
               (i32.mul
-               (get_local $5)
+               (get_local $6)
                (get_global $assembly/index/w)
               )
-              (get_local $2)
+              (get_local $3)
              )
              (i32.const 2)
             )
@@ -406,7 +406,7 @@
          ;;@ assembly/index.ts:68:10
          (i32.and
           ;;@ assembly/index.ts:67:6
-          (tee_local $3
+          (tee_local $4
            ;;@ assembly/index.ts:15:9
            (i32.load
             ;;@ assembly/index.ts:15:19
@@ -429,7 +429,7 @@
           ;;@ assembly/index.ts:68:17
           (i32.const 1)
          )
-         ;;@ assembly/index.ts:70:8
+         ;;@ assembly/index.ts:68:20
          (if
           ;;@ assembly/index.ts:70:12
           (i32.eq
@@ -462,13 +462,15 @@
               (tee_local $2
                (i32.sub
                 (i32.shr_u
-                 (get_local $3)
+                 (get_local $4)
                  (i32.const 24)
                 )
                 (get_global $assembly/index/BIT_ROT)
                )
               )
-              (i32.const 0)
+              (tee_local $3
+               (i32.const 0)
+              )
               (i32.gt_s
                (get_local $2)
                (i32.const 0)
@@ -477,7 +479,7 @@
              (i32.const 24)
             )
             (i32.and
-             (get_local $3)
+             (get_local $4)
              (i32.const 16777215)
             )
            )
@@ -504,7 +506,7 @@
            )
           )
          )
-         ;;@ assembly/index.ts:75:8
+         ;;@ assembly/index.ts:73:13
          (if
           ;;@ assembly/index.ts:75:12
           (i32.eq
@@ -564,7 +566,7 @@
                (i32.sub
                 (i32.shr_u
                  ;;@ assembly/index.ts:27:20
-                 (get_local $3)
+                 (get_local $4)
                  ;;@ assembly/index.ts:27:26
                  (i32.const 24)
                 )
@@ -572,8 +574,10 @@
                 (get_global $assembly/index/BIT_ROT)
                )
               )
-              ;;@ assembly/index.ts:27:41
-              (i32.const 0)
+              (tee_local $3
+               ;;@ assembly/index.ts:27:41
+               (i32.const 0)
+              )
               (i32.gt_s
                (get_local $2)
                (i32.const 0)
@@ -585,7 +589,7 @@
             ;;@ assembly/index.ts:28:24
             (i32.and
              ;;@ assembly/index.ts:28:25
-             (get_local $3)
+             (get_local $4)
              ;;@ assembly/index.ts:28:29
              (i32.const 16777215)
             )
@@ -629,7 +633,7 @@
      (get_global $assembly/index/w)
     )
     (block
-     ;;@ assembly/index.ts:86:4
+     ;;@ assembly/index.ts:85:33
      (if
       ;;@ assembly/index.ts:86:8
       (f64.lt
@@ -673,7 +677,7 @@
    )
   )
   ;;@ assembly/index.ts:88:7
-  (set_local $1
+  (set_local $3
    ;;@ assembly/index.ts:88:16
    (i32.const 0)
   )
@@ -681,12 +685,12 @@
    (if
     ;;@ assembly/index.ts:88:19
     (i32.lt_s
-     (get_local $1)
+     (get_local $3)
      ;;@ assembly/index.ts:88:24
      (get_global $assembly/index/h)
     )
     (block
-     ;;@ assembly/index.ts:89:4
+     ;;@ assembly/index.ts:88:33
      (if
       ;;@ assembly/index.ts:89:8
       (f64.lt
@@ -705,7 +709,7 @@
           (get_global $assembly/index/s)
           ;;@ assembly/index.ts:21:18
           (i32.mul
-           (get_local $1)
+           (get_local $3)
            ;;@ assembly/index.ts:21:22
            (get_global $assembly/index/w)
           )
@@ -725,10 +729,10 @@
       )
      )
      ;;@ assembly/index.ts:88:27
-     (set_local $1
+     (set_local $3
       (i32.add
        ;;@ assembly/index.ts:88:29
-       (get_local $1)
+       (get_local $3)
        (i32.const 1)
       )
      )

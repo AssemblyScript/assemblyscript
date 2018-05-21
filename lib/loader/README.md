@@ -14,21 +14,21 @@ const loader = require("@assemblyscript/loader");
 API
 ---
 
-* **instantiate**<`T`>(module: `WebAssembly.Module`, imports?: `WasmImports`): `ASModule<T>`<br />
+* **instantiate**<`T`>(module: `WebAssembly.Module`, imports?: `WasmImports`): `ASUtil & T`<br />
   Instantiates an AssemblyScript module using the specified imports.
 
-* **instantiateBuffer**<`T`>(buffer: `Uint8Array`, imports?: `WasmImports`): `ASModule<T>`<br />
+* **instantiateBuffer**<`T`>(buffer: `Uint8Array`, imports?: `WasmImports`): `ASUtil & T`<br />
   Instantiates an AssemblyScript module from a buffer using the specified imports.
 
-* **instantiateStreaming**<`T`>(response: `Response`, imports?: `WasmImports`): `Promise<ASModule<T>>`<br />
+* **instantiateStreaming**<`T`>(response: `Response`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
   Instantiates an AssemblyScript module from a response using the sspecified imports.
 
 * **demangle**<`T`>(exports: `WasmExports`): `T`<br />
   Demangles an AssemblyScript module's exports to a friendly object structure. You usually don't have to call this manually as instantiation does this implicitly.
 
-**Note:** `T` above can either be omitted if the structure of the module is unknown, or can reference a `.d.ts` as produced by the compiler with the `-d` option.
+**Note:** `T` above can either be omitted if the structure of the module is unknown, or can reference a `.d.ts` (i.e. `typeof MyModule`) as produced by the compiler with the `-d` option.
 
-Instances of `ASModule` are automatically populated with some useful utility:
+Instances are automatically populated with useful utility:
 
 * **I8**: `Int8Array`<br />
   An 8-bit signed integer view on the memory.
@@ -126,7 +126,7 @@ var str = module.getString(ptrToString);
 ```ts
 import MyModule from "myModule"; // pointing at the d.ts
 
-const myModule = loader.instatiateBuffer<MyModule>(fs.readFileSync("myModule.wasm"), myImports);
+const myModule = loader.instatiateBuffer<typeof MyModule>(fs.readFileSync("myModule.wasm"), myImports);
 ```
 
 **Hint:** You can produce a `.d.ts` for your module with the `-d` option on the command line.

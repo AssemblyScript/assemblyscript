@@ -6,10 +6,6 @@ const nbodyRS = require("../rust/index.js");
 
 // Load ASMJS version
 var src = fs.readFileSync(__dirname + "/../build/index.asm.js", "utf8");
-if (src.indexOf("var Math_sqrt =") < 0) { // currently missing in asm.js output
-  let p = src.indexOf(" var abort = env.abort;");
-  src = src.substring(0, p) + " var Math_sqrt = global.Math.sqrt;\n " + src.substring(p);
-}
 
 const nbodyAsmJS = eval("0," + src)({
   Int8Array,
