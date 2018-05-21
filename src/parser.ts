@@ -244,15 +244,16 @@ export class Parser extends DiagnosticEmitter {
         break;
       }
       case Token.ABSTRACT: {
+        let state = tn.mark();
         tn.next();
-        flags |= CommonFlags.ABSTRACT;
         if (!tn.skip(Token.CLASS)) {
-          this.error(
-            DiagnosticCode._0_expected,
-            tn.range(tn.pos), "class"
-          );
+          tn.reset(state);
+          statement = this.parseStatement(tn, true);
           break;
+        } else {
+          tn.discard(state);
         }
+        flags |= CommonFlags.ABSTRACT;
         // fall through
       }
       case Token.CLASS:
@@ -263,9 +264,16 @@ export class Parser extends DiagnosticEmitter {
         break;
       }
       case Token.NAMESPACE: {
+        let state = tn.mark();
         tn.next();
-        statement = this.parseNamespace(tn, flags, decorators, startPos);
-        decorators = null;
+        if (tn.peek(false, IdentifierHandling.PREFER) == Token.IDENTIFIER) {
+          tn.discard(state);
+          statement = this.parseNamespace(tn, flags, decorators, startPos);
+          decorators = null;
+        } else {
+          tn.reset(state);
+          statement = this.parseStatement(tn, true);
+        }
         break;
       }
       case Token.IMPORT: {
@@ -278,10 +286,17 @@ export class Parser extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.TYPE: {
+      case Token.TYPE: { // also identifier
+        let state = tn.mark();
         tn.next();
-        statement = this.parseTypeDeclaration(tn, flags, decorators, startPos);
-        decorators = null;
+        if (tn.peek(false, IdentifierHandling.PREFER) == Token.IDENTIFIER) {
+          tn.discard(state);
+          statement = this.parseTypeDeclaration(tn, flags, decorators, startPos);
+          decorators = null;
+        } else {
+          tn.reset(state);
+          statement = this.parseStatement(tn, true);
+        }
         break;
       }
       default: {
@@ -1033,43 +1048,28 @@ export class Parser extends DiagnosticEmitter {
     var isOptional = false;
     var startRange: Range | null = null;
     var accessFlags: CommonFlags = CommonFlags.NONE;
-    if (tn.skip(Token.PUBLIC)) {
-      startRange = tn.range();
-      if (!isConstructor) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          startRange, "public"
-        );
+    if (isConstructor) {
+      if (tn.skip(Token.PUBLIC)) {
+        startRange = tn.range();
+        accessFlags |= CommonFlags.PUBLIC;
+      } else if (tn.skip(Token.PROTECTED)) {
+        startRange = tn.range();
+        accessFlags |= CommonFlags.PROTECTED;
+      } else if (tn.skip(Token.PRIVATE)) {
+        startRange = tn.range();
+        accessFlags |= CommonFlags.PRIVATE;
       }
-      accessFlags |= CommonFlags.PUBLIC;
-    } else if (tn.skip(Token.PROTECTED)) {
-      startRange = tn.range();
-      if (!isConstructor) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          startRange, "protected"
-        );
+      if (tn.peek() == Token.READONLY) {
+        let state = tn.mark();
+        tn.next();
+        if (tn.peek() != Token.COLON) { // modifier
+          tn.discard(state);
+          if (!startRange) startRange = tn.range();
+          accessFlags |= CommonFlags.READONLY;
+        } else { // identifier
+          tn.reset(state);
+        }
       }
-      accessFlags |= CommonFlags.PROTECTED;
-    } else if (tn.skip(Token.PRIVATE)) {
-      startRange = tn.range();
-      if (!isConstructor) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          startRange, "private"
-        );
-      }
-      accessFlags |= CommonFlags.PRIVATE;
-    }
-    if (tn.skip(Token.READONLY)) {
-      if (!startRange) startRange = tn.range();
-      if (!isConstructor) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          startRange, "readonly"
-        );
-      }
-      accessFlags |= CommonFlags.READONLY;
     }
     if (tn.skip(Token.DOT_DOT_DOT)) {
       if (accessFlags) {
@@ -2183,10 +2183,6 @@ export class Parser extends DiagnosticEmitter {
         statement = this.parseTryStatement(tn);
         break;
       }
-      case Token.TYPE: {
-        statement = this.parseTypeDeclaration(tn, CommonFlags.NONE, null, tn.tokenPos);
-        break;
-      }
       case Token.VOID: {
         statement = this.parseVoidStatement(tn);
         break;
@@ -2194,6 +2190,13 @@ export class Parser extends DiagnosticEmitter {
       case Token.WHILE: {
         statement = this.parseWhileStatement(tn);
         break;
+      }
+      case Token.TYPE: { // also identifier
+        if (tn.peek(false, IdentifierHandling.PREFER) == Token.IDENTIFIER) {
+          statement = this.parseTypeDeclaration(tn, CommonFlags.NONE, null, tn.tokenPos);
+          break;
+        }
+        // fall-through
       }
       default: {
         tn.reset(state);
