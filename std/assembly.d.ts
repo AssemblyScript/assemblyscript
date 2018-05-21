@@ -403,7 +403,8 @@ declare class String {
   static fromCodePoint(cp: i32): string;
   static fromCodePoints(arr: i32[]): string;
 
-  readonly length: u32;
+  readonly length: i32;
+  readonly lengthUTF8: i32;
 
   charAt(index: u32): string;
   charCodeAt(index: u32): u16;
@@ -419,6 +420,7 @@ declare class String {
   trimRight(): string;
   repeat(count?: i32): string;
   toString(): string;
+  toUTF8(): usize;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */

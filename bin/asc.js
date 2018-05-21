@@ -357,7 +357,7 @@ exports.main = function main(argv, options, callback) {
   // Initialize default aliases
   assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
   assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
-  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/env/abort");
+  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/env/abort"); // to disable: --use abort=
 
   // Add or override aliases if specified
   var aliases = args.use;
@@ -369,7 +369,7 @@ exports.main = function main(argv, options, callback) {
       if (p < 0) return callback(Error("Global alias '" + part + "' is invalid."));
       let name = part.substring(0, p).trim();
       let alias = part.substring(p + 1).trim();
-      if (!name.length || !alias.length) return callback(Error("Global alias '" + part + "' is invalid."));
+      if (!name.length) return callback(Error("Global alias '" + part + "' is invalid."));
       assemblyscript.setGlobalAlias(compilerOptions, name, alias);
     }
   }
