@@ -40,10 +40,23 @@ if (args._.length) {
   }
 }
 
+const EXPECT_ERROR_PREFIX = '// Expect error:';
+
+// Returns an array of error strings to expect, or null if compilation should succeed.
+function getExpectedErrors(filePath) {
+  const lines = fs.readFileSync(filePath).toString().split('\n');
+  const expectErrorLines = lines.filter(line => line.startsWith(EXPECT_ERROR_PREFIX));
+  if (expectErrorLines.length === 0) {
+    return null;
+  }
+  return expectErrorLines.map(line => line.slice(EXPECT_ERROR_PREFIX.length).trim());
+}
+
 // TODO: asc's callback is synchronous here. This might change.
 tests.forEach(filename => {
   console.log(chalk.whiteBright("Testing compiler/" + filename) + "\n");
 
+  const expectedErrors = getExpectedErrors(path.join(basedir, filename));
   const basename = filename.replace(/\.ts$/, "");
 
   const stdout = asc.createMemoryStream();
@@ -66,6 +79,24 @@ tests.forEach(filename => {
     stderr: stderr
   }, err => {
     console.log();
+
+    if (expectedErrors) {
+      const stderrString = stderr.toString();
+      for (const expectedError of expectedErrors) {
+        if (!stderrString.includes(expectedError)) {
+          console.log(`Expected error "${expectedError}" was not in the error output.`);
+          console.log("- " + chalk.red("error check ERROR"));
+          failedTests.push(basename);
+          console.log();
+          return;
+        }
+      }
+      console.log("- " + chalk.green("error check OK"));
+      ++successes;
+      console.log();
+      return;
+    }
+
     if (err)
       stderr.write(err + os.EOL);
     var actual = stdout.toString().replace(/\r\n/g, "\n");

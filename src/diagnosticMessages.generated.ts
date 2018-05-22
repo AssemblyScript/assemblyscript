@@ -23,6 +23,7 @@ export enum DiagnosticCode {
   Class_0_is_sealed_and_cannot_be_extended = 211,
   Decorator_0_is_not_valid_here = 212,
   Duplicate_decorator = 213,
+  An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf = 214,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -131,6 +132,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 211: return "Class '{0}' is sealed and cannot be extended.";
     case 212: return "Decorator '{0}' is not valid here.";
     case 213: return "Duplicate decorator.";
+    case 214: return "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

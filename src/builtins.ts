@@ -2721,6 +2721,10 @@ export function compileAllocate(
       DiagnosticCode.Cannot_find_name_0,
       reportNode.range, allocateInternalName
     );
+    program.info(
+      DiagnosticCode.An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf,
+      reportNode.range
+    );
     return module.createUnreachable();
   }
   if (allocatePrototype.kind != ElementKind.FUNCTION_PROTOTYPE) {

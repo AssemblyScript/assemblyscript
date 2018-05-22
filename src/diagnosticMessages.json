@@ -15,6 +15,7 @@
   "Class '{0}' is sealed and cannot be extended.": 211,
   "Decorator '{0}' is not valid here.": 212,
   "Duplicate decorator.": 213,
+  "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.": 214,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
