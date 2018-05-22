@@ -1,0 +1,37 @@
+<script type="text/javascript">
+
+	const encoder = new TextDecoder('utf-16le');
+	function toUTF16StringA(pointer, size) {
+	  let arr = new Uint8Array(buffer.slice(pointer, pointer+ size*2)); // length *2 for utf16
+	  console.log(encoder.decode(arr));
+	  alert(encoder.decode(arr));
+	}
+	imports = { console: {logs: toUTF16StringA}}
+
+	async function run_wasm(wasm_file = 'hello-string.wasm'){
+		try{
+			fetch(wasm_file).then(response =>
+	  		response.arrayBuffer()
+			).then(bytes =>
+	  		WebAssembly.instantiate(bytes, imports)
+			).then(results => {
+				console.log(results)
+			});
+			// memory = new WebAssembly.Memory({initial: 16384, maximum: 65536});
+		}catch(ex){console.error(ex);alert(ex);}
+	}
+	window.onload=run_wasm
+
+	wasm=fetch('hello-string.wasm')
+	ready = function ({module,instance}){
+		console.log(instance)
+		// heap = instance.exports.memory.buffer
+		buffer = instance.exports.memory.buffer
+		instance.exports.main()
+	}
+	// module=WebAssembly.compileStreaming(wasm,imports).then(ready).catch(e=>alert(e))
+	module=WebAssembly.instantiateStreaming(wasm,imports).then(ready).catch(e=>alert(e))
+	// WebAssembly.instantiate(module)
+	// WebAssembly.instantiateStreaming(fetch('hello-string.wasm'),imports).catch(e=>alert(e))
+
+</script>

@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+// Load and execute wasm files
+
+let file = process.argv[2];
+
+function string(pointer, length = -1, encoding = 0) {
+  if (typeof TextDecoder != "undefined") {
+    // WEB
+    const encoder = new TextDecoder("utf-16le");
+    let string = function toUTF16StringA(pointer, size) {
+      let arr = new Uint8Array(heap.subarray(pointer, pointer + size));
+      return encoder.decode(arr);
+    };
+  } else {
+    // NODE.js
+    if (length <= 0) while (buffer[pointer + ++length]); // auto determine length
+    if (encoding == 16) encoding = "utf16le";
+    else encoding = "utf8";
+    decoded = buffer.slice(pointer, pointer + length).toString(encoding);
+    return decoded;
+  }
+}
+
+let imports = {
+  console: {
+    logs: function(pointer, len, encoding) {
+      console.log(string(pointer, len, encoding));
+    }
+  }
+};
+
+function load_wasm(file, run_main = true) {
+  binary = require("fs").readFileSync(file);
+  module = new WebAssembly.Module(binary);
+  instance = new WebAssembly.Instance(module, imports);
+  args = process.argv.slice(3, process.argv.length);
+  let main = run_main && instance.exports.main;
+  if (instance.exports.memory)
+    buffer = new Buffer(instance.exports.memory.buffer); // node only
+  if (main) console.log((result = main(process.argc, args) || ""));
+}
+
+load_wasm(file);
