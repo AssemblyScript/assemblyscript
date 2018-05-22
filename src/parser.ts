@@ -1878,18 +1878,20 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.skip(Token.OPENBRACE)) {
       let members = new Array<ExportMember>();
-      if (!tn.skip(Token.CLOSEBRACE)) {
-        do {
+      while (!tn.skip(Token.CLOSEBRACE)) {
           let member = this.parseExportMember(tn);
           if (!member) return null;
           members.push(member);
-        } while (tn.skip(Token.COMMA));
-        if (!tn.skip(Token.CLOSEBRACE)) {
-          this.error(
-            DiagnosticCode._0_expected,
-            tn.range(), "}"
-          );
-          return null;
+        if (!tn.skip(Token.COMMA)) {
+          if (tn.skip(Token.CLOSEBRACE)) {
+            break;
+          } else {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "}"
+            );
+            return null;
+          }
         }
       }
       let path: StringLiteralExpression | null = null;
@@ -1971,18 +1973,20 @@ export class Parser extends DiagnosticEmitter {
     var skipFrom = false;
     if (tn.skip(Token.OPENBRACE)) {
       members = new Array();
-      if (!tn.skip(Token.CLOSEBRACE)) {
-        do {
-          let member = this.parseImportDeclaration(tn);
-          if (!member) return null;
-          members.push(member);
-        } while (tn.skip(Token.COMMA));
-        if (!tn.skip(Token.CLOSEBRACE)) {
-          this.error(
-            DiagnosticCode._0_expected,
-            tn.range(), "}"
-          );
-          return null;
+      while (!tn.skip(Token.CLOSEBRACE)) {
+        let member = this.parseImportDeclaration(tn);
+        if (!member) return null;
+        members.push(member);
+        if (!tn.skip(Token.COMMA)) {
+          if (tn.skip(Token.CLOSEBRACE)) {
+            break;
+          } else {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "}"
+            );
+            return null;
+          }
         }
       }
     } else if (tn.skip(Token.ASTERISK)) {
