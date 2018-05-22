@@ -1738,10 +1738,12 @@ export class Program extends DiagnosticEmitter {
     var localName = typeNode.range.source.internalPath + PATH_DELIMITER + simpleName;
 
     var element: Element | null;
-
-    // check file-global / program-global element
-    if ((element = this.elementsLookup.get(localName)) || (element = this.elementsLookup.get(globalName))) {
+    if (
+      (element = this.elementsLookup.get(localName)) || // file-global
+      (element = this.elementsLookup.get(globalName))   // program-global
+    ) {
       switch (element.kind) {
+        case ElementKind.ENUM: return Type.i32;
         case ElementKind.CLASS_PROTOTYPE: {
           let instance = (<ClassPrototype>element).resolveUsingTypeArguments(
             typeNode.typeArguments,

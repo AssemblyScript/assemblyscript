@@ -32,3 +32,5 @@ export enum SelfReference {
   ZERO,
   ONE = ZERO + 1
 }
+
+var enumType: SelfReference;

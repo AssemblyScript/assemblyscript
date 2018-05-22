@@ -14,11 +14,10 @@
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $std/string-utf8/len (mut i32) (i32.const 0))
  (global $std/string-utf8/ptr (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 96))
+ (global $HEAP_BASE i32 (i32.const 64))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00\01\d87\dch\00i\00R\d8b\df")
  (data (i32.const 24) "\12\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00u\00t\00f\008\00.\00t\00s\00")
- (data (i32.const 64) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/string/String#get:lengthUTF8 (; 1 ;) (type $ii) (param $0 i32) (result i32)
@@ -28,22 +27,24 @@
   (local $4 i32)
   (local $5 i32)
   (set_local $1
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $2
    (i32.const 1)
   )
   (block $break|0
-   (set_local $3
-    (i32.const 0)
+   (block
+    (set_local $2
+     (i32.const 0)
+    )
+    (set_local $3
+     (i32.load
+      (get_local $0)
+     )
+    )
    )
    (loop $continue|0
     (if
-     (i32.lt_s
+     (i32.lt_u
+      (get_local $2)
       (get_local $3)
-      (get_local $1)
      )
      (block
       (block
@@ -52,7 +53,7 @@
          (i32.add
           (get_local $0)
           (i32.shl
-           (get_local $3)
+           (get_local $2)
            (i32.const 1)
           )
          )
@@ -64,15 +65,15 @@
          (i32.const 128)
         )
         (block
-         (set_local $2
+         (set_local $1
           (i32.add
-           (get_local $2)
+           (get_local $1)
            (i32.const 1)
           )
          )
-         (set_local $3
+         (set_local $2
           (i32.add
-           (get_local $3)
+           (get_local $2)
            (i32.const 1)
           )
          )
@@ -83,15 +84,15 @@
           (i32.const 2048)
          )
          (block
-          (set_local $2
+          (set_local $1
            (i32.add
-            (get_local $2)
+            (get_local $1)
             (i32.const 2)
            )
           )
-          (set_local $3
+          (set_local $2
            (i32.add
-            (get_local $3)
+            (get_local $2)
             (i32.const 1)
            )
           )
@@ -114,7 +115,7 @@
                (get_local $0)
                (i32.shl
                 (i32.add
-                 (get_local $3)
+                 (get_local $2)
                  (i32.const 1)
                 )
                 (i32.const 1)
@@ -128,29 +129,29 @@
            (get_local $5)
           )
           (block
-           (set_local $2
+           (set_local $1
             (i32.add
-             (get_local $2)
+             (get_local $1)
              (i32.const 4)
             )
            )
-           (set_local $3
+           (set_local $2
             (i32.add
-             (get_local $3)
+             (get_local $2)
              (i32.const 2)
             )
            )
           )
           (block
-           (set_local $2
+           (set_local $1
             (i32.add
-             (get_local $2)
+             (get_local $1)
              (i32.const 3)
             )
            )
-           (set_local $3
+           (set_local $2
             (i32.add
-             (get_local $3)
+             (get_local $2)
              (i32.const 1)
             )
            )
@@ -166,7 +167,7 @@
    )
   )
   (return
-   (get_local $2)
+   (get_local $1)
   )
  )
  (func $~lib/allocator/arena/allocate_memory (; 2 ;) (type $ii) (param $0 i32) (result i32)
@@ -314,7 +315,7 @@
    )
    (loop $continue|0
     (if
-     (i32.lt_s
+     (i32.lt_u
       (get_local $4)
       (get_local $5)
      )
@@ -575,26 +576,6 @@
       (br $continue|0)
      )
     )
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.eq
-     (get_local $3)
-     (i32.sub
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 64)
-     (i32.const 471)
-     (i32.const 4)
-    )
-    (unreachable)
    )
   )
   (i32.store8
