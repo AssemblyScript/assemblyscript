@@ -353,9 +353,9 @@ declare class Int32Array extends TypedArray<i32> {}
 /** An array of 32-bit unsigned integers. */
 declare class Uint32Array extends TypedArray<u32> {}
 /** An array of twos-complement 64-bit signed integers. */
-declare class Int64Array extends TypedArray<i64> {}
+declare class BigInt64Array extends TypedArray<i64> {}
 /** An array of 64-bit unsigned integers. */
-declare class Uint64Array extends TypedArray<u64> {}
+declare class BigUint64Array extends TypedArray<u64> {}
 /** An array of 32-bit floating point numbers. */
 declare class Float32Array extends TypedArray<f32> {}
 /** An array of 64-bit floating point numbers. */

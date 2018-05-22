@@ -68,19 +68,19 @@ export class Uint32Array extends TypedArray<u32,u32> {
   }
 }
 
-export class Int64Array extends TypedArray<i64,i64> {
+export class BigInt64Array extends TypedArray<i64,i64> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int64Array {
-    return changetype<Int64Array>(super.subarray(begin, end));
+  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): BigInt64Array {
+    return changetype<BigInt64Array>(super.subarray(begin, end));
   }
 }
 
-export class Uint64Array extends TypedArray<u64,u64> {
+export class BigUint64Array extends TypedArray<u64,u64> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint64Array {
-    return changetype<Uint64Array>(super.subarray(begin, end));
+  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): BigUint64Array {
+    return changetype<BigUint64Array>(super.subarray(begin, end));
   }
 }
 

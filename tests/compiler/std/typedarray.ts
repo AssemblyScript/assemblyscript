@@ -5,8 +5,8 @@ assert(Int16Array.BYTES_PER_ELEMENT == 2);
 assert(Uint16Array.BYTES_PER_ELEMENT == 2);
 assert(Int32Array.BYTES_PER_ELEMENT == 4);
 assert(Uint32Array.BYTES_PER_ELEMENT == 4);
-assert(Int64Array.BYTES_PER_ELEMENT == 8);
-assert(Uint64Array.BYTES_PER_ELEMENT == 8);
+assert(BigInt64Array.BYTES_PER_ELEMENT == 8);
+assert(BigUint64Array.BYTES_PER_ELEMENT == 8);
 assert(Float32Array.BYTES_PER_ELEMENT == 4);
 assert(Float64Array.BYTES_PER_ELEMENT == 8);
 
@@ -49,14 +49,14 @@ function testInstantiate(len: i32): void {
   assert(u32a.byteLength == len * Uint32Array.BYTES_PER_ELEMENT);
   assert(u32a.length == len);
 
-  var i64a = new Int64Array(len);
+  var i64a = new BigInt64Array(len);
   assert(i64a.byteOffset == 0);
-  assert(i64a.byteLength == len * Int64Array.BYTES_PER_ELEMENT);
+  assert(i64a.byteLength == len * BigInt64Array.BYTES_PER_ELEMENT);
   assert(i64a.length == len);
 
-  var u64a = new Uint64Array(len);
+  var u64a = new BigUint64Array(len);
   assert(u64a.byteOffset == 0);
-  assert(u64a.byteLength == len * Uint64Array.BYTES_PER_ELEMENT);
+  assert(u64a.byteLength == len * BigUint64Array.BYTES_PER_ELEMENT);
   assert(u64a.length == len);
 
   var f32a = new Float32Array(len);
