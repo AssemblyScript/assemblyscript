@@ -2415,43 +2415,45 @@
    (i32.const 18)
    (i32.const 42)
   )
-  (set_global $std/allocator_arena/i
-   (i32.const 0)
-  )
-  (loop $continue|0
-   (if
-    (i32.lt_u
-     (get_global $std/allocator_arena/i)
-     (i32.const 42)
+  (block $break|0
+   (set_global $std/allocator_arena/i
+    (i32.const 0)
+   )
+   (loop $loop|0
+    (br_if $break|0
+     (i32.ge_u
+      (get_global $std/allocator_arena/i)
+      (i32.const 42)
+     )
     )
-    (block
-     (if
-      (i32.ne
-       (i32.load8_u
-        (i32.add
-         (get_global $std/allocator_arena/ptr1)
-         (get_global $std/allocator_arena/i)
-        )
+    (if
+     (i32.ne
+      (i32.load8_u
+       (i32.add
+        (get_global $std/allocator_arena/ptr1)
+        (get_global $std/allocator_arena/i)
        )
-       (i32.const 18)
       )
-      (block
-       (call $~lib/env/abort
-        (i32.const 0)
-        (i32.const 8)
-        (i32.const 13)
-        (i32.const 2)
+      (i32.const 18)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 8)
+       (i32.const 13)
+       (i32.const 2)
+      )
+      (unreachable)
+     )
+     (block
+      (set_global $std/allocator_arena/i
+       (i32.add
+        (get_global $std/allocator_arena/i)
+        (i32.const 1)
        )
-       (unreachable)
       )
+      (br $loop|0)
      )
-     (set_global $std/allocator_arena/i
-      (i32.add
-       (get_global $std/allocator_arena/i)
-       (i32.const 1)
-      )
-     )
-     (br $continue|0)
     )
    )
   )
@@ -2460,43 +2462,45 @@
    (get_global $std/allocator_arena/ptr1)
    (i32.const 42)
   )
-  (set_global $std/allocator_arena/i
-   (i32.const 0)
-  )
-  (loop $continue|1
-   (if
-    (i32.lt_u
-     (get_global $std/allocator_arena/i)
-     (i32.const 42)
+  (block $break|1
+   (set_global $std/allocator_arena/i
+    (i32.const 0)
+   )
+   (loop $loop|1
+    (br_if $break|1
+     (i32.ge_u
+      (get_global $std/allocator_arena/i)
+      (i32.const 42)
+     )
     )
-    (block
-     (if
-      (i32.ne
-       (i32.load8_u
-        (i32.add
-         (get_global $std/allocator_arena/ptr2)
-         (get_global $std/allocator_arena/i)
-        )
+    (if
+     (i32.ne
+      (i32.load8_u
+       (i32.add
+        (get_global $std/allocator_arena/ptr2)
+        (get_global $std/allocator_arena/i)
        )
+      )
+      (i32.const 18)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 8)
        (i32.const 18)
+       (i32.const 2)
       )
-      (block
-       (call $~lib/env/abort
-        (i32.const 0)
-        (i32.const 8)
-        (i32.const 18)
-        (i32.const 2)
+      (unreachable)
+     )
+     (block
+      (set_global $std/allocator_arena/i
+       (i32.add
+        (get_global $std/allocator_arena/i)
+        (i32.const 1)
        )
-       (unreachable)
       )
+      (br $loop|1)
      )
-     (set_global $std/allocator_arena/i
-      (i32.add
-       (get_global $std/allocator_arena/i)
-       (i32.const 1)
-      )
-     )
-     (br $continue|1)
     )
    )
   )

@@ -42,24 +42,24 @@
   (set_global $infer-type/rF
    (call $infer-type/refF)
   )
-  (set_local $1
-   (i32.const 10)
-  )
-  (loop $continue|0
-   (if
-    (i32.lt_s
-     (get_local $0)
-     (get_local $1)
-    )
-    (block
-     (set_local $0
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
+  (block $break|0
+   (set_local $1
+    (i32.const 10)
+   )
+   (loop $loop|0
+    (br_if $break|0
+     (i32.ge_s
+      (get_local $0)
+      (get_local $1)
      )
-     (br $continue|0)
     )
+    (set_local $0
+     (i32.add
+      (get_local $0)
+      (i32.const 1)
+     )
+    )
+    (br $loop|0)
    )
   )
  )

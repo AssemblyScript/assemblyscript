@@ -107,23 +107,25 @@
      (i32.const 10)
     )
    )
-   (loop $continue|0
-    (if
-     (i32.lt_s
-      (get_local $0)
-      (get_local $1)
-     )
-     (block
-      (nop)
-      (set_local $0
-       (i32.add
+   (loop $loop|0
+    (block $continue|0
+     (br_if $break|0
+      (i32.eqz
+       (i32.lt_s
         (get_local $0)
-        (i32.const 1)
+        (get_local $1)
        )
       )
-      (br $continue|0)
+     )
+     (nop)
+    )
+    (set_local $0
+     (i32.add
+      (get_local $0)
+      (i32.const 1)
      )
     )
+    (br $loop|0)
    )
   )
  )

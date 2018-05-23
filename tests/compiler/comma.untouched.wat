@@ -217,31 +217,33 @@
    (set_local $1
     (i32.const 0)
    )
-   (loop $continue|0
-    (if
-     (i32.lt_s
-      (get_local $1)
-      (get_global $comma/a)
-     )
-     (block
-      (nop)
-      (block
-       (set_global $comma/a
-        (i32.sub
-         (get_global $comma/a)
-         (i32.const 1)
-        )
-       )
-       (set_local $1
-        (i32.add
-         (get_local $1)
-         (i32.const 1)
-        )
+   (loop $loop|0
+    (block $continue|0
+     (br_if $break|0
+      (i32.eqz
+       (i32.lt_s
+        (get_local $1)
+        (get_global $comma/a)
        )
       )
-      (br $continue|0)
+     )
+     (nop)
+    )
+    (block
+     (set_global $comma/a
+      (i32.sub
+       (get_global $comma/a)
+       (i32.const 1)
+      )
+     )
+     (set_local $1
+      (i32.add
+       (get_local $1)
+       (i32.const 1)
+      )
      )
     )
+    (br $loop|0)
    )
   )
   (if

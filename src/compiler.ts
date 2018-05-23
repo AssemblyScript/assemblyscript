@@ -1601,6 +1601,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.breakLabel = breakLabel;
     var continueLabel = "continue|" + label;
     flow.continueLabel = continueLabel;
+    var loopLabel = "loop|" + label;
 
     // Compile in correct order
     var module = this.module;
@@ -1645,13 +1646,16 @@ export class Compiler extends DiagnosticEmitter {
 
     var expr = module.createBlock(breakLabel, [
       initExpr,
-      module.createLoop(continueLabel, module.createBlock(null, [
-        module.createIf(condExpr, module.createBlock(null, [
-          bodyExpr,
+      module.createLoop(loopLabel,
+        module.createBlock(null, [
+          module.createBlock(continueLabel, [
+            module.createBreak(breakLabel, module.createUnary(UnaryOp.EqzI32, condExpr)),
+            bodyExpr
+          ], NativeType.None),
           incrExpr,
-          module.createBreak(continueLabel)
-        ], NativeType.None))
-      ], NativeType.None))
+          module.createBreak(loopLabel)
+        ], NativeType.None)
+      )
     ], NativeType.None);
 
     // If the loop is guaranteed to run and return, append a hint for Binaryen

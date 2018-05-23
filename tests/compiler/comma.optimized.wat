@@ -182,30 +182,30 @@
     (unreachable)
    )
   )
-  (set_local $0
-   (i32.const 0)
-  )
-  (loop $continue|0
-   (if
-    (i32.lt_s
-     (get_local $0)
-     (get_global $comma/a)
-    )
-    (block
-     (set_global $comma/a
-      (i32.sub
-       (get_global $comma/a)
-       (i32.const 1)
-      )
+  (block $break|0
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $loop|0
+    (br_if $break|0
+     (i32.ge_s
+      (get_local $0)
+      (get_global $comma/a)
      )
-     (set_local $0
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (br $continue|0)
     )
+    (set_global $comma/a
+     (i32.sub
+      (get_global $comma/a)
+      (i32.const 1)
+     )
+    )
+    (set_local $0
+     (i32.add
+      (get_local $0)
+      (i32.const 1)
+     )
+    )
+    (br $loop|0)
    )
   )
   (if

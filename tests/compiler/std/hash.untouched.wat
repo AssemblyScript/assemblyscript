@@ -44,36 +44,38 @@
      )
     )
    )
-   (loop $continue|0
-    (if
-     (i32.lt_u
-      (get_local $2)
-      (get_local $3)
+   (loop $loop|0
+    (block $continue|0
+     (br_if $break|0
+      (i32.eqz
+       (i32.lt_u
+        (get_local $2)
+        (get_local $3)
+       )
+      )
      )
-     (block
-      (set_local $1
-       (i32.mul
-        (i32.xor
-         (get_local $1)
-         (i32.load8_u offset=4
-          (i32.add
-           (get_local $0)
-           (get_local $2)
-          )
+     (set_local $1
+      (i32.mul
+       (i32.xor
+        (get_local $1)
+        (i32.load8_u offset=4
+         (i32.add
+          (get_local $0)
+          (get_local $2)
          )
         )
-        (i32.const 16777619)
        )
+       (i32.const 16777619)
       )
-      (set_local $2
-       (i32.add
-        (get_local $2)
-        (i32.const 1)
-       )
-      )
-      (br $continue|0)
      )
     )
+    (set_local $2
+     (i32.add
+      (get_local $2)
+      (i32.const 1)
+     )
+    )
+    (br $loop|0)
    )
   )
   (return

@@ -9,41 +9,41 @@
  )
  (func $start (; 1 ;) (type $v)
   (local $0 i32)
-  (loop $continue|0
-   (if
-    (i32.lt_s
-     (get_local $0)
-     (i32.const 1)
-    )
-    (block
-     (set_local $0
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
+  (block $break|0
+   (loop $loop|0
+    (br_if $break|0
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 1)
      )
-     (br $continue|0)
     )
+    (set_local $0
+     (i32.add
+      (get_local $0)
+      (i32.const 1)
+     )
+    )
+    (br $loop|0)
    )
   )
-  (set_local $0
-   (i32.const 0)
-  )
-  (loop $continue|1
-   (if
-    (i32.lt_s
-     (get_local $0)
-     (i32.const 1)
-    )
-    (block
-     (set_local $0
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
+  (block $break|1
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $loop|1
+    (br_if $break|1
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 1)
      )
-     (br $continue|1)
     )
+    (set_local $0
+     (i32.add
+      (get_local $0)
+      (i32.const 1)
+     )
+    )
+    (br $loop|1)
    )
   )
   (call $scoped/fn

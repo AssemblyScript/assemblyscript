@@ -11,10 +11,9 @@ for (var j: i32 = 0; j < 10; ++j) {
 for (; i > 0; --i);
 assert(i == 0);
 
-for (;; ++i)
-  if (i == 10)
-    break;
+for (;; ++i) if (i == 10) break;
 
-for (;;)
-  if (--i == 0)
-    break;
+for (;;) if (--i == 0) break;
+
+for (var k: i32 = 0; k < 10; ++k) continue;
+assert(k == 10);

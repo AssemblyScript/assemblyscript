@@ -17,43 +17,43 @@
   (set_local $2
    (i32.const -2128831035)
   )
-  (set_local $3
-   (i32.shl
-    (i32.load
-     (get_local $0)
+  (block $break|0
+   (set_local $3
+    (i32.shl
+     (i32.load
+      (get_local $0)
+     )
+     (i32.const 1)
     )
-    (i32.const 1)
    )
-  )
-  (loop $continue|0
-   (if
-    (i32.lt_u
-     (get_local $1)
-     (get_local $3)
+   (loop $loop|0
+    (br_if $break|0
+     (i32.ge_u
+      (get_local $1)
+      (get_local $3)
+     )
     )
-    (block
-     (set_local $2
-      (i32.mul
-       (i32.xor
-        (get_local $2)
-        (i32.load8_u offset=4
-         (i32.add
-          (get_local $0)
-          (get_local $1)
-         )
+    (set_local $2
+     (i32.mul
+      (i32.xor
+       (get_local $2)
+       (i32.load8_u offset=4
+        (i32.add
+         (get_local $0)
+         (get_local $1)
         )
        )
-       (i32.const 16777619)
       )
+      (i32.const 16777619)
      )
-     (set_local $1
-      (i32.add
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
-     (br $continue|0)
     )
+    (set_local $1
+     (i32.add
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+    (br $loop|0)
    )
   )
   (get_local $2)

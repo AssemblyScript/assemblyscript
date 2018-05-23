@@ -558,72 +558,74 @@
    (set_local $0
     (i32.const -128)
    )
-   (loop $continue|0
-    (if
-     (i32.le_s
-      (get_local $0)
-      (i32.const 255)
+   (loop $loop|0
+    (block $continue|0
+     (br_if $break|0
+      (i32.eqz
+       (i32.le_s
+        (get_local $0)
+        (i32.const 255)
+       )
+      )
      )
      (block
-      (block
-       (call $retain-i32/test
-        (i32.const 0)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const 1)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const -1)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const -128)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const 127)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const 255)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const -32768)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const 32767)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const 65535)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const 2147483647)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const -2147483648)
-        (get_local $0)
-       )
-       (call $retain-i32/test
-        (i32.const -1)
-        (get_local $0)
-       )
+      (call $retain-i32/test
+       (i32.const 0)
+       (get_local $0)
       )
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
+      (call $retain-i32/test
+       (i32.const 1)
+       (get_local $0)
       )
-      (br $continue|0)
+      (call $retain-i32/test
+       (i32.const -1)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const -128)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const 127)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const 255)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const -32768)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const 32767)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const 65535)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const 2147483647)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const -2147483648)
+       (get_local $0)
+      )
+      (call $retain-i32/test
+       (i32.const -1)
+       (get_local $0)
+      )
      )
     )
+    (set_local $0
+     (i32.add
+      (get_local $0)
+      (i32.const 1)
+     )
+    )
+    (br $loop|0)
    )
   )
   (set_global $retain-i32/si
