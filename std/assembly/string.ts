@@ -414,57 +414,62 @@ export class String {
   }
 
   get lengthUTF8(): i32 {
-    var blen = 1; // null terminated
-    for (let i: usize = 0, k = <usize>this.length; i < k;) {
-      let c = <u32>load<u16>(changetype<usize>(this) + (i << 1), HEADER_SIZE);
+    var len = 1; // null terminated
+    var pos: usize = 0;
+    var end = <usize>this.length;
+    while (pos < end) {
+      let c = <u32>load<u16>(changetype<usize>(this) + (pos << 1), HEADER_SIZE);
       if (c < 128) {
-        blen += 1; ++i;
+        len += 1; ++pos;
       } else if (c < 2048) {
-        blen += 2; ++i;
-      } else if (
-        (c & 0xFC00) === 0xD800 &&
-        (<u32>load<u16>(changetype<usize>(this) + ((i + 1) << 1), HEADER_SIZE) & 0xFC00) === 0xDC00
-      ) {
-        blen += 4; i += 2;
+        len += 2; ++pos;
       } else {
-        blen += 3; ++i;
+        if (
+          (c & 0xFC00) == 0xD800 && pos + 1 < end &&
+          (<u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1), HEADER_SIZE) & 0xFC00) == 0xDC00
+        ) {
+          len += 4; pos += 2;
+        } else {
+          len += 3; ++pos;
+        }
       }
     }
-    return blen;
+    return len;
   }
 
   toUTF8(): usize {
-    var len = this.lengthUTF8;
-    var buf = allocate_memory(len);
+    var buf = allocate_memory(<usize>this.lengthUTF8);
+    var pos: usize = 0;
+    var end = <usize>this.length;
     var off: usize = 0;
-    for (let i: usize = 0, k = <usize>this.length; i < k;) {
-      let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), HEADER_SIZE);
+    while (pos < end) {
+      let c1 = <u32>load<u16>(changetype<usize>(this) + (pos << 1), HEADER_SIZE);
       if (c1 < 128) {
         store<u8>(buf + off, c1);
-        ++off; ++i;
+        ++off; ++pos;
       } else if (c1 < 2048) {
-        let pos = buf + off;
-        store<u8>(pos, c1 >> 6      | 192);
-        store<u8>(pos, c1      & 63 | 128, 1);
-        off += 2; ++i;
+        let ptr = buf + off;
+        store<u8>(ptr, c1 >> 6      | 192);
+        store<u8>(ptr, c1      & 63 | 128, 1);
+        off += 2; ++pos;
       } else {
-        let pos = buf + off;
-        if ((c1 & 0xFC00) == 0xD800) {
-          let c2 = <u32>load<u16>(changetype<usize>(this) + ((i + 1) << 1), HEADER_SIZE);
+        let ptr = buf + off;
+        if ((c1 & 0xFC00) == 0xD800 && pos + 1 < end) {
+          let c2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1), HEADER_SIZE);
           if ((c2 & 0xFC00) == 0xDC00) {
             c1 = 0x10000 + ((c1 & 0x03FF) << 10) + (c2 & 0x03FF);
-            store<u8>(pos, c1 >> 18      | 240);
-            store<u8>(pos, c1 >> 12 & 63 | 128, 1);
-            store<u8>(pos, c1 >> 6  & 63 | 128, 2);
-            store<u8>(pos, c1       & 63 | 128, 3);
-            off += 4; i += 2;
+            store<u8>(ptr, c1 >> 18      | 240);
+            store<u8>(ptr, c1 >> 12 & 63 | 128, 1);
+            store<u8>(ptr, c1 >> 6  & 63 | 128, 2);
+            store<u8>(ptr, c1       & 63 | 128, 3);
+            off += 4; pos += 2;
             continue;
           }
         }
-        store<u8>(pos, c1 >> 12      | 224);
-        store<u8>(pos, c1 >> 6  & 63 | 128, 1);
-        store<u8>(pos, c1       & 63 | 128, 2);
-        off += 3; ++i;
+        store<u8>(ptr, c1 >> 12      | 224);
+        store<u8>(ptr, c1 >> 6  & 63 | 128, 1);
+        store<u8>(ptr, c1       & 63 | 128, 2);
+        off += 3; ++pos;
       }
     }
     store<u8>(buf + off, 0);
