@@ -504,45 +504,43 @@
    (set_local $5
     (get_local $7)
    )
-   (loop $loop|0
-    (block $continue|0
-     (br_if $break|0
-      (i32.eqz
-       (i32.le_s
-        (i32.add
-         (get_local $5)
-         (get_local $8)
-        )
-        (get_local $4)
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.eqz
+      (i32.le_s
+       (i32.add
+        (get_local $5)
+        (get_local $8)
        )
+       (get_local $4)
       )
      )
-     (if
-      (i32.eqz
-       (call $~lib/memory/compare_memory
+    )
+    (if
+     (i32.eqz
+      (call $~lib/memory/compare_memory
+       (i32.add
         (i32.add
-         (i32.add
-          (get_local $0)
-          (i32.const 4)
-         )
-         (i32.shl
-          (get_local $5)
-          (i32.const 1)
-         )
-        )
-        (i32.add
-         (get_local $1)
+         (get_local $0)
          (i32.const 4)
         )
         (i32.shl
-         (get_local $8)
+         (get_local $5)
          (i32.const 1)
         )
        )
+       (i32.add
+        (get_local $1)
+        (i32.const 4)
+       )
+       (i32.shl
+        (get_local $8)
+        (i32.const 1)
+       )
       )
-      (return
-       (get_local $5)
-      )
+     )
+     (return
+      (get_local $5)
      )
     )
     (set_local $5
@@ -551,7 +549,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (return
@@ -4208,30 +4206,28 @@
      )
     )
    )
-   (loop $loop|0
-    (block $continue|0
-     (br_if $break|0
-      (i32.eqz
-       (i32.lt_s
-        (get_local $3)
-        (get_local $6)
-       )
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.eqz
+      (i32.lt_s
+       (get_local $3)
+       (get_local $6)
       )
      )
-     (call $~lib/memory/move_memory
+    )
+    (call $~lib/memory/move_memory
+     (i32.add
       (i32.add
-       (i32.add
-        (get_local $4)
-        (i32.const 4)
-       )
-       (get_local $3)
-      )
-      (i32.add
-       (get_local $0)
+       (get_local $4)
        (i32.const 4)
       )
-      (get_local $5)
+      (get_local $3)
      )
+     (i32.add
+      (get_local $0)
+      (i32.const 4)
+     )
+     (get_local $5)
     )
     (set_local $3
      (i32.add
@@ -4239,7 +4235,7 @@
       (get_local $5)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (return

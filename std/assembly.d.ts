@@ -267,6 +267,8 @@ declare function offsetof<T>(fieldName?: string): usize;
 declare function changetype<T>(value: any): T;
 /** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
 declare function unchecked<T>(value: T): T;
+/** Creates a `call_indirect` instruction, calling the specified target by index with the specified arguments. */
+declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */

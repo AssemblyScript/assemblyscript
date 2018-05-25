@@ -2939,7 +2939,7 @@
      (i32.const 1)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $1)
@@ -2997,7 +2997,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $0)
@@ -3364,7 +3364,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (if (result i32)
@@ -3417,7 +3417,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
      )
     )
    )
@@ -3481,7 +3481,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (if (result i32)
@@ -3506,28 +3506,23 @@
       (set_global $~argc
        (i32.const 3)
       )
-      (i32.eqz
-       (i32.and
-        (call_indirect (type $iiii)
-         (i32.load offset=8
-          (i32.add
-           (get_local $3)
-           (i32.shl
-            (get_local $2)
-            (i32.const 2)
-           )
+      (i32.and
+       (call_indirect (type $iiii)
+        (i32.load offset=8
+         (i32.add
+          (get_local $3)
+          (i32.shl
+           (get_local $2)
+           (i32.const 2)
           )
          )
-         (get_local $2)
-         (get_local $0)
-         (get_local $1)
         )
-        (i32.const 1)
+        (get_local $2)
+        (get_local $0)
+        (get_local $1)
        )
+       (i32.const 1)
       )
-     )
-     (return
-      (i32.const 0)
      )
      (block
       (set_local $2
@@ -3536,7 +3531,10 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
+     )
+     (return
+      (i32.const 0)
      )
     )
    )
@@ -3600,7 +3598,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (if (result i32)
@@ -3653,7 +3651,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
      )
     )
    )
@@ -3719,7 +3717,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (if (result i32)
@@ -3762,7 +3760,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
  )
@@ -3825,7 +3823,7 @@
    )
   )
   (block $break|0
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (if (result i32)
@@ -3877,7 +3875,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $5)
@@ -3952,7 +3950,7 @@
    )
   )
   (block $break|0
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (if (result i32)
@@ -4004,7 +4002,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $5)
@@ -4061,7 +4059,7 @@
    )
   )
   (block $break|0
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (if (result i32)
@@ -4120,7 +4118,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $4)
@@ -4194,7 +4192,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (if (result i32)
@@ -4240,7 +4238,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $2)
@@ -4311,7 +4309,7 @@
      (i32.const 1)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.lt_s
       (get_local $3)
@@ -4344,7 +4342,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $2)
@@ -4421,7 +4419,7 @@
    (set_local $0
     (i32.const 0)
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $0)
@@ -4449,7 +4447,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $1)
@@ -4532,7 +4530,7 @@
    )
   )
   (block $break|0
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $1)
@@ -4561,7 +4559,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $0)
@@ -4597,7 +4595,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $2)
@@ -4698,7 +4696,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $0)
@@ -4750,7 +4748,7 @@
      (i32.const 1)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.le_s
       (get_local $4)
@@ -4906,7 +4904,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (block $break|2
@@ -4916,7 +4914,7 @@
      (i32.const 1)
     )
    )
-   (loop $loop|2
+   (loop $repeat|2
     (br_if $break|2
      (i32.lt_s
       (get_local $4)
@@ -5098,7 +5096,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|2)
+    (br $repeat|2)
    )
   )
   (call $~lib/allocator/arena/free_memory
@@ -5228,7 +5226,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $2)
@@ -5268,7 +5266,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
      )
     )
    )
@@ -5331,7 +5329,7 @@
    )
   )
   (block $break|0
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $3)
@@ -5359,7 +5357,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
      )
     )
    )
@@ -5390,7 +5388,7 @@
    (set_local $0
     (i32.const 0)
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $0)
@@ -5429,7 +5427,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $1)
@@ -5577,7 +5575,7 @@
    (set_local $0
     (i32.const 0)
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $0)
@@ -5608,7 +5606,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $1)
@@ -5946,7 +5944,7 @@
    )
   )
   (block $break|0
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $3)
@@ -5974,7 +5972,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
      )
     )
    )
@@ -6178,7 +6176,7 @@
    (i32.const 544)
   )
   (block $break|0
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $2)
@@ -6211,7 +6209,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $1)
@@ -6228,7 +6226,7 @@
    (set_local $0
     (i32.const 0)
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $0)
@@ -6255,7 +6253,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (get_local $1)

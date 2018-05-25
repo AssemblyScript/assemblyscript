@@ -398,137 +398,65 @@
    (set_local $8
     (i32.const 0)
    )
-   (loop $loop|0
-    (block $continue|0
-     (br_if $break|0
-      (i32.eqz
-       (i32.lt_u
-        (get_local $8)
-        (get_local $1)
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.eqz
+      (i32.lt_u
+       (get_local $8)
+       (get_local $1)
+      )
+     )
+    )
+    (block
+     (set_local $9
+      (f64.mul
+       (f64.sub
+        (f64.convert_u/i32
+         (get_local $8)
+        )
+        (get_local $4)
        )
+       (get_local $6)
       )
      )
      (block
-      (set_local $9
-       (f64.mul
-        (f64.sub
-         (f64.convert_u/i32
-          (get_local $8)
-         )
-         (get_local $4)
-        )
-        (get_local $6)
-       )
+      (set_local $10
+       (f64.const 0)
       )
-      (block
-       (set_local $10
-        (f64.const 0)
-       )
-       (set_local $11
-        (f64.const 0)
-       )
+      (set_local $11
+       (f64.const 0)
       )
-      (set_local $14
-       (i32.const 0)
-      )
-      (block $break|1
-       (loop $continue|1
-        (if
-         (f64.le
-          (f64.add
-           (tee_local $12
-            (f64.mul
-             (get_local $10)
-             (get_local $10)
-            )
-           )
-           (tee_local $13
-            (f64.mul
-             (get_local $11)
-             (get_local $11)
-            )
+     )
+     (set_local $14
+      (i32.const 0)
+     )
+     (block $break|1
+      (loop $continue|1
+       (if
+        (f64.le
+         (f64.add
+          (tee_local $12
+           (f64.mul
+            (get_local $10)
+            (get_local $10)
            )
           )
-          (f64.const 4)
+          (tee_local $13
+           (f64.mul
+            (get_local $11)
+            (get_local $11)
+           )
+          )
          )
+         (f64.const 4)
+        )
+        (block
          (block
-          (block
-           (set_local $15
-            (f64.add
-             (f64.sub
-              (get_local $12)
-              (get_local $13)
-             )
-             (get_local $9)
-            )
-           )
-           (set_local $11
-            (f64.add
-             (f64.mul
-              (f64.mul
-               (f64.const 2)
-               (get_local $10)
-              )
-              (get_local $11)
-             )
-             (get_local $7)
-            )
-           )
-           (set_local $10
-            (get_local $15)
-           )
-           (if
-            (i32.ge_u
-             (get_local $14)
-             (get_local $3)
-            )
-            (br $break|1)
-           )
-           (set_local $14
-            (i32.add
-             (get_local $14)
-             (i32.const 1)
-            )
-           )
-          )
-          (br $continue|1)
-         )
-        )
-       )
-      )
-      (block $break|2
-       (set_local $15
-        (f64.min
-         (f64.const 8)
-         (f64.convert_u/i32
-          (get_local $3)
-         )
-        )
-       )
-       (loop $loop|2
-        (block $continue|2
-         (br_if $break|2
-          (i32.eqz
-           (f64.lt
-            (f64.convert_u/i32
-             (get_local $14)
-            )
-            (get_local $15)
-           )
-          )
-         )
-         (block
-          (set_local $16
+          (set_local $15
            (f64.add
             (f64.sub
-             (f64.mul
-              (get_local $10)
-              (get_local $10)
-             )
-             (f64.mul
-              (get_local $11)
-              (get_local $11)
-             )
+             (get_local $12)
+             (get_local $13)
             )
             (get_local $9)
            )
@@ -546,99 +474,167 @@
            )
           )
           (set_local $10
-           (get_local $16)
+           (get_local $15)
           )
-         )
-        )
-        (set_local $14
-         (i32.add
-          (get_local $14)
-          (i32.const 1)
-         )
-        )
-        (br $loop|2)
-       )
-      )
-      (set_local $15
-       (f64.div
-        (call $~lib/math/NativeMath.log
-         (call $~lib/math/NativeMath.log
-          (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
-           (set_local $15
-            (f64.add
-             (f64.mul
-              (get_local $10)
-              (get_local $10)
-             )
-             (f64.mul
-              (get_local $11)
-              (get_local $11)
-             )
-            )
+          (if
+           (i32.ge_u
+            (get_local $14)
+            (get_local $3)
            )
-           (br $~lib/math/NativeMath.sqrt|inlined.0
-            (f64.sqrt
-             (get_local $15)
-            )
-           )
+           (br $break|1)
           )
-         )
-        )
-        (f64.const 0.6931471805599453)
-       )
-      )
-      (set_local $17
-       (if (result i32)
-        (call $isFinite<f64>
-         (get_local $15)
-        )
-        (i32.trunc_u/f64
-         (f64.mul
-          (f64.convert_s/i32
-           (i32.sub
-            (i32.const 2048)
+          (set_local $14
+           (i32.add
+            (get_local $14)
             (i32.const 1)
            )
           )
-          (call $../../examples/mandelbrot/assembly/index/clamp<f64>
-           (f64.div
-            (f64.sub
-             (f64.convert_u/i32
-              (i32.add
-               (get_local $14)
-               (i32.const 1)
-              )
-             )
-             (get_local $15)
-            )
-            (f64.convert_u/i32
-             (get_local $3)
-            )
-           )
-           (f64.const 0)
-           (f64.const 1)
+         )
+         (br $continue|1)
+        )
+       )
+      )
+     )
+     (block $break|2
+      (set_local $15
+       (f64.min
+        (f64.const 8)
+        (f64.convert_u/i32
+         (get_local $3)
+        )
+       )
+      )
+      (loop $repeat|2
+       (br_if $break|2
+        (i32.eqz
+         (f64.lt
+          (f64.convert_u/i32
+           (get_local $14)
           )
+          (get_local $15)
          )
         )
-        (i32.sub
-         (i32.const 2048)
+       )
+       (block
+        (set_local $16
+         (f64.add
+          (f64.sub
+           (f64.mul
+            (get_local $10)
+            (get_local $10)
+           )
+           (f64.mul
+            (get_local $11)
+            (get_local $11)
+           )
+          )
+          (get_local $9)
+         )
+        )
+        (set_local $11
+         (f64.add
+          (f64.mul
+           (f64.mul
+            (f64.const 2)
+            (get_local $10)
+           )
+           (get_local $11)
+          )
+          (get_local $7)
+         )
+        )
+        (set_local $10
+         (get_local $16)
+        )
+       )
+       (set_local $14
+        (i32.add
+         (get_local $14)
          (i32.const 1)
         )
        )
+       (br $repeat|2)
       )
-      (i32.store16
-       (i32.shl
-        (i32.add
-         (i32.mul
-          (get_local $0)
-          (get_local $1)
+     )
+     (set_local $15
+      (f64.div
+       (call $~lib/math/NativeMath.log
+        (call $~lib/math/NativeMath.log
+         (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
+          (set_local $15
+           (f64.add
+            (f64.mul
+             (get_local $10)
+             (get_local $10)
+            )
+            (f64.mul
+             (get_local $11)
+             (get_local $11)
+            )
+           )
+          )
+          (br $~lib/math/NativeMath.sqrt|inlined.0
+           (f64.sqrt
+            (get_local $15)
+           )
+          )
          )
-         (get_local $8)
         )
+       )
+       (f64.const 0.6931471805599453)
+      )
+     )
+     (set_local $17
+      (if (result i32)
+       (call $isFinite<f64>
+        (get_local $15)
+       )
+       (i32.trunc_u/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (i32.sub
+           (i32.const 2048)
+           (i32.const 1)
+          )
+         )
+         (call $../../examples/mandelbrot/assembly/index/clamp<f64>
+          (f64.div
+           (f64.sub
+            (f64.convert_u/i32
+             (i32.add
+              (get_local $14)
+              (i32.const 1)
+             )
+            )
+            (get_local $15)
+           )
+           (f64.convert_u/i32
+            (get_local $3)
+           )
+          )
+          (f64.const 0)
+          (f64.const 1)
+         )
+        )
+       )
+       (i32.sub
+        (i32.const 2048)
         (i32.const 1)
        )
-       (get_local $17)
       )
+     )
+     (i32.store16
+      (i32.shl
+       (i32.add
+        (i32.mul
+         (get_local $0)
+         (get_local $1)
+        )
+        (get_local $8)
+       )
+       (i32.const 1)
+      )
+      (get_local $17)
      )
     )
     (set_local $8
@@ -647,7 +643,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
  )

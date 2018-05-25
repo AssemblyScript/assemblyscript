@@ -1639,7 +1639,7 @@
          (i32.const 9)
         )
        )
-       (loop $loop|0
+       (loop $repeat|0
         (br_if $break|0
          (i32.shr_u
           (get_local $3)
@@ -1658,7 +1658,7 @@
           (i32.const 1)
          )
         )
-        (br $loop|0)
+        (br $repeat|0)
        )
       )
       (i32.shl
@@ -1689,7 +1689,7 @@
          (i32.const 9)
         )
        )
-       (loop $loop|1
+       (loop $repeat|1
         (br_if $break|1
          (i32.shr_u
           (get_local $3)
@@ -1708,7 +1708,7 @@
           (i32.const 1)
          )
         )
-        (br $loop|1)
+        (br $repeat|1)
        )
       )
       (i32.shl
@@ -1722,7 +1722,7 @@
     )
    )
    (block $break|2
-    (loop $loop|2
+    (loop $repeat|2
      (br_if $break|2
       (i32.le_s
        (get_local $4)
@@ -1764,7 +1764,7 @@
        (i32.const 1)
       )
      )
-     (br $loop|2)
+     (br $repeat|2)
     )
    )
    (if
@@ -1791,7 +1791,7 @@
     )
    )
    (block $break|3
-    (loop $loop|3
+    (loop $repeat|3
      (br_if $break|3
       (i32.shr_u
        (get_local $2)
@@ -1810,7 +1810,7 @@
        (i32.const 1)
       )
      )
-     (br $loop|3)
+     (br $repeat|3)
     )
    )
    (return
@@ -3257,7 +3257,7 @@
          (i64.const 12)
         )
        )
-       (loop $loop|0
+       (loop $repeat|0
         (br_if $break|0
          (i32.eqz
           (i64.eqz
@@ -3280,7 +3280,7 @@
           (i64.const 1)
          )
         )
-        (br $loop|0)
+        (br $repeat|0)
        )
       )
       (i64.shl
@@ -3313,7 +3313,7 @@
          (i64.const 12)
         )
        )
-       (loop $loop|1
+       (loop $repeat|1
         (br_if $break|1
          (i32.eqz
           (i64.eqz
@@ -3336,7 +3336,7 @@
           (i64.const 1)
          )
         )
-        (br $loop|1)
+        (br $repeat|1)
        )
       )
       (i64.shl
@@ -3352,7 +3352,7 @@
     )
    )
    (block $break|2
-    (loop $loop|2
+    (loop $repeat|2
      (br_if $break|2
       (i32.le_s
        (get_local $3)
@@ -3394,7 +3394,7 @@
        (i32.const 1)
       )
      )
-     (br $loop|2)
+     (br $repeat|2)
     )
    )
    (if
@@ -3421,7 +3421,7 @@
     )
    )
    (block $break|3
-    (loop $loop|3
+    (loop $repeat|3
      (br_if $break|3
       (i32.eqz
        (i64.eqz
@@ -3444,7 +3444,7 @@
        (i64.const 1)
       )
      )
-     (br $loop|3)
+     (br $repeat|3)
     )
    )
    (return

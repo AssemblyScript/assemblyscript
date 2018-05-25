@@ -26,44 +26,40 @@
    (set_local $0
     (i32.const 0)
    )
-   (loop $loop|0
-    (block $continue|0
-     (br_if $break|0
-      (i32.eqz
-       (i32.lt_s
-        (get_local $0)
-        (i32.const 1)
-       )
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.eqz
+      (i32.lt_s
+       (get_local $0)
+       (i32.const 1)
       )
      )
-     (nop)
     )
+    (nop)
     (set_local $0
      (i32.add
       (get_local $0)
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (block $break|1
    (set_local $1
     (i32.const 0)
    )
-   (loop $loop|1
-    (block $continue|1
-     (br_if $break|1
-      (i32.eqz
-       (i32.lt_s
-        (get_local $1)
-        (i32.const 1)
-       )
+   (loop $repeat|1
+    (br_if $break|1
+     (i32.eqz
+      (i32.lt_s
+       (get_local $1)
+       (i32.const 1)
       )
      )
-     (drop
-      (get_local $1)
-     )
+    )
+    (drop
+     (get_local $1)
     )
     (set_local $1
      (i32.add
@@ -71,7 +67,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|1)
+    (br $repeat|1)
    )
   )
   (block

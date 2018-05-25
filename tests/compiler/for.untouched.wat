@@ -15,25 +15,23 @@
    (set_global $for/i
     (i32.const 0)
    )
-   (loop $loop|0
-    (block $continue|0
-     (br_if $break|0
-      (i32.eqz
-       (i32.lt_s
-        (get_global $for/i)
-        (i32.const 10)
-       )
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.eqz
+      (i32.lt_s
+       (get_global $for/i)
+       (i32.const 10)
       )
      )
-     (nop)
     )
+    (nop)
     (set_global $for/i
      (i32.add
       (get_global $for/i)
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (if
@@ -57,48 +55,43 @@
    (set_local $0
     (i32.const 0)
    )
-   (loop $loop|1
-    (block $continue|1
-     (br_if $break|1
-      (i32.eqz
-       (i32.lt_s
-        (get_local $0)
-        (i32.const 10)
-       )
+   (loop $repeat|1
+    (br_if $break|1
+     (i32.eqz
+      (i32.lt_s
+       (get_local $0)
+       (i32.const 10)
       )
      )
-     (nop)
     )
+    (nop)
     (set_local $0
      (i32.add
       (get_local $0)
       (i32.const 1)
      )
     )
-    (br $loop|1)
+    (br $repeat|1)
    )
   )
   (block $break|2
-   (nop)
-   (loop $loop|2
-    (block $continue|2
-     (br_if $break|2
-      (i32.eqz
-       (i32.gt_s
-        (get_global $for/i)
-        (i32.const 0)
-       )
+   (loop $repeat|2
+    (br_if $break|2
+     (i32.eqz
+      (i32.gt_s
+       (get_global $for/i)
+       (i32.const 0)
       )
      )
-     (nop)
     )
+    (nop)
     (set_global $for/i
      (i32.sub
       (get_global $for/i)
       (i32.const 1)
      )
     )
-    (br $loop|2)
+    (br $repeat|2)
    )
   )
   (if
@@ -119,21 +112,18 @@
    )
   )
   (block $break|3
-   (nop)
-   (loop $loop|3
-    (block $continue|3
-     (br_if $break|3
-      (i32.eqz
-       (i32.const 1)
-      )
+   (loop $repeat|3
+    (br_if $break|3
+     (i32.eqz
+      (i32.const 1)
      )
-     (if
-      (i32.eq
-       (get_global $for/i)
-       (i32.const 10)
-      )
-      (br $break|3)
+    )
+    (if
+     (i32.eq
+      (get_global $for/i)
+      (i32.const 10)
      )
+     (br $break|3)
     )
     (set_global $for/i
      (i32.add
@@ -141,43 +131,39 @@
       (i32.const 1)
      )
     )
-    (br $loop|3)
+    (br $repeat|3)
    )
   )
   (block $break|4
-   (nop)
-   (loop $loop|4
-    (block $continue|4
-     (br_if $break|4
-      (i32.eqz
-       (i32.const 1)
-      )
-     )
-     (if
-      (i32.eq
-       (block (result i32)
-        (set_global $for/i
-         (i32.sub
-          (get_global $for/i)
-          (i32.const 1)
-         )
-        )
-        (get_global $for/i)
-       )
-       (i32.const 0)
-      )
-      (br $break|4)
+   (loop $repeat|4
+    (br_if $break|4
+     (i32.eqz
+      (i32.const 1)
      )
     )
-    (nop)
-    (br $loop|4)
+    (if
+     (i32.eq
+      (block (result i32)
+       (set_global $for/i
+        (i32.sub
+         (get_global $for/i)
+         (i32.const 1)
+        )
+       )
+       (get_global $for/i)
+      )
+      (i32.const 0)
+     )
+     (br $break|4)
+    )
+    (br $repeat|4)
    )
   )
   (block $break|5
    (set_local $1
     (i32.const 0)
    )
-   (loop $loop|5
+   (loop $repeat|5
     (block $continue|5
      (br_if $break|5
       (i32.eqz
@@ -195,7 +181,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|5)
+    (br $repeat|5)
    )
   )
   (if

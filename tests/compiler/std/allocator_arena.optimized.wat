@@ -2419,7 +2419,7 @@
    (set_global $std/allocator_arena/i
     (i32.const 0)
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_u
       (get_global $std/allocator_arena/i)
@@ -2452,7 +2452,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
      )
     )
    )
@@ -2466,7 +2466,7 @@
    (set_global $std/allocator_arena/i
     (i32.const 0)
    )
-   (loop $loop|1
+   (loop $repeat|1
     (br_if $break|1
      (i32.ge_u
       (get_global $std/allocator_arena/i)
@@ -2499,7 +2499,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|1)
+      (br $repeat|1)
      )
     )
    )

@@ -2318,7 +2318,9 @@ export enum CommonFlags {
   /** Is scoped. */
   SCOPED = 1 << 24,
   /** Is a trampoline. */
-  TRAMPOLINE = 1 << 25
+  TRAMPOLINE = 1 << 25,
+  /** Is a virtual method. */
+  VIRTUAL = 1 << 26
 }
 
 export enum DecoratorFlags {

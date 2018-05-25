@@ -2,6 +2,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $fi (func (param f32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
+ (type $iiv (func (param i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $builtins/b (mut i32) (i32.const 0))
@@ -12,11 +13,15 @@
  (global $builtins/u (mut i32) (i32.const 0))
  (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
+ (global $builtins/fn (mut i32) (i32.const 0))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $start~anonymous|0)
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
  (data (i32.const 36) "\01\00\00\001")
  (export "test" (func $builtins/test))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
   (f32.ne
@@ -48,10 +53,13 @@
    (f64.const 0)
   )
  )
- (func $builtins/test (; 5 ;) (type $v)
+ (func $start~anonymous|0 (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (nop)
  )
- (func $start (; 6 ;) (type $v)
+ (func $builtins/test (; 6 ;) (type $v)
+  (nop)
+ )
+ (func $start (; 7 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -830,6 +838,11 @@
    )
    (unreachable)
   )
+  (call_indirect (type $iiv)
+   (i32.const 1)
+   (i32.const 2)
+   (get_global $builtins/fn)
+  )
   (if
    (i32.eqz
     (call $isNaN<f32>
@@ -840,7 +853,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 261)
+     (i32.const 264)
      (i32.const 0)
     )
     (unreachable)
@@ -856,7 +869,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 262)
+     (i32.const 265)
      (i32.const 0)
     )
     (unreachable)
@@ -870,7 +883,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 263)
+     (i32.const 266)
      (i32.const 0)
     )
     (unreachable)
@@ -884,7 +897,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 264)
+     (i32.const 267)
      (i32.const 0)
     )
     (unreachable)
@@ -898,7 +911,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 265)
+     (i32.const 268)
      (i32.const 0)
     )
     (unreachable)
@@ -912,7 +925,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 266)
+     (i32.const 269)
      (i32.const 0)
     )
     (unreachable)
@@ -928,7 +941,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 267)
+     (i32.const 270)
      (i32.const 0)
     )
     (unreachable)
@@ -944,7 +957,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 268)
+     (i32.const 271)
      (i32.const 0)
     )
     (unreachable)

@@ -232,6 +232,9 @@ F = select<f64>(12.5, 25.0, false);
 
 if (!i) unreachable();
 
+var fn = function(a: i32, b: i32): void {}
+call_indirect(fn, 1, 2);
+
 // AS specific
 
 assert(sizeof<u8>() == 1);

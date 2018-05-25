@@ -2203,6 +2203,65 @@ export function compileCall(
       flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return ret;
     }
+    case "call_indirect": { // call_indirect<T?>(target: Function | u32, ...args: *[]) -> T
+      if (operands.length < 1) {
+        if (typeArguments) {
+          if (typeArguments.length) compiler.currentType = typeArguments[0];
+          if (typeArguments.length != 1) {
+            compiler.error(
+              DiagnosticCode.Expected_0_type_arguments_but_got_1,
+              reportNode.range, "1", typeArguments.length.toString(10)
+            );
+          }
+        }
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let returnType: Type;
+      if (typeArguments) {
+        if (typeArguments.length != 1) {
+          if (typeArguments.length) compiler.currentType = typeArguments[0];
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments.length.toString(10)
+          );
+          return module.createUnreachable();
+        }
+        returnType = typeArguments[0];
+      } else {
+        returnType = contextualType;
+      }
+      arg0 = compiler.compileExpressionRetainType(operands[0], Type.u32, WrapMode.NONE);
+      if (compiler.currentType.kind != TypeKind.U32) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          operands[0].range
+        );
+        return module.createUnreachable();
+      }
+      let numOperands = operands.length - 1;
+      let operandExprs = new Array<ExpressionRef>(numOperands);
+      let signatureParts = new Array<string>(numOperands + 1);
+      let nativeReturnType = returnType.toNativeType();
+      let nativeParamTypes = new Array<NativeType>(numOperands);
+      for (let i = 0; i < numOperands; ++i) {
+        operandExprs[i] = compiler.compileExpressionRetainType(operands[1 + i], Type.i32, WrapMode.NONE);
+        let operandType = compiler.currentType;
+        signatureParts[i] = operandType.toSignatureString();
+        nativeParamTypes[i] = operandType.toNativeType();
+      }
+      signatureParts[numOperands] = returnType.toSignatureString();
+      let typeName = signatureParts.join("");
+      let typeRef = module.getFunctionTypeBySignature(nativeReturnType, nativeParamTypes);
+      if (!typeRef) typeRef = module.addFunctionType(typeName, nativeReturnType, nativeParamTypes);
+      compiler.currentType = returnType;
+      // of course this can easily result in a 'RuntimeError: function signature mismatch' trap and
+      // thus must be used with care. it exists because it *might* be useful in specific scenarios.
+      return module.createCallIndirect(arg0, operandExprs, typeName);
+    }
 
     // conversions
 

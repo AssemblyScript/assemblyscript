@@ -859,10 +859,10 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles a readily resolved function instance. */
   compileFunction(instance: Function): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
-    assert(!instance.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || instance.internalName == "abort");
+    assert(!instance.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN));
     instance.set(CommonFlags.COMPILED);
 
-    // check that modifiers are matching but still compile as-is
+    // check that modifiers are matching
     var declaration = instance.prototype.declaration;
     var body = declaration.body;
     if (body) {
@@ -1601,13 +1601,13 @@ export class Compiler extends DiagnosticEmitter {
     flow.breakLabel = breakLabel;
     var continueLabel = "continue|" + label;
     flow.continueLabel = continueLabel;
-    var loopLabel = "loop|" + label;
+    var repeatLabel = "repeat|" + label;
 
     // Compile in correct order
     var module = this.module;
     var initExpr = statement.initializer
       ? this.compileStatement(<Statement>statement.initializer)
-      : module.createNop();
+      : 0;
     var condExpr: ExpressionRef = 0;
     var alwaysTrue = true;
     if (statement.condition) {
@@ -1635,7 +1635,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var incrExpr = statement.incrementor
       ? this.compileExpression(<Expression>statement.incrementor, Type.void, ConversionKind.IMPLICIT, WrapMode.NONE)
-      : module.createNop();
+      : 0;
     var bodyExpr = this.compileStatement(statement.statement);
 
     // Switch back to the parent flow
@@ -1644,19 +1644,35 @@ export class Compiler extends DiagnosticEmitter {
     currentFunction.flow = parentFlow;
     currentFunction.leaveBreakContext();
 
-    var expr = module.createBlock(breakLabel, [
-      initExpr,
-      module.createLoop(loopLabel,
-        module.createBlock(null, [
-          module.createBlock(continueLabel, [
-            module.createBreak(breakLabel, module.createUnary(UnaryOp.EqzI32, condExpr)),
-            bodyExpr
-          ], NativeType.None),
-          incrExpr,
-          module.createBreak(loopLabel)
+    var breakBlock = new Array<ExpressionRef>(); // outer 'break' block
+    if (initExpr) breakBlock.push(initExpr);
+
+    var repeatBlock = new Array<ExpressionRef>(); // block repeating the loop
+    if (parentFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES)) {
+      repeatBlock.push(
+        module.createBlock(continueLabel, [ // inner 'continue' block
+          module.createBreak(breakLabel, module.createUnary(UnaryOp.EqzI32, condExpr)),
+          bodyExpr
         ], NativeType.None)
+      );
+    } else { // can omit the 'continue' block
+      repeatBlock.push(
+        module.createBreak(breakLabel, module.createUnary(UnaryOp.EqzI32, condExpr))
+      );
+      repeatBlock.push(bodyExpr);
+    }
+    if (incrExpr) repeatBlock.push(incrExpr);
+    repeatBlock.push(
+      module.createBreak(repeatLabel)
+    );
+
+    breakBlock.push(
+      module.createLoop(repeatLabel,
+        module.createBlock(null, repeatBlock, NativeType.None)
       )
-    ], NativeType.None);
+    );
+
+    var expr = module.createBlock(breakLabel, breakBlock, NativeType.None);
 
     // If the loop is guaranteed to run and return, append a hint for Binaryen
     if (flow.isAny(FlowFlags.RETURNS | FlowFlags.THROWS)) {

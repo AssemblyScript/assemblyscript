@@ -364,13 +364,6 @@ export class Parser extends DiagnosticEmitter {
     var token = tn.next();
     var startPos = tn.tokenPos;
 
-    // 'void'
-    if (token == Token.VOID) {
-      return Node.createType(
-        Node.createIdentifierExpression("void", tn.range()), [], false, tn.range(startPos, tn.pos)
-      );
-    }
-
     var type: CommonTypeNode;
 
     // '(' ...
@@ -436,6 +429,12 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
+
+    // 'void'
+    } else if (token == Token.VOID) {
+      type = Node.createType(
+        Node.createIdentifierExpression("void", tn.range()), [], false, tn.range(startPos, tn.pos)
+      );
 
     // 'this'
     } else if (token == Token.THIS) {

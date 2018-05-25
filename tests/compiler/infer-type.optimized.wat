@@ -46,7 +46,7 @@
    (set_local $1
     (i32.const 10)
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $0)
@@ -59,7 +59,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
  )

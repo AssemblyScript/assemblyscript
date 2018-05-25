@@ -80,6 +80,8 @@ export declare function assert<T>(isTrueish: T, message?: string): T;
 
 export declare function unchecked<T>(expr: T): T;
 
+export declare function call_indirect<T>(target: void, ...args: void[]): T;
+
 export declare function i8(value: void): i8;
 export namespace i8 {
   export const MIN_VALUE: i8 = -128;

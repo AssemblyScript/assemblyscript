@@ -217,18 +217,16 @@
    (set_local $1
     (i32.const 0)
    )
-   (loop $loop|0
-    (block $continue|0
-     (br_if $break|0
-      (i32.eqz
-       (i32.lt_s
-        (get_local $1)
-        (get_global $comma/a)
-       )
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.eqz
+      (i32.lt_s
+       (get_local $1)
+       (get_global $comma/a)
       )
      )
-     (nop)
     )
+    (nop)
     (block
      (set_global $comma/a
       (i32.sub
@@ -243,7 +241,7 @@
       )
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (if

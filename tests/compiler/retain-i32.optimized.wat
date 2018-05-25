@@ -110,7 +110,7 @@
    (set_local $0
     (i32.const -128)
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.gt_s
       (get_local $0)
@@ -171,7 +171,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
   (set_global $retain-i32/si

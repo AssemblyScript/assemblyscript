@@ -339,7 +339,7 @@
    (set_local $2
     (i32.const 0)
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_u
       (get_local $2)
@@ -434,7 +434,7 @@
        )
       )
      )
-     (loop $loop|2
+     (loop $repeat|2
       (br_if $break|2
        (i32.eqz
         (f64.lt
@@ -481,7 +481,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|2)
+      (br $repeat|2)
      )
     )
     (i32.store16
@@ -551,7 +551,7 @@
       (i32.const 1)
      )
     )
-    (br $loop|0)
+    (br $repeat|0)
    )
   )
  )

@@ -2110,7 +2110,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_u
       (get_local $2)
@@ -2142,7 +2142,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
      )
     )
    )
@@ -2172,7 +2172,7 @@
      (get_local $0)
     )
    )
-   (loop $loop|0
+   (loop $repeat|0
     (br_if $break|0
      (i32.ge_u
       (get_local $2)
@@ -2254,7 +2254,7 @@
         (i32.const 1)
        )
       )
-      (br $loop|0)
+      (br $repeat|0)
      )
     )
    )
