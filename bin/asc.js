@@ -187,6 +187,26 @@ exports.main = function main(argv, options, callback) {
   // Set up base directory
   const baseDir = args.baseDir ? path.resolve(args.baseDir) : ".";
 
+  // Set up transforms
+  const transforms = [];
+  if (args.transform) {
+    if (typeof args.transform === "string") args.transform = args.transform.split(",");
+    args.transform.forEach(transform =>
+      transforms.push(
+        require(
+          path.isAbsolute(transform = transform.trim())
+            ? transform
+            : path.join(process.cwd(), transform)
+        )
+      )
+    );
+  }
+  function applyTransform(name, ...args) {
+    transforms.forEach(transform => {
+      if (typeof transform[name] === "function") transform[name](...args);
+    });
+  }
+
   // Begin parsing
   var parser = null;
 
@@ -339,6 +359,8 @@ exports.main = function main(argv, options, callback) {
       return callback(Error("Parse error"));
     }
   }
+
+  applyTransform("afterParse", parser);
 
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);
