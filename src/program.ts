@@ -3589,7 +3589,10 @@ export const enum FlowFlags {
   /** This branch explicitly requests no bounds checking. */
   UNCHECKED_CONTEXT = 1 << 11,
   /** This branch returns a properly wrapped value. */
-  RETURNS_WRAPPED = 1 << 12
+  RETURNS_WRAPPED = 1 << 12,
+
+  /** This branch is terminated if any of these flags is set. */
+  TERMINATED = FlowFlags.RETURNS | FlowFlags.THROWS | FlowFlags.BREAKS | FlowFlags.CONTINUES
 }
 
 /** A control flow evaluator. */
@@ -3639,7 +3642,7 @@ export class Flow {
   /** Tests if this flow has the specified flag or flags. */
   is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
   /** Tests if this flow has one of the specified flags. */
-  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
+  isAny(flag: FlowFlags): bool { return (this.flags & flag) != 0; }
   /** Sets the specified flag or flags. */
   set(flag: FlowFlags): void { this.flags |= flag; }
   /** Unsets the specified flag or flags. */
@@ -3662,7 +3665,7 @@ export class Flow {
   }
 
   /** Leaves the current branch or scope and returns the parent flow. */
-  leaveBranchOrScope(): Flow {
+  leaveBranchOrScope(propagate: bool = true): Flow {
     var parent = assert(this.parent);
 
     // Free block-scoped locals
@@ -3676,22 +3679,23 @@ export class Flow {
     }
 
     // Propagate conditionaal flags to parent
-    if (this.is(FlowFlags.RETURNS)) {
-      parent.set(FlowFlags.CONDITIONALLY_RETURNS);
+    if (propagate) {
+      if (this.is(FlowFlags.RETURNS)) {
+        parent.set(FlowFlags.CONDITIONALLY_RETURNS);
+      }
+      if (this.is(FlowFlags.THROWS)) {
+        parent.set(FlowFlags.CONDITIONALLY_THROWS);
+      }
+      if (this.is(FlowFlags.BREAKS) && parent.breakLabel == this.breakLabel) {
+        parent.set(FlowFlags.CONDITIONALLY_BREAKS);
+      }
+      if (this.is(FlowFlags.CONTINUES) && parent.continueLabel == this.continueLabel) {
+        parent.set(FlowFlags.CONDITIONALLY_CONTINUES);
+      }
+      if (this.is(FlowFlags.ALLOCATES)) {
+        parent.set(FlowFlags.CONDITIONALLY_ALLOCATES);
+      }
     }
-    if (this.is(FlowFlags.THROWS)) {
-      parent.set(FlowFlags.CONDITIONALLY_THROWS);
-    }
-    if (this.is(FlowFlags.BREAKS) && parent.breakLabel == this.breakLabel) {
-      parent.set(FlowFlags.CONDITIONALLY_BREAKS);
-    }
-    if (this.is(FlowFlags.CONTINUES) && parent.continueLabel == this.continueLabel) {
-      parent.set(FlowFlags.CONDITIONALLY_CONTINUES);
-    }
-    if (this.is(FlowFlags.ALLOCATES)) {
-      parent.set(FlowFlags.CONDITIONALLY_ALLOCATES);
-    }
-
     return parent;
   }
 

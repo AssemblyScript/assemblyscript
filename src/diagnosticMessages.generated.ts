@@ -24,6 +24,7 @@ export enum DiagnosticCode {
   Decorator_0_is_not_valid_here = 212,
   Duplicate_decorator = 213,
   An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf = 214,
+  Optional_parameter_must_have_an_initializer = 215,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -133,6 +134,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 212: return "Decorator '{0}' is not valid here.";
     case 213: return "Duplicate decorator.";
     case 214: return "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.";
+    case 215: return "Optional parameter must have an initializer.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

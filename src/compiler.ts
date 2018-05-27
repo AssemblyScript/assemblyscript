@@ -1468,7 +1468,7 @@ export class Compiler extends DiagnosticEmitter {
       let stmt = this.compileStatement(statements[i]);
       if (getExpressionId(stmt) != ExpressionId.Nop) {
         stmts[count++] = stmt;
-        if (flow.isAny(FlowFlags.BREAKS | FlowFlags.CONTINUES | FlowFlags.RETURNS)) break;
+        if (flow.isAny(FlowFlags.TERMINATED)) break;
       }
     }
     stmts.length = count;
@@ -1774,14 +1774,18 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var currentFunction = this.currentFunction;
 
+    var cases = statement.cases;
+    var numCases = cases.length;
+    if (!numCases) {
+      return this.compileExpression(statement.condition, Type.void, ConversionKind.IMPLICIT, WrapMode.NONE);
+    }
+
     // Everything within a switch uses the same break context
     var context = currentFunction.enterBreakContext();
 
     // introduce a local for evaluating the condition (exactly once)
     var tempLocal = currentFunction.getTempLocal(Type.u32, false);
     var tempLocalIndex = tempLocal.index;
-    var cases = statement.cases;
-    var numCases = cases.length;
 
     // Prepend initializer to inner block. Does not initiate a new branch, yet.
     var breaks = new Array<ExpressionRef>(1 + numCases);
@@ -1833,31 +1837,37 @@ export class Compiler extends DiagnosticEmitter {
       let breakLabel = "break|" + context;
       flow.breakLabel = breakLabel;
 
-      let fallsThrough = i != numCases - 1;
-      let nextLabel = !fallsThrough ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
+      let isLast = i == numCases - 1;
+      let nextLabel = isLast ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
       let stmts = new Array<ExpressionRef>(1 + numStatements);
       stmts[0] = currentBlock;
       let count = 1;
+      let terminated = false;
       for (let j = 0; j < numStatements; ++j) {
         let stmt = this.compileStatement(statements[j]);
         if (getExpressionId(stmt) != ExpressionId.Nop) {
           stmts[count++] = stmt;
-          if (flow.is(FlowFlags.BREAKS | FlowFlags.CONTINUES | FlowFlags.RETURNS)) break;
+          if (flow.isAny(FlowFlags.TERMINATED)) {
+            terminated = true;
+            break;
+          }
         }
       }
       stmts.length = count;
-      if (!(fallsThrough || flow.is(FlowFlags.RETURNS))) alwaysReturns = false; // ignore fall-throughs
-      if (!(fallsThrough || flow.is(FlowFlags.RETURNS_WRAPPED))) alwaysReturnsWrapped = false; // ignore fall-throughs
-      if (!(fallsThrough || flow.is(FlowFlags.THROWS))) alwaysThrows = false;
-      if (!(fallsThrough || flow.is(FlowFlags.ALLOCATES))) alwaysAllocates = false;
+      if (terminated || isLast) {
+        if (!flow.is(FlowFlags.RETURNS)) alwaysReturns = false;
+        if (!flow.is(FlowFlags.RETURNS_WRAPPED)) alwaysReturnsWrapped = false;
+        if (!flow.is(FlowFlags.THROWS)) alwaysThrows = false;
+        if (!flow.is(FlowFlags.ALLOCATES)) alwaysAllocates = false;
+      }
 
       // Switch back to the parent flow
-      currentFunction.flow = flow.leaveBranchOrScope();
+      currentFunction.flow = flow.leaveBranchOrScope(false);
       currentBlock = module.createBlock(nextLabel, stmts, NativeType.None); // must be a labeled block
     }
     currentFunction.leaveBreakContext();
 
-    // If the switch has a default and always returns, propagate that
+    // If the switch has a default (guaranteed to handle any value), propagate common flags
     if (defaultIndex >= 0) {
       let flow = currentFunction.flow;
       if (alwaysReturns) flow.set(FlowFlags.RETURNS);
@@ -5101,7 +5111,7 @@ export class Compiler extends DiagnosticEmitter {
         let stmt = this.compileStatement(statements[i]);
         if (getExpressionId(stmt) != ExpressionId.Nop) {
           body.push(stmt);
-          if (flow.is(FlowFlags.RETURNS)) break;
+          if (flow.isAny(FlowFlags.TERMINATED)) break;
         }
       }
     } else {
@@ -5122,8 +5132,8 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFunction.flow = previousFlow;
     this.currentType = returnType;
 
-    // Check that all branches return
-    if (returnType != Type.void && !flow.is(FlowFlags.RETURNS)) {
+    // Check that all branches are terminated
+    if (returnType != Type.void && !flow.isAny(FlowFlags.TERMINATED)) {
       this.error(
         DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
         declaration.signature.returnType.range
@@ -5224,16 +5234,28 @@ export class Compiler extends DiagnosticEmitter {
     ]);
     for (let i = 0; i < numOptional; ++i, ++operandIndex) {
       let type = originalParameterTypes[minArguments + i];
-      body = module.createBlock(names[i + 1], [
-        body,
-        module.createSetLocal(operandIndex,
+      let declaration = originalParameterDeclarations[minArguments + i];
+      let initializer = declaration.initializer;
+      let initExpr: ExpressionRef;
+      if (initializer) {
+        initExpr = module.createSetLocal(operandIndex,
           this.compileExpression(
-            assert(originalParameterDeclarations[minArguments + i].initializer),
+            initializer,
             type,
             ConversionKind.IMPLICIT,
             WrapMode.WRAP
           )
-        )
+        );
+      } else {
+        this.error(
+          DiagnosticCode.Optional_parameter_must_have_an_initializer,
+          declaration.range
+        );
+        initExpr = module.createUnreachable();
+      }
+      body = module.createBlock(names[i + 1], [
+        body,
+        initExpr,
       ]);
       forwardedOperands[operandIndex] = module.createGetLocal(operandIndex, type.toNativeType());
     }
@@ -5326,9 +5348,10 @@ export class Compiler extends DiagnosticEmitter {
       let parameterNodes = instance.prototype.declaration.signature.parameterTypes;
       let allOptionalsAreConstant = true;
       for (let i = numArguments; i < maxArguments; ++i) {
-        let initializer = assert(parameterNodes[i].initializer);
-        if (initializer.kind != NodeKind.LITERAL) {
+        let initializer = parameterNodes[i].initializer;
+        if (!(initializer && initializer.kind == NodeKind.LITERAL)) {
           // TODO: other kinds might be constant as well
+          // NOTE: if the initializer is missing this is reported in ensureTrampoline below
           allOptionalsAreConstant = false;
           break;
         }
