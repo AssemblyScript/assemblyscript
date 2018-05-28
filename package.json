@@ -57,6 +57,7 @@
   },
   "files": [
     "bin/",
+    "cli/",
     "dist/",
     "index.d.ts",
     "index.js",

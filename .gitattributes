@@ -1,5 +1,3 @@
-bin/asc text eol=lf
-bin/asinit text eol=lf
-dist/asc.js -diff
-dist/assemblyscript.js -diff
-scripts/check-pr.sh eol=lf
+bin/* text eol=lf
+dist/* -diff
+scripts/*.sh eol=lf

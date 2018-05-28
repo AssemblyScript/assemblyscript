@@ -33,7 +33,7 @@ const lib = {
 
 // Build asc for browser usage
 const bin = {
-  context: path.join(__dirname, "bin"),
+  context: path.join(__dirname, "cli"),
   entry: [ "./asc.js" ],
   externals: [{
     "../dist/assemblyscript.js": "assemblyscript"

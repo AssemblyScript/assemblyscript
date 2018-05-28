@@ -41,7 +41,7 @@ Once the project is set up, it's just a matter of using your existing [TypeScrip
 $> npm run asbuild
 ```
 
-The compiler's API can also [be used programmatically](./bin).
+The CLI API can also [be used programmatically](./cli).
 
 If you rather prefer an installation suitable for development, pretty much the same can be achieved by cloning the GitHub repository instead:
 

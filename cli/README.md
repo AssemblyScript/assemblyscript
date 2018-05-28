@@ -16,7 +16,7 @@ API
 The API accepts the same options as the CLI but also lets you override stdout and stderr and/or provide a callback. Example:
 
 ```js
-const asc = require("assemblyscript/bin/asc");
+const asc = require("assemblyscript/cli/asc");
 asc.main([
   "myModule.ts",
   "--binaryFile", "myModule.wasm",
@@ -36,7 +36,7 @@ asc.main([
 Available command line options can also be obtained programmatically:
 
 ```js
-const options = require("assemblyscript/bin/asc.json");
+const options = require("assemblyscript/cli/asc.json");
 ...
 ```
 

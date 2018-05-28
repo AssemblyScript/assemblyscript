@@ -6,7 +6,7 @@ const glob = require("glob");
 const minimist = require("minimist");
 
 const diff = require("./util/diff");
-const asc = require("../bin/asc.js");
+const asc = require("../cli/asc.js");
 
 const args = minimist(process.argv.slice(2), {
   boolean: [ "create", "help" ],
