@@ -149,6 +149,8 @@ export enum OperatorKind {
   INDEXED_SET,
   UNCHECKED_INDEXED_GET,
   UNCHECKED_INDEXED_SET,
+  EXCLAMATION,
+  NOT,
   ADD,
   SUB,
   MUL,
@@ -223,7 +225,8 @@ function operatorKindFromString(str: string): OperatorKind {
       break;
     }
     case CharCode.EXCLAMATION: {
-      if (str == "!=") return OperatorKind.NE;
+      if (str.length == 1) return OperatorKind.EXCLAMATION;
+      if (str == "!=")     return OperatorKind.NE;
       break;
     }
     case CharCode.GREATERTHAN: {
@@ -238,6 +241,10 @@ function operatorKindFromString(str: string): OperatorKind {
         case "<" : return OperatorKind.LT;
         case "<=": return OperatorKind.LE;
       }
+      break;
+    }
+    case CharCode.TILDE: {
+      if (str.length == 1) return OperatorKind.NOT;
       break;
     }
   }

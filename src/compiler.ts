@@ -6782,18 +6782,24 @@ export class Compiler extends DiagnosticEmitter {
           ConversionKind.NONE,
           WrapMode.NONE
         );
+
+        if (this.currentType.kind === TypeKind.USIZE && this.currentType.is(TypeFlags.REFERENCE)) {
+          // check operator overload
+          let classReference = this.currentType.classReference;
+          if (classReference) {
+            let overload = classReference.lookupOverload(OperatorKind.EXCLAMATION);
+            if (overload) {
+              expr = this.compileUnaryOverload(overload, expression.operand, expression);
+              break;
+            }
+          }
+        }
+
         expr = this.makeIsFalseish(expr, this.currentType);
         this.currentType = Type.bool;
         break;
       }
       case Token.TILDE: {
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return module.createUnreachable();
-        }
         expr = this.compileExpression(
           expression.operand,
           contextualType == Type.void
@@ -6819,11 +6825,15 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: {
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              this.error(
-                DiagnosticCode.Operation_not_supported,
-                expression.range
-              );
-              return module.createUnreachable();
+              // check operator overload
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.NOT);
+                if (overload) {
+                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                  break;
+                }
+              }
             }
             // fall-through
           }

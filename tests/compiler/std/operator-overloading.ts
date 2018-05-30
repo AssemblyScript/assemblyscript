@@ -78,6 +78,17 @@ class Tester {
   static lessEquals(a: Tester, b: Tester): bool {
     return a.x <= b.x && a.y <= b.y;
   }
+
+  // unary opterators
+  @operator('~')
+  static not(value: Tester): Tester {
+    return new Tester(~value.x, ~value.y);
+  }
+
+  @operator('!')
+  static excl(value: Tester): bool {
+    return !value.x && !value.y;
+  }
 }
 
 // check additional
@@ -177,6 +188,17 @@ var leq1 = new Tester(4, 3);
 var leq2 = new Tester(4, 3);
 var leq  = leq1 <= leq2;
 assert(leq == true);
+
+// check unary not "~"
+var not = new Tester(0xFF, 0x10);
+var res = ~not;
+assert(res.x == ~not.x && res.y == ~not.y);
+
+// check unary exclamation "!"
+var excl = new Tester(0, 100);
+var bres = !excl;
+assert(bres == (!excl.x && !excl.y));
+assert(bres == false);
 
 // check inlined static
 class TesterInlineStatic {
