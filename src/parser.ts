@@ -87,10 +87,12 @@ export class Parser extends DiagnosticEmitter {
 
   /** Program being created. */
   program: Program;
-  /** Log of source file names to be requested. */
+  /** Source file names to be requested next. */
   backlog: string[] = new Array();
-  /** Log of source file names already processed. */
+  /** Source file names already seen, that is processed or backlogged. */
   seenlog: Set<string> = new Set();
+  /** Source file names already completely processed. */
+  donelog: Set<string> = new Set();
   /** Optional handler to intercept comments while tokenizing. */
   onComment: CommentHandler | null = null;
 
@@ -106,16 +108,13 @@ export class Parser extends DiagnosticEmitter {
     path: string,
     isEntry: bool
   ): void {
-    var program = this.program;
-
-    // check if already parsed
     var normalizedPath = normalizePath(path);
     var internalPath = mangleInternalPath(normalizedPath);
-    var sources = program.sources;
-    for (let i = 0, k = sources.length; i < k; ++i) {
-      if (sources[i].internalPath == internalPath) return;
-    }
-    this.seenlog.add(internalPath);
+
+    // check if already processed
+    if (this.donelog.has(internalPath)) return;
+    this.donelog.add(internalPath); // do not parse again
+    this.seenlog.add(internalPath); // do not request again
 
     // create the source element
     var source = new Source(
@@ -127,7 +126,8 @@ export class Parser extends DiagnosticEmitter {
           ? SourceKind.LIBRARY
           : SourceKind.DEFAULT
     );
-    sources.push(source);
+    var program = this.program;
+    program.sources.push(source);
 
     // mark the special builtins library file
     if (source.normalizedPath == builtinsFile) {
@@ -350,6 +350,7 @@ export class Parser extends DiagnosticEmitter {
     if (this.backlog.length) throw new Error("backlog is not empty");
     this.backlog = [];
     this.seenlog.clear();
+    this.donelog.clear();
     return this.program;
   }
 
@@ -979,6 +980,8 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  private parseParametersThis: TypeNode | null = null;
+
   parseParameters(
     tn: Tokenizer,
     isConstructor: bool = false
@@ -990,9 +993,44 @@ export class Parser extends DiagnosticEmitter {
     var seenRest: ParameterNode | null = null;
     var seenOptional = false;
     var reportedRest = false;
+    var thisType: CommonTypeNode | null = null;
+
+    // check if there is a leading `this` parameter
+    this.parseParametersThis = null;
+    if (tn.skip(Token.THIS)) {
+      if (tn.skip(Token.COLON)) {
+        thisType = this.parseType(tn); // reports
+        if (!thisType) return null;
+        if (thisType.kind == NodeKind.TYPE) {
+          this.parseParametersThis = <TypeNode>thisType;
+        } else {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            thisType.range
+          );
+        }
+      } else {
+        this.error(
+          DiagnosticCode._0_expected,
+          tn.range(), ":"
+        );
+        return null;
+      }
+      if (!tn.skip(Token.COMMA)) {
+        if (tn.skip(Token.CLOSEPAREN)) {
+          return parameters;
+        } else {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ")"
+          );
+          return null;
+        }
+      }
+    }
 
     while (!tn.skip(Token.CLOSEPAREN)) {
-      let param = this.parseParameter(tn, isConstructor);
+      let param = this.parseParameter(tn, isConstructor); // reports
       if (!param) return null;
       if (seenRest && !reportedRest) {
         this.error(
@@ -1187,6 +1225,7 @@ export class Parser extends DiagnosticEmitter {
 
     var parameters = this.parseParameters(tn);
     if (!parameters) return null;
+    var thisType = this.parseParametersThis;
 
     var isSetter = (flags & CommonFlags.SET) != 0;
     if (isSetter) {
@@ -1234,7 +1273,7 @@ export class Parser extends DiagnosticEmitter {
     var signature = Node.createSignature(
       parameters,
       returnType,
-      null,
+      thisType,
       false,
       tn.range(signatureStart, tn.pos)
     );
@@ -1349,7 +1388,7 @@ export class Parser extends DiagnosticEmitter {
     var signature = Node.createSignature(
       parameters,
       returnType,
-      null,
+      null, // TODO?
       false,
       tn.range(signatureStart, tn.pos)
     );
@@ -1653,6 +1692,7 @@ export class Parser extends DiagnosticEmitter {
       let signatureStart = tn.tokenPos;
       let parameters = this.parseParameters(tn, isConstructor);
       if (!parameters) return null;
+      let thisType = this.parseParametersThis;
       if (isConstructor) {
         for (let i = 0, k = parameters.length; i < k; ++i) {
           let parameter = parameters[i];
@@ -1726,7 +1766,7 @@ export class Parser extends DiagnosticEmitter {
       let signature = Node.createSignature(
         parameters,
         returnType,
-        null,
+        thisType,
         false,
         tn.range(signatureStart, tn.pos)
       );
@@ -1907,7 +1947,7 @@ export class Parser extends DiagnosticEmitter {
       }
       let ret = Node.createExportStatement(members, path, flags, tn.range(startPos, tn.pos));
       let internalPath = ret.internalPath;
-      if (internalPath != null && !this.seenlog.has(internalPath)) {
+      if (internalPath !== null && !this.seenlog.has(internalPath)) {
         this.backlog.push(internalPath);
         this.seenlog.add(internalPath);
       }

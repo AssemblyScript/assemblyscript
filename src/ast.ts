@@ -19,7 +19,8 @@ import {
 
 import {
   normalizePath,
-  resolvePath
+  resolvePath,
+  CharCode
 } from "./util";
 
 export { Token, Range };
@@ -180,7 +181,7 @@ export abstract class Node {
   ): SignatureNode {
     var sig = new SignatureNode();
     sig.range = range;
-    sig.parameterTypes = parameters; setParent(parameters, sig);
+    sig.parameters = parameters; setParent(parameters, sig);
     sig.returnType = returnType; returnType.parent = sig;
     sig.explicitThisType = explicitThisType; if (explicitThisType) explicitThisType.parent = sig;
     sig.isNullable = isNullable;
@@ -1037,7 +1038,7 @@ export class SignatureNode extends CommonTypeNode {
   kind = NodeKind.SIGNATURE;
 
   /** Accepted parameters. */
-  parameterTypes: ParameterNode[];
+  parameters: ParameterNode[];
   /** Return type. */
   returnType: CommonTypeNode;
   /** Explicitly provided this type, if any. */
@@ -1058,14 +1059,30 @@ export enum DecoratorKind {
 
 /** Returns the decorator kind represented by the specified string. */
 export function stringToDecoratorKind(str: string): DecoratorKind {
-  switch (str) {
-    case "global": return DecoratorKind.GLOBAL;
-    case "operator": return DecoratorKind.OPERATOR;
-    case "unmanaged": return DecoratorKind.UNMANAGED;
-    case "sealed": return DecoratorKind.SEALED;
-    case "inline": return DecoratorKind.INLINE;
-    default: return DecoratorKind.CUSTOM;
+  assert(str.length);
+  switch (str.charCodeAt(0)) {
+    case CharCode.g: {
+      if (str == "global") return DecoratorKind.GLOBAL;
+      break;
+    }
+    case CharCode.i: {
+      if (str == "inline") return DecoratorKind.INLINE;
+      break;
+    }
+    case CharCode.o: {
+      if (str == "operator") return DecoratorKind.OPERATOR;
+      break;
+    }
+    case CharCode.s: {
+      if (str == "sealed") return DecoratorKind.SEALED;
+      break;
+    }
+    case CharCode.u: {
+      if (str == "unmanaged") return DecoratorKind.UNMANAGED;
+      break;
+    }
   }
+  return DecoratorKind.CUSTOM;
 }
 
 /** Represents a decorator. */

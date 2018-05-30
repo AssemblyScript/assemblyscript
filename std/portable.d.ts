@@ -316,6 +316,7 @@ declare class Symbol {
 
 declare class Set<T> {
   constructor(entries?: T[]);
+  readonly size: i32;
   has(value: T): bool;
   add(value: T): void;
   delete(value: T): bool;

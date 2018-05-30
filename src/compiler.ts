@@ -4708,7 +4708,7 @@ export class Compiler extends DiagnosticEmitter {
             inferredTypes.set(typeParameters[i].name.text, null);
           }
           // let numInferred = 0;
-          let parameterTypes = prototype.declaration.signature.parameterTypes;
+          let parameterTypes = prototype.declaration.signature.parameters;
           let numParameterTypes = parameterTypes.length;
           let argumentExpressions = expression.arguments;
           let numArguments = argumentExpressions.length;
@@ -4718,7 +4718,7 @@ export class Compiler extends DiagnosticEmitter {
             let name = typeNode.kind == NodeKind.TYPE ? (<TypeNode>typeNode).name.text : null;
             let argumentExpression = i < numArguments
               ? argumentExpressions[i]
-              : prototype.declaration.signature.parameterTypes[i].initializer;
+              : prototype.declaration.signature.parameters[i].initializer;
             if (!argumentExpression) { // missing initializer -> too few arguments
               this.error(
                 DiagnosticCode.Expected_0_arguments_but_got_1,
@@ -5088,7 +5088,7 @@ export class Compiler extends DiagnosticEmitter {
     var numParameters = signature.parameterTypes.length;
     for (let i = numArguments; i < numParameters; ++i) {
       let initExpr = this.compileExpression(
-        assert(declaration.signature.parameterTypes[i].initializer),
+        assert(declaration.signature.parameters[i].initializer),
         parameterTypes[i],
         ConversionKind.IMPLICIT,
         WrapMode.WRAP
@@ -5158,7 +5158,7 @@ export class Compiler extends DiagnosticEmitter {
     var originalSignature = original.signature;
     var originalName = original.internalName;
     var originalParameterTypes = originalSignature.parameterTypes;
-    var originalParameterDeclarations = original.prototype.declaration.signature.parameterTypes;
+    var originalParameterDeclarations = original.prototype.declaration.signature.parameters;
     var commonReturnType = originalSignature.returnType;
     var commonThisType = originalSignature.thisType;
     var isInstance = original.is(CommonFlags.INSTANCE);
@@ -5345,7 +5345,7 @@ export class Compiler extends DiagnosticEmitter {
         operands.length = 0;
       }
       let parameterTypes = instance.signature.parameterTypes;
-      let parameterNodes = instance.prototype.declaration.signature.parameterTypes;
+      let parameterNodes = instance.prototype.declaration.signature.parameters;
       let allOptionalsAreConstant = true;
       for (let i = numArguments; i < maxArguments; ++i) {
         let initializer = parameterNodes[i].initializer;

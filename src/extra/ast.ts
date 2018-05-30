@@ -380,7 +380,7 @@ export class ASTBuilder {
       sb.push("this: ");
       this.visitTypeNode(explicitThisType);
     }
-    var parameters = node.parameterTypes;
+    var parameters = node.parameters;
     var numParameters = parameters.length;
     if (numParameters) {
       if (explicitThisType) sb.push(", ");
@@ -1003,13 +1003,19 @@ export class ASTBuilder {
       }
     }
     sb.push("(");
-    var parameterTypes = signature.parameterTypes;
-    var numParameterTypes = parameterTypes.length;
-    if (numParameterTypes) {
-      this.serializeParameter(parameterTypes[0]);
-      for (let i = 1; i < numParameterTypes; ++i) {
+    var parameters = signature.parameters;
+    var numParameters = parameters.length;
+    var explicitThisType = signature.explicitThisType;
+    if (explicitThisType) {
+      sb.push("this: ");
+      this.visitTypeNode(explicitThisType);
+    }
+    if (numParameters) {
+      if (explicitThisType) sb.push(", ");
+      this.serializeParameter(parameters[0]);
+      for (let i = 1; i < numParameters; ++i) {
         sb.push(", ");
-        this.serializeParameter(parameterTypes[i]);
+        this.serializeParameter(parameters[i]);
       }
     }
     var body = node.body;

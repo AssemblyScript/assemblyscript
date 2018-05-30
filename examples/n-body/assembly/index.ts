@@ -3,22 +3,24 @@ import "allocator/arena";
 // From The Computer Language Benchmarks Game
 // http://benchmarksgame.alioth.debian.org
 
-const SOLAR_MASS = 4.0 * Math.PI * Math.PI;
-const DAYS_PER_YEAR = 365.24;
+type float = f64; // interchangeable f32/f64 for testing
+
+const SOLAR_MASS = <float>(4.0 * Math.PI * Math.PI);
+const DAYS_PER_YEAR: float = 365.24;
 
 class Body {
 
   constructor(
-    public x: f64,
-    public y: f64,
-    public z: f64,
-    public vx: f64,
-    public vy: f64,
-    public vz: f64,
-    public mass: f64
+    public x: float,
+    public y: float,
+    public z: float,
+    public vx: float,
+    public vy: float,
+    public vz: float,
+    public mass: float
   ) {}
 
-  offsetMomentum(px: f64, py: f64, pz: f64): this {
+  offsetMomentum(px: float, py: float, pz: float): this {
     this.vx = -px / SOLAR_MASS;
     this.vy = -py / SOLAR_MASS;
     this.vz = -pz / SOLAR_MASS;
@@ -85,9 +87,9 @@ class NBodySystem {
   constructor(
     public bodies: Body[]
   ) {
-    var px = 0.0;
-    var py = 0.0;
-    var pz = 0.0;
+    var px: float = 0.0;
+    var py: float = 0.0;
+    var pz: float = 0.0;
     var size = bodies.length;
     for (let i = 0; i < size; i++) {
       let b = unchecked(bodies[i]);
@@ -99,7 +101,7 @@ class NBodySystem {
     bodies[0].offsetMomentum(px, py, pz);
   }
 
-  advance(dt: f64): void {
+  advance(dt: float): void {
     var bodies = this.bodies;
     var size: u32 = bodies.length;
     // var buffer = changetype<usize>(bodies.buffer_);
@@ -126,7 +128,7 @@ class NBodySystem {
         let dz = iz - bodyj.z;
 
         let distanceSq = dx * dx + dy * dy + dz * dz;
-        let distance = Math.sqrt(distanceSq);
+        let distance = <float>Math.sqrt(distanceSq);
         let mag = dt / (distanceSq * distance);
 
         let bim = bodyim * mag;
@@ -151,8 +153,8 @@ class NBodySystem {
     }
   }
 
-  energy(): f64 {
-    var e = 0.0;
+  energy(): float {
+    var e: float = 0.0;
     var bodies = this.bodies;
 
     for (let i: u32 = 0, size: u32 = bodies.length; i < size; ++i) {
@@ -171,11 +173,11 @@ class NBodySystem {
       e += 0.5 * bim * (vx * vx + vy * vy + vz * vz);
 
       for (let j: u32 = i + 1; j < size; ++j) {
-        let bodyj = bodies[j];
+        let bodyj = unchecked(bodies[j]);
         let dx = ix - bodyj.x;
         let dy = iy - bodyj.y;
         let dz = iz - bodyj.z;
-        let distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        let distance = <float>Math.sqrt(dx * dx + dy * dy + dz * dz);
         e -= bim * bodyj.mass / distance;
       }
     }
@@ -200,7 +202,7 @@ export function getBody(index: i32): Body | null {
   return <u32>index < <u32>bodies.length ? bodies[index] : null;
 }
 
-export function step(): f64 {
+export function step(): float {
   system.advance(0.01);
   return system.energy();
 }

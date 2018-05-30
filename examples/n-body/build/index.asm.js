@@ -17,7 +17,7 @@ function asmFunc(global, env, buffer) {
  var Math_floor = global.Math.floor;
  var Math_ceil = global.Math.ceil;
  var Math_sqrt = global.Math.sqrt;
- var abort = env.abort;
+ var $lib_env_abort = env.abort;
  var $lib_allocator_arena_startOffset = 0;
  var $lib_allocator_arena_offset = 0;
  var assembly_index_system = 0;
@@ -165,7 +165,7 @@ function asmFunc(global, env, buffer) {
   $1 = $1 | 0;
   var $2 = 0, $3 = 0, $4 = 0;
   if ($1 >>> 0 > 268435454 >>> 0) {
-   abort(0 | 0, 8 | 0, 23 | 0, 39 | 0);
+   $lib_env_abort(0 | 0, 8 | 0, 23 | 0, 39 | 0);
    abort();
   }
   $3 = $1 << 2 | 0;
@@ -189,18 +189,19 @@ function asmFunc(global, env, buffer) {
   $1 = $1 | 0;
   var $2 = 0, $3 = 0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0.0, $72 = 0, $8 = 0, $50 = 0;
   $8 = HEAP32[($1 + 4 | 0) >> 2] | 0;
-  continue_0 : do {
-   if (($2 | 0) < ($8 | 0)) {
+  break_0 : {
+   repeat_0 : do {
+    if (($2 | 0) >= ($8 | 0)) break break_0;
     $3 = HEAPU32[(((HEAPU32[$1 >> 2] | 0) + ($2 << 2 | 0) | 0) + 8 | 0) >> 2] | 0;
     $4 = +HEAPF64[($3 + 48 | 0) >> 3];
     $5 = $5 + +HEAPF64[($3 + 24 | 0) >> 3] * $4;
     $6 = $6 + +HEAPF64[($3 + 32 | 0) >> 3] * $4;
     $7 = $7 + +HEAPF64[($3 + 40 | 0) >> 3] * $4;
     $2 = $2 + 1 | 0;
-    continue continue_0;
-   }
-   break continue_0;
-  } while (1);
+    continue repeat_0;
+    break repeat_0;
+   } while (1);
+  };
   $2 = HEAPU32[$1 >> 2] | 0;
   if (0 >>> 0 < ((HEAP32[$2 >> 2] | 0) >>> 2 | 0) >>> 0) $50 = HEAPU32[($2 + 8 | 0) >> 2] | 0; else abort();
   $2 = $50;
@@ -250,8 +251,9 @@ function asmFunc(global, env, buffer) {
   var $2 = 0, $3 = 0.0, $9 = 0.0, $4 = 0, $5 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0, $10 = 0.0, $11 = 0.0, $12 = 0.0, $13 = 0, $14 = 0, $15 = 0.0, $16 = 0.0, $17 = 0.0, $18 = 0.0;
   $13 = HEAPU32[$0 >> 2] | 0;
   $14 = HEAP32[($13 + 4 | 0) >> 2] | 0;
-  continue_0 : do {
-   if ($4 >>> 0 < $14 >>> 0) {
+  break_0 : {
+   repeat_0 : do {
+    if ($4 >>> 0 >= $14 >>> 0) break break_0;
     $0 = HEAPU32[(((HEAPU32[$13 >> 2] | 0) + ($4 << 2 | 0) | 0) + 8 | 0) >> 2] | 0;
     $15 = +HEAPF64[$0 >> 3];
     $16 = +HEAPF64[($0 + 8 | 0) >> 3];
@@ -260,9 +262,10 @@ function asmFunc(global, env, buffer) {
     $6 = +HEAPF64[($0 + 32 | 0) >> 3];
     $7 = +HEAPF64[($0 + 40 | 0) >> 3];
     $18 = +HEAPF64[($0 + 48 | 0) >> 3];
-    $8 = $4 + 1 | 0;
-    continue_1 : do {
-     if ($8 >>> 0 < $14 >>> 0) {
+    break_1 : {
+     $8 = $4 + 1 | 0;
+     repeat_1 : do {
+      if ($8 >>> 0 >= $14 >>> 0) break break_1;
       $2 = HEAPU32[(((HEAPU32[$13 >> 2] | 0) + ($8 << 2 | 0) | 0) + 8 | 0) >> 2] | 0;
       $10 = $15 - +HEAPF64[$2 >> 3];
       $11 = $16 - +HEAPF64[($2 + 8 | 0) >> 3];
@@ -278,10 +281,10 @@ function asmFunc(global, env, buffer) {
       HEAPF64[($2 + 32 | 0) >> 3] = +HEAPF64[($2 + 32 | 0) >> 3] + $11 * $3;
       HEAPF64[($2 + 40 | 0) >> 3] = +HEAPF64[($2 + 40 | 0) >> 3] + $12 * $3;
       $8 = $8 + 1 | 0;
-      continue continue_1;
-     }
-     break continue_1;
-    } while (1);
+      continue repeat_1;
+      break repeat_1;
+     } while (1);
+    };
     HEAPF64[($0 + 24 | 0) >> 3] = $5;
     HEAPF64[($0 + 32 | 0) >> 3] = $6;
     HEAPF64[($0 + 40 | 0) >> 3] = $7;
@@ -289,20 +292,21 @@ function asmFunc(global, env, buffer) {
     HEAPF64[($0 + 8 | 0) >> 3] = +HEAPF64[($0 + 8 | 0) >> 3] + $1 * $6;
     HEAPF64[($0 + 16 | 0) >> 3] = +HEAPF64[($0 + 16 | 0) >> 3] + $1 * $7;
     $4 = $4 + 1 | 0;
-    continue continue_0;
-   }
-   break continue_0;
-  } while (1);
+    continue repeat_0;
+    break repeat_0;
+   } while (1);
+  };
  }
  
  function assembly_index_NBodySystem_energy($0) {
   $0 = $0 | 0;
-  var $1 = 0.0, $2 = 0, $3 = 0, $4 = 0, $5 = 0, $10 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0.0, $9 = 0.0, $30 = 0.0, $39 = 0.0, $45 = 0.0, $59 = 0.0, $72 = 0, $77 = 0.0, $92 = 0.0;
-  $4 = HEAPU32[$0 >> 2] | 0;
-  $5 = HEAP32[($4 + 4 | 0) >> 2] | 0;
-  continue_0 : do {
-   if ($3 >>> 0 < $5 >>> 0) {
-    $0 = HEAPU32[(((HEAPU32[$4 >> 2] | 0) + ($3 << 2 | 0) | 0) + 8 | 0) >> 2] | 0;
+  var $1 = 0.0, $2 = 0, $3 = 0, $4 = 0, $5 = 0, $10 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0.0, $9 = 0.0, $30 = 0.0, $39 = 0.0, $45 = 0.0, $69 = 0.0, $84 = 0.0;
+  break_0 : {
+   $4 = HEAPU32[$0 >> 2] | 0;
+   $5 = HEAP32[($4 + 4 | 0) >> 2] | 0;
+   repeat_0 : do {
+    if ($2 >>> 0 >= $5 >>> 0) break break_0;
+    $0 = HEAPU32[(((HEAPU32[$4 >> 2] | 0) + ($2 << 2 | 0) | 0) + 8 | 0) >> 2] | 0;
     $7 = +HEAPF64[$0 >> 3];
     $8 = +HEAPF64[($0 + 8 | 0) >> 3];
     $9 = +HEAPF64[($0 + 16 | 0) >> 3];
@@ -314,29 +318,27 @@ function asmFunc(global, env, buffer) {
     $45 = $39 + $1 * $1;
     $1 = +HEAPF64[($0 + 40 | 0) >> 3];
     $1 = $30 + .5 * $10 * ($45 + $1 * $1);
-    $0 = $3 + 1 | 0;
-    continue_1 : do {
-     if ($0 >>> 0 < $5 >>> 0) {
-      $59 = $7;
-      $2 = HEAPU32[$4 >> 2] | 0;
-      if ($0 >>> 0 < ((HEAP32[$2 >> 2] | 0) >>> 2 | 0) >>> 0) $72 = HEAPU32[(($2 + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0; else abort();
-      $2 = $72;
-      $6 = $59 - +HEAPF64[$2 >> 3];
-      $77 = $1;
-      $1 = $8 - +HEAPF64[($2 + 8 | 0) >> 3];
-      $92 = $6 * $6 + $1 * $1;
-      $1 = $9 - +HEAPF64[($2 + 16 | 0) >> 3];
-      $1 = $77 - $10 * +HEAPF64[($2 + 48 | 0) >> 3] / Math_sqrt($92 + $1 * $1);
+    break_1 : {
+     $0 = $2 + 1 | 0;
+     repeat_1 : do {
+      if ($0 >>> 0 >= $5 >>> 0) break break_1;
+      $3 = HEAPU32[(((HEAPU32[$4 >> 2] | 0) + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0;
+      $6 = $7 - +HEAPF64[$3 >> 3];
+      $69 = $1;
+      $1 = $8 - +HEAPF64[($3 + 8 | 0) >> 3];
+      $84 = $6 * $6 + $1 * $1;
+      $1 = $9 - +HEAPF64[($3 + 16 | 0) >> 3];
+      $1 = $69 - $10 * +HEAPF64[($3 + 48 | 0) >> 3] / Math_sqrt($84 + $1 * $1);
       $0 = $0 + 1 | 0;
-      continue continue_1;
-     }
-     break continue_1;
-    } while (1);
-    $3 = $3 + 1 | 0;
-    continue continue_0;
-   }
-   break continue_0;
-  } while (1);
+      continue repeat_1;
+      break repeat_1;
+     } while (1);
+    };
+    $2 = $2 + 1 | 0;
+    continue repeat_0;
+    break repeat_0;
+   } while (1);
+  };
   return +$1;
  }
  
@@ -348,14 +350,15 @@ function asmFunc(global, env, buffer) {
  function assembly_index_bench($0) {
   $0 = $0 | 0;
   var $1 = 0;
-  continue_0 : do {
-   if ($1 >>> 0 < $0 >>> 0) {
+  break_0 : {
+   repeat_0 : do {
+    if ($1 >>> 0 >= $0 >>> 0) break break_0;
     assembly_index_NBodySystem_advance(assembly_index_system | 0, +(.01));
     $1 = $1 + 1 | 0;
-    continue continue_0;
-   }
-   break continue_0;
-  } while (1);
+    continue repeat_0;
+    break repeat_0;
+   } while (1);
+  };
  }
  
  function start() {

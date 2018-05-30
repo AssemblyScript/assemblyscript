@@ -100,6 +100,7 @@ import {
   getConstValueF64,
   getConstValueI64Low
 } from "./module";
+import { CharCode } from "./util";
 
 /** Path delimiter inserted between file system levels. */
 export const PATH_DELIMITER = "/";
@@ -166,26 +167,79 @@ export enum OperatorKind {
 }
 
 function operatorKindFromString(str: string): OperatorKind {
-  switch (str) {
-    case "[]" : return OperatorKind.INDEXED_GET;
-    case "[]=": return OperatorKind.INDEXED_SET;
-    case "{}" : return OperatorKind.UNCHECKED_INDEXED_GET;
-    case "{}=": return OperatorKind.UNCHECKED_INDEXED_SET;
-    case "+"  : return OperatorKind.ADD;
-    case "-"  : return OperatorKind.SUB;
-    case "*"  : return OperatorKind.MUL;
-    case "/"  : return OperatorKind.DIV;
-    case "%"  : return OperatorKind.REM;
-    case "**" : return OperatorKind.POW;
-    case "&"  : return OperatorKind.AND;
-    case "|"  : return OperatorKind.OR;
-    case "^"  : return OperatorKind.XOR;
-    case "==" : return OperatorKind.EQ;
-    case "!=" : return OperatorKind.NE;
-    case ">"  : return OperatorKind.GT;
-    case ">=" : return OperatorKind.GE;
-    case "<"  : return OperatorKind.LT;
-    case "<=" : return OperatorKind.LE;
+  assert(str.length);
+  switch (str.charCodeAt(0)) {
+    case CharCode.OPENBRACKET: {
+      switch (str) {
+        case "[]" : return OperatorKind.INDEXED_GET;
+        case "[]=": return OperatorKind.INDEXED_SET;
+      }
+      break;
+    }
+    case CharCode.OPENBRACE: {
+      switch (str) {
+        case "{}" : return OperatorKind.UNCHECKED_INDEXED_GET;
+        case "{}=": return OperatorKind.UNCHECKED_INDEXED_SET;
+      }
+      break;
+    }
+    case CharCode.PLUS: {
+      if (str.length == 1) return OperatorKind.ADD;
+      break;
+    }
+    case CharCode.MINUS: {
+      if (str.length == 1) return OperatorKind.SUB;
+      break;
+    }
+    case CharCode.ASTERISK: {
+      switch (str) {
+        case "*" : return OperatorKind.MUL;
+        case "**": return OperatorKind.POW;
+      }
+      break;
+    }
+    case CharCode.SLASH: {
+      if (str.length == 1) return OperatorKind.DIV;
+      break;
+    }
+    case CharCode.PERCENT: {
+      if (str.length == 1) return OperatorKind.REM;
+      break;
+    }
+    case CharCode.AMPERSAND: {
+      if (str.length == 1) return OperatorKind.AND;
+      break;
+    }
+    case CharCode.BAR: {
+      if (str.length == 1) return OperatorKind.OR;
+      break;
+    }
+    case CharCode.CARET: {
+      if (str.length == 1) return OperatorKind.XOR;
+      break;
+    }
+    case CharCode.EQUALS: {
+      if (str == "==") return OperatorKind.EQ;
+      break;
+    }
+    case CharCode.EXCLAMATION: {
+      if (str == "!=") return OperatorKind.NE;
+      break;
+    }
+    case CharCode.GREATERTHAN: {
+      switch (str) {
+        case ">" : return OperatorKind.GT;
+        case ">=": return OperatorKind.GE;
+      }
+      break;
+    }
+    case CharCode.LESSTHAN: {
+      switch (str) {
+        case "<" : return OperatorKind.LT;
+        case "<=": return OperatorKind.LE;
+      }
+      break;
+    }
   }
   return OperatorKind.INVALID;
 }
@@ -1674,7 +1728,7 @@ export class Program extends DiagnosticEmitter {
       );
       if (!thisType) return null;
     }
-    var parameterTypeNodes = node.parameterTypes;
+    var parameterTypeNodes = node.parameters;
     var numParameters = parameterTypeNodes.length;
     var parameterTypes = new Array<Type>(numParameters);
     var parameterNames = new Array<string>(numParameters);
@@ -2664,7 +2718,7 @@ export class FunctionPrototype extends Element {
     }
 
     // resolve signature node
-    var signatureParameters = signatureNode.parameterTypes;
+    var signatureParameters = signatureNode.parameters;
     var signatureParameterCount = signatureParameters.length;
     var parameterTypes = new Array<Type>(signatureParameterCount);
     var parameterNames = new Array<string>(signatureParameterCount);

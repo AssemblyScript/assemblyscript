@@ -173,7 +173,8 @@ export enum IdentifierHandling {
 }
 
 export function tokenFromKeyword(text: string): Token {
-  switch (text.length && text.charCodeAt(0)) {
+  assert(text.length);
+  switch (text.charCodeAt(0)) {
     case CharCode.a: {
       switch (text) {
         case "abstract": return Token.ABSTRACT;
