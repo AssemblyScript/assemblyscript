@@ -6725,12 +6725,14 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: {
             // check operator overload
-            let classReference = this.currentType.classReference;
-            if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.DEC);
-              if (overload) {
-                expr = this.compileUnaryOverload(overload, expression.operand, expression);
-                break;
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.DEC);
+                if (overload) {
+                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                  break;
+                }
               }
             }
             // fall-through
