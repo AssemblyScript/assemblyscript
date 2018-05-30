@@ -6638,13 +6638,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.PLUS_PLUS: {
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return module.createUnreachable();
-        }
         compound = true;
         expr = this.compileExpression(
           expression.operand,
@@ -6667,11 +6660,15 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: {
             if (this.currentType.is(TypeFlags.REFERENCE)) {
-              this.error(
-                DiagnosticCode.Operation_not_supported,
-                expression.range
-              );
-              return module.createUnreachable();
+              // check operator overload
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.INC);
+                if (overload) {
+                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                  break;
+                }
+              }
             }
             // fall-through
           }
@@ -6706,13 +6703,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return module.createUnreachable();
-        }
         compound = true;
         expr = this.compileExpression(
           expression.operand,
@@ -6734,12 +6724,14 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              this.error(
-                DiagnosticCode.Operation_not_supported,
-                expression.range
-              );
-              return module.createUnreachable();
+            // check operator overload
+            let classReference = this.currentType.classReference;
+            if (classReference) {
+              let overload = classReference.lookupOverload(OperatorKind.DEC);
+              if (overload) {
+                expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                break;
+              }
             }
             // fall-through
           }

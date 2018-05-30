@@ -89,6 +89,20 @@ class Tester {
   static excl(value: Tester): bool {
     return !value.x && !value.y;
   }
+
+  @operator('++')
+  inc(): this {
+    this.x++;
+    this.y++;
+    return this;
+  }
+
+  @operator('--')
+  dec(): this {
+    this.x--;
+    this.y--;
+    return this;
+  }
 }
 
 // check additional
@@ -199,6 +213,15 @@ var excl = new Tester(0, 0);
 var bres = !excl;
 assert(bres == (!excl.x && !excl.y));
 assert(bres == true);
+
+//
+var incdec = new Tester(0, 1);
+
+++incdec;
+assert(incdec.x == 1 && incdec.y == 2);
+
+--incdec;
+assert(incdec.x == 0 && incdec.y == 1);
 
 // check inlined static
 class TesterInlineStatic {

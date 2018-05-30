@@ -152,6 +152,8 @@ export enum OperatorKind {
   EXCLAMATION,
   NOT,
   ADD,
+  INC,
+  DEC,
   SUB,
   MUL,
   DIV,
@@ -186,11 +188,17 @@ function operatorKindFromString(str: string): OperatorKind {
       break;
     }
     case CharCode.PLUS: {
-      if (str.length == 1) return OperatorKind.ADD;
+      switch (str) {
+        case "+":  return OperatorKind.ADD;
+        case "++": return OperatorKind.INC;
+      }
       break;
     }
     case CharCode.MINUS: {
-      if (str.length == 1) return OperatorKind.SUB;
+      switch (str) {
+        case "-":  return OperatorKind.SUB;
+        case "--": return OperatorKind.DEC;
+      }
       break;
     }
     case CharCode.ASTERISK: {
@@ -225,8 +233,10 @@ function operatorKindFromString(str: string): OperatorKind {
       break;
     }
     case CharCode.EXCLAMATION: {
-      if (str.length == 1) return OperatorKind.EXCLAMATION;
-      if (str == "!=")     return OperatorKind.NE;
+      switch (str) {
+        case "!":  return OperatorKind.EXCLAMATION;
+        case "!=": return OperatorKind.NE;
+      }
       break;
     }
     case CharCode.GREATERTHAN: {
