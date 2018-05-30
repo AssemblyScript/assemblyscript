@@ -2820,7 +2820,7 @@
    (call $std/operator-overloading/Tester#constructor
     (i32.const 0)
     (i32.const 0)
-    (i32.const 100)
+    (i32.const 0)
    )
   )
   (set_global $std/operator-overloading/bres
@@ -2858,7 +2858,10 @@
    )
   )
   (if
-   (get_global $std/operator-overloading/bres)
+   (i32.ne
+    (get_global $std/operator-overloading/bres)
+    (i32.const 1)
+   )
    (block
     (call $~lib/env/abort
      (i32.const 0)

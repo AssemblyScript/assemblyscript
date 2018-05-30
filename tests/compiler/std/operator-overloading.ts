@@ -195,10 +195,10 @@ var res = ~not;
 assert(res.x == ~not.x && res.y == ~not.y);
 
 // check unary exclamation "!"
-var excl = new Tester(0, 100);
+var excl = new Tester(0, 0);
 var bres = !excl;
 assert(bres == (!excl.x && !excl.y));
-assert(bres == false);
+assert(bres == true);
 
 // check inlined static
 class TesterInlineStatic {

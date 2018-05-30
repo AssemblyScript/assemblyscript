@@ -3154,7 +3154,7 @@
    (call $std/operator-overloading/Tester#constructor
     (i32.const 0)
     (i32.const 0)
-    (i32.const 100)
+    (i32.const 0)
    )
   )
   (set_global $std/operator-overloading/bres
@@ -3197,7 +3197,7 @@
    (i32.eqz
     (i32.eq
      (get_global $std/operator-overloading/bres)
-     (i32.const 0)
+     (i32.const 1)
     )
    )
    (block
