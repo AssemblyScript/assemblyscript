@@ -6680,15 +6680,13 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              // check operator overload
-              let classReference = this.currentType.classReference;
-              if (classReference) {
-                let overload = classReference.lookupOverload(OperatorKind.INC);
-                if (overload) {
-                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
-                  break;
-                }
+            // check operator overload
+            let classReference = this.currentType.classReference;
+            if (classReference) {
+              let overload = classReference.lookupOverload(OperatorKind.INC);
+              if (overload) {
+                expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                break;
               }
             }
             // fall-through
@@ -6746,14 +6744,12 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: {
             // check operator overload
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              let classReference = this.currentType.classReference;
-              if (classReference) {
-                let overload = classReference.lookupOverload(OperatorKind.DEC);
-                if (overload) {
-                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
-                  break;
-                }
+            let classReference = this.currentType.classReference;
+            if (classReference) {
+              let overload = classReference.lookupOverload(OperatorKind.DEC);
+              if (overload) {
+                expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                break;
               }
             }
             // fall-through
@@ -6798,7 +6794,7 @@ export class Compiler extends DiagnosticEmitter {
           WrapMode.NONE
         );
 
-        if (this.currentType.kind === TypeKind.USIZE && this.currentType.is(TypeFlags.REFERENCE)) {
+        if (this.currentType.kind === TypeKind.USIZE) {
           // check operator overload
           let classReference = this.currentType.classReference;
           if (classReference) {
@@ -6839,15 +6835,13 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.USIZE: {
-            if (this.currentType.is(TypeFlags.REFERENCE)) {
-              // check operator overload
-              let classReference = this.currentType.classReference;
-              if (classReference) {
-                let overload = classReference.lookupOverload(OperatorKind.NOT);
-                if (overload) {
-                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
-                  break;
-                }
+            // check operator overload
+            let classReference = this.currentType.classReference;
+            if (classReference) {
+              let overload = classReference.lookupOverload(OperatorKind.NOT);
+              if (overload) {
+                expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                break;
               }
             }
             // fall-through
