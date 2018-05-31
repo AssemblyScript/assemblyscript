@@ -3787,7 +3787,18 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.ShlI64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: {
+            // check operator overload
+            let classReference = leftType.classReference;
+            if (classReference) {
+              let overload = classReference.lookupOverload(OperatorKind.SHL);
+              if (overload) {
+                expr = this.compileBinaryOverload(overload, left, right, expression);
+                break;
+              }
+            }
+            // fall through
+          }
           case TypeKind.ISIZE: {
             expr = module.createBinary(
               this.options.isWasm64
@@ -3857,7 +3868,17 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.ShrU64, leftExpr, rightExpr);
             break;
           }
-          case TypeKind.USIZE: { // TODO: check operator overload
+          case TypeKind.USIZE: {
+            // check operator overload
+            let classReference = leftType.classReference;
+            if (classReference) {
+              let overload = classReference.lookupOverload(OperatorKind.SHR);
+              if (overload) {
+                expr = this.compileBinaryOverload(overload, left, right, expression);
+                break;
+              }
+            }
+
             expr = module.createBinary(
               this.options.isWasm64
                 ? BinaryOp.ShrU64

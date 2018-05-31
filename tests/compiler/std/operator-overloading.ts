@@ -79,6 +79,16 @@ class Tester {
     return a.x <= b.x && a.y <= b.y;
   }
 
+  @operator('>>')
+  static shr(value: Tester, shift: i32): Tester {
+    return new Tester(value.x >> shift, value.y >> shift);
+  }
+
+  @operator('<<')
+  static shl(value: Tester, shift: i32): Tester {
+    return new Tester(value.x << shift, value.y << shift);
+  }
+
   // unary opterators
   @operator('~')
   static not(value: Tester): Tester {
@@ -202,6 +212,16 @@ var leq1 = new Tester(4, 3);
 var leq2 = new Tester(4, 3);
 var leq  = leq1 <= leq2;
 assert(leq == true);
+
+// check right shift
+var shr  = new Tester(8, 16);
+var sres = shr >> 3;
+assert(sres.x == 1 && sres.y == 2);
+
+// check left shift
+var shl = new Tester(1, 2);
+sres = shl << 3;
+assert(sres.x == 8 && sres.y == 16);
 
 // check unary not "~"
 var not = new Tester(0xFF, 0x10);

@@ -151,9 +151,9 @@ export enum OperatorKind {
   UNCHECKED_INDEXED_SET,
   EXCLAMATION,
   NOT,
-  ADD,
   INC,
   DEC,
+  ADD,
   SUB,
   MUL,
   DIV,
@@ -162,6 +162,8 @@ export enum OperatorKind {
   AND,
   OR,
   XOR,
+  SHL,
+  SHR,
   EQ,
   NE,
   GT,
@@ -243,6 +245,7 @@ function operatorKindFromString(str: string): OperatorKind {
       switch (str) {
         case ">" : return OperatorKind.GT;
         case ">=": return OperatorKind.GE;
+        case ">>": return OperatorKind.SHL;
       }
       break;
     }
@@ -250,6 +253,7 @@ function operatorKindFromString(str: string): OperatorKind {
       switch (str) {
         case "<" : return OperatorKind.LT;
         case "<=": return OperatorKind.LE;
+        case "<<": return OperatorKind.SHR;
       }
       break;
     }
