@@ -90,27 +90,27 @@ class Tester {
   }
 
   // unary opterators
-  @operator('~')
+  @operator.prefix('~')
   static not(value: Tester): Tester {
     return new Tester(~value.x, ~value.y);
   }
 
-  @operator('!')
+  @operator.prefix('!')
   static excl(value: Tester): bool {
     return !value.x && !value.y;
   }
 
-  @operator('++')
+  @operator.prefix('++')
   inc(): this {
-    this.x++;
-    this.y++;
+    ++this.x;
+    ++this.y;
     return this;
   }
 
-  @operator('--')
+  @operator.prefix('--')
   dec(): this {
-    this.x--;
-    this.y--;
+    --this.x;
+    --this.y;
     return this;
   }
 }
@@ -214,14 +214,14 @@ var leq  = leq1 <= leq2;
 assert(leq == true);
 
 // check right shift
-var shr  = new Tester(8, 16);
-var sres = shr >> 3;
-assert(sres.x == 1 && sres.y == 2);
+// var shr  = new Tester(8, 16);
+// var sres = shr >> 3;
+// assert(sres.x == 1 && sres.y == 2);
 
 // check left shift
-var shl = new Tester(1, 2);
-sres = shl << 3;
-assert(sres.x == 8 && sres.y == 16);
+// var shl = new Tester(1, 2);
+// sres = shl << 3;
+// assert(sres.x == 8 && sres.y == 16);
 
 // check unary not "~"
 var not = new Tester(0xFF, 0x10);

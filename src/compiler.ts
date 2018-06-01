@@ -3791,7 +3791,7 @@ export class Compiler extends DiagnosticEmitter {
             // check operator overload
             let classReference = leftType.classReference;
             if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.SHL);
+              let overload = classReference.lookupOverload(OperatorKind.BITWISE_SHL);
               if (overload) {
                 expr = this.compileBinaryOverload(overload, left, right, expression);
                 break;
@@ -3872,7 +3872,7 @@ export class Compiler extends DiagnosticEmitter {
             // check operator overload
             let classReference = leftType.classReference;
             if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.SHR);
+              let overload = classReference.lookupOverload(OperatorKind.BITWISE_SHR);
               if (overload) {
                 expr = this.compileBinaryOverload(overload, left, right, expression);
                 break;
@@ -6411,6 +6411,17 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.createUnreachable();
         }
+        /*
+        TODO
+        // check operator overload
+        let classReference = this.currentType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
+          if (overload) {
+            return this.compileUnaryOverload(overload, expression.operand, expression);
+          }
+        }
+        */
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6461,13 +6472,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-        if (currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return module.createUnreachable();
-        }
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6481,7 +6485,7 @@ export class Compiler extends DiagnosticEmitter {
             nativeOne = module.createI32(1);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             let options = this.options;
             op = options.isWasm64
@@ -6683,7 +6687,7 @@ export class Compiler extends DiagnosticEmitter {
             // check operator overload
             let classReference = this.currentType.classReference;
             if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.INC);
+              let overload = classReference.lookupOverload(OperatorKind.PREFIX_INC);
               if (overload) {
                 expr = this.compileUnaryOverload(overload, expression.operand, expression);
                 break;
@@ -6746,7 +6750,7 @@ export class Compiler extends DiagnosticEmitter {
             // check operator overload
             let classReference = this.currentType.classReference;
             if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.DEC);
+              let overload = classReference.lookupOverload(OperatorKind.PREFIX_DEC);
               if (overload) {
                 expr = this.compileUnaryOverload(overload, expression.operand, expression);
                 break;
@@ -6798,7 +6802,7 @@ export class Compiler extends DiagnosticEmitter {
           // check operator overload
           let classReference = this.currentType.classReference;
           if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.EXCLAMATION);
+            let overload = classReference.lookupOverload(OperatorKind.NOT);
             if (overload) {
               expr = this.compileUnaryOverload(overload, expression.operand, expression);
               break;
@@ -6838,7 +6842,7 @@ export class Compiler extends DiagnosticEmitter {
             // check operator overload
             let classReference = this.currentType.classReference;
             if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.NOT);
+              let overload = classReference.lookupOverload(OperatorKind.BITWISE_NOT);
               if (overload) {
                 expr = this.compileUnaryOverload(overload, expression.operand, expression);
                 break;

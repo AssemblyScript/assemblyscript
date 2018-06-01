@@ -210,16 +210,28 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
       break;
     }
     case CharCode.PLUS: {
-      switch (str) {
+      switch (arg) {
         case "+":  return OperatorKind.ADD;
-        case "++": return OperatorKind.INC;
+        case "++": {
+          switch (decoratorKind) {
+            case DecoratorKind.OPERATOR_PREFIX:  return OperatorKind.PREFIX_INC;
+            case DecoratorKind.OPERATOR_POSTFIX: return OperatorKind.POSTFIX_INC;
+            default: break;
+          }
+        }
       }
       break;
     }
     case CharCode.MINUS: {
-      switch (str) {
+      switch (arg) {
         case "-":  return OperatorKind.SUB;
-        case "--": return OperatorKind.DEC;
+        case "--": {
+          switch (decoratorKind) {
+            case DecoratorKind.OPERATOR_PREFIX:  return OperatorKind.PREFIX_DEC;
+            case DecoratorKind.OPERATOR_POSTFIX: return OperatorKind.POSTFIX_DEC;
+            default: break;
+          }
+        }
       }
       break;
     }
@@ -255,8 +267,11 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
       break;
     }
     case CharCode.EXCLAMATION: {
-      switch (str) {
-        case "!":  return OperatorKind.EXCLAMATION;
+      switch (arg) {
+        case "!":  {
+          if (decoratorKind == DecoratorKind.OPERATOR_PREFIX) return OperatorKind.NOT;
+          break;
+        }
         case "!=": return OperatorKind.NE;
       }
       break;
@@ -265,7 +280,7 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
       switch (arg) {
         case ">" : return OperatorKind.GT;
         case ">=": return OperatorKind.GE;
-        case ">>": return OperatorKind.SHL;
+        case ">>": return OperatorKind.BITWISE_SHL;
       }
       break;
     }
@@ -273,12 +288,16 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
       switch (arg) {
         case "<" : return OperatorKind.LT;
         case "<=": return OperatorKind.LE;
-        case "<<": return OperatorKind.SHR;
+        case "<<": return OperatorKind.BITWISE_SHR;
       }
       break;
     }
     case CharCode.TILDE: {
-      if (str.length == 1) return OperatorKind.NOT;
+      if (arg.length == 1) {
+        if (decoratorKind == DecoratorKind.OPERATOR_PREFIX) {
+          return OperatorKind.BITWISE_NOT;
+        }
+      }
       break;
     }
   }
@@ -834,7 +853,9 @@ export class Program extends DiagnosticEmitter {
     var decoratorFlags = DecoratorFlags.NONE;
     if (decorators) {
       decoratorFlags = this.filterDecorators(decorators,
-        DecoratorFlags.OPERATOR_BINARY |
+        DecoratorFlags.OPERATOR_BINARY  |
+        DecoratorFlags.OPERATOR_PREFIX  |
+        DecoratorFlags.OPERATOR_POSTFIX |
         DecoratorFlags.INLINE
       );
     }
