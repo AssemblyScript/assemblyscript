@@ -3940,7 +3940,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overloadd
         let classReference = leftType.classReference;
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.AND);
+          let overload = classReference.lookupOverload(OperatorKind.BITWISE_AND);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, right, expression);
             break;
@@ -4029,7 +4029,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.classReference;
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.OR);
+          let overload = classReference.lookupOverload(OperatorKind.BITWISE_OR);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, right, expression);
             break;
@@ -4121,7 +4121,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.classReference;
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.XOR);
+          let overload = classReference.lookupOverload(OperatorKind.BITWISE_XOR);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, right, expression);
             break;

@@ -64,7 +64,7 @@ import {
   VariableLikeDeclarationStatement,
   VariableStatement,
 
-  stringToDecoratorKind
+  decoratorNameToKind
 } from "./ast";
 
 import {
@@ -145,96 +145,122 @@ class TypeAlias {
 /** Represents the kind of an operator overload. */
 export enum OperatorKind {
   INVALID,
-  INDEXED_GET,
-  INDEXED_SET,
-  UNCHECKED_INDEXED_GET,
-  UNCHECKED_INDEXED_SET,
-  ADD,
-  SUB,
-  MUL,
-  DIV,
-  REM,
-  POW,
-  AND,
-  OR,
-  XOR,
-  EQ,
-  NE,
-  GT,
-  GE,
-  LT,
-  LE
+
+  // indexed access
+  INDEXED_GET,            // a[]
+  INDEXED_SET,            // a[]=b
+  UNCHECKED_INDEXED_GET,  // unchecked(a[])
+  UNCHECKED_INDEXED_SET,  // unchecked(a[]=b)
+
+  // binary
+  ADD,                    // a + b
+  SUB,                    // a - b
+  MUL,                    // a * b
+  DIV,                    // a / b
+  REM,                    // a % b
+  POW,                    // a ** b
+  BITWISE_AND,            // a & b
+  BITWISE_OR,             // a | b
+  BITWISE_XOR,            // a ^ b
+  BITWISE_SHL,            // a << b
+  BITWISE_SHR,            // a >> b
+  BITWISE_SHR_U,          // a >>> b
+  EQ,                     // a == b
+  NE,                     // a != b
+  GT,                     // a > b
+  GE,                     // a >= b
+  LT,                     // a < b
+  LE,                     // a <= b
+
+  // unary prefix
+  PLUS,                   // +a
+  MINUS,                  // -a
+  NOT,                    // !a
+  BITWISE_NOT,            // ~a
+  PREFIX_INC,             // ++a
+  PREFIX_DEC,             // --a
+
+  // unary postfix
+  POSTFIX_INC,            // a++
+  POSTFIX_DEC             // a--
+
+  // not overridable:
+  // IDENTITY             // a === b
+  // LOGICAL_AND          // a && b
+  // LOGICAL_OR           // a || b
 }
 
-function operatorKindFromString(str: string): OperatorKind {
-  assert(str.length);
-  switch (str.charCodeAt(0)) {
+/** Returns the operator kind represented by the specified decorator and string argument. */
+function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): OperatorKind {
+  // TODO: currently handles binary only but some differ if unary prefix or postfix
+  assert(arg.length);
+  switch (arg.charCodeAt(0)) {
     case CharCode.OPENBRACKET: {
-      switch (str) {
+      switch (arg) {
         case "[]" : return OperatorKind.INDEXED_GET;
         case "[]=": return OperatorKind.INDEXED_SET;
       }
       break;
     }
     case CharCode.OPENBRACE: {
-      switch (str) {
+      switch (arg) {
         case "{}" : return OperatorKind.UNCHECKED_INDEXED_GET;
         case "{}=": return OperatorKind.UNCHECKED_INDEXED_SET;
       }
       break;
     }
     case CharCode.PLUS: {
-      if (str.length == 1) return OperatorKind.ADD;
+      if (arg.length == 1) return OperatorKind.ADD;
       break;
     }
     case CharCode.MINUS: {
-      if (str.length == 1) return OperatorKind.SUB;
+      if (arg.length == 1) return OperatorKind.SUB;
       break;
     }
     case CharCode.ASTERISK: {
-      switch (str) {
+      switch (arg) {
         case "*" : return OperatorKind.MUL;
         case "**": return OperatorKind.POW;
       }
       break;
     }
     case CharCode.SLASH: {
-      if (str.length == 1) return OperatorKind.DIV;
+      if (arg.length == 1) return OperatorKind.DIV;
       break;
     }
     case CharCode.PERCENT: {
-      if (str.length == 1) return OperatorKind.REM;
+      if (arg.length == 1) return OperatorKind.REM;
       break;
     }
     case CharCode.AMPERSAND: {
-      if (str.length == 1) return OperatorKind.AND;
+      if (arg.length == 1) return OperatorKind.BITWISE_AND;
       break;
     }
     case CharCode.BAR: {
-      if (str.length == 1) return OperatorKind.OR;
+      if (arg.length == 1) return OperatorKind.BITWISE_OR;
       break;
     }
     case CharCode.CARET: {
-      if (str.length == 1) return OperatorKind.XOR;
+      if (arg.length == 1) return OperatorKind.BITWISE_XOR;
       break;
     }
     case CharCode.EQUALS: {
-      if (str == "==") return OperatorKind.EQ;
+      if (arg == "==") return OperatorKind.EQ;
       break;
     }
     case CharCode.EXCLAMATION: {
-      if (str == "!=") return OperatorKind.NE;
+      if (arg == "!=") return OperatorKind.NE;
       break;
     }
     case CharCode.GREATERTHAN: {
-      switch (str) {
+      switch (arg) {
         case ">" : return OperatorKind.GT;
         case ">=": return OperatorKind.GE;
       }
       break;
     }
     case CharCode.LESSTHAN: {
-      switch (str) {
+      switch (arg) {
         case "<" : return OperatorKind.LT;
         case "<=": return OperatorKind.LE;
       }
@@ -534,24 +560,21 @@ export class Program extends DiagnosticEmitter {
     var presentFlags = DecoratorFlags.NONE;
     for (let i = 0, k = decorators.length; i < k; ++i) {
       let decorator = decorators[i];
-      if (decorator.name.kind == NodeKind.IDENTIFIER) {
-        let name = (<IdentifierExpression>decorator.name).text;
-        let kind = stringToDecoratorKind(name);
-        let flag = decoratorKindToFlag(kind);
-        if (flag) {
-          if (!(acceptedFlags & flag)) {
-            this.error(
-              DiagnosticCode.Decorator_0_is_not_valid_here,
-              decorator.range, name
-            );
-          } else if (presentFlags & flag) {
-            this.error(
-              DiagnosticCode.Duplicate_decorator,
-              decorator.range, name
-            );
-          } else {
-            presentFlags |= flag;
-          }
+      let kind = decoratorNameToKind(decorator.name);
+      let flag = decoratorKindToFlag(kind);
+      if (flag) {
+        if (!(acceptedFlags & flag)) {
+          this.error(
+            DiagnosticCode.Decorator_0_is_not_valid_here,
+            decorator.range, decorator.name.range.toString()
+          );
+        } else if (presentFlags & flag) {
+          this.error(
+            DiagnosticCode.Duplicate_decorator,
+            decorator.range, decorator.name.range.toString()
+          );
+        } else {
+          presentFlags |= flag;
         }
       }
     }
@@ -796,7 +819,7 @@ export class Program extends DiagnosticEmitter {
     var decoratorFlags = DecoratorFlags.NONE;
     if (decorators) {
       decoratorFlags = this.filterDecorators(decorators,
-        DecoratorFlags.OPERATOR |
+        DecoratorFlags.OPERATOR_BINARY |
         DecoratorFlags.INLINE
       );
     }
@@ -887,50 +910,54 @@ export class Program extends DiagnosticEmitter {
     prototype: FunctionPrototype,
     classPrototype: ClassPrototype
   ): void {
-    // handle operator annotations. operators are either instance methods taking
-    // a second argument of the instance's type or static methods taking two
-    // arguments of the instance's type. return values vary depending on the
-    // operation.
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         let decorator = decorators[i];
-        if (decorator.decoratorKind == DecoratorKind.OPERATOR) {
-          let numArgs = decorator.arguments && decorator.arguments.length || 0;
-          if (numArgs == 1) {
-            let firstArg = (<Expression[]>decorator.arguments)[0];
-            if (
-              firstArg.kind == NodeKind.LITERAL &&
-              (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
-            ) {
-              let kind = operatorKindFromString((<StringLiteralExpression>firstArg).value);
-              if (kind == OperatorKind.INVALID) {
-                this.error(
-                  DiagnosticCode.Operation_not_supported,
-                  firstArg.range
+        switch (decorator.decoratorKind) {
+          case DecoratorKind.OPERATOR:
+          case DecoratorKind.OPERATOR_BINARY:
+          case DecoratorKind.OPERATOR_PREFIX:
+          case DecoratorKind.OPERATOR_POSTFIX: {
+            let numArgs = decorator.arguments && decorator.arguments.length || 0;
+            if (numArgs == 1) {
+              let firstArg = (<Expression[]>decorator.arguments)[0];
+              if (
+                firstArg.kind == NodeKind.LITERAL &&
+                (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
+              ) {
+                let kind = operatorKindFromDecorator(
+                  decorator.decoratorKind,
+                  (<StringLiteralExpression>firstArg).value
                 );
-              } else {
-                let overloads = classPrototype.overloadPrototypes;
-                if (overloads.has(kind)) {
+                if (kind == OperatorKind.INVALID) {
                   this.error(
-                    DiagnosticCode.Duplicate_function_implementation,
+                    DiagnosticCode.Operation_not_supported,
                     firstArg.range
                   );
                 } else {
-                  prototype.operatorKind = kind;
-                  overloads.set(kind, prototype);
+                  let overloads = classPrototype.overloadPrototypes;
+                  if (overloads.has(kind)) {
+                    this.error(
+                      DiagnosticCode.Duplicate_function_implementation,
+                      firstArg.range
+                    );
+                  } else {
+                    prototype.operatorKind = kind;
+                    overloads.set(kind, prototype);
+                  }
                 }
+              } else {
+                this.error(
+                  DiagnosticCode.String_literal_expected,
+                  firstArg.range
+                );
               }
             } else {
               this.error(
-                DiagnosticCode.String_literal_expected,
-                firstArg.range
+                DiagnosticCode.Expected_0_arguments_but_got_1,
+                decorator.range, "1", numArgs.toString(0)
               );
             }
-          } else {
-            this.error(
-              DiagnosticCode.Expected_0_arguments_but_got_1,
-              decorator.range, "1", numArgs.toString(0)
-            );
           }
         }
       }
@@ -2382,20 +2409,27 @@ export enum DecoratorFlags {
   NONE = 0,
   /** Is a program global. */
   GLOBAL = 1 << 0,
-  /** Is an operator overload. */
-  OPERATOR = 1 << 1,
+  /** Is a binary operator overload. */
+  OPERATOR_BINARY = 1 << 1,
+  /** Is a unary prefix operator overload. */
+  OPERATOR_PREFIX = 1 << 2,
+  /** Is a unary postfix operator overload. */
+  OPERATOR_POSTFIX = 1 << 3,
   /** Is an unmanaged class. */
-  UNMANAGED = 1 << 2,
+  UNMANAGED = 1 << 4,
   /** Is a sealed class. */
-  SEALED = 1 << 3,
+  SEALED = 1 << 5,
   /** Is always inlined. */
-  INLINE = 1 << 4
+  INLINE = 1 << 6
 }
 
 export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
   switch (kind) {
     case DecoratorKind.GLOBAL: return DecoratorFlags.GLOBAL;
-    case DecoratorKind.OPERATOR: return DecoratorFlags.OPERATOR;
+    case DecoratorKind.OPERATOR:
+    case DecoratorKind.OPERATOR_BINARY: return DecoratorFlags.OPERATOR_BINARY;
+    case DecoratorKind.OPERATOR_PREFIX: return DecoratorFlags.OPERATOR_PREFIX;
+    case DecoratorKind.OPERATOR_POSTFIX: return DecoratorFlags.OPERATOR_POSTFIX;
     case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
     case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
     case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
