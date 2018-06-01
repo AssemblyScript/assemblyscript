@@ -211,26 +211,44 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
     }
     case CharCode.PLUS: {
       switch (arg) {
-        case "+":  return OperatorKind.ADD;
+        case "+":  {
+          switch (decoratorKind) {
+            case DecoratorKind.OPERATOR_PREFIX: return OperatorKind.PLUS;
+            case DecoratorKind.OPERATOR:
+            case DecoratorKind.OPERATOR_BINARY: return OperatorKind.ADD;
+            default: break;
+          }
+          break;
+        }
         case "++": {
           switch (decoratorKind) {
             case DecoratorKind.OPERATOR_PREFIX:  return OperatorKind.PREFIX_INC;
             case DecoratorKind.OPERATOR_POSTFIX: return OperatorKind.POSTFIX_INC;
             default: break;
           }
+          break;
         }
       }
       break;
     }
     case CharCode.MINUS: {
       switch (arg) {
-        case "-":  return OperatorKind.SUB;
+        case "-": {
+          switch (decoratorKind) {
+            case DecoratorKind.OPERATOR_PREFIX: return OperatorKind.MINUS;
+            case DecoratorKind.OPERATOR:
+            case DecoratorKind.OPERATOR_BINARY: return OperatorKind.SUB;
+            default: break;
+          }
+          break;
+        }
         case "--": {
           switch (decoratorKind) {
             case DecoratorKind.OPERATOR_PREFIX:  return OperatorKind.PREFIX_DEC;
             case DecoratorKind.OPERATOR_POSTFIX: return OperatorKind.POSTFIX_DEC;
             default: break;
           }
+          break;
         }
       }
       break;
