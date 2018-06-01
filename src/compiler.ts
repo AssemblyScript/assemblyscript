@@ -6483,6 +6483,13 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
+        if (currentType.is(TypeFlags.REFERENCE)) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          return module.createUnreachable();
+        }
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6496,7 +6503,7 @@ export class Compiler extends DiagnosticEmitter {
             nativeOne = module.createI32(1);
             break;
           }
-          case TypeKind.USIZE:
+          case TypeKind.USIZE: // TODO: check operator overload
           case TypeKind.ISIZE: {
             let options = this.options;
             op = options.isWasm64
