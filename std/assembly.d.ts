@@ -573,8 +573,16 @@ declare const Mathf: IMath<f32>;
 /** Annotates an element as a program global. */
 declare function global(target: Function, propertyKey: string, descriptor: any): void;
 
-/** Annotates a method as an operator overload for the specified `token`. */
+/** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+declare namespace operator {
+  /** Annotates a method as a binary operator overload for the specified `token`. */
+  export function binary(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  /** Annotates a method as an unary prefix operator overload for the specified `token`. */
+  export function prefix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  /** Annotates a method as an unary postfix operator overload for the specified `token`. */
+  export function postfix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+}
 
 /** Annotates a class as being unmanaged with limited capabilities. */
 declare function unmanaged(target: Function): any;
