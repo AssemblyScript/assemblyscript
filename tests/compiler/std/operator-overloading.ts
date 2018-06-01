@@ -214,14 +214,14 @@ var leq  = leq1 <= leq2;
 assert(leq == true);
 
 // check right shift
-// var shr  = new Tester(8, 16);
-// var sres = shr >> 3;
-// assert(sres.x == 1 && sres.y == 2);
+var shr  = new Tester(8, 16);
+var sres = shr >> 3;
+assert(sres.x == 1 && sres.y == 2);
 
 // check left shift
-// var shl = new Tester(1, 2);
-// sres = shl << 3;
-// assert(sres.x == 8 && sres.y == 16);
+var shl = new Tester(1, 2);
+sres = shl << 3;
+assert(sres.x == 8 && sres.y == 16);
 
 // check unary not "~"
 var not = new Tester(0xFF, 0x10);
