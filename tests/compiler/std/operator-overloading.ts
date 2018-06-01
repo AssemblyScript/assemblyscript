@@ -105,6 +105,16 @@ class Tester {
     return !value.x && !value.y;
   }
 
+  @operator.prefix('+')
+  static pos(value: Tester): Tester {
+    return new Tester(+value.x, +value.y);
+  }
+
+  @operator.prefix('-')
+  static neg(value: Tester): Tester {
+    return new Tester(-value.x, -value.y);
+  }
+
   @operator.prefix('++')
   inc(): this {
     ++this.x;
@@ -232,6 +242,16 @@ assert(ures.x == 536870911 && ures.y == 536870910);
 var shl = new Tester(1, 2);
 sres = shl << 3;
 assert(sres.x == 8 && sres.y == 16);
+
+// check unary positive
+var pos = new Tester(1, -2);
+var pres = +pos;
+assert(pres.x == pos.x && pres.y == pos.y);
+
+// check unary negative
+var neg = new Tester(-1, -2);
+var nres = -neg;
+assert(nres.x == -neg.x && nres.y == -neg.y);
 
 // check unary not "~"
 var not = new Tester(0xFF, 0x10);

@@ -6586,13 +6586,16 @@ export class Compiler extends DiagnosticEmitter {
 
     switch (expression.operator) {
       case Token.PLUS: {
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return module.createUnreachable();
+        // check operator overload
+        let classReference = this.currentType.classReference;
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.PLUS);
+          if (overload) {
+            expr = this.compileUnaryOverload(overload, expression.operand, expression);
+            break;
+          }
         }
+        // fall-through
         expr = this.compileExpression(
           expression.operand,
           contextualType == Type.void
@@ -6604,13 +6607,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS: {
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return module.createUnreachable();
-        }
         if (expression.operand.kind == NodeKind.LITERAL && (
           (<LiteralExpression>expression.operand).literalKind == LiteralKind.INTEGER ||
           (<LiteralExpression>expression.operand).literalKind == LiteralKind.FLOAT
@@ -6640,12 +6636,14 @@ export class Compiler extends DiagnosticEmitter {
               break;
             }
             case TypeKind.USIZE: {
-              if (this.currentType.is(TypeFlags.REFERENCE)) {
-                this.error(
-                  DiagnosticCode.Operation_not_supported,
-                  expression.range
-                );
-                return module.createUnreachable();
+              // check operator overload
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.MINUS);
+                if (overload) {
+                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                  break;
+                }
               }
               // fall-through
             }
