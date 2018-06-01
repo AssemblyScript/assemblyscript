@@ -278,17 +278,18 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
     }
     case CharCode.GREATERTHAN: {
       switch (arg) {
-        case ">" : return OperatorKind.GT;
-        case ">=": return OperatorKind.GE;
-        case ">>": return OperatorKind.BITWISE_SHR;
+        case ">" :  return OperatorKind.GT;
+        case ">=":  return OperatorKind.GE;
+        case ">>":  return OperatorKind.BITWISE_SHR;
+        case ">>>": return OperatorKind.BITWISE_SHR_U;
       }
       break;
     }
     case CharCode.LESSTHAN: {
       switch (arg) {
-        case "<" : return OperatorKind.LT;
-        case "<=": return OperatorKind.LE;
-        case "<<": return OperatorKind.BITWISE_SHL;
+        case "<" :  return OperatorKind.LT;
+        case "<=":  return OperatorKind.LE;
+        case "<<":  return OperatorKind.BITWISE_SHL;
       }
       break;
     }

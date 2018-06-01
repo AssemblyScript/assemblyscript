@@ -61,6 +61,8 @@
  (global $std/operator-overloading/leq (mut i32) (i32.const 0))
  (global $std/operator-overloading/shr (mut i32) (i32.const 0))
  (global $std/operator-overloading/sres (mut i32) (i32.const 0))
+ (global $std/operator-overloading/shu (mut i32) (i32.const 0))
+ (global $std/operator-overloading/ures (mut i32) (i32.const 0))
  (global $std/operator-overloading/shl (mut i32) (i32.const 0))
  (global $std/operator-overloading/not (mut i32) (i32.const 0))
  (global $std/operator-overloading/res (mut i32) (i32.const 0))
@@ -2290,7 +2292,26 @@
    )
   )
  )
- (func $std/operator-overloading/Tester.shl (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shu (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (return
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.shr_u
+     (i32.load
+      (get_local $0)
+     )
+     (get_local $1)
+    )
+    (i32.shr_u
+     (i32.load offset=4
+      (get_local $0)
+     )
+     (get_local $1)
+    )
+   )
+  )
+ )
+ (func $std/operator-overloading/Tester.shl (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (return
    (call $std/operator-overloading/Tester#constructor
     (i32.const 0)
@@ -2309,7 +2330,7 @@
    )
   )
  )
- (func $std/operator-overloading/Tester.not (; 22 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.not (; 23 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (call $std/operator-overloading/Tester#constructor
     (i32.const 0)
@@ -2328,7 +2349,7 @@
    )
   )
  )
- (func $std/operator-overloading/Tester.excl (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.excl (; 24 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (return
    (if (result i32)
@@ -2348,7 +2369,7 @@
    )
   )
  )
- (func $std/operator-overloading/Tester#inc (; 24 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#inc (; 25 ;) (type $ii) (param $0 i32) (result i32)
   (i32.store
    (get_local $0)
    (i32.add
@@ -2371,7 +2392,7 @@
    (get_local $0)
   )
  )
- (func $std/operator-overloading/Tester#dec (; 25 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#dec (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (i32.store
    (get_local $0)
    (i32.sub
@@ -2394,7 +2415,7 @@
    (get_local $0)
   )
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 26 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 27 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (nop)
   (tee_local $0
@@ -2422,7 +2443,7 @@
    )
   )
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 27 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 28 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (nop)
   (tee_local $0
@@ -2450,7 +2471,7 @@
    )
   )
  )
- (func $start (; 28 ;) (type $v)
+ (func $start (; 29 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
@@ -2512,7 +2533,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 122)
+     (i32.const 127)
      (i32.const 0)
     )
     (unreachable)
@@ -2562,7 +2583,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 128)
+     (i32.const 133)
      (i32.const 0)
     )
     (unreachable)
@@ -2612,7 +2633,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 134)
+     (i32.const 139)
      (i32.const 0)
     )
     (unreachable)
@@ -2662,7 +2683,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 140)
+     (i32.const 145)
      (i32.const 0)
     )
     (unreachable)
@@ -2712,7 +2733,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 146)
+     (i32.const 151)
      (i32.const 0)
     )
     (unreachable)
@@ -2762,7 +2783,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 152)
+     (i32.const 157)
      (i32.const 0)
     )
     (unreachable)
@@ -2812,7 +2833,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 158)
+     (i32.const 163)
      (i32.const 0)
     )
     (unreachable)
@@ -2862,7 +2883,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 164)
+     (i32.const 169)
      (i32.const 0)
     )
     (unreachable)
@@ -2912,7 +2933,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 170)
+     (i32.const 175)
      (i32.const 0)
     )
     (unreachable)
@@ -2949,7 +2970,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 176)
+     (i32.const 181)
      (i32.const 0)
     )
     (unreachable)
@@ -2986,7 +3007,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 182)
+     (i32.const 187)
      (i32.const 0)
     )
     (unreachable)
@@ -3009,7 +3030,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 186)
+     (i32.const 191)
      (i32.const 0)
     )
     (unreachable)
@@ -3032,7 +3053,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 190)
+     (i32.const 195)
      (i32.const 0)
     )
     (unreachable)
@@ -3069,7 +3090,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 196)
+     (i32.const 201)
      (i32.const 0)
     )
     (unreachable)
@@ -3106,7 +3127,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 202)
+     (i32.const 207)
      (i32.const 0)
     )
     (unreachable)
@@ -3143,7 +3164,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 208)
+     (i32.const 213)
      (i32.const 0)
     )
     (unreachable)
@@ -3180,7 +3201,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 214)
+     (i32.const 219)
      (i32.const 0)
     )
     (unreachable)
@@ -3223,7 +3244,50 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 219)
+     (i32.const 224)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/shu
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const -8)
+    (i32.const -16)
+   )
+  )
+  (set_global $std/operator-overloading/ures
+   (call $std/operator-overloading/Tester.shu
+    (get_global $std/operator-overloading/shu)
+    (i32.const 3)
+   )
+  )
+  (if
+   (i32.eqz
+    (if (result i32)
+     (tee_local $0
+      (i32.eq
+       (i32.load
+        (get_global $std/operator-overloading/ures)
+       )
+       (i32.const 536870911)
+      )
+     )
+     (i32.eq
+      (i32.load offset=4
+       (get_global $std/operator-overloading/ures)
+      )
+      (i32.const 536870910)
+     )
+     (get_local $0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 229)
      (i32.const 0)
     )
     (unreachable)
@@ -3266,7 +3330,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 224)
+     (i32.const 234)
      (i32.const 0)
     )
     (unreachable)
@@ -3318,7 +3382,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 229)
+     (i32.const 239)
      (i32.const 0)
     )
     (unreachable)
@@ -3361,7 +3425,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 234)
+     (i32.const 244)
      (i32.const 0)
     )
     (unreachable)
@@ -3378,7 +3442,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 235)
+     (i32.const 245)
      (i32.const 0)
     )
     (unreachable)
@@ -3420,7 +3484,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 241)
+     (i32.const 251)
      (i32.const 0)
     )
     (unreachable)
@@ -3455,7 +3519,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 244)
+     (i32.const 254)
      (i32.const 0)
     )
     (unreachable)
@@ -3530,7 +3594,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 258)
+     (i32.const 268)
      (i32.const 0)
     )
     (unreachable)
@@ -3605,7 +3669,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 272)
+     (i32.const 282)
      (i32.const 0)
     )
     (unreachable)

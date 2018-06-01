@@ -84,6 +84,11 @@ class Tester {
     return new Tester(value.x >> shift, value.y >> shift);
   }
 
+  @operator('>>>')
+  static shu(value: Tester, shift: i32): Tester {
+    return new Tester(value.x >>> shift, value.y >>> shift);
+  }
+
   @operator('<<')
   static shl(value: Tester, shift: i32): Tester {
     return new Tester(value.x << shift, value.y << shift);
@@ -217,6 +222,11 @@ assert(leq == true);
 var shr  = new Tester(8, 16);
 var sres = shr >> 3;
 assert(sres.x == 1 && sres.y == 2);
+
+// check right shift
+var shu  = new Tester(-8, -16);
+var ures = shu >>> 3;
+assert(ures.x == 536870911 && ures.y == 536870910);
 
 // check left shift
 var shl = new Tester(1, 2);
