@@ -106,5 +106,7 @@
   "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
   "Namespace '{0}' has no exported member '{1}'.": 2694,
 
-  "File '{0}' not found.": 6054
+  "File '{0}' not found.": 6054,
+  "Numeric separators are not allowed here.": 6188,
+  "Multiple consecutive numeric separators are not permitted.": 6189
 }
