@@ -6643,6 +6643,12 @@ export class Compiler extends DiagnosticEmitter {
                 if (overload) {
                   expr = this.compileUnaryOverload(overload, expression.operand, expression);
                   break;
+                } else {
+                  this.error(
+                    DiagnosticCode.Operation_not_supported,
+                    expression.range
+                  );
+                  return module.createUnreachable();
                 }
               }
               // fall-through
@@ -6707,6 +6713,12 @@ export class Compiler extends DiagnosticEmitter {
               if (overload) {
                 expr = this.compileUnaryOverload(overload, expression.operand, expression);
                 break;
+              } else {
+                this.error(
+                  DiagnosticCode.Operation_not_supported,
+                  expression.range
+                );
+                return module.createUnreachable();
               }
             }
             // fall-through
@@ -6770,6 +6782,12 @@ export class Compiler extends DiagnosticEmitter {
               if (overload) {
                 expr = this.compileUnaryOverload(overload, expression.operand, expression);
                 break;
+              } else {
+                this.error(
+                  DiagnosticCode.Operation_not_supported,
+                  expression.range
+                );
+                return module.createUnreachable();
               }
             }
             // fall-through
@@ -6862,6 +6880,12 @@ export class Compiler extends DiagnosticEmitter {
               if (overload) {
                 expr = this.compileUnaryOverload(overload, expression.operand, expression);
                 break;
+              } else {
+                this.error(
+                  DiagnosticCode.Operation_not_supported,
+                  expression.range
+                );
+                return module.createUnreachable();
               }
             }
             // fall-through
