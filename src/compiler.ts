@@ -6587,12 +6587,20 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.operator) {
       case Token.PLUS: {
         // check operator overload
-        let classReference = this.currentType.classReference;
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.PLUS);
-          if (overload) {
-            expr = this.compileUnaryOverload(overload, expression.operand, expression);
-            break;
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
+          let classReference = this.currentType.classReference;
+          if (classReference) {
+            let overload = classReference.lookupOverload(OperatorKind.PLUS);
+            if (overload) {
+              expr = this.compileUnaryOverload(overload, expression.operand, expression);
+              break;
+            }
+          } else {
+            this.error(
+              DiagnosticCode.Operation_not_supported,
+              expression.range
+            );
+            return module.createUnreachable();
           }
         }
         // fall-through
@@ -6637,18 +6645,20 @@ export class Compiler extends DiagnosticEmitter {
             }
             case TypeKind.USIZE: {
               // check operator overload
-              let classReference = this.currentType.classReference;
-              if (classReference) {
-                let overload = classReference.lookupOverload(OperatorKind.MINUS);
-                if (overload) {
-                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
-                  break;
-                } else {
-                  this.error(
-                    DiagnosticCode.Operation_not_supported,
-                    expression.range
-                  );
-                  return module.createUnreachable();
+              if (this.currentType.is(TypeFlags.REFERENCE)) {
+                let classReference = this.currentType.classReference;
+                if (classReference) {
+                  let overload = classReference.lookupOverload(OperatorKind.MINUS);
+                  if (overload) {
+                    expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                    break;
+                  } else {
+                    this.error(
+                      DiagnosticCode.Operation_not_supported,
+                      expression.range
+                    );
+                    return module.createUnreachable();
+                  }
                 }
               }
               // fall-through
@@ -6707,18 +6717,20 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: {
             // check operator overload
-            let classReference = this.currentType.classReference;
-            if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.PREFIX_INC);
-              if (overload) {
-                expr = this.compileUnaryOverload(overload, expression.operand, expression);
-                break;
-              } else {
-                this.error(
-                  DiagnosticCode.Operation_not_supported,
-                  expression.range
-                );
-                return module.createUnreachable();
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.PREFIX_INC);
+                if (overload) {
+                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                  break;
+                } else {
+                  this.error(
+                    DiagnosticCode.Operation_not_supported,
+                    expression.range
+                  );
+                  return module.createUnreachable();
+                }
               }
             }
             // fall-through
@@ -6776,18 +6788,20 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: {
             // check operator overload
-            let classReference = this.currentType.classReference;
-            if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.PREFIX_DEC);
-              if (overload) {
-                expr = this.compileUnaryOverload(overload, expression.operand, expression);
-                break;
-              } else {
-                this.error(
-                  DiagnosticCode.Operation_not_supported,
-                  expression.range
-                );
-                return module.createUnreachable();
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.PREFIX_DEC);
+                if (overload) {
+                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                  break;
+                } else {
+                  this.error(
+                    DiagnosticCode.Operation_not_supported,
+                    expression.range
+                  );
+                  return module.createUnreachable();
+                }
               }
             }
             // fall-through
@@ -6832,7 +6846,7 @@ export class Compiler extends DiagnosticEmitter {
           WrapMode.NONE
         );
 
-        if (this.currentType.kind === TypeKind.USIZE) {
+        if (this.currentType.kind == TypeKind.USIZE && this.currentType.is(TypeFlags.REFERENCE)) {
           // check operator overload
           let classReference = this.currentType.classReference;
           if (classReference) {
@@ -6874,18 +6888,20 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.USIZE: {
             // check operator overload
-            let classReference = this.currentType.classReference;
-            if (classReference) {
-              let overload = classReference.lookupOverload(OperatorKind.BITWISE_NOT);
-              if (overload) {
-                expr = this.compileUnaryOverload(overload, expression.operand, expression);
-                break;
-              } else {
-                this.error(
-                  DiagnosticCode.Operation_not_supported,
-                  expression.range
-                );
-                return module.createUnreachable();
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.BITWISE_NOT);
+                if (overload) {
+                  expr = this.compileUnaryOverload(overload, expression.operand, expression);
+                  break;
+                } else {
+                  this.error(
+                    DiagnosticCode.Operation_not_supported,
+                    expression.range
+                  );
+                  return module.createUnreachable();
+                }
               }
             }
             // fall-through
