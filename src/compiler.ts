@@ -3003,12 +3003,6 @@ export class Compiler extends DiagnosticEmitter {
             if (overload) {
               expr = this.compileBinaryOverload(overload, left, right, expression);
               break;
-            } else {
-              this.error(
-                DiagnosticCode.Operation_not_supported,
-                expression.range
-              );
-              return this.module.createUnreachable();
             }
           }
         }
@@ -6992,12 +6986,6 @@ export class Compiler extends DiagnosticEmitter {
             if (overload) {
               expr = this.compileUnaryOverload(overload, expression.operand, expression);
               break;
-            } else {
-              this.error(
-                DiagnosticCode.Operation_not_supported,
-                expression.range
-              );
-              return module.createUnreachable();
             }
           }
         }
