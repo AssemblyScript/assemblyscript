@@ -78,6 +78,56 @@ class Tester {
   static lessEquals(a: Tester, b: Tester): bool {
     return a.x <= b.x && a.y <= b.y;
   }
+
+  @operator('>>')
+  static shr(value: Tester, shift: i32): Tester {
+    return new Tester(value.x >> shift, value.y >> shift);
+  }
+
+  @operator('>>>')
+  static shu(value: Tester, shift: i32): Tester {
+    return new Tester(value.x >>> shift, value.y >>> shift);
+  }
+
+  @operator('<<')
+  static shl(value: Tester, shift: i32): Tester {
+    return new Tester(value.x << shift, value.y << shift);
+  }
+
+  // unary opterators
+  @operator.prefix('~')
+  static not(value: Tester): Tester {
+    return new Tester(~value.x, ~value.y);
+  }
+
+  @operator.prefix('!')
+  static excl(value: Tester): bool {
+    return !value.x && !value.y;
+  }
+
+  @operator.prefix('+')
+  static pos(value: Tester): Tester {
+    return new Tester(+value.x, +value.y);
+  }
+
+  @operator.prefix('-')
+  static neg(value: Tester): Tester {
+    return new Tester(-value.x, -value.y);
+  }
+
+  @operator.prefix('++')
+  inc(): this {
+    ++this.x;
+    ++this.y;
+    return this;
+  }
+
+  @operator.prefix('--')
+  dec(): this {
+    --this.x;
+    --this.y;
+    return this;
+  }
 }
 
 // check additional
@@ -177,6 +227,51 @@ var leq1 = new Tester(4, 3);
 var leq2 = new Tester(4, 3);
 var leq  = leq1 <= leq2;
 assert(leq == true);
+
+// check right shift
+var shr  = new Tester(8, 16);
+var sres = shr >> 3;
+assert(sres.x == 1 && sres.y == 2);
+
+// check right shift
+var shu  = new Tester(-8, -16);
+var ures = shu >>> 3;
+assert(ures.x == 536870911 && ures.y == 536870910);
+
+// check left shift
+var shl = new Tester(1, 2);
+sres = shl << 3;
+assert(sres.x == 8 && sres.y == 16);
+
+// check unary positive
+var pos = new Tester(1, -2);
+var pres = +pos;
+assert(pres.x == pos.x && pres.y == pos.y);
+
+// check unary negative
+var neg = new Tester(-1, -2);
+var nres = -neg;
+assert(nres.x == -neg.x && nres.y == -neg.y);
+
+// check unary not "~"
+var not = new Tester(0xFF, 0x10);
+var res = ~not;
+assert(res.x == ~not.x && res.y == ~not.y);
+
+// check unary exclamation "!"
+var excl = new Tester(0, 0);
+var bres = !excl;
+assert(bres == (!excl.x && !excl.y));
+assert(bres == true);
+
+//
+var incdec = new Tester(0, 1);
+
+++incdec;
+assert(incdec.x == 1 && incdec.y == 2);
+
+--incdec;
+assert(incdec.x == 0 && incdec.y == 1);
 
 // check inlined static
 class TesterInlineStatic {
