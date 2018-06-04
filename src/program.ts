@@ -310,10 +310,8 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
       break;
     }
     case CharCode.TILDE: {
-      if (arg.length == 1) {
-        if (decoratorKind == DecoratorKind.OPERATOR_PREFIX) {
-          return OperatorKind.BITWISE_NOT;
-        }
+      if (decoratorKind == DecoratorKind.OPERATOR_PREFIX && arg.length == 1) {
+        return OperatorKind.BITWISE_NOT;
       }
       break;
     }
