@@ -389,7 +389,7 @@
    (f32.const 1.25)
   )
   (set_global $builtins/f
-   (f32.const 1.25)
+   (f32.const 1)
   )
   (set_global $builtins/f
    (f32.const 1.1180340051651)

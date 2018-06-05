@@ -192,126 +192,111 @@ export enum OperatorKind {
 
 /** Returns the operator kind represented by the specified decorator and string argument. */
 function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): OperatorKind {
-  // TODO: currently handles binary only but some differ if unary prefix or postfix
   assert(arg.length);
-  switch (arg.charCodeAt(0)) {
-    case CharCode.OPENBRACKET: {
-      switch (arg) {
-        case "[]" : return OperatorKind.INDEXED_GET;
-        case "[]=": return OperatorKind.INDEXED_SET;
-      }
-      break;
-    }
-    case CharCode.OPENBRACE: {
-      switch (arg) {
-        case "{}" : return OperatorKind.UNCHECKED_INDEXED_GET;
-        case "{}=": return OperatorKind.UNCHECKED_INDEXED_SET;
-      }
-      break;
-    }
-    case CharCode.PLUS: {
-      switch (decoratorKind) {
-        case DecoratorKind.OPERATOR_PREFIX: {
-          switch (arg) {
-            case "+":  return OperatorKind.PLUS;
-            case "++": return OperatorKind.PREFIX_INC;
-            default: break;
-          }
+  switch (decoratorKind) {
+    case DecoratorKind.OPERATOR:
+    case DecoratorKind.OPERATOR_BINARY: {
+      switch (arg.charCodeAt(0)) {
+        case CharCode.OPENBRACKET: {
+          if (arg == "[]") return OperatorKind.INDEXED_GET;
+          if (arg == "[]=") return OperatorKind.INDEXED_SET;
+          break;
         }
-        case DecoratorKind.OPERATOR_POSTFIX: {
+        case CharCode.OPENBRACE: {
+          if (arg == "{}") return OperatorKind.UNCHECKED_INDEXED_GET;
+          if (arg == "{}=") return OperatorKind.UNCHECKED_INDEXED_SET;
+          break;
+        }
+        case CharCode.PLUS: {
+          if (arg == "+") return OperatorKind.ADD;
+          break;
+        }
+        case CharCode.MINUS: {
+          if (arg == "-") return OperatorKind.SUB;
+          break;
+        }
+        case CharCode.ASTERISK: {
+          if (arg == "*") return OperatorKind.MUL;
+          if (arg == "**") return OperatorKind.POW;
+          break;
+        }
+        case CharCode.SLASH: {
+          if (arg == "/") return OperatorKind.DIV;
+          break;
+        }
+        case CharCode.PERCENT: {
+          if (arg == "%") return OperatorKind.REM;
+          break;
+        }
+        case CharCode.AMPERSAND: {
+          if (arg == "&") return OperatorKind.BITWISE_AND;
+          break;
+        }
+        case CharCode.BAR: {
+          if (arg == "|") return OperatorKind.BITWISE_OR;
+          break;
+        }
+        case CharCode.CARET: {
+          if (arg == "^") return OperatorKind.BITWISE_XOR;
+          break;
+        }
+        case CharCode.EQUALS: {
+          if (arg == "==") return OperatorKind.EQ;
+          break;
+        }
+        case CharCode.EXCLAMATION: {
+          if (arg == "!=") return OperatorKind.NE;
+          break;
+        }
+        case CharCode.GREATERTHAN: {
+          if (arg == ">") return OperatorKind.GT;
+          if (arg == ">=") return OperatorKind.GE;
+          if (arg == ">>") return OperatorKind.BITWISE_SHR;
+          if (arg == ">>>") return OperatorKind.BITWISE_SHR_U;
+          break;
+        }
+        case CharCode.LESSTHAN: {
+          if (arg == "<") return OperatorKind.LT;
+          if (arg == "<=") return OperatorKind.LE;
+          if (arg == "<<") return OperatorKind.BITWISE_SHL;
+          break;
+        }
+      }
+      break;
+    }
+    case DecoratorKind.OPERATOR_PREFIX: {
+      switch (arg.charCodeAt(0)) {
+        case CharCode.PLUS: {
+          if (arg == "+") return OperatorKind.PLUS;
+          if (arg == "++") return OperatorKind.PREFIX_INC;
+          break;
+        }
+        case CharCode.MINUS: {
+          if (arg == "-") return OperatorKind.MINUS;
+          if (arg == "--") return OperatorKind.PREFIX_DEC;
+          break;
+        }
+        case CharCode.EXCLAMATION: {
+          if (arg == "!") return OperatorKind.NOT;
+          break;
+        }
+        case CharCode.TILDE: {
+          if (arg == "~") return OperatorKind.BITWISE_NOT;
+          break;
+        }
+      }
+      break;
+    }
+    case DecoratorKind.OPERATOR_POSTFIX: {
+      switch (arg.charCodeAt(0)) {
+        case CharCode.PLUS: {
           if (arg == "++") return OperatorKind.POSTFIX_INC;
           break;
         }
-        case DecoratorKind.OPERATOR:
-        case DecoratorKind.OPERATOR_BINARY: {
-          if (arg.length == 1) return OperatorKind.ADD;
-          break;
-        }
-      }
-      break;
-    }
-    case CharCode.MINUS: {
-      switch (decoratorKind) {
-        case DecoratorKind.OPERATOR_PREFIX: {
-          switch (arg) {
-            case "-":  return OperatorKind.MINUS;
-            case "--": return OperatorKind.PREFIX_DEC;
-            default: break;
-          }
-        }
-        case DecoratorKind.OPERATOR_POSTFIX: {
+        case CharCode.MINUS: {
           if (arg == "--") return OperatorKind.POSTFIX_DEC;
           break;
         }
-        case DecoratorKind.OPERATOR:
-        case DecoratorKind.OPERATOR_BINARY: {
-          if (arg.length == 1) return OperatorKind.SUB;
-          break;
-        }
-      }
-      break;
-    }
-    case CharCode.ASTERISK: {
-      switch (arg) {
-        case "*" : return OperatorKind.MUL;
-        case "**": return OperatorKind.POW;
-      }
-      break;
-    }
-    case CharCode.SLASH: {
-      if (arg.length == 1) return OperatorKind.DIV;
-      break;
-    }
-    case CharCode.PERCENT: {
-      if (arg.length == 1) return OperatorKind.REM;
-      break;
-    }
-    case CharCode.AMPERSAND: {
-      if (arg.length == 1) return OperatorKind.BITWISE_AND;
-      break;
-    }
-    case CharCode.BAR: {
-      if (arg.length == 1) return OperatorKind.BITWISE_OR;
-      break;
-    }
-    case CharCode.CARET: {
-      if (arg.length == 1) return OperatorKind.BITWISE_XOR;
-      break;
-    }
-    case CharCode.EQUALS: {
-      if (arg == "==") return OperatorKind.EQ;
-      break;
-    }
-    case CharCode.EXCLAMATION: {
-      switch (arg) {
-        case "!":  {
-          if (decoratorKind == DecoratorKind.OPERATOR_PREFIX) return OperatorKind.NOT;
-          break;
-        }
-        case "!=": return OperatorKind.NE;
-      }
-      break;
-    }
-    case CharCode.GREATERTHAN: {
-      switch (arg) {
-        case ">" :  return OperatorKind.GT;
-        case ">=":  return OperatorKind.GE;
-        case ">>":  return OperatorKind.BITWISE_SHR;
-        case ">>>": return OperatorKind.BITWISE_SHR_U;
-      }
-      break;
-    }
-    case CharCode.LESSTHAN: {
-      switch (arg) {
-        case "<" :  return OperatorKind.LT;
-        case "<=":  return OperatorKind.LE;
-        case "<<":  return OperatorKind.BITWISE_SHL;
-      }
-      break;
-    }
-    case CharCode.TILDE: {
-      if (decoratorKind == DecoratorKind.OPERATOR_PREFIX && arg.length == 1) {
-        return OperatorKind.BITWISE_NOT;
       }
       break;
     }

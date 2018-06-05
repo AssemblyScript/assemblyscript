@@ -2081,7 +2081,18 @@
    )
   )
  )
- (func $std/operator-overloading/Tester.neg (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.pos (; 23 ;) (type $ii) (param $0 i32) (result i32)
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.load
+    (get_local $0)
+   )
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
+ )
+ (func $std/operator-overloading/Tester.neg (; 24 ;) (type $ii) (param $0 i32) (result i32)
   (call $std/operator-overloading/Tester#constructor
    (i32.const 0)
    (i32.sub
@@ -2098,7 +2109,7 @@
    )
   )
  )
- (func $std/operator-overloading/Tester.not (; 24 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.not (; 25 ;) (type $ii) (param $0 i32) (result i32)
   (call $std/operator-overloading/Tester#constructor
    (i32.const 0)
    (i32.xor
@@ -2115,7 +2126,7 @@
    )
   )
  )
- (func $std/operator-overloading/Tester.excl (; 25 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.excl (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if (result i32)
    (tee_local $1
@@ -2133,7 +2144,7 @@
    (get_local $1)
   )
  )
- (func $std/operator-overloading/Tester#inc (; 26 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#inc (; 27 ;) (type $ii) (param $0 i32) (result i32)
   (i32.store
    (get_local $0)
    (i32.add
@@ -2154,7 +2165,7 @@
   )
   (get_local $0)
  )
- (func $std/operator-overloading/Tester#dec (; 27 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#dec (; 28 ;) (type $ii) (param $0 i32) (result i32)
   (i32.store
    (get_local $0)
    (i32.sub
@@ -2175,7 +2186,7 @@
   )
   (get_local $0)
  )
- (func $start (; 28 ;) (type $v)
+ (func $start (; 29 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
@@ -3021,7 +3032,9 @@
    )
   )
   (set_global $std/operator-overloading/pres
-   (get_global $std/operator-overloading/pos)
+   (call $std/operator-overloading/Tester.pos
+    (get_global $std/operator-overloading/pos)
+   )
   )
   (if
    (i32.eqz
