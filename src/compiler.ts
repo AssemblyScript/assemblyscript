@@ -94,6 +94,7 @@ import {
   ForStatement,
   IfStatement,
   ImportStatement,
+  InstanceOfExpression,
   InterfaceDeclaration,
   NamespaceDeclaration,
   ReturnStatement,
@@ -2261,6 +2262,10 @@ export class Compiler extends DiagnosticEmitter {
           contextualType,
           conversionKind == ConversionKind.NONE // retain type of inlined constants
         );
+        break;
+      }
+      case NodeKind.INSTANCEOF: {
+        expr = this.compileInstanceOfExpression(<InstanceOfExpression>expression, contextualType);
         break;
       }
       case NodeKind.LITERAL: {
@@ -5871,6 +5876,18 @@ export class Compiler extends DiagnosticEmitter {
       expression.range
     );
     return this.module.createUnreachable();
+  }
+
+  compileInstanceOfExpression(
+    expression: InstanceOfExpression,
+    contextualType: Type
+  ): ExpressionRef {
+    this.compileExpressionRetainType(expression.expression, this.options.usizeType, WrapMode.NONE);
+    var type = this.currentType;
+    var isType = this.program.resolveType(expression.isType);
+    this.currentType = Type.bool;
+    if (!isType) return this.module.createUnreachable();
+    return this.module.createI32(type.isAssignableTo(isType, false) ? 1 : 0);
   }
 
   compileLiteralExpression(

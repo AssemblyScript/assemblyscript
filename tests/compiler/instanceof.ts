@@ -1,0 +1,49 @@
+class A {}
+class B extends A {}
+
+var a: A;
+var b: B;
+var i: i32;
+var f: f32;
+
+assert(  a instanceof A );
+assert(  b instanceof A );
+assert(!(i instanceof A));
+assert(!(f instanceof A));
+
+assert(!(a instanceof B));
+assert(  b instanceof B );
+assert(!(i instanceof B));
+assert(!(f instanceof B));
+
+assert(!(a instanceof i32));
+assert(!(b instanceof i32));
+assert(  i instanceof i32 );
+assert(!(f instanceof i32));
+
+assert(!(a instanceof f32));
+assert(!(b instanceof f32));
+assert(!(i instanceof f32));
+assert(  f instanceof f32 );
+
+function isI32<T>(v: T): bool {
+  // should eliminate non-applicable branches (see fixture)
+  if (v instanceof i32) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+assert( isI32(0));
+assert(!isI32(0.0));
+
+// TODO: what about nullables?
+// var an: A | null;
+// var bn: B | null;
+//
+// assert(an instanceof A);
+// assert(bn instanceof A);
+//
+// assert(!(an instanceof B));
+// assert(bn instanceof B);

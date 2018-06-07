@@ -3108,7 +3108,7 @@ export class Parser extends DiagnosticEmitter {
       switch (token) {
         // AssertionExpression
         case Token.AS: {
-          let toType = this.parseType(tn);
+          let toType = this.parseType(tn); // reports
           if (!toType) return null;
           expr = Node.createAssertionExpression(
             AssertionKind.AS,
@@ -3118,9 +3118,20 @@ export class Parser extends DiagnosticEmitter {
           );
           break;
         }
+        // InstanceOfExpression
+        case Token.INSTANCEOF: {
+          let isType = this.parseType(tn); // reports
+          if (!isType) return null;
+          expr = Node.createInstanceOfExpression(
+            expr,
+            isType,
+            tn.range(startPos, tn.pos)
+          );
+          break;
+        }
         // ElementAccessExpression
         case Token.OPENBRACKET: {
-          next = this.parseExpression(tn);
+          next = this.parseExpression(tn); // reports
           if (!next) return null;
           if (!tn.skip(Token.CLOSEBRACKET)) {
             this.error(

@@ -45,6 +45,7 @@ export enum NodeKind {
   ELEMENTACCESS,
   FALSE,
   FUNCTION,
+  INSTANCEOF,
   LITERAL,
   NEW,
   NULL,
@@ -343,6 +344,18 @@ export abstract class Node {
     expr.flags = declaration.flags & CommonFlags.ARROW;
     expr.range = declaration.range;
     expr.declaration = declaration;
+    return expr;
+  }
+
+  static createInstanceOfExpression(
+    expression: Expression,
+    isType: CommonTypeNode,
+    range: Range
+  ): InstanceOfExpression {
+    var expr = new InstanceOfExpression();
+    expr.range = range;
+    expr.expression = expression; expression.parent = expr;
+    expr.isType = isType; isType.parent = expr;
     return expr;
   }
 
@@ -1265,6 +1278,16 @@ export class FunctionExpression extends Expression {
 
   /** Inline function declaration. */
   declaration: FunctionDeclaration;
+}
+
+/** Represents an `instanceof` expression. */
+export class InstanceOfExpression extends Expression {
+  kind = NodeKind.INSTANCEOF;
+
+  /** Expression being asserted. */
+  expression: Expression;
+  /** Type to test for. */
+  isType: CommonTypeNode;
 }
 
 /** Represents an integer literal expression. */

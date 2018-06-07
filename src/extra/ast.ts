@@ -52,6 +52,7 @@ import {
   ForStatement,
   IfStatement,
   ImportStatement,
+  InstanceOfExpression,
   ReturnStatement,
   SwitchStatement,
   ThrowStatement,
@@ -158,6 +159,10 @@ export class ASTBuilder {
       }
       case NodeKind.FUNCTION: {
         this.visitFunctionExpression(<FunctionExpression>node);
+        break;
+      }
+      case NodeKind.INSTANCEOF: {
+        this.visitInstanceOfExpression(<InstanceOfExpression>node);
         break;
       }
       case NodeKind.LITERAL: {
@@ -542,6 +547,12 @@ export class ASTBuilder {
 
   visitFloatLiteralExpression(node: FloatLiteralExpression): void {
     this.sb.push(node.value.toString(10));
+  }
+
+  visitInstanceOfExpression(node: InstanceOfExpression): void {
+    this.visitNode(node.expression);
+    this.sb.push(" instanceof ");
+    this.visitTypeNode(node.isType);
   }
 
   visitIntegerLiteralExpression(node: IntegerLiteralExpression): void {
