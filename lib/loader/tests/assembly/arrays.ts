@@ -18,4 +18,4 @@ export const arr_i8: i8[] = [-1, 2, -3]; // ok
 export const arr_u16: u16[] = [1, 2, 3]; // ok
 export const arr_i16: i16[] = [-1, 2, -3]; // ok
 
-export const arr_bool: boolean[] = [true, true, false];
+export const arr_bool: boolean[] = [true, true, false]; // ok
