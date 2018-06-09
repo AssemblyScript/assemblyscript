@@ -80,71 +80,75 @@
           (i32.const 1)
          )
         )
-        (if (result i32)
-         (if (result i32)
-          (if (result i32)
-           (tee_local $3
-            (i32.eq
-             (i32.and
-              (get_local $3)
-              (i32.const 64512)
-             )
-             (i32.const 55296)
+        (block (result i32)
+         (if
+          (tee_local $3
+           (i32.eq
+            (i32.and
+             (get_local $3)
+             (i32.const 64512)
             )
+            (i32.const 55296)
            )
-           (tee_local $3
-            (i32.lt_u
-             (i32.add
-              (get_local $2)
-              (i32.const 1)
-             )
-             (get_local $4)
-            )
-           )
-           (get_local $3)
           )
-          (i32.eq
-           (i32.and
-            (i32.load16_u offset=4
-             (i32.add
-              (get_local $0)
-              (i32.shl
-               (i32.add
-                (get_local $2)
+          (set_local $3
+           (i32.lt_u
+            (i32.add
+             (get_local $2)
+             (i32.const 1)
+            )
+            (get_local $4)
+           )
+          )
+         )
+         (if
+          (get_local $3)
+          (set_local $3
+           (i32.eq
+            (i32.and
+             (i32.load16_u offset=4
+              (i32.add
+               (get_local $0)
+               (i32.shl
+                (i32.add
+                 (get_local $2)
+                 (i32.const 1)
+                )
                 (i32.const 1)
                )
-               (i32.const 1)
               )
              )
+             (i32.const 64512)
             )
-            (i32.const 64512)
+            (i32.const 56320)
            )
-           (i32.const 56320)
           )
+         )
+         (if (result i32)
           (get_local $3)
-         )
-         (block (result i32)
-          (set_local $1
+          (block (result i32)
+           (set_local $1
+            (i32.add
+             (get_local $1)
+             (i32.const 4)
+            )
+           )
            (i32.add
-            (get_local $1)
-            (i32.const 4)
+            (get_local $2)
+            (i32.const 2)
            )
           )
-          (i32.add
-           (get_local $2)
-           (i32.const 2)
-          )
-         )
-         (block (result i32)
-          (set_local $1
-           (i32.add
-            (get_local $1)
-            (i32.const 3)
+          (block (result i32)
+           (set_local $1
+            (i32.add
+             (get_local $1)
+             (i32.const 3)
+            )
            )
-          )
-          (i32.add
-           (get_local $2)
-           (i32.const 1)
+           (i32.add
+            (get_local $2)
+            (i32.const 1)
+           )
           )
          )
         )
@@ -161,7 +165,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   (if
    (get_local $0)
    (block
@@ -200,26 +203,24 @@
        (grow_memory
         (select
          (get_local $2)
-         (tee_local $4
-          (tee_local $3
-           (i32.shr_u
-            (i32.and
-             (i32.add
-              (i32.sub
-               (get_local $0)
-               (get_local $1)
-              )
-              (i32.const 65535)
+         (tee_local $3
+          (i32.shr_u
+           (i32.and
+            (i32.add
+             (i32.sub
+              (get_local $0)
+              (get_local $1)
              )
-             (i32.const -65536)
+             (i32.const 65535)
             )
-            (i32.const 16)
+            (i32.const -65536)
            )
+           (i32.const 16)
           )
          )
          (i32.gt_s
           (get_local $2)
-          (get_local $4)
+          (get_local $3)
          )
         )
        )
@@ -349,16 +350,16 @@
          )
         )
         (if
-         (if (result i32)
-          (tee_local $6
-           (i32.eq
-            (i32.and
-             (get_local $1)
-             (i32.const 64512)
-            )
-            (i32.const 55296)
+         (tee_local $6
+          (i32.eq
+           (i32.and
+            (get_local $1)
+            (i32.const 64512)
            )
+           (i32.const 55296)
           )
+         )
+         (set_local $6
           (i32.lt_u
            (i32.add
             (get_local $3)
@@ -366,8 +367,10 @@
            )
            (get_local $7)
           )
-          (get_local $6)
          )
+        )
+        (if
+         (get_local $6)
          (if
           (i32.eq
            (i32.and

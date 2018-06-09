@@ -91,19 +91,17 @@
   (set_global $function-types/i32Adder
    (call $function-types/makeAdder<i32>)
   )
+  (set_global $~argc
+   (i32.const 2)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
+   (i32.ne
+    (call_indirect (type $iii)
+     (i32.const 1)
      (i32.const 2)
+     (get_global $function-types/i32Adder)
     )
-    (i32.ne
-     (call_indirect (type $iii)
-      (i32.const 1)
-      (i32.const 2)
-      (get_global $function-types/i32Adder)
-     )
-     (i32.const 3)
-    )
+    (i32.const 3)
    )
    (block
     (call $~lib/env/abort
@@ -118,19 +116,17 @@
   (set_global $function-types/i64Adder
    (call $function-types/makeAdder<i64>)
   )
+  (set_global $~argc
+   (i32.const 2)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 2)
+   (i64.ne
+    (call_indirect (type $III)
+     (i64.const 10)
+     (i64.const 20)
+     (get_global $function-types/i64Adder)
     )
-    (i64.ne
-     (call_indirect (type $III)
-      (i64.const 10)
-      (i64.const 20)
-      (get_global $function-types/i64Adder)
-     )
-     (i64.const 30)
-    )
+    (i64.const 30)
    )
    (block
     (call $~lib/env/abort
@@ -142,19 +138,17 @@
     (unreachable)
    )
   )
+  (set_global $~argc
+   (i32.const 2)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 2)
+   (f64.ne
+    (call_indirect (type $FFF)
+     (f64.const 1.5)
+     (f64.const 2.5)
+     (call $function-types/makeAdder<f64>)
     )
-    (f64.ne
-     (call_indirect (type $FFF)
-      (f64.const 1.5)
-      (f64.const 2.5)
-      (call $function-types/makeAdder<f64>)
-     )
-     (f64.const 4)
-    )
+    (f64.const 4)
    )
    (block
     (call $~lib/env/abort
@@ -222,19 +216,17 @@
     (unreachable)
    )
   )
+  (set_global $~argc
+   (i32.const 2)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
+   (i32.ne
+    (call $function-types/makeAndAdd<i32>|trampoline
+     (i32.const 1)
      (i32.const 2)
+     (i32.const 0)
     )
-    (i32.ne
-     (call $function-types/makeAndAdd<i32>|trampoline
-      (i32.const 1)
-      (i32.const 2)
-      (i32.const 0)
-     )
-     (i32.const 3)
-    )
+    (i32.const 3)
    )
    (block
     (call $~lib/env/abort

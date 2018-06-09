@@ -11,6 +11,7 @@
  (func $memmove/memmove (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   (set_local $4
    (get_local $0)
   )
@@ -65,25 +66,25 @@
          (set_local $0
           (i32.add
            (tee_local $3
-            (get_local $0)
+            (tee_local $5
+             (get_local $0)
+            )
+           )
+           (i32.const 1)
+          )
+         )
+         (set_local $1
+          (i32.add
+           (tee_local $3
+            (get_local $1)
            )
            (i32.const 1)
           )
          )
          (i32.store8
-          (get_local $3)
-          (block (result i32)
-           (set_local $1
-            (i32.add
-             (tee_local $3
-              (get_local $1)
-             )
-             (i32.const 1)
-            )
-           )
-           (i32.load8_u
-            (get_local $3)
-           )
+          (get_local $5)
+          (i32.load8_u
+           (get_local $3)
           )
          )
          (br $continue|0)
@@ -134,25 +135,25 @@
        (set_local $0
         (i32.add
          (tee_local $3
-          (get_local $0)
+          (tee_local $5
+           (get_local $0)
+          )
+         )
+         (i32.const 1)
+        )
+       )
+       (set_local $1
+        (i32.add
+         (tee_local $3
+          (get_local $1)
          )
          (i32.const 1)
         )
        )
        (i32.store8
-        (get_local $3)
-        (block (result i32)
-         (set_local $1
-          (i32.add
-           (tee_local $3
-            (get_local $1)
-           )
-           (i32.const 1)
-          )
-         )
-         (i32.load8_u
-          (get_local $3)
-         )
+        (get_local $5)
+        (i32.load8_u
+         (get_local $3)
         )
        )
        (set_local $2

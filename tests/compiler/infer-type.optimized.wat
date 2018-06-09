@@ -28,7 +28,6 @@
  )
  (func $start (; 5 ;) (type $v)
   (local $0 i32)
-  (local $1 i32)
   (call $infer-type/locals)
   (set_global $infer-type/ri
    (call $infer-type/reti)
@@ -43,14 +42,11 @@
    (call $infer-type/refF)
   )
   (block $break|0
-   (set_local $1
-    (i32.const 10)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
       (get_local $0)
-      (get_local $1)
+      (i32.const 10)
      )
     )
     (set_local $0

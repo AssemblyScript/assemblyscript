@@ -90,7 +90,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   (if
    (get_local $0)
    (block
@@ -129,26 +128,24 @@
        (grow_memory
         (select
          (get_local $2)
-         (tee_local $4
-          (tee_local $3
-           (i32.shr_u
-            (i32.and
-             (i32.add
-              (i32.sub
-               (get_local $0)
-               (get_local $1)
-              )
-              (i32.const 65535)
+         (tee_local $3
+          (i32.shr_u
+           (i32.and
+            (i32.add
+             (i32.sub
+              (get_local $0)
+              (get_local $1)
              )
-             (i32.const -65536)
+             (i32.const 65535)
             )
-            (i32.const 16)
+            (i32.const -65536)
            )
+           (i32.const 16)
           )
          )
          (i32.gt_s
           (get_local $2)
-          (get_local $4)
+          (get_local $3)
          )
         )
        )
@@ -176,25 +173,21 @@
   (i32.const 0)
  )
  (func $exports/Car#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (i32.store
-   (if (result i32)
+  (if
+   (i32.eqz
     (get_local $0)
-    (get_local $0)
-    (block (result i32)
-     (i32.store
-      (tee_local $2
-       (call $~lib/allocator/arena/allocate_memory
-        (i32.const 4)
-       )
-      )
-      (get_local $1)
-     )
-     (tee_local $0
-      (get_local $2)
+   )
+   (i32.store
+    (tee_local $0
+     (call $~lib/allocator/arena/allocate_memory
+      (i32.const 4)
      )
     )
+    (get_local $1)
    )
+  )
+  (i32.store
+   (get_local $0)
    (get_local $1)
   )
   (get_local $0)

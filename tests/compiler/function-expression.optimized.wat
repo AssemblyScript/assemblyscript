@@ -26,18 +26,16 @@
   (i32.const 1)
  )
  (func $start (; 4 ;) (type $v)
+  (set_global $~argc
+   (i32.const 1)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
+   (i32.ne
+    (call_indirect (type $ii)
      (i32.const 1)
+     (get_global $function-expression/f1)
     )
-    (i32.ne
-     (call_indirect (type $ii)
-      (i32.const 1)
-      (get_global $function-expression/f1)
-     )
-     (i32.const 1)
-    )
+    (i32.const 1)
    )
    (block
     (call $~lib/env/abort
@@ -49,18 +47,16 @@
     (unreachable)
    )
   )
+  (set_global $~argc
+   (i32.const 1)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
-    )
-    (i32.ne
-     (call_indirect (type $ii)
-      (i32.const 2)
-      (get_global $function-expression/f2)
-     )
+   (i32.ne
+    (call_indirect (type $ii)
      (i32.const 2)
+     (get_global $function-expression/f2)
     )
+    (i32.const 2)
    )
    (block
     (call $~lib/env/abort
@@ -78,17 +74,15 @@
   (call_indirect (type $v)
    (get_global $function-expression/f3)
   )
+  (set_global $~argc
+   (i32.const 0)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 0)
+   (i32.ne
+    (call_indirect (type $i)
+     (get_global $function-expression/f4)
     )
-    (i32.ne
-     (call_indirect (type $i)
-      (get_global $function-expression/f4)
-     )
-     (i32.const 1)
-    )
+    (i32.const 1)
    )
    (block
     (call $~lib/env/abort

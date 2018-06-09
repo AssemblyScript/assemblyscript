@@ -60,24 +60,6 @@
   (nop)
  )
  (func $start (; 7 ;) (type $v)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i64)
-  (local $3 i64)
-  (drop
-   (select
-    (tee_local $0
-     (i32.const 1)
-    )
-    (tee_local $1
-     (i32.const 2)
-    )
-    (i32.gt_s
-     (get_local $0)
-     (get_local $1)
-    )
-   )
-  )
   (set_global $builtins/i
    (i32.const 31)
   )
@@ -94,19 +76,7 @@
    (i32.const -2147483648)
   )
   (set_global $builtins/i
-   (select
-    (tee_local $0
-     (i32.const -42)
-    )
-    (i32.sub
-     (i32.const 0)
-     (get_local $0)
-    )
-    (i32.gt_s
-     (get_local $0)
-     (i32.const 0)
-    )
-   )
+   (i32.const 42)
   )
   (if
    (i32.ne
@@ -124,16 +94,7 @@
    )
   )
   (set_global $builtins/i
-   (select
-    (tee_local $0
-     (i32.const 1)
-    )
-    (i32.const 2)
-    (i32.gt_s
-     (get_local $0)
-     (get_local $1)
-    )
-   )
+   (i32.const 2)
   )
   (if
    (i32.ne
@@ -151,14 +112,7 @@
    )
   )
   (set_global $builtins/i
-   (select
-    (i32.const 1)
-    (i32.const 2)
-    (i32.lt_s
-     (get_local $0)
-     (get_local $1)
-    )
-   )
+   (i32.const 1)
   )
   (if
    (i32.ne
@@ -191,19 +145,7 @@
    (i64.const -9223372036854775808)
   )
   (set_global $builtins/I
-   (select
-    (tee_local $2
-     (i64.const -42)
-    )
-    (i64.sub
-     (i64.const 0)
-     (get_local $2)
-    )
-    (i64.gt_s
-     (get_local $2)
-     (i64.const 0)
-    )
-   )
+   (i64.const 42)
   )
   (if
    (i64.ne
@@ -221,18 +163,7 @@
    )
   )
   (set_global $builtins/I
-   (select
-    (tee_local $2
-     (i64.const 1)
-    )
-    (tee_local $3
-     (i64.const 2)
-    )
-    (i64.gt_s
-     (get_local $2)
-     (get_local $3)
-    )
-   )
+   (i64.const 2)
   )
   (if
    (i64.ne
@@ -250,14 +181,7 @@
    )
   )
   (set_global $builtins/I
-   (select
-    (i64.const 1)
-    (i64.const 2)
-    (i64.lt_s
-     (get_local $2)
-     (get_local $3)
-    )
-   )
+   (i64.const 1)
   )
   (if
    (i32.ne

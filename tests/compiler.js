@@ -123,7 +123,7 @@ tests.forEach(filename => {
       filename,
       "--baseDir", basedir,
       "--validate",
-      "--optimize",
+      "-O3",
       "--measure",
       "--binaryFile" // -> stdout
     ];

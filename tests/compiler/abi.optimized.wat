@@ -31,45 +31,11 @@
   )
  )
  (func $start (; 5 ;) (type $v)
-  (local $0 i32)
   (drop
    (call $abi/internal)
   )
   (set_global $abi/condition
    (i32.const 1)
-  )
-  (set_local $0
-   (i32.const 256)
-  )
-  (if
-   (tee_local $0
-    (select
-     (i32.shr_s
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
-     (i32.and
-      (get_local $0)
-      (i32.const 127)
-     )
-     (get_global $abi/condition)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 58)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
   )
   (set_global $abi/y
    (i32.const 0)

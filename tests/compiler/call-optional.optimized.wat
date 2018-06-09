@@ -50,16 +50,14 @@
   )
  )
  (func $start (; 3 ;) (type $v)
+  (set_global $~argc
+   (i32.const 1)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
-    )
-    (call $call-optional/opt|trampoline
-     (i32.const 3)
-     (i32.const 0)
-     (i32.const 0)
-    )
+   (call $call-optional/opt|trampoline
+    (i32.const 3)
+    (i32.const 0)
+    (i32.const 0)
    )
    (block
     (call $~lib/env/abort
@@ -71,19 +69,17 @@
     (unreachable)
    )
   )
+  (set_global $~argc
+   (i32.const 2)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 2)
+   (i32.ne
+    (call $call-optional/opt|trampoline
+     (i32.const 3)
+     (i32.const 4)
+     (i32.const 0)
     )
-    (i32.ne
-     (call $call-optional/opt|trampoline
-      (i32.const 3)
-      (i32.const 4)
-      (i32.const 0)
-     )
-     (i32.const 5)
-    )
+    (i32.const 5)
    )
    (block
     (call $~lib/env/abort
@@ -114,17 +110,15 @@
     (unreachable)
    )
   )
+  (set_global $~argc
+   (i32.const 1)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 1)
-    )
-    (call_indirect (type $iiii)
-     (i32.const 3)
-     (i32.const 0)
-     (i32.const 0)
-     (get_global $call-optional/optIndirect)
-    )
+   (call_indirect (type $iiii)
+    (i32.const 3)
+    (i32.const 0)
+    (i32.const 0)
+    (get_global $call-optional/optIndirect)
    )
    (block
     (call $~lib/env/abort
@@ -136,20 +130,18 @@
     (unreachable)
    )
   )
+  (set_global $~argc
+   (i32.const 2)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 2)
+   (i32.ne
+    (call_indirect (type $iiii)
+     (i32.const 3)
+     (i32.const 4)
+     (i32.const 0)
+     (get_global $call-optional/optIndirect)
     )
-    (i32.ne
-     (call_indirect (type $iiii)
-      (i32.const 3)
-      (i32.const 4)
-      (i32.const 0)
-      (get_global $call-optional/optIndirect)
-     )
-     (i32.const 5)
-    )
+    (i32.const 5)
    )
    (block
     (call $~lib/env/abort
@@ -161,20 +153,18 @@
     (unreachable)
    )
   )
+  (set_global $~argc
+   (i32.const 3)
+  )
   (if
-   (block (result i32)
-    (set_global $~argc
+   (i32.ne
+    (call_indirect (type $iiii)
      (i32.const 3)
+     (i32.const 4)
+     (i32.const 5)
+     (get_global $call-optional/optIndirect)
     )
-    (i32.ne
-     (call_indirect (type $iiii)
-      (i32.const 3)
-      (i32.const 4)
-      (i32.const 5)
-      (get_global $call-optional/optIndirect)
-     )
-     (i32.const 12)
-    )
+    (i32.const 12)
    )
    (block
     (call $~lib/env/abort

@@ -180,30 +180,30 @@
    (i32.const 0)
   )
   (loop $continue|3
-   (br_if $continue|3
-    (if (result i32)
-     (block (result i32)
-      (set_global $while/n
-       (i32.sub
-        (tee_local $0
-         (get_global $while/n)
-        )
-        (i32.const 1)
-       )
-      )
-      (get_local $0)
+   (set_global $while/n
+    (i32.sub
+     (tee_local $0
+      (get_global $while/n)
      )
-     (block (result i32)
-      (set_global $while/m
-       (i32.add
-        (get_global $while/m)
-        (i32.const 1)
-       )
+     (i32.const 1)
+    )
+   )
+   (if
+    (get_local $0)
+    (block
+     (set_global $while/m
+      (i32.add
+       (get_global $while/m)
+       (i32.const 1)
       )
+     )
+     (set_local $0
       (get_global $while/m)
      )
-     (get_local $0)
     )
+   )
+   (br_if $continue|3
+    (get_local $0)
    )
   )
   (if

@@ -22,7 +22,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   (if
    (get_local $0)
    (block
@@ -61,26 +60,24 @@
        (grow_memory
         (select
          (get_local $2)
-         (tee_local $4
-          (tee_local $3
-           (i32.shr_u
-            (i32.and
-             (i32.add
-              (i32.sub
-               (get_local $0)
-               (get_local $1)
-              )
-              (i32.const 65535)
+         (tee_local $3
+          (i32.shr_u
+           (i32.and
+            (i32.add
+             (i32.sub
+              (get_local $0)
+              (get_local $1)
              )
-             (i32.const -65536)
+             (i32.const 65535)
             )
-            (i32.const 16)
+            (i32.const -65536)
            )
+           (i32.const 16)
           )
          )
          (i32.gt_s
           (get_local $2)
-          (get_local $4)
+          (get_local $3)
          )
         )
        )
@@ -117,40 +114,36 @@
   )
  )
  (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (if (result i32)
-   (get_local $0)
-   (get_local $0)
-   (block (result i32)
-    (i32.store
-     (tee_local $1
-      (call $~lib/allocator/arena/allocate_memory
-       (i32.const 4)
-      )
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (i32.store
+    (tee_local $0
+     (call $~lib/allocator/arena/allocate_memory
+      (i32.const 4)
      )
-     (i32.const 1)
     )
-    (get_local $1)
+    (i32.const 1)
    )
   )
+  (get_local $0)
  )
  (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (if (result i32)
-   (get_local $0)
-   (get_local $0)
-   (block (result i32)
-    (i32.store
-     (tee_local $1
-      (call $~lib/allocator/arena/allocate_memory
-       (i32.const 4)
-      )
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (i32.store
+    (tee_local $0
+     (call $~lib/allocator/arena/allocate_memory
+      (i32.const 4)
      )
-     (i32.const 0)
     )
-    (get_local $1)
+    (i32.const 0)
    )
   )
+  (get_local $0)
  )
  (func $std/constructor/CtorReturns#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/allocate_memory
@@ -188,13 +181,17 @@
     )
    )
   )
-  (if (result i32)
-   (get_local $0)
-   (get_local $0)
-   (call $~lib/allocator/arena/allocate_memory
-    (i32.const 0)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (set_local $0
+    (call $~lib/allocator/arena/allocate_memory
+     (i32.const 0)
+    )
    )
   )
+  (get_local $0)
  )
  (func $start (; 7 ;) (type $v)
   (local $0 i32)
@@ -230,31 +227,27 @@
     (i32.const 0)
    )
   )
-  (set_global $std/constructor/justFieldInit
-   (block (result i32)
-    (i32.store
-     (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
-       (i32.const 4)
-      )
-     )
-     (i32.const 1)
+  (i32.store
+   (tee_local $0
+    (call $~lib/allocator/arena/allocate_memory
+     (i32.const 4)
     )
-    (get_local $0)
    )
+   (i32.const 1)
+  )
+  (set_global $std/constructor/justFieldInit
+   (get_local $0)
+  )
+  (i32.store
+   (tee_local $0
+    (call $~lib/allocator/arena/allocate_memory
+     (i32.const 4)
+    )
+   )
+   (i32.const 0)
   )
   (set_global $std/constructor/justFieldNoInit
-   (block (result i32)
-    (i32.store
-     (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
-       (i32.const 4)
-      )
-     )
-     (i32.const 0)
-    )
-    (get_local $0)
-   )
+   (get_local $0)
   )
   (set_global $std/constructor/ctorReturns
    (call $std/constructor/CtorReturns#constructor

@@ -10,18 +10,16 @@
  (start $start)
  (func $start (; 1 ;) (type $v)
   (local $0 i32)
-  (set_global $comma/b
-   (block (result i32)
-    (set_global $comma/a
-     (i32.add
-      (tee_local $0
-       (get_global $comma/a)
-      )
-      (i32.const 1)
-     )
+  (set_global $comma/a
+   (i32.add
+    (tee_local $0
+     (get_global $comma/a)
     )
-    (get_local $0)
+    (i32.const 1)
    )
+  )
+  (set_global $comma/b
+   (get_local $0)
   )
   (if
    (i32.ne
@@ -89,24 +87,20 @@
     (unreachable)
    )
   )
+  (set_global $comma/b
+   (i32.const 0)
+  )
   (set_global $comma/a
-   (block (result i32)
-    (set_global $comma/b
-     (i32.const 0)
-    )
-    (get_global $comma/b)
+   (get_global $comma/b)
+  )
+  (set_global $comma/a
+   (i32.add
+    (get_global $comma/a)
+    (i32.const 1)
    )
   )
   (set_global $comma/b
-   (block (result i32)
-    (set_global $comma/a
-     (i32.add
-      (get_global $comma/a)
-      (i32.const 1)
-     )
-    )
-    (get_global $comma/a)
-   )
+   (get_global $comma/a)
   )
   (if
    (i32.ne
@@ -139,18 +133,16 @@
    )
   )
   (set_global $comma/a
-   (block (result i32)
-    (set_global $comma/a
-     (i32.add
-      (get_global $comma/a)
-      (i32.const 1)
-     )
-    )
-    (set_global $comma/b
-     (get_global $comma/a)
-    )
-    (get_global $comma/b)
+   (i32.add
+    (get_global $comma/a)
+    (i32.const 1)
    )
+  )
+  (set_global $comma/b
+   (get_global $comma/a)
+  )
+  (set_global $comma/a
+   (get_global $comma/b)
   )
   (if
    (i32.ne

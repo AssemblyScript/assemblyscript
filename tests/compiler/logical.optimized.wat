@@ -11,25 +11,6 @@
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 1 ;) (type $v)
-  (local $0 i32)
-  (local $1 f64)
-  (if
-   (i32.eqz
-    (tee_local $0
-     (i32.const 2)
-    )
-   )
-   (unreachable)
-  )
-  (if
-   (f64.eq
-    (tee_local $1
-     (f64.const 2)
-    )
-    (f64.const 0)
-   )
-   (unreachable)
-  )
   (set_global $logical/i
    (i32.const 2)
   )

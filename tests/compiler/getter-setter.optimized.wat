@@ -48,15 +48,13 @@
     (unreachable)
    )
   )
+  (call $getter-setter/Foo.set:bar
+   (i32.const 2)
+  )
   (if
-   (block (result i32)
-    (call $getter-setter/Foo.set:bar
-     (i32.const 2)
-    )
-    (i32.ne
-     (call $getter-setter/Foo.get:bar)
-     (i32.const 2)
-    )
+   (i32.ne
+    (call $getter-setter/Foo.get:bar)
+    (i32.const 2)
    )
    (block
     (call $~lib/env/abort

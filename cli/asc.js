@@ -491,6 +491,10 @@ exports.main = function main(argv, options, callback) {
     shrinkLevel = 2;
   }
 
+  // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
+  // see: https://github.com/WebAssembly/binaryen/pull/1596
+  if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
+
   module.setOptimizeLevel(optimizeLevel > 0 ? optimizeLevel : 0);
   module.setShrinkLevel(shrinkLevel);
   module.setDebugInfo(debugInfo);
