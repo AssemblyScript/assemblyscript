@@ -170,6 +170,7 @@ export class Type {
     if (!this.cachedNullableType) {
       assert(!this.is(TypeFlags.NULLABLE));
       this.cachedNullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
+      this.cachedNullableType.nonNullableType = this;
       this.cachedNullableType.classReference = this.classReference;       // either a class reference
       this.cachedNullableType.signatureReference = this.signatureReference; // or a function reference
     }
@@ -177,27 +178,29 @@ export class Type {
   }
 
   /** Tests if a value of this type is assignable to a target of the specified type. */
-  isAssignableTo(target: Type, signednessIsImportant: bool = false): bool {
+  isAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
     var currentClass: Class | null;
     var targetClass: Class | null;
     var currentFunction: Signature | null;
     var targetFunction: Signature | null;
     if (this.is(TypeFlags.REFERENCE)) {
       if (target.is(TypeFlags.REFERENCE)) {
-        if (currentClass = this.classReference) {
-          if (targetClass = target.classReference) {
-            return currentClass.isAssignableTo(targetClass);
-          }
-        } else if (currentFunction = this.signatureReference) {
-          if (targetFunction = target.signatureReference) {
-            return currentFunction.isAssignableTo(targetFunction);
+        if (!this.is(TypeFlags.NULLABLE) || target.is(TypeFlags.NULLABLE)) {
+          if (currentClass = this.classReference) {
+            if (targetClass = target.classReference) {
+              return currentClass.isAssignableTo(targetClass);
+            }
+          } else if (currentFunction = this.signatureReference) {
+            if (targetFunction = target.signatureReference) {
+              return currentFunction.isAssignableTo(targetFunction);
+            }
           }
         }
       }
     } else if (!target.is(TypeFlags.REFERENCE)) {
       if (this.is(TypeFlags.INTEGER)) {
         if (target.is(TypeFlags.INTEGER)) {
-          if (!signednessIsImportant || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)) {
+          if (!signednessIsRelevant || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)) {
             return this.size <= target.size;
           }
         } else if (target.kind == TypeKind.F32) {
@@ -223,6 +226,21 @@ export class Type {
 
   /** Converts this type to its TypeScript representation. */
   toString(kindOnly: bool = false): string {
+    if (!kindOnly && this.is(TypeFlags.REFERENCE)) {
+      let classReference = this.classReference;
+      if (classReference) {
+        return this.is(TypeFlags.NULLABLE)
+          ? classReference.toString() + " | null"
+          : classReference.toString();
+      }
+      let signatureReference = this.signatureReference;
+      if (signatureReference) {
+        return this.is(TypeFlags.NULLABLE)
+          ? "(" + signatureReference.toString(true) + ") | null"
+          : signatureReference.toString(true);
+      }
+      assert(false);
+    }
     switch (this.kind) {
       case TypeKind.I8: return "i8";
       case TypeKind.I16: return "i16";
@@ -231,23 +249,14 @@ export class Type {
       case TypeKind.ISIZE: return "isize";
       case TypeKind.U8: return "u8";
       case TypeKind.U16: return "u16";
-      case TypeKind.U32: {
-        let functionType = this.signatureReference;
-        return kindOnly || !functionType ? "u32" : functionType.toString(true);
-      }
+      case TypeKind.U32: return "u32";
       case TypeKind.U64: return "u64";
-      case TypeKind.USIZE: {
-        let classType = this.classReference;
-        return kindOnly || !classType ? "usize" : classType.toString();
-      }
+      case TypeKind.USIZE: return "usize";
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
+      default: assert(false);
       case TypeKind.VOID: return "void";
-      default: {
-        assert(false);
-        return "";
-      }
     }
   }
 

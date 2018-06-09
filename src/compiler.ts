@@ -2377,18 +2377,17 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // any to void
-    if (toType.kind == TypeKind.VOID) {
-      return module.createDrop(expr);
+    if (toType.kind == TypeKind.VOID) return module.createDrop(expr);
+
+    if (!fromType.isAssignableTo(toType)) {
+      if (conversionKind == ConversionKind.IMPLICIT) {
+        this.error(
+          DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
+          reportNode.range, fromType.toString(), toType.toString()
+        ); // recoverable
+      }
     }
 
-    if (conversionKind == ConversionKind.IMPLICIT && !fromType.isAssignableTo(toType)) {
-      this.error(
-        DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
-        reportNode.range, fromType.toString(), toType.toString()
-      ); // recoverable
-    }
-
-    // TODO: make this a proper switch?
     if (fromType.is(TypeFlags.FLOAT)) {
 
       // float to float
@@ -4502,7 +4501,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.createUnreachable();
 
     // to compile just the value, we need to know the target's type
-    var elementType: Type;
+    var targetType: Type;
     switch (target.kind) {
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field compiled as a global
@@ -4513,7 +4512,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
-        elementType = (<VariableLikeElement>target).type;
+        targetType = (<VariableLikeElement>target).type;
         break;
       }
       case ElementKind.PROPERTY: {
@@ -4522,7 +4521,7 @@ export class Compiler extends DiagnosticEmitter {
           let instance = prototype.resolve(); // reports
           if (!instance) return this.module.createUnreachable();
           assert(instance.signature.parameterTypes.length == 1); // parser must guarantee this
-          elementType = instance.signature.parameterTypes[0];
+          targetType = instance.signature.parameterTypes[0];
           break;
         }
         this.error(
@@ -4551,7 +4550,7 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
           assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
-          elementType = indexedSet.signature.parameterTypes[1];    // 2nd parameter is the element
+          targetType = indexedSet.signature.parameterTypes[1];    // 2nd parameter is the element
           break;
         }
         // fall-through
@@ -4566,7 +4565,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile the value and do the assignment
-    var valueExpr = this.compileExpression(valueExpression, elementType, ConversionKind.IMPLICIT, WrapMode.NONE);
+    var valueExpr = this.compileExpression(valueExpression, targetType, ConversionKind.IMPLICIT, WrapMode.NONE);
     return this.compileAssignmentWithValue(
       expression,
       valueExpr,
@@ -5882,12 +5881,26 @@ export class Compiler extends DiagnosticEmitter {
     expression: InstanceOfExpression,
     contextualType: Type
   ): ExpressionRef {
-    this.compileExpressionRetainType(expression.expression, this.options.usizeType, WrapMode.NONE);
+    var module = this.module;
+    // NOTE that this differs from TypeScript in that the rhs is a type, not an expression. at the
+    // time of implementation, this seemed more useful because dynamic rhs expressions are not
+    // possible in AS anyway.
+    var expr = this.compileExpressionRetainType(expression.expression, this.options.usizeType, WrapMode.NONE);
     var type = this.currentType;
     var isType = this.program.resolveType(expression.isType);
     this.currentType = Type.bool;
-    if (!isType) return this.module.createUnreachable();
-    return this.module.createI32(type.isAssignableTo(isType, false) ? 1 : 0);
+    if (!isType) return module.createUnreachable();
+    return type.is(TypeFlags.NULLABLE) && !isType.is(TypeFlags.NULLABLE)
+      ? type.nonNullableType.isAssignableTo(isType)
+        ? module.createBinary( // not precomputeable
+            type.is(TypeFlags.LONG)
+              ? BinaryOp.NeI64
+              : BinaryOp.NeI32,
+            expr,
+            type.toNativeZero(module)
+          )
+        : module.createI32(0)
+      : module.createI32(type.isAssignableTo(isType, true) ? 1 : 0);
   }
 
   compileLiteralExpression(

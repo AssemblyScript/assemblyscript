@@ -1847,7 +1847,9 @@ export class Program extends DiagnosticEmitter {
     if (node.kind == NodeKind.SIGNATURE) {
       let signature = this.resolveSignature(<SignatureNode>node, contextualTypeArguments, reportNotFound);
       if (!signature) return null;
-      return Type.u32.asFunction(signature);
+      return node.isNullable
+        ? signature.type.asNullable()
+        : signature.type;
     }
     var typeNode = <TypeNode>node;
     var simpleName = typeNode.name.text;
@@ -1867,7 +1869,10 @@ export class Program extends DiagnosticEmitter {
             contextualTypeArguments,
             null
           ); // reports
-          return instance ? instance.type : null;
+          if (!instance) return null;
+          return node.isNullable
+            ? instance.type.asNullable()
+            : instance.type;
         }
       }
     }

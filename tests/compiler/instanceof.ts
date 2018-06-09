@@ -37,13 +37,14 @@ function isI32<T>(v: T): bool {
 
 assert( isI32(0));
 assert(!isI32(0.0));
+assert(!isI32(<u32>0)); // signedness is relevant
 
-// TODO: what about nullables?
-// var an: A | null;
-// var bn: B | null;
-//
-// assert(an instanceof A);
-// assert(bn instanceof A);
-//
-// assert(!(an instanceof B));
-// assert(bn instanceof B);
+var an: A | null = null;
+assert(!(an instanceof A));       // TS: null is not an instance of A
+assert(  an instanceof A | null); // AS: null is     an instance of A | null
+an = changetype<A | null>(1);
+assert(  an instanceof A);        // TS: non-null is an instance of A
+assert(  an instanceof A | null); // AS: non-null is an instance of A | null
+
+// TODO: keep track of nullability during flows, so this becomes precomputable:
+// assert(an !== null && an instanceof A);
