@@ -11,7 +11,7 @@
  (global $~lib/allocator/buddy/NODE_IS_SPLIT_END (mut i32) (i32.const 0))
  (global $~lib/allocator/buddy/base_ptr (mut i32) (i32.const 0))
  (global $~lib/allocator/buddy/max_ptr (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "allocate_memory" (func $~lib/allocator/buddy/allocate_memory))
  (export "free_memory" (func $~lib/allocator/buddy/free_memory))
@@ -62,8 +62,9 @@
       ;;@ ~lib/allocator/buddy.ts:182:43
       (i32.const 0)
      )
-     ;;@ ~lib/allocator/buddy.ts:183:13
+     ;;@ ~lib/allocator/buddy.ts:182:46
      (return
+      ;;@ ~lib/allocator/buddy.ts:183:13
       (i32.const 0)
      )
     )
@@ -479,8 +480,9 @@
         )
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:323:13
+      ;;@ ~lib/allocator/buddy.ts:322:50
       (return
+       ;;@ ~lib/allocator/buddy.ts:323:13
        (i32.const 0)
       )
      )
@@ -527,7 +529,7 @@
         (i32.const 2)
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:334:6
+      ;;@ ~lib/allocator/buddy.ts:333:19
       (call $~lib/allocator/buddy/flip_parent_is_split
        ;;@ ~lib/allocator/buddy.ts:334:27
        (get_local $1)
@@ -634,8 +636,9 @@
        )
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:363:13
+     ;;@ ~lib/allocator/buddy.ts:362:47
      (return
+      ;;@ ~lib/allocator/buddy.ts:363:13
       (i32.const 0)
      )
     )
@@ -694,8 +697,9 @@
         (get_local $1)
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:390:13
+      ;;@ ~lib/allocator/buddy.ts:389:37
       (return
+       ;;@ ~lib/allocator/buddy.ts:390:13
        (i32.const 0)
       )
      )
@@ -761,8 +765,9 @@
           )
          )
         )
-        ;;@ ~lib/allocator/buddy.ts:416:15
+        ;;@ ~lib/allocator/buddy.ts:415:43
         (return
+         ;;@ ~lib/allocator/buddy.ts:416:15
          (i32.const 0)
         )
        )
@@ -855,7 +860,7 @@
         (get_local $1)
        )
       )
-      ;;@ ~lib/allocator/buddy.ts:445:6
+      ;;@ ~lib/allocator/buddy.ts:444:16
       (call $~lib/allocator/buddy/flip_parent_is_split
        ;;@ ~lib/allocator/buddy.ts:445:27
        (get_local $3)
@@ -946,7 +951,7 @@
     ;;@ ~lib/allocator/buddy.ts:483:7
     (get_local $0)
    )
-   ;;@ ~lib/allocator/buddy.ts:484:4
+   ;;@ ~lib/allocator/buddy.ts:483:12
    (return)
   )
   ;;@ ~lib/allocator/buddy.ts:493:2
@@ -993,7 +998,7 @@
        ;;@ ~lib/allocator/buddy.ts:507:25
        (get_local $0)
       )
-      ;;@ ~lib/allocator/buddy.ts:518:6
+      ;;@ ~lib/allocator/buddy.ts:517:54
       (br_if $break|0
        ;;@ ~lib/allocator/buddy.ts:517:8
        (if (result i32)

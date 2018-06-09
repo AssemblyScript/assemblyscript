@@ -480,7 +480,7 @@ export function allocate_memory(size: usize): usize {
     }
 
     assert((block.info & ~TAGS) >= size);
-    data = root.use(block, size);
+    data = root.use(<Block>block, size);
   }
 
   return data;

@@ -4,7 +4,7 @@
  (type $v (func))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "allocate_memory" (func $~lib/allocator/arena/allocate_memory))
  (export "free_memory" (func $~lib/allocator/arena/free_memory))
@@ -38,7 +38,7 @@
      ;;@ ~lib/allocator/arena.ts:22:8
      (i32.gt_u
       ;;@ ~lib/allocator/arena.ts:20:4
-      (tee_local $2
+      (tee_local $0
        ;;@ ~lib/allocator/arena.ts:20:17
        (i32.and
         (i32.add
@@ -61,7 +61,7 @@
       ;;@ ~lib/allocator/arena.ts:22:17
       (i32.shl
        ;;@ ~lib/allocator/arena.ts:21:4
-       (tee_local $0
+       (tee_local $2
         ;;@ ~lib/allocator/arena.ts:21:22
         (current_memory)
        )
@@ -77,7 +77,7 @@
         ;;@ ~lib/allocator/arena.ts:24:24
         (select
          ;;@ ~lib/allocator/arena.ts:24:28
-         (get_local $0)
+         (get_local $2)
          (tee_local $4
           ;;@ ~lib/allocator/arena.ts:23:6
           (tee_local $3
@@ -88,7 +88,7 @@
              (i32.add
               ;;@ ~lib/allocator/arena.ts:23:26
               (i32.sub
-               (get_local $2)
+               (get_local $0)
                ;;@ ~lib/allocator/arena.ts:23:35
                (get_local $1)
               )
@@ -103,7 +103,7 @@
           )
          )
          (i32.gt_s
-          (get_local $0)
+          (get_local $2)
           (get_local $4)
          )
         )
@@ -111,7 +111,7 @@
        ;;@ ~lib/allocator/arena.ts:25:37
        (i32.const 0)
       )
-      ;;@ ~lib/allocator/arena.ts:26:8
+      ;;@ ~lib/allocator/arena.ts:25:40
       (if
        ;;@ ~lib/allocator/arena.ts:26:12
        (i32.lt_s
@@ -122,7 +122,7 @@
         ;;@ ~lib/allocator/arena.ts:26:39
         (i32.const 0)
        )
-       ;;@ ~lib/allocator/arena.ts:27:10
+       ;;@ ~lib/allocator/arena.ts:26:42
        (unreachable)
       )
      )
@@ -130,7 +130,7 @@
     ;;@ ~lib/allocator/arena.ts:31:4
     (set_global $~lib/allocator/arena/offset
      ;;@ ~lib/allocator/arena.ts:31:13
-     (get_local $2)
+     (get_local $0)
     )
     ;;@ ~lib/allocator/arena.ts:32:11
     (return
@@ -146,7 +146,7 @@
   (nop)
  )
  (func $~lib/allocator/arena/reset_memory (; 2 ;) (type $v)
-  ;;@ ~lib/allocator/arena.ts:44:2
+  ;;@ ~lib/allocator/arena.ts:43:37
   (set_global $~lib/allocator/arena/offset
    ;;@ ~lib/allocator/arena.ts:44:11
    (get_global $~lib/allocator/arena/startOffset)

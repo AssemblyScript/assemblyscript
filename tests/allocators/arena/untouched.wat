@@ -1,5 +1,4 @@
 (module
- (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $v (func))
@@ -9,7 +8,7 @@
  (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "allocate_memory" (func $~lib/allocator/arena/allocate_memory))
  (export "free_memory" (func $~lib/allocator/arena/free_memory))
@@ -142,7 +141,7 @@
         ;;@ ~lib/allocator/arena.ts:25:37
         (i32.const 0)
        )
-       ;;@ ~lib/allocator/arena.ts:26:8
+       ;;@ ~lib/allocator/arena.ts:25:40
        (if
         ;;@ ~lib/allocator/arena.ts:26:12
         (i32.lt_s
@@ -153,7 +152,7 @@
          ;;@ ~lib/allocator/arena.ts:26:39
          (i32.const 0)
         )
-        ;;@ ~lib/allocator/arena.ts:27:10
+        ;;@ ~lib/allocator/arena.ts:26:42
         (unreachable)
        )
       )
@@ -176,9 +175,11 @@
   )
  )
  (func $~lib/allocator/arena/free_memory (; 1 ;) (type $iv) (param $0 i32)
+  ;;@ ~lib/allocator/arena.ts:38:46
+  (nop)
  )
  (func $~lib/allocator/arena/reset_memory (; 2 ;) (type $v)
-  ;;@ ~lib/allocator/arena.ts:44:2
+  ;;@ ~lib/allocator/arena.ts:43:37
   (set_global $~lib/allocator/arena/offset
    ;;@ ~lib/allocator/arena.ts:44:11
    (get_global $~lib/allocator/arena/startOffset)
