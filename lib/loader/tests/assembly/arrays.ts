@@ -10,7 +10,7 @@ export const arr_f32: f32[] = [10.10, -20.20, 30.30]; // ok
 
 export const arr_f64: f64[] = [10.10, -20.20, 30.30];
 
-export const arr_string: string[] = ['hello', 'world']; // ok
+export const arr_string: string[] = ["hello", "world"]; // ok
 
 export const arr_u8: u8[] = [1, 2, 3]; // ok
 export const arr_i8: i8[] = [-1, 2, -3]; // ok
