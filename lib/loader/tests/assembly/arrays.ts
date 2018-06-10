@@ -8,7 +8,7 @@ export const arr_i64: i64[] = [-(4294967296 + 10), 4294967296 + 20, -(4294967296
 
 export const arr_f32: f32[] = [10.10, -20.20, 30.30]; // ok
 
-export const arr_f64: f64[] = [10.10, -20.20, 30.30];
+export const arr_f64: f64[] = [10.10, -20.20, 30.30]; // ok
 
 export const arr_string: string[] = ["hello", "world"]; // ok
 
