@@ -65,7 +65,7 @@ Instances are automatically populated with useful utility:
 * **getString**(ptr: `number`): `string`<br />
   Gets a string from the module's memory by its pointer.
 
-* **getArray**(ptr: `number`, type: `TypedArray | String | Boolean`, asTypedArray?: boolean): `Array<T> | TypedArray`<br />
+* **getArray**(ptr: `number`, type: `TypedArray | String | Boolean`): `Array<T> | TypedArray`<br />
   Get the content of an array from the module's memory by it's pointer and it's type.
   Type are specified by using the typed views of the module. `String` and `Boolean` are also valid.
 
