@@ -908,11 +908,11 @@ export abstract class Node {
     stmt.range = range;
     stmt.statements = statements; setParent(statements, stmt);
     stmt.catchVariable = catchVariable;
-    if (catchVariable) catchVariable.parent = stmt;
+    if (catchVariable != null) catchVariable.parent = stmt;
     stmt.catchStatements = catchStatements;
-    if (catchStatements) setParent(catchStatements, stmt);
+    if (catchStatements != null) setParent(catchStatements, stmt);
     stmt.finallyStatements = finallyStatements;
-    if (finallyStatements) setParent(finallyStatements, stmt);
+    if (finallyStatements != null) setParent(finallyStatements, stmt);
     return stmt;
   }
 
