@@ -48,6 +48,12 @@ Instances are automatically populated with useful utility:
 * **U32**: `Uint32Array`<br />
   A 32-bit unsigned integer view on the memory.
 
+* **I64**: `BigInt64Array`<br />
+  A 64-bit signed integer view on the memory<sup>1</sup>.
+
+* **U64**: `BigUint64Array`<br />
+  A 64-bit unsigned integer view on the memory<sup>1</sup>.
+
 * **F32**: `Float32Array`<br />
   A 32-bit float view on the memory.
 
@@ -64,6 +70,8 @@ Instances are automatically populated with useful utility:
 
 * **getString**(ptr: `number`): `string`<br />
   Gets a string from the module's memory by its pointer.
+
+<sup>1</sup> This feature has not yet landed in any VM as of this writing.
 
 Examples
 --------
@@ -82,13 +90,16 @@ const myModule = await loader.instantiateStreaming(fetch("myModule.wasm"), myImp
 
 ```js
 var ptrToInt8 = ...;
-var value = myModule.U16[ptrToInt8]; // alignment of log2(1)=0
+var value = myModule.I8[ptrToInt8]; // alignment of log2(1)=0
 
 var ptrToInt16 = ...;
-var value = myModule.U16[ptrToInt16 >>> 1]; // alignment of log2(2)=1
+var value = myModule.I16[ptrToInt16 >>> 1]; // alignment of log2(2)=1
 
 var ptrToInt32 = ...;
-var value = myModule.U32[ptrToInt32 >>> 2]; // alignment of log2(4)=2
+var value = myModule.I32[ptrToInt32 >>> 2]; // alignment of log2(4)=2
+
+var ptrToInt64 = ...;
+var value = myModule.I64[ptrToInt64 >>> 3]; // alignment of log2(8)=3
 
 var ptrToFloat32 = ...;
 var value = myModule.F32[ptrToFloat32 >>> 2]; // alignment of log2(4)=2
@@ -97,9 +108,10 @@ var ptrToFloat64 = ...;
 var value = myModule.F64[ptrToFloat64 >>> 3]; // alignment of log2(8)=3
 
 // Likewise, for writing
-myModule.U16[ptrToInt8] = newValue;
-myModule.U16[ptrToInt16 >>> 1] = newValue;
-myModule.U32[ptrToInt32 >>> 2] = newValue;
+myModule.I8[ptrToInt8] = newValue;
+myModule.I16[ptrToInt16 >>> 1] = newValue;
+myModule.I32[ptrToInt32 >>> 2] = newValue;
+myModule.I64[ptrToInt64 >>> 3] = newValue;
 myModule.F32[ptrToFloat32 >>> 2] = newValue;
 myModule.F64[ptrToFloat64 >>> 3] = newValue;
 ```
@@ -128,5 +140,3 @@ import MyModule from "myModule"; // pointing at the d.ts
 
 const myModule = loader.instatiateBuffer<typeof MyModule>(fs.readFileSync("myModule.wasm"), myImports);
 ```
-
-**Hint:** You can produce a `.d.ts` for your module with the `-d` option on the command line.
