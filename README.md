@@ -2,6 +2,7 @@
 =================
 
 [![npm](https://img.shields.io/npm/v/assemblyscript.svg)](https://www.npmjs.com/package/assemblyscript)
+[![Install Size](https://packagephobia.now.sh/badge?p=assemblyscript)](https://packagephobia.now.sh/result?p=assemblyscript)
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
 [![Snap Status](https://build.snapcraft.io/badge/AssemblyScript/assemblyscript.svg)](https://build.snapcraft.io/user/AssemblyScript/assemblyscript)
 
