@@ -903,16 +903,16 @@ export class ASTBuilder {
       sb.push("declare ");
     }
     var members = node.members;
-    var numMembers = members.length;
-    if (numMembers) {
+    if (members && members.length) {
+      let numMembers = members.length;
       sb.push("export {\n");
       let indentLevel = ++this.indentLevel;
       indent(sb, indentLevel);
-      this.visitExportMember(node.members[0]);
+      this.visitExportMember(members[0]);
       for (let i = 1; i < numMembers; ++i) {
         sb.push(",\n");
         indent(sb, indentLevel);
-        this.visitExportMember(node.members[i]);
+        this.visitExportMember(members[i]);
       }
       --this.indentLevel;
       sb.push("\n}");
