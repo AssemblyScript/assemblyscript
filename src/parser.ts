@@ -1915,6 +1915,7 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'export': '{' ExportMember (',' ExportMember)* }' ('from' StringLiteral)? ';'?
 
+    var path: StringLiteralExpression | null = null;
     if (tn.skip(Token.OPENBRACE)) {
       let members = new Array<ExportMember>();
       while (!tn.skip(Token.CLOSEBRACE)) {
@@ -1933,7 +1934,6 @@ export class Parser extends DiagnosticEmitter {
           }
         }
       }
-      let path: StringLiteralExpression | null = null;
       if (tn.skip(Token.FROM)) {
         if (tn.skip(Token.STRINGLITERAL)) {
           path = Node.createStringLiteralExpression(tn.readString(), tn.range());
@@ -1953,6 +1953,30 @@ export class Parser extends DiagnosticEmitter {
       }
       tn.skip(Token.SEMICOLON);
       return ret;
+    } else if (tn.skip(Token.ASTERISK)) {
+      if (tn.skip(Token.FROM)) {
+        if (tn.skip(Token.STRINGLITERAL)) {
+          path = Node.createStringLiteralExpression(tn.readString(), tn.range());
+          let ret = Node.createExportStatement(null, path, flags, tn.range(startPos, tn.pos));
+          let internalPath = ret.internalPath;
+          if (internalPath !== null && !this.seenlog.has(internalPath)) {
+            this.backlog.push(internalPath);
+            this.seenlog.add(internalPath);
+          }
+          tn.skip(Token.SEMICOLON);
+          return ret;
+        } else {
+          this.error(
+            DiagnosticCode.String_literal_expected,
+            tn.range()
+          );
+        }
+      } else {
+        this.error(
+          DiagnosticCode._0_expected,
+          tn.range(), "from"
+        );
+      }
     } else {
       this.error(
         DiagnosticCode._0_expected,
@@ -2805,8 +2829,8 @@ export class Parser extends DiagnosticEmitter {
       return Node.createFalseExpression(tn.range());
     }
 
-    var p = determinePrecedenceStart(token);
-    if (p != Precedence.INVALID) {
+    var precedence = determinePrecedenceStart(token);
+    if (precedence != Precedence.INVALID) {
       let operand: Expression | null;
 
       // TODO: SpreadExpression, YieldExpression (currently become unsupported UnaryPrefixExpressions)
@@ -2830,7 +2854,7 @@ export class Parser extends DiagnosticEmitter {
         }
         return null;
       } else {
-        operand = this.parseExpression(tn, p);
+        operand = this.parseExpression(tn, precedence);
         if (!operand) return null;
       }
 
@@ -3328,7 +3352,7 @@ export const enum Precedence {
 }
 
 /** Determines the precedence of a starting token. */
-function determinePrecedenceStart(kind: Token): i32 {
+function determinePrecedenceStart(kind: Token): Precedence {
   switch (kind) {
     case Token.DOT_DOT_DOT: return Precedence.SPREAD;
     case Token.YIELD: return Precedence.YIELD;
@@ -3347,7 +3371,7 @@ function determinePrecedenceStart(kind: Token): i32 {
 }
 
 /** Determines the precende of a non-starting token. */
-function determinePrecedence(kind: Token): i32 {
+function determinePrecedence(kind: Token): Precedence {
   switch (kind) {
     case Token.COMMA: return Precedence.COMMA;
     case Token.EQUALS:

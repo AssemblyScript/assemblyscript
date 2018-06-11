@@ -1097,8 +1097,9 @@ export class Compiler extends DiagnosticEmitter {
 
   compileExportStatement(statement: ExportStatement): void {
     var module = this.module;
-    var exports = this.program.fileLevelExports;
+    var fileLevelExports = this.program.fileLevelExports;
     var members = statement.members;
+    if (!members) return; // filespace
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
       let internalExportName = (
@@ -1106,7 +1107,7 @@ export class Compiler extends DiagnosticEmitter {
         PATH_DELIMITER +
         member.externalName.text
       );
-      let element = exports.get(internalExportName);
+      let element = fileLevelExports.get(internalExportName);
       if (!element) continue; // reported in Program#initialize
       switch (element.kind) {
         case ElementKind.CLASS_PROTOTYPE: {

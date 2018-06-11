@@ -1,3 +1,5 @@
+/* tslint:disable:no-duplicate-imports */
+
 import {
   add,
   sub as sub,
@@ -11,3 +13,11 @@ import {
 add(a, b) + sub(b, c) + mul(c, a);
 
 renamed_ns.two();
+
+import * as other from "./export";
+
+other.add(other.a, other.b) +
+other.sub(other.b, other.renamed_c) +
+other.renamed_mul(other.renamed_c, other.a);
+
+other.ns.two();

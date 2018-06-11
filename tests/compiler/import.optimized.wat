@@ -45,5 +45,24 @@
    )
   )
   (call $export/ns.two)
+  (drop
+   (i32.add
+    (i32.add
+     (call $export/add
+      (i32.const 1)
+      (i32.const 2)
+     )
+     (call $export/sub
+      (i32.const 2)
+      (i32.const 3)
+     )
+    )
+    (call $export/mul
+     (i32.const 3)
+     (i32.const 1)
+    )
+   )
+  )
+  (call $export/ns.two)
  )
 )

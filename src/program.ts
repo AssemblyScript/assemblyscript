@@ -120,6 +120,8 @@ export const INNER_DELIMITER = "~";
 export const LIBRARY_SUBST = "~lib";
 /** Library directory prefix. */
 export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
+/** Prefix used to indicate a filespace element. */
+export const FILESPACE_PREFIX = "file:";
 
 /** Represents a yet unresolved export. */
 class QueuedExport {
@@ -133,7 +135,7 @@ class QueuedImport {
   internalName: string;
   referencedName: string;
   referencedNameAlt: string;
-  declaration: ImportDeclaration;
+  declaration: ImportDeclaration | null; // not set if a filespace
 }
 
 /** Represents a type alias. */
@@ -338,6 +340,8 @@ export class Program extends DiagnosticEmitter {
   resolvedThisExpression: Expression | null = null;
   /** Element expression of the previously resolved element access. */
   resolvedElementExpression : Expression | null = null;
+  /** Currently processing filespace. */
+  currentFilespace: Filespace;
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
@@ -357,11 +361,12 @@ export class Program extends DiagnosticEmitter {
 
   /** Looks up the source for the specified possibly ambiguous path. */
   lookupSourceByPath(normalizedPathWithoutExtension: string): Source | null {
+    var tmp: string;
     return (
       this.getSource(normalizedPathWithoutExtension + ".ts") ||
       this.getSource(normalizedPathWithoutExtension + "/index.ts") ||
-      this.getSource(LIBRARY_PREFIX + normalizedPathWithoutExtension + ".ts") ||
-      this.getSource(LIBRARY_PREFIX + normalizedPathWithoutExtension + "/index.ts")
+      this.getSource((tmp = LIBRARY_PREFIX + normalizedPathWithoutExtension) + ".ts") ||
+      this.getSource( tmp                                                    + "/index.ts")
     );
   }
 
@@ -395,6 +400,13 @@ export class Program extends DiagnosticEmitter {
     // build initial lookup maps of internal names to declarations
     for (let i = 0, k = this.sources.length; i < k; ++i) {
       let source = this.sources[i];
+
+      // create one filespace per source
+      let filespace = new Filespace(this, source);
+      this.elementsLookup.set(filespace.internalName, filespace);
+      this.currentFilespace = filespace;
+
+      // process this source's statements
       let statements = source.statements;
       for (let j = 0, l = statements.length; j < l; ++j) {
         let statement = statements[j];
@@ -442,22 +454,39 @@ export class Program extends DiagnosticEmitter {
     // queued imports should be resolvable now through traversing exports and queued exports
     for (let i = 0; i < queuedImports.length;) {
       let queuedImport = queuedImports[i];
-      let element = this.tryResolveImport(queuedImport.referencedName, queuedExports);
-      if (element) {
-        this.elementsLookup.set(queuedImport.internalName, element);
-        queuedImports.splice(i, 1);
-      } else {
-        if (element = this.tryResolveImport(queuedImport.referencedNameAlt, queuedExports)) {
+      let declaration = queuedImport.declaration;
+      if (declaration) { // named
+        let element = this.tryResolveImport(queuedImport.referencedName, queuedExports);
+        if (element) {
           this.elementsLookup.set(queuedImport.internalName, element);
           queuedImports.splice(i, 1);
         } else {
-          this.error(
-            DiagnosticCode.Module_0_has_no_exported_member_1,
-            queuedImport.declaration.range,
-            (<ImportStatement>queuedImport.declaration.parent).path.value,
-            queuedImport.declaration.externalName.text
-          );
-          ++i;
+          if (element = this.tryResolveImport(queuedImport.referencedNameAlt, queuedExports)) {
+            this.elementsLookup.set(queuedImport.internalName, element);
+            queuedImports.splice(i, 1);
+          } else {
+            this.error(
+              DiagnosticCode.Module_0_has_no_exported_member_1,
+              declaration.range,
+              (<ImportStatement>declaration.parent).path.value,
+              declaration.externalName.text
+            );
+            ++i;
+          }
+        }
+      } else { // filespace
+        let element = this.elementsLookup.get(queuedImport.referencedName);
+        if (element) {
+          this.elementsLookup.set(queuedImport.internalName, element);
+          queuedImports.splice(i, 1);
+        } else {
+          if (element = this.elementsLookup.get(queuedImport.referencedNameAlt)) {
+            this.elementsLookup.set(queuedImport.internalName, element);
+            queuedImports.splice(i, 1);
+          } else {
+            assert(false); // already reported by the parser not finding the file
+            ++i;
+          }
         }
       }
     }
@@ -732,6 +761,7 @@ export class Program extends DiagnosticEmitter {
         return;
       }
       this.fileLevelExports.set(internalName, prototype);
+      this.currentFilespace.members.set(simpleName, prototype);
       if (prototype.is(CommonFlags.EXPORT) && declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(internalName)) {
           this.error(
@@ -1165,6 +1195,7 @@ export class Program extends DiagnosticEmitter {
         return;
       }
       this.fileLevelExports.set(internalName, element);
+      this.currentFilespace.members.set(simpleName, element);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(internalName)) {
           this.error(
@@ -1215,26 +1246,45 @@ export class Program extends DiagnosticEmitter {
     queuedExports: Map<string,QueuedExport>
   ): void {
     var members = statement.members;
-    for (let i = 0, k = members.length; i < k; ++i) {
-      this.initializeExport(members[i], statement.internalPath, queuedExports);
+    if (members) { // named
+      for (let i = 0, k = members.length; i < k; ++i) {
+        this.initializeExport(members[i], statement.internalPath, queuedExports);
+      }
+    } else { // TODO: filespace
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        statement.range
+      );
     }
   }
 
   private setExportAndCheckLibrary(
-    name: string,
+    internalName: string,
     element: Element,
     identifier: IdentifierExpression
   ): void {
-    this.fileLevelExports.set(name, element);
-    if (identifier.range.source.isLibrary) { // add global alias
-      if (this.elementsLookup.has(identifier.text)) {
+    // add to file-level exports
+    this.fileLevelExports.set(internalName, element);
+
+    // add to filespace
+    var internalPath = identifier.range.source.internalPath;
+    var prefix = FILESPACE_PREFIX + internalPath;
+    var filespace = this.elementsLookup.get(prefix);
+    if (!filespace) filespace = assert(this.elementsLookup.get(prefix + PATH_DELIMITER + "index"));
+    assert(filespace.kind == ElementKind.FILESPACE);
+    var simpleName = identifier.text;
+    (<Filespace>filespace).members.set(simpleName, element);
+
+    // add global alias if from a library file
+    if (identifier.range.source.isLibrary) {
+      if (this.elementsLookup.has(simpleName)) {
         this.error(
           DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-          identifier.range, identifier.text
+          identifier.range, simpleName
         );
       } else {
-        element.internalName = identifier.text;
-        this.elementsLookup.set(identifier.text, element);
+        element.internalName = simpleName;
+        this.elementsLookup.set(simpleName, element);
       }
     }
   }
@@ -1401,6 +1451,7 @@ export class Program extends DiagnosticEmitter {
         return;
       }
       this.fileLevelExports.set(internalName, prototype);
+      this.currentFilespace.members.set(simpleName, prototype);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(internalName)) {
           this.error(
@@ -1446,10 +1497,22 @@ export class Program extends DiagnosticEmitter {
         );
         return;
       }
-      this.error( // TODO
-        DiagnosticCode.Operation_not_supported,
-        statement.range
-      );
+
+      // resolve right away if the exact filespace exists
+      let filespace = this.elementsLookup.get(statement.internalPath);
+      if (filespace) {
+        this.elementsLookup.set(internalName, filespace);
+        return;
+      }
+
+      // otherwise queue it
+      let queuedImport = new QueuedImport();
+      queuedImport.internalName = internalName;
+      let prefix = FILESPACE_PREFIX + statement.internalPath;
+      queuedImport.referencedName = prefix;
+      queuedImport.referencedNameAlt = prefix + PATH_DELIMITER + "index";
+      queuedImport.declaration = null;
+      queuedImports.push(queuedImport);
     }
   }
 
@@ -1511,9 +1574,10 @@ export class Program extends DiagnosticEmitter {
     }
 
     var decorators = declaration.decorators;
+    var simpleName = declaration.name.text;
     var prototype = new InterfacePrototype(
       this,
-      declaration.name.text,
+      simpleName,
       internalName,
       declaration,
       decorators
@@ -1548,6 +1612,7 @@ export class Program extends DiagnosticEmitter {
         return;
       }
       this.fileLevelExports.set(internalName, prototype);
+      this.currentFilespace.members.set(simpleName, prototype);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(internalName)) {
           this.error(
@@ -1632,6 +1697,7 @@ export class Program extends DiagnosticEmitter {
       } else {
         this.fileLevelExports.set(internalName, namespace);
       }
+      this.currentFilespace.members.set(simpleName, namespace);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(internalName)) {
           this.error(
@@ -1759,6 +1825,7 @@ export class Program extends DiagnosticEmitter {
         } else {
           this.fileLevelExports.set(internalName, global);
         }
+        this.currentFilespace.members.set(simpleName, global);
         if (declaration.range.source.isEntry) {
           if (this.moduleLevelExports.has(internalName)) {
             this.error(
@@ -2144,11 +2211,13 @@ export class Program extends DiagnosticEmitter {
       }
       default: { // enums or other namespace-like elements
         let members = target.members;
-        let member: Element | null;
-        if (members && (member = members.get(propertyName))) {
-          this.resolvedThisExpression = targetExpression;
-          this.resolvedElementExpression = null;
-          return member; // static ENUMVALUE, static GLOBAL, static FUNCTION_PROTOTYPE...
+        if (members) {
+          let member = members.get(propertyName);
+          if (member) {
+            this.resolvedThisExpression = targetExpression;
+            this.resolvedElementExpression = null;
+            return member; // static ENUMVALUE, static GLOBAL, static FUNCTION_PROTOTYPE...
+          }
         }
         break;
       }
@@ -2373,7 +2442,9 @@ export enum ElementKind {
   /** A {@link Property}. */
   PROPERTY,
   /** A {@link Namespace}. */
-  NAMESPACE
+  NAMESPACE,
+  /** A {@link Filespace}. */
+  FILESPACE,
 }
 
 /** Indicates traits of a {@link Node} or {@link Element}. */
@@ -2515,7 +2586,25 @@ export abstract class Element {
   hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
 }
 
-/** A namespace. */
+/** A filespace representing the implicit top-level namespace of a source. */
+export class Filespace extends Element {
+
+  kind = ElementKind.FILESPACE;
+
+  /** File members (externally visible only). */
+  members: Map<string,Element>; // more specific
+
+  /** Constructs a new filespace. */
+  constructor(
+    program: Program,
+    source: Source
+  ) {
+    super(program, source.internalPath, FILESPACE_PREFIX + source.internalPath);
+    this.members = new Map();
+  }
+}
+
+/** A namespace that differs from a filespace in being user-declared with a name. */
 export class Namespace extends Element {
 
   // All elements have namespace semantics. This is an explicitly declared one.

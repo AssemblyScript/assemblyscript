@@ -602,7 +602,7 @@ export abstract class Node {
   }
 
   static createExportStatement(
-    members: ExportMember[],
+    members: ExportMember[] | null,
     path: StringLiteralExpression | null,
     flags: CommonFlags,
     range: Range
@@ -610,7 +610,7 @@ export abstract class Node {
     var stmt = new ExportStatement();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.members = members; setParent(members, stmt);
+    stmt.members = members; if (members) setParent(members, stmt);
     stmt.path = path;
     if (path) {
       let normalizedPath = normalizePath(path.value);
@@ -1627,8 +1627,8 @@ export class ExportMember extends Node {
 export class ExportStatement extends Statement {
   kind = NodeKind.EXPORT;
 
-  /** Array of members. */
-  members: ExportMember[];
+  /** Array of members if a set of named exports, or `null` if a filespace export. */
+  members: ExportMember[] | null;
   /** Path being exported from, if applicable. */
   path: StringLiteralExpression | null;
   /** Normalized path, if `path` is set. */
