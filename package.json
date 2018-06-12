@@ -32,6 +32,9 @@
     "webpack": "^4.8.3",
     "webpack-cli": "^2.1.3"
   },
+  "peerDependencies": {
+    "chalk": "^2.4.1"
+  },
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {
