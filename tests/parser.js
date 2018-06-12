@@ -1,5 +1,5 @@
 var fs = require("fs");
-var chalk = require("chalk");
+var colors = require("../cli/util/colors");
 var glob = require("glob");
 var diff = require("./util/diff");
 
@@ -17,7 +17,7 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts"))
     return;
 
-  console.log(chalk.default.whiteBright("Testing parser/" + filename));
+  console.log(colors.white("Testing parser/" + filename));
 
   var failed = false;
   var parser = new Parser();
@@ -36,9 +36,9 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
     if (diffs !== null) {
       failed = true;
       console.log(diffs);
-      console.log(chalk.default.red("diff ERROR"));
+      console.log(colors.red("diff ERROR"));
     } else {
-      console.log(chalk.default.green("diff OK"));
+      console.log(colors.green("diff OK"));
     }
   }
 
@@ -49,6 +49,6 @@ glob.sync(filter, { cwd: __dirname + "/parser" }).forEach(filename => {
 
 if (failures) {
   process.exitCode = 1;
-  console.log(chalk.red("ERROR: ") + failures + " parser tests failed");
+  console.log(colors.red("ERROR: ") + failures + " parser tests failed");
 } else
-  console.log("[ " + chalk.whiteBright("SUCCESS") + " ]");
+  console.log("[ " + colors.white("SUCCESS") + " ]");

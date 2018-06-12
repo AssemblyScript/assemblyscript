@@ -46,7 +46,7 @@ export function diagnosticCategoryToString(category: DiagnosticCategory): string
 }
 
 /** ANSI escape sequence for blue foreground. */
-export const COLOR_BLUE: string = "\u001b[93m";
+export const COLOR_BLUE: string = "\u001b[94m";
 /** ANSI escape sequence for yellow foreground. */
 export const COLOR_YELLOW: string = "\u001b[93m";
 /** ANSI escape sequence for red foreground. */

@@ -1,5 +1,5 @@
 var JsDiff = require("diff");
-var chalk = require("chalk");
+var colors = require("../../cli/util/colors");
 
 module.exports = function diff(filename, expected, actual) {
   var diff = JsDiff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 5 });
@@ -19,9 +19,9 @@ module.exports = function diff(filename, expected, actual) {
     );
     ret.push.apply(ret, hunk.lines.map(line =>
       line.charAt(0) === "+"
-        ? chalk.default.green(line)
+        ? colors.green(line)
         : line.charAt(0) === "-"
-        ? line = chalk.default.red(line)
+        ? line = colors.red(line)
         : line
     ));
   }

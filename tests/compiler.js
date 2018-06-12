@@ -1,7 +1,7 @@
 const fs  = require("fs");
 const path = require("path");
 const os = require("os");
-const chalk = require("chalk");
+const colors = require("../cli/util/colors");
 const glob = require("glob");
 const minimist = require("minimist");
 
@@ -54,7 +54,7 @@ function getExpectedErrors(filePath) {
 
 // TODO: asc's callback is synchronous here. This might change.
 tests.forEach(filename => {
-  console.log(chalk.whiteBright("Testing compiler/" + filename) + "\n");
+  console.log(colors.white("Testing compiler/" + filename) + "\n");
 
   const expectedErrors = getExpectedErrors(path.join(basedir, filename));
   const basename = filename.replace(/\.ts$/, "");
@@ -85,13 +85,13 @@ tests.forEach(filename => {
       for (const expectedError of expectedErrors) {
         if (!stderrString.includes(expectedError)) {
           console.log(`Expected error "${expectedError}" was not in the error output.`);
-          console.log("- " + chalk.red("error check ERROR"));
+          console.log("- " + colors.red("error check ERROR"));
           failedTests.push(basename);
           console.log();
           return;
         }
       }
-      console.log("- " + chalk.green("error check OK"));
+      console.log("- " + colors.green("error check OK"));
       ++successes;
       console.log();
       return;
@@ -102,16 +102,16 @@ tests.forEach(filename => {
     var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
       fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
-      console.log("- " + chalk.yellow("Created fixture"));
+      console.log("- " + colors.yellow("Created fixture"));
     } else {
       let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
       let diffs = diff(basename + ".untouched.wat", expected, actual);
       if (diffs !== null) {
         console.log(diffs);
-        console.log("- " + chalk.red("diff ERROR"));
+        console.log("- " + colors.red("diff ERROR"));
         failed = true;
       } else
-        console.log("- " + chalk.green("diff OK"));
+        console.log("- " + colors.green("diff OK"));
     }
     console.log();
 
@@ -161,9 +161,9 @@ tests.forEach(filename => {
             JSMath: Math
           });
         });
-        console.log("- " + chalk.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
+        console.log("- " + colors.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
       } catch (e) {
-        console.log("- " + chalk.red("instantiate ERROR: ") + e);
+        console.log("- " + colors.red("instantiate ERROR: ") + e);
         failed = true;
       }
 
@@ -176,6 +176,6 @@ tests.forEach(filename => {
 
 if (failedTests.length) {
   process.exitCode = 1;
-  console.log(chalk.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
+  console.log(colors.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
 } else
-  console.log("[ " + chalk.whiteBright("SUCCESS") + " ]");
+  console.log("[ " + colors.white("SUCCESS") + " ]");

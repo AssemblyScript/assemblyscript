@@ -21,7 +21,7 @@ API
   Instantiates an AssemblyScript module from a buffer using the specified imports.
 
 * **instantiateStreaming**<`T`>(response: `Response`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
-  Instantiates an AssemblyScript module from a response using the sspecified imports.
+  Instantiates an AssemblyScript module from a response using the specified imports.
 
 * **demangle**<`T`>(exports: `WasmExports`): `T`<br />
   Demangles an AssemblyScript module's exports to a friendly object structure. You usually don't have to call this manually as instantiation does this implicitly.
