@@ -100,7 +100,10 @@ import {
   getConstValueF64,
   getConstValueI64Low
 } from "./module";
-import { CharCode } from "./util";
+
+import {
+  CharCode
+} from "./util";
 
 /** Path delimiter inserted between file system levels. */
 export const PATH_DELIMITER = "/";
@@ -123,19 +126,19 @@ export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
 /** Prefix used to indicate a filespace element. */
 export const FILESPACE_PREFIX = "file:";
 
-/** Represents a yet unresolved export. */
-class QueuedExport {
-  isReExport: bool;
-  referencedName: string;
-  member: ExportMember;
-}
-
 /** Represents a yet unresolved import. */
 class QueuedImport {
-  internalName: string;
-  referencedName: string;
-  referencedNameAlt: string;
+  localName: string;
+  externalName: string;
+  externalNameAlt: string;
   declaration: ImportDeclaration | null; // not set if a filespace
+}
+
+/** Represents a yet unresolved export. */
+class QueuedExport {
+  externalName: string;
+  isReExport: bool;
+  member: ExportMember;
 }
 
 /** Represents a type alias. */
@@ -317,6 +320,7 @@ export class Program extends DiagnosticEmitter {
   diagnosticsOffset: i32 = 0;
   /** Compiler options. */
   options: Options;
+
   /** Elements by internal name. */
   elementsLookup: Map<string,Element> = new Map();
   /** Class and function instances by internal name. */
@@ -329,6 +333,7 @@ export class Program extends DiagnosticEmitter {
   fileLevelExports: Map<string,Element> = new Map();
   /** Module-level exports by exported name. */
   moduleLevelExports: Map<string,Element> = new Map();
+
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype | null = null;
   /** ArrayBufferView prototype reference. */
@@ -392,8 +397,8 @@ export class Program extends DiagnosticEmitter {
       ["boolean", Type.bool]
     ]);
 
-    var queuedExports = new Map<string,QueuedExport>();
     var queuedImports = new Array<QueuedImport>();
+    var queuedExports = new Map<string,QueuedExport>();
     var queuedExtends = new Array<ClassPrototype>();
     var queuedImplements = new Array<ClassPrototype>();
 
@@ -456,13 +461,13 @@ export class Program extends DiagnosticEmitter {
       let queuedImport = queuedImports[i];
       let declaration = queuedImport.declaration;
       if (declaration) { // named
-        let element = this.tryResolveImport(queuedImport.referencedName, queuedExports);
+        let element = this.tryResolveImport(queuedImport.externalName, queuedExports);
         if (element) {
-          this.elementsLookup.set(queuedImport.internalName, element);
+          this.elementsLookup.set(queuedImport.localName, element);
           queuedImports.splice(i, 1);
         } else {
-          if (element = this.tryResolveImport(queuedImport.referencedNameAlt, queuedExports)) {
-            this.elementsLookup.set(queuedImport.internalName, element);
+          if (element = this.tryResolveImport(queuedImport.externalNameAlt, queuedExports)) {
+            this.elementsLookup.set(queuedImport.localName, element);
             queuedImports.splice(i, 1);
           } else {
             this.error(
@@ -475,13 +480,13 @@ export class Program extends DiagnosticEmitter {
           }
         }
       } else { // filespace
-        let element = this.elementsLookup.get(queuedImport.referencedName);
+        let element = this.elementsLookup.get(queuedImport.externalName);
         if (element) {
-          this.elementsLookup.set(queuedImport.internalName, element);
+          this.elementsLookup.set(queuedImport.localName, element);
           queuedImports.splice(i, 1);
         } else {
-          if (element = this.elementsLookup.get(queuedImport.referencedNameAlt)) {
-            this.elementsLookup.set(queuedImport.internalName, element);
+          if (element = this.elementsLookup.get(queuedImport.externalNameAlt)) {
+            this.elementsLookup.set(queuedImport.localName, element);
             queuedImports.splice(i, 1);
           } else {
             assert(false); // already reported by the parser not finding the file
@@ -497,7 +502,7 @@ export class Program extends DiagnosticEmitter {
       let element: Element | null;
       do {
         if (currentExport.isReExport) {
-          if (element = this.fileLevelExports.get(currentExport.referencedName)) {
+          if (element = this.fileLevelExports.get(currentExport.externalName)) {
             this.setExportAndCheckLibrary(
               exportName,
               element,
@@ -505,7 +510,7 @@ export class Program extends DiagnosticEmitter {
             );
             break;
           }
-          currentExport = queuedExports.get(currentExport.referencedName);
+          currentExport = queuedExports.get(currentExport.externalName);
           if (!currentExport) {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
@@ -517,7 +522,7 @@ export class Program extends DiagnosticEmitter {
         } else {
           if (
             // normal export
-            (element = this.elementsLookup.get(currentExport.referencedName)) ||
+            (element = this.elementsLookup.get(currentExport.externalName)) ||
             // library re-export
             (element = this.elementsLookup.get(currentExport.member.name.text))
           ) {
@@ -602,21 +607,22 @@ export class Program extends DiagnosticEmitter {
 
   /** Tries to resolve an import by traversing exports and queued exports. */
   private tryResolveImport(
-    referencedName: string,
-    queuedExports: Map<string,QueuedExport>
+    externalName: string,
+    queuedNamedExports: Map<string,QueuedExport>
   ): Element | null {
     var element: Element | null;
     var fileLevelExports = this.fileLevelExports;
     do {
-      if (element = fileLevelExports.get(referencedName)) return element;
-      let queuedExport = queuedExports.get(referencedName);
-      if (!queuedExport) return null;
+      if (element = fileLevelExports.get(externalName)) return element;
+      let queuedExport = queuedNamedExports.get(externalName);
+      if (!queuedExport) break;
       if (queuedExport.isReExport) {
-        referencedName = queuedExport.referencedName;
+        externalName = queuedExport.externalName;
         continue;
       }
-      return this.elementsLookup.get(queuedExport.referencedName);
+      return this.elementsLookup.get(queuedExport.externalName);
     } while (true);
+    return null;
   }
 
   private filterDecorators(decorators: DecoratorNode[], acceptedFlags: DecoratorFlags): DecoratorFlags {
@@ -1330,7 +1336,7 @@ export class Program extends DiagnosticEmitter {
       }
       queuedExport = new QueuedExport();
       queuedExport.isReExport = false;
-      queuedExport.referencedName = referencedName; // -> internal name
+      queuedExport.externalName = referencedName; // -> here: local name
       queuedExport.member = member;
       queuedExports.set(externalName, queuedExport);
 
@@ -1353,7 +1359,7 @@ export class Program extends DiagnosticEmitter {
       let seen = new Set<QueuedExport>();
       while (queuedExport = queuedExports.get(referencedName)) {
         if (queuedExport.isReExport) {
-          referencedElement = this.fileLevelExports.get(queuedExport.referencedName);
+          referencedElement = this.fileLevelExports.get(queuedExport.externalName);
           if (referencedElement) {
             this.setExportAndCheckLibrary(
               externalName,
@@ -1362,11 +1368,11 @@ export class Program extends DiagnosticEmitter {
             );
             return;
           }
-          referencedName = queuedExport.referencedName;
+          referencedName = queuedExport.externalName;
           if (seen.has(queuedExport)) break;
           seen.add(queuedExport);
         } else {
-          referencedElement = this.elementsLookup.get(queuedExport.referencedName);
+          referencedElement = this.elementsLookup.get(queuedExport.externalName);
           if (referencedElement) {
             this.setExportAndCheckLibrary(
               externalName,
@@ -1389,7 +1395,7 @@ export class Program extends DiagnosticEmitter {
       }
       queuedExport = new QueuedExport();
       queuedExport.isReExport = true;
-      queuedExport.referencedName = referencedName; // -> export name
+      queuedExport.externalName = referencedName; // -> here: external name
       queuedExport.member = member;
       queuedExports.set(externalName, queuedExport);
     }
@@ -1507,11 +1513,11 @@ export class Program extends DiagnosticEmitter {
 
       // otherwise queue it
       let queuedImport = new QueuedImport();
-      queuedImport.internalName = internalName;
-      let prefix = FILESPACE_PREFIX + statement.internalPath;
-      queuedImport.referencedName = prefix;
-      queuedImport.referencedNameAlt = prefix + PATH_DELIMITER + "index";
-      queuedImport.declaration = null;
+      queuedImport.localName = internalName;
+      let externalName = FILESPACE_PREFIX + statement.internalPath;
+      queuedImport.externalName = externalName;
+      queuedImport.externalNameAlt = externalName + PATH_DELIMITER + "index";
+      queuedImport.declaration = null; // filespace
       queuedImports.push(queuedImport);
     }
   }
@@ -1519,47 +1525,47 @@ export class Program extends DiagnosticEmitter {
   private initializeImport(
     declaration: ImportDeclaration,
     internalPath: string,
-    queuedExports: Map<string,QueuedExport>,
+    queuedNamedExports: Map<string,QueuedExport>,
     queuedImports: QueuedImport[]
   ): void {
-    var internalName = declaration.fileLevelInternalName;
-    if (this.elementsLookup.has(internalName)) {
+    var localName = declaration.fileLevelInternalName;
+    if (this.elementsLookup.has(localName)) {
       this.error(
         DiagnosticCode.Duplicate_identifier_0,
-        declaration.name.range, internalName
+        declaration.name.range, localName
       );
       return;
     }
 
-    var referencedName = internalPath + PATH_DELIMITER + declaration.externalName.text;
+    var externalName = internalPath + PATH_DELIMITER + declaration.externalName.text;
 
     // resolve right away if the exact export exists
     var element: Element | null;
-    if (element = this.fileLevelExports.get(referencedName)) {
-      this.elementsLookup.set(internalName, element);
+    if (element = this.fileLevelExports.get(externalName)) {
+      this.elementsLookup.set(localName, element);
       return;
     }
 
     // otherwise queue it
     const indexPart = PATH_DELIMITER + "index";
     var queuedImport = new QueuedImport();
-    queuedImport.internalName = internalName;
+    queuedImport.localName = localName;
     if (internalPath.endsWith(indexPart)) {
-      queuedImport.referencedName = referencedName; // try exact first
-      queuedImport.referencedNameAlt = (
+      queuedImport.externalName = externalName; // try exact first
+      queuedImport.externalNameAlt = (
         internalPath.substring(0, internalPath.length - indexPart.length + 1) +
         declaration.externalName.text
       );
     } else {
-      queuedImport.referencedName = referencedName; // try exact first
-      queuedImport.referencedNameAlt = (
+      queuedImport.externalName = externalName; // try exact first
+      queuedImport.externalNameAlt = (
         internalPath +
         indexPart +
         PATH_DELIMITER +
         declaration.externalName.text
       );
     }
-    queuedImport.declaration = declaration;
+    queuedImport.declaration = declaration; // named
     queuedImports.push(queuedImport);
   }
 

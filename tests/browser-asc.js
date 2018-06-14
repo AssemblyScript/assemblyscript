@@ -1,10 +1,42 @@
 const asc = require("../dist/asc.js");
 
-console.log("# asc.main");
-
-const stdout = asc.createMemoryStream(arg => console.log("out:", arg));
-const stderr = asc.createMemoryStream(arg => console.log("err:", arg));
+const stdout = asc.createMemoryStream();
+const stderr = asc.createMemoryStream();
 const files = { "module.ts": `import "allocator/arena";` };
+
+console.log("# asc --version");
+
+asc.main([
+  "--version"
+], {
+  stdout: stdout,
+  stderr: stderr
+}, err => {
+  console.log(">>> STDOUT >>>");
+  process.stdout.write(stdout.toString());
+  stdout.reset();
+  console.log(">>> STDERR >>>");
+  process.stdout.write(stderr.toString());
+  stderr.reset();
+});
+
+console.log("\n# asc --help");
+
+asc.main([
+  "--help"
+], {
+  stdout: stdout,
+  stderr: stderr
+}, err => {
+  console.log(">>> STDOUT >>>");
+  process.stdout.write(stdout.toString());
+  stdout.reset();
+  console.log(">>> STDERR >>>");
+  process.stdout.write(stderr.toString());
+  stderr.reset();
+});
+
+console.log("\n# asc module.ts --textFile");
 
 asc.main([
   "module.ts",

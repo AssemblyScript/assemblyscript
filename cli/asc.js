@@ -14,6 +14,7 @@
 const fs = require("fs");
 const path = require("path");
 const utf8 = require("@protobufjs/utf8");
+const colors = require("./util/colors");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 
 // Use distribution files if present, otherwise run the sources directly
@@ -119,23 +120,26 @@ exports.main = function main(argv, options, callback) {
   const listFiles = options.listFiles || listFilesNode;
   const stats = options.stats || createStats();
 
-  // All of the above must be specified in browser environments
+  // Output must be specified if not present in the environment
   if (!stdout) throw Error("'options.stdout' must be specified");
   if (!stderr) throw Error("'options.stderr' must be specified");
-  if (!fs.readFileSync) {
-    if (readFile === readFileNode) throw Error("'options.readFile' must be specified");
-    if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
-    if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
-  }
 
   const args = parseArguments(argv);
   const indent = 24;
+
+  if (args.noColors) {
+    colors.stdout.supported =
+    colors.stderr.supported = false;
+  } else {
+    colors.stdout = colors.from(stdout);
+    colors.stderr = colors.from(stderr);
+  }
 
   // Use default callback if none is provided
   if (!callback) callback = function defaultCallback(err) {
     var code = 0;
     if (err) {
-      stderr.write(err.stack + EOL);
+      stderr.write(colors.stderr.red("ERROR: ") + err.stack.replace(/^ERROR: /i, "") + EOL);
       code = 1;
     }
     return code;
@@ -151,7 +155,7 @@ exports.main = function main(argv, options, callback) {
     const opts = [];
     Object.keys(exports.options).forEach(name => {
       var option = exports.options[name];
-      var text = " ";
+      var text = "  ";
       text += "--" + name;
       if (option.aliases && option.aliases[0].length === 1) {
         text += ", -" + option.aliases[0];
@@ -171,17 +175,27 @@ exports.main = function main(argv, options, callback) {
       }
     });
 
-    (args.help ? stdout : stderr).write([
-      "Version " + exports.version + (isDev ? "-dev" : ""),
-      "Syntax:   asc [entryFile ...] [options]",
+    var out = args.help ? stdout : stderr;
+    var color = args.help ? colors.stdout : colors.stderr;
+    out.write([
+      color.white("Syntax"),
+      "  " + color.cyan("asc") + " [entryFile ...] [options]",
       "",
-      "Examples: asc hello.ts",
-      "          asc hello.ts -b hello.wasm -t hello.wat",
-      "          asc hello1.ts hello2.ts -b -O > hello.wasm",
+      color.white("Examples"),
+      "  " + color.cyan("asc") + " hello.ts",
+      "  " + color.cyan("asc") + " hello.ts -b hello.wasm -t hello.wat",
+      "  " + color.cyan("asc") + " hello1.ts hello2.ts -b -O > hello.wasm",
       "",
-      "Options:"
+      color.white("Options"),
     ].concat(opts).join(EOL) + EOL);
     return callback(null);
+  }
+
+  // I/O must be specified if not present in the environment
+  if (!fs.readFileSync) {
+    if (readFile === readFileNode) throw Error("'options.readFile' must be specified");
+    if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
+    if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
   }
 
   // Set up base directory
@@ -858,6 +872,9 @@ function createMemoryStream(fn) {
       chunk = buffer;
     }
     this.push(chunk);
+  };
+  stream.reset = function() {
+    stream.length = 0;
   };
   stream.toBuffer = function() {
     var offset = 0, i = 0, k = this.length;
