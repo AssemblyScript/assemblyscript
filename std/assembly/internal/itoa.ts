@@ -29,8 +29,6 @@ const digits_00_99: string[] = [
 
 @inline
 function decimalDigitsCount(value: i32): i32 {
-  // var s = value >> 31;
-  // var v = (value ^ s) - s;
   var l = 32 - clz(value);  // log2
   var t = l * 1233 >>> 12;  // log10
       t = t - <i32>(value < powers_0_10[t]);
