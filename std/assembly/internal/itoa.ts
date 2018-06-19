@@ -1,7 +1,7 @@
 
 import { CharCode } from "./string";
 
-const powers_0_20: i32[] = [
+const powers_0_10: i32[] = [
   1,
   10,
   100,
@@ -33,7 +33,7 @@ function decimalDigitsCount(value: i32): i32 {
   // var v = (value ^ s) - s;
   var l = 32 - clz(value);  // log2
   var t = l * 1233 >>> 12;  // log10
-      t = t - <i32>(value < powers_0_20[t]);
+      t = t - <i32>(value < powers_0_10[t]);
   return t + 1;
 }
 
