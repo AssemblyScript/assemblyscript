@@ -1,5 +1,7 @@
 import "allocator/arena";
 
+import { itoa32 } from "internal/itoa";
+
 // preliminary
 
 var str: string = "hi, I'm a string";
@@ -72,3 +74,5 @@ assert("ab".repeat(4) == "abababab");
 assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
+
+assert(itoa32(123) == "123");
