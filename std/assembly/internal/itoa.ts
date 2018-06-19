@@ -1,7 +1,7 @@
 
 import { CharCode } from "./string";
 
-const powers_0_20: u64[] = [
+const powers_0_20: i32[] = [
   1,
   10,
   100,
@@ -11,18 +11,7 @@ const powers_0_20: u64[] = [
   1000000,
   10000000,
   100000000,
-  1000000000,
-
-  10000000000,
-  100000000000,
-  1000000000000,
-  10000000000000,
-  100000000000000,
-  1000000000000000,
-  10000000000000000,
-  100000000000000000,
-  1000000000000000000,
-  10000000000000000000,
+  1000000000
 ];
 
 const digits_00_99: string[] = [
@@ -39,28 +28,28 @@ const digits_00_99: string[] = [
 ];
 
 @inline
-function decimalDigitsCount(value: u64): i32 {
-  // var s = value >> 63;
+function decimalDigitsCount(value: i32): i32 {
+  // var s = value >> 31;
   // var v = (value ^ s) - s;
-  var l = 64 - clz(value);  // log2
+  var l = 32 - clz(value);  // log2
   var t = l * 1233 >>> 12;  // log10
-      t = t - <u64>(value < powers_0_20[t]);
+      t = t - <i32>(value < powers_0_20[t]);
   return t + 1;
 }
 
-export function itoa32(n: i32): string {
-  if (!n) return "0";
+export function itoa32(num: i32): string {
+  if (!num) return "0";
 
   var res = "";
   var r: i32, t: i32, d1: i32, d2: i32;
 
-  var isneg = n < 0;
-  if (isneg) n = -n;
+  var isneg = num < 0;
+  if (isneg) num = -num;
 
-  while (n >= 10000) {
-    t  = n / 10000;
-    r  = n % 10000;
-    n  = t;
+  while (num >= 10000) {
+    t = num / 10000;
+    r = num % 10000;
+    num = t;
 
     d1 = r / 100;
     d2 = r % 100;
@@ -68,17 +57,17 @@ export function itoa32(n: i32): string {
     res = digits_00_99[d1] + digits_00_99[d2] + res;
   }
 
-  if (n >= 100) {
-    t  = n / 100;
-    d1 = n % 100;
-    n  = t;
+  if (num >= 100) {
+    t   = num / 100;
+    d1  = num % 100;
+    num = t;
     res = digits_00_99[d1] + res;
   }
 
-  if (n < 10) {
-    res = String.fromCharCode(CharCode._0 + n) + res;
+  if (num < 10) {
+    res = String.fromCharCode(CharCode._0 + num) + res;
   } else {
-    res = digits_00_99[n] + res;
+    res = digits_00_99[num] + res;
   }
 
   if (isneg) res = "-" + res;

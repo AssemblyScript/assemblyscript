@@ -76,3 +76,4 @@ assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
 assert(itoa32(123) == "123");
+assert(itoa32(-1000) == "-1000");
