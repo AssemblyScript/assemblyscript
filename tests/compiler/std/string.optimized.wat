@@ -3679,57 +3679,34 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/itoa/itoa32 (; 27 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/utoa32 (; 27 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (return
-    (i32.const 1572)
-   )
-  )
   (set_local $1
    (i32.const 8)
   )
-  (if
-   (tee_local $3
-    (i32.lt_s
-     (get_local $0)
-     (i32.const 0)
-    )
-   )
-   (set_local $0
-    (i32.sub
-     (i32.const 0)
-     (get_local $0)
-    )
-   )
-  )
   (loop $continue|0
    (if
-    (i32.ge_s
+    (i32.ge_u
      (get_local $0)
      (i32.const 10000)
     )
     (block
      (set_local $2
-      (i32.rem_s
+      (i32.rem_u
        (get_local $0)
        (i32.const 10000)
       )
      )
      (set_local $0
-      (i32.div_s
+      (i32.div_u
        (get_local $0)
        (i32.const 10000)
       )
      )
-     (set_local $4
-      (i32.rem_s
+     (set_local $3
+      (i32.rem_u
        (get_local $2)
        (i32.const 100)
       )
@@ -3739,14 +3716,14 @@
        (call $~lib/string/String.__concat
         (call $~lib/array/Array<String>#__get
          (i32.const 888)
-         (i32.div_s
+         (i32.div_u
           (get_local $2)
           (i32.const 100)
          )
         )
         (call $~lib/array/Array<String>#__get
          (i32.const 888)
-         (get_local $4)
+         (get_local $3)
         )
        )
        (get_local $1)
@@ -3757,19 +3734,19 @@
    )
   )
   (if
-   (i32.ge_s
+   (i32.ge_u
     (get_local $0)
     (i32.const 100)
    )
    (block
     (set_local $2
-     (i32.rem_s
+     (i32.rem_u
       (get_local $0)
       (i32.const 100)
      )
     )
     (set_local $0
-     (i32.div_s
+     (i32.div_u
       (get_local $0)
       (i32.const 100)
      )
@@ -3785,9 +3762,9 @@
     )
    )
   )
-  (set_local $1
+  (tee_local $1
    (if (result i32)
-    (i32.lt_s
+    (i32.lt_u
      (get_local $0)
      (i32.const 10)
     )
@@ -3809,16 +3786,6 @@
     )
    )
   )
-  (if
-   (get_local $3)
-   (set_local $1
-    (call $~lib/string/String.__concat
-     (i32.const 1920)
-     (get_local $1)
-    )
-   )
-  )
-  (get_local $1)
  )
  (func $start (; 28 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
@@ -4756,7 +4723,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/itoa32
+     (call $~lib/internal/itoa/utoa32
       (i32.const 123)
      )
      (i32.const 1824)
@@ -4775,8 +4742,11 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/itoa32
-      (i32.const -1000)
+     (call $~lib/string/String.__concat
+      (i32.const 1920)
+      (call $~lib/internal/itoa/utoa32
+       (i32.const 1000)
+      )
      )
      (i32.const 1928)
     )

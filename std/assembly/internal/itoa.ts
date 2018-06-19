@@ -37,14 +37,9 @@ function decimalDigitsCount(value: i32): i32 {
   return t + 1;
 }
 
-export function itoa32(num: i32): string {
-  if (!num) return "0";
-
+export function utoa32(num: u32): string {
   var res = "";
-  var r: i32, t: i32, d1: i32, d2: i32;
-
-  var isneg = num < 0;
-  if (isneg) num = -num;
+  var r: u32, t: u32, d1: u32, d2: u32;
 
   while (num >= 10000) {
     t = num / 10000;
@@ -70,6 +65,16 @@ export function itoa32(num: i32): string {
     res = digits_00_99[num] + res;
   }
 
+  return res;
+}
+
+@inline
+export function itoa32(num: i32): string {
+  if (!num) return "0";
+
+  var isneg = num < 0;
+  if (isneg) num = -num;
+  var res = utoa32(num);
   if (isneg) res = "-" + res;
   return res;
 }
@@ -80,14 +85,14 @@ export function itoa64(num: i64): string {
   var isneg = num < 0;
   if (isneg) num = -num;
 
+  var res = "";
   if (num >= 1844674407) {
     let hi: u32 = num / 10000000000;
     let lo: u32 = num - hi * 10000000000;
-
-    let res = itoa32(hi) + itoa32(lo);
-    if (isneg) res = "-" + res;
-    return res;
+    res = utoa32(hi) + utoa32(lo);
+  } else {
+    res = utoa32(<u32>num);
   }
-
-  return itoa32(isneg ? -(<i32>num) : <i32>num);
+  if (isneg) res = "-" + res;
+  return res;
 }
