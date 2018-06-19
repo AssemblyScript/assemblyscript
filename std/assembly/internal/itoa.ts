@@ -73,3 +73,21 @@ export function itoa32(num: i32): string {
   if (isneg) res = "-" + res;
   return res;
 }
+
+export function itoa64(num: i64): string {
+  if (!num) return "0";
+
+  var isneg = num < 0;
+  if (isneg) num = -num;
+
+  if (num >= 1844674407) {
+    let hi: u32 = num / 10000000000;
+    let lo: u32 = num - hi * 10000000000;
+
+    let res = itoa32(hi) + itoa32(lo);
+    if (isneg) res = "-" + res;
+    return res;
+  }
+
+  return itoa32(isneg ? -(<i32>num) : <i32>num);
+}
