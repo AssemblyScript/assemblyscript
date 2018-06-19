@@ -1434,6 +1434,8 @@ export class Source extends Node {
   tokenizer: Tokenizer | null = null;
   /** Source map index. */
   debugInfoIndex: i32 = -1;
+  /** Re-exported sources. */
+  exportPaths: Set<string> | null = null;
 
   /** Constructs a new source node. */
   constructor(normalizedPath: string, text: string, kind: SourceKind) {

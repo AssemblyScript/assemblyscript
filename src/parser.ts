@@ -1958,8 +1958,11 @@ export class Parser extends DiagnosticEmitter {
         if (tn.skip(Token.STRINGLITERAL)) {
           path = Node.createStringLiteralExpression(tn.readString(), tn.range());
           let ret = Node.createExportStatement(null, path, flags, tn.range(startPos, tn.pos));
-          let internalPath = ret.internalPath;
-          if (internalPath !== null && !this.seenlog.has(internalPath)) {
+          let internalPath = assert(ret.internalPath);
+          let source = tn.source;
+          if (!source.exportPaths) source.exportPaths = new Set();
+          source.exportPaths.add(internalPath);
+          if (!this.seenlog.has(internalPath)) {
             this.backlog.push(internalPath);
             this.seenlog.add(internalPath);
           }

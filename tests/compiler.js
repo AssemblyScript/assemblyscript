@@ -163,7 +163,7 @@ tests.forEach(filename => {
         });
         console.log("- " + colors.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
       } catch (e) {
-        console.log("- " + colors.red("instantiate ERROR: ") + e);
+        console.log("- " + colors.red("instantiate ERROR: ") + e.stack);
         failed = true;
       }
 
