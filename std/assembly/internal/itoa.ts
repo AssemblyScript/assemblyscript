@@ -31,7 +31,7 @@ const digits_00_99: string[] = [
 function decimalDigitsCount(value: i32): i32 {
   var l = 32 - clz(value);  // log2
   var t = l * 1233 >>> 12;  // log10
-      t = t - <i32>(value < powers_0_10[t]);
+      t = t - <i32>(value < unchecked(powers_0_10[t]));
   return t + 1;
 }
 
@@ -40,7 +40,7 @@ export function utoa32(num: u32): string {
   var r: u32, t: u32, d1: u32, d2: u32;
 
   while (num >= 10000) {
-    // in most VMs i32/u32 div and rem by constant can be shared and simplificate
+    // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
     t = num / 10000;
     r = num % 10000;
     num = t;
@@ -48,20 +48,20 @@ export function utoa32(num: u32): string {
     d1 = r / 100;
     d2 = r % 100;
 
-    res = digits_00_99[d1] + digits_00_99[d2] + res;
+    res = unchecked(digits_00_99[d1]) + unchecked(digits_00_99[d2]) + res;
   }
 
   if (num >= 100) {
     t   = num / 100;
     d1  = num % 100;
     num = t;
-    res = digits_00_99[d1] + res;
+    res = unchecked(digits_00_99[d1]) + res;
   }
 
   if (num < 10) {
     res = String.fromCharCode(CharCode._0 + num) + res;
   } else {
-    res = digits_00_99[num] + res;
+    res = unchecked(digits_00_99[num]) + res;
   }
 
   return res;
@@ -88,7 +88,7 @@ export function itoa64(num: i64): string {
   if (num >= 1844674407) {
     let hi: u32 = num / 10000000000;
     // In most VMs i64/u64 div and rem by constant is not cheap
-    // and can't be simplificate so we avoid rem operation
+    // and can't be simplificate so we avoid modulo operation
     let lo: u32 = num - hi * 10000000000;
     res = utoa32(hi) + utoa32(lo);
   } else {

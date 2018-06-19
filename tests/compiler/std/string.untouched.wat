@@ -4349,38 +4349,26 @@
    (get_local $4)
   )
  )
- (func $~lib/array/Array<String>#__get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#__unchecked_get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (set_local $2
-   (i32.load
-    (get_local $0)
-   )
-  )
   (return
-   (if (result i32)
-    (i32.lt_u
-     (get_local $1)
-     (i32.shr_u
-      (i32.load
-       (get_local $2)
-      )
-      (i32.const 2)
+   (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0 (result i32)
+    (set_local $2
+     (i32.load
+      (get_local $0)
      )
     )
-    (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0 (result i32)
-     (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0
-      (i32.load offset=8
-       (i32.add
-        (get_local $2)
-        (i32.shl
-         (get_local $1)
-         (i32.const 2)
-        )
+    (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0
+     (i32.load offset=8
+      (i32.add
+       (get_local $2)
+       (i32.shl
+        (get_local $1)
+        (i32.const 2)
        )
       )
      )
     )
-    (unreachable)
    )
   )
  )
@@ -4447,11 +4435,11 @@
        (set_local $1
         (call $~lib/string/String.__concat
          (call $~lib/string/String.__concat
-          (call $~lib/array/Array<String>#__get
+          (call $~lib/array/Array<String>#__unchecked_get
            (i32.const 888)
            (get_local $4)
           )
-          (call $~lib/array/Array<String>#__get
+          (call $~lib/array/Array<String>#__unchecked_get
            (i32.const 888)
            (get_local $5)
           )
@@ -4488,7 +4476,7 @@
     )
     (set_local $1
      (call $~lib/string/String.__concat
-      (call $~lib/array/Array<String>#__get
+      (call $~lib/array/Array<String>#__unchecked_get
        (i32.const 888)
        (get_local $4)
       )
@@ -4515,7 +4503,7 @@
    )
    (set_local $1
     (call $~lib/string/String.__concat
-     (call $~lib/array/Array<String>#__get
+     (call $~lib/array/Array<String>#__unchecked_get
       (i32.const 888)
       (get_local $0)
      )

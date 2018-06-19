@@ -3638,32 +3638,16 @@
   )
   (get_local $4)
  )
- (func $~lib/array/Array<String>#__get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (tee_local $0
-   (if (result i32)
-    (i32.lt_u
+ (func $~lib/array/Array<String>#__unchecked_get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (i32.load offset=8
+   (i32.add
+    (i32.load
+     (get_local $0)
+    )
+    (i32.shl
      (get_local $1)
-     (i32.shr_u
-      (i32.load
-       (tee_local $0
-        (i32.load
-         (get_local $0)
-        )
-       )
-      )
-      (i32.const 2)
-     )
+     (i32.const 2)
     )
-    (i32.load offset=8
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
-      )
-     )
-    )
-    (unreachable)
    )
   )
  )
@@ -3714,14 +3698,14 @@
      (set_local $1
       (call $~lib/string/String.__concat
        (call $~lib/string/String.__concat
-        (call $~lib/array/Array<String>#__get
+        (call $~lib/array/Array<String>#__unchecked_get
          (i32.const 888)
          (i32.div_u
           (get_local $2)
           (i32.const 100)
          )
         )
-        (call $~lib/array/Array<String>#__get
+        (call $~lib/array/Array<String>#__unchecked_get
          (i32.const 888)
          (get_local $3)
         )
@@ -3753,7 +3737,7 @@
     )
     (set_local $1
      (call $~lib/string/String.__concat
-      (call $~lib/array/Array<String>#__get
+      (call $~lib/array/Array<String>#__unchecked_get
        (i32.const 888)
        (get_local $2)
       )
@@ -3778,7 +3762,7 @@
      (get_local $1)
     )
     (call $~lib/string/String.__concat
-     (call $~lib/array/Array<String>#__get
+     (call $~lib/array/Array<String>#__unchecked_get
       (i32.const 888)
       (get_local $0)
      )
