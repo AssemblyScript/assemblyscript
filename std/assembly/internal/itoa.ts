@@ -40,6 +40,7 @@ export function utoa32(num: u32): string {
   var r: u32, t: u32, d1: u32, d2: u32;
 
   while (num >= 10000) {
+    // in most VMs i32/u32 div and rem by constant can be shared and simplificate
     t = num / 10000;
     r = num % 10000;
     num = t;
@@ -86,6 +87,8 @@ export function itoa64(num: i64): string {
   var res = "";
   if (num >= 1844674407) {
     let hi: u32 = num / 10000000000;
+    // In most VMs i64/u64 div and rem by constant is not cheap
+    // and can't be simplificate so we avoid rem operation
     let lo: u32 = num - hi * 10000000000;
     res = utoa32(hi) + utoa32(lo);
   } else {
