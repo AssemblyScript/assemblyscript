@@ -1,9 +1,8 @@
 (module
- (type $iii (func (param i32 i32) (result i32)))
+ (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
@@ -539,8 +538,8 @@
    )
   )
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   (if
    (i32.gt_u
     (get_local $1)
@@ -556,21 +555,29 @@
     (unreachable)
    )
   )
-  (set_local $2
+  (set_local $3
    (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $1)
    )
   )
-  (call $~lib/memory/set_memory
-   (i32.add
-    (get_local $2)
-    (i32.const 8)
+  (if
+   (i32.eqz
+    (i32.and
+     (get_local $2)
+     (i32.const 1)
+    )
    )
-   (i32.const 0)
-   (get_local $1)
+   (call $~lib/memory/set_memory
+    (i32.add
+     (get_local $3)
+     (i32.const 8)
+    )
+    (i32.const 0)
+    (get_local $1)
+   )
   )
   (return
-   (get_local $2)
+   (get_local $3)
   )
  )
  (func $~lib/memory/copy_memory (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -2863,6 +2870,7 @@
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.const 0)
     (i32.const 8)
+    (i32.const 0)
    )
   )
   (if

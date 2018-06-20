@@ -307,7 +307,7 @@ declare class ArrayBuffer {
   /** The size, in bytes, of the array. */
   readonly byteLength: i32;
   /** Constructs a new array buffer of the given length in bytes. */
-  constructor(length: i32);
+  constructor(length: i32, unsafe?: bool);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
   slice(begin?: i32, end?: i32): ArrayBuffer;
 }
