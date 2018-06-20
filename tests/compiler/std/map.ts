@@ -1,10 +1,4 @@
 import {
-  allocUnsafe,
-  HEADER_SIZE,
-  MAX_BLENGTH
-} from "internal/arraybuffer";
-
-import {
   hash
 } from "internal/hash";
 
@@ -25,45 +19,50 @@ class MapEntry<K,V> {
 /** Empty bit. */
 const EMPTY: usize = 1 << 0;
 
+/** Computes the alignment of an entry. */
+@inline function ENTRY_ALIGN<K,V>(): usize {
+  // can align to 4 instead of 8 if 32-bit and K/V is <= 32-bits
+  const maxkv = sizeof<K>() > sizeof<V>() ? sizeof<K>() : sizeof<V>();
+  const align = (maxkv > sizeof<usize>() ? maxkv : sizeof<usize>()) - 1;
+  return align;
+}
+
+/** Computes the aligned size of an entry. */
+@inline function ENTRY_SIZE<K,V>(): usize {
+  const align = ENTRY_ALIGN<K,V>();
+  const size = (offsetof<MapEntry<K,V>>() + align) & ~align;
+  return size;
+}
+
 class Map<K,V> {
 
-  /** A buffer storing `indexMask + 1` indices followed by `capacity` entries. */
-  private buffer: ArrayBuffer;
-  /** The current index mask for distributing hash codes among indixes. */
-  private indexMask: u32;
-  /** Maximum number of entries this map can hold before rehashing. */
-  private capacity: i32;
-  /** Entry insertion offset. */
-  private offset: i32;
-  /** Number of entries excl. explicitly marked empty ones. */
-  private count: i32;
+  // buckets holding references to the respective first entry within
+  private buckets: ArrayBuffer; // usize[bucketsMask + 1]
+  private bucketsMask: u32;
 
-  /** Size of a single index. */
-  private static readonly INDEX_SIZE: usize = sizeof<usize>();
-  /** Size of a single entry. */
-  private static readonly ENTRY_SIZE: usize = (offsetof<MapEntry<K,V>>() + 7) & ~7;
-  /** Initial size of empty map. */
-  private static readonly INITIAL_SIZE: i32 = INITIAL_CAPACITY * <i32>(Map.INDEX_SIZE + Map.ENTRY_SIZE);
+  // entries in insertion order
+  private entries: ArrayBuffer; // MapEntry<K,V>[entriesCapacity]
+  private entriesCapacity: i32;
+  private entriesOffset: i32;
+  private entriesCount: i32;
 
-  get size(): i32 { return this.count; }
+  get size(): i32 { return this.entriesCount; }
 
   constructor() { this.clear(); }
 
   clear(): void {
-    var buffer = allocUnsafe(Map.INITIAL_SIZE);
-    set_memory(changetype<usize>(buffer) + HEADER_SIZE, 0, INITIAL_CAPACITY * Map.INDEX_SIZE);
-    this.buffer = buffer;
-    this.indexMask = INITIAL_CAPACITY - 1;
-    this.capacity = INITIAL_CAPACITY;
-    this.offset = 0;
-    this.count = 0;
+    const bucketsSize = INITIAL_CAPACITY * <i32>sizeof<usize>();
+    this.buckets = new ArrayBuffer(bucketsSize);
+    this.bucketsMask = INITIAL_CAPACITY - 1;
+    const entriesSize = INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>();
+    this.entries = new ArrayBuffer(entriesSize, true);
+    this.entriesCapacity = INITIAL_CAPACITY;
+    this.entriesOffset = 0;
+    this.entriesCount = 0;
   }
 
   private find(key: K, hashCode: u32): MapEntry<K,V> | null {
-    var entry = load<MapEntry<K,V>>(
-      changetype<usize>(this.buffer) + (hashCode & this.indexMask) * Map.INDEX_SIZE,
-      HEADER_SIZE
-    );
+    var entry = this.buckets.load<MapEntry<K,V>>(hashCode & this.bucketsMask);
     while (entry) {
       if (!(entry.taggedNext & EMPTY) && entry.key == key) return entry;
       entry = changetype<MapEntry<K,V>>(entry.taggedNext & ~EMPTY);
@@ -85,122 +84,130 @@ class Map<K,V> {
     var entry = this.find(key, hashCode);
     if (entry) {
       entry.value = value;
-    } else { // check if rehashing is necessary
-      let capacity = this.capacity;
-      if (this.offset == capacity) {
+    } else {
+      // check if rehashing is necessary
+      let capacity = this.entriesCapacity;
+      if (this.entriesOffset == capacity) {
         this.rehash(
-          this.count >= <i32>(capacity * FREE_FACTOR)
-            ? (this.indexMask << 1) | 1 // grow to next power of two
-            : this.indexMask            // just rehash if 1/4+ entries are empty
+          this.entriesCount >= <i32>(capacity * FREE_FACTOR)
+            ? (this.bucketsMask << 1) | 1 // grow capacity to next 2^N
+            :  this.bucketsMask           // just rehash if 1/4+ entries are empty
         );
-        capacity = this.capacity;
+        capacity = this.entriesCapacity;
       }
-
       // append new entry
-      let buffer = this.buffer;
+      let entries = this.entries;
       entry = changetype<MapEntry<K,V>>(
-        changetype<usize>(buffer) + HEADER_SIZE
-        + (this.indexMask + 1) * Map.INDEX_SIZE
-        + this.offset++ * Map.ENTRY_SIZE
+        changetype<usize>(entries) + ArrayBuffer.HEADER_SIZE + this.entriesOffset++ * ENTRY_SIZE<K,V>()
       );
       entry.key = key;
       entry.value = value;
-
-      // link with previous colliding entry, if any
-      let tableIndex = hashCode & this.indexMask;
-      let entryOffset = changetype<usize>(buffer) + HEADER_SIZE + (hashCode & this.indexMask) * Map.INDEX_SIZE;
-      entry.taggedNext = load<usize>(entryOffset);
-      store<usize>(entryOffset, changetype<usize>(entry));
-      ++this.count;
+      // link with previous entry in bucket
+      let bucketIndex = hashCode & this.bucketsMask;
+      entry.taggedNext = this.buckets.load<usize>(bucketIndex);
+      this.buckets.store<usize>(bucketIndex, changetype<usize>(entry));
+      ++this.entriesCount;
     }
   }
 
   delete(key: K): bool {
     var entry = this.find(key, hash(key));
     if (!entry) return false;
-    --this.count;
     entry.taggedNext |= EMPTY;
-    if (this.indexMask > <u32>INITIAL_CAPACITY && this.count < <i32>(this.offset * FREE_FACTOR)) {
-      this.rehash(this.indexMask >> 1);
-    }
+    --this.entriesCount;
+    if (
+      this.bucketsMask  > <u32>INITIAL_CAPACITY &&
+      this.entriesCount < <i32>(this.entriesOffset * FREE_FACTOR)
+    ) this.rehash(this.bucketsMask >> 1);
     return true;
   }
 
-  private rehash(newMask: i32): void {
-    // TODO: check capacity
-    var newIndices = newMask + 1;
-    var newCapacity = <i32>(newIndices * FILL_FACTOR);
-    var newBufferSize = newIndices * Map.INDEX_SIZE + newCapacity * Map.ENTRY_SIZE;
-    var newBuffer = allocUnsafe(newBufferSize);
-    set_memory(changetype<usize>(newBuffer) + HEADER_SIZE, 0, newIndices * Map.INDEX_SIZE);
-    var src = changetype<MapEntry<K,V>>(
-      changetype<usize>(this.buffer) + HEADER_SIZE + (this.indexMask + 1) * Map.INDEX_SIZE
-    );
-    var dst = changetype<MapEntry<K,V>>(
-      changetype<usize>(newBuffer) + HEADER_SIZE + newIndices * Map.INDEX_SIZE
-    );
-    var end = changetype<usize>(src) + this.offset * Map.ENTRY_SIZE;
-    while (changetype<usize>(src) != end) {
-      if (!(src.taggedNext & EMPTY)) {
-        dst.key = src.key;
-        dst.value = src.value;
-        let oldOffset = (
-          changetype<usize>(newBuffer) /* + HEADER_SIZE -> constantOffset */
-          + (hash(src.key) & newMask) * Map.INDEX_SIZE
-        );
-        dst.taggedNext = load<usize>(
-          oldOffset,
-          HEADER_SIZE
-        );
-        store<MapEntry<K,V>>(
-          oldOffset,
-          dst,
-          HEADER_SIZE
-        );
-        dst = changetype<MapEntry<K,V>>(changetype<usize>(dst) + Map.ENTRY_SIZE);
+  private rehash(newBucketsMask: i32): void {
+    var newBucketsCapacity = newBucketsMask + 1;
+    var newBuckets = new ArrayBuffer(newBucketsCapacity * sizeof<usize>());
+    var newEntriesCapacity = <i32>(newBucketsCapacity * FILL_FACTOR);
+    var newEntries = new ArrayBuffer(newEntriesCapacity * ENTRY_SIZE<K,V>(), true);
+
+    // copy old entries to new entries
+    var p = changetype<usize>(this.entries) + ArrayBuffer.HEADER_SIZE;
+    var q = changetype<usize>(newEntries) + ArrayBuffer.HEADER_SIZE;
+    var k = p + this.entriesOffset * ENTRY_SIZE<K,V>();
+    while (p != k) {
+      let pEntry = changetype<MapEntry<K,V>>(p);
+      let qEntry = changetype<MapEntry<K,V>>(q);
+      if (!(pEntry.taggedNext & EMPTY)) {
+        qEntry.key = pEntry.key;
+        qEntry.value = pEntry.value;
+        let bucketIndex = hash(pEntry.key) & newBucketsMask;
+        qEntry.taggedNext = newBuckets.load<usize>(bucketIndex);
+        newBuckets.store<MapEntry<K,V>>(bucketIndex, qEntry);
+        q += ENTRY_SIZE<K,V>();
       }
-      src = changetype<MapEntry<K,V>>(changetype<usize>(src) + Map.ENTRY_SIZE);
+      p += ENTRY_SIZE<K,V>();
     }
-    this.buffer = newBuffer;
-    this.indexMask = newMask;
-    this.capacity = <i32>newCapacity;
-    this.offset = this.count;
+
+    this.buckets = newBuckets;
+    this.bucketsMask = newBucketsMask;
+    this.entries = newEntries;
+    this.entriesCapacity = newEntriesCapacity;
+    this.entriesOffset = this.entriesCount;
   }
 }
 
 import "allocator/arena";
 
-var map = new Map<i32,i32>();
+function test<K,V>(): void {
+  var map = new Map<K,V>();
 
-// insert new
-for (let i = 1; i <= 200; ++i) {
-  map.set(i, 100 + i);
-  assert(map.has(i));
-  assert(!map.has(i + 1));
-  assert(map.get(i) == 100 + i);
+  // insert new
+  for (let k: K = 1; k <= 200; ++k) {
+    map.set(k, 100 + <V>k);
+    assert(map.has(k));
+    assert(!map.has(k + 1));
+    assert(map.get(k) == 100 + k);
+  }
+  assert(map.size == 200);
+
+  // insert duplicate
+  for (let k: K = 50; k <= 100; ++k) {
+    assert(map.has(k));
+    assert(map.get(k) == 100 + <V>k);
+    map.set(k, 100 + <V>k);
+    assert(map.has(k));
+    assert(map.get(k) == 100 + <V>k);
+  }
+  assert(map.size == 200);
+
+  // delete
+  for (let k: K = 1; k <= 100; ++k) {
+    assert(map.has(k));
+    assert(map.get(k) == 100 + <V>k);
+    map.delete(k);
+    assert(!map.has(k));
+    assert(map.has(k + 1));
+  }
+  assert(map.size == 100);
+
+  // insert + delete
+  for (let k: K = 1; k <= 50; ++k) {
+    assert(!map.has(k));
+    map.set(k, 100 + <V>k);
+    assert(map.has(k));
+    map.delete(k);
+    assert(!map.has(k));
+  }
+  assert(map.size == 100);
+
+  // clear
+  map.clear();
+  assert(map.size == 0);
 }
-assert(map.size == 200);
 
-// insert duplicate
-for (let i = 50; i <= 100; ++i) {
-  assert(map.has(i));
-  assert(map.get(i) == 100 + i);
-  map.set(i, 100 + i);
-  assert(map.has(i));
-  assert(map.get(i) == 100 + i);
-}
-assert(map.size == 200);
-
-// delete
-for (let i = 1; i <= 100; ++i) {
-  assert(map.has(i));
-  assert(map.get(i) == 100 + i);
-  map.delete(i);
-  assert(!map.has(i));
-  assert(map.has(i + 1));
-}
-assert(map.size == 100);
-
-// clear
-map.clear();
-assert(map.size == 0);
+test<i32,i32>();
+test<i64,i32>();
+test<i64,i64>();
+test<i32,i64>();
+test<i16,i32>();
+test<i16,i64>();
+test<i32,i16>();
+test<i64,i16>();

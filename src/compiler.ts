@@ -126,7 +126,9 @@ import {
   StringLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
-  FieldDeclaration
+  FieldDeclaration,
+
+  nodeIsConstantValue
 } from "./ast";
 
 import {
@@ -5503,9 +5505,7 @@ export class Compiler extends DiagnosticEmitter {
       let allOptionalsAreConstant = true;
       for (let i = numArguments; i < maxArguments; ++i) {
         let initializer = parameterNodes[i].initializer;
-        if (!(initializer && initializer.kind == NodeKind.LITERAL)) {
-          // TODO: other kinds might be constant as well
-          // NOTE: if the initializer is missing this is reported in ensureTrampoline below
+        if (!(initializer !== null && nodeIsConstantValue(initializer.kind))) {
           allOptionalsAreConstant = false;
           break;
         }

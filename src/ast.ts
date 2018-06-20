@@ -99,6 +99,17 @@ export enum NodeKind {
   COMMENT
 }
 
+/** Checks if a node represents a constant value. */
+export function nodeIsConstantValue(kind: NodeKind): bool {
+  switch (kind) {
+    case NodeKind.LITERAL:
+    case NodeKind.NULL:
+    case NodeKind.TRUE:
+    case NodeKind.FALSE: return true;
+  }
+  return false;
+}
+
 /** Base class of all nodes. */
 export abstract class Node {
 
