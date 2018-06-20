@@ -5,16 +5,18 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iiv (func (param i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iIiv (func (param i32 i64 i32)))
+ (type $iiv (func (param i32 i32)))
+ (type $iIi (func (param i32 i64) (result i32)))
  (type $Ii (func (param i64) (result i32)))
  (type $iIii (func (param i32 i64 i32) (result i32)))
- (type $iIi (func (param i32 i64) (result i32)))
- (type $iIIv (func (param i32 i64 i64)))
- (type $iII (func (param i32 i64) (result i64)))
- (type $iiIv (func (param i32 i32 i64)))
- (type $iiI (func (param i32 i32) (result i64)))
+ (type $iIiv (func (param i32 i64 i32)))
+ (type $ifi (func (param i32 f32) (result i32)))
+ (type $ifii (func (param i32 f32 i32) (result i32)))
+ (type $ifiv (func (param i32 f32 i32)))
+ (type $iFi (func (param i32 f64) (result i32)))
+ (type $iFii (func (param i32 f64 i32) (result i32)))
+ (type $iFiv (func (param i32 f64 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -524,7 +526,7 @@
   )
   (get_local $3)
  )
- (func $std/map/Map<i32,i32>#clear (; 6 ;) (type $iv) (param $0 i32)
+ (func $std/map/Map<i8,i32>#clear (; 6 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -558,7 +560,7 @@
    (i32.const 0)
   )
  )
- (func $std/map/Map<i32,i32>#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/map/Map<i8,i32>#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -594,12 +596,3929 @@
     )
    )
   )
-  (call $std/map/Map<i32,i32>#clear
+  (call $std/map/Map<i8,i32>#clear
    (get_local $0)
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hash32 (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash8 (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  (i32.mul
+   (i32.xor
+    (get_local $0)
+    (i32.const -2128831035)
+   )
+   (i32.const 16777619)
+  )
+ )
+ (func $std/map/Map<i8,i32>#find (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (set_local $0
+   (i32.load offset=8
+    (i32.add
+     (i32.load
+      (get_local $0)
+     )
+     (i32.shl
+      (i32.and
+       (get_local $2)
+       (i32.load offset=4
+        (get_local $0)
+       )
+      )
+      (i32.const 2)
+     )
+    )
+   )
+  )
+  (loop $continue|0
+   (if
+    (get_local $0)
+    (block
+     (if
+      (tee_local $2
+       (i32.eqz
+        (i32.and
+         (i32.load offset=8
+          (get_local $0)
+         )
+         (i32.const 1)
+        )
+       )
+      )
+      (set_local $2
+       (i32.eq
+        (i32.load8_u
+         (get_local $0)
+        )
+        (i32.and
+         (get_local $1)
+         (i32.const 255)
+        )
+       )
+      )
+     )
+     (if
+      (get_local $2)
+      (return
+       (get_local $0)
+      )
+     )
+     (set_local $0
+      (i32.and
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const -2)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.const 0)
+ )
+ (func $std/map/Map<i8,i32>#has (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (i32.ne
+   (call $std/map/Map<i8,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash8
+     (i32.shr_s
+      (i32.shl
+       (get_local $1)
+       (i32.const 24)
+      )
+      (i32.const 24)
+     )
+    )
+   )
+   (i32.const 0)
+  )
+ )
+ (func $std/map/Map<i8,i32>#rehash (; 11 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (set_local $4
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.shl
+     (tee_local $2
+      (i32.add
+       (get_local $1)
+       (i32.const 1)
+      )
+     )
+     (i32.const 2)
+    )
+    (i32.const 0)
+   )
+  )
+  (set_local $5
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.mul
+     (tee_local $2
+      (tee_local $8
+       (i32.trunc_s/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (get_local $2)
+         )
+         (f64.const 2.6666666666666665)
+        )
+       )
+      )
+     )
+     (i32.const 12)
+    )
+    (i32.const 1)
+   )
+  )
+  (set_local $6
+   (i32.add
+    (tee_local $3
+     (tee_local $2
+      (i32.add
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 8)
+      )
+     )
+    )
+    (i32.mul
+     (tee_local $6
+      (i32.load offset=16
+       (get_local $0)
+      )
+     )
+     (i32.const 12)
+    )
+   )
+  )
+  (set_local $3
+   (i32.add
+    (get_local $5)
+    (i32.const 8)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.ne
+     (get_local $2)
+     (get_local $6)
+    )
+    (block
+     (if
+      (i32.eqz
+       (i32.and
+        (i32.load offset=8
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (block
+       (i32.store8
+        (get_local $3)
+        (i32.load8_s
+         (get_local $2)
+        )
+       )
+       (i32.store offset=4
+        (get_local $3)
+        (i32.load offset=4
+         (get_local $2)
+        )
+       )
+       (i32.store offset=8
+        (get_local $3)
+        (i32.load offset=8
+         (tee_local $7
+          (i32.add
+           (get_local $4)
+           (i32.shl
+            (i32.and
+             (tee_local $7
+              (call $~lib/internal/hash/hash8
+               (i32.load8_s
+                (get_local $2)
+               )
+              )
+             )
+             (get_local $1)
+            )
+            (i32.const 2)
+           )
+          )
+         )
+        )
+       )
+       (i32.store offset=8
+        (get_local $7)
+        (get_local $3)
+       )
+       (set_local $3
+        (i32.add
+         (get_local $3)
+         (i32.const 12)
+        )
+       )
+      )
+     )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 12)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.store
+   (get_local $0)
+   (get_local $4)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (get_local $1)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $5)
+  )
+  (i32.store offset=12
+   (get_local $0)
+   (get_local $8)
+  )
+  (i32.store offset=16
+   (get_local $0)
+   (i32.load offset=20
+    (get_local $0)
+   )
+  )
+ )
+ (func $std/map/Map<i8,i32>#set (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (if
+   (tee_local $3
+    (call $std/map/Map<i8,i32>#find
+     (get_local $0)
+     (get_local $1)
+     (tee_local $4
+      (call $~lib/internal/hash/hash8
+       (i32.shr_s
+        (i32.shl
+         (get_local $1)
+         (i32.const 24)
+        )
+        (i32.const 24)
+       )
+      )
+     )
+    )
+   )
+   (i32.store offset=4
+    (get_local $3)
+    (get_local $2)
+   )
+   (block
+    (if
+     (i32.eq
+      (i32.load offset=16
+       (get_local $0)
+      )
+      (i32.load offset=12
+       (get_local $0)
+      )
+     )
+     (call $std/map/Map<i8,i32>#rehash
+      (get_local $0)
+      (tee_local $3
+       (if (result i32)
+        (i32.lt_s
+         (i32.load offset=20
+          (get_local $0)
+         )
+         (i32.trunc_s/f64
+          (f64.mul
+           (f64.convert_s/i32
+            (i32.load offset=12
+             (get_local $0)
+            )
+           )
+           (f64.const 0.75)
+          )
+         )
+        )
+        (i32.load offset=4
+         (get_local $0)
+        )
+        (i32.or
+         (i32.shl
+          (i32.load offset=4
+           (get_local $0)
+          )
+          (i32.const 1)
+         )
+         (i32.const 1)
+        )
+       )
+      )
+     )
+    )
+    (set_local $5
+     (i32.add
+      (i32.load offset=8
+       (get_local $0)
+      )
+      (i32.const 8)
+     )
+    )
+    (i32.store offset=16
+     (get_local $0)
+     (i32.add
+      (tee_local $3
+       (i32.load offset=16
+        (get_local $0)
+       )
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store8
+     (tee_local $3
+      (i32.add
+       (get_local $5)
+       (i32.mul
+        (get_local $3)
+        (i32.const 12)
+       )
+      )
+     )
+     (get_local $1)
+    )
+    (i32.store offset=4
+     (get_local $3)
+     (get_local $2)
+    )
+    (i32.store offset=20
+     (get_local $0)
+     (i32.add
+      (i32.load offset=20
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store offset=8
+     (tee_local $1
+      (get_local $3)
+     )
+     (tee_local $2
+      (i32.load offset=8
+       (i32.add
+        (i32.load
+         (get_local $0)
+        )
+        (i32.shl
+         (tee_local $3
+          (i32.and
+           (get_local $4)
+           (i32.load offset=4
+            (get_local $0)
+           )
+          )
+         )
+         (i32.const 2)
+        )
+       )
+      )
+     )
+    )
+    (i32.store offset=8
+     (i32.add
+      (i32.load
+       (get_local $0)
+      )
+      (i32.shl
+       (get_local $3)
+       (i32.const 2)
+      )
+     )
+     (get_local $1)
+    )
+   )
+  )
+ )
+ (func $std/map/Map<i8,i32>#get (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (tee_local $0
+   (if (result i32)
+    (tee_local $0
+     (call $std/map/Map<i8,i32>#find
+      (get_local $0)
+      (get_local $1)
+      (call $~lib/internal/hash/hash8
+       (i32.shr_s
+        (i32.shl
+         (get_local $1)
+         (i32.const 24)
+        )
+        (i32.const 24)
+       )
+      )
+     )
+    )
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $std/map/Map<i8,i32>#get:size (; 14 ;) (type $ii) (param $0 i32) (result i32)
+  (i32.load offset=20
+   (get_local $0)
+  )
+ )
+ (func $std/map/Map<i8,i32>#delete (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (if
+   (i32.eqz
+    (tee_local $0
+     (call $std/map/Map<i8,i32>#find
+      (tee_local $2
+       (get_local $0)
+      )
+      (get_local $1)
+      (tee_local $0
+       (call $~lib/internal/hash/hash8
+        (i32.shr_s
+         (i32.shl
+          (get_local $1)
+          (i32.const 24)
+         )
+         (i32.const 24)
+        )
+       )
+      )
+     )
+    )
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (i32.or
+    (i32.load offset=8
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
+  (i32.store offset=20
+   (get_local $2)
+   (i32.sub
+    (i32.load offset=20
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+  (if
+   (tee_local $0
+    (i32.ge_u
+     (i32.add
+      (tee_local $1
+       (i32.shr_u
+        (i32.load offset=4
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.const 1)
+     )
+     (select
+      (i32.const 4)
+      (tee_local $0
+       (i32.load offset=20
+        (get_local $2)
+       )
+      )
+      (i32.gt_u
+       (i32.const 4)
+       (get_local $0)
+      )
+     )
+    )
+   )
+   (set_local $0
+    (i32.lt_s
+     (i32.load offset=20
+      (get_local $2)
+     )
+     (i32.trunc_s/f64
+      (f64.mul
+       (f64.convert_s/i32
+        (i32.load offset=12
+         (get_local $2)
+        )
+       )
+       (f64.const 0.75)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (get_local $0)
+   (call $std/map/Map<i8,i32>#rehash
+    (get_local $2)
+    (get_local $1)
+   )
+  )
+  (i32.const 1)
+ )
+ (func $std/map/test<i8,i32> (; 16 ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
+  (set_local $1
+   (call $std/map/Map<i8,i32>#constructor
+    (i32.const 0)
+   )
+  )
+  (block $break|0
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (call $std/map/Map<i8,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i8,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.shr_s
+       (i32.shl
+        (get_local $0)
+        (i32.const 24)
+       )
+       (i32.const 24)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 170)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i8,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.shr_s
+        (i32.shl
+         (get_local $0)
+         (i32.const 24)
+        )
+        (i32.const 24)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 171)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|0)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 173)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|1
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|1
+    (br_if $break|1
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 177)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i8,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.shr_s
+        (i32.shl
+         (get_local $0)
+         (i32.const 24)
+        )
+        (i32.const 24)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 178)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i8,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.shr_s
+       (i32.shl
+        (get_local $0)
+        (i32.const 24)
+       )
+       (i32.const 24)
+      )
+      (i32.const 20)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 180)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i8,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.shr_s
+        (i32.shl
+         (get_local $0)
+         (i32.const 24)
+        )
+        (i32.const 24)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 181)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|1)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 183)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|2
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|2
+    (br_if $break|2
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 187)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i8,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.shr_s
+        (i32.shl
+         (get_local $0)
+         (i32.const 24)
+        )
+        (i32.const 24)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 188)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<i8,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<i8,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 190)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|2)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 192)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|3
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|3
+    (br_if $break|3
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (call $std/map/Map<i8,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 196)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i8,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.shr_s
+       (i32.shl
+        (get_local $0)
+        (i32.const 24)
+       )
+       (i32.const 24)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 198)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<i8,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<i8,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 200)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|3)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 202)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (call $std/map/Map<i8,i32>#clear
+   (get_local $1)
+  )
+  (if
+   (call $std/map/Map<i8,i32>#get:size
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 206)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $std/map/Map<u8,i32>#has (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (i32.ne
+   (call $std/map/Map<i8,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash8
+     (i32.and
+      (get_local $1)
+      (i32.const 255)
+     )
+    )
+   )
+   (i32.const 0)
+  )
+ )
+ (func $std/map/Map<u8,i32>#rehash (; 18 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (set_local $4
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.shl
+     (tee_local $2
+      (i32.add
+       (get_local $1)
+       (i32.const 1)
+      )
+     )
+     (i32.const 2)
+    )
+    (i32.const 0)
+   )
+  )
+  (set_local $5
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.mul
+     (tee_local $2
+      (tee_local $8
+       (i32.trunc_s/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (get_local $2)
+         )
+         (f64.const 2.6666666666666665)
+        )
+       )
+      )
+     )
+     (i32.const 12)
+    )
+    (i32.const 1)
+   )
+  )
+  (set_local $6
+   (i32.add
+    (tee_local $3
+     (tee_local $2
+      (i32.add
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 8)
+      )
+     )
+    )
+    (i32.mul
+     (tee_local $6
+      (i32.load offset=16
+       (get_local $0)
+      )
+     )
+     (i32.const 12)
+    )
+   )
+  )
+  (set_local $3
+   (i32.add
+    (get_local $5)
+    (i32.const 8)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.ne
+     (get_local $2)
+     (get_local $6)
+    )
+    (block
+     (if
+      (i32.eqz
+       (i32.and
+        (i32.load offset=8
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (block
+       (i32.store8
+        (get_local $3)
+        (i32.load8_u
+         (get_local $2)
+        )
+       )
+       (i32.store offset=4
+        (get_local $3)
+        (i32.load offset=4
+         (get_local $2)
+        )
+       )
+       (i32.store offset=8
+        (get_local $3)
+        (i32.load offset=8
+         (tee_local $7
+          (i32.add
+           (get_local $4)
+           (i32.shl
+            (i32.and
+             (tee_local $7
+              (call $~lib/internal/hash/hash8
+               (i32.load8_u
+                (get_local $2)
+               )
+              )
+             )
+             (get_local $1)
+            )
+            (i32.const 2)
+           )
+          )
+         )
+        )
+       )
+       (i32.store offset=8
+        (get_local $7)
+        (get_local $3)
+       )
+       (set_local $3
+        (i32.add
+         (get_local $3)
+         (i32.const 12)
+        )
+       )
+      )
+     )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 12)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.store
+   (get_local $0)
+   (get_local $4)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (get_local $1)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $5)
+  )
+  (i32.store offset=12
+   (get_local $0)
+   (get_local $8)
+  )
+  (i32.store offset=16
+   (get_local $0)
+   (i32.load offset=20
+    (get_local $0)
+   )
+  )
+ )
+ (func $std/map/Map<u8,i32>#set (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (if
+   (tee_local $3
+    (call $std/map/Map<i8,i32>#find
+     (get_local $0)
+     (get_local $1)
+     (tee_local $4
+      (call $~lib/internal/hash/hash8
+       (i32.and
+        (get_local $1)
+        (i32.const 255)
+       )
+      )
+     )
+    )
+   )
+   (i32.store offset=4
+    (get_local $3)
+    (get_local $2)
+   )
+   (block
+    (if
+     (i32.eq
+      (i32.load offset=16
+       (get_local $0)
+      )
+      (i32.load offset=12
+       (get_local $0)
+      )
+     )
+     (call $std/map/Map<u8,i32>#rehash
+      (get_local $0)
+      (tee_local $3
+       (if (result i32)
+        (i32.lt_s
+         (i32.load offset=20
+          (get_local $0)
+         )
+         (i32.trunc_s/f64
+          (f64.mul
+           (f64.convert_s/i32
+            (i32.load offset=12
+             (get_local $0)
+            )
+           )
+           (f64.const 0.75)
+          )
+         )
+        )
+        (i32.load offset=4
+         (get_local $0)
+        )
+        (i32.or
+         (i32.shl
+          (i32.load offset=4
+           (get_local $0)
+          )
+          (i32.const 1)
+         )
+         (i32.const 1)
+        )
+       )
+      )
+     )
+    )
+    (set_local $5
+     (i32.add
+      (i32.load offset=8
+       (get_local $0)
+      )
+      (i32.const 8)
+     )
+    )
+    (i32.store offset=16
+     (get_local $0)
+     (i32.add
+      (tee_local $3
+       (i32.load offset=16
+        (get_local $0)
+       )
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store8
+     (tee_local $3
+      (i32.add
+       (get_local $5)
+       (i32.mul
+        (get_local $3)
+        (i32.const 12)
+       )
+      )
+     )
+     (get_local $1)
+    )
+    (i32.store offset=4
+     (get_local $3)
+     (get_local $2)
+    )
+    (i32.store offset=20
+     (get_local $0)
+     (i32.add
+      (i32.load offset=20
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store offset=8
+     (tee_local $1
+      (get_local $3)
+     )
+     (tee_local $2
+      (i32.load offset=8
+       (i32.add
+        (i32.load
+         (get_local $0)
+        )
+        (i32.shl
+         (tee_local $3
+          (i32.and
+           (get_local $4)
+           (i32.load offset=4
+            (get_local $0)
+           )
+          )
+         )
+         (i32.const 2)
+        )
+       )
+      )
+     )
+    )
+    (i32.store offset=8
+     (i32.add
+      (i32.load
+       (get_local $0)
+      )
+      (i32.shl
+       (get_local $3)
+       (i32.const 2)
+      )
+     )
+     (get_local $1)
+    )
+   )
+  )
+ )
+ (func $std/map/Map<u8,i32>#get (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (tee_local $0
+   (if (result i32)
+    (tee_local $0
+     (call $std/map/Map<i8,i32>#find
+      (get_local $0)
+      (get_local $1)
+      (call $~lib/internal/hash/hash8
+       (i32.and
+        (get_local $1)
+        (i32.const 255)
+       )
+      )
+     )
+    )
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $std/map/Map<u8,i32>#delete (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (if
+   (i32.eqz
+    (tee_local $0
+     (call $std/map/Map<i8,i32>#find
+      (tee_local $2
+       (get_local $0)
+      )
+      (get_local $1)
+      (tee_local $0
+       (call $~lib/internal/hash/hash8
+        (i32.and
+         (get_local $1)
+         (i32.const 255)
+        )
+       )
+      )
+     )
+    )
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (i32.or
+    (i32.load offset=8
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
+  (i32.store offset=20
+   (get_local $2)
+   (i32.sub
+    (i32.load offset=20
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+  (if
+   (tee_local $0
+    (i32.ge_u
+     (i32.add
+      (tee_local $1
+       (i32.shr_u
+        (i32.load offset=4
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.const 1)
+     )
+     (select
+      (i32.const 4)
+      (tee_local $0
+       (i32.load offset=20
+        (get_local $2)
+       )
+      )
+      (i32.gt_u
+       (i32.const 4)
+       (get_local $0)
+      )
+     )
+    )
+   )
+   (set_local $0
+    (i32.lt_s
+     (i32.load offset=20
+      (get_local $2)
+     )
+     (i32.trunc_s/f64
+      (f64.mul
+       (f64.convert_s/i32
+        (i32.load offset=12
+         (get_local $2)
+        )
+       )
+       (f64.const 0.75)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (get_local $0)
+   (call $std/map/Map<u8,i32>#rehash
+    (get_local $2)
+    (get_local $1)
+   )
+  )
+  (i32.const 1)
+ )
+ (func $std/map/test<u8,i32> (; 22 ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
+  (set_local $1
+   (call $std/map/Map<i8,i32>#constructor
+    (i32.const 0)
+   )
+  )
+  (block $break|0
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (call $std/map/Map<u8,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<u8,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.and
+       (get_local $0)
+       (i32.const 255)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 170)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<u8,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.and
+        (get_local $0)
+        (i32.const 255)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 171)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|0)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 173)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|1
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|1
+    (br_if $break|1
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 177)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<u8,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.and
+        (get_local $0)
+        (i32.const 255)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 178)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<u8,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.and
+       (get_local $0)
+       (i32.const 255)
+      )
+      (i32.const 20)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 180)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<u8,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.and
+        (get_local $0)
+        (i32.const 255)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 181)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|1)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 183)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|2
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|2
+    (br_if $break|2
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 187)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<u8,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.and
+        (get_local $0)
+        (i32.const 255)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 188)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<u8,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<u8,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 190)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|2)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 192)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|3
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|3
+    (br_if $break|3
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (call $std/map/Map<u8,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 196)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<u8,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.and
+       (get_local $0)
+       (i32.const 255)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u8,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 198)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<u8,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<u8,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 200)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|3)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 202)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (call $std/map/Map<i8,i32>#clear
+   (get_local $1)
+  )
+  (if
+   (call $std/map/Map<i8,i32>#get:size
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 206)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $~lib/internal/hash/hash16 (; 23 ;) (type $ii) (param $0 i32) (result i32)
+  (i32.mul
+   (i32.xor
+    (i32.mul
+     (i32.xor
+      (i32.and
+       (get_local $0)
+       (i32.const 255)
+      )
+      (i32.const -2128831035)
+     )
+     (i32.const 16777619)
+    )
+    (i32.shr_u
+     (get_local $0)
+     (i32.const 8)
+    )
+   )
+   (i32.const 16777619)
+  )
+ )
+ (func $std/map/Map<i16,i32>#find (; 24 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (set_local $0
+   (i32.load offset=8
+    (i32.add
+     (i32.load
+      (get_local $0)
+     )
+     (i32.shl
+      (i32.and
+       (get_local $2)
+       (i32.load offset=4
+        (get_local $0)
+       )
+      )
+      (i32.const 2)
+     )
+    )
+   )
+  )
+  (loop $continue|0
+   (if
+    (get_local $0)
+    (block
+     (if
+      (tee_local $2
+       (i32.eqz
+        (i32.and
+         (i32.load offset=8
+          (get_local $0)
+         )
+         (i32.const 1)
+        )
+       )
+      )
+      (set_local $2
+       (i32.eq
+        (i32.load16_u
+         (get_local $0)
+        )
+        (i32.and
+         (get_local $1)
+         (i32.const 65535)
+        )
+       )
+      )
+     )
+     (if
+      (get_local $2)
+      (return
+       (get_local $0)
+      )
+     )
+     (set_local $0
+      (i32.and
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const -2)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.const 0)
+ )
+ (func $std/map/Map<i16,i32>#has (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (i32.ne
+   (call $std/map/Map<i16,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash16
+     (i32.shr_s
+      (i32.shl
+       (get_local $1)
+       (i32.const 16)
+      )
+      (i32.const 16)
+     )
+    )
+   )
+   (i32.const 0)
+  )
+ )
+ (func $std/map/Map<i16,i32>#rehash (; 26 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (set_local $4
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.shl
+     (tee_local $2
+      (i32.add
+       (get_local $1)
+       (i32.const 1)
+      )
+     )
+     (i32.const 2)
+    )
+    (i32.const 0)
+   )
+  )
+  (set_local $5
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.mul
+     (tee_local $2
+      (tee_local $8
+       (i32.trunc_s/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (get_local $2)
+         )
+         (f64.const 2.6666666666666665)
+        )
+       )
+      )
+     )
+     (i32.const 12)
+    )
+    (i32.const 1)
+   )
+  )
+  (set_local $6
+   (i32.add
+    (tee_local $3
+     (tee_local $2
+      (i32.add
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 8)
+      )
+     )
+    )
+    (i32.mul
+     (tee_local $6
+      (i32.load offset=16
+       (get_local $0)
+      )
+     )
+     (i32.const 12)
+    )
+   )
+  )
+  (set_local $3
+   (i32.add
+    (get_local $5)
+    (i32.const 8)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.ne
+     (get_local $2)
+     (get_local $6)
+    )
+    (block
+     (if
+      (i32.eqz
+       (i32.and
+        (i32.load offset=8
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (block
+       (i32.store16
+        (get_local $3)
+        (i32.load16_s
+         (get_local $2)
+        )
+       )
+       (i32.store offset=4
+        (get_local $3)
+        (i32.load offset=4
+         (get_local $2)
+        )
+       )
+       (i32.store offset=8
+        (get_local $3)
+        (i32.load offset=8
+         (tee_local $7
+          (i32.add
+           (get_local $4)
+           (i32.shl
+            (i32.and
+             (tee_local $7
+              (call $~lib/internal/hash/hash16
+               (i32.load16_s
+                (get_local $2)
+               )
+              )
+             )
+             (get_local $1)
+            )
+            (i32.const 2)
+           )
+          )
+         )
+        )
+       )
+       (i32.store offset=8
+        (get_local $7)
+        (get_local $3)
+       )
+       (set_local $3
+        (i32.add
+         (get_local $3)
+         (i32.const 12)
+        )
+       )
+      )
+     )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 12)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.store
+   (get_local $0)
+   (get_local $4)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (get_local $1)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $5)
+  )
+  (i32.store offset=12
+   (get_local $0)
+   (get_local $8)
+  )
+  (i32.store offset=16
+   (get_local $0)
+   (i32.load offset=20
+    (get_local $0)
+   )
+  )
+ )
+ (func $std/map/Map<i16,i32>#set (; 27 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (if
+   (tee_local $3
+    (call $std/map/Map<i16,i32>#find
+     (get_local $0)
+     (get_local $1)
+     (tee_local $4
+      (call $~lib/internal/hash/hash16
+       (i32.shr_s
+        (i32.shl
+         (get_local $1)
+         (i32.const 16)
+        )
+        (i32.const 16)
+       )
+      )
+     )
+    )
+   )
+   (i32.store offset=4
+    (get_local $3)
+    (get_local $2)
+   )
+   (block
+    (if
+     (i32.eq
+      (i32.load offset=16
+       (get_local $0)
+      )
+      (i32.load offset=12
+       (get_local $0)
+      )
+     )
+     (call $std/map/Map<i16,i32>#rehash
+      (get_local $0)
+      (tee_local $3
+       (if (result i32)
+        (i32.lt_s
+         (i32.load offset=20
+          (get_local $0)
+         )
+         (i32.trunc_s/f64
+          (f64.mul
+           (f64.convert_s/i32
+            (i32.load offset=12
+             (get_local $0)
+            )
+           )
+           (f64.const 0.75)
+          )
+         )
+        )
+        (i32.load offset=4
+         (get_local $0)
+        )
+        (i32.or
+         (i32.shl
+          (i32.load offset=4
+           (get_local $0)
+          )
+          (i32.const 1)
+         )
+         (i32.const 1)
+        )
+       )
+      )
+     )
+    )
+    (set_local $5
+     (i32.add
+      (i32.load offset=8
+       (get_local $0)
+      )
+      (i32.const 8)
+     )
+    )
+    (i32.store offset=16
+     (get_local $0)
+     (i32.add
+      (tee_local $3
+       (i32.load offset=16
+        (get_local $0)
+       )
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store16
+     (tee_local $3
+      (i32.add
+       (get_local $5)
+       (i32.mul
+        (get_local $3)
+        (i32.const 12)
+       )
+      )
+     )
+     (get_local $1)
+    )
+    (i32.store offset=4
+     (get_local $3)
+     (get_local $2)
+    )
+    (i32.store offset=20
+     (get_local $0)
+     (i32.add
+      (i32.load offset=20
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store offset=8
+     (tee_local $1
+      (get_local $3)
+     )
+     (tee_local $2
+      (i32.load offset=8
+       (i32.add
+        (i32.load
+         (get_local $0)
+        )
+        (i32.shl
+         (tee_local $3
+          (i32.and
+           (get_local $4)
+           (i32.load offset=4
+            (get_local $0)
+           )
+          )
+         )
+         (i32.const 2)
+        )
+       )
+      )
+     )
+    )
+    (i32.store offset=8
+     (i32.add
+      (i32.load
+       (get_local $0)
+      )
+      (i32.shl
+       (get_local $3)
+       (i32.const 2)
+      )
+     )
+     (get_local $1)
+    )
+   )
+  )
+ )
+ (func $std/map/Map<i16,i32>#get (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (tee_local $0
+   (if (result i32)
+    (tee_local $0
+     (call $std/map/Map<i16,i32>#find
+      (get_local $0)
+      (get_local $1)
+      (call $~lib/internal/hash/hash16
+       (i32.shr_s
+        (i32.shl
+         (get_local $1)
+         (i32.const 16)
+        )
+        (i32.const 16)
+       )
+      )
+     )
+    )
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $std/map/Map<i16,i32>#delete (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (if
+   (i32.eqz
+    (tee_local $0
+     (call $std/map/Map<i16,i32>#find
+      (tee_local $2
+       (get_local $0)
+      )
+      (get_local $1)
+      (tee_local $0
+       (call $~lib/internal/hash/hash16
+        (i32.shr_s
+         (i32.shl
+          (get_local $1)
+          (i32.const 16)
+         )
+         (i32.const 16)
+        )
+       )
+      )
+     )
+    )
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (i32.or
+    (i32.load offset=8
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
+  (i32.store offset=20
+   (get_local $2)
+   (i32.sub
+    (i32.load offset=20
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+  (if
+   (tee_local $0
+    (i32.ge_u
+     (i32.add
+      (tee_local $1
+       (i32.shr_u
+        (i32.load offset=4
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.const 1)
+     )
+     (select
+      (i32.const 4)
+      (tee_local $0
+       (i32.load offset=20
+        (get_local $2)
+       )
+      )
+      (i32.gt_u
+       (i32.const 4)
+       (get_local $0)
+      )
+     )
+    )
+   )
+   (set_local $0
+    (i32.lt_s
+     (i32.load offset=20
+      (get_local $2)
+     )
+     (i32.trunc_s/f64
+      (f64.mul
+       (f64.convert_s/i32
+        (i32.load offset=12
+         (get_local $2)
+        )
+       )
+       (f64.const 0.75)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (get_local $0)
+   (call $std/map/Map<i16,i32>#rehash
+    (get_local $2)
+    (get_local $1)
+   )
+  )
+  (i32.const 1)
+ )
+ (func $std/map/test<i16,i32> (; 30 ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
+  (set_local $1
+   (call $std/map/Map<i8,i32>#constructor
+    (i32.const 0)
+   )
+  )
+  (block $break|0
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (call $std/map/Map<i16,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i16,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.shr_s
+       (i32.shl
+        (get_local $0)
+        (i32.const 16)
+       )
+       (i32.const 16)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 170)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i16,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.shr_s
+        (i32.shl
+         (get_local $0)
+         (i32.const 16)
+        )
+        (i32.const 16)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 171)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|0)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 173)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|1
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|1
+    (br_if $break|1
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 177)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i16,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.shr_s
+        (i32.shl
+         (get_local $0)
+         (i32.const 16)
+        )
+        (i32.const 16)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 178)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i16,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.shr_s
+       (i32.shl
+        (get_local $0)
+        (i32.const 16)
+       )
+       (i32.const 16)
+      )
+      (i32.const 20)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 180)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i16,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.shr_s
+        (i32.shl
+         (get_local $0)
+         (i32.const 16)
+        )
+        (i32.const 16)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 181)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|1)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 183)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|2
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|2
+    (br_if $break|2
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 187)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i16,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.shr_s
+        (i32.shl
+         (get_local $0)
+         (i32.const 16)
+        )
+        (i32.const 16)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 188)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<i16,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<i16,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 190)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|2)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 192)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|3
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|3
+    (br_if $break|3
+     (i32.ge_s
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (call $std/map/Map<i16,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 196)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i16,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.shr_s
+       (i32.shl
+        (get_local $0)
+        (i32.const 16)
+       )
+       (i32.const 16)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 198)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<i16,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<i16,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 200)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|3)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 202)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (call $std/map/Map<i8,i32>#clear
+   (get_local $1)
+  )
+  (if
+   (call $std/map/Map<i8,i32>#get:size
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 206)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $std/map/Map<u16,i32>#has (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (i32.ne
+   (call $std/map/Map<i16,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash16
+     (i32.and
+      (get_local $1)
+      (i32.const 65535)
+     )
+    )
+   )
+   (i32.const 0)
+  )
+ )
+ (func $std/map/Map<u16,i32>#rehash (; 32 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (set_local $4
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.shl
+     (tee_local $2
+      (i32.add
+       (get_local $1)
+       (i32.const 1)
+      )
+     )
+     (i32.const 2)
+    )
+    (i32.const 0)
+   )
+  )
+  (set_local $5
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.mul
+     (tee_local $2
+      (tee_local $8
+       (i32.trunc_s/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (get_local $2)
+         )
+         (f64.const 2.6666666666666665)
+        )
+       )
+      )
+     )
+     (i32.const 12)
+    )
+    (i32.const 1)
+   )
+  )
+  (set_local $6
+   (i32.add
+    (tee_local $3
+     (tee_local $2
+      (i32.add
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 8)
+      )
+     )
+    )
+    (i32.mul
+     (tee_local $6
+      (i32.load offset=16
+       (get_local $0)
+      )
+     )
+     (i32.const 12)
+    )
+   )
+  )
+  (set_local $3
+   (i32.add
+    (get_local $5)
+    (i32.const 8)
+   )
+  )
+  (loop $continue|0
+   (if
+    (i32.ne
+     (get_local $2)
+     (get_local $6)
+    )
+    (block
+     (if
+      (i32.eqz
+       (i32.and
+        (i32.load offset=8
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (block
+       (i32.store16
+        (get_local $3)
+        (i32.load16_u
+         (get_local $2)
+        )
+       )
+       (i32.store offset=4
+        (get_local $3)
+        (i32.load offset=4
+         (get_local $2)
+        )
+       )
+       (i32.store offset=8
+        (get_local $3)
+        (i32.load offset=8
+         (tee_local $7
+          (i32.add
+           (get_local $4)
+           (i32.shl
+            (i32.and
+             (tee_local $7
+              (call $~lib/internal/hash/hash16
+               (i32.load16_u
+                (get_local $2)
+               )
+              )
+             )
+             (get_local $1)
+            )
+            (i32.const 2)
+           )
+          )
+         )
+        )
+       )
+       (i32.store offset=8
+        (get_local $7)
+        (get_local $3)
+       )
+       (set_local $3
+        (i32.add
+         (get_local $3)
+         (i32.const 12)
+        )
+       )
+      )
+     )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 12)
+      )
+     )
+     (br $continue|0)
+    )
+   )
+  )
+  (i32.store
+   (get_local $0)
+   (get_local $4)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (get_local $1)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $5)
+  )
+  (i32.store offset=12
+   (get_local $0)
+   (get_local $8)
+  )
+  (i32.store offset=16
+   (get_local $0)
+   (i32.load offset=20
+    (get_local $0)
+   )
+  )
+ )
+ (func $std/map/Map<u16,i32>#set (; 33 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (if
+   (tee_local $3
+    (call $std/map/Map<i16,i32>#find
+     (get_local $0)
+     (get_local $1)
+     (tee_local $4
+      (call $~lib/internal/hash/hash16
+       (i32.and
+        (get_local $1)
+        (i32.const 65535)
+       )
+      )
+     )
+    )
+   )
+   (i32.store offset=4
+    (get_local $3)
+    (get_local $2)
+   )
+   (block
+    (if
+     (i32.eq
+      (i32.load offset=16
+       (get_local $0)
+      )
+      (i32.load offset=12
+       (get_local $0)
+      )
+     )
+     (call $std/map/Map<u16,i32>#rehash
+      (get_local $0)
+      (tee_local $3
+       (if (result i32)
+        (i32.lt_s
+         (i32.load offset=20
+          (get_local $0)
+         )
+         (i32.trunc_s/f64
+          (f64.mul
+           (f64.convert_s/i32
+            (i32.load offset=12
+             (get_local $0)
+            )
+           )
+           (f64.const 0.75)
+          )
+         )
+        )
+        (i32.load offset=4
+         (get_local $0)
+        )
+        (i32.or
+         (i32.shl
+          (i32.load offset=4
+           (get_local $0)
+          )
+          (i32.const 1)
+         )
+         (i32.const 1)
+        )
+       )
+      )
+     )
+    )
+    (set_local $5
+     (i32.add
+      (i32.load offset=8
+       (get_local $0)
+      )
+      (i32.const 8)
+     )
+    )
+    (i32.store offset=16
+     (get_local $0)
+     (i32.add
+      (tee_local $3
+       (i32.load offset=16
+        (get_local $0)
+       )
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store16
+     (tee_local $3
+      (i32.add
+       (get_local $5)
+       (i32.mul
+        (get_local $3)
+        (i32.const 12)
+       )
+      )
+     )
+     (get_local $1)
+    )
+    (i32.store offset=4
+     (get_local $3)
+     (get_local $2)
+    )
+    (i32.store offset=20
+     (get_local $0)
+     (i32.add
+      (i32.load offset=20
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.store offset=8
+     (tee_local $1
+      (get_local $3)
+     )
+     (tee_local $2
+      (i32.load offset=8
+       (i32.add
+        (i32.load
+         (get_local $0)
+        )
+        (i32.shl
+         (tee_local $3
+          (i32.and
+           (get_local $4)
+           (i32.load offset=4
+            (get_local $0)
+           )
+          )
+         )
+         (i32.const 2)
+        )
+       )
+      )
+     )
+    )
+    (i32.store offset=8
+     (i32.add
+      (i32.load
+       (get_local $0)
+      )
+      (i32.shl
+       (get_local $3)
+       (i32.const 2)
+      )
+     )
+     (get_local $1)
+    )
+   )
+  )
+ )
+ (func $std/map/Map<u16,i32>#get (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (tee_local $0
+   (if (result i32)
+    (tee_local $0
+     (call $std/map/Map<i16,i32>#find
+      (get_local $0)
+      (get_local $1)
+      (call $~lib/internal/hash/hash16
+       (i32.and
+        (get_local $1)
+        (i32.const 65535)
+       )
+      )
+     )
+    )
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $std/map/Map<u16,i32>#delete (; 35 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (if
+   (i32.eqz
+    (tee_local $0
+     (call $std/map/Map<i16,i32>#find
+      (tee_local $2
+       (get_local $0)
+      )
+      (get_local $1)
+      (tee_local $0
+       (call $~lib/internal/hash/hash16
+        (i32.and
+         (get_local $1)
+         (i32.const 65535)
+        )
+       )
+      )
+     )
+    )
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (i32.or
+    (i32.load offset=8
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
+  (i32.store offset=20
+   (get_local $2)
+   (i32.sub
+    (i32.load offset=20
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
+  (if
+   (tee_local $0
+    (i32.ge_u
+     (i32.add
+      (tee_local $1
+       (i32.shr_u
+        (i32.load offset=4
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.const 1)
+     )
+     (select
+      (i32.const 4)
+      (tee_local $0
+       (i32.load offset=20
+        (get_local $2)
+       )
+      )
+      (i32.gt_u
+       (i32.const 4)
+       (get_local $0)
+      )
+     )
+    )
+   )
+   (set_local $0
+    (i32.lt_s
+     (i32.load offset=20
+      (get_local $2)
+     )
+     (i32.trunc_s/f64
+      (f64.mul
+       (f64.convert_s/i32
+        (i32.load offset=12
+         (get_local $2)
+        )
+       )
+       (f64.const 0.75)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (get_local $0)
+   (call $std/map/Map<u16,i32>#rehash
+    (get_local $2)
+    (get_local $1)
+   )
+  )
+  (i32.const 1)
+ )
+ (func $std/map/test<u16,i32> (; 36 ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
+  (set_local $1
+   (call $std/map/Map<i8,i32>#constructor
+    (i32.const 0)
+   )
+  )
+  (block $break|0
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (call $std/map/Map<u16,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<u16,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.and
+       (get_local $0)
+       (i32.const 65535)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 170)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<u16,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.and
+        (get_local $0)
+        (i32.const 65535)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 171)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|0)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 173)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|1
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|1
+    (br_if $break|1
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 177)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<u16,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.and
+        (get_local $0)
+        (i32.const 65535)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 178)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<u16,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.and
+       (get_local $0)
+       (i32.const 65535)
+      )
+      (i32.const 20)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 180)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<u16,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.and
+        (get_local $0)
+        (i32.const 65535)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 181)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|1)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 183)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|2
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|2
+    (br_if $break|2
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 187)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<u16,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.and
+        (get_local $0)
+        (i32.const 65535)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 188)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<u16,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<u16,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 190)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|2)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 192)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|3
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|3
+    (br_if $break|3
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (call $std/map/Map<u16,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 196)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<u16,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.and
+       (get_local $0)
+       (i32.const 65535)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<u16,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 198)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<u16,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<u16,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 200)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|3)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 202)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (call $std/map/Map<i8,i32>#clear
+   (get_local $1)
+  )
+  (if
+   (call $std/map/Map<i8,i32>#get:size
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 206)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $~lib/internal/hash/hash32 (; 37 ;) (type $ii) (param $0 i32) (result i32)
   (i32.mul
    (i32.xor
     (i32.mul
@@ -644,12 +4563,7 @@
    (i32.const 16777619)
   )
  )
- (func $~lib/internal/hash/hash<i32> (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  (call $~lib/internal/hash/hash32
-   (get_local $0)
-  )
- )
- (func $std/map/Map<i32,i32>#find (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/map/Map<i32,i32>#find (; 38 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_local $0
    (i32.load offset=8
     (i32.add
@@ -712,7 +4626,19 @@
   )
   (i32.const 0)
  )
- (func $std/map/Map<i32,i32>#rehash (; 11 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/map/Map<i32,i32>#has (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (i32.ne
+   (call $std/map/Map<i32,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash32
+     (get_local $1)
+    )
+   )
+   (i32.const 0)
+  )
+ )
+ (func $std/map/Map<i32,i32>#rehash (; 40 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -735,44 +4661,41 @@
     (i32.const 0)
    )
   )
-  (set_local $2
-   (i32.add
-    (tee_local $7
-     (call $~lib/arraybuffer/ArrayBuffer#constructor
-      (i32.const 0)
-      (i32.mul
-       (tee_local $2
-        (tee_local $6
-         (i32.trunc_s/f64
-          (f64.mul
-           (f64.convert_s/i32
-            (get_local $2)
-           )
-           (f64.const 2.6666666666666665)
-          )
+  (set_local $5
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.mul
+     (tee_local $2
+      (tee_local $8
+       (i32.trunc_s/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (get_local $2)
          )
+         (f64.const 2.6666666666666665)
         )
        )
-       (i32.const 12)
       )
-      (i32.const 1)
      )
+     (i32.const 12)
     )
-    (i32.const 8)
+    (i32.const 1)
    )
   )
-  (set_local $5
+  (set_local $6
    (i32.add
     (tee_local $3
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
+     (tee_local $2
+      (i32.add
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 8)
       )
-      (i32.const 8)
      )
     )
     (i32.mul
-     (tee_local $5
+     (tee_local $6
       (i32.load offset=16
        (get_local $0)
       )
@@ -781,77 +4704,79 @@
     )
    )
   )
+  (set_local $3
+   (i32.add
+    (get_local $5)
+    (i32.const 8)
+   )
+  )
   (loop $continue|0
    (if
     (i32.ne
-     (get_local $3)
-     (get_local $5)
+     (get_local $2)
+     (get_local $6)
     )
     (block
      (if
       (i32.eqz
        (i32.and
         (i32.load offset=8
-         (get_local $3)
+         (get_local $2)
         )
         (i32.const 1)
        )
       )
       (block
        (i32.store
-        (get_local $2)
+        (get_local $3)
         (i32.load
-         (get_local $3)
+         (get_local $2)
         )
        )
        (i32.store offset=4
-        (get_local $2)
+        (get_local $3)
         (i32.load offset=4
-         (get_local $3)
+         (get_local $2)
         )
        )
        (i32.store offset=8
-        (get_local $2)
+        (get_local $3)
         (i32.load offset=8
-         (i32.add
-          (get_local $4)
-          (i32.shl
-           (tee_local $8
+         (tee_local $7
+          (i32.add
+           (get_local $4)
+           (i32.shl
             (i32.and
-             (call $~lib/internal/hash/hash<i32>
-              (i32.load
-               (get_local $3)
+             (tee_local $7
+              (call $~lib/internal/hash/hash32
+               (i32.load
+                (get_local $2)
+               )
               )
              )
              (get_local $1)
             )
+            (i32.const 2)
            )
-           (i32.const 2)
           )
          )
         )
        )
        (i32.store offset=8
-        (i32.add
-         (get_local $4)
-         (i32.shl
-          (get_local $8)
-          (i32.const 2)
-         )
-        )
-        (get_local $2)
+        (get_local $7)
+        (get_local $3)
        )
-       (set_local $2
+       (set_local $3
         (i32.add
-         (get_local $2)
+         (get_local $3)
          (i32.const 12)
         )
        )
       )
      )
-     (set_local $3
+     (set_local $2
       (i32.add
-       (get_local $3)
+       (get_local $2)
        (i32.const 12)
       )
      )
@@ -869,11 +4794,11 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $7)
+   (get_local $5)
   )
   (i32.store offset=12
    (get_local $0)
-   (get_local $6)
+   (get_local $8)
   )
   (i32.store offset=16
    (get_local $0)
@@ -882,7 +4807,7 @@
    )
   )
  )
- (func $std/map/Map<i32,i32>#set (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $std/map/Map<i32,i32>#set (; 41 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -892,7 +4817,7 @@
      (get_local $0)
      (get_local $1)
      (tee_local $4
-      (call $~lib/internal/hash/hash<i32>
+      (call $~lib/internal/hash/hash32
        (get_local $1)
       )
      )
@@ -908,48 +4833,41 @@
       (i32.load offset=16
        (get_local $0)
       )
-      (tee_local $3
-       (i32.load offset=12
-        (get_local $0)
-       )
+      (i32.load offset=12
+       (get_local $0)
       )
      )
-     (block
-      (call $std/map/Map<i32,i32>#rehash
-       (get_local $0)
-       (tee_local $3
-        (if (result i32)
-         (i32.ge_s
-          (i32.load offset=20
-           (get_local $0)
-          )
-          (i32.trunc_s/f64
-           (f64.mul
-            (f64.convert_s/i32
-             (get_local $3)
+     (call $std/map/Map<i32,i32>#rehash
+      (get_local $0)
+      (tee_local $3
+       (if (result i32)
+        (i32.lt_s
+         (i32.load offset=20
+          (get_local $0)
+         )
+         (i32.trunc_s/f64
+          (f64.mul
+           (f64.convert_s/i32
+            (i32.load offset=12
+             (get_local $0)
             )
-            (f64.const 0.75)
            )
+           (f64.const 0.75)
           )
          )
-         (i32.or
-          (i32.shl
-           (i32.load offset=4
-            (get_local $0)
-           )
-           (i32.const 1)
+        )
+        (i32.load offset=4
+         (get_local $0)
+        )
+        (i32.or
+         (i32.shl
+          (i32.load offset=4
+           (get_local $0)
           )
           (i32.const 1)
          )
-         (i32.load offset=4
-          (get_local $0)
-         )
+         (i32.const 1)
         )
-       )
-      )
-      (drop
-       (i32.load offset=12
-        (get_local $0)
        )
       )
      )
@@ -989,6 +4907,15 @@
      (get_local $3)
      (get_local $2)
     )
+    (i32.store offset=20
+     (get_local $0)
+     (i32.add
+      (i32.load offset=20
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
     (i32.store offset=8
      (tee_local $1
       (get_local $3)
@@ -1026,38 +4953,17 @@
      )
      (get_local $1)
     )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.add
-      (i32.load offset=20
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
    )
   )
  )
- (func $std/map/Map<i32,i32>#has (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.ne
-   (call $std/map/Map<i32,i32>#find
-    (get_local $0)
-    (get_local $1)
-    (call $~lib/internal/hash/hash<i32>
-     (get_local $1)
-    )
-   )
-   (i32.const 0)
-  )
- )
- (func $std/map/Map<i32,i32>#get (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/map/Map<i32,i32>#get (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
      (call $std/map/Map<i32,i32>#find
       (get_local $0)
       (get_local $1)
-      (call $~lib/internal/hash/hash<i32>
+      (call $~lib/internal/hash/hash32
        (get_local $1)
       )
      )
@@ -1069,20 +4975,20 @@
    )
   )
  )
- (func $std/map/Map<i32,i32>#get:size (; 15 ;) (type $ii) (param $0 i32) (result i32)
-  (i32.load offset=20
-   (get_local $0)
-  )
- )
- (func $std/map/Map<i32,i32>#delete (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/map/Map<i32,i32>#delete (; 43 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (if
    (i32.eqz
-    (tee_local $1
+    (tee_local $0
      (call $std/map/Map<i32,i32>#find
-      (get_local $0)
+      (tee_local $2
+       (get_local $0)
+      )
       (get_local $1)
-      (call $~lib/internal/hash/hash<i32>
-       (get_local $1)
+      (tee_local $0
+       (call $~lib/internal/hash/hash32
+        (get_local $1)
+       )
       )
      )
     )
@@ -1092,42 +4998,61 @@
    )
   )
   (i32.store offset=8
-   (get_local $1)
+   (get_local $0)
    (i32.or
     (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.sub
-    (i32.load offset=20
      (get_local $0)
     )
     (i32.const 1)
    )
   )
+  (i32.store offset=20
+   (get_local $2)
+   (i32.sub
+    (i32.load offset=20
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
   (if
-   (tee_local $1
-    (i32.gt_u
-     (i32.load offset=4
-      (get_local $0)
+   (tee_local $0
+    (i32.ge_u
+     (i32.add
+      (tee_local $1
+       (i32.shr_u
+        (i32.load offset=4
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.const 1)
      )
-     (i32.const 4)
+     (select
+      (i32.const 4)
+      (tee_local $0
+       (i32.load offset=20
+        (get_local $2)
+       )
+      )
+      (i32.gt_u
+       (i32.const 4)
+       (get_local $0)
+      )
+     )
     )
    )
-   (set_local $1
+   (set_local $0
     (i32.lt_s
      (i32.load offset=20
-      (get_local $0)
+      (get_local $2)
      )
      (i32.trunc_s/f64
       (f64.mul
        (f64.convert_s/i32
-        (i32.load offset=16
-         (get_local $0)
+        (i32.load offset=12
+         (get_local $2)
         )
        )
        (f64.const 0.75)
@@ -1137,36 +5062,43 @@
    )
   )
   (if
-   (get_local $1)
+   (get_local $0)
    (call $std/map/Map<i32,i32>#rehash
-    (get_local $0)
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
+    (get_local $2)
+    (get_local $1)
    )
   )
   (i32.const 1)
  )
- (func $std/map/test<i32,i32> (; 17 ;) (type $v)
+ (func $std/map/test<i32,i32> (; 44 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
-   (call $std/map/Map<i32,i32>#constructor
+   (call $std/map/Map<i8,i32>#constructor
     (i32.const 0)
    )
   )
   (block $break|0
-   (set_local $0
-    (i32.const 1)
-   )
    (loop $repeat|0
     (br_if $break|0
-     (i32.gt_s
+     (i32.ge_s
       (get_local $0)
-      (i32.const 200)
+      (i32.const 100)
+     )
+    )
+    (if
+     (call $std/map/Map<i32,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
      )
     )
     (call $std/map/Map<i32,i32>#set
@@ -1174,7 +5106,7 @@
      (get_local $0)
      (i32.add
       (get_local $0)
-      (i32.const 100)
+      (i32.const 10)
      )
     )
     (if
@@ -1188,25 +5120,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 165)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i32>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 166)
+       (i32.const 170)
        (i32.const 4)
       )
       (unreachable)
@@ -1220,14 +5134,14 @@
       )
       (i32.add
        (get_local $0)
-       (i32.const 100)
+       (i32.const 10)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 167)
+       (i32.const 171)
        (i32.const 4)
       )
       (unreachable)
@@ -1246,16 +5160,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 169)
+     (i32.const 173)
      (i32.const 2)
     )
     (unreachable)
@@ -1263,11 +5177,11 @@
   )
   (block $break|1
    (set_local $0
-    (i32.const 50)
+    (i32.const 0)
    )
    (loop $repeat|1
     (br_if $break|1
-     (i32.gt_s
+     (i32.ge_s
       (get_local $0)
       (i32.const 100)
      )
@@ -1283,7 +5197,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 173)
+       (i32.const 177)
        (i32.const 4)
       )
       (unreachable)
@@ -1297,14 +5211,14 @@
       )
       (i32.add
        (get_local $0)
-       (i32.const 100)
+       (i32.const 10)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 174)
+       (i32.const 178)
        (i32.const 4)
       )
       (unreachable)
@@ -1315,7 +5229,7 @@
      (get_local $0)
      (i32.add
       (get_local $0)
-      (i32.const 100)
+      (i32.const 20)
      )
     )
     (if
@@ -1329,7 +5243,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 176)
+       (i32.const 180)
        (i32.const 4)
       )
       (unreachable)
@@ -1343,14 +5257,14 @@
       )
       (i32.add
        (get_local $0)
-       (i32.const 100)
+       (i32.const 20)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 177)
+       (i32.const 181)
        (i32.const 4)
       )
       (unreachable)
@@ -1369,16 +5283,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 179)
+     (i32.const 183)
      (i32.const 2)
     )
     (unreachable)
@@ -1386,13 +5300,13 @@
   )
   (block $break|2
    (set_local $0
-    (i32.const 1)
+    (i32.const 0)
    )
    (loop $repeat|2
     (br_if $break|2
-     (i32.gt_s
+     (i32.ge_s
       (get_local $0)
-      (i32.const 100)
+      (i32.const 50)
      )
     )
     (if
@@ -1406,7 +5320,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 183)
+       (i32.const 187)
        (i32.const 4)
       )
       (unreachable)
@@ -1420,14 +5334,14 @@
       )
       (i32.add
        (get_local $0)
-       (i32.const 100)
+       (i32.const 20)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 184)
+       (i32.const 188)
        (i32.const 4)
       )
       (unreachable)
@@ -1448,19 +5362,10 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 186)
+       (i32.const 190)
        (i32.const 4)
       )
       (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i32>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
      )
      (block
       (set_local $0
@@ -1471,30 +5376,21 @@
       )
       (br $repeat|2)
      )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 187)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
     )
    )
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 100)
+    (i32.const 50)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 189)
+     (i32.const 192)
      (i32.const 2)
     )
     (unreachable)
@@ -1502,11 +5398,11 @@
   )
   (block $break|3
    (set_local $0
-    (i32.const 1)
+    (i32.const 0)
    )
    (loop $repeat|3
     (br_if $break|3
-     (i32.gt_s
+     (i32.ge_s
       (get_local $0)
       (i32.const 50)
      )
@@ -1520,7 +5416,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 193)
+       (i32.const 196)
        (i32.const 4)
       )
       (unreachable)
@@ -1531,7 +5427,7 @@
      (get_local $0)
      (i32.add
       (get_local $0)
-      (i32.const 100)
+      (i32.const 10)
      )
     )
     (if
@@ -1545,7 +5441,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 195)
+       (i32.const 198)
        (i32.const 4)
       )
       (unreachable)
@@ -1566,7 +5462,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 197)
+       (i32.const 200)
        (i32.const 4)
       )
       (unreachable)
@@ -1585,7 +5481,130 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 202)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (call $std/map/Map<i8,i32>#clear
+   (get_local $1)
+  )
+  (if
+   (call $std/map/Map<i8,i32>#get:size
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 206)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $std/map/test<u32,i32> (; 45 ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
+  (set_local $1
+   (call $std/map/Map<i8,i32>#constructor
+    (i32.const 0)
+   )
+  )
+  (block $break|0
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (call $std/map/Map<i32,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i32,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (get_local $0)
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i32,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 170)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i32,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (get_local $0)
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 171)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|0)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
     (i32.const 100)
@@ -1594,31 +5613,352 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 199)
+     (i32.const 173)
      (i32.const 2)
     )
     (unreachable)
    )
   )
-  (call $std/map/Map<i32,i32>#clear
+  (block $break|1
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|1
+    (br_if $break|1
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 100)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i32,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 177)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i32,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (get_local $0)
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 178)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i32,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (get_local $0)
+      (i32.const 20)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i32,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 180)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i32,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (get_local $0)
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 181)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|1)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 100)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 183)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|2
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|2
+    (br_if $break|2
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i32,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 187)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i32,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (get_local $0)
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 188)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<i32,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<i32,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 190)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|2)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 192)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|3
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|3
+    (br_if $break|3
+     (i32.ge_u
+      (get_local $0)
+      (i32.const 50)
+     )
+    )
+    (if
+     (call $std/map/Map<i32,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 196)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i32,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (get_local $0)
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i32,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 198)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<i32,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<i32,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 200)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|3)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 202)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (call $std/map/Map<i8,i32>#clear
    (get_local $1)
   )
   (if
-   (call $std/map/Map<i32,i32>#get:size
+   (call $std/map/Map<i8,i32>#get:size
     (get_local $1)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 203)
+     (i32.const 206)
      (i32.const 2)
     )
     (unreachable)
    )
   )
  )
- (func $std/map/Map<i64,i32>#clear (; 18 ;) (type $iv) (param $0 i32)
+ (func $std/map/Map<i64,i32>#clear (; 46 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -1652,7 +5992,7 @@
    (i32.const 0)
   )
  )
- (func $std/map/Map<i64,i32>#constructor (; 19 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/map/Map<i64,i32>#constructor (; 47 ;) (type $ii) (param $0 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -1693,7 +6033,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hash64 (; 20 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 48 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (i32.mul
    (i32.xor
@@ -1792,12 +6132,7 @@
    (i32.const 16777619)
   )
  )
- (func $~lib/internal/hash/hash<i64> (; 21 ;) (type $Ii) (param $0 i64) (result i32)
-  (call $~lib/internal/hash/hash64
-   (get_local $0)
-  )
- )
- (func $std/map/Map<i64,i32>#find (; 22 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $std/map/Map<i64,i32>#find (; 49 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (set_local $0
    (i32.load offset=8
     (i32.add
@@ -1860,7 +6195,19 @@
   )
   (i32.const 0)
  )
- (func $std/map/Map<i64,i32>#rehash (; 23 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/map/Map<i64,i32>#has (; 50 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+  (i32.ne
+   (call $std/map/Map<i64,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash64
+     (get_local $1)
+    )
+   )
+   (i32.const 0)
+  )
+ )
+ (func $std/map/Map<i64,i32>#rehash (; 51 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1883,44 +6230,41 @@
     (i32.const 0)
    )
   )
-  (set_local $2
-   (i32.add
-    (tee_local $7
-     (call $~lib/arraybuffer/ArrayBuffer#constructor
-      (i32.const 0)
-      (i32.shl
-       (tee_local $2
-        (tee_local $6
-         (i32.trunc_s/f64
-          (f64.mul
-           (f64.convert_s/i32
-            (get_local $2)
-           )
-           (f64.const 2.6666666666666665)
-          )
+  (set_local $5
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.shl
+     (tee_local $2
+      (tee_local $8
+       (i32.trunc_s/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (get_local $2)
          )
+         (f64.const 2.6666666666666665)
         )
        )
-       (i32.const 4)
       )
-      (i32.const 1)
      )
+     (i32.const 4)
     )
-    (i32.const 8)
+    (i32.const 1)
    )
   )
-  (set_local $5
+  (set_local $6
    (i32.add
     (tee_local $3
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
+     (tee_local $2
+      (i32.add
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 8)
       )
-      (i32.const 8)
      )
     )
     (i32.shl
-     (tee_local $5
+     (tee_local $6
       (i32.load offset=16
        (get_local $0)
       )
@@ -1929,77 +6273,79 @@
     )
    )
   )
+  (set_local $3
+   (i32.add
+    (get_local $5)
+    (i32.const 8)
+   )
+  )
   (loop $continue|0
    (if
     (i32.ne
-     (get_local $3)
-     (get_local $5)
+     (get_local $2)
+     (get_local $6)
     )
     (block
      (if
       (i32.eqz
        (i32.and
         (i32.load offset=12
-         (get_local $3)
+         (get_local $2)
         )
         (i32.const 1)
        )
       )
       (block
        (i64.store
-        (get_local $2)
+        (get_local $3)
         (i64.load
-         (get_local $3)
+         (get_local $2)
         )
        )
        (i32.store offset=8
-        (get_local $2)
+        (get_local $3)
         (i32.load offset=8
-         (get_local $3)
+         (get_local $2)
         )
        )
        (i32.store offset=12
-        (get_local $2)
+        (get_local $3)
         (i32.load offset=8
-         (i32.add
-          (get_local $4)
-          (i32.shl
-           (tee_local $8
+         (tee_local $7
+          (i32.add
+           (get_local $4)
+           (i32.shl
             (i32.and
-             (call $~lib/internal/hash/hash<i64>
-              (i64.load
-               (get_local $3)
+             (tee_local $7
+              (call $~lib/internal/hash/hash64
+               (i64.load
+                (get_local $2)
+               )
               )
              )
              (get_local $1)
             )
+            (i32.const 2)
            )
-           (i32.const 2)
           )
          )
         )
        )
        (i32.store offset=8
-        (i32.add
-         (get_local $4)
-         (i32.shl
-          (get_local $8)
-          (i32.const 2)
-         )
-        )
-        (get_local $2)
+        (get_local $7)
+        (get_local $3)
        )
-       (set_local $2
+       (set_local $3
         (i32.add
-         (get_local $2)
+         (get_local $3)
          (i32.const 16)
         )
        )
       )
      )
-     (set_local $3
+     (set_local $2
       (i32.add
-       (get_local $3)
+       (get_local $2)
        (i32.const 16)
       )
      )
@@ -2017,11 +6363,11 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $7)
+   (get_local $5)
   )
   (i32.store offset=12
    (get_local $0)
-   (get_local $6)
+   (get_local $8)
   )
   (i32.store offset=16
    (get_local $0)
@@ -2030,7 +6376,7 @@
    )
   )
  )
- (func $std/map/Map<i64,i32>#set (; 24 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $std/map/Map<i64,i32>#set (; 52 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2040,7 +6386,7 @@
      (get_local $0)
      (get_local $1)
      (tee_local $4
-      (call $~lib/internal/hash/hash<i64>
+      (call $~lib/internal/hash/hash64
        (get_local $1)
       )
      )
@@ -2056,48 +6402,41 @@
       (i32.load offset=16
        (get_local $0)
       )
-      (tee_local $3
-       (i32.load offset=12
-        (get_local $0)
-       )
+      (i32.load offset=12
+       (get_local $0)
       )
      )
-     (block
-      (call $std/map/Map<i64,i32>#rehash
-       (get_local $0)
-       (tee_local $3
-        (if (result i32)
-         (i32.ge_s
-          (i32.load offset=20
-           (get_local $0)
-          )
-          (i32.trunc_s/f64
-           (f64.mul
-            (f64.convert_s/i32
-             (get_local $3)
+     (call $std/map/Map<i64,i32>#rehash
+      (get_local $0)
+      (tee_local $3
+       (if (result i32)
+        (i32.lt_s
+         (i32.load offset=20
+          (get_local $0)
+         )
+         (i32.trunc_s/f64
+          (f64.mul
+           (f64.convert_s/i32
+            (i32.load offset=12
+             (get_local $0)
             )
-            (f64.const 0.75)
            )
+           (f64.const 0.75)
           )
          )
-         (i32.or
-          (i32.shl
-           (i32.load offset=4
-            (get_local $0)
-           )
-           (i32.const 1)
+        )
+        (i32.load offset=4
+         (get_local $0)
+        )
+        (i32.or
+         (i32.shl
+          (i32.load offset=4
+           (get_local $0)
           )
           (i32.const 1)
          )
-         (i32.load offset=4
-          (get_local $0)
-         )
+         (i32.const 1)
         )
-       )
-      )
-      (drop
-       (i32.load offset=12
-        (get_local $0)
        )
       )
      )
@@ -2137,6 +6476,15 @@
      (get_local $3)
      (get_local $2)
     )
+    (i32.store offset=20
+     (get_local $0)
+     (i32.add
+      (i32.load offset=20
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
     (i32.store offset=12
      (tee_local $2
       (get_local $3)
@@ -2174,38 +6522,17 @@
      )
      (get_local $2)
     )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.add
-      (i32.load offset=20
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
    )
   )
  )
- (func $std/map/Map<i64,i32>#has (; 25 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (i32.ne
-   (call $std/map/Map<i64,i32>#find
-    (get_local $0)
-    (get_local $1)
-    (call $~lib/internal/hash/hash<i64>
-     (get_local $1)
-    )
-   )
-   (i32.const 0)
-  )
- )
- (func $std/map/Map<i64,i32>#get (; 26 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $std/map/Map<i64,i32>#get (; 53 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
      (call $std/map/Map<i64,i32>#find
       (get_local $0)
       (get_local $1)
-      (call $~lib/internal/hash/hash<i64>
+      (call $~lib/internal/hash/hash64
        (get_local $1)
       )
      )
@@ -2217,16 +6544,21 @@
    )
   )
  )
- (func $std/map/Map<i64,i32>#delete (; 27 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $std/map/Map<i64,i32>#delete (; 54 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
+  (local $3 i32)
   (if
    (i32.eqz
-    (tee_local $2
+    (tee_local $0
      (call $std/map/Map<i64,i32>#find
-      (get_local $0)
+      (tee_local $2
+       (get_local $0)
+      )
       (get_local $1)
-      (call $~lib/internal/hash/hash<i64>
-       (get_local $1)
+      (tee_local $0
+       (call $~lib/internal/hash/hash64
+        (get_local $1)
+       )
       )
      )
     )
@@ -2236,42 +6568,61 @@
    )
   )
   (i32.store offset=12
-   (get_local $2)
+   (get_local $0)
    (i32.or
     (i32.load offset=12
-     (get_local $2)
-    )
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.sub
-    (i32.load offset=20
      (get_local $0)
     )
     (i32.const 1)
    )
   )
+  (i32.store offset=20
+   (get_local $2)
+   (i32.sub
+    (i32.load offset=20
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
   (if
-   (tee_local $2
-    (i32.gt_u
-     (i32.load offset=4
-      (get_local $0)
+   (tee_local $0
+    (i32.ge_u
+     (i32.add
+      (tee_local $3
+       (i32.shr_u
+        (i32.load offset=4
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.const 1)
      )
-     (i32.const 4)
+     (select
+      (i32.const 4)
+      (tee_local $0
+       (i32.load offset=20
+        (get_local $2)
+       )
+      )
+      (i32.gt_u
+       (i32.const 4)
+       (get_local $0)
+      )
+     )
     )
    )
-   (set_local $2
+   (set_local $0
     (i32.lt_s
      (i32.load offset=20
-      (get_local $0)
+      (get_local $2)
      )
      (i32.trunc_s/f64
       (f64.mul
        (f64.convert_s/i32
-        (i32.load offset=16
-         (get_local $0)
+        (i32.load offset=12
+         (get_local $2)
         )
        )
        (f64.const 0.75)
@@ -2281,20 +6632,15 @@
    )
   )
   (if
-   (get_local $2)
+   (get_local $0)
    (call $std/map/Map<i64,i32>#rehash
-    (get_local $0)
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
+    (get_local $2)
+    (get_local $3)
    )
   )
   (i32.const 1)
  )
- (func $std/map/test<i64,i32> (; 28 ;) (type $v)
+ (func $std/map/test<i64,i32> (; 55 ;) (type $v)
   (local $0 i64)
   (local $1 i32)
   (set_local $1
@@ -2303,14 +6649,26 @@
    )
   )
   (block $break|0
-   (set_local $0
-    (i64.const 1)
-   )
    (loop $repeat|0
     (br_if $break|0
-     (i64.gt_s
+     (i64.ge_s
       (get_local $0)
-      (i64.const 200)
+      (i64.const 100)
+     )
+    )
+    (if
+     (call $std/map/Map<i64,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
      )
     )
     (call $std/map/Map<i64,i32>#set
@@ -2320,7 +6678,7 @@
       (i32.wrap/i64
        (get_local $0)
       )
-      (i32.const 100)
+      (i32.const 10)
      )
     )
     (if
@@ -2334,48 +6692,30 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 165)
+       (i32.const 170)
        (i32.const 4)
       )
       (unreachable)
      )
     )
     (if
-     (call $std/map/Map<i64,i32>#has
-      (get_local $1)
-      (i64.add
+     (i32.ne
+      (call $std/map/Map<i64,i32>#get
+       (get_local $1)
        (get_local $0)
-       (i64.const 1)
       )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 166)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (i64.extend_s/i32
-       (call $std/map/Map<i64,i32>#get
-        (get_local $1)
+      (i32.add
+       (i32.wrap/i64
         (get_local $0)
        )
-      )
-      (i64.add
-       (get_local $0)
-       (i64.const 100)
+       (i32.const 10)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 167)
+       (i32.const 171)
        (i32.const 4)
       )
       (unreachable)
@@ -2394,16 +6734,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 169)
+     (i32.const 173)
      (i32.const 2)
     )
     (unreachable)
@@ -2411,11 +6751,11 @@
   )
   (block $break|1
    (set_local $0
-    (i64.const 50)
+    (i64.const 0)
    )
    (loop $repeat|1
     (br_if $break|1
-     (i64.gt_s
+     (i64.ge_s
       (get_local $0)
       (i64.const 100)
      )
@@ -2431,7 +6771,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 173)
+       (i32.const 177)
        (i32.const 4)
       )
       (unreachable)
@@ -2447,14 +6787,14 @@
        (i32.wrap/i64
         (get_local $0)
        )
-       (i32.const 100)
+       (i32.const 10)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 174)
+       (i32.const 178)
        (i32.const 4)
       )
       (unreachable)
@@ -2467,7 +6807,7 @@
       (i32.wrap/i64
        (get_local $0)
       )
-      (i32.const 100)
+      (i32.const 20)
      )
     )
     (if
@@ -2481,7 +6821,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 176)
+       (i32.const 180)
        (i32.const 4)
       )
       (unreachable)
@@ -2497,14 +6837,14 @@
        (i32.wrap/i64
         (get_local $0)
        )
-       (i32.const 100)
+       (i32.const 20)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 177)
+       (i32.const 181)
        (i32.const 4)
       )
       (unreachable)
@@ -2523,16 +6863,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 179)
+     (i32.const 183)
      (i32.const 2)
     )
     (unreachable)
@@ -2540,13 +6880,13 @@
   )
   (block $break|2
    (set_local $0
-    (i64.const 1)
+    (i64.const 0)
    )
    (loop $repeat|2
     (br_if $break|2
-     (i64.gt_s
+     (i64.ge_s
       (get_local $0)
-      (i64.const 100)
+      (i64.const 50)
      )
     )
     (if
@@ -2560,7 +6900,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 183)
+       (i32.const 187)
        (i32.const 4)
       )
       (unreachable)
@@ -2576,14 +6916,14 @@
        (i32.wrap/i64
         (get_local $0)
        )
-       (i32.const 100)
+       (i32.const 20)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 184)
+       (i32.const 188)
        (i32.const 4)
       )
       (unreachable)
@@ -2604,19 +6944,10 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 186)
+       (i32.const 190)
        (i32.const 4)
       )
       (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i64,i32>#has
-      (get_local $1)
-      (i64.add
-       (get_local $0)
-       (i64.const 1)
-      )
      )
      (block
       (set_local $0
@@ -2627,30 +6958,21 @@
       )
       (br $repeat|2)
      )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 187)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
     )
    )
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 100)
+    (i32.const 50)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 189)
+     (i32.const 192)
      (i32.const 2)
     )
     (unreachable)
@@ -2658,11 +6980,11 @@
   )
   (block $break|3
    (set_local $0
-    (i64.const 1)
+    (i64.const 0)
    )
    (loop $repeat|3
     (br_if $break|3
-     (i64.gt_s
+     (i64.ge_s
       (get_local $0)
       (i64.const 50)
      )
@@ -2676,7 +6998,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 193)
+       (i32.const 196)
        (i32.const 4)
       )
       (unreachable)
@@ -2689,7 +7011,7 @@
       (i32.wrap/i64
        (get_local $0)
       )
-      (i32.const 100)
+      (i32.const 10)
      )
     )
     (if
@@ -2703,7 +7025,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 195)
+       (i32.const 198)
        (i32.const 4)
       )
       (unreachable)
@@ -2724,7 +7046,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 197)
+       (i32.const 200)
        (i32.const 4)
       )
       (unreachable)
@@ -2743,16 +7065,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 100)
+    (i32.const 50)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 199)
+     (i32.const 202)
      (i32.const 2)
     )
     (unreachable)
@@ -2762,671 +7084,96 @@
    (get_local $1)
   )
   (if
-   (call $std/map/Map<i32,i32>#get:size
+   (call $std/map/Map<i8,i32>#get:size
     (get_local $1)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 203)
+     (i32.const 206)
      (i32.const 2)
     )
     (unreachable)
    )
   )
  )
- (func $std/map/Map<i64,i64>#clear (; 29 ;) (type $iv) (param $0 i32)
-  (i32.store
-   (get_local $0)
-   (call $~lib/arraybuffer/ArrayBuffer#constructor
-    (i32.const 0)
-    (i32.const 16)
-    (i32.const 0)
-   )
-  )
-  (i32.store offset=4
-   (get_local $0)
-   (i32.const 3)
-  )
-  (i32.store offset=8
-   (get_local $0)
-   (call $~lib/arraybuffer/ArrayBuffer#constructor
-    (i32.const 0)
-    (i32.const 96)
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=12
-   (get_local $0)
-   (i32.const 4)
-  )
-  (i32.store offset=16
-   (get_local $0)
-   (i32.const 0)
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.const 0)
-  )
- )
- (func $std/map/Map<i64,i64>#constructor (; 30 ;) (type $ii) (param $0 i32) (result i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (block
-    (i32.store
-     (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
-       (i32.const 24)
-      )
-     )
-     (i32.const 0)
-    )
-    (i32.store offset=4
-     (get_local $0)
-     (i32.const 0)
-    )
-    (i32.store offset=8
-     (get_local $0)
-     (i32.const 0)
-    )
-    (i32.store offset=12
-     (get_local $0)
-     (i32.const 0)
-    )
-    (i32.store offset=16
-     (get_local $0)
-     (i32.const 0)
-    )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.const 0)
-    )
-   )
-  )
-  (call $std/map/Map<i64,i64>#clear
-   (get_local $0)
-  )
-  (get_local $0)
- )
- (func $std/map/Map<i64,i64>#find (; 31 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
-  (set_local $0
-   (i32.load offset=8
-    (i32.add
-     (i32.load
-      (get_local $0)
-     )
-     (i32.shl
-      (i32.and
-       (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-      (i32.const 2)
-     )
-    )
-   )
-  )
-  (loop $continue|0
-   (if
-    (get_local $0)
-    (block
-     (if
-      (tee_local $2
-       (i32.eqz
-        (i32.and
-         (i32.load offset=16
-          (get_local $0)
-         )
-         (i32.const 1)
-        )
-       )
-      )
-      (set_local $2
-       (i64.eq
-        (i64.load
-         (get_local $0)
-        )
-        (get_local $1)
-       )
-      )
-     )
-     (if
-      (get_local $2)
-      (return
-       (get_local $0)
-      )
-     )
-     (set_local $0
-      (i32.and
-       (i32.load offset=16
-        (get_local $0)
-       )
-       (i32.const -2)
-      )
-     )
-     (br $continue|0)
-    )
-   )
-  )
-  (i32.const 0)
- )
- (func $std/map/Map<i64,i64>#rehash (; 32 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (set_local $4
-   (call $~lib/arraybuffer/ArrayBuffer#constructor
-    (i32.const 0)
-    (i32.shl
-     (tee_local $2
-      (i32.add
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
-     (i32.const 2)
-    )
-    (i32.const 0)
-   )
-  )
-  (set_local $2
-   (i32.add
-    (tee_local $7
-     (call $~lib/arraybuffer/ArrayBuffer#constructor
-      (i32.const 0)
-      (i32.mul
-       (tee_local $2
-        (tee_local $6
-         (i32.trunc_s/f64
-          (f64.mul
-           (f64.convert_s/i32
-            (get_local $2)
-           )
-           (f64.const 2.6666666666666665)
-          )
-         )
-        )
-       )
-       (i32.const 24)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.const 8)
-   )
-  )
-  (set_local $5
-   (i32.add
-    (tee_local $3
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 8)
-     )
-    )
-    (i32.mul
-     (tee_local $5
-      (i32.load offset=16
-       (get_local $0)
-      )
-     )
-     (i32.const 24)
-    )
-   )
-  )
-  (loop $continue|0
-   (if
-    (i32.ne
-     (get_local $3)
-     (get_local $5)
-    )
-    (block
-     (if
-      (i32.eqz
-       (i32.and
-        (i32.load offset=16
-         (get_local $3)
-        )
-        (i32.const 1)
-       )
-      )
-      (block
-       (i64.store
-        (get_local $2)
-        (i64.load
-         (get_local $3)
-        )
-       )
-       (i64.store offset=8
-        (get_local $2)
-        (i64.load offset=8
-         (get_local $3)
-        )
-       )
-       (i32.store offset=16
-        (get_local $2)
-        (i32.load offset=8
-         (i32.add
-          (get_local $4)
-          (i32.shl
-           (tee_local $8
-            (i32.and
-             (call $~lib/internal/hash/hash<i64>
-              (i64.load
-               (get_local $3)
-              )
-             )
-             (get_local $1)
-            )
-           )
-           (i32.const 2)
-          )
-         )
-        )
-       )
-       (i32.store offset=8
-        (i32.add
-         (get_local $4)
-         (i32.shl
-          (get_local $8)
-          (i32.const 2)
-         )
-        )
-        (get_local $2)
-       )
-       (set_local $2
-        (i32.add
-         (get_local $2)
-         (i32.const 24)
-        )
-       )
-      )
-     )
-     (set_local $3
-      (i32.add
-       (get_local $3)
-       (i32.const 24)
-      )
-     )
-     (br $continue|0)
-    )
-   )
-  )
-  (i32.store
-   (get_local $0)
-   (get_local $4)
-  )
-  (i32.store offset=4
-   (get_local $0)
-   (get_local $1)
-  )
-  (i32.store offset=8
-   (get_local $0)
-   (get_local $7)
-  )
-  (i32.store offset=12
-   (get_local $0)
-   (get_local $6)
-  )
-  (i32.store offset=16
-   (get_local $0)
-   (i32.load offset=20
-    (get_local $0)
-   )
-  )
- )
- (func $std/map/Map<i64,i64>#set (; 33 ;) (type $iIIv) (param $0 i32) (param $1 i64) (param $2 i64)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (if
-   (tee_local $3
-    (call $std/map/Map<i64,i64>#find
-     (get_local $0)
-     (get_local $1)
-     (tee_local $6
-      (call $~lib/internal/hash/hash<i64>
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (i64.store offset=8
-    (get_local $3)
-    (get_local $2)
-   )
-   (block
-    (if
-     (i32.eq
-      (i32.load offset=16
-       (get_local $0)
-      )
-      (tee_local $3
-       (i32.load offset=12
-        (get_local $0)
-       )
-      )
-     )
-     (block
-      (call $std/map/Map<i64,i64>#rehash
-       (get_local $0)
-       (tee_local $3
-        (if (result i32)
-         (i32.ge_s
-          (i32.load offset=20
-           (get_local $0)
-          )
-          (i32.trunc_s/f64
-           (f64.mul
-            (f64.convert_s/i32
-             (get_local $3)
-            )
-            (f64.const 0.75)
-           )
-          )
-         )
-         (i32.or
-          (i32.shl
-           (i32.load offset=4
-            (get_local $0)
-           )
-           (i32.const 1)
-          )
-          (i32.const 1)
-         )
-         (i32.load offset=4
-          (get_local $0)
-         )
-        )
-       )
-      )
-      (drop
-       (i32.load offset=12
-        (get_local $0)
-       )
-      )
-     )
-    )
-    (set_local $5
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 8)
-     )
-    )
-    (i32.store offset=16
-     (get_local $0)
-     (i32.add
-      (tee_local $4
-       (i32.load offset=16
-        (get_local $0)
-       )
-      )
-      (i32.const 1)
-     )
-    )
-    (i64.store
-     (tee_local $3
-      (i32.add
-       (get_local $5)
-       (i32.mul
-        (tee_local $3
-         (get_local $4)
-        )
-        (i32.const 24)
-       )
-      )
-     )
-     (get_local $1)
-    )
-    (i64.store offset=8
-     (get_local $3)
-     (get_local $2)
-    )
-    (i32.store offset=16
-     (get_local $3)
-     (tee_local $5
-      (i32.load offset=8
-       (i32.add
-        (i32.load
-         (get_local $0)
-        )
-        (i32.shl
-         (tee_local $4
-          (i32.and
-           (get_local $6)
-           (i32.load offset=4
-            (get_local $0)
-           )
-          )
-         )
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    (i32.store offset=8
-     (i32.add
-      (i32.load
-       (get_local $0)
-      )
-      (i32.shl
-       (get_local $4)
-       (i32.const 2)
-      )
-     )
-     (get_local $3)
-    )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.add
-      (i32.load offset=20
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
-   )
-  )
- )
- (func $std/map/Map<i64,i64>#has (; 34 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (i32.ne
-   (call $std/map/Map<i64,i64>#find
-    (get_local $0)
-    (get_local $1)
-    (call $~lib/internal/hash/hash<i64>
-     (get_local $1)
-    )
-   )
-   (i32.const 0)
-  )
- )
- (func $std/map/Map<i64,i64>#get (; 35 ;) (type $iII) (param $0 i32) (param $1 i64) (result i64)
-  (tee_local $1
-   (if (result i64)
-    (tee_local $0
-     (call $std/map/Map<i64,i64>#find
-      (get_local $0)
-      (get_local $1)
-      (call $~lib/internal/hash/hash<i64>
-       (get_local $1)
-      )
-     )
-    )
-    (i64.load offset=8
-     (get_local $0)
-    )
-    (unreachable)
-   )
-  )
- )
- (func $std/map/Map<i64,i64>#delete (; 36 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i32)
-  (if
-   (i32.eqz
-    (tee_local $2
-     (call $std/map/Map<i64,i64>#find
-      (get_local $0)
-      (get_local $1)
-      (call $~lib/internal/hash/hash<i64>
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (return
-    (i32.const 0)
-   )
-  )
-  (i32.store offset=16
-   (get_local $2)
-   (i32.or
-    (i32.load offset=16
-     (get_local $2)
-    )
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.sub
-    (i32.load offset=20
-     (get_local $0)
-    )
-    (i32.const 1)
-   )
-  )
-  (if
-   (tee_local $2
-    (i32.gt_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 4)
-    )
-   )
-   (set_local $2
-    (i32.lt_s
-     (i32.load offset=20
-      (get_local $0)
-     )
-     (i32.trunc_s/f64
-      (f64.mul
-       (f64.convert_s/i32
-        (i32.load offset=16
-         (get_local $0)
-        )
-       )
-       (f64.const 0.75)
-      )
-     )
-    )
-   )
-  )
-  (if
-   (get_local $2)
-   (call $std/map/Map<i64,i64>#rehash
-    (get_local $0)
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
-   )
-  )
-  (i32.const 1)
- )
- (func $std/map/test<i64,i64> (; 37 ;) (type $v)
+ (func $std/map/test<u64,i32> (; 56 ;) (type $v)
   (local $0 i64)
   (local $1 i32)
   (set_local $1
-   (call $std/map/Map<i64,i64>#constructor
+   (call $std/map/Map<i64,i32>#constructor
     (i32.const 0)
    )
   )
   (block $break|0
-   (set_local $0
-    (i64.const 1)
-   )
    (loop $repeat|0
     (br_if $break|0
-     (i64.gt_s
-      (get_local $0)
-      (i64.const 200)
-     )
-    )
-    (call $std/map/Map<i64,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
+     (i64.ge_u
       (get_local $0)
       (i64.const 100)
      )
     )
     (if
-     (i32.eqz
-      (call $std/map/Map<i64,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 165)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i64,i64>#has
+     (call $std/map/Map<i64,i32>#has
       (get_local $1)
-      (i64.add
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i64,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.wrap/i64
        (get_local $0)
-       (i64.const 1)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i64,i32>#has
+       (get_local $1)
+       (get_local $0)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 166)
+       (i32.const 170)
        (i32.const 4)
       )
       (unreachable)
      )
     )
     (if
-     (i64.ne
-      (call $std/map/Map<i64,i64>#get
+     (i32.ne
+      (call $std/map/Map<i64,i32>#get
        (get_local $1)
        (get_local $0)
       )
-      (i64.add
-       (get_local $0)
-       (i64.const 100)
+      (i32.add
+       (i32.wrap/i64
+        (get_local $0)
+       )
+       (i32.const 10)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 167)
+       (i32.const 171)
        (i32.const 4)
       )
       (unreachable)
@@ -3445,16 +7192,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 169)
+     (i32.const 173)
      (i32.const 2)
     )
     (unreachable)
@@ -3462,87 +7209,20 @@
   )
   (block $break|1
    (set_local $0
-    (i64.const 50)
+    (i64.const 0)
    )
    (loop $repeat|1
     (br_if $break|1
-     (i64.gt_s
+     (i64.ge_u
       (get_local $0)
       (i64.const 100)
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i64,i64>#has
+      (call $std/map/Map<i64,i32>#has
        (get_local $1)
        (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 173)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i64,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (get_local $0)
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 174)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i64,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
-      (get_local $0)
-      (i64.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i64,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 176)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i64,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (get_local $0)
-       (i64.const 100)
       )
      )
      (block
@@ -3550,6 +7230,79 @@
        (i32.const 0)
        (i32.const 116)
        (i32.const 177)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i64,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.wrap/i64
+        (get_local $0)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 178)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i64,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.wrap/i64
+       (get_local $0)
+      )
+      (i32.const 20)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i64,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 180)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i64,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.wrap/i64
+        (get_local $0)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 181)
        (i32.const 4)
       )
       (unreachable)
@@ -3568,123 +7321,7 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 200)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 179)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|2
-   (set_local $0
-    (i64.const 1)
-   )
-   (loop $repeat|2
-    (br_if $break|2
-     (i64.gt_s
-      (get_local $0)
-      (i64.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i64,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 183)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i64,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (get_local $0)
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 184)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i64,i64>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i64,i64>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 186)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i64,i64>#has
-      (get_local $1)
-      (i64.add
-       (get_local $0)
-       (i64.const 1)
-      )
-     )
-     (block
-      (set_local $0
-       (i64.add
-        (get_local $0)
-        (i64.const 1)
-       )
-      )
-      (br $repeat|2)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 187)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
     (i32.const 100)
@@ -3693,49 +7330,26 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 189)
+     (i32.const 183)
      (i32.const 2)
     )
     (unreachable)
    )
   )
-  (block $break|3
+  (block $break|2
    (set_local $0
-    (i64.const 1)
+    (i64.const 0)
    )
-   (loop $repeat|3
-    (br_if $break|3
-     (i64.gt_s
+   (loop $repeat|2
+    (br_if $break|2
+     (i64.ge_u
       (get_local $0)
       (i64.const 50)
      )
     )
     (if
-     (call $std/map/Map<i64,i64>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 193)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i64,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
-      (get_local $0)
-      (i64.const 100)
-     )
-    )
-    (if
      (i32.eqz
-      (call $std/map/Map<i64,i64>#has
+      (call $std/map/Map<i64,i32>#has
        (get_local $1)
        (get_local $0)
       )
@@ -3744,20 +7358,43 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 195)
+       (i32.const 187)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<i64,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.wrap/i64
+        (get_local $0)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 188)
        (i32.const 4)
       )
       (unreachable)
      )
     )
     (drop
-     (call $std/map/Map<i64,i64>#delete
+     (call $std/map/Map<i64,i32>#delete
       (get_local $1)
       (get_local $0)
      )
     )
     (if
-     (call $std/map/Map<i64,i64>#has
+     (call $std/map/Map<i64,i32>#has
       (get_local $1)
       (get_local $0)
      )
@@ -3765,7 +7402,109 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 197)
+       (i32.const 190)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (i64.add
+        (get_local $0)
+        (i64.const 1)
+       )
+      )
+      (br $repeat|2)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 192)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|3
+   (set_local $0
+    (i64.const 0)
+   )
+   (loop $repeat|3
+    (br_if $break|3
+     (i64.ge_u
+      (get_local $0)
+      (i64.const 50)
+     )
+    )
+    (if
+     (call $std/map/Map<i64,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 196)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<i64,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.wrap/i64
+       (get_local $0)
+      )
+      (i32.const 10)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<i64,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 198)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (drop
+     (call $std/map/Map<i64,i32>#delete
+      (get_local $1)
+      (get_local $0)
+     )
+    )
+    (if
+     (call $std/map/Map<i64,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 200)
        (i32.const 4)
       )
       (unreachable)
@@ -3784,1048 +7523,40 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 199)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (call $std/map/Map<i64,i64>#clear
-   (get_local $1)
-  )
-  (if
-   (call $std/map/Map<i32,i32>#get:size
-    (get_local $1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 203)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
- )
- (func $std/map/Map<i32,i64>#find (; 38 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (set_local $0
-   (i32.load offset=8
-    (i32.add
-     (i32.load
-      (get_local $0)
-     )
-     (i32.shl
-      (i32.and
-       (get_local $2)
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-      (i32.const 2)
-     )
-    )
-   )
-  )
-  (loop $continue|0
-   (if
-    (get_local $0)
-    (block
-     (if
-      (tee_local $2
-       (i32.eqz
-        (i32.and
-         (i32.load offset=16
-          (get_local $0)
-         )
-         (i32.const 1)
-        )
-       )
-      )
-      (set_local $2
-       (i32.eq
-        (i32.load
-         (get_local $0)
-        )
-        (get_local $1)
-       )
-      )
-     )
-     (if
-      (get_local $2)
-      (return
-       (get_local $0)
-      )
-     )
-     (set_local $0
-      (i32.and
-       (i32.load offset=16
-        (get_local $0)
-       )
-       (i32.const -2)
-      )
-     )
-     (br $continue|0)
-    )
-   )
-  )
-  (i32.const 0)
- )
- (func $std/map/Map<i32,i64>#rehash (; 39 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (set_local $4
-   (call $~lib/arraybuffer/ArrayBuffer#constructor
-    (i32.const 0)
-    (i32.shl
-     (tee_local $2
-      (i32.add
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
-     (i32.const 2)
-    )
-    (i32.const 0)
-   )
-  )
-  (set_local $2
-   (i32.add
-    (tee_local $7
-     (call $~lib/arraybuffer/ArrayBuffer#constructor
-      (i32.const 0)
-      (i32.mul
-       (tee_local $2
-        (tee_local $6
-         (i32.trunc_s/f64
-          (f64.mul
-           (f64.convert_s/i32
-            (get_local $2)
-           )
-           (f64.const 2.6666666666666665)
-          )
-         )
-        )
-       )
-       (i32.const 24)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.const 8)
-   )
-  )
-  (set_local $5
-   (i32.add
-    (tee_local $3
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 8)
-     )
-    )
-    (i32.mul
-     (tee_local $5
-      (i32.load offset=16
-       (get_local $0)
-      )
-     )
-     (i32.const 24)
-    )
-   )
-  )
-  (loop $continue|0
-   (if
-    (i32.ne
-     (get_local $3)
-     (get_local $5)
-    )
-    (block
-     (if
-      (i32.eqz
-       (i32.and
-        (i32.load offset=16
-         (get_local $3)
-        )
-        (i32.const 1)
-       )
-      )
-      (block
-       (i32.store
-        (get_local $2)
-        (i32.load
-         (get_local $3)
-        )
-       )
-       (i64.store offset=8
-        (get_local $2)
-        (i64.load offset=8
-         (get_local $3)
-        )
-       )
-       (i32.store offset=16
-        (get_local $2)
-        (i32.load offset=8
-         (i32.add
-          (get_local $4)
-          (i32.shl
-           (tee_local $8
-            (i32.and
-             (call $~lib/internal/hash/hash<i32>
-              (i32.load
-               (get_local $3)
-              )
-             )
-             (get_local $1)
-            )
-           )
-           (i32.const 2)
-          )
-         )
-        )
-       )
-       (i32.store offset=8
-        (i32.add
-         (get_local $4)
-         (i32.shl
-          (get_local $8)
-          (i32.const 2)
-         )
-        )
-        (get_local $2)
-       )
-       (set_local $2
-        (i32.add
-         (get_local $2)
-         (i32.const 24)
-        )
-       )
-      )
-     )
-     (set_local $3
-      (i32.add
-       (get_local $3)
-       (i32.const 24)
-      )
-     )
-     (br $continue|0)
-    )
-   )
-  )
-  (i32.store
-   (get_local $0)
-   (get_local $4)
-  )
-  (i32.store offset=4
-   (get_local $0)
-   (get_local $1)
-  )
-  (i32.store offset=8
-   (get_local $0)
-   (get_local $7)
-  )
-  (i32.store offset=12
-   (get_local $0)
-   (get_local $6)
-  )
-  (i32.store offset=16
-   (get_local $0)
-   (i32.load offset=20
-    (get_local $0)
-   )
-  )
- )
- (func $std/map/Map<i32,i64>#set (; 40 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (if
-   (tee_local $3
-    (call $std/map/Map<i32,i64>#find
-     (get_local $0)
-     (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<i32>
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (i64.store offset=8
-    (get_local $3)
-    (get_local $2)
-   )
-   (block
-    (if
-     (i32.eq
-      (i32.load offset=16
-       (get_local $0)
-      )
-      (tee_local $3
-       (i32.load offset=12
-        (get_local $0)
-       )
-      )
-     )
-     (block
-      (call $std/map/Map<i32,i64>#rehash
-       (get_local $0)
-       (tee_local $3
-        (if (result i32)
-         (i32.ge_s
-          (i32.load offset=20
-           (get_local $0)
-          )
-          (i32.trunc_s/f64
-           (f64.mul
-            (f64.convert_s/i32
-             (get_local $3)
-            )
-            (f64.const 0.75)
-           )
-          )
-         )
-         (i32.or
-          (i32.shl
-           (i32.load offset=4
-            (get_local $0)
-           )
-           (i32.const 1)
-          )
-          (i32.const 1)
-         )
-         (i32.load offset=4
-          (get_local $0)
-         )
-        )
-       )
-      )
-      (drop
-       (i32.load offset=12
-        (get_local $0)
-       )
-      )
-     )
-    )
-    (set_local $5
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 8)
-     )
-    )
-    (i32.store offset=16
-     (get_local $0)
-     (i32.add
-      (tee_local $3
-       (i32.load offset=16
-        (get_local $0)
-       )
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.store
-     (tee_local $3
-      (i32.add
-       (get_local $5)
-       (i32.mul
-        (get_local $3)
-        (i32.const 24)
-       )
-      )
-     )
-     (get_local $1)
-    )
-    (i64.store offset=8
-     (get_local $3)
-     (get_local $2)
-    )
-    (i32.store offset=16
-     (tee_local $1
-      (get_local $3)
-     )
-     (tee_local $4
-      (i32.load offset=8
-       (i32.add
-        (i32.load
-         (get_local $0)
-        )
-        (i32.shl
-         (tee_local $3
-          (i32.and
-           (get_local $4)
-           (i32.load offset=4
-            (get_local $0)
-           )
-          )
-         )
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    (i32.store offset=8
-     (i32.add
-      (i32.load
-       (get_local $0)
-      )
-      (i32.shl
-       (get_local $3)
-       (i32.const 2)
-      )
-     )
-     (get_local $1)
-    )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.add
-      (i32.load offset=20
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
-   )
-  )
- )
- (func $std/map/Map<i32,i64>#has (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.ne
-   (call $std/map/Map<i32,i64>#find
-    (get_local $0)
-    (get_local $1)
-    (call $~lib/internal/hash/hash<i32>
-     (get_local $1)
-    )
-   )
-   (i32.const 0)
-  )
- )
- (func $std/map/Map<i32,i64>#get (; 42 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
-  (if (result i64)
-   (tee_local $0
-    (call $std/map/Map<i32,i64>#find
-     (get_local $0)
-     (get_local $1)
-     (call $~lib/internal/hash/hash<i32>
-      (get_local $1)
-     )
-    )
-   )
-   (i64.load offset=8
-    (get_local $0)
-   )
-   (unreachable)
-  )
- )
- (func $std/map/Map<i32,i64>#delete (; 43 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (if
-   (i32.eqz
-    (tee_local $1
-     (call $std/map/Map<i32,i64>#find
-      (get_local $0)
-      (get_local $1)
-      (call $~lib/internal/hash/hash<i32>
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (return
-    (i32.const 0)
-   )
-  )
-  (i32.store offset=16
-   (get_local $1)
-   (i32.or
-    (i32.load offset=16
-     (get_local $1)
-    )
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.sub
-    (i32.load offset=20
-     (get_local $0)
-    )
-    (i32.const 1)
-   )
-  )
-  (if
-   (tee_local $1
-    (i32.gt_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 4)
-    )
-   )
-   (set_local $1
-    (i32.lt_s
-     (i32.load offset=20
-      (get_local $0)
-     )
-     (i32.trunc_s/f64
-      (f64.mul
-       (f64.convert_s/i32
-        (i32.load offset=16
-         (get_local $0)
-        )
-       )
-       (f64.const 0.75)
-      )
-     )
-    )
-   )
-  )
-  (if
-   (get_local $1)
-   (call $std/map/Map<i32,i64>#rehash
-    (get_local $0)
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
-   )
-  )
-  (i32.const 1)
- )
- (func $std/map/test<i32,i64> (; 44 ;) (type $v)
-  (local $0 i32)
-  (local $1 i32)
-  (set_local $1
-   (call $std/map/Map<i64,i64>#constructor
-    (i32.const 0)
-   )
-  )
-  (block $break|0
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|0
-    (br_if $break|0
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 200)
-     )
-    )
-    (call $std/map/Map<i32,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
-      (i64.extend_s/i32
-       (get_local $0)
-      )
-      (i64.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 165)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i64>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 166)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i32,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (i64.extend_s/i32
-        (get_local $0)
-       )
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 167)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|0)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 200)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 169)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|1
-   (set_local $0
     (i32.const 50)
    )
-   (loop $repeat|1
-    (br_if $break|1
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 173)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i32,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (i64.extend_s/i32
-        (get_local $0)
-       )
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 174)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i32,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
-      (i64.extend_s/i32
-       (get_local $0)
-      )
-      (i64.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 176)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i32,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (i64.extend_s/i32
-        (get_local $0)
-       )
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 177)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|1)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 200)
-   )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 179)
+     (i32.const 202)
      (i32.const 2)
     )
     (unreachable)
    )
   )
-  (block $break|2
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|2
-    (br_if $break|2
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 183)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i32,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (i64.extend_s/i32
-        (get_local $0)
-       )
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 184)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i32,i64>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i64>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 186)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i64>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|2)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 187)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 189)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|3
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|3
-    (br_if $break|3
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 50)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i64>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 193)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i32,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
-      (i64.extend_s/i32
-       (get_local $0)
-      )
-      (i64.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 195)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i32,i64>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i64>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 197)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|3)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 199)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (call $std/map/Map<i64,i64>#clear
+  (call $std/map/Map<i64,i32>#clear
    (get_local $1)
   )
   (if
-   (call $std/map/Map<i32,i32>#get:size
+   (call $std/map/Map<i8,i32>#get:size
     (get_local $1)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 203)
+     (i32.const 206)
      (i32.const 2)
     )
     (unreachable)
    )
   )
  )
- (func $~lib/internal/hash/hash16 (; 45 ;) (type $ii) (param $0 i32) (result i32)
-  (i32.mul
-   (i32.xor
-    (i32.mul
-     (i32.xor
-      (i32.and
-       (get_local $0)
-       (i32.const 255)
-      )
-      (i32.const -2128831035)
-     )
-     (i32.const 16777619)
-    )
-    (i32.shr_u
-     (get_local $0)
-     (i32.const 8)
-    )
-   )
-   (i32.const 16777619)
-  )
- )
- (func $~lib/internal/hash/hash<i16> (; 46 ;) (type $ii) (param $0 i32) (result i32)
-  (call $~lib/internal/hash/hash16
-   (i32.shr_s
-    (i32.shl
-     (get_local $0)
-     (i32.const 16)
-    )
-    (i32.const 16)
-   )
-  )
- )
- (func $std/map/Map<i16,i32>#find (; 47 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/map/Map<f32,i32>#find (; 57 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (set_local $0
    (i32.load offset=8
     (i32.add
@@ -4860,14 +7591,11 @@
        )
       )
       (set_local $2
-       (i32.eq
-        (i32.load16_u
+       (f32.eq
+        (f32.load
          (get_local $0)
         )
-        (i32.and
-         (get_local $1)
-         (i32.const 65535)
-        )
+        (get_local $1)
        )
       )
      )
@@ -4891,7 +7619,21 @@
   )
   (i32.const 0)
  )
- (func $std/map/Map<i16,i32>#rehash (; 48 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/map/Map<f32,i32>#has (; 58 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+  (i32.ne
+   (call $std/map/Map<f32,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash32
+     (i32.reinterpret/f32
+      (get_local $1)
+     )
+    )
+   )
+   (i32.const 0)
+  )
+ )
+ (func $std/map/Map<f32,i32>#rehash (; 59 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4914,44 +7656,41 @@
     (i32.const 0)
    )
   )
-  (set_local $2
-   (i32.add
-    (tee_local $7
-     (call $~lib/arraybuffer/ArrayBuffer#constructor
-      (i32.const 0)
-      (i32.mul
-       (tee_local $2
-        (tee_local $6
-         (i32.trunc_s/f64
-          (f64.mul
-           (f64.convert_s/i32
-            (get_local $2)
-           )
-           (f64.const 2.6666666666666665)
-          )
+  (set_local $5
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.mul
+     (tee_local $2
+      (tee_local $8
+       (i32.trunc_s/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (get_local $2)
          )
+         (f64.const 2.6666666666666665)
         )
        )
-       (i32.const 12)
       )
-      (i32.const 1)
      )
+     (i32.const 12)
     )
-    (i32.const 8)
+    (i32.const 1)
    )
   )
-  (set_local $5
+  (set_local $6
    (i32.add
     (tee_local $3
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
+     (tee_local $2
+      (i32.add
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 8)
       )
-      (i32.const 8)
      )
     )
     (i32.mul
-     (tee_local $5
+     (tee_local $6
       (i32.load offset=16
        (get_local $0)
       )
@@ -4960,77 +7699,81 @@
     )
    )
   )
+  (set_local $3
+   (i32.add
+    (get_local $5)
+    (i32.const 8)
+   )
+  )
   (loop $continue|0
    (if
     (i32.ne
-     (get_local $3)
-     (get_local $5)
+     (get_local $2)
+     (get_local $6)
     )
     (block
      (if
       (i32.eqz
        (i32.and
         (i32.load offset=8
-         (get_local $3)
+         (get_local $2)
         )
         (i32.const 1)
        )
       )
       (block
-       (i32.store16
-        (get_local $2)
-        (i32.load16_s
-         (get_local $3)
+       (f32.store
+        (get_local $3)
+        (f32.load
+         (get_local $2)
         )
        )
        (i32.store offset=4
-        (get_local $2)
+        (get_local $3)
         (i32.load offset=4
-         (get_local $3)
+         (get_local $2)
         )
        )
        (i32.store offset=8
-        (get_local $2)
+        (get_local $3)
         (i32.load offset=8
-         (i32.add
-          (get_local $4)
-          (i32.shl
-           (tee_local $8
+         (tee_local $7
+          (i32.add
+           (get_local $4)
+           (i32.shl
             (i32.and
-             (call $~lib/internal/hash/hash<i16>
-              (i32.load16_s
-               (get_local $3)
+             (tee_local $7
+              (call $~lib/internal/hash/hash32
+               (i32.reinterpret/f32
+                (f32.load
+                 (get_local $2)
+                )
+               )
               )
              )
              (get_local $1)
             )
+            (i32.const 2)
            )
-           (i32.const 2)
           )
          )
         )
        )
        (i32.store offset=8
-        (i32.add
-         (get_local $4)
-         (i32.shl
-          (get_local $8)
-          (i32.const 2)
-         )
-        )
-        (get_local $2)
+        (get_local $7)
+        (get_local $3)
        )
-       (set_local $2
+       (set_local $3
         (i32.add
-         (get_local $2)
+         (get_local $3)
          (i32.const 12)
         )
        )
       )
      )
-     (set_local $3
+     (set_local $2
       (i32.add
-       (get_local $3)
+       (get_local $2)
        (i32.const 12)
       )
      )
@@ -5048,11 +7791,11 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $7)
+   (get_local $5)
   )
   (i32.store offset=12
    (get_local $0)
-   (get_local $6)
+   (get_local $8)
   )
   (i32.store offset=16
    (get_local $0)
@@ -5061,18 +7804,20 @@
    )
   )
  )
- (func $std/map/Map<i16,i32>#set (; 49 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $std/map/Map<f32,i32>#set (; 60 ;) (type $ifiv) (param $0 i32) (param $1 f32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (if
    (tee_local $3
-    (call $std/map/Map<i16,i32>#find
+    (call $std/map/Map<f32,i32>#find
      (get_local $0)
      (get_local $1)
      (tee_local $4
-      (call $~lib/internal/hash/hash<i16>
-       (get_local $1)
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
+       )
       )
      )
     )
@@ -5087,48 +7832,41 @@
       (i32.load offset=16
        (get_local $0)
       )
-      (tee_local $3
-       (i32.load offset=12
-        (get_local $0)
-       )
+      (i32.load offset=12
+       (get_local $0)
       )
      )
-     (block
-      (call $std/map/Map<i16,i32>#rehash
-       (get_local $0)
-       (tee_local $3
-        (if (result i32)
-         (i32.ge_s
-          (i32.load offset=20
-           (get_local $0)
-          )
-          (i32.trunc_s/f64
-           (f64.mul
-            (f64.convert_s/i32
-             (get_local $3)
+     (call $std/map/Map<f32,i32>#rehash
+      (get_local $0)
+      (tee_local $3
+       (if (result i32)
+        (i32.lt_s
+         (i32.load offset=20
+          (get_local $0)
+         )
+         (i32.trunc_s/f64
+          (f64.mul
+           (f64.convert_s/i32
+            (i32.load offset=12
+             (get_local $0)
             )
-            (f64.const 0.75)
            )
+           (f64.const 0.75)
           )
          )
-         (i32.or
-          (i32.shl
-           (i32.load offset=4
-            (get_local $0)
-           )
-           (i32.const 1)
+        )
+        (i32.load offset=4
+         (get_local $0)
+        )
+        (i32.or
+         (i32.shl
+          (i32.load offset=4
+           (get_local $0)
           )
           (i32.const 1)
          )
-         (i32.load offset=4
-          (get_local $0)
-         )
+         (i32.const 1)
         )
-       )
-      )
-      (drop
-       (i32.load offset=12
-        (get_local $0)
        )
       )
      )
@@ -5152,7 +7890,7 @@
       (i32.const 1)
      )
     )
-    (i32.store16
+    (f32.store
      (tee_local $3
       (i32.add
        (get_local $5)
@@ -5168,11 +7906,20 @@
      (get_local $3)
      (get_local $2)
     )
+    (i32.store offset=20
+     (get_local $0)
+     (i32.add
+      (i32.load offset=20
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
     (i32.store offset=8
-     (tee_local $1
+     (tee_local $2
       (get_local $3)
      )
-     (tee_local $2
+     (tee_local $4
       (i32.load offset=8
        (i32.add
         (i32.load
@@ -5203,41 +7950,22 @@
        (i32.const 2)
       )
      )
-     (get_local $1)
-    )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.add
-      (i32.load offset=20
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
+     (get_local $2)
     )
    )
   )
  )
- (func $std/map/Map<i16,i32>#has (; 50 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.ne
-   (call $std/map/Map<i16,i32>#find
-    (get_local $0)
-    (get_local $1)
-    (call $~lib/internal/hash/hash<i16>
-     (get_local $1)
-    )
-   )
-   (i32.const 0)
-  )
- )
- (func $std/map/Map<i16,i32>#get (; 51 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/map/Map<f32,i32>#get (; 61 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
-     (call $std/map/Map<i16,i32>#find
+     (call $std/map/Map<f32,i32>#find
       (get_local $0)
       (get_local $1)
-      (call $~lib/internal/hash/hash<i16>
-       (get_local $1)
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
+       )
       )
      )
     )
@@ -5248,15 +7976,23 @@
    )
   )
  )
- (func $std/map/Map<i16,i32>#delete (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/map/Map<f32,i32>#delete (; 62 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
   (if
    (i32.eqz
-    (tee_local $1
-     (call $std/map/Map<i16,i32>#find
-      (get_local $0)
+    (tee_local $0
+     (call $std/map/Map<f32,i32>#find
+      (tee_local $2
+       (get_local $0)
+      )
       (get_local $1)
-      (call $~lib/internal/hash/hash<i16>
-       (get_local $1)
+      (tee_local $0
+       (call $~lib/internal/hash/hash32
+        (i32.reinterpret/f32
+         (get_local $1)
+        )
+       )
       )
      )
     )
@@ -5266,42 +8002,61 @@
    )
   )
   (i32.store offset=8
-   (get_local $1)
+   (get_local $0)
    (i32.or
     (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.sub
-    (i32.load offset=20
      (get_local $0)
     )
     (i32.const 1)
    )
   )
+  (i32.store offset=20
+   (get_local $2)
+   (i32.sub
+    (i32.load offset=20
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
   (if
-   (tee_local $1
-    (i32.gt_u
-     (i32.load offset=4
-      (get_local $0)
+   (tee_local $0
+    (i32.ge_u
+     (i32.add
+      (tee_local $3
+       (i32.shr_u
+        (i32.load offset=4
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.const 1)
      )
-     (i32.const 4)
+     (select
+      (i32.const 4)
+      (tee_local $0
+       (i32.load offset=20
+        (get_local $2)
+       )
+      )
+      (i32.gt_u
+       (i32.const 4)
+       (get_local $0)
+      )
+     )
     )
    )
-   (set_local $1
+   (set_local $0
     (i32.lt_s
      (i32.load offset=20
-      (get_local $0)
+      (get_local $2)
      )
      (i32.trunc_s/f64
       (f64.mul
        (f64.convert_s/i32
-        (i32.load offset=16
-         (get_local $0)
+        (i32.load offset=12
+         (get_local $2)
         )
        )
        (f64.const 0.75)
@@ -5311,55 +8066,60 @@
    )
   )
   (if
-   (get_local $1)
-   (call $std/map/Map<i16,i32>#rehash
-    (get_local $0)
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
+   (get_local $0)
+   (call $std/map/Map<f32,i32>#rehash
+    (get_local $2)
+    (get_local $3)
    )
   )
   (i32.const 1)
  )
- (func $std/map/test<i16,i32> (; 53 ;) (type $v)
-  (local $0 i32)
+ (func $std/map/test<f32,i32> (; 63 ;) (type $v)
+  (local $0 f32)
   (local $1 i32)
   (set_local $1
-   (call $std/map/Map<i32,i32>#constructor
+   (call $std/map/Map<i8,i32>#constructor
     (i32.const 0)
    )
   )
   (block $break|0
-   (set_local $0
-    (i32.const 1)
-   )
    (loop $repeat|0
     (br_if $break|0
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 200)
+     (i32.eqz
+      (f32.lt
+       (get_local $0)
+       (f32.const 100)
+      )
      )
     )
-    (call $std/map/Map<i16,i32>#set
+    (if
+     (call $std/map/Map<f32,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<f32,i32>#set
      (get_local $1)
      (get_local $0)
      (i32.add
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 16)
-       )
-       (i32.const 16)
+      (i32.trunc_s/f32
+       (get_local $0)
       )
-      (i32.const 100)
+      (i32.const 10)
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i16,i32>#has
+      (call $std/map/Map<f32,i32>#has
        (get_local $1)
        (get_local $0)
       )
@@ -5368,25 +8128,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 165)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i16,i32>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 166)
+       (i32.const 170)
        (i32.const 4)
       )
       (unreachable)
@@ -5394,35 +8136,31 @@
     )
     (if
      (i32.ne
-      (call $std/map/Map<i16,i32>#get
+      (call $std/map/Map<f32,i32>#get
        (get_local $1)
        (get_local $0)
       )
       (i32.add
-       (i32.shr_s
-        (i32.shl
-         (get_local $0)
-         (i32.const 16)
-        )
-        (i32.const 16)
+       (i32.trunc_s/f32
+        (get_local $0)
        )
-       (i32.const 100)
+       (i32.const 10)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 167)
+       (i32.const 171)
        (i32.const 4)
       )
       (unreachable)
      )
      (block
       (set_local $0
-       (i32.add
+       (f32.add
         (get_local $0)
-        (i32.const 1)
+        (f32.const 1)
        )
       )
       (br $repeat|0)
@@ -5432,16 +8170,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 169)
+     (i32.const 173)
      (i32.const 2)
     )
     (unreachable)
@@ -5449,105 +8187,22 @@
   )
   (block $break|1
    (set_local $0
-    (i32.const 50)
+    (f32.const 0)
    )
    (loop $repeat|1
     (br_if $break|1
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 100)
+     (i32.eqz
+      (f32.lt
+       (get_local $0)
+       (f32.const 100)
+      )
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i16,i32>#has
+      (call $std/map/Map<f32,i32>#has
        (get_local $1)
        (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 173)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i16,i32>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.add
-       (i32.shr_s
-        (i32.shl
-         (get_local $0)
-         (i32.const 16)
-        )
-        (i32.const 16)
-       )
-       (i32.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 174)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i16,i32>#set
-     (get_local $1)
-     (get_local $0)
-     (i32.add
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 16)
-       )
-       (i32.const 16)
-      )
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i16,i32>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 176)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i16,i32>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.add
-       (i32.shr_s
-        (i32.shl
-         (get_local $0)
-         (i32.const 16)
-        )
-        (i32.const 16)
-       )
-       (i32.const 100)
       )
      )
      (block
@@ -5559,11 +8214,84 @@
       )
       (unreachable)
      )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<f32,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.trunc_s/f32
+        (get_local $0)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 178)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<f32,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.trunc_s/f32
+       (get_local $0)
+      )
+      (i32.const 20)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<f32,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 180)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<f32,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.trunc_s/f32
+        (get_local $0)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 181)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
      (block
       (set_local $0
-       (i32.add
+       (f32.add
         (get_local $0)
-        (i32.const 1)
+        (f32.const 1)
        )
       )
       (br $repeat|1)
@@ -5573,16 +8301,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 179)
+     (i32.const 183)
      (i32.const 2)
     )
     (unreachable)
@@ -5590,96 +8318,23 @@
   )
   (block $break|2
    (set_local $0
-    (i32.const 1)
+    (f32.const 0)
    )
    (loop $repeat|2
     (br_if $break|2
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 100)
+     (i32.eqz
+      (f32.lt
+       (get_local $0)
+       (f32.const 50)
+      )
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i16,i32>#has
+      (call $std/map/Map<f32,i32>#has
        (get_local $1)
        (get_local $0)
       )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 183)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i16,i32>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.add
-       (i32.shr_s
-        (i32.shl
-         (get_local $0)
-         (i32.const 16)
-        )
-        (i32.const 16)
-       )
-       (i32.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 184)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i16,i32>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i16,i32>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 186)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i16,i32>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|2)
      )
      (block
       (call $~lib/env/abort
@@ -5691,38 +8346,37 @@
       (unreachable)
      )
     )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
+    (if
+     (i32.ne
+      (call $std/map/Map<f32,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.trunc_s/f32
+        (get_local $0)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 188)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
     )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 189)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|3
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|3
-    (br_if $break|3
-     (i32.gt_s
+    (drop
+     (call $std/map/Map<f32,i32>#delete
+      (get_local $1)
       (get_local $0)
-      (i32.const 50)
      )
     )
     (if
-     (call $std/map/Map<i16,i32>#has
+     (call $std/map/Map<f32,i32>#has
       (get_local $1)
       (get_local $0)
      )
@@ -5730,29 +8384,81 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 193)
+       (i32.const 190)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (f32.add
+        (get_local $0)
+        (f32.const 1)
+       )
+      )
+      (br $repeat|2)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 192)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|3
+   (set_local $0
+    (f32.const 0)
+   )
+   (loop $repeat|3
+    (br_if $break|3
+     (i32.eqz
+      (f32.lt
+       (get_local $0)
+       (f32.const 50)
+      )
+     )
+    )
+    (if
+     (call $std/map/Map<f32,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 196)
        (i32.const 4)
       )
       (unreachable)
      )
     )
-    (call $std/map/Map<i16,i32>#set
+    (call $std/map/Map<f32,i32>#set
      (get_local $1)
      (get_local $0)
      (i32.add
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 16)
-       )
-       (i32.const 16)
+      (i32.trunc_s/f32
+       (get_local $0)
       )
-      (i32.const 100)
+      (i32.const 10)
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i16,i32>#has
+      (call $std/map/Map<f32,i32>#has
        (get_local $1)
        (get_local $0)
       )
@@ -5761,20 +8467,20 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 195)
+       (i32.const 198)
        (i32.const 4)
       )
       (unreachable)
      )
     )
     (drop
-     (call $std/map/Map<i16,i32>#delete
+     (call $std/map/Map<f32,i32>#delete
       (get_local $1)
       (get_local $0)
      )
     )
     (if
-     (call $std/map/Map<i16,i32>#has
+     (call $std/map/Map<f32,i32>#has
       (get_local $1)
       (get_local $0)
      )
@@ -5782,16 +8488,16 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 197)
+       (i32.const 200)
        (i32.const 4)
       )
       (unreachable)
      )
      (block
       (set_local $0
-       (i32.add
+       (f32.add
         (get_local $0)
-        (i32.const 1)
+        (f32.const 1)
        )
       )
       (br $repeat|3)
@@ -5801,40 +8507,40 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 100)
+    (i32.const 50)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 199)
+     (i32.const 202)
      (i32.const 2)
     )
     (unreachable)
    )
   )
-  (call $std/map/Map<i32,i32>#clear
+  (call $std/map/Map<i8,i32>#clear
    (get_local $1)
   )
   (if
-   (call $std/map/Map<i32,i32>#get:size
+   (call $std/map/Map<i8,i32>#get:size
     (get_local $1)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 203)
+     (i32.const 206)
      (i32.const 2)
     )
     (unreachable)
    )
   )
  )
- (func $std/map/Map<i16,i64>#find (; 54 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/map/Map<f64,i32>#find (; 64 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (set_local $0
    (i32.load offset=8
     (i32.add
@@ -5861,7 +8567,7 @@
       (tee_local $2
        (i32.eqz
         (i32.and
-         (i32.load offset=16
+         (i32.load offset=12
           (get_local $0)
          )
          (i32.const 1)
@@ -5869,14 +8575,11 @@
        )
       )
       (set_local $2
-       (i32.eq
-        (i32.load16_u
+       (f64.eq
+        (f64.load
          (get_local $0)
         )
-        (i32.and
-         (get_local $1)
-         (i32.const 65535)
-        )
+        (get_local $1)
        )
       )
      )
@@ -5888,7 +8591,7 @@
      )
      (set_local $0
       (i32.and
-       (i32.load offset=16
+       (i32.load offset=12
         (get_local $0)
        )
        (i32.const -2)
@@ -5900,962 +8603,21 @@
   )
   (i32.const 0)
  )
- (func $std/map/Map<i16,i64>#rehash (; 55 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (set_local $4
-   (call $~lib/arraybuffer/ArrayBuffer#constructor
-    (i32.const 0)
-    (i32.shl
-     (tee_local $2
-      (i32.add
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
-     (i32.const 2)
-    )
-    (i32.const 0)
-   )
-  )
-  (set_local $2
-   (i32.add
-    (tee_local $7
-     (call $~lib/arraybuffer/ArrayBuffer#constructor
-      (i32.const 0)
-      (i32.mul
-       (tee_local $2
-        (tee_local $6
-         (i32.trunc_s/f64
-          (f64.mul
-           (f64.convert_s/i32
-            (get_local $2)
-           )
-           (f64.const 2.6666666666666665)
-          )
-         )
-        )
-       )
-       (i32.const 24)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.const 8)
-   )
-  )
-  (set_local $5
-   (i32.add
-    (tee_local $3
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 8)
-     )
-    )
-    (i32.mul
-     (tee_local $5
-      (i32.load offset=16
-       (get_local $0)
-      )
-     )
-     (i32.const 24)
-    )
-   )
-  )
-  (loop $continue|0
-   (if
-    (i32.ne
-     (get_local $3)
-     (get_local $5)
-    )
-    (block
-     (if
-      (i32.eqz
-       (i32.and
-        (i32.load offset=16
-         (get_local $3)
-        )
-        (i32.const 1)
-       )
-      )
-      (block
-       (i32.store16
-        (get_local $2)
-        (i32.load16_s
-         (get_local $3)
-        )
-       )
-       (i64.store offset=8
-        (get_local $2)
-        (i64.load offset=8
-         (get_local $3)
-        )
-       )
-       (i32.store offset=16
-        (get_local $2)
-        (i32.load offset=8
-         (i32.add
-          (get_local $4)
-          (i32.shl
-           (tee_local $8
-            (i32.and
-             (call $~lib/internal/hash/hash<i16>
-              (i32.load16_s
-               (get_local $3)
-              )
-             )
-             (get_local $1)
-            )
-           )
-           (i32.const 2)
-          )
-         )
-        )
-       )
-       (i32.store offset=8
-        (i32.add
-         (get_local $4)
-         (i32.shl
-          (get_local $8)
-          (i32.const 2)
-         )
-        )
-        (get_local $2)
-       )
-       (set_local $2
-        (i32.add
-         (get_local $2)
-         (i32.const 24)
-        )
-       )
-      )
-     )
-     (set_local $3
-      (i32.add
-       (get_local $3)
-       (i32.const 24)
-      )
-     )
-     (br $continue|0)
-    )
-   )
-  )
-  (i32.store
-   (get_local $0)
-   (get_local $4)
-  )
-  (i32.store offset=4
-   (get_local $0)
-   (get_local $1)
-  )
-  (i32.store offset=8
-   (get_local $0)
-   (get_local $7)
-  )
-  (i32.store offset=12
-   (get_local $0)
-   (get_local $6)
-  )
-  (i32.store offset=16
-   (get_local $0)
-   (i32.load offset=20
-    (get_local $0)
-   )
-  )
- )
- (func $std/map/Map<i16,i64>#set (; 56 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (if
-   (tee_local $3
-    (call $std/map/Map<i16,i64>#find
-     (get_local $0)
-     (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<i16>
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (i64.store offset=8
-    (get_local $3)
-    (get_local $2)
-   )
-   (block
-    (if
-     (i32.eq
-      (i32.load offset=16
-       (get_local $0)
-      )
-      (tee_local $3
-       (i32.load offset=12
-        (get_local $0)
-       )
-      )
-     )
-     (block
-      (call $std/map/Map<i16,i64>#rehash
-       (get_local $0)
-       (tee_local $3
-        (if (result i32)
-         (i32.ge_s
-          (i32.load offset=20
-           (get_local $0)
-          )
-          (i32.trunc_s/f64
-           (f64.mul
-            (f64.convert_s/i32
-             (get_local $3)
-            )
-            (f64.const 0.75)
-           )
-          )
-         )
-         (i32.or
-          (i32.shl
-           (i32.load offset=4
-            (get_local $0)
-           )
-           (i32.const 1)
-          )
-          (i32.const 1)
-         )
-         (i32.load offset=4
-          (get_local $0)
-         )
-        )
-       )
-      )
-      (drop
-       (i32.load offset=12
-        (get_local $0)
-       )
-      )
-     )
-    )
-    (set_local $5
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 8)
-     )
-    )
-    (i32.store offset=16
-     (get_local $0)
-     (i32.add
-      (tee_local $3
-       (i32.load offset=16
-        (get_local $0)
-       )
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.store16
-     (tee_local $3
-      (i32.add
-       (get_local $5)
-       (i32.mul
-        (get_local $3)
-        (i32.const 24)
-       )
-      )
-     )
-     (get_local $1)
-    )
-    (i64.store offset=8
-     (get_local $3)
-     (get_local $2)
-    )
-    (i32.store offset=16
-     (tee_local $1
-      (get_local $3)
-     )
-     (tee_local $4
-      (i32.load offset=8
-       (i32.add
-        (i32.load
-         (get_local $0)
-        )
-        (i32.shl
-         (tee_local $3
-          (i32.and
-           (get_local $4)
-           (i32.load offset=4
-            (get_local $0)
-           )
-          )
-         )
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    (i32.store offset=8
-     (i32.add
-      (i32.load
-       (get_local $0)
-      )
-      (i32.shl
-       (get_local $3)
-       (i32.const 2)
-      )
-     )
-     (get_local $1)
-    )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.add
-      (i32.load offset=20
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
-   )
-  )
- )
- (func $std/map/Map<i16,i64>#has (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/map/Map<f64,i32>#has (; 65 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (i32.ne
-   (call $std/map/Map<i16,i64>#find
+   (call $std/map/Map<f64,i32>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<i16>
-     (get_local $1)
+    (call $~lib/internal/hash/hash64
+     (i64.reinterpret/f64
+      (get_local $1)
+     )
     )
    )
    (i32.const 0)
   )
  )
- (func $std/map/Map<i16,i64>#get (; 58 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
-  (if (result i64)
-   (tee_local $0
-    (call $std/map/Map<i16,i64>#find
-     (get_local $0)
-     (get_local $1)
-     (call $~lib/internal/hash/hash<i16>
-      (get_local $1)
-     )
-    )
-   )
-   (i64.load offset=8
-    (get_local $0)
-   )
-   (unreachable)
-  )
- )
- (func $std/map/Map<i16,i64>#delete (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (if
-   (i32.eqz
-    (tee_local $1
-     (call $std/map/Map<i16,i64>#find
-      (get_local $0)
-      (get_local $1)
-      (call $~lib/internal/hash/hash<i16>
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (return
-    (i32.const 0)
-   )
-  )
-  (i32.store offset=16
-   (get_local $1)
-   (i32.or
-    (i32.load offset=16
-     (get_local $1)
-    )
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.sub
-    (i32.load offset=20
-     (get_local $0)
-    )
-    (i32.const 1)
-   )
-  )
-  (if
-   (tee_local $1
-    (i32.gt_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 4)
-    )
-   )
-   (set_local $1
-    (i32.lt_s
-     (i32.load offset=20
-      (get_local $0)
-     )
-     (i32.trunc_s/f64
-      (f64.mul
-       (f64.convert_s/i32
-        (i32.load offset=16
-         (get_local $0)
-        )
-       )
-       (f64.const 0.75)
-      )
-     )
-    )
-   )
-  )
-  (if
-   (get_local $1)
-   (call $std/map/Map<i16,i64>#rehash
-    (get_local $0)
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
-   )
-  )
-  (i32.const 1)
- )
- (func $std/map/test<i16,i64> (; 60 ;) (type $v)
-  (local $0 i32)
-  (local $1 i32)
-  (set_local $1
-   (call $std/map/Map<i64,i64>#constructor
-    (i32.const 0)
-   )
-  )
-  (block $break|0
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|0
-    (br_if $break|0
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 200)
-     )
-    )
-    (call $std/map/Map<i16,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
-      (i64.extend_s/i32
-       (i32.shr_s
-        (i32.shl
-         (get_local $0)
-         (i32.const 16)
-        )
-        (i32.const 16)
-       )
-      )
-      (i64.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i16,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 165)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i16,i64>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 166)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i16,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (i64.extend_s/i32
-        (i32.shr_s
-         (i32.shl
-          (get_local $0)
-          (i32.const 16)
-         )
-         (i32.const 16)
-        )
-       )
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 167)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|0)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 200)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 169)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|1
-   (set_local $0
-    (i32.const 50)
-   )
-   (loop $repeat|1
-    (br_if $break|1
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i16,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 173)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i16,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (i64.extend_s/i32
-        (i32.shr_s
-         (i32.shl
-          (get_local $0)
-          (i32.const 16)
-         )
-         (i32.const 16)
-        )
-       )
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 174)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i16,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
-      (i64.extend_s/i32
-       (i32.shr_s
-        (i32.shl
-         (get_local $0)
-         (i32.const 16)
-        )
-        (i32.const 16)
-       )
-      )
-      (i64.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i16,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 176)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i16,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (i64.extend_s/i32
-        (i32.shr_s
-         (i32.shl
-          (get_local $0)
-          (i32.const 16)
-         )
-         (i32.const 16)
-        )
-       )
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 177)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|1)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 200)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 179)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|2
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|2
-    (br_if $break|2
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i16,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 183)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (call $std/map/Map<i16,i64>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i64.add
-       (i64.extend_s/i32
-        (i32.shr_s
-         (i32.shl
-          (get_local $0)
-          (i32.const 16)
-         )
-         (i32.const 16)
-        )
-       )
-       (i64.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 184)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i16,i64>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i16,i64>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 186)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i16,i64>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|2)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 187)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 189)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|3
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|3
-    (br_if $break|3
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 50)
-     )
-    )
-    (if
-     (call $std/map/Map<i16,i64>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 193)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i16,i64>#set
-     (get_local $1)
-     (get_local $0)
-     (i64.add
-      (i64.extend_s/i32
-       (i32.shr_s
-        (i32.shl
-         (get_local $0)
-         (i32.const 16)
-        )
-        (i32.const 16)
-       )
-      )
-      (i64.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i16,i64>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 195)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i16,i64>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i16,i64>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 197)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|3)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 199)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (call $std/map/Map<i64,i64>#clear
-   (get_local $1)
-  )
-  (if
-   (call $std/map/Map<i32,i32>#get:size
-    (get_local $1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 203)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
- )
- (func $std/map/Map<i32,i16>#rehash (; 61 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/map/Map<f64,i32>#rehash (; 66 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6878,1030 +8640,124 @@
     (i32.const 0)
    )
   )
-  (set_local $2
-   (i32.add
-    (tee_local $7
-     (call $~lib/arraybuffer/ArrayBuffer#constructor
-      (i32.const 0)
-      (i32.mul
-       (tee_local $2
-        (tee_local $6
-         (i32.trunc_s/f64
-          (f64.mul
-           (f64.convert_s/i32
-            (get_local $2)
-           )
-           (f64.const 2.6666666666666665)
-          )
+  (set_local $5
+   (call $~lib/arraybuffer/ArrayBuffer#constructor
+    (i32.const 0)
+    (i32.shl
+     (tee_local $2
+      (tee_local $8
+       (i32.trunc_s/f64
+        (f64.mul
+         (f64.convert_s/i32
+          (get_local $2)
          )
+         (f64.const 2.6666666666666665)
         )
        )
-       (i32.const 12)
       )
-      (i32.const 1)
      )
+     (i32.const 4)
     )
-    (i32.const 8)
+    (i32.const 1)
    )
   )
-  (set_local $5
+  (set_local $6
    (i32.add
     (tee_local $3
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
+     (tee_local $2
+      (i32.add
+       (i32.load offset=8
+        (get_local $0)
+       )
+       (i32.const 8)
       )
-      (i32.const 8)
      )
     )
-    (i32.mul
-     (tee_local $5
+    (i32.shl
+     (tee_local $6
       (i32.load offset=16
        (get_local $0)
       )
      )
-     (i32.const 12)
+     (i32.const 4)
     )
+   )
+  )
+  (set_local $3
+   (i32.add
+    (get_local $5)
+    (i32.const 8)
    )
   )
   (loop $continue|0
    (if
     (i32.ne
-     (get_local $3)
-     (get_local $5)
-    )
-    (block
-     (if
-      (i32.eqz
-       (i32.and
-        (i32.load offset=8
-         (get_local $3)
-        )
-        (i32.const 1)
-       )
-      )
-      (block
-       (i32.store
-        (get_local $2)
-        (i32.load
-         (get_local $3)
-        )
-       )
-       (i32.store16 offset=4
-        (get_local $2)
-        (i32.load16_s offset=4
-         (get_local $3)
-        )
-       )
-       (i32.store offset=8
-        (get_local $2)
-        (i32.load offset=8
-         (i32.add
-          (get_local $4)
-          (i32.shl
-           (tee_local $8
-            (i32.and
-             (call $~lib/internal/hash/hash<i32>
-              (i32.load
-               (get_local $3)
-              )
-             )
-             (get_local $1)
-            )
-           )
-           (i32.const 2)
-          )
-         )
-        )
-       )
-       (i32.store offset=8
-        (i32.add
-         (get_local $4)
-         (i32.shl
-          (get_local $8)
-          (i32.const 2)
-         )
-        )
-        (get_local $2)
-       )
-       (set_local $2
-        (i32.add
-         (get_local $2)
-         (i32.const 12)
-        )
-       )
-      )
-     )
-     (set_local $3
-      (i32.add
-       (get_local $3)
-       (i32.const 12)
-      )
-     )
-     (br $continue|0)
-    )
-   )
-  )
-  (i32.store
-   (get_local $0)
-   (get_local $4)
-  )
-  (i32.store offset=4
-   (get_local $0)
-   (get_local $1)
-  )
-  (i32.store offset=8
-   (get_local $0)
-   (get_local $7)
-  )
-  (i32.store offset=12
-   (get_local $0)
-   (get_local $6)
-  )
-  (i32.store offset=16
-   (get_local $0)
-   (i32.load offset=20
-    (get_local $0)
-   )
-  )
- )
- (func $std/map/Map<i32,i16>#set (; 62 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (if
-   (tee_local $3
-    (call $std/map/Map<i32,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<i32>
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (i32.store16 offset=4
-    (get_local $3)
-    (get_local $2)
-   )
-   (block
-    (if
-     (i32.eq
-      (i32.load offset=16
-       (get_local $0)
-      )
-      (tee_local $3
-       (i32.load offset=12
-        (get_local $0)
-       )
-      )
-     )
-     (block
-      (call $std/map/Map<i32,i16>#rehash
-       (get_local $0)
-       (tee_local $3
-        (if (result i32)
-         (i32.ge_s
-          (i32.load offset=20
-           (get_local $0)
-          )
-          (i32.trunc_s/f64
-           (f64.mul
-            (f64.convert_s/i32
-             (get_local $3)
-            )
-            (f64.const 0.75)
-           )
-          )
-         )
-         (i32.or
-          (i32.shl
-           (i32.load offset=4
-            (get_local $0)
-           )
-           (i32.const 1)
-          )
-          (i32.const 1)
-         )
-         (i32.load offset=4
-          (get_local $0)
-         )
-        )
-       )
-      )
-      (drop
-       (i32.load offset=12
-        (get_local $0)
-       )
-      )
-     )
-    )
-    (set_local $5
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 8)
-     )
-    )
-    (i32.store offset=16
-     (get_local $0)
-     (i32.add
-      (tee_local $3
-       (i32.load offset=16
-        (get_local $0)
-       )
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.store
-     (tee_local $3
-      (i32.add
-       (get_local $5)
-       (i32.mul
-        (get_local $3)
-        (i32.const 12)
-       )
-      )
-     )
-     (get_local $1)
-    )
-    (i32.store16 offset=4
-     (get_local $3)
      (get_local $2)
-    )
-    (i32.store offset=8
-     (tee_local $1
-      (get_local $3)
-     )
-     (tee_local $2
-      (i32.load offset=8
-       (i32.add
-        (i32.load
-         (get_local $0)
-        )
-        (i32.shl
-         (tee_local $3
-          (i32.and
-           (get_local $4)
-           (i32.load offset=4
-            (get_local $0)
-           )
-          )
-         )
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    (i32.store offset=8
-     (i32.add
-      (i32.load
-       (get_local $0)
-      )
-      (i32.shl
-       (get_local $3)
-       (i32.const 2)
-      )
-     )
-     (get_local $1)
-    )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.add
-      (i32.load offset=20
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
-   )
-  )
- )
- (func $std/map/Map<i32,i16>#get (; 63 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (tee_local $0
-   (if (result i32)
-    (tee_local $0
-     (call $std/map/Map<i32,i32>#find
-      (get_local $0)
-      (get_local $1)
-      (call $~lib/internal/hash/hash<i32>
-       (get_local $1)
-      )
-     )
-    )
-    (i32.load16_s offset=4
-     (get_local $0)
-    )
-    (unreachable)
-   )
-  )
- )
- (func $std/map/Map<i32,i16>#delete (; 64 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (if
-   (i32.eqz
-    (tee_local $1
-     (call $std/map/Map<i32,i32>#find
-      (get_local $0)
-      (get_local $1)
-      (call $~lib/internal/hash/hash<i32>
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (return
-    (i32.const 0)
-   )
-  )
-  (i32.store offset=8
-   (get_local $1)
-   (i32.or
-    (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.sub
-    (i32.load offset=20
-     (get_local $0)
-    )
-    (i32.const 1)
-   )
-  )
-  (if
-   (tee_local $1
-    (i32.gt_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 4)
-    )
-   )
-   (set_local $1
-    (i32.lt_s
-     (i32.load offset=20
-      (get_local $0)
-     )
-     (i32.trunc_s/f64
-      (f64.mul
-       (f64.convert_s/i32
-        (i32.load offset=16
-         (get_local $0)
-        )
-       )
-       (f64.const 0.75)
-      )
-     )
-    )
-   )
-  )
-  (if
-   (get_local $1)
-   (call $std/map/Map<i32,i16>#rehash
-    (get_local $0)
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
-   )
-  )
-  (i32.const 1)
- )
- (func $std/map/test<i32,i16> (; 65 ;) (type $v)
-  (local $0 i32)
-  (local $1 i32)
-  (set_local $1
-   (call $std/map/Map<i32,i32>#constructor
-    (i32.const 0)
-   )
-  )
-  (block $break|0
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|0
-    (br_if $break|0
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 200)
-     )
-    )
-    (call $std/map/Map<i32,i16>#set
-     (get_local $1)
-     (get_local $0)
-     (i32.add
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i32>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 165)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i32>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 166)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i32,i16>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.add
-       (get_local $0)
-       (i32.const 100)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 167)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|0)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 200)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 169)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|1
-   (set_local $0
-    (i32.const 50)
-   )
-   (loop $repeat|1
-    (br_if $break|1
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i32>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 173)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i32,i16>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.shr_s
-       (i32.shl
-        (i32.add
-         (get_local $0)
-         (i32.const 100)
-        )
-        (i32.const 16)
-       )
-       (i32.const 16)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 174)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i32,i16>#set
-     (get_local $1)
-     (get_local $0)
-     (i32.add
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i32>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 176)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i32,i16>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.shr_s
-       (i32.shl
-        (i32.add
-         (get_local $0)
-         (i32.const 100)
-        )
-        (i32.const 16)
-       )
-       (i32.const 16)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 177)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|1)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 200)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 179)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|2
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|2
-    (br_if $break|2
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i32>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 183)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i32,i16>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.shr_s
-       (i32.shl
-        (i32.add
-         (get_local $0)
-         (i32.const 100)
-        )
-        (i32.const 16)
-       )
-       (i32.const 16)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 184)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i32,i16>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i32>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 186)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i32>#has
-      (get_local $1)
-      (i32.add
-       (get_local $0)
-       (i32.const 1)
-      )
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|2)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 187)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 189)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|3
-   (set_local $0
-    (i32.const 1)
-   )
-   (loop $repeat|3
-    (br_if $break|3
-     (i32.gt_s
-      (get_local $0)
-      (i32.const 50)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i32>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 193)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i32,i16>#set
-     (get_local $1)
-     (get_local $0)
-     (i32.add
-      (get_local $0)
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i32,i32>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 195)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i32,i16>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i32,i32>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 197)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-     (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|3)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
-    )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 199)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (call $std/map/Map<i32,i32>#clear
-   (get_local $1)
-  )
-  (if
-   (call $std/map/Map<i32,i32>#get:size
-    (get_local $1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 203)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
- )
- (func $std/map/Map<i64,i16>#rehash (; 66 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (set_local $4
-   (call $~lib/arraybuffer/ArrayBuffer#constructor
-    (i32.const 0)
-    (i32.shl
-     (tee_local $2
-      (i32.add
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
-     (i32.const 2)
-    )
-    (i32.const 0)
-   )
-  )
-  (set_local $2
-   (i32.add
-    (tee_local $7
-     (call $~lib/arraybuffer/ArrayBuffer#constructor
-      (i32.const 0)
-      (i32.shl
-       (tee_local $2
-        (tee_local $6
-         (i32.trunc_s/f64
-          (f64.mul
-           (f64.convert_s/i32
-            (get_local $2)
-           )
-           (f64.const 2.6666666666666665)
-          )
-         )
-        )
-       )
-       (i32.const 4)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.const 8)
-   )
-  )
-  (set_local $5
-   (i32.add
-    (tee_local $3
-     (i32.add
-      (i32.load offset=8
-       (get_local $0)
-      )
-      (i32.const 8)
-     )
-    )
-    (i32.shl
-     (tee_local $5
-      (i32.load offset=16
-       (get_local $0)
-      )
-     )
-     (i32.const 4)
-    )
-   )
-  )
-  (loop $continue|0
-   (if
-    (i32.ne
-     (get_local $3)
-     (get_local $5)
+     (get_local $6)
     )
     (block
      (if
       (i32.eqz
        (i32.and
         (i32.load offset=12
-         (get_local $3)
+         (get_local $2)
         )
         (i32.const 1)
        )
       )
       (block
-       (i64.store
-        (get_local $2)
-        (i64.load
-         (get_local $3)
+       (f64.store
+        (get_local $3)
+        (f64.load
+         (get_local $2)
         )
        )
-       (i32.store16 offset=8
-        (get_local $2)
-        (i32.load16_s offset=8
-         (get_local $3)
+       (i32.store offset=8
+        (get_local $3)
+        (i32.load offset=8
+         (get_local $2)
         )
        )
        (i32.store offset=12
-        (get_local $2)
+        (get_local $3)
         (i32.load offset=8
-         (i32.add
-          (get_local $4)
-          (i32.shl
-           (tee_local $8
+         (tee_local $7
+          (i32.add
+           (get_local $4)
+           (i32.shl
             (i32.and
-             (call $~lib/internal/hash/hash<i64>
-              (i64.load
-               (get_local $3)
+             (tee_local $7
+              (call $~lib/internal/hash/hash64
+               (i64.reinterpret/f64
+                (f64.load
+                 (get_local $2)
+                )
+               )
               )
              )
              (get_local $1)
             )
+            (i32.const 2)
            )
-           (i32.const 2)
           )
          )
         )
        )
        (i32.store offset=8
-        (i32.add
-         (get_local $4)
-         (i32.shl
-          (get_local $8)
-          (i32.const 2)
-         )
-        )
-        (get_local $2)
+        (get_local $7)
+        (get_local $3)
        )
-       (set_local $2
+       (set_local $3
         (i32.add
-         (get_local $2)
+         (get_local $3)
          (i32.const 16)
         )
        )
       )
      )
-     (set_local $3
+     (set_local $2
       (i32.add
-       (get_local $3)
+       (get_local $2)
        (i32.const 16)
       )
      )
@@ -7919,11 +8775,11 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $7)
+   (get_local $5)
   )
   (i32.store offset=12
    (get_local $0)
-   (get_local $6)
+   (get_local $8)
   )
   (i32.store offset=16
    (get_local $0)
@@ -7932,23 +8788,25 @@
    )
   )
  )
- (func $std/map/Map<i64,i16>#set (; 67 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $std/map/Map<f64,i32>#set (; 67 ;) (type $iFiv) (param $0 i32) (param $1 f64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (if
    (tee_local $3
-    (call $std/map/Map<i64,i32>#find
+    (call $std/map/Map<f64,i32>#find
      (get_local $0)
      (get_local $1)
      (tee_local $4
-      (call $~lib/internal/hash/hash<i64>
-       (get_local $1)
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $1)
+       )
       )
      )
     )
    )
-   (i32.store16 offset=8
+   (i32.store offset=8
     (get_local $3)
     (get_local $2)
    )
@@ -7958,48 +8816,41 @@
       (i32.load offset=16
        (get_local $0)
       )
-      (tee_local $3
-       (i32.load offset=12
-        (get_local $0)
-       )
+      (i32.load offset=12
+       (get_local $0)
       )
      )
-     (block
-      (call $std/map/Map<i64,i16>#rehash
-       (get_local $0)
-       (tee_local $3
-        (if (result i32)
-         (i32.ge_s
-          (i32.load offset=20
-           (get_local $0)
-          )
-          (i32.trunc_s/f64
-           (f64.mul
-            (f64.convert_s/i32
-             (get_local $3)
+     (call $std/map/Map<f64,i32>#rehash
+      (get_local $0)
+      (tee_local $3
+       (if (result i32)
+        (i32.lt_s
+         (i32.load offset=20
+          (get_local $0)
+         )
+         (i32.trunc_s/f64
+          (f64.mul
+           (f64.convert_s/i32
+            (i32.load offset=12
+             (get_local $0)
             )
-            (f64.const 0.75)
            )
+           (f64.const 0.75)
           )
          )
-         (i32.or
-          (i32.shl
-           (i32.load offset=4
-            (get_local $0)
-           )
-           (i32.const 1)
+        )
+        (i32.load offset=4
+         (get_local $0)
+        )
+        (i32.or
+         (i32.shl
+          (i32.load offset=4
+           (get_local $0)
           )
           (i32.const 1)
          )
-         (i32.load offset=4
-          (get_local $0)
-         )
+         (i32.const 1)
         )
-       )
-      )
-      (drop
-       (i32.load offset=12
-        (get_local $0)
        )
       )
      )
@@ -8023,7 +8874,7 @@
       (i32.const 1)
      )
     )
-    (i64.store
+    (f64.store
      (tee_local $3
       (i32.add
        (get_local $5)
@@ -8035,9 +8886,18 @@
      )
      (get_local $1)
     )
-    (i32.store16 offset=8
+    (i32.store offset=8
      (get_local $3)
      (get_local $2)
+    )
+    (i32.store offset=20
+     (get_local $0)
+     (i32.add
+      (i32.load offset=20
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
     )
     (i32.store offset=12
      (tee_local $2
@@ -8076,47 +8936,47 @@
      )
      (get_local $2)
     )
-    (i32.store offset=20
-     (get_local $0)
-     (i32.add
-      (i32.load offset=20
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
    )
   )
  )
- (func $std/map/Map<i64,i16>#get (; 68 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $std/map/Map<f64,i32>#get (; 68 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
-     (call $std/map/Map<i64,i32>#find
+     (call $std/map/Map<f64,i32>#find
       (get_local $0)
       (get_local $1)
-      (call $~lib/internal/hash/hash<i64>
-       (get_local $1)
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $1)
+       )
       )
      )
     )
-    (i32.load16_s offset=8
+    (i32.load offset=8
      (get_local $0)
     )
     (unreachable)
    )
   )
  )
- (func $std/map/Map<i64,i16>#delete (; 69 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $std/map/Map<f64,i32>#delete (; 69 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
+  (local $3 i32)
   (if
    (i32.eqz
-    (tee_local $2
-     (call $std/map/Map<i64,i32>#find
-      (get_local $0)
+    (tee_local $0
+     (call $std/map/Map<f64,i32>#find
+      (tee_local $2
+       (get_local $0)
+      )
       (get_local $1)
-      (call $~lib/internal/hash/hash<i64>
-       (get_local $1)
+      (tee_local $0
+       (call $~lib/internal/hash/hash64
+        (i64.reinterpret/f64
+         (get_local $1)
+        )
+       )
       )
      )
     )
@@ -8126,42 +8986,61 @@
    )
   )
   (i32.store offset=12
-   (get_local $2)
+   (get_local $0)
    (i32.or
     (i32.load offset=12
-     (get_local $2)
-    )
-    (i32.const 1)
-   )
-  )
-  (i32.store offset=20
-   (get_local $0)
-   (i32.sub
-    (i32.load offset=20
      (get_local $0)
     )
     (i32.const 1)
    )
   )
+  (i32.store offset=20
+   (get_local $2)
+   (i32.sub
+    (i32.load offset=20
+     (get_local $2)
+    )
+    (i32.const 1)
+   )
+  )
   (if
-   (tee_local $2
-    (i32.gt_u
-     (i32.load offset=4
-      (get_local $0)
+   (tee_local $0
+    (i32.ge_u
+     (i32.add
+      (tee_local $3
+       (i32.shr_u
+        (i32.load offset=4
+         (get_local $2)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.const 1)
      )
-     (i32.const 4)
+     (select
+      (i32.const 4)
+      (tee_local $0
+       (i32.load offset=20
+        (get_local $2)
+       )
+      )
+      (i32.gt_u
+       (i32.const 4)
+       (get_local $0)
+      )
+     )
     )
    )
-   (set_local $2
+   (set_local $0
     (i32.lt_s
      (i32.load offset=20
-      (get_local $0)
+      (get_local $2)
      )
      (i32.trunc_s/f64
       (f64.mul
        (f64.convert_s/i32
-        (i32.load offset=16
-         (get_local $0)
+        (i32.load offset=12
+         (get_local $2)
         )
        )
        (f64.const 0.75)
@@ -8171,21 +9050,16 @@
    )
   )
   (if
-   (get_local $2)
-   (call $std/map/Map<i64,i16>#rehash
-    (get_local $0)
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const 1)
-    )
+   (get_local $0)
+   (call $std/map/Map<f64,i32>#rehash
+    (get_local $2)
+    (get_local $3)
    )
   )
   (i32.const 1)
  )
- (func $std/map/test<i64,i16> (; 70 ;) (type $v)
-  (local $0 i64)
+ (func $std/map/test<f64,i32> (; 70 ;) (type $v)
+  (local $0 f64)
   (local $1 i32)
   (set_local $1
    (call $std/map/Map<i64,i32>#constructor
@@ -8193,29 +9067,43 @@
    )
   )
   (block $break|0
-   (set_local $0
-    (i64.const 1)
-   )
    (loop $repeat|0
     (br_if $break|0
-     (i64.gt_s
-      (get_local $0)
-      (i64.const 200)
+     (i32.eqz
+      (f64.lt
+       (get_local $0)
+       (f64.const 100)
+      )
      )
     )
-    (call $std/map/Map<i64,i16>#set
+    (if
+     (call $std/map/Map<f64,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 168)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<f64,i32>#set
      (get_local $1)
      (get_local $0)
      (i32.add
-      (i32.wrap/i64
+      (i32.trunc_s/f64
        (get_local $0)
       )
-      (i32.const 100)
+      (i32.const 10)
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i64,i32>#has
+      (call $std/map/Map<f64,i32>#has
        (get_local $1)
        (get_local $0)
       )
@@ -8224,57 +9112,39 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 165)
+       (i32.const 170)
        (i32.const 4)
       )
       (unreachable)
      )
     )
     (if
-     (call $std/map/Map<i64,i32>#has
-      (get_local $1)
-      (i64.add
+     (i32.ne
+      (call $std/map/Map<f64,i32>#get
+       (get_local $1)
        (get_local $0)
-       (i64.const 1)
       )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 166)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i64.ne
-      (i64.extend_s/i32
-       (call $std/map/Map<i64,i16>#get
-        (get_local $1)
+      (i32.add
+       (i32.trunc_s/f64
         (get_local $0)
        )
-      )
-      (i64.add
-       (get_local $0)
-       (i64.const 100)
+       (i32.const 10)
       )
      )
      (block
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 167)
+       (i32.const 171)
        (i32.const 4)
       )
       (unreachable)
      )
      (block
       (set_local $0
-       (i64.add
+       (f64.add
         (get_local $0)
-        (i64.const 1)
+        (f64.const 1)
        )
       )
       (br $repeat|0)
@@ -8284,16 +9154,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 169)
+     (i32.const 173)
      (i32.const 2)
     )
     (unreachable)
@@ -8301,105 +9171,22 @@
   )
   (block $break|1
    (set_local $0
-    (i64.const 50)
+    (f64.const 0)
    )
    (loop $repeat|1
     (br_if $break|1
-     (i64.gt_s
-      (get_local $0)
-      (i64.const 100)
+     (i32.eqz
+      (f64.lt
+       (get_local $0)
+       (f64.const 100)
+      )
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i64,i32>#has
+      (call $std/map/Map<f64,i32>#has
        (get_local $1)
        (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 173)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i64,i16>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.shr_s
-       (i32.shl
-        (i32.add
-         (i32.wrap/i64
-          (get_local $0)
-         )
-         (i32.const 100)
-        )
-        (i32.const 16)
-       )
-       (i32.const 16)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 174)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $std/map/Map<i64,i16>#set
-     (get_local $1)
-     (get_local $0)
-     (i32.add
-      (i32.wrap/i64
-       (get_local $0)
-      )
-      (i32.const 100)
-     )
-    )
-    (if
-     (i32.eqz
-      (call $std/map/Map<i64,i32>#has
-       (get_local $1)
-       (get_local $0)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 176)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i64,i16>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.shr_s
-       (i32.shl
-        (i32.add
-         (i32.wrap/i64
-          (get_local $0)
-         )
-         (i32.const 100)
-        )
-        (i32.const 16)
-       )
-       (i32.const 16)
       )
      )
      (block
@@ -8411,11 +9198,84 @@
       )
       (unreachable)
      )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<f64,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.trunc_s/f64
+        (get_local $0)
+       )
+       (i32.const 10)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 178)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $std/map/Map<f64,i32>#set
+     (get_local $1)
+     (get_local $0)
+     (i32.add
+      (i32.trunc_s/f64
+       (get_local $0)
+      )
+      (i32.const 20)
+     )
+    )
+    (if
+     (i32.eqz
+      (call $std/map/Map<f64,i32>#has
+       (get_local $1)
+       (get_local $0)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 180)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (if
+     (i32.ne
+      (call $std/map/Map<f64,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.trunc_s/f64
+        (get_local $0)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 181)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
      (block
       (set_local $0
-       (i64.add
+       (f64.add
         (get_local $0)
-        (i64.const 1)
+        (f64.const 1)
        )
       )
       (br $repeat|1)
@@ -8425,16 +9285,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 200)
+    (i32.const 100)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 179)
+     (i32.const 183)
      (i32.const 2)
     )
     (unreachable)
@@ -8442,98 +9302,23 @@
   )
   (block $break|2
    (set_local $0
-    (i64.const 1)
+    (f64.const 0)
    )
    (loop $repeat|2
     (br_if $break|2
-     (i64.gt_s
-      (get_local $0)
-      (i64.const 100)
+     (i32.eqz
+      (f64.lt
+       (get_local $0)
+       (f64.const 50)
+      )
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i64,i32>#has
+      (call $std/map/Map<f64,i32>#has
        (get_local $1)
        (get_local $0)
       )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 183)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (i32.ne
-      (call $std/map/Map<i64,i16>#get
-       (get_local $1)
-       (get_local $0)
-      )
-      (i32.shr_s
-       (i32.shl
-        (i32.add
-         (i32.wrap/i64
-          (get_local $0)
-         )
-         (i32.const 100)
-        )
-        (i32.const 16)
-       )
-       (i32.const 16)
-      )
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 184)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (drop
-     (call $std/map/Map<i64,i16>#delete
-      (get_local $1)
-      (get_local $0)
-     )
-    )
-    (if
-     (call $std/map/Map<i64,i32>#has
-      (get_local $1)
-      (get_local $0)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 116)
-       (i32.const 186)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (if
-     (call $std/map/Map<i64,i32>#has
-      (get_local $1)
-      (i64.add
-       (get_local $0)
-       (i64.const 1)
-      )
-     )
-     (block
-      (set_local $0
-       (i64.add
-        (get_local $0)
-        (i64.const 1)
-       )
-      )
-      (br $repeat|2)
      )
      (block
       (call $~lib/env/abort
@@ -8545,38 +9330,37 @@
       (unreachable)
      )
     )
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
-     (get_local $1)
+    (if
+     (i32.ne
+      (call $std/map/Map<f64,i32>#get
+       (get_local $1)
+       (get_local $0)
+      )
+      (i32.add
+       (i32.trunc_s/f64
+        (get_local $0)
+       )
+       (i32.const 20)
+      )
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 188)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
     )
-    (i32.const 100)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 116)
-     (i32.const 189)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (block $break|3
-   (set_local $0
-    (i64.const 1)
-   )
-   (loop $repeat|3
-    (br_if $break|3
-     (i64.gt_s
+    (drop
+     (call $std/map/Map<f64,i32>#delete
+      (get_local $1)
       (get_local $0)
-      (i64.const 50)
      )
     )
     (if
-     (call $std/map/Map<i64,i32>#has
+     (call $std/map/Map<f64,i32>#has
       (get_local $1)
       (get_local $0)
      )
@@ -8584,25 +9368,81 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 193)
+       (i32.const 190)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+     (block
+      (set_local $0
+       (f64.add
+        (get_local $0)
+        (f64.const 1)
+       )
+      )
+      (br $repeat|2)
+     )
+    )
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/map/Map<i8,i32>#get:size
+     (get_local $1)
+    )
+    (i32.const 50)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 116)
+     (i32.const 192)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (block $break|3
+   (set_local $0
+    (f64.const 0)
+   )
+   (loop $repeat|3
+    (br_if $break|3
+     (i32.eqz
+      (f64.lt
+       (get_local $0)
+       (f64.const 50)
+      )
+     )
+    )
+    (if
+     (call $std/map/Map<f64,i32>#has
+      (get_local $1)
+      (get_local $0)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 116)
+       (i32.const 196)
        (i32.const 4)
       )
       (unreachable)
      )
     )
-    (call $std/map/Map<i64,i16>#set
+    (call $std/map/Map<f64,i32>#set
      (get_local $1)
      (get_local $0)
      (i32.add
-      (i32.wrap/i64
+      (i32.trunc_s/f64
        (get_local $0)
       )
-      (i32.const 100)
+      (i32.const 10)
      )
     )
     (if
      (i32.eqz
-      (call $std/map/Map<i64,i32>#has
+      (call $std/map/Map<f64,i32>#has
        (get_local $1)
        (get_local $0)
       )
@@ -8611,20 +9451,20 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 195)
+       (i32.const 198)
        (i32.const 4)
       )
       (unreachable)
      )
     )
     (drop
-     (call $std/map/Map<i64,i16>#delete
+     (call $std/map/Map<f64,i32>#delete
       (get_local $1)
       (get_local $0)
      )
     )
     (if
-     (call $std/map/Map<i64,i32>#has
+     (call $std/map/Map<f64,i32>#has
       (get_local $1)
       (get_local $0)
      )
@@ -8632,16 +9472,16 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 116)
-       (i32.const 197)
+       (i32.const 200)
        (i32.const 4)
       )
       (unreachable)
      )
      (block
       (set_local $0
-       (i64.add
+       (f64.add
         (get_local $0)
-        (i64.const 1)
+        (f64.const 1)
        )
       )
       (br $repeat|3)
@@ -8651,16 +9491,16 @@
   )
   (if
    (i32.ne
-    (call $std/map/Map<i32,i32>#get:size
+    (call $std/map/Map<i8,i32>#get:size
      (get_local $1)
     )
-    (i32.const 100)
+    (i32.const 50)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 199)
+     (i32.const 202)
      (i32.const 2)
     )
     (unreachable)
@@ -8670,14 +9510,14 @@
    (get_local $1)
   )
   (if
-   (call $std/map/Map<i32,i32>#get:size
+   (call $std/map/Map<i8,i32>#get:size
     (get_local $1)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 116)
-     (i32.const 203)
+     (i32.const 206)
      (i32.const 2)
     )
     (unreachable)
@@ -8697,13 +9537,15 @@
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
   )
-  (call $std/map/test<i32,i32>)
-  (call $std/map/test<i64,i32>)
-  (call $std/map/test<i64,i64>)
-  (call $std/map/test<i32,i64>)
+  (call $std/map/test<i8,i32>)
+  (call $std/map/test<u8,i32>)
   (call $std/map/test<i16,i32>)
-  (call $std/map/test<i16,i64>)
-  (call $std/map/test<i32,i16>)
-  (call $std/map/test<i64,i16>)
+  (call $std/map/test<u16,i32>)
+  (call $std/map/test<i32,i32>)
+  (call $std/map/test<u32,i32>)
+  (call $std/map/test<i64,i32>)
+  (call $std/map/test<u64,i32>)
+  (call $std/map/test<f32,i32>)
+  (call $std/map/test<f64,i32>)
  )
 )

@@ -32,11 +32,11 @@ export class ArrayBuffer {
 
   static readonly HEADER_SIZE: usize = HEADER_SIZE;
 
-  @inline load<T>(index: i32): T {
+  @inline load<T>(index: usize): T {
     return load<T>(changetype<usize>(this) + index * sizeof<T>(), HEADER_SIZE);
   }
 
-  @inline store<T>(index: i32, value: T): void {
+  @inline store<T>(index: usize, value: T): void {
     store<T>(changetype<usize>(this) + index * sizeof<T>(), value, HEADER_SIZE);
   }
 }
