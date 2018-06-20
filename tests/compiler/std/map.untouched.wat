@@ -575,7 +575,7 @@
   )
   (set_local $3
    (call $~lib/internal/arraybuffer/allocUnsafe
-    (get_local $1)
+    (i32.const 80)
    )
   )
   (if
