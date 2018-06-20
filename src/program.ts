@@ -3505,34 +3505,33 @@ export class ClassPrototype extends Element {
               fieldDeclaration.type,
               instance.contextualTypeArguments
             );
-            if (fieldType) {
-              let fieldInstance = new Field(
-                <FieldPrototype>member,
-                internalName + INSTANCE_DELIMITER + (<FieldPrototype>member).simpleName,
-                fieldType,
-                fieldDeclaration,
-                instance
-              );
-              switch (fieldType.byteSize) { // align
-                case 1: break;
-                case 2: {
-                  if (memoryOffset & 1) ++memoryOffset;
-                  break;
-                }
-                case 4: {
-                  if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1;
-                  break;
-                }
-                case 8: {
-                  if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1;
-                  break;
-                }
-                default: assert(false);
+            if (!fieldType) break;
+            let fieldInstance = new Field(
+              <FieldPrototype>member,
+              internalName + INSTANCE_DELIMITER + (<FieldPrototype>member).simpleName,
+              fieldType,
+              fieldDeclaration,
+              instance
+            );
+            switch (fieldType.byteSize) { // align
+              case 1: break;
+              case 2: {
+                if (memoryOffset & 1) ++memoryOffset;
+                break;
               }
-              fieldInstance.memoryOffset = memoryOffset;
-              memoryOffset += fieldType.byteSize;
-              instance.members.set(member.simpleName, fieldInstance);
+              case 4: {
+                if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1;
+                break;
+              }
+              case 8: {
+                if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1;
+                break;
+              }
+              default: assert(false);
             }
+            fieldInstance.memoryOffset = memoryOffset;
+            memoryOffset += fieldType.byteSize;
+            instance.members.set(member.simpleName, fieldInstance);
             break;
           }
 
