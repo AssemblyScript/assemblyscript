@@ -1755,6 +1755,15 @@ export class Compiler extends DiagnosticEmitter {
 
     if (statement.value) {
       let returnType = flow.returnType;
+      if (returnType == Type.void) {
+        this.compileExpressionRetainType(statement.value, returnType, WrapMode.NONE);
+        this.error(
+          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+          statement.value.range, this.currentType.toString(), returnType.toString()
+        );
+        this.currentType = Type.void;
+        return module.createUnreachable();
+      }
       expr = this.compileExpression(
         statement.value,
         returnType,
