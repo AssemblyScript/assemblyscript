@@ -1,6 +1,8 @@
 
 import { CharCode, allocate, HEADER_SIZE } from "./string";
 
+declare function logi(i: i32): void;
+
 const powers10: i32[] = [
   1,
   10,
@@ -90,16 +92,16 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     store<u32>(ptr, digit, HEADER_SIZE);
   }
 
-  if (num < 10) {
-    pos -= 1;
-    let ptr   = buffer + (pos << 1);
-    let digit = CharCode._0 + num;
-    store<u16>(ptr, digit, HEADER_SIZE);
-  } else {
+  if (num >= 10) {
     pos -= 2;
     let ptr   = buffer + (pos << 1);
     let digit = unchecked(digits00_99[num]);
     store<u32>(ptr, digit, HEADER_SIZE);
+  } else {
+    pos -= 1;
+    let ptr   = buffer + (pos << 1);
+    let digit = CharCode._0 + num;
+    store<u16>(ptr, digit, HEADER_SIZE);
   }
 }
 
@@ -117,6 +119,8 @@ export function utoa32(value: u32): string {
 
   var decimals = decimalCount(value);
   var buffer   = allocate(decimals);
+
+  logi(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
   return changetype<string>(buffer);

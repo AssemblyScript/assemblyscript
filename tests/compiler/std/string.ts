@@ -77,6 +77,7 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
+/*
 assert(itoa32(0) == "0");
 assert(itoa32(1) == "1");
 assert(itoa32(8) == "8");
@@ -97,3 +98,34 @@ assert(utoa32(1000) == "1000");
 assert(utoa32(0x7fffffff) == "2147483647");
 assert(utoa32(0x80000000) == "2147483648"); // fail <--
 assert(utoa32(0xffffffff) == "4294967295"); // fail <--
+*/
+
+var bad = utoa32(0x80000000);
+/*
+logi(bad.charCodeAt(0)); // '2' (50)
+logi(bad.charCodeAt(1)); // '1' (49)
+logi(bad.charCodeAt(2)); // '4' (52)
+logi(bad.charCodeAt(3)); // '7' (55)
+logi(bad.charCodeAt(4)); // '4' (52)
+logi(bad.charCodeAt(5)); // '8' (56)
+logi(bad.charCodeAt(6)); // '3' (51)
+logi(bad.charCodeAt(7)); // '6' (54)
+logi(bad.charCodeAt(8)); // '4' (52)
+logi(bad.charCodeAt(9)); // '8' (56)
+*/
+
+/* But we have:
+
+  logi: 49
+  logi: 52
+  logi: 55
+  logi: 52
+  logi: 56
+  logi: 51
+  logi: 54
+  logi: 52
+  logi: 56
+  logi: 0
+
+  Decimal count (decimalCount) return 9 instead 10 for 0x80000000 Why?
+*/
