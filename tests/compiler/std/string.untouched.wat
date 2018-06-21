@@ -18,8 +18,8 @@
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
  (global $~lib/internal/string/EMPTY i32 (i32.const 8))
- (global $~lib/internal/itoa/powers_0_10 i32 (i32.const 16))
- (global $~lib/internal/itoa/digits_00_99 i32 (i32.const 88))
+ (global $~lib/internal/itoa/powers10 i32 (i32.const 16))
+ (global $~lib/internal/itoa/digits00_99 i32 (i32.const 88))
  (global $std/string/str (mut i32) (i32.const 608))
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
@@ -4369,13 +4369,19 @@
          (get_local $6)
         )
        )
-       (i32.store offset=4
+       (i64.store offset=4
         (get_local $8)
-        (get_local $9)
-       )
-       (i32.store offset=8
-        (get_local $8)
-        (get_local $10)
+        (i64.or
+         (i64.extend_u/i32
+          (get_local $10)
+         )
+         (i64.shl
+          (i64.extend_u/i32
+           (get_local $9)
+          )
+          (i64.const 32)
+         )
+        )
        )
       )
       (br $continue|0)
@@ -4529,7 +4535,10 @@
       (i32.sub
        (i32.const 32)
        (i32.clz
-        (get_local $0)
+        (i32.or
+         (get_local $0)
+         (i32.const 1)
+        )
        )
       )
      )

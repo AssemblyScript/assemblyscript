@@ -1,7 +1,7 @@
 
 import { CharCode, allocate, HEADER_SIZE } from "./string";
 
-const powers_0_10: i32[] = [
+const powers10: i32[] = [
   1,
   10,
   100,
@@ -28,7 +28,7 @@ const powers_0_10: i32[] = [
   "80", "81", "82", "83", "84", "85", "86", "87", "88", "89",
   "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
 */
-const digits_00_99: u32[] = [
+const digits00_99: u32[] = [
   0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
   0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
   0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031,
@@ -53,9 +53,9 @@ const digits_00_99: u32[] = [
 
 @inline
 function decimalDigitsCount(value: i32): i32 {
-  var l = 32 - clz(value);  // log2
-  var t = l * 1233 >>> 12;  // log10
-      t = t - <i32>(value < unchecked(powers_0_10[t]));
+  var l = 32 - clz(value | 1); // log2
+  var t = l * 1233 >>> 12;     // log10
+      t = t - <i32>(value < unchecked(powers10[t]));
   return t + 1;
 }
 
@@ -74,11 +74,10 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     pos -= 4;
     let ptr = buffer + (pos << 1);
 
-    let digit1 = unchecked(digits_00_99[d1]);
-    let digit2 = unchecked(digits_00_99[d2]);
+    let digit1 = unchecked(digits00_99[d1]);
+    let digit2 = unchecked(digits00_99[d2]);
 
-    store<u32>(ptr, digit1, HEADER_SIZE + 0);
-    store<u32>(ptr, digit2, HEADER_SIZE + 4);
+    store<u64>(ptr, <u64>digit2 | (<u64>digit1 << 32), HEADER_SIZE);
   }
 
   if (num >= 100) {
@@ -87,7 +86,7 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     num = t;
     pos -= 2;
     let ptr   = buffer + (pos << 1);
-    let digit = unchecked(digits_00_99[d1]);
+    let digit = unchecked(digits00_99[d1]);
     store<u32>(ptr, digit, HEADER_SIZE);
   }
 
@@ -99,7 +98,7 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
   } else {
     pos -= 2;
     let ptr   = buffer + (pos << 1);
-    let digit = unchecked(digits_00_99[num]);
+    let digit = unchecked(digits00_99[num]);
     store<u32>(ptr, digit, HEADER_SIZE);
   }
 }

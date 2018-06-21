@@ -3553,7 +3553,6 @@
  (func $~lib/internal/itoa/utoa32_lut (; 26 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   (loop $continue|0
    (if
     (i32.ge_u
@@ -3588,32 +3587,33 @@
        )
       )
      )
-     (set_local $4
-      (call $~lib/array/Array<i32>#__unchecked_get
-       (i32.const 88)
-       (get_local $4)
-      )
-     )
-     (i32.store offset=4
-      (tee_local $5
-       (i32.add
-        (get_local $0)
-        (i32.shl
-         (tee_local $2
-          (i32.sub
-           (get_local $2)
-           (i32.const 4)
-          )
+     (i64.store offset=4
+      (i32.add
+       (get_local $0)
+       (i32.shl
+        (tee_local $2
+         (i32.sub
+          (get_local $2)
+          (i32.const 4)
          )
-         (i32.const 1)
         )
+        (i32.const 1)
        )
       )
-      (get_local $3)
-     )
-     (i32.store offset=8
-      (get_local $5)
-      (get_local $4)
+      (i64.or
+       (i64.extend_u/i32
+        (call $~lib/array/Array<i32>#__unchecked_get
+         (i32.const 88)
+         (get_local $4)
+        )
+       )
+       (i64.shl
+        (i64.extend_u/i32
+         (get_local $3)
+        )
+        (i64.const 32)
+       )
+      )
      )
      (br $continue|0)
     )
@@ -3737,7 +3737,10 @@
              (i32.sub
               (i32.const 32)
               (i32.clz
-               (get_local $0)
+               (i32.or
+                (get_local $0)
+                (i32.const 1)
+               )
               )
              )
              (i32.const 1233)
