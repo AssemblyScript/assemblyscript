@@ -138,7 +138,6 @@ export function itoa32(value: i32): string {
   return changetype<string>(buffer);
 }
 
-
 export function itoa64(num: i64): string {
   if (!num) return "0";
 
@@ -146,6 +145,7 @@ export function itoa64(num: i64): string {
   if (isneg) num = -num;
 
   var buffer: String = null;
+  var bufptr: usize  = null;
 
   if (num >= 1844674407) {
     let hi: u32 = <u32>(num / 10000000000);
@@ -154,22 +154,25 @@ export function itoa64(num: i64): string {
     let lo: u32  = <u32>(num - hi * 10000000000);
     // res = utoa32(hi) + utoa32(lo);
     let decimalsLo = 20;
-    let decimalsHi = decimalCount(hi) + <i32>isneg;
-    let decimals   = decimalsLo + decimalsHi;
+    let decimalsHi = decimalCount(hi);
+    let decimals   = decimalsLo + decimalsHi + <i32>isneg;
 
     buffer = allocate(decimals);
-    let bufptr = changetype<usize>(buffer);
+    bufptr = changetype<usize>(buffer);
 
-    utoa32_core(bufptr,             lo, 20);
-    utoa32_core(bufptr + (20 << 1), hi, decimalsHi);
+    utoa32_core(bufptr + (decimalsLo << 1), lo, decimals);
+    utoa32_core(bufptr, hi, decimals - decimalsLo);
 
   } else {
     let lo: u32  = <u32>num;
     let decimals = decimalCount(lo) + <i32>isneg;
+
     buffer = allocate(decimals);
-    utoa32_core(changetype<usize>(buffer), lo, decimals);
+    bufptr = changetype<usize>(buffer);
+
+    utoa32_core(bufptr, lo, decimals);
   }
 
-  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, HEADER_SIZE);
+  if (isneg) store<u16>(bufptr, CharCode.MINUS, HEADER_SIZE);
   return changetype<string>(buffer);
 }
