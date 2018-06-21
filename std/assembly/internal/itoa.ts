@@ -1,9 +1,7 @@
 
 import { CharCode, allocate, HEADER_SIZE } from "./string";
 
-declare function logi(i: i32): void;
-
-const powers10: i32[] = [
+const powers10: u32[] = [
   1,
   10,
   100,
@@ -54,10 +52,10 @@ const digits00_99: u32[] = [
 ];
 
 @inline
-function decimalCount(value: i32): i32 {
+function decimalCount(value: u32): u32 {
   var l = 32 - clz(value | 1); // log2
   var t = l * 1233 >>> 12;     // log10
-      t = t - <i32>(value < unchecked(powers10[t]));
+      t = t - <u32>(value < unchecked(powers10[t]));
   return t + 1;
 }
 
@@ -119,8 +117,6 @@ export function utoa32(value: u32): string {
 
   var decimals = decimalCount(value);
   var buffer   = allocate(decimals);
-
-  logi(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
   return changetype<string>(buffer);
