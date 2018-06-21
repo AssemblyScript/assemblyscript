@@ -225,3 +225,10 @@ export function itoa64(num: i64): string {
   if (isneg) store<u16>(ptr, CharCode.MINUS, HEADER_SIZE);
   return changetype<string>(buf);
 }
+
+// 18446744073709551615
+// 1844674407
+// 3709551615
+//
+// u32:
+// 4294967295
