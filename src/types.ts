@@ -114,19 +114,21 @@ export class Type {
     this.nonNullableType = this;
   }
 
-  /** Returns the int type of this type. Defaults to `Type.i32` if this is not an int type. */
+  /** Returns the closest int type representing this type. */
   get intType(): Type {
     switch (this.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.I32:
-      case TypeKind.I64:
-      case TypeKind.ISIZE:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.U64:
-      case TypeKind.USIZE: return this;
+      case TypeKind.I8: return Type.i8;
+      case TypeKind.I16: return Type.i16;
+      case TypeKind.F32:
+      case TypeKind.I32: return Type.i32;
+      case TypeKind.F64:
+      case TypeKind.I64: return Type.i64;
+      case TypeKind.ISIZE: return this.size == 64 ? Type.isize64 : Type.isize32;
+      case TypeKind.U8: return Type.u8;
+      case TypeKind.U16: return Type.u16;
+      case TypeKind.U32: return Type.u32;
+      case TypeKind.U64: return Type.u64;
+      case TypeKind.USIZE: return this.size == 64 ? Type.usize64 : Type.usize32;
       case TypeKind.BOOL:
       default: return Type.i32;
     }

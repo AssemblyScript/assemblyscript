@@ -451,12 +451,26 @@ interface Number {}
 interface Object {}
 interface RegExp {}
 
+declare class Map<K,V> {
+  readonly size: i32;
+  has(key: K): bool;
+  set(key: K, value: V): void;
+  delete(key: K): bool;
+  clear(): void;
+}
+
 declare class Set<T> {
   readonly size: i32;
   has(value: T): bool;
   add(value: T): void;
   delete(value: T): bool;
   clear(): void;
+}
+
+declare class Symbol {
+  constructor(description?: string | null);
+  static for(key: string): Symbol;
+  static keyFor(sym: Symbol): string | null;
 }
 
 interface IMath<T> {

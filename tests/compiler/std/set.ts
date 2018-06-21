@@ -1,30 +1,54 @@
 import "allocator/arena";
 
-// note that this doesn't test a real set implementation yet, see std/assembly/set.ts
+function test<K>(): void {
+  var set = new Set<K>();
 
-var set = changetype<Set<i32>>(allocate_memory(sizeof<usize>() + 2 * sizeof<i32>()));
+  // insert new
+  for (let k: K = 0; k < 100; ++k) {
+    assert(!set.has(k));
+    set.add(k);
+    assert(set.has(k));
+  }
+  assert(set.size == 100);
 
-assert(set.size == 0);
+  // insert duplicate
+  for (let k: K = 50; k < 100; ++k) {
+    assert(set.has(k));
+    set.add(k);
+    assert(set.has(k));
+  }
+  assert(set.size == 100);
 
-set.add(1);
-set.add(0);
-set.add(2);
+  // delete
+  for (let k: K = 0; k < 50; ++k) {
+    assert(set.has(k));
+    set.delete(k);
+    assert(!set.has(k));
+  }
+  assert(set.size == 50);
 
-assert(set.size == 3);
+  // insert + delete
+  for (let k: K = 0; k < 50; ++k) {
+    assert(!set.has(k));
+    set.add(k);
+    assert(set.has(k));
+    set.delete(k);
+    assert(!set.has(k));
+  }
+  assert(set.size == 50);
 
-assert(set.has(1));
-assert(set.has(0));
-assert(set.has(2));
-assert(!set.has(3));
+  // clear
+  set.clear();
+  assert(set.size == 0);
+}
 
-set.delete(0);
-
-assert(set.size == 2);
-assert(set.has(1));
-assert(!set.has(0));
-assert(set.has(2));
-
-set.clear();
-
-assert(set.size == 0);
-assert(!set.has(1));
+test<i8>();
+test<u8>();
+test<i16>();
+test<u16>();
+test<i32>();
+test<u32>();
+test<i64>();
+test<u64>();
+test<f32>();
+test<f64>();
