@@ -3733,31 +3733,6 @@
     )
    )
   )
-  (block $~lib/internal/itoa/decimalCount|inlined.0
-   (set_local $1
-    (get_local $0)
-   )
-   (if
-    (i32.lt_s
-     (get_local $0)
-     (i32.const 0)
-    )
-    (set_local $1
-     (i32.sub
-      (i32.xor
-       (get_local $0)
-       (tee_local $1
-        (i32.shr_u
-         (get_local $0)
-         (i32.const 31)
-        )
-       )
-      )
-      (get_local $1)
-     )
-    )
-   )
-  )
   (set_local $4
    (tee_local $1
     (call $~lib/internal/string/allocate
@@ -3766,14 +3741,27 @@
        (tee_local $1
         (i32.add
          (i32.sub
-          (tee_local $2
+          (tee_local $1
            (i32.shr_u
             (i32.mul
              (i32.sub
               (i32.const 32)
               (i32.clz
                (i32.or
-                (get_local $1)
+                (tee_local $2
+                 (i32.sub
+                  (i32.xor
+                   (get_local $0)
+                   (tee_local $1
+                    (i32.shr_u
+                     (get_local $0)
+                     (i32.const 31)
+                    )
+                   )
+                  )
+                  (get_local $1)
+                 )
+                )
                 (i32.const 1)
                )
               )
@@ -3784,10 +3772,10 @@
            )
           )
           (i32.lt_u
-           (get_local $1)
+           (get_local $2)
            (call $~lib/array/Array<u32>#__unchecked_get
             (i32.const 16)
-            (get_local $2)
+            (get_local $1)
            )
           )
          )
@@ -3825,45 +3813,33 @@
     (i32.const 772)
    )
   )
-  (block $~lib/internal/itoa/decimalCount|inlined.1
-   (set_local $1
-    (get_local $0)
-   )
-   (if
-    (i32.lt_s
-     (get_local $0)
-     (i32.const 0)
-    )
-    (set_local $1
-     (i32.sub
-      (i32.xor
-       (get_local $0)
-       (tee_local $1
-        (i32.shr_u
-         (get_local $0)
-         (i32.const 31)
-        )
-       )
-      )
-      (get_local $1)
-     )
-    )
-   )
-  )
   (call $~lib/internal/itoa/utoa32_lut
    (tee_local $2
     (call $~lib/internal/string/allocate
      (tee_local $1
       (i32.add
        (i32.sub
-        (tee_local $2
+        (tee_local $1
          (i32.shr_u
           (i32.mul
            (i32.sub
             (i32.const 32)
             (i32.clz
              (i32.or
-              (get_local $1)
+              (tee_local $2
+               (i32.sub
+                (i32.xor
+                 (get_local $0)
+                 (tee_local $1
+                  (i32.shr_u
+                   (get_local $0)
+                   (i32.const 31)
+                  )
+                 )
+                )
+                (get_local $1)
+               )
+              )
               (i32.const 1)
              )
             )
@@ -3874,10 +3850,10 @@
          )
         )
         (i32.lt_u
-         (get_local $1)
+         (get_local $2)
          (call $~lib/array/Array<u32>#__unchecked_get
           (i32.const 16)
-          (get_local $2)
+          (get_local $1)
          )
         )
        )

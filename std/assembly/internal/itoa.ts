@@ -53,12 +53,8 @@ const digits00_99: u32[] = [
 
 @inline
 function decimalCount(value: u32): i32 {
-  var v: u32 = value;
-  // ugly branch workaround. FIXME
-  if (<i32>value < 0) {
-    let sign = value >> 31;
-    v = (value ^ sign) - sign;
-  }
+  var sign   = value >> 31;
+  var v: u32 = (value ^ sign) - sign;
   var l = 32 - clz(v | 1); // log2
   var t = l * 1233 >>> 12;     // log10
       t = t - <i32>(v < unchecked(powers10[t]));
