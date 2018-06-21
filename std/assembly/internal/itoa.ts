@@ -52,7 +52,7 @@ const digits00_99: u32[] = [
 ];
 
 @inline
-function decimalDigitsCount(value: i32): i32 {
+function decimalCount(value: i32): i32 {
   var l = 32 - clz(value | 1); // log2
   var t = l * 1233 >>> 12;     // log10
       t = t - <i32>(value < unchecked(powers10[t]));
@@ -74,10 +74,10 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     pos -= 4;
     let ptr = buffer + (pos << 1);
 
-    let digit1 = unchecked(digits00_99[d1]);
-    let digit2 = unchecked(digits00_99[d2]);
+    let digit1: u64 = unchecked(digits00_99[d1]);
+    let digit2: u64 = unchecked(digits00_99[d2]);
 
-    store<u64>(ptr, <u64>digit2 | (<u64>digit1 << 32), HEADER_SIZE);
+    store<u64>(ptr, digit2 | (digit1 << 32), HEADER_SIZE);
   }
 
   if (num >= 100) {
@@ -118,7 +118,7 @@ export function itoa32(value: i32): string {
   var isneg = value < 0;
   if (isneg) value = -value;
 
-  var decimals = decimalDigitsCount(value) + <i32>isneg;
+  var decimals = decimalCount(value) + <i32>isneg;
   var buffer   = allocate(decimals);
   var bufptr   = changetype<usize>(buffer);
 

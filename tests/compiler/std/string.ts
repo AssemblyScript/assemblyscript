@@ -77,5 +77,8 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
+assert(itoa32(0) == "0");
+assert(itoa32(8) == "8");
 assert(itoa32(123) == "123");
 assert(itoa32(-1000) == "-1000");
+assert(itoa32(0xffffffff) == "-1");

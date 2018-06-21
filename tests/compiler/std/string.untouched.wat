@@ -51,7 +51,7 @@
  (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
  (global $std/string/c (mut i32) (i32.const 0))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $HEAP_BASE i32 (i32.const 1136))
+ (global $HEAP_BASE i32 (i32.const 1152))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
  (data (i32.const 16) "\18\00\00\00\n\00\00\00(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -89,7 +89,9 @@
  (data (i32.const 1068) "\05\00\00\00a\00a\00a\00a\00a\00")
  (data (i32.const 1084) "\06\00\00\00a\00a\00a\00a\00a\00a\00")
  (data (i32.const 1100) "\07\00\00\00a\00a\00a\00a\00a\00a\00a\00")
- (data (i32.const 1120) "\05\00\00\00-\001\000\000\000\00")
+ (data (i32.const 1120) "\01\00\00\008\00")
+ (data (i32.const 1128) "\05\00\00\00-\001\000\000\000\00")
+ (data (i32.const 1144) "\02\00\00\00-\001\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -4301,8 +4303,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
+  (local $9 i64)
+  (local $10 i64)
+  (local $11 i32)
   (set_local $7
    (get_local $2)
   )
@@ -4358,27 +4361,27 @@
         )
        )
        (set_local $9
-        (call $~lib/array/Array<u32>#__unchecked_get
-         (i32.const 88)
-         (get_local $5)
+        (i64.extend_u/i32
+         (call $~lib/array/Array<u32>#__unchecked_get
+          (i32.const 88)
+          (get_local $5)
+         )
         )
        )
        (set_local $10
-        (call $~lib/array/Array<u32>#__unchecked_get
-         (i32.const 88)
-         (get_local $6)
+        (i64.extend_u/i32
+         (call $~lib/array/Array<u32>#__unchecked_get
+          (i32.const 88)
+          (get_local $6)
+         )
         )
        )
        (i64.store offset=4
         (get_local $8)
         (i64.or
-         (i64.extend_u/i32
-          (get_local $10)
-         )
+         (get_local $10)
          (i64.shl
-          (i64.extend_u/i32
-           (get_local $9)
-          )
+          (get_local $9)
           (i64.const 32)
          )
         )
@@ -4416,7 +4419,7 @@
       (i32.const 2)
      )
     )
-    (set_local $10
+    (set_local $8
      (i32.add
       (get_local $0)
       (i32.shl
@@ -4425,15 +4428,15 @@
       )
      )
     )
-    (set_local $9
+    (set_local $11
      (call $~lib/array/Array<u32>#__unchecked_get
       (i32.const 88)
       (get_local $5)
      )
     )
     (i32.store offset=4
-     (get_local $10)
-     (get_local $9)
+     (get_local $8)
+     (get_local $11)
     )
    )
   )
@@ -4449,7 +4452,7 @@
       (i32.const 1)
      )
     )
-    (set_local $9
+    (set_local $11
      (i32.add
       (get_local $0)
       (i32.shl
@@ -4458,15 +4461,15 @@
       )
      )
     )
-    (set_local $10
+    (set_local $8
      (i32.add
       (i32.const 48)
       (get_local $1)
      )
     )
     (i32.store16 offset=4
-     (get_local $9)
-     (get_local $10)
+     (get_local $11)
+     (get_local $8)
     )
    )
    (block
@@ -4476,7 +4479,7 @@
       (i32.const 2)
      )
     )
-    (set_local $10
+    (set_local $8
      (i32.add
       (get_local $0)
       (i32.shl
@@ -4485,15 +4488,15 @@
       )
      )
     )
-    (set_local $9
+    (set_local $11
      (call $~lib/array/Array<u32>#__unchecked_get
       (i32.const 88)
       (get_local $1)
      )
     )
     (i32.store offset=4
-     (get_local $10)
-     (get_local $9)
+     (get_local $8)
+     (get_local $11)
     )
    )
   )
@@ -4530,7 +4533,7 @@
   )
   (set_local $4
    (i32.add
-    (block $~lib/internal/itoa/decimalDigitsCount|inlined.0 (result i32)
+    (block $~lib/internal/itoa/decimalCount|inlined.0 (result i32)
      (set_local $2
       (i32.sub
        (i32.const 32)
@@ -4563,7 +4566,7 @@
        )
       )
      )
-     (br $~lib/internal/itoa/decimalDigitsCount|inlined.0
+     (br $~lib/internal/itoa/decimalCount|inlined.0
       (i32.add
        (get_local $3)
        (i32.const 1)
@@ -5607,9 +5610,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/itoa/itoa32
-      (i32.const 123)
+      (i32.const 0)
      )
-     (i32.const 1024)
+     (i32.const 772)
     )
    )
    (block
@@ -5626,7 +5629,7 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/itoa/itoa32
-      (i32.const -1000)
+      (i32.const 8)
      )
      (i32.const 1120)
     )
@@ -5636,6 +5639,63 @@
      (i32.const 0)
      (i32.const 644)
      (i32.const 81)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa32
+      (i32.const 123)
+     )
+     (i32.const 1024)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 82)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa32
+      (i32.const -1000)
+     )
+     (i32.const 1128)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 83)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa32
+      (i32.const -1)
+     )
+     (i32.const 1144)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 84)
      (i32.const 0)
     )
     (unreachable)
