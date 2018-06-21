@@ -30,16 +30,21 @@
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/symbol/Symbol#constructor (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   (set_global $~lib/symbol/nextId
    (i32.add
-    (tee_local $2
+    (tee_local $0
      (get_global $~lib/symbol/nextId)
     )
     (i32.const 1)
    )
   )
-  (get_local $2)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (unreachable)
+  )
+  (get_local $0)
  )
  (func $~lib/allocator/arena/allocate_memory (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1638,6 +1643,12 @@
     )
     (i32.const 1)
    )
+  )
+  (if
+   (i32.eqz
+    (get_local $1)
+   )
+   (unreachable)
   )
   (call $~lib/map/Map<String,usize>#set
    (get_global $~lib/symbol/stringToId)

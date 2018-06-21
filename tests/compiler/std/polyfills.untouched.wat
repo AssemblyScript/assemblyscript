@@ -84,9 +84,7 @@
      )
      (i32.and
       (get_local $0)
-      (i32.wrap/i64
-       (i64.const 4294901760)
-      )
+      (i32.const -65536)
      )
     )
    )
@@ -224,9 +222,7 @@
      )
      (i32.and
       (get_local $0)
-      (i32.wrap/i64
-       (i64.const 4294901760)
-      )
+      (i32.const -65536)
      )
     )
    )

@@ -45,7 +45,8 @@
  (start $start)
  (func $~lib/symbol/Symbol#constructor (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (return
+  (local $3 i32)
+  (set_local $3
    (block (result i32)
     (set_local $2
      (get_global $~lib/symbol/nextId)
@@ -58,6 +59,15 @@
     )
     (get_local $2)
    )
+  )
+  (if
+   (i32.eqz
+    (get_local $3)
+   )
+   (unreachable)
+  )
+  (return
+   (get_local $3)
   )
  )
  (func $~lib/allocator/arena/allocate_memory (; 2 ;) (type $ii) (param $0 i32) (result i32)
@@ -1978,6 +1988,12 @@
     )
     (get_local $1)
    )
+  )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (unreachable)
   )
   (call $~lib/map/Map<String,usize>#set
    (get_global $~lib/symbol/stringToId)

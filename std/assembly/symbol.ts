@@ -10,6 +10,7 @@ export class Symbol {
     if (!stringToId) { stringToId = new Map(); idToString = new Map(); }
     else if (stringToId.has(key)) return changetype<Symbol>(stringToId.get(key));
     var id = nextId++;
+    if (!id) unreachable(); // out of ids
     stringToId.set(key, id);
     idToString.set(id, key);
     return changetype<Symbol>(id);
@@ -22,6 +23,8 @@ export class Symbol {
   }
 
   constructor(description: string | null = null) {
-    return changetype<Symbol>(nextId++);
+    var id = nextId++;
+    if (!id) unreachable(); // out of ids
+    return changetype<Symbol>(id);
   }
 }

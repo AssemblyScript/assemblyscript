@@ -5979,9 +5979,12 @@ export class Compiler extends DiagnosticEmitter {
             if (i64_is_u16(intValue)) return module.createI32(i64_low(intValue));
             break;
           }
-          case TypeKind.I32:
+          case TypeKind.I32: {
+            if (i64_is_i32(intValue)) return module.createI32(i64_low(intValue));
+            break;
+          }
           case TypeKind.U32: {
-            if (i64_is_i32(intValue) || i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
+            if (i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
             break;
           }
           case TypeKind.BOOL: {
@@ -5990,14 +5993,14 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.ISIZE: {
             if (!this.options.isWasm64) {
-              if (i64_is_i32(intValue) || i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
+              if (i64_is_i32(intValue)) return module.createI32(i64_low(intValue));
               break;
             }
             return module.createI64(i64_low(intValue), i64_high(intValue));
           }
           case TypeKind.USIZE: {
             if (!this.options.isWasm64) {
-              if (i64_is_i32(intValue) || i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
+              if (i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
               break;
             }
             return module.createI64(i64_low(intValue), i64_high(intValue));
@@ -6027,6 +6030,9 @@ export class Compiler extends DiagnosticEmitter {
 
         if (i64_is_i32(intValue)) {
           this.currentType = Type.i32;
+          return module.createI32(i64_low(intValue));
+        } else if (i64_is_u32(intValue)) {
+          this.currentType = Type.u32;
           return module.createI32(i64_low(intValue));
         } else {
           this.currentType = Type.i64;
