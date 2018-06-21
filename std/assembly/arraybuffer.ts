@@ -27,16 +27,4 @@ export class ArrayBuffer {
     move_memory(changetype<usize>(buffer) + HEADER_SIZE, changetype<usize>(this) + HEADER_SIZE + begin, newLen);
     return buffer;
   }
-
-  // internals
-
-  static readonly HEADER_SIZE: usize = HEADER_SIZE;
-
-  @inline load<T>(index: usize): T {
-    return load<T>(changetype<usize>(this) + index * sizeof<T>(), HEADER_SIZE);
-  }
-
-  @inline store<T>(index: usize, value: T): void {
-    store<T>(changetype<usize>(this) + index * sizeof<T>(), value, HEADER_SIZE);
-  }
 }
