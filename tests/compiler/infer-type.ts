@@ -1,4 +1,4 @@
-const i = 10; // infers i32 because
+const i = 10; // infers i32 because it fits into i32 as the default
 i;
 
 const I = 0x100000000; // infers i64 because the value doesn't fit into 32 bits
@@ -44,3 +44,9 @@ rF;
 for (var a = 0, b = 10; a < b; ++a) {
   ;
 }
+
+var inferi = 0x80000000; // infers u32
+assert(!isSigned(inferi));
+
+var inferu = 0x7fffffff; // infers i32
+assert(isSigned(inferu));
