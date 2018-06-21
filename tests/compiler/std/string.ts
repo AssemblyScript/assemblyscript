@@ -1,6 +1,6 @@
 import "allocator/arena";
 
-import { itoa32 } from "internal/itoa";
+import { utoa32, itoa32 } from "internal/itoa";
 
 declare function logi(i: i32): void;
 
@@ -82,4 +82,10 @@ assert(itoa32(8) == "8");
 assert(itoa32(123) == "123");
 assert(itoa32(-1000) == "-1000");
 assert(itoa32(1111111) == "1111111");
+assert(itoa32(0x7ffffffe) == "2147483646");
+assert(itoa32(0x7fffffff) == "2147483647");
 assert(itoa32(0xffffffff) == "-1");
+
+assert(utoa32(0) == "0");
+assert(utoa32(1000) == "1000");
+assert(utoa32(0xffffffff) == "4294967295");

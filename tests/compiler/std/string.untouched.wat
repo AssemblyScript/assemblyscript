@@ -51,7 +51,7 @@
  (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
  (global $std/string/c (mut i32) (i32.const 0))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $HEAP_BASE i32 (i32.const 1172))
+ (global $HEAP_BASE i32 (i32.const 1256))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
  (data (i32.const 16) "\18\00\00\00\n\00\00\00(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -92,7 +92,11 @@
  (data (i32.const 1120) "\01\00\00\008\00")
  (data (i32.const 1128) "\05\00\00\00-\001\000\000\000\00")
  (data (i32.const 1144) "\07\00\00\001\001\001\001\001\001\001\00")
- (data (i32.const 1164) "\02\00\00\00-\001\00")
+ (data (i32.const 1164) "\n\00\00\002\001\004\007\004\008\003\006\004\006\00")
+ (data (i32.const 1188) "\n\00\00\002\001\004\007\004\008\003\006\004\007\00")
+ (data (i32.const 1212) "\02\00\00\00-\001\00")
+ (data (i32.const 1220) "\04\00\00\001\000\000\000\00")
+ (data (i32.const 1232) "\n\00\00\004\002\009\004\009\006\007\002\009\005\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -4603,7 +4607,78 @@
    (get_local $5)
   )
  )
- (func $start (; 29 ;) (type $v)
+ (func $~lib/internal/itoa/utoa32 (; 29 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (return
+    (i32.const 772)
+   )
+  )
+  (set_local $3
+   (block $~lib/internal/itoa/decimalCount|inlined.1 (result i32)
+    (set_local $1
+     (i32.sub
+      (i32.const 32)
+      (i32.clz
+       (i32.or
+        (get_local $0)
+        (i32.const 1)
+       )
+      )
+     )
+    )
+    (set_local $2
+     (i32.shr_u
+      (i32.mul
+       (get_local $1)
+       (i32.const 1233)
+      )
+      (i32.const 12)
+     )
+    )
+    (set_local $2
+     (i32.sub
+      (get_local $2)
+      (i32.lt_s
+       (get_local $0)
+       (call $~lib/array/Array<i32>#__unchecked_get
+        (i32.const 16)
+        (get_local $2)
+       )
+      )
+     )
+    )
+    (br $~lib/internal/itoa/decimalCount|inlined.1
+     (i32.add
+      (get_local $2)
+      (i32.const 1)
+     )
+    )
+   )
+  )
+  (set_local $4
+   (call $~lib/internal/string/allocate
+    (get_local $3)
+   )
+  )
+  (block $~lib/internal/itoa/utoa32_core|inlined.1
+   (call $~lib/internal/itoa/utoa32_lut
+    (get_local $4)
+    (get_local $0)
+    (get_local $3)
+   )
+  )
+  (return
+   (get_local $4)
+  )
+ )
+ (func $start (; 30 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -5706,7 +5781,7 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/itoa/itoa32
-      (i32.const -1)
+      (i32.const 2147483646)
      )
      (i32.const 1164)
     )
@@ -5716,6 +5791,101 @@
      (i32.const 0)
      (i32.const 644)
      (i32.const 85)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa32
+      (i32.const 2147483647)
+     )
+     (i32.const 1188)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 86)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa32
+      (i32.const -1)
+     )
+     (i32.const 1212)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 87)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/utoa32
+      (i32.const 0)
+     )
+     (i32.const 772)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 89)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/utoa32
+      (i32.const 1000)
+     )
+     (i32.const 1220)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 90)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/utoa32
+      (i32.const -1)
+     )
+     (i32.const 1232)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 91)
      (i32.const 0)
     )
     (unreachable)
