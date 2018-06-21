@@ -161,7 +161,7 @@ export function utoa64(num: u64): string {
     // and can't be simplificate so we avoid modulo operation
     let lo: u32 = num - hi * 10000000000;
     // res = utoa32(hi) + utoa32(lo);
-    let decimalsLo = 20;
+    let decimalsLo = 10;
     let decimalsHi = decimalCount(hi);
     let decimals   = decimalsLo + decimalsHi;
 
@@ -198,7 +198,7 @@ export function itoa64(num: i64): string {
     // and can't be simplificate so we avoid modulo operation
     let lo: u32 = num - hi * 10000000000;
     // res = utoa32(hi) + utoa32(lo);
-    let decimalsLo = 20;
+    let decimalsLo = 10;
     let decimalsHi = decimalCount(hi);
     let decimals   = decimalsLo + decimalsHi + <i32>isneg;
 
