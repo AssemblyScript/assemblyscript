@@ -104,12 +104,22 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
 }
 
 @inline
-export function utoa32(buffer: usize, num: u32, decimals: u32): void {
+export function utoa32_core(buffer: usize, num: u32, decimals: u32): void {
   // if (NO_MEMOTY || SHRINK_LEVEL >= 1) {
   //  TODO
   // } else {
   utoa32_lut(buffer, num, decimals);
   // }
+}
+
+export function utoa32(value: u32): string {
+  if (!value) return "0";
+
+  var decimals = decimalCount(value);
+  var buffer   = allocate(decimals);
+
+  utoa32_core(changetype<usize>(buffer), value, decimals);
+  return changetype<string>(buffer);
 }
 
 export function itoa32(value: i32): string {
@@ -122,7 +132,7 @@ export function itoa32(value: i32): string {
   var buffer   = allocate(decimals);
   var bufptr   = changetype<usize>(buffer);
 
-  utoa32(bufptr, value, <u32>decimals);
+  utoa32_core(bufptr, value, decimals);
   if (isneg) store<u16>(bufptr, CharCode.MINUS, HEADER_SIZE);
 
   return changetype<string>(buffer);
