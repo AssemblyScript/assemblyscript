@@ -51,7 +51,7 @@
  (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
  (global $std/string/c (mut i32) (i32.const 0))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $HEAP_BASE i32 (i32.const 1320))
+ (global $HEAP_BASE i32 (i32.const 1344))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
  (data (i32.const 16) "\18\00\00\00\n\00\00\00(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -100,7 +100,8 @@
  (data (i32.const 1252) "\n\00\00\002\001\004\007\004\008\003\006\004\007\00")
  (data (i32.const 1276) "\02\00\00\00-\001\00")
  (data (i32.const 1284) "\04\00\00\001\000\000\000\00")
- (data (i32.const 1296) "\n\00\00\004\002\009\004\009\006\007\002\009\005\00")
+ (data (i32.const 1296) "\n\00\00\002\001\004\007\004\008\003\006\004\008\00")
+ (data (i32.const 1320) "\n\00\00\004\002\009\004\009\006\007\002\009\005\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -5975,7 +5976,26 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/itoa/utoa32
-      (i32.const -1)
+      (i32.const 2147483647)
+     )
+     (i32.const 1252)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 96)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/utoa32
+      (i32.const -2147483648)
      )
      (i32.const 1296)
     )
@@ -5984,7 +6004,26 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 96)
+     (i32.const 97)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/utoa32
+      (i32.const -1)
+     )
+     (i32.const 1320)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 98)
      (i32.const 0)
     )
     (unreachable)

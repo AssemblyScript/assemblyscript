@@ -93,4 +93,6 @@ assert(itoa32(0xffffffff) == "-1");
 
 assert(utoa32(0) == "0");
 assert(utoa32(1000) == "1000");
+assert(utoa32(0x7fffffff) == "2147483647");
+assert(utoa32(0x80000000) == "2147483648"); // fail <--
 assert(utoa32(0xffffffff) == "4294967295"); // fail <--
