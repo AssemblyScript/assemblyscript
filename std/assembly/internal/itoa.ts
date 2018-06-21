@@ -1,5 +1,6 @@
 
 import { CharCode, allocate, HEADER_SIZE } from "./string";
+import { HEADER_SIZE as BUFFER_HEADER_SIZE } from "./arraybuffer";
 
 const powers10: u32[] = [
   1,
@@ -57,7 +58,10 @@ function decimalCount(value: u32): i32 {
   var v = (value ^ sign) - sign;
   var l = 32 - clz(v | 1); // log2
   var t = l * 1233 >>> 12; // log10
-      t = t - <i32>(v < unchecked(powers10[t]));
+      // t = t - <i32>(v < unchecked(powers10[t]));
+
+  var power = load<u32>(changetype<usize>(powers10.buffer_) + (t << 2), BUFFER_HEADER_SIZE);
+  t = t - <i32>(v < power);
 
   return t + 1;
 }
@@ -77,8 +81,10 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     pos -= 4;
     let ptr = buffer + (pos << 1);
 
-    let digit1: u64 = unchecked(digits00_99[d1]);
-    let digit2: u64 = unchecked(digits00_99[d2]);
+    // let digit1: u64 = unchecked(digits00_99[d1]);
+    // let digit2: u64 = unchecked(digits00_99[d2]);
+    let digit1: u64 = load<u32>(changetype<usize>(digits00_99.buffer_) + (d1 << 2), BUFFER_HEADER_SIZE);
+    let digit2: u64 = load<u32>(changetype<usize>(digits00_99.buffer_) + (d2 << 2), BUFFER_HEADER_SIZE);
 
     store<u64>(ptr, digit1 | (digit2 << 32), HEADER_SIZE);
   }
@@ -89,14 +95,16 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     num = t;
     pos -= 2;
     let ptr   = buffer + (pos << 1);
-    let digit = unchecked(digits00_99[d1]);
+    // let digit = unchecked(digits00_99[d1]);
+    let digit = load<u32>(changetype<usize>(digits00_99.buffer_) + (d1 << 2), BUFFER_HEADER_SIZE);
     store<u32>(ptr, digit, HEADER_SIZE);
   }
 
   if (num >= 10) {
     pos -= 2;
     let ptr   = buffer + (pos << 1);
-    let digit = unchecked(digits00_99[num]);
+    // let digit = unchecked(digits00_99[num]);
+    let digit = load<u32>(changetype<usize>(digits00_99.buffer_) + (num << 2), BUFFER_HEADER_SIZE);
     store<u32>(ptr, digit, HEADER_SIZE);
   } else {
     pos -= 1;

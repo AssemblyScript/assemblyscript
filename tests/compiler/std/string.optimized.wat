@@ -3550,22 +3550,8 @@
   )
   (get_local $4)
  )
- (func $~lib/array/Array<u32>#__unchecked_get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.load offset=8
-   (i32.add
-    (i32.load
-     (get_local $0)
-    )
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
-    )
-   )
-  )
- )
- (func $~lib/internal/itoa/utoa32_lut (; 26 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/itoa/utoa32_lut (; 25 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
-  (local $4 i32)
   (loop $continue|0
    (if
     (i32.ge_u
@@ -3585,12 +3571,6 @@
        (i32.const 10000)
       )
      )
-     (set_local $4
-      (i32.rem_u
-       (get_local $3)
-       (i32.const 100)
-      )
-     )
      (i64.store offset=4
       (i32.add
        (get_local $0)
@@ -3605,20 +3585,33 @@
        )
       )
       (i64.or
-       (i64.extend_u/i32
-        (call $~lib/array/Array<u32>#__unchecked_get
-         (i32.const 88)
-         (i32.div_u
-          (get_local $3)
-          (i32.const 100)
+       (i64.load32_u offset=8
+        (i32.add
+         (i32.load
+          (i32.const 88)
+         )
+         (i32.shl
+          (i32.div_u
+           (get_local $3)
+           (i32.const 100)
+          )
+          (i32.const 2)
          )
         )
        )
        (i64.shl
-        (i64.extend_u/i32
-         (call $~lib/array/Array<u32>#__unchecked_get
-          (i32.const 88)
-          (get_local $4)
+        (i64.load32_u offset=8
+         (i32.add
+          (i32.load
+           (i32.const 88)
+          )
+          (i32.shl
+           (i32.rem_u
+            (get_local $3)
+            (i32.const 100)
+           )
+           (i32.const 2)
+          )
          )
         )
         (i64.const 32)
@@ -3660,9 +3653,16 @@
        (i32.const 1)
       )
      )
-     (call $~lib/array/Array<u32>#__unchecked_get
-      (i32.const 88)
-      (get_local $3)
+     (i32.load offset=8
+      (i32.add
+       (i32.load
+        (i32.const 88)
+       )
+       (i32.shl
+        (get_local $3)
+        (i32.const 2)
+       )
+      )
      )
     )
    )
@@ -3683,9 +3683,16 @@
       (i32.const 1)
      )
     )
-    (call $~lib/array/Array<u32>#__unchecked_get
-     (i32.const 88)
-     (get_local $1)
+    (i32.load offset=8
+     (i32.add
+      (i32.load
+       (i32.const 88)
+      )
+      (i32.shl
+       (get_local $1)
+       (i32.const 2)
+      )
+     )
     )
    )
    (i32.store16 offset=4
@@ -3706,7 +3713,7 @@
    )
   )
  )
- (func $~lib/internal/itoa/itoa32 (; 27 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/itoa32 (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3773,9 +3780,16 @@
           )
           (i32.lt_u
            (get_local $2)
-           (call $~lib/array/Array<u32>#__unchecked_get
-            (i32.const 16)
-            (get_local $1)
+           (i32.load offset=8
+            (i32.add
+             (i32.load
+              (i32.const 16)
+             )
+             (i32.shl
+              (get_local $1)
+              (i32.const 2)
+             )
+            )
            )
           )
          )
@@ -3802,7 +3816,7 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/itoa/utoa32 (; 28 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/utoa32 (; 27 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -3851,9 +3865,16 @@
         )
         (i32.lt_u
          (get_local $2)
-         (call $~lib/array/Array<u32>#__unchecked_get
-          (i32.const 16)
-          (get_local $1)
+         (i32.load offset=8
+          (i32.add
+           (i32.load
+            (i32.const 16)
+           )
+           (i32.shl
+            (get_local $1)
+            (i32.const 2)
+           )
+          )
          )
         )
        )
@@ -3867,7 +3888,7 @@
   )
   (get_local $2)
  )
- (func $start (; 29 ;) (type $v)
+ (func $start (; 28 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add

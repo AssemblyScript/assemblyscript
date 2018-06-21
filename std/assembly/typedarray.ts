@@ -26,7 +26,7 @@ export class Uint8ClampedArray extends TypedArray<u8,u32> {
     super.__set(index, max(min(value, 255), 0));
   }
 
-  @operator("{}=")
+  @inline @operator("{}=")
   protected __unchecked_set(index: i32, value: i32): void {
     super.__unchecked_set(index, max(min(value, 255), 0));
   }
