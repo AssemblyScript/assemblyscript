@@ -155,11 +155,12 @@ export function utoa64(num: u64): string {
   var buffer: String = null;
   var bufptr: usize  = null;
 
-  if (num >= 1844674407) {
-    let hi: u32 = num / 10000000000;
+  if (num > 0xFFFFFFFF) {
+    let q:  u64 = num / 10000000000;
+    let hi: u32 = <u32>q;
     // In most VMs i64/u64 div and rem by constant is not cheap
     // and can't be simplificate so we avoid modulo operation
-    let lo: u32 = num - hi * 10000000000;
+    let lo: u32 = <u32>(num - q * 10000000000);
     // res = utoa32(hi) + utoa32(lo);
     let decimalsLo = 10;
     let decimalsHi = decimalCount(hi);
@@ -192,11 +193,12 @@ export function itoa64(num: i64): string {
   var buffer: String = null;
   var bufptr: usize  = null;
 
-  if (num >= 1844674407) {
-    let hi: u32 = num / 10000000000;
+  if (num > 0xFFFFFFFF) {
+    let q:  u64 = num / 10000000000;
+    let hi: u32 = <u32>q;
     // In most VMs i64/u64 div and rem by constant is not cheap
     // and can't be simplificate so we avoid modulo operation
-    let lo: u32 = num - hi * 10000000000;
+    let lo: u32 = <u32>(num - q * 10000000000);
     // res = utoa32(hi) + utoa32(lo);
     let decimalsLo = 10;
     let decimalsHi = decimalCount(hi);
