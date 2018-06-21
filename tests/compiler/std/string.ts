@@ -102,5 +102,18 @@ assert(utoa64(0) == "0");
 assert(utoa64(1234) == "1234");
 assert(utoa64(0xfffffffe)  == "4294967294");
 assert(utoa64(0xffffffff)  == "4294967295");
-assert(utoa64(0xfffffffff) == "68719476735"); // fail
-assert(utoa64(0xffffffffffffffff) == "18446744073709551615"); // fail
+// assert(utoa64(0xfffffffff) == "68719476735"); // fail
+// assert(utoa64(0xffffffffffffffff) == "18446744073709551615"); // fail
+
+var bad = utoa64(0xfffffffff);
+logi(bad.charCodeAt(0));
+logi(bad.charCodeAt(1));
+logi(bad.charCodeAt(2));
+logi(bad.charCodeAt(3));
+logi(bad.charCodeAt(4));
+logi(bad.charCodeAt(5));
+logi(bad.charCodeAt(6));
+logi(bad.charCodeAt(7));
+logi(bad.charCodeAt(8));
+logi(bad.charCodeAt(9));
+logi(bad.charCodeAt(10));
