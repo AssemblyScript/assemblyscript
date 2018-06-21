@@ -1,8 +1,6 @@
 
 import { CharCode, allocate, HEADER_SIZE } from "./string";
 
-declare function logi(i: i32): void;
-
 const powers10: u32[] = [
   1,
   10,
@@ -65,7 +63,6 @@ function decimalCount(value: u32): i32 {
   var t = l * 1233 >>> 12;     // log10
       t = t - <i32>(v < unchecked(powers10[t]));
 
-  // logi(t + 1);
   return t + 1;
 }
 
