@@ -149,6 +149,40 @@ export function itoa32(value: i32): string {
   return changetype<string>(buffer);
 }
 
+export function utoa64(num: u64): string {
+  if (!num) return "0";
+
+  var buffer: String = null;
+  var bufptr: usize  = null;
+
+  if (num >= 1844674407) {
+    let hi: u32 = num / 10000000000;
+    // In most VMs i64/u64 div and rem by constant is not cheap
+    // and can't be simplificate so we avoid modulo operation
+    let lo: u32 = num - hi * 10000000000;
+    // res = utoa32(hi) + utoa32(lo);
+    let decimalsLo = 20;
+    let decimalsHi = decimalCount(hi);
+    let decimals   = decimalsLo + decimalsHi;
+
+    buffer = allocate(decimals);
+    bufptr = changetype<usize>(buffer);
+
+    utoa32_core(bufptr + <usize>(decimalsLo << 1), lo, decimals);
+    utoa32_core(bufptr, hi, decimals - decimalsLo);
+
+  } else {
+    let lo: u32  = <u32>num;
+    let decimals = decimalCount(lo);
+
+    buffer = allocate(decimals);
+    bufptr = changetype<usize>(buffer);
+
+    utoa32_core(bufptr, lo, decimals);
+  }
+  return changetype<string>(buffer);
+}
+
 export function itoa64(num: i64): string {
   if (!num) return "0";
 
@@ -159,10 +193,10 @@ export function itoa64(num: i64): string {
   var bufptr: usize  = null;
 
   if (num >= 1844674407) {
-    let hi: u32 = <u32>(num / 10000000000);
+    let hi: u32 = num / 10000000000;
     // In most VMs i64/u64 div and rem by constant is not cheap
     // and can't be simplificate so we avoid modulo operation
-    let lo: u32 = <u32>(num - hi * 10000000000);
+    let lo: u32 = num - hi * 10000000000;
     // res = utoa32(hi) + utoa32(lo);
     let decimalsLo = 20;
     let decimalsHi = decimalCount(hi);
