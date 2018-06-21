@@ -520,10 +520,9 @@ export class Compiler extends DiagnosticEmitter {
 
         // infer from initializer if not annotated
         } else if (declaration.initializer) { // infer type using void/NONE for literal inference
-          initExpr = this.compileExpression( // reports
+          initExpr = this.compileExpressionRetainType( // reports
             declaration.initializer,
             Type.void,
-            ConversionKind.NONE,
             WrapMode.WRAP
           );
           if (this.currentType == Type.void) {
@@ -1964,10 +1963,9 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
       } else if (declaration.initializer) { // infer type using void/NONE for proper literal inference
-        initExpr = this.compileExpression( // reports
+        initExpr = this.compileExpressionRetainType( // reports
           declaration.initializer,
           Type.void,
-          ConversionKind.NONE,
           WrapMode.NONE
         );
         if (this.currentType == Type.void) {
@@ -4577,6 +4575,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile the value and do the assignment
+    assert(targetType != Type.void);
     var valueExpr = this.compileExpression(valueExpression, targetType, ConversionKind.IMPLICIT, WrapMode.NONE);
     return this.compileAssignmentWithValue(
       expression,
@@ -4597,6 +4596,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.LOCAL: {
         let type = (<Local>target).type;
+        assert(type != Type.void);
         this.currentType = tee ? type : Type.void;
         if ((<Local>target).is(CommonFlags.CONST)) {
           this.error(
@@ -6304,11 +6304,25 @@ export class Compiler extends DiagnosticEmitter {
       return this.module.createUnreachable();
     }
     var classPrototype = <ClassPrototype>target;
-    var classInstance = classPrototype.resolveUsingTypeArguments( // reports
-      expression.typeArguments,
-      currentFunction.flow.contextualTypeArguments,
-      expression
-    );
+    var classInstance: Class | null = null;
+    var typeArguments = expression.typeArguments;
+    var classReference: Class | null;
+    if (
+      !typeArguments &&
+      (classReference = contextualType.classReference) !== null &&
+      classReference.is(CommonFlags.GENERIC)
+    ) {
+      classInstance = classPrototype.resolve(
+        classReference.typeArguments,
+        currentFunction.flow.contextualTypeArguments
+      );
+    } else {
+      classInstance = classPrototype.resolveUsingTypeArguments( // reports
+        typeArguments,
+        currentFunction.flow.contextualTypeArguments,
+        expression
+      );
+    }
     if (!classInstance) return module.createUnreachable();
 
     var expr: ExpressionRef;
@@ -7020,9 +7034,7 @@ export class Compiler extends DiagnosticEmitter {
             : contextualType.is(TypeFlags.FLOAT)
               ? Type.i64
               : contextualType,
-          contextualType == Type.void
-            ? ConversionKind.NONE
-            : ConversionKind.IMPLICIT,
+          ConversionKind.NONE,
           WrapMode.NONE
         );
 
@@ -7041,6 +7053,13 @@ export class Compiler extends DiagnosticEmitter {
             expression.range
           );
           return module.createUnreachable();
+        } else {
+          expr = this.convertExpression(
+            expr,
+            this.currentType, this.currentType.intType,
+            ConversionKind.IMPLICIT, WrapMode.NONE,
+            expression.operand
+          );
         }
 
         switch (this.currentType.kind) {

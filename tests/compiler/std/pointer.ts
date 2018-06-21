@@ -66,7 +66,8 @@ var sub = two - one;
 assert(sub.offset == 16);
 
 assert(one.offset == 8);
-++one; // FIXME: assigning to a var yields an 'auto to void' error
+var nextOne = ++one;
+assert(nextOne === one);
 assert(one.offset == 16);
 
 assert(two.offset == 24);

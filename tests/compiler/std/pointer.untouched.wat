@@ -10,6 +10,7 @@
  (global $std/pointer/two (mut i32) (i32.const 0))
  (global $std/pointer/add (mut i32) (i32.const 0))
  (global $std/pointer/sub (mut i32) (i32.const 0))
+ (global $std/pointer/nextOne (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 40))
  (memory $0 1)
  (data (i32.const 8) "\0e\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
@@ -254,17 +255,39 @@
     (unreachable)
    )
   )
-  (set_global $std/pointer/one
-   (block $std/pointer/Pointer<Entry>#inc|inlined.0 (result i32)
-    (set_local $0
-     (get_global $std/pointer/one)
-    )
-    (br $std/pointer/Pointer<Entry>#inc|inlined.0
-     (i32.add
-      (get_local $0)
-      (i32.const 8)
+  (set_global $std/pointer/nextOne
+   (block (result i32)
+    (set_global $std/pointer/one
+     (block $std/pointer/Pointer<Entry>#inc|inlined.0 (result i32)
+      (set_local $0
+       (get_global $std/pointer/one)
+      )
+      (br $std/pointer/Pointer<Entry>#inc|inlined.0
+       (i32.add
+        (get_local $0)
+        (i32.const 8)
+       )
+      )
      )
     )
+    (get_global $std/pointer/one)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (get_global $std/pointer/nextOne)
+     (get_global $std/pointer/one)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 70)
+     (i32.const 0)
+    )
+    (unreachable)
    )
   )
   (if
@@ -280,7 +303,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 70)
+     (i32.const 71)
      (i32.const 0)
     )
     (unreachable)
@@ -299,7 +322,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 72)
+     (i32.const 73)
      (i32.const 0)
     )
     (unreachable)
@@ -344,7 +367,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 75)
+     (i32.const 76)
      (i32.const 0)
     )
     (unreachable)
@@ -365,7 +388,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 76)
+     (i32.const 77)
      (i32.const 0)
     )
     (unreachable)
@@ -386,7 +409,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 77)
+     (i32.const 78)
      (i32.const 0)
     )
     (unreachable)

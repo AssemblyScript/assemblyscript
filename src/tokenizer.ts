@@ -348,6 +348,7 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.DECLARE:
     case Token.DELETE:
     case Token.FROM:
+    case Token.FOR:
     case Token.GET:
     case Token.IS:
     case Token.KEYOF:

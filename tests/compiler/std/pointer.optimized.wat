@@ -10,6 +10,7 @@
  (global $std/pointer/two (mut i32) (i32.const 0))
  (global $std/pointer/add (mut i32) (i32.const 0))
  (global $std/pointer/sub (mut i32) (i32.const 0))
+ (global $std/pointer/nextOne (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\0e\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s")
  (export "_setargc" (func $~setargc))
@@ -214,6 +215,24 @@
     (i32.const 8)
    )
   )
+  (set_global $std/pointer/nextOne
+   (get_global $std/pointer/one)
+  )
+  (if
+   (i32.ne
+    (get_global $std/pointer/nextOne)
+    (get_global $std/pointer/one)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 70)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
   (if
    (i32.ne
     (call $std/pointer/Pointer<Entry>#get:offset
@@ -225,7 +244,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 70)
+     (i32.const 71)
      (i32.const 0)
     )
     (unreachable)
@@ -242,7 +261,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 72)
+     (i32.const 73)
      (i32.const 0)
     )
     (unreachable)
@@ -271,7 +290,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 75)
+     (i32.const 76)
      (i32.const 0)
     )
     (unreachable)
@@ -290,7 +309,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 76)
+     (i32.const 77)
      (i32.const 0)
     )
     (unreachable)
@@ -309,7 +328,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 77)
+     (i32.const 78)
      (i32.const 0)
     )
     (unreachable)
