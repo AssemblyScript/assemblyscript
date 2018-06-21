@@ -89,7 +89,7 @@ assert(itoa32(1111111) == "1111111");
 assert(itoa32(1234567) == "1234567");
 assert(itoa32(0x7ffffffe) == "2147483646");
 assert(itoa32(0x7fffffff) == "2147483647");
-// assert(utoa32(0x80000000) == "-2147483648"); // fail <--
+assert(itoa32(0x80000000) == "-2147483648");
 assert(itoa32(0xffffffff) == "-1");
 
 assert(utoa32(0) == "0");
@@ -98,16 +98,19 @@ assert(utoa32(0x7fffffff) == "2147483647");
 assert(utoa32(0x80000000) == "2147483648");
 assert(utoa32(0xffffffff) == "4294967295");
 
+// var normal = itoa32(1234567);
+// var bad    = itoa32(2147483648);
+
 /*
-var bad = utoa32(0x80000000);
-logi(bad.charCodeAt(0)); // '2' (50)
-logi(bad.charCodeAt(1)); // '1' (49)
-logi(bad.charCodeAt(2)); // '4' (52)
-logi(bad.charCodeAt(3)); // '7' (55)
-logi(bad.charCodeAt(4)); // '4' (52)
-logi(bad.charCodeAt(5)); // '8' (56)
-logi(bad.charCodeAt(6)); // '3' (51)
-logi(bad.charCodeAt(7)); // '6' (54)
-logi(bad.charCodeAt(8)); // '4' (52)
-logi(bad.charCodeAt(9)); // '8' (56)
+var bad = utoa32(0xffffffff);
+logi(bad.charCodeAt(0)); // '4' (52)
+logi(bad.charCodeAt(1)); // '2' (50)
+logi(bad.charCodeAt(2)); // '9' (57)
+logi(bad.charCodeAt(3)); // '4' (52)
+logi(bad.charCodeAt(4)); // '9' (57)
+logi(bad.charCodeAt(5)); // '6' (54)
+logi(bad.charCodeAt(6)); // '7' (55)
+logi(bad.charCodeAt(7)); // '2' (50)
+logi(bad.charCodeAt(8)); // '9' (57)
+logi(bad.charCodeAt(9)); // '5' (53)
 */

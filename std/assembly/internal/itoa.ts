@@ -1,6 +1,8 @@
 
 import { CharCode, allocate, HEADER_SIZE } from "./string";
 
+declare function logi(i: i32): void;
+
 const powers10: u32[] = [
   1,
   10,
@@ -52,10 +54,18 @@ const digits00_99: u32[] = [
 ];
 
 @inline
-function decimalCount(value: u32): u32 {
-  var l = 32 - clz(value | 1); // log2
+function decimalCount(value: u32): i32 {
+  var v: u32 = value;
+  // ugly branch workaround. FIXME
+  if (<i32>value < 0) {
+    let sign = value >> 31;
+    v = (value ^ sign) - sign;
+  }
+  var l = 32 - clz(v | 1); // log2
   var t = l * 1233 >>> 12;     // log10
-      t = t - <u32>(value < unchecked(powers10[t]));
+      t = t - <i32>(v < unchecked(powers10[t]));
+
+  // logi(t + 1);
   return t + 1;
 }
 
