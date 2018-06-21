@@ -77,6 +77,7 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
+
 assert(itoa32(0) == "0");
 assert(itoa32(1) == "1");
 assert(itoa32(8) == "8");
@@ -105,6 +106,16 @@ assert(utoa64(0xffffffff)  == "4294967295");
 // assert(utoa64(0xfffffffff) == "68719476735"); // fail
 // assert(utoa64(0xffffffffffffffff) == "18446744073709551615"); // fail
 
+/*
+var bad = itoa32(-1000);
+logi(bad.charCodeAt(0));
+logi(bad.charCodeAt(1));
+logi(bad.charCodeAt(2));
+logi(bad.charCodeAt(3));
+logi(bad.charCodeAt(3));
+*/
+
+/*
 var bad = utoa64(0xfffffffff);
 logi(bad.charCodeAt(0));
 logi(bad.charCodeAt(1));
@@ -117,3 +128,4 @@ logi(bad.charCodeAt(7));
 logi(bad.charCodeAt(8));
 logi(bad.charCodeAt(9));
 logi(bad.charCodeAt(10));
+*/

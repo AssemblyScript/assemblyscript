@@ -2,6 +2,8 @@
 import { CharCode, allocate, HEADER_SIZE } from "./string";
 import { HEADER_SIZE as BUFFER_HEADER_SIZE } from "./arraybuffer";
 
+// declare function logi(i: i32): void;
+
 const powers10: u32[] = [
   1,
   10,
@@ -137,17 +139,14 @@ export function itoa32(value: i32): string {
   if (!value) return "0";
 
   var isneg  = value < 0;
-  var uvalue = <u32>value;
+  if (isneg) value = -value;
 
-  var decimals = decimalCount(uvalue) + <i32>isneg;
+  var decimals = decimalCount(value) + <i32>isneg;
   var buffer   = allocate(decimals);
 
-  if (isneg) {
-    uvalue = ~uvalue + 1;
-    store<u16>(changetype<usize>(buffer), CharCode.MINUS, HEADER_SIZE);
-  }
+  utoa32_core(changetype<usize>(buffer), value, decimals);
+  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, HEADER_SIZE);
 
-  utoa32_core(changetype<usize>(buffer), uvalue, decimals);
   return changetype<string>(buffer);
 }
 
