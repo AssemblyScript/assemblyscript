@@ -78,15 +78,17 @@ assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
 assert(itoa32(0) == "0");
+assert(itoa32(1) == "1");
 assert(itoa32(8) == "8");
 assert(itoa32(123) == "123");
 assert(itoa32(-1000) == "-1000");
 assert(itoa32(1234) == "1234");
-assert(itoa32(12345) == "12345");           // fail <--
+assert(itoa32(12345) == "12345");
+assert(itoa32(123456) == "123456");
 assert(itoa32(1111111) == "1111111");
-assert(itoa32(1234567) == "1234567");       // fail <--
-assert(itoa32(0x7ffffffe) == "2147483646"); // fail <--
-assert(itoa32(0x7fffffff) == "2147483647"); // fail <--
+assert(itoa32(1234567) == "1234567");
+assert(itoa32(0x7ffffffe) == "2147483646");
+assert(itoa32(0x7fffffff) == "2147483647");
 assert(itoa32(0xffffffff) == "-1");
 
 assert(utoa32(0) == "0");

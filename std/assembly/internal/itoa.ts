@@ -77,7 +77,7 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     let digit1: u64 = unchecked(digits00_99[d1]);
     let digit2: u64 = unchecked(digits00_99[d2]);
 
-    store<u64>(ptr, digit2 | (digit1 << 32), HEADER_SIZE);
+    store<u64>(ptr, digit1 | (digit2 << 32), HEADER_SIZE);
   }
 
   if (num >= 100) {
