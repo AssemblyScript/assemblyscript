@@ -3700,6 +3700,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -3722,7 +3723,7 @@
     )
    )
   )
-  (call $~lib/internal/itoa/utoa32_lut
+  (set_local $4
    (tee_local $1
     (call $~lib/internal/string/allocate
      (tee_local $3
@@ -3760,13 +3761,16 @@
      )
     )
    )
+  )
+  (call $~lib/internal/itoa/utoa32_lut
+   (get_local $1)
    (get_local $0)
    (get_local $3)
   )
   (if
    (get_local $2)
    (i32.store16 offset=4
-    (get_local $1)
+    (get_local $4)
     (i32.const 45)
    )
   )

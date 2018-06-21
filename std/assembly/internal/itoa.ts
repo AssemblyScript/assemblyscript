@@ -30,16 +30,26 @@ const digits_00_99: string[] = [
 */
 
 const digits_00_99: u32[] = [
-0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030, 0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
-0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031, 0x00350031, 0x00360031, 0x00370031, 0x00380031, 0x00390031,
-0x00300032, 0x00310032, 0x00320032, 0x00330032, 0x00340032, 0x00350032, 0x00360032, 0x00370032, 0x00380032, 0x00390032,
-0x00300033, 0x00310033, 0x00320033, 0x00330033, 0x00340033, 0x00350033, 0x00360033, 0x00370033, 0x00380033, 0x00390033,
-0x00300034, 0x00310034, 0x00320034, 0x00330034, 0x00340034, 0x00350034, 0x00360034, 0x00370034, 0x00380034, 0x00390034,
-0x00300035, 0x00310035, 0x00320035, 0x00330035, 0x00340035, 0x00350035, 0x00360035, 0x00370035, 0x00380035, 0x00390035,
-0x00300036, 0x00310036, 0x00320036, 0x00330036, 0x00340036, 0x00350036, 0x00360036, 0x00370036, 0x00380036, 0x00390036,
-0x00300037, 0x00310037, 0x00320037, 0x00330037, 0x00340037, 0x00350037, 0x00360037, 0x00370037, 0x00380037, 0x00390037,
-0x00300038, 0x00310038, 0x00320038, 0x00330038, 0x00340038, 0x00350038, 0x00360038, 0x00370038, 0x00380038, 0x00390038,
-0x00300039, 0x00310039, 0x00320039, 0x00330039, 0x00340039, 0x00350039, 0x00360039, 0x00370039, 0x00380039, 0x00390039
+  0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
+  0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
+  0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031,
+  0x00350031, 0x00360031, 0x00370031, 0x00380031, 0x00390031,
+  0x00300032, 0x00310032, 0x00320032, 0x00330032, 0x00340032,
+  0x00350032, 0x00360032, 0x00370032, 0x00380032, 0x00390032,
+  0x00300033, 0x00310033, 0x00320033, 0x00330033, 0x00340033,
+  0x00350033, 0x00360033, 0x00370033, 0x00380033, 0x00390033,
+  0x00300034, 0x00310034, 0x00320034, 0x00330034, 0x00340034,
+  0x00350034, 0x00360034, 0x00370034, 0x00380034, 0x00390034,
+  0x00300035, 0x00310035, 0x00320035, 0x00330035, 0x00340035,
+  0x00350035, 0x00360035, 0x00370035, 0x00380035, 0x00390035,
+  0x00300036, 0x00310036, 0x00320036, 0x00330036, 0x00340036,
+  0x00350036, 0x00360036, 0x00370036, 0x00380036, 0x00390036,
+  0x00300037, 0x00310037, 0x00320037, 0x00330037, 0x00340037,
+  0x00350037, 0x00360037, 0x00370037, 0x00380037, 0x00390037,
+  0x00300038, 0x00310038, 0x00320038, 0x00330038, 0x00340038,
+  0x00350038, 0x00360038, 0x00370038, 0x00380038, 0x00390038,
+  0x00300039, 0x00310039, 0x00320039, 0x00330039, 0x00340039,
+  0x00350039, 0x00360039, 0x00370039, 0x00380039, 0x00390039
 ];
 
 @inline
@@ -50,12 +60,8 @@ function decimalDigitsCount(value: i32): i32 {
   return t + 1;
 }
 
-function utoa32_lut(outBuffer: usize, num: u32, decimals: u32): void {
-
-  var ptr = outBuffer;
-  var pos = decimals;
-
-  var r: u32, t: u32, d1: u32, d2: u32;
+function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
+  var r: u32, t: u32, d1: u32, d2: u32, pos = decimals;
 
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
@@ -67,7 +73,7 @@ function utoa32_lut(outBuffer: usize, num: u32, decimals: u32): void {
     d2 = r % 100;
 
     pos -= 4;
-    let ptr = outBuffer + (pos << 1);
+    let ptr = buffer + (pos << 1);
 
     let digit1 = unchecked(digits_00_99[d1]);
     let digit2 = unchecked(digits_00_99[d2]);
@@ -81,30 +87,30 @@ function utoa32_lut(outBuffer: usize, num: u32, decimals: u32): void {
     d1  = num % 100;
     num = t;
     pos -= 2;
-    let ptr   = outBuffer + (pos << 1);
+    let ptr   = buffer + (pos << 1);
     let digit = unchecked(digits_00_99[d1]);
-    store<u32>(ptr, digit, HEADER_SIZE + 0);
+    store<u32>(ptr, digit, HEADER_SIZE);
   }
 
   if (num < 10) {
     pos -= 1;
-    let ptr   = outBuffer + (pos << 1);
+    let ptr   = buffer + (pos << 1);
     let digit = CharCode._0 + num;
     store<u16>(ptr, digit, HEADER_SIZE);
   } else {
     pos -= 2;
-    let ptr   = outBuffer + (pos << 1);
+    let ptr   = buffer + (pos << 1);
     let digit = unchecked(digits_00_99[num]);
-    store<u32>(ptr, digit, HEADER_SIZE + 0);
+    store<u32>(ptr, digit, HEADER_SIZE);
   }
 }
 
 @inline
-export function utoa32(outBuffer: usize, num: u32, decimals: u32): void {
-  // if (!NO_MEMOTY) {
-  utoa32_lut(outBuffer, num, decimals);
+export function utoa32(buffer: usize, num: u32, decimals: u32): void {
+  // if (NO_MEMOTY || SHRINK_LEVEL >= 1) {
+  //  TODO
   // } else {
-  // TODO
+  utoa32_lut(buffer, num, decimals);
   // }
 }
 
@@ -116,12 +122,10 @@ export function itoa32(value: i32): string {
 
   var decimals = decimalDigitsCount(value) + <i32>isneg;
   var buffer   = allocate(decimals);
+  var bufptr   = changetype<usize>(buffer);
 
-  utoa32(changetype<usize>(buffer), value, <u32>decimals);
-
-  if (isneg) {
-    store<u16>(changetype<usize>(buffer), CharCode.MINUS, HEADER_SIZE);
-  }
+  utoa32(bufptr, value, <u32>decimals);
+  if (isneg) store<u16>(bufptr, CharCode.MINUS, HEADER_SIZE);
 
   return changetype<string>(buffer);
 }
