@@ -138,24 +138,38 @@ export function itoa32(value: i32): string {
   return changetype<string>(buffer);
 }
 
-/*
+
 export function itoa64(num: i64): string {
   if (!num) return "0";
 
   var isneg = num < 0;
   if (isneg) num = -num;
 
-  var res = "";
+  var buffer: String = null;
+
   if (num >= 1844674407) {
-    let hi: u32 = num / 10000000000;
+    let hi: u32 = <u32>(num / 10000000000);
     // In most VMs i64/u64 div and rem by constant is not cheap
     // and can't be simplificate so we avoid modulo operation
-    let lo: u32 = num - hi * 10000000000;
-    res = utoa32(hi) + utoa32(lo);
+    let lo: u32  = <u32>(num - hi * 10000000000);
+    // res = utoa32(hi) + utoa32(lo);
+    let decimalsLo = 20;
+    let decimalsHi = decimalCount(hi) + <i32>isneg;
+    let decimals   = decimalsLo + decimalsHi;
+
+    buffer = allocate(decimals);
+    let bufptr = changetype<usize>(buffer);
+
+    utoa32_core(bufptr,             lo, 20);
+    utoa32_core(bufptr + (20 << 1), hi, decimalsHi);
+
   } else {
-    res = utoa32(<u32>num);
+    let lo: u32  = <u32>num;
+    let decimals = decimalCount(lo) + <i32>isneg;
+    buffer = allocate(decimals);
+    utoa32_core(changetype<usize>(buffer), lo, decimals);
   }
-  if (isneg) res = "-" + res;
-  return res;
+
+  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, HEADER_SIZE);
+  return changetype<string>(buffer);
 }
-*/
