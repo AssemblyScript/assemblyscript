@@ -146,24 +146,20 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.shl
-    (i32.const 1)
-    (i32.sub
-     (i32.const 32)
-     (i32.clz
-      (i32.sub
-       (i32.add
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 1)
+  (i32.shl
+   (i32.const 1)
+   (i32.sub
+    (i32.const 32)
+    (i32.clz
+     (i32.sub
+      (i32.add
+       (get_local $0)
+       (i32.const 8)
       )
+      (i32.const 1)
      )
     )
    )
@@ -199,9 +195,7 @@
    (get_local $1)
    (get_local $0)
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/memory/set_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -593,9 +587,7 @@
     (get_local $1)
    )
   )
-  (return
-   (get_local $3)
-  )
+  (get_local $3)
  )
  (func $~lib/map/Map<i8,i32>#clear (; 6 ;) (type $iv) (param $0 i32)
   (i32.store
@@ -681,14 +673,12 @@
   (get_local $0)
  )
  (func $~lib/internal/hash/hash8 (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.mul
-    (i32.xor
-     (i32.const -2128831035)
-     (get_local $0)
-    )
-    (i32.const 16777619)
+  (i32.mul
+   (i32.xor
+    (i32.const -2128831035)
+    (get_local $0)
    )
+   (i32.const 16777619)
   )
  )
  (func $~lib/map/Map<i8,i32>#find (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -765,32 +755,28 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<i8,i32>#has (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<i8,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<i8>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<i8>|inlined.0
-       (call $~lib/internal/hash/hash8
-        (i32.shr_s
-         (i32.shl
-          (get_local $1)
-          (i32.const 24)
-         )
+  (i32.ne
+   (call $~lib/map/Map<i8,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<i8>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<i8>|inlined.0
+      (call $~lib/internal/hash/hash8
+       (i32.shr_s
+        (i32.shl
+         (get_local $1)
          (i32.const 24)
         )
+        (i32.const 24)
        )
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<i8,i32>#rehash (; 11 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -837,9 +823,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<i8,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<i8,i32>|inlined.1
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
     (i32.const 1)
@@ -861,9 +845,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<i8,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<i8,i32>|inlined.2
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
    )
@@ -951,9 +933,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<i8,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<i8,i32>|inlined.3
-             (i32.const 12)
-            )
+            (i32.const 12)
            )
           )
          )
@@ -963,9 +943,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<i8,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<i8,i32>|inlined.4
-           (i32.const 12)
-          )
+          (i32.const 12)
          )
         )
        )
@@ -1102,9 +1080,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<i8,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<i8,i32>|inlined.5
-         (i32.const 12)
-        )
+        (i32.const 12)
        )
       )
      )
@@ -1176,21 +1152,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=4
     (get_local $2)
-    (i32.load offset=4
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<i8,i32>#get:size (; 14 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<i8,i32>#delete (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -1297,9 +1269,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<i8,i32> (; 16 ;) (type $v)
   (local $0 i32)
@@ -1989,29 +1959,25 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<u8,i32>#has (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<u8,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<u8>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<u8>|inlined.0
-       (call $~lib/internal/hash/hash8
-        (i32.and
-         (get_local $1)
-         (i32.const 255)
-        )
+  (i32.ne
+   (call $~lib/map/Map<u8,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<u8>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<u8>|inlined.0
+      (call $~lib/internal/hash/hash8
+       (i32.and
+        (get_local $1)
+        (i32.const 255)
        )
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<u8,i32>#rehash (; 21 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -2058,9 +2024,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<u8,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<u8,i32>|inlined.1
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
     (i32.const 1)
@@ -2082,9 +2046,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<u8,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<u8,i32>|inlined.2
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
    )
@@ -2172,9 +2134,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<u8,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<u8,i32>|inlined.3
-             (i32.const 12)
-            )
+            (i32.const 12)
            )
           )
          )
@@ -2184,9 +2144,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<u8,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<u8,i32>|inlined.4
-           (i32.const 12)
-          )
+          (i32.const 12)
          )
         )
        )
@@ -2320,9 +2278,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<u8,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<u8,i32>|inlined.5
-         (i32.const 12)
-        )
+        (i32.const 12)
        )
       )
      )
@@ -2391,21 +2347,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=4
     (get_local $2)
-    (i32.load offset=4
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<u8,i32>#get:size (; 24 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<u8,i32>#delete (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -2509,9 +2461,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<u8,i32> (; 26 ;) (type $v)
   (local $0 i32)
@@ -3138,9 +3088,7 @@
     (i32.const 16777619)
    )
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/map/Map<i16,i32>#find (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3216,32 +3164,28 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<i16,i32>#has (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<i16,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<i16>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<i16>|inlined.0
-       (call $~lib/internal/hash/hash16
-        (i32.shr_s
-         (i32.shl
-          (get_local $1)
-          (i32.const 16)
-         )
+  (i32.ne
+   (call $~lib/map/Map<i16,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<i16>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<i16>|inlined.0
+      (call $~lib/internal/hash/hash16
+       (i32.shr_s
+        (i32.shl
+         (get_local $1)
          (i32.const 16)
         )
+        (i32.const 16)
        )
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<i16,i32>#rehash (; 32 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -3288,9 +3232,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<i16,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<i16,i32>|inlined.1
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
     (i32.const 1)
@@ -3312,9 +3254,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<i16,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<i16,i32>|inlined.2
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
    )
@@ -3402,9 +3342,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<i16,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<i16,i32>|inlined.3
-             (i32.const 12)
-            )
+            (i32.const 12)
            )
           )
          )
@@ -3414,9 +3352,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<i16,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<i16,i32>|inlined.4
-           (i32.const 12)
-          )
+          (i32.const 12)
          )
         )
        )
@@ -3553,9 +3489,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<i16,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<i16,i32>|inlined.5
-         (i32.const 12)
-        )
+        (i32.const 12)
        )
       )
      )
@@ -3627,21 +3561,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=4
     (get_local $2)
-    (i32.load offset=4
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<i16,i32>#get:size (; 35 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<i16,i32>#delete (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -3748,9 +3678,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<i16,i32> (; 37 ;) (type $v)
   (local $0 i32)
@@ -4440,29 +4368,25 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<u16,i32>#has (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<u16,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<u16>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<u16>|inlined.0
-       (call $~lib/internal/hash/hash16
-        (i32.and
-         (get_local $1)
-         (i32.const 65535)
-        )
+  (i32.ne
+   (call $~lib/map/Map<u16,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<u16>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<u16>|inlined.0
+      (call $~lib/internal/hash/hash16
+       (i32.and
+        (get_local $1)
+        (i32.const 65535)
        )
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<u16,i32>#rehash (; 42 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -4509,9 +4433,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<u16,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<u16,i32>|inlined.1
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
     (i32.const 1)
@@ -4533,9 +4455,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<u16,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<u16,i32>|inlined.2
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
    )
@@ -4623,9 +4543,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<u16,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<u16,i32>|inlined.3
-             (i32.const 12)
-            )
+            (i32.const 12)
            )
           )
          )
@@ -4635,9 +4553,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<u16,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<u16,i32>|inlined.4
-           (i32.const 12)
-          )
+          (i32.const 12)
          )
         )
        )
@@ -4771,9 +4687,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<u16,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<u16,i32>|inlined.5
-         (i32.const 12)
-        )
+        (i32.const 12)
        )
       )
      )
@@ -4842,21 +4756,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=4
     (get_local $2)
-    (i32.load offset=4
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<u16,i32>#get:size (; 45 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<u16,i32>#delete (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -4960,9 +4870,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<u16,i32> (; 47 ;) (type $v)
   (local $0 i32)
@@ -5619,9 +5527,7 @@
     (i32.const 16777619)
    )
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/map/Map<i32,i32>#find (; 51 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -5691,26 +5597,22 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<i32,i32>#has (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<i32,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<i32>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<i32>|inlined.0
-       (call $~lib/internal/hash/hash32
-        (get_local $1)
-       )
+  (i32.ne
+   (call $~lib/map/Map<i32,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<i32>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<i32>|inlined.0
+      (call $~lib/internal/hash/hash32
+       (get_local $1)
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<i32,i32>#rehash (; 53 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -5757,9 +5659,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<i32,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<i32,i32>|inlined.1
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
     (i32.const 1)
@@ -5781,9 +5681,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<i32,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<i32,i32>|inlined.2
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
    )
@@ -5871,9 +5769,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<i32,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<i32,i32>|inlined.3
-             (i32.const 12)
-            )
+            (i32.const 12)
            )
           )
          )
@@ -5883,9 +5779,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<i32,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<i32,i32>|inlined.4
-           (i32.const 12)
-          )
+          (i32.const 12)
          )
         )
        )
@@ -6016,9 +5910,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<i32,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<i32,i32>|inlined.5
-         (i32.const 12)
-        )
+        (i32.const 12)
        )
       )
      )
@@ -6084,21 +5976,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=4
     (get_local $2)
-    (i32.load offset=4
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<i32,i32>#get:size (; 56 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<i32,i32>#delete (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -6199,9 +6087,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<i32,i32> (; 58 ;) (type $v)
   (local $0 i32)
@@ -6846,26 +6732,22 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<u32,i32>#has (; 62 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<u32,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<u32>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<u32>|inlined.0
-       (call $~lib/internal/hash/hash32
-        (get_local $1)
-       )
+  (i32.ne
+   (call $~lib/map/Map<u32,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<u32>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<u32>|inlined.0
+      (call $~lib/internal/hash/hash32
+       (get_local $1)
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<u32,i32>#rehash (; 63 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -6912,9 +6794,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<u32,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<u32,i32>|inlined.1
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
     (i32.const 1)
@@ -6936,9 +6816,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<u32,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<u32,i32>|inlined.2
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
    )
@@ -7026,9 +6904,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<u32,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<u32,i32>|inlined.3
-             (i32.const 12)
-            )
+            (i32.const 12)
            )
           )
          )
@@ -7038,9 +6914,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<u32,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<u32,i32>|inlined.4
-           (i32.const 12)
-          )
+          (i32.const 12)
          )
         )
        )
@@ -7171,9 +7045,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<u32,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<u32,i32>|inlined.5
-         (i32.const 12)
-        )
+        (i32.const 12)
        )
       )
      )
@@ -7239,21 +7111,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=4
     (get_local $2)
-    (i32.load offset=4
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<u32,i32>#get:size (; 66 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<u32,i32>#delete (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -7354,9 +7222,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<u32,i32> (; 68 ;) (type $v)
   (local $0 i32)
@@ -8061,9 +7927,7 @@
     (i32.const 16777619)
    )
   )
-  (return
-   (get_local $3)
-  )
+  (get_local $3)
  )
  (func $~lib/map/Map<i64,i32>#find (; 72 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
@@ -8133,26 +7997,22 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<i64,i32>#has (; 73 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<i64,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<i64>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<i64>|inlined.0
-       (call $~lib/internal/hash/hash64
-        (get_local $1)
-       )
+  (i32.ne
+   (call $~lib/map/Map<i64,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<i64>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<i64>|inlined.0
+      (call $~lib/internal/hash/hash64
+       (get_local $1)
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<i64,i32>#rehash (; 74 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -8200,9 +8060,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<i64,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<i64,i32>|inlined.1
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
     (i32.const 1)
@@ -8224,9 +8082,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<i64,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<i64,i32>|inlined.2
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
    )
@@ -8314,9 +8170,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<i64,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<i64,i32>|inlined.3
-             (i32.const 16)
-            )
+            (i32.const 16)
            )
           )
          )
@@ -8326,9 +8180,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<i64,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<i64,i32>|inlined.4
-           (i32.const 16)
-          )
+          (i32.const 16)
          )
         )
        )
@@ -8459,9 +8311,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<i64,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<i64,i32>|inlined.5
-         (i32.const 16)
-        )
+        (i32.const 16)
        )
       )
      )
@@ -8527,21 +8377,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=8
     (get_local $2)
-    (i32.load offset=8
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<i64,i32>#get:size (; 77 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<i64,i32>#delete (; 78 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
@@ -8642,9 +8488,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<i64,i32> (; 79 ;) (type $v)
   (local $0 i32)
@@ -9303,26 +9147,22 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<u64,i32>#has (; 83 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<u64,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<u64>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<u64>|inlined.0
-       (call $~lib/internal/hash/hash64
-        (get_local $1)
-       )
+  (i32.ne
+   (call $~lib/map/Map<u64,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<u64>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<u64>|inlined.0
+      (call $~lib/internal/hash/hash64
+       (get_local $1)
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<u64,i32>#rehash (; 84 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -9370,9 +9210,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<u64,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<u64,i32>|inlined.1
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
     (i32.const 1)
@@ -9394,9 +9232,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<u64,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<u64,i32>|inlined.2
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
    )
@@ -9484,9 +9320,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<u64,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<u64,i32>|inlined.3
-             (i32.const 16)
-            )
+            (i32.const 16)
            )
           )
          )
@@ -9496,9 +9330,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<u64,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<u64,i32>|inlined.4
-           (i32.const 16)
-          )
+          (i32.const 16)
          )
         )
        )
@@ -9629,9 +9461,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<u64,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<u64,i32>|inlined.5
-         (i32.const 16)
-        )
+        (i32.const 16)
        )
       )
      )
@@ -9697,21 +9527,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=8
     (get_local $2)
-    (i32.load offset=8
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<u64,i32>#get:size (; 87 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<u64,i32>#delete (; 88 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
@@ -9812,9 +9638,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<u64,i32> (; 89 ;) (type $v)
   (local $0 i32)
@@ -10473,28 +10297,24 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<f32,i32>#has (; 93 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<f32,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<f32>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<f32>|inlined.0
-       (call $~lib/internal/hash/hash32
-        (i32.reinterpret/f32
-         (get_local $1)
-        )
+  (i32.ne
+   (call $~lib/map/Map<f32,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<f32>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<f32>|inlined.0
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
        )
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<f32,i32>#rehash (; 94 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -10542,9 +10362,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<f32,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<f32,i32>|inlined.1
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
     (i32.const 1)
@@ -10566,9 +10384,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<f32,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<f32,i32>|inlined.2
-       (i32.const 12)
-      )
+      (i32.const 12)
      )
     )
    )
@@ -10658,9 +10474,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<f32,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<f32,i32>|inlined.3
-             (i32.const 12)
-            )
+            (i32.const 12)
            )
           )
          )
@@ -10670,9 +10484,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<f32,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<f32,i32>|inlined.4
-           (i32.const 12)
-          )
+          (i32.const 12)
          )
         )
        )
@@ -10805,9 +10617,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<f32,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<f32,i32>|inlined.5
-         (i32.const 12)
-        )
+        (i32.const 12)
        )
       )
      )
@@ -10875,21 +10685,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=4
     (get_local $2)
-    (i32.load offset=4
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<f32,i32>#get:size (; 97 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<f32,i32>#delete (; 98 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
@@ -10992,9 +10798,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<f32,i32> (; 99 ;) (type $v)
   (local $0 i32)
@@ -11653,28 +11457,24 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/map/Map<f64,i32>#has (; 103 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/map/Map<f64,i32>#find
-     (get_local $0)
-     (get_local $1)
-     (block $~lib/internal/hash/hash<f64>|inlined.0 (result i32)
-      (br $~lib/internal/hash/hash<f64>|inlined.0
-       (call $~lib/internal/hash/hash64
-        (i64.reinterpret/f64
-         (get_local $1)
-        )
+  (i32.ne
+   (call $~lib/map/Map<f64,i32>#find
+    (get_local $0)
+    (get_local $1)
+    (block $~lib/internal/hash/hash<f64>|inlined.0 (result i32)
+     (br $~lib/internal/hash/hash<f64>|inlined.0
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $1)
        )
       )
      )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/map/Map<f64,i32>#rehash (; 104 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -11722,9 +11522,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/map/ENTRY_SIZE<f64,i32>|inlined.1 (result i32)
-      (br $~lib/map/ENTRY_SIZE<f64,i32>|inlined.1
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
     (i32.const 1)
@@ -11746,9 +11544,7 @@
       (get_local $0)
      )
      (block $~lib/map/ENTRY_SIZE<f64,i32>|inlined.2 (result i32)
-      (br $~lib/map/ENTRY_SIZE<f64,i32>|inlined.2
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
    )
@@ -11838,9 +11634,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/map/ENTRY_SIZE<f64,i32>|inlined.3 (result i32)
-            (br $~lib/map/ENTRY_SIZE<f64,i32>|inlined.3
-             (i32.const 16)
-            )
+            (i32.const 16)
            )
           )
          )
@@ -11850,9 +11644,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/map/ENTRY_SIZE<f64,i32>|inlined.4 (result i32)
-          (br $~lib/map/ENTRY_SIZE<f64,i32>|inlined.4
-           (i32.const 16)
-          )
+          (i32.const 16)
          )
         )
        )
@@ -11985,9 +11777,7 @@
         (get_local $6)
        )
        (block $~lib/map/ENTRY_SIZE<f64,i32>|inlined.5 (result i32)
-        (br $~lib/map/ENTRY_SIZE<f64,i32>|inlined.5
-         (i32.const 16)
-        )
+        (i32.const 16)
        )
       )
      )
@@ -12055,21 +11845,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
+  (if (result i32)
+   (get_local $2)
+   (i32.load offset=8
     (get_local $2)
-    (i32.load offset=8
-     (get_local $2)
-    )
-    (unreachable)
    )
+   (unreachable)
   )
  )
  (func $~lib/map/Map<f64,i32>#get:size (; 107 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/map/Map<f64,i32>#delete (; 108 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
@@ -12172,9 +11958,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/map/test<f64,i32> (; 109 ;) (type $v)
   (local $0 i32)

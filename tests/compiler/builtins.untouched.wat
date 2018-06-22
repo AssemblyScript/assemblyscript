@@ -28,41 +28,33 @@
  (export "table" (table $0))
  (start $start)
  (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
-  (return
-   (f32.ne
-    (get_local $0)
-    (get_local $0)
-   )
+  (f32.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
-  (return
-   (f32.eq
-    (f32.sub
-     (get_local $0)
-     (get_local $0)
-    )
-    (f32.const 0)
+  (f32.eq
+   (f32.sub
+    (get_local $0)
+    (get_local $0)
    )
+   (f32.const 0)
   )
  )
  (func $isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
-  (return
-   (f64.ne
-    (get_local $0)
-    (get_local $0)
-   )
+  (f64.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
-  (return
-   (f64.eq
-    (f64.sub
-     (get_local $0)
-     (get_local $0)
-    )
-    (f64.const 0)
+  (f64.eq
+   (f64.sub
+    (get_local $0)
+    (get_local $0)
    )
+   (f64.const 0)
   )
  )
  (func $start~anonymous|0 (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)

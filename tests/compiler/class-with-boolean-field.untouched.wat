@@ -10,10 +10,8 @@
    (get_local $0)
    (i32.const 1)
   )
-  (return
-   (i32.load8_u
-    (get_local $0)
-   )
+  (i32.load8_u
+   (get_local $0)
   )
  )
 )

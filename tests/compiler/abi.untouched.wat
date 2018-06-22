@@ -14,35 +14,27 @@
  (export "memory" (memory $0))
  (start $start)
  (func $abi/exported (; 1 ;) (type $i) (result i32)
-  (return
-   (i32.shr_s
-    (i32.shl
-     (i32.const 128)
-     (i32.const 24)
-    )
+  (i32.shr_s
+   (i32.shl
+    (i32.const 128)
     (i32.const 24)
    )
+   (i32.const 24)
   )
  )
  (func $abi/exportedExported (; 2 ;) (type $i) (result i32)
-  (return
-   (call $abi/exported)
-  )
+  (call $abi/exported)
  )
  (func $abi/internal (; 3 ;) (type $i) (result i32)
-  (return
-   (i32.const 128)
-  )
+  (i32.const 128)
  )
  (func $abi/exportedInternal (; 4 ;) (type $i) (result i32)
-  (return
-   (i32.shr_s
-    (i32.shl
-     (call $abi/internal)
-     (i32.const 24)
-    )
+  (i32.shr_s
+   (i32.shl
+    (call $abi/internal)
     (i32.const 24)
    )
+   (i32.const 24)
   )
  )
  (func $start (; 5 ;) (type $v)

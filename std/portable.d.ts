@@ -12,6 +12,8 @@
  * @module std/portable
  *//***/
 
+/// <reference no-default-lib="true"/>
+
 // Portable types
 
 declare type i8 = number;
@@ -309,11 +311,6 @@ declare class Error {
   stack: string | null;
 }
 
-declare class Symbol {
-  private constructor();
-  static readonly iterator: symbol;
-}
-
 declare class Set<T> {
   constructor(entries?: T[]);
   readonly size: i32;
@@ -336,6 +333,14 @@ declare class Map<K,V> {
   values(): Iterable<V>;
   [Symbol.iterator](): Iterator<[K,V]>;
 }
+
+interface SymbolConstructor {
+  (description?: string | null): symbol;
+  for(key: string): symbol;
+  keyFor(sym: symbol): string | null;
+  readonly iterator: symbol;
+}
+declare const Symbol: SymbolConstructor;
 
 interface Iterable<T> {
   [Symbol.iterator](): Iterator<T>;

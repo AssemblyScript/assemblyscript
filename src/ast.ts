@@ -1413,6 +1413,20 @@ export class UnaryPrefixExpression extends UnaryExpression {
 
 // statements
 
+export function isLastStatement(statement: Statement): bool {
+  var parent = assert(statement.parent);
+  if (parent.kind == NodeKind.BLOCK) {
+    let statements = (<BlockStatement>parent).statements;
+    if (statements[statements.length - 1] === statement) {
+      switch (assert(parent.parent).kind) {
+        case NodeKind.FUNCTIONDECLARATION:
+        case NodeKind.METHODDECLARATION: return true;
+      }
+    }
+  }
+  return false;
+}
+
 /** Base class of all statement nodes. */
 export abstract class Statement extends Node { }
 

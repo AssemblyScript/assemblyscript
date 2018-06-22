@@ -119,19 +119,17 @@
     )
    )
   )
-  (return
-   (f64.mul
-    (get_local $2)
-    (f64.reinterpret/i64
-     (i64.shl
-      (i64.add
-       (i64.const 1023)
-       (i64.extend_u/i32
-        (get_local $1)
-       )
+  (f64.mul
+   (get_local $2)
+   (f64.reinterpret/i64
+    (i64.shl
+     (i64.add
+      (i64.const 1023)
+      (i64.extend_u/i32
+       (get_local $1)
       )
-      (i64.const 52)
      )
+     (i64.const 52)
     )
    )
   )
@@ -1689,19 +1687,15 @@
     )
    )
   )
-  (return
-   (f64.mul
-    (get_local $14)
-    (get_local $13)
-   )
+  (f64.mul
+   (get_local $14)
+   (get_local $13)
   )
  )
  (func $isNaN<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
-  (return
-   (f32.ne
-    (get_local $0)
-    (get_local $0)
-   )
+  (f32.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $~lib/math/NativeMathf.mod (; 3 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
@@ -2121,10 +2115,8 @@
     (get_local $6)
    )
   )
-  (return
-   (f32.reinterpret/i32
-    (get_local $2)
-   )
+  (f32.reinterpret/i32
+   (get_local $2)
   )
  )
  (func $~lib/math/NativeMathf.scalbn (; 4 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
@@ -2230,17 +2222,15 @@
     )
    )
   )
-  (return
-   (f32.mul
-    (get_local $2)
-    (f32.reinterpret/i32
-     (i32.shl
-      (i32.add
-       (i32.const 127)
-       (get_local $1)
-      )
-      (i32.const 23)
+  (f32.mul
+   (get_local $2)
+   (f32.reinterpret/i32
+    (i32.shl
+     (i32.add
+      (i32.const 127)
+      (get_local $1)
      )
+     (i32.const 23)
     )
    )
   )
@@ -3555,19 +3545,15 @@
     )
    )
   )
-  (return
-   (f32.mul
-    (get_local $12)
-    (get_local $11)
-   )
+  (f32.mul
+   (get_local $12)
+   (get_local $11)
   )
  )
  (func $isNaN<f64> (; 6 ;) (type $Fi) (param $0 f64) (result i32)
-  (return
-   (f64.ne
-    (get_local $0)
-    (get_local $0)
-   )
+  (f64.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $~lib/math/NativeMath.mod (; 7 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -4006,10 +3992,8 @@
     )
    )
   )
-  (return
-   (f64.reinterpret/i64
-    (get_local $2)
-   )
+  (f64.reinterpret/i64
+   (get_local $2)
   )
  )
  (func $start (; 8 ;) (type $v)

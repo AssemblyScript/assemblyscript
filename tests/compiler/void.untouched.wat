@@ -8,9 +8,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $void/anInt (; 0 ;) (type $i) (result i32)
-  (return
-   (i32.const 2)
-  )
+  (i32.const 2)
  )
  (func $start (; 1 ;) (type $v)
   (drop

@@ -190,9 +190,7 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $std/operator-overloading/Tester#constructor (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -223,116 +221,106 @@
   )
  )
  (func $std/operator-overloading/Tester.add (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.add
-     (i32.load
-      (get_local $0)
-     )
-     (i32.load
-      (get_local $1)
-     )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.add
+    (i32.load
+     (get_local $0)
     )
-    (i32.add
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (i32.add
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
     )
    )
   )
  )
  (func $std/operator-overloading/Tester.sub (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.sub
-     (i32.load
-      (get_local $0)
-     )
-     (i32.load
-      (get_local $1)
-     )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.sub
+    (i32.load
+     (get_local $0)
     )
-    (i32.sub
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (i32.sub
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
     )
    )
   )
  )
  (func $std/operator-overloading/Tester.mul (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.mul
-     (i32.load
-      (get_local $0)
-     )
-     (i32.load
-      (get_local $1)
-     )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.mul
+    (i32.load
+     (get_local $0)
     )
-    (i32.mul
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (i32.mul
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
     )
    )
   )
  )
  (func $std/operator-overloading/Tester.div (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.div_s
-     (i32.load
-      (get_local $0)
-     )
-     (i32.load
-      (get_local $1)
-     )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.div_s
+    (i32.load
+     (get_local $0)
     )
-    (i32.div_s
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (i32.div_s
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
     )
    )
   )
  )
  (func $std/operator-overloading/Tester.mod (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.rem_s
-     (i32.load
-      (get_local $0)
-     )
-     (i32.load
-      (get_local $1)
-     )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.rem_s
+    (i32.load
+     (get_local $0)
     )
-    (i32.rem_s
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (i32.rem_s
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
     )
    )
   )
@@ -440,19 +428,17 @@
     )
    )
   )
-  (return
-   (f64.mul
-    (get_local $2)
-    (f64.reinterpret/i64
-     (i64.shl
-      (i64.add
-       (i64.const 1023)
-       (i64.extend_u/i32
-        (get_local $1)
-       )
+  (f64.mul
+   (get_local $2)
+   (f64.reinterpret/i64
+    (i64.shl
+     (i64.add
+      (i64.const 1023)
+      (i64.extend_u/i32
+       (get_local $1)
       )
-      (i64.const 52)
      )
+     (i64.const 52)
     )
    )
   )
@@ -2010,42 +1996,38 @@
     )
    )
   )
-  (return
-   (f64.mul
-    (get_local $14)
-    (get_local $13)
-   )
+  (f64.mul
+   (get_local $14)
+   (get_local $13)
   )
  )
  (func $std/operator-overloading/Tester.pow (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.trunc_s/f64
-     (call $~lib/math/NativeMath.pow
-      (f64.convert_s/i32
-       (i32.load
-        (get_local $0)
-       )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.trunc_s/f64
+    (call $~lib/math/NativeMath.pow
+     (f64.convert_s/i32
+      (i32.load
+       (get_local $0)
       )
-      (f64.convert_s/i32
-       (i32.load
-        (get_local $1)
-       )
+     )
+     (f64.convert_s/i32
+      (i32.load
+       (get_local $1)
       )
      )
     )
-    (i32.trunc_s/f64
-     (call $~lib/math/NativeMath.pow
-      (f64.convert_s/i32
-       (i32.load offset=4
-        (get_local $0)
-       )
+   )
+   (i32.trunc_s/f64
+    (call $~lib/math/NativeMath.pow
+     (f64.convert_s/i32
+      (i32.load offset=4
+       (get_local $0)
       )
-      (f64.convert_s/i32
-       (i32.load offset=4
-        (get_local $1)
-       )
+     )
+     (f64.convert_s/i32
+      (i32.load offset=4
+       (get_local $1)
       )
      )
     )
@@ -2053,356 +2035,324 @@
   )
  )
  (func $std/operator-overloading/Tester.and (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.and
-     (i32.load
-      (get_local $0)
-     )
-     (i32.load
-      (get_local $1)
-     )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.and
+    (i32.load
+     (get_local $0)
     )
-    (i32.and
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (i32.and
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
     )
    )
   )
  )
  (func $std/operator-overloading/Tester.or (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.or
-     (i32.load
-      (get_local $0)
-     )
-     (i32.load
-      (get_local $1)
-     )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.or
+    (i32.load
+     (get_local $0)
     )
-    (i32.or
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (i32.or
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
     )
    )
   )
  )
  (func $std/operator-overloading/Tester.xor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.xor
-     (i32.load
-      (get_local $0)
-     )
-     (i32.load
-      (get_local $1)
-     )
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.xor
+    (i32.load
+     (get_local $0)
     )
-    (i32.xor
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
+    (i32.load
+     (get_local $1)
+    )
+   )
+   (i32.xor
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
     )
    )
   )
  )
  (func $std/operator-overloading/Tester.equals (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (return
-   (if (result i32)
-    (tee_local $2
-     (i32.eq
-      (i32.load
-       (get_local $0)
-      )
-      (i32.load
-       (get_local $1)
-      )
-     )
-    )
+  (if (result i32)
+   (tee_local $2
     (i32.eq
-     (i32.load offset=4
+     (i32.load
       (get_local $0)
      )
-     (i32.load offset=4
+     (i32.load
       (get_local $1)
      )
     )
-    (get_local $2)
    )
+   (i32.eq
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
+    )
+   )
+   (get_local $2)
   )
  )
  (func $std/operator-overloading/Tester.notEquals (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (return
-   (if (result i32)
-    (tee_local $2
-     (i32.ne
-      (i32.load
-       (get_local $0)
-      )
-      (i32.load
-       (get_local $1)
-      )
-     )
-    )
+  (if (result i32)
+   (tee_local $2
     (i32.ne
-     (i32.load offset=4
+     (i32.load
       (get_local $0)
      )
-     (i32.load offset=4
+     (i32.load
       (get_local $1)
      )
     )
-    (get_local $2)
    )
+   (i32.ne
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
+    )
+   )
+   (get_local $2)
   )
  )
  (func $std/operator-overloading/Tester.greater (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (return
-   (if (result i32)
-    (tee_local $2
-     (i32.gt_s
-      (i32.load
-       (get_local $0)
-      )
-      (i32.load
-       (get_local $1)
-      )
-     )
-    )
+  (if (result i32)
+   (tee_local $2
     (i32.gt_s
-     (i32.load offset=4
+     (i32.load
       (get_local $0)
      )
-     (i32.load offset=4
+     (i32.load
       (get_local $1)
      )
     )
-    (get_local $2)
    )
+   (i32.gt_s
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
+    )
+   )
+   (get_local $2)
   )
  )
  (func $std/operator-overloading/Tester.greaterEquals (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (return
-   (if (result i32)
-    (tee_local $2
-     (i32.ge_s
-      (i32.load
-       (get_local $0)
-      )
-      (i32.load
-       (get_local $1)
-      )
-     )
-    )
+  (if (result i32)
+   (tee_local $2
     (i32.ge_s
-     (i32.load offset=4
+     (i32.load
       (get_local $0)
      )
-     (i32.load offset=4
+     (i32.load
       (get_local $1)
      )
     )
-    (get_local $2)
    )
+   (i32.ge_s
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
+    )
+   )
+   (get_local $2)
   )
  )
  (func $std/operator-overloading/Tester.less (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (return
-   (if (result i32)
-    (tee_local $2
-     (i32.lt_s
-      (i32.load
-       (get_local $0)
-      )
-      (i32.load
-       (get_local $1)
-      )
-     )
-    )
+  (if (result i32)
+   (tee_local $2
     (i32.lt_s
-     (i32.load offset=4
+     (i32.load
       (get_local $0)
      )
-     (i32.load offset=4
+     (i32.load
       (get_local $1)
      )
     )
-    (get_local $2)
    )
+   (i32.lt_s
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
+     (get_local $1)
+    )
+   )
+   (get_local $2)
   )
  )
  (func $std/operator-overloading/Tester.lessEquals (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (return
-   (if (result i32)
-    (tee_local $2
-     (i32.le_s
-      (i32.load
-       (get_local $0)
-      )
-      (i32.load
-       (get_local $1)
-      )
-     )
-    )
+  (if (result i32)
+   (tee_local $2
     (i32.le_s
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
-    )
-    (get_local $2)
-   )
-  )
- )
- (func $std/operator-overloading/Tester.shr (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.shr_s
      (i32.load
       (get_local $0)
      )
-     (get_local $1)
-    )
-    (i32.shr_s
-     (i32.load offset=4
-      (get_local $0)
+     (i32.load
+      (get_local $1)
      )
+    )
+   )
+   (i32.le_s
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.load offset=4
      (get_local $1)
     )
+   )
+   (get_local $2)
+  )
+ )
+ (func $std/operator-overloading/Tester.shr (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.shr_s
+    (i32.load
+     (get_local $0)
+    )
+    (get_local $1)
+   )
+   (i32.shr_s
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (get_local $1)
    )
   )
  )
  (func $std/operator-overloading/Tester.shu (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.shr_u
-     (i32.load
-      (get_local $0)
-     )
-     (get_local $1)
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.shr_u
+    (i32.load
+     (get_local $0)
     )
-    (i32.shr_u
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (get_local $1)
+    (get_local $1)
+   )
+   (i32.shr_u
+    (i32.load offset=4
+     (get_local $0)
     )
+    (get_local $1)
    )
   )
  )
  (func $std/operator-overloading/Tester.shl (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.shl
-     (i32.load
-      (get_local $0)
-     )
-     (get_local $1)
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.shl
+    (i32.load
+     (get_local $0)
     )
-    (i32.shl
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (get_local $1)
+    (get_local $1)
+   )
+   (i32.shl
+    (i32.load offset=4
+     (get_local $0)
     )
+    (get_local $1)
    )
   )
  )
  (func $std/operator-overloading/Tester.pos (; 23 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.load
+    (get_local $0)
+   )
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
+ )
+ (func $std/operator-overloading/Tester.neg (; 24 ;) (type $ii) (param $0 i32) (result i32)
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.sub
     (i32.const 0)
     (i32.load
      (get_local $0)
     )
+   )
+   (i32.sub
+    (i32.const 0)
     (i32.load offset=4
      (get_local $0)
     )
    )
   )
  )
- (func $std/operator-overloading/Tester.neg (; 24 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.sub
-     (i32.const 0)
-     (i32.load
-      (get_local $0)
-     )
-    )
-    (i32.sub
-     (i32.const 0)
-     (i32.load offset=4
-      (get_local $0)
-     )
-    )
-   )
-  )
- )
  (func $std/operator-overloading/Tester.not (; 25 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $std/operator-overloading/Tester#constructor
-    (i32.const 0)
-    (i32.xor
-     (i32.load
-      (get_local $0)
-     )
-     (i32.const -1)
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.xor
+    (i32.load
+     (get_local $0)
     )
-    (i32.xor
-     (i32.load offset=4
-      (get_local $0)
-     )
-     (i32.const -1)
+    (i32.const -1)
+   )
+   (i32.xor
+    (i32.load offset=4
+     (get_local $0)
     )
+    (i32.const -1)
    )
   )
  )
  (func $std/operator-overloading/Tester.excl (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (return
-   (if (result i32)
-    (tee_local $1
-     (i32.eqz
-      (i32.load
-       (get_local $0)
-      )
-     )
-    )
+  (if (result i32)
+   (tee_local $1
     (i32.eqz
-     (i32.load offset=4
+     (i32.load
       (get_local $0)
      )
     )
-    (get_local $1)
    )
+   (i32.eqz
+    (i32.load offset=4
+     (get_local $0)
+    )
+   )
+   (get_local $1)
   )
  )
  (func $std/operator-overloading/Tester#inc (; 27 ;) (type $ii) (param $0 i32) (result i32)
@@ -2424,9 +2374,7 @@
     (i32.const 1)
    )
   )
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $std/operator-overloading/Tester#dec (; 28 ;) (type $ii) (param $0 i32) (result i32)
   (i32.store
@@ -2447,9 +2395,7 @@
     (i32.const 1)
    )
   )
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $std/operator-overloading/TesterInlineStatic#constructor (; 29 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3681,24 +3627,22 @@
     (set_local $1
      (get_global $std/operator-overloading/ais2)
     )
-    (br $std/operator-overloading/TesterInlineStatic.add|inlined.0
-     (call $std/operator-overloading/TesterInlineStatic#constructor
-      (i32.const 0)
-      (i32.add
-       (i32.load
-        (get_local $0)
-       )
-       (i32.load
-        (get_local $1)
-       )
+    (call $std/operator-overloading/TesterInlineStatic#constructor
+     (i32.const 0)
+     (i32.add
+      (i32.load
+       (get_local $0)
       )
-      (i32.add
-       (i32.load offset=4
-        (get_local $0)
-       )
-       (i32.load offset=4
-        (get_local $1)
-       )
+      (i32.load
+       (get_local $1)
+      )
+     )
+     (i32.add
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.load offset=4
+       (get_local $1)
       )
      )
     )
@@ -3756,24 +3700,22 @@
     (set_local $0
      (get_global $std/operator-overloading/aii2)
     )
-    (br $std/operator-overloading/TesterInlineInstance#add|inlined.0
-     (call $std/operator-overloading/TesterInlineInstance#constructor
-      (i32.const 0)
-      (i32.add
-       (i32.load
-        (get_local $1)
-       )
-       (i32.load
-        (get_local $0)
-       )
+    (call $std/operator-overloading/TesterInlineInstance#constructor
+     (i32.const 0)
+     (i32.add
+      (i32.load
+       (get_local $1)
       )
-      (i32.add
-       (i32.load offset=4
-        (get_local $1)
-       )
-       (i32.load offset=4
-        (get_local $0)
-       )
+      (i32.load
+       (get_local $0)
+      )
+     )
+     (i32.add
+      (i32.load offset=4
+       (get_local $1)
+      )
+      (i32.load offset=4
+       (get_local $0)
       )
      )
     )

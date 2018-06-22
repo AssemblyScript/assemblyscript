@@ -3,6 +3,8 @@
  * @module std/assembly
  *//***/
 
+/// <reference no-default-lib="true"/>
+
 // Types
 
 /** An 8-bit signed integer. */
@@ -467,11 +469,12 @@ declare class Set<T> {
   clear(): void;
 }
 
-declare class Symbol {
-  constructor(description?: string | null);
-  static for(key: string): Symbol;
-  static keyFor(sym: Symbol): string | null;
+interface SymbolConstructor {
+  (description?: string | null): symbol;
+  for(key: string): symbol;
+  keyFor(sym: symbol): string | null;
 }
+declare const Symbol: SymbolConstructor;
 
 interface IMath<T> {
   /** The base of natural logarithms, e, approximately 2.718. */

@@ -127,9 +127,7 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/memory/set_memory (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -2654,19 +2652,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
-    (get_local $2)
-    (i32.sub
-     (i32.load8_u
-      (get_local $0)
-     )
-     (i32.load8_u
-      (get_local $1)
-     )
+  (if (result i32)
+   (get_local $2)
+   (i32.sub
+    (i32.load8_u
+     (get_local $0)
     )
-    (i32.const 0)
+    (i32.load8_u
+     (get_local $1)
+    )
    )
+   (i32.const 0)
   )
  )
  (func $~lib/allocator/arena/free_memory (; 6 ;) (type $iv) (param $0 i32)

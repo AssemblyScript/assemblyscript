@@ -18,14 +18,10 @@
  (export "table" (table $0))
  (start $start)
  (func $start~anonymous|0 (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $start~anonymous|1 (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $start~someName|2 (; 3 ;) (type $v)
   (nop)

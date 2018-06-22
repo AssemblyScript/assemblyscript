@@ -14,19 +14,17 @@
     (i32.const 1)
    )
   )
-  (return
-   (i32.add
-    (call $recursive/fib
-     (i32.sub
-      (get_local $0)
-      (i32.const 1)
-     )
+  (i32.add
+   (call $recursive/fib
+    (i32.sub
+     (get_local $0)
+     (i32.const 1)
     )
-    (call $recursive/fib
-     (i32.sub
-      (get_local $0)
-      (i32.const 2)
-     )
+   )
+   (call $recursive/fib
+    (i32.sub
+     (get_local $0)
+     (i32.const 2)
     )
    )
   )

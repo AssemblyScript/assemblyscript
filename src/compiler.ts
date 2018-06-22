@@ -128,7 +128,8 @@ import {
   UnaryPrefixExpression,
   FieldDeclaration,
 
-  nodeIsConstantValue
+  nodeIsConstantValue,
+  isLastStatement
 } from "./ast";
 
 import {
@@ -1486,11 +1487,17 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFunction.flow = blockFlow;
 
     var stmts = this.compileStatements(statements);
+    var lastType: NativeType;
     var stmt = stmts.length == 0
       ? this.module.createNop()
       : stmts.length == 1
         ? stmts[0]
-        : this.module.createBlock(null, stmts, NativeType.None);
+        : this.module.createBlock(null, stmts,
+            // if the last expression is a value, annotate the block's return value
+            (lastType = getExpressionType(stmts[stmts.length - 1])) == NativeType.None
+              ? NativeType.None
+              : lastType
+          );
 
     // Switch back to the parent flow
     var parentFlow = blockFlow.leaveBranchOrScope();
@@ -1775,6 +1782,9 @@ export class Compiler extends DiagnosticEmitter {
       // Remember whether returning a properly wrapped value
       if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
     }
+
+    // If the last statement anyway, make it the block's return value
+    if (isLastStatement(statement)) return expr ? expr : module.createNop();
 
     // When inlining, break to the end of the inlined function's block (no need to wrap)
     return flow.is(FlowFlags.INLINE_CONTEXT)
@@ -6440,6 +6450,7 @@ export class Compiler extends DiagnosticEmitter {
           )) {
             return module.createUnreachable();
           }
+          let inline = (instance.decoratorFlags & DecoratorFlags.INLINE) != 0;
           if (instance.is(CommonFlags.INSTANCE)) {
             let parent = assert(instance.parent);
             assert(parent.kind == ElementKind.CLASS);
@@ -6450,10 +6461,10 @@ export class Compiler extends DiagnosticEmitter {
               WrapMode.NONE
             );
             this.currentType = signature.returnType;
-            return this.compileCallDirect(instance, [], propertyAccess, thisExpr);
+            return this.compileCallDirect(instance, [], propertyAccess, thisExpr, inline);
           } else {
             this.currentType = signature.returnType;
-            return this.compileCallDirect(instance, [], propertyAccess);
+            return this.compileCallDirect(instance, [], propertyAccess, 0, inline);
           }
         } else {
           this.error(

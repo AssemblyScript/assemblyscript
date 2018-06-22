@@ -5,8 +5,6 @@
  (export "default" (func $named-export-default/get3))
  (export "memory" (memory $0))
  (func $named-export-default/get3 (; 0 ;) (type $i) (result i32)
-  (return
-   (i32.const 3)
-  )
+  (i32.const 3)
  )
 )

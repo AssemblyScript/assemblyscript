@@ -41,14 +41,10 @@
  (export "ge_u" (func $../../examples/i64-polyfill/assembly/i64/ge_u))
  (export "memory" (memory $0))
  (func $../../examples/i64-polyfill/assembly/i64/getHi (; 0 ;) (type $i) (result i32)
-  (return
-   (get_global $../../examples/i64-polyfill/assembly/i64/hi)
-  )
+  (get_global $../../examples/i64-polyfill/assembly/i64/hi)
  )
  (func $../../examples/i64-polyfill/assembly/i64/getLo (; 1 ;) (type $i) (result i32)
-  (return
-   (get_global $../../examples/i64-polyfill/assembly/i64/lo)
-  )
+  (get_global $../../examples/i64-polyfill/assembly/i64/lo)
  )
  (func $../../examples/i64-polyfill/assembly/i64/clz (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i64)

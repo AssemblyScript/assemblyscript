@@ -37,9 +37,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $enum/getZero (; 0 ;) (type $i) (result i32)
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $start (; 1 ;) (type $v)
   (set_global $enum/NonConstant.ZERO

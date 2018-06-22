@@ -12438,22 +12438,20 @@
   )
  )
  (func $std/math/test_signf (; 142 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
-  (if
-   (f32.gt
-    (f32.abs
-     (get_local $0)
+  (call $std/math/check<f32>
+   (if (result f32)
+    (f32.gt
+     (f32.abs
+      (get_local $0)
+     )
+     (f32.const 0)
     )
-    (f32.const 0)
-   )
-   (set_local $0
     (f32.copysign
      (f32.const 1)
      (get_local $0)
     )
+    (get_local $0)
    )
-  )
-  (call $std/math/check<f32>
-   (get_local $0)
    (get_local $1)
    (get_local $2)
    (get_local $3)

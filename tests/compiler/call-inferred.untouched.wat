@@ -11,24 +11,16 @@
  (export "memory" (memory $0))
  (start $start)
  (func $call-inferred/foo<i32> (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $call-inferred/foo<f64> (; 2 ;) (type $FF) (param $0 f64) (result f64)
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $call-inferred/foo<f32> (; 3 ;) (type $ff) (param $0 f32) (result f32)
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $call-inferred/bar<f32> (; 4 ;) (type $ff) (param $0 f32) (result f32)
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $start (; 5 ;) (type $v)
   (if

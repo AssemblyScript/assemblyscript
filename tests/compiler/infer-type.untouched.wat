@@ -47,24 +47,16 @@
   )
  )
  (func $infer-type/reti (; 2 ;) (type $i) (result i32)
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $infer-type/retI (; 3 ;) (type $I) (result i64)
-  (return
-   (i64.const 0)
-  )
+  (i64.const 0)
  )
  (func $infer-type/retf (; 4 ;) (type $f) (result f32)
-  (return
-   (f32.const 0)
-  )
+  (f32.const 0)
  )
  (func $infer-type/refF (; 5 ;) (type $F) (result f64)
-  (return
-   (f64.const 0)
-  )
+  (f64.const 0)
  )
  (func $start (; 6 ;) (type $v)
   (local $0 i32)

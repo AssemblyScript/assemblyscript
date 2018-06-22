@@ -49,19 +49,15 @@
  (export "memory" (memory $0))
  (start $start)
  (func $exports/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.add
-    (get_local $0)
-    (get_local $1)
-   )
+  (i32.add
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $exports/subOpt (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.sub
-    (get_local $0)
-    (get_local $1)
-   )
+  (i32.sub
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $exports/subOpt|trampoline (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -92,17 +88,13 @@
   )
  )
  (func $exports/math.sub (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.sub
-    (get_local $0)
-    (get_local $1)
-   )
+  (i32.sub
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $exports/Car.getNumTires (; 5 ;) (type $i) (result i32)
-  (return
-   (i32.const 4)
-  )
+  (i32.const 4)
  )
  (func $~lib/allocator/arena/allocate_memory (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -210,9 +202,7 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $exports/Car#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -272,10 +262,8 @@
   )
  )
  (func $exports/Car#get:numDoors (; 11 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load
-    (get_local $0)
-   )
+  (i32.load
+   (get_local $0)
   )
  )
  (func $exports/Car#set:numDoors (; 12 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -288,9 +276,7 @@
   (nop)
  )
  (func $exports/vehicles.Car.getNumTires (; 14 ;) (type $i) (result i32)
-  (return
-   (i32.const 4)
-  )
+  (i32.const 4)
  )
  (func $exports/vehicles.Car#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -350,10 +336,8 @@
   )
  )
  (func $exports/vehicles.Car#get:numDoors (; 19 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load
-    (get_local $0)
-   )
+  (i32.load
+   (get_local $0)
   )
  )
  (func $exports/vehicles.Car#set:numDoors (; 20 ;) (type $iiv) (param $0 i32) (param $1 i32)

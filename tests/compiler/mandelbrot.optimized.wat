@@ -290,8 +290,8 @@
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
-  (local $7 f64)
-  (local $8 i32)
+  (local $7 i32)
+  (local $8 f64)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
@@ -312,7 +312,7 @@
      (f64.convert_u/i32
       (get_local $0)
      )
-     (tee_local $7
+     (tee_local $8
       (f64.div
        (tee_local $4
         (f64.convert_u/i32
@@ -344,7 +344,7 @@
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_u
-      (get_local $8)
+      (get_local $7)
       (get_local $1)
      )
     )
@@ -352,7 +352,7 @@
      (f64.mul
       (f64.sub
        (f64.convert_u/i32
-        (get_local $8)
+        (get_local $7)
        )
        (get_local $11)
       )
@@ -379,7 +379,7 @@
            (get_local $4)
           )
          )
-         (tee_local $7
+         (tee_local $8
           (f64.mul
            (get_local $5)
            (get_local $5)
@@ -405,7 +405,7 @@
          (f64.add
           (f64.sub
            (get_local $6)
-           (get_local $7)
+           (get_local $8)
           )
           (get_local $10)
          )
@@ -447,7 +447,7 @@
         )
        )
       )
-      (set_local $7
+      (set_local $8
        (f64.add
         (f64.sub
          (f64.mul
@@ -475,7 +475,7 @@
        )
       )
       (set_local $4
-       (get_local $7)
+       (get_local $8)
       )
       (set_local $2
        (i32.add
@@ -493,7 +493,7 @@
         (get_local $0)
         (get_local $1)
        )
-       (get_local $8)
+       (get_local $7)
       )
       (i32.const 1)
      )
@@ -504,17 +504,15 @@
          (f64.div
           (call $~lib/math/NativeMath.log
            (call $~lib/math/NativeMath.log
-            (tee_local $7
-             (f64.sqrt
-              (f64.add
-               (f64.mul
-                (get_local $4)
-                (get_local $4)
-               )
-               (f64.mul
-                (get_local $5)
-                (get_local $5)
-               )
+            (f64.sqrt
+             (f64.add
+              (f64.mul
+               (get_local $4)
+               (get_local $4)
+              )
+              (f64.mul
+               (get_local $5)
+               (get_local $5)
               )
              )
             )
@@ -551,9 +549,9 @@
       )
      )
     )
-    (set_local $8
+    (set_local $7
      (i32.add
-      (get_local $8)
+      (get_local $7)
       (i32.const 1)
      )
     )

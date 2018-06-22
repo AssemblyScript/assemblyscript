@@ -19,27 +19,21 @@
  (export "memory" (memory $0))
  (start $start)
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.add
-    (get_local $0)
-    (get_local $1)
-   )
+  (i32.add
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $export/sub (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.sub
-    (get_local $0)
-    (get_local $1)
-   )
+  (i32.sub
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $export/mul (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.mul
-    (get_local $0)
-    (get_local $1)
-   )
+  (i32.mul
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $export/ns.two (; 3 ;) (type $v)

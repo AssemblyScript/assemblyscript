@@ -3417,28 +3417,26 @@
    )
   )
   (set_global $std/operator-overloading/ais
-   (tee_local $0
-    (call $std/operator-overloading/Tester#constructor
-     (i32.const 0)
-     (i32.add
-      (i32.load
-       (tee_local $0
-        (get_global $std/operator-overloading/ais1)
-       )
-      )
-      (i32.load
-       (tee_local $1
-        (get_global $std/operator-overloading/ais2)
-       )
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.add
+     (i32.load
+      (tee_local $0
+       (get_global $std/operator-overloading/ais1)
       )
      )
-     (i32.add
-      (i32.load offset=4
-       (get_local $0)
+     (i32.load
+      (tee_local $1
+       (get_global $std/operator-overloading/ais2)
       )
-      (i32.load offset=4
-       (get_local $1)
-      )
+     )
+    )
+    (i32.add
+     (i32.load offset=4
+      (get_local $0)
+     )
+     (i32.load offset=4
+      (get_local $1)
      )
     )
    )
@@ -3490,28 +3488,26 @@
    )
   )
   (set_global $std/operator-overloading/aii
-   (tee_local $0
-    (call $std/operator-overloading/Tester#constructor
-     (i32.const 0)
-     (i32.add
-      (i32.load
-       (tee_local $1
-        (get_global $std/operator-overloading/aii1)
-       )
-      )
-      (i32.load
-       (tee_local $0
-        (get_global $std/operator-overloading/aii2)
-       )
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.add
+     (i32.load
+      (tee_local $1
+       (get_global $std/operator-overloading/aii1)
       )
      )
-     (i32.add
-      (i32.load offset=4
-       (get_local $1)
+     (i32.load
+      (tee_local $0
+       (get_global $std/operator-overloading/aii2)
       )
-      (i32.load offset=4
-       (get_local $0)
-      )
+     )
+    )
+    (i32.add
+     (i32.load offset=4
+      (get_local $1)
+     )
+     (i32.load offset=4
+      (get_local $0)
      )
     )
    )

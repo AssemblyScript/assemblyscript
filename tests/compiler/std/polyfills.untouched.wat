@@ -89,9 +89,7 @@
     )
    )
   )
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $~lib/polyfills/bswap<u16> (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -227,9 +225,7 @@
     )
    )
   )
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -825,9 +821,7 @@
     )
    )
   )
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $~lib/polyfills/bswap16<i32> (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -905,9 +899,7 @@
     )
    )
   )
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $start (; 13 ;) (type $v)
   (if

@@ -175,9 +175,7 @@
     )
    )
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/allocator/arena/allocate_memory (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -285,9 +283,7 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/string/String#toUTF8 (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -599,9 +595,7 @@
    )
    (i32.const 0)
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/allocator/arena/free_memory (; 4 ;) (type $iv) (param $0 i32)
   (nop)
