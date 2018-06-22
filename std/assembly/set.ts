@@ -38,6 +38,7 @@ const BUCKET_SIZE = sizeof<usize>();
   return size;
 }
 
+@sealed
 export class Set<K> {
 
   // buckets holding references to the respective first entry within
