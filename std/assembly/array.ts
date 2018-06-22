@@ -13,6 +13,7 @@ import {
   weakHeapSort
 } from "./internal/array";
 
+@sealed
 export class Array<T> {
 
   /* @internal */ buffer_: ArrayBuffer;

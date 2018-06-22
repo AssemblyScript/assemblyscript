@@ -546,7 +546,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 23)
+     (i32.const 24)
      (i32.const 39)
     )
     (unreachable)
@@ -2454,7 +2454,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 143)
+       (i32.const 144)
        (i32.const 42)
       )
       (unreachable)
@@ -2535,7 +2535,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 154)
+     (i32.const 155)
      (i32.const 20)
     )
     (unreachable)
@@ -2606,7 +2606,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 244)
+       (i32.const 245)
        (i32.const 42)
       )
       (unreachable)
@@ -2681,7 +2681,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 215)
+     (i32.const 216)
      (i32.const 20)
     )
     (unreachable)
@@ -3119,7 +3119,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 86)
+       (i32.const 87)
        (i32.const 41)
       )
       (unreachable)

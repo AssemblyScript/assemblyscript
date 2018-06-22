@@ -40,6 +40,7 @@ const BUCKET_SIZE = sizeof<usize>();
   return size;
 }
 
+@sealed
 export class Map<K,V> {
 
   // buckets holding references to the respective first entry within

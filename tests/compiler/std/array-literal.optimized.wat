@@ -524,7 +524,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 92)
-     (i32.const 23)
+     (i32.const 24)
      (i32.const 39)
     )
     (unreachable)
