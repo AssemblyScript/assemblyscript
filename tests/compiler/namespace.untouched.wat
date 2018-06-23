@@ -10,14 +10,10 @@
  (export "memory" (memory $0))
  (start $start)
  (func $namespace/Outer.Inner.aFunc (; 0 ;) (type $i) (result i32)
-  (return
-   (get_global $namespace/Outer.Inner.aVar)
-  )
+  (get_global $namespace/Outer.Inner.aVar)
  )
  (func $namespace/Joined.anotherFunc (; 1 ;) (type $i) (result i32)
-  (return
-   (i32.const 3)
-  )
+  (i32.const 3)
  )
  (func $start (; 2 ;) (type $v)
   (drop

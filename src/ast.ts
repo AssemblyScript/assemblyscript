@@ -9,7 +9,7 @@ import {
   STATIC_DELIMITER,
   INSTANCE_DELIMITER,
   LIBRARY_PREFIX
-} from "./program";
+} from "./common";
 
 import {
   Token,
@@ -106,6 +106,26 @@ export function nodeIsConstantValue(kind: NodeKind): bool {
     case NodeKind.NULL:
     case NodeKind.TRUE:
     case NodeKind.FALSE: return true;
+  }
+  return false;
+}
+
+/** Checks if a node might be callable. */
+export function nodeIsCallable(kind: NodeKind): bool {
+  switch (kind) {
+    case NodeKind.IDENTIFIER:
+    case NodeKind.CALL:
+    case NodeKind.ELEMENTACCESS:
+    case NodeKind.PROPERTYACCESS: return true;
+  }
+  return false;
+}
+
+/** Checks if a node might be callable with generic arguments. */
+export function nodeIsGenericCallable(kind: NodeKind): bool {
+  switch (kind) {
+    case NodeKind.IDENTIFIER:
+    case NodeKind.PROPERTYACCESS: return true;
   }
   return false;
 }
@@ -1412,6 +1432,20 @@ export class UnaryPrefixExpression extends UnaryExpression {
 }
 
 // statements
+
+export function isLastStatement(statement: Statement): bool {
+  var parent = assert(statement.parent);
+  if (parent.kind == NodeKind.BLOCK) {
+    let statements = (<BlockStatement>parent).statements;
+    if (statements[statements.length - 1] === statement) {
+      switch (assert(parent.parent).kind) {
+        case NodeKind.FUNCTIONDECLARATION:
+        case NodeKind.METHODDECLARATION: return true;
+      }
+    }
+  }
+  return false;
+}
 
 /** Base class of all statement nodes. */
 export abstract class Statement extends Node { }

@@ -7,12 +7,10 @@ export class Pointer<T> {
     return changetype<Pointer<T>>(offset);
   }
 
-  // FIXME: does not inline
   @inline get offset(): usize {
     return changetype<usize>(this);
   }
 
-  // FIXME: does not inline
   @inline get value(): T {
     return changetype<T>(changetype<usize>(this));
   }

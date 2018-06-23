@@ -27,32 +27,28 @@
     (get_local $0)
    )
   )
-  (return
-   (if (result i32)
-    (i32.lt_u
-     (get_local $1)
-     (i32.shr_u
-      (i32.load
-       (get_local $2)
-      )
-      (i32.const 2)
+  (if (result i32)
+   (i32.lt_u
+    (get_local $1)
+    (i32.shr_u
+     (i32.load
+      (get_local $2)
      )
+     (i32.const 2)
     )
-    (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.0 (result i32)
-     (br $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.0
-      (i32.load offset=8
-       (i32.add
-        (get_local $2)
-        (i32.shl
-         (get_local $1)
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    (unreachable)
    )
+   (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.0 (result i32)
+    (i32.load offset=8
+     (i32.add
+      (get_local $2)
+      (i32.shl
+       (get_local $1)
+       (i32.const 2)
+      )
+     )
+    )
+   )
+   (unreachable)
   )
  )
  (func $~lib/array/Array<i32>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -62,43 +58,37 @@
     (get_local $0)
    )
   )
-  (return
-   (if (result i32)
-    (i32.lt_u
-     (get_local $1)
-     (i32.shr_u
-      (i32.load
-       (get_local $2)
-      )
-      (i32.const 2)
+  (if (result i32)
+   (i32.lt_u
+    (get_local $1)
+    (i32.shr_u
+     (i32.load
+      (get_local $2)
      )
+     (i32.const 2)
     )
-    (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.0 (result i32)
-     (br $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.0
-      (i32.load offset=8
-       (i32.add
-        (get_local $2)
-        (i32.shl
-         (get_local $1)
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    (unreachable)
    )
+   (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.0 (result i32)
+    (i32.load offset=8
+     (i32.add
+      (get_local $2)
+      (i32.shl
+       (get_local $1)
+       (i32.const 2)
+      )
+     )
+    )
+   )
+   (unreachable)
   )
  )
  (func $std/array-access/i32ArrayArrayElementAccess (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $~lib/array/Array<i32>#__get
-    (call $~lib/array/Array<Array<i32>>#__get
-     (get_local $0)
-     (i32.const 0)
-    )
-    (i32.const 1)
+  (call $~lib/array/Array<i32>#__get
+   (call $~lib/array/Array<Array<i32>>#__get
+    (get_local $0)
+    (i32.const 0)
    )
+   (i32.const 1)
   )
  )
  (func $~lib/array/Array<String>#__get (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -108,41 +98,35 @@
     (get_local $0)
    )
   )
-  (return
-   (if (result i32)
-    (i32.lt_u
-     (get_local $1)
-     (i32.shr_u
-      (i32.load
-       (get_local $2)
-      )
-      (i32.const 2)
+  (if (result i32)
+   (i32.lt_u
+    (get_local $1)
+    (i32.shr_u
+     (i32.load
+      (get_local $2)
      )
+     (i32.const 2)
     )
-    (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0 (result i32)
-     (br $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0
-      (i32.load offset=8
-       (i32.add
-        (get_local $2)
-        (i32.shl
-         (get_local $1)
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    (unreachable)
    )
+   (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0 (result i32)
+    (i32.load offset=8
+     (i32.add
+      (get_local $2)
+      (i32.shl
+       (get_local $1)
+       (i32.const 2)
+      )
+     )
+    )
+   )
+   (unreachable)
   )
  )
  (func $std/array-access/stringArrayPropertyAccess (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load
-    (call $~lib/array/Array<String>#__get
-     (get_local $0)
-     (i32.const 0)
-    )
+  (i32.load
+   (call $~lib/array/Array<String>#__get
+    (get_local $0)
+    (i32.const 0)
    )
   )
  )
@@ -197,19 +181,17 @@
     )
    )
   )
-  (return
-   (if (result i32)
-    (get_local $2)
-    (i32.sub
-     (i32.load8_u
-      (get_local $0)
-     )
-     (i32.load8_u
-      (get_local $1)
-     )
+  (if (result i32)
+   (get_local $2)
+   (i32.sub
+    (i32.load8_u
+     (get_local $0)
     )
-    (i32.const 0)
+    (i32.load8_u
+     (get_local $1)
+    )
    )
+   (i32.const 0)
   )
  )
  (func $~lib/string/String#startsWith (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -295,41 +277,37 @@
     (i32.const 0)
    )
   )
-  (return
-   (i32.eqz
-    (call $~lib/memory/compare_memory
+  (i32.eqz
+   (call $~lib/memory/compare_memory
+    (i32.add
      (i32.add
-      (i32.add
-       (get_local $0)
-       (i32.const 4)
-      )
-      (i32.shl
-       (get_local $7)
-       (i32.const 1)
-      )
-     )
-     (i32.add
-      (get_local $1)
+      (get_local $0)
       (i32.const 4)
      )
      (i32.shl
-      (get_local $8)
+      (get_local $7)
       (i32.const 1)
      )
+    )
+    (i32.add
+     (get_local $1)
+     (i32.const 4)
+    )
+    (i32.shl
+     (get_local $8)
+     (i32.const 1)
     )
    )
   )
  )
  (func $std/array-access/stringArrayMethodCall (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $~lib/string/String#startsWith
-    (call $~lib/array/Array<String>#__get
-     (get_local $0)
-     (i32.const 0)
-    )
-    (i32.const 8)
+  (call $~lib/string/String#startsWith
+   (call $~lib/array/Array<String>#__get
+    (get_local $0)
     (i32.const 0)
    )
+   (i32.const 8)
+   (i32.const 0)
   )
  )
  (func $~lib/array/Array<Array<String>>#__get (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -339,60 +317,52 @@
     (get_local $0)
    )
   )
-  (return
-   (if (result i32)
-    (i32.lt_u
-     (get_local $1)
-     (i32.shr_u
-      (i32.load
-       (get_local $2)
-      )
-      (i32.const 2)
+  (if (result i32)
+   (i32.lt_u
+    (get_local $1)
+    (i32.shr_u
+     (i32.load
+      (get_local $2)
      )
+     (i32.const 2)
     )
-    (block $~lib/internal/arraybuffer/loadUnsafe<Array<String>,Array<String>>|inlined.0 (result i32)
-     (br $~lib/internal/arraybuffer/loadUnsafe<Array<String>,Array<String>>|inlined.0
-      (i32.load offset=8
-       (i32.add
-        (get_local $2)
-        (i32.shl
-         (get_local $1)
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    (unreachable)
    )
+   (block $~lib/internal/arraybuffer/loadUnsafe<Array<String>,Array<String>>|inlined.0 (result i32)
+    (i32.load offset=8
+     (i32.add
+      (get_local $2)
+      (i32.shl
+       (get_local $1)
+       (i32.const 2)
+      )
+     )
+    )
+   )
+   (unreachable)
   )
  )
  (func $std/array-access/stringArrayArrayPropertyAccess (; 10 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load
-    (call $~lib/array/Array<String>#__get
-     (call $~lib/array/Array<Array<String>>#__get
-      (get_local $0)
-      (i32.const 0)
-     )
-     (i32.const 1)
+  (i32.load
+   (call $~lib/array/Array<String>#__get
+    (call $~lib/array/Array<Array<String>>#__get
+     (get_local $0)
+     (i32.const 0)
     )
+    (i32.const 1)
    )
   )
  )
  (func $std/array-access/stringArrayArrayMethodCall (; 11 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $~lib/string/String#startsWith
-    (call $~lib/array/Array<String>#__get
-     (call $~lib/array/Array<Array<String>>#__get
-      (get_local $0)
-      (i32.const 0)
-     )
-     (i32.const 1)
+  (call $~lib/string/String#startsWith
+   (call $~lib/array/Array<String>#__get
+    (call $~lib/array/Array<Array<String>>#__get
+     (get_local $0)
+     (i32.const 0)
     )
-    (i32.const 8)
-    (i32.const 0)
+    (i32.const 1)
    )
+   (i32.const 8)
+   (i32.const 0)
   )
  )
 )

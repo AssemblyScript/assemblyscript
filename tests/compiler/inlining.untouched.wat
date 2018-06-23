@@ -16,11 +16,9 @@
  (export "table" (table $0))
  (start $start)
  (func $inlining/test (; 1 ;) (type $i) (result i32)
-  (return
-   (i32.add
-    (i32.const 1)
-    (i32.const 2)
-   )
+  (i32.add
+   (i32.const 1)
+   (i32.const 2)
   )
  )
  (func $inlining/test_funcs~anonymous|0 (; 2 ;) (type $ii) (param $0 i32) (result i32)
@@ -59,15 +57,13 @@
         (i32.const 1)
        )
       )
-      (br $inlining/func_ii|inlined.0
-       (if (result i32)
-        (i32.lt_s
-         (get_local $2)
-         (i32.const 42)
-        )
-        (i32.const 2)
-        (i32.const 3)
+      (if (result i32)
+       (i32.lt_s
+        (get_local $2)
+        (i32.const 42)
        )
+       (i32.const 2)
+       (i32.const 3)
       )
      )
      (i32.const 1)
@@ -99,15 +95,13 @@
         (i32.const 1)
        )
       )
-      (br $inlining/func_ii|inlined.1
-       (if (result i32)
-        (i32.lt_s
-         (get_local $2)
-         (i32.const 42)
-        )
-        (i32.const 2)
-        (i32.const 3)
+      (if (result i32)
+       (i32.lt_s
+        (get_local $2)
+        (i32.const 42)
        )
+       (i32.const 2)
+       (i32.const 3)
       )
      )
      (i32.const 2)
@@ -139,15 +133,13 @@
         (i32.const 1)
        )
       )
-      (br $inlining/func_ii|inlined.2
-       (if (result i32)
-        (i32.lt_s
-         (get_local $2)
-         (i32.const 42)
-        )
-        (i32.const 2)
-        (i32.const 3)
+      (if (result i32)
+       (i32.lt_s
+        (get_local $2)
+        (i32.const 42)
        )
+       (i32.const 2)
+       (i32.const 3)
       )
      )
      (i32.const 3)
@@ -170,9 +162,7 @@
       (set_local $2
        (i32.const 0)
       )
-      (br $inlining/func_ii_opt|inlined.0
-       (get_local $2)
-      )
+      (get_local $2)
      )
      (i32.const 0)
     )
@@ -194,9 +184,7 @@
       (set_local $2
        (i32.const 1)
       )
-      (br $inlining/func_ii_opt|inlined.1
-       (get_local $2)
-      )
+      (get_local $2)
      )
      (i32.const 1)
     )
@@ -235,9 +223,7 @@
         )
        )
       )
-      (br $inlining/func_ii_loc|inlined.0
-       (get_local $4)
-      )
+      (get_local $4)
      )
      (i32.const 3)
     )
@@ -276,9 +262,7 @@
         )
        )
       )
-      (br $inlining/func_ii_loc|inlined.1
-       (get_local $2)
-      )
+      (get_local $2)
      )
      (i32.const 4)
     )
@@ -308,9 +292,7 @@
       (call_indirect (type $ii)
        (i32.const 2)
        (block $inlining/func_fe|inlined.0 (result i32)
-        (br $inlining/func_fe|inlined.0
-         (i32.const 0)
-        )
+        (i32.const 0)
        )
       )
      )
@@ -337,11 +319,9 @@
       (set_local $3
        (i32.const 2)
       )
-      (br $inlining/Foo.method_static|inlined.0
-       (i32.add
-        (get_local $2)
-        (get_local $3)
-       )
+      (i32.add
+       (get_local $2)
+       (get_local $3)
       )
      )
      (i32.const 44)
@@ -370,9 +350,7 @@
       (set_local $2
        (i32.const 3)
       )
-      (br $inlining/Foo#method_this|inlined.0
-       (get_local $7)
-      )
+      (get_local $7)
      )
      (i32.const 123)
     )

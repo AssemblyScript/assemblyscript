@@ -19,92 +19,66 @@
  (export "table" (table $0))
  (start $start)
  (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.add
-    (get_local $0)
-    (get_local $1)
-   )
+  (i32.add
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $function-types/makeAdder<i32> (; 2 ;) (type $i) (result i32)
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $function-types/makeAdder<i64>~anonymous|1 (; 3 ;) (type $III) (param $0 i64) (param $1 i64) (result i64)
-  (return
-   (i64.add
-    (get_local $0)
-    (get_local $1)
-   )
+  (i64.add
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $function-types/makeAdder<i64> (; 4 ;) (type $i) (result i32)
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $function-types/makeAdder<f64>~anonymous|2 (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
-  (return
-   (f64.add
-    (get_local $0)
-    (get_local $1)
-   )
+  (f64.add
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $function-types/makeAdder<f64> (; 6 ;) (type $i) (result i32)
-  (return
-   (i32.const 2)
-  )
+  (i32.const 2)
  )
  (func $function-types/doAddWithFn<i32> (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (return
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 2)
-    )
-    (call_indirect (type $iii)
-     (get_local $0)
-     (get_local $1)
-     (get_local $2)
-    )
-   )
+  (set_global $~argc
+   (i32.const 2)
+  )
+  (call_indirect (type $iii)
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
   )
  )
  (func $function-types/doAdd<i32> (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 2)
-    )
-    (call_indirect (type $iii)
-     (get_local $0)
-     (get_local $1)
-     (call $function-types/makeAdder<i32>)
-    )
-   )
+  (set_global $~argc
+   (i32.const 2)
+  )
+  (call_indirect (type $iii)
+   (get_local $0)
+   (get_local $1)
+   (call $function-types/makeAdder<i32>)
   )
  )
  (func $function-types/addI32 (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.add
-    (get_local $0)
-    (get_local $1)
-   )
+  (i32.add
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $function-types/makeAndAdd<i32> (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (return
-   (block (result i32)
-    (set_global $~argc
-     (i32.const 2)
-    )
-    (call_indirect (type $iii)
-     (get_local $0)
-     (get_local $1)
-     (get_local $2)
-    )
-   )
+  (set_global $~argc
+   (i32.const 2)
+  )
+  (call_indirect (type $iii)
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
   )
  )
  (func $function-types/makeAndAdd<i32>|trampoline (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)

@@ -11,9 +11,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $getter-setter/Foo.get:bar (; 1 ;) (type $i) (result i32)
-  (return
-   (get_global $getter-setter/Foo._bar)
-  )
+  (get_global $getter-setter/Foo._bar)
  )
  (func $getter-setter/Foo.set:bar (; 2 ;) (type $iv) (param $0 i32)
   (set_global $getter-setter/Foo._bar

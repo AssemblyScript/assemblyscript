@@ -15,50 +15,42 @@
  (export "memory" (memory $0))
  (start $start)
  (func $class/Animal.add (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
+  (i32.add
    (i32.add
-    (i32.add
-     (get_local $0)
-     (get_local $1)
-    )
-    (get_global $class/Animal.ONE)
+    (get_local $0)
+    (get_local $1)
    )
+   (get_global $class/Animal.ONE)
   )
  )
  (func $class/Animal.sub<f32> (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
-  (return
-   (f32.add
-    (f32.sub
-     (get_local $0)
-     (get_local $1)
-    )
-    (f32.convert_s/i32
-     (get_global $class/Animal.ONE)
-    )
+  (f32.add
+   (f32.sub
+    (get_local $0)
+    (get_local $1)
+   )
+   (f32.convert_s/i32
+    (get_global $class/Animal.ONE)
    )
   )
  )
  (func $class/Animal<f64>#instanceAdd (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (return
+  (i32.add
    (i32.add
-    (i32.add
-     (get_local $1)
-     (get_local $2)
-    )
-    (get_global $class/Animal.ONE)
+    (get_local $1)
+    (get_local $2)
    )
+   (get_global $class/Animal.ONE)
   )
  )
  (func $class/Animal<f64>#instanceSub<f32> (; 4 ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
-  (return
-   (f32.add
-    (f32.sub
-     (get_local $1)
-     (get_local $2)
-    )
-    (f32.convert_s/i32
-     (get_global $class/Animal.ONE)
-    )
+  (f32.add
+   (f32.sub
+    (get_local $1)
+    (get_local $2)
+   )
+   (f32.convert_s/i32
+    (get_global $class/Animal.ONE)
    )
   )
  )
@@ -124,9 +116,7 @@
   (set_local $2
    (get_local $1)
   )
-  (return
-   (get_local $2)
-  )
+  (get_local $2)
  )
  (func $start (; 6 ;) (type $v)
   (if

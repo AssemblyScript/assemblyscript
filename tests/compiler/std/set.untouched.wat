@@ -148,24 +148,20 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.shl
-    (i32.const 1)
-    (i32.sub
-     (i32.const 32)
-     (i32.clz
-      (i32.sub
-       (i32.add
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 1)
+  (i32.shl
+   (i32.const 1)
+   (i32.sub
+    (i32.const 32)
+    (i32.clz
+     (i32.sub
+      (i32.add
+       (get_local $0)
+       (i32.const 8)
       )
+      (i32.const 1)
      )
     )
    )
@@ -201,9 +197,7 @@
    (get_local $1)
    (get_local $0)
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/memory/set_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -595,9 +589,7 @@
     (get_local $1)
    )
   )
-  (return
-   (get_local $3)
-  )
+  (get_local $3)
  )
  (func $~lib/set/Set<i8>#clear (; 6 ;) (type $iv) (param $0 i32)
   (i32.store
@@ -683,14 +675,12 @@
   (get_local $0)
  )
  (func $~lib/internal/hash/hash8 (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.mul
-    (i32.xor
-     (i32.const -2128831035)
-     (get_local $0)
-    )
-    (i32.const 16777619)
+  (i32.mul
+   (i32.xor
+    (i32.const -2128831035)
+    (get_local $0)
    )
+   (i32.const 16777619)
   )
  )
  (func $~lib/internal/hash/hash<i8> (; 9 ;) (type $ii) (param $0 i32) (result i32)
@@ -780,22 +770,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<i8>#has (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<i8>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<i8>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<i8>
      (get_local $1)
-     (call $~lib/internal/hash/hash<i8>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<i8>#rehash (; 12 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -842,9 +828,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<i8>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<i8>|inlined.1
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
     (i32.const 1)
@@ -866,9 +850,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<i8>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<i8>|inlined.2
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
    )
@@ -950,9 +932,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<i8>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<i8>|inlined.3
-             (i32.const 8)
-            )
+            (i32.const 8)
            )
           )
          )
@@ -962,9 +942,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<i8>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<i8>|inlined.4
-           (i32.const 8)
-          )
+          (i32.const 8)
          )
         )
        )
@@ -1089,9 +1067,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<i8>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<i8>|inlined.5
-         (i32.const 8)
-        )
+        (i32.const 8)
        )
       )
      )
@@ -1139,10 +1115,8 @@
   )
  )
  (func $~lib/set/Set<i8>#get:size (; 14 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<i8>#delete (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -1249,9 +1223,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<i8> (; 16 ;) (type $v)
   (local $0 i32)
@@ -1805,22 +1777,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<u8>#has (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<u8>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<u8>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<u8>
      (get_local $1)
-     (call $~lib/internal/hash/hash<u8>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<u8>#rehash (; 22 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -1867,9 +1835,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<u8>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<u8>|inlined.1
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
     (i32.const 1)
@@ -1891,9 +1857,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<u8>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<u8>|inlined.2
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
    )
@@ -1975,9 +1939,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<u8>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<u8>|inlined.3
-             (i32.const 8)
-            )
+            (i32.const 8)
            )
           )
          )
@@ -1987,9 +1949,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<u8>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<u8>|inlined.4
-           (i32.const 8)
-          )
+          (i32.const 8)
          )
         )
        )
@@ -2114,9 +2074,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<u8>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<u8>|inlined.5
-         (i32.const 8)
-        )
+        (i32.const 8)
        )
       )
      )
@@ -2164,10 +2122,8 @@
   )
  )
  (func $~lib/set/Set<u8>#get:size (; 24 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<u8>#delete (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -2271,9 +2227,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<u8> (; 26 ;) (type $v)
   (local $0 i32)
@@ -2775,9 +2729,7 @@
     (i32.const 16777619)
    )
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/internal/hash/hash<i16> (; 30 ;) (type $ii) (param $0 i32) (result i32)
   (return
@@ -2866,22 +2818,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<i16>#has (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<i16>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<i16>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<i16>
      (get_local $1)
-     (call $~lib/internal/hash/hash<i16>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<i16>#rehash (; 33 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -2928,9 +2876,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<i16>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<i16>|inlined.1
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
     (i32.const 1)
@@ -2952,9 +2898,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<i16>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<i16>|inlined.2
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
    )
@@ -3036,9 +2980,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<i16>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<i16>|inlined.3
-             (i32.const 8)
-            )
+            (i32.const 8)
            )
           )
          )
@@ -3048,9 +2990,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<i16>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<i16>|inlined.4
-           (i32.const 8)
-          )
+          (i32.const 8)
          )
         )
        )
@@ -3175,9 +3115,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<i16>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<i16>|inlined.5
-         (i32.const 8)
-        )
+        (i32.const 8)
        )
       )
      )
@@ -3225,10 +3163,8 @@
   )
  )
  (func $~lib/set/Set<i16>#get:size (; 35 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<i16>#delete (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -3335,9 +3271,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<i16> (; 37 ;) (type $v)
   (local $0 i32)
@@ -3891,22 +3825,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<u16>#has (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<u16>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<u16>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<u16>
      (get_local $1)
-     (call $~lib/internal/hash/hash<u16>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<u16>#rehash (; 43 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -3953,9 +3883,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<u16>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<u16>|inlined.1
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
     (i32.const 1)
@@ -3977,9 +3905,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<u16>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<u16>|inlined.2
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
    )
@@ -4061,9 +3987,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<u16>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<u16>|inlined.3
-             (i32.const 8)
-            )
+            (i32.const 8)
            )
           )
          )
@@ -4073,9 +3997,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<u16>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<u16>|inlined.4
-           (i32.const 8)
-          )
+          (i32.const 8)
          )
         )
        )
@@ -4200,9 +4122,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<u16>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<u16>|inlined.5
-         (i32.const 8)
-        )
+        (i32.const 8)
        )
       )
      )
@@ -4250,10 +4170,8 @@
   )
  )
  (func $~lib/set/Set<u16>#get:size (; 45 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<u16>#delete (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -4357,9 +4275,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<u16> (; 47 ;) (type $v)
   (local $0 i32)
@@ -4891,9 +4807,7 @@
     (i32.const 16777619)
    )
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/internal/hash/hash<i32> (; 51 ;) (type $ii) (param $0 i32) (result i32)
   (return
@@ -4970,22 +4884,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<i32>#has (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<i32>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<i32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<i32>
      (get_local $1)
-     (call $~lib/internal/hash/hash<i32>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<i32>#rehash (; 54 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -5032,9 +4942,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<i32>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<i32>|inlined.1
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
     (i32.const 1)
@@ -5056,9 +4964,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<i32>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<i32>|inlined.2
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
    )
@@ -5140,9 +5046,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<i32>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<i32>|inlined.3
-             (i32.const 8)
-            )
+            (i32.const 8)
            )
           )
          )
@@ -5152,9 +5056,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<i32>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<i32>|inlined.4
-           (i32.const 8)
-          )
+          (i32.const 8)
          )
         )
        )
@@ -5279,9 +5181,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<i32>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<i32>|inlined.5
-         (i32.const 8)
-        )
+        (i32.const 8)
        )
       )
      )
@@ -5329,10 +5229,8 @@
   )
  )
  (func $~lib/set/Set<i32>#get:size (; 56 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<i32>#delete (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -5433,9 +5331,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<i32> (; 58 ;) (type $v)
   (local $0 i32)
@@ -5983,22 +5879,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<u32>#has (; 63 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<u32>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<u32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<u32>
      (get_local $1)
-     (call $~lib/internal/hash/hash<u32>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<u32>#rehash (; 64 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -6045,9 +5937,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<u32>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<u32>|inlined.1
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
     (i32.const 1)
@@ -6069,9 +5959,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<u32>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<u32>|inlined.2
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
    )
@@ -6153,9 +6041,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<u32>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<u32>|inlined.3
-             (i32.const 8)
-            )
+            (i32.const 8)
            )
           )
          )
@@ -6165,9 +6051,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<u32>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<u32>|inlined.4
-           (i32.const 8)
-          )
+          (i32.const 8)
          )
         )
        )
@@ -6292,9 +6176,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<u32>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<u32>|inlined.5
-         (i32.const 8)
-        )
+        (i32.const 8)
        )
       )
      )
@@ -6342,10 +6224,8 @@
   )
  )
  (func $~lib/set/Set<u32>#get:size (; 66 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<u32>#delete (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -6446,9 +6326,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<u32> (; 68 ;) (type $v)
   (local $0 i32)
@@ -7049,9 +6927,7 @@
     (i32.const 16777619)
    )
   )
-  (return
-   (get_local $3)
-  )
+  (get_local $3)
  )
  (func $~lib/internal/hash/hash<i64> (; 72 ;) (type $Ii) (param $0 i64) (result i32)
   (return
@@ -7128,22 +7004,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<i64>#has (; 74 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<i64>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<i64>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<i64>
      (get_local $1)
-     (call $~lib/internal/hash/hash<i64>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<i64>#rehash (; 75 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -7191,9 +7063,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<i64>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<i64>|inlined.1
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
     (i32.const 1)
@@ -7215,9 +7085,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<i64>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<i64>|inlined.2
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
    )
@@ -7299,9 +7167,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<i64>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<i64>|inlined.3
-             (i32.const 16)
-            )
+            (i32.const 16)
            )
           )
          )
@@ -7311,9 +7177,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<i64>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<i64>|inlined.4
-           (i32.const 16)
-          )
+          (i32.const 16)
          )
         )
        )
@@ -7438,9 +7302,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<i64>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<i64>|inlined.5
-         (i32.const 16)
-        )
+        (i32.const 16)
        )
       )
      )
@@ -7488,10 +7350,8 @@
   )
  )
  (func $~lib/set/Set<i64>#get:size (; 77 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<i64>#delete (; 78 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
@@ -7592,9 +7452,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<i64> (; 79 ;) (type $v)
   (local $0 i32)
@@ -8142,22 +8000,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<u64>#has (; 84 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<u64>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<u64>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<u64>
      (get_local $1)
-     (call $~lib/internal/hash/hash<u64>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<u64>#rehash (; 85 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -8205,9 +8059,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<u64>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<u64>|inlined.1
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
     (i32.const 1)
@@ -8229,9 +8081,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<u64>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<u64>|inlined.2
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
    )
@@ -8313,9 +8163,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<u64>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<u64>|inlined.3
-             (i32.const 16)
-            )
+            (i32.const 16)
            )
           )
          )
@@ -8325,9 +8173,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<u64>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<u64>|inlined.4
-           (i32.const 16)
-          )
+          (i32.const 16)
          )
         )
        )
@@ -8452,9 +8298,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<u64>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<u64>|inlined.5
-         (i32.const 16)
-        )
+        (i32.const 16)
        )
       )
      )
@@ -8502,10 +8346,8 @@
   )
  )
  (func $~lib/set/Set<u64>#get:size (; 87 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<u64>#delete (; 88 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
@@ -8606,9 +8448,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<u64> (; 89 ;) (type $v)
   (local $0 i32)
@@ -9158,22 +8998,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<f32>#has (; 94 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<f32>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<f32>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<f32>
      (get_local $1)
-     (call $~lib/internal/hash/hash<f32>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<f32>#rehash (; 95 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -9221,9 +9057,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<f32>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<f32>|inlined.1
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
     (i32.const 1)
@@ -9245,9 +9079,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<f32>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<f32>|inlined.2
-       (i32.const 8)
-      )
+      (i32.const 8)
      )
     )
    )
@@ -9331,9 +9163,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<f32>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<f32>|inlined.3
-             (i32.const 8)
-            )
+            (i32.const 8)
            )
           )
          )
@@ -9343,9 +9173,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<f32>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<f32>|inlined.4
-           (i32.const 8)
-          )
+          (i32.const 8)
          )
         )
        )
@@ -9470,9 +9298,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<f32>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<f32>|inlined.5
-         (i32.const 8)
-        )
+        (i32.const 8)
        )
       )
      )
@@ -9520,10 +9346,8 @@
   )
  )
  (func $~lib/set/Set<f32>#get:size (; 97 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<f32>#delete (; 98 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
@@ -9626,9 +9450,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<f32> (; 99 ;) (type $v)
   (local $0 i32)
@@ -10178,22 +10000,18 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/set/Set<f64>#has (; 104 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
-  (return
-   (i32.ne
-    (call $~lib/set/Set<f64>#find
-     (get_local $0)
+  (i32.ne
+   (call $~lib/set/Set<f64>#find
+    (get_local $0)
+    (get_local $1)
+    (call $~lib/internal/hash/hash<f64>
      (get_local $1)
-     (call $~lib/internal/hash/hash<f64>
-      (get_local $1)
-     )
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
  )
  (func $~lib/set/Set<f64>#rehash (; 105 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -10241,9 +10059,7 @@
     (i32.mul
      (get_local $4)
      (block $~lib/set/ENTRY_SIZE<f64>|inlined.1 (result i32)
-      (br $~lib/set/ENTRY_SIZE<f64>|inlined.1
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
     (i32.const 1)
@@ -10265,9 +10081,7 @@
       (get_local $0)
      )
      (block $~lib/set/ENTRY_SIZE<f64>|inlined.2 (result i32)
-      (br $~lib/set/ENTRY_SIZE<f64>|inlined.2
-       (i32.const 16)
-      )
+      (i32.const 16)
      )
     )
    )
@@ -10351,9 +10165,7 @@
           (i32.add
            (get_local $8)
            (block $~lib/set/ENTRY_SIZE<f64>|inlined.3 (result i32)
-            (br $~lib/set/ENTRY_SIZE<f64>|inlined.3
-             (i32.const 16)
-            )
+            (i32.const 16)
            )
           )
          )
@@ -10363,9 +10175,7 @@
         (i32.add
          (get_local $6)
          (block $~lib/set/ENTRY_SIZE<f64>|inlined.4 (result i32)
-          (br $~lib/set/ENTRY_SIZE<f64>|inlined.4
-           (i32.const 16)
-          )
+          (i32.const 16)
          )
         )
        )
@@ -10490,9 +10300,7 @@
         (get_local $5)
        )
        (block $~lib/set/ENTRY_SIZE<f64>|inlined.5 (result i32)
-        (br $~lib/set/ENTRY_SIZE<f64>|inlined.5
-         (i32.const 16)
-        )
+        (i32.const 16)
        )
       )
      )
@@ -10540,10 +10348,8 @@
   )
  )
  (func $~lib/set/Set<f64>#get:size (; 107 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.load offset=20
-    (get_local $0)
-   )
+  (i32.load offset=20
+   (get_local $0)
   )
  )
  (func $~lib/set/Set<f64>#delete (; 108 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
@@ -10646,9 +10452,7 @@
     (get_local $3)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $std/set/test<f64> (; 109 ;) (type $v)
   (local $0 i32)

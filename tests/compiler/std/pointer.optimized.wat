@@ -1,7 +1,6 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
  (type $iv (func (param i32)))
- (type $ii (func (param i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -15,8 +14,6 @@
  (data (i32.const 8) "\0e\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s")
  (export "_setargc" (func $~setargc))
  (export "Pointer<Entry>#constructor" (func $std/pointer/Pointer<Entry>#constructor|trampoline))
- (export "Pointer<Entry>#get:offset" (func $std/pointer/Pointer<Entry>#get:offset))
- (export "Pointer<Entry>#get:value" (func $std/pointer/Pointer<Entry>#get:offset))
  (export "memory" (memory $0))
  (start $start)
  (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -46,10 +43,7 @@
    (get_local $0)
   )
  )
- (func $std/pointer/Pointer<Entry>#get:offset (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  (get_local $0)
- )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 4 ;) (type $v)
   (set_global $std/pointer/one
    (call $std/pointer/Pointer<Entry>#constructor
     (i32.const 0)
@@ -64,16 +58,14 @@
   )
   (if
    (i32.ne
-    (call $std/pointer/Pointer<Entry>#get:offset
-     (get_global $std/pointer/one)
-    )
+    (get_global $std/pointer/one)
     (i32.const 8)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 54)
+     (i32.const 52)
      (i32.const 0)
     )
     (unreachable)
@@ -81,39 +73,31 @@
   )
   (if
    (i32.ne
-    (call $std/pointer/Pointer<Entry>#get:offset
-     (get_global $std/pointer/two)
-    )
+    (get_global $std/pointer/two)
     (i32.const 24)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 55)
+     (i32.const 53)
      (i32.const 0)
     )
     (unreachable)
    )
   )
   (i32.store
-   (call $std/pointer/Pointer<Entry>#get:offset
-    (get_global $std/pointer/one)
-   )
+   (get_global $std/pointer/one)
    (i32.const 1)
   )
   (i32.store offset=4
-   (call $std/pointer/Pointer<Entry>#get:offset
-    (get_global $std/pointer/one)
-   )
+   (get_global $std/pointer/one)
    (i32.const 2)
   )
   (if
    (i32.ne
     (i32.load
-     (call $std/pointer/Pointer<Entry>#get:offset
-      (get_global $std/pointer/one)
-     )
+     (get_global $std/pointer/one)
     )
     (i32.const 1)
    )
@@ -121,7 +105,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 59)
+     (i32.const 57)
      (i32.const 0)
     )
     (unreachable)
@@ -130,9 +114,7 @@
   (if
    (i32.ne
     (i32.load offset=4
-     (call $std/pointer/Pointer<Entry>#get:offset
-      (get_global $std/pointer/one)
-     )
+     (get_global $std/pointer/one)
     )
     (i32.const 2)
    )
@@ -140,7 +122,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 60)
+     (i32.const 58)
      (i32.const 0)
     )
     (unreachable)
@@ -154,16 +136,14 @@
   )
   (if
    (i32.ne
-    (call $std/pointer/Pointer<Entry>#get:offset
-     (get_global $std/pointer/add)
-    )
+    (get_global $std/pointer/add)
     (i32.const 32)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 63)
+     (i32.const 61)
      (i32.const 0)
     )
     (unreachable)
@@ -177,16 +157,14 @@
   )
   (if
    (i32.ne
-    (call $std/pointer/Pointer<Entry>#get:offset
-     (get_global $std/pointer/sub)
-    )
+    (get_global $std/pointer/sub)
     (i32.const 16)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 66)
+     (i32.const 64)
      (i32.const 0)
     )
     (unreachable)
@@ -194,16 +172,14 @@
   )
   (if
    (i32.ne
-    (call $std/pointer/Pointer<Entry>#get:offset
-     (get_global $std/pointer/one)
-    )
+    (get_global $std/pointer/one)
     (i32.const 8)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 68)
+     (i32.const 66)
      (i32.const 0)
     )
     (unreachable)
@@ -227,7 +203,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 70)
+     (i32.const 68)
      (i32.const 0)
     )
     (unreachable)
@@ -235,10 +211,23 @@
   )
   (if
    (i32.ne
-    (call $std/pointer/Pointer<Entry>#get:offset
-     (get_global $std/pointer/one)
-    )
+    (get_global $std/pointer/one)
     (i32.const 16)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 69)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (get_global $std/pointer/two)
+    (i32.const 24)
    )
    (block
     (call $~lib/env/abort
@@ -250,23 +239,6 @@
     (unreachable)
    )
   )
-  (if
-   (i32.ne
-    (call $std/pointer/Pointer<Entry>#get:offset
-     (get_global $std/pointer/two)
-    )
-    (i32.const 24)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 73)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
   (set_global $std/pointer/two
    (i32.sub
     (get_global $std/pointer/two)
@@ -281,16 +253,14 @@
   )
   (if
    (i32.ne
-    (call $std/pointer/Pointer<Entry>#get:offset
-     (get_global $std/pointer/two)
-    )
+    (get_global $std/pointer/two)
     (i32.const 8)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 76)
+     (i32.const 74)
      (i32.const 0)
     )
     (unreachable)
@@ -299,9 +269,7 @@
   (if
    (i32.ne
     (i32.load
-     (call $std/pointer/Pointer<Entry>#get:offset
-      (get_global $std/pointer/two)
-     )
+     (get_global $std/pointer/two)
     )
     (i32.const 1)
    )
@@ -309,7 +277,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 77)
+     (i32.const 75)
      (i32.const 0)
     )
     (unreachable)
@@ -318,9 +286,7 @@
   (if
    (i32.ne
     (i32.load offset=4
-     (call $std/pointer/Pointer<Entry>#get:offset
-      (get_global $std/pointer/two)
-     )
+     (get_global $std/pointer/two)
     )
     (i32.const 2)
    )
@@ -328,7 +294,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 78)
+     (i32.const 76)
      (i32.const 0)
     )
     (unreachable)

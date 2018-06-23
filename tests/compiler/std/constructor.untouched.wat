@@ -128,9 +128,7 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $std/constructor/EmptyCtor#constructor (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -201,10 +199,8 @@
   )
  )
  (func $std/constructor/CtorReturns#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $~lib/allocator/arena/allocate_memory
-    (i32.const 0)
-   )
+  (call $~lib/allocator/arena/allocate_memory
+   (i32.const 0)
   )
  )
  (func $std/constructor/CtorConditionallyReturns#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)

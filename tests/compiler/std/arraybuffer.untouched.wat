@@ -24,19 +24,17 @@
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (i32.shl
-    (i32.const 1)
-    (i32.sub
-     (i32.const 32)
-     (i32.clz
-      (i32.sub
-       (i32.add
-        (get_local $0)
-        (i32.const 8)
-       )
-       (i32.const 1)
+  (i32.shl
+   (i32.const 1)
+   (i32.sub
+    (i32.const 32)
+    (i32.clz
+     (i32.sub
+      (i32.add
+       (get_local $0)
+       (i32.const 8)
       )
+      (i32.const 1)
      )
     )
    )
@@ -148,9 +146,7 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/internal/arraybuffer/allocUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -182,9 +178,7 @@
    (get_local $1)
    (get_local $0)
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/memory/set_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -576,9 +570,7 @@
     (get_local $1)
    )
   )
-  (return
-   (get_local $3)
-  )
+  (get_local $3)
  )
  (func $~lib/memory/copy_memory (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -2821,9 +2813,7 @@
    )
    (get_local $6)
   )
-  (return
-   (get_local $7)
-  )
+  (get_local $7)
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $2of2

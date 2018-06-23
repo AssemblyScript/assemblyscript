@@ -76,9 +76,7 @@
     (br $repeat|0)
    )
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -139,9 +137,7 @@
     (i32.const 16777619)
    )
   )
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/internal/hash/hash64 (; 3 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
@@ -271,9 +267,7 @@
     (i32.const 16777619)
    )
   )
-  (return
-   (get_local $3)
-  )
+  (get_local $3)
  )
  (func $start (; 4 ;) (type $v)
   (local $0 i32)

@@ -308,9 +308,7 @@
     )
    )
   )
-  (return
-   (get_local $3)
-  )
+  (get_local $3)
  )
  (func $start (; 2 ;) (type $v)
   (i64.store

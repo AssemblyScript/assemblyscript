@@ -92,7 +92,7 @@ import {
 
 import {
   CommonFlags
-} from "../program";
+} from "../common";
 
 /** An AST builder. */
 export class ASTBuilder {

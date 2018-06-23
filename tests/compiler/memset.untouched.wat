@@ -376,9 +376,7 @@
     )
    )
   )
-  (return
-   (get_local $3)
-  )
+  (get_local $3)
  )
  (func $start (; 2 ;) (type $v)
   (set_global $memset/dest

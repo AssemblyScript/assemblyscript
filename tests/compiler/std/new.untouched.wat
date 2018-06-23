@@ -119,9 +119,7 @@
     )
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $std/new/AClass#constructor (; 1 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)

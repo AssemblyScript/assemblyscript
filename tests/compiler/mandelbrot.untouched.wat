@@ -279,58 +279,52 @@
   (set_local $13
    (get_local $3)
   )
-  (return
+  (f64.add
    (f64.add
-    (f64.add
-     (f64.sub
-      (f64.add
-       (f64.mul
-        (get_local $7)
-        (f64.add
-         (get_local $6)
-         (get_local $12)
-        )
-       )
-       (f64.mul
-        (f64.convert_s/i32
-         (get_local $13)
-        )
-        (f64.const 1.9082149292705877e-10)
+    (f64.sub
+     (f64.add
+      (f64.mul
+       (get_local $7)
+       (f64.add
+        (get_local $6)
+        (get_local $12)
        )
       )
-      (get_local $6)
+      (f64.mul
+       (f64.convert_s/i32
+        (get_local $13)
+       )
+       (f64.const 1.9082149292705877e-10)
+      )
      )
-     (get_local $5)
+     (get_local $6)
     )
-    (f64.mul
-     (f64.convert_s/i32
-      (get_local $13)
-     )
-     (f64.const 0.6931471803691238)
+    (get_local $5)
+   )
+   (f64.mul
+    (f64.convert_s/i32
+     (get_local $13)
     )
+    (f64.const 0.6931471803691238)
    )
   )
  )
  (func $isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
-  (return
-   (f64.eq
-    (f64.sub
-     (get_local $0)
-     (get_local $0)
-    )
-    (f64.const 0)
+  (f64.eq
+   (f64.sub
+    (get_local $0)
+    (get_local $0)
    )
+   (f64.const 0)
   )
  )
  (func $../../examples/mandelbrot/assembly/index/clamp<f64> (; 2 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
-  (return
-   (f64.min
-    (f64.max
-     (get_local $0)
-     (get_local $1)
-    )
-    (get_local $2)
+  (f64.min
+   (f64.max
+    (get_local $0)
+    (get_local $1)
    )
+   (get_local $2)
   )
  )
  (func $../../examples/mandelbrot/assembly/index/computeLine (; 3 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
@@ -573,10 +567,8 @@
             )
            )
           )
-          (br $~lib/math/NativeMath.sqrt|inlined.0
-           (f64.sqrt
-            (get_local $15)
-           )
+          (f64.sqrt
+           (get_local $15)
           )
          )
         )

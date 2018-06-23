@@ -8,3 +8,5 @@ var e;
 
 // 1155: 'const' declarations must be initialized.
 const f: i32;
+
+const t = 0 < (c / 10);

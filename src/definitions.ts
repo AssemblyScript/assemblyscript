@@ -4,9 +4,12 @@
  *//***/
 
 import {
+  CommonFlags
+} from "./common";
+
+import {
   Program,
   Element,
-  CommonFlags,
   ElementKind,
   Global,
   Enum,

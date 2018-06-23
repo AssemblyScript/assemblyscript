@@ -98,9 +98,7 @@
     (i32.const 23)
    )
   )
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $switch/doSwitchBreakCase (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -124,9 +122,7 @@
     (i32.const 2)
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $switch/doSwitchBreakDefault (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -150,9 +146,7 @@
    )
    (br $break|0)
   )
-  (return
-   (i32.const 2)
-  )
+  (i32.const 2)
  )
  (func $switch/doSwitchFallThroughCase (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -175,9 +169,7 @@
     )
    )
   )
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $switch/doSwitchFallThroughDefault (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -200,17 +192,13 @@
     )
    )
   )
-  (return
-   (i32.const 2)
-  )
+  (i32.const 2)
  )
  (func $switch/doSwitchEmpty (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (drop
    (get_local $0)
   )
-  (return
-   (i32.const 2)
-  )
+  (i32.const 2)
  )
  (func $start (; 8 ;) (type $v)
   (if

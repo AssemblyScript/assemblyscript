@@ -4,10 +4,13 @@
  *//***/
 
 import {
-  Program,
   CommonFlags,
   LIBRARY_PREFIX,
   PATH_DELIMITER
+} from "./common";
+
+import {
+  Program
 } from "./program";
 
 import {
@@ -77,7 +80,9 @@ import {
   VoidStatement,
   WhileStatement,
 
-  mangleInternalPath
+  mangleInternalPath,
+  nodeIsCallable,
+  nodeIsGenericCallable
 } from "./ast";
 
 const builtinsFile = LIBRARY_PREFIX + "builtins.ts";
@@ -645,10 +650,14 @@ export class Parser extends DiagnosticEmitter {
         }
       } while (tn.skip(Token.COMMA));
       if (!tn.skip(Token.CLOSEPAREN)) {
-        this.error(
-          DiagnosticCode._0_expected,
-          tn.range(), ")"
-        );
+        if (isSignature) {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ")"
+          );
+        } else {
+          tn.reset(state);
+        }
         this.tryParseSignatureIsSignature = isSignature;
         return null;
       }
@@ -3113,16 +3122,18 @@ export class Parser extends DiagnosticEmitter {
     if (!expr) return null;
     var startPos = expr.range.start;
 
-    // CallExpression with type arguments
-    var typeArguments: CommonTypeNode[] | null;
-    while (
-      // there might be better ways to distinguish a LESSTHAN from a CALL with type arguments
-      (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) ||
-      tn.skip(Token.OPENPAREN)
-    ) {
-      let args = this.parseArguments(tn);
-      if (!args) return null;
-      expr = Node.createCallExpression(expr, typeArguments, args, tn.range(startPos, tn.pos));
+    // CallExpression?
+    if (nodeIsCallable(expr.kind)) {
+      let typeArguments: CommonTypeNode[] | null = null;
+      while (
+        tn.skip(Token.OPENPAREN)
+        ||
+        nodeIsGenericCallable(expr.kind) && (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
+      ) {
+        let args = this.parseArguments(tn);
+        if (!args) return null;
+        expr = Node.createCallExpression(expr, typeArguments, args, tn.range(startPos, tn.pos)); // is again callable
+      }
     }
 
     var token: Token;

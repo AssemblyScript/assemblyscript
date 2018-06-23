@@ -1,7 +1,7 @@
 import "allocator/arena";
 
-var sym1 = new Symbol("123");
-var sym2 = new Symbol("123");
+var sym1 = Symbol("123");
+var sym2 = Symbol("123");
 
 assert(sym1 !== sym2);
 
@@ -21,3 +21,7 @@ var key4 = Symbol.keyFor(sym4);
 
 assert(key3 == "123");
 assert(key3 == key4);
+
+Symbol.hasInstance;
+Symbol.concatSpreadable;
+// ...

@@ -20,11 +20,9 @@
  (export "memory" (memory $0))
  (start $start)
  (func $isNaN<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
-  (return
-   (f64.ne
-    (get_local $0)
-    (get_local $0)
-   )
+  (f64.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $~lib/math/NativeMath.mod (; 3 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -463,10 +461,8 @@
     )
    )
   )
-  (return
-   (f64.reinterpret/i64
-    (get_local $2)
-   )
+  (f64.reinterpret/i64
+   (get_local $2)
   )
  )
  (func $std/mod/check<f64> (; 4 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
@@ -500,51 +496,45 @@
     )
    )
   )
-  (return
-   (f64.eq
-    (get_local $0)
-    (get_local $1)
-   )
+  (f64.eq
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $std/mod/test_fmod (; 5 ;) (type $FFFi) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (local $3 i32)
-  (return
+  (if (result i32)
+   (tee_local $3
+    (call $std/mod/check<f64>
+     (call $~lib/math/NativeMath.mod
+      (get_local $0)
+      (get_local $1)
+     )
+     (get_local $2)
+    )
+   )
    (if (result i32)
     (tee_local $3
-     (call $std/mod/check<f64>
-      (call $~lib/math/NativeMath.mod
-       (get_local $0)
-       (get_local $1)
-      )
-      (get_local $2)
-     )
-    )
-    (if (result i32)
-     (tee_local $3
-      (i32.eqz
-       (i32.const 1)
-      )
-     )
-     (get_local $3)
-     (call $std/mod/check<f64>
-      (call $std/mod/JSOp.mod
-       (get_local $0)
-       (get_local $1)
-      )
-      (get_local $2)
+     (i32.eqz
+      (i32.const 1)
      )
     )
     (get_local $3)
+    (call $std/mod/check<f64>
+     (call $std/mod/JSOp.mod
+      (get_local $0)
+      (get_local $1)
+     )
+     (get_local $2)
+    )
    )
+   (get_local $3)
   )
  )
  (func $isNaN<f32> (; 6 ;) (type $fi) (param $0 f32) (result i32)
-  (return
-   (f32.ne
-    (get_local $0)
-    (get_local $0)
-   )
+  (f32.ne
+   (get_local $0)
+   (get_local $0)
   )
  )
  (func $~lib/math/NativeMathf.mod (; 7 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
@@ -964,10 +954,8 @@
     (get_local $6)
    )
   )
-  (return
-   (f32.reinterpret/i32
-    (get_local $2)
-   )
+  (f32.reinterpret/i32
+   (get_local $2)
   )
  )
  (func $std/mod/check<f32> (; 8 ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
@@ -1001,22 +989,18 @@
     )
    )
   )
-  (return
-   (f32.eq
-    (get_local $0)
-    (get_local $1)
-   )
+  (f32.eq
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $std/mod/test_fmodf (; 9 ;) (type $fffi) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
-  (return
-   (call $std/mod/check<f32>
-    (call $~lib/math/NativeMathf.mod
-     (get_local $0)
-     (get_local $1)
-    )
-    (get_local $2)
+  (call $std/mod/check<f32>
+   (call $~lib/math/NativeMathf.mod
+    (get_local $0)
+    (get_local $1)
    )
+   (get_local $2)
   )
  )
  (func $start (; 10 ;) (type $v)

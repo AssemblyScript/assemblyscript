@@ -10,9 +10,7 @@
  (export "memory" (memory $0))
  (start $start)
  (func $static-this/Foo.getBar (; 1 ;) (type $i) (result i32)
-  (return
-   (get_global $static-this/Foo.bar)
-  )
+  (get_global $static-this/Foo.bar)
  )
  (func $start (; 2 ;) (type $v)
   (if

@@ -523,9 +523,7 @@
   (set_local $128
    (get_local $127)
   )
-  (return
-   (get_local $128)
-  )
+  (get_local $128)
  )
  (func $many-locals/testI8 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1040,14 +1038,12 @@
   (set_local $128
    (get_local $127)
   )
-  (return
-   (i32.shr_s
-    (i32.shl
-     (get_local $128)
-     (i32.const 24)
-    )
+  (i32.shr_s
+   (i32.shl
+    (get_local $128)
     (i32.const 24)
    )
+   (i32.const 24)
   )
  )
  (func $start (; 3 ;) (type $v)
