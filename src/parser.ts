@@ -645,10 +645,14 @@ export class Parser extends DiagnosticEmitter {
         }
       } while (tn.skip(Token.COMMA));
       if (!tn.skip(Token.CLOSEPAREN)) {
-        this.error(
-          DiagnosticCode._0_expected,
-          tn.range(), ")"
-        );
+        if (isSignature) {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ")"
+          );
+        } else {
+          tn.reset(state);
+        }
         this.tryParseSignatureIsSignature = isSignature;
         return null;
       }
