@@ -37,6 +37,16 @@ import {
 } from "./module";
 
 import {
+  CommonFlags,
+  PATH_DELIMITER,
+  INNER_DELIMITER,
+  INSTANCE_DELIMITER,
+  STATIC_DELIMITER,
+  GETTER_PREFIX,
+  SETTER_PREFIX
+} from "./common";
+
+import {
   Program,
   ClassPrototype,
   Class,
@@ -54,18 +64,10 @@ import {
   Property,
   VariableLikeElement,
   FlowFlags,
-  CommonFlags,
   ConstantValueKind,
   Flow,
   OperatorKind,
-  DecoratorFlags,
-
-  PATH_DELIMITER,
-  INNER_DELIMITER,
-  INSTANCE_DELIMITER,
-  STATIC_DELIMITER,
-  GETTER_PREFIX,
-  SETTER_PREFIX
+  DecoratorFlags
 } from "./program";
 
 import {
@@ -1487,17 +1489,11 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFunction.flow = blockFlow;
 
     var stmts = this.compileStatements(statements);
-    var lastType: NativeType;
     var stmt = stmts.length == 0
       ? this.module.createNop()
       : stmts.length == 1
         ? stmts[0]
-        : this.module.createBlock(null, stmts,
-            // if the last expression is a value, annotate the block's return value
-            (lastType = getExpressionType(stmts[stmts.length - 1])) == NativeType.None
-              ? NativeType.None
-              : lastType
-          );
+        : this.module.createBlock(null, stmts,getExpressionType(stmts[stmts.length - 1]));
 
     // Switch back to the parent flow
     var parentFlow = blockFlow.leaveBranchOrScope();

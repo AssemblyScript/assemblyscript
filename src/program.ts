@@ -4,6 +4,17 @@
  *//***/
 
 import {
+  CommonFlags,
+  PATH_DELIMITER,
+  STATIC_DELIMITER,
+  INSTANCE_DELIMITER,
+  LIBRARY_PREFIX,
+  GETTER_PREFIX,
+  SETTER_PREFIX,
+  FILESPACE_PREFIX
+} from "./common";
+
+import {
   Options
 } from "./compiler";
 
@@ -18,7 +29,6 @@ import {
   TypeKind,
   TypeFlags,
   Signature,
-
   typesToString
 } from "./types";
 
@@ -104,27 +114,6 @@ import {
 import {
   CharCode
 } from "./util";
-
-/** Path delimiter inserted between file system levels. */
-export const PATH_DELIMITER = "/";
-/** Substitution used to indicate the parent directory. */
-export const PARENT_SUBST = "..";
-/** Function name prefix used for getters. */
-export const GETTER_PREFIX = "get:";
-/** Function name prefix used for setters. */
-export const SETTER_PREFIX = "set:";
-/** Delimiter used between class names and instance members. */
-export const INSTANCE_DELIMITER = "#";
-/** Delimiter used between class and namespace names and static members. */
-export const STATIC_DELIMITER = ".";
-/** Delimiter used between a function and its inner elements. */
-export const INNER_DELIMITER = "~";
-/** Substitution used to indicate a library directory. */
-export const LIBRARY_SUBST = "~lib";
-/** Library directory prefix. */
-export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
-/** Prefix used to indicate a filespace element. */
-export const FILESPACE_PREFIX = "file:";
 
 /** Represents a yet unresolved import. */
 class QueuedImport {
@@ -2415,6 +2404,16 @@ export class Program extends DiagnosticEmitter {
     );
     return null;
   }
+
+  // resolveExpressionType(
+  //   expression: Expression,
+  //   contextualFunction: Function
+  // ): Type {
+  //   var element = this.resolveExpression(expression, contextualFunction);
+  //   switch (element.kind) {
+
+  //   }
+  // }
 }
 
 /** Indicates the specific kind of an {@link Element}. */
@@ -2451,75 +2450,6 @@ export enum ElementKind {
   NAMESPACE,
   /** A {@link Filespace}. */
   FILESPACE,
-}
-
-/** Indicates traits of a {@link Node} or {@link Element}. */
-export enum CommonFlags {
-  /** No flags set. */
-  NONE = 0,
-
-  // Basic modifiers
-
-  /** Has an `import` modifier. */
-  IMPORT = 1 << 0,
-  /** Has an `export` modifier. */
-  EXPORT = 1 << 1,
-  /** Has a `declare` modifier. */
-  DECLARE = 1 << 2,
-  /** Has a `const` modifier. */
-  CONST = 1 << 3,
-  /** Has a `let` modifier. */
-  LET = 1 << 4,
-  /** Has a `static` modifier. */
-  STATIC = 1 << 5,
-  /** Has a `readonly` modifier. */
-  READONLY = 1 << 6,
-  /** Has an `abstract` modifier. */
-  ABSTRACT = 1 << 7,
-  /** Has a `public` modifier. */
-  PUBLIC = 1 << 8,
-  /** Has a `private` modifier. */
-  PRIVATE = 1 << 9,
-  /** Has a `protected` modifier. */
-  PROTECTED = 1 << 10,
-  /** Has a `get` modifier. */
-  GET = 1 << 11,
-  /** Has a `set` modifier. */
-  SET = 1 << 12,
-
-  // Extended modifiers usually derived from basic modifiers
-
-  /** Is ambient, that is either declared or nested in a declared element. */
-  AMBIENT = 1 << 13,
-  /** Is generic. */
-  GENERIC = 1 << 14,
-  /** Is part of a generic context. */
-  GENERIC_CONTEXT = 1 << 15,
-  /** Is an instance member. */
-  INSTANCE = 1 << 16,
-  /** Is a constructor. */
-  CONSTRUCTOR = 1 << 17,
-  /** Is an arrow function. */
-  ARROW = 1 << 18,
-  /** Is a module export. */
-  MODULE_EXPORT = 1 << 19,
-  /** Is a module import. */
-  MODULE_IMPORT = 1 << 20,
-
-  // Compilation states
-
-  /** Is a builtin. */
-  BUILTIN = 1 << 21,
-  /** Is compiled. */
-  COMPILED = 1 << 22,
-  /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 23,
-  /** Is scoped. */
-  SCOPED = 1 << 24,
-  /** Is a trampoline. */
-  TRAMPOLINE = 1 << 25,
-  /** Is a virtual method. */
-  VIRTUAL = 1 << 26
 }
 
 export enum DecoratorFlags {

@@ -188,9 +188,7 @@
    )
   )
   ;;@ ~lib/allocator/arena.ts:34:9
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $assembly/index/Body#constructor (; 2 ;) (type $iFFFFFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
   (local $8 i32)
@@ -243,205 +241,188 @@
  )
  (func $assembly/index/Sun (; 3 ;) (type $i) (result i32)
   ;;@ assembly/index.ts:31:21
-  (return
-   ;;@ assembly/index.ts:32:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:33:4
-    (f64.const 0)
-    ;;@ assembly/index.ts:33:9
-    (f64.const 0)
-    ;;@ assembly/index.ts:33:14
-    (f64.const 0)
-    ;;@ assembly/index.ts:33:19
-    (f64.const 0)
-    ;;@ assembly/index.ts:33:24
-    (f64.const 0)
-    ;;@ assembly/index.ts:33:29
-    (f64.const 0)
-    ;;@ assembly/index.ts:33:34
-    (f64.const 39.47841760435743)
-   )
+  (call $assembly/index/Body#constructor
+   (i32.const 0)
+   ;;@ assembly/index.ts:33:4
+   (f64.const 0)
+   ;;@ assembly/index.ts:33:9
+   (f64.const 0)
+   ;;@ assembly/index.ts:33:14
+   (f64.const 0)
+   ;;@ assembly/index.ts:33:19
+   (f64.const 0)
+   ;;@ assembly/index.ts:33:24
+   (f64.const 0)
+   ;;@ assembly/index.ts:33:29
+   (f64.const 0)
+   ;;@ assembly/index.ts:33:34
+   (f64.const 39.47841760435743)
   )
  )
  (func $assembly/index/Jupiter (; 4 ;) (type $i) (result i32)
   ;;@ assembly/index.ts:37:25
-  (return
-   ;;@ assembly/index.ts:38:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:39:4
-    (f64.const 4.841431442464721)
-    ;;@ assembly/index.ts:40:4
-    (f64.const -1.1603200440274284)
-    ;;@ assembly/index.ts:41:4
-    (f64.const -0.10362204447112311)
-    ;;@ assembly/index.ts:42:4
-    (f64.mul
-     (f64.const 0.001660076642744037)
-     ;;@ assembly/index.ts:42:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:43:4
-    (f64.mul
-     (f64.const 0.007699011184197404)
-     ;;@ assembly/index.ts:43:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:44:4
-    (f64.mul
-     (f64.const -6.90460016972063e-05)
-     ;;@ assembly/index.ts:44:31
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:45:4
-    (f64.mul
-     (f64.const 9.547919384243266e-04)
-     ;;@ assembly/index.ts:45:30
-     (f64.const 39.47841760435743)
-    )
+  (call $assembly/index/Body#constructor
+   (i32.const 0)
+   ;;@ assembly/index.ts:39:4
+   (f64.const 4.841431442464721)
+   ;;@ assembly/index.ts:40:4
+   (f64.const -1.1603200440274284)
+   ;;@ assembly/index.ts:41:4
+   (f64.const -0.10362204447112311)
+   ;;@ assembly/index.ts:42:4
+   (f64.mul
+    (f64.const 0.001660076642744037)
+    ;;@ assembly/index.ts:42:30
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:43:4
+   (f64.mul
+    (f64.const 0.007699011184197404)
+    ;;@ assembly/index.ts:43:30
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:44:4
+   (f64.mul
+    (f64.const -6.90460016972063e-05)
+    ;;@ assembly/index.ts:44:31
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:45:4
+   (f64.mul
+    (f64.const 9.547919384243266e-04)
+    ;;@ assembly/index.ts:45:30
+    (f64.const 39.47841760435743)
    )
   )
  )
  (func $assembly/index/Saturn (; 5 ;) (type $i) (result i32)
   ;;@ assembly/index.ts:49:24
-  (return
-   ;;@ assembly/index.ts:50:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:51:4
-    (f64.const 8.34336671824458)
-    ;;@ assembly/index.ts:52:4
-    (f64.const 4.124798564124305)
-    ;;@ assembly/index.ts:53:4
-    (f64.const -0.4035234171143214)
-    ;;@ assembly/index.ts:54:4
-    (f64.mul
-     (f64.const -0.002767425107268624)
-     ;;@ assembly/index.ts:54:31
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:55:4
-    (f64.mul
-     (f64.const 0.004998528012349172)
-     ;;@ assembly/index.ts:55:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:56:4
-    (f64.mul
-     (f64.const 2.3041729757376393e-05)
-     ;;@ assembly/index.ts:56:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:57:4
-    (f64.mul
-     (f64.const 2.858859806661308e-04)
-     ;;@ assembly/index.ts:57:30
-     (f64.const 39.47841760435743)
-    )
+  (call $assembly/index/Body#constructor
+   (i32.const 0)
+   ;;@ assembly/index.ts:51:4
+   (f64.const 8.34336671824458)
+   ;;@ assembly/index.ts:52:4
+   (f64.const 4.124798564124305)
+   ;;@ assembly/index.ts:53:4
+   (f64.const -0.4035234171143214)
+   ;;@ assembly/index.ts:54:4
+   (f64.mul
+    (f64.const -0.002767425107268624)
+    ;;@ assembly/index.ts:54:31
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:55:4
+   (f64.mul
+    (f64.const 0.004998528012349172)
+    ;;@ assembly/index.ts:55:30
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:56:4
+   (f64.mul
+    (f64.const 2.3041729757376393e-05)
+    ;;@ assembly/index.ts:56:30
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:57:4
+   (f64.mul
+    (f64.const 2.858859806661308e-04)
+    ;;@ assembly/index.ts:57:30
+    (f64.const 39.47841760435743)
    )
   )
  )
  (func $assembly/index/Uranus (; 6 ;) (type $i) (result i32)
   ;;@ assembly/index.ts:61:24
-  (return
-   ;;@ assembly/index.ts:62:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:63:4
-    (f64.const 12.894369562139131)
-    ;;@ assembly/index.ts:64:4
-    (f64.const -15.111151401698631)
-    ;;@ assembly/index.ts:65:4
-    (f64.const -0.22330757889265573)
-    ;;@ assembly/index.ts:66:4
-    (f64.mul
-     (f64.const 0.002964601375647616)
-     ;;@ assembly/index.ts:66:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:67:4
-    (f64.mul
-     (f64.const 2.3784717395948095e-03)
-     ;;@ assembly/index.ts:67:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:68:4
-    (f64.mul
-     (f64.const -2.9658956854023756e-05)
-     ;;@ assembly/index.ts:68:31
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:69:4
-    (f64.mul
-     (f64.const 4.366244043351563e-05)
-     ;;@ assembly/index.ts:69:30
-     (f64.const 39.47841760435743)
-    )
+  (call $assembly/index/Body#constructor
+   (i32.const 0)
+   ;;@ assembly/index.ts:63:4
+   (f64.const 12.894369562139131)
+   ;;@ assembly/index.ts:64:4
+   (f64.const -15.111151401698631)
+   ;;@ assembly/index.ts:65:4
+   (f64.const -0.22330757889265573)
+   ;;@ assembly/index.ts:66:4
+   (f64.mul
+    (f64.const 0.002964601375647616)
+    ;;@ assembly/index.ts:66:30
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:67:4
+   (f64.mul
+    (f64.const 2.3784717395948095e-03)
+    ;;@ assembly/index.ts:67:30
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:68:4
+   (f64.mul
+    (f64.const -2.9658956854023756e-05)
+    ;;@ assembly/index.ts:68:31
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:69:4
+   (f64.mul
+    (f64.const 4.366244043351563e-05)
+    ;;@ assembly/index.ts:69:30
+    (f64.const 39.47841760435743)
    )
   )
  )
  (func $assembly/index/Neptune (; 7 ;) (type $i) (result i32)
   ;;@ assembly/index.ts:73:25
-  (return
-   ;;@ assembly/index.ts:74:9
-   (call $assembly/index/Body#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:75:4
-    (f64.const 15.379697114850917)
-    ;;@ assembly/index.ts:76:4
-    (f64.const -25.919314609987964)
-    ;;@ assembly/index.ts:77:4
-    (f64.const 0.17925877295037118)
-    ;;@ assembly/index.ts:78:4
-    (f64.mul
-     (f64.const 2.6806777249038932e-03)
-     ;;@ assembly/index.ts:78:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:79:4
-    (f64.mul
-     (f64.const 0.001628241700382423)
-     ;;@ assembly/index.ts:79:30
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:80:4
-    (f64.mul
-     (f64.const -9.515922545197159e-05)
-     ;;@ assembly/index.ts:80:31
-     (f64.const 365.24)
-    )
-    ;;@ assembly/index.ts:81:4
-    (f64.mul
-     (f64.const 5.1513890204661145e-05)
-     ;;@ assembly/index.ts:81:30
-     (f64.const 39.47841760435743)
-    )
+  (call $assembly/index/Body#constructor
+   (i32.const 0)
+   ;;@ assembly/index.ts:75:4
+   (f64.const 15.379697114850917)
+   ;;@ assembly/index.ts:76:4
+   (f64.const -25.919314609987964)
+   ;;@ assembly/index.ts:77:4
+   (f64.const 0.17925877295037118)
+   ;;@ assembly/index.ts:78:4
+   (f64.mul
+    (f64.const 2.6806777249038932e-03)
+    ;;@ assembly/index.ts:78:30
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:79:4
+   (f64.mul
+    (f64.const 0.001628241700382423)
+    ;;@ assembly/index.ts:79:30
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:80:4
+   (f64.mul
+    (f64.const -9.515922545197159e-05)
+    ;;@ assembly/index.ts:80:31
+    (f64.const 365.24)
+   )
+   ;;@ assembly/index.ts:81:4
+   (f64.mul
+    (f64.const 5.1513890204661145e-05)
+    ;;@ assembly/index.ts:81:30
+    (f64.const 39.47841760435743)
    )
   )
  )
  (func $~lib/internal/arraybuffer/computeSize (; 8 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/internal/arraybuffer.ts:10:52
-  (return
+  (i32.shl
    ;;@ ~lib/internal/arraybuffer.ts:17:9
-   (i32.shl
-    (i32.const 1)
-    ;;@ ~lib/internal/arraybuffer.ts:17:21
-    (i32.sub
-     ;;@ ~lib/internal/arraybuffer.ts:17:29
-     (i32.const 32)
-     ;;@ ~lib/internal/arraybuffer.ts:17:39
-     (i32.clz
-      ;;@ ~lib/internal/arraybuffer.ts:17:48
-      (i32.sub
-       (i32.add
-        (get_local $0)
-        ;;@ ~lib/internal/arraybuffer.ts:17:61
-        (i32.const 8)
-       )
-       ;;@ ~lib/internal/arraybuffer.ts:17:75
-       (i32.const 1)
+   (i32.const 1)
+   ;;@ ~lib/internal/arraybuffer.ts:17:21
+   (i32.sub
+    ;;@ ~lib/internal/arraybuffer.ts:17:29
+    (i32.const 32)
+    ;;@ ~lib/internal/arraybuffer.ts:17:39
+    (i32.clz
+     ;;@ ~lib/internal/arraybuffer.ts:17:48
+     (i32.sub
+      (i32.add
+       (get_local $0)
+       ;;@ ~lib/internal/arraybuffer.ts:17:61
+       (i32.const 8)
       )
+      ;;@ ~lib/internal/arraybuffer.ts:17:75
+      (i32.const 1)
      )
     )
    )
@@ -488,10 +469,7 @@
    (get_local $0)
   )
   ;;@ ~lib/internal/arraybuffer.ts:25:39
-  (return
-   ;;@ ~lib/internal/arraybuffer.ts:25:9
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/memory/set_memory (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -1139,40 +1117,32 @@
  )
  (func $~lib/array/Array<Body>#get:length (; 13 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/array.ts:35:20
-  (return
+  (i32.load offset=4
    ;;@ ~lib/array.ts:36:11
-   (i32.load offset=4
-    (get_local $0)
-   )
+   (get_local $0)
   )
  )
  (func $~lib/array/Array<Body>#__unchecked_get (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   ;;@ ~lib/array.ts:76:41
-  (return
-   ;;@ ~lib/array.ts:77:11
-   (block $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.0 (result i32)
-    (set_local $2
-     ;;@ ~lib/array.ts:77:27
-     (i32.load
-      (get_local $0)
-     )
+  (block $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.0 (result i32)
+   (set_local $2
+    ;;@ ~lib/array.ts:77:27
+    (i32.load
+     (get_local $0)
     )
-    ;;@ ~lib/internal/arraybuffer.ts:64:91
-    (br $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.0
-     ;;@ ~lib/internal/arraybuffer.ts:64:9
-     (i32.load offset=8
-      ;;@ ~lib/internal/arraybuffer.ts:64:20
-      (i32.add
-       (get_local $2)
-       ;;@ ~lib/internal/arraybuffer.ts:64:48
-       (i32.shl
-        ;;@ ~lib/internal/arraybuffer.ts:64:49
-        (get_local $1)
-        ;;@ ~lib/internal/arraybuffer.ts:64:65
-        (i32.const 2)
-       )
-      )
+   )
+   ;;@ ~lib/internal/arraybuffer.ts:64:91
+   (i32.load offset=8
+    ;;@ ~lib/internal/arraybuffer.ts:64:20
+    (i32.add
+     (get_local $2)
+     ;;@ ~lib/internal/arraybuffer.ts:64:48
+     (i32.shl
+      ;;@ ~lib/internal/arraybuffer.ts:64:49
+      (get_local $1)
+      ;;@ ~lib/internal/arraybuffer.ts:64:65
+      (i32.const 2)
      )
     )
    )
@@ -1188,44 +1158,39 @@
    )
   )
   ;;@ ~lib/array.ts:72:23
-  (return
+  (if (result i32)
    ;;@ ~lib/array.ts:70:11
-   (if (result i32)
-    (i32.lt_u
-     (get_local $1)
-     ;;@ ~lib/array.ts:70:24
-     (i32.shr_u
-      ;;@ ~lib/array.ts:70:30
-      (i32.load
-       (get_local $2)
-      )
-      ;;@ ~lib/array.ts:70:52
-      (i32.const 2)
+   (i32.lt_u
+    (get_local $1)
+    ;;@ ~lib/array.ts:70:24
+    (i32.shr_u
+     ;;@ ~lib/array.ts:70:30
+     (i32.load
+      (get_local $2)
      )
+     ;;@ ~lib/array.ts:70:52
+     (i32.const 2)
     )
-    ;;@ ~lib/array.ts:71:8
-    (block $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.1 (result i32)
-     ;;@ ~lib/internal/arraybuffer.ts:64:91
-     (br $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.1
-      ;;@ ~lib/internal/arraybuffer.ts:64:9
-      (i32.load offset=8
-       ;;@ ~lib/internal/arraybuffer.ts:64:20
-       (i32.add
-        (get_local $2)
-        ;;@ ~lib/internal/arraybuffer.ts:64:48
-        (i32.shl
-         ;;@ ~lib/internal/arraybuffer.ts:64:49
-         (get_local $1)
-         ;;@ ~lib/internal/arraybuffer.ts:64:65
-         (i32.const 2)
-        )
-       )
-      )
-     )
-    )
-    ;;@ ~lib/array.ts:72:8
-    (unreachable)
    )
+   ;;@ ~lib/array.ts:71:8
+   (block $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.1 (result i32)
+    ;;@ ~lib/internal/arraybuffer.ts:64:91
+    (i32.load offset=8
+     ;;@ ~lib/internal/arraybuffer.ts:64:20
+     (i32.add
+      (get_local $2)
+      ;;@ ~lib/internal/arraybuffer.ts:64:48
+      (i32.shl
+       ;;@ ~lib/internal/arraybuffer.ts:64:49
+       (get_local $1)
+       ;;@ ~lib/internal/arraybuffer.ts:64:65
+       (i32.const 2)
+      )
+     )
+    )
+   )
+   ;;@ ~lib/array.ts:72:8
+   (unreachable)
   )
  )
  (func $assembly/index/Body#offsetMomentum (; 16 ;) (type $iFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
@@ -1269,9 +1234,7 @@
    )
   )
   ;;@ assembly/index.ts:27:11
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $assembly/index/NBodySystem#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 f64)
@@ -1494,26 +1457,24 @@
    )
   )
   ;;@ assembly/index.ts:202:59
-  (return
+  (if (result i32)
    ;;@ assembly/index.ts:202:9
-   (if (result i32)
-    (i32.lt_u
-     (get_local $0)
-     ;;@ assembly/index.ts:202:22
-     (call $~lib/array/Array<Body>#get:length
-      ;;@ assembly/index.ts:202:27
-      (get_local $1)
-     )
-    )
-    ;;@ assembly/index.ts:202:43
-    (call $~lib/array/Array<Body>#__get
+   (i32.lt_u
+    (get_local $0)
+    ;;@ assembly/index.ts:202:22
+    (call $~lib/array/Array<Body>#get:length
+     ;;@ assembly/index.ts:202:27
      (get_local $1)
-     ;;@ assembly/index.ts:202:50
-     (get_local $0)
     )
-    ;;@ assembly/index.ts:202:59
-    (i32.const 0)
    )
+   ;;@ assembly/index.ts:202:43
+   (call $~lib/array/Array<Body>#__get
+    (get_local $1)
+    ;;@ assembly/index.ts:202:50
+    (get_local $0)
+   )
+   ;;@ assembly/index.ts:202:59
+   (i32.const 0)
   )
  )
  (func $assembly/index/NBodySystem#advance (; 20 ;) (type $iFv) (param $0 i32) (param $1 f64)
@@ -1728,12 +1689,9 @@
          ;;@ assembly/index.ts:131:23
          (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
           ;;@ ~lib/math.ts:1076:30
-          (br $~lib/math/NativeMath.sqrt|inlined.0
-           ;;@ ~lib/math.ts:1076:11
-           (f64.sqrt
-            ;;@ ~lib/math.ts:1076:29
-            (get_local $18)
-           )
+          (f64.sqrt
+           ;;@ ~lib/math.ts:1076:29
+           (get_local $18)
           )
          )
         )
@@ -2190,12 +2148,9 @@
            )
           )
           ;;@ ~lib/math.ts:1076:30
-          (br $~lib/math/NativeMath.sqrt|inlined.1
-           ;;@ ~lib/math.ts:1076:11
-           (f64.sqrt
-            ;;@ ~lib/math.ts:1076:29
-            (get_local $18)
-           )
+          (f64.sqrt
+           ;;@ ~lib/math.ts:1076:29
+           (get_local $18)
           )
          )
         )
@@ -2242,9 +2197,7 @@
    )
   )
   ;;@ assembly/index.ts:184:11
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $assembly/index/step (; 22 ;) (type $F) (result f64)
   ;;@ assembly/index.ts:206:9
@@ -2255,12 +2208,9 @@
    (f64.const 0.01)
   )
   ;;@ assembly/index.ts:207:23
-  (return
-   ;;@ assembly/index.ts:207:16
-   (call $assembly/index/NBodySystem#energy
-    ;;@ assembly/index.ts:207:9
-    (get_global $assembly/index/system)
-   )
+  (call $assembly/index/NBodySystem#energy
+   ;;@ assembly/index.ts:207:9
+   (get_global $assembly/index/system)
   )
  )
  (func $assembly/index/bench (; 23 ;) (type $iv) (param $0 i32)

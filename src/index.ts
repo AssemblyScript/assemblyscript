@@ -34,8 +34,7 @@ import {
 } from "./parser";
 
 import {
-  Program,
-  LIBRARY_PREFIX
+  Program
 } from "./program";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
@@ -168,4 +167,4 @@ export function buildTSD(program: Program): string {
 }
 
 /** Prefix indicating a library file. */
-export { LIBRARY_PREFIX };
+export { LIBRARY_PREFIX } from "./common";

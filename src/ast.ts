@@ -9,7 +9,7 @@ import {
   STATIC_DELIMITER,
   INSTANCE_DELIMITER,
   LIBRARY_PREFIX
-} from "./program";
+} from "./common";
 
 import {
   Token,
@@ -106,6 +106,26 @@ export function nodeIsConstantValue(kind: NodeKind): bool {
     case NodeKind.NULL:
     case NodeKind.TRUE:
     case NodeKind.FALSE: return true;
+  }
+  return false;
+}
+
+/** Checks if a node might be callable. */
+export function nodeIsCallable(kind: NodeKind): bool {
+  switch (kind) {
+    case NodeKind.IDENTIFIER:
+    case NodeKind.CALL:
+    case NodeKind.ELEMENTACCESS:
+    case NodeKind.PROPERTYACCESS: return true;
+  }
+  return false;
+}
+
+/** Checks if a node might be callable with generic arguments. */
+export function nodeIsGenericCallable(kind: NodeKind): bool {
+  switch (kind) {
+    case NodeKind.IDENTIFIER:
+    case NodeKind.PROPERTYACCESS: return true;
   }
   return false;
 }
