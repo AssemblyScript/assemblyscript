@@ -9,4 +9,4 @@ var e;
 // 1155: 'const' declarations must be initialized.
 const f: i32;
 
-const t = 0 < (i32.MAX_VALUE / 10);
+const t = 0 < (c / 10);
