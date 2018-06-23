@@ -114,6 +114,7 @@ assert(itoa64(-1234) == "-1234");
 assert(itoa64(-868719476735) == "-868719476735");
 // assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808"); // fail
 
+/*
 var bad = itoa64(-9223372036854775808); // -633437444 854775808
 
 logi(bad.charCodeAt(0));
@@ -136,3 +137,4 @@ logi(bad.charCodeAt(16));
 logi(bad.charCodeAt(17));
 logi(bad.charCodeAt(18));
 logi(bad.charCodeAt(19));
+*/
