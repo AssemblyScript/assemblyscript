@@ -1,6 +1,6 @@
 import "allocator/arena";
 
-import { utoa32, itoa32, utoa64/*, itoa64*/ } from "internal/itoa";
+import { utoa32, itoa32, utoa64, itoa64 } from "internal/itoa";
 
 declare function logi(i: i32): void;
 
@@ -110,17 +110,12 @@ assert(utoa64(9999868719476735) == "9999868719476735");
 assert(utoa64(19999868719476735) == "19999868719476735");
 assert(utoa64(0xffffffffffffffff) == "18446744073709551615");
 
-/*
-var bad = itoa32(-1000);
-logi(bad.charCodeAt(0));
-logi(bad.charCodeAt(1));
-logi(bad.charCodeAt(2));
-logi(bad.charCodeAt(3));
-logi(bad.charCodeAt(3));
-*/
+assert(itoa64(-1234) == "-1234");
+assert(itoa64(-868719476735) == "-868719476735");
+// assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808"); // fail
 
-/*
-var bad = utoa64(0xfffffffff);
+var bad = itoa64(-9223372036854775808); // -633437444 854775808
+
 logi(bad.charCodeAt(0));
 logi(bad.charCodeAt(1));
 logi(bad.charCodeAt(2));
@@ -132,4 +127,12 @@ logi(bad.charCodeAt(7));
 logi(bad.charCodeAt(8));
 logi(bad.charCodeAt(9));
 logi(bad.charCodeAt(10));
-*/
+logi(bad.charCodeAt(11));
+logi(bad.charCodeAt(12));
+logi(bad.charCodeAt(13));
+logi(bad.charCodeAt(14));
+logi(bad.charCodeAt(15));
+logi(bad.charCodeAt(16));
+logi(bad.charCodeAt(17));
+logi(bad.charCodeAt(18));
+logi(bad.charCodeAt(19));
