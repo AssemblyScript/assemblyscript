@@ -1,6 +1,6 @@
 import "allocator/arena";
 
-import { utoa32, itoa32, utoa64, itoa64 } from "internal/itoa";
+import { utoa32, itoa32, utoa64/*, itoa64*/ } from "internal/itoa";
 
 declare function logi(i: i32): void;
 
@@ -103,8 +103,12 @@ assert(utoa64(0) == "0");
 assert(utoa64(1234) == "1234");
 assert(utoa64(0xfffffffe)  == "4294967294");
 assert(utoa64(0xffffffff)  == "4294967295");
-// assert(utoa64(0xfffffffff) == "68719476735"); // fail
-// assert(utoa64(0xffffffffffffffff) == "18446744073709551615"); // fail
+assert(utoa64(0xfffffffff) == "68719476735");
+assert(utoa64(868719476735) == "868719476735");
+assert(utoa64(999868719476735) == "999868719476735");
+assert(utoa64(9999868719476735) == "9999868719476735");
+assert(utoa64(19999868719476735) == "19999868719476735");
+assert(utoa64(0xffffffffffffffff) == "18446744073709551615");
 
 /*
 var bad = itoa32(-1000);

@@ -2,7 +2,8 @@
 import { CharCode, allocate, HEADER_SIZE } from "./string";
 import { HEADER_SIZE as BUFFER_HEADER_SIZE } from "./arraybuffer";
 
-// declare function logi(i: i32): void;
+declare function logi(i: i32): void;
+declare function logf(f: f64): void;
 
 const powers10: u32[] = [
   1,
@@ -156,14 +157,20 @@ export function utoa64(num: u64): string {
   var buf: String = null;
   var ptr: usize  = null;
 
-  if (num > 0xFFFFFFFF) {
-    let q:  u64 = num / 10000000000;
-    let hi: u32 = <u32>q;
-    // In most VMs i64/u64 div and rem by constant is not cheap
-    // and can't be simplificate so we avoid modulo operation
-    let lo: u32 = <u32>(num - q * 10000000000);
-    // res = utoa32(hi) + utoa32(lo);
+  if (num > u32.MAX_VALUE) {
+    let q: u64 = num / 10000000000;
+    let r: u64 = num - q * 10000000000;
     let decimalsLo = 10;
+
+    if (r > u32.MAX_VALUE) {
+      q = num / 1000000000;
+      r = num - q * 1000000000;
+      decimalsLo = 9;
+    }
+
+    let hi = <u32>q;
+    let lo = <u32>r;
+
     let decimalsHi = decimalCount(hi);
     let decimals   = decimalsLo + decimalsHi;
 
@@ -186,6 +193,7 @@ export function utoa64(num: u64): string {
   return changetype<string>(buf);
 }
 
+/*
 export function itoa64(num: i64): string {
   if (!num) return "0";
 
@@ -195,14 +203,20 @@ export function itoa64(num: i64): string {
   var buf: String = null;
   var ptr: usize  = null;
 
-  if (num > 0xFFFFFFFF) {
+  if (num > u32.MAX_VALUE) {
     let q:  u64 = num / 10000000000;
-    let hi: u32 = <u32>q;
-    // In most VMs i64/u64 div and rem by constant is not cheap
-    // and can't be simplificate so we avoid modulo operation
-    let lo: u32 = <u32>(num - q * 10000000000);
-    // res = utoa32(hi) + utoa32(lo);
+    let r:  u64 = num - q * 10000000000;
     let decimalsLo = 10;
+
+    if (r > (<u64>u32.MAX_VALUE) && q < (<u64>u16.MAX_VALUE)) {
+      q = num / 100000;
+      r = num - q * 100000;
+      decimalsLo = 5;
+    }
+
+    let hi = <u32>q;
+    let lo = <u32>r;
+
     let decimalsHi = decimalCount(hi);
     let decimals   = decimalsLo + decimalsHi + <i32>isneg;
 
@@ -225,6 +239,7 @@ export function itoa64(num: i64): string {
   if (isneg) store<u16>(ptr, CharCode.MINUS, HEADER_SIZE);
   return changetype<string>(buf);
 }
+*/
 
 // 18446744073709551615
 // 1844674407
