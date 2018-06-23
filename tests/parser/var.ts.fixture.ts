@@ -4,6 +4,6 @@ const c: i32 = 0;
 var d = 2;
 var e;
 const f: i32;
-const t: bool = <u32>10 < (u32.MAX_VALUE / 10);
+const t = 0 < (i32.MAX_VALUE / 10);
 // ERROR 1110: "Type expected." in var.ts:7:5
 // ERROR 1155: "'const' declarations must be initialized." in var.ts:10:6
