@@ -15,7 +15,7 @@ const powers10: u32[] = [
   1000000,
   10000000,
   100000000,
-  1000000000,
+  1000000000
 ];
 
 /*
@@ -127,12 +127,25 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
   }
 }
 
+function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
+  // TODO
+}
+
 @inline
 export function utoa32_core(buffer: usize, num: u32, decimals: u32): void {
   // if (NO_MEMOTY || SHRINK_LEVEL >= 1) {
   //  TODO
   // } else {
   utoa32_lut(buffer, num, decimals);
+  // }
+}
+
+@inline
+export function utoa64_core(buffer: usize, num: u64, decimals: u32): void {
+  // if (NO_MEMOTY || SHRINK_LEVEL >= 1) {
+  //  TODO
+  // } else {
+  utoa64_lut(buffer, num, decimals);
   // }
 }
 
@@ -160,6 +173,7 @@ export function itoa32(value: i32): string {
 
   return changetype<string>(buffer);
 }
+
 
 export function utoa64(num: u64): string {
   if (!num) return "0";
