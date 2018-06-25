@@ -174,7 +174,17 @@ export function itoa32(value: i32): string {
   return changetype<string>(buffer);
 }
 
+export function utoa64(value: u64): string {
+  if (!value) return "0";
 
+  var decimals = decimalCount<u64>(value);
+  var buffer   = allocate(decimals);
+
+  utoa64_core(changetype<usize>(buffer), value, decimals);
+  return changetype<string>(buffer);
+}
+
+/*
 export function utoa64(num: u64): string {
   if (!num) return "0";
 
@@ -216,6 +226,7 @@ export function utoa64(num: u64): string {
 
   return changetype<string>(buf);
 }
+*/
 
 export function itoa64(num: i64): string {
   if (!num) return "0";
