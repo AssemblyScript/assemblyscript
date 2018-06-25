@@ -7,7 +7,6 @@
  (type $iF (func (param i32) (result f64)))
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $Ii (func (param i64) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -16,7 +15,7 @@
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 1656))
+ (global $HEAP_BASE i32 (i32.const 1372))
  (memory $0 1)
  (data (i32.const 16) "\18\00\00\00\n\00\00\00(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
  (data (i32.const 88) "`\00\00\00d\00\00\00\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
@@ -67,15 +66,6 @@
  (data (i32.const 1312) "\04\00\00\001\000\000\000")
  (data (i32.const 1324) "\n\00\00\002\001\004\007\004\008\003\006\004\008")
  (data (i32.const 1348) "\n\00\00\004\002\009\004\009\006\007\002\009\005")
- (data (i32.const 1372) "\n\00\00\004\002\009\004\009\006\007\002\009\004")
- (data (i32.const 1396) "\0b\00\00\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 1424) "\0c\00\00\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 1452) "\0f\00\00\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 1488) "\10\00\00\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 1524) "\11\00\00\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 1564) "\14\00\00\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005")
- (data (i32.const 1608) "\05\00\00\00-\001\002\003\004")
- (data (i32.const 1624) "\0d\00\00\00-\008\006\008\007\001\009\004\007\006\007\003\005")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -3614,6 +3604,12 @@
  )
  (func $~lib/internal/itoa/utoa32_lut (; 26 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (set_local $3
+   (i32.load
+    (i32.const 88)
+   )
+  )
   (loop $continue|0
    (if
     (i32.ge_u
@@ -3621,7 +3617,7 @@
      (i32.const 10000)
     )
     (block
-     (set_local $3
+     (set_local $4
       (i32.rem_u
        (get_local $1)
        (i32.const 10000)
@@ -3649,12 +3645,10 @@
       (i64.or
        (i64.load32_u offset=8
         (i32.add
-         (i32.load
-          (i32.const 88)
-         )
+         (get_local $3)
          (i32.shl
           (i32.div_u
-           (get_local $3)
+           (get_local $4)
            (i32.const 100)
           )
           (i32.const 2)
@@ -3664,12 +3658,10 @@
        (i64.shl
         (i64.load32_u offset=8
          (i32.add
-          (i32.load
-           (i32.const 88)
-          )
+          (get_local $3)
           (i32.shl
            (i32.rem_u
-            (get_local $3)
+            (get_local $4)
             (i32.const 100)
            )
            (i32.const 2)
@@ -3690,7 +3682,7 @@
     (i32.const 100)
    )
    (block
-    (set_local $3
+    (set_local $4
      (i32.rem_u
       (get_local $1)
       (i32.const 100)
@@ -3717,11 +3709,9 @@
      )
      (i32.load offset=8
       (i32.add
-       (i32.load
-        (i32.const 88)
-       )
+       (get_local $3)
        (i32.shl
-        (get_local $3)
+        (get_local $4)
         (i32.const 2)
        )
       )
@@ -3747,9 +3737,7 @@
     )
     (i32.load offset=8
      (i32.add
-      (i32.load
-       (i32.const 88)
-      )
+      (get_local $3)
       (i32.shl
        (get_local $1)
        (i32.const 2)
@@ -3852,281 +3840,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/itoa/utoa64 (; 29 ;) (type $Ii) (param $0 i64) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i64)
-  (local $5 i64)
-  (local $6 i32)
-  (if
-   (i64.eqz
-    (get_local $0)
-   )
-   (return
-    (i32.const 772)
-   )
-  )
-  (if
-   (i64.gt_u
-    (get_local $0)
-    (i64.const 4294967295)
-   )
-   (block
-    (set_local $1
-     (i32.const 10)
-    )
-    (if
-     (i64.gt_u
-      (tee_local $5
-       (i64.sub
-        (get_local $0)
-        (i64.mul
-         (tee_local $4
-          (i64.div_u
-           (get_local $0)
-           (i64.const 10000000000)
-          )
-         )
-         (i64.const 10000000000)
-        )
-       )
-      )
-      (i64.const 4294967295)
-     )
-     (block
-      (set_local $5
-       (i64.sub
-        (get_local $0)
-        (i64.mul
-         (tee_local $4
-          (i64.div_u
-           (get_local $0)
-           (i64.const 1000000000)
-          )
-         )
-         (i64.const 1000000000)
-        )
-       )
-      )
-      (set_local $1
-       (i32.const 9)
-      )
-     )
-    )
-    (call $~lib/internal/itoa/utoa32_lut
-     (tee_local $3
-      (call $~lib/internal/string/allocate
-       (tee_local $2
-        (i32.add
-         (get_local $1)
-         (call $~lib/internal/itoa/decimalCount<u32>
-          (tee_local $6
-           (i32.wrap/i64
-            (get_local $4)
-           )
-          )
-         )
-        )
-       )
-      )
-     )
-     (i32.wrap/i64
-      (get_local $5)
-     )
-     (get_local $2)
-    )
-    (call $~lib/internal/itoa/utoa32_lut
-     (get_local $3)
-     (get_local $6)
-     (i32.sub
-      (get_local $2)
-      (get_local $1)
-     )
-    )
-   )
-   (call $~lib/internal/itoa/utoa32_lut
-    (tee_local $3
-     (call $~lib/internal/string/allocate
-      (tee_local $1
-       (call $~lib/internal/itoa/decimalCount<u32>
-        (tee_local $2
-         (i32.wrap/i64
-          (get_local $0)
-         )
-        )
-       )
-      )
-     )
-    )
-    (get_local $2)
-    (get_local $1)
-   )
-  )
-  (get_local $3)
- )
- (func $~lib/internal/itoa/itoa64 (; 30 ;) (type $Ii) (param $0 i64) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i64)
-  (local $7 i64)
-  (local $8 i32)
-  (if
-   (i64.eqz
-    (get_local $0)
-   )
-   (return
-    (i32.const 772)
-   )
-  )
-  (if
-   (tee_local $4
-    (i64.lt_s
-     (get_local $0)
-     (i64.const 0)
-    )
-   )
-   (set_local $0
-    (i64.sub
-     (i64.const 0)
-     (get_local $0)
-    )
-   )
-  )
-  (if
-   (i64.gt_u
-    (get_local $0)
-    (i64.const 4294967295)
-   )
-   (block
-    (set_local $5
-     (i32.const 10)
-    )
-    (if
-     (tee_local $1
-      (i64.gt_u
-       (tee_local $7
-        (i64.sub
-         (get_local $0)
-         (i64.mul
-          (tee_local $6
-           (i64.div_u
-            (get_local $0)
-            (i64.const 10000000000)
-           )
-          )
-          (i64.const 10000000000)
-         )
-        )
-       )
-       (i64.const 4294967295)
-      )
-     )
-     (set_local $1
-      (i64.lt_u
-       (get_local $6)
-       (i64.const 429496729)
-      )
-     )
-    )
-    (if
-     (get_local $1)
-     (block
-      (set_local $7
-       (i64.sub
-        (get_local $0)
-        (i64.mul
-         (tee_local $6
-          (i64.div_u
-           (get_local $0)
-           (i64.const 1000000000)
-          )
-         )
-         (i64.const 1000000000)
-        )
-       )
-      )
-      (set_local $5
-       (i32.const 9)
-      )
-     )
-    )
-    (call $~lib/internal/itoa/utoa32_lut
-     (tee_local $2
-      (call $~lib/internal/string/allocate
-       (tee_local $3
-        (i32.add
-         (i32.add
-          (get_local $5)
-          (call $~lib/internal/itoa/decimalCount<u32>
-           (tee_local $1
-            (i32.wrap/i64
-             (get_local $6)
-            )
-           )
-          )
-         )
-         (get_local $4)
-        )
-       )
-      )
-     )
-     (i32.wrap/i64
-      (get_local $7)
-     )
-     (get_local $3)
-    )
-    (set_local $8
-     (get_local $2)
-    )
-    (call $~lib/internal/itoa/utoa32_lut
-     (get_local $2)
-     (get_local $1)
-     (i32.sub
-      (get_local $3)
-      (get_local $5)
-     )
-    )
-   )
-   (block
-    (set_local $8
-     (tee_local $2
-      (call $~lib/internal/string/allocate
-       (tee_local $1
-        (i32.add
-         (call $~lib/internal/itoa/decimalCount<u32>
-          (tee_local $3
-           (i32.wrap/i64
-            (get_local $0)
-           )
-          )
-         )
-         (get_local $4)
-        )
-       )
-      )
-     )
-    )
-    (call $~lib/internal/itoa/utoa32_lut
-     (get_local $2)
-     (get_local $3)
-     (get_local $1)
-    )
-   )
-  )
-  (if
-   (get_local $4)
-   (i32.store16 offset=4
-    (get_local $8)
-    (i32.const 45)
-   )
-  )
-  (get_local $2)
- )
- (func $start (; 31 ;) (type $v)
+ (func $start (; 29 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -5415,234 +5129,6 @@
      (i32.const 0)
      (i32.const 644)
      (i32.const 100)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 0)
-     )
-     (i32.const 772)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 102)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 1234)
-     )
-     (i32.const 1144)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 103)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 4294967294)
-     )
-     (i32.const 1372)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 104)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 4294967295)
-     )
-     (i32.const 1348)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 105)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 68719476735)
-     )
-     (i32.const 1396)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 106)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 868719476735)
-     )
-     (i32.const 1424)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 107)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 999868719476735)
-     )
-     (i32.const 1452)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 108)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 9999868719476735)
-     )
-     (i32.const 1488)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 109)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const 19999868719476735)
-     )
-     (i32.const 1524)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 110)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/utoa64
-      (i64.const -1)
-     )
-     (i32.const 1564)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 111)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/itoa64
-      (i64.const -1234)
-     )
-     (i32.const 1608)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 113)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/itoa64
-      (i64.const -868719476735)
-     )
-     (i32.const 1624)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
-     (i32.const 114)
      (i32.const 0)
     )
     (unreachable)

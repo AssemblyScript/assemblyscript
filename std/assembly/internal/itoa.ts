@@ -63,15 +63,16 @@ function decimalCount<T>(value: T): i32 {
       // t = t - <i32>(v < unchecked(powers10[t]));
 
   var power: T;
+  var ptr = changetype<usize>(powers10.buffer_);
   if (sizeof<T>() <= 4) {
-    power = <T>load<u32>(changetype<usize>(powers10.buffer_) + (t << 2), BUFFER_HEADER_SIZE);
+    power = <T>load<u32>(ptr + (t << 2), BUFFER_HEADER_SIZE);
     t = t - <i32>(v < power);
   } else { // sizeof<T>() == 8
     if (t > 10) {
-      power = <T>load<u32>(changetype<usize>(powers10.buffer_) + ((t - 10) << 2), BUFFER_HEADER_SIZE);
+      power = <T>load<u32>(ptr + ((t - 10) << 2), BUFFER_HEADER_SIZE);
       t = t - <i32>(v < 10000000000 * power);
     } else {
-      power = <T>load<u32>(changetype<usize>(powers10.buffer_) + (t << 2), BUFFER_HEADER_SIZE);
+      power = <T>load<u32>(ptr + (t << 2), BUFFER_HEADER_SIZE);
       t = t - <i32>(v < power);
     }
   }
@@ -81,6 +82,7 @@ function decimalCount<T>(value: T): i32 {
 
 function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
   var r: u32, t: u32, d1: u32, d2: u32, pos = decimals;
+  var lutptr = changetype<usize>(digits00_99.buffer_);
 
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
@@ -96,8 +98,8 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
 
     // let digit1: u64 = unchecked(digits00_99[d1]);
     // let digit2: u64 = unchecked(digits00_99[d2]);
-    let digit1: u64 = load<u32>(changetype<usize>(digits00_99.buffer_) + (d1 << 2), BUFFER_HEADER_SIZE);
-    let digit2: u64 = load<u32>(changetype<usize>(digits00_99.buffer_) + (d2 << 2), BUFFER_HEADER_SIZE);
+    let digit1: u64 = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
+    let digit2: u64 = load<u32>(lutptr + (d2 << 2), BUFFER_HEADER_SIZE);
 
     store<u64>(ptr, digit1 | (digit2 << 32), HEADER_SIZE);
   }
@@ -109,7 +111,7 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     pos -= 2;
     let ptr   = buffer + (pos << 1);
     // let digit = unchecked(digits00_99[d1]);
-    let digit = load<u32>(changetype<usize>(digits00_99.buffer_) + (d1 << 2), BUFFER_HEADER_SIZE);
+    let digit = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
     store<u32>(ptr, digit, HEADER_SIZE);
   }
 
@@ -117,7 +119,7 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     pos -= 2;
     let ptr   = buffer + (pos << 1);
     // let digit = unchecked(digits00_99[num]);
-    let digit = load<u32>(changetype<usize>(digits00_99.buffer_) + (num << 2), BUFFER_HEADER_SIZE);
+    let digit = load<u32>(lutptr + (num << 2), BUFFER_HEADER_SIZE);
     store<u32>(ptr, digit, HEADER_SIZE);
   } else {
     pos -= 1;
