@@ -15,7 +15,7 @@ const powers10: u32[] = [
   1000000,
   10000000,
   100000000,
-  1000000000
+  1000000000,
 ];
 
 /*
@@ -55,16 +55,26 @@ const digits00_99: u32[] = [
   0x00350039, 0x00360039, 0x00370039, 0x00380039, 0x00390039
 ];
 
-@inline
-function decimalCount(value: u32): i32 {
-  var sign = value >> 31;
+function decimalCount<T>(value: T): i32 {
+  var sign = value >> (8 * sizeof<T>() - 1);
   var v = (value ^ sign) - sign;
-  var l = 32 - clz(v | 1); // log2
+  var l = 8 * sizeof<T>() - <i32>clz<T>(v | 1); // log2
   var t = l * 1233 >>> 12; // log10
       // t = t - <i32>(v < unchecked(powers10[t]));
 
-  var power = load<u32>(changetype<usize>(powers10.buffer_) + (t << 2), BUFFER_HEADER_SIZE);
-  t = t - <i32>(v < power);
+  var power: T;
+  if (sizeof<T>() <= 4) {
+    power = <T>load<u32>(changetype<usize>(powers10.buffer_) + (t << 2), BUFFER_HEADER_SIZE);
+    t = t - <i32>(v < power);
+  } else { // sizeof<T>() == 8
+    if (t > 10) {
+      power = <T>load<u32>(changetype<usize>(powers10.buffer_) + ((t - 10) << 2), BUFFER_HEADER_SIZE);
+      t = t - <i32>(v < 10000000000 * power);
+    } else {
+      power = <T>load<u32>(changetype<usize>(powers10.buffer_) + (t << 2), BUFFER_HEADER_SIZE);
+      t = t - <i32>(v < power);
+    }
+  }
 
   return t + 1;
 }
@@ -129,7 +139,7 @@ export function utoa32_core(buffer: usize, num: u32, decimals: u32): void {
 export function utoa32(value: u32): string {
   if (!value) return "0";
 
-  var decimals = decimalCount(value);
+  var decimals = decimalCount<u32>(value);
   var buffer   = allocate(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
@@ -142,7 +152,7 @@ export function itoa32(value: i32): string {
   var isneg  = value < 0;
   if (isneg) value = -value;
 
-  var decimals = decimalCount(value) + <i32>isneg;
+  var decimals = decimalCount<u32>(value) + <i32>isneg;
   var buffer   = allocate(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
