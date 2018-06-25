@@ -184,6 +184,21 @@ export function utoa64(value: u64): string {
   return changetype<string>(buffer);
 }
 
+export function itoa64(value: i64): string {
+  if (!value) return "0";
+
+  var isneg  = value < 0;
+  if (isneg) value = -value;
+
+  var decimals = decimalCount<u64>(value) + <i32>isneg;
+  var buffer   = allocate(decimals);
+
+  utoa64_core(changetype<usize>(buffer), value, decimals);
+  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, HEADER_SIZE);
+
+  return changetype<string>(buffer);
+}
+
 /*
 export function utoa64(num: u64): string {
   if (!num) return "0";
@@ -228,6 +243,7 @@ export function utoa64(num: u64): string {
 }
 */
 
+/*
 export function itoa64(num: i64): string {
   if (!num) return "0";
 
@@ -273,3 +289,4 @@ export function itoa64(num: i64): string {
   if (isneg) store<u16>(ptr, CharCode.MINUS, HEADER_SIZE);
   return changetype<string>(buf);
 }
+*/
