@@ -1,5 +1,10 @@
 
-import { CharCode, allocate, HEADER_SIZE } from "./string";
+import {
+  CharCode,
+  allocate,
+  HEADER_SIZE as STRING_HEADER_SIZE
+} from "./string";
+
 import { HEADER_SIZE as BUFFER_HEADER_SIZE } from "./arraybuffer";
 
 // declare function logi(i: i32): void;
@@ -94,14 +99,14 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     d2 = r % 100;
 
     pos -= 4;
-    let ptr = buffer + (pos << 1);
+    let outptr = buffer + (pos << 1);
 
     // let digit1: u64 = unchecked(digits00_99[d1]);
     // let digit2: u64 = unchecked(digits00_99[d2]);
     let digit1: u64 = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
     let digit2: u64 = load<u32>(lutptr + (d2 << 2), BUFFER_HEADER_SIZE);
 
-    store<u64>(ptr, digit1 | (digit2 << 32), HEADER_SIZE);
+    store<u64>(outptr, digit1 | (digit2 << 32), STRING_HEADER_SIZE);
   }
 
   if (num >= 100) {
@@ -109,23 +114,23 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     d1  = num % 100;
     num = t;
     pos -= 2;
-    let ptr   = buffer + (pos << 1);
+    let outptr   = buffer + (pos << 1);
     // let digit = unchecked(digits00_99[d1]);
     let digit = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
-    store<u32>(ptr, digit, HEADER_SIZE);
+    store<u32>(outptr, digit, STRING_HEADER_SIZE);
   }
 
   if (num >= 10) {
     pos -= 2;
-    let ptr   = buffer + (pos << 1);
+    let outptr = buffer + (pos << 1);
     // let digit = unchecked(digits00_99[num]);
     let digit = load<u32>(lutptr + (num << 2), BUFFER_HEADER_SIZE);
-    store<u32>(ptr, digit, HEADER_SIZE);
+    store<u32>(outptr, digit, STRING_HEADER_SIZE);
   } else {
     pos -= 1;
-    let ptr   = buffer + (pos << 1);
-    let digit = CharCode._0 + num;
-    store<u16>(ptr, digit, HEADER_SIZE);
+    let outptr = buffer + (pos << 1);
+    let digit  = CharCode._0 + num;
+    store<u16>(outptr, digit, STRING_HEADER_SIZE);
   }
 }
 
@@ -171,7 +176,7 @@ export function itoa32(value: i32): string {
   var buffer   = allocate(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
-  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, HEADER_SIZE);
+  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
 
   return changetype<string>(buffer);
 }
@@ -196,7 +201,7 @@ export function itoa64(value: i64): string {
   var buffer   = allocate(decimals);
 
   utoa64_core(changetype<usize>(buffer), value, decimals);
-  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, HEADER_SIZE);
+  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
 
   return changetype<string>(buffer);
 }
