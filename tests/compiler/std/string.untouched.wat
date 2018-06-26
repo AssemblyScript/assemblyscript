@@ -4683,21 +4683,27 @@
   )
   (block
    (set_local $7
-    (i32.gt_s
+    (i32.le_s
      (get_local $4)
      (i32.const 10)
     )
    )
    (set_local $8
-    (i32.mul
+    (i32.xor
+     (i32.and
+      (i32.const 10)
+      (i32.sub
+       (i32.const 0)
+       (get_local $7)
+      )
+     )
      (i32.const 10)
-     (get_local $7)
     )
    )
    (set_local $9
     (select
-     (i64.const 10000000000)
      (i64.const 1)
+     (i64.const 10000000000)
      (get_local $7)
     )
    )

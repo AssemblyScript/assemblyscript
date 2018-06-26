@@ -3861,7 +3861,7 @@
   (local $1 i32)
   (local $2 i32)
   (set_local $2
-   (i32.gt_s
+   (i32.le_s
     (tee_local $1
      (i32.shr_u
       (i32.mul
@@ -3904,8 +3904,8 @@
      (get_local $0)
      (i64.mul
       (select
-       (i64.const 10000000000)
        (i64.const 1)
+       (i64.const 10000000000)
        (get_local $2)
       )
       (i64.load32_u offset=8
@@ -3916,8 +3916,14 @@
         (i32.shl
          (i32.sub
           (get_local $1)
-          (i32.mul
-           (get_local $2)
+          (i32.xor
+           (i32.and
+            (i32.sub
+             (i32.const 0)
+             (get_local $2)
+            )
+            (i32.const 10)
+           )
            (i32.const 10)
           )
          )
