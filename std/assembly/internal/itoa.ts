@@ -124,18 +124,18 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
 }
 
 function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
-  var t:  u64, t32: u32, a: u32, b: u32, c: u32;
+  var t:  u64, t32: u32, r: u32, b: u32, c: u32;
   var b1: u32, b2: u32, c1: u32, c2: u32, pos = decimals;
 
   var lutptr = changetype<usize>(digits00_99.buffer_);
 
   while (num >= 100000000) {
     t = num / 100000000;
-    a = <u32>(num - t * 100000000);
+    r = <u32>(num - t * 100000000);
     num = t;
 
-    b = a / 10000;
-    c = a % 10000;
+    b = r / 10000;
+    c = r % 10000;
 
     b1 = b / 100;
     b2 = b % 100;
@@ -155,7 +155,8 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
     store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
   }
 
-  utoa32_lut(buffer, <u32>num, pos);
+  r = <u32>num;
+  if (r) utoa32_lut(buffer, r, pos);
 }
 
 @inline

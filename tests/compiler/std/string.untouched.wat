@@ -4920,12 +4920,18 @@
     )
    )
   )
-  (call $~lib/internal/itoa/utoa32_lut
-   (get_local $0)
+  (set_local $5
    (i32.wrap/i64
     (get_local $1)
    )
-   (get_local $12)
+  )
+  (if
+   (get_local $5)
+   (call $~lib/internal/itoa/utoa32_lut
+    (get_local $0)
+    (get_local $5)
+    (get_local $12)
+   )
   )
  )
  (func $~lib/internal/itoa/utoa64 (; 31 ;) (type $Ii) (param $0 i64) (result i32)
