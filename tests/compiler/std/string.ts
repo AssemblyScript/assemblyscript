@@ -99,25 +99,24 @@ assert(utoa32(0x7fffffff) == "2147483647");
 assert(utoa32(0x80000000) == "2147483648");
 assert(utoa32(0xffffffff) == "4294967295");
 
-/*
 assert(utoa64(0) == "0");
 assert(utoa64(1234) == "1234");
 assert(utoa64(0xfffffffe)  == "4294967294");
 assert(utoa64(0xffffffff)  == "4294967295");
 assert(utoa64(0xfffffffff) == "68719476735");
 assert(utoa64(868719476735) == "868719476735");
-assert(utoa64(999868719476735) == "999868719476735");
-assert(utoa64(9999868719476735) == "9999868719476735");
-assert(utoa64(19999868719476735) == "19999868719476735");
-assert(utoa64(0xffffffffffffffff) == "18446744073709551615");
+// assert(utoa64(999868719476735) == "999868719476735"); // fail "memory access out of bounds"
+// assert(utoa64(9999868719476735) == "9999868719476735");
+// assert(utoa64(19999868719476735) == "19999868719476735");
+// assert(utoa64(0xffffffffffffffff) == "18446744073709551615");
 
-assert(itoa64(-1234) == "-1234");
-assert(itoa64(-868719476735) == "-868719476735");
-*/
+// assert(itoa64(-1234) == "-1234");
+// assert(itoa64(-868719476735) == "-868719476735");
+
 // assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808"); // fail
 
 /*
-var bad = itoa64(-9223372036854775808); // -633437444 854775808
+var bad = utoa64(4294967294); // -633437444 854775808
 
 logi(bad.charCodeAt(0));
 logi(bad.charCodeAt(1));
@@ -129,14 +128,4 @@ logi(bad.charCodeAt(6));
 logi(bad.charCodeAt(7));
 logi(bad.charCodeAt(8));
 logi(bad.charCodeAt(9));
-logi(bad.charCodeAt(10));
-logi(bad.charCodeAt(11));
-logi(bad.charCodeAt(12));
-logi(bad.charCodeAt(13));
-logi(bad.charCodeAt(14));
-logi(bad.charCodeAt(15));
-logi(bad.charCodeAt(16));
-logi(bad.charCodeAt(17));
-logi(bad.charCodeAt(18));
-logi(bad.charCodeAt(19));
 */

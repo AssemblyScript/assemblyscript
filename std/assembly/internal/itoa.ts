@@ -135,7 +135,64 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
 }
 
 function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
-  // TODO
+  var t:  u64, t32: u32, a: u32, b: u32, c: u32;
+  var b1: u32, b2: u32, c1: u32, c2: u32, pos = decimals;
+
+  var lutptr = changetype<usize>(digits00_99.buffer_);
+
+  while (num >= 100000000) {
+    t = num / 100000000;
+    // a = <u32>(num % 100000000);
+    a = <u32>(num - t * 100000000);
+    num = t;
+
+    b = a / 10000;
+    c = a % 10000;
+
+    b1 = b / 100;
+    b2 = b % 100;
+    c1 = c / 100;
+    c2 = c % 100;
+
+    pos -= 4;
+    let outptr = buffer + (pos << 1);
+
+    let digit1: u64 = load<u32>(lutptr + (c1 << 2), BUFFER_HEADER_SIZE);
+    let digit2: u64 = load<u32>(lutptr + (c2 << 2), BUFFER_HEADER_SIZE);
+
+    store<u64>(outptr, digit1 | (digit2 << 32), STRING_HEADER_SIZE);
+
+    pos -= 4;
+    outptr = buffer + (pos << 1);
+
+    digit1 = <u64>load<u32>(lutptr + (b1 << 2), BUFFER_HEADER_SIZE);
+    digit2 = <u64>load<u32>(lutptr + (b2 << 2), BUFFER_HEADER_SIZE);
+
+    store<u64>(outptr, digit1 | (digit2 << 32), STRING_HEADER_SIZE);
+  }
+
+  a = <u32>(num);
+  if (a >= 100) {
+    t32 = a / 100;
+    b   = a % 100;
+    a   = t32;
+    pos -= 2;
+    let outptr = buffer + (pos << 1);
+    let digit = load<u32>(lutptr + (b << 2), BUFFER_HEADER_SIZE);
+    store<u32>(outptr, digit, STRING_HEADER_SIZE);
+  }
+
+  if (a >= 10) {
+    pos -= 2;
+    let outptr = buffer + (pos << 1);
+    let digit  = load<u32>(lutptr + (a << 2), BUFFER_HEADER_SIZE);
+    store<u32>(outptr, digit, STRING_HEADER_SIZE);
+  } else {
+    pos -= 1;
+    let outptr = buffer + (pos << 1);
+    let digit  = CharCode._0 + a;
+    store<u16>(outptr, digit, STRING_HEADER_SIZE);
+  }
 }
 
 @inline
@@ -197,10 +254,17 @@ export function itoa64(value: i64): string {
   var isneg  = value < 0;
   if (isneg) value = -value;
 
-  var decimals = decimalCount<u64>(value) + <i32>isneg;
-  var buffer   = allocate(decimals);
-
-  utoa64_core(changetype<usize>(buffer), value, decimals);
+  var buffer: String = null;
+  if (value <= u32.MAX_VALUE) {
+    let value32  = <u32>value;
+    let decimals = decimalCount<u32>(value32) + <i32>isneg;
+    buffer = allocate(decimals);
+    utoa32_core(changetype<usize>(buffer), value32, decimals);
+  } else {
+    let decimals = decimalCount<u64>(value) + <i32>isneg;
+    buffer = allocate(decimals);
+    utoa64_core(changetype<usize>(buffer), value, decimals);
+  }
   if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
 
   return changetype<string>(buffer);
