@@ -100,11 +100,11 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
 
     // let digit1: u64 = unchecked(digits00_99[d1]);
     // let digit2: u64 = unchecked(digits00_99[d2]);
-    let digit1: u64 = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
-    let digit2: u64 = load<u32>(lutptr + (d2 << 2), BUFFER_HEADER_SIZE);
+    let digits1: u64 = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
+    let digits2: u64 = load<u32>(lutptr + (d2 << 2), BUFFER_HEADER_SIZE);
 
     pos -= 4;
-    store<u64>(buffer + (pos << 1), digit1 | (digit2 << 32), STRING_HEADER_SIZE);
+    store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
   }
 
   if (num >= 100) {
@@ -113,15 +113,15 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     num = t;
     pos -= 2;
     // let digit = unchecked(digits00_99[d1]);
-    let digit = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
-    store<u32>(buffer + (pos << 1), digit, STRING_HEADER_SIZE);
+    let digits = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
+    store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
   }
 
   if (num >= 10) {
     pos -= 2;
     // let digit = unchecked(digits00_99[num]);
-    let digit = load<u32>(lutptr + (num << 2), BUFFER_HEADER_SIZE);
-    store<u32>(buffer + (pos << 1), digit, STRING_HEADER_SIZE);
+    let digits = load<u32>(lutptr + (num << 2), BUFFER_HEADER_SIZE);
+    store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
   } else {
     pos -= 1;
     let digit = CharCode._0 + num;
@@ -149,17 +149,17 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
     c1 = c / 100;
     c2 = c % 100;
 
-    let digit1: u64 = load<u32>(lutptr + (c1 << 2), BUFFER_HEADER_SIZE);
-    let digit2: u64 = load<u32>(lutptr + (c2 << 2), BUFFER_HEADER_SIZE);
+    let digits1: u64 = load<u32>(lutptr + (c1 << 2), BUFFER_HEADER_SIZE);
+    let digits2: u64 = load<u32>(lutptr + (c2 << 2), BUFFER_HEADER_SIZE);
 
     pos -= 4;
-    store<u64>(buffer + (pos << 1), digit1 | (digit2 << 32), STRING_HEADER_SIZE);
+    store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
 
-    digit1 = <u64>load<u32>(lutptr + (b1 << 2), BUFFER_HEADER_SIZE);
-    digit2 = <u64>load<u32>(lutptr + (b2 << 2), BUFFER_HEADER_SIZE);
+    digits1 = <u64>load<u32>(lutptr + (b1 << 2), BUFFER_HEADER_SIZE);
+    digits2 = <u64>load<u32>(lutptr + (b2 << 2), BUFFER_HEADER_SIZE);
 
     pos -= 4;
-    store<u64>(buffer + (pos << 1), digit1 | (digit2 << 32), STRING_HEADER_SIZE);
+    store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
   }
 
   a = <u32>(num);
@@ -168,14 +168,14 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
     b   = a % 100;
     a   = t32;
     pos -= 2;
-    let digit = load<u32>(lutptr + (b << 2), BUFFER_HEADER_SIZE);
-    store<u32>(buffer + (pos << 1), digit, STRING_HEADER_SIZE);
+    let digits = load<u32>(lutptr + (b << 2), BUFFER_HEADER_SIZE);
+    store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
   }
 
   if (a >= 10) {
     pos -= 2;
-    let digit = load<u32>(lutptr + (a << 2), BUFFER_HEADER_SIZE);
-    store<u32>(buffer + (pos << 1), digit, STRING_HEADER_SIZE);
+    let digits = load<u32>(lutptr + (a << 2), BUFFER_HEADER_SIZE);
+    store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
   } else {
     pos -= 1;
     let digit = CharCode._0 + a;
