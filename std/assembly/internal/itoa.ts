@@ -61,11 +61,11 @@ const digits00_99: u32[] = [
 ];
 
 function decimalCount<T>(value: T): i32 {
+  // make value abs
   var sign = value >> (8 * sizeof<T>() - 1);
   var v = (value ^ sign) - sign;
   var l = 8 * sizeof<T>() - <i32>clz<T>(v | 1); // log2
-  var t = l * 1233 >>> 12; // log10
-      // t = t - <i32>(v < unchecked(powers10[t]));
+  var t = l * 1233 >>> 12;                      // log10
 
   var power: T;
   var ptr = changetype<usize>(powers10.buffer_);
@@ -98,8 +98,6 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     d1 = r / 100;
     d2 = r % 100;
 
-    // let digit1: u64 = unchecked(digits00_99[d1]);
-    // let digit2: u64 = unchecked(digits00_99[d2]);
     let digits1: u64 = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
     let digits2: u64 = load<u32>(lutptr + (d2 << 2), BUFFER_HEADER_SIZE);
 
@@ -112,14 +110,12 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     d1  = num % 100;
     num = t;
     pos -= 2;
-    // let digit = unchecked(digits00_99[d1]);
     let digits = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
     store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
   }
 
   if (num >= 10) {
     pos -= 2;
-    // let digit = unchecked(digits00_99[num]);
     let digits = load<u32>(lutptr + (num << 2), BUFFER_HEADER_SIZE);
     store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
   } else {
@@ -137,7 +133,6 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
 
   while (num >= 100000000) {
     t = num / 100000000;
-    // a = <u32>(num % 100000000);
     a = <u32>(num - t * 100000000);
     num = t;
 
@@ -153,7 +148,6 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
     let digits2: u64 = load<u32>(lutptr + (c2 << 2), BUFFER_HEADER_SIZE);
 
     pos -= 4;
-
     store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
 
     digits1 = <u64>load<u32>(lutptr + (b1 << 2), BUFFER_HEADER_SIZE);
