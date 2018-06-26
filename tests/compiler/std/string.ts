@@ -77,7 +77,6 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
-
 assert(itoa32(0) == "0");
 assert(itoa32(1) == "1");
 assert(itoa32(8) == "8");
@@ -97,7 +96,7 @@ assert(utoa32(0) == "0");
 assert(utoa32(1000) == "1000");
 assert(utoa32(0x7fffffff) == "2147483647");
 assert(utoa32(0x80000000) == "2147483648");
-assert(utoa32(0xffffffff) == "4294967295");
+assert(utoa32(u32.MAX_VALUE) == "4294967295");
 
 assert(utoa64(0) == "0");
 assert(utoa64(1234) == "1234");
@@ -108,27 +107,15 @@ assert(utoa64(868719476735) == "868719476735");
 assert(utoa64(999868719476735) == "999868719476735");
 assert(utoa64(9999868719476735) == "9999868719476735");
 assert(utoa64(19999868719476735) == "19999868719476735");
-assert(utoa64(0xffffffffffffffff) == "18446744073709551615");
+assert(utoa64(u64.MAX_VALUE) == "18446744073709551615");
 
 assert(itoa64(-1234) == "-1234");
+assert(itoa64(0xffffffff)  == "4294967295");
+assert(itoa64(-0xffffffff)  == "-4294967295");
 assert(itoa64(68719476735) == "68719476735");
 assert(itoa64(-68719476735) == "-68719476735");
 assert(itoa64(-868719476735) == "-868719476735");
 assert(itoa64(-999868719476735) == "-999868719476735");
 assert(itoa64(-19999868719476735) == "-19999868719476735");
-assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808"); // fail
-
-/*
-var bad = utoa64(4294967294); // -633437444 854775808
-
-logi(bad.charCodeAt(0));
-logi(bad.charCodeAt(1));
-logi(bad.charCodeAt(2));
-logi(bad.charCodeAt(3));
-logi(bad.charCodeAt(4));
-logi(bad.charCodeAt(5));
-logi(bad.charCodeAt(6));
-logi(bad.charCodeAt(7));
-logi(bad.charCodeAt(8));
-logi(bad.charCodeAt(9));
-*/
+assert(itoa64(i64.MAX_VALUE) == "9223372036854775807");
+assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808");

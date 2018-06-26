@@ -153,6 +153,7 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
     let digits2: u64 = load<u32>(lutptr + (c2 << 2), BUFFER_HEADER_SIZE);
 
     pos -= 4;
+
     store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
 
     digits1 = <u64>load<u32>(lutptr + (b1 << 2), BUFFER_HEADER_SIZE);
@@ -251,7 +252,7 @@ export function itoa64(value: i64): string {
   if (isneg) value = -value;
 
   var buffer: String;
-  if (value <= <i64>u32.MAX_VALUE) {
+  if (<u64>value <= <u64>u32.MAX_VALUE) {
     let value32  = <u32>value;
     let decimals = decimalCount<u32>(value32) + <i32>isneg;
     buffer = allocate(decimals);
@@ -265,95 +266,3 @@ export function itoa64(value: i64): string {
 
   return changetype<string>(buffer);
 }
-
-/*
-export function utoa64(num: u64): string {
-  if (!num) return "0";
-
-  var buf: String = null;
-  var ptr: usize  = null;
-
-  if (num > u32.MAX_VALUE) {
-    let q: u64 = num / 10000000000;
-    let r: u64 = num - q * 10000000000;
-    let decimalsLo = 10;
-
-    if (r > u32.MAX_VALUE) {
-      q = num / 1000000000;
-      r = num - q * 1000000000;
-      decimalsLo = 9;
-    }
-
-    let hi = <u32>q;
-    let lo = <u32>r;
-
-    let decimalsHi = decimalCount(hi);
-    let decimals   = decimalsLo + decimalsHi;
-
-    buf = allocate(decimals);
-    ptr = changetype<usize>(buf);
-
-    utoa32_core(ptr, lo, decimals);
-    utoa32_core(ptr, hi, decimals - decimalsLo);
-
-  } else {
-    let lo: u32  = <u32>num;
-    let decimals = decimalCount(lo);
-
-    buf = allocate(decimals);
-    ptr = changetype<usize>(buf);
-
-    utoa32_core(ptr, lo, decimals);
-  }
-
-  return changetype<string>(buf);
-}
-*/
-
-/*
-export function itoa64(num: i64): string {
-  if (!num) return "0";
-
-  var isneg = num < 0;
-  if (isneg) num = -num;
-
-  var buf: String = null;
-  var ptr: usize  = null;
-
-  if (<u64>num > u32.MAX_VALUE) {
-    let q: u64 = <u64>num / 10000000000;
-    let r: u64 = <u64>num - q * 10000000000;
-    let decimalsLo = 10;
-
-    if (r > u32.MAX_VALUE && q < (0xffffffff / 10)) {
-      q = <u64>num / 1000000000;
-      r = <u64>num - q * 1000000000;
-      decimalsLo = 9;
-    }
-
-    let hi = <u32>q;
-    let lo = <u32>r;
-
-    let decimalsHi = decimalCount(hi);
-    let decimals   = decimalsLo + decimalsHi + <i32>isneg;
-
-    buf = allocate(decimals);
-    ptr = changetype<usize>(buf);
-
-    utoa32_core(ptr, lo, decimals);
-    utoa32_core(ptr, hi, decimals - decimalsLo);
-
-  } else {
-    let lo: u32  = <u32>num;
-    let decimals = decimalCount(lo) + <i32>isneg;
-
-    buf = allocate(decimals);
-    ptr = changetype<usize>(buf);
-
-    utoa32_core(ptr, lo, decimals);
-  }
-
-  if (isneg) store<u16>(ptr, CharCode.MINUS, HEADER_SIZE);
-  return changetype<string>(buf);
-}
-*/

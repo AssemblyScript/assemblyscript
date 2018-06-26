@@ -54,7 +54,7 @@
  (global $~lib/internal/string/CharCode.x i32 (i32.const 120))
  (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 1804))
+ (global $HEAP_BASE i32 (i32.const 1876))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
  (data (i32.const 16) "\18\00\00\00\n\00\00\00(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -114,11 +114,13 @@
  (data (i32.const 1524) "\11\00\00\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
  (data (i32.const 1564) "\14\00\00\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005\00")
  (data (i32.const 1608) "\05\00\00\00-\001\002\003\004\00")
- (data (i32.const 1624) "\0c\00\00\00-\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 1652) "\0d\00\00\00-\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 1684) "\10\00\00\00-\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 1720) "\12\00\00\00-\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 1760) "\14\00\00\00-\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\008\00")
+ (data (i32.const 1624) "\0b\00\00\00-\004\002\009\004\009\006\007\002\009\005\00")
+ (data (i32.const 1652) "\0c\00\00\00-\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 1680) "\0d\00\00\00-\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 1712) "\10\00\00\00-\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 1748) "\12\00\00\00-\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 1788) "\13\00\00\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\007\00")
+ (data (i32.const 1832) "\14\00\00\00-\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\008\00")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -5135,7 +5137,7 @@
    )
   )
   (if
-   (i64.le_s
+   (i64.le_u
     (get_local $0)
     (i64.const 4294967295)
    )
@@ -6215,7 +6217,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 81)
+     (i32.const 80)
      (i32.const 0)
     )
     (unreachable)
@@ -6234,7 +6236,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 82)
+     (i32.const 81)
      (i32.const 0)
     )
     (unreachable)
@@ -6253,7 +6255,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 83)
+     (i32.const 82)
      (i32.const 0)
     )
     (unreachable)
@@ -6272,7 +6274,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 84)
+     (i32.const 83)
      (i32.const 0)
     )
     (unreachable)
@@ -6291,7 +6293,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 85)
+     (i32.const 84)
      (i32.const 0)
     )
     (unreachable)
@@ -6310,7 +6312,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 86)
+     (i32.const 85)
      (i32.const 0)
     )
     (unreachable)
@@ -6329,7 +6331,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 87)
+     (i32.const 86)
      (i32.const 0)
     )
     (unreachable)
@@ -6348,7 +6350,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 88)
+     (i32.const 87)
      (i32.const 0)
     )
     (unreachable)
@@ -6367,7 +6369,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 89)
+     (i32.const 88)
      (i32.const 0)
     )
     (unreachable)
@@ -6386,7 +6388,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 90)
+     (i32.const 89)
      (i32.const 0)
     )
     (unreachable)
@@ -6405,7 +6407,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 91)
+     (i32.const 90)
      (i32.const 0)
     )
     (unreachable)
@@ -6424,7 +6426,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 92)
+     (i32.const 91)
      (i32.const 0)
     )
     (unreachable)
@@ -6443,7 +6445,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 93)
+     (i32.const 92)
      (i32.const 0)
     )
     (unreachable)
@@ -6462,7 +6464,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 94)
+     (i32.const 93)
      (i32.const 0)
     )
     (unreachable)
@@ -6481,7 +6483,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 96)
+     (i32.const 95)
      (i32.const 0)
     )
     (unreachable)
@@ -6500,7 +6502,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 97)
+     (i32.const 96)
      (i32.const 0)
     )
     (unreachable)
@@ -6519,7 +6521,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 98)
+     (i32.const 97)
      (i32.const 0)
     )
     (unreachable)
@@ -6538,7 +6540,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 99)
+     (i32.const 98)
      (i32.const 0)
     )
     (unreachable)
@@ -6557,7 +6559,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 100)
+     (i32.const 99)
      (i32.const 0)
     )
     (unreachable)
@@ -6576,7 +6578,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 102)
+     (i32.const 101)
      (i32.const 0)
     )
     (unreachable)
@@ -6595,7 +6597,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 103)
+     (i32.const 102)
      (i32.const 0)
     )
     (unreachable)
@@ -6614,7 +6616,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 104)
+     (i32.const 103)
      (i32.const 0)
     )
     (unreachable)
@@ -6633,7 +6635,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 105)
+     (i32.const 104)
      (i32.const 0)
     )
     (unreachable)
@@ -6652,7 +6654,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 106)
+     (i32.const 105)
      (i32.const 0)
     )
     (unreachable)
@@ -6671,7 +6673,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 107)
+     (i32.const 106)
      (i32.const 0)
     )
     (unreachable)
@@ -6690,7 +6692,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 108)
+     (i32.const 107)
      (i32.const 0)
     )
     (unreachable)
@@ -6709,7 +6711,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 109)
+     (i32.const 108)
      (i32.const 0)
     )
     (unreachable)
@@ -6728,7 +6730,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 110)
+     (i32.const 109)
      (i32.const 0)
     )
     (unreachable)
@@ -6747,7 +6749,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 111)
+     (i32.const 110)
      (i32.const 0)
     )
     (unreachable)
@@ -6766,7 +6768,45 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
+     (i32.const 112)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa64
+      (i64.const 4294967295)
+     )
+     (i32.const 1348)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
      (i32.const 113)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa64
+      (i64.const -4294967295)
+     )
+     (i32.const 1624)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 114)
      (i32.const 0)
     )
     (unreachable)
@@ -6785,25 +6825,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 644)
-     (i32.const 114)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/internal/itoa/itoa64
-      (i64.const -68719476735)
-     )
-     (i32.const 1624)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 644)
      (i32.const 115)
      (i32.const 0)
     )
@@ -6814,7 +6835,7 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/itoa/itoa64
-      (i64.const -868719476735)
+      (i64.const -68719476735)
      )
      (i32.const 1652)
     )
@@ -6833,9 +6854,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/itoa/itoa64
-      (i64.const -999868719476735)
+      (i64.const -868719476735)
      )
-     (i32.const 1684)
+     (i32.const 1680)
     )
    )
    (block
@@ -6852,9 +6873,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/itoa/itoa64
-      (i64.const -19999868719476735)
+      (i64.const -999868719476735)
      )
-     (i32.const 1720)
+     (i32.const 1712)
     )
    )
    (block
@@ -6871,9 +6892,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/itoa/itoa64
-      (i64.const -9223372036854775808)
+      (i64.const -19999868719476735)
      )
-     (i32.const 1760)
+     (i32.const 1748)
     )
    )
    (block
@@ -6881,6 +6902,44 @@
      (i32.const 0)
      (i32.const 644)
      (i32.const 119)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa64
+      (i64.const 9223372036854775807)
+     )
+     (i32.const 1788)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 120)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/itoa/itoa64
+      (i64.const -9223372036854775808)
+     )
+     (i32.const 1832)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 644)
+     (i32.const 121)
      (i32.const 0)
     )
     (unreachable)
