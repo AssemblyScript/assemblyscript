@@ -155,25 +155,7 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
     store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
   }
 
-  a = <u32>(num);
-  while (a >= 100) {
-    t32 = a / 100;
-    b   = a % 100;
-    a   = t32;
-    pos -= 2;
-    let digits = load<u32>(lutptr + (b << 2), BUFFER_HEADER_SIZE);
-    store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
-  }
-
-  if (a >= 10) {
-    pos -= 2;
-    let digits = load<u32>(lutptr + (a << 2), BUFFER_HEADER_SIZE);
-    store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
-  } else {
-    pos -= 1;
-    let digit = CharCode._0 + a;
-    store<u16>(buffer + (pos << 1), digit, STRING_HEADER_SIZE);
-  }
+  utoa32_lut(buffer, <u32>num, pos);
 }
 
 @inline

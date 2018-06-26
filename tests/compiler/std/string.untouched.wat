@@ -4753,7 +4753,6 @@
   (local $13 i32)
   (local $14 i64)
   (local $15 i64)
-  (local $16 i32)
   (set_local $12
    (get_local $2)
   )
@@ -4921,126 +4920,12 @@
     )
    )
   )
-  (set_local $5
+  (call $~lib/internal/itoa/utoa32_lut
+   (get_local $0)
    (i32.wrap/i64
     (get_local $1)
    )
-  )
-  (block $break|1
-   (loop $continue|1
-    (if
-     (i32.ge_u
-      (get_local $5)
-      (i32.const 100)
-     )
-     (block
-      (block
-       (set_local $4
-        (i32.div_u
-         (get_local $5)
-         (i32.const 100)
-        )
-       )
-       (set_local $6
-        (i32.rem_u
-         (get_local $5)
-         (i32.const 100)
-        )
-       )
-       (set_local $5
-        (get_local $4)
-       )
-       (set_local $12
-        (i32.sub
-         (get_local $12)
-         (i32.const 2)
-        )
-       )
-       (set_local $16
-        (i32.load offset=8
-         (i32.add
-          (get_local $13)
-          (i32.shl
-           (get_local $6)
-           (i32.const 2)
-          )
-         )
-        )
-       )
-       (i32.store offset=4
-        (i32.add
-         (get_local $0)
-         (i32.shl
-          (get_local $12)
-          (i32.const 1)
-         )
-        )
-        (get_local $16)
-       )
-      )
-      (br $continue|1)
-     )
-    )
-   )
-  )
-  (if
-   (i32.ge_u
-    (get_local $5)
-    (i32.const 10)
-   )
-   (block
-    (set_local $12
-     (i32.sub
-      (get_local $12)
-      (i32.const 2)
-     )
-    )
-    (set_local $16
-     (i32.load offset=8
-      (i32.add
-       (get_local $13)
-       (i32.shl
-        (get_local $5)
-        (i32.const 2)
-       )
-      )
-     )
-    )
-    (i32.store offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $12)
-       (i32.const 1)
-      )
-     )
-     (get_local $16)
-    )
-   )
-   (block
-    (set_local $12
-     (i32.sub
-      (get_local $12)
-      (i32.const 1)
-     )
-    )
-    (set_local $16
-     (i32.add
-      (i32.const 48)
-      (get_local $5)
-     )
-    )
-    (i32.store16 offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $12)
-       (i32.const 1)
-      )
-     )
-     (get_local $16)
-    )
-   )
+   (get_local $12)
   )
  )
  (func $~lib/internal/itoa/utoa64 (; 31 ;) (type $Ii) (param $0 i64) (result i32)
