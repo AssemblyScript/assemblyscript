@@ -163,7 +163,7 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
   }
 
   a = <u32>(num);
-  if (a >= 100) {
+  while (a >= 100) {
     t32 = a / 100;
     b   = a % 100;
     a   = t32;
@@ -251,7 +251,7 @@ export function itoa64(value: i64): string {
   if (isneg) value = -value;
 
   var buffer: String;
-  if (value <= u32.MAX_VALUE) {
+  if (value <= <i64>u32.MAX_VALUE) {
     let value32  = <u32>value;
     let decimals = decimalCount<u32>(value32) + <i32>isneg;
     buffer = allocate(decimals);
