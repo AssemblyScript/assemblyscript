@@ -66,15 +66,15 @@ function decimalCount<T>(value: T): i32 {
   var t = l * 1233 >>> 12;                       // log10
 
   var power: T;
-  var ptr = changetype<ArrayBuffer>(powers10.buffer_);
+  var lutbuf = powers10.buffer_;
   if (sizeof<T>() <= 4) {
-    power = loadUnsafe<u32, T>(ptr, t);
+    power = loadUnsafe<u32, T>(lutbuf, t);
     t = t - <i32>(v < power);
   } else { // sizeof<T>() == 8
     let le10   = t <= 10;
     let offset = select<i32>(0, 10, le10);        // offset = t <= 10 ? 0 : 10
     let factor = select<T>(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
-    power = loadUnsafe<u32, T>(ptr, t - offset);
+    power = loadUnsafe<u32, T>(lutbuf, t - offset);
     t = t - <i32>(v < factor * power);
   }
 
@@ -83,7 +83,7 @@ function decimalCount<T>(value: T): i32 {
 
 function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
   var r: u32, t: u32, d1: u32, d2: u32;
-  var lutbuf = changetype<ArrayBuffer>(digits00_99.buffer_);
+  var lutbuf = digits00_99.buffer_;
 
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
@@ -125,7 +125,7 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
   var t:  u64, t32: u32, r: u32, b: u32, c: u32;
   var b1: u32, b2: u32, c1: u32, c2: u32;
 
-  var lutbuf = changetype<ArrayBuffer>(digits00_99.buffer_);
+  var lutbuf = digits00_99.buffer_;
 
   while (num >= 100000000) {
     t = num / 100000000;
