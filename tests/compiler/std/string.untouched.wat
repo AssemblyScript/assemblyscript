@@ -4276,7 +4276,7 @@
     (i32.clz
      (i32.or
       (get_local $2)
-      (i32.const 1)
+      (i32.const 10)
      )
     )
    )
@@ -4659,7 +4659,7 @@
      (i64.clz
       (i64.or
        (get_local $2)
-       (i64.const 1)
+       (i64.const 10)
       )
      )
     )

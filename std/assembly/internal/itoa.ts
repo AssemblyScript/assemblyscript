@@ -57,12 +57,13 @@ const digits00_99: u32[] = [
   0x00350039, 0x00360039, 0x00370039, 0x00380039, 0x00390039
 ];
 
+// Count number of decimals in value
 function decimalCount<T>(value: T): i32 {
   // make value abs
   var sign = value >> (8 * sizeof<T>() - 1);
   var v = (value ^ sign) - sign;
-  var l = 8 * sizeof<T>() - <i32>clz<T>(v | 1); // log2
-  var t = l * 1233 >>> 12;                      // log10
+  var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
+  var t = l * 1233 >>> 12;                       // log10
 
   var power: T;
   var ptr = changetype<usize>(powers10.buffer_);
