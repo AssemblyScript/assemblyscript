@@ -3715,37 +3715,63 @@ export const enum FlowFlags {
   /** No specific conditions. */
   NONE = 0,
 
+  // categorical
+
   /** This branch always returns. */
   RETURNS = 1 << 0,
+  /** This branch always returns a wrapped value. */
+  RETURNS_WRAPPED = 1 << 1,
   /** This branch always throws. */
-  THROWS = 1 << 1,
+  THROWS = 1 << 2,
   /** This branch always breaks. */
-  BREAKS = 1 << 2,
+  BREAKS = 1 << 3,
   /** This branch always continues. */
-  CONTINUES = 1 << 3,
+  CONTINUES = 1 << 4,
   /** This branch always allocates. Constructors only. */
-  ALLOCATES = 1 << 4,
+  ALLOCATES = 1 << 5,
+
+  // conditional
 
   /** This branch conditionally returns in a child branch. */
-  CONDITIONALLY_RETURNS = 1 << 5,
+  CONDITIONALLY_RETURNS = 1 << 6,
   /** This branch conditionally throws in a child branch. */
-  CONDITIONALLY_THROWS = 1 << 6,
+  CONDITIONALLY_THROWS = 1 << 7,
   /** This branch conditionally breaks in a child branch. */
-  CONDITIONALLY_BREAKS = 1 << 7,
+  CONDITIONALLY_BREAKS = 1 << 8,
   /** This branch conditionally continues in a child branch. */
-  CONDITIONALLY_CONTINUES = 1 << 8,
+  CONDITIONALLY_CONTINUES = 1 << 9,
   /** This branch conditionally allocates in a child branch. Constructors only. */
-  CONDITIONALLY_ALLOCATES = 1 << 9,
+  CONDITIONALLY_ALLOCATES = 1 << 10,
+
+  // special
 
   /** This branch is part of inlining a function. */
-  INLINE_CONTEXT = 1 << 10,
+  INLINE_CONTEXT = 1 << 11,
   /** This branch explicitly requests no bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 11,
-  /** This branch returns a properly wrapped value. */
-  RETURNS_WRAPPED = 1 << 12,
+  UNCHECKED_CONTEXT = 1 << 12,
 
-  /** This branch is terminated if any of these flags is set. */
-  TERMINATED = FlowFlags.RETURNS | FlowFlags.THROWS | FlowFlags.BREAKS | FlowFlags.CONTINUES
+  // masks
+
+  /** Any terminating flag. */
+  ANY_TERMINATING = FlowFlags.RETURNS
+                  | FlowFlags.THROWS
+                  | FlowFlags.BREAKS
+                  | FlowFlags.CONTINUES,
+
+  /** Any categorical flag. */
+  ANY_CATEGORICAL = FlowFlags.RETURNS
+                  | FlowFlags.RETURNS_WRAPPED
+                  | FlowFlags.THROWS
+                  | FlowFlags.BREAKS
+                  | FlowFlags.CONTINUES
+                  | FlowFlags.ALLOCATES,
+
+  /** Any conditional flag. */
+  ANY_CONDITIONAL = FlowFlags.CONDITIONALLY_RETURNS
+                  | FlowFlags.CONDITIONALLY_THROWS
+                  | FlowFlags.CONDITIONALLY_BREAKS
+                  | FlowFlags.CONDITIONALLY_CONTINUES
+                  | FlowFlags.CONDITIONALLY_ALLOCATES
 }
 
 /** A control flow evaluator. */
@@ -3801,8 +3827,8 @@ export class Flow {
   /** Unsets the specified flag or flags. */
   unset(flag: FlowFlags): void { this.flags &= ~flag; }
 
-  /** Enters a new branch or scope and returns the new flow. */
-  enterBranchOrScope(): Flow {
+  /** Forks this flow to a child flow. */
+  fork(): Flow {
     var branch = new Flow();
     branch.parent = this;
     branch.flags = this.flags;
@@ -3817,37 +3843,16 @@ export class Flow {
     return branch;
   }
 
-  /** Leaves the current branch or scope and returns the parent flow. */
-  leaveBranchOrScope(propagate: bool = true): Flow {
+  /** Frees this flow's scoped variables. */
+  free(): Flow {
     var parent = assert(this.parent);
-
-    // Free block-scoped locals
-    if (this.scopedLocals) {
+    if (this.scopedLocals) { // free block-scoped locals
       for (let scopedLocal of this.scopedLocals.values()) {
         if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
           this.currentFunction.freeTempLocal(scopedLocal);
         }
       }
       this.scopedLocals = null;
-    }
-
-    // Propagate conditionaal flags to parent
-    if (propagate) {
-      if (this.is(FlowFlags.RETURNS)) {
-        parent.set(FlowFlags.CONDITIONALLY_RETURNS);
-      }
-      if (this.is(FlowFlags.THROWS)) {
-        parent.set(FlowFlags.CONDITIONALLY_THROWS);
-      }
-      if (this.is(FlowFlags.BREAKS) && parent.breakLabel == this.breakLabel) {
-        parent.set(FlowFlags.CONDITIONALLY_BREAKS);
-      }
-      if (this.is(FlowFlags.CONTINUES) && parent.continueLabel == this.continueLabel) {
-        parent.set(FlowFlags.CONDITIONALLY_CONTINUES);
-      }
-      if (this.is(FlowFlags.ALLOCATES)) {
-        parent.set(FlowFlags.CONDITIONALLY_ALLOCATES);
-      }
     }
     return parent;
   }
@@ -3982,36 +3987,43 @@ export class Flow {
     else this.wrappedLocals = map;
   }
 
-  /** Inherits flags and local wrap states from the specified flow (e.g. on inner block). */
+  /** Inherits flags and local wrap states from the specified flow (e.g. blocks). */
   inherit(other: Flow): void {
-    this.flags |= other.flags & (
-      FlowFlags.RETURNS |
-      FlowFlags.RETURNS_WRAPPED |
-      FlowFlags.THROWS |
-      FlowFlags.BREAKS |
-      FlowFlags.CONTINUES |
-      FlowFlags.ALLOCATES
-    );
+    this.flags |= other.flags & (FlowFlags.ANY_CATEGORICAL | FlowFlags.ANY_CONDITIONAL);
     this.wrappedLocals = other.wrappedLocals;
     this.wrappedLocalsExt = other.wrappedLocalsExt; // no need to slice because other flow is finished
   }
 
-  /** Inherits mutual flags and local wrap states from the specified flows (e.g. on then/else branches). */
+  /** Inherits categorical flags as conditional flags from the specified flow (e.g. then without else). */
+  inheritConditional(other: Flow): void {
+    if (other.is(FlowFlags.RETURNS)) {
+      this.set(FlowFlags.CONDITIONALLY_RETURNS);
+    }
+    if (other.is(FlowFlags.THROWS)) {
+      this.set(FlowFlags.CONDITIONALLY_THROWS);
+    }
+    if (other.is(FlowFlags.BREAKS) && other.breakLabel == this.breakLabel) {
+      this.set(FlowFlags.CONDITIONALLY_BREAKS);
+    }
+    if (other.is(FlowFlags.CONTINUES) && other.continueLabel == this.continueLabel) {
+      this.set(FlowFlags.CONDITIONALLY_CONTINUES);
+    }
+    if (other.is(FlowFlags.ALLOCATES)) {
+      this.set(FlowFlags.CONDITIONALLY_ALLOCATES);
+    }
+  }
+
+  /** Inherits mutual flags and local wrap states from the specified flows (e.g. then with else). */
   inheritMutual(left: Flow, right: Flow): void {
-    // flags set in both arms
-    this.flags |= left.flags & right.flags & (
-      FlowFlags.RETURNS |
-      FlowFlags.RETURNS_WRAPPED |
-      FlowFlags.THROWS |
-      FlowFlags.BREAKS |
-      FlowFlags.CONTINUES |
-      FlowFlags.ALLOCATES
-    );
+    // categorical flags set in both arms
+    this.flags |= left.flags & right.flags & FlowFlags.ANY_CATEGORICAL;
+
+    // conditional flags set in at least one arm
+    this.flags |= left.flags & FlowFlags.ANY_CONDITIONAL;
+    this.flags |= right.flags & FlowFlags.ANY_CONDITIONAL;
+
     // locals wrapped in both arms
-    this.wrappedLocals = i64_and(
-      left.wrappedLocals,
-      right.wrappedLocals
-    );
+    this.wrappedLocals = i64_and(left.wrappedLocals, right.wrappedLocals);
     var leftExt = left.wrappedLocalsExt;
     var rightExt = right.wrappedLocalsExt;
     if (leftExt != null && rightExt != null) {

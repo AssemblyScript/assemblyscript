@@ -17,3 +17,9 @@ for (;;) if (--i == 0) break;
 
 for (var k: i32 = 0; k < 10; ++k) continue;
 assert(k == 10);
+
+for (let i = 0; i < 10; i++) { // without continue block
+  for (let j = 0; j < 10; j++) { // with continue block
+    if (i === j) continue;
+  }
+}
