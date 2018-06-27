@@ -17,7 +17,7 @@
  (global $enum/NonConstant.ONE (mut i32) (i32.const 0))
  (global $enum/SelfReference.ZERO i32 (i32.const 0))
  (global $enum/SelfReference.ONE i32 (i32.const 1))
- (memory $0 1)
+ (memory $0 0)
  (export "Implicit.ZERO" (global $enum/Implicit.ZERO))
  (export "Implicit.ONE" (global $enum/Implicit.ONE))
  (export "Implicit.TWO" (global $enum/Implicit.TWO))

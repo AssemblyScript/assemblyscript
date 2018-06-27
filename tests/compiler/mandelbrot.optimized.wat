@@ -3,7 +3,7 @@
  (type $FF (func (param f64) (result f64)))
  (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
- (memory $0 1)
+ (memory $0 0)
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
  (export "memory" (memory $0))
  (func $~lib/math/NativeMath.log (; 0 ;) (type $FF) (param $0 f64) (result f64)

@@ -1,16 +1,14 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iv (func (param i32)))
  (type $Ii (func (param i64) (result i32)))
  (type $v (func))
- (import "env" "logi" (func $std/hash/logi (param i32)))
  (memory $0 1)
  (data (i32.const 12) "\01\00\00\00a")
  (data (i32.const 20) "\02\00\00\00a\00b")
  (data (i32.const 28) "\03\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/internal/hash/hashStr (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hashStr (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -57,6 +55,9 @@
    )
   )
   (get_local $2)
+ )
+ (func $std/hash/check (; 1 ;) (type $ii) (param $0 i32) (result i32)
+  (i32.const 1)
  )
  (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (i32.mul
@@ -203,89 +204,123 @@
   )
  )
  (func $start (; 4 ;) (type $v)
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hashStr
-    (i32.const 0)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hashStr
+     (i32.const 0)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hashStr
-    (i32.const 8)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hashStr
+     (i32.const 8)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hashStr
-    (i32.const 12)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hashStr
+     (i32.const 12)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hashStr
-    (i32.const 20)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hashStr
+     (i32.const 20)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hashStr
-    (i32.const 28)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hashStr
+     (i32.const 28)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash32
-    (i32.const 0)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash32
+     (i32.const 0)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash32
-    (i32.const 1065353216)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash32
+     (i32.const 1065353216)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash32
-    (i32.const 1066192077)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash32
+     (i32.const 1066192077)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash32
-    (i32.const 0)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash32
+     (i32.const 0)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash32
-    (i32.const 2139095040)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash32
+     (i32.const 2139095040)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash32
-    (i32.const 2143289344)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash32
+     (i32.const 2143289344)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash64
-    (i64.const 0)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash64
+     (i64.const 0)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash64
-    (i64.const 4607182418800017408)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash64
+     (i64.const 4607182418800017408)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash64
-    (i64.const 4607632778762754458)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash64
+     (i64.const 4607632778762754458)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash64
-    (i64.const 0)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash64
+     (i64.const 0)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash64
-    (i64.const 9218868437227405312)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash64
+     (i64.const 9218868437227405312)
+    )
    )
   )
-  (call $std/hash/logi
-   (call $~lib/internal/hash/hash64
-    (i64.const 9221120237041090560)
+  (drop
+   (call $std/hash/check
+    (call $~lib/internal/hash/hash64
+     (i64.const 9221120237041090560)
+    )
    )
   )
  )

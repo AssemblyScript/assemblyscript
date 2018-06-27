@@ -89,8 +89,6 @@ function ulperrf(got: f32, want: f32, dwant: f32): f32 {
   return NativeMathf.scalbn(got - want, -eulpf(want)) + dwant;
 }
 
-declare function logf(f: f64): void;
-
 function check<T>(actual: T, expected: T, dy: T, flags: i32): bool {
   if (actual == expected) return true;
   if (isNaN(expected)) return isNaN(actual);
@@ -99,7 +97,6 @@ function check<T>(actual: T, expected: T, dy: T, flags: i32): bool {
   else if (sizeof<T>() == 4) d = ulperrf(actual, expected, dy);
   else return false;
   if (abs<T>(d) >= 1.5) {
-    logf(abs<T>(d));
     return false;
   }
   return true;

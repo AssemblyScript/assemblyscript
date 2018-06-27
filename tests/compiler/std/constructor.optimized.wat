@@ -15,7 +15,7 @@
  (global $std/constructor/ctorAllocates (mut i32) (i32.const 0))
  (global $std/constructor/ctorConditionallyAllocates (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 1)
+ (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/allocator/arena/allocate_memory (; 0 ;) (type $ii) (param $0 i32) (result i32)

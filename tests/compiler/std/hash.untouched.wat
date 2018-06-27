@@ -1,9 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iv (func (param i32)))
  (type $Ii (func (param i64) (result i32)))
  (type $v (func))
- (import "env" "logi" (func $std/hash/logi (param i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -23,7 +21,7 @@
  (data (i32.const 28) "\03\00\00\00a\00b\00c\00")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/internal/hash/hashStr (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hashStr (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -77,6 +75,9 @@
    )
   )
   (get_local $1)
+ )
+ (func $std/hash/check (; 1 ;) (type $ii) (param $0 i32) (result i32)
+  (i32.const 1)
  )
  (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -273,229 +274,263 @@
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<String>|inlined.0 (result i32)
-    (set_local $0
-     (i32.const 0)
-    )
-    (br $~lib/internal/hash/hash<String>|inlined.0
-     (call $~lib/internal/hash/hashStr
-      (get_local $0)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<String>|inlined.0 (result i32)
+     (set_local $0
+      (i32.const 0)
      )
-    )
-   )
-  )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<String>|inlined.1 (result i32)
-    (set_local $0
-     (i32.const 8)
-    )
-    (br $~lib/internal/hash/hash<String>|inlined.1
-     (call $~lib/internal/hash/hashStr
-      (get_local $0)
-     )
-    )
-   )
-  )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<String>|inlined.2 (result i32)
-    (set_local $0
-     (i32.const 12)
-    )
-    (br $~lib/internal/hash/hash<String>|inlined.2
-     (call $~lib/internal/hash/hashStr
-      (get_local $0)
-     )
-    )
-   )
-  )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<String>|inlined.3 (result i32)
-    (set_local $0
-     (i32.const 20)
-    )
-    (br $~lib/internal/hash/hash<String>|inlined.3
-     (call $~lib/internal/hash/hashStr
-      (get_local $0)
-     )
-    )
-   )
-  )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<String>|inlined.4 (result i32)
-    (set_local $0
-     (i32.const 28)
-    )
-    (br $~lib/internal/hash/hash<String>|inlined.4
-     (call $~lib/internal/hash/hashStr
-      (get_local $0)
-     )
-    )
-   )
-  )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f32>|inlined.0 (result i32)
-    (set_local $1
-     (f32.const 0)
-    )
-    (br $~lib/internal/hash/hash<f32>|inlined.0
-     (call $~lib/internal/hash/hash32
-      (i32.reinterpret/f32
-       (get_local $1)
+     (br $~lib/internal/hash/hash<String>|inlined.0
+      (call $~lib/internal/hash/hashStr
+       (get_local $0)
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f32>|inlined.1 (result i32)
-    (set_local $1
-     (f32.const 1)
-    )
-    (br $~lib/internal/hash/hash<f32>|inlined.1
-     (call $~lib/internal/hash/hash32
-      (i32.reinterpret/f32
-       (get_local $1)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<String>|inlined.1 (result i32)
+     (set_local $0
+      (i32.const 8)
+     )
+     (br $~lib/internal/hash/hash<String>|inlined.1
+      (call $~lib/internal/hash/hashStr
+       (get_local $0)
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f32>|inlined.2 (result i32)
-    (set_local $1
-     (f32.const 1.100000023841858)
-    )
-    (br $~lib/internal/hash/hash<f32>|inlined.2
-     (call $~lib/internal/hash/hash32
-      (i32.reinterpret/f32
-       (get_local $1)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<String>|inlined.2 (result i32)
+     (set_local $0
+      (i32.const 12)
+     )
+     (br $~lib/internal/hash/hash<String>|inlined.2
+      (call $~lib/internal/hash/hashStr
+       (get_local $0)
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f32>|inlined.3 (result i32)
-    (set_local $1
-     (f32.const 0)
-    )
-    (br $~lib/internal/hash/hash<f32>|inlined.3
-     (call $~lib/internal/hash/hash32
-      (i32.reinterpret/f32
-       (get_local $1)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<String>|inlined.3 (result i32)
+     (set_local $0
+      (i32.const 20)
+     )
+     (br $~lib/internal/hash/hash<String>|inlined.3
+      (call $~lib/internal/hash/hashStr
+       (get_local $0)
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f32>|inlined.4 (result i32)
-    (set_local $1
-     (f32.const inf)
-    )
-    (br $~lib/internal/hash/hash<f32>|inlined.4
-     (call $~lib/internal/hash/hash32
-      (i32.reinterpret/f32
-       (get_local $1)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<String>|inlined.4 (result i32)
+     (set_local $0
+      (i32.const 28)
+     )
+     (br $~lib/internal/hash/hash<String>|inlined.4
+      (call $~lib/internal/hash/hashStr
+       (get_local $0)
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f32>|inlined.5 (result i32)
-    (set_local $1
-     (f32.const nan:0x400000)
-    )
-    (br $~lib/internal/hash/hash<f32>|inlined.5
-     (call $~lib/internal/hash/hash32
-      (i32.reinterpret/f32
-       (get_local $1)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f32>|inlined.0 (result i32)
+     (set_local $1
+      (f32.const 0)
+     )
+     (br $~lib/internal/hash/hash<f32>|inlined.0
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
+       )
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f64>|inlined.0 (result i32)
-    (set_local $2
-     (f64.const 0)
-    )
-    (br $~lib/internal/hash/hash<f64>|inlined.0
-     (call $~lib/internal/hash/hash64
-      (i64.reinterpret/f64
-       (get_local $2)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f32>|inlined.1 (result i32)
+     (set_local $1
+      (f32.const 1)
+     )
+     (br $~lib/internal/hash/hash<f32>|inlined.1
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
+       )
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f64>|inlined.1 (result i32)
-    (set_local $2
-     (f64.const 1)
-    )
-    (br $~lib/internal/hash/hash<f64>|inlined.1
-     (call $~lib/internal/hash/hash64
-      (i64.reinterpret/f64
-       (get_local $2)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f32>|inlined.2 (result i32)
+     (set_local $1
+      (f32.const 1.100000023841858)
+     )
+     (br $~lib/internal/hash/hash<f32>|inlined.2
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
+       )
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f64>|inlined.2 (result i32)
-    (set_local $2
-     (f64.const 1.1)
-    )
-    (br $~lib/internal/hash/hash<f64>|inlined.2
-     (call $~lib/internal/hash/hash64
-      (i64.reinterpret/f64
-       (get_local $2)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f32>|inlined.3 (result i32)
+     (set_local $1
+      (f32.const 0)
+     )
+     (br $~lib/internal/hash/hash<f32>|inlined.3
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
+       )
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f64>|inlined.3 (result i32)
-    (set_local $2
-     (f64.const 0)
-    )
-    (br $~lib/internal/hash/hash<f64>|inlined.3
-     (call $~lib/internal/hash/hash64
-      (i64.reinterpret/f64
-       (get_local $2)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f32>|inlined.4 (result i32)
+     (set_local $1
+      (f32.const inf)
+     )
+     (br $~lib/internal/hash/hash<f32>|inlined.4
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
+       )
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f64>|inlined.4 (result i32)
-    (set_local $2
-     (f64.const inf)
-    )
-    (br $~lib/internal/hash/hash<f64>|inlined.4
-     (call $~lib/internal/hash/hash64
-      (i64.reinterpret/f64
-       (get_local $2)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f32>|inlined.5 (result i32)
+     (set_local $1
+      (f32.const nan:0x400000)
+     )
+     (br $~lib/internal/hash/hash<f32>|inlined.5
+      (call $~lib/internal/hash/hash32
+       (i32.reinterpret/f32
+        (get_local $1)
+       )
       )
      )
     )
    )
   )
-  (call $std/hash/logi
-   (block $~lib/internal/hash/hash<f64>|inlined.5 (result i32)
-    (set_local $2
-     (f64.const nan:0x8000000000000)
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f64>|inlined.0 (result i32)
+     (set_local $2
+      (f64.const 0)
+     )
+     (br $~lib/internal/hash/hash<f64>|inlined.0
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $2)
+       )
+      )
+     )
     )
-    (br $~lib/internal/hash/hash<f64>|inlined.5
-     (call $~lib/internal/hash/hash64
-      (i64.reinterpret/f64
-       (get_local $2)
+   )
+  )
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f64>|inlined.1 (result i32)
+     (set_local $2
+      (f64.const 1)
+     )
+     (br $~lib/internal/hash/hash<f64>|inlined.1
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $2)
+       )
+      )
+     )
+    )
+   )
+  )
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f64>|inlined.2 (result i32)
+     (set_local $2
+      (f64.const 1.1)
+     )
+     (br $~lib/internal/hash/hash<f64>|inlined.2
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $2)
+       )
+      )
+     )
+    )
+   )
+  )
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f64>|inlined.3 (result i32)
+     (set_local $2
+      (f64.const 0)
+     )
+     (br $~lib/internal/hash/hash<f64>|inlined.3
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $2)
+       )
+      )
+     )
+    )
+   )
+  )
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f64>|inlined.4 (result i32)
+     (set_local $2
+      (f64.const inf)
+     )
+     (br $~lib/internal/hash/hash<f64>|inlined.4
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $2)
+       )
+      )
+     )
+    )
+   )
+  )
+  (drop
+   (call $std/hash/check
+    (block $~lib/internal/hash/hash<f64>|inlined.5 (result i32)
+     (set_local $2
+      (f64.const nan:0x8000000000000)
+     )
+     (br $~lib/internal/hash/hash<f64>|inlined.5
+      (call $~lib/internal/hash/hash64
+       (i64.reinterpret/f64
+        (get_local $2)
+       )
       )
      )
     )

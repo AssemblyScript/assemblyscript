@@ -11,6 +11,8 @@ import {
   Opcode
 } from "../src/common";
 
+import * as opt from "./options";
+
 /** Current offset in memory. */
 var off: usize = 0;
 
@@ -104,26 +106,6 @@ function skipInitExpr(): void {
   if (readUint<u8>() != Opcode.end) unreachable();
 }
 
-// Imported callbacks
-declare function onSection(id: u32, offset: u32, length: u32, nameOffset: u32, nameLength: u32): bool;
-declare function onType(index: u32, form: u32): void;
-declare function onTypeParam(index: u32, paramIndex: u32, paramType: u32): void;
-declare function onTypeReturn(index: u32, returnIndex: u32, returnType: u32): void;
-declare function onImport(index: u32, kind: u32, moduleOff: u32, moduleLen: u32, fieldOff: u32, fieldLen: u32): void;
-declare function onFunctionImport(index: u32, type: u32): void;
-declare function onTableImport(index: u32, type: u32, initial: u32, maximum: u32, flags: u32): void;
-declare function onMemoryImport(index: u32, initial: u32, maximum: u32, flags: u32): void;
-declare function onGlobalImport(index: u32, type: u32, mutability: u32): void;
-declare function onMemory(index: u32, initial: u32, maximum: u32, flags: u32): void;
-declare function onFunction(index: u32, typeIndex: u32): void;
-declare function onGlobal(index: u32, type: u32, mutability: u32): void;
-declare function onExport(index: u32, kind: u32, kindIndex: u32, nameOffset: u32, nameLength: u32): void;
-declare function onStart(index: u32): void;
-declare function onSourceMappingURL(offset: u32, length: u32): void;
-declare function onModuleName(offset: u32, length: u32): void;
-declare function onFunctionName(index: u32, offset: u32, length: u32): void;
-declare function onLocalName(funcIndex: u32, index: u32, offset: u32, length: u32): void;
-
 /** Starts parsing the module that has been placed in memory. */
 export function parse(begin: usize, end: usize): void {
   off = begin;
@@ -149,7 +131,7 @@ export function parse(begin: usize, end: usize): void {
       payload_len -= off - before;
     } else if (id > <u32>SectionId.Data) unreachable();
     let payload_off = off;
-    if (onSection(
+    if (opt.onSection(
       id,
       payload_off,
       payload_len,
@@ -161,14 +143,14 @@ export function parse(begin: usize, end: usize): void {
           let count = readVaruint(32);
           for (let index: u32 = 0; index < count; ++index) {
             let form = readVarint(7) & 0x7f;
-            onType(
+            opt.onType(
               index,
               form
             );
             let paramCount = readVaruint(32);
             for (let paramIndex: u32 = 0; paramIndex < paramCount; ++paramIndex) {
               let paramType = readVarint(7) & 0x7f;
-              onTypeParam(
+              opt.onTypeParam(
                 index,
                 paramIndex,
                 paramType
@@ -177,7 +159,7 @@ export function parse(begin: usize, end: usize): void {
             let returnCount = readVaruint(1); // MVP
             for (let returnIndex: u32 = 0; returnIndex < returnCount; ++returnIndex) {
               let returnType = readVarint(7) & 0x7f;
-              onTypeReturn(
+              opt.onTypeReturn(
                 index,
                 returnIndex,
                 returnType
@@ -196,7 +178,7 @@ export function parse(begin: usize, end: usize): void {
             let field_off = off;
             off += field_len;
             let kind = readUint<u8>();
-            onImport(
+            opt.onImport(
               index,
               kind,
               module_off,
@@ -207,7 +189,7 @@ export function parse(begin: usize, end: usize): void {
             switch (kind) {
               case ExternalKind.Function: {
                 let type = readVaruint(32);
-                onFunctionImport(
+                opt.onFunctionImport(
                   fun_space_index++,
                   type
                 );
@@ -218,7 +200,7 @@ export function parse(begin: usize, end: usize): void {
                 let flags = readVaruint(1);
                 let initial = readVaruint(32);
                 let maximum: u32 = flags & 1 ? readVaruint(32) : MAX_TABLES;
-                onTableImport(
+                opt.onTableImport(
                   tbl_space_index++,
                   type,
                   initial,
@@ -231,7 +213,7 @@ export function parse(begin: usize, end: usize): void {
                 let flags = readVaruint(1);
                 let initial = readVaruint(32);
                 let maximum: u32 = flags & 1 ? readVaruint(32) : MAX_PAGES;
-                onMemoryImport(
+                opt.onMemoryImport(
                   mem_space_index++,
                   initial,
                   maximum,
@@ -242,7 +224,7 @@ export function parse(begin: usize, end: usize): void {
               case ExternalKind.Global: {
                 let type = readVarint(7) & 0x7f;
                 let mutability = readVaruint(1);
-                onGlobalImport(
+                opt.onGlobalImport(
                   glo_space_index++,
                   type,
                   mutability
@@ -258,7 +240,7 @@ export function parse(begin: usize, end: usize): void {
           let count = readVaruint(32);
           for (let i: u32 = 0; i < count; ++i) {
             let typeIndex = readVaruint(32);
-            onFunction(
+            opt.onFunction(
               fun_space_index++,
               typeIndex
             );
@@ -271,7 +253,7 @@ export function parse(begin: usize, end: usize): void {
             let flags = readVaruint(1);
             let initial = readVaruint(32);
             let maximum: u32 = flags ? readVaruint(32) : MAX_PAGES;
-            onMemory(
+            opt.onMemory(
               mem_space_index++,
               initial,
               maximum,
@@ -286,7 +268,7 @@ export function parse(begin: usize, end: usize): void {
             let type = readVarint(7) & 0x7f;
             let mutability = readVaruint(1);
             skipInitExpr();
-            onGlobal(
+            opt.onGlobal(
               glo_space_index++,
               type,
               mutability
@@ -302,7 +284,7 @@ export function parse(begin: usize, end: usize): void {
             off += field_len;
             let kind = readUint<u8>();
             let kind_index = readVaruint(32);
-            onExport(
+            opt.onExport(
               index,
               kind,
               kind_index,
@@ -314,7 +296,7 @@ export function parse(begin: usize, end: usize): void {
         }
         case SectionId.Start: {
           let index = readVaruint(32);
-          onStart(
+          opt.onStart(
             index
           );
           break;
@@ -331,7 +313,7 @@ export function parse(begin: usize, end: usize): void {
               case NameType.Module: {
                 let module_name_len = readVaruint(32);
                 let module_name_off = off;
-                onModuleName(
+                opt.onModuleName(
                   module_name_off,
                   module_name_len
                 );
@@ -344,7 +326,7 @@ export function parse(begin: usize, end: usize): void {
                   let fn_name_len = readVaruint(32);
                   let fn_name_off = off;
                   off += fn_name_len;
-                  onFunctionName(
+                  opt.onFunctionName(
                     fn_index,
                     fn_name_off,
                     fn_name_len
@@ -362,7 +344,7 @@ export function parse(begin: usize, end: usize): void {
                     let lc_name_len = readVaruint(32);
                     let lc_name_off = off;
                     off += lc_name_len;
-                    onLocalName(
+                    opt.onLocalName(
                       fn_index,
                       lc_index,
                       lc_name_off,
@@ -384,7 +366,7 @@ export function parse(begin: usize, end: usize): void {
             let url_len = readVaruint(32);
             let url_off = off;
             off += url_len;
-            onSourceMappingURL(
+            opt.onSourceMappingURL(
               url_off,
               url_len
             );

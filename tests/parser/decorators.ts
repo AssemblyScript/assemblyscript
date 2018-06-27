@@ -6,5 +6,6 @@
 @unmanaged
 @sealed
 @inline
+@external("a", "b")
 @custom
 function a(): void {}

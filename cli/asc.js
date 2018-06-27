@@ -23,7 +23,6 @@ var assemblyscript, isDev;
   try {
     assemblyscript = require("../dist/assemblyscript.js");
     isDev = false;
-    try { require("source-map-support").install(); } catch (e) {/* optional */}
   } catch (e) {
     try {
       require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });

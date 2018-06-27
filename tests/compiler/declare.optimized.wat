@@ -1,8 +1,8 @@
 (module
  (type $v (func))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (import "env" "externalConstant" (global $declare/externalConstant i32))
- (import "env" "externalFunction" (func $declare/externalFunction))
+ (import "declare" "externalConstant" (global $declare/externalConstant i32))
+ (import "declare" "externalFunction" (func $declare/externalFunction))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "my" "externalFunction" (func $declare/my.externalFunction))
  (import "my" "externalConstant" (global $declare/my.externalConstant i32))

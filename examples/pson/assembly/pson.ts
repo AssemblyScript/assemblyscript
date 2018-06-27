@@ -19,22 +19,20 @@ const enum Token {
   BINARY = 0xff
 }
 
-namespace pson {
-  export declare function onNull(): void;
-  export declare function onTrue(): void;
-  export declare function onFalse(): void;
-  export declare function onEObject(): void;
-  export declare function onEArray(): void;
-  export declare function onEString(): void;
-  export declare function onObject(size: u32): void;
-  export declare function onArray(size: u32): void;
-  export declare function onInteger(value: i32): void;
-  export declare function onLong(valueLow: i32, valueHigh: i32): void;
-  export declare function onFloat(value: f32): void;
-  export declare function onDouble(value: f64): void;
-  export declare function onString(offset: usize, length: u32): void;
-  export declare function onBinary(offset: usize, length: u32): void;
-}
+export declare function onNull(): void;
+export declare function onTrue(): void;
+export declare function onFalse(): void;
+export declare function onEObject(): void;
+export declare function onEArray(): void;
+export declare function onEString(): void;
+export declare function onObject(size: u32): void;
+export declare function onArray(size: u32): void;
+export declare function onInteger(value: i32): void;
+export declare function onLong(valueLow: i32, valueHigh: i32): void;
+export declare function onFloat(value: f32): void;
+export declare function onDouble(value: f64): void;
+export declare function onString(offset: usize, length: u32): void;
+export declare function onBinary(offset: usize, length: u32): void;
 
 var offset: usize = 0;
 
@@ -50,31 +48,31 @@ function decodeValue(): void {
   var long: u64;
   switch (token) {
     case Token.NULL: {
-      pson.onNull();
+      onNull();
       break;
     }
     case Token.TRUE: {
-      pson.onTrue();
+      onTrue();
       break;
     }
     case Token.FALSE: {
-      pson.onFalse();
+      onFalse();
       break;
     }
     case Token.EOBJECT: {
-      pson.onEObject();
+      onEObject();
       break;
     }
     case Token.EARRAY: {
-      pson.onEArray();
+      onEArray();
       break;
     }
     case Token.ESTRING: {
-      pson.onEString();
+      onEString();
       break;
     }
     case Token.OBJECT: {
-      pson.onObject(size = readVarint32());
+      onObject(size = readVarint32());
       while (size--) {
         decodeValue();
         decodeValue();
@@ -82,32 +80,32 @@ function decodeValue(): void {
       break;
     }
     case Token.ARRAY: {
-      pson.onArray(size = readVarint32());
+      onArray(size = readVarint32());
       while (size--) decodeValue();
       break;
     }
     case Token.INTEGER: {
-      pson.onInteger(((size = readVarint32()) >> 1) ^ -(size & 1));
+      onInteger(((size = readVarint32()) >> 1) ^ -(size & 1));
       break;
     }
     case Token.LONG: {
       long = ((long = readVarint64()) >> 1) ^ -(long & 1);
-      pson.onLong(<i32>long, <i32>(long >>> 32));
+      onLong(<i32>long, <i32>(long >>> 32));
       break;
     }
     case Token.FLOAT: {
-      pson.onFloat(load<f32>(offset));
+      onFloat(load<f32>(offset));
       offset += 4;
       break;
     }
     case Token.DOUBLE: {
-      pson.onDouble(load<f64>(offset));
+      onDouble(load<f64>(offset));
       offset += 8;
       break;
     }
     case Token.STRING: {
       size = readVarint32();
-      pson.onString(offset, size);
+      onString(offset, size);
       offset += size;
       break;
     }
@@ -119,13 +117,13 @@ function decodeValue(): void {
     }
     case Token.BINARY: {
       size = readVarint32();
-      pson.onBinary(offset, size);
+      onBinary(offset, size);
       offset += size;
       break;
     }
     default: { // small integer?
       if (token > <u32>Token.MAX) unreachable();
-      pson.onInteger((token >> 1) ^ -(token & 1));
+      onInteger((token >> 1) ^ -(token & 1));
       break;
     }
   }

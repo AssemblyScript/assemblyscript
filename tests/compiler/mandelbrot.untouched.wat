@@ -5,7 +5,7 @@
  (type $FFFF (func (param f64 f64 f64) (result f64)))
  (global $../../examples/mandelbrot/assembly/index/NUM_COLORS i32 (i32.const 2048))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 1)
+ (memory $0 0)
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
  (export "memory" (memory $0))
  (func $~lib/math/NativeMath.log (; 0 ;) (type $FF) (param $0 f64) (result f64)

@@ -7,7 +7,7 @@
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $Infinity f64 (f64.const inf))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 1)
+ (memory $0 0)
  (export "getHi" (func $../../examples/i64-polyfill/assembly/i64/getHi))
  (export "getLo" (func $../../examples/i64-polyfill/assembly/i64/getLo))
  (export "clz" (func $../../examples/i64-polyfill/assembly/i64/clz))

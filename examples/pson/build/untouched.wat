@@ -1,25 +1,25 @@
 (module
- (type $iv (func (param i32)))
  (type $v (func))
- (type $i (func (result i32)))
- (type $I (func (result i64)))
+ (type $iv (func (param i32)))
  (type $iiv (func (param i32 i32)))
  (type $fv (func (param f32)))
  (type $Fv (func (param f64)))
- (import "pson" "onNull" (func $assembly/pson/pson.onNull))
- (import "pson" "onTrue" (func $assembly/pson/pson.onTrue))
- (import "pson" "onFalse" (func $assembly/pson/pson.onFalse))
- (import "pson" "onEObject" (func $assembly/pson/pson.onEObject))
- (import "pson" "onEArray" (func $assembly/pson/pson.onEArray))
- (import "pson" "onEString" (func $assembly/pson/pson.onEString))
- (import "pson" "onObject" (func $assembly/pson/pson.onObject (param i32)))
- (import "pson" "onArray" (func $assembly/pson/pson.onArray (param i32)))
- (import "pson" "onInteger" (func $assembly/pson/pson.onInteger (param i32)))
- (import "pson" "onLong" (func $assembly/pson/pson.onLong (param i32 i32)))
- (import "pson" "onFloat" (func $assembly/pson/pson.onFloat (param f32)))
- (import "pson" "onDouble" (func $assembly/pson/pson.onDouble (param f64)))
- (import "pson" "onString" (func $assembly/pson/pson.onString (param i32 i32)))
- (import "pson" "onBinary" (func $assembly/pson/pson.onBinary (param i32 i32)))
+ (type $i (func (result i32)))
+ (type $I (func (result i64)))
+ (import "pson" "onNull" (func $assembly/pson/onNull))
+ (import "pson" "onTrue" (func $assembly/pson/onTrue))
+ (import "pson" "onFalse" (func $assembly/pson/onFalse))
+ (import "pson" "onEObject" (func $assembly/pson/onEObject))
+ (import "pson" "onEArray" (func $assembly/pson/onEArray))
+ (import "pson" "onEString" (func $assembly/pson/onEString))
+ (import "pson" "onObject" (func $assembly/pson/onObject (param i32)))
+ (import "pson" "onArray" (func $assembly/pson/onArray (param i32)))
+ (import "pson" "onInteger" (func $assembly/pson/onInteger (param i32)))
+ (import "pson" "onLong" (func $assembly/pson/onLong (param i32 i32)))
+ (import "pson" "onFloat" (func $assembly/pson/onFloat (param f32)))
+ (import "pson" "onDouble" (func $assembly/pson/onDouble (param f64)))
+ (import "pson" "onString" (func $assembly/pson/onString (param i32 i32)))
+ (import "pson" "onBinary" (func $assembly/pson/onBinary (param i32 i32)))
  (global $assembly/pson/offset (mut i32) (i32.const 0))
  (global $assembly/pson/Token.ZERO i32 (i32.const 0))
  (global $assembly/pson/Token.MAX i32 (i32.const 239))
@@ -40,7 +40,21 @@
  (global $assembly/pson/Token.STRING_GET i32 (i32.const 254))
  (global $assembly/pson/Token.BINARY i32 (i32.const 255))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 1)
+ (memory $0 0)
+ (export "onNull" (func $assembly/pson/onNull))
+ (export "onTrue" (func $assembly/pson/onTrue))
+ (export "onFalse" (func $assembly/pson/onFalse))
+ (export "onEObject" (func $assembly/pson/onEObject))
+ (export "onEArray" (func $assembly/pson/onEArray))
+ (export "onEString" (func $assembly/pson/onEString))
+ (export "onObject" (func $assembly/pson/onObject))
+ (export "onArray" (func $assembly/pson/onArray))
+ (export "onInteger" (func $assembly/pson/onInteger))
+ (export "onLong" (func $assembly/pson/onLong))
+ (export "onFloat" (func $assembly/pson/onFloat))
+ (export "onDouble" (func $assembly/pson/onDouble))
+ (export "onString" (func $assembly/pson/onString))
+ (export "onBinary" (func $assembly/pson/onBinary))
  (export "decode" (func $assembly/pson/decode))
  (export "memory" (memory $0))
  (func $assembly/pson/readVarint32 (; 14 ;) (type $i) (result i32)
@@ -48,26 +62,26 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  ;;@ assembly/pson.ts:135:2
+  ;;@ assembly/pson.ts:133:2
   (set_local $0
-   ;;@ assembly/pson.ts:135:19
+   ;;@ assembly/pson.ts:133:19
+   (i32.const 0)
+  )
+  ;;@ assembly/pson.ts:134:2
+  (set_local $1
+   ;;@ assembly/pson.ts:134:19
    (i32.const 0)
   )
   ;;@ assembly/pson.ts:136:2
-  (set_local $1
-   ;;@ assembly/pson.ts:136:19
-   (i32.const 0)
-  )
-  ;;@ assembly/pson.ts:138:2
   (block $break|0
    (loop $continue|0
-    ;;@ assembly/pson.ts:138:5
+    ;;@ assembly/pson.ts:136:5
     (block
-     ;;@ assembly/pson.ts:139:4
+     ;;@ assembly/pson.ts:137:4
      (set_local $2
-      ;;@ assembly/pson.ts:139:8
+      ;;@ assembly/pson.ts:137:8
       (i32.load8_u
-       ;;@ assembly/pson.ts:139:17
+       ;;@ assembly/pson.ts:137:17
        (block (result i32)
         (set_local $3
          (get_global $assembly/pson/offset)
@@ -82,23 +96,23 @@
        )
       )
      )
-     ;;@ assembly/pson.ts:140:4
+     ;;@ assembly/pson.ts:138:4
      (set_local $0
       (i32.or
        (get_local $0)
-       ;;@ assembly/pson.ts:140:13
+       ;;@ assembly/pson.ts:138:13
        (i32.shl
         (i32.and
-         ;;@ assembly/pson.ts:140:19
+         ;;@ assembly/pson.ts:138:19
          (get_local $2)
-         ;;@ assembly/pson.ts:140:23
+         ;;@ assembly/pson.ts:138:23
          (i32.const 127)
         )
-        ;;@ assembly/pson.ts:140:32
+        ;;@ assembly/pson.ts:138:32
         (i32.mul
-         ;;@ assembly/pson.ts:140:33
+         ;;@ assembly/pson.ts:138:33
          (i32.const 7)
-         ;;@ assembly/pson.ts:140:37
+         ;;@ assembly/pson.ts:138:37
          (block (result i32)
           (set_local $3
            (get_local $1)
@@ -117,16 +131,16 @@
      )
     )
     (br_if $continue|0
-     ;;@ assembly/pson.ts:141:11
+     ;;@ assembly/pson.ts:139:11
      (i32.and
       (get_local $2)
-      ;;@ assembly/pson.ts:141:15
+      ;;@ assembly/pson.ts:139:15
       (i32.const 128)
      )
     )
    )
   )
-  ;;@ assembly/pson.ts:142:9
+  ;;@ assembly/pson.ts:140:9
   (get_local $0)
  )
  (func $assembly/pson/readVarint64 (; 15 ;) (type $I) (result i64)
@@ -135,26 +149,26 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i64)
-  ;;@ assembly/pson.ts:146:2
+  ;;@ assembly/pson.ts:144:2
   (set_local $0
-   ;;@ assembly/pson.ts:146:19
+   ;;@ assembly/pson.ts:144:19
+   (i64.const 0)
+  )
+  ;;@ assembly/pson.ts:145:2
+  (set_local $1
+   ;;@ assembly/pson.ts:145:19
    (i64.const 0)
   )
   ;;@ assembly/pson.ts:147:2
-  (set_local $1
-   ;;@ assembly/pson.ts:147:19
-   (i64.const 0)
-  )
-  ;;@ assembly/pson.ts:149:2
   (block $break|0
    (loop $continue|0
-    ;;@ assembly/pson.ts:149:5
+    ;;@ assembly/pson.ts:147:5
     (block
-     ;;@ assembly/pson.ts:150:4
+     ;;@ assembly/pson.ts:148:4
      (set_local $2
-      ;;@ assembly/pson.ts:150:8
+      ;;@ assembly/pson.ts:148:8
       (i32.load8_u
-       ;;@ assembly/pson.ts:150:17
+       ;;@ assembly/pson.ts:148:17
        (block (result i32)
         (set_local $3
          (get_global $assembly/pson/offset)
@@ -169,25 +183,25 @@
        )
       )
      )
-     ;;@ assembly/pson.ts:151:4
+     ;;@ assembly/pson.ts:149:4
      (set_local $0
       (i64.or
        (get_local $0)
-       ;;@ assembly/pson.ts:151:13
+       ;;@ assembly/pson.ts:149:13
        (i64.shl
         (i64.extend_u/i32
-         ;;@ assembly/pson.ts:151:19
+         ;;@ assembly/pson.ts:149:19
          (i32.and
           (get_local $2)
-          ;;@ assembly/pson.ts:151:23
+          ;;@ assembly/pson.ts:149:23
           (i32.const 127)
          )
         )
-        ;;@ assembly/pson.ts:151:32
+        ;;@ assembly/pson.ts:149:32
         (i64.mul
-         ;;@ assembly/pson.ts:151:33
+         ;;@ assembly/pson.ts:149:33
          (i64.const 7)
-         ;;@ assembly/pson.ts:151:37
+         ;;@ assembly/pson.ts:149:37
          (block (result i64)
           (set_local $4
            (get_local $1)
@@ -206,16 +220,16 @@
      )
     )
     (br_if $continue|0
-     ;;@ assembly/pson.ts:152:11
+     ;;@ assembly/pson.ts:150:11
      (i32.and
       (get_local $2)
-      ;;@ assembly/pson.ts:152:15
+      ;;@ assembly/pson.ts:150:15
       (i32.const 128)
      )
     )
    )
   )
-  ;;@ assembly/pson.ts:153:9
+  ;;@ assembly/pson.ts:151:9
   (get_local $0)
  )
  (func $assembly/pson/decodeValue (; 16 ;) (type $v)
@@ -223,11 +237,11 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i64)
-  ;;@ assembly/pson.ts:48:2
+  ;;@ assembly/pson.ts:46:2
   (set_local $1
-   ;;@ assembly/pson.ts:48:19
+   ;;@ assembly/pson.ts:46:19
    (i32.load8_u
-    ;;@ assembly/pson.ts:48:28
+    ;;@ assembly/pson.ts:46:28
     (block (result i32)
      (set_local $0
       (get_global $assembly/pson/offset)
@@ -242,7 +256,7 @@
     )
    )
   )
-  ;;@ assembly/pson.ts:51:2
+  ;;@ assembly/pson.ts:49:2
   (block $break|0
    (block $case16|0
     (block $case15|0
@@ -262,186 +276,186 @@
                   (block $case1|0
                    (block $case0|0
                     (set_local $0
-                     ;;@ assembly/pson.ts:51:10
+                     ;;@ assembly/pson.ts:49:10
                      (get_local $1)
                     )
                     (br_if $case0|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:52:9
+                      ;;@ assembly/pson.ts:50:9
                       (i32.const 240)
                      )
                     )
                     (br_if $case1|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:56:9
+                      ;;@ assembly/pson.ts:54:9
                       (i32.const 241)
                      )
                     )
                     (br_if $case2|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:60:9
+                      ;;@ assembly/pson.ts:58:9
                       (i32.const 242)
                      )
                     )
                     (br_if $case3|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:64:9
+                      ;;@ assembly/pson.ts:62:9
                       (i32.const 243)
                      )
                     )
                     (br_if $case4|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:68:9
+                      ;;@ assembly/pson.ts:66:9
                       (i32.const 244)
                      )
                     )
                     (br_if $case5|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:72:9
+                      ;;@ assembly/pson.ts:70:9
                       (i32.const 245)
                      )
                     )
                     (br_if $case6|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:76:9
+                      ;;@ assembly/pson.ts:74:9
                       (i32.const 246)
                      )
                     )
                     (br_if $case7|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:84:9
+                      ;;@ assembly/pson.ts:82:9
                       (i32.const 247)
                      )
                     )
                     (br_if $case8|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:89:9
+                      ;;@ assembly/pson.ts:87:9
                       (i32.const 248)
                      )
                     )
                     (br_if $case9|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:93:9
+                      ;;@ assembly/pson.ts:91:9
                       (i32.const 249)
                      )
                     )
                     (br_if $case10|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:98:9
+                      ;;@ assembly/pson.ts:96:9
                       (i32.const 250)
                      )
                     )
                     (br_if $case11|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:103:9
+                      ;;@ assembly/pson.ts:101:9
                       (i32.const 251)
                      )
                     )
                     (br_if $case12|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:108:9
+                      ;;@ assembly/pson.ts:106:9
                       (i32.const 252)
                      )
                     )
                     (br_if $case13|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:114:9
+                      ;;@ assembly/pson.ts:112:9
                       (i32.const 253)
                      )
                     )
                     (br_if $case14|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:115:9
+                      ;;@ assembly/pson.ts:113:9
                       (i32.const 254)
                      )
                     )
                     (br_if $case15|0
                      (i32.eq
                       (get_local $0)
-                      ;;@ assembly/pson.ts:120:9
+                      ;;@ assembly/pson.ts:118:9
                       (i32.const 255)
                      )
                     )
                     (br $case16|0)
                    )
-                   ;;@ assembly/pson.ts:52:21
+                   ;;@ assembly/pson.ts:50:21
                    (block
-                    ;;@ assembly/pson.ts:53:11
-                    (call $assembly/pson/pson.onNull)
-                    ;;@ assembly/pson.ts:54:6
+                    ;;@ assembly/pson.ts:51:6
+                    (call $assembly/pson/onNull)
+                    ;;@ assembly/pson.ts:52:6
                     (br $break|0)
                    )
                   )
-                  ;;@ assembly/pson.ts:56:21
+                  ;;@ assembly/pson.ts:54:21
                   (block
-                   ;;@ assembly/pson.ts:57:11
-                   (call $assembly/pson/pson.onTrue)
-                   ;;@ assembly/pson.ts:58:6
+                   ;;@ assembly/pson.ts:55:6
+                   (call $assembly/pson/onTrue)
+                   ;;@ assembly/pson.ts:56:6
                    (br $break|0)
                   )
                  )
-                 ;;@ assembly/pson.ts:60:22
+                 ;;@ assembly/pson.ts:58:22
                  (block
-                  ;;@ assembly/pson.ts:61:11
-                  (call $assembly/pson/pson.onFalse)
-                  ;;@ assembly/pson.ts:62:6
+                  ;;@ assembly/pson.ts:59:6
+                  (call $assembly/pson/onFalse)
+                  ;;@ assembly/pson.ts:60:6
                   (br $break|0)
                  )
                 )
-                ;;@ assembly/pson.ts:64:24
+                ;;@ assembly/pson.ts:62:24
                 (block
-                 ;;@ assembly/pson.ts:65:11
-                 (call $assembly/pson/pson.onEObject)
-                 ;;@ assembly/pson.ts:66:6
+                 ;;@ assembly/pson.ts:63:6
+                 (call $assembly/pson/onEObject)
+                 ;;@ assembly/pson.ts:64:6
                  (br $break|0)
                 )
                )
-               ;;@ assembly/pson.ts:68:23
+               ;;@ assembly/pson.ts:66:23
                (block
-                ;;@ assembly/pson.ts:69:11
-                (call $assembly/pson/pson.onEArray)
-                ;;@ assembly/pson.ts:70:6
+                ;;@ assembly/pson.ts:67:6
+                (call $assembly/pson/onEArray)
+                ;;@ assembly/pson.ts:68:6
                 (br $break|0)
                )
               )
-              ;;@ assembly/pson.ts:72:24
+              ;;@ assembly/pson.ts:70:24
               (block
-               ;;@ assembly/pson.ts:73:11
-               (call $assembly/pson/pson.onEString)
-               ;;@ assembly/pson.ts:74:6
+               ;;@ assembly/pson.ts:71:6
+               (call $assembly/pson/onEString)
+               ;;@ assembly/pson.ts:72:6
                (br $break|0)
               )
              )
-             ;;@ assembly/pson.ts:76:23
+             ;;@ assembly/pson.ts:74:23
              (block
-              ;;@ assembly/pson.ts:77:11
-              (call $assembly/pson/pson.onObject
-               ;;@ assembly/pson.ts:77:20
+              ;;@ assembly/pson.ts:75:6
+              (call $assembly/pson/onObject
+               ;;@ assembly/pson.ts:75:15
                (tee_local $2
-                ;;@ assembly/pson.ts:77:27
+                ;;@ assembly/pson.ts:75:22
                 (call $assembly/pson/readVarint32)
                )
               )
-              ;;@ assembly/pson.ts:78:6
+              ;;@ assembly/pson.ts:76:6
               (block $break|1
                (loop $continue|1
                 (if
-                 ;;@ assembly/pson.ts:78:13
+                 ;;@ assembly/pson.ts:76:13
                  (block (result i32)
                   (set_local $0
                    (get_local $2)
@@ -456,9 +470,9 @@
                  )
                  (block
                   (block
-                   ;;@ assembly/pson.ts:79:8
+                   ;;@ assembly/pson.ts:77:8
                    (call $assembly/pson/decodeValue)
-                   ;;@ assembly/pson.ts:80:8
+                   ;;@ assembly/pson.ts:78:8
                    (call $assembly/pson/decodeValue)
                   )
                   (br $continue|1)
@@ -466,25 +480,25 @@
                 )
                )
               )
-              ;;@ assembly/pson.ts:82:6
+              ;;@ assembly/pson.ts:80:6
               (br $break|0)
              )
             )
-            ;;@ assembly/pson.ts:84:22
+            ;;@ assembly/pson.ts:82:22
             (block
-             ;;@ assembly/pson.ts:85:11
-             (call $assembly/pson/pson.onArray
-              ;;@ assembly/pson.ts:85:19
+             ;;@ assembly/pson.ts:83:6
+             (call $assembly/pson/onArray
+              ;;@ assembly/pson.ts:83:14
               (tee_local $2
-               ;;@ assembly/pson.ts:85:26
+               ;;@ assembly/pson.ts:83:21
                (call $assembly/pson/readVarint32)
               )
              )
-             ;;@ assembly/pson.ts:86:6
+             ;;@ assembly/pson.ts:84:6
              (block $break|2
               (loop $continue|2
                (if
-                ;;@ assembly/pson.ts:86:13
+                ;;@ assembly/pson.ts:84:13
                 (block (result i32)
                  (set_local $0
                   (get_local $2)
@@ -498,276 +512,276 @@
                  (get_local $0)
                 )
                 (block
-                 ;;@ assembly/pson.ts:86:21
+                 ;;@ assembly/pson.ts:84:21
                  (call $assembly/pson/decodeValue)
                  (br $continue|2)
                 )
                )
               )
              )
-             ;;@ assembly/pson.ts:87:6
+             ;;@ assembly/pson.ts:85:6
              (br $break|0)
             )
            )
-           ;;@ assembly/pson.ts:89:24
+           ;;@ assembly/pson.ts:87:24
            (block
-            ;;@ assembly/pson.ts:90:11
-            (call $assembly/pson/pson.onInteger
-             ;;@ assembly/pson.ts:90:21
+            ;;@ assembly/pson.ts:88:6
+            (call $assembly/pson/onInteger
+             ;;@ assembly/pson.ts:88:16
              (i32.xor
               (i32.shr_u
-               ;;@ assembly/pson.ts:90:22
+               ;;@ assembly/pson.ts:88:17
                (tee_local $2
-                ;;@ assembly/pson.ts:90:30
+                ;;@ assembly/pson.ts:88:25
                 (call $assembly/pson/readVarint32)
                )
-               ;;@ assembly/pson.ts:90:49
+               ;;@ assembly/pson.ts:88:44
                (i32.const 1)
               )
-              ;;@ assembly/pson.ts:90:54
+              ;;@ assembly/pson.ts:88:49
               (i32.sub
                (i32.const 0)
-               ;;@ assembly/pson.ts:90:55
+               ;;@ assembly/pson.ts:88:50
                (i32.and
-                ;;@ assembly/pson.ts:90:56
+                ;;@ assembly/pson.ts:88:51
                 (get_local $2)
-                ;;@ assembly/pson.ts:90:63
+                ;;@ assembly/pson.ts:88:58
                 (i32.const 1)
                )
               )
              )
             )
-            ;;@ assembly/pson.ts:91:6
+            ;;@ assembly/pson.ts:89:6
             (br $break|0)
            )
           )
-          ;;@ assembly/pson.ts:93:21
+          ;;@ assembly/pson.ts:91:21
           (block
-           ;;@ assembly/pson.ts:94:6
+           ;;@ assembly/pson.ts:92:6
            (set_local $3
-            ;;@ assembly/pson.ts:94:13
+            ;;@ assembly/pson.ts:92:13
             (i64.xor
              (i64.shr_u
-              ;;@ assembly/pson.ts:94:14
+              ;;@ assembly/pson.ts:92:14
               (tee_local $3
-               ;;@ assembly/pson.ts:94:22
+               ;;@ assembly/pson.ts:92:22
                (call $assembly/pson/readVarint64)
               )
-              ;;@ assembly/pson.ts:94:41
+              ;;@ assembly/pson.ts:92:41
               (i64.const 1)
              )
-             ;;@ assembly/pson.ts:94:46
+             ;;@ assembly/pson.ts:92:46
              (i64.sub
               (i64.const 0)
-              ;;@ assembly/pson.ts:94:47
+              ;;@ assembly/pson.ts:92:47
               (i64.and
-               ;;@ assembly/pson.ts:94:48
+               ;;@ assembly/pson.ts:92:48
                (get_local $3)
-               ;;@ assembly/pson.ts:94:55
+               ;;@ assembly/pson.ts:92:55
                (i64.const 1)
               )
              )
             )
            )
-           ;;@ assembly/pson.ts:95:11
-           (call $assembly/pson/pson.onLong
-            ;;@ assembly/pson.ts:95:18
+           ;;@ assembly/pson.ts:93:6
+           (call $assembly/pson/onLong
+            ;;@ assembly/pson.ts:93:13
             (i32.wrap/i64
              (get_local $3)
             )
-            ;;@ assembly/pson.ts:95:29
+            ;;@ assembly/pson.ts:93:24
             (i32.wrap/i64
-             ;;@ assembly/pson.ts:95:35
+             ;;@ assembly/pson.ts:93:30
              (i64.shr_u
               (get_local $3)
-              ;;@ assembly/pson.ts:95:44
+              ;;@ assembly/pson.ts:93:39
               (i64.const 32)
              )
             )
            )
-           ;;@ assembly/pson.ts:96:6
+           ;;@ assembly/pson.ts:94:6
            (br $break|0)
           )
          )
-         ;;@ assembly/pson.ts:98:22
+         ;;@ assembly/pson.ts:96:22
          (block
-          ;;@ assembly/pson.ts:99:11
-          (call $assembly/pson/pson.onFloat
-           ;;@ assembly/pson.ts:99:19
+          ;;@ assembly/pson.ts:97:6
+          (call $assembly/pson/onFloat
+           ;;@ assembly/pson.ts:97:14
            (f32.load
-            ;;@ assembly/pson.ts:99:29
+            ;;@ assembly/pson.ts:97:24
             (get_global $assembly/pson/offset)
            )
           )
-          ;;@ assembly/pson.ts:100:6
+          ;;@ assembly/pson.ts:98:6
           (set_global $assembly/pson/offset
            (i32.add
             (get_global $assembly/pson/offset)
-            ;;@ assembly/pson.ts:100:16
+            ;;@ assembly/pson.ts:98:16
             (i32.const 4)
            )
           )
-          ;;@ assembly/pson.ts:101:6
+          ;;@ assembly/pson.ts:99:6
           (br $break|0)
          )
         )
-        ;;@ assembly/pson.ts:103:23
+        ;;@ assembly/pson.ts:101:23
         (block
-         ;;@ assembly/pson.ts:104:11
-         (call $assembly/pson/pson.onDouble
-          ;;@ assembly/pson.ts:104:20
+         ;;@ assembly/pson.ts:102:6
+         (call $assembly/pson/onDouble
+          ;;@ assembly/pson.ts:102:15
           (f64.load
-           ;;@ assembly/pson.ts:104:30
+           ;;@ assembly/pson.ts:102:25
            (get_global $assembly/pson/offset)
           )
          )
-         ;;@ assembly/pson.ts:105:6
+         ;;@ assembly/pson.ts:103:6
          (set_global $assembly/pson/offset
           (i32.add
            (get_global $assembly/pson/offset)
-           ;;@ assembly/pson.ts:105:16
+           ;;@ assembly/pson.ts:103:16
            (i32.const 8)
           )
          )
-         ;;@ assembly/pson.ts:106:6
+         ;;@ assembly/pson.ts:104:6
          (br $break|0)
         )
        )
-       ;;@ assembly/pson.ts:108:23
+       ;;@ assembly/pson.ts:106:23
        (block
-        ;;@ assembly/pson.ts:109:6
+        ;;@ assembly/pson.ts:107:6
         (set_local $2
-         ;;@ assembly/pson.ts:109:13
+         ;;@ assembly/pson.ts:107:13
          (call $assembly/pson/readVarint32)
         )
-        ;;@ assembly/pson.ts:110:11
-        (call $assembly/pson/pson.onString
-         ;;@ assembly/pson.ts:110:20
+        ;;@ assembly/pson.ts:108:6
+        (call $assembly/pson/onString
+         ;;@ assembly/pson.ts:108:15
          (get_global $assembly/pson/offset)
-         ;;@ assembly/pson.ts:110:28
+         ;;@ assembly/pson.ts:108:23
          (get_local $2)
         )
-        ;;@ assembly/pson.ts:111:6
+        ;;@ assembly/pson.ts:109:6
         (set_global $assembly/pson/offset
          (i32.add
           (get_global $assembly/pson/offset)
-          ;;@ assembly/pson.ts:111:16
+          ;;@ assembly/pson.ts:109:16
           (get_local $2)
          )
         )
-        ;;@ assembly/pson.ts:112:6
+        ;;@ assembly/pson.ts:110:6
         (br $break|0)
        )
       )
      )
-     ;;@ assembly/pson.ts:115:27
+     ;;@ assembly/pson.ts:113:27
      (block
-      ;;@ assembly/pson.ts:117:6
+      ;;@ assembly/pson.ts:115:6
       (unreachable)
-      ;;@ assembly/pson.ts:118:6
+      ;;@ assembly/pson.ts:116:6
       (br $break|0)
      )
     )
-    ;;@ assembly/pson.ts:120:23
+    ;;@ assembly/pson.ts:118:23
     (block
-     ;;@ assembly/pson.ts:121:6
+     ;;@ assembly/pson.ts:119:6
      (set_local $2
-      ;;@ assembly/pson.ts:121:13
+      ;;@ assembly/pson.ts:119:13
       (call $assembly/pson/readVarint32)
      )
-     ;;@ assembly/pson.ts:122:11
-     (call $assembly/pson/pson.onBinary
-      ;;@ assembly/pson.ts:122:20
+     ;;@ assembly/pson.ts:120:6
+     (call $assembly/pson/onBinary
+      ;;@ assembly/pson.ts:120:15
       (get_global $assembly/pson/offset)
-      ;;@ assembly/pson.ts:122:28
+      ;;@ assembly/pson.ts:120:23
       (get_local $2)
      )
-     ;;@ assembly/pson.ts:123:6
+     ;;@ assembly/pson.ts:121:6
      (set_global $assembly/pson/offset
       (i32.add
        (get_global $assembly/pson/offset)
-       ;;@ assembly/pson.ts:123:16
+       ;;@ assembly/pson.ts:121:16
        (get_local $2)
       )
      )
-     ;;@ assembly/pson.ts:124:6
+     ;;@ assembly/pson.ts:122:6
      (br $break|0)
     )
    )
-   ;;@ assembly/pson.ts:126:13
+   ;;@ assembly/pson.ts:124:13
    (block
-    ;;@ assembly/pson.ts:127:6
+    ;;@ assembly/pson.ts:125:6
     (if
-     ;;@ assembly/pson.ts:127:10
+     ;;@ assembly/pson.ts:125:10
      (i32.gt_u
       (get_local $1)
-      ;;@ assembly/pson.ts:127:18
+      ;;@ assembly/pson.ts:125:18
       (i32.const 239)
      )
-     ;;@ assembly/pson.ts:127:34
+     ;;@ assembly/pson.ts:125:34
      (unreachable)
     )
-    ;;@ assembly/pson.ts:128:11
-    (call $assembly/pson/pson.onInteger
-     ;;@ assembly/pson.ts:128:21
+    ;;@ assembly/pson.ts:126:6
+    (call $assembly/pson/onInteger
+     ;;@ assembly/pson.ts:126:16
      (i32.xor
       (i32.shr_u
-       ;;@ assembly/pson.ts:128:22
+       ;;@ assembly/pson.ts:126:17
        (get_local $1)
-       ;;@ assembly/pson.ts:128:31
+       ;;@ assembly/pson.ts:126:26
        (i32.const 1)
       )
-      ;;@ assembly/pson.ts:128:36
+      ;;@ assembly/pson.ts:126:31
       (i32.sub
        (i32.const 0)
-       ;;@ assembly/pson.ts:128:37
+       ;;@ assembly/pson.ts:126:32
        (i32.and
-        ;;@ assembly/pson.ts:128:38
+        ;;@ assembly/pson.ts:126:33
         (get_local $1)
-        ;;@ assembly/pson.ts:128:46
+        ;;@ assembly/pson.ts:126:41
         (i32.const 1)
        )
       )
      )
     )
-    ;;@ assembly/pson.ts:129:6
+    ;;@ assembly/pson.ts:127:6
     (br $break|0)
    )
   )
  )
  (func $assembly/pson/decode (; 17 ;) (type $iv) (param $0 i32)
-  ;;@ assembly/pson.ts:42:2
+  ;;@ assembly/pson.ts:40:2
   (set_global $assembly/pson/offset
-   ;;@ assembly/pson.ts:42:11
+   ;;@ assembly/pson.ts:40:11
    (i32.const 0)
   )
-  ;;@ assembly/pson.ts:43:2
+  ;;@ assembly/pson.ts:41:2
   (block $break|0
    (loop $continue|0
     (if
-     ;;@ assembly/pson.ts:43:9
+     ;;@ assembly/pson.ts:41:9
      (i32.lt_u
       (get_global $assembly/pson/offset)
-      ;;@ assembly/pson.ts:43:18
+      ;;@ assembly/pson.ts:41:18
       (get_local $0)
      )
      (block
-      ;;@ assembly/pson.ts:43:26
+      ;;@ assembly/pson.ts:41:26
       (call $assembly/pson/decodeValue)
       (br $continue|0)
      )
     )
    )
   )
-  ;;@ assembly/pson.ts:44:2
+  ;;@ assembly/pson.ts:42:2
   (if
-   ;;@ assembly/pson.ts:44:6
+   ;;@ assembly/pson.ts:42:6
    (i32.ne
     (get_global $assembly/pson/offset)
-    ;;@ assembly/pson.ts:44:16
+    ;;@ assembly/pson.ts:42:16
     (get_local $0)
    )
-   ;;@ assembly/pson.ts:44:24
+   ;;@ assembly/pson.ts:42:24
    (unreachable)
   )
  )

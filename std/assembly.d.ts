@@ -609,3 +609,6 @@ declare function sealed(target: Function): any;
 
 /** Annotates a method or function as always inlined. */
 declare function inline(target: any, propertyKey: any, descriptor: any): any;
+
+/** Annotates an explicit external name of a function or global. */
+declare function external(target: any, propertyKey: any, descriptor: any): any;

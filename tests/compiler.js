@@ -151,14 +151,31 @@ tests.forEach(filename => {
               logi: function(i) { console.log("logi: " + i); },
               logf: function(f) { console.log("logf: " + f); }
             },
+            JSOp: {
+              mod: function(a, b) { return a % b; }
+            },
+            JSMath: Math,
+
+            // tests/declare
+            declare: {
+              externalFunction: function() { },
+              externalConstant: 1
+            },
             my: {
               externalFunction: function() { },
               externalConstant: 2
             },
-            JSOp: {
-              mod: function(a, b) { return a % b; }
+
+            // tests/external
+            external: {
+              foo: function() {},
+              bar: function() {}
             },
-            JSMath: Math
+            foo: {
+              bar: function() {},
+              baz: function() {},
+              "var": 3
+            },
           });
         });
         console.log("- " + colors.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");

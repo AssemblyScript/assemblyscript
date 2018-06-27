@@ -65,8 +65,12 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   parse.readString = (offset: number, length: number): string => utf8_read(buffer, offset, offset + length);
 
   // instantiate the parser and return its exports
-  function nop(): void {}
-  var imports = { env: { memory } };
+  var imports = {
+    env: {
+      memory
+    },
+    options: {}
+  };
   [ "onSection",
     "onType",
     "onTypeParam",
@@ -85,7 +89,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     "onModuleName",
     "onFunctionName",
     "onLocalName"
-  ].forEach((name: string): void => imports.env[name] = options[name] || nop);
+  ].forEach((name: string): void => imports.options[name] = options[name] || function() {});
   var instance = new WebAssembly.Instance(compiled, imports);
   instance.exports.parse(0, nBytes);
 }

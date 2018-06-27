@@ -11,7 +11,7 @@
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
- (memory $0 1)
+ (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/math/NativeMath.scalbn (; 0 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
