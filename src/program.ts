@@ -329,6 +329,10 @@ export class Program extends DiagnosticEmitter {
   arrayBufferViewPrototype: InterfacePrototype | null = null;
   /** String instance reference. */
   stringInstance: Class | null = null;
+  /** Start function reference. */
+  startFunction: FunctionPrototype;
+  /** Main function reference. */
+  mainFunction: FunctionPrototype | null = null;
 
   /** Target expression of the previously resolved property or element access. */
   resolvedThisExpression: Expression | null = null;
@@ -592,6 +596,25 @@ export class Program extends DiagnosticEmitter {
         }
       }
     }
+
+    // register 'start'
+    {
+      let element = <Element>assert(this.elementsLookup.get("start"));
+      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+      this.startFunction = <FunctionPrototype>element;
+    }
+
+    // register 'main' if present
+    if (this.moduleLevelExports.has("main")) {
+      let element = <Element>this.moduleLevelExports.get("main");
+      if (
+        element.kind == ElementKind.FUNCTION_PROTOTYPE &&
+        !(<FunctionPrototype>element).isAny(CommonFlags.GENERIC | CommonFlags.AMBIENT)
+      ) {
+        (<FunctionPrototype>element).set(CommonFlags.MAIN);
+        this.mainFunction = <FunctionPrototype>element;
+      }
+    }
   }
 
   /** Tries to resolve an import by traversing exports and queued exports. */
@@ -758,15 +781,15 @@ export class Program extends DiagnosticEmitter {
       this.fileLevelExports.set(internalName, prototype);
       this.currentFilespace.members.set(simpleName, prototype);
       if (prototype.is(CommonFlags.EXPORT) && declaration.range.source.isEntry) {
-        if (this.moduleLevelExports.has(internalName)) {
+        if (this.moduleLevelExports.has(simpleName)) {
           this.error(
             DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-            declaration.name.range, internalName
+            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(internalName, prototype);
+        this.moduleLevelExports.set(simpleName, prototype);
       }
     }
 
@@ -1192,15 +1215,15 @@ export class Program extends DiagnosticEmitter {
       this.fileLevelExports.set(internalName, element);
       this.currentFilespace.members.set(simpleName, element);
       if (declaration.range.source.isEntry) {
-        if (this.moduleLevelExports.has(internalName)) {
+        if (this.moduleLevelExports.has(simpleName)) {
           this.error(
             DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-            declaration.name.range, internalName
+            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
           );
           return;
         }
         element.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(internalName, element);
+        this.moduleLevelExports.set(simpleName, element);
       }
     }
 
@@ -1448,15 +1471,15 @@ export class Program extends DiagnosticEmitter {
       this.fileLevelExports.set(internalName, prototype);
       this.currentFilespace.members.set(simpleName, prototype);
       if (declaration.range.source.isEntry) {
-        if (this.moduleLevelExports.has(internalName)) {
+        if (this.moduleLevelExports.has(simpleName)) {
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range, internalName
+            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(internalName, prototype);
+        this.moduleLevelExports.set(simpleName, prototype);
       }
     }
 
@@ -1609,15 +1632,15 @@ export class Program extends DiagnosticEmitter {
       this.fileLevelExports.set(internalName, prototype);
       this.currentFilespace.members.set(simpleName, prototype);
       if (declaration.range.source.isEntry) {
-        if (this.moduleLevelExports.has(internalName)) {
+        if (this.moduleLevelExports.has(simpleName)) {
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range, internalName
+            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(internalName, prototype);
+        this.moduleLevelExports.set(simpleName, prototype);
       }
     }
 
@@ -1694,15 +1717,15 @@ export class Program extends DiagnosticEmitter {
       }
       this.currentFilespace.members.set(simpleName, namespace);
       if (declaration.range.source.isEntry) {
-        if (this.moduleLevelExports.has(internalName)) {
+        if (this.moduleLevelExports.has(simpleName)) {
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range, internalName
+            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
           );
           return;
         }
         namespace.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(internalName, namespace);
+        this.moduleLevelExports.set(simpleName, namespace);
       }
     }
 
@@ -1822,15 +1845,15 @@ export class Program extends DiagnosticEmitter {
         }
         this.currentFilespace.members.set(simpleName, global);
         if (declaration.range.source.isEntry) {
-          if (this.moduleLevelExports.has(internalName)) {
+          if (this.moduleLevelExports.has(simpleName)) {
             this.error(
               DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range, internalName
+              declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
             );
             continue;
           }
           global.set(CommonFlags.MODULE_EXPORT);
-          this.moduleLevelExports.set(internalName, global);
+          this.moduleLevelExports.set(simpleName, global);
         }
       }
       this.checkGlobalOptions(global, declaration);

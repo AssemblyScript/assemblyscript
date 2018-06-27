@@ -401,13 +401,11 @@
   (set_local $3
    (i32.const 1)
   )
-  (block
-   (set_local $4
-    (f64.const 0)
-   )
-   (set_local $5
-    (f64.const 0)
-   )
+  (set_local $4
+   (f64.const 0)
+  )
+  (set_local $5
+   (f64.const 0)
   )
   (if
    (if (result i32)
@@ -2782,16 +2780,14 @@
     )
    )
   )
-  (block
-   (set_local $3
-    (i32.const 0)
-   )
-   (set_local $4
-    (i32.wrap/i64
-     (i64.shr_u
-      (get_local $1)
-      (i64.const 63)
-     )
+  (set_local $3
+   (i32.const 0)
+  )
+  (set_local $4
+   (i32.wrap/i64
+    (i64.shr_u
+     (get_local $1)
+     (i64.const 63)
     )
    )
   )

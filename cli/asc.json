@@ -95,10 +95,6 @@
     "description": "Performs compilation as usual but does not emit code.",
     "type": "boolean"
   },
-  "noMemory": {
-    "description": "Does not set up a memory. Useful for low-level WebAssembly.",
-    "type": "boolean"
-  },
   "importMemory": {
     "description": "Imports the memory instance provided by the embedder.",
     "type": "boolean"

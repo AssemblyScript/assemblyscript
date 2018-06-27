@@ -132,7 +132,6 @@
  )
  (func $std/constructor/EmptyCtor#constructor (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -152,7 +151,6 @@
  )
  (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -176,7 +174,6 @@
  )
  (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
