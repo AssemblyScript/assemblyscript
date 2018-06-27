@@ -4689,15 +4689,10 @@
     )
    )
    (set_local $8
-    (i32.xor
-     (i32.and
-      (i32.const 10)
-      (i32.sub
-       (i32.const 0)
-       (get_local $7)
-      )
-     )
+    (select
+     (i32.const 0)
      (i32.const 10)
+     (get_local $7)
     )
    )
    (set_local $9

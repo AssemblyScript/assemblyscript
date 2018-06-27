@@ -74,7 +74,7 @@ function decimalCount<T>(value: T): i32 {
     t = t - <i32>(v < power);
   } else { // sizeof<T>() == 8
     let le10   = t <= 10;
-    let offset = (10 & -<i32>le10) ^ 10;          // offset = t <= 10 ? 0 : 10
+    let offset = select<i32>(0, 10, le10);        // offset = t <= 10 ? 0 : 10
     let factor = select<T>(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
     power = <T>load<u32>(ptr + ((t - offset) << 2), BUFFER_HEADER_SIZE);
     t = t - <i32>(v < factor * power);

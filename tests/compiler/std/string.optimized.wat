@@ -3916,15 +3916,10 @@
         (i32.shl
          (i32.sub
           (get_local $1)
-          (i32.xor
-           (i32.and
-            (i32.sub
-             (i32.const 0)
-             (get_local $2)
-            )
-            (i32.const 10)
-           )
+          (select
+           (i32.const 0)
            (i32.const 10)
+           (get_local $2)
           )
          )
          (i32.const 2)
