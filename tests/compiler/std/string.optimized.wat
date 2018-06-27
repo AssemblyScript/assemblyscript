@@ -3571,51 +3571,55 @@
  )
  (func $~lib/internal/itoa/decimalCount<u32> (; 25 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (i32.add
-   (i32.sub
-    (tee_local $0
-     (i32.shr_u
-      (i32.mul
-       (i32.sub
-        (i32.const 32)
-        (i32.clz
-         (i32.or
-          (tee_local $1
-           (i32.sub
-            (i32.xor
-             (get_local $0)
-             (tee_local $0
-              (i32.shr_u
+  (local $2 i32)
+  (set_local $2
+   (i32.load offset=8
+    (i32.add
+     (i32.load
+      (i32.const 16)
+     )
+     (i32.shl
+      (tee_local $0
+       (i32.shr_u
+        (i32.mul
+         (i32.sub
+          (i32.const 32)
+          (i32.clz
+           (i32.or
+            (tee_local $1
+             (i32.sub
+              (i32.xor
                (get_local $0)
-               (i32.const 31)
+               (tee_local $0
+                (i32.shr_u
+                 (get_local $0)
+                 (i32.const 31)
+                )
+               )
               )
+              (get_local $0)
              )
             )
-            (get_local $0)
+            (i32.const 10)
            )
           )
-          (i32.const 10)
          )
+         (i32.const 1233)
         )
+        (i32.const 12)
        )
-       (i32.const 1233)
       )
-      (i32.const 12)
+      (i32.const 2)
      )
     )
+   )
+  )
+  (i32.add
+   (i32.sub
+    (get_local $0)
     (i32.lt_u
      (get_local $1)
-     (i32.load offset=8
-      (i32.add
-       (i32.load
-        (i32.const 16)
-       )
-       (i32.shl
-        (get_local $0)
-        (i32.const 2)
-       )
-      )
-     )
+     (get_local $2)
     )
    )
    (i32.const 1)

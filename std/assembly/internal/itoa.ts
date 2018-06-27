@@ -5,7 +5,7 @@ import {
   HEADER_SIZE as STRING_HEADER_SIZE
 } from "./string";
 
-import { HEADER_SIZE as BUFFER_HEADER_SIZE } from "./arraybuffer";
+import { loadUnsafe } from "./arraybuffer";
 
 const powers10: u32[] = [
   1,
@@ -66,15 +66,15 @@ function decimalCount<T>(value: T): i32 {
   var t = l * 1233 >>> 12;                       // log10
 
   var power: T;
-  var ptr = changetype<usize>(powers10.buffer_);
+  var ptr = changetype<ArrayBuffer>(powers10.buffer_);
   if (sizeof<T>() <= 4) {
-    power = <T>load<u32>(ptr + (t << 2), BUFFER_HEADER_SIZE);
+    power = loadUnsafe<u32, T>(ptr, t);
     t = t - <i32>(v < power);
   } else { // sizeof<T>() == 8
     let le10   = t <= 10;
     let offset = select<i32>(0, 10, le10);        // offset = t <= 10 ? 0 : 10
     let factor = select<T>(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
-    power = <T>load<u32>(ptr + ((t - offset) << 2), BUFFER_HEADER_SIZE);
+    power = loadUnsafe<u32, T>(ptr, t - offset);
     t = t - <i32>(v < factor * power);
   }
 
@@ -83,7 +83,7 @@ function decimalCount<T>(value: T): i32 {
 
 function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
   var r: u32, t: u32, d1: u32, d2: u32;
-  var lutptr = changetype<usize>(digits00_99.buffer_);
+  var lutbuf = changetype<ArrayBuffer>(digits00_99.buffer_);
 
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
@@ -94,8 +94,8 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
     d1 = r / 100;
     d2 = r % 100;
 
-    let digits1: u64 = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
-    let digits2: u64 = load<u32>(lutptr + (d2 << 2), BUFFER_HEADER_SIZE);
+    let digits1 = loadUnsafe<u32, u64>(lutbuf, d1);
+    let digits2 = loadUnsafe<u32, u64>(lutbuf, d2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
@@ -106,13 +106,13 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
     d1  = num % 100;
     num = t;
     offset -= 2;
-    let digits = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
+    let digits = loadUnsafe<u32, u32>(lutbuf, d1);
     store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
   }
 
   if (num >= 10) {
     offset -= 2;
-    let digits = load<u32>(lutptr + (num << 2), BUFFER_HEADER_SIZE);
+    let digits = loadUnsafe<u32, u32>(lutbuf, num);
     store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
   } else {
     offset -= 1;
@@ -125,7 +125,7 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
   var t:  u64, t32: u32, r: u32, b: u32, c: u32;
   var b1: u32, b2: u32, c1: u32, c2: u32;
 
-  var lutptr = changetype<usize>(digits00_99.buffer_);
+  var lutbuf = changetype<ArrayBuffer>(digits00_99.buffer_);
 
   while (num >= 100000000) {
     t = num / 100000000;
@@ -140,14 +140,14 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
     c1 = c / 100;
     c2 = c % 100;
 
-    let digits1: u64 = load<u32>(lutptr + (c1 << 2), BUFFER_HEADER_SIZE);
-    let digits2: u64 = load<u32>(lutptr + (c2 << 2), BUFFER_HEADER_SIZE);
+    let digits1 = loadUnsafe<u32, u64>(lutbuf, c1);
+    let digits2 = loadUnsafe<u32, u64>(lutbuf, c2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
 
-    digits1 = <u64>load<u32>(lutptr + (b1 << 2), BUFFER_HEADER_SIZE);
-    digits2 = <u64>load<u32>(lutptr + (b2 << 2), BUFFER_HEADER_SIZE);
+    digits1 = loadUnsafe<u32, u64>(lutbuf, b1);
+    digits2 = loadUnsafe<u32, u64>(lutbuf, b2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
