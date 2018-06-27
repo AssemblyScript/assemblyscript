@@ -574,72 +574,70 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 268435454)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 92)
-      (i32.const 23)
-      (i32.const 39)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 268435454)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 92)
+     (i32.const 23)
+     (i32.const 39)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 8)
-         )
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
+    (get_local $2)
+   )
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 8)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
+   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (get_local $1)
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
     (get_local $3)
+    (i32.const 8)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (get_local $1)
-   )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
-    (get_local $2)
-   )
+   (i32.const 0)
+   (get_local $2)
   )
   (get_local $0)
  )

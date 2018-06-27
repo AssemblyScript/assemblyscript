@@ -1,7 +1,7 @@
 (module
  (type $iv (func (param i32)))
- (type $i (func (result i32)))
  (type $v (func))
+ (type $i (func (result i32)))
  (type $I (func (result i64)))
  (type $iiv (func (param i32 i32)))
  (type $fv (func (param f32)))
@@ -39,7 +39,7 @@
  (global $assembly/pson/Token.STRING_ADD i32 (i32.const 253))
  (global $assembly/pson/Token.STRING_GET i32 (i32.const 254))
  (global $assembly/pson/Token.BINARY i32 (i32.const 255))
- (global $HEAP_BASE i32 (i32.const 4))
+ (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 1)
  (export "decode" (func $assembly/pson/decode))
  (export "memory" (memory $0))
@@ -58,8 +58,6 @@
    ;;@ assembly/pson.ts:136:19
    (i32.const 0)
   )
-  ;;@ assembly/pson.ts:137:2
-  (nop)
   ;;@ assembly/pson.ts:138:2
   (block $break|0
    (loop $continue|0
@@ -129,9 +127,7 @@
    )
   )
   ;;@ assembly/pson.ts:142:9
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $assembly/pson/readVarint64 (; 15 ;) (type $I) (result i64)
   (local $0 i64)
@@ -149,8 +145,6 @@
    ;;@ assembly/pson.ts:147:19
    (i64.const 0)
   )
-  ;;@ assembly/pson.ts:148:2
-  (nop)
   ;;@ assembly/pson.ts:149:2
   (block $break|0
    (loop $continue|0
@@ -222,9 +216,7 @@
    )
   )
   ;;@ assembly/pson.ts:153:9
-  (return
-   (get_local $0)
-  )
+  (get_local $0)
  )
  (func $assembly/pson/decodeValue (; 16 ;) (type $v)
   (local $0 i32)
@@ -250,10 +242,6 @@
     )
    )
   )
-  ;;@ assembly/pson.ts:49:2
-  (nop)
-  ;;@ assembly/pson.ts:50:2
-  (nop)
   ;;@ assembly/pson.ts:51:2
   (block $break|0
    (block $case16|0

@@ -97,11 +97,6 @@ export function setNoAssert(options: Options, noAssert: bool): void {
   options.noAssert = noAssert;
 }
 
-/** Sets the `noMemory` option. */
-export function setNoMemory(options: Options, noMemory: bool): void {
-  options.noMemory = noMemory;
-}
-
 /** Sets the `importMemory` option. */
 export function setImportMemory(options: Options, importMemory: bool): void {
   options.importMemory = importMemory;

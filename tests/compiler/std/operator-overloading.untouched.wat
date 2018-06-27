@@ -194,7 +194,6 @@
  )
  (func $std/operator-overloading/Tester#constructor (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -2399,7 +2398,6 @@
  )
  (func $std/operator-overloading/TesterInlineStatic#constructor (; 29 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)
@@ -2427,7 +2425,6 @@
  )
  (func $std/operator-overloading/TesterInlineInstance#constructor (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (nop)
   (tee_local $0
    (if (result i32)
     (get_local $0)

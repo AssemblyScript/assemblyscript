@@ -4,6 +4,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (global $assembly/i64/lo (mut i32) (i32.const 0))
  (global $assembly/i64/hi (mut i32) (i32.const 0))
+ (memory $0 1)
  (export "getLo" (func $assembly/i64/getLo))
  (export "getHi" (func $assembly/i64/getHi))
  (export "clz" (func $assembly/i64/clz))
@@ -35,6 +36,7 @@
  (export "gt_u" (func $assembly/i64/gt_u))
  (export "ge_s" (func $assembly/i64/ge_s))
  (export "ge_u" (func $assembly/i64/ge_u))
+ (export "memory" (memory $0))
  (func $assembly/i64/getLo (; 0 ;) (type $i) (result i32)
   ;;@ assembly/i64.ts:4:9
   (get_global $assembly/i64/lo)

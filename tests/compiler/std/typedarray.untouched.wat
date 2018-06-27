@@ -538,80 +538,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 1073741816)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 1073741816)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
+   (block
+    (call $~lib/env/abort
      (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
-   )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
     (i32.const 0)
+   )
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -619,80 +617,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 1073741816)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 1073741816)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
+   (block
+    (call $~lib/env/abort
      (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
-   )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
     (i32.const 0)
+   )
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -700,80 +696,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 536870908)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 536870908)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 1)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 1)
    )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -781,80 +775,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 536870908)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 536870908)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 1)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 1)
    )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -862,80 +854,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 268435454)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 268435454)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 2)
    )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -943,80 +933,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 268435454)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 268435454)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 2)
    )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -1024,80 +1012,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 134217727)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 134217727)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 3)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 3)
    )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -1105,80 +1091,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 134217727)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 134217727)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 3)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 3)
    )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -1186,80 +1170,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 268435454)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 268435454)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 2)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 2)
    )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )
@@ -1267,80 +1249,78 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (block
-   (if
-    (i32.gt_u
-     (get_local $1)
-     (i32.const 134217727)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 18)
-      (i32.const 34)
-     )
-     (unreachable)
-    )
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 134217727)
    )
-   (set_local $2
-    (i32.shl
-     (get_local $1)
-     (i32.const 3)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 18)
+     (i32.const 34)
     )
+    (unreachable)
    )
-   (set_local $3
-    (call $~lib/internal/arraybuffer/allocUnsafe
-     (get_local $2)
-    )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 3)
    )
-   (call $~lib/memory/set_memory
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocUnsafe
     (get_local $2)
    )
-   (i32.store
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $4
-         (call $~lib/allocator/arena/allocate_memory
-          (i32.const 12)
-         )
+  )
+  (call $~lib/memory/set_memory
+   (i32.add
+    (get_local $3)
+    (i32.const 8)
+   )
+   (i32.const 0)
+   (get_local $2)
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/allocator/arena/allocate_memory
+         (i32.const 12)
         )
-        (i32.store
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $4)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $4)
-         (i32.const 0)
-        )
-        (get_local $4)
        )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
       )
      )
     )
-    (get_local $3)
    )
-   (i32.store offset=4
-    (get_local $0)
-    (i32.const 0)
-   )
-   (i32.store offset=8
-    (get_local $0)
-    (get_local $2)
-   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $2)
   )
   (get_local $0)
  )

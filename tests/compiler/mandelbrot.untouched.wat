@@ -413,13 +413,11 @@
        (get_local $6)
       )
      )
-     (block
-      (set_local $10
-       (f64.const 0)
-      )
-      (set_local $11
-       (f64.const 0)
-      )
+     (set_local $10
+      (f64.const 0)
+     )
+     (set_local $11
+      (f64.const 0)
      )
      (set_local $14
       (i32.const 0)

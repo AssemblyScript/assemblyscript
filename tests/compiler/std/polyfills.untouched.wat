@@ -458,57 +458,55 @@
     (unreachable)
    )
   )
-  (block
-   (set_local $2
-    (i64.and
-     (i64.shr_u
-      (get_local $0)
-      (i64.const 8)
-     )
-     (i64.const 71777214294589695)
-    )
-   )
-   (set_local $3
-    (i64.shl
-     (i64.and
-      (get_local $0)
-      (i64.const 71777214294589695)
-     )
+  (set_local $2
+   (i64.and
+    (i64.shr_u
+     (get_local $0)
      (i64.const 8)
     )
+    (i64.const 71777214294589695)
    )
-   (set_local $4
+  )
+  (set_local $3
+   (i64.shl
+    (i64.and
+     (get_local $0)
+     (i64.const 71777214294589695)
+    )
+    (i64.const 8)
+   )
+  )
+  (set_local $4
+   (i64.or
+    (get_local $2)
+    (get_local $3)
+   )
+  )
+  (set_local $2
+   (i64.and
+    (i64.shr_u
+     (get_local $4)
+     (i64.const 16)
+    )
+    (i64.const 281470681808895)
+   )
+  )
+  (set_local $3
+   (i64.shl
+    (i64.and
+     (get_local $4)
+     (i64.const 281470681808895)
+    )
+    (i64.const 16)
+   )
+  )
+  (return
+   (i64.rotr
     (i64.or
      (get_local $2)
      (get_local $3)
     )
-   )
-   (set_local $2
-    (i64.and
-     (i64.shr_u
-      (get_local $4)
-      (i64.const 16)
-     )
-     (i64.const 281470681808895)
-    )
-   )
-   (set_local $3
-    (i64.shl
-     (i64.and
-      (get_local $4)
-      (i64.const 281470681808895)
-     )
-     (i64.const 16)
-    )
-   )
-   (return
-    (i64.rotr
-     (i64.or
-      (get_local $2)
-      (get_local $3)
-     )
-     (i64.const 32)
-    )
+    (i64.const 32)
    )
   )
  )
@@ -561,57 +559,55 @@
     (unreachable)
    )
   )
-  (block
-   (set_local $2
-    (i64.and
-     (i64.shr_u
-      (get_local $0)
-      (i64.const 8)
-     )
-     (i64.const 71777214294589695)
-    )
-   )
-   (set_local $3
-    (i64.shl
-     (i64.and
-      (get_local $0)
-      (i64.const 71777214294589695)
-     )
+  (set_local $2
+   (i64.and
+    (i64.shr_u
+     (get_local $0)
      (i64.const 8)
     )
+    (i64.const 71777214294589695)
    )
-   (set_local $4
+  )
+  (set_local $3
+   (i64.shl
+    (i64.and
+     (get_local $0)
+     (i64.const 71777214294589695)
+    )
+    (i64.const 8)
+   )
+  )
+  (set_local $4
+   (i64.or
+    (get_local $2)
+    (get_local $3)
+   )
+  )
+  (set_local $2
+   (i64.and
+    (i64.shr_u
+     (get_local $4)
+     (i64.const 16)
+    )
+    (i64.const 281470681808895)
+   )
+  )
+  (set_local $3
+   (i64.shl
+    (i64.and
+     (get_local $4)
+     (i64.const 281470681808895)
+    )
+    (i64.const 16)
+   )
+  )
+  (return
+   (i64.rotr
     (i64.or
      (get_local $2)
      (get_local $3)
     )
-   )
-   (set_local $2
-    (i64.and
-     (i64.shr_u
-      (get_local $4)
-      (i64.const 16)
-     )
-     (i64.const 281470681808895)
-    )
-   )
-   (set_local $3
-    (i64.shl
-     (i64.and
-      (get_local $4)
-      (i64.const 281470681808895)
-     )
-     (i64.const 16)
-    )
-   )
-   (return
-    (i64.rotr
-     (i64.or
-      (get_local $2)
-      (get_local $3)
-     )
-     (i64.const 32)
-    )
+    (i64.const 32)
    )
   )
  )

@@ -33,13 +33,11 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (block
-   (set_local $0
-    (f32.const -1)
-   )
-   (set_local $1
-    (f64.const -2)
-   )
+  (set_local $0
+   (f32.const -1)
+  )
+  (set_local $1
+   (f64.const -2)
   )
   (if
    (i32.eqz

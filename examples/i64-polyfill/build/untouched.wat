@@ -6,6 +6,8 @@
  (global $assembly/i64/hi (mut i32) (i32.const 0))
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $Infinity f64 (f64.const inf))
+ (global $HEAP_BASE i32 (i32.const 8))
+ (memory $0 1)
  (export "getLo" (func $assembly/i64/getLo))
  (export "getHi" (func $assembly/i64/getHi))
  (export "clz" (func $assembly/i64/clz))
@@ -37,19 +39,14 @@
  (export "gt_u" (func $assembly/i64/gt_u))
  (export "ge_s" (func $assembly/i64/ge_s))
  (export "ge_u" (func $assembly/i64/ge_u))
+ (export "memory" (memory $0))
  (func $assembly/i64/getLo (; 0 ;) (type $i) (result i32)
-  ;;@ assembly/i64.ts:3:29
-  (return
-   ;;@ assembly/i64.ts:4:9
-   (get_global $assembly/i64/lo)
-  )
+  ;;@ assembly/i64.ts:4:9
+  (get_global $assembly/i64/lo)
  )
  (func $assembly/i64/getHi (; 1 ;) (type $i) (result i32)
-  ;;@ assembly/i64.ts:7:29
-  (return
-   ;;@ assembly/i64.ts:8:9
-   (get_global $assembly/i64/hi)
-  )
+  ;;@ assembly/i64.ts:8:9
+  (get_global $assembly/i64/hi)
  )
  (func $assembly/i64/clz (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i64)
