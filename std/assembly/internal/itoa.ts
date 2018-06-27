@@ -69,13 +69,13 @@ function decimalCount<T>(value: T): i32 {
   var lutbuf = changetype<ArrayBuffer>(powers10.buffer_);
   if (sizeof<T>() <= 4) {
     power = loadUnsafe<u32, T>(lutbuf, t);
-    t = t - <i32>(v < power);
+    t -= <i32>(v < power);
   } else { // sizeof<T>() == 8
     let le10   = t <= 10;
-    let offset = select<i32>(0, 10, le10);        // offset = t <= 10 ? 0 : 10
-    let factor = select<T>(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
+    let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
+    let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
     power = loadUnsafe<u32, T>(lutbuf, t - offset);
-    t = t - <i32>(v < factor * power);
+    t -= <i32>(v < factor * power);
   }
 
   return t + 1;
@@ -188,7 +188,7 @@ export function utoa32(value: u32): string {
 export function itoa32(value: i32): string {
   if (!value) return "0";
 
-  var isneg  = value < 0;
+  var isneg = value < 0;
   if (isneg) value = -value;
 
   var decimals = decimalCount<u32>(value) + <i32>isneg;
@@ -221,7 +221,7 @@ export function utoa64(value: u64): string {
 export function itoa64(value: i64): string {
   if (!value) return "0";
 
-  var isneg  = value < 0;
+  var isneg = value < 0;
   if (isneg) value = -value;
 
   var buffer: String;
