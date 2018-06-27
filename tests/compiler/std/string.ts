@@ -100,8 +100,9 @@ assert(utoa32(u32.MAX_VALUE) == "4294967295");
 
 assert(utoa64(0) == "0");
 assert(utoa64(1234) == "1234");
-assert(utoa64(0xfffffffe)  == "4294967294");
-assert(utoa64(0xffffffff)  == "4294967295");
+assert(utoa64(100000000) == "100000000");
+assert(utoa64(0xfffffffe) == "4294967294");
+assert(utoa64(0xffffffff) == "4294967295");
 assert(utoa64(0xfffffffff) == "68719476735");
 assert(utoa64(868719476735) == "868719476735");
 assert(utoa64(999868719476735) == "999868719476735");
@@ -109,6 +110,7 @@ assert(utoa64(9999868719476735) == "9999868719476735");
 assert(utoa64(19999868719476735) == "19999868719476735");
 assert(utoa64(u64.MAX_VALUE) == "18446744073709551615");
 
+assert(itoa64(0) == "0");
 assert(itoa64(-1234) == "-1234");
 assert(itoa64(0xffffffff)  == "4294967295");
 assert(itoa64(-0xffffffff)  == "-4294967295");
