@@ -102,7 +102,6 @@ assert(utoa64(0) == "0");
 assert(utoa64(1234) == "1234");
 assert(utoa64(99999999) == "99999999");
 assert(utoa64(100000000) == "100000000");
-assert(utoa64(0xfffffffe) == "4294967294");
 assert(utoa64(0xffffffff) == "4294967295");
 assert(utoa64(0xfffffffff) == "68719476735");
 assert(utoa64(868719476735) == "868719476735");
