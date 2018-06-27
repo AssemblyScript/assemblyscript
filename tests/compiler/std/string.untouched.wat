@@ -4326,14 +4326,10 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
+  (local $8 i64)
   (local $9 i64)
-  (local $10 i64)
-  (local $11 i32)
+  (local $10 i32)
   (set_local $7
-   (get_local $2)
-  )
-  (set_local $8
    (i32.load
     (i32.const 88)
    )
@@ -4374,10 +4370,10 @@
          (i32.const 100)
         )
        )
-       (set_local $9
+       (set_local $8
         (i64.load32_u offset=8
          (i32.add
-          (get_local $8)
+          (get_local $7)
           (i32.shl
            (get_local $5)
            (i32.const 2)
@@ -4385,10 +4381,10 @@
          )
         )
        )
-       (set_local $10
+       (set_local $9
         (i64.load32_u offset=8
          (i32.add
-          (get_local $8)
+          (get_local $7)
           (i32.shl
            (get_local $6)
            (i32.const 2)
@@ -4396,9 +4392,9 @@
          )
         )
        )
-       (set_local $7
+       (set_local $2
         (i32.sub
-         (get_local $7)
+         (get_local $2)
          (i32.const 4)
         )
        )
@@ -4406,14 +4402,14 @@
         (i32.add
          (get_local $0)
          (i32.shl
-          (get_local $7)
+          (get_local $2)
           (i32.const 1)
          )
         )
         (i64.or
-         (get_local $9)
+         (get_local $8)
          (i64.shl
-          (get_local $10)
+          (get_local $9)
           (i64.const 32)
          )
         )
@@ -4445,16 +4441,16 @@
     (set_local $1
      (get_local $4)
     )
-    (set_local $7
+    (set_local $2
      (i32.sub
-      (get_local $7)
+      (get_local $2)
       (i32.const 2)
      )
     )
-    (set_local $11
+    (set_local $10
      (i32.load offset=8
       (i32.add
-       (get_local $8)
+       (get_local $7)
        (i32.shl
         (get_local $5)
         (i32.const 2)
@@ -4466,11 +4462,11 @@
      (i32.add
       (get_local $0)
       (i32.shl
-       (get_local $7)
+       (get_local $2)
        (i32.const 1)
       )
      )
-     (get_local $11)
+     (get_local $10)
     )
    )
   )
@@ -4480,16 +4476,16 @@
     (i32.const 10)
    )
    (block
-    (set_local $7
+    (set_local $2
      (i32.sub
-      (get_local $7)
+      (get_local $2)
       (i32.const 2)
      )
     )
-    (set_local $11
+    (set_local $10
      (i32.load offset=8
       (i32.add
-       (get_local $8)
+       (get_local $7)
        (i32.shl
         (get_local $1)
         (i32.const 2)
@@ -4501,21 +4497,21 @@
      (i32.add
       (get_local $0)
       (i32.shl
-       (get_local $7)
+       (get_local $2)
        (i32.const 1)
       )
      )
-     (get_local $11)
+     (get_local $10)
     )
    )
    (block
-    (set_local $7
+    (set_local $2
      (i32.sub
-      (get_local $7)
+      (get_local $2)
       (i32.const 1)
      )
     )
-    (set_local $11
+    (set_local $10
      (i32.add
       (i32.const 48)
       (get_local $1)
@@ -4525,11 +4521,11 @@
      (i32.add
       (get_local $0)
       (i32.shl
-       (get_local $7)
+       (get_local $2)
        (i32.const 1)
       )
      )
-     (get_local $11)
+     (get_local $10)
     )
    )
   )
@@ -4745,13 +4741,9 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
+  (local $13 i64)
   (local $14 i64)
-  (local $15 i64)
   (set_local $12
-   (get_local $2)
-  )
-  (set_local $13
    (i32.load
     (i32.const 88)
    )
@@ -4821,10 +4813,10 @@
          (i32.const 100)
         )
        )
-       (set_local $14
+       (set_local $13
         (i64.load32_u offset=8
          (i32.add
-          (get_local $13)
+          (get_local $12)
           (i32.shl
            (get_local $10)
            (i32.const 2)
@@ -4832,10 +4824,10 @@
          )
         )
        )
-       (set_local $15
+       (set_local $14
         (i64.load32_u offset=8
          (i32.add
-          (get_local $13)
+          (get_local $12)
           (i32.shl
            (get_local $11)
            (i32.const 2)
@@ -4843,9 +4835,9 @@
          )
         )
        )
-       (set_local $12
+       (set_local $2
         (i32.sub
-         (get_local $12)
+         (get_local $2)
          (i32.const 4)
         )
        )
@@ -4853,22 +4845,22 @@
         (i32.add
          (get_local $0)
          (i32.shl
-          (get_local $12)
+          (get_local $2)
           (i32.const 1)
          )
         )
         (i64.or
-         (get_local $14)
+         (get_local $13)
          (i64.shl
-          (get_local $15)
+          (get_local $14)
           (i64.const 32)
          )
         )
        )
-       (set_local $14
+       (set_local $13
         (i64.load32_u offset=8
          (i32.add
-          (get_local $13)
+          (get_local $12)
           (i32.shl
            (get_local $8)
            (i32.const 2)
@@ -4876,10 +4868,10 @@
          )
         )
        )
-       (set_local $15
+       (set_local $14
         (i64.load32_u offset=8
          (i32.add
-          (get_local $13)
+          (get_local $12)
           (i32.shl
            (get_local $9)
            (i32.const 2)
@@ -4887,9 +4879,9 @@
          )
         )
        )
-       (set_local $12
+       (set_local $2
         (i32.sub
-         (get_local $12)
+         (get_local $2)
          (i32.const 4)
         )
        )
@@ -4897,14 +4889,14 @@
         (i32.add
          (get_local $0)
          (i32.shl
-          (get_local $12)
+          (get_local $2)
           (i32.const 1)
          )
         )
         (i64.or
-         (get_local $14)
+         (get_local $13)
          (i64.shl
-          (get_local $15)
+          (get_local $14)
           (i64.const 32)
          )
         )
@@ -4925,7 +4917,7 @@
    (call $~lib/internal/itoa/utoa32_lut
     (get_local $0)
     (get_local $5)
-    (get_local $12)
+    (get_local $2)
    )
   )
  )

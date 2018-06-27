@@ -7,9 +7,6 @@ import {
 
 import { HEADER_SIZE as BUFFER_HEADER_SIZE } from "./arraybuffer";
 
-// declare function logi(i: i32): void;
-// declare function logf(f: f64): void;
-
 const powers10: u32[] = [
   1,
   10,
@@ -83,8 +80,8 @@ function decimalCount<T>(value: T): i32 {
   return t + 1;
 }
 
-function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
-  var r: u32, t: u32, d1: u32, d2: u32, pos = decimals;
+function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
+  var r: u32, t: u32, d1: u32, d2: u32;
   var lutptr = changetype<usize>(digits00_99.buffer_);
 
   while (num >= 10000) {
@@ -99,33 +96,33 @@ function utoa32_lut(buffer: usize, num: u32, decimals: u32): void {
     let digits1: u64 = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
     let digits2: u64 = load<u32>(lutptr + (d2 << 2), BUFFER_HEADER_SIZE);
 
-    pos -= 4;
-    store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
+    offset -= 4;
+    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
   }
 
   if (num >= 100) {
     t   = num / 100;
     d1  = num % 100;
     num = t;
-    pos -= 2;
+    offset -= 2;
     let digits = load<u32>(lutptr + (d1 << 2), BUFFER_HEADER_SIZE);
-    store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
+    store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
   }
 
   if (num >= 10) {
-    pos -= 2;
+    offset -= 2;
     let digits = load<u32>(lutptr + (num << 2), BUFFER_HEADER_SIZE);
-    store<u32>(buffer + (pos << 1), digits, STRING_HEADER_SIZE);
+    store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
   } else {
-    pos -= 1;
+    offset -= 1;
     let digit = CharCode._0 + num;
-    store<u16>(buffer + (pos << 1), digit, STRING_HEADER_SIZE);
+    store<u16>(buffer + (offset << 1), digit, STRING_HEADER_SIZE);
   }
 }
 
-function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
+function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
   var t:  u64, t32: u32, r: u32, b: u32, c: u32;
-  var b1: u32, b2: u32, c1: u32, c2: u32, pos = decimals;
+  var b1: u32, b2: u32, c1: u32, c2: u32;
 
   var lutptr = changetype<usize>(digits00_99.buffer_);
 
@@ -145,35 +142,35 @@ function utoa64_lut(buffer: usize, num: u64, decimals: u32): void {
     let digits1: u64 = load<u32>(lutptr + (c1 << 2), BUFFER_HEADER_SIZE);
     let digits2: u64 = load<u32>(lutptr + (c2 << 2), BUFFER_HEADER_SIZE);
 
-    pos -= 4;
-    store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
+    offset -= 4;
+    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
 
     digits1 = <u64>load<u32>(lutptr + (b1 << 2), BUFFER_HEADER_SIZE);
     digits2 = <u64>load<u32>(lutptr + (b2 << 2), BUFFER_HEADER_SIZE);
 
-    pos -= 4;
-    store<u64>(buffer + (pos << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
+    offset -= 4;
+    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
   }
 
   r = <u32>num;
-  if (r) utoa32_lut(buffer, r, pos);
+  if (r) utoa32_lut(buffer, r, offset);
 }
 
 @inline
-export function utoa32_core(buffer: usize, num: u32, decimals: u32): void {
+export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
   // if (NO_MEMOTY || SHRINK_LEVEL >= 1) {
   //  TODO
   // } else {
-  utoa32_lut(buffer, num, decimals);
+  utoa32_lut(buffer, num, offset);
   // }
 }
 
 @inline
-export function utoa64_core(buffer: usize, num: u64, decimals: u32): void {
+export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
   // if (NO_MEMOTY || SHRINK_LEVEL >= 1) {
   //  TODO
   // } else {
-  utoa64_lut(buffer, num, decimals);
+  utoa64_lut(buffer, num, offset);
   // }
 }
 
