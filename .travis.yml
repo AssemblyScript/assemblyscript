@@ -1,6 +1,7 @@
 language: node_js
 notifications:
   email: false
+install: npm install
 stages:
 - name: check-pr
   if: type = pull_request
@@ -9,27 +10,22 @@ jobs:
 
   - stage: check-pr
     node_js: lts/*
-    install: npm install
     script: ./scripts/check-pr.sh
     env: Checks contributing guidelines before testing pull requests
 
   - stage: lint
     node_js: node
-    install: npm install
     script: npm run lint
     env: Checks the sources with TSLint
 
   - stage: test
     node_js: lts/*
-    install: npm install
     script: npm run clean && node bin/asc -v && npm test
     env: Tests the sources on latest node.js LTS
   - node_js: node
-    install: npm install
     script: npm run clean && node bin/asc -v && npm test
     env: Tests the sources on latest stable node.js
   - node_js: lts/*
-    install: npm install
     script:
     - npm run clean
     - cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test arena
@@ -39,10 +35,12 @@ jobs:
 
   - stage: build
     node_js: lts/*
-    install: npm install
     script: npm run build && node bin/asc -v && npm test
     env: Builds and tests the bundle on latest node.js LTS
   - node_js: node
-    install: npm install
     script: npm run build && node bin/asc -v && npm test
     env: Builds and tests the bundle on latest stable node.js
+
+cache:
+  directories:
+    - node_modules
