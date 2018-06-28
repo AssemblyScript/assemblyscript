@@ -80,7 +80,7 @@ To build an UMD bundle to `dist/assemblyscript.js` (depends on [binaryen.js](htt
 $> npm run build
 ```
 
-Cleaning the distributions files (again):
+Cleaning the distribution files (again):
 
 ```
 $> npm run clean

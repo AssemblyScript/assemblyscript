@@ -25,7 +25,13 @@ var assemblyscript, isDev;
     isDev = false;
   } catch (e) {
     try {
-      require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
+      require("ts-node").register({
+        project: path.join(__dirname, "..", "src", "tsconfig.json"),
+        files: [ // see: https://github.com/TypeStrong/ts-node/issues/620
+          path.join(__dirname, "..", "std", "portable.d.ts"),
+          path.join(__dirname, "..", "src", "glue", "binaryen.d.ts")
+        ]
+      });
       require("../src/glue/js");
       assemblyscript = require("../src");
       isDev = true;
