@@ -68,13 +68,13 @@ function decimalCount<T>(value: T): i32 {
   var power: T;
   var lutbuf = changetype<ArrayBuffer>(powers10.buffer_);
   if (sizeof<T>() <= 4) {
-    power = loadUnsafe<u32, T>(lutbuf, t);
+    power = loadUnsafe<u32,T>(lutbuf, t);
     t -= <i32>(v < power);
   } else { // sizeof<T>() == 8
     let le10   = t <= 10;
     let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
     let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
-    power = loadUnsafe<u32, T>(lutbuf, t - offset);
+    power = loadUnsafe<u32,T>(lutbuf, t - offset);
     t -= <i32>(v < factor * power);
   }
 
@@ -94,8 +94,8 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
     d1 = r / 100;
     d2 = r % 100;
 
-    let digits1 = loadUnsafe<u32, u64>(lutbuf, d1);
-    let digits2 = loadUnsafe<u32, u64>(lutbuf, d2);
+    let digits1 = loadUnsafe<u32,u64>(lutbuf, d1);
+    let digits2 = loadUnsafe<u32,u64>(lutbuf, d2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
@@ -106,13 +106,13 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
     d1  = num % 100;
     num = t;
     offset -= 2;
-    let digits = loadUnsafe<u32, u32>(lutbuf, d1);
+    let digits = loadUnsafe<u32,u32>(lutbuf, d1);
     store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
   }
 
   if (num >= 10) {
     offset -= 2;
-    let digits = loadUnsafe<u32, u32>(lutbuf, num);
+    let digits = loadUnsafe<u32,u32>(lutbuf, num);
     store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
   } else {
     offset -= 1;
@@ -140,14 +140,14 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
     c1 = c / 100;
     c2 = c % 100;
 
-    let digits1 = loadUnsafe<u32, u64>(lutbuf, c1);
-    let digits2 = loadUnsafe<u32, u64>(lutbuf, c2);
+    let digits1 = loadUnsafe<u32,u64>(lutbuf, c1);
+    let digits2 = loadUnsafe<u32,u64>(lutbuf, c2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
 
-    digits1 = loadUnsafe<u32, u64>(lutbuf, b1);
-    digits2 = loadUnsafe<u32, u64>(lutbuf, b2);
+    digits1 = loadUnsafe<u32,u64>(lutbuf, b1);
+    digits2 = loadUnsafe<u32,u64>(lutbuf, b2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
