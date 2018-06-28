@@ -9,7 +9,6 @@ env:
   global: JOBS=2
 jobs:
   include:
-
   - stage: check-pr
     node_js: lts/*
     script: ./scripts/check-pr.sh
