@@ -1,9 +1,16 @@
 var fs = require("fs");
+var path = require("path");
 var colors = require("../cli/util/colors");
 var glob = require("glob");
 var diff = require("./util/diff");
 
-require("ts-node").register({ project: require("path").join(__dirname, "..", "src", "tsconfig.json") });
+require("ts-node").register({
+  project: require("path").join(__dirname, "..", "src", "tsconfig.json"),
+  files: [ // see: https://github.com/TypeStrong/ts-node/issues/620
+    path.join(__dirname, "..", "std", "portable.d.ts"),
+    path.join(__dirname, "..", "src", "glue", "binaryen.d.ts")
+  ]
+});
 require("../src/glue/js");
 
 var Parser = require("../src/parser").Parser;

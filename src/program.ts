@@ -15,7 +15,8 @@ import {
 } from "./common";
 
 import {
-  Options
+  Options,
+  Feature
 } from "./compiler";
 
 import {
@@ -371,6 +372,8 @@ export class Program extends DiagnosticEmitter {
   /** Initializes the program and its elements prior to compilation. */
   initialize(options: Options): void {
     this.options = options;
+
+    // add built-in types
     this.typesLookup = new Map([
       ["i8", Type.i8],
       ["i16", Type.i16],
@@ -390,6 +393,25 @@ export class Program extends DiagnosticEmitter {
       ["boolean", Type.bool]
     ]);
 
+    // add compiler hints
+    this.setConstantInteger("ASC_TARGET", Type.i32,
+      i64_new(options.isWasm64 ? 2 : 1));
+    this.setConstantInteger("ASC_NO_TREESHAKING", Type.bool,
+      i64_new(options.noTreeShaking ? 1 : 0, 0));
+    this.setConstantInteger("ASC_NO_ASSERT", Type.bool,
+      i64_new(options.noAssert ? 1 : 0, 0));
+    this.setConstantInteger("ASC_MEMORY_BASE", Type.i32,
+      i64_new(options.memoryBase, 0));
+    this.setConstantInteger("ASC_OPTIMIZE_LEVEL", Type.i32,
+      i64_new(options.optimizeLevelHint, 0));
+    this.setConstantInteger("ASC_SHRINK_LEVEL", Type.i32,
+      i64_new(options.shrinkLevelHint, 0));
+    this.setConstantInteger("ASC_FEATURE_MUTABLE_GLOBAL", Type.bool,
+      i64_new(options.hasFeature(Feature.MUTABLE_GLOBAL) ? 1 : 0, 0));
+    this.setConstantInteger("ASC_FEATURE_SIGN_EXTENSION", Type.bool,
+      i64_new(options.hasFeature(Feature.SIGN_EXTENSION) ? 1 : 0, 0));
+
+    // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
     var queuedExports = new Map<string,QueuedExport>();
     var queuedExtends = new Array<ClassPrototype>();
@@ -615,6 +637,24 @@ export class Program extends DiagnosticEmitter {
         this.mainFunction = <FunctionPrototype>element;
       }
     }
+  }
+
+  /** Sets a constant integer value. */
+  setConstantInteger(globalName: string, type: Type, value: I64): void {
+    assert(type.is(TypeFlags.INTEGER));
+    this.elementsLookup.set(globalName,
+      new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
+        .withConstantIntegerValue(value)
+    );
+  }
+
+  /** Sets a constant float value. */
+  setConstantFloat(globalName: string, type: Type, value: f64): void {
+    assert(type.is(TypeFlags.FLOAT));
+    this.elementsLookup.set(globalName,
+      new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
+        .withConstantFloatValue(value)
+    );
   }
 
   /** Tries to resolve an import by traversing exports and queued exports. */
@@ -2670,9 +2710,9 @@ export class VariableLikeElement extends Element {
     this.declaration = declaration;
   }
 
-  withConstantIntegerValue(lo: i32, hi: i32): this {
+  withConstantIntegerValue(value: I64): this {
     this.constantValueKind = ConstantValueKind.INTEGER;
-    this.constantIntegerValue = i64_new(lo, hi);
+    this.constantIntegerValue = value;
     this.set(CommonFlags.CONST | CommonFlags.INLINED);
     return this;
   }

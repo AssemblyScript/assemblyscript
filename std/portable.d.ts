@@ -28,6 +28,9 @@ declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
 
+/** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
+declare const ASC_TARGET: i32;
+
 /** Converts any other numeric value to an 8-bit signed integer. */
 declare function i8(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
 declare namespace i8 {

@@ -177,14 +177,19 @@ export class Options {
   importMemory: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
-  /** Static memory start offset. */
-  memoryBase: u32 = 0;
   /** If true, generates information necessary for source maps. */
   sourceMap: bool = false;
+  /** Static memory start offset. */
+  memoryBase: i32 = 0;
   /** Global aliases. */
   globalAliases: Map<string,string> | null = null;
   /** Additional features to activate. */
   features: Feature = Feature.NONE;
+
+  /** Hinted optimize level. Not applied by the compiler itself. */
+  optimizeLevelHint: i32 = 0;
+  /** Hinted shrink level. Not applied by the compiler itself. */
+  shrinkLevelHint: i32 = 0;
 
   /** Tests if the target is WASM64 or, otherwise, WASM32. */
   get isWasm64(): bool {
@@ -251,8 +256,8 @@ export class Compiler extends DiagnosticEmitter {
   module: Module;
   /** Current function in compilation. */
   currentFunction: Function;
-  /** Outer function in compilation, if compiling a function expression. */
-  outerFunction: Function | null = null;
+  /** Current outer function in compilation, if compiling a function expression. */
+  currentOuterFunction: Function | null = null;
   /** Current enum in compilation. */
   currentEnum: Enum | null = null;
   /** Current type in compilation. */
@@ -2045,13 +2050,20 @@ export class Compiler extends DiagnosticEmitter {
             let local = new Local(program, name, -1, type);
             switch (getExpressionType(initExpr)) {
               case NativeType.I32: {
-                local = local.withConstantIntegerValue(getConstValueI32(initExpr), 0);
+                local = local.withConstantIntegerValue(
+                  i64_new(
+                    getConstValueI32(initExpr),
+                    0
+                  )
+                );
                 break;
               }
               case NativeType.I64: {
                 local = local.withConstantIntegerValue(
-                  getConstValueI64Low(initExpr),
-                  getConstValueI64High(initExpr)
+                  i64_new(
+                    getConstValueI64Low(initExpr),
+                    getConstValueI64High(initExpr)
+                  )
                 );
                 break;
               }
