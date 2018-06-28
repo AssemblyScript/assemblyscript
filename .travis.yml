@@ -2,9 +2,7 @@ language: node_js
 notifications:
   email: false
 install:
-  - npm i -g npm@latest
-  - npm ci
-before_install: npm config set spin=false
+  - yarn
 stages:
 - name: check-pr
   if: type = pull_request
@@ -19,33 +17,30 @@ jobs:
 
   - stage: lint
     node_js: node
-    script: npm run lint
+    script: yarn lint
     env: Checks the sources with TSLint
 
   - stage: test
     node_js: lts/*
-    script: npm run clean && node bin/asc -v && npm test
+    script: yarn clean && node bin/asc -v && yarn test
     env: Tests the sources on latest node.js LTS
   - node_js: lts/*
     script:
-    - npm run clean
-    - cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test arena
-    - cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy
-    - cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf
+    - yarn clean
+    - cd $TRAVIS_BUILD_DIR/tests/allocators/arena && yarn build && cd .. && yarn test arena
+    - cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && yarn build && cd .. && yarn test buddy
+    - cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && yarn build && cd .. && yarn test tlsf
     env: Tests the allocators on latest node.js LTS
   - node_js: node
-    script: npm run clean && node bin/asc -v && npm test
+    script: yarn clean && node bin/asc -v && yarn test
     env: Tests the sources on latest stable node.js
 
   - stage: build
     node_js: lts/*
-    script: npm run build && node bin/asc -v && npm test
+    script: yarn build && node bin/asc -v && yarn test
     env: Builds and tests the bundle on latest node.js LTS
   - node_js: node
-    script: npm run build && node bin/asc -v && npm test
+    script: yarn build && node bin/asc -v && yarn test
     env: Builds and tests the bundle on latest stable node.js
 
-cache:
-  directories:
-    - ~/.npm
-    - ~/npm
+cache: yarn
