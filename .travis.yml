@@ -1,6 +1,7 @@
 language: node_js
 notifications:
   email: false
+node_js: '10'
 install: npm ci --ignore-scripts
 stages:
 - name: check-pr
