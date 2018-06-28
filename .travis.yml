@@ -5,6 +5,8 @@ install: npm install
 stages:
 - name: check-pr
   if: type = pull_request
+env:
+  global: JOBS=2
 jobs:
   include:
 
