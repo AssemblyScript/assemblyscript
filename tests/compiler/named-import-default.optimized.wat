@@ -1,6 +1,6 @@
 (module
  (type $i (func (result i32)))
- (memory $0 1)
+ (memory $0 0)
  (export "getValue" (func $named-import-default/getValue))
  (export "memory" (memory $0))
  (func $named-export-default/get3 (; 0 ;) (type $i) (result i32)

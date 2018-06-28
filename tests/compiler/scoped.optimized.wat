@@ -1,7 +1,7 @@
 (module
  (type $iv (func (param i32)))
  (type $v (func))
- (memory $0 1)
+ (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
  (func $scoped/fn (; 0 ;) (type $iv) (param $0 i32)

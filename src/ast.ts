@@ -1099,7 +1099,8 @@ export enum DecoratorKind {
   OPERATOR_POSTFIX,
   UNMANAGED,
   SEALED,
-  INLINE
+  INLINE,
+  EXTERNAL
 }
 
 /** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
@@ -1109,6 +1110,10 @@ export function decoratorNameToKind(name: Expression): DecoratorKind {
     let nameStr = (<IdentifierExpression>name).text;
     assert(nameStr.length);
     switch (nameStr.charCodeAt(0)) {
+      case CharCode.e: {
+        if (nameStr == "external") return DecoratorKind.EXTERNAL;
+        break;
+      }
       case CharCode.g: {
         if (nameStr == "global") return DecoratorKind.GLOBAL;
         break;
@@ -1471,6 +1476,8 @@ export class Source extends Node {
   normalizedPath: string;
   /** Path used internally. */
   internalPath: string;
+  /** Simple path (last part without extension). */
+  simplePath: string;
   /** Contained statements. */
   statements: Statement[];
   /** Full source text. */
@@ -1487,7 +1494,10 @@ export class Source extends Node {
     super();
     this.sourceKind = kind;
     this.normalizedPath = normalizedPath;
-    this.internalPath = mangleInternalPath(this.normalizedPath);
+    var internalPath = mangleInternalPath(this.normalizedPath);
+    this.internalPath = internalPath;
+    var pos = internalPath.lastIndexOf(PATH_DELIMITER);
+    this.simplePath = pos >= 0 ? internalPath.substring(pos + 1) : internalPath;
     this.statements = new Array();
     this.range = new Range(this, 0, text.length);
     this.text = text;
@@ -1881,17 +1891,15 @@ export class WhileStatement extends Statement {
   statement: Statement;
 }
 
-/** Tests if a specific decorator is present within the specified decorators. */
-export function hasDecorator(name: string, decorators: DecoratorNode[] | null): bool {
+/** Finds the first decorator matching the specified kind. */
+export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] | null): DecoratorNode | null {
   if (decorators) {
     for (let i = 0, k = decorators.length; i < k; ++i) {
-      let expression = decorators[i].name;
-      if (expression.kind == NodeKind.IDENTIFIER && (<IdentifierExpression>expression).text == name) {
-        return true;
-      }
+      let decorator = decorators[i];
+      if (decorator.decoratorKind == kind) return decorator;
     }
   }
-  return false;
+  return null;
 }
 
 /** Mangles a declaration's name to an internal name. */

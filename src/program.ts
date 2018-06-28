@@ -1436,7 +1436,8 @@ export class Program extends DiagnosticEmitter {
       decorators
         ? this.filterDecorators(decorators,
             DecoratorFlags.GLOBAL |
-            DecoratorFlags.INLINE
+            DecoratorFlags.INLINE |
+            DecoratorFlags.EXTERNAL
           )
         : DecoratorFlags.NONE
     );
@@ -1718,14 +1719,17 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, namespace);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
-          this.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
-          );
-          return;
+          if (this.moduleLevelExports.get(simpleName) !== namespace) { // not merged
+            this.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
+            );
+            return;
+          }
+        } else {
+          this.moduleLevelExports.set(simpleName, namespace);
         }
         namespace.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, namespace);
       }
     }
 
@@ -1811,7 +1815,8 @@ export class Program extends DiagnosticEmitter {
         declaration,
         decorators
           ? this.filterDecorators(decorators,
-              DecoratorFlags.GLOBAL
+              DecoratorFlags.GLOBAL |
+              DecoratorFlags.EXTERNAL
             )
           : DecoratorFlags.NONE
       );
@@ -2491,7 +2496,9 @@ export enum DecoratorFlags {
   /** Is a sealed class. */
   SEALED = 1 << 5,
   /** Is always inlined. */
-  INLINE = 1 << 6
+  INLINE = 1 << 6,
+  /** Is using a different external name. */
+  EXTERNAL = 1 << 7
 }
 
 export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
@@ -2504,6 +2511,7 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
     case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
     case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
+    case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
     default: return DecoratorFlags.NONE;
   }
 }

@@ -4,7 +4,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (global $../../examples/i64-polyfill/assembly/i64/lo (mut i32) (i32.const 0))
  (global $../../examples/i64-polyfill/assembly/i64/hi (mut i32) (i32.const 0))
- (memory $0 1)
+ (memory $0 0)
  (export "getHi" (func $../../examples/i64-polyfill/assembly/i64/getHi))
  (export "getLo" (func $../../examples/i64-polyfill/assembly/i64/getLo))
  (export "clz" (func $../../examples/i64-polyfill/assembly/i64/clz))

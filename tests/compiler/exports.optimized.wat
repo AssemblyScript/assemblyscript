@@ -16,7 +16,7 @@
  (global $exports/vehicles.Car.TIRES i32 (i32.const 4))
  (global $exports/outer.inner.a i32 (i32.const 42))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 1)
+ (memory $0 0)
  (export "add" (func $exports/add))
  (export "_setargc" (func $~setargc))
  (export "subOpt" (func $exports/subOpt|trampoline))

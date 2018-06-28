@@ -122,9 +122,7 @@
    )
   )
   ;;@ ~lib/allocator/buddy.ts:188:9
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $~lib/allocator/buddy/buckets$get (; 2 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/allocator/buddy.ts:101:2
@@ -148,17 +146,14 @@
    )
   )
   ;;@ ~lib/allocator/buddy.ts:102:59
-  (return
-   ;;@ ~lib/allocator/buddy.ts:102:9
-   (i32.add
-    ;;@ ~lib/allocator/buddy.ts:102:26
-    (get_global $~lib/allocator/buddy/BUCKETS_START)
-    ;;@ ~lib/allocator/buddy.ts:102:42
-    (i32.mul
-     (get_local $0)
-     ;;@ ~lib/allocator/buddy.ts:102:50
-     (i32.const 8)
-    )
+  (i32.add
+   ;;@ ~lib/allocator/buddy.ts:102:26
+   (get_global $~lib/allocator/buddy/BUCKETS_START)
+   ;;@ ~lib/allocator/buddy.ts:102:42
+   (i32.mul
+    (get_local $0)
+    ;;@ ~lib/allocator/buddy.ts:102:50
+    (i32.const 8)
    )
   )
  )
@@ -261,43 +256,39 @@
    )
   )
   ;;@ ~lib/allocator/buddy.ts:287:9
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/allocator/buddy/node_for_ptr (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ ~lib/allocator/buddy.ts:251:56
-  (return
+  ;;@ ~lib/allocator/buddy.ts:252:75
+  (i32.sub
    ;;@ ~lib/allocator/buddy.ts:252:9
-   (i32.sub
-    (i32.add
-     (i32.shr_u
-      ;;@ ~lib/allocator/buddy.ts:252:10
-      (i32.sub
-       ;;@ ~lib/allocator/buddy.ts:252:11
-       (get_local $0)
-       ;;@ ~lib/allocator/buddy.ts:252:17
-       (get_global $~lib/allocator/buddy/base_ptr)
-      )
-      ;;@ ~lib/allocator/buddy.ts:252:30
-      (i32.sub
-       ;;@ ~lib/allocator/buddy.ts:252:31
-       (i32.const 30)
-       ;;@ ~lib/allocator/buddy.ts:252:48
-       (get_local $1)
-      )
+   (i32.add
+    (i32.shr_u
+     ;;@ ~lib/allocator/buddy.ts:252:10
+     (i32.sub
+      ;;@ ~lib/allocator/buddy.ts:252:11
+      (get_local $0)
+      ;;@ ~lib/allocator/buddy.ts:252:17
+      (get_global $~lib/allocator/buddy/base_ptr)
      )
-     ;;@ ~lib/allocator/buddy.ts:252:59
-     (i32.shl
-      ;;@ ~lib/allocator/buddy.ts:252:60
-      (i32.const 1)
-      ;;@ ~lib/allocator/buddy.ts:252:65
+     ;;@ ~lib/allocator/buddy.ts:252:30
+     (i32.sub
+      ;;@ ~lib/allocator/buddy.ts:252:31
+      (i32.const 30)
+      ;;@ ~lib/allocator/buddy.ts:252:48
       (get_local $1)
      )
     )
-    ;;@ ~lib/allocator/buddy.ts:252:75
-    (i32.const 1)
+    ;;@ ~lib/allocator/buddy.ts:252:59
+    (i32.shl
+     ;;@ ~lib/allocator/buddy.ts:252:60
+     (i32.const 1)
+     ;;@ ~lib/allocator/buddy.ts:252:65
+     (get_local $1)
+    )
    )
+   ;;@ ~lib/allocator/buddy.ts:252:75
+   (i32.const 1)
   )
  )
  (func $~lib/allocator/buddy/node_is_split$get (; 7 ;) (type $ii) (param $0 i32) (result i32)
@@ -322,15 +313,12 @@
    )
   )
   ;;@ ~lib/allocator/buddy.ts:148:45
-  (return
-   ;;@ ~lib/allocator/buddy.ts:148:9
-   (i32.load8_u
-    ;;@ ~lib/allocator/buddy.ts:148:18
-    (i32.add
-     (get_global $~lib/allocator/buddy/NODE_IS_SPLIT_START)
-     ;;@ ~lib/allocator/buddy.ts:148:40
-     (get_local $0)
-    )
+  (i32.load8_u
+   ;;@ ~lib/allocator/buddy.ts:148:18
+   (i32.add
+    (get_global $~lib/allocator/buddy/NODE_IS_SPLIT_START)
+    ;;@ ~lib/allocator/buddy.ts:148:40
+    (get_local $0)
    )
   )
  )
@@ -350,35 +338,33 @@
    )
   )
   ;;@ ~lib/allocator/buddy.ts:260:70
-  (return
+  (i32.eq
    ;;@ ~lib/allocator/buddy.ts:260:9
-   (i32.eq
-    (i32.and
-     ;;@ ~lib/allocator/buddy.ts:260:10
-     (i32.shr_u
-      ;;@ ~lib/allocator/buddy.ts:260:11
-      (call $~lib/allocator/buddy/node_is_split$get
-       ;;@ ~lib/allocator/buddy.ts:260:29
-       (i32.div_u
-        (get_local $0)
-        ;;@ ~lib/allocator/buddy.ts:260:37
-        (i32.const 8)
-       )
-      )
-      ;;@ ~lib/allocator/buddy.ts:260:44
-      (i32.rem_u
-       ;;@ ~lib/allocator/buddy.ts:260:50
+   (i32.and
+    ;;@ ~lib/allocator/buddy.ts:260:10
+    (i32.shr_u
+     ;;@ ~lib/allocator/buddy.ts:260:11
+     (call $~lib/allocator/buddy/node_is_split$get
+      ;;@ ~lib/allocator/buddy.ts:260:29
+      (i32.div_u
        (get_local $0)
-       ;;@ ~lib/allocator/buddy.ts:260:58
+       ;;@ ~lib/allocator/buddy.ts:260:37
        (i32.const 8)
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:260:64
-     (i32.const 1)
+     ;;@ ~lib/allocator/buddy.ts:260:44
+     (i32.rem_u
+      ;;@ ~lib/allocator/buddy.ts:260:50
+      (get_local $0)
+      ;;@ ~lib/allocator/buddy.ts:260:58
+      (i32.const 8)
+     )
     )
-    ;;@ ~lib/allocator/buddy.ts:260:70
+    ;;@ ~lib/allocator/buddy.ts:260:64
     (i32.const 1)
    )
+   ;;@ ~lib/allocator/buddy.ts:260:70
+   (i32.const 1)
   )
  )
  (func $~lib/allocator/buddy/list_remove (; 9 ;) (type $iv) (param $0 i32)
@@ -412,36 +398,34 @@
   )
  )
  (func $~lib/allocator/buddy/ptr_for_node (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ ~lib/allocator/buddy.ts:242:58
-  (return
+  ;;@ ~lib/allocator/buddy.ts:243:77
+  (i32.add
    ;;@ ~lib/allocator/buddy.ts:243:9
-   (i32.add
-    (get_global $~lib/allocator/buddy/base_ptr)
-    ;;@ ~lib/allocator/buddy.ts:243:20
-    (i32.shl
-     ;;@ ~lib/allocator/buddy.ts:243:21
-     (i32.add
-      ;;@ ~lib/allocator/buddy.ts:243:22
-      (i32.sub
-       (get_local $0)
-       ;;@ ~lib/allocator/buddy.ts:243:30
-       (i32.shl
-        ;;@ ~lib/allocator/buddy.ts:243:31
-        (i32.const 1)
-        ;;@ ~lib/allocator/buddy.ts:243:36
-        (get_local $1)
-       )
-      )
-      ;;@ ~lib/allocator/buddy.ts:243:46
-      (i32.const 1)
-     )
-     ;;@ ~lib/allocator/buddy.ts:243:52
+   (get_global $~lib/allocator/buddy/base_ptr)
+   ;;@ ~lib/allocator/buddy.ts:243:20
+   (i32.shl
+    ;;@ ~lib/allocator/buddy.ts:243:21
+    (i32.add
+     ;;@ ~lib/allocator/buddy.ts:243:22
      (i32.sub
-      ;;@ ~lib/allocator/buddy.ts:243:53
-      (i32.const 30)
-      ;;@ ~lib/allocator/buddy.ts:243:70
-      (get_local $1)
+      (get_local $0)
+      ;;@ ~lib/allocator/buddy.ts:243:30
+      (i32.shl
+       ;;@ ~lib/allocator/buddy.ts:243:31
+       (i32.const 1)
+       ;;@ ~lib/allocator/buddy.ts:243:36
+       (get_local $1)
+      )
      )
+     ;;@ ~lib/allocator/buddy.ts:243:46
+     (i32.const 1)
+    )
+    ;;@ ~lib/allocator/buddy.ts:243:52
+    (i32.sub
+     ;;@ ~lib/allocator/buddy.ts:243:53
+     (i32.const 30)
+     ;;@ ~lib/allocator/buddy.ts:243:70
+     (get_local $1)
     )
    )
   )
@@ -698,9 +682,7 @@
    )
   )
   ;;@ ~lib/allocator/buddy.ts:338:9
-  (return
-   (i32.const 1)
-  )
+  (i32.const 1)
  )
  (func $~lib/allocator/buddy/list_pop (; 14 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -730,9 +712,7 @@
    (get_local $1)
   )
   ;;@ ~lib/allocator/buddy.ts:233:9
-  (return
-   (get_local $1)
-  )
+  (get_local $1)
  )
  (func $~lib/allocator/buddy/allocate_memory (; 15 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1161,9 +1141,7 @@
    )
   )
   ;;@ ~lib/allocator/buddy.ts:473:9
-  (return
-   (i32.const 0)
-  )
+  (i32.const 0)
  )
  (func $~lib/allocator/buddy/free_memory (; 16 ;) (type $iv) (param $0 i32)
   (local $1 i32)

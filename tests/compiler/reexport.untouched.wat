@@ -5,7 +5,7 @@
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 1)
+ (memory $0 0)
  (export "add" (func $export/add))
  (export "renamed_sub" (func $export/sub))
  (export "renamed_mul" (func $export/mul))

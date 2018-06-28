@@ -443,6 +443,9 @@ export function allocate_memory(size: usize): usize {
   var root = ROOT;
   if (!root) {
     let rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+    let pagesBefore = current_memory();
+    let pagesNeeded = <i32>((((rootOffset + Root.SIZE) + 0xffff) & ~0xffff) >>> 16);
+    if (pagesNeeded > pagesBefore && grow_memory(pagesNeeded - pagesBefore) < 0) unreachable();
     ROOT = root = changetype<Root>(rootOffset);
     root.tailRef = 0;
     root.flMap = 0;
@@ -467,7 +470,7 @@ export function allocate_memory(size: usize): usize {
 
       // request more memory
       let pagesBefore = current_memory();
-      let pagesNeeded = ((size + 0xffff) & ~0xffff) >>> 16;
+      let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
       let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
       if (grow_memory(pagesWanted) < 0) {
         if (grow_memory(pagesNeeded) < 0) {

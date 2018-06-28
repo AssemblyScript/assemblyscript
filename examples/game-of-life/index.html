@@ -62,11 +62,13 @@ fetch("build/optimized.wasm")
 .then(response => response.arrayBuffer())
 .then(buffer => WebAssembly.instantiate(buffer, {
   env: {
-    BGR_ALIVE : rgb2bgr(RGB_ALIVE) | 1, // little endian, LSB must be set
-    BGR_DEAD  : rgb2bgr(RGB_DEAD) & ~1, // little endian, LSB must not be set
-    BIT_ROT,
     memory,
     abort: function() {}
+  },
+  config: {
+    BGR_ALIVE : rgb2bgr(RGB_ALIVE) | 1, // little endian, LSB must be set
+    BGR_DEAD  : rgb2bgr(RGB_DEAD) & ~1, // little endian, LSB must not be set
+    BIT_ROT
   },
   JSMath: Math
 }))

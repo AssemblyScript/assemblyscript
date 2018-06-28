@@ -1,7 +1,7 @@
 (module
  (type $i (func (result i32)))
  (type $v (func))
- (memory $0 1)
+ (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
  (func $void/anInt (; 0 ;) (type $i) (result i32)

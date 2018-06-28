@@ -84,12 +84,14 @@ import {
   TypeNode,
   Source,
   Range,
+  DecoratorKind,
 
   Statement,
   BlockStatement,
   BreakStatement,
   ClassDeclaration,
   ContinueStatement,
+  DeclarationStatement,
   DoStatement,
   EmptyStatement,
   EnumDeclaration,
@@ -134,7 +136,8 @@ import {
   FieldDeclaration,
 
   nodeIsConstantValue,
-  isLastStatement
+  isLastStatement,
+  findDecorator
 } from "./ast";
 
 import {
@@ -350,9 +353,11 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // determine initial page size
-    var pages = i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0));
+    var numPages = this.memorySegments.length
+      ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
+      : 0;
     module.setMemory(
-      i64_low(pages),
+      numPages,
       this.options.isWasm64
         ? Module.MAX_MEMORY_WASM64
         : Module.MAX_MEMORY_WASM32,
@@ -556,12 +561,16 @@ export class Compiler extends DiagnosticEmitter {
       // constant global
       if (isConstant || this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
         global.set(CommonFlags.MODULE_IMPORT);
+        if (declaration) {
+          mangleImportName(global, declaration, global.parent);
+        } else {
+          mangleImportName_moduleName = "env";
+          mangleImportName_elementName = global.simpleName;
+        }
         module.addGlobalImport(
           global.internalName,
-          global.parent
-            ? global.parent.simpleName
-            : "env",
-          global.simpleName,
+          mangleImportName_moduleName,
+          mangleImportName_elementName,
           nativeType
         );
         global.set(CommonFlags.COMPILED);
@@ -908,7 +917,21 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         assert(body.kind == NodeKind.BLOCK);
         let stmts = this.compileStatements((<BlockStatement>body).statements);
-        if (instance.is(CommonFlags.MAIN)) stmts.unshift(module.createCall("start", null, NativeType.None));
+        if (instance.is(CommonFlags.MAIN)) {
+          module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
+          stmts.unshift(
+            module.createIf(
+              module.createUnary(
+                UnaryOp.EqzI32,
+                module.createGetGlobal("~started", NativeType.I32)
+              ),
+              module.createBlock(null, [
+                module.createCall("start", null, NativeType.None),
+                module.createSetGlobal("~started", module.createI32(1))
+              ])
+            )
+          );
+        }
         flow.finalize();
         if (isConstructor) {
           let nativeSizeType = this.options.nativeSizeType;
@@ -954,17 +977,24 @@ export class Compiler extends DiagnosticEmitter {
         stmt
       );
 
+      // concrete functions cannot have an annotated external name
+      if (instance.hasDecorator(DecoratorFlags.EXTERNAL)) {
+        let decorator = assert(findDecorator(DecoratorKind.EXTERNAL, declaration.decorators));
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          decorator.range
+        );
+      }
+
     } else {
       instance.set(CommonFlags.MODULE_IMPORT);
+      mangleImportName(instance, declaration, instance.prototype.parent); // TODO: check for duplicates
 
       // create the function import
-      let parent = instance.prototype.parent;
       ref = module.addFunctionImport(
         instance.internalName,
-        parent
-          ? parent.simpleName
-          : "env",
-        instance.simpleName,
+        mangleImportName_moduleName,
+        mangleImportName_elementName,
         typeRef
       );
     }
@@ -7402,3 +7432,55 @@ function mangleExportName(element: Element, simpleName: string = element.simpleN
     }
   }
 }
+
+function mangleImportName(
+  element: Element,
+  declaration: DeclarationStatement,
+  parentElement: Element | null = null
+): void {
+  mangleImportName_moduleName = parentElement ? parentElement.simpleName : declaration.range.source.simplePath;
+  mangleImportName_elementName = element.simpleName;
+
+  if (!element.hasDecorator(DecoratorFlags.EXTERNAL)) return;
+
+  var program = element.program;
+  var decorator = assert(findDecorator(DecoratorKind.EXTERNAL, declaration.decorators));
+  var args = decorator.arguments;
+  if (args && args.length) {
+    let arg = args[0];
+    if (arg.kind == NodeKind.LITERAL && (<LiteralExpression>arg).literalKind == LiteralKind.STRING) {
+      mangleImportName_elementName = (<StringLiteralExpression>arg).value;
+      if (args.length >= 2) {
+        arg = args[1];
+        if (arg.kind == NodeKind.LITERAL && (<LiteralExpression>arg).literalKind == LiteralKind.STRING) {
+          mangleImportName_moduleName = mangleImportName_elementName;
+          mangleImportName_elementName = (<StringLiteralExpression>arg).value;
+          if (args.length > 2) {
+            program.error(
+              DiagnosticCode.Expected_0_arguments_but_got_1,
+              decorator.range, "2", args.length.toString()
+            );
+          }
+        } else {
+          program.error(
+            DiagnosticCode.String_literal_expected,
+            arg.range
+          );
+        }
+      }
+    } else {
+      program.error(
+        DiagnosticCode.String_literal_expected,
+        arg.range
+      );
+    }
+  } else {
+    program.error(
+      DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+      decorator.range, "1", "0"
+    );
+  }
+}
+
+var mangleImportName_moduleName: string;
+var mangleImportName_elementName: string;

@@ -12,7 +12,7 @@
  (global $std/libm/PI f64 (f64.const 3.141592653589793))
  (global $std/libm/SQRT1_2 f64 (f64.const 0.7071067811865476))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
- (memory $0 1)
+ (memory $0 0)
  (export "E" (global $std/libm/E))
  (export "LN10" (global $std/libm/LN10))
  (export "LN2" (global $std/libm/LN2))

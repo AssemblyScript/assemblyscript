@@ -6,7 +6,7 @@
  (import "JSMath" "sqrt" (func $~lib/math/JSMath.sqrt (param f64) (result f64)))
  (import "JSMath" "log" (func $~lib/math/JSMath.log (param f64) (result f64)))
  (import "JSMath" "LN2" (global $~lib/math/JSMath.LN2 f64))
- (import "env" "memory" (memory $0 1))
+ (import "env" "memory" (memory $0 0))
  (global $assembly/index/NUM_COLORS i32 (i32.const 2048))
  (global $HEAP_BASE i32 (i32.const 8))
  (export "computeLine" (func $assembly/index/computeLine))

@@ -5,7 +5,7 @@
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 1)
+ (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)

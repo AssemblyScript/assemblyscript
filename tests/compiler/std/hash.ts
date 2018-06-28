@@ -1,23 +1,25 @@
 import { hash } from "internal/hash";
 
-declare function logi(i: i32): void;
+function check(hash: u32): bool {
+  return true;
+}
 
-logi(hash<string>(null));
-logi(hash<string>(""));
-logi(hash<string>("a"));
-logi(hash<string>("ab"));
-logi(hash<string>("abc"));
+check(hash<string>(null));
+check(hash<string>(""));
+check(hash<string>("a"));
+check(hash<string>("ab"));
+check(hash<string>("abc"));
 
-logi(hash<f32>(0.0));
-logi(hash<f32>(1.0));
-logi(hash<f32>(1.1));
-logi(hash<f32>(-0));
-logi(hash<f32>(Infinity));
-logi(hash<f32>(NaN));
+check(hash<f32>(0.0));
+check(hash<f32>(1.0));
+check(hash<f32>(1.1));
+check(hash<f32>(-0));
+check(hash<f32>(Infinity));
+check(hash<f32>(NaN));
 
-logi(hash<f64>(0.0));
-logi(hash<f64>(1.0));
-logi(hash<f64>(1.1));
-logi(hash<f64>(-0));
-logi(hash<f64>(Infinity));
-logi(hash<f64>(NaN));
+check(hash<f64>(0.0));
+check(hash<f64>(1.0));
+check(hash<f64>(1.1));
+check(hash<f64>(-0));
+check(hash<f64>(Infinity));
+check(hash<f64>(NaN));

@@ -4,7 +4,7 @@
  (import "JSMath" "sqrt" (func $~lib/math/JSMath.sqrt (param f64) (result f64)))
  (import "JSMath" "log" (func $~lib/math/JSMath.log (param f64) (result f64)))
  (import "JSMath" "LN2" (global $~lib/math/JSMath.LN2 f64))
- (import "env" "memory" (memory $0 1))
+ (import "env" "memory" (memory $0 0))
  (export "computeLine" (func $assembly/index/computeLine))
  (export "memory" (memory $0))
  (func $assembly/index/computeLine (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)

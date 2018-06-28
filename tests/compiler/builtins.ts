@@ -213,7 +213,7 @@ F = reinterpret<f64>(25);
 var s: usize;
 
 current_memory();
-grow_memory(1);
+grow_memory(1); // also necessary for load/store tests below
 
 s = current_memory();
 s = grow_memory(1);
