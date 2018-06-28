@@ -44,9 +44,3 @@ jobs:
   - node_js: node
     script: npm run build && node bin/asc -v && npm test
     env: Builds and tests the bundle on latest stable node.js
-
-cache:
-  directories:
-    - ~/.npm
-    - ~/npm
-    - node_modules
