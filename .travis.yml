@@ -43,4 +43,6 @@ jobs:
 
 cache:
   directories:
+    - ~/.npm
+    - ~/npm
     - node_modules
