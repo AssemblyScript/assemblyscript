@@ -134,6 +134,12 @@ export function enableFeature(options: Options, feature: Feature): void {
   options.features |= feature;
 }
 
+/** Gives the compiler a hint at the optimize levels that will be used later on. */
+export function setOptimizeLevelHints(options: Options, optimizeLevel: i32, shrinkLevel: i32): void {
+  options.optimizeLevelHint = optimizeLevel;
+  options.shrinkLevelHint = shrinkLevel;
+}
+
 /** Finishes parsing. */
 export function finishParsing(parser: Parser): Program {
   return parser.finish();

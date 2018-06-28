@@ -384,6 +384,45 @@ exports.main = function main(argv, options, callback) {
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);
 
+  // Set up optimization levels
+  var optimizeLevel = -1;
+  var shrinkLevel = 0;
+  var debugInfo = !args.noDebug;
+  if (args.optimize !== false) {
+    if (typeof args.optimize === "number") {
+      optimizeLevel = args.optimize;
+    } else if (args["0"]) {
+      optimizeLevel = 0;
+    } else if (args["1"]) {
+      optimizeLevel = 1;
+    } else if (args["2"]) {
+      optimizeLevel = 2;
+    } else if (args["3"]) {
+      optimizeLevel = 3;
+    } else if (args.optimize === true) {
+      optimizeLevel = exports.defaultOptimizeLevel;
+      shrinkLevel = exports.defaultShrinkLevel;
+    } else
+      optimizeLevel = 0;
+  }
+  if (args["s"]) {
+    shrinkLevel = 1;
+  } else if (args["z"]) {
+    shrinkLevel = 2;
+  }
+  if (typeof args.optimizeLevel === "number") {
+    optimizeLevel = args.optimizeLevel;
+  }
+  if (typeof args.shrinkLevel === "number") {
+    shrinkLevel = args.shrinkLevel;
+  } else if (args.shrinkLevel === "s") {
+    shrinkLevel = 1;
+  } else if (args.shrinkLevel === "z") {
+    shrinkLevel = 2;
+  }
+  optimizeLevel = Math.max(optimizeLevel, 0);
+  shrinkLevel = Math.max(shrinkLevel, 0);
+
   // Begin compilation
   const compilerOptions = assemblyscript.createOptions();
   assemblyscript.setTarget(compilerOptions, 0);
@@ -393,6 +432,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setImportTable(compilerOptions, !!args.importTable);
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
+  assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
 
   // Initialize default aliases
   assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
@@ -469,51 +509,11 @@ exports.main = function main(argv, options, callback) {
     return callback(Error("Unsupported trap mode"));
   }
 
-  var optimizeLevel = -1;
-  var shrinkLevel = 0;
-  var debugInfo = !args.noDebug;
-
-  if (args.optimize !== false) {
-    if (typeof args.optimize === "number") {
-      optimizeLevel = args.optimize;
-    } else if (args["0"]) {
-      optimizeLevel = 0;
-    } else if (args["1"]) {
-      optimizeLevel = 1;
-    } else if (args["2"]) {
-      optimizeLevel = 2;
-    } else if (args["3"]) {
-      optimizeLevel = 3;
-    } else if (args.optimize === true) {
-      optimizeLevel = exports.defaultOptimizeLevel;
-      shrinkLevel = exports.defaultShrinkLevel;
-    } else
-      optimizeLevel = 0;
-  }
-
-  if (args["s"]) {
-    shrinkLevel = 1;
-  } else if (args["z"]) {
-    shrinkLevel = 2;
-  }
-
-  if (typeof args.optimizeLevel === "number") {
-    optimizeLevel = args.optimizeLevel;
-  }
-
-  if (typeof args.shrinkLevel === "number") {
-    shrinkLevel = args.shrinkLevel;
-  } else if (args.shrinkLevel === "s") {
-    shrinkLevel = 1;
-  } else if (args.shrinkLevel === "z") {
-    shrinkLevel = 2;
-  }
-
   // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
   // see: https://github.com/WebAssembly/binaryen/pull/1596
   if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
 
-  module.setOptimizeLevel(optimizeLevel > 0 ? optimizeLevel : 0);
+  module.setOptimizeLevel(optimizeLevel);
   module.setShrinkLevel(shrinkLevel);
   module.setDebugInfo(debugInfo);
 
@@ -531,7 +531,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Optimize the module if requested
-  if (optimizeLevel >= 0) {
+  if (optimizeLevel > 0 || shrinkLevel > 0) {
     stats.optimizeCount++;
     stats.optimizeTime += measure(() => {
       module.optimize();

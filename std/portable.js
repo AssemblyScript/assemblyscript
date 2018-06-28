@@ -2,6 +2,8 @@
 
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
+globalScope.ASC_TARGET = 0;
+
 Object.defineProperties(
   globalScope["i8"] = function i8(value) { return value << 24 >> 24; }
 , {

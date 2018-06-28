@@ -34,6 +34,23 @@ declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
 
+/** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
+declare const ASC_TARGET: i32;
+/** Provided noTreeshaking option. */
+declare const ASC_NO_TREESHAKING: bool;
+/** Provided noAssert option. */
+declare const ASC_NO_ASSERT: bool;
+/** Provided memoryBase option. */
+declare const ASC_MEMORY_BASE: i32;
+/** Provided optimizeLevel option. */
+declare const ASC_OPTIMIZE_LEVEL: i32;
+/** Provided shrinkLevel option. */
+declare const ASC_SHRINK_LEVEL: i32;
+/** Whether the mutable global feature is enabled. */
+declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
+/** Whether the sign extension feature is enabled. */
+declare const ASC_FEATURE_SIGN_EXTENSION: bool;
+
 /** Converts any other numeric value to an 8-bit signed integer. */
 declare function i8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
 declare namespace i8 {
