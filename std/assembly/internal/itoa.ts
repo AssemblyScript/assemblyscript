@@ -59,38 +59,55 @@ const digits00_99: u32[] = [
 
 // Count number of decimals in value
 function decimalCount<T>(value: T): i32 {
-  // make value abs
-  var sign = value >> (8 * sizeof<T>() - 1);
-  var v = (value ^ sign) - sign;
-  var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
-  var t = l * 1233 >>> 12;                       // log10
+  if (ASC_SHRINK_LEVEL >= 1) {
 
-  if (sizeof<T>() <= 4) {
-    if (ASC_SHRINK_LEVEL >= 1) {
+    if (value < 10) return 1;
+    if (value < 100) return 2;
+    if (value < 1000) return 3;
+    if (value < 10000) return 4;
+    if (value < 100000) return 5;
+    if (value < 1000000) return 6;
+    if (value < 10000000) return 7;
+    if (value < 100000000) return 8;
+    if (value < 1000000000) return 9;
 
-      // TODO use switch-case
-
+    if (sizeof<T>() > 4) {
+      if (value < 10000000000) return 10;
+      if (value < 100000000000) return 11;
+      if (value < 1000000000000) return 12;
+      if (value < 10000000000000) return 13;
+      if (value < 100000000000000) return 14;
+      if (value < 1000000000000000) return 15;
+      if (value < 10000000000000000) return 16;
+      if (value < 100000000000000000) return 17;
+      if (value < 1000000000000000000) return 18;
+      if (value < 10000000000000000000) return 19;
+      return 20;
     } else {
-      let lutbuf = changetype<ArrayBuffer>(powers10.buffer_);
+      return 10;
+    }
+
+  } else {
+    // make value abs
+    var sign = value >> (8 * sizeof<T>() - 1);
+    var v = (value ^ sign) - sign;
+    var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
+    var t = l * 1233 >>> 12;                       // log10
+
+    var lutbuf = changetype<ArrayBuffer>(powers10.buffer_);
+    if (sizeof<T>() <= 4) {
       let power  = loadUnsafe<u32,T>(lutbuf, t);
       t -= <i32>(v < power);
-    }
-  } else { // sizeof<T>() == 8
-    if (ASC_SHRINK_LEVEL >= 1) {
-
-      // TODO use switch-case
-
-    } else {
+    } else { // sizeof<T>() == 8
       let le10   = t <= 10;
       let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
       let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
-      let lutbuf = changetype<ArrayBuffer>(powers10.buffer_);
       let power  = loadUnsafe<u32,T>(lutbuf, t - offset);
       t -= <i32>(v < factor * power);
     }
-  }
 
-  return t + 1;
+    return t + 1;
+  }
 }
 
 function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
