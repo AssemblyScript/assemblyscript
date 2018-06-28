@@ -1,12 +1,15 @@
 language: node_js
 notifications:
   email: false
+before_install: npm i -g npm@latest
+install: npm config set progress=false && npm ci --no-audit
 stages:
 - name: check-pr
   if: type = pull_request
+env:
+  global: JOBS=2
 jobs:
   include:
-
   - stage: check-pr
     node_js: lts/*
     script: ./scripts/check-pr.sh
@@ -21,9 +24,6 @@ jobs:
     node_js: lts/*
     script: npm run clean && node bin/asc -v && npm test
     env: Tests the sources on latest node.js LTS
-  - node_js: node
-    script: npm run clean && node bin/asc -v && npm test
-    env: Tests the sources on latest stable node.js
   - node_js: lts/*
     script:
     - npm run clean
@@ -31,6 +31,9 @@ jobs:
     - cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy
     - cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf
     env: Tests the allocators on latest node.js LTS
+  - node_js: node
+    script: npm run clean && node bin/asc -v && npm test
+    env: Tests the sources on latest stable node.js
 
   - stage: build
     node_js: lts/*
@@ -39,3 +42,8 @@ jobs:
   - node_js: node
     script: npm run build && node bin/asc -v && npm test
     env: Builds and tests the bundle on latest stable node.js
+
+cache:
+  directories:
+    - ~/.npm
+    - ~/npm
