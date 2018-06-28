@@ -65,17 +65,29 @@ function decimalCount<T>(value: T): i32 {
   var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
   var t = l * 1233 >>> 12;                       // log10
 
-  var power: T;
-  var lutbuf = changetype<ArrayBuffer>(powers10.buffer_);
   if (sizeof<T>() <= 4) {
-    power = loadUnsafe<u32,T>(lutbuf, t);
-    t -= <i32>(v < power);
+    if (ASC_SHRINK_LEVEL >= 1) {
+
+      // TODO use switch-case
+
+    } else {
+      let lutbuf = changetype<ArrayBuffer>(powers10.buffer_);
+      let power  = loadUnsafe<u32,T>(lutbuf, t);
+      t -= <i32>(v < power);
+    }
   } else { // sizeof<T>() == 8
-    let le10   = t <= 10;
-    let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
-    let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
-    power = loadUnsafe<u32,T>(lutbuf, t - offset);
-    t -= <i32>(v < factor * power);
+    if (ASC_SHRINK_LEVEL >= 1) {
+
+      // TODO use switch-case
+
+    } else {
+      let le10   = t <= 10;
+      let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
+      let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
+      let lutbuf = changetype<ArrayBuffer>(powers10.buffer_);
+      let power  = loadUnsafe<u32,T>(lutbuf, t - offset);
+      t -= <i32>(v < factor * power);
+    }
   }
 
   return t + 1;
@@ -121,6 +133,10 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
   }
 }
 
+function utoa32_simple(buffer: usize, num: u32, offset: u32): void {
+  // TODO
+}
+
 function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
   var t:  u64, r: u32, b: u32, c: u32;
   var b1: u32, b2: u32, c1: u32, c2: u32;
@@ -157,22 +173,26 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
   if (r) utoa32_lut(buffer, r, offset);
 }
 
+function utoa64_simple(buffer: usize, num: u64, offset: u32): void {
+  // TODO
+}
+
 @inline
 export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
-  // if (NO_MEMOTY || SHRINK_LEVEL >= 1) {
-  //  TODO
-  // } else {
-  utoa32_lut(buffer, num, offset);
-  // }
+  if (ASC_SHRINK_LEVEL >= 1) {
+    utoa32_simple(buffer, num, offset);
+  } else {
+    utoa32_lut(buffer, num, offset);
+  }
 }
 
 @inline
 export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
-  // if (NO_MEMOTY || SHRINK_LEVEL >= 1) {
-  //  TODO
-  // } else {
-  utoa64_lut(buffer, num, offset);
-  // }
+  if (ASC_SHRINK_LEVEL >= 1) {
+    utoa64_simple(buffer, num, offset);
+  } else {
+    utoa64_lut(buffer, num, offset);
+  }
 }
 
 export function utoa32(value: u32): string {

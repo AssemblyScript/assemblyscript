@@ -4289,16 +4289,16 @@
     (i32.const 12)
    )
   )
-  (set_local $6
+  (set_local $5
    (i32.load
     (i32.const 16)
    )
   )
-  (set_local $5
+  (set_local $6
    (block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.0 (result i32)
     (i32.load offset=8
      (i32.add
-      (get_local $6)
+      (get_local $5)
       (i32.shl
        (get_local $4)
        (i32.const 2)
@@ -4312,7 +4312,7 @@
     (get_local $4)
     (i32.lt_u
      (get_local $2)
-     (get_local $5)
+     (get_local $6)
     )
    )
   )
@@ -4630,12 +4630,12 @@
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i64)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 i64)
   (local $8 i32)
-  (local $9 i64)
-  (local $10 i32)
+  (local $9 i32)
+  (local $10 i64)
   (set_local $1
    (i64.shr_u
     (get_local $0)
@@ -4682,44 +4682,44 @@
     (i32.const 12)
    )
   )
-  (set_local $6
-   (i32.load
-    (i32.const 16)
-   )
-  )
-  (set_local $7
+  (set_local $5
    (i32.le_s
     (get_local $4)
     (i32.const 10)
    )
   )
-  (set_local $8
+  (set_local $6
    (select
     (i32.const 0)
     (i32.const 10)
-    (get_local $7)
+    (get_local $5)
    )
   )
-  (set_local $9
+  (set_local $7
    (select
     (i64.const 1)
     (i64.const 10000000000)
-    (get_local $7)
+    (get_local $5)
    )
   )
-  (set_local $5
+  (set_local $8
+   (i32.load
+    (i32.const 16)
+   )
+  )
+  (set_local $10
    (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.2 (result i64)
-    (set_local $10
+    (set_local $9
      (i32.sub
       (get_local $4)
-      (get_local $8)
+      (get_local $6)
      )
     )
     (i64.load32_u offset=8
      (i32.add
-      (get_local $6)
+      (get_local $8)
       (i32.shl
-       (get_local $10)
+       (get_local $9)
        (i32.const 2)
       )
      )
@@ -4732,8 +4732,8 @@
     (i64.lt_u
      (get_local $2)
      (i64.mul
-      (get_local $9)
-      (get_local $5)
+      (get_local $7)
+      (get_local $10)
      )
     )
    )
