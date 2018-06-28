@@ -94,7 +94,6 @@ assert(itoa32(0xffffffff) == "-1");
 
 assert(utoa32(0) == "0");
 assert(utoa32(1000) == "1000");
-assert(itoa32(0x7ffffffe) == "2147483646");
 assert(utoa32(0x7fffffff) == "2147483647");
 assert(utoa32(0x80000000) == "2147483648");
 assert(utoa32(u32.MAX_VALUE) == "4294967295");
