@@ -1,7 +1,10 @@
 language: node_js
 notifications:
   email: false
-install: npm install
+install:
+  - npm i -g npm@latest
+  - npm ci
+before_install: npm config set spin=false
 stages:
 - name: check-pr
   if: type = pull_request
