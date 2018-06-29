@@ -66,28 +66,28 @@ function getDigitsTable(): u32[] {
 // Count number of decimals in value
 function decimalCount<T>(value: T): i32 {
   if (ASC_SHRINK_LEVEL >= 1) {
-    let t = 1;
-    if (sizeof<T>() > 4) {
-      if (value >= 10000000000000000) {
-        t += 16;
-        value /= 10000000000000000;
-      }
-    }
 
-    if (value >= 100000000) {
-      t += 8;
-      value /= 100000000;
+    if (sizeof<T>() <= 4) {
+      if (value < 100000) {
+        if (value < 100) {
+          return select<T>(1, 2, value < 10);
+        } else {
+          if (value < 1000) return 3;
+          else return select<T>(4, 5, value < 10000);
+        }
+      } else {
+        if (value < 10000000) {
+          return select<T>(6, 7, value < 1000000);
+        } else {
+          if (value < 100000000) return 8;
+          else return select<T>(9, 10, value < 1000000000);
+        }
+      }
+    } else {
+
+      // TODO
+
     }
-    if (value >= 10000) {
-      t += 4;
-      value /= 10000;
-    }
-    if (value >= 100) {
-      t += 2;
-      value /= 100;
-    }
-    if (value >= 10) t++;
-    return t;
 
   } else {
     // make value abs
