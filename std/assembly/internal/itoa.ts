@@ -162,13 +162,14 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
 }
 
 function utoa_simple<T>(buffer: usize, num: T, offset: u32): void {
-  var digit: u32;
+  var t: T, r: u32;
   do {
+    t = num / 10;
+    r = <u32>(num % 10);
+    num = t;
     offset -= 1;
-    digit   = CharCode._0 + <u32>(num % 10);
-    store<u16>(buffer + (offset << 1), digit, STRING_HEADER_SIZE);
-    num /= 10;
-  } while (num > 0);
+    store<u16>(buffer + (offset << 1), CharCode._0 + r, STRING_HEADER_SIZE);
+  } while (num);
 }
 
 @inline
