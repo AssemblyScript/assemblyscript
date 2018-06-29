@@ -65,34 +65,51 @@ function getDigitsTable(): u32[] {
 
 // Count number of decimals in value
 function decimalCount<T>(value: T): i32 {
-  if (ASC_SHRINK_LEVEL >= 1) {
+  // make value abs
+  var sign = value >> (8 * sizeof<T>() - 1);
+  var v = (value ^ sign) - sign;
 
+  if (ASC_SHRINK_LEVEL >= 1) {
     if (sizeof<T>() <= 4) {
-      if (value < 100000) {
-        if (value < 100) {
-          return select<T>(1, 2, value < 10);
+      if (v < 100000) {
+        if (v < 100) {
+          return select<T>(1, 2, v < 10);
         } else {
-          if (value < 1000) return 3;
-          else return select<T>(4, 5, value < 10000);
+          if (v < 1000) return 3;
+          else return select<T>(4, 5, v < 10000);
         }
       } else {
-        if (value < 10000000) {
-          return select<T>(6, 7, value < 1000000);
+        if (v < 10000000) {
+          return select<T>(6, 7, v < 1000000);
         } else {
-          if (value < 100000000) return 8;
-          else return select<T>(9, 10, value < 1000000000);
+          if (v < 100000000) return 8;
+          else return select<T>(9, 10, v < 1000000000);
         }
       }
     } else {
-
-      // TODO
-
+      let t = 1;
+      if (v >= 10000000000000000) {
+        t += 16;
+        v /= 10000000000000000;
+      }
+      // TODO can we skip this? Need tests
+      /*if (v >= 100000000) {
+        t += 8;
+        v /= 100000000;
+      }*/
+      if (v >= 10000) {
+        t += 4;
+        v /= 10000;
+      }
+      if (v >= 100) {
+        t += 2;
+        v /= 100;
+      }
+      if (v >= 10) t++;
+      return t;
     }
-
   } else {
-    // make value abs
-    var sign = value >> (8 * sizeof<T>() - 1);
-    var v = (value ^ sign) - sign;
+
     var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
     var t = l * 1233 >>> 12;                       // log10
 
