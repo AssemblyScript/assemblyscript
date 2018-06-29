@@ -69,47 +69,24 @@ function decimalCount<T>(value: T): i32 {
   var sign = value >> (8 * sizeof<T>() - 1);
   var v = (value ^ sign) - sign;
 
-  if (ASC_SHRINK_LEVEL >= 1) {
-    if (sizeof<T>() <= 4) {
-      if (v < 100000) {
-        if (v < 100) {
-          return select<T>(1, 2, v < 10);
-        } else {
-          if (v < 1000) return 3;
-          else return select<T>(4, 5, v < 10000);
-        }
+  if (sizeof<T>() <= 4) {
+    if (v < 100000) {
+      if (v < 100) {
+        return select<T>(1, 2, v < 10);
       } else {
-        if (v < 10000000) {
-          return select<T>(6, 7, v < 1000000);
-        } else {
-          if (v < 100000000) return 8;
-          else return select<T>(9, 10, v < 1000000000);
-        }
+        if (v < 1000) return 3;
+        else return select<T>(4, 5, v < 10000);
       }
     } else {
-      let t = 1;
-      if (v >= 10000000000000000) {
-        t += 16;
-        v /= 10000000000000000;
+      if (v < 10000000) {
+        return select<T>(6, 7, v < 1000000);
+      } else {
+        if (v < 100000000) return 8;
+        else return select<T>(9, 10, v < 1000000000);
       }
-      // TODO can we skip this? Need tests
-      /*if (v >= 100000000) {
-        t += 8;
-        v /= 100000000;
-      }*/
-      if (v >= 10000) {
-        t += 4;
-        v /= 10000;
-      }
-      if (v >= 100) {
-        t += 2;
-        v /= 100;
-      }
-      if (v >= 10) t++;
-      return t;
     }
   } else {
-
+    /*
     var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
     var t = l * 1233 >>> 12;                       // log10
 
@@ -124,6 +101,15 @@ function decimalCount<T>(value: T): i32 {
       let power  = loadUnsafe<u32,T>(lutbuf, t - offset);
       t -= <i32>(v < factor * power);
     }
+
+    return t + 1;
+    */
+    let l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
+    let t = l * 1233 >>> 12;                       // log10
+
+    let lutbuf = changetype<ArrayBuffer>(getPowers10Table().buffer_);
+    let power  = loadUnsafe<u32,T>(lutbuf, t - 10);
+    t -= <i32>(v < 10000000000 * power);
 
     return t + 1;
   }
