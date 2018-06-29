@@ -4261,17 +4261,9 @@
     (get_local $1)
    )
   )
-  (if
-   (i32.lt_u
-    (get_local $2)
-    (i32.const 100000)
-   )
-   (if
-    (i32.lt_u
-     (get_local $2)
-     (i32.const 100)
-    )
-    (return
+  (return
+   (select
+    (select
      (select
       (i32.const 1)
       (i32.const 2)
@@ -4280,16 +4272,8 @@
        (i32.const 10)
       )
      )
-    )
-    (if
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 1000)
-     )
-     (return
+     (select
       (i32.const 3)
-     )
-     (return
       (select
        (i32.const 4)
        (i32.const 5)
@@ -4298,15 +4282,17 @@
         (i32.const 10000)
        )
       )
+      (i32.lt_u
+       (get_local $2)
+       (i32.const 1000)
+      )
+     )
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 100)
      )
     )
-   )
-   (if
-    (i32.lt_u
-     (get_local $2)
-     (i32.const 10000000)
-    )
-    (return
+    (select
      (select
       (i32.const 6)
       (i32.const 7)
@@ -4315,16 +4301,8 @@
        (i32.const 1000000)
       )
      )
-    )
-    (if
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 100000000)
-     )
-     (return
+     (select
       (i32.const 8)
-     )
-     (return
       (select
        (i32.const 9)
        (i32.const 10)
@@ -4333,7 +4311,19 @@
         (i32.const 1000000000)
        )
       )
+      (i32.lt_u
+       (get_local $2)
+       (i32.const 100000000)
+      )
      )
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 10000000)
+     )
+    )
+    (i32.lt_u
+     (get_local $2)
+     (i32.const 100000)
     )
    )
   )
