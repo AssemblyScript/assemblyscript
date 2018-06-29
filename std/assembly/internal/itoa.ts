@@ -125,10 +125,6 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
   }
 }
 
-function utoa32_simple(buffer: usize, num: u32, offset: u32): void {
-  // TODO
-}
-
 function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
   var t:  u64, r: u32, b: u32, c: u32;
   var b1: u32, b2: u32, c1: u32, c2: u32;
@@ -165,14 +161,20 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
   if (r) utoa32_lut(buffer, r, offset);
 }
 
-function utoa64_simple(buffer: usize, num: u64, offset: u32): void {
-  // TODO
+function utoa_simple<T>(buffer: usize, num: T, offset: u32): void {
+  var digit: u32;
+  do {
+    offset -= 1;
+    digit   = CharCode._0 + <u32>(num % 10);
+    store<u16>(buffer + (offset << 1), digit, STRING_HEADER_SIZE);
+    num /= 10;
+  } while (num > 0);
 }
 
 @inline
 export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa32_simple(buffer, num, offset);
+    utoa_simple(buffer, num, offset);
   } else {
     utoa32_lut(buffer, num, offset);
   }
@@ -181,7 +183,7 @@ export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
 @inline
 export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa64_simple(buffer, num, offset);
+    utoa_simple(buffer, num, offset);
   } else {
     utoa64_lut(buffer, num, offset);
   }
