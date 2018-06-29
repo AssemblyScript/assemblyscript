@@ -104,10 +104,13 @@ function decimalCount<T>(value: T): i32 {
     */
     let l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
     let t = l * 1233 >>> 12;                       // log10
-
     let lutbuf = changetype<ArrayBuffer>(getPowers10Table().buffer_);
-    let power  = loadUnsafe<u32,T>(lutbuf, t - 10);
-    t -= <i32>(v < 10000000000 * power);
+
+    let le10   = t <= 10;
+    let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
+    let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
+    let power  = loadUnsafe<u32,T>(lutbuf, t - offset);
+    t -= <i32>(v < factor * power);
 
     return t + 1;
   }

@@ -4643,7 +4643,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i64)
+  (local $7 i32)
+  (local $8 i64)
+  (local $9 i32)
+  (local $10 i64)
   (set_local $1
    (i64.shr_u
     (get_local $0)
@@ -4697,19 +4700,39 @@
     )
    )
   )
+  (set_local $6
+   (i32.le_s
+    (get_local $4)
+    (i32.const 10)
+   )
+  )
   (set_local $7
+   (select
+    (i32.const 0)
+    (i32.const 10)
+    (get_local $6)
+   )
+  )
+  (set_local $8
+   (select
+    (i64.const 1)
+    (i64.const 10000000000)
+    (get_local $6)
+   )
+  )
+  (set_local $10
    (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.2 (result i64)
-    (set_local $6
+    (set_local $9
      (i32.sub
       (get_local $4)
-      (i32.const 10)
+      (get_local $7)
      )
     )
     (i64.load32_u offset=8
      (i32.add
       (get_local $5)
       (i32.shl
-       (get_local $6)
+       (get_local $9)
        (i32.const 2)
       )
      )
@@ -4722,8 +4745,8 @@
     (i64.lt_u
      (get_local $2)
      (i64.mul
-      (i64.const 10000000000)
-      (get_local $7)
+      (get_local $8)
+      (get_local $10)
      )
     )
    )
