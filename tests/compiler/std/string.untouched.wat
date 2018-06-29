@@ -4318,9 +4318,11 @@
     )
    )
   )
-  (i32.add
-   (get_local $4)
-   (i32.const 1)
+  (return
+   (i32.add
+    (get_local $4)
+    (i32.const 1)
+   )
   )
  )
  (func $~lib/internal/itoa/utoa32_lut (; 26 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -4744,9 +4746,11 @@
     )
    )
   )
-  (i32.add
-   (get_local $4)
-   (i32.const 1)
+  (return
+   (i32.add
+    (get_local $4)
+    (i32.const 1)
+   )
   )
  )
  (func $~lib/internal/itoa/utoa64_lut (; 30 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
