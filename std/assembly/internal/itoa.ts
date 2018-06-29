@@ -68,52 +68,21 @@ function decimalCount<T>(value: T): i32 {
   // make value abs
   var sign = value >> (8 * sizeof<T>() - 1);
   var v = (value ^ sign) - sign;
+  var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
+  var t = l * 1233 >>> 12;                       // log10
 
+  var lutbuf = changetype<ArrayBuffer>(getPowers10Table().buffer_);
   if (sizeof<T>() <= 4) {
-    if (v < 100000) {
-      return select<T>(
-        select<T>(1, 2, v < 10),
-        select<T>(3, select<T>(4, 5, v < 10000), v < 1000),
-        v < 100
-      );
-    } else {
-      return select<T>(
-        select<T>(6, 7, v < 1000000),
-        select<T>(8, select<T>(9, 10, v < 1000000000), v < 100000000),
-        v < 10000000
-      );
-    }
-  } else {
-    /*
-    var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
-    var t = l * 1233 >>> 12;                       // log10
-
-    var lutbuf = changetype<ArrayBuffer>(getPowers10Table().buffer_);
-    if (sizeof<T>() <= 4) {
-      let power  = loadUnsafe<u32,T>(lutbuf, t);
-      t -= <i32>(v < power);
-    } else { // sizeof<T>() == 8
-      let le10   = t <= 10;
-      let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
-      let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
-      let power  = loadUnsafe<u32,T>(lutbuf, t - offset);
-      t -= <i32>(v < factor * power);
-    }
-
-    return t + 1;
-    */
-    let l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
-    let t = l * 1233 >>> 12;                       // log10
-    let lutbuf = changetype<ArrayBuffer>(getPowers10Table().buffer_);
-
+    let power  = loadUnsafe<u32,T>(lutbuf, t);
+    t -= <i32>(v < power);
+  } else { // sizeof<T>() == 8
     let le10   = t <= 10;
     let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
     let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
     let power  = loadUnsafe<u32,T>(lutbuf, t - offset);
     t -= <i32>(v < factor * power);
-
-    return t + 1;
   }
+  return t + 1;
 }
 
 function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
