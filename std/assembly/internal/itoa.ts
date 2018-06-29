@@ -70,19 +70,19 @@ function decimalCount<T>(value: T): i32 {
   var v = (value ^ sign) - sign;
 
   if (sizeof<T>() <= 4) {
-    return select<T>(
-      select<T>(
+    if (v < 100000) {
+      return select<T>(
         select<T>(1, 2, v < 10),
         select<T>(3, select<T>(4, 5, v < 10000), v < 1000),
         v < 100
-      ),
-      select<T>(
+      );
+    } else {
+      return select<T>(
         select<T>(6, 7, v < 1000000),
         select<T>(8, select<T>(9, 10, v < 1000000000), v < 100000000),
         v < 10000000
-      ),
-      v < 100000
-    );
+      );
+    }
   } else {
     /*
     var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2

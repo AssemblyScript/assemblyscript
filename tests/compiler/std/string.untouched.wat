@@ -4261,8 +4261,12 @@
     (get_local $1)
    )
   )
-  (return
-   (select
+  (if
+   (i32.lt_u
+    (get_local $2)
+    (i32.const 100000)
+   )
+   (return
     (select
      (select
       (i32.const 1)
@@ -4292,6 +4296,8 @@
       (i32.const 100)
      )
     )
+   )
+   (return
     (select
      (select
       (i32.const 6)
@@ -4320,10 +4326,6 @@
       (get_local $2)
       (i32.const 10000000)
      )
-    )
-    (i32.lt_u
-     (get_local $2)
-     (i32.const 100000)
     )
    )
   )

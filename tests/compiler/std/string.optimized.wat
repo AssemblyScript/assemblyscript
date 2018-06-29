@@ -3570,26 +3570,30 @@
   (get_local $4)
  )
  (func $~lib/internal/itoa/decimalCount<u32> (; 25 ;) (type $ii) (param $0 i32) (result i32)
-  (select
+  (if (result i32)
+   (i32.lt_u
+    (tee_local $0
+     (i32.sub
+      (i32.xor
+       (get_local $0)
+       (tee_local $0
+        (i32.shr_u
+         (get_local $0)
+         (i32.const 31)
+        )
+       )
+      )
+      (get_local $0)
+     )
+    )
+    (i32.const 100000)
+   )
    (select
     (select
      (i32.const 1)
      (i32.const 2)
      (i32.lt_u
-      (tee_local $0
-       (i32.sub
-        (i32.xor
-         (get_local $0)
-         (tee_local $0
-          (i32.shr_u
-           (get_local $0)
-           (i32.const 31)
-          )
-         )
-        )
-        (get_local $0)
-       )
-      )
+      (get_local $0)
       (i32.const 10)
      )
     )
@@ -3641,10 +3645,6 @@
      (get_local $0)
      (i32.const 10000000)
     )
-   )
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 100000)
    )
   )
  )
