@@ -302,7 +302,7 @@ export class Array<T> {
   }
 
   sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
-    if (!comparator) throw new TypeError("The comparison function must be a function");
+    assert(!!comparator, "The comparison function must be a function");
 
     var length = this.length_;
     if (length <= 1) return this;
