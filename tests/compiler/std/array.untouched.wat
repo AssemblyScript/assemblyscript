@@ -6178,11 +6178,7 @@
   (local $6 i32)
   (if
    (i32.eqz
-    (i32.eqz
-     (i32.eqz
-      (get_local $1)
-     )
-    )
+    (get_local $1)
    )
    (block
     (call $~lib/env/abort
@@ -6920,11 +6916,7 @@
   (local $6 i32)
   (if
    (i32.eqz
-    (i32.eqz
-     (i32.eqz
-      (get_local $1)
-     )
-    )
+    (get_local $1)
    )
    (block
     (call $~lib/env/abort
@@ -7534,11 +7526,7 @@
   (local $6 i32)
   (if
    (i32.eqz
-    (i32.eqz
-     (i32.eqz
-      (get_local $1)
-     )
-    )
+    (get_local $1)
    )
    (block
     (call $~lib/env/abort
@@ -8207,11 +8195,7 @@
   (local $6 i32)
   (if
    (i32.eqz
-    (i32.eqz
-     (i32.eqz
-      (get_local $1)
-     )
-    )
+    (get_local $1)
    )
    (block
     (call $~lib/env/abort
