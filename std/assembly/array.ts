@@ -318,7 +318,7 @@ export class Array<T> {
     }
 
     if (isReference<T>()) {
-      // TODO replace this to stable sort when it implemented
+      // TODO replace this to faster stable sort (TimSort) when it implemented
       return changetype<this>(insertionSort<T>(this, comparator));
     } else {
       return changetype<this>(length < 256
