@@ -4938,6 +4938,20 @@
   (local $3 i32)
   (local $4 i32)
   (if
+   (i32.eqz
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 305)
+     (i32.const 21)
+    )
+    (unreachable)
+   )
+  )
+  (if
    (i32.le_s
     (tee_local $2
      (i32.load offset=4
@@ -5254,6 +5268,20 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (if
+   (i32.eqz
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 305)
+     (i32.const 21)
+    )
+    (unreachable)
+   )
+  )
   (if
    (i32.le_s
     (tee_local $2
