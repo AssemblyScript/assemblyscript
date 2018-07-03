@@ -76,12 +76,10 @@ import {
   ParameterNode,
   ParameterKind,
   ExportMember,
-  SwitchCase,
-  DeclarationStatement
+  SwitchCase
 } from "../ast";
 
 import {
-  Token,
   operatorTokenToString
 } from "../tokenizer";
 

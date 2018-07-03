@@ -4,10 +4,12 @@
  * @preferred
  *//***/
 
-/// <reference path="../../../std/portable.d.ts" />
-/// <reference path="../binaryen.d.ts" />
+/// <reference path="./binaryen.d.ts" />
+/// <reference path="./float.d.ts" />
+/// <reference path="./i64.d.ts" />
+/// <reference path="./node.d.ts" />
 
-import "../../../std/portable";
+import "../../../std/portable/index";
 import "./binaryen";
-import "./i64";
 import "./float";
+import "./i64";

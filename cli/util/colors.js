@@ -1,5 +1,5 @@
 var proc = typeof process !== "undefined" && process || {};
-var isCI = proc.env && "CI" in proc.env;
+var isCI = proc.env && "CI" in proc.env; // doesn't work when bundled because 'process' is a mock
 
 function from(stream, base) {
   var colors = base || {};

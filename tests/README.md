@@ -49,7 +49,11 @@ To (re-)create all fixtures:
 $>npm run test:parser -- --create
 ```
 
-Note that the parser suite currently can't recreate just a specific fixture.
+To (re-)create a specific fixture only:
+
+```
+$> npm run test:parser -- testNameWithoutTs --create
+```
 
 Compiler
 --------
