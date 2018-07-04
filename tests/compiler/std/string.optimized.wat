@@ -15,7 +15,7 @@
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 1828))
+ (global $HEAP_BASE i32 (i32.const 1892))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g")
  (data (i32.const 44) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
@@ -71,8 +71,7 @@
  (data (i32.const 1552) "\16\00\00\00\a3\03\c8\1f \00\93\03\9d\03\a9\03\a1\03\8a\03\96\03\a9\03 \00\08\1f\a0\03\f8\1f \00\a4\03\ca\1f\9d\03 \00L\1f\a8\03\97\03")
  (data (i32.const 1600) "\17\00\00\00\91\03\c0\03\bf\1f \00\c4\03p\1f \00\ba\03\cc\03\ba\03\ba\03\b1\03\bb\03\b1\03 \00\b2\03\b3\03\b1\03\bb\03\bc\03\ad\03\bd\03\b7\03")
  (data (i32.const 1652) "\17\00\00\00\91\03\a0\03\bf\1f \00\a4\03\ba\1f \00\9a\03\8c\03\9a\03\9a\03\91\03\9b\03\91\03 \00\92\03\93\03\91\03\9b\03\9c\03\88\03\9d\03\97\03")
- (data (i32.const 1704) "\1b\00\00\00\c7\03\b1\03\d6\1f\c1\03\b5\03,\00 \00f\1f \00\c7\03\b1\03\d6\1f\c1\03\b5\03,\00 \00\bf\1f\95\03\bb\03\b5\03\c5\03\b8\03\b5\03\c1\03\b9\03\ac\03!")
- (data (i32.const 1764) "\1d\00\00\00\a7\03\91\03\99\03B\03\a1\03\95\03,\00 \00n\1f \00\a7\03\91\03\99\03B\03\a1\03\95\03,\00 \00\bf\1f\95\03\9b\03\95\03\a5\03\98\03\95\03\a1\03\99\03\86\03!")
+ (data (i32.const 1704) "\\\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -9509,14 +9508,33 @@
      (call $~lib/string/String#toUpperCase
       (i32.const 1704)
      )
-     (i32.const 1764)
+     (i32.const 1704)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
-     (i32.const 94)
+     (i32.const 96)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#toLowerCase
+      (i32.const 1704)
+     )
+     (i32.const 1704)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 101)
      (i32.const 0)
     )
     (unreachable)
