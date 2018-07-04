@@ -165,12 +165,12 @@ export function parse<T>(str: String, radix: i32 = 0): T {
 
 @inline
 export function toLower8(c: u32): u32 {
-  return isUpper(c) ? c - CharCode.A + CharCode.a : c;
+  return select<u32>(c - CharCode.A + CharCode.a, c, isUpper(c));
 }
 
 @inline
 export function toUpper8(c: u32): u32 {
-  return isLower(c) ? c - CharCode.a + CharCode.A : c;
+  return select<u32>(c - CharCode.a + CharCode.A, c, isLower(c));
 }
 
 // Lower case mapping for UTF16 chars.
@@ -187,10 +187,10 @@ export function toLower16(c: u32): u32 {
         (c >= 0x014a && c <= 0x0176) ||
         (c >= 0x01de && c <= 0x01ee) ||
         (c >= 0x01f8 && c <= 0x021e) ||
-        (c >= 0x0222 && c <= 0x0232)) return c + <u32>(!(c & 0x01));
+        (c >= 0x0222 && c <= 0x0232)) return c + <u32>(!(c & 1));
     if (c == 0x0130) return 0x0069;
     if ((c >= 0x0139 && c <= 0x0147) ||
-        (c >= 0x01cd && c <= 0x01db)) return c + (c & 0x01);
+        (c >= 0x01cd && c <= 0x01db)) return c + (c & 1);
     if (c >= 0x178 && c <= 0x01f7) {
       let k: u32;
       switch (c) {
@@ -281,7 +281,7 @@ export function toLower16(c: u32): u32 {
   } else if (c < 0x0400) {
     if (c == 0x0370 || c == 0x0372 || c == 0x0376) return c + 1;
     if (c >= 0x0391 && c <= 0x03ab && c != 0x03a2) return c + 0x20;
-    if (c >= 0x03d8 && c <= 0x03ee && !(c & 0x01)) return c + 1;
+    if (c >= 0x03d8 && c <= 0x03ee && !(c & 1)) return c + 1;
     if (c >= 0x0386 && c <= 0x03ff) {
       let k: u32;
       switch (c) {
@@ -309,18 +309,18 @@ export function toLower16(c: u32): u32 {
     if (c >= 0x0410 && c <= 0x042f) return c + 0x20;
     if ((c >= 0x0460 && c <= 0x0480) ||
         (c >= 0x048a && c <= 0x04be) ||
-        (c >= 0x04d0 && c <= 0x04fe)) return c + <u32>(!(c & 0x01));
+        (c >= 0x04d0 && c <= 0x04fe)) return c + <u32>(!(c & 1));
     if (c == 0x04c0) return 0x04cf;
-    if (c >= 0x04c1 && c <= 0x04cd) return c + (c & 0x01);
+    if (c >= 0x04c1 && c <= 0x04cd) return c + (c & 1);
   } else if (c < 0x1f00) {
     if ((c >= 0x0500 && c <= 0x050e) ||
         (c >= 0x0510 && c <= 0x0524) ||
         (c >= 0x1e00 && c <= 0x1e94) ||
-        (c >= 0x1ea0 && c <= 0x1ef8)) return c + <u32>(!(c & 0x01));
+        (c >= 0x1ea0 && c <= 0x1ef8)) return c + <u32>(!(c & 1));
     if (c >= 0x0531 && c <= 0x0556) return c + 0x30;
     if (c >= 0x10a0 && c <= 0x10c5) return c + 0x1c60;
     if (c == 0x1e9e) return 0x00df;
-    if (c >= 0x1efa && c <= 0x1efe && !(c & 0x01)) return c + 1;
+    if (c >= 0x1efa && c <= 0x1efe && !(c & 1)) return c + 1;
   } else if (c < 0x2000) {
     if ((c >= 0x1f08 && c <= 0x1f0f) ||
         (c >= 0x1f18 && c <= 0x1f1d) ||
@@ -331,7 +331,7 @@ export function toLower16(c: u32): u32 {
         (c >= 0x1f88 && c <= 0x1f8f) ||
         (c >= 0x1f98 && c <= 0x1f9f) ||
         (c >= 0x1fa8 && c <= 0x1faf)) return c - 0x08;
-    if (c >= 0x1f59 && c <= 0x1f5f) return select<u32>(c - 0x08, c, c & 0x01);
+    if (c >= 0x1f59 && c <= 0x1f5f) return select<u32>(c - 0x08, c, c & 1);
     if (c >= 0x1fb8 && c <= 0x1ffc) {
       let k: u32;
       switch (c) {
@@ -375,7 +375,7 @@ export function toLower16(c: u32): u32 {
     }
   } else if (c < 0x2d00) {
     if (c >= 0x2c00 && c <= 0x2c2e) return c + 0x30;
-    if (c >= 0x2c80 && c <= 0x2ce2 && !(c & 0x01)) return c + 1;
+    if (c >= 0x2c80 && c <= 0x2ce2 && !(c & 1)) return c + 1;
     switch (c) {
       case 0x2c60: return 0x2c61;
       case 0x2c62: return 0x026b;
@@ -431,10 +431,10 @@ export function toUpper16(c: u32): u32 {
         (c >= 0x01df && c <= 0x01ef) ||
         (c >= 0x01f9 && c <= 0x021f) ||
         (c >= 0x0223 && c <= 0x0233) ||
-        (c >= 0x0247 && c <= 0x024f)) return c - (c & 0x01);
+        (c >= 0x0247 && c <= 0x024f)) return c - (c & 1);
     if ((c >= 0x013a && c <= 0x0148) ||
         (c >= 0x01ce && c <= 0x01dc) ||
-         c == 0x023c || c == 0x0242) return c - <u32>(!(c & 0x01));
+         c == 0x023c || c == 0x0242) return c - <u32>(!(c & 1));
     if (c == 0x0131) return 0x0049;
     if (c == 0x017a || c == 0x017c || c == 0x017e) return c - 1;
     if (c >= 0x017f && c <= 0x0292) {
@@ -542,8 +542,8 @@ export function toUpper16(c: u32): u32 {
     if (c >= 0x0450 && c <= 0x045f) return c - 0x50;
     if ((c >= 0x0461 && c <= 0x0481) ||
         (c >= 0x048b && c <= 0x04bf) ||
-        (c >= 0x04d1 && c <= 0x04ff)) return c - (c & 0x01);
-    if (c >= 0x04c2 && c <= 0x04ce) return c - <u32>(!(c & 0x01));
+        (c >= 0x04d1 && c <= 0x04ff)) return c - (c & 1);
+    if (c >= 0x04c2 && c <= 0x04ce) return c - <u32>(!(c & 1));
     if (c == 0x04cf) return 0x04c0;
     if (c >= 0x04f7 && c <= 0x04f9) return c - 1;
   } else if (c < 0x0600) {
@@ -553,7 +553,7 @@ export function toUpper16(c: u32): u32 {
     if (c == 0x1d79) return 0xa77d;
     if (c == 0x1d7d) return 0x2c63;
     if ((c >= 0x1e01 && c <= 0x1e95) ||
-        (c >= 0x1ea1 && c <= 0x1eff)) return c - (c & 0x01);
+        (c >= 0x1ea1 && c <= 0x1eff)) return c - (c & 1);
     if (c == 0x1e9b) return 0x1e60;
   } else if (c < 0x2000) {
     if ((c >= 0x1f00 && c <= 0x1f07) ||

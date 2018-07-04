@@ -6144,6 +6144,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -6171,59 +6173,64 @@
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $2)
+      (get_local $1)
       (get_local $4)
-     )
-    )
-    (if
-     (i32.and
-      (tee_local $1
-       (i32.load16_u offset=4
-        (i32.add
-         (get_local $0)
-         (i32.shl
-          (get_local $2)
-          (i32.const 1)
-         )
-        )
-       )
-      )
-      (i32.const -128)
-     )
-     (set_local $1
-      (call $~lib/internal/string/toUpper16
-       (get_local $1)
-      )
-     )
-     (if
-      (i32.le_u
-       (i32.sub
-        (get_local $1)
-        (i32.const 97)
-       )
-       (i32.const 25)
-      )
-      (set_local $1
-       (i32.add
-        (get_local $1)
-        (i32.const -32)
-       )
-      )
      )
     )
     (i32.store16 offset=4
      (i32.add
       (get_local $3)
       (i32.shl
-       (get_local $2)
+       (get_local $1)
        (i32.const 1)
       )
      )
-     (get_local $1)
+     (tee_local $2
+      (if (result i32)
+       (i32.and
+        (tee_local $2
+         (i32.load16_u offset=4
+          (i32.add
+           (get_local $0)
+           (i32.shl
+            (get_local $1)
+            (i32.const 1)
+           )
+          )
+         )
+        )
+        (i32.const -128)
+       )
+       (call $~lib/internal/string/toUpper16
+        (get_local $2)
+       )
+       (block (result i32)
+        (set_local $6
+         (i32.le_u
+          (tee_local $5
+           (i32.sub
+            (get_local $2)
+            (i32.const 97)
+           )
+          )
+          (i32.const 25)
+         )
+        )
+        (select
+         (i32.add
+          (get_local $5)
+          (i32.const 65)
+         )
+         (get_local $2)
+         (get_local $6)
+        )
+       )
+      )
+     )
     )
-    (set_local $2
+    (set_local $1
      (i32.add
-      (get_local $2)
+      (get_local $1)
       (i32.const 1)
      )
     )
@@ -8237,6 +8244,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -8264,59 +8273,64 @@
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $2)
+      (get_local $1)
       (get_local $4)
-     )
-    )
-    (if
-     (i32.and
-      (tee_local $1
-       (i32.load16_u offset=4
-        (i32.add
-         (get_local $0)
-         (i32.shl
-          (get_local $2)
-          (i32.const 1)
-         )
-        )
-       )
-      )
-      (i32.const -128)
-     )
-     (set_local $1
-      (call $~lib/internal/string/toLower16
-       (get_local $1)
-      )
-     )
-     (if
-      (i32.le_u
-       (i32.sub
-        (get_local $1)
-        (i32.const 65)
-       )
-       (i32.const 25)
-      )
-      (set_local $1
-       (i32.add
-        (get_local $1)
-        (i32.const 32)
-       )
-      )
      )
     )
     (i32.store16 offset=4
      (i32.add
       (get_local $3)
       (i32.shl
-       (get_local $2)
+       (get_local $1)
        (i32.const 1)
       )
      )
-     (get_local $1)
+     (tee_local $2
+      (if (result i32)
+       (i32.and
+        (tee_local $2
+         (i32.load16_u offset=4
+          (i32.add
+           (get_local $0)
+           (i32.shl
+            (get_local $1)
+            (i32.const 1)
+           )
+          )
+         )
+        )
+        (i32.const -128)
+       )
+       (call $~lib/internal/string/toLower16
+        (get_local $2)
+       )
+       (block (result i32)
+        (set_local $6
+         (i32.le_u
+          (tee_local $5
+           (i32.sub
+            (get_local $2)
+            (i32.const 65)
+           )
+          )
+          (i32.const 25)
+         )
+        )
+        (select
+         (i32.add
+          (get_local $5)
+          (i32.const 97)
+         )
+         (get_local $2)
+         (get_local $6)
+        )
+       )
+      )
+     )
     )
-    (set_local $2
+    (set_local $1
      (i32.add
-      (get_local $2)
+      (get_local $1)
       (i32.const 1)
      )
     )

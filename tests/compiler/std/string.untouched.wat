@@ -7192,9 +7192,17 @@
          (i32.const 1)
         )
         (block $~lib/internal/string/toUpper8|inlined.0 (result i32)
-         (if (result i32)
+         (select
+          (i32.add
+           (i32.sub
+            (get_local $4)
+            (i32.const 97)
+           )
+           (i32.const 65)
+          )
+          (get_local $4)
           (i32.and
-           (block $~lib/internal/string/isLower|inlined.1 (result i32)
+           (block $~lib/internal/string/isLower|inlined.0 (result i32)
             (i32.le_u
              (i32.sub
               (get_local $4)
@@ -7208,14 +7216,6 @@
            )
            (i32.const 1)
           )
-          (i32.add
-           (i32.sub
-            (get_local $4)
-            (i32.const 97)
-           )
-           (i32.const 65)
-          )
-          (get_local $4)
          )
         )
         (call $~lib/internal/string/toUpper16
@@ -10190,9 +10190,17 @@
          (i32.const 1)
         )
         (block $~lib/internal/string/toLower8|inlined.0 (result i32)
-         (if (result i32)
+         (select
+          (i32.add
+           (i32.sub
+            (get_local $4)
+            (i32.const 65)
+           )
+           (i32.const 97)
+          )
+          (get_local $4)
           (i32.and
-           (block $~lib/internal/string/isUpper|inlined.1 (result i32)
+           (block $~lib/internal/string/isUpper|inlined.0 (result i32)
             (i32.le_u
              (i32.sub
               (get_local $4)
@@ -10206,14 +10214,6 @@
            )
            (i32.const 1)
           )
-          (i32.add
-           (i32.sub
-            (get_local $4)
-            (i32.const 65)
-           )
-           (i32.const 97)
-          )
-          (get_local $4)
          )
         )
         (call $~lib/internal/string/toLower16
