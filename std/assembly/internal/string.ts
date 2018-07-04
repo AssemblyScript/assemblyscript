@@ -24,18 +24,18 @@ export function allocate(length: i32): String {
 }
 
 @inline
-export function isAscii(c: u16): bool {
-  return (<u32>c & 0xFFFFFF80) == 0;
+export function isAscii(c: u32): bool {
+  return (c & 0xFFFFFF80) == 0;
 }
 
 @inline
-export function isUpper(c: u16): bool {
-  return c - CharCode.A <= (CharCode.Z - CharCode.A);
+export function isUpper(c: u32): bool {
+  return c - CharCode.A <= <u32>(CharCode.Z - CharCode.A);
 }
 
 @inline
-export function isLower(c: u16): bool {
-  return c - CharCode.a <= (CharCode.z - CharCode.a);
+export function isLower(c: u32): bool {
+  return c - CharCode.a <= <u32>(CharCode.z - CharCode.a);
 }
 
 export function isWhiteSpaceOrLineTerminator(c: u16): bool {
@@ -164,18 +164,18 @@ export function parse<T>(str: String, radix: i32 = 0): T {
 }
 
 @inline
-export function toLower8(c: u16): u16 {
+export function toLower8(c: u32): u32 {
   return isUpper(c) ? c - CharCode.A + CharCode.a : c;
 }
 
 @inline
-export function toUpper8(c: u16): u16 {
+export function toUpper8(c: u32): u32 {
   return isLower(c) ? c - CharCode.a + CharCode.A : c;
 }
 
 // Lower case mapping for UTF16 chars.
 // Code adopted from https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towlower.c
-export function toLower16(c: u16): u16 {
+export function toLower16(c: u32): u32 {
   if (c < 0x100) {
     if ((c >= 0x0041 && c <= 0x005a) ||
         (c >= 0x00c0 && c <= 0x00d6) ||
@@ -187,12 +187,12 @@ export function toLower16(c: u16): u16 {
         (c >= 0x014a && c <= 0x0176) ||
         (c >= 0x01de && c <= 0x01ee) ||
         (c >= 0x01f8 && c <= 0x021e) ||
-        (c >= 0x0222 && c <= 0x0232)) return c + <u16>(!(c & 0x01));
+        (c >= 0x0222 && c <= 0x0232)) return c + <u32>(!(c & 0x01));
     if (c == 0x0130) return 0x0069;
     if ((c >= 0x0139 && c <= 0x0147) ||
         (c >= 0x01cd && c <= 0x01db)) return c + (c & 0x01);
     if (c >= 0x178 && c <= 0x01f7) {
-      let k: u16;
+      let k: u32;
       switch (c) {
         case 0x0178: { k = 0x00ff; break; }
         case 0x0179:
@@ -259,7 +259,7 @@ export function toLower16(c: u16): u16 {
     }
     else if (c == 0x0220) return 0x019e;
     else if (c >= 0x023a && c <= 0x024e) {
-      let k: u16;
+      let k: u32;
       switch (c) {
         case 0x023a: { k = 0x2c65; break; }
         case 0x023b:
@@ -283,7 +283,7 @@ export function toLower16(c: u16): u16 {
     if (c >= 0x0391 && c <= 0x03ab && c != 0x03a2) return c + 0x20;
     if (c >= 0x03d8 && c <= 0x03ee && !(c & 0x01)) return c + 1;
     if (c >= 0x0386 && c <= 0x03ff) {
-      let k: u16;
+      let k: u32;
       switch (c) {
         case 0x0386: { k = 0x03ac; break; }
         case 0x0388: { k = 0x03ad; break; }
@@ -309,14 +309,14 @@ export function toLower16(c: u16): u16 {
     if (c >= 0x0410 && c <= 0x042f) return c + 0x20;
     if ((c >= 0x0460 && c <= 0x0480) ||
         (c >= 0x048a && c <= 0x04be) ||
-        (c >= 0x04d0 && c <= 0x04fe)) return c + <u16>(!(c & 0x01));
+        (c >= 0x04d0 && c <= 0x04fe)) return c + <u32>(!(c & 0x01));
     if (c == 0x04c0) return 0x04cf;
     if (c >= 0x04c1 && c <= 0x04cd) return c + (c & 0x01);
   } else if (c < 0x1f00) {
     if ((c >= 0x0500 && c <= 0x050e) ||
         (c >= 0x0510 && c <= 0x0524) ||
         (c >= 0x1e00 && c <= 0x1e94) ||
-        (c >= 0x1ea0 && c <= 0x1ef8)) return c + <u16>(!(c & 0x01));
+        (c >= 0x1ea0 && c <= 0x1ef8)) return c + <u32>(!(c & 0x01));
     if (c >= 0x0531 && c <= 0x0556) return c + 0x30;
     if (c >= 0x10a0 && c <= 0x10c5) return c + 0x1c60;
     if (c == 0x1e9e) return 0x00df;
@@ -331,9 +331,9 @@ export function toLower16(c: u16): u16 {
         (c >= 0x1f88 && c <= 0x1f8f) ||
         (c >= 0x1f98 && c <= 0x1f9f) ||
         (c >= 0x1fa8 && c <= 0x1faf)) return c - 0x08;
-    if (c >= 0x1f59 && c <= 0x1f5f) return select<u16>(c - 0x08, c, c & 0x01);
+    if (c >= 0x1f59 && c <= 0x1f5f) return select<u32>(c - 0x08, c, c & 0x01);
     if (c >= 0x1fb8 && c <= 0x1ffc) {
-      let k: u16;
+      let k: u32;
       switch (c) {
         case 0x1fb8:
         case 0x1fb9:
@@ -401,7 +401,7 @@ export function toLower16(c: u16): u16 {
         (c >= 0xa680 && c <= 0xa696) ||
         (c >= 0xa722 && c <= 0xa72e) ||
         (c >= 0xa732 && c <= 0xa76e) ||
-        (c >= 0xa77f && c <= 0xa786)) return c + <u16>(!(c & 1));
+        (c >= 0xa77f && c <= 0xa786)) return c + <u32>(!(c & 1));
     switch (c) {
       case 0xa779:
       case 0xa77b:
@@ -418,12 +418,12 @@ export function toLower16(c: u16): u16 {
 
 // Upper case mapping for UTF16 chars.
 // Code adopted from https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towupper.c
-export function toUpper16(c: u16): u16 {
+export function toUpper16(c: u32): u32 {
   if (c < 0x100) {
     if (c == 0x00b5) return 0x039c;
     if ((c >= 0x00e0 && c <= 0x00fe && c != 0x00f7) ||
         (c >= 0x0061 && c <= 0x007a)) return c - 0x20;
-    return select<u16>(0x0178, c, c == 0xff);
+    return select<u32>(0x0178, c, c == 0xff);
   } else if (c < 0x300) {
     if ((c >= 0x0101 && c <= 0x012f) ||
         (c >= 0x0133 && c <= 0x0137) ||
@@ -434,11 +434,11 @@ export function toUpper16(c: u16): u16 {
         (c >= 0x0247 && c <= 0x024f)) return c - (c & 0x01);
     if ((c >= 0x013a && c <= 0x0148) ||
         (c >= 0x01ce && c <= 0x01dc) ||
-         c == 0x023c || c == 0x0242) return c - <u16>(!(c & 0x01));
+         c == 0x023c || c == 0x0242) return c - <u32>(!(c & 0x01));
     if (c == 0x0131) return 0x0049;
     if (c == 0x017a || c == 0x017c || c == 0x017e) return c - 1;
     if (c >= 0x017f && c <= 0x0292) {
-      let k: u16;
+      let k: u32;
       switch (c) {
         case 0x017f: { k = 0x0053; break; }
         case 0x0180: { k = 0x0243; break; }
@@ -506,10 +506,10 @@ export function toUpper16(c: u16): u16 {
       if (k != 0) return k;
     }
   } else if (c < 0x0400) {
-    let k: u16;
+    let k: u32;
     if (c >= 0x03ad && c <= 0x03af) return c - 0x25;
     if (c >= 0x03b1 && c <= 0x03cb && c != 0x03c2) return c - 0x20;
-    if (c >= 0x03d9 && c <= 0x03ef && (c & 1)) return c - 1;
+    if (c >= 0x03d9 && c <= 0x03ef && <bool>(c & 1)) return c - 1;
     switch (c) {
       case 0x0345: { k = 0x0399; break; }
       case 0x0371:
@@ -543,11 +543,11 @@ export function toUpper16(c: u16): u16 {
     if ((c >= 0x0461 && c <= 0x0481) ||
         (c >= 0x048b && c <= 0x04bf) ||
         (c >= 0x04d1 && c <= 0x04ff)) return c - (c & 0x01);
-    if (c >= 0x04c2 && c <= 0x04ce) return c - <u16>(!(c & 0x01));
+    if (c >= 0x04c2 && c <= 0x04ce) return c - <u32>(!(c & 0x01));
     if (c == 0x04cf) return 0x04c0;
     if (c >= 0x04f7 && c <= 0x04f9) return c - 1;
   } else if (c < 0x0600) {
-    if (c >= 0x0501 && c <= 0x0525 && (c & 1)) return c - 1;
+    if (c >= 0x0501 && c <= 0x0525 && <bool>(c & 1)) return c - 1;
     if (c >= 0x0561 && c <= 0x0586) return c - 0x30;
   } else if (c < 0x1f00) {
     if (c == 0x1d79) return 0xa77d;
@@ -565,9 +565,9 @@ export function toUpper16(c: u16): u16 {
         (c >= 0x1f80 && c <= 0x1f87) ||
         (c >= 0x1f90 && c <= 0x1f97) ||
         (c >= 0x1fa0 && c <= 0x1fa7) ||
-        (c >= 0x1f51 && c <= 0x1f57 && (c & 0x01))) return c + 0x08;
+        (c >= 0x1f51 && c <= 0x1f57 && <bool>(c & 1))) return c + 0x08;
     if (c >= 0x1f70 && c <= 0x1ff3) {
-      let k: u16;
+      let k: u32;
       switch (c) {
         case 0x1fb0: { k = 0x1fb8; break; }
         case 0x1fb1: { k = 0x1fb9; break; }
@@ -605,11 +605,11 @@ export function toUpper16(c: u16): u16 {
     if (c >= 0x24d0 && c <= 0x24e9) return c - 0x1a;
     if (c >= 0x2c30 && c <= 0x2c5e) return c - 0x30;
     if ((c >= 0x2c68 && c <= 0x2c6c && !(c & 1)) ||
-        (c >= 0x2c81 && c <= 0x2ce3 && (c & 1))  ||
+        (c >= 0x2c81 && c <= 0x2ce3 && <bool>(c & 1)) ||
          c == 0x2c73 || c == 0x2c76 ||
          c == 0x2cec || c == 0x2cee) return c - 1;
-    if (c >= 0x2c81 && c <= 0x2ce3 && (c & 1)) return c - 1;
-    if (c >= 0x2d00 && c <= 0x2d25) return (c - 0x1c60);
+    if (c >= 0x2c81 && c <= 0x2ce3 && <bool>(c & 1)) return c - 1;
+    if (c >= 0x2d00 && c <= 0x2d25) return c - 0x1c60;
     switch (c) {
       case 0x2c61: return 0x2c60;
       case 0x2c65: return 0x023a;
@@ -622,7 +622,7 @@ export function toUpper16(c: u16): u16 {
          (c >= 0xa723 && c <= 0xa72f) ||
          (c >= 0xa733 && c <= 0xa76f) ||
          (c >= 0xa77f && c <= 0xa787)) &&
-         (c & 1)) return c - 1;
+         <bool>(c & 1)) return c - 1;
     if (c == 0xa77a || c == 0xa77c || c == 0xa78c) return c - 1;
   } else {
     if (c >= 0x0ff41 && c <= 0x0ff5a) return c - 0x20;

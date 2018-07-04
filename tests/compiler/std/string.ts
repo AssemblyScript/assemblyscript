@@ -72,3 +72,6 @@ assert("ab".repeat(4) == "abababab");
 assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
+
+assert("09_AZ az.!".toLowerCase() == "09_az az.!");
+assert("09_AZ az.!".toUpperCase() == "09_AZ AZ.!");

@@ -291,6 +291,8 @@ declare class String {
   replace(search: string, replacement: string): string;
   repeat(count?: i32): string;
   toString(): string;
+  toLowerCase(): string;
+  toUpperCase(): string;
 }
 
 interface Boolean {}

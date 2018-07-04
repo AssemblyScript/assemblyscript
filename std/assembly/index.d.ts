@@ -441,6 +441,8 @@ declare class String {
   trimRight(): string;
   repeat(count?: i32): string;
   toString(): string;
+  toLowerCase(): string;
+  toUpperCase(): string;
   toUTF8(): usize;
 }
 
