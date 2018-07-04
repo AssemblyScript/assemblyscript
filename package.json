@@ -21,7 +21,7 @@
     "diff": "^3.5.0",
     "glob": "^7.1.2",
     "ts-loader": "^4.4.2",
-    "ts-node": "^7.0.0",
+    "ts-node": "^6.2.0",
     "tslint": "^5.10.0",
     "typedoc": "^0.11.1",
     "typedoc-plugin-external-module-name": "^1.1.1",

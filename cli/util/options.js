@@ -30,13 +30,15 @@ function parse(argv, config) {
   for (var i = 0, k = (argv = argv.slice()).length; i < k; ++i) {
     let arg = argv[i];
     if (arg == "--") { ++i; break; }
-    let match = /^(?:(\-\w)|(\-\-\w{2,})(?:=(.*))?)$/.exec(arg), option, key;
+    let match = /^(?:(\-\w)(?:=(.*))?|(\-\-\w{2,})(?:=(.*))?)$/.exec(arg), option, key;
     if (match) {
       if (config[arg]) option = config[key = arg]; // exact
-      else if (match[1] != null) option = config[key = aliases[match[1].substring(1)]]; // alias
-      else if (match[2] != null) {
-        option = config[key = match[2].substring(2)]; // full
-        if (option && match[3] != null) argv[i--] = match[3];
+      else if (match[1] != null) { // alias
+        option = config[key = aliases[match[1].substring(1)]];
+        if (option && match[2] != null) argv[i--] = match[2];
+      } else if (match[3] != null) { // full
+        option = config[key = match[3].substring(2)];
+        if (option && match[4] != null) argv[i--] = match[4];
       }
     } else {
       if (arg.charCodeAt(0) == 45) option = config[key = arg]; // exact

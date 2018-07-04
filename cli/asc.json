@@ -133,7 +133,7 @@
       "Aliases a global object under another name, e.g., to switch",
       "the default 'Math' implementation used: --use Math=JSMath"
     ],
-    "type": "s",
+    "type": "S",
     "alias": "u"
   },
   "trapMode": {

@@ -326,13 +326,11 @@ export class Program extends DiagnosticEmitter {
 
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype | null = null;
-  /** ArrayBufferView prototype reference. */
-  arrayBufferViewPrototype: InterfacePrototype | null = null;
   /** String instance reference. */
   stringInstance: Class | null = null;
   /** Start function reference. */
   startFunction: FunctionPrototype;
-  /** Main function reference. */
+  /** Main function reference, if present. */
   mainFunction: FunctionPrototype | null = null;
 
   /** Target expression of the previously resolved property or element access. */
@@ -591,13 +589,6 @@ export class Program extends DiagnosticEmitter {
     if (arrayPrototype) {
       assert(arrayPrototype.kind == ElementKind.CLASS_PROTOTYPE);
       this.arrayPrototype = <ClassPrototype>arrayPrototype;
-    }
-
-    // register 'ArrayBufferView'
-    var arrayBufferViewPrototype = this.elementsLookup.get("ArrayBufferView");
-    if (arrayBufferViewPrototype) {
-      assert(arrayBufferViewPrototype.kind == ElementKind.INTERFACE_PROTOTYPE);
-      this.arrayBufferViewPrototype = <InterfacePrototype>arrayBufferViewPrototype;
     }
 
     // register 'String'
@@ -2097,58 +2088,46 @@ export class Program extends DiagnosticEmitter {
   /** Resolves an identifier to the element it refers to. */
   resolveIdentifier(
     identifier: IdentifierExpression,
-    contextualFunction: Function | null,
-    contextualEnum: Enum | null = null
+    context: Element | null
   ): Element | null {
     var name = identifier.text;
-
     var element: Element | null;
-    var namespace: Element | null;
 
-    // check siblings
-    if (contextualEnum) {
+    if (context) {
+      let parent: Element | null;
 
-      if (
-        contextualEnum.members &&
-        (element = contextualEnum.members.get(name)) &&
-        element.kind == ElementKind.ENUMVALUE
-      ) {
-        this.resolvedThisExpression = null;
-        this.resolvedElementExpression = null;
-        return element; // ENUMVALUE
-      }
-
-    } else if (contextualFunction) {
-
-      // check locals
-      if (element = contextualFunction.flow.getScopedLocal(name)) {
-        this.resolvedThisExpression = null;
-        this.resolvedElementExpression = null;
-        return element; // LOCAL
-      }
-
-      // check outer scope locals
-      // let outerScope = contextualFunction.outerScope;
-      // while (outerScope) {
-      //   if (element = outerScope.getScopedLocal(name)) {
-      //     let scopedLocal = <Local>element;
-      //     let scopedGlobal = scopedLocal.scopedGlobal;
-      //     if (!scopedGlobal) scopedGlobal = outerScope.addScopedGlobal(scopedLocal);
-      //     if (!resolvedElement) resolvedElement = new ResolvedElement();
-      //     return resolvedElement.set(scopedGlobal);
-      //   }
-      //   outerScope = outerScope.currentFunction.outerScope;
-      // }
-
-      // search contextual parent namespaces if applicable
-      if (namespace = contextualFunction.prototype.parent) {
-        do {
-          if (element = this.elementsLookup.get(namespace.internalName + STATIC_DELIMITER + name)) {
+      switch (context.kind) {
+        case ElementKind.FUNCTION: { // search locals
+          element = (<Function>context).flow.getScopedLocal(name);
+          if (element) {
             this.resolvedThisExpression = null;
             this.resolvedElementExpression = null;
-            return element; // LOCAL
+            return element;
           }
-        } while (namespace = namespace.parent);
+          parent = (<Function>context).prototype.parent;
+          break;
+        }
+        case ElementKind.CLASS: {
+          parent = (<Class>context).prototype.parent;
+          break;
+        }
+        default: {
+          parent = context;
+          break;
+        }
+      }
+
+      // search parent
+      while (parent) {
+        let members = parent.members;
+        if (members) {
+          if (element = members.get(name)) {
+            this.resolvedThisExpression = null;
+            this.resolvedElementExpression = null;
+            return element;
+          }
+        }
+        parent = parent.parent;
       }
     }
 

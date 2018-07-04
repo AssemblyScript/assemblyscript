@@ -49,11 +49,7 @@ if (argv.length) {
   }
 }
 
-require("ts-node").register({
-  project: path.join(__dirname, "..", "src", "tsconfig.json"),
-  cache: false // FIXME: for some reason, if both asc and the parser tests use caching, the one
-               // invoked later cannot find some definition files.
-});
+require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
 require("../src/glue/js");
 
 var Parser = require("../src/parser").Parser;

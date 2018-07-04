@@ -7,7 +7,7 @@
     "allowJs": true,
     "downlevelIteration": true,
     "preserveConstEnums": true,
-    "typeRoots": [ "." ],
-    "types": [ "portable/" ]
+    "typeRoots": [ "types" ],
+    "types": [ "portable" ]
   }
 }

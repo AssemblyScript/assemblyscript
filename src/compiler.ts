@@ -5894,8 +5894,7 @@ export class Compiler extends DiagnosticEmitter {
     // otherwise resolve
     var target = this.program.resolveIdentifier( // reports
       expression,
-      currentFunction,
-      this.currentEnum
+      this.currentEnum || currentFunction
     );
     if (!target) return module.createUnreachable();
 
