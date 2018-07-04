@@ -73,5 +73,33 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
-assert("09_AZ az.!".toLowerCase() == "09_az az.!");
 assert("09_AZ az.!".toUpperCase() == "09_AZ AZ.!");
+assert("09_AZ az.!".toLowerCase() == "09_az az.!");
+assert("Der Wechsel allein ist das Beständige".toUpperCase() == "DER WECHSEL ALLEIN IST DAS BESTÄNDIGE");
+assert("DER WECHSEL ALLEIN IST DAS BESTÄNDIGE".toLowerCase() == "der wechsel allein ist das beständige");
+assert("@ — Друг человека!".toUpperCase() == "@ — ДРУГ ЧЕЛОВЕКА!");
+assert("@ — ДРУГ ЧЕЛОВЕКА!".toLowerCase() == "@ — друг человека!");
+assert("∮ E⋅da = Q, n → ∞, ∑ f(i) = ∏ g(i)".toUpperCase() == "∮ E⋅DA = Q, N → ∞, ∑ F(I) = ∏ G(I)");
+assert("∮ E⋅DA = Q, N → ∞, ∑ F(I) = ∏ G(I)".toLowerCase() == "∮ e⋅da = q, n → ∞, ∑ f(i) = ∏ g(i)");
+assert("ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn".toUpperCase() == "ÐI INTƏˈNÆƩƏNƏL FƏˈNƐTIK ƏSOƱSIˈEIƩN");
+assert("ÐI INTƏˈNÆƩƏNƏL FƏˈNƐTIK ƏSOƱSIˈEIƩN".toLowerCase() == "ði intəˈnæʃənəl fəˈnɛtik əsoʊsiˈeiʃn");
+/*
+assert(
+"Σὲ γνωρίζω ἀπὸ τὴν κόψη \
+τοῦ σπαθιοῦ τὴν τρομερή, \
+σὲ γνωρίζω ἀπὸ τὴν ὄψη \
+ποὺ μὲ βία μετράει τὴ γῆ. \
+Απ᾿ τὰ κόκκαλα βγαλμένη \
+τῶν ῾Ελλήνων τὰ ἱερά \
+καὶ σὰν πρῶτα ἀνδρειωμένη \
+χαῖρε, ὦ χαῖρε, ᾿Ελευθεριά!".toUpperCase() ==
+"ΣῈ ΓΝΩΡΊΖΩ ἈΠῸ ΤῊΝ ΚΌΨΗ \
+ΤΟΥ͂ ΣΠΑΘΙΟΥ͂ ΤῊΝ ΤΡΟΜΕΡΉ, \
+ΣῈ ΓΝΩΡΊΖΩ ἈΠῸ ΤῊΝ ὌΨΗ \
+ΠΟῪ ΜῈ ΒΊΑ ΜΕΤΡΆΕΙ ΤῊ ΓΗ͂. \
+ΑΠ᾿ ΤᾺ ΚΌΚΚΑΛΑ ΒΓΑΛΜΈΝΗ \
+ΤΩ͂Ν ῾ΕΛΛΉΝΩΝ ΤᾺ ἹΕΡΆ \
+ΚΑῚ ΣᾺΝ ΠΡΩ͂ΤΑ ἈΝΔΡΕΙΩΜΈΝΗ \
+ΧΑΙ͂ΡΕ, Ὦ ΧΑΙ͂ΡΕ, ᾿ΕΛΕΥΘΕΡΙΆ!"
+); // fail!
+*/
