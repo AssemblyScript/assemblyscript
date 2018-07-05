@@ -192,9 +192,8 @@ export function toLower16(c: u32): u32 {
     if ((c >= 0x0139 && c <= 0x0147) ||
         (c >= 0x01cd && c <= 0x01db)) return c + (c & 1);
     if (c >= 0x178 && c <= 0x01f7) {
-      let k: u32;
       switch (c) {
-        case 0x0178: { k = 0x00ff; break; }
+        case 0x0178: return 0x00ff;
         case 0x0179:
         case 0x017b:
         case 0x017d:
@@ -226,83 +225,78 @@ export function toLower16(c: u32): u32 {
         case 0x01d9:
         case 0x01db:
         case 0x01f2:
-        case 0x01f4: { k = c + 1;  break; }
-        case 0x0181: { k = 0x0253; break; }
-        case 0x0186: { k = 0x0254; break; }
-        case 0x0189: { k = 0x0256; break; }
-        case 0x018a: { k = 0x0257; break; }
-        case 0x018e: { k = 0x01dd; break; }
-        case 0x018f: { k = 0x0259; break; }
-        case 0x0190: { k = 0x025b; break; }
-        case 0x0193: { k = 0x0260; break; }
-        case 0x0194: { k = 0x0263; break; }
-        case 0x0196: { k = 0x0269; break; }
-        case 0x0197: { k = 0x0268; break; }
-        case 0x019c: { k = 0x026f; break; }
-        case 0x019d: { k = 0x0272; break; }
-        case 0x019f: { k = 0x0275; break; }
-        case 0x01a6: { k = 0x0280; break; }
-        case 0x01a9: { k = 0x0283; break; }
-        case 0x01ae: { k = 0x0288; break; }
-        case 0x01b1: { k = 0x028a; break; }
-        case 0x01b2: { k = 0x028b; break; }
-        case 0x01b7: { k = 0x0292; break; }
+        case 0x01f4: return c + 1;
+        case 0x0181: return 0x0253;
+        case 0x0186: return 0x0254;
+        case 0x0189: return 0x0256;
+        case 0x018a: return 0x0257;
+        case 0x018e: return 0x01dd;
+        case 0x018f: return 0x0259;
+        case 0x0190: return 0x025b;
+        case 0x0193: return 0x0260;
+        case 0x0194: return 0x0263;
+        case 0x0196: return 0x0269;
+        case 0x0197: return 0x0268;
+        case 0x019c: return 0x026f;
+        case 0x019d: return 0x0272;
+        case 0x019f: return 0x0275;
+        case 0x01a6: return 0x0280;
+        case 0x01a9: return 0x0283;
+        case 0x01ae: return 0x0288;
+        case 0x01b1: return 0x028a;
+        case 0x01b2: return 0x028b;
+        case 0x01b7: return 0x0292;
         case 0x01c4:
         case 0x01c7:
         case 0x01ca:
-        case 0x01f1: { k = c + 2;  break; }
-        case 0x01f6: { k = 0x0195; break; }
-        case 0x01f7: { k = 0x01bf; break; }
-        default: k = 0;
+        case 0x01f1: return c + 2;
+        case 0x01f6: return 0x0195;
+        case 0x01f7: return 0x01bf;
+        default: break;
       }
-      if (k != 0) return k;
     }
     else if (c == 0x0220) return 0x019e;
     else if (c >= 0x023a && c <= 0x024e) {
-      let k: u32;
       switch (c) {
-        case 0x023a: { k = 0x2c65; break; }
+        case 0x023a: return 0x2c65;
         case 0x023b:
         case 0x0241:
         case 0x0246:
         case 0x0248:
         case 0x024a:
         case 0x024c:
-        case 0x024e: { k = c + 1;  break; }
-        case 0x023d: { k = 0x019a; break; }
-        case 0x023e: { k = 0x2c66; break; }
-        case 0x0243: { k = 0x0180; break; }
-        case 0x0244: { k = 0x0289; break; }
-        case 0x0245: { k = 0x028c; break; }
-        default: k = 0;
+        case 0x024e: return c + 1;
+        case 0x023d: return 0x019a;
+        case 0x023e: return 0x2c66;
+        case 0x0243: return 0x0180;
+        case 0x0244: return 0x0289;
+        case 0x0245: return 0x028c;
+        default: break;
       }
-      if (k != 0) return k;
     }
   } else if (c < 0x0400) {
     if (c == 0x0370 || c == 0x0372 || c == 0x0376) return c + 1;
     if (c >= 0x0391 && c <= 0x03ab && c != 0x03a2) return c + 0x20;
-    if (c >= 0x03d8 && c <= 0x03ee && !(c & 1)) return c + 1;
+    if (c >= 0x03d8 && c <= 0x03ee && !(c & 1))    return c + 1;
     if (c >= 0x0386 && c <= 0x03ff) {
-      let k: u32;
       switch (c) {
-        case 0x0386: { k = 0x03ac; break; }
-        case 0x0388: { k = 0x03ad; break; }
-        case 0x0389: { k = 0x03ae; break; }
-        case 0x038a: { k = 0x03af; break; }
-        case 0x038c: { k = 0x03cc; break; }
-        case 0x038e: { k = 0x03cd; break; }
-        case 0x038f: { k = 0x03ce; break; }
-        case 0x03cf: { k = 0x03d7; break; }
-        case 0x03f4: { k = 0x03b8; break; }
-        case 0x03f7: { k = 0x03f8; break; }
-        case 0x03f9: { k = 0x03f2; break; }
-        case 0x03fa: { k = 0x03fb; break; }
-        case 0x03fd: { k = 0x037b; break; }
-        case 0x03fe: { k = 0x037c; break; }
-        case 0x03ff: { k = 0x037d; break; }
-        default: k = 0;
+        case 0x0386: return 0x03ac;
+        case 0x0388: return 0x03ad;
+        case 0x0389: return 0x03ae;
+        case 0x038a: return 0x03af;
+        case 0x038c: return 0x03cc;
+        case 0x038e: return 0x03cd;
+        case 0x038f: return 0x03ce;
+        case 0x03cf: return 0x03d7;
+        case 0x03f4: return 0x03b8;
+        case 0x03f7: return 0x03f8;
+        case 0x03f9: return 0x03f2;
+        case 0x03fa: return 0x03fb;
+        case 0x03fd: return 0x037b;
+        case 0x03fe: return 0x037c;
+        case 0x03ff: return 0x037d;
+        default: break;
       }
-      if (k != 0) return k;
     }
   } else if (c < 0x500) {
     if (c >= 0x0400 && c <= 0x040f) return c + 0x50;
@@ -333,35 +327,33 @@ export function toLower16(c: u32): u32 {
         (c >= 0x1fa8 && c <= 0x1faf)) return c - 0x08;
     if (c >= 0x1f59 && c <= 0x1f5f) return select<u32>(c - 0x08, c, c & 1);
     if (c >= 0x1fb8 && c <= 0x1ffc) {
-      let k: u32;
       switch (c) {
         case 0x1fb8:
         case 0x1fb9:
         case 0x1fd8:
         case 0x1fd9:
         case 0x1fe8:
-        case 0x1fe9: { k = c - 0x08; break; }
+        case 0x1fe9: return c - 0x08;
         case 0x1fba:
-        case 0x1fbb: { k = c - 0x4a; break; }
-        case 0x1fbc: { k = 0x1fb3; break; }
+        case 0x1fbb: return c - 0x4a;
+        case 0x1fbc: return 0x1fb3;
         case 0x1fc8:
         case 0x1fc9:
         case 0x1fca:
-        case 0x1fcb: { k = c - 0x56; break; }
-        case 0x1fcc: { k = 0x1fc3; break; }
+        case 0x1fcb: return c - 0x56;
+        case 0x1fcc: return 0x1fc3;
         case 0x1fda:
-        case 0x1fdb: { k = c - 0x64; break; }
+        case 0x1fdb: return c - 0x64;
         case 0x1fea:
-        case 0x1feb: { k = c - 0x70; break; }
-        case 0x1fec: { k = 0x1fe5; break; }
+        case 0x1feb: return c - 0x70;
+        case 0x1fec: return 0x1fe5;
         case 0x1ff8:
-        case 0x1ff9: { k = c - 0x80; break; }
+        case 0x1ff9: return c - 0x80;
         case 0x1ffa:
-        case 0x1ffb: { k = c - 0x7e; break; }
-        case 0x1ffc: { k = 0x1ff3; break; }
-        default: k = 0;
+        case 0x1ffb: return c - 0x7e;
+        case 0x1ffc: return 0x1ff3;
+        default: break;
       }
-      if (k != 0) return k;
     }
   } else if (c < 0x2c00) {
     if (c >= 0x2160 && c <= 0x216f) return c + 0x10;
@@ -372,6 +364,7 @@ export function toLower16(c: u32): u32 {
       case 0x212b: return 0x00e5;
       case 0x2132: return 0x214e;
       case 0x2183: return 0x2184;
+      default: break;
     }
   } else if (c < 0x2d00) {
     if (c >= 0x2c00 && c <= 0x2c2e) return c + 0x30;
@@ -394,6 +387,7 @@ export function toLower16(c: u32): u32 {
       case 0x2c70: return 0x0252;
       case 0x2c7e: return 0x023f;
       case 0x2c7f: return 0x0240;
+      default: break;
     }
   } else if (c >= 0xa600 && c < 0xa800) {
     if ((c >= 0xa640 && c <= 0xa65e) ||
@@ -408,6 +402,7 @@ export function toLower16(c: u32): u32 {
       case 0xa77e:
       case 0xa78b: return c + 1;
       case 0xa77d: return 0x1d79;
+      default: break;
     }
   } else {
     if (c >= 0x0ff21 && c <= 0x0ff3a) return c + 0x20;
@@ -438,19 +433,18 @@ export function toUpper16(c: u32): u32 {
     if (c == 0x0131) return 0x0049;
     if (c == 0x017a || c == 0x017c || c == 0x017e) return c - 1;
     if (c >= 0x017f && c <= 0x0292) {
-      let k: u32;
       switch (c) {
-        case 0x017f: { k = 0x0053; break; }
-        case 0x0180: { k = 0x0243; break; }
-        case 0x0183: { k = 0x0182; break; }
-        case 0x0185: { k = 0x0184; break; }
-        case 0x0188: { k = 0x0187; break; }
-        case 0x018c: { k = 0x018b; break; }
-        case 0x0192: { k = 0x0191; break; }
-        case 0x0195: { k = 0x01f6; break; }
-        case 0x0199: { k = 0x0198; break; }
-        case 0x019a: { k = 0x023d; break; }
-        case 0x019e: { k = 0x0220; break; }
+        case 0x017f: return 0x0053;
+        case 0x0180: return 0x0243;
+        case 0x0183: return 0x0182;
+        case 0x0185: return 0x0184;
+        case 0x0188: return 0x0187;
+        case 0x018c: return 0x018b;
+        case 0x0192: return 0x0191;
+        case 0x0195: return 0x01f6;
+        case 0x0199: return 0x0198;
+        case 0x019a: return 0x023d;
+        case 0x019e: return 0x0220;
         case 0x01a1:
         case 0x01a3:
         case 0x01a5:
@@ -465,78 +459,75 @@ export function toUpper16(c: u32): u32 {
         case 0x01c8:
         case 0x01cb:
         case 0x01f2:
-        case 0x01f5: { k = c - 1; break; }
-        case 0x01bf: { k = 0x01f7; break; }
+        case 0x01f5: return c - 1;
+        case 0x01bf: return 0x01f7;
         case 0x01c6:
         case 0x01c9:
-        case 0x01cc: { k = c - 2; break; }
-        case 0x01dd: { k = 0x018e; break; }
-        case 0x01f3: { k = 0x01f1; break; }
-        case 0x023f: { k = 0x2c7e; break; }
-        case 0x0240: { k = 0x2c7f; break; }
-        case 0x0250: { k = 0x2c6f; break; }
-        case 0x0251: { k = 0x2c6d; break; }
-        case 0x0252: { k = 0x2c70; break; }
-        case 0x0253: { k = 0x0181; break; }
-        case 0x0254: { k = 0x0186; break; }
-        case 0x0256: { k = 0x0189; break; }
-        case 0x0257: { k = 0x018a; break; }
-        case 0x0259: { k = 0x018f; break; }
-        case 0x025b: { k = 0x0190; break; }
-        case 0x0260: { k = 0x0193; break; }
-        case 0x0263: { k = 0x0194; break; }
-        case 0x0268: { k = 0x0197; break; }
-        case 0x0269: { k = 0x0196; break; }
-        case 0x026b: { k = 0x2c62; break; }
-        case 0x026f: { k = 0x019c; break; }
-        case 0x0271: { k = 0x2c6e; break; }
-        case 0x0272: { k = 0x019d; break; }
-        case 0x0275: { k = 0x019f; break; }
-        case 0x027d: { k = 0x2c64; break; }
-        case 0x0280: { k = 0x01a6; break; }
-        case 0x0283: { k = 0x01a9; break; }
-        case 0x0288: { k = 0x01ae; break; }
-        case 0x0289: { k = 0x0244; break; }
-        case 0x028a: { k = 0x01b1; break; }
-        case 0x028b: { k = 0x01b2; break; }
-        case 0x028c: { k = 0x0245; break; }
-        case 0x0292: { k = 0x01b7; break; }
-        default: k = 0;
+        case 0x01cc: return c - 2;
+        case 0x01dd: return 0x018e;
+        case 0x01f3: return 0x01f1;
+        case 0x023f: return 0x2c7e;
+        case 0x0240: return 0x2c7f;
+        case 0x0250: return 0x2c6f;
+        case 0x0251: return 0x2c6d;
+        case 0x0252: return 0x2c70;
+        case 0x0253: return 0x0181;
+        case 0x0254: return 0x0186;
+        case 0x0256: return 0x0189;
+        case 0x0257: return 0x018a;
+        case 0x0259: return 0x018f;
+        case 0x025b: return 0x0190;
+        case 0x0260: return 0x0193;
+        case 0x0263: return 0x0194;
+        case 0x0268: return 0x0197;
+        case 0x0269: return 0x0196;
+        case 0x026b: return 0x2c62;
+        case 0x026f: return 0x019c;
+        case 0x0271: return 0x2c6e;
+        case 0x0272: return 0x019d;
+        case 0x0275: return 0x019f;
+        case 0x027d: return 0x2c64;
+        case 0x0280: return 0x01a6;
+        case 0x0283: return 0x01a9;
+        case 0x0288: return 0x01ae;
+        case 0x0289: return 0x0244;
+        case 0x028a: return 0x01b1;
+        case 0x028b: return 0x01b2;
+        case 0x028c: return 0x0245;
+        case 0x0292: return 0x01b7;
+        default: break;
       }
-      if (k != 0) return k;
     }
   } else if (c < 0x0400) {
-    let k: u32;
     if (c >= 0x03ad && c <= 0x03af) return c - 0x25;
     if (c >= 0x03b1 && c <= 0x03cb && c != 0x03c2) return c - 0x20;
     if (c >= 0x03d9 && c <= 0x03ef && <bool>(c & 1)) return c - 1;
     switch (c) {
-      case 0x0345: { k = 0x0399; break; }
+      case 0x0345: return 0x0399;
       case 0x0371:
       case 0x0373:
       case 0x0377:
       case 0x03f8:
-      case 0x03fb: { k = c - 1; break; }
+      case 0x03fb: return c - 1;
       case 0x037b:
       case 0x037c:
-      case 0x037d: { k = c + 0x82; break; }
-      case 0x03ac: { k = 0x0386; break; }
-      case 0x03c2: { k = 0x03a3; break; }
-      case 0x03cc: { k = 0x038c; break; }
+      case 0x037d: return c + 0x82;
+      case 0x03ac: return 0x0386;
+      case 0x03c2: return 0x03a3;
+      case 0x03cc: return 0x038c;
       case 0x03cd:
-      case 0x03ce: { k = c - 0x3f; break; }
-      case 0x03d0: { k = 0x0392; break; }
-      case 0x03d1: { k = 0x0398; break; }
-      case 0x03d5: { k = 0x03a6; break; }
-      case 0x03d6: { k = 0x03a0; break; }
-      case 0x03d7: { k = 0x03cf; break; }
-      case 0x03f0: { k = 0x039a; break; }
-      case 0x03f1: { k = 0x03a1; break; }
-      case 0x03f2: { k = 0x03f9; break; }
-      case 0x03f5: { k = 0x0395; break; }
-      default: k = 0;
+      case 0x03ce: return c - 0x3f;
+      case 0x03d0: return 0x0392;
+      case 0x03d1: return 0x0398;
+      case 0x03d5: return 0x03a6;
+      case 0x03d6: return 0x03a0;
+      case 0x03d7: return 0x03cf;
+      case 0x03f0: return 0x039a;
+      case 0x03f1: return 0x03a1;
+      case 0x03f2: return 0x03f9;
+      case 0x03f5: return 0x0395;
+      default: break;
     }
-    if (k != 0) return k;
   } else if (c < 0x500) {
     if (c >= 0x0430 && c <= 0x044f) return c - 0x20;
     if (c >= 0x0450 && c <= 0x045f) return c - 0x50;
@@ -567,36 +558,34 @@ export function toUpper16(c: u32): u32 {
         (c >= 0x1fa0 && c <= 0x1fa7) ||
         (c >= 0x1f51 && c <= 0x1f57 && <bool>(c & 1))) return c + 0x08;
     if (c >= 0x1f70 && c <= 0x1ff3) {
-      let k: u32;
       switch (c) {
-        case 0x1fb0: { k = 0x1fb8; break; }
-        case 0x1fb1: { k = 0x1fb9; break; }
-        case 0x1f70: { k = 0x1fba; break; }
-        case 0x1f71: { k = 0x1fbb; break; }
-        case 0x1fb3: { k = 0x1fbc; break; }
-        case 0x1fbe: { k = 0x0399; break; }
-        case 0x1f72: { k = 0x1fc8; break; }
-        case 0x1f73: { k = 0x1fc9; break; }
-        case 0x1f74: { k = 0x1fca; break; }
-        case 0x1f75: { k = 0x1fcb; break; }
-        case 0x1fc3: { k = 0x1fcc; break; }
-        case 0x1fd0: { k = 0x1fd8; break; }
-        case 0x1fd1: { k = 0x1fd9; break; }
-        case 0x1f76: { k = 0x1fda; break; }
-        case 0x1f77: { k = 0x1fdb; break; }
-        case 0x1fe0: { k = 0x1fe8; break; }
-        case 0x1fe1: { k = 0x1fe9; break; }
-        case 0x1f7a: { k = 0x1fea; break; }
-        case 0x1f7b: { k = 0x1feb; break; }
-        case 0x1fe5: { k = 0x1fec; break; }
-        case 0x1f78: { k = 0x1ff8; break; }
-        case 0x1f79: { k = 0x1ff9; break; }
-        case 0x1f7c: { k = 0x1ffa; break; }
-        case 0x1f7d: { k = 0x1ffb; break; }
-        case 0x1ff3: { k = 0x1ffc; break; }
-        default: k = 0;
+        case 0x1fb0: return 0x1fb8;
+        case 0x1fb1: return 0x1fb9;
+        case 0x1f70: return 0x1fba;
+        case 0x1f71: return 0x1fbb;
+        case 0x1fb3: return 0x1fbc;
+        case 0x1fbe: return 0x0399;
+        case 0x1f72: return 0x1fc8;
+        case 0x1f73: return 0x1fc9;
+        case 0x1f74: return 0x1fca;
+        case 0x1f75: return 0x1fcb;
+        case 0x1fc3: return 0x1fcc;
+        case 0x1fd0: return 0x1fd8;
+        case 0x1fd1: return 0x1fd9;
+        case 0x1f76: return 0x1fda;
+        case 0x1f77: return 0x1fdb;
+        case 0x1fe0: return 0x1fe8;
+        case 0x1fe1: return 0x1fe9;
+        case 0x1f7a: return 0x1fea;
+        case 0x1f7b: return 0x1feb;
+        case 0x1fe5: return 0x1fec;
+        case 0x1f78: return 0x1ff8;
+        case 0x1f79: return 0x1ff9;
+        case 0x1f7c: return 0x1ffa;
+        case 0x1f7d: return 0x1ffb;
+        case 0x1ff3: return 0x1ffc;
+        default: break;
       }
-      if (k != 0) return k;
     }
   } else if (c < 0x3000) {
     if (c == 0x214e) return 0x2132;
@@ -614,6 +603,7 @@ export function toUpper16(c: u32): u32 {
       case 0x2c61: return 0x2c60;
       case 0x2c65: return 0x023a;
       case 0x2c66: return 0x023e;
+      default: break;
     }
   } else if (c >= 0xa000 && c < 0xb000) {
     if (((c >= 0xa641 && c <= 0xa65f) ||

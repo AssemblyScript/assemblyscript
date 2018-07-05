@@ -15,7 +15,7 @@
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 2172))
+ (global $HEAP_BASE i32 (i32.const 2304))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g")
  (data (i32.const 44) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
@@ -73,9 +73,10 @@
  (data (i32.const 1652) "\17\00\00\00\91\03\a0\03\bf\1f \00\a4\03\ba\1f \00\9a\03\8c\03\9a\03\9a\03\91\03\9b\03\91\03 \00\92\03\93\03\91\03\9b\03\9c\03\88\03\9d\03\97\03")
  (data (i32.const 1704) "@\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00 \00/\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z")
  (data (i32.const 1836) "@\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00 \00/\000\001\002\003\004\005\006\007\008\009\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z")
- (data (i32.const 1968) "\01\00\00\00\df")
- (data (i32.const 1976) "\01\00\00\00\01\fb")
- (data (i32.const 1984) "\\\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
+ (data (i32.const 1968) "@\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00 \00/\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z")
+ (data (i32.const 2100) "\01\00\00\00\df")
+ (data (i32.const 2108) "\01\00\00\00\01\fb")
+ (data (i32.const 2116) "\\\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -3887,614 +3888,600 @@
          )
          (if
           (get_local $1)
-          (if
-           (tee_local $1
-            (block $break|0 (result i32)
-             (block $case61|0
-              (block $case60|0
-               (block $case59|0
-                (block $case58|0
-                 (block $case57|0
-                  (block $case56|0
-                   (block $case55|0
-                    (block $case54|0
-                     (block $case53|0
-                      (block $case52|0
-                       (block $case51|0
-                        (block $case50|0
-                         (block $case49|0
-                          (block $case48|0
-                           (block $case47|0
-                            (block $case46|0
-                             (block $case45|0
-                              (block $case44|0
-                               (block $case43|0
-                                (block $case42|0
-                                 (block $case41|0
-                                  (block $case40|0
-                                   (block $case39|0
-                                    (block $case38|0
-                                     (block $case37|0
-                                      (block $case36|0
-                                       (block $case35|0
-                                        (block $case34|0
-                                         (block $case33|0
-                                          (block $case32|0
-                                           (block $case31|0
-                                            (block $case30|0
-                                             (block $case29|0
-                                              (block $case26|0
-                                               (block $case25|0
-                                                (block $case10|0
-                                                 (block $case9|0
-                                                  (block $case8|0
-                                                   (block $case7|0
-                                                    (block $case6|0
-                                                     (block $case5|0
-                                                      (block $case4|0
-                                                       (block $case3|0
-                                                        (block $case2|0
-                                                         (block $case1|0
-                                                          (if
-                                                           (i32.ne
+          (block $break|0
+           (block $case61|0
+            (block $case60|0
+             (block $case59|0
+              (block $case58|0
+               (block $case57|0
+                (block $case56|0
+                 (block $case55|0
+                  (block $case54|0
+                   (block $case53|0
+                    (block $case52|0
+                     (block $case51|0
+                      (block $case50|0
+                       (block $case49|0
+                        (block $case48|0
+                         (block $case47|0
+                          (block $case46|0
+                           (block $case45|0
+                            (block $case44|0
+                             (block $case43|0
+                              (block $case42|0
+                               (block $case41|0
+                                (block $case40|0
+                                 (block $case39|0
+                                  (block $case38|0
+                                   (block $case37|0
+                                    (block $case36|0
+                                     (block $case35|0
+                                      (block $case34|0
+                                       (block $case33|0
+                                        (block $case32|0
+                                         (block $case31|0
+                                          (block $case30|0
+                                           (block $case29|0
+                                            (block $case26|0
+                                             (block $case25|0
+                                              (block $case10|0
+                                               (block $case9|0
+                                                (block $case8|0
+                                                 (block $case7|0
+                                                  (block $case6|0
+                                                   (block $case5|0
+                                                    (block $case4|0
+                                                     (block $case3|0
+                                                      (block $case2|0
+                                                       (block $case1|0
+                                                        (if
+                                                         (i32.ne
+                                                          (get_local $0)
+                                                          (i32.const 383)
+                                                         )
+                                                         (block
+                                                          (br_if $case1|0
+                                                           (i32.eq
                                                             (get_local $0)
-                                                            (i32.const 383)
-                                                           )
-                                                           (block
-                                                            (br_if $case1|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 384)
-                                                             )
-                                                            )
-                                                            (br_if $case2|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 387)
-                                                             )
-                                                            )
-                                                            (br_if $case3|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 389)
-                                                             )
-                                                            )
-                                                            (br_if $case4|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 392)
-                                                             )
-                                                            )
-                                                            (br_if $case5|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 396)
-                                                             )
-                                                            )
-                                                            (br_if $case6|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 402)
-                                                             )
-                                                            )
-                                                            (br_if $case7|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 405)
-                                                             )
-                                                            )
-                                                            (br_if $case8|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 409)
-                                                             )
-                                                            )
-                                                            (br_if $case9|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 410)
-                                                             )
-                                                            )
-                                                            (br_if $case10|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 414)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 417)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 419)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 421)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 424)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 429)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 432)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 436)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 438)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 441)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 445)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 453)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 456)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 459)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 498)
-                                                             )
-                                                            )
-                                                            (br_if $case25|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 501)
-                                                             )
-                                                            )
-                                                            (br_if $case26|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 447)
-                                                             )
-                                                            )
-                                                            (br_if $case29|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 454)
-                                                             )
-                                                            )
-                                                            (br_if $case29|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 457)
-                                                             )
-                                                            )
-                                                            (br_if $case29|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 460)
-                                                             )
-                                                            )
-                                                            (br_if $case30|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 477)
-                                                             )
-                                                            )
-                                                            (br_if $case31|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 499)
-                                                             )
-                                                            )
-                                                            (br_if $case32|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 575)
-                                                             )
-                                                            )
-                                                            (br_if $case33|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 576)
-                                                             )
-                                                            )
-                                                            (br_if $case34|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 592)
-                                                             )
-                                                            )
-                                                            (br_if $case35|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 593)
-                                                             )
-                                                            )
-                                                            (br_if $case36|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 594)
-                                                             )
-                                                            )
-                                                            (br_if $case37|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 595)
-                                                             )
-                                                            )
-                                                            (br_if $case38|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 596)
-                                                             )
-                                                            )
-                                                            (br_if $case39|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 598)
-                                                             )
-                                                            )
-                                                            (br_if $case40|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 599)
-                                                             )
-                                                            )
-                                                            (br_if $case41|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 601)
-                                                             )
-                                                            )
-                                                            (br_if $case42|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 603)
-                                                             )
-                                                            )
-                                                            (br_if $case43|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 608)
-                                                             )
-                                                            )
-                                                            (br_if $case44|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 611)
-                                                             )
-                                                            )
-                                                            (br_if $case45|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 616)
-                                                             )
-                                                            )
-                                                            (br_if $case46|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 617)
-                                                             )
-                                                            )
-                                                            (br_if $case47|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 619)
-                                                             )
-                                                            )
-                                                            (br_if $case48|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 623)
-                                                             )
-                                                            )
-                                                            (br_if $case49|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 625)
-                                                             )
-                                                            )
-                                                            (br_if $case50|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 626)
-                                                             )
-                                                            )
-                                                            (br_if $case51|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 629)
-                                                             )
-                                                            )
-                                                            (br_if $case52|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 637)
-                                                             )
-                                                            )
-                                                            (br_if $case53|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 640)
-                                                             )
-                                                            )
-                                                            (br_if $case54|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 643)
-                                                             )
-                                                            )
-                                                            (br_if $case55|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 648)
-                                                             )
-                                                            )
-                                                            (br_if $case56|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 649)
-                                                             )
-                                                            )
-                                                            (br_if $case57|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 650)
-                                                             )
-                                                            )
-                                                            (br_if $case58|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 651)
-                                                             )
-                                                            )
-                                                            (br_if $case59|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 652)
-                                                             )
-                                                            )
-                                                            (br_if $case60|0
-                                                             (i32.eq
-                                                              (get_local $0)
-                                                              (i32.const 658)
-                                                             )
-                                                            )
-                                                            (br $case61|0)
+                                                            (i32.const 384)
                                                            )
                                                           )
-                                                          (br $break|0
-                                                           (i32.const 83)
+                                                          (br_if $case2|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 387)
+                                                           )
                                                           )
-                                                         )
-                                                         (br $break|0
-                                                          (i32.const 579)
+                                                          (br_if $case3|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 389)
+                                                           )
+                                                          )
+                                                          (br_if $case4|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 392)
+                                                           )
+                                                          )
+                                                          (br_if $case5|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 396)
+                                                           )
+                                                          )
+                                                          (br_if $case6|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 402)
+                                                           )
+                                                          )
+                                                          (br_if $case7|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 405)
+                                                           )
+                                                          )
+                                                          (br_if $case8|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 409)
+                                                           )
+                                                          )
+                                                          (br_if $case9|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 410)
+                                                           )
+                                                          )
+                                                          (br_if $case10|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 414)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 417)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 419)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 421)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 424)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 429)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 432)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 436)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 438)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 441)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 445)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 453)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 456)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 459)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 498)
+                                                           )
+                                                          )
+                                                          (br_if $folding-inner1
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 501)
+                                                           )
+                                                          )
+                                                          (br_if $case26|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 447)
+                                                           )
+                                                          )
+                                                          (br_if $case29|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 454)
+                                                           )
+                                                          )
+                                                          (br_if $case29|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 457)
+                                                           )
+                                                          )
+                                                          (br_if $case29|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 460)
+                                                           )
+                                                          )
+                                                          (br_if $case30|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 477)
+                                                           )
+                                                          )
+                                                          (br_if $case31|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 499)
+                                                           )
+                                                          )
+                                                          (br_if $case32|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 575)
+                                                           )
+                                                          )
+                                                          (br_if $case33|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 576)
+                                                           )
+                                                          )
+                                                          (br_if $case34|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 592)
+                                                           )
+                                                          )
+                                                          (br_if $case35|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 593)
+                                                           )
+                                                          )
+                                                          (br_if $case36|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 594)
+                                                           )
+                                                          )
+                                                          (br_if $case37|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 595)
+                                                           )
+                                                          )
+                                                          (br_if $case38|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 596)
+                                                           )
+                                                          )
+                                                          (br_if $case39|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 598)
+                                                           )
+                                                          )
+                                                          (br_if $case40|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 599)
+                                                           )
+                                                          )
+                                                          (br_if $case41|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 601)
+                                                           )
+                                                          )
+                                                          (br_if $case42|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 603)
+                                                           )
+                                                          )
+                                                          (br_if $case43|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 608)
+                                                           )
+                                                          )
+                                                          (br_if $case44|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 611)
+                                                           )
+                                                          )
+                                                          (br_if $case45|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 616)
+                                                           )
+                                                          )
+                                                          (br_if $case46|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 617)
+                                                           )
+                                                          )
+                                                          (br_if $case47|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 619)
+                                                           )
+                                                          )
+                                                          (br_if $case48|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 623)
+                                                           )
+                                                          )
+                                                          (br_if $case49|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 625)
+                                                           )
+                                                          )
+                                                          (br_if $case50|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 626)
+                                                           )
+                                                          )
+                                                          (br_if $case51|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 629)
+                                                           )
+                                                          )
+                                                          (br_if $case52|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 637)
+                                                           )
+                                                          )
+                                                          (br_if $case53|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 640)
+                                                           )
+                                                          )
+                                                          (br_if $case54|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 643)
+                                                           )
+                                                          )
+                                                          (br_if $case55|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 648)
+                                                           )
+                                                          )
+                                                          (br_if $case56|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 649)
+                                                           )
+                                                          )
+                                                          (br_if $case57|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 650)
+                                                           )
+                                                          )
+                                                          (br_if $case58|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 651)
+                                                           )
+                                                          )
+                                                          (br_if $case59|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 652)
+                                                           )
+                                                          )
+                                                          (br_if $case60|0
+                                                           (i32.eq
+                                                            (get_local $0)
+                                                            (i32.const 658)
+                                                           )
+                                                          )
+                                                          (br $break|0)
                                                          )
                                                         )
-                                                        (br $break|0
-                                                         (i32.const 386)
+                                                        (return
+                                                         (i32.const 83)
                                                         )
                                                        )
-                                                       (br $break|0
-                                                        (i32.const 388)
+                                                       (return
+                                                        (i32.const 579)
                                                        )
                                                       )
-                                                      (br $break|0
-                                                       (i32.const 391)
+                                                      (return
+                                                       (i32.const 386)
                                                       )
                                                      )
-                                                     (br $break|0
-                                                      (i32.const 395)
+                                                     (return
+                                                      (i32.const 388)
                                                      )
                                                     )
-                                                    (br $break|0
-                                                     (i32.const 401)
+                                                    (return
+                                                     (i32.const 391)
                                                     )
                                                    )
-                                                   (br $break|0
-                                                    (i32.const 502)
+                                                   (return
+                                                    (i32.const 395)
                                                    )
                                                   )
-                                                  (br $break|0
-                                                   (i32.const 408)
+                                                  (return
+                                                   (i32.const 401)
                                                   )
                                                  )
-                                                 (br $break|0
-                                                  (i32.const 573)
+                                                 (return
+                                                  (i32.const 502)
                                                  )
                                                 )
-                                                (br $break|0
-                                                 (i32.const 544)
+                                                (return
+                                                 (i32.const 408)
                                                 )
                                                )
-                                               (br $break|0
-                                                (i32.sub
-                                                 (get_local $0)
-                                                 (i32.const 1)
-                                                )
+                                               (return
+                                                (i32.const 573)
                                                )
                                               )
-                                              (br $break|0
-                                               (i32.const 503)
-                                              )
-                                             )
-                                             (br $break|0
-                                              (i32.sub
-                                               (get_local $0)
-                                               (i32.const 2)
+                                              (return
+                                               (i32.const 544)
                                               )
                                              )
                                             )
-                                            (br $break|0
-                                             (i32.const 398)
+                                            (return
+                                             (i32.const 503)
                                             )
                                            )
-                                           (br $break|0
-                                            (i32.const 497)
+                                           (return
+                                            (i32.sub
+                                             (get_local $0)
+                                             (i32.const 2)
+                                            )
                                            )
                                           )
-                                          (br $break|0
-                                           (i32.const 11390)
+                                          (return
+                                           (i32.const 398)
                                           )
                                          )
-                                         (br $break|0
-                                          (i32.const 11391)
+                                         (return
+                                          (i32.const 497)
                                          )
                                         )
-                                        (br $break|0
-                                         (i32.const 11375)
+                                        (return
+                                         (i32.const 11390)
                                         )
                                        )
-                                       (br $break|0
-                                        (i32.const 11373)
+                                       (return
+                                        (i32.const 11391)
                                        )
                                       )
-                                      (br $break|0
-                                       (i32.const 11376)
+                                      (return
+                                       (i32.const 11375)
                                       )
                                      )
-                                     (br $break|0
-                                      (i32.const 385)
+                                     (return
+                                      (i32.const 11373)
                                      )
                                     )
-                                    (br $break|0
-                                     (i32.const 390)
+                                    (return
+                                     (i32.const 11376)
                                     )
                                    )
-                                   (br $break|0
-                                    (i32.const 393)
+                                   (return
+                                    (i32.const 385)
                                    )
                                   )
-                                  (br $break|0
-                                   (i32.const 394)
+                                  (return
+                                   (i32.const 390)
                                   )
                                  )
-                                 (br $break|0
-                                  (i32.const 399)
+                                 (return
+                                  (i32.const 393)
                                  )
                                 )
-                                (br $break|0
-                                 (i32.const 400)
+                                (return
+                                 (i32.const 394)
                                 )
                                )
-                               (br $break|0
-                                (i32.const 403)
+                               (return
+                                (i32.const 399)
                                )
                               )
-                              (br $break|0
-                               (i32.const 404)
+                              (return
+                               (i32.const 400)
                               )
                              )
-                             (br $break|0
-                              (i32.const 407)
+                             (return
+                              (i32.const 403)
                              )
                             )
-                            (br $break|0
-                             (i32.const 406)
+                            (return
+                             (i32.const 404)
                             )
                            )
-                           (br $break|0
-                            (i32.const 11362)
+                           (return
+                            (i32.const 407)
                            )
                           )
-                          (br $break|0
-                           (i32.const 412)
+                          (return
+                           (i32.const 406)
                           )
                          )
-                         (br $break|0
-                          (i32.const 11374)
+                         (return
+                          (i32.const 11362)
                          )
                         )
-                        (br $break|0
-                         (i32.const 413)
+                        (return
+                         (i32.const 412)
                         )
                        )
-                       (br $break|0
-                        (i32.const 415)
+                       (return
+                        (i32.const 11374)
                        )
                       )
-                      (br $break|0
-                       (i32.const 11364)
+                      (return
+                       (i32.const 413)
                       )
                      )
-                     (br $break|0
-                      (i32.const 422)
+                     (return
+                      (i32.const 415)
                      )
                     )
-                    (br $break|0
-                     (i32.const 425)
+                    (return
+                     (i32.const 11364)
                     )
                    )
-                   (br $break|0
-                    (i32.const 430)
+                   (return
+                    (i32.const 422)
                    )
                   )
-                  (br $break|0
-                   (i32.const 580)
+                  (return
+                   (i32.const 425)
                   )
                  )
-                 (br $break|0
-                  (i32.const 433)
+                 (return
+                  (i32.const 430)
                  )
                 )
-                (br $break|0
-                 (i32.const 434)
+                (return
+                 (i32.const 580)
                 )
                )
-               (br $break|0
-                (i32.const 581)
+               (return
+                (i32.const 433)
                )
               )
-              (br $break|0
-               (i32.const 439)
+              (return
+               (i32.const 434)
               )
              )
-             (i32.const 0)
+             (return
+              (i32.const 581)
+             )
             )
-           )
-           (return
-            (get_local $1)
+            (return
+             (i32.const 439)
+            )
            )
           )
          )
@@ -4580,244 +4567,230 @@
           (br_if $folding-inner1
            (get_local $1)
           )
-          (if
-           (tee_local $1
-            (block $break|1 (result i32)
-             (block $case23|1
-              (block $case22|1
-               (block $case21|1
-                (block $case20|1
-                 (block $case19|1
-                  (block $case18|1
-                   (block $case17|1
-                    (block $case16|1
-                     (block $case15|1
-                      (block $case14|1
-                       (block $case13|1
-                        (block $case11|1
-                         (block $case10|1
-                          (block $case9|1
-                           (block $case8|1
-                            (block $case5|1
-                             (if
-                              (i32.ne
-                               (get_local $0)
-                               (i32.const 837)
-                              )
-                              (block
-                               (br_if $case5|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 881)
-                                )
-                               )
-                               (br_if $case5|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 883)
-                                )
-                               )
-                               (br_if $case5|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 887)
-                                )
-                               )
-                               (br_if $case5|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1016)
-                                )
-                               )
-                               (br_if $case5|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1019)
-                                )
-                               )
-                               (br_if $case8|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 891)
-                                )
-                               )
-                               (br_if $case8|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 892)
-                                )
-                               )
-                               (br_if $case8|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 893)
-                                )
-                               )
-                               (br_if $case9|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 940)
-                                )
-                               )
-                               (br_if $case10|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 962)
-                                )
-                               )
-                               (br_if $case11|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 972)
-                                )
-                               )
-                               (br_if $case13|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 973)
-                                )
-                               )
-                               (br_if $case13|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 974)
-                                )
-                               )
-                               (br_if $case14|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 976)
-                                )
-                               )
-                               (br_if $case15|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 977)
-                                )
-                               )
-                               (br_if $case16|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 981)
-                                )
-                               )
-                               (br_if $case17|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 982)
-                                )
-                               )
-                               (br_if $case18|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 983)
-                                )
-                               )
-                               (br_if $case19|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1008)
-                                )
-                               )
-                               (br_if $case20|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1009)
-                                )
-                               )
-                               (br_if $case21|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1010)
-                                )
-                               )
-                               (br_if $case22|1
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1013)
-                                )
-                               )
-                               (br $case23|1)
-                              )
-                             )
-                             (br $break|1
-                              (i32.const 921)
-                             )
-                            )
-                            (br $break|1
-                             (i32.sub
-                              (get_local $0)
-                              (i32.const 1)
-                             )
-                            )
-                           )
-                           (br $break|1
-                            (i32.add
+          (block $break|1
+           (block $case23|1
+            (block $case22|1
+             (block $case21|1
+              (block $case20|1
+               (block $case19|1
+                (block $case18|1
+                 (block $case17|1
+                  (block $case16|1
+                   (block $case15|1
+                    (block $case14|1
+                     (block $case13|1
+                      (block $case11|1
+                       (block $case10|1
+                        (block $case9|1
+                         (block $case8|1
+                          (block $case5|1
+                           (if
+                            (i32.ne
                              (get_local $0)
-                             (i32.const 130)
+                             (i32.const 837)
+                            )
+                            (block
+                             (br_if $folding-inner1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 881)
+                              )
+                             )
+                             (br_if $folding-inner1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 883)
+                              )
+                             )
+                             (br_if $folding-inner1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 887)
+                              )
+                             )
+                             (br_if $folding-inner1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1016)
+                              )
+                             )
+                             (br_if $folding-inner1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1019)
+                              )
+                             )
+                             (br_if $case8|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 891)
+                              )
+                             )
+                             (br_if $case8|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 892)
+                              )
+                             )
+                             (br_if $case8|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 893)
+                              )
+                             )
+                             (br_if $case9|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 940)
+                              )
+                             )
+                             (br_if $case10|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 962)
+                              )
+                             )
+                             (br_if $case11|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 972)
+                              )
+                             )
+                             (br_if $case13|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 973)
+                              )
+                             )
+                             (br_if $case13|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 974)
+                              )
+                             )
+                             (br_if $case14|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 976)
+                              )
+                             )
+                             (br_if $case15|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 977)
+                              )
+                             )
+                             (br_if $case16|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 981)
+                              )
+                             )
+                             (br_if $case17|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 982)
+                              )
+                             )
+                             (br_if $case18|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 983)
+                              )
+                             )
+                             (br_if $case19|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1008)
+                              )
+                             )
+                             (br_if $case20|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1009)
+                              )
+                             )
+                             (br_if $case21|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1010)
+                              )
+                             )
+                             (br_if $case22|1
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1013)
+                              )
+                             )
+                             (br $break|1)
                             )
                            )
-                          )
-                          (br $break|1
-                           (i32.const 902)
+                           (return
+                            (i32.const 921)
+                           )
                           )
                          )
-                         (br $break|1
-                          (i32.const 931)
+                         (return
+                          (i32.add
+                           (get_local $0)
+                           (i32.const 130)
+                          )
                          )
                         )
-                        (br $break|1
-                         (i32.const 908)
+                        (return
+                         (i32.const 902)
                         )
                        )
-                       (br $break|1
-                        (i32.sub
-                         (get_local $0)
-                         (i32.const 63)
-                        )
+                       (return
+                        (i32.const 931)
                        )
                       )
-                      (br $break|1
-                       (i32.const 914)
+                      (return
+                       (i32.const 908)
                       )
                      )
-                     (br $break|1
-                      (i32.const 920)
+                     (return
+                      (i32.sub
+                       (get_local $0)
+                       (i32.const 63)
+                      )
                      )
                     )
-                    (br $break|1
-                     (i32.const 934)
+                    (return
+                     (i32.const 914)
                     )
                    )
-                   (br $break|1
-                    (i32.const 928)
+                   (return
+                    (i32.const 920)
                    )
                   )
-                  (br $break|1
-                   (i32.const 975)
+                  (return
+                   (i32.const 934)
                   )
                  )
-                 (br $break|1
-                  (i32.const 922)
+                 (return
+                  (i32.const 928)
                  )
                 )
-                (br $break|1
-                 (i32.const 929)
+                (return
+                 (i32.const 975)
                 )
                )
-               (br $break|1
-                (i32.const 1017)
+               (return
+                (i32.const 922)
                )
               )
-              (br $break|1
-               (i32.const 917)
+              (return
+               (i32.const 929)
               )
              )
-             (i32.const 0)
+             (return
+              (i32.const 1017)
+             )
             )
-           )
-           (return
-            (get_local $1)
+            (return
+             (i32.const 917)
+            )
            )
           )
          )
@@ -5319,292 +5292,284 @@
               )
               (if
                (get_local $1)
-               (if
-                (tee_local $1
-                 (block $break|2 (result i32)
-                  (block $case25|2
-                   (block $case24|2
-                    (block $case23|2
-                     (block $case22|2
-                      (block $case21|2
-                       (block $case20|2
-                        (block $case19|2
-                         (block $case18|2
-                          (block $case17|2
-                           (block $case16|2
-                            (block $case15|2
-                             (block $case14|2
-                              (block $case13|2
-                               (block $case12|2
-                                (block $case11|2
-                                 (block $case10|2
-                                  (block $case9|2
-                                   (block $case8|2
-                                    (block $case7|2
-                                     (block $case6|2
-                                      (block $case5|2
-                                       (block $case4|2
-                                        (block $case3|2
-                                         (block $case2|2
-                                          (block $case1|2
-                                           (if
-                                            (i32.ne
-                                             (get_local $0)
-                                             (i32.const 8112)
-                                            )
-                                            (block
-                                             (br_if $case1|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8113)
-                                              )
-                                             )
-                                             (br_if $case2|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8048)
-                                              )
-                                             )
-                                             (br_if $case3|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8049)
-                                              )
-                                             )
-                                             (br_if $case4|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8115)
-                                              )
-                                             )
-                                             (br_if $case5|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8126)
-                                              )
-                                             )
-                                             (br_if $case6|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8050)
-                                              )
-                                             )
-                                             (br_if $case7|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8051)
-                                              )
-                                             )
-                                             (br_if $case8|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8052)
-                                              )
-                                             )
-                                             (br_if $case9|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8053)
-                                              )
-                                             )
-                                             (br_if $case10|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8131)
-                                              )
-                                             )
-                                             (br_if $case11|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8144)
-                                              )
-                                             )
-                                             (br_if $case12|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8145)
-                                              )
-                                             )
-                                             (br_if $case13|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8054)
-                                              )
-                                             )
-                                             (br_if $case14|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8055)
-                                              )
-                                             )
-                                             (br_if $case15|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8160)
-                                              )
-                                             )
-                                             (br_if $case16|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8161)
-                                              )
-                                             )
-                                             (br_if $case17|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8058)
-                                              )
-                                             )
-                                             (br_if $case18|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8059)
-                                              )
-                                             )
-                                             (br_if $case19|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8165)
-                                              )
-                                             )
-                                             (br_if $case20|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8056)
-                                              )
-                                             )
-                                             (br_if $case21|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8057)
-                                              )
-                                             )
-                                             (br_if $case22|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8060)
-                                              )
-                                             )
-                                             (br_if $case23|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8061)
-                                              )
-                                             )
-                                             (br_if $case24|2
-                                              (i32.eq
-                                               (get_local $0)
-                                               (i32.const 8179)
-                                              )
-                                             )
-                                             (br $case25|2)
-                                            )
-                                           )
-                                           (br $break|2
-                                            (i32.const 8120)
-                                           )
+               (block $break|2
+                (block $case25|2
+                 (block $case24|2
+                  (block $case23|2
+                   (block $case22|2
+                    (block $case21|2
+                     (block $case20|2
+                      (block $case19|2
+                       (block $case18|2
+                        (block $case17|2
+                         (block $case16|2
+                          (block $case15|2
+                           (block $case14|2
+                            (block $case13|2
+                             (block $case12|2
+                              (block $case11|2
+                               (block $case10|2
+                                (block $case9|2
+                                 (block $case8|2
+                                  (block $case7|2
+                                   (block $case6|2
+                                    (block $case5|2
+                                     (block $case4|2
+                                      (block $case3|2
+                                       (block $case2|2
+                                        (block $case1|2
+                                         (if
+                                          (i32.ne
+                                           (get_local $0)
+                                           (i32.const 8112)
                                           )
-                                          (br $break|2
-                                           (i32.const 8121)
+                                          (block
+                                           (br_if $case1|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8113)
+                                            )
+                                           )
+                                           (br_if $case2|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8048)
+                                            )
+                                           )
+                                           (br_if $case3|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8049)
+                                            )
+                                           )
+                                           (br_if $case4|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8115)
+                                            )
+                                           )
+                                           (br_if $case5|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8126)
+                                            )
+                                           )
+                                           (br_if $case6|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8050)
+                                            )
+                                           )
+                                           (br_if $case7|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8051)
+                                            )
+                                           )
+                                           (br_if $case8|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8052)
+                                            )
+                                           )
+                                           (br_if $case9|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8053)
+                                            )
+                                           )
+                                           (br_if $case10|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8131)
+                                            )
+                                           )
+                                           (br_if $case11|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8144)
+                                            )
+                                           )
+                                           (br_if $case12|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8145)
+                                            )
+                                           )
+                                           (br_if $case13|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8054)
+                                            )
+                                           )
+                                           (br_if $case14|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8055)
+                                            )
+                                           )
+                                           (br_if $case15|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8160)
+                                            )
+                                           )
+                                           (br_if $case16|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8161)
+                                            )
+                                           )
+                                           (br_if $case17|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8058)
+                                            )
+                                           )
+                                           (br_if $case18|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8059)
+                                            )
+                                           )
+                                           (br_if $case19|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8165)
+                                            )
+                                           )
+                                           (br_if $case20|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8056)
+                                            )
+                                           )
+                                           (br_if $case21|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8057)
+                                            )
+                                           )
+                                           (br_if $case22|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8060)
+                                            )
+                                           )
+                                           (br_if $case23|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8061)
+                                            )
+                                           )
+                                           (br_if $case24|2
+                                            (i32.eq
+                                             (get_local $0)
+                                             (i32.const 8179)
+                                            )
+                                           )
+                                           (br $break|2)
                                           )
                                          )
-                                         (br $break|2
-                                          (i32.const 8122)
+                                         (return
+                                          (i32.const 8120)
                                          )
                                         )
-                                        (br $break|2
-                                         (i32.const 8123)
+                                        (return
+                                         (i32.const 8121)
                                         )
                                        )
-                                       (br $break|2
-                                        (i32.const 8124)
+                                       (return
+                                        (i32.const 8122)
                                        )
                                       )
-                                      (br $break|2
-                                       (i32.const 921)
+                                      (return
+                                       (i32.const 8123)
                                       )
                                      )
-                                     (br $break|2
-                                      (i32.const 8136)
+                                     (return
+                                      (i32.const 8124)
                                      )
                                     )
-                                    (br $break|2
-                                     (i32.const 8137)
+                                    (return
+                                     (i32.const 921)
                                     )
                                    )
-                                   (br $break|2
-                                    (i32.const 8138)
+                                   (return
+                                    (i32.const 8136)
                                    )
                                   )
-                                  (br $break|2
-                                   (i32.const 8139)
+                                  (return
+                                   (i32.const 8137)
                                   )
                                  )
-                                 (br $break|2
-                                  (i32.const 8140)
+                                 (return
+                                  (i32.const 8138)
                                  )
                                 )
-                                (br $break|2
-                                 (i32.const 8152)
+                                (return
+                                 (i32.const 8139)
                                 )
                                )
-                               (br $break|2
-                                (i32.const 8153)
+                               (return
+                                (i32.const 8140)
                                )
                               )
-                              (br $break|2
-                               (i32.const 8154)
+                              (return
+                               (i32.const 8152)
                               )
                              )
-                             (br $break|2
-                              (i32.const 8155)
+                             (return
+                              (i32.const 8153)
                              )
                             )
-                            (br $break|2
-                             (i32.const 8168)
+                            (return
+                             (i32.const 8154)
                             )
                            )
-                           (br $break|2
-                            (i32.const 8169)
+                           (return
+                            (i32.const 8155)
                            )
                           )
-                          (br $break|2
-                           (i32.const 8170)
+                          (return
+                           (i32.const 8168)
                           )
                          )
-                         (br $break|2
-                          (i32.const 8171)
+                         (return
+                          (i32.const 8169)
                          )
                         )
-                        (br $break|2
-                         (i32.const 8172)
+                        (return
+                         (i32.const 8170)
                         )
                        )
-                       (br $break|2
-                        (i32.const 8184)
+                       (return
+                        (i32.const 8171)
                        )
                       )
-                      (br $break|2
-                       (i32.const 8185)
+                      (return
+                       (i32.const 8172)
                       )
                      )
-                     (br $break|2
-                      (i32.const 8186)
+                     (return
+                      (i32.const 8184)
                      )
                     )
-                    (br $break|2
-                     (i32.const 8187)
+                    (return
+                     (i32.const 8185)
                     )
                    )
-                   (br $break|2
-                    (i32.const 8188)
+                   (return
+                    (i32.const 8186)
                    )
                   )
-                  (i32.const 0)
+                  (return
+                   (i32.const 8187)
+                  )
                  )
-                )
-                (return
-                 (get_local $1)
+                 (return
+                  (i32.const 8188)
+                 )
                 )
                )
               )
@@ -5854,29 +5819,41 @@
                 )
                )
                (block $break|3
-                (block $case2|3
-                 (block $case1|3
-                  (block $case0|3
-                   (block $tablify|0
-                    (br_table $case0|3 $tablify|0 $tablify|0 $tablify|0 $case1|3 $case2|3 $tablify|0
-                     (i32.sub
-                      (get_local $0)
-                      (i32.const 11361)
+                (block $case3|3
+                 (block $case2|3
+                  (block $case1|3
+                   (if
+                    (i32.ne
+                     (get_local $0)
+                     (i32.const 11361)
+                    )
+                    (block
+                     (br_if $case1|3
+                      (i32.eq
+                       (get_local $0)
+                       (i32.const 11365)
+                      )
                      )
+                     (br_if $case2|3
+                      (i32.eq
+                       (get_local $0)
+                       (i32.const 11366)
+                      )
+                     )
+                     (br $break|3)
                     )
                    )
-                   (br $break|3)
+                   (return
+                    (i32.const 11360)
+                   )
                   )
                   (return
-                   (i32.const 11360)
+                   (i32.const 570)
                   )
                  )
                  (return
-                  (i32.const 570)
+                  (i32.const 574)
                  )
-                )
-                (return
-                 (i32.const 574)
                 )
                )
               )
@@ -6490,162 +6467,149 @@
          )
          (if
           (get_local $1)
-          (if
-           (tee_local $1
-            (block $break|0 (result i32)
-             (block $case59|0
-              (block $case58|0
-               (block $case57|0
-                (block $case56|0
-                 (block $case52|0
-                  (block $case51|0
-                   (block $case50|0
-                    (block $case49|0
-                     (block $case48|0
-                      (block $case47|0
-                       (block $case46|0
-                        (block $case45|0
-                         (block $case44|0
-                          (block $case43|0
-                           (block $case42|0
-                            (block $case41|0
-                             (block $case40|0
-                              (block $case39|0
-                               (block $case38|0
-                                (block $case37|0
-                                 (block $case36|0
-                                  (block $case35|0
-                                   (block $case34|0
-                                    (block $case33|0
-                                     (block $case32|0
-                                      (if
-                                       (i32.ne
-                                        (get_local $0)
-                                        (i32.const 376)
-                                       )
-                                       (block
-                                        (block $tablify|0
-                                         (br_table $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $case33|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case34|0 $case32|0 $tablify|0 $case35|0 $case36|0 $case32|0 $tablify|0 $tablify|0 $case37|0 $case38|0 $case39|0 $case32|0 $tablify|0 $case40|0 $case41|0 $tablify|0 $case42|0 $case43|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $case44|0 $case45|0 $tablify|0 $case46|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case47|0 $case32|0 $tablify|0 $case48|0 $tablify|0 $tablify|0 $case32|0 $tablify|0 $case49|0 $case32|0 $tablify|0 $case50|0 $case51|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case52|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $case56|0 $case32|0 $tablify|0 $case56|0 $case32|0 $tablify|0 $case56|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $case56|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case57|0 $case58|0 $tablify|0
-                                          (i32.sub
-                                           (get_local $0)
-                                           (i32.const 377)
-                                          )
-                                         )
+          (block $break|0
+           (block $case59|0
+            (block $case58|0
+             (block $case57|0
+              (block $case56|0
+               (block $case52|0
+                (block $case51|0
+                 (block $case50|0
+                  (block $case49|0
+                   (block $case48|0
+                    (block $case47|0
+                     (block $case46|0
+                      (block $case45|0
+                       (block $case44|0
+                        (block $case43|0
+                         (block $case42|0
+                          (block $case41|0
+                           (block $case40|0
+                            (block $case39|0
+                             (block $case38|0
+                              (block $case37|0
+                               (block $case36|0
+                                (block $case35|0
+                                 (block $case34|0
+                                  (block $case33|0
+                                   (block $case32|0
+                                    (if
+                                     (i32.ne
+                                      (get_local $0)
+                                      (i32.const 376)
+                                     )
+                                     (block
+                                      (block $tablify|0
+                                       (br_table $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $case33|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case34|0 $case32|0 $tablify|0 $case35|0 $case36|0 $case32|0 $tablify|0 $tablify|0 $case37|0 $case38|0 $case39|0 $case32|0 $tablify|0 $case40|0 $case41|0 $tablify|0 $case42|0 $case43|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $case44|0 $case45|0 $tablify|0 $case46|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case47|0 $case32|0 $tablify|0 $case48|0 $tablify|0 $tablify|0 $case32|0 $tablify|0 $case49|0 $case32|0 $tablify|0 $case50|0 $case51|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case52|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $case56|0 $case32|0 $tablify|0 $case56|0 $case32|0 $tablify|0 $case56|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $tablify|0 $case56|0 $case32|0 $tablify|0 $case32|0 $tablify|0 $case57|0 $case58|0 $tablify|0
+                                        (i32.sub
+                                         (get_local $0)
+                                         (i32.const 377)
                                         )
-                                        (br $case59|0)
                                        )
                                       )
-                                      (br $break|0
-                                       (i32.const 255)
-                                      )
-                                     )
-                                     (br $break|0
-                                      (i32.add
-                                       (get_local $0)
-                                       (i32.const 1)
-                                      )
+                                      (br $break|0)
                                      )
                                     )
-                                    (br $break|0
-                                     (i32.const 595)
+                                    (return
+                                     (i32.const 255)
                                     )
                                    )
-                                   (br $break|0
-                                    (i32.const 596)
-                                   )
+                                   (br $folding-inner0)
                                   )
-                                  (br $break|0
-                                   (i32.const 598)
+                                  (return
+                                   (i32.const 595)
                                   )
                                  )
-                                 (br $break|0
-                                  (i32.const 599)
+                                 (return
+                                  (i32.const 596)
                                  )
                                 )
-                                (br $break|0
-                                 (i32.const 477)
+                                (return
+                                 (i32.const 598)
                                 )
                                )
-                               (br $break|0
-                                (i32.const 601)
+                               (return
+                                (i32.const 599)
                                )
                               )
-                              (br $break|0
-                               (i32.const 603)
+                              (return
+                               (i32.const 477)
                               )
                              )
-                             (br $break|0
-                              (i32.const 608)
+                             (return
+                              (i32.const 601)
                              )
                             )
-                            (br $break|0
-                             (i32.const 611)
+                            (return
+                             (i32.const 603)
                             )
                            )
-                           (br $break|0
-                            (i32.const 617)
+                           (return
+                            (i32.const 608)
                            )
                           )
-                          (br $break|0
-                           (i32.const 616)
+                          (return
+                           (i32.const 611)
                           )
                          )
-                         (br $break|0
-                          (i32.const 623)
+                         (return
+                          (i32.const 617)
                          )
                         )
-                        (br $break|0
-                         (i32.const 626)
+                        (return
+                         (i32.const 616)
                         )
                        )
-                       (br $break|0
-                        (i32.const 629)
+                       (return
+                        (i32.const 623)
                        )
                       )
-                      (br $break|0
-                       (i32.const 640)
+                      (return
+                       (i32.const 626)
                       )
                      )
-                     (br $break|0
-                      (i32.const 643)
+                     (return
+                      (i32.const 629)
                      )
                     )
-                    (br $break|0
-                     (i32.const 648)
+                    (return
+                     (i32.const 640)
                     )
                    )
-                   (br $break|0
-                    (i32.const 650)
+                   (return
+                    (i32.const 643)
                    )
                   )
-                  (br $break|0
-                   (i32.const 651)
+                  (return
+                   (i32.const 648)
                   )
                  )
-                 (br $break|0
-                  (i32.const 658)
+                 (return
+                  (i32.const 650)
                  )
                 )
-                (br $break|0
-                 (i32.add
-                  (get_local $0)
-                  (i32.const 2)
-                 )
+                (return
+                 (i32.const 651)
                 )
                )
-               (br $break|0
-                (i32.const 405)
+               (return
+                (i32.const 658)
                )
               )
-              (br $break|0
-               (i32.const 447)
+              (return
+               (i32.add
+                (get_local $0)
+                (i32.const 2)
+               )
               )
              )
-             (i32.const 0)
+             (return
+              (i32.const 405)
+             )
             )
-           )
-           (return
-            (get_local $1)
+            (return
+             (i32.const 447)
+            )
            )
           )
           (if
@@ -6673,69 +6637,56 @@
             )
             (if
              (get_local $1)
-             (if
-              (tee_local $1
-               (block $break|1 (result i32)
-                (block $case13|1
-                 (block $case12|1
-                  (block $case11|1
-                   (block $case10|1
-                    (block $case9|1
-                     (block $case8|1
-                      (block $case7|1
-                       (if
-                        (i32.ne
-                         (get_local $0)
-                         (i32.const 570)
-                        )
-                        (block
-                         (block $tablify|00
-                          (br_table $case7|1 $tablify|00 $case8|1 $case9|1 $tablify|00 $tablify|00 $case7|1 $tablify|00 $case10|1 $case11|1 $case12|1 $case7|1 $tablify|00 $case7|1 $tablify|00 $case7|1 $tablify|00 $case7|1 $tablify|00 $case7|1 $tablify|00
-                           (i32.sub
-                            (get_local $0)
-                            (i32.const 571)
-                           )
-                          )
+             (block $break|1
+              (block $case13|1
+               (block $case12|1
+                (block $case11|1
+                 (block $case10|1
+                  (block $case9|1
+                   (block $case8|1
+                    (block $case7|1
+                     (if
+                      (i32.ne
+                       (get_local $0)
+                       (i32.const 570)
+                      )
+                      (block
+                       (block $tablify|00
+                        (br_table $case7|1 $tablify|00 $case8|1 $case9|1 $tablify|00 $tablify|00 $case7|1 $tablify|00 $case10|1 $case11|1 $case12|1 $case7|1 $tablify|00 $case7|1 $tablify|00 $case7|1 $tablify|00 $case7|1 $tablify|00 $case7|1 $tablify|00
+                         (i32.sub
+                          (get_local $0)
+                          (i32.const 571)
                          )
-                         (br $case13|1)
                         )
                        )
-                       (br $break|1
-                        (i32.const 11365)
-                       )
-                      )
-                      (br $break|1
-                       (i32.add
-                        (get_local $0)
-                        (i32.const 1)
-                       )
+                       (br $break|1)
                       )
                      )
-                     (br $break|1
-                      (i32.const 410)
+                     (return
+                      (i32.const 11365)
                      )
                     )
-                    (br $break|1
-                     (i32.const 11366)
-                    )
+                    (br $folding-inner0)
                    )
-                   (br $break|1
-                    (i32.const 384)
+                   (return
+                    (i32.const 410)
                    )
                   )
-                  (br $break|1
-                   (i32.const 649)
+                  (return
+                   (i32.const 11366)
                   )
                  )
-                 (br $break|1
-                  (i32.const 652)
+                 (return
+                  (i32.const 384)
                  )
                 )
-                (i32.const 0)
+                (return
+                 (i32.const 649)
+                )
                )
-              )
-              (return
-               (get_local $1)
+               (return
+                (i32.const 652)
+               )
               )
              )
             )
@@ -6849,182 +6800,174 @@
           )
           (if
            (get_local $1)
-           (if
-            (tee_local $1
-             (block $break|2 (result i32)
-              (block $case15|2
-               (block $case14|2
-                (block $case13|2
-                 (block $case12|2
-                  (block $case11|2
-                   (block $case10|2
-                    (block $case9|2
-                     (block $case8|2
-                      (block $case7|2
-                       (block $case6|2
-                        (block $case5|2
-                         (block $case4|2
-                          (block $case3|2
-                           (block $case2|2
-                            (block $case1|2
-                             (if
-                              (i32.ne
-                               (get_local $0)
-                               (i32.const 902)
-                              )
-                              (block
-                               (br_if $case1|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 904)
-                                )
-                               )
-                               (br_if $case2|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 905)
-                                )
-                               )
-                               (br_if $case3|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 906)
-                                )
-                               )
-                               (br_if $case4|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 908)
-                                )
-                               )
-                               (br_if $case5|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 910)
-                                )
-                               )
-                               (br_if $case6|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 911)
-                                )
-                               )
-                               (br_if $case7|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 975)
-                                )
-                               )
-                               (br_if $case8|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1012)
-                                )
-                               )
-                               (br_if $case9|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1015)
-                                )
-                               )
-                               (br_if $case10|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1017)
-                                )
-                               )
-                               (br_if $case11|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1018)
-                                )
-                               )
-                               (br_if $case12|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1021)
-                                )
-                               )
-                               (br_if $case13|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1022)
-                                )
-                               )
-                               (br_if $case14|2
-                                (i32.eq
-                                 (get_local $0)
-                                 (i32.const 1023)
-                                )
-                               )
-                               (br $case15|2)
-                              )
-                             )
-                             (br $break|2
-                              (i32.const 940)
-                             )
+           (block $break|2
+            (block $case15|2
+             (block $case14|2
+              (block $case13|2
+               (block $case12|2
+                (block $case11|2
+                 (block $case10|2
+                  (block $case9|2
+                   (block $case8|2
+                    (block $case7|2
+                     (block $case6|2
+                      (block $case5|2
+                       (block $case4|2
+                        (block $case3|2
+                         (block $case2|2
+                          (block $case1|2
+                           (if
+                            (i32.ne
+                             (get_local $0)
+                             (i32.const 902)
                             )
-                            (br $break|2
-                             (i32.const 941)
+                            (block
+                             (br_if $case1|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 904)
+                              )
+                             )
+                             (br_if $case2|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 905)
+                              )
+                             )
+                             (br_if $case3|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 906)
+                              )
+                             )
+                             (br_if $case4|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 908)
+                              )
+                             )
+                             (br_if $case5|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 910)
+                              )
+                             )
+                             (br_if $case6|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 911)
+                              )
+                             )
+                             (br_if $case7|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 975)
+                              )
+                             )
+                             (br_if $case8|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1012)
+                              )
+                             )
+                             (br_if $case9|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1015)
+                              )
+                             )
+                             (br_if $case10|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1017)
+                              )
+                             )
+                             (br_if $case11|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1018)
+                              )
+                             )
+                             (br_if $case12|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1021)
+                              )
+                             )
+                             (br_if $case13|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1022)
+                              )
+                             )
+                             (br_if $case14|2
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 1023)
+                              )
+                             )
+                             (br $break|2)
                             )
                            )
-                           (br $break|2
-                            (i32.const 942)
+                           (return
+                            (i32.const 940)
                            )
                           )
-                          (br $break|2
-                           (i32.const 943)
+                          (return
+                           (i32.const 941)
                           )
                          )
-                         (br $break|2
-                          (i32.const 972)
+                         (return
+                          (i32.const 942)
                          )
                         )
-                        (br $break|2
-                         (i32.const 973)
+                        (return
+                         (i32.const 943)
                         )
                        )
-                       (br $break|2
-                        (i32.const 974)
+                       (return
+                        (i32.const 972)
                        )
                       )
-                      (br $break|2
-                       (i32.const 983)
+                      (return
+                       (i32.const 973)
                       )
                      )
-                     (br $break|2
-                      (i32.const 952)
+                     (return
+                      (i32.const 974)
                      )
                     )
-                    (br $break|2
-                     (i32.const 1016)
+                    (return
+                     (i32.const 983)
                     )
                    )
-                   (br $break|2
-                    (i32.const 1010)
+                   (return
+                    (i32.const 952)
                    )
                   )
-                  (br $break|2
-                   (i32.const 1019)
+                  (return
+                   (i32.const 1016)
                   )
                  )
-                 (br $break|2
-                  (i32.const 891)
+                 (return
+                  (i32.const 1010)
                  )
                 )
-                (br $break|2
-                 (i32.const 892)
+                (return
+                 (i32.const 1019)
                 )
                )
-               (br $break|2
-                (i32.const 893)
+               (return
+                (i32.const 891)
                )
               )
-              (i32.const 0)
+              (return
+               (i32.const 892)
+              )
              )
-            )
-            (return
-             (get_local $1)
+             (return
+              (i32.const 893)
+             )
             )
            )
           )
@@ -7548,107 +7491,99 @@
              )
              (if
               (get_local $1)
-              (if
-               (tee_local $1
-                (block $break|3 (result i32)
-                 (block $case24|3
-                  (block $case23|3
-                   (block $case22|3
-                    (block $case20|3
-                     (block $case18|3
-                      (block $case17|3
-                       (block $case15|3
-                        (block $case13|3
-                         (block $case12|3
-                          (block $case8|3
-                           (block $case7|3
-                            (block $case5|3
-                             (br_if $case5|3
-                              (i32.eq
-                               (get_local $0)
-                               (i32.const 8120)
-                              )
-                             )
-                             (block $tablify|01
-                              (br_table $case5|3 $case7|3 $case7|3 $case8|3 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $case12|3 $case12|3 $case12|3 $case12|3 $case13|3 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $case5|3 $case5|3 $case15|3 $case15|3 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $case5|3 $case5|3 $case17|3 $case17|3 $case18|3 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $case20|3 $case20|3 $case22|3 $case22|3 $case23|3 $tablify|01
-                               (i32.sub
-                                (get_local $0)
-                                (i32.const 8121)
-                               )
-                              )
-                             )
-                             (br $case24|3)
+              (block $break|3
+               (block $case24|3
+                (block $case23|3
+                 (block $case22|3
+                  (block $case20|3
+                   (block $case18|3
+                    (block $case17|3
+                     (block $case15|3
+                      (block $case13|3
+                       (block $case12|3
+                        (block $case8|3
+                         (block $case7|3
+                          (block $case5|3
+                           (br_if $case5|3
+                            (i32.eq
+                             (get_local $0)
+                             (i32.const 8120)
                             )
-                            (br $break|3
+                           )
+                           (block $tablify|01
+                            (br_table $case5|3 $case7|3 $case7|3 $case8|3 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $case12|3 $case12|3 $case12|3 $case12|3 $case13|3 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $case5|3 $case5|3 $case15|3 $case15|3 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $case5|3 $case5|3 $case17|3 $case17|3 $case18|3 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $tablify|01 $case20|3 $case20|3 $case22|3 $case22|3 $case23|3 $tablify|01
                              (i32.sub
                               (get_local $0)
-                              (i32.const 8)
+                              (i32.const 8121)
                              )
                             )
                            )
-                           (br $break|3
-                            (i32.sub
-                             (get_local $0)
-                             (i32.const 74)
-                            )
+                           (br $break|3)
+                          )
+                          (return
+                           (i32.sub
+                            (get_local $0)
+                            (i32.const 8)
                            )
                           )
-                          (br $break|3
-                           (i32.const 8115)
-                          )
                          )
-                         (br $break|3
+                         (return
                           (i32.sub
                            (get_local $0)
-                           (i32.const 86)
+                           (i32.const 74)
                           )
                          )
                         )
-                        (br $break|3
-                         (i32.const 8131)
+                        (return
+                         (i32.const 8115)
                         )
                        )
-                       (br $break|3
+                       (return
                         (i32.sub
                          (get_local $0)
-                         (i32.const 100)
+                         (i32.const 86)
                         )
                        )
                       )
-                      (br $break|3
-                       (i32.sub
-                        (get_local $0)
-                        (i32.const 112)
-                       )
+                      (return
+                       (i32.const 8131)
                       )
                      )
-                     (br $break|3
-                      (i32.const 8165)
+                     (return
+                      (i32.sub
+                       (get_local $0)
+                       (i32.const 100)
+                      )
                      )
                     )
-                    (br $break|3
+                    (return
                      (i32.sub
                       (get_local $0)
-                      (i32.const 128)
+                      (i32.const 112)
                      )
                     )
                    )
-                   (br $break|3
-                    (i32.sub
-                     (get_local $0)
-                     (i32.const 126)
-                    )
+                   (return
+                    (i32.const 8165)
                    )
                   )
-                  (br $break|3
-                   (i32.const 8179)
+                  (return
+                   (i32.sub
+                    (get_local $0)
+                    (i32.const 128)
+                   )
                   )
                  )
-                 (i32.const 0)
+                 (return
+                  (i32.sub
+                   (get_local $0)
+                   (i32.const 126)
+                  )
+                 )
                 )
-               )
-               (return
-                (get_local $1)
+                (return
+                 (i32.const 8179)
+                )
                )
               )
              )
@@ -7706,61 +7641,63 @@
                )
               )
               (block $break|4
-               (block $case4|4
-                (block $case3|4
-                 (block $case2|4
-                  (block $case1|4
-                   (if
-                    (i32.ne
-                     (get_local $0)
-                     (i32.const 8486)
+               (block $case5|4
+                (block $case4|4
+                 (block $case3|4
+                  (block $case2|4
+                   (block $case1|4
+                    (if
+                     (i32.ne
+                      (get_local $0)
+                      (i32.const 8486)
+                     )
+                     (block
+                      (br_if $case1|4
+                       (i32.eq
+                        (get_local $0)
+                        (i32.const 8490)
+                       )
+                      )
+                      (br_if $case2|4
+                       (i32.eq
+                        (get_local $0)
+                        (i32.const 8491)
+                       )
+                      )
+                      (br_if $case3|4
+                       (i32.eq
+                        (get_local $0)
+                        (i32.const 8498)
+                       )
+                      )
+                      (br_if $case4|4
+                       (i32.eq
+                        (get_local $0)
+                        (i32.const 8579)
+                       )
+                      )
+                      (br $break|4)
+                     )
                     )
-                    (block
-                     (br_if $case1|4
-                      (i32.eq
-                       (get_local $0)
-                       (i32.const 8490)
-                      )
-                     )
-                     (br_if $case2|4
-                      (i32.eq
-                       (get_local $0)
-                       (i32.const 8491)
-                      )
-                     )
-                     (br_if $case3|4
-                      (i32.eq
-                       (get_local $0)
-                       (i32.const 8498)
-                      )
-                     )
-                     (br_if $case4|4
-                      (i32.eq
-                       (get_local $0)
-                       (i32.const 8579)
-                      )
-                     )
-                     (br $break|4)
+                    (return
+                     (i32.const 969)
                     )
                    )
                    (return
-                    (i32.const 969)
+                    (i32.const 107)
                    )
                   )
                   (return
-                   (i32.const 107)
+                   (i32.const 229)
                   )
                  )
                  (return
-                  (i32.const 229)
+                  (i32.const 8526)
                  )
                 )
                 (return
-                 (i32.const 8526)
+                 (i32.const 8580)
                 )
-               )
-               (return
-                (i32.const 8580)
                )
               )
              )
@@ -7822,160 +7759,162 @@
                 (get_local $1)
                )
                (block $break|5
-                (block $case16|5
-                 (block $case15|5
-                  (block $case14|5
-                   (block $case13|5
-                    (block $case12|5
-                     (block $case11|5
-                      (block $case10|5
-                       (block $case3|5
-                        (block $case2|5
-                         (block $case1|5
-                          (if
-                           (i32.ne
-                            (get_local $0)
-                            (i32.const 11360)
+                (block $case17|5
+                 (block $case16|5
+                  (block $case15|5
+                   (block $case14|5
+                    (block $case13|5
+                     (block $case12|5
+                      (block $case11|5
+                       (block $case10|5
+                        (block $case3|5
+                         (block $case2|5
+                          (block $case1|5
+                           (if
+                            (i32.ne
+                             (get_local $0)
+                             (i32.const 11360)
+                            )
+                            (block
+                             (br_if $case1|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11362)
+                              )
+                             )
+                             (br_if $case2|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11363)
+                              )
+                             )
+                             (br_if $case3|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11364)
+                              )
+                             )
+                             (br_if $folding-inner0
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11367)
+                              )
+                             )
+                             (br_if $folding-inner0
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11369)
+                              )
+                             )
+                             (br_if $folding-inner0
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11371)
+                              )
+                             )
+                             (br_if $folding-inner0
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11378)
+                              )
+                             )
+                             (br_if $folding-inner0
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11381)
+                              )
+                             )
+                             (br_if $folding-inner0
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11499)
+                              )
+                             )
+                             (br_if $folding-inner0
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11501)
+                              )
+                             )
+                             (br_if $case11|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11373)
+                              )
+                             )
+                             (br_if $case12|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11374)
+                              )
+                             )
+                             (br_if $case13|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11375)
+                              )
+                             )
+                             (br_if $case14|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11376)
+                              )
+                             )
+                             (br_if $case15|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11390)
+                              )
+                             )
+                             (br_if $case16|5
+                              (i32.eq
+                               (get_local $0)
+                               (i32.const 11391)
+                              )
+                             )
+                             (br $break|5)
+                            )
                            )
-                           (block
-                            (br_if $case1|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11362)
-                             )
-                            )
-                            (br_if $case2|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11363)
-                             )
-                            )
-                            (br_if $case3|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11364)
-                             )
-                            )
-                            (br_if $folding-inner0
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11367)
-                             )
-                            )
-                            (br_if $folding-inner0
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11369)
-                             )
-                            )
-                            (br_if $folding-inner0
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11371)
-                             )
-                            )
-                            (br_if $folding-inner0
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11378)
-                             )
-                            )
-                            (br_if $folding-inner0
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11381)
-                             )
-                            )
-                            (br_if $folding-inner0
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11499)
-                             )
-                            )
-                            (br_if $folding-inner0
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11501)
-                             )
-                            )
-                            (br_if $case11|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11373)
-                             )
-                            )
-                            (br_if $case12|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11374)
-                             )
-                            )
-                            (br_if $case13|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11375)
-                             )
-                            )
-                            (br_if $case14|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11376)
-                             )
-                            )
-                            (br_if $case15|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11390)
-                             )
-                            )
-                            (br_if $case16|5
-                             (i32.eq
-                              (get_local $0)
-                              (i32.const 11391)
-                             )
-                            )
-                            (br $break|5)
+                           (return
+                            (i32.const 11361)
                            )
                           )
                           (return
-                           (i32.const 11361)
+                           (i32.const 619)
                           )
                          )
                          (return
-                          (i32.const 619)
+                          (i32.const 7549)
                          )
                         )
                         (return
-                         (i32.const 7549)
+                         (i32.const 637)
                         )
                        )
-                       (return
-                        (i32.const 637)
-                       )
+                      )
+                      (return
+                       (i32.const 593)
                       )
                      )
                      (return
-                      (i32.const 593)
+                      (i32.const 625)
                      )
                     )
                     (return
-                     (i32.const 625)
+                     (i32.const 592)
                     )
                    )
                    (return
-                    (i32.const 592)
+                    (i32.const 594)
                    )
                   )
                   (return
-                   (i32.const 594)
+                   (i32.const 575)
                   )
                  )
                  (return
-                  (i32.const 575)
+                  (i32.const 576)
                  )
-                )
-                (return
-                 (i32.const 576)
                 )
                )
               )
@@ -8110,43 +8049,45 @@
                   (get_local $1)
                  )
                  (block $break|6
-                  (block $case4|6
-                   (block $case3|6
-                    (br_if $folding-inner0
-                     (i32.eq
-                      (get_local $0)
-                      (i32.const 42873)
+                  (block $case5|6
+                   (block $case4|6
+                    (block $case3|6
+                     (br_if $folding-inner0
+                      (i32.eq
+                       (get_local $0)
+                       (i32.const 42873)
+                      )
                      )
-                    )
-                    (br_if $folding-inner0
-                     (i32.eq
-                      (get_local $0)
-                      (i32.const 42875)
+                     (br_if $folding-inner0
+                      (i32.eq
+                       (get_local $0)
+                       (i32.const 42875)
+                      )
                      )
-                    )
-                    (br_if $folding-inner0
-                     (i32.eq
-                      (get_local $0)
-                      (i32.const 42878)
+                     (br_if $folding-inner0
+                      (i32.eq
+                       (get_local $0)
+                       (i32.const 42878)
+                      )
                      )
-                    )
-                    (br_if $folding-inner0
-                     (i32.eq
-                      (get_local $0)
-                      (i32.const 42891)
+                     (br_if $folding-inner0
+                      (i32.eq
+                       (get_local $0)
+                       (i32.const 42891)
+                      )
                      )
-                    )
-                    (br_if $case4|6
-                     (i32.eq
-                      (get_local $0)
-                      (i32.const 42877)
+                     (br_if $case4|6
+                      (i32.eq
+                       (get_local $0)
+                       (i32.const 42877)
+                      )
                      )
+                     (br $break|6)
                     )
-                    (br $break|6)
                    )
-                  )
-                  (return
-                   (i32.const 7545)
+                   (return
+                    (i32.const 7545)
+                   )
                   )
                  )
                 )
@@ -9543,9 +9484,7 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#toLowerCase
-      (call $~lib/string/String#toUpperCase
-       (i32.const 1968)
-      )
+      (i32.const 1704)
      )
      (i32.const 1968)
     )
@@ -9554,7 +9493,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
-     (i32.const 108)
+     (i32.const 101)
      (i32.const 0)
     )
     (unreachable)
@@ -9565,17 +9504,17 @@
     (call $~lib/string/String.__eq
      (call $~lib/string/String#toLowerCase
       (call $~lib/string/String#toUpperCase
-       (i32.const 1976)
+       (i32.const 2100)
       )
      )
-     (i32.const 1976)
+     (i32.const 2100)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
-     (i32.const 109)
+     (i32.const 112)
      (i32.const 0)
     )
     (unreachable)
@@ -9586,17 +9525,38 @@
     (call $~lib/string/String.__eq
      (call $~lib/string/String#toLowerCase
       (call $~lib/string/String#toUpperCase
-       (i32.const 1984)
+       (i32.const 2108)
       )
      )
-     (i32.const 1984)
+     (i32.const 2108)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
-     (i32.const 115)
+     (i32.const 113)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/string/String#toLowerCase
+      (call $~lib/string/String#toUpperCase
+       (i32.const 2116)
+      )
+     )
+     (i32.const 2116)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 44)
+     (i32.const 119)
      (i32.const 0)
     )
     (unreachable)

@@ -98,6 +98,10 @@ assert(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz".toUpperCase() ==
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 );
+assert(
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz".toLowerCase() ==
+  "abcdefghijklmnopqrstuvwxyz /0123456789abcdefghijklmnopqrstuvwxyz"
+);
 // assert("ß".toUpperCase() == "ẞ"); // fail!
 /*
 assert(
