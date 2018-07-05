@@ -418,6 +418,7 @@ export class String {
   toUpperCase(): String {
     assert(this !== null);
     var len = this.length;
+    if (!len) return EMPTY;
     var out = allocate(len);
     for (let pos = 0; pos < len; ++pos) {
       let ch = load<u16>(changetype<usize>(this) + (<usize>pos << 1), HEADER_SIZE);
@@ -429,6 +430,7 @@ export class String {
   toLowerCase(): String {
     assert(this !== null);
     var len = this.length;
+    if (!len) return EMPTY;
     var out = allocate(len);
     for (let pos = 0; pos < len; ++pos) {
       let ch = load<u16>(changetype<usize>(this) + (<usize>pos << 1), HEADER_SIZE);

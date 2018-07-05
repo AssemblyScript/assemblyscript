@@ -73,6 +73,8 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
+assert("".toUpperCase() == "");
+assert("".toLowerCase() == "");
 assert("09_AZ az.!".toUpperCase() == "09_AZ AZ.!");
 assert("09_AZ az.!".toLowerCase() == "09_az az.!");
 assert("Der Wechsel allein ist das Beständige".toUpperCase() == "DER WECHSEL ALLEIN IST DAS BESTÄNDIGE");
