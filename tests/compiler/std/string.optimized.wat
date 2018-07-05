@@ -3784,35 +3784,25 @@
            (i32.const 73)
           )
          )
-         (if
+         (br_if $folding-inner1
           (i32.eqz
-           (tee_local $1
-            (i32.eq
+           (i32.and
+            (i32.and
+             (i32.sub
+              (get_local $0)
+              (i32.const 378)
+             )
+             (i32.sub
+              (get_local $0)
+              (i32.const 380)
+             )
+            )
+            (i32.sub
              (get_local $0)
-             (i32.const 378)
+             (i32.const 382)
             )
            )
           )
-          (set_local $1
-           (i32.eq
-            (get_local $0)
-            (i32.const 380)
-           )
-          )
-         )
-         (if
-          (i32.eqz
-           (get_local $1)
-          )
-          (set_local $1
-           (i32.eq
-            (get_local $0)
-            (i32.const 382)
-           )
-          )
-         )
-         (br_if $folding-inner1
-          (get_local $1)
          )
          (if
           (i32.le_u
@@ -5424,20 +5414,20 @@
                )
                (if
                 (tee_local $1
+                 (i32.eqz
+                  (i32.and
+                   (get_local $0)
+                   (i32.const 1)
+                  )
+                 )
+                )
+                (set_local $1
                  (i32.le_u
                   (i32.sub
                    (get_local $0)
                    (i32.const 11368)
                   )
                   (i32.const 4)
-                 )
-                )
-                (set_local $1
-                 (i32.eqz
-                  (i32.and
-                   (get_local $0)
-                   (i32.const 1)
-                  )
                  )
                 )
                )
@@ -5447,6 +5437,12 @@
                 )
                 (if
                  (tee_local $1
+                  (i32.and
+                   (get_local $0)
+                   (i32.const 1)
+                  )
+                 )
+                 (set_local $1
                   (i32.le_u
                    (i32.sub
                     (get_local $0)
@@ -5455,10 +5451,23 @@
                    (i32.const 98)
                   )
                  )
-                 (set_local $1
+                )
+               )
+               (if
+                (i32.eqz
+                 (get_local $1)
+                )
+                (set_local $1
+                 (i32.eqz
                   (i32.and
-                   (get_local $0)
-                   (i32.const 1)
+                   (i32.sub
+                    (get_local $0)
+                    (i32.const 11379)
+                   )
+                   (i32.sub
+                    (get_local $0)
+                    (i32.const 11382)
+                   )
                   )
                  )
                 )
@@ -5468,42 +5477,17 @@
                  (get_local $1)
                 )
                 (set_local $1
-                 (i32.eq
-                  (get_local $0)
-                  (i32.const 11379)
-                 )
-                )
-               )
-               (if
-                (i32.eqz
-                 (get_local $1)
-                )
-                (set_local $1
-                 (i32.eq
-                  (get_local $0)
-                  (i32.const 11382)
-                 )
-                )
-               )
-               (if
-                (i32.eqz
-                 (get_local $1)
-                )
-                (set_local $1
-                 (i32.eq
-                  (get_local $0)
-                  (i32.const 11500)
-                 )
-                )
-               )
-               (if
-                (i32.eqz
-                 (get_local $1)
-                )
-                (set_local $1
-                 (i32.eq
-                  (get_local $0)
-                  (i32.const 11502)
+                 (i32.eqz
+                  (i32.and
+                   (i32.sub
+                    (get_local $0)
+                    (i32.const 11500)
+                   )
+                   (i32.sub
+                    (get_local $0)
+                    (i32.const 11502)
+                   )
+                  )
                  )
                 )
                )
@@ -5512,18 +5496,18 @@
                )
                (if
                 (tee_local $1
+                 (i32.and
+                  (get_local $0)
+                  (i32.const 1)
+                 )
+                )
+                (set_local $1
                  (i32.le_u
                   (i32.sub
                    (get_local $0)
                    (i32.const 11393)
                   )
                   (i32.const 98)
-                 )
-                )
-                (set_local $1
-                 (i32.and
-                  (get_local $0)
-                  (i32.const 1)
                  )
                 )
                )
@@ -5593,35 +5577,25 @@
                 (i32.const 4095)
                )
                (block
-                (if
+                (br_if $folding-inner1
                  (i32.eqz
-                  (tee_local $1
-                   (i32.eq
+                  (i32.and
+                   (i32.and
+                    (i32.sub
+                     (get_local $0)
+                     (i32.const 42874)
+                    )
+                    (i32.sub
+                     (get_local $0)
+                     (i32.const 42876)
+                    )
+                   )
+                   (i32.sub
                     (get_local $0)
-                    (i32.const 42874)
+                    (i32.const 42892)
                    )
                   )
                  )
-                 (set_local $1
-                  (i32.eq
-                   (get_local $0)
-                   (i32.const 42876)
-                  )
-                 )
-                )
-                (if
-                 (i32.eqz
-                  (get_local $1)
-                 )
-                 (set_local $1
-                  (i32.eq
-                   (get_local $0)
-                   (i32.const 42892)
-                  )
-                 )
-                )
-                (br_if $folding-inner1
-                 (get_local $1)
                 )
                 (if
                  (tee_local $1
@@ -6306,35 +6280,25 @@
           (i32.const 1024)
          )
          (block
-          (if
+          (br_if $folding-inner0
            (i32.eqz
-            (tee_local $1
-             (i32.eq
+            (i32.and
+             (i32.and
+              (i32.sub
+               (get_local $0)
+               (i32.const 880)
+              )
+              (i32.sub
+               (get_local $0)
+               (i32.const 882)
+              )
+             )
+             (i32.sub
               (get_local $0)
-              (i32.const 880)
+              (i32.const 886)
              )
             )
            )
-           (set_local $1
-            (i32.eq
-             (get_local $0)
-             (i32.const 882)
-            )
-           )
-          )
-          (if
-           (i32.eqz
-            (get_local $1)
-           )
-           (set_local $1
-            (i32.eq
-             (get_local $0)
-             (i32.const 886)
-            )
-           )
-          )
-          (br_if $folding-inner0
-           (get_local $1)
           )
           (if
            (tee_local $1

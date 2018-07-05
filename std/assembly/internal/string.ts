@@ -184,7 +184,7 @@ function toUpper8(c: u32): u32 {
 }
 
 // Lower case mapping for UTF16 chars.
-// Code adopted from https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towlower.c
+// Code based on https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towlower.c
 function toLower16(c: u32): u32 {
   if (c < 0x100) {
     if ((c - 0x0041 <= 0x005a - 0x0041) ||
@@ -285,9 +285,10 @@ function toLower16(c: u32): u32 {
       }
     }
   } else if (c < 0x0400) {
-    if (c == 0x0370 || c == 0x0372 || c == 0x0376)    return c + 1;
-    if (c != 0x03a2 && c - 0x0391 <= 0x03ab - 0x0391) return c + 0x20;
-    if (!(c & 1) && c - 0x03d8 <= 0x03ee - 0x03d8)    return c + 1;
+    // if (c == 0x0370 || c == 0x0372 || c == 0x0376)    return c + 1;
+    if (!((c - 0x0370) & (c - 0x0372) & (c - 0x0376))) return c + 1;
+    if (c != 0x03a2 && c - 0x0391 <= 0x03ab - 0x0391)  return c + 0x20;
+    if (!(c & 1) && c - 0x03d8 <= 0x03ee - 0x03d8)     return c + 1;
     if (c - 0x0386 <= 0x03ff - 0x0386) {
       switch (c) {
         case 0x0386: return 0x03ac;
@@ -422,7 +423,7 @@ function toLower16(c: u32): u32 {
 }
 
 // Upper case mapping for UTF16 chars.
-// Code adopted from https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towupper.c
+// Code based on https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towupper.c
 function toUpper16(c: u32): u32 {
   if (c < 0x100) {
     if (c == 0x00b5) return 0x039c;
@@ -441,7 +442,8 @@ function toUpper16(c: u32): u32 {
         (c - 0x01ce <= 0x01dc - 0x01ce) ||
          c == 0x023c || c == 0x0242) return c - <u32>(!(c & 1));
     if (c == 0x0131) return 0x0049;
-    if (c == 0x017a || c == 0x017c || c == 0x017e) return c - 1;
+    // if (c == 0x017a || c == 0x017c || c == 0x017e) return c - 1;
+    if (!((c - 0x017a) & (c - 0x017c) & (c - 0x017e))) return c - 1;
     if (c - 0x017f <= 0x0292 - 0x017f) {
       switch (c) {
         case 0x017f: return 0x0053;
@@ -603,11 +605,15 @@ function toUpper16(c: u32): u32 {
     if (c - 0x2170 <= 0x217f - 0x2170) return c - 0x10;
     if (c - 0x24d0 <= 0x24e9 - 0x24d0) return c - 0x1a;
     if (c - 0x2c30 <= 0x2c5e - 0x2c30) return c - 0x30;
-    if ((c - 0x2c68 <= 0x2c6c - 0x2c68 && !(c & 1)) ||
-        (c - 0x2c81 <= 0x2ce3 - 0x2c81 && <bool>(c & 1)) ||
+    /*if ((!(c & 1) && c - 0x2c68 <= 0x2c6c - 0x2c68) ||
+        (<bool>(c & 1) && c - 0x2c81 <= 0x2ce3 - 0x2c81) ||
          c == 0x2c73 || c == 0x2c76 ||
-         c == 0x2cec || c == 0x2cee) return c - 1;
-    if (c - 0x2c81 <= 0x2ce3 - 0x2c81 && <bool>(c & 1)) return c - 1;
+         c == 0x2cec || c == 0x2cee) return c - 1;*/
+    if ((!(c & 1) && c - 0x2c68 <= 0x2c6c - 0x2c68) ||
+       (<bool>(c & 1) && c - 0x2c81 <= 0x2ce3 - 0x2c81) ||
+        !((c - 0x2c73) & (c - 0x2c76)) ||
+        !((c - 0x2cec) & (c - 0x2cee))) return c - 1;
+    if (<bool>(c & 1) && c - 0x2c81 <= 0x2ce3 - 0x2c81) return c - 1;
     if (c - 0x2d00 <= 0x2d25 - 0x2d00) return c - 0x1c60;
     switch (c) {
       case 0x2c61: return 0x2c60;
@@ -616,7 +622,8 @@ function toUpper16(c: u32): u32 {
       default: break;
     }
   } else if (c - 0xa000 <= 0xb000 - 1 - 0xa000) {
-    if (c == 0xa77a || c == 0xa77c || c == 0xa78c) return c - 1;
+    // if (c == 0xa77a || c == 0xa77c || c == 0xa78c) return c - 1;
+    if (!((c - 0xa77a) & (c - 0xa77c) & (c - 0xa78c))) return c - 1;
     if (<bool>(c & 1) &&
         ((c - 0xa641 <= 0xa65f - 0xa641) ||
          (c - 0xa663 <= 0xa66d - 0xa663) ||
