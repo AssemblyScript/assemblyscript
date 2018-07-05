@@ -48,7 +48,7 @@
  (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
  (global $~lib/internal/string/EMPTY i32 (i32.const 336))
  (global $std/string/c (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 2164))
+ (global $HEAP_BASE i32 (i32.const 2172))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 44) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
@@ -108,7 +108,8 @@
  (data (i32.const 1704) "@\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00 \00/\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00")
  (data (i32.const 1836) "@\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00 \00/\000\001\002\003\004\005\006\007\008\009\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00")
  (data (i32.const 1968) "\01\00\00\00\df\00")
- (data (i32.const 1976) "\\\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
+ (data (i32.const 1976) "\01\00\00\00\01\fb")
+ (data (i32.const 1984) "\\\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $start)
@@ -11539,8 +11540,10 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/string/String#toUpperCase
-      (i32.const 1976)
+     (call $~lib/string/String#toLowerCase
+      (call $~lib/string/String#toUpperCase
+       (i32.const 1976)
+      )
      )
      (i32.const 1976)
     )
@@ -11549,7 +11552,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
-     (i32.const 113)
+     (i32.const 109)
      (i32.const 0)
     )
     (unreachable)
@@ -11559,16 +11562,18 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/string/String#toLowerCase
-      (i32.const 1976)
+      (call $~lib/string/String#toUpperCase
+       (i32.const 1984)
+      )
      )
-     (i32.const 1976)
+     (i32.const 1984)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 44)
-     (i32.const 118)
+     (i32.const 115)
      (i32.const 0)
     )
     (unreachable)

@@ -253,7 +253,7 @@ export function toLower16(c: u32): u32 {
         case 0x01f1: { k = c + 2;  break; }
         case 0x01f6: { k = 0x0195; break; }
         case 0x01f7: { k = 0x01bf; break; }
-        default:       k = 0;
+        default: k = 0;
       }
       if (k != 0) return k;
     }
