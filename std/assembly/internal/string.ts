@@ -201,7 +201,7 @@ function toLower16(c: u32): u32 {
     if (c == 0x0130) return 0x0069;
     if ((c - 0x0139 <= 0x0147 - 0x0139) ||
         (c - 0x01cd <= 0x01db - 0x01cd)) return c + (c & 1);
-    if (c >= 0x178 && c <= 0x01f7) {
+    if (c - 0x178 <= 0x01f7 - 0x178) {
       switch (c) {
         case 0x0178: return 0x00ff;
         case 0x0179:
@@ -399,7 +399,7 @@ function toLower16(c: u32): u32 {
       case 0x2c7f: return 0x0240;
       default: break;
     }
-  } else if (c >= 0xa600 && c < 0xa800) {
+  } else if (c - 0xa600 <= 0xa800 - 1 - 0xa600) {
     if ((c - 0xa640 <= 0xa65e - 0xa640) ||
         (c - 0xa662 <= 0xa66c - 0xa662) ||
         (c - 0xa680 <= 0xa696 - 0xa680) ||
@@ -615,7 +615,7 @@ function toUpper16(c: u32): u32 {
       case 0x2c66: return 0x023e;
       default: break;
     }
-  } else if (c >= 0xa000 && c < 0xb000) {
+  } else if (c - 0xa000 <= 0xb000 - 1 - 0xa000) {
     if (c == 0xa77a || c == 0xa77c || c == 0xa78c) return c - 1;
     if (<bool>(c & 1) &&
         ((c - 0xa641 <= 0xa65f - 0xa641) ||
