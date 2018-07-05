@@ -6633,7 +6633,7 @@
              (get_local $1)
             )
             (set_local $1
-             (i32.ge_u
+             (i32.le_u
               (i32.sub
                (get_local $0)
                (i32.const 1232)

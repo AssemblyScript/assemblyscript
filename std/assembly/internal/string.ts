@@ -313,7 +313,7 @@ function toLower16(c: u32): u32 {
     if (c - 0x0410 <= 0x042f - 0x0410) return c + 0x20;
     if ((c - 0x0460 <= 0x0480 - 0x0460) ||
         (c - 0x048a <= 0x04be - 0x048a) ||
-        (c - 0x04d0 >= 0x04fe - 0x04d0)) return c + <u32>(!(c & 1));
+        (c - 0x04d0 <= 0x04fe - 0x04d0)) return c + <u32>(!(c & 1));
     if (c == 0x04c0) return 0x04cf;
     if (c - 0x04c1 <= 0x04cd - 0x04c1) return c + (c & 1);
   } else if (c < 0x1f00) {
