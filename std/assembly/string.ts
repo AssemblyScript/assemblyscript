@@ -3,13 +3,10 @@ import {
   MAX_LENGTH,
   EMPTY,
   allocate,
-  isAscii,
   isWhiteSpaceOrLineTerminator,
   CharCode,
-  toLower8,
-  toLower16,
-  toUpper8,
-  toUpper16,
+  toLower,
+  toUpper,
   parse
 } from "./internal/string";
 
@@ -424,8 +421,7 @@ export class String {
     var out = allocate(len);
     for (let pos = 0; pos < len; ++pos) {
       let ch = load<u16>(changetype<usize>(this) + (<usize>pos << 1), HEADER_SIZE);
-      ch = <u16>(isAscii(ch) ? toUpper8(ch) : toUpper16(ch));
-      store<u16>(changetype<usize>(out) + (<usize>pos << 1), ch, HEADER_SIZE);
+      store<u16>(changetype<usize>(out) + (<usize>pos << 1), toUpper(ch), HEADER_SIZE);
     }
     return out;
   }
@@ -436,8 +432,7 @@ export class String {
     var out = allocate(len);
     for (let pos = 0; pos < len; ++pos) {
       let ch = load<u16>(changetype<usize>(this) + (<usize>pos << 1), HEADER_SIZE);
-      ch = <u16>(isAscii(ch) ? toLower8(ch) : toLower16(ch));
-      store<u16>(changetype<usize>(out) + (<usize>pos << 1), ch, HEADER_SIZE);
+      store<u16>(changetype<usize>(out) + (<usize>pos << 1), toLower(ch), HEADER_SIZE);
     }
     return out;
   }

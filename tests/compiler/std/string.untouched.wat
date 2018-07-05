@@ -126,7 +126,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 42)
+     (i32.const 39)
      (i32.const 4)
     )
     (unreachable)
@@ -235,7 +235,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 236)
+     (i32.const 233)
      (i32.const 4)
     )
     (unreachable)
@@ -340,7 +340,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 103)
+     (i32.const 100)
      (i32.const 4)
     )
     (unreachable)
@@ -466,7 +466,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 215)
+     (i32.const 212)
      (i32.const 4)
     )
     (unreachable)
@@ -1166,7 +1166,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 76)
-                  (i32.const 558)
+                  (i32.const 553)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -3549,7 +3549,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 79)
+     (i32.const 76)
      (i32.const 4)
     )
     (unreachable)
@@ -4100,7 +4100,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 388)
+     (i32.const 385)
      (i32.const 4)
     )
     (unreachable)
@@ -4135,7 +4135,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 393)
+     (i32.const 390)
      (i32.const 6)
     )
     (unreachable)
@@ -6844,7 +6844,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 422)
+     (i32.const 419)
      (i32.const 4)
     )
     (unreachable)
@@ -6885,8 +6885,15 @@
        )
       )
      )
-     (set_local $4
-      (i32.and
+     (i32.store16 offset=4
+      (i32.add
+       (get_local $2)
+       (i32.shl
+        (get_local $3)
+        (i32.const 1)
+       )
+      )
+      (block $~lib/internal/string/toUpper|inlined.0 (result i32)
        (if (result i32)
         (i32.and
          (block $~lib/internal/string/isAscii|inlined.1 (result i32)
@@ -6931,18 +6938,7 @@
          (get_local $4)
         )
        )
-       (i32.const 65535)
       )
-     )
-     (i32.store16 offset=4
-      (i32.add
-       (get_local $2)
-       (i32.shl
-        (get_local $3)
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
      )
     )
     (set_local $3
@@ -9624,7 +9620,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 434)
+     (i32.const 430)
      (i32.const 4)
     )
     (unreachable)
@@ -9665,8 +9661,15 @@
        )
       )
      )
-     (set_local $4
-      (i32.and
+     (i32.store16 offset=4
+      (i32.add
+       (get_local $2)
+       (i32.shl
+        (get_local $3)
+        (i32.const 1)
+       )
+      )
+      (block $~lib/internal/string/toLower|inlined.0 (result i32)
        (if (result i32)
         (i32.and
          (block $~lib/internal/string/isAscii|inlined.3 (result i32)
@@ -9711,18 +9714,7 @@
          (get_local $4)
         )
        )
-       (i32.const 65535)
       )
-     )
-     (i32.store16 offset=4
-      (i32.add
-       (get_local $2)
-       (i32.shl
-        (get_local $3)
-        (i32.const 1)
-       )
-      )
-      (get_local $4)
      )
     )
     (set_local $3

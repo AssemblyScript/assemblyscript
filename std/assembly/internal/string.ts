@@ -38,6 +38,16 @@ export function isLower(c: u32): bool {
   return c - CharCode.a <= <u32>(CharCode.z - CharCode.a);
 }
 
+@inline
+export function toLower(c: u32): u32 {
+  return isAscii(c) ? toLower8(c) : toLower16(c);
+}
+
+@inline
+export function toUpper(c: u32): u32 {
+  return isAscii(c) ? toUpper8(c) : toUpper16(c);
+}
+
 export function isWhiteSpaceOrLineTerminator(c: u16): bool {
   switch (c) {
     case 10:      // <LF>
@@ -164,18 +174,18 @@ export function parse<T>(str: String, radix: i32 = 0): T {
 }
 
 @inline
-export function toLower8(c: u32): u32 {
+function toLower8(c: u32): u32 {
   return select<u32>(c - CharCode.A + CharCode.a, c, isUpper(c));
 }
 
 @inline
-export function toUpper8(c: u32): u32 {
+function toUpper8(c: u32): u32 {
   return select<u32>(c - CharCode.a + CharCode.A, c, isLower(c));
 }
 
 // Lower case mapping for UTF16 chars.
 // Code adopted from https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towlower.c
-export function toLower16(c: u32): u32 {
+function toLower16(c: u32): u32 {
   if (c < 0x100) {
     if ((c >= 0x0041 && c <= 0x005a) ||
         (c >= 0x00c0 && c <= 0x00d6) ||
@@ -413,7 +423,7 @@ export function toLower16(c: u32): u32 {
 
 // Upper case mapping for UTF16 chars.
 // Code adopted from https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towupper.c
-export function toUpper16(c: u32): u32 {
+function toUpper16(c: u32): u32 {
   if (c < 0x100) {
     if (c == 0x00b5) return 0x039c;
     if ((c >= 0x00e0 && c <= 0x00fe && c != 0x00f7) ||
