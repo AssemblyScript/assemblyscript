@@ -206,21 +206,46 @@ export class String {
     return this.indexOf(searchString, position) != -1;
   }
 
-  indexOf(searchString: String, position: i32 = 0): i32 {
+  indexOf(searchString: String, fromIndex: i32 = 0): i32 {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
-    var pos: isize = position;
+    if (!searchString.length) return 0;
     var len: isize = this.length;
+    if (!len) return -1;
+    var pos: isize = fromIndex;
     var start: isize = min<isize>(max<isize>(pos, 0), len);
     var searchLen: isize = <isize>searchString.length;
 
-    // TODO: two-way, multiple char codes
-    for (let k: usize = start; <isize>k + searchLen <= len; ++k) {
+    // TODO: multiple char codes
+    for (let k: isize = start; <isize>k + searchLen <= len; ++k) {
       if (!compare_memory(
         changetype<usize>(this) + HEADER_SIZE + (k << 1),
         changetype<usize>(searchString) + HEADER_SIZE,
-        searchLen << 1)
-      ) {
+        searchLen << 1
+      )) {
+        return <i32>k;
+      }
+    }
+    return -1;
+  }
+
+  lastIndexOf(searchString: String, fromIndex: i32 = 0): i32 {
+    assert(this !== null);
+    if (searchString === null) searchString = changetype<String>("null");
+    var len: isize = this.length;
+    if (!searchString.length) return len;
+    if (!len) return -1;
+    var pos: isize = fromIndex;
+    var start: isize = min<isize>(max<isize>(pos, 0), len);
+    var searchLen: isize = <isize>searchString.length;
+
+    // TODO: multiple char codes
+    for (let k: isize = len - 1; k >= start - searchLen; --k) {
+      if (!compare_memory(
+        changetype<usize>(this) + HEADER_SIZE + (k << 1),
+        changetype<usize>(searchString) + HEADER_SIZE,
+        searchLen << 1
+      )) {
         return <i32>k;
       }
     }
