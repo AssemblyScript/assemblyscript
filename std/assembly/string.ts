@@ -432,7 +432,7 @@ export class String {
       } else if (cu > 0xffffffff) {
         if (ip == op) out = reallocate(out, len << 1, ip << 1);
         store<u32>(changetype<usize>(out) + (<usize>op << 2), cu, HEADER_SIZE);
-        store<u16>(changetype<usize>(out) + (<usize>(op + 1) << 1), cu, HEADER_SIZE);
+        store<u16>(changetype<usize>(out) + (<usize>(op + 2) << 1), cu, HEADER_SIZE);
         op += 3;
       } else {
         store<u16>(changetype<usize>(out) + (<usize>op << 1), cu, HEADER_SIZE);

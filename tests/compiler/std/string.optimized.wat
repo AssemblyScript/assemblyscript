@@ -6086,7 +6086,7 @@
           (i32.shl
            (i32.add
             (get_local $1)
-            (i32.const 1)
+            (i32.const 2)
            )
            (i32.const 1)
           )
