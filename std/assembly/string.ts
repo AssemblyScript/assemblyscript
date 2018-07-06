@@ -3,6 +3,7 @@ import {
   MAX_LENGTH,
   EMPTY,
   allocate,
+  reallocate,
   isWhiteSpaceOrLineTerminator,
   CharCode,
   toLower,
@@ -420,9 +421,16 @@ export class String {
     var len = this.length;
     if (!len) return EMPTY;
     var out = allocate(len);
-    for (let pos = 0; pos < len; ++pos) {
-      let ch = load<u16>(changetype<usize>(this) + (<usize>pos << 1), HEADER_SIZE);
-      store<u16>(changetype<usize>(out) + (<usize>pos << 1), toUpper(ch), HEADER_SIZE);
+    for (let i = 0, j = 0; i < len; ++i, ++j) {
+      let ch = load<u16>(changetype<usize>(this) + (<usize>i << 1), HEADER_SIZE);
+      let cu = toUpper(ch);
+      if (cu > 0xffff) {
+        // need reallocate
+        if (i == j) out = reallocate(out, len << 1, i << 1);
+        store<u32>(changetype<usize>(out) + (<usize>j << 2), cu, HEADER_SIZE);
+        j++;
+      }
+      store<u16>(changetype<usize>(out) + (<usize>j << 1), cu, HEADER_SIZE);
     }
     return out;
   }
@@ -432,9 +440,16 @@ export class String {
     var len = this.length;
     if (!len) return EMPTY;
     var out = allocate(len);
-    for (let pos = 0; pos < len; ++pos) {
-      let ch = load<u16>(changetype<usize>(this) + (<usize>pos << 1), HEADER_SIZE);
-      store<u16>(changetype<usize>(out) + (<usize>pos << 1), toLower(ch), HEADER_SIZE);
+    for (let i = 0, j = 0; i < len; ++i, ++j) {
+      let ch = load<u16>(changetype<usize>(this) + (<usize>i << 1), HEADER_SIZE);
+      let cl = toLower(ch);
+      if (cl > 0xffff) {
+        // need reallocate
+        if (i == j) out = reallocate(out, len << 1, i << 1);
+        store<u32>(changetype<usize>(out) + (<usize>j << 2), cl, HEADER_SIZE);
+        j++;
+      }
+      store<u16>(changetype<usize>(out) + (<usize>j << 1), cl, HEADER_SIZE);
     }
     return out;
   }

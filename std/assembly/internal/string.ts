@@ -23,6 +23,21 @@ export function allocate(length: i32): String {
   return changetype<String>(buffer);
 }
 
+export function reallocate(buffer: String, newLength: i32, moveOffset: i32 = 0): String {
+  assert(newLength > 0 && newLength <= MAX_LENGTH);
+  var newBuffer = allocate_memory(HEADER_SIZE + (<usize>newLength << 1));
+  store<i32>(newBuffer, newLength);
+  if (moveOffset) {
+    move_memory(
+      changetype<usize>(newBuffer) + HEADER_SIZE,
+      changetype<usize>(buffer)    + HEADER_SIZE,
+      moveOffset << 1
+    );
+  }
+  free_memory(changetype<usize>(buffer));
+  return changetype<String>(newBuffer);
+}
+
 @inline
 export function isAscii(c: u32): bool {
   return (c & 0xFFFFFF80) == 0;
