@@ -421,18 +421,18 @@ export class String {
     var len = this.length;
     if (!len) return EMPTY;
     var out = allocate(len);
-    var i = 0, j = 0;
-    for (; i < len; ++i, ++j) {
-      let ch = load<u16>(changetype<usize>(this) + (<usize>i << 1), HEADER_SIZE);
+    var ip = 0, op = 0;
+    for (; ip < len; ++ip, ++op) {
+      let ch = load<u16>(changetype<usize>(this) + (<usize>ip << 1), HEADER_SIZE);
       let cu = toUpper(ch);
       if (cu > 0xffff) {
-        if (i == j) out = reallocate(out, len << 1, i << 1);
-        store<u32>(changetype<usize>(out) + (<usize>j << 2), cu, HEADER_SIZE);
-        j++;
+        if (ip == op) out = reallocate(out, len << 1, ip << 1);
+        store<u32>(changetype<usize>(out) + (<usize>op << 2), cu, HEADER_SIZE);
+        op++;
       }
-      store<u16>(changetype<usize>(out) + (<usize>j << 1), cu, HEADER_SIZE);
+      store<u16>(changetype<usize>(out) + (<usize>op << 1), cu, HEADER_SIZE);
     }
-    if (i != j) store<i32>(changetype<usize>(out), j);
+    if (ip != op) return reallocate(out, op << 1, op << 1);
     return out;
   }
 
@@ -441,18 +441,18 @@ export class String {
     var len = this.length;
     if (!len) return EMPTY;
     var out = allocate(len);
-    var i = 0, j = 0;
-    for (; i < len; ++i, ++j) {
-      let ch = load<u16>(changetype<usize>(this) + (<usize>i << 1), HEADER_SIZE);
+    var ip = 0, op = 0;
+    for (; ip < len; ++ip, ++op) {
+      let ch = load<u16>(changetype<usize>(this) + (<usize>ip << 1), HEADER_SIZE);
       let cl = toLower(ch);
       if (cl > 0xffff) {
-        if (i == j) out = reallocate(out, len << 1, i << 1);
-        store<u32>(changetype<usize>(out) + (<usize>j << 2), cl, HEADER_SIZE);
-        j++;
+        if (ip == op) out = reallocate(out, len << 1, ip << 1);
+        store<u32>(changetype<usize>(out) + (<usize>op << 2), cl, HEADER_SIZE);
+        op++;
       }
-      store<u16>(changetype<usize>(out) + (<usize>j << 1), cl, HEADER_SIZE);
+      store<u16>(changetype<usize>(out) + (<usize>op << 1), cl, HEADER_SIZE);
     }
-    if (i != j) store<i32>(changetype<usize>(out), j);
+    if (ip != op) return reallocate(out, op << 1, op << 1);
     return out;
   }
 

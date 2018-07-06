@@ -5993,9 +5993,17 @@
     (get_local $2)
     (get_local $1)
    )
-   (i32.store
-    (get_local $3)
-    (get_local $1)
+   (return
+    (call $~lib/internal/string/reallocate
+     (get_local $3)
+     (tee_local $0
+      (i32.shl
+       (get_local $1)
+       (i32.const 1)
+      )
+     )
+     (get_local $0)
+    )
    )
   )
   (get_local $3)
@@ -7787,9 +7795,17 @@
     (get_local $2)
     (get_local $1)
    )
-   (i32.store
-    (get_local $3)
-    (get_local $1)
+   (return
+    (call $~lib/internal/string/reallocate
+     (get_local $3)
+     (tee_local $0
+      (i32.shl
+       (get_local $1)
+       (i32.const 1)
+      )
+     )
+     (get_local $0)
+    )
    )
   )
   (get_local $3)
