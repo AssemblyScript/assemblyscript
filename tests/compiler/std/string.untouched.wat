@@ -209,7 +209,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 256)
+     (i32.const 254)
      (i32.const 4)
     )
     (unreachable)
@@ -428,7 +428,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -479,14 +478,16 @@
    )
   )
   (set_local $4
-   (get_local $2)
+   (i32.load
+    (get_local $1)
+   )
   )
   (set_local $7
    (select
     (tee_local $5
      (select
       (tee_local $5
-       (get_local $4)
+       (get_local $2)
       )
       (tee_local $6
        (i32.const 0)
@@ -506,11 +507,6 @@
     )
    )
   )
-  (set_local $8
-   (i32.load
-    (get_local $1)
-   )
-  )
   (block $break|0
    (set_local $5
     (get_local $7)
@@ -521,7 +517,7 @@
       (i32.le_s
        (i32.add
         (get_local $5)
-        (get_local $8)
+        (get_local $4)
        )
        (get_local $3)
       )
@@ -545,7 +541,7 @@
         (i32.const 4)
        )
        (i32.shl
-        (get_local $8)
+        (get_local $4)
         (i32.const 1)
        )
       )
@@ -581,7 +577,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -593,7 +588,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 233)
+     (i32.const 232)
      (i32.const 4)
     )
     (unreachable)
@@ -632,14 +627,19 @@
    )
   )
   (set_local $4
-   (get_local $2)
+   (i32.load
+    (get_local $1)
+   )
   )
   (set_local $7
    (select
     (tee_local $5
      (select
       (tee_local $5
-       (get_local $4)
+       (i32.sub
+        (get_local $2)
+        (get_local $4)
+       )
       )
       (tee_local $6
        (i32.const 0)
@@ -659,11 +659,6 @@
     )
    )
   )
-  (set_local $8
-   (i32.load
-    (get_local $1)
-   )
-  )
   (block $break|0
    (set_local $5
     (i32.sub
@@ -676,10 +671,7 @@
      (i32.eqz
       (i32.ge_s
        (get_local $5)
-       (i32.sub
-        (get_local $7)
-        (get_local $8)
-       )
+       (get_local $7)
       )
      )
     )
@@ -701,7 +693,7 @@
         (i32.const 4)
        )
        (i32.shl
-        (get_local $8)
+        (get_local $4)
         (i32.const 1)
        )
       )
@@ -1304,7 +1296,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 76)
-                  (i32.const 554)
+                  (i32.const 552)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -4238,7 +4230,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 408)
+     (i32.const 406)
      (i32.const 4)
     )
     (unreachable)
@@ -4273,7 +4265,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 413)
+     (i32.const 411)
      (i32.const 6)
     )
     (unreachable)

@@ -212,9 +212,8 @@ export class String {
     if (!searchString.length) return 0;
     var len: isize = this.length;
     if (!len) return -1;
-    var pos: isize = fromIndex;
-    var start: isize = min<isize>(max<isize>(pos, 0), len);
     var searchLen: isize = <isize>searchString.length;
+    var start: isize = min<isize>(max<isize>(fromIndex, 0), len);
 
     // TODO: multiple char codes
     for (let k: isize = start; <isize>k + searchLen <= len; ++k) {
@@ -235,12 +234,11 @@ export class String {
     var len: isize = this.length;
     if (!searchString.length) return len;
     if (!len) return -1;
-    var pos: isize = fromIndex;
-    var start: isize = min<isize>(max<isize>(pos, 0), len);
     var searchLen: isize = <isize>searchString.length;
+    var start: isize = min<isize>(max<isize>(fromIndex - searchLen, 0), len);
 
     // TODO: multiple char codes
-    for (let k: isize = len - 1; k >= start - searchLen; --k) {
+    for (let k: isize = len - 1; k >= start; --k) {
       if (!compare_memory(
         changetype<usize>(this) + HEADER_SIZE + (k << 1),
         changetype<usize>(searchString) + HEADER_SIZE,
