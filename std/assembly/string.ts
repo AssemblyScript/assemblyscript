@@ -426,7 +426,7 @@ export class String {
       let ch = load<u16>(changetype<usize>(this) + (<usize>ip << 1), HEADER_SIZE);
       let cu = toUpper(ch);
       if (cu > 0xffff) {
-        if (ip == op) out = reallocate(out, len << 1, ip << 1);
+        if (ip == op) out = reallocate(out, len, ip);
         store<u32>(changetype<usize>(out) + (<usize>op << 2), cu, HEADER_SIZE);
         op += 2;
       } else if (cu > 0xffffffff) {
@@ -439,7 +439,7 @@ export class String {
         ++op;
       }
     }
-    if (ip != op) return reallocate(out, op << 1, op << 1);
+    if (ip != op) return reallocate(out, op);
     return out;
   }
 
@@ -453,7 +453,7 @@ export class String {
       let ch = load<u16>(changetype<usize>(this) + (<usize>ip << 1), HEADER_SIZE);
       let cl = toLower(ch);
       if (cl > 0xffff) {
-        if (ip == op) out = reallocate(out, len << 1, ip << 1);
+        if (ip == op) out = reallocate(out, len, ip);
         store<u32>(changetype<usize>(out) + (<usize>op << 2), cl, HEADER_SIZE);
         op += 2;
       } else {
@@ -461,7 +461,7 @@ export class String {
         ++op;
       }
     }
-    if (ip != op) return reallocate(out, op << 1, op << 1);
+    if (ip != op) return reallocate(out, op);
     return out;
   }
 

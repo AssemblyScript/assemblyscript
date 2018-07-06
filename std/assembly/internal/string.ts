@@ -23,15 +23,16 @@ export function allocate(length: i32): String {
   return changetype<String>(buffer);
 }
 
-export function reallocate(buffer: String, newLength: i32, moveOffset: i32 = 0): String {
-  assert(newLength > 0 && newLength <= MAX_LENGTH);
+export function reallocate(buffer: String, newLength: i32, copyLength: i32 = -1): String {
+  assert(newLength > 0 && newLength <= MAX_LENGTH && copyLength >= 0 && copyLength <= MAX_LENGTH);
   var newBuffer = allocate_memory(HEADER_SIZE + (<usize>newLength << 1));
   store<i32>(newBuffer, newLength);
-  if (moveOffset) {
+  if (copyLength == -1) copyLength = newLength;
+  if (copyLength) {
     move_memory(
       changetype<usize>(newBuffer) + HEADER_SIZE,
       changetype<usize>(buffer)    + HEADER_SIZE,
-      moveOffset << 1
+      copyLength << 1
     );
   }
   free_memory(changetype<usize>(buffer));

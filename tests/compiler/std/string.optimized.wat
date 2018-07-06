@@ -5820,6 +5820,24 @@
    )
   )
   (if
+   (get_local $3)
+   (set_local $3
+    (i32.ge_s
+     (get_local $2)
+     (i32.const 0)
+    )
+   )
+  )
+  (if
+   (get_local $3)
+   (set_local $3
+    (i32.le_s
+     (get_local $2)
+     (i32.const 536870910)
+    )
+   )
+  )
+  (if
    (i32.eqz
     (get_local $3)
    )
@@ -5848,6 +5866,15 @@
    (get_local $1)
   )
   (if
+   (i32.eq
+    (get_local $2)
+    (i32.const -1)
+   )
+   (set_local $2
+    (get_local $1)
+   )
+  )
+  (if
    (get_local $2)
    (call $~lib/memory/move_memory
     (i32.add
@@ -5869,7 +5896,30 @@
   )
   (get_local $3)
  )
- (func $~lib/string/String#toUpperCase (; 28 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/reallocate|trampoline (; 28 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (block $1of1
+   (block $0of1
+    (block $oob
+     (br_table $0of1 $1of1 $oob
+      (i32.sub
+       (get_global $~argc)
+       (i32.const 2)
+      )
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (i32.const -1)
+   )
+  )
+  (call $~lib/internal/string/reallocate
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $~lib/string/String#toUpperCase (; 29 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5975,14 +6025,8 @@
         (set_local $2
          (call $~lib/internal/string/reallocate
           (get_local $2)
-          (i32.shl
-           (get_local $5)
-           (i32.const 1)
-          )
-          (i32.shl
-           (get_local $3)
-           (i32.const 1)
-          )
+          (get_local $5)
+          (get_local $3)
          )
         )
        )
@@ -6087,22 +6131,22 @@
     (get_local $3)
     (get_local $1)
    )
-   (return
-    (call $~lib/internal/string/reallocate
-     (get_local $2)
-     (tee_local $0
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
+   (block
+    (set_global $~argc
+     (i32.const 2)
+    )
+    (return
+     (call $~lib/internal/string/reallocate|trampoline
+      (get_local $2)
+      (get_local $1)
+      (i32.const 0)
      )
-     (get_local $0)
     )
    )
   )
   (get_local $2)
  )
- (func $~lib/internal/string/toLower16 (; 29 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/toLower16 (; 30 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (block $folding-inner3
    (block $folding-inner2
@@ -7728,7 +7772,7 @@
    (i32.const 32)
   )
  )
- (func $~lib/string/String#toLowerCase (; 30 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toLowerCase (; 31 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7831,14 +7875,8 @@
         (set_local $3
          (call $~lib/internal/string/reallocate
           (get_local $3)
-          (i32.shl
-           (get_local $5)
-           (i32.const 1)
-          )
-          (i32.shl
-           (get_local $2)
-           (i32.const 1)
-          )
+          (get_local $5)
+          (get_local $2)
          )
         )
        )
@@ -7889,22 +7927,22 @@
     (get_local $2)
     (get_local $1)
    )
-   (return
-    (call $~lib/internal/string/reallocate
-     (get_local $3)
-     (tee_local $0
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
+   (block
+    (set_global $~argc
+     (i32.const 2)
+    )
+    (return
+     (call $~lib/internal/string/reallocate|trampoline
+      (get_local $3)
+      (get_local $1)
+      (i32.const 0)
      )
-     (get_local $0)
     )
    )
   )
   (get_local $3)
  )
- (func $start (; 31 ;) (type $v)
+ (func $start (; 32 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add

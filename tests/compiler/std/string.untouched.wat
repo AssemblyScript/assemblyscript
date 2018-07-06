@@ -6740,13 +6740,31 @@
    (i32.eqz
     (if (result i32)
      (tee_local $3
-      (i32.gt_s
-       (get_local $1)
-       (i32.const 0)
+      (if (result i32)
+       (tee_local $3
+        (if (result i32)
+         (tee_local $3
+          (i32.gt_s
+           (get_local $1)
+           (i32.const 0)
+          )
+         )
+         (i32.le_s
+          (get_local $1)
+          (i32.const 536870910)
+         )
+         (get_local $3)
+        )
+       )
+       (i32.ge_s
+        (get_local $2)
+        (i32.const 0)
+       )
+       (get_local $3)
       )
      )
      (i32.le_s
-      (get_local $1)
+      (get_local $2)
       (i32.const 536870910)
      )
      (get_local $3)
@@ -6778,6 +6796,15 @@
    (get_local $1)
   )
   (if
+   (i32.eq
+    (get_local $2)
+    (i32.const -1)
+   )
+   (set_local $2
+    (get_local $1)
+   )
+  )
+  (if
    (get_local $2)
    (call $~lib/memory/move_memory
     (i32.add
@@ -6799,7 +6826,30 @@
   )
   (get_local $4)
  )
- (func $~lib/string/String#toUpperCase (; 28 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/reallocate|trampoline (; 28 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (block $1of1
+   (block $0of1
+    (block $oob
+     (br_table $0of1 $1of1 $oob
+      (i32.sub
+       (get_global $~argc)
+       (i32.const 2)
+      )
+     )
+    )
+    (unreachable)
+   )
+   (set_local $2
+    (i32.const -1)
+   )
+  )
+  (call $~lib/internal/string/reallocate
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $~lib/string/String#toUpperCase (; 29 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6933,14 +6983,8 @@
         (set_local $2
          (call $~lib/internal/string/reallocate
           (get_local $2)
-          (i32.shl
-           (get_local $1)
-           (i32.const 1)
-          )
-          (i32.shl
-           (get_local $3)
-           (i32.const 1)
-          )
+          (get_local $1)
+          (get_local $3)
          )
         )
        )
@@ -7052,22 +7096,21 @@
     (get_local $4)
    )
    (return
-    (call $~lib/internal/string/reallocate
-     (get_local $2)
-     (i32.shl
-      (get_local $4)
-      (i32.const 1)
+    (block (result i32)
+     (set_global $~argc
+      (i32.const 2)
      )
-     (i32.shl
+     (call $~lib/internal/string/reallocate|trampoline
+      (get_local $2)
       (get_local $4)
-      (i32.const 1)
+      (i32.const 0)
      )
     )
    )
   )
   (get_local $2)
  )
- (func $~lib/internal/string/toLower16 (; 29 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/toLower16 (; 30 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.lt_u
@@ -9559,7 +9602,7 @@
   )
   (get_local $0)
  )
- (func $~lib/string/String#toLowerCase (; 30 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toLowerCase (; 31 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9691,14 +9734,8 @@
         (set_local $2
          (call $~lib/internal/string/reallocate
           (get_local $2)
-          (i32.shl
-           (get_local $1)
-           (i32.const 1)
-          )
-          (i32.shl
-           (get_local $3)
-           (i32.const 1)
-          )
+          (get_local $1)
+          (get_local $3)
          )
         )
        )
@@ -9754,22 +9791,21 @@
     (get_local $4)
    )
    (return
-    (call $~lib/internal/string/reallocate
-     (get_local $2)
-     (i32.shl
-      (get_local $4)
-      (i32.const 1)
+    (block (result i32)
+     (set_global $~argc
+      (i32.const 2)
      )
-     (i32.shl
+     (call $~lib/internal/string/reallocate|trampoline
+      (get_local $2)
       (get_local $4)
-      (i32.const 1)
+      (i32.const 0)
      )
     )
    )
   )
   (get_local $2)
  )
- (func $start (; 31 ;) (type $v)
+ (func $start (; 32 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
