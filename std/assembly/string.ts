@@ -421,17 +421,18 @@ export class String {
     var len = this.length;
     if (!len) return EMPTY;
     var out = allocate(len);
-    for (let i = 0, j = 0; i < len; ++i, ++j) {
+    var i = 0, j = 0;
+    for (; i < len; ++i, ++j) {
       let ch = load<u16>(changetype<usize>(this) + (<usize>i << 1), HEADER_SIZE);
       let cu = toUpper(ch);
       if (cu > 0xffff) {
-        // need reallocate
         if (i == j) out = reallocate(out, len << 1, i << 1);
         store<u32>(changetype<usize>(out) + (<usize>j << 2), cu, HEADER_SIZE);
         j++;
       }
       store<u16>(changetype<usize>(out) + (<usize>j << 1), cu, HEADER_SIZE);
     }
+    if (i != j) store<i32>(changetype<usize>(out), j);
     return out;
   }
 
@@ -440,17 +441,18 @@ export class String {
     var len = this.length;
     if (!len) return EMPTY;
     var out = allocate(len);
-    for (let i = 0, j = 0; i < len; ++i, ++j) {
+    var i = 0, j = 0;
+    for (; i < len; ++i, ++j) {
       let ch = load<u16>(changetype<usize>(this) + (<usize>i << 1), HEADER_SIZE);
       let cl = toLower(ch);
       if (cl > 0xffff) {
-        // need reallocate
         if (i == j) out = reallocate(out, len << 1, i << 1);
         store<u32>(changetype<usize>(out) + (<usize>j << 2), cl, HEADER_SIZE);
         j++;
       }
       store<u16>(changetype<usize>(out) + (<usize>j << 1), cl, HEADER_SIZE);
     }
+    if (i != j) store<i32>(changetype<usize>(out), j);
     return out;
   }
 

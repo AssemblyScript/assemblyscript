@@ -1167,7 +1167,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 76)
-                  (i32.const 570)
+                  (i32.const 572)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -6774,15 +6774,13 @@
     (get_local $1)
    )
   )
+  (set_local $3
+   (i32.const 0)
+  )
+  (set_local $4
+   (i32.const 0)
+  )
   (block $break|0
-   (block
-    (set_local $3
-     (i32.const 0)
-    )
-    (set_local $4
-     (i32.const 0)
-    )
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
@@ -6921,6 +6919,16 @@
      )
     )
     (br $repeat|0)
+   )
+  )
+  (if
+   (i32.ne
+    (get_local $3)
+    (get_local $4)
+   )
+   (i32.store
+    (get_local $2)
+    (get_local $4)
    )
   )
   (get_local $2)
@@ -9435,7 +9443,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 439)
+     (i32.const 440)
      (i32.const 4)
     )
     (unreachable)
@@ -9459,15 +9467,13 @@
     (get_local $1)
    )
   )
+  (set_local $3
+   (i32.const 0)
+  )
+  (set_local $4
+   (i32.const 0)
+  )
   (block $break|0
-   (block
-    (set_local $3
-     (i32.const 0)
-    )
-    (set_local $4
-     (i32.const 0)
-    )
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
@@ -9606,6 +9612,16 @@
      )
     )
     (br $repeat|0)
+   )
+  )
+  (if
+   (i32.ne
+    (get_local $3)
+    (get_local $4)
+   )
+   (i32.store
+    (get_local $2)
+    (get_local $4)
    )
   )
   (get_local $2)
