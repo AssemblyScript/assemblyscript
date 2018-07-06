@@ -59,7 +59,7 @@ export function toLower(c: u32): u32 {
 }
 
 @inline
-export function toUpper(c: u32): u32 {
+export function toUpper(c: u32): u64 {
   return isAscii(c) ? toUpper8(c) : toUpper16(c);
 }
 
@@ -439,7 +439,7 @@ function toLower16(c: u32): u32 {
 
 // Upper case mapping for UTF16 chars.
 // Code based on https://github.com/eblot/newlib/blob/master/newlib/libc/ctype/towupper.c
-function toUpper16(c: u32): u32 {
+function toUpper16(c: u32): u64 {
   if (c < 0x100) {
     if (c == 0x00b5) return 0x039c;
     if ((c - 0x00e0 <= 0x00fe - 0x00e0 && c != 0x00f7) ||

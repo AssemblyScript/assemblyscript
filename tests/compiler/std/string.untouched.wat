@@ -7,6 +7,7 @@
  (type $iF (func (param i32) (result f64)))
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $iI (func (param i32) (result i64)))
  (type $iv (func (param i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -1167,7 +1168,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 76)
-                  (i32.const 572)
+                  (i32.const 581)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -4228,7 +4229,7 @@
   )
   (get_local $4)
  )
- (func $~lib/internal/string/toUpper16 (; 25 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/toUpper16 (; 25 ;) (type $iI) (param $0 i32) (result i64)
   (local $1 i32)
   (if
    (i32.lt_u
@@ -4242,7 +4243,7 @@
       (i32.const 181)
      )
      (return
-      (i32.const 924)
+      (i64.const 924)
      )
     )
     (if
@@ -4281,19 +4282,23 @@
       )
      )
      (return
-      (i32.sub
-       (get_local $0)
-       (i32.const 32)
+      (i64.extend_u/i32
+       (i32.sub
+        (get_local $0)
+        (i32.const 32)
+       )
       )
      )
     )
     (return
-     (select
-      (i32.const 376)
-      (get_local $0)
-      (i32.eq
+     (i64.extend_u/i32
+      (select
+       (i32.const 376)
        (get_local $0)
-       (i32.const 255)
+       (i32.eq
+        (get_local $0)
+        (i32.const 255)
+       )
       )
      )
     )
@@ -4406,11 +4411,13 @@
        )
       )
       (return
-       (i32.sub
-        (get_local $0)
-        (i32.and
+       (i64.extend_u/i32
+        (i32.sub
          (get_local $0)
-         (i32.const 1)
+         (i32.and
+          (get_local $0)
+          (i32.const 1)
+         )
         )
        )
       )
@@ -4460,12 +4467,14 @@
        )
       )
       (return
-       (i32.sub
-        (get_local $0)
-        (i32.eqz
-         (i32.and
-          (get_local $0)
-          (i32.const 1)
+       (i64.extend_u/i32
+        (i32.sub
+         (get_local $0)
+         (i32.eqz
+          (i32.and
+           (get_local $0)
+           (i32.const 1)
+          )
          )
         )
        )
@@ -4477,7 +4486,7 @@
        (i32.const 305)
       )
       (return
-       (i32.const 73)
+       (i64.const 73)
       )
      )
      (if
@@ -4500,9 +4509,11 @@
        )
       )
       (return
-       (i32.sub
-        (get_local $0)
-        (i32.const 1)
+       (i64.extend_u/i32
+        (i32.sub
+         (get_local $0)
+         (i32.const 1)
+        )
        )
       )
      )
@@ -4952,47 +4963,47 @@
                                                                      (br $case61|0)
                                                                     )
                                                                     (return
-                                                                     (i32.const 83)
+                                                                     (i64.const 83)
                                                                     )
                                                                    )
                                                                    (return
-                                                                    (i32.const 579)
+                                                                    (i64.const 579)
                                                                    )
                                                                   )
                                                                   (return
-                                                                   (i32.const 386)
+                                                                   (i64.const 386)
                                                                   )
                                                                  )
                                                                  (return
-                                                                  (i32.const 388)
+                                                                  (i64.const 388)
                                                                  )
                                                                 )
                                                                 (return
-                                                                 (i32.const 391)
+                                                                 (i64.const 391)
                                                                 )
                                                                )
                                                                (return
-                                                                (i32.const 395)
+                                                                (i64.const 395)
                                                                )
                                                               )
                                                               (return
-                                                               (i32.const 401)
+                                                               (i64.const 401)
                                                               )
                                                              )
                                                              (return
-                                                              (i32.const 502)
+                                                              (i64.const 502)
                                                              )
                                                             )
                                                             (return
-                                                             (i32.const 408)
+                                                             (i64.const 408)
                                                             )
                                                            )
                                                            (return
-                                                            (i32.const 573)
+                                                            (i64.const 573)
                                                            )
                                                           )
                                                           (return
-                                                           (i32.const 544)
+                                                           (i64.const 544)
                                                           )
                                                          )
                                                         )
@@ -5010,147 +5021,151 @@
                                             )
                                            )
                                            (return
-                                            (i32.sub
-                                             (get_local $0)
-                                             (i32.const 1)
+                                            (i64.extend_u/i32
+                                             (i32.sub
+                                              (get_local $0)
+                                              (i32.const 1)
+                                             )
                                             )
                                            )
                                           )
                                           (return
-                                           (i32.const 503)
+                                           (i64.const 503)
                                           )
                                          )
                                         )
                                        )
                                        (return
-                                        (i32.sub
-                                         (get_local $0)
-                                         (i32.const 2)
+                                        (i64.extend_u/i32
+                                         (i32.sub
+                                          (get_local $0)
+                                          (i32.const 2)
+                                         )
                                         )
                                        )
                                       )
                                       (return
-                                       (i32.const 398)
+                                       (i64.const 398)
                                       )
                                      )
                                      (return
-                                      (i32.const 497)
+                                      (i64.const 497)
                                      )
                                     )
                                     (return
-                                     (i32.const 11390)
+                                     (i64.const 11390)
                                     )
                                    )
                                    (return
-                                    (i32.const 11391)
+                                    (i64.const 11391)
                                    )
                                   )
                                   (return
-                                   (i32.const 11375)
+                                   (i64.const 11375)
                                   )
                                  )
                                  (return
-                                  (i32.const 11373)
+                                  (i64.const 11373)
                                  )
                                 )
                                 (return
-                                 (i32.const 11376)
+                                 (i64.const 11376)
                                 )
                                )
                                (return
-                                (i32.const 385)
+                                (i64.const 385)
                                )
                               )
                               (return
-                               (i32.const 390)
+                               (i64.const 390)
                               )
                              )
                              (return
-                              (i32.const 393)
+                              (i64.const 393)
                              )
                             )
                             (return
-                             (i32.const 394)
+                             (i64.const 394)
                             )
                            )
                            (return
-                            (i32.const 399)
+                            (i64.const 399)
                            )
                           )
                           (return
-                           (i32.const 400)
+                           (i64.const 400)
                           )
                          )
                          (return
-                          (i32.const 403)
+                          (i64.const 403)
                          )
                         )
                         (return
-                         (i32.const 404)
+                         (i64.const 404)
                         )
                        )
                        (return
-                        (i32.const 407)
+                        (i64.const 407)
                        )
                       )
                       (return
-                       (i32.const 406)
+                       (i64.const 406)
                       )
                      )
                      (return
-                      (i32.const 11362)
+                      (i64.const 11362)
                      )
                     )
                     (return
-                     (i32.const 412)
+                     (i64.const 412)
                     )
                    )
                    (return
-                    (i32.const 11374)
+                    (i64.const 11374)
                    )
                   )
                   (return
-                   (i32.const 413)
+                   (i64.const 413)
                   )
                  )
                  (return
-                  (i32.const 415)
+                  (i64.const 415)
                  )
                 )
                 (return
-                 (i32.const 11364)
+                 (i64.const 11364)
                 )
                )
                (return
-                (i32.const 422)
+                (i64.const 422)
                )
               )
               (return
-               (i32.const 425)
+               (i64.const 425)
               )
              )
              (return
-              (i32.const 430)
+              (i64.const 430)
              )
             )
             (return
-             (i32.const 580)
+             (i64.const 580)
             )
            )
            (return
-            (i32.const 433)
+            (i64.const 433)
            )
           )
           (return
-           (i32.const 434)
+           (i64.const 434)
           )
          )
          (return
-          (i32.const 581)
+          (i64.const 581)
          )
         )
         (return
-         (i32.const 439)
+         (i64.const 439)
         )
        )
        (br $break|0)
@@ -5175,9 +5190,11 @@
         )
        )
        (return
-        (i32.sub
-         (get_local $0)
-         (i32.const 37)
+        (i64.extend_u/i32
+         (i32.sub
+          (get_local $0)
+          (i32.const 37)
+         )
         )
        )
       )
@@ -5202,9 +5219,11 @@
         (get_local $1)
        )
        (return
-        (i32.sub
-         (get_local $0)
-         (i32.const 32)
+        (i64.extend_u/i32
+         (i32.sub
+          (get_local $0)
+          (i32.const 32)
+         )
         )
        )
       )
@@ -5229,9 +5248,11 @@
         (get_local $1)
        )
        (return
-        (i32.sub
-         (get_local $0)
-         (i32.const 1)
+        (i64.extend_u/i32
+         (i32.sub
+          (get_local $0)
+          (i32.const 1)
+         )
         )
        )
       )
@@ -5404,7 +5425,7 @@
                                (br $case23|1)
                               )
                               (return
-                               (i32.const 921)
+                               (i64.const 921)
                               )
                              )
                             )
@@ -5412,75 +5433,81 @@
                           )
                          )
                          (return
-                          (i32.sub
-                           (get_local $0)
-                           (i32.const 1)
+                          (i64.extend_u/i32
+                           (i32.sub
+                            (get_local $0)
+                            (i32.const 1)
+                           )
                           )
                          )
                         )
                        )
                       )
                       (return
-                       (i32.add
-                        (get_local $0)
-                        (i32.const 130)
+                       (i64.extend_u/i32
+                        (i32.add
+                         (get_local $0)
+                         (i32.const 130)
+                        )
                        )
                       )
                      )
                      (return
-                      (i32.const 902)
+                      (i64.const 902)
                      )
                     )
                     (return
-                     (i32.const 931)
+                     (i64.const 931)
                     )
                    )
                    (return
-                    (i32.const 908)
+                    (i64.const 908)
                    )
                   )
                  )
                  (return
-                  (i32.sub
-                   (get_local $0)
-                   (i32.const 63)
+                  (i64.extend_u/i32
+                   (i32.sub
+                    (get_local $0)
+                    (i32.const 63)
+                   )
                   )
                  )
                 )
                 (return
-                 (i32.const 914)
+                 (i64.const 914)
                 )
                )
                (return
-                (i32.const 920)
+                (i64.const 920)
                )
               )
               (return
-               (i32.const 934)
+               (i64.const 934)
               )
              )
              (return
-              (i32.const 928)
+              (i64.const 928)
              )
             )
             (return
-             (i32.const 975)
+             (i64.const 975)
             )
            )
            (return
-            (i32.const 922)
+            (i64.const 922)
            )
           )
           (return
-           (i32.const 929)
+           (i64.const 929)
           )
          )
          (return
-          (i32.const 1017)
+          (i64.const 1017)
          )
         )
         (return
-         (i32.const 917)
+         (i64.const 917)
         )
        )
        (br $break|1)
@@ -5504,9 +5531,11 @@
          )
         )
         (return
-         (i32.sub
-          (get_local $0)
-          (i32.const 32)
+         (i64.extend_u/i32
+          (i32.sub
+           (get_local $0)
+           (i32.const 32)
+          )
          )
         )
        )
@@ -5522,9 +5551,11 @@
          )
         )
         (return
-         (i32.sub
-          (get_local $0)
-          (i32.const 80)
+         (i64.extend_u/i32
+          (i32.sub
+           (get_local $0)
+           (i32.const 80)
+          )
          )
         )
        )
@@ -5570,11 +5601,13 @@
          )
         )
         (return
-         (i32.sub
-          (get_local $0)
-          (i32.and
+         (i64.extend_u/i32
+          (i32.sub
            (get_local $0)
-           (i32.const 1)
+           (i32.and
+            (get_local $0)
+            (i32.const 1)
+           )
           )
          )
         )
@@ -5591,12 +5624,14 @@
          )
         )
         (return
-         (i32.sub
-          (get_local $0)
-          (i32.eqz
-           (i32.and
-            (get_local $0)
-            (i32.const 1)
+         (i64.extend_u/i32
+          (i32.sub
+           (get_local $0)
+           (i32.eqz
+            (i32.and
+             (get_local $0)
+             (i32.const 1)
+            )
            )
           )
          )
@@ -5608,7 +5643,7 @@
          (i32.const 1231)
         )
         (return
-         (i32.const 1216)
+         (i64.const 1216)
         )
        )
        (if
@@ -5623,9 +5658,11 @@
          )
         )
         (return
-         (i32.sub
-          (get_local $0)
-          (i32.const 1)
+         (i64.extend_u/i32
+          (i32.sub
+           (get_local $0)
+           (i32.const 1)
+          )
          )
         )
        )
@@ -5657,9 +5694,11 @@
           (get_local $1)
          )
          (return
-          (i32.sub
-           (get_local $0)
-           (i32.const 1)
+          (i64.extend_u/i32
+           (i32.sub
+            (get_local $0)
+            (i32.const 1)
+           )
           )
          )
         )
@@ -5675,9 +5714,11 @@
           )
          )
          (return
-          (i32.sub
-           (get_local $0)
-           (i32.const 48)
+          (i64.extend_u/i32
+           (i32.sub
+            (get_local $0)
+            (i32.const 48)
+           )
           )
          )
         )
@@ -5694,7 +5735,7 @@
            (i32.const 7545)
           )
           (return
-           (i32.const 42877)
+           (i64.const 42877)
           )
          )
          (if
@@ -5703,7 +5744,7 @@
            (i32.const 7549)
           )
           (return
-           (i32.const 11363)
+           (i64.const 11363)
           )
          )
          (if
@@ -5733,11 +5774,13 @@
            )
           )
           (return
-           (i32.sub
-            (get_local $0)
-            (i32.and
+           (i64.extend_u/i32
+            (i32.sub
              (get_local $0)
-             (i32.const 1)
+             (i32.and
+              (get_local $0)
+              (i32.const 1)
+             )
             )
            )
           )
@@ -5748,7 +5791,7 @@
            (i32.const 7835)
           )
           (return
-           (i32.const 7776)
+           (i64.const 7776)
           )
          )
         )
@@ -5914,9 +5957,11 @@
             )
            )
            (return
-            (i32.add
-             (get_local $0)
-             (i32.const 8)
+            (i64.extend_u/i32
+             (i32.add
+              (get_local $0)
+              (i32.const 8)
+             )
             )
            )
           )
@@ -6114,103 +6159,103 @@
                                       (br $case25|2)
                                      )
                                      (return
-                                      (i32.const 8120)
+                                      (i64.const 8120)
                                      )
                                     )
                                     (return
-                                     (i32.const 8121)
+                                     (i64.const 8121)
                                     )
                                    )
                                    (return
-                                    (i32.const 8122)
+                                    (i64.const 8122)
                                    )
                                   )
                                   (return
-                                   (i32.const 8123)
+                                   (i64.const 8123)
                                   )
                                  )
                                  (return
-                                  (i32.const 8124)
+                                  (i64.const 8124)
                                  )
                                 )
                                 (return
-                                 (i32.const 921)
+                                 (i64.const 921)
                                 )
                                )
                                (return
-                                (i32.const 8136)
+                                (i64.const 8136)
                                )
                               )
                               (return
-                               (i32.const 8137)
+                               (i64.const 8137)
                               )
                              )
                              (return
-                              (i32.const 8138)
+                              (i64.const 8138)
                              )
                             )
                             (return
-                             (i32.const 8139)
+                             (i64.const 8139)
                             )
                            )
                            (return
-                            (i32.const 8140)
+                            (i64.const 8140)
                            )
                           )
                           (return
-                           (i32.const 8152)
+                           (i64.const 8152)
                           )
                          )
                          (return
-                          (i32.const 8153)
+                          (i64.const 8153)
                          )
                         )
                         (return
-                         (i32.const 8154)
+                         (i64.const 8154)
                         )
                        )
                        (return
-                        (i32.const 8155)
+                        (i64.const 8155)
                        )
                       )
                       (return
-                       (i32.const 8168)
+                       (i64.const 8168)
                       )
                      )
                      (return
-                      (i32.const 8169)
+                      (i64.const 8169)
                      )
                     )
                     (return
-                     (i32.const 8170)
+                     (i64.const 8170)
                     )
                    )
                    (return
-                    (i32.const 8171)
+                    (i64.const 8171)
                    )
                   )
                   (return
-                   (i32.const 8172)
+                   (i64.const 8172)
                   )
                  )
                  (return
-                  (i32.const 8184)
+                  (i64.const 8184)
                  )
                 )
                 (return
-                 (i32.const 8185)
+                 (i64.const 8185)
                 )
                )
                (return
-                (i32.const 8186)
+                (i64.const 8186)
                )
               )
               (return
-               (i32.const 8187)
+               (i64.const 8187)
               )
              )
              (return
-              (i32.const 8188)
+              (i64.const 8188)
              )
             )
             (br $break|2)
@@ -6229,7 +6274,7 @@
              (i32.const 8526)
             )
             (return
-             (i32.const 8498)
+             (i64.const 8498)
             )
            )
            (if
@@ -6238,7 +6283,7 @@
              (i32.const 8580)
             )
             (return
-             (i32.const 8579)
+             (i64.const 8579)
             )
            )
            (if
@@ -6253,9 +6298,11 @@
              )
             )
             (return
-             (i32.sub
-              (get_local $0)
-              (i32.const 16)
+             (i64.extend_u/i32
+              (i32.sub
+               (get_local $0)
+               (i32.const 16)
+              )
              )
             )
            )
@@ -6271,9 +6318,11 @@
              )
             )
             (return
-             (i32.sub
-              (get_local $0)
-              (i32.const 26)
+             (i64.extend_u/i32
+              (i32.sub
+               (get_local $0)
+               (i32.const 26)
+              )
              )
             )
            )
@@ -6289,9 +6338,11 @@
              )
             )
             (return
-             (i32.sub
-              (get_local $0)
-              (i32.const 48)
+             (i64.extend_u/i32
+              (i32.sub
+               (get_local $0)
+               (i32.const 48)
+              )
              )
             )
            )
@@ -6376,9 +6427,11 @@
              )
             )
             (return
-             (i32.sub
-              (get_local $0)
-              (i32.const 1)
+             (i64.extend_u/i32
+              (i32.sub
+               (get_local $0)
+               (i32.const 1)
+              )
              )
             )
            )
@@ -6403,9 +6456,11 @@
              (get_local $1)
             )
             (return
-             (i32.sub
-              (get_local $0)
-              (i32.const 1)
+             (i64.extend_u/i32
+              (i32.sub
+               (get_local $0)
+               (i32.const 1)
+              )
              )
             )
            )
@@ -6421,9 +6476,11 @@
              )
             )
             (return
-             (i32.sub
-              (get_local $0)
-              (i32.const 7264)
+             (i64.extend_u/i32
+              (i32.sub
+               (get_local $0)
+               (i32.const 7264)
+              )
              )
             )
            )
@@ -6456,15 +6513,15 @@
                 (br $case3|3)
                )
                (return
-                (i32.const 11360)
+                (i64.const 11360)
                )
               )
               (return
-               (i32.const 570)
+               (i64.const 570)
               )
              )
              (return
-              (i32.const 574)
+              (i64.const 574)
              )
             )
             (br $break|3)
@@ -6505,9 +6562,11 @@
               )
              )
              (return
-              (i32.sub
-               (get_local $0)
-               (i32.const 1)
+              (i64.extend_u/i32
+               (i32.sub
+                (get_local $0)
+                (i32.const 1)
+               )
               )
              )
             )
@@ -6607,9 +6666,11 @@
               (get_local $1)
              )
              (return
-              (i32.sub
-               (get_local $0)
-               (i32.const 1)
+              (i64.extend_u/i32
+               (i32.sub
+                (get_local $0)
+                (i32.const 1)
+               )
               )
              )
             )
@@ -6627,9 +6688,11 @@
               )
              )
              (return
-              (i32.sub
-               (get_local $0)
-               (i32.const 32)
+              (i64.extend_u/i32
+               (i32.sub
+                (get_local $0)
+                (i32.const 32)
+               )
               )
              )
             )
@@ -6645,9 +6708,11 @@
               )
              )
              (return
-              (i32.sub
-               (get_local $0)
-               (i32.const 40)
+              (i64.extend_u/i32
+               (i32.sub
+                (get_local $0)
+                (i32.const 40)
+               )
               )
              )
             )
@@ -6661,7 +6726,9 @@
     )
    )
   )
-  (get_local $0)
+  (i64.extend_u/i32
+   (get_local $0)
+  )
  )
  (func $~lib/allocator/arena/free_memory (; 26 ;) (type $iv) (param $0 i32)
   (nop)
@@ -6738,7 +6805,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
+  (local $6 i64)
   (if
    (i32.eqz
     (i32.ne
@@ -6803,8 +6870,8 @@
       )
      )
      (set_local $6
-      (block $~lib/internal/string/toUpper|inlined.0 (result i32)
-       (if (result i32)
+      (block $~lib/internal/string/toUpper|inlined.0 (result i64)
+       (if (result i64)
         (i32.and
          (block $~lib/internal/string/isAscii|inlined.1 (result i32)
           (i32.eq
@@ -6817,30 +6884,32 @@
          )
          (i32.const 1)
         )
-        (block $~lib/internal/string/toUpper8|inlined.0 (result i32)
-         (select
-          (i32.add
-           (i32.sub
-            (get_local $5)
-            (i32.const 97)
+        (i64.extend_u/i32
+         (block $~lib/internal/string/toUpper8|inlined.0 (result i32)
+          (select
+           (i32.add
+            (i32.sub
+             (get_local $5)
+             (i32.const 97)
+            )
+            (i32.const 65)
            )
-           (i32.const 65)
-          )
-          (get_local $5)
-          (i32.and
-           (block $~lib/internal/string/isLower|inlined.0 (result i32)
-            (i32.le_u
-             (i32.sub
-              (get_local $5)
-              (i32.const 97)
-             )
-             (i32.sub
-              (i32.const 122)
-              (i32.const 97)
+           (get_local $5)
+           (i32.and
+            (block $~lib/internal/string/isLower|inlined.0 (result i32)
+             (i32.le_u
+              (i32.sub
+               (get_local $5)
+               (i32.const 97)
+              )
+              (i32.sub
+               (i32.const 122)
+               (i32.const 97)
+              )
              )
             )
+            (i32.const 1)
            )
-           (i32.const 1)
           )
          )
         )
@@ -6851,9 +6920,9 @@
       )
      )
      (if
-      (i32.gt_u
+      (i64.gt_u
        (get_local $6)
-       (i32.const 65535)
+       (i64.const 65535)
       )
       (block
        (if
@@ -6875,7 +6944,7 @@
          )
         )
        )
-       (i32.store offset=4
+       (i64.store32 offset=4
         (i32.add
          (get_local $2)
          (i32.shl
@@ -6888,34 +6957,90 @@
        (set_local $4
         (i32.add
          (get_local $4)
-         (i32.const 1)
+         (i32.const 2)
+        )
+       )
+      )
+      (if
+       (i64.gt_u
+        (get_local $6)
+        (i64.const 4294967295)
+       )
+       (block
+        (if
+         (i32.eq
+          (get_local $3)
+          (get_local $4)
+         )
+         (set_local $2
+          (call $~lib/internal/string/reallocate
+           (get_local $2)
+           (i32.shl
+            (get_local $1)
+            (i32.const 1)
+           )
+           (i32.shl
+            (get_local $3)
+            (i32.const 1)
+           )
+          )
+         )
+        )
+        (i64.store32 offset=4
+         (i32.add
+          (get_local $2)
+          (i32.shl
+           (get_local $4)
+           (i32.const 2)
+          )
+         )
+         (get_local $6)
+        )
+        (i64.store16 offset=4
+         (i32.add
+          (get_local $2)
+          (i32.shl
+           (i32.add
+            (get_local $4)
+            (i32.const 1)
+           )
+           (i32.const 1)
+          )
+         )
+         (get_local $6)
+        )
+        (set_local $4
+         (i32.add
+          (get_local $4)
+          (i32.const 3)
+         )
+        )
+       )
+       (block
+        (i64.store16 offset=4
+         (i32.add
+          (get_local $2)
+          (i32.shl
+           (get_local $4)
+           (i32.const 1)
+          )
+         )
+         (get_local $6)
+        )
+        (set_local $4
+         (i32.add
+          (get_local $4)
+          (i32.const 1)
+         )
         )
        )
       )
      )
-     (i32.store16 offset=4
-      (i32.add
-       (get_local $2)
-       (i32.shl
-        (get_local $4)
-        (i32.const 1)
-       )
-      )
-      (get_local $6)
-     )
     )
-    (block
-     (set_local $3
-      (i32.add
-       (get_local $3)
-       (i32.const 1)
-      )
-     )
-     (set_local $4
-      (i32.add
-       (get_local $4)
-       (i32.const 1)
-      )
+    (set_local $3
+     (i32.add
+      (get_local $3)
+      (i32.const 1)
      )
     )
     (br $repeat|0)
@@ -9452,7 +9577,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 440)
+     (i32.const 447)
      (i32.const 4)
     )
     (unreachable)
@@ -9590,34 +9715,34 @@
        (set_local $4
         (i32.add
          (get_local $4)
+         (i32.const 2)
+        )
+       )
+      )
+      (block
+       (i32.store16 offset=4
+        (i32.add
+         (get_local $2)
+         (i32.shl
+          (get_local $4)
+          (i32.const 1)
+         )
+        )
+        (get_local $6)
+       )
+       (set_local $4
+        (i32.add
+         (get_local $4)
          (i32.const 1)
         )
        )
       )
      )
-     (i32.store16 offset=4
-      (i32.add
-       (get_local $2)
-       (i32.shl
-        (get_local $4)
-        (i32.const 1)
-       )
-      )
-      (get_local $6)
-     )
     )
-    (block
-     (set_local $3
-      (i32.add
-       (get_local $3)
-       (i32.const 1)
-      )
-     )
-     (set_local $4
-      (i32.add
-       (get_local $4)
-       (i32.const 1)
-      )
+    (set_local $3
+     (i32.add
+      (get_local $3)
+      (i32.const 1)
      )
     )
     (br $repeat|0)

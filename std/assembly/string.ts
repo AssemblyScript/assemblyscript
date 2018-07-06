@@ -422,15 +422,22 @@ export class String {
     if (!len) return EMPTY;
     var out = allocate(len);
     var ip = 0, op = 0;
-    for (; ip < len; ++ip, ++op) {
+    for (; ip < len; ++ip) {
       let ch = load<u16>(changetype<usize>(this) + (<usize>ip << 1), HEADER_SIZE);
       let cu = toUpper(ch);
       if (cu > 0xffff) {
         if (ip == op) out = reallocate(out, len << 1, ip << 1);
         store<u32>(changetype<usize>(out) + (<usize>op << 2), cu, HEADER_SIZE);
-        op++;
+        op += 2;
+      } else if (cu > 0xffffffff) {
+        if (ip == op) out = reallocate(out, len << 1, ip << 1);
+        store<u32>(changetype<usize>(out) + (<usize>op << 2), cu, HEADER_SIZE);
+        store<u16>(changetype<usize>(out) + (<usize>(op + 1) << 1), cu, HEADER_SIZE);
+        op += 3;
+      } else {
+        store<u16>(changetype<usize>(out) + (<usize>op << 1), cu, HEADER_SIZE);
+        ++op;
       }
-      store<u16>(changetype<usize>(out) + (<usize>op << 1), cu, HEADER_SIZE);
     }
     if (ip != op) return reallocate(out, op << 1, op << 1);
     return out;
@@ -442,15 +449,17 @@ export class String {
     if (!len) return EMPTY;
     var out = allocate(len);
     var ip = 0, op = 0;
-    for (; ip < len; ++ip, ++op) {
+    for (; ip < len; ++ip) {
       let ch = load<u16>(changetype<usize>(this) + (<usize>ip << 1), HEADER_SIZE);
       let cl = toLower(ch);
       if (cl > 0xffff) {
         if (ip == op) out = reallocate(out, len << 1, ip << 1);
         store<u32>(changetype<usize>(out) + (<usize>op << 2), cl, HEADER_SIZE);
-        op++;
+        op += 2;
+      } else {
+        store<u16>(changetype<usize>(out) + (<usize>op << 1), cl, HEADER_SIZE);
+        ++op;
       }
-      store<u16>(changetype<usize>(out) + (<usize>op << 1), cl, HEADER_SIZE);
     }
     if (ip != op) return reallocate(out, op << 1, op << 1);
     return out;
