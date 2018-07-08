@@ -395,33 +395,36 @@
     (i32.const -1)
    )
   )
-  (block $break|0
-   (set_local $2
-    (select
-     (tee_local $2
-      (select
+  (set_local $2
+   (select
+    (tee_local $2
+     (select
+      (get_local $2)
+      (i32.const 0)
+      (i32.gt_s
        (get_local $2)
        (i32.const 0)
-       (i32.gt_s
-        (get_local $2)
-        (i32.const 0)
-       )
       )
      )
+    )
+    (get_local $3)
+    (i32.lt_s
+     (get_local $2)
      (get_local $3)
-     (i32.lt_s
-      (get_local $2)
-      (get_local $3)
-     )
     )
    )
+  )
+  (set_local $3
+   (i32.sub
+    (get_local $3)
+    (get_local $4)
+   )
+  )
+  (block $break|0
    (loop $repeat|0
     (br_if $break|0
      (i32.gt_s
-      (i32.add
-       (get_local $2)
-       (get_local $4)
-      )
+      (get_local $2)
       (get_local $3)
      )
     )

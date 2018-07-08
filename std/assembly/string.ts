@@ -215,9 +215,9 @@ export class String {
     var len: isize = this.length;
     if (!len) return -1;
     var start: isize = min<isize>(max<isize>(fromIndex, 0), len);
-
+    len -= searchLen;
     // TODO: multiple char codes
-    for (let k: isize = start; k + searchLen <= len; ++k) {
+    for (let k: isize = start; k <= len; ++k) {
       if (!compare_memory(
         changetype<usize>(this) + HEADER_SIZE + (k << 1),
         changetype<usize>(searchString) + HEADER_SIZE,

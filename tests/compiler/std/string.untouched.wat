@@ -506,6 +506,12 @@
     )
    )
   )
+  (set_local $4
+   (i32.sub
+    (get_local $4)
+    (get_local $3)
+   )
+  )
   (block $break|0
    (set_local $5
     (get_local $7)
@@ -514,10 +520,7 @@
     (br_if $break|0
      (i32.eqz
       (i32.le_s
-       (i32.add
-        (get_local $5)
-        (get_local $3)
-       )
+       (get_local $5)
        (get_local $4)
       )
      )
