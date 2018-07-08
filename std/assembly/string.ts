@@ -2,7 +2,7 @@ import {
   HEADER_SIZE,
   MAX_LENGTH,
   EMPTY,
-  NULL,
+  clamp,
   allocate,
   isWhiteSpaceOrLineTerminator,
   CharCode,
@@ -67,13 +67,13 @@ export class String {
 
   @operator("+")
   private static __concat(left: String, right: String): String {
-    if (!changetype<usize>(left)) left = NULL;
+    if (!changetype<usize>(left)) left = changetype<String>("null");
     return left.concat(right);
   }
 
   concat(other: String): String {
     assert(this !== null);
-    if (other === null) other = NULL;
+    if (other === null) other = changetype<String>("null");
     var thisLen: isize = this.length;
     var otherLen: isize = other.length;
     var outLen: usize = thisLen + otherLen;
@@ -98,7 +98,7 @@ export class String {
   endsWith(searchString: String, endPosition: i32 = MAX_LENGTH): bool {
     assert(this !== null);
     if (searchString === null) return false;
-    var end: isize = <isize>min(max(endPosition, 0), this.length);
+    var end = clamp<isize>(endPosition, 0, this.length);
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
     if (start < 0) return false;
@@ -209,12 +209,12 @@ export class String {
 
   indexOf(searchString: String, fromIndex: i32 = 0): i32 {
     assert(this !== null);
-    if (searchString === null) searchString = NULL;
+    if (searchString === null) searchString = changetype<String>("null");
     var searchLen: isize = searchString.length;
     if (!searchLen) return 0;
     var len: isize = this.length;
     if (!len) return -1;
-    var start: isize = min<isize>(max<isize>(fromIndex, 0), len);
+    var start = clamp<isize>(fromIndex, 0, len);
     len -= searchLen;
     // TODO: multiple char codes
     for (let k: isize = start; k <= len; ++k) {
@@ -231,12 +231,12 @@ export class String {
 
   lastIndexOf(searchString: String, fromIndex: i32 = 0): i32 {
     assert(this !== null);
-    if (searchString === null) searchString = NULL;
+    if (searchString === null) searchString = changetype<String>("null");
     var len: isize = this.length;
     var searchLen: isize = searchString.length;
     if (!searchLen) return len;
     if (!len) return -1;
-    var start: isize = min<isize>(max<isize>(fromIndex - searchLen, 0), len);
+    var start = clamp<isize>(fromIndex - searchLen, 0, len);
 
     // TODO: multiple char codes
     for (let k: isize = len - 1; k >= start; --k) {
@@ -253,12 +253,12 @@ export class String {
 
   startsWith(searchString: String, position: i32 = 0): bool {
     assert(this !== null);
-    if (searchString === null) searchString = NULL;
+    if (searchString === null) searchString = changetype<String>("null");
 
     var pos: isize = position;
     var len: isize = this.length;
-    var start: isize = min<isize>(max<isize>(pos, 0), len);
-    var searchLength: isize = <isize>searchString.length;
+    var start = clamp<isize>(pos, 0, len);
+    var searchLength: isize = searchString.length;
     if (searchLength + start > len) {
       return false;
     }
@@ -277,7 +277,7 @@ export class String {
     if (intStart < 0) {
       intStart = max<isize>(size + intStart, 0);
     }
-    var resultLength: isize = min<isize>(max<isize>(end, 0), size - intStart);
+    var resultLength = clamp<isize>(end, 0, size - intStart);
     if (resultLength <= 0) {
       return EMPTY;
     }
@@ -293,8 +293,8 @@ export class String {
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
     assert(this !== null);
     var len = this.length;
-    var finalStart = min<i32>(max<i32>(start, 0), len);
-    var finalEnd = min<i32>(max<i32>(end, 0), len);
+    var finalStart = clamp<isize>(start, 0, len);
+    var finalEnd = clamp<isize>(end, 0, len);
     var from = min<i32>(finalStart, finalEnd);
     var to = max<i32>(finalStart, finalEnd);
     len = to - from;

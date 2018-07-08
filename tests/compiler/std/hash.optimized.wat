@@ -3,10 +3,9 @@
  (type $Ii (func (param i64) (result i32)))
  (type $v (func))
  (memory $0 1)
- (data (i32.const 12) "\04\00\00\00n\00u\00l\00l")
- (data (i32.const 24) "\01\00\00\00a")
- (data (i32.const 32) "\02\00\00\00a\00b")
- (data (i32.const 40) "\03\00\00\00a\00b\00c")
+ (data (i32.const 12) "\01\00\00\00a")
+ (data (i32.const 20) "\02\00\00\00a\00b")
+ (data (i32.const 28) "\03\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/internal/hash/hashStr (; 0 ;) (type $ii) (param $0 i32) (result i32)
@@ -222,21 +221,21 @@
   (drop
    (call $std/hash/check
     (call $~lib/internal/hash/hashStr
-     (i32.const 24)
+     (i32.const 12)
     )
    )
   )
   (drop
    (call $std/hash/check
     (call $~lib/internal/hash/hashStr
-     (i32.const 32)
+     (i32.const 20)
     )
    )
   )
   (drop
    (call $std/hash/check
     (call $~lib/internal/hash/hashStr
-     (i32.const 40)
+     (i32.const 28)
     )
    )
   )

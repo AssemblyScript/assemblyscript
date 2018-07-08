@@ -55,7 +55,6 @@
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $~lib/internal/string/EMPTY i32 (i32.const 544))
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
- (global $~lib/internal/string/NULL i32 (i32.const 780))
  (global $std/array/randomStrings400 (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 792))
  (table 51 51 anyfunc)
@@ -8612,7 +8611,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 728)
-     (i32.const 21)
+     (i32.const 25)
      (i32.const 2)
     )
     (unreachable)
