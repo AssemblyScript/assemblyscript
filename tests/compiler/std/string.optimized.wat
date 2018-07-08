@@ -63,7 +63,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 37)
+     (i32.const 38)
      (i32.const 4)
     )
     (unreachable)
@@ -163,7 +163,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 254)
+     (i32.const 255)
      (i32.const 4)
     )
     (unreachable)
@@ -248,7 +248,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 98)
+     (i32.const 99)
      (i32.const 4)
     )
     (unreachable)
@@ -357,7 +357,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 210)
+     (i32.const 211)
      (i32.const 4)
     )
     (unreachable)
@@ -373,8 +373,10 @@
   )
   (if
    (i32.eqz
-    (i32.load
-     (get_local $1)
+    (tee_local $4
+     (i32.load
+      (get_local $1)
+     )
     )
    )
    (return
@@ -391,11 +393,6 @@
    )
    (return
     (i32.const -1)
-   )
-  )
-  (set_local $4
-   (i32.load
-    (get_local $1)
    )
   )
   (block $break|0
@@ -488,7 +485,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 232)
+     (i32.const 233)
      (i32.const 4)
     )
     (unreachable)
@@ -509,8 +506,10 @@
   )
   (if
    (i32.eqz
-    (i32.load
-     (get_local $1)
+    (tee_local $4
+     (i32.load
+      (get_local $1)
+     )
     )
    )
    (return
@@ -532,11 +531,7 @@
       (tee_local $2
        (i32.sub
         (get_local $2)
-        (tee_local $4
-         (i32.load
-          (get_local $1)
-         )
-        )
+        (get_local $4)
        )
       )
       (i32.const 0)
@@ -1141,7 +1136,7 @@
               (call $~lib/env/abort
                (i32.const 0)
                (i32.const 76)
-               (i32.const 552)
+               (i32.const 553)
                (i32.const 10)
               )
               (unreachable)
@@ -1337,7 +1332,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 352)
-     (i32.const 20)
+     (i32.const 21)
      (i32.const 2)
     )
     (unreachable)
@@ -3050,7 +3045,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 74)
+     (i32.const 75)
      (i32.const 4)
     )
     (unreachable)
@@ -3556,7 +3551,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 406)
+     (i32.const 407)
      (i32.const 4)
     )
     (unreachable)
@@ -3592,7 +3587,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 411)
+     (i32.const 412)
      (i32.const 6)
     )
     (unreachable)

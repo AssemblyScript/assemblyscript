@@ -18,6 +18,7 @@
  (global $std/string/str (mut i32) (i32.const 8))
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
+ (global $~lib/internal/string/NULL i32 (i32.const 116))
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
  (global $~argc (mut i32) (i32.const 0))
  (global $NaN f64 (f64.const nan:0x8000000000000))
@@ -100,7 +101,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 37)
+     (i32.const 38)
      (i32.const 4)
     )
     (unreachable)
@@ -209,7 +210,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 254)
+     (i32.const 255)
      (i32.const 4)
     )
     (unreachable)
@@ -314,7 +315,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 98)
+     (i32.const 99)
      (i32.const 4)
     )
     (unreachable)
@@ -439,7 +440,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 210)
+     (i32.const 211)
      (i32.const 4)
     )
     (unreachable)
@@ -454,19 +455,9 @@
     (i32.const 116)
    )
   )
-  (if
-   (i32.eqz
-    (i32.load
-     (get_local $1)
-    )
-   )
-   (return
-    (i32.const 0)
-   )
-  )
   (set_local $3
    (i32.load
-    (get_local $0)
+    (get_local $1)
    )
   )
   (if
@@ -474,12 +465,20 @@
     (get_local $3)
    )
    (return
-    (i32.const -1)
+    (i32.const 0)
    )
   )
   (set_local $4
    (i32.load
-    (get_local $1)
+    (get_local $0)
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $4)
+   )
+   (return
+    (i32.const -1)
    )
   )
   (set_local $7
@@ -499,7 +498,7 @@
      )
     )
     (tee_local $6
-     (get_local $3)
+     (get_local $4)
     )
     (i32.lt_s
      (get_local $5)
@@ -517,9 +516,9 @@
       (i32.le_s
        (i32.add
         (get_local $5)
-        (get_local $4)
+        (get_local $3)
        )
-       (get_local $3)
+       (get_local $4)
       )
      )
     )
@@ -541,7 +540,7 @@
         (i32.const 4)
        )
        (i32.shl
-        (get_local $4)
+        (get_local $3)
         (i32.const 1)
        )
       )
@@ -588,7 +587,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 232)
+     (i32.const 233)
      (i32.const 4)
     )
     (unreachable)
@@ -608,11 +607,14 @@
     (get_local $0)
    )
   )
+  (set_local $4
+   (i32.load
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
-    (i32.load
-     (get_local $1)
-    )
+    (get_local $4)
    )
    (return
     (get_local $3)
@@ -624,11 +626,6 @@
    )
    (return
     (i32.const -1)
-   )
-  )
-  (set_local $4
-   (i32.load
-    (get_local $1)
    )
   )
   (set_local $7
@@ -1296,7 +1293,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 76)
-                  (i32.const 552)
+                  (i32.const 553)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -1520,7 +1517,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 352)
-     (i32.const 20)
+     (i32.const 21)
      (i32.const 2)
     )
     (unreachable)
@@ -3679,7 +3676,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 74)
+     (i32.const 75)
      (i32.const 4)
     )
     (unreachable)
@@ -4230,7 +4227,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 406)
+     (i32.const 407)
      (i32.const 4)
     )
     (unreachable)
@@ -4265,7 +4262,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 76)
-     (i32.const 411)
+     (i32.const 412)
      (i32.const 6)
     )
     (unreachable)

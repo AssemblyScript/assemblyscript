@@ -2,6 +2,7 @@ import {
   HEADER_SIZE,
   MAX_LENGTH,
   EMPTY,
+  NULL,
   allocate,
   isWhiteSpaceOrLineTerminator,
   CharCode,
@@ -66,13 +67,13 @@ export class String {
 
   @operator("+")
   private static __concat(left: String, right: String): String {
-    if (!changetype<usize>(left)) left = changetype<String>("null");
+    if (!changetype<usize>(left)) left = NULL;
     return left.concat(right);
   }
 
   concat(other: String): String {
     assert(this !== null);
-    if (other === null) other = changetype<String>("null");
+    if (other === null) other = NULL;
     var thisLen: isize = this.length;
     var otherLen: isize = other.length;
     var outLen: usize = thisLen + otherLen;
@@ -208,15 +209,15 @@ export class String {
 
   indexOf(searchString: String, fromIndex: i32 = 0): i32 {
     assert(this !== null);
-    if (searchString === null) searchString = changetype<String>("null");
-    if (!searchString.length) return 0;
+    if (searchString === null) searchString = NULL;
+    var searchLen: isize = searchString.length;
+    if (!searchLen) return 0;
     var len: isize = this.length;
     if (!len) return -1;
-    var searchLen: isize = <isize>searchString.length;
     var start: isize = min<isize>(max<isize>(fromIndex, 0), len);
 
     // TODO: multiple char codes
-    for (let k: isize = start; <isize>k + searchLen <= len; ++k) {
+    for (let k: isize = start; k + searchLen <= len; ++k) {
       if (!compare_memory(
         changetype<usize>(this) + HEADER_SIZE + (k << 1),
         changetype<usize>(searchString) + HEADER_SIZE,
@@ -230,11 +231,11 @@ export class String {
 
   lastIndexOf(searchString: String, fromIndex: i32 = 0): i32 {
     assert(this !== null);
-    if (searchString === null) searchString = changetype<String>("null");
+    if (searchString === null) searchString = NULL;
     var len: isize = this.length;
-    if (!searchString.length) return len;
+    var searchLen: isize = searchString.length;
+    if (!searchLen) return len;
     if (!len) return -1;
-    var searchLen: isize = <isize>searchString.length;
     var start: isize = min<isize>(max<isize>(fromIndex - searchLen, 0), len);
 
     // TODO: multiple char codes
@@ -252,7 +253,7 @@ export class String {
 
   startsWith(searchString: String, position: i32 = 0): bool {
     assert(this !== null);
-    if (searchString === null) searchString = changetype<String>("null");
+    if (searchString === null) searchString = NULL;
 
     var pos: isize = position;
     var len: isize = this.length;

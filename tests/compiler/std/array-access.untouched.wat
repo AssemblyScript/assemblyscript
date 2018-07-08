@@ -8,6 +8,7 @@
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/internal/string/NULL i32 (i32.const 44))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $HEAP_BASE i32 (i32.const 56))
  (memory $0 1)
@@ -212,7 +213,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 12)
-     (i32.const 254)
+     (i32.const 255)
      (i32.const 4)
     )
     (unreachable)
