@@ -82,7 +82,8 @@ import {
 
   mangleInternalPath,
   nodeIsCallable,
-  nodeIsGenericCallable
+  nodeIsGenericCallable,
+  InterfaceDeclaration
 } from "./ast";
 
 const builtinsFile = LIBRARY_PREFIX + "builtins.ts";
@@ -1556,21 +1557,50 @@ export class Parser extends DiagnosticEmitter {
     //   Identifier ...
 
     var startPos = tn.pos;
+    var isInterface = parent.kind == NodeKind.INTERFACEDECLARATION;
 
     var decorators = new Array<DecoratorNode>();
     while (tn.skip(Token.AT)) {
       let decorator = this.parseDecorator(tn);
       if (!decorator) break;
+      if (isInterface) {
+        this.error(
+          DiagnosticCode.Decorators_are_not_valid_here,
+          decorator.range
+        );
+      }
       decorators.push(<DecoratorNode>decorator);
     }
 
-    var flags = parent.flags & CommonFlags.AMBIENT; // inherit
+    // inherit ambient status
+    var flags = parent.flags & CommonFlags.AMBIENT;
+
+    // implemented methods are virtual
+    if (isInterface) flags |= CommonFlags.VIRTUAL;
 
     if (tn.skip(Token.PUBLIC)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "public"
+        );
+      }
       flags |= CommonFlags.PUBLIC;
     } else if (tn.skip(Token.PRIVATE)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "private"
+        );
+      }
       flags |= CommonFlags.PRIVATE;
     } else if (tn.skip(Token.PROTECTED)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "protected"
+        );
+      }
       flags |= CommonFlags.PROTECTED;
     }
 
@@ -1579,16 +1609,27 @@ export class Parser extends DiagnosticEmitter {
     var abstractStart: i32 = 0;
     var abstractEnd: i32 = 0;
     if (tn.skip(Token.STATIC)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "static"
+        );
+      }
       flags |= CommonFlags.STATIC;
       staticStart = tn.tokenPos;
       staticEnd = tn.pos;
     } else {
+      flags |= CommonFlags.INSTANCE;
       if (tn.skip(Token.ABSTRACT)) {
-        flags |= (CommonFlags.ABSTRACT | CommonFlags.INSTANCE);
+        if (isInterface) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(), "abstract"
+          );
+        }
+        flags |= CommonFlags.ABSTRACT;
         abstractStart = tn.tokenPos;
         abstractEnd = tn.pos;
-      } else {
-        flags |= CommonFlags.INSTANCE;
       }
       if (parent.flags & CommonFlags.GENERIC) {
         flags |= CommonFlags.GENERIC_CONTEXT;
@@ -1612,56 +1653,58 @@ export class Parser extends DiagnosticEmitter {
     var isSetter = false;
     var setStart: i32 = 0;
     var setEnd: i32 = 0;
-    if (tn.skip(Token.GET)) {
-      if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-        flags |= CommonFlags.GET;
-        isGetter = true;
-        setStart = tn.tokenPos;
-        setEnd = tn.pos;
+    if (!isInterface) {
+      if (tn.skip(Token.GET)) {
+        if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+          flags |= CommonFlags.GET;
+          isGetter = true;
+          setStart = tn.tokenPos;
+          setEnd = tn.pos;
+          if (flags & CommonFlags.READONLY) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_be_used_here,
+              tn.range(readonlyStart, readonlyEnd), "readonly"
+            ); // recoverable
+          }
+        } else {
+          tn.reset(state);
+        }
+      } else if (tn.skip(Token.SET)) {
+        if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+          flags |= CommonFlags.SET | CommonFlags.SET;
+          isSetter = true;
+          setStart = tn.tokenPos;
+          setEnd = tn.pos;
+          if (flags & CommonFlags.READONLY) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_be_used_here,
+              tn.range(readonlyStart, readonlyEnd), "readonly"
+            ); // recoverable
+          }
+        } else {
+          tn.reset(state);
+        }
+      } else if (tn.skip(Token.CONSTRUCTOR)) {
+        flags |= CommonFlags.CONSTRUCTOR;
+        isConstructor = true;
+        if (flags & CommonFlags.STATIC) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(staticStart, staticEnd), "static"
+          ); // recoverable
+        }
+        if (flags & CommonFlags.ABSTRACT) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(abstractStart, abstractEnd), "abstract"
+          ); // recoverable
+        }
         if (flags & CommonFlags.READONLY) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(readonlyStart, readonlyEnd), "readonly"
           ); // recoverable
         }
-      } else {
-        tn.reset(state);
-      }
-    } else if (tn.skip(Token.SET)) {
-      if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-        flags |= CommonFlags.SET | CommonFlags.SET;
-        isSetter = true;
-        setStart = tn.tokenPos;
-        setEnd = tn.pos;
-        if (flags & CommonFlags.READONLY) {
-          this.error(
-            DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(readonlyStart, readonlyEnd), "readonly"
-          ); // recoverable
-        }
-      } else {
-        tn.reset(state);
-      }
-    } else if (tn.skip(Token.CONSTRUCTOR)) {
-      flags |= CommonFlags.CONSTRUCTOR;
-      isConstructor = true;
-      if (flags & CommonFlags.STATIC) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(staticStart, staticEnd), "static"
-        ); // recoverable
-      }
-      if (flags & CommonFlags.ABSTRACT) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(abstractStart, abstractEnd), "abstract"
-        ); // recoverable
-      }
-      if (flags & CommonFlags.READONLY) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(readonlyStart, readonlyEnd), "readonly"
-        ); // recoverable
       }
     }
 
@@ -1787,10 +1830,15 @@ export class Parser extends DiagnosticEmitter {
             DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
             tn.range()
           ); // recoverable
+        } else if (flags & CommonFlags.ABSTRACT) {
+          this.error(
+            DiagnosticCode.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract,
+            tn.range(), name.text
+          ); // recoverable
         }
         body = this.parseBlockStatement(tn, false);
         if (!body) return null;
-      } else if (!(flags & CommonFlags.AMBIENT)) {
+      } else if (!(flags & CommonFlags.AMBIENT) && !isInterface) {
         this.error(
           DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
           tn.range()
