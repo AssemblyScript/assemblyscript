@@ -42,6 +42,8 @@ import {
   Expression,
   AssertionKind,
   CallExpression,
+  ClassExpression,
+  FunctionExpression,
   IdentifierExpression,
   StringLiteralExpression,
 
@@ -60,7 +62,6 @@ import {
   ExportStatement,
   ExpressionStatement,
   ForStatement,
-  FunctionExpression,
   FunctionDeclaration,
   IfStatement,
   ImportDeclaration,
@@ -82,8 +83,7 @@ import {
 
   mangleInternalPath,
   nodeIsCallable,
-  nodeIsGenericCallable,
-  InterfaceDeclaration
+  nodeIsGenericCallable
 } from "./ast";
 
 const builtinsFile = LIBRARY_PREFIX + "builtins.ts";
@@ -1544,6 +1544,49 @@ export class Parser extends DiagnosticEmitter {
     return declaration;
   }
 
+  parseClassExpression(tn: Tokenizer): ClassExpression | null {
+
+    // at 'class': Identifier? '{' ... '}'
+
+    var startPos = tn.tokenPos;
+    var name: IdentifierExpression;
+
+    if (tn.skipIdentifier()) {
+      name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    } else {
+      name = Node.createEmptyIdentifierExpression(tn.range(tn.pos));
+    }
+
+    if (!tn.skip(Token.OPENBRACE)) {
+      this.error(
+        DiagnosticCode._0_expected,
+        tn.range(tn.pos), "{"
+      );
+      return null;
+    }
+
+    var members = new Array<DeclarationStatement>();
+    var declaration = Node.createClassDeclaration(
+      name,
+      [],
+      null,
+      null,
+      members,
+      null,
+      CommonFlags.NONE,
+      tn.range(startPos, tn.pos)
+    );
+    if (!tn.skip(Token.CLOSEBRACE)) {
+      do {
+        let member = this.parseClassMember(tn, declaration);
+        if (!member) return null;
+        member.parent = declaration;
+        members.push(<DeclarationStatement>member);
+      } while (!tn.skip(Token.CLOSEBRACE));
+    }
+    return Node.createClassExpression(declaration);
+  }
+
   parseClassMember(
     tn: Tokenizer,
     parent: ClassDeclaration
@@ -2877,20 +2920,8 @@ export class Parser extends DiagnosticEmitter {
 
     var token = tn.next(IdentifierHandling.PREFER);
     var startPos = tn.tokenPos;
-    var expr: Expression | null = null;
-
-    if (token == Token.NULL) {
-      return Node.createNullExpression(tn.range());
-    }
-    if (token == Token.TRUE) {
-      return Node.createTrueExpression(tn.range());
-    }
-    if (token == Token.FALSE) {
-      return Node.createFalseExpression(tn.range());
-    }
-
     var precedence = determinePrecedenceStart(token);
-    if (precedence != Precedence.INVALID) {
+    if (precedence != Precedence.NONE) {
       let operand: Expression | null;
 
       // TODO: SpreadExpression, YieldExpression (currently become unsupported UnaryPrefixExpressions)
@@ -2934,7 +2965,12 @@ export class Parser extends DiagnosticEmitter {
       return Node.createUnaryPrefixExpression(token, operand, tn.range(startPos, tn.pos));
     }
 
+    var expr: Expression | null = null;
     switch (token) {
+
+      case Token.NULL: return Node.createNullExpression(tn.range());
+      case Token.TRUE: return Node.createTrueExpression(tn.range());
+      case Token.FALSE: return Node.createFalseExpression(tn.range());
 
       // ParenthesizedExpression
       // FunctionExpression
@@ -3098,6 +3134,9 @@ export class Parser extends DiagnosticEmitter {
       case Token.FUNCTION: {
         return this.parseFunctionExpression(tn);
       }
+      case Token.CLASS: {
+        return this.parseClassExpression(tn);
+      }
       default: {
         this.error(
           DiagnosticCode.Expression_expected,
@@ -3163,8 +3202,9 @@ export class Parser extends DiagnosticEmitter {
 
   parseExpression(
     tn: Tokenizer,
-    precedence: Precedence = 0
+    precedence: Precedence = Precedence.COMMA
   ): Expression | null {
+    assert(precedence != Precedence.NONE);
 
     var expr = this.parseExpressionStart(tn);
     if (!expr) return null;
@@ -3264,7 +3304,10 @@ export class Parser extends DiagnosticEmitter {
             );
             return null;
           }
-          let ifElse = this.parseExpression(tn, precedence > Precedence.COMMA ? Precedence.COMMA + 1 : 0);
+          let ifElse = this.parseExpression(tn, precedence > Precedence.COMMA
+            ? Precedence.COMMA + 1
+            : Precedence.COMMA
+          );
           if (!ifElse) return null;
           expr = Node.createTernaryExpression(
             expr,
@@ -3372,23 +3415,53 @@ export class Parser extends DiagnosticEmitter {
   }
 
   /** Skips over a block on errors in an attempt to reduce unnecessary diagnostic noise. */
-  // skipBlock(tn: Tokenizer): void {
-  //   var depth = 0;
-  //   var token: Token;
-  //   do {
-  //     token = tn.next();
-  //     if (token == Token.OPENBRACE) {
-  //       ++depth;
-  //     } else if (token == Token.CLOSEBRACE) {
-  //       if (depth) --depth;
-  //       if (!depth) break; // done
-  //     }
-  //   } while (token != Token.ENDOFFILE);
-  // }
+  skipBlock(tn: Tokenizer): void {
+    // at '{': ... '}'
+    var depth = 1;
+    var again = true;
+    do {
+      switch (tn.next()) {
+        case Token.ENDOFFILE: {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), "}"
+          );
+          again = false;
+          break;
+        }
+        case Token.OPENBRACE: {
+          ++depth;
+          break;
+        }
+        case Token.CLOSEBRACE: {
+          --depth;
+          if (!depth) again = false;
+          break;
+        }
+        case Token.IDENTIFIER: {
+          tn.readIdentifier();
+          break;
+        }
+        case Token.STRINGLITERAL: {
+          tn.readString();
+          break;
+        }
+        case Token.INTEGERLITERAL: {
+          tn.readInteger();
+          break;
+        }
+        case Token.FLOATLITERAL: {
+          tn.readFloat();
+          break;
+        }
+      }
+    } while (again);
+  }
 }
 
 /** Operator precedence from least to largest. */
 export const enum Precedence {
+  NONE,
   COMMA,
   SPREAD,
   YIELD,
@@ -3409,8 +3482,7 @@ export const enum Precedence {
   UNARY_POSTFIX,
   CALL,
   MEMBERACCESS,
-  GROUPING,
-  INVALID = -1
+  GROUPING
 }
 
 /** Determines the precedence of a starting token. */
@@ -3428,8 +3500,8 @@ function determinePrecedenceStart(kind: Token): Precedence {
     case Token.VOID:
     case Token.DELETE: return Precedence.UNARY_PREFIX;
     case Token.NEW: return Precedence.MEMBERACCESS;
-    default: return Precedence.INVALID;
   }
+  return Precedence.NONE;
 }
 
 /** Determines the precende of a non-starting token. */
@@ -3480,8 +3552,8 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.DOT:
     case Token.NEW:
     case Token.OPENBRACKET: return Precedence.MEMBERACCESS;
-    default: return Precedence.INVALID;
   }
+  return Precedence.NONE;
 }
 
 /** Determines whether a non-starting token is right associative. */
