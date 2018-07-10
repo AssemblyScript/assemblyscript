@@ -431,7 +431,8 @@ declare class String {
   charCodeAt(index: u32): u16;
   concat(other: string): string;
   endsWith(other: string): bool;
-  indexOf(other: string): u32;
+  indexOf(other: string, fromIndex?: i32): u32;
+  lastIndexOf(other: string, fromIndex?: i32): i32;
   includes(other: string): bool;
   startsWith(other: string): bool;
   substr(start: u32, length?: u32): string;
