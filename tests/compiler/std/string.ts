@@ -34,8 +34,6 @@ assert(str.lastIndexOf(", I", -1) == -1);
 assert(str.lastIndexOf("i", 0) == -1);
 assert(str.lastIndexOf("hi", 0) == 0);
 
-// logi(str.lastIndexOf(",", 2));
-
 export function getString(): string {
   return str;
 }
