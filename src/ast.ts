@@ -41,6 +41,7 @@ export enum NodeKind {
   ASSERTION,
   BINARY,
   CALL,
+  CLASS,
   COMMA,
   ELEMENTACCESS,
   FALSE,
@@ -317,6 +318,15 @@ export abstract class Node {
     expr.expression = expression; expression.parent = expr;
     expr.typeArguments = typeArgs; if (typeArgs) setParent(typeArgs, expr);
     expr.arguments = args; setParent(args, expr);
+    return expr;
+  }
+
+  static createClassExpression(
+    declaration: ClassDeclaration
+  ): ClassExpression {
+    var expr = new ClassExpression();
+    expr.range = declaration.range;
+    expr.declaration = declaration;
     return expr;
   }
 
@@ -1274,6 +1284,14 @@ export class CallExpression extends Expression {
   typeArguments: CommonTypeNode[] | null;
   /** Provided arguments. */
   arguments: Expression[];
+}
+
+/** Represents a class expression using the 'class' keyword. */
+export class ClassExpression extends Expression {
+  kind = NodeKind.CLASS;
+
+  /** Inline class declaration. */
+  declaration: ClassDeclaration;
 }
 
 /** Represents a comma expression composed of multiple expressions. */

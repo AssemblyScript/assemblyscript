@@ -775,6 +775,12 @@ export class Program extends DiagnosticEmitter {
 
       // remember classes that implement interfaces
       } else if (numImplementsTypes) {
+        for (let i = 0; i < numImplementsTypes; ++i) {
+          this.warning( // TODO
+            DiagnosticCode.Operation_not_supported,
+            implementsTypes[i].range
+          );
+        }
         queuedImplements.push(prototype);
       }
     }
@@ -2094,32 +2100,27 @@ export class Program extends DiagnosticEmitter {
     var element: Element | null;
 
     if (context) {
-      let parent: Element | null;
 
       switch (context.kind) {
-        case ElementKind.FUNCTION: { // search locals
+        case ElementKind.FUNCTION: { // search locals, use prototype
           element = (<Function>context).flow.getScopedLocal(name);
           if (element) {
             this.resolvedThisExpression = null;
             this.resolvedElementExpression = null;
             return element;
           }
-          parent = (<Function>context).prototype.parent;
+          context = (<Function>context).prototype.parent;
           break;
         }
-        case ElementKind.CLASS: {
-          parent = (<Class>context).prototype.parent;
-          break;
-        }
-        default: {
-          parent = context;
+        case ElementKind.CLASS: { // use prototype
+          context = (<Class>context).prototype.parent;
           break;
         }
       }
 
-      // search parent
-      while (parent) {
-        let members = parent.members;
+      // search context
+      while (context) {
+        let members = context.members;
         if (members) {
           if (element = members.get(name)) {
             this.resolvedThisExpression = null;
@@ -2127,7 +2128,7 @@ export class Program extends DiagnosticEmitter {
             return element;
           }
         }
-        parent = parent.parent;
+        context = context.parent;
       }
     }
 

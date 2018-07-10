@@ -2379,7 +2379,10 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       default: {
-        assert(false);
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          expression.range
+        );
         expr = this.module.createUnreachable();
       }
     }
