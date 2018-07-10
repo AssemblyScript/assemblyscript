@@ -229,15 +229,14 @@ export class String {
     return -1;
   }
 
-  lastIndexOf(searchString: String, fromIndex: i32 = i32.MIN_VALUE): i32 {
+  lastIndexOf(searchString: String, fromIndex: i32 = i32.MAX_VALUE): i32 {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
     var len: isize = this.length;
     var searchLen: isize = searchString.length;
     if (!searchLen) return len;
     if (!len) return -1;
-    if (fromIndex == i32.MIN_VALUE) fromIndex = len - 1;
-    var start = clamp<isize>(fromIndex, 0, len);
+    var start = clamp<isize>(fromIndex, 0, len - 1);
 
     // TODO: multiple char codes
     for (let k = start; k >= 0; --k) {
