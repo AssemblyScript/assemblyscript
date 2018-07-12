@@ -2794,7 +2794,7 @@ export function compileAllocate(
     return module.createUnreachable();
   }
 
-  var allocateInstance = (<FunctionPrototype>allocatePrototype).resolve(); // reports
+  var allocateInstance = compiler.resolver.resolveFunction(<FunctionPrototype>allocatePrototype, null);
   if (!(allocateInstance && compiler.compileFunction(allocateInstance))) return module.createUnreachable();
 
   compiler.currentType = classInstance.type;
@@ -2825,7 +2825,7 @@ export function compileAbort(
   var abortPrototype = program.elementsLookup.get(abortInternalName); // might be intended
   if (!abortPrototype || abortPrototype.kind != ElementKind.FUNCTION_PROTOTYPE) return module.createUnreachable();
 
-  var abortInstance = (<FunctionPrototype>abortPrototype).resolve(); // reports
+  var abortInstance = compiler.resolver.resolveFunction(<FunctionPrototype>abortPrototype, null);
   if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.createUnreachable();
 
   var messageArg = message != null
