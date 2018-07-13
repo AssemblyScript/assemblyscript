@@ -24,6 +24,7 @@ export abstract class TypedArray<T,V> {
     this.byteLength = byteLength;
   }
 
+  @inline
   get length(): i32 {
     return (this.byteLength - this.byteOffset) >> alignof<T>();
   }
@@ -36,7 +37,7 @@ export abstract class TypedArray<T,V> {
     return loadUnsafeWithOffset<T,T>(this.buffer, index, byteOffset);
   }
 
-  @operator("{}")
+  @inline @operator("{}")
   protected __unchecked_get(index: i32): T {
     return loadUnsafeWithOffset<T,T>(this.buffer, index, this.byteOffset);
   }
@@ -49,7 +50,7 @@ export abstract class TypedArray<T,V> {
     storeUnsafeWithOffset<T,V>(this.buffer, index, value, byteOffset);
   }
 
-  @operator("{}=")
+  @inline @operator("{}=")
   protected __unchecked_set(index: i32, value: V): void {
     storeUnsafeWithOffset<T,V>(this.buffer, index, value, this.byteOffset);
   }

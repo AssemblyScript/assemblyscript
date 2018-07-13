@@ -14,6 +14,16 @@ export class String {
 
   readonly length: i32; // capped to [0, MAX_LENGTH]
 
+  static fromCharCode(code: i32): String {
+    var out = allocate(1);
+    store<u16>(
+      changetype<usize>(out),
+      <u16>code,
+      HEADER_SIZE
+    );
+    return out;
+  }
+
   @operator("[]")
   charAt(pos: i32): String {
     assert(this !== null);
