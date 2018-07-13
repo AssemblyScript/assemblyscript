@@ -73,7 +73,7 @@ function decimalCount<T>(value: T): i32 {
   var l: usize = 8 * sizeof<T>() - <usize>clz<T>(v | 10); // log2
   var t = l * 1233 >>> 12;                                // log10
 
-  var lutbuf = POWERS10().buffer_;
+  var lutbuf = <ArrayBuffer>POWERS10().buffer_;
   if (sizeof<T>() <= 4) {
     let power  = loadUnsafe<u32,T>(lutbuf, t);
     t -= <usize>(v < power);
@@ -88,7 +88,7 @@ function decimalCount<T>(value: T): i32 {
 }
 
 function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
-  var lutbuf = DIGITS().buffer_;
+  var lutbuf = <ArrayBuffer>DIGITS().buffer_;
 
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
@@ -127,7 +127,7 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
 }
 
 function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
-  var lutbuf = DIGITS().buffer_;
+  var lutbuf = <ArrayBuffer>DIGITS().buffer_;
 
   while (num >= 100000000) {
     let t = num / 100000000;
