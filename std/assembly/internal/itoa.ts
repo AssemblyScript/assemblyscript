@@ -68,7 +68,7 @@ function DIGITS(): u32[] {
 }
 
 // Count number of decimals in value
-function decimalCount<T>(value: T): i32 {
+export function decimalCount<T>(value: T): i32 {
   var v = abs<T>(value); // NOP if value is unsigned anyway
   var l: usize = 8 * sizeof<T>() - <usize>clz<T>(v | 10); // log2
   var t = l * 1233 >>> 12;                                // log10
@@ -87,7 +87,7 @@ function decimalCount<T>(value: T): i32 {
   return t + 1;
 }
 
-function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
+function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
   var lutbuf = <ArrayBuffer>DIGITS().buffer_;
 
   while (num >= 10000) {
@@ -126,12 +126,12 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
   }
 }
 
-function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
+function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
   var lutbuf = <ArrayBuffer>DIGITS().buffer_;
 
   while (num >= 100000000) {
     let t = num / 100000000;
-    let r = <u32>(num - t * 100000000);
+    let r = <usize>(num - t * 100000000);
     num = t;
 
     let b = r / 10000;
@@ -155,10 +155,10 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
   }
 
-  if (num) utoa32_lut(buffer, <u32>num, offset);
+  utoa32_lut(buffer, <u32>num, offset);
 }
 
-function utoa_simple<T>(buffer: usize, num: T, offset: u32): void {
+function utoa_simple<T>(buffer: usize, num: T, offset: usize): void {
   do {
     let t = num / 10;
     let r = <u32>(num % 10);
@@ -171,18 +171,18 @@ function utoa_simple<T>(buffer: usize, num: T, offset: u32): void {
 @inline
 export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_simple(buffer, num, offset);
+    utoa_simple(buffer, num, <usize>offset);
   } else {
-    utoa32_lut(buffer, num, offset);
+    utoa32_lut(buffer, num, <usize>offset);
   }
 }
 
 @inline
 export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_simple(buffer, num, offset);
+    utoa_simple(buffer, num, <usize>offset);
   } else {
-    utoa64_lut(buffer, num, offset);
+    utoa64_lut(buffer, num, <usize>offset);
   }
 }
 

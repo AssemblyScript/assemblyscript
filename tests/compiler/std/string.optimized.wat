@@ -4215,18 +4215,12 @@
     )
    )
   )
-  (if
-   (i64.ne
+  (call $~lib/internal/itoa/utoa32_lut
+   (get_local $0)
+   (i32.wrap/i64
     (get_local $1)
-    (i64.const 0)
    )
-   (call $~lib/internal/itoa/utoa32_lut
-    (get_local $0)
-    (i32.wrap/i64
-     (get_local $1)
-    )
-    (get_local $2)
-   )
+   (get_local $2)
   )
  )
  (func $~lib/internal/itoa/utoa64 (; 33 ;) (type $Ii) (param $0 i64) (result i32)
