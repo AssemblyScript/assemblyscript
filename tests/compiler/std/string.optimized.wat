@@ -3744,27 +3744,14 @@
       (i32.const 552)
      )
      (i32.shl
-      (tee_local $0
+      (tee_local $1
        (i32.shr_u
         (i32.mul
          (i32.sub
           (i32.const 32)
           (i32.clz
            (i32.or
-            (tee_local $1
-             (i32.sub
-              (i32.xor
-               (get_local $0)
-               (tee_local $0
-                (i32.shr_u
-                 (get_local $0)
-                 (i32.const 31)
-                )
-               )
-              )
-              (get_local $0)
-             )
-            )
+            (get_local $0)
             (i32.const 10)
            )
           )
@@ -3781,9 +3768,9 @@
   )
   (i32.add
    (i32.sub
-    (get_local $0)
+    (get_local $1)
     (i32.lt_u
-     (get_local $1)
+     (get_local $0)
      (get_local $2)
     )
    )
@@ -4032,7 +4019,7 @@
   (local $1 i32)
   (local $2 i32)
   (set_local $2
-   (i32.le_s
+   (i32.le_u
     (tee_local $1
      (i32.shr_u
       (i32.mul
@@ -4041,20 +4028,7 @@
         (i32.wrap/i64
          (i64.clz
           (i64.or
-           (tee_local $0
-            (i64.sub
-             (i64.xor
-              (get_local $0)
-              (tee_local $0
-               (i64.shr_u
-                (get_local $0)
-                (i64.const 63)
-               )
-              )
-             )
-             (get_local $0)
-            )
-           )
+           (get_local $0)
            (i64.const 10)
           )
          )
@@ -4108,7 +4082,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (set_local $4
+  (set_local $3
    (i32.load
     (i32.const 1472)
    )
@@ -4124,7 +4098,7 @@
       (i32.div_u
        (tee_local $5
         (i32.div_u
-         (tee_local $3
+         (tee_local $4
           (i32.wrap/i64
            (i64.sub
             (get_local $1)
@@ -4168,12 +4142,12 @@
       (i64.or
        (i64.load32_u offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
           (i32.div_u
-           (tee_local $3
+           (tee_local $4
             (i32.rem_u
-             (get_local $3)
+             (get_local $4)
              (i32.const 10000)
             )
            )
@@ -4186,10 +4160,10 @@
        (i64.shl
         (i64.load32_u offset=8
          (i32.add
-          (get_local $4)
+          (get_local $3)
           (i32.shl
            (i32.rem_u
-            (get_local $3)
+            (get_local $4)
             (i32.const 100)
            )
            (i32.const 2)
@@ -4216,7 +4190,7 @@
       (i64.or
        (i64.load32_u offset=8
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.shl
           (get_local $6)
           (i32.const 2)
@@ -4226,7 +4200,7 @@
        (i64.shl
         (i64.load32_u offset=8
          (i32.add
-          (get_local $4)
+          (get_local $3)
           (i32.shl
            (get_local $5)
            (i32.const 2)
@@ -4242,14 +4216,15 @@
    )
   )
   (if
-   (tee_local $3
-    (i32.wrap/i64
-     (get_local $1)
-    )
+   (i64.ne
+    (get_local $1)
+    (i64.const 0)
    )
    (call $~lib/internal/itoa/utoa32_lut
     (get_local $0)
-    (get_local $3)
+    (i32.wrap/i64
+     (get_local $1)
+    )
     (get_local $2)
    )
   )
