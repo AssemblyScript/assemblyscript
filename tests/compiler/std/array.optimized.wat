@@ -5882,8 +5882,13 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
+<<<<<<< HEAD
      (i32.const 784)
      (i32.const 19)
+=======
+     (i32.const 696)
+     (i32.const 29)
+>>>>>>> master
      (i32.const 4)
     )
     (unreachable)
@@ -5930,8 +5935,13 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
+<<<<<<< HEAD
      (i32.const 784)
      (i32.const 75)
+=======
+     (i32.const 696)
+     (i32.const 85)
+>>>>>>> master
      (i32.const 4)
     )
     (unreachable)
