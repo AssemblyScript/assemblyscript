@@ -1,24 +1,37 @@
 const fs  = require("fs");
 const path = require("path");
 const os = require("os");
-const colors = require("../cli/util/colors");
 const glob = require("glob");
-const minimist = require("minimist");
-
+const colorsUtil = require("../cli/util/colors");
+const optionsUtil = require("../cli/util/options");
 const diff = require("./util/diff");
 const asc = require("../cli/asc.js");
 
-const args = minimist(process.argv.slice(2), {
-  boolean: [ "create", "help" ],
-  alias: { h: "help" }
-});
+const config = {
+  "create": {
+    "description": [
+      "Recreates the fixture for the specified test(s)",
+      "or all the fixtures if no specific test is given."
+    ],
+    "type": "b"
+  },
+  "help": {
+    "description": "Prints this message and exits.",
+    "type": "b",
+    "alias": "h"
+  }
+};
+const opts = optionsUtil.parse(process.argv.slice(2),config);
+const args = opts.options;
+const argv = opts.arguments;
 
 if (args.help) {
   console.log([
-    "Usage: npm run test:compiler -- [test1, test2 ...] [--create]",
+    colorsUtil.white("SYNTAX"),
+    "  " + colorsUtil.cyan("npm run test:compiler --") + " [test1, test2 ...] [options]",
     "",
-    "Runs all tests if no tests have been specified.",
-    "Recreates affected fixtures if --create is specified."
+    colorsUtil.white("OPTIONS"),
+    optionsUtil.help(config)
   ].join(os.EOL) + os.EOL);
   process.exit(0);
 }
@@ -29,13 +42,13 @@ var failedTests = [];
 const basedir = path.join(__dirname, "compiler");
 
 // Get a list of all tests
-var tests = glob.sync("**/!(_)*.ts", { cwd: basedir });
+var tests = glob.sync("**/!(_*).ts", { cwd: basedir });
 
 // Run specific tests only if arguments are provided
-if (args._.length) {
-  tests = tests.filter(filename => args._.indexOf(filename.replace(/\.ts$/, "")) >= 0);
+if (argv.length) {
+  tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
   if (!tests.length) {
-    console.error("No matching tests: " + args._.join(" "));
+    console.error("No matching tests: " + argv.join(" "));
     process.exit(1);
   }
 }
@@ -54,7 +67,7 @@ function getExpectedErrors(filePath) {
 
 // TODO: asc's callback is synchronous here. This might change.
 tests.forEach(filename => {
-  console.log(colors.white("Testing compiler/" + filename) + "\n");
+  console.log(colorsUtil.white("Testing compiler/" + filename) + "\n");
 
   const expectedErrors = getExpectedErrors(path.join(basedir, filename));
   const basename = filename.replace(/\.ts$/, "");
@@ -85,13 +98,13 @@ tests.forEach(filename => {
       for (const expectedError of expectedErrors) {
         if (!stderrString.includes(expectedError)) {
           console.log(`Expected error "${expectedError}" was not in the error output.`);
-          console.log("- " + colors.red("error check ERROR"));
+          console.log("- " + colorsUtil.red("error check ERROR"));
           failedTests.push(basename);
           console.log();
           return;
         }
       }
-      console.log("- " + colors.green("error check OK"));
+      console.log("- " + colorsUtil.green("error check OK"));
       ++successes;
       console.log();
       return;
@@ -102,16 +115,16 @@ tests.forEach(filename => {
     var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
       fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
-      console.log("- " + colors.yellow("Created fixture"));
+      console.log("- " + colorsUtil.yellow("Created fixture"));
     } else {
       let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
       let diffs = diff(basename + ".untouched.wat", expected, actual);
       if (diffs !== null) {
         console.log(diffs);
-        console.log("- " + colors.red("diff ERROR"));
+        console.log("- " + colorsUtil.red("diff ERROR"));
         failed = true;
       } else
-        console.log("- " + colors.green("diff OK"));
+        console.log("- " + colorsUtil.green("diff OK"));
     }
     console.log();
 
@@ -178,9 +191,9 @@ tests.forEach(filename => {
             },
           });
         });
-        console.log("- " + colors.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
+        console.log("- " + colorsUtil.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
       } catch (e) {
-        console.log("- " + colors.red("instantiate ERROR: ") + e.stack);
+        console.log("- " + colorsUtil.red("instantiate ERROR: ") + e.stack);
         failed = true;
       }
 
@@ -193,6 +206,6 @@ tests.forEach(filename => {
 
 if (failedTests.length) {
   process.exitCode = 1;
-  console.log(colors.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
+  console.log(colorsUtil.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
 } else
-  console.log("[ " + colors.white("SUCCESS") + " ]");
+  console.log("[ " + colorsUtil.white("SUCCESS") + " ]");

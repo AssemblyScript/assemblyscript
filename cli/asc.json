@@ -1,17 +1,17 @@
 {
   "version": {
     "description": "Prints just the compiler's version and exits.",
-    "type": "boolean",
-    "aliases": [ "v" ]
+    "type": "b",
+    "alias": "v"
   },
   "help": {
     "description": "Prints this message and exits.",
-    "type": "boolean",
-    "aliases": [ "h" ]
+    "type": "b",
+    "alias": "h"
   },
   "optimize": {
     "description": [
-      "Optimizes the module. Also accepts the optimize level:",
+      "Optimizes the module. Also has the usual shorthands:",
       "",
       " -O     Uses defaults. Equivalent to -O2s",
       " -O0    Equivalent to --optimizeLevel 0",
@@ -22,109 +22,119 @@
       " -O3s   Equivalent to -O3 with --shrinkLevel 1 etc.",
       ""
     ],
-    "type": "boolean",
-    "aliases": [ "O" ]
+    "type": "b",
+    "alias": "O"
   },
   "optimizeLevel": {
     "description": "How much to focus on optimizing code. [0-3]",
-    "type": "number"
+    "type": "i"
   },
   "shrinkLevel": {
     "description": "How much to focus on shrinking code size. [0-2, s=1, z=2]",
-    "type": "number"
+    "type": "i"
   },
   "validate": {
     "description": "Validates the module using Binaryen. Exits if invalid.",
-    "type": "boolean",
-    "aliases": [ "c", "check" ]
+    "type": "b",
+    "alias": "c",
+    "default": false
   },
   "baseDir": {
     "description": "Specifies the base directory of input and output files.",
-    "type": "string"
+    "type": "s",
+    "default": "."
   },
   "outFile": {
     "description": "Specifies the output file. File extension indicates format.",
-    "type": "string",
-    "aliases": [ "o" ]
+    "type": "s",
+    "alias": "o"
   },
   "binaryFile": {
     "description": "Specifies the binary output file (.wasm).",
-    "type": "string",
-    "aliases": [ "b" ]
+    "type": "s",
+    "alias": "b"
   },
   "textFile": {
     "description": "Specifies the text output file (.wat).",
-    "type": "string",
-    "aliases": [ "t" ]
+    "type": "s",
+    "alias": "t"
   },
   "asmjsFile": {
     "description": "Specifies the asm.js output file (.js).",
-    "type": "string",
-    "aliases": [ "a" ]
+    "type": "s",
+    "alias": "a"
   },
   "idlFile": {
     "description": "Specifies the WebIDL output file (.webidl).",
-    "type": "string",
-    "aliases": [ "i" ]
+    "type": "s",
+    "alias": "i"
   },
   "tsdFile": {
     "description": "Specifies the TypeScript definition output file (.d.ts).",
-    "type": "string",
-    "aliases": [ "d", "dtsFile" ]
+    "type": "s",
+    "alias": "d"
   },
   "sourceMap": {
     "description": [
       "Enables source map generation. Optionally takes the URL",
       "used to reference the source map from the binary file."
     ],
-    "type": "string"
+    "type": "s"
   },
   "noTreeShaking": {
     "description": "Disables compiler-level tree-shaking, compiling everything.",
-    "type": "boolean"
+    "type": "b",
+    "default": false
   },
   "noDebug": {
     "description": "Disables maintaining of debug information in binaries.",
-    "type": "boolean"
+    "type": "b",
+    "default": false
   },
   "noAssert": {
     "description": "Replaces assertions with just their value without trapping.",
-    "type": "boolean"
+    "type": "b",
+    "default": false
   },
   "noEmit": {
     "description": "Performs compilation as usual but does not emit code.",
-    "type": "boolean"
+    "type": "b",
+    "default": false
   },
   "importMemory": {
     "description": "Imports the memory instance provided by the embedder.",
-    "type": "boolean"
+    "type": "b",
+    "default": false
   },
   "memoryBase": {
     "description": "Sets the start offset of compiler-generated static memory.",
-    "type": "number"
+    "type": "i",
+    "default": 0
   },
   "importTable": {
     "description": "Imports the function table instance provided by the embedder.",
-    "type": "boolean"
+    "type": "b",
+    "default": false
   },
   "noLib": {
     "description": "Does not include the shipped standard library.",
-    "type": "boolean"
+    "type": "b",
+    "default": false
   },
   "lib": {
     "description": [
       "Adds one or multiple paths to custom library components and",
       "uses exports of all top-level files at this path as globals."
     ],
-    "type": "string"
+    "type": "s"
   },
   "use": {
     "description": [
       "Aliases a global object under another name, e.g., to switch",
       "the default 'Math' implementation used: --use Math=JSMath"
     ],
-    "type": "string",
-    "aliases": [ "u" ]
+    "type": "S",
+    "alias": "u"
   },
   "trapMode": {
     "description": [
@@ -135,7 +145,7 @@
       " js     Replace trapping operations with JS semantics.",
       ""
     ],
-    "type": "string",
+    "type": "s",
     "default": "allow"
   },
   "runPasses": {
@@ -143,7 +153,7 @@
       "Specifies additional Binaryen passes to run after other",
       "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
     ],
-    "type": "string"
+    "type": "s"
   },
   "enable": {
     "description": [
@@ -153,19 +163,34 @@
       " mutable-global  Enables mutable global imports and exports",
       ""
     ],
-    "type": "string",
-    "aliases": [ "feature" ]
+    "type": "s"
   },
   "transform": {
     "description": "Specifies the path to a custom transform to 'require'.",
-    "type": "string"
+    "type": "S"
   },
   "measure": {
     "description": "Prints measuring information on I/O and compile times.",
-    "type": "boolean"
+    "type": "b",
+    "default": false
   },
   "noColors": {
     "description": "Disables terminal colors.",
-    "type": "boolean"
-  }
+    "type": "b",
+    "default": false
+  },
+  "-Os": { "value": { "optimize": true, "shrinkLevel": 1 } },
+  "-Oz": { "value": { "optimize": true, "shrinkLevel": 2 } },
+  "-O0": { "value": { "optimizeLevel": 0, "shrinkLevel": 0 } },
+  "-O1": { "value": { "optimizeLevel": 1, "shrinkLevel": 0 } },
+  "-O2": { "value": { "optimizeLevel": 2, "shrinkLevel": 0 } },
+  "-O3": { "value": { "optimizeLevel": 3, "shrinkLevel": 0 } },
+  "-O0s": { "value": { "optimizeLevel": 0, "shrinkLevel": 1 } },
+  "-O1s": { "value": { "optimizeLevel": 1, "shrinkLevel": 1 } },
+  "-O2s": { "value": { "optimizeLevel": 2, "shrinkLevel": 1 } },
+  "-O3s": { "value": { "optimizeLevel": 3, "shrinkLevel": 1 } },
+  "-O0z": { "value": { "optimizeLevel": 0, "shrinkLevel": 2 } },
+  "-O1z": { "value": { "optimizeLevel": 1, "shrinkLevel": 2 } },
+  "-O2z": { "value": { "optimizeLevel": 2, "shrinkLevel": 2 } },
+  "-O3z": { "value": { "optimizeLevel": 3, "shrinkLevel": 2 } }
 }

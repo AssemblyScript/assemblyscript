@@ -216,5 +216,6 @@ globalScope["fmodf"] = function fmodf(x, y) {
   return Math.fround(x % y);
 };
 
-require("./portable/math")(globalScope);
-require("./portable/memory")(globalScope);
+globalScope["JSMath"] = Math;
+
+require("./memory")(globalScope);

@@ -546,13 +546,11 @@ export class Tokenizer extends DiagnosticEmitter {
       let c = text.charCodeAt(this.pos);
       switch (c) {
         case CharCode.CARRIAGERETURN: {
-          if (
+          if (!(
             ++this.pos < this.end &&
             text.charCodeAt(this.pos) == CharCode.LINEFEED
-          ) {
-            ++this.pos;
-          }
-          break;
+          )) break;
+          // otherwise fall-through
         }
         case CharCode.LINEFEED:
         case CharCode.TAB:
@@ -960,8 +958,8 @@ export class Tokenizer extends DiagnosticEmitter {
       this.nextTokenPos = this.tokenPos;
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
-        while (--this.tokenPos > posBefore) {
-          if (isLineBreak(text.charCodeAt(this.tokenPos))) {
+        for (let pos = posBefore, end = this.nextTokenPos; pos < end; ++pos) {
+          if (isLineBreak(text.charCodeAt(pos))) {
             this.nextTokenOnNewLine = true;
             break;
           }

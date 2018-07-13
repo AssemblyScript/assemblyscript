@@ -62,18 +62,18 @@ const bin = {
       BUNDLE_VERSION: JSON.stringify(require("./package.json").version),
       BUNDLE_LIBRARY: (() => {
         const libDir = path.join(__dirname, "std", "assembly");
-        const libFiles = require("glob").sync("**/*.ts", { cwd: libDir });
+        const libFiles = require("glob").sync("**/!(*.d).ts", { cwd: libDir });
         const lib = {};
         libFiles.forEach(file => lib[file.replace(/\.ts$/, "")] = bundleFile(path.join(libDir, file)));
         return lib;
       })(),
       BUNDLE_DEFINITIONS: {
-        "assembly": bundleFile(path.join(__dirname, "std", "assembly.d.ts")),
-        "portable": bundleFile(path.join(__dirname, "std", "portable.d.ts"))
+        "assembly": bundleFile(path.join(__dirname, "std", "assembly", "index.d.ts")),
+        "portable": bundleFile(path.join(__dirname, "std", "portable", "index.d.ts"))
       },
       __dirname: JSON.stringify(".")
     }),
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob|source\-map\-support)$/)
+    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob)$/)
   ]
 };
 

@@ -13,8 +13,27 @@ assert(str.charCodeAt(0) == 0x68);
 assert(str.startsWith("hi"));
 assert(str.endsWith("string"));
 assert(str.includes("I'm"));
+
+assert("".indexOf("") == 0);
+assert("".indexOf("hi") == -1);
+assert(str.indexOf("") == 0);
 assert(str.indexOf(",") == 2);
 assert(str.indexOf("x") == -1);
+assert(str.indexOf(",", 2) == 2);
+assert(str.indexOf(",", 3) == -1);
+assert(str.indexOf(", I", -1) == 2);
+
+assert("".lastIndexOf("") == 0);
+assert("".lastIndexOf("hi") == -1);
+assert(str.lastIndexOf("") == str.length);
+assert(str.lastIndexOf(",") == 2);
+assert(str.lastIndexOf("x") == -1);
+assert(str.lastIndexOf("g") == 15);
+assert(str.lastIndexOf(",", 2) == 2);
+assert(str.lastIndexOf(",", 3) == 2);
+assert(str.lastIndexOf(", I", -1) == -1);
+assert(str.lastIndexOf("i", 0) == -1);
+assert(str.lastIndexOf("hi", 0) == 0);
 
 export function getString(): string {
   return str;

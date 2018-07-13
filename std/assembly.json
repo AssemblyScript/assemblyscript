@@ -4,13 +4,8 @@
     "target": "esnext",
     "module": "commonjs",
     "noLib": true,
-    "types": [],
-    "rootDirs": [
-      "./assembly"
-    ],
-    "allowJs": false
-  },
-  "files": [
-    "./assembly.d.ts"
-  ]
+    "allowJs": false,
+    "typeRoots": [ "types" ],
+    "types": [ "assembly" ]
+  }
 }
