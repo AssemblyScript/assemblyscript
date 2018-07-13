@@ -88,6 +88,7 @@ export function decimalCount<T>(value: T): i32 {
 }
 
 // (Internal) Count number of decimals for u32 values
+// In our case input value always non-zero so we can simplify some parts
 function decimalCountU32(value: u32): i32 {
   var l: usize = 32 - <usize>clz<u32>(value);
   var t = l * 1233 >>> 12;
@@ -99,6 +100,7 @@ function decimalCountU32(value: u32): i32 {
 }
 
 // (Internal) Count number of decimals for u64 values
+// In our case input value always greater than 2^32-1 so we can skip some parts
 function decimalCountU64(value: u64): i32 {
   var l: usize = 64 - <usize>clz<u64>(value);
   var t = l * 1233 >>> 12;
