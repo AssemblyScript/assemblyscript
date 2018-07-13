@@ -236,7 +236,7 @@ export class String {
     var searchLen: isize = searchString.length;
     if (!searchLen) return len;
     if (!len) return -1;
-    var start = clamp<isize>(fromIndex, 0, len - 1);
+    var start = clamp<isize>(fromIndex, 0, len - searchLen);
 
     // TODO: multiple char codes
     for (let k = start; k >= 0; --k) {
