@@ -3,17 +3,11 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
+    "noLib": true,
+    "allowJs": true,
     "downlevelIteration": true,
     "preserveConstEnums": true,
-    "noLib": true,
-    "types": [],
-    "rootDirs": [
-      "./portable"
-    ],
-    "allowJs": true
-  },
-  "files": [
-    "./portable.d.ts",
-    "./portable.js"
-  ]
+    "typeRoots": [ "types" ],
+    "types": [ "portable" ]
+  }
 }

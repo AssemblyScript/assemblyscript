@@ -132,7 +132,11 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 12)
+<<<<<<< HEAD
      (i32.const 241)
+=======
+     (i32.const 255)
+>>>>>>> master
      (i32.const 4)
     )
     (unreachable)
@@ -154,31 +158,31 @@
        (get_local $1)
       )
      )
-     (tee_local $3
+     (tee_local $2
       (select
-       (tee_local $3
+       (tee_local $2
         (select
          (get_local $2)
-         (i32.const 0)
-         (i32.gt_s
+         (tee_local $3
+          (i32.load
+           (get_local $0)
+          )
+         )
+         (i32.lt_s
           (get_local $2)
-          (i32.const 0)
+          (get_local $3)
          )
         )
        )
-       (tee_local $2
-        (i32.load
-         (get_local $0)
-        )
-       )
-       (i32.lt_s
-        (get_local $3)
+       (i32.const 0)
+       (i32.gt_s
         (get_local $2)
+        (i32.const 0)
        )
       )
      )
     )
-    (get_local $2)
+    (get_local $3)
    )
    (return
     (i32.const 0)
@@ -192,7 +196,7 @@
       (i32.const 4)
      )
      (i32.shl
-      (get_local $3)
+      (get_local $2)
       (i32.const 1)
      )
     )

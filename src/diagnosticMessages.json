@@ -69,6 +69,7 @@
   "Unterminated Unicode escape sequence.": 1199,
   "Decorators are not valid here.": 1206,
   "'abstract' modifier can only appear on a class, method, or property declaration.": 1242,
+  "Method '{0}' cannot have an implementation because it is marked abstract.": 1245,
   "A class may only extend another class.": 1311,
   "A parameter property cannot be declared using a rest parameter.": 1317,
 

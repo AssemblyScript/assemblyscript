@@ -1,5 +1,8 @@
 const asc = require("../dist/asc.js");
 
+if (typeof asc.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
+if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");
+
 const stdout = asc.createMemoryStream();
 const stderr = asc.createMemoryStream();
 const files = { "module.ts": `import "allocator/arena";` };
@@ -70,7 +73,7 @@ process.stdout.write(stderr.toString());
 
 console.log("\n# asc.compileString");
 
-const output = asc.compileString(`import "allocator/arena";`, { optimize: 2 });
+const output = asc.compileString(`import "allocator/arena";`, { optimizeLevel: 2 });
 console.log(">>> .stdout >>>");
 process.stdout.write(output.stdout.toString());
 console.log(">>> .stderr >>>");

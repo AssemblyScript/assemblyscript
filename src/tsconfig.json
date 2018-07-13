@@ -9,7 +9,6 @@
   ],
   "exclude": [
     "./binary.ts",
-    "./extra/**",
     "./glue/wasm/**"
   ]
 }
