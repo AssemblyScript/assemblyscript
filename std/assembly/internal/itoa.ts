@@ -1,15 +1,17 @@
 
 import {
   CharCode,
-  allocate,
+  allocate as allocateString,
   HEADER_SIZE as STRING_HEADER_SIZE
 } from "./string";
 
-import { loadUnsafe } from "./arraybuffer";
+import {
+  loadUnsafe
+} from "./arraybuffer";
 
 @inline
-function getPowers10Table(): u32[] {
-  return <u32[]>[
+function POWERS10(): u32[] {
+  const table: u32[] = [
     1,
     10,
     100,
@@ -21,6 +23,7 @@ function getPowers10Table(): u32[] {
     100000000,
     1000000000
   ];
+  return table; // inlines to a constant memory offset
 }
 
 /*
@@ -38,8 +41,8 @@ function getPowers10Table(): u32[] {
   "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
 */
 @inline
-function getDigitsTable(): u32[] {
-  return <u32[]>[
+function DIGITS(): u32[] {
+  const table: u32[] = [
     0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
     0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
     0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031,
@@ -61,42 +64,40 @@ function getDigitsTable(): u32[] {
     0x00300039, 0x00310039, 0x00320039, 0x00330039, 0x00340039,
     0x00350039, 0x00360039, 0x00370039, 0x00380039, 0x00390039
   ];
+  return table; // inlines to a constant memory offset
 }
 
 // Count number of decimals in value
-function decimalCount<T>(value: T): i32 {
-  // make value abs
-  var sign = value >> (8 * sizeof<T>() - 1);
-  var v = (value ^ sign) - sign;
-  var l = 8 * sizeof<T>() - <i32>clz<T>(v | 10); // log2
-  var t = l * 1233 >>> 12;                       // log10
+export function decimalCount<T>(value: T): i32 {
+  var v = abs<T>(value); // NOP if value is unsigned anyway
+  var l: usize = 8 * sizeof<T>() - <usize>clz<T>(v | 10); // log2
+  var t = l * 1233 >>> 12;                                // log10
 
-  var lutbuf = changetype<ArrayBuffer>(getPowers10Table().buffer_);
+  var lutbuf = <ArrayBuffer>POWERS10().buffer_;
   if (sizeof<T>() <= 4) {
     let power  = loadUnsafe<u32,T>(lutbuf, t);
-    t -= <i32>(v < power);
+    t -= <usize>(v < power);
   } else { // sizeof<T>() == 8
     let le10   = t <= 10;
-    let offset = select<i32>(0,          10, le10); // offset = t <= 10 ? 0 : 10
+    let offset = select<usize>(0,        10, le10); // offset = t <= 10 ? 0 : 10
     let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
     let power  = loadUnsafe<u32,T>(lutbuf, t - offset);
-    t -= <i32>(v < factor * power);
+    t -= <usize>(v < factor * power);
   }
   return t + 1;
 }
 
-function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
-  var r: u32, t: u32, d1: u32, d2: u32;
-  var lutbuf = changetype<ArrayBuffer>(getDigitsTable().buffer_);
+function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
+  var lutbuf = <ArrayBuffer>DIGITS().buffer_;
 
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
-    t = num / 10000;
-    r = num % 10000;
+    let t = num / 10000;
+    let r = num % 10000;
     num = t;
 
-    d1 = r / 100;
-    d2 = r % 100;
+    let d1 = r / 100;
+    let d2 = r % 100;
 
     let digits1 = loadUnsafe<u32,u64>(lutbuf, d1);
     let digits2 = loadUnsafe<u32,u64>(lutbuf, d2);
@@ -106,8 +107,8 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
   }
 
   if (num >= 100) {
-    t   = num / 100;
-    d1  = num % 100;
+    let t  = num / 100;
+    let d1 = num % 100;
     num = t;
     offset -= 2;
     let digits = loadUnsafe<u32,u32>(lutbuf, d1);
@@ -125,24 +126,21 @@ function utoa32_lut(buffer: usize, num: u32, offset: u32): void {
   }
 }
 
-function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
-  var t:  u64, r: u32, b: u32, c: u32;
-  var b1: u32, b2: u32, c1: u32, c2: u32;
-
-  var lutbuf = changetype<ArrayBuffer>(getDigitsTable().buffer_);
+function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
+  var lutbuf = <ArrayBuffer>DIGITS().buffer_;
 
   while (num >= 100000000) {
-    t = num / 100000000;
-    r = <u32>(num - t * 100000000);
+    let t = num / 100000000;
+    let r = <usize>(num - t * 100000000);
     num = t;
 
-    b = r / 10000;
-    c = r % 10000;
+    let b = r / 10000;
+    let c = r % 10000;
 
-    b1 = b / 100;
-    b2 = b % 100;
-    c1 = c / 100;
-    c2 = c % 100;
+    let b1 = b / 100;
+    let b2 = b % 100;
+    let c1 = c / 100;
+    let c2 = c % 100;
 
     let digits1 = loadUnsafe<u32,u64>(lutbuf, c1);
     let digits2 = loadUnsafe<u32,u64>(lutbuf, c2);
@@ -157,15 +155,13 @@ function utoa64_lut(buffer: usize, num: u64, offset: u32): void {
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
   }
 
-  r = <u32>num;
-  if (r) utoa32_lut(buffer, r, offset);
+  utoa32_lut(buffer, <u32>num, offset);
 }
 
-function utoa_simple<T>(buffer: usize, num: T, offset: u32): void {
-  var t: T, r: u32;
+function utoa_simple<T>(buffer: usize, num: T, offset: usize): void {
   do {
-    t = num / 10;
-    r = <u32>(num % 10);
+    let t = num / 10;
+    let r = <u32>(num % 10);
     num = t;
     offset -= 1;
     store<u16>(buffer + (offset << 1), CharCode._0 + r, STRING_HEADER_SIZE);
@@ -175,18 +171,18 @@ function utoa_simple<T>(buffer: usize, num: T, offset: u32): void {
 @inline
 export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_simple(buffer, num, offset);
+    utoa_simple(buffer, num, <usize>offset);
   } else {
-    utoa32_lut(buffer, num, offset);
+    utoa32_lut(buffer, num, <usize>offset);
   }
 }
 
 @inline
 export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_simple(buffer, num, offset);
+    utoa_simple(buffer, num, <usize>offset);
   } else {
-    utoa64_lut(buffer, num, offset);
+    utoa64_lut(buffer, num, <usize>offset);
   }
 }
 
@@ -194,7 +190,7 @@ export function utoa32(value: u32): string {
   if (!value) return "0";
 
   var decimals = decimalCount<u32>(value);
-  var buffer   = allocate(decimals);
+  var buffer   = allocateString(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
   return changetype<string>(buffer);
@@ -207,7 +203,7 @@ export function itoa32(value: i32): string {
   if (isneg) value = -value;
 
   var decimals = decimalCount<u32>(value) + <i32>isneg;
-  var buffer   = allocate(decimals);
+  var buffer   = allocateString(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
   if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
@@ -222,11 +218,11 @@ export function utoa64(value: u64): string {
   if (value <= u32.MAX_VALUE) {
     let value32  = <u32>value;
     let decimals = decimalCount<u32>(value32);
-    buffer = allocate(decimals);
+    buffer = allocateString(decimals);
     utoa32_core(changetype<usize>(buffer), value32, decimals);
   } else {
     let decimals = decimalCount<u64>(value);
-    buffer = allocate(decimals);
+    buffer = allocateString(decimals);
     utoa64_core(changetype<usize>(buffer), value, decimals);
   }
 
@@ -243,11 +239,11 @@ export function itoa64(value: i64): string {
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let value32  = <u32>value;
     let decimals = decimalCount<u32>(value32) + <i32>isneg;
-    buffer = allocate(decimals);
+    buffer = allocateString(decimals);
     utoa32_core(changetype<usize>(buffer), value32, decimals);
   } else {
     let decimals = decimalCount<u64>(value) + <i32>isneg;
-    buffer = allocate(decimals);
+    buffer = allocateString(decimals);
     utoa64_core(changetype<usize>(buffer), value, decimals);
   }
   if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
