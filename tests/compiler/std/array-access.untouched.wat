@@ -213,11 +213,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 12)
-<<<<<<< HEAD
-     (i32.const 241)
-=======
-     (i32.const 255)
->>>>>>> master
+     (i32.const 265)
      (i32.const 4)
     )
     (unreachable)
