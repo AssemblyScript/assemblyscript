@@ -67,31 +67,11 @@ function DIGITS(): u32[] {
   return table; // inlines to a constant memory offset
 }
 
-// General routine for count number of decimals in value
-export function decimalCount<T>(value: T): i32 {
-  var v = abs<T>(value); // NOP if value is unsigned anyway
-  var l: usize = 8 * sizeof<T>() - <usize>clz<T>(v | 10); // log2
-  var t = l * 1233 >>> 12;                                // log10
-
-  var lutbuf = <ArrayBuffer>POWERS10().buffer_;
-  if (sizeof<T>() <= 4) {
-    let power  = loadUnsafe<u32,T>(lutbuf, t);
-    t -= <usize>(v < power);
-  } else { // sizeof<T>() == 8
-    let le10   = t <= 10;
-    let offset = select<usize>(0,        10, le10); // offset = t <= 10 ? 0 : 10
-    let factor = select< T >(1, 10000000000, le10); // factor = t <= 10 ? 1 : 10 ^ 10
-    let power  = loadUnsafe<u32,T>(lutbuf, t - offset);
-    t -= <usize>(v < factor * power);
-  }
-  return t + 1;
-}
-
-// (Internal) Count number of decimals for u32 values
+// Count number of decimals for u32 values
 // In our case input value always non-zero so we can simplify some parts
 function decimalCountU32(value: u32): i32 {
-  var l: usize = 32 - <usize>clz<u32>(value);
-  var t = l * 1233 >>> 12;
+  var l: usize = 32 - <usize>clz<u32>(value); // log2
+  var t = l * 1233 >>> 12; // log10
 
   var lutbuf = <ArrayBuffer>POWERS10().buffer_;
   var power  = loadUnsafe<u32,u32>(lutbuf, t);
@@ -99,11 +79,11 @@ function decimalCountU32(value: u32): i32 {
   return t + 1;
 }
 
-// (Internal) Count number of decimals for u64 values
+// Count number of decimals for u64 values
 // In our case input value always greater than 2^32-1 so we can skip some parts
 function decimalCountU64(value: u64): i32 {
-  var l: usize = 64 - <usize>clz<u64>(value);
-  var t = l * 1233 >>> 12;
+  var l: usize = 64 - <usize>clz<u64>(value); // log2
+  var t = l * 1233 >>> 12; // log10
 
   var lutbuf = <ArrayBuffer>POWERS10().buffer_;
   var power  = loadUnsafe<u32,u64>(lutbuf, t - 10);
