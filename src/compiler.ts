@@ -265,6 +265,8 @@ export class Compiler extends DiagnosticEmitter {
   currentFunction: Function;
   /** Current outer function in compilation, if compiling a function expression. */
   currentOuterFunction: Function | null = null;
+  /** Current inline function in compilation. */
+  currentInlineFunction: Function | null = null;
   /** Current enum in compilation. */
   currentEnum: Enum | null = null;
   /** Current type in compilation. */
@@ -5257,7 +5259,21 @@ export class Compiler extends DiagnosticEmitter {
     // Inline if explicitly requested
     if (inline) {
       assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
-      return this.compileCallInlineUnchecked(instance, argumentExpressions, reportNode, thisArg);
+      if (instance === this.currentInlineFunction) {
+        // skip inlining when trying to inline a function into itself and print a warning when
+        // instead compiling the function the normal way.
+        if (instance === this.currentFunction) {
+          this.warning(
+            DiagnosticCode.Function_0_cannot_be_inlined_into_itself,
+            reportNode.range, instance.internalName
+          );
+        }
+      } else {
+        this.currentInlineFunction = instance;
+        let ret = this.compileCallInlineUnchecked(instance, argumentExpressions, reportNode, thisArg);
+        this.currentInlineFunction = null;
+        return ret;
+      }
     }
 
     // Otherwise compile to just a call

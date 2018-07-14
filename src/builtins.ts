@@ -54,7 +54,6 @@ import {
 import {
   ReportMode
 } from "./resolver";
-import { CommonFlags } from "./common";
 
 /** Compiles a call to a built-in function. */
 export function compileCall(
@@ -73,7 +72,7 @@ export function compileCall(
       ret: ExpressionRef;
 
   // NOTE that some implementations below make use of the select expression where straight-forward.
-  // whether worth or not should probably be tested once/ it's known if/how embedders handle it.
+  // whether worth or not should probably be tested once it's known if/how embedders handle it.
   // search: createSelect
 
   switch (prototype.internalName) {

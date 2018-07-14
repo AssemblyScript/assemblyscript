@@ -26,6 +26,7 @@ export enum DiagnosticCode {
   An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf = 214,
   Optional_parameter_must_have_an_initializer = 215,
   Constructor_of_class_0_must_not_require_any_arguments = 216,
+  Function_0_cannot_be_inlined_into_itself = 217,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -142,6 +143,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 214: return "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.";
     case 215: return "Optional parameter must have an initializer.";
     case 216: return "Constructor of class '{0}' must not require any arguments.";
+    case 217: return "Function '{0}' cannot be inlined into itself.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
