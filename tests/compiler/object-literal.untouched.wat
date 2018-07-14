@@ -308,16 +308,38 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 36)
-     (i32.const 23)
+     (i32.const 26)
      (i32.const 2)
     )
     (unreachable)
    )
   )
  )
- (func $start (; 6 ;) (type $v)
+ (func $object-literal/Foo2#test (; 6 ;) (type $iv) (param $0 i32)
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.load
+      (get_local $0)
+     )
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 36)
+     (i32.const 21)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
+  )
+ )
+ (func $start (; 7 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -363,6 +385,20 @@
      (i32.const 2)
     )
     (get_local $1)
+   )
+  )
+  (call $object-literal/Foo2#test
+   (block (result i32)
+    (set_local $2
+     (call $~lib/allocator/arena/allocate_memory
+      (i32.const 4)
+     )
+    )
+    (i32.store
+     (get_local $2)
+     (i32.const 3)
+    )
+    (get_local $2)
    )
   )
  )
