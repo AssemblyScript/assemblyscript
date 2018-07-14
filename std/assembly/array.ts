@@ -302,6 +302,9 @@ export class Array<T> {
   }
 
   sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
+    // TODO remove this when flow will allow trackcing null
+    assert(comparator); // The comparison function must be a function
+
     var length = this.length_;
     if (length <= 1) return this;
     var buffer = this.buffer_;
@@ -316,7 +319,7 @@ export class Array<T> {
     }
 
     if (isReference<T>()) {
-      // TODO replace this to stable sort when it implemented
+      // TODO replace this to faster stable sort (TimSort) when it implemented
       return changetype<this>(insertionSort<T>(this, comparator));
     } else {
       return changetype<this>(length < 256
