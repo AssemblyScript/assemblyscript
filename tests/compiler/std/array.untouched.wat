@@ -1543,122 +1543,662 @@
    )
   )
   (block $break|6
-   (block $case15|6
-    (block $case14|6
-     (block $case13|6
-      (block $case12|6
-       (block $case11|6
-        (block $case10|6
-         (block $case9|6
-          (block $case8|6
-           (block $case7|6
-            (block $case6|6
-             (block $case5|6
-              (block $case4|6
-               (block $case3|6
-                (block $case2|6
-                 (block $case1|6
-                  (block $case0|6
-                   (set_local $5
-                    (get_local $2)
-                   )
-                   (br_if $case0|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 16)
+   (block $case30|6
+    (block $case29|6
+     (block $case28|6
+      (block $case27|6
+       (block $case26|6
+        (block $case25|6
+         (block $case24|6
+          (block $case23|6
+           (block $case22|6
+            (block $case21|6
+             (block $case20|6
+              (block $case19|6
+               (block $case18|6
+                (block $case17|6
+                 (block $case16|6
+                  (block $case15|6
+                   (block $case14|6
+                    (block $case13|6
+                     (block $case12|6
+                      (block $case11|6
+                       (block $case10|6
+                        (block $case9|6
+                         (block $case8|6
+                          (block $case7|6
+                           (block $case6|6
+                            (block $case5|6
+                             (block $case4|6
+                              (block $case3|6
+                               (block $case2|6
+                                (block $case1|6
+                                 (block $case0|6
+                                  (set_local $5
+                                   (get_local $2)
+                                  )
+                                  (br_if $case0|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 31)
+                                   )
+                                  )
+                                  (br_if $case1|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 30)
+                                   )
+                                  )
+                                  (br_if $case2|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 29)
+                                   )
+                                  )
+                                  (br_if $case3|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 28)
+                                   )
+                                  )
+                                  (br_if $case4|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 27)
+                                   )
+                                  )
+                                  (br_if $case5|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 26)
+                                   )
+                                  )
+                                  (br_if $case6|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 25)
+                                   )
+                                  )
+                                  (br_if $case7|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 24)
+                                   )
+                                  )
+                                  (br_if $case8|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 23)
+                                   )
+                                  )
+                                  (br_if $case9|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 22)
+                                   )
+                                  )
+                                  (br_if $case10|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 21)
+                                   )
+                                  )
+                                  (br_if $case11|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 20)
+                                   )
+                                  )
+                                  (br_if $case12|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 19)
+                                   )
+                                  )
+                                  (br_if $case13|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 18)
+                                   )
+                                  )
+                                  (br_if $case14|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 17)
+                                   )
+                                  )
+                                  (br_if $case15|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 16)
+                                   )
+                                  )
+                                  (br_if $case16|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 15)
+                                   )
+                                  )
+                                  (br_if $case17|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 14)
+                                   )
+                                  )
+                                  (br_if $case18|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 13)
+                                   )
+                                  )
+                                  (br_if $case19|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 12)
+                                   )
+                                  )
+                                  (br_if $case20|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 11)
+                                   )
+                                  )
+                                  (br_if $case21|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 10)
+                                   )
+                                  )
+                                  (br_if $case22|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 9)
+                                   )
+                                  )
+                                  (br_if $case23|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 8)
+                                   )
+                                  )
+                                  (br_if $case24|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 7)
+                                   )
+                                  )
+                                  (br_if $case25|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 6)
+                                   )
+                                  )
+                                  (br_if $case26|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 5)
+                                   )
+                                  )
+                                  (br_if $case27|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 4)
+                                   )
+                                  )
+                                  (br_if $case28|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 3)
+                                   )
+                                  )
+                                  (br_if $case29|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 2)
+                                   )
+                                  )
+                                  (br_if $case30|6
+                                   (i32.eq
+                                    (get_local $5)
+                                    (i32.const 1)
+                                   )
+                                  )
+                                  (br $break|6)
+                                 )
+                                 (i32.store8
+                                  (block (result i32)
+                                   (set_local $5
+                                    (get_local $0)
+                                   )
+                                   (set_local $0
+                                    (i32.add
+                                     (get_local $5)
+                                     (i32.const 1)
+                                    )
+                                   )
+                                   (get_local $5)
+                                  )
+                                  (i32.load8_u
+                                   (block (result i32)
+                                    (set_local $5
+                                     (get_local $1)
+                                    )
+                                    (set_local $1
+                                     (i32.add
+                                      (get_local $5)
+                                      (i32.const 1)
+                                     )
+                                    )
+                                    (get_local $5)
+                                   )
+                                  )
+                                 )
+                                )
+                                (i32.store8
+                                 (block (result i32)
+                                  (set_local $5
+                                   (get_local $0)
+                                  )
+                                  (set_local $0
+                                   (i32.add
+                                    (get_local $5)
+                                    (i32.const 1)
+                                   )
+                                  )
+                                  (get_local $5)
+                                 )
+                                 (i32.load8_u
+                                  (block (result i32)
+                                   (set_local $5
+                                    (get_local $1)
+                                   )
+                                   (set_local $1
+                                    (i32.add
+                                     (get_local $5)
+                                     (i32.const 1)
+                                    )
+                                   )
+                                   (get_local $5)
+                                  )
+                                 )
+                                )
+                               )
+                               (i32.store8
+                                (block (result i32)
+                                 (set_local $5
+                                  (get_local $0)
+                                 )
+                                 (set_local $0
+                                  (i32.add
+                                   (get_local $5)
+                                   (i32.const 1)
+                                  )
+                                 )
+                                 (get_local $5)
+                                )
+                                (i32.load8_u
+                                 (block (result i32)
+                                  (set_local $5
+                                   (get_local $1)
+                                  )
+                                  (set_local $1
+                                   (i32.add
+                                    (get_local $5)
+                                    (i32.const 1)
+                                   )
+                                  )
+                                  (get_local $5)
+                                 )
+                                )
+                               )
+                              )
+                              (i32.store8
+                               (block (result i32)
+                                (set_local $5
+                                 (get_local $0)
+                                )
+                                (set_local $0
+                                 (i32.add
+                                  (get_local $5)
+                                  (i32.const 1)
+                                 )
+                                )
+                                (get_local $5)
+                               )
+                               (i32.load8_u
+                                (block (result i32)
+                                 (set_local $5
+                                  (get_local $1)
+                                 )
+                                 (set_local $1
+                                  (i32.add
+                                   (get_local $5)
+                                   (i32.const 1)
+                                  )
+                                 )
+                                 (get_local $5)
+                                )
+                               )
+                              )
+                             )
+                             (i32.store8
+                              (block (result i32)
+                               (set_local $5
+                                (get_local $0)
+                               )
+                               (set_local $0
+                                (i32.add
+                                 (get_local $5)
+                                 (i32.const 1)
+                                )
+                               )
+                               (get_local $5)
+                              )
+                              (i32.load8_u
+                               (block (result i32)
+                                (set_local $5
+                                 (get_local $1)
+                                )
+                                (set_local $1
+                                 (i32.add
+                                  (get_local $5)
+                                  (i32.const 1)
+                                 )
+                                )
+                                (get_local $5)
+                               )
+                              )
+                             )
+                            )
+                            (i32.store8
+                             (block (result i32)
+                              (set_local $5
+                               (get_local $0)
+                              )
+                              (set_local $0
+                               (i32.add
+                                (get_local $5)
+                                (i32.const 1)
+                               )
+                              )
+                              (get_local $5)
+                             )
+                             (i32.load8_u
+                              (block (result i32)
+                               (set_local $5
+                                (get_local $1)
+                               )
+                               (set_local $1
+                                (i32.add
+                                 (get_local $5)
+                                 (i32.const 1)
+                                )
+                               )
+                               (get_local $5)
+                              )
+                             )
+                            )
+                           )
+                           (i32.store8
+                            (block (result i32)
+                             (set_local $5
+                              (get_local $0)
+                             )
+                             (set_local $0
+                              (i32.add
+                               (get_local $5)
+                               (i32.const 1)
+                              )
+                             )
+                             (get_local $5)
+                            )
+                            (i32.load8_u
+                             (block (result i32)
+                              (set_local $5
+                               (get_local $1)
+                              )
+                              (set_local $1
+                               (i32.add
+                                (get_local $5)
+                                (i32.const 1)
+                               )
+                              )
+                              (get_local $5)
+                             )
+                            )
+                           )
+                          )
+                          (i32.store8
+                           (block (result i32)
+                            (set_local $5
+                             (get_local $0)
+                            )
+                            (set_local $0
+                             (i32.add
+                              (get_local $5)
+                              (i32.const 1)
+                             )
+                            )
+                            (get_local $5)
+                           )
+                           (i32.load8_u
+                            (block (result i32)
+                             (set_local $5
+                              (get_local $1)
+                             )
+                             (set_local $1
+                              (i32.add
+                               (get_local $5)
+                               (i32.const 1)
+                              )
+                             )
+                             (get_local $5)
+                            )
+                           )
+                          )
+                         )
+                         (i32.store8
+                          (block (result i32)
+                           (set_local $5
+                            (get_local $0)
+                           )
+                           (set_local $0
+                            (i32.add
+                             (get_local $5)
+                             (i32.const 1)
+                            )
+                           )
+                           (get_local $5)
+                          )
+                          (i32.load8_u
+                           (block (result i32)
+                            (set_local $5
+                             (get_local $1)
+                            )
+                            (set_local $1
+                             (i32.add
+                              (get_local $5)
+                              (i32.const 1)
+                             )
+                            )
+                            (get_local $5)
+                           )
+                          )
+                         )
+                        )
+                        (i32.store8
+                         (block (result i32)
+                          (set_local $5
+                           (get_local $0)
+                          )
+                          (set_local $0
+                           (i32.add
+                            (get_local $5)
+                            (i32.const 1)
+                           )
+                          )
+                          (get_local $5)
+                         )
+                         (i32.load8_u
+                          (block (result i32)
+                           (set_local $5
+                            (get_local $1)
+                           )
+                           (set_local $1
+                            (i32.add
+                             (get_local $5)
+                             (i32.const 1)
+                            )
+                           )
+                           (get_local $5)
+                          )
+                         )
+                        )
+                       )
+                       (i32.store8
+                        (block (result i32)
+                         (set_local $5
+                          (get_local $0)
+                         )
+                         (set_local $0
+                          (i32.add
+                           (get_local $5)
+                           (i32.const 1)
+                          )
+                         )
+                         (get_local $5)
+                        )
+                        (i32.load8_u
+                         (block (result i32)
+                          (set_local $5
+                           (get_local $1)
+                          )
+                          (set_local $1
+                           (i32.add
+                            (get_local $5)
+                            (i32.const 1)
+                           )
+                          )
+                          (get_local $5)
+                         )
+                        )
+                       )
+                      )
+                      (i32.store8
+                       (block (result i32)
+                        (set_local $5
+                         (get_local $0)
+                        )
+                        (set_local $0
+                         (i32.add
+                          (get_local $5)
+                          (i32.const 1)
+                         )
+                        )
+                        (get_local $5)
+                       )
+                       (i32.load8_u
+                        (block (result i32)
+                         (set_local $5
+                          (get_local $1)
+                         )
+                         (set_local $1
+                          (i32.add
+                           (get_local $5)
+                           (i32.const 1)
+                          )
+                         )
+                         (get_local $5)
+                        )
+                       )
+                      )
+                     )
+                     (i32.store8
+                      (block (result i32)
+                       (set_local $5
+                        (get_local $0)
+                       )
+                       (set_local $0
+                        (i32.add
+                         (get_local $5)
+                         (i32.const 1)
+                        )
+                       )
+                       (get_local $5)
+                      )
+                      (i32.load8_u
+                       (block (result i32)
+                        (set_local $5
+                         (get_local $1)
+                        )
+                        (set_local $1
+                         (i32.add
+                          (get_local $5)
+                          (i32.const 1)
+                         )
+                        )
+                        (get_local $5)
+                       )
+                      )
+                     )
+                    )
+                    (i32.store8
+                     (block (result i32)
+                      (set_local $5
+                       (get_local $0)
+                      )
+                      (set_local $0
+                       (i32.add
+                        (get_local $5)
+                        (i32.const 1)
+                       )
+                      )
+                      (get_local $5)
+                     )
+                     (i32.load8_u
+                      (block (result i32)
+                       (set_local $5
+                        (get_local $1)
+                       )
+                       (set_local $1
+                        (i32.add
+                         (get_local $5)
+                         (i32.const 1)
+                        )
+                       )
+                       (get_local $5)
+                      )
+                     )
                     )
                    )
-                   (br_if $case1|6
-                    (i32.eq
+                   (i32.store8
+                    (block (result i32)
+                     (set_local $5
+                      (get_local $0)
+                     )
+                     (set_local $0
+                      (i32.add
+                       (get_local $5)
+                       (i32.const 1)
+                      )
+                     )
                      (get_local $5)
-                     (i32.const 15)
+                    )
+                    (i32.load8_u
+                     (block (result i32)
+                      (set_local $5
+                       (get_local $1)
+                      )
+                      (set_local $1
+                       (i32.add
+                        (get_local $5)
+                        (i32.const 1)
+                       )
+                      )
+                      (get_local $5)
+                     )
                     )
                    )
-                   (br_if $case2|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 14)
-                    )
-                   )
-                   (br_if $case3|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 13)
-                    )
-                   )
-                   (br_if $case4|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 12)
-                    )
-                   )
-                   (br_if $case5|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 11)
-                    )
-                   )
-                   (br_if $case6|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 10)
-                    )
-                   )
-                   (br_if $case7|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 9)
-                    )
-                   )
-                   (br_if $case8|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 8)
-                    )
-                   )
-                   (br_if $case9|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 7)
-                    )
-                   )
-                   (br_if $case10|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 6)
-                    )
-                   )
-                   (br_if $case11|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 5)
-                    )
-                   )
-                   (br_if $case12|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 4)
-                    )
-                   )
-                   (br_if $case13|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 3)
-                    )
-                   )
-                   (br_if $case14|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 2)
-                    )
-                   )
-                   (br_if $case15|6
-                    (i32.eq
-                     (get_local $5)
-                     (i32.const 1)
-                    )
-                   )
-                   (br $break|6)
                   )
                   (i32.store8
                    (block (result i32)

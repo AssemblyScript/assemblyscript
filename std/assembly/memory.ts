@@ -99,6 +99,21 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
 
   // copy remaining bytes one by one
   switch (n) {
+    case 31: store<u8>(dest++, load<u8>(src++));
+    case 30: store<u8>(dest++, load<u8>(src++));
+    case 29: store<u8>(dest++, load<u8>(src++));
+    case 28: store<u8>(dest++, load<u8>(src++));
+    case 27: store<u8>(dest++, load<u8>(src++));
+    case 26: store<u8>(dest++, load<u8>(src++));
+    case 25: store<u8>(dest++, load<u8>(src++));
+    case 24: store<u8>(dest++, load<u8>(src++));
+    case 23: store<u8>(dest++, load<u8>(src++));
+    case 22: store<u8>(dest++, load<u8>(src++));
+    case 21: store<u8>(dest++, load<u8>(src++));
+    case 20: store<u8>(dest++, load<u8>(src++));
+    case 19: store<u8>(dest++, load<u8>(src++));
+    case 18: store<u8>(dest++, load<u8>(src++));
+    case 17: store<u8>(dest++, load<u8>(src++));
     case 16: store<u8>(dest++, load<u8>(src++));
     case 15: store<u8>(dest++, load<u8>(src++));
     case 14: store<u8>(dest++, load<u8>(src++));
