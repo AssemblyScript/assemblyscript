@@ -303,7 +303,7 @@ export class Array<T> {
 
   sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
     // TODO remove this when flow will allow trackcing null
-    assert(comparator, "The comparison function must be a function");
+    assert(comparator); // The comparison function must be a function
 
     var length = this.length_;
     if (length <= 1) return this;
