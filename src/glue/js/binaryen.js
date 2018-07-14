@@ -33,20 +33,10 @@ global.load = function(ptr) {
 
 const Module = require("../../module").Module;
 
-Module.prototype.toText = function toText() {
-  var previousPrint = binaryen.print;
-  var ret = "";
-  binaryen.print = function(x) { ret += x + "\n" };
-  _BinaryenModulePrint(this.ref);
-  binaryen.print = previousPrint;
-  return ret;
+Module.prototype.toText = function() {
+  return new binaryen.Module(this.ref).emitText();
 };
 
-Module.prototype.toAsmjs = function toAsmjs() {
-  var previousPrint = binaryen.print;
-  var ret = "";
-  binaryen.print = function(x) { ret += x + "\n" };
-  _BinaryenModulePrintAsmjs(this.ref);
-  binaryen.print = previousPrint;
-  return ret;
+Module.prototype.toAsmjs = function() {
+  return new binaryen.Module(this.ref).emitAsmjs();
 };

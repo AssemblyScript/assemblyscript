@@ -25,6 +25,7 @@ export enum DiagnosticCode {
   Duplicate_decorator = 213,
   An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf = 214,
   Optional_parameter_must_have_an_initializer = 215,
+  Constructor_of_class_0_must_not_require_any_arguments = 216,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -76,6 +77,7 @@ export enum DiagnosticCode {
   Unterminated_Unicode_escape_sequence = 1199,
   Decorators_are_not_valid_here = 1206,
   _abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration = 1242,
+  Method_0_cannot_have_an_implementation_because_it_is_marked_abstract = 1245,
   A_class_may_only_extend_another_class = 1311,
   A_parameter_property_cannot_be_declared_using_a_rest_parameter = 1317,
   Duplicate_identifier_0 = 2300,
@@ -110,6 +112,8 @@ export enum DiagnosticCode {
   Expected_at_least_0_arguments_but_got_1 = 2555,
   Expected_0_type_arguments_but_got_1 = 2558,
   A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums = 2651,
+  Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration = 2673,
+  Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
   Namespace_0_has_no_exported_member_1 = 2694,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
@@ -137,6 +141,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 213: return "Duplicate decorator.";
     case 214: return "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.";
     case 215: return "Optional parameter must have an initializer.";
+    case 216: return "Constructor of class '{0}' must not require any arguments.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -188,6 +193,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1199: return "Unterminated Unicode escape sequence.";
     case 1206: return "Decorators are not valid here.";
     case 1242: return "'abstract' modifier can only appear on a class, method, or property declaration.";
+    case 1245: return "Method '{0}' cannot have an implementation because it is marked abstract.";
     case 1311: return "A class may only extend another class.";
     case 1317: return "A parameter property cannot be declared using a rest parameter.";
     case 2300: return "Duplicate identifier '{0}'.";
@@ -222,6 +228,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2555: return "Expected at least {0} arguments, but got {1}.";
     case 2558: return "Expected {0} type arguments, but got {1}.";
     case 2651: return "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.";
+    case 2673: return "Constructor of class '{0}' is private and only accessible within the class declaration.";
+    case 2674: return "Constructor of class '{0}' is protected and only accessible within the class declaration.";
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";

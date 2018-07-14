@@ -280,14 +280,14 @@ declare class String {
 
   private constructor();
 
-  indexOf(subject: string, position?: i32): i32;
+  indexOf(other: string, fromIndex?: i32): i32;
+  lastIndexOf(other: string, fromIndex?: i32): i32;
   includes(other: string): bool;
-  lastIndexOf(subject: string, position?: i32): i32;
   charAt(index: i32): string;
   charCodeAt(index: i32): i32;
   substring(from: i32, to?: i32): string;
-  startsWith(subject: string): bool;
-  endsWith(subject: string): bool;
+  startsWith(other: string): bool;
+  endsWith(other: string): bool;
   replace(search: string, replacement: string): string;
   repeat(count?: i32): string;
   toString(): string;

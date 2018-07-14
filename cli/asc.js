@@ -21,20 +21,29 @@ const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 
+// Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
+// useless code fragment on top of an actual error. suppress this:
+if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
+
 // Use distribution files if present, otherwise run the sources directly
 var assemblyscript, isDev = false;
 (() => {
-  try {
+  try { // `asc` on the command line
     assemblyscript = require("../dist/assemblyscript.js");
   } catch (e) {
-    try {
+    try { // `asc` on the command line without dist files
       require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
       require("../src/glue/js");
       assemblyscript = require("../src");
       isDev = true;
-    } catch (e) {
-      // last resort: same directory CommonJS
-      assemblyscript = eval("require('./assemblyscript')");
+    } catch (e_ts) {
+      try { // `require("dist/asc.js")` in explicit browser tests
+        assemblyscript = eval("require('./assemblyscript')");
+      } catch (e) {
+        // combine both errors that lead us here
+        e.stack = e_ts.stack + "\n---\n" + e.stack;
+        throw e;
+      }
     }
   }
 })();
@@ -408,9 +417,8 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/env/abort"); // to disable: --use abort=
 
   // Add or override aliases if specified
-  var aliases = args.use;
-  if (aliases != null) {
-    if (typeof aliases === "string") aliases = aliases.split(",");
+  if (args.use) {
+    let aliases = args.use;
     for (let i = 0, k = aliases.length; i < k; ++i) {
       let part = aliases[i];
       let p = part.indexOf("=");
@@ -709,7 +717,7 @@ exports.main = function main(argv, options, callback) {
     var files;
     try {
       stats.readTime += measure(() => {
-        files = require("glob").sync("!(*.d).ts", { cwd: dirname });
+        files = fs.readdirSync(dirname).filter(file => /^(?!.*\.d\.ts$).*\.ts$/.test(file));
       });
       return files;
     } catch (e) {

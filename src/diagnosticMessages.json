@@ -17,6 +17,7 @@
   "Duplicate decorator.": 213,
   "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.": 214,
   "Optional parameter must have an initializer.": 215,
+  "Constructor of class '{0}' must not require any arguments.": 216,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
@@ -69,6 +70,7 @@
   "Unterminated Unicode escape sequence.": 1199,
   "Decorators are not valid here.": 1206,
   "'abstract' modifier can only appear on a class, method, or property declaration.": 1242,
+  "Method '{0}' cannot have an implementation because it is marked abstract.": 1245,
   "A class may only extend another class.": 1311,
   "A parameter property cannot be declared using a rest parameter.": 1317,
 
@@ -104,6 +106,8 @@
   "Expected at least {0} arguments, but got {1}.": 2555,
   "Expected {0} type arguments, but got {1}.": 2558,
   "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
+  "Constructor of class '{0}' is private and only accessible within the class declaration.": 2673,
+  "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,
   "Namespace '{0}' has no exported member '{1}'.": 2694,
 
   "File '{0}' not found.": 6054,

@@ -2,6 +2,7 @@
 /(abc)\//;
 var re = /(abc)\//ig;
 var noRe = !/(abc)\//i;
+b / ig;
 /(abc)\//iig;
 /(abc)\//iX;
 false && /abc/gX.test(someString) || true;

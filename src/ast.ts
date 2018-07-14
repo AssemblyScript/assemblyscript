@@ -41,6 +41,7 @@ export enum NodeKind {
   ASSERTION,
   BINARY,
   CALL,
+  CLASS,
   COMMA,
   ELEMENTACCESS,
   FALSE,
@@ -320,6 +321,15 @@ export abstract class Node {
     return expr;
   }
 
+  static createClassExpression(
+    declaration: ClassDeclaration
+  ): ClassExpression {
+    var expr = new ClassExpression();
+    expr.range = declaration.range;
+    expr.declaration = declaration;
+    return expr;
+  }
+
   static createCommaExpression(
     expressions: Expression[],
     range: Range
@@ -419,6 +429,18 @@ export abstract class Node {
   ): NullExpression {
     var expr = new NullExpression();
     expr.range = range;
+    return expr;
+  }
+
+  static createObjectLiteralExpression(
+    names: IdentifierExpression[],
+    values: Expression[],
+    range: Range
+  ): ObjectLiteralExpression {
+    var expr = new ObjectLiteralExpression();
+    expr.range = range;
+    expr.names = names;
+    expr.values = values;
     return expr;
   }
 
@@ -1276,6 +1298,14 @@ export class CallExpression extends Expression {
   arguments: Expression[];
 }
 
+/** Represents a class expression using the 'class' keyword. */
+export class ClassExpression extends Expression {
+  kind = NodeKind.CLASS;
+
+  /** Inline class declaration. */
+  declaration: ClassDeclaration;
+}
+
 /** Represents a comma expression composed of multiple expressions. */
 export class CommaExpression extends Expression {
   kind = NodeKind.COMMA;
@@ -1343,6 +1373,16 @@ export class NewExpression extends CallExpression {
 export class NullExpression extends IdentifierExpression {
   kind = NodeKind.NULL;
   text = "null";
+}
+
+/** Represents an object literal expression. */
+export class ObjectLiteralExpression extends LiteralExpression {
+  literalKind = LiteralKind.OBJECT;
+
+  /** Field names. */
+  names: IdentifierExpression[];
+  /** Field values. */
+  values: Expression[];
 }
 
 /** Represents a parenthesized expression. */

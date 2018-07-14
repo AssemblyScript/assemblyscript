@@ -15,6 +15,11 @@ export const MAX_LENGTH = (<i32>MAX_SIZE_32 - HEADER_SIZE) >>> 1;
 /** Singleton empty String. */
 export const EMPTY = changetype<String>(""); // TODO: is this a bad idea with '===' in place?
 
+@inline
+export function clamp<T>(val: T, lo: T, hi: T): T {
+  return max<T>(min<T>(val, hi), lo);
+}
+
 /** Allocates a raw String with uninitialized contents. */
 export function allocate(length: i32): String {
   assert(length > 0 && length <= MAX_LENGTH);

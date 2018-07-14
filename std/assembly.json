@@ -5,7 +5,7 @@
     "module": "commonjs",
     "noLib": true,
     "allowJs": false,
-    "typeRoots": [ "." ],
-    "types": [ "assembly/" ]
+    "typeRoots": [ "types" ],
+    "types": [ "assembly" ]
   }
 }

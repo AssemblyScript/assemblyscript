@@ -71,7 +71,11 @@ export enum CommonFlags {
   /** Is a virtual method. */
   VIRTUAL = 1 << 26,
   /** Is the main function. */
-  MAIN = 1 << 27
+  MAIN = 1 << 27,
+
+  // Other
+
+  QUOTED = 1 << 28
 }
 
 /** Path delimiter inserted between file system levels. */
