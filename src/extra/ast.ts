@@ -39,6 +39,8 @@ import {
   UnaryPostfixExpression,
   UnaryExpression,
   UnaryPrefixExpression,
+  ClassExpression,
+  ObjectLiteralExpression,
 
   Statement,
   BlockStatement,
@@ -76,8 +78,7 @@ import {
   ParameterNode,
   ParameterKind,
   ExportMember,
-  SwitchCase,
-  ClassExpression
+  SwitchCase
 } from "../ast";
 
 import {
@@ -411,7 +412,8 @@ export class ASTBuilder {
   // expressions
 
   visitIdentifierExpression(node: IdentifierExpression): void {
-    this.sb.push(node.text);
+    if (node.is(CommonFlags.QUOTED)) this.visitStringLiteral(node.text);
+    else this.sb.push(node.text);
   }
 
   visitArrayLiteralExpression(node: ArrayLiteralExpression): void {
@@ -427,6 +429,33 @@ export class ASTBuilder {
       }
     }
     sb.push("]");
+  }
+
+  visitObjectLiteralExpression(node: ObjectLiteralExpression): void {
+    var sb = this.sb;
+    var names = node.names;
+    var values = node.values;
+    var numElements = names.length;
+    assert(numElements == values.length);
+    if (numElements) {
+      sb.push("{\n");
+      indent(sb, ++this.indentLevel);
+      this.visitNode(names[0]);
+      sb.push(": ");
+      this.visitNode(values[0]);
+      for (let i = 1; i < numElements; ++i) {
+        sb.push(",\n");
+        indent(sb, this.indentLevel);
+        this.visitNode(names[i]);
+        sb.push(": ");
+        this.visitNode(values[i]);
+      }
+      sb.push("\n");
+      indent(sb, --this.indentLevel);
+      sb.push("}");
+    } else {
+      sb.push("{}");
+    }
   }
 
   visitAssertionExpression(node: AssertionExpression): void {
@@ -542,10 +571,10 @@ export class ASTBuilder {
         this.visitArrayLiteralExpression(<ArrayLiteralExpression>node);
         break;
       }
-      // case LiteralKind.OBJECT: {
-      //   this.serializeObjectLiteralExpression(<ObjectLiteralExpression>node);
-      //   break;
-      // }
+      case LiteralKind.OBJECT: {
+        this.visitObjectLiteralExpression(<ObjectLiteralExpression>node);
+        break;
+      }
       default: {
         assert(false);
         break;

@@ -130,6 +130,7 @@ import {
   LiteralExpression,
   LiteralKind,
   NewExpression,
+  ObjectLiteralExpression,
   ParenthesizedExpression,
   PropertyAccessExpression,
   TernaryExpression,
@@ -6144,7 +6145,10 @@ export class Compiler extends DiagnosticEmitter {
         assert(!implicitNegate);
         return this.compileStaticString((<StringLiteralExpression>expression).value);
       }
-      // case LiteralKind.OBJECT:
+      case LiteralKind.OBJECT: {
+        assert(!implicitNegate);
+        return this.compileObjectLiteral(<ObjectLiteralExpression>expression, contextualType);
+      }
       // case LiteralKind.REGEXP:
     }
     this.error(
@@ -6390,6 +6394,88 @@ export class Compiler extends DiagnosticEmitter {
         module.createI32(0)
       ]);
     }
+  }
+
+  compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef {
+    var module = this.module;
+
+    // contextual type must be a class
+    var classReference = contextualType.classReference;
+    if (!classReference || classReference.is(CommonFlags.ABSTRACT)) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        expression.range, "<object>", contextualType.toString()
+      );
+      return module.createUnreachable();
+    }
+
+    // if present, check that the constructor is compatible with object literals
+    var ctor = classReference.constructorInstance;
+    if (ctor) {
+      if (ctor.signature.requiredParameters) {
+        this.error(
+          DiagnosticCode.Constructor_of_class_0_must_not_require_any_arguments,
+          expression.range, classReference.toString()
+        );
+        return module.createUnreachable();
+      }
+      if (ctor.is(CommonFlags.PRIVATE)) {
+        this.error(
+          DiagnosticCode.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration,
+          expression.range, classReference.toString()
+        );
+        return module.createUnreachable();
+      }
+      if (ctor.is(CommonFlags.PROTECTED)) {
+        this.error(
+          DiagnosticCode.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration,
+          expression.range, classReference.toString()
+        );
+        return module.createUnreachable();
+      }
+    }
+
+    // check and compile field values
+    var names = expression.names;
+    var numNames = names.length;
+    var values = expression.values;
+    var members = classReference.members;
+    var hasErrors = false;
+    var exprs = new Array<ExpressionRef>(numNames + 2);
+    var tempLocal = this.currentFunction.getTempLocal(this.options.usizeType);
+    assert(numNames == values.length);
+    for (let i = 0, k = numNames; i < k; ++i) {
+      let member = members ? members.get(names[i].text) : null;
+      if (!member || member.kind != ElementKind.FIELD) {
+        this.error(
+          DiagnosticCode.Property_0_does_not_exist_on_type_1,
+          names[i].range, names[i].text, classReference.toString()
+        );
+        hasErrors = true;
+        continue;
+      }
+      let type = (<Field>member).type;
+      exprs[i + 1] = this.module.createStore( // TODO: handle setters as well
+        type.byteSize,
+        this.module.createGetLocal(tempLocal.index, this.options.nativeSizeType),
+        this.compileExpression(values[i], (<Field>member).type, ConversionKind.IMPLICIT, WrapMode.NONE),
+        type.toNativeType(),
+        (<Field>member).memoryOffset
+      );
+    }
+    this.currentType = classReference.type.nonNullableType;
+    if (hasErrors) return module.createUnreachable();
+
+    // allocate a new instance first and assign 'this' to the temp. local
+    exprs[0] = module.createSetLocal(
+      tempLocal.index,
+      compileBuiltinAllocate(this, classReference, expression)
+    );
+
+    // once all field values have been set, return 'this'
+    exprs[exprs.length - 1] = module.createGetLocal(tempLocal.index, this.options.nativeSizeType);
+
+    return module.createBlock(null, exprs, this.options.nativeSizeType);
   }
 
   compileNewExpression(expression: NewExpression, contextualType: Type): ExpressionRef {
