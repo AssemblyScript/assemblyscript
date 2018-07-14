@@ -13,8 +13,8 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
   // if dst is aligned to 4 bytes as well, copy 4 bytes each
   if ((dest & 3) == 0) {
     while (n >= 16) {
-      store<u64>(dest     , load<u64>(src     ));
-      store<u64>(dest +  8, load<u64>(src +  8));
+      store<u64>(dest    , load<u64>(src    ));
+      store<u64>(dest + 8, load<u64>(src + 8));
       src += 16; dest += 16; n -= 16;
     }
     if (n & 8) {
