@@ -580,45 +580,21 @@
        (i32.const 16)
       )
       (block
-       (i32.store
+       (i64.store
         (get_local $0)
-        (i32.load
+        (i64.load
          (get_local $1)
         )
        )
-       (i32.store
-        (i32.add
-         (get_local $0)
-         (i32.const 4)
-        )
-        (i32.load
-         (i32.add
-          (get_local $1)
-          (i32.const 4)
-         )
-        )
-       )
-       (i32.store
+       (i64.store
         (i32.add
          (get_local $0)
          (i32.const 8)
         )
-        (i32.load
+        (i64.load
          (i32.add
           (get_local $1)
           (i32.const 8)
-         )
-        )
-       )
-       (i32.store
-        (i32.add
-         (get_local $0)
-         (i32.const 12)
-        )
-        (i32.load
-         (i32.add
-          (get_local $1)
-          (i32.const 12)
          )
         )
        )
@@ -650,22 +626,10 @@
       (i32.const 8)
      )
      (block
-      (i32.store
+      (i64.store
        (get_local $0)
-       (i32.load
+       (i64.load
         (get_local $1)
-       )
-      )
-      (i32.store
-       (i32.add
-        (get_local $0)
-        (i32.const 4)
-       )
-       (i32.load
-        (i32.add
-         (get_local $1)
-         (i32.const 4)
-        )
        )
       )
       (set_local $0
