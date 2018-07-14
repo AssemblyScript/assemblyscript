@@ -3093,17 +3093,20 @@ export class Parser extends DiagnosticEmitter {
           } else {
             name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
           }
-          if (!tn.skip(Token.COLON)) {
+          names.push(name);
+          if (tn.skip(Token.COLON)) {
+            let value = this.parseExpression(tn, Precedence.COMMA + 1);
+            if (!value) return null;
+            values.push(value);
+          } else if (!name.is(CommonFlags.QUOTED)) {
+            values.push(name);
+          } else {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), ":"
             );
             return null;
           }
-          let value = this.parseExpression(tn, Precedence.COMMA + 1);
-          if (!value) return null;
-          names.push(name);
-          values.push(value);
           if (!tn.skip(Token.COMMA)) {
             if (tn.skip(Token.CLOSEBRACE)) {
               break;

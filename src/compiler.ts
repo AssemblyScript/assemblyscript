@@ -265,6 +265,8 @@ export class Compiler extends DiagnosticEmitter {
   currentFunction: Function;
   /** Current outer function in compilation, if compiling a function expression. */
   currentOuterFunction: Function | null = null;
+  /** Current inline functions stack. */
+  currentInlineFunctions: Function[] = [];
   /** Current enum in compilation. */
   currentEnum: Enum | null = null;
   /** Current type in compilation. */
@@ -4623,7 +4625,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createUnreachable();
       }
       case ElementKind.CLASS: {
-        if (resolver.resolvedElementExpression) { // indexed access
+        if (resolver.currentElementExpression) { // indexed access
           let isUnchecked = currentFunction.flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
           if (!indexedSet) {
@@ -4736,7 +4738,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.createUnreachable();
         }
-        let thisExpression = assert(this.resolver.resolvedThisExpression);
+        let thisExpression = assert(this.resolver.currentThisExpression);
         let thisExpr = this.compileExpressionRetainType(
           thisExpression,
           this.options.usizeType,
@@ -4788,7 +4790,7 @@ export class Compiler extends DiagnosticEmitter {
           // call just the setter if the return value isn't of interest
           if (!tee) {
             if (setterInstance.is(CommonFlags.INSTANCE)) {
-              let thisExpression = assert(this.resolver.resolvedThisExpression);
+              let thisExpression = assert(this.resolver.currentThisExpression);
               let thisExpr = this.compileExpressionRetainType(
                 thisExpression,
                 this.options.usizeType,
@@ -4808,7 +4810,7 @@ export class Compiler extends DiagnosticEmitter {
           let returnType = getterInstance.signature.returnType;
           let nativeReturnType = returnType.toNativeType();
           if (setterInstance.is(CommonFlags.INSTANCE)) {
-            let thisExpression = assert(this.resolver.resolvedThisExpression);
+            let thisExpression = assert(this.resolver.currentThisExpression);
             let thisExpr = this.compileExpressionRetainType(
               thisExpression,
               this.options.usizeType,
@@ -4841,7 +4843,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.createUnreachable();
       }
       case ElementKind.CLASS: {
-        let elementExpression = this.resolver.resolvedElementExpression;
+        let elementExpression = this.resolver.currentElementExpression;
         if (elementExpression) {
           let isUnchecked = this.currentFunction.flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
@@ -4862,7 +4864,7 @@ export class Compiler extends DiagnosticEmitter {
             return module.createUnreachable();
           }
           let targetType = (<Class>target).type;
-          let thisExpression = assert(this.resolver.resolvedThisExpression);
+          let thisExpression = assert(this.resolver.currentThisExpression);
           let thisExpr = this.compileExpressionRetainType(
             thisExpression,
             this.options.usizeType,
@@ -5039,7 +5041,7 @@ export class Compiler extends DiagnosticEmitter {
         let thisExpr: ExpressionRef = 0;
         if (instance.is(CommonFlags.INSTANCE)) {
           thisExpr = this.compileExpressionRetainType(
-            assert(this.resolver.resolvedThisExpression),
+            assert(this.resolver.currentThisExpression),
             this.options.usizeType,
             WrapMode.NONE
           );
@@ -5082,7 +5084,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FIELD: {
         let type = (<Field>target).type;
         if (signature = type.signatureReference) {
-          let thisExpression = assert(this.resolver.resolvedThisExpression);
+          let thisExpression = assert(this.resolver.currentThisExpression);
           let thisExpr = this.compileExpressionRetainType(
             thisExpression,
             this.options.usizeType,
@@ -5257,7 +5259,17 @@ export class Compiler extends DiagnosticEmitter {
     // Inline if explicitly requested
     if (inline) {
       assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
-      return this.compileCallInlineUnchecked(instance, argumentExpressions, reportNode, thisArg);
+      if (this.currentInlineFunctions.includes(instance)) {
+        this.warning(
+          DiagnosticCode.Function_0_cannot_be_inlined_into_itself,
+          reportNode.range, instance.internalName
+        );
+      } else {
+        this.currentInlineFunctions.push(instance);
+        let expr = this.compileCallInlineUnchecked(instance, argumentExpressions, reportNode, thisArg);
+        this.currentInlineFunctions.pop();
+        return expr;
+      }
     }
 
     // Otherwise compile to just a call
@@ -6598,7 +6610,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.createGetGlobal((<EnumValue>target).internalName, NativeType.I32);
       }
       case ElementKind.FIELD: { // instance field
-        let thisExpression = assert(this.resolver.resolvedThisExpression);
+        let thisExpression = assert(this.resolver.currentThisExpression);
         assert((<Field>target).memoryOffset >= 0);
         let thisExpr = this.compileExpressionRetainType(
           thisExpression,
@@ -6632,7 +6644,7 @@ export class Compiler extends DiagnosticEmitter {
           if (instance.is(CommonFlags.INSTANCE)) {
             let parent = assert(instance.parent);
             assert(parent.kind == ElementKind.CLASS);
-            let thisExpression = assert(this.resolver.resolvedThisExpression);
+            let thisExpression = assert(this.resolver.currentThisExpression);
             let thisExpr = this.compileExpressionRetainType(
               thisExpression,
               this.options.usizeType,

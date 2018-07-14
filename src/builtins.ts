@@ -51,6 +51,10 @@ import {
   FlowFlags
 } from "./program";
 
+import {
+  ReportMode
+} from "./resolver";
+
 /** Compiles a call to a built-in function. */
 export function compileCall(
   compiler: Compiler,
@@ -68,7 +72,7 @@ export function compileCall(
       ret: ExpressionRef;
 
   // NOTE that some implementations below make use of the select expression where straight-forward.
-  // whether worth or not should probably be tested once/ it's known if/how embedders handle it.
+  // whether worth or not should probably be tested once it's known if/how embedders handle it.
   // search: createSelect
 
   switch (prototype.internalName) {
@@ -127,6 +131,57 @@ export function compileCall(
       return classType != null && classType.lookupOverload(OperatorKind.INDEXED_GET) != null
         ? module.createI32(1)
         : module.createI32(0);
+    }
+    case "isDefined": { // isDefined(expression) -> bool
+      compiler.currentType = Type.bool;
+      if (operands.length != 1) {
+        if (typeArguments) {
+          compiler.error(
+            DiagnosticCode.Type_0_is_not_generic,
+            reportNode.range, prototype.internalName
+          );
+        }
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+        return module.createUnreachable();
+      }
+      let element = compiler.resolver.resolveExpression(operands[0], compiler.currentFunction, ReportMode.SWALLOW);
+      return module.createI32(element ? 1 : 0);
+    }
+    case "isConstant": { // isConstant(expression) -> bool
+      compiler.currentType = Type.bool;
+      if (operands.length != 1) {
+        if (typeArguments) {
+          compiler.error(
+            DiagnosticCode.Type_0_is_not_generic,
+            reportNode.range, prototype.internalName
+          );
+        }
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+        return module.createUnreachable();
+      }
+      let expr = compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
+      compiler.currentType = Type.bool;
+      return module.createI32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
     }
 
     // math

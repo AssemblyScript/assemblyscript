@@ -17,10 +17,15 @@ class Foo2 {
   constructor() {
     this.bar = 1;
   }
+  test(): void {
+    assert(this.bar == 3);
+  }
 }
 
 function bar2(foo: Foo2): void {
   assert(foo.bar == 2);
 }
 
-bar2({ bar: 2 });
+bar2(<Foo2>{ bar: 2 });
+
+(<Foo2>{ bar: 3 }).test();

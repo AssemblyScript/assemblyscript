@@ -18,6 +18,7 @@
   "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.": 214,
   "Optional parameter must have an initializer.": 215,
   "Constructor of class '{0}' must not require any arguments.": 216,
+  "Function '{0}' cannot be inlined into itself.": 217,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

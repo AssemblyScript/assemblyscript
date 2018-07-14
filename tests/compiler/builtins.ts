@@ -22,6 +22,13 @@ assert(!isString(1));
 assert(isArray(changetype<i32[]>(null)));
 assert(!isArray(changetype<usize>(null)));
 
+// evaluation
+
+assert(isDefined(b));
+assert(!isDefined(c));
+assert(isConstant(1));
+assert(!isConstant(b));
+
 // integers
 
 var i: i32;

@@ -304,6 +304,10 @@ declare function isReference<T>(value?: any): value is object | string;
 declare function isString<T>(value?: any): value is string | String;
 /** Tests if the specified type *or* expression can be used as an array. Compiles to a constant. */
 declare function isArray<T>(value?: any): value is Array<any>;
+/** Tests if the specified expression resolves to a defined element. Compiles to a constant. */
+declare function isDefined(expression: any): bool;
+/** Tests if the specified expression evaluates to a constant value. Compiles to a constant. */
+declare function isConstant(expression: any): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */

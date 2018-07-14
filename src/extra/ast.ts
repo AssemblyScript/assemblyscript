@@ -446,9 +446,15 @@ export class ASTBuilder {
       for (let i = 1; i < numElements; ++i) {
         sb.push(",\n");
         indent(sb, this.indentLevel);
-        this.visitNode(names[i]);
-        sb.push(": ");
-        this.visitNode(values[i]);
+        let name = names[i];
+        let value = values[i];
+        if (name === value) {
+          this.visitNode(name);
+        } else {
+          this.visitNode(name);
+          sb.push(": ");
+          this.visitNode(value);
+        }
       }
       sb.push("\n");
       indent(sb, --this.indentLevel);

@@ -73,9 +73,6 @@
     "no-misused-new": {
       "severity": "error"
     },
-    "no-object-literal-type-assertion": {
-      "severity": "error"
-    },
     "no-require-imports": {
       "severity": "error"
     },
