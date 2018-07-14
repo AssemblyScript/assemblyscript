@@ -3073,6 +3073,51 @@ export class Parser extends DiagnosticEmitter {
         }
         return Node.createArrayLiteralExpression(elementExpressions, tn.range(startPos, tn.pos));
       }
+      // ObjectLiteralExpression
+      case Token.OPENBRACE: {
+        let startPos = tn.tokenPos;
+        let names = new Array<IdentifierExpression>();
+        let values = new Array<Expression>();
+        let name: IdentifierExpression;
+        while (!tn.skip(Token.CLOSEBRACE)) {
+          if (!tn.skipIdentifier()) {
+            if (!tn.skip(Token.STRINGLITERAL)) {
+              this.error(
+                DiagnosticCode.Identifier_expected,
+                tn.range(),
+              );
+              return null;
+            }
+            name = Node.createIdentifierExpression(tn.readString(), tn.range());
+            name.set(CommonFlags.QUOTED);
+          } else {
+            name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+          }
+          if (!tn.skip(Token.COLON)) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), ":"
+            );
+            return null;
+          }
+          let value = this.parseExpression(tn, Precedence.COMMA + 1);
+          if (!value) return null;
+          names.push(name);
+          values.push(value);
+          if (!tn.skip(Token.COMMA)) {
+            if (tn.skip(Token.CLOSEBRACE)) {
+              break;
+            } else {
+              this.error(
+                DiagnosticCode._0_expected,
+                tn.range(), "}"
+              );
+              return null;
+            }
+          }
+        }
+        return Node.createObjectLiteralExpression(names, values, tn.range(startPos, tn.pos));
+      }
       // AssertionExpression (unary prefix)
       case Token.LESSTHAN: {
         let toType = this.parseType(tn);
