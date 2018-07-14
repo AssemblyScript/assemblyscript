@@ -13,15 +13,12 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
   // if dst is aligned to 4 bytes as well, copy 4 bytes each
   if ((dest & 3) == 0) {
     while (n >= 16) {
-      store<u32>(dest     , load<u32>(src     ));
-      store<u32>(dest +  4, load<u32>(src +  4));
-      store<u32>(dest +  8, load<u32>(src +  8));
-      store<u32>(dest + 12, load<u32>(src + 12));
+      store<u64>(dest    , load<u64>(src    ));
+      store<u64>(dest + 8, load<u64>(src + 8));
       src += 16; dest += 16; n -= 16;
     }
     if (n & 8) {
-      store<u32>(dest    , load<u32>(src    ));
-      store<u32>(dest + 4, load<u32>(src + 4));
+      store<u64>(dest, load<u64>(src));
       dest += 8; src += 8;
     }
     if (n & 4) {
@@ -101,46 +98,38 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
   }
 
   // copy remaining bytes one by one
-  if (n & 16) {
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-  }
-  if (n & 8) {
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-  }
-  if (n & 4) {
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-  }
-  if (n & 2) {
-    store<u8>(dest++, load<u8>(src++));
-    store<u8>(dest++, load<u8>(src++));
-  }
-  if (n & 1) {
-    store<u8>(dest++, load<u8>(src++));
+  switch (n) {
+    case 31: store<u8>(dest++, load<u8>(src++));
+    case 30: store<u8>(dest++, load<u8>(src++));
+    case 29: store<u8>(dest++, load<u8>(src++));
+    case 28: store<u8>(dest++, load<u8>(src++));
+    case 27: store<u8>(dest++, load<u8>(src++));
+    case 26: store<u8>(dest++, load<u8>(src++));
+    case 25: store<u8>(dest++, load<u8>(src++));
+    case 24: store<u8>(dest++, load<u8>(src++));
+    case 23: store<u8>(dest++, load<u8>(src++));
+    case 22: store<u8>(dest++, load<u8>(src++));
+    case 21: store<u8>(dest++, load<u8>(src++));
+    case 20: store<u8>(dest++, load<u8>(src++));
+    case 19: store<u8>(dest++, load<u8>(src++));
+    case 18: store<u8>(dest++, load<u8>(src++));
+    case 17: store<u8>(dest++, load<u8>(src++));
+    case 16: store<u8>(dest++, load<u8>(src++));
+    case 15: store<u8>(dest++, load<u8>(src++));
+    case 14: store<u8>(dest++, load<u8>(src++));
+    case 13: store<u8>(dest++, load<u8>(src++));
+    case 12: store<u8>(dest++, load<u8>(src++));
+    case 11: store<u8>(dest++, load<u8>(src++));
+    case 10: store<u8>(dest++, load<u8>(src++));
+    case  9: store<u8>(dest++, load<u8>(src++));
+    case  8: store<u8>(dest++, load<u8>(src++));
+    case  7: store<u8>(dest++, load<u8>(src++));
+    case  6: store<u8>(dest++, load<u8>(src++));
+    case  5: store<u8>(dest++, load<u8>(src++));
+    case  4: store<u8>(dest++, load<u8>(src++));
+    case  3: store<u8>(dest++, load<u8>(src++));
+    case  2: store<u8>(dest++, load<u8>(src++));
+    case  1: store<u8>(dest++, load<u8>(src++));
   }
 }
 
