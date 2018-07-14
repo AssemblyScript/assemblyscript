@@ -8647,11 +8647,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 696)
-<<<<<<< HEAD
-     (i32.const 21)
-=======
-     (i32.const 29)
->>>>>>> master
+     (i32.const 32)
      (i32.const 4)
     )
     (unreachable)
@@ -8703,11 +8699,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 696)
-<<<<<<< HEAD
-     (i32.const 77)
-=======
-     (i32.const 85)
->>>>>>> master
+     (i32.const 88)
      (i32.const 4)
     )
     (unreachable)
