@@ -60,7 +60,7 @@ import {
 } from "./common";
 
 /** Indicates whether errors are reported or not. */
-enum ReportMode {
+export enum ReportMode {
   /** Report errors. */
   REPORT,
   /** Swallow errors. */
@@ -72,10 +72,11 @@ export class Resolver extends DiagnosticEmitter {
 
   /** The program this resolver belongs to. */
   program: Program;
+
   /** Target expression of the previously resolved property or element access. */
-  resolvedThisExpression: Expression | null = null;
+  currentThisExpression: Expression | null = null;
   /** Element expression of the previously resolved element access. */
-  resolvedElementExpression : Expression | null = null;
+  currentElementExpression : Expression | null = null;
 
   /** Constructs the resolver for the specified program. */
   constructor(program: Program) {
@@ -306,8 +307,8 @@ export class Resolver extends DiagnosticEmitter {
         case ElementKind.FUNCTION: { // search locals, use prototype
           element = (<Function>context).flow.getScopedLocal(name);
           if (element) {
-            this.resolvedThisExpression = null;
-            this.resolvedElementExpression = null;
+            this.currentThisExpression = null;
+            this.currentElementExpression = null;
             return element;
           }
           context = (<Function>context).prototype.parent;
@@ -324,8 +325,8 @@ export class Resolver extends DiagnosticEmitter {
         let members = context.members;
         if (members) {
           if (element = members.get(name)) {
-            this.resolvedThisExpression = null;
-            this.resolvedElementExpression = null;
+            this.currentThisExpression = null;
+            this.currentElementExpression = null;
             return element;
           }
         }
@@ -336,15 +337,15 @@ export class Resolver extends DiagnosticEmitter {
     // search current file
     var elementsLookup = this.program.elementsLookup;
     if (element = elementsLookup.get(identifier.range.source.internalPath + PATH_DELIMITER + name)) {
-      this.resolvedThisExpression = null;
-      this.resolvedElementExpression = null;
+      this.currentThisExpression = null;
+      this.currentElementExpression = null;
       return element; // GLOBAL, FUNCTION_PROTOTYPE, CLASS_PROTOTYPE
     }
 
     // search global scope
     if (element = elementsLookup.get(name)) {
-      this.resolvedThisExpression = null;
-      this.resolvedElementExpression = null;
+      this.currentThisExpression = null;
+      this.currentElementExpression = null;
       return element; // GLOBAL, FUNCTION_PROTOTYPE, CLASS_PROTOTYPE
     }
 
@@ -407,7 +408,7 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.CLASS: {
-        let elementExpression = this.resolvedElementExpression;
+        let elementExpression = this.currentElementExpression;
         if (elementExpression) {
           let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
           if (!indexedGet) {
@@ -438,8 +439,8 @@ export class Resolver extends DiagnosticEmitter {
           let members = target.members;
           let member: Element | null;
           if (members && (member = members.get(propertyName))) {
-            this.resolvedThisExpression = targetExpression;
-            this.resolvedElementExpression = null;
+            this.currentThisExpression = targetExpression;
+            this.currentElementExpression = null;
             return member; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
           }
           // traverse inherited static members on the base prototype if target is a class prototype
@@ -467,8 +468,8 @@ export class Resolver extends DiagnosticEmitter {
         if (members) {
           let member = members.get(propertyName);
           if (member) {
-            this.resolvedThisExpression = targetExpression;
-            this.resolvedElementExpression = null;
+            this.currentThisExpression = targetExpression;
+            this.currentElementExpression = null;
             return member; // static ENUMVALUE, static GLOBAL, static FUNCTION_PROTOTYPE...
           }
         }
@@ -496,8 +497,8 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.FIELD: {
         let type = (<VariableLikeElement>target).type;
         if (target = type.classReference) {
-          this.resolvedThisExpression = targetExpression;
-          this.resolvedElementExpression = elementAccess.elementExpression;
+          this.currentThisExpression = targetExpression;
+          this.currentElementExpression = elementAccess.elementExpression;
           return target;
         }
         break;
@@ -515,8 +516,8 @@ export class Resolver extends DiagnosticEmitter {
         }
         let returnType = indexedGet.signature.returnType;
         if (target = returnType.classReference) {
-          this.resolvedThisExpression = targetExpression;
-          this.resolvedElementExpression = elementAccess.elementExpression;
+          this.currentThisExpression = targetExpression;
+          this.currentElementExpression = elementAccess.elementExpression;
           return target;
         }
         break;
@@ -549,8 +550,8 @@ export class Resolver extends DiagnosticEmitter {
         if (type) {
           let classType = type.classReference;
           if (classType) {
-            this.resolvedThisExpression = null;
-            this.resolvedElementExpression = null;
+            this.currentThisExpression = null;
+            this.currentElementExpression = null;
             return classType;
           }
         }
@@ -563,15 +564,15 @@ export class Resolver extends DiagnosticEmitter {
         if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
           let explicitLocal = contextualFunction.flow.getScopedLocal("this");
           if (explicitLocal) {
-            this.resolvedThisExpression = null;
-            this.resolvedElementExpression = null;
+            this.currentThisExpression = null;
+            this.currentElementExpression = null;
             return explicitLocal;
           }
         }
         let parent = contextualFunction.parent;
         if (parent) {
-          this.resolvedThisExpression = null;
-          this.resolvedElementExpression = null;
+          this.currentThisExpression = null;
+          this.currentElementExpression = null;
           return parent;
         }
         if (reportMode == ReportMode.REPORT) {
@@ -586,15 +587,15 @@ export class Resolver extends DiagnosticEmitter {
         if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
           let explicitLocal = contextualFunction.flow.getScopedLocal("super");
           if (explicitLocal) {
-            this.resolvedThisExpression = null;
-            this.resolvedElementExpression = null;
+            this.currentThisExpression = null;
+            this.currentElementExpression = null;
             return explicitLocal;
           }
         }
         let parent = contextualFunction.parent;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
-          this.resolvedThisExpression = null;
-          this.resolvedElementExpression = null;
+          this.currentThisExpression = null;
+          this.currentElementExpression = null;
           return parent;
         }
         if (reportMode == ReportMode.REPORT) {
@@ -611,8 +612,8 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.LITERAL: {
         switch ((<LiteralExpression>expression).literalKind) {
           case LiteralKind.STRING: {
-            this.resolvedThisExpression = expression;
-            this.resolvedElementExpression = null;
+            this.currentThisExpression = expression;
+            this.currentElementExpression = null;
             return this.program.stringInstance;
           }
           // case LiteralKind.ARRAY: // TODO
