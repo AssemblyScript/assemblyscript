@@ -3057,104 +3057,7 @@
   )
   (get_local $4)
  )
- (func $~lib/string/String#concat (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (if
-   (i32.eqz
-    (i32.ne
-     (get_local $0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 80)
-     (i32.const 85)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eq
-    (get_local $1)
-    (i32.const 0)
-   )
-   (set_local $1
-    (i32.const 120)
-   )
-  )
-  (set_local $2
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $3
-   (i32.load
-    (get_local $1)
-   )
-  )
-  (set_local $4
-   (i32.add
-    (get_local $2)
-    (get_local $3)
-   )
-  )
-  (if
-   (i32.eq
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 8)
-   )
-  )
-  (set_local $5
-   (call $~lib/internal/string/allocate
-    (get_local $4)
-   )
-  )
-  (call $~lib/memory/move_memory
-   (i32.add
-    (get_local $5)
-    (i32.const 4)
-   )
-   (i32.add
-    (get_local $0)
-    (i32.const 4)
-   )
-   (i32.shl
-    (get_local $2)
-    (i32.const 1)
-   )
-  )
-  (call $~lib/memory/move_memory
-   (i32.add
-    (i32.add
-     (get_local $5)
-     (i32.const 4)
-    )
-    (i32.shl
-     (get_local $2)
-     (i32.const 1)
-    )
-   )
-   (i32.add
-    (get_local $1)
-    (i32.const 4)
-   )
-   (i32.shl
-    (get_local $3)
-    (i32.const 1)
-   )
-  )
-  (get_local $5)
- )
- (func $~lib/string/String#padStart (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#padStart (; 13 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3220,14 +3123,14 @@
     (get_local $4)
    )
    (set_local $7
-    (call $~lib/string/String#concat
-     (get_local $7)
-     (call $~lib/string/String#repeat
-      (get_local $7)
+    (call $~lib/string/String#repeat
+     (get_local $2)
+     (i32.add
       (i32.div_s
        (get_local $6)
        (get_local $4)
       )
+      (i32.const 1)
      )
     )
    )
@@ -3273,7 +3176,7 @@
   )
   (get_local $8)
  )
- (func $~lib/string/String#padStart|trampoline (; 15 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#padStart|trampoline (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -3296,7 +3199,7 @@
    (get_local $2)
   )
  )
- (func $~lib/string/String.__eq (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -3359,7 +3262,7 @@
    )
   )
  )
- (func $~lib/string/String#padEnd (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#padEnd (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3425,14 +3328,14 @@
     (get_local $4)
    )
    (set_local $7
-    (call $~lib/string/String#concat
-     (get_local $7)
-     (call $~lib/string/String#repeat
-      (get_local $7)
+    (call $~lib/string/String#repeat
+     (get_local $2)
+     (i32.add
       (i32.div_s
        (get_local $6)
        (get_local $4)
       )
+      (i32.const 1)
      )
     )
    )
@@ -3478,7 +3381,7 @@
   )
   (get_local $8)
  )
- (func $~lib/string/String#padEnd|trampoline (; 18 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#padEnd|trampoline (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -3501,7 +3404,7 @@
    (get_local $2)
   )
  )
- (func $~lib/string/String#lastIndexOf (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#lastIndexOf (; 18 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3648,7 +3551,7 @@
   )
   (i32.const -1)
  )
- (func $~lib/string/String#lastIndexOf|trampoline (; 20 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#lastIndexOf|trampoline (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $oob
@@ -3671,10 +3574,10 @@
    (get_local $2)
   )
  )
- (func $std/string/getString (; 21 ;) (type $i) (result i32)
+ (func $std/string/getString (; 20 ;) (type $i) (result i32)
   (get_global $std/string/str)
  )
- (func $~lib/internal/string/parse<f64> (; 22 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/internal/string/parse<f64> (; 21 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4064,13 +3967,13 @@
    (get_local $7)
   )
  )
- (func $~lib/string/parseInt (; 23 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/string/parseInt (; 22 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (call $~lib/internal/string/parse<f64>
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/string/parseFloat (; 24 ;) (type $iF) (param $0 i32) (result f64)
+ (func $~lib/string/parseFloat (; 23 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4346,6 +4249,103 @@
    (get_local $4)
    (get_local $5)
   )
+ )
+ (func $~lib/string/String#concat (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (if
+   (i32.eqz
+    (i32.ne
+     (get_local $0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 80)
+     (i32.const 85)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eq
+    (get_local $1)
+    (i32.const 0)
+   )
+   (set_local $1
+    (i32.const 120)
+   )
+  )
+  (set_local $2
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $3
+   (i32.load
+    (get_local $1)
+   )
+  )
+  (set_local $4
+   (i32.add
+    (get_local $2)
+    (get_local $3)
+   )
+  )
+  (if
+   (i32.eq
+    (get_local $4)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 8)
+   )
+  )
+  (set_local $5
+   (call $~lib/internal/string/allocate
+    (get_local $4)
+   )
+  )
+  (call $~lib/memory/move_memory
+   (i32.add
+    (get_local $5)
+    (i32.const 4)
+   )
+   (i32.add
+    (get_local $0)
+    (i32.const 4)
+   )
+   (i32.shl
+    (get_local $2)
+    (i32.const 1)
+   )
+  )
+  (call $~lib/memory/move_memory
+   (i32.add
+    (i32.add
+     (get_local $5)
+     (i32.const 4)
+    )
+    (i32.shl
+     (get_local $2)
+     (i32.const 1)
+    )
+   )
+   (i32.add
+    (get_local $1)
+    (i32.const 4)
+   )
+   (i32.shl
+    (get_local $3)
+    (i32.const 1)
+   )
+  )
+  (get_local $5)
  )
  (func $~lib/string/String.__concat (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if

@@ -421,7 +421,7 @@ export class String {
     var len = targetLength - length;
     var result = padString;
     if (len > padLen) {
-      result = result.concat(result.repeat(len / padLen));
+      result = padString.repeat(len / padLen + 1);
     }
     var out = allocate(targetLength);
     move_memory(
@@ -445,7 +445,7 @@ export class String {
     var len = targetLength - length;
     var result = padString;
     if (len > padLen) {
-      result = result.concat(result.repeat(len / padLen));
+      result = padString.repeat(len / padLen + 1);
     }
     var out = allocate(targetLength);
     move_memory(
