@@ -7,7 +7,8 @@ use core::intrinsics;
 use core::panic::PanicInfo;
 
 #[panic_implementation]
-fn panic(_info: &PanicInfo) -> ! {
+#[no_mangle]
+pub fn panic(_info: &PanicInfo) -> ! {
   unsafe { intrinsics::abort() }
 }
 
