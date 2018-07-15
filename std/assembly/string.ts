@@ -417,7 +417,7 @@ export class String {
     assert(this !== null);
     var length = this.length;
     var padLen = padString.length;
-    if (targetLength < length || padLen == 0) return this;
+    if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
     var result = padString;
     if (len > padLen) {
@@ -441,7 +441,7 @@ export class String {
     assert(this !== null);
     var length = this.length;
     var padLen = padString.length;
-    if (targetLength < length || padLen == 0) return this;
+    if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
     var result = padString;
     if (len > padLen) {

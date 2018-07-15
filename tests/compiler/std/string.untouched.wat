@@ -3197,9 +3197,8 @@
      )
     )
     (get_local $5)
-    (i32.eq
+    (i32.eqz
      (get_local $4)
-     (i32.const 0)
     )
    )
    (return
@@ -3403,9 +3402,8 @@
      )
     )
     (get_local $5)
-    (i32.eq
+    (i32.eqz
      (get_local $4)
-     (i32.const 0)
     )
    )
    (return
