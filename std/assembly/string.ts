@@ -413,6 +413,54 @@ export class String {
     return out;
   }
 
+  padStart(targetLength: i32, padString: String = changetype<String>(" ")): String {
+    assert(this !== null);
+    var length = this.length;
+    var padLen = padString.length;
+    if (targetLength < length || padLen == 0) return this;
+    var len = targetLength - length;
+    var result = padString;
+    if (len > padLen) {
+      result = result.concat(result.repeat(len / padLen));
+    }
+    var out = allocate(targetLength);
+    move_memory(
+      changetype<usize>(out) + HEADER_SIZE,
+      changetype<usize>(result) + HEADER_SIZE,
+      <usize>len << 1
+    );
+    move_memory(
+      changetype<usize>(out) + HEADER_SIZE + (<usize>len << 1),
+      changetype<usize>(this) + HEADER_SIZE,
+      <usize>targetLength << 1
+    );
+    return out;
+  }
+
+  padEnd(targetLength: i32, padString: String = changetype<String>(" ")): String {
+    assert(this !== null);
+    var length = this.length;
+    var padLen = padString.length;
+    if (targetLength < length || padLen == 0) return this;
+    var len = targetLength - length;
+    var result = padString;
+    if (len > padLen) {
+      result = result.concat(result.repeat(len / padLen));
+    }
+    var out = allocate(targetLength);
+    move_memory(
+      changetype<usize>(out) + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE,
+      <usize>length << 1
+    );
+    move_memory(
+      changetype<usize>(out) + HEADER_SIZE + (<usize>length << 1),
+      changetype<usize>(result) + HEADER_SIZE,
+      <usize>targetLength << 1
+    );
+    return out;
+  }
+
   repeat(count: i32 = 0): String {
     assert(this !== null);
     var length = this.length;

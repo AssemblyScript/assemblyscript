@@ -2,6 +2,7 @@ import "allocator/arena";
 
 import { utoa32, itoa32, utoa64, itoa64 } from "internal/itoa";
 
+// @external("env", "logi")
 // declare function logi(i: i32): void;
 
 // preliminary
@@ -17,6 +18,18 @@ assert(str.charCodeAt(0) == 0x68);
 assert(str.startsWith("hi"));
 assert(str.endsWith("string"));
 assert(str.includes("I'm"));
+
+assert(str.padStart(0) == str);
+assert(str.padStart(15) == str);
+assert("a".padStart(100, "") == "a");
+assert("abc".padStart(5) == "  abc");
+assert("abc".padStart(6, "123") == "123abc");
+
+assert(str.padEnd(0) == str);
+assert(str.padEnd(15) == str);
+assert("a".padEnd(100, "") == "a");
+assert("abc".padEnd(5) == "abc  ");
+assert("abc".padEnd(6, "abc") == "abcabc");
 
 assert("".indexOf("") == 0);
 assert("".indexOf("hi") == -1);
