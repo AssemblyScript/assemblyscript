@@ -50,6 +50,8 @@ function epilogue(time) {
   console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
 }
 
+console.log("\nCOLD SERIES:\n");
+
 prologue("AssemblyScript WASM", steps);
 epilogue(test(nbodyAS, steps));
 
@@ -62,7 +64,7 @@ epilogue(test(nbodyJS, steps));
 prologue("Rust WASM", steps);
 epilogue(test(nbodyRS, steps));
 
-console.log("\nWARMED UP:\n");
+console.log("\nWARMED UP SERIES:\n");
 
 prologue("AssemblyScript WASM", steps);
 epilogue(test(nbodyAS, steps));
