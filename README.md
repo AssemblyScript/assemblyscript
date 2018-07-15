@@ -71,6 +71,11 @@ Examples
 * **[WASM parser](./lib/parse)**<br />
   A WebAssembly binary parser in WebAssembly.
 
+Benchmarks
+---------
+* **[n-body](./examples/n-body)**<br />
+  Compare performance and produced binary size with n-body example from Computer Language Benchmarks Game.
+
 Building
 --------
 
