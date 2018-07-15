@@ -127,18 +127,13 @@ function init() {
     ]);
 }
 exports.init = init;
-function getBody(index) {
-    var bodies = system.bodies;
-    return index < bodies.length ? bodies[index] : null;
-}
-exports.getBody = getBody;
 function step() {
     system.advance(0.01);
     return system.energy();
 }
 exports.step = step;
 function bench(steps) {
-    for (let i = 0; i < steps; i++)
+    for (let i = 0; i < steps; ++i)
         system.advance(0.01);
 }
 exports.bench = bench;

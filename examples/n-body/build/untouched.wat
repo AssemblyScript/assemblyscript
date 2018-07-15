@@ -28,7 +28,6 @@
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 40) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (export "init" (func $assembly/index/init))
- (export "getBody" (func $assembly/index/getBody))
  (export "step" (func $assembly/index/step))
  (export "bench" (func $assembly/index/bench))
  (export "memory" (memory $0))
@@ -1439,37 +1438,7 @@
    )
   )
  )
- (func $assembly/index/getBody (; 19 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  ;;@ assembly/index.ts:201:2
-  (set_local $1
-   ;;@ assembly/index.ts:201:15
-   (i32.load
-    (get_global $assembly/index/system)
-   )
-  )
-  ;;@ assembly/index.ts:202:59
-  (if (result i32)
-   ;;@ assembly/index.ts:202:9
-   (i32.lt_u
-    (get_local $0)
-    ;;@ assembly/index.ts:202:22
-    (call $~lib/array/Array<Body>#get:length
-     ;;@ assembly/index.ts:202:27
-     (get_local $1)
-    )
-   )
-   ;;@ assembly/index.ts:202:43
-   (call $~lib/array/Array<Body>#__get
-    (get_local $1)
-    ;;@ assembly/index.ts:202:50
-    (get_local $0)
-   )
-   ;;@ assembly/index.ts:202:59
-   (i32.const 0)
-  )
- )
- (func $assembly/index/NBodySystem#advance (; 20 ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $assembly/index/NBodySystem#advance (; 19 ;) (type $iFv) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1890,7 +1859,7 @@
    )
   )
  )
- (func $assembly/index/NBodySystem#energy (; 21 ;) (type $iF) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 20 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -2191,50 +2160,51 @@
   ;;@ assembly/index.ts:184:11
   (get_local $1)
  )
- (func $assembly/index/step (; 22 ;) (type $F) (result f64)
-  ;;@ assembly/index.ts:206:9
+ (func $assembly/index/step (; 21 ;) (type $F) (result f64)
+  ;;@ assembly/index.ts:201:9
   (call $assembly/index/NBodySystem#advance
-   ;;@ assembly/index.ts:206:2
+   ;;@ assembly/index.ts:201:2
    (get_global $assembly/index/system)
-   ;;@ assembly/index.ts:206:17
+   ;;@ assembly/index.ts:201:17
    (f64.const 0.01)
   )
-  ;;@ assembly/index.ts:207:23
+  ;;@ assembly/index.ts:202:23
   (call $assembly/index/NBodySystem#energy
-   ;;@ assembly/index.ts:207:9
+   ;;@ assembly/index.ts:202:9
    (get_global $assembly/index/system)
   )
  )
- (func $assembly/index/bench (; 23 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/bench (; 22 ;) (type $iv) (param $0 i32)
   (local $1 i32)
-  ;;@ assembly/index.ts:211:2
+  ;;@ assembly/index.ts:206:2
   (block $break|0
-   ;;@ assembly/index.ts:211:7
+   ;;@ assembly/index.ts:206:7
    (set_local $1
-    ;;@ assembly/index.ts:211:20
+    ;;@ assembly/index.ts:206:20
     (i32.const 0)
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
-      ;;@ assembly/index.ts:211:23
+      ;;@ assembly/index.ts:206:23
       (i32.lt_u
        (get_local $1)
-       ;;@ assembly/index.ts:211:27
+       ;;@ assembly/index.ts:206:27
        (get_local $0)
       )
      )
     )
-    ;;@ assembly/index.ts:211:46
+    ;;@ assembly/index.ts:206:46
     (call $assembly/index/NBodySystem#advance
-     ;;@ assembly/index.ts:211:39
+     ;;@ assembly/index.ts:206:39
      (get_global $assembly/index/system)
-     ;;@ assembly/index.ts:211:54
+     ;;@ assembly/index.ts:206:54
      (f64.const 0.01)
     )
-    ;;@ assembly/index.ts:211:34
+    ;;@ assembly/index.ts:206:34
     (set_local $1
      (i32.add
+      ;;@ assembly/index.ts:206:36
       (get_local $1)
       (i32.const 1)
      )
@@ -2243,7 +2213,7 @@
    )
   )
  )
- (func $start (; 24 ;) (type $v)
+ (func $start (; 23 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    ;;@ ~lib/allocator/arena.ts:12:25
    (i32.and

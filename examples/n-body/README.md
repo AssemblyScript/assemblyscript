@@ -39,10 +39,10 @@ Benchmark
 
 |        Target           |  Time, ***ms*** |
 |-------------------------|-----------------|
-| **AssemblyScript WASM** | **3195**        |
-| AssemblyScript ASMJS    | 3696            |
-| JavaScript              | 2642            |
-| Rust WASM               | 3968            |
+| **AssemblyScript WASM** | **3167**        |
+| AssemblyScript ASMJS    | 3633            |
+| JavaScript              | 2628            |
+| Rust WASM               | 3876            |
 
 ***Binary/Bundle Size Results:***
 
