@@ -24,12 +24,14 @@ assert(str.padStart(15) == str);
 assert("a".padStart(100, "") == "a");
 assert("abc".padStart(5) == "  abc");
 assert("abc".padStart(6, "123") == "123abc");
+assert("abc".padStart(8, "123") == "12312abc");
 
 assert(str.padEnd(0) == str);
 assert(str.padEnd(15) == str);
 assert("a".padEnd(100, "") == "a");
 assert("abc".padEnd(5) == "abc  ");
 assert("abc".padEnd(6, "abc") == "abcabc");
+assert("abc".padEnd(8, "abc") == "abcabcab");
 
 assert("".indexOf("") == 0);
 assert("".indexOf("hi") == -1);
