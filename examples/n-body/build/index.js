@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("allocator/arena");
-const SOLAR_MASS = (4.0 * Math.PI * Math.PI);
+const SOLAR_MASS = 4.0 * Math.PI * Math.PI;
 const DAYS_PER_YEAR = 365.24;
 class Body {
     constructor(x, y, z, vx, vy, vz, mass) {
@@ -42,7 +42,7 @@ class NBodySystem {
         var py = 0.0;
         var pz = 0.0;
         var size = bodies.length;
-        for (let i = 0; i < size; i++) {
+        for (let i = 0; i < size; ++i) {
             let b = unchecked(bodies[i]);
             let m = b.mass;
             px += b.vx * m;
