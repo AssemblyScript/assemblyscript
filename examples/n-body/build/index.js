@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("allocator/arena");
-// From The Computer Language Benchmarks Game
-// http://benchmarksgame.alioth.debian.org
-const SOLAR_MASS = 4.0 * Math.PI * Math.PI;
+const SOLAR_MASS = (4.0 * Math.PI * Math.PI);
 const DAYS_PER_YEAR = 365.24;
 class Body {
     constructor(x, y, z, vx, vy, vz, mass) {
@@ -107,7 +105,7 @@ class NBodySystem {
             let bim = bodyi.mass;
             e += 0.5 * bim * (vx * vx + vy * vy + vz * vz);
             for (let j = i + 1; j < size; ++j) {
-                let bodyj = bodies[j];
+                let bodyj = unchecked(bodies[j]);
                 let dx = ix - bodyj.x;
                 let dy = iy - bodyj.y;
                 let dz = iz - bodyj.z;

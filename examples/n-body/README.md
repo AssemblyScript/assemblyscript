@@ -25,3 +25,20 @@ To run the benchmark:
 ```
 $> npm run test [steps=1000000]
 ```
+
+Benchmark
+=========
+
+***Environment:***
+- MacBook Pro (Retina, 15-inch, Late 2013)
+- macOS 10.13.5
+- node.js v10.6.0
+- rustc 1.29.0-nightly (254f8796b 2018-07-13)
+
+***Results:***
+
+| AssemblyScript WASM  | **3195***ms* |
+|----------------------|--------------|
+| AssemblyScript ASMJS | **3696***ms* |
+| JavaScript           | **2642***ms* |
+| Rust WASM            | **3968***ms* |

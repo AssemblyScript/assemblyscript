@@ -1,22 +1,20 @@
 // Code adopted from https://benchmarksgame-team.pages.debian.net/benchmarksgame/program/nbody-rust-1.html
 
-#![feature(core_intrinsics, lang_items)]
+#![feature(core_intrinsics)]
+#![feature(panic_implementation)]
 #![no_std]
 
-#[lang = "panic_fmt"]
-extern "C" fn panic_fmt(_args: ::core::fmt::Arguments, _file: &'static str, _line: u32) -> ! {
-  use core::intrinsics;
-  unsafe {
-    intrinsics::abort();
-  }
+use core::intrinsics;
+use core::panic::PanicInfo;
+
+#[panic_implementation]
+fn panic(_info: &PanicInfo) -> ! {
+  unsafe { intrinsics::abort() }
 }
 
 #[inline(always)]
 fn sqrt(x: f64) -> f64 {
-  use core::intrinsics;
-  unsafe {
-    intrinsics::sqrtf64(x)
-  }
+  unsafe { intrinsics::sqrtf64(x) }
 }
 
 const PI: f64         = 3.141592653589793;
