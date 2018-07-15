@@ -35,7 +35,7 @@ Benchmark
 - node.js v10.6.0
 - rustc 1.29.0-nightly (254f8796b 2018-07-13)
 
-***Results:***
+***Performance Results:***
 
 |        Target           |  Time, ***ms*** |
 |-------------------------|-----------------|
@@ -43,3 +43,14 @@ Benchmark
 | AssemblyScript ASMJS    | 3696            |
 | JavaScript              | 2642            |
 | Rust WASM               | 3968            |
+
+***Binary/Bundle Size Results:***
+
+|        Target           |  Size, ***KB*** |
+|-------------------------|-----------------|
+| **AssemblyScript WASM** | **2**           |
+| AssemblyScript ASMJS*   | 21              |
+| JavaScript*             | 5               |
+| Rust WASM               | 15              |
+
+___* unminified___
