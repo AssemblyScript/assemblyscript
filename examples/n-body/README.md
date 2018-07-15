@@ -37,8 +37,9 @@ Benchmark
 
 ***Results:***
 
-| AssemblyScript WASM  | **3195***ms* |
-|----------------------|--------------|
-| AssemblyScript ASMJS | **3696***ms* |
-| JavaScript           | **2642***ms* |
-| Rust WASM            | **3968***ms* |
+|        Target           |  Time, ***ms*** |
+|-------------------------|-----------------|
+| **AssemblyScript WASM** | **3195**        |
+| AssemblyScript ASMJS    | 3696            |
+| JavaScript              | 2642            |
+| Rust WASM               | 3968            |
