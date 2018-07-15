@@ -1,7 +1,6 @@
 // Code adopted from https://benchmarksgame-team.pages.debian.net/benchmarksgame/program/nbody-rust-1.html
 
-#![feature(core_intrinsics)]
-#![feature(panic_implementation)]
+#![feature(core_intrinsics, panic_implementation)]
 #![no_std]
 
 use core::intrinsics;
