@@ -140,6 +140,8 @@
 
     async function run(job, thread) {
       return new Promise(async function (resolve) {
+        updateIndicator(job)
+        await sleep();
         thread.render(pixels_ptr, job.samples, job.xoffset, job.yoffset, job.width, job.height);
         job.iterations++;
         updateFrame(job)
@@ -232,6 +234,41 @@
       return rgb;
     }
 
+    function updateIndicator(rect) {
+
+      var color = { r: Math.random(), g: Math.random(), b: Math.random() };
+
+      //top-left
+      fillRect({ x: rect.xoffset, y: rect.yoffset, width: 4, height: 1 }, color);
+      fillRect({ x: rect.xoffset, y: rect.yoffset + 1, width: 1, height: 3 }, color);
+
+      //top-right
+      fillRect({ x: rect.xoffset + rect.width - 4, y: rect.yoffset, width: 4, height: 1 }, color);
+      fillRect({ x: rect.xoffset + rect.width - 1, y: rect.yoffset + 1, width: 1, height: 3 }, color);
+
+      //bottom-left
+      fillRect({ x: rect.xoffset, y: rect.yoffset + rect.height - 4, width: 1, height: 4 }, color);
+      fillRect({ x: rect.xoffset + 1, y: rect.yoffset + rect.height - 1, width: 3, height: 1 }, color);
+
+      //bottom-right
+      fillRect({ x: rect.xoffset + rect.width - 4, y: rect.yoffset + rect.height - 1, width: 4, height: 1 }, color);
+      fillRect({ x: rect.xoffset + rect.width - 1, y: rect.yoffset + rect.height - 4, width: 1, height: 3 }, color);
+
+      ctx.putImageData(imageData, 0, 0);
+    }
+    function fillRect(rect, color) {
+      for (var y = rect.y; y < rect.y + rect.height; y++) {
+        for (var x = rect.x; x < rect.x + rect.width; x++) {
+
+          var i = y * (width * 4) + (x * 4);
+          data[i] = color.r * 255;
+          data[i + 1] = color.g * 255;
+          data[i + 2] = color.b * 255;
+          data[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+    }
     init();
   </script>
 </body>
