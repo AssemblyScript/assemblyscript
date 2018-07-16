@@ -418,22 +418,23 @@ export class String {
     var length = this.length;
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
+    if (!length) return padString.repeat(targetLength);
     var len = targetLength - length;
-    var result = padString;
-    if (len > padLen) result = padString.repeat(len / padLen + 1);
+    if (len > padLen) padString = padString.repeat(len / padLen + 1);
     var out = allocate(targetLength);
+
     move_memory(
       changetype<usize>(out) + HEADER_SIZE,
-      changetype<usize>(result) + HEADER_SIZE,
+      changetype<usize>(padString) + HEADER_SIZE,
       <usize>len << 1
     );
-    if (length) {
-      move_memory(
-        changetype<usize>(out) + HEADER_SIZE + (<usize>len << 1),
-        changetype<usize>(this) + HEADER_SIZE,
-        <usize>targetLength << 1
-      );
-    }
+
+    move_memory(
+      changetype<usize>(out)  + HEADER_SIZE + (<usize>len << 1),
+      changetype<usize>(this) + HEADER_SIZE,
+      <usize>targetLength << 1
+    );
+
     return out;
   }
 
@@ -442,22 +443,23 @@ export class String {
     var length = this.length;
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
+    if (!length) return padString.repeat(targetLength);
     var len = targetLength - length;
-    var result = padString;
-    if (len > padLen) result = padString.repeat(len / padLen + 1);
+    if (len > padLen) padString = padString.repeat(len / padLen + 1);
     var out = allocate(targetLength);
-    if (length) {
-      move_memory(
-        changetype<usize>(out) + HEADER_SIZE,
-        changetype<usize>(this) + HEADER_SIZE,
-        <usize>length << 1
-      );
-    }
+
+    move_memory(
+      changetype<usize>(out)  + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE,
+      <usize>length << 1
+    );
+
     move_memory(
       changetype<usize>(out) + HEADER_SIZE + (<usize>length << 1),
-      changetype<usize>(result) + HEADER_SIZE,
+      changetype<usize>(padString) + HEADER_SIZE,
       <usize>targetLength << 1
     );
+
     return out;
   }
 
