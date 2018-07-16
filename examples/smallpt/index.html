@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Smallpt - AssemblyScript</title>
+  <link rel="icon" href="http://assemblyscript.org/favicon.ico" type="image/x-icon" />
+  <meta name="viewport" content="user-scalable=0" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: #111;
+      background: #fff;
+      font-family: sans-serif;
+    }
+
+    body {
+      border-top: 2px solid #070809;
+    }
+
+    h1 {
+      padding: 18px 20px 20px;
+      font-size: 12pt;
+      margin: 0;
+    }
+
+    a {
+      color: #111;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #efbd03;
+      text-decoration: underline;
+    }
+
+    canvas {
+      position: absolute;
+      transform: rotate(180deg);
+      top: 60px;
+      left: 20px;
+      /* width: calc(100% - 40px); */
+      /* height: calc(100% - 80px); */
+      background: #070809;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    <a href="https://en.wikipedia.org/wiki/Path_tracing">Smallpt</a> in
+    <a href="http://assemblyscript.org">AssemblyScript</a>
+    (
+    <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/path-tracer/assembly/index.ts">source</a> )
+    <div style="font-size: 0.8rem">
+      <a href="https://dump.01alchemist.com" target="_blank">By 01 Alchemist</a>
+    </div>
+  </h1>
+  <div>
+    <canvas id="viewport"></canvas>
+  </div>
+  <script>
+    "use strict";
+    var width = 64 * 10;
+    // var width = 1280/2;
+    var height = 64 * 10;
+    // var height = 720/2;
+    var bucketSize = 64;
+    const canvas = document.getElementById('viewport')
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    let imageData = ctx.getImageData(0, 0, width, height)
+    let data = imageData.data;
+
+    const memory = new WebAssembly.Memory({
+      initial: 32767,
+      shared: true,
+      maximum: 32767
+    })
+    const numCPU = navigator.hardwareConcurrency - 1;
+    let threads = [];
+    let jobs = [];
+    let queue = [];
+    let memoryView;
+    let _exports = {};
+    var pixels_ptr;
+    var iterations = 0;
+    function onTraceJobComplete(job) {
+      console.log('onTraceJobComplete:' + job)
+    }
+
+    async function init() {
+      const res = await fetch("build/untouched.wasm");
+      const buffer = await res.arrayBuffer();
+
+      for (let i = 0; i < numCPU; i++) {
+        const module1 = await WebAssembly.instantiate(buffer, {
+          env: {
+            memory,
+            abort: function () { }
+          },
+          JSMath: Math,
+          index: {
+            id: i + 1,
+            onTraceJobComplete: onTraceJobComplete,
+            logf: f => console.log('float:' + f),
+            logi: i => console.log('int:' + i),
+          }
+        })
+
+        const exp1 = module1.instance.exports;
+        threads.push(exp1)
+      }
+
+      var col = width / bucketSize;
+      var row = height / bucketSize;
+
+      for (var j = 0; j < row; j++) {
+        for (var i = 0; i < col; i++) {
+          jobs.push({
+            id: j + "_" + i,
+            iterations: 0,
+            samples: 4,
+            width: bucketSize,
+            height: bucketSize,
+            xoffset: i * bucketSize,
+            yoffset: j * bucketSize
+          }
+          )
+        }
+      }
+
+      pixels_ptr = threads[0].createPixels(width, height);
+      // requestAnimationFrame(render)
+      start();
+    }
+
+    async function run(job, thread) {
+      return new Promise(async function (resolve) {
+        thread.render(pixels_ptr, job.samples, job.xoffset, job.yoffset, job.width, job.height);
+        job.iterations++;
+        updateFrame(job)
+        await sleep();
+        resolve()
+      })
+    }
+
+    async function start() {
+      if (iterations > 1000) {
+        return;
+      }
+      await render();
+      start();
+    }
+
+    async function sleep() {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, 0)
+      })
+    }
+
+    async function render() {
+      // console.time('rendered in')
+
+      if (queue.length == 0) {
+        queue = jobs.concat()
+        iterations++;
+      }
+      let promises = [];
+      threads.forEach((thread, i) => {
+        let job = queue.shift();
+        if (job) {
+          promises.push(run(job, thread));
+        }
+      })
+      await Promise.all(promises)
+    }
+
+    function updateFrame(job) {
+      memoryView = new DataView(threads[0].memory.buffer);
+      let pixels = readPixels(pixels_ptr, memoryView);
+      // console.timeEnd('rendered in')
+      // console.time('write time')
+      for (let y = job.yoffset; y < job.yoffset + job.height; y++) {
+        for (let x = job.xoffset; x < job.xoffset + job.width; x++) {
+          // let i = (height - y - 1) * width + x
+          var i = y * (width * 4) + (x * 4);
+          var pi = y * (width * 3) + (x * 3);
+
+          // data[i] = (pixels[pi]) * 255;
+          // data[i + 1] = (pixels[pi + 1]) * 255;
+          // data[i + 2] = (pixels[pi + 2]) * 255;
+
+          data[i] = (pixels[pi] / job.iterations) * 255;
+          data[i + 1] = (pixels[pi + 1] / job.iterations) * 255;
+          data[i + 2] = (pixels[pi + 2] / job.iterations) * 255;
+
+          data[i + 3] = 255;
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    function readPixels(ptr, memory, arrayType = 'Float64') {
+      const floatSize =
+        (arrayType.indexOf('8') > -1) ? 1 :
+          (arrayType.indexOf('16') > -1) ? 2 :
+            (arrayType.indexOf('32') > -1) ? 4 :
+              (arrayType.indexOf('64') > -1) ? 8 :
+                1;
+
+      const AB_ptr = memory.getUint32(ptr, true);
+      const length = memory.getUint32((ptr + 4), true);
+      let element_ptr = AB_ptr + 8;
+      let rgb = new self[arrayType + 'Array'](length * 3)
+      let p = 0;
+
+      for (let i = 0; i < length; i++) {
+        const vec_ptr = memory.getUint32(element_ptr, true);
+
+        rgb[p++] = memory['get' + arrayType](vec_ptr, true);
+        rgb[p++] = memory['get' + arrayType]((vec_ptr + floatSize), true);
+        rgb[p++] = memory['get' + arrayType]((vec_ptr + (2 * floatSize)), true);
+
+        element_ptr += 4;
+      }
+
+      return rgb;
+    }
+
+    init();
+  </script>
+</body>
+
+</html>

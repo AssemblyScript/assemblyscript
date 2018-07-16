@@ -184,6 +184,8 @@ export class Options {
   noAssert: bool = false;
   /** If true, imports the memory provided by the embedder. */
   importMemory: bool = false;
+  /** If true, declare memory as shared. */
+  sharedMemory: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, generates information necessary for source maps. */
@@ -402,9 +404,8 @@ export class Compiler extends DiagnosticEmitter {
       options.target,
       "memory"
     );
-
     // import memory if requested (default memory is named '0' by Binaryen)
-    if (options.importMemory) module.addMemoryImport("0", "env", "memory");
+    if (options.importMemory) module.addMemoryImport("0", "env", "memory", options.sharedMemory);
 
     // set up function table
     var functionTable = this.functionTable;

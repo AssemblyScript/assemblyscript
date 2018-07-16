@@ -1,0 +1,5 @@
+
+export enum Result {
+    SCENE_FAILED_TO_LOAD,
+    SCENE_LOADED_SUCCESSFULLY,
+}

@@ -786,13 +786,14 @@ export class Module {
   addMemoryImport(
     internalName: string,
     externalModuleName: string,
-    externalBaseName: string
+    externalBaseName: string,
+    shared: bool = false,
   ): ImportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
     try {
-      return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3);
+      return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3, shared);
     } finally {
       memory.free(cStr3);
       memory.free(cStr2);

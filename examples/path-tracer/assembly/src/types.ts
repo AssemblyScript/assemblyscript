@@ -1,0 +1,1 @@
+type float = f32;

@@ -1,0 +1,17 @@
+{
+    "name": "@assemblyscript/shared-memory-example",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --importMemory --sharedMemory --validate",
+        "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat -O3 --importMemory --sharedMemory --validate --noDebug --noAssert",
+        "asbuild:asmjs": "asc assembly/index.ts -a build/index.asm.js -O3 --importMemory --sharedMemory --validate --noDebug --noAssert",
+        "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized && npm run asbuild:asmjs",
+        "tsbuild": "tsc -p assembly -t ES2017 -m commonjs --outDir build",
+        "build": "npm run asbuild && npm run tsbuild",
+        "watch": "nodemon --exec 'npm run asbuild:untouched' ./assembly/index.ts",
+        "server": "http-server . -o -c-1",
+        "test": "node tests"
+    },
+    "devDependencies": {}
+}

@@ -1,0 +1,16 @@
+{
+    "extends": "../../../std/portable.json",
+    "compilerOptions": {
+        "target": "es6",
+        "lib": ["dom", "es2015", "es2017", "es2018"],
+        "noLib": false,
+        "moduleResolution": "node",
+        "strictNullChecks": false,
+        "baseUrl": ".",
+        "outDir": "./dist",
+        "paths": {
+            "~assembly": ["../assembly/src"]
+        }
+    },
+    "include": ["./src/index.d.ts", "./src/index.ts"]
+}

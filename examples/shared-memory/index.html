@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Shared Memory - AssemblyScript</title>
+  <link rel="icon" href="http://assemblyscript.org/favicon.ico" type="image/x-icon" />
+  <meta name="viewport" content="user-scalable=0" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: #111;
+      background: #fff;
+      font-family: sans-serif;
+    }
+
+    body {
+      border-top: 2px solid #070809;
+    }
+
+    h1 {
+      padding: 18px 20px 20px;
+      font-size: 12pt;
+      margin: 0;
+    }
+
+    a {
+      color: #111;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #efbd03;
+      text-decoration: underline;
+    }
+
+    canvas {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      width: calc(100% - 40px);
+      height: calc(100% - 80px);
+      background: #070809;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    <a href="https://github.com/WebAssembly/threads">Shared Memory</a> in
+    <a href="http://assemblyscript.org">AssemblyScript</a>
+    (
+    <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/shared-memory/assembly/index.ts">source</a> )
+  </h1>
+  <div>
+    <label>Input :</label>
+    <input id="writeInput" type="text" value="test" />
+    <button onclick="writeString()">write</button>
+  </div>
+  <div>
+    <label>Wasm1 :</label>
+    <input id="wasm1" type="text" value="test" />
+    <button onclick="read(1, 'wasm1')">read</button>
+  </div>
+  <div>
+    <label>Wasm2 :</label>
+    <input id="wasm2" type="text" value="test" />
+    <button onclick="read(2, 'wasm2')">read</button>
+  </div>
+  <script>
+    "use strict";
+
+    const memory = new WebAssembly.Memory({
+      initial: 1,
+      shared: true,
+      maximum: 1
+    })
+    const memoryView = new DataView(memory.buffer);
+    let _exports = {};
+
+    async function init() {
+      const res = await fetch("build/optimized.wasm");
+      const buffer = await res.arrayBuffer();
+      const module1 = await WebAssembly.instantiate(buffer, {
+        env: {
+          memory,
+          abort: function () {}
+        },
+        index: {
+          id: 1
+        }
+      })
+      const module2 = await WebAssembly.instantiate(buffer, {
+        env: {
+          memory,
+          abort: function () {}
+        },
+        index: {
+          id: 2
+        }
+      })
+      const exp1 = module1.instance.exports;
+      const exp2 = module2.instance.exports;
+
+      _exports.exp1 = exp1;
+      _exports.exp2 = exp2;
+
+      const str_ptr = exp1.read();
+      console.log(readUTF8(str_ptr));
+      console.log(readUTF8(exp1.talk()));
+      console.log(readUTF8(exp2.talk()));
+      writeUTF8(str_ptr, "GFEDCBA");
+      console.log(readUTF8(str_ptr));
+      console.log(readUTF8(exp1.talk()));
+      console.log(readUTF8(exp2.talk()));
+    }
+
+    init();
+
+    const read = function(id, input){
+      const str_ptr = _exports[`exp${id}`].read();
+      const value = readUTF8(str_ptr);
+      console.log(value);
+      const element = document.getElementById(input)
+      element.value = value;
+    }
+
+    const writeString = function(value) {
+      value = value || document.getElementById('writeInput').value;
+      const str_ptr = _exports[`exp1`].read();
+      writeUTF8(str_ptr, value);
+    }
+
+    function readUTF8(ptr, _memoryView) {
+      _memoryView = _memoryView || memoryView;
+      const u8a = new Uint8Array(_memoryView.buffer);
+      const str_len = _memoryView.getUint32(ptr, true);
+      const utf16 = u8a.subarray(ptr + 4, ptr + (str_len * 2) + 4);
+      const decoder = new TextDecoder("utf-16");
+      const _utf16 = utf16.map(a => a);
+      return decoder.decode(_utf16);
+    }
+
+    function writeUTF8(ptr, str, _memoryView) {
+      _memoryView = _memoryView || memoryView;
+      const u8a = new Uint8Array(_memoryView.buffer);
+      const decoder = new TextEncoder("utf-8");
+      const utf8 = decoder.encode(str);
+      const str_len = utf8.length;
+      const _utf8 = u8a.subarray(ptr + 4, ptr + (str_len * 2) + 4);
+      let ii = 0;
+      utf8.forEach((a, i) => {
+        _utf8[ii++] = a;
+        _utf8[ii++] = 0;
+      })
+      _memoryView.setUint32(ptr, str_len, true);
+      return str_len
+    }
+  </script>
+</body>
+
+</html>

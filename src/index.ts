@@ -102,6 +102,11 @@ export function setImportMemory(options: Options, importMemory: bool): void {
   options.importMemory = importMemory;
 }
 
+/** Sets the `sharedMemory` option. */
+export function setSharedMemory(options: Options, sharedMemory: bool): void {
+  options.sharedMemory = sharedMemory;
+}
+
 /** Sets the `importTable` option. */
 export function setImportTable(options: Options, importTable: bool): void {
   options.importTable = importTable;

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Shared Canvas - AssemblyScript</title>
+  <link rel="icon" href="http://assemblyscript.org/favicon.ico" type="image/x-icon" />
+  <meta name="viewport" content="user-scalable=0" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: #111;
+      background: #fff;
+      font-family: sans-serif;
+    }
+
+    body {
+      border-top: 2px solid #070809;
+    }
+
+    h1 {
+      padding: 18px 20px 20px;
+      font-size: 12pt;
+      margin: 0;
+    }
+
+    a {
+      color: #111;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #efbd03;
+      text-decoration: underline;
+    }
+
+    canvas {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      /* width: calc(100% - 40px); */
+      /* height: calc(100% - 80px); */
+      /* background: #070809; */
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    <a href="https://github.com/WebAssembly/threads">Shared Memory</a> in
+    <a href="http://assemblyscript.org">AssemblyScript</a>
+    (
+    <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/shared-memory/assembly/index.ts">source</a> )
+  </h1>
+  <div>
+    <canvas id="viewport"></canvas>
+  </div>
+  <script>
+    "use strict";
+    const canvas = document.getElementById('viewport');
+    const ctx = canvas.getContext('2d');
+
+    const memory = new WebAssembly.Memory({
+      // initial: 32767,
+      initial: 32767,
+      shared: true,
+      maximum: 32767
+    })
+    const memoryView = new DataView(memory.buffer);
+    const u32array = new Uint32Array(memory.buffer);
+    let _exports = {};
+
+    async function init() {
+      const res = await fetch("build/optimized.wasm");
+      const buffer = await res.arrayBuffer();
+      const module1 = await WebAssembly.instantiate(buffer, {
+        env: {
+          memory,
+          abort: function () { }
+        },
+        JSMath: Math,
+        index: {
+          id: 1,
+          logf: f => console.log('float:' + f),
+          logi: i => console.log('int:' + i),
+        }
+      })
+      const module2 = await WebAssembly.instantiate(buffer, {
+        env: {
+          memory,
+          abort: function () { }
+        },
+        JSMath: Math,
+        index: {
+          id: 2,
+          logf: f => console.log('float:' + f),
+          logi: i => console.log('int:' + i),
+        }
+      })
+      const exp1 = module1.instance.exports;
+      const exp2 = module2.instance.exports;
+
+      _exports.exp1 = exp1;
+      _exports.exp2 = exp2;
+      console.log(_exports.exp1)
+      setInterval(run, 100)
+    }
+
+    init();
+
+    let vec_ptr;
+    function run() {
+      vec_ptr = _exports.exp1.run3(vec_ptr);
+      // console.clear();
+      console.log(vec_ptr);
+    }
+  </script>
+</body>
+
+</html>

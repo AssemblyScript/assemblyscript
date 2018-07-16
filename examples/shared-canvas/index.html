@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Shared Canvas - AssemblyScript</title>
+  <link rel="icon" href="http://assemblyscript.org/favicon.ico" type="image/x-icon" />
+  <meta name="viewport" content="user-scalable=0" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: #111;
+      background: #fff;
+      font-family: sans-serif;
+    }
+
+    body {
+      border-top: 2px solid #070809;
+    }
+
+    h1 {
+      padding: 18px 20px 20px;
+      font-size: 12pt;
+      margin: 0;
+    }
+
+    a {
+      color: #111;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #efbd03;
+      text-decoration: underline;
+    }
+
+    canvas {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      /* width: calc(100% - 40px); */
+      /* height: calc(100% - 80px); */
+      /* background: #070809; */
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    <a href="https://github.com/WebAssembly/threads">Shared Memory</a> in
+    <a href="http://assemblyscript.org">AssemblyScript</a>
+    (
+    <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/shared-memory/assembly/index.ts">source</a> )
+  </h1>
+  <div>
+    <canvas id="viewport"></canvas>
+  </div>
+  <script>
+    "use strict";
+    const canvas = document.getElementById('viewport');
+    const ctx = canvas.getContext('2d');
+
+    const memory = new WebAssembly.Memory({
+      // initial: 32767,
+      initial: 32767,
+      shared: true,
+      maximum: 32767
+    })
+    const memoryView = new DataView(memory.buffer);
+    const u32array = new Uint32Array(memory.buffer);
+    let _exports = {};
+    let params = {
+      width: 32 * 2,
+      height: 32 * 2,
+      block: {
+        w: 32,
+        h: 32,
+      }
+    };
+    const imageData = ctx.getImageData(0, 0, params.width, params.height)
+    const data = imageData.data;
+    let pixels;
+    async function init() {
+      const res = await fetch("build/optimized.wasm");
+      const buffer = await res.arrayBuffer();
+      const module1 = await WebAssembly.instantiate(buffer, {
+        env: {
+          memory,
+          abort: function () { }
+        },
+        JSMath: Math,
+        index: {
+          id: 1,
+          logf: f => console.log('float:' + f),
+          logi: i => console.log('int:' + i),
+        }
+      })
+      const module2 = await WebAssembly.instantiate(buffer, {
+        env: {
+          memory,
+          abort: function () { }
+        },
+        JSMath: Math,
+        index: {
+          id: 2,
+          logf: f => console.log('float:' + f),
+          logi: i => console.log('int:' + i),
+        }
+      })
+      const exp1 = module1.instance.exports;
+      const exp2 = module2.instance.exports;
+
+      _exports.exp1 = exp1;
+      _exports.exp2 = exp2;
+
+      const color = Math.random() * 0xffffff;
+      var r = (color >> 16) & 255;
+      var g = (color >> 8) & 255;
+      var b = color & 255;
+      var _r = (r / 255);
+      var _g = (g / 255);
+      var _b = (b / 255);
+      // console.log(`%crgb (${r}, ${g}, ${b})`, `color:rgb(${r}, ${g}, ${b})`);
+      params.ptr = _exports.exp1.createPixels(params.width, params.height, _r, _g, _b);
+      // console.log(params.ptr)
+      setInterval(render, 200)
+      // render();
+    }
+
+    init();
+
+
+    function render() {
+      const { ptr, width, height, block } = params;
+      var color = Math.random() * 0xffffff;
+      var r = (color >> 16) & 255;
+      var g = (color >> 8) & 255;
+      var b = color & 255;
+      // console.log(`1 => %crgb (${r}, ${g}, ${b})`, `color:rgb(${r}, ${g}, ${b})`);
+      _exports.exp1.paint(ptr, 0, 0, block.w, block.h, color);
+
+      color = Math.random() * 0xffffff;
+      r = (color >> 16) & 255;
+      g = (color >> 8) & 255;
+      b = color & 255;
+      // console.log(`2 => %crgb (${r}, ${g}, ${b})`, `color:rgb(${r}, ${g}, ${b})`);
+      _exports.exp2.paint(ptr, 32, 0, block.w, block.h, color);
+
+      pixels = readPixels(ptr, memoryView, 'Float64');
+      // pixels = readPixels2(ptr, memoryView, '32', width, height);
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          // let i = (h - y - 1) * w + x
+          var i = y * (width * 4) + (x * 4);
+          var pi = y * (width * 3) + (x * 3);
+
+          // data[i] = Math.random() * 255;
+          // data[i + 1] = Math.random() * 255;
+          // data[i + 2] = Math.random() * 255;
+
+          data[i] = pixels[pi] * 255;
+          data[i + 1] = pixels[pi + 1] * 255;
+          data[i + 2] = pixels[pi + 2] * 255;
+
+          data[i + 3] = 255;
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      // requestAnimationFrame(render)
+    }
+
+    function readPixels(ptr, memory, arrayType = 'Float32') {
+      const floatSize =
+        (arrayType.indexOf('8') > -1) ? 1 :
+          (arrayType.indexOf('16') > -1) ? 2 :
+            (arrayType.indexOf('32') > -1) ? 4 :
+              (arrayType.indexOf('64') > -1) ? 8 :
+                1;
+
+      const array_buf_ptr = memory.getUint32(ptr, true);
+      const array_length = memory.getUint32((ptr + 4), true);
+      const byteLength = memory.getUint32(array_buf_ptr, true);
+      let data_ptr = array_buf_ptr + 4 + 4;
+      let rgb = new self[arrayType + 'Array'](array_length * 3)
+      let p = 0;
+
+      for (let i = 0; i < array_length; i++) {
+        let vec = { x: 0, y: 0, z: 0 };
+        const vec_ptr = memory.getUint32(data_ptr, true);
+
+        rgb[p++] = memory['get' + arrayType](vec_ptr, true);
+        rgb[p++] = memory['get' + arrayType]((vec_ptr + floatSize), true);
+        rgb[p++] = memory['get' + arrayType]((vec_ptr + (2 * floatSize)), true);
+
+        data_ptr += 4;
+      }
+
+      return rgb;
+    }
+    function readPixels2(ptr, memory, float = '32', width, height) {
+      const floatSize = float === '32' ? 4 : 8;
+      const pixels = new self['Float' + float + 'Array'](memory.buffer, ptr)
+      let rgb = new self['Float' + float + 'Array'](width * height * 3)
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          // let i = (h - y - 1) * w + x
+          var i = y * (width * 4) + (x * 4);
+          var pi = y * (width * 3) + (x * 3);
+
+          data[i] = pixels[pi] * 255;
+          data[i + 1] = pixels[pi + 1] * 255;
+          data[i + 2] = pixels[pi + 2] * 255;
+
+          data[i + 3] = 255;
+        }
+      }
+      console.log(rgb)
+      return rgb;
+    }
+  </script>
+</body>
+
+</html>

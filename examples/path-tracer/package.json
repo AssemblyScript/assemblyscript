@@ -1,0 +1,32 @@
+{
+    "name": "@assemblyscript/path-tracer-example",
+    "version": "1.0.0",
+    "author": {
+        "name": "Nidin Vinayakan",
+        "email": "01@01alchemist.com",
+        "url": "https://dump.01alchemist.com"
+    },
+    "private": true,
+    "scripts": {
+        "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --importMemory --sharedMemory --validate",
+        "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat -O3 --importMemory --sharedMemory --validate --noDebug --noAssert",
+        "asbuild:asmjs": "asc assembly/index.ts -a build/index.asm.js -O3 --importMemory --sharedMemory --validate --noDebug --noAssert",
+        "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized && npm run asbuild:asmjs",
+        "tsbuild": "tsc -p assembly -t ES2017 -m commonjs --outDir build",
+        "build": "npm run asbuild && npm run tsbuild",
+        "watch": "nodemon --exec 'npm run asbuild:optimized' ./assembly/index.ts",
+        "server": "http-server . -o -c-1",
+        "test": "node tests",
+        "build.js-app": "webpack"
+    },
+    "devDependencies": {
+        "@types/webassembly-js-api": "^0.0.1",
+        "@types/webpack": "^4.4.5",
+        "webpack": "^4.15.1",
+        "webpack-cli": "^3.0.8",
+        "webpack-node-externals": "^1.7.2"
+    },
+    "dependencies": {
+        "three": "^0.94.0"
+    }
+}
