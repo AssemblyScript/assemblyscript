@@ -2933,7 +2933,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 465)
+     (i32.const 463)
      (i32.const 4)
     )
     (unreachable)
@@ -2968,7 +2968,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 470)
+     (i32.const 468)
      (i32.const 6)
     )
     (unreachable)
@@ -3066,7 +3066,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -3117,15 +3116,12 @@
     (get_local $3)
    )
   )
-  (set_local $7
-   (get_local $2)
-  )
   (if
    (i32.gt_s
     (get_local $6)
     (get_local $4)
    )
-   (set_local $7
+   (set_local $2
     (call $~lib/string/String#repeat
      (get_local $2)
      (i32.add
@@ -3138,18 +3134,18 @@
     )
    )
   )
-  (set_local $8
+  (set_local $7
    (call $~lib/internal/string/allocate
     (get_local $1)
    )
   )
   (call $~lib/memory/move_memory
    (i32.add
-    (get_local $8)
+    (get_local $7)
     (i32.const 4)
    )
    (i32.add
-    (get_local $7)
+    (get_local $2)
     (i32.const 4)
    )
    (i32.shl
@@ -3162,7 +3158,7 @@
    (call $~lib/memory/move_memory
     (i32.add
      (i32.add
-      (get_local $8)
+      (get_local $7)
       (i32.const 4)
      )
      (i32.shl
@@ -3180,7 +3176,7 @@
     )
    )
   )
-  (get_local $8)
+  (get_local $7)
  )
  (func $~lib/string/String#padStart|trampoline (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
@@ -3274,7 +3270,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -3286,7 +3281,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 441)
+     (i32.const 440)
      (i32.const 4)
     )
     (unreachable)
@@ -3325,15 +3320,12 @@
     (get_local $3)
    )
   )
-  (set_local $7
-   (get_local $2)
-  )
   (if
    (i32.gt_s
     (get_local $6)
     (get_local $4)
    )
-   (set_local $7
+   (set_local $2
     (call $~lib/string/String#repeat
      (get_local $2)
      (i32.add
@@ -3346,7 +3338,7 @@
     )
    )
   )
-  (set_local $8
+  (set_local $7
    (call $~lib/internal/string/allocate
     (get_local $1)
    )
@@ -3355,7 +3347,7 @@
    (get_local $3)
    (call $~lib/memory/move_memory
     (i32.add
-     (get_local $8)
+     (get_local $7)
      (i32.const 4)
     )
     (i32.add
@@ -3371,7 +3363,7 @@
   (call $~lib/memory/move_memory
    (i32.add
     (i32.add
-     (get_local $8)
+     (get_local $7)
      (i32.const 4)
     )
     (i32.shl
@@ -3380,7 +3372,7 @@
     )
    )
    (i32.add
-    (get_local $7)
+    (get_local $2)
     (i32.const 4)
    )
    (i32.shl
@@ -3388,7 +3380,7 @@
     (i32.const 1)
    )
   )
-  (get_local $8)
+  (get_local $7)
  )
  (func $~lib/string/String#padEnd|trampoline (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
@@ -4166,7 +4158,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 80)
-                  (i32.const 611)
+                  (i32.const 609)
                   (i32.const 10)
                  )
                  (unreachable)
