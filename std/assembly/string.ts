@@ -34,9 +34,9 @@ export class String {
     ); // Invalid code point range
     if (!code) return changetype<String>("\0");
 
-    var hasSurr   = <i32>(code  > 0xFFFF);
-    var hasSurr1  = <i32>(code1 > 0xFFFF);
-    var hasSurr2  = <i32>(code2 > 0xFFFF);
+    var hasSurr  = <i32>(code  > 0xFFFF);
+    var hasSurr1 = <i32>(code1 > 0xFFFF);
+    var hasSurr2 = <i32>(code2 > 0xFFFF);
 
     var len = 1;
     len += hasSurr;
@@ -55,11 +55,11 @@ export class String {
       offset += 2;
     } else {
       code -= 0x10000;
-      let hi = (code >>> 10)  + 0xD800;
-      let lo = (code & 0x3FF) + 0xDC00;
+      let hi: u32 = (code >>> 10)  + 0xD800;
+      let lo: u32 = (code & 0x3FF) + 0xDC00;
       store<u32>(
         changetype<usize>(out),
-        (<u32>hi << 16) | <u32>lo,
+        (hi << 16) | lo,
         HEADER_SIZE
       );
       offset += 4;
@@ -75,11 +75,11 @@ export class String {
       offset += 2;
     } else {
       code1 -= 0x10000;
-      let hi = (code1 >>> 10)  + 0xD800;
-      let lo = (code1 & 0x3FF) + 0xDC00;
+      let hi: u32 = (code1 >>> 10)  + 0xD800;
+      let lo: u32 = (code1 & 0x3FF) + 0xDC00;
       store<u32>(
         changetype<usize>(out) + offset,
-        (<u32>hi << 16) | <u32>lo,
+        (hi << 16) | lo,
         HEADER_SIZE
       );
       offset += 4;
@@ -95,11 +95,11 @@ export class String {
       offset += 2;
     } else {
       code2 -= 0x10000;
-      let hi = (code2 >>> 10)  + 0xD800;
-      let lo = (code2 & 0x3FF) + 0xDC00;
+      let hi: u32 = (code2 >>> 10)  + 0xD800;
+      let lo: u32 = (code2 & 0x3FF) + 0xDC00;
       store<u32>(
         changetype<usize>(out) + offset,
-        (<u32>hi << 16) | <u32>lo,
+        (hi << 16) | lo,
         HEADER_SIZE
       );
     }
