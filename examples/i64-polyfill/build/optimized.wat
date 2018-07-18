@@ -4,7 +4,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (global $assembly/i64/lo (mut i32) (i32.const 0))
  (global $assembly/i64/hi (mut i32) (i32.const 0))
- (memory $0 1)
+ (memory $0 0)
  (export "getLo" (func $assembly/i64/getLo))
  (export "getHi" (func $assembly/i64/getHi))
  (export "clz" (func $assembly/i64/clz))

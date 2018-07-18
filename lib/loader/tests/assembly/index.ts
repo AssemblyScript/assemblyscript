@@ -39,8 +39,8 @@ export class Car {
   }
 
   dispose(): void {
-    free_memory(changetype<usize>(this));
+    memory.free(changetype<usize>(this));
   }
 }
 
-export { allocate_memory, free_memory };
+export { memory };

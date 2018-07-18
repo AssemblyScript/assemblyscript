@@ -17,14 +17,14 @@ export namespace math {
 }
 
 // top-level enum
-export enum Animal {
+export const enum Animal {
   CAT,
   DOG
 }
 
 // namespaced enum
 export namespace animals {
-  export enum Animal {
+  export const enum Animal {
     CAT,
     DOG
   }

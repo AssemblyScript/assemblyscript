@@ -176,10 +176,10 @@ function update_max_ptr(new_value: usize): i32 {
     // if (brk(new_value)) {
     //   return 0;
     // }
-    let oldPages = <u32>current_memory();
-    let newPages = <u32>(((new_value + 0xffff) & ~0xffff) >> 16);
+    let oldPages = <i32>memory.size();
+    let newPages = <i32>(((new_value + 0xffff) & ~0xffff) >>> 16);
     assert(newPages > oldPages);
-    if (grow_memory(newPages - oldPages) < 0) {
+    if (memory.grow(newPages - oldPages) < 0) {
       return 0;
     }
     // max_ptr = new_value;
@@ -339,7 +339,7 @@ function lower_bucket_limit(bucket: usize): u32 {
 }
 
 @global
-export function allocate_memory(request: usize): usize {
+export function __memory_allocate(request: usize): usize {
   var original_bucket: usize, bucket: usize;
 
   /*
@@ -357,7 +357,7 @@ export function allocate_memory(request: usize): usize {
   if (base_ptr == 0) {
     // base_ptr = max_ptr = (uint8_t *)sbrk(0);
     base_ptr = (NODE_IS_SPLIT_END + 7) & ~7; // must be aligned
-    max_ptr = <usize>current_memory() << 16; // must grow first
+    max_ptr = <usize>memory.size() << 16; // must grow first
     bucket_limit = BUCKET_COUNT - 1;
     if (!update_max_ptr(base_ptr + List.SIZE)) {
       return 0;
@@ -474,7 +474,7 @@ export function allocate_memory(request: usize): usize {
 }
 
 @global
-export function free_memory(ptr: usize): void {
+export function __memory_free(ptr: usize): void {
   var bucket: usize, i: usize;
 
   /*
@@ -540,6 +540,6 @@ export function free_memory(ptr: usize): void {
 }
 
 @global
-export function reset_memory(): void {
+export function __memory_reset(): void {
   unreachable();
 }

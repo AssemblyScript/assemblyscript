@@ -2,6 +2,8 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $fi (func (param f32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
+ (type $i (func (result i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -17,15 +19,43 @@
  (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
  (global $builtins/fn (mut i32) (i32.const 0))
+ (global $i8.MIN_VALUE i32 (i32.const -128))
+ (global $i8.MAX_VALUE i32 (i32.const 127))
+ (global $i16.MIN_VALUE i32 (i32.const -32768))
+ (global $i16.MAX_VALUE i32 (i32.const 32767))
+ (global $i32.MIN_VALUE i32 (i32.const -2147483648))
+ (global $i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $i64.MIN_VALUE i64 (i64.const -9223372036854775808))
+ (global $i64.MAX_VALUE i64 (i64.const 9223372036854775807))
+ (global $u8.MIN_VALUE i32 (i32.const 0))
+ (global $u8.MAX_VALUE i32 (i32.const 255))
+ (global $u16.MIN_VALUE i32 (i32.const 0))
+ (global $u16.MAX_VALUE i32 (i32.const 65535))
+ (global $u32.MIN_VALUE i32 (i32.const 0))
+ (global $u32.MAX_VALUE i32 (i32.const -1))
+ (global $u64.MIN_VALUE i64 (i64.const 0))
+ (global $u64.MAX_VALUE i64 (i64.const -1))
+ (global $bool.MIN_VALUE i32 (i32.const 0))
+ (global $bool.MAX_VALUE i32 (i32.const 1))
+ (global $f32.MIN_VALUE f32 (f32.const -3402823466385288598117041e14))
+ (global $f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
+ (global $f32.MIN_SAFE_INTEGER f32 (f32.const -16777215))
+ (global $f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
+ (global $f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
+ (global $f64.MIN_VALUE f64 (f64.const -1797693134862315708145274e284))
+ (global $f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
+ (global $f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
+ (global $f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
+ (global $f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $HEAP_BASE i32 (i32.const 44))
  (table 1 1 anyfunc)
  (elem (i32.const 0) $start~anonymous|0)
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
  (data (i32.const 36) "\01\00\00\001\00")
- (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export "test" (func $builtins/test))
  (start $start)
  (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
   (f32.ne
@@ -57,13 +87,21 @@
    (f64.const 0)
   )
  )
- (func $start~anonymous|0 (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.size (; 5 ;) (type $i) (result i32)
+  (current_memory)
+ )
+ (func $~lib/memory/memory.grow (; 6 ;) (type $ii) (param $0 i32) (result i32)
+  (grow_memory
+   (get_local $0)
+  )
+ )
+ (func $start~anonymous|0 (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (nop)
  )
- (func $builtins/test (; 6 ;) (type $v)
+ (func $builtins/test (; 8 ;) (type $v)
   (nop)
  )
- (func $start (; 7 ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -1521,18 +1559,18 @@
    )
   )
   (drop
-   (current_memory)
+   (call $~lib/memory/memory.size)
   )
   (drop
-   (grow_memory
+   (call $~lib/memory/memory.grow
     (i32.const 1)
    )
   )
   (set_global $builtins/s
-   (current_memory)
+   (call $~lib/memory/memory.size)
   )
   (set_global $builtins/s
-   (grow_memory
+   (call $~lib/memory/memory.grow
     (i32.const 1)
    )
   )
@@ -2054,7 +2092,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const -128)
+     (get_global $i8.MIN_VALUE)
      (i32.shr_s
       (i32.shl
        (i32.const 128)
@@ -2077,7 +2115,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 127)
+     (get_global $i8.MAX_VALUE)
      (i32.const 127)
     )
    )
@@ -2094,7 +2132,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const -32768)
+     (get_global $i16.MIN_VALUE)
      (i32.shr_s
       (i32.shl
        (i32.const 32768)
@@ -2117,7 +2155,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 32767)
+     (get_global $i16.MAX_VALUE)
      (i32.const 32767)
     )
    )
@@ -2134,7 +2172,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const -2147483648)
+     (get_global $i32.MIN_VALUE)
      (i32.const -2147483648)
     )
    )
@@ -2151,7 +2189,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 2147483647)
+     (get_global $i32.MAX_VALUE)
      (i32.const 2147483647)
     )
    )
@@ -2168,7 +2206,7 @@
   (if
    (i32.eqz
     (i64.eq
-     (i64.const -9223372036854775808)
+     (get_global $i64.MIN_VALUE)
      (i64.const -9223372036854775808)
     )
    )
@@ -2185,7 +2223,7 @@
   (if
    (i32.eqz
     (i64.eq
-     (i64.const 9223372036854775807)
+     (get_global $i64.MAX_VALUE)
      (i64.const 9223372036854775807)
     )
    )
@@ -2202,7 +2240,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 0)
+     (get_global $u8.MIN_VALUE)
      (i32.const 0)
     )
    )
@@ -2219,7 +2257,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 255)
+     (get_global $u8.MAX_VALUE)
      (i32.const 255)
     )
    )
@@ -2236,7 +2274,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 0)
+     (get_global $u16.MIN_VALUE)
      (i32.const 0)
     )
    )
@@ -2253,7 +2291,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 65535)
+     (get_global $u16.MAX_VALUE)
      (i32.const 65535)
     )
    )
@@ -2270,7 +2308,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 0)
+     (get_global $u32.MIN_VALUE)
      (i32.const 0)
     )
    )
@@ -2287,7 +2325,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const -1)
+     (get_global $u32.MAX_VALUE)
      (i32.const -1)
     )
    )
@@ -2304,7 +2342,7 @@
   (if
    (i32.eqz
     (i64.eq
-     (i64.const 0)
+     (get_global $u64.MIN_VALUE)
      (i64.const 0)
     )
    )
@@ -2321,7 +2359,7 @@
   (if
    (i32.eqz
     (i64.eq
-     (i64.const -1)
+     (get_global $u64.MAX_VALUE)
      (i64.const -1)
     )
    )
@@ -2338,7 +2376,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 0)
+     (get_global $bool.MIN_VALUE)
      (i32.const 0)
     )
    )
@@ -2355,7 +2393,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 0)
+     (get_global $bool.MIN_VALUE)
      (i32.const 0)
     )
    )
@@ -2372,7 +2410,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 1)
+     (get_global $bool.MAX_VALUE)
      (i32.const 1)
     )
    )
@@ -2389,7 +2427,7 @@
   (if
    (i32.eqz
     (i32.eq
-     (i32.const 1)
+     (get_global $bool.MAX_VALUE)
      (i32.const 1)
     )
    )
@@ -2406,7 +2444,7 @@
   (if
    (i32.eqz
     (f32.eq
-     (f32.const -3402823466385288598117041e14)
+     (get_global $f32.MIN_VALUE)
      (f32.const -3402823466385288598117041e14)
     )
    )
@@ -2423,7 +2461,7 @@
   (if
    (i32.eqz
     (f32.eq
-     (f32.const 3402823466385288598117041e14)
+     (get_global $f32.MAX_VALUE)
      (f32.const 3402823466385288598117041e14)
     )
    )
@@ -2440,7 +2478,7 @@
   (if
    (i32.eqz
     (f32.eq
-     (f32.const -16777215)
+     (get_global $f32.MIN_SAFE_INTEGER)
      (f32.const -16777215)
     )
    )
@@ -2457,7 +2495,7 @@
   (if
    (i32.eqz
     (f32.eq
-     (f32.const 16777215)
+     (get_global $f32.MAX_SAFE_INTEGER)
      (f32.const 16777215)
     )
    )
@@ -2474,7 +2512,7 @@
   (if
    (i32.eqz
     (f32.eq
-     (f32.const 1.1920928955078125e-07)
+     (get_global $f32.EPSILON)
      (f32.const 1.1920928955078125e-07)
     )
    )
@@ -2491,7 +2529,7 @@
   (if
    (i32.eqz
     (f64.eq
-     (f64.const -1797693134862315708145274e284)
+     (get_global $f64.MIN_VALUE)
      (f64.const -1797693134862315708145274e284)
     )
    )
@@ -2508,7 +2546,7 @@
   (if
    (i32.eqz
     (f64.eq
-     (f64.const 1797693134862315708145274e284)
+     (get_global $f64.MAX_VALUE)
      (f64.const 1797693134862315708145274e284)
     )
    )
@@ -2525,7 +2563,7 @@
   (if
    (i32.eqz
     (f64.eq
-     (f64.const -9007199254740991)
+     (get_global $f64.MIN_SAFE_INTEGER)
      (f64.const -9007199254740991)
     )
    )
@@ -2542,7 +2580,7 @@
   (if
    (i32.eqz
     (f64.eq
-     (f64.const 9007199254740991)
+     (get_global $f64.MAX_SAFE_INTEGER)
      (f64.const 9007199254740991)
     )
    )
@@ -2559,7 +2597,7 @@
   (if
    (i32.eqz
     (f64.eq
-     (f64.const 2.220446049250313e-16)
+     (get_global $f64.EPSILON)
      (f64.const 2.220446049250313e-16)
     )
    )

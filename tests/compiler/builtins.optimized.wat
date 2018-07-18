@@ -2,6 +2,8 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $fi (func (param f32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
+ (type $i (func (result i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -19,9 +21,9 @@
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
  (data (i32.const 36) "\01\00\00\001")
- (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export "test" (func $builtins/test))
  (start $start)
  (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
   (f32.ne
@@ -53,13 +55,21 @@
    (f64.const 0)
   )
  )
- (func $start~anonymous|0 (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.size (; 5 ;) (type $i) (result i32)
+  (current_memory)
+ )
+ (func $~lib/memory/memory.grow (; 6 ;) (type $ii) (param $0 i32) (result i32)
+  (grow_memory
+   (get_local $0)
+  )
+ )
+ (func $start~anonymous|0 (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (nop)
  )
- (func $builtins/test (; 6 ;) (type $v)
+ (func $builtins/test (; 8 ;) (type $v)
   (nop)
  )
- (func $start (; 7 ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   (set_global $builtins/i
    (i32.const 31)
   )
@@ -729,18 +739,18 @@
    (f64.const 1.24e-322)
   )
   (drop
-   (current_memory)
+   (call $~lib/memory/memory.size)
   )
   (drop
-   (grow_memory
+   (call $~lib/memory/memory.grow
     (i32.const 1)
    )
   )
   (set_global $builtins/s
-   (current_memory)
+   (call $~lib/memory/memory.size)
   )
   (set_global $builtins/s
-   (grow_memory
+   (call $~lib/memory/memory.grow
     (i32.const 1)
    )
   )

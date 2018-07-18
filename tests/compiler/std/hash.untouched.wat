@@ -26,7 +26,7 @@
   (local $2 i32)
   (local $3 i32)
   (set_local $1
-   (i32.const -2128831035)
+   (get_global $~lib/internal/hash/FNV_OFFSET)
   )
   (block $break|0
    (block
@@ -62,7 +62,7 @@
         )
        )
       )
-      (i32.const 16777619)
+      (get_global $~lib/internal/hash/FNV_PRIME)
      )
     )
     (set_local $2
@@ -82,7 +82,7 @@
  (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
-   (i32.const -2128831035)
+   (get_global $~lib/internal/hash/FNV_OFFSET)
   )
   (set_local $1
    (i32.mul
@@ -93,7 +93,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -108,7 +108,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -123,7 +123,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -135,7 +135,7 @@
       (i32.const 24)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (get_local $1)
@@ -158,7 +158,7 @@
    )
   )
   (set_local $3
-   (i32.const -2128831035)
+   (get_global $~lib/internal/hash/FNV_OFFSET)
   )
   (set_local $3
    (i32.mul
@@ -169,7 +169,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -184,7 +184,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -199,7 +199,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -211,7 +211,7 @@
       (i32.const 24)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -223,7 +223,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -238,7 +238,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -253,7 +253,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -265,7 +265,7 @@
       (i32.const 24)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (get_local $3)

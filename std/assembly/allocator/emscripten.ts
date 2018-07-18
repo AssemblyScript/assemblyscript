@@ -12,16 +12,16 @@ declare function _malloc(size: usize): usize;
 declare function _free(ptr: usize): void;
 
 @global
-export function allocate_memory(size: usize): usize {
+export function __memory_allocate(size: usize): usize {
   return _malloc(size);
 }
 
 @global
-export function free_memory(ptr: usize): void {
+export function __memory_free(ptr: usize): void {
   _free(ptr);
 }
 
 @global
-export function reset_memory(): void {
+export function __memory_reset(): void {
   unreachable();
 }

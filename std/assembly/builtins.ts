@@ -1,89 +1,43 @@
+@inline export const NaN: f64 = 0 / 0;
+@inline export const Infinity: f64 = 1 / 0;
+export declare const HEAP_BASE: usize;
+
 export declare function isInteger<T>(value?: T): bool;
-
 export declare function isFloat<T>(value?: T): bool;
-
 export declare function isSigned<T>(value?: T): bool;
-
 export declare function isReference<T>(value?: T): bool;
-
 export declare function isString<T>(value?: T): bool;
-
 export declare function isArray<T>(value?: T): bool;
-
 export declare function isDefined(expression: void): bool;
-
 export declare function isConstant(expression: void): bool;
-
-export const NaN: f64 = 0 / 0;
-
-export const Infinity: f64 = 1 / 0;
-
-export function isNaN<T>(value: T): bool {
-  return value != value;
-}
-
-export function isFinite<T>(value: T): bool {
-  return value - value == 0;
-}
+export function isNaN<T>(value: T): bool { return value != value; }
+export function isFinite<T>(value: T): bool { return value - value == 0; }
 
 export declare function clz<T>(value: T): T;
-
 export declare function ctz<T>(value: T): T;
-
 export declare function popcnt<T>(value: T): T;
-
 export declare function rotl<T>(value: T, shift: T): T;
-
 export declare function rotr<T>(value: T, shift: T): T;
-
 export declare function abs<T>(value: T): T;
-
 export declare function max<T>(left: T, right: T): T;
-
 export declare function min<T>(left: T, right: T): T;
-
 export declare function ceil<T>(value: T): T;
-
 export declare function floor<T>(value: T): T;
-
 export declare function copysign<T>(left: T, right: T): T;
-
 export declare function nearest<T>(value: T): T;
-
 export declare function reinterpret<T>(value: void): T;
-
 export declare function sqrt<T>(value: T): T;
-
 export declare function trunc<T>(value: T): T;
-
 export declare function load<T>(offset: usize, constantOffset?: usize): T;
-
 export declare function store<T>(offset: usize, value: void, constantOffset?: usize): void;
-
 export declare function sizeof<T>(): usize; // | u32 / u64
-
 export declare function alignof<T>(): usize; // | u32 / u64
-
 export declare function offsetof<T>(fieldName?: string): usize; // | u32 / u64
-
 export declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
-
 export declare function unreachable(): void;
-
-export declare function current_memory(): i32;
-
-export declare function grow_memory(pages: i32): i32;
-
-// export declare function move_memory(dest: usize, src: usize: n: usize): void;
-
-// export declare function set_memory(dest: usize, value: u32, n: usize): void;
-
 export declare function changetype<T>(value: void): T;
-
 export declare function assert<T>(isTrueish: T, message?: string): T;
-
 export declare function unchecked<T>(expr: T): T;
-
 export declare function call_indirect<T>(target: void, ...args: void[]): T;
 
 export declare function i8(value: void): i8;
@@ -233,6 +187,15 @@ export namespace f64 {
   export declare function trunc(value: f64): f64;
 }
 
-export declare const HEAP_BASE: usize;
-
 export declare function start(): void;
+
+export declare function ERROR(message?: void): void;
+export declare function WARNING(message?: void): void;
+export declare function INFO(message?: void): void;
+
+export declare function __memory_size(): i32;
+export declare function __memory_grow(pages: i32): i32;
+// export declare function __memory_copy(dest: usize, src: usize: n: usize): void;
+// export declare function __memory_fill(dest: usize, value: u32, n: usize): void;
+
+export declare function __gc_iterate_roots(fn: (ref: usize) => void): void;

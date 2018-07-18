@@ -37,13 +37,13 @@
    (f64.const 1.5)
   )
   (set_local $3
-   (i32.const 10)
+   (get_global $infer-type/i)
   )
   (set_local $4
-   (i64.const 4294967296)
+   (get_global $infer-type/I)
   )
   (set_local $5
-   (f64.const 1.5)
+   (get_global $infer-type/F)
   )
  )
  (func $infer-type/reti (; 2 ;) (type $i) (result i32)
@@ -62,13 +62,13 @@
   (local $0 i32)
   (local $1 i32)
   (drop
-   (i32.const 10)
+   (get_global $infer-type/i)
   )
   (drop
-   (i64.const 4294967296)
+   (get_global $infer-type/I)
   )
   (drop
-   (f64.const 1.5)
+   (get_global $infer-type/F)
   )
   (call $infer-type/locals)
   (set_global $infer-type/ri

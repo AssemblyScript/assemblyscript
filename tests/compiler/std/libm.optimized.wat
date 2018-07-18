@@ -13,6 +13,7 @@
  (global $std/libm/SQRT1_2 f64 (f64.const 0.7071067811865476))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
  (memory $0 0)
+ (export "memory" (memory $0))
  (export "E" (global $std/libm/E))
  (export "LN10" (global $std/libm/LN10))
  (export "LN2" (global $std/libm/LN2))
@@ -55,7 +56,6 @@
  (export "tan" (func $std/libm/cos))
  (export "tanh" (func $std/libm/tanh))
  (export "trunc" (func $std/libm/trunc))
- (export "memory" (memory $0))
  (func $std/libm/abs (; 0 ;) (type $FF) (param $0 f64) (result f64)
   (f64.abs
    (get_local $0)

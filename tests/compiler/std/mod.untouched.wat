@@ -516,7 +516,7 @@
    (if (result i32)
     (tee_local $3
      (i32.eqz
-      (i32.const 1)
+      (get_global $std/mod/js)
      )
     )
     (get_local $3)

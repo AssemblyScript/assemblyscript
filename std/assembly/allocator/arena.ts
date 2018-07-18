@@ -1,7 +1,7 @@
 /**
  * Arena Memory Allocator
  *
- * Provides a `reset_memory` function to reset the heap to its initial state. A user has to make
+ * Provides a `memory.reset` function to reset the heap to its initial state. A user has to make
  * sure that there are no more references to cleared memory afterwards. Always aligns to 8 bytes.
  *
  * @module std/assembly/allocator/arena
@@ -13,17 +13,17 @@ var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;
 
 @global
-export function allocate_memory(size: usize): usize {
+export function __memory_allocate(size: usize): usize {
   if (size) {
     if (size > MAX_SIZE_32) unreachable();
     let ptr = offset;
     let newPtr = (ptr + size + AL_MASK) & ~AL_MASK;
-    let pagesBefore = current_memory();
+    let pagesBefore = memory.size();
     if (newPtr > <usize>pagesBefore << 16) {
       let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
       let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-      if (grow_memory(pagesWanted) < 0) {
-        if (grow_memory(pagesNeeded) < 0) {
+      if (memory.grow(pagesWanted) < 0) {
+        if (memory.grow(pagesNeeded) < 0) {
           unreachable(); // out of memory
         }
       }
@@ -35,11 +35,11 @@ export function allocate_memory(size: usize): usize {
 }
 
 @global
-export function free_memory(ptr: usize): void {
+export function __memory_free(ptr: usize): void {
   // nop
 }
 
 @global
-export function reset_memory(): void {
+export function __memory_reset(): void {
   offset = startOffset;
 }

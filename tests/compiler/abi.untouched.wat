@@ -8,10 +8,10 @@
  (global $HEAP_BASE i32 (i32.const 24))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00a\00b\00i\00.\00t\00s\00")
+ (export "memory" (memory $0))
  (export "exported" (func $abi/exported))
  (export "exportedExported" (func $abi/exportedExported))
  (export "exportedInternal" (func $abi/exportedInternal))
- (export "memory" (memory $0))
  (start $start)
  (func $abi/exported (; 1 ;) (type $i) (result i32)
   (i32.shr_s

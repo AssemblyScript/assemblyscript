@@ -26,7 +26,7 @@ function asmFunc(global, env, buffer) {
  var assembly_index_system = 0;
  var HEAP_BASE = 40;
  var i64toi32_i32$HIGH_BITS = 0;
- function $lib_allocator_arena_allocate_memory($0) {
+ function $lib_allocator_arena___memory_allocate($0) {
   $0 = $0 | 0;
   var $1 = 0, $2 = 0, $3 = 0, wasm2asm_i32$0 = 0, wasm2asm_i32$1 = 0, wasm2asm_i32$2 = 0;
   if ($0) {
@@ -55,7 +55,7 @@ function asmFunc(global, env, buffer) {
   $7 = +$7;
   var wasm2asm_i32$0 = 0, wasm2asm_f64$0 = 0.0;
   if (($0 | 0) == (0 | 0)) {
-   $0 = $lib_allocator_arena_allocate_memory(56 | 0) | 0;
+   $0 = $lib_allocator_arena___memory_allocate(56 | 0) | 0;
    wasm2asm_i32$0 = $0;
    wasm2asm_f64$0 = $1;
    HEAPF64[wasm2asm_i32$0 >> 3] = wasm2asm_f64$0;
@@ -81,7 +81,7 @@ function asmFunc(global, env, buffer) {
   return $0 | 0;
  }
  
- function $lib_memory_set_memory($0, $1, $2) {
+ function $lib_memory_memory_fill($0, $1, $2) {
   $0 = $0 | 0;
   $1 = $1 | 0;
   $2 = $2 | 0;
@@ -253,12 +253,12 @@ function asmFunc(global, env, buffer) {
    abort();
   }
   $2 = $1 << 2 | 0;
-  $3 = $lib_allocator_arena_allocate_memory(1 << (32 - Math_clz32($2 + 7 | 0) | 0) | 0 | 0) | 0;
+  $3 = $lib_allocator_arena___memory_allocate(1 << (32 - Math_clz32($2 + 7 | 0) | 0) | 0 | 0) | 0;
   wasm2asm_i32$0 = $3;
   wasm2asm_i32$1 = $2;
   HEAP32[wasm2asm_i32$0 >> 2] = wasm2asm_i32$1;
   if (($0 | 0) == (0 | 0)) {
-   $0 = $lib_allocator_arena_allocate_memory(8 | 0) | 0;
+   $0 = $lib_allocator_arena___memory_allocate(8 | 0) | 0;
    wasm2asm_i32$0 = $0;
    wasm2asm_i32$1 = 0;
    HEAP32[wasm2asm_i32$0 >> 2] = wasm2asm_i32$1;
@@ -272,7 +272,7 @@ function asmFunc(global, env, buffer) {
   wasm2asm_i32$0 = $0;
   wasm2asm_i32$1 = $1;
   HEAP32[(wasm2asm_i32$0 + 4 | 0) >> 2] = wasm2asm_i32$1;
-  $lib_memory_set_memory($3 + 8 | 0 | 0, 0 | 0, $2 | 0);
+  $lib_memory_memory_fill($3 + 8 | 0 | 0, 0 | 0, $2 | 0);
   return $0 | 0;
  }
  
@@ -307,7 +307,7 @@ function asmFunc(global, env, buffer) {
   wasm2asm_f64$0 = -$7 / 39.47841760435743;
   HEAPF64[(wasm2asm_i32$0 + 40 | 0) >> 3] = wasm2asm_f64$0;
   if (($0 | 0) == (0 | 0)) {
-   $2 = $lib_allocator_arena_allocate_memory(4 | 0) | 0;
+   $2 = $lib_allocator_arena___memory_allocate(4 | 0) | 0;
    wasm2asm_i32$0 = $2;
    wasm2asm_i32$1 = $1;
    HEAP32[wasm2asm_i32$0 >> 2] = wasm2asm_i32$1;

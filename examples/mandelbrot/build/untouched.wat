@@ -12,15 +12,15 @@
  (export "computeLine" (func $assembly/index/computeLine))
  (export "memory" (memory $0))
  (func $isFinite<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
-  ;;@ ~lib/builtins.ts:22:26
+  ;;@ ~lib/builtins.ts:26:26
   (f64.eq
-   ;;@ ~lib/builtins.ts:22:9
+   ;;@ ~lib/builtins.ts:26:9
    (f64.sub
     (get_local $0)
-    ;;@ ~lib/builtins.ts:22:17
+    ;;@ ~lib/builtins.ts:26:17
     (get_local $0)
    )
-   ;;@ ~lib/builtins.ts:22:26
+   ;;@ ~lib/builtins.ts:26:26
    (f64.const 0)
   )
  )
