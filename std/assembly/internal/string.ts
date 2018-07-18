@@ -153,14 +153,14 @@ export function parse<T>(str: String, radix: i32 = 0): T {
   return sign * num;
 }
 
-export function compareUTF16(ap: usize, bp: usize, n: usize): i32 {
-  // if (ap == bp) return 0;
-  while (n && load<u16>(ap) == load<u16>(bp)) {
-    --n, ++ap, ++bp;
+export function compareUTF16(ptr1: String, ptr2: String, len: usize): i32 {
+  if (ptr1 == ptr2) return 0;
+  while (len && load<u16>(ptr1, HEADER_SIZE) == load<u16>(ptr2, HEADER_SIZE)) {
+    --len, ++ptr1, ++ptr2;
   }
-  if (!n) return 0;
-  var a: i32 = load<u16>(ap);
-  var b: i32 = load<u16>(bp);
+  if (!len) return 0;
+  var a: i32 = load<u16>(ptr1, HEADER_SIZE);
+  var b: i32 = load<u16>(ptr2, HEADER_SIZE);
   // a != b, fix up each one if they're both in or above the surrogate range
   if (a >= 0xd800 && b >= 0xd800) {
     a += select<i32>(-0x800, 0x2000, a >= 0xe000);
