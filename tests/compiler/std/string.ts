@@ -95,6 +95,10 @@ assert(!("" > ""));
 assert("" >= "");
 assert("" <= "");
 
+var a = String.fromCodePoint(0xFF61);
+var b = String.fromCodePoint(0xD800, 0xDC02);
+// assert(a > b); fail
+
 assert("123".length == 3);
 
 assert("".repeat(100) == "");

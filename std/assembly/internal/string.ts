@@ -153,8 +153,8 @@ export function parse<T>(str: String, radix: i32 = 0): T {
   return sign * num;
 }
 
-export function compareUTF16(ptr1: String, ptr2: String, len: usize): i32 {
-  if (ptr1 == ptr2) return 0;
+export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
+  if (ptr1 === ptr2) return 0;
   while (len && load<u16>(ptr1, HEADER_SIZE) == load<u16>(ptr2, HEADER_SIZE)) {
     --len, ++ptr1, ++ptr2;
   }

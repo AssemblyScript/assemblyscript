@@ -7767,7 +7767,10 @@
    )
   )
  )
- (func $~lib/memory/compare_memory (; 117 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/string/compareUTF16 (; 117 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   (if
    (i32.eq
     (get_local $0)
@@ -7783,10 +7786,10 @@
      (if (result i32)
       (get_local $2)
       (i32.eq
-       (i32.load8_u
+       (i32.load16_u offset=4
         (get_local $0)
        )
-       (i32.load8_u
+       (i32.load16_u offset=4
         (get_local $1)
        )
       )
@@ -7818,17 +7821,70 @@
     )
    )
   )
-  (if (result i32)
-   (get_local $2)
-   (i32.sub
-    (i32.load8_u
-     (get_local $0)
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (set_local $3
+   (i32.load16_u offset=4
+    (get_local $0)
+   )
+  )
+  (set_local $4
+   (i32.load16_u offset=4
+    (get_local $1)
+   )
+  )
+  (if
+   (if (result i32)
+    (tee_local $5
+     (i32.ge_s
+      (get_local $3)
+      (i32.const 55296)
+     )
     )
-    (i32.load8_u
-     (get_local $1)
+    (i32.ge_s
+     (get_local $4)
+     (i32.const 55296)
+    )
+    (get_local $5)
+   )
+   (block
+    (set_local $3
+     (i32.add
+      (get_local $3)
+      (select
+       (i32.const -2048)
+       (i32.const 8192)
+       (i32.ge_s
+        (get_local $3)
+        (i32.const 57344)
+       )
+      )
+     )
+    )
+    (set_local $4
+     (i32.add
+      (get_local $4)
+      (select
+       (i32.const -2048)
+       (i32.const 8192)
+       (i32.ge_s
+        (get_local $4)
+        (i32.const 57344)
+       )
+      )
+     )
     )
    )
-   (i32.const 0)
+  )
+  (i32.sub
+   (get_local $3)
+   (get_local $4)
   )
  )
  (func $~lib/string/String.__gt (; 118 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -7905,19 +7961,10 @@
    )
   )
   (i32.gt_s
-   (call $~lib/memory/compare_memory
-    (i32.add
-     (get_local $0)
-     (i32.const 4)
-    )
-    (i32.add
-     (get_local $1)
-     (i32.const 4)
-    )
-    (i32.shl
-     (get_local $6)
-     (i32.const 1)
-    )
+   (call $~lib/internal/string/compareUTF16
+    (get_local $0)
+    (get_local $1)
+    (get_local $6)
    )
    (i32.const 0)
   )
@@ -7996,19 +8043,10 @@
    )
   )
   (i32.lt_s
-   (call $~lib/memory/compare_memory
-    (i32.add
-     (get_local $0)
-     (i32.const 4)
-    )
-    (i32.add
-     (get_local $1)
-     (i32.const 4)
-    )
-    (i32.shl
-     (get_local $6)
-     (i32.const 1)
-    )
+   (call $~lib/internal/string/compareUTF16
+    (get_local $0)
+    (get_local $1)
+    (get_local $6)
    )
    (i32.const 0)
   )
@@ -8483,19 +8521,10 @@
    )
   )
   (i32.eqz
-   (call $~lib/memory/compare_memory
-    (i32.add
-     (get_local $0)
-     (i32.const 4)
-    )
-    (i32.add
-     (get_local $1)
-     (i32.const 4)
-    )
-    (i32.shl
-     (get_local $3)
-     (i32.const 1)
-    )
+   (call $~lib/internal/string/compareUTF16
+    (get_local $0)
+    (get_local $1)
+    (get_local $3)
    )
   )
  )
@@ -8703,7 +8732,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 696)
-     (i32.const 112)
+     (i32.const 113)
      (i32.const 4)
     )
     (unreachable)
@@ -8755,7 +8784,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 696)
-     (i32.const 168)
+     (i32.const 169)
      (i32.const 4)
     )
     (unreachable)
