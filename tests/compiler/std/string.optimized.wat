@@ -342,63 +342,13 @@
     (i32.const 0)
    )
   )
-  (set_local $1
+  (i32.sub
+   (i32.load16_u offset=4
+    (get_local $0)
+   )
    (i32.load16_u offset=4
     (get_local $1)
    )
-  )
-  (if
-   (tee_local $0
-    (i32.ge_s
-     (tee_local $2
-      (i32.load16_u offset=4
-       (get_local $0)
-      )
-     )
-     (i32.const 55296)
-    )
-   )
-   (set_local $0
-    (i32.ge_s
-     (get_local $1)
-     (i32.const 55296)
-    )
-   )
-  )
-  (if
-   (get_local $0)
-   (block
-    (set_local $2
-     (i32.add
-      (get_local $2)
-      (select
-       (i32.const -2048)
-       (i32.const 8192)
-       (i32.ge_s
-        (get_local $2)
-        (i32.const 57344)
-       )
-      )
-     )
-    )
-    (set_local $1
-     (i32.add
-      (get_local $1)
-      (select
-       (i32.const -2048)
-       (i32.const 8192)
-       (i32.ge_s
-        (get_local $1)
-        (i32.const 57344)
-       )
-      )
-     )
-    )
-   )
-  )
-  (i32.sub
-   (get_local $2)
-   (get_local $1)
   )
  )
  (func $~lib/string/String.__eq (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -5809,23 +5759,6 @@
     (i32.const 55296)
     (i32.const 56322)
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__gt
-     (get_global $std/string/a)
-     (get_global $std/string/b)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 48)
-     (i32.const 100)
-     (i32.const 0)
-    )
-    (unreachable)
    )
   )
   (if

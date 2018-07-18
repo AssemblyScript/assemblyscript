@@ -7770,7 +7770,6 @@
  (func $~lib/internal/string/compareUTF16 (; 117 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   (if
    (i32.eq
     (get_local $0)
@@ -7837,49 +7836,6 @@
   (set_local $4
    (i32.load16_u offset=4
     (get_local $1)
-   )
-  )
-  (if
-   (if (result i32)
-    (tee_local $5
-     (i32.ge_s
-      (get_local $3)
-      (i32.const 55296)
-     )
-    )
-    (i32.ge_s
-     (get_local $4)
-     (i32.const 55296)
-    )
-    (get_local $5)
-   )
-   (block
-    (set_local $3
-     (i32.add
-      (get_local $3)
-      (select
-       (i32.const -2048)
-       (i32.const 8192)
-       (i32.ge_s
-        (get_local $3)
-        (i32.const 57344)
-       )
-      )
-     )
-    )
-    (set_local $4
-     (i32.add
-      (get_local $4)
-      (select
-       (i32.const -2048)
-       (i32.const 8192)
-       (i32.ge_s
-        (get_local $4)
-        (i32.const 57344)
-       )
-      )
-     )
-    )
    )
   )
   (i32.sub

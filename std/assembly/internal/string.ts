@@ -162,9 +162,9 @@ export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
   var a: i32 = load<u16>(ptr1, HEADER_SIZE);
   var b: i32 = load<u16>(ptr2, HEADER_SIZE);
   // a != b, fix up each one if they're both in or above the surrogate range
-  if (a >= 0xd800 && b >= 0xd800) {
+  /*if (a >= 0xd800 && b >= 0xd800) {
     a += select<i32>(-0x800, 0x2000, a >= 0xe000);
     b += select<i32>(-0x800, 0x2000, b >= 0xe000);
-  }
+  }*/
   return a - b;
 }
