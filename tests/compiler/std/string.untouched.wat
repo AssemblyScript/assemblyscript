@@ -6865,6 +6865,23 @@
   )
   (if
    (i32.eqz
+    (call $~lib/string/String.__gt
+     (get_global $std/string/a)
+     (get_global $std/string/b)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 100)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (i32.eq
      (i32.load
       (i32.const 508)
