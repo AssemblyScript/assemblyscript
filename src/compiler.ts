@@ -6575,12 +6575,13 @@ export class Compiler extends DiagnosticEmitter {
 
     var expr: ExpressionRef;
 
-    // traverse to the first matching constructor
+    // traverse to the top-most visible constructor
     var currentClassInstance: Class | null = classInstance;
-    var constructorInstance = classInstance.constructorInstance;
-    while (!constructorInstance && (currentClassInstance = classInstance.base)) {
+    var constructorInstance: Function | null = null;
+    do {
       constructorInstance = currentClassInstance.constructorInstance;
-    }
+      if (constructorInstance) break; // TODO: check visibility
+    } while (currentClassInstance = currentClassInstance.base);
 
     // if a constructor is present, call it with a zero `this`
     if (constructorInstance) {
