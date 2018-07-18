@@ -7769,30 +7769,23 @@
  )
  (func $~lib/internal/string/compareUTF16 (; 117 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
-  (if
-   (i32.eq
-    (get_local $0)
-    (get_local $1)
-   )
-   (return
-    (i32.const 0)
-   )
+  (set_local $3
+   (i32.const 0)
   )
   (block $break|0
    (loop $continue|0
     (if
      (if (result i32)
       (get_local $2)
-      (i32.eq
+      (i32.eqz
        (tee_local $3
-        (i32.load16_u offset=4
-         (get_local $0)
-        )
-       )
-       (tee_local $4
-        (i32.load16_u offset=4
-         (get_local $1)
+        (i32.sub
+         (i32.load16_u offset=4
+          (get_local $0)
+         )
+         (i32.load16_u offset=4
+          (get_local $1)
+         )
         )
        )
       )
@@ -7824,18 +7817,7 @@
     )
    )
   )
-  (if
-   (i32.eqz
-    (get_local $2)
-   )
-   (return
-    (i32.const 0)
-   )
-  )
-  (i32.sub
-   (get_local $3)
-   (get_local $4)
-  )
+  (get_local $3)
  )
  (func $~lib/string/String.__gt (; 118 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

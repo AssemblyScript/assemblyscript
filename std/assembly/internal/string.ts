@@ -154,11 +154,9 @@ export function parse<T>(str: String, radix: i32 = 0): T {
 }
 
 export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
-  if (ptr1 === ptr2) return 0;
-  var a: u16, b: u16;
-  while (len && (a = load<u16>(ptr1, HEADER_SIZE)) == (b = load<u16>(ptr2, HEADER_SIZE))) {
+  var cmp: i32 = 0;
+  while (len && !(cmp = <i32>load<u16>(ptr1, HEADER_SIZE) - <i32>load<u16>(ptr2, HEADER_SIZE))) {
     --len, ++ptr1, ++ptr2;
   }
-  if (!len) return 0;
-  return <i32>a - <i32>b;
+  return cmp;
 }
