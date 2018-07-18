@@ -27,13 +27,12 @@ export class String {
     return out;
   }
 
-  static fromCodePoint(code: i32, code1: i32 = 0, code2: i32 = 0): String {
+  static fromCodePoint(code: i32, code1: i32 = -1, code2: i32 = -1): String {
     assert(
-      <u32>code  <= 0x10FFFF &&
-      <u32>code1 <= 0x10FFFF &&
-      <u32>code2 <= 0x10FFFF
+      <u32>code <= 0x10FFFF &&
+      (code1 >= -1 && code1 <= 0x10FFFF) &&
+      (code2 >= -1 && code2 <= 0x10FFFF)
     ); // Invalid code point range
-    if (!code) return changetype<String>("\0");
 
     var hasSurr  = <i32>(code  > 0xFFFF);
     var hasSurr1 = <i32>(code1 > 0xFFFF);
@@ -41,8 +40,8 @@ export class String {
 
     var len = 1;
     len += hasSurr;
-    len += hasSurr1 + <i32>(code1 != 0);
-    len += hasSurr2 + <i32>(code2 != 0);
+    len += hasSurr1 + <i32>(code1 != -1);
+    len += hasSurr2 + <i32>(code2 != -1);
 
     var out = allocate(len);
     var offset: usize = 0;
@@ -65,7 +64,7 @@ export class String {
       );
       offset += 4;
     }
-    if (!code1) return out;
+    if (code1 == -1) return out;
 
     if (!hasSurr1) {
       store<u16>(
@@ -85,7 +84,7 @@ export class String {
       );
       offset += 4;
     }
-    if (!code2) return out;
+    if (code2 == -1) return out;
 
     if (!hasSurr2) {
       store<u16>(
