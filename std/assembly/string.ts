@@ -34,15 +34,21 @@ export class String {
     ); // Invalid code point range
     if (!code) return changetype<String>("\0");
 
+    var hasCode1 = <i32>(code1 != 0);
+    var hasCode2 = <i32>(code2 != 0);
+    var hasSurr  = <i32>(code  > 0xFFFF);
+    var hasSurr1 = <i32>(code1 > 0xFFFF);
+    var hasSurr2 = <i32>(code2 > 0xFFFF);
+
     var len = 1;
-    len += <i32>(code  > 0xFFFF);
-    len += <i32>(code1 > 0xFFFF) + <i32>(code1 != 0);
-    len += <i32>(code2 > 0xFFFF) + <i32>(code2 != 0);
+    len += hasSurr;
+    len += hasSurr1 + hasCode1;
+    len += hasSurr2 + hasCode2;
 
     var out = allocate(len);
     var offset: usize = 0;
 
-    if (code <= 0xFFFF) {
+    if (!hasSurr) {
       store<u16>(
         changetype<usize>(out),
         <u16>code,
@@ -61,8 +67,8 @@ export class String {
       offset += 4;
     }
 
-    if (code1 > 0) {
-      if (code1 <= 0xFFFF) {
+    if (hasCode1) {
+      if (!hasSurr1) {
         store<u16>(
           changetype<usize>(out) + offset,
           <u16>code1,
@@ -82,8 +88,8 @@ export class String {
       }
     }
 
-    if (code2 > 0) {
-      if (code2 <= 0xFFFF) {
+    if (hasCode2) {
+      if (!hasSurr2) {
         store<u16>(
           changetype<usize>(out) + offset,
           <u16>code2,
