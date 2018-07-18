@@ -14,6 +14,17 @@ assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
 
 assert(str.length == 16);
 assert(str.charCodeAt(0) == 0x68);
+
+assert(String.fromCharCode(0) == "\0");
+assert(String.fromCharCode(54) == "6");
+assert(String.fromCharCode(0x10000 + 54) == "6");
+
+assert(String.fromCodePoint(0) == "\0");
+assert(String.fromCodePoint(54) == "6");
+assert(String.fromCodePoint(0x1D306), '\uD834\uDF06');
+assert(String.fromCodePoint(0x1D306, 0x61, 0x1D307), '\uD834\uDF06a\uD834\uDF07');
+assert(String.fromCodePoint(0x61, 0x62, 0x1D307), 'ab\uD834\uDF07');
+
 assert(str.startsWith("hi"));
 assert(str.endsWith("string"));
 assert(str.includes("I'm"));

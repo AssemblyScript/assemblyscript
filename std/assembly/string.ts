@@ -14,13 +14,95 @@ export class String {
 
   readonly length: i32; // capped to [0, MAX_LENGTH]
 
+  // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
+    if (!code) return changetype<String>("\0");
     var out = allocate(1);
     store<u16>(
       changetype<usize>(out),
       <u16>code,
       HEADER_SIZE
     );
+    return out;
+  }
+
+  static fromCodePoint(code: i32, code1: i32 = 0, code2: i32 = 0): String {
+    assert(
+      <u32>code  <= 0x10FFFF &&
+      <u32>code1 <= 0x10FFFF &&
+      <u32>code2 <= 0x10FFFF
+    ); // Invalid code point range
+    if (!code) return changetype<String>("\0");
+
+    var len = 1;
+    len += <i32>(code  > 0xFFFF);
+    len += <i32>(code1 > 0xFFFF) + <i32>(code1 != 0);
+    len += <i32>(code2 > 0xFFFF) + <i32>(code2 != 0);
+
+    var out = allocate(len);
+    var offset: usize = 0;
+
+    if (code <= 0xFFFF) {
+      store<u16>(
+        changetype<usize>(out),
+        <u16>code,
+        HEADER_SIZE
+      );
+      offset += 2;
+    } else {
+      code -= 0x10000;
+      let hi = (code >> 10) + 0xD800;
+      let lo = (code & 0x3FF) + 0xDC00;
+      store<u32>(
+        changetype<usize>(out) + offset,
+        (<u32>hi << 16) | <u32>lo,
+        HEADER_SIZE
+      );
+      offset += 4;
+    }
+
+    if (code1 > 0) {
+      if (code1 <= 0xFFFF) {
+        store<u16>(
+          changetype<usize>(out) + offset,
+          <u16>code1,
+          HEADER_SIZE
+        );
+        offset += 2;
+      } else {
+        code1 -= 0x10000;
+        let hi = (code1 >> 10) + 0xD800;
+        let lo = (code1 & 0x3FF) + 0xDC00;
+        store<u32>(
+          changetype<usize>(out) + offset,
+          (<u32>hi << 16) | <u32>lo,
+          HEADER_SIZE
+        );
+        offset += 4;
+      }
+    }
+
+    if (code2 > 0) {
+      if (code2 <= 0xFFFF) {
+        store<u16>(
+          changetype<usize>(out) + offset,
+          <u16>code2,
+          HEADER_SIZE
+        );
+        offset += 2;
+      } else {
+        code2 -= 0x10000;
+        let hi = (code2 >> 10) + 0xD800;
+        let lo = (code2 & 0x3FF) + 0xDC00;
+        store<u32>(
+          changetype<usize>(out) + offset,
+          (<u32>hi << 16) | <u32>lo,
+          HEADER_SIZE
+        );
+        // offset += 4;
+      }
+    }
+
     return out;
   }
 
