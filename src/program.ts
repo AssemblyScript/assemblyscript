@@ -66,7 +66,8 @@ import {
   VariableLikeDeclarationStatement,
   VariableStatement,
 
-  decoratorNameToKind
+  decoratorNameToKind,
+  findDecorator
 } from "./ast";
 
 import {
@@ -948,7 +949,7 @@ export class Program extends DiagnosticEmitter {
         Type.void, // resolved later on
         declaration,
         decorators
-          ? this.checkDecorators(decorators, DecoratorFlags.NONE)
+          ? this.checkDecorators(decorators, DecoratorFlags.INLINE)
           : DecoratorFlags.NONE
       );
       staticField.parent = classPrototype;
@@ -956,6 +957,13 @@ export class Program extends DiagnosticEmitter {
       this.elementsLookup.set(internalName, staticField);
       if (classPrototype.is(CommonFlags.MODULE_EXPORT)) {
         staticField.set(CommonFlags.MODULE_EXPORT);
+      }
+
+      if (staticField.hasDecorator(DecoratorFlags.INLINE) && !staticField.is(CommonFlags.READONLY)) {
+        this.error(
+          DiagnosticCode.Decorator_0_is_not_valid_here,
+          assert(findDecorator(DecoratorKind.INLINE, decorators)).range, "inline"
+        );
       }
 
     // instance fields are remembered until resolved
@@ -1945,6 +1953,13 @@ export class Program extends DiagnosticEmitter {
       );
       global.parent = namespace;
       this.elementsLookup.set(internalName, global);
+
+      if (global.hasDecorator(DecoratorFlags.INLINE) && !global.is(CommonFlags.CONST)) {
+        this.error(
+          DiagnosticCode.Decorator_0_is_not_valid_here,
+          assert(findDecorator(DecoratorKind.INLINE, decorators)).range, "inline"
+        );
+      }
 
       if (namespace) {
         if (namespace.members) {

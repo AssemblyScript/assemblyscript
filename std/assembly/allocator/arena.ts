@@ -14,8 +14,7 @@ var offset: usize = startOffset;
 
 // Memory allocator interface
 
-@global
-export function __memory_allocate(size: usize): usize {
+@global export function __memory_allocate(size: usize): usize {
   if (size) {
     if (size > MAX_SIZE_32) unreachable();
     let ptr = offset;
@@ -36,10 +35,8 @@ export function __memory_allocate(size: usize): usize {
   return 0;
 }
 
-@global
-export function __memory_free(ptr: usize): void { /* nop */ }
+@global export function __memory_free(ptr: usize): void { /* nop */ }
 
-@global
-export function __memory_reset(): void {
+@global export function __memory_reset(): void {
   offset = startOffset;
 }
