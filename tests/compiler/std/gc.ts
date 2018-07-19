@@ -1,5 +1,5 @@
 import "allocator/arena";
-import { gc } from "collector/itcm";
+import "collector/itcm";
 
 // a class to test with
 class MyObject {
@@ -8,7 +8,7 @@ class MyObject {
 function MyObject_visit(ref: usize): void { }
 
 // allocate a managed instance
-var obj = changetype<MyObject>(gc.alloc(offsetof<MyObject>(), MyObject_visit));
+var obj = changetype<MyObject>(gc.allocate(offsetof<MyObject>(), MyObject_visit));
 obj.a = 123;
 var head = changetype<usize>(obj) - 16;
 

@@ -11,10 +11,6 @@ import {
   MAX_SIZE_32
 } from "../internal/allocator";
 
-import {
-  __gc_iterate_roots
-} from "../builtins";
-
 // ╒═══════════════ Managed object layout (32-bit) ════════════════╕
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
@@ -145,7 +141,7 @@ var set2: ManagedObject;
 var iter: ManagedObject;
 
 /** Performs a single step according to the current state. */
-function gc_step(): void {
+function step(): void {
   var obj: ManagedObject;
   switch (state) {
     case State.INIT: {
@@ -158,7 +154,7 @@ function gc_step(): void {
     }
     case State.IDLE: {
       // start by marking roots
-      __gc_iterate_roots(function mark_root(ref: usize): void {
+      gc.iterateRoots(function mark_root(ref: usize): void {
         if (ref) {
           let obj = changetype<ManagedObject>(ref - ManagedObject.SIZE);
           obj.makeBlack();
@@ -202,42 +198,50 @@ function gc_step(): void {
   }
 }
 
-/** Garbage collector interface. */
-@global
-export namespace gc {
+@inline function refToObj(ref: usize): ManagedObject {
+  return changetype<ManagedObject>(ref - ManagedObject.SIZE);
+}
 
-  /** Allocates a managed object. */
-  export function alloc(
-    size: usize,
-    visitFn: (ref: usize) => void
-  ): usize {
-    assert(size <= MAX_SIZE_32 - ManagedObject.SIZE);
-    var obj = changetype<ManagedObject>(memory.allocate(ManagedObject.SIZE + size));
-    obj.makeWhite();
-    obj.visitFn = visitFn;
-    set1.insert(obj);
-    return changetype<usize>(obj) + ManagedObject.SIZE;
-  }
+@inline function objToRef(obj: ManagedObject): usize {
+  return changetype<usize>(obj) + ManagedObject.SIZE;
+}
 
-  /** Visits a reachable object. Called from the visitFn functions. */
-  export function visit(obj: ManagedObject): void {
-    if (state == State.SWEEP) return;
-    if (obj.isWhite) obj.makeGray();
-  }
+// Garbage collector interface
 
-  /** References a managed child object from its parent object. */
-  export function ref(parent: ManagedObject, child: ManagedObject): void {
-    if (parent.isBlack && child.isWhite) parent.makeGray();
-  }
+/** Allocates a managed object. */
+@global export function __gc_allocate(
+  size: usize,
+  visitFn: (ref: usize) => void
+): usize {
+  assert(size <= MAX_SIZE_32 - ManagedObject.SIZE);
+  var obj = changetype<ManagedObject>(memory.allocate(ManagedObject.SIZE + size));
+  obj.makeWhite();
+  obj.visitFn = visitFn;
+  set1.insert(obj);
+  return objToRef(obj);
+}
 
-  /** Performs a full garbage collection cycle. */
-  export function collect(): void {
-    // begin collecting if not yet collecting
-    switch (state) {
-      case State.INIT:
-      case State.IDLE: gc_step();
-    }
-    // finish the cycle
-    while (state != State.IDLE) gc_step();
+/** Marks a reachable object. Called from the visitFn functions. */
+@global export function __gc_mark(ref: usize): void {
+  var obj = refToObj(ref);
+  if (state == State.SWEEP) return;
+  if (obj.isWhite) obj.makeGray();
+}
+
+/** Links a managed child object to its parent object. */
+@global export function __gc_link(parentRef: usize, childRef: usize): void {
+  var parent = refToObj(parentRef);
+  var child = refToObj(childRef);
+  if (parent.isBlack && child.isWhite) parent.makeGray();
+}
+
+/** Performs a full garbage collection cycle. */
+@global export function __gc_collect(): void {
+  // begin collecting if not yet collecting
+  switch (state) {
+    case State.INIT:
+    case State.IDLE: step();
   }
+  // finish the cycle
+  while (state != State.IDLE) step();
 }

@@ -167,7 +167,7 @@
    (get_local $1)
   )
  )
- (func $~lib/collector/itcm/gc.alloc (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -178,8 +178,8 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 214)
-     (i32.const 4)
+     (i32.const 216)
+     (i32.const 2)
     )
     (unreachable)
    )
@@ -207,7 +207,13 @@
    (i32.const 16)
   )
  )
- (func $start (; 8 ;) (type $v)
+ (func $~lib/gc/gc.allocate (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (call $~lib/collector/itcm/__gc_allocate
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func $start (; 9 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 80)
   )
@@ -218,7 +224,7 @@
    (i32.const 0)
   )
   (set_global $std/gc/obj
-   (call $~lib/collector/itcm/gc.alloc
+   (call $~lib/gc/gc.allocate
     (i32.const 4)
     (i32.const 0)
    )

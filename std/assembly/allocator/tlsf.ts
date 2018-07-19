@@ -433,11 +433,10 @@ function fls<T>(word: T): T {
 /** Reference to the initialized {@link Root} structure, once initialized. */
 var ROOT: Root = changetype<Root>(0);
 
-// External interface
+// Memory allocator interface
 
 /** Allocates a chunk of memory. */
-@global
-export function __memory_allocate(size: usize): usize {
+@global export function __memory_allocate(size: usize): usize {
 
   // initialize if necessary
   var root = ROOT;
@@ -490,8 +489,7 @@ export function __memory_allocate(size: usize): usize {
 }
 
 /** Frees the chunk of memory at the specified address. */
-@global
-export function __memory_free(data: usize): void {
+@global export function __memory_free(data: usize): void {
   if (data) {
     let root = ROOT;
     if (root) {
@@ -504,7 +502,6 @@ export function __memory_free(data: usize): void {
   }
 }
 
-@global
-export function __memory_reset(): void {
+@global export function __memory_reset(): void {
   unreachable();
 }

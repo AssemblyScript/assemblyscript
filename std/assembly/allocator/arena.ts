@@ -12,6 +12,8 @@ import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
 var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;
 
+// Memory allocator interface
+
 @global
 export function __memory_allocate(size: usize): usize {
   if (size) {
@@ -35,9 +37,7 @@ export function __memory_allocate(size: usize): usize {
 }
 
 @global
-export function __memory_free(ptr: usize): void {
-  // nop
-}
+export function __memory_free(ptr: usize): void { /* nop */ }
 
 @global
 export function __memory_reset(): void {

@@ -12,8 +12,6 @@
  (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $NaN f64 (f64.const nan:0x8000000000000))
- (global $Infinity f64 (f64.const inf))
  (global $~lib/collector/itcm/State.INIT i32 (i32.const 0))
  (global $~lib/collector/itcm/State.IDLE i32 (i32.const 1))
  (global $~lib/collector/itcm/State.MARK i32 (i32.const 2))
@@ -209,7 +207,7 @@
    (get_local $1)
   )
  )
- (func $~lib/collector/itcm/gc.alloc (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -225,8 +223,8 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 214)
-     (i32.const 4)
+     (i32.const 216)
+     (i32.const 2)
     )
     (unreachable)
    )
@@ -250,12 +248,22 @@
    (get_global $~lib/collector/itcm/set1)
    (get_local $2)
   )
-  (i32.add
-   (get_local $2)
-   (get_global $~lib/collector/itcm/ManagedObject.SIZE)
+  (block $~lib/collector/itcm/objToRef|inlined.0 (result i32)
+   (i32.add
+    (get_local $2)
+    (get_global $~lib/collector/itcm/ManagedObject.SIZE)
+   )
   )
  )
- (func $start (; 8 ;) (type $v)
+ (func $~lib/gc/gc.allocate (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (return
+   (call $~lib/collector/itcm/__gc_allocate
+    (get_local $0)
+    (get_local $1)
+   )
+  )
+ )
+ (func $start (; 9 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -275,7 +283,7 @@
    (get_global $~lib/collector/itcm/State.INIT)
   )
   (set_global $std/gc/obj
-   (call $~lib/collector/itcm/gc.alloc
+   (call $~lib/gc/gc.allocate
     (i32.const 4)
     (i32.const 0)
    )

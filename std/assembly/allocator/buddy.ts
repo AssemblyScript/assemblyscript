@@ -338,8 +338,9 @@ function lower_bucket_limit(bucket: usize): u32 {
   return 1;
 }
 
-@global
-export function __memory_allocate(request: usize): usize {
+// Memory allocator interface
+
+@global export function __memory_allocate(request: usize): usize {
   var original_bucket: usize, bucket: usize;
 
   /*
@@ -473,8 +474,7 @@ export function __memory_allocate(request: usize): usize {
   return 0;
 }
 
-@global
-export function __memory_free(ptr: usize): void {
+@global export function __memory_free(ptr: usize): void {
   var bucket: usize, i: usize;
 
   /*
@@ -537,9 +537,4 @@ export function __memory_free(ptr: usize): void {
    * for better memory locality.
    */
   list_push(buckets$get(bucket), changetype<List>(ptr_for_node(i, bucket)));
-}
-
-@global
-export function __memory_reset(): void {
-  unreachable();
 }

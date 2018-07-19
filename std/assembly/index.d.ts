@@ -348,6 +348,20 @@ declare namespace memory {
   export function reset(): void;
 }
 
+/** Garbage collector operations. */
+declare namespace gc {
+  /** Calls the specified function with every reference within the root set. */
+  export function iterateRoots(fn: (ref: usize) => void): void;
+  /** Allocates a managed object identified by its visitor function. */
+  export function allocate(size: usize, visitFn: (ref: usize) => void): usize;
+  /** Marks a managed object as reachable. */
+  export function mark(ref: usize): void;
+  /** Links a managed child with its parent. */
+  export function link(parentRef: usize, childRef: usize): void;
+  /** Performs a full garbage collection cycle. */
+  export function collect(): void;
+}
+
 /** Table operations. */
 declare namespace table {
   /** Copies elements from a passive element segment to a table. */
