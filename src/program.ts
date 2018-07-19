@@ -708,7 +708,16 @@ export class Program extends DiagnosticEmitter {
       let kind = decoratorNameToKind(decorator.name);
       let flag = decoratorKindToFlag(kind);
       if (flag) {
-        if (!(acceptedFlags & flag)) {
+        if (flag == DecoratorFlags.BUILTIN) {
+          if (decorator.range.source.isLibrary) {
+            presentFlags |= flag;
+          } else {
+            this.error(
+              DiagnosticCode.Decorator_0_is_not_valid_here,
+              decorator.range, decorator.name.range.toString()
+            );
+          }
+        } else if (!(acceptedFlags & flag)) {
           this.error(
             DiagnosticCode.Decorator_0_is_not_valid_here,
             decorator.range, decorator.name.range.toString()
@@ -732,13 +741,9 @@ export class Program extends DiagnosticEmitter {
     declaration: DeclarationStatement
   ): void {
     var parentNode = declaration.parent;
-    // alias the element globally if it is ...
+    // alias globally if explicitly annotated @global or exported from a top-level library file
     if (
-      // explicitly annotated with @global - or -
       (element.hasDecorator(DecoratorFlags.GLOBAL)) ||
-      // part of the special builtins library file - or -
-      (declaration.range.source.is(CommonFlags.BUILTIN)) ||
-      // exported from a top-level library file
       (
         declaration.range.source.isLibrary &&
         element.is(CommonFlags.EXPORT) &&
@@ -758,9 +763,11 @@ export class Program extends DiagnosticEmitter {
         );
       } else {
         this.elementsLookup.set(globalName, element);
-        // builtins can use the global name directly instead of being just an alias
-        if (element.is(CommonFlags.BUILTIN)) element.internalName = globalName;
       }
+    }
+    // builtins use the global name directly
+    if (element.hasDecorator(DecoratorFlags.BUILTIN)) {
+      element.internalName = declaration.programLevelInternalName;
     }
   }
 
@@ -2040,7 +2047,9 @@ export enum DecoratorFlags {
   /** Is always inlined. */
   INLINE = 1 << 6,
   /** Is using a different external name. */
-  EXTERNAL = 1 << 7
+  EXTERNAL = 1 << 7,
+  /** Is a builtin. */
+  BUILTIN = 1 << 8
 }
 
 export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
@@ -2054,6 +2063,7 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
     case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
     case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
+    case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
     default: return DecoratorFlags.NONE;
   }
 }
@@ -2375,7 +2385,7 @@ export class Function extends Element {
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
-    if (!(prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
+    if (!(prototype.is(CommonFlags.AMBIENT))) {
       let localIndex = 0;
       if (parent && parent.kind == ElementKind.CLASS) {
         assert(this.is(CommonFlags.INSTANCE));

@@ -268,7 +268,7 @@
    )
   )
  )
- (func $isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
    (f64.sub
     (get_local $0)
@@ -499,7 +499,7 @@
      )
      (tee_local $2
       (if (result i32)
-       (call $isFinite<f64>
+       (call $~lib/builtins/isFinite<f64>
         (tee_local $6
          (f64.div
           (call $~lib/math/NativeMath.log

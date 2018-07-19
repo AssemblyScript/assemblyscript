@@ -3,7 +3,6 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $i (func (result i32)))
  (type $iiI (func (param i32 i32) (result i64)))
  (type $iiIv (func (param i32 i32 i64)))
  (type $iif (func (param i32 i32) (result f32)))
@@ -447,15 +446,7 @@
    (get_local $2)
   )
  )
- (func $~lib/memory/memory.size (; 6 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $~lib/allocator/arena/__memory_allocate (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -491,7 +482,7 @@
      )
     )
     (set_local $3
-     (call $~lib/memory/memory.size)
+     (current_memory)
     )
     (if
      (i32.gt_u
@@ -536,14 +527,14 @@
       )
       (if
        (i32.lt_s
-        (call $~lib/memory/memory.grow
+        (grow_memory
          (get_local $5)
         )
         (i32.const 0)
        )
        (if
         (i32.lt_s
-         (call $~lib/memory/memory.grow
+         (grow_memory
           (get_local $4)
          )
          (i32.const 0)
@@ -563,14 +554,14 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (call $~lib/allocator/arena/__memory_allocate
     (get_local $0)
    )
   )
  )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 8 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -602,7 +593,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/memcpy (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memcpy (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2404,7 +2395,7 @@
    )
   )
  )
- (func $~lib/memory/memmove (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memmove (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -2722,14 +2713,14 @@
    )
   )
  )
- (func $~lib/memory/memory.copy (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (call $~lib/memory/memmove
    (get_local $0)
    (get_local $1)
    (get_local $2)
   )
  )
- (func $~lib/internal/arraybuffer/reallocUnsafe (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocUnsafe (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (set_local $2
@@ -2859,7 +2850,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#__set (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -2934,12 +2925,12 @@
    )
   )
  )
- (func $~lib/array/Array<i64>#get:length (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i64>#get:length (; 14 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=4
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i64>#__get (; 17 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (; 15 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -2970,7 +2961,7 @@
    (unreachable)
   )
  )
- (func $~lib/array/Array<i64>#__set (; 18 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<i64>#__set (; 16 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -3045,12 +3036,12 @@
    )
   )
  )
- (func $~lib/array/Array<f32>#get:length (; 19 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f32>#get:length (; 17 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=4
    (get_local $0)
   )
  )
- (func $~lib/array/Array<f32>#__get (; 20 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 18 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -3081,7 +3072,7 @@
    (unreachable)
   )
  )
- (func $~lib/array/Array<f32>#__set (; 21 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/array/Array<f32>#__set (; 19 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -3156,12 +3147,12 @@
    )
   )
  )
- (func $~lib/array/Array<f64>#get:length (; 22 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f64>#get:length (; 20 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=4
    (get_local $0)
   )
  )
- (func $~lib/array/Array<f64>#__get (; 23 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 21 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -3192,7 +3183,7 @@
    (unreachable)
   )
  )
- (func $~lib/array/Array<f64>#__set (; 24 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/array/Array<f64>#__set (; 22 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -3267,7 +3258,7 @@
    )
   )
  )
- (func $start (; 25 ;) (type $v)
+ (func $start (; 23 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add

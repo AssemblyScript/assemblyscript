@@ -2,8 +2,6 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $fi (func (param f32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
- (type $i (func (result i32)))
- (type $ii (func (param i32) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -25,13 +23,13 @@
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/builtins/isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
   (f32.ne
    (get_local $0)
    (get_local $0)
   )
  )
- (func $isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/builtins/isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
   (f32.eq
    (f32.sub
     (get_local $0)
@@ -40,13 +38,13 @@
    (f32.const 0)
   )
  )
- (func $isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
    (get_local $0)
    (get_local $0)
   )
  )
- (func $isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
    (f64.sub
     (get_local $0)
@@ -55,21 +53,13 @@
    (f64.const 0)
   )
  )
- (func $~lib/memory/memory.size (; 5 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 6 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $start~anonymous|0 (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $start~anonymous|0 (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (nop)
  )
- (func $builtins/test (; 8 ;) (type $v)
+ (func $builtins/test (; 6 ;) (type $v)
   (nop)
  )
- (func $start (; 9 ;) (type $v)
+ (func $start (; 7 ;) (type $v)
   (set_global $builtins/i
    (i32.const 31)
   )
@@ -209,7 +199,7 @@
    )
   )
   (if
-   (call $isNaN<f32>
+   (call $~lib/builtins/isNaN<f32>
     (f32.const 1.25)
    )
    (block
@@ -224,7 +214,7 @@
   )
   (if
    (i32.ne
-    (call $isNaN<f32>
+    (call $~lib/builtins/isNaN<f32>
      (f32.const nan:0x400000)
     )
     (i32.const 1)
@@ -241,7 +231,7 @@
   )
   (if
    (i32.ne
-    (call $isFinite<f32>
+    (call $~lib/builtins/isFinite<f32>
      (f32.const 1.25)
     )
     (i32.const 1)
@@ -257,7 +247,7 @@
    )
   )
   (if
-   (call $isFinite<f32>
+   (call $~lib/builtins/isFinite<f32>
     (f32.const inf)
    )
    (block
@@ -271,7 +261,7 @@
    )
   )
   (if
-   (call $isFinite<f32>
+   (call $~lib/builtins/isFinite<f32>
     (f32.const -inf)
    )
    (block
@@ -285,7 +275,7 @@
    )
   )
   (if
-   (call $isFinite<f32>
+   (call $~lib/builtins/isFinite<f32>
     (f32.const nan:0x400000)
    )
    (block
@@ -332,17 +322,17 @@
    (f32.const 1)
   )
   (set_global $builtins/b
-   (call $isNaN<f32>
+   (call $~lib/builtins/isNaN<f32>
     (f32.const 1.25)
    )
   )
   (set_global $builtins/b
-   (call $isFinite<f32>
+   (call $~lib/builtins/isFinite<f32>
     (f32.const 1.25)
    )
   )
   (if
-   (call $isNaN<f64>
+   (call $~lib/builtins/isNaN<f64>
     (f64.const 1.25)
    )
    (block
@@ -357,7 +347,7 @@
   )
   (if
    (i32.ne
-    (call $isNaN<f64>
+    (call $~lib/builtins/isNaN<f64>
      (f64.const nan:0x8000000000000)
     )
     (i32.const 1)
@@ -374,7 +364,7 @@
   )
   (if
    (i32.ne
-    (call $isFinite<f64>
+    (call $~lib/builtins/isFinite<f64>
      (f64.const 1.25)
     )
     (i32.const 1)
@@ -390,7 +380,7 @@
    )
   )
   (if
-   (call $isFinite<f64>
+   (call $~lib/builtins/isFinite<f64>
     (f64.const inf)
    )
    (block
@@ -404,7 +394,7 @@
    )
   )
   (if
-   (call $isFinite<f64>
+   (call $~lib/builtins/isFinite<f64>
     (f64.const -inf)
    )
    (block
@@ -418,7 +408,7 @@
    )
   )
   (if
-   (call $isFinite<f64>
+   (call $~lib/builtins/isFinite<f64>
     (f64.const nan:0x8000000000000)
    )
    (block
@@ -465,12 +455,12 @@
    (f64.const 1)
   )
   (set_global $builtins/b
-   (call $isNaN<f64>
+   (call $~lib/builtins/isNaN<f64>
     (f64.const 1.25)
    )
   )
   (set_global $builtins/b
-   (call $isFinite<f64>
+   (call $~lib/builtins/isFinite<f64>
     (f64.const 1.25)
    )
   )
@@ -739,18 +729,18 @@
    (f64.const 1.24e-322)
   )
   (drop
-   (call $~lib/memory/memory.size)
+   (current_memory)
   )
   (drop
-   (call $~lib/memory/memory.grow
+   (grow_memory
     (i32.const 1)
    )
   )
   (set_global $builtins/s
-   (call $~lib/memory/memory.size)
+   (current_memory)
   )
   (set_global $builtins/s
-   (call $~lib/memory/memory.grow
+   (grow_memory
     (i32.const 1)
    )
   )
@@ -779,7 +769,7 @@
   )
   (if
    (i32.eqz
-    (call $isNaN<f32>
+    (call $~lib/builtins/isNaN<f32>
      (f32.const nan:0x400000)
     )
    )
@@ -795,7 +785,7 @@
   )
   (if
    (i32.eqz
-    (call $isNaN<f64>
+    (call $~lib/builtins/isNaN<f64>
      (f64.const nan:0x8000000000000)
     )
    )
@@ -810,7 +800,7 @@
    )
   )
   (if
-   (call $isFinite<f32>
+   (call $~lib/builtins/isFinite<f32>
     (f32.const nan:0x400000)
    )
    (block
@@ -824,7 +814,7 @@
    )
   )
   (if
-   (call $isFinite<f32>
+   (call $~lib/builtins/isFinite<f32>
     (f32.const inf)
    )
    (block
@@ -838,7 +828,7 @@
    )
   )
   (if
-   (call $isFinite<f64>
+   (call $~lib/builtins/isFinite<f64>
     (f64.const nan:0x8000000000000)
    )
    (block
@@ -852,7 +842,7 @@
    )
   )
   (if
-   (call $isFinite<f64>
+   (call $~lib/builtins/isFinite<f64>
     (f64.const inf)
    )
    (block
@@ -867,7 +857,7 @@
   )
   (if
    (i32.eqz
-    (call $isFinite<f32>
+    (call $~lib/builtins/isFinite<f32>
      (f32.const 0)
     )
    )
@@ -883,7 +873,7 @@
   )
   (if
    (i32.eqz
-    (call $isFinite<f64>
+    (call $~lib/builtins/isFinite<f64>
      (f64.const 0)
     )
    )
@@ -1004,7 +994,7 @@
    (f64.const 1)
   )
   (drop
-   (call $isNaN<f64>
+   (call $~lib/builtins/isNaN<f64>
     (f64.const 1)
    )
   )

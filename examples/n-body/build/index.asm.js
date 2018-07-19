@@ -24,7 +24,6 @@ function asmFunc(global, env, buffer) {
  var $lib_allocator_arena_startOffset = 0;
  var $lib_allocator_arena_offset = 0;
  var assembly_index_system = 0;
- var HEAP_BASE = 40;
  var i64toi32_i32$HIGH_BITS = 0;
  function $lib_allocator_arena___memory_allocate($0) {
   $0 = $0 | 0;
@@ -81,7 +80,7 @@ function asmFunc(global, env, buffer) {
   return $0 | 0;
  }
  
- function $lib_memory_memory_fill($0, $1, $2) {
+ function $lib_memory_memset($0, $1, $2) {
   $0 = $0 | 0;
   $1 = $1 | 0;
   $2 = $2 | 0;
@@ -272,7 +271,7 @@ function asmFunc(global, env, buffer) {
   wasm2asm_i32$0 = $0;
   wasm2asm_i32$1 = $1;
   HEAP32[(wasm2asm_i32$0 + 4 | 0) >> 2] = wasm2asm_i32$1;
-  $lib_memory_memory_fill($3 + 8 | 0 | 0, 0 | 0, $2 | 0);
+  $lib_memory_memset($3 + 8 | 0 | 0, 0 | 0, $2 | 0);
   return $0 | 0;
  }
  
@@ -492,7 +491,7 @@ function asmFunc(global, env, buffer) {
  }
  
  function start() {
-  $lib_allocator_arena_startOffset = (HEAP_BASE + 7 | 0) & 4294967288 | 0;
+  $lib_allocator_arena_startOffset = 40;
   $lib_allocator_arena_offset = $lib_allocator_arena_startOffset;
  }
  
@@ -522,10 +521,6 @@ function asmFunc(global, env, buffer) {
  }
  
  return {
-  init: assembly_index_init, 
-  getBody: assembly_index_getBody, 
-  step: assembly_index_step, 
-  bench: assembly_index_bench, 
   memory: Object.create(Object.prototype, {
    grow: {
     value: __wasm_grow_memory
@@ -536,6 +531,10 @@ function asmFunc(global, env, buffer) {
     }
     
    }
-  })
+  }), 
+  init: assembly_index_init, 
+  getBody: assembly_index_getBody, 
+  step: assembly_index_step, 
+  bench: assembly_index_bench
  };
 }

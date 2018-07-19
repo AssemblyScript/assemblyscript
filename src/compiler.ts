@@ -727,7 +727,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // ambient builtins like 'HEAP_BASE' need to be resolved but are added explicitly
-    if (global.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) return true;
+    if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) return true;
 
     var nativeType = global.type.toNativeType();
     var isDeclaredConstant = global.is(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
@@ -1007,7 +1007,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles a readily resolved function instance. */
   compileFunction(instance: Function): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
-    assert(!instance.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN));
+    assert(!(instance.is(CommonFlags.AMBIENT) && instance.hasDecorator(DecoratorFlags.BUILTIN)));
     instance.set(CommonFlags.COMPILED);
 
     // check that modifiers are matching
@@ -1229,6 +1229,7 @@ export class Compiler extends DiagnosticEmitter {
               noTreeShaking || (<FunctionPrototype>element).is(CommonFlags.EXPORT)
             ) && !(<FunctionPrototype>element).is(CommonFlags.GENERIC)
           ) {
+            if (element.hasDecorator(DecoratorFlags.BUILTIN)) break;
             this.compileFunctionUsingTypeArguments(
               <FunctionPrototype>element,
               [],
@@ -2342,7 +2343,8 @@ export class Compiler extends DiagnosticEmitter {
           : this.module.createI64(0);
       }
       case TypeKind.F64: {
-        if (!(element.is(CommonFlags.BUILTIN) && contextualType == Type.f32)) {
+        // monkey-patch for converting built-in floats to f32 implicitly
+        if (!(element.hasDecorator(DecoratorFlags.BUILTIN) && contextualType == Type.f32)) {
           return this.module.createF64((<VariableLikeElement>element).constantFloatValue);
         }
         // otherwise fall-through: basically precomputes f32.demote/f64 of NaN / Infinity
@@ -4967,7 +4969,7 @@ export class Compiler extends DiagnosticEmitter {
         let typeArguments = expression.typeArguments;
 
         // builtins handle present respectively omitted type arguments on their own
-        if (prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN)) {
+        if (prototype.hasDecorator(DecoratorFlags.BUILTIN)) {
           return this.compileCallExpressionBuiltin(prototype, expression, contextualType);
         }
 

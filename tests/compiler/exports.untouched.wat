@@ -69,15 +69,7 @@
  (func $exports/Car.getNumTires (; 3 ;) (type $i) (result i32)
   (get_global $exports/Car.TIRES)
  )
- (func $~lib/memory/memory.size (; 4 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $~lib/allocator/arena/__memory_allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -113,7 +105,7 @@
      )
     )
     (set_local $3
-     (call $~lib/memory/memory.size)
+     (current_memory)
     )
     (if
      (i32.gt_u
@@ -158,14 +150,14 @@
       )
       (if
        (i32.lt_s
-        (call $~lib/memory/memory.grow
+        (grow_memory
          (get_local $5)
         )
         (i32.const 0)
        )
        (if
         (i32.lt_s
-         (call $~lib/memory/memory.grow
+         (grow_memory
           (get_local $4)
          )
          (i32.const 0)
@@ -185,14 +177,14 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (call $~lib/allocator/arena/__memory_allocate
     (get_local $0)
    )
   )
  )
- (func $exports/Car#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (i32.store
    (tee_local $0
@@ -219,24 +211,24 @@
   )
   (get_local $0)
  )
- (func $exports/Car#get:numDoors (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (get_local $0)
   )
  )
- (func $exports/Car#set:numDoors (; 10 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 8 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $exports/Car#openDoors (; 11 ;) (type $iv) (param $0 i32)
+ (func $exports/Car#openDoors (; 9 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $exports/vehicles.Car.getNumTires (; 12 ;) (type $i) (result i32)
+ (func $exports/vehicles.Car.getNumTires (; 10 ;) (type $i) (result i32)
   (get_global $exports/vehicles.Car.TIRES)
  )
- (func $exports/vehicles.Car#constructor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (i32.store
    (tee_local $0
@@ -263,21 +255,21 @@
   )
   (get_local $0)
  )
- (func $exports/vehicles.Car#get:numDoors (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $exports/vehicles.Car#get:numDoors (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (get_local $0)
   )
  )
- (func $exports/vehicles.Car#set:numDoors (; 15 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/vehicles.Car#set:numDoors (; 13 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $exports/vehicles.Car#openDoors (; 16 ;) (type $iv) (param $0 i32)
+ (func $exports/vehicles.Car#openDoors (; 14 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $start (; 17 ;) (type $v)
+ (func $start (; 15 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -294,7 +286,7 @@
    (get_global $~lib/allocator/arena/startOffset)
   )
  )
- (func $exports/subOpt|trampoline (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -316,12 +308,12 @@
    (get_local $1)
   )
  )
- (func $~setargc (; 19 ;) (type $iv) (param $0 i32)
+ (func $~setargc (; 17 ;) (type $iv) (param $0 i32)
   (set_global $~argc
    (get_local $0)
   )
  )
- (func $exports/Car#constructor|trampoline (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -340,18 +332,18 @@
    (get_local $1)
   )
  )
- (func $Car#get:doors (; 21 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Car#get:doors (; 19 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (get_local $0)
   )
  )
- (func $Car#set:doors (; 22 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Car#set:doors (; 20 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -370,12 +362,12 @@
    (get_local $1)
   )
  )
- (func $vehicles.Car#get:doors (; 24 ;) (type $ii) (param $0 i32) (result i32)
+ (func $vehicles.Car#get:doors (; 22 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (get_local $0)
   )
  )
- (func $vehicles.Car#set:doors (; 25 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $vehicles.Car#set:doors (; 23 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)

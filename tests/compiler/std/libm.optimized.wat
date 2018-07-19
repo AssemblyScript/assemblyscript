@@ -1308,7 +1308,7 @@
    (get_local $0)
   )
  )
- (func $isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
    (get_local $0)
    (get_local $0)
@@ -1346,7 +1346,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -1797,13 +1797,13 @@
    (if
     (i32.eqz
      (tee_local $2
-      (call $isNaN<f64>
+      (call $~lib/builtins/isNaN<f64>
        (get_local $1)
       )
      )
     )
     (set_local $2
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
     )
@@ -2390,7 +2390,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -2943,7 +2943,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return

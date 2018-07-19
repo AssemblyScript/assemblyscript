@@ -1871,7 +1871,7 @@ export function compileCall(
 
     // host operations
 
-    case "__memory_size": { // __memory_size() -> i32
+    case "memory.size": { // memory.size() -> i32
       compiler.currentType = Type.i32;
       if (operands.length != 0) {
         compiler.error(
@@ -1887,7 +1887,7 @@ export function compileCall(
       }
       return module.createHost(HostOp.CurrentMemory);
     }
-    case "__memory_grow": { // __memory_grow(pages: i32) -> i32
+    case "memory.grow": { // memory.grow(pages: i32) -> i32
       compiler.currentType = Type.i32;
       if (operands.length != 1) {
         compiler.error(
@@ -1907,7 +1907,7 @@ export function compileCall(
       return module.createHost(HostOp.GrowMemory, null, [ arg0 ]);
     }
     // see: https://github.com/WebAssembly/bulk-memory-operations
-    case "__memory_copy": { // __memory_copy(dest: usize, src: usize: n: usize) -> void
+    case "memory.copy": { // memory.copy(dest: usize, src: usize: n: usize) -> void
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -1944,7 +1944,7 @@ export function compileCall(
       throw new Error("not implemented");
       // return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
     }
-    case "__memory_fill": { // __memory_fill(dest: usize, value: u8, n: usize) -> void
+    case "memory.fill": { // memory.fill(dest: usize, value: u8, n: usize) -> void
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -2629,7 +2629,7 @@ export function compileCall(
 
     // gc
 
-    case "__gc_iterate_roots": {
+    case "gc.iterateRoots": {
       // TOOD: make it so that this can only be called from a library file?
       if (typeArguments) {
         compiler.error(

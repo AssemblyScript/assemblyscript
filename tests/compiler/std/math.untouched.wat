@@ -83,15 +83,15 @@
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1 (mut i64) (i64.const 0))
- (global $f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
+ (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
+ (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
  (global $HEAP_BASE i32 (i32.const 64))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (data (i32.const 36) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func $isNaN<f64> (; 30 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 30 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
    (get_local $0)
    (get_local $0)
@@ -107,7 +107,7 @@
    )
   )
  )
- (func $isFinite<f64> (; 32 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 32 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
    (f64.sub
     (get_local $0)
@@ -277,11 +277,11 @@
   (if
    (if (result i32)
     (tee_local $3
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
     )
-    (call $isNaN<f64>
+    (call $~lib/builtins/isNaN<f64>
      (get_local $1)
     )
     (get_local $3)
@@ -316,7 +316,7 @@
   )
   (if
    (i32.eqz
-    (call $isFinite<f64>
+    (call $~lib/builtins/isFinite<f64>
      (get_local $0)
     )
    )
@@ -363,11 +363,11 @@
    )
   )
   (if
-   (call $isNaN<f64>
+   (call $~lib/builtins/isNaN<f64>
     (get_local $1)
    )
    (return
-    (call $isNaN<f64>
+    (call $~lib/builtins/isNaN<f64>
      (get_local $0)
     )
    )
@@ -392,7 +392,7 @@
   )
   (i32.const 1)
  )
- (func $isNaN<f32> (; 37 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/builtins/isNaN<f32> (; 37 ;) (type $fi) (param $0 f32) (result i32)
   (f32.ne
    (get_local $0)
    (get_local $0)
@@ -406,7 +406,7 @@
    (i32.const 31)
   )
  )
- (func $isFinite<f32> (; 39 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/builtins/isFinite<f32> (; 39 ;) (type $fi) (param $0 f32) (result i32)
   (f32.eq
    (f32.sub
     (get_local $0)
@@ -572,11 +572,11 @@
   (if
    (if (result i32)
     (tee_local $3
-     (call $isNaN<f32>
+     (call $~lib/builtins/isNaN<f32>
       (get_local $0)
      )
     )
-    (call $isNaN<f32>
+    (call $~lib/builtins/isNaN<f32>
      (get_local $1)
     )
     (get_local $3)
@@ -611,7 +611,7 @@
   )
   (if
    (i32.eqz
-    (call $isFinite<f32>
+    (call $~lib/builtins/isFinite<f32>
      (get_local $0)
     )
    )
@@ -658,11 +658,11 @@
    )
   )
   (if
-   (call $isNaN<f32>
+   (call $~lib/builtins/isNaN<f32>
     (get_local $1)
    )
    (return
-    (call $isNaN<f32>
+    (call $~lib/builtins/isNaN<f32>
      (get_local $0)
     )
    )
@@ -3528,7 +3528,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -3961,7 +3961,7 @@
    )
    (block
     (if
-     (call $isNaN<f32>
+     (call $~lib/builtins/isNaN<f32>
       (get_local $0)
      )
      (return
@@ -4564,12 +4564,12 @@
   (if
    (if (result i32)
     (tee_local $2
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $1)
      )
     )
     (get_local $2)
-    (call $isNaN<f64>
+    (call $~lib/builtins/isNaN<f64>
      (get_local $0)
     )
    )
@@ -5065,12 +5065,12 @@
   (if
    (if (result i32)
     (tee_local $2
-     (call $isNaN<f32>
+     (call $~lib/builtins/isNaN<f32>
       (get_local $1)
      )
     )
     (get_local $2)
-    (call $isNaN<f32>
+    (call $~lib/builtins/isNaN<f32>
      (get_local $0)
     )
    )
@@ -6022,7 +6022,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -6491,7 +6491,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -9950,7 +9950,7 @@
        )
       )
       (get_local $7)
-      (call $isNaN<f64>
+      (call $~lib/builtins/isNaN<f64>
        (get_local $1)
       )
      )
@@ -10418,7 +10418,7 @@
        )
       )
       (get_local $7)
-      (call $isNaN<f32>
+      (call $~lib/builtins/isNaN<f32>
        (get_local $1)
       )
      )
@@ -14354,7 +14354,7 @@
        )
       )
       (get_local $8)
-      (call $isNaN<f64>
+      (call $~lib/builtins/isNaN<f64>
        (get_local $1)
       )
      )
@@ -14910,7 +14910,7 @@
        )
       )
       (get_local $10)
-      (call $isNaN<f32>
+      (call $~lib/builtins/isNaN<f32>
        (get_local $1)
       )
      )

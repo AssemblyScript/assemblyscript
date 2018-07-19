@@ -1,6 +1,5 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
@@ -16,15 +15,7 @@
  (data (i32.const 8) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/memory/memory.size (; 1 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -56,14 +47,14 @@
       )
       (i32.shl
        (tee_local $2
-        (call $~lib/memory/memory.size)
+        (current_memory)
        )
        (i32.const 16)
       )
      )
      (if
       (i32.lt_s
-       (call $~lib/memory/memory.grow
+       (grow_memory
         (select
          (get_local $2)
          (tee_local $3
@@ -91,7 +82,7 @@
       )
       (if
        (i32.lt_s
-        (call $~lib/memory/memory.grow
+        (grow_memory
          (get_local $3)
         )
         (i32.const 0)
@@ -110,12 +101,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $~lib/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (if
@@ -445,14 +436,14 @@
    )
   )
  )
- (func $~lib/memory/memory.fill (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (call $~lib/memory/memset
    (get_local $0)
    (get_local $1)
    (get_local $2)
   )
  )
- (func $~lib/memory/memcpy (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1838,7 +1829,7 @@
    )
   )
  )
- (func $~lib/memory/memmove (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memmove (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -2130,14 +2121,14 @@
    )
   )
  )
- (func $~lib/memory/memory.copy (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (call $~lib/memory/memmove
    (get_local $0)
    (get_local $1)
    (get_local $2)
   )
  )
- (func $~lib/memory/memcmp (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memcmp (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -2207,30 +2198,30 @@
    )
   )
  )
- (func $~lib/memory/memory.compare (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.compare (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (call $~lib/memory/memcmp
    (get_local $0)
    (get_local $1)
    (get_local $2)
   )
  )
- (func $~lib/allocator/arena/__memory_free (; 12 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 10 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $~lib/memory/memory.free (; 13 ;) (type $iv) (param $0 i32)
+ (func $~lib/memory/memory.free (; 11 ;) (type $iv) (param $0 i32)
   (call $~lib/allocator/arena/__memory_free
    (get_local $0)
   )
  )
- (func $~lib/allocator/arena/__memory_reset (; 14 ;) (type $v)
+ (func $~lib/allocator/arena/__memory_reset (; 12 ;) (type $v)
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
   )
  )
- (func $~lib/memory/memory.reset (; 15 ;) (type $v)
+ (func $~lib/memory/memory.reset (; 13 ;) (type $v)
   (call $~lib/allocator/arena/__memory_reset)
  )
- (func $start (; 16 ;) (type $v)
+ (func $start (; 14 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 56)
   )

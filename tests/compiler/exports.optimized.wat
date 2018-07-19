@@ -58,15 +58,7 @@
  (func $exports/Car.getNumTires (; 2 ;) (type $i) (result i32)
   (i32.const 4)
  )
- (func $~lib/memory/memory.size (; 3 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $~lib/allocator/arena/__memory_allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -98,14 +90,14 @@
       )
       (i32.shl
        (tee_local $2
-        (call $~lib/memory/memory.size)
+        (current_memory)
        )
        (i32.const 16)
       )
      )
      (if
       (i32.lt_s
-       (call $~lib/memory/memory.grow
+       (grow_memory
         (select
          (get_local $2)
          (tee_local $3
@@ -133,7 +125,7 @@
       )
       (if
        (i32.lt_s
-        (call $~lib/memory/memory.grow
+        (grow_memory
          (get_local $3)
         )
         (i32.const 0)
@@ -152,12 +144,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $exports/Car#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -177,21 +169,21 @@
   )
   (get_local $0)
  )
- (func $exports/Car#get:numDoors (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (get_local $0)
   )
  )
- (func $exports/Car#set:numDoors (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $exports/Car#openDoors (; 10 ;) (type $iv) (param $0 i32)
+ (func $exports/Car#openDoors (; 8 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 8)
   )
@@ -199,7 +191,7 @@
    (get_global $~lib/allocator/arena/startOffset)
   )
  )
- (func $exports/subOpt|trampoline (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -221,12 +213,12 @@
    (get_local $1)
   )
  )
- (func $~setargc (; 13 ;) (type $iv) (param $0 i32)
+ (func $~setargc (; 11 ;) (type $iv) (param $0 i32)
   (set_global $~argc
    (get_local $0)
   )
  )
- (func $exports/Car#constructor|trampoline (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange

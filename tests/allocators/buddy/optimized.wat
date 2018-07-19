@@ -1,8 +1,7 @@
 (module
- (type $i (func (result i32)))
- (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $iiv (func (param i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
@@ -14,202 +13,188 @@
  (global $~lib/allocator/buddy/NODE_IS_SPLIT_END (mut i32) (i32.const 0))
  (global $~lib/allocator/buddy/base_ptr (mut i32) (i32.const 0))
  (global $~lib/allocator/buddy/max_ptr (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
- (export "memory.size" (func $~lib/memory/memory.size))
- (export "memory.grow" (func $~lib/memory/memory.grow))
+ (export "memory" (memory $0))
  (export "memory.fill" (func $~lib/memory/memory.fill))
  (export "memory.copy" (func $~lib/memory/memory.copy))
  (export "memory.compare" (func $~lib/memory/memory.compare))
  (export "memory.allocate" (func $~lib/memory/memory.allocate))
  (export "memory.free" (func $~lib/memory/memory.free))
  (export "memory.reset" (func $~lib/memory/memory.reset))
- (export "memory" (memory $0))
  (start $start)
- (func $~lib/memory/memory.size (; 0 ;) (type $i) (result i32)
-  ;;@ ~lib/memory.ts:4:25
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ ~lib/memory.ts:8:30
-  (grow_memory
-   ;;@ ~lib/memory.ts:8:25
-   (get_local $0)
-  )
- )
- (func $~lib/memory/memory.fill (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 0 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i64)
   (local $4 i32)
-  ;;@ ~lib/memory.ts:17:4
+  ;;@ ~lib/memory.ts:244:2
   (if
-   ;;@ ~lib/memory.ts:17:8
+   ;;@ ~lib/memory.ts:244:6
    (i32.eqz
-    ;;@ ~lib/memory.ts:17:9
+    ;;@ ~lib/memory.ts:244:7
     (get_local $2)
    )
-   ;;@ ~lib/memory.ts:17:12
+   ;;@ ~lib/memory.ts:244:10
    (return)
   )
-  ;;@ ~lib/memory.ts:18:4
+  ;;@ ~lib/memory.ts:245:2
   (i32.store8
-   ;;@ ~lib/memory.ts:18:14
+   ;;@ ~lib/memory.ts:245:12
    (get_local $0)
-   ;;@ ~lib/memory.ts:18:20
+   ;;@ ~lib/memory.ts:245:18
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:19:4
+  ;;@ ~lib/memory.ts:246:2
   (i32.store8
-   ;;@ ~lib/memory.ts:19:14
+   ;;@ ~lib/memory.ts:246:12
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:19:21
+     ;;@ ~lib/memory.ts:246:19
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:19:25
+    ;;@ ~lib/memory.ts:246:23
     (i32.const 1)
    )
-   ;;@ ~lib/memory.ts:19:28
+   ;;@ ~lib/memory.ts:246:26
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:20:4
+  ;;@ ~lib/memory.ts:247:2
   (if
-   ;;@ ~lib/memory.ts:20:8
+   ;;@ ~lib/memory.ts:247:6
    (i32.le_u
     (get_local $2)
-    ;;@ ~lib/memory.ts:20:13
+    ;;@ ~lib/memory.ts:247:11
     (i32.const 2)
    )
-   ;;@ ~lib/memory.ts:20:16
+   ;;@ ~lib/memory.ts:247:14
    (return)
   )
-  ;;@ ~lib/memory.ts:22:4
+  ;;@ ~lib/memory.ts:249:2
   (i32.store8
-   ;;@ ~lib/memory.ts:22:14
+   ;;@ ~lib/memory.ts:249:12
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:22:21
+    ;;@ ~lib/memory.ts:249:19
     (i32.const 1)
    )
-   ;;@ ~lib/memory.ts:22:24
+   ;;@ ~lib/memory.ts:249:22
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:23:4
+  ;;@ ~lib/memory.ts:250:2
   (i32.store8
-   ;;@ ~lib/memory.ts:23:14
+   ;;@ ~lib/memory.ts:250:12
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:23:21
+    ;;@ ~lib/memory.ts:250:19
     (i32.const 2)
    )
-   ;;@ ~lib/memory.ts:23:24
+   ;;@ ~lib/memory.ts:250:22
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:24:4
+  ;;@ ~lib/memory.ts:251:2
   (i32.store8
-   ;;@ ~lib/memory.ts:24:14
+   ;;@ ~lib/memory.ts:251:12
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:24:21
+     ;;@ ~lib/memory.ts:251:19
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:24:25
+    ;;@ ~lib/memory.ts:251:23
     (i32.const 2)
    )
-   ;;@ ~lib/memory.ts:24:28
+   ;;@ ~lib/memory.ts:251:26
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:25:4
+  ;;@ ~lib/memory.ts:252:2
   (i32.store8
-   ;;@ ~lib/memory.ts:25:14
+   ;;@ ~lib/memory.ts:252:12
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:25:21
+     ;;@ ~lib/memory.ts:252:19
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:25:25
+    ;;@ ~lib/memory.ts:252:23
     (i32.const 3)
    )
-   ;;@ ~lib/memory.ts:25:28
+   ;;@ ~lib/memory.ts:252:26
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:26:4
+  ;;@ ~lib/memory.ts:253:2
   (if
-   ;;@ ~lib/memory.ts:26:8
+   ;;@ ~lib/memory.ts:253:6
    (i32.le_u
     (get_local $2)
-    ;;@ ~lib/memory.ts:26:13
+    ;;@ ~lib/memory.ts:253:11
     (i32.const 6)
    )
-   ;;@ ~lib/memory.ts:26:16
+   ;;@ ~lib/memory.ts:253:14
    (return)
   )
-  ;;@ ~lib/memory.ts:27:4
+  ;;@ ~lib/memory.ts:254:2
   (i32.store8
-   ;;@ ~lib/memory.ts:27:14
+   ;;@ ~lib/memory.ts:254:12
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:27:21
+    ;;@ ~lib/memory.ts:254:19
     (i32.const 3)
    )
-   ;;@ ~lib/memory.ts:27:24
+   ;;@ ~lib/memory.ts:254:22
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:28:4
+  ;;@ ~lib/memory.ts:255:2
   (i32.store8
-   ;;@ ~lib/memory.ts:28:14
+   ;;@ ~lib/memory.ts:255:12
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:28:21
+     ;;@ ~lib/memory.ts:255:19
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:28:25
+    ;;@ ~lib/memory.ts:255:23
     (i32.const 4)
    )
-   ;;@ ~lib/memory.ts:28:28
+   ;;@ ~lib/memory.ts:255:26
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:29:4
+  ;;@ ~lib/memory.ts:256:2
   (if
-   ;;@ ~lib/memory.ts:29:8
+   ;;@ ~lib/memory.ts:256:6
    (i32.le_u
     (get_local $2)
-    ;;@ ~lib/memory.ts:29:13
+    ;;@ ~lib/memory.ts:256:11
     (i32.const 8)
    )
-   ;;@ ~lib/memory.ts:29:16
+   ;;@ ~lib/memory.ts:256:14
    (return)
   )
-  ;;@ ~lib/memory.ts:40:4
+  ;;@ ~lib/memory.ts:267:2
   (i32.store
-   ;;@ ~lib/memory.ts:33:4
+   ;;@ ~lib/memory.ts:260:2
    (tee_local $0
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:32:4
+     ;;@ ~lib/memory.ts:259:2
      (tee_local $4
-      ;;@ ~lib/memory.ts:32:19
+      ;;@ ~lib/memory.ts:259:17
       (i32.and
        (i32.sub
         (i32.const 0)
-        ;;@ ~lib/memory.ts:32:20
+        ;;@ ~lib/memory.ts:259:18
         (get_local $0)
        )
-       ;;@ ~lib/memory.ts:32:27
+       ;;@ ~lib/memory.ts:259:25
        (i32.const 3)
       )
      )
     )
    )
-   ;;@ ~lib/memory.ts:37:4
+   ;;@ ~lib/memory.ts:264:2
    (tee_local $1
-    ;;@ ~lib/memory.ts:37:19
+    ;;@ ~lib/memory.ts:264:17
     (i32.mul
      (i32.and
-      ;;@ ~lib/memory.ts:37:35
+      ;;@ ~lib/memory.ts:264:33
       (get_local $1)
       (i32.const 255)
      )
@@ -217,319 +202,319 @@
     )
    )
   )
-  ;;@ ~lib/memory.ts:41:4
+  ;;@ ~lib/memory.ts:268:2
   (i32.store
-   ;;@ ~lib/memory.ts:41:15
+   ;;@ ~lib/memory.ts:268:13
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:35:4
+     ;;@ ~lib/memory.ts:262:2
      (tee_local $2
       (i32.and
        (i32.sub
-        ;;@ ~lib/memory.ts:34:4
+        ;;@ ~lib/memory.ts:261:2
         (get_local $2)
-        ;;@ ~lib/memory.ts:34:9
+        ;;@ ~lib/memory.ts:261:7
         (get_local $4)
        )
-       ;;@ ~lib/memory.ts:35:9
+       ;;@ ~lib/memory.ts:262:7
        (i32.const -4)
       )
      )
     )
-    ;;@ ~lib/memory.ts:41:26
+    ;;@ ~lib/memory.ts:268:24
     (i32.const 4)
    )
-   ;;@ ~lib/memory.ts:41:29
+   ;;@ ~lib/memory.ts:268:27
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:42:4
+  ;;@ ~lib/memory.ts:269:2
   (if
-   ;;@ ~lib/memory.ts:42:8
+   ;;@ ~lib/memory.ts:269:6
    (i32.le_u
     (get_local $2)
-    ;;@ ~lib/memory.ts:42:13
+    ;;@ ~lib/memory.ts:269:11
     (i32.const 8)
    )
-   ;;@ ~lib/memory.ts:42:16
+   ;;@ ~lib/memory.ts:269:14
    (return)
   )
-  ;;@ ~lib/memory.ts:43:4
+  ;;@ ~lib/memory.ts:270:2
   (i32.store
-   ;;@ ~lib/memory.ts:43:15
+   ;;@ ~lib/memory.ts:270:13
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:43:22
+    ;;@ ~lib/memory.ts:270:20
     (i32.const 4)
    )
-   ;;@ ~lib/memory.ts:43:25
+   ;;@ ~lib/memory.ts:270:23
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:44:4
+  ;;@ ~lib/memory.ts:271:2
   (i32.store
-   ;;@ ~lib/memory.ts:44:15
+   ;;@ ~lib/memory.ts:271:13
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:44:22
+    ;;@ ~lib/memory.ts:271:20
     (i32.const 8)
    )
-   ;;@ ~lib/memory.ts:44:25
+   ;;@ ~lib/memory.ts:271:23
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:45:4
+  ;;@ ~lib/memory.ts:272:2
   (i32.store
-   ;;@ ~lib/memory.ts:45:15
+   ;;@ ~lib/memory.ts:272:13
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:45:22
+     ;;@ ~lib/memory.ts:272:20
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:45:26
+    ;;@ ~lib/memory.ts:272:24
     (i32.const 12)
    )
-   ;;@ ~lib/memory.ts:45:30
+   ;;@ ~lib/memory.ts:272:28
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:46:4
+  ;;@ ~lib/memory.ts:273:2
   (i32.store
-   ;;@ ~lib/memory.ts:46:15
+   ;;@ ~lib/memory.ts:273:13
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:46:22
+     ;;@ ~lib/memory.ts:273:20
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:46:26
+    ;;@ ~lib/memory.ts:273:24
     (i32.const 8)
    )
-   ;;@ ~lib/memory.ts:46:29
+   ;;@ ~lib/memory.ts:273:27
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:47:4
+  ;;@ ~lib/memory.ts:274:2
   (if
-   ;;@ ~lib/memory.ts:47:8
+   ;;@ ~lib/memory.ts:274:6
    (i32.le_u
     (get_local $2)
-    ;;@ ~lib/memory.ts:47:13
+    ;;@ ~lib/memory.ts:274:11
     (i32.const 24)
    )
-   ;;@ ~lib/memory.ts:47:17
+   ;;@ ~lib/memory.ts:274:15
    (return)
   )
-  ;;@ ~lib/memory.ts:48:4
+  ;;@ ~lib/memory.ts:275:2
   (i32.store
-   ;;@ ~lib/memory.ts:48:15
+   ;;@ ~lib/memory.ts:275:13
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:48:22
+    ;;@ ~lib/memory.ts:275:20
     (i32.const 12)
    )
-   ;;@ ~lib/memory.ts:48:26
+   ;;@ ~lib/memory.ts:275:24
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:49:4
+  ;;@ ~lib/memory.ts:276:2
   (i32.store
-   ;;@ ~lib/memory.ts:49:15
+   ;;@ ~lib/memory.ts:276:13
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:49:22
+    ;;@ ~lib/memory.ts:276:20
     (i32.const 16)
    )
-   ;;@ ~lib/memory.ts:49:26
+   ;;@ ~lib/memory.ts:276:24
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:50:4
+  ;;@ ~lib/memory.ts:277:2
   (i32.store
-   ;;@ ~lib/memory.ts:50:15
+   ;;@ ~lib/memory.ts:277:13
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:50:22
+    ;;@ ~lib/memory.ts:277:20
     (i32.const 20)
    )
-   ;;@ ~lib/memory.ts:50:26
+   ;;@ ~lib/memory.ts:277:24
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:51:4
+  ;;@ ~lib/memory.ts:278:2
   (i32.store
-   ;;@ ~lib/memory.ts:51:15
+   ;;@ ~lib/memory.ts:278:13
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:51:22
+    ;;@ ~lib/memory.ts:278:20
     (i32.const 24)
    )
-   ;;@ ~lib/memory.ts:51:26
+   ;;@ ~lib/memory.ts:278:24
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:52:4
+  ;;@ ~lib/memory.ts:279:2
   (i32.store
-   ;;@ ~lib/memory.ts:52:15
+   ;;@ ~lib/memory.ts:279:13
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:52:22
+     ;;@ ~lib/memory.ts:279:20
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:52:26
+    ;;@ ~lib/memory.ts:279:24
     (i32.const 28)
    )
-   ;;@ ~lib/memory.ts:52:30
+   ;;@ ~lib/memory.ts:279:28
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:53:4
+  ;;@ ~lib/memory.ts:280:2
   (i32.store
-   ;;@ ~lib/memory.ts:53:15
+   ;;@ ~lib/memory.ts:280:13
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:53:22
+     ;;@ ~lib/memory.ts:280:20
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:53:26
+    ;;@ ~lib/memory.ts:280:24
     (i32.const 24)
    )
-   ;;@ ~lib/memory.ts:53:30
+   ;;@ ~lib/memory.ts:280:28
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:54:4
+  ;;@ ~lib/memory.ts:281:2
   (i32.store
-   ;;@ ~lib/memory.ts:54:15
+   ;;@ ~lib/memory.ts:281:13
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:54:22
+     ;;@ ~lib/memory.ts:281:20
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:54:26
+    ;;@ ~lib/memory.ts:281:24
     (i32.const 20)
    )
-   ;;@ ~lib/memory.ts:54:30
+   ;;@ ~lib/memory.ts:281:28
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:55:4
+  ;;@ ~lib/memory.ts:282:2
   (i32.store
-   ;;@ ~lib/memory.ts:55:15
+   ;;@ ~lib/memory.ts:282:13
    (i32.sub
     (i32.add
      (get_local $0)
-     ;;@ ~lib/memory.ts:55:22
+     ;;@ ~lib/memory.ts:282:20
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:55:26
+    ;;@ ~lib/memory.ts:282:24
     (i32.const 16)
    )
-   ;;@ ~lib/memory.ts:55:30
+   ;;@ ~lib/memory.ts:282:28
    (get_local $1)
   )
-  ;;@ ~lib/memory.ts:59:4
+  ;;@ ~lib/memory.ts:286:2
   (set_local $0
    (i32.add
     (get_local $0)
-    ;;@ ~lib/memory.ts:58:4
+    ;;@ ~lib/memory.ts:285:2
     (tee_local $4
-     ;;@ ~lib/memory.ts:58:8
+     ;;@ ~lib/memory.ts:285:6
      (i32.add
-      ;;@ ~lib/memory.ts:58:13
+      ;;@ ~lib/memory.ts:285:11
       (i32.and
-       ;;@ ~lib/memory.ts:58:14
+       ;;@ ~lib/memory.ts:285:12
        (get_local $0)
-       ;;@ ~lib/memory.ts:58:21
+       ;;@ ~lib/memory.ts:285:19
        (i32.const 4)
       )
-      ;;@ ~lib/memory.ts:58:8
+      ;;@ ~lib/memory.ts:285:6
       (i32.const 24)
      )
     )
    )
   )
-  ;;@ ~lib/memory.ts:60:4
+  ;;@ ~lib/memory.ts:287:2
   (set_local $2
    (i32.sub
     (get_local $2)
-    ;;@ ~lib/memory.ts:60:9
+    ;;@ ~lib/memory.ts:287:7
     (get_local $4)
    )
   )
-  ;;@ ~lib/memory.ts:63:4
+  ;;@ ~lib/memory.ts:290:2
   (set_local $3
-   ;;@ ~lib/memory.ts:63:19
+   ;;@ ~lib/memory.ts:290:17
    (i64.or
     (i64.extend_u/i32
      (get_local $1)
     )
-    ;;@ ~lib/memory.ts:63:30
+    ;;@ ~lib/memory.ts:290:28
     (i64.shl
-     ;;@ ~lib/memory.ts:63:31
+     ;;@ ~lib/memory.ts:290:29
      (i64.extend_u/i32
       (get_local $1)
      )
-     ;;@ ~lib/memory.ts:63:43
+     ;;@ ~lib/memory.ts:290:41
      (i64.const 32)
     )
    )
   )
   (loop $continue|0
    (if
-    ;;@ ~lib/memory.ts:64:11
+    ;;@ ~lib/memory.ts:291:9
     (i32.ge_u
      (get_local $2)
-     ;;@ ~lib/memory.ts:64:16
+     ;;@ ~lib/memory.ts:291:14
      (i32.const 32)
     )
     (block
-     ;;@ ~lib/memory.ts:65:6
+     ;;@ ~lib/memory.ts:292:4
      (i64.store
-      ;;@ ~lib/memory.ts:65:17
+      ;;@ ~lib/memory.ts:292:15
       (get_local $0)
-      ;;@ ~lib/memory.ts:65:23
+      ;;@ ~lib/memory.ts:292:21
       (get_local $3)
      )
-     ;;@ ~lib/memory.ts:66:6
+     ;;@ ~lib/memory.ts:293:4
      (i64.store
-      ;;@ ~lib/memory.ts:66:17
+      ;;@ ~lib/memory.ts:293:15
       (i32.add
        (get_local $0)
-       ;;@ ~lib/memory.ts:66:24
+       ;;@ ~lib/memory.ts:293:22
        (i32.const 8)
       )
-      ;;@ ~lib/memory.ts:66:27
+      ;;@ ~lib/memory.ts:293:25
       (get_local $3)
      )
-     ;;@ ~lib/memory.ts:67:6
+     ;;@ ~lib/memory.ts:294:4
      (i64.store
-      ;;@ ~lib/memory.ts:67:17
+      ;;@ ~lib/memory.ts:294:15
       (i32.add
        (get_local $0)
-       ;;@ ~lib/memory.ts:67:24
+       ;;@ ~lib/memory.ts:294:22
        (i32.const 16)
       )
-      ;;@ ~lib/memory.ts:67:28
+      ;;@ ~lib/memory.ts:294:26
       (get_local $3)
      )
-     ;;@ ~lib/memory.ts:68:6
+     ;;@ ~lib/memory.ts:295:4
      (i64.store
-      ;;@ ~lib/memory.ts:68:17
+      ;;@ ~lib/memory.ts:295:15
       (i32.add
        (get_local $0)
-       ;;@ ~lib/memory.ts:68:24
+       ;;@ ~lib/memory.ts:295:22
        (i32.const 24)
       )
-      ;;@ ~lib/memory.ts:68:28
+      ;;@ ~lib/memory.ts:295:26
       (get_local $3)
      )
-     ;;@ ~lib/memory.ts:69:6
+     ;;@ ~lib/memory.ts:296:4
      (set_local $2
       (i32.sub
        (get_local $2)
-       ;;@ ~lib/memory.ts:69:11
+       ;;@ ~lib/memory.ts:296:9
        (i32.const 32)
       )
      )
-     ;;@ ~lib/memory.ts:70:6
+     ;;@ ~lib/memory.ts:297:4
      (set_local $0
       (i32.add
        (get_local $0)
-       ;;@ ~lib/memory.ts:70:14
+       ;;@ ~lib/memory.ts:297:12
        (i32.const 32)
       )
      )
@@ -538,37 +523,48 @@
    )
   )
  )
- (func $~lib/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 1 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  ;;@ ~lib/memory.ts:11:4
+  (call $~lib/memory/memset
+   ;;@ ~lib/memory.ts:11:11
+   (get_local $0)
+   ;;@ ~lib/memory.ts:11:17
+   (get_local $1)
+   ;;@ ~lib/memory.ts:11:20
+   (get_local $2)
+  )
+ )
+ (func $~lib/memory/memcpy (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (loop $continue|0
    (if
     (select
-     ;;@ ~lib/memory.ts:164:14
+     ;;@ ~lib/memory.ts:59:14
      (i32.and
-      ;;@ ~lib/memory.ts:164:15
+      ;;@ ~lib/memory.ts:59:15
       (get_local $1)
-      ;;@ ~lib/memory.ts:164:21
+      ;;@ ~lib/memory.ts:59:21
       (i32.const 3)
      )
      (get_local $2)
-     ;;@ ~lib/memory.ts:164:9
+     ;;@ ~lib/memory.ts:59:9
      (get_local $2)
     )
     (block
      (set_local $0
       (i32.add
        (tee_local $3
-        ;;@ ~lib/memory.ts:165:14
+        ;;@ ~lib/memory.ts:60:14
         (get_local $0)
        )
        (i32.const 1)
       )
      )
-     ;;@ ~lib/memory.ts:165:4
+     ;;@ ~lib/memory.ts:60:4
      (i32.store8
       (get_local $3)
-      ;;@ ~lib/memory.ts:165:31
+      ;;@ ~lib/memory.ts:60:31
       (block (result i32)
        (set_local $1
         (i32.add
@@ -578,13 +574,13 @@
          (i32.const 1)
         )
        )
-       ;;@ ~lib/memory.ts:165:22
+       ;;@ ~lib/memory.ts:60:22
        (i32.load8_u
         (get_local $3)
        )
       )
      )
-     ;;@ ~lib/memory.ts:166:4
+     ;;@ ~lib/memory.ts:61:4
      (set_local $2
       (i32.sub
        (get_local $2)
@@ -595,113 +591,113 @@
     )
    )
   )
-  ;;@ ~lib/memory.ts:170:2
+  ;;@ ~lib/memory.ts:65:2
   (if
    (i32.eqz
-    ;;@ ~lib/memory.ts:170:6
+    ;;@ ~lib/memory.ts:65:6
     (i32.and
-     ;;@ ~lib/memory.ts:170:7
+     ;;@ ~lib/memory.ts:65:7
      (get_local $0)
-     ;;@ ~lib/memory.ts:170:14
+     ;;@ ~lib/memory.ts:65:14
      (i32.const 3)
     )
    )
-   ;;@ ~lib/memory.ts:170:23
+   ;;@ ~lib/memory.ts:65:23
    (block
     (loop $continue|1
      (if
-      ;;@ ~lib/memory.ts:171:11
+      ;;@ ~lib/memory.ts:66:11
       (i32.ge_u
        (get_local $2)
-       ;;@ ~lib/memory.ts:171:16
+       ;;@ ~lib/memory.ts:66:16
        (i32.const 16)
       )
       (block
-       ;;@ ~lib/memory.ts:172:6
+       ;;@ ~lib/memory.ts:67:6
        (i32.store
-        ;;@ ~lib/memory.ts:172:17
+        ;;@ ~lib/memory.ts:67:17
         (get_local $0)
-        ;;@ ~lib/memory.ts:172:28
+        ;;@ ~lib/memory.ts:67:28
         (i32.load
-         ;;@ ~lib/memory.ts:172:38
+         ;;@ ~lib/memory.ts:67:38
          (get_local $1)
         )
        )
-       ;;@ ~lib/memory.ts:173:6
+       ;;@ ~lib/memory.ts:68:6
        (i32.store
-        ;;@ ~lib/memory.ts:173:17
+        ;;@ ~lib/memory.ts:68:17
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:173:25
+         ;;@ ~lib/memory.ts:68:25
          (i32.const 4)
         )
-        ;;@ ~lib/memory.ts:173:28
+        ;;@ ~lib/memory.ts:68:28
         (i32.load
-         ;;@ ~lib/memory.ts:173:38
+         ;;@ ~lib/memory.ts:68:38
          (i32.add
           (get_local $1)
-          ;;@ ~lib/memory.ts:173:45
+          ;;@ ~lib/memory.ts:68:45
           (i32.const 4)
          )
         )
        )
-       ;;@ ~lib/memory.ts:174:6
+       ;;@ ~lib/memory.ts:69:6
        (i32.store
-        ;;@ ~lib/memory.ts:174:17
+        ;;@ ~lib/memory.ts:69:17
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:174:25
+         ;;@ ~lib/memory.ts:69:25
          (i32.const 8)
         )
-        ;;@ ~lib/memory.ts:174:28
+        ;;@ ~lib/memory.ts:69:28
         (i32.load
-         ;;@ ~lib/memory.ts:174:38
+         ;;@ ~lib/memory.ts:69:38
          (i32.add
           (get_local $1)
-          ;;@ ~lib/memory.ts:174:45
+          ;;@ ~lib/memory.ts:69:45
           (i32.const 8)
          )
         )
        )
-       ;;@ ~lib/memory.ts:175:6
+       ;;@ ~lib/memory.ts:70:6
        (i32.store
-        ;;@ ~lib/memory.ts:175:17
+        ;;@ ~lib/memory.ts:70:17
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:175:24
+         ;;@ ~lib/memory.ts:70:24
          (i32.const 12)
         )
-        ;;@ ~lib/memory.ts:175:28
+        ;;@ ~lib/memory.ts:70:28
         (i32.load
-         ;;@ ~lib/memory.ts:175:38
+         ;;@ ~lib/memory.ts:70:38
          (i32.add
           (get_local $1)
-          ;;@ ~lib/memory.ts:175:44
+          ;;@ ~lib/memory.ts:70:44
           (i32.const 12)
          )
         )
        )
-       ;;@ ~lib/memory.ts:176:6
+       ;;@ ~lib/memory.ts:71:6
        (set_local $1
         (i32.add
          (get_local $1)
-         ;;@ ~lib/memory.ts:176:13
+         ;;@ ~lib/memory.ts:71:13
          (i32.const 16)
         )
        )
-       ;;@ ~lib/memory.ts:176:17
+       ;;@ ~lib/memory.ts:71:17
        (set_local $0
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:176:25
+         ;;@ ~lib/memory.ts:71:25
          (i32.const 16)
         )
        )
-       ;;@ ~lib/memory.ts:176:29
+       ;;@ ~lib/memory.ts:71:29
        (set_local $2
         (i32.sub
          (get_local $2)
-         ;;@ ~lib/memory.ts:176:34
+         ;;@ ~lib/memory.ts:71:34
          (i32.const 16)
         )
        )
@@ -709,160 +705,160 @@
       )
      )
     )
-    ;;@ ~lib/memory.ts:178:4
+    ;;@ ~lib/memory.ts:73:4
     (if
-     ;;@ ~lib/memory.ts:178:8
+     ;;@ ~lib/memory.ts:73:8
      (i32.and
       (get_local $2)
-      ;;@ ~lib/memory.ts:178:12
+      ;;@ ~lib/memory.ts:73:12
       (i32.const 8)
      )
-     ;;@ ~lib/memory.ts:178:15
+     ;;@ ~lib/memory.ts:73:15
      (block
-      ;;@ ~lib/memory.ts:179:6
+      ;;@ ~lib/memory.ts:74:6
       (i32.store
-       ;;@ ~lib/memory.ts:179:17
+       ;;@ ~lib/memory.ts:74:17
        (get_local $0)
-       ;;@ ~lib/memory.ts:179:27
+       ;;@ ~lib/memory.ts:74:27
        (i32.load
-        ;;@ ~lib/memory.ts:179:37
+        ;;@ ~lib/memory.ts:74:37
         (get_local $1)
        )
       )
-      ;;@ ~lib/memory.ts:180:6
+      ;;@ ~lib/memory.ts:75:6
       (i32.store
-       ;;@ ~lib/memory.ts:180:17
+       ;;@ ~lib/memory.ts:75:17
        (i32.add
         (get_local $0)
-        ;;@ ~lib/memory.ts:180:24
+        ;;@ ~lib/memory.ts:75:24
         (i32.const 4)
        )
-       ;;@ ~lib/memory.ts:180:27
+       ;;@ ~lib/memory.ts:75:27
        (i32.load
-        ;;@ ~lib/memory.ts:180:37
+        ;;@ ~lib/memory.ts:75:37
         (i32.add
          (get_local $1)
-         ;;@ ~lib/memory.ts:180:43
+         ;;@ ~lib/memory.ts:75:43
          (i32.const 4)
         )
        )
       )
-      ;;@ ~lib/memory.ts:181:6
+      ;;@ ~lib/memory.ts:76:6
       (set_local $0
        (i32.add
         (get_local $0)
-        ;;@ ~lib/memory.ts:181:14
+        ;;@ ~lib/memory.ts:76:14
         (i32.const 8)
        )
       )
-      ;;@ ~lib/memory.ts:181:17
+      ;;@ ~lib/memory.ts:76:17
       (set_local $1
        (i32.add
         (get_local $1)
-        ;;@ ~lib/memory.ts:181:24
+        ;;@ ~lib/memory.ts:76:24
         (i32.const 8)
        )
       )
      )
     )
-    ;;@ ~lib/memory.ts:183:4
+    ;;@ ~lib/memory.ts:78:4
     (if
-     ;;@ ~lib/memory.ts:183:8
+     ;;@ ~lib/memory.ts:78:8
      (i32.and
       (get_local $2)
-      ;;@ ~lib/memory.ts:183:12
+      ;;@ ~lib/memory.ts:78:12
       (i32.const 4)
      )
-     ;;@ ~lib/memory.ts:183:15
+     ;;@ ~lib/memory.ts:78:15
      (block
-      ;;@ ~lib/memory.ts:184:6
+      ;;@ ~lib/memory.ts:79:6
       (i32.store
-       ;;@ ~lib/memory.ts:184:17
+       ;;@ ~lib/memory.ts:79:17
        (get_local $0)
-       ;;@ ~lib/memory.ts:184:23
+       ;;@ ~lib/memory.ts:79:23
        (i32.load
-        ;;@ ~lib/memory.ts:184:33
+        ;;@ ~lib/memory.ts:79:33
         (get_local $1)
        )
       )
-      ;;@ ~lib/memory.ts:185:6
+      ;;@ ~lib/memory.ts:80:6
       (set_local $0
        (i32.add
         (get_local $0)
-        ;;@ ~lib/memory.ts:185:14
+        ;;@ ~lib/memory.ts:80:14
         (i32.const 4)
        )
       )
-      ;;@ ~lib/memory.ts:185:17
+      ;;@ ~lib/memory.ts:80:17
       (set_local $1
        (i32.add
         (get_local $1)
-        ;;@ ~lib/memory.ts:185:24
+        ;;@ ~lib/memory.ts:80:24
         (i32.const 4)
        )
       )
      )
     )
-    ;;@ ~lib/memory.ts:187:4
+    ;;@ ~lib/memory.ts:82:4
     (if
-     ;;@ ~lib/memory.ts:187:8
+     ;;@ ~lib/memory.ts:82:8
      (i32.and
       (get_local $2)
-      ;;@ ~lib/memory.ts:187:12
+      ;;@ ~lib/memory.ts:82:12
       (i32.const 2)
      )
-     ;;@ ~lib/memory.ts:187:15
+     ;;@ ~lib/memory.ts:82:15
      (block
-      ;;@ ~lib/memory.ts:188:6
+      ;;@ ~lib/memory.ts:83:6
       (i32.store16
-       ;;@ ~lib/memory.ts:188:17
+       ;;@ ~lib/memory.ts:83:17
        (get_local $0)
-       ;;@ ~lib/memory.ts:188:23
+       ;;@ ~lib/memory.ts:83:23
        (i32.load16_u
-        ;;@ ~lib/memory.ts:188:33
+        ;;@ ~lib/memory.ts:83:33
         (get_local $1)
        )
       )
-      ;;@ ~lib/memory.ts:189:6
+      ;;@ ~lib/memory.ts:84:6
       (set_local $0
        (i32.add
         (get_local $0)
-        ;;@ ~lib/memory.ts:189:14
+        ;;@ ~lib/memory.ts:84:14
         (i32.const 2)
        )
       )
-      ;;@ ~lib/memory.ts:189:17
+      ;;@ ~lib/memory.ts:84:17
       (set_local $1
        (i32.add
         (get_local $1)
-        ;;@ ~lib/memory.ts:189:24
+        ;;@ ~lib/memory.ts:84:24
         (i32.const 2)
        )
       )
      )
     )
-    ;;@ ~lib/memory.ts:191:4
+    ;;@ ~lib/memory.ts:86:4
     (if
-     ;;@ ~lib/memory.ts:191:8
+     ;;@ ~lib/memory.ts:86:8
      (i32.and
       (get_local $2)
-      ;;@ ~lib/memory.ts:191:12
+      ;;@ ~lib/memory.ts:86:12
       (i32.const 1)
      )
-     ;;@ ~lib/memory.ts:192:16
+     ;;@ ~lib/memory.ts:87:16
      (block
       (set_local $3
        (get_local $0)
       )
-      ;;@ ~lib/memory.ts:191:15
+      ;;@ ~lib/memory.ts:86:15
       (i32.store8
        (get_local $3)
-       ;;@ ~lib/memory.ts:192:33
+       ;;@ ~lib/memory.ts:87:33
        (block (result i32)
         (set_local $3
          (get_local $1)
         )
-        ;;@ ~lib/memory.ts:192:24
+        ;;@ ~lib/memory.ts:87:24
         (i32.load8_u
          (get_local $3)
         )
@@ -870,19 +866,19 @@
       )
      )
     )
-    ;;@ ~lib/memory.ts:194:4
+    ;;@ ~lib/memory.ts:89:4
     (return)
    )
   )
-  ;;@ ~lib/memory.ts:199:2
+  ;;@ ~lib/memory.ts:94:2
   (if
-   ;;@ ~lib/memory.ts:199:6
+   ;;@ ~lib/memory.ts:94:6
    (i32.ge_u
     (get_local $2)
-    ;;@ ~lib/memory.ts:199:11
+    ;;@ ~lib/memory.ts:94:11
     (i32.const 32)
    )
-   ;;@ ~lib/memory.ts:199:15
+   ;;@ ~lib/memory.ts:94:15
    (block $break|2
     (block $case2|2
      (block $case1|2
@@ -890,10 +886,10 @@
        (block $tablify|0
         (br_table $case0|2 $case1|2 $case2|2 $tablify|0
          (i32.sub
-          ;;@ ~lib/memory.ts:200:12
+          ;;@ ~lib/memory.ts:95:12
           (i32.and
            (get_local $0)
-           ;;@ ~lib/memory.ts:200:19
+           ;;@ ~lib/memory.ts:95:19
            (i32.const 3)
           )
           (i32.const 1)
@@ -902,27 +898,27 @@
        )
        (br $break|2)
       )
-      ;;@ ~lib/memory.ts:203:8
+      ;;@ ~lib/memory.ts:98:8
       (set_local $4
-       ;;@ ~lib/memory.ts:203:12
+       ;;@ ~lib/memory.ts:98:12
        (i32.load
-        ;;@ ~lib/memory.ts:203:22
+        ;;@ ~lib/memory.ts:98:22
         (get_local $1)
        )
       )
       (set_local $0
        (i32.add
         (tee_local $3
-         ;;@ ~lib/memory.ts:204:18
+         ;;@ ~lib/memory.ts:99:18
          (get_local $0)
         )
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:204:8
+      ;;@ ~lib/memory.ts:99:8
       (i32.store8
        (get_local $3)
-       ;;@ ~lib/memory.ts:204:35
+       ;;@ ~lib/memory.ts:99:35
        (block (result i32)
         (set_local $1
          (i32.add
@@ -932,7 +928,7 @@
           (i32.const 1)
          )
         )
-        ;;@ ~lib/memory.ts:204:26
+        ;;@ ~lib/memory.ts:99:26
         (i32.load8_u
          (get_local $3)
         )
@@ -941,16 +937,16 @@
       (set_local $0
        (i32.add
         (tee_local $3
-         ;;@ ~lib/memory.ts:205:18
+         ;;@ ~lib/memory.ts:100:18
          (get_local $0)
         )
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:205:8
+      ;;@ ~lib/memory.ts:100:8
       (i32.store8
        (get_local $3)
-       ;;@ ~lib/memory.ts:205:35
+       ;;@ ~lib/memory.ts:100:35
        (block (result i32)
         (set_local $1
          (i32.add
@@ -960,7 +956,7 @@
           (i32.const 1)
          )
         )
-        ;;@ ~lib/memory.ts:205:26
+        ;;@ ~lib/memory.ts:100:26
         (i32.load8_u
          (get_local $3)
         )
@@ -969,16 +965,16 @@
       (set_local $0
        (i32.add
         (tee_local $3
-         ;;@ ~lib/memory.ts:206:18
+         ;;@ ~lib/memory.ts:101:18
          (get_local $0)
         )
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:206:8
+      ;;@ ~lib/memory.ts:101:8
       (i32.store8
        (get_local $3)
-       ;;@ ~lib/memory.ts:206:35
+       ;;@ ~lib/memory.ts:101:35
        (block (result i32)
         (set_local $1
          (i32.add
@@ -988,182 +984,182 @@
           (i32.const 1)
          )
         )
-        ;;@ ~lib/memory.ts:206:26
+        ;;@ ~lib/memory.ts:101:26
         (i32.load8_u
          (get_local $3)
         )
        )
       )
-      ;;@ ~lib/memory.ts:207:8
+      ;;@ ~lib/memory.ts:102:8
       (set_local $2
        (i32.sub
         (get_local $2)
-        ;;@ ~lib/memory.ts:207:13
+        ;;@ ~lib/memory.ts:102:13
         (i32.const 3)
        )
       )
       (loop $continue|3
        (if
-        ;;@ ~lib/memory.ts:208:15
+        ;;@ ~lib/memory.ts:103:15
         (i32.ge_u
          (get_local $2)
-         ;;@ ~lib/memory.ts:208:20
+         ;;@ ~lib/memory.ts:103:20
          (i32.const 17)
         )
         (block
-         ;;@ ~lib/memory.ts:210:10
+         ;;@ ~lib/memory.ts:105:10
          (i32.store
-          ;;@ ~lib/memory.ts:210:21
+          ;;@ ~lib/memory.ts:105:21
           (get_local $0)
-          ;;@ ~lib/memory.ts:210:27
+          ;;@ ~lib/memory.ts:105:27
           (i32.or
            (i32.shr_u
             (get_local $4)
-            ;;@ ~lib/memory.ts:210:32
+            ;;@ ~lib/memory.ts:105:32
             (i32.const 24)
            )
-           ;;@ ~lib/memory.ts:210:37
+           ;;@ ~lib/memory.ts:105:37
            (i32.shl
-            ;;@ ~lib/memory.ts:209:10
+            ;;@ ~lib/memory.ts:104:10
             (tee_local $3
-             ;;@ ~lib/memory.ts:209:14
+             ;;@ ~lib/memory.ts:104:14
              (i32.load
-              ;;@ ~lib/memory.ts:209:24
+              ;;@ ~lib/memory.ts:104:24
               (i32.add
                (get_local $1)
-               ;;@ ~lib/memory.ts:209:30
+               ;;@ ~lib/memory.ts:104:30
                (i32.const 1)
               )
              )
             )
-            ;;@ ~lib/memory.ts:210:42
+            ;;@ ~lib/memory.ts:105:42
             (i32.const 8)
            )
           )
          )
-         ;;@ ~lib/memory.ts:212:10
+         ;;@ ~lib/memory.ts:107:10
          (i32.store
-          ;;@ ~lib/memory.ts:212:21
+          ;;@ ~lib/memory.ts:107:21
           (i32.add
            (get_local $0)
-           ;;@ ~lib/memory.ts:212:28
+           ;;@ ~lib/memory.ts:107:28
            (i32.const 4)
           )
-          ;;@ ~lib/memory.ts:212:31
+          ;;@ ~lib/memory.ts:107:31
           (i32.or
            (i32.shr_u
             (get_local $3)
-            ;;@ ~lib/memory.ts:212:36
+            ;;@ ~lib/memory.ts:107:36
             (i32.const 24)
            )
-           ;;@ ~lib/memory.ts:212:41
+           ;;@ ~lib/memory.ts:107:41
            (i32.shl
-            ;;@ ~lib/memory.ts:211:10
+            ;;@ ~lib/memory.ts:106:10
             (tee_local $4
-             ;;@ ~lib/memory.ts:211:14
+             ;;@ ~lib/memory.ts:106:14
              (i32.load
-              ;;@ ~lib/memory.ts:211:24
+              ;;@ ~lib/memory.ts:106:24
               (i32.add
                (get_local $1)
-               ;;@ ~lib/memory.ts:211:30
+               ;;@ ~lib/memory.ts:106:30
                (i32.const 5)
               )
              )
             )
-            ;;@ ~lib/memory.ts:212:46
+            ;;@ ~lib/memory.ts:107:46
             (i32.const 8)
            )
           )
          )
-         ;;@ ~lib/memory.ts:214:10
+         ;;@ ~lib/memory.ts:109:10
          (i32.store
-          ;;@ ~lib/memory.ts:214:21
+          ;;@ ~lib/memory.ts:109:21
           (i32.add
            (get_local $0)
-           ;;@ ~lib/memory.ts:214:28
+           ;;@ ~lib/memory.ts:109:28
            (i32.const 8)
           )
-          ;;@ ~lib/memory.ts:214:31
+          ;;@ ~lib/memory.ts:109:31
           (i32.or
            (i32.shr_u
             (get_local $4)
-            ;;@ ~lib/memory.ts:214:36
+            ;;@ ~lib/memory.ts:109:36
             (i32.const 24)
            )
-           ;;@ ~lib/memory.ts:214:41
+           ;;@ ~lib/memory.ts:109:41
            (i32.shl
-            ;;@ ~lib/memory.ts:213:10
+            ;;@ ~lib/memory.ts:108:10
             (tee_local $3
-             ;;@ ~lib/memory.ts:213:14
+             ;;@ ~lib/memory.ts:108:14
              (i32.load
-              ;;@ ~lib/memory.ts:213:24
+              ;;@ ~lib/memory.ts:108:24
               (i32.add
                (get_local $1)
-               ;;@ ~lib/memory.ts:213:30
+               ;;@ ~lib/memory.ts:108:30
                (i32.const 9)
               )
              )
             )
-            ;;@ ~lib/memory.ts:214:46
+            ;;@ ~lib/memory.ts:109:46
             (i32.const 8)
            )
           )
          )
-         ;;@ ~lib/memory.ts:216:10
+         ;;@ ~lib/memory.ts:111:10
          (i32.store
-          ;;@ ~lib/memory.ts:216:21
+          ;;@ ~lib/memory.ts:111:21
           (i32.add
            (get_local $0)
-           ;;@ ~lib/memory.ts:216:28
+           ;;@ ~lib/memory.ts:111:28
            (i32.const 12)
           )
-          ;;@ ~lib/memory.ts:216:32
+          ;;@ ~lib/memory.ts:111:32
           (i32.or
            (i32.shr_u
             (get_local $3)
-            ;;@ ~lib/memory.ts:216:37
+            ;;@ ~lib/memory.ts:111:37
             (i32.const 24)
            )
-           ;;@ ~lib/memory.ts:216:42
+           ;;@ ~lib/memory.ts:111:42
            (i32.shl
-            ;;@ ~lib/memory.ts:215:10
+            ;;@ ~lib/memory.ts:110:10
             (tee_local $4
-             ;;@ ~lib/memory.ts:215:14
+             ;;@ ~lib/memory.ts:110:14
              (i32.load
-              ;;@ ~lib/memory.ts:215:24
+              ;;@ ~lib/memory.ts:110:24
               (i32.add
                (get_local $1)
-               ;;@ ~lib/memory.ts:215:30
+               ;;@ ~lib/memory.ts:110:30
                (i32.const 13)
               )
              )
             )
-            ;;@ ~lib/memory.ts:216:47
+            ;;@ ~lib/memory.ts:111:47
             (i32.const 8)
            )
           )
          )
-         ;;@ ~lib/memory.ts:217:10
+         ;;@ ~lib/memory.ts:112:10
          (set_local $1
           (i32.add
            (get_local $1)
-           ;;@ ~lib/memory.ts:217:17
+           ;;@ ~lib/memory.ts:112:17
            (i32.const 16)
           )
          )
-         ;;@ ~lib/memory.ts:217:21
+         ;;@ ~lib/memory.ts:112:21
          (set_local $0
           (i32.add
            (get_local $0)
-           ;;@ ~lib/memory.ts:217:29
+           ;;@ ~lib/memory.ts:112:29
            (i32.const 16)
           )
          )
-         ;;@ ~lib/memory.ts:217:33
+         ;;@ ~lib/memory.ts:112:33
          (set_local $2
           (i32.sub
            (get_local $2)
-           ;;@ ~lib/memory.ts:217:38
+           ;;@ ~lib/memory.ts:112:38
            (i32.const 16)
           )
          )
@@ -1171,30 +1167,30 @@
         )
        )
       )
-      ;;@ ~lib/memory.ts:219:8
+      ;;@ ~lib/memory.ts:114:8
       (br $break|2)
      )
-     ;;@ ~lib/memory.ts:222:8
+     ;;@ ~lib/memory.ts:117:8
      (set_local $4
-      ;;@ ~lib/memory.ts:222:12
+      ;;@ ~lib/memory.ts:117:12
       (i32.load
-       ;;@ ~lib/memory.ts:222:22
+       ;;@ ~lib/memory.ts:117:22
        (get_local $1)
       )
      )
      (set_local $0
       (i32.add
        (tee_local $3
-        ;;@ ~lib/memory.ts:223:18
+        ;;@ ~lib/memory.ts:118:18
         (get_local $0)
        )
        (i32.const 1)
       )
      )
-     ;;@ ~lib/memory.ts:223:8
+     ;;@ ~lib/memory.ts:118:8
      (i32.store8
       (get_local $3)
-      ;;@ ~lib/memory.ts:223:35
+      ;;@ ~lib/memory.ts:118:35
       (block (result i32)
        (set_local $1
         (i32.add
@@ -1204,7 +1200,7 @@
          (i32.const 1)
         )
        )
-       ;;@ ~lib/memory.ts:223:26
+       ;;@ ~lib/memory.ts:118:26
        (i32.load8_u
         (get_local $3)
        )
@@ -1213,16 +1209,16 @@
      (set_local $0
       (i32.add
        (tee_local $3
-        ;;@ ~lib/memory.ts:224:18
+        ;;@ ~lib/memory.ts:119:18
         (get_local $0)
        )
        (i32.const 1)
       )
      )
-     ;;@ ~lib/memory.ts:224:8
+     ;;@ ~lib/memory.ts:119:8
      (i32.store8
       (get_local $3)
-      ;;@ ~lib/memory.ts:224:35
+      ;;@ ~lib/memory.ts:119:35
       (block (result i32)
        (set_local $1
         (i32.add
@@ -1232,182 +1228,182 @@
          (i32.const 1)
         )
        )
-       ;;@ ~lib/memory.ts:224:26
+       ;;@ ~lib/memory.ts:119:26
        (i32.load8_u
         (get_local $3)
        )
       )
      )
-     ;;@ ~lib/memory.ts:225:8
+     ;;@ ~lib/memory.ts:120:8
      (set_local $2
       (i32.sub
        (get_local $2)
-       ;;@ ~lib/memory.ts:225:13
+       ;;@ ~lib/memory.ts:120:13
        (i32.const 2)
       )
      )
      (loop $continue|4
       (if
-       ;;@ ~lib/memory.ts:226:15
+       ;;@ ~lib/memory.ts:121:15
        (i32.ge_u
         (get_local $2)
-        ;;@ ~lib/memory.ts:226:20
+        ;;@ ~lib/memory.ts:121:20
         (i32.const 18)
        )
        (block
-        ;;@ ~lib/memory.ts:228:10
+        ;;@ ~lib/memory.ts:123:10
         (i32.store
-         ;;@ ~lib/memory.ts:228:21
+         ;;@ ~lib/memory.ts:123:21
          (get_local $0)
-         ;;@ ~lib/memory.ts:228:27
+         ;;@ ~lib/memory.ts:123:27
          (i32.or
           (i32.shr_u
            (get_local $4)
-           ;;@ ~lib/memory.ts:228:32
+           ;;@ ~lib/memory.ts:123:32
            (i32.const 16)
           )
-          ;;@ ~lib/memory.ts:228:37
+          ;;@ ~lib/memory.ts:123:37
           (i32.shl
-           ;;@ ~lib/memory.ts:227:10
+           ;;@ ~lib/memory.ts:122:10
            (tee_local $3
-            ;;@ ~lib/memory.ts:227:14
+            ;;@ ~lib/memory.ts:122:14
             (i32.load
-             ;;@ ~lib/memory.ts:227:24
+             ;;@ ~lib/memory.ts:122:24
              (i32.add
               (get_local $1)
-              ;;@ ~lib/memory.ts:227:30
+              ;;@ ~lib/memory.ts:122:30
               (i32.const 2)
              )
             )
            )
-           ;;@ ~lib/memory.ts:228:42
+           ;;@ ~lib/memory.ts:123:42
            (i32.const 16)
           )
          )
         )
-        ;;@ ~lib/memory.ts:230:10
+        ;;@ ~lib/memory.ts:125:10
         (i32.store
-         ;;@ ~lib/memory.ts:230:21
+         ;;@ ~lib/memory.ts:125:21
          (i32.add
           (get_local $0)
-          ;;@ ~lib/memory.ts:230:28
+          ;;@ ~lib/memory.ts:125:28
           (i32.const 4)
          )
-         ;;@ ~lib/memory.ts:230:31
+         ;;@ ~lib/memory.ts:125:31
          (i32.or
           (i32.shr_u
            (get_local $3)
-           ;;@ ~lib/memory.ts:230:36
+           ;;@ ~lib/memory.ts:125:36
            (i32.const 16)
           )
-          ;;@ ~lib/memory.ts:230:41
+          ;;@ ~lib/memory.ts:125:41
           (i32.shl
-           ;;@ ~lib/memory.ts:229:10
+           ;;@ ~lib/memory.ts:124:10
            (tee_local $4
-            ;;@ ~lib/memory.ts:229:14
+            ;;@ ~lib/memory.ts:124:14
             (i32.load
-             ;;@ ~lib/memory.ts:229:24
+             ;;@ ~lib/memory.ts:124:24
              (i32.add
               (get_local $1)
-              ;;@ ~lib/memory.ts:229:30
+              ;;@ ~lib/memory.ts:124:30
               (i32.const 6)
              )
             )
            )
-           ;;@ ~lib/memory.ts:230:46
+           ;;@ ~lib/memory.ts:125:46
            (i32.const 16)
           )
          )
         )
-        ;;@ ~lib/memory.ts:232:10
+        ;;@ ~lib/memory.ts:127:10
         (i32.store
-         ;;@ ~lib/memory.ts:232:21
+         ;;@ ~lib/memory.ts:127:21
          (i32.add
           (get_local $0)
-          ;;@ ~lib/memory.ts:232:28
+          ;;@ ~lib/memory.ts:127:28
           (i32.const 8)
          )
-         ;;@ ~lib/memory.ts:232:31
+         ;;@ ~lib/memory.ts:127:31
          (i32.or
           (i32.shr_u
            (get_local $4)
-           ;;@ ~lib/memory.ts:232:36
+           ;;@ ~lib/memory.ts:127:36
            (i32.const 16)
           )
-          ;;@ ~lib/memory.ts:232:41
+          ;;@ ~lib/memory.ts:127:41
           (i32.shl
-           ;;@ ~lib/memory.ts:231:10
+           ;;@ ~lib/memory.ts:126:10
            (tee_local $3
-            ;;@ ~lib/memory.ts:231:14
+            ;;@ ~lib/memory.ts:126:14
             (i32.load
-             ;;@ ~lib/memory.ts:231:24
+             ;;@ ~lib/memory.ts:126:24
              (i32.add
               (get_local $1)
-              ;;@ ~lib/memory.ts:231:30
+              ;;@ ~lib/memory.ts:126:30
               (i32.const 10)
              )
             )
            )
-           ;;@ ~lib/memory.ts:232:46
+           ;;@ ~lib/memory.ts:127:46
            (i32.const 16)
           )
          )
         )
-        ;;@ ~lib/memory.ts:234:10
+        ;;@ ~lib/memory.ts:129:10
         (i32.store
-         ;;@ ~lib/memory.ts:234:21
+         ;;@ ~lib/memory.ts:129:21
          (i32.add
           (get_local $0)
-          ;;@ ~lib/memory.ts:234:28
+          ;;@ ~lib/memory.ts:129:28
           (i32.const 12)
          )
-         ;;@ ~lib/memory.ts:234:32
+         ;;@ ~lib/memory.ts:129:32
          (i32.or
           (i32.shr_u
            (get_local $3)
-           ;;@ ~lib/memory.ts:234:37
+           ;;@ ~lib/memory.ts:129:37
            (i32.const 16)
           )
-          ;;@ ~lib/memory.ts:234:42
+          ;;@ ~lib/memory.ts:129:42
           (i32.shl
-           ;;@ ~lib/memory.ts:233:10
+           ;;@ ~lib/memory.ts:128:10
            (tee_local $4
-            ;;@ ~lib/memory.ts:233:14
+            ;;@ ~lib/memory.ts:128:14
             (i32.load
-             ;;@ ~lib/memory.ts:233:24
+             ;;@ ~lib/memory.ts:128:24
              (i32.add
               (get_local $1)
-              ;;@ ~lib/memory.ts:233:30
+              ;;@ ~lib/memory.ts:128:30
               (i32.const 14)
              )
             )
            )
-           ;;@ ~lib/memory.ts:234:47
+           ;;@ ~lib/memory.ts:129:47
            (i32.const 16)
           )
          )
         )
-        ;;@ ~lib/memory.ts:235:10
+        ;;@ ~lib/memory.ts:130:10
         (set_local $1
          (i32.add
           (get_local $1)
-          ;;@ ~lib/memory.ts:235:17
+          ;;@ ~lib/memory.ts:130:17
           (i32.const 16)
          )
         )
-        ;;@ ~lib/memory.ts:235:21
+        ;;@ ~lib/memory.ts:130:21
         (set_local $0
          (i32.add
           (get_local $0)
-          ;;@ ~lib/memory.ts:235:29
+          ;;@ ~lib/memory.ts:130:29
           (i32.const 16)
          )
         )
-        ;;@ ~lib/memory.ts:235:33
+        ;;@ ~lib/memory.ts:130:33
         (set_local $2
          (i32.sub
           (get_local $2)
-          ;;@ ~lib/memory.ts:235:38
+          ;;@ ~lib/memory.ts:130:38
           (i32.const 16)
          )
         )
@@ -1415,30 +1411,30 @@
        )
       )
      )
-     ;;@ ~lib/memory.ts:237:8
+     ;;@ ~lib/memory.ts:132:8
      (br $break|2)
     )
-    ;;@ ~lib/memory.ts:240:8
+    ;;@ ~lib/memory.ts:135:8
     (set_local $4
-     ;;@ ~lib/memory.ts:240:12
+     ;;@ ~lib/memory.ts:135:12
      (i32.load
-      ;;@ ~lib/memory.ts:240:22
+      ;;@ ~lib/memory.ts:135:22
       (get_local $1)
      )
     )
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:241:18
+       ;;@ ~lib/memory.ts:136:18
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:241:8
+    ;;@ ~lib/memory.ts:136:8
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:241:35
+     ;;@ ~lib/memory.ts:136:35
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1448,182 +1444,182 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:241:26
+      ;;@ ~lib/memory.ts:136:26
       (i32.load8_u
        (get_local $3)
       )
      )
     )
-    ;;@ ~lib/memory.ts:242:8
+    ;;@ ~lib/memory.ts:137:8
     (set_local $2
      (i32.sub
       (get_local $2)
-      ;;@ ~lib/memory.ts:242:13
+      ;;@ ~lib/memory.ts:137:13
       (i32.const 1)
      )
     )
     (loop $continue|5
      (if
-      ;;@ ~lib/memory.ts:243:15
+      ;;@ ~lib/memory.ts:138:15
       (i32.ge_u
        (get_local $2)
-       ;;@ ~lib/memory.ts:243:20
+       ;;@ ~lib/memory.ts:138:20
        (i32.const 19)
       )
       (block
-       ;;@ ~lib/memory.ts:245:10
+       ;;@ ~lib/memory.ts:140:10
        (i32.store
-        ;;@ ~lib/memory.ts:245:21
+        ;;@ ~lib/memory.ts:140:21
         (get_local $0)
-        ;;@ ~lib/memory.ts:245:27
+        ;;@ ~lib/memory.ts:140:27
         (i32.or
          (i32.shr_u
           (get_local $4)
-          ;;@ ~lib/memory.ts:245:32
+          ;;@ ~lib/memory.ts:140:32
           (i32.const 8)
          )
-         ;;@ ~lib/memory.ts:245:36
+         ;;@ ~lib/memory.ts:140:36
          (i32.shl
-          ;;@ ~lib/memory.ts:244:10
+          ;;@ ~lib/memory.ts:139:10
           (tee_local $3
-           ;;@ ~lib/memory.ts:244:14
+           ;;@ ~lib/memory.ts:139:14
            (i32.load
-            ;;@ ~lib/memory.ts:244:24
+            ;;@ ~lib/memory.ts:139:24
             (i32.add
              (get_local $1)
-             ;;@ ~lib/memory.ts:244:30
+             ;;@ ~lib/memory.ts:139:30
              (i32.const 3)
             )
            )
           )
-          ;;@ ~lib/memory.ts:245:41
+          ;;@ ~lib/memory.ts:140:41
           (i32.const 24)
          )
         )
        )
-       ;;@ ~lib/memory.ts:247:10
+       ;;@ ~lib/memory.ts:142:10
        (i32.store
-        ;;@ ~lib/memory.ts:247:21
+        ;;@ ~lib/memory.ts:142:21
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:247:28
+         ;;@ ~lib/memory.ts:142:28
          (i32.const 4)
         )
-        ;;@ ~lib/memory.ts:247:31
+        ;;@ ~lib/memory.ts:142:31
         (i32.or
          (i32.shr_u
           (get_local $3)
-          ;;@ ~lib/memory.ts:247:36
+          ;;@ ~lib/memory.ts:142:36
           (i32.const 8)
          )
-         ;;@ ~lib/memory.ts:247:40
+         ;;@ ~lib/memory.ts:142:40
          (i32.shl
-          ;;@ ~lib/memory.ts:246:10
+          ;;@ ~lib/memory.ts:141:10
           (tee_local $4
-           ;;@ ~lib/memory.ts:246:14
+           ;;@ ~lib/memory.ts:141:14
            (i32.load
-            ;;@ ~lib/memory.ts:246:24
+            ;;@ ~lib/memory.ts:141:24
             (i32.add
              (get_local $1)
-             ;;@ ~lib/memory.ts:246:30
+             ;;@ ~lib/memory.ts:141:30
              (i32.const 7)
             )
            )
           )
-          ;;@ ~lib/memory.ts:247:45
+          ;;@ ~lib/memory.ts:142:45
           (i32.const 24)
          )
         )
        )
-       ;;@ ~lib/memory.ts:249:10
+       ;;@ ~lib/memory.ts:144:10
        (i32.store
-        ;;@ ~lib/memory.ts:249:21
+        ;;@ ~lib/memory.ts:144:21
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:249:28
+         ;;@ ~lib/memory.ts:144:28
          (i32.const 8)
         )
-        ;;@ ~lib/memory.ts:249:31
+        ;;@ ~lib/memory.ts:144:31
         (i32.or
          (i32.shr_u
           (get_local $4)
-          ;;@ ~lib/memory.ts:249:36
+          ;;@ ~lib/memory.ts:144:36
           (i32.const 8)
          )
-         ;;@ ~lib/memory.ts:249:40
+         ;;@ ~lib/memory.ts:144:40
          (i32.shl
-          ;;@ ~lib/memory.ts:248:10
+          ;;@ ~lib/memory.ts:143:10
           (tee_local $3
-           ;;@ ~lib/memory.ts:248:14
+           ;;@ ~lib/memory.ts:143:14
            (i32.load
-            ;;@ ~lib/memory.ts:248:24
+            ;;@ ~lib/memory.ts:143:24
             (i32.add
              (get_local $1)
-             ;;@ ~lib/memory.ts:248:30
+             ;;@ ~lib/memory.ts:143:30
              (i32.const 11)
             )
            )
           )
-          ;;@ ~lib/memory.ts:249:45
+          ;;@ ~lib/memory.ts:144:45
           (i32.const 24)
          )
         )
        )
-       ;;@ ~lib/memory.ts:251:10
+       ;;@ ~lib/memory.ts:146:10
        (i32.store
-        ;;@ ~lib/memory.ts:251:21
+        ;;@ ~lib/memory.ts:146:21
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:251:28
+         ;;@ ~lib/memory.ts:146:28
          (i32.const 12)
         )
-        ;;@ ~lib/memory.ts:251:32
+        ;;@ ~lib/memory.ts:146:32
         (i32.or
          (i32.shr_u
           (get_local $3)
-          ;;@ ~lib/memory.ts:251:37
+          ;;@ ~lib/memory.ts:146:37
           (i32.const 8)
          )
-         ;;@ ~lib/memory.ts:251:41
+         ;;@ ~lib/memory.ts:146:41
          (i32.shl
-          ;;@ ~lib/memory.ts:250:10
+          ;;@ ~lib/memory.ts:145:10
           (tee_local $4
-           ;;@ ~lib/memory.ts:250:14
+           ;;@ ~lib/memory.ts:145:14
            (i32.load
-            ;;@ ~lib/memory.ts:250:24
+            ;;@ ~lib/memory.ts:145:24
             (i32.add
              (get_local $1)
-             ;;@ ~lib/memory.ts:250:30
+             ;;@ ~lib/memory.ts:145:30
              (i32.const 15)
             )
            )
           )
-          ;;@ ~lib/memory.ts:251:46
+          ;;@ ~lib/memory.ts:146:46
           (i32.const 24)
          )
         )
        )
-       ;;@ ~lib/memory.ts:252:10
+       ;;@ ~lib/memory.ts:147:10
        (set_local $1
         (i32.add
          (get_local $1)
-         ;;@ ~lib/memory.ts:252:17
+         ;;@ ~lib/memory.ts:147:17
          (i32.const 16)
         )
        )
-       ;;@ ~lib/memory.ts:252:21
+       ;;@ ~lib/memory.ts:147:21
        (set_local $0
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:252:29
+         ;;@ ~lib/memory.ts:147:29
          (i32.const 16)
         )
        )
-       ;;@ ~lib/memory.ts:252:33
+       ;;@ ~lib/memory.ts:147:33
        (set_local $2
         (i32.sub
          (get_local $2)
-         ;;@ ~lib/memory.ts:252:38
+         ;;@ ~lib/memory.ts:147:38
          (i32.const 16)
         )
        )
@@ -1633,29 +1629,29 @@
     )
    )
   )
-  ;;@ ~lib/memory.ts:260:2
+  ;;@ ~lib/memory.ts:155:2
   (if
-   ;;@ ~lib/memory.ts:260:6
+   ;;@ ~lib/memory.ts:155:6
    (i32.and
     (get_local $2)
-    ;;@ ~lib/memory.ts:260:10
+    ;;@ ~lib/memory.ts:155:10
     (i32.const 16)
    )
-   ;;@ ~lib/memory.ts:260:14
+   ;;@ ~lib/memory.ts:155:14
    (block
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:261:14
+       ;;@ ~lib/memory.ts:156:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:261:4
+    ;;@ ~lib/memory.ts:156:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:261:31
+     ;;@ ~lib/memory.ts:156:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1665,7 +1661,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:261:22
+      ;;@ ~lib/memory.ts:156:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1674,16 +1670,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:262:14
+       ;;@ ~lib/memory.ts:157:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:262:4
+    ;;@ ~lib/memory.ts:157:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:262:31
+     ;;@ ~lib/memory.ts:157:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1693,7 +1689,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:262:22
+      ;;@ ~lib/memory.ts:157:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1702,16 +1698,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:263:14
+       ;;@ ~lib/memory.ts:158:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:263:4
+    ;;@ ~lib/memory.ts:158:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:263:31
+     ;;@ ~lib/memory.ts:158:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1721,7 +1717,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:263:22
+      ;;@ ~lib/memory.ts:158:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1730,16 +1726,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:264:14
+       ;;@ ~lib/memory.ts:159:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:264:4
+    ;;@ ~lib/memory.ts:159:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:264:31
+     ;;@ ~lib/memory.ts:159:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1749,7 +1745,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:264:22
+      ;;@ ~lib/memory.ts:159:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1758,16 +1754,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:265:14
+       ;;@ ~lib/memory.ts:160:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:265:4
+    ;;@ ~lib/memory.ts:160:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:265:31
+     ;;@ ~lib/memory.ts:160:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1777,7 +1773,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:265:22
+      ;;@ ~lib/memory.ts:160:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1786,16 +1782,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:266:14
+       ;;@ ~lib/memory.ts:161:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:266:4
+    ;;@ ~lib/memory.ts:161:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:266:31
+     ;;@ ~lib/memory.ts:161:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1805,7 +1801,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:266:22
+      ;;@ ~lib/memory.ts:161:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1814,16 +1810,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:267:14
+       ;;@ ~lib/memory.ts:162:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:267:4
+    ;;@ ~lib/memory.ts:162:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:267:31
+     ;;@ ~lib/memory.ts:162:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1833,7 +1829,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:267:22
+      ;;@ ~lib/memory.ts:162:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1842,16 +1838,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:268:14
+       ;;@ ~lib/memory.ts:163:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:268:4
+    ;;@ ~lib/memory.ts:163:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:268:31
+     ;;@ ~lib/memory.ts:163:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1861,7 +1857,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:268:22
+      ;;@ ~lib/memory.ts:163:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1870,16 +1866,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:269:14
+       ;;@ ~lib/memory.ts:164:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:269:4
+    ;;@ ~lib/memory.ts:164:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:269:31
+     ;;@ ~lib/memory.ts:164:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1889,7 +1885,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:269:22
+      ;;@ ~lib/memory.ts:164:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1898,16 +1894,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:270:14
+       ;;@ ~lib/memory.ts:165:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:270:4
+    ;;@ ~lib/memory.ts:165:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:270:31
+     ;;@ ~lib/memory.ts:165:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1917,7 +1913,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:270:22
+      ;;@ ~lib/memory.ts:165:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1926,16 +1922,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:271:14
+       ;;@ ~lib/memory.ts:166:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:271:4
+    ;;@ ~lib/memory.ts:166:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:271:31
+     ;;@ ~lib/memory.ts:166:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1945,7 +1941,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:271:22
+      ;;@ ~lib/memory.ts:166:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1954,16 +1950,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:272:14
+       ;;@ ~lib/memory.ts:167:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:272:4
+    ;;@ ~lib/memory.ts:167:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:272:31
+     ;;@ ~lib/memory.ts:167:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -1973,7 +1969,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:272:22
+      ;;@ ~lib/memory.ts:167:22
       (i32.load8_u
        (get_local $3)
       )
@@ -1982,16 +1978,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:273:14
+       ;;@ ~lib/memory.ts:168:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:273:4
+    ;;@ ~lib/memory.ts:168:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:273:31
+     ;;@ ~lib/memory.ts:168:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2001,7 +1997,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:273:22
+      ;;@ ~lib/memory.ts:168:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2010,16 +2006,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:274:14
+       ;;@ ~lib/memory.ts:169:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:274:4
+    ;;@ ~lib/memory.ts:169:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:274:31
+     ;;@ ~lib/memory.ts:169:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2029,7 +2025,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:274:22
+      ;;@ ~lib/memory.ts:169:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2038,16 +2034,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:275:14
+       ;;@ ~lib/memory.ts:170:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:275:4
+    ;;@ ~lib/memory.ts:170:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:275:31
+     ;;@ ~lib/memory.ts:170:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2057,7 +2053,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:275:22
+      ;;@ ~lib/memory.ts:170:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2066,16 +2062,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:276:14
+       ;;@ ~lib/memory.ts:171:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:276:4
+    ;;@ ~lib/memory.ts:171:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:276:31
+     ;;@ ~lib/memory.ts:171:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2085,7 +2081,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:276:22
+      ;;@ ~lib/memory.ts:171:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2093,29 +2089,29 @@
     )
    )
   )
-  ;;@ ~lib/memory.ts:278:2
+  ;;@ ~lib/memory.ts:173:2
   (if
-   ;;@ ~lib/memory.ts:278:6
+   ;;@ ~lib/memory.ts:173:6
    (i32.and
     (get_local $2)
-    ;;@ ~lib/memory.ts:278:10
+    ;;@ ~lib/memory.ts:173:10
     (i32.const 8)
    )
-   ;;@ ~lib/memory.ts:278:13
+   ;;@ ~lib/memory.ts:173:13
    (block
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:279:14
+       ;;@ ~lib/memory.ts:174:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:279:4
+    ;;@ ~lib/memory.ts:174:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:279:31
+     ;;@ ~lib/memory.ts:174:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2125,7 +2121,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:279:22
+      ;;@ ~lib/memory.ts:174:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2134,16 +2130,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:280:14
+       ;;@ ~lib/memory.ts:175:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:280:4
+    ;;@ ~lib/memory.ts:175:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:280:31
+     ;;@ ~lib/memory.ts:175:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2153,7 +2149,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:280:22
+      ;;@ ~lib/memory.ts:175:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2162,16 +2158,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:281:14
+       ;;@ ~lib/memory.ts:176:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:281:4
+    ;;@ ~lib/memory.ts:176:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:281:31
+     ;;@ ~lib/memory.ts:176:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2181,7 +2177,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:281:22
+      ;;@ ~lib/memory.ts:176:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2190,16 +2186,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:282:14
+       ;;@ ~lib/memory.ts:177:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:282:4
+    ;;@ ~lib/memory.ts:177:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:282:31
+     ;;@ ~lib/memory.ts:177:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2209,7 +2205,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:282:22
+      ;;@ ~lib/memory.ts:177:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2218,16 +2214,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:283:14
+       ;;@ ~lib/memory.ts:178:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:283:4
+    ;;@ ~lib/memory.ts:178:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:283:31
+     ;;@ ~lib/memory.ts:178:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2237,7 +2233,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:283:22
+      ;;@ ~lib/memory.ts:178:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2246,16 +2242,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:284:14
+       ;;@ ~lib/memory.ts:179:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:284:4
+    ;;@ ~lib/memory.ts:179:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:284:31
+     ;;@ ~lib/memory.ts:179:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2265,7 +2261,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:284:22
+      ;;@ ~lib/memory.ts:179:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2274,16 +2270,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:285:14
+       ;;@ ~lib/memory.ts:180:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:285:4
+    ;;@ ~lib/memory.ts:180:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:285:31
+     ;;@ ~lib/memory.ts:180:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2293,7 +2289,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:285:22
+      ;;@ ~lib/memory.ts:180:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2302,16 +2298,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:286:14
+       ;;@ ~lib/memory.ts:181:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:286:4
+    ;;@ ~lib/memory.ts:181:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:286:31
+     ;;@ ~lib/memory.ts:181:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2321,7 +2317,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:286:22
+      ;;@ ~lib/memory.ts:181:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2329,29 +2325,29 @@
     )
    )
   )
-  ;;@ ~lib/memory.ts:288:2
+  ;;@ ~lib/memory.ts:183:2
   (if
-   ;;@ ~lib/memory.ts:288:6
+   ;;@ ~lib/memory.ts:183:6
    (i32.and
     (get_local $2)
-    ;;@ ~lib/memory.ts:288:10
+    ;;@ ~lib/memory.ts:183:10
     (i32.const 4)
    )
-   ;;@ ~lib/memory.ts:288:13
+   ;;@ ~lib/memory.ts:183:13
    (block
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:289:14
+       ;;@ ~lib/memory.ts:184:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:289:4
+    ;;@ ~lib/memory.ts:184:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:289:31
+     ;;@ ~lib/memory.ts:184:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2361,7 +2357,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:289:22
+      ;;@ ~lib/memory.ts:184:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2370,16 +2366,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:290:14
+       ;;@ ~lib/memory.ts:185:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:290:4
+    ;;@ ~lib/memory.ts:185:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:290:31
+     ;;@ ~lib/memory.ts:185:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2389,7 +2385,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:290:22
+      ;;@ ~lib/memory.ts:185:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2398,16 +2394,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:291:14
+       ;;@ ~lib/memory.ts:186:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:291:4
+    ;;@ ~lib/memory.ts:186:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:291:31
+     ;;@ ~lib/memory.ts:186:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2417,7 +2413,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:291:22
+      ;;@ ~lib/memory.ts:186:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2426,16 +2422,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:292:14
+       ;;@ ~lib/memory.ts:187:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:292:4
+    ;;@ ~lib/memory.ts:187:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:292:31
+     ;;@ ~lib/memory.ts:187:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2445,7 +2441,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:292:22
+      ;;@ ~lib/memory.ts:187:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2453,29 +2449,29 @@
     )
    )
   )
-  ;;@ ~lib/memory.ts:294:2
+  ;;@ ~lib/memory.ts:189:2
   (if
-   ;;@ ~lib/memory.ts:294:6
+   ;;@ ~lib/memory.ts:189:6
    (i32.and
     (get_local $2)
-    ;;@ ~lib/memory.ts:294:10
+    ;;@ ~lib/memory.ts:189:10
     (i32.const 2)
    )
-   ;;@ ~lib/memory.ts:294:13
+   ;;@ ~lib/memory.ts:189:13
    (block
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:295:14
+       ;;@ ~lib/memory.ts:190:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:295:4
+    ;;@ ~lib/memory.ts:190:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:295:31
+     ;;@ ~lib/memory.ts:190:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2485,7 +2481,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:295:22
+      ;;@ ~lib/memory.ts:190:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2494,16 +2490,16 @@
     (set_local $0
      (i32.add
       (tee_local $3
-       ;;@ ~lib/memory.ts:296:14
+       ;;@ ~lib/memory.ts:191:14
        (get_local $0)
       )
       (i32.const 1)
      )
     )
-    ;;@ ~lib/memory.ts:296:4
+    ;;@ ~lib/memory.ts:191:4
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:296:31
+     ;;@ ~lib/memory.ts:191:31
      (block (result i32)
       (set_local $1
        (i32.add
@@ -2513,7 +2509,7 @@
         (i32.const 1)
        )
       )
-      ;;@ ~lib/memory.ts:296:22
+      ;;@ ~lib/memory.ts:191:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2521,28 +2517,28 @@
     )
    )
   )
-  ;;@ ~lib/memory.ts:298:2
+  ;;@ ~lib/memory.ts:193:2
   (if
-   ;;@ ~lib/memory.ts:298:6
+   ;;@ ~lib/memory.ts:193:6
    (i32.and
     (get_local $2)
-    ;;@ ~lib/memory.ts:298:10
+    ;;@ ~lib/memory.ts:193:10
     (i32.const 1)
    )
-   ;;@ ~lib/memory.ts:299:14
+   ;;@ ~lib/memory.ts:194:14
    (block
     (set_local $3
      (get_local $0)
     )
-    ;;@ ~lib/memory.ts:298:13
+    ;;@ ~lib/memory.ts:193:13
     (i32.store8
      (get_local $3)
-     ;;@ ~lib/memory.ts:299:31
+     ;;@ ~lib/memory.ts:194:31
      (block (result i32)
       (set_local $3
        (get_local $1)
       )
-      ;;@ ~lib/memory.ts:299:22
+      ;;@ ~lib/memory.ts:194:22
       (i32.load8_u
        (get_local $3)
       )
@@ -2551,114 +2547,114 @@
    )
   )
  )
- (func $~lib/memory/memory.copy (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memmove (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
-  ;;@ ~lib/memory.ts:79:4
+  ;;@ ~lib/memory.ts:200:2
   (if
-   ;;@ ~lib/memory.ts:79:8
+   ;;@ ~lib/memory.ts:200:6
    (i32.eq
     (get_local $0)
-    ;;@ ~lib/memory.ts:79:16
+    ;;@ ~lib/memory.ts:200:14
     (get_local $1)
    )
-   ;;@ ~lib/memory.ts:79:21
+   ;;@ ~lib/memory.ts:200:19
    (return)
   )
-  ;;@ ~lib/memory.ts:80:4
+  ;;@ ~lib/memory.ts:201:2
   (if
-   ;;@ ~lib/memory.ts:80:8
+   ;;@ ~lib/memory.ts:201:6
    (if (result i32)
     (tee_local $3
      (i32.le_u
       (i32.add
        (get_local $1)
-       ;;@ ~lib/memory.ts:80:14
+       ;;@ ~lib/memory.ts:201:12
        (get_local $2)
       )
-      ;;@ ~lib/memory.ts:80:19
+      ;;@ ~lib/memory.ts:201:17
       (get_local $0)
      )
     )
     (get_local $3)
-    ;;@ ~lib/memory.ts:80:27
+    ;;@ ~lib/memory.ts:201:25
     (i32.le_u
      (i32.add
       (get_local $0)
-      ;;@ ~lib/memory.ts:80:34
+      ;;@ ~lib/memory.ts:201:32
       (get_local $2)
      )
-     ;;@ ~lib/memory.ts:80:39
+     ;;@ ~lib/memory.ts:201:37
      (get_local $1)
     )
    )
-   ;;@ ~lib/memory.ts:80:44
+   ;;@ ~lib/memory.ts:201:42
    (block
-    ;;@ ~lib/memory.ts:81:6
+    ;;@ ~lib/memory.ts:202:4
     (call $~lib/memory/memcpy
-     ;;@ ~lib/memory.ts:81:13
+     ;;@ ~lib/memory.ts:202:11
      (get_local $0)
-     ;;@ ~lib/memory.ts:81:19
+     ;;@ ~lib/memory.ts:202:17
      (get_local $1)
-     ;;@ ~lib/memory.ts:81:24
+     ;;@ ~lib/memory.ts:202:22
      (get_local $2)
     )
-    ;;@ ~lib/memory.ts:82:6
+    ;;@ ~lib/memory.ts:203:4
     (return)
    )
   )
-  ;;@ ~lib/memory.ts:84:4
+  ;;@ ~lib/memory.ts:205:2
   (if
-   ;;@ ~lib/memory.ts:84:8
+   ;;@ ~lib/memory.ts:205:6
    (i32.lt_u
     (get_local $0)
-    ;;@ ~lib/memory.ts:84:15
+    ;;@ ~lib/memory.ts:205:13
     (get_local $1)
    )
-   ;;@ ~lib/memory.ts:84:20
+   ;;@ ~lib/memory.ts:205:18
    (block
-    ;;@ ~lib/memory.ts:85:6
+    ;;@ ~lib/memory.ts:206:4
     (if
-     ;;@ ~lib/memory.ts:85:10
+     ;;@ ~lib/memory.ts:206:8
      (i32.eq
       (i32.and
-       ;;@ ~lib/memory.ts:85:11
+       ;;@ ~lib/memory.ts:206:9
        (get_local $1)
-       ;;@ ~lib/memory.ts:85:17
+       ;;@ ~lib/memory.ts:206:15
        (i32.const 7)
       )
-      ;;@ ~lib/memory.ts:85:23
+      ;;@ ~lib/memory.ts:206:21
       (i32.and
-       ;;@ ~lib/memory.ts:85:24
+       ;;@ ~lib/memory.ts:206:22
        (get_local $0)
-       ;;@ ~lib/memory.ts:85:31
+       ;;@ ~lib/memory.ts:206:29
        (i32.const 7)
       )
      )
-     ;;@ ~lib/memory.ts:85:35
+     ;;@ ~lib/memory.ts:206:33
      (block
       (loop $continue|0
        (if
-        ;;@ ~lib/memory.ts:86:15
+        ;;@ ~lib/memory.ts:207:13
         (i32.and
          (get_local $0)
-         ;;@ ~lib/memory.ts:86:22
+         ;;@ ~lib/memory.ts:207:20
          (i32.const 7)
         )
         (block
-         ;;@ ~lib/memory.ts:87:10
+         ;;@ ~lib/memory.ts:208:8
          (if
-          ;;@ ~lib/memory.ts:87:14
+          ;;@ ~lib/memory.ts:208:12
           (i32.eqz
-           ;;@ ~lib/memory.ts:87:15
+           ;;@ ~lib/memory.ts:208:13
            (get_local $2)
           )
-          ;;@ ~lib/memory.ts:87:18
+          ;;@ ~lib/memory.ts:208:16
           (return)
          )
-         ;;@ ~lib/memory.ts:88:10
+         ;;@ ~lib/memory.ts:209:8
          (set_local $2
           (i32.sub
-           ;;@ ~lib/memory.ts:88:12
+           ;;@ ~lib/memory.ts:209:10
            (get_local $2)
            (i32.const 1)
           )
@@ -2666,16 +2662,16 @@
          (set_local $0
           (i32.add
            (tee_local $3
-            ;;@ ~lib/memory.ts:89:20
+            ;;@ ~lib/memory.ts:210:18
             (get_local $0)
            )
            (i32.const 1)
           )
          )
-         ;;@ ~lib/memory.ts:89:10
+         ;;@ ~lib/memory.ts:210:8
          (i32.store8
           (get_local $3)
-          ;;@ ~lib/memory.ts:89:37
+          ;;@ ~lib/memory.ts:210:35
           (block (result i32)
            (set_local $1
             (i32.add
@@ -2685,7 +2681,7 @@
              (i32.const 1)
             )
            )
-           ;;@ ~lib/memory.ts:89:28
+           ;;@ ~lib/memory.ts:210:26
            (i32.load8_u
             (get_local $3)
            )
@@ -2697,44 +2693,44 @@
       )
       (loop $continue|1
        (if
-        ;;@ ~lib/memory.ts:91:15
+        ;;@ ~lib/memory.ts:212:13
         (i32.ge_u
          (get_local $2)
-         ;;@ ~lib/memory.ts:91:20
+         ;;@ ~lib/memory.ts:212:18
          (i32.const 8)
         )
         (block
-         ;;@ ~lib/memory.ts:92:10
+         ;;@ ~lib/memory.ts:213:8
          (i64.store
-          ;;@ ~lib/memory.ts:92:21
+          ;;@ ~lib/memory.ts:213:19
           (get_local $0)
-          ;;@ ~lib/memory.ts:92:27
+          ;;@ ~lib/memory.ts:213:25
           (i64.load
-           ;;@ ~lib/memory.ts:92:37
+           ;;@ ~lib/memory.ts:213:35
            (get_local $1)
           )
          )
-         ;;@ ~lib/memory.ts:93:10
+         ;;@ ~lib/memory.ts:214:8
          (set_local $2
           (i32.sub
            (get_local $2)
-           ;;@ ~lib/memory.ts:93:18
+           ;;@ ~lib/memory.ts:214:16
            (i32.const 8)
           )
          )
-         ;;@ ~lib/memory.ts:94:10
+         ;;@ ~lib/memory.ts:215:8
          (set_local $0
           (i32.add
            (get_local $0)
-           ;;@ ~lib/memory.ts:94:18
+           ;;@ ~lib/memory.ts:215:16
            (i32.const 8)
           )
          )
-         ;;@ ~lib/memory.ts:95:10
+         ;;@ ~lib/memory.ts:216:8
          (set_local $1
           (i32.add
            (get_local $1)
-           ;;@ ~lib/memory.ts:95:18
+           ;;@ ~lib/memory.ts:216:16
            (i32.const 8)
           )
          )
@@ -2746,22 +2742,22 @@
     )
     (loop $continue|2
      (if
-      ;;@ ~lib/memory.ts:98:13
+      ;;@ ~lib/memory.ts:219:11
       (get_local $2)
       (block
        (set_local $0
         (i32.add
          (tee_local $3
-          ;;@ ~lib/memory.ts:99:18
+          ;;@ ~lib/memory.ts:220:16
           (get_local $0)
          )
          (i32.const 1)
         )
        )
-       ;;@ ~lib/memory.ts:99:8
+       ;;@ ~lib/memory.ts:220:6
        (i32.store8
         (get_local $3)
-        ;;@ ~lib/memory.ts:99:35
+        ;;@ ~lib/memory.ts:220:33
         (block (result i32)
          (set_local $1
           (i32.add
@@ -2771,16 +2767,16 @@
            (i32.const 1)
           )
          )
-         ;;@ ~lib/memory.ts:99:26
+         ;;@ ~lib/memory.ts:220:24
          (i32.load8_u
           (get_local $3)
          )
         )
        )
-       ;;@ ~lib/memory.ts:100:8
+       ;;@ ~lib/memory.ts:221:6
        (set_local $2
         (i32.sub
-         ;;@ ~lib/memory.ts:100:10
+         ;;@ ~lib/memory.ts:221:8
          (get_local $2)
          (i32.const 1)
         )
@@ -2790,72 +2786,72 @@
      )
     )
    )
-   ;;@ ~lib/memory.ts:102:11
+   ;;@ ~lib/memory.ts:223:9
    (block
-    ;;@ ~lib/memory.ts:103:6
+    ;;@ ~lib/memory.ts:224:4
     (if
-     ;;@ ~lib/memory.ts:103:10
+     ;;@ ~lib/memory.ts:224:8
      (i32.eq
       (i32.and
-       ;;@ ~lib/memory.ts:103:11
+       ;;@ ~lib/memory.ts:224:9
        (get_local $1)
-       ;;@ ~lib/memory.ts:103:17
+       ;;@ ~lib/memory.ts:224:15
        (i32.const 7)
       )
-      ;;@ ~lib/memory.ts:103:23
+      ;;@ ~lib/memory.ts:224:21
       (i32.and
-       ;;@ ~lib/memory.ts:103:24
+       ;;@ ~lib/memory.ts:224:22
        (get_local $0)
-       ;;@ ~lib/memory.ts:103:31
+       ;;@ ~lib/memory.ts:224:29
        (i32.const 7)
       )
      )
-     ;;@ ~lib/memory.ts:103:35
+     ;;@ ~lib/memory.ts:224:33
      (block
       (loop $continue|3
        (if
-        ;;@ ~lib/memory.ts:104:15
+        ;;@ ~lib/memory.ts:225:13
         (i32.and
          (i32.add
-          ;;@ ~lib/memory.ts:104:16
+          ;;@ ~lib/memory.ts:225:14
           (get_local $0)
-          ;;@ ~lib/memory.ts:104:23
+          ;;@ ~lib/memory.ts:225:21
           (get_local $2)
          )
-         ;;@ ~lib/memory.ts:104:28
+         ;;@ ~lib/memory.ts:225:26
          (i32.const 7)
         )
         (block
-         ;;@ ~lib/memory.ts:105:10
+         ;;@ ~lib/memory.ts:226:8
          (if
-          ;;@ ~lib/memory.ts:105:14
+          ;;@ ~lib/memory.ts:226:12
           (i32.eqz
-           ;;@ ~lib/memory.ts:105:15
+           ;;@ ~lib/memory.ts:226:13
            (get_local $2)
           )
-          ;;@ ~lib/memory.ts:105:18
+          ;;@ ~lib/memory.ts:226:16
           (return)
          )
-         ;;@ ~lib/memory.ts:106:10
+         ;;@ ~lib/memory.ts:227:8
          (i32.store8
-          ;;@ ~lib/memory.ts:106:20
+          ;;@ ~lib/memory.ts:227:18
           (i32.add
            (get_local $0)
-           ;;@ ~lib/memory.ts:106:27
+           ;;@ ~lib/memory.ts:227:25
            (tee_local $2
             (i32.sub
-             ;;@ ~lib/memory.ts:106:29
+             ;;@ ~lib/memory.ts:227:27
              (get_local $2)
              (i32.const 1)
             )
            )
           )
-          ;;@ ~lib/memory.ts:106:32
+          ;;@ ~lib/memory.ts:227:30
           (i32.load8_u
-           ;;@ ~lib/memory.ts:106:41
+           ;;@ ~lib/memory.ts:227:39
            (i32.add
             (get_local $1)
-            ;;@ ~lib/memory.ts:106:47
+            ;;@ ~lib/memory.ts:227:45
             (get_local $2)
            )
           )
@@ -2866,33 +2862,33 @@
       )
       (loop $continue|4
        (if
-        ;;@ ~lib/memory.ts:108:15
+        ;;@ ~lib/memory.ts:229:13
         (i32.ge_u
          (get_local $2)
-         ;;@ ~lib/memory.ts:108:20
+         ;;@ ~lib/memory.ts:229:18
          (i32.const 8)
         )
         (block
-         ;;@ ~lib/memory.ts:110:10
+         ;;@ ~lib/memory.ts:231:8
          (i64.store
-          ;;@ ~lib/memory.ts:110:21
+          ;;@ ~lib/memory.ts:231:19
           (i32.add
            (get_local $0)
-           ;;@ ~lib/memory.ts:109:10
+           ;;@ ~lib/memory.ts:230:8
            (tee_local $2
             (i32.sub
              (get_local $2)
-             ;;@ ~lib/memory.ts:109:15
+             ;;@ ~lib/memory.ts:230:13
              (i32.const 8)
             )
            )
           )
-          ;;@ ~lib/memory.ts:110:31
+          ;;@ ~lib/memory.ts:231:29
           (i64.load
-           ;;@ ~lib/memory.ts:110:41
+           ;;@ ~lib/memory.ts:231:39
            (i32.add
             (get_local $1)
-            ;;@ ~lib/memory.ts:110:47
+            ;;@ ~lib/memory.ts:231:45
             (get_local $2)
            )
           )
@@ -2905,29 +2901,29 @@
     )
     (loop $continue|5
      (if
-      ;;@ ~lib/memory.ts:113:13
+      ;;@ ~lib/memory.ts:234:11
       (get_local $2)
       (block
-       ;;@ ~lib/memory.ts:113:16
+       ;;@ ~lib/memory.ts:234:14
        (i32.store8
-        ;;@ ~lib/memory.ts:114:18
+        ;;@ ~lib/memory.ts:235:16
         (i32.add
          (get_local $0)
-         ;;@ ~lib/memory.ts:114:25
+         ;;@ ~lib/memory.ts:235:23
          (tee_local $2
           (i32.sub
-           ;;@ ~lib/memory.ts:114:27
+           ;;@ ~lib/memory.ts:235:25
            (get_local $2)
            (i32.const 1)
           )
          )
         )
-        ;;@ ~lib/memory.ts:114:30
+        ;;@ ~lib/memory.ts:235:28
         (i32.load8_u
-         ;;@ ~lib/memory.ts:114:39
+         ;;@ ~lib/memory.ts:235:37
          (i32.add
           (get_local $1)
-          ;;@ ~lib/memory.ts:114:45
+          ;;@ ~lib/memory.ts:235:43
           (get_local $2)
          )
         )
@@ -2939,62 +2935,73 @@
    )
   )
  )
- (func $~lib/memory/memory.compare (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.copy (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  ;;@ ~lib/memory.ts:16:4
+  (call $~lib/memory/memmove
+   ;;@ ~lib/memory.ts:16:12
+   (get_local $0)
+   ;;@ ~lib/memory.ts:16:18
+   (get_local $1)
+   ;;@ ~lib/memory.ts:16:23
+   (get_local $2)
+  )
+ )
+ (func $~lib/memory/memcmp (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  ;;@ ~lib/memory.ts:122:4
+  ;;@ ~lib/memory.ts:302:2
   (if
-   ;;@ ~lib/memory.ts:122:8
+   ;;@ ~lib/memory.ts:302:6
    (i32.eq
     (get_local $0)
-    ;;@ ~lib/memory.ts:122:14
+    ;;@ ~lib/memory.ts:302:12
     (get_local $1)
    )
-   ;;@ ~lib/memory.ts:122:25
+   ;;@ ~lib/memory.ts:302:23
    (return
     (i32.const 0)
    )
   )
   (loop $continue|0
    (if
-    ;;@ ~lib/memory.ts:123:11
+    ;;@ ~lib/memory.ts:303:9
     (if (result i32)
      (tee_local $3
       (i32.ne
        (get_local $2)
-       ;;@ ~lib/memory.ts:123:16
+       ;;@ ~lib/memory.ts:303:14
        (i32.const 0)
       )
      )
-     ;;@ ~lib/memory.ts:123:21
+     ;;@ ~lib/memory.ts:303:19
      (i32.eq
       (i32.load8_u
-       ;;@ ~lib/memory.ts:123:30
+       ;;@ ~lib/memory.ts:303:28
        (get_local $0)
       )
-      ;;@ ~lib/memory.ts:123:37
+      ;;@ ~lib/memory.ts:303:35
       (i32.load8_u
-       ;;@ ~lib/memory.ts:123:46
+       ;;@ ~lib/memory.ts:303:44
        (get_local $1)
       )
      )
      (get_local $3)
     )
     (block
-     ;;@ ~lib/memory.ts:124:6
+     ;;@ ~lib/memory.ts:304:4
      (set_local $2
       (i32.sub
        (get_local $2)
        (i32.const 1)
       )
      )
-     ;;@ ~lib/memory.ts:124:11
+     ;;@ ~lib/memory.ts:304:9
      (set_local $0
       (i32.add
        (get_local $0)
        (i32.const 1)
       )
      )
-     ;;@ ~lib/memory.ts:124:17
+     ;;@ ~lib/memory.ts:304:15
      (set_local $1
       (i32.add
        (get_local $1)
@@ -3005,27 +3012,38 @@
     )
    )
   )
-  ;;@ ~lib/memory.ts:126:55
+  ;;@ ~lib/memory.ts:306:53
   (if (result i32)
-   ;;@ ~lib/memory.ts:126:11
+   ;;@ ~lib/memory.ts:306:9
    (get_local $2)
-   ;;@ ~lib/memory.ts:126:15
+   ;;@ ~lib/memory.ts:306:13
    (i32.sub
     (i32.load8_u
-     ;;@ ~lib/memory.ts:126:29
+     ;;@ ~lib/memory.ts:306:27
      (get_local $0)
     )
-    ;;@ ~lib/memory.ts:126:35
+    ;;@ ~lib/memory.ts:306:33
     (i32.load8_u
-     ;;@ ~lib/memory.ts:126:49
+     ;;@ ~lib/memory.ts:306:47
      (get_local $1)
     )
    )
-   ;;@ ~lib/memory.ts:126:55
+   ;;@ ~lib/memory.ts:306:53
    (i32.const 0)
   )
  )
- (func $~lib/allocator/buddy/update_max_ptr (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.compare (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  ;;@ ~lib/memory.ts:21:27
+  (call $~lib/memory/memcmp
+   ;;@ ~lib/memory.ts:21:18
+   (get_local $0)
+   ;;@ ~lib/memory.ts:21:22
+   (get_local $1)
+   ;;@ ~lib/memory.ts:21:26
+   (get_local $2)
+  )
+ )
+ (func $~lib/allocator/buddy/update_max_ptr (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   ;;@ ~lib/allocator/buddy.ts:175:2
   (if
@@ -3041,6 +3059,7 @@
     (if
      ;;@ ~lib/allocator/buddy.ts:182:8
      (i32.lt_s
+      ;;@ ~lib/allocator/buddy.ts:182:15
       (grow_memory
        ;;@ ~lib/allocator/buddy.ts:182:20
        (i32.sub
@@ -3063,6 +3082,7 @@
           (i32.const 16)
          )
         )
+        ;;@ ~lib/allocator/buddy.ts:179:19
         (current_memory)
        )
       )
@@ -3089,7 +3109,7 @@
   ;;@ ~lib/allocator/buddy.ts:188:9
   (i32.const 1)
  )
- (func $~lib/allocator/buddy/buckets$get (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/buddy/buckets$get (; 8 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/allocator/buddy.ts:102:59
   (i32.add
    ;;@ ~lib/allocator/buddy.ts:102:26
@@ -3097,12 +3117,11 @@
    ;;@ ~lib/allocator/buddy.ts:102:42
    (i32.shl
     (get_local $0)
-    ;;@ ~lib/allocator/buddy.ts:102:50
     (i32.const 3)
    )
   )
  )
- (func $~lib/allocator/buddy/list_init (; 8 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/buddy/list_init (; 9 ;) (type $iv) (param $0 i32)
   ;;@ ~lib/allocator/buddy.ts:197:2
   (i32.store
    (get_local $0)
@@ -3116,7 +3135,7 @@
    (get_local $0)
   )
  )
- (func $~lib/allocator/buddy/list_push (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/buddy/list_push (; 10 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   ;;@ ~lib/allocator/buddy.ts:207:2
   (i32.store
@@ -3148,17 +3167,15 @@
    (get_local $1)
   )
  )
- (func $~lib/allocator/buddy/bucket_for_request (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/buddy/bucket_for_request (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   ;;@ ~lib/allocator/buddy.ts:279:2
   (set_local $1
-   ;;@ ~lib/allocator/buddy.ts:279:15
    (i32.const 26)
   )
   ;;@ ~lib/allocator/buddy.ts:280:2
   (set_local $2
-   ;;@ ~lib/allocator/buddy.ts:280:13
    (i32.const 16)
   )
   (loop $continue|0
@@ -3192,7 +3209,7 @@
   ;;@ ~lib/allocator/buddy.ts:287:9
   (get_local $1)
  )
- (func $~lib/allocator/buddy/node_for_ptr (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/buddy/node_for_ptr (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   ;;@ ~lib/allocator/buddy.ts:252:75
   (i32.sub
    ;;@ ~lib/allocator/buddy.ts:252:9
@@ -3207,7 +3224,6 @@
      )
      ;;@ ~lib/allocator/buddy.ts:252:30
      (i32.sub
-      ;;@ ~lib/allocator/buddy.ts:252:31
       (i32.const 30)
       ;;@ ~lib/allocator/buddy.ts:252:48
       (get_local $1)
@@ -3225,7 +3241,7 @@
    (i32.const 1)
   )
  )
- (func $~lib/allocator/buddy/node_is_split$get (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/buddy/node_is_split$get (; 13 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/allocator/buddy.ts:148:45
   (i32.load8_u
    ;;@ ~lib/allocator/buddy.ts:148:18
@@ -3236,7 +3252,7 @@
    )
   )
  )
- (func $~lib/allocator/buddy/parent_is_split (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/buddy/parent_is_split (; 14 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/allocator/buddy.ts:260:70
   (i32.eq
    ;;@ ~lib/allocator/buddy.ts:260:9
@@ -3280,7 +3296,7 @@
    (i32.const 1)
   )
  )
- (func $~lib/allocator/buddy/list_remove (; 14 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/buddy/list_remove (; 15 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   ;;@ ~lib/allocator/buddy.ts:222:2
   (i32.store offset=4
@@ -3306,7 +3322,7 @@
    (get_local $1)
   )
  )
- (func $~lib/allocator/buddy/ptr_for_node (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/buddy/ptr_for_node (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   ;;@ ~lib/allocator/buddy.ts:243:77
   (i32.add
    ;;@ ~lib/allocator/buddy.ts:243:9
@@ -3331,7 +3347,6 @@
     )
     ;;@ ~lib/allocator/buddy.ts:243:52
     (i32.sub
-     ;;@ ~lib/allocator/buddy.ts:243:53
      (i32.const 30)
      ;;@ ~lib/allocator/buddy.ts:243:70
      (get_local $1)
@@ -3339,7 +3354,7 @@
    )
   )
  )
- (func $~lib/allocator/buddy/flip_parent_is_split (; 16 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/buddy/flip_parent_is_split (; 17 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (set_local $2
@@ -3395,7 +3410,7 @@
    (get_local $0)
   )
  )
- (func $~lib/allocator/buddy/lower_bucket_limit (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/buddy/lower_bucket_limit (; 18 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (loop $continue|0
@@ -3485,7 +3500,6 @@
            (get_global $~lib/allocator/buddy/bucket_limit)
           )
          )
-         ;;@ ~lib/allocator/buddy.ts:322:38
          (i32.const 8)
         )
        )
@@ -3552,7 +3566,7 @@
   ;;@ ~lib/allocator/buddy.ts:338:9
   (i32.const 1)
  )
- (func $~lib/allocator/buddy/list_pop (; 18 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/buddy/list_pop (; 19 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   ;;@ ~lib/allocator/buddy.ts:231:2
   (if
@@ -3581,7 +3595,7 @@
   ;;@ ~lib/allocator/buddy.ts:233:9
   (get_local $1)
  )
- (func $~lib/allocator/buddy/__memory_allocate (; 19 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/buddy/__memory_allocate (; 20 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3591,7 +3605,6 @@
    ;;@ ~lib/allocator/buddy.ts:350:6
    (i32.gt_u
     (get_local $0)
-    ;;@ ~lib/allocator/buddy.ts:350:16
     (i32.const 1073741816)
    )
    ;;@ ~lib/allocator/buddy.ts:350:41
@@ -3629,7 +3642,6 @@
     )
     ;;@ ~lib/allocator/buddy.ts:361:4
     (set_global $~lib/allocator/buddy/bucket_limit
-     ;;@ ~lib/allocator/buddy.ts:361:19
      (i32.const 26)
     )
     ;;@ ~lib/allocator/buddy.ts:362:4
@@ -3641,7 +3653,6 @@
        ;;@ ~lib/allocator/buddy.ts:362:24
        (i32.add
         (get_global $~lib/allocator/buddy/base_ptr)
-        ;;@ ~lib/allocator/buddy.ts:362:35
         (i32.const 8)
        )
       )
@@ -3656,7 +3667,6 @@
     (call $~lib/allocator/buddy/list_init
      ;;@ ~lib/allocator/buddy.ts:365:14
      (call $~lib/allocator/buddy/buckets$get
-      ;;@ ~lib/allocator/buddy.ts:365:26
       (i32.const 26)
      )
     )
@@ -3664,7 +3674,6 @@
     (call $~lib/allocator/buddy/list_push
      ;;@ ~lib/allocator/buddy.ts:366:14
      (call $~lib/allocator/buddy/buckets$get
-      ;;@ ~lib/allocator/buddy.ts:366:26
       (i32.const 26)
      )
      ;;@ ~lib/allocator/buddy.ts:366:45
@@ -3681,7 +3690,6 @@
      ;;@ ~lib/allocator/buddy.ts:373:30
      (i32.add
       (get_local $0)
-      ;;@ ~lib/allocator/buddy.ts:373:40
       (i32.const 8)
      )
     )
@@ -3801,7 +3809,6 @@
        (i32.const 1)
        ;;@ ~lib/allocator/buddy.ts:425:16
        (i32.sub
-        ;;@ ~lib/allocator/buddy.ts:425:17
         (i32.const 30)
         ;;@ ~lib/allocator/buddy.ts:425:34
         (get_local $1)
@@ -3831,7 +3838,6 @@
             ;;@ ~lib/allocator/buddy.ts:426:53
             (i32.const 2)
            )
-           ;;@ ~lib/allocator/buddy.ts:426:57
            (i32.const 8)
           )
           ;;@ ~lib/allocator/buddy.ts:426:69
@@ -3941,7 +3947,6 @@
       ;;@ ~lib/allocator/buddy.ts:470:11
       (i32.add
        (get_local $2)
-       ;;@ ~lib/allocator/buddy.ts:470:17
        (i32.const 8)
       )
      )
@@ -3951,14 +3956,14 @@
   ;;@ ~lib/allocator/buddy.ts:473:9
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 20 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ ~lib/memory.ts:142:45
+ (func $~lib/memory/memory.allocate (; 21 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ ~lib/memory.ts:37:45
   (call $~lib/allocator/buddy/__memory_allocate
-   ;;@ ~lib/memory.ts:142:63
+   ;;@ ~lib/memory.ts:37:63
    (get_local $0)
   )
  )
- (func $~lib/allocator/buddy/__memory_free (; 21 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/buddy/__memory_free (; 22 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   ;;@ ~lib/allocator/buddy.ts:483:2
@@ -3983,12 +3988,10 @@
        ;;@ ~lib/allocator/buddy.ts:492:8
        (i32.sub
         (get_local $0)
-        ;;@ ~lib/allocator/buddy.ts:492:14
         (i32.const 8)
        )
       )
      )
-     ;;@ ~lib/allocator/buddy.ts:493:49
      (i32.const 8)
     )
    )
@@ -4100,20 +4103,19 @@
    )
   )
  )
- (func $~lib/memory/memory.free (; 22 ;) (type $iv) (param $0 i32)
-  ;;@ ~lib/memory.ts:148:36
+ (func $~lib/memory/memory.free (; 23 ;) (type $iv) (param $0 i32)
+  ;;@ ~lib/memory.ts:43:36
   (call $~lib/allocator/buddy/__memory_free
-   ;;@ ~lib/memory.ts:148:50
+   ;;@ ~lib/memory.ts:43:50
    (get_local $0)
   )
  )
- (func $~lib/memory/memory.reset (; 23 ;) (type $v)
+ (func $~lib/memory/memory.reset (; 24 ;) (type $v)
   (unreachable)
  )
- (func $start (; 24 ;) (type $v)
+ (func $start (; 25 ;) (type $v)
   (set_global $~lib/allocator/buddy/BUCKETS_START
-   ;;@ ~lib/allocator/buddy.ts:97:27
-   (get_global $HEAP_BASE)
+   (i32.const 8)
   )
   (set_global $~lib/allocator/buddy/BUCKETS_END
    ;;@ ~lib/allocator/buddy.ts:98:25
@@ -4130,7 +4132,6 @@
    ;;@ ~lib/allocator/buddy.ts:144:31
    (i32.add
     (get_global $~lib/allocator/buddy/NODE_IS_SPLIT_START)
-    ;;@ ~lib/allocator/buddy.ts:144:53
     (i32.const 8388608)
    )
   )

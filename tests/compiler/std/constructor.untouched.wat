@@ -1,6 +1,5 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $i (func (result i32)))
  (type $v (func))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -23,15 +22,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/memory/memory.size (; 0 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -67,7 +58,7 @@
      )
     )
     (set_local $3
-     (call $~lib/memory/memory.size)
+     (current_memory)
     )
     (if
      (i32.gt_u
@@ -112,14 +103,14 @@
       )
       (if
        (i32.lt_s
-        (call $~lib/memory/memory.grow
+        (grow_memory
          (get_local $5)
         )
         (i32.const 0)
        )
        (if
         (i32.lt_s
-         (call $~lib/memory/memory.grow
+         (grow_memory
           (get_local $4)
          )
          (i32.const 0)
@@ -139,14 +130,14 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (call $~lib/allocator/arena/__memory_allocate
     (get_local $0)
    )
   )
  )
- (func $std/constructor/EmptyCtor#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtor#constructor (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (tee_local $0
    (if (result i32)
@@ -165,7 +156,7 @@
    )
   )
  )
- (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (tee_local $0
    (if (result i32)
@@ -188,7 +179,7 @@
    )
   )
  )
- (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (tee_local $0
    (if (result i32)
@@ -211,12 +202,12 @@
    )
   )
  )
- (func $std/constructor/CtorReturns#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorReturns#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/memory/memory.allocate
    (i32.const 0)
   )
  )
- (func $std/constructor/CtorConditionallyReturns#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (get_global $std/constructor/b)
@@ -243,7 +234,7 @@
    )
   )
  )
- (func $std/constructor/CtorAllocates#constructor (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorAllocates#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (drop
    (tee_local $0
@@ -265,7 +256,7 @@
   )
   (get_local $0)
  )
- (func $std/constructor/CtorConditionallyAllocates#constructor (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyAllocates#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (get_global $std/constructor/b)
@@ -305,7 +296,7 @@
    )
   )
  )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and

@@ -310,7 +310,7 @@
    )
   )
  )
- (func $isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
    (f64.sub
     (get_local $0)
@@ -577,7 +577,7 @@
      )
      (set_local $17
       (if (result i32)
-       (call $isFinite<f64>
+       (call $~lib/builtins/isFinite<f64>
         (get_local $15)
        )
        (i32.trunc_u/f64

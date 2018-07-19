@@ -3,7 +3,6 @@
  (type $iv (func (param i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $i (func (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
@@ -32,15 +31,7 @@
    )
   )
  )
- (func $~lib/memory/memory.size (; 2 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -72,14 +63,14 @@
       )
       (i32.shl
        (tee_local $2
-        (call $~lib/memory/memory.size)
+        (current_memory)
        )
        (i32.const 16)
       )
      )
      (if
       (i32.lt_s
-       (call $~lib/memory/memory.grow
+       (grow_memory
         (select
          (get_local $2)
          (tee_local $3
@@ -107,7 +98,7 @@
       )
       (if
        (i32.lt_s
-        (call $~lib/memory/memory.grow
+        (grow_memory
          (get_local $3)
         )
         (i32.const 0)
@@ -126,12 +117,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.gt_u
@@ -160,7 +151,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/memset (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (if
@@ -490,14 +481,14 @@
    )
   )
  )
- (func $~lib/memory/memory.fill (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (call $~lib/memory/memset
    (get_local $0)
    (get_local $1)
    (get_local $2)
   )
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8,i32>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -563,7 +554,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/typedarray/TypedArray<i16,i32>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i16,i32>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -634,7 +625,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -705,7 +696,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/typedarray/TypedArray<i64,i64>#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i64,i64>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -776,7 +767,7 @@
   )
   (get_local $0)
  )
- (func $std/typedarray/testInstantiate (; 13 ;) (type $iv) (param $0 i32)
+ (func $std/typedarray/testInstantiate (; 11 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (if
    (i32.load offset=4
@@ -1465,7 +1456,7 @@
    )
   )
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.ge_u
@@ -1510,7 +1501,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.ge_u
@@ -1554,7 +1545,7 @@
    )
   )
  )
- (func $~lib/typedarray/Int32Array#subarray (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#subarray (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $4
@@ -1665,7 +1656,7 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.ge_u
@@ -1704,7 +1695,7 @@
    (get_local $2)
   )
  )
- (func $~lib/typedarray/Uint8ClampedArray#__set (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#__set (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
    (get_local $0)
@@ -1728,7 +1719,7 @@
    )
   )
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.ge_u
@@ -1766,7 +1757,7 @@
    )
   )
  )
- (func $start (; 20 ;) (type $v)
+ (func $start (; 18 ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 168)

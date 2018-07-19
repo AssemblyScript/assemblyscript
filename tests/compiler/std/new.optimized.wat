@@ -1,7 +1,6 @@
 (module
  (type $ifi (func (param i32 f32) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $i (func (result i32)))
  (type $v (func))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -9,15 +8,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/memory/memory.size (; 0 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -49,14 +40,14 @@
       )
       (i32.shl
        (tee_local $2
-        (call $~lib/memory/memory.size)
+        (current_memory)
        )
        (i32.const 16)
       )
      )
      (if
       (i32.lt_s
-       (call $~lib/memory/memory.grow
+       (grow_memory
         (select
          (get_local $2)
          (tee_local $3
@@ -84,7 +75,7 @@
       )
       (if
        (i32.lt_s
-        (call $~lib/memory/memory.grow
+        (grow_memory
          (get_local $3)
         )
         (i32.const 0)
@@ -103,12 +94,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $std/new/AClass#constructor (; 4 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $std/new/AClass#constructor (; 2 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -146,7 +137,7 @@
   )
   (get_local $0)
  )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 8)
   )

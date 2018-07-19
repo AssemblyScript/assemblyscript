@@ -34,7 +34,7 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 14)
-     (i32.const 43)
+     (i32.const 40)
     )
     (unreachable)
    )

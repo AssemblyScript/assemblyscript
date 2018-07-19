@@ -21,7 +21,7 @@
  (global $~lib/math/NativeMath.SQRT2 f64 (f64.const 1.4142135623730951))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
  (global $NaN f64 (f64.const nan:0x8000000000000))
- (global $f64.EPSILON f64 (f64.const 2.220446049250313e-16))
+ (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
  (export "memory" (memory $0))
@@ -1503,7 +1503,7 @@
    (get_local $0)
   )
  )
- (func $isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
    (get_local $0)
    (get_local $0)
@@ -1547,7 +1547,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -2045,12 +2045,12 @@
   (if
    (if (result i32)
     (tee_local $2
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $1)
      )
     )
     (get_local $2)
-    (call $isNaN<f64>
+    (call $~lib/builtins/isNaN<f64>
      (get_local $0)
     )
    )
@@ -2807,7 +2807,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -3394,7 +3394,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return

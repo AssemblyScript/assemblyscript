@@ -1,12 +1,10 @@
 export namespace memory {
 
-  export function size(): i32 {
-    return __memory_size(); // tslint:disable-line
-  }
+  @builtin
+  export declare function size(): i32;
 
-  export function grow(pages: i32): i32 {
-    return __memory_grow(pages); // tslint:disable-line
-  }
+  @builtin
+  export declare function grow(pages: i32): i32;
 
   export function fill(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
     if (isDefined(__memory_fill)) { __memory_fill(dest, c, n); return; } // tslint:disable-line

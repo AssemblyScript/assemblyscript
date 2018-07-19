@@ -3,7 +3,6 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $i (func (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -25,15 +24,7 @@
  (func $std/gc/MyObject_visit (; 1 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $~lib/memory/memory.size (; 2 ;) (type $i) (result i32)
-  (current_memory)
- )
- (func $~lib/memory/memory.grow (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  (grow_memory
-   (get_local $0)
-  )
- )
- (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -65,14 +56,14 @@
       )
       (i32.shl
        (tee_local $2
-        (call $~lib/memory/memory.size)
+        (current_memory)
        )
        (i32.const 16)
       )
      )
      (if
       (i32.lt_s
-       (call $~lib/memory/memory.grow
+       (grow_memory
         (select
          (get_local $2)
          (tee_local $3
@@ -100,7 +91,7 @@
       )
       (if
        (i32.lt_s
-        (call $~lib/memory/memory.grow
+        (grow_memory
          (get_local $3)
         )
         (i32.const 0)
@@ -119,12 +110,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $~lib/collector/itcm/ManagedObject#makeWhite (; 6 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeWhite (; 4 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (i32.or
@@ -138,7 +129,7 @@
    )
   )
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (i32.or
@@ -152,7 +143,7 @@
    )
   )
  )
- (func $~lib/collector/itcm/ManagedObject#insert (; 8 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#insert (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (set_local $2
    (i32.load offset=4
@@ -176,7 +167,7 @@
    (get_local $1)
   )
  )
- (func $~lib/collector/itcm/gc.alloc (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/gc.alloc (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -216,7 +207,7 @@
    (i32.const 16)
   )
  )
- (func $start (; 10 ;) (type $v)
+ (func $start (; 8 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 80)
   )

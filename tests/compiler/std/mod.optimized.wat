@@ -15,7 +15,7 @@
  (data (i32.const 8) "\n\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $isNaN<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
    (get_local $0)
    (get_local $0)
@@ -81,7 +81,7 @@
      )
     )
     (set_local $7
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $1)
      )
     )
@@ -397,11 +397,11 @@
  )
  (func $std/mod/check<f64> (; 4 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (if
-   (call $isNaN<f64>
+   (call $~lib/builtins/isNaN<f64>
     (get_local $1)
    )
    (return
-    (call $isNaN<f64>
+    (call $~lib/builtins/isNaN<f64>
      (get_local $0)
     )
    )
@@ -455,7 +455,7 @@
   )
   (get_local $3)
  )
- (func $isNaN<f32> (; 6 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/builtins/isNaN<f32> (; 6 ;) (type $fi) (param $0 f32) (result i32)
   (f32.ne
    (get_local $0)
    (get_local $0)
@@ -513,7 +513,7 @@
      )
     )
     (set_local $3
-     (call $isNaN<f32>
+     (call $~lib/builtins/isNaN<f32>
       (get_local $1)
      )
     )
@@ -804,11 +804,11 @@
  )
  (func $std/mod/check<f32> (; 8 ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
   (if
-   (call $isNaN<f32>
+   (call $~lib/builtins/isNaN<f32>
     (get_local $1)
    )
    (return
-    (call $isNaN<f32>
+    (call $~lib/builtins/isNaN<f32>
      (get_local $0)
     )
    )
