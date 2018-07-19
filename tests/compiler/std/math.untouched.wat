@@ -9937,29 +9937,38 @@
    )
   )
   (if
-   (if (result i32)
-    (tee_local $7
-     (if (result i32)
+   (i32.and
+    (if (result i32)
+     (i32.and
       (tee_local $7
-       (i64.eq
-        (i64.shl
-         (get_local $3)
-         (i64.const 1)
+       (if (result i32)
+        (tee_local $7
+         (i64.eq
+          (i64.shl
+           (get_local $3)
+           (i64.const 1)
+          )
+          (i64.const 0)
+         )
         )
-        (i64.const 0)
+        (get_local $7)
+        (block $~lib/builtins/isNaN<f64>|inlined.1 (result i32)
+         (f64.ne
+          (get_local $1)
+          (get_local $1)
+         )
+        )
        )
       )
-      (get_local $7)
-      (call $~lib/builtins/isNaN<f64>
-       (get_local $1)
-      )
+      (i32.const 1)
+     )
+     (get_local $7)
+     (i32.eq
+      (get_local $4)
+      (i32.const 2047)
      )
     )
-    (get_local $7)
-    (i32.eq
-     (get_local $4)
-     (i32.const 2047)
-    )
+    (i32.const 1)
    )
    (return
     (f64.div
@@ -10405,29 +10414,38 @@
    )
   )
   (if
-   (if (result i32)
-    (tee_local $7
-     (if (result i32)
+   (i32.and
+    (if (result i32)
+     (i32.and
       (tee_local $7
-       (i32.eq
-        (i32.shl
-         (get_local $3)
-         (i32.const 1)
+       (if (result i32)
+        (tee_local $7
+         (i32.eq
+          (i32.shl
+           (get_local $3)
+           (i32.const 1)
+          )
+          (i32.const 0)
+         )
         )
-        (i32.const 0)
+        (get_local $7)
+        (block $~lib/builtins/isNaN<f32>|inlined.1 (result i32)
+         (f32.ne
+          (get_local $1)
+          (get_local $1)
+         )
+        )
        )
       )
-      (get_local $7)
-      (call $~lib/builtins/isNaN<f32>
-       (get_local $1)
-      )
+      (i32.const 1)
+     )
+     (get_local $7)
+     (i32.eq
+      (get_local $4)
+      (i32.const 255)
      )
     )
-    (get_local $7)
-    (i32.eq
-     (get_local $4)
-     (i32.const 255)
-    )
+    (i32.const 1)
    )
    (return
     (f32.div

@@ -8598,7 +8598,8 @@
      )
     )
     (set_local $7
-     (call $~lib/builtins/isNaN<f64>
+     (f64.ne
+      (get_local $1)
       (get_local $1)
      )
     )
@@ -8994,14 +8995,18 @@
      )
     )
     (set_local $3
-     (call $~lib/builtins/isNaN<f32>
+     (f32.ne
+      (get_local $1)
       (get_local $1)
      )
     )
    )
    (if
     (i32.eqz
-     (get_local $3)
+     (i32.and
+      (get_local $3)
+      (i32.const 1)
+     )
     )
     (set_local $3
      (i32.eq
@@ -9011,7 +9016,10 @@
     )
    )
    (if
-    (get_local $3)
+    (i32.and
+     (get_local $3)
+     (i32.const 1)
+    )
     (return
      (f32.div
       (tee_local $0

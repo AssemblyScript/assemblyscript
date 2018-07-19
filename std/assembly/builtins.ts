@@ -12,8 +12,8 @@
 @builtin export declare function isArray<T>(value?: T): bool;
 @builtin export declare function isDefined(expression: void): bool;
 @builtin export declare function isConstant(expression: void): bool;
-export function isNaN<T>(value: T): bool { return value != value; }
-export function isFinite<T>(value: T): bool { return value - value == 0; }
+@inline export function isNaN<T>(value: T): bool { return value != value; }
+@inline export function isFinite<T>(value: T): bool { return value - value == 0; }
 
 @builtin export declare function clz<T>(value: T): T;
 @builtin export declare function ctz<T>(value: T): T;

@@ -1,7 +1,5 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $fi (func (param f32) (result i32)))
- (type $Fi (func (param f64) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -23,43 +21,13 @@
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $~lib/builtins/isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
-  (f32.ne
-   (get_local $0)
-   (get_local $0)
-  )
- )
- (func $~lib/builtins/isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
-  (f32.eq
-   (f32.sub
-    (get_local $0)
-    (get_local $0)
-   )
-   (f32.const 0)
-  )
- )
- (func $~lib/builtins/isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
-  (f64.ne
-   (get_local $0)
-   (get_local $0)
-  )
- )
- (func $~lib/builtins/isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
-  (f64.eq
-   (f64.sub
-    (get_local $0)
-    (get_local $0)
-   )
-   (f64.const 0)
-  )
- )
- (func $start~anonymous|0 (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $start~anonymous|0 (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (nop)
  )
- (func $builtins/test (; 6 ;) (type $v)
+ (func $builtins/test (; 2 ;) (type $v)
   (nop)
  )
- (func $start (; 7 ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   (set_global $builtins/i
    (i32.const 31)
   )
@@ -198,96 +166,6 @@
     (unreachable)
    )
   )
-  (if
-   (call $~lib/builtins/isNaN<f32>
-    (f32.const 1.25)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 87)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/builtins/isNaN<f32>
-     (f32.const nan:0x400000)
-    )
-    (i32.const 1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 88)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/builtins/isFinite<f32>
-     (f32.const 1.25)
-    )
-    (i32.const 1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 89)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f32>
-    (f32.const inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 90)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f32>
-    (f32.const -inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 91)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f32>
-    (f32.const nan:0x400000)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 92)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
   (set_global $builtins/f
    (f32.const nan:0x400000)
   )
@@ -322,104 +200,10 @@
    (f32.const 1)
   )
   (set_global $builtins/b
-   (call $~lib/builtins/isNaN<f32>
-    (f32.const 1.25)
-   )
+   (i32.const 0)
   )
   (set_global $builtins/b
-   (call $~lib/builtins/isFinite<f32>
-    (f32.const 1.25)
-   )
-  )
-  (if
-   (call $~lib/builtins/isNaN<f64>
-    (f64.const 1.25)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 123)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/builtins/isNaN<f64>
-     (f64.const nan:0x8000000000000)
-    )
-    (i32.const 1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 124)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/builtins/isFinite<f64>
-     (f64.const 1.25)
-    )
-    (i32.const 1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 125)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f64>
-    (f64.const inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 126)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f64>
-    (f64.const -inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 127)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f64>
-    (f64.const nan:0x8000000000000)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 128)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
+   (i32.const 1)
   )
   (set_global $builtins/F
    (f64.const nan:0x8000000000000)
@@ -455,14 +239,10 @@
    (f64.const 1)
   )
   (set_global $builtins/b
-   (call $~lib/builtins/isNaN<f64>
-    (f64.const 1.25)
-   )
+   (i32.const 0)
   )
   (set_global $builtins/b
-   (call $~lib/builtins/isFinite<f64>
-    (f64.const 1.25)
-   )
+   (i32.const 1)
   )
   (set_global $builtins/i
    (i32.load
@@ -767,126 +547,6 @@
    (i32.const 2)
    (get_global $builtins/fn)
   )
-  (if
-   (i32.eqz
-    (call $~lib/builtins/isNaN<f32>
-     (f32.const nan:0x400000)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 271)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/builtins/isNaN<f64>
-     (f64.const nan:0x8000000000000)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 272)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f32>
-    (f32.const nan:0x400000)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 273)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f32>
-    (f32.const inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 274)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f64>
-    (f64.const nan:0x8000000000000)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 275)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $~lib/builtins/isFinite<f64>
-    (f64.const inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 276)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/builtins/isFinite<f32>
-     (f32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 277)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/builtins/isFinite<f64>
-     (f64.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 278)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
   (drop
    (i32.load8_s
     (i32.const 8)
@@ -992,11 +652,6 @@
   (f64.store
    (i32.const 8)
    (f64.const 1)
-  )
-  (drop
-   (call $~lib/builtins/isNaN<f64>
-    (f64.const 1)
-   )
   )
  )
 )
