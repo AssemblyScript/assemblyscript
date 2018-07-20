@@ -29,18 +29,19 @@ export function allocate(length: i32): String {
 }
 
 export function reallocate(buffer: String, newLength: i32, copyLength: i32 = -1): String {
-  assert(newLength > 0 && newLength <= MAX_LENGTH && copyLength >= 0 && copyLength <= MAX_LENGTH);
-  var newBuffer = allocate_memory(HEADER_SIZE + (<usize>newLength << 1));
+  var length = buffer.length;
+  assert(length <= newLength && newLength <= MAX_LENGTH && copyLength >= 0 && copyLength <= MAX_LENGTH);
+  var newBuffer = memory.allocate(HEADER_SIZE + (<usize>newLength << 1));
   store<i32>(newBuffer, newLength);
-  if (copyLength == -1) copyLength = newLength;
+  if (copyLength == -1) copyLength = length;
   if (copyLength) {
-    move_memory(
+    memory.copy(
       changetype<usize>(newBuffer) + HEADER_SIZE,
       changetype<usize>(buffer)    + HEADER_SIZE,
       copyLength << 1
     );
   }
-  free_memory(changetype<usize>(buffer));
+  memory.free(changetype<usize>(buffer));
   return changetype<String>(newBuffer);
 }
 
