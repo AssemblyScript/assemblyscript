@@ -1,10 +1,10 @@
 (module
  (type $v (func))
  (memory $0 0)
- (export "foo" (func $inlining-recursive/foo))
- (export "baz" (func $inlining-recursive/baz))
- (export "bar" (func $inlining-recursive/bar))
  (export "memory" (memory $0))
+ (export "foo" (func $inlining-recursive/foo))
+ (export "bar" (func $inlining-recursive/bar))
+ (export "baz" (func $inlining-recursive/baz))
  (func $inlining-recursive/foo (; 0 ;) (type $v)
   (call $inlining-recursive/foo)
  )

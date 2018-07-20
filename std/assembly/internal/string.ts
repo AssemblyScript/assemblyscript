@@ -23,7 +23,7 @@ export function clamp<T>(val: T, lo: T, hi: T): T {
 /** Allocates a raw String with uninitialized contents. */
 export function allocate(length: i32): String {
   assert(length > 0 && length <= MAX_LENGTH);
-  var buffer = allocate_memory(HEADER_SIZE + (<usize>length << 1));
+  var buffer = memory.allocate(HEADER_SIZE + (<usize>length << 1));
   store<i32>(buffer, length);
   return changetype<String>(buffer);
 }

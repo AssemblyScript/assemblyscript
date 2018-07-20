@@ -12,7 +12,7 @@ export class ArrayBuffer {
   constructor(length: i32, unsafe: bool = false) {
     if (<u32>length > <u32>MAX_BLENGTH) throw new RangeError("Invalid array buffer length");
     var buffer = allocUnsafe(length);
-    if (!unsafe) set_memory(changetype<usize>(buffer) + HEADER_SIZE, 0, <usize>length);
+    if (!unsafe) memory.fill(changetype<usize>(buffer) + HEADER_SIZE, 0, <usize>length);
     return buffer;
   }
 
@@ -24,7 +24,7 @@ export class ArrayBuffer {
     else end = min(end, len);
     var newLen = max(end - begin, 0);
     var buffer = allocUnsafe(newLen);
-    move_memory(changetype<usize>(buffer) + HEADER_SIZE, changetype<usize>(this) + HEADER_SIZE + begin, newLen);
+    memory.copy(changetype<usize>(buffer) + HEADER_SIZE, changetype<usize>(this) + HEADER_SIZE + begin, newLen);
     return buffer;
   }
 }

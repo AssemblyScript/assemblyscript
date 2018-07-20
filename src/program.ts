@@ -66,7 +66,8 @@ import {
   VariableLikeDeclarationStatement,
   VariableStatement,
 
-  decoratorNameToKind
+  decoratorNameToKind,
+  findDecorator
 } from "./ast";
 
 import {
@@ -130,6 +131,12 @@ class QueuedExport {
 class TypeAlias {
   typeParameters: TypeParameterNode[] | null;
   type: CommonTypeNode;
+}
+
+/** Represents a module-level export. */
+class ModuleExport {
+  element: Element;
+  identifier: IdentifierExpression;
 }
 
 /** Represents the kind of an operator overload. */
@@ -319,7 +326,7 @@ export class Program extends DiagnosticEmitter {
   /** File-level exports by exported name. */
   fileLevelExports: Map<string,Element> = new Map();
   /** Module-level exports by exported name. */
-  moduleLevelExports: Map<string,Element> = new Map();
+  moduleLevelExports: Map<string,ModuleExport> = new Map();
 
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype | null = null;
@@ -329,6 +336,10 @@ export class Program extends DiagnosticEmitter {
   startFunction: FunctionPrototype;
   /** Main function reference, if present. */
   mainFunction: FunctionPrototype | null = null;
+  /** Abort function reference, if present. */
+  abortInstance: Function | null = null;
+  /** Memory allocation function. */
+  memoryAllocateInstance: Function | null = null;
 
   /** Currently processing filespace. */
   currentFilespace: Filespace;
@@ -569,58 +580,82 @@ export class Program extends DiagnosticEmitter {
     }
 
     // set up global aliases
-    var globalAliases = options.globalAliases;
-    if (globalAliases) {
-      for (let [alias, name] of globalAliases) {
-        if (!name.length) continue; // explicitly disabled
-        let element = this.elementsLookup.get(name);
-        if (element) this.elementsLookup.set(alias, element);
-        else throw new Error("element not found: " + name);
+    {
+      let globalAliases = options.globalAliases;
+      if (globalAliases) {
+        for (let [alias, name] of globalAliases) {
+          if (!name.length) continue; // explicitly disabled
+          let element = this.elementsLookup.get(name);
+          if (element) this.elementsLookup.set(alias, element);
+          else throw new Error("element not found: " + name);
+        }
       }
     }
 
     // register 'Array'
-    var arrayPrototype = this.elementsLookup.get("Array");
-    if (arrayPrototype) {
-      assert(arrayPrototype.kind == ElementKind.CLASS_PROTOTYPE);
-      this.arrayPrototype = <ClassPrototype>arrayPrototype;
+    if (this.elementsLookup.has("Array")) {
+      let element = assert(this.elementsLookup.get("Array"));
+      assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+      this.arrayPrototype = <ClassPrototype>element;
     }
 
     // register 'String'
-    var stringPrototype = this.elementsLookup.get("String");
-    if (stringPrototype) {
-      assert(stringPrototype.kind == ElementKind.CLASS_PROTOTYPE);
-      let stringInstance = resolver.resolveClass(<ClassPrototype>stringPrototype, null);
-      if (stringInstance) {
+    if (this.elementsLookup.has("String")) {
+      let element = assert(this.elementsLookup.get("String"));
+      assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+      let instance = resolver.resolveClass(<ClassPrototype>element, null);
+      if (instance) {
         if (this.typesLookup.has("string")) {
-          let declaration = (<ClassPrototype>stringPrototype).declaration;
+          let declaration = (<ClassPrototype>element).declaration;
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
             declaration.name.range, declaration.programLevelInternalName
           );
         } else {
-          this.stringInstance = stringInstance;
-          this.typesLookup.set("string", stringInstance.type);
+          this.stringInstance = instance;
+          this.typesLookup.set("string", instance.type);
         }
       }
     }
 
     // register 'start'
     {
-      let element = <Element>assert(this.elementsLookup.get("start"));
+      let element = assert(this.elementsLookup.get("start"));
       assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
       this.startFunction = <FunctionPrototype>element;
     }
 
     // register 'main' if present
     if (this.moduleLevelExports.has("main")) {
-      let element = <Element>this.moduleLevelExports.get("main");
+      let element = (<ModuleExport>this.moduleLevelExports.get("main")).element;
       if (
         element.kind == ElementKind.FUNCTION_PROTOTYPE &&
         !(<FunctionPrototype>element).isAny(CommonFlags.GENERIC | CommonFlags.AMBIENT)
       ) {
         (<FunctionPrototype>element).set(CommonFlags.MAIN);
         this.mainFunction = <FunctionPrototype>element;
+      }
+    }
+
+    // register 'abort' if present
+    if (this.elementsLookup.has("abort")) {
+      let element = <Element>this.elementsLookup.get("abort");
+      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let instance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+      if (instance) this.abortInstance = instance;
+    }
+
+    // register 'memory.allocate' if present
+    if (this.elementsLookup.has("memory")) {
+      let element = <Element>this.elementsLookup.get("memory");
+      let members = element.members;
+      if (members) {
+        if (members.has("allocate")) {
+          element = assert(members.get("allocate"));
+          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+          let instance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+          if (instance) this.memoryAllocateInstance = instance;
+        }
       }
     }
   }
@@ -674,7 +709,16 @@ export class Program extends DiagnosticEmitter {
       let kind = decoratorNameToKind(decorator.name);
       let flag = decoratorKindToFlag(kind);
       if (flag) {
-        if (!(acceptedFlags & flag)) {
+        if (flag == DecoratorFlags.BUILTIN) {
+          if (decorator.range.source.isLibrary) {
+            presentFlags |= flag;
+          } else {
+            this.error(
+              DiagnosticCode.Decorator_0_is_not_valid_here,
+              decorator.range, decorator.name.range.toString()
+            );
+          }
+        } else if (!(acceptedFlags & flag)) {
           this.error(
             DiagnosticCode.Decorator_0_is_not_valid_here,
             decorator.range, decorator.name.range.toString()
@@ -698,13 +742,9 @@ export class Program extends DiagnosticEmitter {
     declaration: DeclarationStatement
   ): void {
     var parentNode = declaration.parent;
-    // alias the element globally if it is ...
+    // alias globally if explicitly annotated @global or exported from a top-level library file
     if (
-      // explicitly annotated with @global - or -
       (element.hasDecorator(DecoratorFlags.GLOBAL)) ||
-      // part of the special builtins library file - or -
-      (declaration.range.source.is(CommonFlags.BUILTIN)) ||
-      // exported from a top-level library file
       (
         declaration.range.source.isLibrary &&
         element.is(CommonFlags.EXPORT) &&
@@ -724,9 +764,11 @@ export class Program extends DiagnosticEmitter {
         );
       } else {
         this.elementsLookup.set(globalName, element);
-        // builtins can use the global name directly instead of being just an alias
-        if (element.is(CommonFlags.BUILTIN)) element.internalName = globalName;
       }
+    }
+    // builtins use the global name directly
+    if (element.hasDecorator(DecoratorFlags.BUILTIN)) {
+      element.internalName = declaration.programLevelInternalName;
     }
   }
 
@@ -824,14 +866,18 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, prototype);
       if (prototype.is(CommonFlags.EXPORT) && declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
+          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
           this.error(
             DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
+            declaration.name.range, existingExport.element.internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, prototype);
+        this.moduleLevelExports.set(simpleName, <ModuleExport>{
+          element: prototype,
+          identifier: declaration.name
+        });
       }
     }
 
@@ -903,7 +949,7 @@ export class Program extends DiagnosticEmitter {
         Type.void, // resolved later on
         declaration,
         decorators
-          ? this.checkDecorators(decorators, DecoratorFlags.NONE)
+          ? this.checkDecorators(decorators, DecoratorFlags.INLINE)
           : DecoratorFlags.NONE
       );
       staticField.parent = classPrototype;
@@ -911,6 +957,13 @@ export class Program extends DiagnosticEmitter {
       this.elementsLookup.set(internalName, staticField);
       if (classPrototype.is(CommonFlags.MODULE_EXPORT)) {
         staticField.set(CommonFlags.MODULE_EXPORT);
+      }
+
+      if (staticField.hasDecorator(DecoratorFlags.INLINE) && !staticField.is(CommonFlags.READONLY)) {
+        this.error(
+          DiagnosticCode.Decorator_0_is_not_valid_here,
+          assert(findDecorator(DecoratorKind.INLINE, decorators)).range, "inline"
+        );
       }
 
     // instance fields are remembered until resolved
@@ -1269,14 +1322,18 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, element);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
+          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
           this.error(
             DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
+            declaration.name.range, existingExport.element.internalName
           );
           return;
         }
         element.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, element);
+        this.moduleLevelExports.set(simpleName, <ModuleExport>{
+          element,
+          identifier: declaration.name
+        });
       }
     }
 
@@ -1332,31 +1389,39 @@ export class Program extends DiagnosticEmitter {
   private setExportAndCheckLibrary(
     internalName: string,
     element: Element,
-    identifier: IdentifierExpression
+    externalIdentifier: IdentifierExpression
   ): void {
     // add to file-level exports
     this.fileLevelExports.set(internalName, element);
 
     // add to filespace
-    var internalPath = identifier.range.source.internalPath;
+    var internalPath = externalIdentifier.range.source.internalPath;
     var prefix = FILESPACE_PREFIX + internalPath;
     var filespace = this.elementsLookup.get(prefix);
     if (!filespace) filespace = assert(this.elementsLookup.get(prefix + PATH_DELIMITER + "index"));
     assert(filespace.kind == ElementKind.FILESPACE);
-    var simpleName = identifier.text;
+    var simpleName = externalIdentifier.text;
     (<Filespace>filespace).members.set(simpleName, element);
 
-    // add global alias if from a library file
-    if (identifier.range.source.isLibrary) {
+    // add global alias if a top-level export of a library file
+    var source = externalIdentifier.range.source;
+    if (source.isLibrary) {
       if (this.elementsLookup.has(simpleName)) {
         this.error(
           DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-          identifier.range, simpleName
+          externalIdentifier.range, simpleName
         );
       } else {
         element.internalName = simpleName;
         this.elementsLookup.set(simpleName, element);
       }
+
+    // add module level export if a top-level export of an entry file
+    } else if (source.isEntry) {
+      this.moduleLevelExports.set(externalIdentifier.text, <ModuleExport>{
+        element,
+        identifier: externalIdentifier
+      });
     }
   }
 
@@ -1382,10 +1447,10 @@ export class Program extends DiagnosticEmitter {
       referencedName = member.range.source.internalPath + PATH_DELIMITER + member.name.text;
 
       // resolve right away if the element exists
-      if (referencedElement = this.elementsLookup.get(referencedName)) {
+      if (this.elementsLookup.has(referencedName)) {
         this.setExportAndCheckLibrary(
           externalName,
-          referencedElement,
+          <Element>this.elementsLookup.get(referencedName),
           member.externalName
         );
         return;
@@ -1526,14 +1591,18 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, prototype);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
+          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
+            declaration.name.range, existingExport.element.internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, prototype);
+        this.moduleLevelExports.set(simpleName, <ModuleExport>{
+          element: prototype,
+          identifier: declaration.name
+        });
       }
     }
 
@@ -1687,14 +1756,18 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, prototype);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
+          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
+            declaration.name.range, existingExport.element.internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, prototype);
+        this.moduleLevelExports.set(simpleName, <ModuleExport>{
+          element: prototype,
+          identifier: declaration.name
+        });
       }
     }
 
@@ -1772,15 +1845,19 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, namespace);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
-          if (this.moduleLevelExports.get(simpleName) !== namespace) { // not merged
+          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
+          if (existingExport.element !== namespace) { // not merged
             this.error(
               DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
+              declaration.name.range, existingExport.element.internalName
             );
             return;
           }
         } else {
-          this.moduleLevelExports.set(simpleName, namespace);
+          this.moduleLevelExports.set(simpleName, <ModuleExport>{
+            element: namespace,
+            identifier: declaration.name
+          });
         }
         namespace.set(CommonFlags.MODULE_EXPORT);
       }
@@ -1869,12 +1946,20 @@ export class Program extends DiagnosticEmitter {
         decorators
           ? this.checkDecorators(decorators,
               DecoratorFlags.GLOBAL |
+              DecoratorFlags.INLINE |
               DecoratorFlags.EXTERNAL
             )
           : DecoratorFlags.NONE
       );
       global.parent = namespace;
       this.elementsLookup.set(internalName, global);
+
+      if (global.hasDecorator(DecoratorFlags.INLINE) && !global.is(CommonFlags.CONST)) {
+        this.error(
+          DiagnosticCode.Decorator_0_is_not_valid_here,
+          assert(findDecorator(DecoratorKind.INLINE, decorators)).range, "inline"
+        );
+      }
 
       if (namespace) {
         if (namespace.members) {
@@ -1904,14 +1989,18 @@ export class Program extends DiagnosticEmitter {
         this.currentFilespace.members.set(simpleName, global);
         if (declaration.range.source.isEntry) {
           if (this.moduleLevelExports.has(simpleName)) {
+            let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
             this.error(
               DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range, (<Element>this.moduleLevelExports.get(simpleName)).internalName
+              declaration.name.range, existingExport.element.internalName
             );
             continue;
           }
           global.set(CommonFlags.MODULE_EXPORT);
-          this.moduleLevelExports.set(simpleName, global);
+          this.moduleLevelExports.set(simpleName, <ModuleExport>{
+            element: global,
+            identifier: declaration.name
+          });
         }
       }
       this.checkGlobal(global, declaration);
@@ -1973,7 +2062,9 @@ export enum DecoratorFlags {
   /** Is always inlined. */
   INLINE = 1 << 6,
   /** Is using a different external name. */
-  EXTERNAL = 1 << 7
+  EXTERNAL = 1 << 7,
+  /** Is a builtin. */
+  BUILTIN = 1 << 8
 }
 
 export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
@@ -1987,6 +2078,7 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
     case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
     case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
+    case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
     default: return DecoratorFlags.NONE;
   }
 }
@@ -2308,7 +2400,7 @@ export class Function extends Element {
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
-    if (!(prototype.is(CommonFlags.AMBIENT | CommonFlags.BUILTIN) || prototype.is(CommonFlags.DECLARE))) {
+    if (!(prototype.is(CommonFlags.AMBIENT))) {
       let localIndex = 0;
       if (parent && parent.kind == ElementKind.CLASS) {
         assert(this.is(CommonFlags.INSTANCE));

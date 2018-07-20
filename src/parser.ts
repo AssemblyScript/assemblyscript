@@ -86,8 +86,6 @@ import {
   nodeIsGenericCallable
 } from "./ast";
 
-const builtinsFile = LIBRARY_PREFIX + "builtins.ts";
-
 /** Parser interface. */
 export class Parser extends DiagnosticEmitter {
 
@@ -135,11 +133,6 @@ export class Parser extends DiagnosticEmitter {
     var program = this.program;
     program.sources.push(source);
 
-    // mark the special builtins library file
-    if (source.normalizedPath == builtinsFile) {
-      source.set(CommonFlags.BUILTIN);
-    }
-
     // tokenize and parse
     var tn = new Tokenizer(source, program.diagnostics);
     tn.onComment = this.onComment;
@@ -175,9 +168,6 @@ export class Parser extends DiagnosticEmitter {
       if (!decorators) decorators = [];
       decorators.push(decorator);
     }
-
-    // mark builtins
-    flags |= (tn.source.flags & CommonFlags.BUILTIN);
 
     // check modifiers
     var exportStart: i32 = 0;

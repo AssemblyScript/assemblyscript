@@ -4,7 +4,6 @@
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 32))
  (memory $0 1)
  (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
  (export "memory" (memory $0))
@@ -345,7 +344,7 @@
  )
  (func $start (; 2 ;) (type $v)
   (set_global $memset/dest
-   (get_global $HEAP_BASE)
+   (i32.const 32)
   )
   (drop
    (call $memset/memset

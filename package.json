@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "48.0.0-nightly.20180712",
+    "binaryen": "49.0.0-nightly.20180718",
     "long": "^4.0.0"
   },
   "devDependencies": {
@@ -41,15 +41,15 @@
   "scripts": {
     "build": "webpack --mode production --display-modules",
     "clean": "node scripts/clean",
-    "lint": "npm run lint:compiler && npm run lint:library",
-    "lint:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",
-    "lint:library": "tslint -c tslint.json --project std/assembly --formatters-dir lib/lint/formatters --format as",
-    "test:config": "tsc --noEmit -p src --diagnostics --listFiles",
+    "check": "npm run check:config && npm run check:compiler && npm run check:library",
+    "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
+    "check:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",
+    "check:library": "tslint -c tslint.json --project std/assembly --formatters-dir lib/lint/formatters --format as",
+    "test": "npm run test:parser && npm run test:compiler",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
-    "test": "npm run test:config --scripts-prepend-node-path && npm run test:parser --scripts-prepend-node-path && npm run test:compiler --scripts-prepend-node-path",
-    "test:pr": "npm run clean && npm test && npm run build && npm test && npm run clean",
-    "all": "npm run lint && npm run clean && npm test && npm run build && npm test",
+    "make": "npm run clean && npm test && npm run build && npm test",
+    "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"
   },
   "files": [

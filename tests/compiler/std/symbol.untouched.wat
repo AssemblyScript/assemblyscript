@@ -35,6 +35,8 @@
  (global $std/symbol/key2 (mut i32) (i32.const 0))
  (global $std/symbol/key3 (mut i32) (i32.const 0))
  (global $std/symbol/key4 (mut i32) (i32.const 0))
+ (global $~lib/symbol/Symbol.hasInstance i32 (i32.const 1))
+ (global $~lib/symbol/Symbol.concatSpreadable i32 (i32.const 2))
  (global $HEAP_BASE i32 (i32.const 156))
  (memory $0 1)
  (data (i32.const 8) "\03\00\00\001\002\003\00")
@@ -68,7 +70,7 @@
   )
   (get_local $2)
  )
- (func $~lib/allocator/arena/allocate_memory (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -81,7 +83,7 @@
     (if
      (i32.gt_u
       (get_local $0)
-      (i32.const 1073741824)
+      (get_global $~lib/internal/allocator/MAX_SIZE_32)
      )
      (unreachable)
     )
@@ -95,10 +97,10 @@
         (get_local $1)
         (get_local $0)
        )
-       (i32.const 7)
+       (get_global $~lib/internal/allocator/AL_MASK)
       )
       (i32.xor
-       (i32.const 7)
+       (get_global $~lib/internal/allocator/AL_MASK)
        (i32.const -1)
       )
      )
@@ -176,7 +178,14 @@
   )
   (i32.const 0)
  )
- (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+  (return
+   (call $~lib/allocator/arena/__memory_allocate
+    (get_local $0)
+   )
+  )
+ )
+ (func $~lib/internal/arraybuffer/computeSize (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (i32.shl
    (i32.const 1)
    (i32.sub
@@ -185,7 +194,7 @@
      (i32.sub
       (i32.add
        (get_local $0)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.const 1)
      )
@@ -193,13 +202,13 @@
    )
   )
  )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
     (i32.le_u
      (get_local $0)
-     (i32.const 1073741816)
+     (get_global $~lib/internal/arraybuffer/MAX_BLENGTH)
     )
    )
    (block
@@ -213,7 +222,7 @@
    )
   )
   (set_local $1
-   (call $~lib/allocator/arena/allocate_memory
+   (call $~lib/memory/memory.allocate
     (call $~lib/internal/arraybuffer/computeSize
      (get_local $0)
     )
@@ -225,7 +234,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/set_memory (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -577,12 +586,19 @@
    )
   )
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.fill (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (call $~lib/memory/memset
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.gt_u
     (get_local $1)
-    (i32.const 1073741816)
+    (get_global $~lib/internal/arraybuffer/MAX_BLENGTH)
    )
    (block
     (call $~lib/env/abort
@@ -606,10 +622,10 @@
      (i32.const 1)
     )
    )
-   (call $~lib/memory/set_memory
+   (call $~lib/memory/memory.fill
     (i32.add
      (get_local $3)
-     (i32.const 8)
+     (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
     )
     (i32.const 0)
     (get_local $1)
@@ -617,7 +633,7 @@
   )
   (get_local $3)
  )
- (func $~lib/map/Map<String,usize>#clear (; 7 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<String,usize>#clear (; 9 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -629,7 +645,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -643,7 +659,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -654,7 +670,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<String,usize>#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#constructor (; 10 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<String,usize>#clear
    (tee_local $0
@@ -664,7 +680,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -700,7 +716,7 @@
   )
   (get_local $0)
  )
- (func $~lib/map/Map<usize,String>#clear (; 9 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<usize,String>#clear (; 11 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -712,7 +728,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -726,7 +742,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -737,7 +753,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<usize,String>#constructor (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#constructor (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<usize,String>#clear
    (tee_local $0
@@ -747,7 +763,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -783,12 +799,12 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hashStr (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hashStr (; 13 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (set_local $1
-   (i32.const -2128831035)
+   (get_global $~lib/internal/hash/FNV_OFFSET)
   )
   (block $break|0
    (block
@@ -824,7 +840,7 @@
         )
        )
       )
-      (i32.const 16777619)
+      (get_global $~lib/internal/hash/FNV_PRIME)
      )
     )
     (set_local $2
@@ -838,15 +854,29 @@
   )
   (get_local $1)
  )
+<<<<<<< HEAD
  (func $~lib/internal/string/compareUTF16 (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (set_local $3
    (i32.const 0)
+=======
+ (func $~lib/memory/memcmp (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (if
+   (i32.eq
+    (get_local $0)
+    (get_local $1)
+   )
+   (return
+    (i32.const 0)
+   )
+>>>>>>> master
   )
   (block $break|0
    (loop $continue|0
     (if
      (if (result i32)
+<<<<<<< HEAD
       (get_local $2)
       (i32.eqz
        (tee_local $3
@@ -858,9 +888,23 @@
           (get_local $1)
          )
         )
+=======
+      (tee_local $3
+       (i32.ne
+        (get_local $2)
+        (i32.const 0)
        )
       )
-      (get_local $2)
+      (i32.eq
+       (i32.load8_u
+        (get_local $0)
+       )
+       (i32.load8_u
+        (get_local $1)
+>>>>>>> master
+       )
+      )
+      (get_local $3)
      )
      (block
       (block
@@ -890,7 +934,14 @@
   )
   (get_local $3)
  )
- (func $~lib/string/String.__eq (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/memory/memory.compare (; 15 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (call $~lib/memory/memcmp
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $~lib/string/String.__eq (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -937,14 +988,30 @@
    )
   )
   (i32.eqz
+<<<<<<< HEAD
    (call $~lib/internal/string/compareUTF16
     (get_local $0)
     (get_local $1)
     (get_local $3)
+=======
+   (call $~lib/memory/memory.compare
+    (i32.add
+     (get_local $0)
+     (get_global $~lib/internal/string/HEADER_SIZE)
+    )
+    (i32.add
+     (get_local $1)
+     (get_global $~lib/internal/string/HEADER_SIZE)
+    )
+    (i32.shl
+     (get_local $3)
+     (i32.const 1)
+    )
+>>>>>>> master
    )
   )
  )
- (func $~lib/map/Map<String,usize>#find (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#find (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -960,7 +1027,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -979,7 +1046,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -1001,7 +1068,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -1014,7 +1081,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<String,usize>#has (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#has (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<String,usize>#find
     (get_local $0)
@@ -1030,7 +1097,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<String,usize>#get (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#get (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<String,usize>#find
@@ -1053,7 +1120,7 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<String,usize>#rehash (; 17 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<String,usize>#rehash (; 20 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1076,7 +1143,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -1087,7 +1154,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -1108,7 +1175,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -1127,7 +1194,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -1148,7 +1215,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -1189,7 +1256,7 @@
            (get_local $3)
            (i32.mul
             (get_local $11)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -1250,7 +1317,7 @@
    )
   )
  )
- (func $~lib/map/Map<String,usize>#set (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<String,usize>#set (; 21 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1301,7 +1368,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -1329,7 +1396,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -1382,7 +1449,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -1399,10 +1466,10 @@
    )
   )
  )
- (func $~lib/internal/hash/hash32 (; 19 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 22 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
-   (i32.const -2128831035)
+   (get_global $~lib/internal/hash/FNV_OFFSET)
   )
   (set_local $1
    (i32.mul
@@ -1413,7 +1480,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -1428,7 +1495,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -1443,7 +1510,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -1455,12 +1522,12 @@
       (i32.const 24)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (get_local $1)
  )
- (func $~lib/map/Map<usize,String>#find (; 20 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#find (; 23 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -1476,7 +1543,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -1495,7 +1562,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -1517,7 +1584,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -1530,7 +1597,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<usize,String>#rehash (; 21 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,String>#rehash (; 24 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1553,7 +1620,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -1564,7 +1631,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -1585,7 +1652,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -1604,7 +1671,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -1625,7 +1692,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -1666,7 +1733,7 @@
            (get_local $3)
            (i32.mul
             (get_local $11)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -1727,7 +1794,7 @@
    )
   )
  )
- (func $~lib/map/Map<usize,String>#set (; 22 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,String>#set (; 25 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1778,7 +1845,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -1806,7 +1873,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -1859,7 +1926,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -1876,7 +1943,7 @@
    )
   )
  )
- (func $~lib/symbol/Symbol.for (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/Symbol.for (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -1940,7 +2007,7 @@
   )
   (get_local $2)
  )
- (func $~lib/map/Map<usize,String>#has (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#has (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<usize,String>#find
     (get_local $0)
@@ -1956,7 +2023,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<usize,String>#get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#get (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<usize,String>#find
@@ -1979,7 +2046,7 @@
    (unreachable)
   )
  )
- (func $~lib/symbol/Symbol.keyFor (; 26 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/Symbol.keyFor (; 29 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if (result i32)
    (if (result i32)
@@ -2002,15 +2069,15 @@
    (i32.const 0)
   )
  )
- (func $start (; 27 ;) (type $v)
+ (func $start (; 30 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
-     (i32.const 7)
+     (get_global $~lib/internal/allocator/AL_MASK)
     )
     (i32.xor
-     (i32.const 7)
+     (get_global $~lib/internal/allocator/AL_MASK)
      (i32.const -1)
     )
    )
@@ -2161,10 +2228,10 @@
    )
   )
   (drop
-   (i32.const 1)
+   (get_global $~lib/symbol/Symbol.hasInstance)
   )
   (drop
-   (i32.const 2)
+   (get_global $~lib/symbol/Symbol.concatSpreadable)
   )
  )
 )

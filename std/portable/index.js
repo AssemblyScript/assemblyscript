@@ -218,4 +218,32 @@ globalScope["fmodf"] = function fmodf(x, y) {
 
 globalScope["JSMath"] = Math;
 
-require("./memory")(globalScope);
+globalScope["memory"] = (() => {
+  var HEAP = new Uint8Array(0);
+  var HEAP_OFFSET = 0;
+  return {
+    allocate: globalScope["__memory_allocate"] || function allocate(size) {
+      if (!(size >>>= 0)) return 0;
+      if (HEAP_OFFSET + size > HEAP.length) {
+        var oldHeap = HEAP;
+        HEAP = new Uint8Array(Math.max(65536, HEAP.length + size, HEAP.length * 2));
+        HEAP.set(oldHeap);
+      }
+      var ptr = HEAP_OFFSET;
+      if ((HEAP_OFFSET += size) & 7) HEAP_OFFSET = (HEAP_OFFSET | 7) + 1;
+      return ptr;
+    },
+    free: globalScope["__memory_free"] || function free(ptr) { },
+    copy: globalScope["__memory_copy"] || function copy(dest, src, size) {
+      HEAP.copyWithin(dest, src, src + size);
+    }
+  };
+})();
+
+globalScope["store"] = globalScope["__store"] || function store(ptr, value, offset) {
+  HEAP[ptr + (offset | 0)] = value;
+};
+
+globalScope["load"] = globalScope["__load"] || function load(ptr, offset) {
+  return HEAP[ptr + (offset | 0)];
+};

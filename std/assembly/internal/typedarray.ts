@@ -18,7 +18,7 @@ export abstract class TypedArray<T,V> {
     if (<u32>length > MAX_LENGTH) throw new RangeError("Invalid typed array length");
     var byteLength = length << alignof<T>();
     var buffer = allocUnsafe(byteLength);
-    set_memory(changetype<usize>(buffer) + HEADER_SIZE_AB, 0, <usize>byteLength);
+    memory.fill(changetype<usize>(buffer) + HEADER_SIZE_AB, 0, <usize>byteLength);
     this.buffer = buffer;
     this.byteOffset = 0;
     this.byteLength = byteLength;
@@ -64,7 +64,7 @@ export abstract class TypedArray<T,V> {
     else begin = min(begin, length);
     if (end < 0) end = max(length + end, begin);
     else end = max(min(end, length), begin);
-    var slice = allocate_memory(offsetof<this>());
+    var slice = memory.allocate(offsetof<this>());
     store<usize>(slice, this.buffer, offsetof<this>("buffer"));
     store<i32>(slice, begin << alignof<T>(), offsetof<this>("byteOffset"));
     store<i32>(slice, end << alignof<T>(), offsetof<this>("byteLength"));

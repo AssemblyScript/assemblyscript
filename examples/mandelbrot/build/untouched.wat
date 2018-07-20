@@ -9,18 +9,18 @@
  (import "env" "memory" (memory $0 0))
  (global $assembly/index/NUM_COLORS i32 (i32.const 2048))
  (global $HEAP_BASE i32 (i32.const 8))
- (export "computeLine" (func $assembly/index/computeLine))
  (export "memory" (memory $0))
- (func $isFinite<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
-  ;;@ ~lib/builtins.ts:22:26
+ (export "computeLine" (func $assembly/index/computeLine))
+ (func $~lib/builtins/isFinite<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
+  ;;@ ~lib/builtins.ts:16:70
   (f64.eq
-   ;;@ ~lib/builtins.ts:22:9
+   ;;@ ~lib/builtins.ts:16:53
    (f64.sub
     (get_local $0)
-    ;;@ ~lib/builtins.ts:22:17
+    ;;@ ~lib/builtins.ts:16:61
     (get_local $0)
    )
-   ;;@ ~lib/builtins.ts:22:26
+   ;;@ ~lib/builtins.ts:16:70
    (f64.const 0)
   )
  )
@@ -375,7 +375,7 @@
      (set_local $17
       ;;@ assembly/index.ts:37:15
       (if (result i32)
-       (call $isFinite<f64>
+       (call $~lib/builtins/isFinite<f64>
         ;;@ assembly/index.ts:37:24
         (get_local $15)
        )
@@ -386,7 +386,7 @@
          (f64.convert_s/i32
           (i32.sub
            ;;@ assembly/index.ts:38:15
-           (i32.const 2048)
+           (get_global $assembly/index/NUM_COLORS)
            ;;@ assembly/index.ts:38:28
            (i32.const 1)
           )
@@ -421,7 +421,7 @@
        )
        ;;@ assembly/index.ts:39:8
        (i32.sub
-        (i32.const 2048)
+        (get_global $assembly/index/NUM_COLORS)
         ;;@ assembly/index.ts:39:21
         (i32.const 1)
        )

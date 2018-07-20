@@ -173,13 +173,13 @@ export class String {
     if (outLen == 0) return EMPTY;
     var out = allocate(outLen);
 
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE,
       thisLen << 1
     );
 
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE + (thisLen << 1),
       changetype<usize>(other) + HEADER_SIZE,
       otherLen << 1
@@ -373,7 +373,7 @@ export class String {
       return EMPTY;
     }
     var out = allocate(resultLength);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE + (intStart << 1),
       <usize>resultLength << 1
@@ -396,7 +396,7 @@ export class String {
       return this;
     }
     var out = allocate(len);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE + (from << 1),
       len << 1
@@ -432,7 +432,7 @@ export class String {
       return this;
     }
     var out = allocate(length);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE + (start << 1),
       length << 1
@@ -460,7 +460,7 @@ export class String {
       return EMPTY;
     }
     var out = allocate(outLen);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE + (start << 1),
       outLen << 1
@@ -486,7 +486,7 @@ export class String {
       return this;
     }
     var out = allocate(len);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE,
       len << 1
@@ -514,7 +514,7 @@ export class String {
      * 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
      */
     for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
-      move_memory(
+      memory.copy(
         changetype<usize>(result) + HEADER_SIZE + offset,
         changetype<usize>(this)   + HEADER_SIZE,
         strLen
@@ -553,7 +553,7 @@ export class String {
   }
 
   toUTF8(): usize {
-    var buf = allocate_memory(<usize>this.lengthUTF8);
+    var buf = memory.allocate(<usize>this.lengthUTF8);
     var pos: usize = 0;
     var end = <usize>this.length;
     var off: usize = 0;

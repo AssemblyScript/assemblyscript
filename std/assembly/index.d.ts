@@ -34,6 +34,8 @@ declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
 
+// Compiler hints
+
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
 /** Provided noTreeshaking option. */
@@ -50,6 +52,100 @@ declare const ASC_SHRINK_LEVEL: i32;
 declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
+
+// Builtins
+
+/** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
+declare function clz<T = i32 | i64>(value: T): T;
+/** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
+declare function ctz<T = i32 | i64>(value: T): T;
+/** Performs the sign-agnostic count number of one bits operation on a 32-bit or 64-bit integer. */
+declare function popcnt<T = i32 | i64>(value: T): T;
+/** Performs the sign-agnostic rotate left operation on a 32-bit or 64-bit integer. */
+declare function rotl<T = i32 | i64>(value: T, shift: T): T;
+/** Performs the sign-agnostic rotate right operation on a 32-bit or 64-bit integer. */
+declare function rotr<T = i32 | i64>(value: T, shift: T): T;
+/** Computes the absolute value of an integer or float. */
+declare function abs<T = i32 | i64 | f32 | f64>(value: T): T;
+/** Determines the maximum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
+declare function max<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Determines the minimum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
+declare function min<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Performs the ceiling operation on a 32-bit or 64-bit float. */
+declare function ceil<T = f32 | f64>(value: T): T;
+/** Composes a 32-bit or 64-bit float from the magnitude of `x` and the sign of `y`. */
+declare function copysign<T = f32 | f64>(x: T, y: T): T;
+/** Performs the floor operation on a 32-bit or 64-bit float. */
+declare function floor<T = f32 | f64>(value: T): T;
+/** Rounds to the nearest integer tied to even of a 32-bit or 64-bit float. */
+declare function nearest<T = f32 | f64>(value: T): T;
+/** Reinterprets the bits of the specified value as type `T`. Valid reinterpretations are u32/i32 to/from f32 and u64/i64 to/from f64. */
+declare function reinterpret<T = i32 | i64 | f32 | f64>(value: number): T;
+/** Selects one of two pre-evaluated values depending on the condition. */
+declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
+/** Calculates the square root of a 32-bit or 64-bit float. */
+declare function sqrt<T = f32 | f64>(value: T): T;
+/** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
+declare function trunc<T = f32 | f64>(value: T): T;
+/** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
+declare function load<T>(ptr: usize, constantOffset?: usize): T;
+/** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
+declare function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
+/** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
+declare function unreachable(): any; // sic
+
+/** NaN (not a number) as a 32-bit or 64-bit float depending on context. */
+declare const NaN: f32 | f64;
+/** Positive infinity as a 32-bit or 64-bit float depending on context. */
+declare const Infinity: f32 | f64;
+/** Heap base offset. */
+declare const HEAP_BASE: usize;
+/** Determines the byte size of the specified underlying core type. Compiles to a constant. */
+declare function sizeof<T>(): usize;
+/** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */
+declare function alignof<T>(): usize;
+/** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
+declare function offsetof<T>(fieldName?: string): usize;
+/** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
+declare function changetype<T>(value: any): T;
+/** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
+declare function unchecked<T>(value: T): T;
+/** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
+declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
+/** Tests if a 32-bit or 64-bit float is `NaN`. */
+declare function isNaN<T = f32 | f64>(value: T): bool;
+/** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
+declare function isFinite<T = f32 | f64>(value: T): bool;
+/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
+declare function isInteger<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
+declare function isFloat<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression can represent negative numbers. Compiles to a constant. */
+declare function isSigned<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a reference type. Compiles to a constant. */
+declare function isReference<T>(value?: any): value is object | string;
+/** Tests if the specified type *or* expression can be used as a string. Compiles to a constant. */
+declare function isString<T>(value?: any): value is string | String;
+/** Tests if the specified type *or* expression can be used as an array. Compiles to a constant. */
+declare function isArray<T>(value?: any): value is Array<any>;
+/** Tests if the specified expression resolves to a defined element. Compiles to a constant. */
+declare function isDefined(expression: any): bool;
+/** Tests if the specified expression evaluates to a constant value. Compiles to a constant. */
+declare function isConstant(expression: any): bool;
+/** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
+declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
+/** Parses an integer string to a 64-bit float. */
+declare function parseInt(str: string, radix?: i32): f64;
+/** Parses an integer string to a 32-bit integer. */
+declare function parseI32(str: string, radix?: i32): i32;
+/** Parses an integer string to a 64-bit integer. */
+declare function parseI64(str: string, radix?: i32): i64;
+/** Parses a string to a 64-bit float. */
+declare function parseFloat(str: string): f64;
+/** Returns the 64-bit floating-point remainder of `x/y`. */
+declare function fmod(x: f64, y: f64): f64;
+/** Returns the 32-bit floating-point remainder of `x/y`. */
+declare function fmodf(x: f32, y: f32): f32;
 
 /** Converts any other numeric value to an 8-bit signed integer. */
 declare function i8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -210,120 +306,69 @@ declare namespace f64 {
   export function store(offset: usize, value: f64, constantOffset?: usize): void;
 }
 
-// Built-ins
+// User-defined diagnostic macros
 
-/** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
-declare function clz<T = i32 | i64>(value: T): T;
-/** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
-declare function ctz<T = i32 | i64>(value: T): T;
-/** Performs the sign-agnostic count number of one bits operation on a 32-bit or 64-bit integer. */
-declare function popcnt<T = i32 | i64>(value: T): T;
-/** Performs the sign-agnostic rotate left operation on a 32-bit or 64-bit integer. */
-declare function rotl<T = i32 | i64>(value: T, shift: T): T;
-/** Performs the sign-agnostic rotate right operation on a 32-bit or 64-bit integer. */
-declare function rotr<T = i32 | i64>(value: T, shift: T): T;
-/** Computes the absolute value of an integer or float. */
-declare function abs<T = i32 | i64 | f32 | f64>(value: T): T;
-/** Determines the maximum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
-declare function max<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
-/** Determines the minimum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
-declare function min<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
-/** Performs the ceiling operation on a 32-bit or 64-bit float. */
-declare function ceil<T = f32 | f64>(value: T): T;
-/** Composes a 32-bit or 64-bit float from the magnitude of `x` and the sign of `y`. */
-declare function copysign<T = f32 | f64>(x: T, y: T): T;
-/** Performs the floor operation on a 32-bit or 64-bit float. */
-declare function floor<T = f32 | f64>(value: T): T;
-/** Rounds to the nearest integer tied to even of a 32-bit or 64-bit float. */
-declare function nearest<T = f32 | f64>(value: T): T;
-/** Reinterprets the bits of the specified value as type `T`. Valid reinterpretations are u32/i32 to/from f32 and u64/i64 to/from f64. */
-declare function reinterpret<T = i32 | i64 | f32 | f64>(value: number): T;
-/** Selects one of two pre-evaluated values depending on the condition. */
-declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
-/** Calculates the square root of a 32-bit or 64-bit float. */
-declare function sqrt<T = f32 | f64>(value: T): T;
-/** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
-declare function trunc<T = f32 | f64>(value: T): T;
-/** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
-declare function load<T>(ptr: usize, constantOffset?: usize): T;
-/** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
-declare function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
-/** Returns the current memory size in units of pages. One page is 64kb. */
-declare function current_memory(): i32;
-/** Grows linear memory by a given unsigned delta of pages. One page is 64kb. Returns the previous memory size in units of pages or `-1` on failure. */
-declare function grow_memory(value: i32): i32;
-/** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
-declare function move_memory(destination: usize, source: usize, n: usize): void;
-/** Sets n bytes beginning at the specified destination in memory to the specified byte value. */
-declare function set_memory(destination: usize, value: u8, count: usize): void;
-/** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
-declare function compare_memory(vl: usize, vr: usize, n: usize): i32;
-/** Allocates a chunk of memory of the specified size and returns a pointer to it. */
-declare function allocate_memory(size: usize): usize;
-/** Disposes a chunk of memory by its pointer. */
-declare function free_memory(ptr: usize): void;
-/** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
-declare function unreachable(): any; // sic
+/** Emits a user-defined diagnostic error when encountered. */
+declare function ERROR(message?: any): void;
+/** Emits a user-defined diagnostic warning when encountered. */
+declare function WARNING(message?: any): void;
+/** Emits a user-defined diagnostic info when encountered. */
+declare function INFO(message?: any): void;
 
-/** [Polyfill] Performs the sign-agnostic reverse bytes **/
+// Polyfills
+
+/** Performs the sign-agnostic reverse bytes **/
 declare function bswap<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
-/** [Polyfill] Performs the sign-agnostic reverse bytes only for last 16-bit **/
+/** Performs the sign-agnostic reverse bytes only for last 16-bit **/
 declare function bswap16<T = i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
-/** NaN (not a number) as a 32-bit or 64-bit float depending on context. */
-declare const NaN: f32 | f64;
-/** Positive infinity as a 32-bit or 64-bit float depending on context. */
-declare const Infinity: f32 | f64;
-/** Heap base offset. */
-declare const HEAP_BASE: usize;
-/** Determines the byte size of the specified underlying core type. Compiles to a constant. */
-declare function sizeof<T>(): usize;
-/** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */
-declare function alignof<T>(): usize;
-/** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
-declare function offsetof<T>(fieldName?: string): usize;
-/** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
-declare function changetype<T>(value: any): T;
-/** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
-declare function unchecked<T>(value: T): T;
-/** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
-declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
-/** Tests if a 32-bit or 64-bit float is `NaN`. */
-declare function isNaN<T = f32 | f64>(value: T): bool;
-/** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
-declare function isFinite<T = f32 | f64>(value: T): bool;
-/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
-declare function isInteger<T>(value?: any): value is number;
-/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
-declare function isFloat<T>(value?: any): value is number;
-/** Tests if the specified type *or* expression can represent negative numbers. Compiles to a constant. */
-declare function isSigned<T>(value?: any): value is number;
-/** Tests if the specified type *or* expression is of a reference type. Compiles to a constant. */
-declare function isReference<T>(value?: any): value is object | string;
-/** Tests if the specified type *or* expression can be used as a string. Compiles to a constant. */
-declare function isString<T>(value?: any): value is string | String;
-/** Tests if the specified type *or* expression can be used as an array. Compiles to a constant. */
-declare function isArray<T>(value?: any): value is Array<any>;
-/** Tests if the specified expression resolves to a defined element. Compiles to a constant. */
-declare function isDefined(expression: any): bool;
-/** Tests if the specified expression evaluates to a constant value. Compiles to a constant. */
-declare function isConstant(expression: any): bool;
-/** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
-declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
-/** Parses an integer string to a 64-bit float. */
-declare function parseInt(str: string, radix?: i32): f64;
-/** Parses an integer string to a 32-bit integer. */
-declare function parseI32(str: string, radix?: i32): i32;
-/** Parses an integer string to a 64-bit integer. */
-declare function parseI64(str: string, radix?: i32): i64;
-/** Parses a string to a 64-bit float. */
-declare function parseFloat(str: string): f64;
-/** Returns the 64-bit floating-point remainder of `x/y`. */
-declare function fmod(x: f64, y: f64): f64;
-/** Returns the 32-bit floating-point remainder of `x/y`. */
-declare function fmodf(x: f32, y: f32): f32;
-
 // Standard library
+
+/** Memory operations. */
+declare namespace memory {
+  /** Returns the current memory size in units of pages. One page is 64kb. */
+  export function size(): i32;
+  /** Grows linear memory by a given unsigned delta of pages. One page is 64kb. Returns the previous memory size in units of pages or `-1` on failure. */
+  export function grow(value: i32): i32;
+  /** Sets n bytes beginning at the specified destination in memory to the specified byte value. */
+  export function fill(dst: usize, value: u8, count: usize): void;
+  /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
+  export function copy(dst: usize, src: usize, n: usize): void;
+  /** Copies elements from a passive element segment to a table. */
+  // export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void;
+  /** Prevents further use of a passive element segment. */
+  // export function drop(segmentIndex: u32): void;
+  /** Copies elements from one region of a table to another region. */
+  export function allocate(size: usize): usize;
+  /** Disposes a chunk of memory by its pointer. */
+  export function free(ptr: usize): void;
+  /** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
+  export function compare(vl: usize, vr: usize, n: usize): i32;
+  /** Resets the allocator to its initial state, if supported. */
+  export function reset(): void;
+}
+
+/** Garbage collector operations. */
+declare namespace gc {
+  /** Allocates a managed object identified by its visitor function. */
+  export function allocate(size: usize, visitFn: (ref: usize) => void): usize;
+  /** Performs a full garbage collection cycle. */
+  export function collect(): void;
+  /** Must be called when a managed object becomes a child of another one. */
+  export function link(parentRef: usize, childRef: usize): void;
+  /** Must be called when a managed object is found reachable. */
+  export function mark(ref: usize): void;
+}
+
+/** Table operations. */
+declare namespace table {
+  /** Copies elements from a passive element segment to a table. */
+  // export function init(elementIndex: u32, srcOffset: u32, dstOffset: u32, n: u32): void;
+  /** Prevents further use of a passive element segment. */
+  // export function drop(elementIndex: u32): void;
+  /** Copies elements from one region of a table to another region. */
+  // export function copy(dest: u32, src: u32, n: u32): void;
+}
 
 /** Class representing a generic, fixed-length raw binary data buffer. */
 declare class ArrayBuffer {
@@ -607,7 +652,10 @@ declare const Math: IMath<f64>;
 /** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
 declare const Mathf: IMath<f32>;
 
-// Internal decorators
+/** Environmental tracing function for debugging purposes. */
+declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
+
+// Decorators
 
 /** Annotates an element as a program global. */
 declare function global(target: Function, propertyKey: string, descriptor: any): void;
