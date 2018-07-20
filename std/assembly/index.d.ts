@@ -654,6 +654,9 @@ declare const Math: IMath<f64>;
 /** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
 declare const Mathf: IMath<f32>;
 
+/** Environmental tracing function for debugging purposes. */
+declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
+
 // Decorators
 
 /** Annotates an element as a program global. */

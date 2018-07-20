@@ -626,8 +626,8 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register 'main' if present
-    if (this.elementsLookup.has("main")) {
-      let element = <Element>this.elementsLookup.get("main");
+    if (this.moduleLevelExports.has("main")) {
+      let element = (<ModuleExport>this.moduleLevelExports.get("main")).element;
       if (
         element.kind == ElementKind.FUNCTION_PROTOTYPE &&
         !(<FunctionPrototype>element).isAny(CommonFlags.GENERIC | CommonFlags.AMBIENT)

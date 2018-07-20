@@ -2700,6 +2700,7 @@ export function compileCall(
           }
         }
       }
+      compiler.currentType = Type.void;
       return exprs.length
         ? module.createBlock(null, exprs)
         : module.createNop();
