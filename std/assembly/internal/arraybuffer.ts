@@ -20,7 +20,7 @@ export function computeSize(byteLength: i32): usize {
 /** Allocates a raw ArrayBuffer. Contents remain uninitialized. */
 export function allocUnsafe(byteLength: i32): ArrayBuffer {
   assert(<u32>byteLength <= <u32>MAX_BLENGTH);
-  var buffer = allocate_memory(computeSize(byteLength));
+  var buffer = memory.allocate(computeSize(byteLength));
   store<i32>(buffer, byteLength, offsetof<ArrayBuffer>("byteLength"));
   return changetype<ArrayBuffer>(buffer);
 }
@@ -32,19 +32,19 @@ export function reallocUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuf
     assert(newByteLength <= MAX_BLENGTH);
     if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE)) { // fast path: zero out additional space
       store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
-      set_memory(
+      memory.fill(
         changetype<usize>(buffer) + HEADER_SIZE + <usize>oldByteLength,
         0,
         <usize>(newByteLength - oldByteLength)
       );
     } else { // slow path: copy to new buffer
       let newBuffer = allocUnsafe(newByteLength);
-      move_memory(
+      memory.copy(
         changetype<usize>(newBuffer) + HEADER_SIZE,
         changetype<usize>(buffer) + HEADER_SIZE,
         <usize>oldByteLength
       );
-      set_memory(
+      memory.fill(
         changetype<usize>(newBuffer) + HEADER_SIZE + <usize>oldByteLength,
         0,
         <usize>(newByteLength - oldByteLength)

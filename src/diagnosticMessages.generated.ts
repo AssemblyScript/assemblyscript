@@ -9,6 +9,7 @@
 export enum DiagnosticCode {
   Operation_not_supported = 100,
   Operation_is_unsafe = 101,
+  User_defined_0 = 102,
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
@@ -36,7 +37,6 @@ export enum DiagnosticCode {
   A_rest_parameter_must_be_last_in_a_parameter_list = 1014,
   Parameter_cannot_have_question_mark_and_initializer = 1015,
   A_required_parameter_cannot_follow_an_optional_parameter = 1016,
-  Enum_member_must_have_initializer = 1061,
   Statements_are_not_allowed_in_ambient_contexts = 1036,
   Initializers_are_not_allowed_in_ambient_contexts = 1039,
   _0_modifier_cannot_be_used_here = 1042,
@@ -45,6 +45,7 @@ export enum DiagnosticCode {
   A_set_accessor_must_have_exactly_one_parameter = 1049,
   A_set_accessor_parameter_cannot_have_an_initializer = 1052,
   A_get_accessor_cannot_have_parameters = 1054,
+  Enum_member_must_have_initializer = 1061,
   Type_parameters_cannot_appear_on_a_constructor_declaration = 1092,
   Type_annotation_cannot_appear_on_a_constructor_declaration = 1093,
   An_accessor_cannot_have_type_parameters = 1094,
@@ -105,6 +106,7 @@ export enum DiagnosticCode {
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
   Type_0_has_no_property_1 = 2460,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
+  In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
   Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
   The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
@@ -126,6 +128,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
     case 100: return "Operation not supported.";
     case 101: return "Operation is unsafe.";
+    case 102: return "User-defined: {0}";
     case 200: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
@@ -153,7 +156,6 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1014: return "A rest parameter must be last in a parameter list.";
     case 1015: return "Parameter cannot have question mark and initializer.";
     case 1016: return "A required parameter cannot follow an optional parameter.";
-    case 1061: return "Enum member must have initializer.";
     case 1036: return "Statements are not allowed in ambient contexts.";
     case 1039: return "Initializers are not allowed in ambient contexts.";
     case 1042: return "'{0}' modifier cannot be used here.";
@@ -162,6 +164,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1049: return "A 'set' accessor must have exactly one parameter.";
     case 1052: return "A 'set' accessor parameter cannot have an initializer.";
     case 1054: return "A 'get' accessor cannot have parameters.";
+    case 1061: return "Enum member must have initializer.";
     case 1092: return "Type parameters cannot appear on a constructor declaration.";
     case 1093: return "Type annotation cannot appear on a constructor declaration.";
     case 1094: return "An accessor cannot have type parameters.";
@@ -222,6 +225,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
     case 2460: return "Type '{0}' has no property '{1}'.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
+    case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
     case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";
     case 2541: return "The target of an assignment must be a variable or a property access.";

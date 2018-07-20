@@ -13,7 +13,7 @@
   (get_global $namespace/Outer.Inner.aVar)
  )
  (func $namespace/Joined.anotherFunc (; 1 ;) (type $i) (result i32)
-  (i32.const 3)
+  (get_global $namespace/Joined.THREE)
  )
  (func $start (; 2 ;) (type $v)
   (drop
@@ -23,7 +23,7 @@
    (call $namespace/Outer.Inner.aFunc)
   )
   (drop
-   (i32.const 1)
+   (get_global $namespace/Outer.Inner.anEnum.ONE)
   )
   (drop
    (call $namespace/Joined.anotherFunc)

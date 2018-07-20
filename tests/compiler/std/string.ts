@@ -2,9 +2,6 @@ import "allocator/arena";
 
 import { utoa32, itoa32, utoa64, itoa64 } from "internal/itoa";
 
-// @external("env", "logi")
-// declare function logi(i: i32): void;
-
 // preliminary
 
 var str: string = "hi, I'm a string";

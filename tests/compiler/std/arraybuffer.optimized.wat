@@ -10,7 +10,6 @@
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 152))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 52) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
@@ -31,7 +30,7 @@
    )
   )
  )
- (func $~lib/allocator/arena/allocate_memory (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -117,7 +116,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+  (call $~lib/allocator/arena/__memory_allocate
+   (get_local $0)
+  )
+ )
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.gt_u
@@ -136,7 +140,7 @@
   )
   (i32.store
    (tee_local $1
-    (call $~lib/allocator/arena/allocate_memory
+    (call $~lib/memory/memory.allocate
      (call $~lib/internal/arraybuffer/computeSize
       (get_local $0)
      )
@@ -146,7 +150,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/set_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (if
@@ -476,7 +480,14 @@
    )
   )
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.fill (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (call $~lib/memory/memset
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.gt_u
@@ -505,7 +516,7 @@
      (i32.const 1)
     )
    )
-   (call $~lib/memory/set_memory
+   (call $~lib/memory/memory.fill
     (i32.add
      (get_local $3)
      (i32.const 8)
@@ -516,7 +527,7 @@
   )
   (get_local $3)
  )
- (func $~lib/memory/copy_memory (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memcpy (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1902,7 +1913,7 @@
    )
   )
  )
- (func $~lib/memory/move_memory (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memmove (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -1937,7 +1948,7 @@
   (if
    (get_local $3)
    (block
-    (call $~lib/memory/copy_memory
+    (call $~lib/memory/memcpy
      (get_local $0)
      (get_local $1)
      (get_local $2)
@@ -2194,7 +2205,14 @@
    )
   )
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.copy (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (call $~lib/memory/memmove
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#slice (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $4
@@ -2233,7 +2251,7 @@
     )
    )
   )
-  (call $~lib/memory/move_memory
+  (call $~lib/memory/memory.copy
    (i32.add
     (tee_local $2
      (call $~lib/internal/arraybuffer/allocUnsafe
@@ -2297,12 +2315,12 @@
   )
   (get_local $2)
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $2of2
    (block $1of2
     (block $0of2
-     (block $oob
-      (br_table $0of2 $1of2 $2of2 $oob
+     (block $outOfRange
+      (br_table $0of2 $1of2 $2of2 $outOfRange
        (get_global $~argc)
       )
      )
@@ -2322,15 +2340,9 @@
    (get_local $2)
   )
  )
- (func $start (; 10 ;) (type $v)
+ (func $start (; 13 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.and
-    (i32.add
-     (get_global $HEAP_BASE)
-     (i32.const 7)
-    )
-    (i32.const -8)
-   )
+   (i32.const 152)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
