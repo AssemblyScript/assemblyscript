@@ -5,7 +5,7 @@ import "allocator/arena";
 
 type float = f64; // interchangeable f32/f64 for testing
 
-const SOLAR_MASS: float = 4.0 * Math.PI * Math.PI;
+const SOLAR_MASS = <float>(4.0 * Math.PI * Math.PI);
 const DAYS_PER_YEAR: float = 365.24;
 
 class Body {
