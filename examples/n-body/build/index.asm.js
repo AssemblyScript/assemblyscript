@@ -508,12 +508,6 @@ function asmFunc(global, env, buffer) {
  }
  
  return {
-<<<<<<< HEAD
-  init: assembly_index_init, 
-  step: assembly_index_step, 
-  bench: assembly_index_bench, 
-=======
->>>>>>> master
   memory: Object.create(Object.prototype, {
    grow: {
     value: __wasm_grow_memory
@@ -526,7 +520,6 @@ function asmFunc(global, env, buffer) {
    }
   }), 
   init: assembly_index_init, 
-  getBody: assembly_index_getBody, 
   step: assembly_index_step, 
   bench: assembly_index_bench
  };

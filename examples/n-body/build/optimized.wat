@@ -14,11 +14,6 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $assembly/index/system (mut i32) (i32.const 0))
-<<<<<<< HEAD
- (global $HEAP_BASE i32 (i32.const 40))
-=======
- (memory $0 1)
->>>>>>> master
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (export "memory" (memory $0))
  (export "init" (func $assembly/index/init))
