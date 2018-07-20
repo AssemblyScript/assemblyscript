@@ -5,8 +5,8 @@
  (global $~started (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
- (export "main" (func $main/main))
  (export "memory" (memory $0))
+ (export "main" (func $main/main))
  (func $main/main (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.eqz

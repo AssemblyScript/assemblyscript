@@ -1,7 +1,56 @@
-function copy_memory(dest: usize, src: usize, n: usize): void {
-  // based on musl's implementation of memcpy
-  // not a future instruction and sufficiently covered by the upcoming move_memory intrinsic
+export namespace memory {
 
+  @builtin export declare function size(): i32; // tslint:disable-line
+
+  @builtin export declare function grow(pages: i32): i32; // tslint:disable-line
+
+  export function fill(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
+    if (isDefined(__memory_fill)) { __memory_fill(dest, c, n); return; } // tslint:disable-line
+    memset(dest, c, n);
+  }
+
+  export function copy(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
+    if (isDefined(__memory_copy)) { __memory_copy(dest, src, n); return; } // tslint:disable-line
+    memmove(dest, src, n);
+  }
+
+  export function compare(vl: usize, vr: usize, n: usize): i32 { // see: musl/src/string/memcmp.c
+    if (isDefined(__memory_compare)) return __memory_compare(vl, vr, n); // tslint:disable-line
+    return memcmp(vl, vr, n);
+  }
+
+  // Passive segments
+
+  // export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void {
+  //   __memory_init(segmentIndex, srcOffset, dstOffset);
+  // }
+
+  // export function drop(segmentIndex: u32): void {
+  //   __memory_drop(segmentIndex);
+  // }
+
+  // Allocator
+
+  export function allocate(size: usize): usize {
+    if (isDefined(__memory_allocate)) return __memory_allocate(size); // tslint:disable-line
+    WARNING("Calling 'memory.allocate' requires a memory manager to be present.");
+    return <usize>unreachable();
+  }
+
+  export function free(ptr: usize): void {
+    if (isDefined(__memory_free)) { __memory_free(ptr); return; } // tslint:disable-line
+    WARNING("Calling 'memory.free' requires a memory manager to be present.");
+    unreachable();
+  }
+
+  export function reset(): void {
+    if (isDefined(__memory_reset)) { __memory_reset(); return; } // tslint:disable-line
+    unreachable();
+  }
+}
+
+// this function will go away once `memory.copy` becomes an intrinsic
+function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memcpy.c
   var w: u32, x: u32;
 
   // copy 1 byte each until src is aligned to 4 bytes
@@ -144,13 +193,11 @@ function copy_memory(dest: usize, src: usize, n: usize): void {
   }
 }
 
-export function move_memory(dest: usize, src: usize, n: usize): void {
-  // based on musl's implementation of memmove
-  // becomes obsolete once https://github.com/WebAssembly/bulk-memory-operations lands
-
+// this function will go away once `memory.copy` becomes an intrinsic
+function memmove(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
   if (dest == src) return;
   if (src + n <= dest || dest + n <= src) {
-    copy_memory(dest, src, n);
+    memcpy(dest, src, n);
     return;
   }
   if (dest < src) {
@@ -188,9 +235,8 @@ export function move_memory(dest: usize, src: usize, n: usize): void {
   }
 }
 
-export function set_memory(dest: usize, c: u8, n: usize): void {
-  // based on musl's implementation of memset
-  // becomes obsolete once https://github.com/WebAssembly/bulk-memory-operations lands
+// this function will go away once `memory.fill` becomes an intrinsic
+function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
 
   // fill head and tail with minimal branching
   if (!n) return;
@@ -250,14 +296,10 @@ export function set_memory(dest: usize, c: u8, n: usize): void {
   }
 }
 
-export function compare_memory(vl: usize, vr: usize, n: usize): i32 {
-  // based on musl's implementation of memcmp
-  // provided because there's no proposed alternative
+function memcmp(vl: usize, vr: usize, n: usize): i32 { // see: musl/src/string/memcmp.c
   if (vl == vr) return 0;
-  while (n && load<u8>(vl) == load<u8>(vr)) {
-    n--;
-    vl++;
-    vr++;
+  while (n != 0 && load<u8>(vl) == load<u8>(vr)) {
+    n--; vl++; vr++;
   }
   return n ? <i32>load<u8>(vl) - <i32>load<u8>(vr) : 0;
 }

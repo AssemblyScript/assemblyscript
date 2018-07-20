@@ -3,6 +3,15 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
+ (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
+ (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
+ (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
+ (global $~lib/builtins/i16.MAX_VALUE i32 (i32.const 32767))
+ (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
+ (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $retain-i32/si (mut i32) (i32.const 0))
  (global $retain-i32/ui (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 40))
@@ -464,106 +473,106 @@
   (local $0 i32)
   (call $retain-i32/test
    (i32.const 0)
-   (i32.const 127)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
   )
   (call $retain-i32/test
-   (i32.const 127)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
    (i32.const 0)
   )
   (call $retain-i32/test
    (i32.const 1)
-   (i32.const 127)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
   )
   (call $retain-i32/test
-   (i32.const 127)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
    (i32.const 1)
   )
   (call $retain-i32/test
    (i32.const -1)
-   (i32.const 127)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
   )
   (call $retain-i32/test
-   (i32.const 127)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
    (i32.const -1)
   )
   (call $retain-i32/test
    (i32.const 0)
-   (i32.const -128)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
   )
   (call $retain-i32/test
-   (i32.const -128)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
    (i32.const 0)
   )
   (call $retain-i32/test
    (i32.const 1)
-   (i32.const -128)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
   )
   (call $retain-i32/test
-   (i32.const -128)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
    (i32.const 1)
   )
   (call $retain-i32/test
    (i32.const -1)
-   (i32.const -128)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
   )
   (call $retain-i32/test
-   (i32.const -128)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
    (i32.const -1)
   )
   (call $retain-i32/test
-   (i32.const 127)
-   (i32.const 127)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
   )
   (call $retain-i32/test
-   (i32.const -128)
-   (i32.const -128)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
   )
   (call $retain-i32/test
-   (i32.const 127)
-   (i32.const -128)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
   )
   (call $retain-i32/test
-   (i32.const -128)
-   (i32.const 127)
+   (get_global $~lib/builtins/i8.MIN_VALUE)
+   (get_global $~lib/builtins/i8.MAX_VALUE)
   )
   (call $retain-i32/test
    (i32.const 0)
-   (i32.const 255)
+   (get_global $~lib/builtins/u8.MAX_VALUE)
   )
   (call $retain-i32/test
-   (i32.const 255)
+   (get_global $~lib/builtins/u8.MAX_VALUE)
    (i32.const 0)
   )
   (call $retain-i32/test
    (i32.const 1)
-   (i32.const 255)
+   (get_global $~lib/builtins/u8.MAX_VALUE)
   )
   (call $retain-i32/test
-   (i32.const 255)
+   (get_global $~lib/builtins/u8.MAX_VALUE)
    (i32.const 1)
   )
   (call $retain-i32/test
    (i32.const -1)
-   (i32.const 255)
+   (get_global $~lib/builtins/u8.MAX_VALUE)
   )
   (call $retain-i32/test
-   (i32.const 255)
+   (get_global $~lib/builtins/u8.MAX_VALUE)
    (i32.const -1)
   )
   (call $retain-i32/test
-   (i32.const 255)
-   (i32.const 255)
+   (get_global $~lib/builtins/u8.MAX_VALUE)
+   (get_global $~lib/builtins/u8.MAX_VALUE)
   )
   (block $break|0
    (set_local $0
-    (i32.const -128)
+    (get_global $~lib/builtins/i8.MIN_VALUE)
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (i32.le_s
        (get_local $0)
-       (i32.const 255)
+       (get_global $~lib/builtins/u8.MAX_VALUE)
       )
      )
     )
@@ -581,39 +590,39 @@
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const -128)
+      (get_global $~lib/builtins/i8.MIN_VALUE)
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const 127)
+      (get_global $~lib/builtins/i8.MAX_VALUE)
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const 255)
+      (get_global $~lib/builtins/u8.MAX_VALUE)
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const -32768)
+      (get_global $~lib/builtins/i16.MIN_VALUE)
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const 32767)
+      (get_global $~lib/builtins/i16.MAX_VALUE)
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const 65535)
+      (get_global $~lib/builtins/u16.MAX_VALUE)
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const 2147483647)
+      (get_global $~lib/builtins/i32.MAX_VALUE)
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const -2147483648)
+      (get_global $~lib/builtins/i32.MIN_VALUE)
       (get_local $0)
      )
      (call $retain-i32/test
-      (i32.const -1)
+      (get_global $~lib/builtins/u32.MAX_VALUE)
       (get_local $0)
      )
     )

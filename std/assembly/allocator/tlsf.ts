@@ -433,19 +433,18 @@ function fls<T>(word: T): T {
 /** Reference to the initialized {@link Root} structure, once initialized. */
 var ROOT: Root = changetype<Root>(0);
 
-// External interface
+// Memory allocator interface
 
 /** Allocates a chunk of memory. */
-@global
-export function allocate_memory(size: usize): usize {
+@global export function __memory_allocate(size: usize): usize {
 
   // initialize if necessary
   var root = ROOT;
   if (!root) {
     let rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
-    let pagesBefore = current_memory();
+    let pagesBefore = memory.size();
     let pagesNeeded = <i32>((((rootOffset + Root.SIZE) + 0xffff) & ~0xffff) >>> 16);
-    if (pagesNeeded > pagesBefore && grow_memory(pagesNeeded - pagesBefore) < 0) unreachable();
+    if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
     ROOT = root = changetype<Root>(rootOffset);
     root.tailRef = 0;
     root.flMap = 0;
@@ -455,7 +454,7 @@ export function allocate_memory(size: usize): usize {
         root.setHead(fl, sl, null);
       }
     }
-    root.addMemory((rootOffset + Root.SIZE + AL_MASK) & ~AL_MASK, current_memory() << 16);
+    root.addMemory((rootOffset + Root.SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
   }
 
   // search for a suitable block
@@ -469,15 +468,15 @@ export function allocate_memory(size: usize): usize {
     if (!block) {
 
       // request more memory
-      let pagesBefore = current_memory();
+      let pagesBefore = memory.size();
       let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
       let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-      if (grow_memory(pagesWanted) < 0) {
-        if (grow_memory(pagesNeeded) < 0) {
+      if (memory.grow(pagesWanted) < 0) {
+        if (memory.grow(pagesNeeded) < 0) {
           unreachable(); // out of memory
         }
       }
-      let pagesAfter = current_memory();
+      let pagesAfter = memory.size();
       root.addMemory(<usize>pagesBefore << 16, <usize>pagesAfter << 16);
       block = assert(root.search(size)); // must be found now
     }
@@ -490,8 +489,7 @@ export function allocate_memory(size: usize): usize {
 }
 
 /** Frees the chunk of memory at the specified address. */
-@global
-export function free_memory(data: usize): void {
+@global export function __memory_free(data: usize): void {
   if (data) {
     let root = ROOT;
     if (root) {
@@ -504,7 +502,6 @@ export function free_memory(data: usize): void {
   }
 }
 
-@global
-export function reset_memory(): void {
+@global export function __memory_reset(): void {
   unreachable();
 }

@@ -14,7 +14,7 @@
 
 /// <reference no-default-lib="true"/>
 
-// Portable types
+// Types
 
 declare type i8 = number;
 declare type i16 = number;
@@ -28,8 +28,84 @@ declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
 
+// Compiler hints
+
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
+
+// Builtins
+
+/** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
+declare function clz<T = i32>(value: T): T;
+/** Performs the sign-agnostic count tailing zero bits operation on a 32-bit integer. All zero bits are considered trailing if the value is zero. */
+declare function ctz<T = i32>(value: T): T;
+/** Performs the sign-agnostic count number of one bits operation on a 32-bit integer. */
+declare function popcnt<T = i32>(value: T): T;
+/** Performs the sign-agnostic rotate left operation on a 32-bit integer. */
+declare function rotl<T = i32>(value: T, shift: T): T;
+/** Performs the sign-agnostic rotate right operation on a 32-bit integer. */
+declare function rotr<T = i32>(value: T, shift: T): T;
+/** Computes the absolute value of an integer or float. */
+declare function abs<T = i32 | f32 | f64>(value: T): T;
+/** Determines the maximum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
+declare function max<T = i32 | f32 | f64>(left: T, right: T): T;
+/** Determines the minimum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
+declare function min<T = i32 | f32 | f64>(left: T, right: T): T;
+/** Composes a 32-bit or 64-bit float from the magnitude of `x` and the sign of `y`. */
+declare function copysign<T = f32 | f64>(x: T, y: T): T;
+/** Performs the ceiling operation on a 32-bit or 64-bit float. */
+declare function ceil<T = f32 | f64>(value: T): T;
+/** Performs the floor operation on a 32-bit or 64-bit float. */
+declare function floor<T = f32 | f64>(value: T): T;
+/** Rounds to the nearest integer tied to even of a 32-bit or 64-bit float. */
+declare function nearest<T = f32 | f64>(value: T): T;
+/** Selects one of two pre-evaluated values depending on the condition. */
+declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
+/** Calculates the square root of a 32-bit or 64-bit float. */
+declare function sqrt<T = f32 | f64>(value: T): T;
+/** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
+declare function trunc<T = f32 | f64>(value: T): T;
+/** Loads a value of the specified type from memory. Type must be `u8`. */
+declare function load<T = u8>(ptr: usize, constantOffset?: usize): T;
+/** Stores a value of the specified type to memory. Type must be `u8`. */
+declare function store<T = u8>(ptr: usize, value: T, constantOffset?: usize): void;
+/** Emits an unreachable operation that results in a runtime error when executed. */
+declare function unreachable(): any; // sic
+
+/** NaN (not a number) as a 32-bit or 64-bit float depending on context. */
+declare const NaN: f32 | f64;
+/** Positive infinity as a 32-bit or 64-bit float depending on context. */
+declare const Infinity: f32 | f64;
+/** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
+declare function changetype<T>(value: any): T;
+/** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
+declare function unchecked<T>(value: T): T;
+/** Tests if a 32-bit or 64-bit float is `NaN`. */
+declare function isNaN<T = f32 | f64>(value: T): bool;
+/** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
+declare function isFinite<T = f32 | f64>(value: T): bool;
+/** Tests if the specified value is a valid integer. Can't distinguish an integer from an integral float. */
+declare function isInteger(value: any): value is number;
+/** Tests if the specified value is a valid float. Can't distinguish a float from an integer. */
+declare function isFloat(value: any): value is number;
+/** Tests if the specified value is of a reference type. */
+declare function isReference(value: any): value is object | string;
+/** Tests if the specified value can be used as a string. */
+declare function isString(value: any): value is string | String;
+/** Tests if the specified value can be used as an array. */
+declare function isArray(value: any): value is Array<any>;
+/** Traps if the specified value is not true-ish, otherwise returns the value. */
+declare function assert<T>(isTrueish: T | null, message?: string): T;
+/** Parses an integer string to a 64-bit float. */
+declare function parseInt(str: string, radix?: i32): f64;
+/** Parses an integer string to a 32-bit integer. */
+declare function parseI32(str: string, radix?: i32): i32;
+/** Parses a floating point string to a 64-bit float. */
+declare function parseFloat(str: string): f64;
+/** Returns the 64-bit floating-point remainder of `x/y`. */
+declare function fmod(x: f64, y: f64): f64;
+/** Returns the 32-bit floating-point remainder of `x/y`. */
+declare function fmodf(x: f32, y: f32): f32;
 
 /** Converts any other numeric value to an 8-bit signed integer. */
 declare function i8(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
@@ -136,92 +212,26 @@ declare namespace f64 {
   export const EPSILON: f64;
 }
 
-// Portable built-ins
-
-/** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
-declare function clz<T = i32>(value: T): T;
-/** Performs the sign-agnostic count tailing zero bits operation on a 32-bit integer. All zero bits are considered trailing if the value is zero. */
-declare function ctz<T = i32>(value: T): T;
-/** Performs the sign-agnostic count number of one bits operation on a 32-bit integer. */
-declare function popcnt<T = i32>(value: T): T;
-/** Performs the sign-agnostic rotate left operation on a 32-bit integer. */
-declare function rotl<T = i32>(value: T, shift: T): T;
-/** Performs the sign-agnostic rotate right operation on a 32-bit integer. */
-declare function rotr<T = i32>(value: T, shift: T): T;
-/** Computes the absolute value of an integer or float. */
-declare function abs<T = i32 | f32 | f64>(value: T): T;
-/** Determines the maximum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
-declare function max<T = i32 | f32 | f64>(left: T, right: T): T;
-/** Determines the minimum of two integers or floats. If either operand is `NaN`, returns `NaN`. */
-declare function min<T = i32 | f32 | f64>(left: T, right: T): T;
-/** Composes a 32-bit or 64-bit float from the magnitude of `x` and the sign of `y`. */
-declare function copysign<T = f32 | f64>(x: T, y: T): T;
-/** Performs the ceiling operation on a 32-bit or 64-bit float. */
-declare function ceil<T = f32 | f64>(value: T): T;
-/** Performs the floor operation on a 32-bit or 64-bit float. */
-declare function floor<T = f32 | f64>(value: T): T;
-/** Rounds to the nearest integer tied to even of a 32-bit or 64-bit float. */
-declare function nearest<T = f32 | f64>(value: T): T;
-/** Selects one of two pre-evaluated values depending on the condition. */
-declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
-/** Calculates the square root of a 32-bit or 64-bit float. */
-declare function sqrt<T = f32 | f64>(value: T): T;
-/** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
-declare function trunc<T = f32 | f64>(value: T): T;
-/** Allocates a chunk of memory of the specified size and returns a pointer to it. */
-declare function allocate_memory(size: usize): usize;
-/** Disposes a chunk of memory by its pointer. */
-declare function free_memory(ptr: usize): void;
-/** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
-declare function move_memory(destination: usize, source: usize, n: usize): void;
-/** Loads a value of the specified type from memory. Type must be `u8`. */
-declare function load<T = u8>(ptr: usize, constantOffset?: usize): T;
-/** Stores a value of the specified type to memory. Type must be `u8`. */
-declare function store<T = u8>(ptr: usize, value: T, constantOffset?: usize): void;
-/** Emits an unreachable operation that results in a runtime error when executed. */
-declare function unreachable(): any; // sic
+// Polyfills
 
 /** [Polyfill] Performs the sign-agnostic reverse bytes **/
 declare function bswap<T = i32 | u32 | isize | usize>(value: T): T;
 /** [Polyfill] Performs the sign-agnostic reverse bytes only for last 16-bit **/
 declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
 
-/** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
-declare function changetype<T>(value: any): T;
-/** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
-declare function unchecked<T>(value: T): T;
-/** Tests if a 32-bit or 64-bit float is `NaN`. */
-declare function isNaN<T = f32 | f64>(value: T): bool;
-/** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
-declare function isFinite<T = f32 | f64>(value: T): bool;
-/** Tests if the specified value is a valid integer. Can't distinguish an integer from an integral float. */
-declare function isInteger(value: any): value is number;
-/** Tests if the specified value is a valid float. Can't distinguish a float from an integer. */
-declare function isFloat(value: any): value is number;
-/** Tests if the specified value is of a reference type. */
-declare function isReference(value: any): value is object | string;
-/** Tests if the specified value can be used as a string. */
-declare function isString(value: any): value is string | String;
-/** Tests if the specified value can be used as an array. */
-declare function isArray(value: any): value is Array<any>;
-/** Traps if the specified value is not true-ish, otherwise returns the value. */
-declare function assert<T>(isTrueish: T | null, message?: string): T;
-/** Parses an integer string to a 64-bit float. */
-declare function parseInt(str: string, radix?: i32): f64;
-/** Parses an integer string to a 32-bit integer. */
-declare function parseI32(str: string, radix?: i32): i32;
-/** Parses a floating point string to a 64-bit float. */
-declare function parseFloat(str: string): f64;
-/** Returns the 64-bit floating-point remainder of `x/y`. */
-declare function fmod(x: f64, y: f64): f64;
-/** Returns the 32-bit floating-point remainder of `x/y`. */
-declare function fmodf(x: f32, y: f32): f32;
+// Standard library
 
-// Portable standard library
-// Everything marked @deprecated is a temporary filler. Do not use.
-
-declare const NaN: f32 | f64;
-declare const Infinity: f32 | f64;
+/** Memory operations. */
+declare namespace memory {
+  /** Allocates a chunk of memory of the specified size and returns a pointer to it. */
+  function allocate(size: usize): usize;
+  /** Disposes a chunk of memory by its pointer. */
+  function free(ptr: usize): void;
+  /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
+  function copy(dst: usize, src: usize, n: usize): void;
+  /** Resets the allocator to its initial state, if supported. */
+  function reset(): void;
+}
 
 /** Class representing a generic, fixed-length raw binary data buffer. */
 declare class ArrayBuffer {

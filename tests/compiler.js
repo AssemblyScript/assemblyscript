@@ -153,16 +153,40 @@ tests.forEach(filename => {
 
       // Instantiate
       try {
+        let memory = new WebAssembly.Memory({ initial: 10 });
+        let exports = {};
+
+        function getString(ptr) {
+          if (!ptr) return "null";
+          var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
+          var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
+          var dataLength = U32[ptr >>> 2];
+          var dataOffset = (ptr + 4) >>> 1;
+          var dataRemain = dataLength;
+          var parts = [];
+          const chunkSize = 1024;
+          while (dataRemain > chunkSize) {
+            let last = U16[dataOffset + chunkSize - 1];
+            let size = last >= 0xD800 && last < 0xDC00 ? chunkSize - 1 : chunkSize;
+            let part = U16.subarray(dataOffset, dataOffset += size);
+            parts.push(String.fromCharCode.apply(String, part));
+            dataRemain -= size;
+          }
+          return parts.join("") + String.fromCharCode.apply(String, U16.subarray(dataOffset, dataOffset + dataRemain));
+        }
+
         let runTime = asc.measure(() => {
-          let exports = new WebAssembly.Instance(new WebAssembly.Module(stdout.toBuffer()), {
+          exports = new WebAssembly.Instance(new WebAssembly.Module(stdout.toBuffer()), {
             env: {
+              memory,
               abort: function(msg, file, line, column) {
-                console.log("abort called at " + line + ":" + column);
+                console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
+              },
+              trace: function(msg, n) {
+                console.log("  " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
               },
               externalFunction: function() { },
-              externalConstant: 1,
-              logi: function(i) { console.log("logi: " + i); },
-              logf: function(f) { console.log("logf: " + f); }
+              externalConstant: 1
             },
             JSOp: {
               mod: function(a, b) { return a % b; }
@@ -188,10 +212,16 @@ tests.forEach(filename => {
               bar: function() {},
               baz: function() {},
               "var": 3
-            },
-          });
+            }
+          }).exports;
+          if (exports.main) {
+            console.log(colorsUtil.white("  [main]"));
+            var code = exports.main();
+            console.log(colorsUtil.white("  [exit " + code + "]\n"));
+          }
         });
         console.log("- " + colorsUtil.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
+        console.log("\n  " + Object.keys(exports).map(key => "[" + (typeof exports[key]).substring(0, 3) + "] " + key).join("\n  "));
       } catch (e) {
         console.log("- " + colorsUtil.red("instantiate ERROR: ") + e.stack);
         failed = true;

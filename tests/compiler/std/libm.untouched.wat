@@ -4,17 +4,27 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $Ff (func (param f64) (result f32)))
+ (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $std/libm/E f64 (f64.const 2.718281828459045))
+ (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))
  (global $std/libm/LN10 f64 (f64.const 2.302585092994046))
+ (global $~lib/math/NativeMath.LN2 f64 (f64.const 0.6931471805599453))
  (global $std/libm/LN2 f64 (f64.const 0.6931471805599453))
+ (global $~lib/math/NativeMath.LOG10E f64 (f64.const 0.4342944819032518))
  (global $std/libm/LOG10E f64 (f64.const 0.4342944819032518))
+ (global $~lib/math/NativeMath.LOG2E f64 (f64.const 1.4426950408889634))
  (global $std/libm/LOG2E f64 (f64.const 1.4426950408889634))
+ (global $~lib/math/NativeMath.PI f64 (f64.const 3.141592653589793))
  (global $std/libm/PI f64 (f64.const 3.141592653589793))
+ (global $~lib/math/NativeMath.SQRT1_2 f64 (f64.const 0.7071067811865476))
  (global $std/libm/SQRT1_2 f64 (f64.const 0.7071067811865476))
+ (global $~lib/math/NativeMath.SQRT2 f64 (f64.const 1.4142135623730951))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
  (global $NaN f64 (f64.const nan:0x8000000000000))
+ (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
+ (export "memory" (memory $0))
  (export "E" (global $std/libm/E))
  (export "LN10" (global $std/libm/LN10))
  (export "LN2" (global $std/libm/LN2))
@@ -57,7 +67,6 @@
  (export "tan" (func $std/libm/tan))
  (export "tanh" (func $std/libm/tanh))
  (export "trunc" (func $std/libm/trunc))
- (export "memory" (memory $0))
  (func $std/libm/abs (; 0 ;) (type $FF) (param $0 f64) (result f64)
   (block $~lib/math/NativeMath.abs|inlined.0 (result f64)
    (f64.abs
@@ -1494,7 +1503,7 @@
    (get_local $0)
   )
  )
- (func $isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
    (get_local $0)
    (get_local $0)
@@ -1538,7 +1547,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -2036,12 +2045,12 @@
   (if
    (if (result i32)
     (tee_local $2
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $1)
      )
     )
     (get_local $2)
-    (call $isNaN<f64>
+    (call $~lib/builtins/isNaN<f64>
      (get_local $0)
     )
    )
@@ -2183,12 +2192,12 @@
       )
      )
      (return
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
      )
     )
     (return
      (f64.neg
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
      )
     )
    )
@@ -2798,7 +2807,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return
@@ -3385,7 +3394,7 @@
    )
    (block
     (if
-     (call $isNaN<f64>
+     (call $~lib/builtins/isNaN<f64>
       (get_local $0)
      )
      (return

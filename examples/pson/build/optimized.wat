@@ -22,6 +22,7 @@
  (import "pson" "onBinary" (func $assembly/pson/onBinary (param i32 i32)))
  (global $assembly/pson/offset (mut i32) (i32.const 0))
  (memory $0 0)
+ (export "memory" (memory $0))
  (export "onNull" (func $assembly/pson/onNull))
  (export "onTrue" (func $assembly/pson/onTrue))
  (export "onFalse" (func $assembly/pson/onFalse))
@@ -37,7 +38,6 @@
  (export "onString" (func $assembly/pson/onString))
  (export "onBinary" (func $assembly/pson/onBinary))
  (export "decode" (func $assembly/pson/decode))
- (export "memory" (memory $0))
  (func $assembly/pson/readVarint32 (; 14 ;) (type $i) (result i32)
   (local $0 i32)
   (local $1 i32)
@@ -190,54 +190,59 @@
                (block $case3|0
                 (block $case2|0
                  (block $case1|0
-                  (block $case0|0
-                   (block $tablify|0
+                  (if
+                   ;;@ assembly/pson.ts:46:28
+                   (block (result i32)
                     (set_global $assembly/pson/offset
                      (i32.add
                       (tee_local $1
-                       ;;@ assembly/pson.ts:46:28
                        (get_global $assembly/pson/offset)
                       )
                       (i32.const 1)
                      )
                     )
-                    (br_table $case0|0 $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0 $case12|0 $tablify|0
-                     (i32.sub
-                      (tee_local $1
-                       ;;@ assembly/pson.ts:46:2
-                       (tee_local $0
-                        ;;@ assembly/pson.ts:46:19
-                        (i32.load8_u
-                         (get_local $1)
-                        )
+                    (i32.ne
+                     (tee_local $1
+                      ;;@ assembly/pson.ts:46:2
+                      (tee_local $0
+                       ;;@ assembly/pson.ts:46:19
+                       (i32.load8_u
+                        (get_local $1)
                        )
                       )
-                      (i32.const 240)
                      )
+                     (i32.const 240)
                     )
                    )
-                   (br_if $case14|0
-                    (i32.or
+                   (block
+                    (block $tablify|0
+                     (br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0 $case12|0 $tablify|0
+                      (i32.sub
+                       (get_local $1)
+                       (i32.const 241)
+                      )
+                     )
+                    )
+                    (br_if $case14|0
+                     (i32.or
+                      (i32.eq
+                       (get_local $1)
+                       (i32.const 253)
+                      )
+                      (i32.eq
+                       (get_local $1)
+                       (i32.const 254)
+                      )
+                     )
+                    )
+                    (br_if $case15|0
                      (i32.eq
                       (get_local $1)
-                      ;;@ assembly/pson.ts:112:9
-                      (i32.const 253)
-                     )
-                     (i32.eq
-                      (get_local $1)
-                      ;;@ assembly/pson.ts:113:9
-                      (i32.const 254)
+                      (i32.const 255)
                      )
                     )
+                    (br $case16|0)
                    )
-                   (br_if $case15|0
-                    (i32.eq
-                     (get_local $1)
-                     ;;@ assembly/pson.ts:118:9
-                     (i32.const 255)
-                    )
-                   )
-                   (br $case16|0)
                   )
                   ;;@ assembly/pson.ts:51:6
                   (call $assembly/pson/onNull)
@@ -500,7 +505,6 @@
     ;;@ assembly/pson.ts:125:10
     (i32.gt_u
      (get_local $0)
-     ;;@ assembly/pson.ts:125:18
      (i32.const 239)
     )
     ;;@ assembly/pson.ts:125:34

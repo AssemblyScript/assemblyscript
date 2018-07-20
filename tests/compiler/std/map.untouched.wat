@@ -40,7 +40,7 @@
  (data (i32.const 112) "\n\00\00\00s\00t\00d\00/\00m\00a\00p\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -53,7 +53,7 @@
     (if
      (i32.gt_u
       (get_local $0)
-      (i32.const 1073741824)
+      (get_global $~lib/internal/allocator/MAX_SIZE_32)
      )
      (unreachable)
     )
@@ -67,10 +67,10 @@
         (get_local $1)
         (get_local $0)
        )
-       (i32.const 7)
+       (get_global $~lib/internal/allocator/AL_MASK)
       )
       (i32.xor
-       (i32.const 7)
+       (get_global $~lib/internal/allocator/AL_MASK)
        (i32.const -1)
       )
      )
@@ -148,7 +148,14 @@
   )
   (i32.const 0)
  )
- (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+  (return
+   (call $~lib/allocator/arena/__memory_allocate
+    (get_local $0)
+   )
+  )
+ )
+ (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (i32.shl
    (i32.const 1)
    (i32.sub
@@ -157,7 +164,7 @@
      (i32.sub
       (i32.add
        (get_local $0)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.const 1)
      )
@@ -165,13 +172,13 @@
    )
   )
  )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
     (i32.le_u
      (get_local $0)
-     (i32.const 1073741816)
+     (get_global $~lib/internal/arraybuffer/MAX_BLENGTH)
     )
    )
    (block
@@ -185,7 +192,7 @@
    )
   )
   (set_local $1
-   (call $~lib/allocator/arena/allocate_memory
+   (call $~lib/memory/memory.allocate
     (call $~lib/internal/arraybuffer/computeSize
      (get_local $0)
     )
@@ -197,7 +204,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/set_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -549,12 +556,19 @@
    )
   )
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.fill (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (call $~lib/memory/memset
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.gt_u
     (get_local $1)
-    (i32.const 1073741816)
+    (get_global $~lib/internal/arraybuffer/MAX_BLENGTH)
    )
    (block
     (call $~lib/env/abort
@@ -578,10 +592,10 @@
      (i32.const 1)
     )
    )
-   (call $~lib/memory/set_memory
+   (call $~lib/memory/memory.fill
     (i32.add
      (get_local $3)
-     (i32.const 8)
+     (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
     )
     (i32.const 0)
     (get_local $1)
@@ -589,7 +603,7 @@
   )
   (get_local $3)
  )
- (func $~lib/map/Map<i8,i32>#clear (; 6 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<i8,i32>#clear (; 8 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -601,7 +615,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -615,7 +629,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -626,7 +640,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i8,i32>#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#constructor (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<i8,i32>#clear
    (tee_local $0
@@ -636,7 +650,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -672,16 +686,16 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hash8 (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash8 (; 10 ;) (type $ii) (param $0 i32) (result i32)
   (i32.mul
    (i32.xor
-    (i32.const -2128831035)
+    (get_global $~lib/internal/hash/FNV_OFFSET)
     (get_local $0)
    )
-   (i32.const 16777619)
+   (get_global $~lib/internal/hash/FNV_PRIME)
   )
  )
- (func $~lib/map/Map<i8,i32>#find (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#find (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -697,7 +711,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -716,7 +730,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -744,7 +758,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -757,7 +771,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<i8,i32>#has (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#has (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<i8,i32>#find
     (get_local $0)
@@ -779,7 +793,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i8,i32>#rehash (; 11 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#rehash (; 13 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -802,7 +816,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -813,7 +827,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -834,7 +848,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -853,7 +867,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -874,7 +888,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -915,7 +929,7 @@
            (get_local $3)
            (i32.mul
             (get_local $11)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -976,7 +990,7 @@
    )
   )
  )
- (func $~lib/map/Map<i8,i32>#set (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i8,i32>#set (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1033,7 +1047,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -1061,7 +1075,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -1114,7 +1128,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -1131,7 +1145,7 @@
    )
   )
  )
- (func $~lib/map/Map<i8,i32>#get (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#get (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<i8,i32>#find
@@ -1160,12 +1174,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<i8,i32>#get:size (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#get:size (; 16 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<i8,i32>#delete (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#delete (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1203,7 +1217,7 @@
     (i32.load offset=8
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -1233,7 +1247,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -1258,7 +1272,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -1271,7 +1285,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<i8,i32> (; 16 ;) (type $v)
+ (func $std/map/test<i8,i32> (; 18 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $0
@@ -1805,7 +1819,7 @@
    )
   )
  )
- (func $~lib/map/Map<u8,i32>#clear (; 17 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<u8,i32>#clear (; 19 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -1817,7 +1831,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -1831,7 +1845,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -1842,7 +1856,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u8,i32>#constructor (; 18 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#constructor (; 20 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<u8,i32>#clear
    (tee_local $0
@@ -1852,7 +1866,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -1888,7 +1902,7 @@
   )
   (get_local $0)
  )
- (func $~lib/map/Map<u8,i32>#find (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#find (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -1904,7 +1918,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -1923,7 +1937,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -1948,7 +1962,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -1961,7 +1975,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<u8,i32>#has (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#has (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<u8,i32>#find
     (get_local $0)
@@ -1980,7 +1994,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u8,i32>#rehash (; 21 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#rehash (; 23 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2003,7 +2017,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -2014,7 +2028,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -2035,7 +2049,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -2054,7 +2068,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -2075,7 +2089,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -2116,7 +2130,7 @@
            (get_local $3)
            (i32.mul
             (get_local $11)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -2177,7 +2191,7 @@
    )
   )
  )
- (func $~lib/map/Map<u8,i32>#set (; 22 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u8,i32>#set (; 24 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2231,7 +2245,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -2259,7 +2273,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -2312,7 +2326,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -2329,7 +2343,7 @@
    )
   )
  )
- (func $~lib/map/Map<u8,i32>#get (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<u8,i32>#find
@@ -2355,12 +2369,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<u8,i32>#get:size (; 24 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#get:size (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<u8,i32>#delete (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#delete (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2395,7 +2409,7 @@
     (i32.load offset=8
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -2425,7 +2439,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -2450,7 +2464,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -2463,7 +2477,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<u8,i32> (; 26 ;) (type $v)
+ (func $std/map/test<u8,i32> (; 28 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $0
@@ -2976,7 +2990,7 @@
    )
   )
  )
- (func $~lib/map/Map<i16,i32>#clear (; 27 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<i16,i32>#clear (; 29 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -2988,7 +3002,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -3002,7 +3016,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -3013,7 +3027,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i16,i32>#constructor (; 28 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#constructor (; 30 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<i16,i32>#clear
    (tee_local $0
@@ -3023,7 +3037,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -3059,10 +3073,10 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hash16 (; 29 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash16 (; 31 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
-   (i32.const -2128831035)
+   (get_global $~lib/internal/hash/FNV_OFFSET)
   )
   (set_local $1
    (i32.mul
@@ -3073,7 +3087,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -3085,12 +3099,12 @@
       (i32.const 8)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (get_local $1)
  )
- (func $~lib/map/Map<i16,i32>#find (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#find (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -3106,7 +3120,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -3125,7 +3139,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -3153,7 +3167,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -3166,7 +3180,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<i16,i32>#has (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#has (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<i16,i32>#find
     (get_local $0)
@@ -3188,7 +3202,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i16,i32>#rehash (; 32 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#rehash (; 34 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3211,7 +3225,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -3222,7 +3236,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -3243,7 +3257,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -3262,7 +3276,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -3283,7 +3297,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -3324,7 +3338,7 @@
            (get_local $3)
            (i32.mul
             (get_local $11)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -3385,7 +3399,7 @@
    )
   )
  )
- (func $~lib/map/Map<i16,i32>#set (; 33 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i16,i32>#set (; 35 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3442,7 +3456,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -3470,7 +3484,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -3523,7 +3537,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -3540,7 +3554,7 @@
    )
   )
  )
- (func $~lib/map/Map<i16,i32>#get (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#get (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<i16,i32>#find
@@ -3569,12 +3583,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<i16,i32>#get:size (; 35 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#get:size (; 37 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<i16,i32>#delete (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#delete (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3612,7 +3626,7 @@
     (i32.load offset=8
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -3642,7 +3656,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -3667,7 +3681,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -3680,7 +3694,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<i16,i32> (; 37 ;) (type $v)
+ (func $std/map/test<i16,i32> (; 39 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $0
@@ -4214,7 +4228,7 @@
    )
   )
  )
- (func $~lib/map/Map<u16,i32>#clear (; 38 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<u16,i32>#clear (; 40 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -4226,7 +4240,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -4240,7 +4254,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -4251,7 +4265,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u16,i32>#constructor (; 39 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#constructor (; 41 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<u16,i32>#clear
    (tee_local $0
@@ -4261,7 +4275,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -4297,7 +4311,7 @@
   )
   (get_local $0)
  )
- (func $~lib/map/Map<u16,i32>#find (; 40 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#find (; 42 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -4313,7 +4327,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -4332,7 +4346,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -4357,7 +4371,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -4370,7 +4384,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<u16,i32>#has (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#has (; 43 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<u16,i32>#find
     (get_local $0)
@@ -4389,7 +4403,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u16,i32>#rehash (; 42 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#rehash (; 44 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4412,7 +4426,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -4423,7 +4437,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -4444,7 +4458,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -4463,7 +4477,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -4484,7 +4498,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -4525,7 +4539,7 @@
            (get_local $3)
            (i32.mul
             (get_local $11)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -4586,7 +4600,7 @@
    )
   )
  )
- (func $~lib/map/Map<u16,i32>#set (; 43 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u16,i32>#set (; 45 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4640,7 +4654,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -4668,7 +4682,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -4721,7 +4735,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -4738,7 +4752,7 @@
    )
   )
  )
- (func $~lib/map/Map<u16,i32>#get (; 44 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#get (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<u16,i32>#find
@@ -4764,12 +4778,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<u16,i32>#get:size (; 45 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#get:size (; 47 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<u16,i32>#delete (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#delete (; 48 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4804,7 +4818,7 @@
     (i32.load offset=8
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -4834,7 +4848,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -4859,7 +4873,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -4872,7 +4886,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<u16,i32> (; 47 ;) (type $v)
+ (func $std/map/test<u16,i32> (; 49 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $0
@@ -5385,7 +5399,7 @@
    )
   )
  )
- (func $~lib/map/Map<i32,i32>#clear (; 48 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<i32,i32>#clear (; 50 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -5397,7 +5411,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -5411,7 +5425,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -5422,7 +5436,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i32,i32>#constructor (; 49 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#constructor (; 51 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<i32,i32>#clear
    (tee_local $0
@@ -5432,7 +5446,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -5468,10 +5482,10 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hash32 (; 50 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 52 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
-   (i32.const -2128831035)
+   (get_global $~lib/internal/hash/FNV_OFFSET)
   )
   (set_local $1
    (i32.mul
@@ -5482,7 +5496,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -5497,7 +5511,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -5512,7 +5526,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $1
@@ -5524,12 +5538,12 @@
       (i32.const 24)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (get_local $1)
  )
- (func $~lib/map/Map<i32,i32>#find (; 51 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#find (; 53 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -5545,7 +5559,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -5564,7 +5578,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -5586,7 +5600,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -5599,7 +5613,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<i32,i32>#has (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#has (; 54 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<i32,i32>#find
     (get_local $0)
@@ -5615,7 +5629,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i32,i32>#rehash (; 53 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#rehash (; 55 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5638,7 +5652,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -5649,7 +5663,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -5670,7 +5684,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -5689,7 +5703,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -5710,7 +5724,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -5751,7 +5765,7 @@
            (get_local $3)
            (i32.mul
             (get_local $11)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -5812,7 +5826,7 @@
    )
   )
  )
- (func $~lib/map/Map<i32,i32>#set (; 54 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i32,i32>#set (; 56 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5863,7 +5877,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -5891,7 +5905,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -5944,7 +5958,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -5961,7 +5975,7 @@
    )
   )
  )
- (func $~lib/map/Map<i32,i32>#get (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#get (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<i32,i32>#find
@@ -5984,12 +5998,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<i32,i32>#get:size (; 56 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#get:size (; 58 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<i32,i32>#delete (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#delete (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6021,7 +6035,7 @@
     (i32.load offset=8
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -6051,7 +6065,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -6076,7 +6090,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -6089,7 +6103,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<i32,i32> (; 58 ;) (type $v)
+ (func $std/map/test<i32,i32> (; 60 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $0
@@ -6581,7 +6595,7 @@
    )
   )
  )
- (func $~lib/map/Map<u32,i32>#clear (; 59 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<u32,i32>#clear (; 61 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -6593,7 +6607,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -6607,7 +6621,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -6618,7 +6632,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u32,i32>#constructor (; 60 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#constructor (; 62 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<u32,i32>#clear
    (tee_local $0
@@ -6628,7 +6642,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -6664,7 +6678,7 @@
   )
   (get_local $0)
  )
- (func $~lib/map/Map<u32,i32>#find (; 61 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#find (; 63 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -6680,7 +6694,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -6699,7 +6713,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -6721,7 +6735,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -6734,7 +6748,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<u32,i32>#has (; 62 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#has (; 64 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<u32,i32>#find
     (get_local $0)
@@ -6750,7 +6764,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u32,i32>#rehash (; 63 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u32,i32>#rehash (; 65 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6773,7 +6787,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -6784,7 +6798,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -6805,7 +6819,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -6824,7 +6838,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -6845,7 +6859,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -6886,7 +6900,7 @@
            (get_local $3)
            (i32.mul
             (get_local $11)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -6947,7 +6961,7 @@
    )
   )
  )
- (func $~lib/map/Map<u32,i32>#set (; 64 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u32,i32>#set (; 66 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6998,7 +7012,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -7026,7 +7040,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -7079,7 +7093,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -7096,7 +7110,7 @@
    )
   )
  )
- (func $~lib/map/Map<u32,i32>#get (; 65 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#get (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<u32,i32>#find
@@ -7119,12 +7133,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<u32,i32>#get:size (; 66 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#get:size (; 68 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<u32,i32>#delete (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#delete (; 69 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7156,7 +7170,7 @@
     (i32.load offset=8
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -7186,7 +7200,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -7211,7 +7225,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -7224,7 +7238,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<u32,i32> (; 68 ;) (type $v)
+ (func $std/map/test<u32,i32> (; 70 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $0
@@ -7716,7 +7730,7 @@
    )
   )
  )
- (func $~lib/map/Map<i64,i32>#clear (; 69 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<i64,i32>#clear (; 71 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -7728,7 +7742,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -7742,7 +7756,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -7753,7 +7767,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i64,i32>#constructor (; 70 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#constructor (; 72 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<i64,i32>#clear
    (tee_local $0
@@ -7763,7 +7777,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -7799,7 +7813,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hash64 (; 71 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 73 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7817,7 +7831,7 @@
    )
   )
   (set_local $3
-   (i32.const -2128831035)
+   (get_global $~lib/internal/hash/FNV_OFFSET)
   )
   (set_local $3
    (i32.mul
@@ -7828,7 +7842,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -7843,7 +7857,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -7858,7 +7872,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -7870,7 +7884,7 @@
       (i32.const 24)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -7882,7 +7896,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -7897,7 +7911,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -7912,7 +7926,7 @@
       (i32.const 255)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (set_local $3
@@ -7924,12 +7938,12 @@
       (i32.const 24)
      )
     )
-    (i32.const 16777619)
+    (get_global $~lib/internal/hash/FNV_PRIME)
    )
   )
   (get_local $3)
  )
- (func $~lib/map/Map<i64,i32>#find (; 72 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#find (; 74 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -7945,7 +7959,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -7964,7 +7978,7 @@
             (i32.load offset=12
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -7986,7 +8000,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -7999,7 +8013,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<i64,i32>#has (; 73 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#has (; 75 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (i32.ne
    (call $~lib/map/Map<i64,i32>#find
     (get_local $0)
@@ -8015,7 +8029,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i64,i32>#rehash (; 74 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>#rehash (; 76 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8039,7 +8053,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -8050,7 +8064,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -8071,7 +8085,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -8090,7 +8104,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -8111,7 +8125,7 @@
           (i32.load offset=12
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -8152,7 +8166,7 @@
            (get_local $3)
            (i32.mul
             (get_local $12)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -8213,7 +8227,7 @@
    )
   )
  )
- (func $~lib/map/Map<i64,i32>#set (; 75 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/map/Map<i64,i32>#set (; 77 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8264,7 +8278,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -8292,7 +8306,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -8345,7 +8359,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -8362,7 +8376,7 @@
    )
   )
  )
- (func $~lib/map/Map<i64,i32>#get (; 76 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#get (; 78 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<i64,i32>#find
@@ -8385,12 +8399,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<i64,i32>#get:size (; 77 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#get:size (; 79 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<i64,i32>#delete (; 78 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#delete (; 80 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8422,7 +8436,7 @@
     (i32.load offset=12
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -8452,7 +8466,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -8477,7 +8491,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -8490,7 +8504,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<i64,i32> (; 79 ;) (type $v)
+ (func $std/map/test<i64,i32> (; 81 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   (set_local $0
@@ -8996,7 +9010,7 @@
    )
   )
  )
- (func $~lib/map/Map<u64,i32>#clear (; 80 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<u64,i32>#clear (; 82 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -9008,7 +9022,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -9022,7 +9036,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -9033,7 +9047,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u64,i32>#constructor (; 81 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u64,i32>#constructor (; 83 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<u64,i32>#clear
    (tee_local $0
@@ -9043,7 +9057,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -9079,7 +9093,7 @@
   )
   (get_local $0)
  )
- (func $~lib/map/Map<u64,i32>#find (; 82 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u64,i32>#find (; 84 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -9095,7 +9109,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -9114,7 +9128,7 @@
             (i32.load offset=12
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -9136,7 +9150,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -9149,7 +9163,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<u64,i32>#has (; 83 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<u64,i32>#has (; 85 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (i32.ne
    (call $~lib/map/Map<u64,i32>#find
     (get_local $0)
@@ -9165,7 +9179,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u64,i32>#rehash (; 84 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u64,i32>#rehash (; 86 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9189,7 +9203,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -9200,7 +9214,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -9221,7 +9235,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -9240,7 +9254,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -9261,7 +9275,7 @@
           (i32.load offset=12
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -9302,7 +9316,7 @@
            (get_local $3)
            (i32.mul
             (get_local $12)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -9363,7 +9377,7 @@
    )
   )
  )
- (func $~lib/map/Map<u64,i32>#set (; 85 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/map/Map<u64,i32>#set (; 87 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9414,7 +9428,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -9442,7 +9456,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -9495,7 +9509,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -9512,7 +9526,7 @@
    )
   )
  )
- (func $~lib/map/Map<u64,i32>#get (; 86 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<u64,i32>#get (; 88 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<u64,i32>#find
@@ -9535,12 +9549,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<u64,i32>#get:size (; 87 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u64,i32>#get:size (; 89 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<u64,i32>#delete (; 88 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<u64,i32>#delete (; 90 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9572,7 +9586,7 @@
     (i32.load offset=12
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -9602,7 +9616,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -9627,7 +9641,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -9640,7 +9654,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<u64,i32> (; 89 ;) (type $v)
+ (func $std/map/test<u64,i32> (; 91 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   (set_local $0
@@ -10146,7 +10160,7 @@
    )
   )
  )
- (func $~lib/map/Map<f32,i32>#clear (; 90 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<f32,i32>#clear (; 92 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -10158,7 +10172,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -10172,7 +10186,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -10183,7 +10197,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<f32,i32>#constructor (; 91 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#constructor (; 93 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<f32,i32>#clear
    (tee_local $0
@@ -10193,7 +10207,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -10229,7 +10243,7 @@
   )
   (get_local $0)
  )
- (func $~lib/map/Map<f32,i32>#find (; 92 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#find (; 94 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -10245,7 +10259,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -10264,7 +10278,7 @@
             (i32.load offset=8
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -10286,7 +10300,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -10299,7 +10313,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<f32,i32>#has (; 93 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#has (; 95 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (i32.ne
    (call $~lib/map/Map<f32,i32>#find
     (get_local $0)
@@ -10317,7 +10331,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<f32,i32>#rehash (; 94 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,i32>#rehash (; 96 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10341,7 +10355,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -10352,7 +10366,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -10373,7 +10387,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -10392,7 +10406,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -10413,7 +10427,7 @@
           (i32.load offset=8
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -10456,7 +10470,7 @@
            (get_local $3)
            (i32.mul
             (get_local $12)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -10517,7 +10531,7 @@
    )
   )
  )
- (func $~lib/map/Map<f32,i32>#set (; 95 ;) (type $ifiv) (param $0 i32) (param $1 f32) (param $2 i32)
+ (func $~lib/map/Map<f32,i32>#set (; 97 ;) (type $ifiv) (param $0 i32) (param $1 f32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10570,7 +10584,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -10598,7 +10612,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -10651,7 +10665,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -10668,7 +10682,7 @@
    )
   )
  )
- (func $~lib/map/Map<f32,i32>#get (; 96 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#get (; 98 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<f32,i32>#find
@@ -10693,12 +10707,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<f32,i32>#get:size (; 97 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#get:size (; 99 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<f32,i32>#delete (; 98 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#delete (; 100 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10732,7 +10746,7 @@
     (i32.load offset=8
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -10762,7 +10776,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -10787,7 +10801,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -10800,7 +10814,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<f32,i32> (; 99 ;) (type $v)
+ (func $std/map/test<f32,i32> (; 101 ;) (type $v)
   (local $0 i32)
   (local $1 f32)
   (set_local $0
@@ -11306,7 +11320,7 @@
    )
   )
  )
- (func $~lib/map/Map<f64,i32>#clear (; 100 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<f64,i32>#clear (; 102 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -11318,7 +11332,7 @@
   (i32.store offset=4
    (get_local $0)
    (i32.sub
-    (i32.const 4)
+    (get_global $~lib/map/INITIAL_CAPACITY)
     (i32.const 1)
    )
   )
@@ -11332,7 +11346,7 @@
   )
   (i32.store offset=12
    (get_local $0)
-   (i32.const 4)
+   (get_global $~lib/map/INITIAL_CAPACITY)
   )
   (i32.store offset=16
    (get_local $0)
@@ -11343,7 +11357,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<f64,i32>#constructor (; 101 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#constructor (; 103 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (call $~lib/map/Map<f64,i32>#clear
    (tee_local $0
@@ -11353,7 +11367,7 @@
      (tee_local $0
       (block (result i32)
        (set_local $1
-        (call $~lib/allocator/arena/allocate_memory
+        (call $~lib/memory/memory.allocate
          (i32.const 24)
         )
        )
@@ -11389,7 +11403,7 @@
   )
   (get_local $0)
  )
- (func $~lib/map/Map<f64,i32>#find (; 102 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#find (; 104 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -11405,7 +11419,7 @@
         (get_local $0)
        )
       )
-      (i32.const 4)
+      (get_global $~lib/map/BUCKET_SIZE)
      )
     )
    )
@@ -11424,7 +11438,7 @@
             (i32.load offset=12
              (get_local $3)
             )
-            (i32.const 1)
+            (get_global $~lib/map/EMPTY)
            )
           )
          )
@@ -11446,7 +11460,7 @@
           (get_local $3)
          )
          (i32.xor
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
           (i32.const -1)
          )
         )
@@ -11459,7 +11473,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<f64,i32>#has (; 103 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#has (; 105 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (i32.ne
    (call $~lib/map/Map<f64,i32>#find
     (get_local $0)
@@ -11477,7 +11491,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<f64,i32>#rehash (; 104 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,i32>#rehash (; 106 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11501,7 +11515,7 @@
     (i32.const 0)
     (i32.mul
      (get_local $2)
-     (i32.const 4)
+     (get_global $~lib/map/BUCKET_SIZE)
     )
     (i32.const 0)
    )
@@ -11512,7 +11526,7 @@
      (f64.convert_s/i32
       (get_local $2)
      )
-     (f64.const 2.6666666666666665)
+     (get_global $~lib/map/FILL_FACTOR)
     )
    )
   )
@@ -11533,7 +11547,7 @@
     (i32.load offset=8
      (get_local $0)
     )
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (set_local $7
@@ -11552,7 +11566,7 @@
   (set_local $8
    (i32.add
     (get_local $5)
-    (i32.const 8)
+    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
    )
   )
   (block $break|0
@@ -11573,7 +11587,7 @@
           (i32.load offset=12
            (get_local $9)
           )
-          (i32.const 1)
+          (get_global $~lib/map/EMPTY)
          )
         )
         (block
@@ -11616,7 +11630,7 @@
            (get_local $3)
            (i32.mul
             (get_local $12)
-            (i32.const 4)
+            (get_global $~lib/map/BUCKET_SIZE)
            )
           )
          )
@@ -11677,7 +11691,7 @@
    )
   )
  )
- (func $~lib/map/Map<f64,i32>#set (; 105 ;) (type $iFiv) (param $0 i32) (param $1 f64) (param $2 i32)
+ (func $~lib/map/Map<f64,i32>#set (; 107 ;) (type $iFiv) (param $0 i32) (param $1 f64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11730,7 +11744,7 @@
             (get_local $0)
            )
           )
-          (f64.const 0.75)
+          (get_global $~lib/map/FREE_FACTOR)
          )
         )
        )
@@ -11758,7 +11772,7 @@
      (i32.add
       (i32.add
        (get_local $5)
-       (i32.const 8)
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
       )
       (i32.mul
        (block (result i32)
@@ -11811,7 +11825,7 @@
          (get_local $0)
         )
        )
-       (i32.const 4)
+       (get_global $~lib/map/BUCKET_SIZE)
       )
      )
     )
@@ -11828,7 +11842,7 @@
    )
   )
  )
- (func $~lib/map/Map<f64,i32>#get (; 106 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#get (; 108 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (set_local $2
    (call $~lib/map/Map<f64,i32>#find
@@ -11853,12 +11867,12 @@
    (unreachable)
   )
  )
- (func $~lib/map/Map<f64,i32>#get:size (; 107 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#get:size (; 109 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<f64,i32>#delete (; 108 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#delete (; 110 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11892,7 +11906,7 @@
     (i32.load offset=12
      (get_local $2)
     )
-    (i32.const 1)
+    (get_global $~lib/map/EMPTY)
    )
   )
   (i32.store offset=20
@@ -11922,7 +11936,7 @@
       )
       (select
        (tee_local $4
-        (i32.const 4)
+        (get_global $~lib/map/INITIAL_CAPACITY)
        )
        (tee_local $5
         (i32.load offset=20
@@ -11947,7 +11961,7 @@
          (get_local $0)
         )
        )
-       (f64.const 0.75)
+       (get_global $~lib/map/FREE_FACTOR)
       )
      )
     )
@@ -11960,7 +11974,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<f64,i32> (; 109 ;) (type $v)
+ (func $std/map/test<f64,i32> (; 111 ;) (type $v)
   (local $0 i32)
   (local $1 f64)
   (set_local $0
@@ -12466,15 +12480,15 @@
    )
   )
  )
- (func $start (; 110 ;) (type $v)
+ (func $start (; 112 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
      (get_global $HEAP_BASE)
-     (i32.const 7)
+     (get_global $~lib/internal/allocator/AL_MASK)
     )
     (i32.xor
-     (i32.const 7)
+     (get_global $~lib/internal/allocator/AL_MASK)
      (i32.const -1)
     )
    )

@@ -48,12 +48,18 @@ import {
   Class,
   Field,
   OperatorKind,
-  FlowFlags
+  FlowFlags,
+  Global,
+  DecoratorFlags
 } from "./program";
 
 import {
   ReportMode
 } from "./resolver";
+
+import {
+  CommonFlags
+} from "./common";
 
 /** Compiles a call to a built-in function. */
 export function compileCall(
@@ -134,23 +140,16 @@ export function compileCall(
     }
     case "isDefined": { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;
-      if (operands.length != 1) {
-        if (typeArguments) {
-          compiler.error(
-            DiagnosticCode.Type_0_is_not_generic,
-            reportNode.range, prototype.internalName
-          );
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
           reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
         );
         return module.createUnreachable();
       }
@@ -159,23 +158,16 @@ export function compileCall(
     }
     case "isConstant": { // isConstant(expression) -> bool
       compiler.currentType = Type.bool;
-      if (operands.length != 1) {
-        if (typeArguments) {
-          compiler.error(
-            DiagnosticCode.Type_0_is_not_generic,
-            reportNode.range, prototype.internalName
-          );
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
           reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
         );
         return module.createUnreachable();
       }
@@ -1879,7 +1871,7 @@ export function compileCall(
 
     // host operations
 
-    case "current_memory": { // current_memory() -> i32
+    case "memory.size": { // memory.size() -> i32
       compiler.currentType = Type.i32;
       if (operands.length != 0) {
         compiler.error(
@@ -1895,7 +1887,7 @@ export function compileCall(
       }
       return module.createHost(HostOp.CurrentMemory);
     }
-    case "grow_memory": { // grow_memory(pages: i32) -> i32
+    case "memory.grow": { // memory.grow(pages: i32) -> i32
       compiler.currentType = Type.i32;
       if (operands.length != 1) {
         compiler.error(
@@ -1915,7 +1907,7 @@ export function compileCall(
       return module.createHost(HostOp.GrowMemory, null, [ arg0 ]);
     }
     // see: https://github.com/WebAssembly/bulk-memory-operations
-    case "move_memory": { // move_memory(dest: usize, src: usize: n: usize) -> void
+    case "memory.copy": { // memory.copy(dest: usize, src: usize: n: usize) -> void
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -1952,7 +1944,7 @@ export function compileCall(
       throw new Error("not implemented");
       // return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
     }
-    case "set_memory": { // set_memory(dest: usize, value: u8, n: usize) -> void
+    case "memory.fill": { // memory.fill(dest: usize, value: u8, n: usize) -> void
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -2318,6 +2310,30 @@ export function compileCall(
       return module.createCallIndirect(arg0, operandExprs, typeName);
     }
 
+    // user-defined diagnostic macros
+
+    case "ERROR": {
+      compiler.error(
+        DiagnosticCode.User_defined_0,
+        reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
+      );
+      return module.createUnreachable();
+    }
+    case "WARNING": {
+      compiler.warning(
+        DiagnosticCode.User_defined_0,
+        reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
+      );
+      return module.createNop();
+    }
+    case "INFO": {
+      compiler.info(
+        DiagnosticCode.User_defined_0,
+        reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
+      );
+      return module.createNop();
+    }
+
     // conversions
 
     case "i8": {
@@ -2610,6 +2626,45 @@ export function compileCall(
         WrapMode.NONE
       );
     }
+
+    // gc
+
+    case "iterateRoots": {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let expr = compiler.compileExpressionRetainType(operands[0], Type.u32, WrapMode.NONE);
+      let type = compiler.currentType;
+      let signatureReference = type.signatureReference;
+      compiler.currentType = Type.void;
+      if (
+        !type.is(TypeFlags.REFERENCE) ||
+        !signatureReference ||
+        signatureReference.parameterTypes.length != 1 ||
+        signatureReference.parameterTypes[0] != compiler.options.usizeType
+       ) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+          reportNode.range, type.toString(), "(ref: usize) => void"
+        );
+        return module.createUnreachable();
+      }
+      compiler.currentType = Type.void;
+      // just emit a call even if the function doesn't yet exist
+      compiler.needsIterateRoots = true;
+      return module.createCall("~iterateRoots", [ expr ], NativeType.None);
+    }
   }
   var expr = deferASMCall(compiler, prototype, operands, contextualType, reportNode);
   if (expr) {
@@ -2816,8 +2871,6 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   return value;
 }
 
-const allocateInternalName = "allocate_memory";
-
 /** Compiles a memory allocation for an instance of the specified class. */
 export function compileAllocate(
   compiler: Compiler,
@@ -2828,29 +2881,15 @@ export function compileAllocate(
   assert(classInstance.program == program);
   var module = compiler.module;
   var options = compiler.options;
-
-  var allocatePrototype = program.elementsLookup.get(allocateInternalName);
-  if (!allocatePrototype) {
+  var allocateInstance = program.memoryAllocateInstance;
+  if (!allocateInstance) {
     program.error(
       DiagnosticCode.Cannot_find_name_0,
-      reportNode.range, allocateInternalName
-    );
-    program.info(
-      DiagnosticCode.An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf,
-      reportNode.range
+      reportNode.range, "memory.allocate"
     );
     return module.createUnreachable();
   }
-  if (allocatePrototype.kind != ElementKind.FUNCTION_PROTOTYPE) {
-    program.error(
-      DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-      reportNode.range, allocatePrototype.internalName
-    );
-    return module.createUnreachable();
-  }
-
-  var allocateInstance = compiler.resolver.resolveFunction(<FunctionPrototype>allocatePrototype, null);
-  if (!(allocateInstance && compiler.compileFunction(allocateInstance))) return module.createUnreachable();
+  if (!compiler.compileFunction(allocateInstance)) return module.createUnreachable();
 
   compiler.currentType = classInstance.type;
   return module.createCall(
@@ -2863,8 +2902,6 @@ export function compileAllocate(
   );
 }
 
-const abortInternalName = "abort";
-
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(
   compiler: Compiler,
@@ -2874,13 +2911,10 @@ export function compileAbort(
   var program = compiler.program;
   var module = compiler.module;
 
-  var stringType = program.typesLookup.get("string"); // might be intended
+  var stringType = program.typesLookup.get("string");
   if (!stringType) return module.createUnreachable();
 
-  var abortPrototype = program.elementsLookup.get(abortInternalName); // might be intended
-  if (!abortPrototype || abortPrototype.kind != ElementKind.FUNCTION_PROTOTYPE) return module.createUnreachable();
-
-  var abortInstance = compiler.resolver.resolveFunction(<FunctionPrototype>abortPrototype, null);
+  var abortInstance = program.abortInstance;
   if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.createUnreachable();
 
   var messageArg = message != null
@@ -2902,4 +2936,55 @@ export function compileAbort(
     ),
     module.createUnreachable()
   ]);
+}
+
+/** Compiles the iterateRoots function if requires. */
+export function compileIterateRoots(compiler: Compiler): void {
+  var module = compiler.module;
+  var exprs = new Array<ExpressionRef>();
+
+  for (let element of compiler.program.elementsLookup.values()) {
+    if (element.kind != ElementKind.GLOBAL) continue;
+    let global = <Global>element;
+    let classReference = global.type.classReference;
+    if (
+      global.is(CommonFlags.COMPILED) &&
+      classReference !== null &&
+      !classReference.hasDecorator(DecoratorFlags.UNMANAGED)
+    ) {
+      if (global.is(CommonFlags.INLINED)) {
+        let value = global.constantIntegerValue;
+        exprs.push(
+          module.createCallIndirect(
+            module.createGetLocal(0, NativeType.I32),
+            [
+              compiler.options.isWasm64
+                ? module.createI64(i64_low(value), i64_high(value))
+                : module.createI32(i64_low(value))
+            ],
+            "iv"
+          )
+        );
+      } else {
+        exprs.push(
+          module.createCallIndirect(
+            module.createGetLocal(0, NativeType.I32),
+            [
+              module.createGetGlobal(
+                global.internalName,
+                compiler.options.nativeSizeType
+              )
+            ],
+            "iv"
+          )
+        );
+      }
+    }
+  }
+  var typeRef = compiler.ensureFunctionType([ Type.i32 ], Type.void);
+  module.addFunction("~iterateRoots", typeRef, [],
+    exprs.length
+      ? module.createBlock(null, exprs)
+      : module.createNop()
+  );
 }
