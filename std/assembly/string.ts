@@ -421,13 +421,13 @@ export class String {
     var len = targetLength - length;
     if (len > padLen) padString = padString.repeat(len / padLen + 1);
     var out = allocate(targetLength);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(padString) + HEADER_SIZE,
       <usize>len << 1
     );
     if (length) {
-      move_memory(
+      memory.copy(
         changetype<usize>(out) + HEADER_SIZE + (<usize>len << 1),
         changetype<usize>(this) + HEADER_SIZE,
         <usize>targetLength << 1
@@ -445,13 +445,13 @@ export class String {
     if (len > padLen) padString = padString.repeat(len / padLen + 1);
     var out = allocate(targetLength);
     if (length) {
-      move_memory(
+      memory.copy(
         changetype<usize>(out) + HEADER_SIZE,
         changetype<usize>(this) + HEADER_SIZE,
         <usize>length << 1
       );
     }
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE + (<usize>length << 1),
       changetype<usize>(padString) + HEADER_SIZE,
       <usize>targetLength << 1
