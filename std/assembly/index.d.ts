@@ -350,16 +350,14 @@ declare namespace memory {
 
 /** Garbage collector operations. */
 declare namespace gc {
-  /** Calls the specified function with every reference within the root set. */
-  export function iterateRoots(fn: (ref: usize) => void): void;
   /** Allocates a managed object identified by its visitor function. */
   export function allocate(size: usize, visitFn: (ref: usize) => void): usize;
-  /** Marks a managed object as reachable. */
-  export function mark(ref: usize): void;
-  /** Links a managed child with its parent. */
-  export function link(parentRef: usize, childRef: usize): void;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
+  /** Must be called when a managed object becomes a child of another one. */
+  export function link(parentRef: usize, childRef: usize): void;
+  /** Must be called when a managed object is found reachable. */
+  export function mark(ref: usize): void;
 }
 
 /** Table operations. */

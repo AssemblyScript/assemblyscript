@@ -5,8 +5,9 @@
 
 import {
   compileCall as compileBuiltinCall,
-  compileAllocate as compileBuiltinAllocate,
-  compileAbort as compileBuiltinAbort
+  compileAllocate,
+  compileAbort,
+  compileIterateRoots
 } from "./builtins";
 
 import {
@@ -286,6 +287,8 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
+  /** Indicates whether the iterateRoots function must be generated. */
+  needsIterateRoots: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -407,6 +410,9 @@ export class Compiler extends DiagnosticEmitter {
     for (let [name, moduleExport] of program.moduleLevelExports) {
       this.makeModuleExport(name, moduleExport.element);
     }
+
+    // set up gc
+    if (this.needsIterateRoots) compileIterateRoots(this);
 
     return module;
   }
@@ -974,7 +980,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Either reuses or creates the function type matching the specified signature. */
-  private ensureFunctionType(
+  ensureFunctionType(
     parameterTypes: Type[] | null,
     returnType: Type,
     thisType: Type | null = null
@@ -2022,7 +2028,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.set(FlowFlags.RETURNS);
 
     // TODO: requires exception-handling spec.
-    return compileBuiltinAbort(this, null, statement);
+    return compileAbort(this, null, statement);
   }
 
   compileTryStatement(statement: TryStatement): ExpressionRef {
@@ -6524,7 +6530,7 @@ export class Compiler extends DiagnosticEmitter {
     // allocate a new instance first and assign 'this' to the temp. local
     exprs[0] = module.createSetLocal(
       tempLocal.index,
-      compileBuiltinAllocate(this, classReference, expression)
+      compileAllocate(this, classReference, expression)
     );
 
     // once all field values have been set, return 'this'
@@ -7497,7 +7503,7 @@ export class Compiler extends DiagnosticEmitter {
     var initializers = new Array<ExpressionRef>();
     initializers.push(
       module.createSetLocal(tempLocal.index,
-        compileBuiltinAllocate(this, classInstance, reportNode)
+        compileAllocate(this, classInstance, reportNode)
       )
     );
 

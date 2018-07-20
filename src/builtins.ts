@@ -2629,8 +2629,7 @@ export function compileCall(
 
     // gc
 
-    case "gc.iterateRoots": {
-      // TOOD: make it so that this can only be called from a library file?
+    case "iterateRoots": {
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -2661,49 +2660,10 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      let exprs = new Array<ExpressionRef>();
-      for (let element of compiler.program.elementsLookup.values()) {
-        if (element.kind != ElementKind.GLOBAL) continue;
-        let global = <Global>element;
-        let classReference = global.type.classReference;
-        if (
-          global.is(CommonFlags.COMPILED) &&
-          classReference !== null &&
-          !classReference.hasDecorator(DecoratorFlags.UNMANAGED)
-        ) {
-          if (global.is(CommonFlags.INLINED)) {
-            let value = global.constantIntegerValue;
-            exprs.push(
-              module.createCallIndirect(
-                expr,
-                [
-                  compiler.options.isWasm64
-                    ? module.createI64(i64_low(value), i64_high(value))
-                    : module.createI32(i64_low(value))
-                ],
-                signatureReference.toSignatureString()
-              )
-            );
-          } else {
-            exprs.push(
-              module.createCallIndirect(
-                expr,
-                [
-                  module.createGetGlobal(
-                    global.internalName,
-                    compiler.options.nativeSizeType
-                  )
-                ],
-                signatureReference.toSignatureString()
-              )
-            );
-          }
-        }
-      }
       compiler.currentType = Type.void;
-      return exprs.length
-        ? module.createBlock(null, exprs)
-        : module.createNop();
+      // just emit a call even if the function doesn't yet exist
+      compiler.needsIterateRoots = true;
+      return module.createCall("~iterateRoots", [ expr ], NativeType.None);
     }
   }
   var expr = deferASMCall(compiler, prototype, operands, contextualType, reportNode);
@@ -2976,4 +2936,55 @@ export function compileAbort(
     ),
     module.createUnreachable()
   ]);
+}
+
+/** Compiles the iterateRoots function if requires. */
+export function compileIterateRoots(compiler: Compiler): void {
+  var module = compiler.module;
+  var exprs = new Array<ExpressionRef>();
+
+  for (let element of compiler.program.elementsLookup.values()) {
+    if (element.kind != ElementKind.GLOBAL) continue;
+    let global = <Global>element;
+    let classReference = global.type.classReference;
+    if (
+      global.is(CommonFlags.COMPILED) &&
+      classReference !== null &&
+      !classReference.hasDecorator(DecoratorFlags.UNMANAGED)
+    ) {
+      if (global.is(CommonFlags.INLINED)) {
+        let value = global.constantIntegerValue;
+        exprs.push(
+          module.createCallIndirect(
+            module.createGetLocal(0, NativeType.I32),
+            [
+              compiler.options.isWasm64
+                ? module.createI64(i64_low(value), i64_high(value))
+                : module.createI32(i64_low(value))
+            ],
+            "iv"
+          )
+        );
+      } else {
+        exprs.push(
+          module.createCallIndirect(
+            module.createGetLocal(0, NativeType.I32),
+            [
+              module.createGetGlobal(
+                global.internalName,
+                compiler.options.nativeSizeType
+              )
+            ],
+            "iv"
+          )
+        );
+      }
+    }
+  }
+  var typeRef = compiler.ensureFunctionType([ Type.i32 ], Type.void);
+  module.addFunction("~iterateRoots", typeRef, [],
+    exprs.length
+      ? module.createBlock(null, exprs)
+      : module.createNop()
+  );
 }

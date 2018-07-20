@@ -6,12 +6,16 @@
 
 // Largely based on the Bach Le's μgc, see: https://github.com/bullno1/ugc
 
-const TRACE = true;
+const TRACE = false;
 
 import {
   AL_MASK,
   MAX_SIZE_32
 } from "../internal/allocator";
+
+import {
+  iterateRoots
+} from "../gc";
 
 /** Collector states. */
 const enum State {
@@ -31,8 +35,8 @@ var state = State.INIT;
 var white = 0;
 
 // From and to spaces
-var from: ManagedObject;
-var to: ManagedObject;
+var from: ManagedObjectSet;
+var to: ManagedObjectSet;
 var iter: ManagedObject;
 
 // ╒═══════════════ Managed object layout (32-bit) ════════════════╕
@@ -83,16 +87,6 @@ class ManagedObject {
     this.nextWithColor = (this.nextWithColor & ~3) | color;
   }
 
-  /** Inserts an object to this list. */
-  push(obj: ManagedObject): void {
-    var prev = this.prev;
-    trace("   push", 3, objToRef(prev), objToRef(obj), objToRef(this));
-    obj.next = this;
-    obj.prev = prev;
-    prev.next = obj;
-    this.prev = obj;
-  }
-
   /** Unlinks this object from its list. */
   unlink(): void {
     var next = this.next;
@@ -100,12 +94,6 @@ class ManagedObject {
     if (TRACE) trace("   unlink", 3, objToRef(prev), objToRef(this), objToRef(next));
     next.prev = prev;
     prev.next = next;
-  }
-
-  clear(): void {
-    if (TRACE) trace("   clear", 1, objToRef(this));
-    this.nextWithColor = changetype<usize>(this);
-    this.prev = this;
   }
 
   /** Marks this object as gray, that is reachable with unscanned children. */
@@ -119,24 +107,38 @@ class ManagedObject {
   }
 }
 
-function markRoots(): void {
-  if (TRACE) trace("   markRoots");
-  gc.iterateRoots(function markRoot(ref: usize): void {
-    if (TRACE) trace("   markRoot", 1, ref);
-    if (ref) __gc_mark(ref);
-  });
+/** A set of managed objects. Used for the from and to spaces. */
+@unmanaged
+class ManagedObjectSet extends ManagedObject {
+
+  /** Inserts an object. */
+  push(obj: ManagedObject): void {
+    var prev = this.prev;
+    if (TRACE) trace("   push", 3, objToRef(prev), objToRef(obj), objToRef(this));
+    obj.next = this;
+    obj.prev = prev;
+    prev.next = obj;
+    this.prev = obj;
+  }
+
+  /** Clears this list. */
+  clear(): void {
+    if (TRACE) trace("   clear", 1, objToRef(this));
+    this.nextWithColor = changetype<usize>(this);
+    this.prev = this;
+  }
 }
 
 /** Performs a single step according to the current state. */
-function step(): void {
+export function step(): bool {
   var obj: ManagedObject;
   switch (state) {
     case State.INIT: {
       if (TRACE) trace("gc~step/INIT");
-      from = changetype<ManagedObject>(memory.allocate(ManagedObject.SIZE));
+      from = changetype<ManagedObjectSet>(memory.allocate(ManagedObject.SIZE));
       from.visitFn = changetype<(ref: usize) => void>(<u32>-1); // would error
       from.clear();
-      to = changetype<ManagedObject>(memory.allocate(ManagedObject.SIZE));
+      to = changetype<ManagedObjectSet>(memory.allocate(ManagedObject.SIZE));
       to.visitFn = changetype<(ref: usize) => void>(<u32>-1); // would error
       to.clear();
       iter = to;
@@ -146,7 +148,7 @@ function step(): void {
     }
     case State.IDLE: {
       if (TRACE) trace("gc~step/IDLE");
-      markRoots();
+      iterateRoots(__gc_mark);
       state = State.MARK;
       if (TRACE) trace("gc~state = MARK");
       break;
@@ -160,7 +162,7 @@ function step(): void {
         obj.visitFn(objToRef(obj));
       } else {
         if (TRACE) trace("gc~step/MARK finish");
-        markRoots();
+        iterateRoots(__gc_mark);
         obj = iter.next;
         if (obj === to) {
           let prevFrom = from;
@@ -189,6 +191,7 @@ function step(): void {
       break;
     }
   }
+  return state != State.IDLE;
 }
 
 @inline function refToObj(ref: usize): ManagedObject {
@@ -201,7 +204,6 @@ function step(): void {
 
 // Garbage collector interface
 
-/** Allocates a managed object. */
 @global export function __gc_allocate(
   size: usize,
   visitFn: (ref: usize) => void
@@ -216,21 +218,20 @@ function step(): void {
   return objToRef(obj);
 }
 
-/** Marks a reachable object. Called from the visitFn functions. */
-@global export function __gc_mark(ref: usize): void {
-  if (TRACE) trace("gc.mark", 1, ref);
-  var obj = refToObj(ref);
-  if (obj.color == white) obj.makeGray();
-}
-
-/** Links a managed child object to its parent object. */
 @global export function __gc_link(parentRef: usize, childRef: usize): void {
   if (TRACE) trace("gc.link", 2, parentRef, childRef);
   var parent = refToObj(parentRef);
   if (parent.color == <i32>!white && refToObj(childRef).color == white) parent.makeGray();
 }
 
-/** Performs a full garbage collection cycle. */
+@global export function __gc_mark(ref: usize): void {
+  if (TRACE) trace("gc.mark", 1, ref);
+  if (ref) {
+    let obj = refToObj(ref);
+    if (obj.color == white) obj.makeGray();
+  }
+}
+
 @global export function __gc_collect(): void {
   if (TRACE) trace("gc.collect");
   // begin collecting if not yet collecting
