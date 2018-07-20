@@ -1,46 +1,24 @@
 language: node_js
 notifications:
   email: false
-before_install: npm i -g npm@latest --no-audit
-install: npm config set progress=false && npm i --no-audit
+before_install: npm config set progress=false && npm i -g npm@latest --no-audit
+install: npm i --no-audit
 cache:
   directories:
   - node_modules
-stages:
-- name: check-pr
-  if: type = pull_request
 jobs:
   include:
-
-  - stage: check-pr
-    node_js: lts/*
-    script: ./scripts/check-pr.sh
-    env: Checks contributing guidelines before testing pull requests
-
-  - stage: lint
-    node_js: node
-    script: npm run lint
-    env: Checks the sources with TSLint
-
-  - stage: test
-    node_js: lts/*
-    script: npm run clean && node bin/asc -v && npm test
-    env: Tests the sources on latest node.js LTS
-  - node_js: node
-    script: npm run clean && node bin/asc -v && npm test
-    env: Tests the sources on latest stable node.js
   - node_js: lts/*
     script:
-    - npm run clean
-    - cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test arena
-    - cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy
-    - cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf
-    env: Tests the allocators on latest node.js LTS
-
-  - stage: build
-    node_js: lts/*
-    script: npm run build && node bin/asc -v && npm test
-    env: Builds and tests the bundle on latest node.js LTS
+    - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then ./scripts/check-pr.sh; fi
+    - npm run all
+    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+        cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test arena &&
+        cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy &&
+        cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf;
+      fi
+    env: Runs the tests on node.js LTS
   - node_js: node
-    script: npm run build && node bin/asc -v && npm test
-    env: Builds and tests the bundle on latest stable node.js
+    script:
+    - npm run all
+    env: Runs the tests on node.js stable

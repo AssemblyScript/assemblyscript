@@ -11,7 +11,6 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/typedarray/arr (mut i32) (i32.const 0))
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 168))
  (memory $0 1)
  (data (i32.const 8) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 48) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
@@ -32,7 +31,7 @@
    )
   )
  )
- (func $~lib/allocator/arena/allocate_memory (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -118,7 +117,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+  (call $~lib/allocator/arena/__memory_allocate
+   (get_local $0)
+  )
+ )
+ (func $~lib/internal/arraybuffer/allocUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.gt_u
@@ -137,7 +141,7 @@
   )
   (i32.store
    (tee_local $1
-    (call $~lib/allocator/arena/allocate_memory
+    (call $~lib/memory/memory.allocate
      (call $~lib/internal/arraybuffer/computeSize
       (get_local $0)
      )
@@ -147,7 +151,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/set_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (if
@@ -477,7 +481,14 @@
    )
   )
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#constructor (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/memory/memory.fill (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (call $~lib/memory/memset
+   (get_local $0)
+   (get_local $1)
+   (get_local $2)
+  )
+ )
+ (func $~lib/internal/typedarray/TypedArray<i8,i32>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -494,7 +505,7 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/set_memory
+  (call $~lib/memory/memory.fill
    (i32.add
     (tee_local $2
      (call $~lib/internal/arraybuffer/allocUnsafe
@@ -513,7 +524,7 @@
    (block
     (i32.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/memory/memory.allocate
        (i32.const 12)
       )
      )
@@ -543,7 +554,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/typedarray/TypedArray<i16,i32>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i16,i32>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -560,7 +571,7 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/set_memory
+  (call $~lib/memory/memory.fill
    (i32.add
     (tee_local $2
      (call $~lib/internal/arraybuffer/allocUnsafe
@@ -584,7 +595,7 @@
    (block
     (i32.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/memory/memory.allocate
        (i32.const 12)
       )
      )
@@ -614,7 +625,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -631,7 +642,7 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/set_memory
+  (call $~lib/memory/memory.fill
    (i32.add
     (tee_local $2
      (call $~lib/internal/arraybuffer/allocUnsafe
@@ -655,7 +666,7 @@
    (block
     (i32.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/memory/memory.allocate
        (i32.const 12)
       )
      )
@@ -685,7 +696,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/typedarray/TypedArray<i64,i64>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i64,i64>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -702,7 +713,7 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/set_memory
+  (call $~lib/memory/memory.fill
    (i32.add
     (tee_local $2
      (call $~lib/internal/arraybuffer/allocUnsafe
@@ -726,7 +737,7 @@
    (block
     (i32.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/memory/memory.allocate
        (i32.const 12)
       )
      )
@@ -756,7 +767,7 @@
   )
   (get_local $0)
  )
- (func $std/typedarray/testInstantiate (; 9 ;) (type $iv) (param $0 i32)
+ (func $std/typedarray/testInstantiate (; 11 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (if
    (i32.load offset=4
@@ -1445,7 +1456,7 @@
    )
   )
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.ge_u
@@ -1490,7 +1501,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.ge_u
@@ -1534,7 +1545,7 @@
    )
   )
  )
- (func $~lib/typedarray/Int32Array#subarray (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#subarray (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $4
@@ -1621,7 +1632,7 @@
   )
   (i32.store
    (tee_local $3
-    (call $~lib/allocator/arena/allocate_memory
+    (call $~lib/memory/memory.allocate
      (i32.const 12)
     )
    )
@@ -1645,7 +1656,7 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.ge_u
@@ -1684,7 +1695,7 @@
    (get_local $2)
   )
  )
- (func $~lib/typedarray/Uint8ClampedArray#__set (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#__set (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
    (get_local $0)
@@ -1708,7 +1719,7 @@
    )
   )
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.ge_u
@@ -1746,16 +1757,10 @@
    )
   )
  )
- (func $start (; 16 ;) (type $v)
+ (func $start (; 18 ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.and
-    (i32.add
-     (get_global $HEAP_BASE)
-     (i32.const 7)
-    )
-    (i32.const -8)
-   )
+   (i32.const 168)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)

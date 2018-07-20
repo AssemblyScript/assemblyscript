@@ -90,13 +90,13 @@ export class String {
     if (outLen == 0) return EMPTY;
     var out = allocate(outLen);
 
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE,
       thisLen << 1
     );
 
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE + (thisLen << 1),
       changetype<usize>(other) + HEADER_SIZE,
       otherLen << 1
@@ -112,7 +112,7 @@ export class String {
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
     if (start < 0) return false;
-    return !compare_memory(
+    return !memory.compare(
       changetype<usize>(this) + HEADER_SIZE + (start << 1),
       changetype<usize>(searchString) + HEADER_SIZE,
       searchLength << 1
@@ -127,7 +127,7 @@ export class String {
     var leftLength = left.length;
     if (leftLength != right.length) return false;
 
-    return !compare_memory(
+    return !memory.compare(
       changetype<usize>(left) + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
       (<usize>leftLength << 1)
@@ -150,7 +150,7 @@ export class String {
     if (!rightLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return compare_memory(
+    return memory.compare(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
       length << 1
@@ -169,7 +169,7 @@ export class String {
     if (!rightLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return compare_memory(
+    return memory.compare(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
       length << 1
@@ -187,7 +187,7 @@ export class String {
     if (!leftLength)  return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return compare_memory(
+    return memory.compare(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
       length << 1
@@ -206,7 +206,7 @@ export class String {
     if (!leftLength)  return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return compare_memory(
+    return memory.compare(
       changetype<usize>(left)  + HEADER_SIZE,
       changetype<usize>(right) + HEADER_SIZE,
       length << 1
@@ -228,7 +228,7 @@ export class String {
     len -= searchLen;
     // TODO: multiple char codes
     for (let k: isize = start; k <= len; ++k) {
-      if (!compare_memory(
+      if (!memory.compare(
         changetype<usize>(this) + HEADER_SIZE + (k << 1),
         changetype<usize>(searchString) + HEADER_SIZE,
         searchLen << 1
@@ -250,7 +250,7 @@ export class String {
 
     // TODO: multiple char codes
     for (let k = start; k >= 0; --k) {
-      if (!compare_memory(
+      if (!memory.compare(
         changetype<usize>(this) + HEADER_SIZE + (k << 1),
         changetype<usize>(searchString) + HEADER_SIZE,
         searchLen << 1
@@ -272,7 +272,7 @@ export class String {
     if (searchLength + start > len) {
       return false;
     }
-    return !compare_memory(
+    return !memory.compare(
       changetype<usize>(this) + HEADER_SIZE + (start << 1),
       changetype<usize>(searchString) + HEADER_SIZE,
       searchLength << 1
@@ -292,7 +292,7 @@ export class String {
       return EMPTY;
     }
     var out = allocate(resultLength);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE + (intStart << 1),
       <usize>resultLength << 1
@@ -315,7 +315,7 @@ export class String {
       return this;
     }
     var out = allocate(len);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE + (from << 1),
       len << 1
@@ -351,7 +351,7 @@ export class String {
       return this;
     }
     var out = allocate(length);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE + (start << 1),
       length << 1
@@ -379,7 +379,7 @@ export class String {
       return EMPTY;
     }
     var out = allocate(outLen);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE + (start << 1),
       outLen << 1
@@ -405,7 +405,7 @@ export class String {
       return this;
     }
     var out = allocate(len);
-    move_memory(
+    memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
       changetype<usize>(this) + HEADER_SIZE,
       len << 1
@@ -433,7 +433,7 @@ export class String {
      * 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
      */
     for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
-      move_memory(
+      memory.copy(
         changetype<usize>(result) + HEADER_SIZE + offset,
         changetype<usize>(this)   + HEADER_SIZE,
         strLen
@@ -472,7 +472,7 @@ export class String {
   }
 
   toUTF8(): usize {
-    var buf = allocate_memory(<usize>this.lengthUTF8);
+    var buf = memory.allocate(<usize>this.lengthUTF8);
     var pos: usize = 0;
     var end = <usize>this.length;
     var off: usize = 0;

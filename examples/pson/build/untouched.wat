@@ -41,6 +41,7 @@
  (global $assembly/pson/Token.BINARY i32 (i32.const 255))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
+ (export "memory" (memory $0))
  (export "onNull" (func $assembly/pson/onNull))
  (export "onTrue" (func $assembly/pson/onTrue))
  (export "onFalse" (func $assembly/pson/onFalse))
@@ -56,7 +57,6 @@
  (export "onString" (func $assembly/pson/onString))
  (export "onBinary" (func $assembly/pson/onBinary))
  (export "decode" (func $assembly/pson/decode))
- (export "memory" (memory $0))
  (func $assembly/pson/readVarint32 (; 14 ;) (type $i) (result i32)
   (local $0 i32)
   (local $1 i32)
@@ -283,112 +283,112 @@
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:50:9
-                      (i32.const 240)
+                      (get_global $assembly/pson/Token.NULL)
                      )
                     )
                     (br_if $case1|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:54:9
-                      (i32.const 241)
+                      (get_global $assembly/pson/Token.TRUE)
                      )
                     )
                     (br_if $case2|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:58:9
-                      (i32.const 242)
+                      (get_global $assembly/pson/Token.FALSE)
                      )
                     )
                     (br_if $case3|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:62:9
-                      (i32.const 243)
+                      (get_global $assembly/pson/Token.EOBJECT)
                      )
                     )
                     (br_if $case4|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:66:9
-                      (i32.const 244)
+                      (get_global $assembly/pson/Token.EARRAY)
                      )
                     )
                     (br_if $case5|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:70:9
-                      (i32.const 245)
+                      (get_global $assembly/pson/Token.ESTRING)
                      )
                     )
                     (br_if $case6|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:74:9
-                      (i32.const 246)
+                      (get_global $assembly/pson/Token.OBJECT)
                      )
                     )
                     (br_if $case7|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:82:9
-                      (i32.const 247)
+                      (get_global $assembly/pson/Token.ARRAY)
                      )
                     )
                     (br_if $case8|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:87:9
-                      (i32.const 248)
+                      (get_global $assembly/pson/Token.INTEGER)
                      )
                     )
                     (br_if $case9|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:91:9
-                      (i32.const 249)
+                      (get_global $assembly/pson/Token.LONG)
                      )
                     )
                     (br_if $case10|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:96:9
-                      (i32.const 250)
+                      (get_global $assembly/pson/Token.FLOAT)
                      )
                     )
                     (br_if $case11|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:101:9
-                      (i32.const 251)
+                      (get_global $assembly/pson/Token.DOUBLE)
                      )
                     )
                     (br_if $case12|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:106:9
-                      (i32.const 252)
+                      (get_global $assembly/pson/Token.STRING)
                      )
                     )
                     (br_if $case13|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:112:9
-                      (i32.const 253)
+                      (get_global $assembly/pson/Token.STRING_ADD)
                      )
                     )
                     (br_if $case14|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:113:9
-                      (i32.const 254)
+                      (get_global $assembly/pson/Token.STRING_GET)
                      )
                     )
                     (br_if $case15|0
                      (i32.eq
                       (get_local $0)
                       ;;@ assembly/pson.ts:118:9
-                      (i32.const 255)
+                      (get_global $assembly/pson/Token.BINARY)
                      )
                     )
                     (br $case16|0)
@@ -716,7 +716,7 @@
      (i32.gt_u
       (get_local $1)
       ;;@ assembly/pson.ts:125:18
-      (i32.const 239)
+      (get_global $assembly/pson/Token.MAX)
      )
      ;;@ assembly/pson.ts:125:34
      (unreachable)

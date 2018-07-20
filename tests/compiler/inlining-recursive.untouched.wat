@@ -2,10 +2,10 @@
  (type $v (func))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
- (export "foo" (func $inlining-recursive/foo))
- (export "baz" (func $inlining-recursive/baz))
- (export "bar" (func $inlining-recursive/bar))
  (export "memory" (memory $0))
+ (export "foo" (func $inlining-recursive/foo))
+ (export "bar" (func $inlining-recursive/bar))
+ (export "baz" (func $inlining-recursive/baz))
  (func $inlining-recursive/foo (; 0 ;) (type $v)
   (block $inlining-recursive/foo|inlined.0
    (call $inlining-recursive/foo)

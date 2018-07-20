@@ -36,8 +36,8 @@ export function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32):
 
   var length = arr.length;
   var bitsetSize = (length + 31) >> 5 << shift32;
-  var bitset = allocate_memory(bitsetSize); // indexed in 32-bit chunks below
-  set_memory(bitset, 0, bitsetSize);
+  var bitset = memory.allocate(bitsetSize); // indexed in 32-bit chunks below
+  memory.fill(bitset, 0, bitsetSize);
 
   // see: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.21.1863&rep=rep1&type=pdf
 
@@ -83,7 +83,7 @@ export function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32):
     }
   }
 
-  free_memory(bitset);
+  memory.free(bitset);
 
   var t = loadUnsafe<T,T>(buffer, 1);                         // t = arr[1]
   storeUnsafe<T,T>(buffer, 1, loadUnsafe<T,T>(buffer, 0));    // arr[1] = arr[0]

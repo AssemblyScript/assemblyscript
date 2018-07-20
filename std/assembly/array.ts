@@ -25,7 +25,7 @@ export class Array<T> {
     var buffer = allocUnsafe(byteLength);
     this.buffer_ = buffer;
     this.length_ = length;
-    set_memory(
+    memory.fill(
       changetype<usize>(buffer) + HEADER_SIZE_AB,
       0,
       <usize>byteLength
@@ -216,7 +216,7 @@ export class Array<T> {
     var buffer = this.buffer_;
     var element = loadUnsafe<T,T>(buffer, 0);
     var lastIndex = length - 1;
-    move_memory(
+    memory.copy(
       changetype<usize>(buffer) + HEADER_SIZE_AB,
       changetype<usize>(buffer) + HEADER_SIZE_AB + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
@@ -246,7 +246,7 @@ export class Array<T> {
       capacity = buffer.byteLength >>> alignof<T>();
       this.buffer_ = buffer;
     }
-    move_memory(
+    memory.copy(
       changetype<usize>(buffer) + HEADER_SIZE_AB + sizeof<T>(),
       changetype<usize>(buffer) + HEADER_SIZE_AB,
       <usize>(capacity - 1) << alignof<T>()
@@ -267,7 +267,7 @@ export class Array<T> {
     assert(newLength >= 0);
     var sliced = new Array<T>(newLength);
     if (newLength) {
-      move_memory(
+      memory.copy(
         changetype<usize>(sliced.buffer_) + HEADER_SIZE_AB,
         changetype<usize>(this.buffer_) + HEADER_SIZE_AB + (<usize>begin << alignof<T>()),
         <usize>newLength << alignof<T>()
@@ -283,7 +283,7 @@ export class Array<T> {
     if (start >= length) return;
     deleteCount = min(deleteCount, length - start);
     var buffer = this.buffer_;
-    move_memory(
+    memory.copy(
       changetype<usize>(buffer) + HEADER_SIZE_AB + (<usize>start << alignof<T>()),
       changetype<usize>(buffer) + HEADER_SIZE_AB + (<usize>(start + deleteCount) << alignof<T>()),
       <usize>deleteCount << alignof<T>()
