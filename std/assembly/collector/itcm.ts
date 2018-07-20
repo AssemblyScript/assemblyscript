@@ -130,7 +130,7 @@ class ManagedObjectSet extends ManagedObject {
 }
 
 /** Performs a single step according to the current state. */
-export function step(): bool {
+function step(): void {
   var obj: ManagedObject;
   switch (state) {
     case State.INIT: {
@@ -191,7 +191,6 @@ export function step(): bool {
       break;
     }
   }
-  return state != State.IDLE;
 }
 
 @inline function refToObj(ref: usize): ManagedObject {

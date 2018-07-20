@@ -1,11 +1,11 @@
 (module
  (type $iv (func (param i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $i (func (result i32)))
+ (type $v (func))
  (type $ii (func (param i32) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -275,7 +275,7 @@
    (get_local $0)
   )
  )
- (func $~lib/collector/itcm/step (; 14 ;) (type $i) (result i32)
+ (func $~lib/collector/itcm/step (; 14 ;) (type $v)
   (local $0 i32)
   (block $break|0
    (block $case3|0
@@ -435,10 +435,6 @@
     )
    )
   )
-  (i32.ne
-   (get_global $~lib/collector/itcm/state)
-   (i32.const 1)
-  )
  )
  (func $~lib/collector/itcm/__gc_allocate (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -449,9 +445,7 @@
    )
    (unreachable)
   )
-  (drop
-   (call $~lib/collector/itcm/step)
-  )
+  (call $~lib/collector/itcm/step)
   (i32.store offset=8
    (tee_local $2
     (call $~lib/memory/memory.allocate
@@ -501,9 +495,7 @@
     )
     (br $break|0)
    )
-   (drop
-    (call $~lib/collector/itcm/step)
-   )
+   (call $~lib/collector/itcm/step)
   )
   (loop $continue|1
    (if
@@ -512,9 +504,7 @@
      (i32.const 1)
     )
     (block
-     (drop
-      (call $~lib/collector/itcm/step)
-     )
+     (call $~lib/collector/itcm/step)
      (br $continue|1)
     )
    )

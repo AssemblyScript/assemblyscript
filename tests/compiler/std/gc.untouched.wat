@@ -1,11 +1,11 @@
 (module
  (type $iv (func (param i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $i (func (result i32)))
+ (type $v (func))
  (type $ii (func (param i32) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -331,7 +331,7 @@
   )
   (return)
  )
- (func $~lib/collector/itcm/step (; 15 ;) (type $i) (result i32)
+ (func $~lib/collector/itcm/step (; 15 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (block $break|0
@@ -522,10 +522,6 @@
     (br $break|0)
    )
   )
-  (i32.ne
-   (get_global $~lib/collector/itcm/state)
-   (get_global $~lib/collector/itcm/State.IDLE)
-  )
  )
  (func $~lib/collector/itcm/__gc_allocate (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -539,9 +535,7 @@
    )
    (unreachable)
   )
-  (drop
-   (call $~lib/collector/itcm/step)
-  )
+  (call $~lib/collector/itcm/step)
   (set_local $2
    (call $~lib/memory/memory.allocate
     (i32.add
@@ -600,9 +594,7 @@
      (br $break|0)
     )
    )
-   (drop
-    (call $~lib/collector/itcm/step)
-   )
+   (call $~lib/collector/itcm/step)
   )
   (block $break|1
    (loop $continue|1
@@ -612,9 +604,7 @@
       (get_global $~lib/collector/itcm/State.IDLE)
      )
      (block
-      (drop
-       (call $~lib/collector/itcm/step)
-      )
+      (call $~lib/collector/itcm/step)
       (br $continue|1)
      )
     )
