@@ -1,19 +1,22 @@
-function runner(allocator, runs, allocs) {
-  var hasReset = !!allocator.reset_memory;
-  var useSet = !!allocator.set_memory;
-  console.log("hasReset=" + hasReset  + ", useSet=" + useSet);
-  var ptrs = [];
+const useFill = false;
+
+function runner(exports, runs, allocs) {
+  const alloc = exports["memory.allocate"];
+  const free  = exports["memory.free"];
+  const fill  = exports["memory.fill"];
+  const reset = exports["memory.reset"];
+
+  const ptrs = [];
 
   function randomAlloc(maxSize) {
     if (!maxSize) maxSize = 8192;
     var size = ((Math.random() * maxSize) >>> 0) + 1;
     size = (size + 3) & ~3;
-    var ptr = allocator.allocate_memory(size);
+    var ptr = alloc(size);
     if (!ptr) throw Error();
     if ((ptr & 7) != 0) throw Error("invalid alignment: " + (ptr & 7) + " on " + ptr);
     if (ptrs.indexOf(ptr) >= 0) throw Error("duplicate pointer");
-    if (useSet)
-      allocator.set_memory(ptr, 0xdc, size);
+    if (useFill) fill(ptr, 0xdc, size);
     ptrs.push(ptr);
     return ptr;
   }
@@ -24,7 +27,7 @@ function runner(allocator, runs, allocs) {
     var ptr = ptrs[idx];
     ptrs.splice(idx, 1);
     if (typeof ptr !== "number") throw Error();
-    allocator.free_memory(ptr);
+    free(ptr);
   }
 
   function randomFree() {
@@ -32,22 +35,22 @@ function runner(allocator, runs, allocs) {
     var ptr = ptrs[idx];
     if (typeof ptr !== "number") throw Error();
     ptrs.splice(idx, 1);
-    allocator.free_memory(ptr);
+    free(ptr);
   }
 
   // remember the smallest possible memory address
-  var base = allocator.allocate_memory(64);
+  var base = alloc(64);
   console.log("base: " + base);
-  if (hasReset) {
-    allocator.reset_memory();
-  } else {
-    allocator.free_memory(base);
+  try {
+    reset();
+  } catch (e) {
+    free(base);
   }
-  var currentMem = allocator.memory.buffer.byteLength;
+  var currentMem = exports.memory.buffer.byteLength;
   console.log("mem initial: " + currentMem);
 
   function testMemChanged() {
-    var actualMem = allocator.memory.buffer.byteLength;
+    var actualMem = exports.memory.buffer.byteLength;
     if (actualMem > currentMem) {
       console.log("mem changed: " + currentMem + " -> " + actualMem);
       currentMem = actualMem;
@@ -72,23 +75,20 @@ function runner(allocator, runs, allocs) {
       // free the rest, randomly
       while (ptrs.length) randomFree();
 
-      if (hasReset) {
-        allocator.reset_memory();
-        var ptr = allocator.allocate_memory(64);
-        if (ptr !== base)
-          throw Error("expected " + base + " but got " + ptr);
-        allocator.reset_memory();
-      } else {
+      try {
+        reset();
+        var ptr = alloc(64);
+        if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
+        reset();
+      } catch (e) {
         // should now be possible to reuse the entire memory
         // just try a large portion of the memory here, for example because of
         // SL+1 for allocations in TLSF
-        var size = ((allocator.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
-        var ptr = allocator.allocate_memory(size);
-        if (useSet)
-          allocator.set_memory(ptr, 0xac, size);
-        if (ptr !== base)
-          throw Error("expected " + base + " but got " + ptr);
-        allocator.free_memory(ptr);
+        var size = ((exports.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
+        var ptr = alloc(size);
+        if (useFill) fill(ptr, 0xac, size);
+        if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
+        free(ptr);
       }
       testMemChanged();
     }
@@ -116,5 +116,4 @@ function mem(memory, offset, count) {
   console.log(hex.join(" ") + " ...");
 }
 
-if (typeof module === "object" && typeof exports === "object")
-  module.exports = runner;
+if (typeof module === "object" && typeof exports === "object") module.exports = runner;

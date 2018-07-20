@@ -13,16 +13,15 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $assembly/index/system (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 40))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (export "memory" (memory $0))
  (export "init" (func $assembly/index/init))
  (export "getBody" (func $assembly/index/getBody))
  (export "step" (func $assembly/index/step))
  (export "bench" (func $assembly/index/bench))
- (export "memory" (memory $0))
  (start $start)
- (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -116,7 +115,7 @@
    (block
     (f64.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/allocator/arena/__memory_allocate
        (i32.const 56)
       )
      )
@@ -150,7 +149,7 @@
   )
   (get_local $0)
  )
- (func $~lib/memory/set_memory (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (if
@@ -500,7 +499,7 @@
   )
   (i32.store
    (tee_local $3
-    (call $~lib/allocator/arena/allocate_memory
+    (call $~lib/allocator/arena/__memory_allocate
      (i32.shl
       (i32.const 1)
       (i32.sub
@@ -529,7 +528,7 @@
    (block
     (i32.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/allocator/arena/__memory_allocate
        (i32.const 8)
       )
      )
@@ -549,7 +548,7 @@
    (get_local $0)
    (get_local $1)
   )
-  (call $~lib/memory/set_memory
+  (call $~lib/memory/memset
    (i32.add
     (get_local $3)
     (i32.const 8)
@@ -693,7 +692,7 @@
    (block
     (i32.store
      (tee_local $2
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/allocator/arena/__memory_allocate
        (i32.const 4)
       )
      )
@@ -1403,13 +1402,7 @@
  )
  (func $start (; 12 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.and
-    (i32.add
-     (get_global $HEAP_BASE)
-     (i32.const 7)
-    )
-    (i32.const -8)
-   )
+   (i32.const 40)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)

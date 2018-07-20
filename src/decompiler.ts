@@ -834,11 +834,11 @@ export class Decompiler {
       case ExpressionId.Host: {
         switch (getHostOp(expr)) {
           case HostOp.CurrentMemory: {
-            this.push("current_memory()");
+            this.push("memory.size()");
             return;
           }
           case HostOp.GrowMemory: {
-            this.push("grow_memory(");
+            this.push("memory.grow(");
             this.decompileExpression(getHostOperand(expr, 0));
             this.push(")");
             return;

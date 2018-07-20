@@ -8,8 +8,8 @@
  (global $HEAP_BASE i32 (i32.const 32))
  (memory $0 1)
  (data (i32.const 8) "\t\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s\00")
- (export "memcpy" (func $memcpy/memcpy))
  (export "memory" (memory $0))
+ (export "memcpy" (func $memcpy/memcpy))
  (start $start)
  (func $memcpy/memcpy (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1816,26 +1816,26 @@
  )
  (func $start (; 2 ;) (type $v)
   (i64.store
-   (i32.const 8)
+   (get_global $memcpy/base)
    (i64.const 1229782938247303441)
   )
   (i64.store
    (i32.add
-    (i32.const 8)
+    (get_global $memcpy/base)
     (i32.const 8)
    )
    (i64.const 2459565876494606882)
   )
   (i64.store
    (i32.add
-    (i32.const 8)
+    (get_global $memcpy/base)
     (i32.const 16)
    )
    (i64.const 3689348814741910323)
   )
   (i64.store
    (i32.add
-    (i32.const 8)
+    (get_global $memcpy/base)
     (i32.const 24)
    )
    (i64.const 4919131752989213764)
@@ -1843,11 +1843,11 @@
   (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.add
-     (i32.const 8)
+     (get_global $memcpy/base)
      (i32.const 1)
     )
     (i32.add
-     (i32.const 8)
+     (get_global $memcpy/base)
      (i32.const 16)
     )
     (i32.const 4)
@@ -1858,7 +1858,7 @@
     (i32.eq
      (get_global $memcpy/dest)
      (i32.add
-      (i32.const 8)
+      (get_global $memcpy/base)
       (i32.const 1)
      )
     )
@@ -1877,7 +1877,7 @@
    (i32.eqz
     (i64.eq
      (i64.load
-      (i32.const 8)
+      (get_global $memcpy/base)
      )
      (i64.const 1229783084848853777)
     )
@@ -1894,8 +1894,8 @@
   )
   (set_global $memcpy/dest
    (call $memcpy/memcpy
-    (i32.const 8)
-    (i32.const 8)
+    (get_global $memcpy/base)
+    (get_global $memcpy/base)
     (i32.const 32)
    )
   )
@@ -1903,7 +1903,7 @@
    (i32.eqz
     (i32.eq
      (get_global $memcpy/dest)
-     (i32.const 8)
+     (get_global $memcpy/base)
     )
    )
    (block
@@ -1920,7 +1920,7 @@
    (i32.eqz
     (i64.eq
      (i64.load
-      (i32.const 8)
+      (get_global $memcpy/base)
      )
      (i64.const 1229783084848853777)
     )
@@ -1940,7 +1940,7 @@
     (i64.eq
      (i64.load
       (i32.add
-       (i32.const 8)
+       (get_global $memcpy/base)
        (i32.const 8)
       )
      )
@@ -1962,7 +1962,7 @@
     (i64.eq
      (i64.load
       (i32.add
-       (i32.const 8)
+       (get_global $memcpy/base)
        (i32.const 16)
       )
      )
@@ -1984,7 +1984,7 @@
     (i64.eq
      (i64.load
       (i32.add
-       (i32.const 8)
+       (get_global $memcpy/base)
        (i32.const 24)
       )
      )
@@ -2004,11 +2004,11 @@
   (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.add
-     (i32.const 8)
+     (get_global $memcpy/base)
      (i32.const 5)
     )
     (i32.add
-     (i32.const 8)
+     (get_global $memcpy/base)
      (i32.const 28)
     )
     (i32.const 3)
@@ -2018,7 +2018,7 @@
    (i32.eqz
     (i64.eq
      (i64.load
-      (i32.const 8)
+      (get_global $memcpy/base)
      )
      (i64.const 4919131679688438545)
     )
@@ -2036,11 +2036,11 @@
   (set_global $memcpy/dest
    (call $memcpy/memcpy
     (i32.add
-     (i32.const 8)
+     (get_global $memcpy/base)
      (i32.const 8)
     )
     (i32.add
-     (i32.const 8)
+     (get_global $memcpy/base)
      (i32.const 16)
     )
     (i32.const 15)
@@ -2050,7 +2050,7 @@
    (i32.eqz
     (i64.eq
      (i64.load
-      (i32.const 8)
+      (get_global $memcpy/base)
      )
      (i64.const 4919131679688438545)
     )
@@ -2070,7 +2070,7 @@
     (i64.eq
      (i64.load
       (i32.add
-       (i32.const 8)
+       (get_global $memcpy/base)
        (i32.const 8)
       )
      )
@@ -2092,7 +2092,7 @@
     (i64.eq
      (i64.load
       (i32.add
-       (i32.const 8)
+       (get_global $memcpy/base)
        (i32.const 16)
       )
      )
@@ -2114,7 +2114,7 @@
     (i64.eq
      (i64.load
       (i32.add
-       (i32.const 8)
+       (get_global $memcpy/base)
        (i32.const 24)
       )
      )

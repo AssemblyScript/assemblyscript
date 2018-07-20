@@ -54,7 +54,10 @@ abstract class ExportsWalker {
 
   /** Walks all exports and calls the respective handlers. */
   walk(): void {
-    for (let element of this.program.moduleLevelExports.values()) this.visitElement(element);
+    for (let moduleExport of this.program.moduleLevelExports.values()) {
+      // FIXME: doesn't honor the actual externally visible name
+      this.visitElement(moduleExport.element);
+    }
     var todo = this.todo;
     for (let i = 0; i < todo.length; ) this.visitElement(todo[i]);
   }

@@ -2,8 +2,8 @@
  (type $iv (func (param i32)))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
- (export "test" (func $class-extends/test))
  (export "memory" (memory $0))
+ (export "test" (func $class-extends/test))
  (func $class-extends/test (; 0 ;) (type $iv) (param $0 i32)
   (drop
    (i32.load

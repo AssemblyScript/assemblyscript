@@ -245,7 +245,7 @@ class Control {
 
 // TODO: should happen dynamically so it DCE's if all objects are unmanaged
 var GC = Control.create(HEAP_BASE);
-// var someObject = allocate_memory(64);
+// var someObject = memory.allocate(64);
 // GC.register(changetype<ObjectHeader>(someObject));
 
 // Exported interface
@@ -293,5 +293,5 @@ function gc_free_fn(control: Control, header: ObjectHeader): void {
     // array, string: free their data segments
     // TODO: might make sense to provide @finalize or similar
   // }
-  free_memory(changetype<usize>(header));
+  memory.free(changetype<usize>(header));
 }

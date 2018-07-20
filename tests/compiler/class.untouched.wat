@@ -11,8 +11,8 @@
  (global $HEAP_BASE i32 (i32.const 28))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s\00")
- (export "test" (func $class/test))
  (export "memory" (memory $0))
+ (export "test" (func $class/test))
  (start $start)
  (func $class/Animal.add (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.add

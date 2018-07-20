@@ -1,50 +1,26 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $iv (func (param i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
+ (type $iv (func (param i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (global $~argc (mut i32) (i32.const 0))
  (global $std/pointer/one (mut i32) (i32.const 0))
  (global $std/pointer/two (mut i32) (i32.const 0))
  (global $std/pointer/add (mut i32) (i32.const 0))
  (global $std/pointer/sub (mut i32) (i32.const 0))
  (global $std/pointer/nextOne (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 40))
+ (global $~argc (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\0e\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
+ (export "memory" (memory $0))
  (export "_setargc" (func $~setargc))
  (export "Pointer<Entry>#constructor" (func $std/pointer/Pointer<Entry>#constructor|trampoline))
- (export "memory" (memory $0))
  (start $start)
  (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (get_local $1)
  )
- (func $std/pointer/Pointer<Entry>#constructor|trampoline (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
-      (get_global $~argc)
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    (i32.const 0)
-   )
-  )
-  (call $std/pointer/Pointer<Entry>#constructor
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $~setargc (; 3 ;) (type $iv) (param $0 i32)
-  (set_global $~argc
-   (get_local $0)
-  )
- )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_global $std/pointer/one
@@ -431,6 +407,30 @@
     )
     (unreachable)
    )
+  )
+ )
+ (func $std/pointer/Pointer<Entry>#constructor|trampoline (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (block $1of1
+   (block $0of1
+    (block $outOfRange
+     (br_table $0of1 $1of1 $outOfRange
+      (get_global $~argc)
+     )
+    )
+    (unreachable)
+   )
+   (set_local $1
+    (i32.const 0)
+   )
+  )
+  (call $std/pointer/Pointer<Entry>#constructor
+   (get_local $0)
+   (get_local $1)
+  )
+ )
+ (func $~setargc (; 4 ;) (type $iv) (param $0 i32)
+  (set_global $~argc
+   (get_local $0)
   )
  )
 )

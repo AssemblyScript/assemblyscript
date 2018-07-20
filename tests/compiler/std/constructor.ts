@@ -46,7 +46,7 @@ var justFieldNoInit = new JustFieldNoInit();
 // explicit allocation with no extra checks
 class CtorReturns {
   constructor() {
-    return changetype<CtorReturns>(allocate_memory(0));
+    return changetype<CtorReturns>(memory.allocate(0));
   }
 }
 
@@ -58,7 +58,7 @@ var b: bool = true;
 class CtorConditionallyReturns {
   constructor() {
     if (b) {
-      return changetype<CtorConditionallyReturns>(allocate_memory(0));
+      return changetype<CtorConditionallyReturns>(memory.allocate(0));
     }
   }
 }

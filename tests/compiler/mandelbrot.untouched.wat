@@ -4,10 +4,11 @@
  (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
  (global $../../examples/mandelbrot/assembly/index/NUM_COLORS i32 (i32.const 2048))
+ (global $~lib/math/NativeMath.LN2 f64 (f64.const 0.6931471805599453))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
- (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
  (export "memory" (memory $0))
+ (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
  (func $~lib/math/NativeMath.log (; 0 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
@@ -309,7 +310,7 @@
    )
   )
  )
- (func $isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
    (f64.sub
     (get_local $0)
@@ -571,19 +572,19 @@
          )
         )
        )
-       (f64.const 0.6931471805599453)
+       (get_global $~lib/math/NativeMath.LN2)
       )
      )
      (set_local $17
       (if (result i32)
-       (call $isFinite<f64>
+       (call $~lib/builtins/isFinite<f64>
         (get_local $15)
        )
        (i32.trunc_u/f64
         (f64.mul
          (f64.convert_s/i32
           (i32.sub
-           (i32.const 2048)
+           (get_global $../../examples/mandelbrot/assembly/index/NUM_COLORS)
            (i32.const 1)
           )
          )
@@ -608,7 +609,7 @@
         )
        )
        (i32.sub
-        (i32.const 2048)
+        (get_global $../../examples/mandelbrot/assembly/index/NUM_COLORS)
         (i32.const 1)
        )
       )

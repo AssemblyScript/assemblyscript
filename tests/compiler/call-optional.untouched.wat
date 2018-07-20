@@ -26,8 +26,8 @@
   (block $2of2
    (block $1of2
     (block $0of2
-     (block $oob
-      (br_table $0of2 $1of2 $2of2 $oob
+     (block $outOfRange
+      (br_table $0of2 $1of2 $2of2 $outOfRange
        (i32.sub
         (get_global $~argc)
         (i32.const 1)

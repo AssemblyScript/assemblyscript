@@ -1,18 +1,18 @@
-export enum Implicit {
+export const enum Implicit {
   ZERO,
   ONE,
   TWO,
   THREE
 }
 
-export enum Explicit {
+export const enum Explicit {
   ZERO = 0,
   ONE = 0 + 1,
   TWO = 1 + 1,
   THREE = 3
 }
 
-export enum Mixed {
+export const enum Mixed {
   ZERO,
   ONE,
   THREE = 3,
@@ -23,12 +23,15 @@ function getZero(): i32 {
   return 0;
 }
 
-export enum NonConstant {
-  ZERO = getZero(), // cannot export a mutable global
-  ONE               // cannot export a mutable global (tsc doesn't allow this)
+enum NonConstant {
+  ZERO = getZero(),
+  ONE = getZero() + 1
 }
 
-export enum SelfReference {
+NonConstant.ZERO;
+NonConstant.ONE;
+
+export const enum SelfReference {
   ZERO,
   ONE = ZERO + 1
 }

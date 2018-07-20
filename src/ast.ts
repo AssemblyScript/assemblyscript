@@ -1122,7 +1122,8 @@ export enum DecoratorKind {
   UNMANAGED,
   SEALED,
   INLINE,
-  EXTERNAL
+  EXTERNAL,
+  BUILTIN
 }
 
 /** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
@@ -1132,6 +1133,10 @@ export function decoratorNameToKind(name: Expression): DecoratorKind {
     let nameStr = (<IdentifierExpression>name).text;
     assert(nameStr.length);
     switch (nameStr.charCodeAt(0)) {
+      case CharCode.b: {
+        if (nameStr == "builtin") return DecoratorKind.BUILTIN;
+        break;
+      }
       case CharCode.e: {
         if (nameStr == "external") return DecoratorKind.EXTERNAL;
         break;

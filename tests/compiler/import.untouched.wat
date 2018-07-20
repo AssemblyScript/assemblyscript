@@ -34,17 +34,17 @@
    (i32.add
     (i32.add
      (call $export/add
-      (i32.const 1)
-      (i32.const 2)
+      (get_global $export/a)
+      (get_global $export/b)
      )
      (call $export/sub
-      (i32.const 2)
-      (i32.const 3)
+      (get_global $export/b)
+      (get_global $export/c)
      )
     )
     (call $export/mul
-     (i32.const 3)
-     (i32.const 1)
+     (get_global $export/c)
+     (get_global $export/a)
     )
    )
   )
@@ -53,17 +53,17 @@
    (i32.add
     (i32.add
      (call $export/add
-      (i32.const 1)
-      (i32.const 2)
+      (get_global $export/a)
+      (get_global $export/b)
      )
      (call $export/sub
-      (i32.const 2)
-      (i32.const 3)
+      (get_global $export/b)
+      (get_global $export/c)
      )
     )
     (call $export/mul
-     (i32.const 3)
-     (i32.const 1)
+     (get_global $export/c)
+     (get_global $export/a)
     )
    )
   )

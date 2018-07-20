@@ -67,8 +67,8 @@
  (func $function-types/makeAndAdd<i32>|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
+    (block $outOfRange
+     (br_table $0of1 $1of1 $outOfRange
       (i32.sub
        (get_global $~argc)
        (i32.const 2)
