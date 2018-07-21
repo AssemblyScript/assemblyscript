@@ -10,13 +10,13 @@ import {
 /** Obtains the default comparator for the specified type. */
 @inline
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
-  if (isInteger<T>()) {
+  if (isInteger<T>() && isSigned<T>()) {
     return (a: T, b: T): i32 => {
       // JavaScript by default casting all values to string
       // so for emulate this we use trick below
       // TODO can we do better?
       var t = a - b;
-      return select<i32>(-t, t, a & b & 0x80000000);
+      return select<T>(-t, t, a & b & (1 << 8 * sizeof<T>() - 1));
     };
   } else if (isFloat<T>()) {
     return (a: T, b: T): i32 => {

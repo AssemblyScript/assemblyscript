@@ -612,12 +612,23 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assertSorted<T>(arr, defaultComparator<T>());
 }
 
-var reversed0: Array<i32> = [];
-var reversed1: Array<i32> = [1];
-var reversed2: Array<i32> = [2, 1];
-var reversed4: Array<i32> = [3, 2, 1, 0];
+var f64Array: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, -1.0, -2.0, +Infinity];
+f64Array.sort();
+assert(isArraysEqual<f64>(f64Array, <f64[]>[-1.0, -2.0, -Infinity, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
 
-var expected4: Array<i32> = [0, 1, 2, 3];
+var i32Array: i32[] = [1, -2, 0, -1, 2];
+i32Array.sort();
+assert(isArraysEqual<i32>(i32Array, <i32[]>[-1, -2, 0, 1, 2]));
+
+var u32Array: u32[] = [1, -2, 0, -1, 2];
+u32Array.sort();
+assert(isArraysEqual<u32>(u32Array, <u32[]>[0, 1, 2, 4294967294, 4294967295]));
+
+var reversed0: i32[] = [];
+var reversed1: i32[] = [1];
+var reversed2: i32[] = [2, 1];
+var reversed4: i32[] = [3, 2, 1, 0];
+var expected4: i32[] = [0, 1, 2, 3];
 
 var reversed64    = createReverseOrderedArray(64);
 var reversed128   = createReverseOrderedArray(128);
@@ -625,10 +636,6 @@ var reversed1024  = createReverseOrderedArray(1024);
 var reversed10000 = createReverseOrderedArray(10000);
 
 var randomized512 = createRandomOrderedArray(512);
-
-var floatArray: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, -1.0, -2.0, +Infinity];
-floatArray.sort();
-assert(isArraysEqual<f64>(floatArray, <f64[]>[-1.0, -2.0, -Infinity, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
 
 // Test sorting with with default comparator
 
