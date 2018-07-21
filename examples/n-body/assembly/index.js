@@ -7,6 +7,7 @@ const compiled = new WebAssembly.Module(
 
 const imports = {
   env: {
+    memory: new WebAssembly.Memory({ initial: 10 }),
     abort: (filename, line, column) => {
       throw Error("abort called at " + line + ":" + colum);
     }

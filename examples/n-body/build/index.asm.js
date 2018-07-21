@@ -341,19 +341,6 @@ function asmFunc(global, env, buffer) {
   assembly_index_system = assembly_index_NBodySystem_constructor(0 | 0, $1 | 0) | 0;
  }
  
- function assembly_index_getBody($0) {
-  $0 = $0 | 0;
-  var $1 = 0, $22 = 0, $20 = 0;
-  $1 = HEAPU32[assembly_index_system >> 2] | 0;
-  if ($0 >>> 0 < (HEAP32[($1 + 4 | 0) >> 2] | 0) >>> 0) {
-   $1 = HEAPU32[$1 >> 2] | 0;
-   if ($0 >>> 0 < ((HEAP32[$1 >> 2] | 0) >>> 2 | 0) >>> 0) $20 = HEAPU32[(($1 + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0; else abort();
-   $22 = $20;
-  } else $22 = 0;
-  $0 = $22;
-  return $0 | 0;
- }
- 
  function assembly_index_NBodySystem_advance($0, $1) {
   $0 = $0 | 0;
   $1 = +$1;
@@ -533,7 +520,6 @@ function asmFunc(global, env, buffer) {
    }
   }), 
   init: assembly_index_init, 
-  getBody: assembly_index_getBody, 
   step: assembly_index_step, 
   bench: assembly_index_bench
  };
