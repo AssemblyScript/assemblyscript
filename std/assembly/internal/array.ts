@@ -13,7 +13,7 @@ export function defaultComparator<T>(): (a: T, b: T) => i32 {
   if (isReference<T>()) {
     return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
   } else {
-    return (a: T, b: T): i32 => a - b;
+    return (a: T, b: T): i32 => <i32>(a - b);
   }
 }
 
