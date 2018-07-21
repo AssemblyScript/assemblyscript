@@ -19,10 +19,7 @@ assert(String.fromCharCode(0x10000 + 54) == "6");
 
 assert(String.fromCodePoint(0) == "\0");
 assert(String.fromCodePoint(54) == "6");
-assert(String.fromCodePoint(0x1D306), '\uD834\uDF06');
-assert(String.fromCodePoint(0x1D306, 0, 0), '\uD834\uDF06\u0000\u0000');
-assert(String.fromCodePoint(0x1D306, 0x61, 0x1D307), '\uD834\uDF06a\uD834\uDF07');
-assert(String.fromCodePoint(0x61, 0x62, 0x1D307), 'ab\uD834\uDF07');
+assert(String.fromCodePoint(0x1D306), "\uD834\uDF06");
 
 assert(str.startsWith("hi"));
 assert(str.endsWith("string"));
@@ -95,7 +92,7 @@ assert("" >= "");
 assert("" <= "");
 
 var a = String.fromCodePoint(0xFF61);
-var b = String.fromCodePoint(0xD800, 0xDC02);
+var b = String.fromCodePoint(0xD800) + String.fromCodePoint(0xDC02);
 assert(a > b);
 
 assert("123".length == 3);

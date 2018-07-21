@@ -27,32 +27,17 @@ export class String {
     return out;
   }
 
-  static fromCodePoint(code: i32, code1: i32 = -1, code2: i32 = -1): String {
-    assert(
-      <u32>code <= 0x10FFFF &&
-      (code1 >= -1 && code1 <= 0x10FFFF) &&
-      (code2 >= -1 && code2 <= 0x10FFFF)
-    ); // Invalid code point range
-
-    var hasSurr  = <i32>(code  > 0xFFFF);
-    var hasSurr1 = <i32>(code1 > 0xFFFF);
-    var hasSurr2 = <i32>(code2 > 0xFFFF);
-
-    var len = 1;
-    len += hasSurr;
-    len += hasSurr1 + <i32>(code1 != -1);
-    len += hasSurr2 + <i32>(code2 != -1);
-
+  static fromCodePoint(code: i32): String {
+    assert(<u32>code <= 0x10FFFF); // Invalid code point range
+    var hasSurr = <i32>(code  > 0xFFFF);
+    var len = 1 + hasSurr;
     var out = allocate(len);
-    var offset: usize = 0;
-
     if (!hasSurr) {
       store<u16>(
         changetype<usize>(out),
         <u16>code,
         HEADER_SIZE
       );
-      offset += 2;
     } else {
       code -= 0x10000;
       let hi: u32 = (code >>> 10)  + 0xD800;
@@ -62,48 +47,7 @@ export class String {
         (hi << 16) | lo,
         HEADER_SIZE
       );
-      offset += 4;
     }
-    if (code1 == -1) return out;
-
-    if (!hasSurr1) {
-      store<u16>(
-        changetype<usize>(out) + offset,
-        <u16>code1,
-        HEADER_SIZE
-      );
-      offset += 2;
-    } else {
-      code1 -= 0x10000;
-      let hi: u32 = (code1 >>> 10)  + 0xD800;
-      let lo: u32 = (code1 & 0x3FF) + 0xDC00;
-      store<u32>(
-        changetype<usize>(out) + offset,
-        (hi << 16) | lo,
-        HEADER_SIZE
-      );
-      offset += 4;
-    }
-    if (code2 == -1) return out;
-
-    if (!hasSurr2) {
-      store<u16>(
-        changetype<usize>(out) + offset,
-        <u16>code2,
-        HEADER_SIZE
-      );
-      offset += 2;
-    } else {
-      code2 -= 0x10000;
-      let hi: u32 = (code2 >>> 10)  + 0xD800;
-      let lo: u32 = (code2 & 0x3FF) + 0xDC00;
-      store<u32>(
-        changetype<usize>(out) + offset,
-        (hi << 16) | lo,
-        HEADER_SIZE
-      );
-    }
-
     return out;
   }
 
