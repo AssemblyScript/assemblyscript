@@ -41,9 +41,23 @@ export function defaultComparator<T>(): (a: T, b: T) => i32 {
 export function defaultComparatorTyped<T>(): (a: T, b: T) => i32 {
   if (isFloat<T>()) {
     return (a: T, b: T): T => {
+      /*
       if (isNaN(a)) return +1;
       if (isNaN(b)) return -1;
       return <i32>(a > b) - <i32>(a < b);
+      */
+      if (sizeof<T>() == 4) {
+        var ia = reinterpret<u32>(a); /* tslint:disable-line */
+        var ib = reinterpret<u32>(b); /* tslint:disable-line */
+        ia ^= -(ia >>> 31) & 0x7FFFFFFF;
+        ib ^= -(ib >>> 31) & 0x7FFFFFFF;
+      } else {
+        var ia = reinterpret<u64>(a); /* tslint:disable-line */
+        var ib = reinterpret<u64>(b); /* tslint:disable-line */
+        ia ^= -(ia >>> 63) & 0x7FFFFFFFFFFFFFFF;
+        ib ^= -(ib >>> 63) & 0x7FFFFFFFFFFFFFFF;
+      }
+      return ia - ib;
     };
   } else {
     return (a: T, b: T): i32 => <i32>(a - b);
