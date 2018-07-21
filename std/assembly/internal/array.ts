@@ -18,20 +18,17 @@ export function defaultComparator<T>(): (a: T, b: T) => i32 {
       var t = a - b;
       return select<i32>(-t, t, a & b & 0x80000000);
     };
-  } else if (isFloat<T>() && sizeof<T>() == 4) {
+  } else if (isFloat<T>()) {
     return (a: T, b: T): i32 => {
       // JavaScript by default casting all values to string
       // so for emulate this we use trick below
-      var ia = reinterpret<i32>(a);
-      var ib = reinterpret<i32>(b);
-      return <i32>(ia > ib) - <i32>(ia < ib);
-    };
-  } else if (isFloat<T>() && sizeof<T>() == 8) {
-    return (a: T, b: T): i32 => {
-      // JavaScript by default casting all values to string
-      // so for emulate this we use trick below
-      var ia = reinterpret<i64>(a);
-      var ib = reinterpret<i64>(b);
+      if (sizeof<T>() == 4) {
+        var ia = reinterpret<i32>(a);
+        var ib = reinterpret<i32>(b);
+      } else {
+        var ia = reinterpret<i64>(a);
+        var ib = reinterpret<i64>(b);
+      }
       return <i32>(ia > ib) - <i32>(ia < ib);
     };
   } else {
