@@ -12,6 +12,18 @@ import {
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
     return (a: T, b: T): i32 => (<i32>a - <i32>b);
+  } else if (isFloat<T>() && sizeof<T>() == 4) {
+    return (a: T, b: T): i32 => {
+      var ua = reinterpret<i32>(a);
+      var ub = reinterpret<i32>(b);
+      return <i32>(ua > ub) - <i32>(ua < ub);
+    };
+  } else if (isFloat<T>() && sizeof<T>() == 8) {
+    return (a: T, b: T): i32 => {
+      var ua = reinterpret<i64>(a);
+      var ub = reinterpret<i64>(b);
+      return <i32>(ua > ub) - <i32>(ua < ub);
+    };
   } else {
     return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
   }

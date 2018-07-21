@@ -537,8 +537,15 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
     if (a.length != b.length) return false;
     len = a.length;
   }
-  for (let i = 0; i < len; i++) {
-    if (a[i] != b[i]) return false;
+  if (isFloat<T>()) {
+    for (let i = 0; i < len; i++) {
+      if (isNaN(a[i]) == isNaN(b[i])) continue;
+      if (a[i] != b[i]) return false;
+    }
+  } else {
+    for (let i = 0; i < len; i++) {
+      if (a[i] != b[i]) return false;
+    }
   }
   return true;
 }
@@ -622,6 +629,10 @@ var reversed1024  = createReverseOrderedArray(1024);
 var reversed10000 = createReverseOrderedArray(10000);
 
 var randomized512 = createRandomOrderedArray(512);
+
+var floatArray: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, +Infinity];
+floatArray.sort();
+assert(isArraysEqual<f64>(floatArray, <f64[]>[-Infinity, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
 
 // Test sorting with with default comparator
 
