@@ -2386,6 +2386,7 @@ export class Parser extends DiagnosticEmitter {
       let state = tn.mark();
       let statement = this.parseStatement(tn, topLevel);
       if (!statement) {
+        if (tn.token == Token.ENDOFFILE) return null;
         tn.reset(state);
         this.skipStatement(tn);
       } else {
@@ -3176,10 +3177,17 @@ export class Parser extends DiagnosticEmitter {
         return this.parseClassExpression(tn);
       }
       default: {
-        this.error(
-          DiagnosticCode.Expression_expected,
-          tn.range()
-        );
+        if (token == Token.ENDOFFILE) {
+          this.error(
+            DiagnosticCode.Unexpected_end_of_text,
+            tn.range(startPos)
+          );
+        } else {
+          this.error(
+            DiagnosticCode.Expression_expected,
+            tn.range()
+          );
+        }
         return null;
       }
     }
