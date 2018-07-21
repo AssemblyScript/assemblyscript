@@ -6527,9 +6527,26 @@
   (i32.const 1)
  )
  (func $std/array/assertSortedDefault<i32>~anonymous|43 (; 97 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.sub
-   (get_local $0)
-   (get_local $1)
+  (local $2 i32)
+  (set_local $2
+   (i32.sub
+    (get_local $0)
+    (get_local $1)
+   )
+  )
+  (select
+   (i32.sub
+    (i32.const 0)
+    (get_local $2)
+   )
+   (get_local $2)
+   (i32.and
+    (i32.and
+     (get_local $0)
+     (get_local $1)
+    )
+    (i32.const -2147483648)
+   )
   )
  )
  (func $~lib/internal/array/insertionSort<i32> (; 98 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)

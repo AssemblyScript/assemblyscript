@@ -11,21 +11,45 @@ import {
 @inline
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
-    return (a: T, b: T): i32 => <i32>(a - b);
+    return (a: T, b: T): i32 => {
+      // JavaScript by default casting all values to string
+      // so for emulate this we use trick below
+      // TODO can we improve this?
+      var t = a - b;
+      return select<i32>(-t, t, a & b & 0x80000000);
+    };
   } else if (isFloat<T>() && sizeof<T>() == 4) {
     return (a: T, b: T): i32 => {
+      // JavaScript by default casting all values to string
+      // so for emulate this we use trick below
       var ia = reinterpret<i32>(a);
       var ib = reinterpret<i32>(b);
       return <i32>(ia > ib) - <i32>(ia < ib);
     };
   } else if (isFloat<T>() && sizeof<T>() == 8) {
     return (a: T, b: T): i32 => {
+      // JavaScript by default casting all values to string
+      // so for emulate this we use trick below
       var ia = reinterpret<i64>(a);
       var ib = reinterpret<i64>(b);
       return <i32>(ia > ib) - <i32>(ia < ib);
     };
   } else {
     return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
+  }
+}
+
+/** Obtains the default comparator for the typed arrays which behave differently. */
+@inline
+export function defaultComparatorTyped<T>(): (a: T, b: T) => T {
+  if (isFloat<T>()) {
+    return (a: T, b: T): T => {
+      if (isNaN(a)) return +1.0;
+      if (isNaN(b)) return -1.0;
+      return <T>((a > b) - (a < b));
+    };
+  } else {
+    return (a: T, b: T): T => a - b;
   }
 }
 
