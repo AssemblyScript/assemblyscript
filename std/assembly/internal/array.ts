@@ -14,15 +14,15 @@ export function defaultComparator<T>(): (a: T, b: T) => i32 {
     return (a: T, b: T): i32 => <i32>(a - b);
   } else if (isFloat<T>() && sizeof<T>() == 4) {
     return (a: T, b: T): i32 => {
-      var ua = reinterpret<i32>(a);
-      var ub = reinterpret<i32>(b);
-      return <i32>(ua > ub) - <i32>(ua < ub);
+      var ia = reinterpret<i32>(a);
+      var ib = reinterpret<i32>(b);
+      return <i32>(ia > ib) - <i32>(ia < ib);
     };
   } else if (isFloat<T>() && sizeof<T>() == 8) {
     return (a: T, b: T): i32 => {
-      var ua = reinterpret<i64>(a);
-      var ub = reinterpret<i64>(b);
-      return <i32>(ua > ub) - <i32>(ua < ub);
+      var ia = reinterpret<i64>(a);
+      var ib = reinterpret<i64>(b);
+      return <i32>(ia > ib) - <i32>(ia < ib);
     };
   } else {
     return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
