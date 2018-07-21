@@ -11,7 +11,7 @@ import {
 @inline
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
-    return (a: T, b: T): i32 => (<i32>a - <i32>b);
+    return (a: T, b: T): i32 => <i32>(a - b);
   } else if (isFloat<T>() && sizeof<T>() == 4) {
     return (a: T, b: T): i32 => {
       var ua = reinterpret<i32>(a);
