@@ -47,8 +47,8 @@
  (global $std/array/randomized257 (mut i32) (i32.const 0))
  (global $std/array/reversedNested512 (mut i32) (i32.const 0))
  (global $std/array/reversedElements512 (mut i32) (i32.const 0))
- (global $std/array/randomStringsActual (mut i32) (i32.const 696))
- (global $std/array/randomStringsExpected (mut i32) (i32.const 768))
+ (global $std/array/randomStringsActual (mut i32) (i32.const 824))
+ (global $std/array/randomStringsExpected (mut i32) (i32.const 896))
  (global $std/array/randomStrings400 (mut i32) (i32.const 0))
  (table 52 52 anyfunc)
  (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|2 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|16 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $start~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27 $start~anonymous|28 $start~anonymous|28 $start~anonymous|30 $start~anonymous|31 $start~anonymous|32 $start~anonymous|28 $start~anonymous|34 $start~anonymous|28 $start~anonymous|28 $start~anonymous|30 $start~anonymous|31 $start~anonymous|32 $start~anonymous|28 $start~anonymous|34 $~lib/array/Array<f64>#sort|trampoline~anonymous|42 $std/array/assertSortedDefault<i32>~anonymous|43 $std/array/assertSortedDefault<i32>~anonymous|43 $start~anonymous|45 $std/array/assertSortedDefault<i32>~anonymous|43 $start~anonymous|45 $start~anonymous|48 $start~anonymous|49 $start~anonymous|50 $start~anonymous|50)
@@ -63,23 +63,23 @@
  (data (i32.const 384) "\88\01\00\00\04\00\00\00\10\00\00\00\00\00\00\00\03\00\00\00\02\00\00\00\01")
  (data (i32.const 424) "\b0\01\00\00\04\00\00\00\10")
  (data (i32.const 444) "\01\00\00\00\02\00\00\00\03")
- (data (i32.const 464) "\d8\01\00\00\06\00\00\000")
+ (data (i32.const 464) "\d8\01\00\00\08\00\00\00@")
  (data (i32.const 486) "\f0?\00\00\00\00\00\00\f8\7f\00\00\00\00\00\00\f0\ff\05\00\00\00\00\00\f0?")
- (data (i32.const 526) "\f0\7f")
- (data (i32.const 536) " \02\00\00\06\00\00\000")
- (data (i32.const 558) "\f0\ff")
- (data (i32.const 574) "\f0?\05\00\00\00\00\00\f0?\00\00\00\00\00\00\f0\7f\00\00\00\00\00\00\f8\7f")
- (data (i32.const 608) "h\02\00\00\01\00\00\00\04\00\00\00\00\00\00\00\01")
- (data (i32.const 632) "\80\02\00\00\02\00\00\00\08\00\00\00\00\00\00\00\01\00\00\00\02")
- (data (i32.const 656) "\01\00\00\00a")
- (data (i32.const 664) "\01\00\00\00b")
- (data (i32.const 672) "\02\00\00\00a\00b")
- (data (i32.const 680) "\02\00\00\00b\00a")
- (data (i32.const 696) "\c0\02\00\00\07\00\00\00\1c\00\00\00\00\00\00\00\90\02\00\00\98\02\00\00\90\02\00\00\a0\02\00\00\a8\02\00\00\b0\02")
- (data (i32.const 768) "\08\03\00\00\07\00\00\00\1c\00\00\00\00\00\00\00\b0\02\00\00\90\02\00\00\90\02\00\00\a0\02\00\00\98\02\00\00\a8\02")
- (data (i32.const 840) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 872) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 924) "\04\00\00\00n\00u\00l\00l")
+ (data (i32.const 526) "\f0\bf\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f0\7f")
+ (data (i32.const 600) "`\02\00\00\08\00\00\00@")
+ (data (i32.const 622) "\f0\bf\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f0\ff")
+ (data (i32.const 654) "\f0?\05\00\00\00\00\00\f0?\00\00\00\00\00\00\f0\7f\00\00\00\00\00\00\f8\7f")
+ (data (i32.const 736) "\e8\02\00\00\01\00\00\00\04\00\00\00\00\00\00\00\01")
+ (data (i32.const 761) "\03\00\00\02\00\00\00\08\00\00\00\00\00\00\00\01\00\00\00\02")
+ (data (i32.const 784) "\01\00\00\00a")
+ (data (i32.const 792) "\01\00\00\00b")
+ (data (i32.const 800) "\02\00\00\00a\00b")
+ (data (i32.const 808) "\02\00\00\00b\00a")
+ (data (i32.const 824) "@\03\00\00\07\00\00\00\1c\00\00\00\00\00\00\00\10\03\00\00\18\03\00\00\10\03\00\00 \03\00\00(\03\00\000\03")
+ (data (i32.const 896) "\88\03\00\00\07\00\00\00\1c\00\00\00\00\00\00\000\03\00\00\10\03\00\00\10\03\00\00 \03\00\00\18\03\00\00(\03")
+ (data (i32.const 968) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 1000) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 1052) "\04\00\00\00n\00u\00l\00l")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -6684,7 +6684,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 872)
+     (i32.const 1000)
      (i32.const 25)
      (i32.const 2)
     )
@@ -6716,7 +6716,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 840)
+     (i32.const 968)
      (i32.const 29)
      (i32.const 4)
     )
@@ -6731,7 +6731,7 @@
     )
    )
    (return
-    (i32.const 688)
+    (i32.const 816)
    )
   )
   (i32.store16 offset=4
@@ -6763,7 +6763,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 840)
+     (i32.const 968)
      (i32.const 85)
      (i32.const 4)
     )
@@ -6775,7 +6775,7 @@
     (get_local $1)
    )
    (set_local $1
-    (i32.const 924)
+    (i32.const 1052)
    )
   )
   (if
@@ -6796,7 +6796,7 @@
     )
    )
    (return
-    (i32.const 688)
+    (i32.const 816)
    )
   )
   (call $~lib/memory/memory.copy
@@ -6844,7 +6844,7 @@
     (get_local $0)
    )
    (set_local $0
-    (i32.const 924)
+    (i32.const 1052)
    )
   )
   (call $~lib/string/String#concat
@@ -6856,7 +6856,7 @@
   (local $1 i32)
   (local $2 i32)
   (set_local $1
-   (i32.const 688)
+   (i32.const 816)
   )
   (block $break|0
    (loop $repeat|0
@@ -6943,7 +6943,7 @@
  )
  (func $start (; 111 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 936)
+   (i32.const 1064)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
@@ -9945,7 +9945,7 @@
    (i32.eqz
     (call $std/array/isArraysEqual<f64>
      (get_global $std/array/floatArray)
-     (i32.const 536)
+     (i32.const 600)
      (i32.const 0)
     )
    )
@@ -9969,7 +9969,7 @@
    (i32.eqz
     (call $std/array/isArraysEqual<i32>
      (get_global $std/array/reversed1)
-     (i32.const 608)
+     (i32.const 736)
      (i32.const 0)
     )
    )
@@ -9990,7 +9990,7 @@
    (i32.eqz
     (call $std/array/isArraysEqual<i32>
      (get_global $std/array/reversed2)
-     (i32.const 632)
+     (i32.const 760)
      (i32.const 0)
     )
    )

@@ -626,9 +626,9 @@ var reversed10000 = createReverseOrderedArray(10000);
 
 var randomized512 = createRandomOrderedArray(512);
 
-var floatArray: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, +Infinity];
+var floatArray: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, -1.0, -2.0, +Infinity];
 floatArray.sort();
-assert(isArraysEqual<f64>(floatArray, <f64[]>[-Infinity, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
+assert(isArraysEqual<f64>(floatArray, <f64[]>[-1.0, -2.0, -Infinity, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
 
 // Test sorting with with default comparator
 
