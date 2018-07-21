@@ -406,6 +406,14 @@
     (unreachable)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (return
+    (i32.const 112)
+   )
+  )
   (set_local $1
    (call $~lib/internal/string/allocate
     (i32.add

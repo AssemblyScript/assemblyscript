@@ -29,10 +29,10 @@ export class String {
 
   static fromCodePoint(code: i32): String {
     assert(<u32>code <= 0x10FFFF); // Invalid code point range
-    var hasSurr = <i32>(code  > 0xFFFF);
-    var len = 1 + hasSurr;
-    var out = allocate(len);
-    if (!hasSurr) {
+    if (!code) return changetype<String>("\0");
+    var sur = code > 0xFFFF;
+    var out = allocate(<i32>sur + 1);
+    if (!sur) {
       store<u16>(
         changetype<usize>(out),
         <u16>code,
