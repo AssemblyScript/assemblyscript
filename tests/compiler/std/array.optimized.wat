@@ -5130,6 +5130,7 @@
  )
  (func $std/array/isArraysEqual<f64> (; 80 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   (if
    (i32.eqz
     (get_local $2)
@@ -5164,21 +5165,34 @@
        (get_local $2)
       )
      )
-     (br_if $continue|0
-      (i32.eq
+     (if
+      (tee_local $4
        (call $~lib/builtins/isNaN<f64>
         (call $~lib/array/Array<f64>#__get
          (get_local $0)
          (get_local $3)
         )
        )
-       (call $~lib/builtins/isNaN<f64>
-        (call $~lib/array/Array<f64>#__get
-         (get_local $1)
-         (get_local $3)
+      )
+      (set_local $4
+       (i32.eq
+        (call $~lib/builtins/isNaN<f64>
+         (call $~lib/array/Array<f64>#__get
+          (get_local $0)
+          (get_local $3)
+         )
+        )
+        (call $~lib/builtins/isNaN<f64>
+         (call $~lib/array/Array<f64>#__get
+          (get_local $1)
+          (get_local $3)
+         )
         )
        )
       )
+     )
+     (br_if $continue|0
+      (get_local $4)
      )
      (if
       (f64.ne
