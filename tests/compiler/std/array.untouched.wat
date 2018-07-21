@@ -5472,14 +5472,8 @@
  )
  (func $std/array/assertSortedDefault<i32>~anonymous|42 (; 86 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
-   (i32.gt_s
-    (get_local $0)
-    (get_local $1)
-   )
-   (i32.lt_s
-    (get_local $0)
-    (get_local $1)
-   )
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $~lib/internal/array/insertionSort<i32> (; 87 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -6429,7 +6423,9 @@
   (call $std/array/assertSorted<i32>
    (get_local $0)
    (block $~lib/internal/array/defaultComparator<i32>|inlined.0 (result i32)
-    (i32.const 42)
+    (br $~lib/internal/array/defaultComparator<i32>|inlined.0
+     (i32.const 42)
+    )
    )
   )
  )
