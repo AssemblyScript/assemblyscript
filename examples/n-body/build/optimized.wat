@@ -19,6 +19,7 @@
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "bench" (func $assembly/index/bench))
+ (export "getBody" (func $assembly/index/getBody))
  (start $start)
  (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1356,7 +1357,50 @@
    )
   )
  )
- (func $start (; 11 ;) (type $v)
+ (func $assembly/index/getBody (; 11 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (tee_local $0
+   (if (result i32)
+    (i32.lt_u
+     (get_local $0)
+     (i32.load offset=4
+      (tee_local $1
+       (i32.load
+        (get_global $assembly/index/system)
+       )
+      )
+     )
+    )
+    (if (result i32)
+     (i32.lt_u
+      (get_local $0)
+      (i32.shr_u
+       (i32.load
+        (tee_local $1
+         (i32.load
+          (get_local $1)
+         )
+        )
+       )
+       (i32.const 2)
+      )
+     )
+     (i32.load offset=8
+      (i32.add
+       (get_local $1)
+       (i32.shl
+        (get_local $0)
+        (i32.const 2)
+       )
+      )
+     )
+     (unreachable)
+    )
+    (i32.const 0)
+   )
+  )
+ )
+ (func $start (; 12 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 40)
   )

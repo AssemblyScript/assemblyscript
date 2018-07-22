@@ -35,21 +35,23 @@ var state = State.INIT;
 var white = 0;
 
 // From and to spaces
-var from: ManagedObjectSet;
-var to: ManagedObjectSet;
+var from: ManagedObjectList;
+var to: ManagedObjectList;
 var iter: ManagedObject;
 
 // ╒═══════════════ Managed object layout (32-bit) ════════════════╕
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
-// ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┤      ┐
-// │                              next                       │  F  │ ◄─┐ = nextWithFlags
-// ├─────────────────────────────────────────────────────────┴─────┤   │ usize
+// ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┼─┴─┤      ┐
+// │                              next                       │0│ C │ ◄─┐ = nextWithColor
+// ├─────────────────────────────────────────────────────────┴─┴───┤   │ usize
 // │                              prev                             │ ◄─┘
-// ╞═══════════════════════════════════════════════════════════════╡ SIZE ┘
+// ├───────────────────────────────────────────────────────────────┤
+// │                             visitFn                           │
+// ╞═══════════════════════════════════════════════════════════════╡ SIZE ┘ ◄─ user-space reference
 // │                          ... data ...                         │
 // └───────────────────────────────────────────────────────────────┘
-// F: flags
+// C: color
 
 /** Represents a managed object in memory, consisting of a header followed by the object's data. */
 @unmanaged
@@ -61,18 +63,18 @@ class ManagedObject {
   /** Pointer to the previous object. */
   prev: ManagedObject;
 
-  /** Visitor function called with the payload reference. */
+  /** Visitor function called with the user-space reference. */
   visitFn: (ref: usize) => void;
 
   /** Size of a managed object after alignment. */
   static readonly SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
 
-  /** Gets the pointer to the next object in the list. */
+  /** Gets the pointer to the next object. */
   get next(): ManagedObject {
     return changetype<ManagedObject>(this.nextWithColor & ~3);
   }
 
-  /** Sets the pointer to the next object in the list. */
+  /** Sets the pointer to the next object. */
   set next(obj: ManagedObject) {
     this.nextWithColor = changetype<usize>(obj) | (this.nextWithColor & 3);
   }
@@ -107,9 +109,9 @@ class ManagedObject {
   }
 }
 
-/** A set of managed objects. Used for the from and to spaces. */
+/** A list of managed objects. Used for the from and to spaces. */
 @unmanaged
-class ManagedObjectSet extends ManagedObject {
+class ManagedObjectList extends ManagedObject {
 
   /** Inserts an object. */
   push(obj: ManagedObject): void {
@@ -135,10 +137,10 @@ function step(): void {
   switch (state) {
     case State.INIT: {
       if (TRACE) trace("gc~step/INIT");
-      from = changetype<ManagedObjectSet>(memory.allocate(ManagedObject.SIZE));
+      from = changetype<ManagedObjectList>(memory.allocate(ManagedObject.SIZE));
       from.visitFn = changetype<(ref: usize) => void>(<u32>-1); // would error
       from.clear();
-      to = changetype<ManagedObjectSet>(memory.allocate(ManagedObject.SIZE));
+      to = changetype<ManagedObjectList>(memory.allocate(ManagedObject.SIZE));
       to.visitFn = changetype<(ref: usize) => void>(<u32>-1); // would error
       to.clear();
       iter = to;
