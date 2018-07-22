@@ -6,6 +6,12 @@ import {
   storeUnsafeWithOffset
 } from "./arraybuffer";
 
+import {
+  insertionSort,
+  weakHeapSort,
+  defaultComparatorTyped
+} from "./array";
+
 /** Typed array base class. Not a global object. */
 export abstract class TypedArray<T,V> {
 
@@ -70,4 +76,35 @@ export abstract class TypedArray<T,V> {
     store<i32>(slice, end << alignof<T>(), offsetof<this>("byteLength"));
     return changetype<this>(slice);
   }
+
+  /* TODO
+  sort(comparator: (a: T, b: T) => i32 = defaultComparatorTyped<T>()): this {
+    // TODO remove this when flow will allow trackcing null
+    assert(comparator); // The comparison function must be a function
+
+    var byteOffset = this.byteOffset;
+    var length = this.length;
+    if (length <= 1) return this;
+    var buffer = this.buffer;
+    if (length == 2) {
+      let a = loadUnsafeWithOffset<T,T>(buffer, 1, byteOffset);
+      let b = loadUnsafeWithOffset<T,T>(buffer, 0, byteOffset);
+      if (comparator(a, b) < 0) {
+        storeUnsafeWithOffset<T,T>(buffer, 1, b, byteOffset);
+        storeUnsafeWithOffset<T,T>(buffer, 0, a, byteOffset);
+      }
+      return this;
+    }
+
+    if (isReference<T>()) {
+      // TODO replace this to faster stable sort (TimSort) when it implemented
+      return changetype<this>(insertionSort<T>(this, comparator));
+    } else {
+      return changetype<this>(length < 256
+        ? insertionSort<T>(this, comparator)
+        : weakHeapSort<T>(this, comparator)
+      );
+    }
+  }
+  */
 }
