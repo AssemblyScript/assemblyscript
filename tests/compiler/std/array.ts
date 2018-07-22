@@ -1,6 +1,6 @@
 import "allocator/arena";
 import { Array } from "array";
-import { defaultComparator } from "internal/array";
+import { defaultComparator, defaultComparatorTyped } from "internal/array";
 
 // Obtains the internal capacity of an array from its backing buffer.
 function internalCapacity<T>(array: Array<T>): i32 {
@@ -620,9 +620,21 @@ var i32Array: i32[] = [1, -2, 0, -1, 2];
 i32Array.sort();
 assert(isArraysEqual<i32>(i32Array, <i32[]>[-1, -2, 0, 1, 2]));
 
-var u32Array: u32[] = [1, -2, 0, -1, 2];
+var u32Array: u32[] = [1, 4294967295, 0, 4294967294, 2];
 u32Array.sort();
 assert(isArraysEqual<u32>(u32Array, <u32[]>[0, 1, 2, 4294967294, 4294967295]));
+
+var f64ArrayTyped: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, -1.0, -2.0, +Infinity];
+f64ArrayTyped.sort(defaultComparatorTyped<f64>());
+assert(isArraysEqual<f64>(f64ArrayTyped, <f64[]>[-Infinity, -2.0, -1.0, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
+
+var i32ArrayTyped: i32[] = [1, -2, -1, 0, 2];
+i32ArrayTyped.sort(defaultComparatorTyped<i32>());
+assert(isArraysEqual<i32>(i32ArrayTyped, <i32[]>[-2, -1, 0, 1, 2]));
+
+var u32ArrayTyped: u32[] = [1, 4294967295, 4294967294, 0, 2];
+u32ArrayTyped.sort(defaultComparatorTyped<u32>());
+assert(isArraysEqual<u32>(u32ArrayTyped, <u32[]>[0, 1, 2, 4294967294, 4294967295]));
 
 var reversed0: i32[] = [];
 var reversed1: i32[] = [1];
