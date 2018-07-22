@@ -154,7 +154,7 @@
    )
   )
  )
- (func $~lib/collector/itcm/ManagedObjectSet#clear (; 4 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 4 ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (get_local $0)
@@ -219,7 +219,7 @@
    (get_local $1)
   )
  )
- (func $~lib/collector/itcm/ManagedObjectSet#push (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (set_local $2
    (i32.load offset=4
@@ -258,7 +258,7 @@
   (call $~lib/collector/itcm/ManagedObject#unlink
    (get_local $0)
   )
-  (call $~lib/collector/itcm/ManagedObjectSet#push
+  (call $~lib/collector/itcm/ManagedObjectList#push
    (get_global $~lib/collector/itcm/to)
    (get_local $0)
   )
@@ -378,7 +378,7 @@
         (get_global $~lib/collector/itcm/from)
         (i32.const -1)
        )
-       (call $~lib/collector/itcm/ManagedObjectSet#clear
+       (call $~lib/collector/itcm/ManagedObjectList#clear
         (get_global $~lib/collector/itcm/from)
        )
        (set_global $~lib/collector/itcm/to
@@ -390,7 +390,7 @@
         (get_global $~lib/collector/itcm/to)
         (i32.const -1)
        )
-       (call $~lib/collector/itcm/ManagedObjectSet#clear
+       (call $~lib/collector/itcm/ManagedObjectList#clear
         (get_global $~lib/collector/itcm/to)
        )
        (set_global $~lib/collector/itcm/iter
@@ -511,7 +511,7 @@
       )
      )
      (block
-      (call $~lib/collector/itcm/ManagedObjectSet#clear
+      (call $~lib/collector/itcm/ManagedObjectList#clear
        (get_global $~lib/collector/itcm/to)
       )
       (set_global $~lib/collector/itcm/state
@@ -552,7 +552,7 @@
    (get_local $2)
    (get_global $~lib/collector/itcm/white)
   )
-  (call $~lib/collector/itcm/ManagedObjectSet#push
+  (call $~lib/collector/itcm/ManagedObjectList#push
    (get_global $~lib/collector/itcm/from)
    (get_local $2)
   )

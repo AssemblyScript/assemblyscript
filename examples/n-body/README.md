@@ -1,4 +1,4 @@
-N-Body-System
+N-body system
 =============
 
 An [AssemblyScript](http://assemblyscript.org) example. This is actually a benchmark - visualizing it just so happened.
