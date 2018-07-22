@@ -411,11 +411,13 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
 
-  // Initialize default aliases
-  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
-  assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
-  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/env/abort");
-  assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/env/trace");
+  if (!args.noLib) {
+    // Initialize default aliases
+    assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
+    assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
+    assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/env/abort");
+    assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/env/trace");
+  }
 
   // Add or override aliases if specified
   if (args.use) {
