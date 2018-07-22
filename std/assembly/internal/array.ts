@@ -40,27 +40,28 @@ export function defaultComparator<T>(): (a: T, b: T) => i32 {
 @inline
 export function defaultComparatorTyped<T>(): (a: T, b: T) => i32 {
   if (isFloat<T>()) {
-    return (a: T, b: T): i32 => {
-      if (sizeof<T>() == 4) {
-        var ia = reinterpret<i32>(a); /* tslint:disable-line */
-        var ib = reinterpret<i32>(b); /* tslint:disable-line */
+    if (sizeof<T>() == 4) {
+      return (a: T, b: T): i32 => {
+        var ia = reinterpret<i32>(a);
+        var ib = reinterpret<i32>(b);
         ia ^= -(ia >>> 31) & 0x7FFFFFFF;
         ib ^= -(ib >>> 31) & 0x7FFFFFFF;
         return ia - ib;
-      } else {
-        var ia = reinterpret<i64>(a); /* tslint:disable-line */
-        var ib = reinterpret<i64>(b); /* tslint:disable-line */
+      };
+    } else {
+      return (a: T, b: T): i32 => {
+        var ia = reinterpret<i64>(a);
+        var ib = reinterpret<i64>(b);
         ia ^= -(ia >>> 63) & 0x7FFFFFFFFFFFFFFF;
         ib ^= -(ib >>> 63) & 0x7FFFFFFFFFFFFFFF;
         return <i32>(ia > ib) - <i32>(ia < ib);
-      }
-    };
+      };
+    }
   } else {
     if (isInteger<T>() && isSigned<T>() && sizeof<T>() <= 4) {
       return (a: T, b: T): i32 => (<i32>(a - b));
-    } else {
-      return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
     }
+    return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
   }
 }
 
