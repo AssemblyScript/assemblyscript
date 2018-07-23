@@ -70,6 +70,9 @@ Examples
 * **[WASM parser](./lib/parse)**<br />
   A WebAssembly binary parser in WebAssembly.
 
+* **[N-body system](./examples/n-body)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/n-body/index.html) ]<br />
+  An implementation of the N-body system from the [Computer Language Benchmarks Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/).
+
 Building
 --------
 

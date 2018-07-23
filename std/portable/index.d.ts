@@ -283,7 +283,7 @@ declare class String {
 
   static fromCharCode(ls: i32, hs?: i32): string;
   static fromCharCodes(arr: u16[]): string;
-  static fromCodePoint(cp: i32): string;
+  static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
 
   readonly length: i32;

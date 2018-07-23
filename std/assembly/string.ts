@@ -4,6 +4,7 @@ import {
   EMPTY,
   clamp,
   allocate,
+  compareUTF16,
   isWhiteSpaceOrLineTerminator,
   CharCode,
   parse
@@ -14,13 +15,39 @@ export class String {
 
   readonly length: i32; // capped to [0, MAX_LENGTH]
 
+  // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
+    if (!code) return changetype<String>("\0");
     var out = allocate(1);
     store<u16>(
       changetype<usize>(out),
       <u16>code,
       HEADER_SIZE
     );
+    return out;
+  }
+
+  static fromCodePoint(code: i32): String {
+    assert(<u32>code <= 0x10FFFF); // Invalid code point range
+    if (!code) return changetype<String>("\0");
+    var sur = code > 0xFFFF;
+    var out = allocate(<i32>sur + 1);
+    if (!sur) {
+      store<u16>(
+        changetype<usize>(out),
+        <u16>code,
+        HEADER_SIZE
+      );
+    } else {
+      code -= 0x10000;
+      let hi: u32 = (code >>> 10)  + 0xD800;
+      let lo: u32 = (code & 0x3FF) + 0xDC00;
+      store<u32>(
+        changetype<usize>(out),
+        (hi << 16) | lo,
+        HEADER_SIZE
+      );
+    }
     return out;
   }
 
@@ -112,10 +139,10 @@ export class String {
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
     if (start < 0) return false;
-    return !memory.compare(
-      changetype<usize>(this) + HEADER_SIZE + (start << 1),
-      changetype<usize>(searchString) + HEADER_SIZE,
-      searchLength << 1
+    return !compareUTF16(
+      changetype<usize>(this) + (start << 1),
+      changetype<usize>(searchString),
+      searchLength
     );
   }
 
@@ -127,10 +154,10 @@ export class String {
     var leftLength = left.length;
     if (leftLength != right.length) return false;
 
-    return !memory.compare(
-      changetype<usize>(left) + HEADER_SIZE,
-      changetype<usize>(right) + HEADER_SIZE,
-      (<usize>leftLength << 1)
+    return !compareUTF16(
+      changetype<usize>(left),
+      changetype<usize>(right),
+      leftLength
     );
   }
 
@@ -150,10 +177,10 @@ export class String {
     if (!rightLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return memory.compare(
-      changetype<usize>(left)  + HEADER_SIZE,
-      changetype<usize>(right) + HEADER_SIZE,
-      length << 1
+    return compareUTF16(
+      changetype<usize>(left),
+      changetype<usize>(right),
+      length
     ) > 0;
   }
 
@@ -169,10 +196,10 @@ export class String {
     if (!rightLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return memory.compare(
-      changetype<usize>(left)  + HEADER_SIZE,
-      changetype<usize>(right) + HEADER_SIZE,
-      length << 1
+    return compareUTF16(
+      changetype<usize>(left),
+      changetype<usize>(right),
+      length
     ) >= 0;
   }
 
@@ -187,10 +214,10 @@ export class String {
     if (!leftLength)  return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return memory.compare(
-      changetype<usize>(left)  + HEADER_SIZE,
-      changetype<usize>(right) + HEADER_SIZE,
-      length << 1
+    return compareUTF16(
+      changetype<usize>(left),
+      changetype<usize>(right),
+      length
     ) < 0;
   }
 
@@ -206,10 +233,10 @@ export class String {
     if (!leftLength)  return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return memory.compare(
-      changetype<usize>(left)  + HEADER_SIZE,
-      changetype<usize>(right) + HEADER_SIZE,
-      length << 1
+    return compareUTF16(
+      changetype<usize>(left),
+      changetype<usize>(right),
+      length
     ) <= 0;
   }
 
@@ -226,12 +253,11 @@ export class String {
     if (!len) return -1;
     var start = clamp<isize>(fromIndex, 0, len);
     len -= searchLen;
-    // TODO: multiple char codes
     for (let k: isize = start; k <= len; ++k) {
-      if (!memory.compare(
-        changetype<usize>(this) + HEADER_SIZE + (k << 1),
-        changetype<usize>(searchString) + HEADER_SIZE,
-        searchLen << 1
+      if (!compareUTF16(
+        changetype<usize>(this) + (k << 1),
+        changetype<usize>(searchString),
+        searchLen
       )) {
         return <i32>k;
       }
@@ -250,10 +276,10 @@ export class String {
 
     // TODO: multiple char codes
     for (let k = start; k >= 0; --k) {
-      if (!memory.compare(
-        changetype<usize>(this) + HEADER_SIZE + (k << 1),
-        changetype<usize>(searchString) + HEADER_SIZE,
-        searchLen << 1
+      if (!compareUTF16(
+        changetype<usize>(this) + (k << 1),
+        changetype<usize>(searchString),
+        searchLen
       )) {
         return <i32>k;
       }
@@ -269,13 +295,12 @@ export class String {
     var len: isize = this.length;
     var start = clamp<isize>(pos, 0, len);
     var searchLength: isize = searchString.length;
-    if (searchLength + start > len) {
-      return false;
-    }
-    return !memory.compare(
-      changetype<usize>(this) + HEADER_SIZE + (start << 1),
-      changetype<usize>(searchString) + HEADER_SIZE,
-      searchLength << 1
+    if (searchLength + start > len) return false;
+
+    return !compareUTF16(
+      changetype<usize>(this) + (start << 1),
+      changetype<usize>(searchString),
+      searchLength
     );
   }
 
