@@ -499,17 +499,61 @@ export class String {
     var result = allocate(length * count);
     var strLen = length << 1;
 
+    switch (length) {
+      case 1: {
+        let cc = load<u16>(changetype<usize>(this), HEADER_SIZE);
+        for (let i = 0; i < count; ++i) {
+          store<u16>(changetype<usize>(result) + (i << 1), cc, HEADER_SIZE);
+        }
+        break;
+      }
+      case 2: {
+        let cc1 = load<u16>(changetype<usize>(this), HEADER_SIZE + 0);
+        let cc2 = load<u16>(changetype<usize>(this), HEADER_SIZE + 2);
+        let cc  = <u32>cc1 | (<u32>cc2 << 16);
+        for (let i = 0; i < count; ++i) {
+          store<u32>(changetype<usize>(result) + (i << 2), cc, HEADER_SIZE);
+        }
+        break;
+      }
+      case 4: {
+        let cc1 = load<u16>(changetype<usize>(this), HEADER_SIZE + 0);
+        let cc2 = load<u16>(changetype<usize>(this), HEADER_SIZE + 2);
+        let cc3 = load<u16>(changetype<usize>(this), HEADER_SIZE + 4);
+        let cc4 = load<u16>(changetype<usize>(this), HEADER_SIZE + 6);
+        let cc  = <u64>cc1 | (<u64>cc2 << 16) | (<u64>cc3 << 32) | (<u64>cc4 << 48);
+        for (let i = 0; i < count; ++i) {
+          store<u64>(changetype<usize>(result) + (i << 3), cc, HEADER_SIZE);
+        }
+        break;
+      }
+      default: {
+        /*
+         * TODO possible improvments: reuse existing result for exponentially concats like:
+         * 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
+         */
+        for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
+          memory.copy(
+            changetype<usize>(result) + HEADER_SIZE + offset,
+            changetype<usize>(this)   + HEADER_SIZE,
+            strLen
+          );
+        }
+        break;
+      }
+    }
+
     /*
      * TODO possible improvments: reuse existing result for exponentially concats like:
      * 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
      */
-    for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
+    /* for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
       memory.copy(
         changetype<usize>(result) + HEADER_SIZE + offset,
         changetype<usize>(this)   + HEADER_SIZE,
         strLen
       );
-    }
+    } */
 
     return result;
   }
