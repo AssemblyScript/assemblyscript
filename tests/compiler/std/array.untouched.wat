@@ -10011,11 +10011,7 @@
    )
   )
  )
-<<<<<<< HEAD
- (func $~lib/memory/memcmp (; 145 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-=======
- (func $~lib/internal/string/compareUTF16 (; 121 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
->>>>>>> master
+ (func $~lib/internal/string/compareUTF16 (; 145 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (set_local $3
    (i32.const 0)
@@ -10065,33 +10061,9 @@
     )
    )
   )
-<<<<<<< HEAD
-  (if (result i32)
-   (get_local $2)
-   (i32.sub
-    (i32.load8_u
-     (get_local $0)
-    )
-    (i32.load8_u
-     (get_local $1)
-    )
-   )
-   (i32.const 0)
-  )
- )
- (func $~lib/memory/memory.compare (; 146 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (call $~lib/memory/memcmp
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $~lib/string/String.__gt (; 147 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
   (get_local $3)
  )
- (func $~lib/string/String.__gt (; 122 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/string/String.__gt (; 146 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10173,11 +10145,7 @@
    (i32.const 0)
   )
  )
-<<<<<<< HEAD
- (func $~lib/string/String.__lt (; 148 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/string/String.__lt (; 123 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/string/String.__lt (; 147 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10259,11 +10227,7 @@
    (i32.const 0)
   )
  )
-<<<<<<< HEAD
- (func $start~anonymous|57 (; 149 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $start~anonymous|49 (; 124 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $start~anonymous|57 (; 148 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (call $~lib/string/String.__gt
     (get_local $0)
@@ -10275,20 +10239,12 @@
    )
   )
  )
-<<<<<<< HEAD
- (func $~lib/array/Array<String>#get:length (; 150 ;) (type $ii) (param $0 i32) (result i32)
-=======
- (func $~lib/array/Array<String>#get:length (; 125 ;) (type $ii) (param $0 i32) (result i32)
->>>>>>> master
+ (func $~lib/array/Array<String>#get:length (; 149 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=4
    (get_local $0)
   )
  )
-<<<<<<< HEAD
- (func $~lib/internal/array/insertionSort<String> (; 151 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/internal/array/insertionSort<String> (; 126 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/internal/array/insertionSort<String> (; 150 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10444,11 +10400,7 @@
   )
   (get_local $0)
  )
-<<<<<<< HEAD
- (func $~lib/array/Array<String>#sort (; 152 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/array/Array<String>#sort (; 127 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/array/Array<String>#sort (; 151 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10584,11 +10536,7 @@
    )
   )
  )
-<<<<<<< HEAD
- (func $~lib/array/Array<String>#__get (; 153 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/array/Array<String>#__get (; 128 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/array/Array<String>#__get (; 152 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -10619,11 +10567,7 @@
    (unreachable)
   )
  )
-<<<<<<< HEAD
- (func $std/array/isSorted<String> (; 154 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $std/array/isSorted<String> (; 129 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $std/array/isSorted<String> (; 153 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (block $break|0
@@ -10684,11 +10628,7 @@
   )
   (i32.const 1)
  )
-<<<<<<< HEAD
- (func $std/array/assertSorted<String> (; 155 ;) (type $iiv) (param $0 i32) (param $1 i32)
-=======
- (func $std/array/assertSorted<String> (; 130 ;) (type $iiv) (param $0 i32) (param $1 i32)
->>>>>>> master
+ (func $std/array/assertSorted<String> (; 154 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (if
    (i32.eqz
     (call $std/array/isSorted<String>
@@ -10710,11 +10650,7 @@
    )
   )
  )
-<<<<<<< HEAD
- (func $~lib/string/String.__eq (; 156 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/string/String.__eq (; 131 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/string/String.__eq (; 155 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -10768,11 +10704,7 @@
    )
   )
  )
-<<<<<<< HEAD
- (func $~lib/string/String.__ne (; 157 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/string/String.__ne (; 132 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/string/String.__ne (; 156 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.eqz
    (call $~lib/string/String.__eq
     (get_local $0)
@@ -10780,11 +10712,7 @@
    )
   )
  )
-<<<<<<< HEAD
- (func $std/array/isArraysEqual<String> (; 158 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-=======
- (func $std/array/isArraysEqual<String> (; 133 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
->>>>>>> master
+ (func $std/array/isArraysEqual<String> (; 157 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.eqz
@@ -10850,11 +10778,7 @@
   )
   (i32.const 1)
  )
-<<<<<<< HEAD
- (func $~lib/array/Array<String>#constructor (; 159 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/array/Array<String>#constructor (; 134 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/array/Array<String>#constructor (; 158 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10925,11 +10849,7 @@
   )
   (get_local $0)
  )
-<<<<<<< HEAD
- (func $~lib/internal/string/allocate (; 160 ;) (type $ii) (param $0 i32) (result i32)
-=======
- (func $~lib/internal/string/allocate (; 135 ;) (type $ii) (param $0 i32) (result i32)
->>>>>>> master
+ (func $~lib/internal/string/allocate (; 159 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -10975,11 +10895,7 @@
   )
   (get_local $2)
  )
-<<<<<<< HEAD
- (func $~lib/string/String#charAt (; 161 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/string/String#charAt (; 136 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/string/String#charAt (; 160 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -10991,13 +10907,8 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-<<<<<<< HEAD
      (i32.const 1560)
-     (i32.const 29)
-=======
-     (i32.const 696)
      (i32.const 56)
->>>>>>> master
      (i32.const 4)
     )
     (unreachable)
@@ -11033,11 +10944,7 @@
   )
   (get_local $2)
  )
-<<<<<<< HEAD
- (func $~lib/string/String#concat (; 162 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/string/String#concat (; 137 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/string/String#concat (; 161 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11052,13 +10959,8 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-<<<<<<< HEAD
      (i32.const 1560)
-     (i32.const 85)
-=======
-     (i32.const 696)
      (i32.const 112)
->>>>>>> master
      (i32.const 4)
     )
     (unreachable)
@@ -11139,11 +11041,7 @@
   )
   (get_local $5)
  )
-<<<<<<< HEAD
- (func $~lib/string/String.__concat (; 163 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/string/String.__concat (; 138 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $~lib/string/String.__concat (; 162 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -11157,11 +11055,7 @@
    (get_local $1)
   )
  )
-<<<<<<< HEAD
- (func $std/array/createRandomString (; 164 ;) (type $ii) (param $0 i32) (result i32)
-=======
- (func $std/array/createRandomString (; 139 ;) (type $ii) (param $0 i32) (result i32)
->>>>>>> master
+ (func $std/array/createRandomString (; 163 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -11217,11 +11111,7 @@
   )
   (get_local $1)
  )
-<<<<<<< HEAD
- (func $~lib/array/Array<String>#__set (; 165 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-=======
- (func $~lib/array/Array<String>#__set (; 140 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
->>>>>>> master
+ (func $~lib/array/Array<String>#__set (; 164 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -11296,11 +11186,7 @@
    )
   )
  )
-<<<<<<< HEAD
- (func $std/array/createRandomStringArray (; 166 ;) (type $ii) (param $0 i32) (result i32)
-=======
- (func $std/array/createRandomStringArray (; 141 ;) (type $ii) (param $0 i32) (result i32)
->>>>>>> master
+ (func $std/array/createRandomStringArray (; 165 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (set_local $1
@@ -11347,11 +11233,7 @@
   )
   (get_local $1)
  )
-<<<<<<< HEAD
- (func $start~anonymous|58 (; 167 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $start~anonymous|50 (; 142 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
+ (func $start~anonymous|58 (; 166 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (call $~lib/string/String.__gt
     (get_local $0)
@@ -11363,12 +11245,8 @@
    )
   )
  )
-<<<<<<< HEAD
- (func $start (; 168 ;) (type $v)
+ (func $start (; 167 ;) (type $v)
   (local $0 i32)
-=======
- (func $start (; 143 ;) (type $v)
->>>>>>> master
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
