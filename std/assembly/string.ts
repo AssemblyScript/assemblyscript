@@ -497,8 +497,6 @@ export class String {
     if (count === 1) return this;
 
     var result = allocate(length * count);
-    var strLen = length << 1;
-
     switch (length) {
       case 1: {
         let cc = load<u16>(changetype<usize>(this), HEADER_SIZE);
@@ -532,6 +530,7 @@ export class String {
          * TODO possible improvments: reuse existing result for exponentially concats like:
          * 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
          */
+        let strLen = length << 1;
         for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
           memory.copy(
             changetype<usize>(result) + HEADER_SIZE + offset,
