@@ -9,7 +9,7 @@ import {
 import {
   insertionSort,
   weakHeapSort,
-  defaultComparatorTyped
+  // defaultComparatorTyped
 } from "./array";
 
 /** Typed array base class. Not a global object. */
