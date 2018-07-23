@@ -3,6 +3,7 @@ import {
   MAX_LENGTH,
   EMPTY,
   clamp,
+  repeat,
   allocate,
   compareUTF16,
   isWhiteSpaceOrLineTerminator,
@@ -444,13 +445,21 @@ export class String {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    if (len > padLen) padString = padString.repeat((len + padLen - 1) / padLen);
     var out = allocate(targetLength);
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE,
-      changetype<usize>(padString) + HEADER_SIZE,
-      <usize>len << 1
-    );
+    if (len > padLen) {
+      repeat(
+        changetype<usize>(out),
+        changetype<usize>(padString),
+        padLen,
+        (len + padLen - 1) / padLen
+      );
+    } else {
+      memory.copy(
+        changetype<usize>(out) + HEADER_SIZE,
+        changetype<usize>(padString) + HEADER_SIZE,
+        <usize>len << 1
+      );
+    }
     if (length) {
       memory.copy(
         changetype<usize>(out) + HEADER_SIZE + (<usize>len << 1),
@@ -467,7 +476,6 @@ export class String {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    if (len > padLen) padString = padString.repeat((len + padLen - 1) / padLen);
     var out = allocate(targetLength);
     if (length) {
       memory.copy(
@@ -476,11 +484,20 @@ export class String {
         <usize>length << 1
       );
     }
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE + (<usize>length << 1),
-      changetype<usize>(padString) + HEADER_SIZE,
-      <usize>len << 1
-    );
+    if (len > padLen) {
+      repeat(
+        changetype<usize>(out) + (<usize>length << 1),
+        changetype<usize>(padString),
+        padLen,
+        (len + padLen - 1) / padLen
+      );
+    } else {
+      memory.copy(
+        changetype<usize>(out) + HEADER_SIZE + (<usize>length << 1),
+        changetype<usize>(padString) + HEADER_SIZE,
+        <usize>len << 1
+      );
+    }
     return out;
   }
 
@@ -497,57 +514,7 @@ export class String {
     if (count === 1) return this;
 
     var result = allocate(length * count);
-    switch (length) {
-      case 1: {
-        let cc = load<u16>(changetype<usize>(this), HEADER_SIZE);
-        for (let i = 0; i < count; ++i) {
-          store<u16>(changetype<usize>(result) + (i << 1), cc, HEADER_SIZE);
-        }
-        break;
-      }
-      case 2: {
-        let cc = load<u32>(changetype<usize>(this), HEADER_SIZE);
-        for (let i = 0; i < count; ++i) {
-          store<u32>(changetype<usize>(result) + (i << 2), cc, HEADER_SIZE);
-        }
-        break;
-      }
-      case 4: {
-        let cc = load<u64>(changetype<usize>(this), HEADER_SIZE);
-        for (let i = 0; i < count; ++i) {
-          store<u64>(changetype<usize>(result) + (i << 3), cc, HEADER_SIZE);
-        }
-        break;
-      }
-      default: {
-        /*
-         * TODO possible improvments: reuse existing result for exponentially concats like:
-         * 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
-         */
-        let strLen = length << 1;
-        for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
-          memory.copy(
-            changetype<usize>(result) + HEADER_SIZE + offset,
-            changetype<usize>(this)   + HEADER_SIZE,
-            strLen
-          );
-        }
-        break;
-      }
-    }
-
-    /*
-     * TODO possible improvments: reuse existing result for exponentially concats like:
-     * 'a' + 'a' => 'aa' + 'aa' => 'aaaa' + 'aaaa' etc
-     */
-    /* for (let offset = 0, len = strLen * count; offset < len; offset += strLen) {
-      memory.copy(
-        changetype<usize>(result) + HEADER_SIZE + offset,
-        changetype<usize>(this)   + HEADER_SIZE,
-        strLen
-      );
-    } */
-
+    repeat(changetype<usize>(result), changetype<usize>(this), length, count);
     return result;
   }
 
