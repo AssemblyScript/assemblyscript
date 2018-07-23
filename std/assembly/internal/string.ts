@@ -152,3 +152,11 @@ export function parse<T>(str: String, radix: i32 = 0): T {
   }
   return sign * num;
 }
+
+export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
+  var cmp: i32 = 0;
+  while (len && !(cmp = <i32>load<u16>(ptr1, HEADER_SIZE) - <i32>load<u16>(ptr2, HEADER_SIZE))) {
+    --len, ++ptr1, ++ptr2;
+  }
+  return cmp;
+}
