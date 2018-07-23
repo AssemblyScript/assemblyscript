@@ -2652,15 +2652,15 @@
    (set_local $2
     (call $~lib/string/String#repeat
      (get_local $2)
-     (i32.add
-      (i32.div_s
-       (i32.sub
+     (i32.div_s
+      (i32.sub
+       (i32.add
         (get_local $4)
-        (i32.const 1)
+        (get_local $3)
        )
-       (get_local $3)
+       (i32.const 1)
       )
-      (i32.const 1)
+      (get_local $3)
      )
     )
    )
@@ -2749,7 +2749,7 @@
     (unreachable)
    )
   )
-  (set_local $5
+  (set_local $4
    (i32.load
     (get_local $2)
    )
@@ -2759,7 +2759,7 @@
     (tee_local $3
      (i32.lt_s
       (get_local $1)
-      (tee_local $4
+      (tee_local $5
        (i32.load
         (get_local $0)
        )
@@ -2769,7 +2769,7 @@
    )
    (set_local $3
     (i32.eqz
-     (get_local $5)
+     (get_local $4)
     )
    )
   )
@@ -2784,23 +2784,23 @@
     (tee_local $3
      (i32.sub
       (get_local $1)
-      (get_local $4)
+      (get_local $5)
      )
     )
-    (get_local $5)
+    (get_local $4)
    )
    (set_local $2
     (call $~lib/string/String#repeat
      (get_local $2)
-     (i32.add
-      (i32.div_s
-       (i32.sub
+     (i32.div_s
+      (i32.sub
+       (i32.add
         (get_local $3)
-        (i32.const 1)
+        (get_local $4)
        )
-       (get_local $5)
+       (i32.const 1)
       )
-      (i32.const 1)
+      (get_local $4)
      )
     )
    )
@@ -2811,7 +2811,7 @@
    )
   )
   (if
-   (get_local $4)
+   (get_local $5)
    (call $~lib/memory/memory.copy
     (i32.add
      (get_local $3)
@@ -2822,7 +2822,7 @@
      (i32.const 4)
     )
     (i32.shl
-     (get_local $4)
+     (get_local $5)
      (i32.const 1)
     )
    )
@@ -2834,7 +2834,7 @@
      (i32.const 4)
     )
     (i32.shl
-     (get_local $4)
+     (get_local $5)
      (i32.const 1)
     )
    )

@@ -3276,15 +3276,15 @@
    (set_local $2
     (call $~lib/string/String#repeat
      (get_local $2)
-     (i32.add
-      (i32.div_s
-       (i32.sub
+     (i32.div_s
+      (i32.sub
+       (i32.add
         (get_local $6)
-        (i32.const 1)
+        (get_local $4)
        )
-       (get_local $4)
+       (i32.const 1)
       )
-      (i32.const 1)
+      (get_local $4)
      )
     )
    )
@@ -3420,15 +3420,15 @@
    (set_local $2
     (call $~lib/string/String#repeat
      (get_local $2)
-     (i32.add
-      (i32.div_s
-       (i32.sub
+     (i32.div_s
+      (i32.sub
+       (i32.add
         (get_local $6)
-        (i32.const 1)
+        (get_local $4)
        )
-       (get_local $4)
+       (i32.const 1)
       )
-      (i32.const 1)
+      (get_local $4)
      )
     )
    )
