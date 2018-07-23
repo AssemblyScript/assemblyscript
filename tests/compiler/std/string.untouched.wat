@@ -3326,7 +3326,7 @@
      (get_global $~lib/internal/string/HEADER_SIZE)
     )
     (i32.shl
-     (get_local $1)
+     (get_local $3)
      (i32.const 1)
     )
    )
@@ -3471,7 +3471,7 @@
     (get_global $~lib/internal/string/HEADER_SIZE)
    )
    (i32.shl
-    (get_local $1)
+    (get_local $6)
     (i32.const 1)
    )
   )

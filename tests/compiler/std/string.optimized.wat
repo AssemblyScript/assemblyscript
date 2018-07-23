@@ -2609,14 +2609,14 @@
     (unreachable)
    )
   )
-  (set_local $3
+  (set_local $4
    (i32.load
     (get_local $2)
    )
   )
   (if
    (i32.eqz
-    (tee_local $4
+    (tee_local $3
      (i32.lt_s
       (get_local $1)
       (tee_local $5
@@ -2627,27 +2627,27 @@
      )
     )
    )
-   (set_local $4
+   (set_local $3
     (i32.eqz
-     (get_local $3)
+     (get_local $4)
     )
    )
   )
   (if
-   (get_local $4)
+   (get_local $3)
    (return
     (get_local $0)
    )
   )
   (if
    (i32.gt_s
-    (tee_local $4
+    (tee_local $3
      (i32.sub
       (get_local $1)
       (get_local $5)
      )
     )
-    (get_local $3)
+    (get_local $4)
    )
    (set_local $2
     (call $~lib/string/String#repeat
@@ -2655,19 +2655,19 @@
      (i32.div_s
       (i32.sub
        (i32.add
-        (get_local $4)
         (get_local $3)
+        (get_local $4)
        )
        (i32.const 1)
       )
-      (get_local $3)
+      (get_local $4)
      )
     )
    )
   )
   (call $~lib/memory/memory.copy
    (i32.add
-    (tee_local $3
+    (tee_local $1
      (call $~lib/internal/string/allocate
       (get_local $1)
      )
@@ -2679,7 +2679,7 @@
     (i32.const 4)
    )
    (i32.shl
-    (get_local $4)
+    (get_local $3)
     (i32.const 1)
    )
   )
@@ -2688,11 +2688,11 @@
    (call $~lib/memory/memory.copy
     (i32.add
      (i32.add
-      (get_local $3)
+      (get_local $1)
       (i32.const 4)
      )
      (i32.shl
-      (get_local $4)
+      (get_local $3)
       (i32.const 1)
      )
     )
@@ -2701,12 +2701,12 @@
      (i32.const 4)
     )
     (i32.shl
-     (get_local $1)
+     (get_local $5)
      (i32.const 1)
     )
    )
   )
-  (get_local $3)
+  (get_local $1)
  )
  (func $~lib/string/String#padStart|trampoline (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
@@ -2805,7 +2805,7 @@
     )
    )
   )
-  (set_local $3
+  (set_local $1
    (call $~lib/internal/string/allocate
     (get_local $1)
    )
@@ -2814,7 +2814,7 @@
    (get_local $5)
    (call $~lib/memory/memory.copy
     (i32.add
-     (get_local $3)
+     (get_local $1)
      (i32.const 4)
     )
     (i32.add
@@ -2830,7 +2830,7 @@
   (call $~lib/memory/memory.copy
    (i32.add
     (i32.add
-     (get_local $3)
+     (get_local $1)
      (i32.const 4)
     )
     (i32.shl
@@ -2843,11 +2843,11 @@
     (i32.const 4)
    )
    (i32.shl
-    (get_local $1)
+    (get_local $3)
     (i32.const 1)
    )
   )
-  (get_local $3)
+  (get_local $1)
  )
  (func $~lib/string/String#padEnd|trampoline (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1

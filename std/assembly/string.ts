@@ -455,7 +455,7 @@ export class String {
       memory.copy(
         changetype<usize>(out) + HEADER_SIZE + (<usize>len << 1),
         changetype<usize>(this) + HEADER_SIZE,
-        <usize>targetLength << 1
+        <usize>length << 1
       );
     }
     return out;
@@ -479,7 +479,7 @@ export class String {
     memory.copy(
       changetype<usize>(out) + HEADER_SIZE + (<usize>length << 1),
       changetype<usize>(padString) + HEADER_SIZE,
-      <usize>targetLength << 1
+      <usize>len << 1
     );
     return out;
   }
