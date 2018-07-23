@@ -444,7 +444,7 @@ export class String {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    if (len > padLen) padString = padString.repeat(len / padLen + 1);
+    if (len > padLen) padString = padString.repeat((len - 1) / padLen + 1);
     var out = allocate(targetLength);
     memory.copy(
       changetype<usize>(out) + HEADER_SIZE,
@@ -467,7 +467,7 @@ export class String {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    if (len > padLen) padString = padString.repeat(len / padLen + 1);
+    if (len > padLen) padString = padString.repeat((len - 1) / padLen + 1);
     var out = allocate(targetLength);
     if (length) {
       memory.copy(

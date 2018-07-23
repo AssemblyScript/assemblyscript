@@ -3278,7 +3278,10 @@
      (get_local $2)
      (i32.add
       (i32.div_s
-       (get_local $6)
+       (i32.sub
+        (get_local $6)
+        (i32.const 1)
+       )
        (get_local $4)
       )
       (i32.const 1)
@@ -3419,7 +3422,10 @@
      (get_local $2)
      (i32.add
       (i32.div_s
-       (get_local $6)
+       (i32.sub
+        (get_local $6)
+        (i32.const 1)
+       )
        (get_local $4)
       )
       (i32.const 1)
