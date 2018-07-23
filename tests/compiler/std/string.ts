@@ -12,6 +12,15 @@ assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
 
 assert(str.length == 16);
 assert(str.charCodeAt(0) == 0x68);
+
+assert(String.fromCharCode(0) == "\0");
+assert(String.fromCharCode(54) == "6");
+assert(String.fromCharCode(0x10000 + 54) == "6");
+
+assert(String.fromCodePoint(0) == "\0");
+assert(String.fromCodePoint(54) == "6");
+assert(String.fromCodePoint(0x1D306), "\uD834\uDF06");
+
 assert(str.startsWith("hi"));
 assert(str.endsWith("string"));
 assert(str.includes("I'm"));
@@ -81,6 +90,10 @@ assert(!("" < ""));
 assert(!("" > ""));
 assert("" >= "");
 assert("" <= "");
+
+var a = String.fromCodePoint(0xFF61);
+var b = String.fromCodePoint(0xD800) + String.fromCodePoint(0xDC02);
+assert(a > b);
 
 assert("123".length == 3);
 
