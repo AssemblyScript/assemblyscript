@@ -2457,8 +2457,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i64)
+  (local $5 i64)
   (if
    (i32.eqz
     (get_local $0)
@@ -2538,7 +2537,7 @@
     (get_local $0)
    )
   )
-  (set_local $5
+  (set_local $4
    (call $~lib/internal/string/allocate
     (i32.mul
      (get_local $3)
@@ -2591,7 +2590,7 @@
         )
         (i32.store16 offset=4
          (i32.add
-          (get_local $5)
+          (get_local $4)
           (i32.shl
            (get_local $3)
            (i32.const 1)
@@ -2610,40 +2609,35 @@
       )
       (br $break|0)
      )
-     (set_local $0
-      (i32.or
-       (i32.load16_u offset=4
-        (get_local $0)
-       )
-       (i32.shl
-        (i32.load16_u offset=6
-         (get_local $0)
-        )
-        (i32.const 16)
-       )
+     (set_local $2
+      (i32.load offset=4
+       (get_local $0)
       )
      )
      (block $break|2
+      (set_local $3
+       (i32.const 0)
+      )
       (loop $repeat|2
        (br_if $break|2
         (i32.ge_s
-         (get_local $4)
+         (get_local $3)
          (get_local $1)
         )
        )
        (i32.store offset=4
         (i32.add
-         (get_local $5)
+         (get_local $4)
          (i32.shl
-          (get_local $4)
+          (get_local $3)
           (i32.const 2)
          )
         )
-        (get_local $0)
+        (get_local $2)
        )
-       (set_local $4
+       (set_local $3
         (i32.add
-         (get_local $4)
+         (get_local $3)
          (i32.const 1)
         )
        )
@@ -2652,67 +2646,35 @@
      )
      (br $break|0)
     )
-    (set_local $6
-     (i64.or
-      (i64.or
-       (i64.or
-        (i64.extend_u/i32
-         (i32.load16_u offset=4
-          (get_local $0)
-         )
-        )
-        (i64.shl
-         (i64.extend_u/i32
-          (i32.load16_u offset=6
-           (get_local $0)
-          )
-         )
-         (i64.const 16)
-        )
-       )
-       (i64.shl
-        (i64.extend_u/i32
-         (i32.load16_u offset=8
-          (get_local $0)
-         )
-        )
-        (i64.const 32)
-       )
-      )
-      (i64.shl
-       (i64.extend_u/i32
-        (i32.load16_u offset=10
-         (get_local $0)
-        )
-       )
-       (i64.const 48)
-      )
+    (set_local $5
+     (i64.load offset=4
+      (get_local $0)
      )
     )
     (block $break|3
-     (set_local $0
+     (set_local $2
       (i32.const 0)
      )
      (loop $repeat|3
       (br_if $break|3
        (i32.ge_s
-        (get_local $0)
+        (get_local $2)
         (get_local $1)
        )
       )
       (i64.store offset=4
        (i32.add
-        (get_local $5)
+        (get_local $4)
         (i32.shl
-         (get_local $0)
+         (get_local $2)
          (i32.const 3)
         )
        )
-       (get_local $6)
+       (get_local $5)
       )
-      (set_local $0
+      (set_local $2
        (i32.add
-        (get_local $0)
+        (get_local $2)
         (i32.const 1)
        )
       )
@@ -2722,14 +2684,14 @@
     (br $break|0)
    )
    (block $break|4
-    (set_local $2
+    (set_local $3
      (i32.const 0)
     )
-    (set_local $3
+    (set_local $1
      (i32.mul
-      (tee_local $4
+      (tee_local $2
        (i32.shl
-        (get_local $3)
+        (get_local $2)
         (i32.const 1)
        )
       )
@@ -2739,35 +2701,35 @@
     (loop $repeat|4
      (br_if $break|4
       (i32.ge_s
-       (get_local $2)
        (get_local $3)
+       (get_local $1)
       )
      )
      (call $~lib/memory/memory.copy
       (i32.add
        (i32.add
-        (get_local $5)
+        (get_local $4)
         (i32.const 4)
        )
-       (get_local $2)
+       (get_local $3)
       )
       (i32.add
        (get_local $0)
        (i32.const 4)
       )
-      (get_local $4)
+      (get_local $2)
      )
-     (set_local $2
+     (set_local $3
       (i32.add
+       (get_local $3)
        (get_local $2)
-       (get_local $4)
       )
      )
      (br $repeat|4)
     )
    )
   )
-  (get_local $5)
+  (get_local $4)
  )
  (func $~lib/string/String#padStart (; 18 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3720,7 +3682,7 @@
               (call $~lib/env/abort
                (i32.const 0)
                (i32.const 80)
-               (i32.const 677)
+               (i32.const 671)
                (i32.const 10)
               )
               (unreachable)

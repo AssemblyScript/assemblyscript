@@ -506,20 +506,14 @@ export class String {
         break;
       }
       case 2: {
-        let cc1 = load<u16>(changetype<usize>(this), HEADER_SIZE + 0);
-        let cc2 = load<u16>(changetype<usize>(this), HEADER_SIZE + 2);
-        let cc  = <u32>cc1 | (<u32>cc2 << 16);
+        let cc = load<u32>(changetype<usize>(this), HEADER_SIZE);
         for (let i = 0; i < count; ++i) {
           store<u32>(changetype<usize>(result) + (i << 2), cc, HEADER_SIZE);
         }
         break;
       }
       case 4: {
-        let cc1 = load<u16>(changetype<usize>(this), HEADER_SIZE + 0);
-        let cc2 = load<u16>(changetype<usize>(this), HEADER_SIZE + 2);
-        let cc3 = load<u16>(changetype<usize>(this), HEADER_SIZE + 4);
-        let cc4 = load<u16>(changetype<usize>(this), HEADER_SIZE + 6);
-        let cc  = <u64>cc1 | (<u64>cc2 << 16) | (<u64>cc3 << 32) | (<u64>cc4 << 48);
+        let cc = load<u64>(changetype<usize>(this), HEADER_SIZE);
         for (let i = 0; i < count; ++i) {
           store<u64>(changetype<usize>(result) + (i << 3), cc, HEADER_SIZE);
         }
