@@ -162,46 +162,55 @@ export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
 }
 
 export function repeat(dest: usize, src: usize, length: i32, count: i32): void {
-  switch (length) {
-    case 0: break;
-    case 1: {
-      let cc = load<u16>(src, HEADER_SIZE);
-      for (let i = 0; i < count; ++i) {
-        store<u16>(dest + (i << 1), cc, HEADER_SIZE);
-      }
-      break;
+  if (ASC_SHRINK_LEVEL > 1) {
+    let strLen = length << 1;
+    let to = dest + HEADER_SIZE;
+    let from = src + HEADER_SIZE;
+    for (let i = 0, len = strLen * count; i < len; i += strLen) {
+      memory.copy(to + i, from, strLen);
     }
-    case 2: {
-      let cc = load<u32>(src, HEADER_SIZE);
-      for (let i = 0; i < count; ++i) {
-        store<u32>(dest + (i << 2), cc, HEADER_SIZE);
+  } else {
+    switch (length) {
+      case 0: break;
+      case 1: {
+        let cc = load<u16>(src, HEADER_SIZE);
+        for (let i = 0; i < count; ++i) {
+          store<u16>(dest + (i << 1), cc, HEADER_SIZE);
+        }
+        break;
       }
-      break;
-    }
-    case 3: {
-      let cc1 = load<u32>(src, HEADER_SIZE + 0);
-      let cc2 = load<u16>(src, HEADER_SIZE + 4);
-      for (let i = 0; i < count; ++i) {
-        store<u32>(dest + (i << 2), cc1, HEADER_SIZE + 0);
-        store<u16>(dest + (i << 1), cc2, HEADER_SIZE + 4);
+      case 2: {
+        let cc = load<u32>(src, HEADER_SIZE);
+        for (let i = 0; i < count; ++i) {
+          store<u32>(dest + (i << 2), cc, HEADER_SIZE);
+        }
+        break;
       }
-      break;
-    }
-    case 4: {
-      let cc = load<u64>(src, HEADER_SIZE);
-      for (let i = 0; i < count; ++i) {
-        store<u64>(dest + (i << 3), cc, HEADER_SIZE);
+      case 3: {
+        let cc1 = load<u32>(src, HEADER_SIZE + 0);
+        let cc2 = load<u16>(src, HEADER_SIZE + 4);
+        for (let i = 0; i < count; ++i) {
+          store<u32>(dest + (i << 2), cc1, HEADER_SIZE + 0);
+          store<u16>(dest + (i << 1), cc2, HEADER_SIZE + 4);
+        }
+        break;
       }
-      break;
-    }
-    default: {
-      let strLen = length << 1;
-      let to = dest + HEADER_SIZE;
-      let from = src + HEADER_SIZE;
-      for (let i = 0, len = strLen * count; i < len; i += strLen) {
-        memory.copy(to + i, from, strLen);
+      case 4: {
+        let cc = load<u64>(src, HEADER_SIZE);
+        for (let i = 0; i < count; ++i) {
+          store<u64>(dest + (i << 3), cc, HEADER_SIZE);
+        }
+        break;
       }
-      break;
+      default: {
+        let strLen = length << 1;
+        let to = dest + HEADER_SIZE;
+        let from = src + HEADER_SIZE;
+        for (let i = 0, len = strLen * count; i < len; i += strLen) {
+          memory.copy(to + i, from, strLen);
+        }
+        break;
+      }
     }
   }
 }
