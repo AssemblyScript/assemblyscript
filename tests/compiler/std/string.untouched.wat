@@ -619,18 +619,18 @@
         (get_local $3)
        )
        (tee_local $7
-        (get_local $4)
+        (get_local $5)
        )
-       (i32.lt_s
+       (i32.gt_s
         (get_local $6)
         (get_local $7)
        )
       )
      )
      (tee_local $7
-      (get_local $5)
+      (get_local $4)
      )
-     (i32.gt_s
+     (i32.lt_s
       (get_local $6)
       (get_local $7)
      )
@@ -719,18 +719,18 @@
         (get_local $2)
        )
        (tee_local $6
-        (get_local $4)
+        (get_local $3)
        )
-       (i32.lt_s
+       (i32.gt_s
         (get_local $5)
         (get_local $6)
        )
       )
      )
      (tee_local $6
-      (get_local $3)
+      (get_local $4)
      )
-     (i32.gt_s
+     (i32.lt_s
       (get_local $5)
       (get_local $6)
      )
@@ -865,18 +865,18 @@
         (get_local $2)
        )
        (tee_local $7
-        (get_local $4)
+        (get_local $5)
        )
-       (i32.lt_s
+       (i32.gt_s
         (get_local $6)
         (get_local $7)
        )
       )
      )
      (tee_local $7
-      (get_local $5)
+      (get_local $4)
      )
-     (i32.gt_s
+     (i32.lt_s
       (get_local $6)
       (get_local $7)
      )
@@ -3353,12 +3353,12 @@
      (i32.add
       (i32.add
        (get_local $0)
-       (i32.shl
-        (get_local $1)
-        (i32.const 1)
-       )
+       (get_global $~lib/internal/string/HEADER_SIZE)
       )
-      (get_global $~lib/internal/string/HEADER_SIZE)
+      (i32.shl
+       (get_local $1)
+       (i32.const 1)
+      )
      )
     )
     (set_local $5
@@ -3946,18 +3946,18 @@
         (get_local $2)
        )
        (tee_local $8
-        (get_local $6)
+        (get_local $5)
        )
-       (i32.lt_s
+       (i32.gt_s
         (get_local $7)
         (get_local $8)
        )
       )
      )
      (tee_local $8
-      (get_local $5)
+      (get_local $6)
      )
-     (i32.gt_s
+     (i32.lt_s
       (get_local $7)
       (get_local $8)
      )

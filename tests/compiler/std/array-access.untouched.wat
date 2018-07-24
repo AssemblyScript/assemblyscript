@@ -236,18 +236,18 @@
         (get_local $3)
        )
        (tee_local $7
-        (get_local $4)
+        (get_local $5)
        )
-       (i32.lt_s
+       (i32.gt_s
         (get_local $6)
         (get_local $7)
        )
       )
      )
      (tee_local $7
-      (get_local $5)
+      (get_local $4)
      )
-     (i32.gt_s
+     (i32.lt_s
       (get_local $6)
       (get_local $7)
      )

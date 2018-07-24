@@ -17,7 +17,7 @@ export const EMPTY = changetype<String>(""); // TODO: is this a bad idea with '=
 
 @inline
 export function clamp<T>(val: T, lo: T, hi: T): T {
-  return max<T>(min<T>(val, hi), lo);
+  return min<T>(max<T>(val, lo), hi);
 }
 
 /** Allocates a raw String with uninitialized contents. */
@@ -168,8 +168,8 @@ export function repeatUnsafe(
   var length = src.length;
   if (ASC_SHRINK_LEVEL > 1) {
     let strLen = length << 1;
-    let to = changetype<usize>(dest) + (destOffset << 1) + HEADER_SIZE;
-    let from = changetype<usize>(src) + HEADER_SIZE;
+    let to   = changetype<usize>(dest) + HEADER_SIZE + (destOffset << 1);
+    let from = changetype<usize>(src)  + HEADER_SIZE;
     for (let i = 0, len = strLen * count; i < len; i += strLen) {
       memory.copy(to + i, from, strLen);
     }
@@ -177,7 +177,7 @@ export function repeatUnsafe(
     switch (length) {
       case 0: break;
       case 1: {
-        let cc = load<u16>(changetype<usize>(src), HEADER_SIZE);
+        let cc =  load<u16>(changetype<usize>(src), HEADER_SIZE);
         let out = changetype<usize>(dest) + (destOffset << 1);
         for (let i = 0; i < count; ++i) {
           store<u16>(out + (i << 1), cc, HEADER_SIZE);
@@ -185,7 +185,7 @@ export function repeatUnsafe(
         break;
       }
       case 2: {
-        let cc = load<u32>(changetype<usize>(src), HEADER_SIZE);
+        let cc  = load<u32>(changetype<usize>(src), HEADER_SIZE);
         let out = changetype<usize>(dest) + (destOffset << 1);
         for (let i = 0; i < count; ++i) {
           store<u32>(out + (i << 2), cc, HEADER_SIZE);
@@ -212,8 +212,8 @@ export function repeatUnsafe(
       }
       default: {
         let strLen = length << 1;
-        let to = changetype<usize>(dest) + (destOffset << 1) + HEADER_SIZE;
-        let from = changetype<usize>(src) + HEADER_SIZE;
+        let to   = changetype<usize>(dest) + HEADER_SIZE + (destOffset << 1);
+        let from = changetype<usize>(src)  + HEADER_SIZE;
         for (let i = 0, len = strLen * count; i < len; i += strLen) {
           memory.copy(to + i, from, strLen);
         }
