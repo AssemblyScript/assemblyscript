@@ -447,12 +447,22 @@ export class String {
     var len = targetLength - length;
     var out = allocate(targetLength);
     if (len > padLen) {
+      let count = (len - 1) / padLen;
+      let base = count * padLen;
+      let rest = len - base;
       repeat(
         changetype<usize>(out),
         changetype<usize>(padString),
         padLen,
-        (len + padLen - 1) / padLen
+        count
       );
+      if (rest) {
+        memory.copy(
+          changetype<usize>(out) + HEADER_SIZE + (<usize>base << 1),
+          changetype<usize>(padString) + HEADER_SIZE,
+          <usize>rest << 1
+        );
+      }
     } else {
       memory.copy(
         changetype<usize>(out) + HEADER_SIZE,
@@ -485,12 +495,22 @@ export class String {
       );
     }
     if (len > padLen) {
+      let count = (len - 1) / padLen;
+      let base = count * padLen;
+      let rest = len - base;
       repeat(
         changetype<usize>(out) + (<usize>length << 1),
         changetype<usize>(padString),
         padLen,
-        (len + padLen - 1) / padLen
+        count
       );
+      if (rest) {
+        memory.copy(
+          changetype<usize>(out) + HEADER_SIZE + (<usize>(base + length) << 1),
+          changetype<usize>(padString) + HEADER_SIZE,
+          <usize>rest << 1
+        );
+      }
     } else {
       memory.copy(
         changetype<usize>(out) + HEADER_SIZE + (<usize>length << 1),

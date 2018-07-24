@@ -3302,6 +3302,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -3362,19 +3364,56 @@
     (get_local $6)
     (get_local $4)
    )
-   (call $~lib/internal/string/repeat
-    (get_local $7)
-    (get_local $2)
-    (get_local $4)
-    (i32.div_s
-     (i32.sub
-      (i32.add
+   (block
+    (set_local $5
+     (i32.div_s
+      (i32.sub
        (get_local $6)
-       (get_local $4)
+       (i32.const 1)
       )
-      (i32.const 1)
+      (get_local $4)
      )
+    )
+    (set_local $8
+     (i32.mul
+      (get_local $5)
+      (get_local $4)
+     )
+    )
+    (set_local $9
+     (i32.sub
+      (get_local $6)
+      (get_local $8)
+     )
+    )
+    (call $~lib/internal/string/repeat
+     (get_local $7)
+     (get_local $2)
      (get_local $4)
+     (get_local $5)
+    )
+    (if
+     (get_local $9)
+     (call $~lib/memory/memory.copy
+      (i32.add
+       (i32.add
+        (get_local $7)
+        (get_global $~lib/internal/string/HEADER_SIZE)
+       )
+       (i32.shl
+        (get_local $8)
+        (i32.const 1)
+       )
+      )
+      (i32.add
+       (get_local $2)
+       (get_global $~lib/internal/string/HEADER_SIZE)
+      )
+      (i32.shl
+       (get_local $9)
+       (i32.const 1)
+      )
+     )
     )
    )
    (call $~lib/memory/memory.copy
@@ -3446,6 +3485,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -3457,7 +3498,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 474)
+     (i32.const 484)
      (i32.const 4)
     )
     (unreachable)
@@ -3523,25 +3564,65 @@
     (get_local $6)
     (get_local $4)
    )
-   (call $~lib/internal/string/repeat
-    (i32.add
-     (get_local $7)
-     (i32.shl
-      (get_local $3)
-      (i32.const 1)
+   (block
+    (set_local $5
+     (i32.div_s
+      (i32.sub
+       (get_local $6)
+       (i32.const 1)
+      )
+      (get_local $4)
      )
     )
-    (get_local $2)
-    (get_local $4)
-    (i32.div_s
-     (i32.sub
-      (i32.add
-       (get_local $6)
-       (get_local $4)
-      )
-      (i32.const 1)
+    (set_local $8
+     (i32.mul
+      (get_local $5)
+      (get_local $4)
      )
+    )
+    (set_local $9
+     (i32.sub
+      (get_local $6)
+      (get_local $8)
+     )
+    )
+    (call $~lib/internal/string/repeat
+     (i32.add
+      (get_local $7)
+      (i32.shl
+       (get_local $3)
+       (i32.const 1)
+      )
+     )
+     (get_local $2)
      (get_local $4)
+     (get_local $5)
+    )
+    (if
+     (get_local $9)
+     (call $~lib/memory/memory.copy
+      (i32.add
+       (i32.add
+        (get_local $7)
+        (get_global $~lib/internal/string/HEADER_SIZE)
+       )
+       (i32.shl
+        (i32.add
+         (get_local $8)
+         (get_local $3)
+        )
+        (i32.const 1)
+       )
+      )
+      (i32.add
+       (get_local $2)
+       (get_global $~lib/internal/string/HEADER_SIZE)
+      )
+      (i32.shl
+       (get_local $9)
+       (i32.const 1)
+      )
+     )
     )
    )
    (call $~lib/memory/memory.copy
@@ -4334,7 +4415,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 80)
-                  (i32.const 638)
+                  (i32.const 658)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -4893,7 +4974,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 505)
+     (i32.const 525)
      (i32.const 4)
     )
     (unreachable)
@@ -4928,7 +5009,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 510)
+     (i32.const 530)
      (i32.const 6)
     )
     (unreachable)
