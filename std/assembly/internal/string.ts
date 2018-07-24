@@ -178,6 +178,15 @@ export function repeat(dest: usize, src: usize, length: i32, count: i32): void {
       }
       break;
     }
+    case 3: {
+      let cc1 = load<u32>(src, HEADER_SIZE + 0);
+      let cc2 = load<u16>(src, HEADER_SIZE + 4);
+      for (let i = 0; i < count; ++i) {
+        store<u32>(dest + (i << 2), cc1, HEADER_SIZE + 0);
+        store<u16>(dest + (i << 1), cc2, HEADER_SIZE + 4);
+      }
+      break;
+    }
     case 4: {
       let cc = load<u64>(src, HEADER_SIZE);
       for (let i = 0; i < count; ++i) {
