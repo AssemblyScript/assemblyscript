@@ -2453,7 +2453,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/string/repeat (; 17 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/string/stringRepeat (; 17 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i64)
@@ -2775,7 +2775,7 @@
       (get_local $4)
      )
     )
-    (call $~lib/internal/string/repeat
+    (call $~lib/internal/string/stringRepeat
      (get_local $5)
      (get_local $2)
      (get_local $4)
@@ -2970,7 +2970,7 @@
       (get_local $5)
      )
     )
-    (call $~lib/internal/string/repeat
+    (call $~lib/internal/string/stringRepeat
      (i32.add
       (get_local $1)
       (i32.shl
@@ -4306,7 +4306,7 @@
     (get_local $0)
    )
   )
-  (call $~lib/internal/string/repeat
+  (call $~lib/internal/string/stringRepeat
    (tee_local $2
     (call $~lib/internal/string/allocate
      (i32.mul

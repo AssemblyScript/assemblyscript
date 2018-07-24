@@ -161,7 +161,7 @@ export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
   return cmp;
 }
 
-export function repeat(dest: usize, src: usize, length: i32, count: i32): void {
+export function stringRepeat(dest: usize, src: usize, length: i32, count: i32): void {
   if (ASC_SHRINK_LEVEL > 1) {
     let strLen = length << 1;
     let to = dest + HEADER_SIZE;

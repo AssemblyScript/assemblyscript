@@ -3,9 +3,9 @@ import {
   MAX_LENGTH,
   EMPTY,
   clamp,
-  repeat,
   allocate,
   compareUTF16,
+  stringRepeat,
   isWhiteSpaceOrLineTerminator,
   CharCode,
   parse
@@ -450,7 +450,7 @@ export class String {
       let count = (len - 1) / padLen;
       let base = count * padLen;
       let rest = len - base;
-      repeat(
+      stringRepeat(
         changetype<usize>(out),
         changetype<usize>(padString),
         padLen,
@@ -498,7 +498,7 @@ export class String {
       let count = (len - 1) / padLen;
       let base = count * padLen;
       let rest = len - base;
-      repeat(
+      stringRepeat(
         changetype<usize>(out) + (<usize>length << 1),
         changetype<usize>(padString),
         padLen,
@@ -534,7 +534,7 @@ export class String {
     if (count === 1) return this;
 
     var result = allocate(length * count);
-    repeat(changetype<usize>(result), changetype<usize>(this), length, count);
+    stringRepeat(changetype<usize>(result), changetype<usize>(this), length, count);
     return result;
   }
 
