@@ -163,9 +163,9 @@ export function repeatUnsafe(
   dest: String,
   destOffset: usize,
   src: String,
-  length: i32,
   count: i32
 ): void {
+  var length = src.length;
   if (ASC_SHRINK_LEVEL > 1) {
     let strLen = length << 1;
     let to = changetype<usize>(dest) + (destOffset << 1) + HEADER_SIZE;

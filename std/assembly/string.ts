@@ -399,7 +399,7 @@ export class String {
       let count = (len - 1) / padLen;
       let base  = count * padLen;
       let rest  = len - base;
-      repeatUnsafe(out, 0, padString, padLen, count);
+      repeatUnsafe(out, 0, padString, count);
       if (rest) copyUnsafe(out, base, padString, 0, rest);
     } else {
       copyUnsafe(out, 0, padString, 0, len);
@@ -420,7 +420,7 @@ export class String {
       let count = (len - 1) / padLen;
       let base = count * padLen;
       let rest = len - base;
-      repeatUnsafe(out, length, padString, padLen, count);
+      repeatUnsafe(out, length, padString, count);
       if (rest) copyUnsafe(out, base + length, padString, 0, rest);
     } else {
       copyUnsafe(out, length, padString, 0, len);
@@ -441,7 +441,7 @@ export class String {
     if (count === 1) return this;
 
     var result = allocate(length * count);
-    repeatUnsafe(result, 0, this, length, count);
+    repeatUnsafe(result, 0, this, count);
     return result;
   }
 

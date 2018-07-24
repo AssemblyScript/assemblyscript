@@ -3,7 +3,6 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $i (func (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
@@ -3069,13 +3068,19 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/string/repeatUnsafe (; 17 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/repeatUnsafe (; 17 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
   (local $10 i32)
+  (set_local $4
+   (i32.load
+    (get_local $2)
+   )
+  )
   (block $break|0
    (block $case5|0
     (block $case4|0
@@ -3084,7 +3089,7 @@
        (block $case1|0
         (block $case0|0
          (set_local $5
-          (get_local $3)
+          (get_local $4)
          )
          (br_if $case0|0
           (i32.eq
@@ -3144,7 +3149,7 @@
            (i32.eqz
             (i32.lt_s
              (get_local $7)
-             (get_local $4)
+             (get_local $3)
             )
            )
           )
@@ -3194,7 +3199,7 @@
           (i32.eqz
            (i32.lt_s
             (get_local $7)
-            (get_local $4)
+            (get_local $3)
            )
           )
          )
@@ -3249,7 +3254,7 @@
          (i32.eqz
           (i32.lt_s
            (get_local $8)
-           (get_local $4)
+           (get_local $3)
           )
          )
         )
@@ -3311,7 +3316,7 @@
         (i32.eqz
          (i32.lt_s
           (get_local $6)
-          (get_local $4)
+          (get_local $3)
          )
         )
        )
@@ -3340,7 +3345,7 @@
    (block
     (set_local $7
      (i32.shl
-      (get_local $3)
+      (get_local $4)
       (i32.const 1)
      )
     )
@@ -3370,7 +3375,7 @@
       (set_local $10
        (i32.mul
         (get_local $7)
-        (get_local $4)
+        (get_local $3)
        )
       )
      )
@@ -3499,7 +3504,6 @@
      (get_local $7)
      (i32.const 0)
      (get_local $2)
-     (get_local $4)
      (get_local $5)
     )
     (if
@@ -3764,7 +3768,6 @@
      (get_local $7)
      (get_local $3)
      (get_local $2)
-     (get_local $4)
      (get_local $8)
     )
     (if
@@ -5280,7 +5283,6 @@
    (get_local $4)
    (i32.const 0)
    (get_local $0)
-   (get_local $2)
    (get_local $1)
   )
   (get_local $4)
