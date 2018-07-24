@@ -8691,7 +8691,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 696)
-     (i32.const 57)
+     (i32.const 58)
      (i32.const 4)
     )
     (unreachable)
@@ -8732,6 +8732,8 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -8743,7 +8745,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 696)
-     (i32.const 113)
+     (i32.const 114)
      (i32.const 4)
     )
     (unreachable)
@@ -8788,24 +8790,32 @@
     (get_local $4)
    )
   )
-  (call $~lib/memory/memory.copy
-   (i32.add
-    (get_local $5)
-    (get_global $~lib/internal/string/HEADER_SIZE)
+  (block $~lib/internal/string/copyUnsafe|inlined.0
+   (set_local $6
+    (i32.const 0)
    )
-   (i32.add
-    (get_local $0)
-    (get_global $~lib/internal/string/HEADER_SIZE)
+   (set_local $7
+    (i32.const 0)
    )
-   (i32.shl
-    (get_local $2)
-    (i32.const 1)
-   )
-  )
-  (call $~lib/memory/memory.copy
-   (i32.add
+   (call $~lib/memory/memory.copy
     (i32.add
-     (get_local $5)
+     (i32.add
+      (get_local $5)
+      (i32.shl
+       (get_local $6)
+       (i32.const 1)
+      )
+     )
+     (get_global $~lib/internal/string/HEADER_SIZE)
+    )
+    (i32.add
+     (i32.add
+      (get_local $0)
+      (i32.shl
+       (get_local $7)
+       (i32.const 1)
+      )
+     )
      (get_global $~lib/internal/string/HEADER_SIZE)
     )
     (i32.shl
@@ -8813,13 +8823,36 @@
      (i32.const 1)
     )
    )
-   (i32.add
-    (get_local $1)
-    (get_global $~lib/internal/string/HEADER_SIZE)
+  )
+  (block $~lib/internal/string/copyUnsafe|inlined.1
+   (set_local $7
+    (i32.const 0)
    )
-   (i32.shl
-    (get_local $3)
-    (i32.const 1)
+   (call $~lib/memory/memory.copy
+    (i32.add
+     (i32.add
+      (get_local $5)
+      (i32.shl
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
+     (get_global $~lib/internal/string/HEADER_SIZE)
+    )
+    (i32.add
+     (i32.add
+      (get_local $1)
+      (i32.shl
+       (get_local $7)
+       (i32.const 1)
+      )
+     )
+     (get_global $~lib/internal/string/HEADER_SIZE)
+    )
+    (i32.shl
+     (get_local $3)
+     (i32.const 1)
+    )
    )
   )
   (get_local $5)

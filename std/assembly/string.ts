@@ -5,7 +5,8 @@ import {
   clamp,
   allocate,
   compareUTF16,
-  stringRepeat,
+  repeatUnsafe,
+  copyUnsafe,
   isWhiteSpaceOrLineTerminator,
   CharCode,
   parse
@@ -117,19 +118,8 @@ export class String {
     var outLen: usize = thisLen + otherLen;
     if (outLen == 0) return EMPTY;
     var out = allocate(outLen);
-
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE,
-      changetype<usize>(this) + HEADER_SIZE,
-      thisLen << 1
-    );
-
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE + (thisLen << 1),
-      changetype<usize>(other) + HEADER_SIZE,
-      otherLen << 1
-    );
-
+    copyUnsafe(out, 0, this, 0, thisLen);
+    copyUnsafe(out, thisLen, other, 0, otherLen);
     return out;
   }
 
@@ -297,7 +287,6 @@ export class String {
     var start = clamp<isize>(pos, 0, len);
     var searchLength: isize = searchString.length;
     if (searchLength + start > len) return false;
-
     return !compareUTF16(
       changetype<usize>(this) + (start << 1),
       changetype<usize>(searchString),
@@ -310,19 +299,11 @@ export class String {
     var intStart: isize = start;
     var end: isize = length;
     var size: isize = this.length;
-    if (intStart < 0) {
-      intStart = max<isize>(size + intStart, 0);
-    }
+    if (intStart < 0) intStart = max<isize>(size + intStart, 0);
     var resultLength = clamp<isize>(end, 0, size - intStart);
-    if (resultLength <= 0) {
-      return EMPTY;
-    }
+    if (resultLength <= 0) return EMPTY;
     var out = allocate(resultLength);
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE,
-      changetype<usize>(this) + HEADER_SIZE + (intStart << 1),
-      <usize>resultLength << 1
-    );
+    copyUnsafe(out, 0, this, intStart, resultLength);
     return out;
   }
 
@@ -334,18 +315,10 @@ export class String {
     var from = min<i32>(finalStart, finalEnd);
     var to = max<i32>(finalStart, finalEnd);
     len = to - from;
-    if (!len) {
-      return EMPTY;
-    }
-    if (!from && to == this.length) {
-      return this;
-    }
+    if (!len) return EMPTY;
+    if (!from && to == this.length) return this;
     var out = allocate(len);
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE,
-      changetype<usize>(this) + HEADER_SIZE + (from << 1),
-      len << 1
-    );
+    copyUnsafe(out, 0, this, from, len);
     return out;
   }
 
@@ -370,18 +343,10 @@ export class String {
     ) {
       ++start, --length;
     }
-    if (!length) {
-      return EMPTY;
-    }
-    if (!start && length == this.length) {
-      return this;
-    }
+    if (!length) return EMPTY;
+    if (!start && length == this.length) return this;
     var out = allocate(length);
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE,
-      changetype<usize>(this) + HEADER_SIZE + (start << 1),
-      length << 1
-    );
+    copyUnsafe(out, 0, this, start, length);
     return out;
   }
 
@@ -397,19 +362,11 @@ export class String {
     ) {
       ++start;
     }
-    if (!start) {
-      return this;
-    }
+    if (!start) return this;
     var outLen = len - start;
-    if (!outLen) {
-      return EMPTY;
-    }
+    if (!outLen) return EMPTY;
     var out = allocate(outLen);
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE,
-      changetype<usize>(this) + HEADER_SIZE + (start << 1),
-      outLen << 1
-    );
+    copyUnsafe(out, 0, this, start, outLen);
     return out;
   }
 
@@ -424,18 +381,10 @@ export class String {
     ) {
       --len;
     }
-    if (len <= 0) {
-      return EMPTY;
-    }
-    if (<i32>len == this.length) {
-      return this;
-    }
+    if (len <= 0) return EMPTY;
+    if (<i32>len == this.length) return this;
     var out = allocate(len);
-    memory.copy(
-      changetype<usize>(out) + HEADER_SIZE,
-      changetype<usize>(this) + HEADER_SIZE,
-      len << 1
-    );
+    copyUnsafe(out, 0, this, 0, len);
     return out;
   }
 
@@ -448,35 +397,14 @@ export class String {
     var out = allocate(targetLength);
     if (len > padLen) {
       let count = (len - 1) / padLen;
-      let base = count * padLen;
-      let rest = len - base;
-      stringRepeat(
-        changetype<usize>(out),
-        changetype<usize>(padString),
-        padLen,
-        count
-      );
-      if (rest) {
-        memory.copy(
-          changetype<usize>(out) + HEADER_SIZE + (<usize>base << 1),
-          changetype<usize>(padString) + HEADER_SIZE,
-          <usize>rest << 1
-        );
-      }
+      let base  = count * padLen;
+      let rest  = len - base;
+      repeatUnsafe(out, 0, padString, padLen, count);
+      if (rest) copyUnsafe(out, base, padString, 0, rest);
     } else {
-      memory.copy(
-        changetype<usize>(out) + HEADER_SIZE,
-        changetype<usize>(padString) + HEADER_SIZE,
-        <usize>len << 1
-      );
+      copyUnsafe(out, 0, padString, 0, len);
     }
-    if (length) {
-      memory.copy(
-        changetype<usize>(out) + HEADER_SIZE + (<usize>len << 1),
-        changetype<usize>(this) + HEADER_SIZE,
-        <usize>length << 1
-      );
-    }
+    if (length) copyUnsafe(out, len, this, 0, length);
     return out;
   }
 
@@ -487,36 +415,15 @@ export class String {
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
     var out = allocate(targetLength);
-    if (length) {
-      memory.copy(
-        changetype<usize>(out) + HEADER_SIZE,
-        changetype<usize>(this) + HEADER_SIZE,
-        <usize>length << 1
-      );
-    }
+    if (length) copyUnsafe(out, 0, this, 0, length);
     if (len > padLen) {
       let count = (len - 1) / padLen;
       let base = count * padLen;
       let rest = len - base;
-      stringRepeat(
-        changetype<usize>(out) + (<usize>length << 1),
-        changetype<usize>(padString),
-        padLen,
-        count
-      );
-      if (rest) {
-        memory.copy(
-          changetype<usize>(out) + HEADER_SIZE + (<usize>(base + length) << 1),
-          changetype<usize>(padString) + HEADER_SIZE,
-          <usize>rest << 1
-        );
-      }
+      repeatUnsafe(out, length, padString, padLen, count);
+      if (rest) copyUnsafe(out, base + length, padString, 0, rest);
     } else {
-      memory.copy(
-        changetype<usize>(out) + HEADER_SIZE + (<usize>length << 1),
-        changetype<usize>(padString) + HEADER_SIZE,
-        <usize>len << 1
-      );
+      copyUnsafe(out, length, padString, 0, len);
     }
     return out;
   }
@@ -534,7 +441,7 @@ export class String {
     if (count === 1) return this;
 
     var result = allocate(length * count);
-    stringRepeat(changetype<usize>(result), changetype<usize>(this), length, count);
+    repeatUnsafe(result, 0, this, length, count);
     return result;
   }
 
@@ -621,24 +528,19 @@ export function parseI64(str: String, radix: i32 = 0): i64 {
 // FIXME: naive implementation
 export function parseFloat(str: String): f64 {
   var len: i32 = str.length;
-  if (!len) {
-    return NaN;
-  }
+  if (!len) return NaN;
+
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
   var code = <i32>load<u16>(ptr, HEADER_SIZE);
 
   // determine sign
   var sign: f64;
   if (code == CharCode.MINUS) {
-    if (!--len) {
-      return NaN;
-    }
+    if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
     sign = -1;
   } else if (code == CharCode.PLUS) {
-    if (!--len) {
-      return NaN;
-    }
+    if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
     sign = 1;
   } else {
@@ -658,9 +560,7 @@ export function parseFloat(str: String): f64 {
           assert(false); // TODO
         }
         code -= CharCode._0;
-        if (<u32>code > 9) {
-          break;
-        }
+        if (<u32>code > 9) break;
         num += <f64>code * fac;
         fac *= 0.1;
         ptr += 2;
@@ -668,9 +568,7 @@ export function parseFloat(str: String): f64 {
       break;
     }
     code -= CharCode._0;
-    if (<u32>code >= 10) {
-      break;
-    }
+    if (<u32>code >= 10) break;
     num = (num * 10) + code;
     ptr += 2;
   }

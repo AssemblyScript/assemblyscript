@@ -5861,7 +5861,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 696)
-     (i32.const 57)
+     (i32.const 58)
      (i32.const 4)
     )
     (unreachable)
@@ -5908,7 +5908,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 696)
-     (i32.const 113)
+     (i32.const 114)
      (i32.const 4)
     )
     (unreachable)
@@ -5956,20 +5956,21 @@
     (get_local $0)
     (i32.const 4)
    )
-   (tee_local $0
-    (i32.shl
-     (get_local $3)
-     (i32.const 1)
-    )
+   (i32.shl
+    (get_local $3)
+    (i32.const 1)
    )
   )
   (call $~lib/memory/memory.copy
    (i32.add
     (i32.add
      (get_local $2)
-     (i32.const 4)
+     (i32.shl
+      (get_local $3)
+      (i32.const 1)
+     )
     )
-    (get_local $0)
+    (i32.const 4)
    )
    (i32.add
     (get_local $1)
