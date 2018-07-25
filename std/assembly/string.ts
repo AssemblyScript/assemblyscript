@@ -75,9 +75,8 @@ export class String {
 
   charCodeAt(pos: i32): i32 {
     assert(this !== null);
-    if (<u32>pos >= <u32>this.length) {
-      return -1; // (NaN)
-    }
+    if (<u32>pos >= <u32>this.length) return -1; // (NaN)
+
     return load<u16>(
       changetype<usize>(this) + (<usize>pos << 1),
       HEADER_SIZE
@@ -86,9 +85,8 @@ export class String {
 
   codePointAt(pos: i32): i32 {
     assert(this !== null);
-    if (<u32>pos >= <u32>this.length) {
-      return -1; // (undefined)
-    }
+    if (<u32>pos >= <u32>this.length) return -1; // (undefined)
+
     var first = <i32>load<u16>(
       changetype<usize>(this) + (<usize>pos << 1),
       HEADER_SIZE
@@ -113,6 +111,7 @@ export class String {
   concat(other: String): String {
     assert(this !== null);
     if (other === null) other = changetype<String>("null");
+
     var thisLen: isize = this.length;
     var otherLen: isize = other.length;
     var outLen: usize = thisLen + otherLen;
@@ -259,13 +258,12 @@ export class String {
   lastIndexOf(searchString: String, fromIndex: i32 = i32.MAX_VALUE): i32 {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
+
     var len: isize = this.length;
     var searchLen: isize = searchString.length;
     if (!searchLen) return len;
     if (!len) return -1;
     var start = clamp<isize>(fromIndex, 0, len - searchLen);
-
-    // TODO: multiple char codes
     for (let k = start; k >= 0; --k) {
       if (!compareUTF16(
         changetype<usize>(this) + (k << 1),
