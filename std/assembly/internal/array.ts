@@ -51,7 +51,7 @@ export function defaultComparatorTyped<T>(): (a: T, b: T) => i32 {
         var ib = reinterpret<i32>(b);
         ia ^= -(ia >>> 31) & 0x7FFFFFFF;
         ib ^= -(ib >>> 31) & 0x7FFFFFFF;
-        return ia - ib;
+        return <i32>(ia > ib) - <i32>(ia < ib);
       };
     } else {
       return (a: T, b: T): i32 => {
