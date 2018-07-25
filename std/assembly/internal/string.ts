@@ -159,12 +159,7 @@ export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
   return cmp;
 }
 
-export function repeatUnsafe(
-  dest: String,
-  destOffset: usize,
-  src: String,
-  count: i32
-): void {
+export function repeatUnsafe(dest: String, destOffset: usize, src: String, count: i32): void {
   var length = src.length;
   if (ASC_SHRINK_LEVEL > 1) {
     let strLen = length << 1;
