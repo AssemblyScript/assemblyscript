@@ -290,14 +290,21 @@ declare class String {
 
   private constructor();
 
+  charAt(index: i32): string;
+  charCodeAt(index: i32): i32;
+  concat(other: string): string;
   indexOf(other: string, fromIndex?: i32): i32;
   lastIndexOf(other: string, fromIndex?: i32): i32;
   includes(other: string): bool;
-  charAt(index: i32): string;
-  charCodeAt(index: i32): i32;
-  substring(from: i32, to?: i32): string;
   startsWith(other: string): bool;
   endsWith(other: string): bool;
+  substr(start: u32, length?: u32): string;
+  substring(from: i32, to?: i32): string;
+  trim(): string;
+  trimLeft(): string;
+  trimRight(): string;
+  padStart(targetLength: i32, padString?: string): string;
+  padEnd(targetLength: i32, padString?: string): string;
   replace(search: string, replacement: string): string;
   repeat(count?: i32): string;
   toString(): string;

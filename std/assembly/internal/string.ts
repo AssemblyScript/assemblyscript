@@ -17,7 +17,7 @@ export const EMPTY = changetype<String>(""); // TODO: is this a bad idea with '=
 
 @inline
 export function clamp<T>(val: T, lo: T, hi: T): T {
-  return max<T>(min<T>(val, hi), lo);
+  return min<T>(max<T>(val, lo), hi);
 }
 
 /** Allocates a raw String with uninitialized contents. */
@@ -26,6 +26,15 @@ export function allocate(length: i32): String {
   var buffer = memory.allocate(HEADER_SIZE + (<usize>length << 1));
   store<i32>(buffer, length);
   return changetype<String>(buffer);
+}
+
+@inline
+export function copyUnsafe(dest: String, destOffset: usize, src: String, srcOffset: usize, len: usize): void {
+  memory.copy(
+    changetype<usize>(dest) + (destOffset << 1) + HEADER_SIZE,
+    changetype<usize>(src)  + (srcOffset << 1)  + HEADER_SIZE,
+    len << 1
+  );
 }
 
 export function isWhiteSpaceOrLineTerminator(c: u16): bool {
@@ -76,24 +85,19 @@ export const enum CharCode {
 
 export function parse<T>(str: String, radix: i32 = 0): T {
   var len: i32 = str.length;
-  if (!len) {
-    return <T>NaN;
-  }
+  if (!len) return <T>NaN;
+
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
   var code = <i32>load<u16>(ptr, HEADER_SIZE);
 
   // determine sign
   var sign: T;
   if (code == CharCode.MINUS) {
-    if (!--len) {
-      return <T>NaN;
-    }
+    if (!--len) return <T>NaN;
     code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
     sign = -1;
   } else if (code == CharCode.PLUS) {
-    if (!--len) {
-      return <T>NaN;
-    }
+    if (!--len) return <T>NaN;
     code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
     sign = 1;
   } else {
@@ -122,9 +126,7 @@ export function parse<T>(str: String, radix: i32 = 0): T {
           radix = 16;
           break;
         }
-        default: {
-          radix = 10;
-        }
+        default: radix = 10;
       }
     } else radix = 10;
   } else if (radix < 2 || radix > 36) {
@@ -141,22 +143,79 @@ export function parse<T>(str: String, radix: i32 = 0): T {
       code -= CharCode.A - 10;
     } else if (code >= CharCode.a && code <= CharCode.z) {
       code -= CharCode.a - 10;
-    } else {
-      break;
-    }
-    if (code >= radix) {
-      break;
-    }
+    } else break;
+    if (code >= radix) break;
     num = (num * radix) + code;
     ptr += 2;
   }
   return sign * num;
 }
 
-export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
+export function compareUnsafe(str1: String, offset1: usize, str2: String, offset2: usize, len: usize): i32 {
   var cmp: i32 = 0;
+  var ptr1 = changetype<usize>(str1) + (offset1 << 1);
+  var ptr2 = changetype<usize>(str2) + (offset2 << 1);
   while (len && !(cmp = <i32>load<u16>(ptr1, HEADER_SIZE) - <i32>load<u16>(ptr2, HEADER_SIZE))) {
     --len, ++ptr1, ++ptr2;
   }
   return cmp;
+}
+
+export function repeatUnsafe(dest: String, destOffset: usize, src: String, count: i32): void {
+  var length = src.length;
+  if (ASC_SHRINK_LEVEL > 1) {
+    let strLen = length << 1;
+    let to   = changetype<usize>(dest) + HEADER_SIZE + (destOffset << 1);
+    let from = changetype<usize>(src)  + HEADER_SIZE;
+    for (let i = 0, len = strLen * count; i < len; i += strLen) {
+      memory.copy(to + i, from, strLen);
+    }
+  } else {
+    switch (length) {
+      case 0: break;
+      case 1: {
+        let cc =  load<u16>(changetype<usize>(src), HEADER_SIZE);
+        let out = changetype<usize>(dest) + (destOffset << 1);
+        for (let i = 0; i < count; ++i) {
+          store<u16>(out + (i << 1), cc, HEADER_SIZE);
+        }
+        break;
+      }
+      case 2: {
+        let cc  = load<u32>(changetype<usize>(src), HEADER_SIZE);
+        let out = changetype<usize>(dest) + (destOffset << 1);
+        for (let i = 0; i < count; ++i) {
+          store<u32>(out + (i << 2), cc, HEADER_SIZE);
+        }
+        break;
+      }
+      case 3: {
+        let cc1 = load<u32>(changetype<usize>(src), HEADER_SIZE + 0);
+        let cc2 = load<u16>(changetype<usize>(src), HEADER_SIZE + 4);
+        let out = changetype<usize>(dest) + (destOffset << 1);
+        for (let i = 0; i < count; ++i) {
+          store<u32>(out + (i << 2), cc1, HEADER_SIZE + 0);
+          store<u16>(out + (i << 1), cc2, HEADER_SIZE + 4);
+        }
+        break;
+      }
+      case 4: {
+        let cc = load<u64>(changetype<usize>(src), HEADER_SIZE);
+        let out = changetype<usize>(dest) + (destOffset << 1);
+        for (let i = 0; i < count; ++i) {
+          store<u64>(out + (i << 3), cc, HEADER_SIZE);
+        }
+        break;
+      }
+      default: {
+        let strLen = length << 1;
+        let to   = changetype<usize>(dest) + HEADER_SIZE + (destOffset << 1);
+        let from = changetype<usize>(src)  + HEADER_SIZE;
+        for (let i = 0, len = strLen * count; i < len; i += strLen) {
+          memory.copy(to + i, from, strLen);
+        }
+        break;
+      }
+    }
+  }
 }

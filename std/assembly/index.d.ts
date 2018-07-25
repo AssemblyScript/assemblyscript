@@ -489,6 +489,8 @@ declare class String {
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
+  padStart(targetLength: i32, padString?: string): string;
+  padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
   toString(): string;
   toUTF8(): usize;

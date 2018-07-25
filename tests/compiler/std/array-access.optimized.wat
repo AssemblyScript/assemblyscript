@@ -3,6 +3,7 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 12) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
@@ -59,36 +60,50 @@
    )
   )
  )
- (func $~lib/internal/string/compareUTF16 (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
+ (func $~lib/internal/string/compareUnsafe (; 4 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+  (local $5 i32)
+  (set_local $1
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
+  (set_local $2
+   (i32.add
+    (get_local $2)
+    (i32.shl
+     (get_local $3)
+     (i32.const 1)
+    )
+   )
+  )
   (loop $continue|0
    (if
-    (if (result i32)
-     (get_local $2)
-     (i32.eqz
-      (tee_local $3
-       (i32.sub
-        (i32.load16_u offset=4
-         (get_local $0)
-        )
-        (i32.load16_u offset=4
-         (get_local $1)
+    (tee_local $0
+     (if (result i32)
+      (get_local $4)
+      (i32.eqz
+       (tee_local $5
+        (i32.sub
+         (i32.load16_u offset=4
+          (get_local $1)
+         )
+         (i32.load16_u offset=4
+          (get_local $2)
+         )
         )
        )
       )
+      (get_local $4)
      )
-     (get_local $2)
     )
     (block
-     (set_local $2
+     (set_local $4
       (i32.sub
-       (get_local $2)
-       (i32.const 1)
-      )
-     )
-     (set_local $0
-      (i32.add
-       (get_local $0)
+       (get_local $4)
        (i32.const 1)
       )
      )
@@ -98,11 +113,17 @@
        (i32.const 1)
       )
      )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
      (br $continue|0)
     )
    )
   )
-  (get_local $3)
+  (get_local $5)
  )
  (func $~lib/string/String#startsWith (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -115,7 +136,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 12)
-     (i32.const 291)
+     (i32.const 245)
      (i32.const 4)
     )
     (unreachable)
@@ -137,46 +158,42 @@
        (get_local $1)
       )
      )
-     (tee_local $2
+     (tee_local $3
       (select
-       (tee_local $2
+       (tee_local $3
         (select
          (get_local $2)
-         (tee_local $3
-          (i32.load
-           (get_local $0)
-          )
-         )
-         (i32.lt_s
+         (i32.const 0)
+         (i32.gt_s
           (get_local $2)
-          (get_local $3)
+          (i32.const 0)
          )
         )
        )
-       (i32.const 0)
-       (i32.gt_s
+       (tee_local $2
+        (i32.load
+         (get_local $0)
+        )
+       )
+       (i32.lt_s
+        (get_local $3)
         (get_local $2)
-        (i32.const 0)
        )
       )
      )
     )
-    (get_local $3)
+    (get_local $2)
    )
    (return
     (i32.const 0)
    )
   )
   (i32.eqz
-   (call $~lib/internal/string/compareUTF16
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $2)
-      (i32.const 1)
-     )
-    )
+   (call $~lib/internal/string/compareUnsafe
+    (get_local $0)
+    (get_local $3)
     (get_local $1)
+    (i32.const 0)
     (get_local $4)
    )
   )
