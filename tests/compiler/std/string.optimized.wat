@@ -2,6 +2,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
+ (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $i (func (result i32)))
@@ -297,36 +298,50 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/string/compareUTF16 (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
+ (func $~lib/internal/string/compareUnsafe (; 6 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+  (local $5 i32)
+  (set_local $1
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
+  (set_local $2
+   (i32.add
+    (get_local $2)
+    (i32.shl
+     (get_local $3)
+     (i32.const 1)
+    )
+   )
+  )
   (loop $continue|0
    (if
-    (if (result i32)
-     (get_local $2)
-     (i32.eqz
-      (tee_local $3
-       (i32.sub
-        (i32.load16_u offset=4
-         (get_local $0)
-        )
-        (i32.load16_u offset=4
-         (get_local $1)
+    (tee_local $0
+     (if (result i32)
+      (get_local $4)
+      (i32.eqz
+       (tee_local $5
+        (i32.sub
+         (i32.load16_u offset=4
+          (get_local $1)
+         )
+         (i32.load16_u offset=4
+          (get_local $2)
+         )
         )
        )
       )
+      (get_local $4)
      )
-     (get_local $2)
     )
     (block
-     (set_local $2
+     (set_local $4
       (i32.sub
-       (get_local $2)
-       (i32.const 1)
-      )
-     )
-     (set_local $0
-      (i32.add
-       (get_local $0)
+       (get_local $4)
        (i32.const 1)
       )
      )
@@ -336,11 +351,17 @@
        (i32.const 1)
       )
      )
+     (set_local $2
+      (i32.add
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
      (br $continue|0)
     )
    )
   )
-  (get_local $3)
+  (get_local $5)
  )
  (func $~lib/string/String.__eq (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -389,9 +410,11 @@
    )
   )
   (i32.eqz
-   (call $~lib/internal/string/compareUTF16
+   (call $~lib/internal/string/compareUnsafe
     (get_local $0)
+    (i32.const 0)
     (get_local $1)
+    (i32.const 0)
     (get_local $2)
    )
   )
@@ -482,7 +505,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 280)
+     (i32.const 245)
      (i32.const 4)
     )
     (unreachable)
@@ -535,15 +558,11 @@
    )
   )
   (i32.eqz
-   (call $~lib/internal/string/compareUTF16
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $3)
-      (i32.const 1)
-     )
-    )
+   (call $~lib/internal/string/compareUnsafe
+    (get_local $0)
+    (get_local $3)
     (get_local $1)
+    (i32.const 0)
     (get_local $4)
    )
   )
@@ -611,15 +630,11 @@
    )
   )
   (i32.eqz
-   (call $~lib/internal/string/compareUTF16
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $3)
-      (i32.const 1)
-     )
-    )
+   (call $~lib/internal/string/compareUnsafe
+    (get_local $0)
+    (get_local $3)
     (get_local $1)
+    (i32.const 0)
     (get_local $2)
    )
   )
@@ -658,7 +673,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 238)
+     (i32.const 214)
      (i32.const 4)
     )
     (unreachable)
@@ -730,15 +745,11 @@
      )
     )
     (if
-     (call $~lib/internal/string/compareUTF16
-      (i32.add
-       (get_local $0)
-       (i32.shl
-        (get_local $2)
-        (i32.const 1)
-       )
-      )
+     (call $~lib/internal/string/compareUnsafe
+      (get_local $0)
+      (get_local $2)
       (get_local $1)
+      (i32.const 0)
       (get_local $4)
      )
      (block
@@ -2756,7 +2767,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 390)
+     (i32.const 351)
      (i32.const 4)
     )
     (unreachable)
@@ -2933,7 +2944,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 410)
+     (i32.const 371)
      (i32.const 4)
     )
     (unreachable)
@@ -3112,7 +3123,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 259)
+     (i32.const 230)
      (i32.const 4)
     )
     (unreachable)
@@ -3184,15 +3195,11 @@
      )
     )
     (if
-     (call $~lib/internal/string/compareUTF16
-      (i32.add
-       (get_local $0)
-       (i32.shl
-        (get_local $3)
-        (i32.const 1)
-       )
-      )
+     (call $~lib/internal/string/compareUnsafe
+      (get_local $0)
+      (get_local $3)
       (get_local $1)
+      (i32.const 0)
       (get_local $4)
      )
      (block
@@ -3771,7 +3778,7 @@
               (call $~lib/env/abort
                (i32.const 0)
                (i32.const 80)
-               (i32.const 558)
+               (i32.const 519)
                (i32.const 10)
               )
               (unreachable)
@@ -4026,9 +4033,11 @@
    )
   )
   (i32.gt_s
-   (call $~lib/internal/string/compareUTF16
+   (call $~lib/internal/string/compareUnsafe
     (get_local $0)
+    (i32.const 0)
     (get_local $1)
+    (i32.const 0)
     (select
      (get_local $2)
      (get_local $3)
@@ -4101,9 +4110,11 @@
    )
   )
   (i32.ge_s
-   (call $~lib/internal/string/compareUTF16
+   (call $~lib/internal/string/compareUnsafe
     (get_local $0)
+    (i32.const 0)
     (get_local $1)
+    (i32.const 0)
     (select
      (get_local $2)
      (get_local $3)
@@ -4176,9 +4187,11 @@
    )
   )
   (i32.lt_s
-   (call $~lib/internal/string/compareUTF16
+   (call $~lib/internal/string/compareUnsafe
     (get_local $0)
+    (i32.const 0)
     (get_local $1)
+    (i32.const 0)
     (select
      (get_local $2)
      (get_local $3)
@@ -4251,9 +4264,11 @@
    )
   )
   (i32.le_s
-   (call $~lib/internal/string/compareUTF16
+   (call $~lib/internal/string/compareUnsafe
     (get_local $0)
+    (i32.const 0)
     (get_local $1)
+    (i32.const 0)
     (select
      (get_local $2)
      (get_local $3)
@@ -4277,7 +4292,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 430)
+     (i32.const 391)
      (i32.const 4)
     )
     (unreachable)
@@ -4313,7 +4328,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 435)
+     (i32.const 396)
      (i32.const 6)
     )
     (unreachable)

@@ -4,7 +4,7 @@ import {
   EMPTY,
   clamp,
   allocate,
-  compareUTF16,
+  compareUnsafe,
   repeatUnsafe,
   copyUnsafe,
   isWhiteSpaceOrLineTerminator,
@@ -129,11 +129,7 @@ export class String {
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
     if (start < 0) return false;
-    return !compareUTF16(
-      changetype<usize>(this) + (start << 1),
-      changetype<usize>(searchString),
-      searchLength
-    );
+    return !compareUnsafe(this, start, searchString, 0, searchLength);
   }
 
   @operator("==")
@@ -144,11 +140,7 @@ export class String {
     var leftLength = left.length;
     if (leftLength != right.length) return false;
 
-    return !compareUTF16(
-      changetype<usize>(left),
-      changetype<usize>(right),
-      leftLength
-    );
+    return !compareUnsafe(left, 0, right, 0, leftLength);
   }
 
   @operator("!=")
@@ -167,11 +159,7 @@ export class String {
     if (!rightLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUTF16(
-      changetype<usize>(left),
-      changetype<usize>(right),
-      length
-    ) > 0;
+    return compareUnsafe(left, 0, right, 0, length) > 0;
   }
 
   @operator(">=")
@@ -186,11 +174,7 @@ export class String {
     if (!rightLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUTF16(
-      changetype<usize>(left),
-      changetype<usize>(right),
-      length
-    ) >= 0;
+    return compareUnsafe(left, 0, right, 0, length) >= 0;
   }
 
   @operator("<")
@@ -204,11 +188,7 @@ export class String {
     if (!leftLength)  return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUTF16(
-      changetype<usize>(left),
-      changetype<usize>(right),
-      length
-    ) < 0;
+    return compareUnsafe(left, 0, right, 0, length) < 0;
   }
 
   @operator("<=")
@@ -223,11 +203,7 @@ export class String {
     if (!leftLength)  return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUTF16(
-      changetype<usize>(left),
-      changetype<usize>(right),
-      length
-    ) <= 0;
+    return compareUnsafe(left, 0, right, 0, length) <= 0;
   }
 
   includes(searchString: String, position: i32 = 0): bool {
@@ -237,6 +213,7 @@ export class String {
   indexOf(searchString: String, fromIndex: i32 = 0): i32 {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
+
     var searchLen: isize = searchString.length;
     if (!searchLen) return 0;
     var len: isize = this.length;
@@ -244,13 +221,7 @@ export class String {
     var start = clamp<isize>(fromIndex, 0, len);
     len -= searchLen;
     for (let k: isize = start; k <= len; ++k) {
-      if (!compareUTF16(
-        changetype<usize>(this) + (k << 1),
-        changetype<usize>(searchString),
-        searchLen
-      )) {
-        return <i32>k;
-      }
+      if (!compareUnsafe(this, k, searchString, 0, searchLen)) return <i32>k;
     }
     return -1;
   }
@@ -265,13 +236,7 @@ export class String {
     if (!len) return -1;
     var start = clamp<isize>(fromIndex, 0, len - searchLen);
     for (let k = start; k >= 0; --k) {
-      if (!compareUTF16(
-        changetype<usize>(this) + (k << 1),
-        changetype<usize>(searchString),
-        searchLen
-      )) {
-        return <i32>k;
-      }
+      if (!compareUnsafe(this, k, searchString, 0, searchLen)) return <i32>k;
     }
     return -1;
   }
@@ -285,11 +250,7 @@ export class String {
     var start = clamp<isize>(pos, 0, len);
     var searchLength: isize = searchString.length;
     if (searchLength + start > len) return false;
-    return !compareUTF16(
-      changetype<usize>(this) + (start << 1),
-      changetype<usize>(searchString),
-      searchLength
-    );
+    return !compareUnsafe(this, start, searchString, 0, searchLength);
   }
 
   substr(start: i32, length: i32 = i32.MAX_VALUE): String {

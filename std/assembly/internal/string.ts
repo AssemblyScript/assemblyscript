@@ -151,8 +151,10 @@ export function parse<T>(str: String, radix: i32 = 0): T {
   return sign * num;
 }
 
-export function compareUTF16(ptr1: usize, ptr2: usize, len: usize): i32 {
+export function compareUnsafe(str1: String, offset1: usize, str2: String, offset2: usize, len: usize): i32 {
   var cmp: i32 = 0;
+  var ptr1 = changetype<usize>(str1) + (offset1 << 1);
+  var ptr2 = changetype<usize>(str2) + (offset2 << 1);
   while (len && !(cmp = <i32>load<u16>(ptr1, HEADER_SIZE) - <i32>load<u16>(ptr2, HEADER_SIZE))) {
     --len, ++ptr1, ++ptr2;
   }
