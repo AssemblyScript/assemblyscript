@@ -9,7 +9,7 @@ import {
 import {
   insertionSort,
   weakHeapSort,
-  // defaultComparatorTyped
+  defaultComparatorTyped
 } from "./array";
 
 /** Typed array base class. Not a global object. */
@@ -77,7 +77,6 @@ export abstract class TypedArray<T,V> {
     return changetype<this>(slice);
   }
 
-  /* TODO
   sort(comparator: (a: T, b: T) => i32 = defaultComparatorTyped<T>()): this {
     // TODO remove this when flow will allow trackcing null
     assert(comparator); // The comparison function must be a function
@@ -98,13 +97,15 @@ export abstract class TypedArray<T,V> {
 
     if (isReference<T>()) {
       // TODO replace this to faster stable sort (TimSort) when it implemented
-      return changetype<this>(insertionSort<T>(this, comparator));
+      insertionSort<T>(buffer, byteOffset, length, comparator);
+      return this;
     } else {
-      return changetype<this>(length < 256
-        ? insertionSort<T>(this, comparator)
-        : weakHeapSort<T>(this, comparator)
-      );
+      if (length < 256) {
+        insertionSort<T>(buffer, byteOffset, length, comparator);
+      } else {
+        weakHeapSort<T>(buffer, byteOffset, length, comparator);
+      }
+      return this;
     }
   }
-  */
 }

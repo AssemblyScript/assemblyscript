@@ -32,6 +32,7 @@ export class Array<T> {
     );
   }
 
+  @inline
   get length(): i32 {
     return this.length_;
   }
@@ -320,12 +321,15 @@ export class Array<T> {
 
     if (isReference<T>()) {
       // TODO replace this to faster stable sort (TimSort) when it implemented
-      return changetype<this>(insertionSort<T>(this, comparator));
+      insertionSort<T>(buffer, 0, length, comparator);
+      return this;
     } else {
-      return changetype<this>(length < 256
-        ? insertionSort<T>(this, comparator)
-        : weakHeapSort<T>(this, comparator)
-      );
+      if (length < 256) {
+        insertionSort<T>(buffer, 0, length, comparator);
+      } else {
+        weakHeapSort<T>(buffer, 0, length, comparator);
+      }
+      return this;
     }
   }
 }
