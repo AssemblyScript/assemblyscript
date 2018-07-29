@@ -22,6 +22,7 @@
     (i32.const 0)
    )
   )
+  (unreachable)
  )
  (func $if/ifThen (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (if
@@ -42,6 +43,7 @@
     (i32.const 0)
    )
   )
+  (unreachable)
  )
  (func $if/ifAlwaysReturns (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (if
@@ -59,6 +61,7 @@
     (unreachable)
    )
   )
+  (unreachable)
  )
  (func $start (; 5 ;) (type $v)
   (if

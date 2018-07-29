@@ -1,9 +1,7 @@
 import {
   HEADER_SIZE,
   MAX_LENGTH,
-  EMPTY,
-  clamp,
-  allocate,
+  allocateUnsafe,
   compareUnsafe,
   repeatUnsafe,
   copyUnsafe,
@@ -20,7 +18,7 @@ export class String {
   // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
     if (!code) return changetype<String>("\0");
-    var out = allocate(1);
+    var out = allocateUnsafe(1);
     store<u16>(
       changetype<usize>(out),
       <u16>code,
@@ -33,7 +31,7 @@ export class String {
     assert(<u32>code <= 0x10FFFF); // Invalid code point range
     if (!code) return changetype<String>("\0");
     var sur = code > 0xFFFF;
-    var out = allocate(<i32>sur + 1);
+    var out = allocateUnsafe(<i32>sur + 1);
     if (!sur) {
       store<u16>(
         changetype<usize>(out),
@@ -57,11 +55,9 @@ export class String {
   charAt(pos: i32): String {
     assert(this !== null);
 
-    if (<u32>pos >= <u32>this.length) {
-      return EMPTY;
-    }
+    if (<u32>pos >= <u32>this.length) return changetype<String>("");
 
-    var out = allocate(1);
+    var out = allocateUnsafe(1);
     store<u16>(
       changetype<usize>(out),
       load<u16>(
@@ -115,8 +111,8 @@ export class String {
     var thisLen: isize = this.length;
     var otherLen: isize = other.length;
     var outLen: usize = thisLen + otherLen;
-    if (outLen == 0) return EMPTY;
-    var out = allocate(outLen);
+    if (outLen == 0) return changetype<String>("");
+    var out = allocateUnsafe(outLen);
     copyUnsafe(out, 0, this, 0, thisLen);
     copyUnsafe(out, thisLen, other, 0, otherLen);
     return out;
@@ -125,7 +121,7 @@ export class String {
   endsWith(searchString: String, endPosition: i32 = MAX_LENGTH): bool {
     assert(this !== null);
     if (searchString === null) return false;
-    var end = clamp<isize>(endPosition, 0, this.length);
+    var end = min(max(endPosition, 0), this.length);
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
     if (start < 0) return false;
@@ -218,7 +214,7 @@ export class String {
     if (!searchLen) return 0;
     var len: isize = this.length;
     if (!len) return -1;
-    var start = clamp<isize>(fromIndex, 0, len);
+    var start = min<isize>(max<isize>(fromIndex, 0), len);
     len -= searchLen;
     for (let k: isize = start; k <= len; ++k) {
       if (!compareUnsafe(this, k, searchString, 0, searchLen)) return <i32>k;
@@ -234,7 +230,7 @@ export class String {
     var searchLen: isize = searchString.length;
     if (!searchLen) return len;
     if (!len) return -1;
-    var start = clamp<isize>(fromIndex, 0, len - searchLen);
+    var start = min<isize>(max(fromIndex, 0), len - searchLen);
     for (let k = start; k >= 0; --k) {
       if (!compareUnsafe(this, k, searchString, 0, searchLen)) return <i32>k;
     }
@@ -247,7 +243,7 @@ export class String {
 
     var pos: isize = position;
     var len: isize = this.length;
-    var start = clamp<isize>(pos, 0, len);
+    var start = min(max(pos, 0), len);
     var searchLength: isize = searchString.length;
     if (searchLength + start > len) return false;
     return !compareUnsafe(this, start, searchString, 0, searchLength);
@@ -258,10 +254,10 @@ export class String {
     var intStart: isize = start;
     var end: isize = length;
     var size: isize = this.length;
-    if (intStart < 0) intStart = max<isize>(size + intStart, 0);
-    var resultLength = clamp<isize>(end, 0, size - intStart);
-    if (resultLength <= 0) return EMPTY;
-    var out = allocate(resultLength);
+    if (intStart < 0) intStart = max(size + intStart, 0);
+    var resultLength = min(max(end, 0), size - intStart);
+    if (resultLength <= 0) return changetype<String>("");
+    var out = allocateUnsafe(resultLength);
     copyUnsafe(out, 0, this, intStart, resultLength);
     return out;
   }
@@ -269,14 +265,14 @@ export class String {
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
     assert(this !== null);
     var len = this.length;
-    var finalStart = clamp<isize>(start, 0, len);
-    var finalEnd = clamp<isize>(end, 0, len);
+    var finalStart = min(max(start, 0), len);
+    var finalEnd = min(max(end, 0), len);
     var from = min<i32>(finalStart, finalEnd);
     var to = max<i32>(finalStart, finalEnd);
     len = to - from;
-    if (!len) return EMPTY;
+    if (!len) return changetype<String>("");
     if (!from && to == this.length) return this;
-    var out = allocate(len);
+    var out = allocateUnsafe(len);
     copyUnsafe(out, 0, this, from, len);
     return out;
   }
@@ -302,9 +298,9 @@ export class String {
     ) {
       ++start, --length;
     }
-    if (!length) return EMPTY;
+    if (!length) return changetype<String>("");
     if (!start && length == this.length) return this;
-    var out = allocate(length);
+    var out = allocateUnsafe(length);
     copyUnsafe(out, 0, this, start, length);
     return out;
   }
@@ -323,8 +319,8 @@ export class String {
     }
     if (!start) return this;
     var outLen = len - start;
-    if (!outLen) return EMPTY;
-    var out = allocate(outLen);
+    if (!outLen) return changetype<String>("");
+    var out = allocateUnsafe(outLen);
     copyUnsafe(out, 0, this, start, outLen);
     return out;
   }
@@ -340,9 +336,9 @@ export class String {
     ) {
       --len;
     }
-    if (len <= 0) return EMPTY;
+    if (len <= 0) return changetype<String>("");
     if (<i32>len == this.length) return this;
-    var out = allocate(len);
+    var out = allocateUnsafe(len);
     copyUnsafe(out, 0, this, 0, len);
     return out;
   }
@@ -353,7 +349,7 @@ export class String {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    var out = allocate(targetLength);
+    var out = allocateUnsafe(targetLength);
     if (len > padLen) {
       let count = (len - 1) / padLen;
       let base  = count * padLen;
@@ -373,7 +369,7 @@ export class String {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    var out = allocate(targetLength);
+    var out = allocateUnsafe(targetLength);
     if (length) copyUnsafe(out, 0, this, 0, length);
     if (len > padLen) {
       let count = (len - 1) / padLen;
@@ -396,10 +392,10 @@ export class String {
       throw new RangeError("Invalid count value");
     }
 
-    if (count === 0 || !length) return EMPTY;
+    if (count === 0 || !length) return changetype<String>("");
     if (count === 1) return this;
 
-    var result = allocate(length * count);
+    var result = allocateUnsafe(length * count);
     repeatUnsafe(result, 0, this, count);
     return result;
   }

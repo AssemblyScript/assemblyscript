@@ -150,7 +150,7 @@
   (get_local $0)
  )
  (func $std/constructor/CtorReturns#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  (call $~lib/memory/memory.allocate
+  (call $~lib/allocator/arena/__memory_allocate
    (i32.const 0)
   )
  )
@@ -158,18 +158,24 @@
   (if
    (get_global $std/constructor/b)
    (return
+    (tee_local $0
+     (call $~lib/allocator/arena/__memory_allocate
+      (i32.const 0)
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (set_local $0
     (call $~lib/memory/memory.allocate
      (i32.const 0)
     )
    )
   )
-  (if (result i32)
-   (get_local $0)
-   (get_local $0)
-   (call $~lib/memory/memory.allocate
-    (i32.const 0)
-   )
-  )
+  (get_local $0)
  )
  (func $std/constructor/CtorConditionallyAllocates#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (if

@@ -8,7 +8,7 @@ class MyObject {
 function MyObject_visit(ref: usize): void {} // function table index == classId ?
 
 // allocate a managed instance
-var obj: MyObject | null = changetype<MyObject>(gc.allocate(offsetof<MyObject>(), MyObject_visit));
+var obj: MyObject | null = changetype<MyObject>(__gc_allocate(offsetof<MyObject>(), MyObject_visit));
 obj.a = 123;
 
 // check header

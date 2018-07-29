@@ -341,6 +341,15 @@ export class Program extends DiagnosticEmitter {
   /** Memory allocation function. */
   memoryAllocateInstance: Function | null = null;
 
+  /** Whether a garbage collector is present or not. */
+  hasGC: bool = false;
+  /** Garbage collector allocation function. */
+  gcAllocateInstance: Function | null = null;
+  /** Garbage collector link function called when a managed object is referenced from a parent. */
+  gcLinkInstance: Function | null = null;
+  /** Garbage collector mark function called to on reachable managed objects. */
+  gcMarkInstance: Function | null = null;
+
   /** Currently processing filespace. */
   currentFilespace: Filespace;
 
@@ -657,6 +666,47 @@ export class Program extends DiagnosticEmitter {
           if (instance) this.memoryAllocateInstance = instance;
         }
       }
+    }
+
+    // register GC hooks if present
+    if (
+      this.elementsLookup.has("__gc_allocate") &&
+      this.elementsLookup.has("__gc_link") &&
+      this.elementsLookup.has("__gc_mark")
+    ) {
+      // __gc_allocate(usize, (ref: usize) => void): usize
+      let element = <Element>this.elementsLookup.get("__gc_allocate");
+      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let gcAllocateInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
+      let signature = gcAllocateInstance.signature;
+      assert(signature.parameterTypes.length == 2);
+      assert(signature.parameterTypes[0] == this.options.usizeType);
+      assert(signature.parameterTypes[1].signatureReference);
+      assert(signature.returnType == this.options.usizeType);
+
+      // __gc_link(usize, usize): void
+      element = <Element>this.elementsLookup.get("__gc_link");
+      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let gcLinkInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
+      signature = gcLinkInstance.signature;
+      assert(signature.parameterTypes.length == 2);
+      assert(signature.parameterTypes[0] == this.options.usizeType);
+      assert(signature.parameterTypes[1] == this.options.usizeType);
+      assert(signature.returnType == Type.void);
+
+      // __gc_mark(usize): void
+      element = <Element>this.elementsLookup.get("__gc_mark");
+      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let gcMarkInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
+      signature = gcMarkInstance.signature;
+      assert(signature.parameterTypes.length == 1);
+      assert(signature.parameterTypes[0] == this.options.usizeType);
+      assert(signature.returnType == Type.void);
+
+      this.gcAllocateInstance = gcAllocateInstance;
+      this.gcLinkInstance = gcLinkInstance;
+      this.gcMarkInstance = gcMarkInstance;
+      this.hasGC = true;
     }
   }
 
@@ -2771,6 +2821,8 @@ export class Class extends Element {
   constructorInstance: Function | null = null;
   /** Operator overloads. */
   overloads: Map<OperatorKind,Function> | null = null;
+  /** Function index of the GC hook. */
+  gcHookIndex: u32 = <u32>-1;
 
   /** Constructs a new class. */
   constructor(

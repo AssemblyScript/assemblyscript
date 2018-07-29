@@ -114,6 +114,8 @@ export class Map<K,V> {
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase, HEADER_SIZE_AB);
       store<usize>(bucketPtrBase, changetype<usize>(entry), HEADER_SIZE_AB);
+      if (isManaged<K>()) __gc_link(changetype<usize>(this), changetype<usize>(key)); // tslint:disable-line
+      if (isManaged<V>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
     }
   }
 
@@ -161,5 +163,23 @@ export class Map<K,V> {
     this.entries = newEntries;
     this.entriesCapacity = newEntriesCapacity;
     this.entriesOffset = this.entriesCount;
+  }
+
+  private __gc(): void {
+    if (isManaged<K>() || isManaged<V>()) {
+      let entries = this.entries;
+      let offset: usize = 0;
+      let end: usize = this.entriesOffset * ENTRY_SIZE<K,V>();
+      while (offset < end) {
+        let entry = changetype<MapEntry<K,V>>(
+          changetype<usize>(entries) + HEADER_SIZE_AB + offset * ENTRY_SIZE<K,V>()
+        );
+        if (!(entry.taggedNext & EMPTY)) {
+          if (isManaged<K>()) __gc_mark(changetype<usize>(entry.key)); // tslint:disable-line
+          if (isManaged<V>()) __gc_mark(changetype<usize>(entry.value)); // tslint:disable-line
+        }
+        offset += ENTRY_SIZE<K,V>();
+      }
+    }
   }
 }

@@ -36,7 +36,8 @@ import {
   getGetLocalIndex,
   getBlockChildCount,
   getBlockChild,
-  getBlockName
+  getBlockName,
+  needsExplicitUnreachable
 } from "./module";
 
 import {
@@ -282,7 +283,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
   /** Function table being compiled. */
-  functionTable: Function[] = [];
+  functionTable: FunctionRef[] = [];
   /** Argument count helper global. */
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
@@ -391,11 +392,7 @@ export class Compiler extends DiagnosticEmitter {
     var functionTableSize = functionTable.length;
     var functionTableExported = false;
     if (functionTableSize) {
-      let entries = new Array<FunctionRef>(functionTableSize);
-      for (let i = 0; i < functionTableSize; ++i) {
-        entries[i] = functionTable[i].ref;
-      }
-      module.setFunctionTable(entries);
+      module.setFunctionTable(functionTable);
       module.addTableExport("0", "table");
       functionTableExported = true;
     }
@@ -1474,7 +1471,7 @@ export class Compiler extends DiagnosticEmitter {
       // insert the trampoline if the function has optional parameters
       func = this.ensureTrampoline(func);
     }
-    functionTable.push(func);
+    functionTable.push(func.ref);
     func.functionTableIndex = index;
     return index;
   }
@@ -1581,7 +1578,10 @@ export class Compiler extends DiagnosticEmitter {
         default: stmts.push(stmt);
         case ExpressionId.Nop:
       }
-      if (flow.isAny(FlowFlags.ANY_TERMINATING)) break;
+      if (flow.isAny(FlowFlags.ANY_TERMINATING)) {
+        if (needsExplicitUnreachable(stmt)) stmts.push(this.module.createUnreachable());
+        break;
+      }
     }
     return stmts;
   }
@@ -1682,7 +1682,7 @@ export class Compiler extends DiagnosticEmitter {
     );
     parentFlow.inherit(flow);
 
-    return module.createBlock(breakLabel, [
+    var block: ExpressionRef[] = [
       module.createLoop(continueLabel,
         terminated
           ? body // skip trailing continue if unnecessary
@@ -1691,7 +1691,9 @@ export class Compiler extends DiagnosticEmitter {
               module.createBreak(continueLabel, condExpr)
             ], NativeType.None)
       )
-    ], terminated ? NativeType.Unreachable : NativeType.None);
+    ];
+    if (terminated) block.push(module.createUnreachable());
+    return module.createBlock(breakLabel, block);
   }
 
   compileEmptyStatement(statement: EmptyStatement): ExpressionRef {
@@ -1754,7 +1756,10 @@ export class Compiler extends DiagnosticEmitter {
     var incrExpr = statement.incrementor
       ? this.compileExpression(<Expression>statement.incrementor, Type.void, ConversionKind.IMPLICIT, WrapMode.NONE)
       : 0;
-    var bodyExpr = this.compileStatement(statement.statement);
+    var bodyStatement = statement.statement;
+    var bodyExpr = bodyStatement.kind == NodeKind.BLOCK && (<BlockStatement>bodyStatement).statements.length == 1
+      ? this.compileStatement((<BlockStatement>bodyStatement).statements[0])
+      : this.compileStatement(bodyStatement);
 
     // Switch back to the parent flow
     currentFunction.flow = flow.free();
@@ -1766,7 +1771,6 @@ export class Compiler extends DiagnosticEmitter {
       FlowFlags.CONTINUES |
       FlowFlags.CONDITIONALLY_CONTINUES
     );
-    var terminated = alwaysTrue && flow.isAny(FlowFlags.ANY_TERMINATING);
     if (alwaysTrue) parentFlow.inherit(flow);
     else parentFlow.inheritConditional(flow);
 
@@ -1793,18 +1797,10 @@ export class Compiler extends DiagnosticEmitter {
     );
 
     breakBlock.push(
-      module.createLoop(repeatLabel,
-        module.createBlock(null, repeatBlock, NativeType.None)
-      )
+      module.createLoop(repeatLabel, module.createBlock(null, repeatBlock, NativeType.None))
     );
 
-    return module.createBlock(
-      breakLabel,
-      breakBlock,
-      terminated
-        ? NativeType.Unreachable
-        : NativeType.None
-      );
+    return module.createBlock(breakLabel, breakBlock);
   }
 
   compileIfStatement(statement: IfStatement): ExpressionRef {
@@ -2249,7 +2245,6 @@ export class Compiler extends DiagnosticEmitter {
 
     var body = this.compileStatement(statement.statement);
     var alwaysTrue = false; // TODO
-    var alwaysReturns = alwaysTrue && flow.is(FlowFlags.RETURNS);
     var terminated = flow.isAny(FlowFlags.ANY_TERMINATING);
 
     // Switch back to the parent flow
@@ -2264,7 +2259,7 @@ export class Compiler extends DiagnosticEmitter {
     if (alwaysTrue) parentFlow.inherit(flow);
     else parentFlow.inheritConditional(flow);
 
-    var expr = module.createBlock(breakLabel, [
+    return module.createBlock(breakLabel, [
       module.createLoop(continueLabel,
         module.createIf(condExpr,
           terminated
@@ -2275,8 +2270,7 @@ export class Compiler extends DiagnosticEmitter {
               ], NativeType.None)
         )
       )
-    ], alwaysReturns ? NativeType.Unreachable : NativeType.None);
-    return expr;
+    ]);
   }
 
   // expressions
@@ -4808,6 +4802,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           let tempLocalIndex = tempLocal.index;
           // TODO: simplify if valueWithCorrectType has no side effects
+          // TODO: call __gc_link here if a GC is present
           return module.createBlock(null, [
             module.createSetLocal(tempLocalIndex, valueWithCorrectType),
             module.createStore(
@@ -4820,6 +4815,7 @@ export class Compiler extends DiagnosticEmitter {
             module.createGetLocal(tempLocalIndex, nativeType)
           ], nativeType);
         } else {
+          // TODO: call __gc_link here if a GC is present
           return module.createStore(
             type.byteSize,
             thisExpr,
