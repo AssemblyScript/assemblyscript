@@ -415,8 +415,14 @@
        (get_local $0)
       )
      )
-     (call $std/gc-basics/MyObject_visit
-      (get_local $0)
+     (if
+      (i32.ge_u
+       (get_local $0)
+       (i32.const 60)
+      )
+      (call $std/gc-basics/MyObject_visit
+       (get_local $0)
+      )
      )
     )
     (block

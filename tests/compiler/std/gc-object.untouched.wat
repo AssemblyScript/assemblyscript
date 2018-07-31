@@ -499,12 +499,18 @@
         (get_local $0)
        )
       )
-      (block $~lib/memory/memory.free|inlined.0
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $0)
+      (if
+       (i32.ge_u
+        (get_local $0)
+        (get_global $HEAP_BASE)
+       )
+       (block $~lib/memory/memory.free|inlined.0
+        (block
+         (call $~lib/allocator/arena/__memory_free
+          (get_local $0)
+         )
+         (br $~lib/memory/memory.free|inlined.0)
         )
-        (br $~lib/memory/memory.free|inlined.0)
        )
       )
      )

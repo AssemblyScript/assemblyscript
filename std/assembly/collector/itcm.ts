@@ -175,7 +175,7 @@ function step(): void {
       if (obj !== toSpace) {
         if (TRACE) trace("gc~step/SWEEP free", 1, objToRef(obj));
         iter = obj.next;
-        memory.free(changetype<usize>(obj));
+        if (changetype<usize>(obj) >= HEAP_BASE) memory.free(changetype<usize>(obj));
       } else {
         if (TRACE) trace("gc~step/SWEEP finish");
         toSpace.clear();

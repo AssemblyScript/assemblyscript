@@ -410,8 +410,14 @@
        (get_local $0)
       )
      )
-     (call $~lib/allocator/arena/__memory_free
-      (get_local $0)
+     (if
+      (i32.ge_u
+       (get_local $0)
+       (i32.const 8)
+      )
+      (call $~lib/allocator/arena/__memory_free
+       (get_local $0)
+      )
      )
     )
     (block
