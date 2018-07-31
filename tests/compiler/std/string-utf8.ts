@@ -46,5 +46,6 @@ assert(load<u8>(ptr, 8) == 0xad);
 assert(load<u8>(ptr, 9) == 0xa2);
 assert(load<u8>(ptr, 10) == 0);
 assert(load<u8>(ptr, 11) == 0);
+assert(load<u8>(ptr, 12) == 0);
 
 memory.free(ptr3);

@@ -1294,6 +1294,25 @@
     (unreachable)
    )
   )
+  (if
+   (i32.eqz
+    (i32.eq
+     (i32.load8_u offset=12
+      (get_global $std/string-utf8/ptr)
+     )
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 56)
+     (i32.const 49)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
   (call $~lib/memory/memory.free
    (get_global $std/string-utf8/ptr3)
   )
