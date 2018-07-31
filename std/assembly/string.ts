@@ -226,7 +226,7 @@ export class String {
     return -1;
   }
 
-  lastIndexOf(searchString: String, fromIndex: i32 = i32.MAX_VALUE): i32 {
+  lastIndexOf(searchString: String, fromIndex: i32 = MAX_LENGTH): i32 {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
 
@@ -253,7 +253,7 @@ export class String {
     return !compareUnsafe(this, start, searchString, 0, searchLength);
   }
 
-  substr(start: i32, length: i32 = i32.MAX_VALUE): String {
+  substr(start: i32, length: i32 = MAX_LENGTH): String {
     assert(this !== null);
     var intStart: isize = start;
     var end: isize = length;
@@ -266,7 +266,7 @@ export class String {
     return out;
   }
 
-  substring(start: i32, end: i32 = i32.MAX_VALUE): String {
+  substring(start: i32, end: i32 = MAX_LENGTH): String {
     assert(this !== null);
     var len = this.length;
     var finalStart = clamp<isize>(start, 0, len);
@@ -409,6 +409,7 @@ export class String {
   }
 
   get lengthUTF8(): i32 {
+    assert(this !== null);
     var len = 1; // null terminated
     var pos: usize = 0;
     var end = <usize>this.length;
@@ -432,8 +433,9 @@ export class String {
     return len;
   }
 
-  toUTF8(len: i32 = -1): usize {
-    if (len == -1) len = this.lengthUTF8;
+  toUTF8(len: i32 = i32.MIN_VALUE): usize {
+    assert(this !== null);
+    if (len < 0 || len > MAX_LENGTH) len = this.lengthUTF8;
     var buf = memory.allocate(<usize>len);
     var pos: usize = 0;
     var end = <usize>this.length;

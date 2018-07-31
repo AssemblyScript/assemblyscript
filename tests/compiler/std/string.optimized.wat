@@ -3233,7 +3233,7 @@
     (unreachable)
    )
    (set_local $2
-    (i32.const 2147483647)
+    (i32.const 536870910)
    )
   )
   (call $~lib/string/String#lastIndexOf
@@ -3778,7 +3778,7 @@
               (call $~lib/env/abort
                (i32.const 0)
                (i32.const 80)
-               (i32.const 520)
+               (i32.const 522)
                (i32.const 10)
               )
               (unreachable)

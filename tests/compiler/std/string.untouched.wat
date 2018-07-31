@@ -27,7 +27,6 @@
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/internal/string/CharCode.PLUS i32 (i32.const 43))
  (global $~lib/internal/string/CharCode.MINUS i32 (i32.const 45))
@@ -4027,7 +4026,7 @@
     (unreachable)
    )
    (set_local $2
-    (get_global $~lib/builtins/i32.MAX_VALUE)
+    (get_global $~lib/internal/string/MAX_LENGTH)
    )
   )
   (call $~lib/string/String#lastIndexOf
@@ -4619,7 +4618,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 80)
-                  (i32.const 520)
+                  (i32.const 522)
                   (i32.const 10)
                  )
                  (unreachable)
