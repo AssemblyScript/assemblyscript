@@ -349,6 +349,8 @@ export class Program extends DiagnosticEmitter {
   gcLinkInstance: Function | null = null;
   /** Garbage collector mark function called to on reachable managed objects. */
   gcMarkInstance: Function | null = null;
+  /** Size of a managed object header. */
+  gcHeaderSize: u32 = 0;
 
   /** Currently processing filespace. */
   currentFilespace: Filespace;
@@ -706,6 +708,7 @@ export class Program extends DiagnosticEmitter {
       this.gcAllocateInstance = gcAllocateInstance;
       this.gcLinkInstance = gcLinkInstance;
       this.gcMarkInstance = gcMarkInstance;
+      this.gcHeaderSize = (2 * options.usizeType.byteSize + 4 + 7) & ~7; // TODO: hardcoded atm
       this.hasGC = true;
     }
   }

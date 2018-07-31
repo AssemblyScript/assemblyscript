@@ -6217,33 +6217,54 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileStaticString(stringValue: string): ExpressionRef {
+    var program = this.program;
     var module = this.module;
     var options = this.options;
     var stringSegments = this.stringSegments;
 
-    var stringSegment: MemorySegment | null = stringSegments.get(stringValue);
-    if (!stringSegment) {
+    var stringSegment: MemorySegment;
+    var stringOffset: I64;
+    if (!stringSegments.has(stringValue)) {
       let stringLength = stringValue.length;
-      let stringBuffer = new Uint8Array(4 + stringLength * 2);
-      stringBuffer[0] =  stringLength         & 0xff;
-      stringBuffer[1] = (stringLength >>>  8) & 0xff;
-      stringBuffer[2] = (stringLength >>> 16) & 0xff;
-      stringBuffer[3] = (stringLength >>> 24) & 0xff;
+      let stringSize = 4 + stringLength * 2;
+      let offset = 0;
+      if (program.hasGC) {
+        let gcHeaderSize = program.gcHeaderSize;
+        stringSize += gcHeaderSize;
+        offset += gcHeaderSize;
+      }
+      let stringBuffer = new Uint8Array(stringSize);
+      stringBuffer[offset    ] =  stringLength         & 0xff;
+      stringBuffer[offset + 1] = (stringLength >>>  8) & 0xff;
+      stringBuffer[offset + 2] = (stringLength >>> 16) & 0xff;
+      stringBuffer[offset + 3] = (stringLength >>> 24) & 0xff;
       for (let i = 0; i < stringLength; ++i) {
-        stringBuffer[4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
-        stringBuffer[5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
+        stringBuffer[offset + 4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
+        stringBuffer[offset + 5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
       }
       stringSegment = this.addMemorySegment(stringBuffer, options.usizeType.byteSize);
       stringSegments.set(stringValue, stringSegment);
+      if (program.hasGC) {
+        stringOffset = i64_add(stringSegment.offset, i64_new(program.gcHeaderSize, 0));
+      } else {
+        stringOffset = stringSegment.offset;
+      }
+    } else {
+      stringSegment = <MemorySegment>stringSegments.get(stringValue);
+      stringOffset = stringSegment.offset;
     }
-    var stringOffset = stringSegment.offset;
-    var stringType = this.program.typesLookup.get("string");
-    this.currentType = stringType ? stringType : options.usizeType;
+    if (program.typesLookup.has("string")) {
+      let stringType = <Type>program.typesLookup.get("string");
+      this.currentType = stringType;
+    } else {
+      this.currentType = options.usizeType;
+    }
     if (options.isWasm64) {
       return module.createI64(i64_low(stringOffset), i64_high(stringOffset));
+    } else {
+      assert(i64_is_i32(stringOffset));
+      return module.createI32(i64_low(stringOffset));
     }
-    assert(i64_is_i32(stringOffset));
-    return module.createI32(i64_low(stringOffset));
   }
 
   compileArrayLiteral(elementType: Type, expressions: (Expression | null)[], reportNode: Node): ExpressionRef {

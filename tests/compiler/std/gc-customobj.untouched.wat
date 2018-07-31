@@ -11,7 +11,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/TRACE i32 (i32.const 0))
- (global $~lib/collector/itcm/__GC_HEADER_SIZE i32 (i32.const 16))
+ (global $~lib/collector/itcm/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/collector/itcm/State.INIT i32 (i32.const 0))
  (global $~lib/collector/itcm/State.IDLE i32 (i32.const 1))
  (global $~lib/collector/itcm/State.MARK i32 (i32.const 2))
@@ -272,7 +272,7 @@
      (block $~lib/collector/itcm/refToObj|inlined.0 (result i32)
       (i32.sub
        (get_local $0)
-       (get_global $~lib/collector/itcm/__GC_HEADER_SIZE)
+       (get_global $~lib/collector/itcm/HEADER_SIZE)
       )
      )
     )
@@ -351,7 +351,7 @@
        (set_global $~lib/collector/itcm/fromSpace
         (block $~lib/memory/memory.allocate|inlined.0 (result i32)
          (set_local $1
-          (get_global $~lib/collector/itcm/__GC_HEADER_SIZE)
+          (get_global $~lib/collector/itcm/HEADER_SIZE)
          )
          (br $~lib/memory/memory.allocate|inlined.0
           (call $~lib/allocator/arena/__memory_allocate
@@ -370,7 +370,7 @@
        (set_global $~lib/collector/itcm/toSpace
         (block $~lib/memory/memory.allocate|inlined.1 (result i32)
          (set_local $1
-          (get_global $~lib/collector/itcm/__GC_HEADER_SIZE)
+          (get_global $~lib/collector/itcm/HEADER_SIZE)
          )
          (br $~lib/memory/memory.allocate|inlined.1
           (call $~lib/allocator/arena/__memory_allocate
@@ -432,7 +432,7 @@
         (block $~lib/collector/itcm/objToRef|inlined.0 (result i32)
          (i32.add
           (get_local $0)
-          (get_global $~lib/collector/itcm/__GC_HEADER_SIZE)
+          (get_global $~lib/collector/itcm/HEADER_SIZE)
          )
         )
         (i32.load offset=8
@@ -529,7 +529,7 @@
     (get_local $0)
     (i32.sub
      (get_global $~lib/internal/allocator/MAX_SIZE_32)
-     (get_global $~lib/collector/itcm/__GC_HEADER_SIZE)
+     (get_global $~lib/collector/itcm/HEADER_SIZE)
     )
    )
    (unreachable)
@@ -539,7 +539,7 @@
    (block $~lib/memory/memory.allocate|inlined.2 (result i32)
     (set_local $2
      (i32.add
-      (get_global $~lib/collector/itcm/__GC_HEADER_SIZE)
+      (get_global $~lib/collector/itcm/HEADER_SIZE)
       (get_local $0)
      )
     )
@@ -565,7 +565,7 @@
   (block $~lib/collector/itcm/objToRef|inlined.1 (result i32)
    (i32.add
     (get_local $3)
-    (get_global $~lib/collector/itcm/__GC_HEADER_SIZE)
+    (get_global $~lib/collector/itcm/HEADER_SIZE)
    )
   )
  )

@@ -21,7 +21,7 @@
  (table 2 2 anyfunc)
  (elem (i32.const 0) $std/gc/MyObject_visit $~lib/collector/itcm/__gc_mark)
  (memory $0 1)
- (data (i32.const 8) "\t\00\00\00s\00t\00d\00/\00g\00c\00.\00t\00s")
+ (data (i32.const 24) "\t\00\00\00s\00t\00d\00/\00g\00c\00.\00t\00s")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc/main))
@@ -520,7 +520,7 @@
   (local $2 i32)
   (local $3 i32)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 32)
+   (i32.const 48)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
@@ -585,7 +585,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 24)
      (i32.const 19)
      (i32.const 2)
     )

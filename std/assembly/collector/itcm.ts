@@ -8,7 +8,8 @@
 
 const TRACE = false;
 
-@global export const __GC_HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
+/** Size of a managed object header. */
+export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
 
 import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
 import { iterateRoots } from "../gc";
@@ -128,10 +129,10 @@ function step(): void {
   switch (state) {
     case State.INIT: {
       if (TRACE) trace("gc~step/INIT");
-      fromSpace = changetype<ManagedObjectList>(memory.allocate(__GC_HEADER_SIZE));
+      fromSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
       fromSpace.hookFn = changetype<(ref: usize) => void>(<u32>-1); // would error
       fromSpace.clear();
-      toSpace = changetype<ManagedObjectList>(memory.allocate(__GC_HEADER_SIZE));
+      toSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
       toSpace.hookFn = changetype<(ref: usize) => void>(<u32>-1); // would error
       toSpace.clear();
       iter = toSpace;
@@ -187,11 +188,11 @@ function step(): void {
 }
 
 @inline function refToObj(ref: usize): ManagedObject {
-  return changetype<ManagedObject>(ref - __GC_HEADER_SIZE);
+  return changetype<ManagedObject>(ref - HEADER_SIZE);
 }
 
 @inline function objToRef(obj: ManagedObject): usize {
-  return changetype<usize>(obj) + __GC_HEADER_SIZE;
+  return changetype<usize>(obj) + HEADER_SIZE;
 }
 
 // Garbage collector interface
@@ -201,9 +202,9 @@ function step(): void {
   markFn: (ref: usize) => void
 ): usize {
   if (TRACE) trace("gc.allocate", 1, size);
-  if (size > MAX_SIZE_32 - __GC_HEADER_SIZE) unreachable();
+  if (size > MAX_SIZE_32 - HEADER_SIZE) unreachable();
   step(); // also makes sure it's initialized
-  var obj = changetype<ManagedObject>(memory.allocate(__GC_HEADER_SIZE + size));
+  var obj = changetype<ManagedObject>(memory.allocate(HEADER_SIZE + size));
   obj.hookFn = markFn;
   obj.color = white;
   fromSpace.push(obj);
