@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "49.0.0-nightly.20180727",
     "long": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^10.5.3",
+    "binaryen": "^49.0.0-nightly.20180731",
     "browser-process-hrtime": "^0.1.2",
     "diff": "^3.5.0",
     "glob": "^7.1.2",
