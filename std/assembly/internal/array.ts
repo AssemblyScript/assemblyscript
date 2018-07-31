@@ -3,10 +3,6 @@ import {
   storeUnsafeWithOffset
 } from "./arraybuffer";
 
-import {
-  Array
-} from "../array";
-
 /** Obtains the default comparator for the specified type. */
 @inline
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
