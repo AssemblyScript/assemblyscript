@@ -432,8 +432,9 @@ export class String {
     return len;
   }
 
-  toUTF8(): usize {
-    var buf = memory.allocate(<usize>this.lengthUTF8);
+  toUTF8(len: i32 = -1): usize {
+    if (len == -1) len = this.lengthUTF8;
+    var buf = memory.allocate(<usize>len);
     var pos: usize = 0;
     var end = <usize>this.length;
     var off: usize = 0;

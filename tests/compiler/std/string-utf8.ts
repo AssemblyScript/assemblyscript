@@ -6,7 +6,7 @@ var len = str.lengthUTF8;
 
 assert(len == 11);
 
-var ptr = str.toUTF8();
+var ptr = str.toUTF8(len);
 
 assert(load<u8>(ptr, 0) == 0xf0);
 assert(load<u8>(ptr, 1) == 0x90);
