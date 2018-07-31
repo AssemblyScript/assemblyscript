@@ -9,10 +9,10 @@
  (export "testI32" (func $many-locals/testI32))
  (export "testI8" (func $many-locals/testI8))
  (start $start)
- (func $many-locals/testI32 (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $many-locals/testI32 (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (get_local $0)
  )
- (func $many-locals/testI8 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $many-locals/testI8 (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.shr_s
    (i32.shl
     (get_local $0)
@@ -21,7 +21,7 @@
    (i32.const 24)
   )
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (; has Stack IR ;) (type $v)
   (if
    (i32.ne
     (call $many-locals/testI32

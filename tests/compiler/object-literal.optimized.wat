@@ -13,7 +13,7 @@
  (data (i32.const 36) "\11\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -99,12 +99,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $~lib/internal/string/compareUnsafe (; 3 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 3 ;) (; has Stack IR ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (set_local $1
    (i32.add
@@ -169,7 +169,7 @@
   )
   (get_local $5)
  )
- (func $~lib/string/String.__eq (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 4 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eq
@@ -225,7 +225,7 @@
    )
   )
  )
- (func $object-literal/bar (; 5 ;) (type $iv) (param $0 i32)
+ (func $object-literal/bar (; 5 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (if
    (i32.ne
     (i32.load
@@ -263,7 +263,7 @@
    )
   )
  )
- (func $object-literal/bar2 (; 6 ;) (type $iv) (param $0 i32)
+ (func $object-literal/bar2 (; 6 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (if
    (i32.ne
     (i32.load
@@ -282,7 +282,7 @@
    )
   )
  )
- (func $object-literal/Foo2#test (; 7 ;) (type $iv) (param $0 i32)
+ (func $object-literal/Foo2#test (; 7 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (if
    (i32.ne
     (i32.load
@@ -301,7 +301,7 @@
    )
   )
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 8 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 80)

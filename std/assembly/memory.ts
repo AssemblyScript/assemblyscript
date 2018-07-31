@@ -1,6 +1,6 @@
 import { memcmp, memmove, memset } from "./internal/memory";
 
-@builtin export declare const HEAP_BASE: usize;
+@builtin export declare const HEAP_BASE: usize; // tslint:disable-line
 
 /* tslint:disable */
 

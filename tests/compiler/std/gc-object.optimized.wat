@@ -20,7 +20,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-object/main))
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -106,7 +106,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 1 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 1 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (get_local $0)
@@ -116,7 +116,7 @@
    (get_local $0)
   )
  )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:color (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.and
    (i32.load
     (get_local $0)
@@ -124,7 +124,7 @@
    (i32.const 3)
   )
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:next (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.and
    (i32.load
     (get_local $0)
@@ -132,7 +132,7 @@
    (i32.const -4)
   )
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 4 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (i32.or
@@ -146,7 +146,7 @@
    )
   )
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 5 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 5 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (i32.store offset=4
    (tee_local $1
@@ -165,7 +165,7 @@
    (get_local $1)
   )
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (set_local $2
    (i32.load offset=4
@@ -189,7 +189,7 @@
    (get_local $1)
   )
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 7 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 7 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (if
    (i32.eq
     (get_local $0)
@@ -221,7 +221,7 @@
    )
   )
  )
- (func $~lib/collector/itcm/__gc_mark (; 8 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 8 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (if
    (get_local $0)
@@ -243,7 +243,7 @@
    )
   )
  )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 9 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (i32.or
@@ -257,10 +257,10 @@
    )
   )
  )
- (func $~lib/allocator/arena/__memory_free (; 10 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 10 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $~lib/collector/itcm/step (; 11 ;) (type $v)
+ (func $~lib/collector/itcm/step (; 11 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (block $break|0
    (block $case3|0
@@ -431,7 +431,7 @@
    )
   )
  )
- (func $~lib/collector/itcm/__gc_allocate (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 12 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.gt_u
     (get_local $0)
@@ -464,7 +464,7 @@
    (i32.const 16)
   )
  )
- (func $std/gc-object/Base~gc (; 13 ;) (type $iv) (param $0 i32)
+ (func $std/gc-object/Base~gc (; 13 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -475,7 +475,7 @@
    (get_local $0)
   )
  )
- (func $std/gc-object/Custom~gc (; 14 ;) (type $iv) (param $0 i32)
+ (func $std/gc-object/Custom~gc (; 14 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -497,7 +497,7 @@
    )
   )
  )
- (func $~lib/collector/itcm/__gc_collect (; 15 ;) (type $v)
+ (func $~lib/collector/itcm/__gc_collect (; 15 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (block $break|0
    (block $case1|0
@@ -531,10 +531,10 @@
    )
   )
  )
- (func $~lib/gc/gc.collect (; 16 ;) (type $v)
+ (func $~lib/gc/gc.collect (; 16 ;) (; has Stack IR ;) (type $v)
   (call $~lib/collector/itcm/__gc_collect)
  )
- (func $std/gc-object/main (; 17 ;) (type $v)
+ (func $std/gc-object/main (; 17 ;) (; has Stack IR ;) (type $v)
   (if
    (i32.eqz
     (get_global $~started)
@@ -547,7 +547,7 @@
    )
   )
  )
- (func $start (; 18 ;) (type $v)
+ (func $start (; 18 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 8)
@@ -585,7 +585,7 @@
   )
   (call $~lib/gc/gc.collect)
  )
- (func $~iterateRoots (; 19 ;) (type $iv) (param $0 i32)
+ (func $~iterateRoots (; 19 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
    (get_global $std/gc-object/obj)
    (get_local $0)

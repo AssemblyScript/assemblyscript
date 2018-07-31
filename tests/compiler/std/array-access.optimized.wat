@@ -14,7 +14,7 @@
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
- (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (i32.lt_u
@@ -43,7 +43,7 @@
    )
   )
  )
- (func $std/array-access/i32ArrayArrayElementAccess (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/i32ArrayArrayElementAccess (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/array/Array<Array<i32>>#__get
    (call $~lib/array/Array<Array<i32>>#__get
     (get_local $0)
@@ -52,7 +52,7 @@
    (i32.const 1)
   )
  )
- (func $std/array-access/stringArrayPropertyAccess (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayPropertyAccess (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (call $~lib/array/Array<Array<i32>>#__get
     (get_local $0)
@@ -60,7 +60,7 @@
    )
   )
  )
- (func $~lib/internal/string/compareUnsafe (; 4 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 4 ;) (; has Stack IR ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (set_local $1
    (i32.add
@@ -125,7 +125,7 @@
   )
   (get_local $5)
  )
- (func $~lib/string/String#startsWith (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 5 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -198,7 +198,7 @@
    )
   )
  )
- (func $std/array-access/stringArrayMethodCall (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayMethodCall (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/string/String#startsWith
    (call $~lib/array/Array<Array<i32>>#__get
     (get_local $0)
@@ -208,7 +208,7 @@
    (i32.const 0)
   )
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayPropertyAccess (; 7 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (call $~lib/array/Array<Array<i32>>#__get
     (call $~lib/array/Array<Array<i32>>#__get
@@ -219,7 +219,7 @@
    )
   )
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayMethodCall (; 8 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/string/String#startsWith
    (call $~lib/array/Array<Array<i32>>#__get
     (call $~lib/array/Array<Array<i32>>#__get

@@ -4,10 +4,10 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $scoped/fn (; 0 ;) (type $iv) (param $0 i32)
+ (func $scoped/fn (; 0 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 1 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (block $break|0
    (loop $repeat|0

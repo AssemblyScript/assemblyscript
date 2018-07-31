@@ -14,7 +14,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start~anonymous|0 (; 1 ;) (type $iv) (param $0 i32)
+ (func $start~anonymous|0 (; 1 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (set_global $std/gc-integration/i
    (i32.add
     (get_global $std/gc-integration/i)
@@ -40,7 +40,7 @@
    )
   )
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (; has Stack IR ;) (type $v)
   (call $~iterateRoots
    (i32.const 0)
   )
@@ -60,7 +60,7 @@
    )
   )
  )
- (func $~iterateRoots (; 3 ;) (type $iv) (param $0 i32)
+ (func $~iterateRoots (; 3 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
    (i32.const 8)
    (get_local $0)

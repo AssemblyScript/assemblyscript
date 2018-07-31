@@ -10,7 +10,7 @@
  (data (i32.const 8) "\n\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (; has Stack IR ;) (type $v)
   (call $declare/externalFunction)
   (if
    (i32.ne

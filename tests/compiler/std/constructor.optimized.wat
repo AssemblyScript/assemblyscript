@@ -17,7 +17,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -103,12 +103,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $std/constructor/EmptyCtor#constructor (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtor#constructor (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if (result i32)
    (get_local $0)
    (get_local $0)
@@ -117,7 +117,7 @@
    )
   )
  )
- (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -133,7 +133,7 @@
   )
   (get_local $0)
  )
- (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -149,12 +149,12 @@
   )
   (get_local $0)
  )
- (func $std/constructor/CtorReturns#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorReturns#constructor (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (i32.const 0)
   )
  )
- (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if
    (get_global $std/constructor/b)
    (return
@@ -177,7 +177,7 @@
   )
   (get_local $0)
  )
- (func $std/constructor/CtorConditionallyAllocates#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyAllocates#constructor (; 7 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if
    (get_global $std/constructor/b)
    (if
@@ -203,7 +203,7 @@
   )
   (get_local $0)
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 8 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 8)
