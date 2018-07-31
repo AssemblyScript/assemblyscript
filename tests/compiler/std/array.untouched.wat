@@ -39,11 +39,11 @@
  (global $~lib/math/random_state0 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1 (mut i64) (i64.const 0))
  (global $std/array/charset i32 (i32.const 156))
- (global $std/array/reversed0 (mut i32) (i32.const 0))
- (global $std/array/reversed1 (mut i32) (i32.const 336))
- (global $std/array/reversed2 (mut i32) (i32.const 360))
- (global $std/array/reversed4 (mut i32) (i32.const 384))
- (global $std/array/expected4 (mut i32) (i32.const 424))
+ (global $std/array/reversed0 (mut i32) (i32.const 336))
+ (global $std/array/reversed1 (mut i32) (i32.const 352))
+ (global $std/array/reversed2 (mut i32) (i32.const 376))
+ (global $std/array/reversed4 (mut i32) (i32.const 400))
+ (global $std/array/expected4 (mut i32) (i32.const 440))
  (global $std/array/reversed64 (mut i32) (i32.const 0))
  (global $std/array/reversed128 (mut i32) (i32.const 0))
  (global $std/array/reversed1024 (mut i32) (i32.const 0))
@@ -53,12 +53,12 @@
  (global $std/array/randomized257 (mut i32) (i32.const 0))
  (global $std/array/reversedNested512 (mut i32) (i32.const 0))
  (global $std/array/reversedElements512 (mut i32) (i32.const 0))
- (global $std/array/randomStringsActual (mut i32) (i32.const 552))
- (global $std/array/randomStringsExpected (mut i32) (i32.const 624))
+ (global $std/array/randomStringsActual (mut i32) (i32.const 568))
+ (global $std/array/randomStringsExpected (mut i32) (i32.const 640))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
  (global $std/array/randomStrings400 (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 792))
+ (global $HEAP_BASE i32 (i32.const 808))
  (table 51 51 anyfunc)
  (elem (i32.const 0) $start~anonymous|0 $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $start~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27 $start~anonymous|28 $start~anonymous|29 $start~anonymous|30 $start~anonymous|31 $start~anonymous|32 $start~anonymous|33 $start~anonymous|34 $start~anonymous|35 $start~anonymous|36 $start~anonymous|37 $start~anonymous|38 $start~anonymous|39 $start~anonymous|40 $start~anonymous|41 $~lib/internal/array/defaultComparator<i32>~compare|42 $start~anonymous|43 $start~anonymous|44 $start~anonymous|45 $start~anonymous|46 $start~anonymous|47 $start~anonymous|48 $start~anonymous|49 $start~anonymous|50)
  (memory $0 1)
@@ -67,22 +67,23 @@
  (data (i32.const 100) "\0c\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 128) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (data (i32.const 156) "V\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\000\001\002\003\004\005\006\007\008\009\00_\00-\00,\00.\00+\00/\00\\\00[\00]\00{\00}\00(\00)\00<\00>\00*\00&\00$\00%\00^\00@\00#\00!\00?\00")
- (data (i32.const 336) "X\01\00\00\01\00\00\00\04\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 360) "p\01\00\00\02\00\00\00\08\00\00\00\00\00\00\00\02\00\00\00\01\00\00\00")
- (data (i32.const 384) "\88\01\00\00\04\00\00\00\10\00\00\00\00\00\00\00\03\00\00\00\02\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 424) "\b0\01\00\00\04\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 464) "\d8\01\00\00\01\00\00\00\04\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 488) "\f0\01\00\00\02\00\00\00\08\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00")
- (data (i32.const 512) "\01\00\00\00a\00")
- (data (i32.const 520) "\01\00\00\00b\00")
- (data (i32.const 528) "\02\00\00\00a\00b\00")
- (data (i32.const 536) "\02\00\00\00b\00a\00")
- (data (i32.const 544) "\00\00\00\00")
- (data (i32.const 552) "0\02\00\00\07\00\00\00\1c\00\00\00\00\00\00\00\00\02\00\00\08\02\00\00\00\02\00\00\10\02\00\00\18\02\00\00 \02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 624) "x\02\00\00\07\00\00\00\1c\00\00\00\00\00\00\00 \02\00\00\00\02\00\00\00\02\00\00\10\02\00\00\08\02\00\00\18\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 696) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 728) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 780) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 336) "X\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 352) "h\01\00\00\01\00\00\00\04\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 376) "\80\01\00\00\02\00\00\00\08\00\00\00\00\00\00\00\02\00\00\00\01\00\00\00")
+ (data (i32.const 400) "\98\01\00\00\04\00\00\00\10\00\00\00\00\00\00\00\03\00\00\00\02\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 440) "\c0\01\00\00\04\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 480) "\e8\01\00\00\01\00\00\00\04\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 504) "\00\02\00\00\02\00\00\00\08\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00")
+ (data (i32.const 528) "\01\00\00\00a\00")
+ (data (i32.const 536) "\01\00\00\00b\00")
+ (data (i32.const 544) "\02\00\00\00a\00b\00")
+ (data (i32.const 552) "\02\00\00\00b\00a\00")
+ (data (i32.const 560) "\00\00\00\00")
+ (data (i32.const 568) "@\02\00\00\07\00\00\00\1c\00\00\00\00\00\00\00\10\02\00\00\18\02\00\00\10\02\00\00 \02\00\00(\02\00\000\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 640) "\88\02\00\00\07\00\00\00\1c\00\00\00\00\00\00\000\02\00\00\10\02\00\00\10\02\00\00 \02\00\00\18\02\00\00(\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 712) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 744) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 796) "\04\00\00\00n\00u\00l\00l\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -8801,7 +8802,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 728)
+     (i32.const 744)
      (i32.const 14)
      (i32.const 2)
     )
@@ -8844,7 +8845,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 696)
+     (i32.const 712)
      (i32.const 56)
      (i32.const 4)
     )
@@ -8859,7 +8860,7 @@
     )
    )
    (return
-    (i32.const 544)
+    (i32.const 560)
    )
   )
   (set_local $2
@@ -8938,7 +8939,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 696)
+     (i32.const 712)
      (i32.const 108)
      (i32.const 4)
     )
@@ -8951,7 +8952,7 @@
     (i32.const 0)
    )
    (set_local $1
-    (i32.const 780)
+    (i32.const 796)
    )
   )
   (set_local $2
@@ -8976,7 +8977,7 @@
     (i32.const 0)
    )
    (return
-    (i32.const 544)
+    (i32.const 560)
    )
   )
   (set_local $5
@@ -9006,7 +9007,7 @@
     (get_local $0)
    )
    (set_local $0
-    (i32.const 780)
+    (i32.const 796)
    )
   )
   (call $~lib/string/String#concat
@@ -9019,7 +9020,7 @@
   (local $2 i32)
   (local $3 f64)
   (set_local $1
-   (i32.const 544)
+   (i32.const 560)
   )
   (block $break|0
    (set_local $2
@@ -12486,12 +12487,6 @@
     (call $~lib/math/JSMath.random)
    )
   )
-  (set_global $std/array/reversed0
-   (call $~lib/array/Array<i32>#constructor
-    (i32.const 0)
-    (i32.const 0)
-   )
-  )
   (set_global $std/array/reversed64
    (call $std/array/createReverseOrderedArray
     (i32.const 64)
@@ -12527,7 +12522,7 @@
    (i32.eqz
     (call $std/array/isArraysEqual<i32>
      (get_global $std/array/reversed1)
-     (i32.const 464)
+     (i32.const 480)
      (i32.const 0)
     )
    )
@@ -12548,7 +12543,7 @@
    (i32.eqz
     (call $std/array/isArraysEqual<i32>
      (get_global $std/array/reversed2)
-     (i32.const 488)
+     (i32.const 504)
      (i32.const 0)
     )
    )

@@ -15,17 +15,17 @@
  (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
- (global $std/gc/obj (mut i32) (i32.const 0))
- (global $std/gc/obj2 (mut i32) (i32.const 0))
+ (global $std/gc-basics/obj (mut i32) (i32.const 0))
+ (global $std/gc-basics/obj2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (table 2 2 anyfunc)
- (elem (i32.const 0) $std/gc/MyObject_visit $~lib/collector/itcm/__gc_mark)
+ (elem (i32.const 0) $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark)
  (memory $0 1)
- (data (i32.const 24) "\t\00\00\00s\00t\00d\00/\00g\00c\00.\00t\00s")
+ (data (i32.const 24) "\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export "main" (func $std/gc/main))
- (func $std/gc/MyObject_visit (; 1 ;) (type $iv) (param $0 i32)
+ (export "main" (func $std/gc-basics/main))
+ (func $std/gc-basics/MyObject_visit (; 1 ;) (type $iv) (param $0 i32)
   (nop)
  )
  (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
@@ -415,7 +415,7 @@
        (get_local $0)
       )
      )
-     (call $std/gc/MyObject_visit
+     (call $std/gc-basics/MyObject_visit
       (get_local $0)
      )
     )
@@ -500,7 +500,7 @@
  (func $~lib/gc/gc.collect (; 15 ;) (type $v)
   (call $~lib/collector/itcm/__gc_collect)
  )
- (func $std/gc/main (; 16 ;) (type $i) (result i32)
+ (func $std/gc-basics/main (; 16 ;) (type $i) (result i32)
   (if
    (i32.eqz
     (get_global $~started)
@@ -520,7 +520,7 @@
   (local $2 i32)
   (local $3 i32)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 48)
+   (i32.const 64)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
@@ -528,21 +528,21 @@
   (set_global $~lib/collector/itcm/state
    (i32.const 0)
   )
-  (set_global $std/gc/obj
+  (set_global $std/gc-basics/obj
    (call $~lib/collector/itcm/__gc_allocate
     (i32.const 4)
     (i32.const 0)
    )
   )
   (i32.store
-   (get_global $std/gc/obj)
+   (get_global $std/gc-basics/obj)
    (i32.const 123)
   )
   (set_local $2
    (i32.load offset=4
     (tee_local $0
      (i32.sub
-      (get_global $std/gc/obj)
+      (get_global $std/gc-basics/obj)
       (i32.const 16)
      )
     )
@@ -638,18 +638,18 @@
    )
   )
   (call $~lib/gc/gc.collect)
-  (set_global $std/gc/obj
+  (set_global $std/gc-basics/obj
    (i32.const 0)
   )
   (call $~lib/gc/gc.collect)
  )
  (func $~iterateRoots (; 18 ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
-   (get_global $std/gc/obj)
+   (get_global $std/gc-basics/obj)
    (get_local $0)
   )
   (call_indirect (type $iv)
-   (get_global $std/gc/obj2)
+   (get_global $std/gc-basics/obj2)
    (get_local $0)
   )
  )

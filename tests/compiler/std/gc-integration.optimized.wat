@@ -33,7 +33,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 14)
+     (i32.const 18)
      (i32.const 37)
     )
     (unreachable)
@@ -53,7 +53,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 15)
+     (i32.const 19)
      (i32.const 0)
     )
     (unreachable)

@@ -32,6 +32,3 @@ gc.collect(); // should free 'obj' because it isn't referenced anymore (see trac
 var obj2: MyObject; // should also iterate globals defined late
 
 export function main(): i32 { return 0; }
-
-// BEWARE: The compiler does not emit any integrations except gc.iterateRoots yet, hence trying to
-// use the GC with a 'normally' allocated object will break it, as it has no managed header!

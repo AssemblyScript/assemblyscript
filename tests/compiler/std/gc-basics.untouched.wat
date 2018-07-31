@@ -25,18 +25,18 @@
  (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
- (global $std/gc/obj (mut i32) (i32.const 0))
- (global $std/gc/obj2 (mut i32) (i32.const 0))
+ (global $std/gc-basics/obj (mut i32) (i32.const 0))
+ (global $std/gc-basics/obj2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 48))
+ (global $HEAP_BASE i32 (i32.const 60))
  (table 2 2 anyfunc)
- (elem (i32.const 0) $std/gc/MyObject_visit $~lib/collector/itcm/__gc_mark)
+ (elem (i32.const 0) $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark)
  (memory $0 1)
- (data (i32.const 8) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\t\00\00\00s\00t\00d\00/\00g\00c\00.\00t\00s\00")
+ (data (i32.const 8) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export "main" (func $std/gc/main))
- (func $std/gc/MyObject_visit (; 1 ;) (type $iv) (param $0 i32)
+ (export "main" (func $std/gc-basics/main))
+ (func $std/gc-basics/MyObject_visit (; 1 ;) (type $iv) (param $0 i32)
   (nop)
  )
  (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
@@ -621,7 +621,7 @@
   (call $~lib/collector/itcm/__gc_collect)
   (return)
  )
- (func $std/gc/main (; 17 ;) (type $i) (result i32)
+ (func $std/gc-basics/main (; 17 ;) (type $i) (result i32)
   (if
    (i32.eqz
     (get_global $~started)
@@ -660,20 +660,20 @@
   (set_global $~lib/collector/itcm/state
    (get_global $~lib/collector/itcm/State.INIT)
   )
-  (set_global $std/gc/obj
+  (set_global $std/gc-basics/obj
    (call $~lib/collector/itcm/__gc_allocate
     (i32.const 4)
     (i32.const 0)
    )
   )
   (i32.store
-   (get_global $std/gc/obj)
+   (get_global $std/gc-basics/obj)
    (i32.const 123)
   )
   (block
    (set_local $0
     (i32.sub
-     (get_global $std/gc/obj)
+     (get_global $std/gc-basics/obj)
      (i32.const 16)
     )
    )
@@ -796,18 +796,18 @@
    )
   )
   (call $~lib/gc/gc.collect)
-  (set_global $std/gc/obj
+  (set_global $std/gc-basics/obj
    (i32.const 0)
   )
   (call $~lib/gc/gc.collect)
  )
  (func $~iterateRoots (; 19 ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
-   (get_global $std/gc/obj)
+   (get_global $std/gc-basics/obj)
    (get_local $0)
   )
   (call_indirect (type $iv)
-   (get_global $std/gc/obj2)
+   (get_global $std/gc-basics/obj2)
    (get_local $0)
   )
  )

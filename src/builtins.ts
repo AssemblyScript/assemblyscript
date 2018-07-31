@@ -2955,7 +2955,7 @@ export function compileAbort(
     ? compiler.compileExpression(message, stringType, ConversionKind.IMPLICIT, WrapMode.NONE)
     : stringType.toNativeZero(module);
 
-  var filenameArg = compiler.compileStaticString(reportNode.range.source.normalizedPath);
+  var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);
 
   compiler.currentType = Type.void;
   return module.createBlock(null, [
