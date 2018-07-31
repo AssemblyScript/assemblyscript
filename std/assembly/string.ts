@@ -435,12 +435,12 @@ export class String {
 
   toUTF8(len: i32 = i32.MIN_VALUE): usize {
     assert(this !== null);
-    if (len < 0 || len > MAX_LENGTH) len = this.lengthUTF8;
-    var buf = memory.allocate(<usize>len);
+    var bytes = len < 0 ? this.lengthUTF8 : len + 1;
+    var buf = memory.allocate(<usize>bytes);
     var pos: usize = 0;
-    var end = <usize>this.length;
     var off: usize = 0;
-    while (pos < end) {
+    var end = <usize>this.length;
+    while (pos < end && off < <usize>len) {
       let c1 = <u32>load<u16>(changetype<usize>(this) + (pos << 1), HEADER_SIZE);
       if (c1 < 128) {
         store<u8>(buf + off, c1);
