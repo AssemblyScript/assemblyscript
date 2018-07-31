@@ -1070,7 +1070,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 240)
     )
@@ -1089,7 +1089,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=1
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 144)
     )
@@ -1108,7 +1108,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=2
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 144)
     )
@@ -1127,7 +1127,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=3
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 183)
     )
@@ -1146,7 +1146,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=4
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 104)
     )
@@ -1165,7 +1165,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=5
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 105)
     )
@@ -1184,7 +1184,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=6
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 240)
     )
@@ -1203,7 +1203,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=7
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 164)
     )
@@ -1222,7 +1222,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=8
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 173)
     )
@@ -1241,7 +1241,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=9
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 162)
     )
@@ -1260,7 +1260,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=10
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 0)
     )
@@ -1279,7 +1279,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=11
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 0)
     )
@@ -1298,7 +1298,7 @@
    (i32.eqz
     (i32.eq
      (i32.load8_u offset=12
-      (get_global $std/string-utf8/ptr)
+      (get_global $std/string-utf8/ptr3)
      )
      (i32.const 0)
     )

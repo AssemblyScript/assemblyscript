@@ -951,7 +951,7 @@
   (if
    (i32.ne
     (i32.load8_u
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 240)
    )
@@ -968,7 +968,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=1
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 144)
    )
@@ -985,7 +985,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=2
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 144)
    )
@@ -1002,7 +1002,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=3
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 183)
    )
@@ -1019,7 +1019,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=4
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 104)
    )
@@ -1036,7 +1036,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=5
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 105)
    )
@@ -1053,7 +1053,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=6
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 240)
    )
@@ -1070,7 +1070,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=7
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 164)
    )
@@ -1087,7 +1087,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=8
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 173)
    )
@@ -1104,7 +1104,7 @@
   (if
    (i32.ne
     (i32.load8_u offset=9
-     (get_global $std/string-utf8/ptr)
+     (get_global $std/string-utf8/ptr3)
     )
     (i32.const 162)
    )
@@ -1120,7 +1120,7 @@
   )
   (if
    (i32.load8_u offset=10
-    (get_global $std/string-utf8/ptr)
+    (get_global $std/string-utf8/ptr3)
    )
    (block
     (call $~lib/env/abort
@@ -1134,7 +1134,7 @@
   )
   (if
    (i32.load8_u offset=11
-    (get_global $std/string-utf8/ptr)
+    (get_global $std/string-utf8/ptr3)
    )
    (block
     (call $~lib/env/abort
@@ -1148,7 +1148,7 @@
   )
   (if
    (i32.load8_u offset=12
-    (get_global $std/string-utf8/ptr)
+    (get_global $std/string-utf8/ptr3)
    )
    (block
     (call $~lib/env/abort
