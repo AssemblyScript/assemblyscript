@@ -5105,7 +5105,11 @@ export class Compiler extends DiagnosticEmitter {
       // indirect call: index argument with signature (non-generic, can't be inlined)
       case ElementKind.LOCAL: {
         if (signature = (<Local>target).type.signatureReference) {
-          indexArg = module.createGetLocal((<Local>target).index, NativeType.I32);
+          if ((<Local>target).is(CommonFlags.INLINED)) {
+            indexArg = module.createI32(i64_low((<Local>target).constantIntegerValue));
+          } else {
+            indexArg = module.createGetLocal((<Local>target).index, NativeType.I32);
+          }
           break;
         } else {
           this.error(
