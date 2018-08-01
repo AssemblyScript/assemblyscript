@@ -3,6 +3,10 @@ import {
   storeUnsafeWithOffset
 } from "./arraybuffer";
 
+import {
+  compareUnsafe,
+} from "./string";
+
 /** Obtains the default comparator for the specified type. */
 @inline
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
@@ -32,6 +36,11 @@ export function defaultComparator<T>(): (a: T, b: T) => i32 {
         return <i32>(ia > ib) - <i32>(ia < ib);
       };
     }
+  } else if (isString<T>()) {
+    return (a: T, b: T): i32 => {
+      var sa = <string>a, sb = <string>b;
+      return compareUnsafe(sa, 0, sb, 0, min(sa.length, sb.length));
+    };
   } else {
     return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
   }
