@@ -45,16 +45,16 @@ export function defaultComparatorTyped<T>(): (a: T, b: T) => i32 {
       return (a: T, b: T): i32 => {
         var ia = reinterpret<i32>(a);
         var ib = reinterpret<i32>(b);
-        ia ^= -(ia >>> 31) & 0x7FFFFFFF;
-        ib ^= -(ib >>> 31) & 0x7FFFFFFF;
+        ia ^= (ia >> 31) & 0x7FFFFFFF;
+        ib ^= (ib >> 31) & 0x7FFFFFFF;
         return <i32>(ia > ib) - <i32>(ia < ib);
       };
     } else {
       return (a: T, b: T): i32 => {
         var ia = reinterpret<i64>(a);
         var ib = reinterpret<i64>(b);
-        ia ^= -(ia >>> 63) & 0x7FFFFFFFFFFFFFFF;
-        ib ^= -(ib >>> 63) & 0x7FFFFFFFFFFFFFFF;
+        ia ^= (ia >> 63) & 0x7FFFFFFFFFFFFFFF;
+        ib ^= (ib >> 63) & 0x7FFFFFFFFFFFFFFF;
         return <i32>(ia > ib) - <i32>(ia < ib);
       };
     }
