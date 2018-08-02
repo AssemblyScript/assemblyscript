@@ -4,6 +4,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
+    "test:build": "asc tests/assembly/index.ts -b tests/build/untouched.wasm",
     "test": "node tests"
   },
   "files": [
