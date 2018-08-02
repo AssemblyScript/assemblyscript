@@ -8,7 +8,7 @@ class MyObject {
 function MyObject_visit(ref: usize): void {} // function table index == classId ?
 
 // allocate a managed instance
-var obj: MyObject | null = changetype<MyObject>(gc.allocate(offsetof<MyObject>(), MyObject_visit));
+var obj: MyObject | null = changetype<MyObject>(__gc_allocate(offsetof<MyObject>(), MyObject_visit));
 obj.a = 123;
 
 // check header
@@ -32,6 +32,3 @@ gc.collect(); // should free 'obj' because it isn't referenced anymore (see trac
 var obj2: MyObject; // should also iterate globals defined late
 
 export function main(): i32 { return 0; }
-
-// BEWARE: The compiler does not emit any integrations except gc.iterateRoots yet, hence trying to
-// use the GC with a 'normally' allocated object will break it, as it has no managed header!

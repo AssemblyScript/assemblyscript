@@ -2,7 +2,6 @@
 
 @builtin @inline export const NaN: f64 = 0 / 0;
 @builtin @inline export const Infinity: f64 = 1 / 0;
-@builtin export declare const HEAP_BASE: usize;
 
 @builtin export declare function isInteger<T>(value?: T): bool;
 @builtin export declare function isFloat<T>(value?: T): bool;
@@ -12,6 +11,7 @@
 @builtin export declare function isArray<T>(value?: T): bool;
 @builtin export declare function isDefined(expression: void): bool;
 @builtin export declare function isConstant(expression: void): bool;
+@builtin export declare function isManaged<T>(value?: T): bool;
 @inline export function isNaN<T>(value: T): bool { return value != value; }
 @inline export function isFinite<T>(value: T): bool { return value - value == 0; }
 
@@ -190,9 +190,3 @@ export namespace f64 {
 }
 
 @builtin export declare function start(): void;
-
-@builtin export declare function ERROR(message?: void): void;
-@builtin export declare function WARNING(message?: void): void;
-@builtin export declare function INFO(message?: void): void;
-
-@builtin export declare function __gc_iterate_roots(fn: (ref: usize) => void): void;

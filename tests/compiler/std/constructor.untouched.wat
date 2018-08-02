@@ -203,8 +203,16 @@
   )
  )
  (func $std/constructor/CtorReturns#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  (call $~lib/memory/memory.allocate
-   (i32.const 0)
+  (local $1 i32)
+  (block $~lib/memory/memory.allocate|inlined.0 (result i32)
+   (set_local $1
+    (i32.const 0)
+   )
+   (br $~lib/memory/memory.allocate|inlined.0
+    (call $~lib/allocator/arena/__memory_allocate
+     (get_local $1)
+    )
+   )
   )
  )
  (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
@@ -212,8 +220,15 @@
   (if
    (get_global $std/constructor/b)
    (return
-    (call $~lib/memory/memory.allocate
-     (i32.const 0)
+    (block $~lib/memory/memory.allocate|inlined.1 (result i32)
+     (set_local $1
+      (i32.const 0)
+     )
+     (br $~lib/memory/memory.allocate|inlined.1
+      (call $~lib/allocator/arena/__memory_allocate
+       (get_local $1)
+      )
+     )
     )
    )
   )

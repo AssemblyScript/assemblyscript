@@ -13,13 +13,13 @@
  (export "table" (table $0))
  (export "test" (func $inlining/test))
  (start $start)
- (func $inlining/test (; 1 ;) (type $i) (result i32)
+ (func $inlining/test (; 1 ;) (; has Stack IR ;) (type $i) (result i32)
   (i32.const 3)
  )
- (func $inlining/test_funcs~anonymous|0 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $inlining/test_funcs~anonymous|0 (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (get_local $0)
  )
- (func $inlining/test_funcs (; 3 ;) (type $v)
+ (func $inlining/test_funcs (; 3 ;) (; has Stack IR ;) (type $v)
   (set_global $~argc
    (i32.const 1)
   )
@@ -42,7 +42,7 @@
    )
   )
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 4 ;) (; has Stack IR ;) (type $v)
   (if
    (i32.ne
     (call $inlining/test)

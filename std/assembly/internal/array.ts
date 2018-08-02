@@ -1,19 +1,12 @@
-import {
-  loadUnsafe,
-  storeUnsafe
-} from "./arraybuffer";
+import { loadUnsafe, storeUnsafe } from "./arraybuffer";
+import { Array } from "../array";
 
-import {
-  Array
-} from "../array";
-
-/** Obtains the default comparator for the specified type. */
-@inline
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
-  return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b)); // compiles to a constant table index
+  return function compare(a: T, b: T): i32 {
+    return (<i32>(a > b) - <i32>(a < b));
+  };
 }
 
-/** Sorts an Array with the 'Insertion Sort' algorithm. */
 export function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   var buffer = arr.buffer_;
   for (let i: i32 = 0, length: i32 = arr.length; i < length; i++) {
@@ -30,7 +23,6 @@ export function insertionSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32)
   return arr;
 }
 
-/** Sorts an Array with the 'Weak Heap Sort' algorithm. */
 export function weakHeapSort<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): Array<T> {
   const shift32 = alignof<u32>();
 

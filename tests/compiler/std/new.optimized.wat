@@ -8,7 +8,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -94,12 +94,12 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $std/new/AClass#constructor (; 2 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $std/new/AClass#constructor (; 2 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -137,7 +137,7 @@
   )
   (get_local $0)
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 8)
   )

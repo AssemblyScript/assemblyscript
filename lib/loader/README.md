@@ -65,7 +65,7 @@ Instances are automatically populated with useful utility:
 
   ```js
   import "allocator/tlsf";
-  export { allocate_memory, free_memory };
+  export { memory };
   ```
 
 * **getString**(ptr: `number`): `string`<br />
@@ -126,7 +126,7 @@ var str = "Hello world!";
 var ptr = module.newString(str);
 
 // Disposing a string that is no longer needed (requires free_memory to be exported)
-module.free_memory(ptr);
+module.memory.free(ptr);
 
 // Obtaining a string, i.e. as returned by an export
 var ptrToString = ...;

@@ -90,11 +90,6 @@
     "no-unsafe-any": {
       "severity": "error"
     },
-    "no-unused-variable": {
-      "options": [{
-        "ignore-pattern": "^_"
-      }]
-    },
     "no-void-expression": {
       "severity": "error"
     },

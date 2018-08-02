@@ -14,7 +14,7 @@
  (data (i32.const 176) "\08\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
  (export "memory" (memory $0))
  (export "main" (func $std/trace/main))
- (func $std/trace/main (; 1 ;) (type $v)
+ (func $std/trace/main (; 1 ;) (; has Stack IR ;) (type $v)
   (if
    (i32.eqz
     (get_global $~started)
@@ -27,7 +27,7 @@
    )
   )
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (; has Stack IR ;) (type $v)
   (call $~lib/env/trace
    (i32.const 8)
    (i32.const 0)

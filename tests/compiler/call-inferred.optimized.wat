@@ -9,16 +9,16 @@
  (data (i32.const 8) "\10\00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $call-inferred/foo<i32> (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-inferred/foo<i32> (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (get_local $0)
  )
- (func $call-inferred/foo<f64> (; 2 ;) (type $FF) (param $0 f64) (result f64)
+ (func $call-inferred/foo<f64> (; 2 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (get_local $0)
  )
- (func $call-inferred/foo<f32> (; 3 ;) (type $ff) (param $0 f32) (result f32)
+ (func $call-inferred/foo<f32> (; 3 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
   (get_local $0)
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 4 ;) (; has Stack IR ;) (type $v)
   (if
    (i32.ne
     (call $call-inferred/foo<i32>

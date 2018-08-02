@@ -8,10 +8,10 @@
  (data (i32.const 8) "\0e\00\00\00s\00t\00a\00t\00i\00c\00-\00t\00h\00i\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $static-this/Foo.getBar (; 1 ;) (type $i) (result i32)
+ (func $static-this/Foo.getBar (; 1 ;) (; has Stack IR ;) (type $i) (result i32)
   (get_global $static-this/Foo.bar)
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (; has Stack IR ;) (type $v)
   (if
    (i32.ne
     (call $static-this/Foo.getBar)

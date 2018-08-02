@@ -148,15 +148,9 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $~lib/allocator/arena/__memory_allocate
-    (get_local $0)
-   )
-  )
- )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   (if
    (i32.eqz
     (i32.le_u
@@ -168,16 +162,23 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 52)
-     (i32.const 22)
+     (i32.const 23)
      (i32.const 2)
     )
     (unreachable)
    )
   )
   (set_local $1
-   (call $~lib/memory/memory.allocate
-    (call $~lib/internal/arraybuffer/computeSize
-     (get_local $0)
+   (block $~lib/memory/memory.allocate|inlined.0 (result i32)
+    (set_local $2
+     (call $~lib/internal/arraybuffer/computeSize
+      (get_local $0)
+     )
+    )
+    (br $~lib/memory/memory.allocate|inlined.0
+     (call $~lib/allocator/arena/__memory_allocate
+      (get_local $2)
+     )
     )
    )
   )
@@ -187,7 +188,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -539,15 +540,10 @@
    )
   )
  )
- (func $~lib/memory/memory.fill (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (call $~lib/memory/memset
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   (if
    (i32.gt_u
     (get_local $1)
@@ -564,7 +560,7 @@
    )
   )
   (set_local $3
-   (call $~lib/internal/arraybuffer/allocUnsafe
+   (call $~lib/internal/arraybuffer/allocateUnsafe
     (get_local $1)
    )
   )
@@ -575,18 +571,26 @@
      (i32.const 1)
     )
    )
-   (call $~lib/memory/memory.fill
-    (i32.add
-     (get_local $3)
-     (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+   (block $~lib/memory/memory.fill|inlined.0
+    (set_local $4
+     (i32.add
+      (get_local $3)
+      (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+     )
     )
-    (i32.const 0)
-    (get_local $1)
+    (set_local $5
+     (i32.const 0)
+    )
+    (call $~lib/internal/memory/memset
+     (get_local $4)
+     (get_local $5)
+     (get_local $1)
+    )
    )
   )
   (get_local $3)
  )
- (func $~lib/memory/memcpy (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2388,7 +2392,7 @@
    )
   )
  )
- (func $~lib/memory/memmove (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -2418,7 +2422,7 @@
     )
    )
    (block
-    (call $~lib/memory/memcpy
+    (call $~lib/internal/memory/memcpy
      (get_local $0)
      (get_local $1)
      (get_local $2)
@@ -2706,14 +2710,7 @@
    )
   )
  )
- (func $~lib/memory/memory.copy (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (call $~lib/memory/memmove
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $~lib/arraybuffer/ArrayBuffer#slice (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2816,27 +2813,35 @@
    )
   )
   (set_local $7
-   (call $~lib/internal/arraybuffer/allocUnsafe
+   (call $~lib/internal/arraybuffer/allocateUnsafe
     (get_local $6)
    )
   )
-  (call $~lib/memory/memory.copy
-   (i32.add
-    (get_local $7)
-    (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
-   )
-   (i32.add
+  (block $~lib/memory/memory.copy|inlined.0
+   (set_local $4
     (i32.add
-     (get_local $0)
+     (get_local $7)
      (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
     )
-    (get_local $1)
    )
-   (get_local $6)
+   (set_local $5
+    (i32.add
+     (i32.add
+      (get_local $0)
+      (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+     )
+     (get_local $1)
+    )
+   )
+   (call $~lib/internal/memory/memmove
+    (get_local $4)
+    (get_local $5)
+    (get_local $6)
+   )
   )
   (get_local $7)
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $2of2
    (block $1of2
     (block $0of2
@@ -2861,7 +2866,7 @@
    (get_local $2)
   )
  )
- (func $start (; 13 ;) (type $v)
+ (func $start (; 10 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add

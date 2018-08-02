@@ -16,14 +16,14 @@ export type ImportRef = usize;
 export type ExportRef = usize;
 export type Index = u32;
 
-export enum NativeType {
-  None = _BinaryenTypeNone(),
-  I32 = _BinaryenTypeInt32(),
-  I64 = _BinaryenTypeInt64(),
-  F32 = _BinaryenTypeFloat32(),
-  F64 =  _BinaryenTypeFloat64(),
-  Unreachable = _BinaryenTypeUnreachable(),
-  Auto = _BinaryenTypeAuto()
+export const enum NativeType {
+  None = 0,        // _BinaryenTypeNone(),
+  I32  = 1,        // _BinaryenTypeInt32(),
+  I64  = 2,        // _BinaryenTypeInt64(),
+  F32  = 3,        // _BinaryenTypeFloat32(),
+  F64  = 4,        // _BinaryenTypeFloat64(),
+  Unreachable = 5, // _BinaryenTypeUnreachable(),
+  Auto = -1        // _BinaryenTypeAuto()
 }
 
 export enum ExpressionId {
@@ -1579,4 +1579,27 @@ export class BinaryModule {
   output: Uint8Array;
   /** Source map, if generated. */
   sourceMap: string | null;
+}
+
+/** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
+export function needsExplicitUnreachable(expr: ExpressionRef): bool {
+  // not applicable if pushing a value to the stack
+  switch (_BinaryenExpressionGetType(expr)) {
+    case NativeType.I32:
+    case NativeType.I64:
+    case NativeType.F32:
+    case NativeType.F64: return false;
+  }
+  switch (_BinaryenExpressionGetId(expr)) {
+    case ExpressionId.Unreachable:
+    case ExpressionId.Return: return false;
+    case ExpressionId.Break: return _BinaryenBreakGetCondition(expr) != 0;
+    case ExpressionId.Block: {
+      if (!_BinaryenBlockGetName(expr)) { // can't break out of it
+        let numChildren = _BinaryenBlockGetNumChildren(expr); // last child needs unreachable
+        return numChildren > 0 && needsExplicitUnreachable(_BinaryenBlockGetChild(expr, numChildren - 1));
+      }
+    }
+  }
+  return true;
 }

@@ -377,7 +377,9 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.GLOBAL:
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
-        let classReference = (<VariableLikeElement>target).type.classReference;
+        let type = (<VariableLikeElement>target).type;
+        assert(type != Type.void);
+        let classReference = type.classReference;
         if (!classReference) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,

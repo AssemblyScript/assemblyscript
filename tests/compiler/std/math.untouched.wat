@@ -11089,48 +11089,51 @@
       (get_local $8)
       (i32.const 2146435072)
      )
-     (if
-      (i32.eq
-       (i32.or
-        (i32.sub
+     (block
+      (if
+       (i32.eq
+        (i32.or
+         (i32.sub
+          (get_local $7)
+          (i32.const 1072693248)
+         )
+         (get_local $4)
+        )
+        (i32.const 0)
+       )
+       (return
+        (f64.const nan:0x8000000000000)
+       )
+       (if
+        (i32.ge_s
          (get_local $7)
          (i32.const 1072693248)
         )
-        (get_local $4)
-       )
-       (i32.const 0)
-      )
-      (return
-       (f64.const nan:0x8000000000000)
-      )
-      (if
-       (i32.ge_s
-        (get_local $7)
-        (i32.const 1072693248)
-       )
-       (return
-        (if (result f64)
-         (i32.ge_s
-          (get_local $5)
-          (i32.const 0)
-         )
-         (get_local $1)
-         (f64.const 0)
-        )
-       )
-       (return
-        (if (result f64)
-         (i32.ge_s
-          (get_local $5)
-          (i32.const 0)
-         )
-         (f64.const 0)
-         (f64.neg
+        (return
+         (if (result f64)
+          (i32.ge_s
+           (get_local $5)
+           (i32.const 0)
+          )
           (get_local $1)
+          (f64.const 0)
+         )
+        )
+        (return
+         (if (result f64)
+          (i32.ge_s
+           (get_local $5)
+           (i32.const 0)
+          )
+          (f64.const 0)
+          (f64.neg
+           (get_local $1)
+          )
          )
         )
        )
       )
+      (unreachable)
      )
     )
     (if
@@ -12562,42 +12565,45 @@
     (get_local $5)
     (i32.const 2139095040)
    )
-   (if
-    (i32.eq
-     (get_local $4)
-     (i32.const 1065353216)
-    )
-    (return
-     (f32.const nan:0x400000)
-    )
+   (block
     (if
-     (i32.gt_s
+     (i32.eq
       (get_local $4)
       (i32.const 1065353216)
      )
      (return
-      (if (result f32)
-       (i32.ge_s
-        (get_local $3)
-        (i32.const 0)
-       )
-       (get_local $1)
-       (f32.const 0)
-      )
+      (f32.const nan:0x400000)
      )
-     (return
-      (if (result f32)
-       (i32.ge_s
-        (get_local $3)
-        (i32.const 0)
-       )
-       (f32.const 0)
-       (f32.neg
+     (if
+      (i32.gt_s
+       (get_local $4)
+       (i32.const 1065353216)
+      )
+      (return
+       (if (result f32)
+        (i32.ge_s
+         (get_local $3)
+         (i32.const 0)
+        )
         (get_local $1)
+        (f32.const 0)
+       )
+      )
+      (return
+       (if (result f32)
+        (i32.ge_s
+         (get_local $3)
+         (i32.const 0)
+        )
+        (f32.const 0)
+        (f32.neg
+         (get_local $1)
+        )
        )
       )
      )
     )
+    (unreachable)
    )
   )
   (if
@@ -14720,6 +14726,7 @@
     )
     (br $break|2)
    )
+   (unreachable)
   )
   (if
    (i32.gt_s
@@ -15269,6 +15276,7 @@
     )
     (br $break|2)
    )
+   (unreachable)
   )
   (if
    (i32.gt_s

@@ -43,7 +43,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 24)
-     (i32.const 412)
+     (i32.const 408)
      (i32.const 4)
     )
     (unreachable)
@@ -308,14 +308,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $~lib/allocator/arena/__memory_allocate
-    (get_local $0)
-   )
-  )
- )
- (func $~lib/string/String#toUTF8 (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#toUTF8 (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -335,7 +328,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 24)
-     (i32.const 437)
+     (i32.const 433)
      (i32.const 4)
     )
     (unreachable)
@@ -357,8 +350,12 @@
    )
   )
   (set_local $3
-   (call $~lib/memory/memory.allocate
-    (get_local $2)
+   (block $~lib/memory/memory.allocate|inlined.0 (result i32)
+    (br $~lib/memory/memory.allocate|inlined.0
+     (call $~lib/allocator/arena/__memory_allocate
+      (get_local $2)
+     )
+    )
    )
   )
   (set_local $4
@@ -667,7 +664,7 @@
   )
   (get_local $3)
  )
- (func $~lib/string/String#toUTF8|trampoline (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#toUTF8|trampoline (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -686,16 +683,11 @@
    (get_local $1)
   )
  )
- (func $~lib/allocator/arena/__memory_free (; 6 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 5 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $~lib/memory/memory.free (; 7 ;) (type $iv) (param $0 i32)
-  (call $~lib/allocator/arena/__memory_free
-   (get_local $0)
-  )
-  (return)
- )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 6 ;) (type $v)
+  (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -953,8 +945,16 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/memory.free
-   (get_global $std/string-utf8/ptr)
+  (block $~lib/memory/memory.free|inlined.0
+   (set_local $0
+    (get_global $std/string-utf8/ptr)
+   )
+   (block
+    (call $~lib/allocator/arena/__memory_free
+     (get_local $0)
+    )
+    (br $~lib/memory/memory.free|inlined.0)
+   )
   )
   (set_global $std/string-utf8/ptr2
    (call $~lib/string/String#toUTF8
@@ -1057,8 +1057,16 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/memory.free
-   (get_global $std/string-utf8/ptr2)
+  (block $~lib/memory/memory.free|inlined.1
+   (set_local $0
+    (get_global $std/string-utf8/ptr2)
+   )
+   (block
+    (call $~lib/allocator/arena/__memory_free
+     (get_local $0)
+    )
+    (br $~lib/memory/memory.free|inlined.1)
+   )
   )
   (set_global $std/string-utf8/ptr3
    (call $~lib/string/String#toUTF8
@@ -1313,8 +1321,16 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/memory.free
-   (get_global $std/string-utf8/ptr3)
+  (block $~lib/memory/memory.free|inlined.2
+   (set_local $0
+    (get_global $std/string-utf8/ptr3)
+   )
+   (block
+    (call $~lib/allocator/arena/__memory_free
+     (get_local $0)
+    )
+    (br $~lib/memory/memory.free|inlined.2)
+   )
   )
  )
 )

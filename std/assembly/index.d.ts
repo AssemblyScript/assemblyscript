@@ -132,6 +132,8 @@ declare function isArray<T>(value?: any): value is Array<any>;
 declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. Compiles to a constant. */
 declare function isConstant(expression: any): bool;
+/** Tests if the specified type *or* expression is of a managed type. Compiles to a constant. */
+declare function isManaged<T>(value?: any): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
@@ -354,10 +356,6 @@ declare namespace gc {
   export function allocate(size: usize, visitFn: (ref: usize) => void): usize;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
-  /** Must be called when a managed object becomes a child of another one. */
-  export function link(parentRef: usize, childRef: usize): void;
-  /** Must be called when a managed object is found reachable. */
-  export function mark(ref: usize): void;
 }
 
 /** Table operations. */

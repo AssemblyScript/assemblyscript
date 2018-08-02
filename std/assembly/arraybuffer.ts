@@ -1,7 +1,7 @@
 import {
   HEADER_SIZE,
   MAX_BLENGTH,
-  allocUnsafe
+  allocateUnsafe
 } from "./internal/arraybuffer";
 
 @sealed
@@ -11,7 +11,7 @@ export class ArrayBuffer {
 
   constructor(length: i32, unsafe: bool = false) {
     if (<u32>length > <u32>MAX_BLENGTH) throw new RangeError("Invalid array buffer length");
-    var buffer = allocUnsafe(length);
+    var buffer = allocateUnsafe(length);
     if (!unsafe) memory.fill(changetype<usize>(buffer) + HEADER_SIZE, 0, <usize>length);
     return buffer;
   }
@@ -23,7 +23,7 @@ export class ArrayBuffer {
     if (end < 0) end = max(len + end, 0);
     else end = min(end, len);
     var newLen = max(end - begin, 0);
-    var buffer = allocUnsafe(newLen);
+    var buffer = allocateUnsafe(newLen);
     memory.copy(changetype<usize>(buffer) + HEADER_SIZE, changetype<usize>(this) + HEADER_SIZE + begin, newLen);
     return buffer;
   }
