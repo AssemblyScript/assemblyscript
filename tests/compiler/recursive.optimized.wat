@@ -3,7 +3,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (export "fib" (func $recursive/fib))
- (func $recursive/fib (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $recursive/fib (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if
    (i32.le_s
     (get_local $0)

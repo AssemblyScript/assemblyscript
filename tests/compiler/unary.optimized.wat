@@ -7,7 +7,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $start (; 0 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   (local $2 f32)

@@ -8,7 +8,7 @@
  (data (i32.const 8) "\08\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start (; 1 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (set_global $comma/a
    (i32.add
