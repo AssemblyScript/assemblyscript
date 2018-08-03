@@ -6335,7 +6335,10 @@ export class Compiler extends DiagnosticEmitter {
         switch (byteSize) {
           case 1: {
             for (let i = 0; i < length; ++i) {
-              let expr = module.precomputeExpression(values[i]);
+              let expr = values[i];
+              if (getExpressionId(expr) != ExpressionId.Const) {
+                expr = module.precomputeExpression(expr);
+              }
               assert(getExpressionType(expr) == nativeType);
               assert(getExpressionId(expr) == ExpressionId.Const);
               writeI8(getConstValueI32(expr), buffer, offset);
@@ -6345,7 +6348,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           case 2: {
             for (let i = 0; i < length; ++i) {
-              let expr = module.precomputeExpression(values[i]);
+              let expr = values[i];
+              if (getExpressionId(expr) != ExpressionId.Const) {
+                expr = module.precomputeExpression(expr);
+              }
               assert(getExpressionType(expr) == nativeType);
               assert(getExpressionId(expr) == ExpressionId.Const);
               writeI16(getConstValueI32(expr), buffer, offset);
@@ -6355,7 +6361,10 @@ export class Compiler extends DiagnosticEmitter {
           }
           case 4: {
             for (let i = 0; i < length; ++i) {
-              let expr = module.precomputeExpression(values[i]);
+              let expr = values[i];
+              if (getExpressionId(expr) != ExpressionId.Const) {
+                expr = module.precomputeExpression(expr);
+              }
               assert(getExpressionType(expr) == nativeType);
               assert(getExpressionId(expr) == ExpressionId.Const);
               writeI32(getConstValueI32(expr), buffer, offset);
@@ -6369,7 +6378,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NativeType.I64: {
         for (let i = 0; i < length; ++i) {
-          let expr = module.precomputeExpression(values[i]);
+          let expr = values[i];
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            expr = module.precomputeExpression(expr);
+          }
           assert(getExpressionType(expr) == nativeType);
           assert(getExpressionId(expr) == ExpressionId.Const);
           writeI64(i64_new(getConstValueI64Low(expr), getConstValueI64High(expr)), buffer, offset);
@@ -6379,7 +6391,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NativeType.F32: {
         for (let i = 0; i < length; ++i) {
-          let expr = module.precomputeExpression(values[i]);
+          let expr = values[i];
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            expr = module.precomputeExpression(expr);
+          }
           assert(getExpressionType(expr) == nativeType);
           assert(getExpressionId(expr) == ExpressionId.Const);
           writeF32(getConstValueF32(expr), buffer, offset);
@@ -6389,7 +6404,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NativeType.F64: {
         for (let i = 0; i < length; ++i) {
-          let expr = module.precomputeExpression(values[i]);
+          let expr = values[i];
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            expr = module.precomputeExpression(expr);
+          }
           assert(getExpressionType(expr) == nativeType);
           assert(getExpressionId(expr) == ExpressionId.Const);
           writeF64(getConstValueF64(expr), buffer, offset);
