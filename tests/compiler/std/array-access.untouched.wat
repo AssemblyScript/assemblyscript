@@ -10,11 +10,11 @@
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
- (global $HEAP_BASE i32 (i32.const 56))
+ (global $HEAP_BASE i32 (i32.const 60))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
- (data (i32.const 12) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 44) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 16) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 48) "\04\00\00\00n\00u\00l\00l\00")
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $std/array-access/stringArrayPropertyAccess))
@@ -220,7 +220,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 12)
+     (i32.const 16)
      (i32.const 241)
      (i32.const 4)
     )
@@ -233,7 +233,7 @@
     (i32.const 0)
    )
    (set_local $1
-    (i32.const 44)
+    (i32.const 48)
    )
   )
   (set_local $3

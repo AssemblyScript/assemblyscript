@@ -328,6 +328,8 @@ export class Program extends DiagnosticEmitter {
   /** Module-level exports by exported name. */
   moduleLevelExports: Map<string,ModuleExport> = new Map();
 
+  /** ArrayBuffer instance reference. */
+  arrayBufferInstance: Class | null = null;
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype | null = null;
   /** String instance reference. */
@@ -351,6 +353,8 @@ export class Program extends DiagnosticEmitter {
   gcMarkInstance: Function | null = null;
   /** Size of a managed object header. */
   gcHeaderSize: u32 = 0;
+  /** Offset of the GC hook. */
+  gcHookOffset: u32 = 0;
 
   /** Currently processing filespace. */
   currentFilespace: Filespace;
@@ -603,6 +607,13 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
+    // register 'ArrayBuffer'
+    if (this.elementsLookup.has("ArrayBuffer")) {
+      let element = assert(this.elementsLookup.get("ArrayBuffer"));
+      assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+      this.arrayBufferInstance = resolver.resolveClass(<ClassPrototype>element, null);
+    }
+
     // register 'Array'
     if (this.elementsLookup.has("Array")) {
       let element = assert(this.elementsLookup.get("Array"));
@@ -708,7 +719,9 @@ export class Program extends DiagnosticEmitter {
       this.gcAllocateInstance = gcAllocateInstance;
       this.gcLinkInstance = gcLinkInstance;
       this.gcMarkInstance = gcMarkInstance;
-      this.gcHeaderSize = (2 * options.usizeType.byteSize + 4 + 7) & ~7; // TODO: hardcoded atm
+      let gcHookOffset = 2 * options.usizeType.byteSize; // .next + .prev
+      this.gcHookOffset =  gcHookOffset;
+      this.gcHeaderSize = (gcHookOffset + 4 + 7) & ~7;   // + .hook index + alignment
       this.hasGC = true;
     }
   }
@@ -2909,6 +2922,14 @@ export class Class extends Element {
       }
     } while (instance = instance.base);
     return null;
+  }
+
+  offsetof(fieldName: string): u32 {
+    var members = assert(this.members);
+    assert(members.has(fieldName));
+    var field = <Element>members.get(fieldName);
+    assert(field.kind == ElementKind.FIELD);
+    return (<Field>field).memoryOffset;
   }
 
   toString(): string {

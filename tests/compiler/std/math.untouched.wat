@@ -85,10 +85,10 @@
  (global $~lib/math/random_state1 (mut i64) (i64.const 0))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
- (global $HEAP_BASE i32 (i32.const 64))
+ (global $HEAP_BASE i32 (i32.const 68))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s\00")
- (data (i32.const 36) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (data (i32.const 40) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/builtins/isNaN<f64> (; 30 ;) (type $Fi) (param $0 f64) (result i32)
@@ -13786,7 +13786,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 36)
+     (i32.const 40)
      (i32.const 1000)
      (i32.const 4)
     )
@@ -13818,7 +13818,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 36)
+     (i32.const 40)
      (i32.const 1007)
      (i32.const 24)
     )

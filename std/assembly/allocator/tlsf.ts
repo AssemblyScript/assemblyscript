@@ -458,34 +458,30 @@ var ROOT: Root = changetype<Root>(0);
   }
 
   // search for a suitable block
-  var data: usize = 0;
-  if (size) {
-    if (size > Block.MAX_SIZE) unreachable();
-    // 32-bit MAX_SIZE is 1 << 30 and itself aligned, hence the following can't overflow MAX_SIZE
-    size = max<usize>((size + AL_MASK) & ~AL_MASK, Block.MIN_SIZE);
+  if (size > Block.MAX_SIZE) unreachable();
 
-    let block = root.search(size);
-    if (!block) {
+  // 32-bit MAX_SIZE is 1 << 30 and itself aligned, hence the following can't overflow MAX_SIZE
+  size = max<usize>((size + AL_MASK) & ~AL_MASK, Block.MIN_SIZE);
 
-      // request more memory
-      let pagesBefore = memory.size();
-      let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
-      let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-      if (memory.grow(pagesWanted) < 0) {
-        if (memory.grow(pagesNeeded) < 0) {
-          unreachable(); // out of memory
-        }
+  var block = root.search(size);
+  if (!block) {
+
+    // request more memory
+    let pagesBefore = memory.size();
+    let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
+    let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+    if (memory.grow(pagesWanted) < 0) {
+      if (memory.grow(pagesNeeded) < 0) {
+        unreachable(); // out of memory
       }
-      let pagesAfter = memory.size();
-      root.addMemory(<usize>pagesBefore << 16, <usize>pagesAfter << 16);
-      block = assert(root.search(size)); // must be found now
     }
-
-    assert((block.info & ~TAGS) >= size);
-    data = root.use(<Block>block, size);
+    let pagesAfter = memory.size();
+    root.addMemory(<usize>pagesBefore << 16, <usize>pagesAfter << 16);
+    block = assert(root.search(size)); // must be found now
   }
 
-  return data;
+  assert((block.info & ~TAGS) >= size);
+  return root.use(<Block>block, size);
 }
 
 /** Frees the chunk of memory at the specified address. */

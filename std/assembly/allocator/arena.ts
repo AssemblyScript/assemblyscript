@@ -15,24 +15,21 @@ var offset: usize = startOffset;
 // Memory allocator interface
 
 @global export function __memory_allocate(size: usize): usize {
-  if (size) {
-    if (size > MAX_SIZE_32) unreachable();
-    let ptr = offset;
-    let newPtr = (ptr + size + AL_MASK) & ~AL_MASK;
-    let pagesBefore = memory.size();
-    if (newPtr > <usize>pagesBefore << 16) {
-      let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
-      let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-      if (memory.grow(pagesWanted) < 0) {
-        if (memory.grow(pagesNeeded) < 0) {
-          unreachable(); // out of memory
-        }
+  if (size > MAX_SIZE_32) unreachable();
+  var ptr = offset;
+  var newPtr = (ptr + max<usize>(size, 1) + AL_MASK) & ~AL_MASK;
+  var pagesBefore = memory.size();
+  if (newPtr > <usize>pagesBefore << 16) {
+    let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
+    let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+    if (memory.grow(pagesWanted) < 0) {
+      if (memory.grow(pagesNeeded) < 0) {
+        unreachable(); // out of memory
       }
     }
-    offset = newPtr;
-    return ptr;
   }
-  return 0;
+  offset = newPtr;
+  return ptr;
 }
 
 @global export function __memory_free(ptr: usize): void { /* nop */ }

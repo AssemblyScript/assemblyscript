@@ -334,8 +334,9 @@ export class Array<T> {
   }
 
   private __gc(): void {
+    var buffer = this.buffer_;
+    __gc_mark(changetype<usize>(buffer)); // tslint:disable-line
     if (isManaged<T>()) {
-      let buffer = this.buffer_;
       let offset: usize = 0;
       let end = <usize>this.length_ << alignof<usize>();
       while (offset < end) {

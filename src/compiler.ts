@@ -7,7 +7,8 @@ import {
   compileCall as compileBuiltinCall,
   compileAllocate,
   compileAbort,
-  compileIterateRoots
+  compileIterateRoots,
+  ensureGCHook
 } from "./builtins";
 
 import {
@@ -6226,53 +6227,51 @@ export class Compiler extends DiagnosticEmitter {
   /** Ensures that the specified string exists in static memory and returns a pointer to it. */
   ensureStaticString(stringValue: string): ExpressionRef {
     var program = this.program;
-    var module = this.module;
-    var options = this.options;
-    var stringSegments = this.stringSegments;
-    var needsGCHeader = program.hasGC;
+    var hasGC = program.hasGC;
+    var gcHeaderSize = program.gcHeaderSize;
 
+    var stringInstance = assert(program.stringInstance);
     var stringSegment: MemorySegment;
-    var stringOffset: I64;
-    if (!stringSegments.has(stringValue)) {
-      let stringLength = stringValue.length;
-      let stringSize = 4 + stringLength * 2;
-      let offset = 0;
-      let gcHeaderSize = program.gcHeaderSize;
-      if (needsGCHeader) {
-        stringSize += gcHeaderSize;
-        offset += gcHeaderSize;
-      }
-      let stringBuffer = new Uint8Array(stringSize);
-      stringBuffer[offset    ] =  stringLength         & 0xff;
-      stringBuffer[offset + 1] = (stringLength >>>  8) & 0xff;
-      stringBuffer[offset + 2] = (stringLength >>> 16) & 0xff;
-      stringBuffer[offset + 3] = (stringLength >>> 24) & 0xff;
-      for (let i = 0; i < stringLength; ++i) {
-        stringBuffer[offset + 4 + i * 2] =  stringValue.charCodeAt(i)        & 0xff;
-        stringBuffer[offset + 5 + i * 2] = (stringValue.charCodeAt(i) >>> 8) & 0xff;
-      }
-      stringSegment = this.addMemorySegment(stringBuffer, options.usizeType.byteSize);
-      stringSegments.set(stringValue, stringSegment);
-      if (needsGCHeader) {
-        stringOffset = i64_add(stringSegment.offset, i64_new(gcHeaderSize, 0));
+
+    // if the string already exists, reuse it
+    var segments = this.stringSegments;
+    if (segments.has(stringValue)) {
+      stringSegment = <MemorySegment>segments.get(stringValue);
+
+    // otherwise create it
+    } else {
+      let length = stringValue.length;
+      let headerSize = (stringInstance.currentMemoryOffset + 1) & ~1;
+      let totalSize = headerSize + length * 2;
+
+      let buf: Uint8Array;
+      let pos: u32;
+
+      if (hasGC) {
+        buf = new Uint8Array(gcHeaderSize + totalSize);
+        pos = gcHeaderSize;
+        writeI32(ensureGCHook(this, stringInstance), buf, program.gcHookOffset);
       } else {
-        stringOffset = stringSegment.offset;
+        buf = new Uint8Array(totalSize);
+        pos = 0;
       }
-    } else {
-      stringSegment = <MemorySegment>stringSegments.get(stringValue);
-      stringOffset = stringSegment.offset;
+      writeI32(length, buf, pos + stringInstance.offsetof("length"));
+      pos += headerSize;
+      for (let i = 0; i < length; ++i) {
+        writeI16(stringValue.charCodeAt(i), buf, pos + (i << 1));
+      }
+      stringSegment = this.addMemorySegment(buf);
+      segments.set(stringValue, stringSegment);
     }
-    if (program.typesLookup.has("string")) {
-      let stringType = <Type>program.typesLookup.get("string");
-      this.currentType = stringType;
+    var stringOffset = stringSegment.offset;
+    if (hasGC) stringOffset = i64_add(stringOffset, i64_new(gcHeaderSize));
+
+    this.currentType = stringInstance.type;
+    if (this.options.isWasm64) {
+      return this.module.createI64(i64_low(stringOffset), i64_high(stringOffset));
     } else {
-      this.currentType = options.usizeType;
-    }
-    if (options.isWasm64) {
-      return module.createI64(i64_low(stringOffset), i64_high(stringOffset));
-    } else {
-      assert(i64_is_i32(stringOffset));
-      return module.createI32(i64_low(stringOffset));
+      assert(i64_is_u32(stringOffset));
+      return this.module.createI32(i64_low(stringOffset));
     }
   }
 
@@ -6282,52 +6281,32 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Ensures that the specified array exists in static memory and returns a pointer to it. */
   ensureStaticArray(elementType: Type, values: ExpressionRef[]): ExpressionRef {
+    var program = this.program;
+    var hasGC = program.hasGC;
+    var gcHeaderSize = program.gcHeaderSize;
+
     var length = values.length;
     var byteSize = elementType.byteSize;
     var byteLength = length * byteSize;
     var usizeTypeSize = this.options.usizeType.byteSize;
 
-    // determine the size of the Array header
-    var arrayHeaderSize = (usizeTypeSize + 4 + 7) & ~7; // .buffer_ + .length_ + alignment
-    var arrayTotalSize = arrayHeaderSize;
+    var buf: Uint8Array;
+    var pos: u32;
 
-    // determine the size of the ArrayBuffer
-    var bufferHeaderSize = (4 + 7) & ~7; // .byteLength + alignment
-    var bufferTotalSize = 1 << (32 - clz(byteLength + bufferHeaderSize - 1)); // see internals
-
-    var program = this.program;
-    var needsGC = program.hasGC;
-    var gcHeaderSize = program.gcHeaderSize;
-
-    var offset = 0;
-    if (needsGC) {
-      offset += gcHeaderSize; // start writing after GC header
-      arrayTotalSize += gcHeaderSize;
-      bufferTotalSize += gcHeaderSize;
-    }
-
-    // create a compound segment holding both the the Array header and the ArrayBuffer
-    var buffer = new Uint8Array(arrayHeaderSize + bufferTotalSize);
-    var segment = this.addMemorySegment(buffer);
-
-    // write the Array header first
-    if (usizeTypeSize == 8) {
-      writeI64(i64_add(segment.offset, i64_new(arrayHeaderSize)), buffer, offset); // .buffer_
-      offset += 8;
+    // create the backing ArrayBuffer segment
+    var bufferInstance = assert(program.arrayBufferInstance);
+    var bufferHeaderSize = (bufferInstance.currentMemoryOffset + 7) & ~7;
+    var bufferTotalSize = 1 << (32 - clz(bufferHeaderSize + byteLength - 1));
+    if (hasGC) {
+      buf = new Uint8Array(gcHeaderSize + bufferTotalSize);
+      pos = gcHeaderSize;
+      writeI32(ensureGCHook(this, bufferInstance), buf, program.gcHookOffset);
     } else {
-      assert(i64_is_u32(segment.offset));
-      writeI32(i64_low(segment.offset) + arrayHeaderSize, buffer,  offset); // .buffer_
-      offset += 4;
+      buf = new Uint8Array(bufferTotalSize);
+      pos = 0;
     }
-    writeI32(length, buffer, offset); // .length_
-    offset += 4;
-    assert(((offset + 7) & ~7) == arrayTotalSize); // incl. GC header if applicable
-
-    // append the ArrayBuffer
-    offset = arrayTotalSize;
-    if (needsGC) offset += gcHeaderSize;
-    writeI32(byteLength, buffer, offset); // .byteLength
-    offset += bufferHeaderSize; // align
+    writeI32(byteLength, buf, pos + bufferInstance.offsetof("byteLength"));
+    pos += bufferHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (nativeType) {
       case NativeType.I32: {
@@ -6337,8 +6316,8 @@ export class Compiler extends DiagnosticEmitter {
               let value = values[i];
               assert(getExpressionType(value) == nativeType);
               assert(getExpressionId(value) == ExpressionId.Const);
-              writeI8(getConstValueI32(value), buffer, offset);
-              offset += 1;
+              writeI8(getConstValueI32(value), buf, pos);
+              pos += 1;
             }
             break;
           }
@@ -6347,8 +6326,8 @@ export class Compiler extends DiagnosticEmitter {
               let value = values[i];
               assert(getExpressionType(value) == nativeType);
               assert(getExpressionId(value) == ExpressionId.Const);
-              writeI16(getConstValueI32(value), buffer, offset);
-              offset += 2;
+              writeI16(getConstValueI32(value), buf, pos);
+              pos += 2;
             }
             break;
           }
@@ -6357,8 +6336,8 @@ export class Compiler extends DiagnosticEmitter {
               let value = values[i];
               assert(getExpressionType(value) == nativeType);
               assert(getExpressionId(value) == ExpressionId.Const);
-              writeI32(getConstValueI32(value), buffer, offset);
-              offset += 4;
+              writeI32(getConstValueI32(value), buf, pos);
+              pos += 4;
             }
             break;
           }
@@ -6371,8 +6350,8 @@ export class Compiler extends DiagnosticEmitter {
           let value = values[i];
           assert(getExpressionType(value) == nativeType);
           assert(getExpressionId(value) == ExpressionId.Const);
-          writeI64(i64_new(getConstValueI64Low(value), getConstValueI64High(value)), buffer, offset);
-          offset += 8;
+          writeI64(i64_new(getConstValueI64Low(value), getConstValueI64High(value)), buf, pos);
+          pos += 8;
         }
         break;
       }
@@ -6381,8 +6360,8 @@ export class Compiler extends DiagnosticEmitter {
           let value = values[i];
           assert(getExpressionType(value) == nativeType);
           assert(getExpressionId(value) == ExpressionId.Const);
-          writeF32(getConstValueF32(value), buffer, offset);
-          offset += 4;
+          writeF32(getConstValueF32(value), buf, pos);
+          pos += 4;
         }
         break;
       }
@@ -6391,35 +6370,43 @@ export class Compiler extends DiagnosticEmitter {
           let value = values[i];
           assert(getExpressionType(value) == nativeType);
           assert(getExpressionId(value) == ExpressionId.Const);
-          writeF64(getConstValueF64(value), buffer, offset);
-          offset += 8;
+          writeF64(getConstValueF64(value), buf, pos);
+          pos += 8;
         }
         break;
       }
       default: assert(false);
     }
-    assert(offset <= arrayTotalSize + bufferTotalSize); // might have empty trailing space
+    var bufferSegment = this.addMemorySegment(buf);
+    var bufferOffset = bufferSegment.offset;
+    if (hasGC) bufferOffset = i64_add(bufferOffset, i64_new(gcHeaderSize));
 
-    var arrayPrototype = this.program.arrayPrototype;
-    if (arrayPrototype) {
-      let arrayInstance = this.resolver.resolveClass(arrayPrototype, [ elementType ], null, ReportMode.REPORT);
-      if (!arrayInstance) {
-        this.currentType = this.options.usizeType;
-        return this.module.createUnreachable();
-      }
-      this.currentType = arrayInstance.type;
+    // create the Array segment and return a pointer to it
+    var arrayPrototype = assert(program.arrayPrototype);
+    var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
+    var arrayHeaderSize = (arrayInstance.currentMemoryOffset + 7) & ~7;
+    if (hasGC) {
+      buf = new Uint8Array(gcHeaderSize + arrayHeaderSize);
+      pos = gcHeaderSize;
+      writeI32(ensureGCHook(this, arrayInstance), buf, program.gcHookOffset);
     } else {
-      this.currentType = this.options.usizeType;
+      buf = new Uint8Array(arrayHeaderSize);
+      pos = 0;
     }
-
-    // return a pointer at the array header (skip GC header if present)
-    var address = segment.offset;
-    if (needsGC) address = i64_add(address, i64_new(gcHeaderSize, 0));
+    var arraySegment = this.addMemorySegment(buf);
+    var arrayOffset = arraySegment.offset;
+    if (hasGC) arrayOffset = i64_add(arrayOffset, i64_new(gcHeaderSize));
+    this.currentType = arrayInstance.type;
     if (usizeTypeSize == 8) {
-      return this.module.createI64(i64_low(address), i64_high(address));
+      writeI64(bufferOffset, buf, pos + arrayInstance.offsetof("buffer_"));
+      writeI32(length, buf, pos + arrayInstance.offsetof("length_"));
+      return this.module.createI64(i64_low(arrayOffset), i64_high(arrayOffset));
     } else {
-      assert(i64_is_u32(address));
-      return this.module.createI32(i64_low(address));
+      assert(i64_is_u32(bufferOffset));
+      writeI32(i64_low(bufferOffset), buf, pos + arrayInstance.offsetof("buffer_"));
+      writeI32(length, buf, pos + arrayInstance.offsetof("length_"));
+      assert(i64_is_u32(arrayOffset));
+      return this.module.createI32(i64_low(arrayOffset));
     }
   }
 
@@ -6433,17 +6420,20 @@ export class Compiler extends DiagnosticEmitter {
 
     // find out whether all elements are constant (array is static)
     var length = expressions.length;
-    var values = new Array<ExpressionRef>(length);
+    var compiledValues = new Array<ExpressionRef>(length);
+    var constantValues = new Array<ExpressionRef>(length);
     var nativeElementType = elementType.toNativeType();
     var isStatic = true;
     for (let i = 0; i < length; ++i) {
-      values[i] = expressions[i]
+      let expr = expressions[i]
         ? this.compileExpression(<Expression>expressions[i], elementType, ConversionKind.IMPLICIT, WrapMode.NONE)
         : elementType.toNativeZero(module);
+      compiledValues[i] = expr;
       if (isStatic) {
-        let expr = module.precomputeExpression(values[i]);
+        expr = module.precomputeExpression(compiledValues[i]);
         if (getExpressionId(expr) == ExpressionId.Const) {
           assert(getExpressionType(expr) == nativeElementType);
+          constantValues[i] = expr;
         } else {
           if (isConst) {
             this.warning(
@@ -6457,7 +6447,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // make a static array if possible
-    if (isStatic) return this.ensureStaticArray(elementType, values);
+    if (isStatic) return this.ensureStaticArray(elementType, constantValues);
 
     // otherwise obtain the array type
     var arrayPrototype = assert(this.program.arrayPrototype);
@@ -6491,7 +6481,7 @@ export class Compiler extends DiagnosticEmitter {
       stmts[index++] = this.makeCallDirect(setter, [
         module.createGetLocal(tempLocal.index, nativeArrayType), // this
         module.createI32(i),
-        values[i]
+        compiledValues[i]
       ]);
     }
     assert(index + 1 == stmts.length);
