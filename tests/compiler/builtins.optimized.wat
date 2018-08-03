@@ -16,7 +16,7 @@
  (elem (i32.const 0) $start~anonymous|0)
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
- (data (i32.const 36) "\01\00\00\001")
+ (data (i32.const 40) "\01\00\00\001")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $builtins/test))

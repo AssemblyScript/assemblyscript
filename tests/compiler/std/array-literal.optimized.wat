@@ -7,17 +7,19 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 120))
+ (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 128))
  (global $std/array-literal/i (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayI8 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayI32 (mut i32) (i32.const 0))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\03\00\00\00\03")
- (data (i32.const 25) "\01\02")
+ (data (i32.const 8) "\03")
+ (data (i32.const 17) "\01\02")
+ (data (i32.const 24) "\08\00\00\00\03")
  (data (i32.const 32) "\14\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
- (data (i32.const 80) "X\00\00\00\03\00\00\00\0c")
- (data (i32.const 100) "\01\00\00\00\02")
- (data (i32.const 120) "\80")
+ (data (i32.const 80) "\0c")
+ (data (i32.const 92) "\01\00\00\00\02")
+ (data (i32.const 112) "P\00\00\00\03")
+ (data (i32.const 128) "x")
  (data (i32.const 136) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 168) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (export "memory" (memory $0))
@@ -98,86 +100,85 @@
   (local $2 i32)
   (local $3 i32)
   (if
-   (get_local $0)
-   (block
+   (i32.gt_u
+    (get_local $0)
+    (i32.const 1073741824)
+   )
+   (unreachable)
+  )
+  (if
+   (i32.gt_u
+    (tee_local $2
+     (i32.and
+      (i32.add
+       (i32.add
+        (tee_local $1
+         (get_global $~lib/allocator/arena/offset)
+        )
+        (select
+         (get_local $0)
+         (i32.const 1)
+         (i32.gt_u
+          (get_local $0)
+          (i32.const 1)
+         )
+        )
+       )
+       (i32.const 7)
+      )
+      (i32.const -8)
+     )
+    )
+    (i32.shl
+     (tee_local $3
+      (current_memory)
+     )
+     (i32.const 16)
+    )
+   )
+   (if
+    (i32.lt_s
+     (grow_memory
+      (select
+       (get_local $3)
+       (tee_local $0
+        (i32.shr_u
+         (i32.and
+          (i32.add
+           (i32.sub
+            (get_local $2)
+            (get_local $1)
+           )
+           (i32.const 65535)
+          )
+          (i32.const -65536)
+         )
+         (i32.const 16)
+        )
+       )
+       (i32.gt_s
+        (get_local $3)
+        (get_local $0)
+       )
+      )
+     )
+     (i32.const 0)
+    )
     (if
-     (i32.gt_u
-      (get_local $0)
-      (i32.const 1073741824)
+     (i32.lt_s
+      (grow_memory
+       (get_local $0)
+      )
+      (i32.const 0)
      )
      (unreachable)
     )
-    (if
-     (i32.gt_u
-      (tee_local $0
-       (i32.and
-        (i32.add
-         (i32.add
-          (tee_local $1
-           (get_global $~lib/allocator/arena/offset)
-          )
-          (get_local $0)
-         )
-         (i32.const 7)
-        )
-        (i32.const -8)
-       )
-      )
-      (i32.shl
-       (tee_local $2
-        (current_memory)
-       )
-       (i32.const 16)
-      )
-     )
-     (if
-      (i32.lt_s
-       (grow_memory
-        (select
-         (get_local $2)
-         (tee_local $3
-          (i32.shr_u
-           (i32.and
-            (i32.add
-             (i32.sub
-              (get_local $0)
-              (get_local $1)
-             )
-             (i32.const 65535)
-            )
-            (i32.const -65536)
-           )
-           (i32.const 16)
-          )
-         )
-         (i32.gt_s
-          (get_local $2)
-          (get_local $3)
-         )
-        )
-       )
-       (i32.const 0)
-      )
-      (if
-       (i32.lt_s
-        (grow_memory
-         (get_local $3)
-        )
-        (i32.const 0)
-       )
-       (unreachable)
-      )
-     )
-    )
-    (set_global $~lib/allocator/arena/offset
-     (get_local $0)
-    )
-    (return
-     (get_local $1)
-    )
    )
   )
-  (i32.const 0)
+  (set_global $~lib/allocator/arena/offset
+   (get_local $2)
+  )
+  (get_local $1)
  )
  (func $~lib/internal/arraybuffer/allocateUnsafe (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -703,7 +704,7 @@
   (if
    (i32.ne
     (call $~lib/array/Array<i8>#get:length
-     (i32.const 8)
+     (i32.const 24)
     )
     (i32.const 3)
    )
@@ -720,7 +721,7 @@
   (if
    (i32.and
     (call $~lib/array/Array<i8>#__get
-     (i32.const 8)
+     (i32.const 24)
      (i32.const 0)
     )
     (i32.const 255)
@@ -739,7 +740,7 @@
    (i32.ne
     (i32.and
      (call $~lib/array/Array<i8>#__get
-      (i32.const 8)
+      (i32.const 24)
       (i32.const 1)
      )
      (i32.const 255)
@@ -760,7 +761,7 @@
    (i32.ne
     (i32.and
      (call $~lib/array/Array<i8>#__get
-      (i32.const 8)
+      (i32.const 24)
       (i32.const 2)
      )
      (i32.const 255)
@@ -780,7 +781,7 @@
   (if
    (i32.ne
     (call $~lib/array/Array<i8>#get:length
-     (i32.const 80)
+     (i32.const 112)
     )
     (i32.const 3)
    )
@@ -796,7 +797,7 @@
   )
   (if
    (call $~lib/array/Array<i32>#__get
-    (i32.const 80)
+    (i32.const 112)
     (i32.const 0)
    )
    (block
@@ -812,7 +813,7 @@
   (if
    (i32.ne
     (call $~lib/array/Array<i32>#__get
-     (i32.const 80)
+     (i32.const 112)
      (i32.const 1)
     )
     (i32.const 1)
@@ -830,7 +831,7 @@
   (if
    (i32.ne
     (call $~lib/array/Array<i32>#__get
-     (i32.const 80)
+     (i32.const 112)
      (i32.const 2)
     )
     (i32.const 2)

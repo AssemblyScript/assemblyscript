@@ -18,10 +18,10 @@
  (global $std/gc-basics/obj (mut i32) (i32.const 0))
  (global $std/gc-basics/obj2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (table 2 2 anyfunc)
- (elem (i32.const 0) $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark)
+ (table 3 3 anyfunc)
+ (elem (i32.const 0) $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
  (memory $0 1)
- (data (i32.const 24) "\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s")
+ (data (i32.const 16) "\02\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-basics/main))
@@ -33,86 +33,85 @@
   (local $2 i32)
   (local $3 i32)
   (if
-   (get_local $0)
-   (block
+   (i32.gt_u
+    (get_local $0)
+    (i32.const 1073741824)
+   )
+   (unreachable)
+  )
+  (if
+   (i32.gt_u
+    (tee_local $2
+     (i32.and
+      (i32.add
+       (i32.add
+        (tee_local $1
+         (get_global $~lib/allocator/arena/offset)
+        )
+        (select
+         (get_local $0)
+         (i32.const 1)
+         (i32.gt_u
+          (get_local $0)
+          (i32.const 1)
+         )
+        )
+       )
+       (i32.const 7)
+      )
+      (i32.const -8)
+     )
+    )
+    (i32.shl
+     (tee_local $3
+      (current_memory)
+     )
+     (i32.const 16)
+    )
+   )
+   (if
+    (i32.lt_s
+     (grow_memory
+      (select
+       (get_local $3)
+       (tee_local $0
+        (i32.shr_u
+         (i32.and
+          (i32.add
+           (i32.sub
+            (get_local $2)
+            (get_local $1)
+           )
+           (i32.const 65535)
+          )
+          (i32.const -65536)
+         )
+         (i32.const 16)
+        )
+       )
+       (i32.gt_s
+        (get_local $3)
+        (get_local $0)
+       )
+      )
+     )
+     (i32.const 0)
+    )
     (if
-     (i32.gt_u
-      (get_local $0)
-      (i32.const 1073741824)
+     (i32.lt_s
+      (grow_memory
+       (get_local $0)
+      )
+      (i32.const 0)
      )
      (unreachable)
     )
-    (if
-     (i32.gt_u
-      (tee_local $0
-       (i32.and
-        (i32.add
-         (i32.add
-          (tee_local $1
-           (get_global $~lib/allocator/arena/offset)
-          )
-          (get_local $0)
-         )
-         (i32.const 7)
-        )
-        (i32.const -8)
-       )
-      )
-      (i32.shl
-       (tee_local $2
-        (current_memory)
-       )
-       (i32.const 16)
-      )
-     )
-     (if
-      (i32.lt_s
-       (grow_memory
-        (select
-         (get_local $2)
-         (tee_local $3
-          (i32.shr_u
-           (i32.and
-            (i32.add
-             (i32.sub
-              (get_local $0)
-              (get_local $1)
-             )
-             (i32.const 65535)
-            )
-            (i32.const -65536)
-           )
-           (i32.const 16)
-          )
-         )
-         (i32.gt_s
-          (get_local $2)
-          (get_local $3)
-         )
-        )
-       )
-       (i32.const 0)
-      )
-      (if
-       (i32.lt_s
-        (grow_memory
-         (get_local $3)
-        )
-        (i32.const 0)
-       )
-       (unreachable)
-      )
-     )
-    )
-    (set_global $~lib/allocator/arena/offset
-     (get_local $0)
-    )
-    (return
-     (get_local $1)
-    )
    )
   )
-  (i32.const 0)
+  (set_global $~lib/allocator/arena/offset
+   (get_local $2)
+  )
+  (get_local $1)
  )
  (func $~lib/collector/itcm/ManagedObjectList#clear (; 3 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (i32.store
@@ -469,7 +468,18 @@
    (i32.const 16)
   )
  )
- (func $~lib/collector/itcm/__gc_collect (; 14 ;) (; has Stack IR ;) (type $v)
+ (func $~lib/string/String~gc (; 14 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (return)
+  )
+  (call $~lib/collector/itcm/__gc_mark
+   (get_local $0)
+  )
+ )
+ (func $~lib/collector/itcm/__gc_collect (; 15 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (block $break|0
    (block $case1|0
@@ -503,10 +513,10 @@
    )
   )
  )
- (func $~lib/gc/gc.collect (; 15 ;) (; has Stack IR ;) (type $v)
+ (func $~lib/gc/gc.collect (; 16 ;) (; has Stack IR ;) (type $v)
   (call $~lib/collector/itcm/__gc_collect)
  )
- (func $std/gc-basics/main (; 16 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $std/gc-basics/main (; 17 ;) (; has Stack IR ;) (type $i) (result i32)
   (if
    (i32.eqz
     (get_global $~started)
@@ -520,7 +530,7 @@
   )
   (i32.const 0)
  )
- (func $start (; 17 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 18 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -605,7 +615,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 24)
      (i32.const 21)
      (i32.const 2)
     )
@@ -619,7 +629,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 24)
      (i32.const 23)
      (i32.const 2)
     )
@@ -636,7 +646,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 8)
+     (i32.const 24)
      (i32.const 25)
      (i32.const 2)
     )
@@ -649,7 +659,7 @@
   )
   (call $~lib/gc/gc.collect)
  )
- (func $~iterateRoots (; 18 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~iterateRoots (; 19 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
    (get_global $std/gc-basics/obj)
    (get_local $0)

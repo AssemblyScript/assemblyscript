@@ -153,6 +153,13 @@ function step(): void {
         if (TRACE) trace("gc~step/MARK iterate", 1, objToRef(obj));
         iter = obj;
         obj.color = <i32>!white;
+        // if (TRACE) {
+        //   trace("   next/prev/hook", 3,
+        //     changetype<usize>(obj.next),
+        //     changetype<usize>(obj.prev),
+        //     changetype<u32>(obj.hookFn)
+        //   );
+        // }
         obj.hookFn(objToRef(obj));
       } else {
         if (TRACE) trace("gc~step/MARK finish");

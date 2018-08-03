@@ -166,8 +166,10 @@ export class Map<K,V> {
   }
 
   private __gc(): void {
+    __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
+    var entries = this.entries;
+    __gc_mark(changetype<usize>(entries)); // tslint:disable-line
     if (isManaged<K>() || isManaged<V>()) {
-      let entries = this.entries;
       let offset: usize = 0;
       let end: usize = this.entriesOffset * ENTRY_SIZE<K,V>();
       while (offset < end) {
