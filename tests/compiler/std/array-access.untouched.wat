@@ -10,11 +10,11 @@
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
- (global $HEAP_BASE i32 (i32.const 56))
+ (global $HEAP_BASE i32 (i32.const 60))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
- (data (i32.const 12) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 44) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 16) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 48) "\04\00\00\00n\00u\00l\00l\00")
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $std/array-access/stringArrayPropertyAccess))
@@ -210,7 +210,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   (if
    (i32.eqz
     (i32.ne
@@ -221,8 +220,8 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 12)
-     (i32.const 245)
+     (i32.const 16)
+     (i32.const 241)
      (i32.const 4)
     )
     (unreachable)
@@ -234,7 +233,7 @@
     (i32.const 0)
    )
    (set_local $1
-    (i32.const 44)
+    (i32.const 48)
    )
   )
   (set_local $3
@@ -245,37 +244,32 @@
     (get_local $0)
    )
   )
-  (set_local $8
-   (block $~lib/internal/string/clamp<isize>|inlined.0 (result i32)
-    (set_local $5
-     (i32.const 0)
-    )
-    (select
-     (tee_local $6
-      (select
-       (tee_local $6
-        (get_local $3)
-       )
-       (tee_local $7
-        (get_local $5)
-       )
-       (i32.gt_s
-        (get_local $6)
-        (get_local $7)
-       )
+  (set_local $7
+   (select
+    (tee_local $5
+     (select
+      (tee_local $5
+       (get_local $3)
+      )
+      (tee_local $6
+       (i32.const 0)
+      )
+      (i32.gt_s
+       (get_local $5)
+       (get_local $6)
       )
      )
-     (tee_local $7
-      (get_local $4)
-     )
-     (i32.lt_s
-      (get_local $6)
-      (get_local $7)
-     )
+    )
+    (tee_local $6
+     (get_local $4)
+    )
+    (i32.lt_s
+     (get_local $5)
+     (get_local $6)
     )
    )
   )
-  (set_local $9
+  (set_local $8
    (i32.load
     (get_local $1)
    )
@@ -283,8 +277,8 @@
   (if
    (i32.gt_s
     (i32.add
-     (get_local $9)
      (get_local $8)
+     (get_local $7)
     )
     (get_local $4)
    )
@@ -295,10 +289,10 @@
   (i32.eqz
    (call $~lib/internal/string/compareUnsafe
     (get_local $0)
-    (get_local $8)
+    (get_local $7)
     (get_local $1)
     (i32.const 0)
-    (get_local $9)
+    (get_local $8)
    )
   )
  )

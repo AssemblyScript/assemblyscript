@@ -85,10 +85,10 @@
  (global $~lib/math/random_state1 (mut i64) (i64.const 0))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
- (global $HEAP_BASE i32 (i32.const 64))
+ (global $HEAP_BASE i32 (i32.const 68))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s\00")
- (data (i32.const 36) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (data (i32.const 40) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/builtins/isNaN<f64> (; 30 ;) (type $Fi) (param $0 f64) (result i32)
@@ -11089,48 +11089,51 @@
       (get_local $8)
       (i32.const 2146435072)
      )
-     (if
-      (i32.eq
-       (i32.or
-        (i32.sub
+     (block
+      (if
+       (i32.eq
+        (i32.or
+         (i32.sub
+          (get_local $7)
+          (i32.const 1072693248)
+         )
+         (get_local $4)
+        )
+        (i32.const 0)
+       )
+       (return
+        (f64.const nan:0x8000000000000)
+       )
+       (if
+        (i32.ge_s
          (get_local $7)
          (i32.const 1072693248)
         )
-        (get_local $4)
-       )
-       (i32.const 0)
-      )
-      (return
-       (f64.const nan:0x8000000000000)
-      )
-      (if
-       (i32.ge_s
-        (get_local $7)
-        (i32.const 1072693248)
-       )
-       (return
-        (if (result f64)
-         (i32.ge_s
-          (get_local $5)
-          (i32.const 0)
-         )
-         (get_local $1)
-         (f64.const 0)
-        )
-       )
-       (return
-        (if (result f64)
-         (i32.ge_s
-          (get_local $5)
-          (i32.const 0)
-         )
-         (f64.const 0)
-         (f64.neg
+        (return
+         (if (result f64)
+          (i32.ge_s
+           (get_local $5)
+           (i32.const 0)
+          )
           (get_local $1)
+          (f64.const 0)
+         )
+        )
+        (return
+         (if (result f64)
+          (i32.ge_s
+           (get_local $5)
+           (i32.const 0)
+          )
+          (f64.const 0)
+          (f64.neg
+           (get_local $1)
+          )
          )
         )
        )
       )
+      (unreachable)
      )
     )
     (if
@@ -12562,42 +12565,45 @@
     (get_local $5)
     (i32.const 2139095040)
    )
-   (if
-    (i32.eq
-     (get_local $4)
-     (i32.const 1065353216)
-    )
-    (return
-     (f32.const nan:0x400000)
-    )
+   (block
     (if
-     (i32.gt_s
+     (i32.eq
       (get_local $4)
       (i32.const 1065353216)
      )
      (return
-      (if (result f32)
-       (i32.ge_s
-        (get_local $3)
-        (i32.const 0)
-       )
-       (get_local $1)
-       (f32.const 0)
-      )
+      (f32.const nan:0x400000)
      )
-     (return
-      (if (result f32)
-       (i32.ge_s
-        (get_local $3)
-        (i32.const 0)
-       )
-       (f32.const 0)
-       (f32.neg
+     (if
+      (i32.gt_s
+       (get_local $4)
+       (i32.const 1065353216)
+      )
+      (return
+       (if (result f32)
+        (i32.ge_s
+         (get_local $3)
+         (i32.const 0)
+        )
         (get_local $1)
+        (f32.const 0)
+       )
+      )
+      (return
+       (if (result f32)
+        (i32.ge_s
+         (get_local $3)
+         (i32.const 0)
+        )
+        (f32.const 0)
+        (f32.neg
+         (get_local $1)
+        )
        )
       )
      )
     )
+    (unreachable)
    )
   )
   (if
@@ -13780,7 +13786,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 36)
+     (i32.const 40)
      (i32.const 1000)
      (i32.const 4)
     )
@@ -13812,7 +13818,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 36)
+     (i32.const 40)
      (i32.const 1007)
      (i32.const 24)
     )
@@ -14720,6 +14726,7 @@
     )
     (br $break|2)
    )
+   (unreachable)
   )
   (if
    (i32.gt_s
@@ -15269,6 +15276,7 @@
     )
     (br $break|2)
    )
+   (unreachable)
   )
   (if
    (i32.gt_s

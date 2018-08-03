@@ -7,7 +7,7 @@
  (data (i32.const 8) "\06\00\00\00f\00o\00r\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start (; 1 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (block $break|0

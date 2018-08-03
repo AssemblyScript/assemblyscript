@@ -59,6 +59,7 @@
     (i32.const 23)
    )
   )
+  (unreachable)
  )
  (func $switch/doSwitchDefaultOmitted (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)

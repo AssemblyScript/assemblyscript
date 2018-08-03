@@ -1,5 +1,7 @@
 import "allocator/arena";
 
+export { memory };
+
 export const COLOR: string = "red";
 
 export function strlen(str: string): i32 {
@@ -14,7 +16,7 @@ export namespace math {
 
 export class Car {
   static readonly MAX_DOORS: i32 = 5;
-  static usualDoors: i32 = 3;
+  static readonly usualDoors: i32 = 3;
 
   numDoors: i32;
   private doorsOpen: bool = false;
@@ -42,5 +44,3 @@ export class Car {
     memory.free(changetype<usize>(this));
   }
 }
-
-export { memory };

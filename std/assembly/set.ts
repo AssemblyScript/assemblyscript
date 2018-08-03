@@ -104,6 +104,7 @@ export class Set<K> {
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase, HEADER_SIZE_AB);
       store<usize>(bucketPtrBase, changetype<usize>(entry), HEADER_SIZE_AB);
+      if (isManaged<K>()) __gc_link(changetype<usize>(this), changetype<usize>(key)); // tslint:disable-line
     }
   }
 
@@ -150,5 +151,22 @@ export class Set<K> {
     this.entries = newEntries;
     this.entriesCapacity = newEntriesCapacity;
     this.entriesOffset = this.entriesCount;
+  }
+
+  private __gc(): void {
+    __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
+    var entries = this.entries;
+    __gc_mark(changetype<usize>(entries)); // tslint:disable-line
+    if (isManaged<K>()) {
+      let offset: usize = 0;
+      let end: usize = this.entriesOffset * ENTRY_SIZE<K>();
+      while (offset < end) {
+        let entry = changetype<SetEntry<K>>(
+          changetype<usize>(entries) + HEADER_SIZE_AB + offset * ENTRY_SIZE<K>()
+        );
+        if (!(entry.taggedNext & EMPTY)) __gc_mark(changetype<usize>(entry.key)); // tslint:disable-line
+        offset += ENTRY_SIZE<K>();
+      }
+    }
   }
 }
