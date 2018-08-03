@@ -12,6 +12,11 @@ assert(staticArrayI32[0] == 0);
 assert(staticArrayI32[1] == 1);
 assert(staticArrayI32[2] == 2);
 
+const staticArrayf64: f64[] = [1.0 + 1, -Infinity];
+assert(staticArrayf64.length == 2);
+assert(staticArrayf64[0] == 2.0);
+assert(staticArrayf64[1] == -Infinity);
+
 var emptyArrayI32: i32[] = []; // static
 assert(emptyArrayI32.length == 0);
 

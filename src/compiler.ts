@@ -6329,35 +6329,36 @@ export class Compiler extends DiagnosticEmitter {
     writeI32(byteLength, buffer, offset); // .byteLength
     offset += bufferHeaderSize; // align
     var nativeType = elementType.toNativeType();
+    var module = this.module;
     switch (nativeType) {
       case NativeType.I32: {
         switch (byteSize) {
           case 1: {
             for (let i = 0; i < length; ++i) {
-              let value = values[i];
-              assert(getExpressionType(value) == nativeType);
-              assert(getExpressionId(value) == ExpressionId.Const);
-              writeI8(getConstValueI32(value), buffer, offset);
+              let expr = module.precomputeExpression(values[i]);
+              assert(getExpressionType(expr) == nativeType);
+              assert(getExpressionId(expr) == ExpressionId.Const);
+              writeI8(getConstValueI32(expr), buffer, offset);
               offset += 1;
             }
             break;
           }
           case 2: {
             for (let i = 0; i < length; ++i) {
-              let value = values[i];
-              assert(getExpressionType(value) == nativeType);
-              assert(getExpressionId(value) == ExpressionId.Const);
-              writeI16(getConstValueI32(value), buffer, offset);
+              let expr = module.precomputeExpression(values[i]);
+              assert(getExpressionType(expr) == nativeType);
+              assert(getExpressionId(expr) == ExpressionId.Const);
+              writeI16(getConstValueI32(expr), buffer, offset);
               offset += 2;
             }
             break;
           }
           case 4: {
             for (let i = 0; i < length; ++i) {
-              let value = values[i];
-              assert(getExpressionType(value) == nativeType);
-              assert(getExpressionId(value) == ExpressionId.Const);
-              writeI32(getConstValueI32(value), buffer, offset);
+              let expr = module.precomputeExpression(values[i]);
+              assert(getExpressionType(expr) == nativeType);
+              assert(getExpressionId(expr) == ExpressionId.Const);
+              writeI32(getConstValueI32(expr), buffer, offset);
               offset += 4;
             }
             break;
@@ -6368,30 +6369,30 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NativeType.I64: {
         for (let i = 0; i < length; ++i) {
-          let value = values[i];
-          assert(getExpressionType(value) == nativeType);
-          assert(getExpressionId(value) == ExpressionId.Const);
-          writeI64(i64_new(getConstValueI64Low(value), getConstValueI64High(value)), buffer, offset);
+          let expr = module.precomputeExpression(values[i]);
+          assert(getExpressionType(expr) == nativeType);
+          assert(getExpressionId(expr) == ExpressionId.Const);
+          writeI64(i64_new(getConstValueI64Low(expr), getConstValueI64High(expr)), buffer, offset);
           offset += 8;
         }
         break;
       }
       case NativeType.F32: {
         for (let i = 0; i < length; ++i) {
-          let value = values[i];
-          assert(getExpressionType(value) == nativeType);
-          assert(getExpressionId(value) == ExpressionId.Const);
-          writeF32(getConstValueF32(value), buffer, offset);
+          let expr = module.precomputeExpression(values[i]);
+          assert(getExpressionType(expr) == nativeType);
+          assert(getExpressionId(expr) == ExpressionId.Const);
+          writeF32(getConstValueF32(expr), buffer, offset);
           offset += 4;
         }
         break;
       }
       case NativeType.F64: {
         for (let i = 0; i < length; ++i) {
-          let value = values[i];
-          assert(getExpressionType(value) == nativeType);
-          assert(getExpressionId(value) == ExpressionId.Const);
-          writeF64(getConstValueF64(value), buffer, offset);
+          let expr = module.precomputeExpression(values[i]);
+          assert(getExpressionType(expr) == nativeType);
+          assert(getExpressionId(expr) == ExpressionId.Const);
+          writeF64(getConstValueF64(expr), buffer, offset);
           offset += 8;
         }
         break;
