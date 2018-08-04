@@ -1,7 +1,7 @@
 (module
- (type $ii (func (param i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -24,12 +24,7 @@
  (data (i32.const 168) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/array/Array<i8>#get:length (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
-  (i32.load offset=4
-   (get_local $0)
-  )
- )
- (func $~lib/array/Array<i8>#__get (; 2 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#__get (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (i32.lt_u
@@ -52,7 +47,7 @@
    )
   )
  )
- (func $~lib/array/Array<i32>#__get (; 3 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 2 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (i32.lt_u
@@ -81,7 +76,7 @@
    )
   )
  )
- (func $~lib/internal/arraybuffer/computeSize (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.shl
    (i32.const 1)
    (i32.sub
@@ -95,7 +90,7 @@
    )
   )
  )
- (func $~lib/allocator/arena/__memory_allocate (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -180,7 +175,7 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.gt_u
@@ -209,12 +204,12 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/memory.allocate (; 7 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (get_local $0)
   )
  )
- (func $~lib/internal/memory/memset (; 8 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 7 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (if
@@ -544,7 +539,7 @@
    )
   )
  )
- (func $~lib/array/Array<i8>#constructor (; 9 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#constructor (; 8 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.gt_u
@@ -603,7 +598,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i8>#__unchecked_set (; 10 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (i32.store8 offset=8
    (i32.add
     (i32.load
@@ -614,7 +609,7 @@
    (get_local $2)
   )
  )
- (func $~lib/array/Array<i32>#constructor (; 11 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 10 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -679,7 +674,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#__unchecked_set (; 12 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (i32.store offset=8
    (i32.add
     (i32.load
@@ -693,7 +688,7 @@
    (get_local $2)
   )
  )
- (func $start (; 13 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 12 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 232)
@@ -703,8 +698,8 @@
   )
   (if
    (i32.ne
-    (call $~lib/array/Array<i8>#get:length
-     (i32.const 24)
+    (i32.load
+     (i32.const 28)
     )
     (i32.const 3)
    )
@@ -780,8 +775,8 @@
   )
   (if
    (i32.ne
-    (call $~lib/array/Array<i8>#get:length
-     (i32.const 112)
+    (i32.load
+     (i32.const 116)
     )
     (i32.const 3)
    )
@@ -847,7 +842,7 @@
    )
   )
   (if
-   (call $~lib/array/Array<i8>#get:length
+   (i32.load offset=4
     (get_global $std/array-literal/emptyArrayI32)
    )
    (block
@@ -897,7 +892,7 @@
   )
   (if
    (i32.ne
-    (call $~lib/array/Array<i8>#get:length
+    (i32.load offset=4
      (get_global $std/array-literal/dynamicArrayI8)
     )
     (i32.const 3)
@@ -1012,7 +1007,7 @@
   )
   (if
    (i32.ne
-    (call $~lib/array/Array<i8>#get:length
+    (i32.load offset=4
      (get_global $std/array-literal/dynamicArrayI32)
     )
     (i32.const 3)
