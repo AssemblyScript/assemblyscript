@@ -1,8 +1,8 @@
 (module
- (type $ii (func (param i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $ii (func (param i32) (result i32)))
  (type $iiI (func (param i32 i32) (result i64)))
  (type $iiIv (func (param i32 i32 i64)))
  (type $iif (func (param i32 i32) (result f32)))
@@ -38,12 +38,7 @@
  (data (i32.const 216) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/array/Array<i32>#get:length (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (i32.load offset=4
-   (get_local $0)
-  )
- )
- (func $~lib/array/Array<i32>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -74,7 +69,7 @@
    (unreachable)
   )
  )
- (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (i32.shl
    (i32.const 1)
    (i32.sub
@@ -91,7 +86,7 @@
    )
   )
  )
- (func $~lib/internal/memory/memset (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -443,7 +438,7 @@
    )
   )
  )
- (func $~lib/allocator/arena/__memory_allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -554,7 +549,7 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -594,7 +589,7 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/memory/memcpy (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2396,7 +2391,7 @@
    )
   )
  )
- (func $~lib/internal/memory/memmove (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -2714,7 +2709,7 @@
    )
   )
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2877,7 +2872,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#__set (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -2908,7 +2903,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 184)
-       (i32.const 86)
+       (i32.const 87)
        (i32.const 41)
       )
       (unreachable)
@@ -2952,12 +2947,7 @@
    )
   )
  )
- (func $~lib/array/Array<i64>#get:length (; 11 ;) (type $ii) (param $0 i32) (result i32)
-  (i32.load offset=4
-   (get_local $0)
-  )
- )
- (func $~lib/array/Array<i64>#__get (; 12 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (; 10 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -2988,7 +2978,7 @@
    (unreachable)
   )
  )
- (func $~lib/array/Array<i64>#__set (; 13 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<i64>#__set (; 11 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -3019,7 +3009,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 184)
-       (i32.const 86)
+       (i32.const 87)
        (i32.const 41)
       )
       (unreachable)
@@ -3063,12 +3053,7 @@
    )
   )
  )
- (func $~lib/array/Array<f32>#get:length (; 14 ;) (type $ii) (param $0 i32) (result i32)
-  (i32.load offset=4
-   (get_local $0)
-  )
- )
- (func $~lib/array/Array<f32>#__get (; 15 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 12 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -3099,7 +3084,7 @@
    (unreachable)
   )
  )
- (func $~lib/array/Array<f32>#__set (; 16 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/array/Array<f32>#__set (; 13 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -3130,7 +3115,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 184)
-       (i32.const 86)
+       (i32.const 87)
        (i32.const 41)
       )
       (unreachable)
@@ -3174,12 +3159,7 @@
    )
   )
  )
- (func $~lib/array/Array<f64>#get:length (; 17 ;) (type $ii) (param $0 i32) (result i32)
-  (i32.load offset=4
-   (get_local $0)
-  )
- )
- (func $~lib/array/Array<f64>#__get (; 18 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 14 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (set_local $2
    (i32.load
@@ -3210,7 +3190,7 @@
    (unreachable)
   )
  )
- (func $~lib/array/Array<f64>#__set (; 19 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/array/Array<f64>#__set (; 15 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -3241,7 +3221,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 184)
-       (i32.const 86)
+       (i32.const 87)
        (i32.const 41)
       )
       (unreachable)
@@ -3285,7 +3265,8 @@
    )
   )
  )
- (func $start (; 20 ;) (type $v)
+ (func $start (; 16 ;) (type $v)
+  (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -3304,8 +3285,13 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $~lib/array/Array<i32>#get:length
-      (get_global $std/static-array/i)
+     (block $~lib/array/Array<i32>#get:length|inlined.0 (result i32)
+      (set_local $0
+       (get_global $std/static-array/i)
+      )
+      (i32.load offset=4
+       (get_local $0)
+      )
      )
      (i32.const 2)
     )
@@ -3388,8 +3374,13 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $~lib/array/Array<i64>#get:length
-      (get_global $std/static-array/I)
+     (block $~lib/array/Array<i64>#get:length|inlined.0 (result i32)
+      (set_local $0
+       (get_global $std/static-array/I)
+      )
+      (i32.load offset=4
+       (get_local $0)
+      )
      )
      (i32.const 2)
     )
@@ -3472,8 +3463,13 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $~lib/array/Array<f32>#get:length
-      (get_global $std/static-array/f)
+     (block $~lib/array/Array<f32>#get:length|inlined.0 (result i32)
+      (set_local $0
+       (get_global $std/static-array/f)
+      )
+      (i32.load offset=4
+       (get_local $0)
+      )
      )
      (i32.const 2)
     )
@@ -3556,8 +3552,13 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $~lib/array/Array<f64>#get:length
-      (get_global $std/static-array/F)
+     (block $~lib/array/Array<f64>#get:length|inlined.0 (result i32)
+      (set_local $0
+       (get_global $std/static-array/F)
+      )
+      (i32.load offset=4
+       (get_local $0)
+      )
      )
      (i32.const 2)
     )
