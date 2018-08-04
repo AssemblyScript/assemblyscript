@@ -10,46 +10,13 @@ import {
 /** Obtains the default comparator for the specified type. */
 @inline
 export function defaultComparator<T>(): (a: T, b: T) => i32 {
-  if (isInteger<T>() && isSigned<T>()) {
-    return (a: T, b: T): i32 => {
-      // JavaScript by default casting all values to string
-      // so for emulate this we use trick below
-      // TODO can we do better?
-      var t = a - b;
-      return select<T>(-t, t, a & b & (1 << 8 * sizeof<T>() - 1));
-    };
-  } else if (isFloat<T>()) {
-    if (sizeof<T>() == 4) {
-      return (a: T, b: T): i32 => {
-        // JavaScript by default casting all values to string
-        // so for emulate this we use trick below
-        var ia = reinterpret<i32>(a);
-        var ib = reinterpret<i32>(b);
-        return <i32>(ia > ib) - <i32>(ia < ib);
-      };
+  if (isInteger<T>()) {
+    if (isSigned<T>() && sizeof<T>() <= 4) {
+      return (a: T, b: T): i32 => (<i32>(a - b));
     } else {
-      return (a: T, b: T): i32 => {
-        // JavaScript by default casting all values to string
-        // so for emulate this we use trick below
-        var ia = reinterpret<i64>(a);
-        var ib = reinterpret<i64>(b);
-        return <i32>(ia > ib) - <i32>(ia < ib);
-      };
+      return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
     }
-  } else if (isString<T>()) {
-    return (a: T, b: T): i32 => {
-      var sa = <string>a, sb = <string>b;
-      return compareUnsafe(sa, 0, sb, 0, min(sa.length, sb.length));
-    };
-  } else {
-    return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
-  }
-}
-
-/** Obtains the default comparator for the typed arrays which behave differently. */
-@inline
-export function defaultComparatorTyped<T>(): (a: T, b: T) => i32 {
-  if (isFloat<T>()) {
+  } else if (isFloat<T>()) {
     if (sizeof<T>() == 4) {
       return (a: T, b: T): i32 => {
         var ia = reinterpret<i32>(a);
@@ -67,10 +34,12 @@ export function defaultComparatorTyped<T>(): (a: T, b: T) => i32 {
         return <i32>(ia > ib) - <i32>(ia < ib);
       };
     }
+  } else if (isString<T>()) {
+    return (a: T, b: T): i32 => {
+      var sa = <string>a, sb = <string>b;
+      return compareUnsafe(sa, 0, sb, 0, min(sa.length, sb.length));
+    };
   } else {
-    if (isInteger<T>() && isSigned<T>() && sizeof<T>() <= 4) {
-      return (a: T, b: T): i32 => (<i32>(a - b));
-    }
     return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
   }
 }

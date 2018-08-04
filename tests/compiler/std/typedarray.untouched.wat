@@ -3725,8 +3725,8 @@
     (unreachable)
    )
    (set_local $1
-    (block $~lib/internal/array/defaultComparatorTyped<f64>|inlined.0 (result i32)
-     (br $~lib/internal/array/defaultComparatorTyped<f64>|inlined.0
+    (block $~lib/internal/array/defaultComparator<f64>|inlined.0 (result i32)
+     (br $~lib/internal/array/defaultComparator<f64>|inlined.0
       (i32.const 0)
      )
     )

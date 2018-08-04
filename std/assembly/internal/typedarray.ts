@@ -9,7 +9,7 @@ import {
 import {
   insertionSort,
   weakHeapSort,
-  defaultComparatorTyped
+  defaultComparator
 } from "./array";
 
 /** Typed array base class. Not a global object. */
@@ -77,7 +77,7 @@ export abstract class TypedArray<T,V> {
     return changetype<this>(slice);
   }
 
-  sort(comparator: (a: T, b: T) => i32 = defaultComparatorTyped<T>()): this {
+  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
     var byteOffset = this.byteOffset;
     var length = this.length;
     if (length <= 1) return this;
