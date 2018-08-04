@@ -491,7 +491,7 @@ declare class String {
   padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
   toString(): string;
-  toUTF8(): usize;
+  toUTF8(lengthUTF8?: i32): usize;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */

@@ -21,3 +21,31 @@ assert(load<u8>(ptr, 9) == 0xa2);
 assert(load<u8>(ptr, 10) == 0);
 
 memory.free(ptr);
+
+var ptr2 = str.toUTF8(4);
+
+assert(load<u8>(ptr2, 0) == 0xf0);
+assert(load<u8>(ptr2, 1) == 0x90);
+assert(load<u8>(ptr2, 2) == 0x90);
+assert(load<u8>(ptr2, 3) == 0xb7);
+assert(load<u8>(ptr2, 4) == 0);
+
+memory.free(ptr2);
+
+var ptr3 = str.toUTF8(12);
+
+assert(load<u8>(ptr3, 0) == 0xf0);
+assert(load<u8>(ptr3, 1) == 0x90);
+assert(load<u8>(ptr3, 2) == 0x90);
+assert(load<u8>(ptr3, 3) == 0xb7);
+assert(load<u8>(ptr3, 4) == 0x68);
+assert(load<u8>(ptr3, 5) == 0x69);
+assert(load<u8>(ptr3, 6) == 0xf0);
+assert(load<u8>(ptr3, 7) == 0xa4);
+assert(load<u8>(ptr3, 8) == 0xad);
+assert(load<u8>(ptr3, 9) == 0xa2);
+assert(load<u8>(ptr3, 10) == 0);
+assert(load<u8>(ptr3, 11) == 0);
+assert(load<u8>(ptr3, 12) == 0);
+
+memory.free(ptr3);
