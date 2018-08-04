@@ -78,9 +78,6 @@ export abstract class TypedArray<T,V> {
   }
 
   sort(comparator: (a: T, b: T) => i32 = defaultComparatorTyped<T>()): this {
-    // TODO remove this when flow will allow trackcing null
-    assert(comparator); // The comparison function must be a function
-
     var byteOffset = this.byteOffset;
     var length = this.length;
     if (length <= 1) return this;
