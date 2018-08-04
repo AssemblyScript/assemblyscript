@@ -19,6 +19,7 @@ const path = require("path");
 const utf8 = require("@protobufjs/utf8");
 const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
+const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
@@ -411,11 +412,13 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
 
-  // Initialize default aliases
-  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
-  assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
-  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/env/abort");
-  assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/env/trace");
+  if (!args.noLib) {
+    // Initialize default aliases
+    assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
+    assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
+    assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/env/abort");
+    assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/env/trace");
+  }
 
   // Add or override aliases if specified
   if (args.use) {
@@ -702,6 +705,7 @@ exports.main = function main(argv, options, callback) {
     try {
       stats.writeCount++;
       stats.writeTime += measure(() => {
+        mkdirp(path.dirname(filename));
         if (typeof contents === "string") {
           fs.writeFileSync(filename, contents, { encoding: "utf8" } );
         } else {

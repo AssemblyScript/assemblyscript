@@ -9,15 +9,15 @@
  (data (i32.const 8) "\10\00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $getter-setter/Foo.get:bar (; 1 ;) (type $i) (result i32)
+ (func $getter-setter/Foo.get:bar (; 1 ;) (; has Stack IR ;) (type $i) (result i32)
   (get_global $getter-setter/Foo._bar)
  )
- (func $getter-setter/Foo.set:bar (; 2 ;) (type $iv) (param $0 i32)
+ (func $getter-setter/Foo.set:bar (; 2 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (set_global $getter-setter/Foo._bar
    (get_local $0)
   )
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (; has Stack IR ;) (type $v)
   (if
    (call $getter-setter/Foo.get:bar)
    (block

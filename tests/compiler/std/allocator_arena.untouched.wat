@@ -29,114 +29,110 @@
   (local $5 i32)
   (local $6 i32)
   (if
-   (get_local $0)
-   (block
-    (if
-     (i32.gt_u
-      (get_local $0)
-      (get_global $~lib/internal/allocator/MAX_SIZE_32)
-     )
-     (unreachable)
-    )
-    (set_local $1
-     (get_global $~lib/allocator/arena/offset)
-    )
-    (set_local $2
-     (i32.and
-      (i32.add
-       (i32.add
-        (get_local $1)
+   (i32.gt_u
+    (get_local $0)
+    (get_global $~lib/internal/allocator/MAX_SIZE_32)
+   )
+   (unreachable)
+  )
+  (set_local $1
+   (get_global $~lib/allocator/arena/offset)
+  )
+  (set_local $4
+   (i32.and
+    (i32.add
+     (i32.add
+      (get_local $1)
+      (select
+       (tee_local $2
         (get_local $0)
        )
-       (get_global $~lib/internal/allocator/AL_MASK)
+       (tee_local $3
+        (i32.const 1)
+       )
+       (i32.gt_u
+        (get_local $2)
+        (get_local $3)
+       )
       )
-      (i32.xor
-       (get_global $~lib/internal/allocator/AL_MASK)
-       (i32.const -1)
+     )
+     (get_global $~lib/internal/allocator/AL_MASK)
+    )
+    (i32.xor
+     (get_global $~lib/internal/allocator/AL_MASK)
+     (i32.const -1)
+    )
+   )
+  )
+  (set_local $5
+   (current_memory)
+  )
+  (if
+   (i32.gt_u
+    (get_local $4)
+    (i32.shl
+     (get_local $5)
+     (i32.const 16)
+    )
+   )
+   (block
+    (set_local $2
+     (i32.shr_u
+      (i32.and
+       (i32.add
+        (i32.sub
+         (get_local $4)
+         (get_local $1)
+        )
+        (i32.const 65535)
+       )
+       (i32.xor
+        (i32.const 65535)
+        (i32.const -1)
+       )
       )
+      (i32.const 16)
      )
     )
     (set_local $3
-     (current_memory)
+     (select
+      (tee_local $3
+       (get_local $5)
+      )
+      (tee_local $6
+       (get_local $2)
+      )
+      (i32.gt_s
+       (get_local $3)
+       (get_local $6)
+      )
+     )
     )
     (if
-     (i32.gt_u
-      (get_local $2)
-      (i32.shl
+     (i32.lt_s
+      (grow_memory
        (get_local $3)
-       (i32.const 16)
       )
+      (i32.const 0)
      )
-     (block
-      (set_local $4
-       (i32.shr_u
-        (i32.and
-         (i32.add
-          (i32.sub
-           (get_local $2)
-           (get_local $1)
-          )
-          (i32.const 65535)
-         )
-         (i32.xor
-          (i32.const 65535)
-          (i32.const -1)
-         )
-        )
-        (i32.const 16)
+     (if
+      (i32.lt_s
+       (grow_memory
+        (get_local $2)
        )
+       (i32.const 0)
       )
-      (set_local $5
-       (select
-        (tee_local $5
-         (get_local $3)
-        )
-        (tee_local $6
-         (get_local $4)
-        )
-        (i32.gt_s
-         (get_local $5)
-         (get_local $6)
-        )
-       )
-      )
-      (if
-       (i32.lt_s
-        (grow_memory
-         (get_local $5)
-        )
-        (i32.const 0)
-       )
-       (if
-        (i32.lt_s
-         (grow_memory
-          (get_local $4)
-         )
-         (i32.const 0)
-        )
-        (unreachable)
-       )
-      )
+      (unreachable)
      )
-    )
-    (set_global $~lib/allocator/arena/offset
-     (get_local $2)
-    )
-    (return
-     (get_local $1)
     )
    )
   )
-  (i32.const 0)
- )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (return
-   (call $~lib/allocator/arena/__memory_allocate
-    (get_local $0)
-   )
+  (set_global $~lib/allocator/arena/offset
+   (get_local $4)
   )
+  (get_local $1)
  )
- (func $~lib/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -488,14 +484,7 @@
    )
   )
  )
- (func $~lib/memory/memory.fill (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (call $~lib/memory/memset
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $~lib/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2297,7 +2286,7 @@
    )
   )
  )
- (func $~lib/memory/memmove (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -2327,7 +2316,7 @@
     )
    )
    (block
-    (call $~lib/memory/memcpy
+    (call $~lib/internal/memory/memcpy
      (get_local $0)
      (get_local $1)
      (get_local $2)
@@ -2615,14 +2604,7 @@
    )
   )
  )
- (func $~lib/memory/memory.copy (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (call $~lib/memory/memmove
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $~lib/memory/memcmp (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/memory/memcmp (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.eq
@@ -2692,32 +2674,18 @@
    (i32.const 0)
   )
  )
- (func $~lib/memory/memory.compare (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (call $~lib/memory/memcmp
-   (get_local $0)
-   (get_local $1)
-   (get_local $2)
-  )
- )
- (func $~lib/allocator/arena/__memory_free (; 10 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 6 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $~lib/memory/memory.free (; 11 ;) (type $iv) (param $0 i32)
-  (call $~lib/allocator/arena/__memory_free
-   (get_local $0)
-  )
-  (return)
- )
- (func $~lib/allocator/arena/__memory_reset (; 12 ;) (type $v)
+ (func $~lib/allocator/arena/__memory_reset (; 7 ;) (type $v)
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
   )
  )
- (func $~lib/memory/memory.reset (; 13 ;) (type $v)
-  (call $~lib/allocator/arena/__memory_reset)
-  (return)
- )
- (func $start (; 14 ;) (type $v)
+ (func $start (; 8 ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -2734,13 +2702,27 @@
    (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/allocator_arena/ptr1
-   (call $~lib/memory/memory.allocate
-    (get_global $std/allocator_arena/size)
+   (block $~lib/memory/memory.allocate|inlined.0 (result i32)
+    (set_local $0
+     (get_global $std/allocator_arena/size)
+    )
+    (br $~lib/memory/memory.allocate|inlined.0
+     (call $~lib/allocator/arena/__memory_allocate
+      (get_local $0)
+     )
+    )
    )
   )
   (set_global $std/allocator_arena/ptr2
-   (call $~lib/memory/memory.allocate
-    (get_global $std/allocator_arena/size)
+   (block $~lib/memory/memory.allocate|inlined.1 (result i32)
+    (set_local $0
+     (get_global $std/allocator_arena/size)
+    )
+    (br $~lib/memory/memory.allocate|inlined.1
+     (call $~lib/allocator/arena/__memory_allocate
+      (get_local $0)
+     )
+    )
    )
   )
   (if
@@ -2760,10 +2742,21 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/memory.fill
-   (get_global $std/allocator_arena/ptr1)
-   (i32.const 18)
-   (get_global $std/allocator_arena/size)
+  (block $~lib/memory/memory.fill|inlined.0
+   (set_local $0
+    (get_global $std/allocator_arena/ptr1)
+   )
+   (set_local $1
+    (i32.const 18)
+   )
+   (set_local $2
+    (get_global $std/allocator_arena/size)
+   )
+   (call $~lib/internal/memory/memset
+    (get_local $0)
+    (get_local $1)
+    (get_local $2)
+   )
   )
   (block $break|0
    (set_global $std/allocator_arena/i
@@ -2809,10 +2802,21 @@
     (br $repeat|0)
    )
   )
-  (call $~lib/memory/memory.copy
-   (get_global $std/allocator_arena/ptr2)
-   (get_global $std/allocator_arena/ptr1)
-   (get_global $std/allocator_arena/size)
+  (block $~lib/memory/memory.copy|inlined.0
+   (set_local $2
+    (get_global $std/allocator_arena/ptr2)
+   )
+   (set_local $1
+    (get_global $std/allocator_arena/ptr1)
+   )
+   (set_local $0
+    (get_global $std/allocator_arena/size)
+   )
+   (call $~lib/internal/memory/memmove
+    (get_local $2)
+    (get_local $1)
+    (get_local $0)
+   )
   )
   (block $break|1
    (set_global $std/allocator_arena/i
@@ -2861,10 +2865,21 @@
   (if
    (i32.eqz
     (i32.eq
-     (call $~lib/memory/memory.compare
-      (get_global $std/allocator_arena/ptr1)
-      (get_global $std/allocator_arena/ptr2)
-      (get_global $std/allocator_arena/size)
+     (block $~lib/memory/memory.compare|inlined.0 (result i32)
+      (set_local $0
+       (get_global $std/allocator_arena/ptr1)
+      )
+      (set_local $1
+       (get_global $std/allocator_arena/ptr2)
+      )
+      (set_local $2
+       (get_global $std/allocator_arena/size)
+      )
+      (call $~lib/internal/memory/memcmp
+       (get_local $0)
+       (get_local $1)
+       (get_local $2)
+      )
      )
      (i32.const 0)
     )
@@ -2879,16 +2894,44 @@
     (unreachable)
    )
   )
-  (call $~lib/memory/memory.free
-   (get_global $std/allocator_arena/ptr1)
+  (block $~lib/memory/memory.free|inlined.0
+   (set_local $2
+    (get_global $std/allocator_arena/ptr1)
+   )
+   (block
+    (call $~lib/allocator/arena/__memory_free
+     (get_local $2)
+    )
+    (br $~lib/memory/memory.free|inlined.0)
+   )
   )
-  (call $~lib/memory/memory.free
-   (get_global $std/allocator_arena/ptr2)
+  (block $~lib/memory/memory.free|inlined.1
+   (set_local $2
+    (get_global $std/allocator_arena/ptr2)
+   )
+   (block
+    (call $~lib/allocator/arena/__memory_free
+     (get_local $2)
+    )
+    (br $~lib/memory/memory.free|inlined.1)
+   )
   )
-  (call $~lib/memory/memory.reset)
+  (block $~lib/memory/memory.reset|inlined.0
+   (block
+    (call $~lib/allocator/arena/__memory_reset)
+    (br $~lib/memory/memory.reset|inlined.0)
+   )
+  )
   (set_global $std/allocator_arena/ptr1
-   (call $~lib/memory/memory.allocate
-    (get_global $std/allocator_arena/size)
+   (block $~lib/memory/memory.allocate|inlined.2 (result i32)
+    (set_local $2
+     (get_global $std/allocator_arena/size)
+    )
+    (br $~lib/memory/memory.allocate|inlined.2
+     (call $~lib/allocator/arena/__memory_allocate
+      (get_local $2)
+     )
+    )
    )
   )
   (if

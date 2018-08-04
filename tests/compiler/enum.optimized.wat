@@ -34,10 +34,10 @@
  (export "SelfReference.ZERO" (global $enum/SelfReference.ZERO))
  (export "SelfReference.ONE" (global $enum/SelfReference.ONE))
  (start $start)
- (func $enum/getZero (; 0 ;) (type $i) (result i32)
+ (func $enum/getZero (; 0 ;) (; has Stack IR ;) (type $i) (result i32)
   (i32.const 0)
  )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 1 ;) (; has Stack IR ;) (type $v)
   (set_global $enum/NonConstant.ZERO
    (call $enum/getZero)
   )

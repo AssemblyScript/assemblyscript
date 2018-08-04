@@ -16,10 +16,10 @@
  (export "_setargc" (func $~setargc))
  (export "Pointer<Entry>#constructor" (func $std/pointer/Pointer<Entry>#constructor|trampoline))
  (start $start)
- (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (get_local $1)
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (; has Stack IR ;) (type $v)
   (set_global $std/pointer/one
    (call $std/pointer/Pointer<Entry>#constructor
     (i32.const 0)
@@ -277,7 +277,7 @@
    )
   )
  )
- (func $std/pointer/Pointer<Entry>#constructor|trampoline (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/pointer/Pointer<Entry>#constructor|trampoline (; 3 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -296,7 +296,7 @@
    (get_local $1)
   )
  )
- (func $~setargc (; 4 ;) (type $iv) (param $0 i32)
+ (func $~setargc (; 4 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (set_global $~argc
    (get_local $0)
   )

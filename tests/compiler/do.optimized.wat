@@ -9,7 +9,7 @@
  (data (i32.const 8) "\05\00\00\00d\00o\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start (; 1 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (loop $continue|0
    (set_global $do/n

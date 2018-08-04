@@ -3,12 +3,12 @@
  (type $Ii (func (param i64) (result i32)))
  (type $v (func))
  (memory $0 1)
- (data (i32.const 12) "\01\00\00\00a")
- (data (i32.const 20) "\02\00\00\00a\00b")
- (data (i32.const 28) "\03\00\00\00a\00b\00c")
+ (data (i32.const 16) "\01\00\00\00a")
+ (data (i32.const 24) "\02\00\00\00a\00b")
+ (data (i32.const 32) "\03\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/internal/hash/hashStr (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hashStr (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -56,10 +56,10 @@
   )
   (get_local $2)
  )
- (func $std/hash/check (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/hash/check (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.const 1)
  )
- (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.mul
    (i32.xor
     (i32.mul
@@ -104,7 +104,7 @@
    (i32.const 16777619)
   )
  )
- (func $~lib/internal/hash/hash64 (; 3 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 3 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (i32.mul
    (i32.xor
@@ -203,7 +203,7 @@
    (i32.const 16777619)
   )
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 4 ;) (; has Stack IR ;) (type $v)
   (drop
    (call $std/hash/check
     (call $~lib/internal/hash/hashStr
@@ -221,21 +221,21 @@
   (drop
    (call $std/hash/check
     (call $~lib/internal/hash/hashStr
-     (i32.const 12)
+     (i32.const 16)
     )
    )
   )
   (drop
    (call $std/hash/check
     (call $~lib/internal/hash/hashStr
-     (i32.const 20)
+     (i32.const 24)
     )
    )
   )
   (drop
    (call $std/hash/check
     (call $~lib/internal/hash/hashStr
-     (i32.const 28)
+     (i32.const 32)
     )
    )
   )

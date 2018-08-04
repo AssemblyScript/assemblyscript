@@ -1,7 +1,7 @@
 
 import {
   CharCode,
-  allocate as allocateString,
+  allocateUnsafe as allocateUnsafeString,
   HEADER_SIZE as STRING_HEADER_SIZE
 } from "./string";
 
@@ -194,7 +194,7 @@ export function utoa32(value: u32): string {
   if (!value) return "0";
 
   var decimals = decimalCountU32(value);
-  var buffer   = allocateString(decimals);
+  var buffer   = allocateUnsafeString(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
   return changetype<string>(buffer);
@@ -207,7 +207,7 @@ export function itoa32(value: i32): string {
   if (isneg) value = -value;
 
   var decimals = decimalCountU32(value) + <i32>isneg;
-  var buffer   = allocateString(decimals);
+  var buffer   = allocateUnsafeString(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
   if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
@@ -222,11 +222,11 @@ export function utoa64(value: u64): string {
   if (value <= u32.MAX_VALUE) {
     let value32  = <u32>value;
     let decimals = decimalCountU32(value32);
-    buffer = allocateString(decimals);
+    buffer = allocateUnsafeString(decimals);
     utoa32_core(changetype<usize>(buffer), value32, decimals);
   } else {
     let decimals = decimalCountU64(value);
-    buffer = allocateString(decimals);
+    buffer = allocateUnsafeString(decimals);
     utoa64_core(changetype<usize>(buffer), value, decimals);
   }
 
@@ -243,11 +243,11 @@ export function itoa64(value: i64): string {
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let value32  = <u32>value;
     let decimals = decimalCountU32(value32) + <i32>isneg;
-    buffer = allocateString(decimals);
+    buffer = allocateUnsafeString(decimals);
     utoa32_core(changetype<usize>(buffer), value32, decimals);
   } else {
     let decimals = decimalCountU64(value) + <i32>isneg;
-    buffer = allocateString(decimals);
+    buffer = allocateUnsafeString(decimals);
     utoa64_core(changetype<usize>(buffer), value, decimals);
   }
   if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);

@@ -9,7 +9,7 @@
  (data (i32.const 48) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/polyfills/bswap16<u16> (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u16> (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -66,7 +66,7 @@
   )
   (get_local $0)
  )
- (func $~lib/polyfills/bswap<u16> (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -104,7 +104,7 @@
    (get_local $0)
   )
  )
- (func $~lib/polyfills/bswap16<i16> (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i16> (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -164,7 +164,7 @@
   )
   (get_local $0)
  )
- (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -202,7 +202,7 @@
    (get_local $0)
   )
  )
- (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.eqz
@@ -245,7 +245,7 @@
    )
   )
  )
- (func $~lib/polyfills/bswap<u64> (; 6 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 6 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
   (i64.rotr
    (i64.or
     (i64.and
@@ -283,7 +283,7 @@
    (i64.const 32)
   )
  )
- (func $~lib/polyfills/bswap16<u32> (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u32> (; 7 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.or
    (i32.or
     (i32.and
@@ -307,7 +307,7 @@
    )
   )
  )
- (func $~lib/polyfills/bswap16<i32> (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i32> (; 8 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.or
    (i32.or
     (i32.and
@@ -331,7 +331,7 @@
    )
   )
  )
- (func $start (; 9 ;) (type $v)
+ (func $start (; 9 ;) (; has Stack IR ;) (type $v)
   (if
    (i32.ne
     (i32.and

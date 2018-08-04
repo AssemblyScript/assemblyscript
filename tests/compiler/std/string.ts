@@ -12,9 +12,36 @@ assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
 
 assert(str.length == 16);
 assert(str.charCodeAt(0) == 0x68);
+
+assert(String.fromCharCode(0) == "\0");
+assert(String.fromCharCode(54) == "6");
+assert(String.fromCharCode(0x10000 + 54) == "6");
+
+assert(String.fromCodePoint(0) == "\0");
+assert(String.fromCodePoint(54) == "6");
+assert(String.fromCodePoint(0x1D306), "\uD834\uDF06");
+
 assert(str.startsWith("hi"));
 assert(str.endsWith("string"));
 assert(str.includes("I'm"));
+
+assert(str.padStart(0) == str);
+assert(str.padStart(15) == str);
+assert("".padStart(3) == "   ");
+assert("".padStart(10, "") == "");
+assert("a".padStart(100, "") == "a");
+assert("abc".padStart(5) == "  abc");
+assert("abc".padStart(6, "123") == "123abc");
+assert("abc".padStart(8, "123") == "12312abc");
+
+assert(str.padEnd(0) == str);
+assert(str.padEnd(15) == str);
+assert("".padEnd(3) == "   ");
+assert("".padEnd(10, "") == "");
+assert("a".padEnd(100, "") == "a");
+assert("abc".padEnd(5) == "abc  ");
+assert("abc".padEnd(6, "abc") == "abcabc");
+assert("abc".padEnd(8, "abc") == "abcabcab");
 
 assert("".indexOf("") == 0);
 assert("".indexOf("hi") == -1);
@@ -81,6 +108,10 @@ assert(!("" < ""));
 assert(!("" > ""));
 assert("" >= "");
 assert("" <= "");
+
+var a = String.fromCodePoint(0xFF61);
+var b = String.fromCodePoint(0xD800) + String.fromCodePoint(0xDC02);
+assert(a > b);
 
 assert("123".length == 3);
 

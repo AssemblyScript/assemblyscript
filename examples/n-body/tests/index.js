@@ -41,38 +41,39 @@ function test(nbody, steps) {
 }
 
 var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 20000000;
-var time;
 
-console.log("Performing " + steps + " steps (AssemblyScript WASM) ...");
-time = test(nbodyAS, steps);
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+function prologue(name, steps) {
+  console.log("Performing " + steps + " steps (" + name + ") ...");
+}
 
-console.log("Performing " + steps + " steps (AssemblyScript ASMJS) ...");
-time = test(nbodyAsmJS, steps);
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+function epilogue(time) {
+  console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+}
 
-console.log("Performing " + steps + " steps (JS) ...");
-time = test(nbodyJS, steps);
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+console.log("\nCOLD SERIES:\n");
 
-console.log("Performing " + steps + " steps (Rust WASM) ...");
-time = test(nbodyRS, steps);
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+prologue("AssemblyScript WASM", steps);
+epilogue(test(nbodyAS, steps));
 
-console.log("\nWARMED UP:\n");
+prologue("AssemblyScript ASMJS", steps);
+epilogue(test(nbodyAsmJS, steps));
 
-console.log("Performing " + steps + " steps (AssemblyScript WASM) ...");
-time = test(nbodyAS, steps);
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+prologue("JS", steps);
+epilogue(test(nbodyJS, steps));
 
-console.log("Performing " + steps + " steps (AssemblyScript ASMJS) ...");
-time = test(nbodyAsmJS, steps);
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+prologue("Rust WASM", steps);
+epilogue(test(nbodyRS, steps));
 
-console.log("Performing " + steps + " steps (JS) ...");
-time = test(nbodyJS, steps);
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+console.log("\nWARMED UP SERIES:\n");
 
-console.log("Performing " + steps + " steps (Rust WASM) ...");
-time = test(nbodyRS, steps);
-console.log("Took " + (time[0] * 1e3 + time[1] / 1e6) + "ms");
+prologue("AssemblyScript WASM", steps);
+epilogue(test(nbodyAS, steps));
+
+prologue("AssemblyScript ASMJS", steps);
+epilogue(test(nbodyAsmJS, steps));
+
+prologue("JS", steps);
+epilogue(test(nbodyJS, steps));
+
+prologue("Rust WASM", steps);
+epilogue(test(nbodyRS, steps));
