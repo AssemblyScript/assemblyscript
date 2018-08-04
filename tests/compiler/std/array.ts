@@ -616,19 +616,19 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 var f32ArrayTyped: f32[] = [1.0, NaN, -Infinity, 1.00000001, 0.0, -1.0, -2.0, +Infinity];
 f32ArrayTyped.sort();
-assert(isArraysEqual<f32>(f32ArrayTyped, <f32[]>[-Infinity, -2.0, -1.0, 0.0, 1.0, 1.00000001, Infinity, NaN]));
+assert(isArraysEqual<f32>(f32ArrayTyped, [-Infinity, -2.0, -1.0, 0.0, 1.0, 1.00000001, Infinity, NaN]));
 
 var f64ArrayTyped: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, -1.0, -2.0, +Infinity];
 f64ArrayTyped.sort();
-assert(isArraysEqual<f64>(f64ArrayTyped, <f64[]>[-Infinity, -2.0, -1.0, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
+assert(isArraysEqual<f64>(f64ArrayTyped, [-Infinity, -2.0, -1.0, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
 
 var i32ArrayTyped: i32[] = [1, -2, -1, 0, 2];
 i32ArrayTyped.sort();
-assert(isArraysEqual<i32>(i32ArrayTyped, <i32[]>[-2, -1, 0, 1, 2]));
+assert(isArraysEqual<i32>(i32ArrayTyped, [-2, -1, 0, 1, 2]));
 
 var u32ArrayTyped: u32[] = [1, 4294967295, 4294967294, 0, 2];
 u32ArrayTyped.sort();
-assert(isArraysEqual<u32>(u32ArrayTyped, <u32[]>[0, 1, 2, 4294967294, 4294967295]));
+assert(isArraysEqual<u32>(u32ArrayTyped, [0, 1, 2, 4294967294, 4294967295]));
 
 var reversed0: i32[] = [];
 var reversed1: i32[] = [1];
