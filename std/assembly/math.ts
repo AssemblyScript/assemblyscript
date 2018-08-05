@@ -2304,7 +2304,7 @@ export namespace NativeMathf {
   }
 }
 
-export function upow(x: u64, e: i32): u64 {
+export function ipow32(x: i32, e: i32): i32 {
   if (e < 0) return 0;
   switch (e) {
     case 0: return 1;
@@ -2312,7 +2312,49 @@ export function upow(x: u64, e: i32): u64 {
     case 2: return x * x;
   }
 
-  var out: u64 = 1;
+  var out = 1;
+  var log = 32 - clz(e);
+  if (log > 5) return 0;
+
+  // 32 = 2 ^ 5, so need only six cases
+  switch (log) {
+    case 5: {
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
+    }
+    case 4: {
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
+    }
+    case 3: {
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
+    }
+    case 2: {
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
+    }
+    case 1: {
+      if (e & 1) out *= x;
+    }
+  }
+
+  return out;
+}
+
+export function ipow64(x: i64, e: i32): i64 {
+  if (e < 0) return 0;
+  switch (e) {
+    case 0: return 1;
+    case 1: return x;
+    case 2: return x * x;
+  }
+
+  var out: i64 = 1;
   var log = 32 - clz(e);
   if (log > 6) return 0;
 
@@ -2349,8 +2391,4 @@ export function upow(x: u64, e: i32): u64 {
   }
 
   return out;
-}
-
-export function ipow(x: i64, e: i32): i64 {
-  return <i64>upow(<u64>x, e);
 }
