@@ -2310,17 +2310,14 @@ export function upow(base: u64, exponent: i32): u64 {
     case 0: return 1;
     case 1: return base;
     case 2: return base * base;
-    default: break;
   }
-
-  if (base == 1) return 1;
-  if (exponent >= 64 || !(base << 32)) return 0;
 
   var result: u64 = 1;
   var bs = 32 - clz(exponent);
 
   // 64 = 2 ^ 6, so need only six cases
   switch (bs) {
+    default:
     case 6: {
       if (exponent & 1) result *= base;
       exponent >>= 1;
@@ -2349,7 +2346,6 @@ export function upow(base: u64, exponent: i32): u64 {
     case 1: {
       if (exponent & 1) result *= base;
     }
-    default: break;
   }
 
   return result;
