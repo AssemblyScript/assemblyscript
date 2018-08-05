@@ -2303,3 +2303,58 @@ export namespace NativeMathf {
     return sx ? -x : x;
   }
 }
+
+export function upow(base: u64, exponent: i32): u64 {
+  if (exponent < 0 || exponent > 64 || !(base << 32)) {
+    return 0;
+  }
+
+  switch (exponent) {
+    case 0: return 1;
+    case 1: return base;
+    case 2: return base * base;
+    default: break;
+  }
+
+  var result: u64 = 1;
+  var bs = 32 - clz(exponent);
+
+  // 64 = 2 ^ 6, so need only six cases
+  switch (bs) {
+    case 6: {
+      if (exponent & 1) result *= base;
+      exponent >>= 1;
+      base *= base;
+    }
+    case 5: {
+      if (exponent & 1) result *= base;
+      exponent >>= 1;
+      base *= base;
+    }
+    case 4: {
+      if (exponent & 1) result *= base;
+      exponent >>= 1;
+      base *= base;
+    }
+    case 3: {
+      if (exponent & 1) result *= base;
+      exponent >>= 1;
+      base *= base;
+    }
+    case 2: {
+      if (exponent & 1) result *= base;
+      exponent >>= 1;
+      base *= base;
+    }
+    case 1: {
+      if (exponent & 1) result *= base;
+    }
+    default: break;
+  }
+
+  return result;
+}
+
+export function ipow(base: i64, exponent: i32): i64 {
+  return <i64>upow(<u64>base, exponent);
+}
