@@ -2313,7 +2313,8 @@ export function upow(base: u64, exponent: i32): u64 {
     default: break;
   }
 
-  if (exponent > 64 || !(base << 32)) return 0;
+  if (base == 1) return 1;
+  if (exponent >= 64 || !(base << 32)) return 0;
 
   var result: u64 = 1;
   var bs = 32 - clz(exponent);
