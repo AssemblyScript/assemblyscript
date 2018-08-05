@@ -2314,10 +2314,10 @@ export function upow(x: u64, e: i32): u64 {
 
   var out: u64 = 1;
   var log = 32 - clz(e);
+  if (log > 6) return 0;
 
   // 64 = 2 ^ 6, so need only six cases
   switch (log) {
-    default:
     case 6: {
       if (e & 1) out *= x;
       e >>= 1;
