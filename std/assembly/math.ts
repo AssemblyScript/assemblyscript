@@ -2304,53 +2304,53 @@ export namespace NativeMathf {
   }
 }
 
-export function upow(base: u64, exponent: i32): u64 {
-  if (exponent < 0) return 0;
-  switch (exponent) {
+export function upow(x: u64, e: i32): u64 {
+  if (e < 0) return 0;
+  switch (e) {
     case 0: return 1;
-    case 1: return base;
-    case 2: return base * base;
+    case 1: return x;
+    case 2: return x * x;
   }
 
-  var result: u64 = 1;
-  var bs = 32 - clz(exponent);
+  var out: u64 = 1;
+  var log = 32 - clz(e);
 
   // 64 = 2 ^ 6, so need only six cases
-  switch (bs) {
+  switch (log) {
     default:
     case 6: {
-      if (exponent & 1) result *= base;
-      exponent >>= 1;
-      base *= base;
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
     }
     case 5: {
-      if (exponent & 1) result *= base;
-      exponent >>= 1;
-      base *= base;
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
     }
     case 4: {
-      if (exponent & 1) result *= base;
-      exponent >>= 1;
-      base *= base;
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
     }
     case 3: {
-      if (exponent & 1) result *= base;
-      exponent >>= 1;
-      base *= base;
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
     }
     case 2: {
-      if (exponent & 1) result *= base;
-      exponent >>= 1;
-      base *= base;
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
     }
     case 1: {
-      if (exponent & 1) result *= base;
+      if (e & 1) out *= x;
     }
   }
 
-  return result;
+  return out;
 }
 
-export function ipow(base: i64, exponent: i32): i64 {
-  return <i64>upow(<u64>base, exponent);
+export function ipow(x: i64, e: i32): i64 {
+  return <i64>upow(<u64>x, e);
 }
