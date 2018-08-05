@@ -2305,16 +2305,15 @@ export namespace NativeMathf {
 }
 
 export function upow(base: u64, exponent: i32): u64 {
-  if (exponent < 0 || exponent > 64 || !(base << 32)) {
-    return 0;
-  }
-
+  if (exponent < 0) return 0;
   switch (exponent) {
     case 0: return 1;
     case 1: return base;
     case 2: return base * base;
     default: break;
   }
+
+  if (exponent > 64 || !(base << 32)) return 0;
 
   var result: u64 = 1;
   var bs = 32 - clz(exponent);
