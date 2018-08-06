@@ -51,11 +51,11 @@ assert(arr[1] == 44);
 assert(arr[2] == 45);
 
 
-// Array#contact ///////////////////////////////////////////////////////////////////////////////////
+// Array#concat ///////////////////////////////////////////////////////////////////////////////////
 
 var toAdd = new Array<i32>();
 
-arr.contact(toAdd);
+arr.concat(toAdd);
 assert(internalCapacity<i32>(arr) == 3);
 assert(arr.length == 3);
 
@@ -65,7 +65,7 @@ arr.pop();
 toAdd.push(44);
 toAdd.push(45);
 
-arr.contact(toAdd);
+arr.concat(toAdd);
 
 assert(internalCapacity<i32>(arr) == 3);
 assert(arr[0] == 43);

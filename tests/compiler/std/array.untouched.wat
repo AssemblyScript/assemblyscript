@@ -3255,7 +3255,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#contact (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#concat (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13214,7 +13214,7 @@
    )
   )
   (drop
-   (call $~lib/array/Array<i32>#contact
+   (call $~lib/array/Array<i32>#concat
     (get_global $std/array/arr)
     (get_global $std/array/toAdd)
    )
@@ -13285,7 +13285,7 @@
    )
   )
   (drop
-   (call $~lib/array/Array<i32>#contact
+   (call $~lib/array/Array<i32>#concat
     (get_global $std/array/arr)
     (get_global $std/array/toAdd)
    )
