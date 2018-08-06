@@ -153,6 +153,29 @@ export class Array<T> {
     return newLength;
   }
 
+  pushAll(elements: Array<T>): i32 {
+
+    if (elements.length_ == 0) return this.length_;
+
+    var length = this.length_;
+    var buffer = this.buffer_;
+    var capacity = buffer.byteLength >>> alignof<T>();
+    var newLength = length + elements.length;
+
+    if (<u32>length >= <u32>capacity) {
+        const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
+        if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
+        buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
+        this.buffer_ = buffer;
+    }
+    memory.copy(changetype<usize>(buffer) + (<usize>length << alignof<T>()) + HEADER_SIZE,
+     changetype<usize>(elements.buffer_) +  HEADER_SIZE,
+     elements.length_ << alignof<T>());
+    this.length = newLength;
+    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(elements)); // tslint:disable-line
+    return newLength;
+  }
+
   pop(): T {
     var length = this.length_;
     if (length < 1) throw new RangeError("Array is empty");

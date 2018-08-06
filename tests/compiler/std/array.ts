@@ -50,6 +50,32 @@ assert(arr[0] == 43);
 assert(arr[1] == 44);
 assert(arr[2] == 45);
 
+
+// Array#pushAll ///////////////////////////////////////////////////////////////////////////////////
+
+var toAdd = new Array<i32>();
+
+arr.pushAll(toAdd);
+assert(internalCapacity<i32>(arr) == 3);
+assert(arr.length == 3);
+
+arr.pop();
+arr.pop();
+
+toAdd.push(44);
+toAdd.push(45);
+
+arr.pushAll(toAdd);
+
+assert(internalCapacity<i32>(arr) == 3);
+assert(arr[0] == 43);
+assert(arr[1] == 44);
+assert(arr[2] == 45);
+
+toAdd.pop();
+toAdd.push(46);
+assert(arr[2] == 45);
+
 // Array#unshift ///////////////////////////////////////////////////////////////////////////////////
 
 arr.unshift(42);
