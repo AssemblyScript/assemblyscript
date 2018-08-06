@@ -2313,11 +2313,21 @@ export function ipow32(x: i32, e: i32): i32 {
   }
 
   var log = 32 - clz(e);
-  if (log > 5) return 0;
   var out = 1;
 
-  // 32 = 2 ^ 5, so need only five cases
-  switch (log) {
+  // 32 = 2 ^ 5, so need only five cases.
+  // But some extra cases needs for properly overflowing
+  switch (log & 7) {
+    case 7: {
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
+    }
+    case 6: {
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
+    }
     case 5: {
       if (e & 1) out *= x;
       e >>= 1;
@@ -2355,11 +2365,16 @@ export function ipow64(x: i64, e: i32): i64 {
   }
 
   var log = 32 - clz(e);
-  if (log > 6) return 0;
   var out: i64 = 1;
 
-  // 64 = 2 ^ 6, so need only six cases
-  switch (log) {
+  // 64 = 2 ^ 6, so need only six cases.
+  // But some extra cases needs for properly overflowing
+  switch (log & 7) {
+    case 7: {
+      if (e & 1) out *= x;
+      e >>= 1;
+      x *= x;
+    }
     case 6: {
       if (e & 1) out *= x;
       e >>= 1;
