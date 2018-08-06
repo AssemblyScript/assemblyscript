@@ -2655,7 +2655,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#pushAll (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#contact (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8443,7 +8443,7 @@
    )
   )
   (drop
-   (call $~lib/array/Array<i32>#pushAll
+   (call $~lib/array/Array<i32>#contact
     (get_global $std/array/arr)
     (get_global $std/array/toAdd)
    )
@@ -8505,7 +8505,7 @@
    )
   )
   (drop
-   (call $~lib/array/Array<i32>#pushAll
+   (call $~lib/array/Array<i32>#contact
     (get_global $std/array/arr)
     (get_global $std/array/toAdd)
    )

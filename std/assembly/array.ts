@@ -153,7 +153,7 @@ export class Array<T> {
     return newLength;
   }
 
-  pushAll(elements: Array<T>): i32 {
+  contact(elements: Array<T>): i32 {
 
     if (elements.length_ == 0) return this.length_;
 
