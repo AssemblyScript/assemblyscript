@@ -16119,9 +16119,12 @@
   )
  )
  (func $~lib/math/ipow64 (; 158 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
-  (local $2 i32)
-  (local $3 i64)
+  (local $2 i64)
+  (local $3 i32)
   (local $4 i32)
+  (set_local $2
+   (i64.const 1)
+  )
   (if
    (i32.lt_s
     (get_local $1)
@@ -16135,24 +16138,24 @@
    (block $case2|0
     (block $case1|0
      (block $case0|0
-      (set_local $2
+      (set_local $3
        (get_local $1)
       )
       (br_if $case0|0
        (i32.eq
-        (get_local $2)
+        (get_local $3)
         (i32.const 0)
        )
       )
       (br_if $case1|0
        (i32.eq
-        (get_local $2)
+        (get_local $3)
         (i32.const 1)
        )
       )
       (br_if $case2|0
        (i32.eq
-        (get_local $2)
+        (get_local $3)
         (i32.const 2)
        )
       )
@@ -16174,9 +16177,6 @@
    )
   )
   (set_local $3
-   (i64.const 1)
-  )
-  (set_local $4
    (i32.sub
     (i32.const 32)
     (i32.clz
@@ -16186,7 +16186,7 @@
   )
   (if
    (i32.le_s
-    (get_local $4)
+    (get_local $3)
     (i32.const 6)
    )
    (block
@@ -16197,42 +16197,42 @@
         (block $case2|1
          (block $case1|1
           (block $case0|1
-           (set_local $2
-            (get_local $4)
+           (set_local $4
+            (get_local $3)
            )
            (br_if $case0|1
             (i32.eq
-             (get_local $2)
+             (get_local $4)
              (i32.const 6)
             )
            )
            (br_if $case1|1
             (i32.eq
-             (get_local $2)
+             (get_local $4)
              (i32.const 5)
             )
            )
            (br_if $case2|1
             (i32.eq
-             (get_local $2)
+             (get_local $4)
              (i32.const 4)
             )
            )
            (br_if $case3|1
             (i32.eq
-             (get_local $2)
+             (get_local $4)
              (i32.const 3)
             )
            )
            (br_if $case4|1
             (i32.eq
-             (get_local $2)
+             (get_local $4)
              (i32.const 2)
             )
            )
            (br_if $case5|1
             (i32.eq
-             (get_local $2)
+             (get_local $4)
              (i32.const 1)
             )
            )
@@ -16244,9 +16244,9 @@
              (get_local $1)
              (i32.const 1)
             )
-            (set_local $3
+            (set_local $2
              (i64.mul
-              (get_local $3)
+              (get_local $2)
               (get_local $0)
              )
             )
@@ -16271,9 +16271,9 @@
             (get_local $1)
             (i32.const 1)
            )
-           (set_local $3
+           (set_local $2
             (i64.mul
-             (get_local $3)
+             (get_local $2)
              (get_local $0)
             )
            )
@@ -16298,9 +16298,9 @@
            (get_local $1)
            (i32.const 1)
           )
-          (set_local $3
+          (set_local $2
            (i64.mul
-            (get_local $3)
+            (get_local $2)
             (get_local $0)
            )
           )
@@ -16325,9 +16325,9 @@
           (get_local $1)
           (i32.const 1)
          )
-         (set_local $3
+         (set_local $2
           (i64.mul
-           (get_local $3)
+           (get_local $2)
            (get_local $0)
           )
          )
@@ -16352,9 +16352,9 @@
          (get_local $1)
          (i32.const 1)
         )
-        (set_local $3
+        (set_local $2
          (i64.mul
-          (get_local $3)
+          (get_local $2)
           (get_local $0)
          )
         )
@@ -16378,16 +16378,16 @@
        (get_local $1)
        (i32.const 1)
       )
-      (set_local $3
+      (set_local $2
        (i64.mul
-        (get_local $3)
+        (get_local $2)
         (get_local $0)
        )
       )
      )
     )
     (return
-     (get_local $3)
+     (get_local $2)
     )
    )
   )
@@ -16405,9 +16405,9 @@
          (get_local $1)
          (i32.const 1)
         )
-        (set_local $3
+        (set_local $2
          (i64.mul
-          (get_local $3)
+          (get_local $2)
           (get_local $0)
          )
         )
@@ -16430,7 +16430,7 @@
     )
    )
   )
-  (get_local $3)
+  (get_local $2)
  )
  (func $start (; 159 ;) (type $v)
   (local $0 i32)

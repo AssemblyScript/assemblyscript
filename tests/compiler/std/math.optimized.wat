@@ -13985,6 +13985,9 @@
  (func $~lib/math/ipow64 (; 158 ;) (; has Stack IR ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
+  (set_local $2
+   (i64.const 1)
+  )
   (if
    (i32.lt_s
     (get_local $1)
@@ -14030,9 +14033,6 @@
     )
    )
   )
-  (set_local $2
-   (i64.const 1)
-  )
   (if
    (i32.le_s
     (tee_local $3
@@ -14058,8 +14058,14 @@
             (i32.const 6)
            )
            (block
+            (br_if $case1|1
+             (i32.eq
+              (get_local $3)
+              (i32.const 5)
+             )
+            )
             (block $tablify|0
-             (br_table $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $tablify|0
+             (br_table $case5|1 $case4|1 $case3|1 $case2|1 $tablify|0
               (i32.sub
                (get_local $3)
                (i32.const 1)

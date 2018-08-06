@@ -2305,17 +2305,17 @@ export namespace NativeMathf {
 }
 
 export function ipow32(x: i32, e: i32): i32 {
-  if (e < 0) return 0;
-  switch (e) {
-    case 0: return 1;
-    case 1: return x;
-    case 2: return x * x;
-  }
-
   var out = 1;
-  var log = 32 - clz(e);
-
   if (ASC_SHRINK_LEVEL < 1) {
+    if (e < 0) return 0;
+
+    switch (e) {
+      case 0: return 1;
+      case 1: return x;
+      case 2: return x * x;
+    }
+
+    let log = 32 - clz(e);
     if (log <= 5) {
       // 32 = 2 ^ 5, so need only five cases.
       // But some extra cases needs for properly overflowing
@@ -2357,17 +2357,16 @@ export function ipow32(x: i32, e: i32): i32 {
 }
 
 export function ipow64(x: i64, e: i32): i64 {
-  if (e < 0) return 0;
-  switch (e) {
-    case 0: return 1;
-    case 1: return x;
-    case 2: return x * x;
-  }
-
   var out: i64 = 1;
-  var log = 32 - clz(e);
-
   if (ASC_SHRINK_LEVEL < 1) {
+    if (e < 0) return 0;
+    switch (e) {
+      case 0: return 1;
+      case 1: return x;
+      case 2: return x * x;
+    }
+
+    let log = 32 - clz(e);
     if (log <= 6) {
       // 64 = 2 ^ 6, so need only six cases.
       // But some extra cases needs for properly overflowing
