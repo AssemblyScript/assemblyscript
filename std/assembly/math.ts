@@ -2312,47 +2312,47 @@ export function ipow32(x: i32, e: i32): i32 {
     case 2: return x * x;
   }
 
-  var log = 32 - clz(e);
   var out = 1;
+  var log = 32 - clz(e);
 
-  // 32 = 2 ^ 5, so need only five cases.
-  // But some extra cases needs for properly overflowing
-  switch (log & 7) {
-    case 7: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 6: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 5: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 4: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 3: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 2: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 1: {
-      if (e & 1) out *= x;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (log <= 5) {
+      // 32 = 2 ^ 5, so need only five cases.
+      // But some extra cases needs for properly overflowing
+      switch (log) {
+        case 5: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 4: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 3: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 2: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 1: {
+          if (e & 1) out *= x;
+        }
+      }
+      return out;
     }
   }
 
+  while (e > 0) {
+    if (e & 1) out *= x;
+    e >>= 1;
+    x *= x;
+  }
   return out;
 }
 
@@ -2364,46 +2364,51 @@ export function ipow64(x: i64, e: i32): i64 {
     case 2: return x * x;
   }
 
-  var log = 32 - clz(e);
   var out: i64 = 1;
+  var log = 32 - clz(e);
 
-  // 64 = 2 ^ 6, so need only six cases.
-  // But some extra cases needs for properly overflowing
-  switch (log & 7) {
-    case 7: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 6: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 5: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 4: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 3: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 2: {
-      if (e & 1) out *= x;
-      e >>= 1;
-      x *= x;
-    }
-    case 1: {
-      if (e & 1) out *= x;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (log <= 6) {
+      // 64 = 2 ^ 6, so need only six cases.
+      // But some extra cases needs for properly overflowing
+      switch (log) {
+        case 6: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 5: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 4: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 3: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 2: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 1: {
+          if (e & 1) out *= x;
+        }
+      }
+      return out;
     }
   }
 
+  while (e > 0) {
+    if (e & 1) out *= x;
+    e >>= 1;
+    x *= x;
+  }
   return out;
 }
