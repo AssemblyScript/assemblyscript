@@ -2312,11 +2312,11 @@ export function ipow32(x: i32, e: i32): i32 {
     case 2: return x * x;
   }
 
-  var out = 1;
   var log = 32 - clz(e);
   if (log > 5) return 0;
+  var out = 1;
 
-  // 32 = 2 ^ 5, so need only six cases
+  // 32 = 2 ^ 5, so need only five cases
   switch (log) {
     case 5: {
       if (e & 1) out *= x;
@@ -2354,9 +2354,9 @@ export function ipow64(x: i64, e: i32): i64 {
     case 2: return x * x;
   }
 
-  var out: i64 = 1;
   var log = 32 - clz(e);
   if (log > 6) return 0;
+  var out: i64 = 1;
 
   // 64 = 2 ^ 6, so need only six cases
   switch (log) {
