@@ -155,25 +155,24 @@ export class Array<T> {
 
   concat(items: Array<T>): Array<T> {
     assert(this != null);
-    if (items == null) {
-      items = new Array<T>();
-    }
 
     var thisLen: isize = this.length_;
-    var otherLen: isize = items.length_;
-    var outLen = thisLen + otherLen;
+    var otherLen = (items == null) ? 0 : items.length_;
+    var outLen =  thisLen + otherLen;
 
     var out: Array<T> = new Array<T>(outLen);
     memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE,
       changetype<usize>(this.buffer_) + HEADER_SIZE,
       <usize>(thisLen << alignof<T>()));
-    memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE + <usize>(thisLen << alignof<T>()),
+    if (isManaged<T>()) __gc_link(changetype<usize>(out), changetype<usize>(this)); // tslint:disable-line
+
+    if (otherLen != 0) {
+      memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE + <usize>(thisLen << alignof<T>()),
       changetype<usize>(items.buffer_) + HEADER_SIZE,
       <usize>(otherLen << alignof<T>()));
 
-    if (isManaged<T>()) __gc_link(changetype<usize>(out), changetype<usize>(items)); // tslint:disable-line
-    if (isManaged<T>()) __gc_link(changetype<usize>(out), changetype<usize>(this)); // tslint:disable-line
-
+      if (isManaged<T>()) __gc_link(changetype<usize>(out), changetype<usize>(items)); // tslint:disable-line
+    }
     return out;
   }
 

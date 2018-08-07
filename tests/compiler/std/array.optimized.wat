@@ -2625,21 +2625,10 @@
     (unreachable)
    )
   )
-  (if
-   (i32.eqz
-    (get_local $1)
-   )
-   (set_local $1
-    (call $~lib/array/Array<i32>#constructor
-     (i32.const 0)
-     (i32.const 0)
-    )
-   )
-  )
   (call $~lib/internal/memory/memmove
    (i32.add
     (i32.load
-     (tee_local $3
+     (tee_local $4
       (call $~lib/array/Array<i32>#constructor
        (i32.const 0)
        (i32.add
@@ -2648,9 +2637,13 @@
           (get_local $0)
          )
         )
-        (tee_local $4
-         (i32.load offset=4
+        (tee_local $3
+         (if (result i32)
           (get_local $1)
+          (i32.load offset=4
+           (get_local $1)
+          )
+          (i32.const 0)
          )
         )
        )
@@ -2670,31 +2663,34 @@
     (i32.const 2)
    )
   )
-  (call $~lib/internal/memory/memmove
-   (i32.add
+  (if
+   (get_local $3)
+   (call $~lib/internal/memory/memmove
+    (i32.add
+     (i32.add
+      (i32.load
+       (get_local $4)
+      )
+      (i32.const 8)
+     )
+     (i32.shl
+      (get_local $2)
+      (i32.const 2)
+     )
+    )
     (i32.add
      (i32.load
-      (get_local $3)
+      (get_local $1)
      )
      (i32.const 8)
     )
     (i32.shl
-     (get_local $2)
+     (get_local $3)
      (i32.const 2)
     )
    )
-   (i32.add
-    (i32.load
-     (get_local $1)
-    )
-    (i32.const 8)
-   )
-   (i32.shl
-    (get_local $4)
-    (i32.const 2)
-   )
   )
-  (get_local $3)
+  (get_local $4)
  )
  (func $~lib/array/Array<i32>#unshift (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

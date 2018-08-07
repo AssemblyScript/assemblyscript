@@ -3224,26 +3224,21 @@
     (unreachable)
    )
   )
-  (if
-   (i32.eq
-    (get_local $1)
-    (i32.const 0)
-   )
-   (set_local $1
-    (call $~lib/array/Array<i32>#constructor
-     (i32.const 0)
-     (i32.const 0)
-    )
-   )
-  )
   (set_local $2
    (i32.load offset=4
     (get_local $0)
    )
   )
   (set_local $3
-   (i32.load offset=4
-    (get_local $1)
+   (if (result i32)
+    (i32.eq
+     (get_local $1)
+     (i32.const 0)
+    )
+    (i32.const 0)
+    (i32.load offset=4
+     (get_local $1)
+    )
    )
   )
   (set_local $4
@@ -3287,39 +3282,45 @@
     (get_local $8)
    )
   )
-  (block $~lib/memory/memory.copy|inlined.2
-   (set_local $8
-    (i32.add
+  (if
+   (i32.ne
+    (get_local $3)
+    (i32.const 0)
+   )
+   (block $~lib/memory/memory.copy|inlined.2
+    (set_local $8
+     (i32.add
+      (i32.add
+       (i32.load
+        (get_local $5)
+       )
+       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+      )
+      (i32.shl
+       (get_local $2)
+       (i32.const 2)
+      )
+     )
+    )
+    (set_local $7
      (i32.add
       (i32.load
-       (get_local $5)
+       (get_local $1)
       )
       (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
      )
+    )
+    (set_local $6
      (i32.shl
-      (get_local $2)
+      (get_local $3)
       (i32.const 2)
      )
     )
-   )
-   (set_local $7
-    (i32.add
-     (i32.load
-      (get_local $1)
-     )
-     (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+    (call $~lib/internal/memory/memmove
+     (get_local $8)
+     (get_local $7)
+     (get_local $6)
     )
-   )
-   (set_local $6
-    (i32.shl
-     (get_local $3)
-     (i32.const 2)
-    )
-   )
-   (call $~lib/internal/memory/memmove
-    (get_local $8)
-    (get_local $7)
-    (get_local $6)
    )
   )
   (get_local $5)
