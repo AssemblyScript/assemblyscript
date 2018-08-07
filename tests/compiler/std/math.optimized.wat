@@ -54000,5 +54000,29 @@
     (unreachable)
    )
   )
+  (if
+   (i64.ne
+    (i64.add
+     (call $~lib/math/ipow64
+      (i64.const 57055)
+      (i32.const 3)
+     )
+     (call $~lib/math/ipow64
+      (i64.const 339590)
+      (i32.const 3)
+     )
+    )
+    (i64.const 39347712995520375)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3156)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
  )
 )

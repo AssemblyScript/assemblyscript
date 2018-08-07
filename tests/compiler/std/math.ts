@@ -3152,3 +3152,5 @@ assert(ipow64(3,  43) == -3784425932234851461); // should overflow
 assert(ipow64(3,  63) == -3237885987332494933); // should overflow
 assert(ipow64(3,  64) ==  8733086111712066817); // should overflow
 assert(ipow64(3, 128) == -9204772141784466943); // should overflow
+
+assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375); // add Buterin's twit example
